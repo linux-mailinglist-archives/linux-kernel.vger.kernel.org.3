@@ -2,238 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8395146C2E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B1F46C287
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbhLGSel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:34:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:30086 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230390AbhLGSei (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:34:38 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237882650"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="237882650"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:15:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="479613813"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2021 10:15:13 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 10:15:12 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 7 Dec 2021 10:15:12 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 7 Dec 2021 10:15:12 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VSNFVQcPxGmmB1jsZuTIu8mrAllE1IWxTaBc2Ud6syP12z69pACkDyEvf3sj/RdVIUXsZglunt0OzLfnJhtO/imSOFGx5JM7sWTpNq5R/ZnsBSKBhcPg2fro3T+3fkl43YKoGLjIwvrVTFj1f0VdmloFJSwzNtapBp6OI8M24h2g4H4qRhHUROKmnkxUTRQqnBP5zY4yh9J4YSSRIifRoAHRjkcMYiY2AcZWQ0lZAupt/tx0ZlXFYmeQSnWyqnHBpqESxI9yIUPmGYcPKVisQ2CGA8rwojptlBD9QN9yCRAiQeAuwqX+WhFBh3hW8NNtp+1kEtSMLTRZ7odQY7HxtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v1AxncFjhSGRS7O8+aAt0WcCSy/+3T6035c7oyhdHNA=;
- b=CqBlSX4dDLIjx33PtRcMGt7wzb3tijYYkX6ukIkGw7OcLYgJm45sNoTALtn/50eq1hcWp+WtU89KNvJ3WygFvkVRGNEZorHXGSOmFc3BS446UV621u8A2nx/V8bVVBzDy91+MtuQZ47gBK/+/4aA7gvGcWkIdifl9I0avrDt+huKT1RCidVPEOFyGeTEDKBip6sJPJEzNaZ9ZTbMYvpJaEaAf2pGVOgwxK0bK0LPU4G/eF10k7n+SCLlzfGvmucrpw6HHmCj+Dm+L1ln1Ovno7Ef0mHsRoRbL4iisQi3qK4w/+gka0Otd0Wr8kx49kHWo1zW3TTRQr5y4VnorIhM/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v1AxncFjhSGRS7O8+aAt0WcCSy/+3T6035c7oyhdHNA=;
- b=N7F9RDqV7p+5xX3nq2SPggV29z5+6dqrxQpJqDM2sY/MS7TS+1VUQFUcZQ4BjLifWZJMqFGSf4BW6pEWtgD9vE9Ii+OPxAnOFwWHVX9RgFcbEl5vmUwasSLCAprGjxiaesBr1mH5WAWpdNUo+SR/pWGsJUjECywPSVS4Lp1orKs=
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
- by MW5PR11MB5858.namprd11.prod.outlook.com (2603:10b6:303:193::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Tue, 7 Dec
- 2021 18:15:11 +0000
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::1d1b:2541:5263:68de]) by MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::1d1b:2541:5263:68de%5]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 18:15:11 +0000
-From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
-To:     "billy_tsai@aspeedtech.com" <billy_tsai@aspeedtech.com>,
-        "zweiss@equinix.com" <zweiss@equinix.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 02/13] dt-bindings: Add bindings for peci-aspeed
-Thread-Topic: [PATCH v4 02/13] dt-bindings: Add bindings for peci-aspeed
-Thread-Index: AQHX4HOYEttsdpzRq0uN4nTFYN86p6wdfiMAgAEAKwCAAApZAIAI4y8A
-Date:   Tue, 7 Dec 2021 18:15:11 +0000
-Message-ID: <0a82b85608ea13424c601a4a6364652d2a411675.camel@intel.com>
-References: <20211123140706.2945700-1-iwona.winiarska@intel.com>
-         <20211123140706.2945700-3-iwona.winiarska@intel.com>
-         <DDB2E224-472B-41CC-A5C6-BEADB4BF2041@aspeedtech.com>
-         <20211202015455.GB25091@packtop>
-         <4B35121C-3BF3-4EF2-BBE6-AA76FA1920E3@aspeedtech.com>
-In-Reply-To: <4B35121C-3BF3-4EF2-BBE6-AA76FA1920E3@aspeedtech.com>
-Accept-Language: en-US, pl-PL
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.40.4 (3.40.4-2.fc34) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2f71b8cd-8a25-46c0-4e2f-08d9b9ad822e
-x-ms-traffictypediagnostic: MW5PR11MB5858:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <MW5PR11MB58584675F74E185E057C3B8CEC6E9@MW5PR11MB5858.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: I5u6ZTGX1Z70gLkQ+Qq+3EOrGtkWNoXzGgd1a6xy0ahSR6rUuqcCfWxlNgQXKRIfcYtLQVyFQngr8tV1yD52k4+8ahKHqhDMOvSAkpuaId7LAdDzkPXR0bwibW03DPTzh2FteOqYk9d/6C1ckZUwisiSZ6HEAvQLpxzy4pv6Xh8fU6AT6YSX3Embn3kpwFloBCQggztCkvV9IPhRbKW+WyvNBA8oFYwmr176BZkLGwekyWvKBW17dlhUD7OSIrw7Xnufz0JYtEgtykqE8jmzMhwRNNHNmpkpZQufI0ajbvJvSlvF1cAkwoWiddn8Dp3QbTRLDBbYFsvBFxqeqjhquabKXikzLmyQwXLFlnsmM1B3cqY20HeLLYnfCO5U/Zut9KUNt6M/Jmr2ewLxiu05qGrHeao6UUxAuIZCe+3US7iOfeQR1TihHV5ETjagzu5A5BxwqcrwkCvVxaKehC8/Q/pjes7b0VQbHfp4ljhC/4ys4m4U2noZ7fJZMpqQLKN++kej9J3utmcpbo/eV9/0kcGi5h8k32kHK56WC4VCARk8Svmv+WtE26Zezt2m0Z91XGoUY9IVfiooiAHnJ6V0r/E1SDRy7UY/ICLedb6/5/anP2IuHSJAGt3SnYx3Yj0ddgdvhaPeEkMZRC2+fjTkNV2LzuhH9QFd+qj+d5ZcHqWH4N93d1Dh5fz+h/M2/wOCJn3jY0XFz7WO/0omaV1vig==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(82960400001)(316002)(66946007)(66446008)(64756008)(76116006)(66556008)(110136005)(91956017)(66476007)(54906003)(4326008)(508600001)(6486002)(122000001)(186003)(38100700002)(53546011)(6506007)(2616005)(6512007)(71200400001)(7416002)(5660300002)(86362001)(2906002)(26005)(38070700005)(8676002)(83380400001)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TWhyYUM4eVRpODdXRUF0eWI3ajVPblZRc1I5QjZ2YUtzVDJUOHZnVlBUditN?=
- =?utf-8?B?UDBzUFJ0SmlPZ2RzcHpKcFlicGxySnBVV1V4RDUwL2k5SkhHNnhpVk00ZEg1?=
- =?utf-8?B?Q1dHTExaNTUrVFVzYXA2dk9rbnI3enRPOEx6dTZUekVNbTAwTVRXR1crRnNw?=
- =?utf-8?B?NWZBczlzdkcyaGJzaWU0VXpmRjY4TDh3RHlYdUtwZFpISE5WcWQvR1g5WHF3?=
- =?utf-8?B?QURaUzJWbHVxa2dub2Rrbm50ejIwdFVsQ0laaHVhYWZEUjFRaVViNUkvNWE4?=
- =?utf-8?B?NnBsMUxHcDdURTB1QVQ3WXlFQUNmTFEzS3BoQ25LemtJREpDaEpxSFJEa21n?=
- =?utf-8?B?YmsyMXJZcVZzREZyb2kwR1huNjRBMkIvVm0zRmM4Mlo4ZFVybDJDZnlmOG9V?=
- =?utf-8?B?SE5sUXA1NEJiMXF1UnBMS1lqelJ2R2dYOUZ0TEpLZzJRZ3JISFdFQ2tqVkI1?=
- =?utf-8?B?ZmZVbUR1OE9YWTlyR1NTMllZVWFhMHdXWFNWRE94TTlFSjJ5azNaRUNha0FX?=
- =?utf-8?B?ck9IY0ptS0ZGWncyTTlKU3VINWdDeXZTbWc1S1NVWTJPYUVLcnhjNlFzOTJE?=
- =?utf-8?B?cklQZFZJay9OZE41cWxNRFJJQmVObHBsZUhYaGI1bHVQK3p5Vkd4d2N2anls?=
- =?utf-8?B?MkR2V3NQL2ZWK2tNc056eGpNb3NpUWdMQmE1cU8rQTZPL0sycTZwUmprUmhu?=
- =?utf-8?B?elJtaWpheXZ1UjAyTVNuSUYyYkMya2ZncmdkNTBseXcwSWp1TWN2MlN0NTNK?=
- =?utf-8?B?bXpZNTYySmVLRm80MUZQVTZNMDMrTzFKTDV3MUJjMUFFRVJCVC8wQk9ha3RO?=
- =?utf-8?B?c1Y2QU9pL2ViV2JQRDRtL0NmWXlsajgyL1cvQzFGSHdUQzdKb0Z1UnV5ZFd0?=
- =?utf-8?B?VkFWTWh6eTJ6UndrMkVZQjVla1BDN3JLV3ZJdUpDUW5FeGlFbHkxNUpBZUp2?=
- =?utf-8?B?VDY0UW1YU0UvcjJsNWRGWmI1U1RPeDM1OWY3a0hXVHpWc3hZdXZyMURRNjNJ?=
- =?utf-8?B?TXdERnJRY1NUeUdKOWFUWml3dkV3QWQwUWtDektaZEVMMnBFcFRoSndPbldN?=
- =?utf-8?B?WFM0NGhNbFkvQjM4RWwzQ0w2c0twRnV5Zldrci9yMG9wM2dsZWtEZlJFVEF5?=
- =?utf-8?B?SE94SnpVVHVxN25vNzkxNHNHVTFVWkVDbnlHdExrclhFVFU4NndCRFV1U0NB?=
- =?utf-8?B?MUVVb1ZEdzRPN2o3UGhVSnh3RWVSdzhOMyt0M3ZpdzlEYkpSN0w1aG1YVHRY?=
- =?utf-8?B?bXVKVlZrZnJyQVA5enNraXNFOCtzREhSSUNmNGwvcG1GOXV0TTA4RFNRT3Ns?=
- =?utf-8?B?c0VVc01GR2NFRHA5THlGWVRTREhhVXJ0ZmlIbkdoU0ppQmx3QVlJLzdKRmgw?=
- =?utf-8?B?Tm92N0NOM0RSdmoxaXN0TzM2Vzc3eVJrZ2RrQTZscUhtaDRGNkx2LytlaEI5?=
- =?utf-8?B?NnFPcXFUZndOQ2RYYy9BVndoMWZIQzhrTHQ4M1dUYUI3cjhxOHN2aGp1R0Y0?=
- =?utf-8?B?V21odGhRNWxOZmdjQXd4b1krTS9ya3Zja3BTalZJa3VIZjg5Z3dYR0U1MHJZ?=
- =?utf-8?B?U2ZscGxxZVU2UVBOMFNhTndFUmwybmNscUlUeXBRN0M0amdURTlUSThzSHk1?=
- =?utf-8?B?YmtXVndWMUc4THB0ZGdlMFYrOU9aTS9kWU05RnY4dEdDTjZmb0tZMEJuU0Fz?=
- =?utf-8?B?TVFydDV5eUVhclJ2VStLYzdYOXFhMFJHa1doY1RZbGxBQ0dvYjVSdmw1MkhG?=
- =?utf-8?B?em5wQTI0ZlROTFVPdkJxQUtHMjVncS9scDRNRjBFditnSm9BMDBSWjl1T1F1?=
- =?utf-8?B?dXBNV2pocDZGaVdFM1FwMVBnV1ZvSkxyVmQwcE1DQWt3OEV6OXdzcUw4U0lY?=
- =?utf-8?B?bUhPdFZncmtxdDV2RWZ5b1p6dFBYLzdpbld1R0J1NTQzb0pxVTVOZThQV2pI?=
- =?utf-8?B?ZE93Vk9uUTJ3OEpEUFpKdllycWp1K1IwRVg4Qkd2d2xabjNIdTQxWU5TNVBB?=
- =?utf-8?B?UkNKWCtZZ0ZMc2IyUHk1cEo2b1pCaVpPdlNQOUU2SHVoaGpGa1ZRYTdoQlNv?=
- =?utf-8?B?czFtQ3lUdTV0SkY5WnU1VDgrUE9HSUVJT2xZZ21IaGtmQlhnWWw3NXlxTm1o?=
- =?utf-8?B?aGp5K1ZRcSs0aUVQQnRtYnpmdWdRVGk0SkNiRmQ1YkNVcUZwN092blY1M2E3?=
- =?utf-8?B?aWZXeVNMR1RVN3BqQWt1alpaQUJVZDFKNDJGUm40Q2dLWlR3cUFMZlFFMGdh?=
- =?utf-8?Q?xYngiv5/RRTmRYX3CPdCVh9NHECYdgBf9JI7oBtvhU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0F9AE7E32B25564FACAA4D1970421A50@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S235941AbhLGSTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230257AbhLGSTK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:19:10 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA95C061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:15:39 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id w23so51061uao.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:15:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CmeohJcS2Epr7P3xI26c5pQsNz0HFkIzREwgJpwxmZ4=;
+        b=oxMD4DrbNKr9RhHiJ+IDUnFEQh2RjFrrY8g7m4WHzups5XW2f7U5Eg1zmWGlBZyX5V
+         6ts5QDeBsX/btBbXHXEv8l9N8XmTniwKSk6WJRGQEyan5kl5Cho6pkPdDQdhh9HMtm4O
+         pq/+SqssNo3hqn+eBd20xrNIVVqnbRAUv4fOBEfCX8khJlAmpybruN447o2WDXcTPnHq
+         e+XpSnOvTdH8TXp3i31fNR5jfZNC2ADmYs+RxNvSWuzW8RBhs5hU9q3tpgVkVXkthufQ
+         fTsW/BDdA6ahClMXZ/aSMc1hQZQoXy7qvSyM0qHp+/UONauPmU3MqtT7or4gscR+W+3s
+         W8jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CmeohJcS2Epr7P3xI26c5pQsNz0HFkIzREwgJpwxmZ4=;
+        b=SjUYH7562PBskgplwb9ors/lUsAD8HYiA9DfS+hHxv/JogzYXlX1aGFx7IlNwfovzK
+         ULUllm6BFq7l8G/R2uaVAwPHWpo/6chELDIgq2w7Oz7SxYBb2uKIt8Na2JKUfaGoP/fv
+         Q0TAUx4AJzj+qM/9nHk2lWO0CdEVGavEkNG5/C9sfVE2c1TJgGRNcgzJIEc3hDXW7k+P
+         P9C25d+VZN7SpjCdJIlNB6TWQifR/HnUe3resONBV+3p2153JevC+KpqqN4yjHYE/VEE
+         9I6hG+DIVQHqQm95gpwFfBcL/69EVYxrLfTjxBwZ7vHz2awHQ0AExiyb4jpjvEsrNcHA
+         8nrQ==
+X-Gm-Message-State: AOAM530HrsKOZdr2cDXogeXo0Q1ZmRGYVUK/dtm2Amvt1nUCJD0Fv/+h
+        2oOZHUXVaA5hTHEk8GSt+322LGi1yy6H7rLzj/2S1vZN9d2ldA==
+X-Google-Smtp-Source: ABdhPJy95aqLQ+mcXCYI+jih5YSp1vafbNSIfDwe3iW5WSwU+1KiZ85Qvvve9jZ8iRceWuYEHGU5kotTaVk85cwYyv0=
+X-Received: by 2002:a67:d31c:: with SMTP id a28mr47411614vsj.20.1638900938710;
+ Tue, 07 Dec 2021 10:15:38 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f71b8cd-8a25-46c0-4e2f-08d9b9ad822e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 18:15:11.3412
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5uj8lYX3TBJW+nv68fcyROQzOqpVOr9vhYemCzHIb0DklDVIc1bfLFpgzrilCv3qLu6bxsoQtVX4SabEOEOupgW7gQlLrMhUuUrsSqHVbXE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5858
-X-OriginatorOrg: intel.com
+References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-2-virag.david003@gmail.com>
+In-Reply-To: <20211206153124.427102-2-virag.david003@gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 7 Dec 2021 20:15:27 +0200
+Message-ID: <CAPLW+4k-PAqOkqEOaV-1HbNZu1qR89r6y9prU3Uet0vCYx_cjA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add bindings definitions for
+ Exynos7885 CMU
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTEyLTAyIGF0IDAyOjMxICswMDAwLCBCaWxseSBUc2FpIHdyb3RlOgo+IEhp
-IFpldiwKPiAKPiBPbiAyMDIxLzEyLzIsIDk6NTUgQU0sICJaZXYgV2Vpc3MiIDx6d2Vpc3NAZXF1
-aW5peC5jb20+IHdyb3RlOgo+IAo+IMKgwqDCoCBPbiBXZWQsIERlYyAwMSwgMjAyMSBhdCAwMjoz
-ODowNEFNIFBTVCwgQmlsbHkgVHNhaSB3cm90ZToKPiDCoMKgwqAgPsKgwqAgPkhpLAo+IMKgwqDC
-oCA+wqDCoCA+Cj4gwqDCoMKgID7CoMKgID5PbiAyMDIxLzExLzIzLCAxMDoxMCBQTSwgIm9wZW5i
-bWMgb24gYmVoYWxmIG9mIEl3b25hIFdpbmlhcnNrYSIKPiA8b3BlbmJtYy1ib3VuY2VzK2JpbGx5
-X3RzYWk9YXNwZWVkdGVjaC5jb21AbGlzdHMub3psYWJzLm9yZ8Kgb24gYmVoYWxmIG9mCj4gaXdv
-bmEud2luaWFyc2thQGludGVsLmNvbT4gd3JvdGU6Cj4gwqDCoMKgID7CoMKgID4KPiDCoMKgwqAg
-PsKgwqAgPsKgwqDCoCBBZGQgZGV2aWNlIHRyZWUgYmluZGluZ3MgZm9yIHRoZSBwZWNpLWFzcGVl
-ZCBjb250cm9sbGVyIGRyaXZlci4KPiDCoMKgwqAgPsKgwqAgPgo+IMKgwqDCoCA+wqDCoCA+wqDC
-oMKgID7CoMKgICvCoCBhc3BlZWQsY2xvY2stZGl2aWRlcjoKPiDCoMKgwqAgPsKgwqAgPsKgwqDC
-oCA+wqDCoCArwqDCoMKgIGRlc2NyaXB0aW9uOgo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKg
-ICvCoMKgwqDCoMKgIFRoaXMgdmFsdWUgZGV0ZXJtaW5lcyBQRUNJIGNvbnRyb2xsZXIgaW50ZXJu
-YWwgY2xvY2sKPiBkaXZpZGluZwo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqDC
-oMKgIHJhdGUuIFRoZSBkaXZpZGVyIHdpbGwgYmUgY2FsY3VsYXRlZCBhcyAyIHJhaXNlZCB0bwo+
-IHRoZSBwb3dlciBvZgo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqDCoMKgIHRo
-ZSBnaXZlbiB2YWx1ZS4KPiDCoMKgwqAgPsKgwqAgPsKgwqDCoCA+wqDCoCArwqDCoMKgICRyZWY6
-IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMgo+IMKgwqDCoCA+wqDCoCA+
-wqDCoMKgID7CoMKgICvCoMKgwqAgbWluaW11bTogMAo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7C
-oMKgICvCoMKgwqAgbWF4aW11bTogNwo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKg
-wqAgZGVmYXVsdDogMAo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICsKPiDCoMKgwqAgPsKg
-wqAgPsKgwqDCoCA+wqDCoCArwqAgYXNwZWVkLG1zZy10aW1pbmc6Cj4gwqDCoMKgID7CoMKgID7C
-oMKgwqAgPsKgwqAgK8KgwqDCoCBkZXNjcmlwdGlvbjoKPiDCoMKgwqAgPsKgwqAgPsKgwqDCoCA+
-wqDCoCArwqDCoMKgwqDCoCBNZXNzYWdlIHRpbWluZyBuZWdvdGlhdGlvbiBwZXJpb2QuIFRoaXMg
-dmFsdWUgd2lsbAo+IGRldGVybWluZSB0aGUgcGVyaW9kCj4gwqDCoMKgID7CoMKgID7CoMKgwqAg
-PsKgwqAgK8KgwqDCoMKgwqAgb2YgbWVzc2FnZSB0aW1pbmcgbmVnb3RpYXRpb24gdG8gYmUgaXNz
-dWVkIGJ5IFBFQ0kKPiBjb250cm9sbGVyLiBUaGUgdW5pdAo+IMKgwqDCoCA+wqDCoCA+wqDCoMKg
-ID7CoMKgICvCoMKgwqDCoMKgIG9mIHRoZSBwcm9ncmFtbWVkIHZhbHVlIGlzIGZvdXIgdGltZXMg
-b2YgUEVDSSBjbG9jawo+IHBlcmlvZC4KPiDCoMKgwqAgPsKgwqAgPsKgwqDCoCA+wqDCoCArwqDC
-oMKgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMgo+IMKgwqDC
-oCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqAgbWluaW11bTogMAo+IMKgwqDCoCA+wqDCoCA+
-wqDCoMKgID7CoMKgICvCoMKgwqAgbWF4aW11bTogMjU1Cj4gwqDCoMKgID7CoMKgID7CoMKgwqAg
-PsKgwqAgK8KgwqDCoCBkZWZhdWx0OiAxCj4gwqDCoMKgID7CoMKgID7CoMKgwqAgPsKgwqAgKwo+
-IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoCBhc3BlZWQsYWRkci10aW1pbmc6Cj4gwqDC
-oMKgID7CoMKgID7CoMKgwqAgPsKgwqAgK8KgwqDCoCBkZXNjcmlwdGlvbjoKPiDCoMKgwqAgPsKg
-wqAgPsKgwqDCoCA+wqDCoCArwqDCoMKgwqDCoCBBZGRyZXNzIHRpbWluZyBuZWdvdGlhdGlvbiBw
-ZXJpb2QuIFRoaXMgdmFsdWUgd2lsbAo+IGRldGVybWluZSB0aGUgcGVyaW9kCj4gwqDCoMKgID7C
-oMKgID7CoMKgwqAgPsKgwqAgK8KgwqDCoMKgwqAgb2YgYWRkcmVzcyB0aW1pbmcgbmVnb3RpYXRp
-b24gdG8gYmUgaXNzdWVkIGJ5IFBFQ0kKPiBjb250cm9sbGVyLiBUaGUgdW5pdAo+IMKgwqDCoCA+
-wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqDCoMKgIG9mIHRoZSBwcm9ncmFtbWVkIHZhbHVlIGlz
-IGZvdXIgdGltZXMgb2YgUEVDSSBjbG9jawo+IHBlcmlvZC4KPiDCoMKgwqAgPsKgwqAgPsKgwqDC
-oCA+wqDCoCArwqDCoMKgICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3Vp
-bnQzMgo+IMKgwqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqAgbWluaW11bTogMAo+IMKg
-wqDCoCA+wqDCoCA+wqDCoMKgID7CoMKgICvCoMKgwqAgbWF4aW11bTogMjU1Cj4gwqDCoMKgID7C
-oMKgID7CoMKgwqAgPsKgwqAgK8KgwqDCoCBkZWZhdWx0OiAxCj4gwqDCoMKgID7CoMKgID5JIHN1
-Z2dlc3QgZGVsZXRpbmcgdGhlc2UgdGhyZWUgcHJvcGVydGllcyBhbmQgcmVwbGFjaW5nIHRoZW0g
-d2l0aCB0aGUKPiBmb2xsb3dpbmcKPiDCoMKgwqAgPsKgwqAgPgo+IMKgwqDCoCA+wqDCoCA+YXNw
-ZWVkLHBlY2ktYml0LXRpbWU6Cj4gwqDCoMKgID7CoMKgID7CoMKgwqDCoMKgwqDCoCBkZXNjcmlw
-dGlvbjoKPiDCoMKgwqAgPsKgwqAgPsKgwqDCoMKgwqDCoMKgwqDCoCBUaGUgYml0IHRpbWUgZHJp
-dmVuIGJ5IFBFQ0kgY29udHJvbGxlci4gVGhlIHVuaXQgb2YgdGhlCj4gdmFsdWUgaXMgSHouCj4g
-wqDCoMKgID7CoMKgID7CoMKgwqAgbWluaW11bTogMjAwMAo+IMKgwqDCoCA+wqDCoCA+wqDCoMKg
-IG1heGltdW06IDEwMDAwMDAKPiDCoMKgwqAgPsKgwqAgPgo+IMKgwqDCoCA+wqDCoCA+QW5kIHRo
-ZSBkcml2ZXIgc2hvdWxkIHVzZSB0aGlzIHByb3BlcnR5IHRvIGNhY3VsYXRlIHRoZSBhcHByb3By
-aWF0ZQo+IGNsb2NrLWRpdmlkZXIsCj4gwqDCoMKgID7CoMKgID5tc2ctdGltaW5nIGFuZCBhZGRy
-LXRpbWluZywgaW5zdGVhZCBvZiBleHBvc2luZyBoYXJkd2FyZSByZWdpc3RlcnMgdG8KPiBkdHMu
-Cj4gwqDCoMKgID7CoMKgID4KPiAKPiDCoMKgwqAgPsKgwqAgT3IgcGVyaGFwcyBqdXN0ICdidXMt
-ZnJlcXVlbmN5JyBhIGxhIGkyYy1hc3BlZWQsIGdwaW8tYXNwZWVkLXNncGlvLAo+IGV0Yz8KPiAK
-PiBJdCdzIGEgZ29vZCBpZGVhbCBmb3IgdGhlIGNvbnNpc3RlbmN5LgoKSWYgd2Ugd2FudCB0byBn
-byB3aXRoIHBhc3NpbmcgZnJlcXVlbmN5IC0gSSB3b3VsZCBwcmVmZXIgdG8gZ28gd2l0aCAiY2xv
-Y2stCmZyZXF1ZW5jeSIgYW5kIHVzZSBjbG9jayBmcmFtZXdvcmsgZm9yIGV4cG9zaW5nIGl0IHRv
-IHBlY2ktYXNwZWVkIChhcyBJCm1lbnRpb25lZCBpbiByZXBseSB0byBwYXRjaCAwNSkuCgpXaGF0
-IGRvIHlvdSB0aGluaz8KClRoYW5rcwotSXdvbmEKCj4gCj4gVGhhbmtzCj4gCj4gQmVzdCBSZWdh
-cmRzLAo+IEJpbGx5IFRzYWkKPiAKPiAKCg==
+On Mon, 6 Dec 2021 at 17:32, David Virag <virag.david003@gmail.com> wrote:
+>
+> Just like on Exynos850, the clock controller driver is designed to have
+> separate instances for each particular CMU, so clock IDs start from 1
+> for each CMU in this bindings header too.
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+> Changes in v2:
+>   - Added R-b tag by Krzysztof Kozlowski
+>
+> Changes in v3:
+>   - Nothing
+>
+> Changes in v4:
+>   - Nothing
+>
+>  include/dt-bindings/clock/exynos7885.h | 115 +++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/exynos7885.h
+>
+> diff --git a/include/dt-bindings/clock/exynos7885.h b/include/dt-bindings=
+/clock/exynos7885.h
+> new file mode 100644
+> index 000000000000..1f8701691d62
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/exynos7885.h
+> @@ -0,0 +1,115 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2021 D=C3=A1vid Vir=C3=A1g
+> + *
+> + * Device Tree binding constants for Exynos7885 clock controller.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLOCK_EXYNOS_7885_H
+> +#define _DT_BINDINGS_CLOCK_EXYNOS_7885_H
+> +
+> +/* CMU_TOP */
+> +#define CLK_FOUT_SHARED0_PLL           1
+> +#define CLK_FOUT_SHARED1_PLL           2
+> +#define CLK_DOUT_SHARED0_DIV2          3
+> +#define CLK_DOUT_SHARED0_DIV3          4
+> +#define CLK_DOUT_SHARED0_DIV4          5
+> +#define CLK_DOUT_SHARED0_DIV5          6
+> +#define CLK_DOUT_SHARED1_DIV2          7
+> +#define CLK_DOUT_SHARED1_DIV3          8
+> +#define CLK_DOUT_SHARED1_DIV4          9
+> +#define CLK_MOUT_CORE_BUS              10
+> +#define CLK_MOUT_CORE_CCI              11
+> +#define CLK_MOUT_CORE_G3D              12
+> +#define CLK_DOUT_CORE_BUS              13
+> +#define CLK_DOUT_CORE_CCI              14
+> +#define CLK_DOUT_CORE_G3D              15
+> +#define CLK_GOUT_CORE_BUS              16
+> +#define CLK_GOUT_CORE_CCI              17
+> +#define CLK_GOUT_CORE_G3D              18
+> +#define CLK_MOUT_PERI_BUS              19
+> +#define CLK_MOUT_PERI_SPI0             20
+> +#define CLK_MOUT_PERI_SPI1             21
+> +#define CLK_MOUT_PERI_UART0            22
+> +#define CLK_MOUT_PERI_UART1            23
+> +#define CLK_MOUT_PERI_UART2            24
+> +#define CLK_MOUT_PERI_USI0             25
+> +#define CLK_MOUT_PERI_USI1             26
+> +#define CLK_MOUT_PERI_USI2             27
+> +#define CLK_DOUT_PERI_BUS              28
+> +#define CLK_DOUT_PERI_SPI0             29
+> +#define CLK_DOUT_PERI_SPI1             30
+> +#define CLK_DOUT_PERI_UART0            31
+> +#define CLK_DOUT_PERI_UART1            32
+> +#define CLK_DOUT_PERI_UART2            33
+> +#define CLK_DOUT_PERI_USI0             34
+> +#define CLK_DOUT_PERI_USI1             35
+> +#define CLK_DOUT_PERI_USI2             36
+> +#define CLK_GOUT_PERI_BUS              37
+> +#define CLK_GOUT_PERI_SPI0             38
+> +#define CLK_GOUT_PERI_SPI1             39
+> +#define CLK_GOUT_PERI_UART0            40
+> +#define CLK_GOUT_PERI_UART1            41
+> +#define CLK_GOUT_PERI_UART2            42
+> +#define CLK_GOUT_PERI_USI0             43
+> +#define CLK_GOUT_PERI_USI1             44
+> +#define CLK_GOUT_PERI_USI2             45
+> +#define TOP_NR_CLK                     46
+> +
+> +/* CMU_CORE */
+> +#define CLK_MOUT_CORE_BUS_USER         1
+> +#define CLK_MOUT_CORE_CCI_USER         2
+> +#define CLK_MOUT_CORE_G3D_USER         3
+> +#define CLK_MOUT_CORE_GIC              4
+> +#define CLK_DOUT_CORE_BUSP             5
+> +#define CLK_GOUT_CCI_ACLK              6
+> +#define CLK_GOUT_GIC400_CLK            7
+> +#define CORE_NR_CLK                    8
+> +
+> +/* CMU_PERI */
+> +#define CLK_MOUT_PERI_BUS_USER         1
+> +#define CLK_MOUT_PERI_SPI0_USER                2
+> +#define CLK_MOUT_PERI_SPI1_USER                3
+> +#define CLK_MOUT_PERI_UART0_USER       4
+> +#define CLK_MOUT_PERI_UART1_USER       5
+> +#define CLK_MOUT_PERI_UART2_USER       6
+> +#define CLK_MOUT_PERI_USI0_USER                7
+> +#define CLK_MOUT_PERI_USI1_USER                8
+> +#define CLK_MOUT_PERI_USI2_USER                9
+> +#define CLK_GOUT_GPIO_TOP_PCLK         10
+> +#define CLK_GOUT_HSI2C0_PCLK           11
+> +#define CLK_GOUT_HSI2C1_PCLK           12
+> +#define CLK_GOUT_HSI2C2_PCLK           13
+> +#define CLK_GOUT_HSI2C3_PCLK           14
+> +#define CLK_GOUT_I2C0_PCLK             15
+> +#define CLK_GOUT_I2C1_PCLK             16
+> +#define CLK_GOUT_I2C2_PCLK             17
+> +#define CLK_GOUT_I2C3_PCLK             18
+> +#define CLK_GOUT_I2C4_PCLK             19
+> +#define CLK_GOUT_I2C5_PCLK             20
+> +#define CLK_GOUT_I2C6_PCLK             21
+> +#define CLK_GOUT_I2C7_PCLK             22
+> +#define CLK_GOUT_PWM_MOTOR_PCLK                23
+> +#define CLK_GOUT_SPI0_PCLK             24
+> +#define CLK_GOUT_SPI0_EXT_CLK          25
+> +#define CLK_GOUT_SPI1_PCLK             26
+> +#define CLK_GOUT_SPI1_EXT_CLK          27
+> +#define CLK_GOUT_UART0_EXT_UCLK                28
+> +#define CLK_GOUT_UART0_PCLK            29
+> +#define CLK_GOUT_UART1_EXT_UCLK                30
+> +#define CLK_GOUT_UART1_PCLK            31
+> +#define CLK_GOUT_UART2_EXT_UCLK                32
+> +#define CLK_GOUT_UART2_PCLK            33
+> +#define CLK_GOUT_USI0_PCLK             34
+> +#define CLK_GOUT_USI0_SCLK             35
+> +#define CLK_GOUT_USI1_PCLK             36
+> +#define CLK_GOUT_USI1_SCLK             37
+> +#define CLK_GOUT_USI2_PCLK             38
+> +#define CLK_GOUT_USI2_SCLK             39
+> +#define CLK_GOUT_MCT_PCLK              40
+> +#define CLK_GOUT_SYSREG_PERI_PCLK      41
+> +#define CLK_GOUT_WDT0_PCLK             42
+> +#define CLK_GOUT_WDT1_PCLK             43
+> +#define PERI_NR_CLK                    44
+> +
+> +#endif /* _DT_BINDINGS_CLOCK_EXYNOS_7885_H */
+> --
+> 2.34.1
+>

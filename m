@@ -2,103 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC9746C6D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ACC46C6D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234680AbhLGVof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:44:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230374AbhLGVoe (ORCPT
+        id S232757AbhLGVqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhLGVqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:44:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638913263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nGmI7kQNWbEvmiA/4SAjJ2qlBrwJRawfyO5CFs01+o8=;
-        b=AMjXZtoF17P2hRrrauEt7k9pLgTyXQVDtRTOBltMx9uP6+zbKHWYx2FKucLvXc3WyRuBLA
-        e18FF6Bvm59l+jPscVfAHN4Um06TDheRue3RVydtALtn6KtYJkJpKO/zfijg71aGIwgwwi
-        0p490dNIszoRIZie2wpNbZdjV0ThwkE=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-472-xsvM8zwIOoOLZZys9gihZw-1; Tue, 07 Dec 2021 16:41:02 -0500
-X-MC-Unique: xsvM8zwIOoOLZZys9gihZw-1
-Received: by mail-io1-f69.google.com with SMTP id 85-20020a6b0258000000b005ed47a95f03so753802ioc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:41:02 -0800 (PST)
+        Tue, 7 Dec 2021 16:46:22 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F900C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:42:52 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id 15so423443ilq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ld7GFu9I5ImAVII2taoKUmYqR/icJ65ORArYw4v0ttc=;
+        b=nAZjM66YrDrs8HfAa2iTCYIWgi9qc/YsUgO5VAYK6/eQVvUw5DJAifluaZXeUqd1iF
+         v0BFAkBj6IjQzFW0qnP8+30o9JfzzNyjPxxkAJp5859e/BduAVE136R8S7ATT6+5f4gn
+         9J302+HRh1jPhAbGJ2IgovUoCD7uc7m2N3OSo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nGmI7kQNWbEvmiA/4SAjJ2qlBrwJRawfyO5CFs01+o8=;
-        b=q0wdJEmVtWTOO/ked8CVHaZQxdh+BNfWiR8/fgzwf7bq/x7JP91VExsrVRlIu1V2vG
-         YVMpy3tW27L6GvAU4tBbnp2KEmkJhqhRP+ydideBULQM8Sc6w9oL9d6DkJC2Ie8SjHQG
-         yBcgd2OICBuoZObF73nCNRG3R16Qnnph8LY832EPmbcwGNQIeZd4XRkw2dNTeev/AjzD
-         n8qsQo7FljBpmJvk2EnctVrYj31dojOP8y4H01OaRHgTLA+J4UiCac9+7DVSSMioncZp
-         lIrfklnafcF3havxaA927ksWk4K7dRzzJKWTTzHYeCGWdZmnAMYi710AAszFqYngqvFX
-         fc/g==
-X-Gm-Message-State: AOAM533wsI78JefkOHhPhoFYvx0c53SPPtaLPWDsftE4l/r2qOoJB1HE
-        wQ2hJO8leJtApRNr/3kNMiEFfqJNG2xxgNyY8shEO7c2kdDOuBmYXoQrotEAkMXqqXo2b8N6fL5
-        MDpyCu2MxHjdb+2fEvLshEPzH
-X-Received: by 2002:a92:cf45:: with SMTP id c5mr2425564ilr.251.1638913261643;
-        Tue, 07 Dec 2021 13:41:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyqM/PzhfSjpY1htyvNIqqhuJr09WYEY8Im1t+31spDfvEcGYCirMt4dgyvgcJNfQWEWYJYQ==
-X-Received: by 2002:a92:cf45:: with SMTP id c5mr2425496ilr.251.1638913261131;
-        Tue, 07 Dec 2021 13:41:01 -0800 (PST)
-Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
-        by smtp.gmail.com with ESMTPSA id y8sm594581ilp.46.2021.12.07.13.41.00
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ld7GFu9I5ImAVII2taoKUmYqR/icJ65ORArYw4v0ttc=;
+        b=2b7XllZyM+p/eqqad2xjjGTl4Ns3eYZ6eEveJ/dfXTezL76K6uBdcmkyzFHRBWUdFh
+         cIhAJJ1rh1N6XF7nsawK3lt0GGB/UbzEi+B/CwETHbgMfpJVvJ75NgITOWFbM5onSKrp
+         LPfli2zvhezni+hyt+Xi3j3fwb8D85zz6gbTrv1g/VkGExwD8QRn7fvVQ4AKR6qq9ofC
+         bttiVI4tdLztFdVA5guMsnRf73yDENCo5kDV7y2EB5UxSP3arRsArsYvUUSRFWYynPFP
+         1+pGaxy+UeACR4g2+gDZK1NVTyuxbJ/Z/xjjt02jBgCSMr7fjJu/veGjha0suxLsRZpx
+         YG8Q==
+X-Gm-Message-State: AOAM530fjm27VR0Ulox29HQjttycH21GlQCdJvA4+shVPC0XK8ZHlF6b
+        Kyel2+L83g+qcrjN5FoVhHnvsQWXRSA54g==
+X-Google-Smtp-Source: ABdhPJwtCzRYs6KGIzAqFvTx6zrOWj+FWVtnNWogM8STfRQ20zuOhi8zS0AHYiv8L2x+/URHt+uDbA==
+X-Received: by 2002:a05:6e02:1b8c:: with SMTP id h12mr2468410ili.85.1638913370707;
+        Tue, 07 Dec 2021 13:42:50 -0800 (PST)
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
+        by smtp.gmail.com with ESMTPSA id d2sm682398ilv.73.2021.12.07.13.42.49
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 13:41:00 -0800 (PST)
-Message-ID: <8951b82b-d95b-5e22-9846-c78a330f57b7@redhat.com>
-Date:   Tue, 7 Dec 2021 16:40:57 -0500
+        Tue, 07 Dec 2021 13:42:50 -0800 (PST)
+Received: by mail-il1-f176.google.com with SMTP id m5so368577ilh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:42:49 -0800 (PST)
+X-Received: by 2002:a92:ca0e:: with SMTP id j14mr2173215ils.27.1638913369355;
+ Tue, 07 Dec 2021 13:42:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, shakeelb@google.com,
-        ktkhai@virtuozzo.com, shy828301@gmail.com, guro@fb.com,
-        vbabka@suse.cz, vdavydov.dev@gmail.com, raquini@redhat.com
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-3-npache@redhat.com> <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
- <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211207213830.625890-1-robdclark@gmail.com>
+In-Reply-To: <20211207213830.625890-1-robdclark@gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 7 Dec 2021 13:42:36 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VSRB45vFJZhVg7OTy2ZAv6UZ638YjQQiZemt9-AD1JXw@mail.gmail.com>
+Message-ID: <CAD=FV=VSRB45vFJZhVg7OTy2ZAv6UZ638YjQQiZemt9-AD1JXw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: sn65dsi86: defer if there is no dsi host
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Stephen Boyd <swboyd@chromium.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On Tue, Dec 7, 2021 at 1:33 PM Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Otherwise we don't get another shot at it if the bridge probes before
+> the dsi host is registered.  It seems like this is what *most* (but not
+> all) of the other bridges do.
+>
+> It looks like this was missed in the conversion to attach dsi host at
+> probe time.
+>
+> Fixes: c3b75d4734cb ("drm/bridge: sn65dsi86: Register and attach our DSI device at probe")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+> v2: Drop DRM_ERROR() in favor of drm_err_probe() and shift around the
+>     spot where we report the error
+>
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> index 02b490671f8f..8f1321ca819e 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> @@ -714,10 +714,8 @@ static int ti_sn_attach_host(struct ti_sn65dsi86 *pdata)
+>         };
+>
+>         host = of_find_mipi_dsi_host_by_node(pdata->host_node);
+> -       if (!host) {
+> -               DRM_ERROR("failed to find dsi host\n");
+> -               return -ENODEV;
+> -       }
+> +       if (!host)
+> +               return -EPROBE_DEFER;
+>
+>         dsi = devm_mipi_dsi_device_register_full(dev, host, &info);
+>         if (IS_ERR(dsi)) {
+> @@ -1267,8 +1265,10 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+>         drm_bridge_add(&pdata->bridge);
+>
+>         ret = ti_sn_attach_host(pdata);
+> -       if (ret)
+> +       if (ret) {
+> +               dev_err_probe(pdata->dev, ret, "failed to attach dsi host");
+
+nit: Needs a "\n" at the end, doesn't it?
 
 
-On 12/6/21 05:45, David Hildenbrand wrote:
->> This doesn't seen complete. Slab shrinkers are used in the reclaim
->> context. Previously offline nodes could be onlined later and this would
->> lead to NULL ptr because there is no hook to allocate new shrinker
->> infos. This would be also really impractical because this would have to
->> update all existing memcgs...
-> 
-> Instead of going through the trouble of updating...
-> 
-> ...  maybe just keep for_each_node() and check if the target node is
-> offline. If it's offline, just allocate from the first online node.
-> After all, we're not using __GFP_THISNODE, so there are no guarantees
-> either way ...
+>                 goto err_remove_bridge;
+> +       }
 
-Thanks for your reviews David :)
+It's going to be a little funny now because if the
+devm_mipi_dsi_attach() call fails you'll report "failed to attach dsi
+host" twice (once using DRM_ERROR in ti_sn_attach_host() and once
+here). Probably all the error messages could be removed from
+ti_sn_attach_host() and you could rely on this new one because:
+* devm_mipi_dsi_device_register_full() already appears plenty chatty.
+* this is the same message that devm_mipi_dsi_attach() was printing out anyway.
 
-Yes, I believe this would be a viable solution. At this point it looks like our
-short term solution would be something along this line. Long term we would want
-to either allocate all pgdats (which will waste memory) or update the memcgs
-with the appropriate node information once a node is onlined. Im currently
-working a solution that does the latter.
+In any case, it's not really a big deal, so with the "\n" added I'm
+happy with my Reviewed-by.
 
+I'm happy to apply this to to drm-misc-next tomorrow if there are no
+objections. I can always add the "\n" myself unless you want to send a
+v3 with it and/or want to remove more error messages. ;-)
+
+-Doug

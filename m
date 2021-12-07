@@ -2,73 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FB246C44A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B282B46C44E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbhLGUUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:20:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbhLGUUr (ORCPT
+        id S241034AbhLGUVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:21:20 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:33637 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230259AbhLGUVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:20:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739ACC061574;
-        Tue,  7 Dec 2021 12:17:16 -0800 (PST)
-Date:   Tue, 7 Dec 2021 21:17:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638908234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oESRTJAmMs9dAuWEEdfClw9487fUg9HjiJqAVoDqOcs=;
-        b=JJrRgLydgeWsXw7qDeKhKAVFqFj+/XprP4TnlZvSQegsrva5MGEdcyN+nKWjOl9J+8eNPo
-        0O5GqccVI4KjRyCuST0rD+MiCUTGBD6vlWgWbdSXgNiXj9bI2LIBHb9lLXytmA3z8Af7KP
-        77pO1dXtWjF8+Hhtd30O/B+n/sACCi8kNG0P+ivXX9e61z3pkcB5xlwPmQhhTYX71Ynrwp
-        zRvF8Uq61MOdti2hoJF7dRaXZ+k0QHEDfDnuHSW9ddhSl7ppVyLLEQTuo1VrSdB8Rcxhdw
-        a0jgVbAGypB4AhLK3jKmJ+yO0s00ILif3D5iRLuP7XWKBfEFHzsSjMPhD80kSA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638908234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oESRTJAmMs9dAuWEEdfClw9487fUg9HjiJqAVoDqOcs=;
-        b=sLui7Pa19kqJfHS3vDLNwaomXrnW8Vgs0klhG1cXio6vrgCCvKswZQ+fSW9o+fUhGDT63Z
-        0vIlsl6C9DP1e+Ag==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>, carnil@debian.org
-Subject: Re: [ANNOUNCE] 5.10.83-rt58
-Message-ID: <20211207201712.7yqbksbba3zgu7u3@linutronix.de>
-References: <YalDQe/lyXqAxB0K@uudg.org>
+        Tue, 7 Dec 2021 15:21:19 -0500
+Received: by mail-ot1-f41.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso447665otf.0;
+        Tue, 07 Dec 2021 12:17:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+MB6yXYtqMzh5VNyaR3gPGIIrEYooy9VuBz2n/yIA8c=;
+        b=XtUek/csyPycL/68jDCsEDgzJkvghwxhkkWPVn1w/2+rkZ9bjJWQhzUzjFBOsHhN5R
+         zbGyenzd5fETjMYRotLbnWmAMIuv7XUDOSnzGHR8yG4RQjV9MRxqtDjzhioaSpm/9XUV
+         Y7lI9wzI17I5JSaDGZGctOPFV23S6SgVGtEYQlwrgDzZDClGeyI8jF9mBG1IZaD3fjqt
+         /1AgNaIQpSjhRClbAaOAJ9iwkn366LEB6A2VojDJqCZSq7JNyXCndok0rtZ9rSj+nL98
+         zNurCgFL2wTA8IkAjM87024qDPX1HDt7DdZcegLhC0OAUR4LK41QZZawhEtGmUA5/+P+
+         PBgw==
+X-Gm-Message-State: AOAM531QOf/agoy/u1Eohvy0RnjJQ/o3hfW5o6r/CcPQlCpjgZg9vQgB
+        rY+z9v/cpdQ/T7ftnm5WrQ==
+X-Google-Smtp-Source: ABdhPJw4qzAjPBdGAFRx6O6XT1ckH3u9GEqrcqCw84pwWhRxaYjnxvcT+FztKBIhcpB09VBz5ojcVw==
+X-Received: by 2002:a9d:4543:: with SMTP id p3mr37789092oti.99.1638908268313;
+        Tue, 07 Dec 2021 12:17:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r5sm144000oiw.20.2021.12.07.12.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 12:17:47 -0800 (PST)
+Received: (nullmailer pid 759672 invoked by uid 1000);
+        Tue, 07 Dec 2021 20:17:46 -0000
+Date:   Tue, 7 Dec 2021 14:17:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Saenz Julienne <nsaenzjulienne@suse.de>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v9 3/7] dt-bindings: PCI: Add bindings for Brcmstb EP
+ voltage regulators
+Message-ID: <Ya/Bar212Tb+S9Eo@robh.at.kernel.org>
+References: <20211119220756.18628-1-jim2101024@gmail.com>
+ <20211119220756.18628-4-jim2101024@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YalDQe/lyXqAxB0K@uudg.org>
+In-Reply-To: <20211119220756.18628-4-jim2101024@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-02 19:05:53 [-0300], Luis Claudio R. Goncalves wrote:
-> I'm pleased to announce the 5.10.83-rt58 stable release.
-=E2=80=A6
->   https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.83-=
-rt58.patch.xz
+On Fri, Nov 19, 2021 at 05:07:50PM -0500, Jim Quinlan wrote:
+> Add bindings for Brcmstb EP voltage regulators.  A new mechanism is to be
+> added to the Linux PCI subsystem that will allocate and turn on/off
+> regulators.  These are standard regulators -- vpcie12v, vpcie3v3, and
+> vpcie3v3aux -- placed in the DT in the bridge node under the host bridge
+> device.
+> 
+> The use of a regulator property in the pcie EP subnode such as
+> "vpcie12v-supply" depends on a pending pullreq to the pci-bus.yaml
+> file at
+> 
+> https://github.com/devicetree-org/dt-schema/pull/63
+> 
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> ---
+>  .../bindings/pci/brcm,stb-pcie.yaml           | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> index 22f2ef446f18..7113a7f726e7 100644
+> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> @@ -159,5 +159,28 @@ examples:
+>                                   <0x42000000 0x1 0x80000000 0x3 0x00000000 0x0 0x80000000>;
+>                      brcm,enable-ssc;
+>                      brcm,scb-sizes =  <0x0000000080000000 0x0000000080000000>;
+> +
+> +                    /* PCIe bridge */
 
-Any particular reason why every patch has "v4.9-rt" in the Subject line?
+Root port specifically. Didn't Pali mention that before?
 
-> Enjoy!
-> Luis
+> +                    pci@0,0 {
+> +                            #address-cells = <3>;
+> +                            #size-cells = <2>;
+> +                            reg = <0x0 0x0 0x0 0x0 0x0>;
+> +                            compatible = "pciclass,0604";
+> +                            device_type = "pci";
+> +                            vpcie3v3-supply = <&vreg7>;
+> +                            ranges;
+> +
+> +                            /* PCIe endpoint */
+> +                            pci-ep@0,0 {
+> +                                    assigned-addresses =
+> +                                        <0x82010000 0x0 0xf8000000 0x6 0x00000000 0x0 0x2000>;
+> +                                    reg = <0x0 0x0 0x0 0x0 0x0>;
+> +                                    compatible = "pci14e4,1688";
 
-Sebastian
+> +                                    #address-cells = <3>;
+> +                                    #size-cells = <2>;
+> +
+> +                                    ranges;
+
+These aren't appropriate for an endpoint.
+
+> +                            };
+> +                    };
+>              };
+>      };
+> -- 
+> 2.17.1
+> 
+> 

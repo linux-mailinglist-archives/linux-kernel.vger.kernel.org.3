@@ -2,560 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AB746C19E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A8846C19B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235634AbhLGRVr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 12:21:47 -0500
-Received: from mga17.intel.com ([192.55.52.151]:51742 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230498AbhLGRVq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:21:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218313013"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="218313013"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:17:07 -0800
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="502679390"
-Received: from ideak-desk.fi.intel.com ([10.237.68.141])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:17:03 -0800
-Date:   Tue, 7 Dec 2021 19:16:59 +0200
-From:   Imre Deak <imre.deak@intel.com>
-To:     Ammar Faizi <ammarfaizi2@gmail.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?iso-8859-1?Q?Jos=E9?= Roberto de Souza 
-        <jose.souza@intel.com>,
-        Clinton Taylor <Clinton.A.Taylor@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: Re: WARNING: CPU: 1 PID: 722 at
- drivers/gpu/drm/i915/display/intel_tc.c:761
-Message-ID: <20211207171659.GA727629@ideak-desk.fi.intel.com>
-References: <20211207035039.10570-1-ammar.faizi@intel.com>
+        id S235313AbhLGRVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:21:05 -0500
+Received: from mail-dm3nam07on2061.outbound.protection.outlook.com ([40.107.95.61]:10784
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239905AbhLGRVD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:21:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YIJ/0IfFwJA+GQjnDUZL8Ddxe8zz374FA+tAikg4xGjB4FgA8qGHBIZW6yRc86XGgpz9Wd5QZ/MTXeaNY/FEYPR48TqjekK0vP99yhJdyfDWQuJZ4s0NkJAirrZp3VG5GwyXBbSGce6bwRPrChn693C1KHn67h31PhZPmMdk/aT2cg/OhrBJZq+DM81Bzz7IW+huvdtxdDG//5Nra/HFhvB0UakEg/awXpqxLv0oSDqtqunsw05XpwrZPeOQay3UDlNOzZkrOtKAVRKKdEnjyc21aTwAKowGXicuru/IUtVITpFjDfry9BKiH2qgGDgB0g7ft8bqoMDjfY4QvuLTgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y7iq9kRmqmtSBX80Uu7trSp3ElNQBhVym1ntaogC1Dw=;
+ b=UD4nGfwZ6oPHQwlAWI0nw2peRAavbCZd7SrCXWRDOfjYLtl1HjGvdwZZj22E7XnbjlAf0Jq4X/zb9uIUlp0iGp/5y0TQEECjHCSiTJbs+djNkZM+ONKaSkdsBaDia4q3s1CWjXOtAv1N1W9A+mdFFJZ/F6INMqAS7RFodjAd/64G/9NSGlqM+q8u9DdZO32HVUHgZPDDqk3hG0m3xTdFwf44+i7KwxcjeIHRR67TrLtl8s+fhgpoOxAB/SnZ6MOw5wKdjjQfIfibxp31v91T3iO2rM9IZNHFWoXuztSsQMg576Rkh2flSHaSX+uVD3mSZ6b2WOfnK019Zn3bhkmVCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y7iq9kRmqmtSBX80Uu7trSp3ElNQBhVym1ntaogC1Dw=;
+ b=q+dquGcZexnik95+9+sPorIMSuxievMFwJO9O6wovq36G9D82xiNCFuakU5aN+lCb+CIl6gPWiKvew4mCFCMqZgfiNT7gHYevThviUUqVGUt4/na5ftHj5D3u2/GCTrgsVevFRFtjEtGCGwQM0bNiv4Z23SFTJ2OGs03Sd8ukHY=
+Received: from MWHPR05MB3648.namprd05.prod.outlook.com (2603:10b6:301:45::23)
+ by CO2PR05MB2759.namprd05.prod.outlook.com (2603:10b6:102:7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Tue, 7 Dec
+ 2021 17:17:28 +0000
+Received: from MWHPR05MB3648.namprd05.prod.outlook.com
+ ([fe80::ad1f:5c06:a9cf:3dfa]) by MWHPR05MB3648.namprd05.prod.outlook.com
+ ([fe80::ad1f:5c06:a9cf:3dfa%5]) with mapi id 15.20.4755.011; Tue, 7 Dec 2021
+ 17:17:27 +0000
+From:   Alexey Makhalov <amakhalov@vmware.com>
+To:     David Hildenbrand <david@redhat.com>
+CC:     Michal Hocko <mhocko@suse.com>, Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Thread-Topic: [PATCH v3] mm: fix panic in __alloc_pages
+Thread-Index: AQHX1N5+lqzX5/9/hUCR9L+z9tfLRKv6c74AgAD9U4CAAB7tAIAADZWAgAnMHQCAAIIHgIAAufyAgAJfDQCAHgMmAIAABAWAgAASAgCAAAQ5gIAADzyAgAAdyYCAAAWLgIAAAWYAgAAGEoCAAAPOAIAABOmAgAACrYCAAAckgIAAAy2AgAAA/AA=
+Date:   Tue, 7 Dec 2021 17:17:27 +0000
+Message-ID: <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
+References: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz> <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+ <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+ <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+In-Reply-To: <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.120.0.1.13)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 157287f0-2572-4c20-c00a-08d9b9a571d0
+x-ms-traffictypediagnostic: CO2PR05MB2759:EE_
+x-microsoft-antispam-prvs: <CO2PR05MB2759D974EAEEBC266D1835E7D56E9@CO2PR05MB2759.namprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JEACWtiaxJ4JXs72pFNkSFOOhzDb/kDVeD+qsU7t6KCJXFagPr7o7iMsixR7N9+K2Fl/SvD2JpY4SLwkJ06B81Ei6mVxpSoSKFtbHwlHzwQ4Uy+GyS0Ca4Wn8oZaLdYrj6j6DoS/wN2sGgDV2SFgc4baP2X/mR3nC8eXASPSW4NSEdrngKu3WDsn/2rZlxd8/7Djyud7iAiswe6c3mJPIb4hRBxroqUSCXA3a3GRN3gntOvVTHwrww/d0QuErmDRn3fooEUXBxubCIoHu00vS6qZz7uq4d//uL8GXJLi7NR1n6ER6h3cfrM4J7Y3URcFBqteKoNVn0Yx/KD8aBfdeAMY/DH5346Sia9tVOco19jxMz5INb1twyAWr+JyfC5Q3qhXw2qjwmouxaVdwgmouCcM8YD9SRtXc641e1pUAzSH3w4tgEk/yLN0bJyezxr2llr5tBUKDUKvwJ4PLE2APg7+mxwd6zWyM2GkxQAqg4YUCcJ7pJnz/T5FDJ5o5M5ehHxltI2OG7HbrQXbC0X2PQJii5Ml1Q5nafHcLpe86XZxIPhYmUimyEvJGFB0MUKN5lI1eDsuPjyjtkd/Hoy2Kbmsz7d/3RZKflO5pwU260KtUKfhNu5G2ulX8PUHHjNjrOFA0my7egRg1hg/8BigrGzuuR6pfHpUFHgQb/Cah4hX9vCLTk/bm5VKAtqhHoNGUuNfRFiemlKVJmxp4dyV6umkrN4HuRBLDY6ID/HqzAFWqe9vK6R7nFD9R+0l3Csta4tVD2b78eTQ62t7flIOvMSQcfmII+w+HPYrnmkoGEo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR05MB3648.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(66556008)(33656002)(86362001)(66446008)(2616005)(316002)(64756008)(4326008)(66476007)(91956017)(83380400001)(66946007)(6512007)(54906003)(508600001)(53546011)(36756003)(2906002)(26005)(8676002)(7416002)(71200400001)(6486002)(8936002)(122000001)(38100700002)(6916009)(6506007)(38070700005)(5660300002)(186003)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnlkbEgvMFpvVTFyVUJjd00rRDBJV09GSHZ1UGQ1M2JGTnZZTEFQUFc3TVJa?=
+ =?utf-8?B?ZWhnd01Fdnp3bkR1N05ZdmVPM080a2ZLa2trRityUmxBSERsTEdxSEQ2WWEx?=
+ =?utf-8?B?UW44dmN0NWZaM2Z4REZ6Y1BGWTBodEpNMmlEdzNHR3QyMEVUdnh3TGwzaGps?=
+ =?utf-8?B?MGVBY0tFR1huSlJzR01IMlNpQTRjbStJNmJPeHlMRHN1WnUzVjR2ejIrdUJw?=
+ =?utf-8?B?aUIzQlU3UEdRampwMWtnQVhYMTBsL2lTb3BKejFFUUF1aWRGdnFhTlVmRXlK?=
+ =?utf-8?B?d3IwL2toVTZsc0pBUlppOVF2MFdlZ3pGbHd0YXJON1pnZnZaU1lpd25zTGZY?=
+ =?utf-8?B?RFZyZ1BQMHRmM1d6V1MvazRJL2hpQTlRY0ZGdVU5aUh3N1pZcy9TWTRzN21O?=
+ =?utf-8?B?S0x4Q0RHTVBVOGZrdHAvTmFMQnVOejBHdENmNy9NRC9POFdQandRSjM5VWNR?=
+ =?utf-8?B?ajRSQ1hOcTJjbDFyMUpwd0JiQVhmZHh4eENLTG5mZDZBL21OSzVULy9LQXYz?=
+ =?utf-8?B?R2ZMTjFNZmpYTFpSeEREMklET1NsSDJpei9xWFk3dEJPWDdNU3hwUnBHdFY3?=
+ =?utf-8?B?K0dGTndzSTR2NnovK1BvL1B6bjlQbWxCcld5a0VwZkZld2Q0cytpN2NTRHp2?=
+ =?utf-8?B?ZFlpdkp3V011cjk5TEFMc1d1ZXhLeXNWOEJyalNWV2Vmc0hoK1RzM2pBWElz?=
+ =?utf-8?B?Mk1NeEFrRkpNazhsWFBseU5yZ0hmSWtPZHdyMlpZd3l2b3NFdTJ2dFJOZzR6?=
+ =?utf-8?B?dzMwUStiRHJoYXBnSm9lUGtlNDRnY1c0d0xNdVU3RHhBdkMwaGtKZVd6cTFY?=
+ =?utf-8?B?V3dFY2M1Q1NPNHlpRnhydk40eGR5d085T0d1VitNZXlqdXEvQ3NMa3hPSzhJ?=
+ =?utf-8?B?TjNjZkdiSHZrL0VLdmtoMEhCNS84Tk5ZUzdXVEZaRGt6Z2VBTjRkQXd5cTJP?=
+ =?utf-8?B?eWVaczR4R09YZndEUi9Sd3dxMklrNERDeFB3MGFqYVNnMzgxc05rQnZOMTdB?=
+ =?utf-8?B?NnJCVG1WNWNsQ0o1dkFmY056M3Q5TzN3OXBXTmhWdUhORXMxZlVwWEkvQlFl?=
+ =?utf-8?B?Tmt6RWxHdjdFbkNyRzFPVlQzQ0E2TDlHQzlnd05tbDlVcStSTzNtY3BsTHN0?=
+ =?utf-8?B?UklEV01MZTZRcGhpRFVoQ2twbWJEOHhyeGpHR1RxcHZPaW1xci9GOTAzOCtB?=
+ =?utf-8?B?a1pJMy9HdDE1dm4xV3JBV3htTXlFb3hYb3ZEZnJCdVM1Mml5b0tlMmpWNXYx?=
+ =?utf-8?B?V1prN2xSbkJhN2krT2MzMFlLWWI5dGlSV1dXNXlPeXVqMEgwSmtKdVBPYWwr?=
+ =?utf-8?B?TWpUQ0N2TGRxL1d5clhCWHZhaVhraUtXek8vVzRDVE5PWGhobGhRS0p6Y1F1?=
+ =?utf-8?B?M2ZkdEptZDVGalY3bmdZcmdESStrYTZyVnpEakdxOGQvMTJUbTZxbzhYNTJq?=
+ =?utf-8?B?ZU1JY3lwMnNJdS9JUndUV1RkcklVUi9VVWFMaXJneHJKOWpXa1dObWdWd0Nx?=
+ =?utf-8?B?ZmRTb3pUcGtlQU13TkpiOFFSU1RlMTBJZXZEMERjaXVuR0cwSkc5aUVBbjBL?=
+ =?utf-8?B?ZTMxZFZsMWRWcTFQajRPRWFnc1ZnVnRhODd2SGV0R1BCcHRUK1RKS2s5YWdQ?=
+ =?utf-8?B?RUlCd2ZTWk9IeXNDNlFFNDdHR1RUdk5HZ0ZvVm1pMUp4Zk5kNmNjalBwYVpV?=
+ =?utf-8?B?UW5vWU84ajRLZnZ2akphZVAxTENBVWZldEpGeUpCZlhBZnFGQ1AyUmRuN3Fm?=
+ =?utf-8?B?bG9XZHBCUFRqQnZnWEQzWS9zQmQrZzBjcFlwa2pSd3pzdFg3YzlqRFZYOEg0?=
+ =?utf-8?B?dEdLakNGNjhFS0R4KzNuNytmWFdidGlid1hlVkdmRDJCY3NTTUh4SkQ4cWxm?=
+ =?utf-8?B?TjduWk5md3JKTGJIUVhTZ0JTNHhBK0I1R3pjb2ZCSWIvYUNNUWt2Y3VIbHVG?=
+ =?utf-8?B?d1c5aVAzb2hJNkVpU3BiNnpzdFExM1RqWEUvY2pOa2JJbmcxY3hNcm5DOTd4?=
+ =?utf-8?B?TWNneUlpMkJ2Z0Q0Z2ZheWVRdnFFMUNXTzNnZE1YcXFDMlFUN0VVa2h4cnBD?=
+ =?utf-8?B?UkRjbTc4TmRoN0xKRFNRQS9iV2ovRUtid2d5dXZWdHNqZ1NpM3M2NjlzdGh6?=
+ =?utf-8?B?QWhGcTJMem1mb3RlYzMvVDViT2d3VXFvSG5YbUE2TWl1WW9DNHFNT1JsUXNw?=
+ =?utf-8?Q?zLPv9VQAHoVEg0whyoJq5iE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A01F62635940A2418F2F264E56292F6E@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20211207035039.10570-1-ammar.faizi@intel.com>
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR05MB3648.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 157287f0-2572-4c20-c00a-08d9b9a571d0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 17:17:27.9259
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BZ85KaJbhvrD9nDleek5EI+AmjQTz0dK8s73NZ/VEvoJa0PrIlf68U4PsklEt/PYo4QC0L9a9+VD5IAjDA6rwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO2PR05MB2759
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ammar,
-
-On Tue, Dec 07, 2021 at 10:54:59AM +0700, Ammar Faizi wrote:
-> Hello,
-> 
-> I found warnings in the stable tree.
-> 
-> Commit: a2547651bc896f95a3680a6a0a27401e7c7a1080 ("Linux 5.15.6")
-> 
-> There are two unique warn locations:
-> 
->   ammarfaizi2@integral2:~$ sudo dmesg -Sr | grep -oiE 'WARNING:.+' | sort | uniq
->   [sudo] password for ammarfaizi2:
->   WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:531 intel_tc_port_sanitize+0x323/0x380 [i915]
->   WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:761 intel_tc_port_init+0x1a9/0x1b0 [i915]
-> 
-> Full log can be found here:
->   https://gist.githubusercontent.com/ammarfaizi2/d588af19f7bb9eb40494626ecc041654/raw/b98d3e1ee5f5ed20b79b0a6cabce06dce8abcd97/kernel_log_bug_linux_5.15.6_stable.txt
-
-could you open a ticket at
-https://gitlab.freedesktop.org/drm/intel/-/issues/new
-
-providing a dmesg log after booting with drm.debug=0x1e?
-
-Thanks,
-Imre
-
-> 
-> Warning:
->   <4>[    6.629829][  T722] ------------[ cut here ]------------
->   <4>[    6.629830][  T722] i915 0000:00:02.0: drm_WARN_ON(val == 0xffffffff)
->   <4>[    6.629842][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:761 intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.629919][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.629951][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.629984][  T722] CPU: 1 PID: 722 Comm: modprobe Not tainted 5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.629986][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.629987][  T722] RIP: 0010:intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.630045][  T722] Code: 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 b0 a9 17 e0 48 c7 c1 c8 22 6b a1 4c 89 e2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 57 ee 58 e0 <0f> 0b e9 61 ff ff ff 0f 1f 44 00 00 48 8b 17 80 ba d3 0d 00 00 0b
->   <4>[    6.630046][  T722] RSP: 0018:ffffc900017f7b08 EFLAGS: 00010296
->   <4>[    6.630048][  T722] RAX: 0000000000000031 RBX: ffff88810403a000 RCX: 0000000000000027
->   <4>[    6.630049][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.630050][  T722] RBP: 0000000000000000 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.630051][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: ffff888102046410
->   <4>[    6.630052][  T722] R13: 00000000ffffffff R14: ffff88810403b940 R15: 00000000ffffffff
->   <4>[    6.630054][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.630055][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.630056][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.630058][  T722] PKRU: 55555554
->   <4>[    6.630059][  T722] Call Trace:
->   <4>[    6.630062][  T722]  <TASK>
->   <4>[    6.630066][  T722]  intel_ddi_init+0x663/0xba0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630125][  T722]  intel_modeset_init_nogem+0x982/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630180][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630230][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630276][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.630279][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630322][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.630325][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.630328][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.630331][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.630333][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.630334][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.630335][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.630337][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.630338][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.630340][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.630342][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.630344][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630387][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.630388][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.630392][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.630394][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.630397][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.630400][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.630404][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.630406][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.630408][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.630409][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.630410][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.630412][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.630412][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.630413][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.630414][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.630414][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.630418][  T722]  </TASK>
->   <4>[    6.630418][  T722] ---[ end trace a36dd53a5e689fdc ]---
->   <4>[    6.630450][  T722] ------------[ cut here ]------------
->   <4>[    6.630450][  T722] i915 0000:00:02.0: drm_WARN_ON(val == 0xffffffff)
->   <4>[    6.630459][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:761 intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.630518][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.630541][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.630566][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.630568][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.630568][  T722] RIP: 0010:intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.630620][  T722] Code: 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 b0 a9 17 e0 48 c7 c1 c8 22 6b a1 4c 89 e2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 57 ee 58 e0 <0f> 0b e9 61 ff ff ff 0f 1f 44 00 00 48 8b 17 80 ba d3 0d 00 00 0b
->   <4>[    6.630621][  T722] RSP: 0018:ffffc900017f7b08 EFLAGS: 00010296
->   <4>[    6.630622][  T722] RAX: 0000000000000031 RBX: ffff88810403c000 RCX: 0000000000000027
->   <4>[    6.630623][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.630623][  T722] RBP: 0000000000000001 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.630624][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: ffff888102046410
->   <4>[    6.630625][  T722] R13: 00000000ffffffff R14: ffff88810403d940 R15: 00000000ffffffff
->   <4>[    6.630625][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.630626][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.630627][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.630628][  T722] PKRU: 55555554
->   <4>[    6.630628][  T722] Call Trace:
->   <4>[    6.630629][  T722]  <TASK>
->   <4>[    6.630630][  T722]  intel_ddi_init+0x663/0xba0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630684][  T722]  intel_modeset_init_nogem+0x98f/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630739][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630786][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630827][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.630828][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630868][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.630870][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.630872][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.630874][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.630876][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.630877][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.630879][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.630881][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.630883][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.630886][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.630888][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.630891][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.630935][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.630936][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.630937][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.630939][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.630941][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.630942][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.630946][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.630947][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.630949][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.630949][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.630950][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.630952][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.630952][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.630953][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.630954][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.630954][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.630957][  T722]  </TASK>
->   <4>[    6.630958][  T722] ---[ end trace a36dd53a5e689fdd ]---
->   <4>[    6.630979][  T722] ------------[ cut here ]------------
->   <4>[    6.630980][  T722] i915 0000:00:02.0: drm_WARN_ON(val == 0xffffffff)
->   <4>[    6.630985][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:761 intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.631038][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.631060][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.631083][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.631085][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.631085][  T722] RIP: 0010:intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.631134][  T722] Code: 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 b0 a9 17 e0 48 c7 c1 c8 22 6b a1 4c 89 e2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 57 ee 58 e0 <0f> 0b e9 61 ff ff ff 0f 1f 44 00 00 48 8b 17 80 ba d3 0d 00 00 0b
->   <4>[    6.631134][  T722] RSP: 0018:ffffc900017f7b08 EFLAGS: 00010296
->   <4>[    6.631135][  T722] RAX: 0000000000000031 RBX: ffff88810403e000 RCX: 0000000000000027
->   <4>[    6.631136][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.631137][  T722] RBP: 0000000000000002 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.631137][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: ffff888102046410
->   <4>[    6.631138][  T722] R13: 00000000ffffffff R14: ffff88810403f940 R15: 00000000ffffffff
->   <4>[    6.631139][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.631140][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.631140][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.631141][  T722] PKRU: 55555554
->   <4>[    6.631142][  T722] Call Trace:
->   <4>[    6.631142][  T722]  <TASK>
->   <4>[    6.631143][  T722]  intel_ddi_init+0x663/0xba0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631195][  T722]  intel_modeset_init_nogem+0x99c/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631249][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631297][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631341][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.631342][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631384][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.631386][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.631388][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.631390][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.631391][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.631393][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.631394][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.631395][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.631397][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.631398][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.631400][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.631402][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631441][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.631442][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.631443][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.631444][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.631447][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.631448][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.631452][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.631453][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.631454][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.631455][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.631456][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.631457][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.631458][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.631459][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.631459][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.631460][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.631463][  T722]  </TASK>
->   <4>[    6.631463][  T722] ---[ end trace a36dd53a5e689fde ]---
->   <4>[    6.631486][  T722] ------------[ cut here ]------------
->   <4>[    6.631486][  T722] i915 0000:00:02.0: drm_WARN_ON(val == 0xffffffff)
->   <4>[    6.631492][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:761 intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.631547][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.631569][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.631593][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.631594][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.631595][  T722] RIP: 0010:intel_tc_port_init+0x1a9/0x1b0 [i915]
->   <4>[    6.631641][  T722] Code: 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 b0 a9 17 e0 48 c7 c1 c8 22 6b a1 4c 89 e2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 57 ee 58 e0 <0f> 0b e9 61 ff ff ff 0f 1f 44 00 00 48 8b 17 80 ba d3 0d 00 00 0b
->   <4>[    6.631642][  T722] RSP: 0018:ffffc900017f7b08 EFLAGS: 00010296
->   <4>[    6.631643][  T722] RAX: 0000000000000031 RBX: ffff888119580000 RCX: 0000000000000027
->   <4>[    6.631644][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.631644][  T722] RBP: 0000000000000003 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.631645][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: ffff888102046410
->   <4>[    6.631645][  T722] R13: 00000000ffffffff R14: ffff888119581940 R15: 00000000ffffffff
->   <4>[    6.631646][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.631647][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.631648][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.631648][  T722] PKRU: 55555554
->   <4>[    6.631649][  T722] Call Trace:
->   <4>[    6.631650][  T722]  <TASK>
->   <4>[    6.631651][  T722]  intel_ddi_init+0x663/0xba0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631701][  T722]  intel_modeset_init_nogem+0x9a9/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631754][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631802][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631846][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.631848][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631891][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.631893][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.631895][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.631896][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.631898][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.631900][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.631901][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.631902][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.631904][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.631905][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.631907][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.631908][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.631949][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.631950][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.631951][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.631952][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.631955][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.631956][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.631959][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.631961][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.631962][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.631963][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.631964][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.631965][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.631966][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.631966][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.631967][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.631967][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.631971][  T722]  </TASK>
->   <4>[    6.631971][  T722] ---[ end trace a36dd53a5e689fdf ]---
->   <4>[    6.632069][  T722] ------------[ cut here ]------------
->   <4>[    6.632070][  T722] i915 0000:00:02.0: drm_WARN_ON(!tc_phy_status_complete(dig_port))
->   <4>[    6.632075][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:531 intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.632134][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.632157][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.632180][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.632182][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.632182][  T722] RIP: 0010:intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.632233][  T722] Code: 4c 8b 77 50 4d 85 f6 75 03 4c 8b 37 e8 c6 ad 17 e0 48 c7 c1 b8 21 6b a1 4c 89 f2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 6d f2 58 e0 <0f> 0b 45 31 c0 e9 38 fd ff ff 48 8b 45 00 48 8b 78 08 48 8b 57 50
->   <4>[    6.632234][  T722] RSP: 0018:ffffc900017f7a78 EFLAGS: 00010296
->   <4>[    6.632235][  T722] RAX: 0000000000000041 RBX: ffff88811a800000 RCX: 0000000000000027
->   <4>[    6.632235][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.632236][  T722] RBP: ffff88810403a000 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.632237][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: 00000000ffffffff
->   <4>[    6.632237][  T722] R13: ffff88810403b940 R14: ffff888102046410 R15: ffff88811a800000
->   <4>[    6.632238][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.632239][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.632240][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.632241][  T722] PKRU: 55555554
->   <4>[    6.632241][  T722] Call Trace:
->   <4>[    6.632242][  T722]  <TASK>
->   <4>[    6.632242][  T722]  ? ktime_get_mono_fast_ns+0x4b/0x90
->   <4>[    6.632245][  T722]  intel_ddi_sync_state+0x40/0x90 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632297][  T722]  intel_modeset_setup_hw_state+0x3a1/0x1960 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632353][  T722]  ? ww_mutex_lock+0x3a/0x90
->   <4>[    6.632354][  T722]  ? modeset_lock+0x90/0x1c0 [drm 096969a57ca4c13d209a85249bf0bc84f5e7fee4]
->   <4>[    6.632373][  T722]  ? lock_is_held_type+0xa5/0x120
->   <4>[    6.632376][  T722]  intel_modeset_init_nogem+0x394/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632430][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632478][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632522][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.632523][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632564][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.632566][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.632568][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.632570][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.632571][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.632573][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.632574][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.632576][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.632577][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.632579][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.632580][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.632582][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632620][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.632621][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.632622][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.632624][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.632626][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.632627][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.632631][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.632632][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.632634][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.632635][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.632636][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.632637][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.632638][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.632638][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.632639][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.632640][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.632643][  T722]  </TASK>
->   <4>[    6.632643][  T722] ---[ end trace a36dd53a5e689fe0 ]---
->   <4>[    6.632648][  T722] ------------[ cut here ]------------
->   <4>[    6.632648][  T722] i915 0000:00:02.0: drm_WARN_ON(!tc_phy_status_complete(dig_port))
->   <4>[    6.632654][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:531 intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.632711][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.632733][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.632756][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.632758][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.632758][  T722] RIP: 0010:intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.632810][  T722] Code: 4c 8b 77 50 4d 85 f6 75 03 4c 8b 37 e8 c6 ad 17 e0 48 c7 c1 b8 21 6b a1 4c 89 f2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 6d f2 58 e0 <0f> 0b 45 31 c0 e9 38 fd ff ff 48 8b 45 00 48 8b 78 08 48 8b 57 50
->   <4>[    6.632811][  T722] RSP: 0018:ffffc900017f7a78 EFLAGS: 00010296
->   <4>[    6.632812][  T722] RAX: 0000000000000041 RBX: ffff88811a800000 RCX: 0000000000000027
->   <4>[    6.632813][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.632813][  T722] RBP: ffff88810403c000 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.632814][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: 00000000ffffffff
->   <4>[    6.632815][  T722] R13: ffff88810403d940 R14: ffff888102046410 R15: ffff88811a800000
->   <4>[    6.632815][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.632816][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.632817][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.632817][  T722] PKRU: 55555554
->   <4>[    6.632818][  T722] Call Trace:
->   <4>[    6.632819][  T722]  <TASK>
->   <4>[    6.632819][  T722]  ? ktime_get_mono_fast_ns+0x4b/0x90
->   <4>[    6.632821][  T722]  intel_ddi_sync_state+0x40/0x90 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632874][  T722]  intel_modeset_setup_hw_state+0x3a1/0x1960 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632929][  T722]  ? ww_mutex_lock+0x3a/0x90
->   <4>[    6.632931][  T722]  ? modeset_lock+0x90/0x1c0 [drm 096969a57ca4c13d209a85249bf0bc84f5e7fee4]
->   <4>[    6.632945][  T722]  ? lock_is_held_type+0xa5/0x120
->   <4>[    6.632947][  T722]  intel_modeset_init_nogem+0x394/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.632998][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633047][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633091][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.633092][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633140][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.633142][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.633146][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.633148][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.633150][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.633151][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.633153][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.633154][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.633155][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.633157][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.633159][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.633160][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633200][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.633201][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.633203][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.633204][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.633206][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.633208][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.633211][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.633213][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.633214][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.633215][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.633216][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.633217][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.633218][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.633218][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.633219][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.633220][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.633223][  T722]  </TASK>
->   <4>[    6.633223][  T722] ---[ end trace a36dd53a5e689fe1 ]---
->   <4>[    6.633228][  T722] ------------[ cut here ]------------
->   <4>[    6.633228][  T722] i915 0000:00:02.0: drm_WARN_ON(!tc_phy_status_complete(dig_port))
->   <4>[    6.633234][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:531 intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.633287][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.633309][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.633334][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.633335][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.633336][  T722] RIP: 0010:intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.633385][  T722] Code: 4c 8b 77 50 4d 85 f6 75 03 4c 8b 37 e8 c6 ad 17 e0 48 c7 c1 b8 21 6b a1 4c 89 f2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 6d f2 58 e0 <0f> 0b 45 31 c0 e9 38 fd ff ff 48 8b 45 00 48 8b 78 08 48 8b 57 50
->   <4>[    6.633386][  T722] RSP: 0018:ffffc900017f7a78 EFLAGS: 00010296
->   <4>[    6.633387][  T722] RAX: 0000000000000041 RBX: ffff88811a800000 RCX: 0000000000000027
->   <4>[    6.633388][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.633388][  T722] RBP: ffff88810403e000 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.633389][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: 00000000ffffffff
->   <4>[    6.633389][  T722] R13: ffff88810403f940 R14: ffff888102046410 R15: ffff88811a800000
->   <4>[    6.633390][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.633391][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.633392][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.633392][  T722] PKRU: 55555554
->   <4>[    6.633393][  T722] Call Trace:
->   <4>[    6.633393][  T722]  <TASK>
->   <4>[    6.633394][  T722]  ? ktime_get_mono_fast_ns+0x4b/0x90
->   <4>[    6.633396][  T722]  intel_ddi_sync_state+0x40/0x90 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633445][  T722]  intel_modeset_setup_hw_state+0x3a1/0x1960 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633499][  T722]  ? ww_mutex_lock+0x3a/0x90
->   <4>[    6.633501][  T722]  ? modeset_lock+0x90/0x1c0 [drm 096969a57ca4c13d209a85249bf0bc84f5e7fee4]
->   <4>[    6.633515][  T722]  ? lock_is_held_type+0xa5/0x120
->   <4>[    6.633517][  T722]  intel_modeset_init_nogem+0x394/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633569][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633617][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633661][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.633663][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633707][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.633709][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.633711][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.633713][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.633714][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.633716][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.633717][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.633719][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.633720][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.633722][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.633723][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.633725][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.633764][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.633765][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.633767][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.633768][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.633770][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.633772][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.633775][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.633776][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.633778][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.633779][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.633780][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.633781][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.633781][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.633782][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.633783][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.633783][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.633786][  T722]  </TASK>
->   <4>[    6.633787][  T722] ---[ end trace a36dd53a5e689fe2 ]---
->   <4>[    6.633792][  T722] ------------[ cut here ]------------
->   <4>[    6.633792][  T722] i915 0000:00:02.0: drm_WARN_ON(!tc_phy_status_complete(dig_port))
->   <4>[    6.633797][  T722] WARNING: CPU: 1 PID: 722 at drivers/gpu/drm/i915/display/intel_tc.c:531 intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.633855][  T722] Modules linked in: i915(+) snd_soc_dmic snd_sof_pci_intel_tgl snd_sof_intel_hda_common snd_soc_hdac_hda soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_ext_core snd_soc_acpi_intel_match snd_soc_acpi soundwire_bus ledtrig_audio snd_soc_core rtw88_8822ce snd_compress ac97_bus snd_pcm_dmaengine rtw88_8822c snd_hda_intel snd_intel_dspcfg rtw88_pci snd_intel_sdw_acpi rtw88_core snd_hda_codec snd_hda_core snd_hwdep intel_tcc_cooling mac80211 nls_iso8859_1 snd_pcm x86_pkg_temp_thermal intel_powerclamp coretemp snd_seq_midi kvm_intel snd_seq_midi_event snd_rawmidi mei_hdcp intel_rapl_msr ttm kvm cfg80211 drm_kms_helper snd_seq btusb btrtl btbcm uvcvideo btintel bluetooth videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev cec processor_thermal_device_pci_legacy processor_thermal_device snd_seq_device rc_core processor_thermal_rfim snd_timer processor_thermal_mbox
->   <4>[    6.633877][  T722]  crct10dif_pclmul ecdh_generic i2c_algo_bit mc joydev input_leds processor_thermal_rapl snd ghash_clmulni_intel ecc fb_sys_fops mei_me aesni_intel hp_wmi syscopyarea intel_rapl_common crypto_simd sysfillrect platform_profile mei libarc4 sysimgblt serio_raw sparse_keymap efi_pstore hid_multitouch cryptd ee1004 soundcore wmi_bmof intel_soc_dts_iosf mac_hid int3400_thermal int3403_thermal int340x_thermal_zone acpi_thermal_rel acpi_pad dptf_pch_fivr sch_fq_codel zram drm msr parport_pc ppdev lp parport ip_tables x_tables autofs4 btrfs blake2b_generic xor usbhid raid6_pq libcrc32c hid_generic nvme nvme_core intel_lpss_pci xhci_pci crc32_pclmul xhci_pci_renesas intel_lpss i2c_i801 i2c_hid_acpi vmd i2c_smbus idma64 i2c_hid hid wmi video pinctrl_tigerlake
->   <4>[    6.633901][  T722] CPU: 1 PID: 722 Comm: modprobe Tainted: G        W         5.15.6-icetea2-stable-00459-ga2547651bc89 #1 d738e98f796accca080303b93ac2eee924880c33
->   <4>[    6.633902][  T722] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
->   <4>[    6.633903][  T722] RIP: 0010:intel_tc_port_sanitize+0x323/0x380 [i915]
->   <4>[    6.633953][  T722] Code: 4c 8b 77 50 4d 85 f6 75 03 4c 8b 37 e8 c6 ad 17 e0 48 c7 c1 b8 21 6b a1 4c 89 f2 48 c7 c7 5e 0f 6d a1 48 89 c6 e8 6d f2 58 e0 <0f> 0b 45 31 c0 e9 38 fd ff ff 48 8b 45 00 48 8b 78 08 48 8b 57 50
->   <4>[    6.633954][  T722] RSP: 0018:ffffc900017f7a78 EFLAGS: 00010296
->   <4>[    6.633955][  T722] RAX: 0000000000000041 RBX: ffff88811a800000 RCX: 0000000000000027
->   <4>[    6.633956][  T722] RDX: ffff88846fa60c28 RSI: 0000000000000001 RDI: ffff88846fa60c20
->   <4>[    6.633956][  T722] RBP: ffff888119580000 R08: ffffffff82760528 R09: 00000000ffffdfff
->   <4>[    6.633957][  T722] R10: ffffffff82680540 R11: ffffffff82680540 R12: 00000000ffffffff
->   <4>[    6.633957][  T722] R13: ffff888119581940 R14: ffff888102046410 R15: ffff88811a800000
->   <4>[    6.633958][  T722] FS:  00007f4fd979e580(0000) GS:ffff88846fa40000(0000) knlGS:0000000000000000
->   <4>[    6.633959][  T722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   <4>[    6.633960][  T722] CR2: 00007fe05f19fea0 CR3: 0000000119098004 CR4: 0000000000770ee0
->   <4>[    6.633960][  T722] PKRU: 55555554
->   <4>[    6.633961][  T722] Call Trace:
->   <4>[    6.633961][  T722]  <TASK>
->   <4>[    6.633962][  T722]  ? ktime_get_mono_fast_ns+0x4b/0x90
->   <4>[    6.633964][  T722]  intel_ddi_sync_state+0x40/0x90 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634016][  T722]  intel_modeset_setup_hw_state+0x3a1/0x1960 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634072][  T722]  ? ww_mutex_lock+0x3a/0x90
->   <4>[    6.634074][  T722]  ? modeset_lock+0x90/0x1c0 [drm 096969a57ca4c13d209a85249bf0bc84f5e7fee4]
->   <4>[    6.634088][  T722]  ? lock_is_held_type+0xa5/0x120
->   <4>[    6.634090][  T722]  intel_modeset_init_nogem+0x394/0x1230 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634144][  T722]  ? gen12_fwtable_read32+0x96/0x2a0 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634191][  T722]  i915_driver_probe+0x6dc/0xd10 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634231][  T722]  ? vga_switcheroo_client_probe_defer+0x1f/0x40
->   <4>[    6.634232][  T722]  ? i915_pci_probe+0x31/0x110 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634272][  T722]  local_pci_probe+0x40/0x80
->   <4>[    6.634274][  T722]  pci_device_probe+0xd9/0x190
->   <4>[    6.634276][  T722]  really_probe+0x1e9/0x3e0
->   <4>[    6.634278][  T722]  __driver_probe_device+0xfe/0x180
->   <4>[    6.634279][  T722]  driver_probe_device+0x1e/0x90
->   <4>[    6.634281][  T722]  __driver_attach+0xc1/0x1d0
->   <4>[    6.634282][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.634283][  T722]  ? __device_attach_driver+0xd0/0xd0
->   <4>[    6.634284][  T722]  bus_for_each_dev+0x64/0x90
->   <4>[    6.634286][  T722]  bus_add_driver+0x12e/0x1f0
->   <4>[    6.634288][  T722]  driver_register+0x8f/0xe0
->   <4>[    6.634289][  T722]  i915_init+0x1a/0x86 [i915 91e0a10445cc74861446c203b02c9291e0680a4b]
->   <4>[    6.634327][  T722]  ? 0xffffffffa0e9d000
->   <4>[    6.634328][  T722]  do_one_initcall+0x59/0x210
->   <4>[    6.634330][  T722]  ? __cond_resched+0x16/0x50
->   <4>[    6.634331][  T722]  ? kmem_cache_alloc_trace+0x55/0x550
->   <4>[    6.634333][  T722]  do_init_module+0x5c/0x260
->   <4>[    6.634335][  T722]  __do_sys_finit_module+0x95/0xe0
->   <4>[    6.634338][  T722]  do_syscall_64+0x35/0xb0
->   <4>[    6.634339][  T722]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->   <4>[    6.634341][  T722] RIP: 0033:0x7f4fd98c594d
->   <4>[    6.634342][  T722] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 64 0f 00 f7 d8 64 89 01 48
->   <4>[    6.634343][  T722] RSP: 002b:00007ffd955c4318 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
->   <4>[    6.634344][  T722] RAX: ffffffffffffffda RBX: 000055ff3b3e0980 RCX: 00007f4fd98c594d
->   <4>[    6.634344][  T722] RDX: 0000000000000000 RSI: 000055ff3b3cfc02 RDI: 0000000000000000
->   <4>[    6.634345][  T722] RBP: 0000000000040000 R08: 0000000000000000 R09: 0000000000000000
->   <4>[    6.634346][  T722] R10: 0000000000000000 R11: 0000000000000246 R12: 000055ff3b3cfc02
->   <4>[    6.634346][  T722] R13: 000055ff3b3e0a90 R14: 0000000000000000 R15: 000055ff3b3da910
->   <4>[    6.634349][  T722]  </TASK>
->   <4>[    6.634350][  T722] ---[ end trace a36dd53a5e689fe3 ]---
-> 
-> -- 
-> Ammar Faizi
-> 
+DQoNCj4gT24gRGVjIDcsIDIwMjEsIGF0IDk6MTMgQU0sIERhdmlkIEhpbGRlbmJyYW5kIDxkYXZp
+ZEByZWRoYXQuY29tPiB3cm90ZToNCj4gDQo+IE9uIDA3LjEyLjIxIDE4OjAyLCBBbGV4ZXkgTWFr
+aGFsb3Ygd3JvdGU6DQo+PiANCj4+IA0KPj4+IE9uIERlYyA3LCAyMDIxLCBhdCA4OjM2IEFNLCBN
+aWNoYWwgSG9ja28gPG1ob2Nrb0BzdXNlLmNvbT4gd3JvdGU6DQo+Pj4gDQo+Pj4gT24gVHVlIDA3
+LTEyLTIxIDE3OjI3OjI5LCBNaWNoYWwgSG9ja28gd3JvdGU6DQo+Pj4gWy4uLl0NCj4+Pj4gU28g
+eW91ciBwcm9wb3NhbCBpcyB0byBkcm9wIHNldF9ub2RlX29ubGluZSBmcm9tIHRoZSBwYXRjaCBh
+bmQgYWRkIGl0IGFzDQo+Pj4+IGEgc2VwYXJhdGUgb25lIHdoaWNoIGhhbmRsZXMNCj4+Pj4gCS0g
+c3lzZnMgcGFydCAoaS5lLiBkbyBub3QgcmVnaXN0ZXIgYSBub2RlIHdoaWNoIGRvZXNuJ3Qgc3Bh
+biBhDQo+Pj4+IAkgIHBoeXNpY2FsIGFkZHJlc3Mgc3BhY2UpDQo+Pj4+IAktIGhvdHBsdWcgc2lk
+ZSBvZiAoZHJvcCB0aGUgcGdkIGFsbG9jYXRpb24sIHJlZ2lzdGVyIG5vZGUgbGF6aWx5DQo+Pj4+
+IAkgIHdoZW4gYSBmaXJzdCBtZW1ibG9ja3MgYXJlIHJlZ2lzdGVyZWQpDQo+Pj4gDQo+Pj4gSW4g
+b3RoZXIgd29yZHMsIHRoZSBmaXJzdCBzdGFnZQ0KPj4+IGRpZmYgLS1naXQgYS9tbS9wYWdlX2Fs
+bG9jLmMgYi9tbS9wYWdlX2FsbG9jLmMNCj4+PiBpbmRleCBjNTk1Mjc0OWFkNDAuLmY5MDI0YmEw
+OWM1MyAxMDA2NDQNCj4+PiAtLS0gYS9tbS9wYWdlX2FsbG9jLmMNCj4+PiArKysgYi9tbS9wYWdl
+X2FsbG9jLmMNCj4+PiBAQCAtNjM4Miw3ICs2MzgyLDExIEBAIHN0YXRpYyB2b2lkIF9fYnVpbGRf
+YWxsX3pvbmVsaXN0cyh2b2lkICpkYXRhKQ0KPj4+IAlpZiAoc2VsZiAmJiAhbm9kZV9vbmxpbmUo
+c2VsZi0+bm9kZV9pZCkpIHsNCj4+PiAJCWJ1aWxkX3pvbmVsaXN0cyhzZWxmKTsNCj4+PiAJfSBl
+bHNlIHsNCj4+PiAtCQlmb3JfZWFjaF9vbmxpbmVfbm9kZShuaWQpIHsNCj4+PiArCQkvKg0KPj4+
+ICsJCSAqIEFsbCBwb3NzaWJsZSBub2RlcyBoYXZlIHBnZGF0IHByZWFsbG9jYXRlZA0KPj4+ICsJ
+CSAqIGZyZWVfYXJlYV9pbml0DQo+Pj4gKwkJICovDQo+Pj4gKwkJZm9yX2VhY2hfbm9kZShuaWQp
+IHsNCj4+PiAJCQlwZ19kYXRhX3QgKnBnZGF0ID0gTk9ERV9EQVRBKG5pZCk7DQo+Pj4gDQo+Pj4g
+CQkJYnVpbGRfem9uZWxpc3RzKHBnZGF0KTsNCj4+IA0KPj4gV2lsbCBpdCBibG93IHVwIG1lbW9y
+eSB1c2FnZSBmb3IgdGhlIG5vZGVzIHdoaWNoIG1pZ2h0IG5ldmVyIGJlIG9ubGluZWQ/DQo+PiBJ
+IHByZWZlciB0aGUgaWRlYSBvZiBpbml0IG9uIGRlbWFuZC4NCj4+IA0KPj4gRXZlbiBub3cgdGhl
+cmUgaXMgYW4gZXhpc3RpbmcgcHJvYmxlbS4NCj4+IEluIG15IGV4cGVyaW1lbnRzLCBJIG9ic2Vy
+dmVkIF9odWdlXyBtZW1vcnkgY29uc3VtcHRpb24gaW5jcmVhc2UgYnkgaW5jcmVhc2luZyBudW1i
+ZXINCj4+IG9mIHBvc3NpYmxlIG51bWEgbm9kZXMuIEnigJltIGdvaW5nIHRvIHJlcG9ydCBpdCBp
+biBzZXBhcmF0ZSBtYWlsIHRocmVhZC4NCj4gDQo+IEkgYWxyZWFkeSByYWlzZWQgdGhhdCBQUEMg
+bWlnaHQgYmUgcHJvYmxlbWF0aWMgaW4gdGhhdCByZWdhcmQuIFdoaWNoDQo+IGFyY2hpdGVjdHVy
+ZSAvIHNldHVwIGRvIHlvdSBoYXZlIGluIG1pbmQgdGhhdCBjYW4gaGF2ZSBhIGxvdCBvZiBwb3Nz
+aWJsZQ0KPiBub2Rlcz8NCj4gDQpJdCBpcyB4ODZfNjQgVk13YXJlIFZNLCBub3QgdGhlIHJlZ3Vs
+YXIgb25lLCBidXQgc3BlY2lhbGx5IGNvbmZpZ3VyZWQgKDEgdkNQVSBwZXIgbm9kZSwNCndpdGgg
+aG90LXBsdWcgc3VwcG9ydCwgMTI4IHBvc3NpYmxlIG5vZGVzKSAgDQoNClRoYW5rcywNCuKAlC1B
+bGV4ZXk=

@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE06546BAC7
+	by mail.lfdr.de (Postfix) with ESMTP id 64DF546BAC6
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbhLGMRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:17:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:58418 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236151AbhLGMQ6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:16:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60D3A11FB;
-        Tue,  7 Dec 2021 04:13:28 -0800 (PST)
-Received: from [10.57.34.196] (unknown [10.57.34.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E07FF3F5A1;
-        Tue,  7 Dec 2021 04:13:25 -0800 (PST)
-Message-ID: <e7aaacd8-7972-6ab9-ff0c-e286bf23993a@arm.com>
-Date:   Tue, 7 Dec 2021 12:13:16 +0000
+        id S236148AbhLGMQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:16:57 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54072 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236125AbhLGMQ4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 07:16:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 030171FDFD;
+        Tue,  7 Dec 2021 12:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638879205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nGck5MdPvuP3udnx0I0W++3cIdM5m6MOLBwXn7e6OPk=;
+        b=muppBV7reovZWWYXLcS82WCyOFpyW1j5ftWfE/cX6yaoc1+dnWhLq9ZCofCj6MkCqPNKpw
+        RmfL0vspK+TY5OjV1OwG+hud53k5o1E+aAr3oFrMEckRXixaTWHh71g1Q0WHS1NARwh6NI
+        M3IUSIKHbje9+Ti48IB9H/Rs+Hj7zAU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C895DA3B89;
+        Tue,  7 Dec 2021 12:13:24 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 13:13:24 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+References: <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
+ <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
+ <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 1/3] perf vendor events: For the Neoverse N2
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-Cc:     Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20211203123525.31127-1-andrew.kilroy@arm.com>
- <2e1a7a96-4ec6-e1f2-5bd4-133480391053@huawei.com>
-From:   Andrew Kilroy <andrew.kilroy@arm.com>
-In-Reply-To: <2e1a7a96-4ec6-e1f2-5bd4-133480391053@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 07/12/2021 09:57, John Garry wrote:
-> On 03/12/2021 12:35, Andrew Kilroy wrote:
->> Updates the common and microarch json file to add counters
->> available in the Neoverse N2 chip, but should also apply to other ArmV8
->> and ArmV9 cpus.  Specified in ArmV8 architecture reference manual
->>
->>    https://developer.arm.com/documentation/ddi0487/gb/?lang=en
->>
->> Some of the counters added to armv8-common-and-microarch.json are
->> specified in the ArmV9 architecture reference manual supplement
->> (issue A.a):
->>
->>    https://developer.arm.com/documentation/ddi0608/aa
->>
->> The additional ArmV9 counters are
->>
->>    TRB_WRAP
->>    TRCEXTOUT0
->>    TRCEXTOUT1
->>    TRCEXTOUT2
->>    TRCEXTOUT3
->>    CTI_TRIGOUT4
->>    CTI_TRIGOUT5
->>    CTI_TRIGOUT6
->>    CTI_TRIGOUT7
->>
->> This patch also adds files in pmu-events/arch/arm64/arm/neoverse-n2 for
->> perf list to output the counter names in categories.
->>
->> A subsequent patch renames armv8-common-and-microarch.json and
->> armv8-recommended.json to reflect that counters for armv9 are being
->> added.
+On Tue 07-12-21 12:08:57, David Hildenbrand wrote:
+> On 07.12.21 11:54, Michal Hocko wrote:
+> > Hi,
+> > I didn't have much time to dive into this deeper and I have hit some
+> > problems handling this in an arch specific code so I have tried to play
+> > with this instead:
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index c5952749ad40..4d71759d0d9b 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -8032,8 +8032,16 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> >  	/* Initialise every node */
+> >  	mminit_verify_pageflags_layout();
+> >  	setup_nr_node_ids();
+> > -	for_each_online_node(nid) {
+> > +	for_each_node(nid) {
+> >  		pg_data_t *pgdat = NODE_DATA(nid);
+> > +
+> > +		if (!node_online(nid)) {
+> > +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n");
+> > +			alloc_node_data(nid);
 > 
-> This commentary should be in a cover letter. Please do that.
+> That's x86 specific and not exposed to generic code -- at least in my
+> code base. I think we'd want an arch_alloc_nodedata() variant that
+> allocates via memblock -- and initializes all fields to 0. So
+> essentially a generic alloc_node_data().
+
+you are right
+
 > 
-> And did you consider just adding a armv9-common-and-microarch.json and
-> armv9-recommended.json instead of adding to and renaming the v8 version?
-> I know that it creates scattered definitions, but we already have that in
-> dividing the common and the recommended JSONs.
+> > +			free_area_init_memoryless_node(nid);
 > 
+> That's really just free_area_init_node() below, I do wonder what value
+> free_area_init_memoryless_node() has as of today.
 
-I considered it, but I wasn't sure what was preferable.  I thought I'd 
-get some feedback.  Do you consider the separation important?  Any 
-particular reason?
+I am not sure there is any real value in having this special name for
+this but I have kept is sync with what x86 does currently. If we want to
+remove the wrapper then just do it everywhere. I can do that on top.
 
+> > +			continue;
+> > +		}
+> > +
+> >  		free_area_init_node(nid);
+> >  
+> >  		/* Any memory on that node */
+> > 
+> > Could you give it a try? I do not have any machine which would exhibit
+> > the problem so I cannot really test this out. I hope build_zone_info
+> > will not choke on this. I assume the node distance table is
+> > uninitialized for these nodes and IIUC this should lead to an assumption
+> > that all other nodes are close. But who knows that can blow up there.
+> > 
+> > Btw. does this make any sense at all to others?
+> > 
+> 
+> __build_all_zonelists() has to update the zonelists of all nodes I think.
 
-> Thanks,
-> John
-
-Andrew
+I am not sure what you mean. This should be achieved by this patch
+because the boot time build_all_zonelists will go over all online nodes
+(i.e. with pgdat). free_area_init happens before that. I am just worried
+that the arch specific node_distance() will generate a complete garbage
+or blow up for some reason.
+-- 
+Michal Hocko
+SUSE Labs

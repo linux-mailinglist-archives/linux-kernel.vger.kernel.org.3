@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAAA46BA20
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894DB46BA31
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234406AbhLGLgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhLGLgb (ORCPT
+        id S235772AbhLGLl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:41:59 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:59212 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235776AbhLGLl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:36:31 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECCAC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 03:33:00 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id i5so28864251wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:33:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W+jl/ZL6Ni2iJkvnbGpHwSuKGjkdbemchwt4upixgmM=;
-        b=oFABvotOOBZR4NlvwPo/m+RR0AOH8nY+YolX4mtFCDkCZs0/oq92ZvkuJwPfm3hbUR
-         jwzjo8Cpch8bBsxLIoAr1J6gcqPAy7lY9ECZ7rFK3FebmVtjYy6xRtDCnH86AeQAG/N3
-         8aMH5FEVFP0b4/r4sLis56jXp2xcf30+tjZpxKSdXg2f7jTlg5caMN0uOT2KhR+UHFtN
-         BonfxLRAfDWkOWPJv93cpKg/a5wvEfw/KnyLt/x/BI5pJu06mHn2OG6DWetkchIfJnIY
-         MlvdkLaizGz4Af0eH3sATsBEOJ/OB4ZAtaDYv0V0zO9mPSxon+dDULRveFM6DiVNyAUn
-         MVNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W+jl/ZL6Ni2iJkvnbGpHwSuKGjkdbemchwt4upixgmM=;
-        b=fsmonLk10YfeTraCzR0WVsY5vR0m8Fj+tlKmEQ7Y743ht3QIrUHanHZoG9S8+6Eguu
-         zflsohXF+ULrhUiylEWm3IGAUKXUfZ9K2F4zlOHH/HiGSW0s45p2BIbD4qvj3NDenmBT
-         X9sNR3KPfJT/+SCTfGKgSkj4LOYN/kZcHS2vX+l0FfcFOE3mJUv3ltOaOZK2DP1g6+mU
-         pPC8WmYAp42I35ArRiQsvSkkW42ip3jzhfqo7x23fBXYc++hUN2E/s/kmjaZ9goLQLzc
-         /wQ/ct9RdLl5XADWwkxYS0dskpiTqnuDo7ENBJUlZPAWlykuE0fJe12GxwGd03NfAGoY
-         ZKGQ==
-X-Gm-Message-State: AOAM53227HqNt3eoTucRtzsmWOEi+SSDGllP4cMFTUx5iBXTVhwTn3kl
-        VTTMHnlzjVnLgzDTML6d69pUerAQ3qo=
-X-Google-Smtp-Source: ABdhPJxKdI0IOTeMzmfX2JPCpnXJdv/oNQKpU3aOxfgjSYVh+B4N5+cSb56zy/ibu8no6F+ePINcnA==
-X-Received: by 2002:adf:c10e:: with SMTP id r14mr49049778wre.558.1638876779441;
-        Tue, 07 Dec 2021 03:32:59 -0800 (PST)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id p13sm2343765wmi.0.2021.12.07.03.32.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 03:32:59 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: rockchip_i2s_tdm.c:undefined reference to `clk_set_parent'
-Date:   Tue, 07 Dec 2021 12:32:52 +0100
-Message-ID: <13326272.At7iLaMNiz@archbook>
-In-Reply-To: <202112070621.TnLPiADU-lkp@intel.com>
-References: <202112070621.TnLPiADU-lkp@intel.com>
+        Tue, 7 Dec 2021 06:41:58 -0500
+X-UUID: c1d2d3faf55548ef827f6e6e2d90f71d-20211207
+X-UUID: c1d2d3faf55548ef827f6e6e2d90f71d-20211207
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 686929266; Tue, 07 Dec 2021 19:38:24 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 7 Dec 2021 19:38:22 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Dec 2021 19:38:21 +0800
+From:   <yf.wang@mediatek.com>
+To:     <will@kernel.org>
+CC:     <Guangming.Cao@mediatek.com>, <Libo.Kang@mediatek.com>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <robin.murphy@arm.com>, <wsd_upstream@mediatek.com>,
+        <yf.wang@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3] iommu/io-pgtable-arm-v7s: Add error handle for page table allocation failure
+Date:   Tue, 7 Dec 2021 19:33:15 +0800
+Message-ID: <20211207113315.29109-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211207094817.GA31382@willie-the-truck>
+References: <20211207094817.GA31382@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 6. Dezember 2021 23:46:38 CET kernel test robot wrote:
-> [...]
-> 
-> All errors (new ones prefixed by >>):
-> 
->    mips-linux-ld: sound/soc/jz4740/jz4740-i2s.o: in function `jz4740_i2s_set_sysclk':
->    jz4740-i2s.c:(.text+0x3ec): undefined reference to `clk_set_parent'
->    mips-linux-ld: jz4740-i2s.c:(.text+0x44c): undefined reference to `clk_set_parent'
->    mips-linux-ld: sound/soc/rockchip/rockchip_i2s_tdm.o: in function `rockchip_i2s_tdm_calibrate_mclk.isra.0':
-> >> rockchip_i2s_tdm.c:(.text+0x10d4): undefined reference to `clk_set_parent'
-> >> mips-linux-ld: rockchip_i2s_tdm.c:(.text+0x1180): undefined reference to `clk_set_parent'
-> 
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-According to some previous conversations I've stumbled upon[1],
-this appears to be due to certain MIPS configurations not
-implementing the clock API properly, so they don't provide a
-clk_set_parent despite advertising that they have support for
-clocks.
+In __arm_v7s_alloc_table function:
+iommu call kmem_cache_alloc to allocate page table, this function
+allocate memory may fail, when kmem_cache_alloc fails to allocate
+table, call virt_to_phys will be abnomal and return unexpected phys
+and goto out_free, then call kmem_cache_free to release table will
+trigger KE, __get_free_pages and free_pages have similar problem,
+so add error handle for page table allocation failure.
 
-So my question is: do I need to care about this? This hardware
-will never be used on MIPS, and a lot of other drivers (as seen in
-the errors snippet from the test robot) have the same issue, and
-the problem is most likely not in my driver but in that specific
-configuration's clock API implementation.
+Fixes: 29859aeb8a6ea ("iommu/io-pgtable-arm-v7s: Abort allocation when table address overflows the PTE")
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.10.*
+---
+v3: Update patch
+    1. Remove unnecessary log print as suggested by Will.
+    2. Remove unnecessary condition check.
+v2: Cc stable@vger.kernel.org
+    1. This patch needs to be merged stable branch, add stable@vger.kernel.org
+       in mail list.
+    2. There is No new code change in v2.
 
+---
+ drivers/iommu/io-pgtable-arm-v7s.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-[1]: https://lore.kernel.org/lkml/8a41b718-a6f6-6b7f-1699-18ab619884c3@infradead.org/
-
+diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+index bfb6acb651e5..be066c1503d3 100644
+--- a/drivers/iommu/io-pgtable-arm-v7s.c
++++ b/drivers/iommu/io-pgtable-arm-v7s.c
+@@ -246,13 +246,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
+ 	else if (lvl == 2)
+ 		table = kmem_cache_zalloc(data->l2_tables, gfp);
++
++	if (!table)
++		return NULL;
++
+ 	phys = virt_to_phys(table);
+ 	if (phys != (arm_v7s_iopte)phys) {
+ 		/* Doesn't fit in PTE */
+ 		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
+ 		goto out_free;
+ 	}
+-	if (table && !cfg->coherent_walk) {
++	if (!cfg->coherent_walk) {
+ 		dma = dma_map_single(dev, table, size, DMA_TO_DEVICE);
+ 		if (dma_mapping_error(dev, dma))
+ 			goto out_free;
+-- 
+2.18.0
 

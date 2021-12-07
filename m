@@ -2,243 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90CC46C63D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B25546C663
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241582AbhLGVLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241546AbhLGVLW (ORCPT
+        id S241767AbhLGVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:13:05 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:35990 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241766AbhLGVMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:11:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B712C061574;
-        Tue,  7 Dec 2021 13:07:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 80F0CCE1E22;
-        Tue,  7 Dec 2021 21:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64422C341C6;
-        Tue,  7 Dec 2021 21:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638911267;
-        bh=xbRlMGQiDpgUvYdaI107undae+Qs6TI/rFQZGYFE5ws=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cBYISP9LVdytikmRCWz5M4AFc9XhUaSKwFOouejXtfcYt9GXqH/J18Ri0AlAVfCkA
-         fFEdRhKoQK8hqdNrGtpslFwGsnrWbBWtJdcJSXCRSfSvRMva7UptH+qmLAHL36/wgB
-         +Q40sXVJlVL90ihJGfnoAIdCwABRwG7avm6Y/HHq0J737ITfdBNjCDAtERV3VxKSCh
-         Kpk/JKFDn8vTxI1V7D+lXbxw1WksGa9HgaoL9jr0UeQSCtHsbCRe1vhzJyKwIbxZ/4
-         hS+da7OrEP2eS4jltiDqyDDcS1blaYaUUZhSPT5uo4+266EV4D3FDy5+LNcn9Fz1U8
-         Tz0Gqs2+y+1nQ==
-Date:   Tue, 7 Dec 2021 15:07:46 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com
-Subject: Re: [patch V2 10/31] PCI/MSI: Use msi_on_each_desc()
-Message-ID: <20211207210746.GA78295@bhelgaas>
+        Tue, 7 Dec 2021 16:12:38 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:51446)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1muhhv-001ifU-3F; Tue, 07 Dec 2021 14:09:03 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:60992 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1muhht-008wfq-0g; Tue, 07 Dec 2021 14:09:02 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        keescook@chromium.org, jlayton@kernel.org, bfields@fieldses.org,
+        yzaikin@google.com, wangle6@huawei.com,
+        Joe Perches <joe@perches.com>
+References: <20211207011320.100102-1-nixiaoming@huawei.com>
+        <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
+        <Ya/BnndSXKHiUpGm@bombadil.infradead.org>
+Date:   Tue, 07 Dec 2021 15:08:03 -0600
+In-Reply-To: <Ya/BnndSXKHiUpGm@bombadil.infradead.org> (Luis Chamberlain's
+        message of "Tue, 7 Dec 2021 12:18:38 -0800")
+Message-ID: <875ys0azt8.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206210748.142603657@linutronix.de>
+Content-Type: text/plain
+X-XM-SPF: eid=1muhht-008wfq-0g;;;mid=<875ys0azt8.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18gCLiE4BbllrCAkTyVw19+r+viE4ZO5KA=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
+        version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4781]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Luis Chamberlain <mcgrof@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1512 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.6 (0.3%), b_tie_ro: 3.1 (0.2%), parse: 1.16
+        (0.1%), extract_message_metadata: 11 (0.7%), get_uri_detail_list: 2.4
+        (0.2%), tests_pri_-1000: 6 (0.4%), tests_pri_-950: 1.05 (0.1%),
+        tests_pri_-900: 0.80 (0.1%), tests_pri_-90: 101 (6.7%), check_bayes:
+        100 (6.6%), b_tokenize: 7 (0.5%), b_tok_get_all: 9 (0.6%),
+        b_comp_prob: 2.2 (0.1%), b_tok_touch_all: 78 (5.1%), b_finish: 0.76
+        (0.1%), tests_pri_0: 1372 (90.8%), check_dkim_signature: 0.40 (0.0%),
+        check_dkim_adsp: 2.3 (0.2%), poll_dns_idle: 0.16 (0.0%), tests_pri_10:
+        2.8 (0.2%), tests_pri_500: 8 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] sysctl: Add a group of macro functions to initcall the sysctl table of each feature
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:51:18PM +0100, Thomas Gleixner wrote:
-> Use the new iterator functions which pave the way for dynamically extending
-> MSI-X vectors.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Luis Chamberlain <mcgrof@kernel.org> writes:
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> On Mon, Dec 06, 2021 at 05:38:42PM -0800, Andrew Morton wrote:
+>> On Tue, 7 Dec 2021 09:13:20 +0800 Xiaoming Ni <nixiaoming@huawei.com> wrote:
+>> > --- a/fs/inode.c
+>> > +++ b/fs/inode.c
+>> > @@ -132,12 +132,7 @@ static struct ctl_table inodes_sysctls[] = {
+>> >  	{ }
+>> >  };
+>> >  
+>> > -static int __init init_fs_inode_sysctls(void)
+>> > -{
+>> > -	register_sysctl_init("fs", inodes_sysctls);
+>> > -	return 0;
+>> > -}
+>> > -early_initcall(init_fs_inode_sysctls);
+>> > +fs_sysctl_initcall(inodes_sysctls);
+>> >  #endif
+>> 
+>> Here's another, of many.
+>> 
+>> Someone made the decision to use early_initcall() here (why?) and this
+>> patch switches it to late_initcall()!  Worrisome.  Each such stealth
+>> conversion should be explained and justified, shouldn't it?
+>
+> I made the decisions for quite a bit of the ordering and yes I agree
+> this need *very careful* explanation, specially if we are going to
+> generalize this.
+>
+> First and foremost. git grep for sysctl_init_bases and you will see
+> that the bases for now are initialized on proc_sys_init() and that
+> gets called on proc_root_init() and that in turn on init/main.c's
+> start_kernel(). And so this happens *before* the init levels.
+>
+> The proper care for what goes on top of this needs to take into
+> consideration the different init levels and that the if a sysctl
+> is using a directory *on top* of a base, then that sysctl registration
+> must be registered *after* that directory. The *base* directory for
+> "fs" is now registered through fs/sysctls.c() on init_fs_sysctls()
+> using register_sysctl_base(). I made these changes with these names
+> and requiring the DECLARE_SYSCTL_BASE() so it would be easy for us
+> to look at where these are declared.
+>
+> So the next step in order to consider is *link* ordering and that
+> order is maintained by the Makefile. That is why I put this at the
+> top of the fs Makfile:
+>
+> obj-$(CONFIG_SYSCTL)            += sysctls.o 
+>
+> So any file after this can use early_initcall(), because the base
+> for "fs" was declared first in link order, and it used early_initcall().
+> It is fine to have the other stuff that goes on top of the "fs" base
+> use late_initcall() but that assumes that vetting has been done so that
+> if a directory on "fs" was created, let's call it "foo", vetting was done
+> to ensure that things on top of "foo" are registered *after* the "foo"
+> directory.
+>
+> We now have done the cleanup for "fs", and we can do what we see fine
+> for "fs", but we may run into surprises later with the other bases, so
+> I'd be wary of making assumptions at this point if we can use
+> late_initcall().
+>
+> So, as a rule of thumb I'd like to see bases use early_initcall(). The
+> rest requires manual work and vetting.
+>
+> So, how about this, we define fs_sysctl_initcall() to use also
+> early_initcall(), and ask susbsystems to do their vetting so that
+> the base also gets linked first.
+>
+> After this, if a directory on top of a base is created we should likely create
+> a new init level and just bump that to use the next init level. So
+> something like fs_sysctl_base_initcall_subdir_1() map to core_initcall()
+> and so on.
+>
+> That would allow us to easily grep for directory structures easily and
+> puts some implicit onus of ordering on those folks doing these conversions.
+> We'd document well the link order stuff for those using the base stuff
+> too as that is likely only where this will matter most.
 
-> ---
->  drivers/pci/msi/irqdomain.c |    4 ++--
->  drivers/pci/msi/legacy.c    |   19 ++++++++-----------
->  drivers/pci/msi/msi.c       |   30 ++++++++++++++----------------
->  3 files changed, 24 insertions(+), 29 deletions(-)
-> 
-> --- a/drivers/pci/msi/irqdomain.c
-> +++ b/drivers/pci/msi/irqdomain.c
-> @@ -83,7 +83,7 @@ static int pci_msi_domain_check_cap(stru
->  				    struct msi_domain_info *info,
->  				    struct device *dev)
->  {
-> -	struct msi_desc *desc = first_pci_msi_entry(to_pci_dev(dev));
-> +	struct msi_desc *desc = msi_first_desc(dev, MSI_DESC_ALL);
->  
->  	/* Special handling to support __pci_enable_msi_range() */
->  	if (pci_msi_desc_is_multi_msi(desc) &&
-> @@ -98,7 +98,7 @@ static int pci_msi_domain_check_cap(stru
->  			unsigned int idx = 0;
->  
->  			/* Check for gaps in the entry indices */
-> -			for_each_msi_entry(desc, dev) {
-> +			msi_for_each_desc(desc, dev, MSI_DESC_ALL) {
->  				if (desc->msi_index != idx++)
->  					return -ENOTSUPP;
->  			}
-> --- a/drivers/pci/msi/legacy.c
-> +++ b/drivers/pci/msi/legacy.c
-> @@ -28,7 +28,7 @@ int __weak arch_setup_msi_irqs(struct pc
->  	if (type == PCI_CAP_ID_MSI && nvec > 1)
->  		return 1;
->  
-> -	for_each_pci_msi_entry(desc, dev) {
-> +	msi_for_each_desc(desc, &dev->dev, MSI_DESC_NOTASSOCIATED) {
->  		ret = arch_setup_msi_irq(dev, desc);
->  		if (ret)
->  			return ret < 0 ? ret : -ENOSPC;
-> @@ -42,27 +42,24 @@ void __weak arch_teardown_msi_irqs(struc
->  	struct msi_desc *desc;
->  	int i;
->  
-> -	for_each_pci_msi_entry(desc, dev) {
-> -		if (desc->irq) {
-> -			for (i = 0; i < desc->nvec_used; i++)
-> -				arch_teardown_msi_irq(desc->irq + i);
-> -		}
-> +	msi_for_each_desc(desc, &dev->dev, MSI_DESC_ASSOCIATED) {
-> +		for (i = 0; i < desc->nvec_used; i++)
-> +			arch_teardown_msi_irq(desc->irq + i);
->  	}
->  }
->  
->  static int pci_msi_setup_check_result(struct pci_dev *dev, int type, int ret)
->  {
-> -	struct msi_desc *entry;
-> +	struct msi_desc *desc;
->  	int avail = 0;
->  
->  	if (type != PCI_CAP_ID_MSIX || ret >= 0)
->  		return ret;
->  
->  	/* Scan the MSI descriptors for successfully allocated ones. */
-> -	for_each_pci_msi_entry(entry, dev) {
-> -		if (entry->irq != 0)
-> -			avail++;
-> -	}
-> +	msi_for_each_desc(desc, &dev->dev, MSI_DESC_ASSOCIATED)
-> +		avail++;
-> +
->  	return avail ? avail : ret;
->  }
->  
-> --- a/drivers/pci/msi/msi.c
-> +++ b/drivers/pci/msi/msi.c
-> @@ -299,7 +299,6 @@ static void __pci_restore_msix_state(str
->  
->  	if (!dev->msix_enabled)
->  		return;
-> -	BUG_ON(list_empty(dev_to_msi_list(&dev->dev)));
->  
->  	/* route the table */
->  	pci_intx_for_msi(dev, 0);
-> @@ -309,7 +308,7 @@ static void __pci_restore_msix_state(str
->  	write_msg = arch_restore_msi_irqs(dev);
->  
->  	msi_lock_descs(&dev->dev);
-> -	for_each_pci_msi_entry(entry, dev) {
-> +	msi_for_each_desc(entry, &dev->dev, MSI_DESC_ALL) {
->  		if (write_msg)
->  			__pci_write_msi_msg(entry, &entry->msg);
->  		pci_msix_write_vector_ctrl(entry, entry->pci.msix_ctrl);
-> @@ -378,14 +377,14 @@ static int msi_verify_entries(struct pci
->  	if (!dev->no_64bit_msi)
->  		return 0;
->  
-> -	for_each_pci_msi_entry(entry, dev) {
-> +	msi_for_each_desc(entry, &dev->dev, MSI_DESC_ALL) {
->  		if (entry->msg.address_hi) {
->  			pci_err(dev, "arch assigned 64-bit MSI address %#x%08x but device only supports 32 bits\n",
->  				entry->msg.address_hi, entry->msg.address_lo);
-> -			return -EIO;
-> +			break;
->  		}
->  	}
-> -	return 0;
-> +	return !entry ? 0 : -EIO;
->  }
->  
->  /**
-> @@ -418,7 +417,7 @@ static int msi_capability_init(struct pc
->  		goto unlock;
->  
->  	/* All MSIs are unmasked by default; mask them all */
-> -	entry = first_pci_msi_entry(dev);
-> +	entry = msi_first_desc(&dev->dev, MSI_DESC_ALL);
->  	pci_msi_mask(entry, msi_multi_mask(entry));
->  
->  	/* Configure MSI capability structure */
-> @@ -508,11 +507,11 @@ static int msix_setup_msi_descs(struct p
->  
->  static void msix_update_entries(struct pci_dev *dev, struct msix_entry *entries)
->  {
-> -	struct msi_desc *entry;
-> +	struct msi_desc *desc;
->  
->  	if (entries) {
-> -		for_each_pci_msi_entry(entry, dev) {
-> -			entries->vector = entry->irq;
-> +		msi_for_each_desc(desc, &dev->dev, MSI_DESC_ALL) {
-> +			entries->vector = desc->irq;
->  			entries++;
->  		}
->  	}
-> @@ -705,15 +704,14 @@ static void pci_msi_shutdown(struct pci_
->  	if (!pci_msi_enable || !dev || !dev->msi_enabled)
->  		return;
->  
-> -	BUG_ON(list_empty(dev_to_msi_list(&dev->dev)));
-> -	desc = first_pci_msi_entry(dev);
-> -
->  	pci_msi_set_enable(dev, 0);
->  	pci_intx_for_msi(dev, 1);
->  	dev->msi_enabled = 0;
->  
->  	/* Return the device with MSI unmasked as initial states */
-> -	pci_msi_unmask(desc, msi_multi_mask(desc));
-> +	desc = msi_first_desc(&dev->dev, MSI_DESC_ALL);
-> +	if (!WARN_ON_ONCE(!desc))
-> +		pci_msi_unmask(desc, msi_multi_mask(desc));
->  
->  	/* Restore dev->irq to its default pin-assertion IRQ */
->  	dev->irq = desc->pci.msi_attrib.default_irq;
-> @@ -789,7 +787,7 @@ static int __pci_enable_msix(struct pci_
->  
->  static void pci_msix_shutdown(struct pci_dev *dev)
->  {
-> -	struct msi_desc *entry;
-> +	struct msi_desc *desc;
->  
->  	if (!pci_msi_enable || !dev || !dev->msix_enabled)
->  		return;
-> @@ -800,8 +798,8 @@ static void pci_msix_shutdown(struct pci
->  	}
->  
->  	/* Return the device with MSI-X masked as initial states */
-> -	for_each_pci_msi_entry(entry, dev)
-> -		pci_msix_mask(entry);
-> +	msi_for_each_desc(desc, &dev->dev, MSI_DESC_ALL)
-> +		pci_msix_mask(desc);
->  
->  	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_ENABLE, 0);
->  	pci_intx_for_msi(dev, 1);
-> 
+I am a bit confused at this explanation of things.
+
+Last I looked the implementation of sysctls allocated the directories
+independently of the sysctls entries that populated them.
+
+Which should be that as long as there are not conflicts in name of
+directory entries, any order should work.
+
+Am I misremembering how the code works?
+
+
+Eric

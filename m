@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C95D46BB9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B21FD46BBA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbhLGMvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:51:10 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:52798 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbhLGMvJ (ORCPT
+        id S229615AbhLGMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:51:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60366 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhLGMv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:51:09 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638881258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rfvMhKPhb1o//czxJpD8hEyO6OfjVQhOJc2oIhKZDZw=;
-        b=1QK7A5Quf6kWCtw53J7LvMSn21VoC3/a3rTC4N/K9KOL4NOIZguih61ltj5o2xfGP8fosF
-        BeQwVchpb12p0y5ddl73SUOzMBu6gIMOsGkxFdl5DJrfmj1Eim1xbeRkUgaFost/P/l1rc
-        R2cgY1UjJCMU1gjgvFUxFmbrR1966LIsSNzq5oGXncv5V0Y5vYAuEeLPzjweMxQI48uHLx
-        MdMtGCM3OlYqjQpPgR4EUu0q413CYfgQ72I0nJ6osdk/lVoifAMucYRoeBo63dPfAw6clb
-        UTcRGoe1SrHcnbJssHPqCjL3MC2C5BTHwEW6fNyn25OsD54B/nKqidN8WpkUhw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638881258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rfvMhKPhb1o//czxJpD8hEyO6OfjVQhOJc2oIhKZDZw=;
-        b=iWRt10cM8F7Z6E8RZ9a3abFTVEBRiybM6wE8GDhsSLisml9tvmBdzmeYXcqagp5wZeqokg
-        ZkJiPjEuHtHx+wCA==
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V2 18/36] genirq/msi: Add msi_device_data::properties
-In-Reply-To: <6f06c9f0-1f8f-e467-b0fb-2f9985d5be0d@kaod.org>
-References: <20211206210307.625116253@linutronix.de>
- <20211206210438.634566968@linutronix.de>
- <6f06c9f0-1f8f-e467-b0fb-2f9985d5be0d@kaod.org>
-Date:   Tue, 07 Dec 2021 13:47:37 +0100
-Message-ID: <87ilw037km.ffs@tglx>
+        Tue, 7 Dec 2021 07:51:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 167A0B817A2;
+        Tue,  7 Dec 2021 12:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9956CC341C6;
+        Tue,  7 Dec 2021 12:47:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638881274;
+        bh=FipYZVN6opgkJyf2yaMQFgLB9XPA2FAttOydyqD8x6o=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=rkUyLQgyfaB3QXijxmpvfxVS5a/eWaNbeLldZ2j1nRN864yONm0UI/3oxNKEk0VlC
+         Uk1i2rKW0iCacDZzP988P25tDjZEn77aLOdhqNn5am+0+CnMHQzFdcrPiGYYvuoz5i
+         elhJQdprxinIKIE7VlIHuEcP50n9TBYYkbWJfynGiHrC5fgQaEDeKPu8tHs1TdWbzx
+         frVVdOLDtfDnvO4RVv7UBL/tkuvnR3hqfX5qc2lXF0KOa62soWajTQN+9mx+sJ5eNz
+         dRvxLTOVYu/FzsMyOdYmu7xGiiWl8tXPgORf8sfFWb470eTP8yxb4+Vs7mSNAAjgfa
+         UthZ820cAgmWg==
+Subject: Re: [PATCH] dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
+To:     Rob Herring <robh@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211206174209.2297565-1-robh@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <e3eb7ba9-d333-31ed-285f-ef528ff0aa09@kernel.org>
+Date:   Tue, 7 Dec 2021 14:47:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211206174209.2297565-1-robh@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07 2021 at 10:04, C=C3=A9dric Le Goater wrote:
->> +/**
->> + * msi_device_set_properties - Set device specific MSI properties
->> + * @dev:	Pointer to the device which is queried
->> + * @prop:	Properties to set
->> + */
->> +void msi_device_set_properties(struct device *dev, unsigned long prop)
->> +{
->> +	if (WARN_ON_ONCE(!dev->msi.data))
->> +		return ;
->> +	dev->msi.data->properties =3D 0;
-> It would work better if the prop variable was used instead of 0.
->
-> With that fixed,
 
-Indeed. Copy & pasta w/o brain usage ...
+
+On 06/12/2021 19:42, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the TI GPMC example
+> has a warning:
+> 
+> Documentation/devicetree/bindings/memory-controllers/ti,gpmc.example.dt.yaml: nand@0,0: Unevaluated properties are not allowed ('rb-gpios' was unexpected)
+> 
+> Add the missing definition for 'rb-gpios'.
+> 
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Roger Quadros <rogerq@kernel.org>
+> Cc: linux-mtd@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
+
+> ---
+>  Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 

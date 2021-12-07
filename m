@@ -2,131 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC1846C0A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777CE46C0A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239599AbhLGQ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:26:34 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54508 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbhLGQ0d (ORCPT
+        id S239614AbhLGQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239611AbhLGQ0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:26:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BF5EECE1C1D;
-        Tue,  7 Dec 2021 16:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B26BC341C1;
-        Tue,  7 Dec 2021 16:22:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638894179;
-        bh=J8QNuptCRMd5FPz3sYAxGk59NtvnPv/BN3NdiOYbym8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rm1+9y3P//iqR/ITy9maM963Sskw8m0oJfvWK2EEs1y+/CTy6C9o/y1lEn0dUP+AZ
-         AajiJaIlEVhQrRTdoL/ir417yGdqSMr1jxcKPsB6COnYaE0IsvxN2/5DYjWNS3eht/
-         4OgIt85RvmWm37ulTCpw2Ugf9Hxmoxd9FJdEbAWlsfKFrNzObAGUHsyRBeTrJV5VTK
-         f2/eCAdCfsjcIa+0DqqRsTnSCH3kqyIDu35kmiOVE/wPJ86JV2gA5QCFGsGgsQMUNV
-         XblxC6rzvJeGo/BHRGOwoPRfsoxv0vFxNY/zN1x/0cd9zQ3LN3/esS8cWG/GA5Jmcu
-         O4RtyJLyldrhQ==
-Date:   Tue, 7 Dec 2021 10:22:57 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Luca Ceresoli <luca@lucaceresoli.net>, kernel-team@android.com
-Subject: Re: [PATCH v3 1/3] PCI: apple: Follow the PCIe specifications when
- resetting the port
-Message-ID: <20211207162257.GA44468@bhelgaas>
+        Tue, 7 Dec 2021 11:26:45 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCF5C061746;
+        Tue,  7 Dec 2021 08:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1rW4TIWUctUZp5j8orRF9W/v8nGZZ2ml7HDMf4H1m74=; b=cdY349pydLJQo+bEopeFqYOLGL
+        sL8IiC3+DKp0QSxadaKTHWynfhtq0gLwJEX8/6PqSQI2VQgP3YQUvVAwYHrKD9befSwOaTXKKdUSg
+        +FUSqm3prnSAbx5p+Dae/mcsAb0oabEOiEKshXeBoWDmdhuPITVQDnMpepcg1DjaCDPUndcDJd7LE
+        i5b1dIiZfutwmyOj8Q56EwUA+rafGZr84UCY90ESwQc9tSc+FrNwPJ/ecmJD3Z2bwayG1JVpPaNfg
+        S2sdutUWxRXqeS2uETOBJuM6wBf8pJnFXl+fm4hVkE2cYEhOGPPglm34n5ec9x4RjK48AOgmOX5Dk
+        tP3mAb9A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mudFC-007X6w-SL; Tue, 07 Dec 2021 16:23:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 971F930002F;
+        Tue,  7 Dec 2021 17:23:06 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 82AD1201C9141; Tue,  7 Dec 2021 17:23:06 +0100 (CET)
+Date:   Tue, 7 Dec 2021 17:23:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <Ya+KasdqLmXhB41c@hirez.programming.kicks-ass.net>
+References: <Ya2zfVAwh4aQ7KVd@infradead.org>
+ <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
+ <CAHk-=wjXmGt9-JQp-wvup4y2tFNUCVjvx2W7MHzuAaxpryP4mg@mail.gmail.com>
+ <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk>
+ <202112061247.C5CD07E3C@keescook>
+ <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
+ <202112061455.F23512C3CB@keescook>
+ <CAHk-=whLU+dk7EmPu5UC6DDSd76_dO4bVd4BkvxmR4W5-mmAgg@mail.gmail.com>
+ <Ya83zQRVUCRRYNHQ@hirez.programming.kicks-ass.net>
+ <CAHk-=whWJv6xNPQMk+FFumWix+_O1gfwTiCx6tpmcQ4cY=_F=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211123180636.80558-2-maz@kernel.org>
+In-Reply-To: <CAHk-=whWJv6xNPQMk+FFumWix+_O1gfwTiCx6tpmcQ4cY=_F=A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 06:06:34PM +0000, Marc Zyngier wrote:
-> While the Apple PCIe driver works correctly when directly booted
-> from the firmware, it fails to initialise when the kernel is booted
-> from a bootloader using PCIe such as u-boot.
-> 
-> That's beacuse we're missing a proper reset of the port (we only
-> clear the reset, but never assert it).
-> 
-> The PCIe spec requirements are two-fold:
-> 
-> - #PERST must be asserted before setting up the clocks, and
->   stay asserted for at least 100us (Tperst-clk).
-> 
-> - Once #PERST is deasserted, the OS must wait for at least 100ms
->   "from the end of a Conventional Reset" before we can start talking
->   to the devices
+On Tue, Dec 07, 2021 at 08:10:02AM -0800, Linus Torvalds wrote:
+> Can you really not understand my dislike of a data type that is
+> fundamentally a lazy shortcut and intentionally hides error cases with
+> leaks?
 
-Unless somebody objects, I'll s/#PERST/PERST#/ to match the spec
-usage, both here and in the comments below.
+I see the distinction; I just don't see it as hiding. refcount_t will
+very much generate a splat indicating things need fixing, the leak
+simply ensures that it doesn't get worse from there on out.
 
-I also notice gpiod_get_from_of_node(..., "#PERST") earlier in
-apple_pcie_setup_port().  If it wouldn't break anything, I'd like to
-change that, too.
-
-> Implementing this results in a booting system.
-> 
-> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> Acked-by: Pali Rohár <pali@kernel.org>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/pci/controller/pcie-apple.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-> index 1bf4d75b61be..957960a733c4 100644
-> --- a/drivers/pci/controller/pcie-apple.c
-> +++ b/drivers/pci/controller/pcie-apple.c
-> @@ -539,13 +539,23 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
->  
->  	rmw_set(PORT_APPCLK_EN, port->base + PORT_APPCLK);
->  
-> +	/* Engage #PERST before setting up the clock */
-> +	gpiod_set_value(reset, 0);
-> +
->  	ret = apple_pcie_setup_refclk(pcie, port);
->  	if (ret < 0)
->  		return ret;
->  
-> +	/* The minimal Tperst-clk value is 100us (PCIe CMS r2.0, 2.6.2) */
-> +	usleep_range(100, 200);
-
-Spec says "min 100us from REFCLK stable before PERST# inactive".  So I
-guess when apple_pcie_setup_refclk() returns, we know REFCLK is
-already stable?
-
-> +	/* Deassert #PERST */
->  	rmw_set(PORT_PERST_OFF, port->base + PORT_PERST);
->  	gpiod_set_value(reset, 1);
->  
-> +	/* Wait for 100ms after #PERST deassertion (PCIe r2.0, 6.6.1) */
-> +	msleep(100);
-
-Does this port support speeds greater than 5 GT/s?  If so, 6.6.1 says
-we need "100ms after Link training completes," not just after
-deasserting PERST#.
-
-I'll update this citation to "PCIe r5.0, 6.6.1" to reference the
-current spec.
-
->  	ret = readl_relaxed_poll_timeout(port->base + PORT_STATUS, stat,
->  					 stat & PORT_STATUS_READY, 100, 250000);
->  	if (ret < 0) {
-> -- 
-> 2.30.2
-> 
+Anyway, if the code already needs to handle that failure case, such as
+inc_not_zero() usage, then there is indeed no additional complexity.

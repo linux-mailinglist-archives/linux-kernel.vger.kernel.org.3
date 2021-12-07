@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46EC46BE94
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0AA46BE97
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbhLGPDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S229503AbhLGPEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238483AbhLGPDe (ORCPT
+        with ESMTP id S233913AbhLGPEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:03:34 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F163C0617A1;
-        Tue,  7 Dec 2021 07:00:04 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id r11so57794206edd.9;
-        Tue, 07 Dec 2021 07:00:04 -0800 (PST)
+        Tue, 7 Dec 2021 10:04:00 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D66C0617A1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:00:29 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id bk14so28181803oib.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:00:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Fn8KnA/llYwqXsiL6Q1/l2Tp5yDFYZmOjaTdrAUpvsE=;
-        b=J+3jyvCHsVTRr7ZIFrgRwip1RSFWK6pkFaX4vjByn38jDh0H6PxKl2t53lvpcNyplB
-         H9BHqDehFuZTk1kqZ1XdEfBQJ/ftge1K8imp6zCXIC4zXWKbFvmGNbILMekyls1+bfF9
-         wLoEOXzQgEJ7G3j/7accaC078p9Sx4DVMtUGsLA9prwJ6JyEUimIFDgt392Z7HPD2jAt
-         kt65lINWKJXuJypQzohGV0KY9ya9WzrBbvrPxT+NPcm7rnEEKww4va86RGZRLn4zo9PQ
-         bfq6ZM5JjsEjaEPKtpfup9NA1+ftaj41RXR/J6JmYW+LfJV22QFTdSrgw/0EFEGZhsDf
-         aXxg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9PcNSizbGMw2YegMGX+KEq63ckIOo2EkWnB9epQMR/4=;
+        b=wo6OZc/tsL2Q6FqkG87AA9zGjAp316r9JhkLvLznsTArdKJGqGDhNrupJtuedQSzS/
+         O1pLr/FrkioqNDAjhDDWYJZdEnMC6CpYCQbgZapYsB1wcc+RAS1hNNZYqXcCvl4WY+Xb
+         hz4be3fuQav5oYU7ZizNDqAoHA5l26bKaDnPRkL3WxWnsdcxZbHmOiXh05fauLXdmUK6
+         AJpiMXHj+XpFtAqkJw1Y6G+CF9Z969P0KKYquVSTQhjQF4w41EKkHqjMyW2ZKRbXAOab
+         l5AnCoAnp1XdW8r5/t4TuNm0YIB8S9erFwqSdFTRsc6hMsexFCHAKhOVTwB9tPvFyLus
+         ZeMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Fn8KnA/llYwqXsiL6Q1/l2Tp5yDFYZmOjaTdrAUpvsE=;
-        b=7mMtoJMNukxG95gCRIIgHkiVcdw7glFIBaXs1thL0dOFUC1JVxUJEHFpiCuMg2zAXZ
-         duIkc5lb5wSvJ11fPbkTxqWe/PsJx5PLlWhA497JVBNFHnagmH5cfapQU0lAQOgm2Xsl
-         6XF9GTsX4gLbvXghSWX+bcrVIm79ovnTOpbgcxfYqtoE0z9m5/qtd9CtqXlND46cp4i5
-         nOvOhdZHGUuikltQuVbNhIs0pkIXpVr3PQups6KuSyGZj3XX6jJcJ7FTkIAqLsovTAFF
-         7lo2GDpL6jBAc08qEJ6jMFlriN5HCOSK8OapRv0SWDIgY46rBADLEW95nS1e9crHCIeg
-         NaYA==
-X-Gm-Message-State: AOAM530F6xC0+R4bo/UNXCy+9G1y/nxxJ9/hqZhlap4YSmJT1vgrf+uU
-        QC6MJeYBmtKNYQEa5IMUm0Y=
-X-Google-Smtp-Source: ABdhPJzkRqh4jR7yH+Nb3fvZhcu+e27U/39w6GmoxNOm6L6ZJJl5irOJZqafS9C79RJq7AgnZHbRWg==
-X-Received: by 2002:a17:906:168e:: with SMTP id s14mr52618218ejd.340.1638889202045;
-        Tue, 07 Dec 2021 07:00:02 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id i10sm9131821ejw.48.2021.12.07.07.00.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9PcNSizbGMw2YegMGX+KEq63ckIOo2EkWnB9epQMR/4=;
+        b=rJQDcFfS7AyYDI+FRuvUw/P7Zh8yg3ajLlxJuWJ4937M7LeRsTZw2CVmTox6OAGJIi
+         ZCjHNUUfnKaC0AEQsVrHmkIhOv6wGU9iFrQJ9Tvg4aOzSCtOQ0ZRlLg9sZRmEWyifX/L
+         DM/IjCFevhP3OtwgOsRHg352ziIy7SPPCz2L8h5FtoXQMU0fkj746jyQXPREDfTNX4YT
+         y/i9YHdbNTGrcknw5l/cLwHqzLGHRtnkpWGfuEYr3FDSjxOOnCOpDPkxgy9Y7UHf7bCp
+         tizFAxTzofirArpil36yadHawJs1Ta5PDupKR8G4YMqFSVSaqe8yzpacgiqhe/hY9U2b
+         dLuA==
+X-Gm-Message-State: AOAM533qd20a9tO+/Q6XK0eoiyBZDCMjQPZbxMK2YtmVo7d2FUhunCvA
+        n7osExnXpnpbs98XxN3sagbmyS30B+VoUg==
+X-Google-Smtp-Source: ABdhPJzTSTMkm/8aGli1JXMrmKw7lTvzRkVWM1kPOOBkMy15qpPX8ydvwW1Hst/qM9q5kVvDeaAyvA==
+X-Received: by 2002:a05:6808:120b:: with SMTP id a11mr5717777oil.128.1638889228489;
+        Tue, 07 Dec 2021 07:00:28 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id n189sm3271744oif.33.2021.12.07.07.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 07:00:01 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH 6/6] net: dsa: qca8k: cache lo and hi for mdio write
-Date:   Tue,  7 Dec 2021 15:59:42 +0100
-Message-Id: <20211207145942.7444-7-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211207145942.7444-1-ansuelsmth@gmail.com>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+        Tue, 07 Dec 2021 07:00:27 -0800 (PST)
+Date:   Tue, 7 Dec 2021 07:01:53 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/15] arm64: dts: qcom: sm8450-qrd: enable ufs nodes
+Message-ID: <Ya93Ybq3et5WuGsx@ripper>
+References: <20211201072915.3969178-1-vkoul@kernel.org>
+ <20211201072915.3969178-10-vkoul@kernel.org>
+ <bef7e4bf-6d4d-c665-b96a-84b28ed19a33@somainline.org>
+ <Ya2mdlhWCmgiAvvK@matsya>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya2mdlhWCmgiAvvK@matsya>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From Documentation, we can cache lo and hi the same way we do with the
-page. This massively reduce the mdio write as 3/4 of the time we only
-require to write the lo or hi part for a mdio write.
+On Sun 05 Dec 21:58 PST 2021, Vinod Koul wrote:
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca8k.c | 49 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 5 deletions(-)
+> On 01-12-21, 16:18, Konrad Dybcio wrote:
+> > 
+> > On 01.12.2021 08:29, Vinod Koul wrote:
+> > > Enable the UFS and phy node and add the regulators used by them.
+> > >
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 21 +++++++++++++++++++++
+> > >  1 file changed, 21 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+> > > index 218eb3ce1ee5..3e65d662ab8c 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+> > > @@ -5,6 +5,7 @@
+> > >  
+> > >  /dts-v1/;
+> > >  
+> > > +#include <dt-bindings/gpio/gpio.h>
+> > 
+> > This should probably go to the SoC DTSI, as it's generally used
+> > 
+> > in every DT if you have anything more than serial console working..
+> 
+> But arent the gpios added in board dts typically? I am okay either
+> way... Bjorn where would you like this to be..?
+> Seems like we have this is both board as well as SoC DTS
 
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index d2c6139be9ac..64643f1e2f16 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -94,6 +94,48 @@ qca8k_split_addr(u32 regaddr, u16 *r1, u16 *r2, u16 *page)
- 	*page = regaddr & 0x3ff;
- }
- 
-+static u16 qca8k_current_lo = 0xffff;
-+
-+static int
-+qca8k_set_lo(struct mii_bus *bus, int phy_id, u32 regnum, u16 lo)
-+{
-+	int ret;
-+
-+	if (lo == qca8k_current_lo) {
-+		// pr_info("SAME LOW");
-+		return 0;
-+	}
-+
-+	ret = bus->write(bus, phy_id, regnum, lo);
-+	if (ret < 0)
-+		dev_err_ratelimited(&bus->dev,
-+				    "failed to write qca8k 32bit lo register\n");
-+
-+	qca8k_current_lo = lo;
-+	return 0;
-+}
-+
-+static u16 qca8k_current_hi = 0xffff;
-+
-+static int
-+qca8k_set_hi(struct mii_bus *bus, int phy_id, u32 regnum, u16 hi)
-+{
-+	int ret;
-+
-+	if (hi == qca8k_current_hi) {
-+		// pr_info("SAME HI");
-+		return 0;
-+	}
-+
-+	ret = bus->write(bus, phy_id, regnum, hi);
-+	if (ret < 0)
-+		dev_err_ratelimited(&bus->dev,
-+				    "failed to write qca8k 32bit hi register\n");
-+
-+	qca8k_current_hi = hi;
-+	return 0;
-+}
-+
- static int
- qca8k_mii_read32(struct mii_bus *bus, int phy_id, u32 regnum, u32 *val)
- {
-@@ -125,12 +167,9 @@ qca8k_mii_write32(struct mii_bus *bus, int phy_id, u32 regnum, u32 val)
- 	lo = val & 0xffff;
- 	hi = (u16)(val >> 16);
- 
--	ret = bus->write(bus, phy_id, regnum, lo);
-+	ret = qca8k_set_lo(bus, phy_id, regnum, lo);
- 	if (ret >= 0)
--		ret = bus->write(bus, phy_id, regnum + 1, hi);
--	if (ret < 0)
--		dev_err_ratelimited(&bus->dev,
--				    "failed to write qca8k 32bit register\n");
-+		ret = qca8k_set_hi(bus, phy_id, regnum + 1, hi);
- }
- 
- static int
--- 
-2.32.0
+I like Konrad's suggestion of putting it in the dtsi, simply because it
+saves us from including it in every board file - where it will be needed.
 
+Regards,
+Bjorn
+
+> > 
+> > 
+> > Konrad
+> 
+> -- 
+> ~Vinod

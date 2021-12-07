@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372D146BE9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CC546BEA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbhLGPHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbhLGPHM (ORCPT
+        id S233969AbhLGPJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:09:54 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:32970 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233762AbhLGPJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:07:12 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAC4C061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:03:41 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id r26so28242148oiw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:03:41 -0800 (PST)
+        Tue, 7 Dec 2021 10:09:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bK7uHHn7er6ys94qL7Mv0206o1zfT6K0JRMPD7ek61c=;
-        b=aZx5BTpo21JvpVkZkPFVXYdcKqBvM5m9RIvp7QgCt1aFf0gSRd4LpFN4dMtTZSwtqG
-         MZUmHWBRQPhYGQP8xQWakTQkxTqi+KuJfLfQGPpvYmzilsXOFxJiwWbFDncJdsokdlyI
-         oi802fCyK1Hzple7zLmhLjxLGj2iUdLv+koK5y0F5gtnRvl7y44MyZOTSVaP5jGbuNj1
-         iQaUB2vXa2bCSSHNfsMNLFD1uJeGV5bf+dw+XsOAEkG6ijtjuOwsCIUOcwAImnGfJpQK
-         zS7HM9ySTCpU9QR7GRbD8cv5US+VmUE6Nd92zvGmcJlK4+NFb6kvAi76wWxeIdxRV+0O
-         l50A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bK7uHHn7er6ys94qL7Mv0206o1zfT6K0JRMPD7ek61c=;
-        b=SYp9QwDblpQvKMyqqvDNVyLuc7yPTgTQQkP5G1e1HwZLOM9/hxm9mCDP2KWAsngwfL
-         P4KGko7ORCP2hwZHVUnL7xrLH8yTczAaxfK8HjYucOPqUMK9Kd6E/YB6g8lEjVCCyopv
-         HSJgIFY63O/QfCXK5O6WH/9cwAofwhbSKwucc6Lfjb9uc+4LB1BnYe41rYtBRHNW7E+B
-         AlcDrQmPLcUHwgtFPISgxRFeKA53lz9F2tvL80LZZwLZKmll2VwFJiKcfOIvWeONu0T3
-         VLi64cKq5d8goLiiV1nqCzrSq9T0Bc7ULLv2APacOdubuZH9jyz+eEUAVYyIfdpCBLsc
-         UXXQ==
-X-Gm-Message-State: AOAM533L262y8idwoRgQQkB/bO27EN1bXmiWhdnaYACEfezOnZWumKyr
-        RHLPHHBHipkAzZDHsKoJOEnhvA==
-X-Google-Smtp-Source: ABdhPJyAN3yUgurf2zZVufYfD8KVow4dzfZpGxOpnvSd0PVp82XfosGam2kiFVokHGpRK7XI06YDPQ==
-X-Received: by 2002:a05:6808:2016:: with SMTP id q22mr5415142oiw.81.1638889419535;
-        Tue, 07 Dec 2021 07:03:39 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 49sm2765871oti.65.2021.12.07.07.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 07:03:39 -0800 (PST)
-Date:   Tue, 7 Dec 2021 07:05:05 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/15] arm64: dts: qcom: sm8450-qrd: include pmic files
-Message-ID: <Ya94IRoUg4ArHjSO@ripper>
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-13-vkoul@kernel.org>
- <eb2373bc-f9f5-d97a-13ec-d3d580566101@somainline.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638889583; x=1670425583;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=fU//TcKKhH46diZheIx8cFcX5pnBOhrdWPeL3XWH9KA=;
+  b=w/EMEwB0VWuvH/3jttBEDNWtSrMLFvGoIDbW4JQrCFtCu5PVqqXPeXhQ
+   Mia/EE0xnCG+Tzpjbwy8Jp7w/p7OnzJ7EnSs1ZRH8Pyum6hBv3JzWY1PO
+   xG5RySNouPt7WJS2N+gzQ22CwN29tdyUdW4q8EgH2Yq6VJjITxGkxBhls
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Dec 2021 07:06:22 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:06:21 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 7 Dec 2021 07:06:21 -0800
+Received: from [10.216.26.1] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 7 Dec 2021
+ 07:06:16 -0800
+Subject: Re: [PATCH V4 1/6] dt-bindings: regulator: Add
+ "regulator-min-dropout-voltage-microvolt"
+To:     Mark Brown <broonie@kernel.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, <swboyd@chromium.org>,
+        <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Lee Jones" <lee.jones@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-2-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+o9sQpECZSrieN@sirena.org.uk>
+ <d828f2a1-03e8-d6ee-4ab7-39bf677093b7@quicinc.com>
+ <Ya5VhkggWdjYyTHL@sirena.org.uk>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <6a44cb99-6894-c9ce-4f1e-5dee0939598c@quicinc.com>
+Date:   Tue, 7 Dec 2021 20:36:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb2373bc-f9f5-d97a-13ec-d3d580566101@somainline.org>
+In-Reply-To: <Ya5VhkggWdjYyTHL@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 01 Dec 07:23 PST 2021, Konrad Dybcio wrote:
 
-> 
-> On 01.12.2021 08:29, Vinod Koul wrote:
-> > SM8450 QRD platform has bunch of PMICs, include the common ones PM8350,
-> > PM8350b and PMR735b
-> >
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> > index 3e65d662ab8c..48228888f500 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> > @@ -8,6 +8,9 @@
-> >  #include <dt-bindings/gpio/gpio.h>
-> >  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> >  #include "sm8450.dtsi"
-> > +#include "pm8350.dtsi"
-> > +#include "pm8350b.dtsi"
-> > +#include "pmr735b.dtsi"
-> >  
-> >  / {
-> >  	model = "Qualcomm Technologies, Inc. SM8450 QRD";
-> >
-> Again, this could have gone into a single "add board DTS" patch, but this
-> 
-> works too, I guess..
-> 
+On 12/6/2021 11:55 PM, Mark Brown wrote:
+> On Mon, Dec 06, 2021 at 06:33:26PM +0530, Satya Priya Kakitapalli (Temp) wrote:
+>> On 11/25/2021 8:47 PM, Mark Brown wrote:
+>>> Usually this is a fixed property of the regulator rather than something
+>>> that varies per board - why have a DT property?
+>> The min-dropout value (headroom) varies with boards, that's why we have a DT
+>> property for it. We overwrite the default value in driver with actual value
+>> read from DT
+> Interesting.  How exactly does that end up happening - presumably other
+> systems are going to run into it?
 
-I like that suggestion, putting the qrd.dts as a single patch at the end
-of the series would look nice.
 
-Regards,
-Bjorn
+The parent supplies such as "vdd-l1-l2" are coming from other pmic 
+regulators, which are shared supplies with other subsystems like BT, 
+Display etc, they vary between boards as per requirements, so we cannot 
+expect these to be fixed and so are the headroom values. We get the 
+headroom values from PMIC systems team for every target.
 
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> 
-> 
-> Konrad
-> 
+
+> If you do have board designs which somehow managed to introduce
+> additional dropouts (seems pretty concerning TBH) then I think the best
+> way to handle that is to add a generic property for it and have that
+> either added on to or override the requirements of the regulator itself
+> which should continue to be defined in the driver.  That way only boards
+> with issues need to do anything which will avoid bugs with the property
+> being omitted in what should be the common case.

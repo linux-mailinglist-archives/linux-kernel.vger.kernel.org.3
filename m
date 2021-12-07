@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C5046BEF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E56246C141
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbhLGPOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:14:37 -0500
-Received: from mga03.intel.com ([134.134.136.65]:53832 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238673AbhLGPOO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:14:14 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237536580"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="237536580"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 07:10:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="461290237"
-Received: from icx.bj.intel.com ([10.240.192.117])
-  by orsmga003.jf.intel.com with ESMTP; 07 Dec 2021 07:10:19 -0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        yang.zhong@intel.com
-Subject: [PATCH 19/19] kvm: x86: Add AMX CPUIDs support
-Date:   Tue,  7 Dec 2021 19:03:59 -0500
-Message-Id: <20211208000359.2853257-20-yang.zhong@intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211208000359.2853257-1-yang.zhong@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
+        id S235238AbhLGRFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:05:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39294 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229852AbhLGRFw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:05:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5461CCE1C68;
+        Tue,  7 Dec 2021 17:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23EBC341C1;
+        Tue,  7 Dec 2021 17:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638896538;
+        bh=PTyVD4AriAGKQA+5iIODko/4ioAXDlqcrMXsIBsg+C0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MVZYNEW3USXJKFwgQiIDe+jvocKBEUS8l5jg+VKL6ONZ/9FONPY7FSww5lWcwC+8i
+         Znp39ltDQgDx2BtJEz67HGxY4fv0VswTs/J8vHYM1RgioiKl2yqjDbPk6JvhEzoRVP
+         fYG40Sd6DBzoBJZ+H/O6yQrapvB9eUjazfsxRUzmUFDXByfWfmqbyx3OKfpqgcq8rU
+         Kz8HIeQt5XO0s+bSB7JOzcUCGy7s55yW8v8AkbgCog+LyycpCFnebQEbsWpLXjlam0
+         SpMhtHVQCFgGd8rhTvmdXRJ5awzTJBo85x9PqUG1hO/qlQ5x7NxJvI9RFcdaBCw3cZ
+         obKiVk2i/BTGA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Subject: [PATCH] MIPS: Loongson64: Use three arguments for slti
+Date:   Tue,  7 Dec 2021 10:01:29 -0700
+Message-Id: <20211207170129.578089-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Liu <jing2.liu@intel.com>
+LLVM's integrated assembler does not support 'stli <reg>, <imm>':
 
-Extend CPUID emulation to support XFD, AMX_TILE, AMX_INT8 and
-AMX_BF16. Adding those bits into kvm_cpu_caps finally activates all
-previous logics in this series.
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:86:2: note: while in macro instantiation
+ kernel_entry_setup # cpu specific setup
+ ^
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:150:2: note: while in macro instantiation
+ smp_slave_setup
+ ^
 
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+To increase compatibility with LLVM's integrated assembler, use the full
+form of 'stli <reg>, <reg>, <imm>', which matches the rest of
+arch/mips/. This does not result in any change for GNU as.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1526
+Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/x86/include/asm/cpufeatures.h |  2 ++
- arch/x86/kvm/cpuid.c               | 16 +++++++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index d5b5f2ab87a0..da872b6f8d8b 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -299,7 +299,9 @@
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
- #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
-+#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
- #define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- 
- /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
- #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index ea51b986ee67..7bb56cc89aa7 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -510,7 +510,8 @@ void kvm_set_cpu_caps(void)
- 		F(AVX512_4VNNIW) | F(AVX512_4FMAPS) | F(SPEC_CTRL) |
- 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
- 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
--		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16)
-+		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
-+		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
- 	);
- 
- 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
-@@ -529,7 +530,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_D_1_EAX,
--		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES)
-+		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | F(XFD)
- 	);
- 
- 	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
-@@ -655,6 +656,8 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
- 	case 0x14:
- 	case 0x17:
- 	case 0x18:
-+	case 0x1d:
-+	case 0x1e:
- 	case 0x1f:
- 	case 0x8000001d:
- 		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
-@@ -779,6 +782,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		}
- 		break;
- 	case 9:
-+	case 0x1e: /* TMUL information */
- 		break;
- 	case 0xa: { /* Architectural Performance Monitoring */
- 		struct x86_pmu_capability cap;
-@@ -914,7 +918,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		break;
- 	/* Intel PT */
- 	case 0x14:
--		if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT)) {
-+		if ((function == 0x14 && !kvm_cpu_cap_has(X86_FEATURE_INTEL_PT)) ||
-+		    (function == 0x1d && !kvm_cpu_cap_has(X86_FEATURE_AMX_TILE))) {
- 			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
- 			break;
- 		}
-@@ -924,6 +929,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 				goto out;
- 		}
- 		break;
-+	/* Intel AMX TILE */
-+	case 0x1d:
-+		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE))
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+		break;
- 	case KVM_CPUID_SIGNATURE: {
- 		const u32 *sigptr = (const u32 *)KVM_SIGNATURE;
- 		entry->eax = KVM_CPUID_FEATURES;
+diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+index 13373c5144f8..efb41b351974 100644
+--- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
++++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+@@ -32,7 +32,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+@@ -63,7 +63,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+
+base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+-- 
+2.34.1
+

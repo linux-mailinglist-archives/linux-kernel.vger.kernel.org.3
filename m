@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743546BF30
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF1846C058
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238060AbhLGPZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbhLGPY7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:24:59 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF3C061574;
-        Tue,  7 Dec 2021 07:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2G4sRuPvASvykdf+RGVh/2mIPuDGyjKFYNtqvJW5YbM=; b=TJMN7qGXhOyJAf6ImL+1cj1WMU
-        iCqFS+lv8r1i9byGRIhDXENs7YBeBrRiCPVMdeQQnQb6GtYRIF//czqEfQY6ZpbJdd7nLeTyARYZ7
-        Je9FQd89oAqelj1J8R0ypJ15ydaneWyPMob5Sin/bkD7xmrPGNw5RnXvaHoy5zAbPciNm86MZpEtG
-        w6HtpoJMFwgYjwGx/JubZ5/jmXB1NgnkfBUNvEllFM/aMSPj15CEntTE5ppQHa3b58p/tqS68WuNp
-        GHd53UnvVhfLURRf0XVTCJci4SSCrsAmzsCPrdHK3PKyq52TIxSsM/T+zdYOM06X2zv6cZijeIr5V
-        v9Hpl1YQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mucHU-007Th6-3V; Tue, 07 Dec 2021 15:21:24 +0000
-Date:   Tue, 7 Dec 2021 15:21:24 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        kernel test robot <lkp@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [RFC 1/3] headers: add more types to linux/types.h
-Message-ID: <Ya979Hh0V2CdhNSU@casper.infradead.org>
-References: <20211207150927.3042197-1-arnd@kernel.org>
- <20211207150927.3042197-2-arnd@kernel.org>
+        id S239464AbhLGQLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:11:47 -0500
+Received: from mga05.intel.com ([192.55.52.43]:21677 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238478AbhLGQLq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 11:11:46 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="323864029"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="323864029"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 08:07:38 -0800
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="502648934"
+Received: from ssaleem-mobl.amr.corp.intel.com ([10.212.26.33])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 08:07:36 -0800
+From:   Shiraz Saleem <shiraz.saleem@intel.com>
+To:     jgg@nvidia.com
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dan.carpenter@oracle.com,
+        christophe.jaillet@wanadoo.fr,
+        Shiraz Saleem <shiraz.saleem@intel.com>
+Subject: [PATCH for-rc] RDMA/irdma: Fix a user-after-free in add_pble_prm
+Date:   Tue,  7 Dec 2021 09:21:36 -0600
+Message-Id: <20211207152135.2192-1-shiraz.saleem@intel.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207150927.3042197-2-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:09:25PM +0100, Arnd Bergmann wrote:
-> +struct list_lru {
-> +	struct list_lru_node	*node;
-> +#ifdef CONFIG_MEMCG_KMEM
-> +	struct list_head	list;
-> +	int			shrinker_id;
-> +	bool			memcg_aware;
-> +#endif
-> +};
+When irdma_hmc_sd_one fails, 'chunk' is freed while its still on the PBLE
+info list.
 
-This is the only one that gives me qualms.  While there are other
-CONFIG options mentioned in types.h they're properties of the platform,
-eg CONFIG_HAVE_UID16, CONFIG_64BIT, CONFIG_ARCH_DMA_ADDR_T_64BIT, etc.
-I dislike it that changing this CONFIG option is going to result in
-rebuilding the _entire_ kernel.  CONFIG_MEMCG_KMEM just isn't that
-central to how everything works.
+Add the chunk entry to the PBLE info list only after successful setting of
+the SD in irdma_hmc_sd_one.
+
+Fixes: e8c4dbc2fcac ("RDMA/irdma: Add PBLE resource manager")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+---
+ drivers/infiniband/hw/irdma/pble.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/infiniband/hw/irdma/pble.c b/drivers/infiniband/hw/irdma/pble.c
+index aeeb1c3..da032b9 100644
+--- a/drivers/infiniband/hw/irdma/pble.c
++++ b/drivers/infiniband/hw/irdma/pble.c
+@@ -283,7 +283,6 @@ static enum irdma_sd_entry_type irdma_get_type(struct irdma_sc_dev *dev,
+ 		  "PBLE: next_fpm_addr = %llx chunk_size[%llu] = 0x%llx\n",
+ 		  pble_rsrc->next_fpm_addr, chunk->size, chunk->size);
+ 	pble_rsrc->unallocated_pble -= (u32)(chunk->size >> 3);
+-	list_add(&chunk->list, &pble_rsrc->pinfo.clist);
+ 	sd_reg_val = (sd_entry_type == IRDMA_SD_TYPE_PAGED) ?
+ 			     sd_entry->u.pd_table.pd_page_addr.pa :
+ 			     sd_entry->u.bp.addr.pa;
+@@ -295,6 +294,7 @@ static enum irdma_sd_entry_type irdma_get_type(struct irdma_sc_dev *dev,
+ 			goto error;
+ 	}
+ 
++	list_add(&chunk->list, &pble_rsrc->pinfo.clist);
+ 	sd_entry->valid = true;
+ 	return 0;
+ 
+-- 
+1.8.3.1
+

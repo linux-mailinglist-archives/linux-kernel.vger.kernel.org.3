@@ -2,143 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA13446BBF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA346BBF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbhLGNAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:00:46 -0500
-Received: from mail-sgaapc01on2109.outbound.protection.outlook.com ([40.107.215.109]:28198
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231181AbhLGNAp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:00:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AQR5PtIfQZd3VzSQ2IjFIFI5VoW3qhfF68+/wbU2cNLJ7vjy3euB/ZYlhPKGi/HxT3WE681U2ldoteE7NQrO1YKGlx6pKuBCPDtpvXNpFxXQMH/9QuswdTuQoN+YB75BzPJnOpKUgg7oPxkhXpVLcBgtPOYgtR+BAgAy4zaqshZrF2n/v17JbYEfL2Bcwfp51ycQZgiipvr6f9rlD2kd5dKrPg12/zC+LcHcoAaiaq/ik5Ia/9v35M52w11IRVNkEc9jWXfI/egcHFIjhclrlOMdmzR9cV/8/5MSfvmL0TD/WLfL167blXekMnqA7Qratk6N54HC6/+V+4GK3v+Abw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oy6PvJAcwgcCGvjUqjJgS4Jnugfiedl0bwvStSCFAG4=;
- b=eRu5vEQcNNT/6J/+0/eebG6Jxvb7YBfC5uKoRNnPJlIORGFENMSTQZOmzjiGq+ZzwRix8Hq7R+lbL214ZKUstHk9catrRspZeS4HeqIA5VzON5HxSjPV0toF3RPwWRCObJkPpIpjpHBS/kLgFJxwgYL75JbU0xFIp++uP1Mg9n49K2+wd1nOaNY+lLN2IvaOxL47n0EVpTbDcEZ5Ni/FBZlcTa2lDM7rWEyCP2TDnv0madrKWpeMM8uvl4aM/4yM7+C5Tq/IZTb3ckW7fK266Y5NM/CJ+1mmfHn915PPcjD2qqNlauBMV4NNnWiASw9f1e7oK25H+um4nDytk6ZfGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oy6PvJAcwgcCGvjUqjJgS4Jnugfiedl0bwvStSCFAG4=;
- b=Mi52BNgWDJB50bBKZvDkdGDYzWsR3qVzYlbIINWPYOdc+kMTDaoGwoaCQH3K3e1cNOJwSL2BidxgGXilbAVq8/CHRJJztp9/0f5yeuM8qQAY3SCNSaEX6OW6NzIZu920860yIQ2MnJw7c7yWKzHWJpLiqu3cC6gdw9B6ef/n2IA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3388.apcprd06.prod.outlook.com (2603:1096:100:3c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 12:57:12 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4755.021; Tue, 7 Dec 2021
- 12:57:12 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] sound: fsl: add missing put_device() call in imx_hdmi_probe()
-Date:   Tue,  7 Dec 2021 04:56:58 -0800
-Message-Id: <1638881818-3407-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0212.apcprd02.prod.outlook.com
- (2603:1096:201:20::24) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        id S236670AbhLGNBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236645AbhLGNBG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 08:01:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D137FC061574;
+        Tue,  7 Dec 2021 04:57:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 954B3B817A2;
+        Tue,  7 Dec 2021 12:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B99DC341C3;
+        Tue,  7 Dec 2021 12:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638881853;
+        bh=Vsakwz4v3KTwZtfP7ooJ1vlV9GwLJQmR6q3SYZ0oB6g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A6YasNxTZVPG9rVx1R+x6jDLUObYgtxaK/sxcnTOKUhXS84A3C7Z7TepavtJOeLcv
+         YKtEN13PCUFLALzqnpEqTHLb5We5PZBbmr7mB2mokQmek/dNrj3FXr4uQypXrjqohl
+         rSFXd+ZNxhQ4IaOtmQJOZ38pFUgIx0lFImPxxTr9Y0rCqfbd6x9XIh6K02MAiQbPVT
+         vK1FTF1F9Ml58IyrW+xK7h7b1elxAnxnaDp6nCN5/VSN4qAkf+pXSg34CSxBRtFBwc
+         j9H/A23lJGz+2S4gaY9VvXbGirMnwt3BqLDy6EHB1D3HTumsHd9P52bqFGknqT+6wp
+         f+B9kg3V4szcQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mua2F-00BYbD-0g; Tue, 07 Dec 2021 13:57:31 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Wei Xu" <xuwei5@hisilicon.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: hisilicon,hi3670-dwc3: add binding for Kirin970
+Date:   Tue,  7 Dec 2021 13:57:29 +0100
+Message-Id: <fec9df1a99ad8639f23edc24cdcc3ec78ea31575.1638881845.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Received: from ubuntu.localdomain (103.220.76.181) by HK2PR02CA0212.apcprd02.prod.outlook.com (2603:1096:201:20::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4755.14 via Frontend Transport; Tue, 7 Dec 2021 12:57:11 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d751b8b-ab56-41db-0286-08d9b981164c
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3388:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR06MB33880223E7DAFFC374BEF712BD6E9@SL2PR06MB3388.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zu0pz4PwI1gyAoAvdDN8OuiKtk+6Uu67AZo+ylvT8oLiKjiEnUdqI2fqUzH7XLxlEe+HD8ZSxmjO7P4S3KRChK78t00dPe+5cwZ1LO/UUMksaHoi/oy/rpa39VfrZ0edDqknpe+HlzLeBJnfoXQ7yPWO8Z+4Lnq9EoUpQmojk95oU/9MujWuro77omA/opFA7gRjthWQdLeCFaS0S3M+qtBQOPMdZPI6PH7NY8uGAJyIzhkq92ckTe+A5NDJmIhwCjR38tkflhS77oRhpBAqUkTqTgU4Hwk5EyoWZ4scXTsDsY3FWT2F4BLYnw6jwo9UW+fxj801wQ67quYKwtfhFB9fukY87l7re3yRoWaPcLbU43Vx2BxnK0R86dIvyfzke+nAoQ5nVTdnQ57gF5bD4oEyer7cTrav19PMvMaCTEmUMAIC3Rlkh9Nqxdt3vg9c9BDaKN/Uo+iADxqrXTZX3pfyi1C2/6MY5GDL+j+aIigYvHNgRiO74ivve3QQrXDpOUJJDGM96V63rIddyyPIQpQP2Dd87d5O1bQcJr58yZVmUZN/PlRf26Vhimkd9noFymJ2wbbtBTObauT0vDhBP4mT2cdHzFCmBpr+Bp5Q0SPhmF+mWyZ3fteKrojYPz4O4uKChprS+9mjHimRTviW5ZtFZ02D2A1bkhPB6FZkPu1eob4zkmNF/PAEpYOXH90+IbA2PlUXevRfDQT5zsf9ReUAzA2A5BrlYadmE5O1Deg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(186003)(956004)(36756003)(5660300002)(38350700002)(107886003)(7416002)(8676002)(26005)(2616005)(4326008)(6666004)(4744005)(316002)(6512007)(6506007)(66946007)(6486002)(508600001)(110136005)(66556008)(66476007)(52116002)(86362001)(2906002)(8936002)(921005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UwDB0846iqfkR7NLgaNgztq765pWeO0AIH0C+Xdc4AXLCQbUBHp/jpGP+gU8?=
- =?us-ascii?Q?d+LihZE5ImNlUkQyWDfW1UUIm0YcAn6TyG0iaCxwuwjLR/EtR5xWUOM56vpw?=
- =?us-ascii?Q?M4gxzHWOZpYaGNR8zLY+zswYIjYVlm6TkNz+qSHlk393M7qKzo9nKLE7m/PN?=
- =?us-ascii?Q?fXlh1hMnFocEm5JbyldwiYT8DdWgHg2H7Qn4DhG6laxN3rlUQ+4Fv5nHfL2c?=
- =?us-ascii?Q?Eiras1K++viMnzZh6gGfks3At7qsbF3ENXtfNqEUGrqhi4UBsbwZ5Vguz9Of?=
- =?us-ascii?Q?+WPCrs+7I1XmruZyqzh+Fe7QUSUQWFTQGTu6buKqQ6gyurkbuR1s5SDZ4tLA?=
- =?us-ascii?Q?S74gSf0ggBWqhv6p6ymeSHPw/piljaWlwl/yWyjShXNZVjU0UXX9zzvx66lB?=
- =?us-ascii?Q?zEAXWN1pLBtLhDB8N8YYByRScGy/xr/qKidLfi6sg28ajLXgGcyOcrqPDxOt?=
- =?us-ascii?Q?dsuzMm04DwhO0exyEGJKvZ7rRBB280rN+IneAkcfdpniyrm/BqAA0JMLDqzY?=
- =?us-ascii?Q?y73I+JkPycGQO0dDJZndIWbxgZm7DJxNnhy96eryb9PTPRRa0/440p0yKymN?=
- =?us-ascii?Q?IQfG2ZB59YY8YQk9nh5s7ewn0kgRHPB54k/5lQdqSh04FvnSmgebipyBxdaJ?=
- =?us-ascii?Q?5ZP6ijDd9nAS6iXjqb9S8lMSV2HaO9/RNfVGGa8YXIk1e7G9n58A1OJIqiZx?=
- =?us-ascii?Q?0gpgsDAEP8bOdmXZOQtrC2Rjcd2Z1qUfWKhKQGGm0WRYvsSHkwpwf4Ql2KiS?=
- =?us-ascii?Q?06tDMeVTBHgydddNtnBTiANirfr+hRO5t2sE3qdeI+u4x6srRJsXlJPOWuPp?=
- =?us-ascii?Q?1BRkPig4c0ww3WGORI5bm34x1N1vhL8TF2F8z4FINldX8UVekZ7C6bMFCbmd?=
- =?us-ascii?Q?21mCgV2gMmy+vmbSyKAgVI6wITYhkChtqvYwxqaQmn2mELYL2zj4tqfWcVoE?=
- =?us-ascii?Q?ZJWQBCjuO1bYYRx+Unm2RCG+XTi6wKJlVp3qOOek+NkdfMHMlRnQSp3KMSnu?=
- =?us-ascii?Q?aK8+pTZ2Cbu5wQC1KW8z6Z+PT+12x6uWpbvhW5NtzyxyLk3eUvD6UBl/WqRe?=
- =?us-ascii?Q?pUNUbFpsfcteGtV4zEfKmUWKwC4L2SLj1Oqi2dG50nsMvk6Ge3bS9ToO+dGT?=
- =?us-ascii?Q?UouNVaqUfLDYrDnUbdvvorEJpe6zCp8ycL6RDdeMpc1Ns2KFdxed3aEupG5u?=
- =?us-ascii?Q?JXpMpdD810FyD9AIvd76CcBCNQKUpRuualuvK3OxjIv50Eh6P71armmYzxPH?=
- =?us-ascii?Q?mPOdmyxT+n8Cgwo5TR/vJwo/Poa72YX62P7lF2psu/L+bSGAGaFeTjzXo5GB?=
- =?us-ascii?Q?KF4RuXl5/vCxGlVo+CJ60SLpbDAp/ejbVeeQOiVjbErrggUOoGrIHAC8okui?=
- =?us-ascii?Q?3SJha4uV/HjlfWRQT/o1Bu5MVxBiD+60LFajYrPkhM7q7gXQPyK5hgtODCY7?=
- =?us-ascii?Q?RsS5yeCPYH9UjP03ns7pf6V+baG1vP/VTIVcfGXO8VIxj6iGKMUtlXaBYymG?=
- =?us-ascii?Q?yjwaq5QUqo/jdNWN/kAJbywt6h+ZhmgCZbczbtYypPc3Koey0wInKfPQ/9RL?=
- =?us-ascii?Q?YNQp85pKAkS+gyOySM9xX/7cWkz/05rw9NFoTcIVvp15zyhVUd9IWvwlJ/IM?=
- =?us-ascii?Q?t4qCP6AYBpp7DhoG12A8d6Y=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d751b8b-ab56-41db-0286-08d9b981164c
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 12:57:12.7302
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rX1+xgqEihJC+wrcHRcs2IzaAk3Yn2DxwQ2WoQtGxvH2+0QBZfafPHTxZbZdgbbIA+kZakea3oZNhQU8mZ9zkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3388
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+Add documentation for the DWC3 USB3 controller found on Kirin970
+CPUs.
 
-of_find_device_by_node() takes a reference to the embedded struct device 
-which needs to be dropped when error return.
-
-Signed-off-by: Wang Qing <wangqing@vivo.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- sound/soc/fsl/imx-hdmi.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/usb/hisilicon,hi3670-dwc3.yaml   | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml
 
-diff --git a/sound/soc/fsl/imx-hdmi.c b/sound/soc/fsl/imx-hdmi.c
-index 929f69b..89fd8ad
---- a/sound/soc/fsl/imx-hdmi.c
-+++ b/sound/soc/fsl/imx-hdmi.c
-@@ -125,6 +125,7 @@ static int imx_hdmi_probe(struct platform_device *pdev)
- 
- 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data) {
-+		put_device(&cpu_pdev->dev);
- 		ret = -ENOMEM;
- 		goto fail;
- 	}
+diff --git a/Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml b/Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml
+new file mode 100644
+index 000000000000..309a876ea615
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/hisilicon,hi3670-dwc3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: HiSilicon Kirin970 USB3 Controller
++
++maintainers:
++  - Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
++
++description:
++  Bindings for the USB3 DWC3 controller present on Kirin970.
++
++properties:
++  compatible:
++    const: hisilicon,hi3670-dwc3
++
++  clocks:
++    maxItems: 4
++
++  clock-names:
++    items:
++      - const: clk_gate_abb_usb
++      - const: hclk_gate_usb3otg
++      - const: clk_gate_usb3otg_ref
++      - const: aclk_gate_usb3dvfs
++
++  ranges: true
++
++  assigned-clocks:
++    maxItems: 1
++
++  assigned-clock-rates:
++    maxItems: 1
++
++  resets:
++    maxItems: 4
++
++  '#address-cells':
++    const: 2
++
++  '#size-cells':
++    const: 2
++
++# Required child node:
++
++patternProperties:
++  "^usb@[0-9a-f]+$":
++    $ref: snps,dwc3.yaml#
++
++required:
++  - compatible
++  - ranges
++  - clocks
++  - clock-names
++  - assigned-clocks
++  - assigned-clock-rates
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/hi3670-clock.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    bus {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      usb3: hisi_dwc3 {
++        compatible = "hisilicon,hi3670-dwc3";
++        #address-cells = <2>;
++        #size-cells = <2>;
++        ranges;
++
++        clocks = <&crg_ctrl HI3670_CLK_GATE_ABB_USB>,
++                 <&crg_ctrl HI3670_HCLK_GATE_USB3OTG>,
++                 <&crg_ctrl HI3670_CLK_GATE_USB3OTG_REF>,
++                 <&crg_ctrl HI3670_ACLK_GATE_USB3DVFS>;
++        clock-names = "clk_gate_abb_usb",
++                      "hclk_gate_usb3otg",
++                      "clk_gate_usb3otg_ref",
++                      "aclk_gate_usb3dvfs";
++
++        assigned-clocks = <&crg_ctrl HI3670_ACLK_GATE_USB3DVFS>;
++        assigned-clock-rates = <238000000>;
++        resets = <&crg_rst 0x90 6>,
++                 <&crg_rst 0x90 7>,
++                 <&usb31_misc_rst 0xA0 8>,
++                 <&usb31_misc_rst 0xA0 9>;
++
++        dwc3: usb@ff100000 {
++          compatible = "snps,dwc3";
++          reg = <0x0 0xff100000 0x0 0x100000>;
++
++          interrupts = <0 159 IRQ_TYPE_LEVEL_HIGH>,
++                       <0 161 IRQ_TYPE_LEVEL_HIGH>;
++
++          phys = <&usb_phy>;
++          phy-names = "usb3-phy";
++        };
++      };
++    };
 -- 
-2.7.4
+2.33.1
 

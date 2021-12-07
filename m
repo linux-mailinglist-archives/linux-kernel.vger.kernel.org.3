@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7286646C0F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B97A46C0F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239314AbhLGQyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S239481AbhLGQzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239026AbhLGQyB (ORCPT
+        with ESMTP id S234979AbhLGQzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:54:01 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59465C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 08:50:31 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y12so59187707eda.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:50:31 -0800 (PST)
+        Tue, 7 Dec 2021 11:55:13 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6DDC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 08:51:42 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bi37so35039538lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:51:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eGczmUI3Q7tBDz6wgntLrYvORH2u57suFJN4sS9XHMg=;
-        b=h+jSJvv4U2hz8lZ0qTT6h57or5ysrK7CX1MaYaEsHflXopDYDWkZp+ujegIa3ni/ul
-         7vFWaUW1szDy3VDTKfAN1++t0mGJrJF10mMtB8Sis4OL+lBmHs9LqO3G/Gr0QasqJlot
-         at+57ZwaGqiWrpuobuI0MohnVsK6cdwkjQS7VMFZ7iH7I9hLLUiXqlfVvkhh8DhLttPT
-         luoppA3rGH/P+03Soa2jNXJ5ouZh3wXWy4pRZIwe7tifw6ileYrZyQ49o+fg8GARlLwL
-         tKlikJZjkXlBm26/Knnap6TUwlEInX51M6iDyXhNsoUMILoorvFefWN3JCH81oBuZLMV
-         uIEg==
+         :cc;
+        bh=gGXVxTLbQmBfgWuonyaABZsb6R4P9U2TOy7bqOMu6ww=;
+        b=QbeuQPjH9RfFJEdFKlYnA58NxSRrcrfR78rDCN+2pqxbXm0+21yLgIFtGNC3MEg2YT
+         wwhIp9VCuQk22HgglBBkzgVqrrowReUhrqGU3gcijoY9902gBN2sJlQxDsNEA88rIueR
+         +YSkeq+GBB6IoMKG9kATH5dQiLMMy7fIGwU7n6cZf72sAwTeZ3OQk0MbAYZvP382LAVt
+         8+iHB7deUWXGwiZAaFGK/xI3zbBGfz/QTKU2BNwELfUcAPDG1eTk2bz5SKS9jI6WIE25
+         kAiPz8myxiYeU3dO/I8IghmA6EwG+v6wxGVtvk7WYNgfT7FZAKMkkLyHtNHgibjoRHW2
+         BqeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eGczmUI3Q7tBDz6wgntLrYvORH2u57suFJN4sS9XHMg=;
-        b=W9LmuefEhm4dvZs4MJwetdKir2lhVJWLX4j4DGB4rufTnqGvpZ8gbKPlIBhS9Oog7B
-         adW9Wj9sf9EzEoDhE/DMJrdT9B016J1rmFObFGs41OqGQY8azwwCDUJt+3TcZASrsKk0
-         RlpxPE3uNIgrLa2ys2lmQxWgLFoQBNhzvHNHuLNLbrFmT8isIt2wsyWac8I+g8jPWzwd
-         g/gyMi2XGFo8En0l5BlQwJWQHTWc68/LHAF5FWme+xBJjc3aZv1IgsLUIJppp7phYYIe
-         tC9zJKSAOKY/ZeaBIitW7n/MZd6fPudNrLIpDQ9izL9q0uGJHzCSoPY+KRHQShGBI2Iq
-         3qDg==
-X-Gm-Message-State: AOAM531ZuoT6t0OXsvU7Gmh52nSCAcL2Nhm7tcRMBX/CtyFC6KTyTZ9e
-        x+t2S/zD2n28urNmBLLbxYJ1snImA4RQ/xTmh7A=
-X-Google-Smtp-Source: ABdhPJwbGG+m1iJpnkK/yaEn5v01ZZS6w6rDZoUqckpzvyOrPJ0jn6fOZ/xNJwPWLiCPx3ok51fvY92/wFCVliHB1NI=
-X-Received: by 2002:a17:906:9b84:: with SMTP id dd4mr643814ejc.280.1638895829853;
- Tue, 07 Dec 2021 08:50:29 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=gGXVxTLbQmBfgWuonyaABZsb6R4P9U2TOy7bqOMu6ww=;
+        b=KGEpKs22zqIxXGKkG2UxxRyd20Ghhs/0bXwsk9gHFvOgqkq8oPFGg4LbpUyh1PPBiD
+         7vpzmc+HvM5c7R8hfOpRj+0OIL3o8qbZbk+YE44O7hJuo6U9L0csRKUxDVsJ33Eli8Pf
+         sW7lCbXbQYYw0DBRgbAjcpZkMw8SXVINL+O2/IT1o4LuhPzdvJhqKvxpIcypI7CPjJlO
+         1mhBtc/FTuJBvt+4W/awTi74Bl0ThdH6vboudHNc1eV4ofN6Xv6wak9I+YgkLLPntVeM
+         XS78OKGTeg0XXc+WJ0iLwFKmGSb+jnOZv6EnhtwLXmovxyjFAOb4CZkkbH1dq3hKubB2
+         HGyQ==
+X-Gm-Message-State: AOAM530+dcGQ1YuW5D4wtkyvX/NK/ZHfnT4ZmGgW8idHOsA6J4BXRi5K
+        0NFbSvQd6iZGUzMzD42UZb0x/dWXZeDMVqDTIRsAxQ==
+X-Google-Smtp-Source: ABdhPJxQa76T+l/IFTznMnLiPnhZaMvi0Gt+p8wteBwi9ykvlRZehjxryJFTcpzrWt3jkC6I9+ApbtwKRkcaD4Wp5cY=
+X-Received: by 2002:a19:7709:: with SMTP id s9mr43860542lfc.682.1638895900300;
+ Tue, 07 Dec 2021 08:51:40 -0800 (PST)
 MIME-Version: 1.0
-References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
- <Yax01zjuzmNyyJK/@balbir-desktop> <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
- <Ya7uQingLC3fMJlt@balbir-desktop>
-In-Reply-To: <Ya7uQingLC3fMJlt@balbir-desktop>
-From:   yong w <yongw.pur@gmail.com>
-Date:   Wed, 8 Dec 2021 00:50:18 +0800
-Message-ID: <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
-Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
-To:     Balbir Singh <bsingharora@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
+References: <20211207122448.1185769-1-arnd@kernel.org>
+In-Reply-To: <20211207122448.1185769-1-arnd@kernel.org>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Tue, 7 Dec 2021 08:51:28 -0800
+Message-ID: <CAHRSSEyuWLHWyxnmes=Kd6vwXrm+_UHb7etgKT1kfdTeV0RqVA@mail.gmail.com>
+Subject: Re: [PATCH] binder: fix pointer cast warning
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
+        Marco Ballesio <balejs@google.com>,
+        Hang Lu <hangl@codeaurora.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=887=E6=
-=97=A5=E5=91=A8=E4=BA=8C 13:16=E5=86=99=E9=81=93=EF=BC=9A
+On Tue, Dec 7, 2021 at 4:25 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
-> > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=885=
-=E6=97=A5=E5=91=A8=E6=97=A5 16:17=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com wrote:
-> > > > From: wangyong <wang.yong12@zte.com.cn>
-> > > >
-> > > > Delay accounting does not track the delay of memory compact.
-> > > > When there is not enough free memory, tasks can spend
-> > > > a amount of their time waiting for compact.
-> > > >
-> > > > To get the impact of tasks in direct memory compact, measure
-> > > > the delay when allocating memory through memory compact.
-> > > >
-> > >
-> > > Should we call this DIRECT_COMPACT and through documentation
-> > > or name change imply that this won't work for kcompactd the
-> > > kernel thread - based on my reading of the patches.
-> > >
-> > Using DIRECT_COMPACT is a little redundant=EF=BC=8Cbecause the
-> > delayacct stats of delay accounting is specific to tasks, it has
-> > nothing to do with kcompactd, which is similar to the RECLAIM field.
-> >
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> What would we expect when we call delayacct -p <pidof kcompactd>
-> to be output?
-If the slow path of memory allocation is invoked in the kcompacd process,
-there may be delays being recorded.
+> binder_uintptr_t is not the same as uintptr_t, so converting it into a
+> pointer requires a second cast:
+>
+> drivers/android/binder.c: In function 'binder_translate_fd_array':
+> drivers/android/binder.c:2511:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>  2511 |         sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
+>       |                            ^
+>
+> Fixes: 656e01f3ab54 ("binder: read pre-translated fds from sender buffer")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> Don't feel to strongly, but it can be confusing that kcompactd
-> has spent no time in compact'ing? Not that delayacct is used for
-> kernel threads, but I am not sure if that use case exists today.
-Yes, delayacct does not restrict the process of obtaining information=EF=BC=
-=8C
-but kcompactd is used for  compaction,  the compact delay of
-kcompatd is not actually a delay.Maybe it can be added to the
-document later to make it clearer.
+Acked-by: Todd Kjos <tkjos@google.com>
 
-Thanks for your reply!
+> ---
+>  drivers/android/binder.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 5497797ab258..182bb4221b06 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2508,7 +2508,8 @@ static int binder_translate_fd_array(struct list_head *pf_head,
+>          */
+>         fda_offset = (parent->buffer - (uintptr_t)t->buffer->user_data) +
+>                 fda->parent_offset;
+> -       sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
+> +       sender_ufda_base = (void __user *)(uintptr_t)sender_uparent->buffer +
+> +                               fda->parent_offset;
+>
+>         if (!IS_ALIGNED((unsigned long)fda_offset, sizeof(u32)) ||
+>             !IS_ALIGNED((unsigned long)sender_ufda_base, sizeof(u32))) {
+> --
+> 2.29.2
+>

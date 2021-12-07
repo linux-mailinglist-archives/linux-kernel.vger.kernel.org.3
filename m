@@ -2,172 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF9F46BA0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E0A46BA13
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbhLGL10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:27:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45810 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231267AbhLGL1Z (ORCPT
+        id S231444AbhLGLaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231221AbhLGL37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:27:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638876234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=74Y/qtU/NzDU9JVs7Ek3lFSv5mYSLDKoIQSdar7thHY=;
-        b=YnUdDAJuBkLR0ibV7xfys33/qbL4QPQDRUDQAri+guwVGEnxTHNwUhBdixmIY6UNtJjFGd
-        AUK9tcz8u/ZiH14pQqvPth3uX/m2GTJ6arTzApZV9GGZPAlkOJc3jwKZCtwGUnn9r6r/+L
-        gkhzlf3t9Hbfy8OXrSscmPTcsOyOzbI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-VH0XQdK2NYqFGawqdMv5rw-1; Tue, 07 Dec 2021 06:23:53 -0500
-X-MC-Unique: VH0XQdK2NYqFGawqdMv5rw-1
-Received: by mail-wr1-f71.google.com with SMTP id v18-20020a5d5912000000b001815910d2c0so2845427wrd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:23:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=74Y/qtU/NzDU9JVs7Ek3lFSv5mYSLDKoIQSdar7thHY=;
-        b=LOZL+yztLEvXNj7LUjlKp2PzjPcv1jzV0qkvgMRRamydbGSkB1f2Mntg8svb3uQfjP
-         C4uw+jgRh7zu4X6ZC2a7TFvivvEsjOasz9UnwYdOyAfolVjV8pbMzRTTGgeUhmPVZkoy
-         rbEH/F6HN4YJZcgIOkJK3NekxvntONTvP331ciV4jcEpfybWIVHY01TuCAweYWBe2u8e
-         vlWgDD3F8j+kYTh1DRXTCboMvrvFnrWGIXCkfEeJpVqZ4KMxu50jfz3VbsYkJ0xiWo+c
-         e/NL2djsLNOtCFUycVty1oG8NPqrIb481cBt08stQZuihjrBPiAxSapA1fdmJF0NEqFr
-         r2TQ==
-X-Gm-Message-State: AOAM530OaBQCxhtY1JfKDyhRwicjkP4rgKl/gm7Ea4ta/YGP8j5AtrFM
-        wfHtatUxnp5NnPjXg7Cub4MLLEQZ9uAvYmde2KyuS6xSVUbgxElP0HmZlTCVJOm7wojIFMLf2Cn
-        41UGfc++H0ltPh8Tv4ztAfmUK
-X-Received: by 2002:adf:cc91:: with SMTP id p17mr50686244wrj.589.1638876232690;
-        Tue, 07 Dec 2021 03:23:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzKIzi4kWo76ww2Twy+VEhA0j7bpmm1UW47vyNKvMbdvSJtbaj5TVX1rWh7uHf3WXLePL+RQg==
-X-Received: by 2002:adf:cc91:: with SMTP id p17mr50686211wrj.589.1638876232461;
-        Tue, 07 Dec 2021 03:23:52 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
-        by smtp.gmail.com with ESMTPSA id k37sm2365944wms.21.2021.12.07.03.23.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 03:23:51 -0800 (PST)
-Message-ID: <0a9bc228-21ba-abe3-d9c8-b9d52b936366@redhat.com>
-Date:   Tue, 7 Dec 2021 12:23:50 +0100
+        Tue, 7 Dec 2021 06:29:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCE8C061574;
+        Tue,  7 Dec 2021 03:26:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7u+20wao+Z/j7Jl6bNd1keoHdxP64ABauWTeem1CusA=; b=buvAWP6Uf2U0OIXRNkizSRld4K
+        nDvZYJXpRe60yLlA2JuRPI5FVxL+bf7mxuZ7bz6ozZuK9G8bHK/1XUF5/c2ilEjs75WR1VKLMwZSM
+        W09iAAeQ6ruHsebttvyguZveW/+4WmP788oBVmgUELPGHt9zeSB1WoNfN8WgOdw3JyxZSeyjf8cTk
+        oFRbaR0W/nZ/WuPBp5PgSmiXrh+qpGsSpbT/yt6JSO9HnmzWvPJDvn/vDwVFDiGYq7v+18AOEniQF
+        hihcyQeEZn5ou11qXmP7QY0d2oy5EcqSzJmn6NOTzCHxy4XxToXYArJoM04v37qsDl16iUAdwv+Ii
+        Fy0IyB7g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muYc4-007H4o-Kk; Tue, 07 Dec 2021 11:26:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC83130032A;
+        Tue,  7 Dec 2021 12:26:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 940BB20299B41; Tue,  7 Dec 2021 12:26:24 +0100 (CET)
+Date:   Tue, 7 Dec 2021 12:26:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        keescook@chromium.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH RESEND v2 3/5] mm_zone: add function to check if managed
- dma zone exists
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        robin.murphy@arm.com, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
-        m.szyprowski@samsung.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org
-References: <20211207030750.30824-1-bhe@redhat.com>
- <20211207030750.30824-4-bhe@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211207030750.30824-4-bhe@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya2zfVAwh4aQ7KVd@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.21 04:07, Baoquan He wrote:
-> In some places of the current kernel, it assumes that dma zone must have
-> managed pages if CONFIG_ZONE_DMA is enabled. While this is not always true.
-> E.g in kdump kernel of x86_64, only low 1M is presented and locked down
-> at very early stage of boot, so that there's no managed pages at all in
-> DMA zone. This exception will always cause page allocation failure if page
-> is requested from DMA zone.
-> 
-> Here add function has_managed_dma() and the relevant helper functions to
-> check if there's DMA zone with managed pages. It will be used in later
-> patches.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  include/linux/mmzone.h | 21 +++++++++++++++++++++
->  mm/page_alloc.c        | 11 +++++++++++
->  2 files changed, 32 insertions(+)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 58e744b78c2c..82d23e13e0e5 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -998,6 +998,18 @@ static inline bool zone_is_zone_device(struct zone *zone)
->  }
->  #endif
->  
-> +#ifdef CONFIG_ZONE_DMA
-> +static inline bool zone_is_dma(struct zone *zone)
-> +{
-> +	return zone_idx(zone) == ZONE_DMA;
-> +}
-> +#else
-> +static inline bool zone_is_dma(struct zone *zone)
-> +{
-> +	return false;
-> +}
-> +#endif
-> +
->  /*
->   * Returns true if a zone has pages managed by the buddy allocator.
->   * All the reclaim decisions have to use this function rather than
-> @@ -1046,6 +1058,7 @@ static inline int is_highmem_idx(enum zone_type idx)
->  #endif
->  }
->  
-> +bool has_managed_dma(void);
->  /**
->   * is_highmem - helper function to quickly check if a struct zone is a
->   *              highmem zone or not.  This is an attempt to keep references
-> @@ -1131,6 +1144,14 @@ extern struct zone *next_zone(struct zone *zone);
->  			; /* do nothing */		\
->  		else
->  
-> +#define for_each_managed_zone(zone)		        \
-> +	for (zone = (first_online_pgdat())->node_zones; \
-> +	     zone;					\
-> +	     zone = next_zone(zone))			\
-> +		if (!managed_zone(zone))		\
-> +			; /* do nothing */		\
-> +		else
-> +
->  static inline struct zone *zonelist_zone(struct zoneref *zoneref)
->  {
->  	return zoneref->zone;
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c5952749ad40..ac0ea42a4e5f 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -9459,4 +9459,15 @@ bool take_page_off_buddy(struct page *page)
->  	spin_unlock_irqrestore(&zone->lock, flags);
->  	return ret;
->  }
-> +
-> +bool has_managed_dma(void)
-> +{
-> +	struct zone *zone;
-> +
-> +	for_each_managed_zone(zone) {
-> +		if (zone_is_dma(zone))
-> +			return true;
-> +	}
-> +	return false;
-> +}
+On Sun, Dec 05, 2021 at 10:53:49PM -0800, Christoph Hellwig wrote:
 
-Wouldn't it be "easier/faster" to just iterate online nodes and directly
-obtain the ZONE_DMA, checking if there are managed pages?
+> > +#define req_ref_zero_or_close_to_overflow(req)	\
+> > +	((unsigned int) atomic_read(&(req->ref)) + 127u <= 127u)
+> > +
+> > +static inline bool req_ref_inc_not_zero(struct request *req)
+> > +{
+> > +	return atomic_inc_not_zero(&req->ref);
+> > +}
+> > +
+> > +static inline bool req_ref_put_and_test(struct request *req)
+> > +{
+> > +	WARN_ON_ONCE(req_ref_zero_or_close_to_overflow(req));
+> > +	return atomic_dec_and_test(&req->ref);
+> > +}
+
+So it's just about these two ops, right?
+
+Now, afaict refcount_inc_not_zero() doesn't actually generate terrible
+code here's the fast-path of kernel/events/core.c:ring_buffer_get()
+
+refcount_inc_not_zero():
+
+    a9d0:       41 54                   push   %r12
+    a9d2:       49 89 fc                mov    %rdi,%r12
+    a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
+    a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
+    a9e2:       4d 85 e4                test   %r12,%r12
+    a9e5:       74 24                   je     aa0b <ring_buffer_get+0x3b>
+    a9e7:       41 8b 14 24             mov    (%r12),%edx
+    a9eb:       85 d2                   test   %edx,%edx
+    a9ed:       74 1c                   je     aa0b <ring_buffer_get+0x3b>
+    a9ef:       8d 4a 01                lea    0x1(%rdx),%ecx
+*   a9f2:       89 d0                   mov    %edx,%eax
+    a9f4:       f0 41 0f b1 0c 24       lock cmpxchg %ecx,(%r12)
+    a9fa:       75 32                   jne    aa2e <ring_buffer_get+0x5e>
+*   a9fc:       09 ca                   or     %ecx,%edx
+*   a9fe:       78 19                   js     aa19 <ring_buffer_get+0x49>
+    aa00:       e8 00 00 00 00          call   aa05 <ring_buffer_get+0x35>      aa01: R_X86_64_PLT32    __rcu_read_unlock-0x4
+    aa05:       4c 89 e0                mov    %r12,%rax
+    aa08:       41 5c                   pop    %r12
+    aa0a:       c3                      ret
+
+The * marked instructions are the difference, vs atomic_inc_not_zero():
+
+    a9d0:       41 54                   push   %r12
+    a9d2:       49 89 fc                mov    %rdi,%r12
+    a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
+    a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
+    a9e2:       4d 85 e4                test   %r12,%r12
+    a9e5:       74 1e                   je     aa05 <ring_buffer_get+0x35>
+    a9e7:       41 8b 04 24             mov    (%r12),%eax
+    a9eb:       85 c0                   test   %eax,%eax
+    a9ed:       74 16                   je     aa05 <ring_buffer_get+0x35>
+    a9ef:       8d 50 01                lea    0x1(%rax),%edx
+    a9f2:       f0 41 0f b1 14 24       lock cmpxchg %edx,(%r12)
+    a9f8:       75 f1                   jne    a9eb <ring_buffer_get+0x1b>
+    a9fa:       e8 00 00 00 00          call   a9ff <ring_buffer_get+0x2f>      a9fb: R_X86_64_PLT32    __rcu_read_unlock-0x4
+    a9ff:       4c 89 e0                mov    %r12,%rax
+    aa02:       41 5c                   pop    %r12
+    aa04:       c3                      ret
 
 
--- 
-Thanks,
+Now, ring_buffer_put(), which uses refcount_dec_and_test():
 
-David / dhildenb
+refcount_dec_and_test()
 
+    aa40:       b8 ff ff ff ff          mov    $0xffffffff,%eax
+    aa45:       f0 0f c1 07             lock xadd %eax,(%rdi)
+    aa49:       83 f8 01                cmp    $0x1,%eax
+    aa4c:       74 05                   je     aa53 <ring_buffer_put+0x13>
+    aa4e:       85 c0                   test   %eax,%eax
+    aa50:       7e 1e                   jle    aa70 <ring_buffer_put+0x30>
+    aa52:       c3                      ret
+
+atomic_dec_and_test():
+
+    aa40:       f0 ff 0f                lock decl (%rdi)
+    aa43:       75 1d                   jne    aa62 <ring_buffer_put+0x22>
+
+    ...
+
+    aa62:       c3                      ret
+
+Has a larger difference, which is fixable with the below patch, leading
+to:
+
+
+    a9f0:       f0 ff 0f                lock decl (%rdi)
+    a9f3:       74 03                   je     a9f8 <ring_buffer_put+0x8>
+    a9f5:       7c 1e                   jl     aa15 <ring_buffer_put+0x25>
+    a9f7:       c3                      ret
+
+
+So where exactly is the performance fail? Is it purely the mess made of
+refcount_dec_and_test() ?
+
+---
+
+diff --git a/arch/x86/include/asm/refcount.h b/arch/x86/include/asm/refcount.h
+new file mode 100644
+index 000000000000..89e1f84f9170
+--- /dev/null
++++ b/arch/x86/include/asm/refcount.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_REFCOUNT_H
++#define _ASM_X86_REFCOUNT_H
++
++#define refcount_dec_and_test refcount_dec_and_test
++static inline bool refcount_dec_and_test(refcount_t *r)
++{
++	asm_volatile_goto (LOCK_PREFIX "decl %[var]\n\t"
++			   "jz %l[cc_zero]\n\t"
++			   "jl %l[cc_error]"
++			   : : [var] "m" (r->refs.counter)
++			   : "memory"
++			   : cc_zero, cc_error);
++	return false;
++
++cc_zero:
++	return true;
++
++cc_error:
++	refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
++	return false;
++}
++
++#endif
+diff --git a/include/linux/refcount.h b/include/linux/refcount.h
+index b8a6e387f8f9..776b035e12a1 100644
+--- a/include/linux/refcount.h
++++ b/include/linux/refcount.h
+@@ -126,6 +126,8 @@ enum refcount_saturation_type {
+ 
+ void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t);
+ 
++#include <asm/refcount.h>
++
+ /**
+  * refcount_set - set a refcount's value
+  * @r: the refcount
+@@ -328,10 +330,12 @@ static inline __must_check bool __refcount_dec_and_test(refcount_t *r, int *oldp
+  *
+  * Return: true if the resulting refcount is 0, false otherwise
+  */
++#ifndef refcount_dec_and_test
+ static inline __must_check bool refcount_dec_and_test(refcount_t *r)
+ {
+ 	return __refcount_dec_and_test(r, NULL);
+ }
++#endif
+ 
+ static inline void __refcount_dec(refcount_t *r, int *oldp)
+ {

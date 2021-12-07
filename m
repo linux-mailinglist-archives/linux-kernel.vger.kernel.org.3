@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7D346C860
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C0146C861
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242675AbhLGXrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242668AbhLGXrn (ORCPT
+        id S238230AbhLGXsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:48:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49960 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230070AbhLGXsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:47:43 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3BDC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:44:12 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id 15so664264ilq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZVIAUOCqbGCNkkqxHzNddtZULMrSuZJINYUj3xGR98c=;
-        b=YGpZcsgO2+Q7QT6Zvkx6nJIdeUihZ9kvVgD6BoFIN4Hx3AabhztUSB6Z5AdwgaPQXK
-         +j9yzxNE8iBp6RtmOxz/sLW7C9jxjjYkJ707NZ+hTC+1PzPsdwuTTPFUt9poWTJTxwkl
-         tKj/ojQsIMbzZR4SwXYcQ2OZLZo2JADna0id4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZVIAUOCqbGCNkkqxHzNddtZULMrSuZJINYUj3xGR98c=;
-        b=hdV4mVtCiBeYXrIL1PYtFgO+kvvOVv1qyDKq4vx9a+jlGPqWZ/Aj15kPQtQ060WIFb
-         kMGvmv8bY33g5sAtknu5uCvLfZYmMcv2uetFSF0jk199u2TykOBBRE/A20UbFYwRmyia
-         Ta080IFQYFsfXtZ34STO4AFZsqzOzReEEao6nxtv6cqwwizwkY6H6WXrMj9ux1aZJbAR
-         hVwfMhBXxjH9TH7aMRJ9qlBm7/LLxVdwgX07XEJTcGmD6y+Y/mNXt2tyEDC7nzcZ5vhZ
-         maUZmFvA5rk/rrLgoTBfdGEVRDfT1TW/t/isvoEISOaKzEfMjom0U2KqpAIM2QIYs2cF
-         fLIg==
-X-Gm-Message-State: AOAM531lLvIJMIMyW/4ljyG9/AirxPBbhg+KdqPTOKC9DhNDiT1uDEnK
-        flVzfTgXg52tCw5mkPORYcYISw==
-X-Google-Smtp-Source: ABdhPJyOAGRG/113DT1qCsKGEE6vb7EGypJVHmr0LHZUxW6yyEJVm19ajveV9UD1s/v2fLUq6hgwSw==
-X-Received: by 2002:a05:6e02:1c46:: with SMTP id d6mr2591932ilg.140.1638920652296;
-        Tue, 07 Dec 2021 15:44:12 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b7sm727252iln.34.2021.12.07.15.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 15:44:11 -0800 (PST)
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-To:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211207190251.18426-1-davidgow@google.com>
- <202112071358.E8E6812D@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
-Date:   Tue, 7 Dec 2021 16:44:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <202112071358.E8E6812D@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Tue, 7 Dec 2021 18:48:13 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EF7BB81D81
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 23:44:42 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D4C660E98;
+        Tue,  7 Dec 2021 23:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638920680;
+        bh=BEwEUCLZRSg2aVfAnY3W95UfGY4Oj5ctvBxKSFO7qgc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iYskK9Zu/idmCtyqe71iiLRVLganSC9yWh7Xeb/20f5UDuoW3vHTjkwx6Pu8oH7bm
+         diddNxpbzyHanek/5Cyc4Jsyk0Qpu5ZExDIl16LGSpHg6lG1uhmJvwipx9cqAOmIj0
+         1DopsKnJNabNwgBfaLWocXqyUrzT7szk+qVxT5Ho=
+Date:   Tue, 7 Dec 2021 15:44:38 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Nico Pache <npache@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        shakeelb@google.com, ktkhai@virtuozzo.com, shy828301@gmail.com,
+        guro@fb.com, vbabka@suse.cz, vdavydov.dev@gmail.com,
+        raquini@redhat.com, mhocko@suse.com, david@redhat.com
+Subject: Re: [PATCH v2 1/1] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+Message-Id: <20211207154438.c1e49a3f0b5ebc9245aac61b@linux-foundation.org>
+In-Reply-To: <20211207224013.880775-2-npache@redhat.com>
+References: <20211207224013.880775-1-npache@redhat.com>
+        <20211207224013.880775-2-npache@redhat.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 3:02 PM, Kees Cook wrote:
-> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
->> From: Rae Moar <rmoar@google.com>
->>
->> It does not make any significant additions or changes other than those
->> already in use in the kernel: additional features can be added as they
->> become necessary and used.
->>
->> [1]: https://testanything.org/tap-version-13-specification.html
->>
->> Signed-off-by: Rae Moar <rmoar@google.com>
->> Co-developed-by: David Gow <davidgow@google.com>
->> Signed-off-by: David Gow <davidgow@google.com>
-> 
-> I like it! Thank you so much for suffering through my earlier reviews.
-> :)
-> 
-> The only concern I have is wonder what'll be needed to kselftest to
-> deal with indentation changes. As long as this can be implemented
-> without a subtest knowing it is a subtest, we're good.
-> 
+On Tue,  7 Dec 2021 17:40:13 -0500 Nico Pache <npache@redhat.com> wrote:
 
-A lot of this TAP output is in the wrappers - hopefully it will be okay.
-Fingers crossed. :)
+> We have run into a panic caused by a shrinker allocation being attempted
+> on an offlined node.
+>
+> Our crash analysis has determined that the issue originates from trying
+> to allocate pages on an offlined node in expand_one_shrinker_info. This
+> function makes the incorrect assumption that we can allocate on any node.
+> To correct this we make sure the node is online before tempting an
+> allocation. If it is not online choose the closest node.
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
+This isn't fully accurate, is it?  We could allocate on a node which is
+presently offline but which was previously onlined, by testing
+NODE_DATA(nid).
 
-Looks good to me as well. Thanks for doing this work.
+It isn't entirely clear to me from the v1 discussion why this approach
+isn't being taken?
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+AFAICT the proposed patch is *already* taking this approach, by having
+no protection against a concurrent or subsequent node offlining?
 
-thanks,
--- Shuah
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -222,13 +222,16 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+>  	int size = map_size + defer_size;
+>  
+>  	for_each_node(nid) {
+> +		int tmp = nid;
+
+Not `tmp', please.  Better to use an identifier which explains the
+variable's use.  target_nid?
+
+And a newline after defining locals, please.
+
+>  		pn = memcg->nodeinfo[nid];
+>  		old = shrinker_info_protected(memcg, nid);
+>  		/* Not yet online memcg */
+>  		if (!old)
+>  			return 0;
+>  
+> -		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
+> +		if(!node_online(nid))
+
+s/if(/if (/
+
+> +			tmp = numa_mem_id();
+> +		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, tmp);
+>  		if (!new)
+>  			return -ENOMEM;
+>  
+
+And a code comment fully explaining what's going on here?

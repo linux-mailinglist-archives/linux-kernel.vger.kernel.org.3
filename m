@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C88A46C6B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D552C46C6B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbhLGVbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbhLGVbj (ORCPT
+        id S237085AbhLGVdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:33:44 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:36681 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231451AbhLGVdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:31:39 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77B8C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:28:08 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id k2so578120lji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CXomiDWCuNQ6gJYE5Et4P54uUCBaEQ8u4XJdHj07maM=;
-        b=bKX3DeWIdFkRBxNQYZbdFrV3QYV130tjpn8D4leN4i8yq79IgbkX+gPHPsucn5n0vo
-         DSJVLa0GBvCs+aV/cwsQBvTLojNU7SN5XajhI8zKfyAO1qqV90qvPfJXjj2Rz0ufOkbS
-         /In5sJ8v0EZzJZhAe55jg1Ldxb2fYZMusCpM70TlhdNn2LF2oLLzTZoB5z4ZjitA1dEj
-         O9IaWv2kfTk3GxaCjo6MCDH71wXnjTBdUoulCG+bJTOAAqS1kgWQzNxmHppZ0ZoYA6Wk
-         lQKq+JO16J0WR2QgH4eGp244vK3xxfdvplzbR1jTKtb//hMvUXc+ZaPh4uAPj8KLIz9z
-         vgmQ==
+        Tue, 7 Dec 2021 16:33:43 -0500
+Received: by mail-ot1-f43.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so605801otl.3;
+        Tue, 07 Dec 2021 13:30:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CXomiDWCuNQ6gJYE5Et4P54uUCBaEQ8u4XJdHj07maM=;
-        b=Osi/DSNOUEXaieZzhXIsPMWjAUHxtzWsU91sEvNe+YLllMj9cU0/XbJZaYpwXO6N3K
-         t/gy6glr9Eziam0PBLPy3GI1kcnV4iFP7rv9ZBKY6rcPNoCzcM4KgiSdNsA91O9qoS4s
-         wPkDLCCjy9vuOIWZGBZy6GB6igoI9TGB2ofPQ6SOirlnAGTBOECLMlg77Kq9k9SR13jD
-         h+THPpNr2cjQLPQx5p/+zl800FnbShPIk1+q6gi599hIpMbyUsB/pD7zTCtmjrpTyh7c
-         rQ2FggGkgWMu1kg25wit6AqRtLK+FGDqnQvSH+8loTco5sR/2e7aSJ+XDNnswzlivxyT
-         FAXQ==
-X-Gm-Message-State: AOAM530HAzbY187jjQdPN/JjTRMduIZhlgKSAJwcdmNK/0mm3kkerOBM
-        hUkfZOk5ah/HJaX2NrihxiPNbkRJmdZCi8Cn0wMVd9TFr/w=
-X-Google-Smtp-Source: ABdhPJwAMV4Mof6EKI9oYdGZZgVcPctfqy2/zHuWwJfj5fRlrUDwbQWRmFBQ6+bP3kNo+v56Xe9A/oT6YIHXyEUjBaE=
-X-Received: by 2002:a2e:7807:: with SMTP id t7mr43113018ljc.426.1638912486674;
- Tue, 07 Dec 2021 13:28:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ks4hfTfIIz0PesStVcEJSpGBRhRRrquhE5zLvXUEKOs=;
+        b=C+MuF9TApdo/gUyRZaDgGqTnwHB4ZOR25oIGbXhTNgZLD4Ey95YjsGTaWdG1jfDneH
+         1qsxcjrCrN6uiwD4l5pkuz1Ri1vimUTG25KHd6AP3Mve/9Krp5EMCfAlQqzZLrnxOmgK
+         2nPX5RMK49jhFziWs+oZD8y4fwJVPthgq6mOXq3xrm0WIrsnpqDxqHNfMNB4SPZQfz4N
+         qcho9Fh0wm+JE2KwVsUDsIWPEImfxU4SxTxV4gk7u8Ht/lwgyfZMtALxIBnm3q6zsVp4
+         bak2n+/bg04V7d1SijkQ1JMv5AMOhjHXm84wtUP2NcuiPGxBN7rRI6Obk9CV7fUdcWIx
+         DwHA==
+X-Gm-Message-State: AOAM5316+efEJAOUULV71Rva14ThsFqxaTrXmGamYmu02hfkNG4osyY4
+        TTZeQhzKlbSn/5pzMRfEWKUNNHkSsg==
+X-Google-Smtp-Source: ABdhPJyq7RmlHs9Yjf1BtNBb/sX5BQMw344tFd2GcKRh6e1//kRLcA0BA09+zJ52mWCn+tLU1cs9wQ==
+X-Received: by 2002:a9d:4a8:: with SMTP id 37mr38477867otm.83.1638912612042;
+        Tue, 07 Dec 2021 13:30:12 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id n26sm161267ooq.36.2021.12.07.13.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 13:30:11 -0800 (PST)
+Received: (nullmailer pid 866904 invoked by uid 1000);
+        Tue, 07 Dec 2021 21:30:10 -0000
+Date:   Tue, 7 Dec 2021 15:30:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Harsha <harsha.harsha@xilinx.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, saratcha@xilinx.com, harshj@xilinx.com
+Subject: Re: [RFC PATCH 3/6] dt-bindings: crypto: Add bindings for ZynqMP
+ SHA3 driver
+Message-ID: <Ya/SYqbVTPRdch5x@robh.at.kernel.org>
+References: <1638262465-10790-1-git-send-email-harsha.harsha@xilinx.com>
+ <1638262465-10790-4-git-send-email-harsha.harsha@xilinx.com>
 MIME-Version: 1.0
-References: <20211207201034.1392660-1-pgonda@google.com> <Ya/RJiTOQjJ+fj73@google.com>
-In-Reply-To: <Ya/RJiTOQjJ+fj73@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 7 Dec 2021 14:27:55 -0700
-Message-ID: <CAMkAt6qy+F_QH-Uhc7mLPD9bitmCEAjZYZeqguwAgMsX1e39Og@mail.gmail.com>
-Subject: Re: [PATCH] selftests: sev_migrate_tests: Fix sev_ioctl()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Orr <marcorr@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638262465-10790-4-git-send-email-harsha.harsha@xilinx.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 2:25 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Tue, Dec 07, 2021, Peter Gonda wrote:
-> > TEST_ASSERT in SEV ioctl was allowing errors because it checked return
-> > value was good OR the FW error code was OK. This TEST_ASSERT should
-> > require both (aka. AND) values are OK. Removes the LAUNCH_START from the
-> > mirror VM because this call correctly fails because mirror VMs cannot
-> > call this command.
->
-> This probably should be two separate patches.  First remove the bogus LAUNCH_START
-> call, then fix the assert.
+On Tue, Nov 30, 2021 at 02:24:22PM +0530, Harsha wrote:
+> This patch adds documentation to describe Xilinx ZynqMP SHA3 driver
+> bindings.
+> 
+> Signed-off-by: Harsha <harsha.harsha@xilinx.com>
+> ---
+>  .../bindings/crypto/xlnx,zynqmp-sha3.yaml          | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/xlnx,zynqmp-sha3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-sha3.yaml b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-sha3.yaml
+> new file mode 100644
+> index 0000000..45a8022
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-sha3.yaml
+> @@ -0,0 +1,30 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/xlnx,zynqmp-sha3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx ZynqMP SHA3 Hardware Accelerator Device Tree Bindings
+> +
+> +maintainers:
+> +  - Harsha Harsha<harsha.harsha@xilinx.com>
 
-Thanks Sean. I'll split the patch and add your suggestion to the second one.
+space               ^
 
->
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: Marc Orr <marcorr@google.com>
-> > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 7 ++-----
-> >  1 file changed, 2 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > index 29b18d565cf4..8e1b1e737cb1 100644
-> > --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > @@ -31,7 +31,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
-> >       int ret;
-> >
-> >       ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
-> > -     TEST_ASSERT((ret == 0 || cmd.error == SEV_RET_SUCCESS),
-> > +     TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
-> >                   "%d failed: return code: %d, errno: %d, fw error: %d",
-> >                   cmd_id, ret, errno, cmd.error);
->
-> Hmm, reading cmd.error could also consume uninitialized data, e.g. if the ioctl()
-> fails before getting into the PSP command, the error message will dump garbage.
->
-> And theoretically this could get a false negative if the test stack happens to have
-> '0' for cmd.error and KVM neglects to fill cmd.error when the ioctl() succeeds.
->
-> So in additional to fixing the assert itself, I vote we also do:
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> index 29b18d565cf4..50132e165a8d 100644
-> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> @@ -26,6 +26,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
->         struct kvm_sev_cmd cmd = {
->                 .id = cmd_id,
->                 .data = (uint64_t)data,
-> +               .error = -1u,
->                 .sev_fd = open_sev_dev_path_or_exit(),
->         };
->         int ret;
+> +
+> +description: |
 
-Good idea will do in the 2/2.
+Don't need '|' if no formatting to preserve.
+
+> +  The ZynqMP SHA3 hardened cryptographic accelerator is used to
+> +  calculate the SHA3 hash for the given user data.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,zynqmp-sha3-384
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    xlnx_sha3_384: sha3-384 {
+
+crypto {
+
+> +      compatible = "xlnx,zynqmp-sha3-384";
+
+You need some way to access this h/w.
+
+> +    };
+> +...
+> -- 
+> 1.8.2.1
+> 
+> 

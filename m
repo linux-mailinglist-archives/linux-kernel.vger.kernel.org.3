@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C48646B354
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9246646B359
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbhLGHGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S230053AbhLGHIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbhLGHGw (ORCPT
+        with ESMTP id S229551AbhLGHIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:06:52 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E739C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 23:03:23 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id l5so379480ilv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 23:03:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Pr8P3RG5fy/v/v5/oxEglTrLEfbK/m2I7KoCjfpq8Sg=;
-        b=bcm4x1SYp7OA0me7wGyefPOmvKEs3VLA2i1vAPf/ObhzRN37X1c/yx2Gq3IohXb7I9
-         geTAvdhJAIAYIbmrGTPNA4M/46h7V3yVqH7h1M+60NOuuvei7K+FXAMJ3ju5K+h6h+di
-         QG+jcRHt56C4v6lZ/H4MRuEnfPBkHPV1hg8Ga+TO5YbSWPXKiWvYZGDD/2VZAVIpWc4Z
-         9Q/zepS48qAeswXA9k86HnmSjElm+XkYFhmRIiEhL/G0bktc5qu3R3m3xyUlWpkdmqTj
-         j9L+yxN+ejOrgk9Tt45KJ5uWwL8FfC2oONMCrgqfUtTuEwxd2vgP9jvJA1JmPg4WagOb
-         4nOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Pr8P3RG5fy/v/v5/oxEglTrLEfbK/m2I7KoCjfpq8Sg=;
-        b=1zQZ0zOrGOGNJ0XVqAXOE2JcfOZZCJEE4kSvwTX8gndn68NsnHxMPcIzyaWP+z9Uws
-         yAoGx8X4dvK6uE0Z26yr6R1dbw6TBD9j8N0ZWbpzN93blbBAJ6pNZwXm2yCXMllFd4rf
-         SBR38Kz7JUFQR4NnmxGkaDN4QD62XJPATVbtsK0+F6IF23xDG6rh/WzdfwubqJlazWHt
-         T5pB1StrM0cIiwhwQQbsSf2x2SfLm/dOOKfVrUR/aWy+Q1vACsDIXA8lkjjzeOCwYCHc
-         tOscr3JHzjY6XCZ2sbfy4h+TozNNIc2OQEOrBWYGhH+ZTPdzcoklaYeTlHAaDzoDvRKT
-         YBFg==
-X-Gm-Message-State: AOAM533Y8m/s8WDJm9i/nwgSPQVl0EllEl1OCXIUoS4A5dmBOuIiuzMH
-        fKe3nEM1xeaJVMdRB9vUiNb5qgWbi6o//wEOleQ3lF2XVRU=
-X-Google-Smtp-Source: ABdhPJzlgFVVCs5hbC35Skm/1P/e2tQeYTO+oFh9NJolh/i19q5pPu3gSE4ipSzrdwfcNj6vX9tlNjOEE3W2xk0Y2BU=
-X-Received: by 2002:a92:3013:: with SMTP id x19mr15771289ile.113.1638860598774;
- Mon, 06 Dec 2021 23:03:18 -0800 (PST)
-MIME-Version: 1.0
-From:   Jangwoong Kim <6812skiii@gmail.com>
-Date:   Tue, 7 Dec 2021 16:03:11 +0900
-Message-ID: <CAF=mnpiEGXemtEEo_fbJ1pkfwZaaZNo9HPGKG5EZ1voaPqRaWA@mail.gmail.com>
-Subject: [PATCH v3] futex: Fix a faulty comment.
-To:     tglx@linutronix.de, mingo@redhat.com
-Cc:     peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        Tue, 7 Dec 2021 02:08:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55284C061746;
+        Mon,  6 Dec 2021 23:05:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB6C2B812A7;
+        Tue,  7 Dec 2021 07:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0391EC341C3;
+        Tue,  7 Dec 2021 07:04:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638860702;
+        bh=yWzt1aeH4MsSwkVPM8nWDF34gvx3pob6VEdOOSFPds8=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=YZeC7ZwcgZB7JAui1TaysBm8KP7oTxOJsIWO7AtwiVlgdXWdD/3LG/U28Es8vyDLn
+         Sk3Vk2DZ0QR9Q7UfQKsXffIYv1/Ksy9MvjH1Pb8HrCf1SvdKDCeiChQcPeQf2Uty4G
+         OfYrebBOT747Clx5eiOscyAQ2ACzjiKwGEg1+tMCf2+eDWk9BKG1MPK2OwgVyF4xja
+         B9OwXkLSfSO4Ib6m+trpA3HqEXv4Ug7ee91cFX/B49hh4jX1cR7oXAmkCNaUb+GjwC
+         xwvAYOdb2YrcnErfFCcdgH//Gna9w3JzxKWStmD4TCOendMEyD6MMIyZcDNIVssdTH
+         KzYCsjPWyyd/w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Stanislaw Gruszka <stf_xl@wp.pl>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/3] iwlwifi: fix LED dependencies
+References: <20211204173848.873293-1-arnd@kernel.org>
+Date:   Tue, 07 Dec 2021 09:04:56 +0200
+In-Reply-To: <20211204173848.873293-1-arnd@kernel.org> (Arnd Bergmann's
+        message of "Sat, 4 Dec 2021 18:38:33 +0100")
+Message-ID: <87ilw0uc87.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jangwoong Kim <6812skiii@gmail.com>
+Arnd Bergmann <arnd@kernel.org> writes:
 
-Clarify that "woken" saves the last index of futex awoken.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The dependencies for LED configuration are highly inconsistent and too
+> complicated at the moment. One of the results is a randconfig failure I
+> get very rarely when LEDS_CLASS is in a loadable module, but the wireless
+> core is built-in:
+>
+> WARNING: unmet direct dependencies detected for MAC80211_LEDS
+>   Depends on [n]: NET [=y] && WIRELESS [=y] && MAC80211 [=y] && (LEDS_CLASS [=m]=y || LEDS_CLASS [=m]=MAC80211 [=y])
+>   Selected by [m]:
+>   - IWLEGACY [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y]
+>   - IWLWIFI_LEDS [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y] && IWLWIFI [=m] && (LEDS_CLASS [=m]=y || LEDS_CLASS [=m]=IWLWIFI [=m]) && (IWLMVM [=m] || IWLDVM [=m])
+>
+> aarch64-linux-ld: drivers/net/wireless/ath/ath5k/led.o: in function `ath5k_register_led':
+> led.c:(.text+0x60): undefined reference to `led_classdev_register_ext'
+> aarch64-linux-ld: drivers/net/wireless/ath/ath5k/led.o: in function `ath5k_unregister_leds':
+> led.c:(.text+0x200): undefined reference to `led_classdev_unregister'
+>
+> For iwlwifi, the dependency is wrong, since this config prevents the
+> MAC80211_LEDS code from being part of a built-in MAC80211 driver.
+>
+> For iwlegacy, this is worse because the driver tries to force-enable
+> the other subsystems, which is both a layering violation and a bug
+> because it will still fail with MAC80211=y and IWLEGACY=m, leading
+> to LEDS_CLASS being a module as well.
+>
+> The actual link failure in the ath5k driver is a result of MAC80211_LEDS
+> being enabled but not usable. With the Kconfig logic fixed in the
+> Intel drivers, the ath5k driver works as expected again.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-v2 patch had a typo (awaken -> awoken).
+Luca, I would like to take this to wireless-drivers. Ack?
 
-Signed-off-by: Jangwoong Kim <6812skiii@gmail.com>
----
- kernel/futex/waitwake.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
-index 4ce0923f1ce3..45d634dacfcb 100644
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -454,9 +454,9 @@ static int futex_wait_multiple_setup(struct
-futex_vector *vs, int count, int *wo
-                __set_current_state(TASK_RUNNING);
-
-                /*
--                * Even if something went wrong, if we find out that a futex
--                * was woken, we don't return error and return this index to
--                * userspace
-+                * Even if something went wrong, if we find out that any futex
-+                * was woken, we don't return error and return the last index
-+                * of futex awoken to userspace
-                 */
-                *woken = unqueue_multiple(vs, i);
-                if (*woken >= 0)
---
-2.25.1
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

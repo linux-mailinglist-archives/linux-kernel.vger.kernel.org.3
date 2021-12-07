@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F16346C82E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5409846C830
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242538AbhLGX1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S242553AbhLGX2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbhLGX1w (ORCPT
+        with ESMTP id S238388AbhLGX2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:27:52 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3459C061574;
-        Tue,  7 Dec 2021 15:24:21 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d9so894435wrw.4;
-        Tue, 07 Dec 2021 15:24:21 -0800 (PST)
+        Tue, 7 Dec 2021 18:28:21 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8423C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:24:49 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l25so2000175eda.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:24:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ky6lSfjPQirRU1cm8nyx2Yxc3fG4emfY9Mw77avulUI=;
-        b=qrbWWK7V+3hP1q0w89qUG58E+8iQ1IL2KdVcHKKzCooV29dw2GJ07PrJfyRDTRKhpl
-         c2f0oKcLBgbat9JK7KaQksgc6weepdG5JYCBpGDNlQf6vP/W5NR84vs3FVc/N/Ze5S6H
-         wbaN+eTIbZ+New7KE2q4scLBn8K7hHhLVpL95D5D4WtycET0b1IEzL7N32m5xI+1ojdr
-         VnyPhQakeKBCG4NUh91DgHLQkHHfQJFCv1EksHgGdEzs0GAoji0OygdvIxAaLHwuJqSw
-         JiDTVixkJtN5D/x0/x/S7TT7KLvffZMzFzWYE8W66vft2u5YfKm4lM1GFWevb9che7yE
-         F6GA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lZHabsPUc23xUEp/km7HooDqnp/1KyBKhA9+Ose3GXw=;
+        b=DvnwlWEkpneQi1XlSO3gBPxLD70iikmgjVN61w8yUvn34PBCune25Jj9mW9XNgFL4q
+         un4+G4P2SmN1djB/dNEp7ybFulczA6mZmTtM/H80MUvsu1Ga3PzhvFuSc1Dk+D+hQ15/
+         db+sVtRBcfzEfAnFuUgbgivW8aOWBdK5sEbbo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ky6lSfjPQirRU1cm8nyx2Yxc3fG4emfY9Mw77avulUI=;
-        b=jR3EArzrEOkSYUGgaAFUwo/PaTmekwURCkYgGnYIJVnaJLlD3dhE6Cuse7N7jb0h3Y
-         gcJhpWuHu+tb96lxUdrQaSq6D9lwPHY6J8JeLs4Kno0rUU1M9or72K40ICoNVRnocThj
-         06Zmg9RcJLy4EDkA0k/PQZfkiAyBNn+jRLiTb7QJvZCMWvfgCAObhMS3gLaZB235QyTc
-         bJZGVRSjasVbHrL2m8Jq+d79oCe7ttq/pCKMRLTk9ch+4Ml+u5sJbtUR9181Ng8gS6Kp
-         o5rV+L/tHK4tUoJ9YclQJV6On18L8BlYn4K/6K6g1h2OgH/75ZxF3sN39ukrgR242PSQ
-         OefA==
-X-Gm-Message-State: AOAM532LOLnjzuTOsBPJrOxVlrJM/NBTD6+czDIkzmaEdsSKfhh1VSfl
-        QcTF9qacon9Q7lJ+8JR1I1sdGuunuGs=
-X-Google-Smtp-Source: ABdhPJxUZT4T3BISJQJ2NGIEB2/Fb3P9MfXajF2aR8eizgSj7dTr12+IiJh/k8o5swI4viBI3e3yMg==
-X-Received: by 2002:adf:d202:: with SMTP id j2mr54157559wrh.271.1638919460145;
-        Tue, 07 Dec 2021 15:24:20 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id u23sm1159754wru.21.2021.12.07.15.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 15:24:19 -0800 (PST)
-Message-ID: <61afed23.1c69fb81.99660.7328@mx.google.com>
-X-Google-Original-Message-ID: <Ya/tIUlv3RbweLON@Ansuel-xps.>
-Date:   Wed, 8 Dec 2021 00:24:17 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
- <20211207224525.ckdn66tpfba5gm5z@skbuf>
- <61afe8a9.1c69fb81.897ba.6022@mx.google.com>
- <20211207232020.ckdc6polqat4aefo@skbuf>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lZHabsPUc23xUEp/km7HooDqnp/1KyBKhA9+Ose3GXw=;
+        b=x1IzUbaa7mv6WQGr6sGEcuy5r27ZcALoev2mEDKsK6neLwhzCoYbg+YC3kkIVLPUNS
+         O7lgLg0aZjHBnJPLi+2ppOXe78oeELn6mVZlivfDokWjryEktVbqugpxqZ0X8Fu6yViw
+         eY1IdOKSnOum8Me0T7Sl2ayoHzl1l1WG8ArUk9i2u8W3GHDIAPTIPj3Xai9PBxkc8IhB
+         cjqhHrysn0FH2qbLsVLNcZvmlYsn8F6A0Vl1nBtV8Fk7hvr/YAs3oZjY6EddXMchwivH
+         eaNz4DktR1sJUvN9jRS03FUKYz4HOypJvdFuOV/v0Mpps2xp8zm1ZV8woxjFvPdAFOeQ
+         JbDQ==
+X-Gm-Message-State: AOAM531ylGYznYMxxSsikQYM+d4qiDOfMqRBtOjeSY1gsLg1Q4VrECSQ
+        YHWKWYa/+z1FXEoVb8uYrAlNQPZ/p/FqPjeGCws=
+X-Google-Smtp-Source: ABdhPJzSQs+PHd4YPd9FzZc5EW2wSRsNOwVKDMy71YYG9DkWJm7R2D2lajhK9Eb79S343ErHTxr29g==
+X-Received: by 2002:aa7:c14a:: with SMTP id r10mr13556873edp.122.1638919488048;
+        Tue, 07 Dec 2021 15:24:48 -0800 (PST)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id e8sm851402edz.73.2021.12.07.15.24.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 15:24:47 -0800 (PST)
+Received: by mail-wr1-f48.google.com with SMTP id o13so828241wrs.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:24:47 -0800 (PST)
+X-Received: by 2002:adf:e5c7:: with SMTP id a7mr55762662wrn.318.1638919487065;
+ Tue, 07 Dec 2021 15:24:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207232020.ckdc6polqat4aefo@skbuf>
+References: <20211207095726.169766-1-ebiggers@kernel.org>
+In-Reply-To: <20211207095726.169766-1-ebiggers@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 7 Dec 2021 15:24:30 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjXM77BfA6gZTYzpP_7nWw3Mdjfr8pid_TLAqsk-p0wOQ@mail.gmail.com>
+Message-ID: <CAHk-=wjXM77BfA6gZTYzpP_7nWw3Mdjfr8pid_TLAqsk-p0wOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] aio: fix use-after-free and missing wakeups
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Martijn Coenen <maco@android.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:20:20AM +0200, Vladimir Oltean wrote:
-> On Wed, Dec 08, 2021 at 12:05:11AM +0100, Ansuel Smith wrote:
-> > Hm. Interesting idea. So qca8k would provide the way to parse the packet
-> > and made the request. The tagger would just detect the packet and
-> > execute the dedicated function.
-> > About mib considering the driver autocast counter for every port and
-> > every packet have the relevant port to it (set in the qca tag), the
-> > idea was to put a big array and directly write the data. The ethtool
-> > function will then just read the data and report it. (or even work
-> > directly on the ethtool data array).
-> 
-> Apart from the fact that you'd be running inside the priv->rw_reg_ack_handler()
-> which runs in softirq context (so you need spinlocks to serialize with
-> the code that runs in process and/or workqueue context), you have access
-> to all the data structures from the switch driver that you're used to.
-> So you could copy from the void *buf into something owned by struct
-> qca8k_priv *priv, sure.
-> 
-> > >   My current idea is maybe not ideal and a bit fuzzy, because the switch
-> > >   driver would need to be aware of the fact that the tagger private data
-> > >   is in dp->priv, and some code in one folder needs to be in sync with
-> > >   some code in another folder. But at least it should be safer this way,
-> > >   because we are in more control over the exact connection that's being
-> > >   made.
-> > > 
-> > > - to avoid leaking memory, we also need to patch dsa_tree_put() to issue
-> > >   a disconnect event on unbind.
-> > > 
-> > > - the tagging protocol driver would always need to NULL-check the
-> > >   function pointer before dereferencing it, because it may connect to a
-> > >   switch driver that doesn't set them up (dsa_loop):
-> > > 
-> > > 	struct qca8k_tagger_private *priv = dp->priv;
-> > > 
-> > > 	if (priv->rw_reg_ack_handler)
-> > > 		priv->rw_reg_ack_handler(dp, skb_mac_header(skb));
-> > 
-> > Ok so your idea is to make the driver the one controlling ""everything""
-> > and keep the tagger as dummy as possible. That would also remove all the
-> > need to put stuff in the global include dir. Looks complex but handy. We
-> > still need to understand the state part. Any hint about that?
-> > 
-> > In the mean time I will try implement this.
-> 
-> What do you mean exactly by understanding the state?
+On Tue, Dec 7, 2021 at 1:59 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> Careful review is appreciated;
 
-I was referring to the "shared state" problem but you already answer
-that in the prev email.
+I dunno about "careful", but looks sane to me.
 
--- 
-	Ansuel
+> Note, it looks like io_uring has the same bugs as aio poll.  I haven't
+> tried to fix io_uring.
+
+Jens?
+
+                Linus

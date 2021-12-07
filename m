@@ -2,236 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B1A46C3AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3E646C3B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbhLGTdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbhLGTdr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:33:47 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59254C061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:30:17 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id mn13-20020a17090b188d00b001a64f277c1eso2243574pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:30:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=yOTsGfuBFPVTmUTAuefFnl10Yv0MH16ucMFZN1z9orU=;
-        b=OMVhDdZY48D0tSmTxqFMCLIq+xtxd0M4gTwOpwfQJK3NpvP2gV4fVCy+w08G81lXk3
-         TRtqmUY3MjyUNnObdWLcQcjLfkVewn/R8Bukf26WLE/al5jKOCt5xaYMFVti4muN6Mok
-         0WDD4XuKHgws3NQtcpb0XTtBjtRbtfpvBMG/1USQDyOzPFNsHVRb9ZGkUEc4karBOIn0
-         4VZROEl8VLWa4lk/dTC3G0D/J3RsIQcNoV64VNjVcyNisdRvuM9zKo81EWoC0mAHhvCs
-         D+FBWKEXhPfIt1WBX12b+SUIjww64Nl2VVxgTZl9HB0uZuttPeidxWmRsnlvGslK+MMp
-         ddEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=yOTsGfuBFPVTmUTAuefFnl10Yv0MH16ucMFZN1z9orU=;
-        b=2aw6T0INUK+4uusEX815xowuFlONJ/cBoHCeVu9jjtrGrr95Fz8zz2saabdEorB1EX
-         d9mJi2lXHdNthDOVzmyTLqz/LGA4/Y8YgnvyhykQStG/4mPToSIScP0oG5iwqXlPUgwY
-         QP9gk5gW34BsUd3yev1OenWuu6k7okxWufxMUhy6VzfIy5ddmD5godbkFCs0+SZmTIGO
-         etU41NkufHhFu7IsSGBIivRlIrqYaxsBuGzSbXTSYT20UMBzxv8iz3IBqpeDR4ylP0uU
-         dYY6XF8qJCiGuv1QXmtffkl5au9OinuntGb7NPtmywIck1ckMWRj/DwKIRfluXa/dEul
-         nT5Q==
-X-Gm-Message-State: AOAM530WWZ0iXnq254qbjPbKD8/CODQF4JJQtyCWHAphghu4HKYcnCRX
-        UcGcxx8MR52nc86jc0thcRnNUOJRvpM=
-X-Google-Smtp-Source: ABdhPJzS3rWwABYyFdQssPC88z/65mdB7eIwDeHGONvS9cOG6tI/geMfpQ/YiFx5zcTSuxqVfuKXfYIJRmk=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:f092:b0:141:ccb6:897 with SMTP id
- p18-20020a170902f09200b00141ccb60897mr53906568pla.89.1638905416855; Tue, 07
- Dec 2021 11:30:16 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  7 Dec 2021 19:30:06 +0000
-In-Reply-To: <20211207193006.120997-1-seanjc@google.com>
-Message-Id: <20211207193006.120997-5-seanjc@google.com>
-Mime-Version: 1.0
-References: <20211207193006.120997-1-seanjc@google.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 4/4] KVM: selftests: Add test to verify TRIPLE_FAULT on
- invalid L2 guest state
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S234947AbhLGTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:34:27 -0500
+Received: from mail-bn8nam12on2082.outbound.protection.outlook.com ([40.107.237.82]:53537
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231401AbhLGTeY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:34:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LzUoPrPeoqJDMtSmjYhI8yKjuYMcvNkdtRtY605tYAcccVicffs2Gl5r7fVcEnE5RXOmOR2Foulmmz43Yglh2mjOD1wEmNo9DzceeQ52Eua+XskY/ote8XAMV+4ZNGLAEnUHTiasGXv1JU4ckqk49RgbW7pkifgyv4ZC2D1kou6EogjDSYJ+B0TeE88n8pFZWUUUrE9LkipVHms2IRd6ppjmA8+JdOZK9pTAt/0zrjKB2kRtTHNUV6ML8wP7T37FfL5hkZH3EvsmUrp3BpTinzJ+JZ0rKevCEah974FWQ9E9nPwNDRWtSrCWy9hgqQwndJWnUvuUPjASy2CB4ab8Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=noW4VoAT82my1P0k5I6H3N3qozkL9+XT5ZYfvfb2gvM=;
+ b=hv9wfS+dUg8EtDpwiaCUNfJ0iMCql8oUB1xLuH4xdZugRiv4OPLTSVeBevLZxJSEYkphPkye36YKDK3Oz2FFCZkIsB1pnOf1s2lMff4XXY51DtGfoBZOAju9gvzExOOTWumj9Pb7iEUNBc9Xn7X4ArILz2KiX5ax8+BDFj5f8GvV4AHIPeS5InUgna6GIH0MgJxz7wtMyKvpvFlxa3LvLkhRPjZQtQfrF1WPNaIXtbHMOStFdnnxmJy6pw/n9ZTmFopC4VyeOWunnoIU6/LbLqO53jbD2q2ESLwZ9XzjsmMY3gbKHnGhjJj+klMAPQc0l+0GnTXtso/XqzhwEsLQ9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=noW4VoAT82my1P0k5I6H3N3qozkL9+XT5ZYfvfb2gvM=;
+ b=jPNA0StHAr8VltKK+esbWU9Tf6GLrGx/phtzAfziNYVYI1I1BOGs3P0T4FVIWsUJx6kvhWgHz2iDEIozvoX7tdil44oEvM7a9Yx1TEHW2iypkteALcnKW6elndO8tf83/VMsuMvgjxQFQB6DOfRyDkvc+MX84SIxWGWoLk4aIqM=
+Received: from MWHPR07CA0022.namprd07.prod.outlook.com (2603:10b6:300:116::32)
+ by MWHPR12MB1455.namprd12.prod.outlook.com (2603:10b6:301:10::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22; Tue, 7 Dec
+ 2021 19:30:51 +0000
+Received: from CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:116:cafe::c9) by MWHPR07CA0022.outlook.office365.com
+ (2603:10b6:300:116::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend
+ Transport; Tue, 7 Dec 2021 19:30:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT034.mail.protection.outlook.com (10.13.174.248) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4755.13 via Frontend Transport; Tue, 7 Dec 2021 19:30:50 +0000
+Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 7 Dec
+ 2021 13:30:49 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
+        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH] x86/MCE/AMD: Allow thresholding interface updates after init
+Date:   Tue, 7 Dec 2021 19:30:28 +0000
+Message-ID: <20211207193028.9389-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d67eb8eb-40d9-476c-8a6a-08d9b9b8140c
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1455:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1455777C06E36F2A4A421D57F86E9@MWHPR12MB1455.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UNO3EAEvjpZiaViVouSLazPHFXSR7k6Dz8kYnVTKccupGId+tYQyp8r4/ynUZ3TpVigl0Mp4OHWycfdRqJP+pnozOPPstcir0oVooc+Rgdnd/AzMcFiQCCbY0YzTE+5zdd+R7fGPxz2pwFJqZStO6Z41e5z1D/FBdFXRHagUjIBFDq64uzdAs1UwtKp5x09eKDw53er9tggYQ+LYiF3n5ya7CD8G5VET22Z8XKh03vKAWHT6O1xeAN2e4b3ZSGoX3huq5fTklstAJrephGiQM0vRLS2AqHhu8jIsnGOPr29WsneDYgzZc1ne5tYW7kYC6s/jXK6f4UnmzzGyrJF72z12vUlEcJKaN+XeoqTuOnIcfFDiOCq/LBJsoCVbzhNX+1E+MC06LSmVppobwzSp/m+wD1b2EetF0+TLM4g1lG8vg2PF8neN4aB3GD2U102mvFdxsaS6T+Pro6TwH2daxuwV9zBoCl6VlZEasALiEYJDofsomuGsrfRkC9M9PJTCTvTtGhymSpObfKR/kXzV8u/nq5bQVNILAopWszvc37EtrZLhsvKriXNoEdPytJB013DR0RPeFQZcoITthpRT4UUxqFpUEXefoBRG9faZMAjsF1aGnLcs/aRGMtEjLzUUtvNlcAEZEyTJk0bovZJ2bEaeXYsoe/2enx3R5DzPJk6Cb9IM+l53lCVyx5k+MSnDvDVCvH5BpZAEM8I+mu4DG9BK+vMYAxgKKRr8buyGBX4Pu3Axi6e3jzq/QaF79MYCqKucrxKZWmImL8O17NEzCX7juaV2VaMhlDPyu8f+kG8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(36860700001)(4326008)(508600001)(83380400001)(2906002)(356005)(81166007)(186003)(16526019)(426003)(316002)(7696005)(26005)(2616005)(44832011)(336012)(54906003)(82310400004)(40460700001)(15650500001)(6666004)(1076003)(47076005)(86362001)(36756003)(8936002)(5660300002)(8676002)(70206006)(6916009)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 19:30:50.9560
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d67eb8eb-40d9-476c-8a6a-08d9b9b8140c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1455
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a selftest to attempt to enter L2 with invalid guests state by
-exiting to userspace via I/O from L2, and then using KVM_SET_SREGS to set
-invalid guest state (marking TR unusable is arbitrary chosen for its
-relative simplicity).
+Changes to the AMD Thresholding sysfs code prevents sysfs writes from
+updating the underlying registers once CPU init is completed, i.e.
+"threshold_banks" is set.
 
-This is a regression test for a bug introduced by commit c8607e4a086f
-("KVM: x86: nVMX: don't fail nested VM entry on invalid guest state if
-!from_vmentry"), which incorrectly set vmx->fail=true when L2 had invalid
-guest state and ultimately triggered a WARN due to nested_vmx_vmexit()
-seeing vmx->fail==true while attempting to synthesize a nested VM-Exit.
+Allow the registers to be updated if the thresholding interface is
+already initialized or if in the init path. Use the "set_lvt_off" value
+to indicate if running in the init path, since this value is only set
+during init.
 
-The is also a functional test to verify that KVM sythesizes TRIPLE_FAULT
-for L2, which is somewhat arbitrary behavior, instead of emulating L2.
-KVM should never emulate L2 due to invalid guest state, as it's
-architecturally impossible for L1 to run an L2 guest with invalid state
-as nested VM-Enter should always fail, i.e. L1 needs to do the emulation.
-Stuffing state via KVM ioctl() is a non-architctural, out-of-band case,
-hence the TRIPLE_FAULT being rather arbitrary.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../x86_64/vmx_invalid_nested_guest_state.c   | 105 ++++++++++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_invalid_nested_guest_state.c
+ arch/x86/kernel/cpu/mce/amd.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 3763105029fb..de41afb01a77 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -34,6 +34,7 @@
- /x86_64/vmx_apic_access_test
- /x86_64/vmx_close_while_nested_test
- /x86_64/vmx_dirty_log_test
-+/x86_64/vmx_invalid_nested_guest_state
- /x86_64/vmx_preemption_timer_test
- /x86_64/vmx_set_nested_state_test
- /x86_64/vmx_tsc_adjust_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index c4e34717826a..6be4144c8d25 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -63,6 +63,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/userspace_msr_exit_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_apic_access_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_close_while_nested_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_dirty_log_test
-+TEST_GEN_PROGS_x86_64 += x86_64/vmx_invalid_nested_guest_state
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_set_nested_state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_tsc_adjust_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_nested_tsc_scaling_test
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_invalid_nested_guest_state.c b/tools/testing/selftests/kvm/x86_64/vmx_invalid_nested_guest_state.c
-new file mode 100644
-index 000000000000..489fbed4ca6f
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_invalid_nested_guest_state.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "kselftest.h"
-+
-+#define VCPU_ID	0
-+#define ARBITRARY_IO_PORT 0x2000
-+
-+static struct kvm_vm *vm;
-+
-+static void l2_guest_code(void)
-+{
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 2eadc7c4c902..408c9546ea0b 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -400,8 +400,12 @@ static void threshold_restart_bank(void *_tr)
+ 	struct thresh_restart *tr = _tr;
+ 	u32 hi, lo;
+ 
+-	/* sysfs write might race against an offline operation */
+-	if (this_cpu_read(threshold_banks))
 +	/*
-+	 * Generate an exit to L0 userspace, i.e. main(), via I/O to an
-+	 * arbitrary port.
++	 * sysfs write might race against an offline operation.
++	 * Prevent register writes if threshold_banks are not set and this is
++	 * not called from the init path as indicated by "set_lvt_off".
 +	 */
-+	asm volatile("inb %%dx, %%al"
-+		     : : [port] "d" (ARBITRARY_IO_PORT) : "rax");
-+}
-+
-+static void l1_guest_code(struct vmx_pages *vmx_pages)
-+{
-+#define L2_GUEST_STACK_SIZE 64
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+	GUEST_ASSERT(load_vmcs(vmx_pages));
-+
-+	/* Prepare the VMCS for L2 execution. */
-+	prepare_vmcs(vmx_pages, l2_guest_code,
-+		     &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	/*
-+	 * L2 must be run without unrestricted guest, verify that the selftests
-+	 * library hasn't enabled it.  Because KVM selftests jump directly to
-+	 * 64-bit mode, unrestricted guest support isn't required.
-+	 */
-+	GUEST_ASSERT(!(vmreadz(CPU_BASED_VM_EXEC_CONTROL) & CPU_BASED_ACTIVATE_SECONDARY_CONTROLS) ||
-+		     !(vmreadz(SECONDARY_VM_EXEC_CONTROL) & SECONDARY_EXEC_UNRESTRICTED_GUEST));
-+
-+	GUEST_ASSERT(!vmlaunch());
-+
-+	/* L2 should triple fault after main() stuffs invalid guest state. */
-+	GUEST_ASSERT(vmreadz(VM_EXIT_REASON) == EXIT_REASON_TRIPLE_FAULT);
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	vm_vaddr_t vmx_pages_gva;
-+	struct kvm_sregs sregs;
-+	struct kvm_run *run;
-+	struct ucall uc;
-+
-+	nested_vmx_check_supported();
-+
-+	vm = vm_create_default(VCPU_ID, 0, (void *) l1_guest_code);
-+
-+	/* Allocate VMX pages and shared descriptors (vmx_pages). */
-+	vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
-+
-+	vcpu_run(vm, VCPU_ID);
-+
-+	run = vcpu_state(vm, VCPU_ID);
-+
-+	/*
-+	 * The first exit to L0 userspace should be an I/O access from L2.
-+	 * Running L1 should launch L2 without triggering an exit to userspace.
-+	 */
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Expected KVM_EXIT_IO, got: %u (%s)\n",
-+		    run->exit_reason, exit_reason_str(run->exit_reason));
-+
-+	TEST_ASSERT(run->io.port == ARBITRARY_IO_PORT,
-+		    "Expected IN from port %d from L2, got port %d",
-+		    ARBITRARY_IO_PORT, run->io.port);
-+
-+	/*
-+	 * Stuff invalid guest state for L2 by making TR unusuable.  The next
-+	 * KVM_RUN should induce a TRIPLE_FAULT in L2 as KVM doesn't support
-+	 * emulating invalid guest state for L2.
-+	 */
-+	memset(&sregs, 0, sizeof(sregs));
-+	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	sregs.tr.unusable = 1;
-+	vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+
-+	vcpu_run(vm, VCPU_ID);
-+
-+	switch (get_ucall(vm, VCPU_ID, &uc)) {
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		TEST_FAIL("%s", (const char *)uc.args[0]);
-+	default:
-+		TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-+	}
-+}
++	if (!(this_cpu_read(threshold_banks) || tr->set_lvt_off))
+ 		return;
+ 
+ 	rdmsr(tr->b->address, lo, hi);
 -- 
-2.34.1.400.ga245620fadb-goog
+2.25.1
 

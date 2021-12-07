@@ -2,95 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E1F46B015
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD5F46B016
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235931AbhLGB46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:56:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41690 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbhLGB46 (ORCPT
+        id S236077AbhLGB5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:57:48 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:34347 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233991AbhLGB5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:56:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96775B81644;
-        Tue,  7 Dec 2021 01:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E42ADC004DD;
-        Tue,  7 Dec 2021 01:53:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638842006;
-        bh=eXTQmCkV7TlQUUyikTeYDDeh2Q2A+dhlVrouNNuPuY4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pfNIZhoFL5Z2N5wUx7SiDtzqqqsGp1pcVzcbnxzFyBCCu69un9CTSEJm20HqpSa26
-         NWERhDKFPo2tvCk+QBNApNV2R0BjzaQb6HEhQPPFiQSS0jfiQdLbxZ8UEMeJ2R47Ek
-         RyeS8Q1XhA8bxlJD55FyeVJQqykMHY0AwiVtQOd/qiAqPpL5Z6xLb8vgrfb/8EaWn1
-         5DjywXW46pWw0i9TqyPkMmf67XVcYTDuPFW2Q2jR7KumamuczRDHZDMk0vij1pkcNk
-         EFuhijwDHyQp+EGTQTaXV75F8r8RbqRorE97rcvUYYRoHosPsrjo3gJsAe41zp0l+9
-         2VaYeiXJ7wPww==
-Date:   Mon, 6 Dec 2021 19:53:23 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     qizhong cheng <qizhong.cheng@mediatek.com>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczyi=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chuanjia Liu <chuanjia.liu@mediatek.com>,
-        Jiey Yang <ot_jiey.yang@mediatek.com>
-Subject: Re: [PATCH] PCI: mediatek: Delay 100ms to wait power and clock to
- become stable
-Message-ID: <20211207015323.GA26237@bhelgaas>
+        Mon, 6 Dec 2021 20:57:47 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1B71TKeH059246;
+        Tue, 7 Dec 2021 09:29:20 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 7 Dec
+ 2021 09:54:14 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: aspeed: add comments and macro
+Date:   Tue, 7 Dec 2021 09:54:11 +0800
+Message-ID: <20211207015411.1619-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211104062144.31453-1-qizhong.cheng@mediatek.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1B71TKeH059246
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 02:21:44PM +0800, qizhong cheng wrote:
-> Described in PCIe CEM specification setctions 2.2 (PERST# Signal) and
-> 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
-> be delayed 100ms (TPVPERL) for the power and clock to become stable.
+Add comments to describe video-stat and 'struct aspeed_video'.
+Add macro, ASPEED_VIDEO_V4L2_MIN_BUF_REQ, to describe the buffers
+needed.
 
-Thanks for the spec references.
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/media/platform/aspeed-video.c | 36 ++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
 
-s/setctions/sections/
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index d2335d669fb3..e17ad102f064 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -32,6 +32,8 @@
+ #include <media/videobuf2-dma-contig.h>
+ #include <linux/videodev2.h>
+ 
++#define ASPEED_VIDEO_V4L2_MIN_BUF_REQ 3
++
+ #define DEVICE_NAME			"aspeed-video"
+ 
+ #define ASPEED_VIDEO_JPEG_NUM_QUALITIES	12
+@@ -185,6 +187,15 @@
+ #define VE_MEM_RESTRICT_START		0x310
+ #define VE_MEM_RESTRICT_END		0x314
+ 
++/*
++ * @VIDEO_MODE_DETECT_DONE:	a flag raised if signal lock
++ * @VIDEO_RES_CHANGE:		a flag raised if res_change work on-going
++ * @VIDEO_RES_DETECT:		a flag raised if res. detection on-going
++ * @VIDEO_STREAMING:		a flag raised if user requires stream-on
++ * @VIDEO_FRAME_INPRG:		a flag raised if hw working on a frame
++ * @VIDEO_STOPPED:		a flag raised if device release
++ * @VIDEO_CLOCKS_ON:		a flag raised if clk is on
++ */
+ enum {
+ 	VIDEO_MODE_DETECT_DONE,
+ 	VIDEO_RES_CHANGE,
+@@ -217,6 +228,25 @@ struct aspeed_video_perf {
+ #define to_aspeed_video_buffer(x) \
+ 	container_of((x), struct aspeed_video_buffer, vb)
+ 
++/**
++ * struct aspeed_video - driver data
++ *
++ * @res_work:           holds the delayed_work for res-detection if unlock
++ * @buffers:            holds the list of buffer queued from user
++ * @flags:		holds the state of video
++ * @sequence:		holds the last number of frame completed
++ * @max_compressed_size:holds max compressed stream's size
++ * @srcs:		holds the buffer information for srcs
++ * @jpeg:		holds the buffer information for jpeg header
++ * @yuv420:		a flag raised if JPEG subsampling is 420
++ * @frame_rate:		holds the frame_rate
++ * @jpeg_quality:	holds jpeq's quality (0~11)
++ * @frame_bottom:	end position of video data in vertical direction
++ * @frame_left:		start position of video data in horizontal direction
++ * @frame_right:	end position of video data in horizontal direction
++ * @frame_top:		start position of video data in vertical direction
++ * @perf:		holds the statistics primary for debugfs
++ */
+ struct aspeed_video {
+ 	void __iomem *base;
+ 	struct clk *eclk;
+@@ -1135,7 +1165,7 @@ static int aspeed_video_get_parm(struct file *file, void *fh,
+ 	struct aspeed_video *video = video_drvdata(file);
+ 
+ 	a->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
+-	a->parm.capture.readbuffers = 3;
++	a->parm.capture.readbuffers = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
+ 	a->parm.capture.timeperframe.numerator = 1;
+ 	if (!video->frame_rate)
+ 		a->parm.capture.timeperframe.denominator = MAX_FRAME_RATE;
+@@ -1152,7 +1182,7 @@ static int aspeed_video_set_parm(struct file *file, void *fh,
+ 	struct aspeed_video *video = video_drvdata(file);
+ 
+ 	a->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
+-	a->parm.capture.readbuffers = 3;
++	a->parm.capture.readbuffers = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
+ 
+ 	if (a->parm.capture.timeperframe.numerator)
+ 		frame_rate = a->parm.capture.timeperframe.denominator /
+@@ -1681,7 +1711,7 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 	vbq->drv_priv = video;
+ 	vbq->buf_struct_size = sizeof(struct aspeed_video_buffer);
+ 	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	vbq->min_buffers_needed = 3;
++	vbq->min_buffers_needed = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
+ 
+ 	rc = vb2_queue_init(vbq);
+ 	if (rc) {
+-- 
+2.25.1
 
-> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
-> ---
->  drivers/pci/controller/pcie-mediatek.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index 2f3f974977a3..b32acbac8084 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -702,6 +702,14 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
->  	 */
->  	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
->  
-> +	/*
-> +	 * Described in PCIe CEM specification setctions 2.2 (PERST# Signal)
-> +	 * and 2.2.1 (Initial Power-Up (G3 to S0)).
-> +	 * The deassertion of PERST# should be delayed 100ms (TPVPERL)
-> +	 * for the power and clock to become stable.
-
-s/setctions/sections/ again.  Otherwise we'll have a typo-fixing patch
-eventually.
-
-Please also rewrap into one paragraph.
-
-> +	 */
-> +	msleep(100);
-> +
->  	/* De-assert PHY, PE, PIPE, MAC and configuration reset	*/
->  	val = readl(port->base + PCIE_RST_CTRL);
->  	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
-> -- 
-> 2.25.1
-> 

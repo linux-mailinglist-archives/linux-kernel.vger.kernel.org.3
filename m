@@ -2,196 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D9A46BEFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7381046BF01
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbhLGPRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:17:39 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:37537 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbhLGPRg (ORCPT
+        id S234357AbhLGPSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:18:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38506 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229818AbhLGPSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:17:36 -0500
-Received: by mail-oi1-f172.google.com with SMTP id bj13so28281552oib.4;
-        Tue, 07 Dec 2021 07:14:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gHLh/twxwqdkYak+CGLf6Up0AGsQd0DPoFCh/1guPoU=;
-        b=3+Xqc5oKBF2irowKGOlUommx+RVj8F0C5YAjCHz85trAG4F9ORXzjVPu8FYhVn9zxr
-         uDngpyjOvhK3dzcz4iVHk8FNW+GKGTgqw/jr2dFStp2LvgO5U/hbUcO/PT3vGC9PWOUb
-         fl2Jq8qSF/mzvsDliQ7p0OnXm7sRh91zB0MOzLfgBCAjdPBBWwltm5hGsOdH9Mav5rcm
-         9evQblu9DidPgPdd9uqdEPQkOWYGNoKZuMzcfrlmB/9POVCnjh4t2WKZ5loQTkr7MuAZ
-         X0Wq01m9lqqUUTaILESrZrlQsRAxP1VmwHgVerB0HefJTted4FocjmJFIENxm1dURIlG
-         Od4A==
-X-Gm-Message-State: AOAM533Ml31iCzR90UUcJaxLg5zy0Hak6lAM3Ww8SOhPcoei2RyVUe/N
-        811aJF3mHrBVfB+yqplECAnZPW47QA==
-X-Google-Smtp-Source: ABdhPJxIOWxApR2yPnoWn9mY/qhX8SpsrfoNf6wadNvZU6y0quA1Gbdi2DDCY4nBeHPW8uEW3WuDhA==
-X-Received: by 2002:a54:438d:: with SMTP id u13mr5649541oiv.156.1638890045676;
-        Tue, 07 Dec 2021 07:14:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 184sm3297341oih.58.2021.12.07.07.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 07:14:04 -0800 (PST)
-Received: (nullmailer pid 59673 invoked by uid 1000);
-        Tue, 07 Dec 2021 15:14:03 -0000
-Date:   Tue, 7 Dec 2021 09:14:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, cphealy@gmail.com,
-        benjamin.gaignard@collabora.com, hverkuil@xs4all.nl,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [RFC V2 3/6] dt-bindings: media: nxp,imx8mq-vpu: Update the
- bindings for G2 support
-Message-ID: <Ya96O6VXuIDdcM8p@robh.at.kernel.org>
-References: <20211207015446.1250854-1-aford173@gmail.com>
- <20211207015446.1250854-4-aford173@gmail.com>
+        Tue, 7 Dec 2021 10:18:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB8FBB80782;
+        Tue,  7 Dec 2021 15:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51959C341C1;
+        Tue,  7 Dec 2021 15:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638890103;
+        bh=xxF6Nm2aBsMxEff2TkdoXeMHocqjOshQ8GbBna8ovUY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qXQflwPi4XW0XAwlgafUg1Sq0TeYe27GgLJm4wNYJUfUK2N6ICN8hq8sD2/ZcRg/v
+         WHTDBsSH4zvlUICZVXLzlbimjg9keWa2yEL4mg85vLh3arSz/H7lL653jE5VjZPX9c
+         7W5gIRRYGy/QHfpjvmR1r9hFYJns7QDIqs/85W3p5JWtCZRci9pYBvdc2IGX7zgTYN
+         hOqzwtIyR1G12qXRAj0DQfU+lioEyDfywNxbqJL5vQVFxDRO3PBy3jfVR1osUdkSN/
+         OnTK/fmIhg5qr8UWZpTisuPccqRnmmiQzDbToQOwtrIPMO70C9/BctFD29orWb+x9g
+         amxcPAh1WLV3A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [v2] iwlwifi: work around reverse dependency on MEI
+Date:   Tue,  7 Dec 2021 16:14:36 +0100
+Message-Id: <20211207151447.3338818-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207015446.1250854-4-aford173@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 07:54:42PM -0600, Adam Ford wrote:
-> From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> 
-> Introducing the G2 hevc video decoder requires modifications of the bindings to allow
-> one node per VPU.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Why? It looks like the G2 part was already described. If you are 
-changing this because you want 2 drivers for G1 and G2, then NAK. DT 
-nodes and drivers don't have to be 1:1. This change is breaking 
-compatibility.
+If the iwlmei code is a loadable module, the main iwlwifi driver
+cannot be built-in:
 
-> 
-> VPUs share one hardware control block which is provided as a phandle on
-> a syscon.
+x86_64-linux-ld: drivers/net/wireless/intel/iwlwifi/pcie/trans.o: in function `iwl_pcie_prepare_card_hw':
+trans.c:(.text+0x4158): undefined reference to `iwl_mei_is_connected'
 
-That's not really ideal. Is this really a separate block?
+Unfortunately, Kconfig enforces the opposite, forcing the MEI driver to
+not be built-in if iwlwifi is a module.
 
-> Each node has now one reg and one interrupt.
-> Add a compatible for G2 hardware block: nxp,imx8mq-vpu-g2.
-> 
-> To be compatible with older DT the driver is still capable to use the 'ctrl'
-> reg-name even if it is deprecated now.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> index 762be3f96ce9..eaeba4ce262a 100644
-> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> @@ -15,37 +15,36 @@ description:
->  
->  properties:
->    compatible:
-> -    const: nxp,imx8mq-vpu
-> +    oneOf:
-> +      - const: nxp,imx8mq-vpu-g1
-> +      - const: nxp,imx8mq-vpu-g2
->  
->    reg:
-> -    maxItems: 3
-> -
-> -  reg-names:
-> -    items:
-> -      - const: g1
-> -      - const: g2
-> -      - const: ctrl
-> +    maxItems: 1
->  
->    interrupts:
-> -    maxItems: 2
-> +    maxItems: 1
->  
->    interrupt-names:
-> -    items:
-> +    oneOf:
->        - const: g1
->        - const: g2
->  
->    clocks:
-> -    maxItems: 3
-> +    maxItems: 1
->  
->    clock-names:
-> -    items:
-> +    oneOf:
->        - const: g1
->        - const: g2
-> -      - const: bus
->  
->    power-domains:
->      maxItems: 1
->  
-> +  nxp,imx8m-vpu-ctrl:
-> +    description: Specifies a phandle to syscon VPU hardware control block
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+To work around this, decouple iwlmei from iwlwifi and add the
+dependency in the other direction.
 
-This is optional?
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wireless/intel/iwlwifi/Kconfig | 52 +++++++++++-----------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-> +
->  required:
->    - compatible
->    - reg
-> @@ -60,20 +59,27 @@ additionalProperties: false
->  examples:
->    - |
->          #include <dt-bindings/clock/imx8mq-clock.h>
-> +        #include <dt-bindings/power/imx8mq-power.h>
->          #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -        vpu: video-codec@38300000 {
-> +        vpu_g1: video-codec@38300000 {
->                  compatible = "nxp,imx8mq-vpu";
-> -                reg = <0x38300000 0x10000>,
-> -                      <0x38310000 0x10000>,
-> -                      <0x38320000 0x10000>;
-> -                reg-names = "g1", "g2", "ctrl";
-> -                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> -                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> -                interrupt-names = "g1", "g2";
-> -                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> -                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-> -                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> -                clock-names = "g1", "g2", "bus";
-> -                power-domains = <&pgc_vpu>;
-> +                reg = <0x38300000 0x10000>;
-> +                reg-names "g1";
-> +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +                interrupt-names = "g1";
-> +                clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> +                clock-names = "g1";
-> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
-> +        };
-> +
-> +        vpu_g2: video-codec@38310000 {
-> +                compatible = "nxp,imx8mq-vpu-g2";
-> +                reg = <0x38300000 0x10000>;
-> +                reg-names "g2";
-> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> +                interrupt-names = "g2";
-> +                clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> +                clock-names = "g2";
-> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
->          };
-> -- 
-> 2.32.0
-> 
-> 
+diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
+index cf1125d84929..c21c0c68849a 100644
+--- a/drivers/net/wireless/intel/iwlwifi/Kconfig
++++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
+@@ -2,6 +2,7 @@
+ config IWLWIFI
+ 	tristate "Intel Wireless WiFi Next Gen AGN - Wireless-N/Advanced-N/Ultimate-N (iwlwifi) "
+ 	depends on PCI && HAS_IOMEM && CFG80211
++	depends on IWLMEI || !IWLMEI
+ 	select FW_LOADER
+ 	help
+ 	  Select to build the driver supporting the:
+@@ -92,32 +93,6 @@ config IWLWIFI_BCAST_FILTERING
+ 	  If unsure, don't enable this option, as some programs might
+ 	  expect incoming broadcasts for their normal operations.
+ 
+-config IWLMEI
+-	tristate "Intel Management Engine communication over WLAN"
+-	depends on INTEL_MEI
+-	depends on PM
+-	depends on IWLMVM
+-	help
+-	  Enables the iwlmei kernel module.
+-
+-	  CSME stands for Converged Security and Management Engine. It is a CPU
+-	  on the chipset and runs a dedicated firmware. AMT (Active Management
+-	  Technology) is one of the applications that run on that CPU. AMT
+-	  allows to control the platform remotely.
+-
+-	  This kernel module allows to communicate with the Intel Management
+-	  Engine over Wifi. This is supported starting from Tiger Lake
+-	  platforms and has been tested on 9260 devices only.
+-	  If AMT is configured not to use the wireless device, this module is
+-	  harmless (and useless).
+-	  Enabling this option on a platform that has a different device and
+-	  has Wireless enabled on AMT can prevent WiFi from working correctly.
+-
+-	  For more information see
+-	  <https://software.intel.com/en-us/manageability/>
+-
+-	  If unsure, say N.
+-
+ menu "Debugging Options"
+ 
+ config IWLWIFI_DEBUG
+@@ -172,3 +147,28 @@ config IWLWIFI_DEVICE_TRACING
+ endmenu
+ 
+ endif
++
++config IWLMEI
++	tristate "Intel Management Engine communication over WLAN"
++	depends on INTEL_MEI
++	depends on PM
++	help
++	  Enables the iwlmei kernel module.
++
++	  CSME stands for Converged Security and Management Engine. It is a CPU
++	  on the chipset and runs a dedicated firmware. AMT (Active Management
++	  Technology) is one of the applications that run on that CPU. AMT
++	  allows to control the platform remotely.
++
++	  This kernel module allows to communicate with the Intel Management
++	  Engine over Wifi. This is supported starting from Tiger Lake
++	  platforms and has been tested on 9260 devices only.
++	  If AMT is configured not to use the wireless device, this module is
++	  harmless (and useless).
++	  Enabling this option on a platform that has a different device and
++	  has Wireless enabled on AMT can prevent WiFi from working correctly.
++
++	  For more information see
++	  <https://software.intel.com/en-us/manageability/>
++
++	  If unsure, say N.
+-- 
+2.29.2
+

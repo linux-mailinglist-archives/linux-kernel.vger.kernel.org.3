@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D94146C547
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B4B46C530
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbhLGVBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:01:08 -0500
-Received: from mga07.intel.com ([134.134.136.100]:54588 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236269AbhLGVAz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:00:55 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="301068578"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="301068578"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:57:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="542950075"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 12:57:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muhWT-000Mxu-E2; Tue, 07 Dec 2021 20:57:13 +0000
-Date:   Wed, 8 Dec 2021 04:56:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: [intel-tdx:guest 54/144] arch/x86/kernel/tdx.c:225:5: warning: no
- previous prototype for 'tdx_hcall_set_notify_intr'
-Message-ID: <202112080412.ewbt4zCb-lkp@intel.com>
+        id S234680AbhLGVAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233435AbhLGVAD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 16:00:03 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE0AC061A32;
+        Tue,  7 Dec 2021 12:56:31 -0800 (PST)
+Date:   Tue, 7 Dec 2021 21:56:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638910590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y73CmgjIRQmWm9o7zHsQQXaxLdlPjT3UChEH40OcxoU=;
+        b=b7tuO+0ywfuQKYi4Mn3KktToeXF/MhmAVCKpJo1okuQ6SXY610kfRA9ip9kpOvJa5uXm4U
+        FHdIV+esLSOCA6Vip9cmrVe4vqcMbSn+MnDK+UG1OXh8zi/5/+waiTVYL0zHmo6GgSSLed
+        EreoqzrT5Yo1fmJj+xS5LsWEHyZ9d8hYB0bB6LAj+TrOxlLtqBfPR/BDDwCCTDOD6sT2Dz
+        +sro72M7lhh5/+0/SUIW8Cz4bmRDLdVQ7yAByiJelVgUJxrc8WuAqeBCdg8hogx8dt0G2l
+        igrXdqUFM1FXNmM06psvYTNEEuktsSODLSLHW2N+EbuWIeGSZt1w7cTsW2lldg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638910590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y73CmgjIRQmWm9o7zHsQQXaxLdlPjT3UChEH40OcxoU=;
+        b=VjbkOKFFvssGYHOrFJT6iSZeC/K8zQmS+TbvHA0Mmu/Q3nJbA7aQfFIEzEgSRV+gk6knlL
+        QV7r6cxQi9O6EUAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>, carnil@debian.org
+Subject: Re: [ANNOUNCE] 5.10.83-rt58
+Message-ID: <20211207205628.auc54rwl4duuisah@linutronix.de>
+References: <YalDQe/lyXqAxB0K@uudg.org>
+ <20211207201712.7yqbksbba3zgu7u3@linutronix.de>
+ <20211207152049.1013e1ce@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211207152049.1013e1ce@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest
-head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
-commit: 7315ae7f753386e793da1941e073c4cb1112e767 [54/144] x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211208/202112080412.ewbt4zCb-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/7315ae7f753386e793da1941e073c4cb1112e767
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest
-        git checkout 7315ae7f753386e793da1941e073c4cb1112e767
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+On 2021-12-07 15:20:49 [-0500], Steven Rostedt wrote:
+> On Tue, 7 Dec 2021 21:17:12 +0100
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+>=20
+> > On 2021-12-02 19:05:53 [-0300], Luis Claudio R. Goncalves wrote:
+> > > I'm pleased to announce the 5.10.83-rt58 stable release. =20
+> > =E2=80=A6
+> > >   https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10=
+=2E83-rt58.patch.xz =20
+> >=20
+> > Any particular reason why every patch has "v4.9-rt" in the Subject line?
+>=20
+> I'm guessing because he just took over 5.10-rt and did not update his
+> scripts ;-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It seems to confuse ppl. Is there a reason to have it?
 
-All warnings (new ones prefixed by >>):
+> -- Steve
 
->> arch/x86/kernel/tdx.c:225:5: warning: no previous prototype for 'tdx_hcall_set_notify_intr' [-Wmissing-prototypes]
-     225 | int tdx_hcall_set_notify_intr(u8 vector)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tdx_hcall_set_notify_intr +225 arch/x86/kernel/tdx.c
-
-   217	
-   218	/*
-   219	 * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
-   220	 *
-   221	 * @vector        : Vector address to be used for notification.
-   222	 *
-   223	 * return 0 on success or failure error number.
-   224	 */
- > 225	int tdx_hcall_set_notify_intr(u8 vector)
-   226	{
-   227		u64 ret;
-   228	
-   229		/* Minimum vector value allowed is 32 */
-   230		if (vector < 32)
-   231			return -EINVAL;
-   232	
-   233		/*
-   234		 * Register callback vector address with VMM. More details
-   235		 * about the ABI can be found in TDX Guest-Host-Communication
-   236		 * Interface (GHCI), sec 3.5.
-   237		 */
-   238		ret = _trace_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0,
-   239					   NULL);
-   240	
-   241		if (ret == TDVMCALL_SUCCESS)
-   242			return 0;
-   243		else if (ret == TDCALL_INVALID_OPERAND)
-   244			return -EINVAL;
-   245	
-   246		return -EIO;
-   247	}
-   248	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Sebastian

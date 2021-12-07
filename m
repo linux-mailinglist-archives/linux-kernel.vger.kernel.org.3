@@ -2,82 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7318446B975
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E4346B971
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235364AbhLGKxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbhLGKxA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235319AbhLGKxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 7 Dec 2021 05:53:00 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AF6C061574;
-        Tue,  7 Dec 2021 02:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=VEFtiaXzZJZE/WvxgKVKGVbqzPsrnHI/wvB8VfGeVI0=;
-        t=1638874170; x=1640083770; b=Ne5T8hoIVQCc7UpFyTcfZgRue5DP/VkcawDbynoF6sn+Xk+
-        mbBLjpFUeog1tBTojV0JcF4pwkqmabb8tw+A2iNb08JCT9wFOIGTVcIQvqpO9D1cFbmgZiM0m1uqh
-        zhGLOU/XJP+n9sHn/juc0GW9ERrVWQRF5P34MJqw6jD339LTaB1PLuy1z7HALatU4COhjFEd8H/Pu
-        tJ/TqqKYifuC66uiHtfMXUhgtlEZG4aCkqAbK1+MK/7QMYnOjarPB25eyTzQLT8wSIX1DjJ2MEh9Z
-        R19Joz8bW8FZ4mG2X88kPf82lyu58FSIaiDpZjCgiblMxKrcpubDEkeL7K21Q/iw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1muY2B-0089TU-7D;
-        Tue, 07 Dec 2021 11:49:19 +0100
-Message-ID: <dc7d43b96cd1a40654bb2da009ea515b8ded40c3.camel@sipsolutions.net>
-Subject: Re: [PATCH 1/3] iwlwifi: fix LED dependencies
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Arnd Bergmann <arnd@kernel.org>, Stanislaw Gruszka <stf_xl@wp.pl>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229809AbhLGKw7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 05:52:59 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8CBC061574;
+        Tue,  7 Dec 2021 02:49:29 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id d9so28587116wrw.4;
+        Tue, 07 Dec 2021 02:49:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tXAwO6eoQFE08QT+TXCtgtOQ5swxwDw6whv/IXQdugk=;
+        b=LIRKc5n0K2TRpQZJKcM5M2ITTflQ5fp2vsd0kbeU8ulx2w2r7PzIXD7R9Wd/mi/7ws
+         Ukyz4W3QzPfdXujC8zaTtTmLy51aCI+qRLG36ZKzu6+ZSgHgHC28vxLaPs4BqW0xNc5z
+         P2OfRNdS7phko09MaUIzBy+mt4Q8kiMkxI632QQp1+oC19CIlSUc7Rhxg4EiRccnHDWX
+         u7at51XPcPTWx1oaMhnQsyweBJFHuULtpb0wAbknXJ17LYbDgVpveQXLmWVW1O8mFrOM
+         XglBEmKAVyREVhTA8GYa7bAGIbU+wRN2Rf4vcG2pohYm4jjRWqtCb0Dc8kDa3yugUPMe
+         hMaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tXAwO6eoQFE08QT+TXCtgtOQ5swxwDw6whv/IXQdugk=;
+        b=qDRXXC0WsKCtCOPikj0lMy1w7BcYe2cpSFY87iUENT4Xh1jkrf1WbZGai+pTma57yX
+         L10crrvyMt5dp6b1sWEFdtm9A/jKlMjKrZoY6yQsttMBJiKCznZiR5aF09xvwSyAq8Zi
+         Ca1eJgH4RxQgPW48ladCGiYhSZCIgCogSM9UdIrdBKYbrhrTwJCDZ+FbdWyhN0+QWYFf
+         6CLxBpD5TwyoIDq6arPoPKxe2lBpoCvSM3odNbESDJrmcVDoJZ+yVX1KlR+f1k+ewHQG
+         vGMo79wpbXWZMOvkaHQSwJpiq9I1htWWRqLSaCCYBo0pr1JuBirhj14T0hnnFFXBjApw
+         SpyA==
+X-Gm-Message-State: AOAM532vMKAhhoDWBjEmi6wwC2vklKmADhwtM/ID9RU4biIJwxL0B1jY
+        r5ocqpDXw8JFEH3nrNmoGz+yEu2wjbg=
+X-Google-Smtp-Source: ABdhPJxlWoIiNY0QstMH6PV5+GhVGQ7+QOTO7lupZIsNZhLp/RB/xab4GZ7lg0b8n4sYqAB/ppKHJg==
+X-Received: by 2002:adf:c146:: with SMTP id w6mr51798083wre.541.1638874167369;
+        Tue, 07 Dec 2021 02:49:27 -0800 (PST)
+Received: from localhost.localdomain (27.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.27])
+        by smtp.gmail.com with ESMTPSA id z6sm13958561wrm.93.2021.12.07.02.49.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 02:49:26 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-pci@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, linux@roeck-us.net,
         linux-kernel@vger.kernel.org
-Date:   Tue, 07 Dec 2021 11:49:18 +0100
-In-Reply-To: <fd1f5c0f0a9a6b3f59ed0d03e963f87bf745705f.camel@sipsolutions.net>
-References: <20211204173848.873293-1-arnd@kernel.org>
-         <c9acebcef9504ac6889de25d528c3ea0c590b1c1.camel@sipsolutions.net>
-         <fd1f5c0f0a9a6b3f59ed0d03e963f87bf745705f.camel@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+Subject: [PATCH v3 0/5] PCI: mt7621: Remove specific MIPS code from driver
+Date:   Tue,  7 Dec 2021 11:49:19 +0100
+Message-Id: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-07 at 11:16 +0100, Johannes Berg wrote:
-> On Tue, 2021-12-07 at 11:14 +0100, Johannes Berg wrote:
-> > On Sat, 2021-12-04 at 18:38 +0100, Arnd Bergmann wrote:
-> > >  
-> > >  config IWLWIFI_LEDS
-> > >  	bool
-> > > -	depends on LEDS_CLASS=y || LEDS_CLASS=IWLWIFI
-> > > +	depends on LEDS_CLASS=y || LEDS_CLASS=MAC80211
-> > > 
-> > 
-> > Hm. Can we really not have this if LEDS_CLASS=n?
-> > 
-> 
-> Well, umm. That wouldn't make sense for IWLWIFI_LEDS, sorry.
-> 
-> Might be simpler to express this as "depends on MAC80211_LEDS" which has
-> the same condition, and it feels like that makes more sense than
-> referencing MAC80211 here?
-> 
+Hi all,
 
-Hm, maybe not. Sorry for the monologue here - but MAC80211_LEDS is user
-selectable, and so I guess that's a different thing.
+MIPS specific code can be removed from driver and put into ralink mt7621
+instead which is a more accurate place to do this. To make this possible
+we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepare()'
+which has been implemented for ralink mt7621 platform (there is no real
+need to implement this for any other platforms since those ones haven't got
+I/O coherency units). This also allow us to properly enable this driver to
+completely be enabled for COMPILE_TEST. This patchset appoarch:
+- Move windows list splice in 'pci_register_host_bridge()' after function
+  'pcibios_root_bridge_prepare()' is called.
+- Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
+- Avoid custom MIPs code in pcie-mt7621 driver.
+- Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile test
+  module compilation to complain (already sent patch from Yanteng Si that
+  I have rewrite commit message and long description a bit.
+- Remove MIPS conditional code from Kconfig and mark driver as 'tristate'.
 
-johannes
+This patchset is a real fix for some errors reported by Kernel Test Robot about
+implicit mips functions used in driver code and fix errors in driver when
+is compiled as a module [1] (mips:allmodconfig).
+
+Changes in v3:
+ - Rebase the series on the top of the temporal fix sent for v5.16[3] for
+   the module compilation problem.
+ - Address review comments from Guenter in PATCH 2 (thanks Guenter!):
+    - Address TODO in comment about the hardware does not allow zeros
+      after 1s for the mask and WARN_ON if that's happend.
+    - Be sure mask is real valid upper 16 bits.
+
+Changes in v2:
+ - Collect Acked-by from Arnd Bergmann for PATCH 1.
+ - Collect Reviewed-by from Krzysztof Wilczyński for PATCH 4.
+ - Adjust some patches commit subject and message as pointed out by Bjorn in review of v1 of the series[2]. 
+
+This patchset is the good way of properly compile driver as a module removing
+all MIPS specific code into arch ralink mt7621 place. To avoid mips:allmodconfig reported
+problems for v5.16 the following patch has been sent[3]. This series are rebased onto this patch to provide
+a real fix for this problem.
+
+[0]: https://lore.kernel.org/linux-mips/CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com/T/#t
+[1]: https://lkml.org/lkml/2021/11/14/436
+[2]: https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuellos@gmail.com
+[3]: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.paracuellos@gmail.com/T/#u
+
+Thanks in advance for your time.
+
+Best regards,
+   Sergio Paracuellos
+
+Sergio Paracuellos (5):
+  PCI: Let pcibios_root_bridge_prepare() access to 'bridge->windows'
+  MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
+  PCI: mt7621: Avoid custom MIPS code in driver code
+  PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
+  PCI: mt7621: Allow COMPILE_TEST for all arches
+
+ arch/mips/ralink/mt7621.c            | 31 ++++++++++++++++++++++
+ drivers/pci/controller/Kconfig       |  4 +--
+ drivers/pci/controller/pcie-mt7621.c | 39 ++--------------------------
+ drivers/pci/probe.c                  |  4 +--
+ 4 files changed, 37 insertions(+), 41 deletions(-)
+
+-- 
+2.33.0
+

@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8B746C69B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1BA46C69E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbhLGVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:23:33 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]:38887 "EHLO
-        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbhLGVX3 (ORCPT
+        id S241665AbhLGVYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233795AbhLGVYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:23:29 -0500
-Received: by mail-oo1-f42.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so150140ooj.5;
-        Tue, 07 Dec 2021 13:19:58 -0800 (PST)
+        Tue, 7 Dec 2021 16:24:05 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC6C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:20:34 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s137so221911pgs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:20:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9z9mcEOqCc5xD2F5/F5rihEXJE01JxUzDidSsCCdREk=;
+        b=CpBR6wmm1q6jWDwcnPxLQ3eMVgLCMnWFpH/o4g4TOXf9nFP9SWnEqaaxXlDeGX+EZ8
+         Ti6YfyZ6T2EOBk32ZsoAaoWeXmb0qSroICK6P41ALMW45UTnGimHGqnXY9zqa2gZPNgX
+         0/zHHWtMekKdeEZ2FrmB6cpEcmVbmQI/K1fic=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TDybkYmRgN7ASFL9lU803KLgt8MDRIp7lKanWAFVy8w=;
-        b=vIrkEJqBtQ72BkRPn0vsp3EPkYea6bruoBesaf8cXk53P5nO4zCmSQETK+xjTAoKRb
-         zRO2xyRurEyZBCFCe89QU7rOFov1H9NADnUiBvcvg0/j2YwVdMxhe9Av4iPZ98m5fwr+
-         kI0SOOB11fK2OK8qcXn51bPmvKpyuTEACk5XD8fyxwWY4TvzX2DBYkFVoTITP+EgK5HM
-         9VYomR/Nt7IrfelUikjjcAjG20hqbkXAch0I9C/v3aiUbkjX9qINMG456zc17HbYFoP1
-         GhU0c2jxjGpY51HkrRoNNiP5tpGN9XGhPsznoVUBDAR34JAVsIna/pUIVzSrYNZtespk
-         DU3w==
-X-Gm-Message-State: AOAM532dFr3NnHejE4qLwu4YP9kqU5QzcgoSeOs9QCTRnXW8tKSMJbiV
-        K1paGShK6u6ehpcliPobbg==
-X-Google-Smtp-Source: ABdhPJzQx6ifBIeo7YNw/4J7ZMf9KeE80PBI87o4MLSSxGDKBHAC15DEydOg8wZjHXu+Y1USi6AwDQ==
-X-Received: by 2002:a4a:b00e:: with SMTP id f14mr27855125oon.10.1638911997778;
-        Tue, 07 Dec 2021 13:19:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o2sm214597oik.11.2021.12.07.13.19.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9z9mcEOqCc5xD2F5/F5rihEXJE01JxUzDidSsCCdREk=;
+        b=S58PZFPFXL5CrAtpYeB+hsFZcE30LpvszVz+JyPy34lTgS2MBMiUzLwL0pvouax2xc
+         Gc02f124D8yBLo5Lt3Vfi30o/9FElesZ+sR6YCXk792lj6sz9KoX7VT4vlsyuDmoIEX7
+         1HxdKympnDo8nn00mjBHKvLsfzb3GVcGx9RwYXnprF6deQxw82ANZMgv8AoMBVplY7S2
+         U8Y27/8tdmICtDhi1cExq/6IM2NQDSTjrt0aCSvTg32phtLJfmEAdJerf3aJKhT8vM8b
+         2/mhCoknbym9BPy2ZS0iAwK3H5YmGy71BdAlhNP0WVjFa7M/NM4yOKIsnfPKTj1RrI0m
+         9IQA==
+X-Gm-Message-State: AOAM533d9O0f9Wwk5DPsASCnUN4z6IpExpQKFzt0O9dYZRFbacj+M9+V
+        Kwsmg9kgD/V0eLsV+v1UjGJYig==
+X-Google-Smtp-Source: ABdhPJyvXRCXfhQQlLw8UElZzV252uBcZyBir6qj6QPih1VfaMbvXTVORYMT+legzIvu9nrnxuCRPA==
+X-Received: by 2002:a63:e16:: with SMTP id d22mr26642297pgl.291.1638912034224;
+        Tue, 07 Dec 2021 13:20:34 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p15sm705084pfo.143.2021.12.07.13.20.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 13:19:56 -0800 (PST)
-Received: (nullmailer pid 850716 invoked by uid 1000);
-        Tue, 07 Dec 2021 21:19:55 -0000
-Date:   Tue, 7 Dec 2021 15:19:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-hwmon@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org, BMC-SW <BMC-SW@aspeedtech.com>
-Subject: Re: [v14 0/2] Support pwm driver for aspeed ast26xx
-Message-ID: <Ya/P+4CNTnUUqlG9@robh.at.kernel.org>
-References: <20211130055933.32708-1-billy_tsai@aspeedtech.com>
- <CACPK8XfM4C7v3keXaxMs9SkqNzb8XWbZ6QvcZXWcy3ZKJCrvWQ@mail.gmail.com>
+        Tue, 07 Dec 2021 13:20:33 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr
+Date:   Tue,  7 Dec 2021 13:20:22 -0800
+Message-Id: <20211207212022.364703-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8XfM4C7v3keXaxMs9SkqNzb8XWbZ6QvcZXWcy3ZKJCrvWQ@mail.gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1414; h=from:subject; bh=162T4AOcO3pT2xkQ5YSgkPbdfq/MnpvbH7x7jZVSmyI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhr9AVt4fvyuoCUfWH5T4YqQjLaDiCbZE9rfkKTIwE k5jq8UWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYa/QFQAKCRCJcvTf3G3AJtidEA CbLWyJKGTDTi5CTjVhgCptMfETdGlaUHcet5W6ruTsexrxTi8bcw1tOszLU6g9YOaXfJC+lzn+aXac iLA0o5hcR8Bh3Z/k5ezZsUtbY7HBdYc9Sfs0YQMdEcd3YoVsO8djnCJvC20QoztfeZswwjj8eWVQuf z5V7q3hKkjIdH697FYNb7UVd4d6UcOuPsWmi0KjrUBa+rin+z+9LkhrkaTNfzCAV6HNmTCR8fvqP/Y DMirXCEU/MByHo78qZFYXP/zUnKYPiEtPtyKs4rMxYoC/H6wCHnfo27DjIwvtZnbZZi8J+78mIlDV+ XLddXmXKKc/ELcSqEMzQpjbBcr6pqSo8wJQE1k8lAubxr8Yy2p8V/4AekPGsW+0OZbiy3hBH4i3sdz KMyXGYiL5tMQ1dSScN3U98IeICngVOUdrGkmZmP5CssOGB04cFF/PKKrU9qOUXWY+BrK1CRwwzeJWM I5JQYPyTv9RkreRNppv4xfU1aGy17jDhP55bJ+VFQ84ptzKeKhrcExH5MGxoCXpPCDfoWAgwQeh5Uo qOT22dFDX73NRe1ai/oXoLtrtzJFknz+GjB7ZS06wl+YKghyxrE0PgCHpxAKuP1qTae9kXTri1eeqW ALV9Q2tXkUiJE5HKSF7L952YixS4ynmd6IsURnzlIyoAz2iPSuI6s9aNMxGA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 06:45:47AM +0000, Joel Stanley wrote:
-> Hi Billy,
-> 
-> On Tue, 30 Nov 2021 at 05:58, Billy Tsai <billy_tsai@aspeedtech.com> wrote:
-> >
-> > The legacy driver of aspeed pwm is binding with tach controller and it
-> > doesn't follow the pwm framworks usage. In addition, the pwm register
-> > usage of the 6th generation of ast26xx has drastic change. So these
-> > patch serials add the new aspeed pwm driver to fix up the problem above.
-> 
-> Sorry for not taking a look earlier. Well done on making it this far.
-> 
-> There's a few things that need to be addressed before merging this.
-> 
-> Firstly, the bindings need fixing up. I think these should be the one
-> file. The device tree bindings are supposed to describe the hardware,
-> and it doesn't make sense to separate them out just because we plan on
-> using two subsystems to implement the functionality.
-> 
-> Rob, please chime in if you would prefer something different.
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memset(), avoid intentionally writing across
+neighboring fields.
 
-I prefer to see a common binding for fans which I said multiple times 
-on this series. As the same thing keeps getting posted, I've stopped 
-looking at this one.
+Use memset_after() to zero the end of struct mlx5_ib_mr that should
+be initialized.
 
-Rob
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: rebased, umem moved into the union and is expected to be wiped
+    https://lore.kernel.org/lkml/20211207194525.GL6385@nvidia.com
+---
+ drivers/infiniband/hw/mlx5/mlx5_ib.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+index 4a7a56ed740b..ded10719b643 100644
+--- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
++++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+@@ -664,8 +664,8 @@ struct mlx5_ib_mr {
+ 
+ 	/* User MR data */
+ 	struct mlx5_cache_ent *cache_ent;
++	/* Everything after cache_ent is zero'd when MR allocated */
+ 
+-	/* This is zero'd when the MR is allocated */
+ 	union {
+ 		/* Used only while the MR is in the cache */
+ 		struct {
+@@ -718,7 +718,7 @@ struct mlx5_ib_mr {
+ /* Zero the fields in the mr that are variant depending on usage */
+ static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
+ {
+-	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
++	memset_after(mr, 0, cache_ent);
+ }
+ 
+ static inline bool is_odp_mr(struct mlx5_ib_mr *mr)
+-- 
+2.30.2
+

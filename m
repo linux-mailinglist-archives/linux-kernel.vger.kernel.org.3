@@ -2,213 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B35FE46C7AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5546C7AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbhLGWtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S242299AbhLGWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242298AbhLGWs7 (ORCPT
+        with ESMTP id S232119AbhLGWuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:48:59 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A2BC061574;
-        Tue,  7 Dec 2021 14:45:28 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so2042038edd.0;
-        Tue, 07 Dec 2021 14:45:28 -0800 (PST)
+        Tue, 7 Dec 2021 17:50:16 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A56C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:46:45 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id m24so372849pgn.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:46:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Mv2YzdvEcKnWynBtJ0zu8K4EGopTvu+UUigAf5oKgtI=;
-        b=e1uQPkhjj6JuHWcMwoZ+qquFEA8V0yIuPJ5f7F/fxBdxvfV5ouXH6bpNF3ZYs3puvN
-         i9BedRbdsUcJP3MShDXoUW/YSOTsCQX5XlYqHMbbg++60xFS1UA/h9mKF1IZI71+oYlI
-         DKoPMn0QVnj1a/GVjXmJoqgWCa/WMbeHhsZNYDmFd9ugARkbvMuYemhLo6VMPpOqk56M
-         F3riERYOsw7k8ypdMo+pkbID2EofPEipmDhcqLWIc1CdXwbGUzujYvQ74DaClgbUKK6s
-         GZB2I4/8SNVFltgRsFRdqpMt2LMSu7IwRWs98LGXevg8aGauvEd7JSMyAPZrdgrolXO9
-         Kpdw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qo2gY9GkL4/3JxkwIdvL8NrT6jxwYuRAOPwQ/50yNqM=;
+        b=fDXu9wWpReTzmmw0klosA3lK2h7JpNj+kabdgROoCxvh07v3DlpQzK9zRpYVgqpsDn
+         Ee1V3C23ImrW6FmLBU2UhHrSHybZlyKUn/d9MmVhhx4UO8GpanF7FLi1DY7eZG+OO1uZ
+         +0jusIKy7z+1cTdp2b3dTSIPPPW2FqKBarfv8tzDdaPkLtTzeG61Uj/97cJzEVn1v6i+
+         vxF9l82YyhpgdALKZNV1L4pFvXqYgKwqwUEMwzi910eCHDEUuP30bhCZrFe2kuY9cpmq
+         eX6LQdV0GhAfQB/Ec9ccBVKRDs/crCVdnUtswtQftX2NDL+PcGG/P5r2gzQTJa71YjC4
+         zG5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Mv2YzdvEcKnWynBtJ0zu8K4EGopTvu+UUigAf5oKgtI=;
-        b=ho+VGSNejy1mfu+QX1ax25Wcg7QH+ovrCQpGZ7HS4kVsBW9w+xrD+OUzr+JDrLWpjy
-         bkrijzBrqY9aDGKcNqQz1tx7BFlVmFMRq1eeN1Jg44uYD/bSLkq9xilZK5Iyp/B24unC
-         oRUExtUUmIEHZ+hfMLXezFTRSsDSlEKwrK83ThMJ4Svr1jGWMj03c0F0B5EaG0wqll6a
-         iAgbn7JzgJSmu6bNrLW9nvwAx1FHTfxMNFfVwSmnqDv+mR5hc0IM16VDIJOFo0I3N9uM
-         Sywm5di7998OjAypjfg7jlCrJc/gM7AsA+ywkFGUvyT1Qi4/lDPgdb74xH0YxPye4Fet
-         o22w==
-X-Gm-Message-State: AOAM532MU+xJVVKv3acJUn7b3aY73JJ8ELGELZ+EERFZF0fDVKuSzetV
-        1bFsPvTrPVNkMUbB/4HVylc=
-X-Google-Smtp-Source: ABdhPJz/HOfd/mNIBrDyJdaW4XfmgBDW096hi3RTGZu4klZTnXmAh8YejbLw5pQ1z4G89dGPgEub8Q==
-X-Received: by 2002:a50:d543:: with SMTP id f3mr13199722edj.56.1638917127106;
-        Tue, 07 Dec 2021 14:45:27 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id v3sm728604edc.69.2021.12.07.14.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:45:26 -0800 (PST)
-Date:   Wed, 8 Dec 2021 00:45:25 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <20211207224525.ckdn66tpfba5gm5z@skbuf>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qo2gY9GkL4/3JxkwIdvL8NrT6jxwYuRAOPwQ/50yNqM=;
+        b=0anwebdC35tre46FQVchjrJ+RvaH8wQACpjtX833bb7M5mc95HbWELLLsQrIK/+43I
+         dkRHEA6UroohsehHAWKpSHXxry/menSyi3Z0Guzseqz8goS7WP9+xyvhR18d+Nk0YzXj
+         yllyIodts22NtNXJwYx1Yn3yYcttEqTXQxKR9La/Xnd2ucjfepVtZH/pqBpVaQ0akrCO
+         eNiohX9TffEFvgLS/haFs2ke49qbnctXyjMbgcVe0USE4sGEBtgDoBeF31TebP3UMCeH
+         M9ugYZgQUfN4Zy7R1hFP91tGErEzmeYkRgrc2Of+Qq1uXKt2oIKwN/uLgVZUCeewCpK3
+         5UeQ==
+X-Gm-Message-State: AOAM533lpqQ4i3cKw5PU88Bp8otBa4TLnQ0TnBQ+RsilW+/thyD3ruYf
+        13cWRkGf1nTY4qXIu+K7Y2l8ira2CwGvK6IR+Ch0Ekth9Yg=
+X-Google-Smtp-Source: ABdhPJy+oA7nnc/C43NR8k9jnC+Den9LQj2xcpi0XhY+QR1GXKFlMHp+x7rUBtESBtf4d8/NY3VYxrBSaTQ7svxdN40=
+X-Received: by 2002:aa7:96b7:0:b0:49f:df90:e4ae with SMTP id
+ g23-20020aa796b7000000b0049fdf90e4aemr2159519pfk.24.1638917204948; Tue, 07
+ Dec 2021 14:46:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+References: <20211106013058.2621799-1-dlatypov@google.com> <20211106013058.2621799-2-dlatypov@google.com>
+ <CABVgOSnQ9qGtu0nEKePH+Zb1oR2osmVh791zyQ9P61SNznryrw@mail.gmail.com>
+ <CAGS_qxr3qd4b=00B76qN5GpFBa9aYa4UBFPvR505F3PbF5HSmg@mail.gmail.com> <CAGS_qxqhCHQEwoAKZ-ieEXtoC5SRjxwuceCqwF5eyfEDZ7YuBA@mail.gmail.com>
+In-Reply-To: <CAGS_qxqhCHQEwoAKZ-ieEXtoC5SRjxwuceCqwF5eyfEDZ7YuBA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 17:46:33 -0500
+Message-ID: <CAFd5g45MyjJ4e0r=F77YHKcCP6hGSYmS+cP3NmvL_Yh0Ri+Wdg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: tool: add --kconfig_add to allow easily
+ tweaking kunitconfigs
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 10:47:59PM +0100, Ansuel Smith wrote:
-> The main problem here is that we really need a way to have shared data
-> between tagger and dsa driver. I also think that it would be limiting
-> using this only for mdio. For example qca8k can autocast mib with
-> Ethernet port and that would be another feature that the tagger would
-> handle.
+On Thu, Nov 18, 2021 at 2:11 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Mon, Nov 8, 2021 at 9:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 9:07 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Sat, Nov 6, 2021 at 9:31 AM 'Daniel Latypov' via KUnit Development
+> > > <kunit-dev@googlegroups.com> wrote:
+> > > >
+> > > > E.g. run tests but with KASAN
+> > > > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+> > >
+> > > This is very neat, thank you. I'm definitely going to use this quite a bit.
+> > >
+> > > My only real note is that we'll need to add some documentation (but
+> > > since the KUnit documentation is being reworked at the moment, I'm
+> > > okay with doing that later to avoid merge conflicts).
+> >
+> > Yeah, there's that and I was also unsure where exactly to mention it.
+> > I'd also want there to be the caveat about how removing the option
+> > won't trigger a rebuild.
+> > The part where we have that right now is really early on and doesn't
+> > need more stuff added there:
+> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html#creating-a-kunitconfig
+> >
+> > >
+> > > > This also works with --kunitconfig
+> > > > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
+> > >
+> > > It's also worth noting that this can be appended multiple times to set
+> > > multiple options, which is useful
+> >
+> > Ah yeah, this could be called out in the commit desc if we want a v2.
+> > Checking the examples in the link down below, TuxMake doesn't actually
+> > include one with it being repeated.
+> > I had been banking on readers of this message assuming that it could
+> > be repeated either from previous familiarity with TuxMake or by
+> > clicking that link.
+> >
+> > But for tweaks that require multiple options, I'm personally going to
+> > stick with --kunitconfig and heredocs.
+> > E.g. coverage requires appending 3 kconfigs, so I'm sticking with
+> >
+> > ./tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
+> > --kunitconfig /dev/stdin <<EOF
+> > CONFIG_KUNIT=y
+> > CONFIG_KUNIT_ALL_TESTS=y
+> > CONFIG_DEBUG_KERNEL=y
+> > CONFIG_DEBUG_INFO=y
+> > CONFIG_GCOV=y
+> > EOF
+> >
+> > >
+> > > > This flag is inspired by TuxMake's --kconfig-add, see
+> > > > https://gitlab.com/Linaro/tuxmake#examples.
+> > > >
+> > > > Our version just uses "_" as the delimiter for consistency with
+> > > > pre-existing flags like --build_dir, --make_options, --kernel_args, etc.
+> > > >
+> > > > Note: this does make it easier to run into a pre-existing edge case:
+> > > > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+> > > > $ ./tools/testing/kunit/kunit.py run --arch=x86_64
+> > > > This second invocation ^ still has KASAN enabled!
+> > >
+> > > This behaviour is quite useful, and actually means we can turn on
+> > > individual items with
+> > > $ ./tools/testing/kunit/kunit.py config --kconfig_add=<option>
+> >
+> > Yes, that also works.
+> > I didn't really want to call that out, however.
+> >
+> > I ultimately would like this option to make it easier to have kunit
+> > commands be more declarative and less dependent on state.
+>
+> I've just proposed
+> https://lore.kernel.org/linux-kselftest/20211118190329.1925388-1-dlatypov@google.com
+>
+> If that patch goes in, the use case described above *won't* work.
+> I've been annoyed by the issue that removing lines from .kunitconfig
+> doesn't do anything for a while.
+>
+> I really don't like the "stickiness" of options, since I think it's
+> very much not what a user would initially expect. It can be useful in
+> some situations, but I don't think it's worth the cost.
 
-This is cool. I suppose this is what QCA_HDR_RECV_TYPE_MIB is for.
-But it wouldn't work with your design because the tagger doesn't hold
-any queues, it is basically a request/response which is always initiated
-by the switch driver. The hardware can't automatically push anything to
-software on its own. Maybe if the tagger wouldn't be stateless, that
-would be better? What if the qca8k switch driver would just provide some
-function pointers to the switch driver (these would be protocol
-sub-handlers for QCA_HDR_RECV_TYPE_MIB, QCA_HDR_RECV_TYPE_RW_REG_ACK
-etc), and your completion structure would be both initialized, as well
-as finalized, all from within the switch driver itself?
+Yeah, I agree. It would be nice if commands weren't so stateful.
+That's the reality of some things, but I think we are kind of in the
+business of quick, repeatable, transient build/tests/environments.
+From that standpoint, I like this flag, and I think it should not be
+"sticky" as you describe.
 
-> I like the idea of tagger-owend per-switch-tree private data.
-> Do we really need to hook logic?
-> Wonder if something like that would work:
-> 1. Each tagger declare size of his private data (if any).
-> 2. Change tag dsa helper make sure the privata data in dst gets
->    allocated and freed.
-> 3. We create some helper to get the tagger private data pointer that
->    dsa driver will use. (an error is returned if no data is present)
-> 4. Tagger will use the dst to access his own data.
-
-I considered a simplified form like this, but I think the tagger private
-data will still stay in dp->priv, only its ownership will change.
-It is less flexible to just have an autoalloc size. Ok, you allocate a
-structure the size you need, but which dp->priv gets to have it?
-Maybe a certain tagging protocol will need dp1->priv == dp2->priv ==
-dp3->priv == ..., whereas a different tagging protocol will need unique
-different structures for each dp.
-
-> 
-> In theory that way we should be able to make a ""connection"" between
-> dsa driver and the tagger and prevent any sort of strange stuff that
-> could result in bug/kernel panic.
-> 
-> I mean for the current task (mdio in ethernet packet) we just need to
-> put data, send the skb and wait for a response (and after parsing) get
-> the data from a response skb.
-
-It would be a huge win IMO if we could avoid managing the lifetime of
-dp->priv _directly_. I'm thinking something along the lines of:
-
-- every time we make the "dst->tag_ops = tag_ops;" assignment (see dsa2.c)
-  there is a connection event between the switch tree and the tagging
-  protocol (and also a disconnection event, if dst->tag_ops wasn't
-  previously NULL).
-
-- we could add a new tag_ops->connect(dst) and tag_ops->disconnect(dst)
-  and call them. These could allocate/free the dp->priv memory for each
-  dp in &dst->ports.
-
-- _after_ the tag_ops->connect() has been called (this makes sure that
-  the tagger memory has been allocated) we could also emit a cross-chip
-  notifier event:
-
-	/* DSA_NOTIFIER_TAG_PROTO_CONNECT */
-	struct dsa_notifier_tag_proto_connect_info {
-		const struct dsa_device_ops *tag_ops;
-	};
-
-	struct dsa_notifier_tag_proto_connect_info info;
-
-	dsa_tree_notify(dst, DSA_NOTIFIER_TAG_PROTO, &info);
-
-  The role of a cross-chip notifier is to fan-out a call exactly once to
-  every switch within a tree. This particular cross-chip notifier could
-  end up with an implementation in switch.c that lands with a call to:
-
-  ds->ops->tag_proto_connect(ds, tag_ops);
-
-  At this point, I'm a bit fuzzy on the details. I'm thinking of
-  something like this:
-
-	struct qca8k_tagger_private {
-		void (*rw_reg_ack_handler)(struct dsa_port *dp, void *buf);
-		void (*mib_autocast_handler)(struct dsa_port *dp, void *buf);
-	};
-
-	static void qca8k_rw_reg_ack_handler(struct dsa_port *dp, void *buf)
-	{
-		... (code moved from tagger)
-	}
-
-	static void qca8k_mib_autocast_handler(struct dsa_port *dp, void *buf)
-	{
-		... (code moved from tagger)
-	}
-
-	static int qca8k_tag_proto_connect(struct dsa_switch *ds,
-					   const struct dsa_device_ops *tag_ops)
-	{
-		switch (tag_ops->proto) {
-		case DSA_TAG_PROTO_QCA:
-			struct dsa_port *dp;
-
-			dsa_switch_for_each_port(dp, ds) {
-				struct qca8k_tagger_private *priv = dp->priv;
-
-				priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
-				priv->mib_autocast_handler = qca8k_mib_autocast_handler;
-			}
-
-			break;
-		default:
-			return -EOPNOTSUPP;
-		}
-	}
-
-	static const struct dsa_switch_ops qca8k_switch_ops = {
-		...
-		.tag_proto_connect	= qca8k_tag_proto_connect,
-	};
-
-  My current idea is maybe not ideal and a bit fuzzy, because the switch
-  driver would need to be aware of the fact that the tagger private data
-  is in dp->priv, and some code in one folder needs to be in sync with
-  some code in another folder. But at least it should be safer this way,
-  because we are in more control over the exact connection that's being
-  made.
-
-- to avoid leaking memory, we also need to patch dsa_tree_put() to issue
-  a disconnect event on unbind.
-
-- the tagging protocol driver would always need to NULL-check the
-  function pointer before dereferencing it, because it may connect to a
-  switch driver that doesn't set them up (dsa_loop):
-
-	struct qca8k_tagger_private *priv = dp->priv;
-
-	if (priv->rw_reg_ack_handler)
-		priv->rw_reg_ack_handler(dp, skb_mac_header(skb));
+> And I think the stickiness can be annoying to power users as well.
+> Imagine you were trying to debug an issue that only showed up if some
+> other Kconfig's are set.
+> Now instead of iterating by adding diff --kconfig_add=<...>, you have
+> to remember to delete .kunit/.config each time, lest you forget and go
+> down a rabbit hole.
+>
+> >
+> > E.g. instead of
+> > $ cp fs/ext4/.kunitconfig .kunit/.kunitconfig
+> > $ echo "CONFIG_KASAN=y" >> .kunit/.kunitconfig
+> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64
+> >
+> > it's now just one line and I'm less likely to miss a step, etc.
+> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64
+> > --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
+> >
+> > A user could alternatively do this via
+> > $ ./tools/testing/kunit/kunit.py config --arch=x86_64
+> > --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
+> > $ ./tools/testing/kunit/kunit.py config --arch=x86_64
+> > --kconfig_add=CONFIG_ANOTHER_OPTION=y
+> > $ ./tools/testing/kunit/kunit.py build
+> > $ ./tools/testing/kunit/kunit.py exec --arch=x86_64
+> >
+> >
+> > >
+> > > > kunit.py won't call olddefconfig if our current .config is already a
+> > > > superset of the provided kunitconfig.
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > >
+> > > Looks good.
+> > >
+> > > Reviewed-by: David Gow <davidgow@google.com>
+> > >
+> > >
+> > > > ---
+> > > >  tools/testing/kunit/kunit.py           |  8 ++++++++
+> > > >  tools/testing/kunit/kunit_kernel.py    |  5 +++++
+> > > >  tools/testing/kunit/kunit_tool_test.py | 18 ++++++++++++++++++
+> > > >  3 files changed, 31 insertions(+)
+> > > >
+> > > > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > > > index 68e6f461c758..be58f4c93806 100755
+> > > > --- a/tools/testing/kunit/kunit.py
+> > > > +++ b/tools/testing/kunit/kunit.py
+> > > > @@ -280,6 +280,10 @@ def add_common_opts(parser) -> None:
+> > > >                              ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
+> > > >                              'will get  automatically appended.',
+> > > >                              metavar='kunitconfig')
+> > > > +       parser.add_argument('--kconfig_add',
+> > > > +                            help='Additional Kconfig options to append to the '
+> > > > +                            '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
+> > > > +                           action='append')
+> > > >
+> > > >         parser.add_argument('--arch',
+> > > >                             help=('Specifies the architecture to run tests under. '
+> > > > @@ -398,6 +402,7 @@ def main(argv, linux=None):
+> > > >                 if not linux:
+> > > >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > > >                                         kunitconfig_path=cli_args.kunitconfig,
+> > > > +                                       kconfig_add=cli_args.kconfig_add,
+> > > >                                         arch=cli_args.arch,
+> > > >                                         cross_compile=cli_args.cross_compile,
+> > > >                                         qemu_config_path=cli_args.qemu_config)
+> > > > @@ -423,6 +428,7 @@ def main(argv, linux=None):
+> > > >                 if not linux:
+> > > >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > > >                                         kunitconfig_path=cli_args.kunitconfig,
+> > > > +                                       kconfig_add=cli_args.kconfig_add,
+> > > >                                         arch=cli_args.arch,
+> > > >                                         cross_compile=cli_args.cross_compile,
+> > > >                                         qemu_config_path=cli_args.qemu_config)
+> > > > @@ -439,6 +445,7 @@ def main(argv, linux=None):
+> > > >                 if not linux:
+> > > >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > > >                                         kunitconfig_path=cli_args.kunitconfig,
+> > > > +                                       kconfig_add=cli_args.kconfig_add,
+> > > >                                         arch=cli_args.arch,
+> > > >                                         cross_compile=cli_args.cross_compile,
+> > > >                                         qemu_config_path=cli_args.qemu_config)
+> > > > @@ -457,6 +464,7 @@ def main(argv, linux=None):
+> > > >                 if not linux:
+> > > >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+> > > >                                         kunitconfig_path=cli_args.kunitconfig,
+> > > > +                                       kconfig_add=cli_args.kconfig_add,
+> > > >                                         arch=cli_args.arch,
+> > > >                                         cross_compile=cli_args.cross_compile,
+> > > >                                         qemu_config_path=cli_args.qemu_config)
+> > > > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > > > index 51ee6e5dae91..7d459d6d6ff2 100644
+> > > > --- a/tools/testing/kunit/kunit_kernel.py
+> > > > +++ b/tools/testing/kunit/kunit_kernel.py
+> > > > @@ -224,6 +224,7 @@ class LinuxSourceTree(object):
+> > > >               build_dir: str,
+> > > >               load_config=True,
+> > > >               kunitconfig_path='',
+> > > > +             kconfig_add: Optional[List[str]]=None,
+> > > >               arch=None,
+> > > >               cross_compile=None,
+> > > >               qemu_config_path=None) -> None:
+> > > > @@ -249,6 +250,10 @@ class LinuxSourceTree(object):
+> > > >                                 shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
+> > > >
+> > > >                 self._kconfig = kunit_config.parse_file(kunitconfig_path)
+> > > > +               if kconfig_add:
+> > > > +                       kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
+> > > > +                       self._kconfig.merge_in_entries(kconfig)
+> > > > +
+> > > >
+> > > >         def clean(self) -> bool:
+> > > >                 try:
+> > > > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> > > > index 4ec70e41ec5a..7e42a7c27987 100755
+> > > > --- a/tools/testing/kunit/kunit_tool_test.py
+> > > > +++ b/tools/testing/kunit/kunit_tool_test.py
+> > > > @@ -334,6 +334,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
+> > > >                                 pass
+> > > >                         kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
+> > > >
+> > > > +       def test_kconfig_add(self):
+> > > > +               tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
+> > > > +               self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
+> > > > +
+> > > >         def test_invalid_arch(self):
+> > > >                 with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
+> > > >                         kunit_kernel.LinuxSourceTree('', arch='invalid')
+> > > > @@ -540,6 +544,7 @@ class KUnitMainTest(unittest.TestCase):
+> > > >                 # Just verify that we parsed and initialized it correctly here.
+> > > >                 mock_linux_init.assert_called_once_with('.kunit',
+> > > >                                                         kunitconfig_path='mykunitconfig',
+> > > > +                                                       kconfig_add=None,
+> > > >                                                         arch='um',
+> > > >                                                         cross_compile=None,
+> > > >                                                         qemu_config_path=None)
+> > > > @@ -551,6 +556,19 @@ class KUnitMainTest(unittest.TestCase):
+> > > >                 # Just verify that we parsed and initialized it correctly here.
+> > > >                 mock_linux_init.assert_called_once_with('.kunit',
+> > > >                                                         kunitconfig_path='mykunitconfig',
+> > > > +                                                       kconfig_add=None,
+> > > > +                                                       arch='um',
+> > > > +                                                       cross_compile=None,
+> > > > +                                                       qemu_config_path=None)
+> > > > +
+> > > > +       @mock.patch.object(kunit_kernel, 'LinuxSourceTree')
+> > > > +       def test_run_kconfig_add(self, mock_linux_init):
+> > > > +               mock_linux_init.return_value = self.linux_source_mock
+> > > > +               kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
+> > > > +               # Just verify that we parsed and initialized it correctly here.
+> > > > +               mock_linux_init.assert_called_once_with('.kunit',
+> > > > +                                                       kunitconfig_path=None,
+> > > > +                                                       kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
+> > > >                                                         arch='um',
+> > > >                                                         cross_compile=None,
+> > > >                                                         qemu_config_path=None)
+> > > > --
+> > > > 2.34.0.rc0.344.g81b53c2807-goog
+> > > >
+> > > > --
+> > > > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> > > > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> > > > To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211106013058.2621799-2-dlatypov%40google.com.

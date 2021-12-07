@@ -2,152 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9AE46C1A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA7146C172
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235463AbhLGR0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhLGR0C (ORCPT
+        id S239934AbhLGRRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:17:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52201 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235416AbhLGRRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:26:02 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A717EC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:22:31 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id de30so15432621qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iKXAfXf4jawMz0DDlq0/fhYvrtfDoveHg4joGIV1tHc=;
-        b=HHBRg//NtTWRHhc7T2JTj+UEO6h8PdNWedTWAD4U85T0W79dQF95pQPl+9SD824n9D
-         v6GQDFcSUs2t91zLJpA4vMlg4JnH0NXEeYEHBqmL9jd5COtKdvzZoxu8ht1tXMiGdP/q
-         rQktpiAq8aSBhBZzc1+zVqmnx+ymGtMv0eDmk=
+        Tue, 7 Dec 2021 12:17:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638897241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=COjwenkxm8hGw0a/Dri2jSsDB5SQ1RS6CEtMSB+/ozY=;
+        b=c1ifsPF34s+jREXvyx+5lbluYDokFP7kc+syw9QP0RF6B4TnO0DjtJ1wgEVcUw0pY0rbzd
+        NGgw4a1NMYuMkvFo6FnQFvkPcIA4tUApAc68JRGgBRG2b1QQ6hPe/1mhMusmrNzL0EOx9C
+        UEI1FhjQcBwDLsx1oWYGEJm+aN9epYw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-228-hAh0r0IKMHSyhqiFbM5FjQ-1; Tue, 07 Dec 2021 12:13:58 -0500
+X-MC-Unique: hAh0r0IKMHSyhqiFbM5FjQ-1
+Received: by mail-wr1-f69.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so3205345wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:13:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iKXAfXf4jawMz0DDlq0/fhYvrtfDoveHg4joGIV1tHc=;
-        b=hxLYry1oisbJyKPq42geI4Tq09t1GSs73syt4qgEqYCpQLILDbaKyEWJVGWXdi0jCR
-         AakrhQbq3v2gLItOxK6w0GjnyVU+YBYdFzCXMEe8jaJqSqCX/NP0cFmh7jAJdHk5++iA
-         zzR+kx4bBMCUDsXmIu4kUMsFYx/9k7XdtZKJuHWB/+CsbpGQqXr08jefUwJJckJD1bPh
-         m8Kc6LOW8LDxkfknEUjeAKy239E0YAJWRaXK2TiaVXHoYPMkfdSkrOdpEas8wSNEln6F
-         Z8U4cihCCGsgBAxOSdBVO80B5Rg6AgGq6t7WK9n8vbEvPdfKen4rF7frs0kD6Hr/R5na
-         zVvg==
-X-Gm-Message-State: AOAM533mD08iTp8PxSp+g9jphDi49n+ue5kosDFoTsrp2zxtZt9Kp+74
-        mUNwdjp6sF6uHWzwIWFoGEudOSs7qKpQWA==
-X-Google-Smtp-Source: ABdhPJyEykdMRM8yy2FBwIn+8yTZnpF8Va8vYVfj/oSx4jm9bcxN5qtYMzRFPOwIGnsXsnVGGDd4jg==
-X-Received: by 2002:a37:a714:: with SMTP id q20mr471953qke.688.1638897744868;
-        Tue, 07 Dec 2021 09:22:24 -0800 (PST)
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com. [209.85.160.176])
-        by smtp.gmail.com with ESMTPSA id f34sm262250qtb.7.2021.12.07.09.22.24
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=COjwenkxm8hGw0a/Dri2jSsDB5SQ1RS6CEtMSB+/ozY=;
+        b=m30Bhygfb8GqhNygAarzRAEzFIun979XKZn5ZB/RrRMiHBn7waBuwZ/M7E8N5gqcQI
+         12Cakyipm61YS5MgxlR9O2Wzb2lIGqKgv85fNm3MRvXhQJEG7jCalA0iboQT8TjdReRa
+         DKimxLxH3wmjne8VoZ6o8NmqAuqoIDd3ngncWqx8BT3q51n1wBe7K/C6nciERgtjRsf6
+         pwvePkUGxAidvqTgdikrcsJ9bok/uxLOez4/rAs8V1oM6IlY9ULDzJqzr+bKrD0MAZEd
+         ik2RU3J9Oi6aHkX9yq1j7CbFARs8xjEGVoz7wW2bphDR8PViA70J3cZvK5vT5W8pZKEv
+         bGLw==
+X-Gm-Message-State: AOAM531QLKHYOdPeSk8aBUNFZZcHunGkz2gHbpnHlJ1l56xZHUiY310K
+        U4OmtyGQEep6+QEJvRa3cdxOqhcrIKHXaWmi5OpQSJlNTcnCWXq5QJMQshQ+McRTCkOIEe78OF3
+        Cbl7stVzeGJyVoG4058D4w8ny
+X-Received: by 2002:a5d:69c5:: with SMTP id s5mr52069887wrw.283.1638897237001;
+        Tue, 07 Dec 2021 09:13:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyCJkHHVGi9mxMYTS+DiyWjrvsVzRsKQc/2NJz+8bbKe4P0ECvPXyPr8uhORN0NXaxXbVLPDQ==
+X-Received: by 2002:a5d:69c5:: with SMTP id s5mr52069854wrw.283.1638897236754;
+        Tue, 07 Dec 2021 09:13:56 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
+        by smtp.gmail.com with ESMTPSA id d2sm3516059wmb.24.2021.12.07.09.13.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 09:22:24 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id l8so14976485qtk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:22:24 -0800 (PST)
-X-Received: by 2002:a05:6638:190f:: with SMTP id p15mr52681316jal.82.1638897244878;
- Tue, 07 Dec 2021 09:14:04 -0800 (PST)
+        Tue, 07 Dec 2021 09:13:56 -0800 (PST)
+Message-ID: <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+Date:   Tue, 7 Dec 2021 18:13:55 +0100
 MIME-Version: 1.0
-References: <20211206162907.1.I1f5d1eba741e4663050ec1b8e39a753f6e42e38b@changeid>
- <CA+cxXhkmsUMCCJrvbz76nx-ctzSZhg0BFb50qD3nzUon3-Gp+w@mail.gmail.com>
- <CAD=FV=Wr1oai4-oBSJDiuMEV=KYZjW815jL1kh+yuiGdkK3ZbQ@mail.gmail.com> <CA+cxXhmFp31g+_hqj12FVy8Qu7xgssw3aA23OyEBrmTEys9B_w@mail.gmail.com>
-In-Reply-To: <CA+cxXhmFp31g+_hqj12FVy8Qu7xgssw3aA23OyEBrmTEys9B_w@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 7 Dec 2021 09:13:52 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Wu6ouGBrjVRqLY42RxrAxMPWZuyY7PZuSAE3VoVM92Rg@mail.gmail.com>
-Message-ID: <CAD=FV=Wu6ouGBrjVRqLY42RxrAxMPWZuyY7PZuSAE3VoVM92Rg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: parade-ps8640: Add backpointer to drm_device
- in drm_dp_aux
-To:     Philip Chen <philipchen@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org, Lyude Paul <lyude@redhat.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Content-Language: en-US
+To:     Alexey Makhalov <amakhalov@vmware.com>,
+        Michal Hocko <mhocko@suse.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz> <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+ <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 07.12.21 18:02, Alexey Makhalov wrote:
+> 
+> 
+>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
+>>
+>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
+>> [...]
+>>> So your proposal is to drop set_node_online from the patch and add it as
+>>> a separate one which handles
+>>> 	- sysfs part (i.e. do not register a node which doesn't span a
+>>> 	  physical address space)
+>>> 	- hotplug side of (drop the pgd allocation, register node lazily
+>>> 	  when a first memblocks are registered)
+>>
+>> In other words, the first stage
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index c5952749ad40..f9024ba09c53 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+>> 	if (self && !node_online(self->node_id)) {
+>> 		build_zonelists(self);
+>> 	} else {
+>> -		for_each_online_node(nid) {
+>> +		/*
+>> +		 * All possible nodes have pgdat preallocated
+>> +		 * free_area_init
+>> +		 */
+>> +		for_each_node(nid) {
+>> 			pg_data_t *pgdat = NODE_DATA(nid);
+>>
+>> 			build_zonelists(pgdat);
+> 
+> Will it blow up memory usage for the nodes which might never be onlined?
+> I prefer the idea of init on demand.
+> 
+> Even now there is an existing problem.
+> In my experiments, I observed _huge_ memory consumption increase by increasing number
+> of possible numa nodes. I’m going to report it in separate mail thread.
 
-On Tue, Dec 7, 2021 at 8:52 AM Philip Chen <philipchen@chromium.org> wrote:
->
-> Hi
->
-> On Tue, Dec 7, 2021 at 8:13 AM Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Dec 6, 2021 at 5:44 PM Philip Chen <philipchen@chromium.org> wrote:
-> > >
-> > > Hi
-> > >
-> > > On Mon, Dec 6, 2021 at 4:29 PM Douglas Anderson <dianders@chromium.org> wrote:
-> > > >
-> > > > When we added the support for the AUX channel in commit 13afcdd7277e
-> > > > ("drm/bridge: parade-ps8640: Add support for AUX channel") we forgot
-> > > > to set "drm_dev" to avoid the warning splat at the beginning of
-> > > > drm_dp_aux_register(). Since everything was working I guess I never
-> > > > noticed the splat when testing against mainline. In any case, it's
-> > > > easy to fix. This is basically just like commit 6cba3fe43341 ("drm/dp:
-> > > > Add backpointer to drm_device in drm_dp_aux") but just for the
-> > > > parade-ps8640.
-> > > >
-> > > > Fixes: 13afcdd7277e ("drm/bridge: parade-ps8640: Add support for AUX channel")
-> > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > ---
-> > > >
-> > > >  drivers/gpu/drm/bridge/parade-ps8640.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-> > > > index 26898042ba3d..818704bf5e86 100644
-> > > > --- a/drivers/gpu/drm/bridge/parade-ps8640.c
-> > > > +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-> > > > @@ -449,6 +449,7 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
-> > > >         if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-> > > >                 return -EINVAL;
-> > > >
-> > > > +       ps_bridge->aux.drm_dev = bridge->dev;
-> > > >         ret = drm_dp_aux_register(&ps_bridge->aux);
-> > > >         if (ret) {
-> > > >                 dev_err(dev, "failed to register DP AUX channel: %d\n", ret);
-> > > > --
-> > > > 2.34.1.400.ga245620fadb-goog
-> > > >
-> > >
-> > > Signed-off-by: Philip Chen <philipchen@chromium.org>
-> >
-> > That's probably not quite the right tag. I'm going to assume you meant
-> > Reviewed-by? Usually Signed-off-by is added if you were one of the
-> > authors of the patch or you were a maintainer that "touched" the patch
-> > on its way to landing upstream...
-> >
-> > -Doug
->
-> Sorry for the mistake.
-> You're right - I meant to:
->
-> Reviewed-by: Philip Chen <philipchen@chromium.org>
+I already raised that PPC might be problematic in that regard. Which
+architecture / setup do you have in mind that can have a lot of possible
+nodes?
 
-Thanks! Since this is pretty trivial/straightforward, I've pushed it.
-I ended up pushing it to drm-misc-next instead of drm-misc-fixes to
-avoid a merge conflict and because this doesn't seem urgent enough to
-justify having to deal with the merge conflict. Please yell if I
-should make a different choice in instances like this in the future.
 
-f8378c040381 drm/bridge: parade-ps8640: Add backpointer to drm_device
-in drm_dp_aux
+-- 
+Thanks,
 
--Doug
+David / dhildenb
+

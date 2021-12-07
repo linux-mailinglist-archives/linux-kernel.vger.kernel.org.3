@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD2546AEC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A7446AEBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378067AbhLGAF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 19:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S1359054AbhLGAE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 19:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378046AbhLGAFZ (ORCPT
+        with ESMTP id S238201AbhLGAEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 19:05:25 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9EDC0613F8;
-        Mon,  6 Dec 2021 16:01:56 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id l64so6456598pgl.9;
-        Mon, 06 Dec 2021 16:01:56 -0800 (PST)
+        Mon, 6 Dec 2021 19:04:53 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1AFC0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:01:23 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so15784687otl.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 16:01:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TRVmR5B5GtMOM5DOCEErKiwBMO/09svpKKnKlbJkOiw=;
-        b=NtWC+ksGIBpRu4LYc5RB7KSpPhZL1WPg57XSOdPOkSKqUUjhli2QK6Dk7ZvR7AHP0n
-         +TrcIWH/IAKRH7UnbCMunVZEtTvGphQulwoL+1/QJSoqJ4IQnhZcqnPrsHc+dKUh1XaF
-         XwwATXjEHiIqgTbxK+oJCTGPO0V6yB2zDMPIZ93UTV8lG4Dsp9K+SB/VlFkibtsJNIo1
-         jjS7saZw6uWLvi1Eg4qhDRoV9v0zMt3vEEUcca/Zq93fCZBh7qQy7YdTQIwhA9ssiWyA
-         zxK4xMmYhJ/Xagl8rW2/aba2FzQKq3FxwmWcXQsXnZXtemYUDI46xZL/J9KmqjvRdX+O
-         +jlw==
+        bh=BMx3q+Kfe+DjuBkGP2gx6f6ECT/xxrr/KpPYeMR6rqY=;
+        b=NFiU+B4iBWL13hKwzLmjIsvkDTb+/PdHPbMX3+qxkC3RPswW1q2PN+IhkSqlyZcDfb
+         QoVRaokY8QUqXMQ7W6c77dsShprJhkTKRGMSSNPv3Bgq7h14tbMa8Ruij5nMzA4CUU/w
+         kCYr27i4BR4lTQjvINB+IJWCet0My1EfN9n9TE01WSTOTIEKNrhYyqkc2QQmXO9EXmsR
+         PB7BmGRHCYrLfLY4rLy4jw8mo1w1RgDlqKB6Uj6HiGe5hPRQ0Q1AC1Nb0sD1zy8uCRVE
+         aFaYYwFo+e+Ub7Xes3ggKNBmnA9ZfHFVkjEjYWyD/K9mJaAVvad+x58SUyqN8rgn6Or1
+         RCeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=TRVmR5B5GtMOM5DOCEErKiwBMO/09svpKKnKlbJkOiw=;
-        b=WHglQWfVmho4AkxEcEh29C6iTymptPDZHFn1Bti9BsT8BMKuNOnJq07dnN9JL1EYQ0
-         QuKGLvY4HHrx+vZgBnBtI043Wq50yy4uCeIsPzKu0Y1Vh+BqjEqElWlRmTwH+M6ARJIF
-         pk9lMG2X7b/lGHcsthMiT02RvqRMZ5z0Lvb35Yzm3MSmrWyxif4LvplC/hA1284vNkNe
-         046YAaXtykspbMvwzEJpQPojmRXwHZxU/kL8/Hld/D8PRT82CXzhkWQicv8//zoJ+V/T
-         KyjoB6+DzCZH1T8iR6FJZafm6ZFy87HxzgLsndAZOPFPOmcYof+KApNkc6AC+nqMTuRc
-         TT1Q==
-X-Gm-Message-State: AOAM530VReo+Jc9DkORIERbQAhr9e7adbrougnLzMXamflK9bEzkFIfd
-        siHKwGskWZl3GWA8BCyca1Q=
-X-Google-Smtp-Source: ABdhPJzEMQE31rRjYktSVEoq74oZyT7HrROxUkyDOH+IMUZb8SiYY7jGOfCNX9XVgiNzbJ6q14DF1w==
-X-Received: by 2002:a63:110d:: with SMTP id g13mr851759pgl.315.1638835315651;
-        Mon, 06 Dec 2021 16:01:55 -0800 (PST)
-Received: from gmail.com ([2400:2410:93a3:bc00:c35d:e29e:99a3:5fd9])
-        by smtp.gmail.com with ESMTPSA id h1sm4425203pfh.219.2021.12.06.16.01.53
+        bh=BMx3q+Kfe+DjuBkGP2gx6f6ECT/xxrr/KpPYeMR6rqY=;
+        b=pGelwWlaiOglHozVFZbt/v7aegtMKVkVR/tgF3vVRu0TE50LoIq2+sAVHDpUzzJnke
+         E2qjgt4dW4w41SSqz8gA0tGcwdi3JIewMeMwUCWBiwRL8L31BMOXyqz+NO2u1j3SwnL7
+         h+2zwxHYBGTIbxYBcVcu+SA5VjCucG7vJ2pJ1yqobZUxisnmRI20+AJHtf5L3vvwq2w/
+         XOPnypJtgh1TQCRITuC/gDKmysIYZttutq6rNF4F3GiMqXbWtTXHS1r9oZkeeO/A5v8w
+         o5muHRYLzmU4tDgTFhupCii9Aos6JoHi5b8+4GxGX3VJq6fod/XfONhcRhxf71CLJKO7
+         u15Q==
+X-Gm-Message-State: AOAM5310n44XoY7Bp8kMMIWMtT+vo0GFFMEQUJBa8ZZFR+FWjwBsX2ey
+        F89nkoEoBcSUy+oh3UdPCHbccA==
+X-Google-Smtp-Source: ABdhPJyJVSzNU6F1HqOXYRJMj962C/4c6y+kX4SRPOFBKIuAkiZVa/wrgDOKiuQxf16isJv8mhxR3A==
+X-Received: by 2002:a9d:364b:: with SMTP id w69mr33095589otb.18.1638835282986;
+        Mon, 06 Dec 2021 16:01:22 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 49sm2443205oti.65.2021.12.06.16.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 16:01:55 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:01:50 +0900
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: Unused local variable load_addr in load_elf_binary()
-Message-ID: <20211207000150.whruf5uuzbxl274y@gmail.com>
-References: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
+        Mon, 06 Dec 2021 16:01:22 -0800 (PST)
+Date:   Mon, 6 Dec 2021 16:02:48 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        swboyd@chromium.org, Wesley Cheng <quic_wcheng@quicinc.com>,
+        robdclark@chromium.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Avoid use-after-free when USB
+ defers or unbinds
+Message-ID: <Ya6kqL3WzxjdtiSG@ripper>
+References: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
+In-Reply-To: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:46:01PM +0100, Lukas Bulwahn wrote:
-> Dear Akira-san,
-> 
-> With commit 0c9333606e30 ("fs/binfmt_elf: Fix AT_PHDR for unusual ELF
-> files"), you have changed load_elf_binary() in ./fs/binfmt_elf.c in a
-> way such that the local variable load_addr in load_elf_binary() is not
-> used anymore.
-> 
-> I had a quick look at the code and I think the following refactoring
-> would be good:
-> 
-> 1. Remove the definition of load_addr and its unneeded computation of load_addr
-> 
-> 2. Rename load_addr_set to first (or a similar name) to represent that
-> this variable is not linked to the non-existing load_addr, but states
-> that it captures the first iteration of the loop. Note that first has
-> the inverse meaning of load_addr_set.
-> 
-> The issue was reported by make clang-analyzer:
-> 
-> ./fs/binfmt_elf.c:1167:5: warning: Value stored to 'load_addr' is
-> never read [clang-analyzer-deadcode.DeadStores]
->                                 load_addr += load_bias;
->                                 ^            ~~~~~~~~~
-> 
-> 
-> Best regards,
-> 
-> Lukas
+On Mon 06 Dec 15:28 PST 2021, Douglas Anderson wrote:
 
-Thank you for your comments. Should I send a new patch, or change
-the existing patch in linux-next?
+> On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
+> enabled, you'll see a Use-After-Free reported at bootup.
+> 
+> The root of the problem is that dwc3_qcom_of_register_core() is adding
+> a devm-allocated "tx-fifo-resize" property to its device tree node
+> using of_add_property().
+> 
+> The issue is that of_add_property() makes a _permanent_ addition to
+> the device tree that lasts until reboot. That means allocating memory
+> for the property using "devm" managed memory is a terrible idea since
+> that memory will be freed upon probe deferral or device
+> unbinding. Let's change to just allocate memory once and never free
+> it. This sorta looks like a leak but isn't truly one, since only one
+> property will be allocated per device tree node per boot.
+> 
+> NOTE: one would think that perhaps it would be better to use
+> of_remove_property() and then be able to free the property on device
+> remove. That sounds good until you read the comments for
+> of_remove_property(), which says that properties are never really
+> removed and they're just moved to the side.
+> 
 
-Akira
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Regards,
+Bjorn
+
+> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 32 +++++++++++++++++++++-----------
+>  1 file changed, 21 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 9abbd01028c5..34b054033116 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -658,18 +658,28 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>  		return -ENODEV;
+>  	}
+>  
+> -	prop = devm_kzalloc(dev, sizeof(*prop), GFP_KERNEL);
+> -	if (!prop) {
+> -		ret = -ENOMEM;
+> -		dev_err(dev, "unable to allocate memory for property\n");
+> -		goto node_put;
+> -	}
+> +	/*
+> +	 * Permanently add the "tx-fifo-resize" to the device tree. Even if
+> +	 * our device is unregistered this property will still be part
+> +	 * of the device tree until reboot. Because this is a "permanent"
+> +	 * change, we allocate memory _without_ devm. For some context, see
+> +	 * the fact that of_remove_property() doesn't actually remove things.
+> +	 */
+> +	if (!of_find_property(dwc3_np, "tx-fifo-resize", NULL)) {
+> +		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
+> +		if (!prop) {
+> +			ret = -ENOMEM;
+> +			dev_err(dev, "unable to allocate memory for property\n");
+> +			goto node_put;
+> +		}
+>  
+> -	prop->name = "tx-fifo-resize";
+> -	ret = of_add_property(dwc3_np, prop);
+> -	if (ret) {
+> -		dev_err(dev, "unable to add property\n");
+> -		goto node_put;
+> +		prop->name = "tx-fifo-resize";
+> +		ret = of_add_property(dwc3_np, prop);
+> +		if (ret) {
+> +			dev_err(dev, "unable to add property\n");
+> +			kfree(prop);
+> +			goto node_put;
+> +		}
+>  	}
+>  
+>  	ret = of_platform_populate(np, NULL, NULL, dev);
+> -- 
+> 2.34.1.400.ga245620fadb-goog
+> 

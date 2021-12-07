@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D569146B009
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59E646B00F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbhLGBxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:53:53 -0500
-Received: from smtprelay0238.hostedemail.com ([216.40.44.238]:53636 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230223AbhLGBxw (ORCPT
+        id S235004AbhLGBzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:55:42 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:32942 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234802AbhLGBzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:53:52 -0500
-Received: from omf19.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 38CD118132D08;
-        Tue,  7 Dec 2021 01:50:22 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 0073F20033;
-        Tue,  7 Dec 2021 01:50:19 +0000 (UTC)
-Message-ID: <80e800b505adf8a26b2ed9898d03516263a830a7.camel@perches.com>
-Subject: Re: [PATCH] sysctl: Add a group of macro functions to initcall the
- sysctl table of each feature
-From:   Joe Perches <joe@perches.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>, cocci@inria.fr
-Cc:     linux-kernel@vger.kernel.org, mcgrof@kernel.org,
-        viro@zeniv.linux.org.uk, ebiederm@xmission.com,
-        keescook@chromium.org, jlayton@kernel.org, bfields@fieldses.org,
-        yzaikin@google.com, wangle6@huawei.com
-Date:   Mon, 06 Dec 2021 17:50:19 -0800
-In-Reply-To: <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
-References: <20211207011320.100102-1-nixiaoming@huawei.com>
-         <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 6 Dec 2021 20:55:41 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638841931; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=o/E0WPb3DgfSNjgnfDH6dTjCGZn7mfElYZOu6xLSZiA=; b=BZvO4xw/pOmJNqIOq6Q0gkb6bMKMD214ZtFIxR2quHd0Dqv6nxR46U27i4yR0/HOc5o7bldQ
+ qV756GD/YLZZOJIrRNNeUoiWZ8igL1O+HP3APpZeHdiOhPFOKo9eBS8JQ/0kxyqxFkJ+6r3L
+ EkAxzoWyXQoOTXnAi6+4hVuEwp0=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
+ 61aebe4b7d878c8ded334c0e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Dec 2021 01:52:11
+ GMT
+Sender: hemantk=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 60F5BC4361C; Tue,  7 Dec 2021 01:52:05 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.0
+Received: from [10.110.103.130] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: hemantk)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A0E1FC4338F;
+        Tue,  7 Dec 2021 01:52:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A0E1FC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH 01/20] bus: mhi: Move host MHI code to "host" directory
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     bbhatt@codeaurora.org, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, skananth@codeaurora.org,
+        vpernami@codeaurora.org, vbadigan@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211202113553.238011-1-manivannan.sadhasivam@linaro.org>
+ <20211202113553.238011-2-manivannan.sadhasivam@linaro.org>
+From:   Hemant Kumar <hemantk@codeaurora.org>
+Message-ID: <1701ade0-4f75-1407-2741-cd792d3e78fe@codeaurora.org>
+Date:   Mon, 6 Dec 2021 17:52:02 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211202113553.238011-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.70
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 0073F20033
-X-Stat-Signature: eugaf6p34atyjwnhapyor8dt4d1wdy83
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/vZ1xREZaK8aQe4h87FYXZfPC75uLdtD4=
-X-HE-Tag: 1638841819-30
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-06 at 17:38 -0800, Andrew Morton wrote:
-> On Tue, 7 Dec 2021 09:13:20 +0800 Xiaoming Ni <nixiaoming@huawei.com> wrote:
-> 
-> > To avoid duplicated code, add a set of macro functions to initialize the
-> > sysctl table for each feature.
-> > 
-> > The system initialization process is as follows:
-> > 
-> > 	start_kernel () {
-> > 		...
-> > 		/* init proc and sysctl base,
-> > 		 * proc_root_init()-->proc_sys_init()-->sysctl_init_bases()
-> > 		 */
-> > 		proc_root_init(); /* init proc and sysctl base */
-> > 		...
-> > 		arch_call_rest_init();
-> > 	}
-> > 
-> > 	arch_call_rest_init()-->rest_init()-->kernel_init()
-> > 	kernel_init() {
-> > 		...
-> > 		kernel_init_freeable(); /* do all initcalls */
-> > 		...
-> > 		do_sysctl_args(); /* Process the sysctl parameter: sysctl.*= */
-> > 	}
-> > 
-> > 	kernel_init_freeable()--->do_basic_setup()-->do_initcalls()
-> > 	do_initcalls() {
-> > 		for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
-> > 			do_initcall_level
-> > 	}
-> > 
-> > The sysctl interface of each subfeature should be registered after
-> > sysctl_init_bases() and before do_sysctl_args(). It seems that the sysctl
-> > interface does not depend on initcall_levels. To prevent the sysctl
-> > interface from being initialized before the feature itself. The
-> > lowest-level late_initcall() is used as the common sysctl interface
-> > registration level.
-> 
-> I'm not normally a fan of wrapping commonly-used code sequences into
-> magical macros, but this one does seem to make sense.
-> 
-> I wonder if it is possible to cook up a checkpatch rule to tell people
-> to henceforth use the magic macros rather than to open-code things in
-> the old way.  Sounds hard.
-
-Almost impossible for checkpatch.
-Likely easier in coccinelle.
 
 
+On 12/2/2021 3:35 AM, Manivannan Sadhasivam wrote:
+> In preparation of the endpoint MHI support, let's move the host MHI code
+> to its own "host" directory and adjust the toplevel MHI Kconfig & Makefile.
+> 
+> While at it, let's also move the "pci_generic" driver to "host" directory
+> as it is a host MHI controller driver.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+Forum, a Linux Foundation Collaborative Project

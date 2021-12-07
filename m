@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4D346BA5B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADB746BA5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbhLGLvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:51:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S235858AbhLGLvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235869AbhLGLvj (ORCPT
+        with ESMTP id S235832AbhLGLve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:51:39 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A35AC061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 03:48:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 7 Dec 2021 06:51:34 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757E6C061574;
+        Tue,  7 Dec 2021 03:48:04 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C7101CE1A7B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B2CC341C3;
-        Tue,  7 Dec 2021 11:48:03 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 11:48:00 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
- contextidr
-Message-ID: <Ya9J8HnMWxBy3MJv@arm.com>
-References: <20211021134530.206216-1-leo.yan@linaro.org>
- <20211021134530.206216-5-leo.yan@linaro.org>
- <202110210848.35971643C6@keescook>
- <20211101152835.GB375622@leoy-ThinkPad-X240s>
- <YapEUlcyDZ6TuE6n@arm.com>
- <20211205135103.GA42658@leoy-ThinkPad-X240s>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D51561EC0118;
+        Tue,  7 Dec 2021 12:47:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638877679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ImwCuPkAr7fvJr1l21+QubTsvfhG9Iyh1wi4z5y64u4=;
+        b=d1hoIFDkZQ6OXWiqKYR55Vzt3fbkeUbjXfXUmSWPQivG6BsLV+kZtYulzv1av2StEnzWOI
+        vdognkgMsyn2je/qVJst/1nM+vstj6jXL5XSPj05tLNy2rm+u9QeQZP91ypLfBImrew6ci
+        P3DopPWmo0wi6r82pD7/YBQTCO6dKcw=
+Date:   Tue, 7 Dec 2021 12:48:00 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v7 14/45] x86/compressed: Add helper for validating pages
+ in the decompression stage
+Message-ID: <Ya9J8FSeyv/cEhnb@zn.tnic>
+References: <20211110220731.2396491-1-brijesh.singh@amd.com>
+ <20211110220731.2396491-15-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211205135103.GA42658@leoy-ThinkPad-X240s>
+In-Reply-To: <20211110220731.2396491-15-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 09:51:03PM +0800, Leo Yan wrote:
-> On Fri, Dec 03, 2021 at 04:22:42PM +0000, Catalin Marinas wrote:
-> > What's the cost of always enabling CONFIG_PID_IN_CONTEXTIDR? If it's
-> > negligible, I'd not bother at all with any of the enabling/disabling.
-> 
-> Yes, I compared performance for PID tracing with always enabling and
-> disabling CONFIG_PID_IN_CONTEXTIDR, and also compared with using
-> static key for enabling/disabling PID tracing.  The result shows the
-> cost is negligible based on the benchmark 'perf bench sched'.
-> 
-> Please see the detailed data in below link (note the testing results
-> came from my Juno board):
-> https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/
+On Wed, Nov 10, 2021 at 04:07:00PM -0600, Brijesh Singh wrote:
+> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+> index f7213d0943b8..3cf7a7575f5c 100644
+> --- a/arch/x86/boot/compressed/ident_map_64.c
+> +++ b/arch/x86/boot/compressed/ident_map_64.c
+> @@ -275,15 +275,31 @@ static int set_clr_page_flags(struct x86_mapping_info *info,
+>  	 * Changing encryption attributes of a page requires to flush it from
+>  	 * the caches.
+>  	 */
+> -	if ((set | clr) & _PAGE_ENC)
+> +	if ((set | clr) & _PAGE_ENC) {
+>  		clflush_page(address);
+>  
+> +		/*
+> +		 * If the encryption attribute is being cleared, then change
+> +		 * the page state to shared in the RMP table.
+> +		 */
+> +		if (clr)
+> +			snp_set_page_shared(pte_pfn(*ptep) << PAGE_SHIFT);
 
-The table wasn't entirely clear to me. So the dis/enb benchmarks are
-without this patchset applied. There seems to be a minor drop but it's
-probably noise. Anyway, do we need this patchset or we just make
-CONFIG_PID_IN_CONTEXTIDR default to y?
+So I'm wondering: __page_state_change() wants a physical address and
+you're reading it out from the PTE here.
 
-> > Another question: can you run multiple instances of SPE for different
-> > threads on different CPUs? What happens to the global contextidr_in_use
-> > key when one of them stops?
-> 
-> No, I only can launch one instance for Arm SPE event via perf tool; when
-> I tried to launch a second instance, perf tool reports failure:
-> 
-> The sys_perf_event_open() syscall returned with 16 (Device or resource
-> busy) for event (arm_spe_0/load_filter=1,store_filter=1/u).
-[...]
-> Alternatively, I'd like give several examples for contextidr_in_use key
-> values when run different perf modes.
-[...]
-> Hope these three cases can demonstrate the usage for contextidr_in_use
-> static key.
+Why not do
 
-OK, so we can have multiple uses of PID in CONTEXTIDR. Since
-static_branch_inc() is refcounted, we get away with this but the
-downside is that a CPU won't notice until its next thread switch.
+	__pa(address & PAGE_MASK);
 
+like it is usually done?
+
+And those macros are right there at the top of ident_map_64.c with an
+explanation that we're ident-mapped here so pa == va...
+
+> +	}
+> +
+>  	/* Update PTE */
+>  	pte = *ptep;
+>  	pte = pte_set_flags(pte, set);
+>  	pte = pte_clear_flags(pte, clr);
+>  	set_pte(ptep, pte);
+>  
+> +	/*
+> +	 * If the encryption attribute is being set, then change the page state to
+> +	 * private in the RMP entry. The page state must be done after the PTE
+						   ^
+						 change
+
+> +	 * is updated.
+> +	 */
+> +	if (set & _PAGE_ENC)
+> +		snp_set_page_private(pte_pfn(*ptep) << PAGE_SHIFT);
+> +
+>  	/* Flush TLB after changing encryption attribute */
+>  	write_cr3(top_level_pgt);
+>  
 -- 
-Catalin
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

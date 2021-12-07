@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B90D46C7F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B6546C7F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242450AbhLGXG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:06:27 -0500
-Received: from mail-eopbgr00127.outbound.protection.outlook.com ([40.107.0.127]:30532
+        id S242473AbhLGXGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:06:35 -0500
+Received: from mail-eopbgr00099.outbound.protection.outlook.com ([40.107.0.99]:56343
         "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242411AbhLGXGX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:06:23 -0500
+        id S242452AbhLGXG2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:06:28 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cWmo+G0o7JJAibQEcEFYUtRv0t8I9+CK/Dw0fJ6zxr0rVPjW+99+Hlc0d3rsHZMWZzluW6AHgF07uuFCDywQjvW/MpFVFiiXH85KaDLSp7uy2N3j+JesC92orITs3sT6Qm1j5aHVyrp6X3LlIEUxiky+v2hvbSlfuT+JjbOG1V+tVwTgiSN1PjiH2+MrEn+rrJwz8Ylzs/5eyAnfFg6xcTMqphxjDNa1/eEOiW/gq8S55wMjxUNrYr5qm0E62JCpvqgW/WwEKPUPWY9FQZ8ImYeR4Pu6aELfMdm0cC+Ia8kHE/nFPEZrG0ruv33ghO0fvcd/fjWWpu7cYehGAhxjeQ==
+ b=fNql9jl7uHmOvdcwk4AvmRExbBUnISjP9+3NucMd3QzmdTEWF3cu+3UvFU7IT54HgpnBvUOU7sfW5n4zzfEVaAU2Q0vKqlbjNjPa8wXm+06zRTdNZj0eP1aVTt2lGG79SyJEYhlfZs3kl9TlNqg2egR94P6XHjSo6JCrFyTsfBBhC7/XRS3k0w4fziKY+A+t8bko37t3J8+W6VXQj/EQ0Qq5/mNSkuMT480ZguTvv1oqOLUh86bp2lacmjE8XFGErcNbZlsbjYRdihkYsKa0LGbhvp96H0EPhzLGii3kpUSygbmQkNmhcKMy7ociyZrDcLLWwUUx8LUUPVtbTmT0Ng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FHx0KXtaALH4p+/5d5g7Ih/C5F6ooHmhpk+qpygJKyU=;
- b=m0YwJNl6zIoslz/i1zcCjx9R5XtkX3m+lCkvOogDk0TZydj+OebM4HkGFmrl51MSgilGdQqpv6/UM5hDHHAFY0SUwTTm6tNprDFPD3/71ctUvct3RzhgGv01b4Iazc9wuT74ehJ2W0TXWe1orVI0qkYuFpy82jxp2aal7qI38S9ZFgRYNwSwb2ZFYEzZnv1ZYvZJEXXQuH6BPF1Ilg3jWnpuPPJxcxwXMwpoOar/tzzwkYP1q6S/XmhGg5vrKT7AcWs/cH0FtV+RlnUb9kc24eQulbbKWSc8t8LNaPzxh/O9TJpicZNqkr+LMzylIFoKwChUtrxCXR8A8unbjCZu9w==
+ bh=Yz6Guv71csNPLlk2okwUaQDALlCC3UxWIgs6ifO5E8o=;
+ b=HWXAQT5RGbJWvTc2ugI4JC9lBt3p/yP4RcSHzeqK4t5OhWr32sX/R+YdYjxhJLSreu1CF85CAhbyxYt1C7ZvX5t0/2I0eSooERenkm///aF04Vu8bHVADzg2zffstE9LOGZjUsOooGm/u4iuDByn3KAPFHagPZBobkRSLPqtrq7sG80QRqvvI7g0qF0fNdHdFl9hDtIEIQqAoxGvAPYALGeNzDP6Hwj1clsLO3Qd8uN+9AL5TsBMs8fsHVXF8edXZDp5dyhEKkEO2+lGN9dxm8D5bjSXZV7ZZh5UmtG890Y138qO0CfZTFryOY1nE7lr6/1ibQAXl1ZSSRTUxAYkFQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
  header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
@@ -26,19 +26,19 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FHx0KXtaALH4p+/5d5g7Ih/C5F6ooHmhpk+qpygJKyU=;
- b=cs2ciyLHsTbhCOjyEWAp1X7yMIfeOfusnY/VqdvDN1ZN5INg/AwR6J2Cyxivm5w/t4wXDs0SaKDjHKTMALwozLCdjqjT6TVbydEncVS0RRInPUWVjx1ZqSr9w3B+wP3e5TSsQ+RaEv9El+Gk3y2MmWmAPrxX85P6E/7C/XFgILo=
+ bh=Yz6Guv71csNPLlk2okwUaQDALlCC3UxWIgs6ifO5E8o=;
+ b=QP5h3KBVqCDqKx3jyB1cbQQWCZmE1+106JkwjGDnImEzNhirHQ5NsE628ocFWmlIV4/MktB2mtw52MMmmPxtBHxiHYkAIeFzBhkFDIHF3yVAVfOV5Ne8/cMrCIV0m2PsCCcKXEZ5g/ZljL2Y3yLgAo9sgEHqghmOmX78Zj6PiP0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
 Received: from VI1PR06MB3102.eurprd06.prod.outlook.com (2603:10a6:802:c::17)
  by VI1PR0602MB2910.eurprd06.prod.outlook.com (2603:10a6:800:b8::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 23:02:49 +0000
+ 2021 23:02:55 +0000
 Received: from VI1PR06MB3102.eurprd06.prod.outlook.com
  ([fe80::9c38:9d12:599a:a1cf]) by VI1PR06MB3102.eurprd06.prod.outlook.com
  ([fe80::9c38:9d12:599a:a1cf%4]) with mapi id 15.20.4734.031; Tue, 7 Dec 2021
- 23:02:48 +0000
+ 23:02:55 +0000
 From:   Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     robh+dt@kernel.org, shawnguo@kernel.org, michael@walle.cc,
@@ -54,9 +54,9 @@ Cc:     robh+dt@kernel.org, shawnguo@kernel.org, michael@walle.cc,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-crypto@vger.kernel.org, op-tee@lists.trustedfirmware.org,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Subject: [PATCH v3 1/2] crypto: caam - convert to use capabilities
-Date:   Wed,  8 Dec 2021 00:02:05 +0100
-Message-Id: <20211207230206.14637-2-andrey.zhizhikin@leica-geosystems.com>
+Subject: [PATCH v3 2/2] arm64: dts: imx8m: define proper status for caam jr
+Date:   Wed,  8 Dec 2021 00:02:06 +0100
+Message-Id: <20211207230206.14637-3-andrey.zhizhikin@leica-geosystems.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
 References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
@@ -68,440 +68,221 @@ X-ClientProxiedBy: AM6P192CA0069.EURP192.PROD.OUTLOOK.COM
  (2603:10a6:802:c::17)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from GEO-HfyyrYQLnZo.lgs-net.com (146.185.2.7) by AM6P192CA0069.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Tue, 7 Dec 2021 23:02:46 +0000
+Received: from GEO-HfyyrYQLnZo.lgs-net.com (146.185.2.7) by AM6P192CA0069.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Tue, 7 Dec 2021 23:02:52 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 502845d7-a7a0-4847-f170-08d9b9d5b037
+X-MS-Office365-Filtering-Correlation-Id: ac097029-890a-4f60-e1b5-08d9b9d5b3f4
 X-MS-TrafficTypeDiagnostic: VI1PR0602MB2910:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0602MB29106F11F254023AF98A011BA66E9@VI1PR0602MB2910.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-Microsoft-Antispam-PRVS: <VI1PR0602MB29109AA717F06551B75A240AA66E9@VI1PR0602MB2910.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1265;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j8HwlIdOQ+EFdRXIicd+lLhf2rS+Sr+wpgNRfCxw4myUo8LBvXajsM2ZkQK4pLHm7x0pTDuX5DuuUw5/yrN2VXC5JWAD8Mh/dgHzuLUMpwvXsv3WRvRhaMFltcKIwPgjXS14rR++GeRlI/7+vRmRKhpxklRz5aE/Cz1oBYECxWFhyjQMGdMAlPPWbSXBSznot5CwMLGv6b478EuAJs/3ki5hPAjlUTDM22aW9rTqHYhEhL5FwpNXEBQes7WIfghC0aWyVGTkyrItgVU5JOwIzqseLJ7ZQLfKE5CS0Gx6nEf2rvDOtOcZzmXu0Gs+YeIOSOiO4auGhsYymhnGImAukq/skcoP46QvGYfa+W2Kj2dHevqTSkSnwmj/4wLqDm1kCVrRuQNcMBDxxmZU01p0bORmZMhgmaUrADXq0VWvbMm4hXabWMDF1KtQdoCytgE34k+NprwOv8iJKcUr7l/xBboRVx6CntIs9h5Lea8ZKTddeLT3356qWhZn6WqSOmTIB43YRiBUAsIZzYqYx3oAZ3ll+u8VbUL8MgtLWp/rlIyWX3zGkV9PgM1dnYs54JqKFwOHjq03tWfiR+6y2zLK8RtFfMQgVnNPj5cMcRWDWX0togZu11uiBHYunAkd9AY3TgoUk9ALbiQPE4E+6I+hw99rZCMIMUfSq38XPJJYmAjZcU974M60wR23p/FULIYJB2myZu24E+7UXA2Z/N46VoCw0DQOPsCw8spXRjYeY6E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR06MB3102.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(316002)(86362001)(83380400001)(52116002)(38100700002)(6486002)(6512007)(66556008)(66946007)(38350700002)(6506007)(956004)(6916009)(2616005)(4326008)(6666004)(7416002)(2906002)(7406005)(26005)(186003)(107886003)(44832011)(30864003)(8676002)(8936002)(1076003)(66476007)(5660300002)(508600001)(309714004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: oaW+Hddih713Ng7grySTpzv3KS+jZE2E0Urb3iSYPnUqR4dPtQVyufdkbB3T/ifev1baulx6i9ZhXI0NnNVBwAlhU9FgNMziX1lA6dIceusj4Ve630m+U/2xAdtaua7BSB97t8jtCGgBJadiF3WJCZcm+ypAI0ojyxx6D7RbKsZEs8xOgv72RgFzngB9K5KadTNPTyz6UFquhzbWzinD7/LYh653vGLsH6iKNs/0AJ+XRC50TyrbWCRptmV5OVdkfA46kvRlWNTquJElduZvLcNdk550ubp/oZTrVi0Eq8JZCgJZYyW2VwoCY1XZ/u26mfQZUnf5C65VZnRjFBYNGqXxKazem744I38JBPrchOpoIS6h4MWbF6ZwAhs81rSE+QygbpK4Hs6sQIfMNTeuiYH57wk3erzbXFd0keZa2XKxWgOuAjtAU4/D7wDsBM7DUwcIl0MhKmQ804tGk8owWg762COjj3S0rRjpwgt3dmyEioAkp1q1wu/+mRxzXY+oqAa6wCggUUB6xZ2gJ2nQnOu85I7whyECYeiO8G27I2KV7t/Zc5lSDFVw1JVHe+MjUFJ3tNOk392ZWvxWfY2oecO4y2p6bXbRBZbwg4PJ6jVA4X8XgaAMdaAQChxn4Q16auWuEjn9yUE3O5+YXxRD4az24l0qQmobquwTyzfSbeZE31AvsC1CkwoVZtUwxT98aQPx3L71snASVf3GpnMXi0GsVUCDL2QrD3Sq2pVjVXXDd2Z0AKgmXGPz6FKahkN5DpumPzcktWZNcHWEwxe1BffUPf9lT7kiiJALMQd+kyWA7u6y4U+9fpIdspkoQuPo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR06MB3102.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(316002)(86362001)(83380400001)(52116002)(38100700002)(6486002)(6512007)(66556008)(66946007)(38350700002)(6506007)(956004)(6916009)(2616005)(4326008)(6666004)(7416002)(2906002)(7406005)(26005)(186003)(107886003)(44832011)(8676002)(966005)(8936002)(1076003)(66476007)(5660300002)(45080400002)(508600001)(32563001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9HpRtB81Z1YV7lRBlJ7TJyFOAfADhfhFgmBU77Q4Os6cme4UGD2bXQeoisOs?=
- =?us-ascii?Q?JWxR2w63DKwI4ZBaOAQM+vlMqBeoto6M+yg9dB/HdnRLanDHInPDHcyba2xD?=
- =?us-ascii?Q?0JLVfWjbXrm5mbz7n88zqibyv6BoNkEYLgDotBOpQAp9kMZKwNIrbAx4Gyri?=
- =?us-ascii?Q?eFdMWeUejxjR0A6kU7nngooW12eb+HzzWUWDuXaizYI2d6qKZc+ZYPM3xuB3?=
- =?us-ascii?Q?Lo9yrbqm5psL523dgu5eznFXndjHdxg74kBS3YdxUqyGkP0SNAxAQ+Nf1weY?=
- =?us-ascii?Q?kDKYBw4Ss1mB7YEA9wE5JMjadVxosv9rQE+IhljBrxytDC0vduJdNbjBYTyv?=
- =?us-ascii?Q?KhmhAduuv2JRBO71L6v7fvuV+EgYKbrHAAtG1HhPQoq3eOIWrv+eoVJwIbRP?=
- =?us-ascii?Q?wApJ5wEN2AFipQ1YN+OMflgRJWklLD7PSMicAEV8J6I+CFKRh2beRpUax1EA?=
- =?us-ascii?Q?F1T9YwDObv7fjq8fxf5oOEo89cu71SqCHTxEb9wqTerbDMIIRhInUcroLa3P?=
- =?us-ascii?Q?CmfB048e95JlJsm+9CPK6j24ss3kvXHrSTlbU+JTWCKqZdXv2RqYsMBaw/uR?=
- =?us-ascii?Q?2UUFySxcCJ6zR1D0AeYg57sMLllExV+m6f/+FtNlSXfavRHNm4W46wSU4V0H?=
- =?us-ascii?Q?GwPymYFCRnI/WpwGza75DSBZYXgsbPozlNkaPLvLFGwLnnJYYAf/4smkyW0K?=
- =?us-ascii?Q?AZTxby272fq9X81XWY9IM1p7F5rX1u3tj9Fiq31UuhxCYWa6IY6kveuO0M/z?=
- =?us-ascii?Q?yF7vGWFJKwxro6F2evwsunGru1n0TMMEbw0zBbfxIx4gqhjTVTPuq4Lcx5Pq?=
- =?us-ascii?Q?ozfDiomQCl+uQOG2cvmUuTkt8H8xyQlDU8jq0cnrh23domB7DiKjHVU1Bu3/?=
- =?us-ascii?Q?uuq/nofk3j3HybZ3bygQRVJ8idVPOjJTw67o4CFo3VfAyGvw91xLtDycvyJA?=
- =?us-ascii?Q?3U1PCtEaF4Q0dt/spGgf7PqIy+VJIlK7gRyRd+K795VasAKnHrXY5o5lo4kP?=
- =?us-ascii?Q?/hjgdZjIbv+PfTFjXqWZfJVF2BJ4cOxxVLd404UIW3rumqqzPZjY4vM0bmGe?=
- =?us-ascii?Q?maHvyBkS3DI4keUcqgZdXBxx7AyFY/DktXgqqM5fKrDLoyt0y61xLk4AkxhG?=
- =?us-ascii?Q?fT+T67yCqTmDZZ7JKiXdeswjG63NJLeNs6PahcAjvIko1fdBI1DU8YO7KpD1?=
- =?us-ascii?Q?RsEF7nI+WpPGP7Pb1LuOj2kjaFfDNf+kFtfDlkCDBeMo0UCYxICws39+PLC2?=
- =?us-ascii?Q?yk5Qvvn9xwbIyeSZxmcckF0oLehauJxol/a3I8dQTqFgaSKDpznX8C1vDET/?=
- =?us-ascii?Q?QWzQ5lZ0qemwhJturyc4iOhKVsY5pkDA5Q6hnBc9gKAI8ZSfZeWeYwxkxJ2U?=
- =?us-ascii?Q?dR5c1H1ra5q2DaniJMrb7dIh09uztVUKmGrcbC4sRCd3GXA0ztcbuKKcLQPJ?=
- =?us-ascii?Q?s37nnRBtM91oOwvltZOfCuk833rlDHkffKvjWOW0StZ/GnMWbKQcPlZmyJJ/?=
- =?us-ascii?Q?nY/gTsq3kOE8VWMazbxPPQTSUYaeYd04LU4K08NRZMJ39IovHFbqqu9uqmfZ?=
- =?us-ascii?Q?OnbC2GXtY7818xEGXOpsNxCuuKZI1SFBhaA8E2+tTNjM+UFz43tnGq+ZZSA8?=
- =?us-ascii?Q?Rjy7/DlFrAlXA6ZN3Wb+YjcU7oEaGBUM4NVL8piK+/Dl+Z0106DcNqjsvweu?=
- =?us-ascii?Q?Ti0TuXwcuzJKSA4oxCvzzFXcj8w=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KUsJqFLrmftfQ7UgGWjnhGg/7vfLyRshzPndftB/wWOqFp9Gs5mGtIx3w1nE?=
+ =?us-ascii?Q?pTd1J4vWeVJhB7/DI/LCB6n1+Q13tC0tCK8f4ZNatB92Nxwwy2pWTlYXDDIN?=
+ =?us-ascii?Q?eLODdFG9QWuuyHijZCwZldPzEsw1ZWdm0Qr45xEWLQUcOXwB0nP9lDivsi/Y?=
+ =?us-ascii?Q?aW3EhrvH01BgjnWg0H2eMs+AsVO0+FCScFVUYwWFfcmPgIaRlc9niPt9AkOH?=
+ =?us-ascii?Q?S8X18hf8O1JKN2fUfMQ61oJqVDsDehdmmFQClLRmN1IZuur8rMHN2BF10GMg?=
+ =?us-ascii?Q?cIZutz8+fcmAwfj6y04BfbbMOZJ/zn1sQngOdayJKLFm2zqEz2WOeJI87sE2?=
+ =?us-ascii?Q?N/6vdjpdD3ejb423B/tVtlce1rl2F0dhAKdxbqImthDCYE4sTQD1+Dax6BCi?=
+ =?us-ascii?Q?GiRyzmLIqqhFMkuLUi8aAPdyX2oV3ZR/KJeihP+DzgWu9+wylfPfO5bDJyvp?=
+ =?us-ascii?Q?sqs3ACPqRwz8sIUEt9AFzb4BjeqfbRWLCk2x4RU2JnYX4JzVAvDWzHVdyTp1?=
+ =?us-ascii?Q?32XfvxWlTsjozD9F+Ji/3CYXkybgwMV3V6Ko6JbUvDPrn9AZKxod4jS0F1Ps?=
+ =?us-ascii?Q?n2ustSaS4xGo2VGsBrRy7cQ8eJNfcYt+wOPJIHxCnMLcx/0UG5WlQBENPnu/?=
+ =?us-ascii?Q?7l8vE7sXx/fYMPNqqprcYL78XKQ+tVj+MVvjoBtkyF3ZoHQUPx0S8quoxynS?=
+ =?us-ascii?Q?uGGcUyZ9wRHaHDy5MQGd3DbdSUaB0gKg/kOmDNZOyIy831PAF+JwhavyW6h+?=
+ =?us-ascii?Q?ByJmBr8WKH87qDScmFs9/yErKTSl+4455DeGU7yH/VD55RgDyec6lhyvnHKn?=
+ =?us-ascii?Q?7hyfeXHPLOXPlQ3paTtdsYHmElcHkaqiTrdshGhDzrIXhr7gOWBrS1lLhRrW?=
+ =?us-ascii?Q?y2tiXKBv53Y7uNVD6i3XOPsBMRZ9S+WSnr/FSOnR9ALSqYZkgvkGa8Nnxgkg?=
+ =?us-ascii?Q?8TRlqisBNs1pXc/uL5GrowAVB89Z5G0LmZkr8cA386Mu+6JtNesXf6oTuISw?=
+ =?us-ascii?Q?atzjFCNssvCbf3MIXzFaY6EOg7WhSNRAa72Y0v7CCpEDMZIc68gFPbpFdNaT?=
+ =?us-ascii?Q?8uJ380o9uhu8TY2im4NjMP8ZYnzyjUuEUqLpqdRyxGumd5WibPWppu3PLlYL?=
+ =?us-ascii?Q?hgibZR8Pih4H3BNK1+yPVup6Ai3xT4AYIp5ITGvuhh3qf1+WNRYU5SNOsK/o?=
+ =?us-ascii?Q?ZAQSr0imuD7bPHVrkaNmGHzz68knfImTluuBMcltMWkmumibyFfUq5PSnA05?=
+ =?us-ascii?Q?DDAsctRsIsePvRTwehpw1DI9soJPtVDseDHXgnPk4S1PmPCylmWxTInyraOm?=
+ =?us-ascii?Q?2jR3wF/wDZOJAupGgMr+z75KiJeOfIXW5x6Kyf5my88AnztSLBIsxIynSTru?=
+ =?us-ascii?Q?4DKOvV1eY5fF9Hg8e3ovivdvymReVPSc6DIDZQWu8yofj3j1Oxk6tQQPwiUn?=
+ =?us-ascii?Q?3XRhNU68gEALyNp6zyTsq3gIjuvd/GpmpiGZ92b8fBGe7rsxXVs7BXpExHPD?=
+ =?us-ascii?Q?lI9auauNb6DOU1hDwCMKqftjCjh7ItuyPSrJGRS7+JMHl2G9ZbhyqNYy8aQL?=
+ =?us-ascii?Q?8jshVvF1+losAB34sPZP3E6kzKAWpS3DG5mAn1ZGfgfiuEG1sqdcbu0SqGDF?=
+ =?us-ascii?Q?00LX7LzH0sESVXTzDwot/gz9W+L4qdYMFN+SjSQYMD99IpvzQ64DOwjA+sm6?=
+ =?us-ascii?Q?r7xcXM0J810mH0CLOlUJNwhBtxo=3D?=
 X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 502845d7-a7a0-4847-f170-08d9b9d5b037
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac097029-890a-4f60-e1b5-08d9b9d5b3f4
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR06MB3102.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 23:02:48.7013
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 23:02:54.9217
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mwQ2UyhTKesyZzUN3njCWfwLdvkfdiPzPYiYHXi/cVx2fdIZQNx2fUna3kppoAVn72UkHBchwNUxaWnKRN7BezgXMEfHScD1GCBuKXai4/A=
+X-MS-Exchange-CrossTenant-UserPrincipalName: zAQ08USSx5VuqYzeu+0hRbsmYFnjJTyssscSwQz7YceaMwvCon0s87KKvKtqXxzpjfk1ns/66P/1y79ZasDQAYC4nUJMayIuc7IN1pDIvcc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0602MB2910
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CAAM driver contains several variables, which are used for indication
-that certain capabilities are detected during initial probing of the
-device. They are defined as u8, but mainly used as boolean variables to
-identify capabillities. CAAM JR driver code also contains the static
-variable in the probe method, which is used to derive the JR index value
-and does not respect how JRs are implemented in the HW.
+CAAM JR nodes are configured by BootROM and are used by various software
+entities during the boot process before they reach the Kernel.
 
-Clean-up all assorted variables, collect them into one bitfield value
-which encodes capabilities as bit, and use them in the execution flow
-instead.
+Default BootROM configuration have JR0 and JR1 reserved for S-only
+access, while JR2 is generally available for both S and NS access. HAB
+feature of i.MX8M family does require that JR0 is reserved exclusively
+in S-only world, while JR1 and JR2 are both released to NS-World. OP-TEE
+can later reclaim the JR2 via dt_enable_secure_status() call, and modify
+the DID to hold it in S-World only.
 
-Replace static indexing in JR driver with index derived from "reg"
-binding, as it reflects the actual JR number in the HW.
+The above setup has been discovered during review of CAAM patchset
+presented to U-Boot integration [1], and does not correspond to the
+status on jr nodes in FDT.
+
+This missing status settings leads to the following error message during
+jr node probing:
+[    1.509894] caam 30900000.crypto: job rings = 3, qi = 0
+[    1.525201] caam_jr 30901000.jr: failed to flush job ring 0
+[    1.525214] caam_jr: probe of 30901000.jr failed with error -5
+
+JR register readout after BootROM execution shows the following values:
+JR0DID_MS = 0x8011
+JR1DID_MS = 0x8011
+JR2DID_MS = 0x0
+
+This shows that JR0 and JR1 have TZ_OWN bit set, which marks them to be
+reserved for S-World, while JR2 remains accessible from NS-World.
+
+Provide the correct status for JR nodes in imx8m derivatives, which have
+a following meaning:
+- JR0: S-only
+- JR1: visible in both
+- JR2: NS-only
+
+Note, that JR2 is initially marked to be NS-only which does correspond
+to DID readout when OP-TEE is not present. Once present, OP-TEE will
+reclaim the JR2 and set both "status" and "secure-status" to claim JR2
+for S-only access.
 
 Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Link: [1]: https://lore.kernel.org/u-boot/AM6PR06MB4691FC905FE5658BE4B15C11A6609@AM6PR06MB4691.eurprd06.prod.outlook.com/
 ---
 Changes in V3:
-- Address review comments from V2 series, replace inline if statements
-  with explicit ones
-- Add more helper macros
-- Merge change done in separate patch for JR indexing into here
-- Change caam_ctrl_check_jr_perm() from register readout to status
-  binding check
-- Do not export caam_ctrl_check_jr_perm() anymore, drop the declaration
-  from header
-- Remove more local variables in probe() and replace them with
-  capabilities readout
+- No change, new patch introduced
 
- drivers/crypto/caam/caamalg_qi.c |   2 +-
- drivers/crypto/caam/ctrl.c       | 115 ++++++++++++++++++++-----------
- drivers/crypto/caam/intern.h     |  20 +++---
- drivers/crypto/caam/jr.c         |  19 ++++-
- drivers/crypto/caam/regs.h       |   2 -
- 5 files changed, 106 insertions(+), 52 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi | 4 ++++
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi | 4 ++++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 4 ++++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++++
+ 4 files changed, 16 insertions(+)
 
-diff --git a/drivers/crypto/caam/caamalg_qi.c b/drivers/crypto/caam/caamalg_qi.c
-index 189a7438b29c..1b7cdae28290 100644
---- a/drivers/crypto/caam/caamalg_qi.c
-+++ b/drivers/crypto/caam/caamalg_qi.c
-@@ -2610,7 +2610,7 @@ int caam_qi_algapi_init(struct device *ctrldev)
- 	bool registered = false;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+index 5b9c2cca9ac4..51465974c4ea 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+@@ -914,18 +914,22 @@ sec_jr0: jr@1000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x1000 0x1000>;
+ 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++					status = "disabled";
++					secure-status = "okay";
+ 				};
  
- 	/* Make sure this runs only on (DPAA 1.x) QI */
--	if (!priv->qi_present || caam_dpaa2)
-+	if (!(priv->caam_caps & CAAM_CAPS_QI_PRESENT) || caam_dpaa2)
- 		return 0;
+ 				sec_jr1: jr@2000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x2000 0x1000>;
+ 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "okay";
+ 				};
  
- 	/*
-diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
-index ca0361b2dbb0..37c0c6af1137 100644
---- a/drivers/crypto/caam/ctrl.c
-+++ b/drivers/crypto/caam/ctrl.c
-@@ -79,6 +79,36 @@ static void build_deinstantiation_desc(u32 *desc, int handle)
- 	append_jump(desc, JUMP_CLASS_CLASS1 | JUMP_TYPE_HALT);
- }
+ 				sec_jr2: jr@3000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x3000 0x1000>;
+ 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "disabled";
+ 				};
+ 			};
  
-+/*
-+ * caam_ctrl_check_jr_perm - check if the job ring can be accessed
-+ *				from Non-Secure World.
-+ * @np - pointer to JR device node
-+ *
-+ * Return: - 0 if Job Ring is reserved in the Secure World
-+ *	    - 1 if Job Ring is available in NS World
-+ */
-+static inline int caam_ctrl_check_jr_perm(const struct device_node *np)
-+{
-+	struct property *p;
-+
-+	/* read "status" property first */
-+	p = of_find_property(np, "status", NULL);
-+	if (p && (!strncmp(p->value, "disabled", p->length))) {
-+		/*
-+		 * "status" is set to "disabled", which would imply that the JR
-+		 * is not available for NS World. All other possible combination
-+		 * of "status" and "secure-status" would rather indicate that JR
-+		 * is either available in NS-only, or in both S and NS Worlds.
-+		 * In a later case, we indicate that this JR can be used by the
-+		 * Kernel since the resource is shared.
-+		 * For details, see:
-+		 * Documentation/devicetree/bindings/arm/secure.txt
-+		 */
-+		return 0;
-+	}
-+	return 1;
-+}
-+
- /*
-  * run_descriptor_deco0 - runs a descriptor on DECO0, under direct control of
-  *			  the software (no JR/QI used).
-@@ -100,7 +130,7 @@ static inline int run_descriptor_deco0(struct device *ctrldev, u32 *desc,
- 	int i;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+index ba23b416b5e6..e5edf14319b1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+@@ -808,18 +808,22 @@ sec_jr0: jr@1000 {
+ 					 compatible = "fsl,sec-v4.0-job-ring";
+ 					 reg = <0x1000 0x1000>;
+ 					 interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++					 status = "disabled";
++					 secure-status = "okay";
+ 				};
  
+ 				sec_jr1: jr@2000 {
+ 					 compatible = "fsl,sec-v4.0-job-ring";
+ 					 reg = <0x2000 0x1000>;
+ 					 interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
++					 secure-status = "okay";
+ 				};
  
--	if (ctrlpriv->virt_en == 1 ||
-+	if ((ctrlpriv->caam_caps & CAAM_CAPS_VIRT_ENABLED) ||
- 	    /*
- 	     * Apparently on i.MX8M{Q,M,N,P} it doesn't matter if virt_en == 1
- 	     * and the following steps should be performed regardless
-@@ -169,7 +199,7 @@ static inline int run_descriptor_deco0(struct device *ctrldev, u32 *desc,
- 	*status = rd_reg32(&deco->op_status_hi) &
- 		  DECO_OP_STATUS_HI_ERR_MASK;
+ 				sec_jr2: jr@3000 {
+ 					 compatible = "fsl,sec-v4.0-job-ring";
+ 					 reg = <0x3000 0x1000>;
+ 					 interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++					 secure-status = "disabled";
+ 				};
+ 			};
  
--	if (ctrlpriv->virt_en == 1)
-+	if (ctrlpriv->caam_caps & CAAM_CAPS_VIRT_ENABLED)
- 		clrsetbits_32(&ctrl->deco_rsr, DECORSR_JR0, 0);
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 977783784342..3c23bf5c3910 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -661,18 +661,22 @@ sec_jr0: jr@1000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x1000 0x1000>;
+ 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++					status = "disabled";
++					secure-status = "okay";
+ 				};
  
- 	/* Mark the DECO as free */
-@@ -612,7 +642,7 @@ static bool check_version(struct fsl_mc_version *mc_version, u32 major,
- /* Probe routine for CAAM top (controller) level */
- static int caam_probe(struct platform_device *pdev)
- {
--	int ret, ring, gen_sk, ent_delay = RTSDCTL_ENT_DLY_MIN;
-+	int ret, gen_sk, ent_delay = RTSDCTL_ENT_DLY_MIN;
- 	u64 caam_id;
- 	const struct soc_device_attribute *imx_soc_match;
- 	struct device *dev;
-@@ -622,8 +652,6 @@ static int caam_probe(struct platform_device *pdev)
- 	struct dentry *dfs_root;
- 	u32 scfgr, comp_params;
- 	u8 rng_vid;
--	int pg_size;
--	int BLOCK_OFFSET = 0;
- 	bool pr_support = false;
+ 				sec_jr1: jr@2000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x2000 0x1000>;
+ 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "okay";
+ 				};
  
- 	ctrlpriv = devm_kzalloc(&pdev->dev, sizeof(*ctrlpriv), GFP_KERNEL);
-@@ -666,11 +694,12 @@ static int caam_probe(struct platform_device *pdev)
- 	else
- 		caam_ptr_sz = sizeof(u32);
- 	caam_dpaa2 = !!(comp_params & CTPR_MS_DPAA2);
--	ctrlpriv->qi_present = !!(comp_params & CTPR_MS_QI_MASK);
-+	if (comp_params & CTPR_MS_QI_MASK)
-+		ctrlpriv->caam_caps |= CAAM_CAPS_QI_PRESENT;
+ 				sec_jr2: jr@3000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x3000 0x1000>;
+ 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "disabled";
+ 				};
+ 			};
  
- #ifdef CONFIG_CAAM_QI
- 	/* If (DPAA 1.x) QI present, check whether dependencies are available */
--	if (ctrlpriv->qi_present && !caam_dpaa2) {
-+	if ((ctrlpriv->caam_caps & CAAM_CAPS_QI_PRESENT) && !caam_dpaa2) {
- 		ret = qman_is_probed();
- 		if (!ret) {
- 			return -EPROBE_DEFER;
-@@ -689,33 +718,29 @@ static int caam_probe(struct platform_device *pdev)
- 	}
- #endif
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index 95d8b95d6120..16c4c9110ce7 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -999,18 +999,22 @@ sec_jr0: jr@1000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x1000 0x1000>;
+ 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
++					status = "disabled";
++					secure-status = "okay";
+ 				};
  
--	/* Allocating the BLOCK_OFFSET based on the supported page size on
--	 * the platform
--	 */
--	pg_size = (comp_params & CTPR_MS_PG_SZ_MASK) >> CTPR_MS_PG_SZ_SHIFT;
--	if (pg_size == 0)
--		BLOCK_OFFSET = PG_SIZE_4K;
--	else
--		BLOCK_OFFSET = PG_SIZE_64K;
-+	/* Allocate control blocks based on the CAAM supported page size */
-+	if (comp_params & CTPR_MS_PG_SZ_MASK)
-+		ctrlpriv->caam_caps |= CAAM_CAPS_64K_PAGESIZE;
+ 				sec_jr1: jr@2000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x2000 0x1000>;
+ 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "okay";
+ 				};
  
- 	ctrlpriv->ctrl = (struct caam_ctrl __iomem __force *)ctrl;
- 	ctrlpriv->assure = (struct caam_assurance __iomem __force *)
- 			   ((__force uint8_t *)ctrl +
--			    BLOCK_OFFSET * ASSURE_BLOCK_NUMBER
-+			    CAAM_CAPS_PG_SZ(ctrlpriv->caam_caps) * ASSURE_BLOCK_NUMBER
- 			   );
- 	ctrlpriv->deco = (struct caam_deco __iomem __force *)
- 			 ((__force uint8_t *)ctrl +
--			 BLOCK_OFFSET * DECO_BLOCK_NUMBER
-+			 CAAM_CAPS_PG_SZ(ctrlpriv->caam_caps) * DECO_BLOCK_NUMBER
- 			 );
+ 				sec_jr2: jr@3000 {
+ 					compatible = "fsl,sec-v4.0-job-ring";
+ 					reg = <0x3000 0x1000>;
+ 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++					secure-status = "disabled";
+ 				};
+ 			};
  
- 	/* Get the IRQ of the controller (for security violations only) */
- 	ctrlpriv->secvio_irq = irq_of_parse_and_map(nprop, 0);
- 	np = of_find_compatible_node(NULL, NULL, "fsl,qoriq-mc");
--	ctrlpriv->mc_en = !!np;
-+	if (np)
-+		ctrlpriv->caam_caps |= CAAM_CAPS_MC_ENABLED;
- 	of_node_put(np);
- 
- #ifdef CONFIG_FSL_MC_BUS
--	if (ctrlpriv->mc_en) {
-+	if (ctrlpriv->caam_caps & CAAM_CAPS_MC_ENABLED) {
- 		struct fsl_mc_version *mc_version;
- 
- 		mc_version = fsl_mc_get_version();
-@@ -732,7 +757,7 @@ static int caam_probe(struct platform_device *pdev)
- 	 * In case of SoCs with Management Complex, MC f/w performs
- 	 * the configuration.
- 	 */
--	if (!ctrlpriv->mc_en)
-+	if (!(ctrlpriv->caam_caps & CAAM_CAPS_MC_ENABLED))
- 		clrsetbits_32(&ctrl->mcr, MCFGR_AWCACHE_MASK,
- 			      MCFGR_AWCACHE_CACH | MCFGR_AWCACHE_BUFF |
- 			      MCFGR_WDENABLE | MCFGR_LARGE_BURST);
-@@ -745,7 +770,6 @@ static int caam_probe(struct platform_device *pdev)
- 	 */
- 	scfgr = rd_reg32(&ctrl->scfgr);
- 
--	ctrlpriv->virt_en = 0;
- 	if (comp_params & CTPR_MS_VIRT_EN_INCL) {
- 		/* VIRT_EN_INCL = 1 & VIRT_EN_POR = 1 or
- 		 * VIRT_EN_INCL = 1 & VIRT_EN_POR = 0 & SCFGR_VIRT_EN = 1
-@@ -753,14 +777,14 @@ static int caam_probe(struct platform_device *pdev)
- 		if ((comp_params & CTPR_MS_VIRT_EN_POR) ||
- 		    (!(comp_params & CTPR_MS_VIRT_EN_POR) &&
- 		       (scfgr & SCFGR_VIRT_EN)))
--				ctrlpriv->virt_en = 1;
-+			ctrlpriv->caam_caps |= CAAM_CAPS_VIRT_ENABLED;
- 	} else {
- 		/* VIRT_EN_INCL = 0 && VIRT_EN_POR_VALUE = 1 */
- 		if (comp_params & CTPR_MS_VIRT_EN_POR)
--				ctrlpriv->virt_en = 1;
-+			ctrlpriv->caam_caps |= CAAM_CAPS_VIRT_ENABLED;
- 	}
- 
--	if (ctrlpriv->virt_en == 1)
-+	if (ctrlpriv->caam_caps & CAAM_CAPS_VIRT_ENABLED)
- 		clrsetbits_32(&ctrl->jrstart, 0, JRSTART_JR0_START |
- 			      JRSTART_JR1_START | JRSTART_JR2_START |
- 			      JRSTART_JR3_START);
-@@ -785,10 +809,10 @@ static int caam_probe(struct platform_device *pdev)
- 	caam_debugfs_init(ctrlpriv, dfs_root);
- 
- 	/* Check to see if (DPAA 1.x) QI present. If so, enable */
--	if (ctrlpriv->qi_present && !caam_dpaa2) {
-+	if ((ctrlpriv->caam_caps & CAAM_CAPS_QI_PRESENT) && !caam_dpaa2) {
- 		ctrlpriv->qi = (struct caam_queue_if __iomem __force *)
- 			       ((__force uint8_t *)ctrl +
--				 BLOCK_OFFSET * QI_BLOCK_NUMBER
-+				 CAAM_CAPS_PG_SZ(ctrlpriv->caam_caps) * QI_BLOCK_NUMBER
- 			       );
- 		/* This is all that's required to physically enable QI */
- 		wr_reg32(&ctrlpriv->qi->qi_control_lo, QICTL_DQEN);
-@@ -801,21 +825,32 @@ static int caam_probe(struct platform_device *pdev)
- #endif
- 	}
- 
--	ring = 0;
- 	for_each_available_child_of_node(nprop, np)
- 		if (of_device_is_compatible(np, "fsl,sec-v4.0-job-ring") ||
- 		    of_device_is_compatible(np, "fsl,sec4.0-job-ring")) {
--			ctrlpriv->jr[ring] = (struct caam_job_ring __iomem __force *)
--					     ((__force uint8_t *)ctrl +
--					     (ring + JR_BLOCK_NUMBER) *
--					      BLOCK_OFFSET
--					     );
--			ctrlpriv->total_jobrs++;
--			ring++;
-+			u32 ring_id;
-+			/*
-+			 * Get register page to see the start address of CB
-+			 * This is used to index into the bitmap of available
-+			 * job rings and indicate if it is available in NS world.
-+			 */
-+			ret = of_property_read_u32(np, "reg", &ring_id);
-+			if (ret) {
-+				dev_err(dev, "failed to get register address for jobr\n");
-+				continue;
-+			}
-+			ring_id = ring_id >> CAAM_CAPS_PG_SHIFT(ctrlpriv->caam_caps);
-+
-+			if (caam_ctrl_check_jr_perm(np))
-+				ctrlpriv->caam_caps |= CAAM_CAPS_JR_PRESENT(ring_id);
- 		}
- 
--	/* If no QI and no rings specified, quit and go home */
--	if ((!ctrlpriv->qi_present) && (!ctrlpriv->total_jobrs)) {
-+	/*
-+	 * If no QI, no rings specified or no rings available for NS -
-+	 * quit and go home
-+	 */
-+	if (!(ctrlpriv->caam_caps & CAAM_CAPS_QI_PRESENT) &&
-+	    (hweight_long(ctrlpriv->caam_caps & CAAM_CAPS_JOBRS_MASK) == 0)) {
- 		dev_err(dev, "no queues configured, terminating\n");
- 		return -ENOMEM;
- 	}
-@@ -832,7 +867,8 @@ static int caam_probe(struct platform_device *pdev)
- 	 * already instantiated, do RNG instantiation
- 	 * In case of SoCs with Management Complex, RNG is managed by MC f/w.
- 	 */
--	if (!(ctrlpriv->mc_en && pr_support) && rng_vid >= 4) {
-+	if (!((ctrlpriv->caam_caps & CAAM_CAPS_MC_ENABLED) && pr_support) &&
-+	    rng_vid >= 4) {
- 		ctrlpriv->rng4_sh_init =
- 			rd_reg32(&ctrl->r4tst[0].rdsta);
- 		/*
-@@ -900,8 +936,9 @@ static int caam_probe(struct platform_device *pdev)
- 	/* Report "alive" for developer to see */
- 	dev_info(dev, "device ID = 0x%016llx (Era %d)\n", caam_id,
- 		 ctrlpriv->era);
--	dev_info(dev, "job rings = %d, qi = %d\n",
--		 ctrlpriv->total_jobrs, ctrlpriv->qi_present);
-+	dev_info(dev, "job rings = %ld, qi = %s\n",
-+		 hweight_long(ctrlpriv->caam_caps & CAAM_CAPS_JOBRS_MASK),
-+		 (ctrlpriv->caam_caps & CAAM_CAPS_QI_PRESENT) ? "yes" : "no");
- 
- 	ret = devm_of_platform_populate(dev);
- 	if (ret)
-diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h
-index 7d45b21bd55a..37fa9db461c7 100644
---- a/drivers/crypto/caam/intern.h
-+++ b/drivers/crypto/caam/intern.h
-@@ -86,15 +86,19 @@ struct caam_drv_private {
- 
- 	struct iommu_domain *domain;
- 
--	/*
--	 * Detected geometry block. Filled in from device tree if powerpc,
--	 * or from register-based version detection code
--	 */
--	u8 total_jobrs;		/* Total Job Rings in device */
--	u8 qi_present;		/* Nonzero if QI present in device */
--	u8 mc_en;		/* Nonzero if MC f/w is active */
-+	unsigned long caam_caps; /* CAAM Module capabilities */
-+
-+#define CAAM_CAPS_QI_PRESENT	BIT(0)	/* Queue Manager interface (QI) implemented */
-+#define CAAM_CAPS_JOBRS_MASK	GENMASK(15, 1)	/* Job Ring is available in NS World */
-+#define CAAM_CAPS_MC_ENABLED	BIT(16)	/* Management Complex is enabled (F/W is active) */
-+#define CAAM_CAPS_VIRT_ENABLED	BIT(17)	/* Virtualization enabled */
-+#define CAAM_CAPS_64K_PAGESIZE	BIT(18)	/* CAAM register page size (64KB if set, 4KB if unset) */
-+
-+#define CAAM_CAPS_JR_PRESENT(id)	(BIT(id) & CAAM_CAPS_JOBRS_MASK)
-+#define CAAM_CAPS_PG_SHIFT(caps)	(((caps) & CAAM_CAPS_64K_PAGESIZE) ? 16 : 12)
-+#define CAAM_CAPS_PG_SZ(caps)		(1 << CAAM_CAPS_PG_SHIFT(caps))
-+
- 	int secvio_irq;		/* Security violation interrupt number */
--	int virt_en;		/* Virtualization enabled in CAAM */
- 	int era;		/* CAAM Era (internal HW revision) */
- 
- #define	RNG4_MAX_HANDLES 2
-diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
-index 7f2b1101f567..e218d4ae604c 100644
---- a/drivers/crypto/caam/jr.c
-+++ b/drivers/crypto/caam/jr.c
-@@ -511,10 +511,25 @@ static int caam_jr_probe(struct platform_device *pdev)
- 	struct device_node *nprop;
- 	struct caam_job_ring __iomem *ctrl;
- 	struct caam_drv_private_jr *jrpriv;
--	static int total_jobrs;
-+	struct caam_drv_private *caamctrlpriv;
-+	u32 ring_idx;
- 	struct resource *r;
- 	int error;
- 
-+	/*
-+	 * Get register page to see the start address of CB.
-+	 * Job Rings have their respective input base addresses
-+	 * defined in the register IRBAR_JRx. This address is
-+	 * present in the DT node and is aligned to the page
-+	 * size defined at CAAM compile time.
-+	 */
-+	if (of_property_read_u32(pdev->dev.of_node, "reg", &ring_idx)) {
-+		dev_err(&pdev->dev, "failed to get register address for jobr\n");
-+		return -ENOMEM;
-+	}
-+	caamctrlpriv = dev_get_drvdata(pdev->dev.parent);
-+	ring_idx = ring_idx >> CAAM_CAPS_PG_SHIFT(caamctrlpriv->caam_caps);
-+
- 	jrdev = &pdev->dev;
- 	jrpriv = devm_kzalloc(jrdev, sizeof(*jrpriv), GFP_KERNEL);
- 	if (!jrpriv)
-@@ -523,7 +538,7 @@ static int caam_jr_probe(struct platform_device *pdev)
- 	dev_set_drvdata(jrdev, jrpriv);
- 
- 	/* save ring identity relative to detection */
--	jrpriv->ridx = total_jobrs++;
-+	jrpriv->ridx = ring_idx;
- 
- 	nprop = pdev->dev.of_node;
- 	/* Get configuration properties from device tree */
-diff --git a/drivers/crypto/caam/regs.h b/drivers/crypto/caam/regs.h
-index 3738625c0250..186e76e6a3e7 100644
---- a/drivers/crypto/caam/regs.h
-+++ b/drivers/crypto/caam/regs.h
-@@ -1023,6 +1023,4 @@ struct caam_deco {
- #define ASSURE_BLOCK_NUMBER	6
- #define QI_BLOCK_NUMBER		7
- #define DECO_BLOCK_NUMBER	8
--#define PG_SIZE_4K		0x1000
--#define PG_SIZE_64K		0x10000
- #endif /* REGS_H */
 -- 
 2.25.1
 

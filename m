@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B64A46B6C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76B146B6CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbhLGJPg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 04:15:36 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:44835 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbhLGJPe (ORCPT
+        id S233637AbhLGJPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:15:48 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:35376
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233625AbhLGJPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:15:34 -0500
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MkYkC-1m8mpL3sj8-00m5cI; Tue, 07 Dec 2021 10:12:01 +0100
-Received: by mail-wm1-f54.google.com with SMTP id o29so10172384wms.2;
-        Tue, 07 Dec 2021 01:12:01 -0800 (PST)
-X-Gm-Message-State: AOAM530zZJ3crpckAZcNfwMIytnpN9JV+3f4hvR/coiNjDMNZayMlQxa
-        Zfbmlgvv5Pto8w8kYp6wetjYs1HUvpCqugNBxgA=
-X-Google-Smtp-Source: ABdhPJyLD3fDYV1EW4Zm6vqp1Sp5Hf4e0+yxPNK4sUEqwqNGTd2WHKtiQ0eZ5FrFkSBhgxRt35VAPgMt79GF3b9WHYk=
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr5555654wmn.98.1638868321375;
- Tue, 07 Dec 2021 01:12:01 -0800 (PST)
+        Tue, 7 Dec 2021 04:15:46 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 277413F19E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638868335;
+        bh=GaOIt/pSSnxls48YeUnnQvYgi4Owp7/cq1T2WhbsgYA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=vkulWaNHv5e6cXMmJC8Tntffc7KXOOld1iynXVfIeIjk1vZQR+a3W2crGy7yEJE8x
+         9W8yU3Oh1dsIliz9IKPozglVplhEle6nXyLwqpWAcUA42Zk/4fzkiP2xPbAjc2gd26
+         7NsPzHo1bR80z4mNen1TETJX1EQLuKRClfe9OUUo/A2S8JcOICjwDm5Q6JN91iAzJR
+         otsZlSKeNY5lMn4WRYZY8Bq2nl5RKn54K0RaURkyrNu4xXYSLKL6acVu5uADJjW4hw
+         S9/6CJfYV2Ao7FcBBHiUHrMjQ7pjjGTzQYLRnXLmCORVZd2mcCI0ymR2g4L5SbVh3j
+         rDo9fKN54nZOA==
+Received: by mail-lf1-f72.google.com with SMTP id o11-20020a056512230b00b0041ca68ddf35so1680992lfu.22
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 01:12:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GaOIt/pSSnxls48YeUnnQvYgi4Owp7/cq1T2WhbsgYA=;
+        b=UFikVsdQMX0u/rD2WLa283AgqNFwgqjjL+K06BZp5Jwq71U+Z3DHXjnSCgoxcQTjs0
+         qpUkIFg8CoxTQzetCvMaBes2Cxh2yk6BM3UNC1l/xcIwkZ8XMZz+Us3krGNDDy0K2PSa
+         cs0r0dwRXRA4uSTUYElgZ2YTzDvcN9znNXYSBvGrOqzXC6bawRE44UQpNwi8zmLG5svH
+         bzKFJnFueHGNrF+rFlhCL536OJ0myGXfSczmozjmgWr4En9Pe1+h6W6SFDq2vlxTMqpg
+         JB3tlt6nxT5rihiMNjbZvaYax9WVRjZS0+aWT1zDKiwawGYgNTti5NUWOgVFCFiEjyEg
+         LS4g==
+X-Gm-Message-State: AOAM531fiZflZGgQajSb3hobfEPEgDEEjcIuW/q8BNG6Ixz4+hVJEFE/
+        5/Y0avnoMqcc34K1esiLvLo/nzPrgDPhg2LM3zsa7xmXuqDdZ+3ct9rhO3UjcxKIWdjf/sP0aTW
+        TqP0FtJILCjkLDQl/WXsgIrC7pkgPDuL/5qBI0kwYqg==
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr41718552ljh.175.1638868334645;
+        Tue, 07 Dec 2021 01:12:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwoosoQHLil3eUjvo4iMu1SXp7cmiktaSPpGa0qP5LvgOU5irMTlVL8Bg9LA4mGAsqDJxeHsg==
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr41718538ljh.175.1638868334490;
+        Tue, 07 Dec 2021 01:12:14 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id s9sm1620472lfr.304.2021.12.07.01.12.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 01:12:14 -0800 (PST)
+Message-ID: <9400d57e-7db7-0f58-b391-417e103576cd@canonical.com>
+Date:   Tue, 7 Dec 2021 10:12:13 +0100
 MIME-Version: 1.0
-References: <cover.1638515726.git.qinjian@cqplus1.com> <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
- <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com> <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com>
-In-Reply-To: <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 7 Dec 2021 10:11:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1-4XnrkWc_0SPns9xj9Yp4xWhEahLOkeafXmAYWfbYJA@mail.gmail.com>
-Message-ID: <CAK8P3a1-4XnrkWc_0SPns9xj9Yp4xWhEahLOkeafXmAYWfbYJA@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:sNHnA4/Asw/xz23w6NSZQg8Q28Ul/VtKss29494Duj7/bYvo1Jx
- 4boj1hdADDpyK6Xugmxb7dZ3mK+fi+2GBf9EZJXDrx/gYzSVfsRU0jzqKG2MJx6cu6C1tjm
- etRlKFr3y3bMoJ80krpDD5FY0sEubBo5OatxGC54EX+22+QARpuZTHnZtPsqbJW6J6CGWGJ
- TDXD5PVEoJHY4cxaeXQYg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+Jaz6qJBQCQ=:SDgjtEI9BbzKP3/WncCRii
- OVXDWSifegq4bMw+ZvQ61ClC1qa3FJ2XLvqC8DZMCuZLdzR9LS9g5ZOJ1aKz3TMUnXBX4wPmD
- yKUoPaVXQY71Ym5OOQshYzlhO15Q1ArWsZcgdAcA8Q4cCWpsr5wHjrlt+aE/a1WAGjyGYF1Jd
- PG7G33IQf+dWITa3x0nI697UyJ9TF1rjtbhtujurD+63fpPM6UctZ59zEurwAtBdG35Jo5bwS
- 7Nd/H05rPhFMxKKVwZGRrbTwzG2pHuoiUO6ljh2aV46MSJgn+42kHzGQ5uWZAzWypeuBK09Ib
- RMfE6cWAcJ5nEPNQ8Uy116glqyab677VXN9h6SmFP7F8heXOyGaJP4+wbyHfc6XmT1XRnCPnJ
- E+IO8x6kcPIW/l6RL4JJTyE0RFMs5wQPAT1PbvDJlgl9kxBebto191LzZokBGFEMOxPiaxxtO
- Tl9K84b7sEbf3kUU3OzBdlqD+mK+a/xNpKrz9apZfBUcZlORWBNlb9YNjtPB3dICCzr8GHzw3
- KSPC/7XSGI4T1tc7YXugo3YL58vBYvHnp8J2XdA9F4GH7yPYp8G+zE1IZg+LDLcNRFR8T8aM2
- 0T4as4Y1F0+dBF/VlzNSRKMUj2Fh+kkjiUn9bGV3xvq3YPzch1K45ybN/L4q1QqwnnLEvSBYu
- RcOJMys7UfV2TL1GPV4EmM6QvR4AhHP0+Utf+js+Mh7cSWHaVoQXmKuJLeGhnlnOUS6QHcn7h
- aYpaGJgFst2Gl4mafdlNU/ylNbjFBsGdR100Xt2uDD18Jf8rtyL6yI0LkMjsVHBR4AlshGZ+H
- 9IMfl9T9uIDDw36AXJjfC56uuPLVKjos90+9Y4GJcX3vxcisqU=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] dt-bindings: memory-controllers: ti,gpmc: Drop incorrect
+ unevaluatedProperties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Roger Quadros <rogerq@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20211206174215.2297796-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211206174215.2297796-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 8:21 AM qinjian[覃健] <qinjian@cqplus1.com> wrote:
-> > > @@ -152,6 +152,7 @@ textofs-$(CONFIG_ARCH_MSM8X60) := 0x00208000
-> > >  textofs-$(CONFIG_ARCH_MSM8960) := 0x00208000
-> > >  textofs-$(CONFIG_ARCH_MESON) := 0x00208000
-> > >  textofs-$(CONFIG_ARCH_AXXIA) := 0x00308000
-> > > +textofs-$(CONFIG_ARCH_SUNPLUS) := 0x00308000
-> >
-> > What is this needed for? If it boots without this line, better avoid
-> > adding it, because
-> > it will increase the kernel size for everyone else (unless they also enable
-> > AXXIA).
-> >
->
-> SP7021 reserved the 1st 1MB memory for ARM926@P-Chip using,
-> The 2nd 1MB memory for IOP device and the 3rd 1MB memory for bootloader.
-> I'll add these comments at next commit.
+On 06/12/2021 18:42, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the TI GPMC example
+> has a warning:
+> 
+> Documentation/devicetree/bindings/mtd/ti,gpmc-onenand.example.dt.yaml: memory-controller@6e000000: onenand@0,0: Unevaluated properties are not allowed ('compatible', '#address-cells', '#size-cells', 'partition@0', 'partition@100000' were unexpected)
+> 
+> The child node definition for GPMC is not a complete binding, so specifying
+> 'unevaluatedProperties: false' for it is not correct and should be
+> dropped.
+> 
+> Fixup the unnecessary 'allOf' while we're here.
+> 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Roger Quadros <rogerq@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/memory-controllers/ti,gpmc.yaml      | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
 
-I think you can just remove the memory from the system memory map in the
-device tree and pretend it only starts after the bootloader. It's been a while
-since I looked at this though, so I could be misremembering what the minimum
-boundaries are for doing this.
+Looks good. Rob, do you want to take it via your tree or I should handle it?
 
-        Arnd
+
+Best regards,
+Krzysztof

@@ -2,231 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B944446B074
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B346B076
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238851AbhLGCLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:11:02 -0500
-Received: from mga12.intel.com ([192.55.52.136]:4195 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231245AbhLGCLA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:11:00 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217487427"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="217487427"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:07:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="515046131"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 18:07:23 -0800
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/18] iommu: Add device dma ownership set/release
- interfaces
-To:     Christoph Hellwig <hch@infradead.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-2-baolu.lu@linux.intel.com>
- <Ya4hZ2F7MYusgmSB@infradead.org>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <2872aa9f-c325-ca28-fb64-f86857ad3e91@linux.intel.com>
-Date:   Tue, 7 Dec 2021 10:07:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S239210AbhLGCLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231245AbhLGCLY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 21:11:24 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B133C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 18:07:54 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id t6so13251320qkg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 18:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3E3HUdI+eXkJ2DLGNVHT3aFUXd0oRXFnf4vYNBfb/7s=;
+        b=GyZhu9pq5QcuvZaHzOGbHc9lzxal1FXx6GqwCZgiy/sbOkDR2CVFKWLItdgXaAWpNM
+         nmwzwCIMlcYSAQ/EIFU2qIhPgo6ZLMY9cS0d1ann1v0ogRpek3gxwEu4MR22TSX9fHAn
+         qbZCJgE0GFdfVevjWc9GRBdzmHl/TQmbxPu/yAP8Kf8+dSE39SgEm1htWZYmEYNTuReY
+         8dD2+cd7Mv09QgbHG1kx6K4oYeeS7hZ//L/dKaWy3dvrfz0sHuZmbYKq85HpkkKQhrFb
+         l2kgzoy+sgP9xFeIR/qhWd9+300LvFtbpPOp7mmCKT7TQukrt61qKtzi2XPljBVIEbEs
+         KFfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3E3HUdI+eXkJ2DLGNVHT3aFUXd0oRXFnf4vYNBfb/7s=;
+        b=B/UzuRrgfoRZLPAEfOGJ8QmZUL7U5S/b4Ms/Cq3QhMByDs45lEycHeaSSVhB39wBtm
+         e3Qtigihl+DWZr3wESdTCk3Ge/AAkDGBFLJ1h6PPdmMsjSTKqrGl91r0IrgZ4J40g6JA
+         37OsuwXehpn1CEjbKZ1nw8kf20rIL5EaC930Up5a2nrwQ7U4DC+h7F7GJ3psn/aG5K4p
+         5UZFoz3mPEEXN2qlf9eI3vkx1/o1uFN+Y/Pat5ioLVhZDgqIGCmhI3RIao6vZp3PB27H
+         RwV1/VEwngV5Z6/N8KiEQxW6CGYm9/PWRjZDBgbMdJv0yUg4UOqR0L+AWam+67vME1Fx
+         qbaQ==
+X-Gm-Message-State: AOAM5303IHGJsbjcuFcnVIEFzNBoDLzTUIcDMsRN02hOVtFHuAoatUtT
+        HVSqt+V6fcfi8NCooKXesdyUhOrKXdf1IrcnQnA=
+X-Google-Smtp-Source: ABdhPJyGZ1bIQPiE34mfKYdkDQyZmrkn/MwXL/bBP+fIXydIUNUUerJ1PnqtJGfXgs9FZi2JwwlcjAst7cN98GjrmG8=
+X-Received: by 2002:a05:620a:752:: with SMTP id i18mr37590574qki.453.1638842873721;
+ Mon, 06 Dec 2021 18:07:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Ya4hZ2F7MYusgmSB@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1638760762-27239-1-git-send-email-huangzhaoyang@gmail.com> <20211206172340.fded3873aed7e853b54ab276@linux-foundation.org>
+In-Reply-To: <20211206172340.fded3873aed7e853b54ab276@linux-foundation.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 7 Dec 2021 10:07:33 +0800
+Message-ID: <CAGWkznGP1_Ycin+KRsY44XesFDuvZA9rCFnc6pd9VJf-AMj9Eg@mail.gmail.com>
+Subject: Re: [PATCH] mm: mask DIRECT_RECLAIM in kswapd
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-cachefs@redhat.com,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 10:42 PM, Christoph Hellwig wrote:
-> On Mon, Dec 06, 2021 at 09:58:46AM +0800, Lu Baolu wrote:
->> >From the perspective of who is initiating the device to do DMA, device
->> DMA could be divided into the following types:
->>
->>          DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver
->> 			through the kernel DMA API.
->>          DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel
->> 			driver with its own PRIVATE domain.
->> 	DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by
->> 			userspace.
->>
->> Different DMA ownerships are exclusive for all devices in the same iommu
->> group as an iommu group is the smallest granularity of device isolation
->> and protection that the IOMMU subsystem can guarantee. This extends the
->> iommu core to enforce this exclusion.
->>
->> Basically two new interfaces are provided:
->>
->>          int iommu_device_set_dma_owner(struct device *dev,
->>                  enum iommu_dma_owner type, void *owner_cookie);
->>          void iommu_device_release_dma_owner(struct device *dev,
->>                  enum iommu_dma_owner type);
->>
->> Although above interfaces are per-device, DMA owner is tracked per group
->> under the hood. An iommu group cannot have different dma ownership set
->> at the same time. Violation of this assumption fails
->> iommu_device_set_dma_owner().
->>
->> Kernel driver which does DMA have DMA_OWNER_DMA_API automatically set/
->> released in the driver binding/unbinding process (see next patch).
->>
->> Kernel driver which doesn't do DMA could avoid setting the owner type.
->> Device bound to such driver is considered same as a driver-less device
->> which is compatible to all owner types.
->>
->> Userspace driver framework (e.g. vfio) should set
->> DMA_OWNER_PRIVATE_DOMAIN_USER for a device before the userspace is allowed
->> to access it, plus a owner cookie pointer to mark the user identity so a
->> single group cannot be operated by multiple users simultaneously. Vice
->> versa, the owner type should be released after the user access permission
->> is withdrawn.
->>
->> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
->> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>   include/linux/iommu.h | 36 +++++++++++++++++
->>   drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 129 insertions(+)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index d2f3435e7d17..24676b498f38 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -162,6 +162,23 @@ enum iommu_dev_features {
->>   	IOMMU_DEV_FEAT_IOPF,
->>   };
->>   
->> +/**
->> + * enum iommu_dma_owner - IOMMU DMA ownership
->> + * @DMA_OWNER_NONE: No DMA ownership.
->> + * @DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver through
->> + *			the kernel DMA API.
->> + * @DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel driver
->> + *			which provides an UNMANAGED domain.
->> + * @DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by userspace,
->> + *			kernel ensures that DMAs never go to kernel memory.
->> + */
->> +enum iommu_dma_owner {
->> +	DMA_OWNER_NONE,
->> +	DMA_OWNER_DMA_API,
->> +	DMA_OWNER_PRIVATE_DOMAIN,
->> +	DMA_OWNER_PRIVATE_DOMAIN_USER,
->> +};
->> +
->>   #define IOMMU_PASID_INVALID	(-1U)
->>   
->>   #ifdef CONFIG_IOMMU_API
->> @@ -681,6 +698,10 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
->>   void iommu_sva_unbind_device(struct iommu_sva *handle);
->>   u32 iommu_sva_get_pasid(struct iommu_sva *handle);
->>   
->> +int iommu_device_set_dma_owner(struct device *dev, enum iommu_dma_owner owner,
->> +			       void *owner_cookie);
->> +void iommu_device_release_dma_owner(struct device *dev, enum iommu_dma_owner owner);
->> +
->>   #else /* CONFIG_IOMMU_API */
->>   
->>   struct iommu_ops {};
->> @@ -1081,6 +1102,21 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
->>   {
->>   	return NULL;
->>   }
->> +
->> +static inline int iommu_device_set_dma_owner(struct device *dev,
->> +					     enum iommu_dma_owner owner,
->> +					     void *owner_cookie)
->> +{
->> +	if (owner != DMA_OWNER_DMA_API)
->> +		return -EINVAL;
->> +
->> +	return 0;
->> +}
->> +
->> +static inline void iommu_device_release_dma_owner(struct device *dev,
->> +						  enum iommu_dma_owner owner)
->> +{
->> +}
->>   #endif /* CONFIG_IOMMU_API */
->>   
->>   /**
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 8b86406b7162..1de520a07518 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -48,6 +48,9 @@ struct iommu_group {
->>   	struct iommu_domain *default_domain;
->>   	struct iommu_domain *domain;
->>   	struct list_head entry;
->> +	enum iommu_dma_owner dma_owner;
->> +	refcount_t owner_cnt;
-> 
-> owner_cnt is only manipulated under group->mutex, not need for a
-> refcount_t here, a plain unsigned int while do it and will also
-> simplify a fair bit of code as it avoid the need for atomic add/sub
-> and test operations.
+On Tue, Dec 7, 2021 at 9:23 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Mon,  6 Dec 2021 11:19:22 +0800 Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+>
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > As the eg bellowing, using GFP_KERNEL could confuse the registered .releasepage
+> > or .shrinker functions when called in kswapd and have them acting wrongly.Mask
+> > __GFP_DIRECT_RECLAIM in kswapd.
+> >
+> > eg,
+> > kswapd
+> >   shrink_page_list
+> >     try_to_release_page
+> >       __fscache_maybe_release_page
+> >       ...
+> >          if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS)) {
+> >                  fscache_stat(&fscache_n_store_vmscan_busy);
+> >                  return false;
+> >          }
+>
+> Well, we have thus far been permitting kswapd's memory allocations to
+> enter direct reclaim.  Forbidding that kernel-wide might be the right
+> thing to do, or might not be.  But disabling it kernel-wide because of
+> a peculiar hack in fscache is not good justification.
+By checking the whole path of kswapd reclaiming, I don't find any
+steps need __GFP_DIRECT_RECLAIM but the hooked slab shrinker and fs's
+releasepage functions. It doesn't make sense for kswapd be aware of
+there is a concurrent direct reclaim.
 
-Fair enough.
+>
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -4083,7 +4083,7 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
+> >       bool boosted;
+> >       struct zone *zone;
+> >       struct scan_control sc = {
+> > -             .gfp_mask = GFP_KERNEL,
+> > +             .gfp_mask = GFP_KERNEL & ~__GFP_DIRECT_RECLAIM,
+> >               .order = order,
+> >               .may_unmap = 1,
+> >       };
+>
+> Maybe hack the hack like this?
+>
+> --- a/fs/fscache/page.c~a
+> +++ a/fs/fscache/page.c
+> @@ -126,8 +126,10 @@ page_busy:
+>          * sleeping on memory allocation, so we may need to impose a timeout
+>          * too. */
+>         if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS)) {
+> -               fscache_stat(&fscache_n_store_vmscan_busy);
+> -               return false;
+> +               if (!current_is_kswapd()) {
+> +                       fscache_stat(&fscache_n_store_vmscan_busy);
+> +                       return false;
+> +               }
+>         }
+>
+>         fscache_stat(&fscache_n_store_vmscan_wait);
+This method works. However, there are several other hook functions as
+below using this flag for judging the context. IMHO,
+__GFP_DIRECT_RECLAIM just only takes affection for two points. Have
+page_alloc_slow_path judging if enter direct_reclaim and the reclaimer
+tell the context.
 
-> 
->> +static int __iommu_group_set_dma_owner(struct iommu_group *group,
->> +				       enum iommu_dma_owner owner,
->> +				       void *owner_cookie)
->> +{
-> 
-> As pointed out last time, please move the group->mutex locking into
-> this helper, which makes it identical to the later added public
-> function.
+eg.
+ xfs_qm_shrink_scan(
+...
+        if ((sc->gfp_mask & (__GFP_FS|__GFP_DIRECT_RECLAIM)) !=
+(__GFP_FS|__GFP_DIRECT_RECLAIM))
+                 return 0;
 
-I didn't mean to ignore your comment. :-) As I replied, by placing the
-lock out of the function, the helper could easily handle the error paths
-(return directly without something like "goto out_unlock").
+ static int ceph_releasepage(struct page *page, gfp_t gfp)
+...
+          if (PageFsCache(page)) {
+                  if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS))
+                          return 0;
 
-As the implementation of iommu_group_set_dma_owner() has been greatly
-simplified, I agree with you now, we should move the group->mutex
-locking into the helper and make it identical to the latter public
-interface.
+static int afs_releasepage(struct page *page, gfp_t gfp_flags)
+...
+         if (PageFsCache(page)) {
+                 if (!(gfp_flags & __GFP_DIRECT_RECLAIM) ||
+!(gfp_flags & __GFP_FS))
+                         return false;
 
-I will work towards this.
 
-> 
->> +static void __iommu_group_release_dma_owner(struct iommu_group *group,
->> +					    enum iommu_dma_owner owner)
->> +{
-> 
-> Same here.
-> 
-
-Ditto.
-
-Best regards,
-baolu
+> _
+>
+> But please, do cc the fscache mailing list and maintainer when mucking
+> with these things.

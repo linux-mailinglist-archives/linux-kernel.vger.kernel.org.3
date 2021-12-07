@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B030146B0BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477A146B0CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbhLGCkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:40:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbhLGCky (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:40:54 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BED3C061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 18:37:24 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g14so50391846edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 18:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t/GfZExWHoNhx8sv7gdU/W7hPMJlZo4iI9nHpyzXMps=;
-        b=d64OVHz6GBvX6EQQ91Gn/CFkkouaEdXNL1sOlRcWRb48xNCZpocL3hhGwSoeMZD1+/
-         TXt0LQ/RnJDNtj4bUIkkk1ybSZXIpGeZMdyxusIdJqt4ERTea9Izn5B5kJ+ikix0z/cx
-         bZP0oEv01ps0mIzQDMzHAlcpSMvsFObZ2xJpJWOMEEgag1XFrjZ3HVqm1spG6fLXmLiJ
-         mE1mQnm/wvGOH4zFVVXV2OT+7DXRd+mYtdcecGGSQQF0rX0MQWdGcyokcGktR4bOogy7
-         Y6ib34f0nZbNLdfVbFmSHtZqPCaZqwkDYFosSme2PteauGTP2ubhB/qvAko1p9tDQJ6g
-         wclw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t/GfZExWHoNhx8sv7gdU/W7hPMJlZo4iI9nHpyzXMps=;
-        b=ovgz9pAR+ZojOkg2FZd+JhAij+Cv0y/24IRP5Ou68pdYAYH2RWfX3oGFt/7eDteBAQ
-         3h7vha8AhuQIt58nbTUg8USKMWEUskk5OOFSZi5IgJn2a5GtONrrM6brGCXNJl+eUEdn
-         W7k2gC5AOO25B79JuJAfksOdSZxb6kTcBffXJlpDamyFC1y9FakqkP22w5jYxbOIVhZv
-         +R1l1dycOhmGYzKMRLMwPUIJri3YJEjw1muxVALW6qIJ1HHQbqo+DPVWL9lpzCHHnSwN
-         k/UhJWV1bHb40u51PoE+NzEVCal01l+WFfL9MbmtS+FF2ojn5/bL24n4l5LM6DoNQP+h
-         kxng==
-X-Gm-Message-State: AOAM531tQZJlRmA1If781FEK8WKyNRXZRO8qK/jnQM5qZy9EGorc3gmO
-        R3cYHwZq5mfuamQwtqY1zXwvoc5CU5zGu7nzstLG/A==
-X-Google-Smtp-Source: ABdhPJz9q3ApLmPrlbt6JhwHVnK4FBI5Pxx55Cas/yz+JVfFw0ZGZ1Dh9rgntL7P+af5k3FrQKC/Ig0gO+efZwPWtok=
-X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr4548816ede.267.1638844643029;
- Mon, 06 Dec 2021 18:37:23 -0800 (PST)
+        id S229846AbhLGCrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:47:35 -0500
+Received: from mail-eopbgr1300127.outbound.protection.outlook.com ([40.107.130.127]:21426
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S244305AbhLGCrc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 21:47:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iIm0QzbEd7RmtG2+rRKHsBq3xPPHldojUA5l8cGDEw9W8MJ+l+sVJVQJsHrpb7uWkA9jC8GUWnwA91amKX2VKlN3hKmLFi7xKjNISxsqlp7d8xienQJ1AeF5oSZMNNas6qkH8GKfrgfZd7PwVzDd8c/E1yQv+fJTTJg/nbhDCZIAptWTWhm8DTv7NHxUPR4kKox00TrLhZ7mj6lOdjuokb/I6kH1LvspFu5L5ORispWwrXn/mK7fEukAjaE0PcmVOx6sQ2jNdcOuSaSz9yZqg0O7frn2nMui7MH9+z21QEuptShredL5nMQ4gF3d/XcGqZ0UxFtMS/lNuPsRQZvJww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cirse+5pX9YLWKdE/R3V/IMOuRRToxyqfY81JzG3l/c=;
+ b=HCML6taQNJYuGdAJL+WjdJfecAw5k1LszO02bYZnjb+oZp3vbkzmOpASZd19VZKt+j4w6uKodXCZGjQAjD8A1bfvg4RiQhGNO1q/vogF9YAUNaKIXqNFDXNIJgpHe8ks7QJJ+Cw9N4liEvOKEHQKYm5jT+OdecStxKs5WKvr5Jc2Q2jEAN7zsIL+rUGjWuZn8TCYkTlJmdqO4OB3AL1YeMn7xAgGLgebkVTkcHYsVM9uMBER0SmaGCPH2XAnrzb084pkD/PicuImlRK+WsKi9HRmg0EbY8St0AeSdn+G99qr0eBy8QdiPTtaPbM2cZhR1EPLK7Lq5Re5mMbVJyYHWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cirse+5pX9YLWKdE/R3V/IMOuRRToxyqfY81JzG3l/c=;
+ b=n2EoLv+7u8JGGt5JrjlvApAfYcTjkOD+F+JNgSO0t0W8paL9C+WdWnD5qlpaahMCBH2ylhMjNXlaxhSV4oOWFL/LSjzTWXpbwz2pDAR4Km/t1j1JYs4XvYF1cKkKPzGUqNpOj8RzLhQd9mpppwUgBa5avlKi5P5kppJrMgPIrl0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TY2PR06MB2974.apcprd06.prod.outlook.com (2603:1096:404:95::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 02:44:00 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 02:44:00 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] drm/shmem-helper: Remove duplicated include
+Date:   Mon,  6 Dec 2021 18:43:45 -0800
+Message-Id: <20211207024345.37262-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0192.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::21) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-References: <20211206145559.607158688@linuxfoundation.org>
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Dec 2021 08:07:11 +0530
-Message-ID: <CA+G9fYtYmZY-m1ZCaF3qJeGtn=8CJR_4K8EB_T4W+wuh31CNjg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/130] 5.10.84-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
+Received: from ubuntu.vivo.xyz (218.213.202.189) by SG2PR01CA0192.apcprd01.prod.exchangelabs.com (2603:1096:4:189::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Tue, 7 Dec 2021 02:43:58 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6efcd14d-26c0-4b6b-b8ee-08d9b92b6c33
+X-MS-TrafficTypeDiagnostic: TY2PR06MB2974:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR06MB2974681E5CF92BFAF44D4A7CA26E9@TY2PR06MB2974.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:854;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jOnjIiWQBB7S+ryb0XkM39fHsw8z+2dKZRXnysBkKADMq99TV+ozPdTz2zmsAZbekpeSKbRi3bWHBOeoRAkIpTYHg8ZOUKLjcCZGhICZSZhItEgts20WcpRmfaxLompPDcGLq+OQefMk93kmE3ikyuFYUOwLh0quwB++ZtchHLSxHrsKNZtOubG6rdcpZz4wc+VGM5q9OnJRfCJUgxL0DGZpkIdNY/XNLQ764CrGYWOgXZbA0CHA8ZQyKqt9FnvwWCumayT4jUnonv+mv+ff1/IWc1hucoNnkVkRyohq3POvS/dbxqIvRsz/8OY3SgkR7Cr6KlVzQx4bzR6p4gfoI4rPrsuJ5EvZ27h1uzcfWveETRF323nHk3FFlePqp3MlAlmfMij0UmcxV4Fbt3videLOXI0BS+B5kSHDF80thwH+JBVDSfxAVpkgv8fB1TskO0OOUz42COxAy4I3yEvX2cGm0XpIykByXquGnMlXbWB//dbhUfvIT846v2IUMMyxrn+29qtEt6Zo0OuVbWSZI4yrEGkL9/bxl9sBnQOuGdcMc9c9khoxC2h5LpBWQ6jkhz0vN5tf2So0M+ZtFKLS7oSH/xwAahEqEF8vbpkGtjkrTzdmr5ZAolxsDomyTCtYnBStulzF8GKT6/8RwZYcwC+Ca9m3xZggRwRcpvj11K6yjcKZ8YhGvrFsMcBuu9zKaRBvLVkBBCdCNkJkObXQ+PFT5xuuYhvUzA6d5FVHD4g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4744005)(186003)(83380400001)(8676002)(316002)(8936002)(6506007)(52116002)(36756003)(5660300002)(26005)(2906002)(110136005)(1076003)(38350700002)(86362001)(66946007)(4326008)(6486002)(6666004)(508600001)(66556008)(956004)(107886003)(38100700002)(66476007)(6512007)(2616005)(182500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j0nYCboOYPp3a51zZFhVBW8XPYwupecr4QnalP8fnJOOxu/4JDTBS/cPahX5?=
+ =?us-ascii?Q?qLaBcz4d+vH/FCyXuQktUykmW0SMFxfILq6XJV62bAUdhbuKziUIVNVnUH0g?=
+ =?us-ascii?Q?9TfeB5swn+o7k7K/Nabw4g0SCcvUaIdCQy/Pgv6RQHHdzxwaXHD9exsrTqZd?=
+ =?us-ascii?Q?SxrL8LVRLoFvtRa0Vgb0t5zyyOVM/fTorYpt/4JDpq3uz5m30vNfXvCkjtx+?=
+ =?us-ascii?Q?SkHuimeY+ZN6czgGp4mKlxebr7MJpndYWlCYbytic5pT+CkTDdaRJJeOip5o?=
+ =?us-ascii?Q?Bqr+r6STueH+07ppnku4x1J1uyq7VVn6DnGUbugiPss/5CVYl+QTfH2aDTSY?=
+ =?us-ascii?Q?65/G4As94x8NCThnZQQRaf2leKBE+7zwV9/eJO0lvge6as0x4JGE1BhiBfNX?=
+ =?us-ascii?Q?Ra5HNVHqP+/RKX0vubTGgd0RhHT+O3xadqRSk/rmIsawp3Yvp9jZdv7LJjRw?=
+ =?us-ascii?Q?DlxuQgmKcU1+M/nm9wkA3xpxGxtsseBrZEW5FewzK12r2KqSfGYiwyNUkfw3?=
+ =?us-ascii?Q?QoxOelExDh3gGzLZfpHq4N4dwo7xKjkKCdUJgqU3U1+Bb0uTxSLYZcCqViWC?=
+ =?us-ascii?Q?Onr/EYzjYBpC7qNDW2aGe3ZGirgfabHe5I2YDsM+VfIDRXtS33rjxB6buKuS?=
+ =?us-ascii?Q?/jzCvpKtX7afW9h9i+HbdQrGU10gUBVa7AUI/8V+louka9FDJMJS/v9fPnQz?=
+ =?us-ascii?Q?HF8otgnjkpcYwMWpktjrJp6LK5T11dI5e59vt9FEJksB9hd96rK1IxHeuwWj?=
+ =?us-ascii?Q?ga7/RTHHiUxOJuu+0/6oxxFdJKA8CW6080CSzBs09VUX140hq8aEeO/Ou1o0?=
+ =?us-ascii?Q?iSh2OW4VWb6MXLOdhpzXjDO4oOFewiS7rps4ZDANwyS+TncE0LGoB9qr83IX?=
+ =?us-ascii?Q?dn7Qe/8/IIwrJL8/8fJ7kFSPMk3n8pRiK/Evb60ELwQwaTrrbw+h+FAV90Hy?=
+ =?us-ascii?Q?Ew8qSisw+YyR7+YOC6KvMPo5yZRmN4fgCdf5+DKASpQ3wru9SxBBU7KQcYUo?=
+ =?us-ascii?Q?qImY6Ts//6lb3nykgLnf9wPV4QwcUA8uZoCp2W+rHn6S5qpFKif8PlzXfyhM?=
+ =?us-ascii?Q?3WZyAc1YR8V+YNFu37n/qrFvI2oWH7a9x3GNQcn2L69znQlzPhXXMa7HGCSs?=
+ =?us-ascii?Q?AY85Ur0mI1wPVoGxwbCWWF7rixb9ttTZJZJ+Ds3fTMM9p34+Xt/1kHRkGMnk?=
+ =?us-ascii?Q?y60Hh70sqzQLj+xz9d5DdHcXZ451pOEblmOXjgEGauU+7avlLBVhiZVOnEdD?=
+ =?us-ascii?Q?o6Z/5Dmc+1p87mE2FSXTEK2VNDSUmV7MqGtIaO353mzXdCx4unS2nDCq8XLy?=
+ =?us-ascii?Q?/XXBCchdu74VOj4mlCS42Qc5XHOCh3yNnOPxwCHcEH1JBPI5ETUfuo5fui4L?=
+ =?us-ascii?Q?gsLQGLzSnh1MGq7XCPYJeeaGpNq+NOSTC+gjqhIok+mK+xYGegLzsQy5RQeO?=
+ =?us-ascii?Q?b9InII60B/2B+HShzpd0ohYNraJ+Q6NR4Rfw8JTwkFlNQsWY5A+t/I3Ih7dV?=
+ =?us-ascii?Q?absYpdQaCzpn+NABZyooJFMzdFRy1Q2sVxkmZuVWSPZEvPNDlvUDltlBGDcU?=
+ =?us-ascii?Q?VeDSXoC678T2SsiB4xzXe/qHeOQ2nT6kLUJ3z+8u/y2+R82vZ5FzjytiGyNj?=
+ =?us-ascii?Q?V52+fJrhj+9GO+2MTq1v0ec=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6efcd14d-26c0-4b6b-b8ee-08d9b92b6c33
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 02:44:00.1329
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fkJKmnEyk0wunSHK5XSd9kAQHGAs6Rwv/osTkPQXsjZ1Y0Pn3HQVVShRXss2K9T1WMwHTiOV5pHUc20LRLx5hQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2974
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 20:46, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.84 release.
-> There are 130 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.84-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Remove duplicated include in drm_gem_shmem_helper.c
 
-Regression found while building allmodconfig for the following arch
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/gpu/drm/drm_gem_shmem_helper.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- - i386 (allmodconfig) with gcc-10 / gcc-11
- - mips (allmodconfig) with gcc-10 / gcc-11
- - powerpc (allmodconfig) with gcc-10 / gcc-11
- - parisc (allmodconfig) with gcc-10 / gcc-11
- - riscv (allmodconfig) with gcc-10 / gcc-11
- - sh (allmodconfig) with gcc-10 / gcc-11
- - s390 (allmodconfig) with gcc-10 / gcc-11
+diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+index 621924116eb4..7915047cb041 100644
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -10,7 +10,6 @@
+ #include <linux/shmem_fs.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+-#include <linux/module.h>
+ 
+ #ifdef CONFIG_X86
+ #include <asm/set_memory.h>
+-- 
+2.17.1
 
-
-metadata:
-  git branch: linux-5.10.y
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-  git commit: ea2293709b3cac4bdfcb88ad67605c58264608df
-  git describe: v5.10.83-131-gea2293709b3c
-  toolchain: gcc-10 / gcc-11
-  kernel-config: https://builds.tuxbuild.com/21vHJb50DPJcjJuLnT8DzL6vvkn/config
-  build location: https://builds.tuxbuild.com/21dB06iPvDP58giSGHdE5W3Qc68/
-
-build error:
---------------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=i386
-CROSS_COMPILE=i686-linux-gnu- 'CC=sccache i686-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-ERROR: modpost: "kgd2kfd_resume_iommu"
-[drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-make[2]: *** [/builds/linux/scripts/Makefile.modpost:124:
-modules-only.symvers] Error 1
-make[2]: *** Deleting file 'modules-only.symvers'
-make[2]: Target '__modpost' not remade because of errors.
-make[1]: *** [/builds/linux/Makefile:1413: modules] Error 2
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-step to reproduce:
-------------------
-tuxmake --runtime podman --target-arch i386 --toolchain gcc-11
---kconfig allmodconfig
-
---
-Linaro LKFT
-https://lkft.linaro.org

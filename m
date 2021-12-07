@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E02B46BFFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAEC46BFFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239227AbhLGP5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:57:24 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:57618 "EHLO
+        id S239248AbhLGP50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:57:26 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:59252 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239223AbhLGP5U (ORCPT
+        by vger.kernel.org with ESMTP id S239205AbhLGP5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:57:20 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FDslJ004252;
-        Tue, 7 Dec 2021 15:53:47 GMT
+        Tue, 7 Dec 2021 10:57:21 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FSsYq016363;
+        Tue, 7 Dec 2021 15:53:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=5JrWO2vtakmzeU17b1LNzmPiZnC72vuN7LO5yPO7yF4=;
- b=fCHMGavureRx4pZDgIwwYuJYLqhKE9iFs3sBeVKW8hgCcKvRsjGVkZpPgkOdCP6J3o8T
- vA9RXjZOGXTqtvMHqYw1SczrnFOTA5YG2Xyg8h7ob3NWen27pl1UWo07Cryg2nz2FQjZ
- v1MMDwPjcUG5WTWec6uz4Xxe6Rjqv3fqTGPYYsqeJQlsmu4EugxS9lHupfgHSj9waZ4m
- QFmKPgrynxPSPgnb2KokXRnvckPuxFMD+NNQigStajJAWHPuTy7iZx2R4pAgnf9Lt3Nn
- P6G1Y/vPqsALF3gfajIxNDtT/CbTScxf0jTj1RZWrRjYKEi9VM1OozgagJdgrAbdF/+L ZA== 
+ bh=x7eBDd7uZD4FH90JYzY9GeztOaNwJEc4yrfVqx1fUfQ=;
+ b=LQguSvUxRiCzhLpIuFnMvGZEt00w9cAnKLNJHoYmZ+cPLnOXBxf2tIka/ipzUotEyjje
+ tiRUlFygU8jvfshBnypeWQkthSyTzNN+cYhW2RsnIkWsXs+FYRK3QIV5Zlwn54mNvSbj
+ PHj1KNLhv5nlBoImdCX+Ba+FfkERN8RI6u7JtK5/V0lrP8dOB5sdUEPurR6EoWjYILIr
+ IN/MPz7uQYqsHAK6wtSuK3VrnaUgxdUhMAjVj6zJ3kgkV+8SA3vvlXmgq+az0v3D7x59
+ +AokIe/Ufo2z1ACV3ttG/MIntPyn7BCuSN6dNwvT4ZvjSphxm5TCCg4GtN9hRYBdaj/I uA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cscwcdyff-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3csctwnsyk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Dec 2021 15:53:47 +0000
+        Tue, 07 Dec 2021 15:53:48 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FofpE152882;
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FofpF152882;
         Tue, 7 Dec 2021 15:53:46 GMT
 Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
-        by userp3020.oracle.com with ESMTP id 3cr1sp60s7-1
+        by userp3020.oracle.com with ESMTP id 3cr1sp60s7-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Dec 2021 15:53:45 +0000
+        Tue, 07 Dec 2021 15:53:46 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H4KIbK7DoK+izqrDBc7NExQRKSxSDi/Is/9bDXdhpV+056zZsPBdpxI2Y1RSLyp9TNBSQ0oFxLNvWMGL7AAJlTgIWyby+Dw4W/PiPw4VGy+OnlOcr/+fr+SnAEZJ+qElTvqPQuhgoQNF0XMlAyGY80J34ckfZaMDhDP1DHdGtVwOJ4Np6yzy2Iaxpe5Q3jakqJgU2EoOpTTmPHCHY3Lyfi7JoXUlnk6sU0sKSOtAf7dtNbCOxjZNEGlm3DJ7B5SPG8a1Bqt3nn5WOkgalYGU75Edy5T6TgTA/i3wAOTYPURAaf+XNf1JrbB0BeNEepVVaqIXERp0Oj7zs1/5CuyEMg==
+ b=QVsid4/6vAmFTrya6sI2h3KHQUC9rjByM32bqRwVWQqeDZJU9fCQeFHmtmbtgRSHf9FOnbanZxAjkaSVhvzfTnFzcNr/8GzT1QD1V3ySB+LhQNWcWDCo1A7FxnWyH2Jw7qaWncog4IyQHVnaMKr/oBSz3RkDIW7khdf2KRuBYP4/eHZVc/l69/8ykXjPaJbVc/O6h6L+2k+XPFufmEWa5PK/erGQYrd3JDpRZpgqM0pzNid7YwjzbQSR7bgTi7w/fLLOvMjuDuDmWpEpQnC326z1Lr38KAcmzJQIGSPzdj93bePDYUq5SjBfxPCtTQ6RcNt2+KR0aJFnR2JjGa+OIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5JrWO2vtakmzeU17b1LNzmPiZnC72vuN7LO5yPO7yF4=;
- b=dILpEKCIzDN5X3n4feihq2JgBO7vwiFQipEQvSdt5pRw7WmXlUo5z+Kr7YJOmLIemWLsAXroNtgiLda09X3r892IUcQQxXOBIuOG/WDppiWEZlf1SLsKsSbu9eH8GNzY2B4NSAHUoopcc3A7hA7El9P9Cn9MVsl/lSMiTEztcIva1bOqLzR45h/liSWmjUlFJxljr4qPeFyDsIebazhkFa6My3h3vw3wo8/MNAE2w/SKuexDgP6XTwbA6fDoR/DBkUAQvNn2pqol73aQef8E+GpaCXbriarGOBCh/kcYG+fy0MjgDZOl39hulbnyR0gASOo5TcoFCb5h6xSKrD3ysw==
+ bh=x7eBDd7uZD4FH90JYzY9GeztOaNwJEc4yrfVqx1fUfQ=;
+ b=WgF4j/nEJhcTWs/p6pazLkUT5iauccvDlPXNZDg+jDJ8VkP1eEIbD5apGEMJoK7QDFI0iDLQPKvsFSWB5dUMGm5VESsrkGAqzwqCegqhTZOGGFk2NBirMKMpMemLlnyiaivsY+1FSKiCaN6OyaHpgR5KN6i0Nfc9GdCvKwoMc6c/5J5eH43xKRPiQ7/jP2Cs5S46Kcud7OlA5QhTM5AsRQELvapJaadlzctji8QD2y+S1mo2pAAlGdJLxZ9g9AfilJm8hmhn+0LwuZnWnd0TL4NOY+nAjm/G/bWMdoKo064L/DQd1cfYRoivJInDIlirHJtmZZ1gwxpUBwquAGaFcA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5JrWO2vtakmzeU17b1LNzmPiZnC72vuN7LO5yPO7yF4=;
- b=AEy1YVcVuVb7W5Ov2Oo+08uY0qp9v7k/dhSMWhL55DG1Xm+33aoUzRp8kLED86ijpO3KxM7BJ9sqnAUc133MZDjugoueu87w5lmNvt1EV7ugq2Z44gKewUZe97zLNbQG5bS7tVvDBl4JOIvpPmp9WqOry93J3OuD1IZ+k/SMpu8=
+ bh=x7eBDd7uZD4FH90JYzY9GeztOaNwJEc4yrfVqx1fUfQ=;
+ b=KSrgc+vQGcSEgfT+21Im1ht1FAKOi0IVuwUzDF0iL4leJ+fOe42x70FU1fIbpkweilPpy4+3XDpyUBJI0tDJgyjhZLynSnPb63TarU0a+4XE+so8cB93tpe9lN60Dvc5ydNwtrkuxN+b72rhQRcFpn77zOPga3YiCor7f51U4pA=
 Received: from BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8)
  by BN7PR10MB2626.namprd10.prod.outlook.com (2603:10b6:406:c0::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14; Tue, 7 Dec
- 2021 15:53:43 +0000
+ 2021 15:53:44 +0000
 Received: from BN0PR10MB5192.namprd10.prod.outlook.com
  ([fe80::4440:4f39:6d92:a14c]) by BN0PR10MB5192.namprd10.prod.outlook.com
  ([fe80::4440:4f39:6d92:a14c%6]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 15:53:43 +0000
+ 15:53:44 +0000
 From:   George Kennedy <george.kennedy@oracle.com>
 To:     gregkh@linuxfoundation.org, axboe@kernel.dk, asml.silence@gmail.com
 Cc:     george.kennedy@oracle.com, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] Revert "block: avoid extra iter advance with async iocb"
-Date:   Tue,  7 Dec 2021 10:51:41 -0500
-Message-Id: <1638892302-14475-2-git-send-email-george.kennedy@oracle.com>
+Subject: [PATCH 2/2] Revert "block: add single bio async direct IO helper"
+Date:   Tue,  7 Dec 2021 10:51:42 -0500
+Message-Id: <1638892302-14475-3-git-send-email-george.kennedy@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1638892302-14475-1-git-send-email-george.kennedy@oracle.com>
 References: <1638892302-14475-1-git-send-email-george.kennedy@oracle.com>
@@ -74,138 +74,217 @@ X-ClientProxiedBy: SN6PR16CA0040.namprd16.prod.outlook.com
  (2603:10b6:805:ca::17) To BN0PR10MB5192.namprd10.prod.outlook.com
  (2603:10b6:408:115::8)
 MIME-Version: 1.0
-Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (209.17.40.42) by SN6PR16CA0040.namprd16.prod.outlook.com (2603:10b6:805:ca::17) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 7 Dec 2021 15:53:41 +0000
+Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (209.17.40.42) by SN6PR16CA0040.namprd16.prod.outlook.com (2603:10b6:805:ca::17) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 7 Dec 2021 15:53:43 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ad09aa47-9bae-455e-444b-08d9b999be6d
+X-MS-Office365-Filtering-Correlation-Id: 0376d715-62f3-407f-32ae-08d9b999bf20
 X-MS-TrafficTypeDiagnostic: BN7PR10MB2626:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR10MB2626809C08F21EFDB66A6683E66E9@BN7PR10MB2626.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:381;
+X-Microsoft-Antispam-PRVS: <BN7PR10MB262632BB701866E009961EB1E66E9@BN7PR10MB2626.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:16;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OkJlSRN29SXOJP03apSl6MMoSQ3Wp/YNrTaOlfYRk95DES/ktqVE4wYcb+Z/hcVgsxV5ulVV5VBL6pkpag9kz+RuUW8HqdEGdqN0Oh5mjbUoqdPYZo/yQ14a051T3xjGKLsDEFhIog46lSEmaWwrWYEnLmt+oWYhQpc3yPj7nWsfq+8/iFT2VdKGIJUecVgHtzq7isw+8c529LjcVSLR6UwMdQlprstm2BHdkFxmZ4hB8fVg6ydxFZPbxyPqJYXrI9Lgfhwgoa4k6mI1TlbxGANZnRdZRIEUOmriEBK0ladFeo6S/AUKYCTc9ITcqfTsMoTokE6kCc2pHipfTMY3Tp9MDPHFicEwN2TAtGpORg6BrBAL+SAQUNeLGG4DkCBJeoFUHojswKrtgI5J1KH+4H9CgxU06m+/ramPaJg4vJxTdSBVR6pJfK2BiClNyOn+3KXrW7n1aW9DUjtwmOpA5BdMXtwdGRjX8Ji1cm2F7i3aY+7zOKmmUgua+Y2Up6XvJIH7hpcVbgqFXtBuEWQVKcaCRtekhb7RccnVc5GxkVOAUfTC+wfZoi4WLTdPYZLVhIbVkadtq2dCNJoccvu9+jV3VSqlxJxyRaL5VGJdjp9IBLGlNuvxv5cZ4Xf2t6tJABCcAiIDXIXApuh6GCQjb4b1imHObZGoXxKYkDKnHh40LPwuCYgKfALODcJLSb03IHUpWbKj54WyMTsT1TSpFQ==
+X-Microsoft-Antispam-Message-Info: FePtOPg1rnue3WIu5k0L+CBsOK3FHpZwneJuH/fOQsFL7uy/PGGyTJT3NYUntZ7avPUByp9bNB2lKsjKU92Gqy0fYPTLnSZY0Gdegn6dcnMCtJUTKJyfr9QsLUngLO3KIGDAzJvAHdo7fVRIZfVSKlWLLsB7MMuWVlrx6wGeL+U8R92xoyWl85xFs/SQV1cpAJN12InnYL1VAKuQe6xJ7OZukY/pTdwjDrL9VNEeotm0CCOBm7ojDZujN/wasomBAW2Dr1pmwwplh7c86itXZAI29s0ckhvTP/LeIlyirIVQnG9YeHJ/Ix36c81THVp/ISJK+Mi0+ub8O+4C/HVtNvy08VeEmISyBQiRzZwTom0AKdSkrMrhicpQbECSSiX1grSq4Qg457MWu9h4YG7F+eVNh5JCWry/2gZZ+A6u0/ugmQ8z7cgrxGBvF0Hv3HO5slfwuMW5ZOzYAYtT2/sNY4j4GH/dC0cK8d3kPVtIighpIOud95duR437fJRTHIP3TjOTYLFsmP8cGEHEHL+ft4owlQ65VnVxkEH/vcpJqMWo8xoKA4GrFPDJrC+mwn0vyFVbYqPEWno/pkz4b3D2HBXHbdcATKt5EIaKPR8dcxk4U8qL3OSmMdN5+eq0zW2jSe817lwhCla+AsFivxKLhU2IS7xa2m01AlUiDrSHQijLxOp5YoAGAi7oNfR0GecOZDGsg2cCR3onO5ETUaSJsg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5192.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(508600001)(186003)(38350700002)(66946007)(956004)(2616005)(38100700002)(83380400001)(86362001)(6506007)(5660300002)(26005)(66556008)(36756003)(66476007)(316002)(52116002)(6486002)(8936002)(2906002)(8676002)(6512007)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uaIIUnmeSqmDzLtG1NvPF1Sl4sazzlz8ZZRVITRy6Ul5D1U1qRla45F7KJKT?=
- =?us-ascii?Q?+Ik8uJNSmlWxqgTgMsz4/jHTvT3PYxTnJrNnK6TI7WPtzh1JDZYHGYKOjfRR?=
- =?us-ascii?Q?nEDFjx5itdFxGkEbdvjLua3+L8ZUWyl5Eye6OJ9hEru7xGvJ2JYtyEU2IZ8k?=
- =?us-ascii?Q?fnL5XX8i3Jw0/eBLl8hTETxVc9eJlIEuMm4ZMUbL+45Pq6pNonv/6ld6M3r9?=
- =?us-ascii?Q?rMKe5BoB8hHruf2ZbfiobPk4eeuZ4bf/5JrJ2Gdrs5r0wW4Hj5kdacdRZdle?=
- =?us-ascii?Q?R9JJRoh8S81BaNzHM57ALiLb0UtkP+F45y0XGIRXiKTreATUq26KINQGQ6sE?=
- =?us-ascii?Q?+Y/LWdZFafxR46nSZpRiynjVhnG6NsflHgsAS8ALgBU3t3vQKT2PGnn92nfh?=
- =?us-ascii?Q?tPSC2FpUof2w969c895tkx4/+cH8hubiZMF9gO7/6VXRGpK24uhlaA3GtUMp?=
- =?us-ascii?Q?iw1p4p9kC3KO//G+qHYnNMPLGGYgc5tSfOxQKyN3J/3qbvXcVrMhpGD5xVnV?=
- =?us-ascii?Q?b33xjvOF9t9+NbYlI92T+bPTHdNWiwWz2lIL2jAJ/oRpa/3l2P9jb7j+ZNjj?=
- =?us-ascii?Q?VL4YceNtxPXzV1D3HHg/S0mW4iF3cM/vA/hyCZdRZv9eh97yZnZ4ljmAgyvp?=
- =?us-ascii?Q?b+uZVt8AEHNz/IeM068AoDudhs7gHzQ8b/aQq4BmW1R4bBpcckAuULyxHKUs?=
- =?us-ascii?Q?X0jpTbfqIzH3H/O96BfJO96l7TxqBMKh4HfgWTt9EhdD0IQHj8UBqMsFBWl6?=
- =?us-ascii?Q?qyXaob7WtEfVitGMS5G6ZNWe7wcMllb2B/dYZZM0hobXIskYCvtNCoJPav7R?=
- =?us-ascii?Q?WPJrJTXY1lZdqndl9ddDX6/M6+vsoQuFqM8ExdfNyTZmpjYpFjJU8k9wcfs/?=
- =?us-ascii?Q?t2lDX2X/DVFJvHQ1I7RzhFFDg9JZ3UQevdrea4V44WYHAPEHFswR0hnnGGEK?=
- =?us-ascii?Q?8JWY4j5jMlhR1S9td5k1C7hfwVcc9XzjdzmeAXVtmL9rf3cbcEkFKqfAYvFK?=
- =?us-ascii?Q?IyOWJxjmQDFl8DEpiQcnovEDvN+bspboQBo2P2ZAUhlbgWPNvNFmTFIcAQhg?=
- =?us-ascii?Q?Pma0WjJhqFJyinnpOXunh1S+P7kB4H9xpLqn+Ghs8jxR+8Skraesbs+LI2qJ?=
- =?us-ascii?Q?spn6MQoafcCDxmaO3fYtkFhASzMEw3Q5YZDGU1zJ9oASjQsKfI2DYwrn2fey?=
- =?us-ascii?Q?Qeu2Z4QBr3BYXYav/Tw4FPkHmlDZHgT0lofGwP3gIw5EN+F40z6UHFrCVka9?=
- =?us-ascii?Q?QmBVx4Z+TMVEXDFyQDPBJUpCz/pFM6HRJUb0jGc6LlclSu0eRI4zE9vShDhG?=
- =?us-ascii?Q?8oH84qjJr7jV5CVGs24NozASSPKaOXHjBlrlhXZhkviuIlezRdbVsFckgc/5?=
- =?us-ascii?Q?ggSDkjsIfrgeujFHPn3Nl7BAs7TCp4EAeXqETSkpvqmPYybMmqEg+fskL+Qa?=
- =?us-ascii?Q?j1pYCXTzZ5ZoEyYLtvBAXhpK7+oaV4/mjx2dGjQU1InIwDPwNDm0mn8ftvOT?=
- =?us-ascii?Q?R7631lcOoA52s/sO1kpl0juU4/hGIX/cZ4gsixvSJ49Cbkdz6wkRq4MbtdTf?=
- =?us-ascii?Q?rIefTlGwdsrrcN0MPLnQd3xZDUHSBO4iWZ2Tq8ivU1hJMLLetKx68h0KagvS?=
- =?us-ascii?Q?4leW66YDB3hITi9i/2QT9tGpmsmZk8CpgouL1/+NcTKAZjQyRjCwlt3XjCdH?=
- =?us-ascii?Q?cUeELg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QRiyvQeQDc4+LCUdJQo1xjBaaxUBDmcYroop69m+OFXonNIQaJqDWn4JXTjw?=
+ =?us-ascii?Q?Nml23W5gFS0dra2gIXhrvWRNHyb9N1nmCmgEwbcQaA4bdj61fXzPCgA9s49Z?=
+ =?us-ascii?Q?UXpGTavc5mX7HoO+bAXHAp6rdh4AgqCfBpZyrYydVn9ymhFoeGOseD2Ropmd?=
+ =?us-ascii?Q?MFf+QUwMpnJPxgcHfQsGP3SrHbRZELJQl9iJ/VCpKaWdEKNg0UK0TThA5Qfh?=
+ =?us-ascii?Q?WNH1pcFtUCjdEBuJqEzV9wsyWc2cdn/cF/wkD08IqisSqD0/tpIB6zYAetNq?=
+ =?us-ascii?Q?+ta9+7TtYB/1V5/VGCWXD6zqAh1Xo7mpHwaLZ+DlTNmE3eRscSOnd1vnsxAc?=
+ =?us-ascii?Q?IFfb0Uh+xZNrbeXZxFpv77itn8fmG6IX1em0YjMobMRV2ZnPie3oNh+Pr013?=
+ =?us-ascii?Q?LjZWQNf3LAWxHv+4cFk4W/k5uYH8CmhKD4lQdUL1cPYvNFzT83iyWWHnIr+R?=
+ =?us-ascii?Q?C4D+IRiSsQ+RQZLuf6Fgg7YV9qxn8+l7rGwydOe6N1mNk9/SugpuDFEj42QT?=
+ =?us-ascii?Q?zyyt7u4SyYVA1mgDqtrHcq2kEO3GknNf0wt21RF50ezLTTbECKB8lg4EGUQf?=
+ =?us-ascii?Q?YWZYMxnQgwMPzqKdDo1MS6HfRADg705I9DCXZiBVvBZXS8f6hVRzIb5BrTFW?=
+ =?us-ascii?Q?ItACMC+A4qHwJZ2MTENOIywUnIUMHdzbFjExc6Mr427yMAwukHlK4uBnYF4/?=
+ =?us-ascii?Q?kr2w9uEKz26v6pP/OrxsmlcqEgH7GblhwMlIvWb88MV+pI6lLcBX7vwfH/71?=
+ =?us-ascii?Q?Q7XeP5LgMK0b++D+5xXmbwf4tYaf/Hk+qnvJ10Cfu6aJlDkZNHWRUgc0yDLk?=
+ =?us-ascii?Q?2KXk7vBtLFJmJp8z7+rHi5iQasE+0jywrmM0HozC4dD0ZHD/HZ4Ep84rQph6?=
+ =?us-ascii?Q?Mz6Yj8yxzQgvZGH9YwJqg+7yY/IhZoFg/5Vc/yzQnQwWlwPbnWd+24XEyTFF?=
+ =?us-ascii?Q?/3v1L9GZ1b3WWmZrgJT7I/RnIkdrEM7qpBD3h8F+fM62KdBqT3BI2hOgDX4R?=
+ =?us-ascii?Q?LNiStsPc912Ku2OObU+8i/qasGUXJauYaX2671+4+UJpQmdsUepjvANXyyAq?=
+ =?us-ascii?Q?AdwHIvgDGM8Y3j7jQmvXpdIQy4p0pPbTJ8GBmYjArBSjpMeXdC+bAzr2hBuy?=
+ =?us-ascii?Q?0KX2D4n/RFjbFhLJtCG6bto0T16fuVjf5yp7Ej4OIV4JSSjNYGaZZ/yVecqd?=
+ =?us-ascii?Q?+UVYkzqoTXVRmkIBNeFOeHMM/AGsMGE78rjG2Xm17CuXp7yJdeH9QDiVc0VS?=
+ =?us-ascii?Q?npfBT/4faQPQbDsgchzmVRaW/OyFi8Z4V5Sw/UA4VAe4LUjpLigqNrAHWrw6?=
+ =?us-ascii?Q?wY6HoZwVUjvWYNHGx7/7x3Y2uk+vgfCC+OHgaSS21d0eJIorH+7euW/YDgCj?=
+ =?us-ascii?Q?9rSZF3YbvuVuMnXq9BtmhU3IWiNMh1rc3QdHOX3ml37Njm9IJ0QDm3XPWptq?=
+ =?us-ascii?Q?gjGp0nSZ1THudMXHCD7idOMcA0drc6//FawFldB0CqzWii0F9KmpMzpqowpi?=
+ =?us-ascii?Q?31DLu6rwtibxQ0BElrfS4eD0Y1yM8A2/CtG/1DFKEdCE2984uLN3qWbX6KLl?=
+ =?us-ascii?Q?yrhFCEUa9vkVvaiGBo+uMH8fXfiw0m/c8eOncHVy5G/TBDIPxUzGLxdUmY+M?=
+ =?us-ascii?Q?tLYXco75B8Hzf92gwlQUmZb16nJC3iTk2t2kIv7L22iy89D8RHt7ZrwZ1VZ9?=
+ =?us-ascii?Q?hbcEtQ=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad09aa47-9bae-455e-444b-08d9b999be6d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0376d715-62f3-407f-32ae-08d9b999bf20
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5192.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 15:53:42.9508
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 15:53:43.8891
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /q070kOT7Q8RmNEROB3IrFslPQSB4CJpXMRBqxQEKOPKSPKXi8SOenTkTCnGW1YmGRdIiaqA5fCZsa8/34+S6X5g4h4KzzfR3uQ2dPF4L2E=
+X-MS-Exchange-CrossTenant-UserPrincipalName: TBlf6ddfvrnWBx7qDFu9PFtZfgevD0RfVQ/3rl4fpmlLHWrR7rkHBjhXGA7kVenTpG9KwJIPZkKP4JRK2GgcxFGz1lgFqU6obt7zcinVQpM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR10MB2626
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10190 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=983 mlxscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
  phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
  definitions=main-2112070097
-X-Proofpoint-ORIG-GUID: YaiK8fHGqVUBG56SamVChMqSCTvjxHRj
-X-Proofpoint-GUID: YaiK8fHGqVUBG56SamVChMqSCTvjxHRj
+X-Proofpoint-ORIG-GUID: 1GXDjFgWMa9sQNuznme8JHjFpfoGKP0T
+X-Proofpoint-GUID: 1GXDjFgWMa9sQNuznme8JHjFpfoGKP0T
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 1bb6b81029456f4e2e6727c5167f43bdfc34bee5.
+This reverts commit 54a88eb838d37af930c9f19e1930a4fba6789cb5.
 
-Revert this commit in order to be able to revert
-commit 54a88eb838d3 ("block: add single bio async direct IO helper")
+git bisect shows that commit 54a88eb838d3 ("block: add single bio async
+direct IO helper") causes the following UAF:
+
+BUG: KASAN: use-after-free in io_submit_one+0x496/0x2fe0 fs/aio.c:1882
+Write of size 4 at addr ffff888027c338a0 by task syz-executor873/15100
+
+CPU: 2 PID: 15100 Comm: syz-executor873 Not tainted 5.16.0-rc1-syzk #1
+Hardware name: Red Hat KVM, BIOS
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
+ print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x18e/0x1f0 mm/kasan/generic.c:189
+ __kasan_check_write+0x14/0x20 mm/kasan/shadow.c:37
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_fetch_sub_release
+    include/linux/atomic/atomic-instrumented.h:167 [inline]
+ __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ iocb_put fs/aio.c:1161 [inline]
+ io_submit_one+0x496/0x2fe0 fs/aio.c:1882
+ __do_sys_io_submit fs/aio.c:1938 [inline]
+__se_sys_io_submit fs/aio.c:1908 [inline]
+ __x64_sys_io_submit+0x1c7/0x4a0 fs/aio.c:1908
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Conflicts:
+	block/fops.c
 
 Reported-by: syzkaller <syzkaller@googlegroups.com>
 Signed-off-by: George Kennedy <george.kennedy@oracle.com>
 ---
- block/bio.c         |  2 +-
- block/fops.c        | 20 +++++---------------
- include/linux/bio.h |  1 -
- 3 files changed, 6 insertions(+), 17 deletions(-)
+ block/fops.c | 86 +++---------------------------------------------------------
+ 1 file changed, 3 insertions(+), 83 deletions(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 15ab0d6..ead1f8a 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1046,7 +1046,7 @@ void __bio_release_pages(struct bio *bio, bool mark_dirty)
- }
- EXPORT_SYMBOL_GPL(__bio_release_pages);
- 
--void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter)
-+static void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter)
- {
- 	size_t size = iov_iter_count(iter);
- 
 diff --git a/block/fops.c b/block/fops.c
-index ad732a3..e73167b 100644
+index e73167b..88e0401 100644
 --- a/block/fops.c
 +++ b/block/fops.c
-@@ -329,21 +329,11 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
- 	bio->bi_end_io = blkdev_bio_end_io_async;
- 	bio->bi_ioprio = iocb->ki_ioprio;
+@@ -282,84 +282,6 @@ static ssize_t __blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter,
+ 	return ret;
+ }
  
--	if (iov_iter_is_bvec(iter)) {
--		/*
--		 * Users don't rely on the iterator being in any particular
--		 * state for async I/O returning -EIOCBQUEUED, hence we can
--		 * avoid expensive iov_iter_advance(). Bypass
--		 * bio_iov_iter_get_pages() and set the bvec directly.
--		 */
--		bio_iov_bvec_set(bio, iter);
+-static void blkdev_bio_end_io_async(struct bio *bio)
+-{
+-	struct blkdev_dio *dio = container_of(bio, struct blkdev_dio, bio);
+-	struct kiocb *iocb = dio->iocb;
+-	ssize_t ret;
+-
+-	if (likely(!bio->bi_status)) {
+-		ret = dio->size;
+-		iocb->ki_pos += ret;
 -	} else {
--		ret = bio_iov_iter_get_pages(bio, iter);
--		if (unlikely(ret)) {
--			bio->bi_status = BLK_STS_IOERR;
--			bio_endio(bio);
--			return ret;
+-		ret = blk_status_to_errno(bio->bi_status);
+-	}
+-
+-	iocb->ki_complete(iocb, ret);
+-
+-	if (dio->flags & DIO_SHOULD_DIRTY) {
+-		bio_check_pages_dirty(bio);
+-	} else {
+-		bio_release_pages(bio, false);
+-		bio_put(bio);
+-	}
+-}
+-
+-static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
+-					struct iov_iter *iter,
+-					unsigned int nr_pages)
+-{
+-	struct block_device *bdev = iocb->ki_filp->private_data;
+-	struct blkdev_dio *dio;
+-	struct bio *bio;
+-	loff_t pos = iocb->ki_pos;
+-	int ret = 0;
+-
+-	if ((pos | iov_iter_alignment(iter)) &
+-	    (bdev_logical_block_size(bdev) - 1))
+-		return -EINVAL;
+-
+-	bio = bio_alloc_kiocb(iocb, nr_pages, &blkdev_dio_pool);
+-	dio = container_of(bio, struct blkdev_dio, bio);
+-	dio->flags = 0;
+-	dio->iocb = iocb;
+-	bio_set_dev(bio, bdev);
+-	bio->bi_iter.bi_sector = pos >> SECTOR_SHIFT;
+-	bio->bi_write_hint = iocb->ki_hint;
+-	bio->bi_end_io = blkdev_bio_end_io_async;
+-	bio->bi_ioprio = iocb->ki_ioprio;
+-
+-	ret = bio_iov_iter_get_pages(bio, iter);
+-	if (unlikely(ret)) {
+-		bio->bi_status = BLK_STS_IOERR;
+-		bio_endio(bio);
+-		return ret;
+-	}
+-	dio->size = bio->bi_iter.bi_size;
+-
+-	if (iov_iter_rw(iter) == READ) {
+-		bio->bi_opf = REQ_OP_READ;
+-		if (iter_is_iovec(iter)) {
+-			dio->flags |= DIO_SHOULD_DIRTY;
+-			bio_set_pages_dirty(bio);
 -		}
-+	ret = bio_iov_iter_get_pages(bio, iter);
-+	if (unlikely(ret)) {
-+		bio->bi_status = BLK_STS_IOERR;
-+		bio_endio(bio);
-+		return ret;
- 	}
- 	dio->size = bio->bi_iter.bi_size;
+-	} else {
+-		bio->bi_opf = dio_bio_write_op(iocb);
+-		task_io_account_write(bio->bi_iter.bi_size);
+-	}
+-
+-	if (iocb->ki_flags & IOCB_HIPRI) {
+-		bio->bi_opf |= REQ_POLLED | REQ_NOWAIT;
+-		submit_bio(bio);
+-		WRITE_ONCE(iocb->private, bio);
+-	} else {
+-		if (iocb->ki_flags & IOCB_NOWAIT)
+-			bio->bi_opf |= REQ_NOWAIT;
+-		submit_bio(bio);
+-	}
+-	return -EIOCBQUEUED;
+-}
+-
+ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ {
+ 	unsigned int nr_pages;
+@@ -368,11 +290,9 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ 		return 0;
  
-diff --git a/include/linux/bio.h b/include/linux/bio.h
-index fe6bdfb..c88700d 100644
---- a/include/linux/bio.h
-+++ b/include/linux/bio.h
-@@ -417,7 +417,6 @@ int bio_add_zone_append_page(struct bio *bio, struct page *page,
- void __bio_add_page(struct bio *bio, struct page *page,
- 		unsigned int len, unsigned int off);
- int bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *iter);
--void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter);
- void __bio_release_pages(struct bio *bio, bool mark_dirty);
- extern void bio_set_pages_dirty(struct bio *bio);
- extern void bio_check_pages_dirty(struct bio *bio);
+ 	nr_pages = bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS + 1);
+-	if (likely(nr_pages <= BIO_MAX_VECS)) {
+-		if (is_sync_kiocb(iocb))
+-			return __blkdev_direct_IO_simple(iocb, iter, nr_pages);
+-		return __blkdev_direct_IO_async(iocb, iter, nr_pages);
+-	}
++	if (is_sync_kiocb(iocb) && nr_pages <= BIO_MAX_VECS)
++		return __blkdev_direct_IO_simple(iocb, iter, nr_pages);
++
+ 	return __blkdev_direct_IO(iocb, iter, bio_max_segs(nr_pages));
+ }
+ 
 -- 
 1.8.3.1
 

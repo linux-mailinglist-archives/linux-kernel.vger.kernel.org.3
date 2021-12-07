@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6042346C36D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8E846C371
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240911AbhLGTS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:18:59 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:43744 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240849AbhLGTS6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:18:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=haCxayBggHq3rUzu/zZKh9ckK+z7U1nSBhgcWt3JX7Y=; b=V5aWZzQ6UbVqkuq/hNJ2bDfwK5
-        ySiTS4hxpMZmHJ65feJJSseHGxnVK6tvP6ah6ebjqRu+3nGjUkEUM+v4FRsodNhFvLJe/9o2X+KuB
-        YUWb9VPwJxcEwlfTEgAAEmBpaUX8V3g6fnKFEI+37nnrkMBQh/TriyoJFbRDj2dfUsQQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mufvw-00Fo4D-DF; Tue, 07 Dec 2021 20:15:24 +0100
-Date:   Tue, 7 Dec 2021 20:15:24 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <Ya+yzNDMorw4X9CT@lunn.ch>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+        id S240921AbhLGTWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:22:46 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:56976 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231804AbhLGTWp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:22:45 -0500
+Received: by mail-io1-f71.google.com with SMTP id r199-20020a6b2bd0000000b005e234972ddfso86107ior.23
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:19:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=qwIHKUpEZfXAJ98aaHZ0G3Cq+vGsYXU3+sGI9JUl8Qs=;
+        b=uyPbXlHw0+h+Vuj2RxtKGMjyFTEP3a2MozGYHLM/hGuF7l2lMc3tWRXG8IEHYkRf/P
+         7Ta+d3d1muTKOe/CSyY3kOolqS01rcusM1Vv3zRC2wAdX87Db0LBzgfkXLVyhjZNlzxo
+         s9NpxvdeL1EAYazW0uebFiO4bHa3bX4cdTtdP59IxmBMgLPVtctXxD3bZKT/1BvijsyJ
+         qn3SZML8VPiepO5rWhseZE1y9U7gWEws6F3+ptT7v3mvYT54ZGM5SOt94A8Fq2KeaOIT
+         oqy1jAgcaX2obPF10phFSJFeK6u6FEgLmfcKnsHmj5dfXXJHhsA4qhh5ml4CL1OhItce
+         C0Sw==
+X-Gm-Message-State: AOAM531davpmi0qu0FciBzEDNzaFRSveD6ViLZAg9Z8s/7ewj5TZiwl+
+        NrrZISM28jzQ06ok9NBSVWps/W/TcqnTbzBzvgjnyb+QPms+
+X-Google-Smtp-Source: ABdhPJzsAxGhr40s7GLGaVzV5ZP3zz35qdTxoDeDNmyRGE97aOMtDpkw4j5HGfgIf0P+VpdejmMSHCjtkDqG0IeNhi/TooDucIxx
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+X-Received: by 2002:a05:6602:8da:: with SMTP id h26mr1442606ioz.76.1638904754048;
+ Tue, 07 Dec 2021 11:19:14 -0800 (PST)
+Date:   Tue, 07 Dec 2021 11:19:14 -0800
+In-Reply-To: <00000000000051f90e05d2664f1d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000af941b05d2933f28@google.com>
+Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
+From:   syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, fgheet255t@gmail.com,
+        hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, mlevitsk@redhat.com, pbonzini@redhat.com,
+        seanjc@google.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The qca tag header provide a TYPE value that refer to a big list of
-> Frame type. In all of this at value 2 we have the type that tells us
-> that is a READ_WRITE_REG_ACK (aka a mdio rw Ethernet packet)
-> 
-> The idea of using the tagger is to skip parsing the packet 2 times
-> considering the qca tag header is present at the same place in both
-> normal packet and mdio rw Ethernet packet.
-> 
-> Your idea would be hook this before the tagger and parse it?
-> I assume that is the only way if this has to be generilized. But I
-> wonder if this would create some overhead by the double parsing.
+syzbot has bisected this issue to:
 
-So it seems i remembered this incorrectly. Marvell call this Remote
-Management Unit, RMU. And RMU makes use of bits inside the Marvell
-Tag. I was thinking it was outside of the tag.
+commit c8607e4a086fae05efe5bffb47c5199c65e7216e
+Author: Maxim Levitsky <mlevitsk@redhat.com>
+Date:   Mon Sep 13 14:09:53 2021 +0000
 
-So, yes, the tagger does need to be involved in this.
+    KVM: x86: nVMX: don't fail nested VM entry on invalid guest state if !from_vmentry
 
-The initial design of DSA was that the tagger and main driver were
-kept separate. This has been causing us problems recently, we have use
-cases where we need to share information between the tagger and the
-driver. This looks like it is going to be another case of that.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10f21e3ab00000
+start commit:   f80ef9e49fdf Merge tag 'docs-5.16-3' of git://git.lwn.net/..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12f21e3ab00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14f21e3ab00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d5e878e3399b6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1d2136db9c80d4733e8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1603533ab00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175b5f3db00000
 
-	Andrew
+Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
+Fixes: c8607e4a086f ("KVM: x86: nVMX: don't fail nested VM entry on invalid guest state if !from_vmentry")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

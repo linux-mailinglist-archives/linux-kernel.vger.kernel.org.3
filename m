@@ -2,161 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A0346C0DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D8146C0E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbhLGQoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:44:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21300 "EHLO
+        id S238126AbhLGQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:44:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47596 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235031AbhLGQoL (ORCPT
+        by vger.kernel.org with ESMTP id S238561AbhLGQoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:44:11 -0500
+        Tue, 7 Dec 2021 11:44:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638895241;
+        s=mimecast20190719; t=1638895246;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4KoT7MoJZdMHzhKqbC4j9Azc/TQJ3pztEdVibRZgna0=;
-        b=gOOjVpVpeSWVsMrCnkj409XOLFpqoh/zJ9H5y7JNNYWEEuC2niDlSlJ9pexs6Xa6cRfgu5
-        jcxeIz80pMhS38xywc0N27M5lp6MbI/OjrDnB5/zdW3KCnm5zVmim6Sjc26ebZX1/O2Q5v
-        N0H+U9aVM9chrqKxQPmYnxpORRGBllI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=y96QmX07NJygKN8JuJScp9Bj4x4EQexTjjQocu59JHA=;
+        b=VwT51JZsZI0IDLOQ752Gcvr1+GgetMcJxeDtG3Eqr5c72l8ICqnUpPuQrbHQ/xcI+qIGQb
+        MGHXEDFsntzaHkuEfy8k/qBTpEvFh5JRRqi7RLeMX6tC8PnnOcqllEnIDUcw1On/MeW1+h
+        dgG1Yal1ddYgN9gIXpwWeL2P3XvFLrQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-392-2K5pZnF7P9-5hiWDPjbAAQ-1; Tue, 07 Dec 2021 11:40:40 -0500
-X-MC-Unique: 2K5pZnF7P9-5hiWDPjbAAQ-1
-Received: by mail-wm1-f72.google.com with SMTP id p12-20020a05600c1d8c00b0033a22e48203so1621191wms.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:40:38 -0800 (PST)
+ us-mta-588-ifYPmWxfMkOfwUtjVHRFHw-1; Tue, 07 Dec 2021 11:40:45 -0500
+X-MC-Unique: ifYPmWxfMkOfwUtjVHRFHw-1
+Received: by mail-ed1-f69.google.com with SMTP id b15-20020aa7c6cf000000b003e7cf0f73daso11889785eds.22
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:40:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=4KoT7MoJZdMHzhKqbC4j9Azc/TQJ3pztEdVibRZgna0=;
-        b=UXSsYX7/NME7U5upa5nEngtAqztV4lB8xAp/NOax8/WDlEtdf3CfpYaFa+U+lS6y2U
-         n4t652NdED4qh2O76z7nzdFNFsdyiEAxF5tmiZRyXusHWzxbTfN5FCpNPfx9I76UTL5T
-         NF2OCE/Ms0G/ffW1Gk14FNkbXsQKpwX08xYzmMJQlXmdDF0NW5xcQJLZ/oPHEF16Brb3
-         NB35/EvjOMmiA4ULR9iqN0plC8vsyR7q8yvoZjbRCPLooy+fmnQQWF5QUdO6/MSq2OyM
-         pYkEZ+LnobTJ4a7wSd1xS3dl2lDMeOc/WzHkyaVks6N6n9tcO52zn9j18roDAjyJAstk
-         x35g==
-X-Gm-Message-State: AOAM531AChop49k+/IBCoirW1nP/E/0wUueHgvPWHaraLRZI/yoYNP5n
-        xgEFnA7CF+UJtOzj7igkong+yLi3Lyc4JLBUJnSsgYJlDWjnd79rYPwTXNARHxpePSuMgxWz1i5
-        YUgnxpr3yCc5y9KHC8Tuxe2Uq
-X-Received: by 2002:a05:600c:4f48:: with SMTP id m8mr8470689wmq.50.1638895237679;
-        Tue, 07 Dec 2021 08:40:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyLRGhMk0hwoWx4NOrHSo4XAoQnohJI6lQltoXOlkpwvXm6WNomi9AzfV9scYz1A7y1asfVmg==
-X-Received: by 2002:a05:600c:4f48:: with SMTP id m8mr8470651wmq.50.1638895237427;
-        Tue, 07 Dec 2021 08:40:37 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
-        by smtp.gmail.com with ESMTPSA id k13sm211285wri.6.2021.12.07.08.40.36
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=y96QmX07NJygKN8JuJScp9Bj4x4EQexTjjQocu59JHA=;
+        b=Hg8nIKt5I2U9UPBu8RSkULL7dw53oEY7p04ZK5Lw446zlSxc7nryyk0i5N3hGP3n7P
+         7AnAk3NE9ovb8EasY+v2Tpj4tqvEFxwZTFDaO3Jow0wT31dJdBdsy1c/Hq6h/7oz+Fi2
+         +4FIRbvFIzm4N6qymZgwg1FaN75TM0MIyHr9SsjzkO0bhkzsPUlQ7uhDmH+bySN5d6Yc
+         mPzX/2sAYKLzVK6c+XAAmEXHSa34htnlBvYTtr971izhl4vsgjMLL40C6ytwqakdjDUZ
+         LyfK3Ak1Vxpm1DlOxUIuSvozS4n1OSjKgQy1ab6txqndLpbWu4fHefILb0bny456N/m0
+         UoeQ==
+X-Gm-Message-State: AOAM533nYa3hZahn4VZSe7ZjB3N+HFNqgrQWG9oHHvhwZ0hXOutA7oQf
+        Dt/b/59JAWEtELN4CplyAHWww1kFe4MJM2UAeme7UG0dHi3HQi5DAZKag0PHDtQZ2vC3pqtrZE9
+        QFEv8DMvWTwPmS+wAA+HFJWme
+X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr524795ejc.249.1638895244163;
+        Tue, 07 Dec 2021 08:40:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMMH3oJFb/oiebcMS06VV3/zkzgx7/NWskBFMyyZS1aG2zt27NZSpof4Z2LcKTL1meNIe6Ag==
+X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr524765ejc.249.1638895243887;
+        Tue, 07 Dec 2021 08:40:43 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id hx21sm22544ejc.85.2021.12.07.08.40.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 08:40:37 -0800 (PST)
-Message-ID: <235e8656-a947-b446-c39c-fa0f72b65ac7@redhat.com>
-Date:   Tue, 7 Dec 2021 17:40:36 +0100
+        Tue, 07 Dec 2021 08:40:43 -0800 (PST)
+Message-ID: <d158b42c-5a3a-8441-594c-32ca180e519d@redhat.com>
+Date:   Tue, 7 Dec 2021 17:40:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+ Thunderbird/91.3.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 5.16-3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
- <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
- <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
- <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
- <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
- <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
- <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
- <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
- <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
- <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz> <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.21 17:36, Michal Hocko wrote:
-> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
-> [...]
->> So your proposal is to drop set_node_online from the patch and add it as
->> a separate one which handles 
->> 	- sysfs part (i.e. do not register a node which doesn't span a
->> 	  physical address space)
->> 	- hotplug side of (drop the pgd allocation, register node lazily
->> 	  when a first memblocks are registered)
-> 
+Hi Linus,
 
-> In other words, the first stage
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c5952749ad40..f9024ba09c53 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
->  	if (self && !node_online(self->node_id)) {
->  		build_zonelists(self);
->  	} else {
-> -		for_each_online_node(nid) {
-> +		/*
-> +		 * All possible nodes have pgdat preallocated
-> +		 * free_area_init
-> +		 */
-> +		for_each_node(nid) {
->  			pg_data_t *pgdat = NODE_DATA(nid);
->  
->  			build_zonelists(pgdat);
-> @@ -8032,8 +8036,24 @@ void __init free_area_init(unsigned long *max_zone_pfn)
->  	/* Initialise every node */
->  	mminit_verify_pageflags_layout();
->  	setup_nr_node_ids();
-> -	for_each_online_node(nid) {
-> -		pg_data_t *pgdat = NODE_DATA(nid);
-> +	for_each_node(nid) {
-> +		pg_data_t *pgdat;
-> +
-> +		if (!node_online(nid)) {
-> +			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
-> +			pgdat = arch_alloc_nodedata(nid);
+Here is the second round of bug-fixes for platform-drivers-x86
+for 5.16.
 
-Is the buddy fully up an running at that point? I don't think so, so we
-might have to allocate via memblock instead. But I might be wrong.
+This consists of a few small bug-fixes and hardware-id additions.
 
-> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-> +			arch_refresh_nodedata(nid, pgdat);
-> +			free_area_init_memoryless_node(nid);
-> +			/*
-> +			 * not marking this node online because we do not want to
-> +			 * confuse userspace by sysfs files/directories for node
-> +			 * without any memory attached to it (see topology_init)
-> +			 */
-> +			continue;
-> +		}
-> +
-> +		pgdat = NODE_DATA(nid);
->  		free_area_init_node(nid);
->  
->  		/* Any memory on that node */
-> 
+Regards,
 
-Yes, and maybe in the same go, remove/rework hotadd_new_pgdat(), because
-there is nothing  to hotadd anymore. (we should double-check the
-initialization performed in there, it might all not be necessary anymore)
+Hans
 
--- 
-Thanks,
 
-David / dhildenb
+The following changes since commit d477a907cba317cfa58a8c89c09454d3fced1964:
+
+  platform/x86: thinkpad_acpi: fix documentation for adaptive keyboard (2021-11-16 10:56:53 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.16-3
+
+for you to fetch changes up to 7d0c009043f6a970f62dbf5aecda9f8c3ccafcff:
+
+  platform/x86/intel: hid: add quirk to support Surface Go 3 (2021-12-06 22:28:18 +0100)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v5.16-3
+
+Various bug-fixes and hardware-id additions.
+
+The following is an automated git shortlog grouped by driver:
+
+amd-pmc:
+ -  Fix s2idle failures on certain AMD laptops
+
+lg-laptop:
+ -  Recognize more models
+
+platform/x86/intel:
+ -  hid: add quirk to support Surface Go 3
+
+thinkpad_acpi:
+ -  Add lid_logo_dot to the list of safe LEDs
+ -  Restore missing hotkey_tablet_mode and hotkey_radio_sw sysfs-attr
+
+touchscreen_dmi:
+ -  Add TrekStor SurfTab duo W1 touchscreen info
+
+----------------------------------------------------------------
+Alex Hung (1):
+      platform/x86/intel: hid: add quirk to support Surface Go 3
+
+Fabrizio Bertocci (1):
+      platform/x86: amd-pmc: Fix s2idle failures on certain AMD laptops
+
+Hans de Goede (3):
+      platform/x86: thinkpad_acpi: Restore missing hotkey_tablet_mode and hotkey_radio_sw sysfs-attr
+      platform/x86: thinkpad_acpi: Add lid_logo_dot to the list of safe LEDs
+      platform/x86: touchscreen_dmi: Add TrekStor SurfTab duo W1 touchscreen info
+
+Matan Ziv-Av (1):
+      platform/x86: lg-laptop: Recognize more models
+
+ drivers/platform/x86/amd-pmc.c         |  2 +-
+ drivers/platform/x86/intel/hid.c       |  7 +++++++
+ drivers/platform/x86/lg-laptop.c       | 12 ++++++++++++
+ drivers/platform/x86/thinkpad_acpi.c   |  6 ++++--
+ drivers/platform/x86/touchscreen_dmi.c | 18 ++++++++++++++++++
+ 5 files changed, 42 insertions(+), 3 deletions(-)
 

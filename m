@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A2846C79A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB24546C79B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241807AbhLGWlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:41:32 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:44002 "EHLO vps0.lunn.ch"
+        id S241986AbhLGWmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:42:49 -0500
+Received: from mga06.intel.com ([134.134.136.31]:16207 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232475AbhLGWlb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:41:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=KL7t3EzMOJg7Y8VdK8+7cVEQezPhxkNeMva2hDQV8gI=; b=ahFFO/P5JyoTmj2MDU6qu85ZOB
-        FNPq3kmvh9O8tAfjF3j3jGABnIuiwYVU8COGAWSpXSl82uu2w3ur6V6jFUo9dWPsYsqyaRoRfNee7
-        d0KJC7NPMCR/tUXMVyI6WyLRgHkrx+U+R6t3mPVfazsCMPVp4u5DahHRc/S+YIBPYkFY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1muj5w-00Forc-Gc; Tue, 07 Dec 2021 23:37:56 +0100
-Date:   Tue, 7 Dec 2021 23:37:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <Ya/iRAAN8OXC57Ph@lunn.ch>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya96pwC1KKZDO9et@lunn.ch>
- <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
- <20211207211018.cljhqkjyyychisl5@skbuf>
+        id S232475AbhLGWms (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:42:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="298497417"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="298497417"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 14:39:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="462509013"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2021 14:39:15 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muj7C-000N24-V2; Tue, 07 Dec 2021 22:39:14 +0000
+Date:   Wed, 8 Dec 2021 06:38:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:guest 108/144] arch/x86/kernel/tdx.c:714:15: warning: no
+ previous prototype for 'tdx_mmio_readq'
+Message-ID: <202112080635.7JcdsSvJ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207211018.cljhqkjyyychisl5@skbuf>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This raises interesting questions. I see two distinct cases:
-> 
-> 1. "dual I/O": the switch probes initially over a standard bus (MDIO,
->    SPI, I2C) then at some point transitions towards I/O through the
->    tagger.  This would be the case when there is some preparation work
->    to be done (maybe the CPU port needs to be brought up, maybe there is
->    a firmware to be uploaded to the switch's embedded microcontroller
->    such that the expected remote management protocol is supported, etc).
->    It would also be the case when multiple CPU ports are supported (and
->    changing between CPU ports), because we could end up bringing a
->    certain CPU port down, and the register I/O would need to be
->    temporarily done over MDIO before bringing the other CPU port up.
+tree:   https://github.com/intel/tdx.git guest
+head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
+commit: e429db7ac5ebc20d80a407ff29424e5bb710d057 [108/144] x86/tdx: Enable direct iomap MMIO optimizations
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211208/202112080635.7JcdsSvJ-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/e429db7ac5ebc20d80a407ff29424e5bb710d057
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest
+        git checkout e429db7ac5ebc20d80a407ff29424e5bb710d057
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-mv88e6xxx is very likely to take this path. You need to program some
-registers to enable RMU. It is possible to enable this via EEPROM
-configuration, but i've never seen any hardware with the necessary
-EEPROM configuration. And you have the old chicken/egg, in order to be
-able to program the EEPROM, you need access to the switch, or a header
-and a cable.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 2. "single I/O": the switch needs no such configuration, and in this
->     case, it could in principle probe over an "Ethernet bus" rather than
->     a standard bus as mentioned above.
-> 
-> I don't know which case is going to be more common, honestly.
+All warnings (new ones prefixed by >>):
 
-Given the history, i think MDIO startup, and then transition to
-Ethernet is going to be a lot more common.  If there was a lot of
-hardware out there which could do Ethernet from the beginning, we
-would of had patches or at least requests for it by now. 
+   arch/x86/kernel/tdx.c:269:5: warning: no previous prototype for 'tdx_hcall_set_notify_intr' [-Wmissing-prototypes]
+     269 | int tdx_hcall_set_notify_intr(u8 vector)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/tdx.c:492:14: warning: no previous prototype for 'tdx_write_msr' [-Wmissing-prototypes]
+     492 | void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+         |              ^~~~~~~~~~~~~
+>> arch/x86/kernel/tdx.c:714:15: warning: no previous prototype for 'tdx_mmio_readq' [-Wmissing-prototypes]
+     714 | unsigned long tdx_mmio_readq(void __iomem *addr)
+         |               ^~~~~~~~~~~~~~
 
-I would keep it KISS.
 
-      Andrew
+vim +/tdx_mmio_readq +714 arch/x86/kernel/tdx.c
+
+   713	
+ > 714	unsigned long tdx_mmio_readq(void __iomem *addr)
+   715	{
+   716		unsigned long val;
+   717	
+   718		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
+   719			return 0xffffffffffffffff;
+   720		return val;
+   721	}
+   722	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF32546B866
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07F546B86E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbhLGKHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:07:48 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:39562 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234664AbhLGKHr (ORCPT
+        id S234710AbhLGKLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234236AbhLGKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:07:47 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B75kTRX027933;
-        Tue, 7 Dec 2021 04:04:01 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=TTVGHmaU4VbZvXb+ZG07SZEbgxSMk6weMk819DmSDXk=;
- b=cgtcfxlNz05uHx0gN7gFFvjNXKr6R2qi2Cui3aIln8AfcNJSS3Rd5FITjN9CpNeJiODG
- atvHZiWneHMmuQGO6G+DIaDHcp0E6HGrRnrPAa8cEC0fKCIvOppyP+Z8edaz/PGeqRqc
- pNFf1pCAcfsSvu4KtK16UHh59etuwTt3ViHOoZQF5obWV6FSaZ24cSf0ywD1NajmhkMj
- omvLJEPKDH8ZHZdCG/DT2u46d5/20sDx9TZvQXrxnvQobiU1roS8iEoirKzq38AJpC51
- VzzNkfTp5BWFXl6pn7SagPtRbjHvXeHi9ei9Pn7tQXsowwOB7UFuGRMznt3pmNEULP9W QQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3csdc9hhn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 07 Dec 2021 04:04:01 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 7 Dec
- 2021 10:04:00 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 7 Dec 2021 10:04:00 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9A76445A;
-        Tue,  7 Dec 2021 10:03:59 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 10:03:59 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH] dt-bindings: mfd: cirrus,lochnagar: fix pin controller
- nodename
-Message-ID: <20211207100359.GO18506@ediswmail.ad.cirrus.com>
-References: <20211207083618.12940-1-zajec5@gmail.com>
+        Tue, 7 Dec 2021 05:11:25 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A825C061574;
+        Tue,  7 Dec 2021 02:07:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k4cqfgZUBrtx1BceHIgbZ0d9UPpCS0+xdvzE9oekXbg=; b=CDwU+nNZT3EtFIjv+TJuhMTy5Y
+        /0lr+ZBt7ydncCs2yhu+XJA4vSk3/ff/D6iYotqp3O7uOm1t/tpvYWMw91M91tGeqBsfYGjszZzCS
+        SiWrUvykr/vBiJyaffxjesO7oK7uTqO/Ofo+DCoIXg5En7BWO/MeryMko116jYILWDLDJPZHwIOnp
+        8uU5a2a4ig2Exw6rcIDMOG7fwp73y3eB6jOqmlhQjINFe9KniuYGIe+qSe1h4TBdnSGtVML1K1EXE
+        voAD9KsOCLShBHOtL9CN25tRPud65vO6zpQZg3VfMwmprFg94F2KNH2ta1BvBG4O46S09QbMferH+
+        qarmFZhQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muXNx-002k0b-IU; Tue, 07 Dec 2021 10:07:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81E1830002F;
+        Tue,  7 Dec 2021 11:07:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5CA0A202A40B1; Tue,  7 Dec 2021 11:07:44 +0100 (CET)
+Date:   Tue, 7 Dec 2021 11:07:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
+        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
+        quic_blong@quicinc.com, quic_richardp@quicinc.com,
+        quic_cdevired@quicinc.com,
+        Pradeep P V K <quic_pragalla@quicinc.com>
+Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
+Message-ID: <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net>
+References: <1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com>
+ <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211207083618.12940-1-zajec5@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: 0B6qZZoyPd0ak7gmpoOx9zhpZjmMIlc-
-X-Proofpoint-GUID: 0B6qZZoyPd0ak7gmpoOx9zhpZjmMIlc-
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 09:36:18AM +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Replace custom nodename with a generic "pinctrl" to match new pinctrl
-> binding requirement. This will fix:
-> Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
->         From schema: Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
-> 
-> Reported-by: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
+On Tue, Dec 07, 2021 at 10:07:45AM +0100, Miklos Szeredi wrote:
+> On Mon, 6 Dec 2021 at 09:47, Pradeep P V K <quic_pragalla@quicinc.com> wrote:
+> >
+> > The synchronous wakeup interface is available only for the
+> > interruptible wakeup. Add it for normal wakeup and use this
+> > synchronous wakeup interface to wakeup the userspace daemon.
+> > Scheduler can make use of this hint to find a better CPU for
+> > the waker task.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com> 
+That's a horrendoubly bad changelog :-/ Also, if you need it for
+UNINTERRUPTIBLE that's trivial to do ofc.
 
-Thanks,
-Charles
+> Ingo, Peter,
+> 
+> What exactly does WF_SYNC do?   Does it try to give the waker's CPU
+> immediately to the waked?
+> 
+> If that doesn't work (e.g. in this patch the wake up is done with a
+> spin lock held) does it do anything?
+> 
+> Does it give a hint that the waked task should be scheduled on this
+> CPU at the next scheduling point?
+
+WF_SYNC is a hint to the scheduler that the waker is about to go sleep
+and as such it is reasonable to stack the woken thread on this CPU
+instead of going to find an idle CPU for it.
+
+Typically it also means that the waker and wakee share data, and thus
+having them share the CPU is beneficial for cache locality.
+
+That said, WF_SYNC is 'difficult' since not all users of the hint keep
+their promise, so there's a bit of heuristics sprinkled on :/

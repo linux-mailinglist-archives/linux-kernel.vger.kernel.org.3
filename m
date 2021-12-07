@@ -2,125 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C7146BF66
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F7D46BF6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238802AbhLGPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhLGPhc (ORCPT
+        id S238825AbhLGPiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:38:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31917 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238862AbhLGPiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:37:32 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEC3C061574;
-        Tue,  7 Dec 2021 07:34:01 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id x6so58391630edr.5;
-        Tue, 07 Dec 2021 07:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=77FvMUeT/QXm1MM7jzidpCG1GqvPRk7vjmcCy3A7YMg=;
-        b=o/34asWcopDwR1Xwxbt9pgrwwDd6RevowQ6RMRjsBqY0UN7OnGpVcDi05AxQSsdDUX
-         3SUzXm9n0nOZ2fCdU67tSJixvpDa9iXA1mAs/gfH4iASxU4mDhRnthPhRjSx0IYuqA56
-         2lfo+xujN/aU3vtoKKwHwYSNH+pXBTDPCeJXxUPVEMVg+B7VGUIp5tZQC9hkXgC4kpCo
-         vXMokbvNQ2GDOvuUGnrrK2H9FrUB70Hqj/hxthyUIJz8ByXDTx3Qna7zU91IClQW3uil
-         MLXUTVMLN1l1L5JfTSCNZA3R6yQ0RPwRQllrkDlQ6jGvs1iAQr3nb1Nev6p5ES4YEaED
-         Bjng==
+        Tue, 7 Dec 2021 10:38:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638891274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5R4cWI/77swxdmILy6TLQB1mcQwz65GKbFISlyFEK3A=;
+        b=h2kUqCn6ptufREwU/kjwt3brBTLOErb46E+5PRxXMCc7Ge5ZkRETnCU88SGpP5syTLJV6K
+        PBystBDPrAYBAlq/sSZYtOue7Rqgoveh/QV40mO8rbP4k0WnUWNhD4iCKXAXbB6XZME9HT
+        aDRSHOLFOKRY1Xa8Is4DiUCTpCDIjBY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-566-J7qWxxEwOxKB2ytVJ_oQyw-1; Tue, 07 Dec 2021 10:34:33 -0500
+X-MC-Unique: J7qWxxEwOxKB2ytVJ_oQyw-1
+Received: by mail-wr1-f72.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so3099120wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:34:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=77FvMUeT/QXm1MM7jzidpCG1GqvPRk7vjmcCy3A7YMg=;
-        b=Mur+aYnl3JoJVi+kf9XKjyvJhpRql709pZ+HgA0eeJp7+sHKLsls2BHv7ewhq+uvIN
-         7myQaTbQO8D7JO3kihSmdKKzkfx4gFBbInHWjBqTVgmp5xLEgybc622z/KNiNYMupOp6
-         +vCM5ar3NhpsoLIRFDCLhVbHY9DeUmX61aZFnmIbktKvCxnGaEQrAyiEx1qmgMLenfTc
-         2ku/Fz1OBcXLWQa45DVLsb/BMibROejKLVyb4bFAMGT2bQOjp3u522Dk/Pv+W383RTCU
-         Pxk110aQBQgHb+LjMX18nhftqnjizsUTWVMEEnyknq08bh6m+15vgbS/uG73BY8tQOgv
-         Q3/w==
-X-Gm-Message-State: AOAM530s6Mfo5lawMh8GaBKPby7QtAvBIwLJ2h06UJrOsKt7yUVTdhEt
-        GYhHOCgSZmlI+mO0NOdNQeM=
-X-Google-Smtp-Source: ABdhPJxCa2V5Le7pncAArCi+CYBaA/Ap02r+c6AuuFP0eyy38pty4gzgj/BXQhdZuRqFaR69oZWLTA==
-X-Received: by 2002:a17:906:8256:: with SMTP id f22mr104522ejx.207.1638891239986;
-        Tue, 07 Dec 2021 07:33:59 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id ho17sm8884053ejc.111.2021.12.07.07.33.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 07:33:59 -0800 (PST)
-Message-ID: <61af7ee7.1c69fb81.2b3ba.d48b@mx.google.com>
-X-Google-Original-Message-ID: <Ya9+5TXcyqkf+M1g@Ansuel-xps.>
-Date:   Tue, 7 Dec 2021 16:33:57 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya96pwC1KKZDO9et@lunn.ch>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=5R4cWI/77swxdmILy6TLQB1mcQwz65GKbFISlyFEK3A=;
+        b=S+Twp24xqsUn6renrQVotlPJ34YSrMAL0n0HJXhIPT9LCbESed7Nvz9figNV2EmX1Y
+         iNmwOUXN10GOheOngyF1TW7pZd2sjGkGnCb2HO9qLRHQN0JwAn+jBdwW7mYIWcv7AIYh
+         d0InxvbkxrXICR66D9ubLFMC+sWfZt1iQfJ8h68aqAhTSoGiqGzRH+9hpXHwwySBVVsB
+         muoZ/F94AttrrYMM+BchjMDlgXS96EuP/dfb5zAft6XLfrEQX7dN9+mlO6NRUOsISgEr
+         6b4fOMdA1SJsQxQHXftTUII8qGOx17eP7aRa+SOJZzJCZq65Vcom23jly7Qsukm9IkSm
+         fhIA==
+X-Gm-Message-State: AOAM531L30N9iCY8sTTceCcMqfMgkCFNtX/rMZtibuKHubm3XlgPDlsh
+        v4tvIc2/xQup+Mj9VUjZl3ko6pPFmjHy8gmcY/AESohH9YIIlDQccAS5i05DPumpGAnQQbLPHCr
+        DHwyK5OwbeEDOOVCBbPavqZiz
+X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr8181080wml.119.1638891271933;
+        Tue, 07 Dec 2021 07:34:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwwXEaJl0z2dys15JkIB8rW+3kQcC9hiHyw/zWxJiPPVgwvP0S/xlOyINcduVvGYZyw5MfY0w==
+X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr8181047wml.119.1638891271719;
+        Tue, 07 Dec 2021 07:34:31 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
+        by smtp.gmail.com with ESMTPSA id f7sm3775406wmg.6.2021.12.07.07.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 07:34:31 -0800 (PST)
+Message-ID: <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+Date:   Tue, 7 Dec 2021 16:34:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya96pwC1KKZDO9et@lunn.ch>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz> <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:15:51PM +0100, Andrew Lunn wrote:
-> On Tue, Dec 07, 2021 at 03:59:36PM +0100, Ansuel Smith wrote:
-> > Hi, this is still WIP and currently has some problem but I would love if
-> > someone can give this a superficial review and answer to some problem
-> > with this.
-> > 
-> > The main reason for this is that we notice some routing problem in the
-> > switch and it seems assisted learning is needed. Considering mdio is
-> > quite slow due to the indirect write using this Ethernet alternative way
-> > seems to be quicker.
-> > 
-> > The qca8k switch supports a special way to pass mdio read/write request
-> > using specially crafted Ethernet packet.
+On 07.12.21 16:29, Michal Hocko wrote:
+> On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
+>> On 07.12.21 14:23, Michal Hocko wrote:
+>>> On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
+>>> [...]
+>>>> But maybe I am missing something important regarding online vs. offline
+>>>> nodes that your patch changes?
+>>>
+>>> I am relying on alloc_node_data setting the node online. But if we are
+>>> to change the call to arch_alloc_node_data then the patch needs to be
+>>> more involved. Here is what I have right now. If this happens to be the
+>>> right way then there is some additional work to sync up with the hotplug
+>>> code.
+>>>
+>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>> index c5952749ad40..a296e934ad2f 100644
+>>> --- a/mm/page_alloc.c
+>>> +++ b/mm/page_alloc.c
+>>> @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>>>  	/* Initialise every node */
+>>>  	mminit_verify_pageflags_layout();
+>>>  	setup_nr_node_ids();
+>>> -	for_each_online_node(nid) {
+>>> -		pg_data_t *pgdat = NODE_DATA(nid);
+>>> +	for_each_node(nid) {
+>>> +		pg_data_t *pgdat;
+>>> +
+>>> +		if (!node_online(nid)) {
+>>> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
+>>> +			pgdat = arch_alloc_nodedata(nid);
+>>> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
+>>> +			arch_refresh_nodedata(nid, pgdat);
+>>> +			node_set_online(nid);
+>>
+>> Setting all possible nodes online might result in quite some QE noice,
+>> because all these nodes will then be visible in the sysfs and
+>> try_offline_nodes() is essentially for the trash.
 > 
-> Oh! Cool! Marvell has this as well, and i suspect a few others. It is
-> something i've wanted to work on for a long long time, but never had
-> the opportunity.
->
+> I am not sure I follow. I believe sysfs will not get populate because I
+> do not call register_one_node.
 
-Really? I tought this was very specific to qca8k.
+arch/x86/kernel/topology.c:topology_init()
 
-> This also means that, even if you are focusing on qca8k, please try to
-> think what could be generic, and what should specific to the
-> qca8k. The idea of sending an Ethernet frame and sometime later
-> receiving a reply should be generic and usable for other DSA
-> drivers. The contents of those frames needs to be driver specific.
-> How we hook this into MDIO might also be generic, maybe.
+for_each_online_node(i)
+	register_one_node(i);
 
-A generic implementation of this would be add an ops to the dsa generic
-struct that driver can implement and find a clean way to use this
-alternative way instead of normal mdio. (Implement something like
-eth_mdio_read/write ops and the driver will decide when to use them?
-The dsa then will correctly understand when the driver is ready to
-accept packet and send the skb, in all the other case just send an error
-and the driver will use normal mdio?)
 
-I think the tagger require some modification anyway as it's the one that
-receive packet and parse them. (I assume also other switch will use the
-tagger to understand that the packet is used for mdio)
-(A bool to declare that the tagger can correctly parse this kind of
-stuff and complete the completion?)
 
 > 
-> I will look at your questions later, but soon.
+> You are right that try_offline_nodes will be reduce which is good imho.
+> More changes will be possible (hopefully to drop some ugly code) on top
+> of this change (or any other that achieves that there are no NULL pgdat
+> for possible nodes).
 > 
 
-Thanks a lot for the quick response. I'm more than happy to generalize
-this and find the a correct way.
+No to exposing actually offline nodes to user space via sysfs.
+Let's concentrate on preallocating the pgdat and fixing the issue at
+hand. One step at a time please.
 
->   Andrew
+
+>> I agree to prealloc the pgdat, I don't think we should actually set the
+>> nodes online. Node onlining/offlining should be done when we do have
+>> actual CPUs/memory populated.
+> 
+> If we keep the offline/online node state notion we are not solving an
+> important aspect of the problem - confusing api.
+
+I don't think it's that confusing. Just like we do have online and
+offline CPUs. Or online and offline memory blocks. Similarly, a node is
+either online or offline.
 
 -- 
-	Ansuel
+Thanks,
+
+David / dhildenb
+

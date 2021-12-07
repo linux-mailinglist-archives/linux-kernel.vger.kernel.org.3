@@ -2,155 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB2346BAE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9D346BADB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbhLGMUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S236207AbhLGMU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbhLGMUf (ORCPT
+        with ESMTP id S236191AbhLGMU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:20:35 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C259C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:17:05 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id s17so9116007vka.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/shVBi6JlRgjZTPddZCIWjR1bu5s4CCzjOrgUchEDkI=;
-        b=e7/TY4gOh3+cE4hbY2wgLdgFALgqzNBVaatvNUV2/yBzXYjgbVN/BHQtzHFmJzh7DL
-         2qzJtmSPG/QZof/R/Tasc6J7Mr+WXwrOh5jqSl/+J6+ypqPXR6dpeSway3BjIYS4XvmT
-         7RDj5/MRtYTSSZryzfTJcKOobxbwO3U3SfRilM8+CG12IaIgB/JqDPSs1IXIwkZ4mP4y
-         VU67Zm6P5PwUNA9QP+J0UHIP0hjzlP1fkyO9VZZypMETe1JZOR5LWKOMuOjfyVWAEvLJ
-         9WeRjFZh9NxxNG7TdxtIbqqNeiBGXInMU3flTK8PB6xM59E/+bWUb1PtRwVoArLEgrxG
-         HfSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/shVBi6JlRgjZTPddZCIWjR1bu5s4CCzjOrgUchEDkI=;
-        b=xgx1GryM1KRT6dWj5KFrA0eEZl19mTR1Qj4JY4TQLtDHHuTkvm9sZTFuyA9qwImjdN
-         t8HcpmJufZc+vlNNYTbwutI252RWNyvERWFSPEmHJdy8ypDfwrFCIQScNa895xHc5tym
-         9EzbpG3ii7K8cfkVIBIw1IzceIZFlzbZEa1n5LJa98/MCXfJ+Ft4u55r6EZLXgiEL9/o
-         IuNFbPNmkgDUiWeWhFzP1t56A+XFd1gQbF0yAvupv8uLiLmKT95OUQFE9TEEkxym+uVO
-         /zjA/U5Kqyn31XNwDN6HyzCzaw+Irh8Gam0RnS8cxpnHp+30gdO930oSJe+HbV7a+UoW
-         YRCw==
-X-Gm-Message-State: AOAM532gau7aOKyhR8N1v9X0jtRQ2mi1MxRr7vml0mvS02Ef/C5JlWsq
-        N+FObzAIcj540bxGl4P8fyS+eyg1/klgX3dOSn6Ftw==
-X-Google-Smtp-Source: ABdhPJxuGChhAZ4kIiu4qir8hGvBsDCFBjU9JFoH+t8icaVEomxm0J2X8jMAeeiM6ponxEUZHM06zKQNjmtJ+RJak40=
-X-Received: by 2002:a1f:2849:: with SMTP id o70mr50408783vko.35.1638879423373;
- Tue, 07 Dec 2021 04:17:03 -0800 (PST)
+        Tue, 7 Dec 2021 07:20:28 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4ADC061574;
+        Tue,  7 Dec 2021 04:16:57 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 0EE141F44F90
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638879415; bh=B15G7ImDZFtF6Fgqc3mnNZ9T/WxEYBMsfOlqdDJeg0c=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KWVGlMzOSZiio+hBSkRv9KhAv9P4xPky5Uc+b9k/wK39xpfar9SRJh0Jise/8TGGC
+         v+qCsrKl07At6FFXeORmjpT6xgdsvmQOWpJNdJI7KO1zrwJx3bWEDydOUBZmzQKDMs
+         mZVd3VYdxvtxX4gABlx8VDEhalOoX423StYbXQzPzymB63IzDzuaLsfqmEPARqXbXn
+         V6XFPSiZWbsYVoEWyH2PqlkAQ8Uu5ohcXvkgFrKUIoYS2LHkfFck0PY/ogUCsg4LNS
+         6j4J43iWjbDXUUXOcNpr1kmKDM6Vfknuu9x5i6wsswxHe1NesnPyCATisJ1W4SGznJ
+         p6vextvshl4GQ==
+Subject: Re: [PATCH 3/4] memory: mtk-smi: Add sleep ctrl function
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
+        anthony.huang@mediatek.com, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20211203064027.14993-1-yong.wu@mediatek.com>
+ <20211203064027.14993-4-yong.wu@mediatek.com>
+ <f2ffd08a-44c3-9458-1bd8-68e3c0755611@collabora.com>
+ <ebc8e4c0b0519043c5a82c6c967ac6d524e8869a.camel@mediatek.com>
+ <47c30f6f-ce9d-9ea7-283c-9026ae9ed1c0@collabora.com>
+ <e1d72db69f424b9ee8987b7bafa7423c672ceef1.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <85ef182a-8ebe-7dbb-aa95-35e77cbb072c@collabora.com>
+Date:   Tue, 7 Dec 2021 13:16:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211203183517.11390-1-semen.protsenko@linaro.org> <Ya5wNM/cAt1rwazv@robh.at.kernel.org>
-In-Reply-To: <Ya5wNM/cAt1rwazv@robh.at.kernel.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Dec 2021 14:16:52 +0200
-Message-ID: <CAPLW+4np+Cynat7yxaayK-DUKLywyvENS0wnXb=LVXD5s9XBTw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Only show unique unit address warning for
- enabled nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        David Virag <virag.david003@gmail.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e1d72db69f424b9ee8987b7bafa7423c672ceef1.camel@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 22:19, Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Dec 03, 2021 at 08:35:17PM +0200, Sam Protsenko wrote:
-> > There are valid cases when two nodes can have the same address. For
-> > example, in Exynos SoCs there is USI IP-core, which might be configured
-> > to provide UART, SPI or I2C block, all of which having the same base
-> > register address. But only one can be enabled at a time. That looks like
-> > this:
-> >
-> >     usi@138200c0 {
-> >         serial@13820000 {
-> >             status = "okay";
-> >         };
-> >
-> >         i2c@13820000 {
-> >             status = "disabled";
-> >         };
-> >     };
-> >
-> > When running "make dt_binding_check", it reports next warning:
-> >
-> >     Warning (unique_unit_address):
-> >     /example-0/usi@138200c0/serial@13820000:
-> >     duplicate unit-address (also used in node
-> >     /example-0/usi@138200c0/i2c@13820000)
-> >
-> > Disable "unique_unit_address" in DTC_FLAGS to suppress warnings like
-> > that, but enable "unique_unit_address_if_enabled" warning, so that dtc
-> > still reports a warning when two enabled nodes are having the same
-> > address.
->
-> Presumably you have a dts file needing the same thing, so I'll be
-> expecting a patch for that too. That's in scripts/Makefile.lib BTW.
->
+Il 07/12/21 13:10, Yong Wu ha scritto:
+> On Tue, 2021-12-07 at 09:56 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 07/12/21 07:24, Yong Wu ha scritto:
+>>> Hi AngeloGioacchino,
+>>>
+>>> Thanks for your review.
+>>>
+>>> On Mon, 2021-12-06 at 16:08 +0100, AngeloGioacchino Del Regno
+>>> wrote:
+>>>> Il 03/12/21 07:40, Yong Wu ha scritto:
+>>>>> sleep control means that when the larb go to sleep, we should
+>>>>> wait
+>>>>> a bit
+>>>>> until all the current commands are finished. thus, when the
+>>>>> larb
+>>>>> runtime
+>>>>> suspend, we need enable this function to wait until all the
+>>>>> existed
+>>>>> command are finished. when the larb resume, just disable this
+>>>>> function.
+>>>>> This function only improve the safe of bus. Add a new flag for
+>>>>> this
+>>>>> function. Prepare for mt8186.
+>>>>>
+>>>>> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
+>>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>>>> ---
+>>>>>     drivers/memory/mtk-smi.c | 39
+>>>>> +++++++++++++++++++++++++++++++++++----
+>>>>>     1 file changed, 35 insertions(+), 4 deletions(-)
+>>>
+>>> [snip]
+>>>
+>>>>>     static int __maybe_unused mtk_smi_larb_suspend(struct device
+>>>>> *dev)
+>>>>>     {
+>>>>>     	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
+>>>>> +	int ret = 0;
+>>>>> +
+>>>>> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general,
+>>>>> MTK_SMI_FLAG_SLEEP_CTL))
+>>>>> +		ret = mtk_smi_larb_sleep_ctrl(dev, true);
+>>>>
+>>>> Sorry but what happens if SLP_PROT_RDY is not getting set
+>>>> properly?
+>>>>    From what I can understand in the commit description that you
+>>>> wrote,
+>>>> if we reach
+>>>> the timeout, then the LARB transactions are not over....
+>>>>
+>>>> I see that you are indeed returning a failure here, but you are
+>>>> also
+>>>> turning off
+>>>> the clocks regardless of whether we get a failure or a success;
+>>>> I'm
+>>>> not sure that
+>>>> this is right, as this may leave the hardware in an unpredictable
+>>>> state (since
+>>>> there were some more LARB transactions that didn't go through),
+>>>> leading to crashes
+>>>> at system resume (or when retyring to suspend).
+>>>
+>>> Thanks for this question. In theory you are right. In this case,
+>>> the
+>>> bus already hang.
+>>>
+>>> We only printed a fail log in this patch. If this fail happens, we
+>>> should request the master to check which case cause the larb hang.
+>>>
+>>> If the master has a good reason or limitation, the hang is
+>>> expected, I
+>>> think we have to add larb reset in this fail case: Reset the larb
+>>> when
+>>> the larb runtime resume.
+>>>
+>>
+>> Think about the case in which the system gets resumed only partially
+>> due to a
+>>
+>> failure during resume of some driver, or due to a RTC or arch timer
+>> resume and
+>> suspend right after... or perhaps during runtime suspend/resume of
+>> some devices.
+>> In that case, we definitely want to avoid any kind of failure point
+>> that would
+>> lead to a system crash, or any kind of user noticeable (or UX
+>> disrupting) "strange
+>> behavior".
+>>
+>> I think that we should make sure that the system suspends cleanly,
+>> instead of
+>> patching up any possible leftover issue at resume time: if this is
+>> doable with
+>> a LARB reset in suspend error case, that looks like being a good
+>> option indeed.
+>>
+>> As a side note, thinking about UX, losing a little more time during
+>> suspend is
+>> nothing really noticeable for the user... on the other hand, spending
+>> more time
+>> during resume may be something noticeable to the user.
+>> For this reason, I think that guaranteeing that the system resumes as
+>> fast as
+>> possible is very important, which adds up to the need of suspending
+>> cleanly.
+> 
+> Thanks for this comment. I will put it in the suspend when adding the
+> reset. But I have no plan to add it in this version since I don't see
+> the need for this right now. Maybe I should add a comment in the code
+> for this.
+> 
 
-'-Wno-unique_unit_address' is already in scripts/Makefile.lib, and
-when I add '-Wunique_unit_address_if_enabled' there, "make dtbs_check"
-reports a lot of warnings (for ARCH=arm64 at least). Among obvious
-bugs found, there are some cases like this:
+What I understand from your reply is that the reset is not trivial work
+and needs quite some time to be done properly; in that case: yes, please
+add a TODO comment that explains the situation and the discussed solution.
 
-        qfprom@784000 {
-            compatible = "qcom,qfprom";
-            reg = <0 0x00784000 0 0x8ff>;
-            #address-cells = <1>;
-            #size-cells = <1>;
+Also, since this SLP_PROT_RDY flag seems to be very nice, just a simple
+question: is this a new feature in the SMI IP of MT8186, or is there anything
+similar that we may use on other SoCs, like 8183, 8192, 8195, as a follow-up
+of this series?
 
-            qusb2p_hstx_trim: hstx-trim-primary@1eb {
-                reg = <0x1eb 0x1>;
-                bits = <1 4>;
-            };
+>>
+>>> Fortunately, we have never got this issue. We could add this reset
+>>> when
+>>> necessary. Is this OK for you?
+>>>
+>>> Thanks.
+>>>
+>>>>
+>>>>>     
+>>>>>     	clk_bulk_disable_unprepare(larb->smi.clk_num, larb-
+>>>>>> smi.clks);
+>>>>> -	return 0;
+>>>>> +	return ret;
+>>>>>     }
+>>>>>     
+>>>>>     static const struct dev_pm_ops smi_larb_pm_ops = {
+>>>>>
+>>>>
+>>>>
+>>
+>>
 
-            qusb2s_hstx_trim: hstx-trim-secondary@1eb {
-                reg = <0x1eb 0x2>;
-                bits = <6 4>;
-            };
-        };
 
-where "dtbs_check" doesn't like duplicated "reg = <0x1eb 0x2>;" line.
-
-I'll send the patch soon. Just want you to be on the same page about
-side effects from that, because I'm not completely sure it's ok.
-
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Reported-by: Rob Herring <robh@kernel.org>
-> > Suggested-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/Makefile | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-> > index c9abfbe3f0aa..41c555181b6f 100644
-> > --- a/Documentation/devicetree/bindings/Makefile
-> > +++ b/Documentation/devicetree/bindings/Makefile
-> > @@ -65,7 +65,9 @@ DT_DOCS = $(patsubst $(srctree)/%,%,$(shell $(find_all_cmd)))
-> >  override DTC_FLAGS := \
-> >       -Wno-avoid_unnecessary_addr_size \
-> >       -Wno-graph_child_address \
-> > -     -Wno-interrupt_provider
-> > +     -Wno-interrupt_provider \
-> > +     -Wno-unique_unit_address \
-> > +     -Wunique_unit_address_if_enabled
-> >
-> >  # Disable undocumented compatible checks until warning free
-> >  override DT_CHECKER_FLAGS ?=
-> > --
-> > 2.30.2
-> >
-> >

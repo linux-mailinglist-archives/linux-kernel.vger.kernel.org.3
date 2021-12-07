@@ -2,86 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8C846C4CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6212E46C4D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241402AbhLGUpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S241410AbhLGUp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbhLGUps (ORCPT
+        with ESMTP id S241414AbhLGUpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:45:48 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E952AC061574;
-        Tue,  7 Dec 2021 12:42:17 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id m6so910637oim.2;
-        Tue, 07 Dec 2021 12:42:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Oqg8eGIMwCkIu/NLmzOPhh2DpJvnhlnKib8mf5Wpdkk=;
-        b=kyOufgRYFQ5vd9CBoi0dGJX/WeugouGeCojjAaHRlnjkSbcf+kCidYXOdXfiAIi6rU
-         CE8g6IQf7HLytp2wrmg4AsBedUAEMqZuMKSY7wjfmDLCLUkwe3gPWq4f98zdV1Fo21dv
-         YXfE37VUcxuozuc7uJjw3hMzZucfi/iyMLE4XPoClhCinm1EUrdIEkKixpJiG8mBLwq5
-         v9wNECmnCpGk6gongJP8Q+wYgeG3ud2sUa97jsgnQcLfdEKmjvIV5xB309fMZHR8pIKi
-         ecFWG8Km3nZs2ePuQqDVq6LTYqD4E2MKosqWHMw4gOKwufY06BkW8kDh/MvQzSfT8pTR
-         yofw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Oqg8eGIMwCkIu/NLmzOPhh2DpJvnhlnKib8mf5Wpdkk=;
-        b=u9QOt2sZODEudWLGEtv5EPLY5a38zzkNa7DRgbeKED8xVsX5nHYyqCXUEBenHf8AVq
-         zIr6d0dU23di6GRo6SHwXVGvq++iRa8C2L5nSX26NfJ1Z5FG9OnQ8FgPMTXZfUj4toE5
-         Z7TZ1BDmFmBGbPOaCEs+DZTFOsGIZMA4+Nd4+MGTUd915B0GQtbhhvKtdAEvXMd/N+lV
-         /epfBNBV6sM525/o8v2OUfmc7D/Kc/ANu397/9SFWCO7UTjWXMv2Fezp1ZcitGHMuxcc
-         XktdUIcoxYEsoy3mw2apiIOA9U2GsIsvimn5LpEV/hnQkXzdZj0ydj0U1KX8kedYOEVj
-         kNkw==
-X-Gm-Message-State: AOAM532POw8mLavmx1uger1KuryXsDR/vMIJBqgukx9vuZI1PEPWuMFc
-        Gdwu8QJihFeT5ZEYE0DTzyy5BR5YNLE=
-X-Google-Smtp-Source: ABdhPJwvZHhvaKrXguhP/Bda7Iih8DhhsRygfzy4UIxUTa/Im/N8tFtPYm4PyJWcLroWw1YNu2RSOQ==
-X-Received: by 2002:a05:6808:a8f:: with SMTP id q15mr7220476oij.65.1638909737389;
-        Tue, 07 Dec 2021 12:42:17 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3sm121708otk.44.2021.12.07.12.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 12:42:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Dec 2021 12:42:15 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/207] 5.15.7-rc1 review
-Message-ID: <20211207204215.GG2091648@roeck-us.net>
-References: <20211206145610.172203682@linuxfoundation.org>
+        Tue, 7 Dec 2021 15:45:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545FC061574;
+        Tue,  7 Dec 2021 12:42:24 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638909743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
+        b=myOlC5dgE3khI7L8VZJuvb0AqNwW72GyeFELcD1PBbXUtZ68+3HHkLJ6B3AHqyMzsf2WT8
+        +ujqWMGHpaY4rsmjld2a82Vj5AIv9LECzrGlZmnD/32El3mdYogpJBXD830FzxpM64lfFA
+        4umcD+gxjhc1TVxDz7X7+HSKF/BzRb/G2QPcgdTOuekTL5TVuB7tk2FDJgZvBY12rIApXt
+        6/cKg45LVQbCHkJ50Jh/VwMaNydeam+MMtnO87aLsvswM8Dg0b8u1s2wEbGXeG0S5d8b8M
+        gpLncVriJOZxdr/S+hNQBS9u1GXShwEAVsplRx5hkczW+cMOAp/ZAeGaDzJRnQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638909743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
+        b=0V4XVUsOsvnU+9Fv3Fb95pdvdCgo/+dE0Mo+fVtsflMeNE/VXjrD4Tr1l/AitQqcrCl0wJ
+        KhJ9aDeINWrmG3AA==
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
+ worked
+In-Reply-To: <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210223.872249537@linutronix.de>
+ <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+ <87ilw0odel.fsf@mpe.ellerman.id.au>
+ <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
+Date:   Tue, 07 Dec 2021 21:42:22 +0100
+Message-ID: <8735n42lld.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:54:14PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.7 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
-> 
+Cedric,
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 482 pass: 482 fail: 0
+On Tue, Dec 07 2021 at 16:50, C=C3=A9dric Le Goater wrote:
+> On 12/7/21 12:36, Michael Ellerman wrote:
+>>=20
+>> This patch should drop those selects I guess. Can you send an
+>> incremental diff for Thomas to squash in?
+>
+> Sure.
+>
+>> Removing all the tendrils in various device tree files will probably
+>> require some archaeology, and it should be perfectly safe to leave those
+>> in the tree with the driver gone. So I think we can do that as a
+>> subsequent patch, rather than in this series.
+>
+> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+< Lots of patch skipped />
+> @@ -141,7 +138,6 @@ config REDWOOD
+>   	select FORCE_PCI
+>   	select PPC4xx_PCI_EXPRESS
+>   	select PCI_MSI
+> -	select PPC4xx_MSI
+>   	help
+>   	  This option enables support for the AMCC PPC460SX Redwood board.
 
-Guenter
+While that is incremental it certainly is worth a patch on it's
+own. Could you add a proper changelog and an SOB please?
+
+Thanks,
+
+        tglx

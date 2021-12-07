@@ -2,176 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42746B263
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA12446B266
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbhLGFe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbhLGFeZ (ORCPT
+        id S234795AbhLGFfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:35:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26499 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232346AbhLGFfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:34:25 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A27C061746;
-        Mon,  6 Dec 2021 21:30:55 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A87FF41EF0;
-        Tue,  7 Dec 2021 05:30:49 +0000 (UTC)
-Subject: Re: [PATCH v3 00/11] Apple SoC PMGR device power states driver
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20211124073419.181799-1-marcan@marcan.st>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <8fdf7a68-1a24-89eb-96d6-93c3f334621c@marcan.st>
-Date:   Tue, 7 Dec 2021 14:30:46 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 7 Dec 2021 00:35:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638855110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e4ghYP9B13gGvmZuLKDuOchy2naysfKvbuf3lUvYkHc=;
+        b=ILiCplrXUFLPc9DWwvemnd0a7H8UajIsai+WDTBPSFqVOugb7C9EGBpKD6/g293lrKu3db
+        0+AS4lCMlDed30cFg8udqjK6CY2qt7tOggyaYKTypCVVaMHk3kWEdgS06mbFkVF2vegMZI
+        RNXhAIDla1xuLJWGGXx04X13+BUA4hM=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-qGVdLM59PaexWRcmhI7TSA-1; Tue, 07 Dec 2021 00:31:49 -0500
+X-MC-Unique: qGVdLM59PaexWRcmhI7TSA-1
+Received: by mail-qv1-f70.google.com with SMTP id e14-20020a0562140d8e00b003bace92a1feso15584282qve.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 21:31:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e4ghYP9B13gGvmZuLKDuOchy2naysfKvbuf3lUvYkHc=;
+        b=n6P97t0ZaKGzWB4fuATKtUMhZs031v7tsspqBsfTTZ5v7ajCzlMtaZId3iCnmFrVF6
+         kRUGllj1ckJ+t8C0MHaFw+uJt4euh9Vreoj2zW8IKiwPcYwNc4+Yq2o6yx3dbKU6RPKp
+         RBzBtz+wGEDTPp9rTRDTmeGghdneRWjHNvggRzQEQk1rlwG1qe0xg9zDfwr6kAVtItoY
+         zlbs+0g2/oFzSvQ2ECZm0rAIQ/420DwbffCdl5IOgBqMOMdTyY1vUcc/hk7AJqRlW+Sa
+         ZrlT39maAWzCfXehBr+LkO33VmAftif7qUPqqdB3U7NgsIzMyYJyRvN/j1vQqKDolp6H
+         VHMA==
+X-Gm-Message-State: AOAM532d+LnMPOYOz6uap6uAK0i99QyefTSondYOq7/Hj2GI5ZqaCmOa
+        GEqAyxQX9BuIJ71e9EJ5eOPYUbUWSLqOCGwIV0frKYhR/6DdiHeAKW4UjiuY0CnCqnETMQ6EToP
+        C6SUXo4OlrJ7mye7WVX9OpGME
+X-Received: by 2002:ac8:5b51:: with SMTP id n17mr19545784qtw.182.1638855108534;
+        Mon, 06 Dec 2021 21:31:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz454uO8EitNs/c6PtV9eniUKNKiTCgR5+N8W4WMPq1f0ryP+2pFiwPH4C3lFPQ4hkn9zJMiQ==
+X-Received: by 2002:ac8:5b51:: with SMTP id n17mr19545750qtw.182.1638855108304;
+        Mon, 06 Dec 2021 21:31:48 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id s12sm8814877qtk.61.2021.12.06.21.31.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 21:31:47 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:31:42 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 07/14] kallsyms: Hide layout
+Message-ID: <20211207053142.d4xvkqs57zob2v2i@treble>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-8-alexandr.lobakin@intel.com>
+ <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
+ <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211124073419.181799-1-marcan@marcan.st>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2021 16.34, Hector Martin wrote:
-> This series adds the driver for the Apple PMGR device power state
-> registers. These registers can clockgate and (in some cases) powergate
-> specific SoC blocks. They also control the reset line, and can have
-> additional features such as automatic power management.
+On Fri, Dec 03, 2021 at 11:03:35AM +0100, Ard Biesheuvel wrote:
+> On Fri, 3 Dec 2021 at 11:01, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Dec 02, 2021 at 11:32:07PM +0100, Alexander Lobakin wrote:
+> > > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > >
+> > > This patch makes /proc/kallsyms display in a random order, rather
+> > > than sorted by address in order to hide the newly randomized address
+> > > layout.
+> >
+> > Is there a reason to not always do this? That is, why are we keeping two
+> > copies of this code around? Less code is more better etc..
 > 
-> The current driver supports only the lowest/highest power states,
-> provided via the genpd framework, plus reset support provided via
-> the reset subsystem.
+> +1.
 > 
-> Apple's PMGRs (there are two in the T8103) have a uniform register
-> bit layout (sometimes with varying features). To be able to support
-> multiple SoC generations as well as express pd relationships
-> dynamically, this binding describes each PMGR power state control
-> as a single devicetree node. Future SoC generations are expected to
-> retain backwards compatibility, allowing this driver to work on them
-> with only DT changes.
-> 
-> #1: MAINTAINERS updates, to go via the SoC tree to avert merge hell
-> #2-#5: Adds power-domains properties to existing device bindings
-> #6-#7: Adds the new pmgr device tree bindings
-> #8: The driver itself.
-> #9: Instantiates the driver in t8103.dtsi. This adds the entire PMGR
->      node tree and references the relevant nodes from existing devices.
-> #7: Adds runtime-pm support to the Samsung UART driver, as a first
->      working consumer.
-> #8: Instantiates a second UART, to more easily test this.
-> 
-> There are currently no consumers for the reset functionality, so
-> it is untested, but we will be testing it soon with the NVMe driver
-> (as it is required to allow driver re-binding to work properly).
-> 
-> == Changes since v2 ==
-> - DT schema review comments & patch order fix
-> - Added the power-domains properties to devices that already mainlined
-> - Now adds the entire PMGR tree. This turns off all devices we do not
->    currently instantiate, and adds power-domains to those we do. The
->    nodes were initially generated with [1] and manually tweaked. all
->    the labels match the ADT labels (lowercased), which might be used
->    by the bootloader in the future to conditionally disable nodes
->    based on hardware configuration.
-> - Dropped apple,t8103-minipmgr, since I don't expect we will ever need
->    to tell apart multiple PMGR instances within a SoC, and added
->    apple,t6000-pmgr{-pwrstate} for the new SoCs.
-> - Driver now unconditionally enables auto-PM for all devices. This
->    seems to be safe and should save power (it is not implemented for
->    all devices; if not implemented, the bit just doesn't exist and is
->    ignored).
-> - If an always-on device is not powered on at boot, turn it on and
->    print a warning. This avoids the PM core complaining. We still
->    want to know if/when this happens, but let's not outright fail.
-> - Other minor fixes (use PS names instead of offsets for messages,
->    do not spuriously clear flag bits).
-> 
-> On the way the parent node is handled: I've decided that these syscon
-> nodes will only ever contain pwrstates and nothing else. We now size
-> them based on the register range that contains pwrstate controls
-> (rounded up to page size). t6000 has 3 PMGRs and t6001 has 4, and
-> we shouldn't have to care about telling apart the multiple instances.
-> Anything else PMGR does that needs a driver will be handled by
-> entirely separate nodes in the future.
-> 
-> Re t6001 and t6000 (and the rumored t6002), t6000 is basically a
-> cut-down version of t6001 (and t6002 is rumored to be two t6001
-> dies), down to the die floorplan, so I'm quite certain we won't need
-> t6001/2-specific compatibles for anything shared. The t6000 devicetree
-> will just #include the t6001 one and remove the missing devices.
-> Hence, everything for this SoC series is going to have compatibles
-> named apple,t6000-* (except the extra instances of some blocks in
-> t6001 which look like they may have differences; PMGR isn't one of
-> them, but some multimedia stuff might).
-> 
-> [1] https://github.com/AsahiLinux/m1n1/blob/main/proxyclient/tools/pmgr_adt2dt.py
-> 
-> Hector Martin (11):
->    MAINTAINERS: Add PMGR power state files to ARM/APPLE MACHINE
->    dt-bindings: i2c: apple,i2c: Add power-domains property
->    dt-bindings: iommu: apple,dart: Add power-domains property
->    dt-bindings: pinctrl: apple,pinctrl: Add power-domains property
->    dt-bindings: interrupt-controller: apple,aic: Add power-domains
->      property
->    dt-bindings: power: Add apple,pmgr-pwrstate binding
->    dt-bindings: arm: apple: Add apple,pmgr binding
->    soc: apple: Add driver for Apple PMGR power state controls
->    arm64: dts: apple: t8103: Add PMGR nodes
->    tty: serial: samsung_tty: Support runtime PM
->    arm64: dts: apple: t8103: Add UART2
-> 
->   .../bindings/arm/apple/apple,pmgr.yaml        |  134 ++
->   .../devicetree/bindings/i2c/apple,i2c.yaml    |    3 +
->   .../interrupt-controller/apple,aic.yaml       |    3 +
->   .../devicetree/bindings/iommu/apple,dart.yaml |    3 +
->   .../bindings/pinctrl/apple,pinctrl.yaml       |    3 +
->   .../bindings/power/apple,pmgr-pwrstate.yaml   |   71 ++
->   MAINTAINERS                                   |    3 +
->   arch/arm64/boot/dts/apple/t8103-j274.dts      |    5 +
->   arch/arm64/boot/dts/apple/t8103-pmgr.dtsi     | 1136 +++++++++++++++++
->   arch/arm64/boot/dts/apple/t8103.dtsi          |   36 +
->   drivers/soc/Kconfig                           |    1 +
->   drivers/soc/Makefile                          |    1 +
->   drivers/soc/apple/Kconfig                     |   21 +
->   drivers/soc/apple/Makefile                    |    2 +
->   drivers/soc/apple/apple-pmgr-pwrstate.c       |  317 +++++
->   drivers/tty/serial/samsung_tty.c              |   93 +-
->   16 files changed, 1798 insertions(+), 34 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
->   create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
->   create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
->   create mode 100644 drivers/soc/apple/Kconfig
->   create mode 100644 drivers/soc/apple/Makefile
->   create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
-> 
+> IIRC I made the exact same point when this patch was sent out by
+> Kristen a while ago.
 
-Applied everything except the samsung_tty change to asahi-soc/dt (DT 
-changes) and asahi-soc/pmgr (just the driver). Thanks everyone for the 
-reviews!
-
-Krzysztof: feel free to take that patch through tty if you think it's in 
-good shape. I'm not sure how much power UART runtime-pm will save us, 
-but at least it's a decent test case, so it's probably worth having.
+Yes.  Alexander, I'd recommend going back to the review comments from
+Kristen's last posting, they may have been missed.
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Josh
+

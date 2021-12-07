@@ -2,132 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C13946BD95
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8200746BD9C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbhLGO3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S237537AbhLGOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbhLGO3q (ORCPT
+        with ESMTP id S229925AbhLGOb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:29:46 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4F3C08ED87
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:26:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=NNJTfT68Mzbdlc+S7RlFBWTtsV0EvnnqIJjDPRCWrq4=; b=7h
-        5qo3F2OlSZQkBs7eNO568P9jynvo+O0fyWaKvYTraGToastkrUVxFf213fR/vd+sLj2863L/dAB05
-        C030L1hyStHdnHaAmQUHE1nZFgPU5g3U9z98RFj/gYIUd78yQTfzs9vFgEUKrUwQMmokIU9RMLQFV
-        +gM/cOPKjdhrFcXDV8yUvZsmM4CfMIcN6K1T3VTMe33LmZEaIr8H1WkIGZ0Oh+4mmE/ghzWUnguTD
-        LJufN//N4qX3wdx9zrAMo10DXdkCGyUPI/z47h4Rl2QpRN58ffMRX7/x9IsLN2Ju2syPJ58rM8u1k
-        cZ5eGuBA778rOAQ0WDOvN1MWO2qgWXmw==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mubQ1-0007SP-Eq; Tue, 07 Dec 2021 14:26:09 +0000
-From:   John Keeping <john@metanate.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] tracing: make trace_marker{,_raw} stream-like
-Date:   Tue,  7 Dec 2021 14:25:58 +0000
-Message-Id: <20211207142558.347029-1-john@metanate.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Dec 2021 09:31:26 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03485C061574;
+        Tue,  7 Dec 2021 06:27:56 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gt5so10439427pjb.1;
+        Tue, 07 Dec 2021 06:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rZImP3iwshfoecOxdndHZuIOFh7XKnqEjO0XNsB2s2E=;
+        b=QqLJT8VKxXMYb63z1HHhTzqMZS/F2KUKinSJ0AqFuPZgoQhaUKVKQJcVcNU952xAau
+         eUlcXQPy2u4zMhn0Ee+/ywYb7z8kV3l1PMsp+a2auxwtwHNbbgmzMvouvbF8PKEzUnfh
+         g7VmTSrjPHr7vB8KPUa7e4K7e9sM+M+ew0ca00gPFX7xpx3MHMtIZ/Me85MuqH0p2eRp
+         8bSB/+/7y+jOrrGxyWRqiHRmbyF7so2kr6zzURkYAR+yaLJjs9zusAo8JTSjXjF6vwlH
+         jYCbYGrpahoSHfuG4roqrvCPCplwhRGCg2SkYV7rULUTL1B28yyJxrnIaYrzzvqgAefL
+         fQHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rZImP3iwshfoecOxdndHZuIOFh7XKnqEjO0XNsB2s2E=;
+        b=fKLznM+Mz6YifXBHjalqxvF8nI7b9+HD1tBCiaVRVpJnWDO6GhwtJYwwG3NUGEbueq
+         4aaDNlTHAyizyqRSsnsfUQw00G3Dr/TAGy6N8e4eK0zHUBrgBgfzp8q3419R2vD6dpGn
+         cLGfCR5YedjONCqLbT44z2U9aQZPNPyR/6feXNFB3Q5U/P5F0CYnWoQr39ASoCfwYcUf
+         +m9yrSW6XnOdaLySainniocEWuBeRH1PwRe5weVJ9Ezm2pN8/lodlydC+PMInTQiCkXJ
+         FLnbxz5B01z76fgBxdfVZ0drpPpns/foUC/PC7DKkXECtptNfxr4v5j4cOUTmFjOpdXv
+         Za5Q==
+X-Gm-Message-State: AOAM53308pXMNnf8I78ihy34mExPqH4tnlr1NZyEhf0xYVldiO1cLsNx
+        rV94g3XgkLQvhxWMj5V1wtI=
+X-Google-Smtp-Source: ABdhPJxeMS57uFE9g0CClBlUFMnDSb3wIrBRa27M2/wHfp364QSXBSL37EyF+Uz4KE/X49RG6XcBnQ==
+X-Received: by 2002:a17:902:654d:b0:141:7df3:b94 with SMTP id d13-20020a170902654d00b001417df30b94mr50804329pln.60.1638887275144;
+        Tue, 07 Dec 2021 06:27:55 -0800 (PST)
+Received: from nj08008nbu.spreadtrum.com ([103.6.5.6])
+        by smtp.gmail.com with ESMTPSA id d20sm16373247pfl.88.2021.12.07.06.27.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 06:27:54 -0800 (PST)
+From:   Kevin Tang <kevin3.tang@gmail.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, mark.rutland@arm.com, kevin3.tang@gmail.com,
+        pony1.wu@gmail.com
+Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v8 0/6] Add Unisoc's drm kms module
+Date:   Tue,  7 Dec 2021 22:27:11 +0800
+Message-Id: <20211207142717.30296-1-kevin3.tang@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tracing marker files are write-only streams with no meaningful
-concept of file position.  Using stream_open() to mark them as
-stream-link indicates this and has the added advantage that a single
-file descriptor can now be used from multiple threads without contention
-thanks to clearing FMODE_ATOMIC_POS.
+ChangeList:
+RFC v1:
+1. only upstream modeset and atomic at first commit.
+2. remove some unused code;
+3. use alpha and blend_mode properties;
+3. add yaml support;
+4. remove auto-adaptive panel driver;
+5. bugfix
 
-Note that this has the potential to break existing userspace by since
-both lseek(2) and pwrite(2) will now return ESPIPE when previously lseek
-would have updated the stored offset and pwrite would have appended to
-the trace.  A survey of libtracefs and several other projects found to
-use trace_marker(_raw) [1][2][3] suggests that everyone limits
-themselves to calling write(2) and close(2) on these file descriptors so
-there is a good chance this will go unnoticed and the benefits of
-reduced overhead and lock contention seem worth the risk.
+RFC v2:
+1. add sprd crtc and plane module for KMS, preparing for multi crtc&encoder
+2. remove gem drivers, use generic CMA handlers
+3. remove redundant "module_init", all the sub modules loading by KMS
 
-[1] https://github.com/google/perfetto
-[2] https://github.com/intel/media-driver/
-[3] https://w1.fi/cgit/hostap/
+RFC v3:
+1. multi crtc&encoder design have problem, so rollback to v1
 
-Signed-off-by: John Keeping <john@metanate.com>
----
-Resending as requested at [1].
+RFC v4:
+1. update to gcc-linaro-7.5.0
+2. update to Linux 5.6-rc3
+3. remove pm_runtime support
+4. add COMPILE_TEST, remove unused kconfig
+5. "drm_dev_put" on drm_unbind
+6. fix some naming convention issue
+7. remove semaphore lock for crtc flip
+8. remove static variables
 
-[1] https://lore.kernel.org/all/20211207090347.15822d87@gandalf.local.home/
+RFC v5:
+1. optimize encoder and connector code implementation
+2. use "platform_get_irq" and "platform_get_resource"
+3. drop useless function return type, drop unless debug log
+4. custom properties should be separate, so drop it
+5. use DRM_XXX replase pr_xxx
+6. drop dsi&dphy hal callback ops
+7. drop unless callback ops checking
+8. add comments for sprd dpu structure
 
- kernel/trace/trace.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+RFC v6:
+1. Access registers via readl/writel
+2. Checking for unsupported KMS properties (format, rotation, blend_mode, etc) on plane_check ops
+3. Remove always true checks for dpu core ops
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 88de94da596b1..7c91103ac1a04 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -4834,6 +4834,12 @@ int tracing_open_generic_tr(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
-+static int tracing_mark_open(struct inode *inode, struct file *filp)
-+{
-+	stream_open(inode, filp);
-+	return tracing_open_generic_tr(inode, filp);
-+}
-+
- static int tracing_release(struct inode *inode, struct file *file)
- {
- 	struct trace_array *tr = inode->i_private;
-@@ -7110,9 +7116,6 @@ tracing_mark_write(struct file *filp, const char __user *ubuf,
- 	if (tt)
- 		event_triggers_post_call(tr->trace_marker_file, tt);
- 
--	if (written > 0)
--		*fpos += written;
--
- 	return written;
- }
- 
-@@ -7171,9 +7174,6 @@ tracing_mark_raw_write(struct file *filp, const char __user *ubuf,
- 
- 	__buffer_unlock_commit(buffer, event);
- 
--	if (written > 0)
--		*fpos += written;
--
- 	return written;
- }
- 
-@@ -7573,16 +7573,14 @@ static const struct file_operations tracing_free_buffer_fops = {
- };
- 
- static const struct file_operations tracing_mark_fops = {
--	.open		= tracing_open_generic_tr,
-+	.open		= tracing_mark_open,
- 	.write		= tracing_mark_write,
--	.llseek		= generic_file_llseek,
- 	.release	= tracing_release_generic_tr,
- };
- 
- static const struct file_operations tracing_mark_raw_fops = {
--	.open		= tracing_open_generic_tr,
-+	.open		= tracing_mark_open,
- 	.write		= tracing_mark_raw_write,
--	.llseek		= generic_file_llseek,
- 	.release	= tracing_release_generic_tr,
- };
- 
+RFC v7:
+1. Fix DTC unit name warnings
+2. Fix the problem of maintainers
+3. Call drmm_mode_config_init to mode config init
+4. Embed drm_device in sprd_drm and use devm_drm_dev_alloc
+5. Replace DRM_XXX with drm_xxx on KMS module, but not suitable for other subsystems
+6. Remove plane_update stuff, dpu handles all the HW update in crtc->atomic_flush
+7. Dsi&Dphy Code structure adjustment, all move to "sprd/"
+
+v0:
+1. Remove dpu_core_ops stuff layer for sprd drtc driver, but dpu_layer need to keeping.
+   Because all the HW update in crtc->atomic_flush, we need temporary storage all layers for
+   the dpu pageflip of atomic_flush.
+2. Add ports subnode with port@X.
+
+v1:
+1. Remove dphy and dsi graph binding, merge the dphy driver into the dsi.
+2. Add commit messages for Unisoc's virtual nodes.
+
+v2:
+1. Use drm_xxx to replace all DRM_XXX.
+2. Use kzalloc to replace devm_kzalloc for sprd_dsi/sprd_dpu structure init.
+3. Remove dpu_core_ops midlayer.
+
+v3:
+1. Remove dpu_layer midlayer and commit layers by aotmic_update
+
+v4:
+1. Move the devm_drm_dev_alloc to master_ops->bind function.
+2. The managed drmm_mode_config_init() it is no longer necessary for drivers to explicitly call drm_mode_config_cleanup, so delete it.
+3. Use drmm_helpers to allocate crtc ,planes and encoder.
+4. Move allocate crtc ,planes, encoder to bind funtion.
+5. Move rotation enum definitions to crtc layer reg bitfields.
+
+v5:
+1. Remove subdir-ccflgas-y for Makefile.
+2. Keep the selects sorted by alphabet for Kconfig.
+3. Fix the checkpatch warnings.
+4. Use mode_set_nofb instead of mode_valid callback.
+5. Follow the OF-Graph bindings, use of_graph_get_port_by_id instead of of_parse_phandle.
+6. Use zpos to represent the layer position.
+7. Rebase to last drm misc branch.
+8. Remove panel_in port for dsi node.
+9. Drop the dsi ip file prefix.
+10. Add Signed-off-by for dsi&dphy patch.
+11. Use the mode_flags of mipi_dsi_device to setup crtc DPI and EDPI mode.
+
+v6:
+1. Disable and clear interrupts before register dpu IRQ
+2. Init dpi config used by crtc_state->adjusted_mode on mode_set_nofb
+3. Remove enable_irq and disable_irq function call.
+4. Remove drm_format_info function call.
+5. Redesign the way to access the dsi register.
+6. Reduce the dsi_context member variables.
+
+v7:
+1. Fix codeing style issue by checkpatch.
+2. Drop the pll registers structure define.
+3. Use bridge API instead of drm panel API.
+4. Register mipi_dsi_host on probe phase;
+5. Remove iommu error interrupt handling function.
+6. Remove some unused function.
+
+v8:
+1. Fix missing signed-off-by.
+2. Move component_add to dsi_host.attach callback.
+
+Kevin Tang (6):
+  dt-bindings: display: add Unisoc's drm master bindings
+  drm/sprd: add Unisoc's drm kms master
+  dt-bindings: display: add Unisoc's dpu bindings
+  drm/sprd: add Unisoc's drm display controller driver
+  dt-bindings: display: add Unisoc's mipi dsi controller bindings
+  drm/sprd: add Unisoc's drm mipi dsi&dphy driver
+
+ .../display/sprd/sprd,display-subsystem.yaml  |   64 +
+ .../display/sprd/sprd,sharkl3-dpu.yaml        |   77 ++
+ .../display/sprd/sprd,sharkl3-dsi-host.yaml   |   88 ++
+ drivers/gpu/drm/Kconfig                       |    2 +
+ drivers/gpu/drm/Makefile                      |    1 +
+ drivers/gpu/drm/sprd/Kconfig                  |   13 +
+ drivers/gpu/drm/sprd/Makefile                 |    8 +
+ drivers/gpu/drm/sprd/megacores_pll.c          |  305 +++++
+ drivers/gpu/drm/sprd/sprd_dpu.c               |  880 ++++++++++++++
+ drivers/gpu/drm/sprd/sprd_dpu.h               |  109 ++
+ drivers/gpu/drm/sprd/sprd_drm.c               |  205 ++++
+ drivers/gpu/drm/sprd/sprd_drm.h               |   19 +
+ drivers/gpu/drm/sprd/sprd_dsi.c               | 1073 +++++++++++++++++
+ drivers/gpu/drm/sprd/sprd_dsi.h               |  126 ++
+ 14 files changed, 2970 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/sprd/sprd,display-subsystem.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dpu.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dsi-host.yaml
+ create mode 100644 drivers/gpu/drm/sprd/Kconfig
+ create mode 100644 drivers/gpu/drm/sprd/Makefile
+ create mode 100644 drivers/gpu/drm/sprd/megacores_pll.c
+ create mode 100644 drivers/gpu/drm/sprd/sprd_dpu.c
+ create mode 100644 drivers/gpu/drm/sprd/sprd_dpu.h
+ create mode 100644 drivers/gpu/drm/sprd/sprd_drm.c
+ create mode 100644 drivers/gpu/drm/sprd/sprd_drm.h
+ create mode 100644 drivers/gpu/drm/sprd/sprd_dsi.c
+ create mode 100644 drivers/gpu/drm/sprd/sprd_dsi.h
+
 -- 
-2.34.1
+2.29.0
 

@@ -2,123 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D1746C010
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C6C46C018
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239245AbhLGP7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:59:46 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46648 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbhLGP7p (ORCPT
+        id S239314AbhLGQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239294AbhLGQAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:59:45 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8889D1FE00;
-        Tue,  7 Dec 2021 15:56:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638892574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eIuuu/kOGy1zuDG2ON0nQADHm6iD+deyHDd0QC8WGMg=;
-        b=hsdS34/zBKzEB0fwf/afqKYsPcTbONTw7GkyZJZkt8cVDZWyG2z4m1m1LkdGqu2aY9HAnQ
-        DlQKS3WRGGKKr98FP4rWbEIQy6HI/HuJiH43nEFcvhqYxMBCROyQ2rLQCGmEM8m2cv2/Vu
-        +w+EOQ8EtasCyB4TgnKwyT3SPHcREYI=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 58562A3B85;
-        Tue,  7 Dec 2021 15:56:14 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 16:56:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
-References: <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
- <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
- <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
- <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
- <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
- <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
- <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+        Tue, 7 Dec 2021 11:00:07 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA0FC061756
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:56:37 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v11so30403576wrw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s04DWXu5NLwyK43+n0H/Fmx6iCKArUlT2QSk1QCIXEA=;
+        b=leLkaw4Wq4nrnYqRR9i+abimOSRyJ+xJHXAVfqjj+KuC25tQnYy5B0vVrQS/qMzUfv
+         Nzx0Yc1/d8FmVVwS6NNwL81AmJmkekro1sv4KyZcFuf5jb+l3iQQ9lQk6kCK1ld3pvr1
+         dMnxEv9T1vJTd9yaSL8QI8qOi/YqngfClRtusBdrp2eD85vVar9OmInaq8LtUAXrzbqB
+         x2iYS+0r4q9sXr5Owqi3XjZXwMC0tOOYiLSPKJl62VOEL0rpErsrHTYOm5lzHy5tjOL2
+         jiF7lRj7rSuVlNwYEensr/mIw6DHml4OQsxn7aicDRaCL2JCH/4JMQH4nEdm372RUWHy
+         1H+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s04DWXu5NLwyK43+n0H/Fmx6iCKArUlT2QSk1QCIXEA=;
+        b=e7EbHvWxD0KaAUktGfYbB3irP1WF03CF+02fqx6kvI6DBwmAqw70188+Eqvrd+xp1c
+         x6ugOifbWkkw/8Ts0W8V/J44daIUUOIxihG/T+h6mKFzYPrufDTL/XcyVMkfQrbcrsZq
+         15yJwUguJg0gCsl4c5LJiozxVr1YmetQgoE7EXchlLw5QC/k4Kr8MSF+iwzBq6xvLFQS
+         FX6unJuW9Ej3eYP+Jan4XR0gDRik7jhwRx0aer6rSpcmDkJVSkn0u4Z63znU95f9J3xZ
+         9UP3CNkh3mmcWkwmW3MYcOu7TVN1wAwtDk6W4DbchZdaiPWqo0pt02oI2v5QriONEY9E
+         NjyA==
+X-Gm-Message-State: AOAM531CSl/r7GnxmpoT2EljHhFU4i1BTIIjvwoe/85Y+McwbmqoFg+O
+        exHf/OJrYsiPEZ9WN3pZQP9KEjwIcJn1yA==
+X-Google-Smtp-Source: ABdhPJxQBhRnVCXcNj/xSOYLWlR2ziSKQKPnBd1I2FJAjBpy539Q0U8rvPoTbp2fFBr9e85jDnZDXQ==
+X-Received: by 2002:adf:ed83:: with SMTP id c3mr50812916wro.169.1638892595418;
+        Tue, 07 Dec 2021 07:56:35 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id j17sm11346wmq.41.2021.12.07.07.56.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 07:56:34 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: misc: convert Qualcomm FastRPC bindings to
+ the YAML schema
+To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211206193849.109079-1-david@ixit.cz>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <4f631075-85d0-7362-e3d6-b3abaec465e0@linaro.org>
+Date:   Tue, 7 Dec 2021 15:56:33 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+In-Reply-To: <20211206193849.109079-1-david@ixit.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 07-12-21 16:34:30, David Hildenbrand wrote:
-> On 07.12.21 16:29, Michal Hocko wrote:
-> > On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
-> >> On 07.12.21 14:23, Michal Hocko wrote:
-> >>> On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
-> >>> [...]
-> >>>> But maybe I am missing something important regarding online vs. offline
-> >>>> nodes that your patch changes?
-> >>>
-> >>> I am relying on alloc_node_data setting the node online. But if we are
-> >>> to change the call to arch_alloc_node_data then the patch needs to be
-> >>> more involved. Here is what I have right now. If this happens to be the
-> >>> right way then there is some additional work to sync up with the hotplug
-> >>> code.
-> >>>
-> >>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> >>> index c5952749ad40..a296e934ad2f 100644
-> >>> --- a/mm/page_alloc.c
-> >>> +++ b/mm/page_alloc.c
-> >>> @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> >>>  	/* Initialise every node */
-> >>>  	mminit_verify_pageflags_layout();
-> >>>  	setup_nr_node_ids();
-> >>> -	for_each_online_node(nid) {
-> >>> -		pg_data_t *pgdat = NODE_DATA(nid);
-> >>> +	for_each_node(nid) {
-> >>> +		pg_data_t *pgdat;
-> >>> +
-> >>> +		if (!node_online(nid)) {
-> >>> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
-> >>> +			pgdat = arch_alloc_nodedata(nid);
-> >>> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-> >>> +			arch_refresh_nodedata(nid, pgdat);
-> >>> +			node_set_online(nid);
-> >>
-> >> Setting all possible nodes online might result in quite some QE noice,
-> >> because all these nodes will then be visible in the sysfs and
-> >> try_offline_nodes() is essentially for the trash.
-> > 
-> > I am not sure I follow. I believe sysfs will not get populate because I
-> > do not call register_one_node.
-> 
-> arch/x86/kernel/topology.c:topology_init()
-> 
-> for_each_online_node(i)
-> 	register_one_node(i);
+Hi David,
 
-Right you are.
- 
-> > You are right that try_offline_nodes will be reduce which is good imho.
-> > More changes will be possible (hopefully to drop some ugly code) on top
-> > of this change (or any other that achieves that there are no NULL pgdat
-> > for possible nodes).
-> > 
+Thanks for the patch,
+
+
+On 06/12/2021 19:38, David Heidelberg wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
 > 
-> No to exposing actually offline nodes to user space via sysfs.
+> Also:
+>   - simplify example
+>   - embrace compute-cb@ subnodes instead of just cb@
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 
-Why is that a problem with the sysfs for non-populated nodes?
 
--- 
-Michal Hocko
-SUSE Labs
+There is already a similar patch [1] in the list. If you have noticed 
+it, Its better to let the author know about your plans so that we do not 
+duplicate the same thing.
+
+Your patch seems to have addressed issues with subnode names and example.
+
+so am okay with this patch.
+
+Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+FastRPC patches normally go via char-misc tree, so if Rob acks can you 
+send it to Greg as well.
+
+
+--srini
+
+
+> ---
+>   .../devicetree/bindings/misc/qcom,fastrpc.txt | 78 ---------------
+>   .../bindings/misc/qcom,fastrpc.yaml           | 94 +++++++++++++++++++
+>   2 files changed, 94 insertions(+), 78 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+>   create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt b/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+> deleted file mode 100644
+> index 2a1827ab50d2..000000000000
+> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+> +++ /dev/null
+> @@ -1,78 +0,0 @@
+> -Qualcomm Technologies, Inc. FastRPC Driver
+> -
+> -The FastRPC implements an IPC (Inter-Processor Communication)
+> -mechanism that allows for clients to transparently make remote method
+> -invocations across DSP and APPS boundaries. This enables developers
+> -to offload tasks to the DSP and free up the application processor for
+> -other tasks.
+> -
+> -- compatible:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: must be "qcom,fastrpc"
+> -
+> -- label
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: should specify the dsp domain name this fastrpc
+> -	corresponds to. must be one of this: "adsp", "mdsp", "sdsp", "cdsp"
+> -
+> -- #address-cells
+> -	Usage: required
+> -	Value type: <u32>
+> -	Definition: Must be 1
+> -
+> -- #size-cells
+> -	Usage: required
+> -	Value type: <u32>
+> -	Definition: Must be 0
+> -
+> -= COMPUTE BANKS
+> -Each subnode of the Fastrpc represents compute context banks available
+> -on the dsp.
+> -- All Compute context banks MUST contain the following properties:
+> -
+> -- compatible:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: must be "qcom,fastrpc-compute-cb"
+> -
+> -- reg
+> -	Usage: required
+> -	Value type: <u32>
+> -	Definition: Context Bank ID.
+> -
+> -- qcom,nsessions:
+> -	Usage: Optional
+> -	Value type: <u32>
+> -	Defination: A value indicating how many sessions can share this
+> -		    context bank. Defaults to 1 when this property
+> -		    is not specified.
+> -
+> -Example:
+> -
+> -adsp-pil {
+> -	compatible = "qcom,msm8996-adsp-pil";
+> -	...
+> -	smd-edge {
+> -		label = "lpass";
+> -		fastrpc {
+> -			compatible = "qcom,fastrpc";
+> -			qcom,smd-channels = "fastrpcsmd-apps-dsp";
+> -			label = "adsp";
+> -			#address-cells = <1>;
+> -			#size-cells = <0>;
+> -
+> -			cb@1 {
+> -				compatible = "qcom,fastrpc-compute-cb";
+> -				reg = <1>;
+> -			};
+> -
+> -			cb@2 {
+> -				compatible = "qcom,fastrpc-compute-cb";
+> -				reg = <2>;
+> -			};
+> -			...
+> -		};
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> new file mode 100644
+> index 000000000000..f42ab208a7fc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/misc/qcom,fastrpc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm FastRPC Driver
+> +
+> +maintainers:
+> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> +
+> +description: |
+> +  The FastRPC implements an IPC (Inter-Processor Communication)
+> +  mechanism that allows for clients to transparently make remote method
+> +  invocations across DSP and APPS boundaries. This enables developers
+> +  to offload tasks to the DSP and free up the application processor for
+> +  other tasks.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: qcom,fastrpc
+> +
+> +  label:
+> +    items:
+> +      enum:
+> +        - adsp
+> +        - mdsp
+> +        - sdsp
+> +        - cdsp
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  "(compute-)?cb@[0-9]$":
+> +    type: object
+> +
+> +    description: >
+> +      Each subnode of the Fastrpc represents compute context banks available on the dsp.
+> +
+> +    properties:
+> +      compatible:
+> +        items:
+> +          - const: qcom,fastrpc-compute-cb
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      qcom,nsession:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        default: 1
+> +        description: >
+> +          A value indicating how many sessions can share this context bank.
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+> +    additionalProperties: true
+> +
+> +required:
+> +  - compatible
+> +  - label
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    smd-edge {
+> +        label = "lpass";
+> +        fastrpc {
+> +            compatible = "qcom,fastrpc";
+> +            label = "adsp";
+> +            qcom,smd-channels = "fastrpcsmd-apps-dsp";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            compute-cb@1 {
+> +                compatible = "qcom,fastrpc-compute-cb";
+> +                reg = <1>;
+> +            };
+> +
+> +            compute-cb@2 {
+> +                compatible = "qcom,fastrpc-compute-cb";
+> +                reg = <2>;
+> +            };
+> +        };
+> +    };
+> 
+[1] 
+https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211130092846.18804-1-srinivas.kandagatla@linaro.org/

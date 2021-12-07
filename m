@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D246C6AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 499CF46C6AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbhLGV17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:27:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37335 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232531AbhLGV17 (ORCPT
+        id S241883AbhLGV2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237303AbhLGV23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:27:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638912267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wn5kxaLGFOkCOE3vlVAq3FMKxlWOJF803iGWDpf7qyw=;
-        b=RHXmZTDDrnX2s1EheIui9Dpcb+p8j3TqK2C7mMpRD6Iz2oJX1oP+CTEr0Gyyh7JeK+RC5F
-        3b3eAB+JzEuUEMCV08a7qCJbJ3515yx7uSa2dN/BMhd7xlp0ghHmefYgX1fr6w11DNmZT1
-        Or7bQo5C7RtOvck8J3/ZhS5sC6TFUXY=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135-GyTDXY-fPR2-6kj_2xPpGw-1; Tue, 07 Dec 2021 16:24:26 -0500
-X-MC-Unique: GyTDXY-fPR2-6kj_2xPpGw-1
-Received: by mail-io1-f71.google.com with SMTP id o11-20020a0566022e0b00b005e95edf792dso582448iow.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:24:26 -0800 (PST)
+        Tue, 7 Dec 2021 16:28:29 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D741C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:24:58 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id g19so579505pfb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:24:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jRVyeuIh1LxtzkYS1LgM983Dmj/tho/LqeLDaBBAdCA=;
+        b=nw4tUIWMBU0ZfijX4DiaPNSybi8bfq/h9jjeCpKcbJrXFHvVOS2UCW888tnIagK3sg
+         SFx2tv++JgamqZ4ibhYbypQM1twAP0V7h7M/r4Zd/KKyViljM24qpqdnIIpugdDF1AtO
+         6/EFnXi22NJAveaezAG2XAEdSxQ//7ZTtAEWWXCSwvD1yto0JLpXLVnrXcXdB8HLb8xV
+         5ArWiklp0+9NBEBBYsio380JHngx8EQ9tYta+lwXRX4wyOjPW+d7TXWS0aKxe4h7AHFM
+         qQMRwJgM3NhtWPg3NH+N2iE7c0Al2c536OxU2UtszIZNlkpXqhO9dDcS9BBxgzCrI88U
+         tazw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wn5kxaLGFOkCOE3vlVAq3FMKxlWOJF803iGWDpf7qyw=;
-        b=yywKYJvzB8CRTgqdh6dl1MJkWzQqG8gmACASQ8djAxMSpT/qLuQui9huthcbXcAgLn
-         74SIGW7YulwXZqehUGtuhJm4xRZsHMSNrLQ8L8DETqVpcNL7buJbE0tRLScH6rVIzC93
-         nBU5FpapKox0c0se9MnS4JrY7nsQc5hGh1FT/duVT2llvdkQb8zG88IRJsnR3V91YN5P
-         tNh6LzgAmD/3bM7yiEINlWxSr146U4iAKuoh03HI93dkpf5fPr4nBzm16aP1ssB9GJwf
-         7q9D5mrVpwP7S7gYHDXWGvaKia1sfIrPp0OaOqlWYUsbqAKDF/kx9NSwZMmuF+ToDoe/
-         4z1w==
-X-Gm-Message-State: AOAM533bGz/Yi1DgRARjQqt8kG4DZuoqSqrMx6ZMdsd6J9/mMRz10Xmh
-        GrWX4G+oVXP4UhkS5lWpeb1fQMHViA78qLGz89tU2ipKdNg8B3gMKDO1ubdFxBn5KsjZSPcwi2d
-        ci58kvMf7gavFtEreUdDxEqJm
-X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr2361762iow.54.1638912265538;
-        Tue, 07 Dec 2021 13:24:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPpiZvgvkFBP4jYV9P3L95Lz+9Veit4KuNNxL4nYOgfZpNG3y+qSMJ3QgmydN2zLJlshtlYg==
-X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr2361744iow.54.1638912265386;
-        Tue, 07 Dec 2021 13:24:25 -0800 (PST)
-Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
-        by smtp.gmail.com with ESMTPSA id b8sm679453ilj.0.2021.12.07.13.24.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 13:24:24 -0800 (PST)
-Message-ID: <09c3b733-974a-8672-b267-6be1f0b6009b@redhat.com>
-Date:   Tue, 7 Dec 2021 16:24:23 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jRVyeuIh1LxtzkYS1LgM983Dmj/tho/LqeLDaBBAdCA=;
+        b=P+HCKhmphBVDpN+pfJ8YuX+oE+LfomIx3OJTdbZmJMTDOHmDNPPTysR+TikP2Yb2oZ
+         wMbangMMWgFTpdYIWI4+Gq/VBQkrIQojOTYhwz476Ulj9W6At/YBh9zTcj6hbjXBOBuG
+         SzqpV1RXsa8pZavDjWBBxlw/XJVVYkHrXIjnvr8lLFZwNI77+tZuDMDbuIERx95ajdE3
+         EbVrJRRfCiEbTtLFgX2/Q4wuJRvOm0fF/Vp6Bx+j/pJSWlOA9XeRBDn3SASLeK+ssA3d
+         P92yKy8QkoLOPb0vrE6bCoLKiiPBbnA2az7LD+phnbJfTLez4Iw0EosPHHx6EmGRtfqi
+         qI9Q==
+X-Gm-Message-State: AOAM530WCn/i9DwzRjpNoRFbiwzbaIcxDBZY68LRe2kCKw3ZMcR828tm
+        ElkDzo3Q90b7FCEHnzuTYJM1ARNfWCBu5w==
+X-Google-Smtp-Source: ABdhPJz5yHjRT7WEtoUHsulRAwpB6pdUSVvXWyPfKXTGjX4l1AAn8R6DCGg8B/YWQwEZZmfh0QQc5A==
+X-Received: by 2002:a62:7e4c:0:b0:4a2:678e:8793 with SMTP id z73-20020a627e4c000000b004a2678e8793mr1577406pfc.75.1638912297949;
+        Tue, 07 Dec 2021 13:24:57 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n31sm621096pfv.181.2021.12.07.13.24.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 13:24:57 -0800 (PST)
+Date:   Tue, 7 Dec 2021 21:24:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Orr <marcorr@google.com>
+Subject: Re: [PATCH] selftests: sev_migrate_tests: Fix sev_ioctl()
+Message-ID: <Ya/RJiTOQjJ+fj73@google.com>
+References: <20211207201034.1392660-1-pgonda@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 1/2] include/linux/gfp.h: Do not allocate pages on a
- offlined node
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, shakeelb@google.com,
-        ktkhai@virtuozzo.com, shy828301@gmail.com, guro@fb.com,
-        vbabka@suse.cz, vdavydov.dev@gmail.com, raquini@redhat.com,
-        Rafael Aquini <aquini@redhat.com>
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-2-npache@redhat.com> <Ya3WZC1JWU5jdtlC@dhcp22.suse.cz>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <Ya3WZC1JWU5jdtlC@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207201034.1392660-1-pgonda@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 07, 2021, Peter Gonda wrote:
+> TEST_ASSERT in SEV ioctl was allowing errors because it checked return
+> value was good OR the FW error code was OK. This TEST_ASSERT should
+> require both (aka. AND) values are OK. Removes the LAUNCH_START from the
+> mirror VM because this call correctly fails because mirror VMs cannot
+> call this command.
 
-
-On 12/6/21 04:22, Michal Hocko wrote:
-> On Sun 05-12-21 22:33:37, Nico Pache wrote:
->> We shouldn't allocate pages on a unavailable node. Add a check for this
->> in __alloc_pages_node and return NULL to avoid issues further down the
->> callchain.
->>
->> Also update the VM_WARN_ON in __alloc_pages_node which could skip this
->> warn if the gfp_mask is not GFP_THISNODE.
+This probably should be two separate patches.  First remove the bogus LAUNCH_START
+call, then fix the assert.
+ 
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Marc Orr <marcorr@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> ---
+>  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
-> Page allocator trusts callers to know they are doing a right thing so
-> that no unnecessary branches have to be implemented and the fast path is
-> really optimized for performance. Allocating from an !node_online node
-> is a bug in the caller. One that is not really that hard to make
-> unfortunatelly but also one that is is not that common.
+> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> index 29b18d565cf4..8e1b1e737cb1 100644
+> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> @@ -31,7 +31,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+>  	int ret;
+>  
+>  	ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
+> -	TEST_ASSERT((ret == 0 || cmd.error == SEV_RET_SUCCESS),
+> +	TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
+>  		    "%d failed: return code: %d, errno: %d, fw error: %d",
+>  		    cmd_id, ret, errno, cmd.error);
 
-Thank you for your review,
+Hmm, reading cmd.error could also consume uninitialized data, e.g. if the ioctl()
+fails before getting into the PSP command, the error message will dump garbage.
 
-That makes sense. I will drop this patch on my second posting to avoid any
-performance regression.
+And theoretically this could get a false negative if the test stack happens to have
+'0' for cmd.error and KVM neglects to fill cmd.error when the ioctl() succeeds.
 
-Cheers,
--- Nico
+So in additional to fixing the assert itself, I vote we also do:
 
-> 
-> That being said I am not really sure we want to introduce this check.
-> 
->> Co-developed-by: Rafael Aquini <aquini@redhat.com>
->> Signed-off-by: Nico Pache <npache@redhat.com>
->> ---
->>  include/linux/gfp.h | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
->> index b976c4177299..e7e18f6d0d9d 100644
->> --- a/include/linux/gfp.h
->> +++ b/include/linux/gfp.h
->> @@ -565,7 +565,10 @@ static inline struct page *
->>  __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
->>  {
->>  	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
->> -	VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
->> +	VM_WARN_ON(!node_online(nid));
->> +
->> +	if (!node_online(nid))
->> +		return NULL;
->>  
->>  	return __alloc_pages(gfp_mask, order, nid, NULL);
->>  }
->> -- 
->> 2.33.1
-> 
-
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index 29b18d565cf4..50132e165a8d 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -26,6 +26,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+        struct kvm_sev_cmd cmd = {
+                .id = cmd_id,
+                .data = (uint64_t)data,
++               .error = -1u,
+                .sev_fd = open_sev_dev_path_or_exit(),
+        };
+        int ret;

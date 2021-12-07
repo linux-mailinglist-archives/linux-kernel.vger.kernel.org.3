@@ -2,92 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FBE46B937
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE0F46B93D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbhLGKiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:38:06 -0500
-Received: from ns.iliad.fr ([212.27.33.1]:34688 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhLGKiF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:38:05 -0500
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id CCE651FFD9;
-        Tue,  7 Dec 2021 11:34:34 +0100 (CET)
-Received: from sakura (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id BF3101FF88;
-        Tue,  7 Dec 2021 11:34:34 +0100 (CET)
-Message-ID: <12988dafdf7e14ba6db69ab483a2eb53e411fc0d.camel@freebox.fr>
-Subject: Re: [PATCH] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and
- KFENCE
-From:   Maxime Bizon <mbizon@freebox.fr>
-Reply-To: mbizon@freebox.fr
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Tue, 07 Dec 2021 11:34:34 +0100
-In-Reply-To: <aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu>
-References: <aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu>
-Organization: Freebox
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Tue Dec  7 11:34:34 2021 +0100 (CET)
+        id S235293AbhLGKjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235263AbhLGKjG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 05:39:06 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11264C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 02:35:37 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id y7so9169473plp.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 02:35:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=JxiMwx4C7x5k8y2Xl9TOjw2NlxLDyAqVmINHy5bpGck=;
+        b=vK5p9DHLGcOw0yiyBwJ9laMSSiVhDZQCvmpDM1iH75e2UfhLDYH/mf7e2HrefL/sMv
+         fhAra2Bm7cbrxeJgUQNpQ12hDCle+9SXTLYbiM/gw88s5dtwt+0nnivf4XJuwXg6Ninb
+         QSHEiaoZSstIGC2u3byuj1+L3cvdSkzGWuh2L6DBWe5yDmt9EbHOF47NYdZG8yq0KxCj
+         VPIxhqGjsxNJ2uUnhPpAblUNr8sjLY3nb7KpYeFPQYSSuKMUNWtZUIB+sUlCmkMtyJyQ
+         RZ1FrGLgkEUTcsMN1wKyAmyuWlOXBASfTDmzMQLTSA9EpwcFt8NZ221OOL4/vrP9wrdN
+         gMAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=JxiMwx4C7x5k8y2Xl9TOjw2NlxLDyAqVmINHy5bpGck=;
+        b=KDVwmiTOBX4XOLkvz4yrjrujVlMljTL+MkaCC8EJKSrCcUqVB/LsXaYKmxzE0YBvIe
+         7huwuT/ZWCgw0HqAzYoy6KwW6LP/AFNlqNRHpnzXezUaT36Dohbn8jbJJq/+ZFjHLJhO
+         McLkzvfZ6CAukikan86C4DduR/vNoqAhI1bn4Ew+pzD96Z5f1JzXMrrjevssgGoiHx9E
+         xOqiTdmP06mpOIYhgOfSqwPKn7jbLDFtJrDv3Jjx7Rp/ILDZRbBgNfZZJBTinF7rSRnl
+         QJF2O/PpZ/u2xbyOKYYtK3apQrFniSNEACW6PGlPoRVObAXWq1/2io7BUFP080CXoPaL
+         LKDQ==
+X-Gm-Message-State: AOAM530LYBto5eNMdBDqIsn9Vg9b2V9Su5BIR3FG8kVpXZLqKQ8jhxbL
+        hWjxWk0PxyymD7CFY/SEpUsm+w==
+X-Google-Smtp-Source: ABdhPJxVXLdqIw+lDiAPUjGajLKImI1eWzIJDKJ3QTpNQZ82cEF0W15LjnO9lyFohe3k4lFOhliP3g==
+X-Received: by 2002:a17:90a:cb98:: with SMTP id a24mr5558447pju.153.1638873336553;
+        Tue, 07 Dec 2021 02:35:36 -0800 (PST)
+Received: from [10.59.0.6] ([94.177.118.48])
+        by smtp.gmail.com with ESMTPSA id y22sm9020940pfa.107.2021.12.07.02.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 02:35:36 -0800 (PST)
+Subject: Re: [RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)
+To:     eric.auger@redhat.com, eric.auger.pro@gmail.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, jean-philippe@linaro.org,
+        zhukeqian1@huawei.com
+Cc:     alex.williamson@redhat.com, jacob.jun.pan@linux.intel.com,
+        yi.l.liu@intel.com, kevin.tian@intel.com, ashok.raj@intel.com,
+        maz@kernel.org, peter.maydell@linaro.org, vivek.gautam@arm.com,
+        shameerali.kolothum.thodi@huawei.com, wangxingang5@huawei.com,
+        jiangkunkun@huawei.com, yuzenghui@huawei.com,
+        nicoleotsuka@gmail.com, chenxiang66@hisilicon.com,
+        sumitg@nvidia.com, nicolinc@nvidia.com, vdumpa@nvidia.com,
+        zhangfei.gao@gmail.com, lushenming@huawei.com, vsethi@nvidia.com
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <ee119b42-92b1-5744-4321-6356bafb498f@linaro.org>
+ <7763531a-625d-10c6-c35e-2ce41e75f606@redhat.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <c1e9dd67-0000-28b5-81c0-239ceda560ed@linaro.org>
+Date:   Tue, 7 Dec 2021 18:35:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <7763531a-625d-10c6-c35e-2ce41e75f606@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 2021-12-07 at 06:10 +0000, Christophe Leroy wrote:
 
-Hello,
+On 2021/12/7 下午6:27, Eric Auger wrote:
+> Hi Zhangfei,
+>
+> On 12/3/21 1:27 PM, Zhangfei Gao wrote:
+>> Hi, Eric
+>>
+>> On 2021/10/27 下午6:44, Eric Auger wrote:
+>>> This series brings the IOMMU part of HW nested paging support
+>>> in the SMMUv3.
+>>>
+>>> The SMMUv3 driver is adapted to support 2 nested stages.
+>>>
+>>> The IOMMU API is extended to convey the guest stage 1
+>>> configuration and the hook is implemented in the SMMUv3 driver.
+>>>
+>>> This allows the guest to own the stage 1 tables and context
+>>> descriptors (so-called PASID table) while the host owns the
+>>> stage 2 tables and main configuration structures (STE).
+>>>
+>>> This work mainly is provided for test purpose as the upper
+>>> layer integration is under rework and bound to be based on
+>>> /dev/iommu instead of VFIO tunneling. In this version we also get
+>>> rid of the MSI BINDING ioctl, assuming the guest enforces
+>>> flat mapping of host IOVAs used to bind physical MSI doorbells.
+>>> In the current QEMU integration this is achieved by exposing
+>>> RMRs to the guest, using Shameer's series [1]. This approach
+>>> is RFC as the IORT spec is not really meant to do that
+>>> (single mapping flag limitation).
+>>>
+>>> Best Regards
+>>>
+>>> Eric
+>>>
+>>> This series (Host) can be found at:
+>>> https://github.com/eauger/linux/tree/v5.15-rc7-nested-v16
+>>> This includes a rebased VFIO integration (although not meant
+>>> to be upstreamed)
+>>>
+>>> Guest kernel branch can be found at:
+>>> https://github.com/eauger/linux/tree/shameer_rmrr_v7
+>>> featuring [1]
+>>>
+>>> QEMU integration (still based on VFIO and exposing RMRs)
+>>> can be found at:
+>>> https://github.com/eauger/qemu/tree/v6.1.0-rmr-v2-nested_smmuv3_v10
+>>> (use iommu=nested-smmuv3 ARM virt option)
+>>>
+>>> Guest dependency:
+>>> [1] [PATCH v7 0/9] ACPI/IORT: Support for IORT RMR node
+>> Thanks a lot for upgrading these patches.
+>>
+>> I have basically verified these patches on HiSilicon Kunpeng920.
+>> And integrated them to these branches.
+>> https://github.com/Linaro/linux-kernel-uadk/tree/uacce-devel-5.16
+>> https://github.com/Linaro/qemu/tree/v6.1.0-rmr-v2-nested_smmuv3_v10
+>>
+>> Though they are provided for test purpose,
+>>
+>> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> Thank you very much. As you mentioned, until we do not have the
+> /dev/iommu integration this is maintained for testing purpose. The SMMU
+> changes shouldn't be much impacted though.
+> The added value of this respin was to propose an MSI binding solution
+> based on RMRRs which simplify things at kernel level.
 
-With the patch applied and
+Current RMRR solution requires uefi enabled,
+and QEMU_EFI.fd  has to be provided to start qemu.
 
-CONFIG_DEBUG_PAGEALLOC=y
-CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
-CONFIG_DEBUG_VM=y
+Any plan to support dtb as well, which will be simpler since no need 
+QEMU_EFI.fd anymore.
 
-I get tons of this during boot:
-
-[    0.000000] Dentry cache hash table entries: 262144 (order: 8, 1048576 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] ------------[ cut here ]------------
-[    0.000000] WARNING: CPU: 0 PID: 0 at arch/powerpc/mm/pgtable.c:194 set_pte_at+0x18/0x160
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.0+ #442
-[    0.000000] NIP:  80015ebc LR: 80016728 CTR: 800166e4
-[    0.000000] REGS: 80751dd0 TRAP: 0700   Not tainted  (5.15.0+)
-[    0.000000] MSR:  00021032 <ME,IR,DR,RI>  CR: 42228882  XER: 20000000
-[    0.000000] 
-[    0.000000] GPR00: 800b8dc8 80751e80 806c6300 807311d8 807a1000 8ffffe84 80751ea8 00000000 
-[    0.000000] GPR08: 007a1591 00000001 007a1180 00000000 42224882 00000000 3ff9c608 3fffd79c 
-[    0.000000] GPR16: 00000000 00000000 00000000 00000000 00000000 00000000 800166e4 807a2000 
-[    0.000000] GPR24: 807a1fff 807311d8 807311d8 807a2000 80768804 00000000 807a1000 007a1180 
-[    0.000000] NIP [80015ebc] set_pte_at+0x18/0x160
-[    0.000000] LR [80016728] set_page_attr+0x44/0xc0
-[    0.000000] Call Trace:
-[    0.000000] [80751e80] [80058570] console_unlock+0x340/0x428 (unreliable)
-[    0.000000] [80751ea0] [00000000] 0x0
-[    0.000000] [80751ec0] [800b8dc8] __apply_to_page_range+0x144/0x2a8
-[    0.000000] [80751f00] [80016918] __kernel_map_pages+0x54/0x64
-[    0.000000] [80751f10] [800cfeb0] __free_pages_ok+0x1b0/0x440
-[    0.000000] [80751f50] [805cfc8c] memblock_free_all+0x1d8/0x274
-[    0.000000] [80751f90] [805c5e0c] mem_init+0x3c/0xd0
-[    0.000000] [80751fb0] [805c0bdc] start_kernel+0x404/0x5c4
-[    0.000000] [80751ff0] [000033f0] 0x33f0
-[    0.000000] Instruction dump:
-[    0.000000] 7c630034 83e1000c 5463d97e 7c0803a6 38210010 4e800020 9421ffe0 93e1001c 
-[    0.000000] 83e60000 81250000 71290001 41820014 <0fe00000> 7c0802a6 93c10018 90010024 
-
-
--- 
-Maxime
-
+Thanks
 
 

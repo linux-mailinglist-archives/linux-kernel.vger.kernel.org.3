@@ -2,70 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 430A746C682
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A824B46C684
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241770AbhLGVSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:18:32 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:39698 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbhLGVSb (ORCPT
+        id S241804AbhLGVSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232699AbhLGVSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:18:31 -0500
-Received: by mail-ot1-f51.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso541620ots.6;
-        Tue, 07 Dec 2021 13:15:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hMPp8eJ3HT7AMdS1OWA3UkDt9m8fr4GHA3WgnRyiBfs=;
-        b=6YWUs8aHokgKSA5/aew9hi+LpA0ice40TOUnh/4msS3mWLrY4TduFU3VdkUrle0ot2
-         e+t21WYn5XJD+dPmZqDB05GxIvx5oCa37WAO14OCuTDzYFhgH1VzKP3yoUujlXzNm3mq
-         F8t9Y4v9V9QBx/IcMl07WwkRtJ25D6W9f1h4EhOE3Nfug2x4DC14dM+UOapxNwFePaNT
-         W3oAA4pdpGTVP4d2XsnsjsqQoUBBhPYJS8BXCT1kFVlEPTCkCcMow1PpDWLVEsEnTMLi
-         kph0D1ziTzTYpbp9g3jK3p7EqjKGdphqqCyc+4lF6kgo7Zfd6XR1Di92zlw4xe6Kz+NA
-         b3XA==
-X-Gm-Message-State: AOAM533fGWsWp4c9df4AFZ+73chfwIM42MGnqe6WDZuXNUDKCtzkq0hl
-        B1Lm+hEtO49W7jc1F9fukw==
-X-Google-Smtp-Source: ABdhPJwtobr2zojieZAaxXmv84EbWPbJBl9tEuCOl38THFgPPcTLJ44tmtR4FSAuONqNaUdvsZxXOQ==
-X-Received: by 2002:a05:6830:40b1:: with SMTP id x49mr37582035ott.234.1638911700839;
-        Tue, 07 Dec 2021 13:15:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v2sm132279oto.3.2021.12.07.13.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 13:15:00 -0800 (PST)
-Received: (nullmailer pid 843333 invoked by uid 1000);
-        Tue, 07 Dec 2021 21:14:59 -0000
-Date:   Tue, 7 Dec 2021 15:14:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v2] dt-bindings: PCI: ti,j721e: Add device id for J721S2
-Message-ID: <Ya/O0+F6V3YUDmWm@robh.at.kernel.org>
-References: <20211130035608.13492-1-a-govindraju@ti.com>
+        Tue, 7 Dec 2021 16:18:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8585C061574;
+        Tue,  7 Dec 2021 13:15:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFACB81E7F;
+        Tue,  7 Dec 2021 21:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 228D3C341C1;
+        Tue,  7 Dec 2021 21:15:20 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 16:15:18 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Yabin Cui <yabinc@google.com>
+Subject: [PATCH] tracefs: Set all files to the same group ownership as the
+ mount option
+Message-ID: <20211207161518.3a00be3c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130035608.13492-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 09:26:07 +0530, Aswath Govindraju wrote:
-> Document the device id of J721S2 SoC.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
-> 
-> changes since v1:
-> - changed (oneOf, items) into enum
-> 
->  .../devicetree/bindings/pci/ti,j721e-pci-host.yaml   | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+As people have been asking to allow non-root processes to have access to
+the tracefs directory, it was considered best to only allow groups to have
+access to the directory, where it is easier to just set the tracefs file
+system to a specific group (as other would be too dangerous), and that way
+the admins could pick which processes would have access to tracefs.
+
+Unfortunately, this broke tooling on Android that expected the other bit
+to be set. For some special cases, for non-root tools to trace the system,
+tracefs would be mounted and change the permissions of the top level
+directory which gave access to all running tasks permission to the
+tracing directory. Even though this would be dangerous to do in a
+production environment, for testing environments this can be useful.
+
+Now with the new changes to not allow other (which is still the proper
+thing to do), it breaks the testing tooling. Now more code needs to be
+loaded on the system to change ownership of the tracing directory.
+
+The real solution is to have tracefs honor the gid=xxx option when
+mounting. That is,
+
+(tracing group tracing has value 1003)
+
+ mount -t tracefs -o gid=1003 tracefs /sys/kernel/tracing
+
+should have it that all files in the tracing directory should be of the
+given group.
+
+Copy the logic from d_walk() from dcache.c and simplify it for the mount
+case of tracefs if gid is set. All the files in tracefs will be walked and
+their group will be set to the value passed in.
+
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported-by: Yabin Cui <yabinc@google.com>
+Fixes: 49d67e445742 ("tracefs: Have tracefs directories not set OTH permission bits by default")
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+  Resending without the RFC, and also somehow I deleted the below
+  "--- a/fs/tracefs/inode.c" part of the patch, and it prevented
+  my scripts from processing it. I'm going to start running this through
+  all my testes, and if it passes then I'll push it. Unless someone
+  has issues with it.
+
+ fs/tracefs/inode.c | 74 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 925a621b432e..f20f575cdaef 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -161,6 +161,79 @@ struct tracefs_fs_info {
+ 	struct tracefs_mount_opts mount_opts;
+ };
+ 
++static void change_gid(struct dentry *dentry, kgid_t gid)
++{
++	if (!dentry->d_inode)
++		return;
++	dentry->d_inode->i_gid = gid;
++}
++
++/*
++ * Taken from d_walk, but without he need for handling renames.
++ * Nothing can be renamed while walking the list, as tracefs
++ * does not support renames. This is only called when mounting
++ * or remounting the file system, to set all the files to
++ * the given gid.
++ */
++static void set_gid(struct dentry *parent, kgid_t gid)
++{
++	struct dentry *this_parent;
++	struct list_head *next;
++
++	this_parent = parent;
++	spin_lock(&this_parent->d_lock);
++
++	change_gid(this_parent, gid);
++repeat:
++	next = this_parent->d_subdirs.next;
++resume:
++	while (next != &this_parent->d_subdirs) {
++		struct list_head *tmp = next;
++		struct dentry *dentry = list_entry(tmp, struct dentry, d_child);
++		next = tmp->next;
++
++		spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
++
++		change_gid(dentry, gid);
++
++		if (!list_empty(&dentry->d_subdirs)) {
++			spin_unlock(&this_parent->d_lock);
++			spin_release(&dentry->d_lock.dep_map, _RET_IP_);
++			this_parent = dentry;
++			spin_acquire(&this_parent->d_lock.dep_map, 0, 1, _RET_IP_);
++			goto repeat;
++		}
++		spin_unlock(&dentry->d_lock);
++	}
++	/*
++	 * All done at this level ... ascend and resume the search.
++	 */
++	rcu_read_lock();
++ascend:
++	if (this_parent != parent) {
++		struct dentry *child = this_parent;
++		this_parent = child->d_parent;
++
++		spin_unlock(&child->d_lock);
++		spin_lock(&this_parent->d_lock);
++
++		/* go into the first sibling still alive */
++		do {
++			next = child->d_child.next;
++			if (next == &this_parent->d_subdirs)
++				goto ascend;
++			child = list_entry(next, struct dentry, d_child);
++		} while (unlikely(child->d_flags & DCACHE_DENTRY_KILLED));
++		rcu_read_unlock();
++		goto resume;
++	}
++	rcu_read_unlock();
++
++out_unlock:
++	spin_unlock(&this_parent->d_lock);
++	return;
++}
++
+ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ {
+ 	substring_t args[MAX_OPT_ARGS];
+@@ -193,6 +266,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ 			if (!gid_valid(gid))
+ 				return -EINVAL;
+ 			opts->gid = gid;
++			set_gid(tracefs_mount->mnt_root, gid);
+ 			break;
+ 		case Opt_mode:
+ 			if (match_octal(&args[0], &option))
+-- 
+2.31.1
+

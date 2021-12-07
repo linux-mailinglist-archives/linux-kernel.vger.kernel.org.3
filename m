@@ -2,149 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B5B46C65F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09EB46C666
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbhLGVMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:12:54 -0500
-Received: from mout.gmx.net ([212.227.17.21]:33043 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241706AbhLGVMj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:12:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638911341;
-        bh=n/IMLw8RlRNMl11ZPwUHyr0pgPADtPhByeB9Tw0skmg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FNRyavxNkzUybVYlqRDiUBF4KqPm+OMZ0TK9Q76YZWrZ9TS/zwjSQA3TJ28xp4wkU
-         ZUjZXZqX+VWJv+xzSLgZPBdMdEOzHn28a5ncFmL4tW3tsflrdfgk4cKy+1uqOE4kBZ
-         uD4izYA8RmvKAIyi1IDINzq3RFEiShnmjHBezw0c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV63q-1n1ogk3gJy-00S6Qt; Tue, 07
- Dec 2021 22:09:00 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: [PATCH v2 8/8] ARM: dts: wpcm450-supermicro-x9sci-ln4f: Add GPIO LEDs and buttons
-Date:   Tue,  7 Dec 2021 22:08:23 +0100
-Message-Id: <20211207210823.1975632-9-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
-References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
+        id S236957AbhLGVNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhLGVNw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 16:13:52 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9111FC061574;
+        Tue,  7 Dec 2021 13:10:21 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x6so1069544edr.5;
+        Tue, 07 Dec 2021 13:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lNyqGYp+8MURh7GGGLFcbdIhzRc6e9BqDyhcuibFU64=;
+        b=NngUPNdCBmjC1732LN4AUvtL65nNs04u5pXY45ElQrPkbMRyJs7Gl6NV0q/v0IqlaR
+         CpQqyLFvG/oHo33ilNX8EBatJzGw+E//YKRpadStavG9Vqa8YcHlv8uRQOlNcnDh7RlG
+         k0RdxPUVI/9e2yPdcuqLwtv5JgJSFrzzMZAaxwSJweM+dTCjlT1DhmwjS5Ms7sHxFI8e
+         NLNZZ014W8euCjClQiRNVqwdHVfRjfFTRy2pIr7nA3bIOW9FcAmK6xv1mAXJOK4fTWtm
+         7jNiqHDV/5kL5L3pvj2XMdcTAnV5882v1IA3p2RCTyzGqJYm9WGfZ7SAmcVq+V5ZXsF9
+         b9FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lNyqGYp+8MURh7GGGLFcbdIhzRc6e9BqDyhcuibFU64=;
+        b=XNuLClen7NM7OxLWDw+XYX6gun4fA9c2fjLzcyYBu1VKA0GLybXPkDUpCgE1SmbJ+G
+         Fcv741f0ZxHiFi3XgmSiC/IfHRZxoDYjrD5UlaMeAv6Y5PWv2zD1yocNoaGDAmlfQlnh
+         I858b6i4Te4cedRKmg+00lFdC38Sh2EPqdTY5l7YUPxP90Mn1L/No070ANsrJcGY8AWX
+         +Dgf/i9xd2TgX2VuPKTAkIg2mwHByraBlCu7I1apBtAZLDT0TFyFrOYCRV4ow1osTphT
+         sIwCQuk9RRA6XPal8PWHzvZ+xThMbRcrwM3ibm1XzdQrUN2SIaV7hOKCC8SRIkIuvugw
+         cWlA==
+X-Gm-Message-State: AOAM531DUF7GoT/FzYvnhOjH9WHHbGIilSQJQvWToW/0hYHq6xN1WPn2
+        GdnknTkVF8eK1ZzOUsQof+oerRYyo9k=
+X-Google-Smtp-Source: ABdhPJzVHpq/PrfFH9Gj9DJdnTnh373/XyCblBXCY4MvmSlsZO8adJo6MGxo20/Yl8lSkBuLf5iZDA==
+X-Received: by 2002:a17:906:15d0:: with SMTP id l16mr2192486ejd.462.1638911419957;
+        Tue, 07 Dec 2021 13:10:19 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id co10sm575191edb.83.2021.12.07.13.10.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 13:10:19 -0800 (PST)
+Date:   Tue, 7 Dec 2021 23:10:18 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ansuel Smith <ansuelsmth@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211207211018.cljhqkjyyychisl5@skbuf>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya96pwC1KKZDO9et@lunn.ch>
+ <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:w6zd2sE7qX7biDctX7/3wm69kxDwHCnk4KmUNJeio84MbEdf15g
- Nk4DGNQcIQZwB1WFZSh9/PQx+THVkVtuSTVWUOPwXdu90s3phD3XLmM7j3Z699COuz29WVL
- Cmegvh5QaJaHEs5/Gu0uKZQDHMBVmO8vmA0V439F55aZdyJdJpT5iUq6gWiNrp2G2WviA9v
- 3xVbF/GMsHJQpPfU/V+GQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bRTl+6Zn8hA=:cOkpSHY7Gl7GjEPQmOCJqG
- 7B3+v1lKhy9tm0z++wILvQcoyNzdflutetAfJ+8UthJc0bvDoROUhnzTQZEGCyNmWMotgMqjf
- zR6IqqP0rwACE2ZgvuSCIdu4yGHfO83ypsWwArlQVupPUNgqZpZhZFBfkqDlmHrai0XcK7+Bl
- 88YlBbmdnciBXstf3UougA7U6aAU1n7YqJsfpa1QgytE4aEjXSpbX2BP/NCWHYX9XE70R2xZD
- v9B8xdr+sysQgbWbVi+SbPylQd89Zm27Ss/xXifhtI+Zv6Ym8Vqy8mrOw45p7dd/QFJ23cIUy
- qUtLya324sAK+1BA1LIWk3DS/K+hV21ZqXQjsXguOMw90N5mldFtJye8NrGxIGi5lTGTeX/9A
- ruT5eZnDHlpfkoJVgS8Faa9snuAWJcuwXcXOw78j18UnP5JXydLkLxiv3ZUS2fHRXFq+H6ixp
- HVUb8Oc0vuhH/TDVv919SdnSfIGZNPntjcKEeZd8Affjr7BBeraZtbj2ZFa2C+XC0012qJpYF
- fgF13H78PgCU+aTBCrmiDPqhfiiipJ3rIRXf/xWSm5Kpz7krCZ0GoHTNbGMX/gOellWYg17U5
- Ouvt7PlOr3Beitp0EzQOxHPaEx+ufSxELv5wdYYJHNhZWM2I8xfvEqRJTn8XU5nL82Hof1YDl
- o4Ebxzd2mDLadUxRsMG6SOrFMMhN9pz74GmYfIAWGkJl0RlYfPSHXtkKxQ3TB41ojil8e31KZ
- XoAp3vOIxChIPynhhaWrY7uxYn/fivj34AtOIEI9hz9jl9pvusUK2d2mQ6fNTzLnYggD/jkWS
- AXHWJZ5SMMNDTlcc2HeR5y39fBmf8fOnjc/WP70R9vFHqwctQqg6Npg7RA+0xmH/RnN5rZbvl
- qj/KmdhhinGrPfvNXbYKuPPJhMyh5gNV+m5f4iuOA50TcLvyBXLKzFyFDsVeXPA49dLs7yPGx
- JNTNwhGdh1Fo3wsDEBHH4iwl5Vxc6fkYOi0XiHjxoT0e6SICMiB5dVa55Qm3Sp6fQUKjQFbEo
- SPyIs3tEHCxtwbmy2P312zYJDleF+0es0kt40jaVbSrvGhWXLcPnUauGkyXfWwfA7j8ENrPdF
- CID38zHhZk82tU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Supermicro X9SCi-LN4F server mainboard has a two LEDs and a button
-under the control of the BMC. This patch makes them accessible under
-Linux running on the BMC.
+On Tue, Dec 07, 2021 at 10:49:43AM -0800, Florian Fainelli wrote:
+> On 12/7/21 7:15 AM, Andrew Lunn wrote:
+> > On Tue, Dec 07, 2021 at 03:59:36PM +0100, Ansuel Smith wrote:
+> >> Hi, this is still WIP and currently has some problem but I would love if
+> >> someone can give this a superficial review and answer to some problem
+> >> with this.
+> >>
+> >> The main reason for this is that we notice some routing problem in the
+> >> switch and it seems assisted learning is needed. Considering mdio is
+> >> quite slow due to the indirect write using this Ethernet alternative way
+> >> seems to be quicker.
+> >>
+> >> The qca8k switch supports a special way to pass mdio read/write request
+> >> using specially crafted Ethernet packet.
+> > 
+> > Oh! Cool! Marvell has this as well, and i suspect a few others. It is
+> > something i've wanted to work on for a long long time, but never had
+> > the opportunity.
+> > 
+> > This also means that, even if you are focusing on qca8k, please try to
+> > think what could be generic, and what should specific to the
+> > qca8k. The idea of sending an Ethernet frame and sometime later
+> > receiving a reply should be generic and usable for other DSA
+> > drivers. The contents of those frames needs to be driver specific.
+> > How we hook this into MDIO might also be generic, maybe.
+> > 
+> > I will look at your questions later, but soon.
+> 
+> There was a priori attempt from Vivien to add support for mv88e6xxx over
+> RMU frames:
+> 
+> https://www.mail-archive.com/netdev@vger.kernel.org/msg298317.html
+> 
+> This gets interesting because the switch's control path moves from MDIO
+> to Ethernet and there is not really an "ethernet bus" though we could
+> certainly come up with one. We have mdio-i2c, so maybe we should have
+> mdio-ethernet?
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+This raises interesting questions. I see two distinct cases:
 
+1. "dual I/O": the switch probes initially over a standard bus (MDIO,
+   SPI, I2C) then at some point transitions towards I/O through the
+   tagger.  This would be the case when there is some preparation work
+   to be done (maybe the CPU port needs to be brought up, maybe there is
+   a firmware to be uploaded to the switch's embedded microcontroller
+   such that the expected remote management protocol is supported, etc).
+   It would also be the case when multiple CPU ports are supported (and
+   changing between CPU ports), because we could end up bringing a
+   certain CPU port down, and the register I/O would need to be
+   temporarily done over MDIO before bringing the other CPU port up.
 
-=2D--
-v2:
-- Adjust to new GPIO controller names
-- Explicitly set pinmux to GPIO for GPIO keys and LEDs
+2. "single I/O": the switch needs no such configuration, and in this
+    case, it could in principle probe over an "Ethernet bus" rather than
+    a standard bus as mentioned above.
 
-v1:
-- https://lore.kernel.org/lkml/20210602120329.2444672-9-j.neuschaefer@gmx.=
-net/
-=2D--
- .../nuvoton-wpcm450-supermicro-x9sci-ln4f.dts | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
+I don't know which case is going to be more common, honestly. The
+difference between the two is that the former would work using the
+existing infrastructure (bus types) we have today, whereas the latter
+would (maybe) need an "Ethernet bus" as mentioned by Vivien and Florian.
 
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts b=
-/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
-index 83f27fbf4e939..cd8d3a6bbf853 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
-@@ -8,6 +8,9 @@
+I'm not completely convinced, though. The argument for an "Ethernet bus"
+seems to be that any Ethernet controller may need to set up such a
+thing, independently of being a DSA master. In Vivien's link, an example
+is given where we have "Control path via port 1, Data path via port port 3".
+But I don't know, this separation seems pretty artificial and ultimately
+boils down to configuration. Like it or not, in that particular example,
+both ports 1 and 3 are CPU ports, and both eth1 and eth0 are DSA masters.
+The fact that they are used asymmetrically should pretty much not matter.
 
- #include "nuvoton-wpcm450.dtsi"
+I think a fair simplifying assumption is that switch management
+protocols will never be spoken through interfaces that aren't DSA
+masters (because being a DSA master _implies_ having a physical link to
+a DSA switch). And if we have this simplifying factor, we could consider
+moving dsa_tree_setup_master() somewhere earlier in the DSA probe path,
+and just make "type 2" / "single I/O" switches be platform devices, with
+a more-or-less empty probe function (just calls dsa_register_switch),
+and do their hardware init in ->setup, which is _after_
+dsa_tree_setup_master and therefore after the tagging protocol has bound
+to the DSA switch tree and is prepared to handle I/O. So no bus really
+needed.
 
-+#include <dt-bindings/input/linux-event-codes.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
- / {
- 	model =3D "Supermicro X9SCi-LN4F BMC";
- 	compatible =3D "supermicro,x9sci-ln4f-bmc", "nuvoton,wpcm450";
-@@ -20,6 +23,46 @@ memory@0 {
- 		device_type =3D "memory";
- 		reg =3D <0 0x08000000>; /* 128 MiB */
- 	};
-+
-+	gpio-keys {
-+		compatible =3D "gpio-keys";
-+		pinctrl-names =3D "default";
-+		pinctrl-0 =3D <&key_pins>;
-+
-+		uid {
-+			label =3D "UID button";
-+			linux,code =3D <KEY_HOME>;
-+			gpios =3D <&gpio0 14 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	gpio-leds {
-+		compatible =3D "gpio-leds";
-+		pinctrl-names =3D "default";
-+		pinctrl-0 =3D <&led_pins>;
-+
-+		uid {
-+			label =3D "UID";
-+			gpios =3D <&gpio1 7 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		heartbeat {
-+			label =3D "heartbeat";
-+			gpios =3D <&gpio1 4 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&pinctrl {
-+	key_pins: mux_keys {
-+		groups =3D "gspi", "sspi";
-+		function =3D "gpio";
-+	};
-+
-+	led_pins: mux_leds {
-+		groups =3D "hg3", "hg0", "pwm4";
-+		function =3D "gpio";
-+	};
- };
+Although I have to point this out. An "Ethernet bus" would be one of the
+most unreliable buses out there. Consider that the user may run "ip link
+set eth0 down" at any given time. What do you do, as a switch driver on
+an Ethernet bus, when your DSA master goes down? Postpone all your I/O?
+Error out on I/O? Unbind?
 
- &serial0 {
-=2D-
-2.30.2
-
+Even moreso, there are currently code paths in DSA that can only be done
+while the DSA master is down (changing the tagging protocol comes to
+mind). So does this mean that those code paths are simply not available
+when the I/O is over Ethernet? Or does it mean that Ethernet cannot be
+the sole I/O method of any switch driver, due to it being unreliable?
+And if the latter, this is yet another argument against "Ethernet as bus".
+A bus is basically only there for probing purposes, but if you need to
+have a primary I/O method beside Ethernet, you already have a bus and
+don't need another.

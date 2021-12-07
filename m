@@ -2,211 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5860246B053
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10BD46B05A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239268AbhLGB7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:59:51 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:31711 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbhLGB7a (ORCPT
+        id S237292AbhLGCBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229453AbhLGCBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:59:30 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1B71V0US059545;
-        Tue, 7 Dec 2021 09:31:00 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 7 Dec
- 2021 09:55:54 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] media: aspeed: Use runtime configuration
-Date:   Tue, 7 Dec 2021 09:55:44 +0800
-Message-ID: <20211207015544.1755-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Dec 2021 21:01:35 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C312C061746;
+        Mon,  6 Dec 2021 17:58:06 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id z5so51080337edd.3;
+        Mon, 06 Dec 2021 17:58:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zNxM0TnCCI4+N6maswyUrhx++VXdxKrv5kQxG8am6OA=;
+        b=PdHFYs54vb5yFj6SkIYzXSB/rjqxhLfr+2KG6nFwaGzGsrj9YYuSY0QJ5RDLsY/H2v
+         Z8DyzvIGiLhBugZ2Nr2nK7NbwG37sDH0LK6pTtkfvpR9QiQcPHrl7L/JQICg8b8KF10A
+         NJCXuRDfH26gq/spmWQJM8PKqp1uy88VEpyVtYCIZTcuf0mz083oBwQRds6efQ5ieEX6
+         /gxguQ7TyvDoee6n2x6O1ROG2XYSv+ZklJxaBbfk/0A7B38vIRO4Gt/aZTCLrCPjHe20
+         ZVSrAVEdtM8xq69R3qFJfZMXUg32OBdDUbr2ptu8+5H7pXiftoSqdA2jAvvIqvMm5E+e
+         4zrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zNxM0TnCCI4+N6maswyUrhx++VXdxKrv5kQxG8am6OA=;
+        b=uchfNaqsM781AXvvsDu/KGZoCqvCat+kARdiixReSQNnKlZrivLTJnRayqiRScWMwA
+         rJN68mBpjMfk64teE1vcMeEixTu07ZRE7qq90huw7w67aeawnLQNipG/EHl5XVQIqcHH
+         LTeO6BX6a0mWS0jdy6wHus57NcmjfEfadTcmlNBOzOm/0WHTkDLDzM2FdH0kdQzZSNyJ
+         19ThNt30Gasob95Knk9w2sYkBNskez2/j61OFD8D5G1q23MfMunHJS6QuGOIi24HG9mw
+         NJhBO8tcOIQ34fsEZr3MwdqjrVjZaVTi3Zr6LRubWRi1E61U47UzsXwL+vxwCT27sD2b
+         QlRA==
+X-Gm-Message-State: AOAM5314Z3XTMHep1TU36W7LG/6zkMh0WvwY2gBwvd5+ct+05JGrMT5W
+        3FIboY0Y3C0zDe67r94KJQOgdJH38chr5gvlyqg=
+X-Google-Smtp-Source: ABdhPJwWlKAxgTrspUiJGcPjdMYN2NmpMxed1+oRVH1Rs0AWVo752Qk/ja0lS/gDpCtg2Wvb8kBody5BeorTldPJBJs=
+X-Received: by 2002:a05:6402:154:: with SMTP id s20mr4598396edu.148.1638842284779;
+ Mon, 06 Dec 2021 17:58:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1B71V0US059545
+References: <20211205045041.129716-1-imagedong@tencent.com> <CAEf4BzbqhccBOSiBRehnf6V35u48N+f67tmgYUR_EJhpv6HptA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbqhccBOSiBRehnf6V35u48N+f67tmgYUR_EJhpv6HptA@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 7 Dec 2021 09:55:46 +0800
+Message-ID: <CADxym3ZS7u12-hjbH2n9zw+FwLwbqx0YmE+SG+OAcJ0osVhMxw@mail.gmail.com>
+Subject: Re: [PATCH] bpftool: add support of pin prog by name
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Cong Wang <cong.wang@bytedance.com>, liujian56@huawei.com,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aspeed video IP has some differences between SoC families. Currently
-the driver decides which registers to use at compile time, which means
-a single kernel can not be used between platforms.
+On Tue, Dec 7, 2021 at 5:22 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Dec 4, 2021 at 8:51 PM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the command 'bpftool prog loadall' use section name as the
+> > name of the pin file. However, once there are prog with the same
+> > section name in ELF file, this command will failed with the error
+> > 'File Exist'.
+> >
+> > So, add the support of pin prog by function name with the 'pinbyname'
+> > argument.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+>
+> Doesn't [0] do that already?
+>
+>   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20211021214814.1236114-2-sdf@google.com/
+>
 
-Switch to using runtime configuration of the registers that vary between
-SoC families.
+Ops....Sorry, I didn't notice that patch :/
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- drivers/media/platform/aspeed-video.c | 71 ++++++++++++++++++++-------
- 1 file changed, 52 insertions(+), 19 deletions(-)
+> >  tools/bpf/bpftool/prog.c | 7 +++++++
+> >  tools/lib/bpf/libbpf.c   | 5 +++++
+> >  tools/lib/bpf/libbpf.h   | 2 ++
+> >  3 files changed, 14 insertions(+)
+> >
+> > diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> > index e47e8b06cc3d..74e0aaebfefc 100644
+> > --- a/tools/bpf/bpftool/prog.c
+> > +++ b/tools/bpf/bpftool/prog.c
+> > @@ -1471,6 +1471,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> >         unsigned int old_map_fds = 0;
+> >         const char *pinmaps = NULL;
+> >         struct bpf_object *obj;
+> > +       bool pinbyname = false;
+> >         struct bpf_map *map;
+> >         const char *pinfile;
+> >         unsigned int i, j;
+> > @@ -1589,6 +1590,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> >                                 goto err_free_reuse_maps;
+> >
+> >                         pinmaps = GET_ARG();
+> > +               } else if (is_prefix(*argv, "pinbyname")) {
+> > +                       pinbyname = true;
+> > +                       NEXT_ARG();
+> >                 } else {
+> >                         p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+> >                               *argv);
+> > @@ -1616,6 +1620,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> >                                 goto err_close_obj;
+> >                 }
+> >
+> > +               if (pinbyname)
+> > +                       bpf_program__set_pinname(pos,
+> > +                                                (char *)bpf_program__name(pos));
+> >                 bpf_program__set_ifindex(pos, ifindex);
+> >                 bpf_program__set_type(pos, prog_type);
+> >                 bpf_program__set_expected_attach_type(pos, expected_attach_type);
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index f6faa33c80fa..e8fc1d0fe16e 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -8119,6 +8119,11 @@ void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
+> >         prog->prog_ifindex = ifindex;
+> >  }
+> >
+> > +void bpf_program__set_pinname(struct bpf_program *prog, char *name)
+> > +{
+> > +       prog->pin_name = name;
+>
+> BPF maps have bpf_map__set_pin_path(), setting a full path is more
+> flexible approach, I think, so if we had to do something here, it's
+> better to add bpf_program__set_ping_path().
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index d2335d669fb3..ba8ee82b38c3 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -75,11 +75,8 @@
- #define  VE_SEQ_CTRL_CAP_BUSY		BIT(16)
- #define  VE_SEQ_CTRL_COMP_BUSY		BIT(18)
- 
--#ifdef CONFIG_MACH_ASPEED_G4
--#define  VE_SEQ_CTRL_JPEG_MODE		BIT(8)	/* AST2400 */
--#else
--#define  VE_SEQ_CTRL_JPEG_MODE		BIT(13)	/* AST2500/2600 */
--#endif
-+#define AST2500_VE_SEQ_CTRL_JPEG_MODE	BIT(13)
-+#define AST2400_VE_SEQ_CTRL_JPEG_MODE	BIT(8)
- 
- #define VE_CTRL				0x008
- #define  VE_CTRL_HSYNC_POL		BIT(0)
-@@ -136,9 +133,8 @@
- #define  VE_COMP_CTRL_HQ_DCT_CHR	GENMASK(26, 22)
- #define  VE_COMP_CTRL_HQ_DCT_LUM	GENMASK(31, 27)
- 
--#define VE_OFFSET_COMP_STREAM		0x078
--
--#define VE_JPEG_COMP_SIZE_READ_BACK	0x084
-+#define AST2400_VE_COMP_SIZE_READ_BACK	0x078
-+#define AST2600_VE_COMP_SIZE_READ_BACK	0x084
- 
- #define VE_SRC_LR_EDGE_DET		0x090
- #define  VE_SRC_LR_EDGE_DET_LEFT	GENMASK(11, 0)
-@@ -233,6 +229,8 @@ struct aspeed_video {
- 	struct video_device vdev;
- 	struct mutex video_lock;	/* v4l2 and videobuf2 lock */
- 
-+	struct aspeed_video_config config;
-+
- 	wait_queue_head_t wait;
- 	spinlock_t lock;		/* buffer list lock */
- 	struct delayed_work res_work;
-@@ -258,6 +256,30 @@ struct aspeed_video {
- 
- #define to_aspeed_video(x) container_of((x), struct aspeed_video, v4l2_dev)
- 
-+struct aspeed_video_config {
-+	u32 version;
-+	u32 jpeg_mode;
-+	u32 comp_size_read;
-+};
-+
-+static const struct aspeed_video_config ast2400_config = {
-+	.version = 4,
-+	.jpeg_mode = AST2400_VE_SEQ_CTRL_JPEG_MODE,
-+	.comp_size_read = AST2400_VE_COMP_SIZE_READ_BACK,
-+};
-+
-+static const struct aspeed_video_config ast2500_config = {
-+	.version = 5,
-+	.jpeg_mode = AST2500_VE_SEQ_CTRL_JPEG_MODE,
-+	.comp_size_read = AST2400_VE_COMP_SIZE_READ_BACK,
-+};
-+
-+static const struct aspeed_video_config ast2600_config = {
-+	.version = 6,
-+	.jpeg_mode = AST2500_VE_SEQ_CTRL_JPEG_MODE,
-+	.comp_size_read = AST2600_VE_COMP_SIZE_READ_BACK,
-+};
-+
- static const u32 aspeed_video_jpeg_header[ASPEED_VIDEO_JPEG_HEADER_SIZE] = {
- 	0xe0ffd8ff, 0x464a1000, 0x01004649, 0x60000101, 0x00006000, 0x0f00feff,
- 	0x00002d05, 0x00000000, 0x00000000, 0x00dbff00
-@@ -640,7 +662,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 	if (sts & VE_INTERRUPT_COMP_COMPLETE) {
- 		struct aspeed_video_buffer *buf;
- 		u32 frame_size = aspeed_video_read(video,
--						   VE_JPEG_COMP_SIZE_READ_BACK);
-+						   video->config.comp_size_read);
- 
- 		update_perf(&video->perf);
- 
-@@ -973,7 +995,7 @@ static void aspeed_video_update_regs(struct aspeed_video *video)
- 		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
- 		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
- 	u32 ctrl = 0;
--	u32 seq_ctrl = VE_SEQ_CTRL_JPEG_MODE;
-+	u32 seq_ctrl = video->config.jpeg_mode;
- 
- 	v4l2_dbg(1, debug, &video->v4l2_dev, "framerate(%d)\n",
- 		 video->frame_rate);
-@@ -993,7 +1015,7 @@ static void aspeed_video_update_regs(struct aspeed_video *video)
- 
- 	/* Set control registers */
- 	aspeed_video_update(video, VE_SEQ_CTRL,
--			    VE_SEQ_CTRL_JPEG_MODE | VE_SEQ_CTRL_YUV420,
-+			    video->config.jpeg_mode | VE_SEQ_CTRL_YUV420,
- 			    seq_ctrl);
- 	aspeed_video_update(video, VE_CTRL, VE_CTRL_FRC, ctrl);
- 	aspeed_video_update(video, VE_COMP_CTRL,
-@@ -1790,8 +1812,18 @@ static int aspeed_video_init(struct aspeed_video *video)
- 	return rc;
- }
- 
-+static const struct of_device_id aspeed_video_of_match[] = {
-+	{ .compatible = "aspeed,ast2400-video-engine", .data = &ast2400_config },
-+	{ .compatible = "aspeed,ast2500-video-engine", .data = &ast2500_config },
-+	{ .compatible = "aspeed,ast2600-video-engine", .data = &ast2600_config },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, aspeed_video_of_match);
-+
- static int aspeed_video_probe(struct platform_device *pdev)
- {
-+	const struct aspeed_video_config *config;
-+	const struct of_device_id *match;
- 	int rc;
- 	struct resource *res;
- 	struct aspeed_video *video =
-@@ -1815,6 +1847,13 @@ static int aspeed_video_probe(struct platform_device *pdev)
- 	if (IS_ERR(video->base))
- 		return PTR_ERR(video->base);
- 
-+	match = of_match_node(aspeed_video_of_match, pdev->dev.of_node);
-+	if (!match)
-+		return -EINVAL;
-+
-+	config = match->data;
-+	video->config = *config;
-+
- 	rc = aspeed_video_init(video);
- 	if (rc)
- 		return rc;
-@@ -1828,6 +1867,8 @@ static int aspeed_video_probe(struct platform_device *pdev)
- 
- 	aspeed_video_debugfs_create(video);
- 
-+	dev_info(video->dev, "compatible for g%d\n", config->version);
-+
- 	return 0;
- }
- 
-@@ -1860,14 +1901,6 @@ static int aspeed_video_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct of_device_id aspeed_video_of_match[] = {
--	{ .compatible = "aspeed,ast2400-video-engine" },
--	{ .compatible = "aspeed,ast2500-video-engine" },
--	{ .compatible = "aspeed,ast2600-video-engine" },
--	{}
--};
--MODULE_DEVICE_TABLE(of, aspeed_video_of_match);
--
- static struct platform_driver aspeed_video_driver = {
- 	.driver = {
- 		.name = DEVICE_NAME,
--- 
-2.25.1
+Yeah, I think it's a good idea. I'll do something about it.
 
+Thanks!
+Menglong Dong
+
+>
+>
+> > +}
+> > +
+> >  const char *bpf_program__name(const struct bpf_program *prog)
+> >  {
+> >         return prog->name;
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index 4ec69f224342..107cf736c2bb 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -216,6 +216,8 @@ LIBBPF_API int bpf_program__set_priv(struct bpf_program *prog, void *priv,
+> >  LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
+> >  LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+> >                                          __u32 ifindex);
+> > +LIBBPF_API void bpf_program__set_pinname(struct bpf_program *prog,
+> > +                                        char *name);
+> >
+> >  LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+> >  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+> > --
+> > 2.30.2
+> >

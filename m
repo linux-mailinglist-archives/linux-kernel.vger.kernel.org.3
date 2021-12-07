@@ -2,131 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1037646B665
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E97246B66C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbhLGIwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbhLGIwq (ORCPT
+        id S233338AbhLGIyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:54:24 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29096 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232813AbhLGIyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:52:46 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1508C061746;
-        Tue,  7 Dec 2021 00:49:16 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id y196so10110085wmc.3;
-        Tue, 07 Dec 2021 00:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QR97QPW6f+NCgAfPv43w1fjZD41f7yPQgmLStq1mi9A=;
-        b=gRh0LSOOXgIypuCdQaadqe7XgZFROTeqpk1WWlszBVKUUUiTyjV00+KOcnYsNRAX47
-         5X3ALW2nTtvtWHqgaUe9zA4UUUjrNu10vXPJPvxB58W9EN1tSP8hz05dDkuR0k+s+AZh
-         xrzBKOxupUAn/CqiBNghQJtdF4tjfmSatN2sUUoqaqD3IEIMToLSi2Ke5c6iim46iQys
-         Kb/0orwNvVJywlOh8k9fd9C/fPMILruFbp5RSzOfYaZ5dPnRThCRcSGb3qjJ9RpA3+KZ
-         yn3g2KlCui30P8L+KmIAw671RtfrcvdbaCtIGh26eFGhOlnNJG3uH0yXlWBodbi7NoaO
-         BQNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QR97QPW6f+NCgAfPv43w1fjZD41f7yPQgmLStq1mi9A=;
-        b=JOKMMOYIi1pQwIW3h1tbV3EawCj2DQtxRQRgSFmhGwtP1ew4d44KWkaJbuUG5YyOP+
-         F+rBeaFU0UWLkac4/Zg1vanOUrH6s1GPsmu8/KUXaY211WrSPNHeuThst0LTZE3/3L/Y
-         5jVL43mjeEsJQnpuz7smPZSTpRWsJ/Xoqn8FhIijAUA4pe6Bj3CSXZqTlXxE3iOOzgN6
-         6tE58d9DHK2XY10YT6aOwpvdS9BCws/5Sa+YnPwhDiHijx7C2nSH5ttILlWlBQy39hvc
-         UnWBn2dGEsMKdKlFR34ef780zOswc20KHw0wrzDUFAv447KGIEHsbthXao8UE9SgA83L
-         OliA==
-X-Gm-Message-State: AOAM530euGvqYrQMSW/1HlaUKXtGDV3oVajbaR/oj+4ofoPTLLQyXgNs
-        ZLBhypjIPOsCP2AXKAAjYV8=
-X-Google-Smtp-Source: ABdhPJwlcEDhqDKisTkge+HksHvcucpIyuEWBZi2ohpxLgw/uhMKKUgIA3jxgrmbJ1OgEC7tsfbrEQ==
-X-Received: by 2002:a7b:c407:: with SMTP id k7mr5272284wmi.35.1638866955262;
-        Tue, 07 Dec 2021 00:49:15 -0800 (PST)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id x1sm13693748wru.40.2021.12.07.00.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:49:14 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:49:11 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rayn Chen <rayn_chen@aspeedtech.com>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: aspeed: Drop stray '#interrupt-cells'
-Message-ID: <Ya8gB4mu3yFYCbhp@orome.fritz.box>
-References: <20211206174237.2298580-1-robh@kernel.org>
+        Tue, 7 Dec 2021 03:54:22 -0500
+Received: from dggeme755-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J7Ypn0Nywz1DDBs;
+        Tue,  7 Dec 2021 16:48:01 +0800 (CST)
+Received: from [127.0.0.1] (10.67.102.125) by dggeme755-chm.china.huawei.com
+ (10.3.19.101) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Tue, 7
+ Dec 2021 16:50:50 +0800
+Message-ID: <61AF2069.5030607@hisilicon.com>
+Date:   Tue, 7 Dec 2021 16:50:49 +0800
+From:   Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ICqRkSFbTbP5VtpW"
-Content-Disposition: inline
-In-Reply-To: <20211206174237.2298580-1-robh@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linuxarm@huawei.com>, <mauro.chehab@huawei.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/5] arm64: dts: HiSilicon: Add support for HiKey 970
+ USB3 PHY
+References: <cover.1637063775.git.mchehab+huawei@kernel.org> <97d470290e81ac40023bdcc7e2d796796421b737.1637063775.git.mchehab+huawei@kernel.org>
+In-Reply-To: <97d470290e81ac40023bdcc7e2d796796421b737.1637063775.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggeme755-chm.china.huawei.com (10.3.19.101)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mauro,
 
---ICqRkSFbTbP5VtpW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 06, 2021 at 11:42:37AM -0600, Rob Herring wrote:
-> '#interrupt-cells' is not documented which causes a warning when
-> 'unevaluatedProperties' is implemented. Unless the I2C controller is
-> also an interrupt controller, '#interrupt-cells' is not valid. This
-> doesn't appear to be the case from the driver, so just remove it from
-> the example.
->=20
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Rayn Chen <rayn_chen@aspeedtech.com>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: openbmc@lists.ozlabs.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-aspeed@lists.ozlabs.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 2021/11/16 19:59, Mauro Carvalho Chehab wrote:
+> Add the USB3 bindings for Kirin 970 phy and HiKey 970 board.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 > ---
->  Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 1 -
->  1 file changed, 1 deletion(-)
+> 
+> To mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 0/5] at: https://lore.kernel.org/all/cover.1637063775.git.mchehab+huawei@kernel.org/
+> 
+>  .../boot/dts/hisilicon/hi3670-hikey970.dts    | 83 +++++++++++++++++++
+>  arch/arm64/boot/dts/hisilicon/hi3670.dtsi     | 56 +++++++++++++
+>  2 files changed, 139 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> index 7c32f5fd5cc5..60594db07041 100644
+> --- a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> +++ b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> @@ -430,3 +430,86 @@ &uart6 {
+>  	label = "LS-UART1";
+>  	status = "okay";
+>  };
+> +
+> +&usb_phy {
+> +	phy-supply = <&ldo17>;
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +
+> +	rt1711h: rt1711h@4e {
+> +		compatible = "richtek,rt1711h";
+> +		reg = <0x4e>;
+> +		status = "okay";
+> +		interrupt-parent = <&gpio27>;
+> +		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&usb_cfg_func>;
+> +
+> +		usb_con: connector {
+> +			compatible = "usb-c-connector";
+> +			label = "USB-C";
+> +			data-role = "dual";
+> +			power-role = "dual";
+> +			try-power-role = "sink";
+> +			source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
+> +			sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
+> +				PDO_VAR(5000, 5000, 1000)>;
+> +			op-sink-microwatt = <10000000>;
+> +
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				port@1 {
+> +					reg = <1>;
+> +					usb_con_ss: endpoint {
+> +						remote-endpoint = <&dwc3_ss>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +		port {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			rt1711h_ep: endpoint@0 {
+> +				reg = <0>;
+> +				remote-endpoint = <&hikey_usb_ep1>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&i2c2 {
+> +	/* USB HUB is on this bus at address 0x44 */
+> +	status = "okay";
+> +};
+> +
+> +&dwc3 { /* USB */
+> +	dr_mode = "otg";
+> +	maximum-speed = "super-speed";
+> +	phy_type = "utmi";
+> +	snps,dis-del-phy-power-chg-quirk;
+> +	snps,dis_u2_susphy_quirk;
+> +	snps,dis_u3_susphy_quirk;
+> +	snps,tx_de_emphasis_quirk;
+> +	snps,tx_de_emphasis = <1>;
+> +	snps,dis-split-quirk;
+> +	snps,gctl-reset-quirk;
+> +	usb-role-switch;
+> +	role-switch-default-mode = "host";
+> +	port {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		dwc3_role_switch: endpoint@0 {
+> +			reg = <0>;
+> +			remote-endpoint = <&hikey_usb_ep0>;
+> +		};
+> +
+> +		dwc3_ss: endpoint@1 {
+> +			reg = <1>;
+> +			remote-endpoint = <&usb_con_ss>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> index 225dccbcb064..b47654b50139 100644
+> --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> @@ -8,6 +8,7 @@
+>  
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/clock/hi3670-clock.h>
+> +#include <dt-bindings/usb/pd.h>
+>  
+>  / {
+>  	compatible = "hisilicon,hi3670";
+> @@ -892,5 +893,60 @@ i2c4: i2c@fdf0d000 {
+>  			pinctrl-0 = <&i2c4_pmx_func &i2c4_cfg_func>;
+>  			status = "disabled";
+>  		};
+> +
+> +		usb3_otg_bc: usb3_otg_bc@ff200000 {
+> +			compatible = "syscon", "simple-mfd";
+> +			reg = <0x0 0xff200000 0x0 0x1000>;
+> +
+> +			usb_phy: usbphy {
+> +				compatible = "hisilicon,hi3670-usb-phy";
+> +				#phy-cells = <0>;
+> +				hisilicon,pericrg-syscon = <&crg_ctrl>;
+> +				hisilicon,pctrl-syscon = <&pctrl>;
+> +				hisilicon,sctrl-syscon = <&sctrl>;
+> +				hisilicon,eye-diagram-param = <0xFDFEE4>;
+> +				hisilicon,tx-vboost-lvl = <0x5>;
+> +			};
+> +		};
+> +
+> +		usb31_misc_rst: usb31_misc_rst_controller {
+> +			compatible = "hisilicon,hi3660-reset";
+> +			#reset-cells = <2>;
+> +			hisi,rst-syscon = <&usb3_otg_bc>;
+> +		};
+> +
+> +		usb3: hisi_dwc3 {
+> +			compatible = "hisilicon,hi3670-dwc3";
 
-Interestingly I have a patch for this as well but it does the opposite
-and adds interrupt-controller and #interrupt-cells. Upon closer
-inspection I was tricked into this because the i2c-aspeed driver
-includes linux/irqchip/chained_irq.h and linux/irqdomain.h and therefore
-I assumed that it was indeed implementing an interrupt controller. But
-none of the symbols in those files are ever used, so your version seems
-to be correct.
+Could you please also add a binding document for the "hi3670-dwc3"?
+The driver part has added the compatible string as you pointed out before.
+Thanks!
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
+Best Regards,
+Wei
 
---ICqRkSFbTbP5VtpW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvIAcACgkQ3SOs138+
-s6HGYg/+O+id0oZwHJkCp6siA2gEqNUXVYkH6mzWDT9oDmO7ABtPrYBDdQi8FLda
-Y2GS9i6jKuW6j/EP8fDX61ksJhBBuu1Aj89ivX3aPE9QwZXOHCUaVYnRjEVPyUN3
-eFv0QSBMWxsLDNQ0bpOFA5ZpxkJ87wnh1z9u5Vkf4F9q6yUZcWuICwJJImgF5Udm
-LcUaBVBLys7gLX4ixJPHymnB9ogCxS87QTdGXSY94E3iR46Spkr2LKOXVaKbqVKJ
-OBQIdlk64ZSpQOQ1mUDRAdkSoZtyEik4MBbdOwb5/9bT9QvPu7h1Yi+DWxwJpW9x
-40KZD8JDK0xNlJAlUtkiwbu9frmpZrSz359rnQ9HXLbze5p89xsvpLtOiYDemTBW
-VYfFjGVMYAhLx5UgIMDTO4f5oQeBeG4N7XkrSAIEK4zZ9OAjwJ25w5aojJuULqgH
-/jtYeTcU6dkJ0RD3V7+vhaiznwlPZr4tfu63Fqt3Ai3EVYMqKks78wZhwtrrhrOO
-/SpWSv4jyAC7Mh1R6KnDD193ar6IPdW6DkCeuEokRVCpdRjtBGSX2aplXgVlRk+r
-YB3WdOKqkaJuEqKhzYuUdaHsTyRSdzSrb19hWbtHjZc+nuQHLs4GqpAxCxNHoXNR
-V8bGdcm7GQOiVRbaaY9a0+d82p6+hk0rvv9TtKqE+afw/enojQI=
-=8Ial
------END PGP SIGNATURE-----
-
---ICqRkSFbTbP5VtpW--

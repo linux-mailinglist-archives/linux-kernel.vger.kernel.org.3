@@ -2,88 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D2B46BB01
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4862C46BB00
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbhLGM2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbhLGM2a (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236332AbhLGM2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:28:31 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:50278 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231962AbhLGM2a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Dec 2021 07:28:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58676C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:25:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5F7E5CE1AA2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:24:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE5CC341C3;
-        Tue,  7 Dec 2021 12:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638879896;
-        bh=Y2shfXEwL/UCPPKsv0Oa3tA9lIynCe1L61hYiqi9XeI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W559fWo1fWpckmtZrwlLgXqUZHgqZUif16pdSlVwo1cuzrxYUkuy0NWY9gq1VmSVA
-         iH3jZRVaJ2Clg9mS7id1l05XqTXeQG/a5njD+gyHyXoGmCJqhcEHrBnc9Gya4HT43c
-         0LzXNn2wdGrKb7vMkztVpxlCEwJrN07IpekH/JMN1ekrxn9opHbcU8OwAcCOrLfC7y
-         mYWRswwsW08rT6+3bleh9OKW28FvTfn8MGWt3TPvKYK9c0RExdRw9y5JiqFCimbuqy
-         J/Xzx85i69QtYieflARWddvcI9dUhJa4DjN2IqkqdUjVg0rk3DZp8Sh3IGc8m7GHao
-         Jd8YpxDU9sNfw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <christian@brauner.io>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
-        Marco Ballesio <balejs@google.com>,
-        Hang Lu <hangl@codeaurora.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] binder: fix pointer cast warning
-Date:   Tue,  7 Dec 2021 13:24:42 +0100
-Message-Id: <20211207122448.1185769-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id BA20420054;
+        Tue,  7 Dec 2021 14:24:53 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1638879893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cas7ci08rTbBx556E3jwiGUlOxjhK3fn+BcQ2dXZit0=;
+        b=qVvNEQhngj9h9y/k871Mtr+5SZ8gXL1Pre0QeKnqeOFenRhE7eppRv6eR0ZO3QVlbscHGs
+        HzIXSShBd7mqpQr3y/QAw27TE7IuBxiSITKbrVKzaL9UNw+5I29ZhWNT7Kz9Mzpb/LfCgA
+        ArppRL9d5mCtzaZaRy7FLAhKLfulWDo=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E8906634C90;
+        Tue,  7 Dec 2021 14:24:52 +0200 (EET)
+Date:   Tue, 7 Dec 2021 14:24:52 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Joe Perches <joe@perches.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] media: i2c: ov8865: Neaten unnecessary indentation
+Message-ID: <Ya9SlGo5HZpOXTmZ@valkosipuli.retiisi.eu>
+References: <c6189daaac183ddf51da1444c597d8577c1ac416.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6189daaac183ddf51da1444c597d8577c1ac416.camel@perches.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1638879893; a=rsa-sha256; cv=none;
+        b=tQj+QrtOXTVsT2T0ySVMtAAPlz4rSLyGImvPjvzuZTw7qk2AnqBm7vY2NnMpz3hiZaPvXe
+        q+MYfWHt0u/2n5u+WfkLvqaCtjr3zODKcLugGCIGeH/Mue56IqTMvO45JIOM97HknzG2gM
+        QVLyEWW8eLEsbwW5xEgSx0a2kvHV4b4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1638879893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cas7ci08rTbBx556E3jwiGUlOxjhK3fn+BcQ2dXZit0=;
+        b=haLON3qhLaYNajGv13pJEm6frwbadAXQzn0FmXetpYg6OGd9jmDKhUCUfMWN4vjJGitW1X
+        4dSzh38Y/czYlBfE84pes61k+JhuJ622GNWtDAc4vY3efERlPnatHp9zH/4cUgemejBDjG
+        xVzUGYl7jqH0jZlFAqcvtwcry3MMNW0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Joe (and Paul),
 
-binder_uintptr_t is not the same as uintptr_t, so converting it into a
-pointer requires a second cast:
+On Thu, Dec 02, 2021 at 01:06:01AM -0800, Joe Perches wrote:
+> Jumping to the start of a labeled else block isn't typical.
+> 
+> Unindent the code by reversing the test and using a goto instead.
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+>  drivers/media/i2c/ov8865.c | 81 +++++++++++++++++++++++-----------------------
+>  1 file changed, 41 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+> index ebdb20d3fe9d8..7ef83a10f586f 100644
+> --- a/drivers/media/i2c/ov8865.c
+> +++ b/drivers/media/i2c/ov8865.c
+> @@ -2396,56 +2396,57 @@ static int ov8865_sensor_init(struct ov8865_sensor *sensor)
+>  
+>  static int ov8865_sensor_power(struct ov8865_sensor *sensor, bool on)
+>  {
+> -	/* Keep initialized to zero for disable label. */
+> -	int ret = 0;
+> +	int ret;
+>  
+> -	if (on) {
+> -		gpiod_set_value_cansleep(sensor->reset, 1);
+> -		gpiod_set_value_cansleep(sensor->powerdown, 1);
+> +	if (!on) {
+> +		ret = 0;
+> +		goto disable;
+> +	}
+>  
+> -		ret = regulator_enable(sensor->dovdd);
+> -		if (ret) {
+> -			dev_err(sensor->dev,
+> -				"failed to enable DOVDD regulator\n");
+> -			goto disable;
 
-drivers/android/binder.c: In function 'binder_translate_fd_array':
-drivers/android/binder.c:2511:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
- 2511 |         sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
-      |                            ^
+I guess this patch is fine as such but there seems to be a problem in error
+handling here: all regulators are disabled if there's a problem enabling
+one of them.
 
-Fixes: 656e01f3ab54 ("binder: read pre-translated fds from sender buffer")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/android/binder.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Would it be possible to fix this as well?
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 5497797ab258..182bb4221b06 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -2508,7 +2508,8 @@ static int binder_translate_fd_array(struct list_head *pf_head,
- 	 */
- 	fda_offset = (parent->buffer - (uintptr_t)t->buffer->user_data) +
- 		fda->parent_offset;
--	sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
-+	sender_ufda_base = (void __user *)(uintptr_t)sender_uparent->buffer +
-+				fda->parent_offset;
- 
- 	if (!IS_ALIGNED((unsigned long)fda_offset, sizeof(u32)) ||
- 	    !IS_ALIGNED((unsigned long)sender_ufda_base, sizeof(u32))) {
+> -		}
+> +	gpiod_set_value_cansleep(sensor->reset, 1);
+> +	gpiod_set_value_cansleep(sensor->powerdown, 1);
+>  
+> -		ret = regulator_enable(sensor->avdd);
+> -		if (ret) {
+> -			dev_err(sensor->dev,
+> -				"failed to enable AVDD regulator\n");
+> -			goto disable;
+> -		}
+> +	ret = regulator_enable(sensor->dovdd);
+> +	if (ret) {
+> +		dev_err(sensor->dev, "failed to enable DOVDD regulator\n");
+> +		goto disable;
+> +	}
+>  
+> -		ret = regulator_enable(sensor->dvdd);
+> -		if (ret) {
+> -			dev_err(sensor->dev,
+> -				"failed to enable DVDD regulator\n");
+> -			goto disable;
+> -		}
+> +	ret = regulator_enable(sensor->avdd);
+> +	if (ret) {
+> +		dev_err(sensor->dev, "failed to enable AVDD regulator\n");
+> +		goto disable;
+> +	}
+>  
+> -		ret = clk_prepare_enable(sensor->extclk);
+> -		if (ret) {
+> -			dev_err(sensor->dev, "failed to enable EXTCLK clock\n");
+> -			goto disable;
+> -		}
+> +	ret = regulator_enable(sensor->dvdd);
+> +	if (ret) {
+> +		dev_err(sensor->dev, "failed to enable DVDD regulator\n");
+> +		goto disable;
+> +	}
+> +
+> +	ret = clk_prepare_enable(sensor->extclk);
+> +	if (ret) {
+> +		dev_err(sensor->dev, "failed to enable EXTCLK clock\n");
+> +		goto disable;
+> +	}
+>  
+> -		gpiod_set_value_cansleep(sensor->reset, 0);
+> -		gpiod_set_value_cansleep(sensor->powerdown, 0);
+> +	gpiod_set_value_cansleep(sensor->reset, 0);
+> +	gpiod_set_value_cansleep(sensor->powerdown, 0);
+> +
+> +	/* Time to enter streaming mode according to power timings. */
+> +	usleep_range(10000, 12000);
+> +
+> +	return 0;
+>  
+> -		/* Time to enter streaming mode according to power timings. */
+> -		usleep_range(10000, 12000);
+> -	} else {
+>  disable:
+> -		gpiod_set_value_cansleep(sensor->powerdown, 1);
+> -		gpiod_set_value_cansleep(sensor->reset, 1);
+> +	gpiod_set_value_cansleep(sensor->powerdown, 1);
+> +	gpiod_set_value_cansleep(sensor->reset, 1);
+>  
+> -		clk_disable_unprepare(sensor->extclk);
+> +	clk_disable_unprepare(sensor->extclk);
+>  
+> -		regulator_disable(sensor->dvdd);
+> -		regulator_disable(sensor->avdd);
+> -		regulator_disable(sensor->dovdd);
+> -	}
+> +	regulator_disable(sensor->dvdd);
+> +	regulator_disable(sensor->avdd);
+> +	regulator_disable(sensor->dovdd);
+>  
+>  	return ret;
+>  }
+> 
+> 
+
 -- 
-2.29.2
+Kind regards,
 
+Sakari Ailus

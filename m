@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5014C46BDDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E430746BDE2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbhLGOlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbhLGOlV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:41:21 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7C3C061574;
-        Tue,  7 Dec 2021 06:37:51 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id c32so34055190lfv.4;
-        Tue, 07 Dec 2021 06:37:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:references:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=s9/qxIrR8tF6zWnC2CNOSyvQJwZNDJC7C9nlCNHrx+o=;
-        b=XAHGUhgbReJmLxZSPuCnTjbaTkHKyyoX7vnK7Kw5+SjE8r/O2NCLUCdTjCs+qYOhvx
-         LcXgpFSugwfUj+dt9CFAvXQvyqA5gVfMMSP+Tc/3+CZSs0oP1auVjCAhZOthfCOJUIKv
-         R35edurehJU05/8buCwtCBsmucGSxp6IADZKtf6cvl3os/koWo+sZhGOo0/OCaUthdO7
-         7rzLJN2cWV5jh0UWjspEAc/vgnuqeAooqrNKJuePrEXLDlZR8iYcOwwyvcMtVmk2SgqH
-         n1fTSvillj3C32O0v4eb4gE/6bWJEz43qQPRPaWO4TRn6CawNdgu9ktcI0wjwTzy2OYl
-         7oIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=s9/qxIrR8tF6zWnC2CNOSyvQJwZNDJC7C9nlCNHrx+o=;
-        b=T7zTI6aGEwbuPkl2Ja1CggJoakl1LaG5CpNE8ooOPDUmr5i4mTIcj5c1fEADfQwBTd
-         OCsdI1fnDChfBdcZUz7h/CL9fDz2kdERADLibD4fy8X+nFDD4foSpuHYH599C84ESwQN
-         r+1i85/359tHcYjzlAobLqTC7mF/O6zcx80LSVyl5j8KdBJeOogeI8KfEu4bEQg/Idzb
-         w4mHfOc09psf9QLBWPevbMOcWUVT2s9OtrLCKgMTLYeFTNIGiMFOP8S3LvrJrxnERSnw
-         jgjeTrrxEfkgBnIthGFYFaD+ljdi8I8QjzzvT5XyEPJ8vozbqGoOHutn9wKkqQZ7miwG
-         43cA==
-X-Gm-Message-State: AOAM533Ad80TSLU6ubjnOIdXsK+bM49RpgZVoKk7RnN6vuP9eg6dt9+L
-        DuZ3N7q62oURrFYS2gDaCzkOPyOd9oY=
-X-Google-Smtp-Source: ABdhPJy3IcwVhC0N1gj9NrdzdMXNnC7pXCO5CThzlG6JGABXQ23FtLwCvvedNx07wrV55fr9SqN2xQ==
-X-Received: by 2002:ac2:5a46:: with SMTP id r6mr41444829lfn.358.1638887869276;
-        Tue, 07 Dec 2021 06:37:49 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id z23sm1676836ljk.136.2021.12.07.06.37.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 06:37:48 -0800 (PST)
-Subject: Re: [PATCH] phy: tegra: add missing put_device() call in
- tegra210_xusb_padctl_probe()
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Qing Wang <wangqing@vivo.com>, JC Kuo <jckuo@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        id S237984AbhLGOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:41:29 -0500
+Received: from mga03.intel.com ([134.134.136.65]:48397 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237989AbhLGOlZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:41:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237528417"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="237528417"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:37:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="657725063"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 06:37:51 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1638881776-3308-1-git-send-email-wangqing@vivo.com>
- <b56a0b92-cf64-570c-08f8-e7a54fc55946@gmail.com>
-Message-ID: <e57c1c99-0743-c785-24e3-44654e4991f1@gmail.com>
-Date:   Tue, 7 Dec 2021 17:37:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: [PATCH 0/5] acpi: Store _PLD information and convert users
+Date:   Tue,  7 Dec 2021 17:37:52 +0300
+Message-Id: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <b56a0b92-cf64-570c-08f8-e7a54fc55946@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.12.2021 17:35, Dmitry Osipenko пишет:
-> 07.12.2021 15:56, Qing Wang пишет:
->> From: Wang Qing <wangqing@vivo.com>
->>
->> of_find_device_by_node() takes a reference to the embedded struct device 
->> which needs to be dropped when error return.
->>
->> Signed-off-by: Wang Qing <wangqing@vivo.com>
->> ---
->>  drivers/phy/tegra/xusb-tegra210.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index eedfc7c..05a0800
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -3170,8 +3170,10 @@ tegra210_xusb_padctl_probe(struct device *dev,
->>  		goto out;
->>  	}
->>  
->> -	if (!platform_get_drvdata(pdev))
->> +	if (!platform_get_drvdata(pdev)) {
->> +		put_device(&pdev->dev);
->>  		return ERR_PTR(-EPROBE_DEFER);
->> +	}
->>  
->>  	padctl->regmap = dev_get_regmap(&pdev->dev, "usb_sleepwalk");
->>  	if (!padctl->regmap)
->>
-> 
-> What if dev_get_regmap() fails? What if driver is removed?
-> 
-> Please either fix it properly or don't fix it.
-> 
+Hi,
 
-My bad, I see now in the code that this dev_get_regmap() fail is okay.
-Nevertheless the driver removal is incorrect.
+This removes the need for the drivers to always separately evaluate
+the _PLD. With the USB Type-C connector and USB port mapping this
+allows us to start using the component framework and remove the custom
+APIs.
+
+So far the only users of the _PLD information have been the USB
+drivers, but it seems it will be used also at least in some camera
+drivers later. These nevertheless touch mostly USB drivers.
+
+Rafael, is it still OK if Greg takes these?
+
+Prashant, can you test these?
+
+thanks,
+
+Heikki Krogerus (5):
+  acpi: Store the Physical Location of Device (_PLD) information
+  usb: Use the cached ACPI _PLD entry
+  usb: Link the ports to the connectors they are attached to
+  usb: typec: port-mapper: Convert to the component framework
+  usb: Remove usb_for_each_port()
+
+ Documentation/ABI/testing/sysfs-bus-usb |   9 +
+ drivers/acpi/scan.c                     |  79 +++++++
+ drivers/usb/core/port.c                 |  32 +++
+ drivers/usb/core/usb-acpi.c             |  17 +-
+ drivers/usb/core/usb.c                  |  46 ----
+ drivers/usb/typec/Makefile              |   3 +-
+ drivers/usb/typec/class.c               |   2 -
+ drivers/usb/typec/class.h               |  10 +-
+ drivers/usb/typec/port-mapper.c         | 280 +++---------------------
+ include/acpi/acpi_bus.h                 |  14 ++
+ include/linux/usb.h                     |   9 -
+ include/linux/usb/typec.h               |  12 -
+ 12 files changed, 184 insertions(+), 329 deletions(-)
+
+-- 
+2.33.0
+

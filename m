@@ -2,242 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EEF46BDD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A6346BDDD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237961AbhLGOjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbhLGOjg (ORCPT
+        id S233553AbhLGOkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:40:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38724 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233436AbhLGOkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:39:36 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C20C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:36:05 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id r25so57600555edq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XdR083vlxGfR2DxbW2vfHYekMcObry/69dcNA44yDFc=;
-        b=ifG0H7bOPdop+xatYzESVgBWbJSaxC+ihYWZ5WW8yNP9CD80m7Bb7zqSTWXsDYsrs0
-         2y48z2XCRCnGrVC920UKvQVHD4y4xBfvLCVvoTpyLfyboL5bt+HqOnsgca12nu2q65vm
-         vA1hyRJULPMAu+T64vmzaesQQx4ttimdJdil5ONPrizuInKT9kwhw+5Ih2OmmlZavSue
-         t8jWkAcCNwTWHZCvqlQwrmyWcroAD+icbh5lZohjKX0BP6Aqb2pzUkL24n98ON1VC8vk
-         ddOu7fuvfpcdYZV0a/lk2N0bVObpkHIfY0UhmVTMUbxT8ZtGj4aF9ZiiuMgTsJBeKlcF
-         OBiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XdR083vlxGfR2DxbW2vfHYekMcObry/69dcNA44yDFc=;
-        b=cNVCwYmuU8tJMOtJHadm+PfhADyuv9F7FqL/M1RH/g0Xu2carrnTKGNTCkbhOpc7tL
-         snENmqypYhNe5lQ8MKvYLX9JIPHhDP8UTTXOf1Yc6avDZ8dtQduXZq1RvSGbZyTGdGrj
-         rdo0ry6OpqrvbSExdSV5567OX0AATCjofgncXnKjx5PNIR5pqqe0D5SergB/iPCvujQG
-         P9Gpz02zvlnuLaUKTGlcSgdqeehmQZ3GRzui+OwjPsC/6Yc5Q1BSWzIIA55Pr6Ek/x+y
-         +7DeO1nsyo50SIlC1Tfs2w3TpAh0zLYrHN6cWPHYaBqcm0rAFbfcMv0fYhWFdVFR3o1E
-         Tpjw==
-X-Gm-Message-State: AOAM533k5A8H0/LFrv+a/gSoA1nWod5st4GO2FgBzP1aPrnnpcMEHNDl
-        FU1iNuyz9hJcYhbpWLabebxF7b4W2ysGe/yROk+DZQ==
-X-Google-Smtp-Source: ABdhPJxRuiYyyiUlORnM6uZ4axlURoSqWuiWmAXv3sEAclXVDH1Uagv6o1M6XSXrKQzVzuadIZ9i+nOrOCKoyZU4Nas=
-X-Received: by 2002:a17:906:4791:: with SMTP id cw17mr54309258ejc.493.1638887762262;
- Tue, 07 Dec 2021 06:36:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20211207081114.760201765@linuxfoundation.org>
-In-Reply-To: <20211207081114.760201765@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Dec 2021 20:05:50 +0530
-Message-ID: <CA+G9fYv5GG9aY=hxjNzp-FPEnnV-YDo6rz+ErQsit_QKV4Fovg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/125] 5.10.84-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 7 Dec 2021 09:40:52 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 829071FD56;
+        Tue,  7 Dec 2021 14:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638887840; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=486I88iG5iTiPXlrozcDOPpJfLCaalP50/kaI6xgM8s=;
+        b=moHx4OzQMMSAegKyA5u7PneXP3PwdnVOP/mr407/5Ls5i6IvSWZ4uDS+/lw7fCwyYb8KKh
+        rTGZROsSR23pYYK2t3QTGaOVuH867w9fVUwnStpX7KTCERqJgVVxTIwp32ftjKoYcw/yn/
+        QaqB9+BmSowt1Mh73wUW2Aw7AbRbb0c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638887840;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=486I88iG5iTiPXlrozcDOPpJfLCaalP50/kaI6xgM8s=;
+        b=F2vGVeUN+TLm8RtXXGzCqdnS68oeajvDTNJAAvzzT2KHdVQxGl6JZ0e9BLW+Gk7b4SF3VJ
+        hWO8MvEj4H7P+DBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 72E70A3B84;
+        Tue,  7 Dec 2021 14:37:20 +0000 (UTC)
+Date:   Tue, 07 Dec 2021 15:37:20 +0100
+Message-ID: <s5htufkmqfz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     perex@perex.cz, tiwai@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH] sound: ppc: beep: fix clang -Wimplicit-fallthrough
+In-Reply-To: <20211207110053.695712-1-anders.roxell@linaro.org>
+References: <20211207110053.695712-1-anders.roxell@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 at 13:48, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.84 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 09 Dec 2021 08:09:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.84-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, 07 Dec 2021 12:00:53 +0100,
+Anders Roxell wrote:
+> 
+> Clang warns:
+> 
+> sound/ppc/beep.c:103:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+>         case SND_TONE: break;
+>         ^
+> sound/ppc/beep.c:103:2: note: insert 'break;' to avoid fall-through
+>         case SND_TONE: break;
+>         ^
+>         break;
+> 1 warning generated.
+> 
+> Clang is more pedantic than GCC, which does not warn when failing
+> through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst.
+> Add athe missing break to silence the warning.
+> 
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thanks, applied.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-## Build
-* kernel: 5.10.84-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 05722611cd6fddc7f5ed4610f0ac2cca13745edc
-* git describe: v5.10.83-126-g05722611cd6f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.83-126-g05722611cd6f
-
-## No Test Regressions (compared to v5.10.83-131-g7dfedcfa0e17)
-
-## No Test Fixes (compared to v5.10.83-131-g7dfedcfa0e17)
-
-## Test result summary
-total: 95714, pass: 82034, fail: 550, skip: 12354, xfail: 776
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 260 total, 260 passed, 0 failed
-* arm64: 42 total, 42 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 39 passed, 1 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 35 passed, 2 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 58 total, 48 passed, 10 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 22 total, 22 passed, 0 failed
-* sh: 22 total, 20 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 42 total, 41 passed, 1 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Takashi

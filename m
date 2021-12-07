@@ -2,116 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD4C46C3C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599D846C3CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236290AbhLGToj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S236368AbhLGTo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbhLGToj (ORCPT
+        with ESMTP id S236319AbhLGTo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:44:39 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8298DC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:41:08 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so295956pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:41:08 -0800 (PST)
+        Tue, 7 Dec 2021 14:44:58 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBA9C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:41:27 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so243887otj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:41:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ctfRGVnbZ5UzVvW76lJpHV55yVu735c4sanjvxj5i6g=;
-        b=gGwiu8mVrsst9qCWyF8JSYof1zhfxWJtWrF4/VNNPFbt+9liMSH+avbw0kQCH5Mt6h
-         NvVvY0BOSfu3wzytgep0jDQ5jIJpcAd9nfpvO7Ztp+NXHI92e2xlgx/OWtTcFUcbxuFi
-         5hoyie7jpkcFRfDG/W/Wa7ybZTgb2nAyVFDlg=
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=L3MI+h0u5a63sfoKLcmo7CVjt1c80jtugNXNjUS8/Jk=;
+        b=d7Ya5eg8tOISCP0Ft13/S/sAUgMZ0KecWxiuHO43ptpK5siTHkYek/rSLNzRgz6/g/
+         URILtPjeVdASN+HVq+GmUwIcfNNyLHHW6oQmFbFf31z12fibKMkBrFeh/zceaib9GEAv
+         ejs5691m4x1KZV8lN/7mfGn3gPhSJcQyrP/u4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ctfRGVnbZ5UzVvW76lJpHV55yVu735c4sanjvxj5i6g=;
-        b=voSicn0r+6wQZn9g2ka+ZTHwLiYJ+WxLkTV632DxVr9hml+1hlmpF7zvskZOKSzm4v
-         9q6Vv4jhhwtvCSDziNCFNS2rHAKTrP8E1Zwpa9VcmDnw0/GjvBr/ccuv+cmupEWmvOFR
-         HVInAqNvuqr+HUcPrCsmJPzcsMj+z/7+Fq6l6FR5QzsQ16P8poNFDinUUOkQI/ITdslp
-         n2heCSML1ei+vm1uOeNOW1Q6pGbh8zhAi8LE1HiDDvpaifuDXUFx28cKpkCYr1MXPC7b
-         V+3bsmn1Z+ica2MSQUAL+EWOEX0PIloN2eGbtA4ylT0giGIrkrL90QEwV3N424jdiChk
-         hbmQ==
-X-Gm-Message-State: AOAM533ugl+jWcp9ecIBaRISKSMsNoHY4Nifpo7Bxr1MdkohQZc0gLfA
-        MOr5Qo9BAFPp4wUI1ppKHa/KZQW+w59VHA==
-X-Google-Smtp-Source: ABdhPJyMHxBe2uwEACS+gk84ue+Eh1Ae4nS/CMUFSNlmEgNXRaRvfz7t8KT5kQ/IkoTPMtotRgyvjw==
-X-Received: by 2002:a17:90a:670e:: with SMTP id n14mr1531197pjj.144.1638906068073;
-        Tue, 07 Dec 2021 11:41:08 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l21sm3549042pjt.24.2021.12.07.11.41.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 11:41:07 -0800 (PST)
-Date:   Tue, 7 Dec 2021 11:41:07 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr
-Message-ID: <202112071138.64C168D@keescook>
-References: <20211118203138.1287134-1-keescook@chromium.org>
- <YZpPr2P11LJNtrIm@unreal>
- <20211207184729.GA118570@nvidia.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=L3MI+h0u5a63sfoKLcmo7CVjt1c80jtugNXNjUS8/Jk=;
+        b=2Z5lgSq7cSKM7B5iKGk2hBEzuuc/pqSAQVwm2NOHXe+ae93zx8cq+dJy18nEBCnmHS
+         gxrzrpKolvNIEIR9aIbYArKI04w1RvJTI7mGw09S1W9r200/B5qXlT21pzgkaGyahQAD
+         BqLaOMqfArPrn3bUyUNLdfXmn2Mm4RCorctFkOXMS/ynW8T1LDuYe8twDOesgdRuq/32
+         IURuwY/hMJC5V1cHJhDWQbdZrm866kVYKnE15IFh6PJHc7fnJ+Uf+0zoB/eY6+pOYr5O
+         lw1stP5XWDQMSDWah16pnR/43uyYfXy1f9Fv5biNAlKTgnMCllSVrLmNN7GvZvvNay+0
+         kvjA==
+X-Gm-Message-State: AOAM533FimgvTvJb57QrpaV3eNluM2cJYR/ky4vnTnqqSUNu+Mbb3rDX
+        sa642/9GoBFMTueuwQjF3lEay1/u+LItVU8zbnFiYQ==
+X-Google-Smtp-Source: ABdhPJyWKZOZt61oBDBtwA1NmPAv5zfH9arDEDUBhs1KDK1dQBrwuJLt/m0bk+oDxA4rWbR6/PyO+Tok5lhmUB0tq04=
+X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr36355972ots.159.1638906087317;
+ Tue, 07 Dec 2021 11:41:27 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 7 Dec 2021 14:41:26 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207184729.GA118570@nvidia.com>
+In-Reply-To: <20211207094327.1.Ie3cde3443039342e2963262a4c3ac36dc2c08b30@changeid>
+References: <20211207094327.1.Ie3cde3443039342e2963262a4c3ac36dc2c08b30@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 7 Dec 2021 14:41:26 -0500
+Message-ID: <CAE-0n53UzgtKop5KmkxvBRroO-zFHDUgmWU3di1=Xomtew2NJg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
+ property by default"
+To:     Douglas Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, robdclark@chromium.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 02:47:29PM -0400, Jason Gunthorpe wrote:
-> On Sun, Nov 21, 2021 at 03:54:55PM +0200, Leon Romanovsky wrote:
-> > On Thu, Nov 18, 2021 at 12:31:38PM -0800, Kees Cook wrote:
-> > > In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> > > field bounds checking for memset(), avoid intentionally writing across
-> > > neighboring fields.
-> > > 
-> > > Use memset_after() to zero the end of struct mlx5_ib_mr that should
-> > > be initialized.
-> > > 
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > >  drivers/infiniband/hw/mlx5/mlx5_ib.h | 5 ++---
-> > >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > > index e636e954f6bf..af94c9fe8753 100644
-> > > +++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > > @@ -665,8 +665,7 @@ struct mlx5_ib_mr {
-> > >  	/* User MR data */
-> > >  	struct mlx5_cache_ent *cache_ent;
-> > >  	struct ib_umem *umem;
-> > > -
-> > > -	/* This is zero'd when the MR is allocated */
-> > > +	/* Everything after umem is zero'd when the MR is allocated */
-> > >  	union {
-> > >  		/* Used only while the MR is in the cache */
-> > >  		struct {
-> > > @@ -718,7 +717,7 @@ struct mlx5_ib_mr {
-> > >  /* Zero the fields in the mr that are variant depending on usage */
-> > >  static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
-> > >  {
-> > > -	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
-> > > +	memset_after(mr, 0, umem);
-> > 
-> > I think that it is not equivalent change and you need "memset_after(mr, 0, cache_ent);"
-> > to clear umem pointer too.
-> 
-> Kees?
+Quoting Douglas Anderson (2021-12-07 09:43:41)
+> This reverts commit cefdd52fa0455c0555c30927386ee466a108b060.
+>
+> On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
+> enabled, you'll see a Use-After-Free reported at bootup.
+>
+> The root of the problem is that dwc3_qcom_of_register_core() is adding
+> a devm-allocated "tx-fifo-resize" property to its device tree node
+> using of_add_property().
+>
+> The issue is that of_add_property() makes a _permanent_ addition to
+> the device tree that lasts until reboot. That means allocating memory
+> for the property using "devm" managed memory is a terrible idea since
+> that memory will be freed upon probe deferral or device unbinding.
+>
+> Let's revert the patch since the system is still functional without
+> it. The fact that of_add_property() makes a permanent change is extra
+> fodder for those folks who were aruging that the device tree isn't
+> really the right way to pass information between parts of the
+> driver. It is an exercise left to the reader to submit a patch
+> re-adding the new feature in a way that makes everyone happier.
+>
+> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-Oops, sorry, I missed the ealrier reply!
-
-I don't think that matches -- the original code wipes from the start of
-"out" to the end of the struct. "out" is the first thing in the union
-after "umem", so "umem" was not wiped before. I retained that behavior
-("wipe everything after umem").
-
-Am I misunderstanding the desired behavior here?
-
-Thanks!
-
--- 
-Kees Cook
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

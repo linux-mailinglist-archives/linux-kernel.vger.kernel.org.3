@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA64846C0D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC9646C0D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbhLGQj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:39:26 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:42999 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbhLGQjU (ORCPT
+        id S237537AbhLGQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:40:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:50506 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhLGQke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:39:20 -0500
-Received: by mail-oi1-f169.google.com with SMTP id n66so28623255oia.9;
-        Tue, 07 Dec 2021 08:35:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=31mjd/csqFEQKru4ee4D/rvYNR1wxLp+wwKZbiHux2g=;
-        b=QvxLCriqtH6BSPLrSwkDPp2nwdNgYGtUTi+2/g2FjvYo8VfllzKuR9YsLgQFEzkeDg
-         TND7Np0u8l+xIpT5fHefwDeF+7sx2WQziHd+NX5iyQeX9DZ5rPzMjlrH7L6shNX/DXei
-         uuYRyoNAirI3gXDF5Pdgtz/iX80UhzXRBOsf4h3MREBeNcrMpuxnNVHE68GTvt86XbU1
-         dJ//xps/8T9ScrBQA/QF1PPmRVYuHZUwVZCxKoIfvOO7RQe/tikXtOZoB/HnK1YKcx69
-         fY0dHlg4u14AvQzREMh3N7ijGFXka7xs3Vl688EdNLiBTlLdiC8+c9YqO0zXT3Zq0Cd2
-         O5ig==
-X-Gm-Message-State: AOAM530Tf/wmuXxiuEJL+yhN5SrP9Rj3R1uz3p02j7focRMglmdGQtGx
-        zU3TYGZ1ck084nAn1oTcmYKVyrKeTB43E+fCr8E=
-X-Google-Smtp-Source: ABdhPJzbBKOhECxZ5Fu3Bq2Y18qzwDOUfSloASSqP8c4P625s7x/rH/HOywYNNoMhCTzUVtD6pKCl5rKiys9YNoF4nc=
-X-Received: by 2002:a05:6808:e90:: with SMTP id k16mr6067044oil.166.1638894949491;
- Tue, 07 Dec 2021 08:35:49 -0800 (PST)
+        Tue, 7 Dec 2021 11:40:34 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8C67B1FE00;
+        Tue,  7 Dec 2021 16:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638895023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9RUC2PhV3f3vpLr11mqtR46jAj5ypI8WeQwEBxBuSg=;
+        b=nFAtzgaui7XXCSyIUUC0UwS92t88o7kHrBhmYfbaShb0VuaqvjaVvqshjcMYZjZFAiekzn
+        gAYJSC1u5tFGyVtcv44rg12z3kno9uDMQZ4JUqd5e7hAUJbK4tTcMcEfvfX8EiGclUcg/S
+        e75pdfB0GAi2ctXqz6kXWUxR9/t0F9E=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 51811A3BA5;
+        Tue,  7 Dec 2021 16:37:03 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 17:36:59 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+References: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com> <20211206122952.74139-3-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20211206122952.74139-3-kirill.shutemov@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Dec 2021 17:35:38 +0100
-Message-ID: <CAJZ5v0hGnvX2a1bsoUSqV4Vf0LE6P6wTjk4ZPT7JTLvSAL7z_g@mail.gmail.com>
-Subject: Re: [PATCH 2/4] ACPI: PM: Remove redundant cache flushing
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 1:30 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> ACPICA code takes care about cache flushing on S1/S2/S3 in
-> acpi_hw_extended_sleep() and acpi_hw_legacy_sleep().
->
-> acpi_suspend_enter() calls into ACPICA code via acpi_enter_sleep_state()
-> for S1 or x86_acpi_suspend_lowlevel() for S3. It only need to flush
-> cache for S2 (not sure if this call path is ever used for S2).
->
-> acpi_sleep_prepare() call tree:
->   __acpi_pm_prepare()
->     acpi_pm_prepare()
->       acpi_suspend_ops::prepare_late()
->       acpi_hibernation_ops::pre_snapshot()
->       acpi_hibernation_ops::prepare()
->     acpi_suspend_begin_old()
->       acpi_suspend_begin_old::begin()
->   acpi_hibernation_begin_old()
->     acpi_hibernation_ops_old::acpi_hibernation_begin_old()
->   acpi_power_off_prepare()
->     pm_power_off_prepare()
->
-> Hibernation (S4) and Power Off (S5) don't require cache flushing. So,
-> the only interesting callsites are acpi_suspend_ops::prepare_late() and
-> acpi_suspend_begin_old::begin(). Both of them have cache flush on
-> ->enter() operation in acpi_suspend_enter().
->
-> Remove redundant ACPI_FLUSH_CPU_CACHE() in acpi_sleep_prepare() and
-> acpi_suspend_enter().
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  drivers/acpi/sleep.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> index eaa47753b758..14e8df0ac762 100644
-> --- a/drivers/acpi/sleep.c
-> +++ b/drivers/acpi/sleep.c
-> @@ -73,7 +73,6 @@ static int acpi_sleep_prepare(u32 acpi_state)
->                 acpi_set_waking_vector(acpi_wakeup_address);
->
->         }
-> -       ACPI_FLUSH_CPU_CACHE();
->  #endif
->         pr_info("Preparing to enter system sleep state S%d\n", acpi_state);
->         acpi_enable_wakeup_devices(acpi_state);
-> @@ -566,15 +565,15 @@ static int acpi_suspend_enter(suspend_state_t pm_state)
->         u32 acpi_state = acpi_target_sleep_state;
->         int error;
->
-> -       ACPI_FLUSH_CPU_CACHE();
-> -
->         trace_suspend_resume(TPS("acpi_suspend"), acpi_state, true);
->         switch (acpi_state) {
->         case ACPI_STATE_S1:
->                 barrier();
->                 status = acpi_enter_sleep_state(acpi_state);
->                 break;
-> -
-> +       case ACPI_STATE_S2:
-> +               ACPI_FLUSH_CPU_CACHE();
-> +               break;
+On Tue 07-12-21 17:27:29, Michal Hocko wrote:
+[...]
+> So your proposal is to drop set_node_online from the patch and add it as
+> a separate one which handles 
+> 	- sysfs part (i.e. do not register a node which doesn't span a
+> 	  physical address space)
+> 	- hotplug side of (drop the pgd allocation, register node lazily
+> 	  when a first memblocks are registered)
 
-I don't think this is needed for S2, because the function doesn't do
-anything low-level in that case and simply returns (IOW, S2 isn't
-really supported).
-
->         case ACPI_STATE_S3:
->                 if (!acpi_suspend_lowlevel)
->                         return -ENOSYS;
-> --
-> 2.32.0
->
+In other words, the first stage
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index c5952749ad40..f9024ba09c53 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+ 	if (self && !node_online(self->node_id)) {
+ 		build_zonelists(self);
+ 	} else {
+-		for_each_online_node(nid) {
++		/*
++		 * All possible nodes have pgdat preallocated
++		 * free_area_init
++		 */
++		for_each_node(nid) {
+ 			pg_data_t *pgdat = NODE_DATA(nid);
+ 
+ 			build_zonelists(pgdat);
+@@ -8032,8 +8036,24 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ 	/* Initialise every node */
+ 	mminit_verify_pageflags_layout();
+ 	setup_nr_node_ids();
+-	for_each_online_node(nid) {
+-		pg_data_t *pgdat = NODE_DATA(nid);
++	for_each_node(nid) {
++		pg_data_t *pgdat;
++
++		if (!node_online(nid)) {
++			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
++			pgdat = arch_alloc_nodedata(nid);
++			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
++			arch_refresh_nodedata(nid, pgdat);
++			free_area_init_memoryless_node(nid);
++			/*
++			 * not marking this node online because we do not want to
++			 * confuse userspace by sysfs files/directories for node
++			 * without any memory attached to it (see topology_init)
++			 */
++			continue;
++		}
++
++		pgdat = NODE_DATA(nid);
+ 		free_area_init_node(nid);
+ 
+ 		/* Any memory on that node */
+-- 
+Michal Hocko
+SUSE Labs

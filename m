@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 167DB46C798
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A2846C79A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238033AbhLGWlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbhLGWlJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:41:09 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C2AC061574;
-        Tue,  7 Dec 2021 14:37:38 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso538883wmr.5;
-        Tue, 07 Dec 2021 14:37:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HTn8oDbqL3WtQZWuVrPgPxffXFkLIxBUazDaxIaO7GM=;
-        b=qVxGvW0ErqCtKsYWFlXTbzpVWB1gQlVikS9mO4DRLtrjoeZ7cntYCdILadmV/hNU1n
-         pMoG9eG79mqpXEr2EP1fLpc3urPlO+aBAkshv6S/uOWgTdOKjiH2pNwxErWhy5Z/PTLD
-         HUsp4+qBMF1TwCfB5RdVc+wZ50dUK0NC7k4/RWvFqwm9SzNSBh9hP/+/BaeONKFEwPER
-         jxL7SHShbzAd8REjMuMh+bSqj7vErgWCuGbIQ5wGk08TlQ1XdKfaNCND5nLJW5BnVU7A
-         z9pnBIGylkvTqcbpu65dz0LIM8sCDEriLU22olCW7Gg3pZRgZwZeSg9zdQPFR6mFK9g/
-         NH2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HTn8oDbqL3WtQZWuVrPgPxffXFkLIxBUazDaxIaO7GM=;
-        b=HZWekG/bgtSD3vN5MNY7TOdMp2QpNtt9pftYUy06uYxlgC4tpAWwlF3z8I44m2djJe
-         MYVu2rbXJcMfvzkbPAwEnz0ScOZmCtEI6NdrIRMx57KP7CNzmk8jMCFoT5ZlPLWUK/zM
-         kWCI0R2n9if5NnYB28hmIYfqF/ChIiatlRTZJjFXUB85HiTZUqP31xBePmpxNrooPhAO
-         RxBqL9S3VHewgsxUigegD/zAVgj6n749fHr7xp2qOkBJAkN77IH+ZVGFSE7N9NbEx/ZP
-         +iYFwETFhdT29PBRf/JkE4Z2H7bw+Kcg25ktQOhAqZNYzr1VZkZgbQ1fndkSzxtH9q9n
-         AGJQ==
-X-Gm-Message-State: AOAM530B7FEgAvANVh+ahLuMKv8vqbQItuEKzPJW2pfgklIqu1TNNpaB
-        lLO14w5nCnG87KlWkdKgumE=
-X-Google-Smtp-Source: ABdhPJwD+IOz2uSLw8sYwlDLWXqqp2+6zQ/dAwhgMOxC3tRsKdCVbJAAQImGzbxGTR/JDOqhzO6GaQ==
-X-Received: by 2002:a1c:488:: with SMTP id 130mr10747983wme.157.1638916656663;
-        Tue, 07 Dec 2021 14:37:36 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f13sm1169223wmq.29.2021.12.07.14.37.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:37:36 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/resctrl: remove redundant assignment to variable chunks
-Date:   Tue,  7 Dec 2021 22:37:35 +0000
-Message-Id: <20211207223735.35173-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S241807AbhLGWlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:41:32 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:44002 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232475AbhLGWlb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:41:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=KL7t3EzMOJg7Y8VdK8+7cVEQezPhxkNeMva2hDQV8gI=; b=ahFFO/P5JyoTmj2MDU6qu85ZOB
+        FNPq3kmvh9O8tAfjF3j3jGABnIuiwYVU8COGAWSpXSl82uu2w3ur6V6jFUo9dWPsYsqyaRoRfNee7
+        d0KJC7NPMCR/tUXMVyI6WyLRgHkrx+U+R6t3mPVfazsCMPVp4u5DahHRc/S+YIBPYkFY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1muj5w-00Forc-Gc; Tue, 07 Dec 2021 23:37:56 +0100
+Date:   Tue, 7 Dec 2021 23:37:56 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <Ya/iRAAN8OXC57Ph@lunn.ch>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya96pwC1KKZDO9et@lunn.ch>
+ <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
+ <20211207211018.cljhqkjyyychisl5@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207211018.cljhqkjyyychisl5@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable chunks is being shifted right and re-assinged the shifted
-value which is then returned. Since chunks is not being read afterwards
-the assignment is redundant and the >>= operator can be replaced with a
-shift >> operator instead.
+> This raises interesting questions. I see two distinct cases:
+> 
+> 1. "dual I/O": the switch probes initially over a standard bus (MDIO,
+>    SPI, I2C) then at some point transitions towards I/O through the
+>    tagger.  This would be the case when there is some preparation work
+>    to be done (maybe the CPU port needs to be brought up, maybe there is
+>    a firmware to be uploaded to the switch's embedded microcontroller
+>    such that the expected remote management protocol is supported, etc).
+>    It would also be the case when multiple CPU ports are supported (and
+>    changing between CPU ports), because we could end up bringing a
+>    certain CPU port down, and the register I/O would need to be
+>    temporarily done over MDIO before bringing the other CPU port up.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- arch/x86/kernel/cpu/resctrl/monitor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+mv88e6xxx is very likely to take this path. You need to program some
+registers to enable RMU. It is possible to enable this via EEPROM
+configuration, but i've never seen any hardware with the necessary
+EEPROM configuration. And you have the old chicken/egg, in order to be
+able to program the EEPROM, you need access to the switch, or a header
+and a cable.
 
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index c9f0f3d63f75..eaf25a234ff5 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -282,7 +282,7 @@ static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
- 	u64 shift = 64 - width, chunks;
- 
- 	chunks = (cur_msr << shift) - (prev_msr << shift);
--	return chunks >>= shift;
-+	return chunks >> shift;
- }
- 
- static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
--- 
-2.33.1
+> 2. "single I/O": the switch needs no such configuration, and in this
+>     case, it could in principle probe over an "Ethernet bus" rather than
+>     a standard bus as mentioned above.
+> 
+> I don't know which case is going to be more common, honestly.
 
+Given the history, i think MDIO startup, and then transition to
+Ethernet is going to be a lot more common.  If there was a lot of
+hardware out there which could do Ethernet from the beginning, we
+would of had patches or at least requests for it by now. 
+
+I would keep it KISS.
+
+      Andrew

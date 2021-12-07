@@ -2,120 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E3B46B895
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C7646B89A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbhLGKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:18:27 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:19875 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhLGKS0 (ORCPT
+        id S234931AbhLGKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:18:47 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:44590 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234933AbhLGKSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:18:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1638872096; x=1670408096;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Bo9IYL4ZSYRCBcfdD1wFpX2LdtkM98KISonDXEfcFbE=;
-  b=1e2twhaLiu2uK77sl4qykKtRhxhYNngtlqLw7eWXT1FC09bp+rYryEKA
-   VkfT+RcWI86/5J228bR2/3PYDVaxTrxNIjZWhEzijciikrbAE4NqSwaZZ
-   Y0cY7VVehRFy9TETe3R5GNPhkMdZ4XygzGlMvuHV6CZwhZKYxLMRhPOvP
-   F7Mw2sNxcRrViD96bzKA79uAsZSG1FTMfC4JdTcnyRfiLB1Pg+OMIV0AV
-   KyezyO5uCtrqYPcfNCq5Dr+qRph7vxit3ep2WIRNqsc/JVkdzSFrrzAID
-   bURU+ILIEoQNnl9sQhTkNhdBuv+mPw2//aVdz7ciyc9kkoEQw1rk2XLjv
-   A==;
-IronPort-SDR: Ct9G3iLqJ3ea57o09sbbcmculpE4mZ8xstdTdzWaK1YnmGXTs/AsJuWEP6dI75FAznhgEUO/Dw
- 2VNiz/LoCZFE1RcazShTme6leRnjYJ/ajGmN0dqwzsfKkQBJO9Ma3qQmBiG4t4UbpSMeGGXiTK
- /94jj+gWN2wR+lff0rx4Z9QipsG6CXlBs3jYujIGubIIBuVivZm++VeiX+rYlhAuYZ35oA76sY
- j3/p3PF4ZU7d+XaCKgTCpzSaM4wURvVXbPQcoNy4aeWlSSBHv+4jShdMjDSziVza82RAU7uVjj
- OjpOibU0cOJusIGV/7CjxNET
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="145783939"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2021 03:14:56 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 7 Dec 2021 03:14:55 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Tue, 7 Dec 2021 03:14:52 -0700
-Subject: Re: [PATCH] dt-bindings: watchdog: atmel: Add missing 'interrupts'
- property
-To:     Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211206174045.2294873-1-robh@kernel.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <b6944a02-ba13-2a0d-6ed4-7b1330348d68@microchip.com>
-Date:   Tue, 7 Dec 2021 11:14:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 7 Dec 2021 05:18:45 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BDF9421B3E;
+        Tue,  7 Dec 2021 10:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638872114; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fmiDXA5yzuOQ3TCOggxW4h5cLqZY2pHWb0txkt/F/pc=;
+        b=IqW/fQHgB6cUG7JdfpLS9iXvR+Oo1okV83ZgupHdvpn+I+hcJpKHI6aU7od55aKm5f943N
+        WV+Lz1y4Cyl/phAHHe7GPybOaW8UpTgXZy274rmRPmQxWRQd3m2FzMGDlLTCQJxIzMhWkC
+        hEgoxQ5Obmjc4x9qiXaBff6qKdJHDXI=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7BAE5A3B8B;
+        Tue,  7 Dec 2021 10:15:14 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 11:15:13 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Nico Pache <npache@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Roman Gushchin <guro@fb.com>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, raquini@redhat.com
+Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+Message-ID: <Ya80MSTbKmsTfXjf@dhcp22.suse.cz>
+References: <Ya3yZWkj2wGRWDMz@dhcp22.suse.cz>
+ <51c65635-1dae-6ba4-daf9-db9df0ec35d8@redhat.com>
+ <Ya4K0+XCmv3NBmwQ@dhcp22.suse.cz>
+ <05157de4-e5df-11fc-fc46-8a9f79d0ddb4@redhat.com>
+ <Ya4Y07Iu2ygj5zwZ@dhcp22.suse.cz>
+ <d4f281e6-1999-a3de-b879-c6ca6a25ae67@redhat.com>
+ <Ya4cUQpLJHnm3jyK@dhcp22.suse.cz>
+ <f2c695f0-9621-a7be-82c3-8850dc8ca3e3@suse.cz>
+ <Ya4kBASzAJ32UBfT@dhcp22.suse.cz>
+ <CAHbLzkpnvqDCKjf7cmZDcVROAkh_Vzu3HXRJgkZsqp+xVokRZA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211206174045.2294873-1-robh@kernel.org>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkpnvqDCKjf7cmZDcVROAkh_Vzu3HXRJgkZsqp+xVokRZA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2021 at 18:40, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the atmel,sama5d4-wdt
-> example has the following warning:
-> 
-> /home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.example.dt.yaml: watchdog@fc068640: Unevaluated properties are not allowed ('interrupts' was unexpected)
-> 
-> Document the missing 'interrupts' property.
-> 
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Mon 06-12-21 10:26:32, Yang Shi wrote:
+[...]
+> But IMHO actually the memory usage should be not that bad for memcg
+> heavy usecases since there should be not too many "never onlined"
+> nodes for such workloads?
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hardware with very sparse nodes topology are really scarce. More likely
+on ppc (LPARs) but even then we are talking about really low number of
+nodes. At least this is my experience.
 
-Thanks for the fix Rob!
-Best regards,
-   Nicolas
-
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> Cc: Eugen Hristev <eugen.hristev@microchip.com>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml        | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> index 9856cd76c28d..a9635c03761c 100644
-> --- a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> @@ -22,6 +22,9 @@ properties:
->     reg:
->       maxItems: 1
-> 
-> +  interrupts:
-> +    maxItems: 1
-> +
->     atmel,watchdog-type:
->       $ref: /schemas/types.yaml#/definitions/string
->       description: should be hardware or software.
-> --
-> 2.32.0
-> 
-
-
+So while the memory wasting is possible it doesn't seem to be a really
+pressing problem. I would be more careful about a code which scales with
+MAX_NUMNODES because that can be really large.
 -- 
-Nicolas Ferre
+Michal Hocko
+SUSE Labs

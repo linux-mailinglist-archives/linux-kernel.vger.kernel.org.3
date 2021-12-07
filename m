@@ -2,120 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A0946BC0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B35446BC0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbhLGNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:03:19 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:33285 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230183AbhLGNDS (ORCPT
+        id S236694AbhLGNDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:03:48 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58992 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236458AbhLGNDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:03:18 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Uzmr3Eo_1638881983;
-Received: from 30.240.125.66(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Uzmr3Eo_1638881983)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 07 Dec 2021 20:59:45 +0800
-Message-ID: <9a90c5a4-ec3c-5d82-4a8f-baf94ff65edc@linux.alibaba.com>
-Date:   Tue, 7 Dec 2021 20:59:43 +0800
+        Tue, 7 Dec 2021 08:03:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 27FA81FDFE;
+        Tue,  7 Dec 2021 13:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638882016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+C8znulBKfN2iqCnpcXwfq/A/cdrkCZr52J26lpfUyA=;
+        b=IZtx9SM9+SakYOsz8jBa0MNR9U65fWq6gRkSLmuQpgRuufpCzLia6gclbZBIuVRO7xKKXJ
+        hluXHKYGlGQ/tw8Ts25/ZPXS2ZygLu+3AE9y2hTzw86NTzsDHYb7b0r6fZzviioo/M0Eyq
+        3oqtPjqI30NIbPjjWQwSrH6/QA2J3xY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638882016;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+C8znulBKfN2iqCnpcXwfq/A/cdrkCZr52J26lpfUyA=;
+        b=I7Oay/eG0I6BpwMaEtiqsJPDP0GaIB4GSFJLafQY0bcwh2UoKPh5v0UdaEVy4vSgiPpRDI
+        U3jvTYQPcwxIoDBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFDAA13A78;
+        Tue,  7 Dec 2021 13:00:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dOw6Nd9ar2GaPQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 07 Dec 2021 13:00:15 +0000
+Message-ID: <26f988d4-3fac-fcc0-f80a-c9d7516c266b@suse.de>
+Date:   Tue, 7 Dec 2021 14:00:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH 1/2] ghes_edac: refactor memory error location processing
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/rockchip: use generic fbdev setup
 Content-Language: en-US
-To:     Robert Richter <rric@kernel.org>
-Cc:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211207031905.61906-2-xueshuai@linux.alibaba.com>
- <Ya9F75xWt/IlwcKC@rric.localdomain>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <Ya9F75xWt/IlwcKC@rric.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     John Keeping <john@metanate.com>
+Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211029115014.264084-1-john@metanate.com>
+ <ab7ace79-0148-1efa-ec17-6994bb35fd2f@suse.de> <YX01C6l93I2YPgku@donbot>
+ <6e69f9bb-5a1e-7b79-38e8-d2860e5ee615@suse.de>
+ <20211101113415.3bed0f62.john@metanate.com> <Ya9LdiutXV7lCOtT@donbot>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <Ya9LdiutXV7lCOtT@donbot>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------UbAOQXuN5ozF4VxDiNVJF0Ed"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Robert,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------UbAOQXuN5ozF4VxDiNVJF0Ed
+Content-Type: multipart/mixed; boundary="------------GufJmFGkh9XtWaqveMIfvlqc";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: John Keeping <john@metanate.com>
+Cc: David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
+ linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Message-ID: <26f988d4-3fac-fcc0-f80a-c9d7516c266b@suse.de>
+Subject: Re: [PATCH] drm/rockchip: use generic fbdev setup
+References: <20211029115014.264084-1-john@metanate.com>
+ <ab7ace79-0148-1efa-ec17-6994bb35fd2f@suse.de> <YX01C6l93I2YPgku@donbot>
+ <6e69f9bb-5a1e-7b79-38e8-d2860e5ee615@suse.de>
+ <20211101113415.3bed0f62.john@metanate.com> <Ya9LdiutXV7lCOtT@donbot>
+In-Reply-To: <Ya9LdiutXV7lCOtT@donbot>
 
-Thank you for your quick comments! I will change these in the next version.
+--------------GufJmFGkh9XtWaqveMIfvlqc
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 2021/12/7 PM7:30, Robert Richter wrote:
-> On 07.12.21 11:19:04, Shuai Xue wrote:
->> The memory error location processing in ghes_edac_report_mem_error() have
->> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
->> cper_mem_err_type_str() in drivers/firmware/efi/cper.c.
->>
->> To avoid the duplicated code, this patch introduces the above cper_*() into
->> ghes_edac_report_mem_error().
-> 
-> It is not really duplicate yet, changes are slightly different which
-> could trigger problems in some parsers. At least those differences
-> should be listed in the patch description. 
-I see your concerns. I will document the changes in patch description.
+SGkNCg0KQW0gMDcuMTIuMjEgdW0gMTI6NTQgc2NocmllYiBKb2huIEtlZXBpbmc6DQo+IA0K
+PiBBcmUgeW91IGFibGUgdG8gcGljayB0aGlzIHVwIChhbmQgWzFdKT8gIE90aGVyd2lzZSB3
+aGF0IGlzIG5lZWRlZCBoZXJlDQo+IGFuZCB3aG8gc2hvdWxkIHBpY2sgdGhpcyB1cD8NCj4g
+DQo+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMTExMDExMTQ2
+MjIuODEzNTM2LTEtam9obkBtZXRhbmF0ZS5jb20vDQo+IA0KDQpJIGFkZGVkIGJvdGggcGF0
+Y2hlcyB0byBkcm0tbWlzYy1uZXh0Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-> I would rather remove the
-> 'space' delimiter after the colon and take the ghes version of it as
-> logs become harder to read. So ideally there is a unification patch
-> before the "duplication" is removed with changes in both files as
-> necessary for review and to document the change.
-I will add a new patch to unify ghes and cper before removing duplication.
+--------------GufJmFGkh9XtWaqveMIfvlqc--
 
+--------------UbAOQXuN5ozF4VxDiNVJF0Ed
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->> The EDAC error log is now properly reporting the error as follows (all
->> Validation Bits are enabled):
->>
->> [  375.938411] EDAC MC0: 1 CE single-symbol chipkill ECC on unknown memory (node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000 DIMM location: not present. DMI handle: 0x0000 page:0x898b86 offset:0x20 grain:1 syndrome:0x0 - APEI location: node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000 DIMM location: not present. DMI handle: 0x0000 status(0x0000000000000000): reserved)
->> [  375.938416] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
->> [  375.938417] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
->> [  375.938418] {2}[Hardware Error]: event severity: corrected
->> [  375.938419] {2}[Hardware Error]:  Error 0, type: corrected
->> [  375.938420] {2}[Hardware Error]:   section_type: memory error
->> [  375.938421] {2}[Hardware Error]:   error_status: 0x0000000000000000
->> [  375.938422] {2}[Hardware Error]:   physical_address: 0x0000000898b86020
->> [  375.938422] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
->> [  375.938426] {2}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000
->> [  375.938426] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
->> [  375.938428] {2}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> 
-> 
->> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
->> index 6ec8edec6329..08eabb2e23f8 100644
->> --- a/drivers/firmware/efi/cper.c
->> +++ b/drivers/firmware/efi/cper.c
->> @@ -211,7 +211,7 @@ const char *cper_mem_err_type_str(unsigned int etype)
->>  }
->>  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
->>  
->> -static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->> +int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->>  {
->>  	u32 len, n;
->>  
->> @@ -265,7 +265,7 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->>  	return n;
->>  }
->>  
->> -static int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
->> +int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
->>  {
->>  	u32 len, n;
->>  	const char *bank = NULL, *device = NULL;
-> 
-> Even though the ghes driver cannot be built as module,
-> EXPORT_SYMBOL_GPL()s should be added for both.
-I will add EXPORT_SYMBOL_GPL()s.
+-----BEGIN PGP SIGNATURE-----
 
-> It would be good to add a note to the description that the
-> UEFI_CPER/EDAC_GHES dependency is always solved through
-> ACPI_APEI_GHES/ACPI_APEI. But we should make the UEFI_CPER dependency
-> explicit for EDAC_GHES in Kconfig anyway.
-Will document the dependency and add UEFI_CPER dependency explicit for
-EDAC_GHES in Kconfig in next version.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGvWt8FAwAAAAAACgkQlh/E3EQov+Cw
+Kw/9HsNOGnt0zzCJ/bfdMgu2znBHFFGK6kl9x24z0DjOoWvjlMKWpUfILBnjeJkAf+uqRpI7MOul
+oqbt7rHnWPu64tGdqUcFJ0Ta9oiWJg4ow0mSOOUWjStO2LmC4uIGQdjJYtUdoXcghlnnBCICqkLY
+bxWZOh1UfXEU59rjSu+ZyY3Eo51ANVdLU8mNwWqEiCNdjN6Uxo27052qkfbgRYQnQQIuLpUoJGg9
+ZIB3yS+Jf3uqVYxh8vJs50kW4/4xUWIl8Ye77275AoC8wT5kr7BRcIv6/rqMtr5FmR4yaG8qYm6H
+7XTJrb9EzLeSy5To8MY0Z190228alxkhBdT3Qq8BvjlWEIrrU6nRSDdtBiYMRxy5S/fzmDZ/jXhK
+wQgys58+1PutAgXPx48H3XbO3NugNwvB4GV697ZIgu+AtSZCbh5RQ7X30hC2zNxbZirYpZ4m/S67
+v60uKzWvxKW1YIbsi4Xc5+gJcu6uvJ92BZ+8lpjOlMDx4ajB2u+IsFIvTmv1/p8kbysRaGcjq6dP
+rteItmAddk/DTbSz0tLbGr6U9OCgUOrbGXB78Zh/iF3d5V00D0Ct5XQyPGQpaOu+HgnLNWHrkewg
+0d77NHE9OZWtp4i3KbuTjTYMtaDTPOe5hMfLkspB3j+TayoukB5+K5gTvIydiWub3ZS5mlHdteGE
+ukc=
+=exws
+-----END PGP SIGNATURE-----
 
-Cheers,
-Shuai
+--------------UbAOQXuN5ozF4VxDiNVJF0Ed--

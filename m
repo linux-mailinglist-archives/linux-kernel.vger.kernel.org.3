@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A921E46C22F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC7946C231
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240252AbhLGR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbhLGR4U (ORCPT
+        id S240256AbhLGR5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:57:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56598 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234315AbhLGR5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:56:20 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F410FC061574;
-        Tue,  7 Dec 2021 09:52:49 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id o4so12012pfp.13;
-        Tue, 07 Dec 2021 09:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=veFZZ2BwM4ZKvUKxG49udfxSBvJVoaKMQ2UqudqotEQ=;
-        b=jgk5tAuMGUati/xM9n9lNn854YcG8IWqsSlnPC3BlX1x/M8A9P0BExT2hSoApDiQ4C
-         AzRvnEQ/MuyXDHUQsD5qW7yEN2tc+aOf2NEn/PlRjn7BtytXeEf8qar/IZoYu5hCzSRh
-         Sh3T4oittUtRC4IQnYUNYco5R1elFYYQaeQhj7XSJv1n6JBNI/xS4zRymEjZvj3lyYS/
-         QZKeHvGIvsLGwddK3pI3BrDBzv0lj+ftujyo4ZYyVClx9HXsTxh/BWfau/IFvX2UQyo5
-         rbiXdRDBF9nHNczwVOLdif6RqOK3UvgAfZEsCDqdvOIkqcZ/V2CVvrszzSxkRqEZknqa
-         5XhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=veFZZ2BwM4ZKvUKxG49udfxSBvJVoaKMQ2UqudqotEQ=;
-        b=IjQJgSXSbSwxjspEVVYXUl8eoLrA8otZFqfAGgwFwSkes2gMMiNrkawoszOTR/vvCc
-         L28kvZio4W5UUmrNn4fYFHKYDu9WOX5aawI7QD96dRsSnqFAytoWsyWFlaj5NzDp9EFp
-         IH7yLkL6WHM42Yuk6jyaC4a0KyA0JExa7IwfYA0Ma7LKaMBimMIDs8Glt6HInUgGageQ
-         ONV/RLvdrh08I9tysm3/fMNovE5nPTx27HIwNZGUSlSd6OICf34fe7cpxkQcY/QjEp6A
-         2o6XSx4RCAYoY0N0ndw1eKFBydhvGTDwiKL5pNr2j8OLGvfGrQ7gJeQABIwelUc/6hKZ
-         tWWA==
-X-Gm-Message-State: AOAM5327iSV9S/lsv7yriTYHA3L2t9mHTe9UybQYXsCtD3IqV0raGYXY
-        /idROkaSt1UqiUKp/W+UYLoiObA0+A0=
-X-Google-Smtp-Source: ABdhPJxJv+eohQpgN/P9mjM8WWY4HG7RyDTmtHVmTtGPQQIpL0ogZ+ePWhy4QDRVfVlcgrx9DFsDsw==
-X-Received: by 2002:a62:de83:0:b0:4ad:57f7:5a86 with SMTP id h125-20020a62de83000000b004ad57f75a86mr629241pfg.9.1638899569110;
-        Tue, 07 Dec 2021 09:52:49 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x16sm300653pfo.165.2021.12.07.09.52.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 09:52:48 -0800 (PST)
-Subject: Re: [PATCH v2 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to
- YAML
-To:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Doug Berger <opendmb@gmail.com>, linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mmc@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Gregory Fong <gregory.0xf0@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Scott Branden <sbranden@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-ide@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
- <20211206182616.2089677-6-f.fainelli@gmail.com>
- <1638889090.698687.5799.nullmailer@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <df5cc6a5-7857-d86d-e739-9a592b3a5294@gmail.com>
-Date:   Tue, 7 Dec 2021 09:52:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 7 Dec 2021 12:57:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3D466CE1C9A;
+        Tue,  7 Dec 2021 17:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3AFC341C3;
+        Tue,  7 Dec 2021 17:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638899658;
+        bh=kVi8XrFSssRXT3rgDgO1jjnYQhug1iemGioceZ8LSLU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CVEsPspzTJfq0TiQD74as4ZI7nk6iN/8wQrz6kGsFg6ZuWh/GWh/cQHLh8JrifBmT
+         81m9io7385vE4X8Zif3qRfiinKAHvDun7SCo4KTQKJR15Xl022OBYBL7xqOu9tjqnx
+         JjmEZGlvMSx7nQNRuOUUaNv6DrXXvutdAO0kRV05t9kd8RW/+HU6ULnIPbeJhgnXna
+         jPMJPi9GFiMtFPaUW8vLH1qZ4GS/xz3GT5QQGAyg+9EQMO4a/908g2IPoS6Sw7aO6z
+         VBeK9zTKkCGAkltLbR00Vb1/jw/T4r/cj8qCxjrZNMx+YPC5bdTOfvgt/20BLdkrPD
+         u5SS4yQi2T5cQ==
+Date:   Tue, 7 Dec 2021 11:54:16 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     qizhong cheng <qizhong.cheng@mediatek.com>
+Cc:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [RESEND PATCH v2] PCI: mediatek: Delay 100ms to wait power and
+ clock to become stable
+Message-ID: <20211207175416.GA42725@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <1638889090.698687.5799.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211207084153.23019-1-qizhong.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 6:58 AM, Rob Herring wrote:
-> On Mon, 06 Dec 2021 10:26:07 -0800, Florian Fainelli wrote:
->> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
->> validation.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
->>  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 105 ++++++++++++++++++
->>  MAINTAINERS                                   |   2 +-
->>  3 files changed, 106 insertions(+), 84 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->>  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1564132
-> 
-> 
-> gpio@4172c0: interrupts-extended: [[6, 6], [7, 5]] is too long
-> 	arch/arm/boot/dts/bcm7445-bcm97445svmb.dt.yaml
+[+cc Marc, Alyssa, Mark, Luca for reset timing questions]
 
-The property is correct AFAICT, we have:
+On Tue, Dec 07, 2021 at 04:41:53PM +0800, qizhong cheng wrote:
+> Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+> 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> 
+> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+> Acked-by: Pali Rohár <pali@kernel.org>
+> ---
+> 
+> v2:
+>  - Typo fix.
+>  - Rewrap into one paragraph.
 
-                        interrupts-extended = <&irq0_aon_intc 0x6>,
-                                              <&aon_pm_l2_intc 0x5>;
+1) If you change something, even in the commit log or comments, it is
+a new version, not a "RESEND".  A "RESEND" means "I sent this quite a
+while ago and didn't hear anything, so I'm sending the exact same
+thing again in case the first one got lost."
 
-with both interrupt controllers having #interrupt-cells = <1>. I tried
-documenting the interrupts-extended for brcm,brcmstb-gpio.yaml to have
-maxItems: 2 but that does not eliminate the warning. Do you have any
-suggestions?
--- 
-Florian
+2) I suggested a subject line update, which apparently got missed.
+Here's a better one:
+
+  PCI: mediatek: Assert PERST# for 100ms for power and clock to stabilize
+
+3) Most importantly, this needs to be reconciled with the similar
+change to the apple driver:
+
+  https://lore.kernel.org/r/20211123180636.80558-2-maz@kernel.org
+
+In the apple driver, we're doing:
+
+  - Assert PERST#
+  - Set up REFCLK
+  - Sleep 100us (T_perst-clk, CEM r5 2.2, 2.9.2)
+  - Deassert PERST#
+  - Sleep 100ms (not sure there's a name? PCIe r5 6.6.1)
+
+But here in mediatek, we're doing:
+
+  - Assert PERST#
+  - Sleep 100ms (T_pvperl, CEM r5 2.2, 2.2.1, 2.9.2)
+  - Deassert PERST#
+
+My questions:
+
+  - Where does apple enforce T_pvperl?  I can't tell where power to
+    the slot is turned on.
+
+  - Where does mediatek enforce the PCIe sec 6.6.1 delay after
+    deasserting PERST# and before config requests?
+
+  - Does either apple or mediatek support speeds greater than 5 GT/s,
+    and if so, shouldn't we start the sec 6.6.1 100ms delay *after*
+    Link training completes?
+
+>  drivers/pci/controller/pcie-mediatek.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> index 2f3f974977a3..a61ea3940471 100644
+> --- a/drivers/pci/controller/pcie-mediatek.c
+> +++ b/drivers/pci/controller/pcie-mediatek.c
+> @@ -702,6 +702,13 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+>  	 */
+>  	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
+>  
+> +	/*
+> +	 * Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+> +	 * 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> +	 * be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> +	 */
+> +	msleep(100);
+> +
+>  	/* De-assert PHY, PE, PIPE, MAC and configuration reset	*/
+>  	val = readl(port->base + PCIE_RST_CTRL);
+>  	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
+> -- 
+> 2.25.1
+> 

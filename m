@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840E246C7B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9B446C7B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242329AbhLGWux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S242344AbhLGWvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbhLGWuw (ORCPT
+        with ESMTP id S238059AbhLGWvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:50:52 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188D1C061574;
-        Tue,  7 Dec 2021 14:47:21 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id q3so765243wru.5;
-        Tue, 07 Dec 2021 14:47:21 -0800 (PST)
+        Tue, 7 Dec 2021 17:51:21 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F81C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:47:50 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id y68so1574054ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:47:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O39HyWOFBZUdrPmreABJfrxuR9d3BPOym69qD3t0Fwo=;
-        b=OcdWNGmfAHOERVFlOngW3VtU4ZV4XYWa2nprnNgB1A7WDH1YEBnjmUXwmze98Ml97g
-         alEpF0pIToI6zohB0AzSPpA+LBoCFLLXdF+vGp4ZLjGqgqgtrTZ5y2AAhWDKqeAnsREa
-         R5zTj0Tz5wnuW9kN5hgl5Rs/RFxEWABPuQwissAEWrnH4+0Adwvo1GDeDQICsAJcUwfs
-         dw5gZHYhPYSx1FYn2g/wu8gjdnwiXVyv0A0h8Fj8sjQQQzpE12H4aQUFvO3IOfO1SXma
-         ARHmksmd6VUIhgPDQTt/WbPfAxVJQNDbFaWA3n7y+ECyQVl/4eZpWFA9ufXPEkdaPIhs
-         rMNA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4NAkzEae8rEjb3+qLzjOqDzzWbipCWVNMZSADlSEB3Q=;
+        b=S04noigKvm8Bjv2Uuade/bYbL4T/MVHndJwYOjZ3diQDchiFeIXkh/Iv2Z1VZlOuvZ
+         RWj5PYIBWCKL6LHqeqTdlvxYS22x+umwjKY9t4bJOB/W0wItoZFsFyzmfr18B0e8A/IN
+         WdPsNY1kVGF9BdFgrqEFLFehj2kpwpv4O/iCTeCppXEzMaq8J0gSyKP+WYGoa55yp5xC
+         D0tsGee/O+QhIqKBcc+odXWzIkI27p/d4q662FazlTrTvDyISuaEWdGHpjDQQCzjxE2a
+         D3u+qDxoHRpTw/44WHLSpKXzFYIXcsC0AQ7cCZoSS2XvbDXbYRExGIjDpRNzDrhnloip
+         ixWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O39HyWOFBZUdrPmreABJfrxuR9d3BPOym69qD3t0Fwo=;
-        b=mSh9BfJv0pu/ZCc04ufhNRkcJo6LbwGqMKmnJwhkXQ7nvTdMRNOX/tABhzl9kQSVvF
-         uxEaPVXIzgonq1lDbx1BRMNwLnatZkLNY/3Zzz5wee9uxbzmio9vKRnNJpgT+Co5KayZ
-         CmuTV0TNWZ2JyrDpkJDoDCRZJbCmg68Pbr7rfTpGT0480tbV0PDZKFr7b8rJ+xJCqoAB
-         qHJVySHeVEA0Be+NOmjezXvGqFSJL/V20mshDnsVsa9k5DdxIZJy512Lp5+plFKAABvU
-         vY1QGsX17iU6OrPoax/kPRxv+gEMBKB3KtRC0LbA/8sO2cx3ysJ2TrXIdBaS9ERS+xlb
-         +8LQ==
-X-Gm-Message-State: AOAM532lhEa19uKOgd1Kpv/LqngNZeQGLxAccZcCRZTp2uFtYnkxEMig
-        e1GicTGHilRL+1U2xxf+mVo=
-X-Google-Smtp-Source: ABdhPJx2+OaO2LWLFBLWfvNhY8D1veAxwiPR8r2M7DRaBnJ/ivOXkM73424dltZuqjE1hNsreXmPcA==
-X-Received: by 2002:a5d:4008:: with SMTP id n8mr54191507wrp.489.1638917239718;
-        Tue, 07 Dec 2021 14:47:19 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p27sm847440wmi.28.2021.12.07.14.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:47:19 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: remove redundant assignment to pointer t
-Date:   Tue,  7 Dec 2021 22:47:18 +0000
-Message-Id: <20211207224718.59593-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4NAkzEae8rEjb3+qLzjOqDzzWbipCWVNMZSADlSEB3Q=;
+        b=uRBnppupEOkZXFEioqSHvJJODNnEoVptA8VeJYPsgNEAVZHhjyMxGAuByJ3I7j6rwH
+         sK5nKeZlP0OKQheCXO5O8OKLLODPkc+p4WzRaiz+bMdu9JkTtGEfJh3f7BPjYkOKSPK6
+         +TIGJf9pgJXrlXUfZvf/5sNHmKXFvhM+dT/c2ShN9lg5VJwUxM/U56yv9vaBPfNSmjKM
+         YtmiScVKPgqn6F2gUi8PDHW2uRF2P30OIEM+iqx5WigJRf0KwNaHwzHoUhUw4jwz4qAH
+         N66IVimEPNeMHaKbnZa0EdZwC865nJtoTvHkxuY9IleU7WZ3QwfOLBQRvUFwWoZnxmHo
+         vPGQ==
+X-Gm-Message-State: AOAM5301/KZCfUcnCec4al9t8LiEoSGUTStirKMqKn8fXxUB4xh5V6Ck
+        OxMjoLqCvJYkDuU3PBtXOq1CHvPgI8AnO0Bsk08TwA==
+X-Google-Smtp-Source: ABdhPJwHXgvCbDWxObMUDnD4Qr1CbTS9DPYT7YO9TngI6OrrX3PAZgBH08VONCFBFB/9/m7DVGqVCEGiJV9S2IF2MEw=
+X-Received: by 2002:a25:60d5:: with SMTP id u204mr58688606ybb.243.1638917269910;
+ Tue, 07 Dec 2021 14:47:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20211207215031.2251719-1-surenb@google.com> <Ya/bFLcnqyvlVzuO@casper.infradead.org>
+In-Reply-To: <Ya/bFLcnqyvlVzuO@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 7 Dec 2021 14:47:38 -0800
+Message-ID: <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, mhocko@kernel.org, mhocko@suse.com,
+        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer t is being initialized with a value that is never read. The
-pointer is re-assigned a value a littler later on, hence the initialization
-is redundant and can be removed.
+On Tue, Dec 7, 2021 at 2:07 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 01:50:30PM -0800, Suren Baghdasaryan wrote:
+> > - Added a comment for vm_operations_struct::close, documenting restriction for
+> > taking mmap_lock in the callback, per Michal Hocko and Matthew Wilcox
+>
+> This should be a separate patch because it stands alone, but ...
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I thought about it and since it was relevant to the change in
+remove_vma locking, I thought it would fit here. However, if you
+insist on splitting it, I'll post it as a separate patch. Please let
+me know.
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 48cdf5b425a7..c70f80055b8e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -836,7 +836,7 @@ static const char *btf_show_name(struct btf_show *show)
- 	const char *ptr_suffix = &ptr_suffixes[strlen(ptr_suffixes)];
- 	const char *name = NULL, *prefix = "", *parens = "";
- 	const struct btf_member *m = show->state.member;
--	const struct btf_type *t = show->state.type;
-+	const struct btf_type *t;
- 	const struct btf_array *array;
- 	u32 id = show->state.type_id;
- 	const char *member = NULL;
--- 
-2.33.1
+>
+> >  struct vm_operations_struct {
+> >       void (*open)(struct vm_area_struct * area);
+> > +    /*
+> > +     * Called with mmap_lock lock held for write from __split_vma and
+> > +     * remove_vma, therefore should never take that lock.
+> > +     */
+>
+> Your whitespace indentation is weird.  And it'd be nice to make this a
+> kernel-doc comment (I know none of the others are, but that should be
+> fixed too).  And naming the functions that call it is wrong too.
+>
+>         /**
+>          * @close: Called when the VMA is being removed from the MM.
+>          * Context: Caller holds mmap_lock.
+>          */
 
+Ack. Will change and include in the next respin once I hear from you
+on the preference for a separate patch.
+Thanks!

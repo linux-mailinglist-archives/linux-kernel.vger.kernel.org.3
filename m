@@ -2,160 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5EE46B2FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148C746B2FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbhLGGjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 01:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S236949AbhLGGkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 01:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236879AbhLGGjK (ORCPT
+        with ESMTP id S236879AbhLGGkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 01:39:10 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DEEC061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 22:35:40 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id r130so12523894pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 22:35:40 -0800 (PST)
+        Tue, 7 Dec 2021 01:40:14 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20EC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 22:36:45 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id p19so13318788qtw.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 22:36:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DOVDJjmjj4hLTjat7OUu9/MMuAZJaeKFjI5VvP80Sr0=;
-        b=Kbe1be42VDtOUWuyAxH9naNFdn22bhb0PWWRnKlhU4LRtbk5C3qQ1yWv5O8Tf1xaYm
-         oHi75nahMVk+pBVru/TX8Evu++VydsdeYq4KncKE32NwgMXW7KZEu/m12afu5PmFMK5V
-         z++MP4jZY3iPRd8TfjF6XCTaajLbIfaaPW3Ns=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1alM6+AhJgDYrpwHehRie8355PfIbOCgstqykLiCQqs=;
+        b=YpmaD+mNT6M8DTCGsxnNUoPkAcw0RUoyy/gG3VfhdaGarFz2blKer6btNc5brw0MCj
+         mrFv9NF9agHjoOPUCGT8ykaAcWUlViSp8p45IlKZ8mx46TcZtHg7t+3+aQuLeaQrJdzQ
+         RJ/g1MeehSCr7ozKBj4nvvSgEHzbAPQ8YxXJclQAd1H/O+TiFUDZTxRQcDjW5oO984lu
+         956aX9NrtE4sBi+ZnUbcf+cEc+2/96HqesLPvpBzNMh6Ko3z4j4CUbzUL6ZOpvEiR6B0
+         71JV5lnKvqTCAyWt7BRBk5mJeHTN8wEQ1UKMmlFSwmCRIHaUe1+1tkXD1BKUuUrZJr7G
+         gGDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DOVDJjmjj4hLTjat7OUu9/MMuAZJaeKFjI5VvP80Sr0=;
-        b=u10oi5skxDszz0mD68fZlF72/1oTo6zIQIGfCcQa9vZyGRGTeUPc+w3fyn7c0Nfgzq
-         WGCyPCl6kiFfLofwBE1ygNuno36VBzae4S0vUiCiu9RydLvpqKN+ZnZpB3Dwa6o05HJ7
-         0TtY4gchYQLKHfd56qilFq5X52ji2FEPtDmBA9C/ejJQoGGIF0/8t8WsYSlUrPoUODeq
-         scXghQL5CTlYw17waiah2RG2Xj0m55af46zix90p891suJITjclX/uLdLi+6Lu0dYlKI
-         j1EyqGIHSyhMNIZ7tCAcYshNbtw8hdt6FfJKgFBtm1M+iTdBQ3ZWjDYtwUxqMpIKDf66
-         Kxzw==
-X-Gm-Message-State: AOAM530M3iwsPKUoz7Td3wzLkPZrRLJu3ArVouvqLkYFRmaF1FkAbMMM
-        1Vlw1xjB1DLTBrSTvaNshGZDKQ==
-X-Google-Smtp-Source: ABdhPJw4OdnTlYTah6sMJYxRBKcOVLvja72f+MUSEBWLwv5PThpZtJKcMzEeXc4VyCMZMsdCKAQGDQ==
-X-Received: by 2002:a05:6a00:cc4:b0:4a0:e97:fe97 with SMTP id b4-20020a056a000cc400b004a00e97fe97mr41656686pfv.74.1638858940040;
-        Mon, 06 Dec 2021 22:35:40 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b19sm14938169pfv.63.2021.12.06.22.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 22:35:39 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] ath6kl: Use struct_group() to avoid size-mismatched casting
-Date:   Mon,  6 Dec 2021 22:35:38 -0800
-Message-Id: <20211207063538.2767954-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1alM6+AhJgDYrpwHehRie8355PfIbOCgstqykLiCQqs=;
+        b=dazI9HZlKaueviBoM1b2g2TmtAG5AveHlx45yzzH7hpkcjKI+xQZvq5ZWn3jl1ICC7
+         fs7FIBoXssELuRDyJfruxukyyu44IWc0Jg9JnrZDiRZhSw4hGQUtXoYQrmXjK9589m3j
+         rXM+8oLsIrO/audCGy7apDdhMGXFl5AirIRuIB46fpb7Q5dOPJ8AErUL7Nr8jiRz6xB8
+         rFIgpXWUZiZIMWL98tbOgEmE6V8d+f7ROg5MMBP1YlQGYfXjsO+S1rCC/Y41tIyHizMa
+         G7Z6HX9ZCwFCdmMDEs7LH6hOkb7bX3zZA/XWF7rs2H5QvQXFEepzvMBy7TZSweFOZK6n
+         BSqQ==
+X-Gm-Message-State: AOAM532l5bZVyim9eVIBiDOa6MSSJ2uJzEwVQ/TAQzEjynU0iWZQeR1e
+        tBbf6qCXf1vFdBc26T1Gitk=
+X-Google-Smtp-Source: ABdhPJyLFtkeYCzsdOO/qlhIHmssT7sa4UcpZFhKfhTG5zc4yrJe3pn1YWiFMx943h1dOzBygKO1Mw==
+X-Received: by 2002:ac8:5a84:: with SMTP id c4mr45073384qtc.565.1638859004383;
+        Mon, 06 Dec 2021 22:36:44 -0800 (PST)
+Received: from hasanalmaruf-mbp.thefacebook.com ([2620:10d:c091:480::1:6fa5])
+        by smtp.gmail.com with ESMTPSA id w19sm7319304qkw.49.2021.12.06.22.36.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 Dec 2021 22:36:43 -0800 (PST)
+From:   Hasan Al Maruf <hasan3050@gmail.com>
+X-Google-Original-From: Hasan Al Maruf <hasanalmaruf@fb.com>
+To:     ying.huang@intel.com
+Cc:     akpm@linux-foundation.org, dave.hansen@linux.intel.com,
+        feng.tang@intel.com, hasanalmaruf@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mgorman@techsingularity.net, mhocko@suse.com, osalvador@suse.de,
+        peterz@infradead.org, riel@surriel.com, shakeelb@google.com,
+        shy828301@gmail.com, weixugc@google.com, ziy@nvidia.com
+Subject: Re: [PATCH -V10 RESEND 2/6] NUMA balancing: optimize page placement for memory tiering system
+Date:   Tue,  7 Dec 2021 01:36:39 -0500
+Message-Id: <20211207063639.83762-1-hasanalmaruf@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211207022757.2523359-3-ying.huang@intel.com>
+References: <20211207022757.2523359-3-ying.huang@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3525; h=from:subject; bh=gMIiB4KaTnR35ffD7gt6zl0cwWYPiUE9+pb15EV8f5A=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhrwC5FoqRGEH5aDrVc1O409fT3C87dkmvAVyNkfWg ZVhquVyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYa8AuQAKCRCJcvTf3G3AJnR+EA CkJOBiiicx3wiHCrpJQgpwZg2CYcsFxGkaBGzqJj9pwuDubqibmw8T03RfGOjv8cthmZC2VnZP/s+E +ocDnRJgesw6aS9nRoiASGvg+/LjOPt6HUjSYywpy9oyWtBU6/pBAIOxa8Q3PKb6DBgL0+xobEL8k1 m5kJ1MEBDp1dZLVI/cvi8HKamvKUErNmHpaSCmi3mFlz+JNING9jMIWBXcyc26N5DC+mGxXheinDQi 5YSi/t1iWcVLP6IEsVgD3bH2ycFQbaNk5ZNKpxWGr6sitiMKZHR2D63a64TaOPCt03pJx6VGDrbilj 52XKn9NvCJ/+k8431PPZUOJHVZPOGnPr9gV0arRLbqjrmbBHBYIRjUd6p9ewMz/TeKhjKt0HFQntSE IZsOsix+AgMKLct3z/HpB1X4svJt6Lpn0y8auu1KCCkuNrCA4Ou99KgK/0KJPqTEMHuVlRqocjvup7 J/0FwBIsAvUhAzUmhdj59DqS5XlwvgNfpEQP+PWWyM44v/Bv912v0SiwJio6wmX3OZ716n7keVdIpX vo4lIosDNj7bfx23VkByP8CxQDUxScCxZkfzOxrnPtW41VVLn/RYBJQorUGS/f0nW0+vYGraGCsE56 1Kwv5JnFhQDBZ6QkJmUCzwtQE4f5so0PBFIU9oRZ8c2grEJZOC5eGgbVRzTQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In builds with -Warray-bounds, casts from smaller objects to larger
-objects will produce warnings. These can be overly conservative, but since
--Warray-bounds has been finding legitimate bugs, it is desirable to turn
-it on globally. Instead of casting a u32 to a larger object, redefine
-the u32 portion of the header to a separate struct that can be used for
-both u32 operations and the distinct header fields. Silences this warning:
+Hi Huang,
 
-drivers/net/wireless/ath/ath6kl/htc_mbox.c: In function 'htc_wait_for_ctrl_msg':
-drivers/net/wireless/ath/ath6kl/htc_mbox.c:2275:20: error: array subscript 'struct htc_frame_hdr[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Werror=array-bounds]
- 2275 |         if (htc_hdr->eid != ENDPOINT_0)
-      |                    ^~
-drivers/net/wireless/ath/ath6kl/htc_mbox.c:2264:13: note: while referencing 'look_ahead'
- 2264 |         u32 look_ahead;
-      |             ^~~~~~~~~~
+>+void set_numabalancing_state(bool enabled)
+>+{
+>+	if (enabled)
+>+		sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
+>+	else
+>+		sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
+>+	__set_numabalancing_state(enabled);
+>+}
+>+
 
-This change results in no executable instruction differences.
+One of the properties of optimized NUMA Balancing for tiered memory is we
+are not going to scan top-tier nodes as promotion doesn't make sense there
+(implemented in the next patch [3/6]). However, if a system has only
+single memory node with CPU, does it make sense to run
+`NUMA_BALANCING_NORMAL` mode there? What do you think about downgrading to
+`NUMA_BALANCING_MEMORY_TIERING` mode if a user setup NUMA Balancing on
+the default mode of `NUMA_BALANCING_NORMAL` on a single toptier memory
+node?
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/wireless/ath/ath6kl/htc.h      | 19 +++++++++++++------
- drivers/net/wireless/ath/ath6kl/htc_mbox.c | 15 ++++++---------
- 2 files changed, 19 insertions(+), 15 deletions(-)
+>diff --git a/mm/vmscan.c b/mm/vmscan.c
+>index c266e64d2f7e..5edb5dfa8900 100644
+>--- a/mm/vmscan.c
+>+++ b/mm/vmscan.c
+>@@ -56,6 +56,7 @@
+>
+> #include <linux/swapops.h>
+> #include <linux/balloon_compaction.h>
+>+#include <linux/sched/sysctl.h>
+>
+> #include "internal.h"
+>
+>@@ -3919,6 +3920,12 @@ static bool pgdat_watermark_boosted(pg_data_t *pgdat, int highest_zoneidx)
+> 	return false;
+> }
+>
+>+/*
+>+ * Keep the free pages on fast memory node a little more than the high
+>+ * watermark to accommodate the promoted pages.
+>+ */
+>+#define NUMA_BALANCING_PROMOTE_WATERMARK	(10UL * 1024 * 1024 >> PAGE_SHIFT)
+>+
+> /*
+>  * Returns true if there is an eligible zone balanced for the request order
+>  * and highest_zoneidx
+>@@ -3940,6 +3947,15 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+> 			continue;
+>
+> 		mark = high_wmark_pages(zone);
+>+		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+>+		    numa_demotion_enabled &&
+>+		    next_demotion_node(pgdat->node_id) != NUMA_NO_NODE) {
+>+			unsigned long promote_mark;
+>+
+>+			promote_mark = min(NUMA_BALANCING_PROMOTE_WATERMARK,
+>+					   pgdat->node_present_pages >> 6);
+>+			mark += promote_mark;
+>+		}
+> 		if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
+> 			return true;
+> 	}
 
-diff --git a/drivers/net/wireless/ath/ath6kl/htc.h b/drivers/net/wireless/ath/ath6kl/htc.h
-index 112d8a9b8d43..d3534a29c4f0 100644
---- a/drivers/net/wireless/ath/ath6kl/htc.h
-+++ b/drivers/net/wireless/ath/ath6kl/htc.h
-@@ -153,12 +153,19 @@
-  * implementations.
-  */
- struct htc_frame_hdr {
--	u8 eid;
--	u8 flags;
--
--	/* length of data (including trailer) that follows the header */
--	__le16 payld_len;
--
-+	struct_group_tagged(htc_frame_look_ahead, header,
-+		union {
-+			struct {
-+				u8 eid;
-+				u8 flags;
-+
-+				/* length of data (including trailer) that follows the header */
-+				__le16 payld_len;
-+
-+			};
-+			u32 word;
-+		};
-+	);
- 	/* end of 4-byte lookahead */
- 
- 	u8 ctrl[2];
-diff --git a/drivers/net/wireless/ath/ath6kl/htc_mbox.c b/drivers/net/wireless/ath/ath6kl/htc_mbox.c
-index 998947ef63b6..e3874421c4c0 100644
---- a/drivers/net/wireless/ath/ath6kl/htc_mbox.c
-+++ b/drivers/net/wireless/ath/ath6kl/htc_mbox.c
-@@ -2260,19 +2260,16 @@ int ath6kl_htc_rxmsg_pending_handler(struct htc_target *target,
- static struct htc_packet *htc_wait_for_ctrl_msg(struct htc_target *target)
- {
- 	struct htc_packet *packet = NULL;
--	struct htc_frame_hdr *htc_hdr;
--	u32 look_ahead;
-+	struct htc_frame_look_ahead look_ahead;
- 
--	if (ath6kl_hif_poll_mboxmsg_rx(target->dev, &look_ahead,
-+	if (ath6kl_hif_poll_mboxmsg_rx(target->dev, &look_ahead.word,
- 				       HTC_TARGET_RESPONSE_TIMEOUT))
- 		return NULL;
- 
- 	ath6kl_dbg(ATH6KL_DBG_HTC,
--		   "htc rx wait ctrl look_ahead 0x%X\n", look_ahead);
--
--	htc_hdr = (struct htc_frame_hdr *)&look_ahead;
-+		   "htc rx wait ctrl look_ahead 0x%X\n", look_ahead.word);
- 
--	if (htc_hdr->eid != ENDPOINT_0)
-+	if (look_ahead.eid != ENDPOINT_0)
- 		return NULL;
- 
- 	packet = htc_get_control_buf(target, false);
-@@ -2281,8 +2278,8 @@ static struct htc_packet *htc_wait_for_ctrl_msg(struct htc_target *target)
- 		return NULL;
- 
- 	packet->info.rx.rx_flags = 0;
--	packet->info.rx.exp_hdr = look_ahead;
--	packet->act_len = le16_to_cpu(htc_hdr->payld_len) + HTC_HDR_LENGTH;
-+	packet->info.rx.exp_hdr = look_ahead.word;
-+	packet->act_len = le16_to_cpu(look_ahead.payld_len) + HTC_HDR_LENGTH;
- 
- 	if (packet->act_len > packet->buf_len)
- 		goto fail_ctrl_rx;
--- 
-2.30.2
+This can be moved to a different patch. I think, this patch [2/6] can be
+splitted into two basic patches -- 1. NUMA Balancing interface for tiered
+memory and 2. maintaining a headroom for promotion.
 
+Instead of having a static value for `NUMA_BALANCING_PROMOTE_WATERMARK`
+what about decoupling the allocation and reclamation and add a user-space
+interface for controling them?
+
+Do you think patch [2/5] and [3/5] of this series can be merged to your
+current patchset?
+
+https://lore.kernel.org/all/cover.1637778851.git.hasanalmaruf@fb.com/
+
+Best,
+Hasan

@@ -2,121 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9FF46B624
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049CA46B627
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhLGIkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbhLGIkS (ORCPT
+        id S233094AbhLGIkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:40:40 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:53006 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233093AbhLGIkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:40:18 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793BDC061D5E;
-        Tue,  7 Dec 2021 00:36:48 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so1167099wme.0;
-        Tue, 07 Dec 2021 00:36:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hS4s0cfHaFB1mjZApAyxsxaBhzGf1CZ85k4YcjUrKs0=;
-        b=ms2wDCeIABLZLNwTqJQlb4IogiGzKSjBjlsRJgIhXJQnsNiogd61pWnFME+eTqBUAa
-         q6pkwktlkZPY8tEcqJiQL/hA0Hht/Hxq8KKqGlnMFfuWTK0ZLUEaKvnQwlB07xXK9zBU
-         TxmXYx3v6JAYEvRYaMfAxg3fQcD+Yd4qcwbic02yHjdyEUYkL0dvjy/OK14edSu9CESC
-         s5A8BbOhYqWvtCZvI4NsBYQDMWfKBu/NPFuCPNfiuEWb+GiNcbaJr2W6/CQqaWZVMxkn
-         5KKgg0KkRdVQILQ55sqCtbXSBC0vrqk08QHT1SPIxnXNZuE53/uztdxlsxYy0dnsMMVu
-         08Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hS4s0cfHaFB1mjZApAyxsxaBhzGf1CZ85k4YcjUrKs0=;
-        b=cD+CVKeT4ExK3ckOtNjCu2CvGl8JTKns3E0DEVjq6FB5CJppHmpwE8ZRSWaT5IT5H4
-         hyk3dhmIUWF3EPJoKgvBgONHweqiFgRn+S7gTdIr+Fp36Fd2yjOGEaAeSi/YLr5LD3b6
-         M9r0pgWQgrFB/piO+LsZGPZfO+bPo0AOe+et0P4nGFL63PcHOg8KaSA1Jx/UcvzHs4eR
-         DdDlBZUIRVG05QEkp25Zaf+GomEuII4iaeqYzcXwCPKwEISMdntD4+EwIwpNPLyy/CrG
-         QxC0P5mFimdjHRbwR8gLAtC+12ZVoINqbfjRrRPhtbyPM0wUbz/hkUcGv2k7ga0PGn3q
-         72Yg==
-X-Gm-Message-State: AOAM5315DnjADc9LFriPa52x4DzSsjnL1fBbS8ja8w/K/gpqklK9kPq/
-        IbT4Uepnsum9L+zB6MsFsYw=
-X-Google-Smtp-Source: ABdhPJwuCLqlycQzc8KhUT03MVCeXx/CaVFjpUJOwncm8ovBvTb1sAgznte1boCvq0BCgbYhk6LWIQ==
-X-Received: by 2002:a05:600c:3846:: with SMTP id s6mr5173853wmr.55.1638866207094;
-        Tue, 07 Dec 2021 00:36:47 -0800 (PST)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id k8sm13651056wrn.91.2021.12.07.00.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:36:46 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:36:43 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
-Message-ID: <Ya8dG/pQ67XFacdO@orome.fritz.box>
-References: <20211206174209.2297565-1-robh@kernel.org>
+        Tue, 7 Dec 2021 03:40:39 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B71xGYE003241;
+        Tue, 7 Dec 2021 09:36:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=H0RdRCe9r35PH+cGUXxi9Pl2iNpVWrQNSlKDf0Qq5Es=;
+ b=NvG3SuPeVcHYMcUeywekfq3HEmNKckXki3QFqjwo5j2iCxmHh+ejD0gONJP3i3bhIgSw
+ PGmdB7kd3x8Ky6l0jdO8skFJBO6NkrxthUb0VDUv2Nuu6IvvmuBySHpG5cilXczGabTV
+ FpODdM7kCWITkNDme980XZl+Xlf+VXHxqydS7IY2AwlB7MNNxEPOInZXm7d2+J3/mdW4
+ 9vAxrj7aKuJskNutuKpIv4JySZZ80LFH3JZhMlXtMMm6L8TtO5BDhkJJdq3hZ+WJOvoT
+ ZYK4OuurVc908Q59eB5aTLNLeLcehGABMLqWBpNAwrWq/IuzyS3HgukkeV55uz/2/vza LQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csmx0kuf0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 09:36:53 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 090A610002A;
+        Tue,  7 Dec 2021 09:36:51 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F2ED62265EF;
+        Tue,  7 Dec 2021 09:36:50 +0100 (CET)
+Received: from [10.211.7.5] (10.75.127.51) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 7 Dec
+ 2021 09:36:49 +0100
+Subject: Re: [PATCH] dt-bindings: nvmem: Add missing 'reg' property
+To:     Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Saenz Julienne <nsaenzjulienne@suse.de>
+CC:     <devicetree@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Patrick DELAUNAY-SCND-02 <patrick.delaunay@foss.st.com>
+References: <20211206174133.2296265-1-robh@kernel.org>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Message-ID: <0bfd3425-77f6-e00b-e7f9-581917c6dc99@foss.st.com>
+Date:   Tue, 7 Dec 2021 09:36:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OdofmF9j5haQfHF0"
-Content-Disposition: inline
-In-Reply-To: <20211206174209.2297565-1-robh@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <20211206174133.2296265-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_03,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---OdofmF9j5haQfHF0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 06, 2021 at 11:42:09AM -0600, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the TI GPMC example
-> has a warning:
->=20
-> Documentation/devicetree/bindings/memory-controllers/ti,gpmc.example.dt.y=
-aml: nand@0,0: Unevaluated properties are not allowed ('rb-gpios' was unexp=
-ected)
->=20
-> Add the missing definition for 'rb-gpios'.
->=20
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Roger Quadros <rogerq@kernel.org>
-> Cc: linux-mtd@lists.infradead.org
+On 12/6/21 6:41 PM, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the following warnings
+> are generated in the nvmem examples:
+> 
+> Documentation/devicetree/bindings/nvmem/st,stm32-romem.example.dt.yaml: efuse@1fff7800: Unevaluated properties are not allowed ('reg' was unexpected)
+> Documentation/devicetree/bindings/nvmem/rmem.example.dt.yaml: nvram@10000000: Unevaluated properties are not allowed ('reg' was unexpected)
+> Documentation/devicetree/bindings/nvmem/brcm,nvram.example.dt.yaml: nvram@1eff0000: Unevaluated properties are not allowed ('reg' was unexpected)
+> 
+> Add the missing 'reg' property definition.
+> 
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Rafał Miłecki <rafal@milecki.pl>
+> Cc: Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-arm-kernel@lists.infradead.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+>  Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml     | 3 +++
+>  Documentation/devicetree/bindings/nvmem/rmem.yaml           | 3 +++
+>  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 3 +++
+>  3 files changed, 9 insertions(+)
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
+Hi Rob,
 
---OdofmF9j5haQfHF0
-Content-Type: application/pgp-signature; name="signature.asc"
+For the stm32-romem, you can add my:
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHRsACgkQ3SOs138+
-s6EDahAApZ1NZlUaEmFdyjj8cjfwcm+jHarWYeJ+oLuebb2NEoaOeQX+PufHH2H7
-D9f9rm/khm6NTEDhpm8xaoKqHx1FoHpSoc7eJZ+LrK7v/X2IMQK4/TDIcdsko8rt
-qkwKr0KecdUQ84R0enDC8VS9Rh3RjS5BxVOOqL1cXt0HkAWwu/PDCeLJ/pugFbb6
-BKNzArPXhl570OBbjkUEnpda4Fi+ut4dsIu/EC6oSKSmzXv5i/5+9WQy53Xb2lZU
-JaOH/dovvpzlfrX23dFHukiPNCsgiupq9J+kzQSlX0JjuVaPYI/9u4vvPD53+WEs
-JPZUaAUF4kyTJT76vMRca47AMuOEDmaVofeIoOCl2PzmSah8ZSPQq+YGJl/Q8imU
-BilBwnlVb+9kxp2TSNgh90PUG2mUkfWQWESBYQ3u+u9+1nbRVVvJtzFX5ZBqWcMZ
-GOuIfgKGv0s1JS/XN5Oyw9trGzgZ7vMODisDuB33mzciL0e70y97S8gz8q4sXi07
-9zBHpJZkjaLWAwOg5SqyQ05EjWQ6c2nURGsicuBgKPqcdimWoyptwbHH/C8oqzu5
-IzDLuALB/955QRoSI3hY1B+NwJ2gdUX0GmYn/ZiYb9J9LeF/le712kUIjMAnEFVp
-9gDg7brijyvi9ULcK2MFQC9z9zwlDFNCwCyjEl2D73KCFBwCJwE=
-=q8by
------END PGP SIGNATURE-----
-
---OdofmF9j5haQfHF0--
+Thanks,
+Fabrice
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+> index 58ff6b0bdb1a..8c3f0cd22821 100644
+> --- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+> @@ -24,6 +24,9 @@ properties:
+>    compatible:
+>      const: brcm,nvram
+>  
+> +  reg:
+> +    maxItems: 1
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/nvmem/rmem.yaml b/Documentation/devicetree/bindings/nvmem/rmem.yaml
+> index 1d85a0a30846..a4a755dcfc43 100644
+> --- a/Documentation/devicetree/bindings/nvmem/rmem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/rmem.yaml
+> @@ -19,6 +19,9 @@ properties:
+>            - raspberrypi,bootloader-config
+>        - const: nvmem-rmem
+>  
+> +  reg:
+> +    maxItems: 1
+> +
+>    no-map:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> index a48c8fa56bce..448a2678dc62 100644
+> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> @@ -24,6 +24,9 @@ properties:
+>        - st,stm32f4-otp
+>        - st,stm32mp15-bsec
+>  
+> +  reg:
+> +    maxItems: 1
+> +
+>  patternProperties:
+>    "^.*@[0-9a-f]+$":
+>      type: object
+> 

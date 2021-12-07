@@ -2,239 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C19A46BB78
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB35746BB7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbhLGMlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S236537AbhLGMms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbhLGMlI (ORCPT
+        with ESMTP id S236398AbhLGMmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:41:08 -0500
-Received: from lb1-smtp-cloud9.xs4all.net (lb1-smtp-cloud9.xs4all.net [IPv6:2001:888:0:108::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA5C061574;
-        Tue,  7 Dec 2021 04:37:37 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id uZiom8JcOlcdAuZitmm74J; Tue, 07 Dec 2021 13:37:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1638880655; bh=e1nxQHMf3JV3K8iQrlbfQrErzLZwfWaT7Fr5WTmgnOM=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=Mr8/8ewjooFmJ/S61fP1mr6xOU38rw38iZ+j6r+EbaTiUrN+YYQkOGFVW3glXIm7m
-         oevRtMt86hWNJIP3wus7QLayB7j5M8tu7ITzWPC44srkw/SsDXC5sNQer9sj9EC6ux
-         lR/kCah6/cX/y5IxbK1LHdwnWw0yj7H/08oFu1ca0GZGJYRyp5qb2PPDJ/NTdYoNFg
-         5PCq70/SAEw+lx0Ak2eX+MdrI4efFD58QL7F9tqmgbjKguQK0MO+XgleOE1k64HMWv
-         JRpZlnU21mxk2BRW+ulFIuiA8SsQH+uuR7b80Z2DWbexeDGyrtYq8OklDuAbqrwgYJ
-         K+dQPqlh3B/sw==
-Subject: Re: [PATCH v7 2/7] mtk-mdp: add driver to probe mdp components
-To:     houlong wei <houlong.wei@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Eizan Miyamoto <eizan@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        =?UTF-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        =?UTF-8?B?Q0sgSHUgKOiDoeS/ig==?= =?UTF-8?B?5YWJKQ==?= 
-        <ck.hu@mediatek.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        =?UTF-8?B?WW9uZ3FpYW5nIE5pdSAo54mb5rC45by6KQ==?= 
-        <yongqiang.niu@mediatek.com>,
-        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
-        <Andrew-CT.Chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tue, 7 Dec 2021 07:42:47 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00707C061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:39:16 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id p37so26178660uae.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f5zNiGp1JSRMA3ASHOmUNvDb/V2yjKGJt7/64a/2WPc=;
+        b=gx8+94KVsuJqe1HwL87XV9zl/HbVJp5NymZXXh4xMOByJ9y3MEhjy19i/FXs3tMYpn
+         zrUkflXzCLCrXlfsD6l/pX67U1MCrGgLDJN8oiIQwouIOx76JxY5QR/Qo1SLU2JOYxGt
+         z9Fam7x/pYxZiH4UUqdvS7PKe5+iYlAmfnx+n2bjCq+CddGylOfU7sRICNRsoeyJ5n/l
+         DjH/Iv2Qpx5V/Nl/NVJsN++HHjy7trhelHzBkozk4Z4FWPyeLq/UakPE+IlEvBCBihoq
+         qIlPefZy2yGP4kfuUGe9PgBLIMBHQ+tAVt+fTdZtoJaFWTtghbkuXS08dPxecYBbhRq1
+         9uaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f5zNiGp1JSRMA3ASHOmUNvDb/V2yjKGJt7/64a/2WPc=;
+        b=SCPV2QNJQhR2JPVcUM1b9ir/q+JRp5uL4tVwhGsij6CddcJbDij4NsLeIn4kiKChhJ
+         EL+QXcyRb01mIUCjQFjbXL/QlmjS5SMmrEba4S58Zs0cSNn/259+IKSnD9/Kn0rbhXQo
+         VskLj44qFfQsjIwMXdjzBu4UsnfGtkamw934NZykudIxuc3y1tnKP+vuQVmhEUXd+Hbr
+         HtQuCtlmDoEkrZblqchYXgKYquSyiFcLCnOwlDkjH0XOtMRZtv5zrDAhYnDWBCKGVKdN
+         NehnkpbhHY2RaWOlPnRB3DjAXLKKYPyyCP+QMjw5hoV8FOvbHMc3Hj+QEP7jVfjcJtab
+         js7g==
+X-Gm-Message-State: AOAM531upK+uWZbdiLZUjBcS46CJfRP2FhS6XlV+V5Yo2qkYQCbH2Wwg
+        p5ki6y7xRVl7L8iAGHdOCGhgZg==
+X-Google-Smtp-Source: ABdhPJwgSwCNzy5HjbSEOmWA5It2C47YIiajCxqyi27+tXazPDhvr0kGSvN8zGoCTdGVRhKlVhcRpA==
+X-Received: by 2002:a9f:3086:: with SMTP id j6mr50620326uab.83.1638880755986;
+        Tue, 07 Dec 2021 04:39:15 -0800 (PST)
+Received: from eze-laptop (host208.201-253-22.telecom.net.ar. [201.253.22.208])
+        by smtp.gmail.com with ESMTPSA id w17sm6302166uar.18.2021.12.07.04.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 04:39:14 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:39:08 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-media@vger.kernel.org, cphealy@gmail.com,
+        benjamin.gaignard@collabora.com, hverkuil@xs4all.nl,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?B?TWluZ2hzaXUgVHNhaSAo6JSh5piO5L+uKQ==?= 
-        <Minghsiu.Tsai@mediatek.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <20210825063323.3607738-1-eizan@chromium.org>
- <20210825163247.v7.2.Ie6d1e6e39cf9b5d6b2108ae1096af34c3d55880b@changeid>
- <CAAEAJfDNDXdJFfB-bHhFcqnnKZ0TY--d_wLGddKRymQOLQY4TQ@mail.gmail.com>
- <fc309940c9e59f80397b90c8b11424fea344e1b5.camel@mediatek.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <a0b3a10d-9313-7ac5-692c-822aeff50858@xs4all.nl>
-Date:   Tue, 7 Dec 2021 13:37:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [RFC V2 5/6] media: hantro: split i.MX8MQ G1 and G2 code
+Message-ID: <Ya9V7Kwa8MICeS34@eze-laptop>
+References: <20211207015446.1250854-1-aford173@gmail.com>
+ <20211207015446.1250854-6-aford173@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <fc309940c9e59f80397b90c8b11424fea344e1b5.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfFrnF+E4LspJHa9iC0okvk65sbYCc7UmaWwSeF1PKedql/7Kwu+Dco+/KY6CStjjVju+3Z9bt2NnyNbrgIOsecXm9eWl7G4gTxaWJ1DEOLU/6yyIjNJs
- 1u0aYHUrRGYEYFQl3Qg8fEdMuXc658dE0kDzfeNC4kQL0cNF6Ryy8SLPKQR9R31foRCM8wXZ2tESy6u05DnPeY6W0SUAq9mFU4LqQR7RanMdcduzBFKO7en2
- R3Ip7HBIqMplDVeM1wIuUDSHBYYO7xy+1OBxq63Jp3Skoq/I8Oj7HU0YWX0Wey4tYGRJSSzr8xUyTyh2LzCXfVSODjorqjdxK+lEhFtIQEIQeqIShNxE6ztm
- bR0Z0iLkj4sc+CAly15ZTCjycEpy8WjK3GW8i4gGT/6YbG7Bp/8XYyP3KmIIEiDd4dDjoeAxKN4yajFi99nRfKBF06iSMjPbYykD/oUDTpfJCZ9McUyPjDCF
- rYCg4UklGLRodTiZIbTHROu2JD+M+Z9mqvgXHVFv9NGXQA3ovX6mODRQoCKFJSAWrJccq/vqCYaqjveQYeNC05ETw0tTcXKrPs5wAZd7nq5mZHVwt+Y1Z6V4
- eyk4uQFEJdtYRe+6VUzsL2C2FWXYNuiq6IVNto8D1nO/SohM/PKkAVlHhzScpUS3YTiUNvgHixr1rzmumDAow0OlUO+dn2aksuadSKbnRP0aVdA8hCWO9v3z
- F5Q5noY403z5sA6K+ibcTply5RPmCMWfqEDQLN5rGE2svPvpQeFo/8sjOlh3HXD3EYaJU10pz60/huqymFVRDBkGFfHQoWf78A5O99zUP9nEopC8hf/E9qDd
- hV2ouCnmQBYyEQN95u3NAA6gk1NF00ttXJ7hdalKnxlqCbL/Ir9GiDZfpm+u6VTNFxZmNRTRMrS4C/QQJ0A=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207015446.1250854-6-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/21 6:23 PM, houlong wei wrote:
-> Hi Ezequiel,
-> 
-> Thank you for your attention to this series of patches. I answer partial of your questions below.
-> Regards,
-> Houlong
-> 
-> On Sat, 2021-09-04 at 20:34 +0800, Ezequiel Garcia wrote:
->> Hi Eizan,
->>
->> Sorry for seeing this series so late.
->>
->> On Wed, 25 Aug 2021 at 03:35, Eizan Miyamoto <eizan@chromium.org>
->> wrote:
->>>
->>> Broadly, this patch (1) adds a driver for various MTK MDP
->>> components to
->>> go alongside the main MTK MDP driver, and (2) hooks them all
->>> together
->>> using the component framework.
->>>
->>> (1) Up until now, the MTK MDP driver controls 8 devices in the
->>> device
->>> tree on its own. When running tests for the hardware video decoder,
->>> we
->>> found that the iommus and LARBs were not being properly configured.
->>
->> Why were not being properly configured? What was the problem?
->> Why not fixing that instead?
->>
->> Does this mean the driver is currently broken and unusable?
-> 
-> This series of patches are supplements to another series, please refer
-> to  
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=515129c
-> , which add device link between the mtk-iommu consumer and the mtk-larb 
-> devices. Without that series of patches, the mtk-mdp driver can work
-> well so far.
-> But with that series, it seems the device link only can be established
-> for the device which is registered as a platform driver. That's why
-> Eizan adds this series of patches to make all mdp components to be
-> registered as platform drivers.
+Hi Adam,
 
-Hold on, so this means that if that iommu device-link series is merged,
-then the mtk-mdp driver breaks? I posted a PR for that iommu series, but
-I've just withdrawn that PR until this issue is clarified.
+Thanks for the good work! This is looking quite promising.
 
-Is it only mtk-mdp that is affected by this iommu device-link series, or
-others as well?
-
-Regards,
-
-	Hans
-
+On Mon, Dec 06, 2021 at 07:54:44PM -0600, Adam Ford wrote:
+> The VPU in the i.MX8MQ is really the combination of Hantro G1 and
+> Hantro G2. With the updated vpu-blk-ctrl, the power domains system
+> can enable and disable them separately as well as pull them out of
+> reset. This simplifies the code and lets them run independently.
 > 
->>
->>> To
->>> configure them, a driver for each be added to mtk_mdp_comp so that
->>> mtk_iommu_add_device() can (eventually) be called from
->>> dma_configure()
->>> inside really_probe().
->>>
->>> (2) The integration into the component framework allows us to defer
->>> the
->>> registration with the v4l2 subsystem until all the MDP-related
->>> devices
->>> have been probed, so that the relevant device node does not become
->>> available until initialization of all the components is complete.
->>>
->>> Some notes about how the component framework has been integrated:
->>>
->>> - The driver for the rdma0 component serves double duty as the
->>> "master"
->>>   (aggregate) driver as well as a component driver. This is a non-
->>> ideal
->>>   compromise until a better solution is developed. This device is
->>>   differentiated from the rest by checking for a "mediatek,vpu"
->>> property
->>>   in the device node.
->>>
->>
->> As I have stated in Yunfei, I am not convinced you need an async
->> framework
->> at all. It seems all these devices could have been linked together
->> in the device tree, and then have a master device to tie them.
->>
->> I.e. something like
->>
->> mdp {
->>   mdp_rdma0 {
->>   }
->>   mdp_rsz0 {
->>   }
->>   mdp_rsz1 {
->>   }
->> }
->>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 > 
-> The commit message of the patch below explains that " If the mdp_*
-> nodes are under an mdp sub-node, their corresponding platform device
-> does not automatically get its iommu assigned properly."
-> Please refer to 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/arch/arm64/boot/dts/mediatek/mt8173.dtsi?h=v5.14.1&id=8127881f741dbbf9a1da9e9bc59133820160b217
-> 
->> All this async games seem like making the driver really obfuscated,
->> which will mean harder to debug and maintain.
->> I am not sure we want that burden.
->>
->> Even if we are all fully convinced that you absolutely need
->> an async framework, then what's wrong with v4l2-async?
->>
->> I would start by addressing what is wrong with the IOMMUs
->> in the current design.
->>
->> Thanks,
->> Ezequiel
->>
->>> - The list of mdp components remains hard-coded as
->>> mtk_mdp_comp_dt_ids[]
->>>   in mtk_mdp_core.c, and as mtk_mdp_comp_driver_dt_match[] in
->>>   mtk_mdp_comp.c. This unfortunate duplication of information is
->>>   addressed in a following patch in this series.
->>>
->>> - The component driver calls component_add() for each device that
->>> is
->>>   probed.
->>>
->>> - In mtk_mdp_probe (the "master" device), we scan the device tree
->>> for
->>>   any matching nodes against mtk_mdp_comp_dt_ids, and add component
->>>   matches for them. The match criteria is a matching device node
->>>   pointer.
->>>
->>> - When the set of components devices that have been probed
->>> corresponds
->>>   with the list that is generated by the "master", the callback to
->>>   mtk_mdp_master_bind() is made, which then calls the component
->>> bind
->>>   functions.
->>>
->>> - Inside mtk_mdp_master_bind(), once all the component bind
->>> functions
->>>   have been called, we can then register our device to the v4l2
->>>   subsystem.
->>>
->>> - The call to pm_runtime_enable() in the master device is called
->>> after
->>>   all the components have been registered by their bind() functions
->>>   called by mtk_mtp_master_bind(). As a result, the list of
->>> components
->>>   will not change while power management callbacks
->>> mtk_mdp_suspend()/
->>>   resume() are accessing the list of components.
->>>
->>> Signed-off-by: Eizan Miyamoto <eizan@chromium.org>
->>> Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
->>> Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
->>> ---
->>>
-> 
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index ab2467998d29..d803252a5aba 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -608,8 +608,8 @@ static const struct of_device_id of_hantro_match[] = {
+>  	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+>  #endif
+>  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+> -	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+> -	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+> +	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant, },
 
+I think it's important to clarify that you are breaking support
+for the previous device-tree binding. Not only because of the compatible
+string change, but because the binding is now quite different.
+
+Note that in the past Benjamin tried to avoid this.
+IIRC, his proposal was backwards compatible.
+
+If this is unavoidable, due to how the blk-ctrl is handled, then that's
+fine. Given it's a staging driver, we can still play these games.
+
+Having said that, let's please make this very clear in the commit
+description, to it's clear for developers forward-porting their kernels.
+This applies not only to this commit, but to all commits that affect
+the binding.
+
+Thanks!
+Ezequiel
+
+> +	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant, },
+>  #endif
+>  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+>  	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+> index cff817ca8d22..122b83a16663 100644
+> --- a/drivers/staging/media/hantro/hantro_hw.h
+> +++ b/drivers/staging/media/hantro/hantro_hw.h
+> @@ -299,8 +299,8 @@ enum hantro_enc_fmt {
+>  	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
+>  };
+>  
+> +extern const struct hantro_variant imx8mq_vpu_g1_variant;
+>  extern const struct hantro_variant imx8mq_vpu_g2_variant;
+> -extern const struct hantro_variant imx8mq_vpu_variant;
+>  extern const struct hantro_variant px30_vpu_variant;
+>  extern const struct hantro_variant rk3036_vpu_variant;
+>  extern const struct hantro_variant rk3066_vpu_variant;
+> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> index 1a43f6fceef9..c9f6e8472258 100644
+> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> @@ -13,67 +13,6 @@
+>  #include "hantro_g1_regs.h"
+>  #include "hantro_g2_regs.h"
+>  
+> -#define CTRL_SOFT_RESET		0x00
+> -#define RESET_G1		BIT(1)
+> -#define RESET_G2		BIT(0)
+> -
+> -#define CTRL_CLOCK_ENABLE	0x04
+> -#define CLOCK_G1		BIT(1)
+> -#define CLOCK_G2		BIT(0)
+> -
+> -#define CTRL_G1_DEC_FUSE	0x08
+> -#define CTRL_G1_PP_FUSE		0x0c
+> -#define CTRL_G2_DEC_FUSE	0x10
+> -
+> -static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
+> -{
+> -	u32 val;
+> -
+> -	/* Assert */
+> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+> -	val &= ~reset_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+> -
+> -	udelay(2);
+> -
+> -	/* Release */
+> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+> -	val |= reset_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+> -}
+> -
+> -static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
+> -{
+> -	u32 val;
+> -
+> -	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+> -	val |= clock_bits;
+> -	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+> -}
+> -
+> -static int imx8mq_runtime_resume(struct hantro_dev *vpu)
+> -{
+> -	int ret;
+> -
+> -	ret = clk_bulk_prepare_enable(vpu->variant->num_clocks, vpu->clocks);
+> -	if (ret) {
+> -		dev_err(vpu->dev, "Failed to enable clocks\n");
+> -		return ret;
+> -	}
+> -
+> -	imx8m_soft_reset(vpu, RESET_G1 | RESET_G2);
+> -	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
+> -
+> -	/* Set values of the fuse registers */
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
+> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
+> -
+> -	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
+> -
+> -	return 0;
+> -}
+> -
+>  /*
+>   * Supported formats.
+>   */
+> @@ -209,27 +148,6 @@ static irqreturn_t imx8m_vpu_g2_irq(int irq, void *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
+> -{
+> -	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
+> -
+> -	return 0;
+> -}
+> -
+> -static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
+> -{
+> -	struct hantro_dev *vpu = ctx->dev;
+> -
+> -	imx8m_soft_reset(vpu, RESET_G1);
+> -}
+> -
+> -static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
+> -{
+> -	struct hantro_dev *vpu = ctx->dev;
+> -
+> -	imx8m_soft_reset(vpu, RESET_G2);
+> -}
+> -
+>  /*
+>   * Supported codec ops.
+>   */
+> @@ -237,19 +155,16 @@ static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
+>  static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
+>  	[HANTRO_MODE_MPEG2_DEC] = {
+>  		.run = hantro_g1_mpeg2_dec_run,
+> -		.reset = imx8m_vpu_g1_reset,
+>  		.init = hantro_mpeg2_dec_init,
+>  		.exit = hantro_mpeg2_dec_exit,
+>  	},
+>  	[HANTRO_MODE_VP8_DEC] = {
+>  		.run = hantro_g1_vp8_dec_run,
+> -		.reset = imx8m_vpu_g1_reset,
+>  		.init = hantro_vp8_dec_init,
+>  		.exit = hantro_vp8_dec_exit,
+>  	},
+>  	[HANTRO_MODE_H264_DEC] = {
+>  		.run = hantro_g1_h264_dec_run,
+> -		.reset = imx8m_vpu_g1_reset,
+>  		.init = hantro_h264_dec_init,
+>  		.exit = hantro_h264_dec_exit,
+>  	},
+> @@ -258,14 +173,12 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
+>  static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+>  	[HANTRO_MODE_HEVC_DEC] = {
+>  		.run = hantro_g2_hevc_dec_run,
+> -		.reset = imx8m_vpu_g2_reset,
+>  		.init = hantro_hevc_dec_init,
+>  		.exit = hantro_hevc_dec_exit,
+>  	},
+>  	[HANTRO_MODE_VP9_DEC] = {
+>  		.run = hantro_g2_vp9_dec_run,
+>  		.done = hantro_g2_vp9_dec_done,
+> -		.reset = imx8m_vpu_g2_reset,
+>  		.init = hantro_vp9_dec_init,
+>  		.exit = hantro_vp9_dec_exit,
+>  	},
+> @@ -275,7 +188,7 @@ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+>   * VPU variants.
+>   */
+>  
+> -static const struct hantro_irq imx8mq_irqs[] = {
+> +static const struct hantro_irq imx8mq_g1_irqs[] = {
+>  	{ "g1", imx8m_vpu_g1_irq },
+>  };
+>  
+> @@ -283,10 +196,12 @@ static const struct hantro_irq imx8mq_g2_irqs[] = {
+>  	{ "g2", imx8m_vpu_g2_irq },
+>  };
+>  
+> -static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
+> -static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
+> +static const char * const imx8mq_g1_clk_names[] = { "g1" };
+> +static const char * const imx8mq_g1_reg_names[] = { "g1" };
+> +static const char * const imx8mq_g2_clk_names[] = { "g2" };
+> +static const char * const imx8mq_g2_reg_names[] = { "g2" };
+>  
+> -const struct hantro_variant imx8mq_vpu_variant = {
+> +const struct hantro_variant imx8mq_vpu_g1_variant = {
+>  	.dec_fmts = imx8m_vpu_dec_fmts,
+>  	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
+>  	.postproc_fmts = imx8m_vpu_postproc_fmts,
+> @@ -295,14 +210,12 @@ const struct hantro_variant imx8mq_vpu_variant = {
+>  	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+>  		 HANTRO_H264_DECODER,
+>  	.codec_ops = imx8mq_vpu_codec_ops,
+> -	.init = imx8mq_vpu_hw_init,
+> -	.runtime_resume = imx8mq_runtime_resume,
+> -	.irqs = imx8mq_irqs,
+> -	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
+> -	.clk_names = imx8mq_clk_names,
+> -	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
+> -	.reg_names = imx8mq_reg_names,
+> -	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
+> +	.irqs = imx8mq_g1_irqs,
+> +	.num_irqs = ARRAY_SIZE(imx8mq_g1_irqs),
+> +	.clk_names = imx8mq_g1_clk_names,
+> +	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
+> +	.reg_names = imx8mq_g1_reg_names,
+> +	.num_regs = ARRAY_SIZE(imx8mq_g1_reg_names),
+>  };
+>  
+>  const struct hantro_variant imx8mq_vpu_g2_variant = {
+> @@ -314,10 +227,10 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+>  	.postproc_ops = &hantro_g2_postproc_ops,
+>  	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
+>  	.codec_ops = imx8mq_vpu_g2_codec_ops,
+> -	.init = imx8mq_vpu_hw_init,
+> -	.runtime_resume = imx8mq_runtime_resume,
+>  	.irqs = imx8mq_g2_irqs,
+>  	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
+> -	.clk_names = imx8mq_clk_names,
+> -	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
+> +	.clk_names = imx8mq_g2_clk_names,
+> +	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
+> +	.reg_names = imx8mq_g2_reg_names,
+> +	.num_regs = ARRAY_SIZE(imx8mq_g2_reg_names),
+>  };
+> -- 
+> 2.32.0
+> 

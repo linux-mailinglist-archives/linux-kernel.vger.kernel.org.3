@@ -2,89 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A6E46B683
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1717846B68B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbhLGJC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:02:56 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:41805 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhLGJCy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:02:54 -0500
-Received: by mail-ua1-f48.google.com with SMTP id p37so25077338uae.8;
-        Tue, 07 Dec 2021 00:59:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lzwgy7wXN8Jjydn3ji6mL/biJ5JYjvPjWPkziik7m2Q=;
-        b=rXAFC9Y6jwe9lHRa5PvYzJvh8gKcY2yCHBl9aahaZFexe5gbMe2KluDxDjzpcX3iN+
-         BFplnsg2/CUVKH/WpVzCBpPvqqrwPjLSaid7s6ipEIPk8ipLjQULJbjTVOTn0gC6zsK2
-         zmY7VjzUEaxFA/khRlct8ErcjwlX59EWTRJFG0PzvWwyNEtkvwULlMuGz5MFUlYNtiHK
-         zIQ7Z/9cgBYLazIn00InHCgpIScqsN6mVEe7a4ICMVOtnN2ZjSEeTj7zcgpYRLaHYlcb
-         Y3JctITP9akPtHYL4LsyJgPOQXHWDV80+lhX5wZJJYdWpHQzWp0mpEV9R3kfpw1xII8v
-         fAzw==
-X-Gm-Message-State: AOAM530alN5bTqmr4sEeb6/Cwc0el+eTKXWTazVbQmMVmDLy3/BEbNH+
-        t0c0Tnc8QcKVlhOJKq/U0jZoACo1bZJ/zQ==
-X-Google-Smtp-Source: ABdhPJyNknypxBEBvLXiYGLBYxxaP3WSWHm64oNCFMhCsvzDu4kufWeaExXh7tET8vS5nqASWwnXCw==
-X-Received: by 2002:a67:c38f:: with SMTP id s15mr42323851vsj.50.1638867564152;
-        Tue, 07 Dec 2021 00:59:24 -0800 (PST)
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
-        by smtp.gmail.com with ESMTPSA id x21sm6021040ual.11.2021.12.07.00.59.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 00:59:23 -0800 (PST)
-Received: by mail-vk1-f176.google.com with SMTP id q21so8786304vkn.2;
-        Tue, 07 Dec 2021 00:59:23 -0800 (PST)
-X-Received: by 2002:a05:6122:104f:: with SMTP id z15mr51606124vkn.39.1638867563566;
- Tue, 07 Dec 2021 00:59:23 -0800 (PST)
+        id S233346AbhLGJHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:07:07 -0500
+Received: from mga02.intel.com ([134.134.136.20]:29417 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231313AbhLGJHG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 04:07:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224791978"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224791978"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 00:59:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="515194978"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 07 Dec 2021 00:59:51 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muWKE-000MNH-E3; Tue, 07 Dec 2021 08:59:50 +0000
+Date:   Tue, 7 Dec 2021 16:58:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sm8350-next-20211118 48/48]
+ drivers/usb/typec/altmodes/displayport.c:147:4: error: too few arguments to
+ function 'drm_connector_oob_hotplug_event'
+Message-ID: <202112071602.WIq3FYDB-lkp@intel.com>
 MIME-Version: 1.0
-References: <8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net>
-In-Reply-To: <8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Dec 2021 09:59:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUep8xc3Ay5o6=KWsF8Hp7fUKdgPuW-_WOr1=KAxkou2Q@mail.gmail.com>
-Message-ID: <CAMuHMdUep8xc3Ay5o6=KWsF8Hp7fUKdgPuW-_WOr1=KAxkou2Q@mail.gmail.com>
-Subject: Re: [Bug Report] Desktop monitor sleep regression
-To:     Brandon Nielsen <nielsenb@jetfuse.net>
-Cc:     Peter Jones <pjones@redhat.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Imre Deak <imre.deak@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        stable <stable@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CCs
+tree:   https://github.com/andersson/kernel wip/sm8350-next-20211118
+head:   801a35a569988584ffd5f6028a992f636c2a6634
+commit: 801a35a569988584ffd5f6028a992f636c2a6634 [48/48] drm: Add hpd state to drm_connector_oob_hotplug_event()
+config: x86_64-randconfig-r032-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071602.WIq3FYDB-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/andersson/kernel/commit/801a35a569988584ffd5f6028a992f636c2a6634
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sm8350-next-20211118
+        git checkout 801a35a569988584ffd5f6028a992f636c2a6634
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Tue, Dec 7, 2021 at 7:37 AM Brandon Nielsen <nielsenb@jetfuse.net> wrote:
-> Monitors no longer sleep properly on my system (dual monitor connected
-> via DP->DVI, amdgpu, x86_64). The monitors slept properly on 5.14, but
-> stopped during the 5.15 series. I have also filed this bug on the kernel
-> bugzilla[0] and downstream[1].
->
-> I have performed a bisect, first "bad" commit to master is
-> 55285e21f04517939480966164a33898c34b2af2[1], the same change made it
-> into the 5.15 branch as e3b39825ed0813f787cb3ebdc5ecaa5131623647. I have
-> verified the issue exists in latest master
-> (a51e3ac43ddbad891c2b1a4f3aa52371d6939570).
->
->
-> Steps to reproduce:
->
->    1. Boot system (Fedora Workstation 35 in this case)
->    2. Log in
->    3. Lock screen (after a few seconds, monitors will enter power save
-> "sleep" state with backlight off)
->    4. Wait (usually no more than 30 seconds, sometimes up to a few minutes)
->    5. Observe monitor leaving "sleep" state (backlight comes back on),
-> but nothing is displayed
->
->
-> [0] - https://bugzilla.kernel.org/show_bug.cgi?id=215203
-> [1] - https://bugzilla.redhat.com/show_bug.cgi?id=2028613
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/usb/typec/altmodes/displayport.c: In function 'dp_altmode_status_update':
+>> drivers/usb/typec/altmodes/displayport.c:147:4: error: too few arguments to function 'drm_connector_oob_hotplug_event'
+     147 |    drm_connector_oob_hotplug_event(dp->connector_fwnode);
+         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/usb/typec/altmodes/displayport.c:17:
+   include/drm/drm_connector.h:1739:6: note: declared here
+    1739 | void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode, bool hpd_state);
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/typec/altmodes/displayport.c: In function 'dp_altmode_remove':
+   drivers/usb/typec/altmodes/displayport.c:577:4: error: too few arguments to function 'drm_connector_oob_hotplug_event'
+     577 |    drm_connector_oob_hotplug_event(dp->connector_fwnode);
+         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/usb/typec/altmodes/displayport.c:17:
+   include/drm/drm_connector.h:1739:6: note: declared here
+    1739 | void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode, bool hpd_state);
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/drm_connector_oob_hotplug_event +147 drivers/usb/typec/altmodes/displayport.c
+
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  128  
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  129  static int dp_altmode_status_update(struct dp_altmode *dp)
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  130  {
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  131  	bool configured = !!DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
+7f811394878535e Hans de Goede   2021-08-17  132  	bool hpd = !!(dp->data.status & DP_STATUS_HPD_STATE);
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  133  	u8 con = DP_STATUS_CONNECTION(dp->data.status);
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  134  	int ret = 0;
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  135  
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  136  	if (configured && (dp->data.status & DP_STATUS_SWITCH_TO_USB)) {
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  137  		dp->data.conf = 0;
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  138  		dp->state = DP_STATE_CONFIGURE;
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  139  	} else if (dp->data.status & DP_STATUS_EXIT_DP_MODE) {
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  140  		dp->state = DP_STATE_EXIT;
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  141  	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  142  		ret = dp_altmode_configure(dp, con);
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  143  		if (!ret)
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  144  			dp->state = DP_STATE_CONFIGURE;
+7f811394878535e Hans de Goede   2021-08-17  145  	} else {
+7f811394878535e Hans de Goede   2021-08-17  146  		if (dp->hpd != hpd) {
+7f811394878535e Hans de Goede   2021-08-17 @147  			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+7f811394878535e Hans de Goede   2021-08-17  148  			dp->hpd = hpd;
+7f811394878535e Hans de Goede   2021-08-17  149  		}
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  150  	}
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  151  
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  152  	return ret;
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  153  }
+0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  154  
+
+:::::: The code at line 147 was first introduced by commit
+:::::: 7f811394878535ed9a6849717de8c2959ae38899 usb: typec: altmodes/displayport: Notify drm subsys of hotplug events
+
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Hans de Goede <hdegoede@redhat.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

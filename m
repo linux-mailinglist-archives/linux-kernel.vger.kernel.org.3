@@ -2,168 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4905046AF4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6326C46AF52
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378639AbhLGAop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 19:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S1378648AbhLGAs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 19:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351468AbhLGAoo (ORCPT
+        with ESMTP id S231593AbhLGAsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 19:44:44 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05ECC061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:41:14 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bi37so29533132lfb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 16:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jIdEL53nOuAEWWraBxH2Sf1OMMrte3ZBjFe55W9HpZQ=;
-        b=E3O5kgNkwKpGJAfYijYIis3nIYzqNI5uKUm+57c585pwv/tbe2hXRW79KARrf7k0uU
-         xCa/ufxVvEanx8hkDRlRjTOItfQh71Y3IWsybe2U0IgNRLT7zbzouAZNHUOCtnRTEOfu
-         MS5tJBOYoon2o6PHpiKdGvdmlPaXK6HPh09Pkh1MVb8Kw1NNrIQQsXKFJdhq6Om1x26y
-         Yt3z+FOhW5Zu+exusnHVME0R4R3Cm/ynN0CDFHBVasJBLPzY/GhVvZhiZsjCwHTJ0BhF
-         Mr16b/Q6pO+Va7Ws+IBcFgIWCIsRYPZGgd1/CPwtc7ocEtcSArSMpN/8G9kTC5uSyDjq
-         mhkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jIdEL53nOuAEWWraBxH2Sf1OMMrte3ZBjFe55W9HpZQ=;
-        b=WXgkFLTh7RDlZRehgDGwgpNzoW+VfoZiI6A50C5chVy57C7LfNINrsXdHNfgobcEQ2
-         EZq7lZMB5ZfYMVXXuxdrOcjgmUKL6YpRdOkbwfG6Wo+jYA9Y5EMNqLWW2VMf77U233U7
-         SiJmcdeS6m+omTxx1C+iW5Fx+T+Zg2iLeGzImnswyvhywbuo/vDpPlwh2lcNvEkxffZt
-         RX+E7Sl8a+DNCl9N8+BVzY5v+OsSf0Zmab2AlCTZP9/yof7tML/LOUfwaKtGc8ppbH/c
-         eOoh2P3R7Ad31fG44UaQFbjRYozsGTsyvr4hvROIwUHuNtz1IvPHB+SpaIQcYo6z//eX
-         Qy1w==
-X-Gm-Message-State: AOAM533gitXlMURKNGz1aS+jbBzO15yQ2ehoxvZ8B0ckM4BAbzegEf99
-        C3n9LkYnZyorGby69uOlbo9fhzN2HlLuuLisL+cUJc8xpST71Q==
-X-Google-Smtp-Source: ABdhPJzhj5DNFAKr3BTQqYHXWFPODGzuEK9YDqY1brCLRpCiSW6jgBE1YVxRQOsGdhG3vbOnzYjUIgTsolXxUHeDZqg=
-X-Received: by 2002:a05:6512:228c:: with SMTP id f12mr8230554lfu.550.1638837672966;
- Mon, 06 Dec 2021 16:41:12 -0800 (PST)
+        Mon, 6 Dec 2021 19:48:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EC0C061746;
+        Mon,  6 Dec 2021 16:45:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A492AB81644;
+        Tue,  7 Dec 2021 00:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78FFFC004DD;
+        Tue,  7 Dec 2021 00:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638837922;
+        bh=SCN5889vVh+mCc+CkiaepdBgwDK/1jikVPzpnl7uoXk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e3WCRzoyTZfv7k0J0Rx5q26w57k/JZZt4C8OR2q7/B22q25bq6p1lVhWzCdiwBoty
+         A287qgioJl30xM+B1SLQ/LeBKgVByIlU3YIIi8it12f6eYKYEKYXuxQfkrVUL1mI0E
+         MecnFGqFqngtDSVQ/M/IEgYyoulFu+5MHyh7h9aYdmTRrb3rhA6WllT0MIi35Gyz+S
+         KNWiMDd9QihVQeZzQjQkPn25QvYpeGOBg9LjtCaFcPCYYkU1t88LtaeXgRp6qxlilk
+         GPsVUN6e3hY/JpNbAaCFhESkd5U/oV06XozdBD9zz2JhSMeBFzlOhpavKYrUfD/pt1
+         bmDIlXRCbf1Uw==
+Date:   Mon, 6 Dec 2021 16:45:20 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, alex.aring@gmail.com,
+        stefan@datenfreihafen.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, horms@verge.net.au, ja@ssi.bg,
+        pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        daniel@iogearbox.net, roopa@nvidia.com, yajun.deng@linux.dev,
+        chinagar@codeaurora.org, xu.xin16@zte.com.cn,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [PATCH net-next] net: Enable some sysctls for the userns root
+ with privilege
+Message-ID: <20211206164520.51f8a2d8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211203032815.339186-1-xu.xin16@zte.com.cn>
+References: <20211203032815.339186-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-References: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
-In-Reply-To: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Dec 2021 16:41:00 -0800
-Message-ID: <CAKwvOdkgHhOTKbb4vm9p7uDvvp7eXpTg2cb4rvr1jFgyAgSb-w@mail.gmail.com>
-Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix
- section mismatch
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 12:57 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Nick Desaulniers <ndesaulniers@google.com>
-> Date: Mon, 6 Dec 2021 11:43:47 -0800
->
-> > On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
-> > <alexandr.lobakin@intel.com> wrote:
-> > >
-> > > Clang (13) uninlines __next_node() which emits the following warning
-> > > due to that this function is used in init code (amd_numa_init(),
-> > > sched_init_numa() etc.):
-> > >
-> > > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-> > > in reference from the function __next_node() to the variable
-> > > .init.data:numa_nodes_parsed
-> > > The function __next_node() references
-> > > the variable __initdata numa_nodes_parsed.
-> > > This is often because __next_node lacks a __initdata
-> > > annotation or the annotation of numa_nodes_parsed is wrong.
-> > >
-> > > Mark __next_node() as __always_inline() so it won't get uninlined.
-> > > bloat-o-meter over x86_64 binaries says this:
-> > >
-> > > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-> > > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-> > > Function                                     old     new   delta
-> > > apply_wqattrs_cleanup                          -     410    +410
-> > > amd_numa_init                                814     842     +28
-> > > sched_init_numa                             1338    1346      +8
-> > > find_next_bit                                 38      19     -19
-> > > __next_node                                   45       -     -45
-> > > apply_wqattrs_prepare                       1069     799    -270
-> > > wq_nice_store                                688     414    -274
-> > > wq_numa_store                                805     433    -372
-> > > wq_cpumask_store                             789     402    -387
-> > > apply_workqueue_attrs                        538     147    -391
-> > > workqueue_set_unbound_cpumask                947     539    -408
-> > > Total: Before=14422603, After=14420883, chg -0.01%
-> > >
-> > > So it's both win-win in terms of resolving section mismatch and
-> > > saving some text size (-1.7 Kb is quite nice).
-> > >
-> > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> >
-> > Thanks for the patch.  See this thread:
-> > https://github.com/ClangBuiltLinux/linux/issues/1302
-> >
-> > There's a lot more instances of these based on config.  Something like
-> > https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
-> > would be more appropriate for fixing all instances, but I think this
-> > is more so an issue with the inline cost model in LLVM.
-> >
-> > I need to finish off https://reviews.llvm.org/D111456, and request
-> > that https://reviews.llvm.org/D111272 which landed in clang-14 get
-> > backported to the 13.0.1 release which should also help.
->
-> Oh I see. Sorry for redundant posting, non-applicable then.
+On Fri,  3 Dec 2021 03:28:15 +0000 cgel.zte@gmail.com wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> Enabled sysctls include the followings: 
+> 1. net/ipv4/neigh/<if>/* 
+> 2. net/ipv6/neigh/<if>/* 
+> 3. net/ieee802154/6lowpan/* 
+> 4. net/ipv6/route/* 
+> 5. net/ipv4/vs/* 
+> 6. net/unix/* 
+> 7. net/core/xfrm_*
+> 
+> In practical work, some userns with root privilege have needs to adjust
+> these sysctls in their own netns, but limited just because they are not
+> init user_ns, even if they are given root privilege by docker -privilege.
 
-No worries; it's a complex issue.  I appreciate that you took the time
-to test with clang, understand the issue, and send a patch.
-++beers_owed;
+You need to justify why removing these checks is safe. It sounds like
+you're only describing why having the permissions is problematic, which 
+is fair but not sufficient to just remove them.
 
-If you'd like, I can add you to our github org if you'd like to be
-cc'ed on issues there; just ping me privately off thread with your
-github account and I'll add you.
-https://github.com/ClangBuiltLinux
+> Reported-by: xu xin <xu.xin16@zte.com.cn>
+> Tested-by: xu xin <xu.xin16@zte.com.cn>
 
-> We'll wait for these Clang/LLVM works to be finised, thanks!
->
-> >
-> > > ---
-> > >  include/linux/nodemask.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> > > index 567c3ddba2c4..55ba2c56f39b 100644
-> > > --- a/include/linux/nodemask.h
-> > > +++ b/include/linux/nodemask.h
-> > > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
-> > >  }
-> > >
-> > >  #define next_node(n, src) __next_node((n), &(src))
-> > > -static inline int __next_node(int n, const nodemask_t *srcp)
-> > > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
-> > >  {
-> > >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-> > >  }
-> > > --
-> > > 2.33.1
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
-> Al
->
+These tags are superfluous for the author of the patch.
 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> ---
+>  net/core/neighbour.c                | 4 ----
+>  net/ieee802154/6lowpan/reassembly.c | 4 ----
+>  net/ipv6/route.c                    | 4 ----
+>  net/netfilter/ipvs/ip_vs_ctl.c      | 4 ----
+>  net/netfilter/ipvs/ip_vs_lblc.c     | 4 ----
+>  net/netfilter/ipvs/ip_vs_lblcr.c    | 3 ---
+>  net/unix/sysctl_net_unix.c          | 4 ----
+>  net/xfrm/xfrm_sysctl.c              | 4 ----
+>  8 files changed, 31 deletions(-)
+> 
+> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+> index 0cdd4d9ad942..44d90cc341ea 100644
+> --- a/net/core/neighbour.c
+> +++ b/net/core/neighbour.c
+> @@ -3771,10 +3771,6 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
+>  			neigh_proc_base_reachable_time;
+>  	}
+>  
+> -	/* Don't export sysctls to unprivileged users */
+> -	if (neigh_parms_net(p)->user_ns != &init_user_ns)
+> -		t->neigh_vars[0].procname = NULL;
+> -
+>  	switch (neigh_parms_family(p)) {
+>  	case AF_INET:
+>  	      p_name = "ipv4";
+> diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowpan/reassembly.c
+> index be6f06adefe0..89cbad6d8368 100644
+> --- a/net/ieee802154/6lowpan/reassembly.c
+> +++ b/net/ieee802154/6lowpan/reassembly.c
+> @@ -366,10 +366,6 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
+>  				GFP_KERNEL);
+>  		if (table == NULL)
+>  			goto err_alloc;
+> -
+> -		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> -			table[0].procname = NULL;
+>  	}
+>  
+>  	table[0].data	= &ieee802154_lowpan->fqdir->high_thresh;
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index f0d29fcb2094..6a0b15d6500e 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
+> @@ -6409,10 +6409,6 @@ struct ctl_table * __net_init ipv6_route_sysctl_init(struct net *net)
+>  		table[8].data = &net->ipv6.sysctl.ip6_rt_min_advmss;
+>  		table[9].data = &net->ipv6.sysctl.ip6_rt_gc_min_interval;
+>  		table[10].data = &net->ipv6.sysctl.skip_notify_on_dev_down;
+> -
+> -		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> -			table[1].procname = NULL;
+>  	}
+>  
+>  	return table;
+> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+> index 7f645328b47f..a77c8abf2fc7 100644
+> --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> @@ -4040,10 +4040,6 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+>  		tbl = kmemdup(vs_vars, sizeof(vs_vars), GFP_KERNEL);
+>  		if (tbl == NULL)
+>  			return -ENOMEM;
+> -
+> -		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> -			tbl[0].procname = NULL;
+>  	} else
+>  		tbl = vs_vars;
+>  	/* Initialize sysctl defaults */
+> diff --git a/net/netfilter/ipvs/ip_vs_lblc.c b/net/netfilter/ipvs/ip_vs_lblc.c
+> index 7ac7473e3804..567ba33fa5b4 100644
+> --- a/net/netfilter/ipvs/ip_vs_lblc.c
+> +++ b/net/netfilter/ipvs/ip_vs_lblc.c
+> @@ -561,10 +561,6 @@ static int __net_init __ip_vs_lblc_init(struct net *net)
+>  		if (ipvs->lblc_ctl_table == NULL)
+>  			return -ENOMEM;
+>  
+> -		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> -			ipvs->lblc_ctl_table[0].procname = NULL;
+> -
+>  	} else
+>  		ipvs->lblc_ctl_table = vs_vars_table;
+>  	ipvs->sysctl_lblc_expiration = DEFAULT_EXPIRATION;
+> diff --git a/net/netfilter/ipvs/ip_vs_lblcr.c b/net/netfilter/ipvs/ip_vs_lblcr.c
+> index 77c323c36a88..a58440a7bf9e 100644
+> --- a/net/netfilter/ipvs/ip_vs_lblcr.c
+> +++ b/net/netfilter/ipvs/ip_vs_lblcr.c
+> @@ -747,9 +747,6 @@ static int __net_init __ip_vs_lblcr_init(struct net *net)
+>  		if (ipvs->lblcr_ctl_table == NULL)
+>  			return -ENOMEM;
+>  
+> -		/* Don't export sysctls to unprivileged users */
+> -		if (net->user_ns != &init_user_ns)
+> -			ipvs->lblcr_ctl_table[0].procname = NULL;
+>  	} else
+>  		ipvs->lblcr_ctl_table = vs_vars_table;
+>  	ipvs->sysctl_lblcr_expiration = DEFAULT_EXPIRATION;
+> diff --git a/net/unix/sysctl_net_unix.c b/net/unix/sysctl_net_unix.c
+> index c09bea89151b..01d44e2598e2 100644
+> --- a/net/unix/sysctl_net_unix.c
+> +++ b/net/unix/sysctl_net_unix.c
+> @@ -30,10 +30,6 @@ int __net_init unix_sysctl_register(struct net *net)
+>  	if (table == NULL)
+>  		goto err_alloc;
+>  
+> -	/* Don't export sysctls to unprivileged users */
+> -	if (net->user_ns != &init_user_ns)
+> -		table[0].procname = NULL;
+> -
+>  	table[0].data = &net->unx.sysctl_max_dgram_qlen;
+>  	net->unx.ctl = register_net_sysctl(net, "net/unix", table);
+>  	if (net->unx.ctl == NULL)
+> diff --git a/net/xfrm/xfrm_sysctl.c b/net/xfrm/xfrm_sysctl.c
+> index 0c6c5ef65f9d..a9b7723eb88f 100644
+> --- a/net/xfrm/xfrm_sysctl.c
+> +++ b/net/xfrm/xfrm_sysctl.c
+> @@ -55,10 +55,6 @@ int __net_init xfrm_sysctl_init(struct net *net)
+>  	table[2].data = &net->xfrm.sysctl_larval_drop;
+>  	table[3].data = &net->xfrm.sysctl_acq_expires;
+>  
+> -	/* Don't export sysctls to unprivileged users */
+> -	if (net->user_ns != &init_user_ns)
+> -		table[0].procname = NULL;
+> -
+>  	net->xfrm.sysctl_hdr = register_net_sysctl(net, "net/core", table);
+>  	if (!net->xfrm.sysctl_hdr)
+>  		goto out_register;
 
--- 
-Thanks,
-~Nick Desaulniers

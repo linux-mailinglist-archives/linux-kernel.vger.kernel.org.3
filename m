@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299C846C430
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0A346C435
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241084AbhLGUKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbhLGUKc (ORCPT
+        id S241096AbhLGUMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:12:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51316 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229867AbhLGUMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:10:32 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BB2C061574;
-        Tue,  7 Dec 2021 12:07:01 -0800 (PST)
+        Tue, 7 Dec 2021 15:12:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AB770CE1DEF;
-        Tue,  7 Dec 2021 20:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E5FC341C1;
-        Tue,  7 Dec 2021 20:06:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8A97B81858;
+        Tue,  7 Dec 2021 20:08:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CECFC341C3;
+        Tue,  7 Dec 2021 20:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638907617;
-        bh=FSLhkQaVEX4dZ0fRYSqHC72laF/cCWIOhtt3ea/nX1I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Au5zEZNVNz/BP4lbQZPH5XikalbsunVV6IX4OhCHDMFothBnUy1rmTRqTHm+r+IPg
-         QRWV13JsYuO0vQNPj0RfUfVkao09D+yaWpxvflgKMBSDyECeoeciBahAupV/FPO/8m
-         B10yDlmIBFYfEd0p+QsiN+yXHj/aR+J6mVLk/zexbf711nPNUVLhL0kDCHYx4+V/89
-         4X4Ub64KfxdCeoGvVOXCHBtVNlNFGU3nBTicPZsxnX4+inTHs6crndKhlIZQmxu+Zk
-         3R2Y+757qc6m1CFB02LZARnMpVzhnX2hCbVHahS2f6awiQ7Oz4H68eNDluOjNALNie
-         3Ym3IMN50txdg==
-Date:   Tue, 7 Dec 2021 22:06:44 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Richard Hughes <hughsient@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
-Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do
- encryption
-Message-ID: <Ya++1FwWzKr2wYQH@kernel.org>
-References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
- <YaxWXACBguZxWmKS@kernel.org>
- <CAD2FfiG9wfeW_2xxZqBi9vsjzEJBRjJUZw+AQy1Taos4fh2TLA@mail.gmail.com>
- <Ya8MUOKPOKVfBfjJ@kernel.org>
- <CAKgze5Y6F40bk=PgoS3LshcDEAreefOmF4xpCuSxgpiSr+99Kw@mail.gmail.com>
- <1ed6020b-f84b-a29b-690a-9eee683c93a6@intel.com>
+        s=k20201202; t=1638907720;
+        bh=7iECsE/Y/3WDH+hSKw/CvU9fAhHAsdUBKvj/iNSMXUA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eB2WlEkOxMKqWBG4/cC0k1LNrwvjHA7Tb0FsOXXKQXKo3OjZhY/XQ9H+7mTefDAnl
+         TrPVdp5vn0/aHzmEenk/h+aWRxylWK2SZp3xXQMeXPG9JVcwB8IaSfb0aeYSG5lka2
+         hWzXOkTh4wyXOGMqf0jDC80GmhIFAnYEl58IwHw5j9G8dFzNKOafKof7eub6qB3vOG
+         v+uQ+UH13bh0RK4By3SgvYZGOGjS6Bo4z00wNXO5GorHJDVL65klhKPUcm8KA+E3Xx
+         WwRln8ZGWbhHFYBUjOMYUraOFvE0Ubv+IS2Achv9Reay/Vs4iCUlNuYw2FIRydr/ok
+         P6EQacgcAurBg==
+Received: by mail-ed1-f44.google.com with SMTP id l25so374369eda.11;
+        Tue, 07 Dec 2021 12:08:40 -0800 (PST)
+X-Gm-Message-State: AOAM532X852r65PWOPHdNl0AP18qWjbxfUnhLF75DHXRBxXU3EImmM47
+        bpEnQjYTAjTbehh5o2LToyvKvB1zdChJksiPLg==
+X-Google-Smtp-Source: ABdhPJwA9TV+fIIiAm/3KclR1rrQon8NWQlFgkZJrXmBPVhVXjSQmWIYfL8TqwTlEeryByAj0Jv4ANoqhh9Y7EZxl9Y=
+X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr12237548edb.89.1638907718587;
+ Tue, 07 Dec 2021 12:08:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ed6020b-f84b-a29b-690a-9eee683c93a6@intel.com>
+References: <20211206185242.2098683-1-f.fainelli@gmail.com>
+ <20211206185242.2098683-2-f.fainelli@gmail.com> <CAL_JsqKaOkByjwYzyW6G_b90zRjCWVHvi2V0gBx_MJ8v2FmOaw@mail.gmail.com>
+ <fc263ef8-10f8-206e-5df7-76f0b9d50fae@gmail.com>
+In-Reply-To: <fc263ef8-10f8-206e-5df7-76f0b9d50fae@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 7 Dec 2021 14:08:27 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL6HV-C6+9Pna_8GVT5V+uEzcYcPDaS1m6AK8LhsWnFaw@mail.gmail.com>
+Message-ID: <CAL_JsqL6HV-C6+9Pna_8GVT5V+uEzcYcPDaS1m6AK8LhsWnFaw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] ARM: dts: Cygnus: Fixed iProc PCIe controller properties
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM IPROC ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:52:54AM -0800, Dave Hansen wrote:
-> On 12/7/21 11:45 AM, Martin Fernandez wrote:
-> >> I wonder, for example, why did you choose per-node reporting rather than
-> >> per-region as described in UEFI spec.
-> > Some time ago we discussed about this and concluded with Dave Hansen
-> > that it was better to do it in this per-node way.
-> 
-> Physical memory regions aren't exposed to userspace in any meaningful way.
+On Tue, Dec 7, 2021 at 11:44 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 12/7/21 5:49 AM, Rob Herring wrote:
+> > On Mon, Dec 6, 2021 at 12:52 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> >>
+> >> Rename the msi controller unit name to 'msi' to avoid collisions
+> >> with the 'msi-controller' boolean property and add the missing
+> >> 'interrupt-controller' property which is necessary. We also need to
+> >> re-arrange the 'ranges' property to show the two cells as being separate
+> >> instead of combined since the DT checker is not able to differentiate
+> >> otherwise.
+> >>
+> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >> ---
+> >>  arch/arm/boot/dts/bcm-cygnus.dtsi | 14 ++++++++------
+> >>  1 file changed, 8 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/arch/arm/boot/dts/bcm-cygnus.dtsi b/arch/arm/boot/dts/bcm-cygnus.dtsi
+> >> index 8ecb7861ce10..ea19d1b56400 100644
+> >> --- a/arch/arm/boot/dts/bcm-cygnus.dtsi
+> >> +++ b/arch/arm/boot/dts/bcm-cygnus.dtsi
+> >> @@ -263,6 +263,7 @@ pcie0: pcie@18012000 {
+> >>                         compatible = "brcm,iproc-pcie";
+> >>                         reg = <0x18012000 0x1000>;
+> >>
+> >> +                       interrupt-controller;
+> >
+> > How is this a fix? This doesn't even work before v5.16 with commit
+> > 041284181226 ("of/irq: Allow matching of an interrupt-map local to an
+> > interrupt controller").
+>
+> What is the path forward? I suppose I could make the
+> interrupt-controller property not required for this controller but then
+> the default interrupt-controller schema is not terribly happy about
+> seeing an interrupt-map/interrupt-map-mask properties without
+> interrupt-controller.
 
-Well, we have /sys/firmware/memory that exposes e820...
- 
-> An ABI that says "everything is encrypted" is pretty meaningless and
-> only useful for this one, special case.
-> 
-> A per-node ABI is useful for this case and is also useful going forward
-> if folks want to target allocations from applications to NUMA nodes
-> which have encryption capabilities.  The ABI in this set is useful for
-> the immediate case and is useful to other folks.
+There's certainly no requirement for having 'interrupt-controller'.
+What error are you getting?
 
-I don't mind per-node ABI, I'm just concerned that having a small region
-without the encryption flag set will render the entire node "not
-encryptable". This may happen because a bug in firmware, a user that shoot
-themself in a leg with weird memmap= or some hidden gem in interaction
-between e820, EFI and memblock that we still didn't discover.
-
-I agree that per-node flag is useful, but maybe we should also have better
-granularity as well.
-
--- 
-Sincerely yours,
-Mike.
+Rob

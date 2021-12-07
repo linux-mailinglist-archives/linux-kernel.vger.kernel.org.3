@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E86B846BC23
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CC246BC25
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbhLGNJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S236852AbhLGNJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbhLGNJY (ORCPT
+        with ESMTP id S236827AbhLGNJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:09:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F18BC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:05:54 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muaAA-0007ZU-Oh; Tue, 07 Dec 2021 14:05:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muaA8-003EEC-Ka; Tue, 07 Dec 2021 14:05:39 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muaA7-0004ej-Fz; Tue, 07 Dec 2021 14:05:39 +0100
-Date:   Tue, 7 Dec 2021 14:05:39 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     lizhe <sensor1010@163.com>
-Cc:     ulf.hansson@linaro.org, srinivas.pandruvada@linux.intel.com,
-        pali@kernel.org, TheSven73@gmail.com, lznuaa@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/mmc/core/bus: Remove redundant driver match
- function
-Message-ID: <20211207130539.r4zdbyh76kiiid4o@pengutronix.de>
-References: <20211207095029.96387-1-sensor1010@163.com>
+        Tue, 7 Dec 2021 08:09:27 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD1AC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:05:56 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id k4so13754212pgb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 05:05:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FI2qt9CjwRrs4Tfemj8rDZNzeo/YDjtuHCbQrgegDa4=;
+        b=Ff27IpankODa1HIFnY22UfOVCC7xNm9fN8nnjh0EkeDEjM6E7NLthQ8mM8bWDWoMWx
+         Xy+RpC0cUYg0Q4TXwqk892ksP66189yQunoYgibL/EgYTuptQCz17O+hnqXCvd+ZTz1q
+         KECDgk5JnyU65Ot+7GrU6bIC7i4AQEGyo5AME=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FI2qt9CjwRrs4Tfemj8rDZNzeo/YDjtuHCbQrgegDa4=;
+        b=L+rWZ874BpPsGso4sl6dvo5X9GswfmbELsJkiDMBXhEtQHLHH7K9I7xraKY/lTmdgH
+         j2B8wQnYvyQoTiZWLJvjL6d7H/2WmZcR+tDgj5ESUgErzibRymZd5OK/DCySSPwS+Nge
+         Qa5GtqFBpWkdX91hkWhDTUYPXNYC7xyXZuFFtTjeEQZUVsEuOdfk6sXhhHkdMfKudC+S
+         kBggzVPVeP66wQM72d7EA9r85OYcKK1BgV7L+VtgykSIvLPBJoDr0fQPHft9Q4bVPEfK
+         KRLsczmEz4jOJPWFwzOHKnaH9/WtW3nmKc9kbjhp0vCq5k3azEusfsjEUjvKTxhh6dVL
+         zHLA==
+X-Gm-Message-State: AOAM5326SxyriJdQ2D/vBOAV3TrOPSLytyQsvRX8GcBO0+rEd7oLShFr
+        nbFQPoBWVSOJ+ldqYaKV+RYHbA==
+X-Google-Smtp-Source: ABdhPJy74Oo/xXy6Vq9HMkveYiPrIvtFwzoSgLOZDWADx+BG61TDesJcSn6OGCIN600lnUmnhoJQ1A==
+X-Received: by 2002:aa7:88d1:0:b0:4af:844:8be with SMTP id k17-20020aa788d1000000b004af084408bemr8627109pff.43.1638882356424;
+        Tue, 07 Dec 2021 05:05:56 -0800 (PST)
+Received: from 47cfd395a522 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id pc10sm3181836pjb.9.2021.12.07.05.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 05:05:55 -0800 (PST)
+Date:   Tue, 7 Dec 2021 13:05:47 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 000/207] 5.15.7-rc1 review
+Message-ID: <20211207130547.GA1565144@47cfd395a522>
+References: <20211206145610.172203682@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kgftqftmrcsxvhor"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207095029.96387-1-sensor1010@163.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 06, 2021 at 03:54:14PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.7 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 
---kgftqftmrcsxvhor
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Greg,
 
-On Tue, Dec 07, 2021 at 01:50:29AM -0800, lizhe wrote:
-> If there is no driver match function, the driver core assumes
-> that each candidate pair (driver, device) matches. See function
-> driver_match_device().
->=20
-> Drop the mmc bus's match function that always returned 1 and
-> so implements the same behaviour as when there is no match
-> function.
->=20
-> Signed-off-by: lizhe <sensor1010@163.com>
+Looking good.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-If you want to make it easier for maintainers to take your patches,
-consider using -v2 for git send-email (or git format-patch) the next
-time.
+In addition build tested on:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-Best regards and thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kgftqftmrcsxvhor
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGvXBUACgkQwfwUeK3K
-7AlKBwf9FxVQIGM6u2nURsuCrG1EH0cROtww75N7Vh3nYFI5/FMdHliUpsmnHPDo
-Y4McC5H/KG9PUAIrUM8lRRG3DSi8t3KG6lL0N6OXrLKuiKighSlMTDrwSwLCcdMB
-FPlHceGZe4JjEFnaIv85prtb7v3Kb4G+4Yuj6kwU9hwyhoX/XkVB5L+bEsP7kHxI
-f3V0xE+jszjLraH0OE5W/8+6AUhUisZ7kDqaDDqI43KDv6z00NCcknkXSsQ7tUfM
-B6OJdHrJQsv8ExI1ZWem3kiSVIk8gfUAVgdZ/oVwd83FE5BFsmsehK/Alxb6xwh2
-kHjeUhXABkZ1pwTFr3sk7DBApPr7ZA==
-=5y5l
------END PGP SIGNATURE-----
-
---kgftqftmrcsxvhor--
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+-- 
+Rudi

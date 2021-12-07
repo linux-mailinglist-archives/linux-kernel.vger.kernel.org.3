@@ -2,159 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C3946B323
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1E346B329
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbhLGGsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 01:48:14 -0500
-Received: from mail-psaapc01on2124.outbound.protection.outlook.com ([40.107.255.124]:10529
-        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229453AbhLGGsM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 01:48:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oHdLigbK6Wtu/MOL4z2icGqbFKp2Bh5nFJ9R83idctJCGUZF6SxDu29VEVEcDvzhdwkZgtpV9EWKLD3qr5jQnyLUrvT16U+b1U2Jco3Z8RVFnJofqwh74DVrxP/7YUB733zInVwQyi2zX+r3mJfd6+UWYq+jjlMR902VEKjEYliAqnAWkpukPHcTiSdlLfPTErt0y2z4pvxuadTwplkmnIYdASlHvO5nrbMaJ7vie2pkrIQvkf197Kzsx8qmA+ens8s8c6P4gxyeiA11E2s3gjQFbTDQsgsFfBnmx4qKg59iu+jRFGtSGA7OjMM9OoC7WIy0VVJszBFtB1Asy58okw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F0S0WDG1jcvqHu55xBge6L5sXg/JWLqvWkXc8emQUY8=;
- b=B6bJTRToPxmEWnOQpcgLHx2yqRR9ArnHtCrOpCR2wY8xB5+HjsfAvCJAuX5Xqw/w70wMNDXPBEKM9a/IqtcvgTzawkYu/GJWUR7SROBHqT57kyVUs9ZwUPTt50QM4vaPdHvnkl3Y4Z8lZKERZ9F024udw3kXN1Tg4h4ZzG5gbp06H7QvdW55Dwpp9/DvfaeCAVcEuWFuDxC0nDBcbBNBML2j/aDIJKYtHBEa1M1KbQRXHECvhRMKQkYIgK/F0Btl3My1rNN4Ok5Rdk5A3O7QoR2PFA0JbpaLKLr/jtEt7D5V1+lEpuAXo+Hnmc0gHqfJX5v6Cm9pBAXWPFxdxZHM2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F0S0WDG1jcvqHu55xBge6L5sXg/JWLqvWkXc8emQUY8=;
- b=h3H5RBcBpPcZabjk7nxZet3HszAItDwnJQAgIEZTURoIAAXpYSS/vsOIjlCLNmmzGg0vF2tVg9Tof+4HkE+EdXhjyaBw2nk0T/6/fEejum3oYgYtkIs3lA3iPFg8m0/GBqM9RLUZ5rSSzPmnjuQnVpaECeUcbsU2qI0Gyo7ZdDs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by TY2PR06MB2735.apcprd06.prod.outlook.com (2603:1096:404:3b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 06:44:38 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 06:44:38 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH] net: dsa: felix: use kmemdup() to replace kmalloc + memcpy
-Date:   Mon,  6 Dec 2021 22:44:18 -0800
-Message-Id: <20211207064419.38632-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0154.apcprd06.prod.outlook.com
- (2603:1096:1:1f::32) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        id S229870AbhLGGtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 01:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232354AbhLGGta (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 01:49:30 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CED3C061746;
+        Mon,  6 Dec 2021 22:46:01 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id t6so13791183qkg.1;
+        Mon, 06 Dec 2021 22:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zbba/UkaBqT6lJeesV5XnDR8ly5tsCHkshlo7j8jGmI=;
+        b=Q+yWS6IouAezP2RtXT7wfG4/tNxdp9ZXLR+wW9lKJBMyDsJlbJ5H3xZ0rKJ6fVBHbG
+         dSSqWRMXnedRWTkImMBJ02GzPEnNeRFyXRgjK0GwRALs2WOZh06MkTmzmmR7igDS3WRT
+         n9cK0g2H5P2BlLtjlmxoUtb2D+/i7e+uibXPM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zbba/UkaBqT6lJeesV5XnDR8ly5tsCHkshlo7j8jGmI=;
+        b=PhdEVnI6dYg00PJuLWCH4y5EPtMAWlnBMK+HS90cks0zUYxf0c+2OEqIOXlT6TazA6
+         quf9bdlAGZFGsNJCgaYlUdWjrwT4XlqcvoOAWGzgsxu3LioqzvrHaQ0kFpYJREfmsPPW
+         WNIoi4Ig4REY6cM0d57zLHEcKcxaxFnGD4aGMgIiaacCIIwBjCqxytsbdjHwEP/1Vu5l
+         vpCfJHyVjbz19+Z4+kYrXcfcgdb7L/Louf45bKbQDNjqOSqc5fp+uJSdeGFEPUS3Lv2W
+         q6XH/0woghnTs32D9l2bPVSZ+aURWXXQ7yQQ8azK6cBX6gxSMr4qs73LVGu8dh8EyS+n
+         yusA==
+X-Gm-Message-State: AOAM5335po9MDdykn8MXnDfsFc325PhaBygqT/CcUaFvTOtTL4znnAAN
+        nqlNPmBnSo+g7cnh1WUsrmOaHZfVKaXwGwnSE74=
+X-Google-Smtp-Source: ABdhPJwMyI+isbOcD9jb1sDe2P/kVRSvemDmcx2g+X8998rktI8XFF6NjHYwG35zn7OuoJyPRSFLT3eZWu86DISifLQ=
+X-Received: by 2002:a05:620a:1004:: with SMTP id z4mr37420042qkj.243.1638859560150;
+ Mon, 06 Dec 2021 22:46:00 -0800 (PST)
 MIME-Version: 1.0
-Received: from ubuntu.vivo.xyz (103.220.76.181) by SG2PR06CA0154.apcprd06.prod.outlook.com (2603:1096:1:1f::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend Transport; Tue, 7 Dec 2021 06:44:36 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3736d355-3c52-4cd5-6ec4-08d9b94d0a63
-X-MS-TrafficTypeDiagnostic: TY2PR06MB2735:EE_
-X-Microsoft-Antispam-PRVS: <TY2PR06MB2735521B6B19A3401F2CA169A26E9@TY2PR06MB2735.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nfTCjP8mmkxU2e4tftkiIPFs7Q/jl3SLE+0O/k1pF7SmRA5cfrCSFQTPsjW+AEHaADwY3oA4WIiKbPaBG+Svx4Ju0r0nQgbcDtO5QE8D4SCgZJ4TURtbP3yL+JpGtON6wD6vaaE/fNGlj/X3ja+YMhSlVVUtsz0ShBT83XpG70pgqPeZ03Ps4J3zeNuotfL7qkZbBEtgA16TA0k2s4e8whixubFHtxbfqvkxjnxM44avd3+sVzKY5xD3LFgyCl0xjBwnwrXZkcqoD9MWJS/ABKWuerCcsgIj2jJpvj6A2pQpRjxfWEOUlTVi7buDBOP58sRUWvNxo5Ue+A0L0Rw6nsAV2IQaM74Ng/PqHl0PJhkcO7Odar34vbt5kVZ6k7+zGsSzHP2o070R2mVb9uabZdTNuRdHTMvmN0XK5hMEEycjjfygNGDRqW+ObUhm2haVfRx8Kk03QikJrpK9zo/lT6v2z0nhyWqnyTiujDs40AsEDI467CodZjwgtdQi4ZOktxR6cC5+pEF+7uVla4QzuvOXsEcz3Om4HWrB9l/1/rT1H4W3FtTdFowyNcR8kWugjDg2dIJiO3jSB3qo0qzwsGVGbD1RteEw/3IzL6sy2xWLfJ4SLMtlaFAJDRep2WhzF8gEvrmTciTojiXguKQxzqgLG5R7P6ft+qL8AzRe+itB0HkPZiqav6dNl5JtxmlzTdt34xJLqlsjoPMpY9KlyfM/JSoH11wlDba82w0IILONhD6vZVjxH7U0C9viCfKh
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(5660300002)(83380400001)(8676002)(8936002)(921005)(6506007)(36756003)(52116002)(38350700002)(38100700002)(86362001)(6666004)(4326008)(110136005)(7416002)(66946007)(186003)(26005)(6512007)(66476007)(107886003)(1076003)(2616005)(956004)(66556008)(508600001)(316002)(2906002)(182500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rahLCjeIP3NoQUG738zX4rHwFnPTdX3UvPdgxJfZ+TWNmUwjWa5lot9CkL96?=
- =?us-ascii?Q?5f8AdizQTZpFoAJ8lGuYPNI3ArOoklQENerlDGcgpLZwVWXvj8GddyY20Msh?=
- =?us-ascii?Q?8k8s1/h6Jrjqqffb+jMl8kxlqp8pYweCpZG4nUqMbdenHdFJv1vsJ7HkT6nW?=
- =?us-ascii?Q?QYMLOg8dRW4gcJBoobmDOa2snBXlb2/5lkOd/zwgUhJeJR+KXQIRfxZhkeRG?=
- =?us-ascii?Q?IkJEC9RiSfq8I4+broyqsq7AGzZc61sF1AuJPEg4txMSweNUB0uvvbV0dPNG?=
- =?us-ascii?Q?8JOriCW2QV9aXoE7cyzGKEv1k9LiLxijQ2pOmnuZBl2PrrFbZ+OJ1ilaAknj?=
- =?us-ascii?Q?4maGM+hCiAVtbBac98ggyXQPcDryoYabeQdp1wUchifh3gyBjiQDS0LgH3z2?=
- =?us-ascii?Q?lIey8MeXA3e5sepOR2jDVsIH+yYEUeiZ8nENKtm/bRIiumTNSAwLfGJF/uXK?=
- =?us-ascii?Q?31vwzeZzHsDDboFzVadaT3C2ZSgEq152I/ZPMhkVIGFxop2gHXjdK8O+g05D?=
- =?us-ascii?Q?5CFLWms33MP+mYxoKOXhshOf47V7XOFcNBU5C4qI68zPiamiwxT5mK8/TJyU?=
- =?us-ascii?Q?zSuDMDlgNZHLOHqiJ8XFuV/2nnw/CqJ2jyXiAxnb4sDGFRnC036Jzu/GRfnq?=
- =?us-ascii?Q?dSaG9Fphy1f+IZTklN2UxKpXrXV79CvpB+lvD9AV1RNu08CeK/2/uyz6GLQX?=
- =?us-ascii?Q?yVf51Mf9Q+KS6DzmwH7k0fHVxl7ii6bvZHx2ZuIwmGt/qmp536xuUTq7I9Ot?=
- =?us-ascii?Q?GiFGOOQREWBl29Vlku91jT1WMQ2unIINKeHUgiVXl6N8iZWOZJRecmYfmVaL?=
- =?us-ascii?Q?bg5lxKVO4uopA4rgXSlo4TiEgYxckhSAlUgvERGeW83lahnmowA/fOEvBaeN?=
- =?us-ascii?Q?+nbR3O/5sWgH4LnuQ11sPUxjBTCShYGz2b9WxLG3OBxi5Hjzl6T2Zkj5yGg1?=
- =?us-ascii?Q?mdLfvI+3umLnzd0zoeAttUQ+OJofj4UDk9OEEZwzR/G3kUtgaBMic736e6ai?=
- =?us-ascii?Q?tTM935SXY/wi7VAK8SJkCMaXju37+G4TLCoVbtl87bWpcZ2XpRk3dyQrewdi?=
- =?us-ascii?Q?P8Uu0qc5MpzVR51bLzSrrPmBYXy9IJk+paWgqLoqx3ckxWcx+hgVYXBwwPaS?=
- =?us-ascii?Q?h1NgxYRi/+kzvVLGM/ilsE4rRzBeOLHmER2zKfWpDnh5hzD8ue64WUzxzWMs?=
- =?us-ascii?Q?CfcbFHze9gC7I37LM3lC0+gUDpLu1PLCdnfLg4maymJuK0IuvDtzOxTQSJ0m?=
- =?us-ascii?Q?uOjY1xF33aKB1qEpb4vWaZ+8SHwW5URYldy5AS92Lh0PQ3CkWSfFm1s5Rx1z?=
- =?us-ascii?Q?s98Kd0xGTswiBTnv/vcAF8vnwsBn2+OgApYq4aW0fQO7mh3dbVLP9PbOICN1?=
- =?us-ascii?Q?+CDVjQbNCG845bqO5K94S5gTbQN1rkAb2gldzc1HQQSuxEaDvRKubleJMWUp?=
- =?us-ascii?Q?p6DXq9/uO2CJSVzj9EC3dnQ3DI+QCTvD9Tvn+vqLURouTMm5jaTUEHkXAUsl?=
- =?us-ascii?Q?2Ec0t1ZP0CdJDiQ6PU6fWy8KZg1NBGlAbuIHKeXqfH2p+DNuOoEQB9TqQ9L9?=
- =?us-ascii?Q?5/xTEfT3ieC4Wg4ubt2MixQp2f7Sre9dfvLBB4euoA3INJOXvcbxlfGk80z4?=
- =?us-ascii?Q?YJ12aDayi18Uwl4JqjQDOeM=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3736d355-3c52-4cd5-6ec4-08d9b94d0a63
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 06:44:38.8819
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GlTFxtu8DT4wTo27dKOWcb9AWCXICkSckVJmhMpfw729ji6bqr/AQsXx47SiLNEx4DvTXKQRM7PQaIB2S0qmPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2735
+References: <20211130055933.32708-1-billy_tsai@aspeedtech.com>
+In-Reply-To: <20211130055933.32708-1-billy_tsai@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 7 Dec 2021 06:45:47 +0000
+Message-ID: <CACPK8XfM4C7v3keXaxMs9SkqNzb8XWbZ6QvcZXWcy3ZKJCrvWQ@mail.gmail.com>
+Subject: Re: [v14 0/2] Support pwm driver for aspeed ast26xx
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, Andrew Jeffery <andrew@aj.id.au>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pwm@vger.kernel.org, BMC-SW <BMC-SW@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck warning:
-/drivers/net/dsa/ocelot/felix_vsc9959.c:1627:13-20:
-WARNING opportunity for kmemdup
-/drivers/net/dsa/ocelot/felix_vsc9959.c:1506:16-23:
-WARNING opportunity for kmemdup
+Hi Billy,
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- drivers/net/dsa/ocelot/felix_vsc9959.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+On Tue, 30 Nov 2021 at 05:58, Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+>
+> The legacy driver of aspeed pwm is binding with tach controller and it
+> doesn't follow the pwm framworks usage. In addition, the pwm register
+> usage of the 6th generation of ast26xx has drastic change. So these
+> patch serials add the new aspeed pwm driver to fix up the problem above.
 
-diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-index 9add86eda7e3..0076420308a7 100644
---- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-+++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-@@ -1503,12 +1503,10 @@ static int vsc9959_stream_table_add(struct ocelot *ocelot,
- 	struct felix_stream *stream_entry;
- 	int ret;
- 
--	stream_entry = kzalloc(sizeof(*stream_entry), GFP_KERNEL);
-+	stream_entry = kmemdup(stream, sizeof(*stream_entry), GFP_KERNEL);
- 	if (!stream_entry)
- 		return -ENOMEM;
- 
--	memcpy(stream_entry, stream, sizeof(*stream_entry));
--
- 	if (!stream->dummy) {
- 		ret = vsc9959_mact_stream_set(ocelot, stream_entry, extack);
- 		if (ret) {
-@@ -1624,11 +1622,10 @@ static int vsc9959_psfp_sfi_list_add(struct ocelot *ocelot,
- 	struct felix_stream_filter *sfi_entry;
- 	int ret;
- 
--	sfi_entry = kzalloc(sizeof(*sfi_entry), GFP_KERNEL);
-+	sfi_entry = kmemdup(sfi, sizeof(*sfi_entry), GFP_KERNEL);
- 	if (!sfi_entry)
- 		return -ENOMEM;
- 
--	memcpy(sfi_entry, sfi, sizeof(*sfi_entry));
- 	refcount_set(&sfi_entry->refcount, 1);
- 
- 	ret = vsc9959_psfp_sfi_set(ocelot, sfi_entry);
--- 
-2.17.1
+Sorry for not taking a look earlier. Well done on making it this far.
 
+There's a few things that need to be addressed before merging this.
+
+Firstly, the bindings need fixing up. I think these should be the one
+file. The device tree bindings are supposed to describe the hardware,
+and it doesn't make sense to separate them out just because we plan on
+using two subsystems to implement the functionality.
+
+Rob, please chime in if you would prefer something different.
+
+Secondly, we need to clarify why this is a pwm driver and not a hwmon
+driver like we had for the 2500 hardware, and that you're planning on
+submitting a hwmon driver for the other half of the registers.
+
+Finally, do you really need to use regmap? It's lots of overhead for a
+mmio driver, and I like to see it avoided where possible. I know the
+regions are shared, but are there any individual registers shared?
+
+Cheers,
+
+Joel
+
+
+
+>
+> Change since v13:
+> - pwm-aspeed-ast2600.c
+>   - Fix the usage of the braces to meet the coding-style.rst
+>   - Use min function to reduce the times of division.
+>
+> Change since v12:
+> - pwm-aspeed-ast2600.c
+>   - Fix the comment about the duty cycle and period of the PWM.
+>   - Configured to max period when request period > max period.
+>   - Remove unnecessary curly braces.
+>
+> Change since v11:
+> - pwm-aspeed-ast2600.c
+>   - Request reset controller before clock enable.
+>
+> Change since v10:
+> - pwm-aspeed-ast2600.c
+>   - Add more comment to explain the feature of PWM
+>   - Fix the naming of some parameters.
+>   - Set pin_enable and clk_enable at the same time.
+>   - Always set fixed divisor to hw register when apply.
+>
+> Change since v9:
+> - dt-bindings:
+>   - Change the naming of tach subnode channel setting property to
+>   aspeed,tach-ch.
+> - pwm-aspeed-ast2600.c
+>   - Fix the naming of some parameters.
+>   - Capitalise error messages.
+>   - Handling potentially mult overflow when .apply
+>
+> Change since v8:
+> - pwm-aspeed-ast2600.c
+>   - Replace "* _BITULL(div_h)" to "<< div_h"
+>   - Fix duty_cycle precision problem.
+>   - Add the comment about the formula of duty_cycle.
+>
+> Change since v7:
+> - pwm-aspeed-g6.c
+>   - Rename the driver: pwm-aspeed-g6.c -> pwm-aspeed-ast2600.c.
+>   - Macro remove "_CH" part of the register name.
+>   - Unroll the aspeed_pwm_get_period and remove it.
+>   - Simplify the formula to get duty_pt
+>   - Reduce the number of writing register. Organize all the fields and
+>     write them at once.
+>
+> Change since v6:
+> - dt-bindings:
+>   - Add blank line between each DT property.
+>   - Change the sub-node name from fan to tach-ch.
+> - pwm-aspeed-g6.c
+>   - Merge aspeed_pwm_set_period and aspeed_pwm_set_duty into .apply.
+>   - Convert the factor type to u64 when calculating the period value.
+>   - Using ROUND_UP strategy to calculate div_h for finer resolution.
+>
+> Change since v5:
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Move the divide at the end of the calculation.
+>   - Unified the prefix of the function name.
+>   - Use div64_u64 to calculate the divider of frequency.
+>
+> Change since v4:
+> - dt_binding:
+>   - pwm/tach yaml: Replace child-node with additionalProperties
+>   - pwm-tach yaml: Replace child-node with patternProperties
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - The bit definitions contained the name of the register.
+>   - Remove single caller function and fold it to the caller.
+>   - Avoid to divide by the result of a division.
+>   - Remove unnecessary condition in .apply().
+>   - Use goto for error handling
+>
+> Changes since v3:
+> - Add the dt_binding for aspeed,ast2600-tach.
+> - Describe the pwm/tach as child-node of pwm-tach mfd.
+> - Complete the properties of pwm node.
+>
+> Changes since v2:
+> - Remove the tach node, #address-cells and #size-cells from pwm-tach.yaml
+> - Add clocks and reset properties to pwm-tach.yaml
+> - Kconfig/Makfile sorted alphabetically
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Add more hardware descriptions at top of the driver.
+>   - Remove unused api request and free
+>   - Move the initialize settings of all pwm channel to probe.
+>   - Change the method of getting the approximate period.
+>   - Read the hardware register values to fill the state for .get_state()
+>
+> Changes since v1:
+> - Fix the dt_binding_check fail suggested by Rob Herring
+> - Add depends to PWM_ASPEED_G6 configure suggested by Uwe Kleine-Konig
+> - pwm-aspeed-g6.c suggested by Uwe Kleine-K=C3=B6nig
+>   - Fix license header
+>   - Use bitfiled.h macro to define register fields
+>   - Implement .remove device function
+>   - Implement .get_state pwm api
+>
+> Billy Tsai (2):
+>   dt-bindings: Add bindings for aspeed pwm-tach.
+>   pwm: Add Aspeed ast2600 PWM support
+>
+>  .../bindings/hwmon/aspeed,ast2600-tach.yaml   |  68 ++++
+>  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml |  76 ++++
+>  .../bindings/pwm/aspeed,ast2600-pwm.yaml      |  64 ++++
+>  drivers/pwm/Kconfig                           |  10 +
+>  drivers/pwm/Makefile                          |   1 +
+>  drivers/pwm/pwm-aspeed-ast2600.c              | 325 ++++++++++++++++++
+>  6 files changed, 544 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast260=
+0-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-=
+pwm-tach.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-=
+pwm.yaml
+>  create mode 100644 drivers/pwm/pwm-aspeed-ast2600.c
+>
+> --
+> 2.25.1
+>

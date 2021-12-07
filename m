@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7472A46B99D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5987446B9A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbhLGK6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:58:07 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:52234 "EHLO
+        id S235453AbhLGK6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:58:49 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52288 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbhLGK6G (ORCPT
+        with ESMTP id S229903AbhLGK6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:58:06 -0500
+        Tue, 7 Dec 2021 05:58:49 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 78F6F212BE;
-        Tue,  7 Dec 2021 10:54:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5B2B921B3D;
+        Tue,  7 Dec 2021 10:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638874475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1638874518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=n/VtBKAgGrOoJ9mlQUX4QcNZE7VUA2PWVux2aJmIsx4=;
-        b=pX0oqqwAbTsF7GqTf4ROFm8RHUaNC6UZqlUn2IbCNmYDi3sLHAEYbiOwyJ29ZH2YTYpqXP
-        ofRg6Z9wiaDV/9vwK9BbgKjExQysy6orOXfwW4zZWqkUuY0N/HY6yzYpX/nFKm1bMLDxUe
-        Y/BiHkOJ2Gn04wAC41zC5cOsX+jmsYI=
+        bh=1fS/vZbZh9msdrSxyTZbVy9qyqqHF1IQgs77NLVOK1g=;
+        b=DcexllzdzIygPzm1O6ITBxn1OVM+v/TKIxjtMcpFIznmSgUaeV4pTJXNKnZkJ1tTMETZve
+        xX061YO4S/dImpkuT/1mTniO7Q8+kHa1mZum0h/5kjY/heaFyCk+TOkFGG1k+GV5fC1wtk
+        k4EDDXtg2uQraU/aB/8LV3m6IHkD2PI=
 Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E997CA3B81;
-        Tue,  7 Dec 2021 10:54:34 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 11:54:34 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 2AC0EA3B83;
+        Tue,  7 Dec 2021 10:55:18 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 11:55:17 +0100
 From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+To:     David Hildenbrand <david@redhat.com>,
+        Nico Pache <npache@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
-References: <908909e0-4815-b580-7ff5-d824d36a141c@redhat.com>
- <20211108202325.20304-1-amakhalov@vmware.com>
- <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
- <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
- <YYrGpn/52HaLCAyo@fedora>
- <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, raquini@redhat.com
+Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+Message-ID: <Ya89lXTMZJJJfsfo@dhcp22.suse.cz>
+References: <20211206033338.743270-1-npache@redhat.com>
+ <20211206033338.743270-3-npache@redhat.com>
+ <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
+ <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
+ <24b4455c-aff9-ca9f-e29f-350833e7a0d1@virtuozzo.com>
+ <CAHbLzko0UeNadswXEnwr6EtuKAZT4T-fnC5F7xnFcH4RbjhAiA@mail.gmail.com>
+ <a48c16d6-07df-ff44-67e6-f0942672ec28@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+In-Reply-To: <a48c16d6-07df-ff44-67e6-f0942672ec28@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-I didn't have much time to dive into this deeper and I have hit some
-problems handling this in an arch specific code so I have tried to play
-with this instead:
+On Mon 06-12-21 20:01:34, David Hildenbrand wrote:
+[...]
+> Yes, that's what I refer to as fixing it in the caller -- similar to
+> [1]. Michals point is to not require such node_online() checks at all,
+> neither in the caller nor in the buddy.
+> 
+> I see 2 options short-term
+> 
+> 1) What we have in [1].
+> 2) What I proposed in [2], fixing it for all such instances until we
+> have something better.
+> 
+> Long term I tend to agree that what Michal proposes is better.
+> 
+> Short term I tend to like [2], because it avoids having to mess with all
+> such instances to eventually get it right and the temporary overhead
+> until we have the code reworked should be really negligible ...
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c5952749ad40..4d71759d0d9b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -8032,8 +8032,16 @@ void __init free_area_init(unsigned long *max_zone_pfn)
- 	/* Initialise every node */
- 	mminit_verify_pageflags_layout();
- 	setup_nr_node_ids();
--	for_each_online_node(nid) {
-+	for_each_node(nid) {
- 		pg_data_t *pgdat = NODE_DATA(nid);
-+
-+		if (!node_online(nid)) {
-+			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n");
-+			alloc_node_data(nid);
-+			free_area_init_memoryless_node(nid);
-+			continue;
-+		}
-+
- 		free_area_init_node(nid);
- 
- 		/* Any memory on that node */
+I do dislike both but if I were to chose which to chose between the two
+then 2 is surely more targeted. We really do not want to spread this
+into bulk/pcp or whatever other allocator there is. The problem is that
+somebody might still try to access NODE_DATA (e.g. via a helper that
+hides that fact).
 
-Could you give it a try? I do not have any machine which would exhibit
-the problem so I cannot really test this out. I hope build_zone_info
-will not choke on this. I assume the node distance table is
-uninitialized for these nodes and IIUC this should lead to an assumption
-that all other nodes are close. But who knows that can blow up there.
+Anyway, I am not sure whether authors of the patch can reproduce the
+problem and whether they can run a testing code on their machine. If yes
+it would be great to try with http://lkml.kernel.org/r/Ya89aqij6nMwJrIZ@dhcp22.suse.cz
+that I have just sent.
 
-Btw. does this make any sense at all to others?
+> [1] https://lkml.kernel.org/r/20211108202325.20304-1-amakhalov@vmware.com
+> [2]
+> https://lkml.kernel.org/r/51c65635-1dae-6ba4-daf9-db9df0ec35d8@redhat.com
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+
 -- 
 Michal Hocko
 SUSE Labs

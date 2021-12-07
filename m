@@ -2,61 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210FF46B060
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8CF46B06E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbhLGCEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:04:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47082 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbhLGCEB (ORCPT
+        id S236411AbhLGCI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231245AbhLGCI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:04:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5D5DB81607;
-        Tue,  7 Dec 2021 02:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED298C341C1;
-        Tue,  7 Dec 2021 02:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638842429;
-        bh=vZKuzetVYUotfHbqXSkvgU1/GVRXMbdAez66GxQsRPQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ShO4v8bNSokN6loOIh7VjQwg37VabDSOCHKuaxxKVsYoRpYDRvtn3NQEnFkvC+0Ja
-         QIbm07XV/OvMGcb1M2f4rDSIDnQWtNirw7JKvMp8DNKQXd/7e38kDypuDo6pNBI9k0
-         cbWdeOkyzFmEUizKga0ojsgQDqILoSuTI6TC+1JWxbbQHhFeu1ZKCmX2K/ueF137sc
-         QalpKGp0+ZyvnV2QXRhQLWxB6LonOVWdFJf7XPllOp2XwjvdCtF3oQ5lPQDEV4OP3Y
-         YoEXYmivwoGX58FYVbWjs/m1mYAuC/fdW+HmtQA8nITh7r80XqHnHorNuABb4ETjtm
-         R1U9H5j2ZDj/Q==
-Date:   Mon, 6 Dec 2021 18:00:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 0/6] Allow parallel devlink execution
-Message-ID: <20211206180027.3700d357@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <cover.1638690564.git.leonro@nvidia.com>
-References: <cover.1638690564.git.leonro@nvidia.com>
+        Mon, 6 Dec 2021 21:08:28 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D8C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 18:04:58 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id j11so12264487pgs.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 18:04:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zXn+x6PjdC00rwvRf+3OxJFKpI6ggoGfZlhaFuosZ8c=;
+        b=GuSxN5uVJ9+WJ2iyh1JIFGQbXut/l2v2ypgv+dneHZFLf/s3lDtFO6XiM44xUnLO1T
+         lKinbTGi6CA9ot0MaE+HnJqfbGfBeISO+l2PDatV442RW/I6KMOC+W98BVX8/2h9yv+5
+         RLAKzV6pJVhT52YDwnpbv1VaeTkvg7BeaZNzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zXn+x6PjdC00rwvRf+3OxJFKpI6ggoGfZlhaFuosZ8c=;
+        b=tmFdwq8HSE+mzzOAMZWSlqzJPLF2g0JMla4xsUcsdzHrICLVluu5AQfoCYnrkuA22a
+         lEWjsFRcA664oZCdZMkbw1C+6RfBVVAdLA8ai1iwa5JXDFiix5M8+6aL45nzR2mhiM+V
+         wz5HjLZMN7s83M0eG3t6LgH73fqVIDZ3sqflMT5df2jLx5E6y5Szn/UuCiI0ttQWWF3O
+         19S/coxmU4xY/BerBCM0416quAMPWu5P4t93iWbWr2UHRYkRzWBp0A7KEcZvjjXjFnUk
+         EJNoDLjN1ZX6UcZWFrV3EdSCiAA8DxCaj39UypbJZ+4DGOA0W+LTDMyInanTm+M/97Kh
+         p9hw==
+X-Gm-Message-State: AOAM530hud92/8vWlib7uCti4yAdzi3XJT8elEnM+AC1SE0xMPh9oqRA
+        Y7SUaB/fFcOALPDisfKAy/NGNQ==
+X-Google-Smtp-Source: ABdhPJzrx4Qt1TFkMbPfKuTpvu9+Jlgy2hTOryqedenVkWnW8IAs+2d8ehAQCi7OTneU/9GiEz8pRw==
+X-Received: by 2002:a63:1950:: with SMTP id 16mr22562347pgz.422.1638842697962;
+        Mon, 06 Dec 2021 18:04:57 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y8sm14047067pfi.56.2021.12.06.18.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 18:04:57 -0800 (PST)
+Date:   Mon, 6 Dec 2021 18:04:56 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Akira Kawata <akirakawata1@gmail.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Subject: Re: Unused local variable load_addr in load_elf_binary()
+Message-ID: <202112061804.5185ACABD@keescook>
+References: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  5 Dec 2021 10:22:00 +0200 Leon Romanovsky wrote:
-> This is final piece of devlink locking puzzle, where I remove global
-> mutex lock (devlink_mutex), so we can run devlink commands in parallel.
+On Mon, Dec 06, 2021 at 04:46:01PM +0100, Lukas Bulwahn wrote:
+> Dear Akira-san,
 > 
-> The series starts with addition of port_list_lock, which is needed to
-> prevent locking dependency between netdevsim sysfs and devlink. It
-> follows by the patch that adds context aware locking primitives. Such
-> primitives allow us to make sure that devlink instance is locked and
-> stays locked even during reload operation. The last patches opens
-> devlink to parallel commands.
+> With commit 0c9333606e30 ("fs/binfmt_elf: Fix AT_PHDR for unusual ELF
+> files"), you have changed load_elf_binary() in ./fs/binfmt_elf.c in a
+> way such that the local variable load_addr in load_elf_binary() is not
+> used anymore.
 
-I'm not okay with assuming that all sub-objects are added when devlink
-is not registered.
+EEk! yeah, this totally broke ELF randomization. this needs to be
+entirely reverted.
+
+-- 
+Kees Cook

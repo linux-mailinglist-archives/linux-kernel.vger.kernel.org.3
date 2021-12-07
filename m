@@ -2,70 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C1646C013
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D1746C010
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbhLGP75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:59:57 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46220 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239259AbhLGP74 (ORCPT
+        id S239245AbhLGP7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:59:46 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:46648 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbhLGP7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:59:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 7 Dec 2021 10:59:45 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8889D1FE00;
+        Tue,  7 Dec 2021 15:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638892574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eIuuu/kOGy1zuDG2ON0nQADHm6iD+deyHDd0QC8WGMg=;
+        b=hsdS34/zBKzEB0fwf/afqKYsPcTbONTw7GkyZJZkt8cVDZWyG2z4m1m1LkdGqu2aY9HAnQ
+        DlQKS3WRGGKKr98FP4rWbEIQy6HI/HuJiH43nEFcvhqYxMBCROyQ2rLQCGmEM8m2cv2/Vu
+        +w+EOQ8EtasCyB4TgnKwyT3SPHcREYI=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7E274CE1B7E;
-        Tue,  7 Dec 2021 15:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD3DC341C5;
-        Tue,  7 Dec 2021 15:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638892582;
-        bh=zx5Bp47NIplgZcX8mw3eO5PeUIZ35w6aj5Z66F7rxEo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fqwQfKSMV+BCeDf6sqyKqtAqrbOQeyxYmhbDy1BdCgftBtoACKnYfriILebBbpMyJ
-         uMs+AUVuMfMD0qcGv2zNKskkVNIGmDcIwBAG52W0xeEOBVFjBYLZu268sniTzkJaZP
-         MK1FYd0f6cra5IJqGFYlPULAVgahCOnuDcQB5d26F+AXvJxBgrmYrbxa10bLtfB7oO
-         ESiTGBw1Ir2WqUkCbKiLbKEVkmHTuZsYQcPZ5+qCewHRq5coHBV3jddQZjzwaKNesu
-         yrMaKjEhgg70Yn1oD4gyh3WrqOVP6OkcWhQ/9Zrap1NTNmeV7GOjvcLBOzIL1W+PZ2
-         AhziOT9XcTZsQ==
-Received: by mail-ed1-f53.google.com with SMTP id x15so59015123edv.1;
-        Tue, 07 Dec 2021 07:56:22 -0800 (PST)
-X-Gm-Message-State: AOAM531i6Y9QfXuAELCsRxbvajzYHGiEQIipU+Sk6qtoL8j4O1p38HfL
-        DCgl7p71pAUecsKhfkJ457KJMQfRTgc5/nY7iQ==
-X-Google-Smtp-Source: ABdhPJw3sCqVBRhAv5mF8iejFN8VmxMNg6xNXZ9928w9hDdmncG+yAoaCf8vnR1I+geWFuqcKh0hLsUzPO2F6JSGeO8=
-X-Received: by 2002:aa7:dc07:: with SMTP id b7mr10086778edu.327.1638892581030;
- Tue, 07 Dec 2021 07:56:21 -0800 (PST)
+        by relay2.suse.de (Postfix) with ESMTPS id 58562A3B85;
+        Tue,  7 Dec 2021 15:56:14 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 16:56:13 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+References: <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
 MIME-Version: 1.0
-References: <20211206174139.2296497-1-robh@kernel.org> <20211206125753.6a5e837c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211206125753.6a5e837c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 7 Dec 2021 09:56:09 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+ncb5MzObpPRtFEqLYaG2mKxXAPhe-5ben9DcSea--5Q@mail.gmail.com>
-Message-ID: <CAL_Jsq+ncb5MzObpPRtFEqLYaG2mKxXAPhe-5ben9DcSea--5Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: mdio: Allow any child node name
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 2:57 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon,  6 Dec 2021 11:41:39 -0600 Rob Herring wrote:
-> > An MDIO bus can have devices other than ethernet PHYs on it, so it
-> > should allow for any node name rather than just 'ethernet-phy'.
->
-> Hi Rob, what's your preference for merging these?
+On Tue 07-12-21 16:34:30, David Hildenbrand wrote:
+> On 07.12.21 16:29, Michal Hocko wrote:
+> > On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
+> >> On 07.12.21 14:23, Michal Hocko wrote:
+> >>> On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
+> >>> [...]
+> >>>> But maybe I am missing something important regarding online vs. offline
+> >>>> nodes that your patch changes?
+> >>>
+> >>> I am relying on alloc_node_data setting the node online. But if we are
+> >>> to change the call to arch_alloc_node_data then the patch needs to be
+> >>> more involved. Here is what I have right now. If this happens to be the
+> >>> right way then there is some additional work to sync up with the hotplug
+> >>> code.
+> >>>
+> >>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>> index c5952749ad40..a296e934ad2f 100644
+> >>> --- a/mm/page_alloc.c
+> >>> +++ b/mm/page_alloc.c
+> >>> @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> >>>  	/* Initialise every node */
+> >>>  	mminit_verify_pageflags_layout();
+> >>>  	setup_nr_node_ids();
+> >>> -	for_each_online_node(nid) {
+> >>> -		pg_data_t *pgdat = NODE_DATA(nid);
+> >>> +	for_each_node(nid) {
+> >>> +		pg_data_t *pgdat;
+> >>> +
+> >>> +		if (!node_online(nid)) {
+> >>> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
+> >>> +			pgdat = arch_alloc_nodedata(nid);
+> >>> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
+> >>> +			arch_refresh_nodedata(nid, pgdat);
+> >>> +			node_set_online(nid);
+> >>
+> >> Setting all possible nodes online might result in quite some QE noice,
+> >> because all these nodes will then be visible in the sysfs and
+> >> try_offline_nodes() is essentially for the trash.
+> > 
+> > I am not sure I follow. I believe sysfs will not get populate because I
+> > do not call register_one_node.
+> 
+> arch/x86/kernel/topology.c:topology_init()
+> 
+> for_each_online_node(i)
+> 	register_one_node(i);
 
-I can take them.
+Right you are.
+ 
+> > You are right that try_offline_nodes will be reduce which is good imho.
+> > More changes will be possible (hopefully to drop some ugly code) on top
+> > of this change (or any other that achieves that there are no NULL pgdat
+> > for possible nodes).
+> > 
+> 
+> No to exposing actually offline nodes to user space via sysfs.
 
-Rob
+Why is that a problem with the sysfs for non-populated nodes?
+
+-- 
+Michal Hocko
+SUSE Labs

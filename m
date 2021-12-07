@@ -2,96 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F2846BBD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A0F46BBDC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbhLGM5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:57:09 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:52868 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbhLGM5I (ORCPT
+        id S231710AbhLGM6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:58:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36674 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231583AbhLGM6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:57:08 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638881617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aNhnkzcLIHS9o6REcIVVTdi6HJHMTMekwoWhR5Os8KA=;
-        b=fDdfjoBrqymOl2a+g4MXycXTFQvrRmQZeNf3rg3L6n1PiCtdWcCcmDaVpdvwx1WHZPu2/v
-        fJ5y/fl9rqcMBqPDwA5dGahXUq/mN6Rr/ElGbNuccnYfY2zSKXTbzkZQodP7GLSEpFoYdh
-        46+uktDwZ2vMiIgjrLAfY7tW6+YkhG+kEnyrqVcu/yhSumZnuVQZSPFDDqkewYdktBX2W1
-        E5XHAvsHcg+oePKYbcgXP8R5bFs+hJf3t4yTvMtPo50NBwX80mLh/AIBUE7bofDK/aFu6H
-        qtf+AY+yYI2U4AcWEXhnQ22yGPrAzddB3aN+8X6CX1qpB5O1+EGPIoTqDwRh5g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638881617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aNhnkzcLIHS9o6REcIVVTdi6HJHMTMekwoWhR5Os8KA=;
-        b=9LR8QBp7ApgLB6V6Z+0XA4lyUUgGXXJ03ul38aiaIn/PFJSbmKuGwWEzOcLJoDF8z5Se10
-        uqB+RdhRp6Pw8iDA==
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V2 18/36] genirq/msi: Add msi_device_data::properties
-In-Reply-To: <87ilw037km.ffs@tglx>
-References: <20211206210307.625116253@linutronix.de>
- <20211206210438.634566968@linutronix.de>
- <6f06c9f0-1f8f-e467-b0fb-2f9985d5be0d@kaod.org> <87ilw037km.ffs@tglx>
-Date:   Tue, 07 Dec 2021 13:53:36 +0100
-Message-ID: <87fsr437an.ffs@tglx>
+        Tue, 7 Dec 2021 07:58:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31B12B8175A;
+        Tue,  7 Dec 2021 12:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67DC0C341C6;
+        Tue,  7 Dec 2021 12:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638881676;
+        bh=6JN623Wf1cIT6pJuzLUO3rWixP7YcHB2HO5dgsI3tcM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b1EPuXxbh3NSS9zE3IGatJkgzk/cJuXDmR3ifFDCDFhj5/argxtJU3JmR0yzMjpn/
+         /+pr+WMEBT2gBtwyn+/jY4aCYTaWDvVh1HjjOZOjjYTAoKkK6+mSO19DOWHpJGnX1V
+         ovJaIki1AkUqBuGLXdFiGZ4jLqi0qVHZut9Ebm7j6T0sULxEJC3LwUWn0RAxkhCvmn
+         kuJ2RlNsdDvJvpddvprTazRbxLqPmc+PqW9/XYAHD3NBMVPFxv9J046OiUgmnY1txI
+         ZgI+mIfqycj5x1JJPwH2PrV3SBqrnFm0HM4/77fliDDnK9+XW/j9gfxcF45AtX74yz
+         mOQhB/fTcKskQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iwlwifi: work around reverse dependency on MEI
+Date:   Tue,  7 Dec 2021 13:54:12 +0100
+Message-Id: <20211207125430.2423871-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07 2021 at 13:47, Thomas Gleixner wrote:
-> On Tue, Dec 07 2021 at 10:04, C=C3=A9dric Le Goater wrote:
->>> +/**
->>> + * msi_device_set_properties - Set device specific MSI properties
->>> + * @dev:	Pointer to the device which is queried
->>> + * @prop:	Properties to set
->>> + */
->>> +void msi_device_set_properties(struct device *dev, unsigned long prop)
->>> +{
->>> +	if (WARN_ON_ONCE(!dev->msi.data))
->>> +		return ;
->>> +	dev->msi.data->properties =3D 0;
->> It would work better if the prop variable was used instead of 0.
->>
->> With that fixed,
->
-> Indeed. Copy & pasta w/o brain usage ...
+From: Arnd Bergmann <arnd@arndb.de>
 
-I've pushed out an incremental fix on top. Will be folded back.
+If the iwlmei code is a loadable module, the main iwlwifi driver
+cannot be built-in:
 
-     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v2-pa=
-rt-3-1
+x86_64-linux-ld: drivers/net/wireless/intel/iwlwifi/pcie/trans.o: in function `iwl_pcie_prepare_card_hw':
+trans.c:(.text+0x4158): undefined reference to `iwl_mei_is_connected'
 
-Thanks,
+Unfortunately, Kconfig enforces the opposite, forcing the MEI driver to
+not be built-in if iwlwifi is a module.
 
-        tglx
+There is no easy way to express the correct dependency in Kconfig,
+this is the best workaround I could come up with, turning CONFIG_IWLMEI
+into a 'bool' symbol, and spelling out the exact conditions under which
+it may be enabled, and then using Makefile logic to ensure it is
+built-in when iwlwifi is.
+
+A better option would be change iwl_mei_is_connected() so it could be
+called from iwlwifi regardless of whether the mei driver is reachable,
+but that requires a larger rework in the driver.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wireless/intel/iwlwifi/Kconfig      | 6 +++---
+ drivers/net/wireless/intel/iwlwifi/Makefile     | 3 +--
+ drivers/net/wireless/intel/iwlwifi/mei/Makefile | 4 +++-
+ 3 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
+index cf1125d84929..474afc6f82a8 100644
+--- a/drivers/net/wireless/intel/iwlwifi/Kconfig
++++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
+@@ -93,10 +93,10 @@ config IWLWIFI_BCAST_FILTERING
+ 	  expect incoming broadcasts for their normal operations.
+ 
+ config IWLMEI
+-	tristate "Intel Management Engine communication over WLAN"
+-	depends on INTEL_MEI
++	bool "Intel Management Engine communication over WLAN"
++	depends on INTEL_MEI=y || INTEL_MEI=IWLMVM
++	depends on IWLMVM=y || IWLWIFI=m
+ 	depends on PM
+-	depends on IWLMVM
+ 	help
+ 	  Enables the iwlmei kernel module.
+ 
+diff --git a/drivers/net/wireless/intel/iwlwifi/Makefile b/drivers/net/wireless/intel/iwlwifi/Makefile
+index 75a703eb1bdf..c117e105fe5c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/Makefile
++++ b/drivers/net/wireless/intel/iwlwifi/Makefile
+@@ -29,7 +29,6 @@ iwlwifi-$(CONFIG_IWLWIFI_DEVICE_TRACING) += iwl-devtrace.o
+ ccflags-y += -I$(src)
+ 
+ obj-$(CONFIG_IWLDVM)	+= dvm/
+-obj-$(CONFIG_IWLMVM)	+= mvm/
+-obj-$(CONFIG_IWLMEI)	+= mei/
++obj-$(CONFIG_IWLMVM)	+= mvm/ mei/
+ 
+ CFLAGS_iwl-devtrace.o := -I$(src)
+diff --git a/drivers/net/wireless/intel/iwlwifi/mei/Makefile b/drivers/net/wireless/intel/iwlwifi/mei/Makefile
+index 8e3ef0347db7..98b561c3820f 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mei/Makefile
++++ b/drivers/net/wireless/intel/iwlwifi/mei/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_IWLMEI)	+= iwlmei.o
++ifdef CONFIG_IWLMEI
++obj-$(CONFIG_IWLWIFI)	+= iwlmei.o
++endif
+ iwlmei-y += main.o
+ iwlmei-y += net.o
+ iwlmei-$(CONFIG_IWLWIFI_DEVICE_TRACING) += trace.o
+-- 
+2.29.2
+

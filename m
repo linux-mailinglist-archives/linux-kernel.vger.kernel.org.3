@@ -2,91 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A86BE46C2F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BB746C300
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240599AbhLGSli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S240629AbhLGSot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240449AbhLGSlh (ORCPT
+        with ESMTP id S231241AbhLGSos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:41:37 -0500
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1196C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:38:06 -0800 (PST)
-Received: by mail-vk1-xa43.google.com with SMTP id s17so9943868vka.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=e1uS5h/yQq1jg3h4EwH+7iZtFwfb2jMum7PN8Ezu0z4=;
-        b=gEvuGx/1q5HRKMQqW8xNnAtZJNjB+v11zNB4KuAlnzQgfJmLlJxg3tuJuljr0qmB/R
-         WMPg2LnMGutx8ZgVCJsBlohQ4LOBxEMroik7W87VD6XIMZwji+SFuqDkTXjBMLXyhHGn
-         GjtIYvgVhqwG1Wz6t1W6okQJV2M3AWC6ErXiUFhXSW/sEkiWEdZphsNvnJkG0lf0xT92
-         uhW2vPKXj6Is/TUpLNv7UdUv8PGxTACrDAghVBs0hAU/KhCtcD/k5enH+UbeL9kbKeyI
-         0DGh+PK5v6a6OpQil9/7bVCktAr68Xt7zIjj2j4jx1GbvWuAPOVDPoWYZaSCVHws/vuW
-         kSew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=e1uS5h/yQq1jg3h4EwH+7iZtFwfb2jMum7PN8Ezu0z4=;
-        b=vcRoTsszM+Cy2Q+P0BtZGhwbWNm84c+SgaHEEgXS5arVlmxmd2Nao6ONGhvNCnnJzP
-         4IaYZUsrtuMqG8lTWDQvw+0eIQHOCi4KxMm7zHSiQW8xMgUlKmNT7xXinF3yNg+riz8z
-         1RoCTFDLsA97RATMyXc00GzymeGRNGKm+H2i8q+dE0SXZO8GOtoi97YucgFkuwK+Iz6g
-         +awWRMsXft9l2czvpKBHeq5cV68e0fpdJun/ZZlCR2gOnX9ciDJSOKGcWCcb+sKwZ2j9
-         PisKPm+um1fvmAGJ/T4eVGEXHxMcmI3cBL7VVoMWorwmDDVeUAdy+23UI11qDYV0+nyD
-         MwXg==
-X-Gm-Message-State: AOAM532vJAfkR1eVN4MT+w2z7WYN0jzQV+Fo0B/o1cqKAz+9F0uqS99z
-        Pibh4GtYayEqv1l+8TIyN6qi8voM8WMztZDYVMw=
-X-Google-Smtp-Source: ABdhPJx1cZrjqzDyIsJqlPcogcvM5+R/MllyVzEaMhThyh6S/FBtPklycMBWvEFK/xCnyqCffCky8vTAkG00I3So4es=
-X-Received: by 2002:ac5:c805:: with SMTP id y5mr54646662vkl.29.1638902285707;
- Tue, 07 Dec 2021 10:38:05 -0800 (PST)
+        Tue, 7 Dec 2021 13:44:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78BC061574;
+        Tue,  7 Dec 2021 10:41:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 23697CE1D90;
+        Tue,  7 Dec 2021 18:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A5CC341CA;
+        Tue,  7 Dec 2021 18:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638902474;
+        bh=BD7y6nHDHYvwF8F0ey/Mk8ZBpokO5pKuXGZlYMItmjk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XYRyupyxYqJ1J2Xzzy1fbDAcK8U9EmRcrld67xacdQOCmUHzbODW7peeYiDwZrj3u
+         AAkkDDnUYN3tbSBkG8UlHGdxboK6IuLb2BAQQASbgdWxGCFISUaZRIGDhgLbnG48cz
+         siNPn1nu/axEkF9uldG4y4g9XdJ7SG3qoGjVeK/8chFCXZ8bMNRTKgdW1BAny1jfzx
+         EcrXYOZj3qZrX28TtJJ+5tU4GTVkhF0tWH7ald/YdXYQWmXgLM05MTqOf7Eb+8HuTo
+         8xt6IKmU4dJOc//poaAiHnlFV10RNIqgr6tpoX5NFDhg2CZOq3jm7pIxEq/uR2U41l
+         M3la7iG9doIFQ==
+Received: by mail-ed1-f46.google.com with SMTP id l25so60416874eda.11;
+        Tue, 07 Dec 2021 10:41:14 -0800 (PST)
+X-Gm-Message-State: AOAM530KQYWFwmBU5pWod420bFn9iDmSk7C+yt2KI+6x2mKc+lM015v8
+        hT0J9rUvi3YSuKvIWJVPzMho5DNOmNGEYU/FcA==
+X-Google-Smtp-Source: ABdhPJzcwDO/upO0y0Heow+dDIweLmSN4XLEBMezQBu999RnN0nYR8CEhaX/FQ9NPwIz30CbYJUz7q1kPpylgv6jWiU=
+X-Received: by 2002:a17:906:5e14:: with SMTP id n20mr1338660eju.466.1638902472240;
+ Tue, 07 Dec 2021 10:41:12 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: le61816@yandex.com
-Sender: mss.cloudinejoseph@gmail.com
-Received: by 2002:a67:dc8d:0:0:0:0:0 with HTTP; Tue, 7 Dec 2021 10:38:05 -0800 (PST)
-From:   "Mrs Lisa Edward." <hippolytepilabre@gmail.com>
-Date:   Tue, 7 Dec 2021 06:38:05 -1200
-X-Google-Sender-Auth: uV83BXWpQEaN52CrDXhuqdgY_Lw
-Message-ID: <CAEmgZVMKYeQtUCyWvUKLvme6CdUQAtVKTV_=mUBNnac9KK8mSA@mail.gmail.com>
-Subject: WITH DUE RESPECT.
-To:     undisclosed-recipients:;
+References: <20211126181500.3404129-1-daniel.lezcano@linaro.org> <20211126181500.3404129-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20211126181500.3404129-2-daniel.lezcano@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 7 Dec 2021 12:41:00 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
+Message-ID: <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] arm64: dts: rockchip: Add powerzones definition
+ for rock960
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     arnd@linaro.org, heiko@sntech.de, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Robin Murphy <robin.murphy@arm.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WITH DUE RESPECT.
+On Fri, Nov 26, 2021 at 12:15 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Add the powerzones description. This first step introduces the big,
+> the little and the gpu as a powerzone place.
+>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>    V1: Initial post
+>    V2:
+>      - Move description in the SoC dtsi specific file
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi | 25 ++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> index d3cdf6f42a30..3c0dbc0cb2bc 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> @@ -76,6 +76,8 @@ cpu_l0: cpu@0 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l1: cpu@1 {
+> @@ -88,6 +90,8 @@ cpu_l1: cpu@1 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l2: cpu@2 {
+> @@ -100,6 +104,8 @@ cpu_l2: cpu@2 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l3: cpu@3 {
+> @@ -112,6 +118,8 @@ cpu_l3: cpu@3 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_b0: cpu@100 {
+> @@ -124,6 +132,8 @@ cpu_b0: cpu@100 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <436>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>
+>                         thermal-idle {
+>                                 #cooling-cells = <2>;
+> @@ -142,6 +152,8 @@ cpu_b1: cpu@101 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <436>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       #powerzone-cells = <0>;
+> +                       powerzone = <&PKG_PZ>;
+>
+>                         thermal-idle {
+>                                 #cooling-cells = <2>;
+> @@ -791,6 +803,17 @@ spi5: spi@ff200000 {
+>                 status = "disabled";
+>         };
+>
+> +       powerzones {
+> +
+> +               PKG_PZ: pkg {
+> +                       #powerzone-cells = <0>;
+> +                        powerzone = <&SOC_PZ>;
+> +               };
+> +
+> +               SOC_PZ: soc {
+> +               };
+> +       };
+> +
+>         thermal_zones: thermal-zones {
+>                 cpu_thermal: cpu-thermal {
+>                         polling-delay-passive = <100>;
+> @@ -2027,6 +2050,8 @@ gpu: gpu@ff9a0000 {
+>                 clocks = <&cru ACLK_GPU>;
+>                 #cooling-cells = <2>;
+>                 power-domains = <&power RK3399_PD_GPU>;
+> +               #powerzone-cells = <0>;
+> +               powerzone = <&PKG_PZ>;
 
- Please forgive me for stressing you with my predicaments and am sorry
-for approaching you through this media.
+Every CPU and the GPU are in the same powerzone. What is the point? Do
+you really have to be told that CPUs and GPU are a source of heat and
+might need to be limited?
 
-I really like to have a good relationship with you, and I have a
-special reason why I decided to contact you because of the urgency of
-my situation here.I came across your e-mail contact prior to a private
-search while in need of your assistance.I decided to contact you
-believing you will be honest to fulfill my final wish before I die.
-
-I am Mrs Lisa Edward, 63 years, from USA, I am childless and am
-suffering from a pro-long critical cancer, my doctors confirmed I may
-not live beyond two months from now as my ill health has defiled all
-forms of medical treatment.
-
-Since my days are numbered, I have decided willingly to fulfill my
-long-time promise to donate you the sum ($5.000.000.00) million
-dollars I inherited from my late husband Mr. Edward Herbart, foreign
-bank account over years. I need a very honest person who can assist in
-transfer of this money to his or her account and use the funds for
-charity work of God while you use 50% for yourself. I want you to know
-there is no risk involved; it
-is 100% hitch free & safe.
-
-If you are interested in assisting in getting this fund into your
-account for a charity project to fulfill my promise before I die
-please let me know immediately.
-
-I will appreciate your utmost confidentiality as I wait for your reply.
-Best Regards,
-Mrs Lisa Edward.
+Rob

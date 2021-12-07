@@ -2,96 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD7146B185
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4793E46B18B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbhLGDjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S234256AbhLGDl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbhLGDjB (ORCPT
+        with ESMTP id S231591AbhLGDlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:39:01 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D30FC061746;
-        Mon,  6 Dec 2021 19:35:32 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id d10so37206653ybe.3;
-        Mon, 06 Dec 2021 19:35:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VhnVwEWLdblOjr90EMEMGhUapGYQEMmVHRRWBGP+yjw=;
-        b=KOwS4EtQuhp4PrM6HVNezG+TT+Q7knK5h5qA8nxKdQhj06qYbByS10l4IPBnwjo7N5
-         h4UUzStinEkO6vAssGrKkDO3/PMGKcYJx3M+8lKnR9PwpyuJjOkiBQNEGJhsAh5rvvVH
-         i7DHd3dBpTLNwLcJTi32jDw/4iycLdQh+Vzc0+eNvqCCcIFx7IM2NuWAUlgrJ3NPwpMc
-         KA5qlBJtwsRvyxQZXB3x3XXaLXEvQgfyQCqm+FbNJOglEkMvjVI+zmQD4Qcmt4Z3I20j
-         3rivXIFNbdxxdZcF27goiZk89ezC0WTkdhwsIZSDzqWCq6BB0K+FN5ALDNxN7Ln77BWe
-         rzjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VhnVwEWLdblOjr90EMEMGhUapGYQEMmVHRRWBGP+yjw=;
-        b=p4LbUmX3yeHoO04SWmG4TaJ7Oi5etchiGrvpVwC5frihNQCBeDvvEnTpihuVgJL9WP
-         oCABwKBrRXe/biZjlw3OikiYGwZcoluNvJ/us509QQ9UzyBSKNm1mSE1/5PJtTJ6NjMx
-         GgQJ2w8FglkmhRuIh3ShW4enmWxyd9pe7q5upEGzQ2y3JScElnVebwFJEQlGodeXfDcB
-         Vz5WEqJw+zOyX70/R/oc6X9Q5/ZAhLvdYFLKbE2B1i1OP0b7uyzi4SMVxmQ4BBs7vMVw
-         vg98WZQQAmQ9aYjYuLFX8gWy3llAgoSK0LCNe+Xc1uNXKbcoiSXVXJvKIrymMRvJxmsy
-         iwiw==
-X-Gm-Message-State: AOAM531yU5BXubfC/Y/qImLnsgfcS7P31sxPk/EVPy8cle1f4hsojwPX
-        ZfBPluaIc796saDel8aVZAZaS0DWRxgqYfol/9g=
-X-Google-Smtp-Source: ABdhPJynZCr7m7alFn9eEw0KlD0b7XnSu9eeqFbyzTLyGtGWoaVXfKduwnIJx828coovBV12MA4M5c6d7qqK6rXsO1o=
-X-Received: by 2002:a25:84c1:: with SMTP id x1mr48226892ybm.690.1638848131288;
- Mon, 06 Dec 2021 19:35:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20211203195004.5803-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20211203195004.5803-1-alexandr.lobakin@intel.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 6 Dec 2021 19:35:20 -0800
-Message-ID: <CAEf4BzZLt_ojTAf-=1nO2R7F8ROUwBdUsfp_W9NaAk-XSNEYmA@mail.gmail.com>
-Subject: Re: [PATCH bpf 0/2] samples: bpf: fix build issues with Clang/LLVM
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Mon, 6 Dec 2021 22:41:04 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC76C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 19:37:34 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7QwQ4t8hz4xYy;
+        Tue,  7 Dec 2021 14:37:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1638848247;
+        bh=aK6UnXsnHaG+UxOSiY3p7wH3ZFM5J8iLb6R+UzwrXEo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=r56VIcqqzxA8DsRmfvBYIShqBzgJYCbFnsnknc878nWTfPZ9OIupRN40EGMcBW5Wy
+         BSUmPGClHynV5bl3sz9iUcP5Hq7o1Nj2sPpoC6wVp3RKcNiObaN9RpO7HLHz0Aki9b
+         oOkc2fULv2FxJPhvMLXyCKHJmwx8u9poPy8iW289ROaBLDMYW4A3doWOKMWTfZCukT
+         HrqVBTIUzhK8ltqBDuG9hWUmNH020LMrQuQNUNPj32WMB0mmpoBqBTxDhIPyyVJOUg
+         taJDijYLPh9dr5JdrG0YHmPX+WonwDU65gfGFaeLnQhcSq0tf2KUNBR1n34uwTtJPp
+         oRVnGkpaYwuKg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel test robot <lkp@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+In-Reply-To: <CAGG=3QVQ9bwWWyKDN3_C2B0v7H6iZ4ZpNybXGCqbzwWrPjuPrg@mail.gmail.com>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+ <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+ <87a6hlq408.fsf@mpe.ellerman.id.au> <YaZqs2tPxMzhgkAW@archlinux-ax161>
+ <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
+ <CAGG=3QVQ9bwWWyKDN3_C2B0v7H6iZ4ZpNybXGCqbzwWrPjuPrg@mail.gmail.com>
+Date:   Tue, 07 Dec 2021 14:37:26 +1100
+Message-ID: <87o85tnkzt.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 11:55 AM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> Samples, at least XDP ones, can be built only with the compiler used
-> to build the kernel itself.
-> However, XDP sample infra introduced in Aug'21 was probably tested
-> with GCC/Binutils only as it's not really compilable for now with
-> Clang/LLVM.
-> These two are trivial fixes addressing this.
->
-> Alexander Lobakin (2):
->   samples: bpf: fix xdp_sample_user.o linking with Clang
->   samples: bpf: fix 'unknown warning group' build warning on Clang
->
+Bill Wendling <morbo@google.com> writes:
+> On Tue, Nov 30, 2021 at 10:38 AM Bill Wendling <morbo@google.com> wrote:
+>> On Tue, Nov 30, 2021 at 10:17 AM Nathan Chancellor <nathan@kernel.org> w=
+rote:
+>> > On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
+>> > > Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+>> > > > Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit :
+...
+>> > > >> All warnings (new ones prefixed by >>):
+>> > > >>
+>> > > >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+>> > > >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h=
+:7:
+>> > > >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val'=
+ is uninitialized when used here [-Wuninitialized]
+>> > > >>                     *inst =3D ppc_inst(val);
+>> > > >>                                      ^~~
+>> > > >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from ma=
+cro 'ppc_inst'
+>> > > >>     #define ppc_inst(x) (x)
+>> > > >>                          ^
+>> > > >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the =
+variable 'val' to silence this warning
+>> > > >>             unsigned int val, suffix;
+>> > > >>                             ^
+>> > > >>                              =3D 0
+>> > > >
+>> > > > I can't understand what's wrong here.
+...
+>> > > >
+>> > > > I see no possibility, no alternative path where val wouldn't be se=
+t. The
+>> > > > asm clearly has *addr as an output param so it is always set.
+>> > >
+>> > > I guess clang can't convince itself of that?
+...
+>> >
+>> > It certainly looks like there is something wrong with how clang is
+>> > tracking the initialization of the variable because it looks to me like
+>> > val is only used in the fallthrough path, which happens after it is
+>> > initialized via lwz.  Perhaps something is wrong with the logic of
+>> > https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues a=
+re
+>> > being migrated from Bugzilla to GitHub Issues right now so I cannot fi=
+le
+>> > this upstream at the moment).
+>> >
+>> If I remove the casts of "val" the warning doesn't appear. I suspect
+>> that when I wrote that patch I forgot to remove those when checking.
+>> #include "Captain_Picard_facepalm.h"
+>>
+>> I'll look into it.
+>>
+> Small retraction. It's the "*(<cast>)&val" that's the issue. (I.e. the "*=
+&")
 
-There were conflicts when applying, but luckily I was the one who
-caused this conflict in XDP_SAMPLE_CFLAGS, so I just fixed it up
-locally and pushed to bpf-next. Thanks.
+I guess for now I'll just squash this in as a workaround?
 
->  samples/bpf/Makefile          | 5 +++++
->  samples/bpf/Makefile.target   | 2 +-
->  samples/bpf/xdp_sample_user.h | 2 ++
->  3 files changed, 8 insertions(+), 1 deletion(-)
->
-> --
-> 2.33.1
->
+
+diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/ins=
+t.h
+index 631436f3f5c3..5b591c51fec9 100644
+--- a/arch/powerpc/include/asm/inst.h
++++ b/arch/powerpc/include/asm/inst.h
+@@ -157,6 +157,9 @@ static inline int copy_inst_from_kernel_nofault(ppc_ins=
+t_t *inst, u32 *src)
+ 	if (unlikely(!is_kernel_addr((unsigned long)src)))
+ 		return -ERANGE;
+=20
++#ifdef CONFIG_CC_IS_CLANG
++	val =3D suffix =3D 0;
++#endif
+ 	__get_kernel_nofault(&val, src, u32, Efault);
+ 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
+ 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+
+
+
+cheers

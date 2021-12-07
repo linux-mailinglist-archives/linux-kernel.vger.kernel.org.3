@@ -2,229 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA05046C333
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5BE46C338
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240763AbhLGS6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:58:07 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42094 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbhLGS6F (ORCPT
+        id S240787AbhLGTBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231778AbhLGTBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:58:05 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id 069b2043b9497aaa; Tue, 7 Dec 2021 19:54:33 +0100
-Received: from kreacher.localnet (unknown [213.134.187.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D953B66ADAB;
-        Tue,  7 Dec 2021 19:54:32 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] PM: runtime: Capture device status before disabling runtime PM
-Date:   Tue, 07 Dec 2021 19:54:32 +0100
-Message-ID: <2613374.mvXUDI8C0e@kreacher>
+        Tue, 7 Dec 2021 14:01:43 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649D8C061574;
+        Tue,  7 Dec 2021 10:58:12 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p18so87650wmq.5;
+        Tue, 07 Dec 2021 10:58:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5TwZNUkcdesAVo2XU0JqG4+SDNmveUKskYbqRNyzqvQ=;
+        b=Qx7wzVGMUcZzWHStM8/3DGIbr4c6zxdQtb/CIs05f2/tqVwKkIRivH/ybdi0gQbfZC
+         vJEn9ftM+4VKjTCWifH8w5GiAN2CtBUFoHkQWxEbzLsPcyhNhh5iK1LUzJllnJ0LfcOJ
+         iWPMYOu+cuuHN5rMGpQNyQ2GzDcQGmAYSUS1AZPCf6rhPRonzkanorkB6pp++Rpma0UB
+         2bi8vqyqTf8HkmB4DlH7/yVhhH6nrKLe1MvhQ20G1pAvE6CxWweVcs6fL3wjKiyG4omF
+         1JTkY4gj51GYqpPGWwyNGm/dib4yRVJ0e8XS8ZS/1a6r6HmHgBLedKL+KNN4vLw2pQb1
+         rWkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5TwZNUkcdesAVo2XU0JqG4+SDNmveUKskYbqRNyzqvQ=;
+        b=x89olsHQDPDBg8Jr4a9mCWt57pnHOE3UAK2w1uY5Gg4eTPgpmMh/KQnuKHA1No4OUV
+         82OvQNzh+n7ilWUsRInGhN7S49UfTfhOzxbzq3g0RrD3mgStc4MSBxvdX4h4QQ3PAk+g
+         HLJU+cICjunDfBMPvAEkY2R96hdZZh26mrvnAE+V9eGLYK166Lx5Bd43bpY6Ny7GdSug
+         vwEXmVTldYlA9cCxfwdsZHujwevKAG5aBS15u8EcT+3VV5qPIyokGD6aR5Te1WDmUTUm
+         WA5/25x4llpd2vLowRBRWqzGyn9jskYhHb99T52SZOWZRWMbGak5josVIebf3/b1EWMI
+         ZBmw==
+X-Gm-Message-State: AOAM53336HkBoc6qOVeU2/4GqkwnNFJJFSy1mEgZSYDEpOVbnkUuNUYM
+        EhBcLi4Q6ChJeV4gElIOREA=
+X-Google-Smtp-Source: ABdhPJxHJ6oBv9R9mxNZbowMX4onGKDMAWSih8dUFTk8HPBn4RkcKszgZuWGU4hSNfNVdJPVAxMTuA==
+X-Received: by 2002:a05:600c:213:: with SMTP id 19mr9045396wmi.16.1638903490541;
+        Tue, 07 Dec 2021 10:58:10 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n1sm494545wmq.6.2021.12.07.10.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 10:58:10 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: x86/des: remove redundant assignment of variable nbytes
+Date:   Tue,  7 Dec 2021 18:58:09 +0000
+Message-Id: <20211207185809.1436833-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.187.84
-X-CLIENT-HOSTNAME: 213.134.187.84
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeehgdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeejrdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkhhhilhhmrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmkhhshhgrhhestghouggvrghurhhorhgrrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhh
- rghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The variable nbytes is being assigned a value that is never read, it is
+being re-assigned in the following statement. The assignment is redundant
+and can be removed.
 
-In some cases (for example, during system-wide suspend and resume of
-devices) it is useful to know whether or not runtime PM has ever been
-enabled for a given device and, if so, what the runtime PM status of
-it had been right before runtime PM was disabled for it last time.
-
-For this reason, introduce a new struct dev_pm_info field called
-last_status that will be used for capturing the runtime PM status of
-the device when its power.disable_depth counter changes from 0 to 1.
-
-The new field will be set to RPM_INVALID to start with and whenever
-power.disable_depth changes from 1 to 0, so it will be valid only
-when runtime PM of the device is currently disabled, but it has been
-enabled at least once.
-
-Immediately use power.last_status in rpm_resume() to make it handle
-the case when PM runtime is disabled for the device, but its runtime
-PM status is RPM_ACTIVE more consistently.  Namely, make it return 1
-if power.last_status is also equal to RPM_ACTIVE in that case (the
-idea being that if the status was RPM_ACTIVE last time when
-power.disable_depth was changing from 0 to 1 and it is still
-RPM_ACTIVE, it can be assumed to reflect what happened to the device
-last time when it was using runtime PM) and -EACCES otherwise.
-
-Update the documentation to provide a description of last_status and
-change the description of pm_runtime_resume() in it to reflect the
-new behavior of rpm_active().
-
-While at it, rearrange the code in pm_runtime_enable() to be more
-straightforward and replace the WARN() macro in it with a pr_warn()
-invocation which is less disruptive.
-
-Link: https://lore.kernel.org/linux-pm/20211026222626.39222-1-ulf.hansson@linaro.org/t/#u
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
+ arch/x86/crypto/des3_ede_glue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--> v2: Avoid using the ternary operator in rpm_resume() (Alan).
-
----
- Documentation/power/runtime_pm.rst |   14 ++++++++---
- drivers/base/power/runtime.c       |   45 ++++++++++++++++++++-----------------
- include/linux/pm.h                 |    2 +
- 3 files changed, 37 insertions(+), 24 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -742,13 +742,15 @@ static int rpm_resume(struct device *dev
- 	trace_rpm_resume_rcuidle(dev, rpmflags);
+diff --git a/arch/x86/crypto/des3_ede_glue.c b/arch/x86/crypto/des3_ede_glue.c
+index e7cb68a3db3b..787c234d2469 100644
+--- a/arch/x86/crypto/des3_ede_glue.c
++++ b/arch/x86/crypto/des3_ede_glue.c
+@@ -164,7 +164,7 @@ static int cbc_encrypt(struct skcipher_request *req)
  
-  repeat:
--	if (dev->power.runtime_error)
-+	if (dev->power.runtime_error) {
- 		retval = -EINVAL;
--	else if (dev->power.disable_depth == 1 && dev->power.is_suspended
--	    && dev->power.runtime_status == RPM_ACTIVE)
--		retval = 1;
--	else if (dev->power.disable_depth > 0)
--		retval = -EACCES;
-+	} else if (dev->power.disable_depth > 0) {
-+		if (dev->power.runtime_status == RPM_ACTIVE &&
-+		    dev->power.last_status == RPM_ACTIVE)
-+			retval = 1;
-+		else
-+			retval = -EACCES;
-+	}
- 	if (retval)
- 		goto out;
+ 	err = skcipher_walk_virt(&walk, req, false);
  
-@@ -1410,8 +1412,10 @@ void __pm_runtime_disable(struct device
- 	/* Update time accounting before disabling PM-runtime. */
- 	update_pm_runtime_accounting(dev);
- 
--	if (!dev->power.disable_depth++)
-+	if (!dev->power.disable_depth++) {
- 		__pm_runtime_barrier(dev);
-+		dev->power.last_status = dev->power.runtime_status;
-+	}
- 
-  out:
- 	spin_unlock_irq(&dev->power.lock);
-@@ -1428,23 +1432,23 @@ void pm_runtime_enable(struct device *de
- 
- 	spin_lock_irqsave(&dev->power.lock, flags);
- 
--	if (dev->power.disable_depth > 0) {
--		dev->power.disable_depth--;
--
--		/* About to enable runtime pm, set accounting_timestamp to now */
--		if (!dev->power.disable_depth)
--			dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
--	} else {
-+	if (!dev->power.disable_depth) {
- 		dev_warn(dev, "Unbalanced %s!\n", __func__);
-+		goto out;
+-	while ((nbytes = walk.nbytes)) {
++	while (walk.nbytes) {
+ 		nbytes = __cbc_encrypt(ctx, &walk);
+ 		err = skcipher_walk_done(&walk, nbytes);
  	}
+@@ -243,7 +243,7 @@ static int cbc_decrypt(struct skcipher_request *req)
  
--	WARN(!dev->power.disable_depth &&
--	     dev->power.runtime_status == RPM_SUSPENDED &&
--	     !dev->power.ignore_children &&
--	     atomic_read(&dev->power.child_count) > 0,
--	     "Enabling runtime PM for inactive device (%s) with active children\n",
--	     dev_name(dev));
-+	if (--dev->power.disable_depth > 0)
-+		goto out;
-+
-+	dev->power.last_status = RPM_INVALID;
-+	dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
-+
-+	if (dev->power.runtime_status == RPM_SUSPENDED &&
-+	    !dev->power.ignore_children &&
-+	    atomic_read(&dev->power.child_count) > 0)
-+		dev_warn(dev, "Enabling runtime PM for inactive device with active children\n");
+ 	err = skcipher_walk_virt(&walk, req, false);
  
-+out:
- 	spin_unlock_irqrestore(&dev->power.lock, flags);
- }
- EXPORT_SYMBOL_GPL(pm_runtime_enable);
-@@ -1640,6 +1644,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_use_autos
- void pm_runtime_init(struct device *dev)
- {
- 	dev->power.runtime_status = RPM_SUSPENDED;
-+	dev->power.last_status = RPM_INVALID;
- 	dev->power.idle_notification = false;
- 
- 	dev->power.disable_depth = 1;
-Index: linux-pm/include/linux/pm.h
-===================================================================
---- linux-pm.orig/include/linux/pm.h
-+++ linux-pm/include/linux/pm.h
-@@ -499,6 +499,7 @@ const struct dev_pm_ops __maybe_unused n
-  */
- 
- enum rpm_status {
-+	RPM_INVALID = -1,
- 	RPM_ACTIVE = 0,
- 	RPM_RESUMING,
- 	RPM_SUSPENDED,
-@@ -612,6 +613,7 @@ struct dev_pm_info {
- 	unsigned int		links_count;
- 	enum rpm_request	request;
- 	enum rpm_status		runtime_status;
-+	enum rpm_status		last_status;
- 	int			runtime_error;
- 	int			autosuspend_delay;
- 	u64			last_busy;
-Index: linux-pm/Documentation/power/runtime_pm.rst
-===================================================================
---- linux-pm.orig/Documentation/power/runtime_pm.rst
-+++ linux-pm/Documentation/power/runtime_pm.rst
-@@ -265,6 +265,10 @@ defined in include/linux/pm.h:
-       RPM_SUSPENDED, which means that each device is initially regarded by the
-       PM core as 'suspended', regardless of its real hardware status
- 
-+  `enum rpm_status last_status;`
-+    - the last runtime PM status of the device captured before disabling runtime
-+      PM for it (invalid initially and when disable_depth is 0)
-+
-   `unsigned int runtime_auto;`
-     - if set, indicates that the user space has allowed the device driver to
-       power manage the device at run time via the /sys/devices/.../power/control
-@@ -333,10 +337,12 @@ drivers/base/power/runtime.c and include
- 
-   `int pm_runtime_resume(struct device *dev);`
-     - execute the subsystem-level resume callback for the device; returns 0 on
--      success, 1 if the device's runtime PM status was already 'active' or
--      error code on failure, where -EAGAIN means it may be safe to attempt to
--      resume the device again in future, but 'power.runtime_error' should be
--      checked additionally, and -EACCES means that 'power.disable_depth' is
-+      success, 1 if the device's runtime PM status is already 'active' (also if
-+      'power.disable_depth' is nonzero, but the status was 'active' when it was
-+      changing from 0 to 1) or error code on failure, where -EAGAIN means it may
-+      be safe to attempt to resume the device again in future, but
-+      'power.runtime_error' should be checked additionally, and -EACCES means
-+      that the callback could not be run, because 'power.disable_depth' was
-       different from 0
- 
-   `int pm_runtime_resume_and_get(struct device *dev);`
-
-
+-	while ((nbytes = walk.nbytes)) {
++	while (walk.nbytes) {
+ 		nbytes = __cbc_decrypt(ctx, &walk);
+ 		err = skcipher_walk_done(&walk, nbytes);
+ 	}
+-- 
+2.33.1
 

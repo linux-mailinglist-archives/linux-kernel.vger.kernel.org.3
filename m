@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6310C46AFE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6442046AFEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243070AbhLGBm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:42:27 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28278 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242868AbhLGBm0 (ORCPT
+        id S243262AbhLGBme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:42:34 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42078 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S243145AbhLGBmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:42:26 -0500
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J7NHR0MhYzbjMf;
-        Tue,  7 Dec 2021 09:38:43 +0800 (CST)
-Received: from [10.67.102.99] (10.67.102.99) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
- 2021 09:38:54 +0800
-Message-ID: <6770e115-61b7-2721-ee71-c986ebd6c2de@huawei.com>
-Date:   Tue, 7 Dec 2021 09:38:54 +0800
+        Mon, 6 Dec 2021 20:42:33 -0500
+X-UUID: bcadf9cb14034271b35f83d2687bc5fd-20211207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=5TqzGfDJSklDX44XMBIA/ykNHsD+dGmD9/tWrIY+fjY=;
+        b=PNQuW8hwaV3CPXj/ZdP36tj6CV04V+lESRQjva8hsXj07O3nP25vanoZB/Dv7tkgNVbQKRiGXreNt1IkAEpWBLk9OB6L0Mw1kAFLb1eFvsrVogq7UcVh4AqUF0mXuJ/xM12lS40OOFQdOfW/QNLzFmaqr9oDv7LvznA5wxy+j/8=;
+X-UUID: bcadf9cb14034271b35f83d2687bc5fd-20211207
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1146748263; Tue, 07 Dec 2021 09:39:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 7 Dec 2021 09:38:59 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Dec 2021 09:38:58 +0800
+Message-ID: <d807b5784357ca7656b496b275ef87bf0e4b8100.camel@mediatek.com>
+Subject: Re: [PATCH v4 5/7] net-next: stmmac: dwmac-mediatek: add support
+ for mt8195
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <dkirjanov@suse.de>
+Date:   Tue, 7 Dec 2021 09:38:58 +0800
+In-Reply-To: <0efc7cfd-f048-3c69-0ef3-5904c245f914@collabora.com>
+References: <20211203063418.14892-1-biao.huang@mediatek.com>
+         <20211203063418.14892-6-biao.huang@mediatek.com>
+         <0efc7cfd-f048-3c69-0ef3-5904c245f914@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2, RESEND] sched/rt: Try to restart rt period timer when
- rt runtime exceeded
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20211203033618.11895-1-hucool.lihua@huawei.com>
- <YanElPGuGJ8J6UK9@kroah.com>
-From:   "Lihua (lihua, ran)" <hucool.lihua@huawei.com>
-In-Reply-To: <YanElPGuGJ8J6UK9@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.99]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RGVhciBBbmdlbG8sDQoJVGhhbmtzIGZvciB5b3VyIGNvbW1lbnRzfg0KT24gTW9uLCAyMDIxLTEy
+LTA2IGF0IDE2OjIyICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBSZWdubyB3cm90ZToNCj4g
+SWwgMDMvMTIvMjEgMDc6MzQsIEJpYW8gSHVhbmcgaGEgc2NyaXR0bzoNCj4gPiBBZGQgRXRoZXJu
+ZXQgc3VwcG9ydCBmb3IgTWVkaWFUZWsgU29DcyBmcm9tIHRoZSBtdDgxOTUgZmFtaWx5Lg0KPiA+
+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEJpYW8gSHVhbmcgPGJpYW8uaHVhbmdAbWVkaWF0ZWsuY29t
+Pg0KPiANCj4gQWNrZWQtYnk6IEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIDwNCj4gYW5nZWxv
+Z2lvYWNjaGluby5kZWxyZWdub0Bjb2xsYWJvcmEuY29tPg0KSSdsbCBhZGQgaXQgaW4gbmV4dCBz
+ZW5kLg0K
 
-在 2021/12/3 15:17, Greg KH 写道:
-> On Fri, Dec 03, 2021 at 03:36:18AM +0000, Li Hua wrote:
->> When rt_runtime is modified from -1 to a valid control value, it may
->> cause the task to be throttled all the time. Operations like the following
->> will trigger the bug. E.g:
->> 1. echo -1 > /proc/sys/kernel/sched_rt_runtime_us
->> 2. Run a FIFO task named A that executes while(1)
->> 3. echo 950000 > /proc/sys/kernel/sched_rt_runtime_us
->>
->> When rt_runtime is -1, The rt period timer will not be activated when task
->> A enqueued. And then the task will be throttled after setting rt_runtime to
->> 950,000. The task will always be throttled because the rt period timer is
->> not activated.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Li Hua <hucool.lihua@huawei.com>
->> ---
->> v1->v2:
->>    - call do_start_rt_bandwidth to reduce repetitive code.
->>    - use raw_spin_lock_irqsave to avoid deadlock on a timer context.
->> ---
->>   kernel/sched/rt.c | 23 ++++++++++++++++++-----
->>   1 file changed, 18 insertions(+), 5 deletions(-)
-> <formletter>
->
-> This is not the correct way to submit patches for inclusion in the
-> stable kernel tree.  Please read:
->      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> for how to do this properly.
-I did not CC: stable in the signed-off region，Is that so？
-> </formletter>
-> .

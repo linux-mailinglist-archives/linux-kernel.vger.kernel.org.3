@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E44946B13F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4E846B142
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbhLGDMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:12:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60761 "EHLO
+        id S233572AbhLGDMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:12:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24845 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233094AbhLGDME (ORCPT
+        by vger.kernel.org with ESMTP id S233094AbhLGDMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:12:04 -0500
+        Mon, 6 Dec 2021 22:12:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638846515;
+        s=mimecast20190719; t=1638846519;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=uYJk8sZNBvqI2TY4p7XM11abhtDaYRbwAT1TVDU3vqk=;
-        b=MltMNBP8MaWcqsD8VMwgZf4ZaDjV/dblP3/LY34Ef4vpDPFCVbvSg+/Hd7DNH+ncIs+maW
-        LqqXhecsjmbCvTZ51FRsJazok5Ufi6zffKP3oGZWLu4XNKRIrR6a39N4c94T59YQXL5Shu
-        zsGz0c9n5RCfdCg4cFNrzNIKuyIkMSk=
+        bh=D3SDEWRMNKNX06llp/mTlJpG6I82/0kSJ3d1s90jnG4=;
+        b=P3TgEz5tR0paIMhajD6FN3ZPYnYSwrNsSpf38bxNohqeif/bcWB2Md/iOdJtaZXxFubF52
+        SnZ1ph1cVIs2rsPvhxYQqZpbxEZpwi/IRrOSXG8cu+I7zS938fWfk5Lbp4yp384g84ikK2
+        fkHOiwqVq7d2GbPDpmk1UiNjra1PbVY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-473-e7M3Njl3PLOnd8yyWBWbnQ-1; Mon, 06 Dec 2021 22:08:31 -0500
-X-MC-Unique: e7M3Njl3PLOnd8yyWBWbnQ-1
+ us-mta-511-3m8d_p1ZPM-7q2BkDwEujQ-1; Mon, 06 Dec 2021 22:08:37 -0500
+X-MC-Unique: 3m8d_p1ZPM-7q2BkDwEujQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72E471006AA0;
-        Tue,  7 Dec 2021 03:08:29 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D022B81CCB5;
+        Tue,  7 Dec 2021 03:08:35 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-87.pek2.redhat.com [10.72.12.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C0F7419C59;
-        Tue,  7 Dec 2021 03:08:21 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D2AB119C59;
+        Tue,  7 Dec 2021 03:08:29 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
         robin.murphy@arm.com, cl@linux.com, penberg@kernel.org,
         rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
         m.szyprowski@samsung.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
-        iommu@lists.linux-foundation.org
-Subject: [PATCH RESEND v2 4/5] dma/pool: create dma atomic pool only if dma zone has managed pages
-Date:   Tue,  7 Dec 2021 11:07:49 +0800
-Message-Id: <20211207030750.30824-5-bhe@redhat.com>
+        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>
+Subject: [PATCH RESEND v2 5/5] mm/slub: do not create dma-kmalloc if no managed pages in DMA zone
+Date:   Tue,  7 Dec 2021 11:07:50 +0800
+Message-Id: <20211207030750.30824-6-bhe@redhat.com>
 In-Reply-To: <20211207030750.30824-1-bhe@redhat.com>
 References: <20211207030750.30824-1-bhe@redhat.com>
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
@@ -51,79 +50,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently three dma atomic pools are initialized as long as the relevant
-kernel codes are built in. While in kdump kernel of x86_64, this is not
-right when trying to create atomic_pool_dma, because there's no managed
-pages in DMA zone. In the case, DMA zone only has low 1M memory presented
-and locked down by memblock allocator. So no pages are added into buddy
-of DMA zone. Please check commit f1d4d47c5851 ("x86/setup: Always reserve
-the first 1M of RAM").
+Dma-kmalloc will be created as long as CONFIG_ZONE_DMA is enabled.
+However, it will fail if DMA zone has no managed pages. The failure
+can be seen in kdump kernel of x86_64 as below:
 
-Then in kdump kernel of x86_64, it always prints below failure message:
-
- DMA: preallocated 128 KiB GFP_KERNEL pool for atomic allocations
- swapper/0: page allocation failure: order:5, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0
- CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc3+ #1
+ kworker/u2:2: page allocation failure: order:0, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0                          
+ CPU: 0 PID: 36 Comm: kworker/u2:2 Not tainted 5.16.0-rc3+ #6
+ Hardware name: Dell Inc. PowerEdge R815/06JC9T, BIOS 3.2.2 09/15/2014
+ Workqueue: events_unbound async_run_entry_fn
  Call Trace:
-  dump_stack+0x7f/0xa1
+  dump_stack_lvl+0x57/0x72
   warn_alloc.cold+0x72/0xd6
-  ? _raw_spin_unlock_irq+0x24/0x40
-  ? __alloc_pages_direct_compact+0x90/0x1b0
-  __alloc_pages_slowpath.constprop.0+0xf29/0xf50
-  ? __cond_resched+0x16/0x50
-  ? prepare_alloc_pages.constprop.0+0x19d/0x1b0
-  __alloc_pages+0x24d/0x2c0
-  ? __dma_atomic_pool_init+0x93/0x93
-  alloc_page_interleave+0x13/0xb0
-  atomic_pool_expand+0x118/0x210
-  ? __dma_atomic_pool_init+0x93/0x93
-  __dma_atomic_pool_init+0x45/0x93
-  dma_atomic_pool_init+0xdb/0x176
-  do_one_initcall+0x67/0x320
-  ? rcu_read_lock_sched_held+0x3f/0x80
-  kernel_init_freeable+0x290/0x2dc
-  ? rest_init+0x24f/0x24f
-  kernel_init+0xa/0x111
+  __alloc_pages_slowpath.constprop.0+0xf56/0xf70
+  __alloc_pages+0x23b/0x2b0
+  allocate_slab+0x406/0x630
+  ___slab_alloc+0x4b1/0x7e0
+  ? sr_probe+0x200/0x600
+  ? lock_acquire+0xc4/0x2e0
+  ? fs_reclaim_acquire+0x4d/0xe0
+  ? lock_is_held_type+0xa7/0x120
+  ? sr_probe+0x200/0x600
+  ? __slab_alloc+0x67/0x90
+  __slab_alloc+0x67/0x90
+  ? sr_probe+0x200/0x600
+  ? sr_probe+0x200/0x600
+  kmem_cache_alloc_trace+0x259/0x270
+  sr_probe+0x200/0x600
+  ......
+  bus_probe_device+0x9f/0xb0
+  device_add+0x3d2/0x970
+  ......
+  __scsi_add_device+0xea/0x100
+  ata_scsi_scan_host+0x97/0x1d0
+  async_run_entry_fn+0x30/0x130
+  process_one_work+0x2b0/0x5c0
+  worker_thread+0x55/0x3c0
+  ? process_one_work+0x5c0/0x5c0
+  kthread+0x149/0x170
+  ? set_kthread_struct+0x40/0x40
   ret_from_fork+0x22/0x30
  Mem-Info:
  ......
- DMA: failed to allocate 128 KiB GFP_KERNEL|GFP_DMA pool for atomic allocation
- DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
 
-Here, let's check if DMA zone has managed pages, then create atomic_pool_dma
-if yes. Otherwise just skip it.
+The above failure happened when calling kmalloc() to allocate buffer with
+GFP_DMA. It requests to allocate slab page from DMA zone while no managed
+pages in there.
+ sr_probe()
+ --> get_capabilities()
+     --> buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
+
+The DMA zone should be checked if it has managed pages, then try to create
+dma-kmalloc.
 
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: iommu@lists.linux-foundation.org
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
 ---
- kernel/dma/pool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/slab_common.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
-index 5a85804b5beb..00df3edd6c5d 100644
---- a/kernel/dma/pool.c
-+++ b/kernel/dma/pool.c
-@@ -206,7 +206,7 @@ static int __init dma_atomic_pool_init(void)
- 						    GFP_KERNEL);
- 	if (!atomic_pool_kernel)
- 		ret = -ENOMEM;
--	if (IS_ENABLED(CONFIG_ZONE_DMA)) {
-+	if (has_managed_dma()) {
- 		atomic_pool_dma = __dma_atomic_pool_init(atomic_pool_size,
- 						GFP_KERNEL | GFP_DMA);
- 		if (!atomic_pool_dma)
-@@ -229,7 +229,7 @@ static inline struct gen_pool *dma_guess_pool(struct gen_pool *prev, gfp_t gfp)
- 	if (prev == NULL) {
- 		if (IS_ENABLED(CONFIG_ZONE_DMA32) && (gfp & GFP_DMA32))
- 			return atomic_pool_dma32;
--		if (IS_ENABLED(CONFIG_ZONE_DMA) && (gfp & GFP_DMA))
-+		if (atomic_pool_dma && (gfp & GFP_DMA))
- 			return atomic_pool_dma;
- 		return atomic_pool_kernel;
- 	}
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index e5d080a93009..ae4ef0f8903a 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -878,6 +878,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ {
+ 	int i;
+ 	enum kmalloc_cache_type type;
++#ifdef CONFIG_ZONE_DMA
++	bool managed_dma;
++#endif
+ 
+ 	/*
+ 	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
+@@ -905,10 +908,16 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 	slab_state = UP;
+ 
+ #ifdef CONFIG_ZONE_DMA
++	managed_dma = has_managed_dma();
++
+ 	for (i = 0; i <= KMALLOC_SHIFT_HIGH; i++) {
+ 		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
+ 
+ 		if (s) {
++			if (!managed_dma) {
++				kmalloc_caches[KMALLOC_DMA][i] = kmalloc_caches[KMALLOC_NORMAL][i];
++				continue;
++			}
+ 			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+ 				kmalloc_info[i].name[KMALLOC_DMA],
+ 				kmalloc_info[i].size,
 -- 
 2.17.2
 

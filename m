@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF8246B2E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0527F46B2E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbhLGG2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 01:28:51 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28280 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbhLGG2q (ORCPT
+        id S234853AbhLGG3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 01:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233234AbhLGG3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 01:28:46 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J7Vdq4QmGzQjD0;
-        Tue,  7 Dec 2021 14:25:03 +0800 (CST)
-Received: from [10.67.102.197] (10.67.102.197) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 14:25:15 +0800
-Subject: Re: [PATCH] sysctl: Add a group of macro functions to initcall the
- sysctl table of each feature
-To:     Joe Perches <joe@perches.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>, <cocci@inria.fr>
-CC:     <linux-kernel@vger.kernel.org>, <mcgrof@kernel.org>,
-        <viro@zeniv.linux.org.uk>, <ebiederm@xmission.com>,
-        <keescook@chromium.org>, <jlayton@kernel.org>,
-        <bfields@fieldses.org>, <yzaikin@google.com>, <wangle6@huawei.com>
-References: <20211207011320.100102-1-nixiaoming@huawei.com>
- <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
- <80e800b505adf8a26b2ed9898d03516263a830a7.camel@perches.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <ce96717e-3f18-bf9e-90e2-a482be33a488@huawei.com>
-Date:   Tue, 7 Dec 2021 14:25:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
-MIME-Version: 1.0
-In-Reply-To: <80e800b505adf8a26b2ed9898d03516263a830a7.camel@perches.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+        Tue, 7 Dec 2021 01:29:37 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C959C061746;
+        Mon,  6 Dec 2021 22:26:08 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 133so12802172pgc.12;
+        Mon, 06 Dec 2021 22:26:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=o0m56NLmcmWPOff6hp+BjYLZvUDHc7oRux1lK9/M35U=;
+        b=XnS7RRKBhoDK65BGl1iVc+IsVNck13y++E8PPKTH23Lgd+oRzZBZUuNQWUbQAEHOq6
+         ceM79B5uzCVekLwGgB104KjGjo4xpm+AuSpLkDrvxFI9VObwqdvW1s7F9p4eXrhW77fi
+         qVMm6QfjNwaX9YBj73smvVSSbHZPRR8gqiQyQfgghukPVVHvzhTDJ1j6zLL6m5wmTgn8
+         uA3Bp1guBe0csEDbOQPqyNcE0WE5oO1GcFr/Bh0b7lnkZXm7dfYULVRPCK/pGAGtR2XI
+         u1KEfzAUjX04WaFe3xc6JPBI4ic1WHc/4tx5fLTXwya51Wpm9YLgYDq3gvN+rM4ExXAD
+         aI3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=o0m56NLmcmWPOff6hp+BjYLZvUDHc7oRux1lK9/M35U=;
+        b=TD5dLrvowkOFJiAEpH0cQ4a2wU1lAsks+UPW8JQ8RvXaNwvbXmRU4JmidXpXRR5doT
+         D0UKnows+rkyNyqhikjbdJlMBXSS9dd0NeKoek9OtRVjcUoXPqQlGIBkzVzeAD2/pSNb
+         smtsvkCZIO7kDnn/58MPJNapSDUR0mvMH9DP+bXz5IyCAAJFDhVfIUmHfq7f0UaFXkBM
+         JbGA6ysD2VdzrDoiXgq5J2LPHstKScEsAC96lqrJNbha/rVLFRgT68Bu3onkIH7v4eP2
+         RqWkuzrhN9+jL5MOXXf3acb70X3LYcEqeJgtvwT7uP474ZvoIIBG3iBG1ljvf+/a2IaA
+         N1tQ==
+X-Gm-Message-State: AOAM5337TgdhVHrC1VjB4AHREO/G7D0H4Ak+b1cI5azf/m8ed18UtJKz
+        u4/6bIXxTCfpzYpn5P6aY4Ypmes66UZGaCSjaTs=
+X-Google-Smtp-Source: ABdhPJzaYZpoqyXkq45KC1R694yzvyYDMfL2QTbz5ochNJYloW5TEG+YWMlAJQ2uPLdhi0aj92nR1g==
+X-Received: by 2002:a05:6a00:2311:b0:431:c19f:2a93 with SMTP id h17-20020a056a00231100b00431c19f2a93mr41897638pfh.11.1638858367104;
+        Mon, 06 Dec 2021 22:26:07 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id m15sm9319541pgd.44.2021.12.06.22.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 22:26:06 -0800 (PST)
+Message-ID: <61aefe7e.1c69fb81.9d1c8.b27d@mx.google.com>
+Date:   Mon, 06 Dec 2021 22:26:06 -0800 (PST)
+X-Google-Original-Date: Tue, 07 Dec 2021 06:26:00 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 000/130] 5.10.84-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.197]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/7 9:50, Joe Perches wrote:
-> On Mon, 2021-12-06 at 17:38 -0800, Andrew Morton wrote:
->> On Tue, 7 Dec 2021 09:13:20 +0800 Xiaoming Ni <nixiaoming@huawei.com> wrote:
->>
->>> To avoid duplicated code, add a set of macro functions to initialize the
->>> sysctl table for each feature.
->>>
->>> The system initialization process is as follows:
->>>
->>> 	start_kernel () {
->>> 		...
->>> 		/* init proc and sysctl base,
->>> 		 * proc_root_init()-->proc_sys_init()-->sysctl_init_bases()
->>> 		 */
->>> 		proc_root_init(); /* init proc and sysctl base */
->>> 		...
->>> 		arch_call_rest_init();
->>> 	}
->>>
->>> 	arch_call_rest_init()-->rest_init()-->kernel_init()
->>> 	kernel_init() {
->>> 		...
->>> 		kernel_init_freeable(); /* do all initcalls */
->>> 		...
->>> 		do_sysctl_args(); /* Process the sysctl parameter: sysctl.*= */
->>> 	}
->>>
->>> 	kernel_init_freeable()--->do_basic_setup()-->do_initcalls()
->>> 	do_initcalls() {
->>> 		for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
->>> 			do_initcall_level
->>> 	}
->>>
->>> The sysctl interface of each subfeature should be registered after
->>> sysctl_init_bases() and before do_sysctl_args(). It seems that the sysctl
->>> interface does not depend on initcall_levels. To prevent the sysctl
->>> interface from being initialized before the feature itself. The
->>> lowest-level late_initcall() is used as the common sysctl interface
->>> registration level.
->>
->> I'm not normally a fan of wrapping commonly-used code sequences into
->> magical macros, but this one does seem to make sense.
->>
->> I wonder if it is possible to cook up a checkpatch rule to tell people
->> to henceforth use the magic macros rather than to open-code things in
->> the old way.  Sounds hard.
+On Mon,  6 Dec 2021 15:55:17 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 130 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Almost impossible for checkpatch.
-> Likely easier in coccinelle.
->
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.84-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Maybe we can add a rudimentary check to the checkpatch.
+5.10.84-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b01c36a15d9d..26e953ae4cc5 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7212,6 +7212,12 @@ sub process {
-                              "Deprecated use of '$deprecated_api', 
-prefer '$new_api' instead\n" . $herecurr);
-                 }
-
-+# check register_sysctl_init
-+               if ($prevline =~ /{/ && $rawline =~ 
-/\sregister_sysctl_init\(\"(kernel|fs|vm|debug|dev)\",\s+(.*)\)\;/) {
-+                       WARN("DEPRECATED_API",
-+                            "Deprecated use of 
-'register_sysctl_init(\"$1\", $2);', prefer '$1_sysctl_initcall($2);' 
-instead\n".$herecurr);
-+               }
-+
-  # check for various structs that are normally const (ops, kgdb, 
-device_tree)
-  # and avoid what seem like struct definitions 'struct foo {'
-                 if (defined($const_structs) &&
-
-
-
-Thanks
-Xiaoming Ni

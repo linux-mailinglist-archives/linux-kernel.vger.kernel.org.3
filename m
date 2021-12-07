@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBCD46BE29
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816CF46BE2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238262AbhLGOxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:53:41 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50696 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbhLGOxc (ORCPT
+        id S238265AbhLGOza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhLGOz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:53:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA881CE1AB3;
-        Tue,  7 Dec 2021 14:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D137BC341C3;
-        Tue,  7 Dec 2021 14:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638888599;
-        bh=QASQ4r6wPYhYJnlffLIsiV/Atwvn7C2vRnKmQNa+YRQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=duaMdAUghKFj7lfWTUX9jfjTW//bHdeOkQzHGuF3HNAPLML01x71wuJROI2S0LFB/
-         GqqoMIaNRjj0+VKrM0pml9vGIBeaD+VRMxys5jOWArCFG26dRDJysHHqdIEeeFKj6m
-         hZt6sLD8Q6XNgs1Vs6utmKoNe9qPheZMOgsClJ/WfJrzA/5ASt/QQYowzIGWs2WF8i
-         ksIIaYgs6n0nrnhCNDLB3m/VoUOkDRvy5chUdwjmL1nbRugFblYiwT8gpcm17ak+Wt
-         jLOBfX6Ywyi5fP1mi1LYniF6YioU+HDj+Kwu93rvN5RC0I7qWt6lTyYhOM+3fFNgwH
-         R5BE6GAPFsCPQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EC418406C1; Tue,  7 Dec 2021 11:49:56 -0300 (-03)
-Date:   Tue, 7 Dec 2021 11:49:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andrew Kilroy <andrew.kilroy@arm.com>
-Cc:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/3] perf vendor events: For the Neoverse N2
-Message-ID: <Ya90lK/PqJDIrXlB@kernel.org>
-References: <20211203123525.31127-1-andrew.kilroy@arm.com>
- <2e1a7a96-4ec6-e1f2-5bd4-133480391053@huawei.com>
- <e7aaacd8-7972-6ab9-ff0c-e286bf23993a@arm.com>
+        Tue, 7 Dec 2021 09:55:28 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BFCC061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:51:58 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id a11-20020a4ad1cb000000b002c2657270a0so5453551oos.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 06:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OeNOUxJRvzJDEPV0OHCTfN/BC6OjDO8ZDnn+8g5u4A0=;
+        b=H4vHUFxY+7ZtRXtaHRDlhIzLI79WBBMNDjTny3CTQzQRnqFaZDmH7U314L1aT/sBuq
+         IaAgyYE2n98cvIsPjjRf23kimor5r2uQqirFclePUpX3mTbIuZD5l2yT7UEGAU49S0QW
+         37ux2Dul11cQJBSg1WUeyl7Yb0EkFPfuo9OI5eieCQTIEXZ4Qp6oBktjbMXEeCizfPpz
+         57CJgP9NU31Q8nR3IKtBsUK0tzWUOxBIOlimy9p2ttVqRnu3T4YVret8FX9fcKTELqx2
+         mrZ1aqqP6RYz6BlrrVgvg2FAqs/kLM2XFV/brhjIehGfu7chrbmxfZ8Vbe/rBGelCSKD
+         5LCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OeNOUxJRvzJDEPV0OHCTfN/BC6OjDO8ZDnn+8g5u4A0=;
+        b=3uNIhUGFBLXYXuUoLvMisyUchwyhnbxxZOoUhLInS5VkKv5v1329kfwmR7NPUZmnss
+         COPpBH5VD7VUE+ti6ABsWBqATMeR5yVa0KDPvVVyz6bjN+trD6uWNUCSF9Ao27H+n2Fl
+         hftzPt8RLA28iZewO3cmBmO24c/KRlXDPa1FXEDgPrGApS4N/IVXNxZqVPQVsJWy/VSL
+         VEKkYnwKpt/KhlpMPMTOLTFpRjkyXcuh50C4FJFcdpgGMHKd1emHZX9xwAoHktP2fwn5
+         7uMdPCc+UYBs3Y6X1YVtJDgvLaFfRwvysyiPQK2PU5AxMvzcol2xMGlUdUHtpa4GO6Ze
+         lSPQ==
+X-Gm-Message-State: AOAM532a/tkLPsebZNAuiXBnRp1f93scAC3vT2GXF9ViG3ma0U3iAGkg
+        AnWNIHM/Gv6HjaDj7sNNHG0bYw==
+X-Google-Smtp-Source: ABdhPJx4b5NHZUnIbdAlET8r6WP74/NerDHcpOLA4tts/SA95+Tbms6lQZAldQ7a4U4g4i2c+FcbbQ==
+X-Received: by 2002:a4a:c987:: with SMTP id u7mr27386225ooq.65.1638888717409;
+        Tue, 07 Dec 2021 06:51:57 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o26sm2813460otj.14.2021.12.07.06.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 06:51:56 -0800 (PST)
+Date:   Tue, 7 Dec 2021 06:53:24 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/15] arm64: dts: qcom: Add base SM8450 DTSI
+Message-ID: <Ya91ZLytXpm9brJu@ripper>
+References: <20211201072915.3969178-1-vkoul@kernel.org>
+ <20211201072915.3969178-2-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7aaacd8-7972-6ab9-ff0c-e286bf23993a@arm.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211201072915.3969178-2-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 07, 2021 at 12:13:16PM +0000, Andrew Kilroy escreveu:
-> 
-> 
-> On 07/12/2021 09:57, John Garry wrote:
-> > On 03/12/2021 12:35, Andrew Kilroy wrote:
-> > > Updates the common and microarch json file to add counters
-> > > available in the Neoverse N2 chip, but should also apply to other ArmV8
-> > > and ArmV9 cpus.  Specified in ArmV8 architecture reference manual
-> > > 
-> > >    https://developer.arm.com/documentation/ddi0487/gb/?lang=en
-> > > 
-> > > Some of the counters added to armv8-common-and-microarch.json are
-> > > specified in the ArmV9 architecture reference manual supplement
-> > > (issue A.a):
-> > > 
-> > >    https://developer.arm.com/documentation/ddi0608/aa
-> > > 
-> > > The additional ArmV9 counters are
-> > > 
-> > >    TRB_WRAP
-> > >    TRCEXTOUT0
-> > >    TRCEXTOUT1
-> > >    TRCEXTOUT2
-> > >    TRCEXTOUT3
-> > >    CTI_TRIGOUT4
-> > >    CTI_TRIGOUT5
-> > >    CTI_TRIGOUT6
-> > >    CTI_TRIGOUT7
-> > > 
-> > > This patch also adds files in pmu-events/arch/arm64/arm/neoverse-n2 for
-> > > perf list to output the counter names in categories.
-> > > 
-> > > A subsequent patch renames armv8-common-and-microarch.json and
-> > > armv8-recommended.json to reflect that counters for armv9 are being
-> > > added.
-> > 
-> > This commentary should be in a cover letter. Please do that.
-> > 
-> > And did you consider just adding a armv9-common-and-microarch.json and
-> > armv9-recommended.json instead of adding to and renaming the v8 version?
-> > I know that it creates scattered definitions, but we already have that in
-> > dividing the common and the recommended JSONs.
-> > 
-> 
-> I considered it, but I wasn't sure what was preferable.  I thought I'd get
-> some feedback.  Do you consider the separation important?  Any particular
-> reason?
+On Tue 30 Nov 23:29 PST 2021, Vinod Koul wrote:
 
-Applied the second patch, waiting for a conclusion to this discussion to
-pick the other two patches.
+> This add based DTSI for SM8450 SoC and includes base description of
+> CPUs, GCC, RPMHCC, UART, interuupt-controller which helps to boot to
+> shell with console on boards with this SoC
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 476 +++++++++++++++++++++++++++
+>  1 file changed, 476 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+[..]
+> +		qupv3_id_0: geniqup@9c0000 {
+> +			compatible = "qcom,geni-se-qup";
+> +			reg = <0x0 0x009c0000 0x0 0x2000>;
+> +			clock-names = "m-ahb", "s-ahb";
+> +			clocks = <&gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
+> +				 <&gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +			status = "disabled";
+> +
+> +			uart7: serial@99c000 {
+> +				compatible = "qcom,geni-debug-uart";
 
-- Arnaldo
+There's nothing special about uart7 on a platform level, so my
+suggestion is that you use the standard compatible of "qcom,geni-se-qup"
+here and then override the compatible with "qcom,geni-debug-uart" in the
+qrd.dts.
+
+Regards,
+Bjorn

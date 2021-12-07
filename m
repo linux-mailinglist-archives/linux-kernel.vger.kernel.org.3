@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56BB46C344
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C799546C346
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240811AbhLGTE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S240817AbhLGTEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbhLGTE1 (ORCPT
+        with ESMTP id S231668AbhLGTEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:04:27 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07C4C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:00:56 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id l24so346984uak.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:00:56 -0800 (PST)
+        Tue, 7 Dec 2021 14:04:33 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F27C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:01:03 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id c32so560465lfv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:01:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XUW31wASrpej0TIE+YgQ7k+2lttAbs6gSJFGK6RBLPs=;
-        b=KotoaVRcY7w9F5qPYhg8uT5YU7vXM9Nap2d+E1Jj1bxEtOYIf9ruXQ2RAO0t2oh1Lx
-         w1kS4gQlcV9cDX0SNOXlr102ieZAo7dWvX6DG4HYvRvBteqXn+BEqg240XGceQWaoTVE
-         DCCPrFe/J/E5/oWvBD53iiUij4SwsK1uBtxB1d6Olh2xg74wAlivLavVKKltnXLE0SHT
-         1qUkOGdgwae3JKT9EC7iLcVsFbHX7Q3ZeyNwsEfuTFZYHsT6aDnQTw/qeOq7dzDcpSUo
-         dzAscOhwDrMuPGwa/hjXZ2imTvQxdzS7Q4UvbKsiAh2ygvo0cIqjg3oztvLwmNrGuAbe
-         TgDQ==
+        bh=SupVShNTJXevij1EjwBsA50LSidShtjCg/jXRot9bjo=;
+        b=r3DyYrLKfSQMsfPXa31vjOKwQh2BCyUHk/ALY7BiaifwGaT4UGUmiNmjvztyRKLNWr
+         S+yen2gW1+z5FuFYaeXS8KFz/bg2gq1LFLuNWj22DKJHEUebD+oPYu3OOK3CNn5JpDj+
+         d9sN4Zx32FnSjBrQVAnSSx93kLiX+Rm/o5XnK606mauTydScUqvPkpOFJv/OLNOEL/kc
+         mQvvvSS7oU58jh7wVNHRG5yHZyIFWiezcZosFLUBV9NVe+2FsR+x43qbYNLAVjH5ps59
+         ZnR340Wofoz25vQQ10zcZqRTURu1XwrKOcbdtv/vKfa7suRPRMfHPL5Mv1sBi9wMOyiW
+         M2NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XUW31wASrpej0TIE+YgQ7k+2lttAbs6gSJFGK6RBLPs=;
-        b=C6wkK4kjdGdyyzEEfVWSQofFNCI4GHLfLdhiGXsMMNKuYdobKo7UR6iC9WzOnUHLYf
-         ziUkfkF7r2hNyewWnagD9PgDebNgSd1AS9uLoj835XfwHwStgrayDcIu0KoHrqLXeEMb
-         1doLQGYcWaz/nomK4RCN9C7PwhDYZk/ltw0msQy8vr6ijaleaxM40UcUMKD10H4G1PAG
-         Q1r+ajH4AVxBKz1Rvnnlrqbaoxk1qjntKpTjTqGDfLO7xEy7gpYyqeLDs0Kd/c0Uq8pz
-         6TXx+0CEwLZlr5tbJiI4+IUmAjbU5HgbvapwxwV1mmPfBNQW2JE1CntXUiPOIbWh5Vy6
-         ASxQ==
-X-Gm-Message-State: AOAM533WaWteLcaCs34C3E24y2uZgPEgufWtyCPSmmhDEBS4Boo9bSyW
-        jtOmxStZYJop12xxCnmaC+oiBXBqdlW/sAbuw0VAIg==
-X-Google-Smtp-Source: ABdhPJzv2fTwd3ja4cBNvXF6S3n5jGC34sPus7OnJwNyYndFTy2ncbXaEU8Qldo0qciKxLX0Ic5B597EeLxHxyLu55o=
-X-Received: by 2002:a67:3382:: with SMTP id z124mr46939269vsz.57.1638903656074;
- Tue, 07 Dec 2021 11:00:56 -0800 (PST)
+        bh=SupVShNTJXevij1EjwBsA50LSidShtjCg/jXRot9bjo=;
+        b=OzSmEltnHZED4sf5t9pa+4CSv75/iAEf+1KlgtH5heEMn3ptSAxbeIF5ZqRBNFG96m
+         C0VG7a/OEo7zybXzC0fK5W3FHJA9+EMGPFbA7a3fDPe6rpmtNXeflP+oq6tyRe0qrkuv
+         F6S42hfDgzHKgRf70AFVYPPYh/XYFru00rNJr/YykQkyRe8NZJEVGEH3fL8iLaMjQHHt
+         Zs0qBuJl6CP/QmN3Ufr52ou/DxhGl5Ah5+oCteB5PsFZC5ZYP4OR9DdzQtO7Qjkme0Ml
+         b7xZAkEtV41jSQwvT+w3PkRa4iCoZYlOycMYHsmcgROh+LDWZXiWxZztg7LSBqG3IMPY
+         K/lw==
+X-Gm-Message-State: AOAM532qkDg1nHiouARSQP6ZnnMzj90wrBY839BOZ7E/BcfBi/VtxDbR
+        SiwGhAzw9hmiuFHO5GaEMcmT0047cuvhfxR7qK8muw==
+X-Google-Smtp-Source: ABdhPJws1M5JeOEGcy41V2RcswPp254QO96BxAPTUKc20NHWJL5bam2X9XT3xWRLxCoy1rPVWr5hd+t+GrwApmkBD1g=
+X-Received: by 2002:a05:6512:607:: with SMTP id b7mr43740531lfe.489.1638903661109;
+ Tue, 07 Dec 2021 11:01:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-6-virag.david003@gmail.com>
-In-Reply-To: <20211206153124.427102-6-virag.david003@gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Dec 2021 21:00:44 +0200
-Message-ID: <CAPLW+4kSDHUsvHo0njykTTRGqaAehRt6MXdJF73OzR47avOm9Q@mail.gmail.com>
-Subject: Re: [PATCH v4 5/7] clk: samsung: clk-pll: Add support for pll1417x
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211204220249.591482-1-arnd@kernel.org> <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
+In-Reply-To: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 7 Dec 2021 11:00:49 -0800
+Message-ID: <CAKwvOdnH9tV3PK4k+XEnjo_Le88o+Jqt-H-_C2VnsKiiBUAW9g@mail.gmail.com>
+Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 17:32, David Virag <virag.david003@gmail.com> wrote:
+On Tue, Dec 7, 2021 at 10:41 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> pll1417x is used in Exynos7885 SoC for top-level integer PLLs.
-> It is similar enough to pll0822x that practically the same code can
-> handle both. The difference that's to be noted is that when defining a
-> pl1417x PLL, the "con" parameter of the PLL macro should be set to the
-> CON1 register instead of CON3, like this:
+> On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > clang-14 does not like the way this driver converts a 'long double'
+> > to an integer when the target architecture disables floating point
+> > support:
+> >
+> > drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+> >         data->wde_interval = 300L * 1E6L;
+> >                                   ^
+> >
+> > Turn this into pure integer math and make it more readable at the
+> > same time using the NSEC_PER_MSEC macro instead.
+> >
+> > Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >
->     PLL(pll_1417x, CLK_FOUT_SHARED0_PLL, "fout_shared0_pll", "oscclk",
->         PLL_LOCKTIME_PLL_SHARED0, PLL_CON0_PLL_SHARED0,
->         NULL),
+> Thanks for the patch! The change in clang-14 (ToT) that triggered this
+> has had another patch on top reverting these diagnostics.
+> https://reviews.llvm.org/D114162
 >
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: David Virag <virag.david003@gmail.com>
-> ---
-> Changes in v2:
->   - Nothing
+> That said, this change is still worthwhile for the improved semantics, IMO.
 >
-> Changes in v3:
->   - Nothing
->
-> Changes in v4:
->   - Added R-b tag by Krzysztof Kozlowski
->
->  drivers/clk/samsung/clk-pll.c | 1 +
->  drivers/clk/samsung/clk-pll.h | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/clk/samsung/clk-pll.c b/drivers/clk/samsung/clk-pll.c
-> index 83d1b03647db..70cdc87f714e 100644
-> --- a/drivers/clk/samsung/clk-pll.c
-> +++ b/drivers/clk/samsung/clk-pll.c
-> @@ -1476,6 +1476,7 @@ static void __init _samsung_clk_register_pll(struct samsung_clk_provider *ctx,
->                 else
->                         init.ops = &samsung_pll35xx_clk_ops;
->                 break;
-> +       case pll_1417x:
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I wonder why this switch have a bunch of fall through cases, but none
-marked with "fallthrough;" line, and both checkpatch and "make" turn
-blind eye on that? Anyway, I guess it's ok as is, just an observation.
+Ah, a fix has already been picked up:
+https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?id=644106cdb89844be2496b21175b7c0c2e0fab381
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
->         case pll_0822x:
->                 pll->enable_offs = PLL0822X_ENABLE_SHIFT;
->                 pll->lock_offs = PLL0822X_LOCK_STAT_SHIFT;
-> diff --git a/drivers/clk/samsung/clk-pll.h b/drivers/clk/samsung/clk-pll.h
-> index a739f2b7ae80..c83a20195f6d 100644
-> --- a/drivers/clk/samsung/clk-pll.h
-> +++ b/drivers/clk/samsung/clk-pll.h
-> @@ -32,6 +32,7 @@ enum samsung_pll_type {
->         pll_2550xx,
->         pll_2650x,
->         pll_2650xx,
-> +       pll_1417x,
->         pll_1450x,
->         pll_1451x,
->         pll_1452x,
+>
+> > ---
+> >  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+> > index fbb344353fe4..9fc88a9f244c 100644
+> > --- a/drivers/power/reset/ltc2952-poweroff.c
+> > +++ b/drivers/power/reset/ltc2952-poweroff.c
+> > @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+> >
+> >  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+> >  {
+> > -       data->wde_interval = 300L * 1E6L;
+> > -       data->trigger_delay = ktime_set(2, 500L*1E6L);
+> > +       data->wde_interval = 300 * NSEC_PER_MSEC;
+> > +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+> >
+> >         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> >         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+> > --
+> > 2.29.2
+> >
+>
+>
 > --
-> 2.34.1
->
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers

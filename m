@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D15D846B490
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832C146B492
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbhLGHzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbhLGHz3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:55:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5740C061746;
-        Mon,  6 Dec 2021 23:51:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S231555AbhLGHzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:55:33 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:56991 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230360AbhLGHzc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 02:55:32 -0500
+Received: from [192.168.0.3] (ip5f5aea86.dynamic.kabel-deutschland.de [95.90.234.134])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2F26BCE1A05;
-        Tue,  7 Dec 2021 07:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A69C341C3;
-        Tue,  7 Dec 2021 07:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638863516;
-        bh=jJB7V/1FDjCODHYTLlFlS5enXptOdG8ZYS3VC4cWcVw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vRE24ncYXDsRhhK2eQiUlxP7Y8oQsTsshV3hfVEv8bGtSxchPZ8/SkzPNYE1E38An
-         aOvrifHb/I9rQaWzQ07/d2NwtcfBxBO7tW7Ohdsq63Q2QKH1LNL+bVYpuGXJT676qi
-         Uz/SbFs2qPx/iZd1dSkcACeZlmJJNSFCfEQlT6xo=
-Date:   Tue, 7 Dec 2021 08:51:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Will Deacon <will@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V2 27/36] genirq/msi: Provide interface to retrieve Linux
- interrupt number
-Message-ID: <Ya8SmWGiCnt4xTmC@kroah.com>
-References: <20211206210307.625116253@linutronix.de>
- <20211206210439.128089025@linutronix.de>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id B070C61E6478B;
+        Tue,  7 Dec 2021 08:52:00 +0100 (CET)
+Message-ID: <0ba14395-7c35-025a-d904-fddf5dd1e0bb@molgen.mpg.de>
+Date:   Tue, 7 Dec 2021 08:52:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206210439.128089025@linutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Check that no dot/period ends the commit message summary?
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:39:39PM +0100, Thomas Gleixner wrote:
-> This allows drivers to retrieve the Linux interrupt number instead of
-> fiddling with MSI descriptors.
-> 
-> msi_get_virq() returns the Linux interrupt number or 0 in case that there
-> is no entry for the given MSI index.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Dear checkpatch folks,
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+git’s default messages don’t use a dot/period at the end of the commit 
+message summary (title).
+
+•   Revert …
+•   Merge …
+
+Some guides on the WWW, like *How to Write a Git Commit Message* [1], 
+also recommend that: Do not end the subject line with a period.
+
+Would that be sensible to add to the checkpatch script?
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://cbea.ms/git-commit/#end

@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF3346B3E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C37B246B3E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhLGHcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:32:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37296 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbhLGHck (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:32:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S230146AbhLGHeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:34:24 -0500
+Received: from marcansoft.com ([212.63.210.85]:35528 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229765AbhLGHeX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 02:34:23 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58E25B80DCB;
-        Tue,  7 Dec 2021 07:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E674C341C3;
-        Tue,  7 Dec 2021 07:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638862148;
-        bh=5Dq/7jLxcO2UFh4QvOiytWk2dl7v7XkLRY05FxFYRqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YG6cDvRY/296PCdJ1xhJlyEaGHix7q7ygi4kq76xEErjx2iLH1gQRje/NH8btMrsl
-         076PcMMIMt7N/Ku0WxlNaHfJUSJvgsT73sC/3TDkBy4q3g36+XSbGjtufJX3IQJYgN
-         ZXpLhW77S1GCMQ+zWHHjpuh6DQ4EO58XqiXsdUoNFTIBsWOd2K8z8mRtGcOayz7GAF
-         pl7j34I69Y4J1sxLx1AVeApxMwpz3JYdFrELoI3NOwu85zgpxw2KXHND2exLrp5ROM
-         8nmNumt/j19kXx3UZkU9aeOU+OpdHG09OrAT47zF/0CigiN6V5pbt3Wc1/Ekku2cpS
-         PB0VHMTt6UhzA==
-Date:   Tue, 7 Dec 2021 09:29:03 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 0/6] Allow parallel devlink execution
-Message-ID: <Ya8NPxxn8/OAF4cR@unreal>
-References: <cover.1638690564.git.leonro@nvidia.com>
- <20211206180027.3700d357@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 7EF2F41F7F;
+        Tue,  7 Dec 2021 07:30:48 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [PATCH v2 0/3] drm/simpledrm: Apple M1 / DT platform support fixes
+Date:   Tue,  7 Dec 2021 16:29:40 +0900
+Message-Id: <20211207072943.121961-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206180027.3700d357@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 06:00:27PM -0800, Jakub Kicinski wrote:
-> On Sun,  5 Dec 2021 10:22:00 +0200 Leon Romanovsky wrote:
-> > This is final piece of devlink locking puzzle, where I remove global
-> > mutex lock (devlink_mutex), so we can run devlink commands in parallel.
-> > 
-> > The series starts with addition of port_list_lock, which is needed to
-> > prevent locking dependency between netdevsim sysfs and devlink. It
-> > follows by the patch that adds context aware locking primitives. Such
-> > primitives allow us to make sure that devlink instance is locked and
-> > stays locked even during reload operation. The last patches opens
-> > devlink to parallel commands.
-> 
-> I'm not okay with assuming that all sub-objects are added when devlink
-> is not registered.
+Hi DRM folks,
 
-But none of the patches in this series assume that.
+This short series makes simpledrm work on Apple M1 (including Pro/Max)
+platforms the way simplefb already does, by adding XRGB2101010 support
+and making it bind to framebuffers in /chosen the same way simplefb
+does.
 
-In devlink_nested_lock() patch [1], I added new marker just to make sure
-that we don't lock if this specific command is called in locked context.
+This avoids breaking the bootloader-provided framebuffer console when
+simpledrm is selected to replace simplefb, as these FBs always seem to
+be 10-bit (at least when a real screen is attached).
 
-+#define DEVLINK_NESTED_LOCK XA_MARK_2
+Changes since v1:
+- Moved the OF platform device setup code from simplefb into common
+  code, instead of duplicating it in simpledrm
+- Rebased on drm-tip
 
-[1] https://lore.kernel.org/all/2b64a2a81995b56fec0231751ff6075020058584.1638690564.git.leonro@nvidia.com/
+Hector Martin (3):
+  of: Move simple-framebuffer device handling from simplefb to of
+  drm/format-helper: Add drm_fb_xrgb8888_to_xrgb2101010_toio()
+  drm/simpledrm: Add XRGB2101010 format
+
+ drivers/gpu/drm/drm_format_helper.c | 62 +++++++++++++++++++++++++++++
+ drivers/gpu/drm/tiny/simpledrm.c    |  2 +-
+ drivers/of/platform.c               |  5 +++
+ drivers/video/fbdev/simplefb.c      | 21 +---------
+ include/drm/drm_format_helper.h     |  3 ++
+ 5 files changed, 72 insertions(+), 21 deletions(-)
+
+-- 
+2.33.0
+

@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F2246BD69
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609FE46BD6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbhLGOWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:22:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58350 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbhLGOWR (ORCPT
+        id S237018AbhLGOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229615AbhLGOXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:22:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D434B817BB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9606EC341C3;
-        Tue,  7 Dec 2021 14:18:44 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 09:18:43 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace: use WARN instead of printk and WARN_ON
-Message-ID: <20211207091843.0765fa3f@gandalf.local.home>
-In-Reply-To: <1638881732-3157-1-git-send-email-wangqing@vivo.com>
-References: <1638881732-3157-1-git-send-email-wangqing@vivo.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Dec 2021 09:23:44 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D234DC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Dc6Umx8GfzggaUiLtnc+utxyaUi99WuMF+Fg2ep+0Tw=; b=qD2GLdUcIwzJ8N0MPnmOS6M4kN
+        jVNZ4qa+teTeT5hYGMSIEvPOD6yzSouvWUZZ1NBqRm9BmzPGJAGiJIQMiU/Ui6WC3RBsUq846tREA
+        T43Ev5G76W9NcLI08FpY1rRqCX6FDCCu4DGPg0B+TMKa5m7UQw+UXOO7dNTWYlO5/5lq+iqwMFeZW
+        68WV4ZvwN280nKQNBHVEdikGniebqj8CzdKi7aOPRBpKQM7wlQ/1PpFZWAYNut/ohkHewKSRxkknB
+        l2TRyAGRRMk0FJDT/KUT/Kr/kb//I3c+EjEyFGCsAqDa90pV1ajh43mY+EPY5GiBzE3PS8q4LFCo/
+        wRnH0QTg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mubJs-002mFt-4R; Tue, 07 Dec 2021 14:19:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C08713000E6;
+        Tue,  7 Dec 2021 15:19:46 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 85E14201D19A6; Tue,  7 Dec 2021 15:19:46 +0100 (CET)
+Date:   Tue, 7 Dec 2021 15:19:46 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 00/11] lockdep: Unbreak lockdep's selftest work on
+ PREEMPT_RT.
+Message-ID: <Ya9tguFHUePjEh/W@hirez.programming.kicks-ass.net>
+References: <20211129174654.668506-1-bigeasy@linutronix.de>
+ <20211202211253.GC16608@worktop.programming.kicks-ass.net>
+ <20211206152618.avqghqegykwjnxm5@linutronix.de>
+ <Ya4vkmFek71v88+t@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya4vkmFek71v88+t@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Dec 2021 04:55:32 -0800
-Qing Wang <wangqing@vivo.com> wrote:
-
-> From: Wang Qing <wangqing@vivo.com>
+On Mon, Dec 06, 2021 at 04:43:14PM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 06, 2021 at 04:26:18PM +0100, Sebastian Andrzej Siewior wrote:
+> > On 2021-12-02 22:12:53 [+0100], Peter Zijlstra wrote:
+> > > Thanks! (fixed up that first thiny), lemme feed it to the robots.
+> > 
+> > Thank you. I see bots' commit mail for 1-9. I don't see them for 10+11
+> > but then I also don't see those two in your tree.
+> > What should I do with them?
 > 
-> Simply use WARN instead of printk(KERN_WARNING, ...) and WARN_ON.
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  kernel/trace/trace_output.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> index 3547e71..e0348ec
-> --- a/kernel/trace/trace_output.c
-> +++ b/kernel/trace/trace_output.c
-> @@ -775,8 +775,7 @@ int register_trace_event(struct trace_event *event)
->  		list_add_tail(&event->list, list);
->  
->  	} else if (event->type > __TRACE_LAST_TYPE) {
-> -		printk(KERN_WARNING "Need to add type to trace.h\n");
-> -		WARN_ON(1);
-> +		WARN(1, "Need to add type to trace.h\n");
+> I've no idea wth happened there, let me go fix that.
 
-If you are going to fix this, then please fix it properly.
-
-	} else if (WARN(event->type > __TRACE_LAST_TYPE,
-			"Need to add type to trace.h")) {
-
->  		goto out;
->  	} else {
->  		/* Is this event already used */
-> @@ -1569,11 +1568,9 @@ __init static int init_events(void)
->  		event = events[i];
->  
->  		ret = register_trace_event(event);
-> -		if (!ret) {
-> -			printk(KERN_WARNING "event %d failed to register\n",
-> -			       event->type);
-> -			WARN_ON_ONCE(1);
-> -		}
-> +		if (!ret)
-> +			WARN_ONCE(1, "event %d failed to register\n",
-> +				  event->type);
-
-And this should just turn into:
-
-		WARN_ONCE(!ret, "event %d failed to register", event->type);
-
--- Steve
-
-
->  	}
->  
->  	return 0;
-
+Still now clue how they got lost, but it should be sorted now.

@@ -2,118 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D2946C303
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B15146C30F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240657AbhLGSpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240627AbhLGSpH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:45:07 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96BDC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:41:36 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b40so370333lfv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=aDIAN17BKGq0GIN+YPIlQpFEpU4IUGBEknSlUTURp1gnh6I71NueXG/IAR3kdGGdnb
-         LXMkE3sM3iS1y3vT4KBCqNdcAzBh0GwpFSY5BZemA+TV9dieQBcMWd4/UUeLInNlkuQW
-         Bf+QMp2p6J6HDkVKgrVYIl6fLaEjWgoqLxuWNHZp7QGVxyaXHU2M2pLj7KRcT6w9jvpe
-         O5LW/kXKV27CBR25kEBseIpFQxdPcpxkMwlMKja49bqU9dOWidyseQGcyzsz6F4R1qO8
-         wHM04ZWGdvFpC4HyJWrMHKaz3QULjsP6DkWcM+Q/H1pkgRGltpi1JaMR6nA+D/q3r45P
-         tNuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=fzN8JI32PlriNJeQIj1EPCmeRE7IoNb3AmZk+jf+A6OYdk9WUC8YCCRaBIb7dtSn7v
-         SLXmKopc81/FgFjQ4OvwStTgC/TCiZQYsV6o/L+wJesxUMhzjAXEm8O1uJ7gMnzly/EM
-         KW/jLKp/IBOTipLqSMtvAbxqMNUJXpzIEutX7x54ly2IdivFdIUH5U08FpyXRN2Anpzd
-         uOh3jvmBAMSfBFrMee66SdcIWGRgDksuIPCKBzgWS70R+gfJ0q79AuYE7TWmXtXPDBGl
-         jeJT+umvKDzwaMhnKdehruFturYXeDMbMeG4qMcKGeGIH0ZEzPgMr09Gb5z5p7Py2e7s
-         xE1g==
-X-Gm-Message-State: AOAM533k7AE6RIaPVUIBbg+FEbM7pY+Ve0M+IljA3hJyib+AxKZF2Ay/
-        VOAZgw/U430K9axqlVXxFJgmuk7XKYSwFJ0Fc6Jbyg==
-X-Google-Smtp-Source: ABdhPJyeHj3lrlUlDby3ennl3ufCpDgdCUvs6c7j5SLDxK90H6tLe6REyxb4vxCtSTv4FGgP01zjRMahD5LyaHn+DeQ=
-X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr41550500lfv.523.1638902494780;
- Tue, 07 Dec 2021 10:41:34 -0800 (PST)
+        id S240682AbhLGStb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:49:31 -0500
+Received: from mga06.intel.com ([134.134.136.31]:61567 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230001AbhLGSta (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:49:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298454455"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="298454455"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:42:54 -0800
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="515414445"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:42:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mufPU-003KCw-HN;
+        Tue, 07 Dec 2021 20:41:52 +0200
+Date:   Tue, 7 Dec 2021 20:41:52 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] i2c: designware: Add a note about struct
+ dw_scl_sda_cfg usage
+Message-ID: <Ya+q8CPfpBLgXYKf@smile.fi.intel.com>
+References: <20211203171318.62503-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20211204220249.591482-1-arnd@kernel.org>
-In-Reply-To: <20211204220249.591482-1-arnd@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Dec 2021 10:41:24 -0800
-Message-ID: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203171318.62503-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> clang-14 does not like the way this driver converts a 'long double'
-> to an integer when the target architecture disables floating point
-> support:
->
-> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
->         data->wde_interval = 300L * 1E6L;
->                                   ^
->
-> Turn this into pure integer math and make it more readable at the
-> same time using the NSEC_PER_MSEC macro instead.
->
-> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Dec 03, 2021 at 07:13:18PM +0200, Andy Shevchenko wrote:
+> Add a note about struct dw_scl_sda_cfg usage to discourage people
+> of using this structure on new platforms. Instead they should try
+> hard to put the needed information into firmware descriptions.
 
-Thanks for the patch! The change in clang-14 (ToT) that triggered this
-has had another patch on top reverting these diagnostics.
-https://reviews.llvm.org/D114162
-
-That said, this change is still worthwhile for the improved semantics, IMO.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> index fbb344353fe4..9fc88a9f244c 100644
-> --- a/drivers/power/reset/ltc2952-poweroff.c
-> +++ b/drivers/power/reset/ltc2952-poweroff.c
-> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
->
->  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
->  {
-> -       data->wde_interval = 300L * 1E6L;
-> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
-> +       data->wde_interval = 300 * NSEC_PER_MSEC;
-> +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
->
->         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
-> --
-> 2.29.2
->
-
+Scratch this, I will send a bigger series where I incorporate this one into.
 
 -- 
-Thanks,
-~Nick Desaulniers
+With Best Regards,
+Andy Shevchenko
+
+

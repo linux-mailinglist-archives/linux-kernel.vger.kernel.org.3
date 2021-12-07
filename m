@@ -2,137 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2087F46C14C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAE146C14E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239791AbhLGRHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:07:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52256 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239784AbhLGRHy (ORCPT
+        id S239797AbhLGRIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239784AbhLGRIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:07:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638896663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IXSzrQOI/K5tZY+kjNzeUmFO3T6QyzyAUaamIjn3uk8=;
-        b=idxzV9kQzsXkoybSf6uoXg5hjn0hT0lMfZuzD3VaHuEZhPL4aLG0Dc81Vxzx7tna+6iH2V
-        DkanrNNylOgnhh4qV5orPcZR9Ety1soGhMJ03XHWecl1bzChMqsfQWYB1u2JAmHIQlL0QA
-        4hknGj07YRFHOfJiiltLbYLBS634Zf4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-bWCt9y2KPC6IlDjqg2EroQ-1; Tue, 07 Dec 2021 12:04:22 -0500
-X-MC-Unique: bWCt9y2KPC6IlDjqg2EroQ-1
-Received: by mail-ed1-f71.google.com with SMTP id c1-20020aa7c741000000b003e7bf1da4bcso11910018eds.21
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:04:22 -0800 (PST)
+        Tue, 7 Dec 2021 12:08:14 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3650DC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:04:44 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id c4so30824204wrd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I8eF5Cm7NpdqCyk/v+5ozHvBNPRK3ZZovGuWeGlLnro=;
+        b=GyZAIf7sxlpA27BvC5e9ZJbLsqMtDBz6rej2U4LCoYzmvO2ViNdqI1QjFFhifL4AbY
+         GXcLogtZwAXDOMXAZdJBoNFn+BMI/jtmtzQ2OC63iCd9DXfiNX7Pg7sTPeNftBniSOU3
+         fYk49pqCidTZ5Kjx/eh/v65mhIEUjSk6aK8S+mcEXBpoDwijkcXKzr7igUnKkOJJjU3O
+         2AGV38OeiTlZXt15OxJKooPz5pTT/fctZ+1fSmov6/bDnWoLiIvrP1xNksRd6MoqVnmh
+         xeqk1uQzRrDxVEDn35KGa2b6B9BG5pZ/brtT/zEPCY+lepyikgZkR7yGmLJrIH1vFXhU
+         mWbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IXSzrQOI/K5tZY+kjNzeUmFO3T6QyzyAUaamIjn3uk8=;
-        b=vw+qZjdUNb6BvoleAoySPMIBwXLVSO1y9G3Cj56UHbFS71yPceqopt7UPPGl3O4ox6
-         NJMw0Qx4Ov8HQkCSwQAtPVOnPBjJEq+DxCaf6wxYjfAFtOsEC19129FpW8omqiLQXzRJ
-         a8hoh60au+sS1growqUja4bs1Xk1zkGofIpxDrcdUuMtMOwDzQkngATSru0f+rzibQ+K
-         +Cu6axUP0Y8PXKVbwijVKuVUvBcl/Rh6IPVkbL/iwiu7e45HVEzyqBL7ynGhXOC5emjc
-         xo39yUoN9T35yulwBWQlLUKqqbW2qZCtSMXvVVUbqMQlxP2+hjnZnhlcxA0UAPlZeevH
-         llmw==
-X-Gm-Message-State: AOAM530afijeqFd00FXmcHgifnrQQ/wPwnNPORfCKDTrZaAPGodfMI6T
-        UONv2tgDRObAoUjr1/6SmWM29BAbsGSfwXNdCwVNIGx0IJ6Wqx4atEON9Nr3DzI7UhcmGKGTwQR
-        bKLP5qkUVA2uJL5E88jFVGz2S
-X-Received: by 2002:a05:6402:1914:: with SMTP id e20mr11175893edz.96.1638896661288;
-        Tue, 07 Dec 2021 09:04:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzwAgfWRJ0ycKbIJkQMQpvQquErHiSiNvlEGv/U09VDwMX7lCMbFfZBtuIWHyyCb05mtdvIrg==
-X-Received: by 2002:a05:6402:1914:: with SMTP id e20mr11175865edz.96.1638896661130;
-        Tue, 07 Dec 2021 09:04:21 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id y15sm202023edr.35.2021.12.07.09.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 09:04:20 -0800 (PST)
-Date:   Tue, 7 Dec 2021 18:04:18 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     "nakamura.shun@fujitsu.com" <nakamura.shun@fujitsu.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
-Subject: Re: libperf: lack of interface
-Message-ID: <Ya+UEn+qjUEzgKfq@krava>
-References: <OSBPR01MB460016842A4310264B1CC5A0F7CD9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
- <YS+B6PVHtiTmqZS+@kernel.org>
- <YTCOVGyffe+VwL6G@krava>
- <OSBPR01MB4600E7C8C79D64125270D034F7A19@OSBPR01MB4600.jpnprd01.prod.outlook.com>
- <OSBPR01MB4600A616AD3341EAF6AA3DE8F7BC9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
- <YXAJhTC9aqOS/GWy@krava>
- <OSBPR01MB460067F4CE80D8EF6B707D4CF7809@OSBPR01MB4600.jpnprd01.prod.outlook.com>
- <OSBPR01MB46002D1F64E2349CA9E742A4F76A9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
- <OSBPR01MB46003CB99B9AAC0A574D341DF76E9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I8eF5Cm7NpdqCyk/v+5ozHvBNPRK3ZZovGuWeGlLnro=;
+        b=xpxoviUUfAWh8j+1wr4tIKvajs7e1QouPlcdVLfpehMkJC8j+G1AtEvX9/klg8nqOJ
+         my1d14nb1eModo95hoadXbJb1YecoGfYR+Llm19a0qf/M9nOMQK3PLYbYadjHeAvDb+c
+         tCAD/4Sip4wTjq3CPoelcmqCFdD/TY5F5cy0BpcHyScBBvBoJPsSWhEuw4Go5OsuQYAJ
+         pqniOPcRhch7r+fZJUPsOX1GQmfE2vkr+Dtzs+qeBeh6hVrLuEoO5Suh0WbUNeNEca9i
+         qK4ISDIbZgG04dRooVO5ecaE9c2fDjPF0LFMClxhG4BVQ2YNeXAXV83sDIcKOS+0VO6/
+         ZY9w==
+X-Gm-Message-State: AOAM530saMehw6x7jn2I/WNAw+v8Km8r6ULxAI9lLu6Bg/zWoipVDYQ6
+        SjRPmXhFHSGM/Hwd8ubnoQFg06B0alW6IGeuC5EoOg==
+X-Google-Smtp-Source: ABdhPJwIETaZPWETnwifeaLgE8/4vE84mq3whBqpCvFBTnHFeSusueUBDqgttIzMRNvh0UnWKTzCH7xVpDeMW14eukQ=
+X-Received: by 2002:a05:6000:47:: with SMTP id k7mr51292153wrx.485.1638896681406;
+ Tue, 07 Dec 2021 09:04:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <OSBPR01MB46003CB99B9AAC0A574D341DF76E9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+References: <20211206211219.3eff99c9@gandalf.local.home>
+In-Reply-To: <20211206211219.3eff99c9@gandalf.local.home>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Tue, 7 Dec 2021 09:04:30 -0800
+Message-ID: <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
+Subject: Re: [RFC][PATCH] tracefs: Set all files to the same group ownership
+ as the mount option
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yabin Cui <yabinc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:49:16AM +0000, nakamura.shun@fujitsu.com wrote:
-> Hi jirka
-> 
-> > > > On Mon, Oct 18, 2021 at 08:57:20AM +0000, nakamura.shun@fujitsu.com wrote:
-> > > > > Hi
-> > > > > 
-> > > > > > > On Wed, Sep 01, 2021 at 10:36:40AM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > > > > > Em Wed, Sep 01, 2021 at 09:45:10AM +0000, nakamura.shun@fujitsu.com escreveu:
-> > > > > > > > > Hello.
-> > > > > > > > >
-> > > > > > > > > I'm trying to change rdpmc test in perf_event_tests[1] to use libperf, but libperf doesn't have enough interfaces.
-> > > > > > > > > Does anyone plan to implement any of these libperf features?
-> > > > > > > > >
-> > > > > > > > > - Interfaces that can run ioctl (PERF_EVENT_IOC_RESET) from userland
-> > > > > > > > > - Interfaces that can run fcntl (SIGIO) from userland
-> > > > > > >
-> > > > > > > hi,
-> > > > > > > we could add perf_evsel__fd like below, would it help your usecase?
-> > > > > > >
-> > > > > > > if you described your usecases in more details we could
-> > > > > > > see if we could add/move something to libperf for that
-> > > > > > >
-> > > > > > > as Arnaldo said below it could be already in tools/perf/util/*.c
-> > > > > > > somewhere ;-)
-> > > > > > 
-> > > > > > As Peter says, I understood that for rdpmc, no reset is needed.
-> > > > > > 
-> > > > > > However, PAPI resets it explicitly, for example, at PAPI_reset.
-> > > > > > In other, PAPI also has the ability to call PERF_EVENT_IOC_REFLESH on overflow to call a user-registered handler, using SIGIO.
-> > > > > > 
-> > > > > > I think it is desirable to be able to achieve similar functionality.
-> > > > > 
-> > > > > Does anyone have any comments?
-> > > > 
-> > > > I'll try to add that functionality soon,
-> > > > I'll cc you on patch
-> > > 
-> > > Thank you.
-> > > I look forward to your patch.
-> > 
-> > Do you have a specific plan? 
-> > I would like to know the rough period until your patch is made.
->  
-> I will also try to implement these interfaces.
+On Mon, Dec 6, 2021 at 6:12 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+>
+> As people have been asking to allow non-root processes to have access to
+> the tracefs directory, it was considered best to only allow groups to have
+> access to the directory, where it is easier to just set the tracefs file
+> system to a specific group (as other would be too dangerous), and that way
+> the admins could pick which processes would have access to tracefs.
+>
+> Unfortunately, this broke tooling on Android that expected the other bit
+> to be set. For some special cases, for non-root tools to trace the system,
+> tracefs would be mounted and change the permissions of the top level
+> directory which gave access to all running tasks permission to the
+> tracing directory. Even though this would be dangerous to do in a
+> production environment, for testing environments this can be useful.
+>
+> Now with the new changes to not allow other (which is still the proper
+> thing to do), it breaks the testing tooling. Now more code needs to be
+> loaded on the system to change ownership of the tracing directory.
+>
+> The real solution is to have tracefs honor the gid=xxx option when
+> mounting. That is,
+>
+> (tracing group tracing has value 1003)
+>
+>  mount -t tracefs -o gid=1003 tracefs /sys/kernel/tracing
+>
+> should have it that all files in the tracing directory should be of the
+> given group.
+>
+> Copy the logic from d_walk() from dcache.c and simplify it for the mount
+> case of tracefs if gid is set. All the files in tracefs will be walked and
+> their group will be set to the value passed in.
+>
+> Reported-by: Kalesh Singh <kaleshsingh@google.com>
+> Reported-by: Yabin Cui <yabinc@google.com>
+> Fixes: 49d67e445742 ("tracefs: Have tracefs directories not set OTH permission bits by default")
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>
+>   I'm posting this as an RFC as I want to make sure this is the proper way
+>   to handle this. It really makes sense. As tracefs is simply a file system
+>   with a bunch of control knobs to control tracing, if you mount it with
+>   gid=xxx then the control knobs should be controlled by group xxx.
+>
+>
+>  fs/tracefs/inode.c | 74 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index 925a621b432e..f20f575cdaef 100644
+> +++ b/fs/tracefs/inode.c
+> @@ -161,6 +161,79 @@ struct tracefs_fs_info {
+>         struct tracefs_mount_opts mount_opts;
+>  };
+>
+> +static void change_gid(struct dentry *dentry, kgid_t gid)
+> +{
+> +       if (!dentry->d_inode)
+> +               return;
+> +       dentry->d_inode->i_gid = gid;
+> +}
+> +
+> +/*
+> + * Taken from d_walk, but without he need for handling renames.
+> + * Nothing can be renamed while walking the list, as tracefs
+> + * does not support renames. This is only called when mounting
+> + * or remounting the file system, to set all the files to
+> + * the given gid.
+> + */
 
-sorry for late reply, please do
+Hi Steve,
 
-thanks,
-jirka
+One thing that I missed before: There are files that can be generated
+after the mount, for instance when a new synthetic event is added new
+entries for that event are created under events/synthetic/ and when a
+new instance is created the new entries generated under instances/.
+These new entries don't honor the gid specified when mounting. Could
+we make it so that they also respect the specified gid?
 
+Thanks,
+Kalesh
+
+> +static void set_gid(struct dentry *parent, kgid_t gid)
+> +{
+> +       struct dentry *this_parent;
+> +       struct list_head *next;
+> +
+> +       this_parent = parent;
+> +       spin_lock(&this_parent->d_lock);
+> +
+> +       change_gid(this_parent, gid);
+> +repeat:
+> +       next = this_parent->d_subdirs.next;
+> +resume:
+> +       while (next != &this_parent->d_subdirs) {
+> +               struct list_head *tmp = next;
+> +               struct dentry *dentry = list_entry(tmp, struct dentry, d_child);
+> +               next = tmp->next;
+> +
+> +               spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
+> +
+> +               change_gid(dentry, gid);
+> +
+> +               if (!list_empty(&dentry->d_subdirs)) {
+> +                       spin_unlock(&this_parent->d_lock);
+> +                       spin_release(&dentry->d_lock.dep_map, _RET_IP_);
+> +                       this_parent = dentry;
+> +                       spin_acquire(&this_parent->d_lock.dep_map, 0, 1, _RET_IP_);
+> +                       goto repeat;
+> +               }
+> +               spin_unlock(&dentry->d_lock);
+> +       }
+> +       /*
+> +        * All done at this level ... ascend and resume the search.
+> +        */
+> +       rcu_read_lock();
+> +ascend:
+> +       if (this_parent != parent) {
+> +               struct dentry *child = this_parent;
+> +               this_parent = child->d_parent;
+> +
+> +               spin_unlock(&child->d_lock);
+> +               spin_lock(&this_parent->d_lock);
+> +
+> +               /* go into the first sibling still alive */
+> +               do {
+> +                       next = child->d_child.next;
+> +                       if (next == &this_parent->d_subdirs)
+> +                               goto ascend;
+> +                       child = list_entry(next, struct dentry, d_child);
+> +               } while (unlikely(child->d_flags & DCACHE_DENTRY_KILLED));
+> +               rcu_read_unlock();
+> +               goto resume;
+> +       }
+> +       rcu_read_unlock();
+> +
+> +out_unlock:
+> +       spin_unlock(&this_parent->d_lock);
+> +       return;
+> +}
+> +
+>  static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+>  {
+>         substring_t args[MAX_OPT_ARGS];
+> @@ -193,6 +266,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+>                         if (!gid_valid(gid))
+>                                 return -EINVAL;
+>                         opts->gid = gid;
+> +                       set_gid(tracefs_mount->mnt_root, gid);
+>                         break;
+>                 case Opt_mode:
+>                         if (match_octal(&args[0], &option))
+> --
+> 2.31.1
+>

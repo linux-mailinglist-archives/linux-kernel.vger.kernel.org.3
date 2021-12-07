@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B8446B7BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423E746B7D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbhLGJrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S234295AbhLGJtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbhLGJrI (ORCPT
+        with ESMTP id S234297AbhLGJqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:47:08 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A502FC061574;
-        Tue,  7 Dec 2021 01:43:38 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id v19so9029052plo.7;
-        Tue, 07 Dec 2021 01:43:38 -0800 (PST)
+        Tue, 7 Dec 2021 04:46:55 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5921C061574;
+        Tue,  7 Dec 2021 01:43:25 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y8so9055136plg.1;
+        Tue, 07 Dec 2021 01:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bh0sgY0CynSVOBQygTqUBy2hQ/ibiJ6Lgv4CouwRzDU=;
-        b=M9sgqrigFWPe+Yv6lI915lNQohM2FqNmsca8uGu7fmqqjqHTasDpOXMcu/mNV0wDTu
-         +oIZOr1y5zzhruKUJJ+6RDolg8sfuheh7yCTD4kxlycwd+kwSXxevD1htyI2gp+vPxI0
-         qwByNW/wqG2evb2d87yZv+ILl2spg7bsUmiYHdsaGeFwWFumll/zM9o6KxtRNBMnxsMu
-         t4UYpZM8EvELVpsPDWLJsjuFCmnIcWVv2G0/BetRYlSUG5T0Psrq8uZpnWcEccgBHPLU
-         o2osE3VuXrl3vnboQJtQ21Nw9gq4VEj4lRcCMPA5Tals/0FIiyCzGbUYMWEFj8jFd0yH
-         gVpQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=M26x5UvlFo70PWzW7kaxBf+q+G00WQfZ+Q0ntnHnbLY=;
+        b=pGJmJ0NP1NOGZ2NPAQfIIES/ZDzgnLdpK4WXWUmiiuAQIXkrZn07+L/wjHmJoR2jkQ
+         tB2pyBNdeXpH4lj08vqJQx606notQkjiIbwYXgkOLJGX2wNnbR93MyyTqt3QrjFYDl+E
+         7do9zYIm/5vb9PrQicEylejphIisuVjIMrxvzfuek0CI6p4qZ/ZiMWQDCTsadfl6JCE4
+         GVE39JSnzOZsKSF0S95d9vwcMGWlY4Dn2NBy89Iwb/g9vXlH3G2Yghjkf4Nsb/TJQ4U0
+         ESrD9rU/ixXx/wLatDHIwsfVk0y9BS+s9JRwUvSij+09CRyvyoc3LF2w4Qlz2NlOHswo
+         MIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bh0sgY0CynSVOBQygTqUBy2hQ/ibiJ6Lgv4CouwRzDU=;
-        b=xM1HHgthcQE4wbKYOkMmHzTcEPv5oDAMawvJnX9sKDIaMA19f1UIKGL2JdsVM/qgb8
-         VOchi43vIEG7AchIXDKs5S20qaiL9E1swP6oo23K1MDgA+vMVN1Ut3vEx0XuTBjzmXwy
-         DSosGgO39oB1i+xP4/GBXNwQgfPnPgNLU5M6ie+rfrCiW57TQJauH+1ShSy/gckizoOS
-         AvBtNcd5/Sf65JOF3gUWjW72qp9K8UWIIWcw237NaS3FG0SbsVQHtkBRInyRzxZGc/Cr
-         CnhGo3IzeGKFZOdeW6PFNXMEMXMBnrh+OJyQgA4g/TZsSFL08h6FlbPXp02HwoXUrehG
-         0IeA==
-X-Gm-Message-State: AOAM533rJbMcZCyEDAlKPQAHa/XziunTgirJMo7gIESRz2ELCHlWdy0/
-        DGFtoc6X3Z71LLsWpGQa4Ik=
-X-Google-Smtp-Source: ABdhPJx5dEKL7At1NDgZFuVNXph9MXWC4bBSWp/cWcLB63SBMOHIdxAHnG/gg7Pi+2M2mx5LMzgBLw==
-X-Received: by 2002:a17:902:7c8a:b0:143:bb4a:7bb3 with SMTP id y10-20020a1709027c8a00b00143bb4a7bb3mr50544959pll.46.1638870218148;
-        Tue, 07 Dec 2021 01:43:38 -0800 (PST)
-Received: from richard-System-Product-Name.. ([101.10.104.26])
-        by smtp.gmail.com with ESMTPSA id y190sm15281494pfg.153.2021.12.07.01.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 01:43:37 -0800 (PST)
-From:   Richard Hsu <saraon640529@gmail.com>
-X-Google-Original-From: Richard Hsu <Richard_Hsu@asmedia.com.tw>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        Richard_Hsu@asmedia.com.tw, andriy.shevchenko@linux.intel.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yd_Tseng@asmedia.com.tw, Cindy1_Hsu@asmedia.com.tw,
-        Andrew_Su@asmedia.com.tw
-Subject: [PATCH] gpio:gpio-amdpt:add new device and that 24-pin support
-Date:   Tue,  7 Dec 2021 17:42:39 +0800
-Message-Id: <20211207094239.5059-1-Richard_Hsu@asmedia.com.tw>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=M26x5UvlFo70PWzW7kaxBf+q+G00WQfZ+Q0ntnHnbLY=;
+        b=qgwDC5DCS2hf4HAF7s/wsBADavMrbM+R/YlS4TGL/kERFdo9EsCsEx/q9dC4a2HMIk
+         N6Fg0WDCP6PRuBLSw5q7Izfku49oOHDCZcfIJt5HyYLZs2YcM5wqwF8iNyqqNlDIVr40
+         uyljG+hX2TKDCnPgS6sa24O1/ohfJj8UiqIqyICXl8SIqv/Iz7y0UH9pxhVlEt0d3X/W
+         fqSUwxi26eiaAR8uTAn69QSNpPJu2aar7uP9iJ6a0KTtOM/1XsxVSKQhVjwYeUjjdawk
+         xyRsxdsIu7cMppQJHlzv20P00P3yvaHe2ptjdZ311425N9wv+Nh20cbgvEsyx1A4Yr1W
+         I23A==
+X-Gm-Message-State: AOAM531zEv5Zo2TebE8eCJeXRP0mgLqzY6GNnu4M4jvPwDXwTpsnmUkX
+        dOotNUdWz/fRRpF7s4XeM1M=
+X-Google-Smtp-Source: ABdhPJwanBlcrErgErWcvGEOvkGFOtcjtqkyktDf0f+ooTR3yIBhwa/jruKeOP4U0Yw//j7yD5OhZA==
+X-Received: by 2002:a17:902:d2cf:b0:141:b347:df9d with SMTP id n15-20020a170902d2cf00b00141b347df9dmr49432164plc.37.1638870205352;
+        Tue, 07 Dec 2021 01:43:25 -0800 (PST)
+Received: from nishad ([2406:7400:61:6687:fd10:b36d:bcea:520])
+        by smtp.gmail.com with ESMTPSA id fs21sm2095731pjb.1.2021.12.07.01.43.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 Dec 2021 01:43:24 -0800 (PST)
+Date:   Tue, 7 Dec 2021 15:13:08 +0530
+From:   Nishad Kamdar <nishadkamdar@gmail.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Huijin Park <huijin.park@samsung.com>,
+        Yue Hu <huyue2@yulong.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        nishadkamdar@gmail.com
+Subject: Re: [PATCH] mmc: core: Add support for the eMMC RTC feature in
+ mmc_ops
+Message-ID: <20211207094304.GA11969@nishad>
+References: <20211205191009.32454-1-nishadkamdar@gmail.com>
+ <DM6PR04MB657527FCF325EA9760032DA5FC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <20211207093009.GA11794@nishad>
+ <DM6PR04MB6575BF4FC2DE49885D0EEDF0FC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR04MB6575BF4FC2DE49885D0EEDF0FC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: RichardHsu <Richard_Hsu@asmedia.com.tw>
+On Tue, Dec 07, 2021 at 09:33:46AM +0000, Avri Altman wrote:
+> > On Tue, Dec 07, 2021 at 08:28:42AM +0000, Avri Altman wrote:
+> > >
+> > > > This patch adds support to set the RTC information in the eMMC
+> > > > device. This is based on the JEDEC specification.
+> > > >
+> > > > There is no way however, to read the RTC time from the device. Hence
+> > > > we rely on the response of the CMD49 to confirm the completion of
+> > > > the operation.
+> > > >
+> > > > This patch has been tested successfully with the ioctl interface.
+> > > > This patch has also been tested suceessfully with all the three
+> > > > RTC_INFO_TYPEs.
+> > > If this is triggered from user-space via ioctl anyway, Why do we need
+> > > this command to be implemented in the kernel?
+> > > Why not just add this to mmc-utils?
+> > >
+> > > Thanks,
+> > > Avri
+> > As per the spec, B51: Section 6.6.35:
+> > Providing RTC info may be useful for internal maintainance operations.
+> > And the host should send it on the following events:
+> > - power-up
+> > - wake-up
+> > - Periodically
+> > Hence IMO, the Kernel would be the right place of peforming this operation.
+> But your patch doesn't do that, is it?
+>
+Yes, That's because this operation may be device specific. In order to know when
+to call this function may require eMMC firmware info.
+This patch only adds support so that if the info is made available
+in the future, a separate patch can be added to introduce the calling mechanism.
 
-New ACPI gpio device(AMDIF031) support 24 gpio pins. We add new device id and pin number to .driver_data of acpi_device_id structure
-and then retrieve it by device_get_match_data() that Andy suggest it.
+Thanks and Regards,
+Nishad
 
-Signed-off-by: RichardHsu <Richard_Hsu@asmedia.com.tw>
----
- drivers/gpio/gpio-amdpt.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
-index bbf53e289141..a45693423a07 100644
---- a/drivers/gpio/gpio-amdpt.c
-+++ b/drivers/gpio/gpio-amdpt.c
-@@ -14,6 +14,7 @@
- #include <linux/platform_device.h>
-
- #define PT_TOTAL_GPIO 8
-+#define PT_TOTAL_GPIO_EX 24
-
- /* PCI-E MMIO register offsets */
- #define PT_DIRECTION_REG   0x00
-@@ -103,7 +104,8 @@ static int pt_gpio_probe(struct platform_device *pdev)
- 	pt_gpio->gc.owner            = THIS_MODULE;
- 	pt_gpio->gc.request          = pt_gpio_request;
- 	pt_gpio->gc.free             = pt_gpio_free;
--	pt_gpio->gc.ngpio            = PT_TOTAL_GPIO;
-+	/* retrieve pin number from .driver_data of acpi_device_id structure */
-+	pt_gpio->gc.ngpio            = (uintptr_t)device_get_match_data(dev);
- #if defined(CONFIG_OF_GPIO)
- 	pt_gpio->gc.of_node          = dev->of_node;
- #endif
-@@ -133,8 +135,9 @@ static int pt_gpio_remove(struct platform_device *pdev)
- }
-
- static const struct acpi_device_id pt_gpio_acpi_match[] = {
--	{ "AMDF030", 0 },
--	{ "AMDIF030", 0 },
-+	{ "AMDF030", PT_TOTAL_GPIO },
-+	{ "AMDIF030", PT_TOTAL_GPIO },
-+	{ "AMDIF031", PT_TOTAL_GPIO_EX },
- 	{ },
- };
- MODULE_DEVICE_TABLE(acpi, pt_gpio_acpi_match);
---
-2.30.2
-
+> Thanks,
+> Avri

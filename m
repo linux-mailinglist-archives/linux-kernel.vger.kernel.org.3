@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F18246BAA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A982146BAA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbhLGMHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:07:08 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:33599 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbhLGMHH (ORCPT
+        id S236034AbhLGMIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:08:38 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60862 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231576AbhLGMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:07:07 -0500
-Received: by mail-wr1-f52.google.com with SMTP id d24so29148554wra.0;
-        Tue, 07 Dec 2021 04:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WOUkRvk8md0qXXeJWUBaI3pWBezAEcrjYlSaZ1Cva6A=;
-        b=IJ9JvEIdZjVPaXmiQuBDDuypRCU4M2pzREewawCznlMR3VhnKVBatXB+JIpXdWhLut
-         bb/HyAWzYmyqMu2f2KHjcQ6XjsUJS2i8nHQtj6ANFnM9n4Y3WREEUPAyUbxkIW6mVxbc
-         c/gceWEczq2UAWCVKnLuUT5cC12BZ6Qfk7AobzIFfWQ4FRJvZrb5eADBskSsMnj6Qkbc
-         PkEDgiLYEHG1atWkVjU21I8mQ3D7sUgzKpyAxfQ7CpEoU+04rDgRCzXn0QhR4A4u7bnd
-         o39UjtaQ9yNbX9w0RfRUGmIl094cdnMpRf+TJMUXPPoDBVEtMOjk+1pmmhPRbRNKcBsn
-         OruA==
-X-Gm-Message-State: AOAM532BY5WO1fwZxye7Ju0Dn8FYaqz4GwgCQHmC71IZVDiCzeAPCp4O
-        Xj+DVfjYVxeWGxwLTMYzhts=
-X-Google-Smtp-Source: ABdhPJzMzHrPwjx1q6wcjSgllaGFav30b9QtgoVVc3D8PMFLIs2P8l6Us9wMV4IxRbCko1NRKBiujw==
-X-Received: by 2002:adf:f947:: with SMTP id q7mr50874696wrr.260.1638878616067;
-        Tue, 07 Dec 2021 04:03:36 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id g18sm3074323wmq.4.2021.12.07.04.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 04:03:34 -0800 (PST)
-Date:   Tue, 7 Dec 2021 12:03:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hv_sock: Extract hvs_send_data() helper that takes only
- header
-Message-ID: <20211207120333.rmq3mmla5js7kpuj@liuwe-devbox-debian-v2>
-References: <20211207063217.2591451-1-keescook@chromium.org>
+        Tue, 7 Dec 2021 07:08:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 682DFCE1A7E;
+        Tue,  7 Dec 2021 12:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC0A1C341C3;
+        Tue,  7 Dec 2021 12:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638878703;
+        bh=ujCHnMR34AzoG3Vi8aJNN8FINppyuK04wRnq0gfNiQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MZoqarWRRmjq2S95AYjelwGU5/W9x8CNj0QiHigq0C1l9A5f2d31V2UOqzQpHQpNk
+         G6N7GU7Cl5HYfJkeRrJsyy/JE2KLDapb8lJnhKYkdYZqco9sy2gm5h3fTztMKRiDih
+         E6NpUpWLQ0jFms5nBU05FQ2OAkH7NZBl+hHBlGmFG31S5/cAnamjaARGcPCg+42Q4L
+         kbtGwgxiSSecsQFgy63b1QH2yF+AAHrmwGBD6qVc82OCt+CeP7C0rpz/8ta1SQxGIx
+         gJ3ktWVVbQswr9+p5D2Y5e7zp68iKGMm64Lg7D+c+S4Ejl50IwDP09QsCRGyGxVsDX
+         noNVVuLEFk49g==
+Date:   Tue, 7 Dec 2021 17:34:59 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Kuogee Hsieh <khsieh@codeaurora.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        robdclark@gmail.com, robh+dt@kernel.org, sean@poorly.run,
+        abhinavk@codeaurora.org, aravindh@codeaurora.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com, p.zabel@pengutronix.de
+Subject: Re: [PATCH v4] phy: qcom-qmp: add support for display port voltage
+ and pre-emphasis swing
+Message-ID: <Ya9N65mseobpBrYx@matsya>
+References: <1631637901-11603-1-git-send-email-khsieh@codeaurora.org>
+ <CAE-0n50R1wfw=V7o19N20YOqSrRZKR7Zd4QLcRcjYQNsdf3QHg@mail.gmail.com>
+ <CAE-0n51OA3c_hcnpJ-k5ZQvCN3kv8PcjLMRw4BLx9OKZPjGLcA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207063217.2591451-1-keescook@chromium.org>
+In-Reply-To: <CAE-0n51OA3c_hcnpJ-k5ZQvCN3kv8PcjLMRw4BLx9OKZPjGLcA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:32:17PM -0800, Kees Cook wrote:
-> When building under -Warray-bounds, the compiler is especially
-> conservative when faced with casts from a smaller object to a larger
-> object. While this has found many real bugs, there are some cases that
-> are currently false positives (like here). With this as one of the last
-> few instances of the warning in the kernel before -Warray-bounds can be
-> enabled globally, rearrange the functions so that there is a header-only
-> version of hvs_send_data(). Silences this warning:
+On 02-12-21, 14:51, Stephen Boyd wrote:
+> Quoting Stephen Boyd (2021-09-14 12:49:13)
+> > Quoting Kuogee Hsieh (2021-09-14 09:45:01)
+> > > Both voltage and pre-emphasis swing level are set during link training
+> > > negotiation between host and sink. There are totally four tables added.
+> > > A voltage swing table for both hbr and hbr1, a voltage table for both
+> > > hbr2 and hbr3, a pre-emphasis table for both hbr and hbr1 and a pre-emphasis
+> > > table for both hbr2 and hbr3. In addition, write 0x0a to TX_TX_POL_INV is
+> > > added to complete the sequence of configure dp phy base on HPG.
+> > >
+> > > Chnages in v2:
+> > > -- revise commit test
+> > > -- add Fixes tag
+> > > -- replaced voltage_swing_cfg with voltage
+> > > -- replaced pre_emphasis_cfg with emphasis
+> > > -- delete drv_lvl_reg and emp_post_reg parameters from qcom_qmp_v4_phy_configure_dp_swing()
+> > > -- delete drv_lvl_reg and emp_post_reg parameters from qcom_qmp_phy_configure_dp_swing()
+> > >
+> > > Changes in V3:
+> > > -- add __qcom_qmp_phy_configure_dp_swing() to commit swing/pre-emphasis level
+> > >
+> > > Changes in V4:
+> > > -- pass 2D array to __qcom_qmp_phy_configure_dp_swing()
+> > >
+> > > Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
+> > > Signed-off-by: Kuogee Hsieh <khsieh@codeaurora.org>
+> > > ---
+> >
+> > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 > 
-> net/vmw_vsock/hyperv_transport.c: In function 'hvs_shutdown_lock_held.constprop':
-> net/vmw_vsock/hyperv_transport.c:231:32: warning: array subscript 'struct hvs_send_buf[0]' is partly outside array bounds of 'struct vmpipe_proto_header[1]' [-Warray-bounds]
->   231 |         send_buf->hdr.pkt_type = 1;
->       |         ~~~~~~~~~~~~~~~~~~~~~~~^~~
-> net/vmw_vsock/hyperv_transport.c:465:36: note: while referencing 'hdr'
->   465 |         struct vmpipe_proto_header hdr;
->       |                                    ^~~
-> 
-> This change results in no executable instruction differences.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Can this patch be picked up?
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+Somehow this is not in my queue. Kuogee can you add tags received and
+rebase and send please
+
+
+-- 
+~Vinod

@@ -2,121 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDAB46BF08
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B4246BF0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234487AbhLGPT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:19:59 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:51394 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234427AbhLGPT5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:19:57 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638890187; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=lhmLEurJtruYbgU84VYlYJYpIAj8F3QlaKT0LNANdlo=; b=xULvUiBI/JSmZk23O4Jk/koD3+UXPvrl8MITC95nSWWiOP88ZzTE0J3E45WiqYaxBzMt4wYn
- crboqepW7aOjEXg4UqADnP1CDYeAi+/d2oSTy7iuudZTGLU3OrYCntguaTzH6yjEe8dIRxL5
- 05HlYjEuSUrhLLrp5dfFPwxKEsE=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 61af7aca4fca5da46dfa76ac (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Dec 2021 15:16:26
- GMT
-Sender: srivasam=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A47D0C43635; Tue,  7 Dec 2021 15:16:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.242.143.72] (unknown [202.46.23.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: srivasam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BD688C4338F;
-        Tue,  7 Dec 2021 15:16:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org BD688C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v4 4/5] pinctrl: qcom: Update clock voting as optional
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-References: <1638531140-25899-1-git-send-email-srivasam@codeaurora.com>
- <1638531140-25899-5-git-send-email-srivasam@codeaurora.com>
- <Ya13Bl66oS1hgHFd@ripper>
-From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Organization: Qualcomm India Private Limited.
-Message-ID: <bf2b48fc-d97d-d5a5-e934-6c0a8cae72fe@codeaurora.org>
-Date:   Tue, 7 Dec 2021 20:46:16 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234601AbhLGPUX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 10:20:23 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:46593 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234581AbhLGPUW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 10:20:22 -0500
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 1536C60002;
+        Tue,  7 Dec 2021 15:16:46 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 16:16:24 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Denis Kirjanov <dkirjanov@suse.de>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+Subject: Re: [PATCH net-next v5 4/4] net: ocelot: add FDMA support
+Message-ID: <20211207161624.39565296@fixe.home>
+In-Reply-To: <20211207135200.qvjaw6vkazfcmuvk@skbuf>
+References: <20211207090853.308328-1-clement.leger@bootlin.com>
+        <20211207090853.308328-5-clement.leger@bootlin.com>
+        <20211207135200.qvjaw6vkazfcmuvk@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Ya13Bl66oS1hgHFd@ripper>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Tue, 7 Dec 2021 13:52:01 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> a écrit :
 
-On 12/6/2021 8:05 AM, Bjorn Andersson wrote:
-Thanks for Your Time Bjorn!!!
-> On Fri 03 Dec 03:32 PST 2021, Srinivasa Rao Mandadapu wrote:
->
->> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
->>
->> Update bulk clock voting to optional voting as ADSP bypass platform doesn't
->> need macro and decodec clocks, these are maintained as power domains and
->> operated from lpass audio core cc.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
->> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> ---
->>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> index bcc12f6..c2a1110 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> @@ -394,7 +394,7 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
->>   		return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
->>   				     "Slew resource not provided\n");
->>   
->> -	ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
->> +	ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
-> If some platforms requires this clock and others doesn't have one, then
-> please make this statement conditional on the compatible, rather than
-> making it optional on both.
->
-> Thanks,
-> Bjorn
-Okay. will add one flag in lpi_pinctrl_variant_data structure and handle 
-it accordingly.
->>   	if (ret)
->>   		return dev_err_probe(dev, ret, "Can't get clocks\n");
->>   
->> -- 
->> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
->> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
->>
+> On Tue, Dec 07, 2021 at 10:08:53AM +0100, Clément Léger wrote:
+> > Ethernet frames can be extracted or injected autonomously to or from
+> > the device’s DDR3/DDR3L memory and/or PCIe memory space. Linked list
+> > data structures in memory are used for injecting or extracting Ethernet
+> > frames. The FDMA generates interrupts when frame extraction or
+> > injection is done and when the linked lists need updating.
+> >
+> > The FDMA is shared between all the ethernet ports of the switch and
+> > uses a linked list of descriptors (DCB) to inject and extract packets.
+> > Before adding descriptors, the FDMA channels must be stopped. It would
+> > be inefficient to do that each time a descriptor would be added so the
+> > channels are restarted only once they stopped.
+> >
+> > Both channels uses ring-like structure to feed the DCBs to the FDMA.
+> > head and tail are never touched by hardware and are completely handled
+> > by the driver. On top of that, page recycling has been added and is
+> > mostly taken from gianfar driver.
+> >
+> > Co-developed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> > ---  
+> 
+> > +static void ocelot_fdma_send_skb(struct ocelot *ocelot,
+> > +				 struct ocelot_fdma *fdma, struct sk_buff *skb)
+> > +{
+> > +	struct ocelot_fdma_tx_ring *tx_ring = &fdma->tx_ring;
+> > +	struct ocelot_fdma_tx_buf *tx_buf;
+> > +	struct ocelot_fdma_dcb *dcb;
+> > +	dma_addr_t dma;
+> > +	u16 next_idx;
+> > +
+> > +	dcb = &tx_ring->dcbs[tx_ring->next_to_use];
+> > +	tx_buf = &tx_ring->bufs[tx_ring->next_to_use];
+> > +	if (!ocelot_fdma_tx_dcb_set_skb(ocelot, tx_buf, dcb, skb)) {
+> > +		dev_kfree_skb_any(skb);
+> > +		return;
+> > +	}
+> > +
+> > +	next_idx = ocelot_fdma_idx_next(tx_ring->next_to_use,
+> > +					OCELOT_FDMA_TX_RING_SIZE);
+> > +	/* If the FDMA TX chan is empty, then enqueue the DCB directly */
+> > +	if (ocelot_fdma_tx_ring_empty(fdma)) {
+> > +		dma = ocelot_fdma_idx_dma(tx_ring->dcbs_dma, tx_ring->next_to_use);
+> > +		ocelot_fdma_activate_chan(ocelot, dma, MSCC_FDMA_INJ_CHAN);
+> > +	} else {
+> > +		/* Chain the DCBs */
+> > +		dcb->llp = ocelot_fdma_idx_dma(tx_ring->dcbs_dma, next_idx);
+> > +	}
+> > +	skb_tx_timestamp(skb);
+> > +
+> > +	tx_ring->next_to_use = next_idx;  
+> 
+> You've decided against moving these before ocelot_fdma_activate_chan?
+> The skb may be freed by ocelot_fdma_tx_cleanup() before
+> skb_tx_timestamp() has a chance to run, is this not true?
+
+Since tx_ring->next_to_use is updated after calling skb_tx_timestamp,
+fdma_tx_cleanup will not free it. However, I'm not sure if the
+timestamping should be done before being sent by the hardware (ie, does
+the timestamping function modifies the SKB inplace). If not, then the
+current code is ok. By looking at ocelot_port_inject_frame, the
+timestamping is done after sending the frame.
+
+> 
+> > +}
+> > diff --git a/drivers/net/ethernet/mscc/ocelot_vsc7514.c b/drivers/net/ethernet/mscc/ocelot_vsc7514.c
+> > index cd3eb101f159..bee883a0b5b8 100644
+> > --- a/drivers/net/ethernet/mscc/ocelot_vsc7514.c
+> > +++ b/drivers/net/ethernet/mscc/ocelot_vsc7514.c
+> > @@ -18,6 +18,7 @@
+> >
+> >  #include <soc/mscc/ocelot_vcap.h>
+> >  #include <soc/mscc/ocelot_hsio.h>
+> > +#include "ocelot_fdma.h"
+> >  #include "ocelot.h"
+> >
+> >  #define VSC7514_VCAP_POLICER_BASE			128
+> > @@ -275,6 +276,18 @@ static const u32 ocelot_ptp_regmap[] = {
+> >  	REG(PTP_CLK_CFG_ADJ_FREQ,			0x0000a8),
+> >  };
+> >
+> > +static const u32 ocelot_fdma_regmap[] = {
+> > +	REG(PTP_PIN_CFG,				0x000000),
+> > +	REG(PTP_PIN_TOD_SEC_MSB,			0x000004),
+> > +	REG(PTP_PIN_TOD_SEC_LSB,			0x000008),
+> > +	REG(PTP_PIN_TOD_NSEC,				0x00000c),
+> > +	REG(PTP_PIN_WF_HIGH_PERIOD,			0x000014),
+> > +	REG(PTP_PIN_WF_LOW_PERIOD,			0x000018),
+> > +	REG(PTP_CFG_MISC,				0x0000a0),
+> > +	REG(PTP_CLK_CFG_ADJ_CFG,			0x0000a4),
+> > +	REG(PTP_CLK_CFG_ADJ_FREQ,			0x0000a8),
+> > +};  
+> 
+> drivers/net/ethernet/mscc/ocelot_vsc7514.c:279:18: warning: ‘ocelot_fdma_regmap’ defined but not used [-Wunused-const-variable=]
+>   279 | static const u32 ocelot_fdma_regmap[] = {
+>       |                  ^~~~~~~~~~~~~~~~~~
+> 
+> Not to mention this isn't even the FDMA regmap.
+
+This is a huge mistake on my side. Sorry.
+
+> 
+> > +
+> >  static const u32 ocelot_dev_gmii_regmap[] = {
+> >  	REG(DEV_CLOCK_CFG,				0x0),
+> >  	REG(DEV_PORT_MISC,				0x4),
+> > @@ -1048,6 +1061,7 @@ static int mscc_ocelot_probe(struct platform_device *pdev)
+> >  		{ S1, "s1" },
+> >  		{ S2, "s2" },
+> >  		{ PTP, "ptp", 1 },
+> > +		{ FDMA, "fdma", 1 },
+> >  	}  
+
+
+
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+Clément Léger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,98 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F5946C14F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8166C46C151
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239809AbhLGRIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbhLGRI3 (ORCPT
+        id S239766AbhLGRJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:09:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42478 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234465AbhLGRJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:08:29 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14188C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:04:59 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id f186so42626695ybg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:04:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O73Ze+VaZ72yqZEQS/KFQihGyU4Mm5AKKp2/1/GYgVA=;
-        b=KrByQ0JfoqCtbQKA/SPw4hrXd2hut53v8cVXeumIKc3jsfhmQy+eu+jBSjFhMOZO5N
-         qFeO9hBpT0uyME6t11z11b1Q48aIYpnkk8+J2oMf275wKThdmf3t6bfm8Cd6HqRs07EQ
-         IA/OeE3VQsz6f26MEfyaWVBqROeIU1N+JGYxx95CFhdsNifoX2cts0O3D8tzXJBCr6TF
-         csw89OCuXY5pilyURgMjZGe34oy2xuj1GJ4VniStv9aEFI57agr1bn0E5sA+WTxxUgTj
-         VGbwhA6J8aUjrf01dyebrbaAaksUlAm5CD+DvdtfpEg2YUbZ83DdSfqHvw+oETsMioTz
-         Wo+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O73Ze+VaZ72yqZEQS/KFQihGyU4Mm5AKKp2/1/GYgVA=;
-        b=aTDNkfGO08bwI2t9ZrlnyYJAlnl8dmtUXi0qarXudpNhU48Spre2nNQ1ritzFeOPYY
-         l2QSETwTl3C8KQYvpPPE5pz1i1USbFxrLE4eRTh8/5A7yb3nSipVKHrYRozA+niUkLp+
-         2RuGOzQYmYyaxyZcWkrTSVCLgO3Vf08uCqzxwoSK9mYdyYh8o+A0VgrhiPVRxTmHlhkB
-         2Ia/uvLGPa0ByRmmZVBfXwMeepgfkgBqgvEOFtOMLrN1yhc9+OKKFTsrAaEHTrIOKIGT
-         FJFQLKyAzNlb11h+yojXkDIM3MpOMgsQ3XlVTOSQqjaWrXgqML1QYo8P0bo1bNfTQ9K3
-         n5PQ==
-X-Gm-Message-State: AOAM531K5WuIcgNBnUP4a5V5togJIYD8+qOQZR377trxFGGdjhd12S+4
-        5cw0FV0kTpjtmNLqDvu39wyUC0HcedJsneYJ3GNx8Q==
-X-Google-Smtp-Source: ABdhPJwp9DybShWds517wP/lVihTekfcDrGzA+mDrpQ8/7v2KoG0f6RJNuvIBdbUpi9vbxnyaKQN6XHRMU+yLNoUsxs=
-X-Received: by 2002:a25:6ec5:: with SMTP id j188mr52542171ybc.602.1638896698078;
- Tue, 07 Dec 2021 09:04:58 -0800 (PST)
+        Tue, 7 Dec 2021 12:09:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638896735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WKR4l8EGNswQ0z+RtaYYtmkRaXTvQhgHjbr7U9hnO7I=;
+        b=g2N6DPNFu6enmGmYzOCK23m4FOtiqbrCcbcNXILBljX91xiJxWFU488P25cY/98oxZl/RC
+        y/kgM7EYomW0gUc1Xe+h6aGfQ5JqUb7jXQeYqOxESlPwlftDBNWLPp8ZzgkRdmGhVEIOW4
+        0IUtxnU3OeZNh6soAsiX13kX/5gJm7s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-426-g_Uo7oAEOhurcKphCNagPQ-1; Tue, 07 Dec 2021 12:05:32 -0500
+X-MC-Unique: g_Uo7oAEOhurcKphCNagPQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 52411102CB34;
+        Tue,  7 Dec 2021 17:05:31 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BFB4145D6A;
+        Tue,  7 Dec 2021 17:05:30 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 77715416CE5D; Tue,  7 Dec 2021 14:05:26 -0300 (-03)
+Date:   Tue, 7 Dec 2021 14:05:26 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v7 02/10] add prctl task isolation prctl docs and samples
+Message-ID: <20211207170526.GA19149@fuller.cnet>
+References: <20211112123531.497831890@fuller.cnet>
+ <20211112123750.692268849@fuller.cnet>
+ <20211123123620.GB479935@lothringen>
+ <20211129151325.GA135990@fuller.cnet>
+ <20211202171320.GA648659@lothringen>
+ <20211202182930.GA48887@fuller.cnet>
 MIME-Version: 1.0
-References: <20211207032202.6022-1-xiaofeng5@xiaomi.com>
-In-Reply-To: <20211207032202.6022-1-xiaofeng5@xiaomi.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 7 Dec 2021 09:04:47 -0800
-Message-ID: <CAJuCfpFgEB0qNcQGhi+wyrx4ktwm+PZujLeKTUeEMZTRUL=31w@mail.gmail.com>
-Subject: Re: [PATCH] mm/madvise: break reclaim when lock race
-To:     xf2017140389@gmail.com
-Cc:     akpm@linux-foundation.org, christian@brauner.io,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        zhangcang@xiaomi.com, wangju@xiaomi.com, fangzhirong@xiaomi.com,
-        xiaofeng <xiaofeng5@xiaomi.com>, Minchan Kim <minchan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202182930.GA48887@fuller.cnet>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 7:22 PM <xf2017140389@gmail.com> wrote:
->
-> From: xiaofeng <xiaofeng5@xiaomi.com>
->
-> When the process_madvise() system call is being used, it takes mmap_lock and blocks the application from allocating memory, leading to unreasonable delays. This patchset aims to fix it.
+On Thu, Dec 02, 2021 at 03:29:30PM -0300, Marcelo Tosatti wrote:
+> On Thu, Dec 02, 2021 at 06:13:20PM +0100, Frederic Weisbecker wrote:
+> > On Mon, Nov 29, 2021 at 12:13:25PM -0300, Marcelo Tosatti wrote:
+> > > On Tue, Nov 23, 2021 at 01:36:20PM +0100, Frederic Weisbecker wrote:
+> > > > On Fri, Nov 12, 2021 at 09:35:33AM -0300, Marcelo Tosatti wrote:
+> > > > > +**PR_ISOL_CFG_SET**:
+> > > > > +
+> > > > > +        Set task isolation configuration.
+> > > > > +        The general format is::
+> > > > > +
+> > > > > +                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);
+> > > > > +
+> > > > > +        The 'what' argument specifies what to configure. Possible values are:
+> > > > > +
+> > > > > +        - ``I_CFG_FEAT``:
+> > > > > +
+> > > > > +                Set configuration of task isolation features. 'arg3' specifies
+> > > > > +                the feature. Possible values are:
+> > > > > +
+> > > > > +                - ``ISOL_F_QUIESCE``:
+> > > > > +
+> > > > > +                        If arg4 is QUIESCE_CONTROL, set the control structure
+> > > > > +                        for quiescing of background kernel activities, from
+> > > > > +                        the location pointed to by ``(int *)arg5``::
+> > > > > +
+> > > > > +                         struct task_isol_quiesce_control {
+> > > > > +                                __u64 flags;
+> > > > > +                                __u64 quiesce_mask;
+> > > > > +                                __u64 quiesce_oneshot_mask;
+> > > > > +                                __u64 pad[5];
+> > > > > +                         };
+> > > > > +
+> > > > > +                        Where:
+> > > > > +
+> > > > > +                        *flags*: Additional flags (should be zero).
+> > > > > +
+> > > > > +                        *quiesce_mask*: A bitmask containing which kernel
+> > > > > +                        activities to quiesce.
+> > > > > +
+> > > > > +                        *quiesce_oneshot_mask*: A bitmask indicating which kernel
+> > > > > +                        activities should behave in oneshot mode, that is, quiescing
+> > > > > +                        will happen on return from prctl(PR_ISOL_ACTIVATE_SET), but not
+> > > > > +                        on return of subsequent system calls. The corresponding bit(s)
+> > > > > +                        must also be set at quiesce_mask.
+> > > > > +
+> > > > > +                        *pad*: Additional space for future enhancements.
+> > > > > +
+> > > > > +                        For quiesce_mask (and quiesce_oneshot_mask), possible bit sets are:
+> > > > > +
+> > > > > +                        - ``ISOL_F_QUIESCE_VMSTATS``
+> > > > > +
+> > > > > +                        VM statistics are maintained in per-CPU counters to
+> > > > > +                        improve performance. When a CPU modifies a VM statistic,
+> > > > > +                        this modification is kept in the per-CPU counter.
+> > > > > +                        Certain activities require a global count, which
+> > > > > +                        involves requesting each CPU to flush its local counters
+> > > > > +                        to the global VM counters.
+> > > > > +
+> > > > > +                        This flush is implemented via a workqueue item, which
+> > > > > +                        might schedule a workqueue on isolated CPUs.
+> > > > > +
+> > > > > +                        To avoid this interruption, task isolation can be
+> > > > > +                        configured to, upon return from system calls, synchronize
+> > > > > +                        the per-CPU counters to global counters, thus avoiding
+> > > > > +                        the interruption.
+> > > > 
+> > > > Sorry I know this is already v7 but we really don't want to screw up this interface.
+> > > 
+> > > No problem.
+> > > 
+> > > > What would be more simple and flexible for individual features to quiesce:
+> > > > 
+> > > >    arg3 = ISOL_F_QUIESCE
+> > > >    arg4 = which feature to quiesce (eg: ISOL_F_QUIESCE_VMSTATS)
+> > > 
+> > > arg4 is QUIESCE_CONTROL today so one can expand the interface
+> > > (by adding new commands).
+> > > 
+> > > >    arg5 =
+> > > > 
+> > > >        struct task_isol_quiesce_control {
+> > > >            __u64 flags; //with ONESHOT as the first and only possible flag for now
+> > > >            __u64 pad[5];
+> > > >        };
+> > > 
+> > > So your idea is to allow expansion at this level ? Say while adding
+> > > a new
+> > > 
+> > > ISOL_F_QUIESCE_NEWITEM
+> > > 
+> > > one can add
+> > > 
+> > > 	struct task_isol_quiesce_control_newitem {
+> > > 		__u64 flags;
+> > > 		__u64 pad[5];
+> > > 	};
+> > > 
+> > > And add new fields to "struct task_isol_quiesce_control_newitem".
+> > > 
+> > > One downside of this suggestion is that for use-cases of the task_isol_computation.c type,
+> > > (see patch 2 "add prctl task isolation prctl docs and samples"), this might need
+> > > multiple system calls for each enable/disable cycle. Is that OK?
+> > > 
+> > > See more below.
+> > > 
+> > > > This way we can really do a finegrained control over each feature to quiesce.
+> > > 
+> > > With the patchset above, one can add new values to arg4 
+> > > (at the same level of QUIESCE_CONTROL). Your suggestion does not save
+> > > room for that.
+> > > 
+> > > One could add new values to the same space of I_CFG_FEAT:
+> > > 
+> > >           prctl(PR_ISOL_CFG_SET, I_CFG_FEAT_xxx, ...);
+> > > 
+> > > But that sounds awkward.
+> > > 
+> > > Or change the current ioctl to:
+> > > 
+> > >           prctl(PR_ISOL_CFG, I_CFG_FEAT_CONTROL, ...);
+> > > 
+> > > Which makes it less awkward.
+> > > 
+> > > What do you say?
+> > > 
+> > > --- 
+> > > 
+> > > And then, what about keeping the bitmaps with enabled/one-shot mode
+> > > per feature per bit (to avoid multiple system calls)
+> > > but having (in the future) additional per-quiesce instance commands ?
+> > 
+> > Ok got your points.
+> > 
+> > I guess we can then simply rename ISOL_F_QUIESCE to ISOL_F_QUIESCE_MULTIPLE
+> > for simple all-in-one configuration. Then if the need ever arise in the future,
+> > we can always add ISOL_F_QUIESCE (or ISOL_F_QUIESCE_ONE) to do finegrained
+> > control over a single quiescing feature.
+> > 
+> > Does that sound ok?
+> 
+> Yep, it does, will change that.
 
-Please use checkpatch.pl script before posting (see this blog for
-example: http://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-patch-to-the-linux-kernel-and-responding-to-feedback/).
+Actually, after performing some of the changes, it turns out that
+just adding ISOL_F_QUIESCE_ONE to configure individual features, 
+and keeping the current ISOL_F_QUIESCE works just as well.
 
-Could you please describe your usecase a bit more? Which MADV is being
-used specifically (MADV_COLD or MADV_PAGEOUT)?
-CC'ing Minchan as he might be interested in learning more about this.
+Fixed the other issues you raised, and added documentation about 
+the possibility of ISOL_F_QUIESCE_ONE.
 
->
-> Signed-off-by: xiaofeng <xiaofeng5@xiaomi.com>
-> ---
->  mm/madvise.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 8c927202bbe6..8f1e325873e0 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -322,6 +322,9 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->         if (fatal_signal_pending(current))
->                 return -EINTR;
->
-> +       if (mmap_lock_is_contended(mm))
-> +               return -EINTR;
-> +
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->         if (pmd_trans_huge(*pmd)) {
->                 pmd_t orig_pmd;
-> --
-> 2.17.1
->
+Will resend.
+

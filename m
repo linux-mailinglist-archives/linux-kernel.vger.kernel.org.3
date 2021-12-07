@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 675C646C7BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0C646C7BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242374AbhLGWv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242349AbhLGWvX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:51:23 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C55C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:47:52 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id t19so1405539oij.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ANaVoXu55ljkpav9SN1pj18NmEH8lx2ewAQtH2fHYB0=;
-        b=ixgoSnmmBpMMYicNrHKI5rVjsYCEAUnD4nFbCAbeGei42pR3CWO2tz+WjHFHgydtzf
-         lTGw+uNX8IVjY3noyK5odC+HsvDMOLccbRAXKKjA0j5YsvHqBHzixTnDv7Gocnv4BGwt
-         FjjBUu5q7lGv2Uj7wZZnDpUebmevcp/jX7LuVBCQG2B7t7MmFccN1r8Q7+35nkd82Xfs
-         PMLhP7JDJEj2iI1mi27ezQrmLUyK8fXSV3d5YXn7aidWcdWpZ0GA0KqWFxHY/xnk8Dcd
-         2bCdVggAUiaf/IZT2ykv02z/A+VE6inrQ3BEQTN4jtOK/RPB1z7rV7FLLLAJxhMQfRuL
-         Ja/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ANaVoXu55ljkpav9SN1pj18NmEH8lx2ewAQtH2fHYB0=;
-        b=OAtH9yf7vIUv22z1L8XWn/9Lgo9Kox9k8gNo/DwTNOqp0vDu0+SQus5Kc2dNeHHUUw
-         WkZN7AcCcJlo0q3u1VmimVP08UV6gK7LcA7gdnxu3B2OyTIZ+dGHaRUWdrRQfkF17GbQ
-         6ow6rnE+QeglTCtqbNV+SNQI/JgnoJlFX729gxVbLrWktx4PCZhfXTBMDShYEVk0HROP
-         be1t3jrDYdRyQ+J54j80msl8Vp2B7K1hP2FdyOX6qOz6R17oBnZ00pUmDHhx3jSdf59g
-         t1S4HU/xMq+rQJOvZSlnYuC1bAPlLJdm6EThV0NA1ExTRV6VvfUhvkQ1kh56R4G5HqqG
-         I3Ig==
-X-Gm-Message-State: AOAM532BWRHtQS1E7Q1BMi6FfCDc0E3Y/Q47X2e6er9pJSBQo3+SYcG1
-        jYcYn5SvimBnXUL6iSEqxeP3Wlymi796KBi1Cw55HcCULmtBeA==
-X-Google-Smtp-Source: ABdhPJxw38x9CvHao9Pj701EVIKxSBumcofay2OZSTdlR9iNK5zF05jfsTPPs8Z5W31klSYYIRTD5Wla2gtOVEuERZQ=
-X-Received: by 2002:a54:4515:: with SMTP id l21mr8018083oil.15.1638917271888;
- Tue, 07 Dec 2021 14:47:51 -0800 (PST)
+        id S233705AbhLGWxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:53:16 -0500
+Received: from mout.gmx.net ([212.227.17.20]:58193 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232560AbhLGWxP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:53:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638917381;
+        bh=A68nTVr2A5reCqtLvHISJZyYBFmL+bfScMzNfjGakIA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Blz4Gt40aQBbW+QDnx3rdFWKanbGrl9LjbD2Iu8b3L+AD1fcZBuRj5BZB1OdFPpgD
+         0TiKln/YupRq1Uf0xdUVY1zxajveSopYp3gd2tOAc+Xm0cDG4HK+baPJcZ2jfWc7a0
+         XYzpCJ+f85YlUwqGmtFvB6UEPmMOC3ELZfAlg5zc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLQxX-1nBR5C1LjH-00IQhT; Tue, 07
+ Dec 2021 23:49:41 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MAINTAINERS: Nuvoton NPCM: Add myself as reviewer
+Date:   Tue,  7 Dec 2021 23:49:31 +0100
+Message-Id: <20211207224931.2026620-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211207201034.1392660-1-pgonda@google.com>
-In-Reply-To: <20211207201034.1392660-1-pgonda@google.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Tue, 7 Dec 2021 14:47:40 -0800
-Message-ID: <CAA03e5G1wMBrP_1+YS2TZxRpcdJQ6CqxRqry8FQpq_PJcCS0jw@mail.gmail.com>
-Subject: Re: [PATCH] selftests: sev_migrate_tests: Fix sev_ioctl()
-To:     Peter Gonda <pgonda@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:aDXhXhLoc4C8G0XnE9vQJcA4BZ+8I1YhbNy76enAZ7Q3cGElo8F
+ sw+yO/ot2BJlhvjEdv5CiGvPI56txNUykOWvMzIhbKKiByq1JKOe+EEycC8E7QU6MsMddNB
+ 1ZR/b9UGl5f2v7FEUiPlZfhYrcSZTdmnoaXf8erPInjDPwNqLtTVhh42gtDHt6X3XlImAAX
+ skJKWX4ip32U81Yt5yzHw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9ke01iRbufA=:CmKcors0kTsoqK3t+RGgKI
+ aJs5qp/sgrK+OAqCFKf2n+zNGQmnBjE+zEZudfhcczVUgNTOMIwoIBrod81sswROT4NeNbO3C
+ ouhUP0+xtAfAD1icmFyRdVXbvvuVXimJ8+i+V7UxGGSyf2Agn8oemjFW1fhVR7yyfNFhYpi0Q
+ X4PHqp2IPpNvEtRctHxAcKGe9kLqk8D6A7XI7piDaeC+Tb8Z7sQBwnIHr68y3itKhOMJlQMZJ
+ ueJomiYtLvSLNlg33aYUR08lOJGM2E9levpbN6clS/gb/A66gwjxhyOJIUCv4Uf49xF0LRxbA
+ LMKRH3+efSNsHs7thO3/6Vr+5y8fWHKsf4Bxs0tTzV7c73QJefTg02c4HxTDtpuZb+iuwI2Po
+ ptIv+51kVBB2DUsLQxW07mDdi487NJkNg5LWEam2H51D2nODkvJmgpgOmLV1ZIuwVkjCF4CCv
+ KV1zXUgoWwyjx1iZ+MMuxVAVoB6GGnhqhyatpdAcWsdazqMHCVwKuMXLn+llA43w9bog5tDXt
+ f6XcUfADwSeVvSrjwWF3H0OuYUYI+ke9YCIWhKYwdH0dLrSqmXYbiB8jproFhxZuTOdbsjzbo
+ PTpkNQex09llvbfU7TamEppdYuGlUluZylunuZLRe8PaECld0GIv6c6RKoi/1GxBi3gyLlcII
+ ZqhDw+ZmdsKAY7lAE4h2EqiUnNonQC3QFEdn2ZwaqwsQ8mUSQ+kTqUwlbqjMSooBjyYeotm41
+ D4nCHJTe3Qbp7jjRuFzVryR2X/IIDHgl1MK89RkiytKZglDUxD3arIh6C5Y22iucXqBJiIe8g
+ 6PETjpMKoyBKdkx1OePZ+JrHztTbVYGTR82UkeL8ffD4p//N3JH62epzAmHyhWOMtnMgmLuXX
+ 1pjhuFdCHDQMdISWl7Qdj6i1aOouX/BfA1AgUQAUV/7SuaI5rbJW8PZCfwIITubJMQwlSDneF
+ TCBddhCYmCoQ7MhOpnCESvIMmwTArR6sw1mpNS8AMBVryleZCKWymKe2DNHin1cl4xhPep8ny
+ exHhSamxinSyUHtYlFk7dRMeh+JMTbGrRW6XwbkgVeiQ9KvhTOSU93gsAY/veRLDNHF2RIdWe
+ 46DTXIOsKN+Fag=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 12:10 PM Peter Gonda <pgonda@google.com> wrote:
->
-> TEST_ASSERT in SEV ioctl was allowing errors because it checked return
-> value was good OR the FW error code was OK. This TEST_ASSERT should
-> require both (aka. AND) values are OK. Removes the LAUNCH_START from the
-> mirror VM because this call correctly fails because mirror VMs cannot
-> call this command.
->
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> index 29b18d565cf4..8e1b1e737cb1 100644
-> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> @@ -31,7 +31,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
->         int ret;
->
->         ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
-> -       TEST_ASSERT((ret == 0 || cmd.error == SEV_RET_SUCCESS),
-> +       TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
->                     "%d failed: return code: %d, errno: %d, fw error: %d",
->                     cmd_id, ret, errno, cmd.error);
->  }
-> @@ -228,9 +228,6 @@ static void sev_mirror_create(int dst_fd, int src_fd)
->  static void test_sev_mirror(bool es)
->  {
->         struct kvm_vm *src_vm, *dst_vm;
-> -       struct kvm_sev_launch_start start = {
-> -               .policy = es ? SEV_POLICY_ES : 0
-> -       };
->         int i;
->
->         src_vm = sev_vm_create(es);
-> @@ -241,7 +238,7 @@ static void test_sev_mirror(bool es)
->         /* Check that we can complete creation of the mirror VM.  */
->         for (i = 0; i < NR_MIGRATE_TEST_VCPUS; ++i)
->                 vm_vcpu_add(dst_vm, i);
-> -       sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_START, &start);
-> +
->         if (es)
->                 sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
->
-> --
-> 2.34.1.400.ga245620fadb-goog
->
+Nuvoton NPCM7xx SoCs share a lot of the hardware design with Nuvoton
+WPCM450. I'm adding myself as a reviewer, so I don't miss patches that
+affect both NPCM7xx and WPCM450.
 
-+1 to Sean's feedback.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Reviewed-by: Avi Fishman <avifishman70@gmail.com>
+=2D--
 
-Otherwise:
+v2:
+- Added R-b tag
 
-Reviewed-by: Marc Orr <marcorr@google.com>
+v1:
+- https://lore.kernel.org/lkml/20210508113342.94457-1-j.neuschaefer@gmx.ne=
+t/
+=2D--
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 360e9aa0205d6..788b1b6b7b6a6 100644
+=2D-- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2334,6 +2334,7 @@ M:	Tali Perry <tali.perry1@gmail.com>
+ R:	Patrick Venture <venture@google.com>
+ R:	Nancy Yuen <yuenn@google.com>
+ R:	Benjamin Fair <benjaminfair@google.com>
++R:	Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Supported
+ F:	Documentation/devicetree/bindings/*/*/*npcm*
+=2D-
+2.30.2
+

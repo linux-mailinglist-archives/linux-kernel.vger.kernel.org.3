@@ -2,298 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5C646B610
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B970146B614
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbhLGIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbhLGIhT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:37:19 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B71C061746;
-        Tue,  7 Dec 2021 00:33:49 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id i5so27868797wrb.2;
-        Tue, 07 Dec 2021 00:33:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5w7GJDcAWufEOgwRxxDKQLdJYteK1rDYzUGs71X/NGY=;
-        b=AMkLgOPZO03DJEz3tdJo6JpQ9IuUJXONLDsX19CMNOVfJx7gPLKrU7SrYrpY3Eb7bw
-         o52Jvv+6LlkQgatItp9J+ki3oyzN8WgzZ2MmqbC8fg2ap/SLlmUmJcNXLjel64vWKsHK
-         y7Pfr39wNkrtQu+JKG3M9bDu/sORmwluqLhLN2ewCiw3q2eyOaqT84/PAzHvkBk5Bi29
-         piz9ol2mOvYoJkC7/QcPjlnrHjAHsYfVRFHkiJ8RJsmw57vkh15fP5i674j4SnZx9YRB
-         FX51hNGKfoRH80wIiKfyPDGvsxy4uLOPFi84eurytYejSoruwQbtjY1LOOPTcSZNNdVQ
-         IxeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5w7GJDcAWufEOgwRxxDKQLdJYteK1rDYzUGs71X/NGY=;
-        b=F/F2GXFeLpQe4oYa+h08ZfJvSe1gweKydTBombBZbj05B0OKxr34NuA+f351nZP6ij
-         YRhEXsHM6clx/yVHnUsmHU3Cgu9xJWFpg+Xh6cu1kSh8u49xLK4Rw862nC8VVli284fx
-         QLIYsP8mF1wSTQhL0XICmC3NVmXQL4GLBkpFSC35LE9Wn3XHy691oPkMPpqOd2UaF14v
-         2nJrgMxpFxwDL15IuuDVNz3dm4RjftTEzzYw4n2mlHeRumKrkhBRawM3EgGYosYvn+7Z
-         0xjUSN8jLr3cVHFNQuwfPl7zmSuZExuY5ej0N0zZdF2Hn0oZ+pUaAYowMlR223gPupCb
-         wimw==
-X-Gm-Message-State: AOAM530yfO5e5pcy55+oCnEMnjS8GAP6J1Ocauf+bvfT1/qA5sKNEGq2
-        L7LALZhImu9CTIoqEjwsPTU=
-X-Google-Smtp-Source: ABdhPJz7Lwdj7tU0pXaU19+1uN5CbY2adjHOZl8nh90hv/58XxNJ6ZL3j4RRIhHgIfiJ3mk87Gcfqw==
-X-Received: by 2002:a5d:584c:: with SMTP id i12mr48899153wrf.95.1638866028372;
-        Tue, 07 Dec 2021 00:33:48 -0800 (PST)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id d6sm14060823wrn.53.2021.12.07.00.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:33:47 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:33:43 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: net: Add missing properties used in examples
-Message-ID: <Ya8cZ69WGfeh0G4I@orome.fritz.box>
-References: <20211206174153.2296977-1-robh@kernel.org>
+        id S233017AbhLGIj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:39:26 -0500
+Received: from mail-eopbgr30078.outbound.protection.outlook.com ([40.107.3.78]:45794
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231997AbhLGIjY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 03:39:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eaCga5Wcj7Wlw+/334q+Nh+HHhIoT8wTcYMrhNGzejGFiTe0MR41XlFInodrkxg8lbS2HgW0JtvKjFdp5YD32QB3bBKqdLdRMb/s0j+A0DtFxnPz6T8iVJy5KJuWvCPTveXNN4zU5lRoPDzw5D1oX6tCWP53XqNiplvXVm14AfAKAxhK6PkvvqGYcfHqb4UEaOWFWfBwmyGYOB8I+uhsT7VKSVhgQoTOZESdn65P2KpWiY33R01pSY4Lp/RuXwAW41e1GJ3QVX6P+XWw6yeK4F1ucgUmVOX1l8R5ANTLAIHn0j+EAp2EchXWTra3aujnNtEBAlnKHAghOV3TT49jhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qc4PbYNm6juRpJ8+Y5JTiUfUFXznWsWps6c2eGGFdfM=;
+ b=n7mPW/jfyVmGvKJuNlVlAadT9Kclq14tgFpYUwF6IkjKTbdKaY8ocISbhc4CIFAhtCeH4qISESN9bSM+xUxKoS1cQje2uO/65qK0rgOhnMdRnoNeFFH1/TSzi66Vm2LkUe24/tlYo2rV8r8wYy59bQozbHrTyB/eCfBB0mZUBHylJGFcX8dba0d/C+20rUdi+7YvTSxXexPJX2lXCH/Kx5Is14I4iBFDR0Mr0gX6mYnOdEKAqeu2Fc1SjgqgyZecI0h5H9Z8QaDngPJK+z9dlvolwR2OVLGGXC1Lnt3ZDceDLgKL2KX1Qo49YWGfQ8vWu2o50kSQXnSgWfS4iGHS2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qc4PbYNm6juRpJ8+Y5JTiUfUFXznWsWps6c2eGGFdfM=;
+ b=RXyQP6lqEZdycZhaLqRgQBpn8NoLH850PGCe+VNXxGrPPt9D2pAVo3cd01LNAPSI3Jft6azpkqTGxXT5xKCY3fz7RLKXrfXGhO88Q2J7QMEJ8UoYctCgsYU7mvCM3YR0ec+a3zYqloVrd99FNwxIHsh4nC04vfMEzencxHrvFFM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8744.eurprd04.prod.outlook.com (2603:10a6:10:2e2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 08:35:51 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Tue, 7 Dec 2021
+ 08:35:51 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        ping.bai@nxp.com, aisheng.dong@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] arm64: defconfig: enable drivers for booting i.MX8ULP
+Date:   Tue,  7 Dec 2021 16:34:57 +0800
+Message-Id: <20211207083457.2932511-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jliEij1nEk5boU2d"
-Content-Disposition: inline
-In-Reply-To: <20211206174153.2296977-1-robh@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14 via Frontend Transport; Tue, 7 Dec 2021 08:35:47 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8b2fd85-09ca-4cc3-b49f-08d9b95c9334
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8744:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DU2PR04MB874432DD51CB8B3ADD0404F5C96E9@DU2PR04MB8744.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:386;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fWu3jOKlpeozYGgXq+ip3ZHaJtaT2r1b+KIlalEsaEqwvHUoKcqZf438ylXvJh1vnERO1sQz0um6whQ2Tg5GH9w2pbYQPXcbiOywfmcf7eVKKhRSfIXIK7gS2cMKDHKvAauX2EL79ahTLci2qj66sKga0EL1QybE2d++KqEblGQRy5jQ3KY/Gw7vO6iV63InFaNLgtrLQI24ux1VoiE5ihVWDASnWGOoPE0AnvCeBXF05tERtKLHqd9Yv0VKmfUQrnQBV8O9YpCuo6RdJRNyE5sEpHIfpiTDigOLUNN4Hq4KZKCmfwmVzNKB9vHo+zGPWKQkAEJNdQ67o19VYNKPjYw43CtsqXbm1+c9dTLjcEXS5SnRW4p6g7w8iRR3B/cnVsVXzL5j+JRj12LK47jyp/MHymy1hJEHlhsOFn/moaV2yitKNw3AHgBQLMzIBssq9cvE75tLKfdQZaPZWevHcZgX4mNQ7kGzL3PpREu7VGH4m2FM76ev0kf2XDEsa+Lkn07Sx3j37y9EaWHn7GibUF/DwjR4Sa19jzIQi/mI77SFGCh7cq5YpKCRRQITiL5Ul9ReWkkr4C0TVYp63ab0sJd59lITkpm2mIO036iXE97kewCtWgANDBcHJSsqr2/xP+Ei/Uxq8rwRbe5kGwKaxYRl5ZPJLsRr4G1ViVU+uPsQs4MksGvKnyy8fXVyavmkO2Vmjn6QoqvAAOpd859+eA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(6486002)(38100700002)(38350700002)(66946007)(6512007)(508600001)(4744005)(5660300002)(1076003)(26005)(8676002)(8936002)(186003)(956004)(6506007)(2616005)(2906002)(316002)(6666004)(86362001)(66476007)(66556008)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/EM6fTQc7ltA+TUL0QV+4K/fO51WnWk17BR2z16Q/H2eVisBiiu5ysRJaZat?=
+ =?us-ascii?Q?wTsFvXwA+XVVHBtceIudzcWKkALrhC0/yF1Jz1ERCzMs4MpFCkOmhdgy7wJ4?=
+ =?us-ascii?Q?lTW1y6wY8qlHHVhLCCmxOpro/twYu9fqK5Aq5PPN/xAmhRX9Gi/SuN5o3BQJ?=
+ =?us-ascii?Q?zJv0XaN8xf40q3MwwQzTCWBsHxLRf9tbEM9XLvgEpSNtkVK4+OpvztcXczsK?=
+ =?us-ascii?Q?6/G1SJQ//8L/nwE2kRjTNKcbR3G9h2MkWGAi3R6mzJe3txb0JmLEdqm42dW7?=
+ =?us-ascii?Q?09jztqjXhK80SeKlAbr7SFdOADCcU9XMDNJGGmMKGRMN6lCLeJIUS6YMxlLa?=
+ =?us-ascii?Q?GpVtJqRTZpiQhx+o3xG0ZwcjwxNpcNd4AD8VnJE88O9hLWFVJyjpkFrixuTj?=
+ =?us-ascii?Q?wWzaEND4lZZn0GBm6E3zDJelqopDeuJZw+U7ELWw9HuDeSuemSXyB5K6g/mC?=
+ =?us-ascii?Q?n76KOASdhvE482PRlWfMPC0dNzkp47Tnkkii9tjBVqV7lC8cskwsida09xrW?=
+ =?us-ascii?Q?A2XmIIfLYgOFyFzwpECheb6vApH+fjoHpD4i+Fy4Rb9knEnUXKS+G2OrFzC9?=
+ =?us-ascii?Q?OwW5frzh2fD6R9TJSmT53VhGv5ggXSOiYwexGDusmSVEjM8frLUYmq/J2W5Q?=
+ =?us-ascii?Q?StNEgAihD7OkdIrOh56V/fIc2y37ZyViqf3fVTCyEjXD9SzPd2ybqIh2uAX3?=
+ =?us-ascii?Q?XDpHPePbgo3A/ypQXDFjY/VJbqu8X+sb/x8Lqt8qcCKh3FVb+/I+2TWWfT3r?=
+ =?us-ascii?Q?p/mIhUedGRZWTUxH7uyAjdfbgFSLm2mRirJ9VegmEdFmidE+SEJ/787ytoXG?=
+ =?us-ascii?Q?T855/wtrXEKIDATYvXR7lrH0df3nqDl3ILVMO+daCKJ4tP6DZ4odS/9LDMIH?=
+ =?us-ascii?Q?tf2TY8AuS6tkSsERFVcHRmnzQ5v+GlrdCCl+jwpnXxs/GSIFAww8XgAuDtbW?=
+ =?us-ascii?Q?pem0rfF3oCrgQMuKZNl7RmFgx04LZY5GEyEvwKsc/5qmDA9nndsnBLdign9V?=
+ =?us-ascii?Q?yIMltgUdbj4J4DTFTy2tM+qY7AAIRQm3wObDjly75sSu2FaQs9EzbsaYYb6h?=
+ =?us-ascii?Q?KAaZhHplEuikmtVBLdC+8Ob/xDAP/RxD16uAS2sJMBmWNdxIMuEck9KeXY8V?=
+ =?us-ascii?Q?V4l7r3lcwWKRQJiuqWeo1cOAvKcSseosl//TEsnL5tKQl3hl+h2mYjRJOR64?=
+ =?us-ascii?Q?nuWkjO51NnqnRxk4+BBvSdPrz0itwxWE2SBf3hC4JWlTfIGLEq2Jrk4k4qnA?=
+ =?us-ascii?Q?/5uNodX4jkKmlV+Zo0gmGl6tV1hA011RmD6zDGdxP7KOSxFPLzJ2hGTh+/CI?=
+ =?us-ascii?Q?kBokDENITJhVR/OiMuTABG86yEj4MT+8YMwEToGvkTkEXk053AUPheZjqQWr?=
+ =?us-ascii?Q?v8/kavUTq5zaZQftIIdo3CKhBMVKt+v0jGS3+slpqX9Wj2kGeSGqdWEEIMva?=
+ =?us-ascii?Q?8QF82YFMVNqqfdpE/UwP1owQHdEiNRfvfLfOfaKwiplOW2iKtxa+6a1AwFMA?=
+ =?us-ascii?Q?tOcgJ8lCgi+cdS17nbItXJk8MmkMEMFFTJ+pllqmb2CgZDTqtWk/UOXaFo8u?=
+ =?us-ascii?Q?PBtZzwBEaMeXdCVuP1lI07JUWI5NghcNRoqe3giJxdvZsSzmhxJ4QlTByPJP?=
+ =?us-ascii?Q?DMbfPGdH/QBLmwQpn24qQ7E=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8b2fd85-09ca-4cc3-b49f-08d9b95c9334
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 08:35:51.2398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XVIyVBsZ7sMcj6+T+/G34m6IzI4YWN4N26KaCPjEZPGhKKCluVXAWRnVrKN6QBRk/4klg+G94jdQ8TY8mEjNvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8744
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Peng Fan <peng.fan@nxp.com>
 
---jliEij1nEk5boU2d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Select i.MX8ULP CLK and PINCTRL driver to make it boot.
 
-On Mon, Dec 06, 2021 at 11:41:52AM -0600, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the following warnings
-> are generated in the net bindings:
->=20
-> Documentation/devicetree/bindings/net/actions,owl-emac.example.dt.yaml: e=
-thernet@b0310000: Unevaluated properties are not allowed ('mdio' was unexpe=
-cted)
-> Documentation/devicetree/bindings/net/intel,dwmac-plat.example.dt.yaml: e=
-thernet@3a000000: Unevaluated properties are not allowed ('snps,pbl', 'mdio=
-0' were unexpected)
-> Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: etherne=
-t@19000000: Unevaluated properties are not allowed ('qca,ethcfg' was unexpe=
-cted)
-> Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: etherne=
-t@1a000000: Unevaluated properties are not allowed ('mdio' was unexpected)
-> Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethern=
-et@40028000: Unevaluated properties are not allowed ('reg-names', 'snps,pbl=
-' were unexpected)
-> Documentation/devicetree/bindings/net/ti,cpsw-switch.example.dt.yaml: mdi=
-o@1000: Unevaluated properties are not allowed ('clocks', 'clock-names' wer=
-e unexpected)
-> Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.example.dt.ya=
-ml: mdio@f00: Unevaluated properties are not allowed ('clocks', 'clock-name=
-s' were unexpected)
->=20
-> Add the missing properties/nodes as necessary.
->=20
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: "Andreas F=C3=A4rber" <afaerber@suse.de>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Cc: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> Cc: "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> Cc: Christophe Roullier <christophe.roullier@foss.st.com>
-> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-actions@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/net/actions,owl-emac.yaml          | 3 +++
->  .../devicetree/bindings/net/intel,dwmac-plat.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/qca,ar71xx.yaml      | 5 ++++-
->  Documentation/devicetree/bindings/net/stm32-dwmac.yaml     | 6 ++++++
->  Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml | 7 +++++++
->  .../devicetree/bindings/net/toshiba,visconti-dwmac.yaml    | 5 ++++-
->  6 files changed, 25 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/actions,owl-emac.yaml =
-b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-> index 1626e0a821b0..e9c0d6360e74 100644
-> --- a/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-> +++ b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-> @@ -51,6 +51,9 @@ properties:
->      description:
->        Phandle to the device containing custom config.
-> =20
-> +  mdio:
-> +    type: object
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-In one of the conversions I've been working on, I've used this construct
-for the mdio node:
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7135eff90327..7461b609eb94 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -507,6 +507,7 @@ CONFIG_PINCTRL_IMX8MQ=y
+ CONFIG_PINCTRL_IMX8QM=y
+ CONFIG_PINCTRL_IMX8QXP=y
+ CONFIG_PINCTRL_IMX8DXL=y
++CONFIG_PINCTRL_IMX8ULP=y
+ CONFIG_PINCTRL_MSM=y
+ CONFIG_PINCTRL_IPQ8074=y
+ CONFIG_PINCTRL_IPQ6018=y
+@@ -987,6 +988,7 @@ CONFIG_CLK_IMX8MN=y
+ CONFIG_CLK_IMX8MP=y
+ CONFIG_CLK_IMX8MQ=y
+ CONFIG_CLK_IMX8QXP=y
++CONFIG_CLK_IMX8ULP=y
+ CONFIG_TI_SCI_CLK=y
+ CONFIG_COMMON_CLK_QCOM=y
+ CONFIG_QCOM_A53PLL=y
+-- 
+2.25.1
 
-	mdio:
-	  $ref: mdio.yaml
-
-In the cases here this may not be necessary because we could also match
-on the compatible string, but for the example that I've been working on
-there is no compatible string for the MDIO bus, so that's not an option.
-
-On the other hand, it looks like the snps,dwmac-mdio that the examples
-here use don't end up including mdio.yaml, so no validation (or rather
-only very limited validation) will be performed on their properties and
-children.
-
-Thierry
-
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml =
-b/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-> index 08a3f1f6aea2..52a7fa4f49a4 100644
-> --- a/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-> +++ b/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-> @@ -117,7 +117,7 @@ examples:
->          snps,mtl-tx-config =3D <&mtl_tx_setup>;
->          snps,tso;
-> =20
-> -        mdio0 {
-> +        mdio {
->              #address-cells =3D <1>;
->              #size-cells =3D <0>;
->              compatible =3D "snps,dwmac-mdio";
-> diff --git a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml b/Docu=
-mentation/devicetree/bindings/net/qca,ar71xx.yaml
-> index cf4d35edaa1b..f2bf1094d887 100644
-> --- a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-> +++ b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-> @@ -62,6 +62,10 @@ properties:
->        - const: mac
->        - const: mdio
-> =20
-> +
-> +  mdio:
-> +    type: object
-> +
->  required:
->    - compatible
->    - reg
-> @@ -85,7 +89,6 @@ examples:
->          reset-names =3D "mac", "mdio";
->          clocks =3D <&pll 1>, <&pll 2>;
->          clock-names =3D "eth", "mdio";
-> -        qca,ethcfg =3D <&ethcfg>;
->          phy-mode =3D "mii";
->          phy-handle =3D <&phy_port4>;
->      };
-> diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Doc=
-umentation/devicetree/bindings/net/stm32-dwmac.yaml
-> index 577f4e284425..86632e9d987e 100644
-> --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> @@ -44,6 +44,12 @@ properties:
->                - st,stm32-dwmac
->            - const: snps,dwmac-3.50a
-> =20
-> +  reg: true
-> +
-> +  reg-names:
-> +    items:
-> +      - const: stmmaceth
-> +
->    clocks:
->      minItems: 3
->      items:
-> diff --git a/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml b=
-/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-> index 5728fe23f530..dbfca5ee9139 100644
-> --- a/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-> @@ -37,6 +37,13 @@ properties:
->      maximum: 2500000
->      description: MDIO Bus frequency
-> =20
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: fck
-> +
->    ti,hwmods:
->      description: TI hwmod name
->      deprecated: true
-> diff --git a/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac=
-=2Eyaml b/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-> index 59724d18e6f3..f5bec97460e4 100644
-> --- a/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-> @@ -42,6 +42,9 @@ properties:
->        - const: stmmaceth
->        - const: phy_ref_clk
-> =20
-> +  mdio:
-> +    type: object
-> +
->  required:
->    - compatible
->    - reg
-> @@ -71,7 +74,7 @@ examples:
->              phy-mode =3D "rgmii-id";
->              phy-handle =3D <&phy0>;
-> =20
-> -            mdio0 {
-> +            mdio {
->                  #address-cells =3D <0x1>;
->                  #size-cells =3D <0x0>;
->                  compatible =3D "snps,dwmac-mdio";
-> --=20
-> 2.32.0
->=20
-
---jliEij1nEk5boU2d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHGcACgkQ3SOs138+
-s6H8Jw//WclnebfLzRqSdyWulOD0fPLCDtxwQKijio6FvjU/kOTbOzrCNOPLASCb
-yZVH0hUXMr5h8Rk5BvFp+3SnEZu5zuunMz5MiySM1BU+26yxYM9vePeaz8ke3Lo5
-Ar+85QXegvpsqTXQkLTH9XeA2lUftnnM47p/ZGE4zKhGnwItgQGxL3z7KNalN/eM
-I8m75rVPcwhpcw261o5Ffuc4FhQjKR0FQOkFVZQNRmMx8t/JAtFzEPjAV9DNwn49
-J2hMx4G3acBTCsa7Hnmjp3G1v4+6EffmCCDoe9w6+LOCVMoEks+QKa5ZdIaeVKhP
-ZrAswWo1a/pa22WHnDSrfZbr7IRBHVpTGXJurBFYwfXQxAdUR1RcGyNb9QHrMPHZ
-DhPR36xMEdmRTJ/6E4xHE0hh0XRjUDthKKAvGHdOVONpNUzFs8eJ4tsMmE2Y/2qM
-wL6IgNBN2p4UK0WwE/GH0MfF41eTaMShlZKl+lDd49BXRlG8h38uQRRMnGvtjc6r
-OdW3YQPbjDAcV0Dp174DFKyWH00lslf5DbiGsctxlj52THJn7/yIwBGSI66TNZAo
-B3T8miFX+rTLdJ8SuviR3mbEynf0AtJBy5P1dUZP9Ux2I21+eop4fT7m4ol8vsUW
-vz5PLqWt0xB/ukD1TioMEdY0Yhdv+4kajo7Qlb+FQOQvLkbTiHM=
-=dwOt
------END PGP SIGNATURE-----
-
---jliEij1nEk5boU2d--

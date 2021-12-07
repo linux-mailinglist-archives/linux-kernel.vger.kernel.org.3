@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AAA46BCDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E86A46BCE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237261AbhLGNtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S237287AbhLGNta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbhLGNtK (ORCPT
+        with ESMTP id S237276AbhLGNt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:49:10 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29E9C061574;
-        Tue,  7 Dec 2021 05:45:39 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2288514wmc.2;
-        Tue, 07 Dec 2021 05:45:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hborBrthxNbQAZArCMA4MiIrNEcRIe9EcwmyeOHHUJ0=;
-        b=KwioKg8aKiIAwqcRrerQOBq+2pCJ2noJDzLdEYT0nGbN8xeTiR1kypzDh3rAusGg1/
-         BbjhbpflDqERDU8n9tuDi2g9G1oGy2XUXHjJz05N+wkm9I0i/EqdIcxhPJTA//NyZGES
-         mky5qUXIyPMwph4iVFdoU4OJRqKVSXIqaJ27NkfQCQrq2oifGW31lQfZp0v9bAgZSyoB
-         jkvrEE+xq1H1Kx1W2Oq6I+lVXw2INETyIMAEzLQjuiJU0+QNfrGMNpp0Q4fYXgsSQE8p
-         FLt14202lMw46oGpzbZp3WV9W3vKo4fEppM3FcewYDvfrlrLWUYKPYkDO+BtqD3AZ9kX
-         Tadw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hborBrthxNbQAZArCMA4MiIrNEcRIe9EcwmyeOHHUJ0=;
-        b=bfXT1Qa+e7/OJmIgVqpWvw0/I4yX/O12TP7z4d96dJLuGKsIa5WK0iJpX7yiWQJ43a
-         9PD/25hdjzOBBa7xtmDOIIuGk5wfjno1gHHpm1eMeAckzxowZ5JekiFfbtfGGE09+dQN
-         //iRC6DNAA6JOjxyR5/BY4A53DRK09ShOVppi6vf1qHUkeSW3sh13N29I8M86WHCy0DK
-         oma1uLyU+XyHHBGC/EsKU033pv6pUt8KLy42s3bSuCi3ij13JP0fGpAQSYpIPZNu0LbW
-         boIIgmWOR8aL0NPMwaR3qbLLEOYSJ+QTnJTGbG2M4Ocv4sir2s8UbXY6PDuDDTIUYd6r
-         rPHA==
-X-Gm-Message-State: AOAM532ZJFWWZ2hw3P08y1g+b0s4M/EWUp8//53GPIhS4D18io+3NW8z
-        HzaLxdMCKVSmH4Q+iGFm5Z0=
-X-Google-Smtp-Source: ABdhPJzt9o/ocPKsbNmeRRBU4lwVWkUk/+vqjSHNtgFCZ8vx5g2UUbxi4CHe1kWcOXN5YOzW/PppBQ==
-X-Received: by 2002:a1c:a592:: with SMTP id o140mr7041688wme.10.1638884738146;
-        Tue, 07 Dec 2021 05:45:38 -0800 (PST)
-Received: from localhost.elektrobit.com (eth1-fw1-nbg6.eb.noris.de. [213.95.148.172])
-        by smtp.gmail.com with ESMTPSA id x1sm14504594wru.40.2021.12.07.05.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 05:45:37 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
-Date:   Tue,  7 Dec 2021 14:45:31 +0100
-Message-Id: <20211207134531.19560-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        Tue, 7 Dec 2021 08:49:28 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADCAC061574;
+        Tue,  7 Dec 2021 05:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CtRe9IWGea7W1qUUtSipymFANRf25cs9ub/ASOlc7Y0=; b=ZjZtjaF1ZEh6e9uHD1cGmLhpS5
+        r/gy4as8+euG3R8iiCtrPexlqjtGcw0q4si5U1RPb1TvBr8HYvA6b2TbSEAY5sZBxpdWbL862DzSy
+        LCaM+yJ2yWZ6e2MDoXqD8I8dLEpIisdow0PyUV9qd9z7a6GF2iTGBA54Jm+Olo3b4k7kMFJw1BvxC
+        fKOLIwRY8AtoYOi/TaUx0Jfh6q4NkYTsubpPylWjSSJqHfDEQy3wfWXqHHujmcPmTIkGpC1flXYhO
+        zTDJobtf5qES0Qko8wQEAhumJDs/yATV91Y0E5auSt6FGKEUEemc0um6eZWTW08KLTysmGSLjd+yF
+        7fjVcF3g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muan0-002m1X-5g; Tue, 07 Dec 2021 13:45:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4CB81300237;
+        Tue,  7 Dec 2021 14:45:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2F73620239D92; Tue,  7 Dec 2021 14:45:49 +0100 (CET)
+Date:   Tue, 7 Dec 2021 14:45:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
+        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
+        quic_blong@quicinc.com, quic_richardp@quicinc.com,
+        quic_cdevired@quicinc.com,
+        Pradeep P V K <quic_pragalla@quicinc.com>
+Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
+Message-ID: <Ya9ljdrOkhBhhnJX@hirez.programming.kicks-ass.net>
+References: <1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com>
+ <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
+ <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net>
+ <CAJfpegsVg2K0CvrPvXGSu=Jz_R3VZZOy49Jw51rThQUJ1_9e6g@mail.gmail.com>
+ <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
+ <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 983b62975e90 ("dt-bindings: mfd: bd9571mwv: Convert to json-schema")
-converts bd9571mwv.txt to rohm,bd9571mwv.yaml, but missed to adjust its
-reference in MAINTAINERS.
+On Tue, Dec 07, 2021 at 01:44:49PM +0100, Miklos Szeredi wrote:
+> On Tue, 7 Dec 2021 at 11:42, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Tue, Dec 07, 2021 at 11:20:59AM +0100, Miklos Szeredi wrote:
+> 
+> > > That may be good for fuse as the data is indeed shared.  It would be
+> > > even better if the woken task had already a known affinity to this
+> > > CPU, since that would mean thread local data wouldn't have to be
+> > > migrated each time...   So I'm not sure sync wakeup alone is worth it,
+> > > needs real life benchmarking.
+> >
+> > Hard affinities have other down-sides.. occasional migrations shouldn't
+> > be a problem, constant migrations are bad.
+> 
+> Currently fuse readers are sleeping in
+> wait_event_interruptible_exclusive().  wake_up_interruptible_sync()
+> will pick the first thread in the queue and wake that up.  That will
+> likely result in migration, right?
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
-a broken reference. Repair this file reference in ROHM MULTIFUNCTION
-BD9571MWV-M PMIC DEVICE DRIVERS.
+Per the _sync it will try harder to place the thread on the waking CPU.
+Which is what you want right? For the worker to do the work on the CPU
+that wakes it, since that CPU has the data cache-hot etc..
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Lee, please pick this minor clean-up patch into your -next tree on top
-of the commit mentioned above.
+> What would be much nicer, is to look at all the threads on the waitq
+> and pick one that previously ran on the current CPU if there's one.
+> Could this be implemented?
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 79ef55bf2ca7..842be45b37ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16560,7 +16560,7 @@ M:	Marek Vasut <marek.vasut+renesas@gmail.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- S:	Supported
--F:	Documentation/devicetree/bindings/mfd/bd9571mwv.txt
-+F:	Documentation/devicetree/bindings/mfd/rohm,bd9571mwv.yaml
- F:	drivers/gpio/gpio-bd9571mwv.c
- F:	drivers/mfd/bd9571mwv.c
- F:	drivers/regulator/bd9571mwv-regulator.c
--- 
-2.26.2
-
+It would violate the FIFO semantics of _exclusive.

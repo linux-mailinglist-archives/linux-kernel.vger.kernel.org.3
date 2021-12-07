@@ -2,335 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A39846C04F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB38B46BFE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239433AbhLGQLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:11:08 -0500
-Received: from smtpout4.mo529.mail-out.ovh.net ([217.182.185.173]:35013 "EHLO
-        smtpout4.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238478AbhLGQLH (ORCPT
+        id S234223AbhLGPyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhLGPyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:11:07 -0500
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.36])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 876D2D06810E;
-        Tue,  7 Dec 2021 16:50:06 +0100 (CET)
-Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
- 2021 16:50:04 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-96R0016d463d06-8f28-4116-8296-36026f977615,
-                    D5B34436B48CBBE29FDE786D5871FA4E32D79878) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 86.201.172.254
-Message-ID: <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
-Date:   Tue, 7 Dec 2021 16:50:01 +0100
+        Tue, 7 Dec 2021 10:54:45 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87196C061574;
+        Tue,  7 Dec 2021 07:51:15 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id s139so28383239oie.13;
+        Tue, 07 Dec 2021 07:51:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5RC0SUNNieJVoq7OOLew5g5YdYByS++3ZIz6kV69YtQ=;
+        b=c5KSMg8fdndhy8/ZJbbRl1gXY8zK3b8+050UzizWqxoynp0tTaaqLp7Txia8kIAY00
+         +uv0Pl1mFQVCrYOZNAOaYwAn91E4+aN2EORBn0eFF1KGouZiKJmRIBeStDWKoT7Yqh03
+         uWt1yMtlf71SJSMG+WLSQAKg0peL0ru0V/PK1nffAzOgjhMSMMnpHKpl/1rw+tyUg04H
+         nA4rI76QyoS4LC5T6h6a2zm3koDmRuJoo/XBjtOX3CN5HUvZXwRIptjuz5XzFyjbikyz
+         IKAq/0A5p8kkWHCtEYjKdTAkSrpDnAfJRKXtHzVXgFBG/6JuYdxrRwIgQtsNeaJ1HW68
+         4PIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5RC0SUNNieJVoq7OOLew5g5YdYByS++3ZIz6kV69YtQ=;
+        b=rqPeSlTdQwMq7MZwejDs2WsFQWmkQ64UztvphGdQGTOytO6GB4VJ7P8LY3OCsFpGTD
+         nWFDYq6uQFxTFpe0f5pTl11yK4g7RvPItBr7cXkENecEDCvfpODyOgcDd5oQGbN4BrJg
+         GXeDAOTUd2YRavsSW8guStW9uHbe4W4+PH50fD27Ua3zT9imGqoyZpOAjPsh8NFa4MjH
+         +1bNn9vmO27NmiyxS8L+rkx4VzA+TklVKsdTk/kgdYFniTvPk97jKRicdkYsGqjzm5NB
+         nlqaZxmzrJ2cZ6v0Q+N+nXZCE5OmnounbrrGf/1hCZ57Sk+gGTayJfwJmAnHqOLnQ/Sg
+         iakA==
+X-Gm-Message-State: AOAM532CSA2LAxIZwUBgZCY+EMKRGvjCEie68tTLyCCInnxDJafNQFAD
+        dzVtavL96IzNDqA1YvnwUEY7ljUwj60=
+X-Google-Smtp-Source: ABdhPJynmIO1zPK9Vosfp27CV7cVpHn4IpltNd/HrRpwB+O970MfkN9rcEfWEIv+zkn5la5oCRhJhA==
+X-Received: by 2002:a54:4494:: with SMTP id v20mr5949442oiv.95.1638892274935;
+        Tue, 07 Dec 2021 07:51:14 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id b17sm3082436ots.66.2021.12.07.07.51.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 07:51:14 -0800 (PST)
+Message-ID: <cfedb3e3-746a-d052-b3f1-09e4b20ad061@gmail.com>
+Date:   Tue, 7 Dec 2021 08:51:13 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
- worked
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] ipv6: fix NULL pointer dereference in ip6_output()
 Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>, Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <sparclinux@vger.kernel.org>, <x86@kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Wei Liu <wei.liu@kernel.org>, <linux-hyperv@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-References: <20211206210147.872865823@linutronix.de>
- <20211206210223.872249537@linutronix.de>
- <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
- <87ilw0odel.fsf@mpe.ellerman.id.au>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <87ilw0odel.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG9EX1.mxp5.local (172.16.2.81) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 3ba07c30-c0fb-4b34-adb9-c7c234a94237
-X-Ovh-Tracer-Id: 9416182396562148133
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeehgdekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtohephhgtrgeslhhinhhugidrihgsmhdrtghomh
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ahmed Abdelsalam <ahabdels@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+References: <20211206163447.991402-1-andrea.righi@canonical.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211206163447.991402-1-andrea.righi@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 12:36, Michael Ellerman wrote:
-> Cédric Le Goater <clg@kaod.org> writes:
->> Hello Thomas,
->>
->> On 12/6/21 23:27, Thomas Gleixner wrote:
->>> This code is broken since day one. ppc4xx_setup_msi_irqs() has the
->>> following gems:
->>>
->>>    1) The handling of the result of msi_bitmap_alloc_hwirqs() is completely
->>>       broken:
->>>       
->>>       When the result is greater than or equal 0 (bitmap allocation
->>>       successful) then the loop terminates and the function returns 0
->>>       (success) despite not having installed an interrupt.
->>>
->>>       When the result is less than 0 (bitmap allocation fails), it prints an
->>>       error message and continues to "work" with that error code which would
->>>       eventually end up in the MSI message data.
->>>
->>>    2) On every invocation the file global pp4xx_msi::msi_virqs bitmap is
->>>       allocated thereby leaking the previous one.
->>>
->>> IOW, this has never worked and for more than 10 years nobody cared. Remove
->>> the gunk.
->>>
->>> Fixes: 3fb7933850fa ("powerpc/4xx: Adding PCIe MSI support")
->>
->> Shouldn't we remove all of it ? including the updates in the device trees
->> and the Kconfig changes under :
->>
->> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
->> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
->> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
->> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
->> arch/powerpc/platforms/40x/Kconfig:	select PPC4xx_MSI
+[ cc a few SR6 folks ]
+
+On 12/6/21 9:34 AM, Andrea Righi wrote:
+> It is possible to trigger a NULL pointer dereference by running the srv6
+> net kselftest (tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh):
 > 
-> This patch should drop those selects I guess. Can you send an
-> incremental diff for Thomas to squash in?
+> [  249.051216] BUG: kernel NULL pointer dereference, address: 0000000000000378
+> [  249.052331] #PF: supervisor read access in kernel mode
+> [  249.053137] #PF: error_code(0x0000) - not-present page
+> [  249.053960] PGD 0 P4D 0
+> [  249.054376] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [  249.055083] CPU: 1 PID: 21 Comm: ksoftirqd/1 Tainted: G            E     5.16.0-rc4 #2
+> [  249.056328] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+> [  249.057632] RIP: 0010:ip6_forward+0x53c/0xab0
+> [  249.058354] Code: 49 c7 44 24 20 00 00 00 00 48 83 e0 fe 48 8b 40 30 48 3d 70 b2 b5 81 0f 85 b5 04 00 00 e8 7c f2 ff ff 41 89 c5 e9 17 01 00 00 <44> 8b 93 78 03 00 00 45 85 d2 0f 85 92 fb ff ff 49 8b 54 24 10 48
+> [  249.061274] RSP: 0018:ffffc900000cbb30 EFLAGS: 00010246
+> [  249.062042] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff8881051d3400
+> [  249.063141] RDX: ffff888104bda000 RSI: 00000000000002c0 RDI: 0000000000000000
+> [  249.064264] RBP: ffffc900000cbbc8 R08: 0000000000000000 R09: 0000000000000000
+> [  249.065376] R10: 0000000000000040 R11: 0000000000000000 R12: ffff888103409800
+> [  249.066498] R13: ffff8881051d3410 R14: ffff888102725280 R15: ffff888103525000
+> [  249.067619] FS:  0000000000000000(0000) GS:ffff88813bc80000(0000) knlGS:0000000000000000
+> [  249.068881] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  249.069777] CR2: 0000000000000378 CR3: 0000000104980000 CR4: 0000000000750ee0
+> [  249.070907] PKRU: 55555554
+> [  249.071337] Call Trace:
+> [  249.071730]  <TASK>
+> [  249.072070]  ? debug_smp_processor_id+0x17/0x20
+> [  249.072807]  seg6_input_core+0x2bb/0x2d0
+> [  249.073436]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+> [  249.074225]  seg6_input+0x3b/0x130
+> [  249.074768]  lwtunnel_input+0x5e/0xa0
+> [  249.075357]  ip_rcv+0x17b/0x190
+> [  249.075867]  ? update_load_avg+0x82/0x600
+> [  249.076514]  __netif_receive_skb_one_core+0x86/0xa0
+> [  249.077231]  __netif_receive_skb+0x15/0x60
+> [  249.077843]  process_backlog+0x97/0x160
+> [  249.078389]  __napi_poll+0x31/0x170
+> [  249.078912]  net_rx_action+0x229/0x270
+> [  249.079506]  __do_softirq+0xef/0x2ed
+> [  249.080085]  run_ksoftirqd+0x37/0x50
+> [  249.080663]  smpboot_thread_fn+0x193/0x230
+> [  249.081312]  kthread+0x17a/0x1a0
+> [  249.081847]  ? smpboot_register_percpu_thread+0xe0/0xe0
+> [  249.082677]  ? set_kthread_struct+0x50/0x50
+> [  249.083340]  ret_from_fork+0x22/0x30
+> [  249.083926]  </TASK>
+> [  249.090295] ---[ end trace 1998d7ba5965a365 ]---
+> 
+> It looks like commit 0857d6f8c759 ("ipv6: When forwarding count rx stats
+> on the orig netdev") tries to determine the right netdev to account the
+> rx stats, but in this particular case it's failing and the netdev is
+> NULL.
+> 
+> Fallback to the previous method of determining the netdev interface (via
+> skb->dev) to account the rx stats when the orig netdev can't be
+> determined.
+> 
+> Fixes: 0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig netdev")
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  net/ipv6/ip6_output.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+> index ff4e83e2a506..7ca4719ff34c 100644
+> --- a/net/ipv6/ip6_output.c
+> +++ b/net/ipv6/ip6_output.c
+> @@ -472,6 +472,9 @@ int ip6_forward(struct sk_buff *skb)
+>  	u32 mtu;
+>  
+>  	idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
+> +	if (unlikely(!idev))
+> +		idev = __in6_dev_get_safely(skb->dev);
+> +
 
-Sure.
+We need to understand why iif is not set - or set to an invalid value.
 
-> Removing all the tendrils in various device tree files will probably
-> require some archaeology, and it should be perfectly safe to leave those
-> in the tree with the driver gone. So I think we can do that as a
-> subsequent patch, rather than in this series.
 
-Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
-
-Thanks,
-
-C.
-
-diff --git a/arch/powerpc/boot/dts/bluestone.dts b/arch/powerpc/boot/dts/bluestone.dts
-index aa1ae94cd776..6971595319c1 100644
---- a/arch/powerpc/boot/dts/bluestone.dts
-+++ b/arch/powerpc/boot/dts/bluestone.dts
-@@ -366,30 +366,5 @@ PCIE0: pcie@d00000000 {
-  				0x0 0x0 0x0 0x3 &UIC3 0xe 0x4 /* swizzled int C */
-  				0x0 0x0 0x0 0x4 &UIC3 0xf 0x4 /* swizzled int D */>;
-  		};
--
--		MSI: ppc4xx-msi@C10000000 {
--			compatible = "amcc,ppc4xx-msi", "ppc4xx-msi";
--			reg = < 0xC 0x10000000 0x100
--				0xC 0x10000000 0x100>;
--			sdr-base = <0x36C>;
--			msi-data = <0x00004440>;
--			msi-mask = <0x0000ffe0>;
--			interrupts =<0 1 2 3 4 5 6 7>;
--			interrupt-parent = <&MSI>;
--			#interrupt-cells = <1>;
--			#address-cells = <0>;
--			#size-cells = <0>;
--			msi-available-ranges = <0x0 0x100>;
--			interrupt-map = <
--				0 &UIC3 0x18 1
--				1 &UIC3 0x19 1
--				2 &UIC3 0x1A 1
--				3 &UIC3 0x1B 1
--				4 &UIC3 0x1C 1
--				5 &UIC3 0x1D 1
--				6 &UIC3 0x1E 1
--				7 &UIC3 0x1F 1
--			>;
--		};
-  	};
-  };
-diff --git a/arch/powerpc/boot/dts/canyonlands.dts b/arch/powerpc/boot/dts/canyonlands.dts
-index c5fbb08e0a6e..5db1bff6b23d 100644
---- a/arch/powerpc/boot/dts/canyonlands.dts
-+++ b/arch/powerpc/boot/dts/canyonlands.dts
-@@ -544,23 +544,5 @@ PCIE1: pcie@d20000000 {
-  				0x0 0x0 0x0 0x3 &UIC3 0x12 0x4 /* swizzled int C */
-  				0x0 0x0 0x0 0x4 &UIC3 0x13 0x4 /* swizzled int D */>;
-  		};
--
--		MSI: ppc4xx-msi@C10000000 {
--			compatible = "amcc,ppc4xx-msi", "ppc4xx-msi";
--			reg = < 0xC 0x10000000 0x100>;
--			sdr-base = <0x36C>;
--			msi-data = <0x00000000>;
--			msi-mask = <0x44440000>;
--			interrupt-count = <3>;
--			interrupts = <0 1 2 3>;
--			interrupt-parent = <&UIC3>;
--			#interrupt-cells = <1>;
--			#address-cells = <0>;
--			#size-cells = <0>;
--			interrupt-map = <0 &UIC3 0x18 1
--					1 &UIC3 0x19 1
--					2 &UIC3 0x1A 1
--					3 &UIC3 0x1B 1>;
--		};
-  	};
-  };
-diff --git a/arch/powerpc/boot/dts/katmai.dts b/arch/powerpc/boot/dts/katmai.dts
-index a8f353229fb7..4262b2bbd6de 100644
---- a/arch/powerpc/boot/dts/katmai.dts
-+++ b/arch/powerpc/boot/dts/katmai.dts
-@@ -442,24 +442,6 @@ PCIE2: pcie@d40000000 {
-  				0x0 0x0 0x0 0x4 &UIC3 0xb 0x4 /* swizzled int D */>;
-  		};
-  
--		MSI: ppc4xx-msi@400300000 {
--				compatible = "amcc,ppc4xx-msi", "ppc4xx-msi";
--				reg = < 0x4 0x00300000 0x100>;
--				sdr-base = <0x3B0>;
--				msi-data = <0x00000000>;
--				msi-mask = <0x44440000>;
--				interrupt-count = <3>;
--				interrupts =<0 1 2 3>;
--				interrupt-parent = <&UIC0>;
--				#interrupt-cells = <1>;
--				#address-cells = <0>;
--				#size-cells = <0>;
--				interrupt-map = <0 &UIC0 0xC 1
--					1 &UIC0 0x0D 1
--					2 &UIC0 0x0E 1
--					3 &UIC0 0x0F 1>;
--		};
--
-  		I2O: i2o@400100000 {
-  			compatible = "ibm,i2o-440spe";
-  			reg = <0x00000004 0x00100000 0x100>;
-diff --git a/arch/powerpc/boot/dts/kilauea.dts b/arch/powerpc/boot/dts/kilauea.dts
-index a709fb47a180..c07a7525a72c 100644
---- a/arch/powerpc/boot/dts/kilauea.dts
-+++ b/arch/powerpc/boot/dts/kilauea.dts
-@@ -403,33 +403,5 @@ PCIE1: pcie@c0000000 {
-  				0x0 0x0 0x0 0x3 &UIC2 0xd 0x4 /* swizzled int C */
-  				0x0 0x0 0x0 0x4 &UIC2 0xe 0x4 /* swizzled int D */>;
-  		};
--
--		MSI: ppc4xx-msi@C10000000 {
--			compatible = "amcc,ppc4xx-msi", "ppc4xx-msi";
--			reg = <0xEF620000 0x100>;
--			sdr-base = <0x4B0>;
--			msi-data = <0x00000000>;
--			msi-mask = <0x44440000>;
--			interrupt-count = <12>;
--			interrupts = <0 1 2 3 4 5 6 7 8 9 0xA 0xB 0xC 0xD>;
--			interrupt-parent = <&UIC2>;
--			#interrupt-cells = <1>;
--			#address-cells = <0>;
--			#size-cells = <0>;
--			interrupt-map = <0 &UIC2 0x10 1
--					1 &UIC2 0x11 1
--					2 &UIC2 0x12 1
--					2 &UIC2 0x13 1
--					2 &UIC2 0x14 1
--					2 &UIC2 0x15 1
--					2 &UIC2 0x16 1
--					2 &UIC2 0x17 1
--					2 &UIC2 0x18 1
--					2 &UIC2 0x19 1
--					2 &UIC2 0x1A 1
--					2 &UIC2 0x1B 1
--					2 &UIC2 0x1C 1
--					3 &UIC2 0x1D 1>;
--		};
-  	};
-  };
-diff --git a/arch/powerpc/boot/dts/redwood.dts b/arch/powerpc/boot/dts/redwood.dts
-index f38035a1f4a1..3c849e23e5f3 100644
---- a/arch/powerpc/boot/dts/redwood.dts
-+++ b/arch/powerpc/boot/dts/redwood.dts
-@@ -358,25 +358,6 @@ PCIE2: pcie@d40000000 {
-  				0x0 0x0 0x0 0x4 &UIC3 0xb 0x4 /* swizzled int D */>;
-  		};
-  
--		MSI: ppc4xx-msi@400300000 {
--				compatible = "amcc,ppc4xx-msi", "ppc4xx-msi";
--				reg = < 0x4 0x00300000 0x100
--					0x4 0x00300000 0x100>;
--				sdr-base = <0x3B0>;
--				msi-data = <0x00000000>;
--				msi-mask = <0x44440000>;
--				interrupt-count = <3>;
--				interrupts =<0 1 2 3>;
--				interrupt-parent = <&UIC0>;
--				#interrupt-cells = <1>;
--				#address-cells = <0>;
--				#size-cells = <0>;
--				interrupt-map = <0 &UIC0 0xC 1
--					1 &UIC0 0x0D 1
--					2 &UIC0 0x0E 1
--					3 &UIC0 0x0F 1>;
--		};
--
-  	};
-  
-  
-diff --git a/arch/powerpc/platforms/40x/Kconfig b/arch/powerpc/platforms/40x/Kconfig
-index e3e5217c9822..614ea6dc994c 100644
---- a/arch/powerpc/platforms/40x/Kconfig
-+++ b/arch/powerpc/platforms/40x/Kconfig
-@@ -23,7 +23,6 @@ config KILAUEA
-  	select PPC4xx_PCI_EXPRESS
-  	select FORCE_PCI
-  	select PCI_MSI
--	select PPC4xx_MSI
-  	help
-  	  This option enables support for the AMCC PPC405EX evaluation board.
-  
-diff --git a/arch/powerpc/platforms/44x/Kconfig b/arch/powerpc/platforms/44x/Kconfig
-index 83975ef50975..25b80cd558f8 100644
---- a/arch/powerpc/platforms/44x/Kconfig
-+++ b/arch/powerpc/platforms/44x/Kconfig
-@@ -23,7 +23,6 @@ config BLUESTONE
-  	select APM821xx
-  	select FORCE_PCI
-  	select PCI_MSI
--	select PPC4xx_MSI
-  	select PPC4xx_PCI_EXPRESS
-  	select IBM_EMAC_RGMII if IBM_EMAC
-  	help
-@@ -73,7 +72,6 @@ config KATMAI
-  	select FORCE_PCI
-  	select PPC4xx_PCI_EXPRESS
-  	select PCI_MSI
--	select PPC4xx_MSI
-  	help
-  	  This option enables support for the AMCC PPC440SPe evaluation board.
-  
-@@ -115,7 +113,6 @@ config CANYONLANDS
-  	select FORCE_PCI
-  	select PPC4xx_PCI_EXPRESS
-  	select PCI_MSI
--	select PPC4xx_MSI
-  	select IBM_EMAC_RGMII if IBM_EMAC
-  	select IBM_EMAC_ZMII if IBM_EMAC
-  	help
-@@ -141,7 +138,6 @@ config REDWOOD
-  	select FORCE_PCI
-  	select PPC4xx_PCI_EXPRESS
-  	select PCI_MSI
--	select PPC4xx_MSI
-  	help
-  	  This option enables support for the AMCC PPC460SX Redwood board.
-  
--- 
-2.31.1
-
+>  	if (net->ipv6.devconf_all->forwarding == 0)
+>  		goto error;
+>  
+> 
 

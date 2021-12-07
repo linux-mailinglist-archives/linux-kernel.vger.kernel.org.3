@@ -2,129 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6687346BD16
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B81746BD20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237429AbhLGOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:02:30 -0500
-Received: from mga07.intel.com ([134.134.136.100]:10163 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232792AbhLGOC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:02:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="300961750"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="300961750"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 05:58:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="563515661"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2021 05:58:57 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muazg-000Me2-Nu; Tue, 07 Dec 2021 13:58:56 +0000
-Date:   Tue, 7 Dec 2021 21:58:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202112072152.F1lbyFcy-lkp@intel.com>
+        id S237453AbhLGODk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232930AbhLGODi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:03:38 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873B8C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:00:08 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1mub0i-0006xW-KF; Tue, 07 Dec 2021 15:00:00 +0100
+Subject: Re: [Linux-stm32] [PATCH v2 1/4] ASoC: dt-bindings: stm32: i2s: add
+ audio-graph-card port
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh@kernel.org>,
+        Olivier MOYSAN <olivier.moysan@foss.st.com>
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        alain.volmat@foss.st.com, arnaud.pouliquen@foss.st.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20211125144053.774-1-olivier.moysan@foss.st.com>
+ <20211125144053.774-2-olivier.moysan@foss.st.com>
+ <1637875562.357461.2858318.nullmailer@robh.at.kernel.org>
+ <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com>
+ <Yaf4jiZIp8+ndaXs@robh.at.kernel.org>
+ <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <cf5f994b-aecf-e051-f5c9-4a46e6414207@pengutronix.de>
+Date:   Tue, 7 Dec 2021 14:59:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
-date:   7 weeks ago
-config: arm-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211207/202112072152.F1lbyFcy-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
+Hello Alex,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 07.12.21 14:52, Alexandre TORGUE wrote:
+> Hi Rob
+> 
+> On 12/1/21 11:34 PM, Rob Herring wrote:
+>> On Fri, Nov 26, 2021 at 11:25:27AM +0100, Olivier MOYSAN wrote:
+>>> Hi Rob,
+>>>
+>>> On 11/25/21 10:26 PM, Rob Herring wrote:
+>>>> On Thu, 25 Nov 2021 15:40:50 +0100, Olivier Moysan wrote:
+>>>>> The STM2 I2S DAI can be connected via the audio-graph-card.
+>>>>> Add port entry into the bindings.
+>>>>>
+>>>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+>>>>> ---
+>>>>>    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 5 +++++
+>>>>>    1 file changed, 5 insertions(+)
+>>>>>
+>>>>
+>>>> Running 'make dtbs_check' with the schema in this patch gives the
+>>>> following warnings. Consider if they are expected or the schema is
+>>>> incorrect. These may not be new warnings.
+>>>>
+>>>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+>>>> This will change in the future.
+>>>>
+>>>> Full log is available here: https://patchwork.ozlabs.org/patch/1559750
+>>>>
+>>>>
+>>>> audio-controller@4000b000: 'port' does not match any of the regexes: '^port@[0-9]', 'pinctrl-[0-9]+'
+>>>>     arch/arm/boot/dts/stm32mp157a-dk1.dt.yaml
+>>>>     arch/arm/boot/dts/stm32mp157c-dk2.dt.yaml
+>>>>
+>>>
+>>> This warning is not a new one.
+>>>
+>>> The i2s2 node in stm32mp15xx-dkx.dtsi would require the following binding:
+>>> port:
+>>>     $ref: audio-graph-port.yaml#
+>>>     unevaluatedProperties: false
+>>>
+>>> However the spi binding requires to introduce a unit address:
+>>> patternProperties:
+>>>    '^port@[0-9]':
+>>>      $ref: audio-graph-port.yaml#
+>>>      unevaluatedProperties: false
+>>>
+>>> The warning can be removed by re-ordering the bindings patches in the serie,
+>>> as "additionalProperties: true" makes the check more tolerant on extra
+>>> properties.
+>>
+>> That's never right.
+>>
+>>> The patch "ASoC: dt-bindings: stm32: i2s: add audio-graph-card port" can
+>>> even be merely dropped.
+>>> So, I suggest to resend the serie without audio-graph-card patch.
+>>
+>> Only if you aren't using audio-graph-card.
+>>
+>>>
+>>> Does it sound too permissive to you ?
+>>
+>> I think perhaps you need to combine the schemas into 1. Or you need to
+>> restructure your dtsi files such that you only add spi specific
+>> properties when spi mode is enabled and only add i2s specific properties
+>> when i2s mode is enabled. Or use the /delete-property/ directive.
+> 
+> Initially the aim of this series was to fix a "make W=1" warnings seen on spi and i2s nodes (duplicate unit-address). Moving both nodes in a common node + using a different compatible depending on SPI or I2S usage sounded good) but it is not enough. In this series the common node is named as following: "spi2s2: spi@4000b000". It is fine for a spi usage but if we want to use this "common node" with I2S compatible and specific bindings, the node name remains spi@... and then specific spi checks are done. For this with this series applied we got this issue reported by spi-controller.yaml:
+> 
+> spi@4000b000: port@0: 'compatible' is a required property
+> 
+> So, if we use two separates nodes we got W=1 warning and if we use a common node we got yaml check issue. One possibility would be to use a common node with a new node name (for example i2spi@...) but I think it is not acceptable.
+> 
+> How to progress ?
+
+Atmel Flexcom can be configured to be either UART, SPI or i2c. Functions
+are child nodes of the flexcom node and the MFD driver matching against it,
+just configure the operating mode and then calls of_platform_populate.
+
+Would something along these lines fit here as well?
+
+Cheers,
+Ahmad
+
+> 
+> Thanks
+> Alex
+> 
+> 
+>> Rob
+>>
+> 
+> _______________________________________________
+> Linux-stm32 mailing list
+> Linux-stm32@st-md-mailman.stormreply.com
+> https://st-md-mailman.stormreply.com/mailman/listinfo/linux-stm32
+> 
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
-   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
-
-vim +210 arch/arm/mach-ep93xx/clock.c
-
-   205	
-   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
-   207					struct clk_rate_request *req)
-   208	{
-   209		unsigned long rate = req->rate;
- > 210		struct clk *best_parent = 0;
-   211		unsigned long __parent_rate;
-   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
-   213		unsigned long best_parent_rate;
-   214		int __div = 0, __pdiv = 0;
-   215		int i;
-   216	
-   217		/*
-   218		 * Try the two pll's and the external clock
-   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
-   220		 * all the clocks by 2 to avoid floating point math.
-   221		 *
-   222		 * This is based on the algorithm in the ep93xx raster guide:
-   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
-   224		 *
-   225		 */
-   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
-   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
-   228	
-   229			__parent_rate = clk_get_rate(parent);
-   230			mclk_rate = __parent_rate * 2;
-   231	
-   232			/* Try each predivider value */
-   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
-   234				__div = mclk_rate / (rate * __pdiv);
-   235				if (__div < 2 || __div > 127)
-   236					continue;
-   237	
-   238				actual_rate = mclk_rate / (__pdiv * __div);
-   239				if (is_best(rate, actual_rate, best_rate)) {
-   240					best_rate = actual_rate;
-   241					best_parent_rate = __parent_rate;
-   242					best_parent = parent;
-   243				}
-   244			}
-   245		}
-   246	
-   247		if (!best_parent)
-   248			return -EINVAL;
-   249	
-   250		req->best_parent_rate = best_parent_rate;
-   251		req->best_parent_hw = __clk_get_hw(best_parent);
-   252		req->rate = best_rate;
-   253	
-   254		return 0;
-   255	}
-   256	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

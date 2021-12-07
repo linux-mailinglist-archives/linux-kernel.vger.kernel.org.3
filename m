@@ -2,217 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8166C46C151
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6594046C154
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239766AbhLGRJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:09:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42478 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234465AbhLGRJG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:09:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638896735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WKR4l8EGNswQ0z+RtaYYtmkRaXTvQhgHjbr7U9hnO7I=;
-        b=g2N6DPNFu6enmGmYzOCK23m4FOtiqbrCcbcNXILBljX91xiJxWFU488P25cY/98oxZl/RC
-        y/kgM7EYomW0gUc1Xe+h6aGfQ5JqUb7jXQeYqOxESlPwlftDBNWLPp8ZzgkRdmGhVEIOW4
-        0IUtxnU3OeZNh6soAsiX13kX/5gJm7s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-g_Uo7oAEOhurcKphCNagPQ-1; Tue, 07 Dec 2021 12:05:32 -0500
-X-MC-Unique: g_Uo7oAEOhurcKphCNagPQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 52411102CB34;
-        Tue,  7 Dec 2021 17:05:31 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BFB4145D6A;
-        Tue,  7 Dec 2021 17:05:30 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 77715416CE5D; Tue,  7 Dec 2021 14:05:26 -0300 (-03)
-Date:   Tue, 7 Dec 2021 14:05:26 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v7 02/10] add prctl task isolation prctl docs and samples
-Message-ID: <20211207170526.GA19149@fuller.cnet>
-References: <20211112123531.497831890@fuller.cnet>
- <20211112123750.692268849@fuller.cnet>
- <20211123123620.GB479935@lothringen>
- <20211129151325.GA135990@fuller.cnet>
- <20211202171320.GA648659@lothringen>
- <20211202182930.GA48887@fuller.cnet>
+        id S239794AbhLGRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:09:57 -0500
+Received: from elvis.franken.de ([193.175.24.41]:35282 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234465AbhLGRJ4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:09:56 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mudv5-0003op-00; Tue, 07 Dec 2021 18:06:23 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6EC63C4DFD; Tue,  7 Dec 2021 18:06:03 +0100 (CET)
+Date:   Tue, 7 Dec 2021 18:06:03 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Do not define pci_remap_iospace() under
+ MACH_LOONGSON64
+Message-ID: <20211207170603.GA20028@alpha.franken.de>
+References: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202182930.GA48887@fuller.cnet>
+In-Reply-To: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 03:29:30PM -0300, Marcelo Tosatti wrote:
-> On Thu, Dec 02, 2021 at 06:13:20PM +0100, Frederic Weisbecker wrote:
-> > On Mon, Nov 29, 2021 at 12:13:25PM -0300, Marcelo Tosatti wrote:
-> > > On Tue, Nov 23, 2021 at 01:36:20PM +0100, Frederic Weisbecker wrote:
-> > > > On Fri, Nov 12, 2021 at 09:35:33AM -0300, Marcelo Tosatti wrote:
-> > > > > +**PR_ISOL_CFG_SET**:
-> > > > > +
-> > > > > +        Set task isolation configuration.
-> > > > > +        The general format is::
-> > > > > +
-> > > > > +                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);
-> > > > > +
-> > > > > +        The 'what' argument specifies what to configure. Possible values are:
-> > > > > +
-> > > > > +        - ``I_CFG_FEAT``:
-> > > > > +
-> > > > > +                Set configuration of task isolation features. 'arg3' specifies
-> > > > > +                the feature. Possible values are:
-> > > > > +
-> > > > > +                - ``ISOL_F_QUIESCE``:
-> > > > > +
-> > > > > +                        If arg4 is QUIESCE_CONTROL, set the control structure
-> > > > > +                        for quiescing of background kernel activities, from
-> > > > > +                        the location pointed to by ``(int *)arg5``::
-> > > > > +
-> > > > > +                         struct task_isol_quiesce_control {
-> > > > > +                                __u64 flags;
-> > > > > +                                __u64 quiesce_mask;
-> > > > > +                                __u64 quiesce_oneshot_mask;
-> > > > > +                                __u64 pad[5];
-> > > > > +                         };
-> > > > > +
-> > > > > +                        Where:
-> > > > > +
-> > > > > +                        *flags*: Additional flags (should be zero).
-> > > > > +
-> > > > > +                        *quiesce_mask*: A bitmask containing which kernel
-> > > > > +                        activities to quiesce.
-> > > > > +
-> > > > > +                        *quiesce_oneshot_mask*: A bitmask indicating which kernel
-> > > > > +                        activities should behave in oneshot mode, that is, quiescing
-> > > > > +                        will happen on return from prctl(PR_ISOL_ACTIVATE_SET), but not
-> > > > > +                        on return of subsequent system calls. The corresponding bit(s)
-> > > > > +                        must also be set at quiesce_mask.
-> > > > > +
-> > > > > +                        *pad*: Additional space for future enhancements.
-> > > > > +
-> > > > > +                        For quiesce_mask (and quiesce_oneshot_mask), possible bit sets are:
-> > > > > +
-> > > > > +                        - ``ISOL_F_QUIESCE_VMSTATS``
-> > > > > +
-> > > > > +                        VM statistics are maintained in per-CPU counters to
-> > > > > +                        improve performance. When a CPU modifies a VM statistic,
-> > > > > +                        this modification is kept in the per-CPU counter.
-> > > > > +                        Certain activities require a global count, which
-> > > > > +                        involves requesting each CPU to flush its local counters
-> > > > > +                        to the global VM counters.
-> > > > > +
-> > > > > +                        This flush is implemented via a workqueue item, which
-> > > > > +                        might schedule a workqueue on isolated CPUs.
-> > > > > +
-> > > > > +                        To avoid this interruption, task isolation can be
-> > > > > +                        configured to, upon return from system calls, synchronize
-> > > > > +                        the per-CPU counters to global counters, thus avoiding
-> > > > > +                        the interruption.
-> > > > 
-> > > > Sorry I know this is already v7 but we really don't want to screw up this interface.
-> > > 
-> > > No problem.
-> > > 
-> > > > What would be more simple and flexible for individual features to quiesce:
-> > > > 
-> > > >    arg3 = ISOL_F_QUIESCE
-> > > >    arg4 = which feature to quiesce (eg: ISOL_F_QUIESCE_VMSTATS)
-> > > 
-> > > arg4 is QUIESCE_CONTROL today so one can expand the interface
-> > > (by adding new commands).
-> > > 
-> > > >    arg5 =
-> > > > 
-> > > >        struct task_isol_quiesce_control {
-> > > >            __u64 flags; //with ONESHOT as the first and only possible flag for now
-> > > >            __u64 pad[5];
-> > > >        };
-> > > 
-> > > So your idea is to allow expansion at this level ? Say while adding
-> > > a new
-> > > 
-> > > ISOL_F_QUIESCE_NEWITEM
-> > > 
-> > > one can add
-> > > 
-> > > 	struct task_isol_quiesce_control_newitem {
-> > > 		__u64 flags;
-> > > 		__u64 pad[5];
-> > > 	};
-> > > 
-> > > And add new fields to "struct task_isol_quiesce_control_newitem".
-> > > 
-> > > One downside of this suggestion is that for use-cases of the task_isol_computation.c type,
-> > > (see patch 2 "add prctl task isolation prctl docs and samples"), this might need
-> > > multiple system calls for each enable/disable cycle. Is that OK?
-> > > 
-> > > See more below.
-> > > 
-> > > > This way we can really do a finegrained control over each feature to quiesce.
-> > > 
-> > > With the patchset above, one can add new values to arg4 
-> > > (at the same level of QUIESCE_CONTROL). Your suggestion does not save
-> > > room for that.
-> > > 
-> > > One could add new values to the same space of I_CFG_FEAT:
-> > > 
-> > >           prctl(PR_ISOL_CFG_SET, I_CFG_FEAT_xxx, ...);
-> > > 
-> > > But that sounds awkward.
-> > > 
-> > > Or change the current ioctl to:
-> > > 
-> > >           prctl(PR_ISOL_CFG, I_CFG_FEAT_CONTROL, ...);
-> > > 
-> > > Which makes it less awkward.
-> > > 
-> > > What do you say?
-> > > 
-> > > --- 
-> > > 
-> > > And then, what about keeping the bitmaps with enabled/one-shot mode
-> > > per feature per bit (to avoid multiple system calls)
-> > > but having (in the future) additional per-quiesce instance commands ?
-> > 
-> > Ok got your points.
-> > 
-> > I guess we can then simply rename ISOL_F_QUIESCE to ISOL_F_QUIESCE_MULTIPLE
-> > for simple all-in-one configuration. Then if the need ever arise in the future,
-> > we can always add ISOL_F_QUIESCE (or ISOL_F_QUIESCE_ONE) to do finegrained
-> > control over a single quiescing feature.
-> > 
-> > Does that sound ok?
+On Wed, Nov 17, 2021 at 05:03:15PM +0800, Tiezhu Yang wrote:
+> After commit 9f76779f2418 ("MIPS: implement architecture-specific
+> 'pci_remap_iospace()'"), there exists the following warning on the
+> Loongson64 platform:
 > 
-> Yep, it does, will change that.
+>     loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
+>     loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+>     ------------[ cut here ]------------
+>     WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
+>     resource start address is not zero
+>     ...
+>     Call Trace:
+>     [<ffffffff8020dc78>] show_stack+0x40/0x120
+>     [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
+>     [<ffffffff8023a0b0>] __warn+0xe0/0x110
+>     [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
+>     [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
+>     [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
+>     [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
+>     [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
+>     [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
+>     [<ffffffff809203cc>] platform_probe+0x6c/0xe0
+>     [<ffffffff8091d5d4>] really_probe+0xbc/0x340
+>     [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
+>     [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
+>     [<ffffffff8091dea0>] __driver_attach+0x80/0x118
+>     [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
+>     [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
+>     [<ffffffff8091ead4>] driver_register+0x8c/0x150
+>     [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
+>     [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
+>     [<ffffffff80cfc380>] kernel_init+0x2c/0x134
+>     [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
+>     ---[ end trace e4a0efe10aa5cce6 ]---
+>     loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
+> 
+> We can see that the resource start address is 0x0000020000, because
+> the ISA Bridge used the zero address which is defined in the dts file
+> arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
+> 
+>     ISA Bridge: /bus@10000000/isa@18000000
+>     IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
+> 
+> The architecture-independent function pci_remap_iospace() works well
+> for Loongson64, so just do not define architecture-specific function
+> pci_remap_iospace() under MACH_LOONGSON64.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/include/asm/pci.h | 2 ++
+>  arch/mips/pci/pci-generic.c | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+> index 421231f..5d647cb 100644
+> --- a/arch/mips/include/asm/pci.h
+> +++ b/arch/mips/include/asm/pci.h
+> @@ -21,8 +21,10 @@
+>  #include <linux/of.h>
+>  
+>  #ifdef CONFIG_PCI_DRIVERS_GENERIC
+> +#ifndef CONFIG_MACH_LOONGSON64
+>  #define pci_remap_iospace pci_remap_iospace
+>  #endif
+> +#endif
 
-Actually, after performing some of the changes, it turns out that
-just adding ISOL_F_QUIESCE_ONE to configure individual features, 
-and keeping the current ISOL_F_QUIESCE works just as well.
+I prefer a version without new CONFIG_MACH_LOONGSON64 ifdefery. Something
+like:
 
-Fixed the other issues you raised, and added documentation about 
-the possibility of ISOL_F_QUIESCE_ONE.
 
-Will resend.
+diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+index 05d14c21c417..f7af11ea2d61 100644
+--- a/arch/mips/include/asm/mach-ralink/spaces.h
++++ b/arch/mips/include/asm/mach-ralink/spaces.h
+@@ -6,5 +6,7 @@
+ #define PCI_IOSIZE	SZ_64K
+ #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+ 
++#define pci_remap_iospace pci_remap_iospace
++
+ #include <asm/mach-generic/spaces.h>
+ #endif
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 421231f55935..9ffc8192adae 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -20,10 +20,6 @@
+ #include <linux/list.h>
+ #include <linux/of.h>
+ 
+-#ifdef CONFIG_PCI_DRIVERS_GENERIC
+-#define pci_remap_iospace pci_remap_iospace
+-#endif
+-
+ #ifdef CONFIG_PCI_DRIVERS_LEGACY
+ 
+ /*
+diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
+index 18eb8a453a86..d2d68bac3d25 100644
+--- a/arch/mips/pci/pci-generic.c
++++ b/arch/mips/pci/pci-generic.c
+@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+ 	pci_read_bridge_bases(bus);
+ }
+ 
++#ifdef pci_remap_iospace
+ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ {
+ 	unsigned long vaddr;
+@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ 	set_io_port_base(vaddr);
+ 	return 0;
+ }
++#endif
 
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

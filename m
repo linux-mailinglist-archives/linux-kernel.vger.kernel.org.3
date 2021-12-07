@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491E446BE7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD8746BE5E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbhLGPB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:01:57 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:39440 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238337AbhLGPBv (ORCPT
+        id S238329AbhLGPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:01:44 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:41571 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238310AbhLGPBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:01:51 -0500
-Received: by mail-oi1-f182.google.com with SMTP id bf8so28199783oib.6;
-        Tue, 07 Dec 2021 06:58:20 -0800 (PST)
+        Tue, 7 Dec 2021 10:01:43 -0500
+Received: by mail-ot1-f50.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so18359900otl.8;
+        Tue, 07 Dec 2021 06:58:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=55srzYY1ppnVfuRkuBM2BCV46CNk0tpVbIJ64T+tBjk=;
-        b=KDnoOR+yvLFTGR6yTTfU37pfs3jkn/f/+ExgoeQtkEmo/9Jpv9uARspEDxAlgjEBO3
-         ovwIs9FZmVhZ9f2Onf0spTfTEW2OfU7rAqC/F0N4PnQtCxDw1tbdQOFl0Gf1rV84BKgH
-         v0JJ//11fo3BeaAQ+5K1twmKhwxkk9QdvbslmWBjpTQ7Qv9deDcxmJhuqg93zJckiDnL
-         87U/zqq373OSHj1cNVZVD1piqIv8OTUddpU77ZelmepTSQpEEN7eojApUBQbSfeauoRx
-         CZ3coriZ1CajvGWXw0zYFX+MUD0xrLZLtVgsVdBhoEcXCXAnufPAVKIkiZS8UfunqjJ8
-         fnTA==
-X-Gm-Message-State: AOAM530NkGHCSngRIzAWVGXhn1GZYH9BH3fdLu5nK+XgBMBBLBt/CKl1
-        ZSeDKt4JwNbYnvvyo7oY9w==
-X-Google-Smtp-Source: ABdhPJx308W+qbNIEcIs/sxpoxaXSfVLMzfWn6R3dMEM5BXFYP4m4OTloeynRhVUpXtoFvav/hfcFQ==
-X-Received: by 2002:aca:b387:: with SMTP id c129mr5663673oif.6.1638889100127;
-        Tue, 07 Dec 2021 06:58:20 -0800 (PST)
+        bh=VgYpRv7FKDRFJkyswgOt8jfkEjY4KcUU5jFAaY5SUrw=;
+        b=PxwlrWpgDFax7uetBT41rigifwzYiPf/J+9SMS0yE7eaAyMKJw3ZnevfVC03iSPzCd
+         wlU0AY81Z6Y+xQpaGcPySxJDDh8oIW6oJT3JWG41QOfAIqDIZrE8OGkpj7MSZrkRmfee
+         1XKHfdAEip2+p9CFClbeTnG/4jGHKoZea8oiuGoWa8cPk4TTMn8LWEyReYF+6QEzceA9
+         26Il/RgH/kkxkCm2PFBMJmOlyVoDSUXC4MWv272U1NFyK6HjpnUdZ6VvgrrskXwb0sOl
+         75AXKwKiTRsfiNhZGInp2+y0q3eTFZQyeR0cVxLRQ4/DyVRHfKZ/JUi302+0XEtDVQ1x
+         RH1A==
+X-Gm-Message-State: AOAM531Fhfkr5J9ddiflZt2yVc2Yo+HticnVAb/umnOX7Gz/XbuVOKbr
+        OpEq0R9xR/uVMrBPMQskpw==
+X-Google-Smtp-Source: ABdhPJxI+GdBHmtxK/QcTh3tcIy1ZwNfkubLUnPPWtqNhLRymXjSM4MMyk6de2SMgFGNU+/WHw79vA==
+X-Received: by 2002:a9d:4f0b:: with SMTP id d11mr35759185otl.227.1638889092708;
+        Tue, 07 Dec 2021 06:58:12 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c9sm2877544oog.43.2021.12.07.06.58.18
+        by smtp.gmail.com with ESMTPSA id m2sm2815394oop.12.2021.12.07.06.58.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 06:58:19 -0800 (PST)
-Received: (nullmailer pid 5802 invoked by uid 1000);
+        Tue, 07 Dec 2021 06:58:11 -0800 (PST)
+Received: (nullmailer pid 5797 invoked by uid 1000);
         Tue, 07 Dec 2021 14:58:10 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-media@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, benjamin.gaignard@collabora.com,
         Rob Herring <robh+dt@kernel.org>,
-        Doug Berger <opendmb@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ray Jui <rjui@broadcom.com>, linux-usb@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Scott Branden <sbranden@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pwm@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Markus Mayer <mmayer@broadcom.com>, linux-mmc@vger.kernel.org
-In-Reply-To: <20211206182616.2089677-10-f.fainelli@gmail.com>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-10-f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 09/14] dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        hverkuil@xs4all.nl, Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, cphealy@gmail.com
+In-Reply-To: <20211207015446.1250854-4-aford173@gmail.com>
+References: <20211207015446.1250854-1-aford173@gmail.com> <20211207015446.1250854-4-aford173@gmail.com>
+Subject: Re: [RFC V2 3/6] dt-bindings: media: nxp,imx8mq-vpu: Update the bindings for G2 support
 Date:   Tue, 07 Dec 2021 08:58:10 -0600
-Message-Id: <1638889090.711166.5801.nullmailer@robh.at.kernel.org>
+Message-Id: <1638889090.684232.5796.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Dec 2021 10:26:11 -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB L2 generic Level 2 interrupt controller Device
-> Tree binding to YAML to help with validation.
+On Mon, 06 Dec 2021 19:54:42 -0600, Adam Ford wrote:
+> From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../interrupt-controller/brcm,l2-intc.txt     | 31 ---------
->  .../interrupt-controller/brcm,l2-intc.yaml    | 64 +++++++++++++++++++
->  2 files changed, 64 insertions(+), 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+> Introducing the G2 hevc video decoder requires modifications of the bindings to allow
+> one node per VPU.
+> 
+> VPUs share one hardware control block which is provided as a phandle on
+> a syscon.
+> Each node has now one reg and one interrupt.
+> Add a compatible for G2 hardware block: nxp,imx8mq-vpu-g2.
+> 
+> To be compatible with older DT the driver is still capable to use the 'ctrl'
+> reg-name even if it is deprecated now.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1564135
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml: properties:clock-names:oneOf: [{'const': 'g1'}, {'const': 'g2'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
+	hint: Use 'enum' rather than 'oneOf' + 'const' entries
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml: properties:interrupt-names:oneOf: [{'const': 'g1'}, {'const': 'g2'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
+	hint: Use 'enum' rather than 'oneOf' + 'const' entries
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml: properties:compatible:oneOf: [{'const': 'nxp,imx8mq-vpu-g1'}, {'const': 'nxp,imx8mq-vpu-g2'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
+	hint: Use 'enum' rather than 'oneOf' + 'const' entries
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml: ignoring, error in schema: properties: interrupt-names: oneOf
+warning: no schema found in file: ./Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+Error: Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.example.dts:26.27-31 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
 
+doc reference errors (make refcheckdocs):
 
-interrupt-controller@3e1000: 'interrupt-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/bcm7445-bcm97445svmb.dt.yaml
+See https://patchwork.ozlabs.org/patch/1564457
 
-interrupt-controller@7ef00100: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dt.yaml
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dt.yaml
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-io.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-400.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-cm4-io.dt.yaml
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

@@ -2,121 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D69846C84F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C848D46C853
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238292AbhLGXka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S238340AbhLGXnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbhLGXk3 (ORCPT
+        with ESMTP id S231416AbhLGXnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:40:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9161CC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:36:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9727DB81D80
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 23:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA742C341C3;
-        Tue,  7 Dec 2021 23:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638920215;
-        bh=FG2SGFwHcUyA+9+/Ri7rTgQT9k2NE3/aM61sY9WDemQ=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Aok5DLUJj+Jy+u4ZaMwSlbC6ocZ+w7ekCFqJtmvUvFk88u7LuWmPb2RtTfOeKJ+vj
-         74uRJCdnaTNBaLlNCL85DkWQ3ctIxEImPA/IjNSnrAU4RDG3ozJGTMnEH8LqxLCt0t
-         M7L/j8LTAapBoD22PIB7nlv5uIAWuNbF5VX5lLdurPYF2WssIJmXdUM/kpkGsOIoj0
-         hZ1vkRZUR0bho/yrYDQg1m5hNj3V/igTBF+RgOKwwsTFsYZM8XIZVtlil77U/38TKM
-         qYlB/av2z5AFJH8/fB2CHpPVVOY9sAJhxDtFDi9D7dMKcgqpBTPTe1F0x3YU8vBlP+
-         vsA2scHSad/Ww==
-Date:   Tue, 7 Dec 2021 15:36:53 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr <olekstysh@gmail.com>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: Re: [PATCH V3 4/6] xen/unpopulated-alloc: Add mechanism to use Xen
- resource
-In-Reply-To: <c2e8c00a-3856-8330-8e8f-ab8a92e93e47@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112071506370.4091490@ubuntu-linux-20-04-desktop>
-References: <1637787223-21129-1-git-send-email-olekstysh@gmail.com> <1637787223-21129-5-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2111241701240.1412361@ubuntu-linux-20-04-desktop> <c2e8c00a-3856-8330-8e8f-ab8a92e93e47@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 7 Dec 2021 18:43:05 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7BDC061574;
+        Tue,  7 Dec 2021 15:39:34 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id 8so782006qtx.5;
+        Tue, 07 Dec 2021 15:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G7jAqXCltz46U/cxmlDjDs2z0XdoZvQMLqREmYtXQOI=;
+        b=CtWSug85RcxBo9oM69nbuLsNC04Amu0JRXcBZcYJE6uNnYpl63KWJaZmKdA8lZVX2j
+         kRknS3fJvA39WwNvqu2AY7tnrX15RgFIQTfukbDnKRq3qbCDh2SlmlhtvYK1qVIGCqND
+         jh/IyCmGNy23Kau6iVu4z3VpqmgY4GRR3Jlucsi5xwlGWpYG1jOlxMEVCp7labkZEAvU
+         9+TJLam4gYicI0CEtcAX6RX+U3sODY4F8BOBJBGkb8Weo8Rr6i7O+i/3HTwa1RCCPyKK
+         2ddzals126BaEpbstjSnTSah7q46CczBjgcknynFDbJopGvOpq6+uguPcWVqZnMtOzyD
+         OlLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G7jAqXCltz46U/cxmlDjDs2z0XdoZvQMLqREmYtXQOI=;
+        b=eJBxdbjKn+QDn12Trn5pX8Y5lUYpP5WaVFEUVuZwFEiv8mjz2B68QxHaByDWPI/60Y
+         /D3pKW/RcX9SFSnHilDJizrTF4U/7nT/zhyMhuYicUKTwkZ2/Z7yicEHpEu91pyYM+S3
+         CJcci5fd+ShyADRWV9oXl34XGcedDNO5SJgTDPmXeRRue1vYwj/AZAcnOQYCFhxK9ley
+         kub5VYW2ToIj9PRiTHBtC8hnHZBppEK5nd9CcWOjkDnRHt8EPF9vF1sK37A0O/No9es+
+         tNX2XD+n3KjX1J3kWyZK42Qe/STdQDmt0k1VVm4EyorBoY5as53IV+BIfJFfLOF4EB1r
+         pxag==
+X-Gm-Message-State: AOAM532mHmrQb3KZSpsNLkil1QLOe/Dl0TS2q/pL+WQZJFtScOK20VQB
+        jwvVnr8Y9lUNmQjtsPYqRC83htrd2lM=
+X-Google-Smtp-Source: ABdhPJwP9pYPFehahM4GW7LIPOaQ8/j5trXi5AbOSzoUYm2kf3SNOzf7jPRqJwd9WnGp8XnDvYRouA==
+X-Received: by 2002:ac8:7252:: with SMTP id l18mr3574791qtp.9.1638920373148;
+        Tue, 07 Dec 2021 15:39:33 -0800 (PST)
+Received: from localhost ([66.216.211.25])
+        by smtp.gmail.com with ESMTPSA id a3sm802013qtx.59.2021.12.07.15.39.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 15:39:32 -0800 (PST)
+Date:   Tue, 7 Dec 2021 15:39:30 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+Message-ID: <20211207233930.GA3955@lapt>
+References: <20211203100846.3977195-1-keescook@chromium.org>
+ <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+ <20211203182638.GA450223@lapt>
+ <202112031450.EFE7B7B4A@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1417778164-1638918436=:4091490"
-Content-ID: <alpine.DEB.2.22.394.2112071520320.4091490@ubuntu-linux-20-04-desktop>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112031450.EFE7B7B4A@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1417778164-1638918436=:4091490
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2112071520321.4091490@ubuntu-linux-20-04-desktop>
-
-On Thu, 25 Nov 2021, Oleksandr wrote:
-> > > Please note the following:
-> > > for V3 arch_xen_unpopulated_init() was moved to init() as was agreed
-> > > and gained __init specifier. So the target_resource is initialized there.
-> > > 
-> > > With current patch series applied if CONFIG_XEN_UNPOPULATED_ALLOC
-> > > is enabled:
-> > > 
-> > > 1. On Arm, under normal circumstances, the xen_alloc_unpopulated_pages()
-> > > won't be called “before” arch_xen_unpopulated_init(). It will only be
-> > > called "before" when either ACPI is in use or something wrong happened
-> > > with DT (and we failed to read xen_grant_frames), so we fallback to
-> > > xen_xlate_map_ballooned_pages() in arm/xen/enlighten.c:xen_guest_init(),
-> > > please see "arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT"
-> > > for details. But in that case, I think, it doesn't matter much whether
-> > > xen_alloc_unpopulated_pages() is called "before" of "after"
-> > > target_resource
-> > > initialization, as we don't have extended regions in place the
-> > > target_resource
-> > > will remain invalid even after initialization, so
-> > > xen_alloc_ballooned_pages()
-> > > will be used in both scenarios.
-> > > 
-> > > 2. On x86, I am not quite sure which modes use unpopulated-alloc (PVH?),
-> > > but it looks like xen_alloc_unpopulated_pages() can (and will) be called
-> > > “before” arch_xen_unpopulated_init().
-> > > At least, I see that xen_xlate_map_ballooned_pages() is called in
-> > > x86/xen/grant-table.c:xen_pvh_gnttab_setup(). According to the initcall
-> > > levels for both xen_pvh_gnttab_setup() and init() I expect the former
-> > > to be called earlier.
-> > > If it is true, the sentence in the commit description which mentions
-> > > that “behaviour on x86 is not changed” is not precise. I don’t think
-> > > it would be correct to fallback to xen_alloc_ballooned_pages() just
-> > > because we haven’t initialized target_resource yet (on x86 it is just
-> > > assigning it iomem_resource), at least this doesn't look like an expected
-> > > behaviour and unlikely would be welcome.
-> > > 
-> > > I am wondering whether it would be better to move
-> > > arch_xen_unpopulated_init()
-> > > to a dedicated init() marked with an appropriate initcall level
-> > > (early_initcall?)
-> > > to make sure it will always be called *before*
-> > > xen_xlate_map_ballooned_pages().
-> > > What do you think?
+On Fri, Dec 03, 2021 at 03:01:30PM -0800, Kees Cook wrote:
+> On Fri, Dec 03, 2021 at 10:26:38AM -0800, Yury Norov wrote:
+> > On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
+> > > On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
+> > > > It's common practice to cast small variable arguments to the find_*_bit()
+> > 
+> > Not that common - I found 19 examples of this cast, and most of them
+> > are in drivers.
 > 
->    ... here (#2). Or I really missed something and there wouldn't be an issue?
+> I find 51 (most are in the for_each_* wrappers):
+> 
+> $ RE=$(echo '\b('$(echo $(grep -E '^(unsigned long find|#define for_each)_' include/linux/find.h | cut -d'(' -f1 | awk '{print $NF}') | tr ' ' '|')')\(.*\(unsigned long \*\)')
+> $ git grep -E "$RE" | wc -l
+> 51
+> 
+> > > > This leads to the find helper dereferencing a full unsigned long,
+> > > > regardless of the size of the actual variable. The unwanted bits
+> > > > get masked away, but strictly speaking, a read beyond the end of
+> > > > the target variable happens. Builds under -Warray-bounds complain
+> > > > about this situation, for example:
+> > > > 
+> > > > In file included from ./include/linux/bitmap.h:9,
+> > > >                  from drivers/iommu/intel/iommu.c:17:
+> > > > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
+> > > > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
+> > > >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > > >       |                                     ^~~~~
+> > > > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
+> > > >  2115 |         int pds, max_pde;
+> > > >       |                  ^~~~~~~
+> > 
+> > The driver should be fixed. I would suggest using one of ffs/fls/ffz from
+> > include/asm/bitops.h
+> 
+> I don't think it's a good API design to make developers choose between
+> functions based on the size of their target.
 
-Yes, I see your point. Yeah, it makes sense to make sure that
-drivers/xen/unpopulated-alloc.c:init is executed before
-xen_pvh_gnttab_setup.
+Bitmap functions work identically for all sizes from 0 to INT_MAX - 1. 
+Users don't 'choose between functions based on the size of their target'.
 
-If we move it to early_initcall, then we end up running it before
-xen_guest_init on ARM. But that might be fine: it looks like it should
-work OK and would also allow us to execute xen_xlate_map_ballooned_pages
-with target_resource already set.
+Can you explain more what you mean?
 
-So I'd say go for it :)
---8323329-1417778164-1638918436=:4091490--
+> This also doesn't work well
+> for the main problem which is the for_each_* usage.
+
+for_each_*_bit() requires a pointer to an array of unsigned longs. If
+it's provided with something else, this is an error on a caller side.
+
+> The existing API is totally fine: it already diverts the constant
+> expression small sizes to ffs/etc, and this change is only to that
+> part.
+
+If you want to allow passing types other than unsigned long *, you need
+to be consistent and propagate this change to other bitmap functions.
+This is much more work than just fixing at most 48 wrong callers.
+(48 because I inspected some callers manually, and they are fine.)
+
+> It's just changing the C description of how to get at the desired
+> bits, so that -Warray-bounds doesn't (correctly) get upset about the
+> wider-than-underlying-type OOB read.
+
+As you said, -Warray-bounds _correctly_ gets upset about the dangerous
+typecasting. What suggested here is an attempt to shut down the
+compiler warning with the cost of complication of the code and
+possible maintenance issues. The correct example of handling tiny
+bitmaps can be found for example in drivers/mtd/nand/raw/ams-delta.c:
+
+        static void gpio_nand_io_write(struct gpio_nand *priv, u8 byte)
+        {
+                struct gpio_descs *data_gpiods = priv->data_gpiods;
+                DECLARE_BITMAP(values, BITS_PER_TYPE(byte)) = { byte, };
+
+                ...
+        }
+
+> This is one of the last issues with -Warray-bounds, which has proven to
+> be an effective compiler flag for finding real bugs. Since this patch
+> doesn't change performance, doesn't change the resulting executable
+> instructions, doesn't require any caller changes, and helps gain global
+> -Warray-bounds coverage, I'm hoping to convince you of its value. :)
+
+I'm all for enabling -Warray-bounds, but the warnings that it spots
+only convinced me that bitmap API is used wrongly, and it should be
+fixed. Can you please share the list of bitmap-related issues found
+with -Warray-bounds that concerned you? I'll take a look and try to
+make a patch that fixes it.
+
+Thanks,
+Yury

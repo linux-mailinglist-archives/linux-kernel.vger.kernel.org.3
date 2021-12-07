@@ -2,112 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4D246B48D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15D846B490
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbhLGHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:55:18 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:44874 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230360AbhLGHzR (ORCPT
+        id S231543AbhLGHzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230360AbhLGHz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:55:17 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Uzjqu0m_1638863505;
-Received: from 30.21.164.179(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0Uzjqu0m_1638863505)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 07 Dec 2021 15:51:46 +0800
-Message-ID: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
-Date:   Tue, 7 Dec 2021 15:51:45 +0800
+        Tue, 7 Dec 2021 02:55:29 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5740C061746;
+        Mon,  6 Dec 2021 23:51:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F26BCE1A05;
+        Tue,  7 Dec 2021 07:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A69C341C3;
+        Tue,  7 Dec 2021 07:51:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638863516;
+        bh=jJB7V/1FDjCODHYTLlFlS5enXptOdG8ZYS3VC4cWcVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vRE24ncYXDsRhhK2eQiUlxP7Y8oQsTsshV3hfVEv8bGtSxchPZ8/SkzPNYE1E38An
+         aOvrifHb/I9rQaWzQ07/d2NwtcfBxBO7tW7Ohdsq63Q2QKH1LNL+bVYpuGXJT676qi
+         Uz/SbFs2qPx/iZd1dSkcACeZlmJJNSFCfEQlT6xo=
+Date:   Tue, 7 Dec 2021 08:51:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Will Deacon <will@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V2 27/36] genirq/msi: Provide interface to retrieve Linux
+ interrupt number
+Message-ID: <Ya8SmWGiCnt4xTmC@kroah.com>
+References: <20211206210307.625116253@linutronix.de>
+ <20211206210439.128089025@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-Subject: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206210439.128089025@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We observed issues like:
-   virtio-pci 0000:14:00.0: platform bug: legacy virtio-mmio must
-   not be used with RAM above 0x4000GB
+On Mon, Dec 06, 2021 at 11:39:39PM +0100, Thomas Gleixner wrote:
+> This allows drivers to retrieve the Linux interrupt number instead of
+> fiddling with MSI descriptors.
+> 
+> msi_get_virq() returns the Linux interrupt number or 0 in case that there
+> is no entry for the given MSI index.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-when we have a legacy pci device which desired 32bit-pfn vq
-but gain 64bit-pfn instead, lead into the failure of probe.
-
-vring_use_dma_api() is playing the key role in here, to help the
-allocation process understand which kind of vq it should alloc,
-however, it failed to take care the legacy pci device, which only
-have 32bit feature flag and can never have VIRTIO_F_ACCESS_PLATFORM
-setted.
-
-This patch introduce force_dma flag to help vring_use_dma_api()
-understanding the requirement better, to avoid the failing.
-
-Signed-off-by: Michael Wang <yun.wang@linux.alibaba.com>
----
-  drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
-  drivers/virtio/virtio_ring.c       |  3 +++
-  include/linux/virtio.h             |  1 +
-  3 files changed, 14 insertions(+)
-
-diff --git a/drivers/virtio/virtio_pci_legacy.c 
-b/drivers/virtio/virtio_pci_legacy.c
-index d62e983..11f2ebf 100644
---- a/drivers/virtio/virtio_pci_legacy.c
-+++ b/drivers/virtio/virtio_pci_legacy.c
-@@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct 
-virtio_pci_device *vp_dev)
-  	vp_dev->setup_vq = setup_vq;
-  	vp_dev->del_vq = del_vq;
-
-+	/*
-+	 * The legacy pci device requre 32bit-pfn vq,
-+	 * or setup_vq() will failed.
-+	 *
-+	 * Thus we make sure vring_use_dma_api() will
-+	 * return true during the allocation by marking
-+	 * force_dma here.
-+	 */
-+	vp_dev->vdev.force_dma = true;
-+
-  	return 0;
-
-  err_iomap:
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 3035bb6..6562e01 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct 
-virtqueue *_vq,
-
-  static bool vring_use_dma_api(struct virtio_device *vdev)
-  {
-+	if (vdev->force_dma)
-+		return true;
-+
-  	if (!virtio_has_dma_quirk(vdev))
-  		return true;
-
-diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-index 41edbc0..a4eb29d 100644
---- a/include/linux/virtio.h
-+++ b/include/linux/virtio.h
-@@ -109,6 +109,7 @@ struct virtio_device {
-  	bool failed;
-  	bool config_enabled;
-  	bool config_change_pending;
-+	bool force_dma;
-  	spinlock_t config_lock;
-  	spinlock_t vqs_list_lock; /* Protects VQs list access */
-  	struct device dev;
--- 
-1.8.3.1
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 

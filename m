@@ -2,287 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B6546C7F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1325C46C7FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242473AbhLGXGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:06:35 -0500
-Received: from mail-eopbgr00099.outbound.protection.outlook.com ([40.107.0.99]:56343
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242452AbhLGXG2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:06:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fNql9jl7uHmOvdcwk4AvmRExbBUnISjP9+3NucMd3QzmdTEWF3cu+3UvFU7IT54HgpnBvUOU7sfW5n4zzfEVaAU2Q0vKqlbjNjPa8wXm+06zRTdNZj0eP1aVTt2lGG79SyJEYhlfZs3kl9TlNqg2egR94P6XHjSo6JCrFyTsfBBhC7/XRS3k0w4fziKY+A+t8bko37t3J8+W6VXQj/EQ0Qq5/mNSkuMT480ZguTvv1oqOLUh86bp2lacmjE8XFGErcNbZlsbjYRdihkYsKa0LGbhvp96H0EPhzLGii3kpUSygbmQkNmhcKMy7ociyZrDcLLWwUUx8LUUPVtbTmT0Ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yz6Guv71csNPLlk2okwUaQDALlCC3UxWIgs6ifO5E8o=;
- b=HWXAQT5RGbJWvTc2ugI4JC9lBt3p/yP4RcSHzeqK4t5OhWr32sX/R+YdYjxhJLSreu1CF85CAhbyxYt1C7ZvX5t0/2I0eSooERenkm///aF04Vu8bHVADzg2zffstE9LOGZjUsOooGm/u4iuDByn3KAPFHagPZBobkRSLPqtrq7sG80QRqvvI7g0qF0fNdHdFl9hDtIEIQqAoxGvAPYALGeNzDP6Hwj1clsLO3Qd8uN+9AL5TsBMs8fsHVXF8edXZDp5dyhEKkEO2+lGN9dxm8D5bjSXZV7ZZh5UmtG890Y138qO0CfZTFryOY1nE7lr6/1ibQAXl1ZSSRTUxAYkFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yz6Guv71csNPLlk2okwUaQDALlCC3UxWIgs6ifO5E8o=;
- b=QP5h3KBVqCDqKx3jyB1cbQQWCZmE1+106JkwjGDnImEzNhirHQ5NsE628ocFWmlIV4/MktB2mtw52MMmmPxtBHxiHYkAIeFzBhkFDIHF3yVAVfOV5Ne8/cMrCIV0m2PsCCcKXEZ5g/ZljL2Y3yLgAo9sgEHqghmOmX78Zj6PiP0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
-Received: from VI1PR06MB3102.eurprd06.prod.outlook.com (2603:10a6:802:c::17)
- by VI1PR0602MB2910.eurprd06.prod.outlook.com (2603:10a6:800:b8::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 23:02:55 +0000
-Received: from VI1PR06MB3102.eurprd06.prod.outlook.com
- ([fe80::9c38:9d12:599a:a1cf]) by VI1PR06MB3102.eurprd06.prod.outlook.com
- ([fe80::9c38:9d12:599a:a1cf%4]) with mapi id 15.20.4734.031; Tue, 7 Dec 2021
- 23:02:55 +0000
-From:   Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, shawnguo@kernel.org, michael@walle.cc,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, horia.geanta@nxp.com, pankaj.gupta@nxp.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        l.stach@pengutronix.de, qiangqing.zhang@nxp.com, peng.fan@nxp.com,
-        alice.guo@nxp.com, aford173@gmail.com, frieder.schrempf@kontron.de,
-        krzk@kernel.org, shengjiu.wang@nxp.com, gregkh@linuxfoundation.org,
-        ping.bai@nxp.com, daniel.baluta@nxp.com, jun.li@nxp.com,
-        marex@denx.de, thunder.leizhen@huawei.com, martink@posteo.de,
-        leonard.crestez@nxp.com, hongxing.zhu@nxp.com, agx@sigxcpu.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Subject: [PATCH v3 2/2] arm64: dts: imx8m: define proper status for caam jr
-Date:   Wed,  8 Dec 2021 00:02:06 +0100
-Message-Id: <20211207230206.14637-3-andrey.zhizhikin@leica-geosystems.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
-References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
- <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM6P192CA0069.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:209:82::46) To VI1PR06MB3102.eurprd06.prod.outlook.com
- (2603:10a6:802:c::17)
+        id S242411AbhLGXIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238150AbhLGXIq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:08:46 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA1FC061574;
+        Tue,  7 Dec 2021 15:05:15 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so2890865wmj.5;
+        Tue, 07 Dec 2021 15:05:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=daT0BRDRC5WhA1yaih6/jyrYlJJtWyQd9d5tZI5Lpqw=;
+        b=Cc51MmOVkKzHPu9rIIIy3/afv7cjzxca/DoylPsojJhjV4aySiPob3b/5VG53IvAfC
+         0wjxbr9Q+XmCE+YrxChrbRNZF7VjXqINbyepW4CVCmS6+kO3RxltC/VFDvTq3BIXVPPz
+         SQBljUdc0ZTihmXPVC4M10IJuWXGV2pgrlRURPMGkD3+la7DlhBVBhhkL5eGaDktPwwZ
+         BnMrnNLD+c+j0+HHQUilz67vIqP5iRhQZ22or7L90wu/fQ956Ulmlt0CLi/tJitExtip
+         IdVs4AsU3+lkhF6Hmn6+NWrYz7oyb7wpR9sFZiZVGIi05N5r0GEYmY9Hm30Y/Or2I3Aw
+         WhdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=daT0BRDRC5WhA1yaih6/jyrYlJJtWyQd9d5tZI5Lpqw=;
+        b=hdhlyD1TOBH7N1gL1b4RirlDtZqZU7Rd77/Nf/30ijZuB0BhjarM7CkwCbURoBllXl
+         K8cYZhz+Dple+mhfpX0MjDur56AHTSdKYdyg7xmjTw2BGb0aIVnNF2nALY2KaMPusbC8
+         UDZn2qkwilttd/bwFqQWWCs1ir73jEsem7v2yslU1rQHlTt8SrD995Y9BLHE6zZhUv0J
+         Xe9NiOLKbJnc2KaoBwG4N8Ux1axBNSmeMOFyaHV6UUzB8YcwDCg67uYsuJ0lcdPA+TtB
+         R263LQPJTQH1iTRxy50xz0oEuY44Pt8uko8aKr5/IqRilDVx2Y5tQR3dJtshFTZToL0J
+         Sw0w==
+X-Gm-Message-State: AOAM530dHxu/sRZyxV8J8LbUbO7ipGUc/5lEZLVliOPsxXw8E65DtjdD
+        lxEpCJ7wG+oFVbsCks9nhew=
+X-Google-Smtp-Source: ABdhPJwfTn93GsBbFV3BLkJZQcqdTUsCQqfv72kAbzwTlGAYD1nR7qwL4CKjDIh4RTVPyhX/4JulUA==
+X-Received: by 2002:a1c:1bd8:: with SMTP id b207mr10934553wmb.114.1638918313387;
+        Tue, 07 Dec 2021 15:05:13 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id l11sm985336wrp.61.2021.12.07.15.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 15:05:13 -0800 (PST)
+Message-ID: <61afe8a9.1c69fb81.897ba.6022@mx.google.com>
+X-Google-Original-Message-ID: <Ya/op2cIvOZaLYFN@Ansuel-xps.>
+Date:   Wed, 8 Dec 2021 00:05:11 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+ <20211207224525.ckdn66tpfba5gm5z@skbuf>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from GEO-HfyyrYQLnZo.lgs-net.com (146.185.2.7) by AM6P192CA0069.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Tue, 7 Dec 2021 23:02:52 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ac097029-890a-4f60-e1b5-08d9b9d5b3f4
-X-MS-TrafficTypeDiagnostic: VI1PR0602MB2910:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0602MB29109AA717F06551B75A240AA66E9@VI1PR0602MB2910.eurprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1265;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oaW+Hddih713Ng7grySTpzv3KS+jZE2E0Urb3iSYPnUqR4dPtQVyufdkbB3T/ifev1baulx6i9ZhXI0NnNVBwAlhU9FgNMziX1lA6dIceusj4Ve630m+U/2xAdtaua7BSB97t8jtCGgBJadiF3WJCZcm+ypAI0ojyxx6D7RbKsZEs8xOgv72RgFzngB9K5KadTNPTyz6UFquhzbWzinD7/LYh653vGLsH6iKNs/0AJ+XRC50TyrbWCRptmV5OVdkfA46kvRlWNTquJElduZvLcNdk550ubp/oZTrVi0Eq8JZCgJZYyW2VwoCY1XZ/u26mfQZUnf5C65VZnRjFBYNGqXxKazem744I38JBPrchOpoIS6h4MWbF6ZwAhs81rSE+QygbpK4Hs6sQIfMNTeuiYH57wk3erzbXFd0keZa2XKxWgOuAjtAU4/D7wDsBM7DUwcIl0MhKmQ804tGk8owWg762COjj3S0rRjpwgt3dmyEioAkp1q1wu/+mRxzXY+oqAa6wCggUUB6xZ2gJ2nQnOu85I7whyECYeiO8G27I2KV7t/Zc5lSDFVw1JVHe+MjUFJ3tNOk392ZWvxWfY2oecO4y2p6bXbRBZbwg4PJ6jVA4X8XgaAMdaAQChxn4Q16auWuEjn9yUE3O5+YXxRD4az24l0qQmobquwTyzfSbeZE31AvsC1CkwoVZtUwxT98aQPx3L71snASVf3GpnMXi0GsVUCDL2QrD3Sq2pVjVXXDd2Z0AKgmXGPz6FKahkN5DpumPzcktWZNcHWEwxe1BffUPf9lT7kiiJALMQd+kyWA7u6y4U+9fpIdspkoQuPo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR06MB3102.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(316002)(86362001)(83380400001)(52116002)(38100700002)(6486002)(6512007)(66556008)(66946007)(38350700002)(6506007)(956004)(6916009)(2616005)(4326008)(6666004)(7416002)(2906002)(7406005)(26005)(186003)(107886003)(44832011)(8676002)(966005)(8936002)(1076003)(66476007)(5660300002)(45080400002)(508600001)(32563001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KUsJqFLrmftfQ7UgGWjnhGg/7vfLyRshzPndftB/wWOqFp9Gs5mGtIx3w1nE?=
- =?us-ascii?Q?pTd1J4vWeVJhB7/DI/LCB6n1+Q13tC0tCK8f4ZNatB92Nxwwy2pWTlYXDDIN?=
- =?us-ascii?Q?eLODdFG9QWuuyHijZCwZldPzEsw1ZWdm0Qr45xEWLQUcOXwB0nP9lDivsi/Y?=
- =?us-ascii?Q?aW3EhrvH01BgjnWg0H2eMs+AsVO0+FCScFVUYwWFfcmPgIaRlc9niPt9AkOH?=
- =?us-ascii?Q?S8X18hf8O1JKN2fUfMQ61oJqVDsDehdmmFQClLRmN1IZuur8rMHN2BF10GMg?=
- =?us-ascii?Q?cIZutz8+fcmAwfj6y04BfbbMOZJ/zn1sQngOdayJKLFm2zqEz2WOeJI87sE2?=
- =?us-ascii?Q?N/6vdjpdD3ejb423B/tVtlce1rl2F0dhAKdxbqImthDCYE4sTQD1+Dax6BCi?=
- =?us-ascii?Q?GiRyzmLIqqhFMkuLUi8aAPdyX2oV3ZR/KJeihP+DzgWu9+wylfPfO5bDJyvp?=
- =?us-ascii?Q?sqs3ACPqRwz8sIUEt9AFzb4BjeqfbRWLCk2x4RU2JnYX4JzVAvDWzHVdyTp1?=
- =?us-ascii?Q?32XfvxWlTsjozD9F+Ji/3CYXkybgwMV3V6Ko6JbUvDPrn9AZKxod4jS0F1Ps?=
- =?us-ascii?Q?n2ustSaS4xGo2VGsBrRy7cQ8eJNfcYt+wOPJIHxCnMLcx/0UG5WlQBENPnu/?=
- =?us-ascii?Q?7l8vE7sXx/fYMPNqqprcYL78XKQ+tVj+MVvjoBtkyF3ZoHQUPx0S8quoxynS?=
- =?us-ascii?Q?uGGcUyZ9wRHaHDy5MQGd3DbdSUaB0gKg/kOmDNZOyIy831PAF+JwhavyW6h+?=
- =?us-ascii?Q?ByJmBr8WKH87qDScmFs9/yErKTSl+4455DeGU7yH/VD55RgDyec6lhyvnHKn?=
- =?us-ascii?Q?7hyfeXHPLOXPlQ3paTtdsYHmElcHkaqiTrdshGhDzrIXhr7gOWBrS1lLhRrW?=
- =?us-ascii?Q?y2tiXKBv53Y7uNVD6i3XOPsBMRZ9S+WSnr/FSOnR9ALSqYZkgvkGa8Nnxgkg?=
- =?us-ascii?Q?8TRlqisBNs1pXc/uL5GrowAVB89Z5G0LmZkr8cA386Mu+6JtNesXf6oTuISw?=
- =?us-ascii?Q?atzjFCNssvCbf3MIXzFaY6EOg7WhSNRAa72Y0v7CCpEDMZIc68gFPbpFdNaT?=
- =?us-ascii?Q?8uJ380o9uhu8TY2im4NjMP8ZYnzyjUuEUqLpqdRyxGumd5WibPWppu3PLlYL?=
- =?us-ascii?Q?hgibZR8Pih4H3BNK1+yPVup6Ai3xT4AYIp5ITGvuhh3qf1+WNRYU5SNOsK/o?=
- =?us-ascii?Q?ZAQSr0imuD7bPHVrkaNmGHzz68knfImTluuBMcltMWkmumibyFfUq5PSnA05?=
- =?us-ascii?Q?DDAsctRsIsePvRTwehpw1DI9soJPtVDseDHXgnPk4S1PmPCylmWxTInyraOm?=
- =?us-ascii?Q?2jR3wF/wDZOJAupGgMr+z75KiJeOfIXW5x6Kyf5my88AnztSLBIsxIynSTru?=
- =?us-ascii?Q?4DKOvV1eY5fF9Hg8e3ovivdvymReVPSc6DIDZQWu8yofj3j1Oxk6tQQPwiUn?=
- =?us-ascii?Q?3XRhNU68gEALyNp6zyTsq3gIjuvd/GpmpiGZ92b8fBGe7rsxXVs7BXpExHPD?=
- =?us-ascii?Q?lI9auauNb6DOU1hDwCMKqftjCjh7ItuyPSrJGRS7+JMHl2G9ZbhyqNYy8aQL?=
- =?us-ascii?Q?8jshVvF1+losAB34sPZP3E6kzKAWpS3DG5mAn1ZGfgfiuEG1sqdcbu0SqGDF?=
- =?us-ascii?Q?00LX7LzH0sESVXTzDwot/gz9W+L4qdYMFN+SjSQYMD99IpvzQ64DOwjA+sm6?=
- =?us-ascii?Q?r7xcXM0J810mH0CLOlUJNwhBtxo=3D?=
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac097029-890a-4f60-e1b5-08d9b9d5b3f4
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR06MB3102.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 23:02:54.9217
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zAQ08USSx5VuqYzeu+0hRbsmYFnjJTyssscSwQz7YceaMwvCon0s87KKvKtqXxzpjfk1ns/66P/1y79ZasDQAYC4nUJMayIuc7IN1pDIvcc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0602MB2910
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207224525.ckdn66tpfba5gm5z@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CAAM JR nodes are configured by BootROM and are used by various software
-entities during the boot process before they reach the Kernel.
+On Wed, Dec 08, 2021 at 12:45:25AM +0200, Vladimir Oltean wrote:
+> On Tue, Dec 07, 2021 at 10:47:59PM +0100, Ansuel Smith wrote:
+> > The main problem here is that we really need a way to have shared data
+> > between tagger and dsa driver. I also think that it would be limiting
+> > using this only for mdio. For example qca8k can autocast mib with
+> > Ethernet port and that would be another feature that the tagger would
+> > handle.
+> 
+> This is cool. I suppose this is what QCA_HDR_RECV_TYPE_MIB is for.
 
-Default BootROM configuration have JR0 and JR1 reserved for S-only
-access, while JR2 is generally available for both S and NS access. HAB
-feature of i.MX8M family does require that JR0 is reserved exclusively
-in S-only world, while JR1 and JR2 are both released to NS-World. OP-TEE
-can later reclaim the JR2 via dt_enable_secure_status() call, and modify
-the DID to hold it in S-World only.
+Exactly that.
 
-The above setup has been discovered during review of CAAM patchset
-presented to U-Boot integration [1], and does not correspond to the
-status on jr nodes in FDT.
+> But it wouldn't work with your design because the tagger doesn't hold
+> any queues, it is basically a request/response which is always initiated
+> by the switch driver. The hardware can't automatically push anything to
+> software on its own. Maybe if the tagger wouldn't be stateless, that
+> would be better? What if the qca8k switch driver would just provide some
+> function pointers to the switch driver (these would be protocol
+> sub-handlers for QCA_HDR_RECV_TYPE_MIB, QCA_HDR_RECV_TYPE_RW_REG_ACK
+> etc), and your completion structure would be both initialized, as well
+> as finalized, all from within the switch driver itself?
+> 
 
-This missing status settings leads to the following error message during
-jr node probing:
-[    1.509894] caam 30900000.crypto: job rings = 3, qi = 0
-[    1.525201] caam_jr 30901000.jr: failed to flush job ring 0
-[    1.525214] caam_jr: probe of 30901000.jr failed with error -5
+Hm. Interesting idea. So qca8k would provide the way to parse the packet
+and made the request. The tagger would just detect the packet and
+execute the dedicated function.
+About mib considering the driver autocast counter for every port and
+every packet have the relevant port to it (set in the qca tag), the
+idea was to put a big array and directly write the data. The ethtool
+function will then just read the data and report it. (or even work
+directly on the ethtool data array).
 
-JR register readout after BootROM execution shows the following values:
-JR0DID_MS = 0x8011
-JR1DID_MS = 0x8011
-JR2DID_MS = 0x0
+> > I like the idea of tagger-owend per-switch-tree private data.
+> > Do we really need to hook logic?
+> > Wonder if something like that would work:
+> > 1. Each tagger declare size of his private data (if any).
+> > 2. Change tag dsa helper make sure the privata data in dst gets
+> >    allocated and freed.
+> > 3. We create some helper to get the tagger private data pointer that
+> >    dsa driver will use. (an error is returned if no data is present)
+> > 4. Tagger will use the dst to access his own data.
+> 
+> I considered a simplified form like this, but I think the tagger private
+> data will still stay in dp->priv, only its ownership will change.
+> It is less flexible to just have an autoalloc size. Ok, you allocate a
+> structure the size you need, but which dp->priv gets to have it?
+> Maybe a certain tagging protocol will need dp1->priv == dp2->priv ==
+> dp3->priv == ..., whereas a different tagging protocol will need unique
+> different structures for each dp.
+> 
+> > 
+> > In theory that way we should be able to make a ""connection"" between
+> > dsa driver and the tagger and prevent any sort of strange stuff that
+> > could result in bug/kernel panic.
+> > 
+> > I mean for the current task (mdio in ethernet packet) we just need to
+> > put data, send the skb and wait for a response (and after parsing) get
+> > the data from a response skb.
+> 
+> It would be a huge win IMO if we could avoid managing the lifetime of
+> dp->priv _directly_. I'm thinking something along the lines of:
+> 
+> - every time we make the "dst->tag_ops = tag_ops;" assignment (see dsa2.c)
+>   there is a connection event between the switch tree and the tagging
+>   protocol (and also a disconnection event, if dst->tag_ops wasn't
+>   previously NULL).
+> 
+> - we could add a new tag_ops->connect(dst) and tag_ops->disconnect(dst)
+>   and call them. These could allocate/free the dp->priv memory for each
+>   dp in &dst->ports.
+> 
+> - _after_ the tag_ops->connect() has been called (this makes sure that
+>   the tagger memory has been allocated) we could also emit a cross-chip
+>   notifier event:
+> 
+> 	/* DSA_NOTIFIER_TAG_PROTO_CONNECT */
+> 	struct dsa_notifier_tag_proto_connect_info {
+> 		const struct dsa_device_ops *tag_ops;
+> 	};
+> 
+> 	struct dsa_notifier_tag_proto_connect_info info;
+> 
+> 	dsa_tree_notify(dst, DSA_NOTIFIER_TAG_PROTO, &info);
+> 
+>   The role of a cross-chip notifier is to fan-out a call exactly once to
+>   every switch within a tree. This particular cross-chip notifier could
+>   end up with an implementation in switch.c that lands with a call to:
+> 
+>   ds->ops->tag_proto_connect(ds, tag_ops);
+> 
+>   At this point, I'm a bit fuzzy on the details. I'm thinking of
+>   something like this:
+> 
+> 	struct qca8k_tagger_private {
+> 		void (*rw_reg_ack_handler)(struct dsa_port *dp, void *buf);
+> 		void (*mib_autocast_handler)(struct dsa_port *dp, void *buf);
+> 	};
+> 
+> 	static void qca8k_rw_reg_ack_handler(struct dsa_port *dp, void *buf)
+> 	{
+> 		... (code moved from tagger)
+> 	}
+> 
+> 	static void qca8k_mib_autocast_handler(struct dsa_port *dp, void *buf)
+> 	{
+> 		... (code moved from tagger)
+> 	}
+> 
+> 	static int qca8k_tag_proto_connect(struct dsa_switch *ds,
+> 					   const struct dsa_device_ops *tag_ops)
+> 	{
+> 		switch (tag_ops->proto) {
+> 		case DSA_TAG_PROTO_QCA:
+> 			struct dsa_port *dp;
+> 
+> 			dsa_switch_for_each_port(dp, ds) {
+> 				struct qca8k_tagger_private *priv = dp->priv;
+> 
+> 				priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
+> 				priv->mib_autocast_handler = qca8k_mib_autocast_handler;
+> 			}
+> 
+> 			break;
+> 		default:
+> 			return -EOPNOTSUPP;
+> 		}
+> 	}
+> 
+> 	static const struct dsa_switch_ops qca8k_switch_ops = {
+> 		...
+> 		.tag_proto_connect	= qca8k_tag_proto_connect,
+> 	};
+> 
+>   My current idea is maybe not ideal and a bit fuzzy, because the switch
+>   driver would need to be aware of the fact that the tagger private data
+>   is in dp->priv, and some code in one folder needs to be in sync with
+>   some code in another folder. But at least it should be safer this way,
+>   because we are in more control over the exact connection that's being
+>   made.
+> 
+> - to avoid leaking memory, we also need to patch dsa_tree_put() to issue
+>   a disconnect event on unbind.
+> 
+> - the tagging protocol driver would always need to NULL-check the
+>   function pointer before dereferencing it, because it may connect to a
+>   switch driver that doesn't set them up (dsa_loop):
+> 
+> 	struct qca8k_tagger_private *priv = dp->priv;
+> 
+> 	if (priv->rw_reg_ack_handler)
+> 		priv->rw_reg_ack_handler(dp, skb_mac_header(skb));
 
-This shows that JR0 and JR1 have TZ_OWN bit set, which marks them to be
-reserved for S-World, while JR2 remains accessible from NS-World.
+Ok so your idea is to make the driver the one controlling ""everything""
+and keep the tagger as dummy as possible. That would also remove all the
+need to put stuff in the global include dir. Looks complex but handy. We
+still need to understand the state part. Any hint about that?
 
-Provide the correct status for JR nodes in imx8m derivatives, which have
-a following meaning:
-- JR0: S-only
-- JR1: visible in both
-- JR2: NS-only
+In the mean time I will try implement this.
 
-Note, that JR2 is initially marked to be NS-only which does correspond
-to DID readout when OP-TEE is not present. Once present, OP-TEE will
-reclaim the JR2 and set both "status" and "secure-status" to claim JR2
-for S-only access.
-
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Link: [1]: https://lore.kernel.org/u-boot/AM6PR06MB4691FC905FE5658BE4B15C11A6609@AM6PR06MB4691.eurprd06.prod.outlook.com/
----
-Changes in V3:
-- No change, new patch introduced
-
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 4 ++++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 4 ++++
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 4 ++++
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++++
- 4 files changed, 16 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 5b9c2cca9ac4..51465974c4ea 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -914,18 +914,22 @@ sec_jr0: jr@1000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x1000 0x1000>;
- 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+					status = "disabled";
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr1: jr@2000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x2000 0x1000>;
- 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr2: jr@3000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x3000 0x1000>;
- 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "disabled";
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index ba23b416b5e6..e5edf14319b1 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -808,18 +808,22 @@ sec_jr0: jr@1000 {
- 					 compatible = "fsl,sec-v4.0-job-ring";
- 					 reg = <0x1000 0x1000>;
- 					 interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+					 status = "disabled";
-+					 secure-status = "okay";
- 				};
- 
- 				sec_jr1: jr@2000 {
- 					 compatible = "fsl,sec-v4.0-job-ring";
- 					 reg = <0x2000 0x1000>;
- 					 interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+					 secure-status = "okay";
- 				};
- 
- 				sec_jr2: jr@3000 {
- 					 compatible = "fsl,sec-v4.0-job-ring";
- 					 reg = <0x3000 0x1000>;
- 					 interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-+					 secure-status = "disabled";
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 977783784342..3c23bf5c3910 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -661,18 +661,22 @@ sec_jr0: jr@1000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x1000 0x1000>;
- 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+					status = "disabled";
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr1: jr@2000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x2000 0x1000>;
- 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr2: jr@3000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x3000 0x1000>;
- 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "disabled";
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index 95d8b95d6120..16c4c9110ce7 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -999,18 +999,22 @@ sec_jr0: jr@1000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x1000 0x1000>;
- 					interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+					status = "disabled";
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr1: jr@2000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x2000 0x1000>;
- 					interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "okay";
- 				};
- 
- 				sec_jr2: jr@3000 {
- 					compatible = "fsl,sec-v4.0-job-ring";
- 					reg = <0x3000 0x1000>;
- 					interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-+					secure-status = "disabled";
- 				};
- 			};
- 
 -- 
-2.25.1
-
+	Ansuel

@@ -2,177 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E10BD46B05A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C12146B055
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237292AbhLGCBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbhLGCBf (ORCPT
+        id S239267AbhLGCAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:00:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43692 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238691AbhLGCAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:01:35 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C312C061746;
-        Mon,  6 Dec 2021 17:58:06 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id z5so51080337edd.3;
-        Mon, 06 Dec 2021 17:58:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zNxM0TnCCI4+N6maswyUrhx++VXdxKrv5kQxG8am6OA=;
-        b=PdHFYs54vb5yFj6SkIYzXSB/rjqxhLfr+2KG6nFwaGzGsrj9YYuSY0QJ5RDLsY/H2v
-         Z8DyzvIGiLhBugZ2Nr2nK7NbwG37sDH0LK6pTtkfvpR9QiQcPHrl7L/JQICg8b8KF10A
-         NJCXuRDfH26gq/spmWQJM8PKqp1uy88VEpyVtYCIZTcuf0mz083oBwQRds6efQ5ieEX6
-         /gxguQ7TyvDoee6n2x6O1ROG2XYSv+ZklJxaBbfk/0A7B38vIRO4Gt/aZTCLrCPjHe20
-         ZVSrAVEdtM8xq69R3qFJfZMXUg32OBdDUbr2ptu8+5H7pXiftoSqdA2jAvvIqvMm5E+e
-         4zrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zNxM0TnCCI4+N6maswyUrhx++VXdxKrv5kQxG8am6OA=;
-        b=uchfNaqsM781AXvvsDu/KGZoCqvCat+kARdiixReSQNnKlZrivLTJnRayqiRScWMwA
-         rJN68mBpjMfk64teE1vcMeEixTu07ZRE7qq90huw7w67aeawnLQNipG/EHl5XVQIqcHH
-         LTeO6BX6a0mWS0jdy6wHus57NcmjfEfadTcmlNBOzOm/0WHTkDLDzM2FdH0kdQzZSNyJ
-         19ThNt30Gasob95Knk9w2sYkBNskez2/j61OFD8D5G1q23MfMunHJS6QuGOIi24HG9mw
-         NJhBO8tcOIQ34fsEZr3MwdqjrVjZaVTi3Zr6LRubWRi1E61U47UzsXwL+vxwCT27sD2b
-         QlRA==
-X-Gm-Message-State: AOAM5314Z3XTMHep1TU36W7LG/6zkMh0WvwY2gBwvd5+ct+05JGrMT5W
-        3FIboY0Y3C0zDe67r94KJQOgdJH38chr5gvlyqg=
-X-Google-Smtp-Source: ABdhPJwWlKAxgTrspUiJGcPjdMYN2NmpMxed1+oRVH1Rs0AWVo752Qk/ja0lS/gDpCtg2Wvb8kBody5BeorTldPJBJs=
-X-Received: by 2002:a05:6402:154:: with SMTP id s20mr4598396edu.148.1638842284779;
- Mon, 06 Dec 2021 17:58:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20211205045041.129716-1-imagedong@tencent.com> <CAEf4BzbqhccBOSiBRehnf6V35u48N+f67tmgYUR_EJhpv6HptA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbqhccBOSiBRehnf6V35u48N+f67tmgYUR_EJhpv6HptA@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 7 Dec 2021 09:55:46 +0800
-Message-ID: <CADxym3ZS7u12-hjbH2n9zw+FwLwbqx0YmE+SG+OAcJ0osVhMxw@mail.gmail.com>
-Subject: Re: [PATCH] bpftool: add support of pin prog by name
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Cong Wang <cong.wang@bytedance.com>, liujian56@huawei.com,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 6 Dec 2021 21:00:05 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E232CB8166D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 01:56:34 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E447C60EBB;
+        Tue,  7 Dec 2021 01:56:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638842193;
+        bh=b/VP2yUNSXMDqDOnbHgxx09MYMM/sNMmnDNOVdXb0RA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vMSNbM8vZIsAGf8maRR7w/w9aK/geHLwbvw6fpxURpdRkbnYmVEbDgmml5+wNq18w
+         DhBpbpTkWmSaKxvHRdTOe64utAVXdk7dvIc57DRsP5ZY6jqygza+X22PWlZQ3zj/uk
+         TEXiI/7MAvCoYYqT1cNmoOSWIJjhzwefEMYmKSjk=
+Date:   Mon, 6 Dec 2021 17:56:31 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
+ in folio_mark_dirty
+Message-Id: <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
+In-Reply-To: <0000000000005f297e05d24f05f6@google.com>
+References: <0000000000005f297e05d24f05f6@google.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 5:22 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Dec 4, 2021 at 8:51 PM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > For now, the command 'bpftool prog loadall' use section name as the
-> > name of the pin file. However, once there are prog with the same
-> > section name in ELF file, this command will failed with the error
-> > 'File Exist'.
-> >
-> > So, add the support of pin prog by function name with the 'pinbyname'
-> > argument.
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
->
-> Doesn't [0] do that already?
->
->   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20211021214814.1236114-2-sdf@google.com/
->
+On Sat, 04 Dec 2021 01:55:17 -0800 syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com> wrote:
 
-Ops....Sorry, I didn't notice that patch :/
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1362881eb00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7cd473c2cac13fd2dd72
+> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com
+> 
+> BUG: kernel NULL pointer dereference, address: 0000000000000000
 
-> >  tools/bpf/bpftool/prog.c | 7 +++++++
-> >  tools/lib/bpf/libbpf.c   | 5 +++++
-> >  tools/lib/bpf/libbpf.h   | 2 ++
-> >  3 files changed, 14 insertions(+)
-> >
-> > diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> > index e47e8b06cc3d..74e0aaebfefc 100644
-> > --- a/tools/bpf/bpftool/prog.c
-> > +++ b/tools/bpf/bpftool/prog.c
-> > @@ -1471,6 +1471,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
-> >         unsigned int old_map_fds = 0;
-> >         const char *pinmaps = NULL;
-> >         struct bpf_object *obj;
-> > +       bool pinbyname = false;
-> >         struct bpf_map *map;
-> >         const char *pinfile;
-> >         unsigned int i, j;
-> > @@ -1589,6 +1590,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
-> >                                 goto err_free_reuse_maps;
-> >
-> >                         pinmaps = GET_ARG();
-> > +               } else if (is_prefix(*argv, "pinbyname")) {
-> > +                       pinbyname = true;
-> > +                       NEXT_ARG();
-> >                 } else {
-> >                         p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
-> >                               *argv);
-> > @@ -1616,6 +1620,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
-> >                                 goto err_close_obj;
-> >                 }
-> >
-> > +               if (pinbyname)
-> > +                       bpf_program__set_pinname(pos,
-> > +                                                (char *)bpf_program__name(pos));
-> >                 bpf_program__set_ifindex(pos, ifindex);
-> >                 bpf_program__set_type(pos, prog_type);
-> >                 bpf_program__set_expected_attach_type(pos, expected_attach_type);
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index f6faa33c80fa..e8fc1d0fe16e 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -8119,6 +8119,11 @@ void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
-> >         prog->prog_ifindex = ifindex;
-> >  }
-> >
-> > +void bpf_program__set_pinname(struct bpf_program *prog, char *name)
-> > +{
-> > +       prog->pin_name = name;
->
-> BPF maps have bpf_map__set_pin_path(), setting a full path is more
-> flexible approach, I think, so if we had to do something here, it's
-> better to add bpf_program__set_ping_path().
+cc linux-f2fs-devel@lists.sourceforge.net
 
-Yeah, I think it's a good idea. I'll do something about it.
+And willy, who might help with diagnosing this.  But it does seem that
+f2fs got itself a NULL page* then put it in places where it shouldn't have.
 
-Thanks!
-Menglong Dong
-
->
->
-> > +}
-> > +
-> >  const char *bpf_program__name(const struct bpf_program *prog)
-> >  {
-> >         return prog->name;
-> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > index 4ec69f224342..107cf736c2bb 100644
-> > --- a/tools/lib/bpf/libbpf.h
-> > +++ b/tools/lib/bpf/libbpf.h
-> > @@ -216,6 +216,8 @@ LIBBPF_API int bpf_program__set_priv(struct bpf_program *prog, void *priv,
-> >  LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
-> >  LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
-> >                                          __u32 ifindex);
-> > +LIBBPF_API void bpf_program__set_pinname(struct bpf_program *prog,
-> > +                                        char *name);
-> >
-> >  LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
-> >  LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
-> > --
-> > 2.30.2
-> >
+> #PF: supervisor instruction fetch in kernel mode
+> #PF: error_code(0x0010) - not-present page
+> PGD 70764067 P4D 70764067 PUD 0 
+> Oops: 0010 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 6541 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+> RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
+> RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
+> RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
+> R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
+> R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
+> FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
+> Call Trace:
+>  <TASK>
+>  folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
+>  f2fs_update_meta_page+0x4b/0x380 fs/f2fs/segment.c:2485
+>  do_checkpoint fs/f2fs/checkpoint.c:1513 [inline]
+>  f2fs_write_checkpoint+0x31ad/0x5430 fs/f2fs/checkpoint.c:1674
+>  f2fs_issue_checkpoint+0x361/0x4e0
+>  sync_filesystem+0x19c/0x1f0 fs/sync.c:63
+>  generic_shutdown_super+0x6b/0x300 fs/super.c:448
+>  kill_block_super+0x79/0xd0 fs/super.c:1397
+>  kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4478
+>  deactivate_locked_super+0xa7/0xf0 fs/super.c:335
+>  cleanup_mnt+0x462/0x510 fs/namespace.c:1137
+>  task_work_run+0x146/0x1c0 kernel/task_work.c:164
+>  tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+>  exit_to_user_mode_prepare+0x209/0x220 kernel/entry/common.c:207
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+>  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+>  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f6cfdd59f57
+> Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fffcbddcad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6cfdd59f57
+> RDX: 00007fffcbddcbac RSI: 000000000000000a RDI: 00007fffcbddcba0
+> RBP: 00007fffcbddcba0 R08: 00000000ffffffff R09: 00007fffcbddc970
+> R10: 0000555557166903 R11: 0000000000000246 R12: 00007f6cfddb2105
+> R13: 00007fffcbdddc60 R14: 0000555557166810 R15: 00007fffcbdddca0
+>  </TASK>
+> Modules linked in:
+> CR2: 0000000000000000
+> ---[ end trace 08eda5a5e35b48a0 ]---
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+> RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
+> RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
+> RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
+> R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
+> R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
+> FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

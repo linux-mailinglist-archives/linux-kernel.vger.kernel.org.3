@@ -2,270 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E3A46B325
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C3946B323
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 07:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235557AbhLGGtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 01:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbhLGGtS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 01:49:18 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7954CC061746;
-        Mon,  6 Dec 2021 22:45:48 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id n26so12522842pff.3;
-        Mon, 06 Dec 2021 22:45:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G0omo7Egqr3hytg5r9KH47aiBoXPSyXGzIlq5RGChSA=;
-        b=VYlmU4B3WwLuxMzTakTr9D4yheq4v2y4TdCRtge5Vl6prjGqPx5TzVuE+W/ewiQpwh
-         9uRf+1hBnt9fOJC1sO0KFrdU/kpct9tyiAApZJeWKyb4+7MaZqexpVHQg5Zcuoh8ff4y
-         MuidlwVNBc8hxX42/Sm3fC2563F5Jp2Dbzcv2dRbLZ18Tg3fRlcRjNpM7q7BfJa7CISF
-         oM+Pcm3dSmZC9lzAw5smsI89AnD+dXFZpV7mZ79wdMTnbC4pdrq5aESB+XfofA0INZf1
-         3ZL6R1kKQfNknM9H0gmPczwtyIWgKZmMrEkL7lW3hmXfvCMdPTHi2L97pV84wjorVTwK
-         cZ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G0omo7Egqr3hytg5r9KH47aiBoXPSyXGzIlq5RGChSA=;
-        b=xSbarpneIWKmCXf7J+UZrtg910GpwqrlAhkNChVPgS/h3jAmOV1mzcOw4KH+Dgeqql
-         f4vmIBkl8eBG/TPlm3f5FAZ6wLKniC8YsdnOnkSt9vTFOwNGbjZApaLllmKw2cuj3gtC
-         2f6ngiHx33EdUcvRgDzbOQzBXgFqr0/XlTOLFJ2/6e5mn+BureSUXZA43HfXTMYUXup0
-         utOcQycEXakOuWzpRgR19YfQCCVDqED/a/RqMe4pKal4OgxzYkojWbNs9ylEEdz/ETMY
-         MMP2jMGWCTexsC+ZDckYxoTL3D5nX0tG3gtYWBYZyvwyrffA61Gqk5b/bse780XypDor
-         fy2A==
-X-Gm-Message-State: AOAM533VuFOf5XyCqO3r7TUnCRAOGffswzszYWFqWudzprM/JfvNMxHM
-        yUY0BPlMo+KIb5EcO0KbCGI=
-X-Google-Smtp-Source: ABdhPJwzUYfN7C9r5TbnwE8X42vLzMZDr8n/CFZ+xPEt3cZ4jZt2BdFRd81vwTJgeZr7h0CWYageuA==
-X-Received: by 2002:a63:8848:: with SMTP id l69mr23277994pgd.41.1638859547882;
-        Mon, 06 Dec 2021 22:45:47 -0800 (PST)
-Received: from howard-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id g13sm1358326pjc.39.2021.12.06.22.45.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 22:45:47 -0800 (PST)
-From:   Howard Chiu <howard10703049@gmail.com>
-X-Google-Original-From: Howard Chiu <howard.chiu@quantatw.com>
-To:     linux@roeck-us.net, jdelvare@suse.com, inux-hwmon@vger.kernel.org,
+        id S234820AbhLGGsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 01:48:14 -0500
+Received: from mail-psaapc01on2124.outbound.protection.outlook.com ([40.107.255.124]:10529
+        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229453AbhLGGsM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 01:48:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oHdLigbK6Wtu/MOL4z2icGqbFKp2Bh5nFJ9R83idctJCGUZF6SxDu29VEVEcDvzhdwkZgtpV9EWKLD3qr5jQnyLUrvT16U+b1U2Jco3Z8RVFnJofqwh74DVrxP/7YUB733zInVwQyi2zX+r3mJfd6+UWYq+jjlMR902VEKjEYliAqnAWkpukPHcTiSdlLfPTErt0y2z4pvxuadTwplkmnIYdASlHvO5nrbMaJ7vie2pkrIQvkf197Kzsx8qmA+ens8s8c6P4gxyeiA11E2s3gjQFbTDQsgsFfBnmx4qKg59iu+jRFGtSGA7OjMM9OoC7WIy0VVJszBFtB1Asy58okw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F0S0WDG1jcvqHu55xBge6L5sXg/JWLqvWkXc8emQUY8=;
+ b=B6bJTRToPxmEWnOQpcgLHx2yqRR9ArnHtCrOpCR2wY8xB5+HjsfAvCJAuX5Xqw/w70wMNDXPBEKM9a/IqtcvgTzawkYu/GJWUR7SROBHqT57kyVUs9ZwUPTt50QM4vaPdHvnkl3Y4Z8lZKERZ9F024udw3kXN1Tg4h4ZzG5gbp06H7QvdW55Dwpp9/DvfaeCAVcEuWFuDxC0nDBcbBNBML2j/aDIJKYtHBEa1M1KbQRXHECvhRMKQkYIgK/F0Btl3My1rNN4Ok5Rdk5A3O7QoR2PFA0JbpaLKLr/jtEt7D5V1+lEpuAXo+Hnmc0gHqfJX5v6Cm9pBAXWPFxdxZHM2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F0S0WDG1jcvqHu55xBge6L5sXg/JWLqvWkXc8emQUY8=;
+ b=h3H5RBcBpPcZabjk7nxZet3HszAItDwnJQAgIEZTURoIAAXpYSS/vsOIjlCLNmmzGg0vF2tVg9Tof+4HkE+EdXhjyaBw2nk0T/6/fEejum3oYgYtkIs3lA3iPFg8m0/GBqM9RLUZ5rSSzPmnjuQnVpaECeUcbsU2qI0Gyo7ZdDs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TY2PR06MB2735.apcprd06.prod.outlook.com (2603:1096:404:3b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 06:44:38 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 06:44:38 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Howard Chiu <howard.chiu@quantatw.com>
-Subject: [PATCH v1] hwmon: (pmbus) Add support for MPS Multi-phase mp5023 controller
-Date:   Tue,  7 Dec 2021 14:43:25 +0800
-Message-Id: <20211207064325.312583-1-howard.chiu@quantatw.com>
-X-Mailer: git-send-email 2.25.1
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] net: dsa: felix: use kmemdup() to replace kmalloc + memcpy
+Date:   Mon,  6 Dec 2021 22:44:18 -0800
+Message-Id: <20211207064419.38632-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0154.apcprd06.prod.outlook.com
+ (2603:1096:1:1f::32) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: from ubuntu.vivo.xyz (103.220.76.181) by SG2PR06CA0154.apcprd06.prod.outlook.com (2603:1096:1:1f::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend Transport; Tue, 7 Dec 2021 06:44:36 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3736d355-3c52-4cd5-6ec4-08d9b94d0a63
+X-MS-TrafficTypeDiagnostic: TY2PR06MB2735:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR06MB2735521B6B19A3401F2CA169A26E9@TY2PR06MB2735.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nfTCjP8mmkxU2e4tftkiIPFs7Q/jl3SLE+0O/k1pF7SmRA5cfrCSFQTPsjW+AEHaADwY3oA4WIiKbPaBG+Svx4Ju0r0nQgbcDtO5QE8D4SCgZJ4TURtbP3yL+JpGtON6wD6vaaE/fNGlj/X3ja+YMhSlVVUtsz0ShBT83XpG70pgqPeZ03Ps4J3zeNuotfL7qkZbBEtgA16TA0k2s4e8whixubFHtxbfqvkxjnxM44avd3+sVzKY5xD3LFgyCl0xjBwnwrXZkcqoD9MWJS/ABKWuerCcsgIj2jJpvj6A2pQpRjxfWEOUlTVi7buDBOP58sRUWvNxo5Ue+A0L0Rw6nsAV2IQaM74Ng/PqHl0PJhkcO7Odar34vbt5kVZ6k7+zGsSzHP2o070R2mVb9uabZdTNuRdHTMvmN0XK5hMEEycjjfygNGDRqW+ObUhm2haVfRx8Kk03QikJrpK9zo/lT6v2z0nhyWqnyTiujDs40AsEDI467CodZjwgtdQi4ZOktxR6cC5+pEF+7uVla4QzuvOXsEcz3Om4HWrB9l/1/rT1H4W3FtTdFowyNcR8kWugjDg2dIJiO3jSB3qo0qzwsGVGbD1RteEw/3IzL6sy2xWLfJ4SLMtlaFAJDRep2WhzF8gEvrmTciTojiXguKQxzqgLG5R7P6ft+qL8AzRe+itB0HkPZiqav6dNl5JtxmlzTdt34xJLqlsjoPMpY9KlyfM/JSoH11wlDba82w0IILONhD6vZVjxH7U0C9viCfKh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(5660300002)(83380400001)(8676002)(8936002)(921005)(6506007)(36756003)(52116002)(38350700002)(38100700002)(86362001)(6666004)(4326008)(110136005)(7416002)(66946007)(186003)(26005)(6512007)(66476007)(107886003)(1076003)(2616005)(956004)(66556008)(508600001)(316002)(2906002)(182500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rahLCjeIP3NoQUG738zX4rHwFnPTdX3UvPdgxJfZ+TWNmUwjWa5lot9CkL96?=
+ =?us-ascii?Q?5f8AdizQTZpFoAJ8lGuYPNI3ArOoklQENerlDGcgpLZwVWXvj8GddyY20Msh?=
+ =?us-ascii?Q?8k8s1/h6Jrjqqffb+jMl8kxlqp8pYweCpZG4nUqMbdenHdFJv1vsJ7HkT6nW?=
+ =?us-ascii?Q?QYMLOg8dRW4gcJBoobmDOa2snBXlb2/5lkOd/zwgUhJeJR+KXQIRfxZhkeRG?=
+ =?us-ascii?Q?IkJEC9RiSfq8I4+broyqsq7AGzZc61sF1AuJPEg4txMSweNUB0uvvbV0dPNG?=
+ =?us-ascii?Q?8JOriCW2QV9aXoE7cyzGKEv1k9LiLxijQ2pOmnuZBl2PrrFbZ+OJ1ilaAknj?=
+ =?us-ascii?Q?4maGM+hCiAVtbBac98ggyXQPcDryoYabeQdp1wUchifh3gyBjiQDS0LgH3z2?=
+ =?us-ascii?Q?lIey8MeXA3e5sepOR2jDVsIH+yYEUeiZ8nENKtm/bRIiumTNSAwLfGJF/uXK?=
+ =?us-ascii?Q?31vwzeZzHsDDboFzVadaT3C2ZSgEq152I/ZPMhkVIGFxop2gHXjdK8O+g05D?=
+ =?us-ascii?Q?5CFLWms33MP+mYxoKOXhshOf47V7XOFcNBU5C4qI68zPiamiwxT5mK8/TJyU?=
+ =?us-ascii?Q?zSuDMDlgNZHLOHqiJ8XFuV/2nnw/CqJ2jyXiAxnb4sDGFRnC036Jzu/GRfnq?=
+ =?us-ascii?Q?dSaG9Fphy1f+IZTklN2UxKpXrXV79CvpB+lvD9AV1RNu08CeK/2/uyz6GLQX?=
+ =?us-ascii?Q?yVf51Mf9Q+KS6DzmwH7k0fHVxl7ii6bvZHx2ZuIwmGt/qmp536xuUTq7I9Ot?=
+ =?us-ascii?Q?GiFGOOQREWBl29Vlku91jT1WMQ2unIINKeHUgiVXl6N8iZWOZJRecmYfmVaL?=
+ =?us-ascii?Q?bg5lxKVO4uopA4rgXSlo4TiEgYxckhSAlUgvERGeW83lahnmowA/fOEvBaeN?=
+ =?us-ascii?Q?+nbR3O/5sWgH4LnuQ11sPUxjBTCShYGz2b9WxLG3OBxi5Hjzl6T2Zkj5yGg1?=
+ =?us-ascii?Q?mdLfvI+3umLnzd0zoeAttUQ+OJofj4UDk9OEEZwzR/G3kUtgaBMic736e6ai?=
+ =?us-ascii?Q?tTM935SXY/wi7VAK8SJkCMaXju37+G4TLCoVbtl87bWpcZ2XpRk3dyQrewdi?=
+ =?us-ascii?Q?P8Uu0qc5MpzVR51bLzSrrPmBYXy9IJk+paWgqLoqx3ckxWcx+hgVYXBwwPaS?=
+ =?us-ascii?Q?h1NgxYRi/+kzvVLGM/ilsE4rRzBeOLHmER2zKfWpDnh5hzD8ue64WUzxzWMs?=
+ =?us-ascii?Q?CfcbFHze9gC7I37LM3lC0+gUDpLu1PLCdnfLg4maymJuK0IuvDtzOxTQSJ0m?=
+ =?us-ascii?Q?uOjY1xF33aKB1qEpb4vWaZ+8SHwW5URYldy5AS92Lh0PQ3CkWSfFm1s5Rx1z?=
+ =?us-ascii?Q?s98Kd0xGTswiBTnv/vcAF8vnwsBn2+OgApYq4aW0fQO7mh3dbVLP9PbOICN1?=
+ =?us-ascii?Q?+CDVjQbNCG845bqO5K94S5gTbQN1rkAb2gldzc1HQQSuxEaDvRKubleJMWUp?=
+ =?us-ascii?Q?p6DXq9/uO2CJSVzj9EC3dnQ3DI+QCTvD9Tvn+vqLURouTMm5jaTUEHkXAUsl?=
+ =?us-ascii?Q?2Ec0t1ZP0CdJDiQ6PU6fWy8KZg1NBGlAbuIHKeXqfH2p+DNuOoEQB9TqQ9L9?=
+ =?us-ascii?Q?5/xTEfT3ieC4Wg4ubt2MixQp2f7Sre9dfvLBB4euoA3INJOXvcbxlfGk80z4?=
+ =?us-ascii?Q?YJ12aDayi18Uwl4JqjQDOeM=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3736d355-3c52-4cd5-6ec4-08d9b94d0a63
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 06:44:38.8819
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GlTFxtu8DT4wTo27dKOWcb9AWCXICkSckVJmhMpfw729ji6bqr/AQsXx47SiLNEx4DvTXKQRM7PQaIB2S0qmPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2735
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for mp5023 device from Monolithic Power Systems, Inc. (MPS)
-vendor. This is a Hot-Swap Controller.
+Fix following coccicheck warning:
+/drivers/net/dsa/ocelot/felix_vsc9959.c:1627:13-20:
+WARNING opportunity for kmemdup
+/drivers/net/dsa/ocelot/felix_vsc9959.c:1506:16-23:
+WARNING opportunity for kmemdup
 
-Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
- Documentation/hwmon/mp5023.rst | 80 ++++++++++++++++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig    |  9 ++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/mp5023.c   | 66 ++++++++++++++++++++++++++++
- 4 files changed, 156 insertions(+)
- create mode 100644 Documentation/hwmon/mp5023.rst
- create mode 100644 drivers/hwmon/pmbus/mp5023.c
+ drivers/net/dsa/ocelot/felix_vsc9959.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/hwmon/mp5023.rst b/Documentation/hwmon/mp5023.rst
-new file mode 100644
-index 000000000000..b88506817406
---- /dev/null
-+++ b/Documentation/hwmon/mp5023.rst
-@@ -0,0 +1,80 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver mp5023
-+====================
-+
-+Supported chips:
-+
-+  * MPS MP5023
-+
-+    Prefix: 'mp5023'
-+
-+Author:
-+
-+	Howard Chiu <howard.chiu@quantatw.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for Monolithic Power Systems, Inc. (MPS)
-+MP5023 Hot-Swap Controller.
-+
-+Device complaint with:
-+
-+- PMBus rev 1.3 interface.
-+
-+Device supports direct format for reading input voltage, output voltage,
-+output current, input power and temperature.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+The driver provides the next attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_alarm**
-+
-+The driver provides the next attributes for output current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_alarm**
-+
-+**curr1_max**
-+
-+The driver provides the next attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+**power1_alarm**
-+
-+The driver provides the next attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index ffb609cee3a4..b56bd8542864 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -276,6 +276,15 @@ config SENSORS_MP2975
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mp2975.
+diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
+index 9add86eda7e3..0076420308a7 100644
+--- a/drivers/net/dsa/ocelot/felix_vsc9959.c
++++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+@@ -1503,12 +1503,10 @@ static int vsc9959_stream_table_add(struct ocelot *ocelot,
+ 	struct felix_stream *stream_entry;
+ 	int ret;
  
-+config SENSORS_MP5023
-+	tristate "MPS MP5023"
-+	help
-+	  If you say yes here you get hardware monitoring support for MPS
-+	  MP5023.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mp5023.
-+
- config SENSORS_PIM4328
- 	tristate "Flex PIM4328 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 0ed4d596a948..61cdc24b1309 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
- obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
- obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
- obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
-+obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
-diff --git a/drivers/hwmon/pmbus/mp5023.c b/drivers/hwmon/pmbus/mp5023.c
-new file mode 100644
-index 000000000000..2d2048c9765e
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp5023.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for MPS MP5023 Hot-Swap Controller
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/of_device.h>
-+#include "pmbus.h"
-+
-+static struct pmbus_driver_info mp5023_info = {
-+	.pages = 1,
-+
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+
-+	.m[PSC_VOLTAGE_IN] = 32,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 0,
-+	.m[PSC_VOLTAGE_OUT] = 32,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+	.m[PSC_CURRENT_OUT] = 16,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 0,
-+	.m[PSC_POWER] = 1,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = 0,
-+	.m[PSC_TEMPERATURE] = 2,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 0,
-+
-+	.func[0] =
-+		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
-+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-+};
-+
-+static int mp5023_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &mp5023_info);
-+}
-+
-+static const struct of_device_id __maybe_unused mp5023_of_match[] = {
-+	{ .compatible = "mps,mp5023", },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, mp5023_of_match);
-+
-+static struct i2c_driver mp5023_driver = {
-+	.driver = {
-+		   .name = "mp5023",
-+		   .of_match_table = of_match_ptr(mp5023_of_match),
-+	},
-+	.probe_new = mp5023_probe,
-+};
-+
-+module_i2c_driver(mp5023_driver);
-+
-+MODULE_AUTHOR("Howard Chiu <howard.chiu@quantatw.com>");
-+MODULE_DESCRIPTION("PMBus driver for MPS MP5023 HSC");
-+MODULE_LICENSE("GPL");
+-	stream_entry = kzalloc(sizeof(*stream_entry), GFP_KERNEL);
++	stream_entry = kmemdup(stream, sizeof(*stream_entry), GFP_KERNEL);
+ 	if (!stream_entry)
+ 		return -ENOMEM;
+ 
+-	memcpy(stream_entry, stream, sizeof(*stream_entry));
+-
+ 	if (!stream->dummy) {
+ 		ret = vsc9959_mact_stream_set(ocelot, stream_entry, extack);
+ 		if (ret) {
+@@ -1624,11 +1622,10 @@ static int vsc9959_psfp_sfi_list_add(struct ocelot *ocelot,
+ 	struct felix_stream_filter *sfi_entry;
+ 	int ret;
+ 
+-	sfi_entry = kzalloc(sizeof(*sfi_entry), GFP_KERNEL);
++	sfi_entry = kmemdup(sfi, sizeof(*sfi_entry), GFP_KERNEL);
+ 	if (!sfi_entry)
+ 		return -ENOMEM;
+ 
+-	memcpy(sfi_entry, sfi, sizeof(*sfi_entry));
+ 	refcount_set(&sfi_entry->refcount, 1);
+ 
+ 	ret = vsc9959_psfp_sfi_set(ocelot, sfi_entry);
 -- 
-2.25.1
+2.17.1
 

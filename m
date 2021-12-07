@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A088046C4EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D3646C4F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241452AbhLGU5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S241466AbhLGU6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241441AbhLGU5j (ORCPT
+        with ESMTP id S241454AbhLGU6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:57:39 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A64DC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:54:09 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id u11so90069plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:54:09 -0800 (PST)
+        Tue, 7 Dec 2021 15:58:14 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F24DC061756
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:54:43 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id i6so912692uae.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:54:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VMPoqsoId6HWsPFw69vGUFoNsyz/LMMcBs3MC/wfdeY=;
-        b=jRFhTTXNtqYsIZI1JEosgsPdAzsOUjmz5xu1yZsmwWUTaHAb4apJ0WOzg4jucgF5/L
-         SdHBHDeVzqhbT81RD4gyWeOWbvlHsN/oPhoOxMWunbs6kvUH3anKpdL0FUN9rWpnLWpR
-         NotedaBP3/jPDtg5JmXubVa0ofHKJ3k+jskwaJOQ9E/qKMC1Uo0DZs6iUmNgvsUYAvqH
-         j9gX59LadC/sguKp+iYnTuBuKCKSxzM3DEIYdQHoJ1KeHRQke1dKlOz400tJI7zURL/M
-         cj6Pwvje/V5T58h5atih4omfgxChtcwK58TaWMXbnHfaBDQE4BKJ8k3fTrs4Ucn7yjJW
-         DrzQ==
+        bh=vnQaA6P+LIHQMrDzcMBkiFC3eYo06vZ3BgOWnpFUb+U=;
+        b=KDelhbXVes+lqRe0cb53jkgLal/aW6GQGwffjQa0rUHsbe6161UF1t6Z2on4FaIk7K
+         kpkpfJFoyxDKQNM8u5/DG4qXs14VX31bLcBiREhAe/fcde1lmjKR005B0B2dvpxIN7lJ
+         mEBfjeYuO/+jL9tenYrHFM7UEN1XBRDKed1vVA6cU9emE0Y7fuY31Qx89Q2ci9KQaR6L
+         fsjgccMmfK5xtAY1EFTmdpfMThTmerT33Sa/j2aUf0jUwpOEj8vuHNSUPhU4Pj9zD8mk
+         ttkdJZ90tG1h6qpo4ANKcjDL7GvumlIwp2XJqi1+0kvTJLtAudu0VD6q7YGCLRznQnam
+         adhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VMPoqsoId6HWsPFw69vGUFoNsyz/LMMcBs3MC/wfdeY=;
-        b=jsmn/vBtTlRCRLeAWpJDkx8i0V8iSXcO/BZbqZUngg9okTJsEStN5P36AqIb6It0bW
-         QQpSJaIqGPy/4JZkwKPkZrOSDQ3jWH/kRmm7/c1oXf1oO/Gx1MQLreGGsv7q3/6jp8nN
-         sFCi7u2XKYGUvRgsg/20eU60gYc0VLuP2qhq7lP8NRdxcNeD86rSKAARyZpnTcSev0Gy
-         tzXBZccDIeO5CW/ePX/0m1PQx5GTLhXL9W4ZSWWXJWcmYAXNnbhulzQdbDmoEWoLdUCg
-         QRMRfJcnhfIXGGI6iK0N8f5ln3MpzgyOm81AA3R+ATK/RMz+B6I9gi8j69poPA/GpspV
-         4Ukg==
-X-Gm-Message-State: AOAM5313CE2gKG0g2haailPR2bqHhXUr+1ZCcxGdJESo5bSU8nkCtl5z
-        PLeXyt7AEKmvfct+QWDWv+W9u5Yc7ury4uhKHSovJw==
-X-Google-Smtp-Source: ABdhPJxGOX9jRrRoXCbwqewVjhX8JMcCh8Le9ks7gtD+qaihDusUQXxVlQl4+wBikjYMLbSX+3jM95lWCDZTPbPfTh8=
-X-Received: by 2002:a17:90b:230c:: with SMTP id mt12mr1898428pjb.63.1638910448209;
- Tue, 07 Dec 2021 12:54:08 -0800 (PST)
+        bh=vnQaA6P+LIHQMrDzcMBkiFC3eYo06vZ3BgOWnpFUb+U=;
+        b=sRvCvEe2h9hGsEpKC4JLpr6nRzx3McvqGFDMqS7WOgSIv4NsSk3f5zkHbS/ZqUF3Nu
+         j/eImdyRMgsyFPpVg8YOWSgxvpiLSkJbsW1tB77aAwioL/UEpwehwaoK/7LEota8Mihu
+         5DmRyT8v+dZ/oGnHrL0XtAv+cd7F5nhgMY7rXwNfyqm9gRyjssdMvRtHWr/ICce7B6Ec
+         ZBn09a82W2EgdmfPilgPLq1KIkCmK2I5lxyAG9QoXq6+yRHOp2PE9vFaNTD3Mov65WMQ
+         6Q+b0Oh/L/fkOpCYKTGqecZHwkBMypxGUfJXA+rF5r1Z+OnzxTJbhsb1nf7CPbjI2lX7
+         x/+Q==
+X-Gm-Message-State: AOAM533TnDS+kd5xbCix1AWMzqaGX7Kr3WCN2Kp6gGJ90nCI3eOHQi6z
+        P3n64a6fHwVpITB5zj/9OX6O5TOcD2gQF0JSTMzU1g==
+X-Google-Smtp-Source: ABdhPJytk9aqZYoTy38J10oQ1ej1BjD0TBUC+GRw7/nU3TmvDeFV2TePR+yGXQDx2wGW2M7EDD6S8h4pv5K8ijYKEVs=
+X-Received: by 2002:a67:d31c:: with SMTP id a28mr48540382vsj.20.1638910482661;
+ Tue, 07 Dec 2021 12:54:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20211007211417.728268-1-dlatypov@google.com>
-In-Reply-To: <20211007211417.728268-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 7 Dec 2021 15:53:57 -0500
-Message-ID: <CAFd5g44yfd_K1KTeatUGkBu+STX-mGkWQsMQDBCgzZ7aPz4x7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: print parsed test results fully incrementally
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+References: <20211126203641.24005-1-semen.protsenko@linaro.org> <YagPWOj0CLxE/+ER@robh.at.kernel.org>
+In-Reply-To: <YagPWOj0CLxE/+ER@robh.at.kernel.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 7 Dec 2021 22:54:31 +0200
+Message-ID: <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        David Virag <virag.david003@gmail.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 5:14 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, 2 Dec 2021 at 02:12, Rob Herring <robh@kernel.org> wrote:
 >
-> With the parser rework [1] and run_kernel() rework [2], this allows the
-> parser to print out test results incrementally.
+> On Fri, 26 Nov 2021 22:36:40 +0200, Sam Protsenko wrote:
+> > System Register is used to configure system behavior, like USI protocol,
+> > etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+> > make it possible to modify SYSREG registers.
+> >
+> > While at it, add also missing PMU and GPIO clocks, which looks necessary
+> > and might be needed for corresponding Exynos850 features soon.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> >
 >
-> Currently, that's held up by the fact that the LineStream eagerly
-> pre-fetches the next line when you call pop().
-> This blocks parse_test_result() from returning until the line *after*
-> the "ok 1 - test name" line is also printed.
->
-> One can see this with the following example:
-> $ (echo -e 'TAP version 14\n1..3\nok 1 - fake test'; sleep 2; echo -e 'ok 2 - fake test 2'; sleep 3; echo -e 'ok 3 - fake test 3') | ./tools/testing/kunit/kunit.py parse
->
-> Before this patch [1]: there's a pause before 'fake test' is printed.
-> After this patch: 'fake test' is printed out immediately.
->
-> This patch also adds
-> * a unit test to verify LineStream's behavior directly
-> * a test case to ensure that it's lazily calling the generator
-> * an explicit exception for when users go beyond EOF
->
-> [1] https://lore.kernel.org/linux-kselftest/20211006170049.106852-1-dlatypov@google.com/
-> [2] https://lore.kernel.org/linux-kselftest/20211005011340.2826268-1-dlatypov@google.com/
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Hi Sylwester,
+
+Can you please review and apply this series, if it's ok?
+
+Thanks!

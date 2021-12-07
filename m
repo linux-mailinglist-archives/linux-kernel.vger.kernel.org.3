@@ -2,173 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E5C46B25B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B42746B263
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbhLGFaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S234480AbhLGFe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbhLGFa3 (ORCPT
+        with ESMTP id S232346AbhLGFeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:30:29 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E166DC061746;
-        Mon,  6 Dec 2021 21:26:59 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so1033822pjc.4;
-        Mon, 06 Dec 2021 21:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9ovNqKLM8DfKM0dll8ggaH/2TM9J/6RL9ZGDKw88N+4=;
-        b=f+jCUAm+bCAy+8ipqGWFQ8UZ7oMKbwNiPL6NYNzURwixp/bTFbwtc+JfTfs9EnebMX
-         jOhzpRAoqTu8nqDB2OeuH9Q/pb8jOaBTyMiXu8th+pBFg+/7ElvTLhqXbKZMEzQOgLmC
-         ZowcQk8RLCLA5qo6bmYx/Sx3FRj5rYuS96QZZqzNyK/urbUAw4V53BR9xuh5tmv/Vbyq
-         CinpgBt6pD5uNxTFjCf5xy2+w/0nIHgYdvTaaYZxlCzCyJWpnrwjYlhwgt2Ii0gdqfI5
-         +2An7yaVhVVrk1nNjgCH8917qNuicDHGW4rqwhTRsgzZLnQvOvAVm57/0LAyWxo9GC2F
-         iQyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9ovNqKLM8DfKM0dll8ggaH/2TM9J/6RL9ZGDKw88N+4=;
-        b=NfZTtyzbA8s0ZZEE62sLYLaAST9wPYcliuCON6SBV4t1yU2JHwXPmkWIrpWoDmW66h
-         QyUUCDD+DOVHXFqibzymr4vdHF7xFmNemSrt+gVy/bVzXcWZcSiWCopzS0gtVXSPMulS
-         khU7RKu46QBQI4nP7cBBZr6fKmyTCwSKRboEMoVdGYEItZTTztClp0LqDgkmmjQLv5la
-         zH3jipVx879nX//PYyRo3Vox1udfN/rfwJj8a9dOsufv5XjYuZL7YIj/lus9Kn3r+EcZ
-         8bbawT1nWa4eVvhuFHPG7OPdmvR8x3zIeBdrcBCKeHYhBCe85bL7uW9tP1EnMkJFgHq/
-         HW8w==
-X-Gm-Message-State: AOAM530g6YBSb7fc5fpGRsETA8q3Q9eAqcc1TqeXiSySXq5ZvGNgugAV
-        lsK/H66HNBIpuBTCez8GHm4=
-X-Google-Smtp-Source: ABdhPJyvBMcy8o3j6kEQNUJJKDyOgUfCeelyb/aoKIIPW95tG2vyOX883bN6/QFfi7JpT5cUV5Qv2w==
-X-Received: by 2002:a17:902:b7c8:b0:141:9ddb:33e7 with SMTP id v8-20020a170902b7c800b001419ddb33e7mr49141097plz.60.1638854819212;
-        Mon, 06 Dec 2021 21:26:59 -0800 (PST)
-Received: from nishad ([2406:7400:61:6687:fd10:b36d:bcea:520])
-        by smtp.gmail.com with ESMTPSA id e4sm11452187pgi.21.2021.12.06.21.26.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 Dec 2021 21:26:58 -0800 (PST)
-Date:   Tue, 7 Dec 2021 10:56:48 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Huijin Park <huijin.park@samsung.com>,
-        Yue Hu <huyue2@yulong.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mmc: core: Add support for the eMMC RTC feature in
- mmc_ops
-Message-ID: <20211207052647.GA5700@nishad>
-References: <20211205191009.32454-1-nishadkamdar@gmail.com>
- <CAE-0n515qDr95A5PgbhpYer+UT053VzbaDKrxe6zjVgAQwpcEw@mail.gmail.com>
+        Tue, 7 Dec 2021 00:34:25 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A27C061746;
+        Mon,  6 Dec 2021 21:30:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A87FF41EF0;
+        Tue,  7 Dec 2021 05:30:49 +0000 (UTC)
+Subject: Re: [PATCH v3 00/11] Apple SoC PMGR device power states driver
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20211124073419.181799-1-marcan@marcan.st>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <8fdf7a68-1a24-89eb-96d6-93c3f334621c@marcan.st>
+Date:   Tue, 7 Dec 2021 14:30:46 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n515qDr95A5PgbhpYer+UT053VzbaDKrxe6zjVgAQwpcEw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211124073419.181799-1-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 12:44:14PM -0800, Stephen Boyd wrote:
-> Quoting Nishad Kamdar (2021-12-05 11:10:08)
-> > diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
-> > index d63d1c735335..490372341b3b 100644
-> > --- a/drivers/mmc/core/mmc_ops.c
-> > +++ b/drivers/mmc/core/mmc_ops.c
-> > @@ -1063,3 +1063,62 @@ int mmc_sanitize(struct mmc_card *card, unsigned int timeout_ms)
-> >         return err;
-> >  }
-> >  EXPORT_SYMBOL_GPL(mmc_sanitize);
-> > +
-> > +int mmc_set_time(struct mmc_card *card, struct mmc_host *host,
-> > +                u8 rtc_info_type, u64 seconds)
-> > +{
-> > +       struct mmc_request mrq = {};
-> > +       struct mmc_command cmd = {};
-> > +       struct mmc_data data = {};
-> > +       struct scatterlist sg;
-> > +       int err = 0;
-> > +       u8 *data_buf;
-> > +
-> > +       data_buf = kzalloc(512, GFP_KERNEL);
+On 24/11/2021 16.34, Hector Martin wrote:
+> This series adds the driver for the Apple PMGR device power state
+> registers. These registers can clockgate and (in some cases) powergate
+> specific SoC blocks. They also control the reset line, and can have
+> additional features such as automatic power management.
 > 
-> Use some #define for 512 because it's used three times in here?
-ok, but there is not #define for 512 as it is the variable block size
-value. Hence, other functions in the same file like mmc_get_ext_csd() also use
-the 512 value directly.
+> The current driver supports only the lowest/highest power states,
+> provided via the genpd framework, plus reset support provided via
+> the reset subsystem.
+> 
+> Apple's PMGRs (there are two in the T8103) have a uniform register
+> bit layout (sometimes with varying features). To be able to support
+> multiple SoC generations as well as express pd relationships
+> dynamically, this binding describes each PMGR power state control
+> as a single devicetree node. Future SoC generations are expected to
+> retain backwards compatibility, allowing this driver to work on them
+> with only DT changes.
+> 
+> #1: MAINTAINERS updates, to go via the SoC tree to avert merge hell
+> #2-#5: Adds power-domains properties to existing device bindings
+> #6-#7: Adds the new pmgr device tree bindings
+> #8: The driver itself.
+> #9: Instantiates the driver in t8103.dtsi. This adds the entire PMGR
+>      node tree and references the relevant nodes from existing devices.
+> #7: Adds runtime-pm support to the Samsung UART driver, as a first
+>      working consumer.
+> #8: Instantiates a second UART, to more easily test this.
+> 
+> There are currently no consumers for the reset functionality, so
+> it is untested, but we will be testing it soon with the NVMe driver
+> (as it is required to allow driver re-binding to work properly).
+> 
+> == Changes since v2 ==
+> - DT schema review comments & patch order fix
+> - Added the power-domains properties to devices that already mainlined
+> - Now adds the entire PMGR tree. This turns off all devices we do not
+>    currently instantiate, and adds power-domains to those we do. The
+>    nodes were initially generated with [1] and manually tweaked. all
+>    the labels match the ADT labels (lowercased), which might be used
+>    by the bootloader in the future to conditionally disable nodes
+>    based on hardware configuration.
+> - Dropped apple,t8103-minipmgr, since I don't expect we will ever need
+>    to tell apart multiple PMGR instances within a SoC, and added
+>    apple,t6000-pmgr{-pwrstate} for the new SoCs.
+> - Driver now unconditionally enables auto-PM for all devices. This
+>    seems to be safe and should save power (it is not implemented for
+>    all devices; if not implemented, the bit just doesn't exist and is
+>    ignored).
+> - If an always-on device is not powered on at boot, turn it on and
+>    print a warning. This avoids the PM core complaining. We still
+>    want to know if/when this happens, but let's not outright fail.
+> - Other minor fixes (use PS names instead of offsets for messages,
+>    do not spuriously clear flag bits).
+> 
+> On the way the parent node is handled: I've decided that these syscon
+> nodes will only ever contain pwrstates and nothing else. We now size
+> them based on the register range that contains pwrstate controls
+> (rounded up to page size). t6000 has 3 PMGRs and t6001 has 4, and
+> we shouldn't have to care about telling apart the multiple instances.
+> Anything else PMGR does that needs a driver will be handled by
+> entirely separate nodes in the future.
+> 
+> Re t6001 and t6000 (and the rumored t6002), t6000 is basically a
+> cut-down version of t6001 (and t6002 is rumored to be two t6001
+> dies), down to the die floorplan, so I'm quite certain we won't need
+> t6001/2-specific compatibles for anything shared. The t6000 devicetree
+> will just #include the t6001 one and remove the missing devices.
+> Hence, everything for this SoC series is going to have compatibles
+> named apple,t6000-* (except the extra instances of some blocks in
+> t6001 which look like they may have differences; PMGR isn't one of
+> them, but some multimedia stuff might).
+> 
+> [1] https://github.com/AsahiLinux/m1n1/blob/main/proxyclient/tools/pmgr_adt2dt.py
+> 
+> Hector Martin (11):
+>    MAINTAINERS: Add PMGR power state files to ARM/APPLE MACHINE
+>    dt-bindings: i2c: apple,i2c: Add power-domains property
+>    dt-bindings: iommu: apple,dart: Add power-domains property
+>    dt-bindings: pinctrl: apple,pinctrl: Add power-domains property
+>    dt-bindings: interrupt-controller: apple,aic: Add power-domains
+>      property
+>    dt-bindings: power: Add apple,pmgr-pwrstate binding
+>    dt-bindings: arm: apple: Add apple,pmgr binding
+>    soc: apple: Add driver for Apple PMGR power state controls
+>    arm64: dts: apple: t8103: Add PMGR nodes
+>    tty: serial: samsung_tty: Support runtime PM
+>    arm64: dts: apple: t8103: Add UART2
+> 
+>   .../bindings/arm/apple/apple,pmgr.yaml        |  134 ++
+>   .../devicetree/bindings/i2c/apple,i2c.yaml    |    3 +
+>   .../interrupt-controller/apple,aic.yaml       |    3 +
+>   .../devicetree/bindings/iommu/apple,dart.yaml |    3 +
+>   .../bindings/pinctrl/apple,pinctrl.yaml       |    3 +
+>   .../bindings/power/apple,pmgr-pwrstate.yaml   |   71 ++
+>   MAINTAINERS                                   |    3 +
+>   arch/arm64/boot/dts/apple/t8103-j274.dts      |    5 +
+>   arch/arm64/boot/dts/apple/t8103-pmgr.dtsi     | 1136 +++++++++++++++++
+>   arch/arm64/boot/dts/apple/t8103.dtsi          |   36 +
+>   drivers/soc/Kconfig                           |    1 +
+>   drivers/soc/Makefile                          |    1 +
+>   drivers/soc/apple/Kconfig                     |   21 +
+>   drivers/soc/apple/Makefile                    |    2 +
+>   drivers/soc/apple/apple-pmgr-pwrstate.c       |  317 +++++
+>   drivers/tty/serial/samsung_tty.c              |   93 +-
+>   16 files changed, 1798 insertions(+), 34 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+>   create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
+>   create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+>   create mode 100644 drivers/soc/apple/Kconfig
+>   create mode 100644 drivers/soc/apple/Makefile
+>   create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
+> 
 
-> > +       if (!data_buf)
-> > +               return -ENOMEM;
-> > +
-> > +       if (rtc_info_type == 0x01 || rtc_info_type == 0x02 ||
-> > +           rtc_info_type == 0x03) {
-> > +               data_buf[0] = 0x01;
-> > +               data_buf[1] = rtc_info_type;
-> > +               memcpy(&data_buf[2], &seconds, sizeof(u64));
-> 
-> Use sizeof(seconds) instead?
-> 
-ok, I will do that.
+Applied everything except the samsung_tty change to asahi-soc/dt (DT 
+changes) and asahi-soc/pmgr (just the driver). Thanks everyone for the 
+reviews!
 
-> > +       } else {
-> > +               pr_err("%s: invalid rtc_info_type %d\n",
-> > +                      mmc_hostname(host), rtc_info_type);
-> > +               kfree(data_buf);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       mrq.cmd = &cmd;
-> > +       mrq.data = &data;
-> > +
-> > +       cmd.opcode = MMC_SET_TIME;
-> > +       cmd.arg = 0;
-> > +       cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-> > +
-> > +       data.blksz = 512;
-> > +       data.blocks = 1;
-> > +       data.flags = MMC_DATA_WRITE;
-> > +       data.sg = &sg;
-> > +       data.sg_len = 1;
-> > +       sg_init_one(&sg, data_buf, 512);
-> > +
-> > +       mmc_set_data_timeout(&data, card);
-> > +
-> > +       mmc_wait_for_req(host, &mrq);
-> > +
-> > +       if (cmd.error) {
-> > +               err = cmd.error;
-> > +               goto out;
-> > +       }
-> > +
-> > +       if (data.error) {
-> > +               err = data.error;
-> > +               goto out;
-> > +       }
-> 
-> Why not
-> 
-> 	if (cmd.error) {
-> 		err = cmd.error;
-> 	} else if (data.error) {
-> 		err = data.error;
-> 	} else {
-> 		err = 0;
-> 	}
-> 
-> > +out:
-> 
-> And then drop out: and the assignment of err to 0 up above?
-ok, I will do that.
+Krzysztof: feel free to take that patch through tty if you think it's in 
+good shape. I'm not sure how much power UART runtime-pm will save us, 
+but at least it's a decent test case, so it's probably worth having.
 
-> 
-> > +       kfree(data_buf);
-> > +       return err;
-> > +}
-> > +EXPORT_SYMBOL_GPL(mmc_set_time);
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

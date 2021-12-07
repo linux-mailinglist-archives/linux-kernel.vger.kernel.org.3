@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDF746C6A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B0146C6A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241789AbhLGVZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:25:19 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:35647 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbhLGVZT (ORCPT
+        id S241807AbhLGVZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232128AbhLGVZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:25:19 -0500
-Received: by mail-oi1-f178.google.com with SMTP id m6so1069306oim.2;
-        Tue, 07 Dec 2021 13:21:48 -0800 (PST)
+        Tue, 7 Dec 2021 16:25:57 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A5CC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:22:26 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id np3so419534pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:22:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=ju5q/8LdtV/d6IPSSjw+nF8L2cah7GfwEe7IizH6nS4=;
+        b=O/caTuT/x4AJZXSEVDeoxnH+Zkkd8t5p1pMhH3V1MxoQrbSTXpVz//hXL6nKExvwyN
+         HxhqTCpEtUZ/pA/rCNt2cErq7+5mDf6OUNJgrH7ka60/MXDu588FjRQ/I5ZIdqyJqgK/
+         +Rc0sAxigHplMeiPhHG0fOe3Dl1/3VYn/aqKDnsZydu07AxikewwFwJs+06hYhsgCGA8
+         8ONKLhJViZkNJGx//Y+wVhsq4aq9nep9LXvqBQZbE/OVyMnGhpWp9ear/9byEyqfduUt
+         inMTECmsNO0H4vv66KXHjMEl3FPZERX6PYk9FhHVusUWWgEgUFO9j8K58qKb9R8Zc1LM
+         OqNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YHFDCx8cz0OBlLogJ/xFHdL4cUOdiVDHhIchnRBaE9Q=;
-        b=1dXjWW1AKqCe8DQsYUvw6oN8hdcwVhDeLKC2+Vt0aJScYAgHjenhn3lZC6MeVkKHZ1
-         iyHcoAMPOh1wAgpwlvHaIrAL3SfPJQu77jlOInQwi4qpYaH3dWXFSv/AJzPjGbjd6nvw
-         WmDbuMmCuCeLDHGOwqBYtmfy1ouojhXeF3irAaDMLID1YMBDqwoH8NAjqo/z5bHM5YCd
-         UQO8NUZyOPqsDZ/pJiplcV6VTcQLqRYt8ZxuaaB6KkTXqE7jvq611kHSK3lv74UEMakq
-         S4C9o2ATh0LHH1JAjMqJtIiy90IVHys81DJcGBeUHKpDCYT/rkkOqPrPklciqE9PmpPr
-         6uUw==
-X-Gm-Message-State: AOAM532G4q/vOsmQgBeY8OFtOm0p3vagIIko6gfmqR/NG9byMDMjYaQu
-        37NCqFYQcDIVzIzU1Y60pQ==
-X-Google-Smtp-Source: ABdhPJzA4YcDlmXoSGBF16wJC5CXRfHtRRFgKj56o15+uWhHftO8cS/FG3AQ4zcnAI4JBgHR1AfAXA==
-X-Received: by 2002:aca:1115:: with SMTP id 21mr7495706oir.137.1638912108077;
-        Tue, 07 Dec 2021 13:21:48 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w24sm133958ots.10.2021.12.07.13.21.46
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=ju5q/8LdtV/d6IPSSjw+nF8L2cah7GfwEe7IizH6nS4=;
+        b=v0QWnn1kuGwKEtbJUhitli9Kmojh0xx/Nntk5pkVCl2RdmlH9FUTK1wV9npOqPXXW4
+         QzdJnCRCvuN3ks9oBmz/pui7kCjYv+N1wHXXz/4dKBh279AKTxZCq/eGcaY2+L/u8mv4
+         cGoQCeC0brNCfTCnaNpcoxrNqObEetddeq/8zTN0m6xIft6uRuHbUO2aObU51UOWYiwV
+         KgNKVfTw5Sy5ijinK7MpXyfbh8fGNxFrkuTvNVJUk056MGpyAg5lnyO2L5r6lQUSHR1t
+         ptk6y+TWyrPtfxc7Syq1J6grCTv59ncDDuS3WQIJ9vNnL76UKEJ1Q6iEkKZaT3YWVZXn
+         px+g==
+X-Gm-Message-State: AOAM532+4KHjvPmeTlp//Cbnk61TuEyNCrOsps5YsqJrMf4LhZ3s7t+H
+        YGKl4c9doHdMlpVqYTTv/fI=
+X-Google-Smtp-Source: ABdhPJwLkQCaWF8wwFDCO+7EEp9cQjbVj8dWmjPzDL1UCjffJYDVTNzdB1rirFX0hfnZHtWBKVcWZg==
+X-Received: by 2002:a17:90a:c58f:: with SMTP id l15mr2088266pjt.75.1638912146573;
+        Tue, 07 Dec 2021 13:22:26 -0800 (PST)
+Received: from simon-desktop (n112119139022.netvigator.com. [112.119.139.22])
+        by smtp.gmail.com with ESMTPSA id p16sm698712pfh.97.2021.12.07.13.22.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 13:21:47 -0800 (PST)
-Received: (nullmailer pid 853594 invoked by uid 1000);
-        Tue, 07 Dec 2021 21:21:46 -0000
-Date:   Tue, 7 Dec 2021 15:21:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benoit Masson <yahoo@perenite.com>
-Subject: Re: [RFC PATCH 2/9] dt-bindings: arm: amlogic: add X96-AIR bindings
-Message-ID: <Ya/Qask7Fpb6mTxb@robh.at.kernel.org>
-References: <20211130060523.19161-1-christianshewitt@gmail.com>
- <20211130060523.19161-3-christianshewitt@gmail.com>
+        Tue, 07 Dec 2021 13:22:26 -0800 (PST)
+Date:   Wed, 8 Dec 2021 05:22:23 +0800
+From:   Ngo Tak Fong <simon.fodin@gmail.com>
+To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: rtl8712: Fix alignment checks with flipped
+ condition
+Message-ID: <20211207212223.GA70594@simon-desktop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130060523.19161-3-christianshewitt@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 06:05:16AM +0000, Christian Hewitt wrote:
-> Add board bindings for the Amediatech X96-AIR STB which ships with
-> model variants distiguished by Ethernet configuration: models using
-> internal 10/100 PHY have a -100 suffix, while models using external
-> Gigabit PHY have a -1000 suffix.
+Fixed two CHECKs of Alignment should match open parenthesis and flipped
+a condition to pull the code in one tab.
 
-Isn't the phy described in DT? Why do you need to describe this 1 
-difference at the top level?
+Signed-off-by: Ngo Tak Fong <simon.fodin@gmail.com>
+---
+Changes in v2:
+  - flipped a condition to pull the code in one tab.
+---
+ drivers/staging/rtl8712/rtl8712_efuse.c | 28 ++++++++++++-------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/amlogic.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
-> index 36081734f720..e9ab0ffe8be7 100644
-> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
-> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
-> @@ -170,6 +170,8 @@ properties:
->        - description: Boards with the Amlogic Meson SM1 S905X3/D3/Y3 SoC
->          items:
->            - enum:
-> +              - amediatech,x96-air-100
-> +              - amediatech,x96-air-1000
->                - bananapi,bpi-m5
->                - hardkernel,odroid-c4
->                - hardkernel,odroid-hc4
-> -- 
-> 2.17.1
-> 
-> 
+diff --git a/drivers/staging/rtl8712/rtl8712_efuse.c b/drivers/staging/rtl8712/rtl8712_efuse.c
+index 4f3b54a7c3be..c9400e40a1d6 100644
+--- a/drivers/staging/rtl8712/rtl8712_efuse.c
++++ b/drivers/staging/rtl8712/rtl8712_efuse.c
+@@ -298,25 +298,23 @@ static u8 fix_header(struct _adapter *adapter, u8 header, u16 header_addr)
+ 			continue;
+ 		}
+ 		for (i = 0; i < PGPKG_MAX_WORDS; i++) {
+-			if (BIT(i) & word_en) {
+-				if (BIT(i) & pkt.word_en) {
+-					if (efuse_one_byte_read(
+-							adapter, addr,
++			if (!(BIT(i) & word_en))
++				continue;
++			if (BIT(i) & pkt.word_en) {
++				if (efuse_one_byte_read(adapter,
++							addr,
+ 							&value))
+-						pkt.data[i * 2] = value;
+-					else
+-						return false;
+-					if (efuse_one_byte_read(
+-							adapter,
++					pkt.data[i * 2] = value;
++				else
++					return false;
++				if (efuse_one_byte_read(adapter,
+ 							addr + 1,
+ 							&value))
+-						pkt.data[i * 2 + 1] =
+-							value;
+-					else
+-						return false;
+-				}
+-				addr += 2;
++					pkt.data[i * 2 + 1] = value;
++				else
++					return false;
+ 			}
++			addr += 2;
+ 		}
+ 	}
+ 	if (addr != header_addr)
+-- 
+2.32.0
+

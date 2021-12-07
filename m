@@ -2,90 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BAA46BFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E1C46BFA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239026AbhLGPms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239027AbhLGPme (ORCPT
+        id S238974AbhLGPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:44:55 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16032 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233215AbhLGPoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:42:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D291C061574;
-        Tue,  7 Dec 2021 07:39:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D232B80DBF;
-        Tue,  7 Dec 2021 15:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4072AC341C1;
-        Tue,  7 Dec 2021 15:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638891541;
-        bh=JVL0Sq2i+LUFVXYb3DxB2ruUAdzAFklM0iojGMbanEA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=harAXc6BJFLTNKLdlynKCgJmeQk9xgu01DVNGr4UfugAA5FgPJbEEVvSTxDuQ5w4t
-         fsHgY26HsHERlD2+3RO/LwOM3jcl23lfMMMMMXzcEkQilgQ8pzj8GfKf2qOUKDvqjP
-         TFW66v3rLbM2M5sUfKV/1bC/18zu4AcflT/W1KySDVxQV+p3bXQoFgiwfWcWTt9Pju
-         e0NSBW25Rs0QjAPZF+CfclFtIBNsny6mEL1U98DTfsdmg7SN9Jd89NGnhKlS9PUbKg
-         u2tZ/Uxg6J9La2xXBZrXfz3VGbnF7Q+NeMDf5E2oLv2osrtcLP0hkc9c0GHHIrnob4
-         AVMNwSI8Ua3QQ==
-Date:   Tue, 7 Dec 2021 07:39:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v4 net-next 5/5] net: mscc: ocelot: expose ocelot wm
- functions
-Message-ID: <20211207073900.151725ff@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211207153011.xs5k3ir4jzftbxct@skbuf>
-References: <20211204182858.1052710-1-colin.foster@in-advantage.com>
-        <20211204182858.1052710-6-colin.foster@in-advantage.com>
-        <20211206180922.1efe4e51@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <Ya9KJAYEypSs6+dO@shell.armlinux.org.uk>
-        <20211207121121.baoi23nxiitfshdk@skbuf>
-        <20211207072652.36827870@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20211207153011.xs5k3ir4jzftbxct@skbuf>
+        Tue, 7 Dec 2021 10:44:54 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7EqVfu018140;
+        Tue, 7 Dec 2021 15:41:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=BIfbpC/D5BpovGMZzHG5tMi7Si+mH45W95CAsHXsAIE=;
+ b=NsAhg01CPMdfqXVjcdEK5Shi/7DqjK2pFGDJJ+ygj8e/36e0+/7qyR2jTFYJLoU00oVn
+ vjcYaQ4tKGO930Wg2NH22JlWfUghgxTuh0JXu293OGuynwBv1EYHp1uRg/GIZBGth2eN
+ mrQui/A1x3YNOxsk0Fz8/yaoKh0skPmAFltRECTPrJkM5AZcW+KiiUNIDaPXKfh79OSR
+ fu3p7cQzIJIz+D+g5ItRPdaylWXwwksQdJWoOxUbz3M8y0ATOjLg4rc/rmocjiHvxSLN
+ xdtpkhGRJ+UBwdD7q72rPBOTKGmDCglwd5mvnwtxIePgVrWuuBPGmXo19K06TH/XsvN3 Ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct9ru14p4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 15:41:01 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B7EqYuB018217;
+        Tue, 7 Dec 2021 15:41:00 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct9ru14np-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 15:41:00 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FbkR6029200;
+        Tue, 7 Dec 2021 15:40:59 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3cqyyaes14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 15:40:59 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7Fews433161688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Dec 2021 15:40:58 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E983D7807A;
+        Tue,  7 Dec 2021 15:40:57 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C99B78064;
+        Tue,  7 Dec 2021 15:40:55 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Dec 2021 15:40:55 +0000 (GMT)
+Message-ID: <8491f76d5c8923f35216f55c030a68f478a0325a.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Tue, 07 Dec 2021 10:40:54 -0500
+In-Reply-To: <10fa531054c3b9e2a02ceb3dc007fa50e1bae1ff.camel@linux.ibm.com>
+References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+         <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
+         <20211207145901.awiibdgdidbshsbf@wittgenstein>
+         <10fa531054c3b9e2a02ceb3dc007fa50e1bae1ff.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Py0io_LEeHoIMiWajJJ2Vwz7yR8xyXGh
+X-Proofpoint-GUID: 6lgf8hXoUrGGMka3HjIzIQUByJqlw462
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_06,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ adultscore=0 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 15:30:12 +0000 Vladimir Oltean wrote:
-> On Tue, Dec 07, 2021 at 07:26:52AM -0800, Jakub Kicinski wrote:
-> > On Tue, 7 Dec 2021 12:11:22 +0000 Vladimir Oltean wrote:  
-> > > I'm not taking this as a spiteful comment either, it is a very fair point.
-> > > Colin had previously submitted this as part of a 23-patch series and it
-> > > was me who suggested that this change could go in as part of preparation
-> > > work right away:
-> > > https://patchwork.kernel.org/project/netdevbpf/cover/20211116062328.1949151-1-colin.foster@in-advantage.com/#24596529
-> > > I didn't realize that in doing so with this particular change, we would
-> > > end up having some symbols exported by the ocelot switch lib that aren't
-> > > yet in use by other drivers. So yes, this would have to go in at the
-> > > same time as the driver submission itself.  
-> >
-> > I don't know the dependencies here (there are also pinctrl patches
-> > in the linked series) so I'll defer to you, if there is a reason to
-> > merge the unused symbols it needs to be spelled out, otherwise let's
-> > drop the last patch for now.  
+On Tue, 2021-12-07 at 10:16 -0500, James Bottomley wrote:
+> On Tue, 2021-12-07 at 15:59 +0100, Christian Brauner wrote:
+> > On Mon, Dec 06, 2021 at 04:14:15PM -0500, James Bottomley wrote:
+[...]
+> > >  static int securityfs_fill_super(struct super_block *sb, struct
+> > > fs_context *fc)
+> > >  {
+> > >  	static const struct tree_descr files[] = {{""}};
+> > >  	int error;
+> > > +	struct user_namespace *ns = fc->user_ns;
+> > >  
+> > >  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+> > >  	if (error)
+> > >  		return error;
+> > >  
+> > > +	ns->securityfs_root = dget(sb->s_root);
+> > > +
+> > >  	sb->s_op = &securityfs_super_operations;
+> > >  
+> > > +	if (ns != &init_user_ns)
+> > > +		blocking_notifier_call_chain(&securityfs_ns_notifier,
+> > > +					     SECURITYFS_NS_ADD, ns);
+> > 
+> > I would propose not to use the notifier logic. While it might be
+> > nifty it's over-engineered in my opinion.
 > 
-> I don't think there's any problem with dropping the last patch for now,
-> as that's the safer thing to do (Colin?), but just let us know whether
-> you prefer Colin to resend a 4-patch series, or you can pick this series
-> up without the last one.
+> The reason for a notifier is that this current patch set only
+> namespaces ima, but we also have integrity and evm to do.  Plus, as
+> Casey said, we might get apparmour and selinux.  Since each of those
+> will also want to add entries in fill_super, the notifier mechanism
+> seemed fairly tailor made for this.  The alternative is to have a
+> load of 
+> 
+> #if CONFIG_securityfeature
+> callback()
+> #endif
+> 
+> Inside securityfs_fill_super which is a bit inelegant.
+> 
+> >  The dentry stashing in struct user_namespace currently serves the
+> > purpose to make it retrievable in ima_fs_ns_init(). That doesn't
+> > justify its existence imho.
+> 
+> I can thread the root as part of the callback.  I think I can still
+> use the standard securityfs calls because the only reason for the
+> dentry in the namespace is so the callee can pass NULL and have the
+> dentry created at the top level.  We can insist in the namespaced use
+> case that the callee always pass in the dentry, even for the top
+> level.
+> 
+> > There is one central place were all users of namespaced securityfs
+> > can create the files that they need to and that is in
+> > securityfs_fill_super(). (If you want to make that more obvious
+> > then give it a subdirectory securityfs and move inode.c in there.)
+> 
+> Right, that's what the patch does.
+> 
+> > We simply will expect users to add:
+> > 
+> > ima_init_securityfs()
+> > mylsm_init_securityfs()
+> 
+> Yes, plus all the #ifdefs because securityfs can exist independently
+> of each of the features.  We can hide the ifdefs in the header files
+> and make the functions static do nothing if not defined, but the
+> ifdeffery has to live somewhere.
 
-Repost once it's confirmed that's the right course of action.
-I'll merge it right away.
+Actually, I've got a much better reason: securityfs is a bool; all the
+other LSMs and IMA are tristates.  We can't call module init functions
+from core code, it has to be done by something like a notifier.
+
+James
+
+

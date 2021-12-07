@@ -2,107 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6212E46C4D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB1146C4E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241410AbhLGUp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S241402AbhLGUzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241414AbhLGUpz (ORCPT
+        with ESMTP id S236446AbhLGUzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:45:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545FC061574;
-        Tue,  7 Dec 2021 12:42:24 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638909743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
-        b=myOlC5dgE3khI7L8VZJuvb0AqNwW72GyeFELcD1PBbXUtZ68+3HHkLJ6B3AHqyMzsf2WT8
-        +ujqWMGHpaY4rsmjld2a82Vj5AIv9LECzrGlZmnD/32El3mdYogpJBXD830FzxpM64lfFA
-        4umcD+gxjhc1TVxDz7X7+HSKF/BzRb/G2QPcgdTOuekTL5TVuB7tk2FDJgZvBY12rIApXt
-        6/cKg45LVQbCHkJ50Jh/VwMaNydeam+MMtnO87aLsvswM8Dg0b8u1s2wEbGXeG0S5d8b8M
-        gpLncVriJOZxdr/S+hNQBS9u1GXShwEAVsplRx5hkczW+cMOAp/ZAeGaDzJRnQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638909743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
-        b=0V4XVUsOsvnU+9Fv3Fb95pdvdCgo/+dE0Mo+fVtsflMeNE/VXjrD4Tr1l/AitQqcrCl0wJ
-        KhJ9aDeINWrmG3AA==
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
- worked
-In-Reply-To: <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
-References: <20211206210147.872865823@linutronix.de>
- <20211206210223.872249537@linutronix.de>
- <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
- <87ilw0odel.fsf@mpe.ellerman.id.au>
- <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
-Date:   Tue, 07 Dec 2021 21:42:22 +0100
-Message-ID: <8735n42lld.ffs@tglx>
+        Tue, 7 Dec 2021 15:55:53 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2ACC061574;
+        Tue,  7 Dec 2021 12:52:22 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id o20so808016eds.10;
+        Tue, 07 Dec 2021 12:52:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Fim7R1r0cV64FIpGYUgCJ6uujA0JMyHn3Gr0t97V2fE=;
+        b=e4hahpGMgGqyeQw4rN9K3dZcb6Jd8KMNLWB9sH5YjlzmXzbNfTvPUxcTHCfBSld9qP
+         hxqnTrRayGzlifFU28r9ySTX5yqkwLHJhKAmwsTKJ6SgXRosBsFGZ9k7keC2js8DeIe7
+         kffYBZDi2jGJ7+oqW3Dtb1zYVeKZxrKn9NTVU5Z/DV2naVosIe1MorYaNu2+JRd3O3uy
+         NgAkCPZqEWvW1nO8c7T2gavU/Kk0Y7BD1ArovYYcNRxmTMHU5L2U6dALyZy7o5++6kQn
+         RELlyZgd4XKDmdhbGKNClHZj9iVSnm5WudEwPiwRvqNEvR2lOavSeiR9Mf++XuFS2t0n
+         WFNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fim7R1r0cV64FIpGYUgCJ6uujA0JMyHn3Gr0t97V2fE=;
+        b=QtW3ZER/u791t1UiQW4R9JjabJwopdF8z9mc9VyQKx8I7+gJy/J0jLgql2KpzMsgzm
+         nVQF12RAtu5epzXp7Y0cM1H8MfrczRI+wd9eigskbckIyEgeMmC4Y0woSTAEfNBQ5ikY
+         Fr3gDd8HEzts+2XPvc5XptCOXA9ntOImFklxHrGpD7D/ungwADGn8+rjcLU03RP/RgXQ
+         jBadQyS+hVTnOgqaqN/xt7lWDUxGjEpVhvxZ5zid0Zy1hjfO/GcMQQUXnxoUubM3gTRT
+         almQgcM64rfRwf7Jg2kCOcO+I/ZrDZpGqqm22DeuNuThqn7+4DSEdIoA9V6XNmGcWVzq
+         zvBw==
+X-Gm-Message-State: AOAM531bUnlLrPm/u3UxGNaYkAD9ncNtFqWLd6DNK72Ln7jLePHQOsfX
+        ile9+caD/pxlILyJennod6Y=
+X-Google-Smtp-Source: ABdhPJwWoE8ZwxmAKF5fTgBjukeAPOliH+W4wfSw00nbhuZWPSUTlbEYzkyPnwH+zOwRzCeRiigXmA==
+X-Received: by 2002:a17:907:60c9:: with SMTP id hv9mr2060447ejc.482.1638910341292;
+        Tue, 07 Dec 2021 12:52:21 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id sg39sm351972ejc.66.2021.12.07.12.52.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 12:52:20 -0800 (PST)
+Date:   Tue, 7 Dec 2021 22:52:19 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211207205219.4eoygea6gey4iurp@skbuf>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61afb452.1c69fb81.18c6f.242e@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cedric,
+On Tue, Dec 07, 2021 at 08:21:52PM +0100, Ansuel Smith wrote:
+> On Tue, Dec 07, 2021 at 08:15:24PM +0100, Andrew Lunn wrote:
+> > > The qca tag header provide a TYPE value that refer to a big list of
+> > > Frame type. In all of this at value 2 we have the type that tells us
+> > > that is a READ_WRITE_REG_ACK (aka a mdio rw Ethernet packet)
+> > > 
+> > > The idea of using the tagger is to skip parsing the packet 2 times
+> > > considering the qca tag header is present at the same place in both
+> > > normal packet and mdio rw Ethernet packet.
+> > > 
+> > > Your idea would be hook this before the tagger and parse it?
+> > > I assume that is the only way if this has to be generilized. But I
+> > > wonder if this would create some overhead by the double parsing.
+> > 
+> > So it seems i remembered this incorrectly. Marvell call this Remote
+> > Management Unit, RMU. And RMU makes use of bits inside the Marvell
+> > Tag. I was thinking it was outside of the tag.
+> > 
+> > So, yes, the tagger does need to be involved in this.
+> > 
+> > The initial design of DSA was that the tagger and main driver were
+> > kept separate. This has been causing us problems recently, we have use
+> > cases where we need to share information between the tagger and the
+> > driver. This looks like it is going to be another case of that.
+> > 
+> > 	Andrew
+> 
+> I mean if you check the code this is still somewhat ""separate"".
+> I ""abuse"" the dsa port priv to share the required data.
+> (I allocate a different struct... i put it in qca8k_priv and i set every
+> port priv to this struct)
+> 
+> Wonder if we can add something to share data between the driver and the
+> port so the access that from the tagger. (something that doesn't use the
+> port priv)
 
-On Tue, Dec 07 2021 at 16:50, C=C3=A9dric Le Goater wrote:
-> On 12/7/21 12:36, Michael Ellerman wrote:
->>=20
->> This patch should drop those selects I guess. Can you send an
->> incremental diff for Thomas to squash in?
->
-> Sure.
->
->> Removing all the tendrils in various device tree files will probably
->> require some archaeology, and it should be perfectly safe to leave those
->> in the tree with the driver gone. So I think we can do that as a
->> subsequent patch, rather than in this series.
->
-> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
+The one problem relevant to this submission among those referenced by
+Andrew is that dp->priv needs to be allocated by the Ethernet switch
+driver, although it is used by the tagging protocol driver. So they
+aren't really 'separate', nor can they be, the way dp->priv is currently
+designed, it can only be "abused", not really "used".
 
-< Lots of patch skipped />
-> @@ -141,7 +138,6 @@ config REDWOOD
->   	select FORCE_PCI
->   	select PPC4xx_PCI_EXPRESS
->   	select PCI_MSI
-> -	select PPC4xx_MSI
->   	help
->   	  This option enables support for the AMCC PPC460SX Redwood board.
+The DSA design allows in principle for any switch driver to return any
+protocol it desires in ->get_tag_protocol(). I occasionally test various
+tagger submissions by hacking dsa_loop to do just that. But your
+tag_qca.c driver would have a pretty unpleasant surprise if it was to be
+paired to any other switch driver than qca8k, because that other driver
+would either not allocate memory for dp->priv, or (worse) allocate some
+other type of structure, expected to be used differently etc.
 
-While that is incremental it certainly is worth a patch on it's
-own. Could you add a proper changelog and an SOB please?
+An even bigger complication is created by the fact that we can
+dynamically change tagging protocols in certain cases (dsa <-> edsa,
+ocelot <-> ocelot-8021q), and the current design doesn't really scale:
+if any tagging protocol required its own dp->priv format, we may end up
+with bugs such as the driver not freeing the old dp->priv and setting up
+the new one, when the tagging protocol changes. These mistakes are all
+too easy to make currently.
 
-Thanks,
+Another potential issue, which I don't see present here, but still
+worth watching out for, is that the tagger cannot use symbols exported
+by the switch, and vice versa. Otherwise the tagger cannot be inserted
+into the kernel when built as module, due to missing symbols provided by
+the switch. And the switch will not probe until it has a tagger.
 
-        tglx
+I'm afraid we need to make a decision now whether we keep supporting the
+separation between taggers and switch drivers, especially since the
+tagger could become a bus provider for the switch driver. We need to
+weigh the pros and cons.
+
+I thought about what would be needed and I think we'd need tagger-owned
+per-switch-tree private data. But this implies that there needs to be a
+hook in the tagging protocol driver that notifies it when a certain
+struct dsa_switch_tree *dst binds and unbinds to a certain tagger.
+Then it could pick and choose the ports that need dp->priv configured in
+a certain way: some taggers need the dp->priv of user ports to hold
+something per port, others need the dp->priv of _all_ user ports to
+point to something shared, others (like yours) apparently need the
+dp->priv of the CPU port to hold something. This would become something
+handled and owned exclusively by the tagger.
+
+Ansuel, would something like this help you in any way?

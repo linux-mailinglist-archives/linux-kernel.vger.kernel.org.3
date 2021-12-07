@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C950E46C403
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFC746C408
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240980AbhLGT4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:56:49 -0500
-Received: from mga17.intel.com ([192.55.52.151]:1900 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240682AbhLGT42 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:56:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="218353397"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="218353397"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:52:57 -0800
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="515435884"
-Received: from yperng-mobl1.amr.corp.intel.com (HELO [10.209.19.84]) ([10.209.19.84])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:52:56 -0800
-Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do
- encryption
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Richard Hughes <hughsient@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mm@kvack.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, ardb@kernel.org, dvhart@infradead.org,
-        andy@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
-References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
- <YaxWXACBguZxWmKS@kernel.org>
- <CAD2FfiG9wfeW_2xxZqBi9vsjzEJBRjJUZw+AQy1Taos4fh2TLA@mail.gmail.com>
- <Ya8MUOKPOKVfBfjJ@kernel.org>
- <CAKgze5Y6F40bk=PgoS3LshcDEAreefOmF4xpCuSxgpiSr+99Kw@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <1ed6020b-f84b-a29b-690a-9eee683c93a6@intel.com>
-Date:   Tue, 7 Dec 2021 11:52:54 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S241140AbhLGT5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240931AbhLGT4i (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:56:38 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46C3C061574;
+        Tue,  7 Dec 2021 11:53:07 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id be32so600345oib.11;
+        Tue, 07 Dec 2021 11:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ocpM13shdrzspJtzRbkfnFcsNjtIdLeSrTT2g1ZXEgg=;
+        b=KlhSt382SwfpGFCkrH6ZqVbc7kTqq0K5xD0J0TieVmpOk+pQprsi6iF0SYbo7HRDkA
+         Llzpz1yPrYAwwR603VeO+MPu4GPF1gSiiudAxC8/AiTkBIyVivzKmX1elT0iuBy0mhiD
+         wHjo62yYzw+rwNTwIfXiSJok/pRGyEqamnchkVE3QT7Lo4wTTqg86nse0NhHfeDP/fYw
+         EkFbhoXHBeBRsKAIpgehk54LkgtIeryqwpx5s+wBxKC9KQbiUrspQb74kcKhAwGO8+A9
+         2+F8UbaIQtQxaITkkD+7iP0EUVg4DIkAINOP2bIT3qTdq+zw1kiuLQhx6AkxGvDvExX2
+         lmXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ocpM13shdrzspJtzRbkfnFcsNjtIdLeSrTT2g1ZXEgg=;
+        b=Jzm6y+lw0o/t377zbiJIcMadk5njTYNx0ZW3CscKSFRtzxBPuiMNQRjcpxKYqGDmq8
+         LDorIL1m5K+x3997JB93zPlqm3ACFVpogSlkF4b945aQHMDBT9SSzDtLyo5XhKNEXJ2I
+         xFmS+YnMQZh4FItUCjBtfL3sv7ETzrtB3VvVoc3RpplZDrgviBg7I3m4UpyHDSOA56gX
+         puGOHVqJDVSN7rG7K3+ydsYNEmA+5Mao5Uwdppp9VX7ZrR2Ix8bC2xGWSlWJhVe4QVMR
+         soChu4O+ErlJR5eP+EgwlcSHSw90SLdaEU3Evds/Y0dLjVLSq4FXImNmoCNLMURqqAOy
+         Yy8A==
+X-Gm-Message-State: AOAM532tx4PHiLu8AeLFxv1ZvUT61mFER+bCVxC7rmETpm9pnoBq3vZQ
+        eZmIQgzVBIh6VN/ZJCQLTc5sm1/GK88=
+X-Google-Smtp-Source: ABdhPJz9CzLS0f3B265ofV4rL23LMd8YvSPc0WWvZKz7yBSBzmiOhGYjDWJEYa7Vw5nWmyJ8I0tQPQ==
+X-Received: by 2002:a05:6808:23d6:: with SMTP id bq22mr7233235oib.71.1638906786835;
+        Tue, 07 Dec 2021 11:53:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q22sm103043ots.62.2021.12.07.11.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 11:53:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
+ module driver
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20211207071521.543-1-zev@bewilderbeest.net>
+ <20211207071521.543-2-zev@bewilderbeest.net>
+ <20211207175015.GA772416@roeck-us.net>
+ <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <9ff85af2-f707-ee62-cc32-2dd628e5c63f@roeck-us.net>
+Date:   Tue, 7 Dec 2021 11:53:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CAKgze5Y6F40bk=PgoS3LshcDEAreefOmF4xpCuSxgpiSr+99Kw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 11:45 AM, Martin Fernandez wrote:
->> I wonder, for example, why did you choose per-node reporting rather than
->> per-region as described in UEFI spec.
-> Some time ago we discussed about this and concluded with Dave Hansen
-> that it was better to do it in this per-node way.
+On 12/7/21 11:22 AM, Zev Weiss wrote:
+> On Tue, Dec 07, 2021 at 09:50:15AM PST, Guenter Roeck wrote:
+>> On Mon, Dec 06, 2021 at 11:15:20PM -0800, Zev Weiss wrote:
+>>> This device is an integrated module of the Delta AHE-50DC Open19 power
+>>> shelf.  For lack of proper documentation, this driver has been developed
+>>> referencing an existing (GPL) driver that was included in a code release
+>>> from LinkedIn [1].  It provides four fan speeds, four temperatures, and
+>>> one voltage reading, as well as a handful of warning and fault
+>>> indicators.
+>>>
+>>> [1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
+>>>
+>>
+>> Hmm, that reference isn't really accurate anymore. I think it would be
+>> better to just say that the device was found to be PMBus compliant.
+> 
+> Sure, will do.
+> 
 
-Physical memory regions aren't exposed to userspace in any meaningful way.
+Makes me wonder: How do you know that the referenced driver is for Delta AHE-50DC ?
 
-An ABI that says "everything is encrypted" is pretty meaningless and
-only useful for this one, special case.
-
-A per-node ABI is useful for this case and is also useful going forward
-if folks want to target allocations from applications to NUMA nodes
-which have encryption capabilities.  The ABI in this set is useful for
-the immediate case and is useful to other folks.
+Guenter

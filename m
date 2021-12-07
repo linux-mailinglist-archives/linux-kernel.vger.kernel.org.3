@@ -2,130 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C38846C1BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238B246C1BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240004AbhLGRcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S239994AbhLGRcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239791AbhLGRcX (ORCPT
+        with ESMTP id S229800AbhLGRcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:32:23 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2EFC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:28:52 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id bj13so28985878oib.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:28:52 -0800 (PST)
+        Tue, 7 Dec 2021 12:32:00 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F5FC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:28:30 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so18957455otl.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:28:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/AvOf7ER8v5H0MjABhsd0BcEX4X+zqr8vh7bP9dwVAA=;
-        b=ZvcljMy7ztZ2M2RzI/cYNwQh+ld65A/KWrGMi0BI/g1hKirUUjFuJERVQBNwc9G/nb
-         vViR2AjLmz3v4X3QEpZPDgCcEHG6OSHgAzYlCaDw4qY58CmleIVOWJF+Eruvq7Y+5sfo
-         BL6/Piynk8knxTaad4opvmEUSA1e17+Mr0tX1Fvsd4WnZxFgLAwrri+GnHagzKyPFlkw
-         y4nwcZmjzGsVT55Uc8hwTGDBtnRTNhvQI2yHGZu+7Jfv4OEl3OilEAANz0AuOc9P14Zb
-         oOYzyrJ1F2/F7TE3QqVnML7eGobICS8ZpdrN7Nzf0uCd+F+FWFmYkfFLegeyblPmonRt
-         kdPg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cAiQf0ONQNJNMdL3+jUJU+JidwXWLCQpiHOB2RtvqCE=;
+        b=KvCQ6dF4flLsJTf0KvEcK4GIjyYXs2v/mFJobl/fJywV5MqL8F7fLCBbUfWg2ncDhf
+         S1Ccq6b0r+ZOEKE1yuHcuS/5Qo2/gqzus+eCTa6mJxR+vrO1OW3nIPw28SMDC8AuRjgQ
+         u/Jg8q6DyV9KSj+O72quvvZISTrOLDjAYjKvukolgNttyjAxFpeWY/I0j9PDeJZQf570
+         p/rHUMcb3YQGCpy5FuwWyzL4IscZWFuQDiTFibOB6jybLLsn+t1wisDq/kz8c+4Ztjx8
+         DQutOJMLfCusc7SzJ0f84zDVU2CowjDO1kppUEilla3cfdCELyuWPbVCvZEqlfZ9lVNv
+         3TIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/AvOf7ER8v5H0MjABhsd0BcEX4X+zqr8vh7bP9dwVAA=;
-        b=xlQH0hsjLXI0TrlV8dSfSdARmVf4ynbCcsK2ZIYKIuGDSWZGbYo19zzLDvU1U89nDr
-         tElWEHm0TiWLQpUX4IiYDNOWo55tqYe86iaMyzy81CZJkODEbf2KKn4Hu2KT5SlOD980
-         JLSTz3rvjC26JbDpnPK/F12fnuF6v9kL6J/EnkllPDe0NPixkFEFAMLuIPaORMiDIY3q
-         t41MXd+bGtwgLQRyWQDWCRO+fkQn7onWjrvEPKrcmOjAVIQubaJdBzHi3lu3JDNuctZ/
-         Y0XGDsrj8CVjuTW2KnlxcGqam94EN8sw3JL/XohS+BvB8wm/1FLjcp+w4psNj+CgqDab
-         45dw==
-X-Gm-Message-State: AOAM531QOpXivTMNrUSeG3rbE+TNEv0F2j8iWGIYWf6MGEYr+TrMNugS
-        42iXhnMMoUKEjgrr24JX6ueOyyDOhaczDIRzTiW1Icfcaj87Hg==
-X-Google-Smtp-Source: ABdhPJzKZi3NPnBCVYoeIOunfFC4LiThbaSzLqhOKTlwi9M5FmOEA5dK5aAeDwO4w+3RZwxMjvr3esT4tI4hPHO6ip4=
-X-Received: by 2002:a54:4515:: with SMTP id l21mr6394061oil.15.1638898120973;
- Tue, 07 Dec 2021 09:28:40 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cAiQf0ONQNJNMdL3+jUJU+JidwXWLCQpiHOB2RtvqCE=;
+        b=k7Qq/AORKW0ZlRFxlCA9yuHEbmlSleQQBGZoGJ5XRt0BQSF02L+qwavAIX2Xyl+f1i
+         yvYnmLmh6bDz/jaklfg61hO8JJYzcYqqGBG+TKRAmC6QvCYHpsAbgJKBYf8Tkwpwt6Az
+         nF57SLl+oQhawCd4bCEYYP/qgtc+0naMykXJAhCct/4e6Kih+hv3BUEo1pTT3DMDFOQk
+         kwmlP3dSnRj3S0GHHFj+IokW3X5JpuKM1A7uyLk/pxLIm0m8FmTW10/mE7TkRBbrHecw
+         1ZwNnvyrZ6SE9WI1DY2eIBOOQTdizSUAWSIp9C7KQb9cm1f/S5pbRQeQt+n+4Tb9Fhi5
+         OfDA==
+X-Gm-Message-State: AOAM530qSOyHlQGSx1xQjB1vZZkujHr5RaafAp2KXRAEY9yC1DwIfGkC
+        m+fquFDAeC47eCMHMQhBD7qhMw==
+X-Google-Smtp-Source: ABdhPJxpv2sQTpaNTYyMr91f6tCuspeaXuCJcm8jiGxkp55PT3GbiwK0ScBsEtJNNeNKjyQ+l1mvBA==
+X-Received: by 2002:a05:6830:453:: with SMTP id d19mr36870191otc.72.1638898109698;
+        Tue, 07 Dec 2021 09:28:29 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q10sm60905oiw.17.2021.12.07.09.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 09:28:28 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:29:54 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <khsieh@codeaurora.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Vara Reddy <varar@codeaurora.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Benson Leung <bleung@chromium.org>
+Subject: Re: [RFC] drm/msm/dp: Allow attaching a drm_panel
+Message-ID: <Ya+aEr+XWTjdcTt9@ripper>
+References: <CAD=FV=W9uKq00wXn4H1ax0u2D=R8Wn3J-Je43uxcPyDtk7AK7Q@mail.gmail.com>
+ <YVyMwsvLl6XalJxB@ripper>
+ <CAD=FV=WY+g38p7--QKZCaQnSqx7VvdwC36jH-VKnrEWoxK=XHQ@mail.gmail.com>
+ <YV0KBWxVtKgOp2Cj@ripper>
+ <CAD=FV=X5JFE3u9BtxxocaUrYNSpYXJN90UJ8HOvXZE6oYiVsDQ@mail.gmail.com>
+ <CACeCKac4b_ej87cQD692TNwpsoFsmBwDcSeLy5fp+pvLX1si7g@mail.gmail.com>
+ <YV7JNH9QvI4cBz5s@kuha.fi.intel.com>
+ <Ya6PTGN4zaZ8RD9K@ripper>
+ <Ya9S3cFo0rOUotqY@kuha.fi.intel.com>
+ <1932c73c-e372-788b-fcbd-13cad52d96da@redhat.com>
 MIME-Version: 1.0
-References: <20211207043100.3357474-1-marcorr@google.com> <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
- <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com>
- <5e69c0ca-389c-3ace-7559-edd901a0ab3c@amd.com> <Ya+NIxO5pIkB8057@google.com>
-In-Reply-To: <Ya+NIxO5pIkB8057@google.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Tue, 7 Dec 2021 09:28:29 -0800
-Message-ID: <CAA03e5FYm1ZZc+OEiKjdDj6jnhvgcU_fwOpV5RxofChPEHp-+Q@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Always set kvm_run->if_flag
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Tom Lendacky <Thomas.Lendacky@amd.com>, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1932c73c-e372-788b-fcbd-13cad52d96da@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 8:34 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Tue, Dec 07, 2021, Tom Lendacky wrote:
-> > On 12/7/21 9:14 AM, Marc Orr wrote:
-> > > On Tue, Dec 7, 2021 at 6:43 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> > > > > +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
-> > > > > +{
-> > > > > +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
-> > > > > +
-> > > > > +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
-> > > >
-> > > > I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
-> > > > the better thing would be:
-> > > >
-> > > >          return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
-> > > >                                         : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
-> > > >
-> > > > (Since this function returns a bool, I don't think you need the !!)
-> > >
-> > > I had the same reservations when writing the patch. (Why fix what's
-> > > not broken.) The reason I wrote the patch this way is based on what I
-> > > read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
-> > > Value of the RFLAGS.IF bit for the guest."
-> >
-> > I just verified with the hardware team that this flag is indeed only set for
-> > a guest with protected state (SEV-ES / SEV-SNP). An update to the APM will
-> > be made.
->
-> svm_interrupt_blocked() should be modified to use the new svm_get_if_flag()
-> helper so that the SEV-{ES,SN} behavior is contained in a single location, e.g.
->
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 208566f63bce..fef04e9fa9c9 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3583,14 +3583,10 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
->         if (!gif_set(svm))
->                 return true;
->
-> -       if (sev_es_guest(vcpu->kvm)) {
-> -               /*
-> -                * SEV-ES guests to not expose RFLAGS. Use the VMCB interrupt mask
-> -                * bit to determine the state of the IF flag.
-> -                */
-> -               if (!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK))
-> +       if (!is_guest_mode(vcpu)) {
-> +               if (!svm_get_if_flag(vcpu))
->                         return true;
-> -       } else if (is_guest_mode(vcpu)) {
-> +       } else {
->                 /* As long as interrupts are being delivered...  */
->                 if ((svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
->                     ? !(svm->vmcb01.ptr->save.rflags & X86_EFLAGS_IF)
-> @@ -3600,9 +3596,6 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
->                 /* ... vmexits aren't blocked by the interrupt shadow  */
->                 if (nested_exit_on_intr(svm))
->                         return false;
-> -       } else {
-> -               if (!(kvm_get_rflags(vcpu) & X86_EFLAGS_IF))
-> -                       return true;
->         }
->
->         return (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK);
+On Tue 07 Dec 08:56 PST 2021, Hans de Goede wrote:
 
-Agreed. This is a nice change. I'll incorporate it into v2. Thanks!
+> Hi all,
+> 
+> On 12/7/21 13:26, Heikki Krogerus wrote:
+> > +Hans and Imre
+> > 
+> > On Mon, Dec 06, 2021 at 02:31:40PM -0800, Bjorn Andersson wrote:
+> >> On Thu 07 Oct 03:17 PDT 2021, Heikki Krogerus wrote:
+> >>> On Wed, Oct 06, 2021 at 01:26:35PM -0700, Prashant Malani wrote:
+> >>>> (CC+ Heikki)
+> >> [..]
+> >>>> On Wed, Oct 6, 2021 at 8:19 AM Doug Anderson <dianders@chromium.org> wrote:
+> >> [..]
+> >>>         void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
+> >>>
+> >>> If your USB Type-C controller/port driver does not yet register the DP
+> >>> alt mode, the it's responsible of handling HPD separately by calling
+> >>> drm_connector_oob_hotplug_event() on its own.
+> >>>
+> >>
+> >> Finally found my way back to this topic and it doesn't look like I can
+> >> reuse the existing altmode code with the firmware interface provided by
+> >> Qualcomm, so  I just hacked something up that invokes
+> >> drm_connector_oob_hotplug_event().
+> >>
+> >> But I'm not able to make sense of what the expected usage is. Reading
+> >> altmode/displayport.c, it seems that I should only invoke
+> >> drm_connector_oob_hotplug_event() as HPD state toggles.
+> >>
+> >> I made a trial implementation of this, where my firmware interface
+> >> driver calls drm_connector_oob_hotplug_event() every time HPD state
+> >> changes and then in my oob_hotplug_event callback I flip the DP
+> >> controller between on and off.
+> >>
+> >> Unfortunately when I then connect my HDMI dongle, I get HPD state HIGH,
+> >> call the oob_hotplug_event, the DP driver powers up and concludes that
+> >> there's nothing connected to the dongle and goes to idle. I then connect
+> >> the HDMI cable to the dongle, the firmware sends me another message with
+> >> HPD irq and state HIGH, which I ignore because it's not a change in
+> >> state.
+> >>
+> >> In the end I hacked up drm_connector_oob_hotplug_event() to allow me to
+> >> pass the HPD state and this solves my problem. I can now distinguish
+> >> between connect, disconnect and attention.
+> >>
+> >> Can you please help shed some light on what I might be missing?
+> 
+> The plan always was to pass some extra information, like the number
+> of available DP lanes (which can make training faster) along as
+> parameter to the drm_connector_oob_hotplug_event().
+> 
+> The merged version ended up not doing this because there were no
+> consumers, but passing additional info like HPD state definitely
+> is ok.
+> 
+
+Thanks, that clarifies things.
+
+I think it makes sense to pass #lanes, as that would rule out the
+possibility of attempting to run 4 lanes per dpcd information over a
+2-lane mux configuration as well.
+
+I will write up some patches.
+
+Regards,
+Bjorn

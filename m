@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8CF46B06E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A2946B071
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236411AbhLGCI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S236621AbhLGCKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbhLGCI2 (ORCPT
+        with ESMTP id S231245AbhLGCKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:08:28 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D8C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 18:04:58 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id j11so12264487pgs.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 18:04:58 -0800 (PST)
+        Mon, 6 Dec 2021 21:10:35 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC93BC061746;
+        Mon,  6 Dec 2021 18:07:05 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id t5so50690802edd.0;
+        Mon, 06 Dec 2021 18:07:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zXn+x6PjdC00rwvRf+3OxJFKpI6ggoGfZlhaFuosZ8c=;
-        b=GuSxN5uVJ9+WJ2iyh1JIFGQbXut/l2v2ypgv+dneHZFLf/s3lDtFO6XiM44xUnLO1T
-         lKinbTGi6CA9ot0MaE+HnJqfbGfBeISO+l2PDatV442RW/I6KMOC+W98BVX8/2h9yv+5
-         RLAKzV6pJVhT52YDwnpbv1VaeTkvg7BeaZNzo=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xh3jbz1H5oyvdrVY4iMt8Ki42g+iYpXie4VFb+QH4Gg=;
+        b=cDFpvNLehRCIjKJjQDZ9K1BhWxYfF38JwgPlH4Go0etmnyubIMWOpQUULkzxMdIDmw
+         URTE71EjO0sDuu0Z/vx1LD1pzaWlnU2fhr9YlFrWUyiXlNTMa/dl4tMztryT5N6CdQ2J
+         IWuHxPLZY8el70eSfua/uwnPtP2M9bGWgP05ZGd7pMV+i/QZ8yTDBEt2/+cmjEpmcy5a
+         JlFDEwYExb8nitAEhytZra2ssuFjKjMNYGtHkgRrqESQ7g3pQvMQfLLbQC/5DK9I8Oy4
+         P3lXlYtgf6RrldvEPLGDVF/t57lnrMEHII8mqrsYDnPQdOdFgj68gw5XHoY5Y2Mam1pk
+         2WUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zXn+x6PjdC00rwvRf+3OxJFKpI6ggoGfZlhaFuosZ8c=;
-        b=tmFdwq8HSE+mzzOAMZWSlqzJPLF2g0JMla4xsUcsdzHrICLVluu5AQfoCYnrkuA22a
-         lEWjsFRcA664oZCdZMkbw1C+6RfBVVAdLA8ai1iwa5JXDFiix5M8+6aL45nzR2mhiM+V
-         wz5HjLZMN7s83M0eG3t6LgH73fqVIDZ3sqflMT5df2jLx5E6y5Szn/UuCiI0ttQWWF3O
-         19S/coxmU4xY/BerBCM0416quAMPWu5P4t93iWbWr2UHRYkRzWBp0A7KEcZvjjXjFnUk
-         EJNoDLjN1ZX6UcZWFrV3EdSCiAA8DxCaj39UypbJZ+4DGOA0W+LTDMyInanTm+M/97Kh
-         p9hw==
-X-Gm-Message-State: AOAM530hud92/8vWlib7uCti4yAdzi3XJT8elEnM+AC1SE0xMPh9oqRA
-        Y7SUaB/fFcOALPDisfKAy/NGNQ==
-X-Google-Smtp-Source: ABdhPJzrx4Qt1TFkMbPfKuTpvu9+Jlgy2hTOryqedenVkWnW8IAs+2d8ehAQCi7OTneU/9GiEz8pRw==
-X-Received: by 2002:a63:1950:: with SMTP id 16mr22562347pgz.422.1638842697962;
-        Mon, 06 Dec 2021 18:04:57 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y8sm14047067pfi.56.2021.12.06.18.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 18:04:57 -0800 (PST)
-Date:   Mon, 6 Dec 2021 18:04:56 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Akira Kawata <akirakawata1@gmail.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: Unused local variable load_addr in load_elf_binary()
-Message-ID: <202112061804.5185ACABD@keescook>
-References: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xh3jbz1H5oyvdrVY4iMt8Ki42g+iYpXie4VFb+QH4Gg=;
+        b=ee3HGY6TGbuXxIK3xtyT3sAS6FrXLrOH7jd/hBS8ZKaNXhpoq9KALzIgZdARbmh2fh
+         cF3S84pZ+LPJOkvdcTGutlP5UcDrgUQHI7kXsmHV7+W8iKHhwBrhwK8hdFLPaIBxxsd1
+         fj76MY4F+W76lnYis8UBLS3ybQn06bby+tY1S7wvb51CYGl9lHEr9zxoc4qHRJbxhluM
+         FIW7TsjhNUsQvEhuqyhvqrUWj9WZK1XRyMDgyIBsXVjx2HjGTtt4uuW8L3H6K2UvzEjy
+         m/iJ/RCoo58X3mOejBg60GS2mzgwAW8Iee3iJ/vckkdCprqQ5SUiskpq2ohVlu1zvkOm
+         X9Bg==
+X-Gm-Message-State: AOAM532IoN3SVC+rL2obBMT6l2SVaQbOqu9YtnBnBw/nQV6COF3q4IGR
+        EJ0N3S0qr1I/Hwco036lo+PlWYiYgu7QV0fOhvZW+JeFYaJa1aki
+X-Google-Smtp-Source: ABdhPJwNkpwjPH7wJQrwZQ2Sh2JsnuFbohsjM04gBk5AkIftwEJsgDzTgw43j5xFY1ueZrDE1ZlvEGTVjGHTVwdAtpk=
+X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr4332389edc.373.1638842824139;
+ Mon, 06 Dec 2021 18:07:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
+References: <20211206113437.2820889-1-mudongliangabcd@gmail.com> <CADBw62pSJ=rHjwTocxeeuCgtadLKqz-U7gAQek5Eo_bBQSzBzQ@mail.gmail.com>
+In-Reply-To: <CADBw62pSJ=rHjwTocxeeuCgtadLKqz-U7gAQek5Eo_bBQSzBzQ@mail.gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Tue, 7 Dec 2021 10:06:38 +0800
+Message-ID: <CAD-N9QUsOvumgVMJmjHF6vx92VGx8_KpAuqROkMrDYrqMyNfuA@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: sprd: move pm_runtime_disable to err_rpm
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Baolin Wang <baolin.wang@spreadtrum.com>,
+        dmaengine@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:46:01PM +0100, Lukas Bulwahn wrote:
-> Dear Akira-san,
-> 
-> With commit 0c9333606e30 ("fs/binfmt_elf: Fix AT_PHDR for unusual ELF
-> files"), you have changed load_elf_binary() in ./fs/binfmt_elf.c in a
-> way such that the local variable load_addr in load_elf_binary() is not
-> used anymore.
+On Tue, Dec 7, 2021 at 9:38 AM Baolin Wang <baolin.wang7@gmail.com> wrote:
+>
+> Hi Dongliang,
+>
+> On Mon, Dec 6, 2021 at 7:34 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+> >
+> > When pm_runtime_get_sync fails, it forgets to invoke pm_runtime_disable
+> > in the label err_rpm.
+> >
+> > Fix this by moving pm_runtime_disable to label err_rpm.
+> >
+> > Fixes: 9b3b8171f7f4 ("dmaengine: sprd: Add Spreadtrum DMA driver")
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+>
+> Thanks for your patch, but looking at the code in detail, I think we
+> also should decrease the rpm counter when failing to call the
+> pm_runtime_get_sync().
 
-EEk! yeah, this totally broke ELF randomization. this needs to be
-entirely reverted.
+Thanks for your reply. There are many different pm_runtime_* API.
+After I double check the usage of pm_runtime_get_sync, there are two
+kinds of error handling code:
 
--- 
-Kees Cook
+1. When pm_runtime_get_sync fails, call pm_runtime_put_sync and
+pm_runtime_disable [1]
+
+2. When pm_runtime_get_sync fails, only call pm_runtime_disable [2]
+
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/dma/ti/edma.c#L2402
+[2] https://elixir.bootlin.com/linux/latest/source/drivers/dma/ti/cppi41.c#L1098
+
+BTW, is there any standard error handling code of pm runtime API? Or
+the majority wins?
+
+>
+> --- a/drivers/dma/sprd-dma.c
+> +++ b/drivers/dma/sprd-dma.c
+> @@ -1210,7 +1210,7 @@ static int sprd_dma_probe(struct platform_device *pdev)
+>         ret = dma_async_device_register(&sdev->dma_dev);
+>         if (ret < 0) {
+>                 dev_err(&pdev->dev, "register dma device failed:%d\n", ret);
+> -               goto err_register;
+> +               goto err_rpm;
+>         }
+>
+>         sprd_dma_info.dma_cap = sdev->dma_dev.cap_mask;
+> @@ -1224,10 +1224,9 @@ static int sprd_dma_probe(struct platform_device *pdev)
+>
+>  err_of_register:
+>         dma_async_device_unregister(&sdev->dma_dev);
+> -err_register:
+> +err_rpm:
+>         pm_runtime_put_noidle(&pdev->dev);
+>         pm_runtime_disable(&pdev->dev);
+> -err_rpm:
+>         sprd_dma_disable(sdev);
+>         return ret;
+>  }
+>
+> --
+> Baolin Wang

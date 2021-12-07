@@ -2,117 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1717846B68B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD7B46B688
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbhLGJHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:07:07 -0500
-Received: from mga02.intel.com ([134.134.136.20]:29417 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231313AbhLGJHG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:07:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224791978"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="224791978"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 00:59:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="515194978"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 07 Dec 2021 00:59:51 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muWKE-000MNH-E3; Tue, 07 Dec 2021 08:59:50 +0000
-Date:   Tue, 7 Dec 2021 16:58:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sm8350-next-20211118 48/48]
- drivers/usb/typec/altmodes/displayport.c:147:4: error: too few arguments to
- function 'drm_connector_oob_hotplug_event'
-Message-ID: <202112071602.WIq3FYDB-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233386AbhLGJFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231313AbhLGJFy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 04:05:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1E9C061746;
+        Tue,  7 Dec 2021 01:02:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E5721CE19FB;
+        Tue,  7 Dec 2021 09:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D90C341C1;
+        Tue,  7 Dec 2021 09:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638867741;
+        bh=1IukoI6r8Y3+ceVNx/4v3GTKBU5J+Is6mGvn/8YlWg8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hoae/zLFUpSqApEhwKxiw4UtutDQdT6pjNJYO4M3kBwDXuD6/1d08m9o8TgoKI08B
+         2dZd3W5Cj9tIwul9sfyXde9ifzYozqaudCxQ7OU7wizX07YH/yrNp4SqrYGwZ6YAE9
+         YsmkKt2G9rYMLPgV73UHSpzIasHaLdFlutBSuwY8K8rZXmD84V4nWeAR1M7sY5X1dl
+         zXc3YxC5yeYdk8AMnF6RC4bIDEFq177RgAo8fuTu/54uNoii4ZGtb9OEFFjc4EGO6Z
+         LIYiLFdgXjm9P9UPwelVeIpzIgD9nJDLnRdqtT2Wuekn0ovKPP6cheB8lg+xikMh1T
+         chgfVT98YdpJQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muWMc-00ASSc-LG; Tue, 07 Dec 2021 09:02:18 +0000
+Date:   Tue, 07 Dec 2021 09:02:18 +0000
+Message-ID: <87r1ao23fp.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt controller driver
+In-Reply-To: <e88ea4cf28ba69a41f6d1b4dd4128b82a6095c29.1638515726.git.qinjian@cqplus1.com>
+References: <cover.1638515726.git.qinjian@cqplus1.com>
+        <e88ea4cf28ba69a41f6d1b4dd4128b82a6095c29.1638515726.git.qinjian@cqplus1.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qinjian@cqplus1.com, robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk, broonie@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, wells.lu@sunplus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sm8350-next-20211118
-head:   801a35a569988584ffd5f6028a992f636c2a6634
-commit: 801a35a569988584ffd5f6028a992f636c2a6634 [48/48] drm: Add hpd state to drm_connector_oob_hotplug_event()
-config: x86_64-randconfig-r032-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071602.WIq3FYDB-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/andersson/kernel/commit/801a35a569988584ffd5f6028a992f636c2a6634
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sm8350-next-20211118
-        git checkout 801a35a569988584ffd5f6028a992f636c2a6634
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, 03 Dec 2021 07:34:25 +0000,
+Qin Jian <qinjian@cqplus1.com> wrote:
+> 
+> Add interrupt controller driver for Sunplus SP7021 SoC.
+> 
+> This is the interrupt controller in P-chip which collects all interrupt
+> sources in P-chip and routes them to parent interrupt controller in C-chip.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+>  MAINTAINERS                       |   1 +
+>  drivers/irqchip/Kconfig           |   9 +
+>  drivers/irqchip/Makefile          |   1 +
+>  drivers/irqchip/irq-sp7021-intc.c | 284 ++++++++++++++++++++++++++++++
+>  4 files changed, 295 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6b3bbe021..febbd97bf 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2665,6 +2665,7 @@ F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+>  F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+>  F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+>  F:	drivers/clk/clk-sp7021.c
+> +F:	drivers/irqchip/irq-sp7021-intc.c
+>  F:	drivers/reset/reset-sunplus.c
+>  F:	include/dt-bindings/clock/sp-sp7021.h
+>  F:	include/dt-bindings/reset/sp-sp7021.h
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index aca7b595c..b9429b8d0 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -602,4 +602,13 @@ config APPLE_AIC
+>  	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
+>  	  such as the M1.
+>  
+> +config SUNPLUS_SP7021_INTC
+> +	bool "Sunplus SP7021 interrupt controller"
+> +	help
+> +	  Support for the Sunplus SP7021 Interrupt Controller IP core.
+> +	  SP7021 SoC has 2 Chips: C-Chip & P-Chip. This is used as a
+> +	  chained controller, routing all interrupt source in P-Chip to
+> +	  the primary controller on C-Chip.
+> +	  This is selected automatically by platform config.
+> +
+>  endmenu
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index f88cbf36a..75411f654 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -116,3 +116,4 @@ obj-$(CONFIG_MACH_REALTEK_RTL)		+= irq-realtek-rtl.o
+>  obj-$(CONFIG_WPCM450_AIC)		+= irq-wpcm450-aic.o
+>  obj-$(CONFIG_IRQ_IDT3243X)		+= irq-idt3243x.o
+>  obj-$(CONFIG_APPLE_AIC)			+= irq-apple-aic.o
+> +obj-$(CONFIG_SUNPLUS_SP7021_INTC)	+= irq-sp7021-intc.o
+> diff --git a/drivers/irqchip/irq-sp7021-intc.c b/drivers/irqchip/irq-sp7021-intc.c
+> new file mode 100644
+> index 000000000..beabc64d5
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-sp7021-intc.c
+> @@ -0,0 +1,284 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Copyright (C) Sunplus Technology Co., Ltd.
+> + *       All rights reserved.
+> + */
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/io.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +
+> +#define SP_INTC_HWIRQ_MIN	0
+> +#define SP_INTC_HWIRQ_MAX	223
+> +
+> +#define SP_INTC_NR_IRQS		(SP_INTC_HWIRQ_MAX - SP_INTC_HWIRQ_MIN + 1)
+> +#define SP_INTC_NR_GROUPS	DIV_ROUND_UP(SP_INTC_NR_IRQS, 32)
+> +#define SP_INTC_REG_SIZE	(SP_INTC_NR_GROUPS * 4)
+> +
+> +/* REG_GROUP_0 regs */
+> +#define REG_INTR_TYPE		(sp_intc.g0)
+> +#define REG_INTR_POLARITY	(REG_INTR_TYPE     + SP_INTC_REG_SIZE)
+> +#define REG_INTR_PRIORITY	(REG_INTR_POLARITY + SP_INTC_REG_SIZE)
+> +#define REG_INTR_MASK		(REG_INTR_PRIORITY + SP_INTC_REG_SIZE)
+> +
+> +/* REG_GROUP_1 regs */
+> +#define REG_INTR_CLEAR		(sp_intc.g1)
+> +#define REG_MASKED_EXT1		(REG_INTR_CLEAR    + SP_INTC_REG_SIZE)
+> +#define REG_MASKED_EXT0		(REG_MASKED_EXT1   + SP_INTC_REG_SIZE)
+> +#define REG_INTR_GROUP		(REG_INTR_CLEAR    + 31 * 4)
+> +
+> +#define GROUP_MASK			(BIT(SP_INTC_NR_GROUPS) - 1)
+> +#define GROUP_SHIFT_EXT1	(0)
+> +#define GROUP_SHIFT_EXT0	(8)
+> +
+> +/*
+> + * When GPIO_INT0~7 set to edge trigger, doesn't work properly.
+> + * WORKAROUND: change it to level trigger, and toggle the polarity
+> + * at ACK/Handler to make the HW work.
+> + */
+> +#define GPIO_INT0_HWIRQ		120
+> +#define GPIO_INT7_HWIRQ		127
+> +#define IS_GPIO_INT(irq)	\
+> +({ \
+> +	u32 i = irq; \
+> +	(i >= GPIO_INT0_HWIRQ) && (i <= GPIO_INT7_HWIRQ); \
+> +})
+> +
+> +/* index of states */
+> +enum {
+> +	_IS_EDGE = 0,
+> +	_IS_LOW,
+> +	_IS_ACTIVE
+> +};
+> +
+> +#define STATE_BIT(irq, idx)			(((irq) - GPIO_INT0_HWIRQ) * 3 + (idx))
+> +#define ASSIGN_STATE(irq, idx, v)	assign_bit(STATE_BIT(irq, idx), sp_intc.states, v)
+> +#define TEST_STATE(irq, idx)		test_bit(STATE_BIT(irq, idx), sp_intc.states)
+> +
+> +static struct sp_intctl {
+> +	/*
+> +	 * REG_GROUP_0: include type/polarity/priority/mask regs.
+> +	 * REG_GROUP_1: include clear/masked_ext0/masked_ext1/group regs.
+> +	 */
+> +	void __iomem *g0; // REG_GROUP_0 base
+> +	void __iomem *g1; // REG_GROUP_1 base
+> +
+> +	struct irq_domain *domain;
+> +	raw_spinlock_t lock;
+> +
+> +	/*
+> +	 * store GPIO_INT states
+> +	 * each interrupt has 3 states: is_edge, is_low, is_active
+> +	 */
+> +	DECLARE_BITMAP(states, (GPIO_INT7_HWIRQ - GPIO_INT0_HWIRQ + 1) * 3);
+> +} sp_intc;
+> +
+> +static struct irq_chip sp_intc_chip;
+> +
+> +static void sp_intc_assign_bit(u32 hwirq, void __iomem *base, bool value)
+> +{
+> +	unsigned long flags;
+> +
+> +	raw_spin_lock_irqsave(&sp_intc.lock, flags);
+> +	__assign_bit(hwirq, base, value);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+__assign_bit() on an MMIO mapping? No. Why do you think we have
+separate MMIO accessors?
 
-All errors (new ones prefixed by >>):
+> +	raw_spin_unlock_irqrestore(&sp_intc.lock, flags);
+> +}
+> +
+> +static void sp_intc_ack_irq(struct irq_data *d)
+> +{
+> +	u32 hwirq = d->hwirq;
+> +
+> +	if (unlikely(IS_GPIO_INT(hwirq) && TEST_STATE(hwirq, _IS_EDGE))) { // WORKAROUND
+> +		sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, !TEST_STATE(hwirq, _IS_LOW));
+> +		ASSIGN_STATE(hwirq, _IS_ACTIVE, true);
+> +	}
+> +
+> +	sp_intc_assign_bit(hwirq, REG_INTR_CLEAR, 1);
+> +}
+> +
+> +static void sp_intc_mask_irq(struct irq_data *d)
+> +{
+> +	sp_intc_assign_bit(d->hwirq, REG_INTR_MASK, 0);
+> +}
+> +
+> +static void sp_intc_unmask_irq(struct irq_data *d)
+> +{
+> +	sp_intc_assign_bit(d->hwirq, REG_INTR_MASK, 1);
+> +}
+> +
+> +static int sp_intc_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +	u32 hwirq = d->hwirq;
+> +	bool is_edge = !(type & IRQ_TYPE_LEVEL_MASK);
+> +	bool is_low = (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_EDGE_FALLING);
+> +
+> +	irq_set_handler_locked(d, is_edge ? handle_edge_irq : handle_level_irq);
+> +
+> +	if (unlikely(IS_GPIO_INT(hwirq) && is_edge)) { // WORKAROUND
+> +		/* store states */
+> +		ASSIGN_STATE(hwirq, _IS_EDGE, is_edge);
+> +		ASSIGN_STATE(hwirq, _IS_LOW, is_low);
+> +		ASSIGN_STATE(hwirq, _IS_ACTIVE, false);
+> +		/* change to level */
+> +		is_edge = false;
+> +	}
+> +
+> +	sp_intc_assign_bit(hwirq, REG_INTR_TYPE, is_edge);
+> +	sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, is_low);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_intc_get_ext_irq(int ext_num)
+> +{
+> +	void __iomem *base = ext_num ? REG_MASKED_EXT1 : REG_MASKED_EXT0;
+> +	u32 shift = ext_num ? GROUP_SHIFT_EXT1 : GROUP_SHIFT_EXT0;
+> +	u32 groups;
+> +	u32 pending_group;
+> +	u32 group;
+> +	u32 pending_irq;
+> +
+> +	groups = readl_relaxed(REG_INTR_GROUP);
+> +	pending_group = (groups >> shift) & GROUP_MASK;
+> +	if (!pending_group)
+> +		return -1;
+> +
+> +	group = fls(pending_group) - 1;
+> +	pending_irq = readl_relaxed(base + group * 4);
+> +	if (!pending_irq)
+> +		return -1;
+> +
+> +	return (group * 32) + fls(pending_irq) - 1;
+> +}
+> +
+> +static void sp_intc_handle_ext_cascaded(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	int ext_num = (int)irq_desc_get_handler_data(desc);
+> +	int hwirq;
+> +
+> +	chained_irq_enter(chip, desc);
+> +
+> +	while ((hwirq = sp_intc_get_ext_irq(ext_num)) >= 0) {
+> +		if (unlikely(IS_GPIO_INT(hwirq) && TEST_STATE(hwirq, _IS_ACTIVE))) { // WORKAROUND
+> +			ASSIGN_STATE(hwirq, _IS_ACTIVE, false);
+> +			sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, TEST_STATE(hwirq, _IS_LOW));
+> +		} else {
+> +			generic_handle_domain_irq(sp_intc.domain, hwirq);
+> +		}
+> +	}
+> +
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +#ifdef CONFIG_SMP
+> +static int sp_intc_set_affinity(struct irq_data *d, const struct cpumask *mask, bool force)
+> +{
+> +	return -EINVAL;
+> +}
+> +#endif
+> +
+> +static struct irq_chip sp_intc_chip = {
+> +	.name = "sp_intc",
+> +	.irq_ack = sp_intc_ack_irq,
+> +	.irq_mask = sp_intc_mask_irq,
+> +	.irq_unmask = sp_intc_unmask_irq,
+> +	.irq_set_type = sp_intc_set_type,
+> +#ifdef CONFIG_SMP
+> +	.irq_set_affinity = sp_intc_set_affinity,
+> +#endif
+> +};
+> +
+> +static int sp_intc_irq_domain_map(struct irq_domain *domain,
+> +				  unsigned int irq, irq_hw_number_t hwirq)
+> +{
+> +	irq_set_chip_and_handler(irq, &sp_intc_chip, handle_level_irq);
+> +	irq_set_chip_data(irq, &sp_intc_chip);
+> +	irq_set_noprobe(irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops sp_intc_dm_ops = {
+> +	.xlate = irq_domain_xlate_twocell,
+> +	.map = sp_intc_irq_domain_map,
+> +};
+> +
+> +static int sp_intc_irq_map(struct device_node *node, int i)
+> +{
+> +	unsigned int irq;
+> +
+> +	irq = irq_of_parse_and_map(node, i);
+> +	if (!irq)
+> +		return -ENOENT;
+> +
+> +	irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
+> +
+> +	return 0;
+> +}
+> +
+> +void sp_intc_set_ext(u32 hwirq, int ext_num)
+> +{
+> +	sp_intc_assign_bit(hwirq, REG_INTR_PRIORITY, !ext_num);
+> +}
+> +EXPORT_SYMBOL_GPL(sp_intc_set_ext);
 
-   drivers/usb/typec/altmodes/displayport.c: In function 'dp_altmode_status_update':
->> drivers/usb/typec/altmodes/displayport.c:147:4: error: too few arguments to function 'drm_connector_oob_hotplug_event'
-     147 |    drm_connector_oob_hotplug_event(dp->connector_fwnode);
-         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/usb/typec/altmodes/displayport.c:17:
-   include/drm/drm_connector.h:1739:6: note: declared here
-    1739 | void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode, bool hpd_state);
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/altmodes/displayport.c: In function 'dp_altmode_remove':
-   drivers/usb/typec/altmodes/displayport.c:577:4: error: too few arguments to function 'drm_connector_oob_hotplug_event'
-     577 |    drm_connector_oob_hotplug_event(dp->connector_fwnode);
-         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/usb/typec/altmodes/displayport.c:17:
-   include/drm/drm_connector.h:1739:6: note: declared here
-    1739 | void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode, bool hpd_state);
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+No way. We don't export random symbols without a good justification,
+and you didn't give any.
 
+> +
+> +int __init sp_intc_init_dt(struct device_node *node, struct device_node *parent)
 
-vim +/drm_connector_oob_hotplug_event +147 drivers/usb/typec/altmodes/displayport.c
+This should be static.
 
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  128  
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  129  static int dp_altmode_status_update(struct dp_altmode *dp)
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  130  {
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  131  	bool configured = !!DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
-7f811394878535e Hans de Goede   2021-08-17  132  	bool hpd = !!(dp->data.status & DP_STATUS_HPD_STATE);
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  133  	u8 con = DP_STATUS_CONNECTION(dp->data.status);
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  134  	int ret = 0;
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  135  
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  136  	if (configured && (dp->data.status & DP_STATUS_SWITCH_TO_USB)) {
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  137  		dp->data.conf = 0;
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  138  		dp->state = DP_STATE_CONFIGURE;
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  139  	} else if (dp->data.status & DP_STATUS_EXIT_DP_MODE) {
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  140  		dp->state = DP_STATE_EXIT;
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  141  	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  142  		ret = dp_altmode_configure(dp, con);
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  143  		if (!ret)
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  144  			dp->state = DP_STATE_CONFIGURE;
-7f811394878535e Hans de Goede   2021-08-17  145  	} else {
-7f811394878535e Hans de Goede   2021-08-17  146  		if (dp->hpd != hpd) {
-7f811394878535e Hans de Goede   2021-08-17 @147  			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-7f811394878535e Hans de Goede   2021-08-17  148  			dp->hpd = hpd;
-7f811394878535e Hans de Goede   2021-08-17  149  		}
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  150  	}
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  151  
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  152  	return ret;
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  153  }
-0e3bb7d6894d9b6 Heikki Krogerus 2018-06-27  154  
+> +{
+> +	int i, ret;
+> +
+> +	sp_intc.g0 = of_iomap(node, 0);
+> +	if (!sp_intc.g0)
+> +		return -ENXIO;
+> +
+> +	sp_intc.g1 = of_iomap(node, 1);
+> +	if (!sp_intc.g1) {
+> +		ret = -ENXIO;
+> +		goto out_unmap0;
+> +	}
+> +
+> +	ret = sp_intc_irq_map(node, 0); // EXT_INT0
+> +	if (ret)
+> +		goto out_unmap1;
+> +
+> +	ret = sp_intc_irq_map(node, 1); // EXT_INT1
+> +	if (ret)
+> +		goto out_unmap1;
+> +
+> +	/* initial regs */
+> +	for (i = 0; i < SP_INTC_NR_GROUPS; i++) {
+> +		/* all mask */
+> +		writel_relaxed(0, REG_INTR_MASK + i * 4);
+> +		/* all edge */
+> +		writel_relaxed(~0, REG_INTR_TYPE + i * 4);
+> +		/* all high-active */
+> +		writel_relaxed(0, REG_INTR_POLARITY + i * 4);
+> +		/* all EXT_INT0 */
+> +		writel_relaxed(~0, REG_INTR_PRIORITY + i * 4);
+> +		/* all clear */
+> +		writel_relaxed(~0, REG_INTR_CLEAR + i * 4);
+> +	}
+> +
+> +	sp_intc.domain = irq_domain_add_linear(node, SP_INTC_NR_IRQS,
+> +					       &sp_intc_dm_ops, &sp_intc);
+> +	if (!sp_intc.domain) {
+> +		ret = -ENOMEM;
+> +		goto out_unmap1;
+> +	}
+> +
+> +	raw_spin_lock_init(&sp_intc.lock);
+> +
+> +	return 0;
+> +
+> +out_unmap1:
+> +	iounmap(sp_intc.g1);
+> +out_unmap0:
+> +	iounmap(sp_intc.g0);
+> +
+> +	return ret;
+> +}
+> +
+> +IRQCHIP_DECLARE(sp_intc, "sunplus,sp7021-intc", sp_intc_init_dt);
 
-:::::: The code at line 147 was first introduced by commit
-:::::: 7f811394878535ed9a6849717de8c2959ae38899 usb: typec: altmodes/displayport: Notify drm subsys of hotplug events
+	M.
 
-:::::: TO: Hans de Goede <hdegoede@redhat.com>
-:::::: CC: Hans de Goede <hdegoede@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Without deviation from the norm, progress is not possible.

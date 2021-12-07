@@ -2,290 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C5846C79D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E3646C79F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242134AbhLGWm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:42:58 -0500
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:60943 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbhLGWm5 (ORCPT
+        id S242255AbhLGWnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232475AbhLGWno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:42:57 -0500
-Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 8B974613;
-        Tue,  7 Dec 2021 14:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1638916766;
-        bh=YalSIP9XYDezyJZSffzzJNuPhL4aH69ToG2SUt9LUfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GIMzKpC4eEMwFAfWs8LlWw5W72rllszR08T/IpoS1xutuXXx+WM5llGS+ZXQtdbYj
-         Z1zvvUJsA7dCeo3DNu0uYF8WrQMxvG91VU9h57hCR8S/p+H/V6rqhA+3ptTuym7hiI
-         Zsxrj5W+rU4TOU8vAjBiktW0IvvRIpAYJda7dxAg=
-Date:   Tue, 7 Dec 2021 14:39:25 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
- module driver
-Message-ID: <Ya/inWEDpNmk62Fu@hatter.bewilderbeest.net>
-References: <20211207071521.543-1-zev@bewilderbeest.net>
- <20211207071521.543-2-zev@bewilderbeest.net>
- <20211207175015.GA772416@roeck-us.net>
- <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
- <f30241ad-f3c4-ee78-22f3-405401615b61@roeck-us.net>
- <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
+        Tue, 7 Dec 2021 17:43:44 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D4C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:40:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=94ssuV1jSg9K3Ux54E1ljokemHX2bOcrFqOn/HPTGgI=; b=bcAplM0QE/5wdDLBTtHveQ1Vmb
+        cD9vkCRomHr4v52y4tG4m9YvCLnOv1Qr51/huauo6nk0I/IkaNtriLzdCtK8NmxgfHrvjBHpM42Wj
+        kpHbTJxhUxNFrBDNCAM1Al1jpGAJltwTmIiPs2pZYRvFqf2XoyRyNyESCFPOPCgBeNXiNmQnRYsOf
+        AulYvQ1s/Je0y35arcNe+Wdma1gWKdA4gGRU5/4bQoOljmaDrTBcotRk4GNlY3C8xctK/ZX6V/daJ
+        xFgxhkUy2b7DK/F6OVJDojsvaeu7AK7b+48hz3SmH1Gy27XFOlPmcYJy0xXHQT1UN7mQ5381wX51r
+        bX9T7a/A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muj7v-00AHHi-Un; Tue, 07 Dec 2021 22:39:59 +0000
+Date:   Tue, 7 Dec 2021 14:39:59 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        keescook@chromium.org, jlayton@kernel.org, bfields@fieldses.org,
+        yzaikin@google.com, wangle6@huawei.com,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] sysctl: Add a group of macro functions to initcall the
+ sysctl table of each feature
+Message-ID: <Ya/iv33Ud+KRt9E9@bombadil.infradead.org>
+References: <20211207011320.100102-1-nixiaoming@huawei.com>
+ <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
+ <Ya/BnndSXKHiUpGm@bombadil.infradead.org>
+ <875ys0azt8.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
+In-Reply-To: <875ys0azt8.fsf@email.froward.int.ebiederm.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 01:53:44PM PST, Zev Weiss wrote:
->On Tue, Dec 07, 2021 at 11:44:01AM PST, Guenter Roeck wrote:
->>On 12/7/21 11:22 AM, Zev Weiss wrote:
->>>On Tue, Dec 07, 2021 at 09:50:15AM PST, Guenter Roeck wrote:
->>>>On Mon, Dec 06, 2021 at 11:15:20PM -0800, Zev Weiss wrote:
->>>>>This device is an integrated module of the Delta AHE-50DC Open19 power
->>>>>shelf.  For lack of proper documentation, this driver has been developed
->>>>>referencing an existing (GPL) driver that was included in a code release
->>>>>from LinkedIn [1].  It provides four fan speeds, four temperatures, and
->>>>>one voltage reading, as well as a handful of warning and fault
->>>>>indicators.
->>>>>
->>>>>[1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
->>>>>
->>>>
->>>>Hmm, that reference isn't really accurate anymore. I think it would be
->>>>better to just say that the device was found to be PMBus compliant.
->>>
->>>Sure, will do.
->>>
->>
->>Makes me wonder: How do you know that the referenced driver is for 
->>Delta AHE-50DC ?
->
->We'd been waiting for the source code for the software it ships with 
->for a while, and were finally provided with that repo; everything I've 
->observed from the factory software is consistent with the code in that 
->driver.  A sampling:
->
->    # no modinfo command available, but...
->    root@bmc-oob:~# strings -n8 /lib/modules/4.1.51-deltapower/extra/fancontrol.ko | head
->    fancontrol
->    license=GPL
->    description=FANCTRL Driver
->    author=Ping Mao <pmao@linkedin.com>
->    alias=i2c:fancontrol
->    depends=i2c_dev_sysfs
->    vermagic=4.1.51-deltapower mod_unload ARMv5 p2v8
->    fancontrol
->    status_word
->    bit 2:  Temparature Warning
->    root@bmc-oob:~# cd /sys/bus/i2c/drivers/fancontrol/8-0030
->    root@bmc-oob:/sys/bus/i2c/drivers/fancontrol/8-0030# grep . fan* temp* vin
->    fan1_2_status:0
->    fan1_speed:7860
->    fan2_speed:7860
->    fan3_4_status:0
->    fan3_speed:7680
->    fan4_speed:7560
->    temperature1:292
->    temperature2:278
->    temperature3:286
->    temperature4:302
->    vin:12251
->
->
->>>>
->>>>>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>>>>---
->>>>> MAINTAINERS                             |  6 ++
->>>>> drivers/hwmon/pmbus/Kconfig             | 12 ++++
->>>>> drivers/hwmon/pmbus/Makefile            |  1 +
->>>>> drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 84 +++++++++++++++++++++++++
->>>>> 4 files changed, 103 insertions(+)
->>>>> create mode 100644 drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>>
->>>>>diff --git a/MAINTAINERS b/MAINTAINERS
->>>>>index 0ac052200ecb..8bb7ba52d2f5 100644
->>>>>--- a/MAINTAINERS
->>>>>+++ b/MAINTAINERS
->>>>>@@ -5425,6 +5425,12 @@ W:    https://linuxtv.org
->>>>> T:    git git://linuxtv.org/media_tree.git
->>>>> F:    drivers/media/platform/sti/delta
->>>>>
->>>>>+DELTA AHE-50DC FAN CONTROL MODULE DRIVER
->>>>>+M:    Zev Weiss <zev@bewilderbeest.net>
->>>>>+L:    linux-hwmon@vger.kernel.org
->>>>>+S:    Maintained
->>>>>+F:    drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>>+
->>>>> DELTA DPS920AB PSU DRIVER
->>>>> M:    Robert Marko <robert.marko@sartura.hr>
->>>>> L:    linux-hwmon@vger.kernel.org
->>>>>diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>>>>index ffb609cee3a4..937e1c2c11e7 100644
->>>>>--- a/drivers/hwmon/pmbus/Kconfig
->>>>>+++ b/drivers/hwmon/pmbus/Kconfig
->>>>>@@ -66,6 +66,18 @@ config SENSORS_BPA_RS600
->>>>>       This driver can also be built as a module. If so, the module will
->>>>>       be called bpa-rs600.
->>>>>
->>>>>+config SENSORS_DELTA_AHE50DC_FAN
->>>>>+    tristate "Delta AHE-50DC fan control module"
->>>>>+    depends on I2C
->>>>>+    select REGMAP_I2C
->>>
->>>And I realize I neglected to drop the depends & select lines here when moving this bit into the pmbus directory...
->>>
->>>>>+    help
->>>>>+      If you say yes here you get hardware monitoring support for
->>>>>+      the integrated fan control module of the Delta AHE-50DC
->>>>>+      Open19 power shelf.
->>>>>+
->>>>>+      This driver can also be built as a module. If so, the module
->>>>>+      will be called delta-ahe50dc-fan.
->>>>>+
->>>>> config SENSORS_FSP_3Y
->>>>>     tristate "FSP/3Y-Power power supplies"
->>>>>     help
->>>>>diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->>>>>index 0ed4d596a948..a56b2897288d 100644
->>>>>--- a/drivers/hwmon/pmbus/Makefile
->>>>>+++ b/drivers/hwmon/pmbus/Makefile
->>>>>@@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266)    += adm1266.o
->>>>> obj-$(CONFIG_SENSORS_ADM1275)    += adm1275.o
->>>>> obj-$(CONFIG_SENSORS_BEL_PFE)    += bel-pfe.o
->>>>> obj-$(CONFIG_SENSORS_BPA_RS600)    += bpa-rs600.o
->>>>>+obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
->>>>> obj-$(CONFIG_SENSORS_FSP_3Y)    += fsp-3y.o
->>>>> obj-$(CONFIG_SENSORS_IBM_CFFPS)    += ibm-cffps.o
->>>>> obj-$(CONFIG_SENSORS_DPS920AB)    += dps920ab.o
->>>>>diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>>new file mode 100644
->>>>>index 000000000000..07b1e7c5f5f5
->>>>>--- /dev/null
->>>>>+++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>>@@ -0,0 +1,84 @@
->>>>>+// SPDX-License-Identifier: GPL-2.0
->>>>>+/*
->>>>>+ * Delta AHE-50DC power shelf fan control module driver
->>>>>+ *
->>>>>+ * Copyright 2021 Zev Weiss <zev@bewilderbeest.net>
->>>>>+ */
->>>>>+
->>>>>+#include <linux/kernel.h>
->>>>>+#include <linux/module.h>
->>>>>+#include <linux/i2c.h>
->>>>>+#include <linux/pmbus.h>
->>>>
->>>>Alphabetic include file order please.
->>>
->>>Ack, will fix.
->>>
->>>>
->>>>>+
->>>>>+#include "pmbus.h"
->>>>>+
->>>>>+#define AHE50DC_PMBUS_READ_TEMP4 0xd0
->>>>>+
->>>>>+static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
->>>>>+{
->>>>>+    /* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
->>>>>+    if (page == 1) {
->>>>>+        if (reg == PMBUS_READ_TEMPERATURE_1)
->>>>>+            return i2c_smbus_read_word_data(client, AHE50DC_PMBUS_READ_TEMP4);
->>>>>+        return -EOPNOTSUPP;
->>>>>+    }
->>>>>+    return -ENODATA;
->>>>>+}
->>>>>+
->>>>>+static struct pmbus_driver_info ahe50dc_fan_info = {
->>>>>+    .pages = 2,
->>>>>+    .format[PSC_FAN] = direct,
->>>>>+    .format[PSC_TEMPERATURE] = direct,
->>>>>+    .format[PSC_VOLTAGE_IN] = direct,
->>>>>+    .m[PSC_FAN] = 1,
->>>>>+    .b[PSC_FAN] = 0,
->>>>>+    .R[PSC_FAN] = 0,
->>>>>+    .m[PSC_TEMPERATURE] = 1,
->>>>>+    .b[PSC_TEMPERATURE] = 0,
->>>>>+    .R[PSC_TEMPERATURE] = 1,
->>>>>+    .m[PSC_VOLTAGE_IN] = 1,
->>>>>+    .b[PSC_VOLTAGE_IN] = 0,
->>>>>+    .R[PSC_VOLTAGE_IN] = 3,
->>>>
->>>>How did you determine the exponents ? The referenced driver
->>>>doesn't seem to make a difference between voltage and temperature
->>>>exponents (nor fan speed, which is a bit odd).
->>>
->>>Lacking documentation, the honest answer here is that I just sort of eyeballed it.  However, after doing so, I dug through the code dump a bit more and found some userspace unit-conversion bits that appear to confirm what I arrived at:
->>>
->>>https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/platform-lib/files/powershelf/powershelf_fan.c
->>>
->>>(Lines 107, and 153/161/169/177.)
->>>
->>
->>Brr. Well, why use a standard API/ABI if one can invent a non-standard one.
->>
->
->It's...not the only bit of gratuitous wheel-reinvention we've come
->across in this particular system.
->
->>Can you check this with real hardware, by any chance ?
->>
->
->If you mean running that code on it, yes -- here's the userspace 
->utility that invokes that library routine:
->
->    root@bmc-oob:~# fan-util.sh
->    fan1 speed: 7860 RPM
->    fan2 speed: 7860 RPM
->    fan3 speed: 7620 RPM
->    fan4 speed: 7560 RPM
->    temperature1: 29.20 C
->    temperature2: 27.80 C
->    temperature3: 28.50 C
->    temperature4: 30.20 C
->    vin_undervolt_fault: no
->    overtemperature_warning: no
->    fan_fault: no
->    fan_warning: no
->    fan_status: ok
->
->That fan-util.sh script being this:
->
->https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/liutils/files/fan-util.sh
->
->which invokes this:
->
->https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/liutils/files/fan-ctrl/fan-util.c
->
->(which calls into the routine in powershelf_fan.c linked above).
->
+On Tue, Dec 07, 2021 at 03:08:03PM -0600, Eric W. Biederman wrote:
+> Luis Chamberlain <mcgrof@kernel.org> writes:
+> 
+> > On Mon, Dec 06, 2021 at 05:38:42PM -0800, Andrew Morton wrote:
+> >> On Tue, 7 Dec 2021 09:13:20 +0800 Xiaoming Ni <nixiaoming@huawei.com> wrote:
+> >> > --- a/fs/inode.c
+> >> > +++ b/fs/inode.c
+> >> > @@ -132,12 +132,7 @@ static struct ctl_table inodes_sysctls[] = {
+> >> >  	{ }
+> >> >  };
+> >> >  
+> >> > -static int __init init_fs_inode_sysctls(void)
+> >> > -{
+> >> > -	register_sysctl_init("fs", inodes_sysctls);
+> >> > -	return 0;
+> >> > -}
+> >> > -early_initcall(init_fs_inode_sysctls);
+> >> > +fs_sysctl_initcall(inodes_sysctls);
+> >> >  #endif
+> >> 
+> >> Here's another, of many.
+> >> 
+> >> Someone made the decision to use early_initcall() here (why?) and this
+> >> patch switches it to late_initcall()!  Worrisome.  Each such stealth
+> >> conversion should be explained and justified, shouldn't it?
+> >
+> > I made the decisions for quite a bit of the ordering and yes I agree
+> > this need *very careful* explanation, specially if we are going to
+> > generalize this.
+> >
+> > First and foremost. git grep for sysctl_init_bases and you will see
+> > that the bases for now are initialized on proc_sys_init() and that
+> > gets called on proc_root_init() and that in turn on init/main.c's
+> > start_kernel(). And so this happens *before* the init levels.
+> >
+> > The proper care for what goes on top of this needs to take into
+> > consideration the different init levels and that the if a sysctl
+> > is using a directory *on top* of a base, then that sysctl registration
+> > must be registered *after* that directory. The *base* directory for
+> > "fs" is now registered through fs/sysctls.c() on init_fs_sysctls()
+> > using register_sysctl_base(). I made these changes with these names
+> > and requiring the DECLARE_SYSCTL_BASE() so it would be easy for us
+> > to look at where these are declared.
+> >
+> > So the next step in order to consider is *link* ordering and that
+> > order is maintained by the Makefile. That is why I put this at the
+> > top of the fs Makfile:
+> >
+> > obj-$(CONFIG_SYSCTL)            += sysctls.o 
+> >
+> > So any file after this can use early_initcall(), because the base
+> > for "fs" was declared first in link order, and it used early_initcall().
+> > It is fine to have the other stuff that goes on top of the "fs" base
+> > use late_initcall() but that assumes that vetting has been done so that
+> > if a directory on "fs" was created, let's call it "foo", vetting was done
+> > to ensure that things on top of "foo" are registered *after* the "foo"
+> > directory.
+> >
+> > We now have done the cleanup for "fs", and we can do what we see fine
+> > for "fs", but we may run into surprises later with the other bases, so
+> > I'd be wary of making assumptions at this point if we can use
+> > late_initcall().
+> >
+> > So, as a rule of thumb I'd like to see bases use early_initcall(). The
+> > rest requires manual work and vetting.
+> >
+> > So, how about this, we define fs_sysctl_initcall() to use also
+> > early_initcall(), and ask susbsystems to do their vetting so that
+> > the base also gets linked first.
+> >
+> > After this, if a directory on top of a base is created we should likely create
+> > a new init level and just bump that to use the next init level. So
+> > something like fs_sysctl_base_initcall_subdir_1() map to core_initcall()
+> > and so on.
+> >
+> > That would allow us to easily grep for directory structures easily and
+> > puts some implicit onus of ordering on those folks doing these conversions.
+> > We'd document well the link order stuff for those using the base stuff
+> > too as that is likely only where this will matter most.
+> 
+> I am a bit confused at this explanation of things.
+> 
+> Last I looked the implementation of sysctls allocated the directories
+> independently of the sysctls entries that populated them.
 
-...though I think I accidentally glossed over some additional steps in 
-beteween there; looks like there's actually another daemon involved that 
-does the read from the sysfs files and the unit normalization and then 
-drops the resulting data into a file that fan-util.c then reads:
+With most sysctls being created using the same kernel/sysctl.c file and
+structure, yes, this was true. With the changes now on linux-next things
+change a bit. The goal is to move sysctls to be registered where they
+are actually defined. But the directory that holds them must be
+registered first. During the first phase of cleanups now on linux-next
+all filesystem "fs" syscls were moved to be delcared in the kernel's
+fs/ directory. The last part was to register the base "fs" directory.
+For this declareres were added to simplify that and to clarify which
+are base directories:
 
-https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-core/health-mon/files/healthmon.c
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ededd3fc701668743087c77ceeeb7490107cc12c
 
-Anyway, the upshot is that I'm fairly confident that the code there is 
-in fact what's running on the device as shipped from the factory, and I 
-think the coefficients I determined for the pmbus driver should handle 
-it appropriately.  (It produces readings that align with what the 
-factory software gives and are generally sane-looking.)
+Then, this commit moves the "fs" base to be declared to fs/ as well:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d0f885a73ec6e05803ce99f279232b3116061ed8
 
-Zev
+This used early_initcall() for the base for "fs" and that is
+because there are no built-in sysctls for "fs" which need to
+be exposed prior to the init levels.
 
+So after this then order is important. If you are using the same
+init level, the the next thing which will ensure order is the order
+of things being linked, so what order they appear on the Makefile.
+And this is why the base move for the "fs" sysctl directory is kept
+at the top of fs/Makfile:
+
+obj-$(CONFIG_SYSCTL)		+= sysctls.o
+
+  Luis

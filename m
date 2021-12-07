@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 108E446B54E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926AA46B54D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbhLGIM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:12:56 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48744 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbhLGIMr (ORCPT
+        id S232220AbhLGIMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:12:54 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40930 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232125AbhLGIMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:12:47 -0500
+        Tue, 7 Dec 2021 03:12:48 -0500
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B789Bbl071901;
-        Tue, 7 Dec 2021 02:09:11 -0600
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B789EeC074029;
+        Tue, 7 Dec 2021 02:09:14 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638864551;
-        bh=h6hJ7BIzq+gRrn9Kh0zQfHs0HvxUzKMK2M/7I0A8N3Y=;
+        s=ti-com-17Q1; t=1638864554;
+        bh=zCUeNEPn/uK6GG1XOOeNrdU+6ouS9igMSIrag4Cq6YI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=i6ZQ3d/RfO7cZsedT0Ja288DUBpholeR3aaEU2jL1M0R1YkTfXG1TUtpfUzenuO8l
-         TuYFVHOfcNhMlEQMf+6daphnMOo/VF6xO371+Dn4qFUPl60f/OCL5vR9uGrMaDTpA5
-         DLHolauelxFDpGu4+ndJX+Aas2S1b7Pvf61b2xJ4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B789BnX098280
+        b=W3gMEj3coqpar3t1Q83pjm8zAwZAyXLmemNBzYnnBzFw+QXiANaY+1G3k+3mAzEwY
+         tUHpSd+hLI5NEMTwjVyQ9MXfJhUsj6u/8NoEK8PII26jP7Wp/wm9bhpFUCVs/fvlWw
+         7lKqQCKZCF7bNWooy3fEMjqAiFKxDG2imGSYLZ/I=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B789E7C098322
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Dec 2021 02:09:11 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 7 Dec 2021 02:09:14 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 7
- Dec 2021 02:09:11 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 02:09:13 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 7 Dec 2021 02:09:11 -0600
+ Frontend Transport; Tue, 7 Dec 2021 02:09:13 -0600
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B7895qX046083;
-        Tue, 7 Dec 2021 02:09:08 -0600
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B7895qY046083;
+        Tue, 7 Dec 2021 02:09:11 -0600
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -45,9 +45,9 @@ CC:     <linux-kernel@vger.kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Aswath Govindraju <a-govindraju@ti.com>
-Subject: [PATCH v3 1/5] dt-bindings: arm: ti: Add bindings for J721s2 SoC
-Date:   Tue, 7 Dec 2021 13:39:00 +0530
-Message-ID: <20211207080904.14324-2-a-govindraju@ti.com>
+Subject: [PATCH v3 2/5] dt-bindings: pinctrl: k3: Introduce pinmux definitions for J721S2
+Date:   Tue, 7 Dec 2021 13:39:01 +0530
+Message-ID: <20211207080904.14324-3-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211207080904.14324-1-a-govindraju@ti.com>
 References: <20211207080904.14324-1-a-govindraju@ti.com>
@@ -59,31 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding for J721S2 SoC
+Add pinctrl macros for J721S2 SoC. These macro definitions are
+similar to that of J721E, but adding new definitions to avoid
+any naming confusions in the soc dts files.
+
+checkpatch insists the following error exists:
+ERROR: Macros with complex values should be enclosed in parentheses
+
+However, we do not need parentheses enclosing the values for this
+macro as we do intend it to generate two separate values as has been
+done for other similar platforms.
 
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/dt-bindings/pinctrl/k3.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-index cf327230fc0e..b03c10fa2e7a 100644
---- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
-+++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
-@@ -53,6 +53,12 @@ properties:
-               - ti,am642-sk
-           - const: ti,am642
+diff --git a/include/dt-bindings/pinctrl/k3.h b/include/dt-bindings/pinctrl/k3.h
+index e085f102b283..63e038e36ca3 100644
+--- a/include/dt-bindings/pinctrl/k3.h
++++ b/include/dt-bindings/pinctrl/k3.h
+@@ -38,4 +38,7 @@
+ #define AM64X_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
+ #define AM64X_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
  
-+      - description: K3 J721s2 SoC
-+        items:
-+          - enum:
-+              - ti,j721s2-evm
-+          - const: ti,j721s2
++#define J721S2_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
++#define J721S2_WKUP_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
 +
- additionalProperties: true
- 
- ...
+ #endif
 -- 
 2.17.1
 

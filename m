@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E5A46B8B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4ED46B8BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbhLGKXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:23:41 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42754 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbhLGKXk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:23:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 889331FD2F;
-        Tue,  7 Dec 2021 10:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638872409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qM7yciPPFvBZvKovAKZtxhDTcu1tDT01ZYjgVWk4dKI=;
-        b=UkLgYoYVwGNXfFrMr1C1cmGz+wi/t9QYBjMF0O/xWjA7d00rgLL8cXPDsug1W5o4kXpsOD
-        z4A7yOhg5Lb0pxC66iw7cL1JCAnzMC1Nyy04YlAJt9l2Y7UooESKW9i+PUeXTjKRELrkZ7
-        uF/oTlyX5e4fTAYJKFqqK1UvfwmI48k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638872409;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qM7yciPPFvBZvKovAKZtxhDTcu1tDT01ZYjgVWk4dKI=;
-        b=hxkreLcM485+LsCFmv193fS6ONW63/nHAR5oWrO6lBiv19vZMsjiQt352G72USH9GN0Grt
-        voigXuueWJ3bbWAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 464A613A1F;
-        Tue,  7 Dec 2021 10:20:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /RchEFk1r2E9awAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 07 Dec 2021 10:20:09 +0000
-Message-ID: <afce9a18-8819-56ba-91d9-71b061186d69@suse.de>
-Date:   Tue, 7 Dec 2021 11:20:08 +0100
+        id S235010AbhLGKZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:25:25 -0500
+Received: from mga18.intel.com ([134.134.136.126]:25367 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232748AbhLGKZY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 05:25:24 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224416186"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224416186"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 02:21:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="542753730"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 02:21:52 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muXbc-000MS9-4o; Tue, 07 Dec 2021 10:21:52 +0000
+Date:   Tue, 7 Dec 2021 18:20:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202112071840.2bl34nL3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 2/3] drm/format-helper: Add
- drm_fb_xrgb8888_to_xrgb2101010_toio()
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211207072943.121961-1-marcan@marcan.st>
- <20211207072943.121961-3-marcan@marcan.st>
- <03a52a64-7be3-b401-7711-b7b1452f433d@suse.de>
- <c339c133-25d0-3c8e-e776-b61108836528@marcan.st>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <c339c133-25d0-3c8e-e776-b61108836528@marcan.st>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------DgLD0puFfDYxxaTlS4GDixHV"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------DgLD0puFfDYxxaTlS4GDixHV
-Content-Type: multipart/mixed; boundary="------------uDUCbj8QGgjfhgqmezVXXbZm";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Hector Martin <marcan@marcan.st>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Message-ID: <afce9a18-8819-56ba-91d9-71b061186d69@suse.de>
-Subject: Re: [PATCH v2 2/3] drm/format-helper: Add
- drm_fb_xrgb8888_to_xrgb2101010_toio()
-References: <20211207072943.121961-1-marcan@marcan.st>
- <20211207072943.121961-3-marcan@marcan.st>
- <03a52a64-7be3-b401-7711-b7b1452f433d@suse.de>
- <c339c133-25d0-3c8e-e776-b61108836528@marcan.st>
-In-Reply-To: <c339c133-25d0-3c8e-e776-b61108836528@marcan.st>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
+date:   7 weeks ago
+config: arm-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071840.2bl34nL3-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
---------------uDUCbj8QGgjfhgqmezVXXbZm
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-SGkNCg0KQW0gMDcuMTIuMjEgdW0gMTA6NTQgc2NocmllYiBIZWN0b3IgTWFydGluOg0KPiBI
-aSwgdGhhbmtzIGZvciB0aGUgcmV2aWV3IQ0KPiANCj4gT24gMDcvMTIvMjAyMSAxOC40MCwg
-VGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+PiBIaQ0KPj4NCj4+IEFtIDA3LjEyLjIxIHVt
-IDA4OjI5IHNjaHJpZWIgSGVjdG9yIE1hcnRpbjoNCj4+PiBBZGQgWFJHQjg4ODggZW11bGF0
-aW9uIHN1cHBvcnQgZm9yIGRldmljZXMgdGhhdCBjYW4gb25seSBkbyBYUkdCMjEwMTAxMC4N
-Cj4+Pg0KPj4+IFRoaXMgaXMgY2hpZWZseSB1c2VmdWwgZm9yIHNpbXBsZWRybSBvbiBBcHBs
-ZSBkZXZpY2VzIHdoZXJlIHRoZQ0KPj4+IGJvb3Rsb2FkZXItcHJvdmlkZWQgZnJhbWVidWZm
-ZXIgaXMgMTAtYml0Lg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogSGVjdG9yIE1hcnRpbiA8
-bWFyY2FuQG1hcmNhbi5zdD4NCj4+PiAtLS0NCj4+PiDCoMKgIGRyaXZlcnMvZ3B1L2RybS9k
-cm1fZm9ybWF0X2hlbHBlci5jIHwgNjIgDQo+Pj4gKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysNCj4+PiDCoMKgIGluY2x1ZGUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmjCoMKgwqDC
-oCB8wqAgMyArKw0KPj4+IMKgwqAgMiBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCsp
-DQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVs
-cGVyLmMgDQo+Pj4gYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYw0KPj4+
-IGluZGV4IGRiZTNlODMwMDk2ZS4uZWRkNjExZDNhYjZhIDEwMDY0NA0KPj4+IC0tLSBhL2Ry
-aXZlcnMvZ3B1L2RybS9kcm1fZm9ybWF0X2hlbHBlci5jDQo+Pj4gKysrIGIvZHJpdmVycy9n
-cHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMNCj4+PiBAQCAtNDA5LDYgKzQwOSw1OSBAQCB2
-b2lkIGRybV9mYl94cmdiODg4OF90b19yZ2I4ODhfdG9pbyh2b2lkIF9faW9tZW0gDQo+Pj4g
-KmRzdCwgdW5zaWduZWQgaW50IGRzdF9waXRjaCwNCj4+PiDCoMKgIH0NCj4+PiDCoMKgIEVY
-UE9SVF9TWU1CT0woZHJtX2ZiX3hyZ2I4ODg4X3RvX3JnYjg4OF90b2lvKTsNCj4+PiArc3Rh
-dGljIHZvaWQgZHJtX2ZiX3hyZ2I4ODg4X3RvX3hyZ2IyMTAxMDEwX2xpbmUodTMyICpkYnVm
-LCBjb25zdCB1MzIgDQo+Pj4gKnNidWYsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW5zaWduZWQgaW50IHBpeGVscykNCj4+PiArew0K
-Pj4+ICvCoMKgwqAgdW5zaWduZWQgaW50IHg7DQo+Pj4gKw0KPj4+ICvCoMKgwqAgZm9yICh4
-ID0gMDsgeCA8IHBpeGVsczsgeCsrKSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgICpkYnVmKysg
-PSAoKHNidWZbeF0gJiAweDAwMDAwMEZGKSA8PCAyKSB8DQo+Pj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgICgoc2J1Zlt4XSAmIDB4MDAwMEZGMDApIDw8IDQpIHwNCj4+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKChzYnVmW3hdICYgMHgwMEZGMDAwMCkgPDwgNik7
-DQo+Pg0KPj4gVGhpcyBpc24ndCBxdWl0ZSByaWdodC4gVGhlIGxvd2VzdCB0d28gZGVzdGlu
-YXRpb24gYml0cyBpbiBlYWNoDQo+PiBjb21wb25lbnQgd2lsbCBhbHdheXMgYmUgemVyby4g
-WW91IGhhdmUgdG8gZG8gdGhlIHNoaWZ0aW5nIGFzIGFib3ZlIGFuZA0KPj4gZm9yIGVhY2gg
-Y29tcG9uZW50IHRoZSB0d28gaGlnaGVzdCBzb3VyY2UgYml0cyBoYXZlIHRvIGJlIE9SJ2Vk
-IGludG8gdGhlDQo+PiB0d28gbG93ZXN0IGRlc3RpbmF0aW9uIGJpdHMuIEZvciBleGFtcGxl
-IHRoZSBzb3VyY2UgYml0cyBpbiBhIGNvbXBvbmVudA0KPj4gYXJlIG51bWJlcmVkIDcgdG8g
-MA0KPj4NCj4+IMKgwqAgfCA3IDYgNSA0IDMgMiAxIDAgfA0KPj4NCj4+IHRoZW4gdGhlIGRl
-c3RpbmF0aW9uIGJpdHMgc2hvdWxkIGJlDQo+Pg0KPj4gwqDCoCB8IDcgNiA1IDQgMyAyIDEg
-MCA3IDYgfA0KPj4NCj4gDQo+IEkgdGhpbmsgYm90aCBhcHByb2FjaGVzIGhhdmUgcHJvcyBh
-bmQgY29ucy4gTGVhdmluZyB0aGUgdHdvIExTQnMgYWx3YXlzIA0KPiBhdCAwIHlpZWxkcyBh
-IGZ1bGx5IGxpbmVhciB0cmFuc2ZlciBjdXJ2ZSB3aXRoIG5vIGRpc2NvbnRpbnVpdGllcywg
-YnV0IA0KPiBtZWFucyB0aGUgbWF4aW11bSBicmlnaHRuZXNzIGlzIHNsaWdodGx5IGxlc3Mg
-dGhhbiBmdWxsLiBTZXR0aW5nIHRoZW0gDQo+IGZ1bGx5IG1hcHMgdGhlIGJyaWdodG5lc3Mg
-cmFuZ2UsIGJ1dCBjcmVhdGVzIDQgZG91YmxlIHdpZGUgc3RlcHMgaW4gdGhlIA0KPiB0cmFu
-c2ZlciBjdXJ2ZSAoYWxzbyBpdCdzIHBvdGVudGlhbGx5IHNsaWdodGx5IHNsb3dlciBDUFUt
-d2lzZSkuDQo+IA0KPiBJZiB5b3UgcHJlZmVyIHRoZSBsYXR0ZXIgSSdsbCBkbyB0aGF0IGZv
-ciB2Mi4NCg0KV2UgZG9uJ3QgZ2l2ZSBndWFyYW50ZWVzIGZvciBjb2xvciBvdXRwdXQgdW5s
-ZXNzIGNvbG9yIHNwYWNlcyBhcmUgDQppbnZvbHZlZC4gQnV0IHRoZSBsYWNrIG9mIExTQiBi
-aXRzIGNhbiBiZSBtb3JlIHZpc2libGUgdGhhbiBsYXJnZXIgc3RlcHMgDQppbiB0aGUgY3Vy
-dmUuIFdpdGggdGhlIGN1cnJlbnQgZm9ybWF0cyBoZXJlLCBpdCdzIHByb2JhYmx5IGEgbm9u
-LWlzc3VlLiANCkJ1dCB0aGVyZSBjYW4gYmUgY29udmVyc2lvbnMsIHN1Y2ggYXMgUkdCNDQ0
-IHRvIFJHQjg4LCB3aGVyZSB0aGVzZSANCm1pc3NpbmcgTFNCcyBtYWtlIGEgdmlzaWJsZSBk
-aWZmZXJlbmNlLg0KDQpUaGVyZWZvcmUsIHBsZWFzZSBjaGFuZ2UgdGhlIGFsZ29yaXRobS4g
-SXQgcHJvZHVjZXMgbW9yZSBjb25zaXN0ZW50IA0KcmVzdWx0cyBvdmVyIGEgdmFyaWV0eSBv
-ZiBmb3JtYXQgY29udmVyc2lvbi4gSXQncyBiZXR0ZXIgdG8gaGF2ZSB0aGUgDQpzYW1lIChk
-ZWZhdWx0KSBhbGdvcml0aG0gZm9yIGFsbCBvZiB0aGVtLg0KDQpCZXN0IHJlZ2FyZHMNClRo
-b21hcw0KDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIg
-RGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZl
-bGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8
-cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
---------------uDUCbj8QGgjfhgqmezVXXbZm--
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
+   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
 
---------------DgLD0puFfDYxxaTlS4GDixHV
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+vim +210 arch/arm/mach-ep93xx/clock.c
 
------BEGIN PGP SIGNATURE-----
+   205	
+   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
+   207					struct clk_rate_request *req)
+   208	{
+   209		unsigned long rate = req->rate;
+ > 210		struct clk *best_parent = 0;
+   211		unsigned long __parent_rate;
+   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
+   213		unsigned long best_parent_rate;
+   214		int __div = 0, __pdiv = 0;
+   215		int i;
+   216	
+   217		/*
+   218		 * Try the two pll's and the external clock
+   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
+   220		 * all the clocks by 2 to avoid floating point math.
+   221		 *
+   222		 * This is based on the algorithm in the ep93xx raster guide:
+   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
+   224		 *
+   225		 */
+   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
+   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
+   228	
+   229			__parent_rate = clk_get_rate(parent);
+   230			mclk_rate = __parent_rate * 2;
+   231	
+   232			/* Try each predivider value */
+   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
+   234				__div = mclk_rate / (rate * __pdiv);
+   235				if (__div < 2 || __div > 127)
+   236					continue;
+   237	
+   238				actual_rate = mclk_rate / (__pdiv * __div);
+   239				if (is_best(rate, actual_rate, best_rate)) {
+   240					best_rate = actual_rate;
+   241					best_parent_rate = __parent_rate;
+   242					best_parent = parent;
+   243				}
+   244			}
+   245		}
+   246	
+   247		if (!best_parent)
+   248			return -EINVAL;
+   249	
+   250		req->best_parent_rate = best_parent_rate;
+   251		req->best_parent_hw = __clk_get_hw(best_parent);
+   252		req->rate = best_rate;
+   253	
+   254		return 0;
+   255	}
+   256	
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGvNVgFAwAAAAAACgkQlh/E3EQov+Bs
-0RAAwF27/E6srIzBbLxzjirh0AlUNPritli3cKtZScS5z/YFYYdrO4yTbo5EeTacUXR7YyDx02Kd
-wTMtk9n0eP5neQgm+dhfLK7hWxPtyxJAqdnAKRkhiVVjOwuKGoXMazyMoQ2PV0jNVa01zNprPp8t
-qd9sQPDCvts9TaXep4PnQ5wak4UrYIB8ZHsob65f/to273N8aWeHycEzHh0DGIo+sgGb5YgjFxfX
-OFlsmsFbTX/QHc9FqJS86fkMnejNWsYnx8vhxE8CwJKKhGQjK+nbSskSlHK0lQgjtpvOjvANq6HP
-bkJ1+yTccAnAQMUE4bxknWY1DYQLwhsIH4Ct/DS6m04/Oi9DyRNiCXqNOZMmtJS/ErW0oS140x3D
-Ub8mf7WHxyiCv0SlJkFbesnTAl79u8v5CjJ899hokEAw0BXMU3FeHZxTW/kXRcx24HJQU4dgo6/N
-QAHuTzAmBS3XX3tRnO3nd6sccfpzfaOXL7QzVkvicyZWkfuIMwRSjSB5fKUZPcpE8rNoBncdpKiu
-OYwmtkoovLsQdx/vkPH6ozckTMY8VB95KzXOEP5x7upnqPHGaJrL61JtSvxIjaEgsQd+UjTZvL6i
-p+W+V5eGpAd5HmrxRjcAemIJqK+nCJMWrP/wfK9DOBxxPQfk6sCCDkvw/9TBxvqVOZHzFqG38aJ6
-Pzw=
-=BHJh
------END PGP SIGNATURE-----
-
---------------DgLD0puFfDYxxaTlS4GDixHV--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

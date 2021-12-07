@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2779146C75D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5921946C762
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237918AbhLGWYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:24:38 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:47385 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233310AbhLGWYh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:24:37 -0500
-Received: (qmail 553011 invoked by uid 1000); 7 Dec 2021 17:21:05 -0500
-Date:   Tue, 7 Dec 2021 17:21:05 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>, Li Jun <jun.li@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
-Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
-Message-ID: <Ya/eUbdN1+ABFVWf@rowland.harvard.edu>
-References: <20211207135401.5507-1-guozhengkui@vivo.com>
- <Ya9yZX3JsuO8OcVJ@kroah.com>
+        id S238083AbhLGW0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:26:20 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:43970 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233310AbhLGW0S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:26:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Vw5BOFkSJ3OQNTdGVx0WTiEgvdw+Ohj/vP1ysKtmUI4=; b=iFwtJcMYJ0oIOtuiqMWS+tzZM7
+        Ku+fAUqqiWIloVgV3bonCGDS4Lgloj+U65C5OGfQWBWTDgWAzHFxUoBw3KVAn83UFrLZMCsR4AYWj
+        7rIFRyKKD/NiZMxG0p+l7xtG+zZYR+hQrMFGVQuk0iO2zfAo5pIDQitqyqs6oVhcKqoc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1muirB-00FonC-ON; Tue, 07 Dec 2021 23:22:41 +0100
+Date:   Tue, 7 Dec 2021 23:22:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <Ya/esX+GTet9PM+D@lunn.ch>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya9yZX3JsuO8OcVJ@kroah.com>
+In-Reply-To: <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:40:37PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
-> > Fix following error:
-> > ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
-> > application of sizeof to pointer.
-> 
-> What generated this error?
-> 
-> > 
-> > Use sizeof(*vaddr) instead.
-> > 
-> > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> > ---
-> >  drivers/usb/core/hcd.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index 4d326ee12c36..996d5273cf60 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
-> >  		return -EFAULT;
-> >  	}
-> >  
-> > -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
-> > +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
-> 
-> I think you just broke the code.
-> 
-> Look at this closer and see what the function is doing with this buffer
-> and if you still think your patch is correct, please rewrite the
-> changelog text to explain why it is so (hint, just using the output of
-> coccinelle isn't ok.)
+> The main problem here is that we really need a way to have shared data
+> between tagger and dsa driver. I also think that it would be limiting
+> using this only for mdio. For example qca8k can autocast mib with
+> Ethernet port and that would be another feature that the tagger would
+> handle.
 
-Although the patch is definitely wrong, the code could stand to be 
-improved.  The value stored at the end of the buffer is *vaddr_handle 
-converted to an unsigned long, but the space reserved for this value is 
-sizeof(vaddr) -- which doesn't make much sense since vaddr is a pointer 
-to unsigned char.  The code implicitly relies on the fact that unsigned 
-long takes up the same amount of space as a pointer.
+The Marvell switches also have an efficient way to get the whole MIB
+table. So this is something i would also want.
 
-Readers wouldn't have to stop and figure this out if the amount of 
-reserved space was simply set to sizeof(unsigned long) rather than 
-sizeof(vaddr).
+> I like the idea of tagger-owend per-switch-tree private data.
+> Do we really need to hook logic?
 
-Alan Stern
+We have two different things here.
+
+1) The tagger needs somewhere to store its own private data.
+2) The tagger needs to share state with the switch driver.
+
+We can probably have the DSA core provide 1). Add the size to
+dsa_device_ops structure, and provide helpers to go from either a
+master or a slave netdev to the private data.
+
+2) is harder. But as far as i know, we have an 1:N setup.  One switch
+driver can use N tag drivers. So we need the switch driver to be sure
+the tag driver is what it expects. We keep the shared state in the tag
+driver, so it always has valid data, but when the switch driver wants
+to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
+if it does not match, the core should return -EINVAL or similar.
+
+   Andrew

@@ -2,81 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3756D46C4BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F9346C4BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbhLGUkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
+        id S241202AbhLGUlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241096AbhLGUkE (ORCPT
+        with ESMTP id S241096AbhLGUlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:40:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC238C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:36:33 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638909392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FjJH5mMK1NjranKzgVWHF1Rdi35tEUoQhKJi7tzLktQ=;
-        b=mYDs8W40YGi+/DTyX8hoWoIBSww7NIa7OVElQOOuEiIeuj1QaM3mTbv14bwKHTHGbLr75n
-        v239VwCwm04kBctyflDLN3gPTBxPACVJ00fP9JTon7lhFAVvG+ZRuwmq92InL64JyikQf9
-        UYe54AuKgCvRAwA49lhucZPR3rBxxZ3d/BItxiZOfK6nUxKuEhHSJiWb9G2CG3vHLi94Dg
-        rQ06oOESVofgMz7wd7x339RwfOG8YLMeBnI0mBwuT3+cMn8Ch+dmiRftcNzAg6XbcjN4Ll
-        UFMYO4Z096AV9EwV/0n+JVLHpNhW4OMFPTxKxCSTTN5WidnoVLMvFjCuc8rwzA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638909392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FjJH5mMK1NjranKzgVWHF1Rdi35tEUoQhKJi7tzLktQ=;
-        b=e4D4rcUF58F0bvRjvm3o9fuD6bHQeJKDoeplDIXPuTyaSHpUEv5gISzZxZ7ayRZiISFtW4
-        UjqVRoCQwmbzXlBg==
-To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
-Cc:     "Sang, Oliver" <oliver.sang@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [x86/signal]  3aac3ebea0:  will-it-scale.per_thread_ops -11.9%
- regression
-In-Reply-To: <81783AEA-1313-4353-837D-8217DEF3B9A2@intel.com>
-References: <20211207012128.GA16074@xsang-OptiPlex-9020>
- <87bl1s357p.ffs@tglx> <81783AEA-1313-4353-837D-8217DEF3B9A2@intel.com>
-Date:   Tue, 07 Dec 2021 21:36:31 +0100
-Message-ID: <875ys02lv4.ffs@tglx>
+        Tue, 7 Dec 2021 15:41:42 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E46C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:38:12 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id g18so484461pfk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tahw8lr7Eo912eVNmXdwIVFgh3iBz1otD8cy1FuG8Cg=;
+        b=OmzCiDKsu5J4DzIaB5MMSPO6KacFic5zES9uE2LRjQwuYUVqw/QwUNiuiEWVdgaZLg
+         eNduadsDzhJuvz/mSkv/2H0PHwbXrImNTQ+1OW1C7Ag0xmiZcqcrdKnvu+K+3Gnj6rlo
+         3u9cggyGj/AiXzdcM/oQEP7kpts/QVdb6Yqzb/7O7UKtlPvwezjnPutSx3pvuDjH9TWq
+         IJmnXaAErs/tn0sAd7aQvn6l6UUY4WndUSV/nno0FbeC33/uMwIwCz7EBkv6jAXVBNGh
+         +mYsrGXxK+iyOiI15r3jnOCOx2txoVzXxApt9EkHKXosyChJpGS+CWkMKS/eMN7ifuiX
+         M46A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tahw8lr7Eo912eVNmXdwIVFgh3iBz1otD8cy1FuG8Cg=;
+        b=3iOycaUkQG4SnD7CN67NpcloE3CXNbXaMNgmfQzE2ob8ue8xFn3yjKttlVMrDiJXe8
+         mwKD5PQdGxhxaNn8r55toWAdhTbACnn2PnR+/XcFr7ZaNM+UIG/ppD1U1DnoBToseWQp
+         qQRjDp/KGOjXWzmJgombfVZh6tlFFGLHpKj/kAiTno3D78NgpOCy+9ErJ7rlHPMKNtbf
+         NEw6b3WPP3jvcO9tmg3DeQWTihJCtfAsbNNZIt+vSZxDmFPkwV4m1aQnwhXHHewWCJFu
+         pk1htadIqxFuhjQWcYHyBv1fBBJBptqmwMPlyGCGSt2rhldug14yQB01xpVwFE3XxokS
+         NVKw==
+X-Gm-Message-State: AOAM5339UG13CqBkyyg05TQPqQx16zLr4+50pUwNObR5WDVDT+siUW+f
+        9yiQ01KSgEqCU/fyZbJs81vUbqiy5ZYsEw==
+X-Google-Smtp-Source: ABdhPJzlswD2/fTrqx7DkQ75CY5WTclgyGqyPn8nSQijFnbfMbm3xn3hDTx9KEgZoTes5fg4RVGQ4Q==
+X-Received: by 2002:a05:6a00:148c:b0:49f:e048:25dc with SMTP id v12-20020a056a00148c00b0049fe04825dcmr1429664pfu.12.1638909491636;
+        Tue, 07 Dec 2021 12:38:11 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t2sm663266pfd.36.2021.12.07.12.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 12:38:11 -0800 (PST)
+Date:   Tue, 7 Dec 2021 20:38:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 05/15] KVM: VMX: Add document to state that write to uret
+ msr should always be intercepted
+Message-ID: <Ya/GL0zyobfM1rUF@google.com>
+References: <20211118110814.2568-1-jiangshanlai@gmail.com>
+ <20211118110814.2568-6-jiangshanlai@gmail.com>
+ <226fc242-ae46-3214-4e01-dbfdf5f7c0fb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <226fc242-ae46-3214-4e01-dbfdf5f7c0fb@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07 2021 at 18:49, Chang Seok Bae wrote:
-> On Dec 7, 2021, at 05:38, Thomas Gleixner <tglx@linutronix.de> wrote:
->> On Tue, Dec 07 2021 at 09:21, kernel test robot wrote:
->>> (please be noted we made some further analysis before reporting out,
->>> and thought it's likely the regression is related with the extra spinlock
->>> introducded by enalbling DYNAMIC_SIGFRAME. below is the full report.)
->>> 
->>> FYI, we noticed a -11.9% regression of will-it-scale.per_thread_ops due to commit:
->> 
->> Does that use sigaltstack() ?
->
-> FWIW, I was also wondering about this with:
->
-> $ git clone https://github.com/antonblanchard/will-it-scale.git
-> $ cd will-it-scale/
-> $ git grep sigaltstack
-> $
->
-> But, the test seems to use python via runtest.py. And the python code has
-> sigaltstack():
->     https://github.com/python/cpython/blob/main/Modules/faulthandler.c#L454
+On Thu, Nov 18, 2021, Paolo Bonzini wrote:
+> On 11/18/21 12:08, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <laijs@linux.alibaba.com>
+> > 
+> > And adds a corresponding sanity check code.
+> > 
+> > Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> > ---
+> >   arch/x86/kvm/vmx/vmx.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > index e8a41fdc3c4d..cd081219b668 100644
+> > --- a/arch/x86/kvm/vmx/vmx.c
+> > +++ b/arch/x86/kvm/vmx/vmx.c
+> > @@ -3703,13 +3703,21 @@ void vmx_disable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type)
+> >   	if (!cpu_has_vmx_msr_bitmap())
+> >   		return;
+> > +	/*
+> > +	 * Write to uret msr should always be intercepted due to the mechanism
+> > +	 * must know the current value.  Santity check to avoid any inadvertent
+> > +	 * mistake in coding.
+> > +	 */
+> > +	if (WARN_ON_ONCE(vmx_find_uret_msr(vmx, msr) && (type & MSR_TYPE_W)))
+> > +		return;
+> > +
+> 
+> I'm not sure about this one, it's relatively expensive to call
+> vmx_find_uret_msr.
+> 
+> User-return MSRs and disable-intercept MSRs are almost the opposite: uret is
+> for MSRs that the host (not even the processor) never uses,
+> disable-intercept is for MSRs that the guest reads/writes often.  As such it
+> seems almost impossible that they overlap.
 
-But how does that affect the test written in C? Mysterious!
+And they aren't fundamentally mutually exclusive, e.g. KVM could pass-through an
+MSR and then do RDMSR in vmx_prepare_switch_to_host() to refresh the uret data
+with the current (guest) value.  It'd be silly, but it would work.

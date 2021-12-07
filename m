@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA34746B57A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C75646B57E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbhLGIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S232017AbhLGITr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbhLGIS6 (ORCPT
+        with ESMTP id S231981AbhLGITp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:18:58 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649EDC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:15:28 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i12so10041670wmq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 00:15:28 -0800 (PST)
+        Tue, 7 Dec 2021 03:19:45 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACBEC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:16:15 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so1598062wmd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 00:16:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rOIlXsz0PGlaxQV5U7jqAgR4am707r4hcnOeW2eWLV8=;
-        b=O8SFw4q1q5ubvaw3zVvh8753feNo1rPiMnkGhekMVUnsCFUaohyqvaZe68fvMGM8N8
-         sZmBEpSiVbkdsKuPImwoM1u5FiZ+b+3/jl5Cd0KKSsu0dAAUUeqYVX6DyIrQHlcS2fms
-         7J+rRho0iI5Mqzw7u+u11SgF0A/cbP3eBI5MwbYzydorih2gOxyIWaFLdlSVq4M2dIQx
-         kdM/tlGiBGVBROrQ1X4OhBFx20/WgzcPgZJr+dTbXD6brOe0JaMKxU5CoJuSJde6YFaP
-         yenPSry8I10ZwYJWXiRKF+2uhZuEtGMSxrM6BuGZ241OzmK6K4AK8C0JWM9tfaCYbfgc
-         YQqQ==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wV05YmqytZZ4i77GlP1Brthyva63mRUa2qE0+W2OXv4=;
+        b=cC1Hbczjdh2dzt9ciK2qiKC3ZkYz1fGNc8p1h3oLUa2PWAkb2rVdSC0aavqJ+hIEzx
+         pcvAhgPMbMkSHKM2in+pdz8ejZ2PqF/iimPZYtPQuW4YbhrLGril86javjmtKtUImtuH
+         ZbQ9sVHkJZyetxai1yhoAKKC9qIRnccfGo4bqqCYFOUoJ0nMsc4ZaNR4ohPMMBMLYeq7
+         5uSC9mLsvmQineh9UG21iURMUPJPQuwv8iGgoi/PBa323WyfEWbcdE7FWPdyC/L6aDau
+         PXbmlej1r2JWIDKbmZZVVFWUIEidbsWHPyibno6dYOAKDAvZ/QWNTpn80CUMKZO2uJqe
+         Q38g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rOIlXsz0PGlaxQV5U7jqAgR4am707r4hcnOeW2eWLV8=;
-        b=mL0rk4Oqduogi3jQ/pE8fCfv49ai5RiOMSxDmqIQKs0xlQS3NBHn3vgzPISOGORyqo
-         D0VnT4K0GabxsDSbB1OUQP4o4KWT3r6UeElLeUyUa018+RaI8eVhK/XChC4TylPvAvmY
-         M4xR6dInMeOEqfocGzskinGhHuUPShYFMutwxZUHHUoYlN9LhjrxK/4Xfxrpt/544sBW
-         bnIEebu4l6KKqvRPQ6KBMMxjVRWg2qRXF+R1HD21d4Hc3B8wQ2wN1BQJwXCd24qjqWIH
-         yLOk8dPeJIuL2NEia0HlUq6H27HwsACkOr1kRbnBb9/1n9aMbgJ5A4FWIdeNtn9MeoT4
-         bQZA==
-X-Gm-Message-State: AOAM530OBpt7cvDWd9IWCi4kyuSstM+NVZlaKuZPDaKwvtNfgE9ONrOP
-        JqHbcQnXFnil1kMjSxFnY0M=
-X-Google-Smtp-Source: ABdhPJy2X3TxTv34u8UaDIlSKuFZUwju+YHjlgxlUlnKm60GtggT+2vqZhY/Oj9PuKjuvpLCt4hQ/Q==
-X-Received: by 2002:a05:600c:510d:: with SMTP id o13mr5051389wms.104.1638864926845;
-        Tue, 07 Dec 2021 00:15:26 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.238.254])
-        by smtp.gmail.com with ESMTPSA id r8sm16944910wrz.43.2021.12.07.00.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:15:26 -0800 (PST)
-Date:   Tue, 7 Dec 2021 13:15:22 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: test-component: fix null pointer dereference.
-Message-ID: <20211207081522.GA9690@hamza-OptiPlex-7040>
-References: <20211205204200.7852-1-amhamza.mgc@gmail.com>
- <TYCPR01MB55813B26BB2B3BB6D1E072F2D46C9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
- <20211206092937.GA5609@hamza-OptiPlex-7040>
- <TYCPR01MB5581998AD64AE249C7D86C26D46D9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wV05YmqytZZ4i77GlP1Brthyva63mRUa2qE0+W2OXv4=;
+        b=bntXhrtLCyb6gWiVUVZxIWNvvVsffotcNbubo4HijE31ck/3jo9/BeVXu+9WqWF49I
+         iyUA3G3FNOKtE/Lz6ianQ24fePfnF3LILr6fk3j0CUPIPc/P84W90xpBi2QYCq+4PY0j
+         Z3XfWYaK3Y2n3+xKw+dU5kp8ZE+8U96JwvqK5W/gma2FQmtbMI38Wur0PfZwC9PSRhux
+         5HvR3jn3Fd1oUqAI4g6VqJ31frw4URdaj5JK76TFuS9yEJjvqSKkknzu87OF/5eymU8r
+         mttzJSwggYw0kRwOeM8Jt+BfzJSoGUiwspCI58+6BB4mg2V4UyrAKgwSLTe5KI5xoCoj
+         9RHQ==
+X-Gm-Message-State: AOAM530/CTakQDzNYvwa/1GAyJ+7E4sbUw/XrMxRNz2+IMPAEPCiB6gZ
+        om/IftyIdM3H+dD8v1q+4D/o/PMroC1e4vxWlkooLg==
+X-Google-Smtp-Source: ABdhPJy/5bX081hEllcHF+ciiU1wOWxT4YMmlv0lSO4Mp0uNC6xawLDFYKeG14mC3/pJJ+ZqaKc0D9h7/Cwk8IFQCsM=
+X-Received: by 2002:a7b:c7cd:: with SMTP id z13mr5087144wmk.59.1638864974238;
+ Tue, 07 Dec 2021 00:16:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB5581998AD64AE249C7D86C26D46D9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com> <20211207080843.21222-6-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20211207080843.21222-6-arnaud.pouliquen@foss.st.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 7 Dec 2021 13:46:03 +0530
+Message-ID: <CAAhSdy3GDArfbQgusdDg-mi1bdTfDhFMaF4qa5-KFv1regwJ-Q@mail.gmail.com>
+Subject: Re: [PATCH v8 05/13] RISC-V: configs: Configs that had RPMSG_CHAR now
+ get RPMSG_CTRL
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:19:36PM +0000, Kuninori Morimoto wrote:
-> 
-> Hi Ameer
-> 
-> >> Probing this driver without adata is strange for me.
-> >> How did probe this driver ??
-> >
-> > Thank you for your response. Unfortunately, I am not aware of
-> > implementation details of this component. Coverity suggested that there
-> > can be a potential NULL pointer access which seems logical to me. Do you
-> > agree with coverity here?
-> 
-> I think no potential NULL pointer access, because this driver can't
-> be called without of_id->data.
-> But, potential NULL pointer check itself is good idea.
-> It seems your patch was already accepted :)
-Yes, indeed.
+On Tue, Dec 7, 2021 at 1:39 PM Arnaud Pouliquen
+<arnaud.pouliquen@foss.st.com> wrote:
+>
+> In the patch "rpmsg: Move the rpmsg control device from rpmsg_char
+> to rpmsg_ctrl", we split the rpmsg_char driver in two.
+> By default give everyone who had the old driver enabled the rpmsg_ctrl
+> driver too.
+>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> cc: linux-riscv@lists.infradead.org
 
-> I noticed that we can replace it to use of_device_get_match_data()
-> 
-> -	const struct of_device_id *of_id = of_match_device(test_of_match, &pdev->dev);
-> -	const struct test_adata *adata = of_id->data;
-> +	const struct test_adata *adata = of_device_get_match_data(&pdev->dev);
-Thanks, that's a cleaner way. Can you advise how should proceed with
-this since previous patch is already applied. Should I send a updated
-version of patch, e.g., v2 or a new patch. 
+Looks good to me.
 
-> 
-> Best regards
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
 > ---
-> Kuninori Morimoto
+>  arch/riscv/configs/defconfig      | 1 +
+>  arch/riscv/configs/rv32_defconfig | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index c252fd5706d2..c0439d3ffb8c 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -97,6 +97,7 @@ CONFIG_VIRTIO_BALLOON=y
+>  CONFIG_VIRTIO_INPUT=y
+>  CONFIG_VIRTIO_MMIO=y
+>  CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_VIRTIO=y
+>  CONFIG_EXT4_FS=y
+>  CONFIG_EXT4_FS_POSIX_ACL=y
+> diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+> index 434ef5b64599..99eabad7ca0f 100644
+> --- a/arch/riscv/configs/rv32_defconfig
+> +++ b/arch/riscv/configs/rv32_defconfig
+> @@ -89,6 +89,7 @@ CONFIG_VIRTIO_BALLOON=y
+>  CONFIG_VIRTIO_INPUT=y
+>  CONFIG_VIRTIO_MMIO=y
+>  CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_VIRTIO=y
+>  CONFIG_EXT4_FS=y
+>  CONFIG_EXT4_FS_POSIX_ACL=y
+> --
+> 2.17.1
+>

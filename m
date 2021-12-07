@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1308446C253
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E86F46C255
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240340AbhLGSJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:09:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42646 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235212AbhLGSJo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:09:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08F51B81DDD;
-        Tue,  7 Dec 2021 18:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B6DC341C1;
-        Tue,  7 Dec 2021 18:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638900371;
-        bh=j9hWvmDnSHhLayK/S4LB2G5JlhTIiHuWMU7YUw+Jl4s=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=qvwmJpCYS2z63ywOJoiE/LKGUBCvwi1+d60H1ZyiJ/EX2TXn8fddEdk15mWGZ8IoL
-         9s0i6h+vnFXZxaxuRfodg4OECnKP+YRjeT97gSLxlHWAMi03MCv9O6OWUAmmCMuSlk
-         uWRITrqocUk6CnIsxkubxOnAh5c2rLkzaYwrxoIFMDDRb92B/rHNXtc21rH2qbkwQT
-         swPXvzzvOQoqt+ze0guZZbqCWtzN3uxMkgL5ZwiyrC0DpHyWHpglb39WIevVu1ajx2
-         WkpNHJoBFNIT5vHUeuOX1h8gxqlu8+c0lZ3jSrvpMWXETJtAsIXaljnqCbo9e4QgiJ
-         deRLDJ72/DcHg==
-Content-Type: text/plain; charset="utf-8"
+        id S240370AbhLGSKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:10:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:37990 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230390AbhLGSKq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:10:46 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3A9111FB;
+        Tue,  7 Dec 2021 10:07:15 -0800 (PST)
+Received: from e127744.cambridge.arm.com (e127744.cambridge.arm.com [10.1.37.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7D95D3F73B;
+        Tue,  7 Dec 2021 10:07:12 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v2 0/3] Support register names of all architectures
+Date:   Tue,  7 Dec 2021 18:06:49 +0000
+Message-Id: <20211207180653.1147374-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF
- selection
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211009221711.2315352-1-robimarko@gmail.com>
-References: <20211009221711.2315352-1-robimarko@gmail.com>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Marko <robimarko@gmail.com>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <163890036783.24891.8718291787865192280.kvalo@kernel.org>
-Date:   Tue,  7 Dec 2021 18:06:09 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Marko <robimarko@gmail.com> wrote:
+The following changeset applies some corrections to the way system
+registers are processed and presented when reading perf.data files using
+the various perf tools.
 
-> Some ath10k IPQ40xx devices like the MikroTik hAP ac2 and ac3 require the
-> BDF-s to be extracted from the device storage instead of shipping packaged
-> API 2 BDF-s.
-> 
-> This is required as MikroTik has started shipping boards that require BDF-s
-> to be updated, as otherwise their WLAN performance really suffers.
-> This is however impossible as the devices that require this are release
-> under the same revision and its not possible to differentiate them from
-> devices using the older BDF-s.
-> 
-> In OpenWrt we are extracting the calibration data during runtime and we are
-> able to extract the BDF-s in the same manner, however we cannot package the
-> BDF-s to API 2 format on the fly and can only use API 1 to provide BDF-s on
-> the fly.
-> This is an issue as the ath10k driver explicitly looks only for the
-> board.bin file and not for something like board-bus-device.bin like it does
-> for pre-cal data.
-> Due to this we have no way of providing correct BDF-s on the fly, so lets
-> extend the ath10k driver to first look for BDF-s in the
-> board-bus-device.bin format, for example: board-ahb-a800000.wifi.bin
-> If that fails, look for the default board file name as defined previously.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+The commit message from [3/3] shows how register names aren't correctly
+presented when performing x-arch analysis of perf.data files (recording
+in one arch, then reading the file from a different arch).
 
-Can someone review this, please? I understand the need for this, but the board
-handling is getting quite complex in ath10k so I'm hesitant.
+  - [PATCH 1/3] Fixes a potential out-of-bounds access when reading the
+    values of the registers in the perf.data file.
+  - [PATCH 2/3] Fixes an issue of ARM and ARM64 registers having the
+    same enum name.
+  - [PATCH 3/3] Refactors the function "perf_reg_name" declared in the
+   "tools/perf/util/perf_regs.h" header, in order to support every arch.
 
-What about QCA6390 and other devices. Will they still work?
+Thanks,
+German
+
+--
+Changes since v1
+
+  - Added "Reported-by" tags.
+  - Removed [PATCH 2/4] because it's not needed (suggested by Athira
+    Rajeev).
+  - Removed [PATCH 3/4] which created additional header files with the
+    register names of every arch.
+  - Introduced [PATCH 2/3] to deal with ARM and ARM64 registers having the
+    same enum name across "/tools/perf/".
+  - Reworked the refactor of "perf_reg_name" function (now implemented in
+    perf_regs.c, rather than in the header file) in [PATCH 3/3].
+
+German Gomez (3):
+  perf tools: Prevent out-of-bounds access to registers
+  perf tools: Rename perf_event_arm_regs for ARM64 registers
+  perf tools: Support register names from all archs
+
+ tools/perf/arch/arm/include/perf_regs.h       |  42 --
+ tools/perf/arch/arm64/include/perf_regs.h     |  78 +-
+ tools/perf/arch/csky/include/perf_regs.h      |  82 ---
+ tools/perf/arch/mips/include/perf_regs.h      |  69 --
+ tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
+ tools/perf/arch/riscv/include/perf_regs.h     |  74 --
+ tools/perf/arch/s390/include/perf_regs.h      |  78 --
+ tools/perf/arch/x86/include/perf_regs.h       |  82 ---
+ tools/perf/builtin-script.c                   |  18 +-
+ tools/perf/util/event.h                       |   5 +-
+ tools/perf/util/libunwind/arm64.c             |   2 +
+ tools/perf/util/perf_regs.c                   | 671 +++++++++++++++++-
+ tools/perf/util/perf_regs.h                   |  10 +-
+ .../scripting-engines/trace-event-python.c    |  10 +-
+ tools/perf/util/session.c                     |  25 +-
+ 15 files changed, 709 insertions(+), 603 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211009221711.2315352-1-robimarko@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.25.1
 

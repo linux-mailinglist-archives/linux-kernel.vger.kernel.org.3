@@ -2,173 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750F546B616
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374E046B61A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbhLGIj1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 03:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S233039AbhLGIjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbhLGIjZ (ORCPT
+        with ESMTP id S230300AbhLGIjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:39:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851BC061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:35:56 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1muVwp-0005HR-6U; Tue, 07 Dec 2021 09:35:39 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1muVwg-0003U5-SO; Tue, 07 Dec 2021 09:35:30 +0100
-Message-ID: <75d34242693a41978fb7c6703dac3fd3a6437172.camel@pengutronix.de>
-Subject: Re: [PATCH v5 04/10] reset: Add Sunplus SP7021 reset driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, linux@armlinux.org.uk, broonie@kernel.org,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, wells.lu@sunplus.com
-Date:   Tue, 07 Dec 2021 09:35:30 +0100
-In-Reply-To: <5b847375ae9591dfd0551c86141102e02b450479.1638515726.git.qinjian@cqplus1.com>
-References: <cover.1638515726.git.qinjian@cqplus1.com>
-         <5b847375ae9591dfd0551c86141102e02b450479.1638515726.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Tue, 7 Dec 2021 03:39:49 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC2AC061746;
+        Tue,  7 Dec 2021 00:36:19 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a18so27873394wrn.6;
+        Tue, 07 Dec 2021 00:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=txpKJCB9flJSZc0QKUGWSrqXp0fivPRRoZMs5h9rIy4=;
+        b=ONpPyzBbBYmCy/jEi6THaHeMomOw87qLzvC9Tn3SIZeXT+AcjKJzYp0R9mUkq1G9SH
+         Z0BwYt6LSejwIh6sd+2TgWdeYtqC1+nY/lr+RjypnIYD+0j8WELgL56ANu3/nYJxFHTN
+         pIDrjeIiPvbV+NIn6FMbEXwqeJZiZqLty+dD1wih5vvEMLQDMRmU+aSQCF2uaLzD7Nta
+         y2rSpYqq9K7/Qo4DuRPrvq8cX7j6pgRJi/WKrny0JzgyKUGFY+yDwEZIWcYAzb4UiyvS
+         x0LUWKbOSkY3PZGAvzBlG32hVvvLERBAw3t1djsXBcV3nkptL/byeF6ngOZIhfGN3p4Z
+         1ghg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=txpKJCB9flJSZc0QKUGWSrqXp0fivPRRoZMs5h9rIy4=;
+        b=BiScGzmF8Z4z4QNeUAFYVCkvLzqBmH6NbPv55pv4tPsyFBATBYQ5lxfU1KjhljQ2HC
+         MIBayxaRTLXkc/l1vIHKMyNSpOd4AKj9z4SOs55/PnMD+uRWgkwoCRw+td67+fQrgEOM
+         bYSyegiQpAedp3z3AS7fkVyBdXqBX4Q1yYZwlTvZBjrhd3/1/hAxMj1VDZd+/2fWHI2z
+         yANpnZt0W8JSsKuCBKkNx4F3gB0NHb3D5Shpb9eYji8cNaNryvwVtRMt3wF5TLtnDaHA
+         ICx/pU9oJNajFx0hbUw0vqiXmCoz0Pe+j7cxFlG1YBgzZYWJAM0e0PU9cjXhSAA39/Jy
+         Wa2g==
+X-Gm-Message-State: AOAM532ZyaoIVCYJBlRbGfjoYoB/7aWv/A5QjG3EpAx6zMRLEOLJAG+C
+        kMdlESzEDaGFKxsAduDcST8=
+X-Google-Smtp-Source: ABdhPJznedDUqS8jUQ+Ryu0I+xJoYdixLr+0Cztf872wx/CqkKNyE+ViGHLrl9WkD57LKsRp6LCx7Q==
+X-Received: by 2002:adf:fb86:: with SMTP id a6mr49712690wrr.35.1638866178321;
+        Tue, 07 Dec 2021 00:36:18 -0800 (PST)
+Received: from orome.fritz.box ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id s8sm13724585wro.19.2021.12.07.00.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 00:36:17 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:36:13 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mmc: Add missing properties used in examples
+Message-ID: <Ya8c/YjZswNcykLW@orome.fritz.box>
+References: <20211206174201.2297265-1-robh@kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RkZB72i537OSCdj2"
+Content-Disposition: inline
+In-Reply-To: <20211206174201.2297265-1-robh@kernel.org>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-03 at 15:34 +0800, Qin Jian wrote:
-[...]
-> diff --git a/drivers/reset/reset-sunplus.c b/drivers/reset/reset-sunplus.c
-> new file mode 100644
-> index 000000000..a1d88dbaf
-> --- /dev/null
-> +++ b/drivers/reset/reset-sunplus.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * SP7021 reset driver
-> + *
-> + * Copyright (C) Sunplus Technology Co., Ltd.
-> + *       All rights reserved.
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/reboot.h>
-> +
-> +/* HIWORD_MASK_REG BITS */
-> +#define BITS_PER_HWM_REG	16
-> +
-> +struct sp_reset_data {
-> +	struct reset_controller_dev rcdev;
-> +	void __iomem *membase;
-> +} *sp_reset;
-     ^^^^^^^^^^
 
-I'd prefer if you removed the global sp_reset pointer.
+--RkZB72i537OSCdj2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
-> +static int sp_restart(struct notifier_block *this, unsigned long mode,
-> +		      void *cmd)
-> +{
+On Mon, Dec 06, 2021 at 11:42:00AM -0600, Rob Herring wrote:
+> When 'unevaluatedProperties' support is enabled, the following warnings
+> are generated in the mmc bindings:
+>=20
+> Documentation/devicetree/bindings/mmc/mtk-sd.example.dt.yaml: mmc@1123000=
+0: Unevaluated properties are not allowed ('reg', 'interrupts' were unexpec=
+ted)
+> Documentation/devicetree/bindings/mmc/sdhci-am654.example.dt.yaml: mmc@4f=
+80000: Unevaluated properties are not allowed ('sdhci-caps-mask' was unexpe=
+cted)
+> Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.example.dt.ya=
+ml: mmc@5a400000: Unevaluated properties are not allowed ('dma-names', 'dma=
+s' were unexpected)
+> Documentation/devicetree/bindings/mmc/arm,pl18x.example.dt.yaml: mmc@8012=
+6000: Unevaluated properties are not allowed ('dmas', 'dma-names' were unex=
+pected)
+> Documentation/devicetree/bindings/mmc/arasan,sdhci.example.dt.yaml: mmc@8=
+0420000: Unevaluated properties are not allowed ('resets' was unexpected)
+> Documentation/devicetree/bindings/mmc/arm,pl18x.example.dt.yaml: mmc@5200=
+7000: Unevaluated properties are not allowed ('interrupt-names' was unexpec=
+ted)
+> Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml: mmc=
+@5b010000: Unevaluated properties are not allowed ('power-domains' was unex=
+pected)
+>=20
+> Add the missing properties as necessary. For pl18x, drop interrupt-names
+> as there isn't any use of it when there are 2 interrupts.
+>=20
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: Chaotian Jing <chaotian.jing@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Wenbin Mei <wenbin.mei@mediatek.com>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml  | 3 +++
+>  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml     | 9 ++++++++-
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 3 +++
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml        | 6 ++++++
+>  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml   | 2 ++
+>  .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml   | 6 ++++++
+>  6 files changed, 28 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Do=
+cumentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> index de6f076e0ece..83be9e93d221 100644
+> --- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+> @@ -118,6 +118,9 @@ properties:
+>    phy-names:
+>      const: phy_arasan
+> =20
+> +  resets:
+> +    maxItems: 1
+> +
+>    arasan,soc-ctl-syscon:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Docum=
+entation/devicetree/bindings/mmc/arm,pl18x.yaml
+> index 47595cb483be..fbc866d9bb2f 100644
+> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+> @@ -60,6 +60,14 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+> =20
+> +  dmas:
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    items:
+> +      - const: rx
+> +      - const: tx
+> +
+>    power-domains: true
+> =20
+>    resets:
+> @@ -213,7 +221,6 @@ examples:
+>        arm,primecell-periphid =3D <0x10153180>;
+>        reg =3D <0x52007000 0x1000>;
+>        interrupts =3D <49>;
+> -      interrupt-names =3D "cmd_irq";
+>        clocks =3D <&rcc 0>;
+>        clock-names =3D "apb_pclk";
+>        resets =3D <&rcc 1>;
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/D=
+ocumentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 19621a2f8beb..8d5cef0d3039 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -116,6 +116,9 @@ properties:
+>        - const: ahb
+>        - const: per
+> =20
+> +  power-domains:
+> +    maxItems: 1
+> +
+>    pinctrl-names:
+>      oneOf:
+>        - minItems: 3
+> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Document=
+ation/devicetree/bindings/mmc/mtk-sd.yaml
+> index 82768a807294..faf89b0c918f 100644
+> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> @@ -36,6 +36,9 @@ properties:
+>            - const: mediatek,mt8195-mmc
+>            - const: mediatek,mt8183-mmc
+> =20
+> +  reg:
+> +    maxItems: 1
+> +
+>    clocks:
+>      description:
+>        Should contain phandle for the clock feeding the MMC controller.
+> @@ -62,6 +65,9 @@ properties:
+>        - const: axi_cg
+>        - const: ahb_cg
+> =20
+> +  interrupts:
+> +    maxItems: 1
+> +
+>    pinctrl-names:
+>      items:
+>        - const: default
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml b/Doc=
+umentation/devicetree/bindings/mmc/sdhci-am654.yaml
+> index 224303f5b913..9fbf16b3bc8d 100644
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+> @@ -48,6 +48,8 @@ properties:
+>        - const: clk_ahb
+>        - const: clk_xin
+> =20
+> +  sdhci-caps-mask: true
 
-You could embed the sp_restart_nb notifier block in struct sp_reset_data
-and use container_of(this, struct sp_reset_data, notifier) to get to the
-rcdev here.
+I can take a stab at converting sdhci.txt if you don't have a patch for
+that yet. That way we can reference this one rather than blindly passing
+validation for it.
 
-> +	sp_reset_assert(&sp_reset->rcdev, 0);
-> +	sp_reset_deassert(&sp_reset->rcdev, 0);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static struct notifier_block sp_restart_nb = {
-> +	.notifier_call = sp_restart,
-> +	.priority = 192,
-> +};
-> +
-> +static const struct reset_control_ops sp_reset_ops = {
-> +	.assert   = sp_reset_assert,
-> +	.deassert = sp_reset_deassert,
-> +	.status   = sp_reset_status,
-> +};
-> +
-> +static const struct of_device_id sp_reset_dt_ids[] = {
-> +	{.compatible = "sunplus,sp7021-reset",},
-> +	{ /* sentinel */ },
-> +};
-> +
-> +static int sp_reset_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	void __iomem *membase;
-> +	struct resource *res;
-> +
-> +	sp_reset = devm_kzalloc(&pdev->dev, sizeof(*sp_reset), GFP_KERNEL);
-> +	if (!sp_reset)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	membase = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(membase))
-> +		return PTR_ERR(membase);
-> +
-> +	sp_reset->membase = membase;
-> +	sp_reset->rcdev.owner = THIS_MODULE;
-> +	sp_reset->rcdev.nr_resets = resource_size(res) / 4 * 16;	/* HIWORD_MASK */
-> +	sp_reset->rcdev.ops = &sp_reset_ops;
-> +	sp_reset->rcdev.of_node = dev->of_node;
-> +	register_restart_handler(&sp_restart_nb);
+Otherwise looks good:
 
-Either do this after devm_reset_controller_register(), which could
-theoretically fail with -ENOMEM, or call unregister_restart_handler() in
-the error case below.
+Reviewed-by: Thierry Reding <treding@nvidia.com>
 
-> +
-> +	return devm_reset_controller_register(dev, &sp_reset->rcdev);
-> +}
-> +
-> +static struct platform_driver sp_reset_driver = {
-> +	.probe = sp_reset_probe,
-> +	.driver = {
-> +		   .name = "sunplus-reset",
-> +		   .of_match_table = sp_reset_dt_ids,
-		^
-Please fix the indentation, two tabs here.
+--RkZB72i537OSCdj2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-		.suppress_bind_attrs = true,
+-----BEGIN PGP SIGNATURE-----
 
-to stop unbinding the driver. Alternatively, add a driver remove
-function that unregisters the restart handler.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHP0ACgkQ3SOs138+
+s6GdPxAAoiiXF6jcILeyfyeQa6e86k5/6ZroZA28WrPOsubkr4xVzr1RuuHC9MUs
+kgO7jaOsRmnLNvRivQDvs97Sc2FKEJC6rqx9T1J9p3RSRAq4aGEMlx7tVhjdrEny
+iTO1QKmRnvgxrEWV6tNaqG4kkCN9ITvIekQWDf6Kko2rD2Xo4dV2dndMXvbDxTse
+AqDtuA6bprz2L2fAQLSt3O06+QGQLCxo0+tZcs1vzxnF6Nk7WU1PpKNpMEw+Bhe0
+/8gV6GDmty1zvKko3PfaEtDj2F9eiNjReJVbA9LF5iC4GwObpzL7qwm37Qv4466f
+aAeVluxwNn67u+LOr+oBV8CidIvFn7tooJxFmj/u08jmKuE9PL7JJOMDI23IlKn8
+cIzf7UAy7KR30FIbb3yyL//RW9I3ZSV3J92Bp63rDS+yG3Pe5RgKqW1dvzuMS2iv
+THlqohHmZ1n5JJPSHgD+oG/4RzTZdYNsPjN0AcC+ERsQauU5+aCLATD+ja2hkVA+
+PL1Aadx8XpqUhqbEP3mIPUv1qH9EMg0CRGs5wQYjCddZgRI2q06jI3SoMIlAO82Z
+RGOM2I1/GY+gM6W6Es4m817F+z03ahzZEcRz+92K3opjBHT64c2c3YOcW45ubo13
+iTG4CPi1UKE1673mqe1e0BfkTvB1j90AmBSmFkTDbQiH0Bc+o4k=
+=soAZ
+-----END PGP SIGNATURE-----
 
-> +		   },
-	^
-One tab here.
-
-> +};
-> +
-> +module_platform_driver(sp_reset_driver);
-> +
-> +MODULE_AUTHOR("Edwin Chiu <edwin.chiu@sunplus.com>");
-> +MODULE_DESCRIPTION("Sunplus Reset Driver");
-> +MODULE_LICENSE("GPL v2");
-
-regards
-Philipp
+--RkZB72i537OSCdj2--

@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED86346B62F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407B246B63B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbhLGIlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbhLGIlb (ORCPT
+        id S233133AbhLGInG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:43:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53650 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229925AbhLGInF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:41:31 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93EC061748;
-        Tue,  7 Dec 2021 00:38:01 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id c4so27797195wrd.9;
-        Tue, 07 Dec 2021 00:38:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HfN03EH6jRdkzxqbzdL+husUCScYn8YWR0GEjsaexJQ=;
-        b=SU1LiBtF7Vmw2kbRPFZMKxlaW7Wvd0fPteIARv6bABR+DP9wdANTI612x7HCDjUt+2
-         mB3J1q0LBIQleCPyscGcpdrlPFn9IoYiz4nsZmf4GYqEdiEY8Cw2hjwpI1wpqfU1KoaH
-         +v8GnCYWfUIpegDUJdZqo5UFlOlC4bSRMwgwLJEm+EmQ5+b57JVfU1JxdyEtUP9xlX0W
-         CbGwk1pCd+0vKnlhPzSEBmWzn5qOcvDun9F52OjT/BJho2ybARzPQD3ctpYZaKi6ZRlT
-         QNeSXt/pepGdGA578DLX7k5/IbagL0BicaxTbvt4KEXU2HTjJfvBZii4bQQo3280SXuA
-         xQUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HfN03EH6jRdkzxqbzdL+husUCScYn8YWR0GEjsaexJQ=;
-        b=sm2H6B01bECGEtxFt+aNA32jiZawKVt6A9ZRRnvePvg2AE55jGrOdBZk8yydgVxLjR
-         sVcYTi0V/VEzgiHccSr1yUqQZ68N1sdqJtKxBzzuGWRpPnj/y9vL5HClVvK5cEwwL/Pk
-         g5ZBZhmZbE7wTcru/fsGcsH3NDKIOTv6WqkQHBx5QK0IU4uw3U1jazyx8DlGi1U7JmYg
-         vC04M+Ke6qMlvJNR/tbcJXOKex6scJ6SBE+6M5Y9qoFejya8dAELKk3ueWnOXxFFCjHK
-         3rPcUVWdORheMNEzQRaOrhcYxo2ozg0mmnQ77rZ9UPaOME5UicapCAvPzIOj/UKYSEx8
-         gLGg==
-X-Gm-Message-State: AOAM530uS+adXKGLBPj2O5uqcQQhAu5GGNMl7f7x9LwgByXvtdVSuKdB
-        HcnGknviOI4Alyj1YNXD/Gs77z7j+GXqsg==
-X-Google-Smtp-Source: ABdhPJyCGrPxgn5HfGAfiUv6e3AxvvcHVuO3XSqp8b4h82P41TA3JfEm4nzDaa136Axf9Qwn4+IU5g==
-X-Received: by 2002:a5d:6da2:: with SMTP id u2mr48974035wrs.273.1638866279689;
-        Tue, 07 Dec 2021 00:37:59 -0800 (PST)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id l7sm16234648wry.86.2021.12.07.00.37.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:37:58 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:37:56 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: memory-controllers: ti,gpmc: Drop incorrect
- unevaluatedProperties
-Message-ID: <Ya8dZKQJWxt5IfZh@orome.fritz.box>
-References: <20211206174215.2297796-1-robh@kernel.org>
+        Tue, 7 Dec 2021 03:43:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8745AB80E45;
+        Tue,  7 Dec 2021 08:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA58C341C3;
+        Tue,  7 Dec 2021 08:39:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638866373;
+        bh=Y6skVCngCbI28tETkZn7Q+Cj+mWVtnxR54oJS9ORRtw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G7wh6klcUOGI124zSciDGLZnl/jFRh+vJkbgsmhrQJQjIBDiCg+p+lnVVCmdikTjt
+         hlrOlZFE6Z1zCu2pnuOoTOh2Ohjhol5O4Jx7sAnsN0weqJyYQYKckvy8zHMpnhjKbt
+         ljKdfLiWUtTZShxxk3p06CBZE8obhBAjhQOTph2Uo4BR9nryPZxzAbw80wC0jESa3l
+         nPruA/i3jo8OzeAiqy+hFhVuvF9K13WjIZqtCbcHPy5HqCYIEyKQk6aWiJ7B1GFFwR
+         SPltmVJycfpOzkfIqlxNH6Xm2AtHJ8r5txunauQ+ZDRGGN2GzOsbTMoBLYQO9neVzV
+         kaqNcYmXIq6Dw==
+Date:   Tue, 7 Dec 2021 09:39:26 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Wei Xu <xuwei5@hisilicon.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, <linuxarm@huawei.com>,
+        <mauro.chehab@huawei.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/5] arm64: dts: HiSilicon: Add support for HiKey 970
+ PCIe controller hardware
+Message-ID: <20211207093926.24f26dae@coco.lan>
+In-Reply-To: <61AF16AC.1080506@hisilicon.com>
+References: <cover.1637063775.git.mchehab+huawei@kernel.org>
+        <884b83c1aed70735883e15f032f9668ebfd77a01.1637063775.git.mchehab+huawei@kernel.org>
+        <61AF16AC.1080506@hisilicon.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jnZevcPpY2ZzTOjv"
-Content-Disposition: inline
-In-Reply-To: <20211206174215.2297796-1-robh@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Tue, 7 Dec 2021 16:09:16 +0800
+Wei Xu <xuwei5@hisilicon.com> escreveu:
 
---jnZevcPpY2ZzTOjv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi Mauro,
+> 
+> On 2021/11/16 19:59, Mauro Carvalho Chehab wrote:
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > 
+> > Add DTS bindings for the HiKey 970 board's PCIe hardware.
+> > 
+> > Co-developed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---
+> > 
+> > To mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> > See [PATCH 0/5] at: https://lore.kernel.org/all/cover.1637063775.git.mchehab+huawei@kernel.org/
+> > 
+> >  arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 107 ++++++++++++++++++++++
+> >  1 file changed, 107 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > index 636c8817df7e..225dccbcb064 100644
+> > --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > @@ -176,6 +176,12 @@ sctrl: sctrl@fff0a000 {
+> >  			#clock-cells = <1>;
+> >  		};
+> >  
+> > +		pmctrl: pmctrl@fff31000 {
+> > +			compatible = "hisilicon,hi3670-pmctrl", "syscon";  
+> 
+> The "hi3670-pmctrl" is not documented in the devicetree binding documents yet.
+> Could we remove this part this time?
 
-On Mon, Dec 06, 2021 at 11:42:15AM -0600, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the TI GPMC example
-> has a warning:
->=20
-> Documentation/devicetree/bindings/mtd/ti,gpmc-onenand.example.dt.yaml: me=
-mory-controller@6e000000: onenand@0,0: Unevaluated properties are not allow=
-ed ('compatible', '#address-cells', '#size-cells', 'partition@0', 'partitio=
-n@100000' were unexpected)
->=20
-> The child node definition for GPMC is not a complete binding, so specifyi=
-ng
-> 'unevaluatedProperties: false' for it is not correct and should be
-> dropped.
->=20
-> Fixup the unnecessary 'allOf' while we're here.
->=20
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Roger Quadros <rogerq@kernel.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/memory-controllers/ti,gpmc.yaml      | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+Without that, the PCI PHY won't work.
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
+IMO, the best would be to just add this compatible to hi3670-clock,
+where it belongs.
 
---jnZevcPpY2ZzTOjv
-Content-Type: application/pgp-signature; name="signature.asc"
+Just sent a patch.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHWMACgkQ3SOs138+
-s6H4QA/9EgPPg3VO2cn97p6mKq29CZwbV2RejnZP3ZuuxGjNobrVjjfSiaQIqeOR
-CAjFxXtVjmaB6X0jhPSDNH0fRF2rAI3SHISGvEoks8utXlzEkTEcXhUIMz3s9Zym
-da9RS8YQJpQcJk+fzKpOKJ+eCUMAgVSOdkkdb4QyxNIsrCRB60oQXchWVsuKHxIv
-uWtPRf6Vy1gz+myQpoKC+R5i9YrulZOPLFqEKuuKIz9NZ5RHne8bWtQEy4JC3K4Z
-6m84is5MzD4r8M6c1NQaNxeOACzklND0Zwkk2iiJrlbFmdO2jmxbgzAzHnNlSDNi
-/If7hU9MKEOW3QZMuDA0aTVeitEa9TXG8/3fDUpsWNtOHuv71RxKMYJwPW87ln8a
-/Zyx2BzqHthpIrEUDDTD97dqZQsYFNB02wDJT6ZcJEoSBiQCFfDo/GuduAowpXtp
-4bsLT2YNx7G0UFbsW+H/4Dv9PBjEDyLgmTaK0jGbp+ut6AqZvUfzHhSo4OtUygZ4
-vUq6ATyuGKlBSolN+zSjqQbTFg433mZ0Bi5I8HH3xwJmQVMKjm67Tf/EiDTZ8+vy
-yw1zTbWdGvTOX0eLacz9C7UyyKddgYLzY/JUzwqlfddnK6dmKTgfOJi5y8FCf2G+
-4QH0hXpXCnlKOtkNU3NnH0i9h9cE7OhGhNOJwj1apkWgYQxjbmE=
-=czj4
------END PGP SIGNATURE-----
-
---jnZevcPpY2ZzTOjv--
+Regards,
+Mauro

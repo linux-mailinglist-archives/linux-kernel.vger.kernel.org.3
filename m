@@ -2,126 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B35446BC0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D4446BC13
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236694AbhLGNDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:03:48 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58992 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbhLGNDr (ORCPT
+        id S236721AbhLGNEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:04:31 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:55241 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236717AbhLGNE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:03:47 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 27FA81FDFE;
-        Tue,  7 Dec 2021 13:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638882016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+C8znulBKfN2iqCnpcXwfq/A/cdrkCZr52J26lpfUyA=;
-        b=IZtx9SM9+SakYOsz8jBa0MNR9U65fWq6gRkSLmuQpgRuufpCzLia6gclbZBIuVRO7xKKXJ
-        hluXHKYGlGQ/tw8Ts25/ZPXS2ZygLu+3AE9y2hTzw86NTzsDHYb7b0r6fZzviioo/M0Eyq
-        3oqtPjqI30NIbPjjWQwSrH6/QA2J3xY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638882016;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+C8znulBKfN2iqCnpcXwfq/A/cdrkCZr52J26lpfUyA=;
-        b=I7Oay/eG0I6BpwMaEtiqsJPDP0GaIB4GSFJLafQY0bcwh2UoKPh5v0UdaEVy4vSgiPpRDI
-        U3jvTYQPcwxIoDBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFDAA13A78;
-        Tue,  7 Dec 2021 13:00:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dOw6Nd9ar2GaPQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 07 Dec 2021 13:00:15 +0000
-Message-ID: <26f988d4-3fac-fcc0-f80a-c9d7516c266b@suse.de>
-Date:   Tue, 7 Dec 2021 14:00:15 +0100
+        Tue, 7 Dec 2021 08:04:28 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mr9OA-1mFUWU3bgE-00oClf for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021
+ 14:00:56 +0100
+Received: by mail-wr1-f44.google.com with SMTP id j3so29384164wrp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 05:00:56 -0800 (PST)
+X-Gm-Message-State: AOAM531TIr7CjKAwPeQFUbNMonO4+9RVamT3Gtj6dHhUuVx774Yj9qWT
+        WmJppJRbBd67Z4UPHo5dt1jDdWrKo5IXor4oTM0=
+X-Google-Smtp-Source: ABdhPJxPTZb1NEgHTgiRZ5k7TV56wTLpaTAV0tigTfyAj6yjgVEdlWqbHmbxec81GQE5rsfdo8Evow6Ud4USOVQhzcM=
+X-Received: by 2002:a5d:4107:: with SMTP id l7mr50868012wrp.209.1638882056495;
+ Tue, 07 Dec 2021 05:00:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/rockchip: use generic fbdev setup
-Content-Language: en-US
-To:     John Keeping <john@metanate.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211029115014.264084-1-john@metanate.com>
- <ab7ace79-0148-1efa-ec17-6994bb35fd2f@suse.de> <YX01C6l93I2YPgku@donbot>
- <6e69f9bb-5a1e-7b79-38e8-d2860e5ee615@suse.de>
- <20211101113415.3bed0f62.john@metanate.com> <Ya9LdiutXV7lCOtT@donbot>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <Ya9LdiutXV7lCOtT@donbot>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------UbAOQXuN5ozF4VxDiNVJF0Ed"
+References: <20211207110228.698956-1-anders.roxell@linaro.org>
+In-Reply-To: <20211207110228.698956-1-anders.roxell@linaro.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 7 Dec 2021 14:00:40 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2xJJutbwujzh57QqEAgOUwBz5aT78ZFsSam7TfZuQ_Dg@mail.gmail.com>
+Message-ID: <CAK8P3a2xJJutbwujzh57QqEAgOUwBz5aT78ZFsSam7TfZuQ_Dg@mail.gmail.com>
+Subject: Re: [PATCH] powerpc: platforms: cell: pervasive: fix clang -Wimplicit-fallthrough
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:5vY9kdUQgOWVplvt9IvFwNXA/SbJmYljfOxv8HnixAPLOhRZHJ5
+ eXjXSx8kPg8EYa+LdfUR3UvrPnSqJOVJBOUJNavORlIfWmIBbpLY9iweEqD2+0FYi9Balf5
+ O1mGQzETEZVgCTyMKyAFQQKW4mcuZ4bMdG+FAp7/2USQ9hjdBpo+tqGKxjU7koYuB4/kzKJ
+ P4DI1P2Urt5sDOwz64BTw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Gbn6C5V1CfI=:QEhCTrla2Ma2UZkomu7T1H
+ /J7P1gyuaJoz8M8NPSfzVdR4tQzsDLX3VuTyM7AnpqaTy4Dg+FvdwtQotDFGn88V0hiSg3MiT
+ HXgfApkCmYVQyMyGbuevWUydXtbfjxho7SyxQLsdLCQYacIFLkmx/3D5kJ2vY2td5pCFjIQ/Q
+ UcBQgVV3Ff/Ma/F35SVS1vUGu3MB8j0FOfigEANa04MDCT55wlleiwI0NMjzXspj4xLnmyXAs
+ rTFeUQzogeZiCUWML/Yp7TgikE+qkGAuqetE2r6lskxcuaKq5DErEat5o4OCT+/b1Q5YsAbS8
+ +hkIxFX+AV/GXLpOipZSxoem8hK9R2mD6PCEXbkyoNa8gUOWyGzHWFVWp0VY7ZkP+OUzBjUBz
+ 6FHudGnayJhpPdFvXHZk5flLrp9jBMFeL85DICD7R0CR8/Aj6tnu3h+TvOillfhXEC9TpT4tt
+ +mkzvsUosFZtIqpll9qwiLJMgK6RDcI5KbWc1ei3/OGp25/MO4jtZYpiCChe//U2REB4m3fQ5
+ c4EgoN1Ptm4GxtoXNzekkeO8XsfSBSIyQXNc4JxaakyqQt2eSHJUWq8hs3w7T1DScg75iPLhO
+ 8wsSNXmK0q5lHCr3zGYp/wdemyhR88yP7CtmHydW9JzNpiw71kNO3vKT98dr+7g9AuozsZcxA
+ yYmBUvM3fTYiBvDMq80+1dHv9oUE8jwp048k6V0jTBTVGuIlzHuf2h7ZOfXsXHuEEInVZfTqB
+ frBky3Xva69lh7f+7QEMyRuC8kuT/w6DdqHMXX1It5F2bxWn2wWydq9S+36PN1v4rXaNThxeW
+ zsfXlt/8G1fX9J4oxrxDm40LoEWy3+ijqBMktvCJ9Nk7QP/v8Y=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------UbAOQXuN5ozF4VxDiNVJF0Ed
-Content-Type: multipart/mixed; boundary="------------GufJmFGkh9XtWaqveMIfvlqc";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: John Keeping <john@metanate.com>
-Cc: David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
- linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Message-ID: <26f988d4-3fac-fcc0-f80a-c9d7516c266b@suse.de>
-Subject: Re: [PATCH] drm/rockchip: use generic fbdev setup
-References: <20211029115014.264084-1-john@metanate.com>
- <ab7ace79-0148-1efa-ec17-6994bb35fd2f@suse.de> <YX01C6l93I2YPgku@donbot>
- <6e69f9bb-5a1e-7b79-38e8-d2860e5ee615@suse.de>
- <20211101113415.3bed0f62.john@metanate.com> <Ya9LdiutXV7lCOtT@donbot>
-In-Reply-To: <Ya9LdiutXV7lCOtT@donbot>
+On Tue, Dec 7, 2021 at 12:02 PM Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> Clang warns:
+>
+> arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>         case SRR1_WAKEEE:
+>         ^
+> arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
+>         case SRR1_WAKEEE:
+>         ^
+>         break;
+> 1 error generated.
+>
+> Clang is more pedantic than GCC, which does not warn when failing
+> through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst.
+> Add athe missing break to silence the warning.
+>
+> Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
---------------GufJmFGkh9XtWaqveMIfvlqc
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks for the fix!
 
-SGkNCg0KQW0gMDcuMTIuMjEgdW0gMTI6NTQgc2NocmllYiBKb2huIEtlZXBpbmc6DQo+IA0K
-PiBBcmUgeW91IGFibGUgdG8gcGljayB0aGlzIHVwIChhbmQgWzFdKT8gIE90aGVyd2lzZSB3
-aGF0IGlzIG5lZWRlZCBoZXJlDQo+IGFuZCB3aG8gc2hvdWxkIHBpY2sgdGhpcyB1cD8NCj4g
-DQo+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMTExMDExMTQ2
-MjIuODEzNTM2LTEtam9obkBtZXRhbmF0ZS5jb20vDQo+IA0KDQpJIGFkZGVkIGJvdGggcGF0
-Y2hlcyB0byBkcm0tbWlzYy1uZXh0Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNCi0t
-IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
-U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
-TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
-ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
-
---------------GufJmFGkh9XtWaqveMIfvlqc--
-
---------------UbAOQXuN5ozF4VxDiNVJF0Ed
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGvWt8FAwAAAAAACgkQlh/E3EQov+Cw
-Kw/9HsNOGnt0zzCJ/bfdMgu2znBHFFGK6kl9x24z0DjOoWvjlMKWpUfILBnjeJkAf+uqRpI7MOul
-oqbt7rHnWPu64tGdqUcFJ0Ta9oiWJg4ow0mSOOUWjStO2LmC4uIGQdjJYtUdoXcghlnnBCICqkLY
-bxWZOh1UfXEU59rjSu+ZyY3Eo51ANVdLU8mNwWqEiCNdjN6Uxo27052qkfbgRYQnQQIuLpUoJGg9
-ZIB3yS+Jf3uqVYxh8vJs50kW4/4xUWIl8Ye77275AoC8wT5kr7BRcIv6/rqMtr5FmR4yaG8qYm6H
-7XTJrb9EzLeSy5To8MY0Z190228alxkhBdT3Qq8BvjlWEIrrU6nRSDdtBiYMRxy5S/fzmDZ/jXhK
-wQgys58+1PutAgXPx48H3XbO3NugNwvB4GV697ZIgu+AtSZCbh5RQ7X30hC2zNxbZirYpZ4m/S67
-v60uKzWvxKW1YIbsi4Xc5+gJcu6uvJ92BZ+8lpjOlMDx4ajB2u+IsFIvTmv1/p8kbysRaGcjq6dP
-rteItmAddk/DTbSz0tLbGr6U9OCgUOrbGXB78Zh/iF3d5V00D0Ct5XQyPGQpaOu+HgnLNWHrkewg
-0d77NHE9OZWtp4i3KbuTjTYMtaDTPOe5hMfLkspB3j+TayoukB5+K5gTvIydiWub3ZS5mlHdteGE
-ukc=
-=exws
------END PGP SIGNATURE-----
-
---------------UbAOQXuN5ozF4VxDiNVJF0Ed--
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

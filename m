@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D175146B810
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AE346B80D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbhLGJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S234526AbhLGJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbhLGJ4B (ORCPT
+        with ESMTP id S234508AbhLGJzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:56:01 -0500
-Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BB8C061574;
-        Tue,  7 Dec 2021 01:52:30 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id uX96mxufCQyExuX99m6Mav; Tue, 07 Dec 2021 10:52:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1638870748; bh=YIK8OHDbi3V4LndmzWao6mLqVaAtXkrpBG9mG5TVAco=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From:
-         Subject;
-        b=ET2rNmICLk25V6X121sF2QETLZMyvygTF/J9Ke96bkaYZk1A8tzrA3Vml13GhNBCb
-         TemdWpPzs1qFchb43BGfsVvGq1zHCTdAAzFPQzUNcF7t9Gurw4ESM0z0AsrzOSyAUJ
-         S5gfMaVlpmadluchLBNs5xle/MLKQdPisg/Eqk+Gmy6oe1kpRmZjQXMq7KY2jvMsnC
-         F0fKi7ubIVxDL9OWJQFZBQIqBz+CZ3g0u152BSLpHDDkXHy0B29xmNN0N0tM5Ww14+
-         xONBla2v0xYa4DBe3DllwPbzjRHvKI80WjWo6dysFjEAj6JvtW1o8+aNlX+3Fc+G9G
-         vnGJzqBe4shVQ==
-Message-ID: <6e64bb76-14f5-b492-ca36-775a0011acba@xs4all.nl>
-Date:   Tue, 7 Dec 2021 10:52:24 +0100
+        Tue, 7 Dec 2021 04:55:50 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1DBC061574;
+        Tue,  7 Dec 2021 01:52:20 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso2203019pjb.2;
+        Tue, 07 Dec 2021 01:52:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AggZV2m9pqXxnzeFQjDaBo+amTkLh6dgZ3TEXgFqWsI=;
+        b=jPzFBXftZgwL/u/b+dpxrnveAEUhqe17Ub1F3EsLObND8KZPmoZXS+h1g9Ruq/Bu7L
+         tLNRtcbwos5SL3ILogmtiGVDLuWmbYDovOQIj8h0KrecZB6XywdfJGzxuXp3cm49CntF
+         Jk6rmlAslHbwZL0qGkEG8PzNtA4npiECpTZnseuLzas7/McE1/9518jyPxcUXpd0UBMn
+         clWCY+dWgTHJqSHPRMvl+bpNLBoQcAgp1Rjic45gFMC2qrRgZUcTHyQzSXUZy+ylgAKR
+         8F/MufYIv8yDSndeqMx0hkkPivpVpNZNjnlg1zYd5gafOrb+DNYqW2tjdoCwZuguphN1
+         QCPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AggZV2m9pqXxnzeFQjDaBo+amTkLh6dgZ3TEXgFqWsI=;
+        b=T0c5F5uw16KIHkwsHWeGxX32yfrRi4zqUi8ILGGMskDKERVbdd8+9buv6p5vMx80v7
+         HB393WCCnIbHH1Nk4KrO4FMvhdRS1Xdv+eMECzqI3keb9KCkZiStGcYQrH1vEwXulHDS
+         EpHP2y5zQR99O6opGiEeccP3qkRVfHqqKDLbcssW8gq3MtszGMR3wW3WkmZO8IK9XQsE
+         sm+8rtFhULXoizVYI8CzWiVUbfRKBj47+LNpOjsHVgkr6dty5Gp/ILUo7D/S+MqhG4HR
+         xh8/dd9sK6sNFsegMAmtJDhaZ/M/ja5mZMCc6RxG5alFiLBwUbtVD3kNFla6zToWAJMi
+         gX9g==
+X-Gm-Message-State: AOAM53087a1+L8A4+w/hR7G3kCl+oTXsDmdTVur/Xi7HQEl4pBxs8Qbn
+        VWCOBtBfeYvH08kRA7AjHdBnhHXOT34=
+X-Google-Smtp-Source: ABdhPJwXzoP30B10NeSDpYRv0Zs/d3AIA+fHzA1z8/M0HJteC7Rk9UQ+4mEz3IzgEzEUPjf9d+EvWA==
+X-Received: by 2002:a17:903:2341:b0:142:1b63:98f3 with SMTP id c1-20020a170903234100b001421b6398f3mr49926698plh.49.1638870739547;
+        Tue, 07 Dec 2021 01:52:19 -0800 (PST)
+Received: from localhost ([47.88.60.64])
+        by smtp.gmail.com with ESMTPSA id n3sm12377373pgc.76.2021.12.07.01.52.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 01:52:19 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] KVM: X86: Raise #GP when clearing CR0_PG in 64 bit mode
+Date:   Tue,  7 Dec 2021 17:52:30 +0800
+Message-Id: <20211207095230.53437-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.2
-Subject: Re: [PATCH v2 1/4] Revert "media: uvcvideo: Set unique vdev name
- based in type"
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org
-Cc:     stable@vger.kernel.org
-References: <20211207003840.1212374-1-ribalda@chromium.org>
- <20211207003840.1212374-2-ribalda@chromium.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20211207003840.1212374-2-ribalda@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfE+7voatNWDKUjr1aMl0AXKaQkhI98MJFkc/Lc4uEEl8JUYVekHCg1kpUPeDtNOSCR3zbvKlb+wACVj4luuYXw9Rk+IR0nLOdcaRSIxSONlfqOMOK0eS
- Jb5s3XXxzu5qTJSwy+/iKd30uvGIB4wa3L3j9cH/WZLi1zfuQ6rzvoIX+Cb93sfMjk6LXHi0BJQtzDJGXMO2f0dXmiMGLq1bOp7Pzn3w4NXIox46Vqr8qC+v
- g15GyFUrFPyBsN/wFm+7LQUuMsdI8mm2GpkwQFLneCgI1qAPEJritCAi7RPwwNJ8sltnfsTr8ViLJlSrwOtlmW+RpLQa5hIbVtnemMiAwzBVVgmEEUrqCNYA
- rU54yNRvsCR8oaQ7Mq5Y1cNppAoERPWeMv611qc2eO+GIyyiV2fMrRjOvG3p3ZUuHnO1dGtP+DBN//8bTTzj1PZMzPOiZaLid3LCGPetROHYbNkuc/+5+sOF
- PZ/zbuptl7bKZ3TiBrtTmDMABy5f1p9BevFd+A==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2021 01:38, Ricardo Ribalda wrote:
-> A lot of userspace depends on a descriptive name for vdev. Without this
-> patch, users have a hard time figuring out which camera shall they use
-> for their video conferencing.
-> 
-> This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
-> Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In the SDM:
+If the logical processor is in 64-bit mode or if CR4.PCIDE = 1, an
+attempt to clear CR0.PG causes a general-protection exception (#GP).
+Software should transition to compatibility mode and clear CR4.PCIDE
+before attempting to disable paging.
 
-Thanks!
+Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+---
+ arch/x86/kvm/x86.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-	Hans
-
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 7c007426e082..058d28a0344b 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2193,7 +2193,6 @@ int uvc_register_video_device(struct uvc_device *dev,
->  			      const struct v4l2_file_operations *fops,
->  			      const struct v4l2_ioctl_ops *ioctl_ops)
->  {
-> -	const char *name;
->  	int ret;
->  
->  	/* Initialize the video buffers queue. */
-> @@ -2222,20 +2221,16 @@ int uvc_register_video_device(struct uvc_device *dev,
->  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
->  	default:
->  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> -		name = "Video Capture";
->  		break;
->  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
->  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-> -		name = "Video Output";
->  		break;
->  	case V4L2_BUF_TYPE_META_CAPTURE:
->  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
-> -		name = "Metadata";
->  		break;
->  	}
->  
-> -	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
-> -		 stream->header.bTerminalLink);
-> +	strscpy(vdev->name, dev->name, sizeof(vdev->name));
->  
->  	/*
->  	 * Set the driver data before calling video_register_device, otherwise
-> 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 00f5b2b82909..78c40ac3b197 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -906,7 +906,8 @@ int kvm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+ 	    !load_pdptrs(vcpu, kvm_read_cr3(vcpu)))
+ 		return 1;
+ 
+-	if (!(cr0 & X86_CR0_PG) && kvm_read_cr4_bits(vcpu, X86_CR4_PCIDE))
++	if (!(cr0 & X86_CR0_PG) &&
++	    (is_64_bit_mode(vcpu) || kvm_read_cr4_bits(vcpu, X86_CR4_PCIDE)))
+ 		return 1;
+ 
+ 	static_call(kvm_x86_set_cr0)(vcpu, cr0);
+-- 
+2.19.1.6.gb485710b
 

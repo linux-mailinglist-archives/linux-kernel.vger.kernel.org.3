@@ -2,155 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6594046C154
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9E046C15A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbhLGRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:09:57 -0500
-Received: from elvis.franken.de ([193.175.24.41]:35282 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234465AbhLGRJ4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:09:56 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mudv5-0003op-00; Tue, 07 Dec 2021 18:06:23 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 6EC63C4DFD; Tue,  7 Dec 2021 18:06:03 +0100 (CET)
-Date:   Tue, 7 Dec 2021 18:06:03 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Do not define pci_remap_iospace() under
- MACH_LOONGSON64
-Message-ID: <20211207170603.GA20028@alpha.franken.de>
-References: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
+        id S239825AbhLGRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:10:44 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40232 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239723AbhLGRKm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:10:42 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7EqwU5011669;
+        Tue, 7 Dec 2021 17:06:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=U0CklnoRUAd4J9T8OROHkfvvRneHXd686ccgYestuCA=;
+ b=q9GNZppRuHNbOWoW9XTzJpTBix1xGJ38anWpLUe8tZAhSuLLVfQKDS3+JNIEg7liiwaM
+ U6LF413roFszATsNEbt4eF0Ux8qC1EOjWNpbUSacQh5MIv97Jf50DFzlNXME7tYVF1Rv
+ uiUjYXja0f2o41YZIU8xKV+8IAhUMTJlTiSTg+OyvohnFZAipZtn0tCohe+bbfZzfa9w
+ Ib4TGDl7IbdsWOwibmIcsZ6dbF0IREki6yOASWyAXNb7iqiVLVk+1RcW+7pWehqwmlpH
+ GB2a9IGpWWXC/EvVbLVE7P31GXPf9dKRA0vie5ITQFTrCChRH6+EnzwFkcD93+2j9TDk vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct7gke99p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:06:58 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B7H0H3L004403;
+        Tue, 7 Dec 2021 17:06:57 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct7gke997-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:06:57 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7H3raW019502;
+        Tue, 7 Dec 2021 17:06:56 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02wdc.us.ibm.com with ESMTP id 3cqyyaghgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:06:56 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7H6t0633030832
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Dec 2021 17:06:55 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69F4D7806B;
+        Tue,  7 Dec 2021 17:06:55 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CA5678077;
+        Tue,  7 Dec 2021 17:06:52 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Dec 2021 17:06:52 +0000 (GMT)
+Message-ID: <64639b3e599b60eb755dfcb8a1dc00a1057b5bf1.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Tue, 07 Dec 2021 12:06:51 -0500
+In-Reply-To: <edaa3e45-77aa-602d-2b30-66ef9a0a7161@schaufler-ca.com>
+References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+         <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
+         <20211207145901.awiibdgdidbshsbf@wittgenstein>
+         <10fa531054c3b9e2a02ceb3dc007fa50e1bae1ff.camel@linux.ibm.com>
+         <8491f76d5c8923f35216f55c030a68f478a0325a.camel@linux.ibm.com>
+         <edaa3e45-77aa-602d-2b30-66ef9a0a7161@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AWEyje-k00stW9ncUa80XwX6d4kFeQBJ
+X-Proofpoint-ORIG-GUID: TzQpxLG-mgyA-ZschMzSErYDBDlZrKvC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_06,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070106
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 05:03:15PM +0800, Tiezhu Yang wrote:
-> After commit 9f76779f2418 ("MIPS: implement architecture-specific
-> 'pci_remap_iospace()'"), there exists the following warning on the
-> Loongson64 platform:
+On Tue, 2021-12-07 at 07:48 -0800, Casey Schaufler wrote:
+> On 12/7/2021 7:40 AM, James Bottomley wrote:
+> > On Tue, 2021-12-07 at 10:16 -0500, James Bottomley wrote:
+> > > On Tue, 2021-12-07 at 15:59 +0100, Christian Brauner wrote:
+> > > > On Mon, Dec 06, 2021 at 04:14:15PM -0500, James Bottomley
+> > > > wrote:
+> > [...]
+> > > > >   static int securityfs_fill_super(struct super_block *sb,
+> > > > > struct
+> > > > > fs_context *fc)
+> > > > >   {
+> > > > >   	static const struct tree_descr files[] = {{""}};
+> > > > >   	int error;
+> > > > > +	struct user_namespace *ns = fc->user_ns;
+> > > > >   
+> > > > >   	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+> > > > >   	if (error)
+> > > > >   		return error;
+> > > > >   
+> > > > > +	ns->securityfs_root = dget(sb->s_root);
+> > > > > +
+> > > > >   	sb->s_op = &securityfs_super_operations;
+> > > > >   
+> > > > > +	if (ns != &init_user_ns)
+> > > > > +		blocking_notifier_call_chain(&securityfs_ns_not
+> > > > > ifier,
+> > > > > +					     SECURITYFS_NS_ADD,
+> > > > > ns);
+> > > >  
+> > > > I would propose not to use the notifier logic. While it might
+> > > > be nifty it's over-engineered in my opinion.
+> > >  
+> > > The reason for a notifier is that this current patch set only
+> > > namespaces ima, but we also have integrity and evm to do.  Plus,
+> > > as Casey said, we might get apparmour and selinux.  Since each of
+> > > those will also want to add entries in fill_super, the notifier
+> > > mechanism seemed fairly tailor made for this.  The alternative is
+> > > to have a load of
+> > > 
+> > > #if CONFIG_securityfeature
+> > > callback()
+> > > #endif
+> > > 
+> > > Inside securityfs_fill_super which is a bit inelegant.
+> > > 
+> > > >   The dentry stashing in struct user_namespace currently serves
+> > > > the purpose to make it retrievable in ima_fs_ns_init(). That
+> > > > doesn't justify its existence imho.
+> > >  
+> > > I can thread the root as part of the callback.  I think I can
+> > > still use the standard securityfs calls because the only reason
+> > > for the dentry in the namespace is so the callee can pass NULL
+> > > and have the dentry created at the top level.  We can insist in
+> > > the namespaced use case that the callee always pass in the
+> > > dentry, even for the top level.
+> > > 
+> > > > There is one central place were all users of namespaced
+> > > > securityfs can create the files that they need to and that is
+> > > > in securityfs_fill_super(). (If you want to make that more
+> > > > obvious then give it a subdirectory securityfs and move inode.c
+> > > > in there.)
+> > > >  
+> > > Right, that's what the patch does.
+> > > 
+> > > > We simply will expect users to add:
+> > > > 
+> > > > ima_init_securityfs()
+> > > > mylsm_init_securityfs()
+> > >  
+> > > Yes, plus all the #ifdefs because securityfs can exist
+> > > independently of each of the features.  We can hide the ifdefs in
+> > > the header files and make the functions static do nothing if not
+> > > defined, but the ifdeffery has to live somewhere.
+> >  
+> > Actually, I've got a much better reason: securityfs is a bool; all
+> > the other LSMs and IMA are tristates.  We can't call module init
+> > functions from core code, it has to be done by something like a
+> > notifier.
 > 
->     loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
->     loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
->     ------------[ cut here ]------------
->     WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
->     resource start address is not zero
->     ...
->     Call Trace:
->     [<ffffffff8020dc78>] show_stack+0x40/0x120
->     [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
->     [<ffffffff8023a0b0>] __warn+0xe0/0x110
->     [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
->     [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
->     [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
->     [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
->     [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
->     [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
->     [<ffffffff809203cc>] platform_probe+0x6c/0xe0
->     [<ffffffff8091d5d4>] really_probe+0xbc/0x340
->     [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
->     [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
->     [<ffffffff8091dea0>] __driver_attach+0x80/0x118
->     [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
->     [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
->     [<ffffffff8091ead4>] driver_register+0x8c/0x150
->     [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
->     [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
->     [<ffffffff80cfc380>] kernel_init+0x2c/0x134
->     [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
->     ---[ end trace e4a0efe10aa5cce6 ]---
->     loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
-> 
-> We can see that the resource start address is 0x0000020000, because
-> the ISA Bridge used the zero address which is defined in the dts file
-> arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
-> 
->     ISA Bridge: /bus@10000000/isa@18000000
->     IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
-> 
-> The architecture-independent function pci_remap_iospace() works well
-> for Loongson64, so just do not define architecture-specific function
-> pci_remap_iospace() under MACH_LOONGSON64.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/include/asm/pci.h | 2 ++
->  arch/mips/pci/pci-generic.c | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-> index 421231f..5d647cb 100644
-> --- a/arch/mips/include/asm/pci.h
-> +++ b/arch/mips/include/asm/pci.h
-> @@ -21,8 +21,10 @@
->  #include <linux/of.h>
->  
->  #ifdef CONFIG_PCI_DRIVERS_GENERIC
-> +#ifndef CONFIG_MACH_LOONGSON64
->  #define pci_remap_iospace pci_remap_iospace
->  #endif
-> +#endif
+> Err, no. LSMs are not available as loadable modules.
 
-I prefer a version without new CONFIG_MACH_LOONGSON64 ifdefery. Something
-like:
+Well securityfs has EXPORT_MODULE_GPL() across all its dentry creation
+functions ... that does mean it expects to be called by a module.
+
+However, it does appear to be it's only TPM that may use it as a module
+... this is still going to cause a problem eventually because now we'll
+have to require some of the TPM code be built in once we want to attach
+vTPMs to containers.
+
+James
 
 
-diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-index 05d14c21c417..f7af11ea2d61 100644
---- a/arch/mips/include/asm/mach-ralink/spaces.h
-+++ b/arch/mips/include/asm/mach-ralink/spaces.h
-@@ -6,5 +6,7 @@
- #define PCI_IOSIZE	SZ_64K
- #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
- 
-+#define pci_remap_iospace pci_remap_iospace
-+
- #include <asm/mach-generic/spaces.h>
- #endif
-diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-index 421231f55935..9ffc8192adae 100644
---- a/arch/mips/include/asm/pci.h
-+++ b/arch/mips/include/asm/pci.h
-@@ -20,10 +20,6 @@
- #include <linux/list.h>
- #include <linux/of.h>
- 
--#ifdef CONFIG_PCI_DRIVERS_GENERIC
--#define pci_remap_iospace pci_remap_iospace
--#endif
--
- #ifdef CONFIG_PCI_DRIVERS_LEGACY
- 
- /*
-diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-index 18eb8a453a86..d2d68bac3d25 100644
---- a/arch/mips/pci/pci-generic.c
-+++ b/arch/mips/pci/pci-generic.c
-@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
- 	pci_read_bridge_bases(bus);
- }
- 
-+#ifdef pci_remap_iospace
- int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- {
- 	unsigned long vaddr;
-@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- 	set_io_port_base(vaddr);
- 	return 0;
- }
-+#endif
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]

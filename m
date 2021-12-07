@@ -2,1735 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285EA46C25B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A41646C26A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240404AbhLGSLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:11:06 -0500
-Received: from foss.arm.com ([217.140.110.172]:38050 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231193AbhLGSLF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:11:05 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC31711FB;
-        Tue,  7 Dec 2021 10:07:34 -0800 (PST)
-Received: from e127744.cambridge.arm.com (e127744.cambridge.arm.com [10.1.37.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AF8E33F73B;
-        Tue,  7 Dec 2021 10:07:30 -0800 (PST)
-From:   German Gomez <german.gomez@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     German Gomez <german.gomez@arm.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 3/3] perf tools: Support register names from all archs
-Date:   Tue,  7 Dec 2021 18:06:52 +0000
-Message-Id: <20211207180653.1147374-4-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207180653.1147374-1-german.gomez@arm.com>
-References: <20211207180653.1147374-1-german.gomez@arm.com>
-MIME-Version: 1.0
+        id S240441AbhLGSNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:13:15 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:37008 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231169AbhLGSNL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:13:11 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7I4Y22021777;
+        Tue, 7 Dec 2021 18:09:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=soimS5RRbYeD9ESvK7Fc/AH5JQLM0uOYQSEJBZRcb98=;
+ b=Epz/tV118q8G6EUd8voLGv313c5Iuwkbt9ttG5vfM3UyaWMBa639w4G0VJb7iKFXEAu9
+ pHLe1w3JW737TqXTThnzWdIXz4UeNxbIxbcVx6OEXVFDDiEsY/BRUqwcLaH6ZpuW2pde
+ 8pT7TMF8f2tVNoH6TwPHtBUEyeauduHWzJrQxZY9Cd/nrQm0m5vdIf9SIM+ABQqJnima
+ 0MkQ1ZakiH0UHlvoHJFIBgagWaqjtv20F2lRUy6KrNs8w2MFHpCBan3j5n7eIHSHfEzm
+ IXW71EtzNIILlGFaRoh6xg9dio/akZctNGzZ9vv7ScfFege/zfctx5SMYsukFm2JgWcn sQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3csdfje21v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Dec 2021 18:09:38 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B7I5Bx4173199;
+        Tue, 7 Dec 2021 18:09:37 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2045.outbound.protection.outlook.com [104.47.57.45])
+        by userp3030.oracle.com with ESMTP id 3cqwey3gqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Dec 2021 18:09:37 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KjiRLzgttshcvFgYsfQpvHnfa8Jox48UCmGFxvNBr1lEHAytmoe+HGIsvFnFueR6O/LaWoCt1jsteytMKv5LhGZ3sJqfa8SDxNhvMkWJ+CZLBthPRUmmlqtC3dUNWNCdIEXDOlZUwvsxNwRuTVCF3Lbg7gSbTL9gG8w1BoIxF4CNYn4MW+oJ9Qa7LqWYF5VHdG1wIw1lI6PzACfE6F7DoIXqq9xQBMqA0SZkSVFparhd7lHowapSz1MhG7bzDD6kg03Y+/KSrAzvy342ltBlKOi44viqU8R60IOj33uRy7LP4CNqxXOfBYhJDD1NwF37VDz5qfUzuK5EGt+czHhuMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=soimS5RRbYeD9ESvK7Fc/AH5JQLM0uOYQSEJBZRcb98=;
+ b=aHi0Kwo2Uwk06530+55W/5WtMPQ6vXxutyVEwgc5W8B665POz5xYqWAORoxBHKfSRmUjJsIQmb5H6qx0EXU2RoKYcSwNORdIBJ5YDe9JW8A8zJP4QSLQPQi+HkTF4QVwd8Uxl1yl6VEDYKfKukNkA6GEdBQiiY9IeLee2M095SXPD2sa4bEcY3nwtZt36HwHlkjt85BiTr4SmmtXLPLjuCk1ICdB3w1T+1bqXQhbKpBpQq6uSgwHdREOBNmP+H0lF4OPajn0IGXWvl3tGH0D1JpCFLxt/yvwTndK10wYRlsXk1VRN4diwHWXe4nWXbIp3HCcKCw4ZJjl8c/PgYchsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=soimS5RRbYeD9ESvK7Fc/AH5JQLM0uOYQSEJBZRcb98=;
+ b=WQUk2Hs1YRU/c/GrQYL+ZaZvVhJQSjfEiqDSZ1W9Y1onYcyd3GBvoRBwZZSXlEakCWwrg0A+SBl+wQsuWSznHzzh4tQ6oqgmYAbb24D+4PVq5pucyAWLJnzD2Hw2KXcHokI+AtXo770JGIkU9SmjoGrTxBF8yyQ9FnMlag0yhP0=
+Received: from BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8)
+ by BN0PR10MB4965.namprd10.prod.outlook.com (2603:10b6:408:126::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 18:09:35 +0000
+Received: from BN0PR10MB5192.namprd10.prod.outlook.com
+ ([fe80::4440:4f39:6d92:a14c]) by BN0PR10MB5192.namprd10.prod.outlook.com
+ ([fe80::4440:4f39:6d92:a14c%6]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 18:09:35 +0000
+Message-ID: <a3e6455c-b3a3-d98c-cda7-f05f686bd036@oracle.com>
+Date:   Tue, 7 Dec 2021 13:09:31 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 0/2] Revert "block: add single bio async direct IO helper"
+ to avoid UAF
+Content-Language: en-CA
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        gregkh@linuxfoundation.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1638892302-14475-1-git-send-email-george.kennedy@oracle.com>
+ <95ea9142-9f36-981d-a04d-3efded544af7@gmail.com>
+From:   George Kennedy <george.kennedy@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <95ea9142-9f36-981d-a04d-3efded544af7@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA0PR11CA0186.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::11) To BN0PR10MB5192.namprd10.prod.outlook.com
+ (2603:10b6:408:115::8)
+MIME-Version: 1.0
+Received: from [10.39.208.49] (138.3.201.49) by SA0PR11CA0186.namprd11.prod.outlook.com (2603:10b6:806:1bc::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Tue, 7 Dec 2021 18:09:34 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dba2f6b4-e5a1-44cd-ba1b-08d9b9acb9fe
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4965:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR10MB49654D93DDA5F6BD198A31E9E66E9@BN0PR10MB4965.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JjnSqY5vjbZltF5Ln1SG3bgPLklFvE3CBcKe/qIOXpS6s2gJNY+uulQAn3qmdLEBWtOuaHr4ayS/eyaxR0w56uCNNU7W+u8bdfdsiY3YF8jf4+0U8IA+nSjUfjEvfEEW62AuG+FPOfYN1c2dyw+aUsFDS6qE6/LK1N++7WlMgqxHChOl4EPaZ6Jf/nW5AAuwnGRzhRil1RaKfzUDPA79xE6TXxy3llk4z04lcbHRU1yeflJwSwKPi7QnOlZmG6XIyoITMnlfXmdFGu9fXduCl0YWawxJHYcC3xhAMFZVZQdkQTVo8QQVG23FISCchObeDVfiE4IWqwRyoHNHkO2uqTQ7WEdxKz1aWbuLOhlNHx7hEKZ3SsG1LmA7M5563km8VXfVdUab10xmGWOOAAhuBt5Hs3xRi59khHQQ7YcDg44BWZ6D2w5wbU/v0BgAX/OEogiEQ0tRXeT6LPFEDNYVSMsXa/SgOdNw5dmmvaxRuPOxY3duHwt0XXYDP4PEaxmtBf0Vqoh23kPeTeXGWd1jKP262hbDD7dZvkNyhZvgd7I0Kx2oR+niuQUbIS5NT//pQW+lY/cZVhvLheTyAhmHNi8W5Bq+q2HXQy68FYvUidUsiztW4oD2Ef0Do0v6mDndQaN8KkM3e7/t9DyL2xx+V2nUiIc7cGEcIpH88t3BNtWv1UScEwySg3hQnsWvpBv1wifjxzmkBCud7JNTJryvd36SL+Vjt1VG7PdTuwe4NfMMzxxukBLytukPSFEMu6+ldys2KPrqwgrXxOdk1W8O0VCQsJYgvTY5DpR7EZ/8n6SkBFyfME8XN1wwwqds+rMs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5192.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(8936002)(83380400001)(316002)(26005)(66946007)(38100700002)(8676002)(4326008)(30864003)(66476007)(16576012)(2906002)(44832011)(186003)(66556008)(45080400002)(5660300002)(36916002)(956004)(36756003)(31686004)(53546011)(2616005)(31696002)(6486002)(86362001)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WTJLVE9kUTVEYkRqN3M5ZitJa0lDdHV1Y25COVdGYVhKbmlRNmRYc0c2eFdV?=
+ =?utf-8?B?T3VtTWJoZjlzR3c0NTZCQkdXbFlrZ0FmcTViK2tJOVNHMHd0dUsyRGxOM2Nn?=
+ =?utf-8?B?VCs3SXF5NzJUUmcwZC9IRE1yM2JSemF2MURrb3Yxa0JhYWNYYWRyUUludmtj?=
+ =?utf-8?B?TkN3c1NHN0IrTE1TdENwdnBWNG5KZTN3TGlycERYU2UvMkZQYVkvRDZKUEo0?=
+ =?utf-8?B?S0tucTJGNWh4ZlF2N3Y4UVZBdUVIc0ZNYXRLZDFZZEY1eTFRdnNKWUFsWjJm?=
+ =?utf-8?B?emVNNC9jRTh5MW9zYmRvVlRJTFBRbklNRGNsd3BraGdLOGx0QklLckprNWdm?=
+ =?utf-8?B?OC9tN1JJK0w1K1RuZ3hLRVMwOU5BUEVHUCtrT3RkNWZpY3ZRNEI1WUZOcnA1?=
+ =?utf-8?B?Y1YvV28ycVVKMkVwY216N2F1WUt1SkRLc3RsQjB3U2FxOFFiYlNYNFdncE1i?=
+ =?utf-8?B?aEt2Q2ZYSU1XbWp5MWFad0picVg5c2hlUm9BNGYvSjcrV0wxdXZoSmFLdjI5?=
+ =?utf-8?B?MkVjRktheXZjYmVuS2xMNmFPQW1UZGNNcmNNTGJhS3FmcDRIRmtDV2YreHFr?=
+ =?utf-8?B?MXM4VjNzR2lZL2VzWUhta2trMjlUbHB0WXQ2K2xoSzFCeEJyZXBoUDVncWtM?=
+ =?utf-8?B?SmF6dG5KbUoyNVhzVUd0cU15M0picW1PMzQ3bUJhUVd3dTBrMWZwZVM3M1Jn?=
+ =?utf-8?B?dUdLVmZ1TC8wWUZVVXBwQ0tHN2J6N3Z5TmtMVlZJeDQyQmh1OERUMTJxUElw?=
+ =?utf-8?B?WGthMXJockVLeHZ4ajJtVTJzSENDSG5rN21UZ1p2OUtpbW1wS2tSR0l5aHEy?=
+ =?utf-8?B?bSt5SGg3Wm1Za2lzaUhJajJQMFhGcXJrUUdSREdOTzFGS25zMFVnVkt6dU4y?=
+ =?utf-8?B?SSsxV1FTSFN4MVpIdlFDWkt4QkE4clR0eURTbXV0a3QzU3hiZnlERXF0Kyth?=
+ =?utf-8?B?dEtZUktHOXdrczVndHpyMTJrZ3c2TWt2RlZkU1V2cnZ0ZWwzWGd1c0ttaG82?=
+ =?utf-8?B?bWtTM3pTVDRjUU1jZDVnTWVjT3N0NHkrUWVvZkgvWFZZK1AvMklpTkdqa0Vm?=
+ =?utf-8?B?dlJyZXNrS0xXZ3R4NXhKTXd4VDBTNWJKQUZJVW9STVJKUzJpcWNlV3hmNkdQ?=
+ =?utf-8?B?MEdyaFc5SlRKb1dZaGxLVHdxYndBL0h5Rk5sZUE4VEhPeWQ1RVpDbWxzQU5C?=
+ =?utf-8?B?a2ZBYUlsQ1I3bHBTak01M1ZCcEVLR1R5UU9GWHBhdFVZRW9QdHcvM3cyUHN4?=
+ =?utf-8?B?bzVBZk1vNE0xRHJVRXZZM21hT0NEYWR4NlNCUmxvS0ZaVXptWHE5b2NFZkVW?=
+ =?utf-8?B?bEJseUlMYmM1RkhSeXByM1I0YXJWQkh3OVpXQXFqdnJCVDVmZ0tBQURGNEE3?=
+ =?utf-8?B?SWtISjhjTUNPMFM5QUlYQk4wRWh0ZWdLeWk1Vy9BcUt5d28yQVZ6N1ZDTmVk?=
+ =?utf-8?B?a2ZOaWlqVXBSbm56eEl6T054Ui9rVHcrZVZURFNXaGZUMW8yakJ4a1FaRUVj?=
+ =?utf-8?B?N09vTkphRkhWK3dNRDc1SktZZEhndiswNTc5K3ZQNURlSE4veEpvTk9wckd6?=
+ =?utf-8?B?N3JFT3VHbVdXSHBhOVBjK3NDQmFaYWhDMkoyeVNiR2VSZWF3dkh6cEFOcUZS?=
+ =?utf-8?B?UnN3S3BjKy9OK0dXdER2S2dLWFpTT0JnemZ5c2lwcEdPTEgwMjFTOGk0S0VF?=
+ =?utf-8?B?amlHTkVQRUMwdHJPMzcrZFRoUXViWDBaWEVYbUNPd2FKY1luVXNEVXdiWW9D?=
+ =?utf-8?B?dzF1a1p6V1JGL1g1UGFvUllaa2VYT2FsZ1BhNHFPcUZCVjdUakdubkdmMTAv?=
+ =?utf-8?B?SFI0UDJBTjZpQ0F0WVZkVUcvYU9TWmRsMkdjUDNpaHRzOVBpSndGcTI2SlFI?=
+ =?utf-8?B?SUVoUDduSzVOOWFoeTBUMW5HbW4rMjcvWTg0QTllc1pZblhMUEtndlluUTZo?=
+ =?utf-8?B?a01BcmFDYkhkM3JZL0Q1QkNJZENhVHRQVXA3c1dOVzZOZk5TKzIzNEIwalJE?=
+ =?utf-8?B?d01oMVJ5bU5kRngzdnRNVlcwZ2habzZtVlVZRHpwRmV3YXhYbElFQmQyRlBH?=
+ =?utf-8?B?cllLWDdGWCtRdlNZeFl2d0tXeTdlYzFTR0tBRlBINjNCNEhnZWR3dXJrQ043?=
+ =?utf-8?B?dVhZM3NBcjVrSnlhSGM0c3AxWFU4azJ3ajFEQm93clpzY0U5WmxiWm5iR1Aw?=
+ =?utf-8?B?ZWxZbmZEQzRkS0hBK2tLcjBqZTV3aU8zTUxpRWRXUW1ocHRGYy9Yeml5ZjN0?=
+ =?utf-8?B?VlRReHVoOXZnbEczS1lYQmpHOFR3PT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dba2f6b4-e5a1-44cd-ba1b-08d9b9acb9fe
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5192.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 18:09:35.6890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: doHA3pLiXAju+/vVDS6AofsO94WTAHr/XI+UGNpLINRNB4sVMs4zw3KEy5y+hzQLoo4WHT7CNlTo7iZ4V2s2JSTAsTsaNx54RLMfi8r08j0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4965
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10190 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070112
+X-Proofpoint-GUID: F8-2pwo4FlvMw9UFGkxuhIeGNFp1-mWT
+X-Proofpoint-ORIG-GUID: F8-2pwo4FlvMw9UFGkxuhIeGNFp1-mWT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reading a perf.data file with register values, there is a mismatch
-between the names and the values of the registers because the tool is
-built using only the register names from the local architecture.
 
-Reading a perf.data file that was recorded on ARM64, gives the following
-erroneous output on an X86 machine:
 
-  # perf report -i perf_arm64.data -D
-  [...]
-  24661932634451 0x698 [0x21d0]: PERF_RECORD_SAMPLE(IP, 0x1): 43239/43239: 0xffffc5be8f100f98 period: 1 addr: 0
-  ... user regs: mask 0x1ffffffff ABI 64-bit
-  .... AX    0x0000ffffd1515817
-  .... BX    0x0000ffffd1515480
-  .... CX    0x0000aaaadabf6c80
-  .... DX    0x000000000000002e
-  .... SI    0x0000000040100401
-  .... DI    0x0040600200000080
-  .... BP    0x0000ffffd1510e10
-  .... SP    0x0000000000000000
-  .... IP    0x00000000000000dd
-  .... FLAGS 0x0000ffffd1510cd0
-  .... CS    0x0000000000000000
-  .... SS    0x0000000000000030
-  .... DS    0x0000ffffa569a208
-  .... ES    0x0000000000000000
-  .... FS    0x0000000000000000
-  .... GS    0x0000000000000000
-  .... R8    0x0000aaaad3de9650
-  .... R9    0x0000ffffa57397f0
-  .... R10   0x0000000000000001
-  .... R11   0x0000ffffa57fd000
-  .... R12   0x0000ffffd1515817
-  .... R13   0x0000ffffd1515480
-  .... R14   0x0000aaaadabf6c80
-  .... R15   0x0000000000000000
-  .... unknown 0x0000000000000001
-  .... unknown 0x0000000000000000
-  .... unknown 0x0000000000000000
-  .... unknown 0x0000000000000000
-  .... unknown 0x0000000000000000
-  .... unknown 0x0000ffffd1510d90
-  .... unknown 0x0000ffffa5739b90
-  .... unknown 0x0000ffffd1510d80
-  .... XMM0  0x0000ffffa57392c8
-   ... thread: perf-exec:43239
-   ...... dso: [kernel.kallsyms]
+On 12/7/2021 12:36 PM, Pavel Begunkov wrote:
+> On 12/7/21 15:51, George Kennedy wrote:
+>> git bisect shows that commit 54a88eb838d3
+>> ("block: add single bio async direct IO helper")
+>> causes the following UAF: KASAN: use-after-free Write in io_submit_one
+>>
+>> Tried to root-cause the issue, but need the patch submitter's help in
+>> coming up with a fix.
+>
+> Hey George, thanks for the report. Do you have a reproducer?
 
-As can be seen, the register names correspond to X86 registers, even
-though the perf.data file was recorded on an ARM64 system. After this
-patch, the output of the command displays the correct register names:
+Hi Pavel,
 
-  # perf report -i perf_arm64.data -D
-  [...]
-  24661932634451 0x698 [0x21d0]: PERF_RECORD_SAMPLE(IP, 0x1): 43239/43239: 0xffffc5be8f100f98 period: 1 addr: 0
-  ... user regs: mask 0x1ffffffff ABI 64-bit
-  .... x0    0x0000ffffd1515817
-  .... x1    0x0000ffffd1515480
-  .... x2    0x0000aaaadabf6c80
-  .... x3    0x000000000000002e
-  .... x4    0x0000000040100401
-  .... x5    0x0040600200000080
-  .... x6    0x0000ffffd1510e10
-  .... x7    0x0000000000000000
-  .... x8    0x00000000000000dd
-  .... x9    0x0000ffffd1510cd0
-  .... x10   0x0000000000000000
-  .... x11   0x0000000000000030
-  .... x12   0x0000ffffa569a208
-  .... x13   0x0000000000000000
-  .... x14   0x0000000000000000
-  .... x15   0x0000000000000000
-  .... x16   0x0000aaaad3de9650
-  .... x17   0x0000ffffa57397f0
-  .... x18   0x0000000000000001
-  .... x19   0x0000ffffa57fd000
-  .... x20   0x0000ffffd1515817
-  .... x21   0x0000ffffd1515480
-  .... x22   0x0000aaaadabf6c80
-  .... x23   0x0000000000000000
-  .... x24   0x0000000000000001
-  .... x25   0x0000000000000000
-  .... x26   0x0000000000000000
-  .... x27   0x0000000000000000
-  .... x28   0x0000000000000000
-  .... x29   0x0000ffffd1510d90
-  .... lr    0x0000ffffa5739b90
-  .... sp    0x0000ffffd1510d80
-  .... pc    0x0000ffffa57392c8
-   ... thread: perf-exec:43239
-   ...... dso: [kernel.kallsyms]
+Forgot to include it in the cover letter. Straight from Syzkaller:
 
-Reported-by: Alexandre Truong <alexandre.truong@arm.com>
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/arch/arm/include/perf_regs.h       |  42 --
- tools/perf/arch/arm64/include/perf_regs.h     |  76 --
- tools/perf/arch/csky/include/perf_regs.h      |  82 ---
- tools/perf/arch/mips/include/perf_regs.h      |  69 --
- tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
- tools/perf/arch/riscv/include/perf_regs.h     |  74 --
- tools/perf/arch/s390/include/perf_regs.h      |  78 --
- tools/perf/arch/x86/include/perf_regs.h       |  82 ---
- tools/perf/builtin-script.c                   |  18 +-
- tools/perf/util/perf_regs.c                   | 666 ++++++++++++++++++
- tools/perf/util/perf_regs.h                   |  10 +-
- .../scripting-engines/trace-event-python.c    |  10 +-
- tools/perf/util/session.c                     |  25 +-
- 13 files changed, 697 insertions(+), 601 deletions(-)
+#ifdef REF
+Syzkaller hit 'KASAN: use-after-free Write in io_submit_one' bug.
 
-diff --git a/tools/perf/arch/arm/include/perf_regs.h b/tools/perf/arch/arm/include/perf_regs.h
-index 408541928..99a06550e 100644
---- a/tools/perf/arch/arm/include/perf_regs.h
-+++ b/tools/perf/arch/arm/include/perf_regs.h
-@@ -15,46 +15,4 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP	PERF_REG_ARM_PC
- #define PERF_REG_SP	PERF_REG_ARM_SP
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_ARM_R0:
--		return "r0";
--	case PERF_REG_ARM_R1:
--		return "r1";
--	case PERF_REG_ARM_R2:
--		return "r2";
--	case PERF_REG_ARM_R3:
--		return "r3";
--	case PERF_REG_ARM_R4:
--		return "r4";
--	case PERF_REG_ARM_R5:
--		return "r5";
--	case PERF_REG_ARM_R6:
--		return "r6";
--	case PERF_REG_ARM_R7:
--		return "r7";
--	case PERF_REG_ARM_R8:
--		return "r8";
--	case PERF_REG_ARM_R9:
--		return "r9";
--	case PERF_REG_ARM_R10:
--		return "r10";
--	case PERF_REG_ARM_FP:
--		return "fp";
--	case PERF_REG_ARM_IP:
--		return "ip";
--	case PERF_REG_ARM_SP:
--		return "sp";
--	case PERF_REG_ARM_LR:
--		return "lr";
--	case PERF_REG_ARM_PC:
--		return "pc";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/arm64/include/perf_regs.h b/tools/perf/arch/arm64/include/perf_regs.h
-index 1f0d78b9f..35a3cc775 100644
---- a/tools/perf/arch/arm64/include/perf_regs.h
-+++ b/tools/perf/arch/arm64/include/perf_regs.h
-@@ -17,80 +17,4 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP	PERF_REG_ARM64_PC
- #define PERF_REG_SP	PERF_REG_ARM64_SP
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_ARM64_X0:
--		return "x0";
--	case PERF_REG_ARM64_X1:
--		return "x1";
--	case PERF_REG_ARM64_X2:
--		return "x2";
--	case PERF_REG_ARM64_X3:
--		return "x3";
--	case PERF_REG_ARM64_X4:
--		return "x4";
--	case PERF_REG_ARM64_X5:
--		return "x5";
--	case PERF_REG_ARM64_X6:
--		return "x6";
--	case PERF_REG_ARM64_X7:
--		return "x7";
--	case PERF_REG_ARM64_X8:
--		return "x8";
--	case PERF_REG_ARM64_X9:
--		return "x9";
--	case PERF_REG_ARM64_X10:
--		return "x10";
--	case PERF_REG_ARM64_X11:
--		return "x11";
--	case PERF_REG_ARM64_X12:
--		return "x12";
--	case PERF_REG_ARM64_X13:
--		return "x13";
--	case PERF_REG_ARM64_X14:
--		return "x14";
--	case PERF_REG_ARM64_X15:
--		return "x15";
--	case PERF_REG_ARM64_X16:
--		return "x16";
--	case PERF_REG_ARM64_X17:
--		return "x17";
--	case PERF_REG_ARM64_X18:
--		return "x18";
--	case PERF_REG_ARM64_X19:
--		return "x19";
--	case PERF_REG_ARM64_X20:
--		return "x20";
--	case PERF_REG_ARM64_X21:
--		return "x21";
--	case PERF_REG_ARM64_X22:
--		return "x22";
--	case PERF_REG_ARM64_X23:
--		return "x23";
--	case PERF_REG_ARM64_X24:
--		return "x24";
--	case PERF_REG_ARM64_X25:
--		return "x25";
--	case PERF_REG_ARM64_X26:
--		return "x26";
--	case PERF_REG_ARM64_X27:
--		return "x27";
--	case PERF_REG_ARM64_X28:
--		return "x28";
--	case PERF_REG_ARM64_X29:
--		return "x29";
--	case PERF_REG_ARM64_SP:
--		return "sp";
--	case PERF_REG_ARM64_LR:
--		return "lr";
--	case PERF_REG_ARM64_PC:
--		return "pc";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/csky/include/perf_regs.h b/tools/perf/arch/csky/include/perf_regs.h
-index 25ac3bdcb..1afcc0e91 100644
---- a/tools/perf/arch/csky/include/perf_regs.h
-+++ b/tools/perf/arch/csky/include/perf_regs.h
-@@ -15,86 +15,4 @@
- #define PERF_REG_IP	PERF_REG_CSKY_PC
- #define PERF_REG_SP	PERF_REG_CSKY_SP
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_CSKY_A0:
--		return "a0";
--	case PERF_REG_CSKY_A1:
--		return "a1";
--	case PERF_REG_CSKY_A2:
--		return "a2";
--	case PERF_REG_CSKY_A3:
--		return "a3";
--	case PERF_REG_CSKY_REGS0:
--		return "regs0";
--	case PERF_REG_CSKY_REGS1:
--		return "regs1";
--	case PERF_REG_CSKY_REGS2:
--		return "regs2";
--	case PERF_REG_CSKY_REGS3:
--		return "regs3";
--	case PERF_REG_CSKY_REGS4:
--		return "regs4";
--	case PERF_REG_CSKY_REGS5:
--		return "regs5";
--	case PERF_REG_CSKY_REGS6:
--		return "regs6";
--	case PERF_REG_CSKY_REGS7:
--		return "regs7";
--	case PERF_REG_CSKY_REGS8:
--		return "regs8";
--	case PERF_REG_CSKY_REGS9:
--		return "regs9";
--	case PERF_REG_CSKY_SP:
--		return "sp";
--	case PERF_REG_CSKY_LR:
--		return "lr";
--	case PERF_REG_CSKY_PC:
--		return "pc";
--#if defined(__CSKYABIV2__)
--	case PERF_REG_CSKY_EXREGS0:
--		return "exregs0";
--	case PERF_REG_CSKY_EXREGS1:
--		return "exregs1";
--	case PERF_REG_CSKY_EXREGS2:
--		return "exregs2";
--	case PERF_REG_CSKY_EXREGS3:
--		return "exregs3";
--	case PERF_REG_CSKY_EXREGS4:
--		return "exregs4";
--	case PERF_REG_CSKY_EXREGS5:
--		return "exregs5";
--	case PERF_REG_CSKY_EXREGS6:
--		return "exregs6";
--	case PERF_REG_CSKY_EXREGS7:
--		return "exregs7";
--	case PERF_REG_CSKY_EXREGS8:
--		return "exregs8";
--	case PERF_REG_CSKY_EXREGS9:
--		return "exregs9";
--	case PERF_REG_CSKY_EXREGS10:
--		return "exregs10";
--	case PERF_REG_CSKY_EXREGS11:
--		return "exregs11";
--	case PERF_REG_CSKY_EXREGS12:
--		return "exregs12";
--	case PERF_REG_CSKY_EXREGS13:
--		return "exregs13";
--	case PERF_REG_CSKY_EXREGS14:
--		return "exregs14";
--	case PERF_REG_CSKY_TLS:
--		return "tls";
--	case PERF_REG_CSKY_HI:
--		return "hi";
--	case PERF_REG_CSKY_LO:
--		return "lo";
--#endif
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mips/include/perf_regs.h
-index ee73b36a1..b8cd8bbb3 100644
---- a/tools/perf/arch/mips/include/perf_regs.h
-+++ b/tools/perf/arch/mips/include/perf_regs.h
-@@ -12,73 +12,4 @@
- 
- #define PERF_REGS_MASK ((1ULL << PERF_REG_MIPS_MAX) - 1)
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_MIPS_PC:
--		return "PC";
--	case PERF_REG_MIPS_R1:
--		return "$1";
--	case PERF_REG_MIPS_R2:
--		return "$2";
--	case PERF_REG_MIPS_R3:
--		return "$3";
--	case PERF_REG_MIPS_R4:
--		return "$4";
--	case PERF_REG_MIPS_R5:
--		return "$5";
--	case PERF_REG_MIPS_R6:
--		return "$6";
--	case PERF_REG_MIPS_R7:
--		return "$7";
--	case PERF_REG_MIPS_R8:
--		return "$8";
--	case PERF_REG_MIPS_R9:
--		return "$9";
--	case PERF_REG_MIPS_R10:
--		return "$10";
--	case PERF_REG_MIPS_R11:
--		return "$11";
--	case PERF_REG_MIPS_R12:
--		return "$12";
--	case PERF_REG_MIPS_R13:
--		return "$13";
--	case PERF_REG_MIPS_R14:
--		return "$14";
--	case PERF_REG_MIPS_R15:
--		return "$15";
--	case PERF_REG_MIPS_R16:
--		return "$16";
--	case PERF_REG_MIPS_R17:
--		return "$17";
--	case PERF_REG_MIPS_R18:
--		return "$18";
--	case PERF_REG_MIPS_R19:
--		return "$19";
--	case PERF_REG_MIPS_R20:
--		return "$20";
--	case PERF_REG_MIPS_R21:
--		return "$21";
--	case PERF_REG_MIPS_R22:
--		return "$22";
--	case PERF_REG_MIPS_R23:
--		return "$23";
--	case PERF_REG_MIPS_R24:
--		return "$24";
--	case PERF_REG_MIPS_R25:
--		return "$25";
--	case PERF_REG_MIPS_R28:
--		return "$28";
--	case PERF_REG_MIPS_R29:
--		return "$29";
--	case PERF_REG_MIPS_R30:
--		return "$30";
--	case PERF_REG_MIPS_R31:
--		return "$31";
--	default:
--		break;
--	}
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/powerpc/include/perf_regs.h b/tools/perf/arch/powerpc/include/perf_regs.h
-index 93339d17a..9bb17c3f3 100644
---- a/tools/perf/arch/powerpc/include/perf_regs.h
-+++ b/tools/perf/arch/powerpc/include/perf_regs.h
-@@ -19,70 +19,4 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP     PERF_REG_POWERPC_NIP
- #define PERF_REG_SP     PERF_REG_POWERPC_R1
- 
--static const char *reg_names[] = {
--	[PERF_REG_POWERPC_R0] = "r0",
--	[PERF_REG_POWERPC_R1] = "r1",
--	[PERF_REG_POWERPC_R2] = "r2",
--	[PERF_REG_POWERPC_R3] = "r3",
--	[PERF_REG_POWERPC_R4] = "r4",
--	[PERF_REG_POWERPC_R5] = "r5",
--	[PERF_REG_POWERPC_R6] = "r6",
--	[PERF_REG_POWERPC_R7] = "r7",
--	[PERF_REG_POWERPC_R8] = "r8",
--	[PERF_REG_POWERPC_R9] = "r9",
--	[PERF_REG_POWERPC_R10] = "r10",
--	[PERF_REG_POWERPC_R11] = "r11",
--	[PERF_REG_POWERPC_R12] = "r12",
--	[PERF_REG_POWERPC_R13] = "r13",
--	[PERF_REG_POWERPC_R14] = "r14",
--	[PERF_REG_POWERPC_R15] = "r15",
--	[PERF_REG_POWERPC_R16] = "r16",
--	[PERF_REG_POWERPC_R17] = "r17",
--	[PERF_REG_POWERPC_R18] = "r18",
--	[PERF_REG_POWERPC_R19] = "r19",
--	[PERF_REG_POWERPC_R20] = "r20",
--	[PERF_REG_POWERPC_R21] = "r21",
--	[PERF_REG_POWERPC_R22] = "r22",
--	[PERF_REG_POWERPC_R23] = "r23",
--	[PERF_REG_POWERPC_R24] = "r24",
--	[PERF_REG_POWERPC_R25] = "r25",
--	[PERF_REG_POWERPC_R26] = "r26",
--	[PERF_REG_POWERPC_R27] = "r27",
--	[PERF_REG_POWERPC_R28] = "r28",
--	[PERF_REG_POWERPC_R29] = "r29",
--	[PERF_REG_POWERPC_R30] = "r30",
--	[PERF_REG_POWERPC_R31] = "r31",
--	[PERF_REG_POWERPC_NIP] = "nip",
--	[PERF_REG_POWERPC_MSR] = "msr",
--	[PERF_REG_POWERPC_ORIG_R3] = "orig_r3",
--	[PERF_REG_POWERPC_CTR] = "ctr",
--	[PERF_REG_POWERPC_LINK] = "link",
--	[PERF_REG_POWERPC_XER] = "xer",
--	[PERF_REG_POWERPC_CCR] = "ccr",
--	[PERF_REG_POWERPC_SOFTE] = "softe",
--	[PERF_REG_POWERPC_TRAP] = "trap",
--	[PERF_REG_POWERPC_DAR] = "dar",
--	[PERF_REG_POWERPC_DSISR] = "dsisr",
--	[PERF_REG_POWERPC_SIER] = "sier",
--	[PERF_REG_POWERPC_MMCRA] = "mmcra",
--	[PERF_REG_POWERPC_MMCR0] = "mmcr0",
--	[PERF_REG_POWERPC_MMCR1] = "mmcr1",
--	[PERF_REG_POWERPC_MMCR2] = "mmcr2",
--	[PERF_REG_POWERPC_MMCR3] = "mmcr3",
--	[PERF_REG_POWERPC_SIER2] = "sier2",
--	[PERF_REG_POWERPC_SIER3] = "sier3",
--	[PERF_REG_POWERPC_PMC1] = "pmc1",
--	[PERF_REG_POWERPC_PMC2] = "pmc2",
--	[PERF_REG_POWERPC_PMC3] = "pmc3",
--	[PERF_REG_POWERPC_PMC4] = "pmc4",
--	[PERF_REG_POWERPC_PMC5] = "pmc5",
--	[PERF_REG_POWERPC_PMC6] = "pmc6",
--	[PERF_REG_POWERPC_SDAR] = "sdar",
--	[PERF_REG_POWERPC_SIAR] = "siar",
--};
--
--static inline const char *__perf_reg_name(int id)
--{
--	return reg_names[id];
--}
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/riscv/include/perf_regs.h
-index 6b02a767c..6944bf0de 100644
---- a/tools/perf/arch/riscv/include/perf_regs.h
-+++ b/tools/perf/arch/riscv/include/perf_regs.h
-@@ -19,78 +19,4 @@
- #define PERF_REG_IP	PERF_REG_RISCV_PC
- #define PERF_REG_SP	PERF_REG_RISCV_SP
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_RISCV_PC:
--		return "pc";
--	case PERF_REG_RISCV_RA:
--		return "ra";
--	case PERF_REG_RISCV_SP:
--		return "sp";
--	case PERF_REG_RISCV_GP:
--		return "gp";
--	case PERF_REG_RISCV_TP:
--		return "tp";
--	case PERF_REG_RISCV_T0:
--		return "t0";
--	case PERF_REG_RISCV_T1:
--		return "t1";
--	case PERF_REG_RISCV_T2:
--		return "t2";
--	case PERF_REG_RISCV_S0:
--		return "s0";
--	case PERF_REG_RISCV_S1:
--		return "s1";
--	case PERF_REG_RISCV_A0:
--		return "a0";
--	case PERF_REG_RISCV_A1:
--		return "a1";
--	case PERF_REG_RISCV_A2:
--		return "a2";
--	case PERF_REG_RISCV_A3:
--		return "a3";
--	case PERF_REG_RISCV_A4:
--		return "a4";
--	case PERF_REG_RISCV_A5:
--		return "a5";
--	case PERF_REG_RISCV_A6:
--		return "a6";
--	case PERF_REG_RISCV_A7:
--		return "a7";
--	case PERF_REG_RISCV_S2:
--		return "s2";
--	case PERF_REG_RISCV_S3:
--		return "s3";
--	case PERF_REG_RISCV_S4:
--		return "s4";
--	case PERF_REG_RISCV_S5:
--		return "s5";
--	case PERF_REG_RISCV_S6:
--		return "s6";
--	case PERF_REG_RISCV_S7:
--		return "s7";
--	case PERF_REG_RISCV_S8:
--		return "s8";
--	case PERF_REG_RISCV_S9:
--		return "s9";
--	case PERF_REG_RISCV_S10:
--		return "s10";
--	case PERF_REG_RISCV_S11:
--		return "s11";
--	case PERF_REG_RISCV_T3:
--		return "t3";
--	case PERF_REG_RISCV_T4:
--		return "t4";
--	case PERF_REG_RISCV_T5:
--		return "t5";
--	case PERF_REG_RISCV_T6:
--		return "t6";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/s390/include/perf_regs.h b/tools/perf/arch/s390/include/perf_regs.h
-index ce3031526..52fcc0891 100644
---- a/tools/perf/arch/s390/include/perf_regs.h
-+++ b/tools/perf/arch/s390/include/perf_regs.h
-@@ -14,82 +14,4 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP PERF_REG_S390_PC
- #define PERF_REG_SP PERF_REG_S390_R15
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_S390_R0:
--		return "R0";
--	case PERF_REG_S390_R1:
--		return "R1";
--	case PERF_REG_S390_R2:
--		return "R2";
--	case PERF_REG_S390_R3:
--		return "R3";
--	case PERF_REG_S390_R4:
--		return "R4";
--	case PERF_REG_S390_R5:
--		return "R5";
--	case PERF_REG_S390_R6:
--		return "R6";
--	case PERF_REG_S390_R7:
--		return "R7";
--	case PERF_REG_S390_R8:
--		return "R8";
--	case PERF_REG_S390_R9:
--		return "R9";
--	case PERF_REG_S390_R10:
--		return "R10";
--	case PERF_REG_S390_R11:
--		return "R11";
--	case PERF_REG_S390_R12:
--		return "R12";
--	case PERF_REG_S390_R13:
--		return "R13";
--	case PERF_REG_S390_R14:
--		return "R14";
--	case PERF_REG_S390_R15:
--		return "R15";
--	case PERF_REG_S390_FP0:
--		return "FP0";
--	case PERF_REG_S390_FP1:
--		return "FP1";
--	case PERF_REG_S390_FP2:
--		return "FP2";
--	case PERF_REG_S390_FP3:
--		return "FP3";
--	case PERF_REG_S390_FP4:
--		return "FP4";
--	case PERF_REG_S390_FP5:
--		return "FP5";
--	case PERF_REG_S390_FP6:
--		return "FP6";
--	case PERF_REG_S390_FP7:
--		return "FP7";
--	case PERF_REG_S390_FP8:
--		return "FP8";
--	case PERF_REG_S390_FP9:
--		return "FP9";
--	case PERF_REG_S390_FP10:
--		return "FP10";
--	case PERF_REG_S390_FP11:
--		return "FP11";
--	case PERF_REG_S390_FP12:
--		return "FP12";
--	case PERF_REG_S390_FP13:
--		return "FP13";
--	case PERF_REG_S390_FP14:
--		return "FP14";
--	case PERF_REG_S390_FP15:
--		return "FP15";
--	case PERF_REG_S390_MASK:
--		return "MASK";
--	case PERF_REG_S390_PC:
--		return "PC";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/x86/include/perf_regs.h b/tools/perf/arch/x86/include/perf_regs.h
-index cddc4cdc0..16e23b722 100644
---- a/tools/perf/arch/x86/include/perf_regs.h
-+++ b/tools/perf/arch/x86/include/perf_regs.h
-@@ -23,86 +23,4 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP PERF_REG_X86_IP
- #define PERF_REG_SP PERF_REG_X86_SP
- 
--static inline const char *__perf_reg_name(int id)
--{
--	switch (id) {
--	case PERF_REG_X86_AX:
--		return "AX";
--	case PERF_REG_X86_BX:
--		return "BX";
--	case PERF_REG_X86_CX:
--		return "CX";
--	case PERF_REG_X86_DX:
--		return "DX";
--	case PERF_REG_X86_SI:
--		return "SI";
--	case PERF_REG_X86_DI:
--		return "DI";
--	case PERF_REG_X86_BP:
--		return "BP";
--	case PERF_REG_X86_SP:
--		return "SP";
--	case PERF_REG_X86_IP:
--		return "IP";
--	case PERF_REG_X86_FLAGS:
--		return "FLAGS";
--	case PERF_REG_X86_CS:
--		return "CS";
--	case PERF_REG_X86_SS:
--		return "SS";
--	case PERF_REG_X86_DS:
--		return "DS";
--	case PERF_REG_X86_ES:
--		return "ES";
--	case PERF_REG_X86_FS:
--		return "FS";
--	case PERF_REG_X86_GS:
--		return "GS";
--#ifdef HAVE_ARCH_X86_64_SUPPORT
--	case PERF_REG_X86_R8:
--		return "R8";
--	case PERF_REG_X86_R9:
--		return "R9";
--	case PERF_REG_X86_R10:
--		return "R10";
--	case PERF_REG_X86_R11:
--		return "R11";
--	case PERF_REG_X86_R12:
--		return "R12";
--	case PERF_REG_X86_R13:
--		return "R13";
--	case PERF_REG_X86_R14:
--		return "R14";
--	case PERF_REG_X86_R15:
--		return "R15";
--#endif /* HAVE_ARCH_X86_64_SUPPORT */
--
--#define XMM(x) \
--	case PERF_REG_X86_XMM ## x:	\
--	case PERF_REG_X86_XMM ## x + 1:	\
--		return "XMM" #x;
--	XMM(0)
--	XMM(1)
--	XMM(2)
--	XMM(3)
--	XMM(4)
--	XMM(5)
--	XMM(6)
--	XMM(7)
--	XMM(8)
--	XMM(9)
--	XMM(10)
--	XMM(11)
--	XMM(12)
--	XMM(13)
--	XMM(14)
--	XMM(15)
--#undef XMM
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- #endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 9434367af..da2175d70 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -15,6 +15,7 @@
- #include "util/symbol.h"
- #include "util/thread.h"
- #include "util/trace-event.h"
-+#include "util/env.h"
- #include "util/evlist.h"
- #include "util/evsel.h"
- #include "util/evsel_fprintf.h"
-@@ -648,7 +649,7 @@ static int perf_session__check_output_opt(struct perf_session *session)
- 	return 0;
- }
- 
--static int perf_sample__fprintf_regs(struct regs_dump *regs, uint64_t mask,
-+static int perf_sample__fprintf_regs(struct regs_dump *regs, uint64_t mask, const char *arch,
- 				     FILE *fp)
- {
- 	unsigned i = 0, r;
-@@ -661,7 +662,7 @@ static int perf_sample__fprintf_regs(struct regs_dump *regs, uint64_t mask,
- 
- 	for_each_set_bit(r, (unsigned long *) &mask, sizeof(mask) * 8) {
- 		u64 val = regs->regs[i++];
--		printed += fprintf(fp, "%5s:0x%"PRIx64" ", perf_reg_name(r), val);
-+		printed += fprintf(fp, "%5s:0x%"PRIx64" ", perf_reg_name(r, arch), val);
- 	}
- 
- 	return printed;
-@@ -718,17 +719,17 @@ tod_scnprintf(struct perf_script *script, char *buf, int buflen,
- }
- 
- static int perf_sample__fprintf_iregs(struct perf_sample *sample,
--				      struct perf_event_attr *attr, FILE *fp)
-+				      struct perf_event_attr *attr, const char *arch, FILE *fp)
- {
- 	return perf_sample__fprintf_regs(&sample->intr_regs,
--					 attr->sample_regs_intr, fp);
-+					 attr->sample_regs_intr, arch, fp);
- }
- 
- static int perf_sample__fprintf_uregs(struct perf_sample *sample,
--				      struct perf_event_attr *attr, FILE *fp)
-+				      struct perf_event_attr *attr, const char *arch, FILE *fp)
- {
- 	return perf_sample__fprintf_regs(&sample->user_regs,
--					 attr->sample_regs_user, fp);
-+					 attr->sample_regs_user, arch, fp);
- }
- 
- static int perf_sample__fprintf_start(struct perf_script *script,
-@@ -2000,6 +2001,7 @@ static void process_event(struct perf_script *script,
- 	struct evsel_script *es = evsel->priv;
- 	FILE *fp = es->fp;
- 	char str[PAGE_SIZE_NAME_LEN];
-+	const char *arch = perf_env__arch(machine->env);
- 
- 	if (output[type].fields == 0)
- 		return;
-@@ -2066,10 +2068,10 @@ static void process_event(struct perf_script *script,
- 	}
- 
- 	if (PRINT_FIELD(IREGS))
--		perf_sample__fprintf_iregs(sample, attr, fp);
-+		perf_sample__fprintf_iregs(sample, attr, arch, fp);
- 
- 	if (PRINT_FIELD(UREGS))
--		perf_sample__fprintf_uregs(sample, attr, fp);
-+		perf_sample__fprintf_uregs(sample, attr, arch, fp);
- 
- 	if (PRINT_FIELD(BRSTACK))
- 		perf_sample__fprintf_brstack(sample, thread, attr, fp);
-diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
-index 06a7461ba..a982e40ee 100644
---- a/tools/perf/util/perf_regs.c
-+++ b/tools/perf/util/perf_regs.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <errno.h>
-+#include <string.h>
- #include "perf_regs.h"
- #include "event.h"
- 
-@@ -20,6 +21,671 @@ uint64_t __weak arch__user_reg_mask(void)
- }
- 
- #ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#define perf_event_arm_regs perf_event_arm64_regs
-+#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
-+#undef perf_event_arm_regs
-+
-+#include "../../arch/arm/include/uapi/asm/perf_regs.h"
-+#include "../../arch/csky/include/uapi/asm/perf_regs.h"
-+#include "../../arch/mips/include/uapi/asm/perf_regs.h"
-+#include "../../arch/powerpc/include/uapi/asm/perf_regs.h"
-+#include "../../arch/riscv/include/uapi/asm/perf_regs.h"
-+#include "../../arch/s390/include/uapi/asm/perf_regs.h"
-+#include "../../arch/x86/include/uapi/asm/perf_regs.h"
-+
-+static const char *__perf_reg_name_arm64(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_ARM64_X0:
-+		return "x0";
-+	case PERF_REG_ARM64_X1:
-+		return "x1";
-+	case PERF_REG_ARM64_X2:
-+		return "x2";
-+	case PERF_REG_ARM64_X3:
-+		return "x3";
-+	case PERF_REG_ARM64_X4:
-+		return "x4";
-+	case PERF_REG_ARM64_X5:
-+		return "x5";
-+	case PERF_REG_ARM64_X6:
-+		return "x6";
-+	case PERF_REG_ARM64_X7:
-+		return "x7";
-+	case PERF_REG_ARM64_X8:
-+		return "x8";
-+	case PERF_REG_ARM64_X9:
-+		return "x9";
-+	case PERF_REG_ARM64_X10:
-+		return "x10";
-+	case PERF_REG_ARM64_X11:
-+		return "x11";
-+	case PERF_REG_ARM64_X12:
-+		return "x12";
-+	case PERF_REG_ARM64_X13:
-+		return "x13";
-+	case PERF_REG_ARM64_X14:
-+		return "x14";
-+	case PERF_REG_ARM64_X15:
-+		return "x15";
-+	case PERF_REG_ARM64_X16:
-+		return "x16";
-+	case PERF_REG_ARM64_X17:
-+		return "x17";
-+	case PERF_REG_ARM64_X18:
-+		return "x18";
-+	case PERF_REG_ARM64_X19:
-+		return "x19";
-+	case PERF_REG_ARM64_X20:
-+		return "x20";
-+	case PERF_REG_ARM64_X21:
-+		return "x21";
-+	case PERF_REG_ARM64_X22:
-+		return "x22";
-+	case PERF_REG_ARM64_X23:
-+		return "x23";
-+	case PERF_REG_ARM64_X24:
-+		return "x24";
-+	case PERF_REG_ARM64_X25:
-+		return "x25";
-+	case PERF_REG_ARM64_X26:
-+		return "x26";
-+	case PERF_REG_ARM64_X27:
-+		return "x27";
-+	case PERF_REG_ARM64_X28:
-+		return "x28";
-+	case PERF_REG_ARM64_X29:
-+		return "x29";
-+	case PERF_REG_ARM64_SP:
-+		return "sp";
-+	case PERF_REG_ARM64_LR:
-+		return "lr";
-+	case PERF_REG_ARM64_PC:
-+		return "pc";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_arm(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_ARM_R0:
-+		return "r0";
-+	case PERF_REG_ARM_R1:
-+		return "r1";
-+	case PERF_REG_ARM_R2:
-+		return "r2";
-+	case PERF_REG_ARM_R3:
-+		return "r3";
-+	case PERF_REG_ARM_R4:
-+		return "r4";
-+	case PERF_REG_ARM_R5:
-+		return "r5";
-+	case PERF_REG_ARM_R6:
-+		return "r6";
-+	case PERF_REG_ARM_R7:
-+		return "r7";
-+	case PERF_REG_ARM_R8:
-+		return "r8";
-+	case PERF_REG_ARM_R9:
-+		return "r9";
-+	case PERF_REG_ARM_R10:
-+		return "r10";
-+	case PERF_REG_ARM_FP:
-+		return "fp";
-+	case PERF_REG_ARM_IP:
-+		return "ip";
-+	case PERF_REG_ARM_SP:
-+		return "sp";
-+	case PERF_REG_ARM_LR:
-+		return "lr";
-+	case PERF_REG_ARM_PC:
-+		return "pc";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_csky(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_CSKY_A0:
-+		return "a0";
-+	case PERF_REG_CSKY_A1:
-+		return "a1";
-+	case PERF_REG_CSKY_A2:
-+		return "a2";
-+	case PERF_REG_CSKY_A3:
-+		return "a3";
-+	case PERF_REG_CSKY_REGS0:
-+		return "regs0";
-+	case PERF_REG_CSKY_REGS1:
-+		return "regs1";
-+	case PERF_REG_CSKY_REGS2:
-+		return "regs2";
-+	case PERF_REG_CSKY_REGS3:
-+		return "regs3";
-+	case PERF_REG_CSKY_REGS4:
-+		return "regs4";
-+	case PERF_REG_CSKY_REGS5:
-+		return "regs5";
-+	case PERF_REG_CSKY_REGS6:
-+		return "regs6";
-+	case PERF_REG_CSKY_REGS7:
-+		return "regs7";
-+	case PERF_REG_CSKY_REGS8:
-+		return "regs8";
-+	case PERF_REG_CSKY_REGS9:
-+		return "regs9";
-+	case PERF_REG_CSKY_SP:
-+		return "sp";
-+	case PERF_REG_CSKY_LR:
-+		return "lr";
-+	case PERF_REG_CSKY_PC:
-+		return "pc";
-+#if defined(__CSKYABIV2__)
-+	case PERF_REG_CSKY_EXREGS0:
-+		return "exregs0";
-+	case PERF_REG_CSKY_EXREGS1:
-+		return "exregs1";
-+	case PERF_REG_CSKY_EXREGS2:
-+		return "exregs2";
-+	case PERF_REG_CSKY_EXREGS3:
-+		return "exregs3";
-+	case PERF_REG_CSKY_EXREGS4:
-+		return "exregs4";
-+	case PERF_REG_CSKY_EXREGS5:
-+		return "exregs5";
-+	case PERF_REG_CSKY_EXREGS6:
-+		return "exregs6";
-+	case PERF_REG_CSKY_EXREGS7:
-+		return "exregs7";
-+	case PERF_REG_CSKY_EXREGS8:
-+		return "exregs8";
-+	case PERF_REG_CSKY_EXREGS9:
-+		return "exregs9";
-+	case PERF_REG_CSKY_EXREGS10:
-+		return "exregs10";
-+	case PERF_REG_CSKY_EXREGS11:
-+		return "exregs11";
-+	case PERF_REG_CSKY_EXREGS12:
-+		return "exregs12";
-+	case PERF_REG_CSKY_EXREGS13:
-+		return "exregs13";
-+	case PERF_REG_CSKY_EXREGS14:
-+		return "exregs14";
-+	case PERF_REG_CSKY_TLS:
-+		return "tls";
-+	case PERF_REG_CSKY_HI:
-+		return "hi";
-+	case PERF_REG_CSKY_LO:
-+		return "lo";
-+#endif
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_mips(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_MIPS_PC:
-+		return "PC";
-+	case PERF_REG_MIPS_R1:
-+		return "$1";
-+	case PERF_REG_MIPS_R2:
-+		return "$2";
-+	case PERF_REG_MIPS_R3:
-+		return "$3";
-+	case PERF_REG_MIPS_R4:
-+		return "$4";
-+	case PERF_REG_MIPS_R5:
-+		return "$5";
-+	case PERF_REG_MIPS_R6:
-+		return "$6";
-+	case PERF_REG_MIPS_R7:
-+		return "$7";
-+	case PERF_REG_MIPS_R8:
-+		return "$8";
-+	case PERF_REG_MIPS_R9:
-+		return "$9";
-+	case PERF_REG_MIPS_R10:
-+		return "$10";
-+	case PERF_REG_MIPS_R11:
-+		return "$11";
-+	case PERF_REG_MIPS_R12:
-+		return "$12";
-+	case PERF_REG_MIPS_R13:
-+		return "$13";
-+	case PERF_REG_MIPS_R14:
-+		return "$14";
-+	case PERF_REG_MIPS_R15:
-+		return "$15";
-+	case PERF_REG_MIPS_R16:
-+		return "$16";
-+	case PERF_REG_MIPS_R17:
-+		return "$17";
-+	case PERF_REG_MIPS_R18:
-+		return "$18";
-+	case PERF_REG_MIPS_R19:
-+		return "$19";
-+	case PERF_REG_MIPS_R20:
-+		return "$20";
-+	case PERF_REG_MIPS_R21:
-+		return "$21";
-+	case PERF_REG_MIPS_R22:
-+		return "$22";
-+	case PERF_REG_MIPS_R23:
-+		return "$23";
-+	case PERF_REG_MIPS_R24:
-+		return "$24";
-+	case PERF_REG_MIPS_R25:
-+		return "$25";
-+	case PERF_REG_MIPS_R28:
-+		return "$28";
-+	case PERF_REG_MIPS_R29:
-+		return "$29";
-+	case PERF_REG_MIPS_R30:
-+		return "$30";
-+	case PERF_REG_MIPS_R31:
-+		return "$31";
-+	default:
-+		break;
-+	}
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_powerpc(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_POWERPC_R0:
-+		return "r0";
-+	case PERF_REG_POWERPC_R1:
-+		return "r1";
-+	case PERF_REG_POWERPC_R2:
-+		return "r2";
-+	case PERF_REG_POWERPC_R3:
-+		return "r3";
-+	case PERF_REG_POWERPC_R4:
-+		return "r4";
-+	case PERF_REG_POWERPC_R5:
-+		return "r5";
-+	case PERF_REG_POWERPC_R6:
-+		return "r6";
-+	case PERF_REG_POWERPC_R7:
-+		return "r7";
-+	case PERF_REG_POWERPC_R8:
-+		return "r8";
-+	case PERF_REG_POWERPC_R9:
-+		return "r9";
-+	case PERF_REG_POWERPC_R10:
-+		return "r10";
-+	case PERF_REG_POWERPC_R11:
-+		return "r11";
-+	case PERF_REG_POWERPC_R12:
-+		return "r12";
-+	case PERF_REG_POWERPC_R13:
-+		return "r13";
-+	case PERF_REG_POWERPC_R14:
-+		return "r14";
-+	case PERF_REG_POWERPC_R15:
-+		return "r15";
-+	case PERF_REG_POWERPC_R16:
-+		return "r16";
-+	case PERF_REG_POWERPC_R17:
-+		return "r17";
-+	case PERF_REG_POWERPC_R18:
-+		return "r18";
-+	case PERF_REG_POWERPC_R19:
-+		return "r19";
-+	case PERF_REG_POWERPC_R20:
-+		return "r20";
-+	case PERF_REG_POWERPC_R21:
-+		return "r21";
-+	case PERF_REG_POWERPC_R22:
-+		return "r22";
-+	case PERF_REG_POWERPC_R23:
-+		return "r23";
-+	case PERF_REG_POWERPC_R24:
-+		return "r24";
-+	case PERF_REG_POWERPC_R25:
-+		return "r25";
-+	case PERF_REG_POWERPC_R26:
-+		return "r26";
-+	case PERF_REG_POWERPC_R27:
-+		return "r27";
-+	case PERF_REG_POWERPC_R28:
-+		return "r28";
-+	case PERF_REG_POWERPC_R29:
-+		return "r29";
-+	case PERF_REG_POWERPC_R30:
-+		return "r30";
-+	case PERF_REG_POWERPC_R31:
-+		return "r31";
-+	case PERF_REG_POWERPC_NIP:
-+		return "nip";
-+	case PERF_REG_POWERPC_MSR:
-+		return "msr";
-+	case PERF_REG_POWERPC_ORIG_R3:
-+		return "orig_r3";
-+	case PERF_REG_POWERPC_CTR:
-+		return "ctr";
-+	case PERF_REG_POWERPC_LINK:
-+		return "link";
-+	case PERF_REG_POWERPC_XER:
-+		return "xer";
-+	case PERF_REG_POWERPC_CCR:
-+		return "ccr";
-+	case PERF_REG_POWERPC_SOFTE:
-+		return "softe";
-+	case PERF_REG_POWERPC_TRAP:
-+		return "trap";
-+	case PERF_REG_POWERPC_DAR:
-+		return "dar";
-+	case PERF_REG_POWERPC_DSISR:
-+		return "dsisr";
-+	case PERF_REG_POWERPC_SIER:
-+		return "sier";
-+	case PERF_REG_POWERPC_MMCRA:
-+		return "mmcra";
-+	case PERF_REG_POWERPC_MMCR0:
-+		return "mmcr0";
-+	case PERF_REG_POWERPC_MMCR1:
-+		return "mmcr1";
-+	case PERF_REG_POWERPC_MMCR2:
-+		return "mmcr2";
-+	case PERF_REG_POWERPC_MMCR3:
-+		return "mmcr3";
-+	case PERF_REG_POWERPC_SIER2:
-+		return "sier2";
-+	case PERF_REG_POWERPC_SIER3:
-+		return "sier3";
-+	case PERF_REG_POWERPC_PMC1:
-+		return "pmc1";
-+	case PERF_REG_POWERPC_PMC2:
-+		return "pmc2";
-+	case PERF_REG_POWERPC_PMC3:
-+		return "pmc3";
-+	case PERF_REG_POWERPC_PMC4:
-+		return "pmc4";
-+	case PERF_REG_POWERPC_PMC5:
-+		return "pmc5";
-+	case PERF_REG_POWERPC_PMC6:
-+		return "pmc6";
-+	case PERF_REG_POWERPC_SDAR:
-+		return "sdar";
-+	case PERF_REG_POWERPC_SIAR:
-+		return "siar";
-+	default:
-+		break;
-+	}
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_riscv(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_RISCV_PC:
-+		return "pc";
-+	case PERF_REG_RISCV_RA:
-+		return "ra";
-+	case PERF_REG_RISCV_SP:
-+		return "sp";
-+	case PERF_REG_RISCV_GP:
-+		return "gp";
-+	case PERF_REG_RISCV_TP:
-+		return "tp";
-+	case PERF_REG_RISCV_T0:
-+		return "t0";
-+	case PERF_REG_RISCV_T1:
-+		return "t1";
-+	case PERF_REG_RISCV_T2:
-+		return "t2";
-+	case PERF_REG_RISCV_S0:
-+		return "s0";
-+	case PERF_REG_RISCV_S1:
-+		return "s1";
-+	case PERF_REG_RISCV_A0:
-+		return "a0";
-+	case PERF_REG_RISCV_A1:
-+		return "a1";
-+	case PERF_REG_RISCV_A2:
-+		return "a2";
-+	case PERF_REG_RISCV_A3:
-+		return "a3";
-+	case PERF_REG_RISCV_A4:
-+		return "a4";
-+	case PERF_REG_RISCV_A5:
-+		return "a5";
-+	case PERF_REG_RISCV_A6:
-+		return "a6";
-+	case PERF_REG_RISCV_A7:
-+		return "a7";
-+	case PERF_REG_RISCV_S2:
-+		return "s2";
-+	case PERF_REG_RISCV_S3:
-+		return "s3";
-+	case PERF_REG_RISCV_S4:
-+		return "s4";
-+	case PERF_REG_RISCV_S5:
-+		return "s5";
-+	case PERF_REG_RISCV_S6:
-+		return "s6";
-+	case PERF_REG_RISCV_S7:
-+		return "s7";
-+	case PERF_REG_RISCV_S8:
-+		return "s8";
-+	case PERF_REG_RISCV_S9:
-+		return "s9";
-+	case PERF_REG_RISCV_S10:
-+		return "s10";
-+	case PERF_REG_RISCV_S11:
-+		return "s11";
-+	case PERF_REG_RISCV_T3:
-+		return "t3";
-+	case PERF_REG_RISCV_T4:
-+		return "t4";
-+	case PERF_REG_RISCV_T5:
-+		return "t5";
-+	case PERF_REG_RISCV_T6:
-+		return "t6";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_s390(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_S390_R0:
-+		return "R0";
-+	case PERF_REG_S390_R1:
-+		return "R1";
-+	case PERF_REG_S390_R2:
-+		return "R2";
-+	case PERF_REG_S390_R3:
-+		return "R3";
-+	case PERF_REG_S390_R4:
-+		return "R4";
-+	case PERF_REG_S390_R5:
-+		return "R5";
-+	case PERF_REG_S390_R6:
-+		return "R6";
-+	case PERF_REG_S390_R7:
-+		return "R7";
-+	case PERF_REG_S390_R8:
-+		return "R8";
-+	case PERF_REG_S390_R9:
-+		return "R9";
-+	case PERF_REG_S390_R10:
-+		return "R10";
-+	case PERF_REG_S390_R11:
-+		return "R11";
-+	case PERF_REG_S390_R12:
-+		return "R12";
-+	case PERF_REG_S390_R13:
-+		return "R13";
-+	case PERF_REG_S390_R14:
-+		return "R14";
-+	case PERF_REG_S390_R15:
-+		return "R15";
-+	case PERF_REG_S390_FP0:
-+		return "FP0";
-+	case PERF_REG_S390_FP1:
-+		return "FP1";
-+	case PERF_REG_S390_FP2:
-+		return "FP2";
-+	case PERF_REG_S390_FP3:
-+		return "FP3";
-+	case PERF_REG_S390_FP4:
-+		return "FP4";
-+	case PERF_REG_S390_FP5:
-+		return "FP5";
-+	case PERF_REG_S390_FP6:
-+		return "FP6";
-+	case PERF_REG_S390_FP7:
-+		return "FP7";
-+	case PERF_REG_S390_FP8:
-+		return "FP8";
-+	case PERF_REG_S390_FP9:
-+		return "FP9";
-+	case PERF_REG_S390_FP10:
-+		return "FP10";
-+	case PERF_REG_S390_FP11:
-+		return "FP11";
-+	case PERF_REG_S390_FP12:
-+		return "FP12";
-+	case PERF_REG_S390_FP13:
-+		return "FP13";
-+	case PERF_REG_S390_FP14:
-+		return "FP14";
-+	case PERF_REG_S390_FP15:
-+		return "FP15";
-+	case PERF_REG_S390_MASK:
-+		return "MASK";
-+	case PERF_REG_S390_PC:
-+		return "PC";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const char *__perf_reg_name_x86(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_X86_AX:
-+		return "AX";
-+	case PERF_REG_X86_BX:
-+		return "BX";
-+	case PERF_REG_X86_CX:
-+		return "CX";
-+	case PERF_REG_X86_DX:
-+		return "DX";
-+	case PERF_REG_X86_SI:
-+		return "SI";
-+	case PERF_REG_X86_DI:
-+		return "DI";
-+	case PERF_REG_X86_BP:
-+		return "BP";
-+	case PERF_REG_X86_SP:
-+		return "SP";
-+	case PERF_REG_X86_IP:
-+		return "IP";
-+	case PERF_REG_X86_FLAGS:
-+		return "FLAGS";
-+	case PERF_REG_X86_CS:
-+		return "CS";
-+	case PERF_REG_X86_SS:
-+		return "SS";
-+	case PERF_REG_X86_DS:
-+		return "DS";
-+	case PERF_REG_X86_ES:
-+		return "ES";
-+	case PERF_REG_X86_FS:
-+		return "FS";
-+	case PERF_REG_X86_GS:
-+		return "GS";
-+	case PERF_REG_X86_R8:
-+		return "R8";
-+	case PERF_REG_X86_R9:
-+		return "R9";
-+	case PERF_REG_X86_R10:
-+		return "R10";
-+	case PERF_REG_X86_R11:
-+		return "R11";
-+	case PERF_REG_X86_R12:
-+		return "R12";
-+	case PERF_REG_X86_R13:
-+		return "R13";
-+	case PERF_REG_X86_R14:
-+		return "R14";
-+	case PERF_REG_X86_R15:
-+		return "R15";
-+
-+#define XMM(x) \
-+	case PERF_REG_X86_XMM ## x:	\
-+	case PERF_REG_X86_XMM ## x + 1:	\
-+		return "XMM" #x;
-+	XMM(0)
-+	XMM(1)
-+	XMM(2)
-+	XMM(3)
-+	XMM(4)
-+	XMM(5)
-+	XMM(6)
-+	XMM(7)
-+	XMM(8)
-+	XMM(9)
-+	XMM(10)
-+	XMM(11)
-+	XMM(12)
-+	XMM(13)
-+	XMM(14)
-+	XMM(15)
-+#undef XMM
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
-+}
-+
-+const char *perf_reg_name(int id, const char *arch)
-+{
-+	const char *reg_name = NULL;
-+
-+	if (!strcmp(arch, "csky"))
-+		reg_name = __perf_reg_name_csky(id);
-+	else if (!strcmp(arch, "mips"))
-+		reg_name = __perf_reg_name_mips(id);
-+	else if (!strcmp(arch, "powerpc"))
-+		reg_name = __perf_reg_name_powerpc(id);
-+	else if (!strcmp(arch, "riscv"))
-+		reg_name = __perf_reg_name_riscv(id);
-+	else if (!strcmp(arch, "s390"))
-+		reg_name = __perf_reg_name_s390(id);
-+	else if (!strcmp(arch, "x86"))
-+		reg_name = __perf_reg_name_x86(id);
-+	else if (!strcmp(arch, "arm"))
-+		reg_name = __perf_reg_name_arm(id);
-+	else if (!strcmp(arch, "arm64"))
-+		reg_name = __perf_reg_name_arm64(id);
-+
-+	return reg_name ?: "unknown";
-+}
-+
- int perf_reg_value(u64 *valp, struct regs_dump *regs, int id)
- {
- 	int i, idx = 0;
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index eeac181eb..4e6b1299c 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -31,22 +31,16 @@ extern const struct sample_reg sample_reg_masks[];
- 
- #define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
- 
-+const char *perf_reg_name(int id, const char *arch);
- int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
- 
--static inline const char *perf_reg_name(int id)
--{
--	const char *reg_name = __perf_reg_name(id);
--
--	return reg_name ?: "unknown";
--}
--
- #else
- #define PERF_REGS_MASK	0
- #define PERF_REGS_MAX	0
- 
- #define DWARF_MINIMAL_REGS PERF_REGS_MASK
- 
--static inline const char *perf_reg_name(int id __maybe_unused)
-+static inline const char *perf_reg_name(int id __maybe_unused, const char *arch __maybe_unused)
- {
- 	return "unknown";
- }
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index c0c010350..0445bee92 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -36,6 +36,7 @@
- #include "../debug.h"
- #include "../dso.h"
- #include "../callchain.h"
-+#include "../env.h"
- #include "../evsel.h"
- #include "../event.h"
- #include "../thread.h"
-@@ -687,7 +688,7 @@ static void set_sample_datasrc_in_dict(PyObject *dict,
- 			_PyUnicode_FromString(decode));
- }
- 
--static void regs_map(struct regs_dump *regs, uint64_t mask, char *bf, int size)
-+static void regs_map(struct regs_dump *regs, uint64_t mask, const char *arch, char *bf, int size)
- {
- 	unsigned int i = 0, r;
- 	int printed = 0;
-@@ -702,7 +703,7 @@ static void regs_map(struct regs_dump *regs, uint64_t mask, char *bf, int size)
- 
- 		printed += scnprintf(bf + printed, size - printed,
- 				     "%5s:0x%" PRIx64 " ",
--				     perf_reg_name(r), val);
-+				     perf_reg_name(r, arch), val);
- 	}
- }
- 
-@@ -711,6 +712,7 @@ static void set_regs_in_dict(PyObject *dict,
- 			     struct evsel *evsel)
- {
- 	struct perf_event_attr *attr = &evsel->core.attr;
-+	const char *arch = perf_env__arch(evsel__env(evsel));
- 
- 	/*
- 	 * Here value 28 is a constant size which can be used to print
-@@ -722,12 +724,12 @@ static void set_regs_in_dict(PyObject *dict,
- 	int size = __sw_hweight64(attr->sample_regs_intr) * 28;
- 	char bf[size];
- 
--	regs_map(&sample->intr_regs, attr->sample_regs_intr, bf, sizeof(bf));
-+	regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, sizeof(bf));
- 
- 	pydict_set_item_string_decref(dict, "iregs",
- 			_PyUnicode_FromString(bf));
- 
--	regs_map(&sample->user_regs, attr->sample_regs_user, bf, sizeof(bf));
-+	regs_map(&sample->user_regs, attr->sample_regs_user, arch, bf, sizeof(bf));
- 
- 	pydict_set_item_string_decref(dict, "uregs",
- 			_PyUnicode_FromString(bf));
-diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index d8857d1b6..e1a273048 100644
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@ -15,6 +15,7 @@
- #include "map_symbol.h"
- #include "branch.h"
- #include "debug.h"
-+#include "env.h"
- #include "evlist.h"
- #include "evsel.h"
- #include "memswap.h"
-@@ -1168,7 +1169,7 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
- 	}
- }
- 
--static void regs_dump__printf(u64 mask, u64 *regs)
-+static void regs_dump__printf(u64 mask, u64 *regs, const char *arch)
- {
- 	unsigned rid, i = 0;
- 
-@@ -1176,7 +1177,7 @@ static void regs_dump__printf(u64 mask, u64 *regs)
- 		u64 val = regs[i++];
- 
- 		printf(".... %-5s 0x%016" PRIx64 "\n",
--		       perf_reg_name(rid), val);
-+		       perf_reg_name(rid, arch), val);
- 	}
- }
- 
-@@ -1194,7 +1195,7 @@ static inline const char *regs_dump_abi(struct regs_dump *d)
- 	return regs_abi[d->abi];
- }
- 
--static void regs__printf(const char *type, struct regs_dump *regs)
-+static void regs__printf(const char *type, struct regs_dump *regs, const char *arch)
- {
- 	u64 mask = regs->mask;
- 
-@@ -1203,23 +1204,23 @@ static void regs__printf(const char *type, struct regs_dump *regs)
- 	       mask,
- 	       regs_dump_abi(regs));
- 
--	regs_dump__printf(mask, regs->regs);
-+	regs_dump__printf(mask, regs->regs, arch);
- }
- 
--static void regs_user__printf(struct perf_sample *sample)
-+static void regs_user__printf(struct perf_sample *sample, const char *arch)
- {
- 	struct regs_dump *user_regs = &sample->user_regs;
- 
- 	if (user_regs->regs)
--		regs__printf("user", user_regs);
-+		regs__printf("user", user_regs, arch);
- }
- 
--static void regs_intr__printf(struct perf_sample *sample)
-+static void regs_intr__printf(struct perf_sample *sample, const char *arch)
- {
- 	struct regs_dump *intr_regs = &sample->intr_regs;
- 
- 	if (intr_regs->regs)
--		regs__printf("intr", intr_regs);
-+		regs__printf("intr", intr_regs, arch);
- }
- 
- static void stack_user__printf(struct stack_dump *dump)
-@@ -1304,7 +1305,7 @@ char *get_page_size_name(u64 size, char *str)
- }
- 
- static void dump_sample(struct evsel *evsel, union perf_event *event,
--			struct perf_sample *sample)
-+			struct perf_sample *sample, const char *arch)
- {
- 	u64 sample_type;
- 	char str[PAGE_SIZE_NAME_LEN];
-@@ -1325,10 +1326,10 @@ static void dump_sample(struct evsel *evsel, union perf_event *event,
- 		branch_stack__printf(sample, evsel__has_branch_callstack(evsel));
- 
- 	if (sample_type & PERF_SAMPLE_REGS_USER)
--		regs_user__printf(sample);
-+		regs_user__printf(sample, arch);
- 
- 	if (sample_type & PERF_SAMPLE_REGS_INTR)
--		regs_intr__printf(sample);
-+		regs_intr__printf(sample, arch);
- 
- 	if (sample_type & PERF_SAMPLE_STACK_USER)
- 		stack_user__printf(&sample->user_stack);
-@@ -1502,7 +1503,7 @@ static int machines__deliver_event(struct machines *machines,
- 			++evlist->stats.nr_unknown_id;
- 			return 0;
- 		}
--		dump_sample(evsel, event, sample);
-+		dump_sample(evsel, event, sample, perf_env__arch(machine->env));
- 		if (machine == NULL) {
- 			++evlist->stats.nr_unprocessable_samples;
- 			return 0;
--- 
-2.25.1
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read_write 
+include/linux/instrumented.h:101 [inline]
+BUG: KASAN: use-after-free in atomic_fetch_sub_release 
+include/linux/atomic/atomic-instrumented.h:167 [inline]
+BUG: KASAN: use-after-free in __refcount_sub_and_test 
+include/linux/refcount.h:272 [inline]
+BUG: KASAN: use-after-free in __refcount_dec_and_test 
+include/linux/refcount.h:315 [inline]
+BUG: KASAN: use-after-free in refcount_dec_and_test 
+include/linux/refcount.h:333 [inline]
+BUG: KASAN: use-after-free in iocb_put fs/aio.c:1161 [inline]
+BUG: KASAN: use-after-free in io_submit_one+0x496/0x2fe0 fs/aio.c:1882
+Write of size 4 at addr ffff888027c338a0 by task syz-executor873/15100
+
+CPU: 2 PID: 15100 Comm: syz-executor873 Not tainted 5.16.0-rc1-syzk #1
+Hardware name: Red Hat KVM, BIOS 1.13.0-2.module+el8.3.0+7860+a7792d29 
+04/01/2014
+Call Trace:
+  <TASK>
+  __dump_stack lib/dump_stack.c:88 [inline]
+  dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
+  print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:247
+  __kasan_report mm/kasan/report.c:433 [inline]
+  kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:450
+  check_region_inline mm/kasan/generic.c:183 [inline]
+  kasan_check_range+0x18e/0x1f0 mm/kasan/generic.c:189
+  __kasan_check_write+0x14/0x20 mm/kasan/shadow.c:37
+  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+  atomic_fetch_sub_release 
+include/linux/atomic/atomic-instrumented.h:167 [inline]
+  __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+  refcount_dec_and_test include/linux/refcount.h:333 [inline]
+  iocb_put fs/aio.c:1161 [inline]
+  io_submit_one+0x496/0x2fe0 fs/aio.c:1882
+  __do_sys_io_submit fs/aio.c:1938 [inline]
+  __se_sys_io_submit fs/aio.c:1908 [inline]
+  __x64_sys_io_submit+0x1c7/0x4a0 fs/aio.c:1908
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f43c5504289
+Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00 48 89 f8 48 89 
+f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 
+f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffda542ba68 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f43c5504289
+RDX: 0000000020000400 RSI: 0000000000000001 RDI: 00007f43c5c14000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004006f0
+R13: 00007ffda542bb50 R14: 0000000000000000 R15: 0000000000000000
+  </TASK>
+
+Allocated by task 15100:
+  kasan_save_stack+0x26/0x60 mm/kasan/common.c:38
+  kasan_set_track mm/kasan/common.c:46 [inline]
+  set_alloc_info mm/kasan/common.c:434 [inline]
+  __kasan_slab_alloc+0x71/0x90 mm/kasan/common.c:467
+  kasan_slab_alloc include/linux/kasan.h:259 [inline]
+  slab_post_alloc_hook+0x55/0x230 mm/slab.h:519
+  slab_alloc_node mm/slub.c:3234 [inline]
+  slab_alloc mm/slub.c:3242 [inline]
+  kmem_cache_alloc+0x15a/0x2b0 mm/slub.c:3247
+  aio_get_req fs/aio.c:1028 [inline]
+  io_submit_one+0x122/0x2fe0 fs/aio.c:1875
+  __do_sys_io_submit fs/aio.c:1938 [inline]
+  __se_sys_io_submit fs/aio.c:1908 [inline]
+  __x64_sys_io_submit+0x1c7/0x4a0 fs/aio.c:1908
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 15100:
+  kasan_save_stack+0x26/0x60 mm/kasan/common.c:38
+  kasan_set_track+0x25/0x30 mm/kasan/common.c:46
+  kasan_set_free_info+0x24/0x40 mm/kasan/generic.c:370
+  ____kasan_slab_free mm/kasan/common.c:366 [inline]
+  ____kasan_slab_free mm/kasan/common.c:328 [inline]
+  __kasan_slab_free+0xe8/0x120 mm/kasan/common.c:374
+  kasan_slab_free include/linux/kasan.h:235 [inline]
+  slab_free_hook mm/slub.c:1723 [inline]
+  slab_free_freelist_hook mm/slub.c:1749 [inline]
+  slab_free mm/slub.c:3513 [inline]
+  kmem_cache_free+0xfe/0x310 mm/slub.c:3530
+  iocb_destroy fs/aio.c:1080 [inline]
+  iocb_put fs/aio.c:1163 [inline]
+  iocb_put fs/aio.c:1159 [inline]
+  aio_complete_rw+0xa0f/0x1010 fs/aio.c:1440
+  aio_rw_done fs/aio.c:1510 [inline]
+  aio_read+0x352/0x4a0 fs/aio.c:1537
+  __io_submit_one fs/aio.c:1830 [inline]
+  io_submit_one+0x478/0x2fe0 fs/aio.c:1879
+  __do_sys_io_submit fs/aio.c:1938 [inline]
+  __se_sys_io_submit fs/aio.c:1908 [inline]
+  __x64_sys_io_submit+0x1c7/0x4a0 fs/aio.c:1908
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888027c33800
+  which belongs to the cache aio_kiocb of size 176
+The buggy address is located 160 bytes inside of
+  176-byte region [ffff888027c33800, ffff888027c338b0)
+The buggy address belongs to the page:
+page:00000000dfee8ade refcount:1 mapcount:0 mapping:0000000000000000 
+index:0x0 pfn:0x27c33
+flags: 0xfffffc0000200(slab|node=0|zone=1|lastcpupid=0x1fffff)
+raw: 000fffffc0000200 ffffea0000714400 dead000000000002 ffff88810649da40
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff888027c33780: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+  ffff888027c33800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ >ffff888027c33880: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+                                ^
+  ffff888027c33900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888027c33980: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+==================================================================
+------------[ cut here ]------------
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 2 PID: 15100 at lib/refcount.c:28 
+refcount_warn_saturate+0x111/0x200 lib/refcount.c:28
+Modules linked in:
+CPU: 2 PID: 15100 Comm: syz-executor873 Tainted: G    B 5.16.0-rc1-syzk #1
+Hardware name: Red Hat KVM, BIOS 1.13.0-2.module+el8.3.0+7860+a7792d29 
+04/01/2014
+RIP: 0010:refcount_warn_saturate+0x111/0x200 lib/refcount.c:28
+Code: 1d fe 0e 02 11 31 ff 89 de e8 db 75 04 fe 84 db 75 9b e8 02 75 04 
+fe 48 c7 c7 60 57 53 8f c6 05 de 0e 02 11 01 e8 a8 32 7a 0a <0f> 0b e9 
+7c ff ff ff e8 e3 74 04 fe 0f b6 1d c4 0e 02 11 31 ff 89
+RSP: 0018:ffff88801885fc90 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff816856a5
+RDX: 0000000000000000 RSI: ffff888026f78000 RDI: 0000000000000002
+RBP: ffff88801885fca0 R08: ffffed1020f27911 R09: ffffed1020f27911
+R10: ffff88810793c887 R11: ffffed1020f27910 R12: ffff888027c338a0
+R13: 0000000000000000 R14: ffff888027c33890 R15: 0000000000000000
+FS:  00007f43c5c0d740(0000) GS:ffff888107900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f43c5c14000 CR3: 00000000247fe000 CR4: 00000000000006e0
+Call Trace:
+  <TASK>
+  __refcount_sub_and_test include/linux/refcount.h:283 [inline]
+  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+  refcount_dec_and_test include/linux/refcount.h:333 [inline]
+  iocb_put fs/aio.c:1161 [inline]
+  io_submit_one+0xfd2/0x2fe0 fs/aio.c:1882
+  __do_sys_io_submit fs/aio.c:1938 [inline]
+  __se_sys_io_submit fs/aio.c:1908 [inline]
+  __x64_sys_io_submit+0x1c7/0x4a0 fs/aio.c:1908
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f43c5504289
+Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00 48 89 f8 48 89 
+f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 
+f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffda542ba68 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f43c5504289
+RDX: 0000000020000400 RSI: 0000000000000001 RDI: 00007f43c5c14000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004006f0
+R13: 00007ffda542bb50 R14: 0000000000000000 R15: 0000000000000000
+  </TASK>
+---[ end trace 8c5b816eed9c8016 ]---
+
+
+Syzkaller reproducer:
+# {Threaded:false Collide:false Repeat:false RepeatTimes:0 Procs:1 
+Slowdown:1 Sandbox: Fault:false FaultCall:-1 FaultNth:0 Leak:false 
+NetInjection:false NetDevices:false NetReset:false Cgroups:false 
+BinfmtMisc:false CloseFDs:false KCSAN:false DevlinkPCI:false USB:false 
+VhciInjection:false Wifi:false IEEE802154:false Sysctl:false 
+UseTmpDir:false HandleSegv:false Repro:false Trace:false}
+io_setup(0x3, &(0x7f0000000040)=<r0=>0x0)
+r1 = openat$nullb(0xffffffffffffff9c, &(0x7f0000000000), 0x24080, 0x0)
+io_submit(r0, 0x1, &(0x7f0000000400)=[&(0x7f0000000140)={0x0, 0x0, 0x0, 
+0x0, 0x0, r1, 0x0, 0xfe00}])
+
+
+C reproducer:
+#endif /* REF */
+// autogenerated by syzkaller (https://github.com/google/syzkaller)
+
+#define _GNU_SOURCE
+
+#include <endian.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+uint64_t r[2] = {0x0, 0xffffffffffffffff};
+
+int main(void)
+{
+         syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+     syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+     syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+                 intptr_t res = 0;
+     res = syscall(__NR_io_setup, 3, 0x20000040ul);
+     if (res != -1)
+r[0] = *(uint64_t*)0x20000040;
+memcpy((void*)0x20000000, "/dev/nullb0\000", 12);
+     res = syscall(__NR_openat, 0xffffffffffffff9cul, 0x20000000ul, 
+0x24080ul, 0ul);
+     if (res != -1)
+         r[1] = res;
+*(uint64_t*)0x20000400 = 0x20000140;
+*(uint64_t*)0x20000140 = 0;
+*(uint32_t*)0x20000148 = 0;
+*(uint32_t*)0x2000014c = 0;
+*(uint16_t*)0x20000150 = 0;
+*(uint16_t*)0x20000152 = 0;
+*(uint32_t*)0x20000154 = r[1];
+*(uint64_t*)0x20000158 = 0;
+*(uint64_t*)0x20000160 = 0xfe00;
+*(uint64_t*)0x20000168 = 0;
+*(uint64_t*)0x20000170 = 0;
+*(uint32_t*)0x20000178 = 0;
+*(uint32_t*)0x2000017c = -1;
+     syscall(__NR_io_submit, r[0], 1ul, 0x20000400ul);
+     return 0;
+}
+
+Thanks,
+George
+>
+> One spot I don't like is how errors from bio_iov_iter_get_pages()
+> are handled, will test it.
+>
+> diff --git a/block/fops.c b/block/fops.c
+> index ad732a36f9b3..211f44974d1e 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -342,7 +342,7 @@ static ssize_t __blkdev_direct_IO_async(struct 
+> kiocb *iocb,
+>          if (unlikely(ret)) {
+>              bio->bi_status = BLK_STS_IOERR;
+>              bio_endio(bio);
+> -            return ret;
+> +            return -EIOCBQUEUED;
+>          }
+>      }
+>      dio->size = bio->bi_iter.bi_size;
+>
+>
 

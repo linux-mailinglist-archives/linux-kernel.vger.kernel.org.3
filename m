@@ -2,78 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609FE46BD6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402C446BD74
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237018AbhLGOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S237524AbhLGOYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbhLGOXo (ORCPT
+        with ESMTP id S229615AbhLGOX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:23:44 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D234DC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:20:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Dc6Umx8GfzggaUiLtnc+utxyaUi99WuMF+Fg2ep+0Tw=; b=qD2GLdUcIwzJ8N0MPnmOS6M4kN
-        jVNZ4qa+teTeT5hYGMSIEvPOD6yzSouvWUZZ1NBqRm9BmzPGJAGiJIQMiU/Ui6WC3RBsUq846tREA
-        T43Ev5G76W9NcLI08FpY1rRqCX6FDCCu4DGPg0B+TMKa5m7UQw+UXOO7dNTWYlO5/5lq+iqwMFeZW
-        68WV4ZvwN280nKQNBHVEdikGniebqj8CzdKi7aOPRBpKQM7wlQ/1PpFZWAYNut/ohkHewKSRxkknB
-        l2TRyAGRRMk0FJDT/KUT/Kr/kb//I3c+EjEyFGCsAqDa90pV1ajh43mY+EPY5GiBzE3PS8q4LFCo/
-        wRnH0QTg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mubJs-002mFt-4R; Tue, 07 Dec 2021 14:19:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C08713000E6;
-        Tue,  7 Dec 2021 15:19:46 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 85E14201D19A6; Tue,  7 Dec 2021 15:19:46 +0100 (CET)
-Date:   Tue, 7 Dec 2021 15:19:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 00/11] lockdep: Unbreak lockdep's selftest work on
- PREEMPT_RT.
-Message-ID: <Ya9tguFHUePjEh/W@hirez.programming.kicks-ass.net>
-References: <20211129174654.668506-1-bigeasy@linutronix.de>
- <20211202211253.GC16608@worktop.programming.kicks-ass.net>
- <20211206152618.avqghqegykwjnxm5@linutronix.de>
- <Ya4vkmFek71v88+t@hirez.programming.kicks-ass.net>
+        Tue, 7 Dec 2021 09:23:59 -0500
+Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1EFC061574;
+        Tue,  7 Dec 2021 06:20:27 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id ubKHm0IBcQyExubKLm7GOu; Tue, 07 Dec 2021 15:20:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1638886825; bh=nHsNw5awsuV5Hy14rbgowmf8bWApqDSwX8s3aD8P2yI=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=ZtHZie7OZNJDrjzcX/OzbGFws1fkSDvkAmwqmRqFMDyC6kl6L9JwM/bSQa0zYS9H5
+         yCCdKE3dfyD0WnY1Y5qqCt3kPByAAqRr9rJ610n86EDf24LB7lAbqu9mPX2Mye+TWO
+         BmDMnr/CjutYkSEFRIEUiGZqxZEWyHA0P29css3/Mo0xdXUHerysMqaY1rhFnvSmiM
+         VT8Z4MBOMbWyBZVbvSvYukRMPnfIq7zWBsRV/aF8f+hldQGVZg6clCvtKzac3kSKBG
+         Ns0Oc1pzE2TfO+PSzPczni1VapTqWhORAS3rkQTDfDynw+JXfCnl3+sU6037OBM/tM
+         SCgHQI6Th8gtg==
+Subject: Re: [PATCH v10 3/3] media: platform: mtk-mdp3: add Mediatek MDP3
+ driver
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com
+References: <20211202062733.20338-1-moudy.ho@mediatek.com>
+ <20211202062733.20338-4-moudy.ho@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <c48154b9-b202-c47c-c27e-53aa97877430@xs4all.nl>
+Date:   Tue, 7 Dec 2021 15:20:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya4vkmFek71v88+t@hirez.programming.kicks-ass.net>
+In-Reply-To: <20211202062733.20338-4-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfOWUbPfTiPTqirbiNfEpShw1ekwWSNVBklXd6tW+PX5RoibUYVNnPuH1W0Sv0F/PxUpzjBPYWp0cFS0vnE0gpKSfURIOaucsX732AgIM+ukOGzSQ9wNA
+ nNnYbD1UZ18/W5nHu8Jdnsu5LExcznoZ96e4mfwARYr8+Z0HfVPAMBfun5q680aBlYglJgElkR85tMLPnuGafp2JNHqwZo4voWHP3kkJAL4ku+Ey5XUMj5Hl
+ R6Cw+5fE4WW1/x0VYrv8uDcKit8XpThhu57lAawTiJY+TAy/d1wqcdF29tLhKe5/uyM9i7bEhtH+SBJiby48tziakD1nL7UU97IX2QMi7/zDEk65wzk6O2+v
+ +7ClTGLyDmjZTsq5jiebvx/jkJug7aBm/ngg8QRc3NleZLDdUONuEU69khFL/DUTnwNtIsf0S+ypPvi9SpUwMrzOlEP8op9f4FSJuuArR6HAF8EhXgaWqI5L
+ sKg2tn3nrnXEc/Lyai9bQ2GCFiG7lrbCcYIMxJ8hc4dPqh4Wt/s/uOc35CiEKFGrUmWRLusxLk+U8EGs71Fq5rVP9VtAgoaljmREZjXLnQmoIl9QW0UeDYwN
+ 0Zju9vqI3wGRJQPd7mU0XeCaTSv/lsAvgun6F9aXDf3Nsb9biM4ZBw1orB07QHtS0kg/HMGln/Fs9UAaZgPN3zwedh7sVxdm+RJTjeDX6BTP/IXJURYXroSJ
+ PMiBIWTVEPbAgDPRnLs1KlsswAiaPOShDBmyaXsbR+rjrPcQUl2fE5pvS4a524SBwYerXIjYWa6pgJojCm/8VXZqvFWriISWzcrSxMcQ87KejhSrH58jJV9P
+ 1ip6T8HAuYJeQnakhyJvnJzJoiHP+D0Seqv1AZKrGNie5N3N5O8hhcJ+nTZjq6WNQTm8UqDliBTI/Wla1eARP6k5cf/5cpNb39QYCHU/C2NVKB2aUW5+z9n8
+ D666FGOVbX9MXHfdDgpcPlCSt4NdXu7T6m4hWKjCEk/jyWGt8SeTWlNwZT3tnb0gvt2S/XL/aOX9ZYSvVbv3I2wlg1fmKBPQZmurZGXo1bG2yg7TsHhtZhZ+
+ 4qqZ3FMxz4TQ6MMGbv2VNXPyTtUOg9j+M1ou4j/rvwQsyHV/vDHX0XdfajSbtToN2/qoTaaWu9J6yvnbtB7PMr8U/KGItkRPAbzfjvjF89hv3fcgpEdj2m80
+ mF4aMINaCg/sPBn5NMJ/cYyMTgc51/C+aWz0cgNDOnm7sccv+xSleD8ON+tEeF80URdI2LEWbuJPF2HP5uI3PBbFpPjcAYrko85mxOI++BFm5lTwaLAEP6ma
+ C3VMFSKoUv7SjFozzjEDwedHPTjBFVyeI5EOh9uV5qzroYDxVk4Q9nQJf20a2ahuF30LnYL+aQqi8zA4FvPgjBz8w+mUl1z9vJ/UIkrIHiwYqGyFMpaqEb9l
+ 8TEivMpj4iTZNGVI
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:43:14PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 06, 2021 at 04:26:18PM +0100, Sebastian Andrzej Siewior wrote:
-> > On 2021-12-02 22:12:53 [+0100], Peter Zijlstra wrote:
-> > > Thanks! (fixed up that first thiny), lemme feed it to the robots.
-> > 
-> > Thank you. I see bots' commit mail for 1-9. I don't see them for 10+11
-> > but then I also don't see those two in your tree.
-> > What should I do with them?
+On 12/2/21 7:27 AM, Moudy Ho wrote:
+> This patch adds driver for Mediatek's Media Data Path ver.3 (MDP3).
+> It provides the following functions:
+>   color transform, format conversion, resize, crop, rotate, flip
+>   and additional image quality enhancement.
 > 
-> I've no idea wth happened there, let me go fix that.
+> The MDP3 driver is mainly used for Google Chromebook products to
+> import the new architecture to set the HW settings as shown below:
+>   User -> V4L2 framework
+>     -> MDP3 driver -> SCP (setting calculations)
+>       -> MDP3 driver -> CMDQ (GCE driver) -> HW
+> 
+> Each modules' related operation control is sited in mtk-mdp3-comp.c
+> Each modules' register table is defined in file with "mdp_reg_" prefix
+> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> Probe, power, suspend/resume, system level functions are defined in
+> mtk-mdp3-core.c
+> 
+> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  drivers/media/platform/Kconfig                |   19 +
+>  drivers/media/platform/Makefile               |    2 +
+>  drivers/media/platform/mtk-mdp3/Makefile      |    6 +
+>  .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   19 +
+>  drivers/media/platform/mtk-mdp3/mdp_reg_isp.h |   27 +
+>  .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |   65 +
+>  drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |   39 +
+>  .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |   47 +
+>  .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |   55 +
+>  drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  280 ++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  505 +++++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   46 +
+>  .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1264 +++++++++++++++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  147 ++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  338 +++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   76 +
+>  .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  789 ++++++++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   49 +
+>  .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  737 ++++++++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  372 +++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  312 ++++
+>  .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   78 +
+>  22 files changed, 5272 insertions(+)
+>  create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_isp.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
+>  create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
+> 
+> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> index cf4adc64c953..e6c1e8892154 100644
+> --- a/drivers/media/platform/Kconfig
+> +++ b/drivers/media/platform/Kconfig
+> @@ -315,6 +315,25 @@ config VIDEO_MEDIATEK_MDP
+>  	    To compile this driver as a module, choose M here: the
+>  	    module will be called mtk-mdp.
+>  
+> +config VIDEO_MEDIATEK_MDP3
+> +	tristate "Mediatek MDP v3 driver"
+> +	depends on MTK_IOMMU || COMPLIE_TEST
 
-Still now clue how they got lost, but it should be sorted now.
+Typo: COMPLIE_TEST -> COMPILE_TEST
+
+After fixing this, trying to build this driver on my PC results in:
+
+ERROR: modpost: "mtk_mmsys_mdp_connect" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mmsys_mdp_camin_ctrl" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mmsys_mdp_isp_ctrl" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_prepare" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mmsys_mdp_disconnect" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_unprepare" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_get_mdp_mod" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_put" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_mdp_get" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_add_mod_by_cmdq" [drivers/media/platform/mtk-mdp3/mtk-mdp3.ko] undefined!
+WARNING: modpost: suppressed 1 unresolved symbol warnings because there were too many)
+
+include/linux/soc/mediatek/mtk-mmsys.h should probably provide dummy functions
+if CONFIG_MTK_MMSYS is undefined. Ditto for include/linux/soc/mediatek/mtk-mutex.h.
+
+Regards,
+
+	Hans

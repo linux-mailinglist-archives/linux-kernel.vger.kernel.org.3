@@ -2,150 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4725A46C314
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CC546C317
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240697AbhLGSvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:51:04 -0500
-Received: from mail-bn7nam10on2043.outbound.protection.outlook.com ([40.107.92.43]:21985
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231469AbhLGSvD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:51:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FwcqUF+7bwoQbfQMuYusWejdKFeNkAg3CzZ8NhvmnKebPVbbpnUCBLvCtyIZ/2O2nrGR9DQZ4mceqdoaBtE3cipVcP2oNsxtDqwsL5mighvfyK3Rau5CcZVjtWLa0HHm5JNOXKO8+32ppR1B227FjOq0CT+T9JbeMpB11o6uLSIk+eiWGME8x3EBdW0jRqgxU0sihisIVLB4M4mckwSW7e1EOvyLYkc83ytPUajiUiRAF7E4rkgfFEdv+PGHp8tMcm0yHu20TltYDekm+d2xdbgY0HGWfO9rrEGk0Qp3bo1dfqtXq86GX9vMNfp+oeY0oFyemm8GePa56+ijC1f8jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9u3BVxBauFQIDJwg5DrBx3W+I5fpwDxqyH7nP9PTWGE=;
- b=S0XfC2OlS+B5pfZSoHRCrpx0tt0bvQXHUPps1K8wAoGfsYnw+tv37Fn1QLbrn7p/Gi3vXUrcayVLvJhKexYxYrM9t75tQj3KMixpueW9OyozRpJmHBjQuwL8fSmftXWE2iYTZWpCMWwamPwgf+RVAKFlfq/3KJS5bpoKC7wBqz1z9F9W9B4R+cc5q3cv7fc6rPgchveXnU8jUHCnZgfayfAiGMOqGJKddA+2/+XePiCt4nra1TKYAm3iTA90FSeg13yNbaIhgg4H/qFfWXweT6x9aVxCPtoWG928oX46zHqUkPHlte62U4tr84/jSKOWkC/M8CnvNwiUmyzNbVYfzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9u3BVxBauFQIDJwg5DrBx3W+I5fpwDxqyH7nP9PTWGE=;
- b=hMVH414DA4U/ZnrrB+PrZnwBz3LodDilsmYnCg6XCVsPF6YwXizE7P/MFimBL3tkCTgxXm64CpcPH5VVBqLr3exWtCPsPuIATaJxMQ4h/ZJN0B7ZkMkz+sV8acMowEhVUIL8f6g8lXp4kUZng3qLadCPPQUNrkIlMRRFBuAyplc7GvJFxifJOVMWIDCC8ofzdjg2LbG0xlL38Y4inv2mGa6lIIdG1kS0Vv8bmuumbWS/tDD/oOG76aBv3aDf2FBTMt/KwqyTz3bBb5ZgGISfbPZyY/nrEwDZs/ddMNCjN4jdNXaV3iFtCFiUf9zbuvdCyldlcwxLyleQtNxXvI4fnw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5063.namprd12.prod.outlook.com (2603:10b6:208:31a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Tue, 7 Dec
- 2021 18:47:31 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%5]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 18:47:31 +0000
-Date:   Tue, 7 Dec 2021 14:47:29 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr
-Message-ID: <20211207184729.GA118570@nvidia.com>
-References: <20211118203138.1287134-1-keescook@chromium.org>
- <YZpPr2P11LJNtrIm@unreal>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZpPr2P11LJNtrIm@unreal>
-X-ClientProxiedBy: SJ0PR13CA0154.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::9) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S240706AbhLGSwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:52:55 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:43840 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231469AbhLGSwy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:52:54 -0500
+Received: by mail-il1-f197.google.com with SMTP id j1-20020a056e02154100b002a181a1ce89so12760970ilu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:49:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IUVj85S6PaeVhUcViFQHX8PAG9j4UnRxeaSkiD5JR1w=;
+        b=V4JZn62bvatfPU/WEG1zAt2o8GZLbv61qaq6c01blvhS7MTZO0eG4d1evtuH2bfYjT
+         H7uWOtEnsfp8fFf8m1Uwj2MsKuk6rdxgtHdfDq/235mQDtCwx70zB+/AH0wN0tLQxGkE
+         6scN6fE/Ealcr9MLT1uUKIOxLHuT6uqM0hG7QMytjFf5A6ADzbbOBF0kaOwKrFljo8OB
+         +7w5RoyUGWvMyzSeSm5S2ooOdaZYm0c0G/vTY7zsUdlK+iSKlzaFWylPDM6Lo3D9uL7I
+         AXL3pWJqA4LpJEzGpi00M3Qr1CGINTIGNC3aAYRrOypsqi66RdxV2rxidkA9rUVLv4Sl
+         tjQA==
+X-Gm-Message-State: AOAM531/e089nbfShc5snzk2hxjNjK/50+ATF7F5GqdC3jNJ4C3O1r8c
+        ea++bnpVRhHri2rAMm10eBap9mRddRpK7QCTeliWL2MGzNh1
+X-Google-Smtp-Source: ABdhPJzROWoN+IXDOH7W2hG9rxkwpmbLRyxHGwMhvCfg7DyuRxTJ8WnT5Rl4QVpq2QAdZ9GUX8LrXx7RNF3Dih4l16rDipGbnJGJ
 MIME-Version: 1.0
-Received: from mlx.ziepe.ca (206.223.160.26) by SJ0PR13CA0154.namprd13.prod.outlook.com (2603:10b6:a03:2c7::9) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 7 Dec 2021 18:47:31 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1mufUv-000Ur9-9O; Tue, 07 Dec 2021 14:47:29 -0400
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d6790399-03d7-4a51-0e6b-08d9b9b2067a
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5063:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB506303F81E319BCC59F0D9DFC26E9@BL1PR12MB5063.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2043;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M1YFp9oxv8/EA0frcQTqNHUpLjcrwuMZlFNE42NMJNk3oOZnv5WDIpqfHlCttJ3EcVe5he0dgNFSdtEVnTjhgOSo+CMZ+V8y51eKqg/RSk9sIyd2FifdIAyXm7//hwXmRH0LDoGWL5vgCzzHeiKvFSo9s0F/Dw2GnHf/8sZeHn0PMFuzIXzafmCxBbjnse2RzLwV5EINnSFnR47h3/cfBOkApy7oKCwvf8ftkG/DNgbFh5TYhI4oLZrKRsPGru289JIijmTA/tpoEhEVtt37Ey52DL4OeSumNNuqu/LCLn/AeoCzS7aUKwYqCUw2hoikZZJf0PM16GDqLccSy/c6C0Xp2n7Q5hGVcrBf5+xnRdeLiJVvJ8LrcsbC1GmNAwRMTFp8KV66pn3Wo3OAdjnqXXzPoF14LoPin4j8hmIrZ9kg8UyPWlr4TIXJ7KtfGquDn2fBUWiSzsDIeG0y1Q9X+JQ8zrRdzJE+DLZ9UMEo/KRoWj5ilJO+7Mog9mf204Kz7uzp/DEM/dnb/VbYundz7azVg5Ad5sPEkfasLYpdgIVFoytLjKKEqjgPtshfi7AQfEOyHHJpRs21LskUV8P8KcJQYEhSrIhWMbxL+8dBKolwEsj0IsSajTXjwIDLmEyn3NZAYjTx4jrfnX0zD3ooi+MvkKOIL4e9Q9NzyL39TxIUTlJl+ka731pBLnm7Als/wB+qAopJEffC6o/vXrRDKA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(426003)(26005)(86362001)(4326008)(38100700002)(508600001)(33656002)(2906002)(83380400001)(186003)(9786002)(1076003)(9746002)(5660300002)(36756003)(66946007)(66476007)(66556008)(316002)(2616005)(110136005)(8676002)(8936002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n3MyA35gkJxfDpO3IMyyT/rZZ+ue4dIHrZJc+PS0eHUKLJgS9zFZ2SKL4nI0?=
- =?us-ascii?Q?8mCTnU3QPYcqTbrXSMxnvsfB9Ccn9niZb0UqijmnFUDOLCaaJ1wGpqvrkgnt?=
- =?us-ascii?Q?KIm5xR2tK61N3BuXKmdECvfy5pnl3yW4PMCVNlUj/1v9k49XzV+Zo37d+UTZ?=
- =?us-ascii?Q?FDvUgae/l21u70Ottdd9mDWpKiJh+5oWi0RTw7IIwsKaR8HJe9xrjT18tgQ5?=
- =?us-ascii?Q?RDAEqDO8HOJox6YP6MxAxCiTwt4ZFknGt9GDHoI3y6TZX3kuL+cmbRW4X0wv?=
- =?us-ascii?Q?9Zh2ka6Z8ZCAZg6xrPo6sfa533nlQ5tpi1Baa/jniQ4l6eWi05G4DXtrGC2Z?=
- =?us-ascii?Q?jpUS+DDtpaov+704HgZ2ABnAwAmDkX9BpRTKhWs8cLKsPutfAg53jSthO+mU?=
- =?us-ascii?Q?J4xQ28IhfqN46OFX54uYdWMJ92YReEZRZyxxDpy2XTUu1esNC0ymYPaFBJkM?=
- =?us-ascii?Q?vyFImxKxVVrJLBoTopT2S9a0S06IUR7qEO67HNuUGe0m6Y5eoFLrmRwJ98nq?=
- =?us-ascii?Q?VHQCOa/YjhPatG4cxnwz1JSEvFW/Es7l86Qr3sWuqQ+MxiYVdSCTsbecgYbR?=
- =?us-ascii?Q?sfHxcg+BPtL3PdLI/jANn/MTMDkmjpt8Ax9BMzpQ9EVrd86igcDOmexpCWzs?=
- =?us-ascii?Q?WSZPUUP/Sh9X9mKnt2IDDD+cyyZpGUON4zITvkQYOvswVoy38jMYG6IZ9TGN?=
- =?us-ascii?Q?lPX3lbZXffPOGejEWcAnrJXavEzDilWUwRLQtBYuZFaQVK2Bj4I7iO2+D4xd?=
- =?us-ascii?Q?qw3t+SvMaEkGNADNJArS+p1K+HYyKzkQjGNL0h+gLHXAhAT6W7vLDbPO8qe0?=
- =?us-ascii?Q?E0ZsHjLZXqa89H+ypKIXA4hQH/AfXfoOkblOhxjPXtZJohP81G7PbVuFWJoS?=
- =?us-ascii?Q?VU8rZPNuim3lX/2W4lL5AwBqDKPox7YmTvFYz2DnsDcVhziHmvM70VmwIfb7?=
- =?us-ascii?Q?qAfHu8h1tuBPVH9gbVimjCLW6MS4M4S7hgGoA/TUDCtY2DSjY0VDFfxUoMSh?=
- =?us-ascii?Q?ZzHjI3FtdYCoQ9LvcaGz8mMzj0fC9RkMht2U77hkgIgCxXX9/M8jwWtM1S/T?=
- =?us-ascii?Q?YhIEcIKefV7A6xX17bcUnUGl1ECvzvM4G1whMv+ogTDuLiIzv9z4DYaoqzSg?=
- =?us-ascii?Q?f21Tlcqypijli7RzqO6Ajc+knzy7DxavDumRWu27QMPGIAbDUUtVof7wlBW2?=
- =?us-ascii?Q?xryQePHyJPoQrGSfWPDgvuK3RdI5ubzJsusL7mZLPKwVaLTWyDiP4BunrSj/?=
- =?us-ascii?Q?Xo0zOA6D8+pa+Lp7NeifkcHSZzSK7KiCzKgerMJJAdP4qCuq6Fw2fAPV5/iC?=
- =?us-ascii?Q?gTwIqqV7zdhG92SaAdTOJj6MB066HZDPIPz8HMOxi5X3ua8nNuz1g3sRDAWK?=
- =?us-ascii?Q?J3F/0i/JdxXy2rXCgPsd1EwQUFSCnseH92+YLk2I3BwQmcObEX9znqfc9Xly?=
- =?us-ascii?Q?Uf/mpsvNIR6akjD630buE6iAxGPBTfv5QYIKW7B7G3+CO6ZiDWwZDV9xcz91?=
- =?us-ascii?Q?x3uILRhOjp9uQkDf8lZedZtAsbyJ7Ib6enVanbxYGkCEyB/Pc9a4rfFtSCDv?=
- =?us-ascii?Q?hNwG4g3Dpw+LdGXZcY8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6790399-03d7-4a51-0e6b-08d9b9b2067a
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 18:47:31.5970
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GYicOuY/pCrUkQA06wj5EqpG5Szldy4fNTFM123AbXVk+oAi41lgPJitrT60eH0u
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5063
+X-Received: by 2002:a05:6602:26d0:: with SMTP id g16mr1200059ioo.70.1638902963736;
+ Tue, 07 Dec 2021 10:49:23 -0800 (PST)
+Date:   Tue, 07 Dec 2021 10:49:23 -0800
+In-Reply-To: <0000000000007de81505cfea992f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f993de05d292d4fd@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_submit_one
+From:   syzbot <syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com>
+To:     bcrl@kvack.org, linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 21, 2021 at 03:54:55PM +0200, Leon Romanovsky wrote:
-> On Thu, Nov 18, 2021 at 12:31:38PM -0800, Kees Cook wrote:
-> > In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> > field bounds checking for memset(), avoid intentionally writing across
-> > neighboring fields.
-> > 
-> > Use memset_after() to zero the end of struct mlx5_ib_mr that should
-> > be initialized.
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> >  drivers/infiniband/hw/mlx5/mlx5_ib.h | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > index e636e954f6bf..af94c9fe8753 100644
-> > +++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > @@ -665,8 +665,7 @@ struct mlx5_ib_mr {
-> >  	/* User MR data */
-> >  	struct mlx5_cache_ent *cache_ent;
-> >  	struct ib_umem *umem;
-> > -
-> > -	/* This is zero'd when the MR is allocated */
-> > +	/* Everything after umem is zero'd when the MR is allocated */
-> >  	union {
-> >  		/* Used only while the MR is in the cache */
-> >  		struct {
-> > @@ -718,7 +717,7 @@ struct mlx5_ib_mr {
-> >  /* Zero the fields in the mr that are variant depending on usage */
-> >  static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
-> >  {
-> > -	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
-> > +	memset_after(mr, 0, umem);
-> 
-> I think that it is not equivalent change and you need "memset_after(mr, 0, cache_ent);"
-> to clear umem pointer too.
+syzbot has found a reproducer for the following issue on:
 
-Kees?
+HEAD commit:    04fe99a8d936 Add linux-next specific files for 20211207
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16eaddadb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4589399873466942
+dashboard link: https://syzkaller.appspot.com/bug?extid=3587cbbc6e1868796292
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db884db00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e9eabdb00000
 
-Jason
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
+BUG: KASAN: use-after-free in iocb_put fs/aio.c:1188 [inline]
+BUG: KASAN: use-after-free in io_submit_one+0x6fb/0x1b80 fs/aio.c:1909
+Write of size 4 at addr ffff8880182820c8 by task syz-executor415/6540
+
+CPU: 0 PID: 6540 Comm: syz-executor415 Not tainted 5.16.0-rc4-next-20211207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xa5/0x3ed mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+ __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ iocb_put fs/aio.c:1188 [inline]
+ io_submit_one+0x6fb/0x1b80 fs/aio.c:1909
+ __do_sys_io_submit fs/aio.c:1965 [inline]
+ __se_sys_io_submit fs/aio.c:1935 [inline]
+ __x64_sys_io_submit+0x18c/0x330 fs/aio.c:1935
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f9604613139
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdfcd47e58 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f9604613139
+RDX: 0000000020000800 RSI: 0000000000000002 RDI: 00007f96045cb000
+RBP: 00007f96045d7120 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f96045d71b0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 6540:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
+ kasan_slab_alloc include/linux/kasan.h:260 [inline]
+ slab_post_alloc_hook mm/slab.h:766 [inline]
+ slab_alloc_node mm/slub.c:3231 [inline]
+ slab_alloc mm/slub.c:3239 [inline]
+ kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3244
+ aio_get_req fs/aio.c:1055 [inline]
+ io_submit_one+0xfd/0x1b80 fs/aio.c:1902
+ __do_sys_io_submit fs/aio.c:1965 [inline]
+ __se_sys_io_submit fs/aio.c:1935 [inline]
+ __x64_sys_io_submit+0x18c/0x330 fs/aio.c:1935
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 6540:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
+ slab_free mm/slub.c:3510 [inline]
+ kmem_cache_free+0xdd/0x580 mm/slub.c:3527
+ iocb_destroy fs/aio.c:1107 [inline]
+ iocb_put fs/aio.c:1190 [inline]
+ iocb_put fs/aio.c:1186 [inline]
+ aio_complete_rw+0x474/0x8c0 fs/aio.c:1467
+ aio_rw_done fs/aio.c:1537 [inline]
+ aio_read+0x30d/0x460 fs/aio.c:1564
+ __io_submit_one fs/aio.c:1857 [inline]
+ io_submit_one+0xe2b/0x1b80 fs/aio.c:1906
+ __do_sys_io_submit fs/aio.c:1965 [inline]
+ __se_sys_io_submit fs/aio.c:1935 [inline]
+ __x64_sys_io_submit+0x18c/0x330 fs/aio.c:1935
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888018282000
+ which belongs to the cache aio_kiocb of size 216
+The buggy address is located 200 bytes inside of
+ 216-byte region [ffff888018282000, ffff8880182820d8)
+The buggy address belongs to the page:
+page:ffffea000060a080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x18282
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 0000000000000000 dead000000000122 ffff888144b95dc0
+raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 6540, ts 72148479011, free_ts 72144305967
+ prep_new_page mm/page_alloc.c:2433 [inline]
+ get_page_from_freelist+0xa72/0x2f40 mm/page_alloc.c:4164
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5376
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab mm/slub.c:1944 [inline]
+ new_slab+0x28d/0x3a0 mm/slub.c:2004
+ ___slab_alloc+0x6be/0xd60 mm/slub.c:3019
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3106
+ slab_alloc_node mm/slub.c:3197 [inline]
+ slab_alloc mm/slub.c:3239 [inline]
+ kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3244
+ aio_get_req fs/aio.c:1055 [inline]
+ io_submit_one+0xfd/0x1b80 fs/aio.c:1902
+ __do_sys_io_submit fs/aio.c:1965 [inline]
+ __se_sys_io_submit fs/aio.c:1935 [inline]
+ __x64_sys_io_submit+0x18c/0x330 fs/aio.c:1935
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1351 [inline]
+ free_pcp_prepare+0x414/0xb60 mm/page_alloc.c:1403
+ free_unref_page_prepare mm/page_alloc.c:3324 [inline]
+ free_unref_page_list+0x1a9/0xfa0 mm/page_alloc.c:3440
+ release_pages+0x818/0x18e0 mm/swap.c:980
+ tlb_batch_pages_flush mm/mmu_gather.c:49 [inline]
+ tlb_flush_mmu_free mm/mmu_gather.c:242 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:249 [inline]
+ tlb_finish_mmu+0x165/0x8c0 mm/mmu_gather.c:340
+ exit_mmap+0x21b/0x670 mm/mmap.c:3180
+ __mmput+0x122/0x4b0 kernel/fork.c:1115
+ mmput+0x56/0x60 kernel/fork.c:1136
+ exec_mmap fs/exec.c:1029 [inline]
+ begin_new_exec+0x1047/0x2ef0 fs/exec.c:1288
+ load_elf_binary+0x7db/0x4da0 fs/binfmt_elf.c:1000
+ search_binary_handler fs/exec.c:1725 [inline]
+ exec_binprm fs/exec.c:1766 [inline]
+ bprm_execve fs/exec.c:1835 [inline]
+ bprm_execve+0x7ef/0x19b0 fs/exec.c:1797
+ do_execveat_common+0x5e3/0x780 fs/exec.c:1924
+ do_execve fs/exec.c:1992 [inline]
+ __do_sys_execve fs/exec.c:2068 [inline]
+ __se_sys_execve fs/exec.c:2063 [inline]
+ __x64_sys_execve+0x8f/0xc0 fs/exec.c:2063
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff888018281f80: fc fc 00 00 00 00 fc fc 00 00 00 00 fc fc fc fc
+ ffff888018282000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888018282080: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
+                                              ^
+ ffff888018282100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888018282180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+

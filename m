@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E9B46C084
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF4846C08D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239557AbhLGQRf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 11:17:35 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:51925 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbhLGQRe (ORCPT
+        id S239369AbhLGQUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234804AbhLGQUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:17:34 -0500
-Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 1FFA6CED0C;
-        Tue,  7 Dec 2021 17:14:03 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
-Subject: Re: [PATCH] Bluetooth: Apply initial command workaround for more
- Intel chips
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <YayVYIAi56097Ltl@zacax395.localdomain>
-Date:   Tue, 7 Dec 2021 17:14:02 +0100
-Cc:     Takashi Iwai <tiwai@suse.de>, Paul Menzel <pmenzel@molgen.mpg.de>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-bluetooth@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <1D49EE9C-42D4-45C9-AE37-F4C508FD2D64@holtmann.org>
-References: <20211202162256.31837-1-tiwai@suse.de>
- <acc7b5b4-72cc-9f3b-90a6-6fbf6c3a71e7@molgen.mpg.de>
- <s5h7dcnt0lp.wl-tiwai@suse.de> <YayVYIAi56097Ltl@zacax395.localdomain>
-To:     Fernando Ramos <greenfoo@u92.eu>
-X-Mailer: Apple Mail (2.3693.20.0.1.32)
+        Tue, 7 Dec 2021 11:20:33 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE22C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 08:17:03 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id q72so13191980iod.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:17:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gmWS9TjLgGqZ+g1YHcRQV99bcbdUvJkmlKsPhxgxsCY=;
+        b=SSYZUtmknty2K0xQ3CwS7w4YcGWspE+Nfqyy3dv/dEqrdOoowNYgFukY6yRnj/4jnN
+         Z8kgMEP4/vdUOnTOiX2ACoadIctzI2lBYo7MRdAYnx6k6IEb1+JxAwo/sTuMje5y0fM2
+         lJSdFQOCRkioBiCmI2qKpJTgyAspTesDXwo+4XSSzSJlUj+nBdEboyxvqgKZRygruYbs
+         GJYeilG+8u/wcEbMZoV4SX00EC0Q1YCUoVmPFbybQANbddT07zD8j/dCIP/u3NhabC5s
+         Nx99cK0gUP3R3UXyU0oQYIDZGLe/S1KzY3zmgQ4f/8lb7UvN44OriAHXFD/FXC/tatZn
+         Fapw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gmWS9TjLgGqZ+g1YHcRQV99bcbdUvJkmlKsPhxgxsCY=;
+        b=odWhBLkyj4ipcawvYmWhaOo/6tX7cmUwpD69W+5p5hux1PLhDYEF7gnxzV4nelExv3
+         SEYCZKiDQBOLnOdWFpjD+TWICoXz2Pp4CPJpYopaPg5GYZT2uGHvFCcFs+sJ/2CFa76Z
+         Eur9LZHLKH5zlMSKwVD7OapSYgI/93JbjjdRb1h/09+48OF0Lk8Ho8zmAIuwrciyE8tq
+         4b4eIpuTpe75daCz8oyNcKjRaPxJI5DU0zfPRB9gNA1Tjsabp7EQ7YBLZv2Ithyu+hpR
+         gc8luqi+4u2T3R8H0E4gqt5+MZgpUQSdcerYSvh1LMoRuNKXFJvtpv0ZrVlxEOwImxGO
+         5ImQ==
+X-Gm-Message-State: AOAM531RX56+EAMi/o+gfATCzTWr50bgAIzxxdEbX7hkV78uraknly6d
+        t/APBQevp5Qg6QMgapgaU99+z9qCgKtsmw5dNCmCBQ==
+X-Google-Smtp-Source: ABdhPJyy+b+L3LlvJM1Iiho74qcXJCkSlfcsc/kFP26/3ibIGOCb0nEAJqVkhN+uv7XitGO1xv1s9gKsMfM5DSy234A=
+X-Received: by 2002:a5e:9b07:: with SMTP id j7mr355952iok.136.1638893822676;
+ Tue, 07 Dec 2021 08:17:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20211123075205.2457975-1-yangcong5@huaqin.corp-partner.google.com>
+ <20211201023230.344976-1-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20211201023230.344976-1-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Tue, 7 Dec 2021 08:16:50 -0800
+Message-ID: <CAD=FV=Ut=gP9EWPmVqar9pxPA_mTZFD+E1L14fjmFASCfh8_6g@mail.gmail.com>
+Subject: Re: [v2] drm/panel: Update Boe-tv110c9m and Inx-hj110iz initial code
+To:     yangcong <yangcong5@huaqin.corp-partner.google.com>
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fernando,
+Hi,
 
->> Thanks, so this seems depending on the hardware, maybe a subtle
->> difference matters.  As far as I read the code changes, the workaround
->> was applied in the past unconditionally, so it must be fairly safe
->> even if the chip works as is.
->> 
->> Or, for avoiding the unnecessarily application of the workaround,
->> should it be changed as a fallback after the failure at the first
->> try...?
-> 
-> I don't know if this helps, but I started experiencing this same issue ("hci0:
-> command 0xfc05 tx timeout") yesterday after a kernel upgrade.
-> 
-> My controller is a different one:
-> 
->    8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
->    ^^^^^^^^^
-> 
-> I tried with different (older) versions of the v5.15.x kernel but none worked.
-> 
-> Now, this is the interesting (?) part: today, when I switched on the computer
-> to keep testing, the bluetooth was *already* working once again.
-> 
-> I have reviewed my bash history to try to figure out what is it that I did, and
-> the only thing I see is that yesterday, before going to sleep, I did a full
-> poweroff instead of a reset (which is what I used yesterday to try different
-> kernels).
-> 
-> This does not make any sense... but then I found this [1] post from someone else
-> who experienced the same.
-> 
-> Is there any reasonable explanation for this? Could this be the reason why you
-> seem to have different results with the same controller (8087:0a2a)?
+On Tue, Nov 30, 2021 at 6:32 PM yangcong
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> At present, we have enough panel to confirm the effect,
+> update the initial code to achieve the best effect.
+> Such as gamma, Gop timing. They are all minor modifications
+> and doesn't affect the lighting of the panel.
+>
+> a)Boe-tv110c9m panel Optimized touch horizontal grain.
+> b)Inx-hj110iz panel Optimized GOP timing and gamma.
+>
+> Signed-off-by: yangcong <yangcong5@huaqin.corp-partner.google.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>  .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 108 ++++++++++++------
+>  1 file changed, 74 insertions(+), 34 deletions(-)
 
-we trying to figure out what went wrong here. This should be really only an issue on the really early Intel hardware like Wilkens Peak. However it seems it slipped into later parts now as well. We are investigating what happened and see if this can be fixed via a firmware update or if we really have to mark this hardware as having a broken boot loader.
+Pushed to drm-misc-next.
 
-Regards
-
-Marcel
-
+42c632b0555e drm/panel: Update Boe-tv110c9m and Inx-hj110iz initial code

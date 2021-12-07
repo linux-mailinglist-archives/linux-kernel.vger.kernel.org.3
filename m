@@ -2,533 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5F146BB8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDECA46BB83
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbhLGMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:48:29 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29097 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbhLGMs3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:48:29 -0500
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J7g0v4cdNz1DJyZ;
-        Tue,  7 Dec 2021 20:42:07 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 20:44:56 +0800
-Received: from localhost.localdomain (10.67.165.103) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 20:44:56 +0800
-From:   Qi Liu <liuqi115@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <mhiramat@kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     <song.bao.hua@hisilicon.com>, <prime.zeng@hisilicon.com>,
-        <robin.murphy@arm.com>, <liuqi115@huawei.com>,
-        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-Date:   Tue, 7 Dec 2021 20:40:02 +0800
-Message-ID: <20211207124002.59877-1-liuqi115@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        id S236555AbhLGMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:44:18 -0500
+Received: from mail-bn8nam08on2080.outbound.protection.outlook.com ([40.107.100.80]:35760
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236544AbhLGMoR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 07:44:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NpkRzDDpaBdnudeWfwZuxLdYQKZv29nKahjQNQ035WFwx05qUU046UVoEqkL4bv3ncHJ5gcGljzQli9XKYuBSglzEh6SuFiQ8DR+RL0XY/eMxbvURKFq9Q27f994jmWxfTsEwYlLChvcNmzfKRtir3JAKf/fU4ApmDTRPLat2egbETEEDkqTLiA86aDnbmMm0u7WgV4+GQ/pZCjpz196T285FThds5XHLQ+mygaKHyLwWlDzkwjJQWbXHON482NSi8LzwEpzffAm5PzwM955cA8KbUVrkoc9R117lANQmgy8fWdG7icl+uFdPlHZmXf4juBtQ8voQKhECwR76pHLVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hW8hvvY6N9ZQUhF8TIwBXv1J2p401JHaU2ZVVrGYMwc=;
+ b=OY2mryE1AFbqDyhOMGMeqGXCXfHLDNhlyZkh0pBjP2Q7ZjZK5hvHHJ58gFvY9FbQHX0Kewu/dknsxifPrBrZEwmBFJnRM4LvUTKPnkNdaHc2WcUVpZFi8Y1GFhIhTkhvAB7RshGzBeJxWwKZuNFlPmkrKiu0ovz07VV17h2AUbuZE8/5cXsbjREFrXG47Ls1Jyp5bZ1uqynh416djsweVsFvsPtqsT4l62g9vIrJpHdJFyi/r1ymMW9eJdNtTTHxVnbomfkD2/vKTFqtAn3khAEENX8dy2EYYYw5OQcGbw7ZUCIaaVjC05yaR11gxWuJCtsTYqLoZLIiqOJfRsXMxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hW8hvvY6N9ZQUhF8TIwBXv1J2p401JHaU2ZVVrGYMwc=;
+ b=ayvJfzv8o0AIBLaEggayNXfyuJDXoe1X4nWjsFk7qZyhJXQUP5x5nsHuBjwGZJx7FzJ5Qqg0Se9okPbBO3SFjjxz1A95fiefGoZ9rWiL3eek5PYXN7ZBsyOkLE4MFdUBAYDEv9lMtpXOYKg3UhmxTtd5aVEPoFhcJKWYa8/k1AkP7YJEiOnSWsrtfiSk099bOfC/w+TcB8dIMMWrYBd7dCuYY7Owa2tnj9sDjQqZNJgo+nHk09JyjyeGmvPu3UmXezUqBs91eLS58PD3g5vb6aQ4ArEAuqucNLBxGR+OJYvUkT4tesDgIizjxL9Svks7Ahf4hZRC8oocsyexwtlaUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY4PR12MB1576.namprd12.prod.outlook.com (2603:10b6:910:10::9)
+ by CY4PR1201MB0056.namprd12.prod.outlook.com (2603:10b6:910:1c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 12:40:39 +0000
+Received: from CY4PR12MB1576.namprd12.prod.outlook.com
+ ([fe80::24b0:46e7:d3c0:a77b]) by CY4PR12MB1576.namprd12.prod.outlook.com
+ ([fe80::24b0:46e7:d3c0:a77b%7]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 12:40:39 +0000
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+To:     Dmitry Osipenko <digetx@gmail.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, perex@perex.cz
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mohan Kumar <mkumard@nvidia.com>
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+ <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+ <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
+ <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
+ <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+From:   Sameer Pujar <spujar@nvidia.com>
+Message-ID: <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
+Date:   Tue, 7 Dec 2021 18:10:09 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+In-Reply-To: <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-ClientProxiedBy: PN2PR01CA0006.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::11) To CY4PR12MB1576.namprd12.prod.outlook.com
+ (2603:10b6:910:10::9)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.103]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Received: from [10.25.102.117] (202.164.25.5) by PN2PR01CA0006.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:25::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Tue, 7 Dec 2021 12:40:28 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8a9ea4ab-9bf7-4a9f-4942-08d9b97ec60d
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB0056:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB0056FA470C9444FEC7A608ECA76E9@CY4PR1201MB0056.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MdgsCCf6eOXh87gAmi+3C4XuRkMg9TxxdZFd4OZY8HjJ0iB+i5nm3hYrCXz8TmlXnkuEdwx959IlzF4eee9Kic7LVwEJPfKsocft8uBV+qMiowcqxNC1ELTiDTya24unKPnzEQoRjqfRulEhW3qW2NOaLLvXbw8IzzmYPJGCPuAi3GGrGheWJvciOE762DNQ93EEoafWbtkBfo4ZZ20rRXMqvPcz3hIqK3Wv3PU+Gda4+z+Lv0mmhnNrDgpsxfcA80sYb8b0Dv9t/Kk2jOZYj2DljFawRhmMDt4WaHdSOKcxyiKr6Li0tPImrH4JxrQqVnzErexFbtnLjI2EiPJaJJmrxD5vzKV+QUv5rRWM2V2EhaJtFf5T0ZqWMzoPlm+5HGLHKEWt5336KwZVPR4aOKwgqCdHkwBPhxOU+XkeWqUhkqBBz2YMUztaTwzk9aoyr7HRFdh9HO4UqemhV9uo6Y//o/dj/4Da8jBjfa3h70M6CZ7pN25AI8OV49e3YFsBvzPvAAckkk4Vx5AswfsU4zXKh9vIRaS6Q0kfNbFncTSy+jLa+s32XNT/K+fw9QSp5xZ+D29ud7DiDSvJet54N4byeIM207T4kePOLfPSAztciX6/uqwTMwkp9TS5xA8iaf4Bfq5uAWtJPwrlHYDg8mFbngrvyQ6K2Qa9uH3KygGGIWhwmGbTEmbcmicBixFuB4DMptjd30cbrqaAji31M0ukxskGdpQuZ236mrFmu64=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1576.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(6486002)(38100700002)(31696002)(8936002)(66476007)(66556008)(53546011)(956004)(5660300002)(2616005)(83380400001)(26005)(4326008)(86362001)(6666004)(16576012)(316002)(186003)(36756003)(107886003)(31686004)(508600001)(2906002)(8676002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cEhZMXNGLy9tSVNPcHZKcFFnaEdOMjdqaUJpQkt0RWoydjZ1YjdYUEN4WjNC?=
+ =?utf-8?B?TTNHVFBQUndnQ0plRXpLTVM4QTRjQVNHRCtKWTJrUStQMjE1NzV0QkZMTG1o?=
+ =?utf-8?B?TmZVYkptT3pDS2IzbWlNMEdwM0J3Q1oxazNJekhnUVgwaWJoV3RKRjRrUDZs?=
+ =?utf-8?B?WnZkVEJYWWJmajkwVFJHaWM3WUxLR3NVU2U5bmdsU0JOalNNTmpmaXJDZnpa?=
+ =?utf-8?B?N2dnMXFRdERHRTBPbUt2NndLbG5YZms3aGN4L0t3Q3FoM1dnZ0NNTmREM20z?=
+ =?utf-8?B?SnZEYkFxbE1VQk5sVjhCRE5lRXVvRUpzUG0zYy8yT3h6QnJnL29xV0dRSkhr?=
+ =?utf-8?B?NFh3UnhwdElkdUZvOGpUREhMcUcwV005S1BreDJ4SWt3OEFibXZvcm5XbXBZ?=
+ =?utf-8?B?RnlGZFhUbE96OWxCdnhYRlRHQTQ4TTdNNmNRTk9qVmpLM0hIdE9sUjZTTUdS?=
+ =?utf-8?B?eUU3by9zT3RkaTJxMXlJTStUZm5lc3FxT0sxQjZCMWN5aUR3YVBISlVkd0ZR?=
+ =?utf-8?B?RW0zazkxekh4SVd2dFFyZGdJeXFabitPSW9hVzM3cXVyTWs4K1NiekhNZ3pw?=
+ =?utf-8?B?MFFPbk5yZi9DakloaTBjME8zT0FTUDU2bnFtWDhHSmZuaUZEd0RxZkxGYm9p?=
+ =?utf-8?B?ZzlucFc0Zk5QZUVYTkFqRkNGMnRQNC90UG5GM3dmSXhtTVh4ME9TYUQreFFy?=
+ =?utf-8?B?bUkwU3JremxWMEpLOThyOEZlSVBNTTNmeU03MVA5b1B3UWZwYjBWUUVLUEdD?=
+ =?utf-8?B?WHB1SG1LaXpvN3QzdjkrODY5dzY0NG5iejNjUUtEY21VTU5kT1lVL0k1bnB0?=
+ =?utf-8?B?U1IwTjRZQzRPU0NaUHlYUit2dHB0OTVBK3JTR1VMcWlyYzRIaG4wWlljQ2xC?=
+ =?utf-8?B?cWNBRjVlbStZVVBLcllZSG8xcmlxS3dqVjUxVmhxQ29tSVBPNDRJRmRYQkdQ?=
+ =?utf-8?B?K0VIY3dxdmhtNjJiMDJIUFJ0a1FtT1FTaVRqRDM3bCtvTHB2WG1aLzVITlM5?=
+ =?utf-8?B?OVBEWll5VTFiYmk1NnZCQTZDSjNjOGlsbmQxbFhJR3ZDMXo0RlNZams0QVBo?=
+ =?utf-8?B?MVJnZmpXZlVPTEVpR0dHaXQvT0lqNzZJbGd0K294SllsTkp2L3N0MXdNdDNN?=
+ =?utf-8?B?TmZiTW03cVoyMGxudi9kenJ2Q09nTlM4cEdUaVdXN2tGZXdsbWxSaWRqRG9j?=
+ =?utf-8?B?azU5blNYaEJUY2NqRkgyd3lKRWNxMzN5ZXd4Zis1bWJtRzNUNHMrdytva21G?=
+ =?utf-8?B?cFh1SE90NExIdThMUjlqNG1pRGh3MGZCa1h6Y0hKME1NS3VOMkFRR2J5OGE5?=
+ =?utf-8?B?c1pOa051cm5pS0p1Y1ZmaXRZaHY1MVljRDZYT2FOVjRVa3h6eDc1LzdncU5P?=
+ =?utf-8?B?Umo1Wm5nK2JnN2UyZUhyQU41WTgvR2NPU3BwWjFLMkRiYWd2ZytRVHV5NEo3?=
+ =?utf-8?B?cUNuN2QvUjU2NVNRRGltbWhUSThFVVdvU0N4VXlWdEt4RDROaWVLMXlnYnd3?=
+ =?utf-8?B?ZFVUOUxHRFp1ZHVULys5R0JlZlRwWGowTHhPS01WcndpTnBWWUNhNmQvUnFU?=
+ =?utf-8?B?WVFYSzBEWGZ3aU45RCtNNklrTGtaYUhBMzkycUZNWkJOaS96NXRIZmFyNlQ1?=
+ =?utf-8?B?ZFJVQXVST245UzN5Rk1rOVpIUkJpWTJpbEt0OGZBcWd4ZHNWRnJYdHdRa3dY?=
+ =?utf-8?B?bk5JQ1kvbEFOM0t4WXlTMW82TnpOV0ZMTVNoVDJTR1FLUEM2NWcvM0tMUEMy?=
+ =?utf-8?B?azRjcW1IOW1VMmxQc2UwMkdzZndDc3RRY0N6NTFUazZNWGJnU3AwNUhKS2lI?=
+ =?utf-8?B?SHRUc3pwRjBKYkJsR0xDMkZLVEtzSW8vWVNYSkdUd25VWU91ZXEwSkNVaFBJ?=
+ =?utf-8?B?VkZ3b3dFWDBjU1IyZEplekMyejRIdXRqUFhTQ0FDTlFUWWlWOEpJb0lZV2JK?=
+ =?utf-8?B?TkIzNGpRUHUyRTZiQS94dS8zUi95cVd2c1hZdUIzYy94eE1zMlZMMkxhU28v?=
+ =?utf-8?B?emdBWXJyb3lUdkZuMlVhY1VRK3d1WXAyaWdETDdCMVF1OTJ6ZkM0bFlJNEpE?=
+ =?utf-8?B?MFBoc3NNTlBHWkthSXhCUCtvdXhDYXBXZ2hiMFlMZkNsdUtZQ1hKYTN4QnFY?=
+ =?utf-8?B?S0RaMzI4NW55dDVTRnhKTXp2NW5oNVh1Y0doNGdhekJmY1I2d05yZTFBY3E5?=
+ =?utf-8?Q?g+IfFRGhC3WblyelOrmlRyw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a9ea4ab-9bf7-4a9f-4942-08d9b97ec60d
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1576.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 12:40:39.1022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sm+rGNHIHsIm5j1dRwpfdcbveUbt4ECLSR+mr2R/3ObHvQ0V4IP9MWl6eCUTE5+BKHe9c7oduUZfCOGr2qvDWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0056
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduce optprobe for ARM64. In optprobe, probed
-instruction is replaced by a branch instruction to trampoline.
 
-Performance of optprobe on Hip08 platform is test using kprobe
-example module[1] to analyze the latency of a kernel function,
-and here is the result:
 
-common kprobe:
-[280709.846380] do_empty returned 0 and took 1530 ns to execute
-[280709.852057] do_empty returned 0 and took 550 ns to execute
-[280709.857631] do_empty returned 0 and took 440 ns to execute
-[280709.863215] do_empty returned 0 and took 380 ns to execute
-[280709.868787] do_empty returned 0 and took 360 ns to execute
-[280709.874362] do_empty returned 0 and took 340 ns to execute
-[280709.879936] do_empty returned 0 and took 320 ns to execute
-[280709.885505] do_empty returned 0 and took 300 ns to execute
-[280709.891075] do_empty returned 0 and took 280 ns to execute
-[280709.896646] do_empty returned 0 and took 290 ns to execute
+On 12/7/2021 5:35 PM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> 07.12.2021 15:00, Sameer Pujar пишет:
+>>
+>> On 12/7/2021 3:52 PM, Dmitry Osipenko wrote:
+>>> 07.12.2021 09:32, Sameer Pujar пишет:
+>>>> HDA regression is recently reported on Tegra194 based platforms.
+>>>> This happens because "hda2codec_2x" reset does not really exist
+>>>> in Tegra194 and it causes probe failure. All the HDA based audio
+>>>> tests fail at the moment. This underlying issue is exposed by
+>>>> commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
+>>>> response") which now checks return code of BPMP command response.
+>>>>
+>>>> The failure can be fixed by avoiding above reset in the driver,
+>>>> but the explicit reset is not necessary for Tegra devices which
+>>>> depend on BPMP. On such devices, BPMP ensures reset application
+>>>> during unpowergate calls. Hence skip reset on these devices
+>>>> which is applicable for Tegra186 and later.
+>>> The power domain is shared with the display, AFAICS. The point of reset
+>>> is to bring h/w into predictable state. It doesn't make sense to me to
+>>> skip the reset.
+>> Yes the power-domain is shared with display. As mentioned above,
+>> explicit reset in driver is not really necessary since BPMP is already
+>> doing it during unpowergate stage. So the h/w is already ensured to be
+>> in a good state.
+> If you'll reload the driver module, then h/w won't be reset.
 
-optprobe:
-[ 2965.964572] do_empty returned 0 and took 90 ns to execute
-[ 2965.969952] do_empty returned 0 and took 80 ns to execute
-[ 2965.975332] do_empty returned 0 and took 70 ns to execute
-[ 2965.980714] do_empty returned 0 and took 60 ns to execute
-[ 2965.986128] do_empty returned 0 and took 80 ns to execute
-[ 2965.991507] do_empty returned 0 and took 70 ns to execute
-[ 2965.996884] do_empty returned 0 and took 70 ns to execute
-[ 2966.002262] do_empty returned 0 and took 80 ns to execute
-[ 2966.007642] do_empty returned 0 and took 70 ns to execute
-[ 2966.013020] do_empty returned 0 and took 70 ns to execute
-[ 2966.018400] do_empty returned 0 and took 70 ns to execute
-
-As the result shows, optprobe can greatly reduce the latency. Big
-latency of common kprobe will significantly impact the real result
-while doing performance analysis or debugging performance issues
-in lab, so optprobe is useful in this scenario.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
-
-Note:
-As branch instruction in Arm64 has a 128M range limitation, optprobe
-could only used when offset between probe point and trampoline
-is less than 128M, otherwise kernel will choose common kprobe
-automaticly.
-
-Limitation caused by branch isn't unique to Arm64, but also to
-x86/arm/powerpc.
-
-In fact, Module PLT has been tried to get rid of limiation, but
-destination of PLT must be a fixed value, and we need to modify
-the destination (as each optprobe has its own trampoline).
-
-As discussed with Masami[2], we can start with core-kernel point
-(within 128M) as the first step, like other architectures.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/kprobes/kretprobe_example.c
-[2] https://lore.kernel.org/lkml/20211201105001.5164f98ba783e7207df1229c@kernel.org/
----
- arch/arm64/Kconfig                            |   1 +
- arch/arm64/include/asm/kprobes.h              |  21 ++
- arch/arm64/kernel/probes/Makefile             |   2 +
- arch/arm64/kernel/probes/opt_arm64.c          | 199 ++++++++++++++++++
- .../arm64/kernel/probes/optprobe_trampoline.S |  97 +++++++++
- include/linux/kprobes.h                       |   2 +
- kernel/kprobes.c                              |  22 ++
- 7 files changed, 344 insertions(+)
- create mode 100644 arch/arm64/kernel/probes/opt_arm64.c
- create mode 100644 arch/arm64/kernel/probes/optprobe_trampoline.S
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c4207cf9bb17..6b68ec498e67 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -200,6 +200,7 @@ config ARM64
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_KPROBES
-+	select HAVE_OPTPROBES
- 	select HAVE_KRETPROBES
- 	select HAVE_GENERIC_VDSO
- 	select IOMMU_DMA if IOMMU_SUPPORT
-diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
-index 05cd82eeca13..3838e4317877 100644
---- a/arch/arm64/include/asm/kprobes.h
-+++ b/arch/arm64/include/asm/kprobes.h
-@@ -39,6 +39,27 @@ void arch_remove_kprobe(struct kprobe *);
- int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
- int kprobe_exceptions_notify(struct notifier_block *self,
- 			     unsigned long val, void *data);
-+
-+struct arch_optimized_insn {
-+	kprobe_opcode_t orig_insn[1];
-+	kprobe_opcode_t *trampoline;
-+};
-+
-+#define MAX_OPTIMIZED_LENGTH	sizeof(kprobe_opcode_t)
-+#define MAX_OPTINSN_SIZE                                                       \
-+	((unsigned long)optprobe_template_restore_end - (unsigned long)optprobe_template_entry)
-+
-+extern __visible kprobe_opcode_t optprobe_template_entry[];
-+extern __visible kprobe_opcode_t optprobe_template_val[];
-+extern __visible kprobe_opcode_t optprobe_template_common[];
-+extern __visible kprobe_opcode_t optprobe_template_end[];
-+extern __visible kprobe_opcode_t optprobe_template_restore_begin[];
-+extern __visible kprobe_opcode_t optprobe_template_restore_orig_insn[];
-+extern __visible kprobe_opcode_t optprobe_template_restore_end[];
-+extern __visible kprobe_opcode_t optinsn_slot[];
-+
-+void optprobe_common(void);
-+
- void __kretprobe_trampoline(void);
- void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
- 
-diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
-index 8e4be92e25b1..07105fd3261d 100644
---- a/arch/arm64/kernel/probes/Makefile
-+++ b/arch/arm64/kernel/probes/Makefile
-@@ -4,3 +4,5 @@ obj-$(CONFIG_KPROBES)		+= kprobes.o decode-insn.o	\
- 				   simulate-insn.o
- obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o	\
- 				   simulate-insn.o
-+obj-$(CONFIG_OPTPROBES)		+= opt_arm64.o			\
-+				   optprobe_trampoline.o
-diff --git a/arch/arm64/kernel/probes/opt_arm64.c b/arch/arm64/kernel/probes/opt_arm64.c
-new file mode 100644
-index 000000000000..1bad5cddcdf2
---- /dev/null
-+++ b/arch/arm64/kernel/probes/opt_arm64.c
-@@ -0,0 +1,199 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Code for Kernel probes Jump optimization.
-+ *
-+ * Copyright (C) 2021 Hisilicon Limited
-+ */
-+
-+#include <linux/jump_label.h>
-+#include <linux/kprobes.h>
-+
-+#include <asm/cacheflush.h>
-+#include <asm/compiler.h>
-+#include <asm/insn.h>
-+#include <asm/kprobes.h>
-+#include <asm/patching.h>
-+
-+#define OPTPROBE_BATCH_SIZE 64
-+#define GET_LO_VAL(val)		FIELD_GET(GENMASK(31, 0), val)
-+#define GET_HI_VAL(val)		FIELD_GET(GENMASK(63, 32), val)
-+
-+#define TMPL_VAL_IDX \
-+	(optprobe_template_val - optprobe_template_entry)
-+#define TMPL_CALL_COMMON \
-+	(optprobe_template_common - optprobe_template_entry)
-+#define TMPL_RESTORE_ORIGN_INSN \
-+	(optprobe_template_restore_orig_insn - optprobe_template_entry)
-+#define TMPL_RESTORE_END \
-+	(optprobe_template_restore_end - optprobe_template_entry)
-+#define TMPL_END_IDX \
-+	(optprobe_template_end - optprobe_template_entry)
-+
-+static bool insn_page_in_use;
-+
-+void *alloc_optinsn_page(void)
-+{
-+	if (insn_page_in_use)
-+		return NULL;
-+	insn_page_in_use = true;
-+	return &optinsn_slot;
-+}
-+
-+void free_optinsn_page(void *page)
-+{
-+	insn_page_in_use = false;
-+}
-+
-+int arch_check_optimized_kprobe(struct optimized_kprobe *op)
-+{
-+	return 0;
-+}
-+
-+int arch_prepared_optinsn(struct arch_optimized_insn *optinsn)
-+{
-+	return optinsn->trampoline != NULL;
-+}
-+
-+int arch_within_optimized_kprobe(struct optimized_kprobe *op, kprobe_opcode_t *addr)
-+{
-+	return op->kp.addr == addr;
-+}
-+
-+static void optprobe_set_pc_value(struct optimized_kprobe *op, struct pt_regs *regs)
-+{
-+	regs->pc = (unsigned long)op->kp.addr;
-+}
-+
-+static int optprobe_check_branch_limit(unsigned long pc, unsigned long addr)
-+{
-+	long offset;
-+
-+	if ((pc & 0x3) || (addr & 0x3))
-+		return -ERANGE;
-+
-+	offset = (long)addr - (long)pc;
-+	if (offset < -SZ_128M || offset >= SZ_128M)
-+		return -ERANGE;
-+
-+	return 0;
-+}
-+
-+int arch_prepare_optimized_kprobe(struct optimized_kprobe *op, struct kprobe *orig)
-+{
-+	kprobe_opcode_t *code, *buf;
-+	u32 insn;
-+	int ret = -ENOMEM;
-+	int i;
-+
-+	buf = kcalloc(MAX_OPTINSN_SIZE, sizeof(kprobe_opcode_t), GFP_KERNEL);
-+	if (!buf)
-+		return ret;
-+
-+	code = get_optinsn_slot();
-+	if (!code)
-+		goto out;
-+
-+	if (optprobe_check_branch_limit((unsigned long)code, (unsigned long)orig->addr + 8)) {
-+		ret = -ERANGE;
-+		goto error;
-+	}
-+
-+	op->set_pc = optprobe_set_pc_value;
-+	memcpy(buf, optprobe_template_entry, MAX_OPTINSN_SIZE * sizeof(kprobe_opcode_t));
-+
-+	insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_CALL_COMMON],
-+					   (unsigned long)&optprobe_common,
-+					   AARCH64_INSN_BRANCH_LINK);
-+	buf[TMPL_CALL_COMMON] = insn;
-+
-+	insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_RESTORE_END],
-+					   (unsigned long)op->kp.addr + 4,
-+					   AARCH64_INSN_BRANCH_NOLINK);
-+	buf[TMPL_RESTORE_END] = insn;
-+
-+	buf[TMPL_VAL_IDX] = cpu_to_le32(GET_LO_VAL((unsigned long)op));
-+	buf[TMPL_VAL_IDX + 1] = cpu_to_le32(GET_HI_VAL((unsigned long)op));
-+	buf[TMPL_RESTORE_ORIGN_INSN] = orig->opcode;
-+
-+	/* Setup template */
-+	for (i = 0; i < MAX_OPTINSN_SIZE; i++)
-+		aarch64_insn_patch_text_nosync(code + i, buf[i]);
-+
-+	flush_icache_range((unsigned long)code, (unsigned long)(&code[TMPL_VAL_IDX]));
-+	/* Set op->optinsn.trampoline means prepared. */
-+	op->optinsn.trampoline = code;
-+
-+out:
-+	kfree(buf);
-+	return ret;
-+
-+error:
-+	free_optinsn_slot(code, 0);
-+	goto out;
-+}
-+
-+void arch_optimize_kprobes(struct list_head *oplist)
-+{
-+	struct optimized_kprobe *op, *tmp;
-+	kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-+	void *addrs[OPTPROBE_BATCH_SIZE];
-+	int i = 0;
-+
-+	list_for_each_entry_safe(op, tmp, oplist, list) {
-+		WARN_ON(kprobe_disabled(&op->kp));
-+
-+		/*
-+		 * Backup instructions which will be replaced
-+		 * by jump address
-+		 */
-+		memcpy(op->optinsn.orig_insn, op->kp.addr, AARCH64_INSN_SIZE);
-+
-+		addrs[i] = (void *)op->kp.addr;
-+		insns[i] = aarch64_insn_gen_branch_imm((unsigned long)op->kp.addr,
-+						       (unsigned long)op->optinsn.trampoline,
-+						       AARCH64_INSN_BRANCH_NOLINK);
-+
-+		list_del_init(&op->list);
-+		if (++i == OPTPROBE_BATCH_SIZE)
-+			break;
-+	}
-+
-+	aarch64_insn_patch_text(addrs, insns, i);
-+}
-+
-+void arch_unoptimize_kprobe(struct optimized_kprobe *op)
-+{
-+	arch_arm_kprobe(&op->kp);
-+}
-+
-+/*
-+ * Recover original instructions and breakpoints from relative jumps.
-+ * Caller must call with locking kprobe_mutex.
-+ */
-+void arch_unoptimize_kprobes(struct list_head *oplist,
-+			    struct list_head *done_list)
-+{
-+	struct optimized_kprobe *op, *tmp;
-+	kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-+	void *addrs[OPTPROBE_BATCH_SIZE];
-+	int i = 0;
-+
-+	list_for_each_entry_safe(op, tmp, oplist, list) {
-+		addrs[i] = (void *)op->kp.addr;
-+		insns[i] = BRK64_OPCODE_KPROBES;
-+		list_move(&op->list, done_list);
-+
-+		if (++i == OPTPROBE_BATCH_SIZE)
-+			break;
-+	}
-+
-+	aarch64_insn_patch_text(addrs, insns, i);
-+}
-+
-+void arch_remove_optimized_kprobe(struct optimized_kprobe *op)
-+{
-+	if (op->optinsn.trampoline) {
-+		free_optinsn_slot(op->optinsn.trampoline, 1);
-+		op->optinsn.trampoline = NULL;
-+	}
-+}
-diff --git a/arch/arm64/kernel/probes/optprobe_trampoline.S b/arch/arm64/kernel/probes/optprobe_trampoline.S
-new file mode 100644
-index 000000000000..1376daeae844
---- /dev/null
-+++ b/arch/arm64/kernel/probes/optprobe_trampoline.S
-@@ -0,0 +1,97 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * trampoline entry and return code for optprobes.
-+ */
-+
-+#include <linux/linkage.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/assembler.h>
-+
-+#define        OPT_SLOT_SIZE   65536
-+
-+	.global optinsn_slot
-+optinsn_slot:
-+	.space  OPT_SLOT_SIZE
-+
-+SYM_CODE_START(optprobe_common)
-+	stp x2, x3, [sp, #S_X2]
-+	stp x4, x5, [sp, #S_X4]
-+	stp x6, x7, [sp, #S_X6]
-+	stp x8, x9, [sp, #S_X8]
-+	stp x10, x11, [sp, #S_X10]
-+	stp x12, x13, [sp, #S_X12]
-+	stp x14, x15, [sp, #S_X14]
-+	stp x16, x17, [sp, #S_X16]
-+	stp x18, x19, [sp, #S_X18]
-+	stp x20, x21, [sp, #S_X20]
-+	stp x22, x23, [sp, #S_X22]
-+	stp x24, x25, [sp, #S_X24]
-+	stp x26, x27, [sp, #S_X26]
-+	stp x28, x29, [sp, #S_X28]
-+	add x2, sp, #PT_REGS_SIZE
-+	str x2, [sp, #S_SP]
-+	/* Construct a useful saved PSTATE */
-+	mrs x2, nzcv
-+	mrs x3, daif
-+	orr x2, x2, x3
-+	mrs x3, CurrentEL
-+	orr x2, x2, x3
-+	mrs x3, SPSel
-+	orr x2, x2, x3
-+	stp xzr, x2, [sp, #S_PC]
-+
-+	/* set the pt_regs address to x1 */
-+	mov	x1, sp
-+	/* store lr of optprobe_common temporary */
-+	sub sp, sp, #0x10
-+	str lr, [sp, #0x8]
-+
-+	bl optprobe_optimized_callback
-+
-+	ldr lr, [sp, #0x8]
-+	add sp, sp, #0x10
-+	ldr x0, [sp, #S_PSTATE]
-+	and x0, x0, #(PSR_N_BIT | PSR_Z_BIT | PSR_C_BIT | PSR_V_BIT)
-+	msr nzcv, x0
-+	ldp x0, x1, [sp, #S_X0]
-+	ldp x2, x3, [sp, #S_X2]
-+	ldp x4, x5, [sp, #S_X4]
-+	ldp x6, x7, [sp, #S_X6]
-+	ldp x8, x9, [sp, #S_X8]
-+	ldp x10, x11, [sp, #S_X10]
-+	ldp x12, x13, [sp, #S_X12]
-+	ldp x14, x15, [sp, #S_X14]
-+	ldp x16, x17, [sp, #S_X16]
-+	ldp x18, x19, [sp, #S_X18]
-+	ldp x20, x21, [sp, #S_X20]
-+	ldp x22, x23, [sp, #S_X22]
-+	ldp x24, x25, [sp, #S_X24]
-+	ldp x26, x27, [sp, #S_X26]
-+	ldp x28, x29, [sp, #S_X28]
-+	ret
-+SYM_CODE_END(optprobe_common)
-+
-+	.global optprobe_template_entry
-+optprobe_template_entry:
-+	sub sp, sp, #PT_REGS_SIZE
-+	str lr, [sp, #S_LR]
-+	stp x0, x1, [sp, #S_X0]
-+	/* Get parameters to optimized_callback() */
-+	ldr x0, 1f
-+	.global optprobe_template_common
-+optprobe_template_common:
-+	nop
-+	ldr lr, [sp, #S_LR]
-+       add sp, sp, #PT_REGS_SIZE
-+	.global optprobe_template_restore_orig_insn
-+optprobe_template_restore_orig_insn:
-+	nop
-+	.global optprobe_template_restore_end
-+optprobe_template_restore_end:
-+	nop
-+	.global optprobe_template_val
-+optprobe_template_val:
-+	1:	.long 0
-+		.long 0
-+	.global optprobe_template_end
-+optprobe_template_end:
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 8c8f7a4d93af..7be680155df7 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -329,6 +329,7 @@ struct optimized_kprobe {
- 	struct kprobe kp;
- 	struct list_head list;	/* list for optimizing queue */
- 	struct arch_optimized_insn optinsn;
-+	void (*set_pc)(struct optimized_kprobe *op, struct pt_regs *regs);
- };
- 
- /* Architecture dependent functions for direct jump optimization */
-@@ -345,6 +346,7 @@ extern int arch_within_optimized_kprobe(struct optimized_kprobe *op,
- 					kprobe_opcode_t *addr);
- 
- extern void opt_pre_handler(struct kprobe *p, struct pt_regs *regs);
-+extern void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs);
- 
- DEFINE_INSN_CACHE_OPS(optinsn);
- 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 21eccc961bba..d799e562a39a 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -430,6 +430,28 @@ void opt_pre_handler(struct kprobe *p, struct pt_regs *regs)
- }
- NOKPROBE_SYMBOL(opt_pre_handler);
- 
-+void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs)
-+{
-+	if (kprobe_disabled(&op->kp))
-+		return;
-+
-+	preempt_disable();
-+
-+	if (kprobe_running()) {
-+		kprobes_inc_nmissed_count(&op->kp);
-+	} else {
-+		op->set_pc(op, regs);
-+		__this_cpu_write(current_kprobe, &op->kp);
-+		get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
-+		opt_pre_handler(&op->kp, regs);
-+		__this_cpu_write(current_kprobe, NULL);
-+	}
-+
-+	preempt_enable();
-+}
-+NOKPROBE_SYMBOL(optprobe_optimized_callback)
-+
-+
- /* Free optimized instructions and optimized_kprobe */
- static void free_aggr_kprobe(struct kprobe *p)
- {
--- 
-2.33.0
-
+How the reload case would be different? Can you please specify more 
+details if you are referring to a particular scenario?

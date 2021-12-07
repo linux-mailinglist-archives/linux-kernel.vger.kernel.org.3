@@ -2,87 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D13646B8A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E64546B8A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbhLGKUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:20:16 -0500
-Received: from foss.arm.com ([217.140.110.172]:56076 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234945AbhLGKUO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:20:14 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 633BD1042;
-        Tue,  7 Dec 2021 02:16:44 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 125F83F73B;
-        Tue,  7 Dec 2021 02:16:42 -0800 (PST)
-Date:   Tue, 7 Dec 2021 10:16:32 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Marc Zyngier <maz@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Luca Ceresoli <luca@lucaceresoli.net>, kernel-team@android.com
-Subject: Re: [PATCH v3 0/3] PCI: apple: Assorted #PERST fixes
-Message-ID: <20211207101621.GA466@lpieralisi>
-References: <20211123180636.80558-1-maz@kernel.org>
- <20211130115632.GA3355@lpieralisi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130115632.GA3355@lpieralisi>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S234948AbhLGKUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhLGKUH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 05:20:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A880C061574;
+        Tue,  7 Dec 2021 02:16:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06958B8173F;
+        Tue,  7 Dec 2021 10:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0798C341C3;
+        Tue,  7 Dec 2021 10:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638872194;
+        bh=B1oT697OtNR2k4tOPVurO8VmCv1cDWiUQ3tRM2Up8BE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uHw0odvRGScbwMTcj00jFfv2B4lUWZk3dxGYXzPUjECUov4nAjYYUtzqF5gU0m3oP
+         053cCMcRZ131qBScAEtkNvE6Trql+QhmQLXO9hrACYqmK7ev4I0qthG2M9o14cT+4Q
+         Da0lB30tTfPsiWCzSFt/8m6jbm0Z8Ra/Pdo4wgG7qwAZE0DBcKp8jI43VD5ycrSjeE
+         XMDwc4KPdRqMsIm386qSSr2zBx3WVerU3cqj6d6CaLGUVFeNMl9fz8S5QN388q7hCH
+         nsJqZr4769IaDvrOA3Ya/CLIqMIGyMtNsfj6Kss3bT04ca4kfzcFvpInFHg5lwD4mx
+         XJg87abq10Y5g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muXWS-00ATbR-S4; Tue, 07 Dec 2021 10:16:32 +0000
+Date:   Tue, 07 Dec 2021 10:16:32 +0000
+Message-ID: <87mtlc1zzz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20211207094835.GO10105@dragon>
+References: <20211202122122.23548-1-shawn.guo@linaro.org>
+        <20211202122122.23548-4-shawn.guo@linaro.org>
+        <87wnkikqve.wl-maz@kernel.org>
+        <20211206131530.GN10105@dragon>
+        <87wnkh26ar.wl-maz@kernel.org>
+        <20211207094835.GO10105@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:56:32AM +0000, Lorenzo Pieralisi wrote:
-> On Tue, Nov 23, 2021 at 06:06:33PM +0000, Marc Zyngier wrote:
-> > Apologies for the rapid fire (I tend to be much more conservative when
-> > resending series), but given that this series has a direct impact on
-> > other projects (such as u-boot), I'm trying to converge as quickly as
-> > possible.
-> > 
-> > This series aims at fixing a number of issues for the recently merged
-> > Apple PCIe driver, all revolving around the mishandling of #PERST:
-> > 
-> > - we didn't properly drive #PERST, and we didn't follow the specified
-> >   timings
-> >   
-> > - the DT had the wrong polarity, which has impacts on the driver
-> >   itself
-> > 
-> > Hopefully, this should address all the issues reported so far.
-> > 
-> > * From v2:
-> >   - Fixed DT
-> >   - Fixed #PERST polarity in the driver
-> >   - Collected Pali's ack on patch #1
-> > 
-> > [1] https://lore.kernel.org/r/20211122104156.518063-1-maz@kernel.org
-> > 
-> > Marc Zyngier (3):
-> >   PCI: apple: Follow the PCIe specifications when resetting the port
-> >   arm64: dts: apple: t8103: Fix PCIe #PERST polarity
-> >   PCI: apple: Fix #PERST polarity
-> > 
-> >  arch/arm64/boot/dts/apple/t8103.dtsi |  7 ++++---
-> >  drivers/pci/controller/pcie-apple.c  | 12 +++++++++++-
-> >  2 files changed, 15 insertions(+), 4 deletions(-)
+On Tue, 07 Dec 2021 09:48:36 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
 > 
-> Hi Bjorn,
+> On Mon, Dec 06, 2021 at 01:48:12PM +0000, Marc Zyngier wrote:
+> > > > > +static int qcom_mpm_enter_sleep(struct qcom_mpm_priv *priv)
+> > > > > +{
+> > > > > +	int i, ret;
+> > > > > +
+> > > > > +	for (i = 0; i < priv->reg_stride; i++)
+> > > > > +		qcom_mpm_write(priv, MPM_REG_STATUS, i, 0);
+> > > > > +
+> > > > > +	/* Notify RPM to write vMPM into HW */
+> > > > 
+> > > > What do you mean by 'into HW'? We just did that, right? or are these
+> > > > registers just fake and most of the stuff is in the RPM?
+> > > 
+> > > I have a note about this in commit log.
+> > > 
+> > > - All the register settings are done by APSS on an internal memory
+> > >   region called vMPM, and RPM will flush them into hardware after it
+> > >   receives a mailbox/IPC notification from APSS.
+> > > 
+> > > So yes, these registers are fake/virtual in memory, and RPM will
+> > > actually flush the values into the MPM hardware block.
+> > 
+> > Then why are you using MMIO accessors all over the place if this is
+> > just RAM? Who *owns* this memory? Is it normal DRAM? Or some flops
+> > exposed by a device? Why isn't the state simply communicated over the
+> > mailbox instead?
 > 
-> this series is v5.16-rcX material for PCI fixes, can you pick patches
-> 1,3 up please ?
+> It's a piece of internal memory (SRAM) which can be access by AP and
+> RPM.  The communication mechanism is defined by SoC/RPM design, and we
+> can do nothing but following the procedure.
 
-Hi Bjorn,
+Then the procedure needs to be documented:
 
-Arnd acked patch 2, can we send the whole series upstream for one
-of the upcoming -rcX please ? It is fixing code that was merged
-in the last merge window.
+- Who owns the memory at any given time?
 
-Thanks,
-Lorenzo
+- What are the events that trigger a change of ownership?
+
+- What are the messages exchanged between these entities?
+
+- What is the synchronisation mechanism between the various processing
+  entities (MPM. RPM, APSS...)?
+
+- Is the per-interrupt tracking a HW requirement or a SW
+  implementation choice? Could this instead be a one-shot operation
+  iterating over the whole state?
+
+All this needs to be explained so that it is maintainable, because I'm
+getting tired of drivers that mimic the QC downstream code without
+justification nor documentation to support the implementation.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

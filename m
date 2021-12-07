@@ -2,87 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D4446BC13
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9385646BC11
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbhLGNEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:04:31 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:55241 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236717AbhLGNE2 (ORCPT
+        id S236714AbhLGNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236458AbhLGNE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:04:28 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mr9OA-1mFUWU3bgE-00oClf for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021
- 14:00:56 +0100
-Received: by mail-wr1-f44.google.com with SMTP id j3so29384164wrp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 05:00:56 -0800 (PST)
-X-Gm-Message-State: AOAM531TIr7CjKAwPeQFUbNMonO4+9RVamT3Gtj6dHhUuVx774Yj9qWT
-        WmJppJRbBd67Z4UPHo5dt1jDdWrKo5IXor4oTM0=
-X-Google-Smtp-Source: ABdhPJxPTZb1NEgHTgiRZ5k7TV56wTLpaTAV0tigTfyAj6yjgVEdlWqbHmbxec81GQE5rsfdo8Evow6Ud4USOVQhzcM=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr50868012wrp.209.1638882056495;
- Tue, 07 Dec 2021 05:00:56 -0800 (PST)
+        Tue, 7 Dec 2021 08:04:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2A2C061574;
+        Tue,  7 Dec 2021 05:00:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04C55B817AB;
+        Tue,  7 Dec 2021 13:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D83C341C6;
+        Tue,  7 Dec 2021 13:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638882053;
+        bh=tlZQmFrL4c1Q7qm8ZsencyO1fQ3VitQp6hwvBIsNvKE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aeBE5Zrf2kuyD0QZ9LLtvcfige7Oxx/yZ2y465k9Ky2u0IcJSAOhQV10BxgSlM1M+
+         HOJgTUHstK7sSdidZ+hck1HpWJri3SqsqR38MgcAYPLVD+n7DCm/l82Ue0Q0a1x63O
+         Ul6l3ljb9o+NBb1GWggszojYit/K0dL6U8bMkR3jHuVEn56oV7BC15boebev5ZKVgo
+         u2G5DfDwR7XX4W/HMtiD4J8p2/Zop30oxCI1aQXrkIhWKUVwiqdFfUJH/GeFBAhBw3
+         jebTErETudTe/Uv40BkFm17Y75FFVKBfgy8hcFYhwHnmmt8byLKACKKiSZMxvtB3fP
+         naW/VAerP4l5w==
+Date:   Tue, 7 Dec 2021 14:00:48 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Wei Xu <xuwei5@hisilicon.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, <linuxarm@huawei.com>,
+        <mauro.chehab@huawei.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Felipe Balbi <balbi@ti.com>
+Subject: Re: [PATCH 3/5] arm64: dts: HiSilicon: Add support for HiKey 970
+ USB3 PHY
+Message-ID: <20211207140048.3d54c55f@coco.lan>
+In-Reply-To: <61AF2069.5030607@hisilicon.com>
+References: <cover.1637063775.git.mchehab+huawei@kernel.org>
+        <97d470290e81ac40023bdcc7e2d796796421b737.1637063775.git.mchehab+huawei@kernel.org>
+        <61AF2069.5030607@hisilicon.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20211207110228.698956-1-anders.roxell@linaro.org>
-In-Reply-To: <20211207110228.698956-1-anders.roxell@linaro.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 7 Dec 2021 14:00:40 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2xJJutbwujzh57QqEAgOUwBz5aT78ZFsSam7TfZuQ_Dg@mail.gmail.com>
-Message-ID: <CAK8P3a2xJJutbwujzh57QqEAgOUwBz5aT78ZFsSam7TfZuQ_Dg@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: platforms: cell: pervasive: fix clang -Wimplicit-fallthrough
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5vY9kdUQgOWVplvt9IvFwNXA/SbJmYljfOxv8HnixAPLOhRZHJ5
- eXjXSx8kPg8EYa+LdfUR3UvrPnSqJOVJBOUJNavORlIfWmIBbpLY9iweEqD2+0FYi9Balf5
- O1mGQzETEZVgCTyMKyAFQQKW4mcuZ4bMdG+FAp7/2USQ9hjdBpo+tqGKxjU7koYuB4/kzKJ
- P4DI1P2Urt5sDOwz64BTw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Gbn6C5V1CfI=:QEhCTrla2Ma2UZkomu7T1H
- /J7P1gyuaJoz8M8NPSfzVdR4tQzsDLX3VuTyM7AnpqaTy4Dg+FvdwtQotDFGn88V0hiSg3MiT
- HXgfApkCmYVQyMyGbuevWUydXtbfjxho7SyxQLsdLCQYacIFLkmx/3D5kJ2vY2td5pCFjIQ/Q
- UcBQgVV3Ff/Ma/F35SVS1vUGu3MB8j0FOfigEANa04MDCT55wlleiwI0NMjzXspj4xLnmyXAs
- rTFeUQzogeZiCUWML/Yp7TgikE+qkGAuqetE2r6lskxcuaKq5DErEat5o4OCT+/b1Q5YsAbS8
- +hkIxFX+AV/GXLpOipZSxoem8hK9R2mD6PCEXbkyoNa8gUOWyGzHWFVWp0VY7ZkP+OUzBjUBz
- 6FHudGnayJhpPdFvXHZk5flLrp9jBMFeL85DICD7R0CR8/Aj6tnu3h+TvOillfhXEC9TpT4tt
- +mkzvsUosFZtIqpll9qwiLJMgK6RDcI5KbWc1ei3/OGp25/MO4jtZYpiCChe//U2REB4m3fQ5
- c4EgoN1Ptm4GxtoXNzekkeO8XsfSBSIyQXNc4JxaakyqQt2eSHJUWq8hs3w7T1DScg75iPLhO
- 8wsSNXmK0q5lHCr3zGYp/wdemyhR88yP7CtmHydW9JzNpiw71kNO3vKT98dr+7g9AuozsZcxA
- yYmBUvM3fTYiBvDMq80+1dHv9oUE8jwp048k6V0jTBTVGuIlzHuf2h7ZOfXsXHuEEInVZfTqB
- frBky3Xva69lh7f+7QEMyRuC8kuT/w6DdqHMXX1It5F2bxWn2wWydq9S+36PN1v4rXaNThxeW
- zsfXlt/8G1fX9J4oxrxDm40LoEWy3+ijqBMktvCJ9Nk7QP/v8Y=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 12:02 PM Anders Roxell <anders.roxell@linaro.org> wrote:
->
-> Clang warns:
->
-> arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->         case SRR1_WAKEEE:
->         ^
-> arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
->         case SRR1_WAKEEE:
->         ^
->         break;
-> 1 error generated.
->
-> Clang is more pedantic than GCC, which does not warn when failing
-> through to a case that is just break or return. Clang's version
-> is more in line with the kernel's own stance in deprecated.rst.
-> Add athe missing break to silence the warning.
->
-> Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Em Tue, 7 Dec 2021 16:50:49 +0800
+Wei Xu <xuwei5@hisilicon.com> escreveu:
 
-Thanks for the fix!
+> Hi Mauro,
+> 
+> On 2021/11/16 19:59, Mauro Carvalho Chehab wrote:
+> > Add the USB3 bindings for Kirin 970 phy and HiKey 970 board.
+> > 
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---
+> > 
+> > To mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> > See [PATCH 0/5] at: https://lore.kernel.org/all/cover.1637063775.git.mchehab+huawei@kernel.org/
+> > 
+> >  .../boot/dts/hisilicon/hi3670-hikey970.dts    | 83 +++++++++++++++++++
+> >  arch/arm64/boot/dts/hisilicon/hi3670.dtsi     | 56 +++++++++++++
+> >  2 files changed, 139 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> > index 7c32f5fd5cc5..60594db07041 100644
+> > --- a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> > +++ b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+> > @@ -430,3 +430,86 @@ &uart6 {
+> >  	label = "LS-UART1";
+> >  	status = "okay";
+> >  };
+> > +
+> > +&usb_phy {
+> > +	phy-supply = <&ldo17>;
+> > +};
+> > +
+> > +&i2c1 {
+> > +	status = "okay";
+> > +
+> > +	rt1711h: rt1711h@4e {
+> > +		compatible = "richtek,rt1711h";
+> > +		reg = <0x4e>;
+> > +		status = "okay";
+> > +		interrupt-parent = <&gpio27>;
+> > +		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&usb_cfg_func>;
+> > +
+> > +		usb_con: connector {
+> > +			compatible = "usb-c-connector";
+> > +			label = "USB-C";
+> > +			data-role = "dual";
+> > +			power-role = "dual";
+> > +			try-power-role = "sink";
+> > +			source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
+> > +			sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
+> > +				PDO_VAR(5000, 5000, 1000)>;
+> > +			op-sink-microwatt = <10000000>;
+> > +
+> > +			ports {
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +				port@1 {
+> > +					reg = <1>;
+> > +					usb_con_ss: endpoint {
+> > +						remote-endpoint = <&dwc3_ss>;
+> > +					};
+> > +				};
+> > +			};
+> > +		};
+> > +		port {
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +
+> > +			rt1711h_ep: endpoint@0 {
+> > +				reg = <0>;
+> > +				remote-endpoint = <&hikey_usb_ep1>;
+> > +			};
+> > +		};
+> > +	};
+> > +};
+> > +
+> > +&i2c2 {
+> > +	/* USB HUB is on this bus at address 0x44 */
+> > +	status = "okay";
+> > +};
+> > +
+> > +&dwc3 { /* USB */
+> > +	dr_mode = "otg";
+> > +	maximum-speed = "super-speed";
+> > +	phy_type = "utmi";
+> > +	snps,dis-del-phy-power-chg-quirk;
+> > +	snps,dis_u2_susphy_quirk;
+> > +	snps,dis_u3_susphy_quirk;
+> > +	snps,tx_de_emphasis_quirk;
+> > +	snps,tx_de_emphasis = <1>;
+> > +	snps,dis-split-quirk;
+> > +	snps,gctl-reset-quirk;
+> > +	usb-role-switch;
+> > +	role-switch-default-mode = "host";
+> > +	port {
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +		dwc3_role_switch: endpoint@0 {
+> > +			reg = <0>;
+> > +			remote-endpoint = <&hikey_usb_ep0>;
+> > +		};
+> > +
+> > +		dwc3_ss: endpoint@1 {
+> > +			reg = <1>;
+> > +			remote-endpoint = <&usb_con_ss>;
+> > +		};
+> > +	};
+> > +};
+> > diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > index 225dccbcb064..b47654b50139 100644
+> > --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> > @@ -8,6 +8,7 @@
+> >  
+> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> >  #include <dt-bindings/clock/hi3670-clock.h>
+> > +#include <dt-bindings/usb/pd.h>
+> >  
+> >  / {
+> >  	compatible = "hisilicon,hi3670";
+> > @@ -892,5 +893,60 @@ i2c4: i2c@fdf0d000 {
+> >  			pinctrl-0 = <&i2c4_pmx_func &i2c4_cfg_func>;
+> >  			status = "disabled";
+> >  		};
+> > +
+> > +		usb3_otg_bc: usb3_otg_bc@ff200000 {
+> > +			compatible = "syscon", "simple-mfd";
+> > +			reg = <0x0 0xff200000 0x0 0x1000>;
+> > +
+> > +			usb_phy: usbphy {
+> > +				compatible = "hisilicon,hi3670-usb-phy";
+> > +				#phy-cells = <0>;
+> > +				hisilicon,pericrg-syscon = <&crg_ctrl>;
+> > +				hisilicon,pctrl-syscon = <&pctrl>;
+> > +				hisilicon,sctrl-syscon = <&sctrl>;
+> > +				hisilicon,eye-diagram-param = <0xFDFEE4>;
+> > +				hisilicon,tx-vboost-lvl = <0x5>;
+> > +			};
+> > +		};
+> > +
+> > +		usb31_misc_rst: usb31_misc_rst_controller {
+> > +			compatible = "hisilicon,hi3660-reset";
+> > +			#reset-cells = <2>;
+> > +			hisi,rst-syscon = <&usb3_otg_bc>;
+> > +		};
+> > +
+> > +		usb3: hisi_dwc3 {
+> > +			compatible = "hisilicon,hi3670-dwc3";  
+> 
+> Could you please also add a binding document for the "hi3670-dwc3"?
+> The driver part has added the compatible string as you pointed out before.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Just sent a patch adding a compatible for it:
+
+	https://lore.kernel.org/all/fec9df1a99ad8639f23edc24cdcc3ec78ea31575.1638881845.git.mchehab+huawei@kernel.org/T/#u
+
+This is basically a DWC3 driver, using drivers/usb/dwc3/dwc3-of-simple.c
+to setup the needed clocks and reset pins to make DWC3 IP available.
+
+Thanks,
+Mauro

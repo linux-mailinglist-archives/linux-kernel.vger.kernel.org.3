@@ -2,111 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 769EB46B70A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B7846B713
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbhLGJbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:31:41 -0500
-Received: from outbound-smtp31.blacknight.com ([81.17.249.62]:35876 "EHLO
-        outbound-smtp31.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229503AbhLGJbh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:31:37 -0500
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp31.blacknight.com (Postfix) with ESMTPS id 54DCDC1011
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:28:06 +0000 (GMT)
-Received: (qmail 18135 invoked from network); 7 Dec 2021 09:28:06 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 7 Dec 2021 09:28:05 -0000
-Date:   Tue, 7 Dec 2021 09:28:03 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211207092803.GI3366@techsingularity.net>
-References: <20211202150614.22440-1-mgorman@techsingularity.net>
- <CALvZod6am_QrZCSf_de6eyzbOtKnWuL1CQZVn+srQVt20cnpFg@mail.gmail.com>
- <20211202165220.GZ3366@techsingularity.net>
- <CALvZod5tiDgEz4JwxMHQvkzLxYeV0OtNGGsX5ZdT5mTQdUdUUA@mail.gmail.com>
- <20211203090137.GA3366@techsingularity.net>
- <CALvZod46SFiNvUSLCJWEVccsXKx=NwT4=gk9wS6Nt8cZd0WOgg@mail.gmail.com>
- <20211203190807.GE3366@techsingularity.net>
- <CALvZod5BmFVdosG=e2NcEzeuzv0W9WifSBmeD48xnn1k+SNRKg@mail.gmail.com>
- <20211206112545.GF3366@techsingularity.net>
- <CALvZod6NPzzD=rzvmgLNsudCDVNJWgwviijB1LztRAhCX7jQBA@mail.gmail.com>
+        id S233910AbhLGJdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:33:23 -0500
+Received: from mga14.intel.com ([192.55.52.115]:54243 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233856AbhLGJdW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 04:33:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237767081"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="237767081"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 01:29:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="750850052"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Dec 2021 01:29:51 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muWnH-000MPG-06; Tue, 07 Dec 2021 09:29:51 +0000
+Date:   Tue, 7 Dec 2021 17:29:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sm8350-next-20211118 38/48]
+ drivers/power/supply/qcom_pmic_glink_power.c:10:10: fatal error:
+ linux/soc/qcom/pmic_glink.h: No such file or directory
+Message-ID: <202112071752.oMiQp01k-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvZod6NPzzD=rzvmgLNsudCDVNJWgwviijB1LztRAhCX7jQBA@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:14:58PM -0800, Shakeel Butt wrote:
-> On Mon, Dec 6, 2021 at 3:25 AM Mel Gorman <mgorman@techsingularity.net> wrote:
-> >
-> > On Sun, Dec 05, 2021 at 10:06:27PM -0800, Shakeel Butt wrote:
-> > > On Fri, Dec 3, 2021 at 11:08 AM Mel Gorman <mgorman@techsingularity.net> wrote:
-> > > >
-> > > [...]
-> > > > > I am in agreement with the motivation of the whole series. I am just
-> > > > > making sure that the motivation of VMSCAN_THROTTLE_NOPROGRESS based
-> > > > > throttle is more than just the congestion_wait of
-> > > > > mem_cgroup_force_empty_write.
-> > > > >
-> > > >
-> > > > The commit that primarily targets congestion_wait is 8cd7c588decf
-> > > > ("mm/vmscan: throttle reclaim until some writeback completes if
-> > > > congested"). The series recognises that there are other reasons why
-> > > > reclaim can fail to make progress that is not directly writeback related.
-> > > >
-> > >
-> > > I agree with throttling for VMSCAN_THROTTLE_[WRITEBACK|ISOLATED]
-> > > reasons. Please explain why we should throttle for
-> > > VMSCAN_THROTTLE_NOPROGRESS? Also 69392a403f49 claims "Direct reclaim
-> > > primarily is throttled in the page allocator if it is failing to make
-> > > progress.", can you please explain how?
-> >
-> > It could happen if the pages on the LRU are being reactivated continually
-> > or holding an elevated reference count for some reason (e.g. gup,
-> > page migration etc). The event is probably transient, hence the short
-> > throttling.
-> >
-> 
-> What's the worst that can happen if the kernel doesn't throttle at all
-> for these transient scenarios? Premature oom-kills?
+tree:   https://github.com/andersson/kernel wip/sm8350-next-20211118
+head:   801a35a569988584ffd5f6028a992f636c2a6634
+commit: af2e40a7c1b6390b42af215ac19c9be35554b397 [38/48] pmic_glink: Initial patch
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20211207/202112071752.oMiQp01k-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/af2e40a7c1b6390b42af215ac19c9be35554b397
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sm8350-next-20211118
+        git checkout af2e40a7c1b6390b42af215ac19c9be35554b397
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
 
-Excessive CPU usage in reclaim, potential premature OOM kills.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> The kernel already
-> has some protection against such situations with retries i.e.
-> consecutive 16 unsuccessful reclaim tries have to fail to give up the
-> reclaim.
-> 
+All errors (new ones prefixed by >>):
 
-The retries mitigate the premature OOM kills but not the excessive
-CPU usage.
+>> drivers/power/supply/qcom_pmic_glink_power.c:10:10: fatal error: linux/soc/qcom/pmic_glink.h: No such file or directory
+      10 | #include <linux/soc/qcom/pmic_glink.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-> Anyways, I have shared my view which is 'no need to throttle at all
-> for no-progress reclaims for now and course correct if there are
-> complaints in future' but will not block the patch.
-> 
 
-We've gone through periods of bugs that had either direct reclaim or
-kswapd pegged at 100% CPU usage. While kswapd now just stops, the patch
-still minimises the risk of excessive CPU usage bugs due to direct reclaim.
+vim +10 drivers/power/supply/qcom_pmic_glink_power.c
 
--- 
-Mel Gorman
-SUSE Labs
+     9	
+  > 10	#include <linux/soc/qcom/pmic_glink.h>
+    11	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

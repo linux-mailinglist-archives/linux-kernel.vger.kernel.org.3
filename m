@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A468B46BCAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7D46BCB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237178AbhLGNfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:35:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32943 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232505AbhLGNfv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:35:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638883940;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NKYPfQIjnZc9GgFyi3oXFUCuNFUgD0ub6Q8m1fQmeU4=;
-        b=OaPsTL7vCOZFcHqpCINo4cDxJlPmSLIaEP0NQ9wTd2BpdATWFckHL0yAVx524iHv7e41FM
-        B0SOIz2PF7/BOLShvFVbbZfmSCKPNN8nO0pEP2UVew7hB6xKGjHNQhvKkIWg4eb+MWzDra
-        8lbpSJZkP4Q4krjyHkRcYRHQdzIBH4o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-I5v9qoEqNRKlR7yAVqqH4g-1; Tue, 07 Dec 2021 08:32:17 -0500
-X-MC-Unique: I5v9qoEqNRKlR7yAVqqH4g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1DA461006AA2;
-        Tue,  7 Dec 2021 13:32:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ACC5B60843;
-        Tue,  7 Dec 2021 13:32:14 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Ya9eDiFCE2fO7K/S@casper.infradead.org>
-References: <Ya9eDiFCE2fO7K/S@casper.infradead.org> <163887597541.1596626.2668163316598972956.stgit@warthog.procyon.org.uk>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, jack@suse.cz, jlayton@kernel.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] netfs: Fix lockdep warning from taking sb_writers whilst holding mmap_lock
+        id S237197AbhLGNh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:37:26 -0500
+Received: from foss.arm.com ([217.140.110.172]:60450 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237180AbhLGNhZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 08:37:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3100511FB;
+        Tue,  7 Dec 2021 05:33:55 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.67.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF6583F5A1;
+        Tue,  7 Dec 2021 05:33:52 -0800 (PST)
+Date:   Tue, 7 Dec 2021 13:33:42 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
+        broonie@kernel.org, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, linux-arm-kernel@lists.infradead.org,
+        maz@kernel.org, mingo@redhat.com, tabba@google.com,
+        tglx@linutronix.de, will@kernel.org
+Subject: Re: [RFC PATCH 0/6] linkage: better symbol aliasing
+Message-ID: <Ya9itnC28/vr46Qb@FVFF77S0Q05N>
+References: <20211206124715.4101571-1-mark.rutland@arm.com>
+ <20211207052304.pb76ofjymf7o2yyb@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1602526.1638883933.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 07 Dec 2021 13:32:13 +0000
-Message-ID: <1602527.1638883933@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207052304.pb76ofjymf7o2yyb@treble>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
+On Mon, Dec 06, 2021 at 09:23:04PM -0800, Josh Poimboeuf wrote:
+> On Mon, Dec 06, 2021 at 12:47:09PM +0000, Mark Rutland wrote:
+> > This avoids repetition and hopefully make it easier to ensure
+> > consistency (e.g. so each function has a single canonical name and
+> > associated metadata).
+> > 
+> > I'm sending this as an RFC since I want to check:
+> > 
+> > a) People are happy with the idea in principle.
+> > 
+> > b) People are happy with the implementation within <linux/linkage.h>.
+> > 
+> > ... and I haven't yet converted the headers under tools/, which is
+> > largely a copy+paste job.
+> 
+> Looks like a definite improvement to me.
+> 
+> The only suggestion I'd have would be to fix a minor naming
+> inconsistency: change "SYM_FUNC_LOCAL_ALIAS" to "SYM_FUNC_ALIAS_LOCAL"
+> to match the other "<noun>_<verb>" macros.
 
-> On Tue, Dec 07, 2021 at 11:19:35AM +0000, David Howells wrote:
-> > Taking sb_writers whilst holding mmap_lock isn't allowed and will resu=
-lt in
-> > a lockdep warning like that below.  The problem comes from cachefiles
-> > needing to take the sb_writers lock in order to do a write to the cach=
-e,
-> > but being asked to do this by netfslib called from readpage, readahead=
- or
-> > write_begin[1].
-> =
+Sure; I was following the example set by `SYM_FUNC_START_LOCAL_ALIAS`, but I
+agree that placing LOCAL on the end looks more consistent overall once that's
+removed.
 
-> Isn't it taking sb_writers _on a different filesystem_?  So there's not
-> a real deadlock here, just a need to tell lockdep that this is a
-> different subclass of lock?
+For V2 I'll make that `SYM_FUNC_ALIAS_LOCAL`.
 
-Jann thinks it can be turned into a real deadlock.  See the link I put in =
-the
-patch description:
-
-> > Link: https://lore.kernel.org/r/20210922110420.GA21576@quack2.suse.cz/=
- [1]
-
-David
-
+Thanks,
+Mark.

@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B08C146B404
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0843646B409
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbhLGHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbhLGHgu (ORCPT
+        id S230444AbhLGHjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:39:05 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44848 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230429AbhLGHjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:36:50 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A353C061748
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 23:33:20 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id c32so31471872lfv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 23:33:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nYlsUJA2v1NrBNA0bh02dqcVY/I/S+4gUdunq+959CY=;
-        b=WYw5pofw2Hy9CKYXVELV6x3Dn+mplsIVOfxkUADyveDfp0jmmucqgphPIzeKKRBEBd
-         MYT4ZmWGQ545s/TYpIFVBXaRUf055HZ/kBQNlGwXLPFULAvl12muFU36d/1fQQyyDiOA
-         nziJPzhKJUtPJ+l2gKUd33jCpaLz6qRTQJsv0BeklzNBjPqamtdOLP891lCeSzfVzM9j
-         vlZkFP22LDwrtj0EgsJqD4Rgd3MljH0bkvkiU6z+qnJPZ7wkxBXjBnPgpnS38C24dbRn
-         1ChIegMvr2lx/FwA7Hcq8oaNG/JGXOEn7v7xCt8JFSQv99qu7SDG7dA77Kq5Doyp6Dzx
-         3RIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nYlsUJA2v1NrBNA0bh02dqcVY/I/S+4gUdunq+959CY=;
-        b=qN++O2wZSjFEVT+8nyZnDv5bE0kb1FyNInFIIFLrBXA5ti6Nv6yv2vyzV7P9MZkToQ
-         wgCtuexVzdmTp3Q6lm9RmVeu0AlssnLlwhNcu5fnKGS7Ok0pJ8QAC55+EXAbphCshPWQ
-         RMp9rphAOUBkuG9bVm+nOSda1jmrPDQfabPN/g2Fd6veEsRFpLmIx9t3Zz0NpFxp8xyo
-         WJWWxw+5Eol4hOuNDrc1elS6VpTtAbJHeIiF7torB2+R2RCfMuxRLG4XUEqL3YIlPsXs
-         cdt1r1V/zQksnhD6p6N025T1TREVw8YiUQdtZrB2IWUshgit/A59tg1jsx/dD1ClwlD2
-         jOhA==
-X-Gm-Message-State: AOAM531hu0ihZqoYERNIVi6h6rJOlAD/oQ+5QyC7A4AzLa9gXu7jaaRx
-        zyy62f+HbH0SbHJKLKXAZx7eN7Q8DsZTVv96+lb6PE6aFxU=
-X-Google-Smtp-Source: ABdhPJzG8ZBDExSmFh/pnJKDGddnE9yfGj/UF8eafs/YVHaKuFcrt9fS9luriwXvzYYrsz1McOvsRxx8CFlMPC8+1zY=
-X-Received: by 2002:a05:6512:2292:: with SMTP id f18mr39926788lfu.18.1638862398264;
- Mon, 06 Dec 2021 23:33:18 -0800 (PST)
+        Tue, 7 Dec 2021 02:39:04 -0500
+X-UUID: e3bd06823cc245cab226ff17ab211d3c-20211207
+X-UUID: e3bd06823cc245cab226ff17ab211d3c-20211207
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <wenbin.mei@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1411742270; Tue, 07 Dec 2021 15:35:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 7 Dec 2021 15:35:32 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Tue, 7 Dec 2021 15:35:31 +0800
+From:   Wenbin Mei <wenbin.mei@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        "Wenbin Mei" <wenbin.mei@mediatek.com>
+Subject: [PATCH v1] mmc: mediatek: free the ext_csd when mmc_get_ext_csd success
+Date:   Tue, 7 Dec 2021 15:35:24 +0800
+Message-ID: <20211207073524.22707-1-wenbin.mei@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHhAz+jpmksehY4BSH9jJPYuY+jykSHtx9TNiG-gAkq10zaXSQ@mail.gmail.com>
- <fe9dbf81-e060-36ab-b769-215af3d65ba7@linaro.org>
-In-Reply-To: <fe9dbf81-e060-36ab-b769-215af3d65ba7@linaro.org>
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Tue, 7 Dec 2021 13:03:07 +0530
-Message-ID: <CAHhAz+iZe4A9bi9tvwqpHaV1ari76r2bXcO1E6Bm88Cc7XFq+A@mail.gmail.com>
-Subject: Re: Time: new clocksource
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     tglx@linutronix.de, LKML <linux-kernel@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 3:18 AM Daniel Lezcano <daniel.lezcano@linaro.org> w=
-rote:
->
-> Hi Sekhar,
->
-> On 03/12/2021 17:50, Muni Sekhar wrote:
-> > Hi All,
-> >
-> > We have a Digital PLL with 64 bit timer counter hardware and the
-> > counter is accessible from the CPU over the PCIe bus.
-> >
-> > Is it possible to add this timer counter hardware as new clocksource
-> > driver? To do this, can someone please point me to the existing
-> > reference source code(or patch) for this task.
->
-> You can refer to the drivers located in drivers/clocksource
->
-> git annotate on one of the driver can give you the initial commit where
-> recent submissions explain the timer internals.
->
-> > Suppose if it is possible to add a new clocksource driver for this
-> > hardware then does any userspace get_timestamp* API would get the time
-> > from this new hardware?
->
-> It should if the timer is selected as the clocksource
-/var/log/kern.log file use a absolute time, like "Nov 29 12:26:13", as
-well as relative time in seconds and microseconds since startup , like
-"[1263900.984287]
+If mmc_get_ext_csd success, the ext_csd are not freed.
+Add the missing kfree() calls.
 
-Is the relative time calculated by the clocksource driver module (tsc
-or acpi_pm)?
+Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+---
+ drivers/mmc/host/mtk-sd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Which module is responsible for resulting in the absolute time? Is
-absolute time synchronized across multiple systems connected on the
-network?
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 943940b44e83..632775217d35 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -2291,8 +2291,10 @@ static int msdc_execute_hs400_tuning(struct mmc_host *mmc, struct mmc_card *card
+ 			sdr_set_field(host->base + PAD_DS_TUNE,
+ 				      PAD_DS_TUNE_DLY1, i);
+ 		ret = mmc_get_ext_csd(card, &ext_csd);
+-		if (!ret)
++		if (!ret) {
+ 			result_dly1 |= (1 << i);
++			kfree(ext_csd);
++		}
+ 	}
+ 	host->hs400_tuning = false;
+ 
+-- 
+2.25.1
 
-
-
---=20
-Thanks,
-Sekhar

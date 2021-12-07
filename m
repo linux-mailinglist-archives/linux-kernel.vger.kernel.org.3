@@ -2,115 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878BE46B622
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8FE46B620
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbhLGIkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbhLGIkI (ORCPT
+        id S233066AbhLGIkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:40:10 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57508 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233045AbhLGIkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:40:08 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E84C061748;
-        Tue,  7 Dec 2021 00:36:38 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id 13so25914143ljj.11;
-        Tue, 07 Dec 2021 00:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nlYUyB267zRhWHErr+nJIFE9vcvHYd5t7U4mg/8Hi0Y=;
-        b=HSYuJeEYa11G8cde/aHBJ67FLo/70lWm81UkGfm//hqvANeDge/w9FbJnuH8zbiH1a
-         4d95iPPqpho7z6/34c6G141tHm2YzjtQ0BZHc3+qPuOXXtMXSYkApFd3811Ns9UDcOVY
-         3SweIqHNTEtzgaegDRwcXBPsUVgS9XXNwY3l25QjPwJ7sj3/xeqJIU15TQ0c1otuhhmK
-         f22qa5vP3CwvAoDydCnMHfTn6gPAQsaJ5qWBOBZYcXTpsM+GqjjmnU0MjXTjdCbdyCtx
-         hIXQEPfK8TjPz7+lwttBHPSGZiANzUGvJxoyxNs9jq6e1eSk+SEzGax5IgJIGTnkm5NL
-         aSrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nlYUyB267zRhWHErr+nJIFE9vcvHYd5t7U4mg/8Hi0Y=;
-        b=RbHi6krLxFRzmxB2T23sw+0fZJaIKXD74PfxGqaAzNao2YqgTdbt+fNRBiV1uqP7ht
-         hiqABlWXtAvXM0QmrZNoweD2sddAi1MxOI+YmjV7ZxLKlnP74kngDxEappOKRT10QY85
-         W4b4/9PygLmi78qqS6C4iqjwoUup9eP9v80cf3HM3NYYFXAkxCT4TI0ckw+TNu1rwVmY
-         hzLlRwUmYohftbW5bBInmCEjY6YfrUE1zEGQNwtj++Jk3wN8oRECAQUOJcico2MzQg2E
-         VV13TcnlA9/VnehWtmJx8BwYAt8uGDb2rWzWCWltcHh/oiAFwV4h3Ic5ku6L2KIleDIl
-         r2/w==
-X-Gm-Message-State: AOAM533niagd5zKAX+3mhPoqavepOKIi5qI8P9jU0YrkbGVO8OHf5Qa3
-        u3dbs4L0o4AEcbQQvbK3D5Y=
-X-Google-Smtp-Source: ABdhPJy370SD/W2VgTDgwCTyzxI0sgHro2MB8sQzzFjxeK//DcV/vPDGZtzq13i5a+ZxC8k9SDhxOw==
-X-Received: by 2002:a2e:730b:: with SMTP id o11mr41721795ljc.14.1638866196333;
-        Tue, 07 Dec 2021 00:36:36 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id cf34sm1601358lfb.222.2021.12.07.00.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:36:35 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: mfd: cirrus,lochnagar: fix pin controller nodename
-Date:   Tue,  7 Dec 2021 09:36:18 +0100
-Message-Id: <20211207083618.12940-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Tue, 7 Dec 2021 03:40:03 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5E97D1FD56;
+        Tue,  7 Dec 2021 08:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638866192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OhKBSihja7Wi0IcDmkS9szspFsMyGwohZw3DnR8AKto=;
+        b=qToIQ1ybfGM6pOBSE6JkXHudkwGB08MCharrhZJ/5Ju6/Lqnm2gyR72ib25xp6j6cmYvwQ
+        dR5OniWaAObE7yhrCbPplQuWZwtskN2sXp2l0hDSRSHdTnDaV7d4BCjeNwIZGx1QiZ56xH
+        HuPGV6FjrsqMOsRSJbfClw4fgfatZEY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638866192;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OhKBSihja7Wi0IcDmkS9szspFsMyGwohZw3DnR8AKto=;
+        b=24suiqKIhx9u/m/LjLHzCCE8+Ev+w3ELxUmnxQXJ73CJ0cDGgF4u5MQ2GZn4GML20Ob5b/
+        FGIz6GQ/MQOo8RDg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 4A896A3B8A;
+        Tue,  7 Dec 2021 08:36:32 +0000 (UTC)
+Date:   Tue, 07 Dec 2021 09:36:32 +0100
+Message-ID: <s5htufkolpr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        perex@perex.cz, jonathanh@nvidia.com, digetx@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+In-Reply-To: <Ya8Ya2en5Tm5Ol2u@orome.fritz.box>
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+        <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+        <Ya8Ya2en5Tm5Ol2u@orome.fritz.box>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Tue, 07 Dec 2021 09:16:43 +0100,
+Thierry Reding wrote:
+> 
+> On Tue, Dec 07, 2021 at 12:02:48PM +0530, Sameer Pujar wrote:
+> > HDA regression is recently reported on Tegra194 based platforms.
+> > This happens because "hda2codec_2x" reset does not really exist
+> > in Tegra194 and it causes probe failure. All the HDA based audio
+> > tests fail at the moment. This underlying issue is exposed by
+> > commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
+> > response") which now checks return code of BPMP command response.
+> > 
+> > The failure can be fixed by avoiding above reset in the driver,
+> > but the explicit reset is not necessary for Tegra devices which
+> > depend on BPMP. On such devices, BPMP ensures reset application
+> > during unpowergate calls. Hence skip reset on these devices
+> > which is applicable for Tegra186 and later.
+> > 
+> > Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> > Cc: stable@vger.kernel.org
+> > Depends-on: 87f0e46e7559 ("ALSA: hda/tegra: Reset hardware")
+> > ---
+> >  sound/pci/hda/hda_tegra.c | 24 +++++++++++++++++++-----
+> >  1 file changed, 19 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/sound/pci/hda/hda_tegra.c b/sound/pci/hda/hda_tegra.c
+> > index ea700395..862141e 100644
+> > --- a/sound/pci/hda/hda_tegra.c
+> > +++ b/sound/pci/hda/hda_tegra.c
+> > @@ -68,6 +68,10 @@
+> >   */
+> >  #define TEGRA194_NUM_SDO_LINES	  4
+> >  
+> > +struct hda_data {
+> > +	unsigned int do_reset:1;
+> > +};
+> 
+> I suppose this could also be a bool. Not sure if we need to care about
+> packing optimizations at this point.
+> 
+> It may also be useful to rename this to something less generic to avoid
+> potential clashes with other data structures in the future. We've often
+> used the _soc suffix in other drivers to mark this kind of SoC-specific
+> data. In this case it would be struct hda_tegra_soc.
+> 
+> If Takashi is fine with this as-is, I don't have any strong objections,
+> though.
 
-Replace custom nodename with a generic "pinctrl" to match new pinctrl
-binding requirement. This will fix:
-Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-        From schema: Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.yaml
+Indeed, a bit more prefix would be better for avoiding the possible
+conflict in future, but the struct name is local, so I don't mind to
+use the simple name for now.  We can change it later once when needed,
+too. 
 
-Reported-by: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> > +
+> >  struct hda_tegra {
+> >  	struct azx chip;
+> >  	struct device *dev;
+> > @@ -76,6 +80,7 @@ struct hda_tegra {
+> >  	unsigned int nclocks;
+> >  	void __iomem *regs;
+> >  	struct work_struct probe_work;
+> > +	const struct hda_data *data;
+> >  };
+> >  
+> >  #ifdef CONFIG_PM
+> > @@ -427,8 +432,13 @@ static int hda_tegra_create(struct snd_card *card,
+> >  	return 0;
+> >  }
+> >  
+> > +static const struct hda_data tegra30_data = {
+> > +	.do_reset = 1,
+> > +};
+> > +
+> >  static const struct of_device_id hda_tegra_match[] = {
+> > -	{ .compatible = "nvidia,tegra30-hda" },
+> > +	{ .compatible = "nvidia,tegra30-hda", .data = &tegra30_data },
+> > +	{ .compatible = "nvidia,tegra186-hda" },
+> >  	{ .compatible = "nvidia,tegra194-hda" },
+> >  	{},
+> >  };
+> 
+> One other thing we've done in the past is to explicitly pass these
+> structures for each compatible string. That simplifies things a bit
+> because we don't have to keep checking for non-NULL pointers and instead
+> rely on the fact that there's always a valid pointer.
+> 
+> To do so, you'd basically add:
+> 
+> 	static const struct hda_data tegra186_data = {
+> 		.do_reset = 0,
+> 	};
+> 
+> And reference that for both the Tegra186 and Tegra194 entries. Again,
+> not strictly necessary and since we have only one occurrence where we
+> need to check this, it seems fine as-is, so:
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
 
-diff --git a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-index c00ad3e21c21..ad285cb480c9 100644
---- a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-+++ b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-@@ -126,7 +126,7 @@ properties:
-       clock-frequency:
-         const: 12288000
- 
--  lochnagar-pinctrl:
-+  pinctrl:
-     type: object
-     $ref: /schemas/pinctrl/cirrus,lochnagar.yaml#
- 
-@@ -255,7 +255,7 @@ required:
-   - reg
-   - reset-gpios
-   - lochnagar-clk
--  - lochnagar-pinctrl
-+  - pinctrl
- 
- additionalProperties: false
- 
-@@ -293,7 +293,7 @@ examples:
-                 clock-frequency = <32768>;
-             };
- 
--            lochnagar-pinctrl {
-+            pinctrl {
-                 compatible = "cirrus,lochnagar-pinctrl";
- 
-                 gpio-controller;
--- 
-2.31.1
+That's true, too.  OTOH, completely without a NULL check would be also
+unsafe, so some sanity check would be still required.
 
+That said, the current patch is good enough for taking as a regression
+fix, but I'm fine to wait for a while for v2 to address those, too :)
+
+
+thanks,
+
+Takashi

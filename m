@@ -2,128 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B282B46C44E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8644F46C451
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241034AbhLGUVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:21:20 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:33637 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbhLGUVT (ORCPT
+        id S241172AbhLGUWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241161AbhLGUWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:21:19 -0500
-Received: by mail-ot1-f41.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso447665otf.0;
-        Tue, 07 Dec 2021 12:17:48 -0800 (PST)
+        Tue, 7 Dec 2021 15:22:15 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB11C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:18:44 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso2787776pji.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MTMrDvwfzQGiaJPQBFbEv4AszPseMtF5ZS7lGyIY7c0=;
+        b=YIBjOIRpVgxjMP9m6+2jWvLhIaDPgkFfxcvfB1utoJSHen4TVt3SyVmAUAau1ATvYm
+         ysdxw3n48rlYfYHm2pmHsa+n8em0zUYn2Zkp1C6LkrcgckiDPz6iYQv4W1tZfzLCwKTK
+         NIsqWSg5oxPnb0UpocpT/qA0fh75qjupob5TrlMtLK+Ygdxv4A5TvezolrS1236uieMi
+         94koD/D3GZxmstngqH6wk74+z93GK2aeQzif30UPWcnsTAr9cIYu0+tNLCEnWDfKHuFg
+         XZQRJ/nLjfduDM923bulQ6xKpnoRSNVAQgG5hv/gG6FpeVQaERGK3Bl3JKgJVtC1OBZm
+         nfBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+MB6yXYtqMzh5VNyaR3gPGIIrEYooy9VuBz2n/yIA8c=;
-        b=XtUek/csyPycL/68jDCsEDgzJkvghwxhkkWPVn1w/2+rkZ9bjJWQhzUzjFBOsHhN5R
-         zbGyenzd5fETjMYRotLbnWmAMIuv7XUDOSnzGHR8yG4RQjV9MRxqtDjzhioaSpm/9XUV
-         Y7lI9wzI17I5JSaDGZGctOPFV23S6SgVGtEYQlwrgDzZDClGeyI8jF9mBG1IZaD3fjqt
-         /1AgNaIQpSjhRClbAaOAJ9iwkn366LEB6A2VojDJqCZSq7JNyXCndok0rtZ9rSj+nL98
-         zNurCgFL2wTA8IkAjM87024qDPX1HDt7DdZcegLhC0OAUR4LK41QZZawhEtGmUA5/+P+
-         PBgw==
-X-Gm-Message-State: AOAM531QOf/agoy/u1Eohvy0RnjJQ/o3hfW5o6r/CcPQlCpjgZg9vQgB
-        rY+z9v/cpdQ/T7ftnm5WrQ==
-X-Google-Smtp-Source: ABdhPJw4qzAjPBdGAFRx6O6XT1ckH3u9GEqrcqCw84pwWhRxaYjnxvcT+FztKBIhcpB09VBz5ojcVw==
-X-Received: by 2002:a9d:4543:: with SMTP id p3mr37789092oti.99.1638908268313;
-        Tue, 07 Dec 2021 12:17:48 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r5sm144000oiw.20.2021.12.07.12.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 12:17:47 -0800 (PST)
-Received: (nullmailer pid 759672 invoked by uid 1000);
-        Tue, 07 Dec 2021 20:17:46 -0000
-Date:   Tue, 7 Dec 2021 14:17:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 3/7] dt-bindings: PCI: Add bindings for Brcmstb EP
- voltage regulators
-Message-ID: <Ya/Bar212Tb+S9Eo@robh.at.kernel.org>
-References: <20211119220756.18628-1-jim2101024@gmail.com>
- <20211119220756.18628-4-jim2101024@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MTMrDvwfzQGiaJPQBFbEv4AszPseMtF5ZS7lGyIY7c0=;
+        b=OrtRubxOMSnWkKSIF+dpBNMg5yHiCzQc7xeUlL+hXplz7CEGwrKp0JVdTPx3boxHEx
+         PX6skTKy75NXjvJ3Rg8mziU5xVUsJaj3GLAGUC1klzkPWvH6SK7nCq2Q1oB40soLK5FJ
+         aYNBMEDykkY3pI/p1M1ToIPFdSUhIQ1HLlgvE7dhEXZFM9bnOiY76TNnaaRNPEpIpA3R
+         y1dzLwyZHntl3SoeKl7IOx/l2i81Alp3Mz/igWXMiNtkiBe0PmNie+iI2Cb/cQNrSfov
+         N5S0j5ejPPqqGgzccc9+IMfI2Sd+HXVJapExgpXc5iZ8hzWXga06xcLa/Je5IoSLmYzK
+         CQCA==
+X-Gm-Message-State: AOAM532ZWdrYpU6OwnFnpSoA6H3cq8PSwAWQSH5vIA+4vxA+ArTQnC4s
+        4kn3M9pGimZqSIjsxySdNXz/Fq2LDK1G75/c/t3hUg==
+X-Google-Smtp-Source: ABdhPJzePolHYX+66SBsdghr9hv6MwgUMIieXN+1tZFLIjYVMl5V0gVFXx/3j64aFOuGS+eaRbDNvHLmOOoyqM+B+Cs=
+X-Received: by 2002:a17:902:e852:b0:142:19fe:982a with SMTP id
+ t18-20020a170902e85200b0014219fe982amr55086358plg.13.1638908324024; Tue, 07
+ Dec 2021 12:18:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119220756.18628-4-jim2101024@gmail.com>
+References: <20211102073014.2901870-1-davidgow@google.com>
+In-Reply-To: <20211102073014.2901870-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 15:18:32 -0500
+Message-ID: <CAFd5g458aB5kML4TioAVF--aXwK1AiHcBi1vXVJM_cK6w8NKEg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] kunit: tool: Do not error on tests without test plans
+To:     David Gow <davidgow@google.com>
+Cc:     Rae Moar <rmr167@gmail.com>, Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 05:07:50PM -0500, Jim Quinlan wrote:
-> Add bindings for Brcmstb EP voltage regulators.  A new mechanism is to be
-> added to the Linux PCI subsystem that will allocate and turn on/off
-> regulators.  These are standard regulators -- vpcie12v, vpcie3v3, and
-> vpcie3v3aux -- placed in the DT in the bridge node under the host bridge
-> device.
-> 
-> The use of a regulator property in the pcie EP subnode such as
-> "vpcie12v-supply" depends on a pending pullreq to the pci-bus.yaml
-> file at
-> 
-> https://github.com/devicetree-org/dt-schema/pull/63
-> 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->  .../bindings/pci/brcm,stb-pcie.yaml           | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> index 22f2ef446f18..7113a7f726e7 100644
-> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> @@ -159,5 +159,28 @@ examples:
->                                   <0x42000000 0x1 0x80000000 0x3 0x00000000 0x0 0x80000000>;
->                      brcm,enable-ssc;
->                      brcm,scb-sizes =  <0x0000000080000000 0x0000000080000000>;
-> +
-> +                    /* PCIe bridge */
+On Tue, Nov 2, 2021 at 3:30 AM David Gow <davidgow@google.com> wrote:
+>
+> The (K)TAP spec encourages test output to begin with a 'test plan': a
+> count of the number of tests being run of the form:
+> 1..n
+>
+> However, some test suites might not know the number of subtests in
+> advance (for example, KUnit's parameterised tests use a generator
+> function). In this case, it's not possible to print the test plan in
+> advance.
+>
+> kunit_tool already parses test output which doesn't contain a plan, but
+> reports an error. Since we want to use nested subtests with KUnit
+> paramterised tests, remove this error.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-Root port specifically. Didn't Pali mention that before?
-
-> +                    pci@0,0 {
-> +                            #address-cells = <3>;
-> +                            #size-cells = <2>;
-> +                            reg = <0x0 0x0 0x0 0x0 0x0>;
-> +                            compatible = "pciclass,0604";
-> +                            device_type = "pci";
-> +                            vpcie3v3-supply = <&vreg7>;
-> +                            ranges;
-> +
-> +                            /* PCIe endpoint */
-> +                            pci-ep@0,0 {
-> +                                    assigned-addresses =
-> +                                        <0x82010000 0x0 0xf8000000 0x6 0x00000000 0x0 0x2000>;
-> +                                    reg = <0x0 0x0 0x0 0x0 0x0>;
-> +                                    compatible = "pci14e4,1688";
-
-> +                                    #address-cells = <3>;
-> +                                    #size-cells = <2>;
-> +
-> +                                    ranges;
-
-These aren't appropriate for an endpoint.
-
-> +                            };
-> +                    };
->              };
->      };
-> -- 
-> 2.17.1
-> 
-> 
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

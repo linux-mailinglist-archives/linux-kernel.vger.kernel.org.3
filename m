@@ -2,74 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE3346BE0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C960B46BE0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238163AbhLGOrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbhLGOrU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:47:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1187C061574;
-        Tue,  7 Dec 2021 06:43:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 19EF4CE1B19;
-        Tue,  7 Dec 2021 14:43:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E8CC341C1;
-        Tue,  7 Dec 2021 14:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638888226;
-        bh=5MrplqICp5ANCWUEGpUqpG9gDk7l+o1aiuGOgg7OwLM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MNgEtovjWw1rD8htPyN6EHRDRcWb11cI/DCkMpYfFiiMgpppPLre1wTb0FR4a9rAh
-         QPgPplm1d1YAA9ZSspKTf3WI5aNuBmqMz5fZK2WsUgqMqNUPWz4vnX2CveZMDQzP0K
-         ZjeA72R/viKPgd7+kTan4fK0xUQfR1rG4QxY0zGKFJKeZzqaPV22qaElgEemaEjqv1
-         OaZIzech2Ujzn6pEuR0EwSDcjobwOWJkiIYskAZm0YpWsZyzcntB1xJgiwfg2nA0Wh
-         WHiIyqnsY+ODFMdJ7cazVOG4hQY6gkYTEm9t6jYXHRIf5rhXfujWbzD9kKUHlMyEO4
-         Nnonhwe4p1bSQ==
-Date:   Tue, 7 Dec 2021 06:43:45 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Subject: Re: [PATCH v5 0/7] MediaTek Ethernet Patches on MT8195
-Message-ID: <20211207064345.2c6427a1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211207015505.16746-1-biao.huang@mediatek.com>
-References: <20211207015505.16746-1-biao.huang@mediatek.com>
+        id S238172AbhLGOs2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 09:48:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:15512 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231565AbhLGOs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:48:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="235100439"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="235100439"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:44:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="462312784"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2021 06:44:56 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 06:44:56 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 06:44:55 -0800
+Received: from fmsmsx612.amr.corp.intel.com ([10.18.126.92]) by
+ fmsmsx612.amr.corp.intel.com ([10.18.126.92]) with mapi id 15.01.2308.020;
+ Tue, 7 Dec 2021 06:44:55 -0800
+From:   "Saleem, Shiraz" <shiraz.saleem@intel.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: RE: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
+ 'irdma_prm_add_pble_mem()'
+Thread-Topic: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
+ 'irdma_prm_add_pble_mem()'
+Thread-Index: AQHX6bCNMQeR51AEWEqSWwxcHSAfJ6wni3UA//+RAfA=
+Date:   Tue, 7 Dec 2021 14:44:55 +0000
+Message-ID: <0500c21d9d814715956e3275afd4f116@intel.com>
+References: <5e670b640508e14b1869c3e8e4fb970d78cbe997.1638692171.git.christophe.jaillet@wanadoo.fr>
+ <20211207131428.GF1956@kadam>
+In-Reply-To: <20211207131428.GF1956@kadam>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 09:54:58 +0800 Biao Huang wrote:
-> Changes in v5:
-> 1. remove useless inclusion in dwmac-mediatek.c as Angelo's comments.
-> 2. add acked-by in "net-next: stmmac: dwmac-mediatek: add support for
->    mt8195" patch
+> Subject: Re: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
+> 'irdma_prm_add_pble_mem()'
+> 
+> On Sun, Dec 05, 2021 at 09:17:24AM +0100, Christophe JAILLET wrote:
+> > @@ -299,8 +298,7 @@ add_pble_prm(struct irdma_hmc_pble_rsrc *pble_rsrc)
+> >  	return 0;
+> >
+> >  error:
+> > -	if (chunk->bitmapbuf)
+> > -		kfree(chunk->bitmapmem.va);
+> > +	bitmap_free(chunk->bitmapbuf);
+> >  	kfree(chunk->chunkmem.va);
+> 
+> Thanks for removing the "chunk->bitmapbuf = chunk->bitmapmem.va;" stuff.
+> It was really confusing.  The kfree(chunk->chunkmem.va) is equivalent to
+> kfree(chunk).  A good rule of thumb is that when you have one error:
+> label to free everything then it's normally going to be buggy.
+> 
+> drivers/infiniband/hw/irdma/pble.c
+>    281          pble_rsrc->next_fpm_addr += chunk->size;
+>    282          ibdev_dbg(to_ibdev(dev),
+>    283                    "PBLE: next_fpm_addr = %llx chunk_size[%llu] = 0x%llx\n",
+>    284                    pble_rsrc->next_fpm_addr, chunk->size, chunk->size);
+>    285          pble_rsrc->unallocated_pble -= (u32)(chunk->size >> 3);
+>    286          list_add(&chunk->list, &pble_rsrc->pinfo.clist);
+>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> "chunk" added to the "->pinfo.clist" list.
+> 
+>    287          sd_reg_val = (sd_entry_type == IRDMA_SD_TYPE_PAGED) ?
+>    288                               sd_entry->u.pd_table.pd_page_addr.pa :
+>    289                               sd_entry->u.bp.addr.pa;
+>    290
+>    291          if (!sd_entry->valid) {
+>    292                  ret_code = irdma_hmc_sd_one(dev, hmc_info->hmc_fn_id,
+> sd_reg_val,
+>    293                                              idx->sd_idx, sd_entry->entry_type, true);
+>    294                  if (ret_code)
+>    295                          goto error;
+>                                 ^^^^^^^^^^^
+> 
+>    296          }
+>    297
+>    298          sd_entry->valid = true;
+>    299          return 0;
+>    300
+>    301  error:
+>    302          if (chunk->bitmapbuf)
+>    303                  kfree(chunk->bitmapmem.va);
+>    304          kfree(chunk->chunkmem.va);
+>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> kfree(chunk) will lead to a use after free because it's still on the list.
+> 
 
-Which tree is this series based on? It doesn't seem to apply to
-net-next. Also the net-next in the subjects is misplaced. If the series
-is supposed to be merged to net-next the subject should be like:
+Ugh! Yes, this is a bug. I will send a separate fix out shortly for this one.
 
-[PATCH net-next v5 1/7] stmmac: dwmac-mediatek: add platform level clocks management
-
-You can use --subject-prefix="PATCH net-next v6" in git-format-patch to
-add the prefix.
+Shiraz

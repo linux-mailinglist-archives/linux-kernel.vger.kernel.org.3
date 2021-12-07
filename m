@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F11B546BB8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F64346BB91
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbhLGMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236579AbhLGMsb (ORCPT
+        id S236601AbhLGMsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:48:50 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:35100 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236592AbhLGMst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:48:31 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0FC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:45:00 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id 30so7650730uag.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3ChVHxxOxhIGs4rdOWG75rsbNvdLDYwE9pw3zOgGr8M=;
-        b=cagc1Fsf3e3/RtlMkfBVVOFkZIH9p/PFEuLPjNipBOP0t1oa1QC8YVzGB+j92EPAwe
-         6DTlD2JOtMKDSlPhKnOM/oxgdUt/VXmnnMYFugCOVpgB0FnYTJy1E6vbsmqTHC0EmMFK
-         nWgrrOt3CxGahgD0XTFo6KthaMQ6T+bGXHxJg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3ChVHxxOxhIGs4rdOWG75rsbNvdLDYwE9pw3zOgGr8M=;
-        b=ZqPP5KMi90IqCiIirAa/A+utQL4YPYX4xxwONwZKcvk4QxmANGxHd2prDJ9sMSEMS6
-         zh9YXOhmbiha2e0XDlEF2pVSDkBEWYNJ40Qnj09eqzJZvrG0jjggX9jsZBS2vMvm/S3n
-         jKUAV9htSMgV9IjA0sdaKX1y2cOId0qghsoinkkwSdCThI8hhE5aFw8ntZTKbzl4i61X
-         0CCHxPI1fHhg/JYOkKXr7jXvi1SSxWpLDER7EhytrricW14ZUJNloVIw4m6Xxvk3m4Js
-         lnk8qkKSMoysLd3cSEdoVy5+TtB8yiqfoA8cT56l6PwI97GSfjqWqKvC9M6o8joOCOwC
-         +UKg==
-X-Gm-Message-State: AOAM533z19n+AMo0QANcS5TTcT6yulws/S5TR4MkmKjyj6cgLgSD5eK9
-        HKOv5ZosByY8sSa8hPmJ0PtGqledUi+FK+eLc5sSOPafemJKjQ==
-X-Google-Smtp-Source: ABdhPJy6rksSBimk0QbT52WvsQczQrLRNltJbKL+leXstLsmKjLOHPKljfGjuHPqEwiWodirXVF16UvBFmqK2b8HX34=
-X-Received: by 2002:a05:6102:945:: with SMTP id a5mr44302178vsi.87.1638881099983;
- Tue, 07 Dec 2021 04:44:59 -0800 (PST)
+        Tue, 7 Dec 2021 07:48:49 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B7B1mmN022007;
+        Tue, 7 Dec 2021 13:45:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=OyTJSvDtn+sTc+d0hN/bngh9lylJ5evU6S5CH5TSdX8=;
+ b=U6V2zq+HzqH9bz+etOwejddvoGmszT+Z/8Cn9dc5z8LzEwnTIa7wD3LeKMuPz0Zft8Yk
+ 9mw0HOEa+rf0XnAzu/9zDAclP/0GEXPgt4L5DKf7bmvK5qX/VYyxsuTNl7HV9DBJNLAy
+ sCG4r77jw4vjos8lgwuqzoehFfWyIJ9XtSF/etid2JB7uE1WljJROVmRR5v1p6I/+Wzj
+ CSL58rhezdaPOeO+5VacnVeJZK0DhE3eQJjx5ccspF79jixHh47JaJ6qiO98bnysIkWr
+ TFUAwKMgUNrWwN3GCC2FpEpeiHTtEcQVSn2sQPd6mxrZX7QomFOx+ba5atTbCf8R7GaU Fw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ct1fxa887-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 13:45:14 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BE15110002A;
+        Tue,  7 Dec 2021 13:45:13 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B05322220AB;
+        Tue,  7 Dec 2021 13:45:13 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 7 Dec 2021 13:45:12
+ +0100
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH 1/1] usb: dwc2: fix STM ID/VBUS detection startup delay in dwc2_driver_probe
+Date:   Tue, 7 Dec 2021 13:45:10 +0100
+Message-ID: <20211207124510.268841-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com>
- <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
- <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net> <CAJfpegsVg2K0CvrPvXGSu=Jz_R3VZZOy49Jw51rThQUJ1_9e6g@mail.gmail.com>
- <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 7 Dec 2021 13:44:49 +0100
-Message-ID: <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
-Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
-        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
-        quic_blong@quicinc.com, quic_richardp@quicinc.com,
-        quic_cdevired@quicinc.com,
-        Pradeep P V K <quic_pragalla@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_04,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 at 11:42, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Dec 07, 2021 at 11:20:59AM +0100, Miklos Szeredi wrote:
+When activate_stm_id_vb_detection is enabled, ID and Vbus detection relies
+on sensing comparators. This detection needs time to stabilize.
+A delay was already applied in dwc2_resume() when reactivating the
+detection, but it wasn't done in dwc2_probe().
+This patch adds delay after enabling STM ID/VBUS detection. Then, ID state
+is good when initializing gadget and host, and avoid to get a wrong
+Connector ID Status Change interrupt.
 
-> > That may be good for fuse as the data is indeed shared.  It would be
-> > even better if the woken task had already a known affinity to this
-> > CPU, since that would mean thread local data wouldn't have to be
-> > migrated each time...   So I'm not sure sync wakeup alone is worth it,
-> > needs real life benchmarking.
->
-> Hard affinities have other down-sides.. occasional migrations shouldn't
-> be a problem, constant migrations are bad.
+Fixes: a415083a11cc ("usb: dwc2: add support for STM32MP15 SoCs USB OTG HS and FS")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ drivers/usb/dwc2/platform.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Currently fuse readers are sleeping in
-wait_event_interruptible_exclusive().  wake_up_interruptible_sync()
-will pick the first thread in the queue and wake that up.  That will
-likely result in migration, right?
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index a1feaa09be57..55d7fca6f95c 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -555,6 +555,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 		ggpio |= GGPIO_STM32_OTG_GCCFG_IDEN;
+ 		ggpio |= GGPIO_STM32_OTG_GCCFG_VBDEN;
+ 		dwc2_writel(hsotg, ggpio, GGPIO);
++
++		/* ID/VBUS detection startup time */
++		usleep_range(5000, 7000);
+ 	}
+ 
+ 	retval = dwc2_drd_init(hsotg);
+-- 
+2.25.1
 
-What would be much nicer, is to look at all the threads on the waitq
-and pick one that previously ran on the current CPU if there's one.
-Could this be implemented?
-
-Thanks,
-Miklos

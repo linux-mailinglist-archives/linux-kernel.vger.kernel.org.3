@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B789746BD4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD8646BD48
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbhLGON7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:13:59 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:51659 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237613AbhLGON5 (ORCPT
+        id S237597AbhLGONr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232979AbhLGONq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:13:57 -0500
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mzy6q-1mfq0V1ZHq-00x3Qy; Tue, 07 Dec 2021 15:10:25 +0100
-Received: by mail-wm1-f45.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so1875312wme.0;
-        Tue, 07 Dec 2021 06:10:25 -0800 (PST)
-X-Gm-Message-State: AOAM5337vgAZyyuPJvl5HLtEs64AFxqWm9WbFiEnEGSu2Llum1/KyTvT
-        QrkxrVIVQhNedPGhUSL0XKCs7wunamd7GkyIS+k=
-X-Google-Smtp-Source: ABdhPJxzYIaZyD07IEwH3J9HMGNIhqGAWZ3zGdm59Whd0a71CdI2ssR4a+ilh0TymsuKXM7V3KAqtDlm32UnFlbGssQ=
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr7177099wmi.173.1638886224981;
- Tue, 07 Dec 2021 06:10:24 -0800 (PST)
+        Tue, 7 Dec 2021 09:13:46 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AAEC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:10:16 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38C661EC04EC;
+        Tue,  7 Dec 2021 15:10:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638886210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nMIOwz2qDbopLUx34G1IUCoLxN5m6RDRFzKA3kZm8Ag=;
+        b=fwVZ9HowqQmvHUKHLFQDWzgTfmGl+N96cjS7cwz10ZslkZbANWus/8GeuBJTsC6TAjYltM
+        Au+/s5uC1F8SeyLTjyXiU7mrWkfPqYHmID3IsrnSAttE0QsNvcGJf2i73E1tAO0h8/gO+l
+        SsnzxhWTvf+b0Fch8VabRKGdGH4BH2A=
+Date:   Tue, 7 Dec 2021 15:10:12 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: mm: use WARN_ONCE instead of printk and WARN_ON_ONCE
+Message-ID: <Ya9rRL0Bhv7SnV5C@zn.tnic>
+References: <1638881702-3106-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-References: <20211207125430.2423871-1-arnd@kernel.org>
-In-Reply-To: <20211207125430.2423871-1-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 7 Dec 2021 15:10:08 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1uMmgKw=drPhJWCdatzbm1+9FPZ6=-YMme+9n+f3xuXQ@mail.gmail.com>
-Message-ID: <CAK8P3a1uMmgKw=drPhJWCdatzbm1+9FPZ6=-YMme+9n+f3xuXQ@mail.gmail.com>
-Subject: Re: [PATCH] iwlwifi: work around reverse dependency on MEI
-To:     Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/nRy2E8cQ9ecITUKNHJeEG4LL+dPwsNKOW2ejiYquEJxDStU7if
- sJEX5LgxNRReffJMf0Tirwe9QF/hoygLHN0h0L2lt5qM45szh26HnAqLi3X+w1eeCCXvW35
- dBKsdS83JmquZ6r4MlmXcJVIJz2KvMun2uGSm0p2NvtxKRRV9aL6g2yflxU09TLtw8B8B1k
- CJ8chUbSrKOINDit5mWPA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:omN3Ka5GG4Q=:0+k2uG/7PU8KNeMeMpSkHB
- DyL5zg9CSHJenWflWSAW43MzsWc+lLJWHVDGxUShrcDQ3uqwnwT3vF27eKAA89Hckf4E1A2oz
- qAPeEBaf0l79DqjuAQs2XqxSG3UcTYb1km8VLM8z4UgAGv+QPC4RdMw+rfasrr1ftjWeLOTHn
- Mi2NJBxeroM8/RbGyvMvXDA8jjAeUbGaIzF04K0oW2PmztdUS9ChBVqA1JtnMAr9sqLi3I7l/
- XTGXP9fZTqHEZ7LKMDhFbWtRe1uNH0tyaU7ZBtQAkIEB2skMoM7irE1kC7E+vaYkeLMX1AJnD
- 3iK5fqVE3MKuCRbq4+3fjedqe7XP0PMPytqALoms3rNo3bza+r4FsADVonr9UEXrZi+ZshjIM
- DDQJCwjjVh//MO6zMdHf9aRyXEL7cmhk6zhIy+qFNg+amWuvdtGiNEAE/7+bhzJCiU6SHXBvD
- yj6Ztn5d3U/NRUPsveW7FAWYXmzBJnLFA45qjeUwBr/4Tj+LP7hlz06Jrsy/sG7/MWt/dPpu9
- bGpcpqg5wcJx5xztunPPXzKYLn+35oeap0N93DFa9Ho4FIE+0euJIzR+eIvbgxuczJwclWAFm
- BF5e/Pq74jpHdcszLxfCRTSjnQNd5Sys7mS8Y0R14yOCMxy9Vkh9CpVjg4mLlaEaDT4vu3Y0+
- VTDS2lD4fQpwdXKxAeSEy6kQjwcVPp5iGmS68KHYZ9MOJryJGVpr1fPbCrUwBbpJpWSU=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1638881702-3106-1-git-send-email-wangqing@vivo.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 1:54 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
-> index cf1125d84929..474afc6f82a8 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/Kconfig
-> +++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
-> @@ -93,10 +93,10 @@ config IWLWIFI_BCAST_FILTERING
->           expect incoming broadcasts for their normal operations.
->
->  config IWLMEI
-> -       tristate "Intel Management Engine communication over WLAN"
-> -       depends on INTEL_MEI
-> +       bool "Intel Management Engine communication over WLAN"
-> +       depends on INTEL_MEI=y || INTEL_MEI=IWLMVM
-> +       depends on IWLMVM=y || IWLWIFI=m
+On Tue, Dec 07, 2021 at 04:55:00AM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+> 
+> Simply use WARN_ONCE instead of printk(KERN_WARNING, ...) and WARN_ON_ONCE.
+> 
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
+>  arch/x86/mm/ioremap.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+> index 026031b..af9a321
+> --- a/arch/x86/mm/ioremap.c
+> +++ b/arch/x86/mm/ioremap.c
+> @@ -195,9 +195,8 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
+>  		return NULL;
+>  
+>  	if (!phys_addr_valid(phys_addr)) {
+> -		printk(KERN_WARNING "ioremap: invalid physical address %llx\n",
+> -		       (unsigned long long)phys_addr);
+> -		WARN_ON_ONCE(1);
+> +		WARN_ONCE(1, "ioremap: invalid physical address %llx\n",
+> +			 (unsigned long long)phys_addr);
+>  		return NULL;
+>  	}
+>  
+> -- 
 
-For reference, that line is wrong, and I still see the same problem
-with my patch
-applied. It should work after changing it to
+This is not an equivalent transformation.
 
-        depends on IWLMVM=y || IWLMVM=m
+-- 
+Regards/Gruss,
+    Boris.
 
-but I'm still testing for further problems.
-
-             Arnd
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,220 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D25146C23E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A14846C241
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240297AbhLGSE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:04:29 -0500
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:41631 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240264AbhLGSE2 (ORCPT
+        id S240306AbhLGSEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:04:47 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57076 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240264AbhLGSEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:04:28 -0500
-Received: by mail-lf1-f41.google.com with SMTP id z21so140838lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:00:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PGsskQMQjpVQlfTy9skedeGAINE9Lj1BrqEY0Xhv8Ec=;
-        b=rA1podhwNO076B1lJKXPOkxRnrHhr7znnrlBN3E8uKCoBpvW3Sn/LnkYIPmSc8EAok
-         DOYQDh7s1S30fXEqSbeR53VGvJGXJTFWYJk1Xy6IA43rCxGMXe+Tl0yBRABMdrWKUsTI
-         ZdCBu+5nJqe9+F4NAsCHNZZNYN4gbRkbXTRmZcsCFXvld2tCYzaN2wuM+qZZIpAsBMii
-         b8tTyNODx532QfSo38k2NG4VJkehYS6x3HyP2rKo04zJLhfdHjvMW56mXdnHOMwm5NFG
-         ehODrLTXVpvf5D0RGnB9WvPZw019mT/1hJzzsPZfXGqHWJvmP5RgW9aR7GKdxMGVOn23
-         is8Q==
-X-Gm-Message-State: AOAM5321RcauRqGEIocEP6tBIGJUfrHJKIaR6KMDsYT3Mb9BXr/SuBv0
-        Sf59oDhm2nI7oXLSd/OdnprBnR76MqirxT1QFdcsim9S
-X-Google-Smtp-Source: ABdhPJz6nU3KoXeHBuV1hMt1sYN6/QZNls3Gn+Ujwp30bB76GMI2xyOSUz4QzgZlBLUkJpwe6FfBIvr8OmvTvfEnOUE=
-X-Received: by 2002:a19:4f42:: with SMTP id a2mr42617223lfk.47.1638900056871;
- Tue, 07 Dec 2021 10:00:56 -0800 (PST)
+        Tue, 7 Dec 2021 13:04:46 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B8C471FE00;
+        Tue,  7 Dec 2021 18:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638900074; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sW0G13L8LD3vgOCzYybnjl1DLQ/o79kuO3HbE02t/2c=;
+        b=b86kL9GxGDQxZmbhmUH5Mv7g3oBf0JP1OB4hNDMdn2qk7vG9hR8Bl326gcVcytktcT4Thp
+        JO1qG5p8w2TX8z08p1jFZWSUWN0Ks09fi1GwGetLA5XWvGQBm+ZNuregUZpaLEsKjNsy83
+        sSyYibOUajplc3fn+/hHWPTL+ucE8d0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638900074;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sW0G13L8LD3vgOCzYybnjl1DLQ/o79kuO3HbE02t/2c=;
+        b=H9NPRWL20q5s5cTMbqqGZkOgzpCBMYl/q46/W1On+xqxDGNe1PVc4hUQv2BnUmiG/FeaNe
+        Qle3FiwqgpFVTtAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 673B513AAD;
+        Tue,  7 Dec 2021 18:01:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I+NyGGqhr2EjTwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 07 Dec 2021 18:01:14 +0000
+Message-ID: <d585f9e5-538e-bdab-c89b-b4e1cc03c7b2@suse.cz>
+Date:   Tue, 7 Dec 2021 19:01:14 +0100
 MIME-Version: 1.0
-References: <20211129231830.1117781-1-namhyung@kernel.org> <20211129231830.1117781-5-namhyung@kernel.org>
- <738F7D58-264D-48A2-9A83-E7D126A50471@fb.com>
-In-Reply-To: <738F7D58-264D-48A2-9A83-E7D126A50471@fb.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 7 Dec 2021 10:00:45 -0800
-Message-ID: <CAM9d7cit6h25_fb7qfhw+erXPPRtHLfQ9EG478R_yjHiVOWQ6w@mail.gmail.com>
-Subject: Re: [PATCH 4/5] perf ftrace: Add -b/--use-bpf option for latency subcommand
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Changbin Du <changbin.du@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-7-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 06/66] mm: Start tracking VMAs with maple tree
+In-Reply-To: <20211201142918.921493-7-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Start tracking the VMAs with the new maple tree structure in parallel
+> with the rb_tree.  Add debug and trace events for maple tree operations
+> and duplicate the rb_tree that is created on forks into the maple tree.
+> 
+> The maple tree is added to the mm_struct including the mm_init struct,
+> added support in required mm/mmap functions, added tracking in
+> kernel/fork for process forking, and used to find the unmapped_area and
+> checked against what the rbtree finds.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  arch/x86/kernel/tboot.c     |   1 +
+>  drivers/firmware/efi/efi.c  |   1 +
+>  include/linux/mm.h          |   2 +
+>  include/linux/mm_types.h    |   3 +
+>  include/trace/events/mmap.h |  71 ++++++++++++
+>  init/main.c                 |   2 +
+>  kernel/fork.c               |   5 +
+>  mm/init-mm.c                |   2 +
+>  mm/internal.h               |  73 ++++++++++++
+>  mm/mmap.c                   | 220 +++++++++++++++++++++++++++++++++++-
+>  10 files changed, 378 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/tboot.c b/arch/x86/kernel/tboot.c
+> index f9af561c3cd4..859e8d2ea070 100644
+> --- a/arch/x86/kernel/tboot.c
+> +++ b/arch/x86/kernel/tboot.c
+> @@ -98,6 +98,7 @@ void __init tboot_probe(void)
+>  static pgd_t *tboot_pg_dir;
+>  static struct mm_struct tboot_mm = {
+>  	.mm_rb          = RB_ROOT,
+> +	.mm_mt          = MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, tboot_mm.mmap_lock),
+>  	.pgd            = swapper_pg_dir,
+>  	.mm_users       = ATOMIC_INIT(2),
+>  	.mm_count       = ATOMIC_INIT(1),
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index ae79c3300129..0b40291416ca 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -55,6 +55,7 @@ static unsigned long __initdata rt_prop = EFI_INVALID_TABLE_ADDR;
+>  
+>  struct mm_struct efi_mm = {
+>  	.mm_rb			= RB_ROOT,
+> +	.mm_mt			= MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, efi_mm.mmap_lock),
+>  	.mm_users		= ATOMIC_INIT(2),
+>  	.mm_count		= ATOMIC_INIT(1),
+>  	.write_protect_seq      = SEQCNT_ZERO(efi_mm.write_protect_seq),
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index a7e4a9e7d807..9eae78a155be 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2610,6 +2610,8 @@ extern bool arch_has_descending_max_zone_pfns(void);
+>  /* nommu.c */
+>  extern atomic_long_t mmap_pages_allocated;
+>  extern int nommu_shrink_inode_mappings(struct inode *, size_t, size_t);
+> +/* maple_tree */
 
-On Mon, Dec 6, 2021 at 5:06 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Nov 29, 2021, at 3:18 PM, Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The -b/--use-bpf option is to use BPF to get latency info of kernel
-> > functions.  It'd have better performance impact and I observed that
-> > latency of same function is smaller than before when using BPF.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
->
-> We can actually get something similar with a bpftrace one-liner, like:
->
-> bpftrace -e 'kprobe:mutex_lock { @start[tid] = nsecs; } kretprobe:mutex_lock /@start[tid] != 0/ { @delay = hist(nsecs - @start[tid]); delete(@start[tid]); } END {clear(@start); }'
-> Attaching 3 probes...
-> ^C
->
-> @delay:
-> [256, 512)       1553006 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [512, 1K)          89171 |@@                                                  |
-> [1K, 2K)           37522 |@                                                   |
-> [2K, 4K)            3308 |                                                    |
-> [4K, 8K)             415 |                                                    |
-> [8K, 16K)             38 |                                                    |
-> [16K, 32K)            47 |                                                    |
-> [32K, 64K)             2 |                                                    |
-> [64K, 128K)            0 |                                                    |
-> [128K, 256K)           0 |                                                    |
-> [256K, 512K)           0 |                                                    |
-> [512K, 1M)             0 |                                                    |
-> [1M, 2M)               0 |                                                    |
-> [2M, 4M)               0 |                                                    |
-> [4M, 8M)               1 |                                                    |
->
->
-> So I am not quite sure whether we need this for systems with BPF features.
+Hm should it say mmap.c as that's where vma_store() is defined.
 
-Yeah, bpftrace can do this too but there are situations one cannot
-use the tool for some reason.  On the other hand, we have been
-using perf tools widely to collect performance profiles on the fleet.
+...
 
-So it'd be really nice if we can use it as a vehicle to carry various
-innovative features using BPF.  I plan to add more functionalities
-in BCC/bpftrace to the perf tools in this regard.
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index bfb0ea164a90..c2f1431886d4 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
 
+...
 
->
-> Other than this, a few comments and nitpicks below.
->
-> > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> > index 2e5bfbb69960..294b12430d73 100644
-> > --- a/tools/perf/util/Build
-> > +++ b/tools/perf/util/Build
-> > @@ -144,6 +144,7 @@ perf-$(CONFIG_LIBBPF) += bpf-loader.o
-> > perf-$(CONFIG_LIBBPF) += bpf_map.o
-> > perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
-> > perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
-> > +perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
-> > perf-$(CONFIG_BPF_PROLOGUE) += bpf-prologue.o
-> > perf-$(CONFIG_LIBELF) += symbol-elf.o
-> > perf-$(CONFIG_LIBELF) += probe-file.o
-> > diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
-> > new file mode 100644
-> > index 000000000000..1975a6fe73c9
-> > --- /dev/null
-> > +++ b/tools/perf/util/bpf_ftrace.c
-> > @@ -0,0 +1,113 @@
-> > +#include <stdio.h>
-> > +#include <fcntl.h>
-> > +#include <stdint.h>
-> > +#include <stdlib.h>
-> > +
-> > +#include <linux/err.h>
-> > +
-> > +#include "util/ftrace.h"
-> > +#include "util/debug.h"
-> > +#include "util/bpf_counter.h"
-> > +
-> > +#include "util/bpf_skel/func_latency.skel.h"
-> > +
-> > +static struct func_latency_bpf *skel;
-> > +
-> > +int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
-> > +{
-> > +     int fd, err;
-> > +     struct filter_entry *func;
-> > +     struct bpf_link *begin_link, *end_link;
-> > +
-> > +     if (!list_is_singular(&ftrace->filters)) {
-> > +             pr_err("ERROR: %s target function(s).\n",
-> > +                    list_empty(&ftrace->filters) ? "No" : "Too many");
-> > +             return -1;
-> > +     }
-> > +
-> > +     func = list_first_entry(&ftrace->filters, struct filter_entry, list);
-> > +
-> > +     skel = func_latency_bpf__open();
-> > +     if (!skel) {
-> > +             pr_err("Failed to open func latency skeleton\n");
-> > +             return -1;
-> > +     }
-> > +
-> > +     set_max_rlimit();
-> > +
-> > +     err = func_latency_bpf__load(skel);
->
-> We can do func_latency_bpf__open_and_load() to save a few lines.
+> @@ -1901,12 +2018,21 @@ static unsigned long unmapped_area(struct vm_unmapped_area_info *info)
+>  	struct mm_struct *mm = current->mm;
+>  	struct vm_area_struct *vma;
+>  	unsigned long length, low_limit, high_limit, gap_start, gap_end;
+> +	unsigned long gap;
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+>  
+>  	/* Adjust search length to account for worst case alignment overhead */
+>  	length = info->length + info->align_mask;
+>  	if (length < info->length)
+>  		return -ENOMEM;
+>  
+> +	rcu_read_lock();
+> +	mas_empty_area_rev(&mas, info->low_limit, info->high_limit - 1,
+> +			   length);
 
-Sure, but I was thinking to add some modifications between
-them like in patch 5/5.
+unmapped_area_topdown also uses mas_empty_area_rev(), shouldn't this one be
+non-rev()?
 
->
-> > +     if (err) {
-> > +             pr_err("Failed to load func latency skeleton\n");
-> > +             goto out;
-> > +     }
-> > +
-> > +     begin_link = bpf_program__attach_kprobe(skel->progs.func_begin,
-> > +                                              false, func->name);
-> > +     if (IS_ERR(begin_link)) {
-> > +             pr_err("Failed to attach fentry program\n");
-> > +             err = PTR_ERR(begin_link);
-> > +             goto out;
-> > +     }
-> > +
-> > +     end_link = bpf_program__attach_kprobe(skel->progs.func_end,
-> > +                                           true, func->name);
-> > +     if (IS_ERR(end_link)) {
-> > +             pr_err("Failed to attach fexit program\n");
-> > +             err = PTR_ERR(end_link);
-> > +             bpf_link__destroy(begin_link);
-> > +             goto out;
-> > +     }
->
-> I think we are leaking begin_link and end_link here? (They will be released
-> on perf termination, but we are not freeing them in the code).
+> +	rcu_read_unlock();
+> +	gap = mas.index;
+> +	gap += (info->align_offset - gap) & info->align_mask;
+> +
+>  	/* Adjust search limits by the desired length */
+>  	if (info->high_limit < length)
+>  		return -ENOMEM;
+> @@ -1988,20 +2114,39 @@ static unsigned long unmapped_area(struct vm_unmapped_area_info *info)
+>  
+>  	VM_BUG_ON(gap_start + info->length > info->high_limit);
+>  	VM_BUG_ON(gap_start + info->length > gap_end);
+> +
+> +	VM_BUG_ON(gap != gap_start);
+>  	return gap_start;
+>  }
+>  
+> +static inline unsigned long top_area_aligned(struct vm_unmapped_area_info *info,
+> +					     unsigned long end)
+> +{
+> +	return (end - info->length - info->align_offset) & (~info->align_mask);
+> +}
 
-Right, I'll keep them and destroy at the end.
+Looks like this is never used anywhere and just deleted later in the series.
 
->
-> [...]
->
-> > diff --git a/tools/perf/util/bpf_skel/func_latency.bpf.c b/tools/perf/util/bpf_skel/func_latency.bpf.c
-> > new file mode 100644
-> > index 000000000000..d7d31cfeabf8
-> > --- /dev/null
-> > +++ b/tools/perf/util/bpf_skel/func_latency.bpf.c
-> > @@ -0,0 +1,92 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +// Copyright (c) 2021 Google
-> > +#include "vmlinux.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +
-> > +#define NUM_BUCKET  22
->
-> We define NUM_BUCKET twice, which might cause issue when we change it.
-> Maybe just use bpf_map__set_max_entries() in user space?
-
-Sure, will do.
-
-Thanks,
-Namhyung
+> +
+>  static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+>  {
+>  	struct mm_struct *mm = current->mm;
+> -	struct vm_area_struct *vma;
+> +	struct vm_area_struct *vma = NULL;
+>  	unsigned long length, low_limit, high_limit, gap_start, gap_end;
+> +	unsigned long gap;
+> +
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+> +	validate_mm_mt(mm);
+>  
+>  	/* Adjust search length to account for worst case alignment overhead */
+>  	length = info->length + info->align_mask;
+>  	if (length < info->length)
+>  		return -ENOMEM;
+>  
+> +	rcu_read_lock();
+> +	mas_empty_area_rev(&mas, info->low_limit, info->high_limit - 1,
+> +		   length);
+> +	rcu_read_unlock();
+> +	gap = (mas.index + info->align_mask) & ~info->align_mask;
+> +	gap -= info->align_offset & info->align_mask;
+> +
+>  	/*
+>  	 * Adjust search limits by the desired length.
+>  	 * See implementation comment at top of unmapped_area().

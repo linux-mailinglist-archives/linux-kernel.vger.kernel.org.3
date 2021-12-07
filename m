@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE15046C6E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2319F46C6E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242024AbhLGVsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241980AbhLGVsG (ORCPT
+        id S242059AbhLGVsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:48:16 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53866 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhLGVsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Dec 2021 16:48:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AE2C061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:44:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0546CE1E7A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B398DC341E8;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 11FB7CE1E7C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34CBC341E9;
         Tue,  7 Dec 2021 21:44:31 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1muiGE-000I0D-Tx;
-        Tue, 07 Dec 2021 16:44:30 -0500
-Message-ID: <20211207214430.760852438@goodmis.org>
+        id 1muiGF-000I0m-3e;
+        Tue, 07 Dec 2021 16:44:31 -0500
+Message-ID: <20211207214430.947502966@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 07 Dec 2021 16:44:16 -0500
+Date:   Tue, 07 Dec 2021 16:44:17 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-next][PATCH 10/13] tracing/kprobes: Do not open code event reserve logic
+Subject: [for-next][PATCH 11/13] tracing/uprobes: Use trace_event_buffer_reserve() helper
 References: <20211207214406.148423650@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,64 +41,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-As kprobe events use trace_event_buffer_commit() to commit the event to
-the ftrace ring buffer, for consistency, it should use
-trace_event_buffer_reserve() to allocate it, as the two functions are
-related.
+To be consistent with kprobes and eprobes, use
+trace_event_buffer_reserver() and trace_event_buffer_commit(). This will
+ensure that any updates to trace events will also be implemented on uprobe
+events.
 
-Link: https://lkml.kernel.org/r/20211130024319.257430762@goodmis.org
+Link: https://lkml.kernel.org/r/20211206162440.69fbf96c@gandalf.local.home
 
 Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_kprobe.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ kernel/trace/trace_uprobe.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 33272a7b6912..d10c01948e68 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1383,17 +1383,11 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 	if (trace_trigger_soft_disabled(trace_file))
- 		return;
+diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+index f5f0039d31e5..a4d5c624fe79 100644
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -949,8 +949,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
+ 				struct trace_event_file *trace_file)
+ {
+ 	struct uprobe_trace_entry_head *entry;
+-	struct trace_buffer *buffer;
+-	struct ring_buffer_event *event;
++	struct trace_event_buffer fbuffer;
+ 	void *data;
+ 	int size, esize;
+ 	struct trace_event_call *call = trace_probe_event_call(&tu->tp);
+@@ -965,12 +964,10 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
  
--	fbuffer.trace_ctx = tracing_gen_ctx();
--	fbuffer.trace_file = trace_file;
--
- 	dsize = __get_data_size(&tk->tp, regs);
- 
--	fbuffer.event =
--		trace_event_buffer_lock_reserve(&fbuffer.buffer, trace_file,
--					call->event.type,
--					sizeof(*entry) + tk->tp.size + dsize,
--					fbuffer.trace_ctx);
--	if (!fbuffer.event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-+					   sizeof(*entry) + tk->tp.size + dsize);
+ 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
+ 	size = esize + tu->tp.size + dsize;
+-	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+-						call->event.type, size, 0);
+-	if (!event)
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
 +	if (!entry)
  		return;
  
- 	fbuffer.regs = regs;
-@@ -1430,16 +1424,11 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	if (trace_trigger_soft_disabled(trace_file))
- 		return;
+-	entry = ring_buffer_event_data(event);
+ 	if (is_ret_probe(tu)) {
+ 		entry->vaddr[0] = func;
+ 		entry->vaddr[1] = instruction_pointer(regs);
+@@ -982,7 +979,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
  
--	fbuffer.trace_ctx = tracing_gen_ctx();
--	fbuffer.trace_file = trace_file;
--
- 	dsize = __get_data_size(&tk->tp, regs);
--	fbuffer.event =
--		trace_event_buffer_lock_reserve(&fbuffer.buffer, trace_file,
--					call->event.type,
--					sizeof(*entry) + tk->tp.size + dsize,
--					fbuffer.trace_ctx);
--	if (!fbuffer.event)
-+
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-+					   sizeof(*entry) + tk->tp.size + dsize);
-+	if (!entry)
- 		return;
+ 	memcpy(data, ucb->buf, tu->tp.size + dsize);
  
- 	fbuffer.regs = regs;
+-	event_trigger_unlock_commit(trace_file, buffer, event, entry, 0);
++	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ /* uprobe handler */
 -- 
 2.33.0

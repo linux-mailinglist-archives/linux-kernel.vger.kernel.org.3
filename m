@@ -2,98 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AA346C1EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9F546C26D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240072AbhLGRkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:40:01 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:33533 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbhLGRkA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:40:00 -0500
-Received: by mail-il1-f199.google.com with SMTP id w1-20020a056e021a6100b0029f42663adcso12675862ilv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:36:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1dQvezvp3iGWZ0YIb75qsQGcY3DEG/a8kpN3taG3XIQ=;
-        b=W+LqPx6Jql+sKl5p0S15hSHbh+rHGy/5uwCgwyKZl7erROYjWE3Ai+I1MDbrM6dUy+
-         hpO5C1kFz5TjTq+DDXG+G415lNDzNophN7fWWyBlbR3SFtkt2flSrA5BpWLDbYBl/pui
-         +2t4cB9AYFAINtWKW2Pj1bbC+doZ0RDUt7HeN0MI08PrDcnYDWEHfIXm792Wonw1+1+k
-         WcI+zadzWW423npUefHg8qfraABWOGuRcnNJTkVFDvkWmWpqrihp6cUdRhC8VmRjQWOV
-         l/ejJQD80xb9RKXGBpC/riApWi/z0Jrkvblwm4uIdS0PGotr30deQ/4MuXdbdYAtRYpn
-         j71w==
-X-Gm-Message-State: AOAM532MVy1fUwXjLNRj2aje44f1AWd4LzQ4PXGaRVtvHaMJAhV/kZxn
-        3SgMR79yvWTPBFYZQz0BaXAfBuy52xMGnVaoKQXkOKeqWcHv
-X-Google-Smtp-Source: ABdhPJxrY5ezv1MAc4b3hmpC2DiyVCa1ZBCuumVI4l2wVqyLJVseDqkqWYesgOImWu3+rPfrjLJrTeEt9WFpybMUWdvQ/3svPH4Z
+        id S240450AbhLGSNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:13:41 -0500
+Received: from mga18.intel.com ([134.134.136.126]:52983 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231351AbhLGSNk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:13:40 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224513425"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="224513425"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:38:08 -0800
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="751385217"
+Received: from charriso-mobl2.amr.corp.intel.com (HELO pbossart-mobl3.intel.com) ([10.212.98.250])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:38:07 -0800
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To:     alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org, vkoul@kernel.org,
+        Sameer Pujar <spujar@nvidia.com>,
+        Gyeongtaek Lee <gt82.lee@samsung.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: [PATCH 0/6] ASoC : soc-pcm: fix trigger race conditions with shared BE
+Date:   Tue,  7 Dec 2021 11:37:39 -0600
+Message-Id: <20211207173745.15850-1-pierre-louis.bossart@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:16ca:: with SMTP id 10mr721658ilx.274.1638898589332;
- Tue, 07 Dec 2021 09:36:29 -0800 (PST)
-Date:   Tue, 07 Dec 2021 09:36:29 -0800
-In-Reply-To: <000000000000367c2205d2549cb9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003d78f805d291d061@google.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
-From:   syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+We've been adding a 'deep buffer' PCM device to several SOF topologies
+in order to reduce power consumption. The typical use-case would be
+music playback over a headset: this additional PCM device provides
+more buffering and longer latencies, leaving the rest of the system
+sleep for longer periods. Notifications and 'regular' low-latency
+audio playback would still use the 'normal' PCM device and be mixed
+with the 'deep buffer' before rendering on the headphone endpoint. The
+tentative direction would be to expose this alternate device to
+PulseAudio/PipeWire/CRAS via the UCM SectionModifier definitions.
 
-HEAD commit:    1c5526968e27 net/smc: Clear memory when release and reuse ..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a9eabdb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2b8e24e3a80e3875
-dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b749a9b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170d7519b00000
+That seemed a straightforward topology change until our automated
+validation stress tests started reporting issues on SoundWire
+platforms, when e.g. two START triggers might be send and conversely
+the STOP trigger is never sent. The SoundWire stream state management
+flagged inconsistent states when the two 'normal' and 'deep buffer'
+devices are used concurrently with rapid play/stop/pause monkey
+testing.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
+Looking at the soc-pcm.c code, it seems that the BE state
+management needs a lot of love.
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
-Read of size 8 at addr ffffc90001a16038 by task kworker/0:3/2934
+a) there is no consistent protection for the BE state. In some parts
+of the code, the state updates are protected by a spinlock but in the
+trigger they are not. When we open/play/close the two PCM devices in
+stress tests, we end-up testing a state that is being modified. That
+can't be good.
 
-CPU: 0 PID: 2934 Comm: kworker/0:3 Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events sk_psock_destroy
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
- __kasan_report mm/kasan/report.c:433 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
- __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
- psock_set_prog include/linux/skmsg.h:477 [inline]
- psock_progs_drop include/linux/skmsg.h:495 [inline]
- sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+b) there is a conceptual deadlock: on stop we check the FE states to
+see if a shared BE can be stopped, but since we trigger the BE first
+the FE states have not been modified yet, so the TRIGGER_STOP is never
+sent.
 
+This patchset suggests the removal of the dedicated 'dpcm_lock' and
+follows the design suggested by Takashi Iwai.  By default the
+protection relies on the 'pcm_mutex', except for the FE and BE
+triggers where the mutex cannot be used.  In this case, the FE PCM
+lock is used instead. In the cases where a BE is added/removed, the
+pcm_mutex and FE PCM lock are both taken.  In addition, the BE PCM
+lock is used to serialize access to a shared BE.
 
-Memory state around the buggy address:
- ffffc90001a15f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90001a15f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90001a16000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                        ^
- ffffc90001a16080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90001a16100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
+With these patches I am able to run our entire validation suite
+without any issues with this new 'deep buffer' topology, and no
+regressions on existing solutions [1]. The tests were reproduced by
+Bard Liao for SoundWire devices.
+
+One might ask 'how come we didn't see this earlier'? The answer is
+probably that the .trigger callbacks in most implementations seems to
+perform DAPM operations, and sending the triggers multiple times is
+not an issue. In the case of SoundWire, we do use the .trigger
+callback to reconfigure the bus using the 'bank switch' mechanism. It
+could be acceptable to tolerate a trigger multiple times, but the
+deadlock on stop cannot be fixed at the SoundWire level alone.
+
+Opens:
+
+1) The issues reported by Nvidia on the RFCv3 may or may not be
+present. We'd need test results to make sure the locking update does
+not introduce a regression on Tegra.
+
+2) There are other reports of kernel oopses [2] that seem related to
+the lack of protection. I'd be good to confirm if this patchset solve
+these problems as well.
+
+[1] https://github.com/thesofproject/linux/pull/3146
+[2] https://lore.kernel.org/alsa-devel/002f01d7b4f5$c030f4a0$4092dde0$@samsung.com/
+
+changes since RFCv3:
+Used two patches from Takashi. We now use the pcm_mutex, the FE stream
+lock when adding and deleting a BE, and the BE stream lock to handle
+concurrency between streams using the same BE.
+Added a patch to use GFP_ATOMIC for the DPCM structure.
+Fixed PAUSE_RELEASE transition (GitHub comment from Kai Vehmanen)
+
+changes since RFCv2:
+Removal of dpcm_lock to use FE PCM locks (credits to Takashi Iwai for
+the suggestion). The FE PCM lock is now used before each use of
+for_each_dpcm_be() - with the exception of the trigger where the lock
+is already taken. This change is also applied in drivers which make
+use of this loop (compress, SH, FSL).
+Addition of BE PCM lock to deal with mutual exclusion between triggers
+for the same BE.
+Alignment of the BE atomicity on the FE on connections, this is
+required to avoid sleeping in atomic context.
+Additional cleanups (indentation, static functions)
+
+changes since RFC v1:
+Removed unused function
+Removed exported symbols only used in soc-pcm.c, used static instead
+Use a mutex instead of a spinlock
+Protect all for_each_dpcm_be() loops
+Fix bugs introduced in the refcount
+
+Pierre-Louis Bossart (4):
+  ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure
+  ASoC: soc-pcm: align BE 'atomicity' with that of the FE
+  ASoC: soc-pcm: test refcount before triggering
+  ASoC: soc-pcm: fix BE handling of PAUSE_RELEASE
+
+Takashi Iwai (2):
+  ASoC: soc-pcm: Fix and cleanup DPCM locking
+  ASoC: soc-pcm: serialize BE triggers
+
+ include/sound/soc-dpcm.h |   2 +
+ include/sound/soc.h      |   2 -
+ sound/soc/soc-core.c     |   1 -
+ sound/soc/soc-pcm.c      | 351 +++++++++++++++++++++++++++------------
+ 4 files changed, 246 insertions(+), 110 deletions(-)
+
+-- 
+2.25.1
 

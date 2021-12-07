@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BC846B098
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05ABD46B099
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbhLGCc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:32:27 -0500
+        id S243643AbhLGCcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:32:31 -0500
 Received: from mga14.intel.com ([192.55.52.115]:8199 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243409AbhLGCcZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:32:25 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237700782"
+        id S242662AbhLGCca (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 21:32:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237700804"
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="237700782"
+   d="scan'208";a="237700804"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:28:56 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:29:00 -0800
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="502397403"
+   d="scan'208";a="502397448"
 Received: from yhuang6-desk2.sh.intel.com ([10.239.159.50])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:28:51 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:28:56 -0800
 From:   Huang Ying <ying.huang@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -34,9 +34,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
         Shakeel Butt <shakeelb@google.com>,
         Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: [PATCH -V10 RESEND 5/6] memory tiering: rate limit NUMA migration throughput
-Date:   Tue,  7 Dec 2021 10:27:56 +0800
-Message-Id: <20211207022757.2523359-6-ying.huang@intel.com>
+Subject: [PATCH -V10 RESEND 6/6] memory tiering: adjust hot threshold automatically
+Date:   Tue,  7 Dec 2021 10:27:57 +0800
+Message-Id: <20211207022757.2523359-7-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211207022757.2523359-1-ying.huang@intel.com>
 References: <20211207022757.2523359-1-ying.huang@intel.com>
@@ -46,23 +46,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In NUMA balancing memory tiering mode, the hot slow memory pages could
-be promoted to the fast memory node via NUMA balancing.  But this
-incurs some overhead too.  So that sometimes the workload performance
-may be hurt.  To avoid too much disturbing to the workload in these
-situations, we should make it possible to rate limit the promotion
-throughput.
+It isn't easy for the administrator to determine the hot threshold.
+So in this patch, a method to adjust the hot threshold automatically
+is implemented.  The basic idea is to control the number of the
+candidate promotion pages to match the promotion rate limit.  If the
+hint page fault latency of a page is less than the hot threshold, we
+will try to promote the page, and the page is called the candidate
+promotion page.
 
-So, in this patch, we implement a simple rate limit algorithm as
-follows.  The number of the candidate pages to be promoted to the fast
-memory node via NUMA balancing is counted, if the count exceeds the
-limit specified by the users, the NUMA balancing promotion will be
-stopped until the next second.
+If the number of the candidate promotion pages in the statistics
+interval is much more than the promotion rate limit, the hot threshold
+will be decreased to reduce the number of the candidate promotion
+pages.  Otherwise, the hot threshold will be increased to increase the
+number of the candidate promotion pages.
 
-A new sysctl knob kernel.numa_balancing_rate_limit_mbps is added for
-the users to specify the limit.
+To make the above method works, in each statistics interval, the total
+number of the pages to check (on which the hint page faults occur) and
+the hot/cold distribution need to be stable.  Because the page tables
+are scanned linearly in NUMA balancing, but the hot/cold distribution
+isn't uniform along the address, the statistics interval should be
+larger than the NUMA balancing scan period.  So in the patch, the max
+scan period is used as statistics interval and it works well in our
+tests.
 
-TODO: Add ABI document for new sysctl knob.
+The sysctl knob kernel.numa_balancing_hot_threshold_ms becomes the
+initial value and max value of the hot threshold.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
@@ -80,140 +88,177 @@ Cc: Hasan Al Maruf <hasanalmaruf@fb.com>
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org
 ---
- include/linux/mmzone.h       |  5 +++++
- include/linux/sched/sysctl.h |  1 +
- kernel/sched/fair.c          | 29 +++++++++++++++++++++++++++--
- kernel/sysctl.c              |  8 ++++++++
- mm/vmstat.c                  |  1 +
- 5 files changed, 42 insertions(+), 2 deletions(-)
+ include/linux/mmzone.h       |  3 ++
+ include/linux/sched/sysctl.h |  2 ++
+ kernel/sched/core.c          | 15 +++++++++
+ kernel/sched/fair.c          | 64 +++++++++++++++++++++++++++++++++---
+ kernel/sysctl.c              |  3 +-
+ 5 files changed, 81 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index eda6d2f09d77..f3b044993bc5 100644
+index f3b044993bc5..4ac0ae1cf15d 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -213,6 +213,7 @@ enum node_stat_item {
- #endif
+@@ -906,6 +906,9 @@ typedef struct pglist_data {
  #ifdef CONFIG_NUMA_BALANCING
- 	PGPROMOTE_SUCCESS,	/* promote successfully */
-+	PGPROMOTE_CANDIDATE,	/* candidate pages to promote */
+ 	unsigned long numa_ts;
+ 	unsigned long numa_nr_candidate;
++	unsigned long numa_threshold_ts;
++	unsigned long numa_threshold_nr_candidate;
++	unsigned long numa_threshold;
  #endif
- 	NR_VM_NODE_STAT_ITEMS
- };
-@@ -902,6 +903,10 @@ typedef struct pglist_data {
- 	struct deferred_split deferred_split_queue;
- #endif
- 
-+#ifdef CONFIG_NUMA_BALANCING
-+	unsigned long numa_ts;
-+	unsigned long numa_nr_candidate;
-+#endif
  	/* Fields commonly accessed by the page reclaim scanner */
  
- 	/*
 diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-index 0ea43b146aee..7d937adaac0f 100644
+index 7d937adaac0f..ff2c43e8ebac 100644
 --- a/include/linux/sched/sysctl.h
 +++ b/include/linux/sched/sysctl.h
-@@ -42,6 +42,7 @@ enum sched_tunable_scaling {
- #ifdef CONFIG_NUMA_BALANCING
- extern int sysctl_numa_balancing_mode;
- extern unsigned int sysctl_numa_balancing_hot_threshold;
-+extern unsigned int sysctl_numa_balancing_rate_limit;
- #else
- #define sysctl_numa_balancing_mode	0
- #endif
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 2b78664a5ce2..7912669a2065 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1028,6 +1028,11 @@ unsigned int sysctl_numa_balancing_scan_delay = 1000;
+@@ -84,6 +84,8 @@ int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+ 		void *buffer, size_t *lenp, loff_t *ppos);
+ int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
+ 		size_t *lenp, loff_t *ppos);
++int sysctl_numa_balancing_threshold(struct ctl_table *table, int write, void *buffer,
++		size_t *lenp, loff_t *ppos);
+ int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
+ 		size_t *lenp, loff_t *ppos);
  
- /* The page with hint page fault latency < threshold in ms is considered hot */
- unsigned int sysctl_numa_balancing_hot_threshold = 1000;
-+/*
-+ * Restrict the NUMA migration per second in MB for each target node
-+ * if no enough free space in target node
-+ */
-+unsigned int sysctl_numa_balancing_rate_limit = 65536;
- 
- struct numa_group {
- 	refcount_t refcount;
-@@ -1401,6 +1406,23 @@ static int numa_hint_fault_latency(struct page *page)
- 	return (time - last_time) & PAGE_ACCESS_TIME_MASK;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 5dcabc98432f..1cca2c8a3423 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4285,6 +4285,18 @@ void set_numabalancing_state(bool enabled)
  }
  
-+static bool numa_migration_check_rate_limit(struct pglist_data *pgdat,
-+					    unsigned long rate_limit, int nr)
+ #ifdef CONFIG_PROC_SYSCTL
++static void reset_memory_tiering(void)
 +{
-+	unsigned long nr_candidate;
-+	unsigned long now = jiffies, last_ts;
++	struct pglist_data *pgdat;
 +
-+	mod_node_page_state(pgdat, PGPROMOTE_CANDIDATE, nr);
-+	nr_candidate = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
-+	last_ts = pgdat->numa_ts;
-+	if (now > last_ts + HZ &&
-+	    cmpxchg(&pgdat->numa_ts, last_ts, now) == last_ts)
-+		pgdat->numa_nr_candidate = nr_candidate;
-+	if (nr_candidate - pgdat->numa_nr_candidate > rate_limit)
-+		return false;
-+	return true;
++	for_each_online_pgdat(pgdat) {
++		pgdat->numa_threshold = 0;
++		pgdat->numa_threshold_nr_candidate =
++			node_page_state(pgdat, PGPROMOTE_CANDIDATE);
++		pgdat->numa_threshold_ts = jiffies;
++	}
++}
++
+ int sysctl_numa_balancing(struct ctl_table *table, int write,
+ 			  void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -4301,6 +4313,9 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
+ 	if (err < 0)
+ 		return err;
+ 	if (write) {
++		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
++		    (state & NUMA_BALANCING_MEMORY_TIERING))
++			reset_memory_tiering();
+ 		sysctl_numa_balancing_mode = state;
+ 		__set_numabalancing_state(state);
+ 	}
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7912669a2065..daa978d2d70d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1423,6 +1423,54 @@ static bool numa_migration_check_rate_limit(struct pglist_data *pgdat,
+ 	return true;
+ }
+ 
++int sysctl_numa_balancing_threshold(struct ctl_table *table, int write, void *buffer,
++		size_t *lenp, loff_t *ppos)
++{
++	int err;
++	struct pglist_data *pgdat;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	err = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (err < 0 || !write)
++		return err;
++
++	for_each_online_pgdat(pgdat)
++		pgdat->numa_threshold = 0;
++
++	return err;
++}
++
++#define NUMA_MIGRATION_ADJUST_STEPS	16
++
++static void numa_migration_adjust_threshold(struct pglist_data *pgdat,
++					    unsigned long rate_limit,
++					    unsigned long ref_th)
++{
++	unsigned long now = jiffies, last_th_ts, th_period;
++	unsigned long unit_th, th;
++	unsigned long nr_cand, ref_cand, diff_cand;
++
++	th_period = msecs_to_jiffies(sysctl_numa_balancing_scan_period_max);
++	last_th_ts = pgdat->numa_threshold_ts;
++	if (now > last_th_ts + th_period &&
++	    cmpxchg(&pgdat->numa_threshold_ts, last_th_ts, now) == last_th_ts) {
++		ref_cand = rate_limit *
++			sysctl_numa_balancing_scan_period_max / 1000;
++		nr_cand = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
++		diff_cand = nr_cand - pgdat->numa_threshold_nr_candidate;
++		unit_th = ref_th / NUMA_MIGRATION_ADJUST_STEPS;
++		th = pgdat->numa_threshold ? : ref_th;
++		if (diff_cand > ref_cand * 11 / 10)
++			th = max(th - unit_th, unit_th);
++		else if (diff_cand < ref_cand * 9 / 10)
++			th = min(th + unit_th, ref_th);
++		pgdat->numa_threshold_nr_candidate = nr_cand;
++		pgdat->numa_threshold = th;
++	}
 +}
 +
  bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
  				int src_nid, int dst_cpu)
  {
-@@ -1415,7 +1437,7 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+@@ -1437,19 +1485,25 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
  	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
  	    !node_is_toptier(src_nid)) {
  		struct pglist_data *pgdat;
--		unsigned long latency, th;
-+		unsigned long rate_limit, latency, th;
+-		unsigned long rate_limit, latency, th;
++		unsigned long rate_limit, latency, th, def_th;
  
  		pgdat = NODE_DATA(dst_nid);
- 		if (pgdat_free_space_enough(pgdat))
-@@ -1426,7 +1448,10 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+-		if (pgdat_free_space_enough(pgdat))
++		if (pgdat_free_space_enough(pgdat)) {
++			/* workload changed, reset hot threshold */
++			pgdat->numa_threshold = 0;
+ 			return true;
++		}
+ 
+-		th = sysctl_numa_balancing_hot_threshold;
++		def_th = sysctl_numa_balancing_hot_threshold;
++		rate_limit =
++			sysctl_numa_balancing_rate_limit << (20 - PAGE_SHIFT);
++		numa_migration_adjust_threshold(pgdat, rate_limit, def_th);
++
++		th = pgdat->numa_threshold ? : def_th;
+ 		latency = numa_hint_fault_latency(page);
  		if (latency > th)
  			return false;
  
--		return true;
-+		rate_limit =
-+			sysctl_numa_balancing_rate_limit << (20 - PAGE_SHIFT);
-+		return numa_migration_check_rate_limit(pgdat, rate_limit,
-+						       thp_nr_pages(page));
+-		rate_limit =
+-			sysctl_numa_balancing_rate_limit << (20 - PAGE_SHIFT);
+ 		return numa_migration_check_rate_limit(pgdat, rate_limit,
+ 						       thp_nr_pages(page));
  	}
- 
- 	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
 diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 40432524642a..7be964eb0d13 100644
+index 7be964eb0d13..38892422ffac 100644
 --- a/kernel/sysctl.c
 +++ b/kernel/sysctl.c
-@@ -1818,6 +1818,14 @@ static struct ctl_table kern_table[] = {
+@@ -1816,7 +1816,8 @@ static struct ctl_table kern_table[] = {
+ 		.data		= &sysctl_numa_balancing_hot_threshold,
+ 		.maxlen		= sizeof(unsigned int),
  		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
-+	{
-+		.procname	= "numa_balancing_rate_limit_mbps",
-+		.data		= &sysctl_numa_balancing_rate_limit,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
+-		.proc_handler	= proc_dointvec,
++		.proc_handler	= sysctl_numa_balancing_threshold,
 +		.extra1		= SYSCTL_ZERO,
-+	},
- #endif /* CONFIG_NUMA_BALANCING */
+ 	},
  	{
- 		.procname	= "sched_rt_period_us",
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 53a6e92b1efb..787a012de3e2 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1244,6 +1244,7 @@ const char * const vmstat_text[] = {
- #endif
- #ifdef CONFIG_NUMA_BALANCING
- 	"pgpromote_success",
-+	"pgpromote_candidate",
- #endif
- 
- 	/* enum writeback_stat_item counters */
+ 		.procname	= "numa_balancing_rate_limit_mbps",
 -- 
 2.30.2
 

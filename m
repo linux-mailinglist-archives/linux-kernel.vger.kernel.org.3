@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CC246BC25
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561AF46BC29
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbhLGNJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S236854AbhLGNK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbhLGNJ1 (ORCPT
+        with ESMTP id S232611AbhLGNK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:09:27 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD1AC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:05:56 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id k4so13754212pgb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 05:05:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FI2qt9CjwRrs4Tfemj8rDZNzeo/YDjtuHCbQrgegDa4=;
-        b=Ff27IpankODa1HIFnY22UfOVCC7xNm9fN8nnjh0EkeDEjM6E7NLthQ8mM8bWDWoMWx
-         Xy+RpC0cUYg0Q4TXwqk892ksP66189yQunoYgibL/EgYTuptQCz17O+hnqXCvd+ZTz1q
-         KECDgk5JnyU65Ot+7GrU6bIC7i4AQEGyo5AME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FI2qt9CjwRrs4Tfemj8rDZNzeo/YDjtuHCbQrgegDa4=;
-        b=L+rWZ874BpPsGso4sl6dvo5X9GswfmbELsJkiDMBXhEtQHLHH7K9I7xraKY/lTmdgH
-         j2B8wQnYvyQoTiZWLJvjL6d7H/2WmZcR+tDgj5ESUgErzibRymZd5OK/DCySSPwS+Nge
-         Qa5GtqFBpWkdX91hkWhDTUYPXNYC7xyXZuFFtTjeEQZUVsEuOdfk6sXhhHkdMfKudC+S
-         kBggzVPVeP66wQM72d7EA9r85OYcKK1BgV7L+VtgykSIvLPBJoDr0fQPHft9Q4bVPEfK
-         KRLsczmEz4jOJPWFwzOHKnaH9/WtW3nmKc9kbjhp0vCq5k3azEusfsjEUjvKTxhh6dVL
-         zHLA==
-X-Gm-Message-State: AOAM5326SxyriJdQ2D/vBOAV3TrOPSLytyQsvRX8GcBO0+rEd7oLShFr
-        nbFQPoBWVSOJ+ldqYaKV+RYHbA==
-X-Google-Smtp-Source: ABdhPJy74Oo/xXy6Vq9HMkveYiPrIvtFwzoSgLOZDWADx+BG61TDesJcSn6OGCIN600lnUmnhoJQ1A==
-X-Received: by 2002:aa7:88d1:0:b0:4af:844:8be with SMTP id k17-20020aa788d1000000b004af084408bemr8627109pff.43.1638882356424;
-        Tue, 07 Dec 2021 05:05:56 -0800 (PST)
-Received: from 47cfd395a522 ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id pc10sm3181836pjb.9.2021.12.07.05.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 05:05:55 -0800 (PST)
-Date:   Tue, 7 Dec 2021 13:05:47 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/207] 5.15.7-rc1 review
-Message-ID: <20211207130547.GA1565144@47cfd395a522>
-References: <20211206145610.172203682@linuxfoundation.org>
+        Tue, 7 Dec 2021 08:10:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36493C061574;
+        Tue,  7 Dec 2021 05:06:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8160FCE1AA5;
+        Tue,  7 Dec 2021 13:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DEEC341C3;
+        Tue,  7 Dec 2021 13:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638882412;
+        bh=FB4u9uEQYxXzQGT/WU6wZVuIeyO4n5dE1JxOD6X7obw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AReKIX+3b9w7AwPSPFfM9XmwumGjZrRv/sBHpdn1CeZ3zYaet7iRZ3Ux72GD+ip9B
+         XNYfXaRnyJfV0RmNjz0z4s2TB9LLk4mCLNIVZ8poPeg2lG2A/vRv0sDReievDpwFlH
+         VNbY9UDs5qUp8ngwwFkfUkhQgAAGnZNWRRnAdTgQ2pmvehK3A/Fqqx8BMHdzSyudr1
+         HLT4Dmk/Wh67FPXV16pmoMP91ryvQ4saCp7FN14SMrjNobF09wmeyCy/zFbFg1Vh5e
+         bgkQV0grRKC5Ktue0Z4/FmwPR5GkL3CFlLecgn4x3a9icYB9+snIhu9WmkfBfdy2aq
+         MZEd7PslqaMNA==
+Date:   Tue, 7 Dec 2021 14:06:47 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ameer Hamza <amhamza.mgc@gmail.com>,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: mv88e6xxx: initialize return variable on
+ declaration
+Message-ID: <20211207140647.6926a3e7@thinkpad>
+In-Reply-To: <20211206162510.35b85e74@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20211206113219.17640-1-amhamza.mgc@gmail.com>
+        <Ya4OP+jQYd/UwiQK@lunn.ch>
+        <20211206232953.065c0dc9@thinkpad>
+        <20211206162510.35b85e74@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:54:14PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.7 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+On Mon, 6 Dec 2021 16:25:10 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Hi Greg,
+> On Mon, 6 Dec 2021 23:29:53 +0100 Marek Beh=C3=BAn wrote:
+> > On Mon, 6 Dec 2021 14:21:03 +0100
+> > Andrew Lunn <andrew@lunn.ch> wrote:
+> >  =20
+> > > On Mon, Dec 06, 2021 at 04:32:19PM +0500, Ameer Hamza wrote:   =20
+> > > > Uninitialized err variable defined in mv88e6393x_serdes_power
+> > > > function may cause undefined behaviour if it is called from
+> > > > mv88e6xxx_serdes_power_down context.
+> > > >=20
+> > > > Addresses-Coverity: 1494644 ("Uninitialized scalar variable")
+> > > >=20
+> > > > Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> > > > ---
+> > > >  drivers/net/dsa/mv88e6xxx/serdes.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/m=
+v88e6xxx/serdes.c
+> > > > index 55273013bfb5..33727439724a 100644
+> > > > --- a/drivers/net/dsa/mv88e6xxx/serdes.c
+> > > > +++ b/drivers/net/dsa/mv88e6xxx/serdes.c
+> > > > @@ -1507,7 +1507,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_=
+chip *chip, int port, int lane,
+> > > >  			    bool on)
+> > > >  {
+> > > >  	u8 cmode =3D chip->ports[port].cmode;
+> > > > -	int err;
+> > > > +	int err =3D 0;
+> > > > =20
+> > > >  	if (port !=3D 0 && port !=3D 9 && port !=3D 10)
+> > > >  		return -EOPNOTSUPP;     =20
+> > >=20
+> > > Hi Marek
+> > >=20
+> > > This warning likely comes from cmode not being a SERDES mode, and that
+> > > is not handles in the switch statementing. Do we want an
+> > >=20
+> > > default:
+> > > 	err =3D EINVAL;
+> > >=20
+> > > ? =20
+> >=20
+> > currently all the .serdes_power() methods return 0 for non-serdes ports.
+> > This is because the way it is written, these methods are not called if
+> > there is not a serdes lane for a given port.
+> >=20
+> > For this issue with err variable undefined, to fix it we should simply
+> > set int err=3D0 at the beginning of mv88e6393x_serdes_power(), to make =
+it
+> > behave like other serdes_power() methods do in serdes.c. =20
+>=20
+> Any objections to using a default case in the switch statement, tho?
+> I agree with Andrew that default statement would make the reasoning
+> clearer than just setting the variable at the start of the function.
 
-Looking good.
+No objection, just that it should be done for all the serdes_power()
+methods in serdes.c.
 
-Run tested on:
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
-
-In addition build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
--- 
-Rudi
+Marek

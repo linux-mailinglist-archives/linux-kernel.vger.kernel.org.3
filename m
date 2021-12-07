@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E4E46B18E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C352346B193
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbhLGDmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S234369AbhLGDp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbhLGDmF (ORCPT
+        with ESMTP id S234282AbhLGDp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:42:05 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C4C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 19:38:35 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id y8so8497559plg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 19:38:35 -0800 (PST)
+        Mon, 6 Dec 2021 22:45:26 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279BC061746;
+        Mon,  6 Dec 2021 19:41:57 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id l24so23994291uak.2;
+        Mon, 06 Dec 2021 19:41:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hZC9U2jKVDuGs2UUeY7QPzNlMq63gmQj4X8NafYCGHc=;
-        b=d6HVa48Wqm+KA2IPDIC1ZMFLQ0i5eNSB1YLPZ87AUHCmC1+y/o6GL69VEgD7C3gsNU
-         lDnOVtvATEYAIsBDFpfBPVc0TJvRI8IHcL6XjIuwiUuG4ghVXpdpp8dWRrU0v4l7geAF
-         LFIa90vwzZhyxNsWaZZvD8rQzUJrMP4TKQLcIaqctndnE/E29FFT5VjnPVFpIshg6weG
-         NwMHMlEyv38zOzQl/FijI9RGv98sEvR4Jh13WyruuBRXQZ9mQB9g5YaKXPoMf7v3bYQP
-         +wS/YzukRdi6KjHhvbjRxldg6uciwbibb5ojTwyhXXlaABFjXu1FwZUKR4sSJoNI1nVX
-         eRfw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+WjCLq5iyPbhZoOVbo+nvWb9Wp/JdlLnIPR31C337C8=;
+        b=mZiJ1JWBFc1OWU2CphwdToWib2Fs7VeoMvRyd6OGAUdTYE7JuVX3y18pFnbL9d0SYR
+         qnkGAcFy4HWByFCmfen3y9B+gsUBd2Z4vpiAY8cExnT/X6456PRBzYpHz5lzE8xWOBLE
+         /Opn0hwl+/WEjMpD3cFa2zhWfG+2VM8IZAoAwDwKw4uis+328EKo2LCeWhkZKeKEAT9k
+         n3UXrAemi7nOM0I+lBZxbPlnpXZXWks7fOWw21TwqOUg6+DtBOdhLAZp7S1avVtceNWO
+         6hIZiEiJ4irNSwTkZ0WAOuxz06b1U7vebIqVBU87ZImLwZxD31NuI/0Q7jK48HpCxsG6
+         jbJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=hZC9U2jKVDuGs2UUeY7QPzNlMq63gmQj4X8NafYCGHc=;
-        b=Huv7wfK1W6EmJyg93VBenb3YbIHCuDD9CtJXWzjmm+kvR1mlWMCUlw6S0JIWX1aE9s
-         mbQLbR3fMv0At5f5nA6A7rGVs7xbEjADZZN+E+DzzZoUKO4Izl1YjK+ujJBrohLiP7GO
-         4nHF7ENGRovN58wytphZ8TiXkH1eVg2wSMOXBx5TZzoBl5otwYjzIXuAIa4FnJ88j2C3
-         L7AcajFdD8bp2S7ihLiykwBYUWJ7im0eqSn/Og8sueHO/qYE17UgEC6BqnJjaAGu/FTo
-         VkR5Y4fbobVFGpRrp5KHxciG/DCNOw2VLAuavoc0YeIOJs88pOsM00Yr36fV9cCApNsM
-         DqBQ==
-X-Gm-Message-State: AOAM533NQPznsFHzbcAWoD2mf6WJGe3NBpm8nI6spQxJVSQpCAGVlmBv
-        zQAG5X4AThJYGNCOTo0g65M=
-X-Google-Smtp-Source: ABdhPJzoVxIlMCOvxhNtZeJLmhVfUSWj4JcvwOUXLx6L25N67aQzjKxegOiAi3hbGkk7eDbB18hHCg==
-X-Received: by 2002:a17:90a:ec15:: with SMTP id l21mr3452892pjy.48.1638848314619;
-        Mon, 06 Dec 2021 19:38:34 -0800 (PST)
-Received: from localhost.localdomain ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id n3sm11052865pgc.76.2021.12.06.19.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 19:38:33 -0800 (PST)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     Jeremy Kerr <jk@ozlabs.org>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH 2/2] fsi: scom: Remove retries in indirect scoms
-Date:   Tue,  7 Dec 2021 14:08:11 +1030
-Message-Id: <20211207033811.518981-3-joel@jms.id.au>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211207033811.518981-1-joel@jms.id.au>
-References: <20211207033811.518981-1-joel@jms.id.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+WjCLq5iyPbhZoOVbo+nvWb9Wp/JdlLnIPR31C337C8=;
+        b=5b7/eFbJEOeL9ZNIuyZyAlpO52UWbGZLaf1bg2jfeQ4GVl9evTE4oJzyD9m1cSI9P/
+         DVPyXnB3/68ID+cisJSTq0toGmcK37hgecZUF+s5nTmSNshi7xyjIvERRCANsf5p2Cef
+         yJcC3400mMfT63OzCTqBEdCLqzU8xaCSeUwhc4bGPHFTFKW2b3+ptNWmWBzWiIc0kMa9
+         vZG8GfYGc42M+t896RoqpVEKnJpiKiqgug+D23TQaG32kECWATHpfW8SP/GLfqEUa5hf
+         WwNhY9eNgtRg13me9cjXzUQuEuMd15/WNRvBlpPMtNKPGOv6A2JBl3sGakYnONJo0rIu
+         Ki8w==
+X-Gm-Message-State: AOAM532t6a257QWxIXJkyZ7p6GAsPVSWe/vD+jR6CfEsncfkwhk3ZcV8
+        X+LhJLOcsUU2w0747qhtduReT7g/GebIhBzAkg0d1blr0+c=
+X-Google-Smtp-Source: ABdhPJx6RQZ3n6olyV3sCz9AbKmYBKhNAk0yZ773fOAPjf8R3q9XrHTi0PcC2P6/Zcqz0XN+NMNLS7cMSGYejK/S3F0=
+X-Received: by 2002:ab0:6813:: with SMTP id z19mr46872879uar.28.1638848516162;
+ Mon, 06 Dec 2021 19:41:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-6-f.fainelli@gmail.com>
+In-Reply-To: <20211206182616.2089677-6-f.fainelli@gmail.com>
+From:   Gregory Fong <gregory.0xf0@gmail.com>
+Date:   Mon, 6 Dec 2021 19:41:29 -0800
+Message-ID: <CADtm3G5Sh5sFhq7ye=aJbzd0v_FiqOPt_RAE3v_qWFQ+jH5bEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit f72ddbe1d7b7 ("fsi: scom: Remove retries") the retries were
-removed from get and put scoms. That patch missed the retires in get and
-put indirect scom.
+On Mon, Dec 6, 2021 at 10:26 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+> validation.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-For the same reason, remove them from the scom driver to allow the
-caller to decide to retry.
-
-This removes the following special case which would have caused the
-retry code to return early:
-
- -       if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
- -               return 0;
-
-I believe this case is handled.
-
-Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- drivers/fsi/fsi-scom.c | 41 +++++++++++++++--------------------------
- 1 file changed, 15 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index 3b427f7e9027..bcb756dc9866 100644
---- a/drivers/fsi/fsi-scom.c
-+++ b/drivers/fsi/fsi-scom.c
-@@ -145,7 +145,7 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
- 				   uint64_t addr, uint32_t *status)
- {
- 	uint64_t ind_data, ind_addr;
--	int rc, retries, err = 0;
-+	int rc, err;
- 
- 	if (value & ~XSCOM_DATA_IND_DATA)
- 		return -EINVAL;
-@@ -156,19 +156,14 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
- 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
- 		return rc;
- 
--	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
--		rc = __get_scom(scom, &ind_data, addr, status);
--		if (rc || (*status & SCOM_STATUS_ANY_ERR))
--			return rc;
-+	rc = __get_scom(scom, &ind_data, addr, status);
-+	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-+		return rc;
- 
--		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
--		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
--		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
--			return 0;
-+	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-+	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
- 
--		msleep(1);
--	}
--	return rc;
-+	return 0;
- }
- 
- static int put_indirect_scom_form1(struct scom_device *scom, uint64_t value,
-@@ -188,7 +183,7 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
- 				   uint64_t addr, uint32_t *status)
- {
- 	uint64_t ind_data, ind_addr;
--	int rc, retries, err = 0;
-+	int rc, err;
- 
- 	ind_addr = addr & XSCOM_ADDR_DIRECT_PART;
- 	ind_data = (addr & XSCOM_ADDR_INDIRECT_PART) | XSCOM_DATA_IND_READ;
-@@ -196,21 +191,15 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
- 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
- 		return rc;
- 
--	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
--		rc = __get_scom(scom, &ind_data, addr, status);
--		if (rc || (*status & SCOM_STATUS_ANY_ERR))
--			return rc;
--
--		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
--		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
--		*value = ind_data & XSCOM_DATA_IND_DATA;
-+	rc = __get_scom(scom, &ind_data, addr, status);
-+	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-+		return rc;
- 
--		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
--			return 0;
-+	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-+	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
-+	*value = ind_data & XSCOM_DATA_IND_DATA;
- 
--		msleep(1);
--	}
--	return rc;
-+	return 0;
- }
- 
- static int raw_put_scom(struct scom_device *scom, uint64_t value,
--- 
-2.33.0
-
+Acked-by: Gregory Fong <gregory.0xf0@gmail.com>

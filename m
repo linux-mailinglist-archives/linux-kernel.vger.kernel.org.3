@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AE346B80D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B33046B814
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbhLGJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S232430AbhLGJ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbhLGJzu (ORCPT
+        with ESMTP id S230351AbhLGJ4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:55:50 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1DBC061574;
-        Tue,  7 Dec 2021 01:52:20 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso2203019pjb.2;
-        Tue, 07 Dec 2021 01:52:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AggZV2m9pqXxnzeFQjDaBo+amTkLh6dgZ3TEXgFqWsI=;
-        b=jPzFBXftZgwL/u/b+dpxrnveAEUhqe17Ub1F3EsLObND8KZPmoZXS+h1g9Ruq/Bu7L
-         tLNRtcbwos5SL3ILogmtiGVDLuWmbYDovOQIj8h0KrecZB6XywdfJGzxuXp3cm49CntF
-         Jk6rmlAslHbwZL0qGkEG8PzNtA4npiECpTZnseuLzas7/McE1/9518jyPxcUXpd0UBMn
-         clWCY+dWgTHJqSHPRMvl+bpNLBoQcAgp1Rjic45gFMC2qrRgZUcTHyQzSXUZy+ylgAKR
-         8F/MufYIv8yDSndeqMx0hkkPivpVpNZNjnlg1zYd5gafOrb+DNYqW2tjdoCwZuguphN1
-         QCPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AggZV2m9pqXxnzeFQjDaBo+amTkLh6dgZ3TEXgFqWsI=;
-        b=T0c5F5uw16KIHkwsHWeGxX32yfrRi4zqUi8ILGGMskDKERVbdd8+9buv6p5vMx80v7
-         HB393WCCnIbHH1Nk4KrO4FMvhdRS1Xdv+eMECzqI3keb9KCkZiStGcYQrH1vEwXulHDS
-         EpHP2y5zQR99O6opGiEeccP3qkRVfHqqKDLbcssW8gq3MtszGMR3wW3WkmZO8IK9XQsE
-         sm+8rtFhULXoizVYI8CzWiVUbfRKBj47+LNpOjsHVgkr6dty5Gp/ILUo7D/S+MqhG4HR
-         xh8/dd9sK6sNFsegMAmtJDhaZ/M/ja5mZMCc6RxG5alFiLBwUbtVD3kNFla6zToWAJMi
-         gX9g==
-X-Gm-Message-State: AOAM53087a1+L8A4+w/hR7G3kCl+oTXsDmdTVur/Xi7HQEl4pBxs8Qbn
-        VWCOBtBfeYvH08kRA7AjHdBnhHXOT34=
-X-Google-Smtp-Source: ABdhPJwXzoP30B10NeSDpYRv0Zs/d3AIA+fHzA1z8/M0HJteC7Rk9UQ+4mEz3IzgEzEUPjf9d+EvWA==
-X-Received: by 2002:a17:903:2341:b0:142:1b63:98f3 with SMTP id c1-20020a170903234100b001421b6398f3mr49926698plh.49.1638870739547;
-        Tue, 07 Dec 2021 01:52:19 -0800 (PST)
-Received: from localhost ([47.88.60.64])
-        by smtp.gmail.com with ESMTPSA id n3sm12377373pgc.76.2021.12.07.01.52.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 Dec 2021 01:52:19 -0800 (PST)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] KVM: X86: Raise #GP when clearing CR0_PG in 64 bit mode
-Date:   Tue,  7 Dec 2021 17:52:30 +0800
-Message-Id: <20211207095230.53437-1-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Tue, 7 Dec 2021 04:56:18 -0500
+Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2FEC061574;
+        Tue,  7 Dec 2021 01:52:47 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id uX9QmxupeQyExuX9Tm6Meb; Tue, 07 Dec 2021 10:52:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1638870767; bh=xcBSzC84ENHyCJggetySzc9vha9XBNexfRqRB15Gr0I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From:
+         Subject;
+        b=fYXdARPWvbWyUoa+WHSTDA+oaH/drdJkCy5PSdAQ4B5s7nQkqv4t+GCV2aP69/JV7
+         W/B95/8Sxtn6Z2wltk04bZBLYmCyFIuB6YNHI6BFtlT53SnBYJMvClEdCHoYOBKoVl
+         7acl3PBotq7iZudfqgxxDBJzVSqMBY82kn4FmmhTvlhpTDfYKaq15aXSmYV3MPzWsd
+         i07VQSXNWyp7SW/U/B+x9Vkx/qjP2JO7G0wcNDuPZOu8OFyFlz9HxwSmoSm8dt3S+l
+         s8i0wfMJnV3XimrQJos0MnhViDKp0QXpXIsHLmmIAowmpKk47G7uhWQR5RYk9P8ud2
+         tdevhXN7TIUgg==
+Message-ID: <0d80df0a-0d20-5048-1e6d-ad913dc986c7@xs4all.nl>
+Date:   Tue, 7 Dec 2021 10:52:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH v2 2/4] media: v4l2-dev.c: Allow driver-defined entity
+ names
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+References: <20211207003840.1212374-1-ribalda@chromium.org>
+ <20211207003840.1212374-3-ribalda@chromium.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20211207003840.1212374-3-ribalda@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfN0iEp9/KQRCtLK0nAhbuSENAmF4dmRxs9kDaBs7lL1M8xywzvJSdFObfvYFkXtn2YmIorpJy1V4jfC3xEdo6ZkoeulI2cElfC3HwlkI+9mCwr9SOe/1
+ ubEM+17FmN4PxFvoECW5okgkdaYZ9uOovhtKMiuzeLAl23lWZsB4GUlraepRBue8gPR0CwdwvvIJllQK99gLbwcKrDdwrbUfOF7vUBwBywbNO0ocorNUhOGH
+ 0XzSWAsfdyNDXBlUM86M7UlmNdub5FVZeLf4wJvrNDdAzKDuXKRygnJqfajpgr2wp9rZLZCRIwX0ZEGj0J7pGXV9tyg5Cyl4zHVtevbqfzFZVJXonzPnnSH2
+ cScZsd70fPWtui9o2QxNYmkNWfsPl1Uj0+Zjkk61iktRRyH9iazGHb/ByfL+deojmm8hlXLsPjBDCYMlHOx8Kzg6Cz9bN8tf/Poo70qHsBY8WyAG9IQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <laijs@linux.alibaba.com>
+On 07/12/2021 01:38, Ricardo Ribalda wrote:
+> If the driver provides an name for an entity, use it.
+> This is particularly useful for drivers that export multiple video
+> devices for the same hardware (i.e. metadata and data).
+> 
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-In the SDM:
-If the logical processor is in 64-bit mode or if CR4.PCIDE = 1, an
-attempt to clear CR0.PG causes a general-protection exception (#GP).
-Software should transition to compatibility mode and clear CR4.PCIDE
-before attempting to disable paging.
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
----
- arch/x86/kvm/x86.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 00f5b2b82909..78c40ac3b197 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -906,7 +906,8 @@ int kvm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
- 	    !load_pdptrs(vcpu, kvm_read_cr3(vcpu)))
- 		return 1;
- 
--	if (!(cr0 & X86_CR0_PG) && kvm_read_cr4_bits(vcpu, X86_CR4_PCIDE))
-+	if (!(cr0 & X86_CR0_PG) &&
-+	    (is_64_bit_mode(vcpu) || kvm_read_cr4_bits(vcpu, X86_CR4_PCIDE)))
- 		return 1;
- 
- 	static_call(kvm_x86_set_cr0)(vcpu, cr0);
--- 
-2.19.1.6.gb485710b
+	Hans
+
+> ---
+>  drivers/media/v4l2-core/v4l2-dev.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index d03ace324db0..4c00503b9349 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -832,7 +832,9 @@ static int video_register_media_controller(struct video_device *vdev)
+>  	}
+>  
+>  	if (vdev->entity.function != MEDIA_ENT_F_UNKNOWN) {
+> -		vdev->entity.name = vdev->name;
+> +		/* Use entity names provided by the driver, if available. */
+> +		if (!vdev->entity.name)
+> +			vdev->entity.name = vdev->name;
+>  
+>  		/* Needed just for backward compatibility with legacy MC API */
+>  		vdev->entity.info.dev.major = VIDEO_MAJOR;
+> 
 

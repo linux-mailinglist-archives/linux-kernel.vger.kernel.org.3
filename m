@@ -2,63 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237AC46C1FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2C746C27E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbhLGRo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbhLGRo6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:44:58 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C81C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:41:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2F5C5CE1A08
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:41:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7196C341C7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:41:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="qEBrot7k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1638898882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GdyZO4yPBUkXCcWoIcrN45a9rRuGd50+yXWo0OuMTyQ=;
-        b=qEBrot7k/9fVRwkznbZ7kcTy12hb4rEvs9QlQW3S5axeor1HRxt/r/eQBerggC34VNnW+M
-        Be9LB5nUbrcNNpRB692NPDLd+TlGezCtWvsYIn4qNruM8CSiluLUq14rsAalrAwOHeSlFD
-        3i7uo02E2kXM7ZEY0Nt51tHd6jlU8e0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 81313d4d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 7 Dec 2021 17:41:22 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id d10so43167911ybn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:41:21 -0800 (PST)
-X-Gm-Message-State: AOAM532G3tkopAImlTQ1v0MriyS4p2R41Vlkga11njiC7n6T31GzO8d2
-        ShOROCltVGD0op6aAoy44ULRvygJrSL32GN6FD8=
-X-Google-Smtp-Source: ABdhPJyg/YyqxBkm+EiVNxWEevqJ1KPYNyac2UmV7OyAP/kb7CGatkniEAf4k/v6F78XW0VzX/JF8VEu8YHygCpHMcA=
-X-Received: by 2002:a25:d393:: with SMTP id e141mr54622006ybf.255.1638898880973;
- Tue, 07 Dec 2021 09:41:20 -0800 (PST)
+        id S240534AbhLGSRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:17:05 -0500
+Received: from mga06.intel.com ([134.134.136.31]:57593 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235897AbhLGSRE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:17:04 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298441030"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="298441030"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:42:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="542885356"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 09:42:10 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mueTh-000Mp3-Ub; Tue, 07 Dec 2021 17:42:09 +0000
+Date:   Wed, 8 Dec 2021 01:41:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390
+ ZSTD_decompressSequences() warn: inconsistent indenting
+Message-ID: <202112080125.NkeawIus-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211207121737.2347312-1-bigeasy@linutronix.de> <20211207121737.2347312-3-bigeasy@linutronix.de>
-In-Reply-To: <20211207121737.2347312-3-bigeasy@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 7 Dec 2021 18:41:10 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rYB7uii-HgorYmuEytoJ3bEyuD2FKkqP_oYqrAUf8cvg@mail.gmail.com>
-Message-ID: <CAHmME9rYB7uii-HgorYmuEytoJ3bEyuD2FKkqP_oYqrAUf8cvg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] irq: Remove unsued flags argument from __handle_irq_event_percpu().
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to the crng/random.git tree, thanks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
+date:   4 weeks ago
+config: x86_64-randconfig-m001-20211206 (https://download.01.org/0day-ci/archive/20211208/202112080125.NkeawIus-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+New smatch warnings:
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390 ZSTD_decompressSequences() warn: inconsistent indenting
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1414 ZSTD_decompressSequencesLong() warn: inconsistent indenting
+
+Old smatch warnings:
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/misc.c:292 parse_elf() warn: ignoring unreachable code.
+
+vim +1390 arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c
+
+  1369	
+  1370	typedef size_t (*ZSTD_decompressSequences_t)(
+  1371	                            ZSTD_DCtx* dctx,
+  1372	                            void* dst, size_t maxDstSize,
+  1373	                            const void* seqStart, size_t seqSize, int nbSeq,
+  1374	                            const ZSTD_longOffset_e isLongOffset,
+  1375	                            const int frame);
+  1376	
+  1377	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG
+  1378	static size_t
+  1379	ZSTD_decompressSequences(ZSTD_DCtx* dctx, void* dst, size_t maxDstSize,
+  1380	                   const void* seqStart, size_t seqSize, int nbSeq,
+  1381	                   const ZSTD_longOffset_e isLongOffset,
+  1382	                   const int frame)
+  1383	{
+  1384	    DEBUGLOG(5, "ZSTD_decompressSequences");
+  1385	#if DYNAMIC_BMI2
+  1386	    if (dctx->bmi2) {
+  1387	        return ZSTD_decompressSequences_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1388	    }
+  1389	#endif
+> 1390	  return ZSTD_decompressSequences_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1391	}
+  1392	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG */
+  1393	
+  1394	
+  1395	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT
+  1396	/* ZSTD_decompressSequencesLong() :
+  1397	 * decompression function triggered when a minimum share of offsets is considered "long",
+  1398	 * aka out of cache.
+  1399	 * note : "long" definition seems overloaded here, sometimes meaning "wider than bitstream register", and sometimes meaning "farther than memory cache distance".
+  1400	 * This function will try to mitigate main memory latency through the use of prefetching */
+  1401	static size_t
+  1402	ZSTD_decompressSequencesLong(ZSTD_DCtx* dctx,
+  1403	                             void* dst, size_t maxDstSize,
+  1404	                             const void* seqStart, size_t seqSize, int nbSeq,
+  1405	                             const ZSTD_longOffset_e isLongOffset,
+  1406	                             const int frame)
+  1407	{
+  1408	    DEBUGLOG(5, "ZSTD_decompressSequencesLong");
+  1409	#if DYNAMIC_BMI2
+  1410	    if (dctx->bmi2) {
+  1411	        return ZSTD_decompressSequencesLong_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1412	    }
+  1413	#endif
+> 1414	  return ZSTD_decompressSequencesLong_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1415	}
+  1416	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT */
+  1417	
+  1418	
+  1419	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

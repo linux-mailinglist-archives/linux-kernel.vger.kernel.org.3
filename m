@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2319F46C6E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A17246C6E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242059AbhLGVsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:48:16 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:53866 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbhLGVsG (ORCPT
+        id S242074AbhLGVs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:48:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48754 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241958AbhLGVsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:48:06 -0500
+        Tue, 7 Dec 2021 16:48:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 11FB7CE1E7C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34CBC341E9;
-        Tue,  7 Dec 2021 21:44:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72F75B81E89
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD98C341EC;
+        Tue,  7 Dec 2021 21:44:32 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1muiGF-000I0m-3e;
+        id 1muiGF-000I1L-9Q;
         Tue, 07 Dec 2021 16:44:31 -0500
-Message-ID: <20211207214430.947502966@goodmis.org>
+Message-ID: <20211207214431.133392002@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 07 Dec 2021 16:44:17 -0500
+Date:   Tue, 07 Dec 2021 16:44:18 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-next][PATCH 11/13] tracing/uprobes: Use trace_event_buffer_reserve() helper
+        Qiujun Huang <hqjagain@gmail.com>
+Subject: [for-next][PATCH 12/13] tracing: Fix synth_event_add_val() kernel-doc comment
 References: <20211207214406.148423650@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -39,58 +39,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+From: Qiujun Huang <hqjagain@gmail.com>
 
-To be consistent with kprobes and eprobes, use
-trace_event_buffer_reserver() and trace_event_buffer_commit(). This will
-ensure that any updates to trace events will also be implemented on uprobe
-events.
+It's named field here.
 
-Link: https://lkml.kernel.org/r/20211206162440.69fbf96c@gandalf.local.home
+Link: https://lkml.kernel.org/r/20210516022410.64271-1-hqjagain@gmail.com
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_uprobe.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ kernel/trace/trace_events_synth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index f5f0039d31e5..a4d5c624fe79 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -949,8 +949,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
- 				struct trace_event_file *trace_file)
- {
- 	struct uprobe_trace_entry_head *entry;
--	struct trace_buffer *buffer;
--	struct ring_buffer_event *event;
-+	struct trace_event_buffer fbuffer;
- 	void *data;
- 	int size, esize;
- 	struct trace_event_call *call = trace_probe_event_call(&tu->tp);
-@@ -965,12 +964,10 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
- 
- 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
- 	size = esize + tu->tp.size + dsize;
--	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
--						call->event.type, size, 0);
--	if (!event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
-+	if (!entry)
- 		return;
- 
--	entry = ring_buffer_event_data(event);
- 	if (is_ret_probe(tu)) {
- 		entry->vaddr[0] = func;
- 		entry->vaddr[1] = instruction_pointer(regs);
-@@ -982,7 +979,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
- 
- 	memcpy(data, ucb->buf, tu->tp.size + dsize);
- 
--	event_trigger_unlock_commit(trace_file, buffer, event, entry, 0);
-+	trace_event_buffer_commit(&fbuffer);
- }
- 
- /* uprobe handler */
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index 22db3ce95e74..98e002648994 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -1978,7 +1978,7 @@ EXPORT_SYMBOL_GPL(synth_event_add_next_val);
+ /**
+  * synth_event_add_val - Add a named field's value to an open synth trace
+  * @field_name: The name of the synthetic event field value to set
+- * @val: The value to set the next field to
++ * @val: The value to set the named field to
+  * @trace_state: A pointer to object tracking the piecewise trace state
+  *
+  * Set the value of the named field in an event that's been opened by
 -- 
 2.33.0

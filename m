@@ -2,114 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D32946B208
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F39846B20D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbhLGE7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbhLGE7n (ORCPT
+        id S230027AbhLGFGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:06:50 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48378 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhLGFGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:59:43 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560E0C061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:56:14 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v23so9375312pjr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 20:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Vfk7CqoztkD1HFR8OkKYPFrRCf+3sHfsZdA7qyQ/7N0=;
-        b=EcOcbfCOFRfSCWQ46N29k7xqIx+75pRxi1/vKhuibKum+tm4X1t/qcoZFgUwCFhTys
-         D8vGkMMpTqY6Gu7aJ1uJNtkkDeZxFNes3Z2qquBc5gO32LtUwVgvQLUfbS6zCCBsehfD
-         jWUPZkF0YAGCIGc439scNe2cLzA8wo/SwBpIc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Vfk7CqoztkD1HFR8OkKYPFrRCf+3sHfsZdA7qyQ/7N0=;
-        b=TaSzGDUFv9tZerwSM5upYf96LZ4gIl/BqWMAajGDbVjopFeoc3FBgp+7Tu8AIT8ZAy
-         208qBJUdjPuIOdvrrL4XJr1QOni5etRV58cyK3nvb+e8ubFy/6+snfiOkJLkn1sI4Qpf
-         GsEkyOsoApv3wHW10Ibz3l7D35DpfMF6xvzOcBIVH1FAVE6wGmFV3/j2rIJ1GBVUt85H
-         odGEIixoH0p/XNsOU7woNRyP00pzl/9UfC0Q9QmPjS22C1557gPOMdsBYSjZEIKXCidl
-         Sf4r+tTixgSMLNqokTYpcXzbdH2YPfCaNhAzEg++xLws9qprHy585ktX23tXqfOEEyrR
-         9G/w==
-X-Gm-Message-State: AOAM532aHGgZTfx3tOPodzIcp8hlRCxTu2gfRnpJ6hukWfJjYVhSOqXV
-        v+CpnEaYX3cO4gj08F0w62qnpw==
-X-Google-Smtp-Source: ABdhPJyKERAriy5ko5uP7qvV/cSmj/QqxhbhuhGGsvjUxznfwAESoUpWMKn4Z5RZXnqAQOczzv27+g==
-X-Received: by 2002:a17:902:b08a:b0:142:51be:57e2 with SMTP id p10-20020a170902b08a00b0014251be57e2mr48470411plr.53.1638852973792;
-        Mon, 06 Dec 2021 20:56:13 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t67sm13888134pfd.24.2021.12.06.20.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 20:56:13 -0800 (PST)
-Date:   Mon, 6 Dec 2021 20:56:12 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <202112062004.EFB6BFE1@keescook>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
- <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
- <CAHk-=wjXmGt9-JQp-wvup4y2tFNUCVjvx2W7MHzuAaxpryP4mg@mail.gmail.com>
- <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk>
- <202112061247.C5CD07E3C@keescook>
- <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
- <202112061455.F23512C3CB@keescook>
- <CAHk-=whLU+dk7EmPu5UC6DDSd76_dO4bVd4BkvxmR4W5-mmAgg@mail.gmail.com>
+        Tue, 7 Dec 2021 00:06:49 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B7535He028160;
+        Mon, 6 Dec 2021 23:03:05 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638853385;
+        bh=gS5qRRdJFapqcyUi0/EkgP/aZO8T3aw4DbK7IE3Zxc0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Pz2Snm2610uopRqDqLRpN5SKVdG5MH/jaWAGz2NteDWtPRBkZO0QLedjCjBQ51gWT
+         B6+OSjTZXDzzXQy0lkGph7eppOO7FfN4QV4y1P/lQ84QuD6qvP7Y/YnWaP1mrlWbuf
+         TFWo9US/oTwib6iI7Ajz5odxyAonSyHiOj1W+k+8=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B75359M069532
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Dec 2021 23:03:05 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
+ Dec 2021 23:03:04 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 6 Dec 2021 23:03:04 -0600
+Received: from [172.24.145.75] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B7532JM129163;
+        Mon, 6 Dec 2021 23:03:02 -0600
+Subject: Re: [PATCH v4] ASoC: dt-bindings: davinci-mcasp: convert McASP
+ bindings to yaml schema
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        <robh+dt@kernel.org>
+CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211203120243.24173-1-j-choudhary@ti.com>
+ <ed6c9be9-32d3-719a-ee0d-608b228f36b3@gmail.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+Message-ID: <20449d7b-0524-a8df-7852-a4c495157682@ti.com>
+Date:   Tue, 7 Dec 2021 10:33:01 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whLU+dk7EmPu5UC6DDSd76_dO4bVd4BkvxmR4W5-mmAgg@mail.gmail.com>
+In-Reply-To: <ed6c9be9-32d3-719a-ee0d-608b228f36b3@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:13:00PM -0800, Linus Torvalds wrote:
-> On Mon, Dec 6, 2021 at 3:28 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > I'm not arguing for refcount_t -- I'm arguing for an API that isn't a
-> > regression of features that have been protecting the kernel from bugs.
+Hi,
+
+On 04/12/21 1:50 pm, Péter Ujfalusi wrote:
+> Hi,
 > 
-> Maybe somebody could actually just fix refcount_t instead. Somebody
-> who cares about that currently horrendously bad interface.
+> On 03/12/2021 14:02, Jayesh Choudhary wrote:
+>> Convert the bindings for McASP controllers for TI SOCs from txt
+>> to YAML schema.
+>>
+>> Adds additional properties 'clocks', 'clock-names', 'power-domains',
+>> '#sound-dai-cells' and 'port' which were missing from txt file.
+>> Removes properties 'sram-size-playback' and 'sram-size-capture'
+>> since they are not used.
+>> Adds 'dmas' and 'dma-names' in the example which were missing from
+>> the txt file.
+>> Changes 'interrupts' and 'interrupt-names' from optional to
+>> required properties.
+>> Changes 'op-mode', 'serial-dir' and 'tdm-slots' to optional properties
+>> as they are not needed if the McASP is used only as GPIO.
+>>
+>> Adds the yaml file in the 'MAINTAINERS' under the heading 'TEXAS
+>> INSTRUMENTS ASoC DRIVERS'
+>>
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>> Changelog:
+>> v4:
+>> - changes the commit message
+>> - adds type and description to relevant properties
+>> - changes maxItems for 'serial-dir'
+>> - removes properties 'sram-size-playback' and 'sram-size-capture'
+>>    as they are not used
+>> - removes 'function-gpios'
+>> - removes 'num-serializer'
+>> - marks 'tdm-slots', 'serial-dir' and 'op-mode' as optional properties
+>> - adds the yaml file in MAINTAINERS
+>>
 > 
-> Fix it to not do the fundamentally broken saturation that actively
-> destroys state: fix it to have a safe "try to increment", instead of
-> an unsafe "increment and do bad things".
+> ...
+> 
+>> +  reg:
+>> +    minItems: 1
+>> +    items:
+>> +      - description: main registers
+> 
+> The TRM refers to this area as CFG registers
+> 
+>> +      - description: data port register
+> 
+> Data registers
+> 
+>> +
+>> +  op-mode:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: I2S - 0 or DIT - 1 operation mode
+> 
+> 0 - I2S, or 1 - DIT operation mode
+> 
 
-There would need to be a pretty hefty transition -- there are a lot of
-refcount_inc() uses that would need checking and error handling (which
-might not be sane to add to ancient drivers):
+I will change the description for 'reg' and 'op-mode'.
 
-      2 block
-      2 crypto
-      2 ipc
-      2 virt
-      3 mm
-      4 sound
-      5 rust
-     10 arch
-     13 security
-     31 kernel
-     88 include
-    192 fs
-    192 net
-    358 drivers
+>> +    enum:
+>> +      - 0
+>> +      - 1
+>> +
+>> +  tdm-slots:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: number of channels over one serializer
+>> +    maxItems: 1
+> 
+> and it has to be between 2 and 32, ignored in DIT mode (384 slots)
+> 
 
-refcount_inc_not_zero() already uses __must_check, etc.
+Will add minimum and maximum. Should this be added as a conditional
+property when op-mode is 0 (I2S mode) and mark it as required?
 
-I'm not afraid of giant transitions, but this could be pretty tricky.
-I'm open to ideas. Maybe a treewide change of refcount_inc() ->
-refcount_inc_saturating() and then start fixing all the _unsafe() cases
-where a sensible error path could be created and tested?
+>> +
+>> +  serial-dir:
+>> +    description:
+>> +      A list of serializer configuration
+>> +      Entry is indication for serializer pin direction
+>> +      0 - Inactive, 1 - TX, 2 - RX
+>> +      All AXR pins should be present in the array even if inactive
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    minItems: 1
+>> +    maxItems: 25
+>> +    items:
+>> +      minimum: 0
+>> +      maximum: 2
+>> +      default: 0
+> 
+> There is no default as all pins must be accounted for.
+> 
 
--- 
-Kees Cook
+Okay. Will remove it.
+
+>> +
+>> +  tx-num-evt:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: configures WFIFO threshold
+> 
+> 0 disables the FIFO use
+> If the property is missing, it also disables the FIFO use.
+> 
+
+Will mention this in the description of both tx/rx-num-evt.
+
+>> +    maxItems: 1
+>> +
+>> +  rx-num-evt:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: configures RFIFO threshold
+>> +    maxItems: 1
+
+>> +
+>> +  interrupts:
+>> +    anyOf:
+>> +      - minItems: 1
+>> +        items:
+>> +          - description: TX FIFO interrupt
+>> +          - description: RX FIFO interrupt
+>> +      - items:
+>> +          - description: common FIFO interrupt
+> 
+> These has nothing to do with FIFO, they are just transmit, receive and
+> common or combined
+> 
+
+Okay.
+
+>> +
+>> +  port:
+>> +    description: connection for when McASP is used via graph card
+>> +    type: object
+> 
+> I understand that it can be present under the mcasp node as it is part
+> of the graph card binding (or a card binding using graph).
+> I mean if a new card binding comes around then we need to document it
+> here as well?
+> 
+
+Specific properties are not marked for the port. So it should not be an
+issue. Other alternative is to mark the additional properties as true
+but that is not preferred.
+
+Peter,
+Any other changes I should make?
+
+>> +
+> 

@@ -2,161 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C848D46C853
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6AC46C858
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbhLGXnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbhLGXnF (ORCPT
+        id S238399AbhLGXpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:45:18 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:45995 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238306AbhLGXpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:43:05 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7BDC061574;
-        Tue,  7 Dec 2021 15:39:34 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id 8so782006qtx.5;
-        Tue, 07 Dec 2021 15:39:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G7jAqXCltz46U/cxmlDjDs2z0XdoZvQMLqREmYtXQOI=;
-        b=CtWSug85RcxBo9oM69nbuLsNC04Amu0JRXcBZcYJE6uNnYpl63KWJaZmKdA8lZVX2j
-         kRknS3fJvA39WwNvqu2AY7tnrX15RgFIQTfukbDnKRq3qbCDh2SlmlhtvYK1qVIGCqND
-         jh/IyCmGNy23Kau6iVu4z3VpqmgY4GRR3Jlucsi5xwlGWpYG1jOlxMEVCp7labkZEAvU
-         9+TJLam4gYicI0CEtcAX6RX+U3sODY4F8BOBJBGkb8Weo8Rr6i7O+i/3HTwa1RCCPyKK
-         2ddzals126BaEpbstjSnTSah7q46CczBjgcknynFDbJopGvOpq6+uguPcWVqZnMtOzyD
-         OlLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G7jAqXCltz46U/cxmlDjDs2z0XdoZvQMLqREmYtXQOI=;
-        b=eJBxdbjKn+QDn12Trn5pX8Y5lUYpP5WaVFEUVuZwFEiv8mjz2B68QxHaByDWPI/60Y
-         /D3pKW/RcX9SFSnHilDJizrTF4U/7nT/zhyMhuYicUKTwkZ2/Z7yicEHpEu91pyYM+S3
-         CJcci5fd+ShyADRWV9oXl34XGcedDNO5SJgTDPmXeRRue1vYwj/AZAcnOQYCFhxK9ley
-         kub5VYW2ToIj9PRiTHBtC8hnHZBppEK5nd9CcWOjkDnRHt8EPF9vF1sK37A0O/No9es+
-         tNX2XD+n3KjX1J3kWyZK42Qe/STdQDmt0k1VVm4EyorBoY5as53IV+BIfJFfLOF4EB1r
-         pxag==
-X-Gm-Message-State: AOAM532mHmrQb3KZSpsNLkil1QLOe/Dl0TS2q/pL+WQZJFtScOK20VQB
-        jwvVnr8Y9lUNmQjtsPYqRC83htrd2lM=
-X-Google-Smtp-Source: ABdhPJwP9pYPFehahM4GW7LIPOaQ8/j5trXi5AbOSzoUYm2kf3SNOzf7jPRqJwd9WnGp8XnDvYRouA==
-X-Received: by 2002:ac8:7252:: with SMTP id l18mr3574791qtp.9.1638920373148;
-        Tue, 07 Dec 2021 15:39:33 -0800 (PST)
-Received: from localhost ([66.216.211.25])
-        by smtp.gmail.com with ESMTPSA id a3sm802013qtx.59.2021.12.07.15.39.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 15:39:32 -0800 (PST)
-Date:   Tue, 7 Dec 2021 15:39:30 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
- sizes
-Message-ID: <20211207233930.GA3955@lapt>
-References: <20211203100846.3977195-1-keescook@chromium.org>
- <YaoN6wnNezMvyyd5@smile.fi.intel.com>
- <20211203182638.GA450223@lapt>
- <202112031450.EFE7B7B4A@keescook>
+        Tue, 7 Dec 2021 18:45:16 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638920505; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=DKZYj2D2ozIike5afQtrah0cMUGtTdAKUDAOIu8jYCg=; b=H4Qk6yngVWJ4uOB8/ir/mN8N9m8O8uBwEfCGHtNjeB2tGQH7MF0U12oA+slqTInRuHJ4qPb2
+ tBcH2nNOJHsWmhCwJb1x0mQyLFdZRGzBUZEzc4M/9RwBiFdmNq0KKS0e1+6oIQFgU9+qIaap
+ wSU8Ei5jZV/FRA2U9gqmpl62CAo=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 61aff1384fca5da46df1b36b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Dec 2021 23:41:44
+ GMT
+Sender: hemantk=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B3D60C43616; Tue,  7 Dec 2021 23:41:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.103.130] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: hemantk)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C55B2C4338F;
+        Tue,  7 Dec 2021 23:41:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C55B2C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH] bus: mhi: core: Add support for forced PM resume
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     bbhatt@codeaurora.org, loic.poulain@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        kvalo@codeaurora.org, stable@vger.kernel.org,
+        Pengyu Ma <mapengyu@gmail.com>
+References: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
+From:   Hemant Kumar <hemantk@codeaurora.org>
+Message-ID: <7eb05d7c-ddda-5ec1-73a0-e696d2b5a236@codeaurora.org>
+Date:   Tue, 7 Dec 2021 15:41:42 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112031450.EFE7B7B4A@keescook>
+In-Reply-To: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 03:01:30PM -0800, Kees Cook wrote:
-> On Fri, Dec 03, 2021 at 10:26:38AM -0800, Yury Norov wrote:
-> > On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
-> > > On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
-> > > > It's common practice to cast small variable arguments to the find_*_bit()
-> > 
-> > Not that common - I found 19 examples of this cast, and most of them
-> > are in drivers.
+Hi Mani,
+
+On 12/6/2021 8:10 AM, Manivannan Sadhasivam wrote:
+> From: Loic Poulain <loic.poulain@linaro.org>
 > 
-> I find 51 (most are in the for_each_* wrappers):
+> For whatever reason, some devices like QCA6390, WCN6855 using ath11k
+> are not in M3 state during PM resume, but still functional. The
+> mhi_pm_resume should then not fail in those cases, and let the higher
+> level device specific stack continue resuming process.
 > 
-> $ RE=$(echo '\b('$(echo $(grep -E '^(unsigned long find|#define for_each)_' include/linux/find.h | cut -d'(' -f1 | awk '{print $NF}') | tr ' ' '|')')\(.*\(unsigned long \*\)')
-> $ git grep -E "$RE" | wc -l
-> 51
+> Add a new parameter to mhi_pm_resume, to force resuming, whatever the
+> current MHI state is. This fixes a regression with non functional
+> ath11k WiFi after suspend/resume cycle on some machines.
 > 
-> > > > This leads to the find helper dereferencing a full unsigned long,
-> > > > regardless of the size of the actual variable. The unwanted bits
-> > > > get masked away, but strictly speaking, a read beyond the end of
-> > > > the target variable happens. Builds under -Warray-bounds complain
-> > > > about this situation, for example:
-> > > > 
-> > > > In file included from ./include/linux/bitmap.h:9,
-> > > >                  from drivers/iommu/intel/iommu.c:17:
-> > > > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
-> > > > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
-> > > >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
-> > > >       |                                     ^~~~~
-> > > > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
-> > > >  2115 |         int pds, max_pde;
-> > > >       |                  ^~~~~~~
-> > 
-> > The driver should be fixed. I would suggest using one of ffs/fls/ffz from
-> > include/asm/bitops.h
+> Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
 > 
-> I don't think it's a good API design to make developers choose between
-> functions based on the size of their target.
-
-Bitmap functions work identically for all sizes from 0 to INT_MAX - 1. 
-Users don't 'choose between functions based on the size of their target'.
-
-Can you explain more what you mean?
-
-> This also doesn't work well
-> for the main problem which is the for_each_* usage.
-
-for_each_*_bit() requires a pointer to an array of unsigned longs. If
-it's provided with something else, this is an error on a caller side.
-
-> The existing API is totally fine: it already diverts the constant
-> expression small sizes to ffs/etc, and this change is only to that
-> part.
-
-If you want to allow passing types other than unsigned long *, you need
-to be consistent and propagate this change to other bitmap functions.
-This is much more work than just fixing at most 48 wrong callers.
-(48 because I inspected some callers manually, and they are fine.)
-
-> It's just changing the C description of how to get at the desired
-> bits, so that -Warray-bounds doesn't (correctly) get upset about the
-> wider-than-underlying-type OOB read.
-
-As you said, -Warray-bounds _correctly_ gets upset about the dangerous
-typecasting. What suggested here is an attempt to shut down the
-compiler warning with the cost of complication of the code and
-possible maintenance issues. The correct example of handling tiny
-bitmaps can be found for example in drivers/mtd/nand/raw/ams-delta.c:
-
-        static void gpio_nand_io_write(struct gpio_nand *priv, u8 byte)
-        {
-                struct gpio_descs *data_gpiods = priv->data_gpiods;
-                DECLARE_BITMAP(values, BITS_PER_TYPE(byte)) = { byte, };
-
-                ...
-        }
-
-> This is one of the last issues with -Warray-bounds, which has proven to
-> be an effective compiler flag for finding real bugs. Since this patch
-> doesn't change performance, doesn't change the resulting executable
-> instructions, doesn't require any caller changes, and helps gain global
-> -Warray-bounds coverage, I'm hoping to convince you of its value. :)
-
-I'm all for enabling -Warray-bounds, but the warnings that it spots
-only convinced me that bitmap API is used wrongly, and it should be
-fixed. Can you please share the list of bitmap-related issues found
-with -Warray-bounds that concerned you? I'll take a look and try to
-make a patch that fixes it.
+> Cc: stable@vger.kernel.org #5.13
+> Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
+> Reported-by: Kalle Valo <kvalo@codeaurora.org>
+> Reported-by: Pengyu Ma <mapengyu@gmail.com>
+> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> [mani: Added comment, bug report, added reported-by tags and CCed stable]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/bus/mhi/core/pm.c             | 10 +++++++---
+>   drivers/bus/mhi/pci_generic.c         |  2 +-
+>   drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
+>   include/linux/mhi.h                   |  3 ++-
+>   4 files changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
+> index 7464f5d09973..4ddd266e042e 100644
+> --- a/drivers/bus/mhi/core/pm.c
+> +++ b/drivers/bus/mhi/core/pm.c
+> @@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
+>   }
+>   EXPORT_SYMBOL_GPL(mhi_pm_suspend);
+>   
+> -int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
+> +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
+>   {
+>   	struct mhi_chan *itr, *tmp;
+>   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+> @@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
+>   	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
+>   		return -EIO;
+>   
+> -	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
+> -		return -EINVAL;
+> +	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
+	in case if mhi_get_mhi_state(mhi_cntrl) returns SYS_ERR (assuming while 
+doing this check SYS_ERR is set) do we still want to continue pm resume 
+when force is true? Just want to make sure SYS_ERR handling with and 
+without this change remains the same or atleast does not cause any 
+regression with this change. or if we need to continue pm resume only 
+for MHI_STATE_RESET when MHI_STATE_M3 is not set?
+> +		dev_warn(dev, "Resuming from non M3 state (%s)\n",
+> +			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
+> +		if (!force)
+> +			return -EINVAL;
+> +	}
+>   
+[..]
 
 Thanks,
-Yury
+Hemant
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+Forum, a Linux Foundation Collaborative Project

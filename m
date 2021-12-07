@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A14046C71B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF3A46C71F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242044AbhLGWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:11:49 -0500
-Received: from mga18.intel.com ([134.134.136.126]:10367 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237622AbhLGWLr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:11:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224565675"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="224565675"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 14:08:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="611853386"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 07 Dec 2021 14:08:15 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muidC-000N0v-KZ; Tue, 07 Dec 2021 22:08:14 +0000
-Date:   Wed, 8 Dec 2021 06:07:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [cel:topic-rpc-with-tls 8/8] net/sunrpc/svcauth.c:39:10: error:
- 'RPC_AUTH_TLS' undeclared here (not in a function); did you mean
- 'RPC_AUTH_GSS'?
-Message-ID: <202112080624.nH4NZavB-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S242065AbhLGWNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237622AbhLGWNI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:13:08 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856A3C061756
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:09:37 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id j9-20020a17090a31c900b001abe663b508so2460220pjf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:09:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=H9d3b7ySfPUUkyj8WwGO7YINvSuZ61NMD+2fSI/NRIQ=;
+        b=kavNo4w//awmdXO5HpD/p+k8j6D9sG5ed5rnhy6iRwkpibbidw6pxcuAlSF08ANNHS
+         AuzRlasPHS5c+2qkBbl5iC6XWKTL0VtiGFM5Y9jNipsSu8Mt+rVitZBMQ/C3fdD0W9no
+         Gd7C9tHsD6AdQ40xfJlyUtRCxUb240E1fWiSd3/AFwMrxRZf1GTcv21jiPBDjdKx8EGV
+         KcwMnMhh205HO6lvj5rdnxQA/wEvoQYWKnoJjlQ3J8fRr9WYhaGxfBBulxET05qUcXTi
+         KL+VA8Iu0l+JerJE1K4vUqVNe66UTgxBGsyfCm0HJDihzF2XKvzmMO3k3OgspObBZ+VL
+         p8+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=H9d3b7ySfPUUkyj8WwGO7YINvSuZ61NMD+2fSI/NRIQ=;
+        b=y/xr468gRV7xtDH0UaMMUitJr41h4F+FqEXUyTH5WQpSGPRFWS4dVVtkNWX5DPvDxC
+         1WHlAaGtlmdwR97onHrRD7GG4zB4uIAHj369UJbPu+6YE/j6JX3i4GITAPPVquuIfOtl
+         EkKuTSsnd24FiEH+Bdy3se9AF5+F32drb1Pw40rq/03/B1sY+Z5gnc4bJZu41Q7lRTmP
+         51uHMj9Zuukiiwu1gSSad72PDNUwB3OV5cHOOak+c07UigIoCPPzCNbDxhUEsgM+O9Kt
+         i40Df+8VAG09eNb6pJ1IigjoOkYa2HcodCAKCnqPIqwWfw9Z4ZqS7OpnuN3LL19bpqDj
+         FXew==
+X-Gm-Message-State: AOAM531+AS/ZnYux9pnSnUZpd5s86eDmNLtA0n9DwRBVrnD+woZBAn9A
+        c9g2gSnhEAZJEI2JDry1Okm5vPHgyhA=
+X-Google-Smtp-Source: ABdhPJzYigwKgXuf4QjKrxXjkaHgzzD+/k5Wx9tZeXK3ngvuCH9gJt9PRu0YFmMirUBJBLh3UP201FwOiaY=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4a0e:: with SMTP id
+ kk14mr2401871pjb.42.1638914976806; Tue, 07 Dec 2021 14:09:36 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue,  7 Dec 2021 22:09:18 +0000
+Message-Id: <20211207220926.718794-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH v3 0/8] KVM: x86: Hyper-V hypercall fix and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls
-head:   21c40b0003975c1afe4b59126aba2c547103ccae
-commit: 21c40b0003975c1afe4b59126aba2c547103ccae [8/8] SUNRPC: Teach server to recognize RPC_AUTH_TLS
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211208/202112080624.nH4NZavB-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=21c40b0003975c1afe4b59126aba2c547103ccae
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls
-        git checkout 21c40b0003975c1afe4b59126aba2c547103ccae
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash net/sunrpc/
+Fix a bug where KVM incorrectly skips an "all_cpus" IPI request, and misc
+cleanups and enhancements for KVM handling of Hyper-V hypercalls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Based on kvm/queue, commit 1cf84614b04a ("KVM: x86: Exit to ...").
 
-All errors (new ones prefixed by >>):
+v3:
+  - Collect reviews. [Vitaly]
+  - Add BUILD_BUG_ON() to protect KVM_HV_MAX_SPARSE_VCPU_SET_BITS. [Vitaly]
+  - Fix misc typos. [Vitaly]
+  - Opportunistically rename "cnt" to "rep_cnt" in tracepoint. [Vitaly]
+  - Drop var_cnt checks for debug hypercalls due to lack of documentation
+    as to their expected behavior. [Vitaly]
+  - Tweak the changelog regarding the TLFS spec issue to reference the
+    bug filed by Vitaly.
 
->> net/sunrpc/svcauth.c:39:10: error: 'RPC_AUTH_TLS' undeclared here (not in a function); did you mean 'RPC_AUTH_GSS'?
-      39 |         [RPC_AUTH_TLS]  = (struct auth_ops __force __rcu *)&svcauth_tls,
-         |          ^~~~~~~~~~~~
-         |          RPC_AUTH_GSS
->> net/sunrpc/svcauth.c:39:10: error: array index in initializer not of integer type
-   net/sunrpc/svcauth.c:39:10: note: (near initialization for 'authtab')
---
-   net/sunrpc/svcauth_unix.c: In function 'svcauth_tls_accept':
->> net/sunrpc/svcauth_unix.c:842:36: error: 'RPC_AUTH_TLS' undeclared (first use in this function); did you mean 'RPC_AUTH_GSS'?
-     842 |         rqstp->rq_cred.cr_flavor = RPC_AUTH_TLS;
-         |                                    ^~~~~~~~~~~~
-         |                                    RPC_AUTH_GSS
-   net/sunrpc/svcauth_unix.c:842:36: note: each undeclared identifier is reported only once for each function it appears in
-   net/sunrpc/svcauth_unix.c: At top level:
->> net/sunrpc/svcauth_unix.c:849:27: error: 'RPC_AUTH_TLS' undeclared here (not in a function); did you mean 'RPC_AUTH_GSS'?
-     849 |         .flavour        = RPC_AUTH_TLS,
-         |                           ^~~~~~~~~~~~
-         |                           RPC_AUTH_GSS
+v2: https://lore.kernel.org/all/20211030000800.3065132-1-seanjc@google.com/
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CRYPTO_SHA1_SSSE3
-   Depends on CRYPTO && X86 && 64BIT
-   Selected by
-   - TLS_HANDSHAKE && NET && TLS && TLS_SOFTIRQ
+Sean Christopherson (8):
+  KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI
+    req
+  KVM: x86: Get the number of Hyper-V sparse banks from the VARHEAD
+    field
+  KVM: x86: Refactor kvm_hv_flush_tlb() to reduce indentation
+  KVM: x86: Add a helper to get the sparse VP_SET for IPIs and TLB
+    flushes
+  KVM: x86: Don't bother reading sparse banks that end up being ignored
+  KVM: x86: Shove vp_bitmap handling down into sparse_set_to_vcpu_mask()
+  KVM: x86: Reject fixeds-size Hyper-V hypercalls with non-zero
+    "var_cnt"
+  KVM: x86: Add checks for reserved-to-zero Hyper-V hypercall fields
 
+ arch/x86/kvm/hyperv.c             | 175 ++++++++++++++++++------------
+ arch/x86/kvm/trace.h              |  14 ++-
+ include/asm-generic/hyperv-tlfs.h |   7 ++
+ 3 files changed, 123 insertions(+), 73 deletions(-)
 
-vim +39 net/sunrpc/svcauth.c
+-- 
+2.34.1.400.ga245620fadb-goog
 
-    35	
-    36	static struct auth_ops __rcu *authtab[RPC_AUTH_MAXFLAVOR] = {
-    37		[RPC_AUTH_NULL] = (struct auth_ops __force __rcu *)&svcauth_null,
-    38		[RPC_AUTH_UNIX] = (struct auth_ops __force __rcu *)&svcauth_unix,
-  > 39		[RPC_AUTH_TLS]  = (struct auth_ops __force __rcu *)&svcauth_tls,
-    40	};
-    41	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

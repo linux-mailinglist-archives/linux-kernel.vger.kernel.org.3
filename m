@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9232146B892
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A8D46B898
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbhLGKRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S234935AbhLGKSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhLGKRu (ORCPT
+        with ESMTP id S234925AbhLGKSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:17:50 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FBFC061746;
-        Tue,  7 Dec 2021 02:14:19 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bi37so32419837lfb.5;
-        Tue, 07 Dec 2021 02:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e8kee/N0as/hz/cg2sQd2lCPZnQthggdydHn9mrSiqU=;
-        b=Vn7zKGINM/TVnj1QqZzCB4RhDZXr5GvFm0DDRUrZ6icbPApcWsfZsMgO3UiLD70BCF
-         uOkV0ROYdKwHyS8iLSIkN28MswjzfnkK5zQDX5w224RopqbJPh2c+yUgiSikKsyGin03
-         THJ+OPgdAymtIiMRMASPqRzXhZL6jKYBt2KKP6DzuUDGusT7YXjoPRgF0Xq9gcmi2jiJ
-         PiEKuxjAGYMU0ndESLlKnF9fIjcWEAYuIQmKAbIaND9+F8vbhETUOZVOY+We4DEiyjzL
-         6kOT3gjLdor4/ZjtlRdY3Ue7n6NZ39ksC0xMa7w/Cc5QVbmHESP1CAm2AFRocceomZbv
-         FMSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e8kee/N0as/hz/cg2sQd2lCPZnQthggdydHn9mrSiqU=;
-        b=VmVHrNCgJ1/Lq5D1ZwATV4m4aczyJzFDrhOF+yPJgy2pbq/FUrqPCywCliwqTv0/O6
-         TKJGvpLVE1io6LAGXhOZx0832SNNQYxESnZHMow66oS9d1V0JYK/Jpyn/bMFtkwl1t5j
-         gKef/nFmJQES6vNkIKV56tbGeU9mpr8oOqZQhJEliTHuvld5wkkGAev3Ylo4mjs85Am0
-         xmpWj6bxhiKj7qT46FT3DVasHP6riEeY0+u40HBBqf4vkUnXYRUkfBHAq9TjsURHRLre
-         QQQr6WbcpcDbbk+vleF76VC/md+kTz7aEbo+lpbzIzpa2I293Y7VC+7U92imr2qmFpfU
-         HeFw==
-X-Gm-Message-State: AOAM533vgzm6/pR5+/1GCOpMcFtXpD+rUFGRHsTriKvuXZ5muoJdrNPE
-        eoYReOzF4sBe68nNg+JiIA03kT4Nt3s=
-X-Google-Smtp-Source: ABdhPJzQGDXpxQbq645M+Cx7NqFq4GuTvMkGZHqWfLldEcnTBw1AkZi7CP1LNhMvfB00h76mxuu0Lw==
-X-Received: by 2002:a05:6512:39d3:: with SMTP id k19mr39194848lfu.81.1638872057999;
-        Tue, 07 Dec 2021 02:14:17 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id i18sm1635047lfu.67.2021.12.07.02.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 02:14:17 -0800 (PST)
-Subject: Re: [PATCH 2/3] dt-bindings: sound: tegra: Update HDA resets
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, perex@perex.cz
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Tue, 7 Dec 2021 05:18:30 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AE2C061574;
+        Tue,  7 Dec 2021 02:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=fbOS2qQiswfhsw1SwRrnERpkkSMQDodSjMAiw37a16U=;
+        t=1638872100; x=1640081700; b=ZDrz5lXvTecxbw3LcGkdZS2ld0FAoI97lll/zNNQ9GFL24m
+        6n0vGPOK3rQeKtNJGBqGwSx9pNz/TEyNQR8u0IcSNKjwv4shytFFNqC4Fv1iorSNlqO7Th3OPLtq1
+        Z6oR0ZPamYXWztMJsfX95hKe3/nfkI3+o+KlAQmM9yAfw+WOiF4tKW7VMw4XLOoWUPyoft7SGwbkL
+        nkEVSg6yAISU0VrwfQqgjsx2s5xNUbeFMyW1e7IV+DS17xKQNR0XH+HUZBKNOeIprUKW+6SiVteet
+        kROqNWpF3J6k/dqx+djaEGOf1Iez7bU7be2zgXlJURa3B3ze8a0h5pFo2uBOVijA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1muXUf-0088pS-EA;
+        Tue, 07 Dec 2021 11:14:41 +0100
+Message-ID: <c9acebcef9504ac6889de25d528c3ea0c590b1c1.camel@sipsolutions.net>
+Subject: Re: [PATCH 1/3] iwlwifi: fix LED dependencies
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Arnd Bergmann <arnd@kernel.org>, Stanislaw Gruszka <stf_xl@wp.pl>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-3-git-send-email-spujar@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <13d20227-ec6b-03db-01dc-b4b00038a15c@gmail.com>
-Date:   Tue, 7 Dec 2021 13:14:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Date:   Tue, 07 Dec 2021 11:14:40 +0100
+In-Reply-To: <20211204173848.873293-1-arnd@kernel.org>
+References: <20211204173848.873293-1-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <1638858770-22594-3-git-send-email-spujar@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.12.2021 09:32, Sameer Pujar пишет:
-> Tegra194 HDA has only two resets unlike the previous generations of
-> Tegra SoCs. Hence update the reset list accordingly.
+On Sat, 2021-12-04 at 18:38 +0100, Arnd Bergmann wrote:
+>  
+>  config IWLWIFI_LEDS
+>  	bool
+> -	depends on LEDS_CLASS=y || LEDS_CLASS=IWLWIFI
+> +	depends on LEDS_CLASS=y || LEDS_CLASS=MAC80211
 > 
-> Fixes: 2d8f8955fe02 ("dt-bindings: tegra: Convert HDA doc to json-schema")
 
-The original txt binding was already wrong, this "fixes" tag is wrong.
+Hm. Can we really not have this if LEDS_CLASS=n?
+
+johannes

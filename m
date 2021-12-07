@@ -2,55 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9680E46C837
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD59D46C83A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242564AbhLGXah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:30:37 -0500
-Received: from mga05.intel.com ([192.55.52.43]:61404 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238376AbhLGXag (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:30:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="323966452"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="323966452"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:27:05 -0800
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="611876673"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.88.239]) ([10.212.88.239])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:27:04 -0800
-Message-ID: <dbb90f20-d9fb-1f24-b59d-15a2a42437e2@intel.com>
-Date:   Tue, 7 Dec 2021 16:27:03 -0700
+        id S242577AbhLGXeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:34:08 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:55363 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238125AbhLGXeI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:34:08 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Uzp41ZO_1638919832;
+Received: from 192.168.2.97(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0Uzp41ZO_1638919832)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Dec 2021 07:30:33 +0800
+Message-ID: <e350fd1c-f8e4-5e4a-cc0a-baa735277083@linux.alibaba.com>
+Date:   Wed, 8 Dec 2021 07:30:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH 3/4] KVM: X86: Handle implicit supervisor access with SMAP
 Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
         Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-Cc:     Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20211207095039.53166-1-jiangshanlai@gmail.com>
+ <20211207095039.53166-4-jiangshanlai@gmail.com> <Ya/XoYTsEvkPqRuh@google.com>
+From:   Lai Jiangshan <laijs@linux.alibaba.com>
+In-Reply-To: <Ya/XoYTsEvkPqRuh@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -58,199 +46,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/7/2021 6:47 AM, Jacob Pan wrote:
-> In-kernel DMA should be managed by DMA mapping API. The existing kernel
-> PASID support is based on the SVA machinery in SVA lib that is intended
-> for user process SVA. The binding between a kernel PASID and kernel
-> mapping has many flaws. See discussions in the link below.
->
-> This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform DMA
-> requests with PASID under the same mapping managed by DMA mapping API.
-> In addition, SVA-related bits for kernel DMA are removed. As a result,
-> DSA users shall use DMA mapping API to obtain DMA handles instead of
-> using kernel virtual addresses.
->
-> Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+On 2021/12/8 05:52, Sean Christopherson wrote:
 
-Also cc Vinod and dmaengine@vger
+> 
+>> +	 *
+>> +	 * This computes explicit_access && (rflags & X86_EFLAGS_AC), leaving
+> 
+> Too many &&, the logic below is a bitwise &, not a logical &&.
 
+The intended logic is "explicit_access &&" ("logic and") and the code ensures
+explicit_access has the bit X86_EFLAGS_AC and morphs it into "&" ("binary and")
+below to achieve branchless.
 
-> ---
->   .../admin-guide/kernel-parameters.txt         |  6 --
->   drivers/dma/Kconfig                           | 10 ----
->   drivers/dma/idxd/idxd.h                       |  1 -
->   drivers/dma/idxd/init.c                       | 59 ++++++-------------
->   drivers/dma/idxd/sysfs.c                      |  7 ---
->   5 files changed, 19 insertions(+), 64 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 9725c546a0d4..fe73d02c62f3 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1751,12 +1751,6 @@
->   			In such case C2/C3 won't be used again.
->   			idle=nomwait: Disable mwait for CPU C-states
->   
-> -	idxd.sva=	[HW]
-> -			Format: <bool>
-> -			Allow force disabling of Shared Virtual Memory (SVA)
-> -			support for the idxd driver. By default it is set to
-> -			true (1).
-> -
->   	idxd.tc_override= [HW]
->   			Format: <bool>
->   			Allow override of default traffic class configuration
-> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> index 6bcdb4e6a0d1..3b28bd720e7d 100644
-> --- a/drivers/dma/Kconfig
-> +++ b/drivers/dma/Kconfig
-> @@ -313,16 +313,6 @@ config INTEL_IDXD_COMPAT
->   
->   	  If unsure, say N.
->   
-> -# Config symbol that collects all the dependencies that's necessary to
-> -# support shared virtual memory for the devices supported by idxd.
-> -config INTEL_IDXD_SVM
-> -	bool "Accelerator Shared Virtual Memory Support"
-> -	depends on INTEL_IDXD
-> -	depends on INTEL_IOMMU_SVM
-> -	depends on PCI_PRI
-> -	depends on PCI_PASID
-> -	depends on PCI_IOV
-> -
->   config INTEL_IDXD_PERFMON
->   	bool "Intel Data Accelerators performance monitor support"
->   	depends on INTEL_IDXD
-> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> index 0cf8d3145870..3155e3a2d3ae 100644
-> --- a/drivers/dma/idxd/idxd.h
-> +++ b/drivers/dma/idxd/idxd.h
-> @@ -262,7 +262,6 @@ struct idxd_device {
->   	struct idxd_wq **wqs;
->   	struct idxd_engine **engines;
->   
-> -	struct iommu_sva *sva;
->   	unsigned int pasid;
->   
->   	int num_groups;
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 7bf03f371ce1..44633f8113e2 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -16,6 +16,7 @@
->   #include <linux/idr.h>
->   #include <linux/intel-svm.h>
->   #include <linux/iommu.h>
-> +#include <linux/dma-iommu.h>
->   #include <uapi/linux/idxd.h>
->   #include <linux/dmaengine.h>
->   #include "../dmaengine.h"
-> @@ -28,10 +29,6 @@ MODULE_LICENSE("GPL v2");
->   MODULE_AUTHOR("Intel Corporation");
->   MODULE_IMPORT_NS(IDXD);
->   
-> -static bool sva = true;
-> -module_param(sva, bool, 0644);
-> -MODULE_PARM_DESC(sva, "Toggle SVA support on/off");
-> -
->   bool tc_override;
->   module_param(tc_override, bool, 0644);
->   MODULE_PARM_DESC(tc_override, "Override traffic class defaults");
-> @@ -530,36 +527,22 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
->   
->   static int idxd_enable_system_pasid(struct idxd_device *idxd)
->   {
-> -	int flags;
-> -	unsigned int pasid;
-> -	struct iommu_sva *sva;
-> -
-> -	flags = SVM_FLAG_SUPERVISOR_MODE;
-> -
-> -	sva = iommu_sva_bind_device(&idxd->pdev->dev, NULL, &flags);
-> -	if (IS_ERR(sva)) {
-> -		dev_warn(&idxd->pdev->dev,
-> -			 "iommu sva bind failed: %ld\n", PTR_ERR(sva));
-> -		return PTR_ERR(sva);
-> -	}
-> +	u32 pasid;
->   
-> -	pasid = iommu_sva_get_pasid(sva);
-> -	if (pasid == IOMMU_PASID_INVALID) {
-> -		iommu_sva_unbind_device(sva);
-> +	pasid = iommu_enable_pasid_dma(&idxd->pdev->dev);
-> +	if (pasid == INVALID_IOASID) {
-> +		dev_err(&idxd->pdev->dev, "No kernel DMA PASID\n");
->   		return -ENODEV;
->   	}
-> -
-> -	idxd->sva = sva;
->   	idxd->pasid = pasid;
-> -	dev_dbg(&idxd->pdev->dev, "system pasid: %u\n", pasid);
-> +
->   	return 0;
->   }
->   
->   static void idxd_disable_system_pasid(struct idxd_device *idxd)
->   {
-> -
-> -	iommu_sva_unbind_device(idxd->sva);
-> -	idxd->sva = NULL;
-> +	iommu_disable_pasid_dma(&idxd->pdev->dev);
-> +	idxd->pasid = 0;
->   }
->   
->   static int idxd_probe(struct idxd_device *idxd)
-> @@ -575,21 +558,17 @@ static int idxd_probe(struct idxd_device *idxd)
->   
->   	dev_dbg(dev, "IDXD reset complete\n");
->   
-> -	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
-> -		rc = iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> -		if (rc == 0) {
-> -			rc = idxd_enable_system_pasid(idxd);
-> -			if (rc < 0) {
-> -				iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> -				dev_warn(dev, "Failed to enable PASID. No SVA support: %d\n", rc);
-> -			} else {
-> -				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-> -			}
-> -		} else {
-> -			dev_warn(dev, "Unable to turn on SVA feature.\n");
-> -		}
-> -	} else if (!sva) {
-> -		dev_warn(dev, "User forced SVA off via module param.\n");
-> +	/*
-> +	 * Try to enable both in-kernel and user DMA request with PASID.
-> +	 * PASID is supported unless both user and kernel PASID are
-> +	 * supported. Do not fail probe here in that idxd can still be
-> +	 * used w/o PASID or IOMMU.
-> +	 */
-> +	if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) ||
-> +		idxd_enable_system_pasid(idxd)) {
-> +		dev_warn(dev, "Failed to enable PASID\n");
-> +	} else {
-> +		set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
->   	}
->   
->   	idxd_read_caps(idxd);
-> diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-> index a9025be940db..35737299c355 100644
-> --- a/drivers/dma/idxd/sysfs.c
-> +++ b/drivers/dma/idxd/sysfs.c
-> @@ -776,13 +776,6 @@ static ssize_t wq_name_store(struct device *dev,
->   	if (strlen(buf) > WQ_NAME_SIZE || strlen(buf) == 0)
->   		return -EINVAL;
->   
-> -	/*
-> -	 * This is temporarily placed here until we have SVM support for
-> -	 * dmaengine.
-> -	 */
-> -	if (wq->type == IDXD_WQT_KERNEL && device_pasid_enabled(wq->idxd))
-> -		return -EOPNOTSUPP;
-> -
->   	memset(wq->name, 0, WQ_NAME_SIZE + 1);
->   	strncpy(wq->name, buf, WQ_NAME_SIZE);
->   	strreplace(wq->name, '\n', '\0');
+Original comments is "(cpl < 3) &&", and it is morphed into "(cpl - 3) &" in
+code to achieve branchless.
+
+The comments is bad in this patch, it should have stated that the logic operations
+on the conditions are changed to use "binary and" to achieve branchless.
+
+> 
+>>   	 * the result in X86_EFLAGS_AC. We then insert it in place of
+>>   	 * the PFERR_RSVD_MASK bit; this bit will always be zero in pfec,
+>>   	 * but it will be one in index if SMAP checks are being overridden.
+>>   	 * It is important to keep this branchless.
+> 
+> Heh, so important that it incurs multiple branches and possible VMREADs in
+> vmx_get_cpl() and vmx_get_rflags().  And before static_call, multiple retpolines
+> to boot.  Probably a net win now as only the first permission_fault() check for
+> a given VM-Exit be penalized, but the comment is amusing nonetheless.
+> 
+>>   	 */
+>> -	unsigned long not_smap = (cpl - 3) & (rflags & X86_EFLAGS_AC);
+>> +	u32 not_smap = (rflags & X86_EFLAGS_AC) & vcpu->arch.explicit_access;
+> 
+> I really, really dislike shoving this into vcpu->arch.  I'd much prefer to make
+> this a property of the access, even if that means adding another param or doing
+> something gross with @access (@pfec here).
+
+En, it taste bad to add a variable in vcpu->arch for a scope-like condition.
+I will do as you suggested.
+
+> 
+>>   	int index = (pfec >> 1) +
+>>   		    (not_smap >> (X86_EFLAGS_AC_BIT - PFERR_RSVD_BIT + 1));
+>>   	bool fault = (mmu->permissions[index] >> pte_access) & 1;

@@ -2,163 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF8546BC61
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C258C46BC65
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbhLGNZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:25:44 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:36752 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbhLGNZn (ORCPT
+        id S237038AbhLGN0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:26:38 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:60750 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232535AbhLGN0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:25:43 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B7DM4Qp025597;
-        Tue, 7 Dec 2021 07:22:04 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638883324;
-        bh=Y13dIz8fRS90BB0Qx0GHpyyvSDR6Omd/XlEd+z3yN2s=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=JfnVk+tXJGIjXAcUwprl2dh04guk1qfrS0KnT7uZNtRkxh/5ZxrLljLJWPqooH9aa
-         tcKWnLEHdwVMxsc0Oubkcu+Ny0l8LQu1mjuNt2IXPkcMkDhtsf+OVivM9SkqrJxdLM
-         YO28+0Yi331rx1o/9GEC4IJdABYYUawr1bk/sIcw=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B7DM4Ht006775
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Dec 2021 07:22:04 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 7
- Dec 2021 07:22:04 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 7 Dec 2021 07:22:04 -0600
-Received: from [10.250.232.32] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B7DLxgj089634;
-        Tue, 7 Dec 2021 07:22:00 -0600
-Subject: Re: [PATCH v5 6/6] arm64: dts: ti: k3-am642-evm/sk: Add support for
- main domain mcan nodes in EVM and disable them on SK
-To:     Aswath Govindraju <a-govindraju@ti.com>
-CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211122134159.29936-1-a-govindraju@ti.com>
- <20211122134159.29936-7-a-govindraju@ti.com>
-From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <e789b13a-fac9-b9a7-d649-0e9c0551e64e@ti.com>
-Date:   Tue, 7 Dec 2021 18:51:59 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 7 Dec 2021 08:26:37 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3195D1FDFE;
+        Tue,  7 Dec 2021 13:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638883386; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3MujDroQCCYFmjo9aU+XnlNtxQIfbbwBM+qx0TwvZA=;
+        b=seX7fjd3dhWbMLAzyyjOOcYy5pvqRFbfqgSB8dF+6CqlVqD6PH5s5EPABaOLYypyFdDlJ9
+        ywbxRdq9qIuAaZnxc9VBTcZ1jf6GJS/JF1CmOOvwPZ5ZO1w616j2VQ+VTZqWpBh0WlC5vu
+        awim2Bn8l5QAUyuNH6vWNtBeerc21GI=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 040D8A3B89;
+        Tue,  7 Dec 2021 13:23:05 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 14:23:03 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+References: <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211122134159.29936-7-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
+[...]
+> But maybe I am missing something important regarding online vs. offline
+> nodes that your patch changes?
 
-On 22/11/21 7:11 pm, Aswath Govindraju wrote:
-> AM642 EVM has two CAN connecters brought out from the two MCAN instances in
-> the main domain through transceivers. Add device tree nodes for
-> transceivers and set the required properties in the mcan device tree nodes,
-> in EVM device tree file.
->
-> On AM642 SK there are no connectors brought out for CAN. Therefore, disable
-> the mcan device tree nodes in the SK device tree file.
->
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+I am relying on alloc_node_data setting the node online. But if we are
+to change the call to arch_alloc_node_data then the patch needs to be
+more involved. Here is what I have right now. If this happens to be the
+right way then there is some additional work to sync up with the hotplug
+code.
 
-Reviewed-by: Apurva Nandan <a-nandan@ti.com>
-
-> ---
->   arch/arm64/boot/dts/ti/k3-am642-evm.dts | 40 +++++++++++++++++++++++++
->   arch/arm64/boot/dts/ti/k3-am642-sk.dts  |  8 +++++
->   2 files changed, 48 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-> index 6726c4c7c28c..e94ae178b1ae 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-> @@ -184,6 +184,20 @@
->   			};
->   		};
->   	};
-> +
-> +	transceiver1: can-phy0 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +		standby-gpios = <&exp1 8 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	transceiver2: can-phy1 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +		standby-gpios = <&exp1 9 GPIO_ACTIVE_HIGH>;
-> +	};
->   };
->   
->   &main_pmx0 {
-> @@ -294,6 +308,20 @@
->   			AM64X_IOPAD(0x0270, PIN_INPUT, 0) /* (D18) ECAP0_IN_APWM_OUT */
->   		>;
->   	};
-> +
-> +	main_mcan0_pins_default: main-mcan0-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM64X_IOPAD(0x0254, PIN_INPUT, 0) /* (B17) MCAN0_RX */
-> +			AM64X_IOPAD(0x0250, PIN_OUTPUT, 0) /* (A17) MCAN0_TX */
-> +		>;
-> +	};
-> +
-> +	main_mcan1_pins_default: main-mcan1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM64X_IOPAD(0x025c, PIN_INPUT, 0) /* (D17) MCAN1_RX */
-> +			AM64X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (C17) MCAN1_TX */
-> +		>;
-> +	};
->   };
->   
->   &main_uart0 {
-> @@ -638,3 +666,15 @@
->   &icssg1_mdio {
->   	status = "disabled";
->   };
-> +
-> +&main_mcan0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_mcan0_pins_default>;
-> +	phys = <&transceiver1>;
-> +};
-> +
-> +&main_mcan1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_mcan1_pins_default>;
-> +	phys = <&transceiver2>;
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-> index 6b04745147be..a9785bec12df 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-> @@ -525,3 +525,11 @@
->   &icssg1_mdio {
->   	status = "disabled";
->   };
-> +
-> +&main_mcan0 {
-> +	status = "disabled";
-> +};
-> +
-> +&main_mcan1 {
-> +	status = "disabled";
-> +};
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index c5952749ad40..a296e934ad2f 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ 	/* Initialise every node */
+ 	mminit_verify_pageflags_layout();
+ 	setup_nr_node_ids();
+-	for_each_online_node(nid) {
+-		pg_data_t *pgdat = NODE_DATA(nid);
++	for_each_node(nid) {
++		pg_data_t *pgdat;
++
++		if (!node_online(nid)) {
++			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
++			pgdat = arch_alloc_nodedata(nid);
++			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
++			arch_refresh_nodedata(nid, pgdat);
++			node_set_online(nid);
++			/* TODO do we need register_one_node here or postpone to
++			 * when any memory is onlined there
++			 */
++			free_area_init_memoryless_node(nid);
++			continue;
++		}
++
++		pgdat = NODE_DATA(nid);
+ 		free_area_init_node(nid);
+ 
+ 		/* Any memory on that node */
+-- 
+Michal Hocko
+SUSE Labs

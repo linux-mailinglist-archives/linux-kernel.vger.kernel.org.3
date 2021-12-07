@@ -2,169 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBB546C7EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7160646C7F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242406AbhLGXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241986AbhLGXFl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:05:41 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482F8C061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:02:10 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m27so1710775lfj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:02:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XeysCYKuIXT30NpKmxVW0LuuA+5Y9jF9W/gtwz7ItQs=;
-        b=FjWKHHI5PiBkeM53HJ0SJ8QW3pwZzOqQOjK+ZF5sx7OT+T49loOhaddpCBDI3KVtK9
-         G3W8JoJaT2gLeh23K56rW0XqsGUDfQBWPSlRUpiyMBWrwRESbpCREPfznGpocHMz9Jf5
-         KTn8soeKulfYk3hqMUD/z7Zx8owzOzX8VkcMydwtoEQ4GmTJslVi0R5449kC+szdM4Dx
-         m241C13+coQvCrtRQ7yj49/uRQCajqIkjkKLC/NBjympTCs3D4ZvTaSfN02gjAqsMnGN
-         Ur9lQfMbX0byWz8vRjiI6d+I1nRqKhZIfuxK7hwvnuoLl+PiVBQLZEASabzSEx7CyYaG
-         Is1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XeysCYKuIXT30NpKmxVW0LuuA+5Y9jF9W/gtwz7ItQs=;
-        b=OfQ77SuGpiyWABuSkHMqa5JIxvejWXcyBXmc7c3kep26m5Q7R+Va3q/pnCrJUyQM/y
-         ATS2bYOwEVol5asf6XJClrr3zfCuVZ6Y+zzuHkCWrjD/GA4BzfVYTYBRqAkYkOy64/oE
-         Z+rxOiSVYBJUJD+PY7awJZ+IvxDiCFCYmIP93ctykde6Z/JyPelmINiLEANzZ1bwVhY+
-         J0KUm2GWZXIpdxOaO2VBJ6TJuTPODy6LZSotWASALieqOiApIbR761ciscnOFV7/C1/y
-         YmCg+m8FZ0tv2P9/ILdzJqGbMd4cgacSzDS8etK6kB03cRGWJyHfRZC3BqPCwZtnxBmk
-         WwJw==
-X-Gm-Message-State: AOAM5326GnqkNvLvdUytFjawdYkvTT1Bh3t77pHxlC1c78u4yiVtxdcB
-        ATICv7NZhURkVzrbpS+8LIFjyNSNz8H7OhjAonQvGw==
-X-Google-Smtp-Source: ABdhPJycRpNrtmgPnLthJBwXFriPhrz3LH63dzqAVAo1jcSHKR5llRWJKZLjakqcbvDHbnK3EfH8MLGqnfo8YgsG0oo=
-X-Received: by 2002:a05:6512:228c:: with SMTP id f12mr14294851lfu.550.1638918128028;
- Tue, 07 Dec 2021 15:02:08 -0800 (PST)
+        id S242410AbhLGXGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:06:15 -0500
+Received: from mail-db8eur05on2133.outbound.protection.outlook.com ([40.107.20.133]:56288
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234310AbhLGXGO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:06:14 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CyLXN+eyy1n7Nub+IKhhCjtIzxGgsoTWjQhjypDWO6+RsbYEDRS0EQ1/CbvF8pvNYiq9M9iaqNLoH4Q0MZA7EknC4FjmVYEsfmva8KS+t7BaNqbNO3YcrrbsQiQylmR6UgdswgCHjCK6SrA27mdJTVaDEX4mAyF7GPJ/WINs1AJx0yjG89pCE5lUaf8f+s52g3K7MHCuLkVbFxs+Xhw4iVSGFiAeJPbyRUB66VoVmu+CAQJZM+ptvUgi8vWYUycWlb5I/KqqrUrV8nvzclix6ANDqghiCYz9zbbSlVwcqAxHmGpgcYE4Tlp+iI6ecZjLYrfhAQ4gTlZwW09PexSZvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aDpH36F9nvIPoLFlkslZMVxBZ4XnFBTT8Rhe+rZNPAw=;
+ b=K8FROsZcbIQnFkZ1lA/tANZDQXIlUDShIdA292sqkn7qiYygu9uElyzSfge//eforTZivggZU72DFezubNtjup7v0ymNvoVE14l7OJ01EZAyncRmMePyQuPh4zZDKrLbPPUuLqwz51GKVos1ajkJBaUCNJnPvR4ldNXVjSvomIdITdzGxGd/NaNSbeYoJYd5NJ1oXHQi8DWHROtPPlT+x1AEwTNKMRj2uttQRyyj7eRZfclUr+GxpaxaZMq8DiaAiT5ZxEEPvIAEfuOvWLDytqHLrPPK9ttkbbYcgr2SFgUQGAyYY3kn0VwwgPpjsY0U5C2/yT31nIUkVrEoY4qbhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
+ header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aDpH36F9nvIPoLFlkslZMVxBZ4XnFBTT8Rhe+rZNPAw=;
+ b=T+z8dkWfuj2xcfIJ7oE7Iu8scsZWLdAH1NMYZfXiIHpBXptkoXpSL/y6rYuJnC1ItWUl/zqzBcO4O7xTdHm9EU0eJ0RH/IDCWFeJJXvbYgHUmnxT9IcX6Sb6JgtTQYCrQUCjdhC1txgxGf954ohQWJkqArN1y1UmABsAIPG7ikU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
+Received: from VI1PR06MB3102.eurprd06.prod.outlook.com (2603:10a6:802:c::17)
+ by VI1PR0602MB2910.eurprd06.prod.outlook.com (2603:10a6:800:b8::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 23:02:39 +0000
+Received: from VI1PR06MB3102.eurprd06.prod.outlook.com
+ ([fe80::9c38:9d12:599a:a1cf]) by VI1PR06MB3102.eurprd06.prod.outlook.com
+ ([fe80::9c38:9d12:599a:a1cf%4]) with mapi id 15.20.4734.031; Tue, 7 Dec 2021
+ 23:02:38 +0000
+From:   Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, shawnguo@kernel.org, michael@walle.cc,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, horia.geanta@nxp.com, pankaj.gupta@nxp.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        l.stach@pengutronix.de, qiangqing.zhang@nxp.com, peng.fan@nxp.com,
+        alice.guo@nxp.com, aford173@gmail.com, frieder.schrempf@kontron.de,
+        krzk@kernel.org, shengjiu.wang@nxp.com, gregkh@linuxfoundation.org,
+        ping.bai@nxp.com, daniel.baluta@nxp.com, jun.li@nxp.com,
+        marex@denx.de, thunder.leizhen@huawei.com, martink@posteo.de,
+        leonard.crestez@nxp.com, hongxing.zhu@nxp.com, agx@sigxcpu.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Subject: [PATCH v3 0/2] CAAM Driver: re-factor and set proper JR status
+Date:   Wed,  8 Dec 2021 00:02:04 +0100
+Message-Id: <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
+References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM6P192CA0069.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:209:82::46) To VI1PR06MB3102.eurprd06.prod.outlook.com
+ (2603:10a6:802:c::17)
 MIME-Version: 1.0
-References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-6-ojeda@kernel.org>
-In-Reply-To: <20211206140313.5653-6-ojeda@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Dec 2021 15:01:56 -0800
-Message-ID: <CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com>
-Subject: Re: [PATCH 05/19] rust: add `compiler_builtins` crate
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from GEO-HfyyrYQLnZo.lgs-net.com (146.185.2.7) by AM6P192CA0069.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Tue, 7 Dec 2021 23:02:36 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7192a0f3-449a-4916-6fc8-08d9b9d5aa36
+X-MS-TrafficTypeDiagnostic: VI1PR0602MB2910:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0602MB2910EFA4FBA6C8F482CBA5A3A66E9@VI1PR0602MB2910.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6rYZ7wQQiinyNjhMH5LQq7NfuL1ZKvYXohYdcHh08I/aoTW7gbL3ou0kCtskZP6+xvkexhnfQ5NjYssMwCBBPohUOr/GOF64isdYR5uRjEYYgDSZ0gCypA/49996+XIFsIHk7P/IrN4DidWGucPxpZieBs0PB3uXhik5zANDfhedOzc1oJr9quWRLwDblJGrXuuSYmkPKtwnbW+Rhdeba3bt9AVTtKGXbKd+fxt2FxEnjcrNh9zCk4sByHK7DSs41gqqvtQ8nD5oCuDm5CzXQFKlZ/ZYAqu9niACO10ZGTECoKzIns5o8zMBY4ZKWZqm75N6UFm260nLCtkPBkAipwfOOYIQ3K+e1s831DjVcQtsDcGcZC0xOimmKCn0ezXnDW9/fxqpR9CG7X0D1B4aJwBogKEq1fOCzQQg8aEAoVn4jVJRheplORA6i5P/YczESQsho8pjqRoOBtYbKCKwJotSAHywfsb4r8a43ZAiMdoyy6ISWk37vD699Ag7f+beb7Nseit4tZnw7WCXuJE9zWbzxyljhV3hHerX9nrdESsKxN1r675EUuewVyj51I2o1Cd68vI/p1tN0/HARsd2RTFidWSep9RQkst8L4jhCJlyniuxsCgwm6D/6CjQwb1J1V95C9qTPG/6x14AMAe8CgHjusoRsNK7StGoefkl+zlK+FDBKifNX4GADjko/6xeuj5mCUt8dlcEz9zoh6sYRw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR06MB3102.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(316002)(86362001)(83380400001)(52116002)(38100700002)(6486002)(6512007)(66556008)(66946007)(38350700002)(6506007)(956004)(6916009)(2616005)(4326008)(6666004)(7416002)(2906002)(7406005)(26005)(186003)(107886003)(44832011)(8676002)(8936002)(1076003)(66476007)(5660300002)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?20v7vVAjULvXNMIEjlA0LZH+Hxticse3ktwgsDR08UGU6rtpK5lv/GvDG1d7?=
+ =?us-ascii?Q?mmgd32HmgOMrbj6bP5e8OLUlGQxjDUS+Cucw58U3p0k+peJLPIqb3JIWQi8t?=
+ =?us-ascii?Q?TBkLh+lVAPajTWYqtMojqwAyadZmys3a+2CCw6KPxMBb9fciGptrxPUDSj4k?=
+ =?us-ascii?Q?3Z0OW/SUMHAILUbY7H5agIy1CTeVlbgu1THOYffc10U0Seyvmwo9PXYUQWKs?=
+ =?us-ascii?Q?XepgCKfDohxKy8dptxACMKjHg1ZYpNsUzir++NeJqKOKDOY/tBNp4DUaXPaL?=
+ =?us-ascii?Q?RqX3qgcTRs9ZgDb/lUXcuylvT0ignwLT21QydAS5K53ju4piCEYxvGUYzTRF?=
+ =?us-ascii?Q?dM+SMTej3yZVS8kD6Fec6FcVN435iXfWoWxqC1Vxud9QLDMM/j0+aYpm6yXj?=
+ =?us-ascii?Q?EfvhPRB/ALmWa60F4xPtoMuGEr3TANruN1zkX0UHWF18niRpeMOXUdWCbhOB?=
+ =?us-ascii?Q?9mWvMKChZwIfrX1Q1aZtLY0a9oD69UoJidn/tGWXryNTpVo7y+SumkGNiuuq?=
+ =?us-ascii?Q?5kVYGy6Bpia0thuw8MPwSKrK7lF8X2VzCod77XhMpBhIDSstgzflmSYVjWYU?=
+ =?us-ascii?Q?j8G6FmkesLr8U9FBLIB+luf2Gfml2MM7ebJU6jwUAzz0T1TCmddh2dcpP0AB?=
+ =?us-ascii?Q?Ztk4tjHi6+No+5JFVB9MMw9nCLWsEDaii6g/PJIpRNodxr9yrAfonyNftklb?=
+ =?us-ascii?Q?2dWOs2x93dMl6+MlBOLgAuAbt+NxHm8f3o9wOB1vAa4n40lOEJ7IkZuZEctP?=
+ =?us-ascii?Q?XgJZMuW835aPjfuEVWiYpeiJT7ZqsAkuhxIQPNmn1zKouYTJiCG3Sl3iiB+Z?=
+ =?us-ascii?Q?C0M2TrdwvDzavE9gd6kSnKYY2BwIJit5BkUJajmnD1iysL2fkI+7DNb8++9U?=
+ =?us-ascii?Q?FJuhUaslb/fQ5ZciTJSMbQ+ATR4IKpskYpGOKiL3PFK1zBHOeKOzVuRX/KyZ?=
+ =?us-ascii?Q?vhLk2SUaS2bKUtiCeo3c4aEYJshVtUzeNX9BCCrk9tw7N0mn+7YgUqzL12p/?=
+ =?us-ascii?Q?raZAsO+TdqDCAWXyruFZMw1feXJMpMNnQMPxRZwHnH9pCr1AWxUBBvCXr1tv?=
+ =?us-ascii?Q?XaN4/JpIs1oqlNOxn/aUXh8jnEK0csYvtJFPVpcM3STzHxRfjfwROSKwNms8?=
+ =?us-ascii?Q?i1f9ZbdonaMjdV3AV/eAkFkfwnGA8AjW64/dyXOLtkOWE/k7dwnBEJLemDk4?=
+ =?us-ascii?Q?CDbQZuzgWAVvyDR0bokr+8LzHwkk+jce4YlLVLGtE8yIWdOs83YlSNyIMNuh?=
+ =?us-ascii?Q?Qus0Z4Wy0xpN6qpy+XpYHI+PFUlff4DA88HYzUxepI0nyQcsvTcABNhLk4uv?=
+ =?us-ascii?Q?9Id8ujfAJhoajwdIa62wwFhOuLmTDdrt/Z0r8hYdS7Mx0zncrpivJSas4RXm?=
+ =?us-ascii?Q?LZQFJElzsKW/S2yE3p1RuJsH2DXyN5em7EvAxGiXfu8wuunPDG7fYywtAyWM?=
+ =?us-ascii?Q?5lTzWtmNcSWhiKMUQPyLuX6sdl28c+YAYs5svRGpdzT35U57ZFMCKdFf1twZ?=
+ =?us-ascii?Q?jKMsSvs+cYl2vuIiRx4EyU/r/UB/4o8u0cx8lzyK2Y2xyBVgoXsOYgaHsB4c?=
+ =?us-ascii?Q?UOHGSpzbGRztY5+mgME1kYI1D0MiLkzRqmgY/IbRCNyg3bwZzq5aT7Rvh67a?=
+ =?us-ascii?Q?yNq5kFi3KPLLWktODauBlSZlw1hab1u8/IEZbn7I0ZlZviY/bPH8O2sQLdww?=
+ =?us-ascii?Q?iQxk0v+jNeJC7B9vuFuhDIdgmvc=3D?=
+X-OriginatorOrg: leica-geosystems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7192a0f3-449a-4916-6fc8-08d9b9d5aa36
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR06MB3102.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 23:02:38.7231
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ph7tZnwliYFsXoHH9fSHTt9wLEyACvHtKT14PQG/Zel3N2nENxJfzrSD/65IutyrfBID1Me5Yh4OooPeiMX22g+NX2HCXDygHgp2QRdsQXs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0602MB2910
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 6:05 AM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> Rust provides `compiler_builtins` as a port of LLVM's `compiler-rt`.
-> Since we do not need the vast majority of them, we avoid the
-> dependency by providing our own crate.
->
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/compiler_builtins.rs | 57 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 rust/compiler_builtins.rs
->
-> diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-> new file mode 100644
-> index 000000000000..a5a0be72591b
-> --- /dev/null
-> +++ b/rust/compiler_builtins.rs
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Our own `compiler_builtins`.
-> +//!
-> +//! Rust provides [`compiler_builtins`] as a port of LLVM's [`compiler-rt`].
-> +//! Since we do not need the vast majority of them, we avoid the dependency
-> +//! by providing this file.
-> +//!
-> +//! At the moment, some builtins are required that should not be. For instance,
-> +//! [`core`] has floating-point functionality which we should not be compiling
-> +//! in. We will work with upstream [`core`] to provide feature flags to disable
-> +//! the parts we do not need. For the moment, we define them to [`panic!`] at
-> +//! runtime for simplicity to catch mistakes, instead of performing surgery
+This V3 series covers points uncovered during the review of the previous
+series, one major point being that register readout should not be used
+for dynamic JR availability check due to its unreliability.
 
-Rather than panic at runtime, could we do some binary post processing
-in Kbuild with $(NM) to error the build if any of the below symbols
-are referenced from .o files produced by .rs sources?
+Instead, JR should have a proper status set in FDT which indicates the
+availability of the ring in NS-World. This status is aligned with what
+BootROM code configures, and can be modified by all actors in the boot
+chain.
 
-If we provide definitions of these symbols, then I worry about C code
-that previously would have failed to link at build time when
-referencing these will now succeed at linking when CONFIG_RUST=y is
-enabled, but may panic at runtime IF we happen to hit those code
-paths.
+Therefore, patch in V2 series that was handling the dynamic JR
+availability check is dropped in this series and replaced by the patch
+which sets proper DT status for JR nodes.
 
-> +//! on `core.o`.
-> +//!
-> +//! In any case, all these symbols are weakened to ensure we do not override
-> +//! those that may be provided by the rest of the kernel.
-> +//!
-> +//! [`compiler_builtins`]: https://github.com/rust-lang/compiler-builtins
-> +//! [`compiler-rt`]: https://compiler-rt.llvm.org/
-> +
-> +#![feature(compiler_builtins)]
-> +#![compiler_builtins]
-> +#![no_builtins]
-> +#![no_std]
-> +
-> +macro_rules! define_panicking_intrinsics(
-> +    ($reason: tt, { $($ident: ident, )* }) => {
-> +        $(
-> +            #[doc(hidden)]
-> +            #[no_mangle]
-> +            pub extern "C" fn $ident() {
-> +                panic!($reason);
-> +            }
-> +        )*
-> +    }
-> +);
-> +
-> +define_panicking_intrinsics!("`i128` should not be used", {
-> +    __ashrti3,
-> +    __muloti4,
-> +    __multi3,
-> +});
-> +
-> +define_panicking_intrinsics!("`u128` should not be used", {
-> +    __ashlti3,
-> +    __lshrti3,
-> +    __udivmodti4,
-> +    __udivti3,
-> +    __umodti3,
-> +});
-> +
-> +#[cfg(target_arch = "arm")]
-> +define_panicking_intrinsics!("`u64` division/modulo should not be used", {
-> +    __aeabi_uldivmod,
-> +    __mulodi4,
-> +});
-> --
-> 2.34.0
->
+Andrey Zhizhikin (2):
+  crypto: caam - convert to use capabilities
+  arm64: dts: imx8m: define proper status for caam jr
+
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi |   4 +
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi |   4 +
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi |   4 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi |   4 +
+ drivers/crypto/caam/caamalg_qi.c          |   2 +-
+ drivers/crypto/caam/ctrl.c                | 115 ++++++++++++++--------
+ drivers/crypto/caam/intern.h              |  20 ++--
+ drivers/crypto/caam/jr.c                  |  19 +++-
+ drivers/crypto/caam/regs.h                |   2 -
+ 9 files changed, 122 insertions(+), 52 deletions(-)
 
 
+base-commit: 04fe99a8d936d46a310ca61b8b63dc270962bf01
 -- 
-Thanks,
-~Nick Desaulniers
+2.25.1
+

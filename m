@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96A346BC76
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C50D46BC7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbhLGN3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbhLGN3A (ORCPT
+        id S237089AbhLGN3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:29:45 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55158 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229815AbhLGN3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:29:00 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17835C061574;
-        Tue,  7 Dec 2021 05:25:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KQcvNXZoBrFT1ECPJOgCbdB29JRbYvjVmyy9Ekguwm0=; b=IxkRHghcRV+MwUHxxCscISSv1H
-        JWfGjMs6J311R3KzxeMKQI70SqgGVzCrJCSkjIwuHg5wb7rig3HLmlWtaxNXxhRS9M0uYVHmY4FYq
-        9zAekfWiNA1jT70Bpx8ggBQ2xNGDJ53xYMGnppPu+sRvaPn32jNYy8djwi0z6jIewZK2kKhj0GpMo
-        j0EAnGDM/jnBvjSKZOint4tBnJrmEGlO+r+RL9EGpgmAe/xvIFHdBZH656HyJQHdKtUiBOUzs4XfL
-        pEb1dfxu7j5ZLekpnfWu2aT0F8F/urGkz6WlDf4GdSlHFsv3rI45VyGv4aXazeOOPXfsZ980MBNxY
-        gE9V0xJQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muaSu-008gW5-68; Tue, 07 Dec 2021 13:25:04 +0000
-Date:   Tue, 7 Dec 2021 05:25:04 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/18] driver core: platform: Add driver dma ownership
- management
-Message-ID: <Ya9gsMmQnVdQ0hyj@infradead.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-5-baolu.lu@linux.intel.com>
- <Ya4f662Af+8kE2F/@infradead.org>
- <20211206150647.GE4670@nvidia.com>
- <56a63776-48ca-0d6e-c25c-016dc016e0d5@linux.intel.com>
- <20211207131627.GA6385@nvidia.com>
+        Tue, 7 Dec 2021 08:29:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5991ACE1AB3;
+        Tue,  7 Dec 2021 13:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B9FFC341C1;
+        Tue,  7 Dec 2021 13:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638883570;
+        bh=+PMXl8C2vXbjI2QYMOuXsbcxqTyVb3++/NqlyuDIFnk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pdcuJE9whDlyBdGaUdRmtw7rc/2uC8XP6aUbDtydE/31O8TXy54LjlIOIngm5NJFd
+         ZKKPxMaRCVxfMPgMlwOTH44+u3qnNY+qSus65O3E0HPKZjYRwjN/NaUq9dK3qbHK0p
+         MOo55HlELhrKTLINdS3+xwI4mHXZriGzJy4ktyXpH/lXthXaEHmWAHmUApK2g5uyjO
+         GeGpo2rUdWBDOQ3GPG5L2xd3qFCwyX0r5IkQa8nm6+L5aX47Ct2GRI+j2mvxeCPDRp
+         I85BKNE0HhSymt9TdpQS6RnYr6f95m6QDKYDKkuQPZFWatNBSg0t7ntVY+g7yMKl08
+         /0dvG0v4X8hEw==
+Received: by mail-wr1-f52.google.com with SMTP id d9so29476735wrw.4;
+        Tue, 07 Dec 2021 05:26:10 -0800 (PST)
+X-Gm-Message-State: AOAM533VYy6fIaKslRqh/Eqfk7M2cVBRVmrTeQeTK6Fg3v4NqyzQPL5R
+        lNG5gFgSQNdqZ/Y+3YGMebY8ZUcLUyLRPNP115U=
+X-Google-Smtp-Source: ABdhPJwlN0Z5yI+R+jgBN3ZZ44OPA1YvCVDHGSNjueEg+kIdm0GolFkKVFVe+yKlfamA6x1vVKO0eZnmxqoxjoCmomY=
+X-Received: by 2002:a5d:4107:: with SMTP id l7mr51031453wrp.209.1638883568777;
+ Tue, 07 Dec 2021 05:26:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207131627.GA6385@nvidia.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20211207125430.2423871-1-arnd@kernel.org> <SA1PR11MB58258D60F7C1334471E2F434F26E9@SA1PR11MB5825.namprd11.prod.outlook.com>
+In-Reply-To: <SA1PR11MB58258D60F7C1334471E2F434F26E9@SA1PR11MB5825.namprd11.prod.outlook.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 7 Dec 2021 14:25:52 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a35HHPs2sMsfQ_SrX4DTKmzidFUOczu8khzwJJTAy++yw@mail.gmail.com>
+Message-ID: <CAK8P3a35HHPs2sMsfQ_SrX4DTKmzidFUOczu8khzwJJTAy++yw@mail.gmail.com>
+Subject: Re: [PATCH] iwlwifi: work around reverse dependency on MEI
+To:     "Grumbach, Emmanuel" <emmanuel.grumbach@intel.com>
+Cc:     "Coelho, Luciano" <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Beker, Ayala" <ayala.beker@intel.com>,
+        "Korenblit, Miriam Rachel" <miriam.rachel.korenblit@intel.com>,
+        "Berg, Johannes" <johannes.berg@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 09:16:27AM -0400, Jason Gunthorpe wrote:
-> Yes, the suggestion was to put everything that 'if' inside a function
-> and then of course a matching undo function.
+On Tue, Dec 7, 2021 at 2:19 PM Grumbach, Emmanuel
+<emmanuel.grumbach@intel.com> wrote:
+> > A better option would be change iwl_mei_is_connected() so it could be
+> > called from iwlwifi regardless of whether the mei driver is reachable, but that
+> > requires a larger rework in the driver.
+>
+> I can try to do that but I don't really see how..
+> I can't really make a function that would behave differently based on whether the symbol is available or not.
 
-Can't we simplify things even more?  Do away with the DMA API owner
-entirely, and instead in iommu_group_set_dma_owner iterate over all
-devices in a group and check that they all have the no_dma_api flag
-set (plus a similar check on group join).  With that most of the
-boilerplate code goes away entirely in favor of a little more work at
-iommu_group_set_dma_owner time.
+I meant that this would be an inline function that only accesses variables
+that are available to the iwlwifi driver already, rather than part of the iwlmei
+driver.
+
+Part of the problem here is that the current implementation checks a global
+variable that is part of the iwlmei driver, so there is no easy way for iwlwifi
+to access it.
+
+> >  config IWLMEI
+> > -     tristate "Intel Management Engine communication over WLAN"
+> > -     depends on INTEL_MEI
+> > +     bool "Intel Management Engine communication over WLAN"
+> > +     depends on INTEL_MEI=y || INTEL_MEI=IWLMVM
+> > +     depends on IWLMVM=y || IWLWIFI=m
+> >       depends on PM
+> > -     depends on IWLMVM
+> >       help
+> >         Enables the iwlmei kernel module.
+>
+> Johannes suggested to make IWLMVM depend on IWLMEI || !IWLMEI
+> That worked as well, I just had issues with this in our internal backport based tree.
+> I need to spend a bit more time on this, but I admit my total ignorance in Kconfig's dialect.
+
+It's still not enough, the dependency is in iwlwifi, not in iwlmvm, so it
+would remain broken for IWLWIFI=y IWLMVM=m IWLMEI=m.
+
+One easy solution might be to link all the iwlmei objects intro the main
+iwlwifi driver, the same way it links in the fw/*.c files.
+
+       Arnd

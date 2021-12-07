@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFB546C863
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E72646C865
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238230AbhLGXvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S238420AbhLGXvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbhLGXvK (ORCPT
+        with ESMTP id S230070AbhLGXvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:51:10 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F5DC061574;
-        Tue,  7 Dec 2021 15:47:39 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x6so2280114edr.5;
-        Tue, 07 Dec 2021 15:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vA4Q0RHvLMyq79s/jfz1F7MJnsng1yXkMUoVh193Hw0=;
-        b=cxyLZRQSkFFeFvc4vzgFelg4M/obbDO/IFtytxDMEI7QCgkPzIzJS5R8KBak6qLyUx
-         gkv8am0icr7Y1UWU+BN//koLOCw5boprtpLXnSL3M8W6sp12ggZHne6gQatgnITOrkay
-         QSoGIgJC2+aAWqbgD9LxgvYUcNmoYtr7NCgRVfjXQ15uGAGfx6anwCKGv87SPtgFHV+s
-         Nus2iLOh33my+zIiFT3dMH/opp3Mwgr0xFz7Bg/lS37BbqNLGgRVuatF/lCLKgngQmDT
-         2OfT/90wb4aJJRDVgLxfagEx/fCzHhkXvR4L2k1hdgHB2v+yaPcGCzxWY8aBfYcp/bIA
-         u0lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vA4Q0RHvLMyq79s/jfz1F7MJnsng1yXkMUoVh193Hw0=;
-        b=HvVsysYuAwLOAO7L2t5YCAMN5qDA49hDXyweaEdFf9UUYxUgiJvoXzWNDNjv52Dwgn
-         a6SO4jfFu2cOGHHp7KjbbdvGHGPJA0ht7Dy0Fp2uorO4ATqwoRpo3l0o+TgHMSj690Y8
-         tsZlQu4W8StpWiPKrHshF2RCryebCfrVoY1T7hP77guvcBo1HUKcCYp6FDVqF/nn/p6n
-         5oNnKSTI7C9yM8abmMHW4yd2bstQylSIFsOnsDIn19kk7HQFjBGECLiNdcHnKc+m2Cro
-         n5LduiT+Yzg/Uhm4U6SnbB8TxE0/xSeNbGNtO5h+nH6yrPhkxMStBtgokLca+T8eW57I
-         4qTA==
-X-Gm-Message-State: AOAM533MZWhJeBQL3lCmqXDYfL6LZQ3kn2nzI80OXlvJ7f/bDqRZjQh9
-        pqyqskgqOR7+0ikX5nilvyE=
-X-Google-Smtp-Source: ABdhPJwYP37i8uztDq9DhC+ym0z7wZVuWeXBUFGSvGV7d64JT6oFaNeaBJ23HIFlw13QJVi+h96/nQ==
-X-Received: by 2002:a17:906:3489:: with SMTP id g9mr3049558ejb.17.1638920858032;
-        Tue, 07 Dec 2021 15:47:38 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id hx21sm495373ejc.85.2021.12.07.15.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 15:47:37 -0800 (PST)
-Date:   Wed, 8 Dec 2021 01:47:36 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <20211207234736.vpqurmattqx4a76h@skbuf>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
- <Ya/esX+GTet9PM+D@lunn.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya/esX+GTet9PM+D@lunn.ch>
+        Tue, 7 Dec 2021 18:51:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F88C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:48:04 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09658B81EBA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 23:48:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A9AA60E09;
+        Tue,  7 Dec 2021 23:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638920881;
+        bh=NZI5E6OTeAr2lobR6Gt7GWhIGmD0oHASC6XKqv3HqqE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZHw/TP4mHfCUxYJrBbmiI6dsQ4uG9j3FaNwFJU6oduhWIODxQkhdkv3qL+14KaF3v
+         2kY5VnUnJDmFLALpkxgzzfspPD/sgeZ76jf2qLphMUqvySdnMKlsyYvt8aXIpyMfQ0
+         axl2zJYhPRpYT1PMQp4G2ZGzkTB0+iRJz4BdCI2g=
+Date:   Tue, 7 Dec 2021 15:47:59 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Joel Savitz <jsavitz@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        linux-mm@kvack.org, Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Message-Id: <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
+In-Reply-To: <20211207214902.772614-1-jsavitz@redhat.com>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:22:41PM +0100, Andrew Lunn wrote:
-> > I like the idea of tagger-owend per-switch-tree private data.
-> > Do we really need to hook logic?
+(cc's added)
+
+On Tue,  7 Dec 2021 16:49:02 -0500 Joel Savitz <jsavitz@redhat.com> wrote:
+
+> In the case that two or more processes share a futex located within
+> a shared mmaped region, such as a process that shares a lock between
+> itself and a number of child processes, we have observed that when
+> a process holding the lock is oom killed, at least one waiter is never
+> alerted to this new development and simply continues to wait.
+
+Well dang.  Is there any way of killing off that waiting process, or do
+we have a resource leak here?
+
+> This is visible via pthreads by checking the __owner field of the
+> pthread_mutex_t structure within a waiting process, perhaps with gdb.
 > 
-> We have two different things here.
+> We identify reproduction of this issue by checking a waiting process of
+> a test program and viewing the contents of the pthread_mutex_t, taking note
+> of the value in the owner field, and then checking dmesg to see if the
+> owner has already been killed.
 > 
-> 1) The tagger needs somewhere to store its own private data.
-> 2) The tagger needs to share state with the switch driver.
+> This issue can be tricky to reproduce, but with the modifications of
+> this small patch, I have found it to be impossible to reproduce. There
+> may be additional considerations that I have not taken into account in
+> this patch and I welcome any comments and criticism.
+
+> Co-developed-by: Nico Pache <npache@redhat.com>
+> Signed-off-by: Nico Pache <npache@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> ---
+>  mm/oom_kill.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> We can probably have the DSA core provide 1). Add the size to
-> dsa_device_ops structure, and provide helpers to go from either a
-> master or a slave netdev to the private data.
-
-We cannot "add the size to the dsa_device_ops structure", because it is
-a singleton (const struct). It is not replicated at all, not per port,
-not per switch, not per tree, but global to the kernel. Not to mention
-const. Nobody needs state as shared as that.
-
-Given this, do you have objections to the sja1105_port->data model for
-shared state?
-
-> 2) is harder. But as far as i know, we have an 1:N setup.  One switch
-> driver can use N tag drivers. So we need the switch driver to be sure
-> the tag driver is what it expects. We keep the shared state in the tag
-> driver, so it always has valid data, but when the switch driver wants
-> to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
-> if it does not match, the core should return -EINVAL or similar.
-
-In my proposal, the tagger will allocate the memory from its side of the
-->connect() call. So regardless of whether the switch driver side
-connects or not, the memory inside dp->priv is there for the tagger to
-use. The switch can access it or it can ignore it.
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index 1ddabefcfb5a..fa58bd10a0df 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -44,6 +44,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/init.h>
+>  #include <linux/mmu_notifier.h>
+> +#include <linux/futex.h>
+>  
+>  #include <asm/tlb.h>
+>  #include "internal.h"
+> @@ -890,6 +891,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+>  	 * in order to prevent the OOM victim from depleting the memory
+>  	 * reserves from the user space under its control.
+>  	 */
+> +	futex_exit_release(victim);
+>  	do_send_sig_info(SIGKILL, SEND_SIG_PRIV, victim, PIDTYPE_TGID);
+>  	mark_oom_victim(victim);
+>  	pr_err("%s: Killed process %d (%s) total-vm:%lukB, anon-rss:%lukB, file-rss:%lukB, shmem-rss:%lukB, UID:%u pgtables:%lukB oom_score_adj:%hd\n",
+> @@ -930,6 +932,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+>  		 */
+>  		if (unlikely(p->flags & PF_KTHREAD))
+>  			continue;
+> +		futex_exit_release(p);
+>  		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
+>  	}
+>  	rcu_read_unlock();
+> -- 
+> 2.33.1

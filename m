@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD59D46C83A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE9946C83F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242577AbhLGXeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:34:08 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:55363 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238125AbhLGXeI (ORCPT
+        id S242585AbhLGXgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242567AbhLGXgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:34:08 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Uzp41ZO_1638919832;
-Received: from 192.168.2.97(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0Uzp41ZO_1638919832)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Dec 2021 07:30:33 +0800
-Message-ID: <e350fd1c-f8e4-5e4a-cc0a-baa735277083@linux.alibaba.com>
-Date:   Wed, 8 Dec 2021 07:30:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH 3/4] KVM: X86: Handle implicit supervisor access with SMAP
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Tue, 7 Dec 2021 18:36:43 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172DC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:33:12 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id hg9-20020a17090b300900b001a6aa0b7d8cso488726pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iIqu28BeAUoA+tn6qtuHLblGA5Z72SgaTk+HvlXOhpM=;
+        b=olgFNAjwG1AeRcw2PppFf/EUtPbfGR933cWHJ3Omt83fxkDYo/HetlZYrVHNcapkz9
+         PUHZNPhkIKEJacNJcOuI4nHrnGuLQ1rtCrjfKPxbZEBglaXaY0smso+1eAw/U9k41CNQ
+         kkOcMQSKpDZMomeAD3cL/QpCyHoRBGldcppdtpsc6xbnAU3/cSYgA2LWkNSI9Ci7K4LD
+         CcCPIdwjdesWpcVZ8crEFeGBMtLYBJLA6XyilOnNcDL+ksJaVyG9wBOCnG6w7YNfLNZd
+         UDiljsUgKh5WNuqKzyKt6j41FapC/EI5GRKLyIEjucKrEYDavXz85ozuf4+ITr+XFHks
+         u4mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iIqu28BeAUoA+tn6qtuHLblGA5Z72SgaTk+HvlXOhpM=;
+        b=QGt13g72mgtF15uIB+uTyAEEQCu9CIf1FLMANngLRnUMdPKmMzY6v5RBIdwuiBMDGo
+         htVU43RL5R+GiOoAWcU2Fu6769Q/Ho15XFeiT1zPkaaczTbGdMLcRxpjwrI9vLPsOiJ9
+         vpRjTDzy1WWiesDe40Ja3f3LEwOUdteH1222h2ve1C/7jymyfYHAo9xTtT2zYBeQz/wB
+         vFpkgOnBF09SIL/P/85QdWYNiNd9vuyAFKz7IYQ2bMj9iCOks4LGulexSR1ipJdQxhx2
+         YwchKWe7GiCADjKjfxbnc7KPAFCE2cDV2D0chtcBwfY06uMsQOEafQuNFKuNQP4EqHo3
+         5ZCg==
+X-Gm-Message-State: AOAM530PZp8DHmnzDT5dE3UxX03xpBMWOQPg3VlzhkaWusqz1CesQWhz
+        s5ZuCZY8cWUfFkedxEN3W8FpOhvA+Uw=
+X-Google-Smtp-Source: ABdhPJxvziXdsdc0pNZh+Am/zNB3QgSZSap+AN8IzbDa9hpqE9VRdVreOlojNbRundI42qp++YRE+JjUTbw=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:46ed:9c47:8229:475d])
+ (user=pgonda job=sendgmr) by 2002:a05:6a00:2283:b0:49f:dea0:b9ba with SMTP id
+ f3-20020a056a00228300b0049fdea0b9bamr2197867pfe.56.1638919992248; Tue, 07 Dec
+ 2021 15:33:12 -0800 (PST)
+Date:   Tue,  7 Dec 2021 15:33:01 -0800
+Message-Id: <20211207233306.2200118-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH V6 0/5] Add SEV_INIT_EX support
+From:   Peter Gonda <pgonda@google.com>
+To:     thomas.lendacky@amd.com
+Cc:     Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20211207095039.53166-1-jiangshanlai@gmail.com>
- <20211207095039.53166-4-jiangshanlai@gmail.com> <Ya/XoYTsEvkPqRuh@google.com>
-From:   Lai Jiangshan <laijs@linux.alibaba.com>
-In-Reply-To: <Ya/XoYTsEvkPqRuh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SEV_INIT requires users to unlock their SPI bus for the PSP's non
+volatile (NV) storage. Users may wish to lock their SPI bus for numerous
+reasons, to support this the PSP firmware supports SEV_INIT_EX. INIT_EX
+allows the firmware to use a region of memory for its NV storage leaving
+the kernel responsible for actually storing the data in a persistent
+way. This series adds a new module parameter to ccp allowing users to
+specify a path to a file for use as the PSP's NV storage. The ccp driver
+then reads the file into memory for the PSP to use and is responsible
+for writing the file whenever the PSP modifies the memory region.
 
+V4-5
+* Fix make C=1 W=1 warnings.
 
-On 2021/12/8 05:52, Sean Christopherson wrote:
+V3
+* Add another module parameter 'psp_init_on_probe' to allow for skipping
+  PSP init on module init.
+* Fixes review comments from Sean.
+* Fixes missing error checking with file reading.
+* Removed setting 'error' to a set value in patch 1.
 
-> 
->> +	 *
->> +	 * This computes explicit_access && (rflags & X86_EFLAGS_AC), leaving
-> 
-> Too many &&, the logic below is a bitwise &, not a logical &&.
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Acked-by: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David Rientjes <rientjes@google.com>
+Cc: John Allen <john.allen@amd.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-The intended logic is "explicit_access &&" ("logic and") and the code ensures
-explicit_access has the bit X86_EFLAGS_AC and morphs it into "&" ("binary and")
-below to achieve branchless.
+David Rientjes (1):
+  crypto: ccp - Add SEV_INIT_EX support
 
-Original comments is "(cpl < 3) &&", and it is morphed into "(cpl - 3) &" in
-code to achieve branchless.
+Peter Gonda (4):
+  crypto: ccp - Add SEV_INIT rc error logging on init
+  crypto: ccp - Move SEV_INIT retry for corrupted data
+  crypto: ccp - Refactor out sev_fw_alloc()
+  crypto: ccp - Add psp_init_on_probe module parameter
 
-The comments is bad in this patch, it should have stated that the logic operations
-on the conditions are changed to use "binary and" to achieve branchless.
+ .../virt/kvm/amd-memory-encryption.rst        |   6 +
+ drivers/crypto/ccp/sev-dev.c                  | 259 +++++++++++++++---
+ include/linux/psp-sev.h                       |  21 ++
+ 3 files changed, 245 insertions(+), 41 deletions(-)
 
-> 
->>   	 * the result in X86_EFLAGS_AC. We then insert it in place of
->>   	 * the PFERR_RSVD_MASK bit; this bit will always be zero in pfec,
->>   	 * but it will be one in index if SMAP checks are being overridden.
->>   	 * It is important to keep this branchless.
-> 
-> Heh, so important that it incurs multiple branches and possible VMREADs in
-> vmx_get_cpl() and vmx_get_rflags().  And before static_call, multiple retpolines
-> to boot.  Probably a net win now as only the first permission_fault() check for
-> a given VM-Exit be penalized, but the comment is amusing nonetheless.
-> 
->>   	 */
->> -	unsigned long not_smap = (cpl - 3) & (rflags & X86_EFLAGS_AC);
->> +	u32 not_smap = (rflags & X86_EFLAGS_AC) & vcpu->arch.explicit_access;
-> 
-> I really, really dislike shoving this into vcpu->arch.  I'd much prefer to make
-> this a property of the access, even if that means adding another param or doing
-> something gross with @access (@pfec here).
+-- 
+2.34.1.400.ga245620fadb-goog
 
-En, it taste bad to add a variable in vcpu->arch for a scope-like condition.
-I will do as you suggested.
-
-> 
->>   	int index = (pfec >> 1) +
->>   		    (not_smap >> (X86_EFLAGS_AC_BIT - PFERR_RSVD_BIT + 1));
->>   	bool fault = (mmu->permissions[index] >> pte_access) & 1;

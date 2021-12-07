@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A91146C805
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF0846C80C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242486AbhLGXNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238175AbhLGXNL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:13:11 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A774C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:09:40 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id m24so275119pls.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qKDd1VX3hBC89im9d4I56OuLVc25eiwTlx+sbQdp+Sw=;
-        b=vnRocbhNrruqT81hYa0+LL1YmTd03xre0R39dPhTL0Iz+ndRyi8Kk2j4vncEtIedml
-         5RWbyz49x2iypSewBHEWmhUYR0VuL5cEhUkN98ZUxvT6HS/VyG0I0qMdRscK/WNR2DzI
-         dB92AVMKkDTkNdE63WRtE0QzmrymcC1lL2mSUXhMPJ7x/2TV60k32n1ycoojIp/UExzR
-         fc6k80Qup2+U+AI6C7WOejJzHM7rcFKuzGjy1pgiKFxywby8bw80rj64B0R02Fi6e6vv
-         fL+92ombKOd2u0jrHgMNUN/EW+PdkCFpJ2gNZo1sByZ9x4wqg7GRifEO4/ue6Cqc/Sfp
-         0iYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qKDd1VX3hBC89im9d4I56OuLVc25eiwTlx+sbQdp+Sw=;
-        b=2SDX2+CjiBbsKQp1tazwNWct9XK0Uq5utQKd3t6OmVbBy7oZnAZzFj4iFzCDFT6btu
-         XN28DLuT3wt3sS2g6nvF/UkiZHMVq60ju/NX1fHfbpmK4NAekW1uLnc6AUxVvRUGWELv
-         rYnrggtvyGTIkgc5HWhJ+zyne6GzLHV16uPL1azR4d1bYi2X4R9n6GlPTRNulRNuQnEV
-         3qUOs9akmDXpNNaT1nPwuE5RB8V2/PixeolPi4xJuXEtmqgGv5MRq+4nwBdrh6y+cHEJ
-         /I8HYwz6c4AWiP0kh5ErJibqz7M7XnwJMcFOpj+6Pos/nD9zv8pq8eWLHrf6gqIyaYAv
-         rZSg==
-X-Gm-Message-State: AOAM531RDDcODug6TZMjeWbHUODwRsU8Z8g+QJY4/MIuBfmRG4wdKqIi
-        VUm/2ifwTVV9wsoy/1qg694EHvGTFd2SgMKk7e5GMw==
-X-Google-Smtp-Source: ABdhPJzZdj71AnZbqQAjVBfM6MMhRIMl5UOIfQgG74lXBky1qWNCtCR6rgJiwzjurPqRAgI5uDkweOykjFQBpapU+Vk=
-X-Received: by 2002:a17:902:7fcd:b0:142:8ab3:ec0e with SMTP id
- t13-20020a1709027fcd00b001428ab3ec0emr54368732plb.4.1638918579107; Tue, 07
- Dec 2021 15:09:39 -0800 (PST)
+        id S242506AbhLGXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:18:26 -0500
+Received: from mga11.intel.com ([192.55.52.93]:3479 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242494AbhLGXSY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:18:24 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="235221458"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="235221458"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:14:47 -0800
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="515507847"
+Received: from yperng-mobl1.amr.corp.intel.com (HELO [10.209.19.84]) ([10.209.19.84])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:14:46 -0800
+Subject: Re: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
+ regression
+To:     kernel test robot <oliver.sang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <20211207012128.GA16074@xsang-OptiPlex-9020>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzShEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gPGRhdmVAc3I3MS5uZXQ+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJ
+ CgsEFgIDAQIeAQIXgAUCTo3k0QIZAQAKCRBoNZUwcMmSsMO2D/421Xg8pimb9mPzM5N7khT0
+ 2MCnaGssU1T59YPE25kYdx2HntwdO0JA27Wn9xx5zYijOe6B21ufrvsyv42auCO85+oFJWfE
+ K2R/IpLle09GDx5tcEmMAHX6KSxpHmGuJmUPibHVbfep2aCh9lKaDqQR07gXXWK5/yU1Dx0r
+ VVFRaHTasp9fZ9AmY4K9/BSA3VkQ8v3OrxNty3OdsrmTTzO91YszpdbjjEFZK53zXy6tUD2d
+ e1i0kBBS6NLAAsqEtneplz88T/v7MpLmpY30N9gQU3QyRC50jJ7LU9RazMjUQY1WohVsR56d
+ ORqFxS8ChhyJs7BI34vQusYHDTp6PnZHUppb9WIzjeWlC7Jc8lSBDlEWodmqQQgp5+6AfhTD
+ kDv1a+W5+ncq+Uo63WHRiCPuyt4di4/0zo28RVcjtzlGBZtmz2EIC3vUfmoZbO/Gn6EKbYAn
+ rzz3iU/JWV8DwQ+sZSGu0HmvYMt6t5SmqWQo/hyHtA7uF5Wxtu1lCgolSQw4t49ZuOyOnQi5
+ f8R3nE7lpVCSF1TT+h8kMvFPv3VG7KunyjHr3sEptYxQs4VRxqeirSuyBv1TyxT+LdTm6j4a
+ mulOWf+YtFRAgIYyyN5YOepDEBv4LUM8Tz98lZiNMlFyRMNrsLV6Pv6SxhrMxbT6TNVS5D+6
+ UorTLotDZKp5+M7BTQRUY85qARAAsgMW71BIXRgxjYNCYQ3Xs8k3TfAvQRbHccky50h99TUY
+ sqdULbsb3KhmY29raw1bgmyM0a4DGS1YKN7qazCDsdQlxIJp9t2YYdBKXVRzPCCsfWe1dK/q
+ 66UVhRPP8EGZ4CmFYuPTxqGY+dGRInxCeap/xzbKdvmPm01Iw3YFjAE4PQ4hTMr/H76KoDbD
+ cq62U50oKC83ca/PRRh2QqEqACvIH4BR7jueAZSPEDnzwxvVgzyeuhwqHY05QRK/wsKuhq7s
+ UuYtmN92Fasbxbw2tbVLZfoidklikvZAmotg0dwcFTjSRGEg0Gr3p/xBzJWNavFZZ95Rj7Et
+ db0lCt0HDSY5q4GMR+SrFbH+jzUY/ZqfGdZCBqo0cdPPp58krVgtIGR+ja2Mkva6ah94/oQN
+ lnCOw3udS+Eb/aRcM6detZr7XOngvxsWolBrhwTQFT9D2NH6ryAuvKd6yyAFt3/e7r+HHtkU
+ kOy27D7IpjngqP+b4EumELI/NxPgIqT69PQmo9IZaI/oRaKorYnDaZrMXViqDrFdD37XELwQ
+ gmLoSm2VfbOYY7fap/AhPOgOYOSqg3/Nxcapv71yoBzRRxOc4FxmZ65mn+q3rEM27yRztBW9
+ AnCKIc66T2i92HqXCw6AgoBJRjBkI3QnEkPgohQkZdAb8o9WGVKpfmZKbYBo4pEAEQEAAcLB
+ XwQYAQIACQUCVGPOagIbDAAKCRBoNZUwcMmSsJeCEACCh7P/aaOLKWQxcnw47p4phIVR6pVL
+ e4IEdR7Jf7ZL00s3vKSNT+nRqdl1ugJx9Ymsp8kXKMk9GSfmZpuMQB9c6io1qZc6nW/3TtvK
+ pNGz7KPPtaDzvKA4S5tfrWPnDr7n15AU5vsIZvgMjU42gkbemkjJwP0B1RkifIK60yQqAAlT
+ YZ14P0dIPdIPIlfEPiAWcg5BtLQU4Wg3cNQdpWrCJ1E3m/RIlXy/2Y3YOVVohfSy+4kvvYU3
+ lXUdPb04UPw4VWwjcVZPg7cgR7Izion61bGHqVqURgSALt2yvHl7cr68NYoFkzbNsGsye9ft
+ M9ozM23JSgMkRylPSXTeh5JIK9pz2+etco3AfLCKtaRVysjvpysukmWMTrx8QnI5Nn5MOlJj
+ 1Ov4/50JY9pXzgIDVSrgy6LYSMc4vKZ3QfCY7ipLRORyalFDF3j5AGCMRENJjHPD6O7bl3Xo
+ 4DzMID+8eucbXxKiNEbs21IqBZbbKdY1GkcEGTE7AnkA3Y6YB7I/j9mQ3hCgm5muJuhM/2Fr
+ OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
+ ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
+ z5cecg==
+Message-ID: <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
+Date:   Tue, 7 Dec 2021 15:14:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-4-baolu.lu@linux.intel.com> <Ya3BYxrgkNK3kbGI@kroah.com>
- <Ya4abbx5M31LYd3N@infradead.org> <20211206144535.GB4670@nvidia.com>
- <Ya4ikRpenoQPXfML@infradead.org> <20211206150415.GD4670@nvidia.com>
-In-Reply-To: <20211206150415.GD4670@nvidia.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 7 Dec 2021 15:09:28 -0800
-Message-ID: <CAPcyv4gS8fxx_QP43ShhLysRgy0XH-4KS_e3WO56k6gNMQqaJA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/18] driver core: platform: Rename platform_dma_configure()
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        KVM list <kvm@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux-foundation.org>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211207012128.GA16074@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 7:04 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Mon, Dec 06, 2021 at 06:47:45AM -0800, Christoph Hellwig wrote:
-> > On Mon, Dec 06, 2021 at 10:45:35AM -0400, Jason Gunthorpe via iommu wrote:
-> > > IIRC the only thing this function does is touch ACPI and OF stuff?
-> > > Isn't that firmware?
-> > >
-> > > AFAICT amba uses this because AMBA devices might be linked to DT
-> > > descriptions?
-> >
-> > But DT descriptions aren't firmware.  They are usually either passed onb
-> > the bootloader or in some deeply embedded setups embedded into the
-> > kernel image.
->
-> Pedenatically yes, but do you know of a common word to refer to both
-> OF and ACPI that is better than firmware? :)
->
-> AFAICT we already use firwmare for this in a few places, eg
-> fwnode_handle and so on.
+On 12/6/21 5:21 PM, kernel test robot wrote:
+> 
+> 1bdda24c4af64cd2 3aac3ebea08f2d342364f827c89 
+> ---------------- --------------------------- 
+>          %stddev     %change         %stddev
+>              \          |                \  
+>     980404 ±  3%     -10.2%     880436 ±  2%  will-it-scale.16.threads
+>      61274 ±  3%     -10.2%      55027 ±  2%  will-it-scale.per_thread_ops
+>     980404 ±  3%     -10.2%     880436 ±  2%  will-it-scale.workload
+>    9745749 ± 18%     +26.8%   12356608 ±  4%  meminfo.DirectMap2M
 
-I've always thought 'platform' was the generic name for otherwise
-non-enumerable platform-firmware/data things enumerated by ACPI / OF.
+Something else funky is going on here.  Why would there all of a sudden
+be so many more 2M pages in the direct map?  I also see gunk like
+interrupts on the network card going up.  I can certainly see that
+happening if something else on the network was messing around.
+
+Granted, this was seen across several systems, but it's really odd.  I
+guess I'll go try to dig up one of the actual ones where this was seen.
+
+I tried on a smaller Skylake system and I don't see any regression at
+all or any interesting delta in a perf profile.
+
+Oliver or Chang, could you try to reproduce this by hand on one of the
+suspect systems?  Build:
+
+  1bdda24c4a ("signal: Add an optional check for altstack size")
+
+then run will-it-scale by hand.  Then build:
+
+  3aac3ebea0 ("x86/signal: Implement sigaltstack size validation")
+
+and run it again.  Also, do we see any higher core-count regressions?
+These all seem to happen with:
+
+	mode=thread
+	nr_task=16
+
+That's really odd to see that for these systems with probably ~50 cores
+each.  I'd expect to see it get worse at higher core counts.

@@ -2,85 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD346B4B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D84546B416
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbhLGH6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:58:00 -0500
-Received: from [113.204.237.245] ([113.204.237.245]:41268 "EHLO
-        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231681AbhLGH57 (ORCPT
+        id S231173AbhLGHkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:40:51 -0500
+Received: from 10.mo548.mail-out.ovh.net ([46.105.77.235]:41643 "EHLO
+        10.mo548.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231147AbhLGHkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:57:59 -0500
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.27.96.203
-        by cqmailgates with MailGates ESMTP Server V5.0(21476:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Tue, 07 Dec 2021 15:21:34 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 7 Dec 2021 15:21:31 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.017; Tue, 7 Dec 2021 15:21:31 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Thread-Topic: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Thread-Index: AQHX6BmLzMMFC/bfnUOF4rJ/hd0nkqwgNNgAgAZiSeA=
-Date:   Tue, 7 Dec 2021 07:21:31 +0000
-Message-ID: <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com>
-References: <cover.1638515726.git.qinjian@cqplus1.com>
- <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
- <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
-In-Reply-To: <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 7 Dec 2021 02:40:51 -0500
+Received: from mxplan5.mail.ovh.net (unknown [10.108.4.240])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id C4A4B209B3;
+        Tue,  7 Dec 2021 07:21:35 +0000 (UTC)
+Received: from kaod.org (37.59.142.102) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
+ 2021 08:21:34 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004880801b5-1b74-45de-8484-6c3316d6c777,
+                    EDCC1E77E28A65BD51DFCD2B92BF934EEA10E5FB) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+Date:   Tue, 7 Dec 2021 08:21:33 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
+ worked
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        <linuxppc-dev@lists.ozlabs.org>, Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-mips@vger.kernel.org>, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <sparclinux@vger.kernel.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Wei Liu <wei.liu@kernel.org>, <linux-hyperv@vger.kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210223.872249537@linutronix.de>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20211206210223.872249537@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [37.59.142.102]
+X-ClientProxiedBy: DAG6EX1.mxp5.local (172.16.2.51) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: b516111a-777e-4242-b371-8efd2fe3d9aa
+X-Ovh-Tracer-Id: 828380858499042085
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeeggddutdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhephffhleegueektdetffdvffeuieeugfekkeelheelteeftdfgtefffeehueegleehnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtohephhgtrgeslhhinhhugidrihgsmhdrtghomh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ICtjb25maWcgQVJDSF9TVU5QTFVTDQo+ID4gKyAgICAgICBib29sICJTdW5wbHVzIFNvQ3Mi
-DQo+ID4gKyAgICAgICBzZWxlY3QgQ0xLU1JDX09GDQo+ID4gKyAgICAgICBzZWxlY3QgQ09NTU9O
-X0NMSw0KPiA+ICsgICAgICAgc2VsZWN0IEdFTkVSSUNfQ0xPQ0tFVkVOVFMNCj4gPiArICAgICAg
-IHNlbGVjdCBHRU5FUklDX0lSUV9DSElQDQo+ID4gKyAgICAgICBzZWxlY3QgR0VORVJJQ19JUlFf
-TVVMVElfSEFORExFUg0KPiA+ICsgICAgICAgc2VsZWN0IFVTRV9PRg0KPiA+ICsgICAgICAgc2Vs
-ZWN0IFJUQ19DTEFTUw0KPiA+ICsgICAgICAgc2VsZWN0IFJFU0VUX1NVTlBMVVMNCj4gDQo+IFRo
-aXMgaXMgaW4gdGhlIHdyb25nIHBsYWNlOiBtb3ZlIHRoZSBLY29uZmlnIGVudHJ5IGludG8NCj4g
-YXJjaC9hcm0vbWFjaC1zdW5wbHVzL0tjb25maWcNCj4gYW5kIG1ha2UgaXQgJ2RlcGVuZHMgb24g
-QVJDSF9NVUxUSV9WNycuDQo+IA0KPiBJIHRoaW5rIHlvdSBjYW4gcmVtb3ZlIGFsbCB0aGUgJ3Nl
-bGVjdCcgbGluZXMgYXMgd2VsbCBiZWNhdXNlIHRoZXkgYXJlDQo+IGVpdGhlciBpbXBsaWVkIGJ5
-DQo+IEFSQ0hfTVVMVElfVjcgb3Igbm90IGFjdHVhbGx5IG5lY2Vzc2FyeS4NCj4gLi4uLi4uDQoN
-ClRoYW5rcyBmb3IgeW91ciByZXZpZXcsIEknbGwgY29ycmVjdCB0aGVzZSBhdCBuZXh0IGNvbW1p
-dC4NCg0KPiANCj4gPiBAQCAtMTUyLDYgKzE1Miw3IEBAIHRleHRvZnMtJChDT05GSUdfQVJDSF9N
-U004WDYwKSA6PSAweDAwMjA4MDAwDQo+ID4gIHRleHRvZnMtJChDT05GSUdfQVJDSF9NU004OTYw
-KSA6PSAweDAwMjA4MDAwDQo+ID4gIHRleHRvZnMtJChDT05GSUdfQVJDSF9NRVNPTikgOj0gMHgw
-MDIwODAwMA0KPiA+ICB0ZXh0b2ZzLSQoQ09ORklHX0FSQ0hfQVhYSUEpIDo9IDB4MDAzMDgwMDAN
-Cj4gPiArdGV4dG9mcy0kKENPTkZJR19BUkNIX1NVTlBMVVMpIDo9IDB4MDAzMDgwMDANCj4gDQo+
-IFdoYXQgaXMgdGhpcyBuZWVkZWQgZm9yPyBJZiBpdCBib290cyB3aXRob3V0IHRoaXMgbGluZSwg
-YmV0dGVyIGF2b2lkDQo+IGFkZGluZyBpdCwgYmVjYXVzZQ0KPiBpdCB3aWxsIGluY3JlYXNlIHRo
-ZSBrZXJuZWwgc2l6ZSBmb3IgZXZlcnlvbmUgZWxzZSAodW5sZXNzIHRoZXkgYWxzbyBlbmFibGUN
-Cj4gQVhYSUEpLg0KPiANCg0KU1A3MDIxIHJlc2VydmVkIHRoZSAxc3QgMU1CIG1lbW9yeSBmb3Ig
-QVJNOTI2QFAtQ2hpcCB1c2luZywNClRoZSAybmQgMU1CIG1lbW9yeSBmb3IgSU9QIGRldmljZSBh
-bmQgdGhlIDNyZCAxTUIgbWVtb3J5IGZvciBib290bG9hZGVyLg0KSSdsbCBhZGQgdGhlc2UgY29t
-bWVudHMgYXQgbmV4dCBjb21taXQuDQoNCg0K
+Hello Thomas,
+
+On 12/6/21 23:27, Thomas Gleixner wrote:
+> This code is broken since day one. ppc4xx_setup_msi_irqs() has the
+> following gems:
+> 
+>   1) The handling of the result of msi_bitmap_alloc_hwirqs() is completely
+>      broken:
+>      
+>      When the result is greater than or equal 0 (bitmap allocation
+>      successful) then the loop terminates and the function returns 0
+>      (success) despite not having installed an interrupt.
+> 
+>      When the result is less than 0 (bitmap allocation fails), it prints an
+>      error message and continues to "work" with that error code which would
+>      eventually end up in the MSI message data.
+> 
+>   2) On every invocation the file global pp4xx_msi::msi_virqs bitmap is
+>      allocated thereby leaking the previous one.
+> 
+> IOW, this has never worked and for more than 10 years nobody cared. Remove
+> the gunk.
+> 
+> Fixes: 3fb7933850fa ("powerpc/4xx: Adding PCIe MSI support")
+
+Shouldn't we remove all of it ? including the updates in the device trees
+and the Kconfig changes under :
+
+arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+arch/powerpc/platforms/40x/Kconfig:	select PPC4xx_MSI
+
+Thanks,
+
+C.
+
+
+
+> Fixes: 247540b03bfc ("powerpc/44x: Fix PCI MSI support for Maui APM821xx SoC and Bluestone board")
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> ---
+>   arch/powerpc/platforms/4xx/Makefile |    1
+>   arch/powerpc/platforms/4xx/msi.c    |  281 ------------------------------------
+>   arch/powerpc/sysdev/Kconfig         |    6
+>   3 files changed, 288 deletions(-)
+> 
+> --- a/arch/powerpc/platforms/4xx/Makefile
+> +++ b/arch/powerpc/platforms/4xx/Makefile
+> @@ -3,6 +3,5 @@ obj-y				+= uic.o machine_check.o
+>   obj-$(CONFIG_4xx_SOC)		+= soc.o
+>   obj-$(CONFIG_PCI)		+= pci.o
+>   obj-$(CONFIG_PPC4xx_HSTA_MSI)	+= hsta_msi.o
+> -obj-$(CONFIG_PPC4xx_MSI)	+= msi.o
+>   obj-$(CONFIG_PPC4xx_CPM)	+= cpm.o
+>   obj-$(CONFIG_PPC4xx_GPIO)	+= gpio.o
+> --- a/arch/powerpc/platforms/4xx/msi.c
+> +++ /dev/null
+> @@ -1,281 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
+> -/*
+> - * Adding PCI-E MSI support for PPC4XX SoCs.
+> - *
+> - * Copyright (c) 2010, Applied Micro Circuits Corporation
+> - * Authors:	Tirumala R Marri <tmarri@apm.com>
+> - *		Feng Kan <fkan@apm.com>
+> - */
+> -
+> -#include <linux/irq.h>
+> -#include <linux/pci.h>
+> -#include <linux/msi.h>
+> -#include <linux/of_platform.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/export.h>
+> -#include <linux/kernel.h>
+> -#include <asm/prom.h>
+> -#include <asm/hw_irq.h>
+> -#include <asm/ppc-pci.h>
+> -#include <asm/dcr.h>
+> -#include <asm/dcr-regs.h>
+> -#include <asm/msi_bitmap.h>
+> -
+> -#define PEIH_TERMADH	0x00
+> -#define PEIH_TERMADL	0x08
+> -#define PEIH_MSIED	0x10
+> -#define PEIH_MSIMK	0x18
+> -#define PEIH_MSIASS	0x20
+> -#define PEIH_FLUSH0	0x30
+> -#define PEIH_FLUSH1	0x38
+> -#define PEIH_CNTRST	0x48
+> -
+> -static int msi_irqs;
+> -
+> -struct ppc4xx_msi {
+> -	u32 msi_addr_lo;
+> -	u32 msi_addr_hi;
+> -	void __iomem *msi_regs;
+> -	int *msi_virqs;
+> -	struct msi_bitmap bitmap;
+> -	struct device_node *msi_dev;
+> -};
+> -
+> -static struct ppc4xx_msi ppc4xx_msi;
+> -
+> -static int ppc4xx_msi_init_allocator(struct platform_device *dev,
+> -		struct ppc4xx_msi *msi_data)
+> -{
+> -	int err;
+> -
+> -	err = msi_bitmap_alloc(&msi_data->bitmap, msi_irqs,
+> -			      dev->dev.of_node);
+> -	if (err)
+> -		return err;
+> -
+> -	err = msi_bitmap_reserve_dt_hwirqs(&msi_data->bitmap);
+> -	if (err < 0) {
+> -		msi_bitmap_free(&msi_data->bitmap);
+> -		return err;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int ppc4xx_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
+> -{
+> -	int int_no = -ENOMEM;
+> -	unsigned int virq;
+> -	struct msi_msg msg;
+> -	struct msi_desc *entry;
+> -	struct ppc4xx_msi *msi_data = &ppc4xx_msi;
+> -
+> -	dev_dbg(&dev->dev, "PCIE-MSI:%s called. vec %x type %d\n",
+> -		__func__, nvec, type);
+> -	if (type == PCI_CAP_ID_MSIX)
+> -		pr_debug("ppc4xx msi: MSI-X untested, trying anyway.\n");
+> -
+> -	msi_data->msi_virqs = kmalloc_array(msi_irqs, sizeof(int), GFP_KERNEL);
+> -	if (!msi_data->msi_virqs)
+> -		return -ENOMEM;
+> -
+> -	for_each_pci_msi_entry(entry, dev) {
+> -		int_no = msi_bitmap_alloc_hwirqs(&msi_data->bitmap, 1);
+> -		if (int_no >= 0)
+> -			break;
+> -		if (int_no < 0) {
+> -			pr_debug("%s: fail allocating msi interrupt\n",
+> -					__func__);
+> -		}
+> -		virq = irq_of_parse_and_map(msi_data->msi_dev, int_no);
+> -		if (!virq) {
+> -			dev_err(&dev->dev, "%s: fail mapping irq\n", __func__);
+> -			msi_bitmap_free_hwirqs(&msi_data->bitmap, int_no, 1);
+> -			return -ENOSPC;
+> -		}
+> -		dev_dbg(&dev->dev, "%s: virq = %d\n", __func__, virq);
+> -
+> -		/* Setup msi address space */
+> -		msg.address_hi = msi_data->msi_addr_hi;
+> -		msg.address_lo = msi_data->msi_addr_lo;
+> -
+> -		irq_set_msi_desc(virq, entry);
+> -		msg.data = int_no;
+> -		pci_write_msi_msg(virq, &msg);
+> -	}
+> -	return 0;
+> -}
+> -
+> -void ppc4xx_teardown_msi_irqs(struct pci_dev *dev)
+> -{
+> -	struct msi_desc *entry;
+> -	struct ppc4xx_msi *msi_data = &ppc4xx_msi;
+> -	irq_hw_number_t hwirq;
+> -
+> -	dev_dbg(&dev->dev, "PCIE-MSI: tearing down msi irqs\n");
+> -
+> -	for_each_pci_msi_entry(entry, dev) {
+> -		if (!entry->irq)
+> -			continue;
+> -		hwirq = virq_to_hw(entry->irq);
+> -		irq_set_msi_desc(entry->irq, NULL);
+> -		irq_dispose_mapping(entry->irq);
+> -		msi_bitmap_free_hwirqs(&msi_data->bitmap, hwirq, 1);
+> -	}
+> -}
+> -
+> -static int ppc4xx_setup_pcieh_hw(struct platform_device *dev,
+> -				 struct resource res, struct ppc4xx_msi *msi)
+> -{
+> -	const u32 *msi_data;
+> -	const u32 *msi_mask;
+> -	const u32 *sdr_addr;
+> -	dma_addr_t msi_phys;
+> -	void *msi_virt;
+> -	int err;
+> -
+> -	sdr_addr = of_get_property(dev->dev.of_node, "sdr-base", NULL);
+> -	if (!sdr_addr)
+> -		return -EINVAL;
+> -
+> -	msi_data = of_get_property(dev->dev.of_node, "msi-data", NULL);
+> -	if (!msi_data)
+> -		return -EINVAL;
+> -
+> -	msi_mask = of_get_property(dev->dev.of_node, "msi-mask", NULL);
+> -	if (!msi_mask)
+> -		return -EINVAL;
+> -
+> -	msi->msi_dev = of_find_node_by_name(NULL, "ppc4xx-msi");
+> -	if (!msi->msi_dev)
+> -		return -ENODEV;
+> -
+> -	msi->msi_regs = of_iomap(msi->msi_dev, 0);
+> -	if (!msi->msi_regs) {
+> -		dev_err(&dev->dev, "of_iomap failed\n");
+> -		err = -ENOMEM;
+> -		goto node_put;
+> -	}
+> -	dev_dbg(&dev->dev, "PCIE-MSI: msi register mapped 0x%x 0x%x\n",
+> -		(u32) (msi->msi_regs + PEIH_TERMADH), (u32) (msi->msi_regs));
+> -
+> -	msi_virt = dma_alloc_coherent(&dev->dev, 64, &msi_phys, GFP_KERNEL);
+> -	if (!msi_virt) {
+> -		err = -ENOMEM;
+> -		goto iounmap;
+> -	}
+> -	msi->msi_addr_hi = upper_32_bits(msi_phys);
+> -	msi->msi_addr_lo = lower_32_bits(msi_phys & 0xffffffff);
+> -	dev_dbg(&dev->dev, "PCIE-MSI: msi address high 0x%x, low 0x%x\n",
+> -		msi->msi_addr_hi, msi->msi_addr_lo);
+> -
+> -	mtdcri(SDR0, *sdr_addr, upper_32_bits(res.start));	/*HIGH addr */
+> -	mtdcri(SDR0, *sdr_addr + 1, lower_32_bits(res.start));	/* Low addr */
+> -
+> -	/* Progam the Interrupt handler Termination addr registers */
+> -	out_be32(msi->msi_regs + PEIH_TERMADH, msi->msi_addr_hi);
+> -	out_be32(msi->msi_regs + PEIH_TERMADL, msi->msi_addr_lo);
+> -
+> -	/* Program MSI Expected data and Mask bits */
+> -	out_be32(msi->msi_regs + PEIH_MSIED, *msi_data);
+> -	out_be32(msi->msi_regs + PEIH_MSIMK, *msi_mask);
+> -
+> -	dma_free_coherent(&dev->dev, 64, msi_virt, msi_phys);
+> -
+> -	return 0;
+> -
+> -iounmap:
+> -	iounmap(msi->msi_regs);
+> -node_put:
+> -	of_node_put(msi->msi_dev);
+> -	return err;
+> -}
+> -
+> -static int ppc4xx_of_msi_remove(struct platform_device *dev)
+> -{
+> -	struct ppc4xx_msi *msi = dev->dev.platform_data;
+> -	int i;
+> -	int virq;
+> -
+> -	for (i = 0; i < msi_irqs; i++) {
+> -		virq = msi->msi_virqs[i];
+> -		if (virq)
+> -			irq_dispose_mapping(virq);
+> -	}
+> -
+> -	if (msi->bitmap.bitmap)
+> -		msi_bitmap_free(&msi->bitmap);
+> -	iounmap(msi->msi_regs);
+> -	of_node_put(msi->msi_dev);
+> -
+> -	return 0;
+> -}
+> -
+> -static int ppc4xx_msi_probe(struct platform_device *dev)
+> -{
+> -	struct ppc4xx_msi *msi;
+> -	struct resource res;
+> -	int err = 0;
+> -	struct pci_controller *phb;
+> -
+> -	dev_dbg(&dev->dev, "PCIE-MSI: Setting up MSI support...\n");
+> -
+> -	msi = devm_kzalloc(&dev->dev, sizeof(*msi), GFP_KERNEL);
+> -	if (!msi)
+> -		return -ENOMEM;
+> -	dev->dev.platform_data = msi;
+> -
+> -	/* Get MSI ranges */
+> -	err = of_address_to_resource(dev->dev.of_node, 0, &res);
+> -	if (err) {
+> -		dev_err(&dev->dev, "%pOF resource error!\n", dev->dev.of_node);
+> -		return err;
+> -	}
+> -
+> -	msi_irqs = of_irq_count(dev->dev.of_node);
+> -	if (!msi_irqs)
+> -		return -ENODEV;
+> -
+> -	err = ppc4xx_setup_pcieh_hw(dev, res, msi);
+> -	if (err)
+> -		return err;
+> -
+> -	err = ppc4xx_msi_init_allocator(dev, msi);
+> -	if (err) {
+> -		dev_err(&dev->dev, "Error allocating MSI bitmap\n");
+> -		goto error_out;
+> -	}
+> -	ppc4xx_msi = *msi;
+> -
+> -	list_for_each_entry(phb, &hose_list, list_node) {
+> -		phb->controller_ops.setup_msi_irqs = ppc4xx_setup_msi_irqs;
+> -		phb->controller_ops.teardown_msi_irqs = ppc4xx_teardown_msi_irqs;
+> -	}
+> -	return 0;
+> -
+> -error_out:
+> -	ppc4xx_of_msi_remove(dev);
+> -	return err;
+> -}
+> -static const struct of_device_id ppc4xx_msi_ids[] = {
+> -	{
+> -		.compatible = "amcc,ppc4xx-msi",
+> -	},
+> -	{}
+> -};
+> -static struct platform_driver ppc4xx_msi_driver = {
+> -	.probe = ppc4xx_msi_probe,
+> -	.remove = ppc4xx_of_msi_remove,
+> -	.driver = {
+> -		   .name = "ppc4xx-msi",
+> -		   .of_match_table = ppc4xx_msi_ids,
+> -		   },
+> -
+> -};
+> -
+> -static __init int ppc4xx_msi_init(void)
+> -{
+> -	return platform_driver_register(&ppc4xx_msi_driver);
+> -}
+> -
+> -subsys_initcall(ppc4xx_msi_init);
+> --- a/arch/powerpc/sysdev/Kconfig
+> +++ b/arch/powerpc/sysdev/Kconfig
+> @@ -12,17 +12,11 @@ config PPC4xx_HSTA_MSI
+>   	depends on PCI_MSI
+>   	depends on PCI && 4xx
+>   
+> -config PPC4xx_MSI
+> -	bool
+> -	depends on PCI_MSI
+> -	depends on PCI && 4xx
+> -
+>   config PPC_MSI_BITMAP
+>   	bool
+>   	depends on PCI_MSI
+>   	default y if MPIC
+>   	default y if FSL_PCI
+> -	default y if PPC4xx_MSI
+>   	default y if PPC_POWERNV
+>   
+>   source "arch/powerpc/sysdev/xics/Kconfig"
+> 
+

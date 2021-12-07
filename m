@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B7A46BDA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A4D46BDA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbhLGObk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S237827AbhLGObt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237799AbhLGObj (ORCPT
+        with ESMTP id S237820AbhLGObs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:31:39 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFB3C061574;
-        Tue,  7 Dec 2021 06:28:09 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id i12so13643483pfd.6;
-        Tue, 07 Dec 2021 06:28:09 -0800 (PST)
+        Tue, 7 Dec 2021 09:31:48 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B28C061748;
+        Tue,  7 Dec 2021 06:28:18 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 71so14010392pgb.4;
+        Tue, 07 Dec 2021 06:28:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q0MsKoLxSvs7X9cZpCJWtx19tEgg6uxw/DuKyl42aFU=;
-        b=CG+hc5tTr+VSZGM2hFcB8L+V4tPAiUfdKz0qzNu6DF4/y/TtAoRcVhtuZgSXkGos64
-         CnUSjtOhWgmvbnsAdd3jdnBBSzTzRDdQEDVRAXatjD1KQXwIYfjs5M8GdWeVZhEhfpej
-         NEDGMLRArLyH65mDrgZHHkgWebyvuswuNGHmi7dPHhZqHRscna3xZFrmFlchMTV/5HSH
-         6Gn9ZBs3xv9jMm7oUWvCzlr+NDJP21tQUi+ZRFbUSzq2h2ttbIXuJG1GQXIgSfSSoLNW
-         snW8bTiKVyVPhPG7v32JoM7C7rRtUkuzxRcRjBqwfKYKKuky45HXc4E3cfdiYZWau52N
-         kCHg==
+        bh=k3VX3I7y9xb7wsw2EFMUi2KX7EoFTuOAW4MR3tKQ32Y=;
+        b=D/oGGndHpbKYyz23y3ZctunZPJKbWBzt1/Tf4u1HekEFHrqh4BfhpUT0ACwsI7TXfw
+         ftxEZVpbANUg6WaMwScs+FCpTo74OlEYYUhyrZUFpXLVBH8PS4/5FW1J0WW66tBvZWbh
+         lpqlVwMJMZ6fjrogHo52takRiFMx2PVzJYfieevtqaY8V7pC/fxJ1NddFpv8rJY5EL2h
+         5kfvRre+gRUrvXAc2o1ZRu7Nf+K5Z/FJgzag6GURo3bHzH8ghNpp+ZP0/C1QQcZwmEdT
+         TKjEmcLBraTVFGsLeJzAE6kuV6Vw7avkEq8j6GxSsM0jyMxeHGINn3Cw+6U9K7DzK0D6
+         LPUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q0MsKoLxSvs7X9cZpCJWtx19tEgg6uxw/DuKyl42aFU=;
-        b=KTepMJ55O4K22d5I9TQVCSaUab0luYZBqbmnNsTx7t4Z8ZG5w1ATjcHKeDPbioL+K0
-         5e0yJhXdJOmS0uds/DXA2cttv5FqOLlcQ8Eqb3tuMBfHIhpsiJuXl8q5UQb8+AMGz9j5
-         rFeqK5eyi42/2hL11L0ZxWjslBXp6TLxcZXLODMV+aiSUXL61kspRWS6COPqDZli4tLu
-         YNwNvDoUhLXqp1/LIc6l5J2+JfMLDKUON2ozA1ahjcelDsWeAVMam/dkhEqGiuw3Yk+i
-         vEDLyvoaBgU3uIEMFK2rgyX9eCcgtE60aiBA3fbw0uEn+zRzdNfxiEAObmkpz9Ahb5oL
-         FJKA==
-X-Gm-Message-State: AOAM532wVL1K17LnCU2z2C2ddLYQuXH9k2Uq6pmHKR/vilbrxhqVUMFy
-        2t6BsRU5HtwjZ5eGP0qQc28=
-X-Google-Smtp-Source: ABdhPJxsYIQ5qAEwOevUHie4l3unr3f34PSBXJLKZunzKtAkBYcCTL6+PRYNkPT4ndYRjkhFMi1c6g==
-X-Received: by 2002:a63:2b8a:: with SMTP id r132mr23647643pgr.434.1638887288551;
-        Tue, 07 Dec 2021 06:28:08 -0800 (PST)
+        bh=k3VX3I7y9xb7wsw2EFMUi2KX7EoFTuOAW4MR3tKQ32Y=;
+        b=Xb5GkKe0lT7rmeRtlhdif0qcRss0gEzI0YnAw1KXGF7qn08wDU2w0GnjfnqCuY51QZ
+         +Z39knpQvKuoBaJGpu2CYrT4CrMvR9IwGhhyudHf5vSa1AtR6H18WYWUQnwbOrBHh5NO
+         dzoFbVfCGLfL86u8FN3Rw5t/1GBfpIWc2EGNHdrmvvwFEHZ/gorZdaxa8teCDfFIbOs2
+         7Po/QPtJNCO7yC3D0ZWUw/Wax23IkxYKgxvFZsz8dpRdnHG0SU+AjusRO+b8gi8+5W7K
+         p/0TpgBkYQ5SM4MpIOqHb+FSdw/WQnLSssKvck6H7Hn0GszB/ZpxqEOAx1aRAJKISztw
+         nYog==
+X-Gm-Message-State: AOAM531+oMFHiKZuygKDKLnM6WpIGOLz5UAEtzXWGzkEBjhbNEmjW/Qe
+        yCMvOmAvoGWqmx4gNhTQMzM=
+X-Google-Smtp-Source: ABdhPJzYCDEsy6w5v+vfJK80BRKAykU8tpWz7FrBnvAf5fGj3sEO0irtTRjkvczLLXlrKrnfsRAooQ==
+X-Received: by 2002:a63:8149:: with SMTP id t70mr24020143pgd.2.1638887297908;
+        Tue, 07 Dec 2021 06:28:17 -0800 (PST)
 Received: from nj08008nbu.spreadtrum.com ([103.6.5.6])
-        by smtp.gmail.com with ESMTPSA id d20sm16373247pfl.88.2021.12.07.06.28.01
+        by smtp.gmail.com with ESMTPSA id d20sm16373247pfl.88.2021.12.07.06.28.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 Dec 2021 06:28:08 -0800 (PST)
+        Tue, 07 Dec 2021 06:28:17 -0800 (PST)
 From:   Kevin Tang <kevin3.tang@gmail.com>
 To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
@@ -56,9 +56,9 @@ To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
 Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v8 2/6] drm/sprd: add Unisoc's drm kms master
-Date:   Tue,  7 Dec 2021 22:27:13 +0800
-Message-Id: <20211207142717.30296-3-kevin3.tang@gmail.com>
+Subject: [PATCH v8 3/6] dt-bindings: display: add Unisoc's dpu bindings
+Date:   Tue,  7 Dec 2021 22:27:14 +0800
+Message-Id: <20211207142717.30296-4-kevin3.tang@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20211207142717.30296-1-kevin3.tang@gmail.com>
 References: <20211207142717.30296-1-kevin3.tang@gmail.com>
@@ -68,318 +68,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds drm support for the Unisoc's display subsystem.
+From: Kevin Tang <kevin.tang@unisoc.com>
 
-This is drm kms driver, this driver provides support for the
-application framework in Android, Yocto and more.
-
-Application framework can access Unisoc's display internal
-peripherals through libdrm or libkms, it's test ok by modetest
-(DRM/KMS test tool) and Android HWComposer.
-
-v4:
-  - Move the devm_drm_dev_alloc to master_ops->bind function.
-  - The managed drmm_mode_config_init() it is no longer necessary for drivers to explicitly call drm_mode_config_cleanup, so delete it.
-
-v5:
-  - Remove subdir-ccflgas-y for Makefile.
-  - Keep the selects sorted by alphabet for Kconfig.
+DPU (Display Processor Unit) is the Display Controller for the Unisoc SoCs
+which transfers the image data from a video memory buffer to an internal
+LCD interface.
 
 Cc: Orson Zhai <orsonzhai@gmail.com>
 Cc: Chunyan Zhang <zhang.lyra@gmail.com>
 Signed-off-by: Kevin Tang <kevin.tang@unisoc.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/gpu/drm/Kconfig         |   2 +
- drivers/gpu/drm/Makefile        |   1 +
- drivers/gpu/drm/sprd/Kconfig    |  11 ++
- drivers/gpu/drm/sprd/Makefile   |   3 +
- drivers/gpu/drm/sprd/sprd_drm.c | 203 ++++++++++++++++++++++++++++++++
- drivers/gpu/drm/sprd/sprd_drm.h |  16 +++
- 6 files changed, 236 insertions(+)
- create mode 100644 drivers/gpu/drm/sprd/Kconfig
- create mode 100644 drivers/gpu/drm/sprd/Makefile
- create mode 100644 drivers/gpu/drm/sprd/sprd_drm.c
- create mode 100644 drivers/gpu/drm/sprd/sprd_drm.h
+ .../display/sprd/sprd,sharkl3-dpu.yaml        | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dpu.yaml
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index fb1446170..f50abc84f 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -395,6 +395,8 @@ source "drivers/gpu/drm/xlnx/Kconfig"
- 
- source "drivers/gpu/drm/gud/Kconfig"
- 
-+source "drivers/gpu/drm/sprd/Kconfig"
-+
- config DRM_HYPERV
- 	tristate "DRM Support for Hyper-V synthetic video device"
- 	depends on DRM && PCI && MMU && HYPERV
-diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 1c41156de..e6bab8df7 100644
---- a/drivers/gpu/drm/Makefile
-+++ b/drivers/gpu/drm/Makefile
-@@ -132,3 +132,4 @@ obj-$(CONFIG_DRM_TIDSS) += tidss/
- obj-y			+= xlnx/
- obj-y			+= gud/
- obj-$(CONFIG_DRM_HYPERV) += hyperv/
-+obj-$(CONFIG_DRM_SPRD) += sprd/
-diff --git a/drivers/gpu/drm/sprd/Kconfig b/drivers/gpu/drm/sprd/Kconfig
+diff --git a/Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dpu.yaml b/Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dpu.yaml
 new file mode 100644
-index 000000000..726c3e76d
+index 000000000..4ebea60b8
 --- /dev/null
-+++ b/drivers/gpu/drm/sprd/Kconfig
-@@ -0,0 +1,11 @@
-+config DRM_SPRD
-+	tristate "DRM Support for Unisoc SoCs Platform"
-+	depends on ARCH_SPRD || COMPILE_TEST
-+	depends on DRM && OF
-+	select DRM_GEM_CMA_HELPER
-+	select DRM_KMS_CMA_HELPER
-+	select DRM_KMS_HELPER
-+	help
-+	  Choose this option if you have a Unisoc chipset.
-+	  If M is selected the module will be called sprd_drm.
++++ b/Documentation/devicetree/bindings/display/sprd/sprd,sharkl3-dpu.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/sprd/sprd,sharkl3-dpu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-diff --git a/drivers/gpu/drm/sprd/Makefile b/drivers/gpu/drm/sprd/Makefile
-new file mode 100644
-index 000000000..9850f00b8
---- /dev/null
-+++ b/drivers/gpu/drm/sprd/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
++title: Unisoc Sharkl3 Display Processor Unit (DPU)
 +
-+obj-y := sprd_drm.o
-diff --git a/drivers/gpu/drm/sprd/sprd_drm.c b/drivers/gpu/drm/sprd/sprd_drm.c
-new file mode 100644
-index 000000000..bb87f28f2
---- /dev/null
-+++ b/drivers/gpu/drm/sprd/sprd_drm.c
-@@ -0,0 +1,203 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020 Unisoc Inc.
-+ */
++maintainers:
++  - Kevin Tang <kevin.tang@unisoc.com>
 +
-+#include <linux/component.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of_graph.h>
-+#include <linux/of_platform.h>
++description: |
++  DPU (Display Processor Unit) is the Display Controller for the Unisoc SoCs
++  which transfers the image data from a video memory buffer to an internal
++  LCD interface.
 +
-+#include <drm/drm_atomic_helper.h>
-+#include <drm/drm_crtc_helper.h>
-+#include <drm/drm_drv.h>
-+#include <drm/drm_gem_cma_helper.h>
-+#include <drm/drm_gem_framebuffer_helper.h>
-+#include <drm/drm_of.h>
-+#include <drm/drm_probe_helper.h>
-+#include <drm/drm_vblank.h>
++properties:
++  compatible:
++    const: sprd,sharkl3-dpu
 +
-+#include "sprd_drm.h"
++  reg:
++    maxItems: 1
 +
-+#define DRIVER_NAME	"sprd"
-+#define DRIVER_DESC	"Spreadtrum SoCs' DRM Driver"
-+#define DRIVER_DATE	"20200201"
-+#define DRIVER_MAJOR	1
-+#define DRIVER_MINOR	0
++  interrupts:
++    maxItems: 1
 +
-+static const struct drm_mode_config_helper_funcs sprd_drm_mode_config_helper = {
-+	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
-+};
++  clocks:
++    minItems: 2
 +
-+static const struct drm_mode_config_funcs sprd_drm_mode_config_funcs = {
-+	.fb_create = drm_gem_fb_create,
-+	.atomic_check = drm_atomic_helper_check,
-+	.atomic_commit = drm_atomic_helper_commit,
-+};
++  clock-names:
++    items:
++      - const: clk_src_128m
++      - const: clk_src_384m
 +
-+static void sprd_drm_mode_config_init(struct drm_device *drm)
-+{
-+	drm->mode_config.min_width = 0;
-+	drm->mode_config.min_height = 0;
-+	drm->mode_config.max_width = 8192;
-+	drm->mode_config.max_height = 8192;
-+	drm->mode_config.allow_fb_modifiers = true;
++  power-domains:
++    maxItems: 1
 +
-+	drm->mode_config.funcs = &sprd_drm_mode_config_funcs;
-+	drm->mode_config.helper_private = &sprd_drm_mode_config_helper;
-+}
++  iommus:
++    maxItems: 1
 +
-+DEFINE_DRM_GEM_CMA_FOPS(sprd_drm_fops);
++  port:
++    type: object
++    description:
++      A port node with endpoint definitions as defined in
++      Documentation/devicetree/bindings/media/video-interfaces.txt.
++      That port should be the output endpoint, usually output to
++      the associated DSI.
 +
-+static struct drm_driver sprd_drm_drv = {
-+	.driver_features	= DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
-+	.fops			= &sprd_drm_fops,
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - port
 +
-+	/* GEM Operations */
-+	DRM_GEM_CMA_DRIVER_OPS,
++additionalProperties: false
 +
-+	.name			= DRIVER_NAME,
-+	.desc			= DRIVER_DESC,
-+	.date			= DRIVER_DATE,
-+	.major			= DRIVER_MAJOR,
-+	.minor			= DRIVER_MINOR,
-+};
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/sprd,sc9860-clk.h>
++    dpu: dpu@63000000 {
++        compatible = "sprd,sharkl3-dpu";
++        reg = <0x63000000 0x1000>;
++        interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
++        clock-names = "clk_src_128m", "clk_src_384m";
 +
-+static int sprd_drm_bind(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct drm_device *drm;
-+	struct sprd_drm *sprd;
-+	int ret;
++        clocks = <&pll CLK_TWPLL_128M>,
++          <&pll CLK_TWPLL_384M>;
 +
-+	sprd = devm_drm_dev_alloc(dev, &sprd_drm_drv, struct sprd_drm, drm);
-+	if (IS_ERR(sprd))
-+		return PTR_ERR(sprd);
-+
-+	drm = &sprd->drm;
-+	platform_set_drvdata(pdev, drm);
-+
-+	ret = drmm_mode_config_init(drm);
-+	if (ret)
-+		return ret;
-+
-+	sprd_drm_mode_config_init(drm);
-+
-+	/* bind and init sub drivers */
-+	ret = component_bind_all(drm->dev, drm);
-+	if (ret) {
-+		drm_err(drm, "failed to bind all component.\n");
-+		return ret;
-+	}
-+
-+	/* vblank init */
-+	ret = drm_vblank_init(drm, drm->mode_config.num_crtc);
-+	if (ret) {
-+		drm_err(drm, "failed to initialize vblank.\n");
-+		goto err_unbind_all;
-+	}
-+
-+	/* reset all the states of crtc/plane/encoder/connector */
-+	drm_mode_config_reset(drm);
-+
-+	/* init kms poll for handling hpd */
-+	drm_kms_helper_poll_init(drm);
-+
-+	ret = drm_dev_register(drm, 0);
-+	if (ret < 0)
-+		goto err_kms_helper_poll_fini;
-+
-+	return 0;
-+
-+err_kms_helper_poll_fini:
-+	drm_kms_helper_poll_fini(drm);
-+err_unbind_all:
-+	component_unbind_all(drm->dev, drm);
-+	return ret;
-+}
-+
-+static void sprd_drm_unbind(struct device *dev)
-+{
-+	struct drm_device *drm = dev_get_drvdata(dev);
-+
-+	drm_dev_unregister(drm);
-+
-+	drm_kms_helper_poll_fini(drm);
-+
-+	component_unbind_all(drm->dev, drm);
-+}
-+
-+static const struct component_master_ops drm_component_ops = {
-+	.bind = sprd_drm_bind,
-+	.unbind = sprd_drm_unbind,
-+};
-+
-+static int compare_of(struct device *dev, void *data)
-+{
-+	return dev->of_node == data;
-+}
-+
-+static int sprd_drm_probe(struct platform_device *pdev)
-+{
-+	return drm_of_component_probe(&pdev->dev, compare_of, &drm_component_ops);
-+}
-+
-+static int sprd_drm_remove(struct platform_device *pdev)
-+{
-+	component_master_del(&pdev->dev, &drm_component_ops);
-+	return 0;
-+}
-+
-+static void sprd_drm_shutdown(struct platform_device *pdev)
-+{
-+	struct drm_device *drm = platform_get_drvdata(pdev);
-+
-+	if (!drm) {
-+		drm_warn(drm, "drm device is not available, no shutdown\n");
-+		return;
-+	}
-+
-+	drm_atomic_helper_shutdown(drm);
-+}
-+
-+static const struct of_device_id drm_match_table[] = {
-+	{ .compatible = "sprd,display-subsystem", },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, drm_match_table);
-+
-+static struct platform_driver sprd_drm_driver = {
-+	.probe = sprd_drm_probe,
-+	.remove = sprd_drm_remove,
-+	.shutdown = sprd_drm_shutdown,
-+	.driver = {
-+		.name = "sprd-drm-drv",
-+		.of_match_table = drm_match_table,
-+	},
-+};
-+
-+static struct platform_driver *sprd_drm_drivers[]  = {
-+	&sprd_drm_driver,
-+};
-+
-+static int __init sprd_drm_init(void)
-+{
-+	return platform_register_drivers(sprd_drm_drivers,
-+					ARRAY_SIZE(sprd_drm_drivers));
-+}
-+
-+static void __exit sprd_drm_exit(void)
-+{
-+	platform_unregister_drivers(sprd_drm_drivers,
-+				    ARRAY_SIZE(sprd_drm_drivers));
-+}
-+
-+module_init(sprd_drm_init);
-+module_exit(sprd_drm_exit);
-+
-+MODULE_AUTHOR("Leon He <leon.he@unisoc.com>");
-+MODULE_AUTHOR("Kevin Tang <kevin.tang@unisoc.com>");
-+MODULE_DESCRIPTION("Unisoc DRM KMS Master Driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/gpu/drm/sprd/sprd_drm.h b/drivers/gpu/drm/sprd/sprd_drm.h
-new file mode 100644
-index 000000000..9781fd591
---- /dev/null
-+++ b/drivers/gpu/drm/sprd/sprd_drm.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020 Unisoc Inc.
-+ */
-+
-+#ifndef _SPRD_DRM_H_
-+#define _SPRD_DRM_H_
-+
-+#include <drm/drm_atomic.h>
-+#include <drm/drm_print.h>
-+
-+struct sprd_drm {
-+	struct drm_device drm;
-+};
-+
-+#endif /* _SPRD_DRM_H_ */
++        dpu_port: port {
++            dpu_out: endpoint {
++                remote-endpoint = <&dsi_in>;
++            };
++        };
++    };
 -- 
 2.29.0
 

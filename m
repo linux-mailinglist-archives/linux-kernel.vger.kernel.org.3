@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F02146B178
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1317A46B17B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbhLGD0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S234108AbhLGD1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbhLGD0j (ORCPT
+        with ESMTP id S233910AbhLGD1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:26:39 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F84C061746;
-        Mon,  6 Dec 2021 19:23:09 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id f186so37051186ybg.2;
-        Mon, 06 Dec 2021 19:23:09 -0800 (PST)
+        Mon, 6 Dec 2021 22:27:20 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1087CC061746;
+        Mon,  6 Dec 2021 19:23:51 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id l64so6887395pgl.9;
+        Mon, 06 Dec 2021 19:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MW07K0MrFAu2xQfDoW0bQgBPKA2ToS58ph8BV+OA0js=;
-        b=fqTDqw8WQYbT/xGm7g48YauGBVFiUdsVqnt6pfOV3d2dvIXHKjBOuRpWKewZtWoSWP
-         S5iPCkfMjN4CMXSA31GYUSde7rnihTwKcbxEQxVbZFMndOaGy73CAmWkSu1mQkfkXAIl
-         c+GRD2r3/5FWP2JLqW7iD0TXkX3dcFiQvexhlC6PIGjr4cRC6bCbhw1WeRAWyO9+a4Ql
-         ViPf2f9vR58J5b9zaFRqcX1AXgxphd9Cj/Itf5Jj4ax97O6oKY9bll0RueDE575VbGzl
-         aVzA3m4DDVCoOiTpNJxNAZ6log+MthWS3RNnNLnndOIecdQTEmA6PAUkr+hdjWQNy642
-         U5Fg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jh/Kjz0Ns9vTlq2xsujkefYFH6sZw0GJ2m8+AGu9qfQ=;
+        b=JXKUeqDKv01CWYnopMmmIVsbT8tqxwhoRS082UHG6irEZG/NqiWz5O6E5dQ3spdbuh
+         abZr6fDeQyo7ArFzx6ZcofBcjJwXohJtQSL6V8CPYyLSVJb7ZKFgdyjZdAwDy2+vX5hR
+         ynhvuK63LlHuNAE+TrPmlbJsYnDL3Ci24lomtvQN9V0fDr1zd7Sh7w2NXs8mqfE2nApI
+         HE+rpKgrxCauN1iEkumLCAd4Sooph8qjSWdQythnM7rTFrD0ifTdFF4g8ZU2dMdcFhN2
+         iRL5G1+zfeeff1OZmKMBJEwhBNjvE+k+Fm/0MxX/MZndPLIaMbAKXn3QbJWZwYMXF7Aj
+         MJXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MW07K0MrFAu2xQfDoW0bQgBPKA2ToS58ph8BV+OA0js=;
-        b=5J15V5LhoEUOm6tQ9KDbazLmLWhWLzwBYt4X8JLjae8dvSmFVH6HLXqhS+oovB0IHs
-         vynUQ1tuXaDJBRiF0uaEMnemEOijkKNYjDl5WbOq4ROxLba3n9b0aVCTuJPBfOl49EbN
-         +0YcvRxYGfoul0+9//rGsMQ8pnfdK9mx03uqOuW1cv70TYAtNzBqyXQGyD47IrsK6sFu
-         eAh7gidtCThQ2iXS0/HjoZTZ3HfMmkOpE2hD4k0k9Um0WR/N2ScLCfQskgrtmqb2xFSf
-         /25F5MRVKZKcQgxHrKnUSvqbT14IyR57d2PHxfsABBWZlXyMEk5nBBi4xGTnhAKjgwIf
-         u7Nw==
-X-Gm-Message-State: AOAM533adS3pM/DiE13i7HbHnnd0g7jj6O7DhAv1VljLBd0RtOgc40JG
-        LKsfDvcWnhZTo2N1uT+LB4ccV80opX06BQNZWi4=
-X-Google-Smtp-Source: ABdhPJycHxvJtKMzj7FhQDNdExGHKoDBkSNC85yJuGrUBZACR3dT6+M2BSA9iN+WDbkAIwOrxM1suydz9DwJDfMkqOM=
-X-Received: by 2002:a25:abaa:: with SMTP id v39mr47466264ybi.367.1638847389122;
- Mon, 06 Dec 2021 19:23:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20211206105530.0cd0a147@canb.auug.org.au> <20211206114348.37971224@canb.auug.org.au>
-In-Reply-To: <20211206114348.37971224@canb.auug.org.au>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 6 Dec 2021 19:22:58 -0800
-Message-ID: <CAEf4BzbiXhNk5xVQnZy11R697jmZEEQePwpSSNu+00x8hZ+Z1g@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jh/Kjz0Ns9vTlq2xsujkefYFH6sZw0GJ2m8+AGu9qfQ=;
+        b=mPnE1U3H/fPVS1zLMPsQfr1jJ5S5htDwzpdvZvo+l9nHLljrKlndKHIi3fknwyHJRR
+         8bxnq/dg5U2DYYs2RGaEM4uH4aZhlQIro2ZZ36NLKvse+n6QovJD6TeJVE7VY/hUEc/6
+         ajj0RVI5Kaqj5Y8px53tSmEVHUZcvYsEOfwMcbfNchoUlzQWLA3GiHC8xRsrsxd+2k1X
+         SNQepzY8XySjzz1rDdvgJbZzG/yJYk8QRFEXAmXbUMkdfSpSxcA6lLmLOFRs3wpXEbD1
+         KFivggAcTcrDFocXYi5v13iPWqUmMneSsV7AdZIF15orAO9Del4gM8B6gXA10YAguTVN
+         TD0A==
+X-Gm-Message-State: AOAM533lcoWhJCt2Ob1Bt6CBVViYADG3tUpHmXQk+klcn4pNIgNRbXO4
+        araw19GBxTa49/iRSAYb5bA=
+X-Google-Smtp-Source: ABdhPJyHQizBCf7Ert+hGTJt2QADRILWK71efUXgoNCe91XR6d7BUKs/8X+g5kidC4fkpxqw+AY1sQ==
+X-Received: by 2002:a63:1446:: with SMTP id 6mr21669961pgu.150.1638847430496;
+        Mon, 06 Dec 2021 19:23:50 -0800 (PST)
+Received: from gmail.com ([2400:2410:93a3:bc00:c35d:e29e:99a3:5fd9])
+        by smtp.gmail.com with ESMTPSA id s14sm13939343pfk.73.2021.12.06.19.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 19:23:50 -0800 (PST)
+Date:   Tue, 7 Dec 2021 12:23:46 +0900
+From:   Akira Kawata <akirakawata1@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Subject: Re: Unused local variable load_addr in load_elf_binary()
+Message-ID: <20211207032346.g47nf4n6374xyaw2@gmail.com>
+References: <CAKXUXMz1P8xCW+fjaiu0rvgJYmwHocMmtp+19u-+CQkLi=X2cw@mail.gmail.com>
+ <202112061804.5185ACABD@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112061804.5185ACABD@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 4:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Mon, 6 Dec 2021 10:55:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the bpf-next tree, today's linux-next build (powerpc
-> > ppc64_defconfig) produced this warning:
-> >
-> > kernel/bpf/btf.c:6588:13: warning: 'purge_cand_cache' defined but not used [-Wunused-function]
-> >  6588 | static void purge_cand_cache(struct btf *btf)
-> >       |             ^~~~~~~~~~~~~~~~
-> >
-> > Introduced by commit
-> >
-> >   1e89106da253 ("bpf: Add bpf_core_add_cands() and wire it into bpf_core_apply_relo_insn().")
->
-> And this is a build failure for my x86_64 allmodconfig build.  So I
-> have used the bpf-next tree from next-20211202 again.
+On Mon, Dec 06, 2021 at 06:04:56PM -0800, Kees Cook wrote:
+> On Mon, Dec 06, 2021 at 04:46:01PM +0100, Lukas Bulwahn wrote:
+> > Dear Akira-san,
+> > 
+> > With commit 0c9333606e30 ("fs/binfmt_elf: Fix AT_PHDR for unusual ELF
+> > files"), you have changed load_elf_binary() in ./fs/binfmt_elf.c in a
+> > way such that the local variable load_addr in load_elf_binary() is not
+> > used anymore.
+> 
+> EEk! yeah, this totally broke ELF randomization. this needs to be
+> entirely reverted.
+> 
+> -- 
+> Kees Cook
 
-This should be fixed by [0] which I just applied to bpf-next, thanks
-for letting us know! The reason you noticed this and we didn't is
-because your version of pahole is probably older than what we use
-typically and doesn't yet support kernel module BTFs.
-
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20211207014839.6976-1-alexei.starovoitov@gmail.com/
+I think my patch doesn't affect on ELF randomization because it keeps
+the way of load_addr calculation.
 
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+Akira Kawata

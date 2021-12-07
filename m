@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADA846BFCC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AC946BFCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbhLGPwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S239079AbhLGPxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233981AbhLGPwk (ORCPT
+        with ESMTP id S233981AbhLGPw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:52:40 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A47FC061574;
-        Tue,  7 Dec 2021 07:49:10 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id z8so28178590ljz.9;
-        Tue, 07 Dec 2021 07:49:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4uDjcpsKd8NPDhx91UKVlEBzzyIKS/ryAwk42PqDp8Q=;
-        b=UEtfTTDOqrQoj6+s5QaG/0SmRDQVDZqi7GfjXEpeYM+4+dZ1hpuhoT3tEqYqLdL4Er
-         YN3rhY47CyteMJQt6gr6ilhV7vpXTBTGzX1+Mllw1UXspZOoyajN2s3Q8yyhy84oSK4n
-         +65yyy1vm7c+sO7FQBTv2BXYdVMDv2G58lJ0cRtctGDhwLezgZukKtRv41HGl9pmkYGo
-         5Xc9McTM9QjwOUFuntzzjQDamTn18ar9L8/773vFi4XoCT76nc6uA0yK2iZOMyuTti1C
-         8pLRkfboinSm2Hr06AD0U1RYvlJp+Ur5FyI7EcZSFdDgyqRVUQ4LQ1R1WOPt4bSFkiQa
-         FMNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4uDjcpsKd8NPDhx91UKVlEBzzyIKS/ryAwk42PqDp8Q=;
-        b=7mxopVFf5F4wHhRjf+k40G36hygYbe+OuP5ykmeaexYLoluygx9QfIJkFuQt7K130J
-         5+O+AKE0BhrvIMyU1AzsrEqDM/3TmfENs5tQ7XiovrSwiTCG17oHoIUJLgqEfgXK96VR
-         vCl4t4BTkVH+wk1ujtbg+8ZKAXjtuJGwAIQDQEYycPWhYfvtsptHKvIkH/oi1MiNh2Dt
-         jb/Oeh11zhB+yVpPQxCmry1U9AA+Z7n80GyeO74LyM1K0FE37qPXZzwaNG4joeGPDYzN
-         zXAAIafELiuV7zyfOwG55qUvPHc6Y8obn66XC/XEK0yE7oDk8vHKh9hOyGp5RwRE9/hU
-         0Jzw==
-X-Gm-Message-State: AOAM533agj089wyTsac2XSgR10wQSNrhDcmqcaerstGVHkLQkmixcGVL
-        3yLKXh12imJdgRRtBtRTeeM6dqxxNTg=
-X-Google-Smtp-Source: ABdhPJyd5F+rdKY9vKX8srKhW4YKSmy3giHf4T98i3vJ99HbMF5SdEvvtOVUbD9AMCdDqwmIwmt+qw==
-X-Received: by 2002:a05:651c:2c1:: with SMTP id f1mr44175758ljo.345.1638892148238;
-        Tue, 07 Dec 2021 07:49:08 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id d16sm1712471ljj.87.2021.12.07.07.49.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 07:49:07 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: regulators: Document Tegra regulator
- coupling in json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211206154032.227938-1-thierry.reding@gmail.com>
- <Ya51Ndf+VdRRdM9h@robh.at.kernel.org>
- <dfb6b42c-16ed-ab17-b585-6b07d3d6874f@gmail.com>
- <CAL_JsqKJFk76nXwRZoe-A_C8r+1jBWMDg7BvrxFBRHR62Ls9yw@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3b67b2b5-104d-ebc7-426d-266086698a68@gmail.com>
-Date:   Tue, 7 Dec 2021 18:49:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 7 Dec 2021 10:52:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFC0C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:49:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0E0E5CE1B60
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BEBC341C8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:49:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WyGjEHMj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1638892163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5xLidv0Jet0uhvStOh3cHmNx+1Zq0cTicPBO56WosCQ=;
+        b=WyGjEHMjxWQTUiMsNCtVPf518t/VRR4PItBoIqyWouofwUkVwpL2COO+HytWhvq0TBoqhO
+        Ql63wSk2aqE4H8VeaT9McawfWwLCfRWPODdlJF1jDPJ4E/8MR69/bEjtW5KiwUadtaCsAA
+        QdqmOFnbCH18/tVxfHLY6oy7C3v6dQU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b6f29e72 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 7 Dec 2021 15:49:22 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id v203so41993554ybe.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:49:22 -0800 (PST)
+X-Gm-Message-State: AOAM532Ra9FgHfu3UzjL7jgHeHzBCaAs0emUmfLC4PYwARWm/wQp/v+Y
+        ssXMXbWP8O9dVXaF5caX19jS3WihEOcrkM9WEdg=
+X-Google-Smtp-Source: ABdhPJy5tmSUwizGXrqf4iv+m+DlaicDj61kH8nvpKvyH4guUh4x/iS8eBuG7I/HnDEZ5OfxFztG9qA0bhtaVejQn10=
+X-Received: by 2002:a25:a427:: with SMTP id f36mr51468185ybi.245.1638892161818;
+ Tue, 07 Dec 2021 07:49:21 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKJFk76nXwRZoe-A_C8r+1jBWMDg7BvrxFBRHR62Ls9yw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211130184315.258150-1-Jason@zx2c4.com> <1c2862682ff04463c7ca1f58f1c46aec4d6af03d.camel@perches.com>
+ <CAHmME9q7kVREOGPpG+kafS25Ny1=geFPwLRREe+nkC=UkGQUHw@mail.gmail.com>
+ <YauCkjsgDL4sdCId@mit.edu> <CAHmME9q_hYyiUKb+H82-njugXaruQc6=sVa3HCQHnOHEOsGVwQ@mail.gmail.com>
+In-Reply-To: <CAHmME9q_hYyiUKb+H82-njugXaruQc6=sVa3HCQHnOHEOsGVwQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 7 Dec 2021 16:49:10 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qECnsh0EhV8Zi0vFntqT4OaAbhfOXFFZBjQjzpReNAJg@mail.gmail.com>
+Message-ID: <CAHmME9qECnsh0EhV8Zi0vFntqT4OaAbhfOXFFZBjQjzpReNAJg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: co-maintain random.c
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.12.2021 18:25, Rob Herring пишет:
-> On Mon, Dec 6, 2021 at 3:55 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> 06.12.2021 23:40, Rob Herring пишет:
->>> On Mon, Dec 06, 2021 at 04:40:32PM +0100, Thierry Reding wrote:
->>>> From: Thierry Reding <treding@nvidia.com>
->>>>
->>>> Move the NVIDIA Tegra regulator coupling bindings from the free-form
->>>> text format into the existing json-schema file for regulators.
->>>
->>> Do we need these properties for every single regulator? This should be
->>> its own schema file and then referenced where it is needed.
->>
->> These properties are SoC-specific, they describe how regulators are
->> integrated into SoC's power subsystem. Regulators themselves are
->> SoC-independent, i.e. PMIC's vendor and model don't matter for SoC.
-> 
-> Yes, but in reality the PMIC and SoC are typically somewhat coupled.
-> How many PMICs do you need these properties for?
+On Sat, Dec 4, 2021 at 4:15 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Sat, Dec 4, 2021 at 4:00 PM Theodore Y. Ts'o <tytso@mit.edu> wrote:
+> > Thanks for stepping up.  There's no question that this Fall has been
+> > insanely busy for me, and for the past 3 weeks or so, I've been on
+> > vacation and Thanksgiving travel, and I'm still catching up on a
+> > mountain of e-mail.
+> >
+> > Something that I think would make sense is that we set up a joint git
+> > tree on git.kernel.org, for which we would both have access to push
+> > to, and use a group maintainership model much like what other teams
+> > have done.  Do you agree?
+>
+> Sure, that works for me. I had started using zx2c4/random.git. But
+> I'll talk to Konstantin about moving that over to a shared repository
+> in a group namespace.
 
-Three PMICs. Realistically we shouldn't have more such PMICs in upstream
-in foreseeable future.
+We're all set now with
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+
+Jason

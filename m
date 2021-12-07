@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64A646B77E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F7046B78F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbhLGJjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:39:47 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:44840 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229453AbhLGJjq (ORCPT
+        id S233954AbhLGJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:40:30 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4221 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbhLGJk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:39:46 -0500
-X-UUID: 64c74f11bcfc449e8d5e5c76bf4219a3-20211207
-X-UUID: 64c74f11bcfc449e8d5e5c76bf4219a3-20211207
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1195996042; Tue, 07 Dec 2021 17:36:13 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 7 Dec 2021 17:36:12 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 7 Dec 2021 17:36:12 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>
-Subject: [PATCH] gfp: further document GFP_DMA32
-Date:   Tue, 7 Dec 2021 17:36:10 +0800
-Message-ID: <20211207093610.6406-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 7 Dec 2021 04:40:29 -0500
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J7Zsz1Vjvz67snD;
+        Tue,  7 Dec 2021 17:35:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 10:36:57 +0100
+Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
+ 2021 09:36:56 +0000
+Subject: Re: [PATCH 2/3] perf vendor events: Fix whitespace
+To:     Andrew Kilroy <andrew.kilroy@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211203123525.31127-1-andrew.kilroy@arm.com>
+ <20211203123525.31127-2-andrew.kilroy@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <aabc45c7-cea4-2e8b-bddc-7ea1bd18910f@huawei.com>
+Date:   Tue, 7 Dec 2021 09:36:40 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20211203123525.31127-2-andrew.kilroy@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.82.161]
+X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmalloc(..., GFP_DMA32) does not return DMA32 memory
-because the DMA32 kmalloc cache array is not implemented.
-(Reason: there is no such user in kernel).
+On 03/12/2021 12:35, Andrew Kilroy wrote:
+> Correct indentation to 4 spaces, same as the other json files.
+> 
+> Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
 
-Put a short comment about this so people can understand this by
-reading the comment.
+Reviewed-by: John Garry <john.garry@huawei.com>
 
-[1] https://lists.linuxfoundation.org/pipermail/iommu/2018-December/031696.html
-
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
----
- include/linux/gfp.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index b976c4177299..c7bfaa9f3903 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -302,7 +302,9 @@ struct vm_area_struct;
-  * lowest zone as a type of emergency reserve.
-  *
-  * %GFP_DMA32 is similar to %GFP_DMA except that the caller requires a 32-bit
-- * address.
-+ * address. Note that kmalloc(..., GFP_DMA32) does not return DMA32 memory
-+ * because the DMA32 kmalloc cache array is not implemented.
-+ * (Reason: there is no such user in kernel).
-  *
-  * %GFP_HIGHUSER is for userspace allocations that may be mapped to userspace,
-  * do not need to be directly accessible by the kernel but that cannot
--- 
-2.18.0
-
+As an aside,  maybe we should improve the parser to find these inconsistencies in formatting.

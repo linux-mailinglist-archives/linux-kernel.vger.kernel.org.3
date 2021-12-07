@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A83646B1D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC3946B1D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbhLGEXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S235189AbhLGEZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 23:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbhLGEXD (ORCPT
+        with ESMTP id S233659AbhLGEZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:23:03 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB254C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:19:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eI/E/scurWRpXvQ4y7yg58dqUt9tO+R5AEVz3Yib1pI=; b=DsjLAg+kppkmLxuifRzHc7NCy+
-        7q/TbExCf1+cP/NGmcZzF7pi4pa7Ey+X7+mffz+Tr+PYm9mr4ADH4yTGHSH+HpJ2qQu4roIj9FqW5
-        w7bF7HvrSbUxvMKTOVJp/5gd4xvURrn2OLxGlbXPXLQ/BKWvFPglN9+QB8fRxvGMGeFBriL2P1uGn
-        dwpdvovNse2yinWIkp31hKT/ImTWfI622SNrPXR7zK8y6L3ncuo6ONQ+Hw2MwoyHa45nqvpzRlJ6i
-        VhmpLM/Qhr04X1NKE7tPOvcdfoouDhhUJHMYofR81sWqMfQYyFg5bXnPTx08j5LeUEicumKjR7Bgc
-        q7o/Blcw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muRww-006vYD-9T; Tue, 07 Dec 2021 04:19:30 +0000
-Date:   Tue, 7 Dec 2021 04:19:30 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in folio_mark_dirty
-Message-ID: <Ya7g0qoH9ihhxDM4@casper.infradead.org>
-References: <0000000000005f297e05d24f05f6@google.com>
- <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
+        Mon, 6 Dec 2021 23:25:33 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B33AC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:22:03 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4B14F8364E;
+        Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1638850918;
+        bh=XNS7tMPMWsz0YQlXTN2pcDOyy/ddhlLbJmGey5fqZ3Q=;
+        h=From:To:Cc:Subject:Date;
+        b=Tzr45wDVXTgIXnVOTvLOSgsHgMrcbvWYlA6MT/CZHMqteKmjbAoq56JUWKgiKcS0d
+         GTuedigrpONq6LXK0RcRbZWeVpmiRS7Nx9/+lZlRJ5X5NmT3Ezom9e3PEm+C5sGBRS
+         6UCh60LGLJTXzXK/gjUMtPwPgimflyAWiuVV9SwLMeYnUtOopT79CnuPcfs/hrnkm3
+         jd7lkSPFToKtdk49yZjGPPvv02vgh6aag/TS/MmzTrz0RS0PYgftYd2UKO3idGN+hX
+         to6wT41Ty4Ja+eKyaVICDMIHFpb2neJ0CUWt9ipc5JDlpb+Olg9LP2QJdo5KSpEABD
+         xjIDdjDc9EkGw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61aee1660000>; Tue, 07 Dec 2021 17:21:58 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 208F913EC78;
+        Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 1BD422A02A6; Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wsa@kernel.org, mbizon@freebox.fr
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Date:   Tue,  7 Dec 2021 17:21:44 +1300
+Message-Id: <20211207042144.358867-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=XOZOtjpE c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IOMw9HtfNCkA:10 a=pVfueR0RV8q608vrjqwA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 05:56:31PM -0800, Andrew Morton wrote:
-> > BUG: kernel NULL pointer dereference, address: 0000000000000000
-> 
-> cc linux-f2fs-devel@lists.sourceforge.net
-> 
-> And willy, who might help with diagnosing this.  But it does seem that
-> f2fs got itself a NULL page* then put it in places where it shouldn't have.
+Maxime points out that the polling code in mpc_i2c_isr should use the
+_atomic API because it is called in an irq context and that the
+behaviour of the MCF bit is that it is 1 when the byte transfer is
+complete. All of this means the original code was effectively a
+udelay(100).
 
-I'm surprised it got that far.
+Fix this by using readb_poll_timeout_atomic() and removing the negation
+of the break condition.
 
-void f2fs_update_meta_page(struct f2fs_sb_info *sbi,
-                                        void *src, block_t blk_addr)
-{
-        struct page *page = f2fs_grab_meta_page(sbi, blk_addr);
+Fixes: 4a8ac5e45cda ("i2c: mpc: Poll for MCF")
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
-        memcpy(page_address(page), src, PAGE_SIZE);
-        set_page_dirty(page);
-        f2fs_put_page(page, 1);
-}
+Maxime,
 
-How does page_address(NULL) not crash first?  Or return an address that
-can be the target of a memcpy()?
+Can you give this a test on your setup. I've tried it on the setup where
+I had the original problem that led to 4a8ac5e45cda and it seems OK so
+far (I'll leave my test running overnight).
 
-> > #PF: supervisor instruction fetch in kernel mode
-> > #PF: error_code(0x0010) - not-present page
-> > PGD 70764067 P4D 70764067 PUD 0 
-> > Oops: 0010 [#1] PREEMPT SMP KASAN
-> > CPU: 1 PID: 6541 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:0x0
-> > Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> > RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-> > RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-> > RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-> > R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-> > R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-> > FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
-> > Call Trace:
-> >  <TASK>
-> >  folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
-> >  f2fs_update_meta_page+0x4b/0x380 fs/f2fs/segment.c:2485
-> >  do_checkpoint fs/f2fs/checkpoint.c:1513 [inline]
-> >  f2fs_write_checkpoint+0x31ad/0x5430 fs/f2fs/checkpoint.c:1674
-> >  f2fs_issue_checkpoint+0x361/0x4e0
-> >  sync_filesystem+0x19c/0x1f0 fs/sync.c:63
-> >  generic_shutdown_super+0x6b/0x300 fs/super.c:448
-> >  kill_block_super+0x79/0xd0 fs/super.c:1397
-> >  kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4478
-> >  deactivate_locked_super+0xa7/0xf0 fs/super.c:335
-> >  cleanup_mnt+0x462/0x510 fs/namespace.c:1137
-> >  task_work_run+0x146/0x1c0 kernel/task_work.c:164
-> >  tracehook_notify_resume include/linux/tracehook.h:189 [inline]
-> >  exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
-> >  exit_to_user_mode_prepare+0x209/0x220 kernel/entry/common.c:207
-> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-> >  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
-> >  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f6cfdd59f57
-> > Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007fffcbddcad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6cfdd59f57
-> > RDX: 00007fffcbddcbac RSI: 000000000000000a RDI: 00007fffcbddcba0
-> > RBP: 00007fffcbddcba0 R08: 00000000ffffffff R09: 00007fffcbddc970
-> > R10: 0000555557166903 R11: 0000000000000246 R12: 00007f6cfddb2105
-> > R13: 00007fffcbdddc60 R14: 0000555557166810 R15: 00007fffcbdddca0
-> >  </TASK>
-> > Modules linked in:
-> > CR2: 0000000000000000
-> > ---[ end trace 08eda5a5e35b48a0 ]---
-> > RIP: 0010:0x0
-> > Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> > RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-> > RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-> > RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-> > R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-> > R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-> > FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ drivers/i2c/busses/i2c-mpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+index a6ea1eb1394e..53b8da6dbb23 100644
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -636,7 +636,7 @@ static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
+ 	status =3D readb(i2c->base + MPC_I2C_SR);
+ 	if (status & CSR_MIF) {
+ 		/* Wait up to 100us for transfer to properly complete */
+-		readb_poll_timeout(i2c->base + MPC_I2C_SR, status, !(status & CSR_MCF)=
+, 0, 100);
++		readb_poll_timeout_atomic(i2c->base + MPC_I2C_SR, status, status & CSR=
+_MCF, 0, 100);
+ 		writeb(0, i2c->base + MPC_I2C_SR);
+ 		mpc_i2c_do_intr(i2c, status);
+ 		return IRQ_HANDLED;
+--=20
+2.34.1
+

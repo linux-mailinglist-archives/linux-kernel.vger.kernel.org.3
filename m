@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBBF46C1ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AA346C1EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240084AbhLGRkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239870AbhLGRkM (ORCPT
+        id S240072AbhLGRkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:40:01 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:33533 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235271AbhLGRkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:40:12 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752D8C061574;
-        Tue,  7 Dec 2021 09:36:41 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id a9so30994961wrr.8;
-        Tue, 07 Dec 2021 09:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a3zxNdfVlrqJM/GplmpbPoiA2qAHHXHO/zZh90BaEHU=;
-        b=E5lKpb3vhHSuGisVdRa6wTrXBlzm+UHQSNVIT3A9bbLpPbwxnlWx0jfWvOTnL/DEj+
-         0J89Dv1LCmYsbFsRCjVKwyTmI7JwOmq4JrCY6bDMjUtuBATEygHiMJoOriGihm9aCGnm
-         HVAxfRHcJ4n2CdvTefeJ7jq1jQjRgAwQ1NjuCjo60gJIpXhxOkleYr/Jpcd8iCSQYfKs
-         F4oHGljpvz+1Y5chJ7aBB2u5NcLh9H+qGHwmr77HGT5+zSqYnJepeNy9oBFMXeF+PTza
-         SJ3oRhnXA4KwaIg4oB9DgqvwJ0xYY+WafBSTAHUZCK5yUAMKKuSuOlUh0gZJT4QkaoGA
-         aRmg==
+        Tue, 7 Dec 2021 12:40:00 -0500
+Received: by mail-il1-f199.google.com with SMTP id w1-20020a056e021a6100b0029f42663adcso12675862ilv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:36:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a3zxNdfVlrqJM/GplmpbPoiA2qAHHXHO/zZh90BaEHU=;
-        b=CwaAOQSpqpMizIOcLsBsTOiKKC2tJaY9S9T8N3kD3JzNvodlyUDgPSROkIIDpEuRYO
-         En6l+1hOe5I+ozQ1safvA/4ZcF/Ly2HEYgVSnlukUVvX3CxvQz/3fehECU8AgVY0clOK
-         HDLqNr/fToRDQN3HBgX3nWgnCSHHmpm/kdD0PJFQU9sA2yaklXs5IOLaFJHgQ8QmOfEV
-         d0HqnBgD6rzBUa0MQntsJj3RB1NiYA5rdVNri2nt0bZHxD/89C/TEwi7EcNgJrd+BQL1
-         Zi/IxIFrj7r0SkWzmicLH/GYOocOREVEoMDuw0NRN/4n4Lb12vyOB1JfVr8p/jXN5RAR
-         2vaQ==
-X-Gm-Message-State: AOAM531482SyPHPRCO4tdyxjHH3OkgzqzsH2rMDWpI4eUncoeOPUBwBG
-        zK7hPNwkUwgOM8gffSTOLG+rbAMWbiE=
-X-Google-Smtp-Source: ABdhPJxDtAZ5Ay3wLwPU3+O3McRLFyTMberw8gEw2xzruLB+PmktKIAlToGMhoAZ+LG4eaPKzC8H6g==
-X-Received: by 2002:a5d:548b:: with SMTP id h11mr52995831wrv.11.1638898599733;
-        Tue, 07 Dec 2021 09:36:39 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.132.245])
-        by smtp.gmail.com with ESMTPSA id z18sm355250wrq.11.2021.12.07.09.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 09:36:39 -0800 (PST)
-Message-ID: <95ea9142-9f36-981d-a04d-3efded544af7@gmail.com>
-Date:   Tue, 7 Dec 2021 17:36:24 +0000
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=1dQvezvp3iGWZ0YIb75qsQGcY3DEG/a8kpN3taG3XIQ=;
+        b=W+LqPx6Jql+sKl5p0S15hSHbh+rHGy/5uwCgwyKZl7erROYjWE3Ai+I1MDbrM6dUy+
+         hpO5C1kFz5TjTq+DDXG+G415lNDzNophN7fWWyBlbR3SFtkt2flSrA5BpWLDbYBl/pui
+         +2t4cB9AYFAINtWKW2Pj1bbC+doZ0RDUt7HeN0MI08PrDcnYDWEHfIXm792Wonw1+1+k
+         WcI+zadzWW423npUefHg8qfraABWOGuRcnNJTkVFDvkWmWpqrihp6cUdRhC8VmRjQWOV
+         l/ejJQD80xb9RKXGBpC/riApWi/z0Jrkvblwm4uIdS0PGotr30deQ/4MuXdbdYAtRYpn
+         j71w==
+X-Gm-Message-State: AOAM532MVy1fUwXjLNRj2aje44f1AWd4LzQ4PXGaRVtvHaMJAhV/kZxn
+        3SgMR79yvWTPBFYZQz0BaXAfBuy52xMGnVaoKQXkOKeqWcHv
+X-Google-Smtp-Source: ABdhPJxrY5ezv1MAc4b3hmpC2DiyVCa1ZBCuumVI4l2wVqyLJVseDqkqWYesgOImWu3+rPfrjLJrTeEt9WFpybMUWdvQ/3svPH4Z
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 0/2] Revert "block: add single bio async direct IO helper"
- to avoid UAF
-Content-Language: en-US
-To:     George Kennedy <george.kennedy@oracle.com>,
-        gregkh@linuxfoundation.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1638892302-14475-1-git-send-email-george.kennedy@oracle.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <1638892302-14475-1-git-send-email-george.kennedy@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:16ca:: with SMTP id 10mr721658ilx.274.1638898589332;
+ Tue, 07 Dec 2021 09:36:29 -0800 (PST)
+Date:   Tue, 07 Dec 2021 09:36:29 -0800
+In-Reply-To: <000000000000367c2205d2549cb9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d78f805d291d061@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+From:   syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 15:51, George Kennedy wrote:
-> git bisect shows that commit 54a88eb838d3
-> ("block: add single bio async direct IO helper")
-> causes the following UAF: KASAN: use-after-free Write in io_submit_one
-> 
-> Tried to root-cause the issue, but need the patch submitter's help in
-> coming up with a fix.
+syzbot has found a reproducer for the following issue on:
 
-Hey George, thanks for the report. Do you have a reproducer?
+HEAD commit:    1c5526968e27 net/smc: Clear memory when release and reuse ..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a9eabdb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b8e24e3a80e3875
+dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b749a9b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170d7519b00000
 
-One spot I don't like is how errors from bio_iov_iter_get_pages()
-are handled, will test it.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
 
-diff --git a/block/fops.c b/block/fops.c
-index ad732a36f9b3..211f44974d1e 100644
---- a/block/fops.c
-+++ b/block/fops.c
-@@ -342,7 +342,7 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
-  		if (unlikely(ret)) {
-  			bio->bi_status = BLK_STS_IOERR;
-  			bio_endio(bio);
--			return ret;
-+			return -EIOCBQUEUED;
-  		}
-  	}
-  	dio->size = bio->bi_iter.bi_size;
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+Read of size 8 at addr ffffc90001a16038 by task kworker/0:3/2934
+
+CPU: 0 PID: 2934 Comm: kworker/0:3 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events sk_psock_destroy
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+ psock_set_prog include/linux/skmsg.h:477 [inline]
+ psock_progs_drop include/linux/skmsg.h:495 [inline]
+ sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
 
--- 
-Pavel Begunkov
+Memory state around the buggy address:
+ ffffc90001a15f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90001a15f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90001a16000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                        ^
+ ffffc90001a16080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90001a16100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+

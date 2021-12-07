@@ -2,421 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BDC46B297
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FB246B29F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbhLGFtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhLGFtp (ORCPT
+        id S233709AbhLGFw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:52:58 -0500
+Received: from esa9.fujitsucc.c3s2.iphmx.com ([68.232.159.90]:23651 "EHLO
+        esa9.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229487AbhLGFwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:49:45 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C035C061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 21:46:15 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id y5so24326893ual.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 21:46:15 -0800 (PST)
+        Tue, 7 Dec 2021 00:52:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1638856165; x=1670392165;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FzkjOvWKZbz2Vl7VWRn+oUqJPobqjOPwCCc+q+2zwlw=;
+  b=B7bg7HoBLNRxMPQ5YoWtPKEjPAoAas0uyv8VYN3s6o2TpVDyfz9o/hkY
+   TTuHDSkKC/pK8etHSceEPVZrUnzlxyxsksMQm1Ud/xIlElEuO1IAu7Ane
+   e3Z3tWpdPyGkMB/U84KxyDcbuEJai0at5Q0Cae37A5ATEO+l+3mSNwdoW
+   5OsAiWmd/drL11ItS88wx1xzxKGYi9fQC9DrkopVOVqFAhRafeERKQ17I
+   gmpPmjdx89F2nGdgBMkDHdy8L1dm4b+nDXUITMRBhF0fRg+qBcZlhn4s1
+   5WwoM/ViGfkPdmRLduzYUeN1rpxu2YUe6bIz9QTRq95cMz3gkX663EsCM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="45449711"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631545200"; 
+   d="scan'208";a="45449711"
+Received: from mail-os0jpn01lp2104.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.104])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 14:49:21 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OSTuAw4XBNBF+J0RiNc4LgGl91OzYNyQprWWR53XvouqJPt1oLkI87Hwvk+X75G0fySNKH5VrsVx+dOkpeeP1MZq/i2MDOsVZr/Kwrqtck0/crKajG/VsSQkE86NQ8fRX5RtaoofJmxSsX2eiTVtY/8D7qB/EcEI7IxK9mw1ON74HClrCXi4i0ZaVZwbBQ2EaV2fLJqFdf9SCqghUUmnr9cqHN3WfS5ctyY3Sb1b7QnXmxHW0bH2yZRITGyOS2LsQoxNtQYto/Mo8Uo2KO5Yx4y7oj8788gLSu9mFhSfMBNg/IGW8jJFyTJ1ETS2APv2Y3pNeRvjldz6iscioDRXpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FzkjOvWKZbz2Vl7VWRn+oUqJPobqjOPwCCc+q+2zwlw=;
+ b=mdDSeGsKXjyHLq0fbOMnpCpNtRZSYGiljxC1x0rL+P32tmHSw/LWD77Yaz0ygawf5qsYflv9F97M0IBU9R0XDiWScJxe58Yd8Km+XYWHX9sxXM/67E0VHJC3u8rMKAU7egLjkL1fRlGVp31PKYD9f22YQc3jP6n9MYre7JeD+QowtMi6blYGbjJtgFh1USfmbxH17hs7zYkm27pqlK6NaVh6GUT71ud9WK0oQ+DsWvscz6j67fLsl4aFbtaNcMCbZs5qp8mVxlehhPiAUzHmemAz5kgguh0QqcW+98C3lR862rvSP+Vk2jSzObDdpacTzn+0Q4gKn5HrfBy2g17QZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0x6oYYrviWBofrqgS9OoLqmV9EK0W9oBz7Z4W3jJ5Es=;
-        b=jpk9DqfZJxv+/kjCDAjLzo21cJ+lZV6LTLafyrrDfVbObAVuhC5pEzY/xESknv3Tql
-         M5ysJDm5yWDdKXNIia3UZwFIKSzCk2jtMn7k05LGJK7o33Lt20TmRm0h7uWtC+PaXT3X
-         SBFqMVb0QLjYlZYisbldJ4W3U1VU6tYQtf8n2alH2mdN0qSUPAov7NmLW5v2nsElNFtS
-         tb+607YuZEoNTGB7crdJU3bamNJOwDuScVZBYzreg4a1zYfxwCpYuIdFiPdhs6CTxR//
-         OjyKS0+/m50otkiefcYyJ1CJQXVtqa3oyVW2HmdwQgDp4qNdHe70DQZUR5RnmnrWt/CF
-         B68Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0x6oYYrviWBofrqgS9OoLqmV9EK0W9oBz7Z4W3jJ5Es=;
-        b=oUjSlj2VL9i164VMPkedJEDyr9V6QqLmDuk3kMfB3J6VJGRuDZo9HNn7gcWf7QASX2
-         xePF5Kc1EXp7oQ8wH32eScRJH2WNOF1eprMLuzrBcfJKlKrhi5MhSmAUG8ozP+oae5es
-         66pG5lBKlbhmsrwkYJJlhfhkYJE5Nmyp9LX2bi9HsBUh8xKPpPt13dCQbtOmtj7kL+2s
-         XVqRR/YLYEDXBes4AKcb5qjS8ATweZRSk8oqMNu37Q/E+Vl8Re29oKJa/QSCRFiz+0Cz
-         CMOASyQy/lh/MOlIFu8L4RjSk5aQkPPlENJOTp6ISrzwy5+YxLDXRj0xZaXJJSXk2+M2
-         M+BA==
-X-Gm-Message-State: AOAM532SaA9KFb8QXi7/EKYr1p13xo9SXC9QfWyFh4s/rp51Lgjq49ax
-        kacioDysqdmkmVwVSZfHBx9Qu+BeVkJ6CaYq8H7utw==
-X-Google-Smtp-Source: ABdhPJzs/m/H8K7Iaw3ZVhcEQnuV65Ix2pKfwFm1IlLLbgJed33yGFKx8DyvURgiWhXiGsVsiHxkfqqKuGMkDJ/BXGg=
-X-Received: by 2002:a67:c402:: with SMTP id c2mr42509850vsk.53.1638855974127;
- Mon, 06 Dec 2021 21:46:14 -0800 (PST)
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FzkjOvWKZbz2Vl7VWRn+oUqJPobqjOPwCCc+q+2zwlw=;
+ b=e7soVVfKezXyvG5qbLID1gpE2hO6vs/1gLs+Eq09MB5aXurPGedoti/v53reMPYY2KHrOWBwsrCJzppWQtjRQEVw0UvKetmhJzbcmbFX+xNkDaJPPl7QV/PehzBu74qJEWnQpdTsL67rlAQ67FoShxPdm3KusObQJLxOlidWU6Y=
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com (2603:1096:604:7e::12)
+ by OSBPR01MB2472.jpnprd01.prod.outlook.com (2603:1096:604:11::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
+ 2021 05:49:17 +0000
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::2c38:ad18:39de:3042]) by OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::2c38:ad18:39de:3042%5]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 05:49:17 +0000
+From:   "nakamura.shun@fujitsu.com" <nakamura.shun@fujitsu.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
+Subject: Re: libperf: lack of interface
+Thread-Topic: libperf: lack of interface
+Thread-Index: AQHXnxU1v7C7yDhEy0Gzl7rxTcNZhquPLp8AgAE//ACAHexCH4AqXPW2gANjt4CAArnVuoBCHup+gAYl4Rw=
+Date:   Tue, 7 Dec 2021 05:49:16 +0000
+Message-ID: <OSBPR01MB46003CB99B9AAC0A574D341DF76E9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+References: <OSBPR01MB460016842A4310264B1CC5A0F7CD9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+ <YS+B6PVHtiTmqZS+@kernel.org> <YTCOVGyffe+VwL6G@krava>
+ <OSBPR01MB4600E7C8C79D64125270D034F7A19@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+ <OSBPR01MB4600A616AD3341EAF6AA3DE8F7BC9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+ <YXAJhTC9aqOS/GWy@krava>
+ <OSBPR01MB460067F4CE80D8EF6B707D4CF7809@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+ <OSBPR01MB46002D1F64E2349CA9E742A4F76A9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB46002D1F64E2349CA9E742A4F76A9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=True;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2021-12-07T05:49:16.312Z;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
+suggested_attachment_session_id: 4cbeeb21-f494-c85a-26ad-f9effdb6fefd
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a2b129b1-fed3-4fee-07b3-08d9b9454e87
+x-ms-traffictypediagnostic: OSBPR01MB2472:EE_
+x-microsoft-antispam-prvs: <OSBPR01MB24726E6A4AA17B283A3FAFB4F76E9@OSBPR01MB2472.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: O4DuLHD7LdvNDrBQ8Z2DYxycqwtbECBbaCQ13deHp70degYTPtDAOYCkfcNBxtxJ3+klzMtBRqMgYEoVPHz+dsXR5G0NmpaLHtR3brbR+5Ij/5suQs99KwNbKG4k58fc1/0nBAtbPIjnrREIhrkh/ikOrYBKbAkaC/GV4YQM92pi4Yc0+Bkgib9FWWpDJFkke8oqpAr8hXWZubg/n8VMsHP1QfbhuhRXqUZ5X3HlAqSjn+SwV/5ZUQf80FEpCMxJ6i1DZeT+18w1jVR5PNRFshYxFhEGUfcV2gufwTzkafDdAVxvR4tiwNRmEpw6ptpfUeBY5F6QKOjnYeebMtW/TFCleCwsZxVmW1k1471DaDLgE1eoALE7BSt+UImnI7Q1q5tz+bUFeI/4krbRqtLTbrsPKiyxBCSCqmfA0Z8Hdxh/WkJvwYV2oHY6Pw38dAs/obCOlG0DsSnf5H2Bp8HebpmAH+YDKE7Qi458sZhGLmYo3hnFXZ+uC4RTKdnBGy0LS+IVA939avMtk1tfVF5Y4Wqpu4FUWdz1jmAHv7wLfgDLThDVAW3Lh2TeyRlbgVyKe4OnA1nmw5wTpxdSLcmPEn9Q9rtKFIGXLZW6KVjVIZDMd2HubAvGvGysJ7oo9CvrmTWaZ3NDCkQIwIDOr4tjUO9Kp5o7XLMjaBZdfBQm4ynFsc//t2mCgyOPTc++Hfs+y5XoSecs1FOo90c77ICtQg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4600.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(26005)(8676002)(8936002)(83380400001)(6916009)(54906003)(66446008)(55016003)(64756008)(186003)(122000001)(9686003)(38070700005)(66556008)(66476007)(7416002)(66946007)(7696005)(91956017)(76116006)(4326008)(6506007)(52536014)(86362001)(5660300002)(2906002)(508600001)(33656002)(85182001)(71200400001)(316002)(82960400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aEdqRTMrbjNaSzgvZWQ5VWsrZjhuNUIrZy9ydUdoNVJEYzZ1aHZibEhaRHZ4?=
+ =?utf-8?B?dlpvQjlYQVVRUTZaWnZER2xBRjJXajU4eERGQ0hZbHNEb0M2L0FYcENCMzcz?=
+ =?utf-8?B?bHJDSGRhekRwRlpUZmt3RWNuZU84SHQvQzNyR0tHaS9Xdzh2ckJrNWhSNTZF?=
+ =?utf-8?B?VWovZVpsL0VWRFJBYlFybUszSzMrMTJKNzd3cUs4Tjk2c2NpUGM5RU52VG9L?=
+ =?utf-8?B?ZENvMThtN0NhblNHNHFkUUxkSFRSRWxqd29FZWNmRFVpK3dPM0g4c2d3OEcv?=
+ =?utf-8?B?bWRLUzd1NG5IWHBWd1pyWU9qTVBNUXh3UGxtdGE3M01nVWZ4ZTdTQTdvNkJx?=
+ =?utf-8?B?dVZqQi9ERUhtQU1TUUlOcUxwWTZudmRTblJ2dDE2dDBiL210RmlKbFdqMDQ5?=
+ =?utf-8?B?d0ovVk4xdVVRRzFaMFJqeXRCVmJxc1pDY3BETVJzVVhhQjBZc1FsM3JoYWY2?=
+ =?utf-8?B?R0pJaDZIelVvSXk0SGFrdllFdGxmdHoyYzFZNi9QdFhGVUFXRk9IUDYvMlBl?=
+ =?utf-8?B?VDlmSFczM1c4ZmpZT2FqL0RtZERKZjkvMm9UNmZhMWN6NDJNOTl0bHVPOHNm?=
+ =?utf-8?B?WVQvZVFaS2RkU21Hakd0Y3JhSUJkN2tTWERwS0JQSGhXYTZkWDFyQVlKVXlh?=
+ =?utf-8?B?MDEyMHRTeFc1Q3ROVWdpbS93THgvdFhNTGNzaU9RMWkvOWtaclg4Vmh4NFZs?=
+ =?utf-8?B?N2hWRjRTSkRxTWxhcnkxczNGdm1ib0g3d2hOc3BCL0JhL3UyZHFMVFFEcTl6?=
+ =?utf-8?B?RUt1cTdzVHhueVVCUGYrYmFxN0RzTnhZaEtTSlBlYW53ZWlKZXZNTnBJWkVX?=
+ =?utf-8?B?M3N5b0hxZVZVaUtrM3VXZ3Q3R1lINWpQVWlCZll1d2NyMWZid1UwMEVicGJ5?=
+ =?utf-8?B?THFybTVSNEtCZFh5MitWZFM0c0hUenA2NmpKVXNRYnJYb2JyenZlKzRuUlh5?=
+ =?utf-8?B?bFdJazdnMXNUS1pmNEcrVy9yYmFNWlpmOFRDMnptdFlOV294bmduY3NDdXZV?=
+ =?utf-8?B?OTk0OTNYRUs4TjVyUjJCM1NkRjRWYm9wZ0d0UjFIZUlBSGV4dkoycG13aGhY?=
+ =?utf-8?B?T2dIa1dNR3U4NXE5NzFtb2h0RXFra3VDUTluTlJMQ2hFYjNLNHlVc09hWk8y?=
+ =?utf-8?B?Y0pGRU5wMUUrNzFPTnR2UTNRRWcwZjlxelp0REZKR050bUtEWVNsZE9EY2hr?=
+ =?utf-8?B?bHo4YXZSSEVXQ092Wmt6WnFaaEUyYmxZTTVVVm9qSmtGZXZVaVg0TXJpMHRm?=
+ =?utf-8?B?RzRER0s0dUM1RHJzZnJ6V3d5dThJTG8xVVlNWkJqc3BnSWZpREw5dk9wUDY3?=
+ =?utf-8?B?eW5rRi9sRHVyeVZaN1FrenJtUkszdWRvaGIvb21tNTBKakVOL1ZxeExza2xW?=
+ =?utf-8?B?SjRYeWNXc211TTRTSXQ3cCt3aWtkZ1JBWk96QWZWbEppQ2JyUzlyMU55V2Nh?=
+ =?utf-8?B?LzA0QWsrcDVaeUltbzFacXNzaXJITTN0OW4zRUxIRjJOYVhEL3pzT3N3dDhs?=
+ =?utf-8?B?MHFHR253Vm9ncERjSFdEU1FDdkREZitWcHlvS1pqUk5OMmJ2Ym42RHVidnNa?=
+ =?utf-8?B?MW56VVovWWlvVGlKS2o5b2NkSDNuUDFrZjlnQkdGYko2RXpCMEN4bUNySGJp?=
+ =?utf-8?B?anYvUGh5NmlHRStWNHU5a3JHL3ZVNVpYcXo5WDJUa1FINk5wNnFramNlS0ND?=
+ =?utf-8?B?eW5QRHFnYzdHTjh1U3ZNZUs5SXEyR0srelZZR2tBVStGQUFvck52R3dRdVRI?=
+ =?utf-8?B?a2JkVExoR2J3TmtLTHQ5WXhvbTZEcHdrMmF2WUxSVk92S0x3YSs3TTVNcE5L?=
+ =?utf-8?B?Q2cxdjFvcjk0TS9wSkE0eitPNm9aL1JSTDdDN3BsQkRSRnI1WjlPSFBSWmw1?=
+ =?utf-8?B?OWd6MkF3cTQ4YXJESjFJOGZ6Y3l3Vm41SjNXeUE0Y0JTa2dkS0ZYWXFrRDQ3?=
+ =?utf-8?B?ZFpmQXM3T1pJd3Z6K1NNanpudlJ1UlVsa2tobTVZbUVmeHFyL1UyVkZwUFBN?=
+ =?utf-8?B?eDFKMW1HVnBOUU5DVkxSVUEvOVVZQXBmOU8xekhId0ZxNHZwVjdLR1NLcU1I?=
+ =?utf-8?B?RlFiem9UclhJeDVHczRFUUdwSkI3Q2F4RTh4bjVPWmdPbUd4dTVVaXV3RFJK?=
+ =?utf-8?B?aDhrS2xoeHZzb25wbkpxcmlha0ZTOWFGeXJjeWtEamV4T1d1a21WQWZ2bUw2?=
+ =?utf-8?B?L3JzWW9OZG5rd04vTGY5NnAxTDNkV2tyV05nTUZxL3V4T251bjJlMHdlQlA1?=
+ =?utf-8?B?MEhvN29jbEE2NVNGcUVhRXhYZDFRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211203042437.740255-1-sharinder@google.com> <20211203042437.740255-2-sharinder@google.com>
- <BYAPR13MB2503D1D29303C11E2135ED44FD6A9@BYAPR13MB2503.namprd13.prod.outlook.com>
-In-Reply-To: <BYAPR13MB2503D1D29303C11E2135ED44FD6A9@BYAPR13MB2503.namprd13.prod.outlook.com>
-From:   Harinder Singh <sharinder@google.com>
-Date:   Tue, 7 Dec 2021 11:16:03 +0530
-Message-ID: <CAHLZCaHKxLK=ohJcjW04FTyzpMys79JGRYV=yBkQ5HQpLRgiKQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/7] Documentation: KUnit: Rewrite main page
-To:     tim.bird@sony.com
-Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4600.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2b129b1-fed3-4fee-07b3-08d9b9454e87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 05:49:16.9700
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dLTUlA/a9JMpvDjiaMEU6V3D8QZdPoisi4svTAl8xpdfT+kMxXTrzKyyzqZwvAaOcMdl7aHDgVFaDxfSMwKYLfNwxqB5BN2Ngn+KC0nb1kU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2472
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tim,
-
-Thanks for your suggestions.
-
-I have incorporated your changes  on v2 here:
-https://lore.kernel.org/linux-kselftest/20211207054019.1455054-1-sharinder@=
-google.com/T/
-
-See comments below.
-
-On Fri, Dec 3, 2021 at 11:02 PM <Tim.Bird@sony.com> wrote:
->
-> Here are some suggestions inline below.
->
-> > -----Original Message-----
-> > From: Harinder Singh <sharinder@google.com>
-> > Sent: Thursday, December 2, 2021 9:25 PM
-> > To: davidgow@google.com; brendanhiggins@google.com; shuah@kernel.org; c=
-orbet@lwn.net
-> > Cc: linux-kselftest@vger.kernel.org; kunit-dev@googlegroups.com; linux-=
-doc@vger.kernel.org; linux-kernel@vger.kernel.org; Harinder
-> > Singh <sharinder@google.com>
-> > Subject: [PATCH v1 1/7] Documentation: KUnit: Rewrite main page
-> >
-> > Add a section on advantages of unit testing, how to write unit tests,
-> > KUnit features and Prerequisites.
-> >
-> > Signed-off-by: Harinder Singh <sharinder@google.com>
-> > ---
-> >  Documentation/dev-tools/kunit/index.rst | 159 ++++++++++++------------
-> >  1 file changed, 81 insertions(+), 78 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/de=
-v-tools/kunit/index.rst
-> > index cacb35ec658d..2ddd01d62406 100644
-> > --- a/Documentation/dev-tools/kunit/index.rst
-> > +++ b/Documentation/dev-tools/kunit/index.rst
-> > @@ -1,11 +1,12 @@
-> >  .. SPDX-License-Identifier: GPL-2.0
-> >
-> > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > -KUnit - Unit Testing for the Linux Kernel
-> > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +KUnit - Linux Kernel Unit Testing
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >  .. toctree::
-> >       :maxdepth: 2
-> > +     :caption: Contents:
-> >
-> >       start
-> >       usage
-> > @@ -16,82 +17,84 @@ KUnit - Unit Testing for the Linux Kernel
-> >       tips
-> >       running_tips
-> >
-> > -What is KUnit?
-> > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > -
-> > -KUnit is a lightweight unit testing and mocking framework for the Linu=
-x kernel.
-> > -
-> > -KUnit is heavily inspired by JUnit, Python's unittest.mock, and
-> > -Googletest/Googlemock for C++. KUnit provides facilities for defining =
-unit test
-> > -cases, grouping related test cases into test suites, providing common
-> > -infrastructure for running tests, and much more.
-> > -
-> > -KUnit consists of a kernel component, which provides a set of macros f=
-or easily
-> > -writing unit tests. Tests written against KUnit will run on kernel boo=
-t if
-> > -built-in, or when loaded if built as a module. These tests write out r=
-esults to
-> > -the kernel log in `TAP <https://testanything.org/>`_ format.
-> > -
-> > -To make running these tests (and reading the results) easier, KUnit of=
-fers
-> > -:doc:`kunit_tool <kunit-tool>`, which builds a `User Mode Linux
-> > -<http://user-mode-linux.sourceforge.net>`_ kernel, runs it, and parses=
- the test
-> > -results. This provides a quick way of running KUnit tests during devel=
-opment,
-> > -without requiring a virtual machine or separate hardware.
-> This introduction to kunit_tool it not present elsewhere in this patch.
-> Are you sure we want to drop this?
-
-Thanks!
-This section was a bit outdated, so I added an updated version.
-
->
-> > -
-> > -Get started now: Documentation/dev-tools/kunit/start.rst
-> > -
-> > -Why KUnit?
-> > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > -
-> > -A unit test is supposed to test a single unit of code in isolation, he=
-nce the
-> > -name. A unit test should be the finest granularity of testing and as s=
-uch should
-> > -allow all possible code paths to be tested in the code under test; thi=
-s is only
-> > -possible if the code under test is very small and does not have any ex=
-ternal
-> > -dependencies outside of the test's control like hardware.
->
-> The patch just drops these ideas.  I don't think It should.
-
-Restored and reworded the original paragraph to replace the
-description of unit testing.
-
->
-> > -
-> > -KUnit provides a common framework for unit tests within the kernel.
-> > -
-> > -KUnit tests can be run on most architectures, and most tests are archi=
-tecture
-> > -independent. All built-in KUnit tests run on kernel startup.  Alternat=
-ively,
-> > -KUnit and KUnit tests can be built as modules and tests will run when =
-the test
-> > -module is loaded.
-> > -
-> > -.. note::
-> > -
-> > -        KUnit can also run tests without needing a virtual machine or =
-actual
-> > -        hardware under User Mode Linux. User Mode Linux is a Linux arc=
-hitecture,
-> > -        like ARM or x86, which compiles the kernel as a Linux executab=
-le. KUnit
-> > -        can be used with UML either by building with ``ARCH=3Dum`` (li=
-ke any other
-> > -        architecture), or by using :doc:`kunit_tool <kunit-tool>`.
->
-> You don't replace this note about using kunit with UML with anything.  Wh=
-y?
-> Is using UML deprecated or something?  Is this note incorrect or misleadi=
-ng?
-
-We do not want to suggest that using UML is the only way of running
-KUnit. The next version includes brief information about KUnit with
-UML. More details about using UML are described in subsequent pages.
-
-> > -
-> > -KUnit is fast. Excluding build time, from invocation to completion KUn=
-it can run
-> > -several dozen tests in only 10 to 20 seconds; this might not sound lik=
-e a big
-> > -deal to some people, but having such fast and easy to run tests fundam=
-entally
-> > -changes the way you go about testing and even writing code in the firs=
-t place.
-> > -Linus himself said in his `git talk at Google
-> > -<https://gist.github.com/lorn/1272686/revisions#diff-53c65572127855f1b=
-003db4064a94573R874>`_:
-> > -
-> > -     "... a lot of people seem to think that performance is about doin=
-g the
-> > -     same thing, just doing it faster, and that is not true. That is n=
-ot what
-> > -     performance is all about. If you can do something really fast, re=
-ally
-> > -     well, people will start using it differently."
-> > -
-> > -In this context Linus was talking about branching and merging,
-> > -but this point also applies to testing. If your tests are slow, unreli=
-able, are
-> > -difficult to write, and require a special setup or special hardware to=
- run,
-> > -then you wait a lot longer to write tests, and you wait a lot longer t=
-o run
-> > -tests; this means that tests are likely to break, unlikely to test a l=
-ot of
-> > -things, and are unlikely to be rerun once they pass. If your tests are=
- really
-> > -fast, you run them all the time, every time you make a change, and eve=
-ry time
-> > -someone sends you some code. Why trust that someone ran all their test=
-s
-> > -correctly on every change when you can just run them yourself in less =
-time than
-> > -it takes to read their test log?
->
-> This whole section about speed changing the nature of the activity
-> is dropped.  Is that intentional?
-
-We want readers to focus on the "how" of KUnit compared to "why" KUnit
-exists. We feel this is now sufficiently justified and this paragraph
-is no longer required.
-
-> > +This section details the kernel unit testing framework.
-> > +
-> > +Introduction
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +KUnit (Kernel unit testing framework) prvoides a common framework for
->
-> prvoides -> provides
-
-Fixed
-
-> > +unit tests within the Linux kernel. Using KUnit, you can define groups
-> > +of test cases called test suites. The tests either run on kernel boot
-> > +if built-in, or load as a module. KUnit automatically flags and report=
-s
-> > +failed test cases in the kernel log. The test results appear in TAP
-> > +(Test Anything Protocol) format. It is inspired by JUnit, Python=E2=80=
-=99s
->
-> You lost the link to the TAP website here.  You should
-> have something like this link in here somewhere.
-> `TAP <https://testanything.org/>`_
-
-Done
-
-> > +unittest.mock, and GoogleTest/GoogleMock (C++ unit testing framework).
-> > +
-> > +KUnit tests are part of the kernel, written in the C (programming)
-> > +language, and test parts of the Kernel implementation (example: a C
-> > +language function). Excluding build time, from invocation to
-> > +completion, KUnit can run around 100 tests in less than 10 seconds.
-> > +KUnit can test all kernel components, example: file system, system
->
-> all kernel components, example -> any kernel component, for example
-
-Done
-
-> > +calls, memory management, device drivers and so on.
-> > +
-> > +KUnit follows the white-box testing approach. The test has access to
-> > +internal system functionality. KUnit runs in kernel space and is not
-> > +restricted to things exposed to user-space.
-> > +
-> > +Features
-> > +--------
-> > +
-> > +- Perform unit tests.
->
-> Perform -> Performs
-
-Replaced this with "Provides a framework for writing unit tests".
-
-> > +- Run tests on any kernel architecture.
-> Run tests -> Runs tests
-
-Done
-
-> > +- Runs test in milliseconds.
-> Runs test -> Runs a test
-
-Done
-
-> > +
-> > +Prerequisites
-> > +-------------
-> > +
-> > +- Any Linux kernel compatible hardware.
-> > +- For Kernel under test, Linux kernel version 5.5 or greater.
-> > +
-> > +Unit Testing
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +A unit test verifies a single code unit. For example: a function or
->
-> code unit. For example: a function -> code unit - for example a function
-
-Replaced the whole paragraph.
-
-> > +codepath. The test executes a single test method multiple times with
->
-> The test executes -> The test commonly executes
-
-Replaced the whole paragraph.
-
-> > +different parameters. It is recommended to run unit test
-> > +independently of any other unit test or code.
->
-> It is recommended to run unit test ->
->   It is recommended to structure a unit test so that it can run
-
-Replaced the whole paragraph.
-
-> > +
-> > +Write Unit Tests
-> > +----------------
-> > +
-> > +To write good unit tests, there is a simple but powerful pattern:
-> > +Arrange-Act-Asert. This is a great way to structure test cases and
-> Asert -> Assert
-
-Done
-
-> > +defines an order of operations.
-> > +
-> > +- Arrange inputs and targets: At the start of the test, arrange the da=
-ta
-> > +  that allows a function to work. Example: initialize a statement or
-> > +  object.
-> > +- Act on the target behavior: Call your function/code under test.
-> > +- Assert expected outcome: Verify the initial state and result as
-> > +  expected or not.
->
-> I don't know what "Verify the initial state" means.
->
-> Verify the initial state and result as expected or not ->
->    Verify whether the result (or resulting state) is as expected or not.
-
-Done
-
-
-> > +
-> > +Unit Testing Advantages
-> > +-----------------------
-> > +
-> > +- Increases testing speed and development in the long run.
-> > +- Detects bugs at initial stage and therefore decreases bug fix cost
-> > +  compared to acceptance testing.
-> > +- Improves code quality.
-> > +- Encourages writing testable code.
-> >
-> >  How do I use it?
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > -*   Documentation/dev-tools/kunit/start.rst - for new users of KUnit
-> > -*   Documentation/dev-tools/kunit/tips.rst - for short examples of bes=
-t practices
-> > -*   Documentation/dev-tools/kunit/usage.rst - for a more detailed expl=
-anation of KUnit features
-> > -*   Documentation/dev-tools/kunit/api/index.rst - for the list of KUni=
-t APIs used for testing
-> > -*   Documentation/dev-tools/kunit/kunit-tool.rst - for more informatio=
-n on the kunit_tool helper script
-> > -*   Documentation/dev-tools/kunit/faq.rst - for answers to some common=
- questions about KUnit
-> > +*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
-> > +*   Documentation/dev-tools/kunit/usage.rst - KUnit features.
-> > +*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> > +    examples.
-> > +*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> > +    used for testing.
-> > +*   Documentation/dev-tools/kunit/kunit-tool.rst - kunit_tool helper
-> > +    script.
-> > +*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> > +    answers.
-> > --
-> > 2.34.0.384.gca35af8252-goog
->
-
-Regards,
-Harinder Singh
+SGkgamlya2EKCj4gPiA+IE9uIE1vbiwgT2N0IDE4LCAyMDIxIGF0IDA4OjU3OjIwQU0gKzAwMDAs
+IG5ha2FtdXJhLnNodW5AZnVqaXRzdS5jb20gd3JvdGU6Cj4gPiA+ID4gSGkKPiA+ID4gPiAKPiA+
+ID4gPiA+wqA+IE9uIFdlZCwgU2VwIDAxLCAyMDIxIGF0IDEwOjM2OjQwQU0gLTAzMDAsIEFybmFs
+ZG8gQ2FydmFsaG8gZGUgTWVsbyB3cm90ZToKPiA+ID4gPiA+wqA+ID4gRW0gV2VkLCBTZXAgMDEs
+IDIwMjEgYXQgMDk6NDU6MTBBTSArMDAwMCwgbmFrYW11cmEuc2h1bkBmdWppdHN1LmNvbSBlc2Ny
+ZXZldToKPiA+ID4gPiA+wqA+ID4gPiBIZWxsby4KPiA+ID4gPiA+wqA+ID4gPgo+ID4gPiA+ID7C
+oD4gPiA+IEknbSB0cnlpbmcgdG8gY2hhbmdlIHJkcG1jIHRlc3QgaW4gcGVyZl9ldmVudF90ZXN0
+c1sxXSB0byB1c2UgbGlicGVyZiwgYnV0IGxpYnBlcmYgZG9lc24ndCBoYXZlIGVub3VnaCBpbnRl
+cmZhY2VzLgo+ID4gPiA+ID7CoD4gPiA+IERvZXMgYW55b25lIHBsYW4gdG8gaW1wbGVtZW50IGFu
+eSBvZiB0aGVzZSBsaWJwZXJmIGZlYXR1cmVzPwo+ID4gPiA+ID7CoD4gPiA+Cj4gPiA+ID4gPsKg
+PiA+ID4gLSBJbnRlcmZhY2VzIHRoYXQgY2FuIHJ1biBpb2N0bCAoUEVSRl9FVkVOVF9JT0NfUkVT
+RVQpIGZyb20gdXNlcmxhbmQKPiA+ID4gPiA+wqA+ID4gPiAtIEludGVyZmFjZXMgdGhhdCBjYW4g
+cnVuIGZjbnRsIChTSUdJTykgZnJvbSB1c2VybGFuZAo+ID4gPiA+ID7CoD4KPiA+ID4gPiA+wqA+
+IGhpLAo+ID4gPiA+ID7CoD4gd2UgY291bGQgYWRkIHBlcmZfZXZzZWxfX2ZkIGxpa2UgYmVsb3cs
+IHdvdWxkIGl0IGhlbHAgeW91ciB1c2VjYXNlPwo+ID4gPiA+ID7CoD4KPiA+ID4gPiA+wqA+IGlm
+IHlvdSBkZXNjcmliZWQgeW91ciB1c2VjYXNlcyBpbiBtb3JlIGRldGFpbHMgd2UgY291bGQKPiA+
+ID4gPiA+wqA+IHNlZSBpZiB3ZSBjb3VsZCBhZGQvbW92ZSBzb21ldGhpbmcgdG8gbGlicGVyZiBm
+b3IgdGhhdAo+ID4gPiA+ID7CoD4KPiA+ID4gPiA+wqA+IGFzIEFybmFsZG8gc2FpZCBiZWxvdyBp
+dCBjb3VsZCBiZSBhbHJlYWR5IGluIHRvb2xzL3BlcmYvdXRpbC8qLmMKPiA+ID4gPiA+wqA+IHNv
+bWV3aGVyZSA7LSkKPiA+ID4gPiA+wqAKPiA+ID4gPiA+wqBBcyBQZXRlciBzYXlzLCBJIHVuZGVy
+c3Rvb2QgdGhhdCBmb3IgcmRwbWMsIG5vIHJlc2V0IGlzIG5lZWRlZC4KPiA+ID4gPiA+wqAKPiA+
+ID4gPiA+wqBIb3dldmVyLCBQQVBJIHJlc2V0cyBpdCBleHBsaWNpdGx5LCBmb3IgZXhhbXBsZSwg
+YXQgUEFQSV9yZXNldC4KPiA+ID4gPiA+wqBJbiBvdGhlciwgUEFQSSBhbHNvIGhhcyB0aGUgYWJp
+bGl0eSB0byBjYWxsIFBFUkZfRVZFTlRfSU9DX1JFRkxFU0ggb24gb3ZlcmZsb3cgdG8gY2FsbCBh
+IHVzZXItcmVnaXN0ZXJlZCBoYW5kbGVyLCB1c2luZyBTSUdJTy4KPiA+ID4gPiA+wqAKPiA+ID4g
+PiA+wqBJIHRoaW5rIGl0IGlzIGRlc2lyYWJsZSB0byBiZSBhYmxlIHRvIGFjaGlldmUgc2ltaWxh
+ciBmdW5jdGlvbmFsaXR5Lgo+ID4gPiA+IAo+ID4gPiA+IERvZXMgYW55b25lIGhhdmUgYW55IGNv
+bW1lbnRzPwo+ID4gPiAKPiA+ID4gSSdsbCB0cnkgdG8gYWRkIHRoYXQgZnVuY3Rpb25hbGl0eSBz
+b29uLAo+ID4gPiBJJ2xsIGNjIHlvdSBvbiBwYXRjaAo+ID4gCj4gPiBUaGFuayB5b3UuCj4gPiBJ
+IGxvb2sgZm9yd2FyZCB0byB5b3VyIHBhdGNoLgo+IAo+IERvIHlvdSBoYXZlIGEgc3BlY2lmaWMg
+cGxhbj8gCj4gSSB3b3VsZCBsaWtlIHRvIGtub3cgdGhlIHJvdWdoIHBlcmlvZCB1bnRpbCB5b3Vy
+IHBhdGNoIGlzIG1hZGUuCiAKSSB3aWxsIGFsc28gdHJ5IHRvIGltcGxlbWVudCB0aGVzZSBpbnRl
+cmZhY2VzLgoKQmVzdCBSZWdhcmRzClNodW5zdWtl

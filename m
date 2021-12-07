@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB18646C42A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F7546C426
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241067AbhLGUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:09:50 -0500
-Received: from mga05.intel.com ([192.55.52.43]:47493 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230384AbhLGUJs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:09:48 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="323930250"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="323930250"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:06:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="542936151"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 12:06:12 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mugj6-000Mv7-1p; Tue, 07 Dec 2021 20:06:12 +0000
-Date:   Wed, 8 Dec 2021 04:05:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tommy Haung <tommy_huang@aspeedtech.com>, joel@jms.id.au,
-        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
-        andrew@aj.id.au, linux-aspeed@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v4 6/6] arm:boot:dts:aspeed-g6 Add more gfx reset control
-Message-ID: <202112080327.zlIz9vRq-lkp@intel.com>
-References: <20211207102749.18118-8-tommy_huang@aspeedtech.com>
+        id S241049AbhLGUJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235966AbhLGUJH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 15:09:07 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73F7C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:05:36 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x131so360844pfc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZgYEUXbXJnnaXhuLas61v51X/GU1A03HhoOGNbWznls=;
+        b=myJbxd20cJHzOhtFzksBCaz14XF0J+ZIoFTkJKwkBAQSsbKJKSnUDKGZpVCWcxgrUx
+         nwknjq4sOXBawDYgFdZssPFZPiM1d5PNq+B0OVvWjsWoe+BP+GIMdxWlb5Os7EE28mlE
+         QADptOhOeTmblUDKZo+wzpthShGAhxtqhnpPZwCfZ0tOU+q7ZP76PBhR4+5XWhR0vV08
+         HnDJa7X4VFnGQ0VTvPdam4fSB3GQLowXFu8TVdc4FIFJEDxJzXf5r+7Hg/z3yhf9UOJ9
+         0B8/Wc4YL/JJiFkJhwUEQtQWq3j3lW/hZ8gGylmYU+orUtAIQqt1JhzyvcU+PIYQJqwU
+         DNeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZgYEUXbXJnnaXhuLas61v51X/GU1A03HhoOGNbWznls=;
+        b=EQZNMvHtyVj/RPduKec/nfo8WLUNkTtDOwpgeTGozXXeGoyzl8ipIxtJwfrqXevpO9
+         JT36Z2fP0ZAvBaMNZB00rUDzQqAPrSGYir2OQTnJ3KwNZbjIzuL4tO0WVhwseuRKSrWy
+         kK6yAV6jKq5BqxDpiMZ6vXb0ZAijxqGjev2d+xA7IRz3pI/iT5Es1JjWVy9FUL1o6h2F
+         w3F6i5iY/lPpRvpMrdlb1zNYBYvEizprBNA7JHqQW/GEsDZUpO63PySoGVFdlZ4gCDu1
+         2ljj4rSvKxozK74SDGNBtKxCL3hS1Frf91D9A4uYISHtEDy7VJEpks4t451LzViBuhoG
+         0Rkw==
+X-Gm-Message-State: AOAM531Gxk53ORVG3Id01M1GMjP2NaK0Q4oZM0RnN4583380kFsBZlhj
+        pbMRLFkRRCSi9qZSjSJaZoQcy4e3QQ5MDRGH+/zTUw==
+X-Google-Smtp-Source: ABdhPJxwSkadnRD6LrIKmzZwTM9QAa4PDN+XAQfPHrmj3HkH9rSrr8S1Hsw8ZlLuS9gBam7VH5GhHZqA2fRlFPr9XXo=
+X-Received: by 2002:a63:34f:: with SMTP id 76mr25135340pgd.609.1638907536157;
+ Tue, 07 Dec 2021 12:05:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207102749.18118-8-tommy_huang@aspeedtech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211026153638.3857452-1-dlatypov@google.com>
+In-Reply-To: <20211026153638.3857452-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 15:05:25 -0500
+Message-ID: <CAFd5g44mWXs-cunWEtVUWgsA3rJe8P19-409SMQNjrYGW0E4iw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: remove claims that kunit is a
+ mocking framework
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommy,
+On Tue, Oct 26, 2021 at 11:36 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> KUnit does not have any first party support for "mocking".
+>
+> The original RFC had some, but the code got dropped.
+> However, the documentation patches never got updated. This fixes that.
+>
+> https://kunit.dev/mocking.html has a current writeup on the status quo
+> and will hopefully be eventually folded into the in-kernel
+> Documentation.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on v5.16-rc4]
-[also build test ERROR on next-20211207]
-[cannot apply to joel-aspeed/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tommy-Haung/Add-Aspeed-AST2600-soc-display-support/20211207-183100
-base:    0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20211208/202112080327.zlIz9vRq-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1f021d3aa80957f6bd0434bf4b5d66898b8d2e9c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tommy-Haung/Add-Aspeed-AST2600-soc-display-support/20211207-183100
-        git checkout 1f021d3aa80957f6bd0434bf4b5d66898b8d2e9c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm/boot/dts/aspeed-g6.dtsi:359.23-24 syntax error
-   FATAL ERROR: Unable to parse input tree
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

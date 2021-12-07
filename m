@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250DB46BC33
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9665546BC34
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236895AbhLGNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S236714AbhLGNPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236857AbhLGNOk (ORCPT
+        with ESMTP id S230153AbhLGNPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:14:40 -0500
+        Tue, 7 Dec 2021 08:15:13 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60109C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:11:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C08C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:11:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AB174CE1AB3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:11:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB5BC341C1;
-        Tue,  7 Dec 2021 13:11:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51974CE1ABA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:11:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812F2C341C1;
+        Tue,  7 Dec 2021 13:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638882666;
-        bh=uv22WAK4++8AgdeRR8r3o5bfpFmLmJdCJoSGQg801rQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AEl7p5l/1EPmMPx0doRX4NaAnsWWOEWq9b69OMHfQaEq7YaLNMsZRxKbTBxtKeA+A
-         o66lBeAomYI6oHP4viDMYbm5c5G726UqUtt3MaWKdtI6EOSOvuFFCVrpVDUhEimJ0+
-         glhNAmqu+sykWBjBQcKBG8UT88DTPgsJfZffnRGtTjZvvQV6/xJMVa2nEPw1UHPnd4
-         5U4UwCHo6mDdoqvbS3mdERJ8/Yv4o/JZDrpBBd2AyPzZFS0a8bCkbsX1MtGYRUn9bz
-         eaVCwfGCGpaRSpufT7Opox+aAJBdjEJZqGTT1yeHmgLWzg/O6iIHlOzoLsprZCSkpP
-         jAQ2FhTr6T3zQ==
-Date:   Tue, 7 Dec 2021 13:11:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: rockchip_i2s_tdm.c:undefined reference to `clk_set_parent'
-Message-ID: <Ya9dZiqbSPODo74p@sirena.org.uk>
-References: <202112070621.TnLPiADU-lkp@intel.com>
- <13326272.At7iLaMNiz@archbook>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bu7aYMSE//vud9rI"
-Content-Disposition: inline
-In-Reply-To: <13326272.At7iLaMNiz@archbook>
-X-Cookie: Only God can make random selections.
+        s=k20201202; t=1638882699;
+        bh=Ccrdn9d5r9CsPswfq8x643P9H1bylzwnyQl/IGJmaiA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JeL61nTWIKcxsjK0PE2V6v8Pwf+pcxTdnNxvbFcf1HIRFuHWTX0YHAQmluKrd2pVn
+         crdMgFaZoB/AHawQIsbRATn4Jmko6CZoNxp+JiUm/2JbigP9Ik/bTBBgqBvBClgnJn
+         lMPKRh8dZkOLyUKhqkTWMuvotnEyR/0+GGv5isObk25We9DJcnZeRMR1hmXvxUjbz3
+         1Rbx79FSF9pn6QxVSfkFAlCzqYQx+I9QF7dt4uqYechBXr+c1AIcCl5ueGX/tvHKtN
+         VHQIpnbeuN2GdaqxYIXQzR3/+AZSlrxQmCKZvWhO/hVcBkvkaKkDccTh95wu6RYuO9
+         N4BmCx2N6zt5A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muaFt-00AVsT-Ja; Tue, 07 Dec 2021 13:11:37 +0000
+Date:   Tue, 07 Dec 2021 13:11:37 +0000
+Message-ID: <87k0gg1rw6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     kernel test robot <lkp@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+Subject: Re: include/linux/compiler_types.h:328:45: error: call to '__compiletime_assert_202' declared with attribute error: BUILD_BUG failed
+In-Reply-To: <202112071925.61r0Z8V1-lkp@intel.com>
+References: <202112071925.61r0Z8V1-lkp@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lkp@intel.com, daniel.lezcano@linaro.org, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++ Will for the arm64 tree.
 
---Bu7aYMSE//vud9rI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, 07 Dec 2021 11:53:09 +0000,
+kernel test robot <lkp@intel.com> wrote:
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+> commit: 4775bc63f880001ee4fbd6456b12ab04674149e3 clocksource/arm_arch_timer: Add build-time guards for unhandled register accesses
+> date:   7 weeks ago
+> config: arm64-randconfig-r003-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071925.61r0Z8V1-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4775bc63f880001ee4fbd6456b12ab04674149e3
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 4775bc63f880001ee4fbd6456b12ab04674149e3
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from <command-line>:
+>    In function 'arch_timer_reg_read_cp15',
+>        inlined from 'arch_timer_reg_read' at drivers/clocksource/arm_arch_timer.c:166:9,
+>        inlined from 'erratum_set_next_event_tval_generic' at drivers/clocksource/arm_arch_timer.c:414:9:
+> >> include/linux/compiler_types.h:328:45: error: call to '__compiletime_assert_202' declared with attribute error: BUILD_BUG failed
 
-On Tue, Dec 07, 2021 at 12:32:52PM +0100, Nicolas Frattaroli wrote:
+[...]
 
-> So my question is: do I need to care about this? This hardware
-> will never be used on MIPS, and a lot of other drivers (as seen in
-> the errors snippet from the test robot) have the same issue, and
-> the problem is most likely not in my driver but in that specific
-> configuration's clock API implementation.
+This looks like another version of the inlining issue for which I have
+posted a fix[1] a while ago.
 
-It's fine, in theory you should care and add suitable dependencies but
-in practice it's not bothering anyone and at this point I'd rather see
-this sorted on the MIPS side, supporting things like this is just
-ongoing hassle.
+Daniel, can you please pick this one up for the next -rc?
 
---Bu7aYMSE//vud9rI
-Content-Type: application/pgp-signature; name="signature.asc"
+Alternatively, I can route it via the arm64 tree.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGvXWUACgkQJNaLcl1U
-h9DDtQf/QZ2O0UkGXzLJfaag+pGtz/017d0AGj7BA0ugsyy0dB8xIlUUzPZdCCsY
-ugIVwiX0znypgeZ236g4K4X+YIstYIFVjAKxQ9WftgTGS8JJfw3I0E2ZI0N8SHHm
-sPoS6TismjwwcSg0YtYB2bXzgq/Ld3xqfVzvLqwY+KHHqOX8EomVXJ12XqDIyQc+
-nUaNnHWO+++ueuqtdumGG6oi1sleixFujOFwySkM/fno1iXWNH3M1ONHepaikfjG
-0fI1VpbBYBABWz5sTEeekLGM6T9Od24O83G7Nnth1FN6bhWuD41iqjgdVtrb1TfD
-ZN7qK1WrUp+cczm4Gutn8Jl6FMUuAw==
-=08a9
------END PGP SIGNATURE-----
+	M.
 
---Bu7aYMSE//vud9rI--
+[1] https://lore.kernel.org/all/20211117113532.3895208-1-maz@kernel.org
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A24746B801
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D175146B810
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbhLGJyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S234537AbhLGJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234505AbhLGJyw (ORCPT
+        with ESMTP id S232778AbhLGJ4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:54:52 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7D7C0698CC;
-        Tue,  7 Dec 2021 01:51:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5830CCE1A2A;
-        Tue,  7 Dec 2021 09:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0365AC341C1;
-        Tue,  7 Dec 2021 09:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638870667;
-        bh=t0UaL5ptrXo0DEWrnydiPDnfduthGVFkCZnCDXLVv54=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=x6kq6j8zv0tB+CddNhxmP62n1huZ8A22s0Mpld4jQzw9LJ5VG8qjkSQ2hFkKMXgdA
-         PCC18DHlCTINQPrkhWYXheeeQfMRH7kSx+GETTJE0O+TFOnnmABhRk69vkCYdnI1gf
-         ErCKwgAPOGycirNbsTMxCab+GWVlICwSA3mQkxxo=
-Date:   Tue, 7 Dec 2021 10:51:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nishad Kamdar <nishadkamdar@gmail.com>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Huijin Park <huijin.park@samsung.com>,
-        Yue Hu <huyue2@yulong.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Christian =?iso-8859-1?Q?L=F6hle?= <CLoehle@hyperstone.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mmc: core: Add support for the eMMC RTC feature in
- mmc_ops
-Message-ID: <Ya8uiOq3MGGKRB5n@kroah.com>
-References: <20211205191009.32454-1-nishadkamdar@gmail.com>
- <DM6PR04MB657527FCF325EA9760032DA5FC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <20211207093009.GA11794@nishad>
- <DM6PR04MB6575BF4FC2DE49885D0EEDF0FC6E9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <20211207094304.GA11969@nishad>
+        Tue, 7 Dec 2021 04:56:01 -0500
+Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BB8C061574;
+        Tue,  7 Dec 2021 01:52:30 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id uX96mxufCQyExuX99m6Mav; Tue, 07 Dec 2021 10:52:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1638870748; bh=YIK8OHDbi3V4LndmzWao6mLqVaAtXkrpBG9mG5TVAco=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From:
+         Subject;
+        b=ET2rNmICLk25V6X121sF2QETLZMyvygTF/J9Ke96bkaYZk1A8tzrA3Vml13GhNBCb
+         TemdWpPzs1qFchb43BGfsVvGq1zHCTdAAzFPQzUNcF7t9Gurw4ESM0z0AsrzOSyAUJ
+         S5gfMaVlpmadluchLBNs5xle/MLKQdPisg/Eqk+Gmy6oe1kpRmZjQXMq7KY2jvMsnC
+         F0fKi7ubIVxDL9OWJQFZBQIqBz+CZ3g0u152BSLpHDDkXHy0B29xmNN0N0tM5Ww14+
+         xONBla2v0xYa4DBe3DllwPbzjRHvKI80WjWo6dysFjEAj6JvtW1o8+aNlX+3Fc+G9G
+         vnGJzqBe4shVQ==
+Message-ID: <6e64bb76-14f5-b492-ca36-775a0011acba@xs4all.nl>
+Date:   Tue, 7 Dec 2021 10:52:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207094304.GA11969@nishad>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH v2 1/4] Revert "media: uvcvideo: Set unique vdev name
+ based in type"
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+Cc:     stable@vger.kernel.org
+References: <20211207003840.1212374-1-ribalda@chromium.org>
+ <20211207003840.1212374-2-ribalda@chromium.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20211207003840.1212374-2-ribalda@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfE+7voatNWDKUjr1aMl0AXKaQkhI98MJFkc/Lc4uEEl8JUYVekHCg1kpUPeDtNOSCR3zbvKlb+wACVj4luuYXw9Rk+IR0nLOdcaRSIxSONlfqOMOK0eS
+ Jb5s3XXxzu5qTJSwy+/iKd30uvGIB4wa3L3j9cH/WZLi1zfuQ6rzvoIX+Cb93sfMjk6LXHi0BJQtzDJGXMO2f0dXmiMGLq1bOp7Pzn3w4NXIox46Vqr8qC+v
+ g15GyFUrFPyBsN/wFm+7LQUuMsdI8mm2GpkwQFLneCgI1qAPEJritCAi7RPwwNJ8sltnfsTr8ViLJlSrwOtlmW+RpLQa5hIbVtnemMiAwzBVVgmEEUrqCNYA
+ rU54yNRvsCR8oaQ7Mq5Y1cNppAoERPWeMv611qc2eO+GIyyiV2fMrRjOvG3p3ZUuHnO1dGtP+DBN//8bTTzj1PZMzPOiZaLid3LCGPetROHYbNkuc/+5+sOF
+ PZ/zbuptl7bKZ3TiBrtTmDMABy5f1p9BevFd+A==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:13:08PM +0530, Nishad Kamdar wrote:
-> On Tue, Dec 07, 2021 at 09:33:46AM +0000, Avri Altman wrote:
-> > > On Tue, Dec 07, 2021 at 08:28:42AM +0000, Avri Altman wrote:
-> > > >
-> > > > > This patch adds support to set the RTC information in the eMMC
-> > > > > device. This is based on the JEDEC specification.
-> > > > >
-> > > > > There is no way however, to read the RTC time from the device. Hence
-> > > > > we rely on the response of the CMD49 to confirm the completion of
-> > > > > the operation.
-> > > > >
-> > > > > This patch has been tested successfully with the ioctl interface.
-> > > > > This patch has also been tested suceessfully with all the three
-> > > > > RTC_INFO_TYPEs.
-> > > > If this is triggered from user-space via ioctl anyway, Why do we need
-> > > > this command to be implemented in the kernel?
-> > > > Why not just add this to mmc-utils?
-> > > >
-> > > > Thanks,
-> > > > Avri
-> > > As per the spec, B51: Section 6.6.35:
-> > > Providing RTC info may be useful for internal maintainance operations.
-> > > And the host should send it on the following events:
-> > > - power-up
-> > > - wake-up
-> > > - Periodically
-> > > Hence IMO, the Kernel would be the right place of peforming this operation.
-> > But your patch doesn't do that, is it?
-> >
-> Yes, That's because this operation may be device specific. In order to know when
-> to call this function may require eMMC firmware info.
-> This patch only adds support so that if the info is made available
-> in the future, a separate patch can be added to introduce the calling mechanism.
+On 07/12/2021 01:38, Ricardo Ribalda wrote:
+> A lot of userspace depends on a descriptive name for vdev. Without this
+> patch, users have a hard time figuring out which camera shall they use
+> for their video conferencing.
+> 
+> This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
+> Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-We do not add code that is not actually used in the kernel tree.
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Please submit a user of this new function, otherwise there is no need
-for it at all.
+Thanks!
 
-thanks,
+	Hans
 
-greg k-h
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 7c007426e082..058d28a0344b 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2193,7 +2193,6 @@ int uvc_register_video_device(struct uvc_device *dev,
+>  			      const struct v4l2_file_operations *fops,
+>  			      const struct v4l2_ioctl_ops *ioctl_ops)
+>  {
+> -	const char *name;
+>  	int ret;
+>  
+>  	/* Initialize the video buffers queue. */
+> @@ -2222,20 +2221,16 @@ int uvc_register_video_device(struct uvc_device *dev,
+>  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+>  	default:
+>  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+> -		name = "Video Capture";
+>  		break;
+>  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+>  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+> -		name = "Video Output";
+>  		break;
+>  	case V4L2_BUF_TYPE_META_CAPTURE:
+>  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
+> -		name = "Metadata";
+>  		break;
+>  	}
+>  
+> -	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
+> -		 stream->header.bTerminalLink);
+> +	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+>  
+>  	/*
+>  	 * Set the driver data before calling video_register_device, otherwise
+> 
+

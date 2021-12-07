@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B539246C75F
+	by mail.lfdr.de (Postfix) with ESMTP id 2779146C75D
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbhLGWYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbhLGWYj (ORCPT
+        id S237918AbhLGWYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:24:38 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:47385 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233310AbhLGWYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:24:39 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D56AC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:21:09 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v19so217614plo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
-        b=L1FSJ/KwaTmbswiwLO5H3JAbe6EdsY605iXcH//Ll1DUiWACcbZLD8gaKzKbuhgCer
-         o1p8PSf9Duc/6nNpfRi/Gd85Hft199FDAdT04hIYp+cczigwoPyeRIHGzHEhWNkXv057
-         qjc03gIBBYyeiEUtur/r6KPD9ZgOigsPkuYUC0M8ntHMeQzDQxEgEtZc6c7QDmDVOXdX
-         5fPSGwfNNDoqJQd8RETKbvrQM8sWQFl44KA4sWrNkMBH8VCQeM7mPnPLQ/vbvdr3PyBJ
-         PJWhkofV0im2TyuZ+AhmoQz2DJNBEAxC+2xvNR3kUOsC5fLdwT2Slq0dRt3lfX5JSocT
-         NRqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
-        b=y5739NqIk68ItYVv8A6CayFThdiNHa4T8+6WOGgvR6oNTZr8BOTUo83p7HHJjx89pg
-         iU06idQCWEn9r9/Ys5oIBOVAej/Mm68W+MMuRvHwayRVKrvwhGhdinmgkqTspURGPw+c
-         E3dAaLC32haIruXGMESNNvA6i1t1PWEvDSgApXcEpsF655zEz4rpXNKFVdC0WIMwF3iQ
-         A3wpdA2OSWH0YDGVOb8LtYNwqp+US0BaYysW2mf4pXRnWxRcuq6cXtbQCsfHkq+Q0nn4
-         q+O8/08nvgYri7+3KP2n4fESvGiFHYPJvOQaU1i2pqnKOUjz5UzljAMpbrUww65lxM/V
-         RGYA==
-X-Gm-Message-State: AOAM532NtnHA9I9sN1wqm1kLLaunS1T/voI9yomRfiHVklYxnHKTosw3
-        gBngJ+NZUx1/XGcalaNEGYRblxBzfmHlACWruWU5wA==
-X-Google-Smtp-Source: ABdhPJxdZxxEERlxR9HetbGs+nmDuevgLWgjNa/dJICW8sAh/CIABDON8aM6odojPC8knmmLBCz5Is1zHgk1l9i0HKE=
-X-Received: by 2002:a17:90b:230c:: with SMTP id mt12mr2394253pjb.63.1638915668434;
- Tue, 07 Dec 2021 14:21:08 -0800 (PST)
+        Tue, 7 Dec 2021 17:24:37 -0500
+Received: (qmail 553011 invoked by uid 1000); 7 Dec 2021 17:21:05 -0500
+Date:   Tue, 7 Dec 2021 17:21:05 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guo Zhengkui <guozhengkui@vivo.com>, Li Jun <jun.li@nxp.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
+Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
+Message-ID: <Ya/eUbdN1+ABFVWf@rowland.harvard.edu>
+References: <20211207135401.5507-1-guozhengkui@vivo.com>
+ <Ya9yZX3JsuO8OcVJ@kroah.com>
 MIME-Version: 1.0
-References: <20211009015406.1311319-1-dlatypov@google.com> <20211009015406.1311319-2-dlatypov@google.com>
-In-Reply-To: <20211009015406.1311319-2-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 7 Dec 2021 17:20:57 -0500
-Message-ID: <CAFd5g44yXaVG+w+G3EXLkbgHvxSQ3baE_=wTD7EQAK+sroaEkw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: delete kunit_parser.TestResult type
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya9yZX3JsuO8OcVJ@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 8, 2021 at 9:54 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> The `log` field is unused, and the `status` field is accessible via
-> `test.status`.
->
-> So it's simpler to just return the main `Test` object directly.
->
-> And since we're no longer returning a namedtuple, which has no type
-> annotations, this hopefully means typecheckers are better equipped to
-> find any errors.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Tue, Dec 07, 2021 at 03:40:37PM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
+> > Fix following error:
+> > ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
+> > application of sizeof to pointer.
+> 
+> What generated this error?
+> 
+> > 
+> > Use sizeof(*vaddr) instead.
+> > 
+> > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> > ---
+> >  drivers/usb/core/hcd.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > index 4d326ee12c36..996d5273cf60 100644
+> > --- a/drivers/usb/core/hcd.c
+> > +++ b/drivers/usb/core/hcd.c
+> > @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
+> >  		return -EFAULT;
+> >  	}
+> >  
+> > -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
+> > +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
+> 
+> I think you just broke the code.
+> 
+> Look at this closer and see what the function is doing with this buffer
+> and if you still think your patch is correct, please rewrite the
+> changelog text to explain why it is so (hint, just using the output of
+> coccinelle isn't ok.)
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Although the patch is definitely wrong, the code could stand to be 
+improved.  The value stored at the end of the buffer is *vaddr_handle 
+converted to an unsigned long, but the space reserved for this value is 
+sizeof(vaddr) -- which doesn't make much sense since vaddr is a pointer 
+to unsigned char.  The code implicitly relies on the fact that unsigned 
+long takes up the same amount of space as a pointer.
+
+Readers wouldn't have to stop and figure this out if the amount of 
+reserved space was simply set to sizeof(unsigned long) rather than 
+sizeof(vaddr).
+
+Alan Stern

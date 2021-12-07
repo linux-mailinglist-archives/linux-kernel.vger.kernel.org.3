@@ -2,195 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B333346B26D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666EF46B270
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbhLGFgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:36:21 -0500
-Received: from mail-eopbgr50068.outbound.protection.outlook.com ([40.107.5.68]:31461
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234147AbhLGFgU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:36:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JCXGbcx5YXeCjVaf5EcecOE0pV+u+yghbJuclSlt7u9biLGuMnV4pP3/Yk27KsJtvXyautcHhD1KxRIyZNQklXTdxR3q+5/8gA64tqzE4xehm8rXDZ91VlSyVIeFmhiaBIxI5/PKANas3OTon7GXnZIHg9wyIO8sc3Qwg9S9W/YMva/CxIgifp2bbRwi7fb7DqqWh/IdfMWkfp6pDlGOxca1evAZO49psZko4Bj6NvkIPzNNY9QFvzOnARs6pFSu9Qcya87rHrWEnF7xa6YD1wFrs8wigH97arlt0bHQLcq5GHm6yhQF6XwY5u8vhmosEw+RiZwqvDP0pgVT/prtiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UPfyVky6MQwU3PaTxjupGvwyhEMfmPGsqxiGAXpiqGU=;
- b=bDIbjTFehYsY5tf8dapeHc/hLZpM/KOm6Meo+fv4iW/b47TniRhU2doXKfGr97KHLTWQlMz18Zvs9evgUOFD7L5w0JCZVtVCvVPd4HAcGtVBcvCUhWsVIwIz3QgOdPCIaZQ3GqjqswXtmkIjh02oX3V2PMy0YuUF0qLP5w9BmiOMepScBoiy+NUydDzt0yFWH0PH7a/EZ7ocEKneshkDsnaVod8WX/c7ont8JNxVS8BFAIgqtD+EzcUPaLyYEjp8sMEFi2u5M11IfJcmfG7/O2k5rGCNToxVO8Qt7XqNitlotjuw4+8GaoxijfKR7BrYVzZ0ku9EQcK3N4nmnDTiTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+        id S235320AbhLGFhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234147AbhLGFhe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 00:37:34 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9FBC061746;
+        Mon,  6 Dec 2021 21:34:04 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id x6so15562295iol.13;
+        Mon, 06 Dec 2021 21:34:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UPfyVky6MQwU3PaTxjupGvwyhEMfmPGsqxiGAXpiqGU=;
- b=pcn5MyRrCT9J1N46uIWlN4wzdHQvZHhZKf3pBTKm7/VzkKxBq/Nzoh9yjyhkT/ST6D+93iDmh4tgfSanJ4IRZRlu8ogDFy13PUWl1UN2VQSoPtJZ3yW7UpMmtyxsPmlmlCM51fdByaTilbsfS42E+4GjWsxG6eDYrUXNzDcbmHE=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR0302MB2732.eurprd03.prod.outlook.com (2603:10a6:3:f0::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.21; Tue, 7 Dec 2021 05:32:47 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::544e:754:6241:aa7f]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::544e:754:6241:aa7f%6]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 05:32:46 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Baruch Siach <baruch@tkos.co.il>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>, Tony Lindgren <tony@atomide.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Thierry Reding <treding@nvidia.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-unisoc@lists.infradead.org" <linux-unisoc@lists.infradead.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-CC:     Ray Jui <rjui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH v2 1/3] gpio: Get rid of duplicate of_node assignment in
- the drivers
-Thread-Topic: [PATCH v2 1/3] gpio: Get rid of duplicate of_node assignment in
- the drivers
-Thread-Index: AQHX6qPlbNC/xZaZB0uM50SVI3g84awmgnGA
-Date:   Tue, 7 Dec 2021 05:32:46 +0000
-Message-ID: <c5464ae4-d8e9-6fab-4855-3ca1ba58d705@fi.rohmeurope.com>
-References: <20211206131852.74746-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211206131852.74746-1-andriy.shevchenko@linux.intel.com>
-Accept-Language: fi-FI, en-US
-Content-Language: fi-FI
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a59a12dd-6973-432c-2a9c-08d9b943005d
-x-ms-traffictypediagnostic: HE1PR0302MB2732:EE_
-x-microsoft-antispam-prvs: <HE1PR0302MB2732B1150C7F3ECAC7FF3644AD6E9@HE1PR0302MB2732.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sxxlaCytz7SgGEZz6QCsHFfuItTQnpZ9SrpWlKlUuzHJYqFgkGkJrJb84rDrE45zhc0ZoT9Va5Ncj2Ev4zK/ICX4wmePK0oHjQIkkAnJfjK4meG+gptWgjbGpZ0iODlg11ezncupkaU5fINSYA0TiZoknSIILuOCrvH173TQvWKKjoQKfh/mdAHpc9Bog+C85hUBR3M+WPx0VpyFel2hlYsybwluFk+gQuQEPvcnZ0w3sUfxyahVoBhICOAvD7+9QwuvQj0r5QxsPvYd+KjZgmirRwgptJr573sOX++jCF3rQIT2t4JyMaY8Vy0+grUtI7mdKgDZbCjeME3FQk/1ZfDjsktB5ueVaB30I3LeLo26ZVHToWHY917ZPItn+4P2QABLpg1sApBA4Lnkmu1jsaWmyVv9tE6sAA0rXbNMLUPYnQuWWTIwPuhdWA8aTYC4hSwjqcZYP2cjPWSDP6PlJsf4oBbCaOGuiIzIEdzaFX47JNmutniC/NyUsvxNrNobhgiLiOGVz4KhGOIZpi0IFZaoC6u/tNw6yEBOlVUat//x320zLbGrGQ102doiTqZnlHdr4XgQiR5j75GqPGFICxkR63NlnI44E9PS32VftgeWXa8TInUB05azti0cFbOfXYxSfeAjv82GyWkXpyitOdiVSPeJk+OCqOWIJo05i570tijfN9uzYMHO9dfCWU3nvsOAPeYtzmtgX2cajdEZla4rnP0aQY/Gic35o9YjgEMDL4T0yx8fAV7GbwaDbuM221On6nhThbqf5AppCPVfYIuZq9B7j3c+A8aM0kpoSCeyFv7efgPd6J3ymxDMureg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(31686004)(53546011)(71200400001)(186003)(86362001)(6506007)(4326008)(6512007)(38100700002)(76116006)(31696002)(6486002)(122000001)(83380400001)(38070700005)(64756008)(66556008)(66446008)(7416002)(8936002)(7406005)(66476007)(2906002)(508600001)(316002)(110136005)(66946007)(54906003)(4744005)(921005)(8676002)(5660300002)(2616005)(26583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?LzZRMkhQSWxUUGtreWZqZ0h3VmMrZjh0WVh6TWFOOWZrZVBrVTVZOXowLzVI?=
- =?utf-8?B?N2pKajczSGVtY1F5Y0VyRVJXNTR5OXRlSHRhUGM2MDVlaU85OUJlT21Rb0FX?=
- =?utf-8?B?TTE3aUhWVnRRMVJsMWRqL2cxQVJXSHgrTTUrbHJiRGwxQmdzazJlSDVkUXR4?=
- =?utf-8?B?Wm5DK1NjSzNHUGIvanpGMkozZnRocDFoVEJFRWROWFcrb0FubkhiSW5LVC85?=
- =?utf-8?B?bzJZYWx0bnJGTHpFTWZtSWFyS2tiMjJUMmxrYm9QamRHSHNtSFB1cHZyaEYr?=
- =?utf-8?B?aHl3UDEwT3UxajUvaW9oMHd2clNvTGJwYWhLVzlNc1BwbVR3MGZlT214bFhy?=
- =?utf-8?B?NG1KK3lCL1p6NmJJTEppZm45ekJ1R0VBZlMyYU9RcHpjdlE3VGRzN2tvNkNE?=
- =?utf-8?B?SDBHcVF1R3BYQjI2NnRxbkpITytHOC92VVVoNnpoRkpxZDUzVmpiRVpJNXVp?=
- =?utf-8?B?ZTlicWdzVVFhRjNKOENBY3RVYUdpelkzTnh0SXBGWFhseWpWUUMzOE90eTMy?=
- =?utf-8?B?Z0I1a3FVczFEczNyS1ZNc3E3WmZBU1JieldwcTdlbWVjaXRXNmJhdG94TERJ?=
- =?utf-8?B?emtGd0JrTVJwbVVOQlVpL3hobGRMTHJlZWdueldnZ2VFbVVwSEViMlB3UjFY?=
- =?utf-8?B?a0FwRExyaWl4a1Y5amlOSXlwWEhPelV3OW11cWJSWGRJU2wyQ3VhWmdXZVds?=
- =?utf-8?B?Q2RpN25NajN2R2gzZ2VjVWRWZDI5VGpQem9mNXhtd0pVSnphNEFyRUpuaUs5?=
- =?utf-8?B?VlBRSVZJUEptK3p1YmxoaGlsVzBmNWJEQUVPZE91TzBsYjNTZjJoTlJQbTBK?=
- =?utf-8?B?ODRmVUVNZnlGbnRMWUhUUlFjVk1lZUtPZlRaMHcxUVhDdjFpdmZVSGp3WGtz?=
- =?utf-8?B?OTZ6VmwxK1ViUVB6a2plMzY5VjE5OXd2eEU2bU5QeXFqbHgxWldZcFBGSEpw?=
- =?utf-8?B?Z2ZwaENWU1JzMWhMYmI4OGdmN29xZVlwL2F0ODRmeDR0cDJDb1FGWVE3VmhE?=
- =?utf-8?B?TG8rR2NTUEZxOVZPWC8yMFJmeVR5VHNUZXFpMVBjRUFEQzVsRHVIYk1sZkdz?=
- =?utf-8?B?M0tpWDRldnVGdWRoc08zNld2Qm9UM2tvb3JiQ3c1U2VybkNhM0UzTnZ2MlFQ?=
- =?utf-8?B?ZzhPbmpvUE5tR2NTaG84bEZmY0M4ZVJJVmVWSFpyem9ZV1ZRTlozVDV3NWRp?=
- =?utf-8?B?NzZHT3Jnam9rZnFIb295bDhUbzFmcFhSUS8vVHdXWVZCcGNGQ3BIb1VyTS81?=
- =?utf-8?B?QXhMYW9aUHJGZDVSYXJsVWZxcXB4bGZkTnhaODNRZ3VxL0RGbktIdFJZcmMr?=
- =?utf-8?B?U3QzNVpiNnZVK0FvVTVvNi9mTFRsc1MvcW0wWW4yVUJVc1czQ0xqQTk1YlZ0?=
- =?utf-8?B?WFlFT1RWT1dnS2RuNVNFbTVlNEttK2lMM3lUR24wVDZOR2JYWW9BVURheDZk?=
- =?utf-8?B?aTU2Z0hkbVJMVHJ4S2VJZTh2UHFBZTBMUmlERThQZWtsWFNnRXE2Z1BlRW8x?=
- =?utf-8?B?NExQNkh5dFpRSW9BaERRdG5xR1U5NGdXUlFHS2tvVkFPMUdyeEMyYmxuMmJr?=
- =?utf-8?B?MjRtYnhZVVljRFVGQUF4bmFJR1gwTmJqUHBtQzNHN2hGVVkyS09Jd0JnZ0hR?=
- =?utf-8?B?TUdQdEhZVzR0VlpHY25Da0lwbmdiRi9CUys5YXg2aFRQdnduRnFyQ3FPREgx?=
- =?utf-8?B?ejYzb3lyMlY2VzdpSWdUclcwakEvTXNFeXBVYnhpY2s2MlI0OFd2TUh6NHRS?=
- =?utf-8?B?SU1CaFdWdEtyMVk3b0ZPS3dCNnEzck50UDVpZnVrTmZLV3huQVc0c2J1L0dC?=
- =?utf-8?B?ZXpjTktLT1FTTFdsUEVGWDhoUS9wdkxVTWY0RURqemlaM3pkNlAwYklENlAr?=
- =?utf-8?B?Q29rR2ptb2xHOW9sZjFGeThnSzdnWUpjbE5RTTRvZUdVUUUxU0w5UGdEV2pC?=
- =?utf-8?B?TERwYURybFhrVDZ3UzNtQ3NUTEVsM2FHa3hWc1RLYm1BME5EUW8xWWUxWWVh?=
- =?utf-8?B?dzEyUVZhUURDNWRTVEJ3eG9TS3JiamhmQnpGczRsem0vQlBDRTJsN3VrY0ZQ?=
- =?utf-8?B?UlhNMmtkQmhZaVRaZklZVkp2UXU3ZlQ1TlZpYTgwWFk5QWVGTXNMNkFMOFVJ?=
- =?utf-8?B?RkpqdmFBTmtUeU01dHFDTVRJREF4NVFZYTd3Uk9Rb0FGWS81dXJJVlY4bGxZ?=
- =?utf-8?B?cnp5Vlh4NXpmZWpnN0RZUFVVTW5XdC9zVnJVZm14S3JGd3Q4VTdmdjhYa0ZQ?=
- =?utf-8?B?bGh4ZkVEalZ3ZCt1L29mY3NCY011NEc0bzVjUllUdTVabEQzbDlqRnFRdWZN?=
- =?utf-8?B?RVNrNEdzMU4rNktxbHErYmNRengxTnN0L01yakJwR3UzczRTSGx2Zz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <127CB2431B374341B6A92C1C7D91C3D4@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Foo5IT0QdYnxFFa9bodUnnVRJ7cPv1e6msV9QJTF8yk=;
+        b=nwKSc1DBij0ic3RJCjNMNBgt8KadqTdhcbqBlCBquECz/FRCFZXA65gyTbhSteFeo3
+         LIOhRQMwp1FmO9XTum0yQtkfgsMmRewLZNJDVt/GOZhu8hGy08PC2ejkwhELo9yNYfci
+         PeFVc5pl6T7TnibBwEczchCjINQAkVPsoJojZsCVaMiv52L8xpYqt+qY9Mc+a91fhQVA
+         R+y12wt1x77dzeAj17IZ6wdnQxKpqICl+y3E+0itOaXkypST967YaRYah71zHU9i3Rkl
+         WET99tW3ovvDJfGJkGolKInFlrV0IJ/gPXqrVcVPVSwl0aBvkiMKKCvTE9VKv9IqtOfK
+         gTCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Foo5IT0QdYnxFFa9bodUnnVRJ7cPv1e6msV9QJTF8yk=;
+        b=ydYW0Qce7zNeAMb7F3NsX05dQOr/a5tDImewpQp0Bl4aqqdzs6UewG3U2/KeKfiA+S
+         FIYa5uU3Z7XAVJfkkjCoNes+wUhwmygsJIyauLW7C2PoQmsTpUi0sWZesdyI/LFhYjyy
+         6WFPGFBebfHyMUVYA00UuyN8QcKe5F4Zw3t8UEcvSL5uaY6+mpxZHn2lurYwqbAAkqix
+         78b+z3MS7U5VAhfzEYM9PpQEszHUhzZ4JuhHw0OTSkt9absG1MrehrTvGS/cYXNps9qy
+         NqFHa57BxzhAi9wcWcsExYGEO7A93SWPyX7CJbweuZqoZ2cvRhS7iVl5O1kReJE6hOMa
+         2x4A==
+X-Gm-Message-State: AOAM531NTFvqewutJ5p5+5R5xTwsLAGCNbTdbX7UUSGGHgrCl0B3jXHS
+        awjmyS1zjzeMcr+0zJ62uqkJNt/vLv1Cr+IpE6Y=
+X-Google-Smtp-Source: ABdhPJwV2Pgrf6dZi+UehOKNyiNBfmeN0PJyOjSEuaF+IAnJEBx55klJPHPNY04SmNimPt6Akpc6lDZZizWRoMWP+Hk=
+X-Received: by 2002:a02:a489:: with SMTP id d9mr46258543jam.47.1638855243954;
+ Mon, 06 Dec 2021 21:34:03 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a59a12dd-6973-432c-2a9c-08d9b943005d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 05:32:46.6220
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8dQPkrp6bQCbQMUUZZGm5Sk9KOE6hymi2KDAdTq8W+oJy/yq9Zkesb/eEtoUeP+5cAreL4ajFusG8h+6VrxO3v7iFXvhIMoc7bNk4J9YtHdYWBKjJEJyBD3ej1mCYitX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0302MB2732
+References: <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
+ <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
+ <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+ <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
+ <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
+ <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
+ <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
+ <20211201134610.GA1815@quack2.suse.cz> <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
+ <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com> <17d8aeb19ac.f22523af26365.6531629287230366441@mykernel.net>
+In-Reply-To: <17d8aeb19ac.f22523af26365.6531629287230366441@mykernel.net>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 7 Dec 2021 07:33:52 +0200
+Message-ID: <CAOQ4uxgwZoB5GQJZvpPLzRqrQA-+JSowD+brUwMSYWf9zZjiRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode operation
+To:     Chengguang Xu <cgxu519@mykernel.net>
+Cc:     Jan Kara <jack@suse.cz>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        ronyjin <ronyjin@tencent.com>,
+        charliecgxu <charliecgxu@tencent.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvNi8yMSAxNToxOCwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiBHUElPIGxpYnJhcnkg
-ZG9lcyBjb3B5IHRoZSBvZl9ub2RlIGZyb20gdGhlIHBhcmVudCBkZXZpY2Ugb2YNCj4gdGhlIEdQ
-SU8gY2hpcCwgdGhlcmUgaXMgbm8gbmVlZCB0byByZXBlYXQgdGhpcyBpbiB0aGUgaW5kaXZpZHVh
-bA0KPiBkcml2ZXJzLiBSZW1vdmUgdGhlc2UgYXNzaWdubWVudCBhbGwgYXQgb25jZS4NCj4gDQo+
-IEZvciB0aGUgZGV0YWlscyBvbmUgbWF5IGxvb2sgaW50byB0aGUgb2ZfZ3Bpb19kZXZfaW5pdCgp
-IGltcGxlbWVudGF0aW9uLg0KPiANCj4gV2hpbGUgYXQgaXQsIHJlbW92ZSBkdXBsaWNhdGUgcGFy
-ZW50IGRldmljZSBhc3NpZ25tZW50IHdoZXJlIGl0IGlzIHRoZSBjYXNlLg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogQW5keSBTaGV2Y2hlbmtvIDxhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5j
-b20+DQo+IC0tLQ0KPiB2MjogbWVudGlvbmVkIHBhcmVudCByZW1vdmFsIChMaW51cyksIGRyb3Bw
-ZWQgY2hhbmdlIG9mIHRoZSByZW1vdmVkIGNvZGUNCj4gICBkcml2ZXJzL2dwaW8vZ3Bpby1hZG5w
-LmMgICAgICAgICAgICB8IDEgLQ0KPiAgIGRyaXZlcnMvZ3Bpby9ncGlvLWFtZHB0LmMgICAgICAg
-ICAgIHwgNCArLS0tDQo+ICAgZHJpdmVycy9ncGlvL2dwaW8tYmQ3MTgyOC5jICAgICAgICAgfCAx
-IC0NCg0KZm9yIGJkNzE4Mjg6DQpSZXZpZXdlZC1CeTogTWF0dGkgVmFpdHRpbmVuIDxtYXR0aS52
-YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQoNCi0tIA0KVGhlIExpbnV4IEtlcm5lbCBndXkg
-YXQgUk9ITSBTZW1pY29uZHVjdG9ycw0KDQpNYXR0aSBWYWl0dGluZW4sIExpbnV4IGRldmljZSBk
-cml2ZXJzDQpST0hNIFNlbWljb25kdWN0b3JzLCBGaW5sYW5kIFNXREMNCktpdmloYXJqdW5sZW5r
-a2kgMUUNCjkwMjIwIE9VTFUNCkZJTkxBTkQNCg0Kfn4gdGhpcyB5ZWFyIGlzIHRoZSB5ZWFyIG9m
-IGEgc2lnbmF0dXJlIHdyaXRlcnMgYmxvY2sgfn4NCg==
+On Sun, Dec 5, 2021 at 4:07 PM Chengguang Xu <cgxu519@mykernel.net> wrote:
+>
+>  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2021-12-02 06:47:25 Amir Gol=
+dstein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
+>  > On Wed, Dec 1, 2021 at 6:24 PM Chengguang Xu <cgxu519@mykernel.net> wr=
+ote:
+>  > >
+>  > >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 21:46:10 Jan=
+ Kara <jack@suse.cz> =E6=92=B0=E5=86=99 ----
+>  > >  > On Wed 01-12-21 09:19:17, Amir Goldstein wrote:
+>  > >  > > On Wed, Dec 1, 2021 at 8:31 AM Chengguang Xu <cgxu519@mykernel.=
+net> wrote:
+>  > >  > > > So the final solution to handle all the concerns looks like a=
+ccurately
+>  > >  > > > mark overlay inode diry on modification and re-mark dirty onl=
+y for
+>  > >  > > > mmaped file in ->write_inode().
+>  > >  > > >
+>  > >  > > > Hi Miklos, Jan
+>  > >  > > >
+>  > >  > > > Will you agree with new proposal above?
+>  > >  > > >
+>  > >  > >
+>  > >  > > Maybe you can still pull off a simpler version by remarking dir=
+ty only
+>  > >  > > writably mmapped upper AND inode_is_open_for_write(upper)?
+>  > >  >
+>  > >  > Well, if inode is writeably mapped, it must be also open for writ=
+e, doesn't
+>  > >  > it? The VMA of the mapping will hold file open. So remarking over=
+lay inode
+>  > >  > dirty during writeback while inode_is_open_for_write(upper) looks=
+ like
+>  > >  > reasonably easy and presumably there won't be that many inodes op=
+en for
+>  > >  > writing for this to become big overhead?
+>  >
+>  > I think it should be ok and a good tradeoff of complexity vs. performa=
+nce.
+>
+> IMO, mark dirtiness on write is relatively simple, so I think we can mark=
+ the
+> overlayfs inode dirty during real write behavior and only remark writable=
+ mmap
+> unconditionally in ->write_inode().
+>
+
+If by "on write" you mean on write/copy_file_range/splice_write/...
+then yes I agree
+since we have to cover all other mnt_want_write() cases anyway.
+
+>
+>  >
+>  > >  >
+>  > >  > > If I am not mistaken, if you always mark overlay inode dirty on=
+ ovl_flush()
+>  > >  > > of FMODE_WRITE file, there is nothing that can make upper inode=
+ dirty
+>  > >  > > after last close (if upper is not mmaped), so one more inode sy=
+nc should
+>  > >  > > be enough. No?
+>  > >  >
+>  > >  > But we still need to catch other dirtying events like timestamp u=
+pdates,
+>  > >  > truncate(2) etc. to mark overlay inode dirty. Not sure how reliab=
+ly that
+>  > >  > can be done...
+>  > >  >
+>  >
+>  > Oh yeh, we have those as well :)
+>  > All those cases should be covered by ovl_copyattr() that updates the
+>  > ovl inode ctime/mtime, so always dirty in ovl_copyattr() should be goo=
+d.
+>
+> Currently ovl_copyattr() does not cover all the cases, so I think we stil=
+l need to carefully
+> check all the places of calling mnt_want_write().
+>
+
+Careful audit is always good, but if we do not have ovl_copyattr() in
+a call site
+that should mark inode dirty, then it sounds like a bug, because ovl inode =
+ctime
+will not get updated. Do you know of any such cases?
+
+Thanks,
+Amir.

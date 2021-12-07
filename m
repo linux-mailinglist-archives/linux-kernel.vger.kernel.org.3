@@ -2,194 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F4946C827
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F16346C82E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbhLGX0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S242538AbhLGX1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbhLGX0i (ORCPT
+        with ESMTP id S238332AbhLGX1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:26:38 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33055C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:23:08 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso3083953pji.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:23:08 -0800 (PST)
+        Tue, 7 Dec 2021 18:27:52 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3459C061574;
+        Tue,  7 Dec 2021 15:24:21 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id d9so894435wrw.4;
+        Tue, 07 Dec 2021 15:24:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
          :content-disposition:in-reply-to;
-        bh=odaS6pNITaDkFmtnLCbjDjdEj6wji/Y2s13cR0tMYI0=;
-        b=A5Dgml+ICiv0/XJnTsX/b6ZUogmJxRkeHcG86qOVgu1pcxsMxx+YXTpKTR61ICsJj9
-         v0KQ9+mpu2RrOdqQBiZnJRMvvIdULeqangpBGCu62M0/7wsGQRWIfMINbHCxOLpL5Eas
-         1hcioLEj5idWM7f2+I9qwdq9hiTlKbPIf4WmmbCI1UtDqqogbASHOT31GsJ0GBVAPjAz
-         triaLaVGIHxVQbbTChW9FkuEc/XiQGUKl+sugxiTZ14gV6js4SqNgSdW63NpkfvD6GMU
-         V90SDE3dB1oGA1wamhtB7KyE0BzAlP7+r1xq2NPstpW0F6oJ8fK3kiFOFgFNWACKYH7X
-         MMcQ==
+        bh=Ky6lSfjPQirRU1cm8nyx2Yxc3fG4emfY9Mw77avulUI=;
+        b=qrbWWK7V+3hP1q0w89qUG58E+8iQ1IL2KdVcHKKzCooV29dw2GJ07PrJfyRDTRKhpl
+         c2f0oKcLBgbat9JK7KaQksgc6weepdG5JYCBpGDNlQf6vP/W5NR84vs3FVc/N/Ze5S6H
+         wbaN+eTIbZ+New7KE2q4scLBn8K7hHhLVpL95D5D4WtycET0b1IEzL7N32m5xI+1ojdr
+         VnyPhQakeKBCG4NUh91DgHLQkHHfQJFCv1EksHgGdEzs0GAoji0OygdvIxAaLHwuJqSw
+         JiDTVixkJtN5D/x0/x/S7TT7KLvffZMzFzWYE8W66vft2u5YfKm4lM1GFWevb9che7yE
+         F6GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
          :mime-version:content-disposition:in-reply-to;
-        bh=odaS6pNITaDkFmtnLCbjDjdEj6wji/Y2s13cR0tMYI0=;
-        b=4rvjuNs/yW/5UWIIMyAaS9h9iJqjtbf42S5VdJgelFQjMR5DHwGIv5ysRd0uPHqSCF
-         v1xQwR+X2X9yDOvPxMPEK9ULILuwRDUlhehHxDC4ft+GQIeUN4YKP4/G5BP7MqKOKd33
-         3GpxRgsDDvZZEiYP6tQrUBcHZCoQB/87E0/tguolTTZfP5cb/IeZWRowJElYp4N2Lf6k
-         /V23d4j/DWkBUT8YTFCDw8g0Nu/wszi4oM+ReQdzt/4+8D2B25DSNXvCVtfZSuF2E5RS
-         wE+EdCnBvHQ/ZEeef+86BSCwpiLEUlRHfm2xZOYWqO80lC5CyKfGZkrImv46sd2ZjOHE
-         k4XA==
-X-Gm-Message-State: AOAM531DfGiYMe3RFQB8EsDN5vWpmNwvd9+B6jo8OFjUdlPGP9SHn1UN
-        JGGhJdH62LmK8RTO46lOJfeIqw==
-X-Google-Smtp-Source: ABdhPJxQi9iVEzKR+cwVo75xEqkFOxRQYSlNj/puTovuLCsY6ib3tUvsobXQe60M7Xfxvvu6cz+Pbg==
-X-Received: by 2002:a17:90a:d684:: with SMTP id x4mr2822958pju.244.1638919387463;
-        Tue, 07 Dec 2021 15:23:07 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id me7sm4606927pjb.9.2021.12.07.15.23.06
+        bh=Ky6lSfjPQirRU1cm8nyx2Yxc3fG4emfY9Mw77avulUI=;
+        b=jR3EArzrEOkSYUGgaAFUwo/PaTmekwURCkYgGnYIJVnaJLlD3dhE6Cuse7N7jb0h3Y
+         gcJhpWuHu+tb96lxUdrQaSq6D9lwPHY6J8JeLs4Kno0rUU1M9or72K40ICoNVRnocThj
+         06Zmg9RcJLy4EDkA0k/PQZfkiAyBNn+jRLiTb7QJvZCMWvfgCAObhMS3gLaZB235QyTc
+         bJZGVRSjasVbHrL2m8Jq+d79oCe7ttq/pCKMRLTk9ch+4Ml+u5sJbtUR9181Ng8gS6Kp
+         o5rV+L/tHK4tUoJ9YclQJV6On18L8BlYn4K/6K6g1h2OgH/75ZxF3sN39ukrgR242PSQ
+         OefA==
+X-Gm-Message-State: AOAM532LOLnjzuTOsBPJrOxVlrJM/NBTD6+czDIkzmaEdsSKfhh1VSfl
+        QcTF9qacon9Q7lJ+8JR1I1sdGuunuGs=
+X-Google-Smtp-Source: ABdhPJxUZT4T3BISJQJ2NGIEB2/Fb3P9MfXajF2aR8eizgSj7dTr12+IiJh/k8o5swI4viBI3e3yMg==
+X-Received: by 2002:adf:d202:: with SMTP id j2mr54157559wrh.271.1638919460145;
+        Tue, 07 Dec 2021 15:24:20 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id u23sm1159754wru.21.2021.12.07.15.24.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 15:23:06 -0800 (PST)
-Date:   Tue, 7 Dec 2021 23:23:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Aili Yao <yaoaili126@gmail.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yaoaili@kingsoft.com
-Subject: Re: [PATCH v2] KVM: LAPIC: Per vCPU control over
- kvm_can_post_timer_interrupt
-Message-ID: <Ya/s17QDlGZi9COR@google.com>
-References: <20211124125409.6eec3938@gmail.com>
+        Tue, 07 Dec 2021 15:24:19 -0800 (PST)
+Message-ID: <61afed23.1c69fb81.99660.7328@mx.google.com>
+X-Google-Original-Message-ID: <Ya/tIUlv3RbweLON@Ansuel-xps.>
+Date:   Wed, 8 Dec 2021 00:24:17 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+ <20211207224525.ckdn66tpfba5gm5z@skbuf>
+ <61afe8a9.1c69fb81.897ba.6022@mx.google.com>
+ <20211207232020.ckdc6polqat4aefo@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211124125409.6eec3938@gmail.com>
+In-Reply-To: <20211207232020.ckdc6polqat4aefo@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021, Aili Yao wrote:
-> When cpu-pm is successfully enabled, and hlt_in_guest is true and
-> mwait_in_guest is false, the guest cant't use Monitor/Mwait instruction
-> for idle operation, instead, the guest may use halt for that purpose, as
-> we have enable the cpu-pm feature and hlt_in_guest is true, we will also
-> minimize the guest exit; For such a scenario, Monitor/Mwait instruction
-> support is totally disabled, the guest has no way to use Mwait to exit from
-> non-root mode;
+On Wed, Dec 08, 2021 at 01:20:20AM +0200, Vladimir Oltean wrote:
+> On Wed, Dec 08, 2021 at 12:05:11AM +0100, Ansuel Smith wrote:
+> > Hm. Interesting idea. So qca8k would provide the way to parse the packet
+> > and made the request. The tagger would just detect the packet and
+> > execute the dedicated function.
+> > About mib considering the driver autocast counter for every port and
+> > every packet have the relevant port to it (set in the qca tag), the
+> > idea was to put a big array and directly write the data. The ethtool
+> > function will then just read the data and report it. (or even work
+> > directly on the ethtool data array).
 > 
-> For cpu-pm feature, hlt_in_guest and others except mwait_in_guest will
-> be a good hint for it. So replace it with hlt_in_guest.
-
-This should be a separate patch from the housekeeping_cpu() check, if we add
-the housekeeping check.
-
-> Signed-off-by: Aili Yao <yaoaili@kingsoft.com>
-> ---
->  arch/x86/kvm/lapic.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Apart from the fact that you'd be running inside the priv->rw_reg_ack_handler()
+> which runs in softirq context (so you need spinlocks to serialize with
+> the code that runs in process and/or workqueue context), you have access
+> to all the data structures from the switch driver that you're used to.
+> So you could copy from the void *buf into something owned by struct
+> qca8k_priv *priv, sure.
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 759952dd1222..42aef1accd6b 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -34,6 +34,7 @@
->  #include <asm/delay.h>
->  #include <linux/atomic.h>
->  #include <linux/jump_label.h>
-> +#include <linux/sched/isolation.h>
->  #include "kvm_cache_regs.h"
->  #include "irq.h"
->  #include "ioapic.h"
-> @@ -113,13 +114,14 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
->  
->  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
->  {
-> -	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-> +	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-> +		!housekeeping_cpu(vcpu->cpu, HK_FLAG_TIMER);
+> > >   My current idea is maybe not ideal and a bit fuzzy, because the switch
+> > >   driver would need to be aware of the fact that the tagger private data
+> > >   is in dp->priv, and some code in one folder needs to be in sync with
+> > >   some code in another folder. But at least it should be safer this way,
+> > >   because we are in more control over the exact connection that's being
+> > >   made.
+> > > 
+> > > - to avoid leaking memory, we also need to patch dsa_tree_put() to issue
+> > >   a disconnect event on unbind.
+> > > 
+> > > - the tagging protocol driver would always need to NULL-check the
+> > >   function pointer before dereferencing it, because it may connect to a
+> > >   switch driver that doesn't set them up (dsa_loop):
+> > > 
+> > > 	struct qca8k_tagger_private *priv = dp->priv;
+> > > 
+> > > 	if (priv->rw_reg_ack_handler)
+> > > 		priv->rw_reg_ack_handler(dp, skb_mac_header(skb));
+> > 
+> > Ok so your idea is to make the driver the one controlling ""everything""
+> > and keep the tagger as dummy as possible. That would also remove all the
+> > need to put stuff in the global include dir. Looks complex but handy. We
+> > still need to understand the state part. Any hint about that?
+> > 
+> > In the mean time I will try implement this.
+> 
+> What do you mean exactly by understanding the state?
 
-Why not check kvm_{hlt,mwait}_in_guest()?  IIUC, non-housekeeping CPUs don't _have_
-to be associated 1:1 with a vCPU, in which case posting the timer is unlikely
-to be a performance win even though the target isn't a housekeeping CPU.
+I was referring to the "shared state" problem but you already answer
+that in the prev email.
 
-And wouldn't exposing HLT/MWAIT to a vCPU that's on a housekeeping CPU be a bogus
-configuration?
-
->  }
->  
->  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
->  {
->  	return kvm_x86_ops.set_hv_timer
-> -	       && !(kvm_mwait_in_guest(vcpu->kvm) ||
-> +	       && !(kvm_hlt_in_guest(vcpu->kvm) ||
-
-This is incorrect, the HLT vs. MWAIT isn't purely a posting interrupts thing.  The
-VMX preemption timer counts down in C0, C1, and C2, but not deeper sleep states.
-HLT is always C1, thus it's safe to use the VMX preemption timer even if the guest
-can execute HLT without exiting.
-
-The timer isn't compatible with MWAIT because it stops counting in C3 (or lower),
-i.e. the guest can cause the timer to stop counting.
-
->  		    kvm_can_post_timer_interrupt(vcpu));
->  }
->  EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
-> -- 
-
-Splicing in Wanpeng's version to try and merge the two threads:
-
-On Tue, Nov 23, 2021 at 10:00 PM Wanpeng Li <kernellwp@gmail.com> wrote:
-> ---
->  arch/x86/kvm/lapic.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 759952dd1222..8257566d44c7 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -113,14 +113,13 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
->
->  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
->  {
-> -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-> +       return pi_inject_timer && kvm_mwait_in_guest(vcpu->kvm) && kvm_vcpu_apicv_active(vcpu);
-
-As Aili's changelog pointed out, MWAIT may not be advertised to the guest. 
-
-So I think we want this?  With a non-functional, opinionated refactoring of
-kvm_can_use_hv_timer() because I'm terrible at reading !(a || b).
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 40270d7bc597..c77cb386d03d 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -113,14 +113,25 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
-
- static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
- {
--       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-+       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-+              (kvm_mwait_in_guest(vcpu) || kvm_hlt_in_guest(vcpu));
- }
-
- bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
- {
--       return kvm_x86_ops.set_hv_timer
--              && !(kvm_mwait_in_guest(vcpu->kvm) ||
--                   kvm_can_post_timer_interrupt(vcpu));
-+       /*
-+        * Don't use the hypervisor timer, a.k.a. VMX Preemption Timer, if the
-+        * guest can execute MWAIT without exiting as the timer will stop
-+        * counting if the core enters C3 or lower.  HLT in the guest is ok as
-+        * HLT is effectively C1 and the timer counts in C0, C1, and C2.
-+        *
-+        * Don't use the hypervisor timer if KVM can post a timer interrupt to
-+        * the guest since posted the timer avoids taking an extra a VM-Exit
-+        * when the timer expires.
-+        */
-+       return kvm_x86_ops.set_hv_timer &&
-+              !kvm_mwait_in_guest(vcpu->kvm) &&
-+              !kvm_can_post_timer_interrupt(vcpu));
- }
- EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
-
+-- 
+	Ansuel

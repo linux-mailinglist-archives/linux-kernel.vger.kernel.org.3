@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB51E46C15D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD31D46C15F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239835AbhLGRLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:11:04 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:40966 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbhLGRLD (ORCPT
+        id S239842AbhLGRLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:11:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29244 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235335AbhLGRLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:11:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 795EECE1C4B;
-        Tue,  7 Dec 2021 17:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8537C341D2;
-        Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638896849;
-        bh=AWAI4dsGFqTjRC1xoqF0cYc1RPAXHGsAWxn92fKI3oI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gf3v2LOOtwGy6hrhLaaWTZdzvHT2yj5fU611wjvPDLNa8iEipEpydiG2MaJQdmcON
-         5lKqN3WsEE+gquCLQHNajub1oh17woTQIMr9Ec/YVS5pQLeqYAMI51bBhAhV3u39Hs
-         8XhGioMd5MdkwTerMyzbSvVtibIeZUl3TFPh7iywLJL80GmcXl2IPxHtMLoqyNlyNT
-         /CrN1hdY0hYnXgaG0xYnfi3pvMQH6BFN0pl6BOEv7NaYnFDwa/ZijuvEyMqdmf3UvB
-         +TWYf5z8QpIlhyMHDUHSGx1iSk0SsiikS16nizfpEbn/lD2qlASj9M7QZJfWXRphgF
-         /iAMoxCsfLKKQ==
-Received: by mail-wr1-f42.google.com with SMTP id d24so31052833wra.0;
-        Tue, 07 Dec 2021 09:07:29 -0800 (PST)
-X-Gm-Message-State: AOAM530iPJn3MeUwaXFr8lPwptGLsi+rJWlb84Dx8EhT6k/ArGxk0L3X
-        Qn1bk2WlQ4I0fTaiggD5tANAkpVujdb0os92c7k=
-X-Google-Smtp-Source: ABdhPJxWAtCNN0Uz78wSmLpQSouIBrjU5QdcPq1mv6T3zwlTEprnXUaZ5kdK5O0wqBz67kMO3G1bdxsApionhf3b3lc=
-X-Received: by 2002:a5d:64ea:: with SMTP id g10mr53188820wri.137.1638896847522;
- Tue, 07 Dec 2021 09:07:27 -0800 (PST)
+        Tue, 7 Dec 2021 12:11:30 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FrHrj027785;
+        Tue, 7 Dec 2021 17:07:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=KV7oBdrURQGDIkQQgRY7Ef5rSkRnP4z8E1pnB7i6FNg=;
+ b=J1j/s5girdbYsJ7K6XED6vEV5veo7zOI4Z4X+M1t5GWoz+aJJJz3juezq7GQww0g6pKz
+ +WqEy59fXYK0gnlGX+NwrBZOJ7ZO2ruKb7+0/iIqxLOFvPkglpqUp8CHLy7P+3stFLg3
+ mPczk62fMabU1eBM5Oh70nSIHkO+Ns8SsaTu4EjKjl4MyiTia1T3JmIbXJm9GH9Pc5d+
+ 4+I50zqZGgHeiMM7Vj9+3MfZHBh+Ht365fGkZSrzkVj+KxtQuYw5r5Nz3th4vRlMMIjP
+ iL01eS+GcEJt/LZandgeKjmncJoyjDhJwOdUM+OurpFN/DgqMdN9JO2Pw9uwdGEMw7O3 zA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctanb1q35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:07:55 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7H7qxR030589;
+        Tue, 7 Dec 2021 17:07:54 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02wdc.us.ibm.com with ESMTP id 3cqyyagjd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:07:54 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7H7rUn50921938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Dec 2021 17:07:53 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEDEDB2068;
+        Tue,  7 Dec 2021 17:07:52 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 911C8B2070;
+        Tue,  7 Dec 2021 17:07:51 +0000 (GMT)
+Received: from localhost (unknown [9.211.135.78])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Dec 2021 17:07:50 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
+In-Reply-To: <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
+References: <20211203154321.13168-1-ldufour@linux.ibm.com>
+ <87bl1so588.fsf@linux.ibm.com>
+ <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
+Date:   Tue, 07 Dec 2021 11:07:50 -0600
+Message-ID: <878rwwny1l.fsf@linux.ibm.com>
 MIME-Version: 1.0
-References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
- <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
-In-Reply-To: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 7 Dec 2021 18:07:11 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
-Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        kernel test robot <lkp@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: u4OqYHRlQ7DzTIQDdbgq-sLH52StFeJr
+X-Proofpoint-ORIG-GUID: u4OqYHRlQ7DzTIQDdbgq-sLH52StFeJr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_06,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ impostorscore=0 phishscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070106
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 4:32 PM Matthew Wilcox <willy@infradead.org> wrote:
-
-> >  #define __SWAITQUEUE_INITIALIZER(name) {                             \
-> >       .task           =3D current,                                     =
- \
-> >       .task_list      =3D LIST_HEAD_INIT((name).task_list),            =
- \
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
+>> Is there a reasonable fallback for VMs where this parameter doesn't
+>> exist? PowerVM partitions should always have it, but what do we want the
+>> behavior to be on other hypervisors?
 >
-> swait.h doesn't need to include <linux/struct_types.h> ?
+> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
+> the lparstat -i command will fall back to the device tree value. I can't
+> see any valid reason to report the value defined in the device tree
+> here.
 
-I should probably add it for consistency, also in some other places.
-At the moment it works without that because the new header is pulled
-in through linux/spinlock.h.
+Here's a valid reason :-)
 
-> > -
-> >  #define XARRAY_INIT(name, flags) {                           \
-> >       .xa_lock =3D __SPIN_LOCK_UNLOCKED(name.xa_lock),          \
-> >       .xa_flags =3D flags,                                      \
->
-> I think this is going to break:
->
-> (cd tools/testing/radix-tree; make)
+lparstat isn't the only possible consumer of the interface, and the
+'ibm,partition-name' property and the dynamic system parameter clearly
+serve a common purpose. 'ibm,partition-name' is provided by qemu.
 
-I've tried addressing this now, but I first ran into a different problem
-that exists in linux-next but not in mainline as of today:
-
-cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
--fsanitize=3Dundefined   -c -o main.o main.c
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from main.c:10:
-./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
-hunk=E2=80=99:
-./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
-declaration of function =E2=80=98find_next_bit=E2=80=99
-[-Wimplicit-function-declaration]
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
--fsanitize=3Dundefined   -c -o xarray.o xarray.c
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from test.h:4,
-                 from xarray.c:8:
-./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
-hunk=E2=80=99:
-./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
-declaration of function =E2=80=98find_next_bit=E2=80=99
-[-Wimplicit-function-declaration]
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-In file included from ../../include/linux/bitmap.h:7,
-                 from ../../../lib/xarray.c:9,
-                 from xarray.c:16:
-../../include/linux/find.h: At top level:
-../../include/linux/find.h:31:15: error: conflicting types for =E2=80=98fin=
-d_next_bit=E2=80=99
-   31 | unsigned long find_next_bit(const unsigned long *addr,
-unsigned long size,
-      |               ^~~~~~~~~~~~~
-In file included from ./linux/xarray.h:2,
-                 from ./linux/../../../../include/linux/radix-tree.h:21,
-                 from ./linux/radix-tree.h:5,
-                 from test.h:4,
-                 from xarray.c:8:
-./linux/../../../../include/linux/xarray.h:1669:9: note: previous
-implicit declaration of =E2=80=98find_next_bit=E2=80=99 was here
- 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
-      |         ^~~~~~~~~~~~~
-make: *** [<builtin>: xarray.o] Error 1
-
-It's clearly broken after Yury's recent bitops.h cleanup, but I can't
-quite find my way
-through the maze of tools/testing headers to fix it.
-
-        Arnd
+In any case, the function should not print an error when the return
+value is -3 (parameter not supported).

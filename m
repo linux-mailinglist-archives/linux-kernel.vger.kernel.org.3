@@ -2,93 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9136946B8C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEEC46B8C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbhLGK0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhLGK0C (ORCPT
+        id S235029AbhLGK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:26:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37105 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229528AbhLGK0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:26:02 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8656C061574;
-        Tue,  7 Dec 2021 02:22:31 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id k2so26533453lji.4;
-        Tue, 07 Dec 2021 02:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zn4bh7aDtipPvIQajdqUH0g7HydWjfXn6rvGe1BMNUA=;
-        b=QX0Oq1SAxkO6tVEodTmKdzTn3o3oXRNoD1cv2vYJCr+21mmrHt3JLRdQZRSiTE2jX8
-         REup2kvzdfpFTnvbfjSuQjq+qNCgxuaIJohZHc/yJYd520QTmIZQXfGQ2MpYCM7AYjBD
-         0IFrCLqGfJkCFLPIyJKbyisgH4vsavf7WKBq5V+LA8w9LAMZvg+SDAf4Y6NFGTv98KOB
-         5AdN1q9YmwkDlLQcj32OBvTAD1soULHez9BkU7GXJhOK8dA4MFNxgO298FDJsGueYRUM
-         z0IvpCD3p/Adh1xCzlNGwArIrZEMsL2NJJQNIJj5HqdACjbu9MqMGms70PR+63oaUfmC
-         a3kQ==
+        Tue, 7 Dec 2021 05:26:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638872554;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIblGTzXX40hR9szafjbMCGgx30k6YagvsBGLTnN0YI=;
+        b=BTDOiJ5TJMdVA0OeZUlCpys29dUUgn83u++Cd8E2huJfN8Z3qTb1VrxgkeAPbXm9tGWon3
+        /2ZKpoQr8JXbzPU6d2+DcsUcR//Eklj4v70MZ03tXpsMUOdlhnRxN5bZ6wdohzgNKIUFMX
+        CVRerwo4ZUgTAErBhPTr8f4ym+2/q0A=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-wkeSHWtPPgugkuhUDxoK9g-1; Tue, 07 Dec 2021 05:22:33 -0500
+X-MC-Unique: wkeSHWtPPgugkuhUDxoK9g-1
+Received: by mail-wr1-f69.google.com with SMTP id o4-20020adfca04000000b0018f07ad171aso2765020wrh.20
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 02:22:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zn4bh7aDtipPvIQajdqUH0g7HydWjfXn6rvGe1BMNUA=;
-        b=31of1G0RKriLRxBanm+6ALoeYmu3lclcBFXujmMRn+4hoxdn359+i7RQrzEpty2Qn/
-         oOAyB6X1J04igczFCgGygykAR0ZkVF5eAzOLJWX9Js7Pr5ZrRbD6iUffZbuFY/BMm6Wm
-         Nq+y1fxi2/A5ivWr0CbYGti8OpbnibWkSUgprs23HofPsW2BhXftSgTTD51FiGwTF4Vs
-         kGe1HD04CtYPzzpKZMr6D0/AX1j+Zjrme7c3nOnLLHYBKOzXqkYz8yvvQ9HVTOR5S4oq
-         aA9D8rh/haQHM7bqqe2aD5/YROL04RrNYcLPnsIsMwE3gTuUzLoYwlww1GzSNYvMbrIh
-         N6sg==
-X-Gm-Message-State: AOAM533i7rhf8aY3f43yAdpqYpG3sC/48+vxFux3vwpXmwfcuzL0qs/d
-        Lvfz4BO1awr++HUVm3blfd5T8nE8gDQ=
-X-Google-Smtp-Source: ABdhPJwa9mQuwpzBTlt1YakBtu9w7COZcAvYbJk3NFERAIkQSUu9HoZB4XdVRfP08MqzECPAi0qGOQ==
-X-Received: by 2002:a05:651c:1687:: with SMTP id bd7mr42558183ljb.305.1638872550008;
-        Tue, 07 Dec 2021 02:22:30 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id l5sm1568500ljh.66.2021.12.07.02.22.29
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=vIblGTzXX40hR9szafjbMCGgx30k6YagvsBGLTnN0YI=;
+        b=oxgrsu5GdFKz5SkXuOZ54e3syck1gPdUqqHl/ZXLblPFGU0r5JvmFS5W6/S/Q8OMx4
+         7TZIZIU1KfLwg8taBhl1/XxacfiRYqBuixW912WubbJrdmZhVnhlvo8yqjMePt0J+2Cr
+         AC+GVd5pHw3RQl1pFKrviJYbIXtwe2mr8BPPPWl1S7OVZ0/PKIW2L/ABUype+GqXru/A
+         Qdc5HN63svyGDQcwbykUIecAr0vc20K3MnZB5Wz45+uRlh18wyUgZwaPAWd+NNg5FrIQ
+         frt6tBNOwYWrD6r+HVVXGCBeBj//iM9SrX9X+P4dOaONIopY9N53JiZp4VtwgFAV1Q22
+         51vQ==
+X-Gm-Message-State: AOAM532b+oLhQ8sdNF/dbbuf9doheVH8ViD4e8js2Ob/2MVvV+SSreew
+        9i3KUUNOgZFIamvLp5JOAievjcEf9jrY2H0a0TuzgEL0BkdjqlyIhromVfx9cH/MvZG7ZB/OPKE
+        u+Dqm9K1Mh/k4J+pKBRQ/7QPj
+X-Received: by 2002:a05:600c:4f55:: with SMTP id m21mr5891536wmq.68.1638872552025;
+        Tue, 07 Dec 2021 02:22:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzOgIcH/ywM872FWWEzo4wI3r37JDW61iH1Cfi/iZw3pSmHii9bhQ9WabrWC9ggWBBYhH9xLg==
+X-Received: by 2002:a05:600c:4f55:: with SMTP id m21mr5891493wmq.68.1638872551786;
+        Tue, 07 Dec 2021 02:22:31 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id k8sm13945681wrn.91.2021.12.07.02.22.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 02:22:29 -0800 (PST)
-Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, perex@perex.cz
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-2-git-send-email-spujar@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
-Date:   Tue, 7 Dec 2021 13:22:28 +0300
+        Tue, 07 Dec 2021 02:22:31 -0800 (PST)
+Reply-To: eric.auger@redhat.com
+Subject: Re: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     eric.auger.pro@gmail.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, will@kernel.org,
+        robin.murphy@arm.com, jean-philippe@linaro.org,
+        zhukeqian1@huawei.com, alex.williamson@redhat.com,
+        jacob.jun.pan@linux.intel.com, yi.l.liu@intel.com,
+        kevin.tian@intel.com, ashok.raj@intel.com, maz@kernel.org,
+        peter.maydell@linaro.org, vivek.gautam@arm.com,
+        shameerali.kolothum.thodi@huawei.com, wangxingang5@huawei.com,
+        jiangkunkun@huawei.com, yuzenghui@huawei.com,
+        nicoleotsuka@gmail.com, chenxiang66@hisilicon.com,
+        sumitg@nvidia.com, nicolinc@nvidia.com, vdumpa@nvidia.com,
+        zhangfei.gao@linaro.org, zhangfei.gao@gmail.com,
+        lushenming@huawei.com, vsethi@nvidia.com
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <20211027104428.1059740-2-eric.auger@redhat.com>
+ <Ya3qd6mT/DpceSm8@8bytes.org>
+From:   Eric Auger <eric.auger@redhat.com>
+Message-ID: <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
+Date:   Tue, 7 Dec 2021 11:22:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+In-Reply-To: <Ya3qd6mT/DpceSm8@8bytes.org>
 Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.12.2021 09:32, Sameer Pujar пишет:
-> HDA regression is recently reported on Tegra194 based platforms.
-> This happens because "hda2codec_2x" reset does not really exist
-> in Tegra194 and it causes probe failure. All the HDA based audio
-> tests fail at the moment. This underlying issue is exposed by
-> commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
-> response") which now checks return code of BPMP command response.
-> 
-> The failure can be fixed by avoiding above reset in the driver,
-> but the explicit reset is not necessary for Tegra devices which
-> depend on BPMP. On such devices, BPMP ensures reset application
-> during unpowergate calls. Hence skip reset on these devices
-> which is applicable for Tegra186 and later.
+Hi Joerg,
 
-The power domain is shared with the display, AFAICS. The point of reset
-is to bring h/w into predictable state. It doesn't make sense to me to
-skip the reset.
+On 12/6/21 11:48 AM, Joerg Roedel wrote:
+> On Wed, Oct 27, 2021 at 12:44:20PM +0200, Eric Auger wrote:
+>> Signed-off-by: Jean-Philippe Brucker <jean-philippe.brucker@arm.com>
+>> Signed-off-by: Liu, Yi L <yi.l.liu@linux.intel.com>
+>> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+>> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+>> Signed-off-by: Eric Auger <eric.auger@redhat.com>
+> This Signed-of-by chain looks dubious, you are the author but the last
+> one in the chain?
+The 1st RFC in Aug 2018
+(https://lists.cs.columbia.edu/pipermail/kvmarm/2018-August/032478.html)
+said this was a generalization of Jacob's patch
 
-If T194+ doesn't have hda2codec_2x reset, then don't request that reset
-for T194+.
+
+  [PATCH v5 01/23] iommu: introduce bind_pasid_table API function
+
+
+  https://lists.linuxfoundation.org/pipermail/iommu/2018-May/027647.html
+
+So indeed Jacob should be the author. I guess the multiple rebases got
+this eventually replaced at some point, which is not an excuse. Please
+forgive me for that.
+Now the original patch already had this list of SoB so I don't know if I
+shall simplify it.
+
+
+>
+>> +int iommu_uapi_attach_pasid_table(struct iommu_domain *domain,
+>> +				  void __user *uinfo)
+>> +{
+> [...]
+>
+>> +	if (pasid_table_data.format == IOMMU_PASID_FORMAT_SMMUV3 &&
+>> +	    pasid_table_data.argsz <
+>> +		offsetofend(struct iommu_pasid_table_config, vendor_data.smmuv3))
+>> +		return -EINVAL;
+> This check looks like it belongs in driver specific code.
+Indeed, I will fix that in my next respin :-)
+
+Thanks!
+
+Eric
+>
+> Regards,
+>
+> 	Joerg
+>
+

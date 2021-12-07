@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0C146BA2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974DC46BA38
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbhLGLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbhLGLlr (ORCPT
+        id S235773AbhLGLnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:43:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50034 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231258AbhLGLnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:41:47 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28386C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 03:38:17 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id e3so55939791edu.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vcONFbkMq0aQgDFOGecCASi4QK2A5FCN577AfWqoSrE=;
-        b=XCLAQQ3aQV+2wHAdAiWLreYKr5+A7XhBsEd26d12iCqPN/W8eys1YPh4mB5EQM5kUf
-         atInw1bc2IWIWoio+X+M3YS6GqYjMBwiDz2G0nJTAUYu9rCO0jbzKkg9G1bfIcXYZr9e
-         bYJAehFSR8pXSWbEdBX+9txdBevAPM9QNG+iNEV5/H9ftZ8Zl5stvtsyssevhcmQ4aw2
-         em9zZ66Zc9yJX+pRVPdQW2lcIROo45a0CUvOTrmcKvD/cNHsEhBzrykh76aTswkOmEQ9
-         OlMI/L6hOSmFw++nWW5g2979vYwX0it89hMwv0pmZx/CunSQtAf5hEd6FqhWxKNMD0ni
-         0mdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vcONFbkMq0aQgDFOGecCASi4QK2A5FCN577AfWqoSrE=;
-        b=q+S8qAekbhH+xQNMCbzQwiX5yDt13bqj73L6s/wJGLB9yL7Os7JFx2BeQDIz2byw7H
-         slBsBQDjcpHtWVcYq8vIHeLeWZG1KLO2fc28iPtpIapNuMhuh9uitqzt8NsAHWRV0Ydz
-         fUUBOTvBcZ9XaXRVFBZcg4hFs/FJAuIs/rFZHMM7cySUDpRRYXFVqx9lSMtpl9dyy/Qz
-         qxCGAXYoikYVTAdG+P2ROJqtGOo9tMokrpiS8yLQZ1h2Ff3p0PvJptSBQDhdgLofULBC
-         ijCpeTLApSsweBLSCsWzoVJ5SOYeW2oohLuUShSgeGDv+PlPhiWqj89g53zhJHDOoMl2
-         84JA==
-X-Gm-Message-State: AOAM531F5PJvMkD6AThFlS0zqT5bdkLOAGtMzuafkc5nEeUrBPEKRj1S
-        OlvacUGte1TqxjxbaMI/32bQNw+nv+zOeiM0su5x
-X-Google-Smtp-Source: ABdhPJzOung/etClm624N3JnBTWt3GkIiRGSofg6IC61AfMN7BR7UOHAD1XTt+ag+M14IN8e3IJcUawX1wQNgmHXLrM=
-X-Received: by 2002:a17:907:72c7:: with SMTP id du7mr53191810ejc.424.1638877095740;
- Tue, 07 Dec 2021 03:38:15 -0800 (PST)
+        Tue, 7 Dec 2021 06:43:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87EFFB8174B;
+        Tue,  7 Dec 2021 11:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3D5C341C3;
+        Tue,  7 Dec 2021 11:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638877218;
+        bh=s4wkP8QFJJDrpKObfWQlsbk6GV7MZa4F1T931fS2ovc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uQicVVwR5R3FFMcw/xf1Q1Rpp3kzB+592zmR4hgvYvWXU8r1JYd4RI/oiMDMDZH4R
+         Pg2L/mO3YRmlnXEW0pfgyIFnQw19HLbw8eMBcDlakzJL5obfQJ3cC6qA4TTMdyKP24
+         9ifEhdFJtkBcF3vAEH/lFEn70KHLqZPtTYKHcDgOSnM1OPwZKL4Dcufa41vgIU644M
+         /kUfv2MPsP0c5qoGj8OIA9OlIYRaCuMw8rNyCGNUzvdjV80d2VqepckQSBk3puiO8z
+         c7dylFapxjyJcW4MsG3Y5L8tFdSC4JHXD9xRn6NTqyYQScHvzYDit0B+Eg6fUv0shu
+         7JiRfxQYdSkEA==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] clk: qcom: Add clocks for SM8450 SoC
+Date:   Tue,  7 Dec 2021 17:10:01 +0530
+Message-Id: <20211207114003.100693-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210913111928.98-1-xieyongji@bytedance.com> <CACycT3ugx-wwPVb+Euzhj6hWn0fXO+jvfsUCew6v1iBaB8SZsQ@mail.gmail.com>
-In-Reply-To: <CACycT3ugx-wwPVb+Euzhj6hWn0fXO+jvfsUCew6v1iBaB8SZsQ@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 7 Dec 2021 19:38:04 +0800
-Message-ID: <CACycT3vaPcjYbORMN9mkFmZEgspPQ46y=ONQbiAEi-MYCu-0Mw@mail.gmail.com>
-Subject: Re: [PATCH] aio: Fix incorrect usage of eventfd_signal_allowed()
-To:     bcrl@kvack.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping again.
+This series adds the GCC clock support required for SM8450 SoC
+along with devicetree binding for these clocks.
 
-On Sun, Nov 14, 2021 at 3:15 PM Yongji Xie <xieyongji@bytedance.com> wrote:
->
-> Ping
->
-> On Mon, Sep 13, 2021 at 7:20 PM Xie Yongji <xieyongji@bytedance.com> wrote:
-> >
-> > We should defer eventfd_signal() to the workqueue when
-> > eventfd_signal_allowed() return false rather than return
-> > true.
-> >
-> > Fixes: b542e383d8c0 ("eventfd: Make signal recursion protection a task bit")
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > ---
-> >  fs/aio.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/aio.c b/fs/aio.c
-> > index 51b08ab01dff..8822e3ed4566 100644
-> > --- a/fs/aio.c
-> > +++ b/fs/aio.c
-> > @@ -1695,7 +1695,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
-> >                 list_del(&iocb->ki_list);
-> >                 iocb->ki_res.res = mangle_poll(mask);
-> >                 req->done = true;
-> > -               if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> > +               if (iocb->ki_eventfd && !eventfd_signal_allowed()) {
-> >                         iocb = NULL;
-> >                         INIT_WORK(&req->work, aio_poll_put_work);
-> >                         schedule_work(&req->work);
-> > --
-> > 2.11.0
-> >
+Please note that the GCC driver patch depends on new alpha LUCID_EVO
+introduced by Vamsi in [1]. That would be required to be picked before this
+patch can be applied.
+
+[1]: https://lore.kernel.org/all/a0b04869a20a0afef99dd457ebb6474f50591210.1637302009.git.quic_vamslank@quicinc.com/
+
+
+Changes in v2:
+ - Drop rpmhcc patches as they are picked by Bjorn
+ - Fix the multi line comment and drop noise in probe
+ - Remove .name in clocks coming from firmware
+
+Vinod Koul (2):
+  dt-bindings: clock: Add SM8450 GCC clock bindings
+  clk: qcom: Add clock driver for SM8450
+
+ .../bindings/clock/qcom,gcc-sm8450.yaml       |   85 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-sm8450.c                 | 3303 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8450.h   |  244 ++
+ 5 files changed, 3641 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm8450.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8450.h
+
+-- 
+2.31.1
+

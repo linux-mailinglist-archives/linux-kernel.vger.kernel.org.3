@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6F446C2B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5980D46C2BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbhLGS36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S240544AbhLGSau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbhLGS36 (ORCPT
+        with ESMTP id S240517AbhLGSat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:29:58 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8E8C061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:26:27 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id q21so9922395vkn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:26:27 -0800 (PST)
+        Tue, 7 Dec 2021 13:30:49 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAECAC061574;
+        Tue,  7 Dec 2021 10:27:18 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id g16so6205650pgi.1;
+        Tue, 07 Dec 2021 10:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KOYSjdHYBV8TKUHkuO1ISt5K4kTgwN/3GjP4cOdaJ+0=;
-        b=clfFHliTJzuituvKR96ulQ6OK3kqWSIrEqQOR4zM4aV/baQUI0RFYnullFv8E8Ym9Y
-         G9a5fzk+HtbFCGHBzytGaPwOp/Y5HaPhwRrVCXiE5K7YMbp78l7K0Er0oAghrv2rPMlf
-         bOi/o19luqrfxeLNJq9DjCzvQ2R8NoU2w4fh7oPqs4LAkPE8c/ydOEeJv4b0m7Mm26aq
-         +MtXlJygLTj8zF1+VoYDEDOrVmgkStgRkKvfF/lUwuZa6MW1vRjAFPvIDkYiWN8e+53F
-         CH1U7NAb2Kdszv9cDSv45b/Z7avucxb+enHJ/n//Xh09cinZBY3g+vWzBIEYn7824Rl5
-         ETaQ==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=C0LkxVwpUdGoBixaZieHgp/CQb/hjKviKlRxWLGX6o8=;
+        b=NXczgaSfmKpqwkI34D4JBAYvn+xfHaCdTKV/aw+T7xvKEN9tqizVAuk5rUGLTaSTOW
+         v6op3RPRLaPIuALMHsevjg4IbHzDebNz+U0+4w2yS4Eo/WI9nh9peTdtU6keo8JknAue
+         oArhfLi9gapmCZxsci29KaWUx6jPj5hKzhwTGS51clEJZKUogn9D3aYf1Uezj/aTB8eI
+         /vGki8jVVXdIlAvwybgHPaZubZu9P3+ofPm4JPkOW6KN4s12P6OY2yd37z8Wz3xFC2mY
+         bYG5ln/J2sqCh+W8l7zxPmJUSrmAmDtTELPNl8K3/mT2SjR4qeXaG56DXGl5WyeZln99
+         nc6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KOYSjdHYBV8TKUHkuO1ISt5K4kTgwN/3GjP4cOdaJ+0=;
-        b=DHH1OqeJkA/Ze1qH13Y44fMV62N4J9MFDl7pmqacTJuBfSCbp3zGXe33xxmXIfJIXq
-         OpTy4iIlV9JBnJ0Q/0UL77TdtmoJ6dMTUu0fumo5+yksK9nikTvZ6nX9M2H8S5epCzkp
-         P+59j9WA30OKiKpc8rpLAAcal3/4gyZc3UX8HONhbmJu693G/O4Yv65q+kybxPZFCRIf
-         y0/3BJqIGualdtNQMU//N3DL8f+OgMlghnsioScWBXaJKMn/mxDIbTHr3JEChv3AsbDD
-         G3kfCMrJumg6e+Il8NNbDJEJk971t0V/8rFqwXbyvNx8Gx1gOc/XrxICiFsqnBiZEVUt
-         uNzA==
-X-Gm-Message-State: AOAM531aDY5/8MG3RhIuG4HC+rndXxnFEXJOMQvvA0UtXPGTw4nBdmEz
-        mh3tgNFsRObbC+lQrqdsPDh8cUszmVEi+ita9LPAyQ==
-X-Google-Smtp-Source: ABdhPJzPkEALntqueRozx/btL2H3rZpdzbM0gxwcBKNAOihMH/NPP8Ud2tf8oC0uIvhCZKEuVTx5xEOXRUx7xNH5JnA=
-X-Received: by 2002:a05:6122:ca6:: with SMTP id ba38mr55043958vkb.14.1638901586564;
- Tue, 07 Dec 2021 10:26:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-4-virag.david003@gmail.com>
-In-Reply-To: <20211206153124.427102-4-virag.david003@gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Dec 2021 20:26:14 +0200
-Message-ID: <CAPLW+4nVPE=RCwhLe7wLFR1aWOHh4ZmrA56uiNPYXij7rPkOag@mail.gmail.com>
-Subject: Re: [PATCH v4 3/7] dt-bindings: arm: samsung: document jackpotlte
- board binding
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=C0LkxVwpUdGoBixaZieHgp/CQb/hjKviKlRxWLGX6o8=;
+        b=LEgSiCpD5y0JpBJrgUXkZzkTUp05PHUeg7TadWZ5q9xjylpigQtK2ynIYjCYC8VHy1
+         pXVcmvZ/zeLw3gCINhcxNtgyPzjlv2qRt8PbS1ItI9Y7PtcOOgcukuxYC56mGxBc5Jor
+         BxwNQCb3RmOenFXe0wj4Vv89XLnXzamPusLdUcuvJqndviwA/qtpQ+qbJEGTN96VTRxe
+         l/r32Bu/0+MYGILdOaQQISkfzN4uipncdXrExRs/lg0858SckAYuc7oe4PD3wTJa6o7J
+         1PDh2f644npPm8iAgETqIHZPVzW7NsZfl8MrRfrx7iyYIkh2/j/lXSF/fMCq5/kGYOx1
+         fBfg==
+X-Gm-Message-State: AOAM531ukp65F1fVW3zmDbuymRIuX04cEgFRDVhQDia+jV4CwIQ2td3k
+        Q8AiwmBX2MSPrby5d0JtKKA=
+X-Google-Smtp-Source: ABdhPJymUYdSIQdlWNQCYN5uJz3xbATnyslhcCjgxD8jE+ABfiikoXOEwCvE/LD0GLO3oPANONkYJw==
+X-Received: by 2002:a05:6a00:1385:b0:4ad:580d:8a8 with SMTP id t5-20020a056a00138500b004ad580d08a8mr714317pfg.10.1638901638138;
+        Tue, 07 Dec 2021 10:27:18 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i198sm425669pfe.81.2021.12.07.10.27.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 10:27:17 -0800 (PST)
+Subject: Re: [PATCH v2 03/14] dt-bindings: pwm: Convert BCM7038 PWM binding to
+ YAML
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        kernel@pengutronix.de
+References: <20211206182616.2089677-1-f.fainelli@gmail.com>
+ <20211206182616.2089677-4-f.fainelli@gmail.com>
+ <20211207075958.fsw6hcvpocnwokot@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <b47d0576-969a-885e-d340-286f1e06b8ba@gmail.com>
+Date:   Tue, 7 Dec 2021 10:27:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211207075958.fsw6hcvpocnwokot@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 17:32, David Virag <virag.david003@gmail.com> wrote:
->
-> Add binding for the jackpotlte board (Samsung Galaxy A8 (2018)).
->
-> Signed-off-by: David Virag <virag.david003@gmail.com>
-> ---
+On 12/6/21 11:59 PM, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Mon, Dec 06, 2021 at 10:26:05AM -0800, Florian Fainelli wrote:
+>> Convert the Broadcom STB BCM7038 PWM Device Tree binding to YAML to help
+>> with validation.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> I assume you intend to take these patches all together via the bcm tree?
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
-> Changes in v2:
->   - Nothing
->
-> Changes in v3:
->   - Nothing
->
-> Changes in v4:
->   - Nothing
->
->  .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> index ef6dc14be4b5..d88571202713 100644
-> --- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> @@ -199,6 +199,12 @@ properties:
->                - samsung,exynos7-espresso        # Samsung Exynos7 Espresso
->            - const: samsung,exynos7
->
-> +      - description: Exynos7885 based boards
-> +        items:
-> +          - enum:
-> +              - samsung,jackpotlte              # Samsung Galaxy A8 (2018)
-> +          - const: samsung,exynos7885
-> +
->        - description: Exynos Auto v9 based boards
->          items:
->            - enum:
-> --
-> 2.34.1
->
+Yes, or having Rob pick them up, either way is fine.
+-- 
+Florian

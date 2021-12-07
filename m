@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD5F46B016
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB8146B019
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbhLGB5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:57:48 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:34347 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbhLGB5r (ORCPT
+        id S236479AbhLGB6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236365AbhLGB54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:57:47 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1B71TKeH059246;
-        Tue, 7 Dec 2021 09:29:20 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 7 Dec
- 2021 09:54:14 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] media: aspeed: add comments and macro
-Date:   Tue, 7 Dec 2021 09:54:11 +0800
-Message-ID: <20211207015411.1619-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Dec 2021 20:57:56 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50066C0613FE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 17:54:27 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id z26so15181428iod.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 17:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8GCfs3UIWYheIdOcXQxitSGok4TtBWFHvnOhGvwh4LU=;
+        b=EJPgQEgeubJfZbHmJT+ml4muCB9PM20VpdG8wGJniHE0bGeY3FD0kxAK49lCQDtaN/
+         c9RubZAQFKlfJft+x9GcWe2k8R4GLCJw8aC+uWAZujXFa+FQ2OHp6/GVBGyMoeDyOaxh
+         YbQgyFIGjS0Kv9cK2z8rBcaH5o950iDBlH4BPFCdBi8Y/z4n6uAQQXyXln5423emXYaY
+         WXtWlcablEGXFLzbJzWiKvlmC7bWD756LZ/7FPR/+YyEin0MNq45sHiiSHH3DKg9Bhuu
+         IGOkO2r0avMCnseKZx7Gu8jEZ3D5IIVeT0tRml2C3G6f6cRQPz7nqLWuEntfYpz2S1TK
+         l2VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8GCfs3UIWYheIdOcXQxitSGok4TtBWFHvnOhGvwh4LU=;
+        b=kn+LdAlf9aT3CXgyQaY05lTYXNSIrmKX+/OZahJ0QWHsdpX5hnqNxt6FYc9q5HHKdf
+         1rnKl1+wN0Jn8ItksXL0RhQo50i0nL5zD5AnuG6xqmwQWtHjUzrunT7tSvqrDSR/maIw
+         SaqemQvNcQhIA7u88qS3+emqZSofqWDnWtsifVrjLKNZOGMJN/l24dswve67kp3rhlOJ
+         5IBUcRnfDxKFTJiQUQVAeCiniv4LQbeCK1NKRHmKspfotK1Qg1HjPC7XB8ppXM6FMKAH
+         e5UB2wx4WF9D2X6xM/T9s/6OAWhni308swEr2vyShGwB2joCYH3bAuD8itfERANadsuc
+         UPuw==
+X-Gm-Message-State: AOAM530W8b3XC3aKBJUY62JesxIRHZY+1oIXHM31Tj0oQThZooXZ+amj
+        jiy5251JBG1p0zBgpMfshU4C7ecgVw9gCen4s2RPJw==
+X-Google-Smtp-Source: ABdhPJyQjwGuVEpanwRxhs05NMKibfDWQCJJpGsPeH8foH3M53khXDQmMTwCV/a+WLqELyEiS/7cVz+m5Tuka3bF1/w=
+X-Received: by 2002:a6b:ea0a:: with SMTP id m10mr36636252ioc.91.1638842066584;
+ Mon, 06 Dec 2021 17:54:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1B71TKeH059246
+References: <20211203065647.2819707-1-keescook@chromium.org>
+In-Reply-To: <20211203065647.2819707-1-keescook@chromium.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Mon, 6 Dec 2021 17:54:15 -0800
+Message-ID: <CAHS8izMqjZqK9h42pXaAxfD=Spdwem8PEAgErDhXSBtLBO8eCA@mail.gmail.com>
+Subject: Re: [PATCH] hugetlb/cgroup: Fix copy/paste array assignment
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add comments to describe video-stat and 'struct aspeed_video'.
-Add macro, ASPEED_VIDEO_V4L2_MIN_BUF_REQ, to describe the buffers
-needed.
+On Thu, Dec 2, 2021 at 10:56 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Fix mismatched array assignment, reported by an -Warray-bounds build:
+>
+> mm/hugetlb_cgroup.c: In function '__hugetlb_cgroup_file_legacy_init':
+> mm/hugetlb_cgroup.c:850:35: error: array subscript 8 is above array bounds of 'struct cftype[8]' [-Werror=array-bounds ]
+>   850 |         cft = &h->cgroup_files_dfl[8];
+>       |                ~~~~~~~~~~~~~~~~~~~^~~
+> In file included from mm/hugetlb_cgroup.c:23:
+> ./include/linux/hugetlb.h:625:23: note: while referencing 'cgroup_files_dfl'
+>   625 |         struct cftype cgroup_files_dfl[8];
+>       |                       ^~~~~~~~~~~~~~~~
+>
+> Fixes: e45f4726bcad ("hugetlb: add hugetlb.*.numa_stat file")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- drivers/media/platform/aspeed-video.c | 36 ++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+Sorry about that and thanks for the fix!
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index d2335d669fb3..e17ad102f064 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -32,6 +32,8 @@
- #include <media/videobuf2-dma-contig.h>
- #include <linux/videodev2.h>
- 
-+#define ASPEED_VIDEO_V4L2_MIN_BUF_REQ 3
-+
- #define DEVICE_NAME			"aspeed-video"
- 
- #define ASPEED_VIDEO_JPEG_NUM_QUALITIES	12
-@@ -185,6 +187,15 @@
- #define VE_MEM_RESTRICT_START		0x310
- #define VE_MEM_RESTRICT_END		0x314
- 
-+/*
-+ * @VIDEO_MODE_DETECT_DONE:	a flag raised if signal lock
-+ * @VIDEO_RES_CHANGE:		a flag raised if res_change work on-going
-+ * @VIDEO_RES_DETECT:		a flag raised if res. detection on-going
-+ * @VIDEO_STREAMING:		a flag raised if user requires stream-on
-+ * @VIDEO_FRAME_INPRG:		a flag raised if hw working on a frame
-+ * @VIDEO_STOPPED:		a flag raised if device release
-+ * @VIDEO_CLOCKS_ON:		a flag raised if clk is on
-+ */
- enum {
- 	VIDEO_MODE_DETECT_DONE,
- 	VIDEO_RES_CHANGE,
-@@ -217,6 +228,25 @@ struct aspeed_video_perf {
- #define to_aspeed_video_buffer(x) \
- 	container_of((x), struct aspeed_video_buffer, vb)
- 
-+/**
-+ * struct aspeed_video - driver data
-+ *
-+ * @res_work:           holds the delayed_work for res-detection if unlock
-+ * @buffers:            holds the list of buffer queued from user
-+ * @flags:		holds the state of video
-+ * @sequence:		holds the last number of frame completed
-+ * @max_compressed_size:holds max compressed stream's size
-+ * @srcs:		holds the buffer information for srcs
-+ * @jpeg:		holds the buffer information for jpeg header
-+ * @yuv420:		a flag raised if JPEG subsampling is 420
-+ * @frame_rate:		holds the frame_rate
-+ * @jpeg_quality:	holds jpeq's quality (0~11)
-+ * @frame_bottom:	end position of video data in vertical direction
-+ * @frame_left:		start position of video data in horizontal direction
-+ * @frame_right:	end position of video data in horizontal direction
-+ * @frame_top:		start position of video data in vertical direction
-+ * @perf:		holds the statistics primary for debugfs
-+ */
- struct aspeed_video {
- 	void __iomem *base;
- 	struct clk *eclk;
-@@ -1135,7 +1165,7 @@ static int aspeed_video_get_parm(struct file *file, void *fh,
- 	struct aspeed_video *video = video_drvdata(file);
- 
- 	a->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
--	a->parm.capture.readbuffers = 3;
-+	a->parm.capture.readbuffers = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
- 	a->parm.capture.timeperframe.numerator = 1;
- 	if (!video->frame_rate)
- 		a->parm.capture.timeperframe.denominator = MAX_FRAME_RATE;
-@@ -1152,7 +1182,7 @@ static int aspeed_video_set_parm(struct file *file, void *fh,
- 	struct aspeed_video *video = video_drvdata(file);
- 
- 	a->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
--	a->parm.capture.readbuffers = 3;
-+	a->parm.capture.readbuffers = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
- 
- 	if (a->parm.capture.timeperframe.numerator)
- 		frame_rate = a->parm.capture.timeperframe.denominator /
-@@ -1681,7 +1711,7 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
- 	vbq->drv_priv = video;
- 	vbq->buf_struct_size = sizeof(struct aspeed_video_buffer);
- 	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	vbq->min_buffers_needed = 3;
-+	vbq->min_buffers_needed = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
- 
- 	rc = vb2_queue_init(vbq);
- 	if (rc) {
--- 
-2.25.1
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 
+> ---
+>  mm/hugetlb_cgroup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+> index 9eebe8df3c39..f9942841df18 100644
+> --- a/mm/hugetlb_cgroup.c
+> +++ b/mm/hugetlb_cgroup.c
+> @@ -847,7 +847,7 @@ static void __init __hugetlb_cgroup_file_legacy_init(int idx)
+>         cft->read_u64 = hugetlb_cgroup_read_u64;
+>
+>         /* Add the numa stat file */
+> -       cft = &h->cgroup_files_dfl[8];
+> +       cft = &h->cgroup_files_legacy[8];
+>         snprintf(cft->name, MAX_CFTYPE_NAME, "%s.numa_stat", buf);
+>         cft->private = MEMFILE_PRIVATE(idx, 1);
+>         cft->seq_show = hugetlb_cgroup_read_numa_stat;
+> --
+> 2.30.2
+>

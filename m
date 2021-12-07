@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A063746B274
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745BD46B278
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbhLGFlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:41:23 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28279 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbhLGFlW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:41:22 -0500
-Received: from kwepemi100007.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J7Tb66V4FzbjHn;
-        Tue,  7 Dec 2021 13:37:38 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi100007.china.huawei.com (7.221.188.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 13:37:50 +0800
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 13:37:50 +0800
-Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
- kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.020;
- Tue, 7 Dec 2021 13:37:50 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jay Chen <jkchen@linux.alibaba.com>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-CC:     "zhangliguang@linux.alibaba.com" <zhangliguang@linux.alibaba.com>
-Subject: RE: [RFC PATCH] provide per numa cma with an initial default size
-Thread-Topic: [RFC PATCH] provide per numa cma with an initial default size
-Thread-Index: AQHX5b5WdkB1fqcI6kSRZ5Tsh5qqyawlEoQAgAF5HwA=
-Date:   Tue, 7 Dec 2021 05:37:50 +0000
-Message-ID: <a3990c9921a44884b0adc448d1281b0a@hisilicon.com>
-References: <20211130074556.11091-1-jkchen@linux.alibaba.com>
- <ddcdde8c-5118-048e-d5f8-6b8bc860947d@arm.com>
-In-Reply-To: <ddcdde8c-5118-048e-d5f8-6b8bc860947d@arm.com>
-Accept-Language: en-GB, zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.201.109]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S236055AbhLGFnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:43:09 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:15254 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235886AbhLGFnI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 00:43:08 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638855578; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=UKewAIFiJrkQQJEmsNAIUgWl1Cnv1mvrzX9VaOWue/w=;
+ b=fKxpk2me6t6HHkNSppsQSlnkFRgcY4Hk/yHVUKtSfJgXexS4M8Ek5bekYMS7/9GaFvS/bvcz
+ 1xsrrJaWjmWiBwo3kbwJZS90nXEM0bk2kmvfWx8h+9KdsZ2GLlIjDx6CF4Wk/C/P67pwVabt
+ vF3/pXA/9O4A5W9X65DnmlzlP8s=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 61aef399df12ba53c4d6a622 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Dec 2021 05:39:37
+ GMT
+Sender: pharish=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AC2BFC43616; Tue,  7 Dec 2021 05:39:36 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pharish)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 11B9EC4338F;
+        Tue,  7 Dec 2021 05:39:35 +0000 (UTC)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 07 Dec 2021 11:09:35 +0530
+From:   pharish@codeaurora.org
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>, mka@chromium.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        hemantg@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        bgodavar@codeaurora.org, rjliao@codeaurora.org,
+        hbandi@codeaurora.org, abhishekpandit@chromium.org,
+        mcchou@chromium.org, saluvala@codeaurora.org
+Subject: Re: [PATCH v1] Bluetooth: hci_qca: Stop IBS timer during BT OFF
+In-Reply-To: <A078C973-AAAF-4BD2-85DA-F8017CE89012@holtmann.org>
+References: <1637846230-4798-1-git-send-email-pharish@codeaurora.org>
+ <1637846230-4798-2-git-send-email-pharish@codeaurora.org>
+ <A078C973-AAAF-4BD2-85DA-F8017CE89012@holtmann.org>
+Message-ID: <c767becd1ded90dc0cf4b76f38d779b0@codeaurora.org>
+X-Sender: pharish@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUm9iaW4gTXVycGh5IFtt
-YWlsdG86cm9iaW4ubXVycGh5QGFybS5jb21dDQo+IFNlbnQ6IFR1ZXNkYXksIERlY2VtYmVyIDcs
-IDIwMjEgNDowMSBBTQ0KPiBUbzogSmF5IENoZW4gPGprY2hlbkBsaW51eC5hbGliYWJhLmNvbT47
-IGhjaEBsc3QuZGU7IG0uc3p5cHJvd3NraUBzYW1zdW5nLmNvbTsNCj4gbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZzsgaW9tbXVAbGlzdHMubGludXgtZm91bmRhdGlvbi5vcmc7IFNvbmcgQmFv
-IEh1YQ0KPiAoQmFycnkgU29uZykgPHNvbmcuYmFvLmh1YUBoaXNpbGljb24uY29tPg0KPiBDYzog
-emhhbmdsaWd1YW5nQGxpbnV4LmFsaWJhYmEuY29tDQo+IFN1YmplY3Q6IFJlOiBbUkZDIFBBVENI
-XSBwcm92aWRlIHBlciBudW1hIGNtYSB3aXRoIGFuIGluaXRpYWwgZGVmYXVsdCBzaXplDQo+IA0K
-PiBbICtCYXJyeSBdDQo+IA0KPiBPbiAyMDIxLTExLTMwIDA3OjQ1LCBKYXkgQ2hlbiB3cm90ZToN
-Cj4gPiAgICBJbiB0aGUgYWN0dWFsIHByb2R1Y3Rpb24gZW52aXJvbm1lbnQsIHdoZW4gd2Ugb3Bl
-bg0KPiA+IGNtYSBhbmQgcGVyIG51bWEgY21hLCBpZiB3ZSBkbyBub3QgaW5jcmVhc2UgdGhlIHBl
-cg0KPiA+IG51bWEgc2l6ZSBjb25maWd1cmF0aW9uIGluIGNtZGxpbmUsIHdlIGZpbmQgdGhhdCBv
-dXINCj4gPiBwZXJmb3JtYW5jZSBoYXMgZHJvcHBlZCBieSAyMCUuDQo+ID4gICAgVGhyb3VnaCBh
-bmFseXNpcywgd2UgZm91bmQgdGhhdCB0aGUgZGVmYXVsdCBzaXplIG9mDQo+ID4gcGVyIG51bWEg
-aXMgMCwgd2hpY2ggY2F1c2VzIHRoZSBkcml2ZXIgdG8gYWxsb2NhdGUNCj4gPiBtZW1vcnkgZnJv
-bSBjbWEsIHdoaWNoIGFmZmVjdHMgcGVyZm9ybWFuY2UuIFRoZXJlZm9yZSwNCj4gPiB3ZSB0aGlu
-ayB3ZSBuZWVkIHRvIHByb3ZpZGUgYSBkZWZhdWx0IHNpemUuDQo+IA0KPiBMb29raW5nIGJhY2sg
-YXQgc29tZSBvZiB0aGUgcmV2aWV3IGRpc2N1c3Npb25zLCBJIHRoaW5rIGl0IG1heSBoYXZlIGJl
-ZW4NCj4gaW50ZW50aW9uYWwgdGhhdCBwZXItbm9kZSBhcmVhcyBhcmUgbm90IGFsbG9jYXRlZCBi
-eSBkZWZhdWx0LCBzaW5jZSBpdCdzDQo+IHRoZSBraW5kIG9mIHRoaW5nIHRoYXQgcmVhbGx5IHdh
-bnRzIHRvIGJlIHR1bmVkIHRvIHRoZSBwYXJ0aWN1bGFyIHN5c3RlbQ0KPiBhbmQgd29ya2xvYWQs
-IGFuZCBhcyBzdWNoIGl0IHNlZW1lZCByZWFzb25hYmxlIHRvIGV4cGVjdCB1c2VycyB0bw0KPiBw
-cm92aWRlIGEgdmFsdWUgb24gdGhlIGNvbW1hbmQgbGluZSBpZiB0aGV5IHdhbnRlZCB0aGUgZmVh
-dHVyZS4gVGhhdCdzDQo+IGNlcnRhaW5seSB3aGF0IHRoZSBLY29uZmlnIHRleHQgaW1wbGllcy4N
-Cj4gDQo+IFRoYW5rcywNCj4gUm9iaW4uDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEpheSBDaGVu
-IDxqa2NoZW5AbGludXguYWxpYmFiYS5jb20+DQo+ID4gLS0tDQo+ID4gICBrZXJuZWwvZG1hL2Nv
-bnRpZ3VvdXMuYyB8IDIgKy0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2tlcm5lbC9kbWEvY29udGlndW91
-cy5jIGIva2VybmVsL2RtYS9jb250aWd1b3VzLmMNCj4gPiBpbmRleCAzZDYzZDkxY2JhNWMuLjNi
-ZWY4YmYzNzFkOSAxMDA2NDQNCj4gPiAtLS0gYS9rZXJuZWwvZG1hL2NvbnRpZ3VvdXMuYw0KPiA+
-ICsrKyBiL2tlcm5lbC9kbWEvY29udGlndW91cy5jDQo+ID4gQEAgLTk5LDcgKzk5LDcgQEAgZWFy
-bHlfcGFyYW0oImNtYSIsIGVhcmx5X2NtYSk7DQo+ID4gICAjaWZkZWYgQ09ORklHX0RNQV9QRVJO
-VU1BX0NNQQ0KPiA+DQo+ID4gICBzdGF0aWMgc3RydWN0IGNtYSAqZG1hX2NvbnRpZ3VvdXNfcGVy
-bnVtYV9hcmVhW01BWF9OVU1OT0RFU107DQo+ID4gLXN0YXRpYyBwaHlzX2FkZHJfdCBwZXJudW1h
-X3NpemVfYnl0ZXMgX19pbml0ZGF0YTsNCj4gPiArc3RhdGljIHBoeXNfYWRkcl90IHBlcm51bWFf
-c2l6ZV9ieXRlcyBfX2luaXRkYXRhID0gc2l6ZV9ieXRlczsNCg0KSSBkb24ndCB0aGluayB0aGUg
-c2l6ZSBmb3IgdGhlIGRlZmF1bHQgY21hIGNhbiBhcHBseSB0bw0KcGVyLW51bWEgQ01BLg0KDQpX
-ZSBkaWQgaGF2ZSBzb21lIGRpc2N1c3Npb24gcmVnYXJkaW5nIHRoZSBzaXplIHdoZW4gcGVyLW51
-bWEgY21hIHdhcw0KYWRkZWQsIGFuZCBpdCB3YXMgZG9uZSBieSBhIEtjb25maWcgb3B0aW9uLiBJ
-IHRoaW5rIHdlIGhhdmUgZGVjaWRlZA0KdG8gbm90IGhhdmUgYW55IGRlZmF1bHQgc2l6ZSBvdGhl
-ciB0aGFuIDAuIERlZmF1bHQgc2l6ZSAwIGlzIHBlcmZlY3QsDQp0aGlzIHdpbGwgZW5mb3JjZSB1
-c2VycyB0byBzZXQgYSBwcm9wZXIgImNtYV9wZXJudW1hPSIgYm9vdGFyZ3MuDQoNCj4gPg0KPiA+
-ICAgc3RhdGljIGludCBfX2luaXQgZWFybHlfY21hX3Blcm51bWEoY2hhciAqcCkNCj4gPiAgIHsN
-Cj4gPg0KDQpUaGFua3MNCkJhcnJ5DQo=
+On 2021-11-26 00:12, Marcel Holtmann wrote:
+> Hi,
+> 
+>> This change stops IBS timers during BT OFF.
+>> 
+>> Signed-off-by: pharish <pharish@codeaurora.org>
+> 
+> clear name please.
+
+[Harish]: will update
+
+> 
+>> ---
+>> drivers/bluetooth/hci_qca.c | 3 +++
+>> 1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+>> index dd768a8..6f44b26 100644
+>> --- a/drivers/bluetooth/hci_qca.c
+>> +++ b/drivers/bluetooth/hci_qca.c
+>> @@ -1928,6 +1928,9 @@ static int qca_power_off(struct hci_dev *hdev)
+>> 	hu->hdev->hw_error = NULL;
+>> 	hu->hdev->cmd_timeout = NULL;
+>> 
+>> +	mod_timer(&qca->tx_idle_timer, 0);
+>> +	mod_timer(&qca->wake_retrans_timer, 0);
+>> +
+> 
+> And I would really prefer if this gets changed to use a workqueue
+> instead of a timer.
+
+[Harish]: The full implementation of IBS is based on timers
+to that reason I have switched to timers.
+
+> 
+> Regards
+> 
+> Marcel

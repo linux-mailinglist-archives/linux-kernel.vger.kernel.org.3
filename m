@@ -2,123 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE1946BB0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D2B46BB01
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbhLGMbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:31:12 -0500
-Received: from mga18.intel.com ([134.134.136.126]:15932 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235422AbhLGMbL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:31:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224432359"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="224432359"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 04:27:41 -0800
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="579821071"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 04:27:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muZWF-003Dpl-L4;
-        Tue, 07 Dec 2021 14:24:27 +0200
-Date:   Tue, 7 Dec 2021 14:24:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v13 2/7] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-Message-ID: <Ya9Seyco7elB2on2@smile.fi.intel.com>
-References: <20211207093412.27833-1-brgl@bgdev.pl>
- <20211207093412.27833-3-brgl@bgdev.pl>
+        id S236372AbhLGM2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236021AbhLGM2a (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 07:28:30 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58676C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:25:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5F7E5CE1AA2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE5CC341C3;
+        Tue,  7 Dec 2021 12:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638879896;
+        bh=Y2shfXEwL/UCPPKsv0Oa3tA9lIynCe1L61hYiqi9XeI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W559fWo1fWpckmtZrwlLgXqUZHgqZUif16pdSlVwo1cuzrxYUkuy0NWY9gq1VmSVA
+         iH3jZRVaJ2Clg9mS7id1l05XqTXeQG/a5njD+gyHyXoGmCJqhcEHrBnc9Gya4HT43c
+         0LzXNn2wdGrKb7vMkztVpxlCEwJrN07IpekH/JMN1ekrxn9opHbcU8OwAcCOrLfC7y
+         mYWRswwsW08rT6+3bleh9OKW28FvTfn8MGWt3TPvKYK9c0RExdRw9y5JiqFCimbuqy
+         J/Xzx85i69QtYieflARWddvcI9dUhJa4DjN2IqkqdUjVg0rk3DZp8Sh3IGc8m7GHao
+         Jd8YpxDU9sNfw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
+        Marco Ballesio <balejs@google.com>,
+        Hang Lu <hangl@codeaurora.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] binder: fix pointer cast warning
+Date:   Tue,  7 Dec 2021 13:24:42 +0100
+Message-Id: <20211207122448.1185769-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207093412.27833-3-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 10:34:07AM +0100, Bartosz Golaszewski wrote:
-> Software nodes allow us to represent hierarchies for device components
-> that don't have their struct device representation yet - for instance:
-> banks of GPIOs under a common GPIO expander. The core gpiolib core
-> however doesn't offer any way of passing this information from the
-> drivers.
-> 
-> This extends struct gpio_chip with a pointer to fwnode that can be set
-> by the driver and used to pass device properties for child nodes.
-> 
-> This is similar to how we handle device-tree sub-nodes with
-> CONFIG_OF_GPIO enabled.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+binder_uintptr_t is not the same as uintptr_t, so converting it into a
+pointer requires a second cast:
 
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  drivers/gpio/gpiolib.c      | 7 ++++++-
->  include/linux/gpio/driver.h | 2 ++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 22b98a590a88..6af732bf4c99 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -593,13 +593,18 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->  			       struct lock_class_key *lock_key,
->  			       struct lock_class_key *request_key)
->  {
-> -	struct fwnode_handle *fwnode = gc->parent ? dev_fwnode(gc->parent) : NULL;
-> +	struct fwnode_handle *fwnode = NULL;
->  	unsigned long	flags;
->  	int		ret = 0;
->  	unsigned	i;
->  	int		base = gc->base;
->  	struct gpio_device *gdev;
->  
-> +	if (gc->fwnode)
-> +		fwnode = gc->fwnode;
-> +	else if (gc->parent)
-> +		fwnode = dev_fwnode(gc->parent);
-> +
->  	/*
->  	 * First: allocate and populate the internal stat container, and
->  	 * set up the struct device.
-> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-> index a673a359e20b..b0728c8ad90c 100644
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -289,6 +289,7 @@ struct gpio_irq_chip {
->   *	number or the name of the SoC IP-block implementing it.
->   * @gpiodev: the internal state holder, opaque struct
->   * @parent: optional parent device providing the GPIOs
-> + * @fwnode: optional fwnode providing this controller's properties
->   * @owner: helps prevent removal of modules exporting active GPIOs
->   * @request: optional hook for chip-specific activation, such as
->   *	enabling module power and clock; may sleep
-> @@ -377,6 +378,7 @@ struct gpio_chip {
->  	const char		*label;
->  	struct gpio_device	*gpiodev;
->  	struct device		*parent;
-> +	struct fwnode_handle	*fwnode;
->  	struct module		*owner;
->  
->  	int			(*request)(struct gpio_chip *gc,
-> -- 
-> 2.25.1
-> 
+drivers/android/binder.c: In function 'binder_translate_fd_array':
+drivers/android/binder.c:2511:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+ 2511 |         sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
+      |                            ^
 
+Fixes: 656e01f3ab54 ("binder: read pre-translated fds from sender buffer")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/android/binder.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 5497797ab258..182bb4221b06 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2508,7 +2508,8 @@ static int binder_translate_fd_array(struct list_head *pf_head,
+ 	 */
+ 	fda_offset = (parent->buffer - (uintptr_t)t->buffer->user_data) +
+ 		fda->parent_offset;
+-	sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
++	sender_ufda_base = (void __user *)(uintptr_t)sender_uparent->buffer +
++				fda->parent_offset;
+ 
+ 	if (!IS_ALIGNED((unsigned long)fda_offset, sizeof(u32)) ||
+ 	    !IS_ALIGNED((unsigned long)sender_ufda_base, sizeof(u32))) {
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.29.2
 

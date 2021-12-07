@@ -2,271 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A61D46C18F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529CF46C17A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239945AbhLGRUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:20:45 -0500
-Received: from mga17.intel.com ([192.55.52.151]:51627 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239905AbhLGRUo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:20:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218312485"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="218312485"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:14:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="461341085"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 07 Dec 2021 09:14:50 -0800
-Received: from debox1-desk4.hsd1.or.comcast.net (unknown [10.251.18.198])
-        by linux.intel.com (Postfix) with ESMTP id 905C45804B4;
-        Tue,  7 Dec 2021 09:14:50 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     lee.jones@linaro.org, hdegoede@redhat.com,
-        david.e.box@linux.intel.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [V2 6/6] selftests: sdsi: test sysfs setup
-Date:   Tue,  7 Dec 2021 09:14:48 -0800
-Message-Id: <20211207171448.799376-7-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207171448.799376-1-david.e.box@linux.intel.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+        id S239870AbhLGRTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234054AbhLGRTJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:19:09 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF7EC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:15:38 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id i13so13730042qvm.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:15:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XBFyhsQNquZ3pQHlUtJ+6p1EED9gXcXiwvxejmOE88o=;
+        b=PgGKb+Njo2T1X/tum6Ttion0RVdSWLjvQNuQQUQh/9ciXyvFmQts2vIfjGDS4lbW4l
+         lJ3EfP11Wu9S1Y6tSz2xhls/0T0ilKTm+JwuBUlz2KQwdRSDlTTqPLPiGcSAHkTU22cp
+         2fprTvHiMLIlRFFm/R/cDEoY23MJ5wKne/mh1wtBWmdoNu9F7bFYn5tSwcAlzCpyMJVH
+         AxTALAhF4016N/A8Ye82uUl6/bJnQmAQZVopQrqZyWRFeckKCR6TsKICVobXreJd2yDo
+         FDliWYkLgmsAth2w/v/F1Xw3LTOfGYFk26upKuayLj8XyVaburOFCXILvGyYjkYf0UB2
+         Ex0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XBFyhsQNquZ3pQHlUtJ+6p1EED9gXcXiwvxejmOE88o=;
+        b=24diNWBPvp+W53Jwb/vkUrLnkxsKg/61GOBAFG+uOlGXwJBnrOuyveOx68a8CgPPki
+         +BbPli6c5G02uaf7I7FPKcg+XpsvhKlT7tAmHC6FNAB1DLGHJ7SKUUbgC+kq7R/5lb73
+         HUTk2ONOguffG+KusiYYQx6rh9Y7XGFah0jnJCvTi9Qn3LFmY++JJ1USNmQVdwXyRQe4
+         hr3m9pWsSjMBCQpj2uMt7wGFY7MYlbcjOklzETcMwnUmWalgFan1Ezev5lWDuo2RA6jD
+         daU9KzUsigMOkK7fwNwHG8fFRI3XPkTwc+BtPmOXHW9LBrHk2UAZHDqWRjBDVAMaBVp7
+         si7Q==
+X-Gm-Message-State: AOAM5305BrjmKWu1CWLyNleBde/QiloKSdIw/quXImLfUKhGSbu1JcRp
+        5Edqe2vRN2ZBD2GfQAoKf/SQow==
+X-Google-Smtp-Source: ABdhPJx2dAwjSu6007TyEGRFXM67eMCde+v+xT39zzAQ9NoQBCOcllZxeigztUqz6Ze6rQ9T4R5awg==
+X-Received: by 2002:a05:6214:29c3:: with SMTP id gh3mr620183qvb.30.1638897337717;
+        Tue, 07 Dec 2021 09:15:37 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id b11sm182363qtx.85.2021.12.07.09.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 09:15:37 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1mue40-0005eD-O7; Tue, 07 Dec 2021 13:15:36 -0400
+Date:   Tue, 7 Dec 2021 13:15:36 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>,
+        avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: corrupted list in rdma_listen (2)
+Message-ID: <20211207171536.GB6467@ziepe.ca>
+References: <000000000000c3eace05d24f0189@google.com>
+ <20211206154159.GP5112@ziepe.ca>
+ <CACT4Y+bnJ5M84RjUONFYMXSOpzC5UOq2DxVNoQkq6c6nYwG9Og@mail.gmail.com>
+ <20211206173550.GQ5112@ziepe.ca>
+ <CACT4Y+atv60UELnQJqejS_Z+uBYYERha4-o1dViwVuSLpb-Tfw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+atv60UELnQJqejS_Z+uBYYERha4-o1dViwVuSLpb-Tfw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests file configuration and error handling of the Intel Software
-Defined Silicon sysfs ABI.
+On Tue, Dec 07, 2021 at 09:37:30AM +0100, Dmitry Vyukov wrote:
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-V2
-  - New patch
+> > > https://syzkaller.appspot.com/bug?extid=c94a3675a626f6333d74
+>
+> In the Crashes table there are 2 crashes, one is the one that was
+> reported in this email and the second happened on upstream commit
+> 5833291ab6de (you can search by this hash on the page).
+> 5833291ab6de is newer than a year:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?id=5833291ab6de
 
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/drivers/sdsi/sdsi.sh  |  18 ++
- .../selftests/drivers/sdsi/sdsi_test.py       | 166 ++++++++++++++++++
- 3 files changed, 185 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
- create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
+Oh I see, I did not read it properly then
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ba9603fb7f62..3bc2a7bff168 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9788,6 +9788,7 @@ M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
- F:	samples/sdsi/
-+F:	tools/testing/selftests/drivers/sdsi/
- 
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi.sh b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-new file mode 100755
-index 000000000000..8db71961d164
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the intel_sdsi driver
-+
-+if ! /sbin/modprobe -q -r intel_sdsi; then
-+	echo "drivers/sdsi: [SKIP]"
-+	exit 77
-+fi
-+
-+if /sbin/modprobe -q intel_sdsi; then
-+	python3 -m pytest sdsi_test.py
-+	/sbin/modprobe -q -r intel_sdsi
-+
-+	echo "drivers/sdsi: ok"
-+else
-+	echo "drivers/sdsi: [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi_test.py b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-new file mode 100644
-index 000000000000..fc99d9c23f51
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-@@ -0,0 +1,166 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from struct import pack
-+from time import sleep
-+
-+import errno
-+import glob
-+import os
-+import subprocess
-+
-+try:
-+    import pytest
-+except ImportError:
-+    print("Unable to import pytest python module.")
-+    print("\nIf not already installed, you may do so with:")
-+    print("\t\tpip3 install pytest")
-+    exit(1)
-+
-+SOCKETS = glob.glob('/sys/bus/auxiliary/devices/intel_vsec.sdsi.*')
-+NUM_SOCKETS = len(SOCKETS)
-+
-+MODULE_NAME = 'sdsi'
-+DEV_PREFIX = 'intel_vsec.sdsi'
-+CLASS_DIR = '/sys/bus/auxiliary/devices'
-+GUID = "0x6dd191"
-+
-+def read_bin_file(file):
-+    with open(file, mode='rb') as f:
-+        content = f.read()
-+    return content
-+
-+def get_dev_file_path(socket, file):
-+    return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/' + file
-+
-+class TestSDSiDriver:
-+    def test_driver_loaded(self):
-+        lsmod_p = subprocess.Popen(('lsmod'), stdout=subprocess.PIPE)
-+        result = subprocess.check_output(('grep', '-q', MODULE_NAME), stdin=lsmod_p.stdout)
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiFilesClass:
-+
-+    def read_value(self, file):
-+        f = open(file, "r")
-+        value = f.read().strip("\n")
-+        return value
-+
-+    def get_dev_folder(self, socket):
-+        return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/'
-+
-+    def test_sysfs_files_exist(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        print (folder)
-+        assert os.path.isfile(folder + "guid") == True
-+        assert os.path.isfile(folder + "provision_akc") == True
-+        assert os.path.isfile(folder + "provision_cap") == True
-+        assert os.path.isfile(folder + "state_certificate") == True
-+        assert os.path.isfile(folder + "registers") == True
-+
-+    def test_sysfs_file_permissions(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        mode = os.stat(folder + "guid").st_mode & 0o777
-+        assert mode == 0o444    # Read all
-+        mode = os.stat(folder + "registers").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+        mode = os.stat(folder + "provision_akc").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "provision_cap").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "state_certificate").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+
-+    def test_sysfs_file_ownership(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        st = os.stat(folder + "guid")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "registers")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+    def test_sysfs_file_sizes(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        if self.read_value(folder + "guid") == GUID:
-+            st = os.stat(folder + "registers")
-+            assert st.st_size == 72
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_size == 4096
-+
-+    def test_no_seek_allowed(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(folder + "state_certificate", "rb")
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.read()
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_cap", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_akc", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+    def test_registers_seek(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        # Check that the value read from an offset of the entire
-+        # file is none-zero and the same as the value read
-+        # from seeking to the same location
-+        f = open(folder + "registers", "rb")
-+        data = f.read()
-+        f.seek(64)
-+        id = f.read()
-+        assert id != bytes(0)
-+        assert data[64:] == id
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiMailboxCmdsClass:
-+    def test_provision_akc_eoverflow_1017_bytes(self, socket):
-+
-+        # The buffer for writes is 1k, of with 8 bytes must be
-+        # reserved for the command, leaving 1016 bytes max.
-+        # Check that we get an overflow error for 1017 bytes.
-+        node = get_dev_file_path(socket, "provision_akc")
-+        rand_file = bytes(os.urandom(1017))
-+
-+        f = open(node, 'wb', 0)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.EOVERFLOW
-+        f.close()
--- 
-2.25.1
+Sigh, OK
 
+I thought we fixed this :(
+
+Jason

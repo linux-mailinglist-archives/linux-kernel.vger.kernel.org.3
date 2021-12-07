@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5D546C7CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C211B46C7E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242388AbhLGW6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:58:36 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50304 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhLGW6f (ORCPT
+        id S242429AbhLGXCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229963AbhLGXCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:58:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2CCC5CE1EB4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 22:55:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B16C341C3;
-        Tue,  7 Dec 2021 22:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638917701;
-        bh=sp0xm1WbDE3Fb/5V0cM4QWZ6D+dNtSoC1dtm8Wt6zSA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Kso+dWdkPbHMFoZDjt3VRPukSq7hZyVhE7XTBZP0D7n5/VubjR+3TGhcXxnkBPf3g
-         FBQbBYL4lvny9ZiuUuETO0hIBLCP+pYYJLYI0/5ZpiES/Qm/QiNGh4qqDLEp61zKJo
-         lXFaL3YktiooHh5iAAqcMGQdN/HD6wUcD1WONc5hR66ePErZrzMaYI9/i2u+XIeMZx
-         HLGsvDxwL9b6VbLQYt5jAyHIjZo2I1DFz27fdSVq618oARRGFdD9ShEz3XfIPKysrj
-         K6vHr8kzDAFIuXHJPo5z/nNq+tqKjXEDe4w11OlmglL1g6/Pokc2QeYI/6fYJJqdpw
-         nt/9pfCZVCBCg==
-From:   labbott@kernel.org
-To:     Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     Laura Abbott <labbott@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Update e-mail addresses for Laura Abbott
-Date:   Tue,  7 Dec 2021 17:54:58 -0500
-Message-Id: <20211207225458.622282-1-labbott@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        Tue, 7 Dec 2021 18:02:17 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35FC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:58:46 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id x7so619686pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qoM1pVINkMLD60gxA8TI/pZmmvMgShnXtiUKe3CgEzs=;
+        b=YqPCePVbTajCZ5c50XbOPpPapYky9JCDNgiYPjrpdZGVMZsvoODGmkimetIQARRt7I
+         fpfley0T0kc3rFG0Gabis6709qQ6D676+qJifId8SKf79z7wlRq008xGKS+e/wt6fqNl
+         yP3L9JGyVafRaIonrAkOLKtFxgloUvyLDsG+gO7GXvQ1Vcp7geNvvNXOB6S/v2Uh0A8F
+         1EH5zpRB31GJkR3roA+dqmHjYBq49LHX/TcmldPqvsiezWIBCypBgXudSIw5u+Klt7fK
+         sPQTwTrnseZf9nTM/7gbS9BWQHgQ3GpMjTLV0CSGtOSxxrEbqi3CtEOA/UCr2ql57lyF
+         wG0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qoM1pVINkMLD60gxA8TI/pZmmvMgShnXtiUKe3CgEzs=;
+        b=1kkPkzlTsPkq/xXb0ugUfH/hGvQNp0TBhEFACBGBEqj2xC04t4A1hJTWXFTJ9WWx/I
+         UUdNebwUy/p49v0NXjCS8ThVaeDqLZqpih1QWzur1LHvGgy7PsVBsr0YBqHpNk0pfpqk
+         t+bcH+fqNCK/pIW13zGbQhzLH+VVdza9W5PldhPDKSaWWuqVa7ZIqyxVykD0C567/ryf
+         YXwcY9tQn7hcqfG5DMflixBjM3MeN59cjkdZEV157enHuKwV7rNCTavPfbSBLfK7vmI0
+         j2Rpk08poecsYp82jozS+oXD2ISf3QJ/kKsoeWt1Prkv97VsobuKDBjSiCh+Va5ow5XZ
+         3Itw==
+X-Gm-Message-State: AOAM530WM/uQn1+wipijIuoUokfOOayCZ/bfKPSBsQjpihRMQh5EGJan
+        zk8PAdU58CD5+/yZpcF26ecIVzPHeQwbsRpvPNdaqA==
+X-Google-Smtp-Source: ABdhPJwrtiDMh+jI+v/37kJDmwUCRtE0nGiX1/JKs55GKW5kLOw6pjF4lPrTwosOfwHyxpP0wzP6Wt7HLNiSebX2uhM=
+X-Received: by 2002:a17:90b:4a0a:: with SMTP id kk10mr2694893pjb.198.1638917925412;
+ Tue, 07 Dec 2021 14:58:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211120032401.2305447-1-dlatypov@google.com>
+In-Reply-To: <20211120032401.2305447-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 17:58:34 -0500
+Message-ID: <CAFd5g443R4OU4vspOh2yqu=7FBtUaxMbsd_tpr8ZnND1CJveCA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: suggest using decode_stacktrace.sh on kernel crash
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laura Abbott <labbott@kernel.org>
+On Fri, Nov 19, 2021 at 10:24 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> kunit.py isn't very clear that
+> 1) it stashes a copy of the unparsed output in $BUILD_DIR/test.log
+> 2) it sets $BUILD_DIR=.kunit by default
+>
+> So it's trickier than it should be for a user to come up with the right
+> command to do so.
+>
+> Make kunit.py print out a command for this if
+> a) we saw a test case crash
+> b) we only ran one kernel (test.log only contains output from the last)
+>
+> Example suggested command:
+> $ scripts/decode_stacktrace.sh .kunit/vmlinux .kunit < .kunit/test.log | tee .kunit/decoded.log | ./tools/testing/kunit/kunit.py parse
+>
+> Without debug info a user might see something like
+> [14:11:25] Call Trace:
+> [14:11:25] ? kunit_binary_assert_format (:?)
+> [14:11:25] kunit_try_run_case (test.c:?)
+> [14:11:25] ? __kthread_parkme (kthread.c:?)
+> [14:11:25] kunit_generic_run_threadfn_adapter (try-catch.c:?)
+> [14:11:25] ? kunit_generic_run_threadfn_adapter (try-catch.c:?)
+> [14:11:25] kthread (kthread.c:?)
+> [14:11:25] new_thread_handler (:?)
+> [14:11:25] [CRASHED]
+>
+> `tee` is in GNU coreutils, so it seems fine to add that into the
+> pipeline by default, that way users can inspect the otuput in more
+> detail.
+>
+> Note: to turn on debug info, users would need to do something like
+> $ echo -e 'CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y' >> .kunit/.kunitconfig
+> $ ./tools/testing/kunit/kunit.py config
+> $ ./tools/testing/kunit/kunit.py build
+> $ <then run decode_stacktrace.sh now vmlinux is updated>
+>
+> This feels too clunky to include in the instructions.
+> With --kconfig_add [1], it would become a bit less painful.
+>
+> [1] https://lore.kernel.org/linux-kselftest/20211106013058.2621799-2-dlatypov@google.com/
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Consolodate everything under an @kernel.org address.
-
-Signed-off-by: Laura Abbott <labbott@kernel.org>
----
-Sumit, can you take this through your tree?
----
- .mailmap    | 3 +++
- MAINTAINERS | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/.mailmap b/.mailmap
-index 6277bb27b4bf..e7a5bb0c35ae 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -203,6 +203,9 @@ Koushik <raghavendra.koushik@neterion.com>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-+Laura Abbott <labbott@kernel.org> <lauraa@codeaurora.org>
-+Laura Abbott <labbott@kernel.org> <labbott@redhat.com>
-+Laura Abbott <labobtt@kernel.org> <laura@labbott.name>
- Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
- Leonid I Ananiev <leonid.i.ananiev@intel.com>
- Leon Romanovsky <leon@kernel.org> <leon@leon.nu>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 43007f2d29e0..21ab7c9d1bee 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5715,7 +5715,7 @@ DMA-BUF HEAPS FRAMEWORK
- M:	Sumit Semwal <sumit.semwal@linaro.org>
- R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
- R:	Liam Mark <lmark@codeaurora.org>
--R:	Laura Abbott <labbott@redhat.com>
-+R:	Laura Abbott <labbott@kernel.org>
- R:	Brian Starkey <Brian.Starkey@arm.com>
- R:	John Stultz <john.stultz@linaro.org>
- L:	linux-media@vger.kernel.org
--- 
-2.33.1
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

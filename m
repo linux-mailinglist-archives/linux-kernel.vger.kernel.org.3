@@ -2,171 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A64346BE82
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A24B46BE85
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbhLGPCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S233616AbhLGPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbhLGPCp (ORCPT
+        with ESMTP id S233407AbhLGPDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:02:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C5C061574;
-        Tue,  7 Dec 2021 06:59:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39271B817E4;
-        Tue,  7 Dec 2021 14:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4299C341C1;
-        Tue,  7 Dec 2021 14:59:05 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 15:59:01 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
-Message-ID: <20211207145901.awiibdgdidbshsbf@wittgenstein>
-References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
- <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
+        Tue, 7 Dec 2021 10:03:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF4FC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:59:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AVv4NRDLTEOgNBP/O0rn8XHYGKZqjEPb8Ke4zaIQf84=; b=N1zjHSCHdV81XbDdNvZ2ou5tDT
+        t1ZP2wFkuyKYsH+LDZmmNcdh1BBbM3QHLBYXFH59mkRSpO6ihetWN560upzRL3DtIkPnw3VtgHl6k
+        pkJM4/zn7/2faEqgsN7rUnW7BdOtRowvFLulfafhXKEBf739/QiqQqylSqC0LgxYGoxARgdrwR3Db
+        rScrF7OSIiHtBM0pML2/AcAEYttlXoCKygp3ph4HABr3Vu8S6dh92JPno+/MJ9RhtW8fWHO8ZvuIm
+        bL2GbSSXThVNWsp2ljfVmTg6D1RReoVUg/Sh6wGB0Z7O4dpHsgOASpG7jofjihpUSuLxt7ihoFXoV
+        S2LeiqQw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mubwL-007SMH-7o; Tue, 07 Dec 2021 14:59:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9B793000E6;
+        Tue,  7 Dec 2021 15:59:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C9A7E201CAF60; Tue,  7 Dec 2021 15:59:32 +0100 (CET)
+Date:   Tue, 7 Dec 2021 15:59:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        valentin.schneider@arm.com
+Subject: Re: [PATCH v3] sched/fair: cleanup task_util and capacity type
+Message-ID: <Ya921MtQfJbBHRPc@hirez.programming.kicks-ass.net>
+References: <20211207095755.859972-1-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
+In-Reply-To: <20211207095755.859972-1-vincent.donnefort@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:14:15PM -0500, James Bottomley wrote:
-> On Mon, 2021-12-06 at 12:25 -0500, Stefan Berger wrote:
-> [...]
-> > v3:
-> >  - Further modifications to virtualized SecurityFS following James's
-> > posted patch
-> >  - Dropping of early teardown for user_namespaces since not needed
-> > anymore
+On Tue, Dec 07, 2021 at 09:57:55AM +0000, Vincent Donnefort wrote:
+> task_util and capacity are comparable unsigned long values. There is no
+> need for an intermidiate implicit signed cast.
 > 
-> This is my incremental to this series that moves the namespaced
-> securityfs away from using a vfsmount and on to a root dentry instead,
-> meaning we can call the blocking notifier from fill_super as Christian
-> requested (and thus can remove the securityfs_notifier_sent indicator
-> since it's only called once).
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
 
-Somehow b4 retrieves your patch out-of-band which makes it weird to
-reply to so I'm copy-pasting it here and reply inline:
-
-On Mon, Dec 06, 2021 at 08:27:00PM +0000, James Bottomley wrote:
-> ---
->  include/linux/user_namespace.h |  3 +-
->  security/inode.c               | 55 +++++++++++++---------------------
->  2 files changed, 22 insertions(+), 36 deletions(-)
-> 
-> diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
-> index 6b8bd060d8c4..03a0879376a0 100644
-> --- a/include/linux/user_namespace.h
-> +++ b/include/linux/user_namespace.h
-> @@ -104,8 +104,7 @@ struct user_namespace {
->  	struct ima_namespace	*ima_ns;
->  #endif
->  #ifdef CONFIG_SECURITYFS
-> -	struct vfsmount		*securityfs_mount;
-> -	bool			securityfs_notifier_sent;
-> +	struct dentry		*securityfs_root;
->  #endif
->  } __randomize_layout;
->  
-> diff --git a/security/inode.c b/security/inode.c
-> index 45211845fc31..f8b6cb3dfb87 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -24,6 +24,7 @@
->  #include <linux/magic.h>
->  #include <linux/user_namespace.h>
->  
-> +static struct vfsmount *securityfs_mount;
->  static int securityfs_mount_count;
->  
->  static BLOCKING_NOTIFIER_HEAD(securityfs_ns_notifier);
-> @@ -40,43 +41,24 @@ static const struct super_operations securityfs_super_operations = {
->  	.free_inode	= securityfs_free_inode,
->  };
->  
-> -static struct file_system_type fs_type;
-> -
-> -static void securityfs_free_context(struct fs_context *fc)
-> -{
-> -	struct user_namespace *ns = fc->user_ns;
-> -
-> -	if (ns == &init_user_ns ||
-> -	    ns->securityfs_notifier_sent)
-> -		return;
-> -
-> -	ns->securityfs_notifier_sent = true;
-> -
-> -	ns->securityfs_mount = vfs_kern_mount(&fs_type, SB_KERNMOUNT,
-> -					      fs_type.name, NULL);
-> -	if (IS_ERR(ns->securityfs_mount)) {
-> -		printk(KERN_ERR "kern mount on securityfs ERROR: %ld\n",
-> -		       PTR_ERR(ns->securityfs_mount));
-> -		ns->securityfs_mount = NULL;
-> -		return;
-> -	}
-> -
-> -	blocking_notifier_call_chain(&securityfs_ns_notifier,
-> -				     SECURITYFS_NS_ADD, fc->user_ns);
-> -	mntput(ns->securityfs_mount);
-> -}
-> -
->  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
->  {
->  	static const struct tree_descr files[] = {{""}};
->  	int error;
-> +	struct user_namespace *ns = fc->user_ns;
->  
->  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
->  	if (error)
->  		return error;
->  
-> +	ns->securityfs_root = dget(sb->s_root);
-> +
->  	sb->s_op = &securityfs_super_operations;
->  
-> +	if (ns != &init_user_ns)
-> +		blocking_notifier_call_chain(&securityfs_ns_notifier,
-> +					     SECURITYFS_NS_ADD, ns);
-
-I would propose not to use the notifier logic. While it might be nifty
-it's over-engineered in my opinion. The dentry stashing in struct
-user_namespace currently serves the purpose to make it retrievable in
-ima_fs_ns_init(). That doesn't justify its existence imho.
-
-There is one central place were all users of namespaced securityfs can
-create the files that they need to and that is in
-securityfs_fill_super(). (If you want to make that more obvious then give
-it a subdirectory securityfs and move inode.c in there.)
-
-We simply will expect users to add:
-
-ima_init_securityfs()
-mylsm_init_securityfs()
-
-that are to be placed in fill_super
-
-and
-
-ima_kill_securityfs()
-mylsm_kill_securityfs()
-
-that get called in kill_super and the root dentry and other relevant
-information should be passed explicitly into those functions. Then we
-can remove the dentry stashing from struct user_namespace altogether and
-the patch gets smaller too.
+Thanks!

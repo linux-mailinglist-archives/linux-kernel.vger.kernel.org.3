@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC4846B644
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF25B46B646
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbhLGIoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLGIop (ORCPT
+        id S233181AbhLGIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:45:06 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32883 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhLGIpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:44:45 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C957C061746;
-        Tue,  7 Dec 2021 00:41:15 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso1629622wmr.5;
-        Tue, 07 Dec 2021 00:41:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=epZ7mVCQBBKdcnfQSHCIYXAMlF3XUVoAAwD3l/pIzA4=;
-        b=VLWZOCZvt0Yeoe4B/XgxzHhAvC0UZEAvQcsEQhJhi8rc1lf8ZYWLrWwgWslG/UpKsr
-         0oeqqOcE5UnmR6sWHNsQUwLEOr3j/wzR5UwRqUQYL4E9eRQh5S8Nf2eSyS0iE4ZjV568
-         x84HasluSaFdd3VB1w+0tN/XbW1FZW0LsJAUQ8QAMyOmkJk64guC7xODyhxEy6/xZOE1
-         fWWC1p77wOCbxyYVf69kcRW4lxoJOgBzyHQYd8iUlwGMFR283y0wXX7koloA4Y7w8ovn
-         xvNqYawaCOKeyBypRQGp1qQSwiWM/0JyE+C82nb3CfaVXsZknSjA2LsGhCrvxenoPxzS
-         Hnhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=epZ7mVCQBBKdcnfQSHCIYXAMlF3XUVoAAwD3l/pIzA4=;
-        b=zDVbkvHR5QczRn10Z1188x2V+kSm84spsZWfS81vWqE6ogjFGW5D1jQTxjC7q0oqL1
-         KQamrt8gI9Fv7I/zHT4uXO2xq8UfujALTbyyS+VPG7LP8d3bNSHeC6YuVF2ZZ/BOe28y
-         hcqxiT9HtTMdqSYLaR4eXs2YbTI1dqY63u8wj1gTDwZMtIdj05RM1zn454h/EA2QUme3
-         EHSIlgqmJejs6yUYZfdoyGN1H2glDD8167We7SGvg3xkBOgjWwjYzr/RoDFGKucyGk/p
-         VAoV02AQqyG/82UZJBiUdyCjafXsZYFmIZj/XON2ZH5HeZIrYFNHVy5uSGYK8L5SZNrq
-         o3lg==
-X-Gm-Message-State: AOAM531sm/i+ovHXcc/aGOzJ2sc2hGicPROyJehR/BGte9s2Do9IbOCT
-        WbVrrRpSaN+gDE+AdB/mm0UpJJJaEN5OiA==
-X-Google-Smtp-Source: ABdhPJwkr2k/LEq0QWcZJ3Cbcg78zTLZ6eD905w3QO8UkrVMKGziSKshMBKn0WNTMq75l3/OpxhfSA==
-X-Received: by 2002:a1c:ed0a:: with SMTP id l10mr5230735wmh.104.1638866473754;
-        Tue, 07 Dec 2021 00:41:13 -0800 (PST)
-Received: from orome.fritz.box ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id f3sm13737702wrm.96.2021.12.07.00.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 00:41:12 -0800 (PST)
-Date:   Tue, 7 Dec 2021 09:41:10 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: dma: pl08x: Fix unevaluatedProperties
- warnings
-Message-ID: <Ya8eJjPMLwqBUFD/@orome.fritz.box>
-References: <20211206174231.2298349-1-robh@kernel.org>
+        Tue, 7 Dec 2021 03:45:03 -0500
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J7Yg45PQMzcbg5;
+        Tue,  7 Dec 2021 16:41:20 +0800 (CST)
+Received: from [127.0.0.1] (10.67.102.125) by dggeme756-chm.china.huawei.com
+ (10.3.19.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Tue, 7
+ Dec 2021 16:41:32 +0800
+Message-ID: <61AF1E3B.5060706@hisilicon.com>
+Date:   Tue, 7 Dec 2021 16:41:31 +0800
+From:   Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="toi56B7oyc04/PA5"
-Content-Disposition: inline
-In-Reply-To: <20211206174231.2298349-1-robh@kernel.org>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+To:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>
+CC:     <~okias/devicetree@lists.sr.ht>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: hisilicon: update deprecated property name
+References: <20211029104211.29079-1-david@ixit.cz>
+In-Reply-To: <20211029104211.29079-1-david@ixit.cz>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi David,
 
---toi56B7oyc04/PA5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 06, 2021 at 11:42:31AM -0600, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the example has
-> warnings on primecell properties and 'resets':
->=20
-> Documentation/devicetree/bindings/dma/arm-pl08x.example.dt.yaml: dma-cont=
-roller@67000000: Unevaluated properties are not allowed ('arm,primecell-per=
-iphid', 'resets' were unexpected)
->=20
-> Add the missing reference to primecell.yaml and definition for 'resets'.
->=20
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 2021/10/29 18:42, David Heidelberg wrote:
+> hisi,rst-syscon property name is deprecated, use hisilicon,rst-syscon
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  Documentation/devicetree/bindings/dma/arm-pl08x.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  arch/arm64/boot/dts/hisilicon/hi3660.dtsi | 4 ++--
+>  arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+> index 8bd6d7e8a474..3fd80f1f7c1e 100644
+> --- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+> +++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+> @@ -345,7 +345,7 @@ crg_ctrl: crg_ctrl@fff35000 {
+>  		crg_rst: crg_rst_controller {
+>  			compatible = "hisilicon,hi3660-reset";
+>  			#reset-cells = <2>;
+> -			hisi,rst-syscon = <&crg_ctrl>;
+> +			hisilicon,rst-syscon = <&crg_ctrl>;
+>  		};
+>  
+>  
+> @@ -376,7 +376,7 @@ iomcu: iomcu@ffd7e000 {
+>  
+>  		iomcu_rst: reset {
+>  			compatible = "hisilicon,hi3660-reset";
+> -			hisi,rst-syscon = <&iomcu>;
+> +			hisilicon,rst-syscon = <&iomcu>;
+>  			#reset-cells = <2>;
+>  		};
+>  
+> diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> index 636c8817df7e..9eac9a339654 100644
+> --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+> @@ -155,7 +155,7 @@ crg_rst: crg_rst_controller {
+>  			compatible = "hisilicon,hi3670-reset",
+>  				     "hisilicon,hi3660-reset";
+>  			#reset-cells = <2>;
+> -			hisi,rst-syscon = <&crg_ctrl>;
+> +			hisilicon,rst-syscon = <&crg_ctrl>;
+>  		};
+>  
+>  		pctrl: pctrl@e8a09000 {
+> @@ -196,7 +196,7 @@ media2_crg: media2_crgctrl@e8900000 {
+>  
+>  		iomcu_rst: reset {
+>  			compatible = "hisilicon,hi3660-reset";
+> -			hisi,rst-syscon = <&iomcu>;
+> +			hisilicon,rst-syscon = <&iomcu>;
+>  			#reset-cells = <2>;
+>  		};
+>  
+> 
 
-Reviewed-by: Thierry Reding <treding@nvidia.com>
+Thanks!
+But this may break the compatibility of old kernels with new dts files here.
+And we have discussed this at [1].
+That is why we did not update the dts file yet.
 
---toi56B7oyc04/PA5
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]: https://www.spinics.net/lists/arm-kernel/msg887577.html
 
------BEGIN PGP SIGNATURE-----
+Best Regards,
+Wei
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHiYACgkQ3SOs138+
-s6E7gg/+OZndKVWvLb1pAMyft4NJh4m8IKfJVNuOY0UiJIoJj7/0Pznme3pc0KES
-U6A9e0Pnx383LIBQGJOOEu0nVYoAOWgawYtTPIOjiu9lY/yCS9sHTErWgWRb/4mo
-0VQ8Xx3+oy2haQlFbzDi0708dBydPkiSWcmjvVbtSdQ+lDCRjsJ+q/n9Qyi63SqZ
-q1jN8A7lC437JjkxiXSQk6k2YnzEfmvugaQYqWyG7J8pI/d2sG8sKPzb/OAEsz1i
-B7ypZtt1QJFq5j1cR2C3FSXjvLLRT10PyE+FJGu98xDf8jbR5V7Ck7E6NzMgjgHK
-syTZUCSxh5Pp0xIM4+qY1E+FBiBM/McbtQ9ewysPiS2uDL80/J75cm3q04VUpY5X
-n3L6OiieWqOOtjqTFUHYqDIrSKpzkccEZJMmLcxoQAmUU53rIjxUGdhkmHGYEd1H
-Pyz2uuFcUjWRa3/n2qlsvQloRfIKB3NubU0ocrSyXmKtC6nOfzxJUwLxn5wSAlL/
-DubeVh8uZoUHZFUk6KeZv+X1qm7NNPdnTelYvYlV/v9OZKTzRzqkcDWP77IljKBz
-Fv6OeDvRpe3UdMqCe42tUfzHjTvAmS0ddBdt66YYXqkh4SMcVEH8PDbhBRu3xnb6
-MTZpoJ6mpc+PFvMalDNBboSrdfxKRgMZsc/8N+bv8DNLTJNdnKw=
-=tfi7
------END PGP SIGNATURE-----
-
---toi56B7oyc04/PA5--

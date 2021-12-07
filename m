@@ -2,150 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8733646BEFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6BE46BF04
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbhLGPSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbhLGPSf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:18:35 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE31CC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:15:04 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id q25so28413445oiw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hYEsDkmgy55LBBuGxMFIWjuhjsIdsYQ2MQLWd9zZFJA=;
-        b=pbSTEPN9vNs2eTDvxkECIOFuhHmgFh06GxwxUJgGN6qbNlXkIFmJYga3cRVf6uZN0C
-         K9U7YNiBon4uxVOyRbV7YxqpFxc45c80lBf1qmVCVYd94/ut2bnIA6r68qCxMoTZsBUL
-         kz26VXVwlVPJkUPyfuy7RNCFY5g0/JuRW3vt+M7K/APpUqK5TIfOlOXXEyJ71z8gf3yy
-         D+naE5Q9+b/Vp9tf+j2QZwh0og6p72mK5laTlHcjVBjZZscgj+IZTaS32xuNLEuEuUgt
-         zyYbYqLE7s6rTbE8hLU7dYPrWsW/1Kj7CTWyrfB5kkL+jp/caxHBvRM+NS0Zy6i156A1
-         yilQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hYEsDkmgy55LBBuGxMFIWjuhjsIdsYQ2MQLWd9zZFJA=;
-        b=TBIXPGT2bspeEi5M3lwFBaVb1OW+dMD7iGeS9UitfwfQABqw0m8TucfzHwUHYS3uw8
-         aVoFtjsbkCfV8Y/wfgc4JjQ3jOLmjY8hIX86JqStjf2F8I47tu2zrV+/hj93VoYBxudK
-         te+7HCDK2szlcXJ0ORooJ76wororY0E/EtyXIHzOuYzM6x0AH8yoZyA6UK4qJ0sdBK7a
-         dPSQFe7xYU7Pg/orOOHH+MEHTG22TEysE1ZdtNJaWZV287VCSBHj3PyXV6na2sCD8uy3
-         DdvL65udqaT4RVCX1/Du6UgjnC6wIxCfYEddbRHfFSEqzYvntOcAGow5VAYnoLs7R3mt
-         kmCg==
-X-Gm-Message-State: AOAM531q2W183rnRRxJE2fwVqbAh6wMPmk4izO8rZTzyDn2SbsFszFhS
-        4TUhJMVCjWSfzPeeZFSivJx8tjEFrKj1o8s8RnF0WA==
-X-Google-Smtp-Source: ABdhPJwDw/sySXKjX8gXRG2Dcsl+1iyX/CEM2kTY4CKsqQ+BujquEoOqFrIjyoT0V8s/6EdwJiDxPuVZ7+FvglzmgRo=
-X-Received: by 2002:a54:4515:: with SMTP id l21mr5695599oil.15.1638890103775;
- Tue, 07 Dec 2021 07:15:03 -0800 (PST)
+        id S234384AbhLGPT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:19:27 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:43258 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229818AbhLGPT0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 10:19:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qP8+O/gRwcoIWKNvm0K0i0AMA/UfbiCfK7Wrt+s47ko=; b=GC0Tpen6RVJp3cdWwNMGKrCUsZ
+        HW0pB8fGH1RY0+5kdBHDrJxkJA8iX7aacTtLij7owxX/0ptDWlz8AcEoXxlo6bI95Qq7XdjjmvEn3
+        XMJu7eolUgQDgzigUQuv6ILG7wo5WXPIFrf0y9AdTASg+jB69zDJZbZQQmXJOs+nkp2k=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mucC7-00FmoY-W7; Tue, 07 Dec 2021 16:15:51 +0100
+Date:   Tue, 7 Dec 2021 16:15:51 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <Ya96pwC1KKZDO9et@lunn.ch>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <20211207043100.3357474-1-marcorr@google.com> <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
-In-Reply-To: <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Tue, 7 Dec 2021 07:14:52 -0800
-Message-ID: <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Always set kvm_run->if_flag
-To:     Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207145942.7444-1-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 6:43 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 12/6/21 10:31 PM, Marc Orr wrote:
-> > The kvm_run struct's if_flag is apart of the userspace/kernel API. The
-> > SEV-ES patches failed to set this flag because it's no longer needed by
-> > QEMU (according to the comment in the source code). However, other
-> > hypervisors may make use of this flag. Therefore, set the flag for
-> > guests with encrypted regiesters (i.e., with guest_state_protected set).
-> >
-> > Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
-> > Signed-off-by: Marc Orr <marcorr@google.com>
-> > ---
-> >   arch/x86/include/asm/kvm-x86-ops.h | 1 +
-> >   arch/x86/include/asm/kvm_host.h    | 1 +
-> >   arch/x86/kvm/svm/svm.c             | 8 ++++++++
-> >   arch/x86/kvm/vmx/vmx.c             | 6 ++++++
-> >   arch/x86/kvm/x86.c                 | 9 +--------
-> >   5 files changed, 17 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > index cefe1d81e2e8..9e50da3ed01a 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
-> >   KVM_X86_OP(cache_reg)
-> >   KVM_X86_OP(get_rflags)
-> >   KVM_X86_OP(set_rflags)
-> > +KVM_X86_OP(get_if_flag)
-> >   KVM_X86_OP(tlb_flush_all)
-> >   KVM_X86_OP(tlb_flush_current)
-> >   KVM_X86_OP_NULL(tlb_remote_flush)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 860ed500580c..a7f868ff23e7 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1349,6 +1349,7 @@ struct kvm_x86_ops {
-> >       void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
-> >       unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
-> >       void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
-> > +     bool (*get_if_flag)(struct kvm_vcpu *vcpu);
-> >
-> >       void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
-> >       void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index d0f68d11ec70..91608f8c0cde 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -1585,6 +1585,13 @@ static void svm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
-> >       to_svm(vcpu)->vmcb->save.rflags = rflags;
-> >   }
-> >
-> > +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
-> > +{
-> > +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
-> > +
-> > +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
->
-> I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
-> the better thing would be:
->
->         return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
->                                        : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
->
-> (Since this function returns a bool, I don't think you need the !!)
+On Tue, Dec 07, 2021 at 03:59:36PM +0100, Ansuel Smith wrote:
+> Hi, this is still WIP and currently has some problem but I would love if
+> someone can give this a superficial review and answer to some problem
+> with this.
+> 
+> The main reason for this is that we notice some routing problem in the
+> switch and it seems assisted learning is needed. Considering mdio is
+> quite slow due to the indirect write using this Ethernet alternative way
+> seems to be quicker.
+> 
+> The qca8k switch supports a special way to pass mdio read/write request
+> using specially crafted Ethernet packet.
 
-I had the same reservations when writing the patch. (Why fix what's
-not broken.) The reason I wrote the patch this way is based on what I
-read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
-Value of the RFLAGS.IF bit for the guest."
+Oh! Cool! Marvell has this as well, and i suspect a few others. It is
+something i've wanted to work on for a long long time, but never had
+the opportunity.
 
-Also, I had _thought_ that `svm_interrupt_allowed()` -- the
-AMD-specific function used to populate `ready_for_interrupt_injection`
--- was relying on `GUEST_INTERRUPT_MASK`. But now I'm reading the code
-again, and I realized I was overly focused on the SEV-ES handling.
-That code is actually extracting the IF bit from the RFLAGS register
-in the same way you've proposed here.
+This also means that, even if you are focusing on qca8k, please try to
+think what could be generic, and what should specific to the
+qca8k. The idea of sending an Ethernet frame and sometime later
+receiving a reply should be generic and usable for other DSA
+drivers. The contents of those frames needs to be driver specific.
+How we hook this into MDIO might also be generic, maybe.
 
-Changing the patch as you've suggested SGTM. I can send out a v2. I'll
-wait a day or two to see if there are any other comments first. I
-guess the alternative would be to change `svm_interrupt_blocked()` to
-solely use the `SVM_GUEST_INTERRUPT_MASK`. If we were confident that
-it was sufficient, it would be a nice little cleanup. But regardless,
-I think we should keep the code introduced by this patch consistent
-with `svm_interrupt_blocked()`.
+I will look at your questions later, but soon.
 
-Also, noted on the `!!` not being needed when returning from a bool
-function. I'll keep this in mind in the future. Thanks!
+  Andrew

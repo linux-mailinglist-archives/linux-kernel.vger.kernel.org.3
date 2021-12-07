@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B43346BC21
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86B846BC23
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbhLGNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:09:17 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6349 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232599AbhLGNJR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:09:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="300952988"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="300952988"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 05:04:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="750984340"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Dec 2021 05:04:55 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mua9P-000MaE-8i; Tue, 07 Dec 2021 13:04:55 +0000
-Date:   Tue, 7 Dec 2021 21:04:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: fs/file.c:401:54: sparse: sparse: incorrect type in initializer
- (different address spaces)
-Message-ID: <202112072144.ZYJ4BKaf-lkp@intel.com>
+        id S236836AbhLGNJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236827AbhLGNJY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 08:09:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F18BC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:05:54 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muaAA-0007ZU-Oh; Tue, 07 Dec 2021 14:05:42 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muaA8-003EEC-Ka; Tue, 07 Dec 2021 14:05:39 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muaA7-0004ej-Fz; Tue, 07 Dec 2021 14:05:39 +0100
+Date:   Tue, 7 Dec 2021 14:05:39 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     lizhe <sensor1010@163.com>
+Cc:     ulf.hansson@linaro.org, srinivas.pandruvada@linux.intel.com,
+        pali@kernel.org, TheSven73@gmail.com, lznuaa@gmail.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/mmc/core/bus: Remove redundant driver match
+ function
+Message-ID: <20211207130539.r4zdbyh76kiiid4o@pengutronix.de>
+References: <20211207095029.96387-1-sensor1010@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kgftqftmrcsxvhor"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211207095029.96387-1-sensor1010@163.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   4 months ago
-config: arc-randconfig-s032-20211207 (https://download.01.org/0day-ci/archive/20211207/202112072144.ZYJ4BKaf-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--kgftqftmrcsxvhor
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Dec 07, 2021 at 01:50:29AM -0800, lizhe wrote:
+> If there is no driver match function, the driver core assumes
+> that each candidate pair (driver, device) matches. See function
+> driver_match_device().
+>=20
+> Drop the mmc bus's match function that always returned 1 and
+> so implements the same behaviour as when there is no match
+> function.
+>=20
+> Signed-off-by: lizhe <sensor1010@163.com>
 
-sparse warnings: (new ones prefixed by >>)
-   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:350:17: sparse:     expected struct file **old_fds
-   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:351:17: sparse:     expected struct file **new_fds
-   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
-   fs/file.c:366:17: sparse:    struct file *
->> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
-   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
-   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-vim +401 fs/file.c
+If you want to make it easier for maintainers to take your patches,
+consider using -v2 for git send-email (or git format-patch) the next
+time.
 
-02afc6267f6d55 Al Viro          2008-05-08  382  
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  383  static struct fdtable *close_files(struct files_struct * files)
-7cf4dc3c8dbfdf Al Viro          2012-08-15  384  {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  385  	/*
-7cf4dc3c8dbfdf Al Viro          2012-08-15  386  	 * It is safe to dereference the fd table without RCU or
-7cf4dc3c8dbfdf Al Viro          2012-08-15  387  	 * ->file_lock because this is the last reference to the
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  388  	 * files structure.
-7cf4dc3c8dbfdf Al Viro          2012-08-15  389  	 */
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  390  	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
-9b80a184eaadc1 Alexey Dobriyan  2016-09-02  391  	unsigned int i, j = 0;
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  392  
-7cf4dc3c8dbfdf Al Viro          2012-08-15  393  	for (;;) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  394  		unsigned long set;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  395  		i = j * BITS_PER_LONG;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  396  		if (i >= fdt->max_fds)
-7cf4dc3c8dbfdf Al Viro          2012-08-15  397  			break;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  398  		set = fdt->open_fds[j++];
-7cf4dc3c8dbfdf Al Viro          2012-08-15  399  		while (set) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  400  			if (set & 1) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15 @401  				struct file * file = xchg(&fdt->fd[i], NULL);
-7cf4dc3c8dbfdf Al Viro          2012-08-15  402  				if (file) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  403  					filp_close(file, files);
-388a4c88064e7e Paul E. McKenney 2017-10-24  404  					cond_resched();
-7cf4dc3c8dbfdf Al Viro          2012-08-15  405  				}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  406  			}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  407  			i++;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  408  			set >>= 1;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  409  		}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  410  	}
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  411  
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  412  	return fdt;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  413  }
-7cf4dc3c8dbfdf Al Viro          2012-08-15  414  
+Best regards and thanks
+Uwe
 
-:::::: The code at line 401 was first introduced by commit
-:::::: 7cf4dc3c8dbfdfde163d4636f621cf99a1f63bfb move files_struct-related bits from kernel/exit.c to fs/file.c
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
-:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
+--kgftqftmrcsxvhor
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGvXBUACgkQwfwUeK3K
+7AlKBwf9FxVQIGM6u2nURsuCrG1EH0cROtww75N7Vh3nYFI5/FMdHliUpsmnHPDo
+Y4McC5H/KG9PUAIrUM8lRRG3DSi8t3KG6lL0N6OXrLKuiKighSlMTDrwSwLCcdMB
+FPlHceGZe4JjEFnaIv85prtb7v3Kb4G+4Yuj6kwU9hwyhoX/XkVB5L+bEsP7kHxI
+f3V0xE+jszjLraH0OE5W/8+6AUhUisZ7kDqaDDqI43KDv6z00NCcknkXSsQ7tUfM
+B6OJdHrJQsv8ExI1ZWem3kiSVIk8gfUAVgdZ/oVwd83FE5BFsmsehK/Alxb6xwh2
+kHjeUhXABkZ1pwTFr3sk7DBApPr7ZA==
+=5y5l
+-----END PGP SIGNATURE-----
+
+--kgftqftmrcsxvhor--

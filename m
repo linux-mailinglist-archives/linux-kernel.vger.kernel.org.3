@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB83246C6B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C88A46C6B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241850AbhLGV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:28:58 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:46855 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbhLGV25 (ORCPT
+        id S237338AbhLGVbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231515AbhLGVbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:28:57 -0500
-Received: by mail-ot1-f42.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so525797oto.13;
-        Tue, 07 Dec 2021 13:25:26 -0800 (PST)
+        Tue, 7 Dec 2021 16:31:39 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77B8C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:28:08 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id k2so578120lji.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CXomiDWCuNQ6gJYE5Et4P54uUCBaEQ8u4XJdHj07maM=;
+        b=bKX3DeWIdFkRBxNQYZbdFrV3QYV130tjpn8D4leN4i8yq79IgbkX+gPHPsucn5n0vo
+         DSJVLa0GBvCs+aV/cwsQBvTLojNU7SN5XajhI8zKfyAO1qqV90qvPfJXjj2Rz0ufOkbS
+         /In5sJ8v0EZzJZhAe55jg1Ldxb2fYZMusCpM70TlhdNn2LF2oLLzTZoB5z4ZjitA1dEj
+         O9IaWv2kfTk3GxaCjo6MCDH71wXnjTBdUoulCG+bJTOAAqS1kgWQzNxmHppZ0ZoYA6Wk
+         lQKq+JO16J0WR2QgH4eGp244vK3xxfdvplzbR1jTKtb//hMvUXc+ZaPh4uAPj8KLIz9z
+         vgmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lYGb/0Umx7vlgzgCMR19+gfp3X/V8dsI0FA1sevnxo4=;
-        b=JTjIzB1HP3JJ+wQoHxdb8dSH9lsurHelZXu2/n3Xcg8Eb6J7+asVl78YmdcCEjUoWZ
-         hLhbz88M20XuoAsEjQ6yiCcHfbv8cButiHf2z8223aZGCPs/d+meaCbQaUm8W3DH/py7
-         dCsqH+KbnElhzxEtIavdGeVY4ht4e4UOLkDpBS0gBt2DfQEzSuzULFue69aUcg+jc8bD
-         lx+0j8sPboyqCmEsSUbQI4DoC/+bG94/OmVxsFmLVtY6LXkC5mW+BQKsAKYh2avclfgY
-         HFd3HGlpVPGsx8OgsIle1JD+/5lY3sBk5onm4OCC2r9rIQt1ARVjRJbtUdaWhbtlAPlh
-         btNw==
-X-Gm-Message-State: AOAM533xoi9ThFwiGYq70EOcP17/o3usff2SOHSufnOhvAukCXua2zmy
-        Tls/P8Qb8Zmst5GNTX99nDfRqkwrJg==
-X-Google-Smtp-Source: ABdhPJzeKG8WH1yZ25noRLZK2kMjvuFPcDWffuT2TjGzr2SWDhQgJT6pD+DWJYou5tFl+W08wF9BPQ==
-X-Received: by 2002:a05:6830:310f:: with SMTP id b15mr37384321ots.31.1638912326238;
-        Tue, 07 Dec 2021 13:25:26 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h6sm136583otb.60.2021.12.07.13.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 13:25:25 -0800 (PST)
-Received: (nullmailer pid 859562 invoked by uid 1000);
-        Tue, 07 Dec 2021 21:25:24 -0000
-Date:   Tue, 7 Dec 2021 15:25:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     reinhold.mueller@emtrion.com
-Cc:     alexandre.torgue@foss.st.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: arm/stm32: Add emtrion hardware
- emSBC-Argon
-Message-ID: <Ya/RRFKQ35shFCzg@robh.at.kernel.org>
-References: <20211130081654.119028-1-reinhold.mueller@emtrion.com>
- <20211130081654.119028-2-reinhold.mueller@emtrion.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CXomiDWCuNQ6gJYE5Et4P54uUCBaEQ8u4XJdHj07maM=;
+        b=Osi/DSNOUEXaieZzhXIsPMWjAUHxtzWsU91sEvNe+YLllMj9cU0/XbJZaYpwXO6N3K
+         t/gy6glr9Eziam0PBLPy3GI1kcnV4iFP7rv9ZBKY6rcPNoCzcM4KgiSdNsA91O9qoS4s
+         wPkDLCCjy9vuOIWZGBZy6GB6igoI9TGB2ofPQ6SOirlnAGTBOECLMlg77Kq9k9SR13jD
+         h+THPpNr2cjQLPQx5p/+zl800FnbShPIk1+q6gi599hIpMbyUsB/pD7zTCtmjrpTyh7c
+         rQ2FggGkgWMu1kg25wit6AqRtLK+FGDqnQvSH+8loTco5sR/2e7aSJ+XDNnswzlivxyT
+         FAXQ==
+X-Gm-Message-State: AOAM530HAzbY187jjQdPN/JjTRMduIZhlgKSAJwcdmNK/0mm3kkerOBM
+        hUkfZOk5ah/HJaX2NrihxiPNbkRJmdZCi8Cn0wMVd9TFr/w=
+X-Google-Smtp-Source: ABdhPJwAMV4Mof6EKI9oYdGZZgVcPctfqy2/zHuWwJfj5fRlrUDwbQWRmFBQ6+bP3kNo+v56Xe9A/oT6YIHXyEUjBaE=
+X-Received: by 2002:a2e:7807:: with SMTP id t7mr43113018ljc.426.1638912486674;
+ Tue, 07 Dec 2021 13:28:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130081654.119028-2-reinhold.mueller@emtrion.com>
+References: <20211207201034.1392660-1-pgonda@google.com> <Ya/RJiTOQjJ+fj73@google.com>
+In-Reply-To: <Ya/RJiTOQjJ+fj73@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 7 Dec 2021 14:27:55 -0700
+Message-ID: <CAMkAt6qy+F_QH-Uhc7mLPD9bitmCEAjZYZeqguwAgMsX1e39Og@mail.gmail.com>
+Subject: Re: [PATCH] selftests: sev_migrate_tests: Fix sev_ioctl()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Orr <marcorr@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 09:16:53AM +0100, reinhold.mueller@emtrion.com wrote:
-> From: Reinhold Mueller <reinhold.mueller@emtrion.com>
-> 
-> This patch presents the yaml patch for the emtrion GmbH
-> Argon board series.
-> 
-> Signed-off-by: Reinhold Mueller <reinhold.mueller@emtrion.com>
-> ---
->  Documentation/devicetree/bindings/arm/stm32/stm32.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-> index bcaf7be3ab37..710230847dcd 100644
-> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-> @@ -28,6 +28,14 @@ properties:
->            - enum:
->                - st,stm32mp153
->                - st,stm32mp157
-> +
-> +      - description: emtrion STM32MP1 Argon based Boards
-> +        items:
-> +          - enum:
-> +              - emtrion,stm32mp157c-emsbc-argon
-> +          - enum:
-> +              - emtrion,stm32mp157c-emstamp-argon
+On Tue, Dec 7, 2021 at 2:25 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Tue, Dec 07, 2021, Peter Gonda wrote:
+> > TEST_ASSERT in SEV ioctl was allowing errors because it checked return
+> > value was good OR the FW error code was OK. This TEST_ASSERT should
+> > require both (aka. AND) values are OK. Removes the LAUNCH_START from the
+> > mirror VM because this call correctly fails because mirror VMs cannot
+> > call this command.
+>
+> This probably should be two separate patches.  First remove the bogus LAUNCH_START
+> call, then fix the assert.
 
-Is there going to be multiple entries here? If not, use 'const' instead 
-of 'enum'.
+Thanks Sean. I'll split the patch and add your suggestion to the second one.
 
-> +          - const: st,stm32mp157
->        - items:
->            - enum:
->                - st,stm32f429i-disco
-> -- 
-> 2.20.1
-> 
-> 
+>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Marc Orr <marcorr@google.com>
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 7 ++-----
+> >  1 file changed, 2 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > index 29b18d565cf4..8e1b1e737cb1 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > @@ -31,7 +31,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+> >       int ret;
+> >
+> >       ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
+> > -     TEST_ASSERT((ret == 0 || cmd.error == SEV_RET_SUCCESS),
+> > +     TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
+> >                   "%d failed: return code: %d, errno: %d, fw error: %d",
+> >                   cmd_id, ret, errno, cmd.error);
+>
+> Hmm, reading cmd.error could also consume uninitialized data, e.g. if the ioctl()
+> fails before getting into the PSP command, the error message will dump garbage.
+>
+> And theoretically this could get a false negative if the test stack happens to have
+> '0' for cmd.error and KVM neglects to fill cmd.error when the ioctl() succeeds.
+>
+> So in additional to fixing the assert itself, I vote we also do:
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> index 29b18d565cf4..50132e165a8d 100644
+> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> @@ -26,6 +26,7 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+>         struct kvm_sev_cmd cmd = {
+>                 .id = cmd_id,
+>                 .data = (uint64_t)data,
+> +               .error = -1u,
+>                 .sev_fd = open_sev_dev_path_or_exit(),
+>         };
+>         int ret;
+
+Good idea will do in the 2/2.

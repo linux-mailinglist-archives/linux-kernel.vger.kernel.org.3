@@ -2,123 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A2946B071
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B944446B074
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236621AbhLGCKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbhLGCKf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:10:35 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC93BC061746;
-        Mon,  6 Dec 2021 18:07:05 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id t5so50690802edd.0;
-        Mon, 06 Dec 2021 18:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xh3jbz1H5oyvdrVY4iMt8Ki42g+iYpXie4VFb+QH4Gg=;
-        b=cDFpvNLehRCIjKJjQDZ9K1BhWxYfF38JwgPlH4Go0etmnyubIMWOpQUULkzxMdIDmw
-         URTE71EjO0sDuu0Z/vx1LD1pzaWlnU2fhr9YlFrWUyiXlNTMa/dl4tMztryT5N6CdQ2J
-         IWuHxPLZY8el70eSfua/uwnPtP2M9bGWgP05ZGd7pMV+i/QZ8yTDBEt2/+cmjEpmcy5a
-         JlFDEwYExb8nitAEhytZra2ssuFjKjMNYGtHkgRrqESQ7g3pQvMQfLLbQC/5DK9I8Oy4
-         P3lXlYtgf6RrldvEPLGDVF/t57lnrMEHII8mqrsYDnPQdOdFgj68gw5XHoY5Y2Mam1pk
-         2WUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xh3jbz1H5oyvdrVY4iMt8Ki42g+iYpXie4VFb+QH4Gg=;
-        b=ee3HGY6TGbuXxIK3xtyT3sAS6FrXLrOH7jd/hBS8ZKaNXhpoq9KALzIgZdARbmh2fh
-         cF3S84pZ+LPJOkvdcTGutlP5UcDrgUQHI7kXsmHV7+W8iKHhwBrhwK8hdFLPaIBxxsd1
-         fj76MY4F+W76lnYis8UBLS3ybQn06bby+tY1S7wvb51CYGl9lHEr9zxoc4qHRJbxhluM
-         FIW7TsjhNUsQvEhuqyhvqrUWj9WZK1XRyMDgyIBsXVjx2HjGTtt4uuW8L3H6K2UvzEjy
-         m/iJ/RCoo58X3mOejBg60GS2mzgwAW8Iee3iJ/vckkdCprqQ5SUiskpq2ohVlu1zvkOm
-         X9Bg==
-X-Gm-Message-State: AOAM532IoN3SVC+rL2obBMT6l2SVaQbOqu9YtnBnBw/nQV6COF3q4IGR
-        EJ0N3S0qr1I/Hwco036lo+PlWYiYgu7QV0fOhvZW+JeFYaJa1aki
-X-Google-Smtp-Source: ABdhPJwNkpwjPH7wJQrwZQ2Sh2JsnuFbohsjM04gBk5AkIftwEJsgDzTgw43j5xFY1ueZrDE1ZlvEGTVjGHTVwdAtpk=
-X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr4332389edc.373.1638842824139;
- Mon, 06 Dec 2021 18:07:04 -0800 (PST)
+        id S238851AbhLGCLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:11:02 -0500
+Received: from mga12.intel.com ([192.55.52.136]:4195 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231245AbhLGCLA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 21:11:00 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217487427"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="217487427"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:07:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="515046131"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 18:07:23 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/18] iommu: Add device dma ownership set/release
+ interfaces
+To:     Christoph Hellwig <hch@infradead.org>
+References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
+ <20211206015903.88687-2-baolu.lu@linux.intel.com>
+ <Ya4hZ2F7MYusgmSB@infradead.org>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <2872aa9f-c325-ca28-fb64-f86857ad3e91@linux.intel.com>
+Date:   Tue, 7 Dec 2021 10:07:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211206113437.2820889-1-mudongliangabcd@gmail.com> <CADBw62pSJ=rHjwTocxeeuCgtadLKqz-U7gAQek5Eo_bBQSzBzQ@mail.gmail.com>
-In-Reply-To: <CADBw62pSJ=rHjwTocxeeuCgtadLKqz-U7gAQek5Eo_bBQSzBzQ@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 7 Dec 2021 10:06:38 +0800
-Message-ID: <CAD-N9QUsOvumgVMJmjHF6vx92VGx8_KpAuqROkMrDYrqMyNfuA@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: sprd: move pm_runtime_disable to err_rpm
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Baolin Wang <baolin.wang@spreadtrum.com>,
-        dmaengine@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ya4hZ2F7MYusgmSB@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 9:38 AM Baolin Wang <baolin.wang7@gmail.com> wrote:
->
-> Hi Dongliang,
->
-> On Mon, Dec 6, 2021 at 7:34 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
-> >
-> > When pm_runtime_get_sync fails, it forgets to invoke pm_runtime_disable
-> > in the label err_rpm.
-> >
-> > Fix this by moving pm_runtime_disable to label err_rpm.
-> >
-> > Fixes: 9b3b8171f7f4 ("dmaengine: sprd: Add Spreadtrum DMA driver")
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
->
-> Thanks for your patch, but looking at the code in detail, I think we
-> also should decrease the rpm counter when failing to call the
-> pm_runtime_get_sync().
+On 12/6/21 10:42 PM, Christoph Hellwig wrote:
+> On Mon, Dec 06, 2021 at 09:58:46AM +0800, Lu Baolu wrote:
+>> >From the perspective of who is initiating the device to do DMA, device
+>> DMA could be divided into the following types:
+>>
+>>          DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver
+>> 			through the kernel DMA API.
+>>          DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel
+>> 			driver with its own PRIVATE domain.
+>> 	DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by
+>> 			userspace.
+>>
+>> Different DMA ownerships are exclusive for all devices in the same iommu
+>> group as an iommu group is the smallest granularity of device isolation
+>> and protection that the IOMMU subsystem can guarantee. This extends the
+>> iommu core to enforce this exclusion.
+>>
+>> Basically two new interfaces are provided:
+>>
+>>          int iommu_device_set_dma_owner(struct device *dev,
+>>                  enum iommu_dma_owner type, void *owner_cookie);
+>>          void iommu_device_release_dma_owner(struct device *dev,
+>>                  enum iommu_dma_owner type);
+>>
+>> Although above interfaces are per-device, DMA owner is tracked per group
+>> under the hood. An iommu group cannot have different dma ownership set
+>> at the same time. Violation of this assumption fails
+>> iommu_device_set_dma_owner().
+>>
+>> Kernel driver which does DMA have DMA_OWNER_DMA_API automatically set/
+>> released in the driver binding/unbinding process (see next patch).
+>>
+>> Kernel driver which doesn't do DMA could avoid setting the owner type.
+>> Device bound to such driver is considered same as a driver-less device
+>> which is compatible to all owner types.
+>>
+>> Userspace driver framework (e.g. vfio) should set
+>> DMA_OWNER_PRIVATE_DOMAIN_USER for a device before the userspace is allowed
+>> to access it, plus a owner cookie pointer to mark the user identity so a
+>> single group cannot be operated by multiple users simultaneously. Vice
+>> versa, the owner type should be released after the user access permission
+>> is withdrawn.
+>>
+>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h | 36 +++++++++++++++++
+>>   drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 129 insertions(+)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index d2f3435e7d17..24676b498f38 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -162,6 +162,23 @@ enum iommu_dev_features {
+>>   	IOMMU_DEV_FEAT_IOPF,
+>>   };
+>>   
+>> +/**
+>> + * enum iommu_dma_owner - IOMMU DMA ownership
+>> + * @DMA_OWNER_NONE: No DMA ownership.
+>> + * @DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver through
+>> + *			the kernel DMA API.
+>> + * @DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel driver
+>> + *			which provides an UNMANAGED domain.
+>> + * @DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by userspace,
+>> + *			kernel ensures that DMAs never go to kernel memory.
+>> + */
+>> +enum iommu_dma_owner {
+>> +	DMA_OWNER_NONE,
+>> +	DMA_OWNER_DMA_API,
+>> +	DMA_OWNER_PRIVATE_DOMAIN,
+>> +	DMA_OWNER_PRIVATE_DOMAIN_USER,
+>> +};
+>> +
+>>   #define IOMMU_PASID_INVALID	(-1U)
+>>   
+>>   #ifdef CONFIG_IOMMU_API
+>> @@ -681,6 +698,10 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>>   void iommu_sva_unbind_device(struct iommu_sva *handle);
+>>   u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>>   
+>> +int iommu_device_set_dma_owner(struct device *dev, enum iommu_dma_owner owner,
+>> +			       void *owner_cookie);
+>> +void iommu_device_release_dma_owner(struct device *dev, enum iommu_dma_owner owner);
+>> +
+>>   #else /* CONFIG_IOMMU_API */
+>>   
+>>   struct iommu_ops {};
+>> @@ -1081,6 +1102,21 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+>>   {
+>>   	return NULL;
+>>   }
+>> +
+>> +static inline int iommu_device_set_dma_owner(struct device *dev,
+>> +					     enum iommu_dma_owner owner,
+>> +					     void *owner_cookie)
+>> +{
+>> +	if (owner != DMA_OWNER_DMA_API)
+>> +		return -EINVAL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static inline void iommu_device_release_dma_owner(struct device *dev,
+>> +						  enum iommu_dma_owner owner)
+>> +{
+>> +}
+>>   #endif /* CONFIG_IOMMU_API */
+>>   
+>>   /**
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 8b86406b7162..1de520a07518 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -48,6 +48,9 @@ struct iommu_group {
+>>   	struct iommu_domain *default_domain;
+>>   	struct iommu_domain *domain;
+>>   	struct list_head entry;
+>> +	enum iommu_dma_owner dma_owner;
+>> +	refcount_t owner_cnt;
+> 
+> owner_cnt is only manipulated under group->mutex, not need for a
+> refcount_t here, a plain unsigned int while do it and will also
+> simplify a fair bit of code as it avoid the need for atomic add/sub
+> and test operations.
 
-Thanks for your reply. There are many different pm_runtime_* API.
-After I double check the usage of pm_runtime_get_sync, there are two
-kinds of error handling code:
+Fair enough.
 
-1. When pm_runtime_get_sync fails, call pm_runtime_put_sync and
-pm_runtime_disable [1]
+> 
+>> +static int __iommu_group_set_dma_owner(struct iommu_group *group,
+>> +				       enum iommu_dma_owner owner,
+>> +				       void *owner_cookie)
+>> +{
+> 
+> As pointed out last time, please move the group->mutex locking into
+> this helper, which makes it identical to the later added public
+> function.
 
-2. When pm_runtime_get_sync fails, only call pm_runtime_disable [2]
+I didn't mean to ignore your comment. :-) As I replied, by placing the
+lock out of the function, the helper could easily handle the error paths
+(return directly without something like "goto out_unlock").
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/dma/ti/edma.c#L2402
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/dma/ti/cppi41.c#L1098
+As the implementation of iommu_group_set_dma_owner() has been greatly
+simplified, I agree with you now, we should move the group->mutex
+locking into the helper and make it identical to the latter public
+interface.
 
-BTW, is there any standard error handling code of pm runtime API? Or
-the majority wins?
+I will work towards this.
 
->
-> --- a/drivers/dma/sprd-dma.c
-> +++ b/drivers/dma/sprd-dma.c
-> @@ -1210,7 +1210,7 @@ static int sprd_dma_probe(struct platform_device *pdev)
->         ret = dma_async_device_register(&sdev->dma_dev);
->         if (ret < 0) {
->                 dev_err(&pdev->dev, "register dma device failed:%d\n", ret);
-> -               goto err_register;
-> +               goto err_rpm;
->         }
->
->         sprd_dma_info.dma_cap = sdev->dma_dev.cap_mask;
-> @@ -1224,10 +1224,9 @@ static int sprd_dma_probe(struct platform_device *pdev)
->
->  err_of_register:
->         dma_async_device_unregister(&sdev->dma_dev);
-> -err_register:
-> +err_rpm:
->         pm_runtime_put_noidle(&pdev->dev);
->         pm_runtime_disable(&pdev->dev);
-> -err_rpm:
->         sprd_dma_disable(sdev);
->         return ret;
->  }
->
-> --
-> Baolin Wang
+> 
+>> +static void __iommu_group_release_dma_owner(struct iommu_group *group,
+>> +					    enum iommu_dma_owner owner)
+>> +{
+> 
+> Same here.
+> 
+
+Ditto.
+
+Best regards,
+baolu

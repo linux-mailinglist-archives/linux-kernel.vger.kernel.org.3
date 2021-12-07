@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A16846B18D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E4E46B18E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbhLGDmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S234347AbhLGDmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbhLGDmA (ORCPT
+        with ESMTP id S234339AbhLGDmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:42:00 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14450C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 19:38:31 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id g19so12115138pfb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 19:38:31 -0800 (PST)
+        Mon, 6 Dec 2021 22:42:05 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C4C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 19:38:35 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y8so8497559plg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 19:38:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dEomjkO6usZNSsctJD1p6Zcy57WfWwQNo29c7d2e1PI=;
-        b=lrh+UI119wmZYIiv5/pwqnzAFqRWwrQ3oBh2Ht+A9FuMG5oJFf2BQrY02nI7hL++CH
-         C0sZTPx/CO25rXbR2n6rwEKWHot4q2/tKnkY6xYVr+i6ejcgRPSjeHRg4bC3kU3m9ak8
-         +wW82rZD607s1QjmBk83XxOJQ67JDkSK/4p7zyYkAhddbCWQvnQA9luZgBUPxS0w9Thu
-         SkV3QQcFtF+b4V87z+NeHKbkMhLpOGlNUqjAgPtNV20yJ+n5eqKf/gymM/isZeUbxLRs
-         4QFzgtu3aoEQaBtTnnG2TYQS8bfJb6yFp7ot9iVZsEEjJ2r5I/0Fw4UEYuuA6WhyBmIG
-         T+vw==
+        bh=hZC9U2jKVDuGs2UUeY7QPzNlMq63gmQj4X8NafYCGHc=;
+        b=d6HVa48Wqm+KA2IPDIC1ZMFLQ0i5eNSB1YLPZ87AUHCmC1+y/o6GL69VEgD7C3gsNU
+         lDnOVtvATEYAIsBDFpfBPVc0TJvRI8IHcL6XjIuwiUuG4ghVXpdpp8dWRrU0v4l7geAF
+         LFIa90vwzZhyxNsWaZZvD8rQzUJrMP4TKQLcIaqctndnE/E29FFT5VjnPVFpIshg6weG
+         NwMHMlEyv38zOzQl/FijI9RGv98sEvR4Jh13WyruuBRXQZ9mQB9g5YaKXPoMf7v3bYQP
+         +wS/YzukRdi6KjHhvbjRxldg6uciwbibb5ojTwyhXXlaABFjXu1FwZUKR4sSJoNI1nVX
+         eRfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=dEomjkO6usZNSsctJD1p6Zcy57WfWwQNo29c7d2e1PI=;
-        b=Rjv0thFxowxPZA/2t81FBCwIuBY29JzrHfLlJUwF0hTjvuoW3aEZcBIddJnn5+Jas5
-         P5ASmxzlh3Gw8PRek8IM70zL0cZXLRomAws8DE2fky440aK1zbfBeEeKsOuOv4vRegL7
-         cdV6lElCF5Pb7NTfMKCVpcWHRQ913FOZAU8dZTnkBuHtw7pfmaedkzqLHEfBuC6LIp5A
-         b4XGDmGUmQWHLcGVyWlU5dXOADODLUt73t25UOy5fDwFVvB8h09IxZraCvjvuc2cNo9q
-         3tPhwgvkjIGZt+Vrt4BF9tGqZ8C7vbhOT1wry2NIMKhvfp+fATZihgQXwGVbTJ+OWg0L
-         0TKw==
-X-Gm-Message-State: AOAM533NebTVOcIEErL/TZNDIQj/VYwTWJQi6P7N3rDprnashSk1TRTX
-        hQQS9mUAc/CfkMmlXBXKz+c=
-X-Google-Smtp-Source: ABdhPJwZrWPAvA/NEeGakV91EOY/LMncWnJbcGrVlvuBvQ8lLHzjZXgFzpglWPpfHCy75GKOtyNKig==
-X-Received: by 2002:a63:6687:: with SMTP id a129mr21428300pgc.477.1638848310524;
-        Mon, 06 Dec 2021 19:38:30 -0800 (PST)
+        bh=hZC9U2jKVDuGs2UUeY7QPzNlMq63gmQj4X8NafYCGHc=;
+        b=Huv7wfK1W6EmJyg93VBenb3YbIHCuDD9CtJXWzjmm+kvR1mlWMCUlw6S0JIWX1aE9s
+         mbQLbR3fMv0At5f5nA6A7rGVs7xbEjADZZN+E+DzzZoUKO4Izl1YjK+ujJBrohLiP7GO
+         4nHF7ENGRovN58wytphZ8TiXkH1eVg2wSMOXBx5TZzoBl5otwYjzIXuAIa4FnJ88j2C3
+         L7AcajFdD8bp2S7ihLiykwBYUWJ7im0eqSn/Og8sueHO/qYE17UgEC6BqnJjaAGu/FTo
+         VkR5Y4fbobVFGpRrp5KHxciG/DCNOw2VLAuavoc0YeIOJs88pOsM00Yr36fV9cCApNsM
+         DqBQ==
+X-Gm-Message-State: AOAM533NQPznsFHzbcAWoD2mf6WJGe3NBpm8nI6spQxJVSQpCAGVlmBv
+        zQAG5X4AThJYGNCOTo0g65M=
+X-Google-Smtp-Source: ABdhPJzoVxIlMCOvxhNtZeJLmhVfUSWj4JcvwOUXLx6L25N67aQzjKxegOiAi3hbGkk7eDbB18hHCg==
+X-Received: by 2002:a17:90a:ec15:: with SMTP id l21mr3452892pjy.48.1638848314619;
+        Mon, 06 Dec 2021 19:38:34 -0800 (PST)
 Received: from localhost.localdomain ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id n3sm11052865pgc.76.2021.12.06.19.38.26
+        by smtp.gmail.com with ESMTPSA id n3sm11052865pgc.76.2021.12.06.19.38.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 19:38:29 -0800 (PST)
+        Mon, 06 Dec 2021 19:38:33 -0800 (PST)
 Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From:   Joel Stanley <joel@jms.id.au>
 To:     Jeremy Kerr <jk@ozlabs.org>,
@@ -56,9 +56,9 @@ To:     Jeremy Kerr <jk@ozlabs.org>,
 Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/2] fsi: scom: Fix error handling
-Date:   Tue,  7 Dec 2021 14:08:10 +1030
-Message-Id: <20211207033811.518981-2-joel@jms.id.au>
+Subject: [PATCH 2/2] fsi: scom: Remove retries in indirect scoms
+Date:   Tue,  7 Dec 2021 14:08:11 +1030
+Message-Id: <20211207033811.518981-3-joel@jms.id.au>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211207033811.518981-1-joel@jms.id.au>
 References: <20211207033811.518981-1-joel@jms.id.au>
@@ -68,60 +68,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SCOM error handling is made complex by trying to pass around two bits of
-information: the function return code, and a status parameter that
-represents the CFAM error status register.
+In commit f72ddbe1d7b7 ("fsi: scom: Remove retries") the retries were
+removed from get and put scoms. That patch missed the retires in get and
+put indirect scom.
 
-The commit f72ddbe1d7b7 ("fsi: scom: Remove retries") removed the
-"hidden" retries in the SCOM driver, in preference of allowing the
-calling code (userspace or driver) to decide how to handle a failed
-SCOM. However it introduced a bug by attempting to be smart about the
-return codes that were "errors" and which were ok to fall through to the
-status register parsing.
+For the same reason, remove them from the scom driver to allow the
+caller to decide to retry.
 
-We get the following errors:
+This removes the following special case which would have caused the
+retry code to return early:
 
- - EINVAL or ENXIO, for indirect scoms where the value is invalid
- - EINVAL, where the size or address is incorrect
- - EIO or ETIMEOUT, where FSI write failed (aspeed master)
- - EAGAIN, where the master detected a crc error (GPIO master only)
- - EBUSY, where the bus is disabled (GPIO master in external mode)
+ -       if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+ -               return 0;
 
-In all of these cases we should fail the SCOM read/write and return the
-error.
-
-Thanks to Dan Carpenter for the detailed bug report.
+I believe this case is handled.
 
 Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-Link: https://lists.ozlabs.org/pipermail/linux-fsi/2021-November/000235.html
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- drivers/fsi/fsi-scom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/fsi/fsi-scom.c | 41 +++++++++++++++--------------------------
+ 1 file changed, 15 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index da1486bb6a14..3b427f7e9027 100644
+index 3b427f7e9027..bcb756dc9866 100644
 --- a/drivers/fsi/fsi-scom.c
 +++ b/drivers/fsi/fsi-scom.c
-@@ -289,7 +289,7 @@ static int put_scom(struct scom_device *scom, uint64_t value,
- 	int rc;
+@@ -145,7 +145,7 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
+ 				   uint64_t addr, uint32_t *status)
+ {
+ 	uint64_t ind_data, ind_addr;
+-	int rc, retries, err = 0;
++	int rc, err;
  
- 	rc = raw_put_scom(scom, value, addr, &status);
--	if (rc == -ENODEV)
-+	if (rc)
+ 	if (value & ~XSCOM_DATA_IND_DATA)
+ 		return -EINVAL;
+@@ -156,19 +156,14 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
+ 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
  		return rc;
  
- 	rc = handle_fsi2pib_status(scom, status);
-@@ -308,7 +308,7 @@ static int get_scom(struct scom_device *scom, uint64_t *value,
- 	int rc;
+-	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
+-		rc = __get_scom(scom, &ind_data, addr, status);
+-		if (rc || (*status & SCOM_STATUS_ANY_ERR))
+-			return rc;
++	rc = __get_scom(scom, &ind_data, addr, status);
++	if (rc || (*status & SCOM_STATUS_ANY_ERR))
++		return rc;
  
- 	rc = raw_get_scom(scom, value, addr, &status);
--	if (rc == -ENODEV)
-+	if (rc)
+-		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+-		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+-		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+-			return 0;
++	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
++	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+ 
+-		msleep(1);
+-	}
+-	return rc;
++	return 0;
+ }
+ 
+ static int put_indirect_scom_form1(struct scom_device *scom, uint64_t value,
+@@ -188,7 +183,7 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
+ 				   uint64_t addr, uint32_t *status)
+ {
+ 	uint64_t ind_data, ind_addr;
+-	int rc, retries, err = 0;
++	int rc, err;
+ 
+ 	ind_addr = addr & XSCOM_ADDR_DIRECT_PART;
+ 	ind_data = (addr & XSCOM_ADDR_INDIRECT_PART) | XSCOM_DATA_IND_READ;
+@@ -196,21 +191,15 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
+ 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
  		return rc;
  
- 	rc = handle_fsi2pib_status(scom, status);
+-	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
+-		rc = __get_scom(scom, &ind_data, addr, status);
+-		if (rc || (*status & SCOM_STATUS_ANY_ERR))
+-			return rc;
+-
+-		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+-		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+-		*value = ind_data & XSCOM_DATA_IND_DATA;
++	rc = __get_scom(scom, &ind_data, addr, status);
++	if (rc || (*status & SCOM_STATUS_ANY_ERR))
++		return rc;
+ 
+-		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+-			return 0;
++	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
++	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
++	*value = ind_data & XSCOM_DATA_IND_DATA;
+ 
+-		msleep(1);
+-	}
+-	return rc;
++	return 0;
+ }
+ 
+ static int raw_put_scom(struct scom_device *scom, uint64_t value,
 -- 
 2.33.0
 

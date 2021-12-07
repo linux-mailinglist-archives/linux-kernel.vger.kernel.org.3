@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA4946B62B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED86346B62F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhLGIlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S233127AbhLGIlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbhLGIlM (ORCPT
+        with ESMTP id S233118AbhLGIlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:41:12 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8722FC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:37:42 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id bf8so26520421oib.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 00:37:42 -0800 (PST)
+        Tue, 7 Dec 2021 03:41:31 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93EC061748;
+        Tue,  7 Dec 2021 00:38:01 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id c4so27797195wrd.9;
+        Tue, 07 Dec 2021 00:38:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=89Xwan8ItV/N/elD2Nw4JJQYF/4fozL+k5X8mIfTuqE=;
-        b=X3U0yqla0ZettlIRR2U3uP0hx6rTJFNuuIn9WxKNOg7ICs9bP8R4BftQvB2E4SMgR/
-         1UtRpdZYAaAVh+J3b/H+slzNv/2xF++AU041vWwDYf02+kyQ+dDWdCuaE43jrsufBpFr
-         9aobdsyWLM0WBKeGtRSjzw1QsfXAQWRtMcMNZtqzTvnOJT1hooYNo1RxDSDguGuL+7g8
-         9GGewTl4W5m1pPcWNQhYwDpB77vxV5ghiP1RbkhwuBbLqjVf0umwuIpxE/L+lo3jstRE
-         91P2T9HeUav86KdwjRx8DsD2qD1K7AUsY3IQmIih5Jpbmr8tNIHEkcWR5H/oJ6MxhkZT
-         1fdg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HfN03EH6jRdkzxqbzdL+husUCScYn8YWR0GEjsaexJQ=;
+        b=SU1LiBtF7Vmw2kbRPFZMKxlaW7Wvd0fPteIARv6bABR+DP9wdANTI612x7HCDjUt+2
+         mB3J1q0LBIQleCPyscGcpdrlPFn9IoYiz4nsZmf4GYqEdiEY8Cw2hjwpI1wpqfU1KoaH
+         +v8GnCYWfUIpegDUJdZqo5UFlOlC4bSRMwgwLJEm+EmQ5+b57JVfU1JxdyEtUP9xlX0W
+         CbGwk1pCd+0vKnlhPzSEBmWzn5qOcvDun9F52OjT/BJho2ybARzPQD3ctpYZaKi6ZRlT
+         QNeSXt/pepGdGA578DLX7k5/IbagL0BicaxTbvt4KEXU2HTjJfvBZii4bQQo3280SXuA
+         xQUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=89Xwan8ItV/N/elD2Nw4JJQYF/4fozL+k5X8mIfTuqE=;
-        b=CGWRGUX5krORtuV0uB2H+KOqD+la49SQZnv71SoPsyJCSnBxmlyTXvErEStXT1Z/3n
-         dWeZC9p0D+j9dsynDWQb1K2f1kEqhKi467EJXK8FsXvDOjn5fV6a4hYX2yaX0Vchzx+i
-         8R3Lpr1eSyW2/5HPW9eOj9Xl3YR68p5BMJfvX3I6huu/wcAtF8vbdbFUQiGVajnI2BOe
-         8OK/4/nSBI6t+KKFIE22luclWANvnLc+/Xxkd1mRzf1y4HPHg+DoWgMjBP5yY2Ix0Iqq
-         9zzj2w5bHP3sDBJMKUaJP1m3TL/O1j/LAouzS3w7Ru26EID/Baod9ywFqGbM0oxn9klq
-         nSnw==
-X-Gm-Message-State: AOAM533GF11DSDoW64Ugf3X+hyZt0lkCF7RVQpzp7adFuP7emk1kL9qq
-        LhF+6x1ddCvAquRNCr6mgP2lr+fq/Ha/SMCFAp0GcA==
-X-Google-Smtp-Source: ABdhPJzpgVfQyheJozzv4cR1ZAH4dVyUrqeHxyYfwcSt1BR6FsTV5YduqrJOdrq3V+OkC6sfvA+xrXX0JJvNeTlV414=
-X-Received: by 2002:a05:6808:ec9:: with SMTP id q9mr3754831oiv.160.1638866261588;
- Tue, 07 Dec 2021 00:37:41 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HfN03EH6jRdkzxqbzdL+husUCScYn8YWR0GEjsaexJQ=;
+        b=sm2H6B01bECGEtxFt+aNA32jiZawKVt6A9ZRRnvePvg2AE55jGrOdBZk8yydgVxLjR
+         sVcYTi0V/VEzgiHccSr1yUqQZ68N1sdqJtKxBzzuGWRpPnj/y9vL5HClVvK5cEwwL/Pk
+         g5ZBZhmZbE7wTcru/fsGcsH3NDKIOTv6WqkQHBx5QK0IU4uw3U1jazyx8DlGi1U7JmYg
+         vC04M+Ke6qMlvJNR/tbcJXOKex6scJ6SBE+6M5Y9qoFejya8dAELKk3ueWnOXxFFCjHK
+         3rPcUVWdORheMNEzQRaOrhcYxo2ozg0mmnQ77rZ9UPaOME5UicapCAvPzIOj/UKYSEx8
+         gLGg==
+X-Gm-Message-State: AOAM530uS+adXKGLBPj2O5uqcQQhAu5GGNMl7f7x9LwgByXvtdVSuKdB
+        HcnGknviOI4Alyj1YNXD/Gs77z7j+GXqsg==
+X-Google-Smtp-Source: ABdhPJyCGrPxgn5HfGAfiUv6e3AxvvcHVuO3XSqp8b4h82P41TA3JfEm4nzDaa136Axf9Qwn4+IU5g==
+X-Received: by 2002:a5d:6da2:: with SMTP id u2mr48974035wrs.273.1638866279689;
+        Tue, 07 Dec 2021 00:37:59 -0800 (PST)
+Received: from orome.fritz.box ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id l7sm16234648wry.86.2021.12.07.00.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 00:37:58 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:37:56 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: memory-controllers: ti,gpmc: Drop incorrect
+ unevaluatedProperties
+Message-ID: <Ya8dZKQJWxt5IfZh@orome.fritz.box>
+References: <20211206174215.2297796-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <000000000000c3eace05d24f0189@google.com> <20211206154159.GP5112@ziepe.ca>
- <CACT4Y+bnJ5M84RjUONFYMXSOpzC5UOq2DxVNoQkq6c6nYwG9Og@mail.gmail.com> <20211206173550.GQ5112@ziepe.ca>
-In-Reply-To: <20211206173550.GQ5112@ziepe.ca>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 7 Dec 2021 09:37:30 +0100
-Message-ID: <CACT4Y+atv60UELnQJqejS_Z+uBYYERha4-o1dViwVuSLpb-Tfw@mail.gmail.com>
-Subject: Re: [syzbot] BUG: corrupted list in rdma_listen (2)
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>,
-        avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
-        leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jnZevcPpY2ZzTOjv"
+Content-Disposition: inline
+In-Reply-To: <20211206174215.2297796-1-robh@kernel.org>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 18:35, Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Mon, Dec 06, 2021 at 04:46:40PM +0100, Dmitry Vyukov wrote:
-> > On Mon, 6 Dec 2021 at 16:42, Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > >
-> > > On Sat, Dec 04, 2021 at 01:54:17AM -0800, syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    bf152b0b41dc Merge tag 'for_linus' of git://git.kernel.org..
-> > >
-> > > ??
-> > >
-> > > This commit is nearly a year old?
-> > >
-> > > $ git describe --contains bf152b0b41dc
-> > > v5.12-rc4~28
-> > >
-> > > I think this has probably been fixed since, why did a report for such
-> > > an old kernel get sent?
-> >
-> > Hi Jason,
-> >
-> > Oh, that's because the arm32 kernel was broken for that period, so
-> > syzbot tested the latest working kernel. There is a more fresh x86_64
-> > crash available on the dashboard:
-> > https://syzkaller.appspot.com/bug?extid=c94a3675a626f6333d74
->
-> ??
->
-> There is nothing there newer than a year?
->
-> Jason
 
-In the Crashes table there are 2 crashes, one is the one that was
-reported in this email and the second happened on upstream commit
-5833291ab6de (you can search by this hash on the page).
-5833291ab6de is newer than a year:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?id=5833291ab6de
+--jnZevcPpY2ZzTOjv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Dec 06, 2021 at 11:42:15AM -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the TI GPMC example
+> has a warning:
+>=20
+> Documentation/devicetree/bindings/mtd/ti,gpmc-onenand.example.dt.yaml: me=
+mory-controller@6e000000: onenand@0,0: Unevaluated properties are not allow=
+ed ('compatible', '#address-cells', '#size-cells', 'partition@0', 'partitio=
+n@100000' were unexpected)
+>=20
+> The child node definition for GPMC is not a complete binding, so specifyi=
+ng
+> 'unevaluatedProperties: false' for it is not correct and should be
+> dropped.
+>=20
+> Fixup the unnecessary 'allOf' while we're here.
+>=20
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Roger Quadros <rogerq@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/memory-controllers/ti,gpmc.yaml      | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+
+Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+--jnZevcPpY2ZzTOjv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvHWMACgkQ3SOs138+
+s6H4QA/9EgPPg3VO2cn97p6mKq29CZwbV2RejnZP3ZuuxGjNobrVjjfSiaQIqeOR
+CAjFxXtVjmaB6X0jhPSDNH0fRF2rAI3SHISGvEoks8utXlzEkTEcXhUIMz3s9Zym
+da9RS8YQJpQcJk+fzKpOKJ+eCUMAgVSOdkkdb4QyxNIsrCRB60oQXchWVsuKHxIv
+uWtPRf6Vy1gz+myQpoKC+R5i9YrulZOPLFqEKuuKIz9NZ5RHne8bWtQEy4JC3K4Z
+6m84is5MzD4r8M6c1NQaNxeOACzklND0Zwkk2iiJrlbFmdO2jmxbgzAzHnNlSDNi
+/If7hU9MKEOW3QZMuDA0aTVeitEa9TXG8/3fDUpsWNtOHuv71RxKMYJwPW87ln8a
+/Zyx2BzqHthpIrEUDDTD97dqZQsYFNB02wDJT6ZcJEoSBiQCFfDo/GuduAowpXtp
+4bsLT2YNx7G0UFbsW+H/4Dv9PBjEDyLgmTaK0jGbp+ut6AqZvUfzHhSo4OtUygZ4
+vUq6ATyuGKlBSolN+zSjqQbTFg433mZ0Bi5I8HH3xwJmQVMKjm67Tf/EiDTZ8+vy
+yw1zTbWdGvTOX0eLacz9C7UyyKddgYLzY/JUzwqlfddnK6dmKTgfOJi5y8FCf2G+
+4QH0hXpXCnlKOtkNU3NnH0i9h9cE7OhGhNOJwj1apkWgYQxjbmE=
+=czj4
+-----END PGP SIGNATURE-----
+
+--jnZevcPpY2ZzTOjv--

@@ -2,117 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A966446C0AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC9A46C0B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239638AbhLGQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:30:59 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55564
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239631AbhLGQa6 (ORCPT
+        id S239649AbhLGQbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:31:01 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:54594 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239631AbhLGQbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:30:58 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 7 Dec 2021 11:31:00 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 68F0C21763;
+        Tue,  7 Dec 2021 16:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638894449; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kIF7c/GC399ClUmX9kOCgFAXVwR1ENNV1ti6qlHDyxE=;
+        b=MmhP3fHYP/OFuMvrgV6vV32tQ5r69cLHLQSZNcKJXiHI3PuOOZySlpPbdCBdk/fwjo3pi8
+        jgtjx5jIgAl9fwArKG26wB9uLnWJIB3iESXRxLkR53gZL+NHT3Fpf87hFG/XMfmrzJ0Ged
+        AgL4ZRpRWaGRkCfSS+mWi64FVoAboUA=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id ECD6B3F1F3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 16:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638894444;
-        bh=xM0l6E3jMAiAL33QZvvnbCIHqgFt7ZY4OmXToVTpadE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ObgLC9LZJ/iwPo3Tte5xYQO/4ThNZVpvrWfOX4ItFgrLvj1N6SW3AdU9F4aTbGdZM
-         1cToYTp54XUISo2F/R36hjqnBF3Y4JWlxuU1WdIRcW5muoRp+0UX/f52mScGCsLZeI
-         MuizMMqbdR4axJLa6vEr0mEZobsQv8Eq8W2TTQSr++Vw9eAHlCprLd508FY/lGp01s
-         U+05e8C93KlIDsBUwR7njOpHB0nGmvltC6LC68gQyfx5A8YV7uLP6aT9uNV0m+ovKP
-         Pbmmq+4z0q550splcmId/8l3Nkadni37f+XewloScA2i6Fr0SCOJt5JEHoxCy96LT7
-         WYC7DTcJTsOQQ==
-Received: by mail-lf1-f70.google.com with SMTP id j9-20020a05651231c900b004037efe9fddso5575686lfe.18
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:27:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xM0l6E3jMAiAL33QZvvnbCIHqgFt7ZY4OmXToVTpadE=;
-        b=gaL36bOZzORI7/2fzL38Gw8LqBBYxwSzcAcClLCtHbybuETYiql1Vxbtqw/g6E9miH
-         Oa5x5jFrGwcZpzuKPsFxqKZvAoDW0S/59mRXYV149gGqINp/FZfOhVccvUmSC3fkGOWi
-         frVAgx1IRAgyIjGzs1rsXycLy7/UhoTULUsC/T0FjWqoPZf63akjkIid0lYdzhapcH1A
-         KllgJH9BSlsii8zNFrLoLpu8qqeR8vq8nCfe0bmLHln5ZPONGvuZdLRZjjvR/TlhDt5g
-         tf8KVe/KMSwx8FS/Pmw1XgTiTguaypJ7tresX5ouwZJYimvQWiwwjfTkOOP6opvTKqfu
-         WK5w==
-X-Gm-Message-State: AOAM532tpSik1WMrD60jikf0J65kyRRzgplZK8EscID3RsULXPK+5PLC
-        RszJVIR9JEqv6zwtn/HEvg4oBNykW6z5zjmD8pDqYqKR57yX45SP5c6BJG0hDwc0JUt9Bggy+G7
-        07mrJhlcMxT39qSe+W2VTB4Z9upAZpV+1amgqANJ8ow==
-X-Received: by 2002:a05:6512:3251:: with SMTP id c17mr40905497lfr.440.1638894443827;
-        Tue, 07 Dec 2021 08:27:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyPlvTlKBjaqxG6K7rwhBvJnMmqJFIA3cH7OtYj4hNRFmF9NhNCnZdVDoq/XHpFZc+BQBwwpQ==
-X-Received: by 2002:a05:6512:3251:: with SMTP id c17mr40905480lfr.440.1638894443619;
-        Tue, 07 Dec 2021 08:27:23 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id w6sm4208lfr.11.2021.12.07.08.27.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 08:27:23 -0800 (PST)
-Message-ID: <9a412f16-9375-32ae-cbda-ae9f38332887@canonical.com>
-Date:   Tue, 7 Dec 2021 17:27:22 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 333D9A3B88;
+        Tue,  7 Dec 2021 16:27:29 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 17:27:25 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
+References: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] dt-bindings: memory-controllers: ti,gpmc: Drop incorrect
- unevaluatedProperties
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20211206174215.2297796-1-robh@kernel.org>
- <9400d57e-7db7-0f58-b391-417e103576cd@canonical.com>
- <CAL_JsqKBE5p2hA0F4DqrzA1ERA484kzDsZP2u1nq79yTG2nM+A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAL_JsqKBE5p2hA0F4DqrzA1ERA484kzDsZP2u1nq79yTG2nM+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2021 16:54, Rob Herring wrote:
-> On Tue, Dec 7, 2021 at 3:12 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> On 06/12/2021 18:42, Rob Herring wrote:
->>> With 'unevaluatedProperties' support implemented, the TI GPMC example
->>> has a warning:
->>>
->>> Documentation/devicetree/bindings/mtd/ti,gpmc-onenand.example.dt.yaml: memory-controller@6e000000: onenand@0,0: Unevaluated properties are not allowed ('compatible', '#address-cells', '#size-cells', 'partition@0', 'partition@100000' were unexpected)
->>>
->>> The child node definition for GPMC is not a complete binding, so specifying
->>> 'unevaluatedProperties: false' for it is not correct and should be
->>> dropped.
->>>
->>> Fixup the unnecessary 'allOf' while we're here.
->>>
->>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>> Cc: Tony Lindgren <tony@atomide.com>
->>> Cc: Roger Quadros <rogerq@kernel.org>
->>> Signed-off-by: Rob Herring <robh@kernel.org>
->>> ---
->>>  .../devicetree/bindings/memory-controllers/ti,gpmc.yaml      | 5 +----
->>>  1 file changed, 1 insertion(+), 4 deletions(-)
->>>
->>
->> Looks good. Rob, do you want to take it via your tree or I should handle it?
+On Tue 07-12-21 17:09:50, David Hildenbrand wrote:
+> On 07.12.21 16:56, Michal Hocko wrote:
+> > On Tue 07-12-21 16:34:30, David Hildenbrand wrote:
+> >> On 07.12.21 16:29, Michal Hocko wrote:
+> >>> On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
+> >>>> On 07.12.21 14:23, Michal Hocko wrote:
+> >>>>> On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
+> >>>>> [...]
+> >>>>>> But maybe I am missing something important regarding online vs. offline
+> >>>>>> nodes that your patch changes?
+> >>>>>
+> >>>>> I am relying on alloc_node_data setting the node online. But if we are
+> >>>>> to change the call to arch_alloc_node_data then the patch needs to be
+> >>>>> more involved. Here is what I have right now. If this happens to be the
+> >>>>> right way then there is some additional work to sync up with the hotplug
+> >>>>> code.
+> >>>>>
+> >>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>>>> index c5952749ad40..a296e934ad2f 100644
+> >>>>> --- a/mm/page_alloc.c
+> >>>>> +++ b/mm/page_alloc.c
+> >>>>> @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> >>>>>  	/* Initialise every node */
+> >>>>>  	mminit_verify_pageflags_layout();
+> >>>>>  	setup_nr_node_ids();
+> >>>>> -	for_each_online_node(nid) {
+> >>>>> -		pg_data_t *pgdat = NODE_DATA(nid);
+> >>>>> +	for_each_node(nid) {
+> >>>>> +		pg_data_t *pgdat;
+> >>>>> +
+> >>>>> +		if (!node_online(nid)) {
+> >>>>> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
+> >>>>> +			pgdat = arch_alloc_nodedata(nid);
+> >>>>> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
+> >>>>> +			arch_refresh_nodedata(nid, pgdat);
+> >>>>> +			node_set_online(nid);
+> >>>>
+> >>>> Setting all possible nodes online might result in quite some QE noice,
+> >>>> because all these nodes will then be visible in the sysfs and
+> >>>> try_offline_nodes() is essentially for the trash.
+> >>>
+> >>> I am not sure I follow. I believe sysfs will not get populate because I
+> >>> do not call register_one_node.
+> >>
+> >> arch/x86/kernel/topology.c:topology_init()
+> >>
+> >> for_each_online_node(i)
+> >> 	register_one_node(i);
+> > 
+> > Right you are.
+> >  
+> >>> You are right that try_offline_nodes will be reduce which is good imho.
+> >>> More changes will be possible (hopefully to drop some ugly code) on top
+> >>> of this change (or any other that achieves that there are no NULL pgdat
+> >>> for possible nodes).
+> >>>
+> >>
+> >> No to exposing actually offline nodes to user space via sysfs.
+> > 
+> > Why is that a problem with the sysfs for non-populated nodes?
+> > 
 > 
-> I'll take it given there's also the somewhat related "dt-bindings:
-> mtd: ti,gpmc-nand: Add missing 'rb-gpios'"
+> https://lore.kernel.org/linuxppc-dev/20200428093836.27190-1-srikar@linux.vnet.ibm.com/t/
 
-Sure, then:
+Thanks. It is good to be reminded that we are in cicling around this
+problem for quite some time without really forward much.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Contains some points -- certainly nothing unfixable but it clearly shows
+> that users expect only nodes with actual memory and cpus to be online --
+> that's why we export the possible+online state to user space. My point
+> is to be careful with such drastic changes and do one step at a time.
+>
+> I think preallocation of the pgdat is a reasonable thing to have without
+> changing user-space visible semantics or even in-kernel semantics.
 
+So your proposal is to drop set_node_online from the patch and add it as
+a separate one which handles 
+	- sysfs part (i.e. do not register a node which doesn't span a
+	  physical address space)
+	- hotplug side of (drop the pgd allocation, register node lazily
+	  when a first memblocks are registered)
 
-Best regards,
-Krzysztof
+Makes sense?
+-- 
+Michal Hocko
+SUSE Labs

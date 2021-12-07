@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5816E46B507
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92A646B50E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhLGIFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:05:25 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:35717 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbhLGIFY (ORCPT
+        id S232078AbhLGIHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:07:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232071AbhLGIHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:05:24 -0500
-Received: by mail-ua1-f51.google.com with SMTP id l24so24938571uak.2;
-        Tue, 07 Dec 2021 00:01:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KcN9ex+/pkEUzYHt8cZEAymXHVVW/XeHcDIVVJmtosQ=;
-        b=3ou7026aCzMbupKxsaxruMUPEjUE2p0n5TvMtRmTJ+eU6ZB2N+bxTZEHLWypwyNnXb
-         PSlW3LSMT8WIxBC6ZyhbfgeqQIFsjU0YH+PPOc21NsXUshZQCAby1C3+EXQ88iqDeMi0
-         idbM6D7geAWDWATzVYcF9K7GpWsv5TkWVBgkfNjXxhwRkWBe1Uwy8EhpcZwk7Maq7r6n
-         nTUN3UVrVcJkH0UIaachMAgxyx+e1gWCYR9iQYYKyqYeN4vcQKY9Ll3iFzgrx+3HZNNI
-         RT931vB+b/Aoyw9QUpYiumxSoO2Oz6hD9r83MpJcOaz6rQ1wxGr52ChkpKTNO7pCk5pX
-         IlCw==
-X-Gm-Message-State: AOAM533IHl0T2AWLOERgTEKoluWWGr2g54syf9n/c6nPNiKUSWxKiW9R
-        YRLx8ls8Sq2PdZtmJImQOMgKyLlqZx9+sA==
-X-Google-Smtp-Source: ABdhPJydBKYqevBdzHMgW/m6kC9Fo9xXsIpa+uAeautL6qV1lVBcBEiALuPk9xTzp30sDKyFGuINdg==
-X-Received: by 2002:a67:6187:: with SMTP id v129mr42218061vsb.68.1638864114049;
-        Tue, 07 Dec 2021 00:01:54 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id f132sm5790722vkf.18.2021.12.07.00.01.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 00:01:53 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id t13so24817604uad.9;
-        Tue, 07 Dec 2021 00:01:53 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr43341091vsj.77.1638864113376;
- Tue, 07 Dec 2021 00:01:53 -0800 (PST)
+        Tue, 7 Dec 2021 03:07:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAF3C061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:04:05 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muVRw-0007zm-Lm; Tue, 07 Dec 2021 09:03:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muVRh-003BVK-7H; Tue, 07 Dec 2021 09:03:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muVRg-0004V5-7f; Tue, 07 Dec 2021 09:03:28 +0100
+Date:   Tue, 7 Dec 2021 09:03:25 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Tony Lindgren <tony@atomide.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-power@fi.rohmeurope.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v1 1/3] gpio: Get rid of duplicate of_node assignment in
+ the drivers
+Message-ID: <20211207080325.6hfokrrcs45iucx6@pengutronix.de>
+References: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20211203234155.2319803-1-gsomlo@gmail.com> <20211203234155.2319803-4-gsomlo@gmail.com>
- <CACPK8XfO_8=vgedmZddz1YmWbyxiM1-azF_j88wEBHzXnP6y_g@mail.gmail.com>
- <CAMuHMdXxO-CP0Ao8q8r4Gw5e5FzCznhSxt2JWz13zbnt2tnzVQ@mail.gmail.com> <CACPK8XdF6WQDj9X1Nr0Hf6EzPkQtXBo75dj_WPsFq6nzfWPUrA@mail.gmail.com>
-In-Reply-To: <CACPK8XdF6WQDj9X1Nr0Hf6EzPkQtXBo75dj_WPsFq6nzfWPUrA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Dec 2021 09:01:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXvHYB++NDCxgBkyhvxu57pGYVGUN4rcr=g+pXoUK+ZQw@mail.gmail.com>
-Message-ID: <CAMuHMdXvHYB++NDCxgBkyhvxu57pGYVGUN4rcr=g+pXoUK+ZQw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Stafford Horne <shorne@gmail.com>,
-        david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xelnb7q2ptte2x6e"
+Content-Disposition: inline
+In-Reply-To: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
 
-On Tue, Dec 7, 2021 at 12:51 AM Joel Stanley <joel@jms.id.au> wrote:
-> On Mon, 6 Dec 2021 at 12:16, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > +       depends on OF && LITEX
-> > >
-> > > I don't like having litex drivers depend on the LITEX kconfig. The
-> > > symbol is not user visible, and to enable it we need to build in the
-> > > litex controller driver, which platforms may or may not have.
-> > >
-> > > The microwatt platform is an example of a SoC that embeds some LITEX
-> > > IP, but may or may not be a litex SoC.
-> >
-> > I do like the LITEX dependency, as it allows us to gate off a bunch of
-> > related drivers, and avoid annoying users with questions about them,
-> > using a single symbol.
->
-> I appreciate your concern.
->
-> We could do this:
->
->         depends on PPC_MICROWATT || LITEX || COMPILE_TEST
->
-> It's unfortunate that kconfig doesn't let us describe the difference
-> between "this driver requires this symbol" as it won't build and "this
-> driver is only useful when this symbol is enabled". Traditionally I
-> write kconfig to represent only the former, whereas you prefer both.
+--xelnb7q2ptte2x6e
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The former is expressed using:
+Hello Andy,
 
-    depends on FOO
+you Cc: linux-pwm and the pwm maintainers in this series. I don't spot
+anything pwm specific here (apart from touching gpio-mvebu which also
+contains a PWM driver). Do I miss something?
 
-The latter using:
+Best regards
+Uwe
 
-    depends on BAR || COMPILE_TEST
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Traditionally we only had the former. But with the introduction of
-more and more dummy symbols for the !CONFIG_BAR case, the amount of
-questions asked during configuration has become overwhelming.  At the
-current pace, we'll reach 20K config symbols by v5.24 or so...
+--xelnb7q2ptte2x6e
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGvFUoACgkQwfwUeK3K
+7Ak2FAf/a3x5Co4mVUxKnXqmGwHXz7g+sVyT+Syp0AbNKmLSwV/jFmFT6Zy9u/ee
+Tv34gVXuYPBNDch6VBo47qrv8omMZtiQvE6l0bU4pmjYU9kriMmE4l65BQqexZaM
+bM0EDY+/6GNToLwCq7AXD6l/waEl7lwtO/KcLZHowCSWr7opyg23EoTgDCyxLUwv
+ceSVjNXqAAd4NzyHf63suy2ID66QzItCoRNbOrOBtIi1Vo5RM0SgZbN8ODyXKIWu
+sGCnBiaseRnCv31VkHPE/hsgFXIEwQbtMwohgWfD7YlrkmpOh3Bi29Em95cRuVIo
+tZQmPFwDQcMgt/4UuHdm2lxVcYjgyQ==
+=gmyE
+-----END PGP SIGNATURE-----
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--xelnb7q2ptte2x6e--

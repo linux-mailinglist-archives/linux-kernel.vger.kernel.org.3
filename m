@@ -2,64 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7046B78F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE6046B79A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbhLGJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:40:30 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4221 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbhLGJk3 (ORCPT
+        id S234054AbhLGJm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229584AbhLGJm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:40:29 -0500
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J7Zsz1Vjvz67snD;
-        Tue,  7 Dec 2021 17:35:51 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 10:36:57 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
- 2021 09:36:56 +0000
-Subject: Re: [PATCH 2/3] perf vendor events: Fix whitespace
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>
-CC:     Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211203123525.31127-1-andrew.kilroy@arm.com>
- <20211203123525.31127-2-andrew.kilroy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <aabc45c7-cea4-2e8b-bddc-7ea1bd18910f@huawei.com>
-Date:   Tue, 7 Dec 2021 09:36:40 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Tue, 7 Dec 2021 04:42:56 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B9C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 01:39:26 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id r25so54313954edq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 01:39:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WGo/QVbK/TSIpI3qUR7eBM4qHBvmukUGZVBWwo9E1no=;
+        b=R6OuklbcmZyHv1geiPJ4yZ0zlMj2O91GGCed7xLBbCHxBte7tedpAG7O2XSVJ8t/P7
+         uMNN8z6pM9ZgRw3/1e3G6m8alXke++4WQasihIxgnCUmDpR1j9fO2hCHUE6B7iwqReqV
+         ZSmqVW+ufEeqqREEk3ZheFBGM6m/HZd8/LTIJAr8mCU8SU0s5WZpGieSfI/luikjyH5a
+         NHCs6aSi01zGinuaZY72i7u+A70VuFoq5SL0NarTdn/ZRfmGfHg6Od2lvyQdywksogS/
+         j6B/6in/NYMxcrsCkSB5CmzyvKUIRGHHKfJ/wiKbbLQ43wYItANb1Qz9csWGkoMfgcjW
+         Ee9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WGo/QVbK/TSIpI3qUR7eBM4qHBvmukUGZVBWwo9E1no=;
+        b=p52LIgTeBprBVGBF9IXY9CeY3TOcf0nkIlxpIoTiSWLLWVVg5thkIr2ofY6XqyI3rz
+         DaeuAavjcbYTvHJXuWUQgbXvEulvXVrZuSizjKIjE+Yht7uHpgRVeUOozJmHIeN1NgQQ
+         pFNS3bNde/+k++LAC/euXxQwj7KRKwOy/vtOX7nLHXmD7lsuQus+gBVvwijlu6n2SBnv
+         J/huYoihZhHlkyHsTSD2B/d8cMB8w+XMQ9UCfvmyvat9blSicOCuKduYjOBz30IDvKZb
+         2TH4IKo+our7R1IOZ1nmOPQXMyz7Vp1mYdY4nWbpFyX4FQbkaX257L05899l4KH4jAUI
+         KZFA==
+X-Gm-Message-State: AOAM532lYI3KMaqmiHgQbq/VNgez5V/UbM51gY3cddaZG4ArYI/H3zD+
+        TapvXZ34jrcNVfC1QPRPwZ8tDaeqDSBNHPUu7SDd2g==
+X-Google-Smtp-Source: ABdhPJzxk/AiNNNQ0ba0Rd+Jl0oay16fwIJuoNE7YFINmW3Qig3bDeQeYreGkjGFxV1IwVTVgWrCd0iSs97jrr5qX/A=
+X-Received: by 2002:a17:906:489b:: with SMTP id v27mr50862790ejq.567.1638869965113;
+ Tue, 07 Dec 2021 01:39:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211203123525.31127-2-andrew.kilroy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Dec 2021 15:09:13 +0530
+Message-ID: <CA+G9fYuAAdeYThitRaYTnQtj9v3Geiw6ZdWHXeAX2JpLZirCaw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/48] 4.19.220-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/2021 12:35, Andrew Kilroy wrote:
-> Correct indentation to 4 spaces, same as the other json files.
-> 
-> Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
+On Mon, 6 Dec 2021 at 20:40, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.220 release.
+> There are 48 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.220-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-As an aside,  maybe we should improve the parser to find these inconsistencies in formatting.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.220-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 36bf297d873717a14e37c015e0e4947bd5a0b6fe
+* git describe: v4.19.219-49-g36bf297d8737
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.219-49-g36bf297d8737
+
+## No Test Regressions (compared to v4.19.219-37-ge0e7c50a944b)
+
+## No Test Fixes (compared to v4.19.219-37-ge0e7c50a944b)
+
+## Test result summary
+total: 72689, pass: 58828, fail: 638, skip: 11613, xfail: 1610
+
+## Build Summary
+* arm: 130 total, 130 passed, 0 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 22 total, 22 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E3546C3F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED0546C3F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240288AbhLGTwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:52:09 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39228 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbhLGTwH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238038AbhLGTwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 7 Dec 2021 14:52:07 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B708E21B3F;
-        Tue,  7 Dec 2021 19:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1638906515;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fX7nt/1x5vbLAmgZX62l/SnhTi54fxc8Qfac2yM2Jlw=;
-        b=cea5O8wvB8iy2WUqvfa9wSAqCTR/P0RSaIJ9hh3TxbteYwbBkrjEh0tuyWnTImHoyWD44V
-        Tce4teskQcQdK9L19VHlm+CpE6gxPAYUXTQPUFHNp92Gz2WkzN+M7XxvzCtm7gYYTVXQMX
-        pTjoppMs0hyqu68fJwPmaULczpC5Xkw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1638906515;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fX7nt/1x5vbLAmgZX62l/SnhTi54fxc8Qfac2yM2Jlw=;
-        b=NIgIqSkZcZnQKhXXtsR0QW767JGesxE6zg0o6Ig3B51kJTjLKPy9jUvE7zqCqng3DCutBn
-        qEU+5lFNmvd7qVBA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 8806EA3B81;
-        Tue,  7 Dec 2021 19:48:35 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id B8B1DDA799; Tue,  7 Dec 2021 20:48:20 +0100 (CET)
-Date:   Tue, 7 Dec 2021 20:48:20 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] btrfs: zoned: convert comment to kernel-doc format
-Message-ID: <20211207194820.GH28560@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
-References: <20211203064820.27033-1-rdunlap@infradead.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231562AbhLGTwG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:52:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84906C061574;
+        Tue,  7 Dec 2021 11:48:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D6CF8CE1DEF;
+        Tue,  7 Dec 2021 19:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9939C341C1;
+        Tue,  7 Dec 2021 19:48:29 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 14:48:28 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yabin Cui <yabinc@google.com>
+Subject: [PATCH] tracefs: Have new files inherit the ownership of their
+ parent
+Message-ID: <20211207144828.3d356e26@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203064820.27033-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 10:48:20PM -0800, Randy Dunlap wrote:
-> Complete kernel-doc notation for btrfs_zone_activate() to prevent
-> kernel-doc warnings:
-> 
-> zoned.c:1784: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Activate block group and underlying device zones
-> zoned.c:1784: warning: missing initial short description on line:
->  * Activate block group and underlying device zones
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-We've been using a slightly different format than the strict kernel-doc,
-in this cas the function name is not repeated (because it's right under
-the comment), what we want is the argument list checks (order and
-completeness).
+If the tracefs system is set to a specific owner and group, then the files
+and directories that are created under them should inherit the owner and
+group of the parent.
+
+Cc: stable@vger.kernel.org
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ fs/tracefs/inode.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index f20f575cdaef..6b16d89cf187 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -488,6 +488,8 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = dentry->d_parent->d_inode->i_uid;
++	inode->i_gid = dentry->d_parent->d_inode->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -510,6 +512,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = dentry->d_parent->d_inode->i_uid;
++	inode->i_gid = dentry->d_parent->d_inode->i_gid;
+ 
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+-- 
+2.31.1
+

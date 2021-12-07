@@ -2,144 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B4246BDC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EEF46BDD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbhLGOhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S237961AbhLGOjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbhLGOhR (ORCPT
+        with ESMTP id S233459AbhLGOjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:37:17 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B256C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:33:47 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so18216061oto.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 06:33:47 -0800 (PST)
+        Tue, 7 Dec 2021 09:39:36 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C20C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:36:05 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id r25so57600555edq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 06:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0m2GF26E40xs6mb1JEeofYn5H0g7vqPjjF1kUlGlw1g=;
-        b=qTMDWbLjlnnwBWIxkq7P3nMajKwCc4EprCObUf3oK+rgEK99LWCDchKSgEBzp3taXi
-         L9OdOkdcVYPJPOSSFjixzUJDR6Z6f5/5yiQI7AU50vOq7eDrvkkfGF09XoA7TRFDxZt7
-         6B7Mo1KflEauK7z7QPu2luy3bqlkZ0fFTTAicwhdgvGQ48fbrCGHyYKe2Hu720QR/85m
-         PLsr02ynd/it9TtM/XFds17CdDdIPalHH/xZMFuX8cxcGFOErICua4RTr+oOrX5PwsOv
-         D9vm6YT3Ufpfb2ZMp+P1Esa5Oar8v/aSvtil36hD1bfWnrX44y61rvvmgVjKOwknwH5N
-         tdtA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XdR083vlxGfR2DxbW2vfHYekMcObry/69dcNA44yDFc=;
+        b=ifG0H7bOPdop+xatYzESVgBWbJSaxC+ihYWZ5WW8yNP9CD80m7Bb7zqSTWXsDYsrs0
+         2y48z2XCRCnGrVC920UKvQVHD4y4xBfvLCVvoTpyLfyboL5bt+HqOnsgca12nu2q65vm
+         vA1hyRJULPMAu+T64vmzaesQQx4ttimdJdil5ONPrizuInKT9kwhw+5Ih2OmmlZavSue
+         t8jWkAcCNwTWHZCvqlQwrmyWcroAD+icbh5lZohjKX0BP6Aqb2pzUkL24n98ON1VC8vk
+         ddOu7fuvfpcdYZV0a/lk2N0bVObpkHIfY0UhmVTMUbxT8ZtGj4aF9ZiiuMgTsJBeKlcF
+         OBiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0m2GF26E40xs6mb1JEeofYn5H0g7vqPjjF1kUlGlw1g=;
-        b=kgEiJ2JXtiuO50oMrX1fJZUSC1xNv5FaygqS4DCCvkQvbUFSM1WXfNQ+r4k/McC2z6
-         uBw5x2wWrTyYFW9yxwdoB4FZfWWDUhHYFRDvNCSTkaez3zG+VatuGygwwvlkjS+1XBO8
-         WTYZgcJIa6McsGMXdaX8JQY4tBHtuwgh/Nxan0WK+70V7mgEymKgJKGrJNZUecmOgD6E
-         fUDojiHuLVn35xYpKJZhs91AHhWgUl0oUkTN1XeYAn+DXVw1DU9bdzqk417EZI1Qrz/p
-         IXWPUPZ3fV9jzrkDQkjHOdM4VbkZXyXC9tRoJLwbi5czCI996tL13L85qDZmQuPqyUyA
-         e69A==
-X-Gm-Message-State: AOAM5314d4K3S7VdyDjNWQMqo5OuSOXeqOGiKZYjyTEnqpzm38AYb/PT
-        m8CyMMIlUYiZyzCorh5LuY9jaJZPGtMuuA==
-X-Google-Smtp-Source: ABdhPJy9LoOphSM1nEVxuWvLYLMmN9Elgk4jmv3+PE9nQA06m25+qZiTiG26zXQGeLFhHPulg3eG2Q==
-X-Received: by 2002:a9d:62c5:: with SMTP id z5mr36478679otk.166.1638887626915;
-        Tue, 07 Dec 2021 06:33:46 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bh12sm3469459oib.25.2021.12.07.06.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 06:33:46 -0800 (PST)
-Date:   Tue, 7 Dec 2021 06:35:11 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/15] arm64: dts: qcom: Add base SM8450 DTSI
-Message-ID: <Ya9xHzykSknMdqcd@ripper>
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-2-vkoul@kernel.org>
- <3fe36e35-8c4b-f772-be43-8e8c49e97f63@somainline.org>
- <Ya2iJD8kfFfj/MpY@matsya>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XdR083vlxGfR2DxbW2vfHYekMcObry/69dcNA44yDFc=;
+        b=cNVCwYmuU8tJMOtJHadm+PfhADyuv9F7FqL/M1RH/g0Xu2carrnTKGNTCkbhOpc7tL
+         snENmqypYhNe5lQ8MKvYLX9JIPHhDP8UTTXOf1Yc6avDZ8dtQduXZq1RvSGbZyTGdGrj
+         rdo0ry6OpqrvbSExdSV5567OX0AATCjofgncXnKjx5PNIR5pqqe0D5SergB/iPCvujQG
+         P9Gpz02zvlnuLaUKTGlcSgdqeehmQZ3GRzui+OwjPsC/6Yc5Q1BSWzIIA55Pr6Ek/x+y
+         +7DeO1nsyo50SIlC1Tfs2w3TpAh0zLYrHN6cWPHYaBqcm0rAFbfcMv0fYhWFdVFR3o1E
+         Tpjw==
+X-Gm-Message-State: AOAM533k5A8H0/LFrv+a/gSoA1nWod5st4GO2FgBzP1aPrnnpcMEHNDl
+        FU1iNuyz9hJcYhbpWLabebxF7b4W2ysGe/yROk+DZQ==
+X-Google-Smtp-Source: ABdhPJxRuiYyyiUlORnM6uZ4axlURoSqWuiWmAXv3sEAclXVDH1Uagv6o1M6XSXrKQzVzuadIZ9i+nOrOCKoyZU4Nas=
+X-Received: by 2002:a17:906:4791:: with SMTP id cw17mr54309258ejc.493.1638887762262;
+ Tue, 07 Dec 2021 06:36:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya2iJD8kfFfj/MpY@matsya>
+References: <20211207081114.760201765@linuxfoundation.org>
+In-Reply-To: <20211207081114.760201765@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Dec 2021 20:05:50 +0530
+Message-ID: <CA+G9fYv5GG9aY=hxjNzp-FPEnnV-YDo6rz+ErQsit_QKV4Fovg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/125] 5.10.84-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 05 Dec 21:39 PST 2021, Vinod Koul wrote:
+On Tue, 7 Dec 2021 at 13:48, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 125 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 09 Dec 2021 08:09:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.84-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> On 01-12-21, 16:03, Konrad Dybcio wrote:
-> > 
-> > On 01.12.2021 08:29, Vinod Koul wrote:
-> > > This add based DTSI for SM8450 SoC and includes base description of
-> > > CPUs, GCC, RPMHCC, UART, interuupt-controller which helps to boot to
-> > > shell with console on boards with this SoC
-> > >
-> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/sm8450.dtsi | 476 +++++++++++++++++++++++++++
-> > >  1 file changed, 476 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > > new file mode 100644
-> > > index 000000000000..d838283bde4b
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > > @@ -0,0 +1,476 @@
-> > > +// SPDX-License-Identifier: BSD-3-Clause
-> > > +/*
-> > > + * Copyright (c) 2021, Linaro Limited
-> > > + */
-> > > +
-> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
-> > > +#include <dt-bindings/clock/qcom,rpmh.h>
-> > > +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> > > +
-> > > +/ {
-> > > +	interrupt-parent = <&intc>;
-> > > +
-> > > +	#address-cells = <2>;
-> > > +	#size-cells = <2>;
-> > > +
-> > > +	chosen { };
-> > > +
-> > > +	clocks {
-> > > +		xo_board: xo-board {
-> > > +			compatible = "fixed-clock";
-> > > +			#clock-cells = <0>;
-> > > +			clock-frequency = <76800000>;
-> > > +			clock-output-names = "xo_board";
-> > > +		};
-> > > +
-> > > +		sleep_clk: sleep-clk {
-> > > +			compatible = "fixed-clock";
-> > > +			clock-frequency = <32000>;
-> > > +			#clock-cells = <0>;
-> > > +		};
-> > 
-> > No clock-output-names for this one?
-> 
-> This should have one, will fix and update in v2
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-No need, the clock's name is not significant for anything beyond
-debugging. So if you're going to change something let it be dropping the
-clock-output-names from &xo_board.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
-Bjorn
+## Build
+* kernel: 5.10.84-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 05722611cd6fddc7f5ed4610f0ac2cca13745edc
+* git describe: v5.10.83-126-g05722611cd6f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.83-126-g05722611cd6f
 
-> > 
-> > 
-> > Other than that:
-> > 
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> 
-> Thanks for the review!
-> 
-> -- 
-> ~Vinod
+## No Test Regressions (compared to v5.10.83-131-g7dfedcfa0e17)
+
+## No Test Fixes (compared to v5.10.83-131-g7dfedcfa0e17)
+
+## Test result summary
+total: 95714, pass: 82034, fail: 550, skip: 12354, xfail: 776
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 260 total, 260 passed, 0 failed
+* arm64: 42 total, 42 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 39 passed, 1 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 35 passed, 2 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 58 total, 48 passed, 10 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 22 total, 22 passed, 0 failed
+* sh: 22 total, 20 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 41 passed, 1 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

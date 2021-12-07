@@ -2,264 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A54046B36B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4502246B370
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhLGHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:13:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhLGHNR (ORCPT
+        id S229550AbhLGHOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:14:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54662 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhLGHOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:13:17 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF7C061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 23:09:48 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id l5so392851ilv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 23:09:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eIorkq2sMVezkBsAIP3Avkx7qHILJR+a50Qp09DisFs=;
-        b=VaMV0AZ7KSPcLIaVO/aIBtRMyxWeEeEDUX/8XFmvg/Z2qklsP1MG62W9t81aJraKO4
-         ogfttH45Doi8QGT7h3HZpfEYm1LaUe8frT+1eMUszP3ER2pIe0UWbjn/+C4xui652okt
-         fEW7xKo8ZHLqromyURpmg/mV23v3lkZaug29Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eIorkq2sMVezkBsAIP3Avkx7qHILJR+a50Qp09DisFs=;
-        b=qCKh+Zh3TB2YGThzMVsp/a1Z4JZe95di00VJyp2ZCCd2gHnZd8rTdfl+HyOcE46Gvd
-         ths3s0P81nF0uU4NgX9UEKrGACHZFIST1tPaYuQlxfgghc0ZPr+AH8JOr+FdEHukBeVs
-         frwG/B+tcJmIAg2zfUgwEQpC/HwuiXsy0VW4RB5n6FEYQThHSNsSQzxvnxm0uJcDW/zM
-         UazwXKcIPH8+nkGxWlHGO4ZNl7ZdPzVbKtVvgroEM2ulKoWS8sF08BpmafqrvwtWvwsv
-         XniLHv6utYJVXIg/zl+dgrplVuOtFOwESC6jkBhqMieNDQytwwkn5ScWS9XUcglNCuqp
-         W3/w==
-X-Gm-Message-State: AOAM531/EPXsSsCkFUdM0klltGnQ6VF+PSMgYpMv4xNKl7rB0+wzROZs
-        X/Fm0l5OlpxPqDf8SEnQ3MO4tKiQBSL917xVa7Hycg==
-X-Google-Smtp-Source: ABdhPJxEzAHrvrIokXQzo56Rcma8vBU4cL0XbJdB2kh81qCfExjthTUZsEjcGXCp+ePqH+Za/j5co6S5cTpi8pusJeM=
-X-Received: by 2002:a05:6e02:4c2:: with SMTP id f2mr37328322ils.105.1638860987351;
- Mon, 06 Dec 2021 23:09:47 -0800 (PST)
+        Tue, 7 Dec 2021 02:14:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05E3DB812A7;
+        Tue,  7 Dec 2021 07:10:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3F2C341C3;
+        Tue,  7 Dec 2021 07:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638861035;
+        bh=kCGsGGeR5QnFYKn4gsjzd/63TI+GAON4K8jZsOn8PYA=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Z9kuwQr36CwBs7ACFmkWeOi519ZSOxjCOb4ctlgwMoKfSf0H4K0+hr8mkzIYp4EsS
+         Ez5uub6Id9yzt/hLpfcay61GeWftOSebecU4F1l4r2qs0SU346PCUHGbWCizMTcQg+
+         M+Wl9uYSFlL5paKM4sA5dp/VkWIgem486+XH2gbk3Jl00BEnMcoN0cLhXWn0Q79+A0
+         ScFeXs3wt8z1sf+8BKHRxOUs8FLjXYJtwENDFRnd6gRFhtYb5cALfQds96o3rU3oxr
+         3NPGAHfuEV+Ljzn61cpPj/lwHfr58t9kkYksXXKcPCHUfsDiIsLVpCWgF8DzWWwpKn
+         IgFfP1dEAkL8A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     Jes.Sorensen@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        code@reto-schneider.ch, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtl8xxxu: Improve the A-MPDU retransmission rate with RTS/CTS protection
+References: <20211205095836.417258-1-chris.chiu@canonical.com>
+Date:   Tue, 07 Dec 2021 09:10:32 +0200
+In-Reply-To: <20211205095836.417258-1-chris.chiu@canonical.com> (Chris Chiu's
+        message of "Sun, 5 Dec 2021 17:58:36 +0800")
+Message-ID: <87ee6oubyv.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20211012082708.121931-1-iivanov@suse.de> <YWVKAk4h5bsUA3b6@light.dominikbrodowski.net>
- <YaivhAV8LouB0zGV@light.dominikbrodowski.net> <CAHmME9qxBeBzfKCjzfAFX9ZWAGKv1TKCQw3x22d_DmJtaAewLw@mail.gmail.com>
- <YanOIvAV1iPBEXR3@light.dominikbrodowski.net> <CAJMQK-i0vZ8k8cNrUaDBdCBv4ucd-DzUWix3ui7QZ_2awZHe6g@mail.gmail.com>
- <Ya55SjgSkO+INcbb@light.dominikbrodowski.net>
-In-Reply-To: <Ya55SjgSkO+INcbb@light.dominikbrodowski.net>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 7 Dec 2021 15:09:21 +0800
-Message-ID: <CAJMQK-g8J8VCthoe5c9TWozycufhgWQQshRpEnHRo=y5A3m74g@mail.gmail.com>
-Subject: Re: [PATCH v5] random: fix crash on multiple early calls to add_bootloader_randomness()
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     "Jason A. Donenfeld" <jason@zx2c4.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Ivan T. Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 4:58 AM Dominik Brodowski
-<linux@dominikbrodowski.net> wrote:
->
-> Am Mon, Dec 06, 2021 at 01:42:01PM +0800 schrieb Hsin-Yi Wang:
-> > On Fri, Dec 3, 2021 at 3:59 PM Dominik Brodowski
-> > <linux@dominikbrodowski.net> wrote:
-> > >
-> > > Hi Jason,
-> > >
-> > > Am Thu, Dec 02, 2021 at 11:55:10AM -0500 schrieb Jason A. Donenfeld:
-> > > > Thanks for the patch. One trivial nit and one question:
-> > >
-> > > Thanks for your review!
-> > >
-> > > > On Thu, Dec 2, 2021 at 6:35 AM Dominik Brodowski
-> > > > <linux@dominikbrodowski.net> wrote:
-> > > > > +       /* We cannot do much with the input pool until it is set up in
-> > > > > +        * rand_initalize(); therefore just mix into the crng state.
-> > > >
-> > > > I think you meant "rand_initialize()" here (missing 'i').
-> > >
-> > > Indeed, sorry about that.
-> > >
-> > > > > If the added entropy suffices to increase crng_init to 1, future calls
-> > > > > to add_bootloader_randomness() or add_hwgenerator_randomness() used to
-> > > > > progress to credit_entropy_bits(). However, if the input pool is not yet
-> > > > > properly set up, the cmpxchg call within that function can lead to an
-> > > > > infinite recursion.
-> > > >
-> > > > I see what this patch does with crng_global_init_time, and that seems
-> > > > probably sensible, but I didn't understand this part of the reasoning
-> > > > in the commit message; I might just be a bit slow here. Where's the
-> > > > recursion exactly? Or even an infinite loop?
-> > >
-> > > On arm64, it was actually a NULL pointer dereference reported by Ivan T.
-> > > Ivanov; see
-> > >
-> > >         https://lore.kernel.org/lkml/20211012082708.121931-1-iivanov@suse.de/
-> > >
-> > > Trying to reproduce this rather bluntly on x86/qemu by multiple manual calls
-> > > to add_bootloader_randomness(), I mis-interpreted the symptoms to point to an
-> > > infinite recursion. The real problem seems to be that crng_reseed() isn't
-> > > ready to be called too early in the boot process, in particular before
-> > > workqueues are ready (see the call to numa_crng_init()).
-> > >
-> > > However, there seem be additional issues with add_bootloader_randomness()
-> > > not yet addressed (or worsened) by my patch:
-> > >
-> > >         - If CONFIG_RANDOM_TRUST_BOOTLOADER is enabled and crng_init==0,
-> > >           add_hwgenerator_randomness() calls crng_fast_load() and returns
-> > >           immediately. If it is disabled and crng_init==0,
-> > >           add_device_randnomness() calls crng_slow_load() but still
-> > >           continues to call _mix_pool_bytes(). That means the seed is
-> > >           used more extensively if CONFIG_RANDOM_TRUST_BOOTLOADER is not
-> > >           set!
-> > If called by the crng_slow_load(), it's mixed into the pool but we're
-> > not trusting it. But in crng_fast_load() we're using it to init crng.
-> >
-> > >
-> > >         - If CONFIG_RANDOM_TRUST_BOOTLOADER is enabled and crng_init==0,
-> > >           the entropy is not credited -- same as if
-> > >           CONFIG_RANDOM_TRUST_BOOTLOADER is not set. Only subsequent calls
-> >
-> > In crng_fast_load(), the seed would be mixed to primary_crng.state[4],
->
-> Actually, that is also the case for crng_slow_load() (see dest_buf there).
->
-Right, but the difference is if we want to credit(trust) that for crng init.
-> > and then crng_init will be 1 if the added seed is enough.
-> > rng-seed in dt (called in early_init_dt_scan_chosen()) also needs to
-> > use this function to init crng.
->
-> Indeed, crng_init should be set to 1 in that case.
->
-> > With the patch, we're seeing
-> > [    0.000000] random: get_random_u64 called from
-> > __kmem_cache_create+0x34/0x270 with crng_init=0
-> >
-> > While before it should be
-> > [    0.000000] random: get_random_u64 called from
-> > __kmem_cache_create+0x34/0x280 with crng_init=1
-> >
-> > >           to add_bootloader_randomness() would credit entropy, but that
-> > >           causes the issue NULL pointer dereference or the hang...
-> > >
-> > >         - As crng_fast_load() returns early, that actually means that my
-> > >           patch causes the additional entropy submitted to
-> > >           add_hwgenerator_randomness() by subsequent calls to be completely
-> > >           lost.
-> > Only when crng_init==0, if crng is initialized, it would continue with
-> > credit_entropy_bits().
->
-> However, if workqueues are not up and running (yet), it will fail.
->
-> New draft below!
+Chris Chiu <chris.chiu@canonical.com> writes:
 
-Thanks, the new draft now takes care of the crng init.
-[    0.000000] random: get_random_u64 called from
-__kmem_cache_create+0x34/0x270 with crng_init=1
+> The A-MPDU retransmission rate is always high (> 20%) even in a very
+> clean environment. However, the vendor driver retransimission rate is
+> < 10% in the same test bed. The different is the vendor driver starts
+> the A-MPDU TXOP with initial RTS/CTS handshake which is observed in the
+> air capture and the TX descriptor. Since there's no related field in
+> TX descriptor to enable the L-SIG TXOP protection and the duration,
+> applying the RTS/CTS protection instead helps to lower the retransmission
+> rate from > 20% to ~12% in the same test setup.
+>
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 
->
-> Thanks,
->         Dominik
->
-> ---
->
-> Currently, if CONFIG_RANDOM_TRUST_BOOTLOADER is enabled, mutliple calls
-> to add_bootloader_randomness() are broken and can cause a NULL pointer
-> dereference, as noted by Ivan T. Ivanov. This is not only a hypothetical
-> problem, as qemu on arm64 may provide bootloader entropy via EFI and via
-> devicetree.
->
-> On the first call to add_hwgenerator_randomness(), crng_fast_load() is
-> executed, and if the seed is long enough, crng_init will be set to 1.
-> However, no entropy is currently credited for that, even though the
-> name and description of CONFIG_RANDOM_TRUST_BOOTLOADER states otherwise.
->
-> On subsequent calls to add_bootloader_randomness() and then to
-> add_hwgenerator_randomness(), crng_fast_load() will be skipped. Instead,
-> wait_event_interruptible() (which makes no sense for the init process)
-> and then credit_entropy_bits() will be called. If the entropy count for
-> that second seed is large enough, that proceeds to crng_reseed().
-> However, crng_reseed() may depend on workqueues being available, which
-> is not the case early during boot.
->
-> To fix these issues, explicitly call crng_fast_load() or crng_slow_load()
-> depending on whether the bootloader is trusted -- only in the first
-> instance, crng_init may progress to 1. Also, mix the seed into the
-> input pool unconditionally, and credit the entropy for that iff
-> CONFIG_RANDOM_TRUST_BOOTLOADER is set. However, avoid a call to
-> crng_reseed() too early during boot. It is safe to be called after
-> rand_initialize(), so use crng_global_init_time (which is set to != 0
-> in that function) to determine which branch to take.
->
-> Reported-by: Ivan T. Ivanov <iivanov@suse.de>
-> Fixes: 18b915ac6b0a ("efi/random: Treat EFI_RNG_PROTOCOL output as bootloader randomness")
-> Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
->
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 605969ed0f96..abe4571fd2c0 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -722,7 +722,8 @@ static void credit_entropy_bits(struct entropy_store *r, int nbits)
->         if (r == &input_pool) {
->                 int entropy_bits = entropy_count >> ENTROPY_SHIFT;
->
-> -               if (crng_init < 2 && entropy_bits >= 128)
-> +               if (crng_init < 2 && entropy_bits >= 128 &&
-> +                   crng_global_init_time > 0)
->                         crng_reseed(&primary_crng, r);
->         }
->  }
-> @@ -1763,8 +1764,8 @@ static void __init init_std_data(struct entropy_store *r)
->  }
->
->  /*
-> - * Note that setup_arch() may call add_device_randomness()
-> - * long before we get here. This allows seeding of the pools
-> + * add_device_randomness() or add_bootloader_randomness() may be
-> + * called long before we get here. This allows seeding of the pools
->   * with some platform dependent data very early in the boot
->   * process. But it limits our options here. We must use
->   * statically allocated structures that already have all
-> @@ -2291,15 +2292,29 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
->  EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
->
->  /* Handle random seed passed by bootloader.
-> - * If the seed is trustworthy, it would be regarded as hardware RNGs. Otherwise
-> - * it would be regarded as device data.
-> + * If the seed is trustworthy, its entropy will be credited.
->   * The decision is controlled by CONFIG_RANDOM_TRUST_BOOTLOADER.
->   */
->  void add_bootloader_randomness(const void *buf, unsigned int size)
->  {
-> -       if (IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER))
-> -               add_hwgenerator_randomness(buf, size, size * 8);
-> -       else
-> -               add_device_randomness(buf, size);
-> +       unsigned long time = random_get_entropy() ^ jiffies;
-> +       unsigned long flags;
-> +
-> +       if (!crng_ready() && size) {
-size is checked here but not below?
+You should have marked this as v2 because you submitted already before:
 
-> +#ifdef CONFIG_RANDOM_TRUST_BOOTLOADER
-> +               crng_fast_load(buf, size);
-> +#else
-> +               crng_slow_load(buf, size);
-> +#endif /* CONFIG_RANDOM_TRUST_BOOTLOADER */
-> +       }
-> +
-> +       spin_lock_irqsave(&input_pool.lock, flags);
-> +       _mix_pool_bytes(&input_pool, buf, size);
-> +       _mix_pool_bytes(&input_pool, &time, sizeof(time));
-> +       spin_unlock_irqrestore(&input_pool.lock, flags);
-> +
-> +#ifdef CONFIG_RANDOM_TRUST_BOOTLOADER
-> +       credit_entropy_bits(&input_pool, size * 8);
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+https://patchwork.kernel.org/project/linux-wireless/patch/20211129143953.369557-1-chris.chiu@canonical.com/
+
+And include a list of changes between versions, more info in the wiki
+below.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF25B46B646
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D6346B648
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbhLGIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:45:06 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32883 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLGIpD (ORCPT
+        id S233189AbhLGIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:45:46 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:38176 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229846AbhLGIpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:45:03 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J7Yg45PQMzcbg5;
-        Tue,  7 Dec 2021 16:41:20 +0800 (CST)
-Received: from [127.0.0.1] (10.67.102.125) by dggeme756-chm.china.huawei.com
- (10.3.19.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Tue, 7
- Dec 2021 16:41:32 +0800
-Message-ID: <61AF1E3B.5060706@hisilicon.com>
-Date:   Tue, 7 Dec 2021 16:41:31 +0800
-From:   Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
-MIME-Version: 1.0
-To:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>
-CC:     <~okias/devicetree@lists.sr.ht>,
+        Tue, 7 Dec 2021 03:45:45 -0500
+X-UUID: 87fd9c02db674226a9c5c0bd5aba56f2-20211207
+X-UUID: 87fd9c02db674226a9c5c0bd5aba56f2-20211207
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <qizhong.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1654386062; Tue, 07 Dec 2021 16:42:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 7 Dec 2021 16:42:11 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Tue, 7 Dec 2021 16:42:10 +0800
+From:   qizhong cheng <qizhong.cheng@mediatek.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: hisilicon: update deprecated property name
-References: <20211029104211.29079-1-david@ixit.cz>
-In-Reply-To: <20211029104211.29079-1-david@ixit.cz>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+        <qizhong.cheng@mediatek.com>, <chuanjia.liu@mediatek.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [RESEND PATCH v2] PCI: mediatek: Delay 100ms to wait power and clock to become stable
+Date:   Tue, 7 Dec 2021 16:41:53 +0800
+Message-ID: <20211207084153.23019-1-qizhong.cheng@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+be delayed 100ms (TPVPERL) for the power and clock to become stable.
 
-On 2021/10/29 18:42, David Heidelberg wrote:
-> hisi,rst-syscon property name is deprecated, use hisilicon,rst-syscon
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  arch/arm64/boot/dts/hisilicon/hi3660.dtsi | 4 ++--
->  arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-> index 8bd6d7e8a474..3fd80f1f7c1e 100644
-> --- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-> +++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-> @@ -345,7 +345,7 @@ crg_ctrl: crg_ctrl@fff35000 {
->  		crg_rst: crg_rst_controller {
->  			compatible = "hisilicon,hi3660-reset";
->  			#reset-cells = <2>;
-> -			hisi,rst-syscon = <&crg_ctrl>;
-> +			hisilicon,rst-syscon = <&crg_ctrl>;
->  		};
->  
->  
-> @@ -376,7 +376,7 @@ iomcu: iomcu@ffd7e000 {
->  
->  		iomcu_rst: reset {
->  			compatible = "hisilicon,hi3660-reset";
-> -			hisi,rst-syscon = <&iomcu>;
-> +			hisilicon,rst-syscon = <&iomcu>;
->  			#reset-cells = <2>;
->  		};
->  
-> diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-> index 636c8817df7e..9eac9a339654 100644
-> --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-> +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-> @@ -155,7 +155,7 @@ crg_rst: crg_rst_controller {
->  			compatible = "hisilicon,hi3670-reset",
->  				     "hisilicon,hi3660-reset";
->  			#reset-cells = <2>;
-> -			hisi,rst-syscon = <&crg_ctrl>;
-> +			hisilicon,rst-syscon = <&crg_ctrl>;
->  		};
->  
->  		pctrl: pctrl@e8a09000 {
-> @@ -196,7 +196,7 @@ media2_crg: media2_crgctrl@e8900000 {
->  
->  		iomcu_rst: reset {
->  			compatible = "hisilicon,hi3660-reset";
-> -			hisi,rst-syscon = <&iomcu>;
-> +			hisilicon,rst-syscon = <&iomcu>;
->  			#reset-cells = <2>;
->  		};
->  
-> 
+Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+Acked-by: Pali Rohár <pali@kernel.org>
+---
 
-Thanks!
-But this may break the compatibility of old kernels with new dts files here.
-And we have discussed this at [1].
-That is why we did not update the dts file yet.
+v2:
+ - Typo fix.
+ - Rewrap into one paragraph.
 
-[1]: https://www.spinics.net/lists/arm-kernel/msg887577.html
+ drivers/pci/controller/pcie-mediatek.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Best Regards,
-Wei
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index 2f3f974977a3..a61ea3940471 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -702,6 +702,13 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+ 	 */
+ 	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
+ 
++	/*
++	 * Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
++	 * 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
++	 * be delayed 100ms (TPVPERL) for the power and clock to become stable.
++	 */
++	msleep(100);
++
+ 	/* De-assert PHY, PE, PIPE, MAC and configuration reset	*/
+ 	val = readl(port->base + PCIE_RST_CTRL);
+ 	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
+-- 
+2.25.1
 

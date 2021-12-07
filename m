@@ -2,243 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9286D46B6DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9475F46B6E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbhLGJUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbhLGJUg (ORCPT
+        id S233817AbhLGJWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:22:00 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32806 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233794AbhLGJV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:20:36 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D194EC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 01:17:05 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z5so54709963edd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 01:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dwd5dEAn3MA4kor56BytGEzIDB2TFQRsbAMpOWBTitA=;
-        b=f/QD/lMUy0YmQaqqPJWBDgEEJociX9CX+d2le4r/K2kC+2xzCZJsbft4M1m4teXm74
-         50a7k06zZyx7ptyxv0qNj18pffQV9SNF6t1IkYYKnjN7fZRi6fWmqUy/7K5SLqqZelgb
-         bSSmbYHLuFEAhLoZBzfCR8aSkR91ryqQZ1ybupwvf9VjDqH7J6ZOkzCDAtHlOCym1Yxz
-         hMadGzX5NgnHAAK5rcC3Np0A5R4vO/jmBsaS7DniXeh0RcjSs85IBnEfA8YFM2QwOPVx
-         aafDMqj17aV5FN/RqanQelB1HNQl7VWsVo5LrxBcfiQFuSdO0LmhtsZ4iCFugZssymKP
-         h5wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dwd5dEAn3MA4kor56BytGEzIDB2TFQRsbAMpOWBTitA=;
-        b=RUluLQmulf0wcEvYbHSyLGx66jR2acW2IGhTs81UlCaKGuhWFhnkq03cwUey+psi93
-         tM9kr4wWj7a0MeA4UlDDkjP80RfcrT/CfMhjhV6k6K/CzTaiz0c7Go7c1FjQlHuEMi66
-         ClsP18bV41X/gY2+FFv16KgP5BLnflnHy6PV3wHAYGo1/JYIFk0/NKxKeV4LP+MYB1Qw
-         kI3Fqo2WpSJjfUcZBUaigYtjRzzlWHqkcb5PyZ+RhGuj+gpkxFvQYP5JlzMRT4ieZ7tx
-         Qg+v3ARqJjNLmW3wSB0plfgq63p9vODFrg2XjkDAxwR9Sxzn+ComjH5m1/wYfqD+4Gyv
-         bYtA==
-X-Gm-Message-State: AOAM532athvgORf02p5eNmM6VN3UXh6EmSzzDCePEz5m+4JUq1Fil6aG
-        xI3VNN87MoVevxv5sPhG6c7N26MhuFRKUFkN/l3QPA==
-X-Google-Smtp-Source: ABdhPJyfJwmPW5CI6Uzto1iOXsYCxcsEsWPbQz4ttteHzi0HhhLOfp9wjjDHmYlr4c2ppE6ilWL3B8dMsOp12j/i1cs=
-X-Received: by 2002:a17:906:7955:: with SMTP id l21mr53959605ejo.6.1638868624248;
- Tue, 07 Dec 2021 01:17:04 -0800 (PST)
+        Tue, 7 Dec 2021 04:21:59 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B77GdYF021812;
+        Tue, 7 Dec 2021 09:18:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=wJwR0qPRphkBEbKGeEnRyEEXwyY66K6vr8D3jkbrj/U=;
+ b=T1tj3LX7EocfckPOxrOpeOASuNNk2Y/T2DAaL/uiHZG4vZjA4uqpBf96E77O9k+3zRWc
+ deibsbV6Gg50YnMzf6ZlVgC7yqzNoLEzJ3MDiGs/eRoj1/4b/0MwMEXQnEC/CZ+0XNyg
+ IHo74qPNyEwxYPj5+G2gObHG36guHZH1AhasAWNeWQdM76ypH8+eUDu0/mB6NQ+nJnBC
+ hhUAk6bzCYGBeZnFnYyOnjflCI4UgxTf4+mP2q+2roMqItDLHmEUZvR2fsUkAmV3uatv
+ xRIyOJMp+bNbpVYg/iHkg5DnUikjG51d4rrlb7quvvMc4bOeqcNh/aRv4Ce7yGXdvJXk qQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ct334tben-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 09:18:24 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B794Rkq027632;
+        Tue, 7 Dec 2021 09:18:23 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ct334tbe9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 09:18:23 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B798PW5025617;
+        Tue, 7 Dec 2021 09:18:21 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyy9bk9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 09:18:21 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B79IImk29360520
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Dec 2021 09:18:18 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 414B7A4062;
+        Tue,  7 Dec 2021 09:18:18 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7BD0A405B;
+        Tue,  7 Dec 2021 09:18:17 +0000 (GMT)
+Received: from [9.145.93.53] (unknown [9.145.93.53])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Dec 2021 09:18:17 +0000 (GMT)
+Message-ID: <4b839336-2dcb-6506-5d2d-149a8a31a765@linux.ibm.com>
+Date:   Tue, 7 Dec 2021 10:18:17 +0100
 MIME-Version: 1.0
-References: <20211206145551.909846023@linuxfoundation.org>
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Dec 2021 14:46:53 +0530
-Message-ID: <CA+G9fYs0icvitkzDx4Qrp7ZAuxRppoQ769GO-+0XXzBUL2BiJw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/70] 5.4.164-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] KVM: s390: Fix names of skey constants in api
+ documentation
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.vnet.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211118102522.569660-1-scgl@linux.ibm.com>
+ <6b781b76-28a9-c375-30cb-ee6764ecd7c8@linux.ibm.com>
+ <fd0aa191-4b43-76a1-cb0c-7ed4298ffecb@linux.vnet.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <fd0aa191-4b43-76a1-cb0c-7ed4298ffecb@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OxLtbJV70BlPfgR4QLkqMKLHDZWQb_0-
+X-Proofpoint-ORIG-GUID: PZ17YJ8c9e13h2nwFIiZ_h3mxQI4ONAf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_03,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070054
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 20:42, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.164 release.
-> There are 70 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.164-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.164-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.4.y
-* git commit: 5d289daa9fc282e333cd99893062f9ce3e69e842
-* git describe: v5.4.163-71-g5d289daa9fc2
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-63-71-g5d289daa9fc2
-
-## No Test Regressions (compared to v5.4.163)
-
-## No Test Fixes (compared to v5.4.163)
-
-## Test result summary
-total: 90099, pass: 74767, fail: 727, skip: 13223, xfail: 1382
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 41 total, 36 passed, 5 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 24 total, 22 passed, 2 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 35 passed, 2 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 58 total, 50 passed, 8 failed
-* riscv: 27 total, 24 passed, 3 failed
-* s390: 16 total, 13 passed, 3 failed
-* sh: 22 total, 20 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 40 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+T24gMTIvMi8yMSAxMTozMSwgSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIHdyb3RlOg0KPiBP
+biAxMi8xLzIxIDA5OjQ1LCBKYW5vc2NoIEZyYW5rIHdyb3RlOg0KPj4gT24gMTEvMTgvMjEg
+MTE6MjUsIEphbmlzIFNjaG9ldHRlcmwtR2xhdXNjaCB3cm90ZToNCj4+PiBUaGUgYXJlIGRl
+ZmluZWQgaW4gaW5jbHVkZS91YXBpL2xpbnV4L2t2bS5oIGFzDQo+Pg0KPj4gcy9UaGUvVGhl
+eS8NCj4+DQo+PiBJIGNhbiBmaXggdGhhdCB1cCB3aGVuIHBpY2tpbmcgaWYgeW91IHdhbnQu
+DQo+IA0KPiBUaGFua3MsIHBsZWFzZSBkby4NCj4+DQo+Pj4gS1ZNX1MzOTBfR0VUX1NLRVlT
+X05PTkUgYW5kIEtWTV9TMzkwX1NLRVlTX01BWCwgYnV0IHRoZQ0KPj4+IGFwaSBkb2N1bWV0
+YXRpb24gdGFsa3Mgb2YgS1ZNX1MzOTBfR0VUX0tFWVNfTk9ORSBhbmQNCj4+PiBLVk1fUzM5
+MF9TS0VZU19BTExPQ19NQVggcmVzcGVjdGl2ZWx5Lg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1i
+eTogSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIDxzY2dsQGxpbnV4LmlibS5jb20+DQo+Pg0K
+Pj4gVGhhbmtzIGZvciBmaXhpbmcgdGhpcyB1cC4NCg0KVGhhbmtzLCBwaWNrZWQNCg0KPj4N
+Cj4+IFJldmlld2VkLWJ5OiBKYW5vc2NoIEZyYW5rIDxmcmFua2phQGxpbnV4LmlibS5jb20+
+DQo+Pg0KPj4+IC0tLQ0KPj4+ICDCoCBEb2N1bWVudGF0aW9uL3ZpcnQva3ZtL2FwaS5yc3Qg
+fCA2ICsrKy0tLQ0KPj4+ICDCoCAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAz
+IGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vdmly
+dC9rdm0vYXBpLnJzdCBiL0RvY3VtZW50YXRpb24vdmlydC9rdm0vYXBpLnJzdA0KPj4+IGlu
+ZGV4IGFlZWIwNzFjNzY4OC4uYjg2YzdlZGFlODg4IDEwMDY0NA0KPj4+IC0tLSBhL0RvY3Vt
+ZW50YXRpb24vdmlydC9rdm0vYXBpLnJzdA0KPj4+ICsrKyBiL0RvY3VtZW50YXRpb24vdmly
+dC9rdm0vYXBpLnJzdA0KPj4+IEBAIC0zNzAxLDcgKzM3MDEsNyBAQCBLVk0gd2l0aCB0aGUg
+Y3VycmVudGx5IGRlZmluZWQgc2V0IG9mIGZsYWdzLg0KPj4+ICDCoCA6QXJjaGl0ZWN0dXJl
+czogczM5MA0KPj4+ICDCoCA6VHlwZTogdm0gaW9jdGwNCj4+PiAgwqAgOlBhcmFtZXRlcnM6
+IHN0cnVjdCBrdm1fczM5MF9za2V5cw0KPj4+IC06UmV0dXJuczogMCBvbiBzdWNjZXNzLCBL
+Vk1fUzM5MF9HRVRfS0VZU19OT05FIGlmIGd1ZXN0IGlzIG5vdCB1c2luZyBzdG9yYWdlDQo+
+Pj4gKzpSZXR1cm5zOiAwIG9uIHN1Y2Nlc3MsIEtWTV9TMzkwX0dFVF9TS0VZU19OT05FIGlm
+IGd1ZXN0IGlzIG5vdCB1c2luZyBzdG9yYWdlDQo+Pj4gIMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAga2V5cywgbmVnYXRpdmUgdmFsdWUgb24gZXJyb3INCj4+PiAgwqAgwqAgVGhpcyBpb2N0
+bCBpcyB1c2VkIHRvIGdldCBndWVzdCBzdG9yYWdlIGtleSB2YWx1ZXMgb24gdGhlIHMzOTAN
+Cj4+PiBAQCAtMzcyMCw3ICszNzIwLDcgQEAgeW91IHdhbnQgdG8gZ2V0Lg0KPj4+ICDCoCDC
+oCBUaGUgY291bnQgZmllbGQgaXMgdGhlIG51bWJlciBvZiBjb25zZWN1dGl2ZSBmcmFtZXMg
+KHN0YXJ0aW5nIGZyb20gc3RhcnRfZ2ZuKQ0KPj4+ICDCoCB3aG9zZSBzdG9yYWdlIGtleXMg
+dG8gZ2V0LiBUaGUgY291bnQgZmllbGQgbXVzdCBiZSBhdCBsZWFzdCAxIGFuZCB0aGUgbWF4
+aW11bQ0KPj4+IC1hbGxvd2VkIHZhbHVlIGlzIGRlZmluZWQgYXMgS1ZNX1MzOTBfU0tFWVNf
+QUxMT0NfTUFYLiBWYWx1ZXMgb3V0c2lkZSB0aGlzIHJhbmdlDQo+Pj4gK2FsbG93ZWQgdmFs
+dWUgaXMgZGVmaW5lZCBhcyBLVk1fUzM5MF9TS0VZU19NQVguIFZhbHVlcyBvdXRzaWRlIHRo
+aXMgcmFuZ2UNCj4+PiAgwqAgd2lsbCBjYXVzZSB0aGUgaW9jdGwgdG8gcmV0dXJuIC1FSU5W
+QUwuDQo+Pj4gIMKgIMKgIFRoZSBza2V5ZGF0YV9hZGRyIGZpZWxkIGlzIHRoZSBhZGRyZXNz
+IHRvIGEgYnVmZmVyIGxhcmdlIGVub3VnaCB0byBob2xkIGNvdW50DQo+Pj4gQEAgLTM3NDQs
+NyArMzc0NCw3IEBAIHlvdSB3YW50IHRvIHNldC4NCj4+PiAgwqAgwqAgVGhlIGNvdW50IGZp
+ZWxkIGlzIHRoZSBudW1iZXIgb2YgY29uc2VjdXRpdmUgZnJhbWVzIChzdGFydGluZyBmcm9t
+IHN0YXJ0X2dmbikNCj4+PiAgwqAgd2hvc2Ugc3RvcmFnZSBrZXlzIHRvIGdldC4gVGhlIGNv
+dW50IGZpZWxkIG11c3QgYmUgYXQgbGVhc3QgMSBhbmQgdGhlIG1heGltdW0NCj4+PiAtYWxs
+b3dlZCB2YWx1ZSBpcyBkZWZpbmVkIGFzIEtWTV9TMzkwX1NLRVlTX0FMTE9DX01BWC4gVmFs
+dWVzIG91dHNpZGUgdGhpcyByYW5nZQ0KPj4+ICthbGxvd2VkIHZhbHVlIGlzIGRlZmluZWQg
+YXMgS1ZNX1MzOTBfU0tFWVNfTUFYLiBWYWx1ZXMgb3V0c2lkZSB0aGlzIHJhbmdlDQo+Pj4g
+IMKgIHdpbGwgY2F1c2UgdGhlIGlvY3RsIHRvIHJldHVybiAtRUlOVkFMLg0KPj4+ICDCoCDC
+oCBUaGUgc2tleWRhdGFfYWRkciBmaWVsZCBpcyB0aGUgYWRkcmVzcyB0byBhIGJ1ZmZlciBj
+b250YWluaW5nIGNvdW50IGJ5dGVzIG9mDQo+Pj4NCj4+DQo+IA0KDQo=

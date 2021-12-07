@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7DC46C1C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2990246C217
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240013AbhLGRe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbhLGRe1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:34:27 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D81C061574;
-        Tue,  7 Dec 2021 09:30:56 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso5603008ood.13;
-        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
-        b=owALHfLYmXossbIFvZDrUvt/Rivjzm1yU1ECHuCrg8uTANH2C+BbYxOMFrDmaceRyP
-         PNALtgmYczTPG4KqhsKYOkhCFRfPvp65jXNeeoUJp778fcE93b9uLmQehgNtEB/Katdl
-         9IM973tgVDhBfW0ATYwvf4SAp3uRH3se6A27oEN4fGjkI+7XdR5SAfMgP727kk7sQeBQ
-         oLduWw3VyAdJZmRMgXpulqB52pPbi3EVR+qfRMN2ElVZyyYI4dADkUX9pzbthshY3ayE
-         He7MrQOUIvsMXFlNg84Zm/pIFNsnLnJ4nrhVAYzF6EhNHNtat/YJVl6T5LFmbZd2V7bG
-         bmug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=UfRFcZhTqwVLVt7r2zueC/pU4lBh0hExXO/ZORo48wQ=;
-        b=UYsnBNQYq+l/28M3lk1O0VEDQPagNlwhfrO/QtYubEOKy9PZ8RRiokEvfPjFnvLSqi
-         dSFeTcu/9DY+Bx31v9RvvNnmbleQ8y8zISNmpezH1PAt3jZ6FT57sdPne3paYbDebWb9
-         KzBo28LvVnvn/WX9PIsXzp++ftZlvr0372WX4mlVL0DEBIputjNetkf5fzhit5wKmL2U
-         5AAuZbkOwCpSWH7dy7CyRbaGss0h/MyVDKJUR73I9NLhiArddVhHJngjQ7gt4dXdHP+W
-         1deIW8DoM8EygkQeohMHmUwiLOZXQqoI/1Iq8HMR696huETT+ot2Ragt0i2cpV1IWDp/
-         XCIw==
-X-Gm-Message-State: AOAM530qr8MVFVwK1qGHQf1uwEcjF/iaTu3cQEW0TM7XXdBEuCtyfEVE
-        a3RCr6zwg6apxlgT2m7lDWSYa1WZ4yY=
-X-Google-Smtp-Source: ABdhPJwIc0LVN4/MQdUZjJdvbi1VBFbGaJdglcFbSsjW5Rcqb43m1YoJc3mtk3uGKYJ9qrw43LmsJA==
-X-Received: by 2002:a05:6820:445:: with SMTP id p5mr27603951oou.9.1638898256014;
-        Tue, 07 Dec 2021 09:30:56 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1sm36907otq.45.2021.12.07.09.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 09:30:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Dec 2021 09:30:54 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adm1031): Remove redundant assignment to
- variable range
-Message-ID: <20211207173054.GA657431@roeck-us.net>
-References: <20211204233155.55454-1-colin.i.king@gmail.com>
+        id S240221AbhLGRvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:51:39 -0500
+Received: from mga12.intel.com ([192.55.52.136]:41157 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230181AbhLGRvi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:51:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217662933"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="217662933"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:32:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="515617230"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Dec 2021 09:32:10 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mueK1-000MoR-Rz; Tue, 07 Dec 2021 17:32:09 +0000
+Date:   Wed, 8 Dec 2021 01:31:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas =?iso-8859-1?Q?K=FChnel?= <thomas.kuehnel@avm.de>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     kbuild-all@lists.01.org, ntfs3@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?K=FChnel?= <thomas.kuehnel@avm.de>,
+        Nicolas Schier <n.schier@avm.de>
+Subject: Re: [PATCH 2/3] fs/ntfs3: add functions to modify LE bitmaps
+Message-ID: <202112080045.huYZOn4p-lkp@intel.com>
+References: <20211207102454.576906-3-thomas.kuehnel@avm.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211204233155.55454-1-colin.i.king@gmail.com>
+In-Reply-To: <20211207102454.576906-3-thomas.kuehnel@avm.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 11:31:55PM +0000, Colin Ian King wrote:
-> Variable range is being initialized with a value that is never read, it
-> is being re-assigned in the next statement. The assignment is redundant,
-> remove it and initialize range using the second assigned value. Clean up
-> the formatting too by adding missing spaces.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hi "Thomas,
 
-Applied.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Guenter
+[auto build test WARNING on 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1]
 
-> ---
->  drivers/hwmon/adm1031.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
-> index 257ec53ae723..ac841fa3a369 100644
-> --- a/drivers/hwmon/adm1031.c
-> +++ b/drivers/hwmon/adm1031.c
-> @@ -242,9 +242,8 @@ static int FAN_TO_REG(int reg, int div)
->  static int AUTO_TEMP_MAX_TO_REG(int val, int reg, int pwm)
->  {
->  	int ret;
-> -	int range = val - AUTO_TEMP_MIN_FROM_REG(reg);
-> +	int range = ((val - AUTO_TEMP_MIN_FROM_REG(reg)) * 10) / (16 - pwm);
->  
-> -	range = ((val - AUTO_TEMP_MIN_FROM_REG(reg))*10)/(16 - pwm);
->  	ret = ((reg & 0xf8) |
->  	       (range < 10000 ? 0 :
->  		range < 20000 ? 1 :
+url:    https://github.com/0day-ci/linux/commits/Thomas-K-hnel/fs-ntfs3-Fixes-for-big-endian-systems/20211207-184206
+base:   0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+config: arm64-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080045.huYZOn4p-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/2227622e39d3100d10077199481f05ccb9a17204
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Thomas-K-hnel/fs-ntfs3-Fixes-for-big-endian-systems/20211207-184206
+        git checkout 2227622e39d3100d10077199481f05ccb9a17204
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash fs/ntfs3/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> fs/ntfs3/bitmap.c:1498:37: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask_to_set @@     got restricted __le32 [usertype] @@
+   fs/ntfs3/bitmap.c:1498:37: sparse:     expected unsigned long mask_to_set
+   fs/ntfs3/bitmap.c:1498:37: sparse:     got restricted __le32 [usertype]
+>> fs/ntfs3/bitmap.c:1508:29: sparse: sparse: invalid assignment: &=
+>> fs/ntfs3/bitmap.c:1508:29: sparse:    left side has type unsigned long
+>> fs/ntfs3/bitmap.c:1508:29: sparse:    right side has type restricted __le32
+>> fs/ntfs3/bitmap.c:1518:39: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask_to_clear @@     got restricted __le32 [usertype] @@
+   fs/ntfs3/bitmap.c:1518:39: sparse:     expected unsigned long mask_to_clear
+   fs/ntfs3/bitmap.c:1518:39: sparse:     got restricted __le32 [usertype]
+   fs/ntfs3/bitmap.c:1528:31: sparse: sparse: invalid assignment: &=
+   fs/ntfs3/bitmap.c:1528:31: sparse:    left side has type unsigned long
+   fs/ntfs3/bitmap.c:1528:31: sparse:    right side has type restricted __le32
+
+vim +1498 fs/ntfs3/bitmap.c
+
+  1492	
+  1493	void ntfs_bitmap_set_le(unsigned long *map, unsigned int start, int len)
+  1494	{
+  1495		unsigned long *p = map + BIT_WORD(start);
+  1496		const unsigned int size = start + len;
+  1497		int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
+> 1498		unsigned long mask_to_set = cpu_to_le32(BITMAP_FIRST_WORD_MASK(start));
+  1499	
+  1500		while (len - bits_to_set >= 0) {
+  1501			*p |= mask_to_set;
+  1502			len -= bits_to_set;
+  1503			bits_to_set = BITS_PER_LONG;
+  1504			mask_to_set = ~0UL;
+  1505			p++;
+  1506		}
+  1507		if (len) {
+> 1508			mask_to_set &= cpu_to_le32(BITMAP_LAST_WORD_MASK(size));
+  1509			*p |= mask_to_set;
+  1510		}
+  1511	}
+  1512	
+  1513	void ntfs_bitmap_clear_le(unsigned long *map, unsigned int start, int len)
+  1514	{
+  1515		unsigned long *p = map + BIT_WORD(start);
+  1516		const unsigned int size = start + len;
+  1517		int bits_to_clear = BITS_PER_LONG - (start % BITS_PER_LONG);
+> 1518		unsigned long mask_to_clear = cpu_to_le32(BITMAP_FIRST_WORD_MASK(start));
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

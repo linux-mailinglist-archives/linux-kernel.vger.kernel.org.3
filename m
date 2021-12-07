@@ -2,144 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78FC46B48B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4D246B48D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbhLGHyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:54:22 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32881 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbhLGHyT (ORCPT
+        id S231527AbhLGHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:55:18 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:44874 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230360AbhLGHzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:54:19 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J7XXX5JpszcbTn;
-        Tue,  7 Dec 2021 15:50:36 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
- (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
- 2021 15:50:48 +0800
-Subject: Re: [PATCH v13 0/2] drivers/perf: hisi: Add support for PCIe PMU
-To:     Qi Liu <liuqi115@huawei.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
-References: <20211202080633.2919-1-liuqi115@huawei.com>
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Message-ID: <ca0af1e2-678c-a196-3313-d57a088e08ee@hisilicon.com>
-Date:   Tue, 7 Dec 2021 15:50:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 7 Dec 2021 02:55:17 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Uzjqu0m_1638863505;
+Received: from 30.21.164.179(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0Uzjqu0m_1638863505)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 07 Dec 2021 15:51:46 +0800
+Message-ID: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
+Date:   Tue, 7 Dec 2021 15:51:45 +0800
 MIME-Version: 1.0
-In-Reply-To: <20211202080633.2919-1-liuqi115@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
 Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+Subject: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.77.175]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qi,
+We observed issues like:
+   virtio-pci 0000:14:00.0: platform bug: legacy virtio-mmio must
+   not be used with RAM above 0x4000GB
 
-Thanks for your continuous and nice work, please free to add if it is necessary:
+when we have a legacy pci device which desired 32bit-pfn vq
+but gain 64bit-pfn instead, lead into the failure of probe.
 
-Reviewed-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+vring_use_dma_api() is playing the key role in here, to help the
+allocation process understand which kind of vq it should alloc,
+however, it failed to take care the legacy pci device, which only
+have 32bit feature flag and can never have VIRTIO_F_ACCESS_PLATFORM
+setted.
 
-Thanks,
-Shaokun
+This patch introduce force_dma flag to help vring_use_dma_api()
+understanding the requirement better, to avoid the failing.
 
-On 2021/12/2 16:06, Qi Liu wrote:
-> This patchset adds support for HiSilicon PCIe Performance Monitoring
-> Unit(PMU). It is a PCIe Root Complex integrated End Point(RCiEP) device
-> added on Hip09. Each PCIe Core has a PMU RCiEP to monitor multi root
-> ports and all Endpoints downstream these root ports.
-> 
-> HiSilicon PCIe PMU is supported to collect performance data of PCIe bus,
-> such as: bandwidth, latency etc.
-> 
-> Example usage of counting PCIe rx memory write latency::
-> 
->   $# perf stat -e hisi_pcie0_core0/rx_mwr_latency/
->   $# perf stat -e hisi_pcie0_core0/rx_mwr_cnt/
->   $# perf stat -g -e hisi_pcie0_core0/rx_mwr_latency/ -e hisi_pcie0_core0/rx_mwr_cnt/
-> 
-> average rx memory write latency can be calculated like this:
->   latency = rx_mwr_latency / rx_mwr_cnt.
-> 
-> Common PMU events and metrics will be described in JSON file, and will be add
-> in userspace perf tool latter.
-> 
-> Changes since v12:
-> - Modify the printout message of cpuhotplug to standard.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20211130120450.2747-1-liuqi115@huawei.com/
-> 
-> Changes since v11:
-> - Address the comments from Krzysztof, drop all the final dot and change bdf in comment to BDF.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20211029093632.4350-1-liuqi115@huawei.com/
-> 
-> Changes since v10:
-> - Drop the out of date comment according to Jonathan's review.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210915074524.18040-1-liuqi115@huawei.com/
-> 
-> Changes since v9:
-> - Add check in hisi_pcie_pmu_validate_event_group to count counters accurently .
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210818051246.29545-1-liuqi115@huawei.com/
-> 
-> Changes since v8:
-> - Remove subevent parameter in attr->config.
-> - Check the counter scheduling constraints when accepting an event group.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210728080932.72515-1-liuqi115@huawei.com/
-> 
-> Changes since v7:
-> - Drop headerfile cpumask.h and cpuhotplug.h.
-> - Rename events in perf list: bw->flux, lat->delay, as driver doesn't
->   process bandwidth and average latency data.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1624532384-43002-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v6:
-> - Move the driver to drivers/perf/hisilicon.
-> - Treat content in PMU counter and ext_counter as different PMU events, and
->   export them separately.
-> - Address the comments from Will and Krzysztof.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1622467951-32114-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v5:
-> - Fix some errors when build under ARCH=xtensa.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1621946795-14046-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v4:
-> - Replace irq_set_affinity_hint() with irq_set_affinity().
-> - Link: https://lore.kernel.org/linux-arm-kernel/1621417741-5229-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v3:
-> - Fix some warnings when build under 32bits architecture.
-> - Address the comments from John.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1618490885-44612-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v2:
-> - Address the comments from John.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1617959157-22956-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v1:
-> - Drop the internal Reviewed-by tag.
-> - Fix some build warnings when W=1.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1617788943-52722-1-git-send-email-liuqi115@huawei.com/
-> Qi Liu (2):
->   docs: perf: Add description for HiSilicon PCIe PMU driver
->   drivers/perf: hisi: Add driver for HiSilicon PCIe PMU
-> 
->  .../admin-guide/perf/hisi-pcie-pmu.rst        | 106 ++
->  MAINTAINERS                                   |   2 +
->  drivers/perf/hisilicon/Kconfig                |   9 +
->  drivers/perf/hisilicon/Makefile               |   2 +
->  drivers/perf/hisilicon/hisi_pcie_pmu.c        | 948 ++++++++++++++++++
->  include/linux/cpuhotplug.h                    |   1 +
->  6 files changed, 1068 insertions(+)
->  create mode 100644 Documentation/admin-guide/perf/hisi-pcie-pmu.rst
->  create mode 100644 drivers/perf/hisilicon/hisi_pcie_pmu.c
-> 
+Signed-off-by: Michael Wang <yun.wang@linux.alibaba.com>
+---
+  drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
+  drivers/virtio/virtio_ring.c       |  3 +++
+  include/linux/virtio.h             |  1 +
+  3 files changed, 14 insertions(+)
+
+diff --git a/drivers/virtio/virtio_pci_legacy.c 
+b/drivers/virtio/virtio_pci_legacy.c
+index d62e983..11f2ebf 100644
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct 
+virtio_pci_device *vp_dev)
+  	vp_dev->setup_vq = setup_vq;
+  	vp_dev->del_vq = del_vq;
+
++	/*
++	 * The legacy pci device requre 32bit-pfn vq,
++	 * or setup_vq() will failed.
++	 *
++	 * Thus we make sure vring_use_dma_api() will
++	 * return true during the allocation by marking
++	 * force_dma here.
++	 */
++	vp_dev->vdev.force_dma = true;
++
+  	return 0;
+
+  err_iomap:
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 3035bb6..6562e01 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct 
+virtqueue *_vq,
+
+  static bool vring_use_dma_api(struct virtio_device *vdev)
+  {
++	if (vdev->force_dma)
++		return true;
++
+  	if (!virtio_has_dma_quirk(vdev))
+  		return true;
+
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 41edbc0..a4eb29d 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -109,6 +109,7 @@ struct virtio_device {
+  	bool failed;
+  	bool config_enabled;
+  	bool config_change_pending;
++	bool force_dma;
+  	spinlock_t config_lock;
+  	spinlock_t vqs_list_lock; /* Protects VQs list access */
+  	struct device dev;
+-- 
+1.8.3.1
+

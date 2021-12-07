@@ -2,175 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B888846B1E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFC146B1F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbhLGEfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbhLGEfC (ORCPT
+        id S236178AbhLGEkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 23:40:02 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38678 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236121AbhLGEkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:35:02 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938FC061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:31:32 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id 61-20020a17090a09c300b001adc4362b42so997469pjo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 20:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=K7euZbyWNX2ta4I57cBHSw4Q5N0mYoG5GUIKq874i+o=;
-        b=dPhH/UsMOylT5QvMK9bZDLTGOriozO3FD1jzQcbKMul8WzY6i8jcO0GaHI0Qt9N+7f
-         tZA3jtLHRLds4VR6Pbmn4MZnBioviDrliJUlAt/7k0ExE/UEtloUkbA0BIqR/+QvTHYD
-         SEiPnvYmZfBO0kTFAQD84O28CVxgOz/6RKzHR9xfpLfnhiH0KVNgums6ovhDmsNbqnTD
-         BxPKK7NR2HTnWTDGjrrMF3UvIOmCNfjsZR8wyb2NcPLeX/UG6d6lvejBbZKZczWDmhd1
-         vGwrn4tr0QKTxsk8Y0fEM5RyVspbsEKXTQiDHfMQ9366FaD5seypcTE4HNoeITXBjBS+
-         dZCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=K7euZbyWNX2ta4I57cBHSw4Q5N0mYoG5GUIKq874i+o=;
-        b=kVzDjOPGsDAhCH/AlyabyieAk3Co26iyrkKLx+fsbNweF8oUraQ7nD/kdsDQXhmr67
-         QVKlIzNmBWkJEhohvrsW2dMnVkWU9gyz+oO8b8xf2gQtbB5Sp7fS/Z6hwAZ76jaFSnNs
-         ZKUvgZEE7BRd6Lj7RyUJsdoW8qN06XLMkgjtPB+PVwq3vyeTZA7OKRVo7DOe2dB+Ed0D
-         4FpeC3e24b9pMYyBn2uYxY7qPMKgenUUvy2SOpeSeVBqEu+Nx40c/1V53Z9bnaaChsJ/
-         ZDqQAdeTgQ4dwjJoj8QJy1GSb3am1mFQugTzQnlKuzHRFGykzE6CHnpAujQEJFYpDajg
-         3tVg==
-X-Gm-Message-State: AOAM5328zrLUTo+5O8OcvCulQiCkNWoWE3l+dwcLz8zb1br95DOMzPXM
-        TK1JX9z+htCh02q0tIekP48vT782/xIJ
-X-Google-Smtp-Source: ABdhPJxiQK8cujFiXdSCJI7KloTZeBJuh8vfwX8QTFSo8Fw35fpkzgDpmwRR/cakDUoIew9SskGdWxgaqR6a
-X-Received: from marcorr-sp.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e50])
- (user=marcorr job=sendgmr) by 2002:a17:90b:1486:: with SMTP id
- js6mr385955pjb.0.1638851491597; Mon, 06 Dec 2021 20:31:31 -0800 (PST)
-Date:   Mon,  6 Dec 2021 20:31:00 -0800
-Message-Id: <20211207043100.3357474-1-marcorr@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH] KVM: x86: Always set kvm_run->if_flag
-From:   Marc Orr <marcorr@google.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        thomas.lendacky@amd.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Marc Orr <marcorr@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 6 Dec 2021 23:40:00 -0500
+X-UUID: d6245042be1e404a95d23e2807e35f31-20211207
+X-UUID: d6245042be1e404a95d23e2807e35f31-20211207
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1939152083; Tue, 07 Dec 2021 12:36:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 7 Dec 2021 12:36:25 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 7 Dec 2021 12:36:24 +0800
+From:   <yf.wang@mediatek.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "moderated list:ARM SMMU DRIVERS" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <Yong.Wu@mediatek.com>,
+        Guangming Cao <Guangming.Cao@mediatek.com>,
+        "Yunfei Wang" <yf.wang@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] iommu/io-pgtable-arm-v7s: Add error handle for page table allocation failure
+Date:   Tue, 7 Dec 2021 12:31:14 +0800
+Message-ID: <20211207043116.27319-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kvm_run struct's if_flag is apart of the userspace/kernel API. The
-SEV-ES patches failed to set this flag because it's no longer needed by
-QEMU (according to the comment in the source code). However, other
-hypervisors may make use of this flag. Therefore, set the flag for
-guests with encrypted regiesters (i.e., with guest_state_protected set).
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
-Signed-off-by: Marc Orr <marcorr@google.com>
+In __arm_v7s_alloc_table function:
+iommu call kmem_cache_alloc to allocate page table, this function
+allocate memory may fail, when kmem_cache_alloc fails to allocate
+table, call virt_to_phys will be abnomal and return unexpected phys
+and goto out_free, then call kmem_cache_free to release table will
+trigger KE, __get_free_pages and free_pages have similar problem,
+so add error handle for page table allocation failure.
+
+Fixes: 29859aeb8a6ea ("iommu/io-pgtable-arm-v7s: Abort allocation when table address overflows the PTE")
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.10.*
 ---
- arch/x86/include/asm/kvm-x86-ops.h | 1 +
- arch/x86/include/asm/kvm_host.h    | 1 +
- arch/x86/kvm/svm/svm.c             | 8 ++++++++
- arch/x86/kvm/vmx/vmx.c             | 6 ++++++
- arch/x86/kvm/x86.c                 | 9 +--------
- 5 files changed, 17 insertions(+), 8 deletions(-)
+V2: Cc stable@vger.kernel.org
+    1. This patch needs to be merged stable branch, add stable@vger.kernel.org
+       in mail list.
+    2. There is No new code change in V2.
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index cefe1d81e2e8..9e50da3ed01a 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
- KVM_X86_OP(cache_reg)
- KVM_X86_OP(get_rflags)
- KVM_X86_OP(set_rflags)
-+KVM_X86_OP(get_if_flag)
- KVM_X86_OP(tlb_flush_all)
- KVM_X86_OP(tlb_flush_current)
- KVM_X86_OP_NULL(tlb_remote_flush)
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 860ed500580c..a7f868ff23e7 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1349,6 +1349,7 @@ struct kvm_x86_ops {
- 	void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
- 	unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
- 	void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
-+	bool (*get_if_flag)(struct kvm_vcpu *vcpu);
- 
- 	void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
- 	void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index d0f68d11ec70..91608f8c0cde 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1585,6 +1585,13 @@ static void svm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
- 	to_svm(vcpu)->vmcb->save.rflags = rflags;
- }
- 
-+static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
-+{
-+	struct vmcb *vmcb = to_svm(vcpu)->vmcb;
+---
+ drivers/iommu/io-pgtable-arm-v7s.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+index bfb6acb651e5..d84240308f4b 100644
+--- a/drivers/iommu/io-pgtable-arm-v7s.c
++++ b/drivers/iommu/io-pgtable-arm-v7s.c
+@@ -246,6 +246,12 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
+ 	else if (lvl == 2)
+ 		table = kmem_cache_zalloc(data->l2_tables, gfp);
 +
-+	return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
-+}
++	if (!table) {
++		dev_err(dev, "Page table allocation failure lvl:%d\n", lvl);
++		return NULL;
++	}
 +
- static void svm_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
- {
- 	switch (reg) {
-@@ -4621,6 +4628,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.cache_reg = svm_cache_reg,
- 	.get_rflags = svm_get_rflags,
- 	.set_rflags = svm_set_rflags,
-+	.get_if_flag = svm_get_if_flag,
- 
- 	.tlb_flush_all = svm_flush_tlb,
- 	.tlb_flush_current = svm_flush_tlb,
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 9453743ce0c4..6056baa13977 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1363,6 +1363,11 @@ void vmx_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
- 		vmx->emulation_required = vmx_emulation_required(vcpu);
- }
- 
-+static bool vmx_get_if_flag(struct kvm_vcpu *vcpu)
-+{
-+	return !!(vmx_get_rflags(vcpu) & X86_EFLAGS_IF);
-+}
-+
- u32 vmx_get_interrupt_shadow(struct kvm_vcpu *vcpu)
- {
- 	u32 interruptibility = vmcs_read32(GUEST_INTERRUPTIBILITY_INFO);
-@@ -7575,6 +7580,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
- 	.cache_reg = vmx_cache_reg,
- 	.get_rflags = vmx_get_rflags,
- 	.set_rflags = vmx_set_rflags,
-+	.get_if_flag = vmx_get_if_flag,
- 
- 	.tlb_flush_all = vmx_flush_tlb_all,
- 	.tlb_flush_current = vmx_flush_tlb_current,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e0aa4dd53c7f..45e836db5bcd 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8995,14 +8995,7 @@ static void post_kvm_run_save(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_run *kvm_run = vcpu->run;
- 
--	/*
--	 * if_flag is obsolete and useless, so do not bother
--	 * setting it for SEV-ES guests.  Userspace can just
--	 * use kvm_run->ready_for_interrupt_injection.
--	 */
--	kvm_run->if_flag = !vcpu->arch.guest_state_protected
--		&& (kvm_get_rflags(vcpu) & X86_EFLAGS_IF) != 0;
--
-+	kvm_run->if_flag = static_call(kvm_x86_get_if_flag)(vcpu);
- 	kvm_run->cr8 = kvm_get_cr8(vcpu);
- 	kvm_run->apic_base = kvm_get_apic_base(vcpu);
- 
+ 	phys = virt_to_phys(table);
+ 	if (phys != (arm_v7s_iopte)phys) {
+ 		/* Doesn't fit in PTE */
 -- 
-2.34.1.400.ga245620fadb-goog
+2.18.0
 

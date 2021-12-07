@@ -2,485 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D76F446C34C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458B846C34D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240833AbhLGTGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbhLGTGY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:06:24 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F8FC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 11:02:54 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id l14-20020a170903120e00b00143cc292bc3so2914424plh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 11:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=8q51zUwHuJfhXkm4t3PDBh8T8/WWWNZrP/ln+mfXd9E=;
-        b=nbm20WZ+jVXjHrFDAZT9Mtyr2NdB1tcau+0H4kMeB4KlEFiJbD4alL28ZPdMNlgkJj
-         FFTYwHQObwr4VdA4539Cagxu4xysq98EiP7KK22SWOjG0NUYCHylNtMzw5XA3OQnrKlT
-         g5s0wu1wkUKqRhBzA0PFEVbpuXuihMaraIZ5Bsb/NQvO1quDnJxtWZjspjevglDo29kq
-         876I0QUm/ZO2jcaivw+koc7Ozm3a6jKyKsrGdTKs4+wFE7VMADdwxLxYHhBMs8caOzdK
-         mr1rUBNZiuMdmRsBuijgzgYuCWmeYcC5Rvw2IigqhJGrr4ZVJvSNuIS0cCeRA++gTlD3
-         58BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=8q51zUwHuJfhXkm4t3PDBh8T8/WWWNZrP/ln+mfXd9E=;
-        b=xFxF/PyksV356AAE8+qOtmvxsomNaDRB3MobuScl57StqKECH/aiLMh+OXqOXi1JvJ
-         BdtKC53p0F0x539uT37ZuqSlzdvvupEjNn1GkJDFAmaKPZHzCAjNCE0A0aCssNS5tIyE
-         PO+5p0Y9kCiG4Q1YEfsEuF7kBPoqEXeoP5aEHoJkVqWnW9K9y+hsi7KusCMsqpq/EoIB
-         y8giQzxia+Gc1OnF1lWYXKiqlDb80e9YNI50dCiWLeMZKDsQq+eADKfnwaC1kh4dr9nd
-         bFW7P9gs/V35EwJdfKQBLoxw9ZrWTmc491eQRBtVkDJ/C9+ldQp+Z5naEMRkU1bPgHY9
-         hi6Q==
-X-Gm-Message-State: AOAM530N32JRcBrR+HM1z91ijRkiTwkk/beislsW8xEuOCzMXvO1J3mo
-        Dn/lFYujgh/EZQ7errMLQvFagB9f5n6O+Q==
-X-Google-Smtp-Source: ABdhPJwxiMjj0eRUrmptJlP62mAjB2juBg2U8ySx/Cfl7N7nEZkB/AoFVpzNeaC8pQJ8VjC8cBwtrI+DB1NNIQ==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:36b6:7f4b:d39a:e417])
- (user=davidgow job=sendgmr) by 2002:a17:90b:4b51:: with SMTP id
- mi17mr1298440pjb.48.1638903773471; Tue, 07 Dec 2021 11:02:53 -0800 (PST)
-Date:   Tue,  7 Dec 2021 11:02:51 -0800
-Message-Id: <20211207190251.18426-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S240840AbhLGTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:07:45 -0500
+Received: from mga04.intel.com ([192.55.52.120]:21548 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231668AbhLGTHo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:07:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="236401837"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="236401837"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:04:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="502722806"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2021 11:04:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mufl5-000Msp-1J; Tue, 07 Dec 2021 19:04:11 +0000
+Date:   Wed, 8 Dec 2021 03:03:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202112080347.ZNyya0DH-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rae Moar <rmoar@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
+date:   7 weeks ago
+config: arm-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080347.ZNyya0DH-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
-It does not make any significant additions or changes other than those
-already in use in the kernel: additional features can be added as they
-become necessary and used.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1]: https://testanything.org/tap-version-13-specification.html
 
-Signed-off-by: Rae Moar <rmoar@google.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
+   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
+
+vim +210 arch/arm/mach-ep93xx/clock.c
+
+   205	
+   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
+   207					struct clk_rate_request *req)
+   208	{
+   209		unsigned long rate = req->rate;
+ > 210		struct clk *best_parent = 0;
+   211		unsigned long __parent_rate;
+   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
+   213		unsigned long best_parent_rate;
+   214		int __div = 0, __pdiv = 0;
+   215		int i;
+   216	
+   217		/*
+   218		 * Try the two pll's and the external clock
+   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
+   220		 * all the clocks by 2 to avoid floating point math.
+   221		 *
+   222		 * This is based on the algorithm in the ep93xx raster guide:
+   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
+   224		 *
+   225		 */
+   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
+   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
+   228	
+   229			__parent_rate = clk_get_rate(parent);
+   230			mclk_rate = __parent_rate * 2;
+   231	
+   232			/* Try each predivider value */
+   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
+   234				__div = mclk_rate / (rate * __pdiv);
+   235				if (__div < 2 || __div > 127)
+   236					continue;
+   237	
+   238				actual_rate = mclk_rate / (__pdiv * __div);
+   239				if (is_best(rate, actual_rate, best_rate)) {
+   240					best_rate = actual_rate;
+   241					best_parent_rate = __parent_rate;
+   242					best_parent = parent;
+   243				}
+   244			}
+   245		}
+   246	
+   247		if (!best_parent)
+   248			return -EINVAL;
+   249	
+   250		req->best_parent_rate = best_parent_rate;
+   251		req->best_parent_hw = __clk_get_hw(best_parent);
+   252		req->rate = best_rate;
+   253	
+   254		return 0;
+   255	}
+   256	
+
 ---
-
-Changes since RFC v1:
-https://lore.kernel.org/linux-kselftest/20211203064840.2871751-1-davidgow@g=
-oogle.com/
-- Add a "see also" section with some useful links.
-- Remove the XPASS directive, which isn't used anywhere.
-- Clear up / reorganise the discussion around differences between KTAP
-  and TAP14.
-- Improve the wording around some directives.
-- Fix a bunch of typos.
-
-See prior discussion in the following RFC:
-https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqa=
-Jk+r-K1YJzPggFDQ@mail.gmail.com/.
-
----
-
- Documentation/dev-tools/index.rst |   1 +
- Documentation/dev-tools/ktap.rst  | 298 ++++++++++++++++++++++++++++++
- 2 files changed, 299 insertions(+)
- create mode 100644 Documentation/dev-tools/ktap.rst
-
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/in=
-dex.rst
-index 010a2af1e7d9..4621eac290f4 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -32,6 +32,7 @@ Documentation/dev-tools/testing-overview.rst
-    kgdb
-    kselftest
-    kunit/index
-+   ktap
-=20
-=20
- .. only::  subproject and html
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/kta=
-p.rst
-new file mode 100644
-index 000000000000..878530cb9c27
---- /dev/null
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -0,0 +1,298 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+The Kernel Test Anything Protocol (KTAP)
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+TAP, or the Test Anything Protocol is a format for specifying test results=
- used
-+by a number of projects. It's website and specification are found at this =
-`link
-+<https://testanything.org/>`_. The Linux Kernel largely uses TAP output fo=
-r test
-+results. However, Kernel testing frameworks have special needs for test re=
-sults
-+which don't align with the original TAP specification. Thus, a "Kernel TAP=
-"
-+(KTAP) format is specified to extend and alter TAP to support these use-ca=
-ses.
-+This specification describes the generally accepted format of KTAP as it i=
-s
-+currently used in the kernel.
-+
-+KTAP test results describe a series of tests (which may be nested: i.e., t=
-est
-+can have subtests), each of which can contain both diagnostic data -- e.g.=
-, log
-+lines -- and a final result. The test structure and results are
-+machine-readable, whereas the diagnostic data is unstructured and is there=
- to
-+aid human debugging.
-+
-+KTAP output is built from four different types of lines:
-+- Version lines
-+- Plan lines
-+- Test case result lines
-+- Diagnostic lines
-+
-+In general, valid KTAP output should also form valid TAP output, but some
-+information, in particular nested test results, may be lost. Also note tha=
-t
-+there is a stagnant draft specification for TAP14, KTAP diverges from this=
- in
-+a couple of places (notably the "Subtest" header), which are described whe=
-re
-+relevant later in this document.
-+
-+Version lines
-+-------------
-+
-+All KTAP-formatted results begin with a "version line" which specifies whi=
-ch
-+version of the (K)TAP standard the result is compliant with.
-+
-+For example:
-+- "KTAP version 1"
-+- "TAP version 13"
-+- "TAP version 14"
-+
-+Note that, in KTAP, subtests also begin with a version line, which denotes=
- the
-+start of the nested test results. This differs from TAP14, which uses a
-+separate "Subtest" line.
-+
-+While, going forward, "KTAP version 1" should be used by compliant tests, =
-it
-+is expected that most parsers and other tooling will accept the other vers=
-ions
-+listed here for compatibility with existing tests and frameworks.
-+
-+Plan lines
-+----------
-+
-+A test plan provides the number of tests (or subtests) in the KTAP output.
-+
-+Plan lines must follow the format of "1..N" where N is the number of tests=
- or subtests.
-+Plan lines follow version lines to indicate the number of nested tests.
-+
-+While there are cases where the number of tests is not known in advance --=
- in
-+which case the test plan may be omitted -- it is strongly recommended one =
-is
-+present where possible.
-+
-+Test case result lines
-+----------------------
-+
-+Test case result lines indicate the final status of a test.
-+They are required and must have the format:
-+
-+.. code-block::
-+
-+	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
-+
-+The result can be either "ok", which indicates the test case passed,
-+or "not ok", which indicates that the test case failed.
-+
-+<number> represents the number of the test being performed. The first test=
- must
-+have the number 1 and the number then must increase by 1 for each addition=
-al
-+subtest within the same test at the same nesting level.
-+
-+The description is a description of the test, generally the name of
-+the test, and can be any string of words (can't include #). The
-+description is optional, but recommended.
-+
-+The directive and any diagnostic data is optional. If either are present, =
-they
-+must follow a hash sign, "#".
-+
-+A directive is a keyword that indicates a different outcome for a test oth=
-er
-+than passed and failed. The directive is optional, and consists of a singl=
-e
-+keyword preceding the diagnostic data. In the event that a parser encounte=
-rs
-+a directive it doesn't support, it should fall back to the "ok" / "not ok"
-+result.
-+
-+Currently accepted directives are:
-+
-+- "SKIP", which indicates a test was skipped (note the result of the test =
-case
-+  result line can be either "ok" or "not ok" if the SKIP directive is used=
-)
-+- "TODO", which indicates that a test is not expected to pass at the momen=
-t,
-+  e.g. because the feature it is testing is known to be broken. While this
-+  directive is inherited from TAP, its use in the kernel is discouraged.
-+- "XFAIL", which indicates that a test is expected to fail. This is simila=
-r
-+  to "TODO", above, and is used by some kselftest tests.
-+- =E2=80=9CTIMEOUT=E2=80=9D, which indicates a test has timed out (note th=
-e result of the test
-+  case result line should be =E2=80=9Cnot ok=E2=80=9D if the TIMEOUT direc=
-tive is used)
-+- =E2=80=9CERROR=E2=80=9D, which indicates that the execution of a test ha=
-s failed due to a
-+  specific error that is included in the diagnostic data. (note the result=
- of
-+  the test case result line should be =E2=80=9Cnot ok=E2=80=9D if the ERRO=
-R directive is used)
-+
-+The diagnostic data is a plain-text field which contains any additional de=
-tails
-+about why this result was produced. This is typically an error message for=
- ERROR
-+or failed tests, or a description of missing dependencies for a SKIP resul=
-t.
-+
-+The diagnostic data field is optional, and results which have neither a
-+directive nor any diagnostic data do not need to include the "#" field
-+separator.
-+
-+Example result lines include:
-+
-+.. code-block::
-+
-+	ok 1 test_case_name
-+
-+The test "test_case_name" passed.
-+
-+.. code-block::
-+
-+	not ok 1 test_case_name
-+
-+The test "test_case_name" failed.
-+
-+.. code-block::
-+
-+	ok 1 test # SKIP necessary dependency unavailable
-+
-+The test "test" was SKIPPED with the diagnostic message "necessary depende=
-ncy
-+unavailable".
-+
-+.. code-block::
-+
-+	not ok 1 test # TIMEOUT 30 seconds
-+
-+The test "test" timed out, with diagnostic data "30 seconds".
-+
-+.. code-block::
-+
-+	ok 5 check return code # rcode=3D0
-+
-+The test "check return code" passed, with additional diagnostic data =E2=
-=80=9Crcode=3D0=E2=80=9D
-+
-+
-+Diagnostic lines
-+----------------
-+
-+If tests wish to output any further information, they should do so using
-+"diagnostic lines". Diagnostic lines are optional, freeform text, and are
-+often used to describe what is being tested and any intermediate results i=
-n
-+more detail than the final result and diagnostic data line provides.
-+
-+Diagnostic lines are formatted as "# <diagnostic_description>", where the
-+description can be any string.  Diagnostic lines can be anywhere in the te=
-st
-+output. As a rule, diagnostic lines regarding a test are directly before t=
-he
-+test result line for that test.
-+
-+Note that most tools will treat unknown lines (see below) as diagnostic li=
-nes,
-+even if they do not start with a "#": this is to capture any other useful
-+kernel output which may help debug the test. It is nevertheless recommende=
-d
-+that tests always prefix any diagnostic output they have with a "#" charac=
-ter.
-+
-+Unknown lines
-+-------------
-+
-+There may be lines within KTAP output that do not follow the format of one=
- of
-+the four formats for lines described above. This is allowed, however, they=
- will
-+not influence the status of the tests.
-+
-+Nested tests
-+------------
-+
-+In KTAP, tests can be nested. This is done by having a test include within=
- its
-+output an entire set of KTAP-formatted results. This can be used to catego=
-rize
-+and group related tests, or to split out different results from the same t=
-est.
-+
-+The "parent" test's result should consist of all of its subtests' results,
-+starting with another KTAP version line and test plan, and end with the ov=
-erall
-+result. If one of the subtests fail, for example, the parent test should a=
-lso
-+fail.
-+
-+Additionally, all result lines in a subtest should be indented. One level =
-of
-+indentation is two spaces: "  ". The indentation should begin at the versi=
-on
-+line and should end before the parent test's result line.
-+
-+An example of a test with two nested subtests:
-+
-+.. code-block::
-+
-+	KTAP version 1
-+	1..1
-+	  KTAP version 1
-+	  1..2
-+	  ok 1 test_1
-+	  not ok 2 test_2
-+	# example failed
-+	not ok 1 example
-+
-+An example format with multiple levels of nested testing:
-+
-+.. code-block::
-+
-+	KTAP version 1
-+	1..2
-+	  KTAP version 1
-+	  1..2
-+	    KTAP version 1
-+	    1..2
-+	    not ok 1 test_1
-+	    ok 2 test_2
-+	  not ok 1 test_3
-+	  ok 2 test_4 # SKIP
-+	not ok 1 example_test_1
-+	ok 2 example_test_2
-+
-+
-+Major differences between TAP and KTAP
-+--------------------------------------
-+
-+Note the major differences between the TAP and KTAP specification:
-+- yaml and json are not recommended in diagnostic messages
-+- TODO directive not recognized
-+- KTAP allows for an arbitrary number of tests to be nested
-+
-+The TAP14 specification does permit nested tests, but instead of using ano=
-ther
-+nested version line, uses a line of the form
-+"Subtest: <name>" where <name> is the name of the parent test.
-+
-+Example KTAP output
-+--------------------
-+.. code-block::
-+
-+	KTAP version 1
-+	1..1
-+	  KTAP version 1
-+	  1..3
-+	    KTAP version 1
-+	    1..1
-+	    # test_1: initializing test_1
-+	    ok 1 test_1
-+	  ok 1 example_test_1
-+	    KTAP version 1
-+	    1..2
-+	    ok 1 test_1 # SKIP test_1 skipped
-+	    ok 2 test_2
-+	  ok 2 example_test_2
-+	    KTAP version 1
-+	    1..3
-+	    ok 1 test_1
-+	    # test_2: FAIL
-+	    not ok 2 test_2
-+	    ok 3 test_3 # SKIP test_3 skipped
-+	  not ok 3 example_test_3
-+	not ok 1 main_test
-+
-+This output defines the following hierarchy:
-+
-+A single test called "main_test", which fails, and has three subtests:
-+- "example_test_1", which passes, and has one subtest:
-+
-+   - "test_1", which passes, and outputs the diagnostic message "test_1: i=
-nitializing test_1"
-+
-+- "example_test_2", which passes, and has two subtests:
-+
-+   - "test_1", which is skipped, with the explanation "test_1 skipped"
-+   - "test_2", which passes
-+
-+- "example_test_3", which fails, and has three subtests
-+
-+   - "test_1", which passes
-+   - "test_2", which outputs the diagnostic line "test_2: FAIL", and fails=
-.
-+   - "test_3", which is skipped with the explanation "test_3 skipped"
-+
-+Note that the individual subtests with the same names do not conflict, as =
-they
-+are found in different parent tests. This output also exhibits some sensib=
-le
-+rules for "bubbling up" test results: a test fails if any of its subtests =
-fail.
-+Skipped tests do not affect the result of the parent test (though it often
-+makes sense for a test to be marked skipped if _all_ of its subtests have =
-been
-+skipped).
-+
-+See also:
-+---------
-+
-+- The TAP specification:
-+  https://testanything.org/tap-version-13-specification.html
-+- The (stagnant) TAP version 14 specification:
-+  https://github.com/TestAnything/Specification/blob/tap-14-specification/=
-specification.md
-+- The kselftest documentation:
-+  Documentation/dev-tools/kselftest.rst
-+- The KUnit documentation:
-+  Documentation/dev-tools/kunit/index.rst
---=20
-2.34.1.400.ga245620fadb-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

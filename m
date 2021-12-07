@@ -2,89 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0978746B80B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E030246B7F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbhLGJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:55:49 -0500
-Received: from m12-18.163.com ([220.181.12.18]:10535 "EHLO m12-18.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232311AbhLGJzs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:55:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ta/wF
-        WP7wx/GbOe/PU6XzVZ7kIW7mTON1PaHIqq+Y9o=; b=CdgN2VC79T//s8mekft1l
-        WUgscf6Ruhp2aQoHrh4KNo9DhFivzYYnL6GTGcytgmmP1uB/rfS0zGzjROEeks0E
-        vmhgg8E8HK5B9CJnMeuwC1na6uDiR55UY3hnd6FkBvZE1y5DxyC22DbSkESHOUn7
-        RE4vc8VXfYAuEVHHzYDt9o=
-Received: from localhost.localdomain (unknown [120.243.49.111])
-        by smtp14 (Coremail) with SMTP id EsCowADntPFnLq9hY61kAw--.50424S4;
-        Tue, 07 Dec 2021 17:51:14 +0800 (CST)
-From:   lizhe <sensor1010@163.com>
-To:     ulf.hansson@linaro.org, u.kleine-koenig@pengutronix.de,
-        srinivas.pandruvada@linux.intel.com, pali@kernel.org,
-        TheSven73@gmail.com, lznuaa@gmail.com, sensor1010@163.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/mmc/core/bus: Remove redundant driver match function
-Date:   Tue,  7 Dec 2021 01:50:29 -0800
-Message-Id: <20211207095029.96387-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S234348AbhLGJx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229873AbhLGJxz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 04:53:55 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0462BC061574;
+        Tue,  7 Dec 2021 01:50:26 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id u80so12951024pfc.9;
+        Tue, 07 Dec 2021 01:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g9v1gEiTaCcmm9Ipr1ZhTI3gfkBKIxC9zvlLuNxve5w=;
+        b=nUqguKBP6eJ+p9sbAz5TrcJPZwzURDTfvyPkZkFcqJLapZyiHUMzWVBD9lM0ebskMS
+         g9cA+y8ZpU2Rfs9RxBkRBbsmdUI22ABcBgsHzuBCgXfWY7i6JfyX+3cfODrhipPEQa7H
+         GAogE1IVyn5S97r2v2kwMVd/6ZIkyDJSgcYVpfgUx11UlmW98tmYkRPwniF5nvi+UqUE
+         t1AcKHJ/c4oQyHMeNFdWjbYHJ9FF29j3yn/tPeP0cV6tCKC390QZI7cmUrYXhj4Ai0Nz
+         aoRHyZVZktIHlLmuDNKqmAoDX2UWYNN51rxDL5QVaD19kow9O2lKnGyjJrYk1hn4F1Y6
+         5WqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g9v1gEiTaCcmm9Ipr1ZhTI3gfkBKIxC9zvlLuNxve5w=;
+        b=ieWFVfNaFS4X3wYsDpOFPA5e4qp0PIIIF6fNCkA9trmTK8I05QIGi8iCCfEoZcsxkS
+         pgurc8+Uu5TUUoh6wq+rtwVoIqCIovF40tsglSAB9PT/veQzdpJHVIGAyP9yriLgmuxn
+         eUtVdP0FElfUs8r5XcHKi4GeKazQjpG2ahrBnRhylkFsTytYNJBCsUrT69M07TddWKA1
+         PXCjNmIBwQaOHRKjE+iYgSyJuRCPPgkhxnA2ZQwi2O1NOQlB7+Wi0vchZEueEyxGAUft
+         46mbfNt1Pq+KvTNDTUG9wMhxFZr7LjMvFwgPcFZG7fyCBF7CSBvZBzSL32vOYdHI7+jz
+         pRgA==
+X-Gm-Message-State: AOAM530OALiKLV7odFsIlemtPA1++O5j+4cExax31rpkF3yBJ5qdMjQl
+        QIiYG/+n6jWEt3k+gbFEe3Lxljw09o8=
+X-Google-Smtp-Source: ABdhPJwxBuESsfuL6Lk10423rx+9fimCI4T2qa3tA0b4fqWoe91Xnw1TvAeMXkiD0ZDGu4/wFJtsiA==
+X-Received: by 2002:a05:6a00:b49:b0:49f:bad2:bd7c with SMTP id p9-20020a056a000b4900b0049fbad2bd7cmr42447835pfo.64.1638870625404;
+        Tue, 07 Dec 2021 01:50:25 -0800 (PST)
+Received: from localhost ([47.88.60.64])
+        by smtp.gmail.com with ESMTPSA id m6sm12423138pgs.18.2021.12.07.01.50.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 01:50:25 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: [PATCH 0/4] KVM: X86: Improve permission_fault() for SMAP
+Date:   Tue,  7 Dec 2021 17:50:35 +0800
+Message-Id: <20211207095039.53166-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowADntPFnLq9hY61kAw--.50424S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFWDCF48AFW7tw17JF1fWFg_yoW8JFW3pF
-        ZxXFy2kryUKa13Z3s7CFWkuFySk3y8Kry0grW8K3sY9a17CrnrJFyvy34jyF98uFy5CF4S
-        qryqvryrCFy8ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uha9fUUUUU=
-X-Originating-IP: [120.243.49.111]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBXhtiq1aD9jTE-gAAsh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is no driver match function, the driver core assumes
-that each candidate pair (driver, device) matches. See function
-driver_match_device().
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Drop the mmc bus's match function that always returned 1 and
-so implements the same behaviour as when there is no match
-function.
+permission_fault() calls two callbacks to get CPL and RFLAGS for SMAP,
+but it is unneeded for some cases, this patchset improves it.
 
-Signed-off-by: lizhe <sensor1010@163.com>
----
- drivers/mmc/core/bus.c | 11 -----------
- 1 file changed, 11 deletions(-)
+Lai Jiangshan (4):
+  KVM: X86: Fix comments in update_permission_bitmask
+  KVM: X86: Rename variable smap to not_smap in permission_fault()
+  KVM: X86: Handle implicit supervisor access with SMAP
+  KVM: X86: Only get rflags when needed in permission_fault()
 
-diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
-index f6b7a9c5bbff..096ae624be9a 100644
---- a/drivers/mmc/core/bus.c
-+++ b/drivers/mmc/core/bus.c
-@@ -53,16 +53,6 @@ static struct attribute *mmc_dev_attrs[] = {
- };
- ATTRIBUTE_GROUPS(mmc_dev);
- 
--/*
-- * This currently matches any MMC driver to any MMC card - drivers
-- * themselves make the decision whether to drive this card in their
-- * probe method.
-- */
--static int mmc_bus_match(struct device *dev, struct device_driver *drv)
--{
--	return 1;
--}
--
- static int
- mmc_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
-@@ -226,7 +216,6 @@ static const struct dev_pm_ops mmc_bus_pm_ops = {
- static struct bus_type mmc_bus_type = {
- 	.name		= "mmc",
- 	.dev_groups	= mmc_dev_groups,
--	.match		= mmc_bus_match,
- 	.uevent		= mmc_bus_uevent,
- 	.probe		= mmc_bus_probe,
- 	.remove		= mmc_bus_remove,
+ arch/x86/include/asm/kvm_host.h |  9 +++++++
+ arch/x86/kvm/mmu.h              | 45 +++++++++++++++++++++------------
+ arch/x86/kvm/mmu/mmu.c          |  8 +++---
+ arch/x86/kvm/x86.c              | 20 ++++++++++++---
+ 4 files changed, 59 insertions(+), 23 deletions(-)
+
 -- 
-2.25.1
-
+2.19.1.6.gb485710b
 

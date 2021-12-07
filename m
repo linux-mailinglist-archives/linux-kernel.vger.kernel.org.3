@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59E646B00F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC4446B012
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbhLGBzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:55:42 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:32942 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbhLGBzl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:55:41 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638841931; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=o/E0WPb3DgfSNjgnfDH6dTjCGZn7mfElYZOu6xLSZiA=; b=BZvO4xw/pOmJNqIOq6Q0gkb6bMKMD214ZtFIxR2quHd0Dqv6nxR46U27i4yR0/HOc5o7bldQ
- qV756GD/YLZZOJIrRNNeUoiWZ8igL1O+HP3APpZeHdiOhPFOKo9eBS8JQ/0kxyqxFkJ+6r3L
- EkAxzoWyXQoOTXnAi6+4hVuEwp0=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 61aebe4b7d878c8ded334c0e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Dec 2021 01:52:11
- GMT
-Sender: hemantk=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 60F5BC4361C; Tue,  7 Dec 2021 01:52:05 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.0
-Received: from [10.110.103.130] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hemantk)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A0E1FC4338F;
-        Tue,  7 Dec 2021 01:52:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A0E1FC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH 01/20] bus: mhi: Move host MHI code to "host" directory
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        mhi@lists.linux.dev
-Cc:     bbhatt@codeaurora.org, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, skananth@codeaurora.org,
-        vpernami@codeaurora.org, vbadigan@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211202113553.238011-1-manivannan.sadhasivam@linaro.org>
- <20211202113553.238011-2-manivannan.sadhasivam@linaro.org>
-From:   Hemant Kumar <hemantk@codeaurora.org>
-Message-ID: <1701ade0-4f75-1407-2741-cd792d3e78fe@codeaurora.org>
-Date:   Mon, 6 Dec 2021 17:52:02 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+        id S235489AbhLGB4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:56:23 -0500
+Received: from mga12.intel.com ([192.55.52.136]:2913 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234802AbhLGB4W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 20:56:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217481070"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="217481070"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 17:52:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="515038186"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 17:52:44 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/18] iommu: Add device dma ownership set/release
+ interfaces
+To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
+References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
+ <20211206015903.88687-2-baolu.lu@linux.intel.com>
+ <Ya4Ru/GtILJYzI6j@8bytes.org> <20211206150144.GC4670@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <fa30d398-746c-c7d0-830f-40e3aaee16d6@linux.intel.com>
+Date:   Tue, 7 Dec 2021 09:52:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211202113553.238011-2-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20211206150144.GC4670@nvidia.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,19 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/2/2021 3:35 AM, Manivannan Sadhasivam wrote:
-> In preparation of the endpoint MHI support, let's move the host MHI code
-> to its own "host" directory and adjust the toplevel MHI Kconfig & Makefile.
+On 12/6/21 11:01 PM, Jason Gunthorpe wrote:
+> On Mon, Dec 06, 2021 at 02:35:55PM +0100, Joerg Roedel wrote:
+>> On Mon, Dec 06, 2021 at 09:58:46AM +0800, Lu Baolu wrote:
+>>> >From the perspective of who is initiating the device to do DMA, device
+>>> DMA could be divided into the following types:
+>>>
+>>>          DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver
+>>> 			through the kernel DMA API.
+>>>          DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel
+>>> 			driver with its own PRIVATE domain.
+>>> 	DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by
+>>> 			userspace.
+>>
+>> I have looked at the other iommu patches in this series, but I still
+>> don't quite get what the difference in the code flow is between
+>> DMA_OWNER_PRIVATE_DOMAIN and DMA_OWNER_PRIVATE_DOMAIN_USER. What are the
+>> differences in the iommu core behavior based on this setting?
 > 
-> While at it, let's also move the "pci_generic" driver to "host" directory
-> as it is a host MHI controller driver.
+> USER causes the IOMMU code to spend extra work to never assign the
+> default domain. Lu, it would be good to update the comment with this
+> detail
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Once in USER mode the domain is always a /dev/null domain or a domain
+> controlled by userspace. Never a domain pointing at kernel memory.
 
-Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+Yes. The __iommu_detach_group() re-attaches the default domain
+automatically. This is not allowed once in USER mode.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
-Forum, a Linux Foundation Collaborative Project
+I will update the comments whit this detail.
+
+> 
+>>>   struct group_device {
+>>> @@ -621,6 +624,7 @@ struct iommu_group *iommu_group_alloc(void)
+>>>   	INIT_LIST_HEAD(&group->devices);
+>>>   	INIT_LIST_HEAD(&group->entry);
+>>>   	BLOCKING_INIT_NOTIFIER_HEAD(&group->notifier);
+>>> +	group->dma_owner = DMA_OWNER_NONE;
+>>
+>>
+>> DMA_OWNER_NONE is also questionable. All devices are always in one
+>> domain, and the default domain is always the one used for DMA-API, so
+>> why isn't the initial value DMA_OWNER_DMA_API?
+> 
+> 'NONE' means the group is in the default domain but no driver is bound
+> and thus DMA isn't being used. Seeing NONE is the only condition when
+> it is OK to change the domain.
+> 
+> This could be reworked to instead rely on the refcount == 0 as the
+> signal to know it is OK to change the domain and then we never have
+> NONE at all. Lu?
+
+NONE is just a parking state. It's okay to rely on the "refcount == 0"
+for state transition as far as I see. I will work towards this.
+
+Best regards,
+baolu

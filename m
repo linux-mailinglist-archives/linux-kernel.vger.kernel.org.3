@@ -2,150 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A915946B14F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6FF46B151
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbhLGDTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbhLGDTk (ORCPT
+        id S233748AbhLGDUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:20:01 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:45407 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229653AbhLGDUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:19:40 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE104C061746;
-        Mon,  6 Dec 2021 19:16:10 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id y68so37117715ybe.1;
-        Mon, 06 Dec 2021 19:16:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LNIl78nckWjbXlFhMvmgIRUvjw5KLk7k5w+8AsbkB/Q=;
-        b=pkjjpbSJYrSJIT1vUnWcBPWxYHNh5AFQzR6BgYygbMumqzzt0bk1i5HUQoiFYFymCJ
-         4zQZuIbaqtYAz2/XG4Me5IpxpSMww147GWlV3VjbaEu1TrNqaYn+8Q7a/vtY95Enmhoo
-         nUars06ljDV9ZOsY4qhrG9r4Oe7EZMRemIeWC9Usoars4OtU9V77b90fqNwq+ASG4UaC
-         m0+Dfwa5YSt7MOA0mC/8ikgzb4OjLnMSUTO1EjtIMF7/ME3ZU2ACAU0a07iZ/KErZ1OD
-         AKNidnW/vQKhpsd+9FfHUmVkdCFdAlT+4peqFGB4pVXxij/EuNKA+W63baNVFoXGYng5
-         xfzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LNIl78nckWjbXlFhMvmgIRUvjw5KLk7k5w+8AsbkB/Q=;
-        b=CWv+0IzKnkVOcLtgwc97FGgmx7tVa5C2dVabsiUBeK5E82CLJUCzkRplauXwYpM3BB
-         SE5l7v7/eHFM4YK9hSk8yeweq0P6Wu4xRoMobQVtCY9B8I3c1/W2CbXBojX2pjKuRp7L
-         kEhQHJSmdoCCsCkcOanK48C3lMvhgvnpOa9s5VJEmiDINztGD9hhkPmnoz9tu8tHV4rw
-         HLP5SFOKKovdaZ5mQOPRgh2lyD/s+0syvpz+1KT/a3arBAHa+TeblVZxTkUk2OrKpS2x
-         UWIDVBl/GG+OE/lh7q/svZe7tV63974JbPXeTzZxk9/wN2l7kYjWtToxrXdSe938malg
-         dOog==
-X-Gm-Message-State: AOAM532dsWXGsZo/0RpHFvGIQFQPeGaa4Sdih/zSLwJOxwNvYPXZ891b
-        3Yx7ut4kUP9vaSG/ObLY0iuDuB+NpNJPhuA6Veo=
-X-Google-Smtp-Source: ABdhPJwT8QjQbugo9c7+SC0qEVR104ES+uIjUurEnscVlr2lktlzSaC4XbZwxfkDp+yhckp2grsrS4MciWEAHIzy9kk=
-X-Received: by 2002:a25:abaa:: with SMTP id v39mr47437825ybi.367.1638846970036;
- Mon, 06 Dec 2021 19:16:10 -0800 (PST)
+        Mon, 6 Dec 2021 22:20:00 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 76D0D2B000FE;
+        Mon,  6 Dec 2021 22:16:28 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 06 Dec 2021 22:16:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=K
+        DwpeRiMBZ51a/1N537G6MpuhOZKtEbUes449q2dxHA=; b=aMSVqlTgdlw0z4qzM
+        jhsxSmzCok04+3Ub8TZuJRQFEilsZUiVfV5tRwxqtKK7Kvkuwkx2LXPvycBx2d7l
+        9N8VmLkcPANwMi6mSuo3tSQjEQg1ZchvrtMJ73faDvC9mPDDJyOUd2CDzU56jcSx
+        N/ibXUgMxl83B9tf4KZVGfabXL8MfAyJvhbwNHQiHiZosl+r97LFopr2VXOZUNxT
+        ztaabFr8IqjrxRO6RtWoJygsRezHqXXOqBYorI2X4D7WhezS3a0J05KT7f6jV6m+
+        8UzIrlu+cHtjBO74JbIDSIMy+bOd9+UIUHqs0qkt4LtHcqjVZqnj90EDjt1qJRHA
+        jVkxQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=KDwpeRiMBZ51a/1N537G6MpuhOZKtEbUes449q2dx
+        HA=; b=Wjgizc0i5kuQ49PQnaS0dZyj7XWwusgQ8K38W5zQ2uHc/bhPBd6l/TUnc
+        ndCtVqqYhudhtuWA05eAOXHfYP4toV/TYqp0PX6xlEPkdVxu3VbtZ1qc+1IgnNRD
+        zeVruVhdGtzVslfW6YAbCSBjw/SHBNDPnqhthtz9Q/9sOOiAGpGJ6FN61gIkc2Na
+        oUIY6B5cKUbhe5mkhXJ3WUocdM7633zG3HKOoEYC8xlrbH9c0fsHpZx0InB2HlJe
+        MNdHzbn6hf4uG3UcXpAlNOKyBzPgrE4pfZOQ80pId3YHL7kCgq7ncXKRn7uOuFfD
+        nAP0e7A2TZGlPX9l0Izunr3+3oTfQ==
+X-ME-Sender: <xms:C9KuYY3yF_ZwjRG9Xv3bxTZesMsUR4MqCTjytAZW6Rcfb4CQPONoeQ>
+    <xme:C9KuYTEQD3RbrHY7ir45q9C8NR74L6Gs76FIPpwQ0wLTKIDmsbwGbnug34Zth8F7v
+    GgHWTYT-z0fR21EaEg>
+X-ME-Received: <xmr:C9KuYQ5DglWL4yyQjaK65vj9wf3eDjNIxzXVHTUYw_bKjI4RipH5k9RNFzifW7edKAYflvvII8QqSNUmlrEMjT5YVkDI5EPuogTL>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeeggdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefrvghtvghr
+    ucfjuhhtthgvrhgvrhcuoehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+    eqnecuggftrfgrthhtvghrnhepveeuveeifeetgedvvdehgeefieehveekffevteeiudei
+    hfevvdejieeuleefleefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvghtvghrrdhhuhht
+    thgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:C9KuYR2NgKorlsKgWHKhNABkmON_FpvJAX2Yp0yhLyHCUpx24z9b-Q>
+    <xmx:C9KuYbHng5AsCOalPPnoCNqeqRC92Np16M2wRpd2DaOUCdEQDHXX0A>
+    <xmx:C9KuYa9IZaBsRgGQ3CjK6qn6kafZOkXZ4K1WSbVQ8_-ZFf3D4nqe9g>
+    <xmx:C9KuYYdQupVdu8lccYCGrOfdRRLo-5bYAkb2_01tz5y2qrYgiGRJXqmF9nQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Dec 2021 22:16:22 -0500 (EST)
+Date:   Tue, 7 Dec 2021 13:16:16 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Doug Anderson <dianders@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        "Kristian H . Kristensen" <hoegsberg@google.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-input@vger.kernel.org, Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH v2 1/2] drm/input_helper: Add new input-handling helper
+Message-ID: <Ya7SAHD39m/CLJqw@quokka>
+References: <20211117224841.3442482-1-briannorris@chromium.org>
+ <20211117144807.v2.1.I09b516eff75ead160a6582dd557e7e7e900c9e8e@changeid>
+ <20211118123928.545dec8a@eldfell>
+ <YZcB4ooqpvP3gHdx@google.com>
+ <20211119123841.1d628cb6@eldfell>
+ <YaaLITQF+lngE+VZ@google.com>
 MIME-Version: 1.0
-References: <20211124084119.260239-1-jolsa@kernel.org> <20211124084119.260239-2-jolsa@kernel.org>
- <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com> <Yafp193RdskXofbH@krava>
-In-Reply-To: <Yafp193RdskXofbH@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 6 Dec 2021 19:15:58 -0800
-Message-ID: <CAEf4BzbmKffmcM3WhCthrgfbWZBZj52hGH0Ju0itXyJ=yD01NA@mail.gmail.com>
-Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YaaLITQF+lngE+VZ@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 1:32 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Tue, Nov 30, 2021 at 10:53:58PM -0800, Andrii Nakryiko wrote:
-> > On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > Adding support to create multiple probes within single perf event.
-> > > This way we can associate single bpf program with multiple kprobes,
-> > > because bpf program gets associated with the perf event.
-> > >
-> > > The perf_event_attr is not extended, current fields for kprobe
-> > > attachment are used for multi attachment.
-> >
-> > I'm a bit concerned with complicating perf_event_attr further to
-> > support this multi-attach. For BPF, at least, we now have
-> > bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
-> > syscall which allows much simpler and cleaner API to do this. Libbpf
-> > will actually pick bpf_link-based attachment if kernel supports it. I
-> > think we should better do bpf_link-based approach from the get go.
-> >
-> > Another thing I'd like you to keep in mind and think about is BPF
-> > cookie. Currently kprobe/uprobe/tracepoint allow to associate
-> > arbitrary user-provided u64 value which will be accessible from BPF
-> > program with bpf_get_attach_cookie(). With multi-attach kprobes this
-> > because extremely crucial feature to support, otherwise it's both
-> > expensive, inconvenient and complicated to be able to distinguish
-> > between different instances of the same multi-attach kprobe
-> > invocation. So with that, what would be the interface to specify these
-> > BPF cookies for this multi-attach kprobe, if we are going through
-> > perf_event_attr. Probably picking yet another unused field and
-> > union-izing it with a pointer. It will work, but makes the interface
-> > even more overloaded. While for LINK_CREATE we can just add another
-> > pointer to a u64[] with the same size as number of kfunc names and
-> > offsets.
->
-> I'm not sure we could bypass perf event easily.. perhaps introduce
-> BPF_PROG_TYPE_RAW_KPROBE as we did for tracepoints or just new
-> type for multi kprobe attachment like BPF_PROG_TYPE_MULTI_KPROBE
-> that might be that way we'd have full control over the API
+On Tue, Nov 30, 2021 at 12:35:45PM -0800, Brian Norris wrote:
+> Hi Pekka,
+> 
+> On Fri, Nov 19, 2021 at 12:38:41PM +0200, Pekka Paalanen wrote:
+> > On Thu, 18 Nov 2021 17:46:10 -0800
+> > Brian Norris <briannorris@chromium.org> wrote:
+> > > On Thu, Nov 18, 2021 at 12:39:28PM +0200, Pekka Paalanen wrote:
+> > > > On Wed, 17 Nov 2021 14:48:40 -0800
+> > > > Brian Norris <briannorris@chromium.org> wrote:
+> > > > If KMS gets a pageflip or modeset in no time after an input event, then
+> > > > what's the gain. OTOH, if the display server is locking on to vblank,
+> > > > there might be a delay worth avoiding. But then, is it worth
+> > > > short-circuiting the wake-up in kernel vs. adding a new ioctl that
+> > > > userspace could hit to start the warming up process?  
+> > > 
+> > > Rob responded to the first part to some extent (there is definitely gain
+> > > to be had).
+> > > 
+> > > To the last part: I wrote a simple debugfs hook to allow user space to
+> > > force a PSR exit, and then a simple user space program to read input
+> > > events and smash that debugfs file whenever it sees one. Testing in the
+> > > same scenarios, this appears to lose less than 100 microseconds versus
+> > > the in-kernel approach, which is negligible for this use case. (I'm not
+> > > sure about the other use cases.)
+> > > 
+> > > So, this is technically doable in user space.
+> > 
+> > This is crucial information I would like you to include in some commit
+> > message. I think it is very interesting for the reviewers. Maybe also
+> > copy that in the cover letter.
+> > 
+> > In my opinion there is a clear and obvious decision due that
+> > measurement: Add the new ioctl for userspace to hit, do not try to
+> > hardcode or upload the wake-up policy into the kernel.
+> 
+> Perhaps.
+> 
+> I'll admit, I'm not eager to go write the fd-passing solutions that
+> others are designing on the fly. I'm currently torn on whether I'll just
+> live with this current patch set out-of-tree (or, y'all can decide that
+> a simple, 99% working solution is better than no solution), because it's
+> simple; or possibly figuring out how to utilize such an ioctl cleanly
+> within our display manager. I'm not super hopeful on the latter.
+> 
+> IOW, I'm approximately in line with Doug's thoughts:
+> https://lore.kernel.org/all/CAD=FV=XARhZoj+0p-doxcbC=4K+NuMc=uR6wqG6kWk-MkPkNdQ@mail.gmail.com/
+> But then, we're obviously biased.
+> 
+> > > I can't speak to the ease of _actually_ integrating this into even our
+> > > own Chrome display manager, but I highly doubt it will get integrated
+> > > into others. I'd posit this should weigh into the relative worth, but
+> > > otherwise can't really give you an answer there.
+> > 
+> > I think such a thing would be very simple to add to any display server.
+> > They already have hooks for things like resetting idle timeout timers on
+> > any relevant input event.
+> > 
+> > > I'd also note, software-directed PSR is so far designed to be completely
+> > > opaque to user space. There's no way to disable it; no way to know it's
+> > > active; and no way to know anything about the parameters it's computing
+> > > (like average entry/exit delay). Would you suggest a whole set of new
+> > > IOCTLs for this?
+> > 
+> > Just one ioctl on the DRM device: "Hey, wake up!". Because that's what
+> > your patch does in-kernel, right?
+> 
+> Well, we'd at least want something to advertise that the feature does
+> something ("is supported") I think, otherwise we're just asking user
+> space to do useless work.
+> 
+> > If there are use case specific parameters, then how did you intend to
+> > allow adjusting those in your proposal?
+> 
+> Another commenter mentioned the latency tradeoff -- it's possible that
+> there are panels/eDP-links that resume fast enough that one doesn't care
+> to use this ioctl. For an in-kernel solution, one has all the data
+> available and could use hardware information to make decisions, if
+> needed. For a user space solution, we won't have any of that, and we'd
+> have to work to expose that information.
+> 
+> I suppose we could ignore that problem and only expose a minimal UAPI
+> until we need something more, but it feels like exposing a UAPI for
+> something is a critical point where one should make sure it's reasonably
+> descriptive and useful.
+> 
+> > > > How do you know userspace is using this input device at all? If
+> > > > userspace is not using the input device, then DRM should not be opening
+> > > > it either, as it must have no effect on anything.
+> > > > 
+> > > > If you open an input device that userspace does not use, you also cause
+> > > > a power consumption regression, because now the input device itself is
+> > > > active and possibly flooding the kernel with events (e.g. an
+> > > > accelerometer).  
+> > > 
+> > > Well, I don't think accelerometers show up as input devices, but I
+> > > suppose your point could apply to actual input devices.
 
-Sure, new type works.
+fwiw, filtering INPUT_PROP_ACCELEROMETER would go a long way towards ignoring
+accelerometers.
 
->
-> >
-> > But other than that, I'm super happy that you are working on these
-> > complicated multi-attach capabilities! It would be great to benchmark
-> > one-by-one attachment vs multi-attach to the same set of kprobes once
-> > you arrive at the final implementation.
->
-> I have the change for bpftrace to use this and even though there's
-> some speed up, it's not as substantial as for trampolines
->
-> looks like we 'only' got rid of the multiple perf syscall overheads,
-> compared to rcu syncs timeouts like we eliminated for trampolines
+> > My understanding is that accelerometers are evdev (input) devices,
+> > especially when used as input e.g. for controlling games. I'm not aware
+> > of any other interface for it.
 
-if it's just eliminating a pretty small overhead of multiple syscalls,
-then it would be quite disappointing to add a bunch of complexity just
-for that. Are there any reasons we can't use the same low-level ftrace
-batch attach API to speed this up considerably? I assume it's only
-possible if kprobe is attached at the beginning of the function (not
-sure how kretprobe is treated here), so we can either say that this
-new kprobe prog type can only be attached at the beginning of each
-function and enforce that (probably would be totally reasonable
-assumption as that's what's happening most frequently in practice).
-Worst case, should be possible to split all requested attach targets
-into two groups, one fast at function entry and all the rest.
+> I'm not familiar with game-controlling accelerometers, but many types of
+> accelerometers are serviced by drivers/iio/.
 
-Am I too far off on this one? There might be some more complications
-that I don't see.
+you can also unbind devices and use hidraw directly.
 
->
-> I'll make full benchmarks once we have some final solution
->
-> jirka
->
+> And even if they register as input devices, do they match the ID list in
+> this patch?
+
+device type assignment is problematic, but i think in this case it doesn't
+matter if the associations are a bit rough. You don't care about the type of
+device, you merely care about "is this likely to be used". And I think for
+that the list is good enough.
+
+though tbh, having this policy in userspace would still be better IMO.
+
+Cheers,
+  Peter
+
+> > Even audio sockets are input devices for detecting whether a plug has
+> > been plugged in, but those probably wouldn't flood anything.
+> 
+> They also won't match the input_handler ID list, because they won't
+> support the key or position combinations in the heuristic.
+> 
+> > > > Yet another problem here is that this completely ignores the concept of
+> > > > physical seats. Of course it does so, because seats are a pure
+> > > > userspace concept.
+> > > > 
+> > > > The kernel VT console already has problems because the kernel has no
+> > > > concept of seats, which means that if there is a second seat defined and
+> > > > a desktop running on it, while the first seat is in the normal VT text
+> > > > mode, then everything typed in the desktop will be delivered to the VT
+> > > > shell as well! (This has a possible workaround in userspace [1], by opening
+> > > > the evdev input devices in some kind of exclusive mode - which is not
+> > > > common practise AFAIK.)  
+> > > 
+> > > Sure.
+> > > 
+> > > I'd bet the intersection of systems that use SW-directed PSR and
+> > > "multi-seat" is negligibly close to zero, but I can't guarantee that.
+> > > Chalk one up for a user space policy.
+> > 
+> > Your cover letter has also the other bullet point: ramping up GPUs.
+> > That applies to a lot more systems than PSR, right?
+> > 
+> > Maybe that is an acceptable trade-off: be 100 µs faster (your
+> > measurement) by ramping up all GPUs in a system instead of only the
+> > relevant ones?
+> > 
+> > Or maybe that will hurt normal gaming computers by ramping up the iGPU
+> > when the OS and game only uses the dGPU, which makes iGPU eat away the
+> > CPU power budget, causing the CPU to slow down? I suppose that would be
+> > handled by ramping up only GPUs that userspace has opened.
+> 
+> FWIW, the current work we have out-of-tree involves only select GPU
+> drivers that know they are slow to ramp up. If this were generalized,
+> then yes, it could potentially have undesireable side effects. I'm
+> certainly not an expert on Rob's work though, so I can't speak to this
+> very much, but I imagine we could resolve the {d,i}GPU problem easily.
+> 
+> Brian

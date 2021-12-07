@@ -2,97 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB0346C6DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5345346C6DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241997AbhLGVsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241957AbhLGVsE (ORCPT
+        id S241971AbhLGVsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:48:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53824 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhLGVsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:48:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8D8C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:44:33 -0800 (PST)
+        Tue, 7 Dec 2021 16:48:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BDE8DCE1E71
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7CBC341C3;
-        Tue,  7 Dec 2021 21:44:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 03B5CCE1E75
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C99C341C1;
+        Tue,  7 Dec 2021 21:44:30 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1muiGD-000Hub-1z;
+        id 1muiGD-000HvC-8C;
         Tue, 07 Dec 2021 16:44:29 -0500
-Message-ID: <20211207214406.148423650@goodmis.org>
+Message-ID: <20211207214429.089114928@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 07 Dec 2021 16:44:06 -0500
+Date:   Tue, 07 Dec 2021 16:44:07 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-next][PATCH 00/13] tracing: Updates for 5.17
+        Andrew Morton <akpm@linux-foundation.org>,
+        Colin Ian King <colin.i.king@gmail.com>
+Subject: [for-next][PATCH 01/13] tracing: Fix spelling mistake "aritmethic" -> "arithmetic"
+References: <20211207214406.148423650@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-for-next
+From: Colin Ian King <colin.i.king@googlemail.com>
 
-Head SHA1: a6ed2aee54644cfa2d04ca86308767f5c3a087e8
+There is a spelling mistake in the tracing mini-HOWTO text. Fix it.
 
+Link: https://lkml.kernel.org/r/20211108201513.42876-1-colin.i.king@gmail.com
 
-Colin Ian King (1):
-      tracing: Fix spelling mistake "aritmethic" -> "arithmetic"
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Masami Hiramatsu (5):
-      tracing: Support __rel_loc relative dynamic data location attribute
-      tracing: Add '__rel_loc' using trace event macros
-      samples/trace_event: Add '__rel_loc' using sample event
-      libtraceevent: Add __rel_loc relative location attribute support
-      tools/perf: Add '__rel_loc' event field parsing support
-
-Qiujun Huang (1):
-      tracing: Fix synth_event_add_val() kernel-doc comment
-
-Steven Rostedt (VMware) (5):
-      tracing: Use __this_cpu_read() in trace_event_buffer_lock_reserver()
-      tracing: Disable preemption when using the filter buffer
-      tracing: Have eprobes use filtering logic of trace events
-      tracing/kprobes: Do not open code event reserve logic
-      tracing/uprobes: Use trace_event_buffer_reserve() helper
-
-Uladzislau Rezki (Sony) (1):
-      tracing: Switch to kvfree_rcu() API
-
-----
- include/linux/trace_events.h                       |   1 +
- include/trace/bpf_probe.h                          |  16 +++
- include/trace/perf.h                               |  16 +++
- include/trace/trace_events.h                       | 120 ++++++++++++++++++++-
- kernel/trace/trace.c                               |  61 ++++++-----
- kernel/trace/trace.h                               |   8 +-
- kernel/trace/trace_eprobe.c                        |  16 +--
- kernel/trace/trace_events_filter.c                 |  32 +++++-
- kernel/trace/trace_events_hist.c                   |  21 +++-
- kernel/trace/trace_events_inject.c                 |  11 +-
- kernel/trace/trace_events_synth.c                  |   2 +-
- kernel/trace/trace_kprobe.c                        |  25 ++---
- kernel/trace/trace_osnoise.c                       |   3 +-
- kernel/trace/trace_probe.c                         |   3 +-
- kernel/trace/trace_uprobe.c                        |  11 +-
- samples/trace_events/trace-events-sample.c         |   3 +
- samples/trace_events/trace-events-sample.h         |  33 ++++++
- tools/lib/traceevent/event-parse.c                 |  59 ++++++----
- tools/lib/traceevent/event-parse.h                 |   5 +-
- tools/lib/traceevent/parse-filter.c                |   5 +-
- tools/perf/builtin-trace.c                         |   2 +
- tools/perf/util/data-convert-bt.c                  |   2 +
- tools/perf/util/evsel.c                            |   2 +
- tools/perf/util/python.c                           |   2 +
- .../perf/util/scripting-engines/trace-event-perl.c |   2 +
- .../util/scripting-engines/trace-event-python.c    |   2 +
- tools/perf/util/sort.c                             |   2 +
- 27 files changed, 366 insertions(+), 99 deletions(-)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 88de94da596b..4821fe6a40a5 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -5635,7 +5635,7 @@ static const char readme_msg[] =
+ 	"\t        - a numeric literal: e.g. ms_per_sec=1000,\n"
+ 	"\t        - an arithmetic expression: e.g. time_secs=current_timestamp/1000\n"
+ 	"\n"
+-	"\t    hist trigger aritmethic expressions support addition(+), subtraction(-),\n"
++	"\t    hist trigger arithmetic expressions support addition(+), subtraction(-),\n"
+ 	"\t    multiplication(*) and division(/) operators. An operand can be either a\n"
+ 	"\t    variable reference, field or numeric literal.\n"
+ 	"\n"
+-- 
+2.33.0

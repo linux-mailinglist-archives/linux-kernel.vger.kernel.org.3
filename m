@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A4F46C3E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B09146C3C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhLGTsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S236215AbhLGTny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLGTsH (ORCPT
+        with ESMTP id S231629AbhLGTnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:48:07 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C977BC061574;
-        Tue,  7 Dec 2021 11:44:36 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id v1so319661edx.2;
-        Tue, 07 Dec 2021 11:44:36 -0800 (PST)
+        Tue, 7 Dec 2021 14:43:53 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B41BC061574;
+        Tue,  7 Dec 2021 11:40:22 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id z7so702610lfi.11;
+        Tue, 07 Dec 2021 11:40:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zq+yuFXqBJlvxepwYYo56GAdIfTptGEXaFm/n42pn8I=;
-        b=WEK9i3bpZ/09USMxoUrHk/BjgYrKvAkCaLdu3AqUuTNEhXctqHdWLE9pQB3viOJLVJ
-         3vD0Oa1O3UsjScKragWu9/TvDvA53Qj5kw9G9uMw2DpFIuF26Lj/IEkPlKq3+SjU7o40
-         mgSPeyxPoHa+MMYDw/LNwl8eGPH+ISCt2HLCn3CxeXHZT9KfWehdLLEEquMRJZzS8f1W
-         moi+r/X+NBHWJBJNQot5rxh/d37cES5yvpXRf/VFcQxdXbIz0/Vre9N5mh8NmOcjbEmh
-         FCgtRxAIeAgQS+c71pw8QPml3BB62Fgo8S0mEXIg7wExcMxKIBMjWyx6isSrDgQek1n1
-         v5rw==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=lJUPRmvzGBYlX226TjBuiYmtUf9jUn5G93+KA16LjAg=;
+        b=N6dpjqjSGXJte521IlFBV3JwwBDYSI3jUNgG7vtsLv2egTWEUMbr6ffb6gexw+xZgO
+         MJw07re/mwKoJsjygSKKeTnXfWMN1H0c4Ywt1Ums0+LkmTRdvqoqWsnpAADjZyQ4jf66
+         omAWJ3HlFasrghRBVxCq33dqszE2xRUfWFXzmTGXlrE6jiI8Rv9qt5GeR2vLr/Y4CgCm
+         C1Uk36jREfGSnQAO1Ua+bJ2wztS8eJ/wr0ezCvK82B8V+rmwc2cAJd6fEgFt999UYXPh
+         Ujz4ngGsWTEsoI635i1clIuyfdidjm2dilIIplYQZsrApMn1FdTDQGMoiCRwRTWW5rqR
+         oZBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zq+yuFXqBJlvxepwYYo56GAdIfTptGEXaFm/n42pn8I=;
-        b=oko9pTQT5Tu1gY7lPriGet5/1Fh4xnUK46AbSFYvqQVMWH5Dj0skFFtQ/rpad/5Tkq
-         J8sthvPpFyB4hDuQoTOtEiXASbnq/K/C5aFMp2KbIS1YIeKVJQAblSj2MSo3ytxrwVaU
-         XifWPMpkCNqtpHP51mj0JoVILf59EO0P757rZ7LePKfucWDLNemkdUMdpwo5rYw6WeiE
-         E/sHsR9+gk7cgXviAqLnAMXtOyTpt9S0c7zf862KwOG2agbxGKcOPksxRhbOjiZ+AMmk
-         L3Xu0DHHcuhHbi0+N+ST7YamETforVTBiXtaN7X/MuOvpg/Sp5g3tqnXCcf+4hJXSDiu
-         sUKg==
-X-Gm-Message-State: AOAM531fFRhxIUFvEGEoyM+1S9vUc+M2gefSNR5NLrNGMbc1KvwWMCQK
-        4s/08NRh4LEf4XRGzxnOl5c=
-X-Google-Smtp-Source: ABdhPJwolB7x9GJ7FBrEtYLJhh9UWKwDgDYpPDHNrbkX+WX123qoEEgijRamE5Uu/MLqNEjUixEQTA==
-X-Received: by 2002:aa7:dd56:: with SMTP id o22mr12170424edw.73.1638906275189;
-        Tue, 07 Dec 2021 11:44:35 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id 29sm477879edw.42.2021.12.07.11.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 11:44:34 -0800 (PST)
-Message-ID: <61afb9a2.1c69fb81.9a5d0.1f85@mx.google.com>
-X-Google-Original-Message-ID: <Ya+5ofCDyUR6Szf7@Ansuel-xps.>
-Date:   Tue, 7 Dec 2021 20:44:33 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya96pwC1KKZDO9et@lunn.ch>
- <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=lJUPRmvzGBYlX226TjBuiYmtUf9jUn5G93+KA16LjAg=;
+        b=NcTx8jo+bk1bx1+j0iwiK6YSTpkyUKXFauljiKlvAsSW0viKQfyc5gelWzW5n5REQr
+         4tWcOu4HEZm+X1FzWRP8wKbKS7VUTVq7oHqcY27uYumRJQgpPmveodXIrhT7cOS2TZVS
+         jFrW50c3Q0RgXw0Vy/90xNtRJHWkCjtxkESco43t3QgYrM7vsg3jO5eSV0+dAmp1Cg0b
+         qYuPqPKhnk81drj+R7jnUO2gFYnhbFKWF0afwrVlQYsJHAZSIA1Vdn8zxvnAsjGQiyeI
+         RpyOwhwoB0kober8/WPzLrVVUQmzZcyu3GEJ9lRguFZdEfhmvFubcmi9QriQhYFED4ft
+         ekYQ==
+X-Gm-Message-State: AOAM532r+FOK44sWc8xFm5vqv/Aalx/tTDoi+IjBFNwgmsSmXHNDjPP1
+        XD4X1zcJF6L5vtGjuEnCCMg=
+X-Google-Smtp-Source: ABdhPJyr4zizRPTfcscSDF65TlfDwku/yypVsSmIKZoDc7b4l/BC9epnqQcHVd81tlPlhrwQ26x3pg==
+X-Received: by 2002:a05:6512:ac5:: with SMTP id n5mr41852984lfu.246.1638906020361;
+        Tue, 07 Dec 2021 11:40:20 -0800 (PST)
+Received: from [10.0.0.42] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
+        by smtp.gmail.com with ESMTPSA id p10sm51919lja.0.2021.12.07.11.40.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 11:40:19 -0800 (PST)
+Message-ID: <b6af56f1-7e6b-81ca-7bae-8f2a2dfaf0eb@gmail.com>
+Date:   Tue, 7 Dec 2021 21:44:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77203cb2-ba90-ff01-5940-2e9b599f648f@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211203120243.24173-1-j-choudhary@ti.com>
+ <ed6c9be9-32d3-719a-ee0d-608b228f36b3@gmail.com>
+ <20449d7b-0524-a8df-7852-a4c495157682@ti.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH v4] ASoC: dt-bindings: davinci-mcasp: convert McASP
+ bindings to yaml schema
+In-Reply-To: <20449d7b-0524-a8df-7852-a4c495157682@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 10:49:43AM -0800, Florian Fainelli wrote:
-> On 12/7/21 7:15 AM, Andrew Lunn wrote:
-> > On Tue, Dec 07, 2021 at 03:59:36PM +0100, Ansuel Smith wrote:
-> >> Hi, this is still WIP and currently has some problem but I would love if
-> >> someone can give this a superficial review and answer to some problem
-> >> with this.
-> >>
-> >> The main reason for this is that we notice some routing problem in the
-> >> switch and it seems assisted learning is needed. Considering mdio is
-> >> quite slow due to the indirect write using this Ethernet alternative way
-> >> seems to be quicker.
-> >>
-> >> The qca8k switch supports a special way to pass mdio read/write request
-> >> using specially crafted Ethernet packet.
-> > 
-> > Oh! Cool! Marvell has this as well, and i suspect a few others. It is
-> > something i've wanted to work on for a long long time, but never had
-> > the opportunity.
-> > 
-> > This also means that, even if you are focusing on qca8k, please try to
-> > think what could be generic, and what should specific to the
-> > qca8k. The idea of sending an Ethernet frame and sometime later
-> > receiving a reply should be generic and usable for other DSA
-> > drivers. The contents of those frames needs to be driver specific.
-> > How we hook this into MDIO might also be generic, maybe.
-> > 
-> > I will look at your questions later, but soon.
-> 
-> There was a priori attempt from Vivien to add support for mv88e6xxx over
-> RMU frames:
-> 
-> https://www.mail-archive.com/netdev@vger.kernel.org/msg298317.html
-> 
-> This gets interesting because the switch's control path moves from MDIO
-> to Ethernet and there is not really an "ethernet bus" though we could
-> certainly come up with one. We have mdio-i2c, so maybe we should have
-> mdio-ethernet?
-> -- 
-> Florian
+Hi,
 
-I checked that series and I notice that the proposed implementation used
-a workqueue. The current implementation here use completion and mutex so
-the transaction is really one command at time and wait for response.
-Considering most of the time we do read and write operation is seems a
-bit overkill to use a queue... Also to track the response.
-Using a single queue simplify the implementation and should be just
-good. (btw qca8k supports a way to queue packet using a seq int but we
-don't use it to keep things simple)
+On 12/7/21 07:03, Jayesh Choudhary wrote:
+>>> +  tdm-slots:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: number of channels over one serializer
+>>> +    maxItems: 1
+>>
+>> and it has to be between 2 and 32, ignored in DIT mode (384 slots)
+>>
+> 
+> Will add minimum and maximum. Should this be added as a conditional
+> property when op-mode is 0 (I2S mode) and mark it as required?
 
-Is that acceptable? Also I notice in that series mru have some
-limitation and can be used only for some kind of data...
-Should we add a way to blacklist some particular reg and use the legacy
-mdio way?
+That would make it much nicer, yes, thank you!
+
+>>> +  port:
+>>> +    description: connection for when McASP is used via graph card
+>>> +    type: object
+>>
+>> I understand that it can be present under the mcasp node as it is part
+>> of the graph card binding (or a card binding using graph).
+>> I mean if a new card binding comes around then we need to document it
+>> here as well?
+>>
+> 
+> Specific properties are not marked for the port. So it should not be an
+> issue. Other alternative is to mark the additional properties as true
+> but that is not preferred.
+
+If the McASP is used with simple-sound-card (as it is the case most of
+the time) then the port is not present under the node for this device as
+the card is not using graph.
+I consider the port (and the #sound-dai-cells if we are here) not part
+of the McASP hardware description as they are part of the graph or
+simple-card binding.
+
+I'm fine if the port remains here
+
+> Peter,
+> Any other changes I should make?
+
+Not much, this already looking good.
+I would fix the dts files which generates warning/error with this yaml
+as they are incorrect.
 
 -- 
-	Ansuel
+Péter

@@ -2,350 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9031E46C2A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF2B46C2F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbhLGSZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbhLGSZu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:25:50 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82F5C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:22:19 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id a18so31355034wrn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=08Y7iJI/PLTRM2a75Lt/X18n1ghFVyrjUSIXA87jB1c=;
-        b=NaDI0vUgbYnBOYtMUBltHLOUYkBXWIXJLzv1PJ7Qa9rHdOKP9n7wD2RgoiI26BUkdU
-         CZEv7LjjD++6EkU7BPSrcm5S5wjFQxbu6pQpfZBClnaei3kVbRcKDTFCdpA2g/elj3oJ
-         9KfrkXcOBOAK/G7Zr0zvdI5whTEkEdr8KfEX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=08Y7iJI/PLTRM2a75Lt/X18n1ghFVyrjUSIXA87jB1c=;
-        b=B7h8SPJDriw4kw7tBltPadyT1SRdKY3swNi11UCSCi+SZ+JcUS5KG6jX1f46rH9eaT
-         LwG12bwC/6fN5mz91QlIeMCc3PTariIVou/04zm4zHAyuhgjnZpPZZwMeSpUKDDclOly
-         TFToUIxNcY9c9zvvlhJGqWjum5dm+HDvTtPsfyT9wq+QmCVDPLxk8hV3QsjL66pzbsHR
-         6TergHGLKBhUyLKDcwse/SzgMMkSny9MOTpFnqsvfMrt5YmZMdBS3kNfyhDKgFm8EJT0
-         +e9sWcbMWF6V2LpqOHhcqQlqb3I8czARtVq3QKDNqsyVO75mxSEdky1hlkuEuCQZEY/v
-         i1CQ==
-X-Gm-Message-State: AOAM531w6v4f5r5oN0Q7oqhK2Hw2uF3IWbY0mbaQavBxOeuF9otXosyT
-        vCHZAC4Ae3nPX81qHDVOFkZK+Q==
-X-Google-Smtp-Source: ABdhPJxK2mhzgF3YMS/fG40gJ9DDy/bEcttiC7rT6MkCLhX411tsNH3w2Tru9t1nhhNXbQLQaKdz8Q==
-X-Received: by 2002:adf:d1e2:: with SMTP id g2mr54445987wrd.362.1638901338335;
-        Tue, 07 Dec 2021 10:22:18 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id w4sm421952wrs.88.2021.12.07.10.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 10:22:17 -0800 (PST)
-Date:   Tue, 7 Dec 2021 19:22:15 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emma Anholt <emma@anholt.net>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: Re: [PATCH v4 00/34] component: Make into an aggregate bus
-Message-ID: <Ya+mV/zuRVVIGVy1@phenom.ffwll.local>
-Mail-Followup-To: Stephen Boyd <swboyd@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>, Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Emma Anholt <emma@anholt.net>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>, Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>, Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>, Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-References: <20211202222732.2453851-1-swboyd@chromium.org>
+        id S240583AbhLGSjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:39:24 -0500
+Received: from mga03.intel.com ([134.134.136.65]:12289 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236023AbhLGSjW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:39:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237598846"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="237598846"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 10:23:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="542902061"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 10:23:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muf7O-000Mqn-Ef; Tue, 07 Dec 2021 18:23:10 +0000
+Date:   Wed, 8 Dec 2021 02:22:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: Re: [PATCH v2] staging: r8188eu: convert type of HalData in struct
+ adapter
+Message-ID: <202112080251.yDzenEtM-lkp@intel.com>
+References: <20211207140405.8673-1-straube.linux@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211202222732.2453851-1-swboyd@chromium.org>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <20211207140405.8673-1-straube.linux@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 02:26:58PM -0800, Stephen Boyd wrote:
-> This series is from discussion we had on reordering the device lists for
-> drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
-> the aggregate device onto and then we probe the aggregate device once
-> all the components are probed and call component_add(). The probe/remove
-> hooks are where the bind/unbind calls go, and then a shutdown hook is
-> added that can be used to shutdown the drm display pipeline at the right
-> time.
-> 
-> This works for me on my sc7180 board. I no longer get a warning from i2c
-> at shutdown that we're trying to make an i2c transaction after the i2c
-> bus has been shutdown. There's more work to do on the msm drm driver to
-> extract component device resources like clks, regulators, etc. out of
-> the component bind function into the driver probe but I wanted to move
-> everything over now in other component drivers before tackling that
-> problem.
-> 
-> Tested-by tags would be appreciated, and Acked-by/Reviewed-by tags too.
+Hi Michael,
 
-Thanks for pushing this forward. Unfortunately I'm completely burried and
-it's just not improving, so merge plan:
+Thank you for the patch! Yet something to improve:
 
-- please get Greg KH to ack the bus/driver core stuff
+[auto build test ERROR on staging/staging-testing]
 
-- please get one of the drm-misc committers we have from Google's Chromeos
-  team (there should be a few by now) to review&push this.
+url:    https://github.com/0day-ci/linux/commits/Michael-Straube/staging-r8188eu-convert-type-of-HalData-in-struct-adapter/20211207-220628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git c601ab0eb478f66ca30efd2534a818f3d1b91a25
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20211208/202112080251.yDzenEtM-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/056bebd5149575caa282e91f6bab60f936c06484
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michael-Straube/staging-r8188eu-convert-type-of-HalData-in-struct-adapter/20211207-220628
+        git checkout 056bebd5149575caa282e91f6bab60f936c06484
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/staging/r8188eu/
 
-Otherwise I fear this might get stuck and I'd really like to avoid that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers, Daniel
+All error/warnings (new ones prefixed by >>):
 
-> 
-> Changes since v3 (https://lore.kernel.org/r/20211026000044.885195-1-swboyd@chromium.org):
->  - Picked up tags
->  - Rebased to v5.16-rc2
->  - Updated component.c for a few new patches there
->  - Dropped a conversion patch
->  - Added a conversion patch
-> 
-> Changes since v2 (https://lore.kernel.org/r/20211006193819.2654854-1-swboyd@chromium.org):
->  - Picked up acks
->  - Fixed build warnings/errors
->  - Reworked patch series to rename 'master' in a different patch
-> 
-> Changes since v1 (https://lore.kernel.org/r/20210520002519.3538432-1-swboyd@chromium.org):
->  - Use devlink to connect components to the aggregate device
->  - Don't set the registering device as a parent of the aggregate device
->  - New patch for bind_component/unbind_component ops that takes the
->    aggregate device
->  - Convert all drivers in the tree to use the aggregate driver approach
->  - Allow one aggregate driver to be used for multiple aggregate devices
-> 
-> [1] https://lore.kernel.org/r/20210508074118.1621729-1-swboyd@chromium.org
-> 
-> 
-> Stephen Boyd (34):
->   component: Introduce struct aggregate_device
->   component: Remove most references to 'master'
->   component: Introduce the aggregate bus_type
->   component: Move struct aggregate_device out to header file
->   component: Add {bind,unbind}_component() ops that take aggregate
->     device
->   drm/of: Add a drm_of_aggregate_probe() API
->   drm/msm: Migrate to aggregate driver
->   drm/komeda: Migrate to aggregate driver
->   drm/arm/hdlcd: Migrate to aggregate driver
->   drm/malidp: Migrate to aggregate driver
->   drm/armada: Migrate to aggregate driver
->   drm/etnaviv: Migrate to aggregate driver
->   drm/kirin: Migrate to aggregate driver
->   drm/exynos: Migrate to aggregate driver
->   drm/imx: Migrate to aggregate driver
->   drm/ingenic: Migrate to aggregate driver
->   drm/mcde: Migrate to aggregate driver
->   drm/mediatek: Migrate to aggregate driver
->   drm/meson: Migrate to aggregate driver
->   drm/omap: Migrate to aggregate driver
->   drm/rockchip: Migrate to aggregate driver
->   drm/sti: Migrate to aggregate driver
->   drm/sun4i: Migrate to aggregate driver
->   drm/tilcdc: Migrate to aggregate driver
->   drm/vc4: Migrate to aggregate driver
->   iommu/mtk: Migrate to aggregate driver
->   mei: Migrate to aggregate driver
->   power: supply: ab8500: Migrate to aggregate driver
->   fbdev: omap2: Migrate to aggregate driver
->   sound: hdac: Migrate to aggregate driver
->   ASoC: codecs: wcd938x: Migrate to aggregate driver
->   mei: pxp: Migrate to aggregate driver
->   component: Get rid of drm_of_component_probe()
->   component: Remove component_master_ops and friends
-> 
->  drivers/base/component.c                      | 544 ++++++++++--------
->  .../gpu/drm/arm/display/komeda/komeda_drv.c   |  20 +-
->  drivers/gpu/drm/arm/hdlcd_drv.c               |  21 +-
->  drivers/gpu/drm/arm/malidp_drv.c              |  21 +-
->  drivers/gpu/drm/armada/armada_drv.c           |  23 +-
->  drivers/gpu/drm/drm_drv.c                     |   2 +-
->  drivers/gpu/drm/drm_of.c                      |  18 +-
->  drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  20 +-
->  drivers/gpu/drm/exynos/exynos_drm_drv.c       |  21 +-
->  .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  20 +-
->  drivers/gpu/drm/imx/imx-drm-core.c            |  20 +-
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  25 +-
->  drivers/gpu/drm/mcde/mcde_drv.c               |  23 +-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  20 +-
->  drivers/gpu/drm/meson/meson_drv.c             |  21 +-
->  drivers/gpu/drm/msm/msm_drv.c                 |  46 +-
->  drivers/gpu/drm/omapdrm/dss/dss.c             |  20 +-
->  drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |  20 +-
->  drivers/gpu/drm/sti/sti_drv.c                 |  20 +-
->  drivers/gpu/drm/sun4i/sun4i_drv.c             |  26 +-
->  drivers/gpu/drm/tilcdc/tilcdc_drv.c           |  28 +-
->  drivers/gpu/drm/vc4/vc4_drv.c                 |  20 +-
->  drivers/iommu/mtk_iommu.c                     |  14 +-
->  drivers/iommu/mtk_iommu.h                     |   6 +-
->  drivers/iommu/mtk_iommu_v1.c                  |  14 +-
->  drivers/misc/mei/hdcp/mei_hdcp.c              |  22 +-
->  drivers/misc/mei/pxp/mei_pxp.c                |  22 +-
->  drivers/power/supply/ab8500_charger.c         |  22 +-
->  drivers/video/fbdev/omap2/omapfb/dss/dss.c    |  20 +-
->  include/drm/drm_of.h                          |  10 +-
->  include/linux/component.h                     |  92 ++-
->  sound/hda/hdac_component.c                    |  21 +-
->  sound/soc/codecs/wcd938x.c                    |  20 +-
->  33 files changed, 772 insertions(+), 490 deletions(-)
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> Cc: Chen Feng <puck.chen@hisilicon.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Emma Anholt <emma@anholt.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Heiko Stübner" <heiko@sntech.de>
-> Cc: Inki Dae <inki.dae@samsung.com>
-> Cc: James Qian Wang (Arm Technology China) <james.qian.wang@arm.com>
-> Cc: Jaroslav Kysela <perex@perex.cz>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Cc: Joonyoung Shim <jy0922.shim@samsung.com>
-> Cc: Jyri Sarha <jyri.sarha@iki.fi>
-> Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: <linux-fbdev@vger.kernel.org>
-> Cc: <linux-omap@vger.kernel.org>
-> Cc: <linux-pm@vger.kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Russell King <linux+etnaviv@armlinux.org.uk>
-> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-> Cc: Sandy Huang <hjc@rock-chips.com>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: Tian Tao <tiantao6@hisilicon.com>
-> Cc: Tomas Winkler <tomas.winkler@intel.com>
-> Cc: Tomi Valkeinen <tomba@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Xinliang Liu <xinliang.liu@linaro.org>
-> Cc: Xinwei Kong <kong.kongxinwei@hisilicon.com>
-> Cc: Yong Wu <yong.wu@mediatek.com>
-> Cc: Vitaly Lubart <vitaly.lubart@intel.com>
-> Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> 
-> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
-> -- 
-> https://chromeos.dev
-> 
+   drivers/staging/r8188eu/hal/rtl8188eu_led.c: In function 'SwLedOff':
+>> drivers/staging/r8188eu/hal/rtl8188eu_led.c:39:45: error: implicit declaration of function 'GET_HAL_DATA' [-Werror=implicit-function-declaration]
+      39 |         struct hal_data_8188e   *pHalData = GET_HAL_DATA(padapter);
+         |                                             ^~~~~~~~~~~~
+>> drivers/staging/r8188eu/hal/rtl8188eu_led.c:39:45: warning: initialization of 'struct hal_data_8188e *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
+--
+   drivers/staging/r8188eu/hal/usb_halinit.c: In function '_ReadLEDSetting':
+>> drivers/staging/r8188eu/hal/usb_halinit.c:946:44: error: implicit declaration of function 'GET_HAL_DATA' [-Werror=implicit-function-declaration]
+     946 |         struct hal_data_8188e   *haldata = GET_HAL_DATA(Adapter);
+         |                                            ^~~~~~~~~~~~
+>> drivers/staging/r8188eu/hal/usb_halinit.c:946:44: warning: initialization of 'struct hal_data_8188e *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   cc1: some warnings being treated as errors
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+
+vim +/GET_HAL_DATA +39 drivers/staging/r8188eu/hal/rtl8188eu_led.c
+
+8cd574e6af5463 Phillip Potter 2021-07-28  33  
+8cd574e6af5463 Phillip Potter 2021-07-28  34  /*	Description: */
+8cd574e6af5463 Phillip Potter 2021-07-28  35  /*		Turn off LED according to LedPin specified. */
+8cd574e6af5463 Phillip Potter 2021-07-28  36  void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
+8cd574e6af5463 Phillip Potter 2021-07-28  37  {
+8cd574e6af5463 Phillip Potter 2021-07-28  38  	u8	LedCfg;
+8cd574e6af5463 Phillip Potter 2021-07-28 @39  	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
+8cd574e6af5463 Phillip Potter 2021-07-28  40  
+8cd574e6af5463 Phillip Potter 2021-07-28  41  	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
+8cd574e6af5463 Phillip Potter 2021-07-28  42  		goto exit;
+8cd574e6af5463 Phillip Potter 2021-07-28  43  
+8cd574e6af5463 Phillip Potter 2021-07-28  44  	LedCfg = rtw_read8(padapter, REG_LEDCFG2);/* 0x4E */
+8cd574e6af5463 Phillip Potter 2021-07-28  45  
+8cd574e6af5463 Phillip Potter 2021-07-28  46  	switch (pLed->LedPin) {
+8cd574e6af5463 Phillip Potter 2021-07-28  47  	case LED_PIN_LED0:
+8cd574e6af5463 Phillip Potter 2021-07-28  48  		if (pHalData->bLedOpenDrain) {
+8cd574e6af5463 Phillip Potter 2021-07-28  49  			/*  Open-drain arrangement for controlling the LED) */
+8cd574e6af5463 Phillip Potter 2021-07-28  50  			LedCfg &= 0x90; /*  Set to software control. */
+dcda94c9412a07 Larry Finger   2021-08-10  51  			rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
+8cd574e6af5463 Phillip Potter 2021-07-28  52  			LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
+8cd574e6af5463 Phillip Potter 2021-07-28  53  			LedCfg &= 0xFE;
+8cd574e6af5463 Phillip Potter 2021-07-28  54  			rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
+8cd574e6af5463 Phillip Potter 2021-07-28  55  		} else {
+dcda94c9412a07 Larry Finger   2021-08-10  56  			rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3) | BIT(5) | BIT(6)));
+8cd574e6af5463 Phillip Potter 2021-07-28  57  		}
+8cd574e6af5463 Phillip Potter 2021-07-28  58  		break;
+8cd574e6af5463 Phillip Potter 2021-07-28  59  	case LED_PIN_LED1:
+8cd574e6af5463 Phillip Potter 2021-07-28  60  		LedCfg &= 0x0f; /*  Set to software control. */
+dcda94c9412a07 Larry Finger   2021-08-10  61  		rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
+8cd574e6af5463 Phillip Potter 2021-07-28  62  		break;
+8cd574e6af5463 Phillip Potter 2021-07-28  63  	default:
+8cd574e6af5463 Phillip Potter 2021-07-28  64  		break;
+8cd574e6af5463 Phillip Potter 2021-07-28  65  	}
+8cd574e6af5463 Phillip Potter 2021-07-28  66  exit:
+8cd574e6af5463 Phillip Potter 2021-07-28  67  	pLed->bLedOn = false;
+8cd574e6af5463 Phillip Potter 2021-07-28  68  }
+8cd574e6af5463 Phillip Potter 2021-07-28  69  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

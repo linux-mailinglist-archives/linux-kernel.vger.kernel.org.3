@@ -2,212 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E0A46BA13
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3317D46BA15
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbhLGLaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbhLGL37 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:29:59 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCE8C061574;
-        Tue,  7 Dec 2021 03:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7u+20wao+Z/j7Jl6bNd1keoHdxP64ABauWTeem1CusA=; b=buvAWP6Uf2U0OIXRNkizSRld4K
-        nDvZYJXpRe60yLlA2JuRPI5FVxL+bf7mxuZ7bz6ozZuK9G8bHK/1XUF5/c2ilEjs75WR1VKLMwZSM
-        W09iAAeQ6ruHsebttvyguZveW/+4WmP788oBVmgUELPGHt9zeSB1WoNfN8WgOdw3JyxZSeyjf8cTk
-        oFRbaR0W/nZ/WuPBp5PgSmiXrh+qpGsSpbT/yt6JSO9HnmzWvPJDvn/vDwVFDiGYq7v+18AOEniQF
-        hihcyQeEZn5ou11qXmP7QY0d2oy5EcqSzJmn6NOTzCHxy4XxToXYArJoM04v37qsDl16iUAdwv+Ii
-        Fy0IyB7g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muYc4-007H4o-Kk; Tue, 07 Dec 2021 11:26:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC83130032A;
-        Tue,  7 Dec 2021 12:26:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 940BB20299B41; Tue,  7 Dec 2021 12:26:24 +0100 (CET)
-Date:   Tue, 7 Dec 2021 12:26:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        keescook@chromium.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
+        id S235641AbhLGLa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:30:59 -0500
+Received: from mga05.intel.com ([192.55.52.43]:59560 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231221AbhLGLa6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 06:30:58 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="323811554"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="323811554"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 03:27:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="679411624"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 03:27:25 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7BROmr011993;
+        Tue, 7 Dec 2021 11:27:24 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
+Date:   Tue,  7 Dec 2021 12:27:09 +0100
+Message-Id: <20211207112709.4778-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <CAKwvOdkgHhOTKbb4vm9p7uDvvp7eXpTg2cb4rvr1jFgyAgSb-w@mail.gmail.com>
+References: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com> <CAKwvOdkgHhOTKbb4vm9p7uDvvp7eXpTg2cb4rvr1jFgyAgSb-w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya2zfVAwh4aQ7KVd@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 10:53:49PM -0800, Christoph Hellwig wrote:
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 6 Dec 2021 16:41:00 -0800
 
-> > +#define req_ref_zero_or_close_to_overflow(req)	\
-> > +	((unsigned int) atomic_read(&(req->ref)) + 127u <= 127u)
-> > +
-> > +static inline bool req_ref_inc_not_zero(struct request *req)
-> > +{
-> > +	return atomic_inc_not_zero(&req->ref);
-> > +}
-> > +
-> > +static inline bool req_ref_put_and_test(struct request *req)
-> > +{
-> > +	WARN_ON_ONCE(req_ref_zero_or_close_to_overflow(req));
-> > +	return atomic_dec_and_test(&req->ref);
-> > +}
+> On Mon, Dec 6, 2021 at 12:57 PM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > From: Nick Desaulniers <ndesaulniers@google.com>
+> > Date: Mon, 6 Dec 2021 11:43:47 -0800
+> >
+> > > On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
+> > > <alexandr.lobakin@intel.com> wrote:
+> > > >
+> > > > Clang (13) uninlines __next_node() which emits the following warning
+> > > > due to that this function is used in init code (amd_numa_init(),
+> > > > sched_init_numa() etc.):
+> > > >
+> > > > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
+> > > > in reference from the function __next_node() to the variable
+> > > > .init.data:numa_nodes_parsed
+> > > > The function __next_node() references
+> > > > the variable __initdata numa_nodes_parsed.
+> > > > This is often because __next_node lacks a __initdata
+> > > > annotation or the annotation of numa_nodes_parsed is wrong.
+> > > >
+> > > > Mark __next_node() as __always_inline() so it won't get uninlined.
+> > > > bloat-o-meter over x86_64 binaries says this:
+> > > >
+> > > > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
+> > > > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
+> > > > Function                                     old     new   delta
+> > > > apply_wqattrs_cleanup                          -     410    +410
+> > > > amd_numa_init                                814     842     +28
+> > > > sched_init_numa                             1338    1346      +8
+> > > > find_next_bit                                 38      19     -19
+> > > > __next_node                                   45       -     -45
+> > > > apply_wqattrs_prepare                       1069     799    -270
+> > > > wq_nice_store                                688     414    -274
+> > > > wq_numa_store                                805     433    -372
+> > > > wq_cpumask_store                             789     402    -387
+> > > > apply_workqueue_attrs                        538     147    -391
+> > > > workqueue_set_unbound_cpumask                947     539    -408
+> > > > Total: Before=14422603, After=14420883, chg -0.01%
+> > > >
+> > > > So it's both win-win in terms of resolving section mismatch and
+> > > > saving some text size (-1.7 Kb is quite nice).
+> > > >
+> > > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > >
+> > > Thanks for the patch.  See this thread:
+> > > https://github.com/ClangBuiltLinux/linux/issues/1302
+> > >
+> > > There's a lot more instances of these based on config.  Something like
+> > > https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
+> > > would be more appropriate for fixing all instances, but I think this
+> > > is more so an issue with the inline cost model in LLVM.
+> > >
+> > > I need to finish off https://reviews.llvm.org/D111456, and request
+> > > that https://reviews.llvm.org/D111272 which landed in clang-14 get
+> > > backported to the 13.0.1 release which should also help.
+> >
+> > Oh I see. Sorry for redundant posting, non-applicable then.
+> 
+> No worries; it's a complex issue.  I appreciate that you took the time
+> to test with clang, understand the issue, and send a patch.
+> ++beers_owed;
 
-So it's just about these two ops, right?
+Cool, thank you! :D Open source beer is shared across all
+contributors I guess :P
 
-Now, afaict refcount_inc_not_zero() doesn't actually generate terrible
-code here's the fast-path of kernel/events/core.c:ring_buffer_get()
+> If you'd like, I can add you to our github org if you'd like to be
+> cc'ed on issues there; just ping me privately off thread with your
+> github account and I'll add you.
+> https://github.com/ClangBuiltLinux
 
-refcount_inc_not_zero():
+I think my private (non-Intel) account is added to it (it probably
+was you who added me after my comments on ClangCFI x86 or so), so
+I'll just be watching for it there, thanks!
 
-    a9d0:       41 54                   push   %r12
-    a9d2:       49 89 fc                mov    %rdi,%r12
-    a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
-    a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
-    a9e2:       4d 85 e4                test   %r12,%r12
-    a9e5:       74 24                   je     aa0b <ring_buffer_get+0x3b>
-    a9e7:       41 8b 14 24             mov    (%r12),%edx
-    a9eb:       85 d2                   test   %edx,%edx
-    a9ed:       74 1c                   je     aa0b <ring_buffer_get+0x3b>
-    a9ef:       8d 4a 01                lea    0x1(%rdx),%ecx
-*   a9f2:       89 d0                   mov    %edx,%eax
-    a9f4:       f0 41 0f b1 0c 24       lock cmpxchg %ecx,(%r12)
-    a9fa:       75 32                   jne    aa2e <ring_buffer_get+0x5e>
-*   a9fc:       09 ca                   or     %ecx,%edx
-*   a9fe:       78 19                   js     aa19 <ring_buffer_get+0x49>
-    aa00:       e8 00 00 00 00          call   aa05 <ring_buffer_get+0x35>      aa01: R_X86_64_PLT32    __rcu_read_unlock-0x4
-    aa05:       4c 89 e0                mov    %r12,%rax
-    aa08:       41 5c                   pop    %r12
-    aa0a:       c3                      ret
+> > We'll wait for these Clang/LLVM works to be finised, thanks!
+> >
+> > >
+> > > > ---
+> > > >  include/linux/nodemask.h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+> > > > index 567c3ddba2c4..55ba2c56f39b 100644
+> > > > --- a/include/linux/nodemask.h
+> > > > +++ b/include/linux/nodemask.h
+> > > > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
+> > > >  }
+> > > >
+> > > >  #define next_node(n, src) __next_node((n), &(src))
+> > > > -static inline int __next_node(int n, const nodemask_t *srcp)
+> > > > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
+> > > >  {
+> > > >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+> > > >  }
+> > > > --
+> > > > 2.33.1
+> > > >
+> > >
+> > >
+> > > --
+> > > Thanks,
+> > > ~Nick Desaulniers
+> >
+> > Al
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
 
-The * marked instructions are the difference, vs atomic_inc_not_zero():
-
-    a9d0:       41 54                   push   %r12
-    a9d2:       49 89 fc                mov    %rdi,%r12
-    a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
-    a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
-    a9e2:       4d 85 e4                test   %r12,%r12
-    a9e5:       74 1e                   je     aa05 <ring_buffer_get+0x35>
-    a9e7:       41 8b 04 24             mov    (%r12),%eax
-    a9eb:       85 c0                   test   %eax,%eax
-    a9ed:       74 16                   je     aa05 <ring_buffer_get+0x35>
-    a9ef:       8d 50 01                lea    0x1(%rax),%edx
-    a9f2:       f0 41 0f b1 14 24       lock cmpxchg %edx,(%r12)
-    a9f8:       75 f1                   jne    a9eb <ring_buffer_get+0x1b>
-    a9fa:       e8 00 00 00 00          call   a9ff <ring_buffer_get+0x2f>      a9fb: R_X86_64_PLT32    __rcu_read_unlock-0x4
-    a9ff:       4c 89 e0                mov    %r12,%rax
-    aa02:       41 5c                   pop    %r12
-    aa04:       c3                      ret
-
-
-Now, ring_buffer_put(), which uses refcount_dec_and_test():
-
-refcount_dec_and_test()
-
-    aa40:       b8 ff ff ff ff          mov    $0xffffffff,%eax
-    aa45:       f0 0f c1 07             lock xadd %eax,(%rdi)
-    aa49:       83 f8 01                cmp    $0x1,%eax
-    aa4c:       74 05                   je     aa53 <ring_buffer_put+0x13>
-    aa4e:       85 c0                   test   %eax,%eax
-    aa50:       7e 1e                   jle    aa70 <ring_buffer_put+0x30>
-    aa52:       c3                      ret
-
-atomic_dec_and_test():
-
-    aa40:       f0 ff 0f                lock decl (%rdi)
-    aa43:       75 1d                   jne    aa62 <ring_buffer_put+0x22>
-
-    ...
-
-    aa62:       c3                      ret
-
-Has a larger difference, which is fixable with the below patch, leading
-to:
-
-
-    a9f0:       f0 ff 0f                lock decl (%rdi)
-    a9f3:       74 03                   je     a9f8 <ring_buffer_put+0x8>
-    a9f5:       7c 1e                   jl     aa15 <ring_buffer_put+0x25>
-    a9f7:       c3                      ret
-
-
-So where exactly is the performance fail? Is it purely the mess made of
-refcount_dec_and_test() ?
-
----
-
-diff --git a/arch/x86/include/asm/refcount.h b/arch/x86/include/asm/refcount.h
-new file mode 100644
-index 000000000000..89e1f84f9170
---- /dev/null
-+++ b/arch/x86/include/asm/refcount.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_REFCOUNT_H
-+#define _ASM_X86_REFCOUNT_H
-+
-+#define refcount_dec_and_test refcount_dec_and_test
-+static inline bool refcount_dec_and_test(refcount_t *r)
-+{
-+	asm_volatile_goto (LOCK_PREFIX "decl %[var]\n\t"
-+			   "jz %l[cc_zero]\n\t"
-+			   "jl %l[cc_error]"
-+			   : : [var] "m" (r->refs.counter)
-+			   : "memory"
-+			   : cc_zero, cc_error);
-+	return false;
-+
-+cc_zero:
-+	return true;
-+
-+cc_error:
-+	refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
-+	return false;
-+}
-+
-+#endif
-diff --git a/include/linux/refcount.h b/include/linux/refcount.h
-index b8a6e387f8f9..776b035e12a1 100644
---- a/include/linux/refcount.h
-+++ b/include/linux/refcount.h
-@@ -126,6 +126,8 @@ enum refcount_saturation_type {
- 
- void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t);
- 
-+#include <asm/refcount.h>
-+
- /**
-  * refcount_set - set a refcount's value
-  * @r: the refcount
-@@ -328,10 +330,12 @@ static inline __must_check bool __refcount_dec_and_test(refcount_t *r, int *oldp
-  *
-  * Return: true if the resulting refcount is 0, false otherwise
-  */
-+#ifndef refcount_dec_and_test
- static inline __must_check bool refcount_dec_and_test(refcount_t *r)
- {
- 	return __refcount_dec_and_test(r, NULL);
- }
-+#endif
- 
- static inline void __refcount_dec(refcount_t *r, int *oldp)
- {
+Al

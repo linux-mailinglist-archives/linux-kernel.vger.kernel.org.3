@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4502246B370
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D6C46B377
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhLGHOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:14:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54662 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbhLGHOH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:14:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05E3DB812A7;
-        Tue,  7 Dec 2021 07:10:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3F2C341C3;
-        Tue,  7 Dec 2021 07:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638861035;
-        bh=kCGsGGeR5QnFYKn4gsjzd/63TI+GAON4K8jZsOn8PYA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Z9kuwQr36CwBs7ACFmkWeOi519ZSOxjCOb4ctlgwMoKfSf0H4K0+hr8mkzIYp4EsS
-         Ez5uub6Id9yzt/hLpfcay61GeWftOSebecU4F1l4r2qs0SU346PCUHGbWCizMTcQg+
-         M+Wl9uYSFlL5paKM4sA5dp/VkWIgem486+XH2gbk3Jl00BEnMcoN0cLhXWn0Q79+A0
-         ScFeXs3wt8z1sf+8BKHRxOUs8FLjXYJtwENDFRnd6gRFhtYb5cALfQds96o3rU3oxr
-         3NPGAHfuEV+Ljzn61cpPj/lwHfr58t9kkYksXXKcPCHUfsDiIsLVpCWgF8DzWWwpKn
-         IgFfP1dEAkL8A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     Jes.Sorensen@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        code@reto-schneider.ch, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtl8xxxu: Improve the A-MPDU retransmission rate with RTS/CTS protection
-References: <20211205095836.417258-1-chris.chiu@canonical.com>
-Date:   Tue, 07 Dec 2021 09:10:32 +0200
-In-Reply-To: <20211205095836.417258-1-chris.chiu@canonical.com> (Chris Chiu's
-        message of "Sun, 5 Dec 2021 17:58:36 +0800")
-Message-ID: <87ee6oubyv.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S229584AbhLGHPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:15:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:51948 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229461AbhLGHPa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 02:15:30 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CC2411FB;
+        Mon,  6 Dec 2021 23:12:00 -0800 (PST)
+Received: from [10.163.34.206] (unknown [10.163.34.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2B423F5A1;
+        Mon,  6 Dec 2021 23:11:55 -0800 (PST)
+Subject: Re: [RFC PATCH 01/14] fs/proc/vmcore: Update read_from_oldmem() for
+ user pointer
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kexec <kexec@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, x86 <x86@kernel.org>
+References: <20211203104231.17597-1-amit.kachhap@arm.com>
+ <20211203104231.17597-2-amit.kachhap@arm.com> <20211206140451.GA4936@lst.de>
+From:   Amit Kachhap <amit.kachhap@arm.com>
+Message-ID: <08e4e9d8-2c42-115a-f440-d7f44fb19280@arm.com>
+Date:   Tue, 7 Dec 2021 12:41:52 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20211206140451.GA4936@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chris Chiu <chris.chiu@canonical.com> writes:
 
-> The A-MPDU retransmission rate is always high (> 20%) even in a very
-> clean environment. However, the vendor driver retransimission rate is
-> < 10% in the same test bed. The different is the vendor driver starts
-> the A-MPDU TXOP with initial RTS/CTS handshake which is observed in the
-> air capture and the TX descriptor. Since there's no related field in
-> TX descriptor to enable the L-SIG TXOP protection and the duration,
-> applying the RTS/CTS protection instead helps to lower the retransmission
-> rate from > 20% to ~12% in the same test setup.
->
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 
-You should have marked this as v2 because you submitted already before:
+On 12/6/21 7:34 PM, Christoph Hellwig wrote:
+> On Fri, Dec 03, 2021 at 04:12:18PM +0530, Amit Daniel Kachhap wrote:
+>> +	return read_from_oldmem_to_kernel(buf, count, ppos,
+>> +					  cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
+> 
+> Overly long line.
+> 
+>> +ssize_t read_from_oldmem(char __user *ubuf, char *kbuf, size_t count,
+>> +			 u64 *ppos, bool encrypted)
+>>   {
+>>   	unsigned long pfn, offset;
+>>   	size_t nr_bytes;
+>> @@ -156,19 +163,27 @@ ssize_t read_from_oldmem(char *buf, size_t count,
+>>   		/* If pfn is not ram, return zeros for sparse dump files */
+>>   		if (!pfn_is_ram(pfn)) {
+>>   			tmp = 0;
+>> -			if (!userbuf)
+>> -				memset(buf, 0, nr_bytes);
+>> -			else if (clear_user(buf, nr_bytes))
+>> +			if (kbuf)
+>> +				memset(kbuf, 0, nr_bytes);
+>> +			else if (clear_user(ubuf, nr_bytes))
+>>   				tmp = -EFAULT;
+> 
+> This looks like a huge mess.  What speak against using an iov_iter
+> here?
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211129143953.369557-1-chris.chiu@canonical.com/
+iov_iter seems to be a reasonable way. As a start I thought of adding
+minimal changes.
 
-And include a list of changes between versions, more info in the wiki
-below.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> 

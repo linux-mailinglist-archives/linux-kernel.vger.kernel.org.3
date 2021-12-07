@@ -2,95 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BBC46BA9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A37346BA97
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbhLGMFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbhLGMFs (ORCPT
+        id S236019AbhLGMEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:04:42 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:57214 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230444AbhLGMEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:05:48 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7936BC061574;
-        Tue,  7 Dec 2021 04:02:18 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id m12so26968963ljj.6;
-        Tue, 07 Dec 2021 04:02:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r9fkipqnPp4f5GIDB2CeCpczHVdjwOS7jyMrYOGJkF0=;
-        b=GqsVf1hNAe43Bt6PyvC0QWChB1UjYKkxYX9URxZLfpdXvzC6fMLwXnx71FOfonXyt5
-         F7zQlK9GPRC+MFH2s0yllhIN9t/Ss3r29tEeGKbHSDqxVRhx+vBR9Oc2dJuDAoAt3eQZ
-         2oQTy6DVwGjkjZw/ZG82kHwPpvg9AWdFOm/EYJ8HAdzmFrAt925lkQWKzRlb05B+zZj3
-         9Ss6dcp3JpKy1o3OxOxPZLC9KAlrruzmklV39eyCRFHOUahIRUV8DznZZxtx2w6R5L5x
-         QuLumVQxniEJq0tj5sdj7UE34yRpeqRy59debQkWFGCNpzhBwl2W3HHl+eg5RbMqZ5/b
-         qxEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r9fkipqnPp4f5GIDB2CeCpczHVdjwOS7jyMrYOGJkF0=;
-        b=GyHTwWHjWQYDHjwMvm6OGJlZSmd5j/SEACQCKZiSlSQumEGYsiF75Szi7jDXk9EE0+
-         zD2xLn4ZOeCW1m3SxyaDAzVyl3iZ4/RU5/FyPx4HuvL6v4yXsI5o4WNapsyjqtfgzZbr
-         U5UVMAPGvz04hi0skGShD4A83V2QSZEaYTCtsnz7YVMFihOmxcYS+FdRZ/PU1TW1hFCS
-         Clbkie3t4tkbL6jCqItG4m5VZuIxItoThxnkBI16hT4yny+NQI3flTABRx9Gf0P+AQUW
-         tHqpDoSkYOYldtwN6QlkpGm3yrwvQPS6c8kSjJZNwnPpfYzTuprI/N9mlepxXp9WvGfD
-         d8XA==
-X-Gm-Message-State: AOAM531VJZG86SVIDD1CqD6B7rbPJGzzJaOBrdx4D36ZfokJ7e6IM0cm
-        WQMClb1Tl4RibSvN+ifgxFdA8SsnR2U=
-X-Google-Smtp-Source: ABdhPJyQT9CYRiC9vZmuQJvr0YvSDl7dobRPVo6l6llkAAPAyU1myeVZ+7YuQSDslv8PspRPRDxvTQ==
-X-Received: by 2002:a2e:8091:: with SMTP id i17mr42642170ljg.64.1638878536336;
-        Tue, 07 Dec 2021 04:02:16 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id k13sm1812530lfo.300.2021.12.07.04.02.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 04:02:15 -0800 (PST)
-Subject: Re: [PATCH 2/3] dt-bindings: sound: tegra: Update HDA resets
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, perex@perex.cz
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-3-git-send-email-spujar@nvidia.com>
- <13d20227-ec6b-03db-01dc-b4b00038a15c@gmail.com>
- <03a5094c-0c53-98ab-97cb-4b27ed1b7a38@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <42161fd5-f3bb-a71d-710e-b7078e294a0d@gmail.com>
-Date:   Tue, 7 Dec 2021 15:02:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 7 Dec 2021 07:04:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638878468; x=1670414468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R4oNkyXHoIArR8CahcGG7a0KgMyQw239IP2710b1DoQ=;
+  b=Q1EDsc/+dqKzBPxHkO6YAKLhmMMVguoVwPQJwWLDYl5WZ2Zx+FuNF4Zo
+   fH5y7tgRi/7TAXuNfGBQQ/99CIS2DCRDGz9XY/Bie/WtYz5IzCtjikXx/
+   k0Cjn8N/1sac+RBmTYVJnWB1DDHSykj5ML2fZl0b0E/s/epfc5mjKjZY5
+   PRn4o+WlazvefPxrpaZ6jo0eMICWLMAQD3E5WoT3YAxU+pv+q7zO8a9VT
+   Gg0TjxWdh00Ge0aQz+cYXhfe8ZuovvopgUAQbBvCmT1rYSPgt81oNh0kl
+   ZZ96MIDs/x00XmNyCT8IoWPVIMAsJOlSnCs3fxbGnW8FESm95A7pHyVRr
+   g==;
+IronPort-SDR: +4OBppKR0MVRMNiqXr7QfLHFNcuaZ5Ut5RRC7yBandQmsoAxU1I3P1a9J1SJg3FdCzIxpCAjCl
+ i/HjpEI4RtvamtrlbN/rI17tLvqetkTw1E0TqzBGNKPKMdT+4azGs7hgNYYkynfck8Wp50k/GV
+ wWqPeoF8RPUgbyG1jlNnW5Xt7DoQPeTbmoHm0kkvqpc3YkiDYxQTf1DYiyQivnlQMHs3PWOMs5
+ 9OUy967MtoZezxx+flO3WfWuFRMakjodQJWb+Av/k5PBdVbREZ00SpCKjX3S12YT1yORM6ejyl
+ 5CqGx/viqkfRevfX6qRrZPjS
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="146370055"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2021 05:01:08 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 7 Dec 2021 05:01:08 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Tue, 7 Dec 2021 05:01:07 -0700
+Date:   Tue, 7 Dec 2021 13:03:05 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <robh+dt@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/6] net: lan966x: add support for interrupts
+ from analyzer
+Message-ID: <20211207120305.atm3xhyhz4xl7vqw@soft-dev3-1.localhost>
+References: <20211203104645.1476704-1-horatiu.vultur@microchip.com>
+ <20211203104645.1476704-4-horatiu.vultur@microchip.com>
+ <20211206182456.4494c5f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-In-Reply-To: <03a5094c-0c53-98ab-97cb-4b27ed1b7a38@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20211206182456.4494c5f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.12.2021 14:04, Sameer Pujar пишет:
-> 
-> 
-> On 12/7/2021 3:44 PM, Dmitry Osipenko wrote:
->> 07.12.2021 09:32, Sameer Pujar пишет:
->>> Tegra194 HDA has only two resets unlike the previous generations of
->>> Tegra SoCs. Hence update the reset list accordingly.
->>>
->>> Fixes: 2d8f8955fe02 ("dt-bindings: tegra: Convert HDA doc to
->>> json-schema")
->> The original txt binding was already wrong, this "fixes" tag is wrong.
-> 
-> The text didn't document "nvidia,tegra194-hda" compatibile support until
-> the json-schema conversion happened. Perhaps the text doc was not
-> updated when Tegra194 support was added. So wouldn't this be right to
-> use json-schema commit as a base for this?
+The 12/06/2021 18:24, Jakub Kicinski wrote:
 
-This problem didn't exist when the binding was converted. Should be
-better to drop this tag since it doesn't add much value and creates
-confusion, IMO.
+Hi Jakub,
+
+> 
+> On Fri, 3 Dec 2021 11:46:42 +0100 Horatiu Vultur wrote:
+> > This patch adds support for handling the interrupts generated by the
+> > analyzer. Currently, only the MAC table generates these interrupts.
+> > The MAC table will generate an interrupt whenever it learns or forgets
+> > an entry in the table. It is the SW responsibility figure out which
+> > entries were added/removed.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> 
+> > +static struct lan966x_mac_entry *lan966x_mac_alloc_entry(struct lan966x *lan966x,
+> > +                                                      const unsigned char *mac,
+> > +                                                      u16 vid, u16 port_index)
+> > +{
+> > +     struct lan966x_mac_entry *mac_entry;
+> > +
+> > +     mac_entry = devm_kzalloc(lan966x->dev,
+> > +                              sizeof(*mac_entry), GFP_ATOMIC);
+> 
+> Is it really necessary to use devm_ allocation for the mac entries?
+> It's 2x memory overhead.
+
+It is not necessary.
+
+> 
+> Also why GFP_ATOMIC? Memory allocations are _a lot_ less likely with
+> GFP_KERNEL.
+
+Initially I thought this is called also in some context where it
+couldn't sleep. But I was wrong.
+
+I will change these in the next version.
+
+> 
+> > +     if (!mac_entry)
+> > +             return NULL;
+> > +
+> > +     memcpy(mac_entry->mac, mac, ETH_ALEN);
+> > +     mac_entry->vid = vid;
+> > +     mac_entry->port_index = port_index;
+> > +     mac_entry->row = LAN966X_MAC_INVALID_ROW;
+> > +     return mac_entry;
+> > +}
+> 
+> > +static void lan966x_mac_process_raw_entry(struct lan966x_mac_raw_entry *raw_entry,
+> > +                                       u8 *mac, u16 *vid, u32 *dest_idx)
+> > +{
+> > +     mac[0] = (raw_entry->mach >> 8)  & 0xff;
+> > +     mac[1] = (raw_entry->mach >> 0)  & 0xff;
+> > +     mac[2] = (raw_entry->macl >> 24) & 0xff;
+> > +     mac[3] = (raw_entry->macl >> 16) & 0xff;
+> > +     mac[4] = (raw_entry->macl >> 8)  & 0xff;
+> > +     mac[5] = (raw_entry->macl >> 0)  & 0xff;
+> > +
+> > +     *vid = (raw_entry->mach >> 16) & 0xfff;
+> > +     *dest_idx  = ANA_MACACCESS_DEST_IDX_GET(raw_entry->maca);
+> 
+> Double space before =
+> 
+> > +}
+> > +
+> > +static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
+> > +                                 struct lan966x_mac_raw_entry *raw_entries)
+> > +{
+> > +     struct lan966x_mac_entry *mac_entry, *tmp;
+> > +     unsigned long flags;
+> > +     char mac[ETH_ALEN];
+> > +     u32 dest_idx;
+> > +     u32 column;
+> > +     u16 vid;
+> > +
+> > +     spin_lock_irqsave(&lan966x->mac_lock, flags);
+> > +     list_for_each_entry_safe(mac_entry, tmp, &lan966x->mac_entries, list) {
+> > +             bool founded = false;
+> 
+> s/founded/found/
+> 
+> > +             if (mac_entry->row != row)
+> > +                     continue;
+> > +
+> > +             for (column = 0; column < LAN966X_MAC_COLUMNS; ++column) {
+> > +                     /* All the valid entries are at the start of the row,
+> > +                      * so when get one invalid entry it can just skip the
+> > +                      * rest of the columns
+> > +                      */
+> > +                     if (!ANA_MACACCESS_VALID_GET(raw_entries[column].maca))
+> > +                             break;
+> > +
+> > +                     lan966x_mac_process_raw_entry(&raw_entries[column],
+> > +                                                   mac, &vid, &dest_idx);
+> > +                     WARN_ON(dest_idx > lan966x->num_phys_ports);
+> > +
+> > +                     /* If the entry in SW is found, then there is nothing
+> > +                      * to do
+> > +                      */
+> > +                     if (mac_entry->vid == vid &&
+> > +                         ether_addr_equal(mac_entry->mac, mac) &&
+> 
+> You need to add __aligned(2) to mac, ether_addr_equal() needs aligned
+> arguments.
+> 
+> > +                         mac_entry->port_index == dest_idx) {
+> > +                             raw_entries[column].process = true;
+> > +                             founded = true;
+> > +                             break;
+> > +                     }
+> > +             }
+
+-- 
+/Horatiu

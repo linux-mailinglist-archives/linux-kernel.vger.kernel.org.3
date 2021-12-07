@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A8A46B439
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E0B46B444
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbhLGHrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S231244AbhLGHse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbhLGHrr (ORCPT
+        with ESMTP id S229498AbhLGHsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:47:47 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD376C061748
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 23:44:17 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b1so31428429lfs.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 23:44:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZnCX1L7P9G+B1Vs43uOrlGg0q/TNmHjNB6lJj8IG4e8=;
-        b=XUGwj4FwsXOHgrbkMFHdG9X5APBb5lhYszRRYrYFySRbayuFbY952MeCzaaZ3x4PBw
-         VNKdEq+biAvsxHOkvEHgYGX1D8nOzTk7b5IdjuZz9zpjDPQcxG+/oMHLVinGLZefD6F+
-         nw5gwQkSXK/3Qjx1tIWa32zmSIt7yq+1jSAj5IcEvNYaGfEpIqIdKONKN/t6vLMS+vC/
-         ZRXq+gb42oBDsaEmDMchCrAXLoGcmRqO7rLK4W+S+v2nK9TJTpxzV5SmiBM/AprqE68j
-         EfgrTOnSiPnMXaBi7WN3Yg+rPXU4LYXEDeXHRWfGUjiPoNpWwAAHR9WEpysSp2vrDYNf
-         ijug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZnCX1L7P9G+B1Vs43uOrlGg0q/TNmHjNB6lJj8IG4e8=;
-        b=QHlsSQBvm1hbdniTHGomFJW8mkmXw1AzVFgn3B3QsEwwEj9tBepgeP/JqT3MqHyugD
-         JqmGhiBTGZxbWBIUdaReiU1PX1N3bvpi5kDJWWTiuWOl2ZJDg87plJHkQA+Z2D/1ebAU
-         q295jaBoxqqzBaKPzUF8no52wvETlFK+AeAjNnSOYrTtXUB8BJlESySYtROwcJPxt1z2
-         Ta3TbdvIsWSGQcAMSc/68q2JqbrzZQco9+sMChA5k8TSXVuAWofOnv9pUcFtqd2ImnTr
-         e06F22umcuXp7an0UjFRjG+Ybr3bSzgvkF/IRIzRcPwm/lerlEBCcUlxMK9yRzihCBpn
-         EDCA==
-X-Gm-Message-State: AOAM532b2s0DSr6ttorxzleXaEMef0zLjZPe54vfTWUdaBe0MXYwFr3+
-        AoF5m4RyLAeEYo2SAtu3A3+ADoUQbhz9vMnd3P/XeA==
-X-Google-Smtp-Source: ABdhPJzwbJ+AmwlUxupF37WJgIpFtFfggIdfhyWyrwmYld6riTYG/enamZ6VzXuHPFbXRIRNmoXnaKAQ9+M1/sQAgJI=
-X-Received: by 2002:a05:6512:118b:: with SMTP id g11mr36461383lfr.46.1638863056070;
- Mon, 06 Dec 2021 23:44:16 -0800 (PST)
+        Tue, 7 Dec 2021 02:48:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68023C061746;
+        Mon,  6 Dec 2021 23:45:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D1A94CE19EE;
+        Tue,  7 Dec 2021 07:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A401C341C3;
+        Tue,  7 Dec 2021 07:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638863100;
+        bh=1r1X+ZHiffheVJg5Mf7nrvakcpVQqQbwTurW2S7fT/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l1/QgBFwqoXc2OAqrPg8mXMQvF5rv5z/fNqAHcshOCZgD5tN6DsYDVMKyMum5XpbR
+         tTUmjHxCYxJdHEeYzATtISF27T8l5whlPASeO5DQut4iaiHRSBKvqJ9dh18fp3h8CK
+         xuOWK2ssrIqlzWKMqvooAc5l1otA0m+pE8ZKIdZ4=
+Date:   Tue, 7 Dec 2021 08:44:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch V2 14/23] PCI/MSI: Make msix_update_entries() smarter
+Message-ID: <Ya8Q+Q8OnrovJGET@kroah.com>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210224.600351129@linutronix.de>
 MIME-Version: 1.0
-References: <20210621070058.37682-1-mie@igel.co.jp> <ed4de030-e0b3-503f-f0dc-75b103769dfc@ti.com>
-In-Reply-To: <ed4de030-e0b3-503f-f0dc-75b103769dfc@ti.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 7 Dec 2021 16:44:05 +0900
-Message-ID: <CANXvt5r-1+W91DXNcVuRxTE0_T0TSGuduMhOfmYgY=N87uzqCg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: endpoint: Fix use after free in pci_epf_remove_cfs()
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206210224.600351129@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kishon,
+On Mon, Dec 06, 2021 at 11:27:46PM +0100, Thomas Gleixner wrote:
+> No need to walk the descriptors and check for each one whether the entries
+> pointer function argument is NULL. Do it once.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Juergen Gross <jgross@suse.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-2021=E5=B9=B412=E6=9C=887=E6=97=A5(=E7=81=AB) 16:26 Kishon Vijay Abraham I =
-<kishon@ti.com>:
->
-> Hi Shunsuke,
->
-> On 21/06/21 12:30 pm, Shunsuke Mie wrote:
-> > All of entries are freed in a loop, however, the freed entry is accesse=
-d
-> > by list_del() after the loop.
-> >
-> > When epf driver that includes pci-epf-test unload, the pci_epf_remove_c=
-fs()
-> > is called, and occurred the use after free. Therefore, kernel panics
-> > randomly after or while the module unloading.
-> >
-> > I tested this patch with r8a77951-Salvator-xs boards.
->
-> Can you provide the crash dump?
-Ok. However, that is use-after-free bug. so, the crash log is changed rando=
-mly.
-I'll send some crash dumps.
-> >
-> > Fixes: ef1433f ("PCI: endpoint: Create configfs entry for each pci_epf_=
-device_id table entry")
-> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > ---
-> >  drivers/pci/endpoint/pci-epf-core.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint=
-/pci-epf-core.c
-> > index e9289d10f822..538e902b0ba6 100644
-> > --- a/drivers/pci/endpoint/pci-epf-core.c
-> > +++ b/drivers/pci/endpoint/pci-epf-core.c
-> > @@ -202,8 +202,10 @@ static void pci_epf_remove_cfs(struct pci_epf_driv=
-er *driver)
-> >               return;
-> >
-> >       mutex_lock(&pci_epf_mutex);
-> > -     list_for_each_entry_safe(group, tmp, &driver->epf_group, group_en=
-try)
-> > +     list_for_each_entry_safe(group, tmp, &driver->epf_group, group_en=
-try) {
-> > +             list_del(&group->group_entry);
->
-> Need full crash dump to see if this is really required or not. Ideally th=
-is
-> should be handled by configfs (or a configfs API could be used).
->
-> Thanks,
-> Kishon
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

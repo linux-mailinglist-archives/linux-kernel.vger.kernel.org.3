@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFC146B1F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECDF46B1E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236178AbhLGEkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:40:02 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:38678 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236121AbhLGEkA (ORCPT
+        id S235745AbhLGEez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 23:34:55 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:9282 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233659AbhLGEey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:40:00 -0500
-X-UUID: d6245042be1e404a95d23e2807e35f31-20211207
-X-UUID: d6245042be1e404a95d23e2807e35f31-20211207
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1939152083; Tue, 07 Dec 2021 12:36:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 7 Dec 2021 12:36:25 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 7 Dec 2021 12:36:24 +0800
-From:   <yf.wang@mediatek.com>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>,
-        Guangming Cao <Guangming.Cao@mediatek.com>,
-        "Yunfei Wang" <yf.wang@mediatek.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] iommu/io-pgtable-arm-v7s: Add error handle for page table allocation failure
-Date:   Tue, 7 Dec 2021 12:31:14 +0800
-Message-ID: <20211207043116.27319-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 6 Dec 2021 23:34:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638851484; x=1670387484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=adfjxvPtoTQBY1C+FT1LcQzKj4mW5Oha7NkxOuX1Y+I=;
+  b=rmoK23D1BpZzwqsZ4ASJEk4sUuqvSxpTKYLmz7Q3lCCbK8Pi41eL9mKU
+   8/tf8CZ6z0zashZ/lfMY4y4iiQROGoMAxHWpuw5hPXXMcJUelEVK+f/JZ
+   TSA/5D6ffiwe/TyiE1fQOHN474vo9cjiByCE3V1/K/U1xZFxgIzEWKj56
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Dec 2021 20:31:24 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 20:31:24 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 20:31:23 -0800
+Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 6 Dec 2021
+ 20:31:23 -0800
+Date:   Mon, 6 Dec 2021 20:31:21 -0800
+From:   Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <maz@kernel.org>, <mturquette@baylibre.com>, <robh+dt@kernel.org>,
+        <tglx@linutronix.de>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v6 3/5] clk: qcom: Add SDX65 GCC support
+Message-ID: <20211207043121.GA28122@quicinc.com>
+References: <cover.1638402361.git.quic_vamslank@quicinc.com>
+ <475a055e403762e54a1cae6c2c97d4ada6064607.1638402361.git.quic_vamslank@quicinc.com>
+ <20211203002010.8225CC00446@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211203002010.8225CC00446@smtp.kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+On Thu, Dec 02, 2021 at 04:20:09PM -0800, Stephen Boyd wrote:
+> Quoting quic_vamslank@quicinc.com (2021-12-01 16:21:33)
+> > +static struct clk_branch gcc_gp3_clk = {
+> > +       .halt_reg = 0x39000,
+> > +       .halt_check = BRANCH_HALT,
+> > +       .clkr = {
+> > +               .enable_reg = 0x39000,
+> > +               .enable_mask = BIT(0),
+> > +               .hw.init = &(struct clk_init_data){
+> > +                       .name = "gcc_gp3_clk",
+> > +                       .parent_data = &(const struct clk_parent_data){
+> > +                               .hw = &gcc_gp3_clk_src.clkr.hw,
+> > +                       },
+> > +                       .num_parents = 1,
+> > +                       .flags = CLK_SET_RATE_PARENT,
+> > +                       .ops = &clk_branch2_ops,
+> > +               },
+> > +       },
+> > +};
+> > +
+> > +static struct clk_branch gcc_pcie_0_clkref_en = {
+> > +       .halt_reg = 0x88004,
+> > +       /* The clock controller does not handle the status bit for
+> 
+> Please leave /* on it's own line for multiline comments.
 
-In __arm_v7s_alloc_table function:
-iommu call kmem_cache_alloc to allocate page table, this function
-allocate memory may fail, when kmem_cache_alloc fails to allocate
-table, call virt_to_phys will be abnomal and return unexpected phys
-and goto out_free, then call kmem_cache_free to release table will
-trigger KE, __get_free_pages and free_pages have similar problem,
-so add error handle for page table allocation failure.
+Will do.
 
-Fixes: 29859aeb8a6ea ("iommu/io-pgtable-arm-v7s: Abort allocation when table address overflows the PTE")
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Cc: <stable@vger.kernel.org> # 5.10.*
----
-V2: Cc stable@vger.kernel.org
-    1. This patch needs to be merged stable branch, add stable@vger.kernel.org
-       in mail list.
-    2. There is No new code change in V2.
+> 
+> > +        * the clocks with gdscs(powerdomains) in hw controlled mode
+> > +        * and hence avoid checking for the status bit of those clocks
+> > +        * by setting the BRANCH_HALT_DELAY flag */
+> 
+> And */ too
 
----
- drivers/iommu/io-pgtable-arm-v7s.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Will do.
 
-diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
-index bfb6acb651e5..d84240308f4b 100644
---- a/drivers/iommu/io-pgtable-arm-v7s.c
-+++ b/drivers/iommu/io-pgtable-arm-v7s.c
-@@ -246,6 +246,12 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
- 			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
- 	else if (lvl == 2)
- 		table = kmem_cache_zalloc(data->l2_tables, gfp);
-+
-+	if (!table) {
-+		dev_err(dev, "Page table allocation failure lvl:%d\n", lvl);
-+		return NULL;
-+	}
-+
- 	phys = virt_to_phys(table);
- 	if (phys != (arm_v7s_iopte)phys) {
- 		/* Doesn't fit in PTE */
--- 
-2.18.0
+> 
+> > +       .halt_check = BRANCH_HALT_DELAY,
+> > +       .clkr = {
+> > +               .enable_reg = 0x88004,
+> > +               .enable_mask = BIT(0),
+> > +               .hw.init = &(struct clk_init_data){
+> > +                       .name = "gcc_pcie_0_clkref_en",
+> > +                       .ops = &clk_branch2_ops,
+> > +               },
+> > +       },
+> > +};
 
+Thanks,
+Vamsi

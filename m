@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B1246AF29
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E19146AF2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354182AbhLGAdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 19:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S1354276AbhLGAd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 19:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344456AbhLGAdH (ORCPT
+        with ESMTP id S1354128AbhLGAdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 19:33:07 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E76C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:29:38 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id y7so8248522plp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 16:29:38 -0800 (PST)
+        Mon, 6 Dec 2021 19:33:25 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D8CC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:29:55 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id b13so8219461plg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 16:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KwSNWNmS5A3o/1YUiJZz0ef7pg3vZf37AUR9Jx7txiA=;
-        b=j5TPG5D6iGGlUhUGkz7lWoOFUl5Zcy1I25YFqtVQzQMd9hRvxHo1g8FJghAKUzJwyn
-         qQ9W1va6XU4ulE3fo6MjQcXlsVdrZfbY24YqeqzgelWwCLDS2lLgtFm4n4T/Rv3efjcO
-         TgoCHgwehFBceoxjK1ztr3yugEkMOttl+KZIA=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JFL3a9BAYZxoPiyJ9z8spwDTdM7PhrtvmEyrxDtZRok=;
+        b=XwgclYJMnSTCpHdW7a228z9KW8jBcv/cslPUgF703S+wkiaP/lUQXC+cGactY7lXeG
+         4SHapoJAU/OSXP3kEYONYNBy9YX08hE/r/Vdz2qC8DrZcHNCK4PZv2nK87ITxsxmpw8A
+         mf42HFfH7FAOSfpyVzn0J/Mod0E9oEK2Z9xhY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KwSNWNmS5A3o/1YUiJZz0ef7pg3vZf37AUR9Jx7txiA=;
-        b=2w5eYiIRb5I8HzN5AbRaR6OWHNvSeLgm6nFMrXK0/Yn7rGek22FPFijK0bErG0ymhY
-         LUkXoGr8xYxms4vBA/IQT5sNoPOSAZNwcVrgkI3qWFxFtLIaZIb2j9WXIJD6peQBEOm7
-         FqUEg4FbCNDpgMr+Tc2IKaI/B9Pm7DHLCAac2hBYEQ0S3dPg8eAdGEfHDv/tCdSdvMV8
-         5+a69tWMAtBE+hxbMZPjMtoScfyoUsAkh55faedXu75SOUWNewFFwKv8FZikpDOfUfrh
-         AguXOkzmZXHadUcnzQq+98OiZM+SR3rbUX/WV7R5mM+qpH5JNhqL8+zkIMTfrCCc0eYE
-         OVLA==
-X-Gm-Message-State: AOAM533aKb/tiQYjh9tuOw418EynmIocLNZIS4T3356aVVpJZLTYgPaC
-        a6MqaFJV7+4jUPb5sxnTvZ92kg==
-X-Google-Smtp-Source: ABdhPJy4GyDRBHTZ2ZmWGQRiCTI+9pVPBVlT1KvfSYKm8ucP4rQoWfP/6Hqa+/0WzTjprT3f1yzInQ==
-X-Received: by 2002:a17:902:bb97:b0:144:d5cb:969f with SMTP id m23-20020a170902bb9700b00144d5cb969fmr47338882pls.36.1638836978293;
-        Mon, 06 Dec 2021 16:29:38 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:a783:e7e8:acf6:96a5])
-        by smtp.gmail.com with ESMTPSA id b8sm13141154pfr.213.2021.12.06.16.29.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 16:29:38 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Lyude Paul <lyude@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: parade-ps8640: Add backpointer to drm_device in drm_dp_aux
-Date:   Mon,  6 Dec 2021 16:29:16 -0800
-Message-Id: <20211206162907.1.I1f5d1eba741e4663050ec1b8e39a753f6e42e38b@changeid>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JFL3a9BAYZxoPiyJ9z8spwDTdM7PhrtvmEyrxDtZRok=;
+        b=aVh5ZvCoz0mpatliul3P1rSScE1c7noiy/qvcY4pyktE/yUjdNYkbga1FPZXeQ8uLC
+         puaZvhLbXzS4Cn9EgWoIgzPhkCse2ec6TR8Jny+hm+n3WfU0/qC83cGetHgx9dZqfqNB
+         mUYNjMLZOljci2udUggGQ4xTpWwzy0NU4Xp0z6UeReJZkeF0E3D0ea9shgxtpMVq5+eu
+         L2CBrdcAFjO0L+TYqpDjIaJ5kXWkP3EK2irgu80O+MRyn4tuSFk4yjqdK/3w/plZxGlq
+         c5k9lLXx37yK1MvH1ZHr1VCJhu64QHkBtUJjfGVQ8fDtVrruTZtlLmsc+uxmlcPPZ+bx
+         lANA==
+X-Gm-Message-State: AOAM530aLSFepropQ8tyeq+anC66Hw3fLXbJcwVtLGY4U1VbteO7QlK8
+        5lPRv2GzbWO5Mjz4Ur2CDpjyTg==
+X-Google-Smtp-Source: ABdhPJyu2gXkmFVy2jBSwD5NikHxHYUQekaMuJzFF7uNw87YY3rZyctiaHhY1+HGMxIXBEJowJiJ4A==
+X-Received: by 2002:a17:90b:1e0c:: with SMTP id pg12mr2411598pjb.135.1638836995310;
+        Mon, 06 Dec 2021 16:29:55 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:ab1b:c09c:ed69:5925])
+        by smtp.gmail.com with UTF8SMTPSA id mq14sm523121pjb.54.2021.12.06.16.29.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 16:29:54 -0800 (PST)
+Date:   Mon, 6 Dec 2021 16:29:53 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        swboyd@chromium.org, Wesley Cheng <quic_wcheng@quicinc.com>,
+        robdclark@chromium.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Avoid use-after-free when USB
+ defers or unbinds
+Message-ID: <Ya6rAVgZ+hSYNaVE@google.com>
+References: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we added the support for the AUX channel in commit 13afcdd7277e
-("drm/bridge: parade-ps8640: Add support for AUX channel") we forgot
-to set "drm_dev" to avoid the warning splat at the beginning of
-drm_dp_aux_register(). Since everything was working I guess I never
-noticed the splat when testing against mainline. In any case, it's
-easy to fix. This is basically just like commit 6cba3fe43341 ("drm/dp:
-Add backpointer to drm_device in drm_dp_aux") but just for the
-parade-ps8640.
+On Mon, Dec 06, 2021 at 03:28:47PM -0800, Douglas Anderson wrote:
+> On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
+> enabled, you'll see a Use-After-Free reported at bootup.
+> 
+> The root of the problem is that dwc3_qcom_of_register_core() is adding
+> a devm-allocated "tx-fifo-resize" property to its device tree node
+> using of_add_property().
+> 
+> The issue is that of_add_property() makes a _permanent_ addition to
+> the device tree that lasts until reboot. That means allocating memory
+> for the property using "devm" managed memory is a terrible idea since
+> that memory will be freed upon probe deferral or device
+> unbinding. Let's change to just allocate memory once and never free
+> it. This sorta looks like a leak but isn't truly one, since only one
+> property will be allocated per device tree node per boot.
+> 
+> NOTE: one would think that perhaps it would be better to use
+> of_remove_property() and then be able to free the property on device
+> remove. That sounds good until you read the comments for
+> of_remove_property(), which says that properties are never really
+> removed and they're just moved to the side.
+> 
+> Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Fixes: 13afcdd7277e ("drm/bridge: parade-ps8640: Add support for AUX channel")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- drivers/gpu/drm/bridge/parade-ps8640.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 26898042ba3d..818704bf5e86 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -449,6 +449,7 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
- 	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
- 		return -EINVAL;
- 
-+	ps_bridge->aux.drm_dev = bridge->dev;
- 	ret = drm_dp_aux_register(&ps_bridge->aux);
- 	if (ret) {
- 		dev_err(dev, "failed to register DP AUX channel: %d\n", ret);
--- 
-2.34.1.400.ga245620fadb-goog
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

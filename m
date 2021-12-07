@@ -2,274 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D01D46C6FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D1E46C6FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237691AbhLGV5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:57:17 -0500
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:41567 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbhLGV5Q (ORCPT
+        id S241807AbhLGV5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232542AbhLGV5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:57:16 -0500
-Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id BAF23613;
-        Tue,  7 Dec 2021 13:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1638914024;
-        bh=CvghTx/r5viUdpFKeoGF2p6OU37g5jR62YEdfJZenXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MSXUDWGuNoELTfnshEDiwshsJmG0uYjejLuhbWu1DKgJZ6tI5TEyIYf9JZ9+WpEvN
-         nuUV4c47zRor+SzgRWrGKx6s/X7Vn7FXTD9k4YDY1jFBix6zJNaA92rhsy5JD2uGm9
-         9q2jZKp7TIbbp+zDme3eNUYEgAPb+9OH8u+L0dBU=
-Date:   Tue, 7 Dec 2021 13:53:39 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
- module driver
-Message-ID: <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
-References: <20211207071521.543-1-zev@bewilderbeest.net>
- <20211207071521.543-2-zev@bewilderbeest.net>
- <20211207175015.GA772416@roeck-us.net>
- <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
- <f30241ad-f3c4-ee78-22f3-405401615b61@roeck-us.net>
+        Tue, 7 Dec 2021 16:57:52 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0FC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:54:21 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id y68so1286779ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 13:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fDx/94r4ADspOhlWO7pgbLEvuG3T+2O5huorZnMDt1o=;
+        b=VlFZtpAgp/++wjgYrGcbZie0amdhox3rSvanNp8rHHp3DS2car8/BUK1awmez3yd1U
+         CsvKK25CJDRZ6toy2+k8hu46lXpgh/qjGU7wwOv3kg+YyGljViBH4hqTE1AUMPdgrOvK
+         6VWiEEI2g2y4ZWV8UKUkx1Usv95ZB10bz//DIVbVEW7l5Q+89QRKfesKrdFNjJvHdw3Q
+         9F+FF04kdX3A1jcKH/e40czJinp1a06dyYMWPPy1W8ONfZ++Z2yTAfcc43vBXM/Dr5AB
+         O1zyLSr5rZGO4orkzLkVsdXWi0QC+/BErA5f4pC6JCKj4vRT3Rd3wgce3raIr0ZEXZwh
+         tR2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fDx/94r4ADspOhlWO7pgbLEvuG3T+2O5huorZnMDt1o=;
+        b=UV8N+Jys1PG3ytPIeGO2zdsDEK8BBOS0dolaqllld4jcQnOBuNJrovsE6cL0PyqzpG
+         9GatrNdU8blownM+v98pqvONyibEIlXecrPnOBvHiN9VWoB9pHYQmO0y19eYZ8vO5/8T
+         TLqcMs6a7kwEDLLyO/hrZRT8jNy97yjQIeqADOTRi8rH1XfPy2f+rE5qOkKerGvXTETU
+         GUM56kLvToUqLU+719FX22o0J4WE4TvEovugf29/fZdFYOk1RUT4Bhe31Y1E+m9/9Q7n
+         wNWL+/G0X2Y/rubfuET0mGtkaXIG62gA4O6DOkAU3kZm3nfNXJ12cFBYs9rqj7wY5O+t
+         kGfA==
+X-Gm-Message-State: AOAM532S3lxk6Ss6D3IhZeTuxu9+xpx/BpdsdQICgQEwsit8Xp9uZks3
+        05kyZzL0iI1YyNQxkGg6T1H9+fyZdHe8Bikt53imKA==
+X-Google-Smtp-Source: ABdhPJwcsdBByQo/BIVqa9iHcMPtn67Wm78BMma5WdxNneogML4Nyrot361oke2MCgQbManPrJFVL7eTtyEMjOCQm3Q=
+X-Received: by 2002:a25:610d:: with SMTP id v13mr50515196ybb.1.1638914060596;
+ Tue, 07 Dec 2021 13:54:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f30241ad-f3c4-ee78-22f3-405401615b61@roeck-us.net>
+References: <20211124235906.14437-1-surenb@google.com> <YaS4KxCSLK+02xaF@dhcp22.suse.cz>
+ <CAJuCfpEZi=4V7=nD-4gWi=QyQ8-=ezwmx80twndtoPpZSCzEGQ@mail.gmail.com>
+ <Ya8y9ya1NEZhx03e@dhcp22.suse.cz> <CAJuCfpHFy6EhzxR6Zj8X_s=qwrNh0S8-o4ugEzYbh-z_LDtJSQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpHFy6EhzxR6Zj8X_s=qwrNh0S8-o4ugEzYbh-z_LDtJSQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 7 Dec 2021 13:54:09 -0800
+Message-ID: <CAJuCfpHVi8oFZpbussAPnAoKNP=+0D1gmd1MtFj=s=V8h5NG8g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:44:01AM PST, Guenter Roeck wrote:
->On 12/7/21 11:22 AM, Zev Weiss wrote:
->>On Tue, Dec 07, 2021 at 09:50:15AM PST, Guenter Roeck wrote:
->>>On Mon, Dec 06, 2021 at 11:15:20PM -0800, Zev Weiss wrote:
->>>>This device is an integrated module of the Delta AHE-50DC Open19 power
->>>>shelf.  For lack of proper documentation, this driver has been developed
->>>>referencing an existing (GPL) driver that was included in a code release
->>>>from LinkedIn [1].  It provides four fan speeds, four temperatures, and
->>>>one voltage reading, as well as a handful of warning and fault
->>>>indicators.
->>>>
->>>>[1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
->>>>
->>>
->>>Hmm, that reference isn't really accurate anymore. I think it would be
->>>better to just say that the device was found to be PMBus compliant.
->>
->>Sure, will do.
->>
+On Tue, Dec 7, 2021 at 8:50 AM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> Makes me wonder: How do you know that the referenced driver is for 
-> Delta AHE-50DC ?
-
-We'd been waiting for the source code for the software it ships with for 
-a while, and were finally provided with that repo; everything I've 
-observed from the factory software is consistent with the code in that 
-driver.  A sampling:
-
-     # no modinfo command available, but...
-     root@bmc-oob:~# strings -n8 /lib/modules/4.1.51-deltapower/extra/fancontrol.ko | head
-     fancontrol
-     license=GPL
-     description=FANCTRL Driver
-     author=Ping Mao <pmao@linkedin.com>
-     alias=i2c:fancontrol
-     depends=i2c_dev_sysfs
-     vermagic=4.1.51-deltapower mod_unload ARMv5 p2v8
-     fancontrol
-     status_word
-     bit 2:  Temparature Warning
-     root@bmc-oob:~# cd /sys/bus/i2c/drivers/fancontrol/8-0030
-     root@bmc-oob:/sys/bus/i2c/drivers/fancontrol/8-0030# grep . fan* temp* vin
-     fan1_2_status:0
-     fan1_speed:7860
-     fan2_speed:7860
-     fan3_4_status:0
-     fan3_speed:7680
-     fan4_speed:7560
-     temperature1:292
-     temperature2:278
-     temperature3:286
-     temperature4:302
-     vin:12251
-
-
->>>
->>>>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>>>---
->>>> MAINTAINERS                             |  6 ++
->>>> drivers/hwmon/pmbus/Kconfig             | 12 ++++
->>>> drivers/hwmon/pmbus/Makefile            |  1 +
->>>> drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 84 +++++++++++++++++++++++++
->>>> 4 files changed, 103 insertions(+)
->>>> create mode 100644 drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>
->>>>diff --git a/MAINTAINERS b/MAINTAINERS
->>>>index 0ac052200ecb..8bb7ba52d2f5 100644
->>>>--- a/MAINTAINERS
->>>>+++ b/MAINTAINERS
->>>>@@ -5425,6 +5425,12 @@ W:    https://linuxtv.org
->>>> T:    git git://linuxtv.org/media_tree.git
->>>> F:    drivers/media/platform/sti/delta
->>>>
->>>>+DELTA AHE-50DC FAN CONTROL MODULE DRIVER
->>>>+M:    Zev Weiss <zev@bewilderbeest.net>
->>>>+L:    linux-hwmon@vger.kernel.org
->>>>+S:    Maintained
->>>>+F:    drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>+
->>>> DELTA DPS920AB PSU DRIVER
->>>> M:    Robert Marko <robert.marko@sartura.hr>
->>>> L:    linux-hwmon@vger.kernel.org
->>>>diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>>>index ffb609cee3a4..937e1c2c11e7 100644
->>>>--- a/drivers/hwmon/pmbus/Kconfig
->>>>+++ b/drivers/hwmon/pmbus/Kconfig
->>>>@@ -66,6 +66,18 @@ config SENSORS_BPA_RS600
->>>>       This driver can also be built as a module. If so, the module will
->>>>       be called bpa-rs600.
->>>>
->>>>+config SENSORS_DELTA_AHE50DC_FAN
->>>>+    tristate "Delta AHE-50DC fan control module"
->>>>+    depends on I2C
->>>>+    select REGMAP_I2C
->>
->>And I realize I neglected to drop the depends & select lines here when moving this bit into the pmbus directory...
->>
->>>>+    help
->>>>+      If you say yes here you get hardware monitoring support for
->>>>+      the integrated fan control module of the Delta AHE-50DC
->>>>+      Open19 power shelf.
->>>>+
->>>>+      This driver can also be built as a module. If so, the module
->>>>+      will be called delta-ahe50dc-fan.
->>>>+
->>>> config SENSORS_FSP_3Y
->>>>     tristate "FSP/3Y-Power power supplies"
->>>>     help
->>>>diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->>>>index 0ed4d596a948..a56b2897288d 100644
->>>>--- a/drivers/hwmon/pmbus/Makefile
->>>>+++ b/drivers/hwmon/pmbus/Makefile
->>>>@@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266)    += adm1266.o
->>>> obj-$(CONFIG_SENSORS_ADM1275)    += adm1275.o
->>>> obj-$(CONFIG_SENSORS_BEL_PFE)    += bel-pfe.o
->>>> obj-$(CONFIG_SENSORS_BPA_RS600)    += bpa-rs600.o
->>>>+obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
->>>> obj-$(CONFIG_SENSORS_FSP_3Y)    += fsp-3y.o
->>>> obj-$(CONFIG_SENSORS_IBM_CFFPS)    += ibm-cffps.o
->>>> obj-$(CONFIG_SENSORS_DPS920AB)    += dps920ab.o
->>>>diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>new file mode 100644
->>>>index 000000000000..07b1e7c5f5f5
->>>>--- /dev/null
->>>>+++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
->>>>@@ -0,0 +1,84 @@
->>>>+// SPDX-License-Identifier: GPL-2.0
->>>>+/*
->>>>+ * Delta AHE-50DC power shelf fan control module driver
->>>>+ *
->>>>+ * Copyright 2021 Zev Weiss <zev@bewilderbeest.net>
->>>>+ */
->>>>+
->>>>+#include <linux/kernel.h>
->>>>+#include <linux/module.h>
->>>>+#include <linux/i2c.h>
->>>>+#include <linux/pmbus.h>
->>>
->>>Alphabetic include file order please.
->>
->>Ack, will fix.
->>
->>>
->>>>+
->>>>+#include "pmbus.h"
->>>>+
->>>>+#define AHE50DC_PMBUS_READ_TEMP4 0xd0
->>>>+
->>>>+static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
->>>>+{
->>>>+    /* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
->>>>+    if (page == 1) {
->>>>+        if (reg == PMBUS_READ_TEMPERATURE_1)
->>>>+            return i2c_smbus_read_word_data(client, AHE50DC_PMBUS_READ_TEMP4);
->>>>+        return -EOPNOTSUPP;
->>>>+    }
->>>>+    return -ENODATA;
->>>>+}
->>>>+
->>>>+static struct pmbus_driver_info ahe50dc_fan_info = {
->>>>+    .pages = 2,
->>>>+    .format[PSC_FAN] = direct,
->>>>+    .format[PSC_TEMPERATURE] = direct,
->>>>+    .format[PSC_VOLTAGE_IN] = direct,
->>>>+    .m[PSC_FAN] = 1,
->>>>+    .b[PSC_FAN] = 0,
->>>>+    .R[PSC_FAN] = 0,
->>>>+    .m[PSC_TEMPERATURE] = 1,
->>>>+    .b[PSC_TEMPERATURE] = 0,
->>>>+    .R[PSC_TEMPERATURE] = 1,
->>>>+    .m[PSC_VOLTAGE_IN] = 1,
->>>>+    .b[PSC_VOLTAGE_IN] = 0,
->>>>+    .R[PSC_VOLTAGE_IN] = 3,
->>>
->>>How did you determine the exponents ? The referenced driver
->>>doesn't seem to make a difference between voltage and temperature
->>>exponents (nor fan speed, which is a bit odd).
->>
->>Lacking documentation, the honest answer here is that I just sort of eyeballed it.  However, after doing so, I dug through the code dump a bit more and found some userspace unit-conversion bits that appear to confirm what I arrived at:
->>
->>https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/platform-lib/files/powershelf/powershelf_fan.c
->>
->>(Lines 107, and 153/161/169/177.)
->>
+> On Tue, Dec 7, 2021 at 2:10 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Mon 06-12-21 10:35:03, Suren Baghdasaryan wrote:
+> > > On Mon, Nov 29, 2021 at 3:23 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Wed 24-11-21 15:59:05, Suren Baghdasaryan wrote:
+> > > > > oom-reaper and process_mrelease system call should protect against
+> > > > > races with exit_mmap which can destroy page tables while they
+> > > > > walk the VMA tree. oom-reaper protects from that race by setting
+> > > > > MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
+> > > > > before taking and releasing mmap_write_lock. process_mrelease has
+> > > > > to elevate mm->mm_users to prevent such race. Both oom-reaper and
+> > > > > process_mrelease hold mmap_read_lock when walking the VMA tree.
+> > > > > The locking rules and mechanisms could be simpler if exit_mmap takes
+> > > > > mmap_write_lock while executing destructive operations such as
+> > > > > free_pgtables.
+> > > > > Change exit_mmap to hold the mmap_write_lock when calling
+> > > > > free_pgtables. Operations like unmap_vmas() and unlock_range() are not
+> > > > > destructive and could run under mmap_read_lock but for simplicity we
+> > > > > take one mmap_write_lock during almost the entire operation. Note
+> > > > > also that because oom-reaper checks VM_LOCKED flag, unlock_range()
+> > > > > should not be allowed to race with it.
+> > > > > In most cases this lock should be uncontended. Previously, Kirill
+> > > > > reported ~4% regression caused by a similar change [1]. We reran the
+> > > > > same test and although the individual results are quite noisy, the
+> > > > > percentiles show lower regression with 1.6% being the worst case [2].
+> > > > > The change allows oom-reaper and process_mrelease to execute safely
+> > > > > under mmap_read_lock without worries that exit_mmap might destroy page
+> > > > > tables from under them.
+> > > > >
+> > > > > [1] https://lore.kernel.org/all/20170725141723.ivukwhddk2voyhuc@node.shutemov.name/
+> > > > > [2] https://lore.kernel.org/all/CAJuCfpGC9-c9P40x7oy=jy5SphMcd0o0G_6U1-+JAziGKG6dGA@mail.gmail.com/
+> > > > >
+> > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > > ---
+> > > > > changes in v2
+> > > > > - Moved mmap_write_unlock to cover remove_vma loop as well, per Matthew Wilcox
+> > > > >
+> > > > >  mm/mmap.c | 16 ++++++++--------
+> > > > >  1 file changed, 8 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > > index bfb0ea164a90..f4e09d390a07 100644
+> > > > > --- a/mm/mmap.c
+> > > > > +++ b/mm/mmap.c
+> > > > > @@ -3142,25 +3142,27 @@ void exit_mmap(struct mm_struct *mm)
+> > > > >                * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+> > > > >                * __oom_reap_task_mm() will not block.
+> > > > >                *
+> > > > > -              * This needs to be done before calling munlock_vma_pages_all(),
+> > > > > +              * This needs to be done before calling unlock_range(),
+> > > > >                * which clears VM_LOCKED, otherwise the oom reaper cannot
+> > > > >                * reliably test it.
+> > > > >                */
+> > > > >               (void)__oom_reap_task_mm(mm);
+> > > > >
+> > > > >               set_bit(MMF_OOM_SKIP, &mm->flags);
+> > > >
+> > > > Why do you keep this in place?
+> > >
+> > > Sorry for the delay, I was out last week.
+> > > I missed your comment about removing MMF_OOM_SKIP at
+> > > https://lore.kernel.org/all/YYrO%2FPwdsyaxJaNZ@dhcp22.suse.cz
+> > > I'll look into removing it in a separate patch, which I think would be cleaner.
+> >
+> > The point of this code was to sync up the oom_repaer and exit_mmap. Now
+> > that your patch uses proper locking for that to happen then MMF_OOM_SKIP
+> > is not really necessary. IIRC all you need to guarantee is that the vma
+> > tree is empty when exit_mmap does all its work - i.e set mm->mmap to
+> > NULL. You can do that after remove_vma loop but it would be equally safe
+> > at any time after vma = mm->mmap as the loop relies on the vma chain.
+> > Doing that after would be slightly nicer if you ask me.
 >
->Brr. Well, why use a standard API/ABI if one can invent a non-standard one.
+> Will do. But if you don't mind I'll post the removal of MMF_OOM_SKIP
+> as a separate patch. This patchset has already been extensively tested
+> and it will be easier for me to test MMF_OOM_SKIP removal separately.
 >
-
-It's...not the only bit of gratuitous wheel-reinvention we've come
-across in this particular system.
-
->Can you check this with real hardware, by any chance ?
+> >
+> > > > Other than that looks OK to me. Maybe we want to add an explicit note
+> > > > that vm_ops::close cannot take mmap_sem in any form. The changelog
+> > > > should also mention that you have considered remove_vma and its previous
+> > > > no MM locking assumption. You can argue that fput is async and close
+> > > > callback shouldn't really need mmap_sem.
+> > >
+> > > Should I post another version of this patch with the patch description
+> > > clarifying these points and additional comments as you suggested?
+> >
+> > Yes please.
 >
+> Will re-post. So, to clarify, we want:
+> - Patch description to include explanation that remove_vma is now
+> being called under MM lock but this should not be a problem because
+> fput and vm_ops->close do not and should not take mmap_sem.
+> - Add a comment for vm_ops->close that the callback should not take
+> mmap_sem, with explanation that __split_vma and exit_mmap use this
+> callback with the mmap_sem write lock taken.
+> Is that correct?
 
-If you mean running that code on it, yes -- here's the userspace utility 
-that invokes that library routine:
+Assuming my understanding was correct, posted v3 at
+https://lore.kernel.org/all/20211207215031.2251719-1-surenb@google.com/
 
-     root@bmc-oob:~# fan-util.sh
-     fan1 speed: 7860 RPM
-     fan2 speed: 7860 RPM
-     fan3 speed: 7620 RPM
-     fan4 speed: 7560 RPM
-     temperature1: 29.20 C
-     temperature2: 27.80 C
-     temperature3: 28.50 C
-     temperature4: 30.20 C
-     vin_undervolt_fault: no
-     overtemperature_warning: no
-     fan_fault: no
-     fan_warning: no
-     fan_status: ok
-
-That fan-util.sh script being this:
-
-https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/liutils/files/fan-util.sh
-
-which invokes this:
-
-https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-deltapower/liutils/files/fan-ctrl/fan-util.c
-
-(which calls into the routine in powershelf_fan.c linked above).
-
-
-Zev
-
+>
+> >
+> > --
+> > Michal Hocko
+> > SUSE Labs

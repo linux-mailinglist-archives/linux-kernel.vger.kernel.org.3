@@ -2,93 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D3646C4F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D250946C4FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241466AbhLGU6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241454AbhLGU6O (ORCPT
+        id S241468AbhLGU6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:58:19 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34068 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241459AbhLGU6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:58:14 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F24DC061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:54:43 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id i6so912692uae.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vnQaA6P+LIHQMrDzcMBkiFC3eYo06vZ3BgOWnpFUb+U=;
-        b=KDelhbXVes+lqRe0cb53jkgLal/aW6GQGwffjQa0rUHsbe6161UF1t6Z2on4FaIk7K
-         kpkpfJFoyxDKQNM8u5/DG4qXs14VX31bLcBiREhAe/fcde1lmjKR005B0B2dvpxIN7lJ
-         mEBfjeYuO/+jL9tenYrHFM7UEN1XBRDKed1vVA6cU9emE0Y7fuY31Qx89Q2ci9KQaR6L
-         fsjgccMmfK5xtAY1EFTmdpfMThTmerT33Sa/j2aUf0jUwpOEj8vuHNSUPhU4Pj9zD8mk
-         ttkdJZ90tG1h6qpo4ANKcjDL7GvumlIwp2XJqi1+0kvTJLtAudu0VD6q7YGCLRznQnam
-         adhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vnQaA6P+LIHQMrDzcMBkiFC3eYo06vZ3BgOWnpFUb+U=;
-        b=sRvCvEe2h9hGsEpKC4JLpr6nRzx3McvqGFDMqS7WOgSIv4NsSk3f5zkHbS/ZqUF3Nu
-         j/eImdyRMgsyFPpVg8YOWSgxvpiLSkJbsW1tB77aAwioL/UEpwehwaoK/7LEota8Mihu
-         5DmRyT8v+dZ/oGnHrL0XtAv+cd7F5nhgMY7rXwNfyqm9gRyjssdMvRtHWr/ICce7B6Ec
-         ZBn09a82W2EgdmfPilgPLq1KIkCmK2I5lxyAG9QoXq6+yRHOp2PE9vFaNTD3Mov65WMQ
-         6Q+b0Oh/L/fkOpCYKTGqecZHwkBMypxGUfJXA+rF5r1Z+OnzxTJbhsb1nf7CPbjI2lX7
-         x/+Q==
-X-Gm-Message-State: AOAM533TnDS+kd5xbCix1AWMzqaGX7Kr3WCN2Kp6gGJ90nCI3eOHQi6z
-        P3n64a6fHwVpITB5zj/9OX6O5TOcD2gQF0JSTMzU1g==
-X-Google-Smtp-Source: ABdhPJytk9aqZYoTy38J10oQ1ej1BjD0TBUC+GRw7/nU3TmvDeFV2TePR+yGXQDx2wGW2M7EDD6S8h4pv5K8ijYKEVs=
-X-Received: by 2002:a67:d31c:: with SMTP id a28mr48540382vsj.20.1638910482661;
- Tue, 07 Dec 2021 12:54:42 -0800 (PST)
+        Tue, 7 Dec 2021 15:58:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3B966CE1E6F;
+        Tue,  7 Dec 2021 20:54:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E222C341C3;
+        Tue,  7 Dec 2021 20:54:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638910483;
+        bh=2TCFm6oMcOo2j9kU57EKGsnY8fkR6JvmY5FAYrIs66g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nsS3jKJ7qQGHDYJB47kov7AVBhzyG091DRuFfOsLF+34ALijihn9KZtlp+GJ6IKE8
+         kwldgAGONyoShIXShWCqK6l38EuYcxpvxsfxzUOfye0qv3FNym4mEgnKFN3S4deZJn
+         MK94vwclzEowmaVdB2cGhf7Z0a7/o3/oMmVUhVyJY2de/L6mR980HgZkZTFIElzJ/+
+         epdz+yWDLvAPCET9jF0AcFlWO/tiWh+A6jWW8FLHS0WZbyvHO0pmCIW6QBNlbIsCJM
+         H+HIHHhPv17Z3oQSzspeU71bWUAG5BFut+e0szyhVsCnMRESKTLgg/mxRT13eAuaiM
+         cbQlCTOqnZvyg==
+Date:   Tue, 7 Dec 2021 14:54:41 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch V2 06/23] PCI/MSI: Make pci_msi_domain_write_msg() static
+Message-ID: <20211207205441.GA76497@bhelgaas>
 MIME-Version: 1.0
-References: <20211126203641.24005-1-semen.protsenko@linaro.org> <YagPWOj0CLxE/+ER@robh.at.kernel.org>
-In-Reply-To: <YagPWOj0CLxE/+ER@robh.at.kernel.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Dec 2021 22:54:31 +0200
-Message-ID: <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
- Exynos850 sysreg clocks
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        David Virag <virag.david003@gmail.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206210224.157070464@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Dec 2021 at 02:12, Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, 26 Nov 2021 22:36:40 +0200, Sam Protsenko wrote:
-> > System Register is used to configure system behavior, like USI protocol,
-> > etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> > make it possible to modify SYSREG registers.
-> >
-> > While at it, add also missing PMU and GPIO clocks, which looks necessary
-> > and might be needed for corresponding Exynos850 features soon.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> >  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
->
-> Acked-by: Rob Herring <robh@kernel.org>
+On Mon, Dec 06, 2021 at 11:27:33PM +0100, Thomas Gleixner wrote:
+> There is no point to have this function public as it is set by the PCI core
+> anyway when a PCI/MSI irqdomain is created.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Juergen Gross <jgross@suse.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Hi Sylwester,
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# PCI
 
-Can you please review and apply this series, if it's ok?
-
-Thanks!
+> ---
+>  drivers/irqchip/irq-gic-v2m.c            |    1 -
+>  drivers/irqchip/irq-gic-v3-its-pci-msi.c |    1 -
+>  drivers/irqchip/irq-gic-v3-mbi.c         |    1 -
+>  drivers/pci/msi.c                        |    2 +-
+>  include/linux/msi.h                      |    1 -
+>  5 files changed, 1 insertion(+), 5 deletions(-)
+> 
+> --- a/drivers/irqchip/irq-gic-v2m.c
+> +++ b/drivers/irqchip/irq-gic-v2m.c
+> @@ -88,7 +88,6 @@ static struct irq_chip gicv2m_msi_irq_ch
+>  	.irq_mask		= gicv2m_mask_msi_irq,
+>  	.irq_unmask		= gicv2m_unmask_msi_irq,
+>  	.irq_eoi		= irq_chip_eoi_parent,
+> -	.irq_write_msi_msg	= pci_msi_domain_write_msg,
+>  };
+>  
+>  static struct msi_domain_info gicv2m_msi_domain_info = {
+> --- a/drivers/irqchip/irq-gic-v3-its-pci-msi.c
+> +++ b/drivers/irqchip/irq-gic-v3-its-pci-msi.c
+> @@ -28,7 +28,6 @@ static struct irq_chip its_msi_irq_chip
+>  	.irq_unmask		= its_unmask_msi_irq,
+>  	.irq_mask		= its_mask_msi_irq,
+>  	.irq_eoi		= irq_chip_eoi_parent,
+> -	.irq_write_msi_msg	= pci_msi_domain_write_msg,
+>  };
+>  
+>  static int its_pci_msi_vec_count(struct pci_dev *pdev, void *data)
+> --- a/drivers/irqchip/irq-gic-v3-mbi.c
+> +++ b/drivers/irqchip/irq-gic-v3-mbi.c
+> @@ -171,7 +171,6 @@ static struct irq_chip mbi_msi_irq_chip
+>  	.irq_unmask		= mbi_unmask_msi_irq,
+>  	.irq_eoi		= irq_chip_eoi_parent,
+>  	.irq_compose_msi_msg	= mbi_compose_msi_msg,
+> -	.irq_write_msi_msg	= pci_msi_domain_write_msg,
+>  };
+>  
+>  static struct msi_domain_info mbi_msi_domain_info = {
+> --- a/drivers/pci/msi.c
+> +++ b/drivers/pci/msi.c
+> @@ -1281,7 +1281,7 @@ EXPORT_SYMBOL_GPL(msi_desc_to_pci_sysdat
+>   * @irq_data:	Pointer to interrupt data of the MSI interrupt
+>   * @msg:	Pointer to the message
+>   */
+> -void pci_msi_domain_write_msg(struct irq_data *irq_data, struct msi_msg *msg)
+> +static void pci_msi_domain_write_msg(struct irq_data *irq_data, struct msi_msg *msg)
+>  {
+>  	struct msi_desc *desc = irq_data_get_msi_desc(irq_data);
+>  
+> --- a/include/linux/msi.h
+> +++ b/include/linux/msi.h
+> @@ -455,7 +455,6 @@ void *platform_msi_get_host_data(struct
+>  #endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
+>  
+>  #ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
+> -void pci_msi_domain_write_msg(struct irq_data *irq_data, struct msi_msg *msg);
+>  struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
+>  					     struct msi_domain_info *info,
+>  					     struct irq_domain *parent);
+> 

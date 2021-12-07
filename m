@@ -2,72 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD9546B922
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9EB46B907
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbhLGKcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:32:41 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:55049 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbhLGKcc (ORCPT
+        id S235147AbhLGKcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:32:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52917 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235131AbhLGKcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:32:32 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1B7A33YT003135;
-        Tue, 7 Dec 2021 18:03:03 +0800 (GMT-8)
-        (envelope-from tommy_huang@aspeedtech.com)
-Received: from tommy0527-VirtualBox.aspeedtech.com (192.168.2.141) by
- TWMBX02.aspeed.com (192.168.0.24) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 7 Dec 2021 18:27:59 +0800
-From:   Tommy Haung <tommy_huang@aspeedtech.com>
-To:     <joel@jms.id.au>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <robh+dt@kernel.org>, <andrew@aj.id.au>,
-        <linux-aspeed@lists.ozlabs.org>, <dri-devel@lists.freedesktop.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <BMC-SW@aspeedtech.com>, tommy-huang <tommy_huang@aspeedtech.com>
-Subject: [PATCH v4 6/6] arm:boot:dts:aspeed-g6 Add more gfx reset control
-Date:   Tue, 7 Dec 2021 18:27:49 +0800
-Message-ID: <20211207102749.18118-8-tommy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211207102749.18118-1-tommy_huang@aspeedtech.com>
-References: <20211207102749.18118-1-tommy_huang@aspeedtech.com>
+        Tue, 7 Dec 2021 05:32:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638872917;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d58w/O9tmt4TQ0yEa0JhGzxmg+sZ/WD5ifzH3Bv9Ixg=;
+        b=IOM5Is90cwql3d86jczDjOD67f0Jcw/ucdZw/Nx56hqdnC6YeU87Y3WBulVOhZPyyDAqiL
+        7S4JuJiCA38UWpNQDTJ7BEg0WMZEkBmCPAWxx3zyAcvUgNeuvB8p8qJpJCArAJPpvdeWII
+        T4EXGG20VXYnOKZMkzd+VpbTxFFewPU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-309-6oD_vIqGN8OORaRk1P2XtQ-1; Tue, 07 Dec 2021 05:28:36 -0500
+X-MC-Unique: 6oD_vIqGN8OORaRk1P2XtQ-1
+Received: by mail-wr1-f72.google.com with SMTP id u4-20020a5d4684000000b0017c8c1de97dso2767671wrq.16
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 02:28:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=d58w/O9tmt4TQ0yEa0JhGzxmg+sZ/WD5ifzH3Bv9Ixg=;
+        b=HjNoUy5tFA8pB5nIdL1bMKPnv9L6m4cCEMf0vNvyrgR4Jch/SLX/lCmq+VaIgA23T0
+         MGvTujQJqJSzkEzICzvJzlxr9NBwGCVwtVS97o1HVqHmxFL3YyF5nQZKeagEW34PAOut
+         VXwGfEhdUGEIM+OHngwhqFiXiJ2YwCxsBbT8fLTdp08ZZLLhbd//V8bbRZ95iEk5Vx9D
+         q9sghksnR9szYF3UGT2HY00Lhpupmvey5FSj9t4qxb9uJBmQrm6qHQrXQJbl+gMU4oAB
+         vwtSAQTyf7BZc4LCB+urGEt/b2D/r8kXjaIsRFJn0KccMScYvr93d13PbSUy8IW6H9rK
+         QQKg==
+X-Gm-Message-State: AOAM5306+WBjMuM4sHZv9PuCOUpAnXazbw5SQMVWY5c8V73MmEoxhn3D
+        9YcqEYinditDpUOxBrm7xyOdXsvQFoi0uf2u0OJnyp6fkTo4yJwTFihgIJ+ux5ETUb4yR8f2NUl
+        ET8ZHO6yKxCQzazI7mnqSw0f9
+X-Received: by 2002:adf:d1cb:: with SMTP id b11mr50103342wrd.33.1638872915670;
+        Tue, 07 Dec 2021 02:28:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw9yqgtAotyRXCF75l+LBkff1xoYlfGD7TQ/mCawQyzCBi7p3cdMYW9aV0zdVcyfpRAAKmK1g==
+X-Received: by 2002:adf:d1cb:: with SMTP id b11mr50103308wrd.33.1638872915426;
+        Tue, 07 Dec 2021 02:28:35 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id e24sm14675252wra.78.2021.12.07.02.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 02:28:34 -0800 (PST)
+Reply-To: eric.auger@redhat.com
+Subject: Re: [RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)
+To:     Sumit Gupta <sumitg@nvidia.com>, eric.auger.pro@gmail.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, jean-philippe@linaro.org,
+        zhukeqian1@huawei.com
+Cc:     alex.williamson@redhat.com, jacob.jun.pan@linux.intel.com,
+        yi.l.liu@intel.com, kevin.tian@intel.com, ashok.raj@intel.com,
+        maz@kernel.org, peter.maydell@linaro.org, vivek.gautam@arm.com,
+        shameerali.kolothum.thodi@huawei.com, wangxingang5@huawei.com,
+        jiangkunkun@huawei.com, yuzenghui@huawei.com,
+        nicoleotsuka@gmail.com, chenxiang66@hisilicon.com,
+        nicolinc@nvidia.com, vdumpa@nvidia.com, zhangfei.gao@linaro.org,
+        zhangfei.gao@gmail.com, lushenming@huawei.com, vsethi@nvidia.com,
+        Sachin Nikam <Snikam@nvidia.com>,
+        Pritesh Raithatha <praithatha@nvidia.com>
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <4921cd06-065d-951d-d396-ee9843882c40@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+Message-ID: <780faf42-e035-4bfd-252d-8d009355bd6c@redhat.com>
+Date:   Tue, 7 Dec 2021 11:28:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.2.141]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1B7A33YT003135
+In-Reply-To: <4921cd06-065d-951d-d396-ee9843882c40@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: tommy-huang <tommy_huang@aspeedtech.com>
+Hi Sumit,
 
-Add more gfx reset control for ast2600.
+On 12/3/21 2:13 PM, Sumit Gupta wrote:
+> Hi Eric,
+>
+>> This series brings the IOMMU part of HW nested paging support
+>> in the SMMUv3.
+>>
+>> The SMMUv3 driver is adapted to support 2 nested stages.
+>>
+>> The IOMMU API is extended to convey the guest stage 1
+>> configuration and the hook is implemented in the SMMUv3 driver.
+>>
+>> This allows the guest to own the stage 1 tables and context
+>> descriptors (so-called PASID table) while the host owns the
+>> stage 2 tables and main configuration structures (STE).
+>>
+>> This work mainly is provided for test purpose as the upper
+>> layer integration is under rework and bound to be based on
+>> /dev/iommu instead of VFIO tunneling. In this version we also get
+>> rid of the MSI BINDING ioctl, assuming the guest enforces
+>> flat mapping of host IOVAs used to bind physical MSI doorbells.
+>> In the current QEMU integration this is achieved by exposing
+>> RMRs to the guest, using Shameer's series [1]. This approach
+>> is RFC as the IORT spec is not really meant to do that
+>> (single mapping flag limitation).
+>>
+>> Best Regards
+>>
+>> Eric
+>>
+>> This series (Host) can be found at:
+>> https://github.com/eauger/linux/tree/v5.15-rc7-nested-v16
+>> This includes a rebased VFIO integration (although not meant
+>> to be upstreamed)
+>>
+>> Guest kernel branch can be found at:
+>> https://github.com/eauger/linux/tree/shameer_rmrr_v7
+>> featuring [1]
+>>
+>> QEMU integration (still based on VFIO and exposing RMRs)
+>> can be found at:
+>> https://github.com/eauger/qemu/tree/v6.1.0-rmr-v2-nested_smmuv3_v10
+>> (use iommu=nested-smmuv3 ARM virt option)
+>>
+>> Guest dependency:
+>> [1] [PATCH v7 0/9] ACPI/IORT: Support for IORT RMR node
+>>
+>> History:
+>>
+>> v15 -> v16:
+>> - guest RIL must support RIL
+>> - additional checks in the cache invalidation hook
+>> - removal of the MSI BINDING ioctl (tentative replacement
+>>    by RMRs)
+>>
+>>
+>> Eric Auger (9):
+>>    iommu: Introduce attach/detach_pasid_table API
+>>    iommu: Introduce iommu_get_nesting
+>>    iommu/smmuv3: Allow s1 and s2 configs to coexist
+>>    iommu/smmuv3: Get prepared for nested stage support
+>>    iommu/smmuv3: Implement attach/detach_pasid_table
+>>    iommu/smmuv3: Allow stage 1 invalidation with unmanaged ASIDs
+>>    iommu/smmuv3: Implement cache_invalidate
+>>    iommu/smmuv3: report additional recoverable faults
+>>    iommu/smmuv3: Disallow nested mode in presence of HW MSI regions
+> Hi Eric,
+>
+> I validated the reworked test patches in v16 from the given
+> branches with Kernel v5.15 & Qemu v6.2. Verified them with
+> NVMe PCI device assigned to Guest VM.
+> Sorry, forgot to update earlier.
+>
+> Tested-by: Sumit Gupta <sumitg@nvidia.com>
 
-Signed-off-by: tommy-huang <tommy_huang@aspeedtech.com>
----
- arch/arm/boot/dts/aspeed-g6.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thank you very much!
 
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index e38c3742761b..b92b24609660 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -356,7 +356,9 @@
- 				reg = <0x1e6e6000 0x1000>;
- 				reg-io-width = <4>;
- 				clocks = <&syscon ASPEED_CLK_GATE_D1CLK>;
--				resets = <&syscon ASPEED_RESET_GRAPHICS>;
-+				resets = <&syscon ASPEED_RESET_CRT>,
-+					 <&syscon ASPEED_RESET_GRAPHICS>;
-+				reset-names = "crt", "engine";
- 				syscon = <&syscon>;
- 				status = "disabled";
- 				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.17.1
+Best Regards
+
+Eric
+>
+> Thanks,
+> Sumit Gupta
+>
 

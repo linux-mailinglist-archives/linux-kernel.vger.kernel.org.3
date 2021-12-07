@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA3146C501
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF33B46C506
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbhLGU6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbhLGU6i (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:58:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE94C061574;
-        Tue,  7 Dec 2021 12:55:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 73B61CE1E01;
-        Tue,  7 Dec 2021 20:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A28BC341CA;
-        Tue,  7 Dec 2021 20:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638910503;
-        bh=Fa6UchSERsdNVXky6PNS2vCw8nCpV4RsTu7TPsjmB4I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dvUfGzkAJKzccQlv0HtPexRzXLWw3+BexhSfcjdhY9OELj9M9shyPr2oxlHYgishh
-         t4D2z7Bdr+ncSq9kKTlJ1eWwQvEyIE70QCOcHPfTkykUuEbmkImTsvOBxAh+YrDT2N
-         e2tXRjJ7AyPRQqOviSDYGDRtTGTym9+e84h6CsKaxpAqC8y47ShWjPbJ5Wc+6tQEDN
-         O+w8x6jcjhb24uXwmpRRwPhRkrIfIv7GvPutd6orOK9sOuf81nkdYTyVSsRwR7X0hy
-         UTGVn2mumg3zTPmrl6DdJIgD9FUL38mTDmd4Yy4CHa5XbrINFDsrU5l0x2T6JYzzJO
-         QyWBUWsq4OuoA==
-Date:   Tue, 7 Dec 2021 14:55:02 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [patch V2 07/23] PCI/MSI: Remove msi_desc_to_pci_sysdata()
-Message-ID: <20211207205502.GA76553@bhelgaas>
+        id S229833AbhLGU7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:59:47 -0500
+Received: from mga02.intel.com ([134.134.136.20]:30780 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229475AbhLGU7r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 15:59:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224942856"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="224942856"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:56:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="563798551"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2021 12:56:11 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Ku9kd018910;
+        Tue, 7 Dec 2021 20:56:09 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Krzysztof Kazimierczak <krzysztof.kazimierczak@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v3 net-next 0/9] net: intel: napi_alloc_skb() vs metadata
+Date:   Tue,  7 Dec 2021 21:55:27 +0100
+Message-Id: <20211207205536.563550-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206210224.210768199@linutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:27:34PM +0100, Thomas Gleixner wrote:
-> Last user is gone long ago.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Juergen Gross <jgross@suse.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+This is an interpolation of [0] to other Intel Ethernet drivers
+(and is (re)based on its code).
+The main aim is to keep XDP metadata not only in case with
+build_skb(), but also when we do napi_alloc_skb() + memcpy().
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+All Intel drivers suffers from the same here:
+ - metadata gets lost on XDP_PASS in legacy-rx;
+ - excessive headroom allocation on XSK Rx to skbs;
+ - metadata gets lost on XSK Rx to skbs.
 
-> ---
->  drivers/pci/msi.c   |    8 --------
->  include/linux/msi.h |    5 -----
->  2 files changed, 13 deletions(-)
-> 
-> --- a/drivers/pci/msi.c
-> +++ b/drivers/pci/msi.c
-> @@ -1267,14 +1267,6 @@ struct pci_dev *msi_desc_to_pci_dev(stru
->  }
->  EXPORT_SYMBOL(msi_desc_to_pci_dev);
->  
-> -void *msi_desc_to_pci_sysdata(struct msi_desc *desc)
-> -{
-> -	struct pci_dev *dev = msi_desc_to_pci_dev(desc);
-> -
-> -	return dev->bus->sysdata;
-> -}
-> -EXPORT_SYMBOL_GPL(msi_desc_to_pci_sysdata);
-> -
->  #ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
->  /**
->   * pci_msi_domain_write_msg - Helper to write MSI message to PCI config space
-> --- a/include/linux/msi.h
-> +++ b/include/linux/msi.h
-> @@ -218,13 +218,8 @@ static inline void msi_desc_set_iommu_co
->  	for_each_msi_entry((desc), &(pdev)->dev)
->  
->  struct pci_dev *msi_desc_to_pci_dev(struct msi_desc *desc);
-> -void *msi_desc_to_pci_sysdata(struct msi_desc *desc);
->  void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg);
->  #else /* CONFIG_PCI_MSI */
-> -static inline void *msi_desc_to_pci_sysdata(struct msi_desc *desc)
-> -{
-> -	return NULL;
-> -}
->  static inline void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
->  {
->  }
-> 
+Those get especially actual in XDP Hints upcoming.
+I couldn't have addressed the first one for all Intel drivers due to
+that they don't reserve any headroom for now in legacy-rx mode even
+with XDP enabled. This is hugely wrong, but requires quite a bunch
+of work and a separate series. Luckily, ice doesn't suffer from
+that.
+igc has 1 and 3 already fixed in [0].
+
+From v2 (unreleased upstream):
+ - tweaked 007 to pass bi->xdp directly and simplify code (Maciej);
+ - picked Michal's Reviewed-by.
+
+From v1 (unreleased upstream):
+ - drop "fixes" of legacy-rx for i40e, igb and ixgbe since they have
+   another flaw regarding headroom (see above);
+ - drop igc cosmetic fixes since they landed upstream incorporated
+   into Jesper's commits;
+ - picked one Acked-by from Maciej.
+
+[0] https://lore.kernel.org/netdev/163700856423.565980.10162564921347693758.stgit@firesoul
+
+Alexander Lobakin (9):
+  i40e: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  i40e: respect metadata on XSK Rx to skb
+  ice: respect metadata in legacy-rx/ice_construct_skb()
+  ice: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  ice: respect metadata on XSK Rx to skb
+  igc: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  ixgbe: pass bi->xdp to ixgbe_construct_skb_zc() directly
+  ixgbe: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  i40e: respect metadata on XSK Rx to skb
+
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c   | 16 +++++++-----
+ drivers/net/ethernet/intel/ice/ice_txrx.c    | 15 ++++++++---
+ drivers/net/ethernet/intel/ice/ice_xsk.c     | 16 +++++++-----
+ drivers/net/ethernet/intel/igc/igc_main.c    | 13 +++++-----
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 27 ++++++++++++--------
+ 5 files changed, 54 insertions(+), 33 deletions(-)
+
+-- 
+Testing hints:
+
+Setup an XDP and AF_XDP program which will prepend metadata at the
+front of the frames and return XDP_PASS, then check that metadata
+is present after frames reach kernel network stack.
+--
+2.33.1
+

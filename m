@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4DB46C094
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC1846C0A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbhLGQVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239562AbhLGQVe (ORCPT
+        id S239599AbhLGQ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:26:34 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54508 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239565AbhLGQ0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:21:34 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0323CC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 08:18:04 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id w1so1628226ilh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=98f/j99AuJzhZ6H5G/BaaKmxrlUIJ+qa/P4gIH2gWOw=;
-        b=se7fm4oskX7jefsflWX65qMvO6PKk5Vo6IwV/PRz7zFtyMYQE2iYOK+wEqcMZjY9o5
-         S8JlXR/lfXvbuJxbpBCafNY3X9IjzakaxHaxWi+6u5yTDiqlf4xinpJGOtr+ARR4kuC/
-         TUgwJYSg6a761I8ND1z2BOf3gmjtfygD2UFF5u9v53BvNAtsn4Ez9qxLVyUkyUeF6Kr4
-         QcLbfhCZE3Cbb7ORBHhC0iCAx6xvBUnMhySVGFRuGoxEA9wGqsXA7ChauWsCcf9dF3yB
-         s15PRFBIhzw2QiBoEHdZbNScPYUsAR+1CWyqDum1MsWOTjRcs7NN/TzPtgtrEG9sKbe1
-         2GZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=98f/j99AuJzhZ6H5G/BaaKmxrlUIJ+qa/P4gIH2gWOw=;
-        b=C55upurlecFfJIlgVw+FplWRRkxGLMo5EUDkdGZUEMl2GKVBR7tGN/AQmHV9hzXQ6s
-         3qT+9EPkvJZaBNzLSHehWZTcLXvdfR6YHN9QQWy84DM3y4FGZIv/CdYDLfdeQulLgPm8
-         f0M286wZPaG3b/gta8h6nemEuZ2NUPETlZCNdihlQYQCEdviMeCn1yd0Xxik5IriwNDd
-         kd4w2R0UXV4PJlrUGF86xeilOHzie6dpqSeKF+UCzT1Z5Kn++CrJAjVlZGCsGknQ15Uc
-         RuelCTaS06WUW5KXCHjuLukdcE6i3jUlf61ceMEAEn1H06QoBkzDJ9rgCU6Vo+SSGpid
-         qElw==
-X-Gm-Message-State: AOAM5300k7M9EbrhOaVIp5okV63U8g1QfhvuljPgv9BsLdEwI/+3KjZH
-        2fJbUBuLAt3f1zae+6kZrQ+GXPpvW8bAYclg
-X-Google-Smtp-Source: ABdhPJz111zaVwF/YHQfSDLhMEcjob8y5Likudp/zcGxdQ9NGB8pmN5q3jD2siCFohjNC35oN8G9ag==
-X-Received: by 2002:a92:8751:: with SMTP id d17mr380244ilm.148.1638893883342;
-        Tue, 07 Dec 2021 08:18:03 -0800 (PST)
-Received: from x1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id w10sm95941ill.36.2021.12.07.08.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 08:18:02 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     John Garry <john.garry@huawei.com>
-Cc:     linux-block@vger.kernel.org, kashyap.desai@broadcom.com,
-        linux-kernel@vger.kernel.org, hare@suse.de, ming.lei@redhat.com
-In-Reply-To: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
-References: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
-Subject: Re: [PATCH v2 0/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for shared tags
-Message-Id: <163889388252.160645.10327363566878499665.b4-ty@kernel.dk>
-Date:   Tue, 07 Dec 2021 09:18:02 -0700
+        Tue, 7 Dec 2021 11:26:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF5EECE1C1D;
+        Tue,  7 Dec 2021 16:23:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B26BC341C1;
+        Tue,  7 Dec 2021 16:22:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638894179;
+        bh=J8QNuptCRMd5FPz3sYAxGk59NtvnPv/BN3NdiOYbym8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=rm1+9y3P//iqR/ITy9maM963Sskw8m0oJfvWK2EEs1y+/CTy6C9o/y1lEn0dUP+AZ
+         AajiJaIlEVhQrRTdoL/ir417yGdqSMr1jxcKPsB6COnYaE0IsvxN2/5DYjWNS3eht/
+         4OgIt85RvmWm37ulTCpw2Ugf9Hxmoxd9FJdEbAWlsfKFrNzObAGUHsyRBeTrJV5VTK
+         f2/eCAdCfsjcIa+0DqqRsTnSCH3kqyIDu35kmiOVE/wPJ86JV2gA5QCFGsGgsQMUNV
+         XblxC6rzvJeGo/BHRGOwoPRfsoxv0vFxNY/zN1x/0cd9zQ3LN3/esS8cWG/GA5Jmcu
+         O4RtyJLyldrhQ==
+Date:   Tue, 7 Dec 2021 10:22:57 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Luca Ceresoli <luca@lucaceresoli.net>, kernel-team@android.com
+Subject: Re: [PATCH v3 1/3] PCI: apple: Follow the PCIe specifications when
+ resetting the port
+Message-ID: <20211207162257.GA44468@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211123180636.80558-2-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 20:49:47 +0800, John Garry wrote:
-> In [0] Kashyap reports high CPU usage for blk_mq_queue_tag_busy_iter()
-> and callees for shared tags.
+On Tue, Nov 23, 2021 at 06:06:34PM +0000, Marc Zyngier wrote:
+> While the Apple PCIe driver works correctly when directly booted
+> from the firmware, it fails to initialise when the kernel is booted
+> from a bootloader using PCIe such as u-boot.
 > 
-> Indeed blk_mq_queue_tag_busy_iter() would be less optimum for moving to
-> shared tags, but it was not optimum previously.
+> That's beacuse we're missing a proper reset of the port (we only
+> clear the reset, but never assert it).
 > 
-> This series optimises by having only a single iter (per regular and resv
-> tags) for the shared tags, instead of an iter per HW queue.
+> The PCIe spec requirements are two-fold:
 > 
-> [...]
+> - #PERST must be asserted before setting up the clocks, and
+>   stay asserted for at least 100us (Tperst-clk).
+> 
+> - Once #PERST is deasserted, the OS must wait for at least 100ms
+>   "from the end of a Conventional Reset" before we can start talking
+>   to the devices
 
-Applied, thanks!
+Unless somebody objects, I'll s/#PERST/PERST#/ to match the spec
+usage, both here and in the comments below.
 
-[1/3] blk-mq: Drop busy_iter_fn blk_mq_hw_ctx argument
-      (no commit info)
-[2/3] blk-mq: Delete busy_iter_fn
-      (no commit info)
-[3/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for shared tags
-      (no commit info)
+I also notice gpiod_get_from_of_node(..., "#PERST") earlier in
+apple_pcie_setup_port().  If it wouldn't break anything, I'd like to
+change that, too.
 
-Best regards,
--- 
-Jens Axboe
+> Implementing this results in a booting system.
+> 
+> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/controller/pcie-apple.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index 1bf4d75b61be..957960a733c4 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -539,13 +539,23 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  
+>  	rmw_set(PORT_APPCLK_EN, port->base + PORT_APPCLK);
+>  
+> +	/* Engage #PERST before setting up the clock */
+> +	gpiod_set_value(reset, 0);
+> +
+>  	ret = apple_pcie_setup_refclk(pcie, port);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	/* The minimal Tperst-clk value is 100us (PCIe CMS r2.0, 2.6.2) */
+> +	usleep_range(100, 200);
 
+Spec says "min 100us from REFCLK stable before PERST# inactive".  So I
+guess when apple_pcie_setup_refclk() returns, we know REFCLK is
+already stable?
 
+> +	/* Deassert #PERST */
+>  	rmw_set(PORT_PERST_OFF, port->base + PORT_PERST);
+>  	gpiod_set_value(reset, 1);
+>  
+> +	/* Wait for 100ms after #PERST deassertion (PCIe r2.0, 6.6.1) */
+> +	msleep(100);
+
+Does this port support speeds greater than 5 GT/s?  If so, 6.6.1 says
+we need "100ms after Link training completes," not just after
+deasserting PERST#.
+
+I'll update this citation to "PCIe r5.0, 6.6.1" to reference the
+current spec.
+
+>  	ret = readl_relaxed_poll_timeout(port->base + PORT_STATUS, stat,
+>  					 stat & PORT_STATUS_READY, 100, 250000);
+>  	if (ret < 0) {
+> -- 
+> 2.30.2
+> 

@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FAC46C61F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB7146C61B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241625AbhLGVJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238978AbhLGVJX (ORCPT
+        id S232369AbhLGVJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:09:25 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39516 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240101AbhLGVJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:09:23 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60353C061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 13:05:51 -0800 (PST)
-Received: from 250.57.4.146.static.wline.lns.sme.cust.swisscom.ch ([146.4.57.250] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1muhel-00060K-4x; Tue, 07 Dec 2021 22:05:47 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 3/3] staging: r8188eu: remove LedPin from struct struct LED_871x
-Date:   Tue,  7 Dec 2021 22:05:37 +0100
-Message-Id: <20211207210537.23382-4-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211207210537.23382-1-martin@kaiser.cx>
-References: <20211207210537.23382-1-martin@kaiser.cx>
+        Tue, 7 Dec 2021 16:09:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 242EECE1E70;
+        Tue,  7 Dec 2021 21:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E534FC341C1;
+        Tue,  7 Dec 2021 21:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638911146;
+        bh=emmb3xsy+H3LBfwGrcgXTk/PL3JNw+p8ei444INyEeo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=tUHMVIuvSKD4KpV71T2u3HTnNeDdjH94nw6ue1OFelE7L1C2fPpkpG+VJS6EQ7RbL
+         DE4nTrcL4DzJJW3p9KkxJ90aY6WFOuJBcNOz8jNU3ACfHQRdCHhgymSV73nOEduwEV
+         6C7Yc+PJ57lEXe3kC7Fnk7gDayIipgMIIFTSVZY22xFXTXz0GcB0An+vkRX1XJHFeD
+         76cd+8jimETlvZcjXu7IptnZ7ZJ5TZKmn3H2yllAjGpq1LNMQk63AsB8yMhOvkaWG7
+         8Ad9xB75VRw/OAC03WjVlipOwF+92OCz7KOMco287/fqEZgDdhOY94sgRr2WDdSvK3
+         r75m+DCO8+wLg==
+Date:   Tue, 7 Dec 2021 15:05:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V2 28/36] PCI/MSI: Use __msi_get_virq() in
+ pci_get_vector()
+Message-ID: <20211207210544.GA77966@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206210439.181331216@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We only support a single LED. LedPin in struct struct LED_871x is
-always LED_PIN_LED0. There's no need to store this info or to pass it
-to functions as a parameter.
+On Mon, Dec 06, 2021 at 11:39:41PM +0100, Thomas Gleixner wrote:
+> Use msi_get_vector() and handle the return value to be compatible.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_led.c      |  3 +--
- drivers/staging/r8188eu/hal/rtl8188eu_led.c |  7 +------
- drivers/staging/r8188eu/include/rtw_led.h   | 10 +---------
- 3 files changed, 3 insertions(+), 17 deletions(-)
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-index 1eda366c61aa..e1be1ba189cb 100644
---- a/drivers/staging/r8188eu/core/rtw_led.c
-+++ b/drivers/staging/r8188eu/core/rtw_led.c
-@@ -28,10 +28,9 @@ void ResetLedStatus(struct LED_871x *pLed)
- 	pLed->bLedScanBlinkInProgress = false;
- }
- 
--void InitLed871x(struct adapter *padapter, struct LED_871x *pLed, enum LED_PIN_871x LedPin)
-+void InitLed871x(struct adapter *padapter, struct LED_871x *pLed)
- {
- 	pLed->padapter = padapter;
--	pLed->LedPin = LedPin;
- 
- 	ResetLedStatus(pLed);
- 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_led.c b/drivers/staging/r8188eu/hal/rtl8188eu_led.c
-index dd692d6a3ab7..6fd1d1d476c7 100644
---- a/drivers/staging/r8188eu/hal/rtl8188eu_led.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188eu_led.c
-@@ -8,9 +8,6 @@
- 
- /*  LED object. */
- 
--/*  LED_819xUsb routines. */
--/*	Description: */
--/*		Turn on LED according to LedPin specified. */
- void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
- {
- 	u8	LedCfg;
-@@ -23,8 +20,6 @@ void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
- 	pLed->bLedOn = true;
- }
- 
--/*	Description: */
--/*		Turn off LED according to LedPin specified. */
- void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
- {
- 	u8	LedCfg;
-@@ -54,7 +49,7 @@ void rtl8188eu_InitSwLeds(struct adapter *padapter)
- 
- 	pledpriv->LedControlHandler = LedControl8188eu;
- 
--	InitLed871x(padapter, &pledpriv->SwLed0, LED_PIN_LED0);
-+	InitLed871x(padapter, &pledpriv->SwLed0);
- }
- 
- /*	Description: */
-diff --git a/drivers/staging/r8188eu/include/rtw_led.h b/drivers/staging/r8188eu/include/rtw_led.h
-index ff182878e371..e9b6d7768c2d 100644
---- a/drivers/staging/r8188eu/include/rtw_led.h
-+++ b/drivers/staging/r8188eu/include/rtw_led.h
-@@ -51,15 +51,9 @@ enum LED_STATE_871x {
- 	LED_BLINK_ALWAYS_ON = 16,
- };
- 
--enum LED_PIN_871x {
--	LED_PIN_LED0 = 1,
--};
--
- struct LED_871x {
- 	struct adapter *padapter;
- 
--	enum LED_PIN_871x	LedPin;	/* Identify how to implement this
--					 * SW led. */
- 	enum LED_STATE_871x	CurrLedState; /*  Current LED state. */
- 	enum LED_STATE_871x	BlinkingLedState; /*  Next state for blinking,
- 				   * either RTW_LED_ON or RTW_LED_OFF are. */
-@@ -110,9 +104,7 @@ void BlinkWorkItemCallback(struct work_struct *work);
- 
- void ResetLedStatus(struct LED_871x * pLed);
- 
--void InitLed871x(struct adapter *padapter, struct LED_871x *pLed,
--		 enum LED_PIN_871x LedPin);
--
-+void InitLed871x(struct adapter *padapter, struct LED_871x *pLed);
- void DeInitLed871x(struct LED_871x *pLed);
- 
- /* hal... */
--- 
-2.20.1
-
+> ---
+> V2: Handle the INTx case directly instead of trying to be overly smart - Marc
+> ---
+>  drivers/pci/msi/msi.c |   25 +++++--------------------
+>  1 file changed, 5 insertions(+), 20 deletions(-)
+> 
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -1032,28 +1032,13 @@ EXPORT_SYMBOL(pci_free_irq_vectors);
+>   */
+>  int pci_irq_vector(struct pci_dev *dev, unsigned int nr)
+>  {
+> -	if (dev->msix_enabled) {
+> -		struct msi_desc *entry;
+> +	unsigned int irq;
+>  
+> -		for_each_pci_msi_entry(entry, dev) {
+> -			if (entry->msi_index == nr)
+> -				return entry->irq;
+> -		}
+> -		WARN_ON_ONCE(1);
+> -		return -EINVAL;
+> -	}
+> +	if (!dev->msi_enabled && !dev->msix_enabled)
+> +		return !nr ? dev->irq : -EINVAL;
+>  
+> -	if (dev->msi_enabled) {
+> -		struct msi_desc *entry = first_pci_msi_entry(dev);
+> -
+> -		if (WARN_ON_ONCE(nr >= entry->nvec_used))
+> -			return -EINVAL;
+> -	} else {
+> -		if (WARN_ON_ONCE(nr > 0))
+> -			return -EINVAL;
+> -	}
+> -
+> -	return dev->irq + nr;
+> +	irq = msi_get_virq(&dev->dev, nr);
+> +	return irq ? irq : -EINVAL;
+>  }
+>  EXPORT_SYMBOL(pci_irq_vector);
+>  
+> 

@@ -2,173 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DD546BB13
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA64546BB16
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbhLGMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:32:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36445 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231129AbhLGMcF (ORCPT
+        id S236246AbhLGMfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230264AbhLGMfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:32:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638880114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U86KNIlXWBU0MTv/F9LU3y5IqrvBGqYEtNBS3ySXeBs=;
-        b=h/E2qCa4icdmqIP3AUeH5KMjEZP/s6HYjIIjasrRplvifyQZA6ON/cRY0BErFJbxvPYEf2
-        4O5tgMCuaRhNcQ/IqfxCy/zX5Jldu5q3cikThwZ//sU3A8LVDvUKCHD8FOUOKeWJHSzJti
-        /w9CgeRRKDXvCG6W5xCTIfCtVxi89JY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-559-FiqqxuSfNZ6-Drpd0YS2kA-1; Tue, 07 Dec 2021 07:28:34 -0500
-X-MC-Unique: FiqqxuSfNZ6-Drpd0YS2kA-1
-Received: by mail-wm1-f71.google.com with SMTP id l4-20020a05600c1d0400b00332f47a0fa3so1280801wms.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:28:33 -0800 (PST)
+        Tue, 7 Dec 2021 07:35:03 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE22C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:31:32 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p18so9302080plf.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9lUHPB2WqXOAiBVqz8lwa/VPd4K7gsmHbCi4yQjtOaM=;
+        b=HNiWO1c3kMKRbeu2DaGLDy7I/MrSOxg2gaUn8hn69XVnosy5Ayco+V+mkD/+LX2sMy
+         gXXEmlouLJejEGgBE8EL6o7oDSaqz74AO7hMWVQAhOEXuBIyGGH83IZH/ZCMM98mynTs
+         uLLtKQyQfqp303jxbqU7NVpqEebLgee3ArVdxZ+f3ykhHwwDhgEdCPMyAlir/mX8Rgt4
+         dG66rd1Y297aZNseC1OZDERoAvCBchQSe00ckQ7UaIv/YMcZ9R4USEt1w8R85P50fH6B
+         dsQUDerOWzWpnMJXbgO8RZZ5M4rljtCtgURIaoAtUVxUjmgmZyfSjKu85kVv9Hd3l96n
+         yXTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=U86KNIlXWBU0MTv/F9LU3y5IqrvBGqYEtNBS3ySXeBs=;
-        b=I7qHXY7THFU1isxgumCMezke7rOdQA6zavXcRdA8GdV41YsosemkDHQfupA1QWxYxE
-         Ggo9CyuzzCP00vAaxTwHcvBAtQpbOxMoHKyp9iGv5hQ26s6jgkvS2s99C3G5NMBLqZmK
-         qLKmf0MEKavonbJVwNjuGwLGPNZYtiSlDDFUsYY+dl6NuS2OwciQI8YeHDJ8fPvfnxg3
-         W96cJTdLRJyYn9mRTv2VQ4jc3kj2p0rdGsRADRcJPWcMzAtNrICNxU+SPNY6ijzkBvJj
-         vJsSc6nIJJPBmUQbE9e1J/2sLrUNpA3vZSRTPsBG8KbCk/dyLlKnMgPcR/BehLVgbq5R
-         uj1Q==
-X-Gm-Message-State: AOAM533GKqJoaaAqv70GBpz35427dhYGVS+8WTeALHHZIAWXDHWkqKSE
-        Zqt5iygWt0j4SzkMLsTO/KV/iXI4ivPjfAniVo98hPXtQaXqCr4D4+6Fr5SL3ThiyA7nz8Dxd+M
-        zDhnR6LeNJtNvYYRLlSeti0aQ
-X-Received: by 2002:a05:600c:1e8b:: with SMTP id be11mr6643917wmb.40.1638880112896;
-        Tue, 07 Dec 2021 04:28:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyueHJH/VSBXoMRrxMAPOq/Sw7KkduJI/w9KW7Jk8hxAx8dqCJ+QrFIwPfr2gfiIEu/otuukA==
-X-Received: by 2002:a05:600c:1e8b:: with SMTP id be11mr6643882wmb.40.1638880112674;
-        Tue, 07 Dec 2021 04:28:32 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
-        by smtp.gmail.com with ESMTPSA id o25sm2537500wms.17.2021.12.07.04.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 04:28:32 -0800 (PST)
-Message-ID: <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
-Date:   Tue, 7 Dec 2021 13:28:31 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9lUHPB2WqXOAiBVqz8lwa/VPd4K7gsmHbCi4yQjtOaM=;
+        b=7NLzyw38B4wHqHOSl7e/xi/i4iHANL1b2fLl6soRSNqiXx+f+yI5ceVqLnwndI0mBH
+         1seaWZ/BvalsFB+tCLYoFoTFrS+gDR5L3lW6RxUFyhWwDPaWWKkbdZIAeZIIBmfjSKmB
+         FkcYw2ecReZbzTXvOaVRKppf4U02+BQJrGW3KXRB5fAAg88e7BFj4Vgo5m3gZdf67DGA
+         oCFso4ijdLN1ps2WQbBsT7nIHD+lMdi/U7cAtjecOJxIa/X7dagCSFqIXZJuFZo2w1jC
+         QyiYtDcNv+ChSR7j5vAcj1nIeMAfWYD1F1mq1XHdsTZOgEofdx/4XdvCkCfw8FnBvTfJ
+         wSPw==
+X-Gm-Message-State: AOAM533UXOhPV2CjQ2VXDBAEBVpOzMNnAV/L/5laNC2Vvp1dfrhS1w5O
+        xWydhlOZrJEEyl1KsxUnka0ZlQ==
+X-Google-Smtp-Source: ABdhPJxRqF9LmXTEfjJkOQk1MHm9tH1NF6gJzZJvl8VwPZdkgYJ9gfpen0t0m56M0kNOD0cAPLJM+g==
+X-Received: by 2002:a17:903:186:b0:141:eda2:d5fa with SMTP id z6-20020a170903018600b00141eda2d5famr50587035plg.63.1638880291999;
+        Tue, 07 Dec 2021 04:31:31 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([103.207.71.6])
+        by smtp.gmail.com with ESMTPSA id n6sm13150000pgk.43.2021.12.07.04.31.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 04:31:31 -0800 (PST)
+Date:   Tue, 7 Dec 2021 20:31:18 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        James Morse <james.morse@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        James Clark <james.clark@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
+ contextidr
+Message-ID: <20211207123118.GA255238@leoy-ThinkPad-X240s>
+References: <20211021134530.206216-1-leo.yan@linaro.org>
+ <20211021134530.206216-5-leo.yan@linaro.org>
+ <202110210848.35971643C6@keescook>
+ <20211101152835.GB375622@leoy-ThinkPad-X240s>
+ <YapEUlcyDZ6TuE6n@arm.com>
+ <20211205135103.GA42658@leoy-ThinkPad-X240s>
+ <Ya9J8HnMWxBy3MJv@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
- <YYqstfX8PSGDfWsn@dhcp22.suse.cz> <YYrGpn/52HaLCAyo@fedora>
- <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz> <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
- <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-In-Reply-To: <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya9J8HnMWxBy3MJv@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> +			free_area_init_memoryless_node(nid);
->>
->> That's really just free_area_init_node() below, I do wonder what value
->> free_area_init_memoryless_node() has as of today.
+On Tue, Dec 07, 2021 at 11:48:00AM +0000, Catalin Marinas wrote:
+> On Sun, Dec 05, 2021 at 09:51:03PM +0800, Leo Yan wrote:
+> > On Fri, Dec 03, 2021 at 04:22:42PM +0000, Catalin Marinas wrote:
+> > > What's the cost of always enabling CONFIG_PID_IN_CONTEXTIDR? If it's
+> > > negligible, I'd not bother at all with any of the enabling/disabling.
+> > 
+> > Yes, I compared performance for PID tracing with always enabling and
+> > disabling CONFIG_PID_IN_CONTEXTIDR, and also compared with using
+> > static key for enabling/disabling PID tracing.  The result shows the
+> > cost is negligible based on the benchmark 'perf bench sched'.
+> > 
+> > Please see the detailed data in below link (note the testing results
+> > came from my Juno board):
+> > https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/
 > 
-> I am not sure there is any real value in having this special name for
-> this but I have kept is sync with what x86 does currently. If we want to
-> remove the wrapper then just do it everywhere. I can do that on top.
+> The table wasn't entirely clear to me. So the dis/enb benchmarks are
+> without this patchset applied.
+
+Yes, dis/enb metrics don't apply this patchset.
+
+> There seems to be a minor drop but it's
+> probably noise. Anyway, do we need this patchset or we just make
+> CONFIG_PID_IN_CONTEXTIDR default to y?
+
+Good point.  I remembered before we had discussed for making
+CONFIG_PID_IN_CONTEXTIDR to 'y', but this approach is not always valid,
+especially when the profiling process runs in non-root PID namespace,
+in this case, hardware tracing data (e.g. Arm SPE or CoreSight) cannot
+trust the PID values from tracing since the PID conflicts between
+different PID namespaces.
+
+So this patchset is to add the fundamental mechanism for dynamically
+enabling and disable PID tracing into CONTEXTIDR.  Based on it, we can
+use helpers to dynamically enable PID tracing _only_ when process runs
+in root PID namespace.
+
+> > > Another question: can you run multiple instances of SPE for different
+> > > threads on different CPUs? What happens to the global contextidr_in_use
+> > > key when one of them stops?
+> > 
+> > No, I only can launch one instance for Arm SPE event via perf tool; when
+> > I tried to launch a second instance, perf tool reports failure:
+> > 
+> > The sys_perf_event_open() syscall returned with 16 (Device or resource
+> > busy) for event (arm_spe_0/load_filter=1,store_filter=1/u).
+> [...]
+> > Alternatively, I'd like give several examples for contextidr_in_use key
+> > values when run different perf modes.
+> [...]
+> > Hope these three cases can demonstrate the usage for contextidr_in_use
+> > static key.
 > 
+> OK, so we can have multiple uses of PID in CONTEXTIDR. Since
+> static_branch_inc() is refcounted, we get away with this but the
+> downside is that a CPU won't notice until its next thread switch.
 
-Sure, just a general comment.
+Yes, it's true that after static key is decreased to 0, any CPUs in
+the system will notice for the '0' value until the next context
+switch.  But I think this will not introduce issue, please see the
+flow:
 
->>> +			continue;
->>> +		}
->>> +
->>>  		free_area_init_node(nid);
->>>  
->>>  		/* Any memory on that node */
->>>
->>> Could you give it a try? I do not have any machine which would exhibit
->>> the problem so I cannot really test this out. I hope build_zone_info
->>> will not choke on this. I assume the node distance table is
->>> uninitialized for these nodes and IIUC this should lead to an assumption
->>> that all other nodes are close. But who knows that can blow up there.
->>>
->>> Btw. does this make any sense at all to others?
->>>
->>
->> __build_all_zonelists() has to update the zonelists of all nodes I think.
-> 
-> I am not sure what you mean. This should be achieved by this patch
-> because the boot time build_all_zonelists will go over all online nodes
+  Step 1: Perf tool: enable event (Arm SPE or CoreSight event)
+  Step 2: Perf tool: enable PID tracing when setup AUX buf
+  Step 3: Profiling, run specific program or for all CPUs;
+          it can have many context switch and all relevant PIDs
+          are stored into CONTEXTIDR.
+  Step 4: Perf tool: disable PID tracing when free AUX buf
+  Step 5: Perf tool: disable event
 
-"Over all possible nodes", including online and offline ones, to make
-sure any possible node has a valid pgdat. IIUC, you're not changing
-anything about online vs offline nodes, only that we have a pgdat also
-for offline nodes.
+The latency you mentioned is introduced between step 4 and step 5,
+but it doesn't impact any PID tracing for step 3.
 
-> (i.e. with pgdat). free_area_init happens before that. I am just worried
-> that the arch specific node_distance() will generate a complete garbage
-> or blow up for some reason. 
+And when the CPU will switch context, it will detect the static key is
+decreased to zero so it can skip PID tracing.  Thus it also will not
+introduce any redundant PID tracing.
 
-Assume you online a new zone and then call __build_all_zonelists() to
-include the zone in all zonelists (via online_pages()).
-__build_all_zonelists() will not include offline nodes (that still have
-a pgdat with a valid zonelist now).
+Do I miss any potential issue?
 
-Similarly, assume you online a zone and then call
-__build_all_zonelists() to exclude the zone from all zonelists (via
-offline_pages()). __build_all_zonelists() will not include offline nodes
-(that still have a pgdat with a valid zonelist now).
-
-Essentially, IIRC, even after your change
-start_kernel()->build_all_zonelists(NULL)->build_all_zonelists_init()->__build_all_zonelists(NULL)
-won't initialize the zonelist of the new pgdat, because the nodes are
-offline.
-
-I'd assume we'd need
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c5952749ad40..e5d958abc7cc 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6382,7 +6382,7 @@ static void __build_all_zonelists(void *data)
-        if (self && !node_online(self->node_id)) {
-                build_zonelists(self);
-        } else {
--               for_each_online_node(nid) {
-+               for_each_node(nid) {
-                        pg_data_t *pgdat = NODE_DATA(nid);
-
-                        build_zonelists(pgdat);
-
-to properly initialize the zonelist also for the offline nodes with a
-valid pgdat.
-
-But maybe I am missing something important regarding online vs. offline
-nodes that your patch changes?
-
--- 
 Thanks,
-
-David / dhildenb
-
+Leo
+> 
+> -- 
+> Catalin

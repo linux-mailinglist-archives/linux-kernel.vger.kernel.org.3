@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2479C46C800
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AAE46C801
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242470AbhLGXKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S242473AbhLGXMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242406AbhLGXKn (ORCPT
+        with ESMTP id S233885AbhLGXMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:10:43 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A93C061574;
-        Tue,  7 Dec 2021 15:07:12 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id a18so818972wrn.6;
-        Tue, 07 Dec 2021 15:07:12 -0800 (PST)
+        Tue, 7 Dec 2021 18:12:02 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD450C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:08:31 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id f9so1553837ybq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 15:08:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DcCZDxr7SMu2ST2bCheW+pTmK2hn1qh9rUqEtH0VUFo=;
-        b=bLQ2O/CdKWEqQVuAVdO65WBB0M2/5v9FbfRJZlgTL1a6fZdOm60L8EVFRtZl1mSzRN
-         lpXQRlmtBNRG3eeemQ0jK7wp0+jAUFxD6LmbFkcGJdN1cRMCXEDIFpgHkfbPC09TroDF
-         MOkrvDP+n4vr/5mQg5hD7WWKfCX7exPlczzEcZJB+h1pxQWZFqIrWGeZ9Ubl9o9uvI2X
-         4Ady/A9V6ADi78PMsJCEme/6ZkplYHqorKoYRy/wfJ9XEW++pG2XtTzO9QSsFbwF6FhH
-         FcM0qQAViW46Hwx9G7s+/8byiIsBF9+i+w8ErT14ZdlAX4ZSR8PZXu4Illr/2i4ax2eN
-         CKTg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lRGAev7E9rKsBfzE8rVm/cgWBvl8Wsl3a2S3zf5VBy8=;
+        b=PPRJZURpqVRgSTfc7Nr8cFealNWVTbNpUySCqBM3oRRkKcetpG7iiI0K+M8+mjImhX
+         pKwU1baysS3T+YERbd4QWVcOzuxXYZVvhlkKpvpiCUBh70uNfNZXNembGCh7Sb/lfWZk
+         p/V6bPhCsWli62X6CvipyjsvTcNrH/j7tFhpP5ab0i0Y9VzjMDvArx0SOQF/rXVihgtg
+         Iw6uoNqJaw+7hJaTGCBktS7PFfHaycv053JtM9c6Trkrw5RaBbnQf7Ssk5fiySnxRe5p
+         x4vU9RWx3tvrEhPFChpDWZuTesmwul3bYhwW2m1M6Y10aUGkmSDlJ0Lf2XDkY01aQWYk
+         ZisA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DcCZDxr7SMu2ST2bCheW+pTmK2hn1qh9rUqEtH0VUFo=;
-        b=ok+s+x6NaGQoJZCy9J46Q5akUJaFhoJxFx4sg0I6KbYiY6b7i3wmgVeGsgFy3gFojc
-         IkBrLvhoQuoItK2DH8FCc95POH0PimraT2nA3tKuU8f8Z1n+4+N2Qdf/8naKHY/1EJ5Q
-         8OwaKiDbckvW13LpoxLdaoi7Zwkss62KcjOJIkLepojNGjtKEkpGsINXxZIIktXOyTnx
-         8QRgO2mnXs7QVJc9d4p/n1DMI6vxo7p56uGR5qzy94tvZlvylXjx9vc31BGjhnR6zUeK
-         T/B66oAfWDcgJxEPyvq1o3MOHyOnNtBlxZruB0mKxNX5Xwb9YkTwypjRQFTTxdKa3ORn
-         0ohA==
-X-Gm-Message-State: AOAM533Sc62J1N0hNn+i95cqvfUe5zSwW1WhRPTdspSjJhZo0AaNafMb
-        nvqR12fW/3PD1DeNMZBGbhw=
-X-Google-Smtp-Source: ABdhPJzTUl2RXqgh7/qMQVxbAj5Aiu1asHPEJJWP4qPZPg/jkBlMGIyTKf399nxU3h/Rw7buDUr0gA==
-X-Received: by 2002:a05:6000:1201:: with SMTP id e1mr56646984wrx.298.1638918431085;
-        Tue, 07 Dec 2021 15:07:11 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l11sm988962wrp.61.2021.12.07.15.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 15:07:10 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH][V2] intel_th: remove redundant re-assignment of pointer hubdrv
-Date:   Tue,  7 Dec 2021 23:07:09 +0000
-Message-Id: <20211207230709.121444-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lRGAev7E9rKsBfzE8rVm/cgWBvl8Wsl3a2S3zf5VBy8=;
+        b=vFB+Mh57Rj0vQ4Cb+QptTYgJcRRo1ZAFGtFaB3L8YOq4OYTDWKNM7X8HvdzwxkE9s3
+         24AurN/fum3mTFf4p9zdddN7QjOC719VFWh9yhh4toLdfzhwr9D+Jg4/pz27XUjZlwjS
+         8Ifp3qwvFED2Zp4dqqchABYyRDFzMjWbz+HH5wPen+yhW71TU60bv+cEaFdwQ6azMCSI
+         mBiIJRjLV6oOTG7uuFjdxWfa+alnKut35E8V8Zvr+ayH399YNxIHNa9RGQQFDeKUSh2c
+         TP5CtknTiWlQo9KTLlJ37ilJsXZzDostLM9N5LTffbcsB93TjW8sQs9zjsVyj1fiyfaB
+         LUGg==
+X-Gm-Message-State: AOAM530cuOgOfg0H8DB6mpNdP6wgosc5mDq6eBiGQgdsMvflLttzUOJ4
+        Z20JMZ9c8lzZJZ371nQZTOofhEoqg0SsIwYVwEwAIA==
+X-Google-Smtp-Source: ABdhPJwjSdFUsVfx4V7nDizmuk5wveIpt2khnP4YDL+B5L668iwYp4izqrQpnK2K1m9hL8AMW8lzgybGsJybQpjQsfw=
+X-Received: by 2002:a25:6ec5:: with SMTP id j188mr54674582ybc.602.1638918510741;
+ Tue, 07 Dec 2021 15:08:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20211207215031.2251719-1-surenb@google.com> <Ya/bFLcnqyvlVzuO@casper.infradead.org>
+ <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
+In-Reply-To: <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 7 Dec 2021 15:08:19 -0800
+Message-ID: <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, mhocko@kernel.org, mhocko@suse.com,
+        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer hubdrv is being re-assigned the same value as it was
-initialized with only a few lines earlier. The re-assignment is
-redundant and can be removed.
+On Tue, Dec 7, 2021 at 2:47 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Tue, Dec 7, 2021 at 2:07 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Tue, Dec 07, 2021 at 01:50:30PM -0800, Suren Baghdasaryan wrote:
+> > > - Added a comment for vm_operations_struct::close, documenting restriction for
+> > > taking mmap_lock in the callback, per Michal Hocko and Matthew Wilcox
+> >
+> > This should be a separate patch because it stands alone, but ...
+>
+> I thought about it and since it was relevant to the change in
+> remove_vma locking, I thought it would fit here. However, if you
+> insist on splitting it, I'll post it as a separate patch. Please let
+> me know.
+>
+> >
+> > >  struct vm_operations_struct {
+> > >       void (*open)(struct vm_area_struct * area);
+> > > +    /*
+> > > +     * Called with mmap_lock lock held for write from __split_vma and
+> > > +     * remove_vma, therefore should never take that lock.
+> > > +     */
+> >
+> > Your whitespace indentation is weird.  And it'd be nice to make this a
+> > kernel-doc comment (I know none of the others are, but that should be
+> > fixed too).  And naming the functions that call it is wrong too.
+> >
+> >         /**
+> >          * @close: Called when the VMA is being removed from the MM.
+> >          * Context: Caller holds mmap_lock.
 
-As Dan Carpenter pointed out, the pointer hubdrv is hub - some_offset
-and in this case some_offset is zero. Since hub has already been
-dereferenced hubdrv can't be NULL so the NULL check is redundant
-and can also be removed.
+BTW, is the caller always required to hold mmap_lock for write or it
+*might* hold it?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
----
-
-V2: Remove null check, kudos to Dan Carpenter for spotting this.
-
----
- drivers/hwtracing/intel_th/core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/hwtracing/intel_th/core.c b/drivers/hwtracing/intel_th/core.c
-index 7e753a75d23b..bf4ee2a31006 100644
---- a/drivers/hwtracing/intel_th/core.c
-+++ b/drivers/hwtracing/intel_th/core.c
-@@ -1048,8 +1048,7 @@ int intel_th_set_output(struct intel_th_device *thdev,
- 	 * hub is instantiated together with the source device that
- 	 * calls here, so guaranteed to be present.
- 	 */
--	hubdrv = to_intel_th_driver(hub->dev.driver);
--	if (!hubdrv || !try_module_get(hubdrv->driver.owner))
-+	if (!try_module_get(hubdrv->driver.owner))
- 		return -EINVAL;
- 
- 	if (!hubdrv->set_output) {
--- 
-2.33.1
-
+> >          */
+>
+> Ack. Will change and include in the next respin once I hear from you
+> on the preference for a separate patch.
+> Thanks!

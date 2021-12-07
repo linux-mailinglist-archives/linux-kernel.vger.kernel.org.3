@@ -2,108 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9126D46B21D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F6246B221
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbhLGFRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:17:02 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:50521 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbhLGFRC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:17:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7T3C0T05z4xgY;
-        Tue,  7 Dec 2021 16:13:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638854010;
-        bh=3+qmB/ds23kimJCqQdonk71tq0ufD8t/epgsmFU3AoA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fQhGxMzrS133Xz++LKf/fs8kI0WWBwmHzhFLDCUp16pRBBsEyVx7sMkDmlBxP/6op
-         O5Y6xqihmxOifVhysLXv45Ti/pcTL/mu+wJaMCQCOA65frb6id11Y/nh4NT71OlaJb
-         0VYkKgXFMH8+Hx24ewVRLYVxKtVzWVs/wn6Y9NIgVqh3F4HlnWdAle4z+PtsmuZbEp
-         KP9RSN04j0s2P+Xz2IeasAG7y0to5SZ51mfpJtp+zE+rsPKOImrJdeFql9QN7TXgkI
-         O0xlku+q9N28/01iF0/qdsEpGYOpDv5czojAbEWQs5H4kuMhzMc3UvTi7wrsb8iD3U
-         +qMCh0pCwwMwA==
-Date:   Tue, 7 Dec 2021 16:13:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Message-ID: <20211207161326.22d81aaf@canb.auug.org.au>
+        id S232099AbhLGFUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:20:19 -0500
+Received: from mga05.intel.com ([192.55.52.43]:50917 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231877AbhLGFUS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 00:20:18 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="323750562"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="323750562"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 21:16:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="502444631"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2021 21:16:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muSqM-000MCL-H1; Tue, 07 Dec 2021 05:16:46 +0000
+Date:   Tue, 7 Dec 2021 13:16:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sm8350-next-20211118 38/48]
+ drivers/soc/qcom/pmic_glink_pan.c:9:10: fatal error:
+ linux/soc/qcom/pmic_glink.h: No such file or directory
+Message-ID: <202112071342.1DHkP3SK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6aFJR8PkEMnhtrWICOf5Tma";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6aFJR8PkEMnhtrWICOf5Tma
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://github.com/andersson/kernel wip/sm8350-next-20211118
+head:   801a35a569988584ffd5f6028a992f636c2a6634
+commit: af2e40a7c1b6390b42af215ac19c9be35554b397 [38/48] pmic_glink: Initial patch
+config: powerpc-randconfig-m031-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071342.1DHkP3SK-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/af2e40a7c1b6390b42af215ac19c9be35554b397
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sm8350-next-20211118
+        git checkout af2e40a7c1b6390b42af215ac19c9be35554b397
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/soc/qcom/
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Today's linux-next merge of the rust tree got a conflict in:
+All error/warnings (new ones prefixed by >>):
 
-  scripts/kconfig/confdata.c
+>> drivers/soc/qcom/pmic_glink.c:44:26: warning: no previous prototype for 'pmic_glink_register_callback' [-Wmissing-prototypes]
+      44 | struct pmic_glink_owner *pmic_glink_register_callback(struct pmic_glink *pg,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/pmic_glink.c:67:6: warning: no previous prototype for 'pmic_glink_unregister_callback' [-Wmissing-prototypes]
+      67 | void pmic_glink_unregister_callback(struct pmic_glink *pg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/pmic_glink.c:76:5: warning: no previous prototype for 'pmic_glink_send' [-Wmissing-prototypes]
+      76 | int pmic_glink_send(struct pmic_glink *pg, void *data, size_t len)
+         |     ^~~~~~~~~~~~~~~
+   drivers/soc/qcom/pmic_glink.c:200:34: warning: 'pmic_glink_of_match' defined but not used [-Wunused-const-variable=]
+     200 | static const struct of_device_id pmic_glink_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~
+--
+>> drivers/soc/qcom/pmic_glink_pan.c:9:10: fatal error: linux/soc/qcom/pmic_glink.h: No such file or directory
+       9 | #include <linux/soc/qcom/pmic_glink.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-between commit:
 
-  373c0a890520 ("[for -next only] kconfig: generate include/generated/rustc=
-_cfg")
+vim +9 drivers/soc/qcom/pmic_glink_pan.c
 
-from the kbuild tree and commit:
+     8	
+   > 9	#include <linux/soc/qcom/pmic_glink.h>
+    10	
 
-  62cb43b76df3 ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (I basically used the latter version) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
-Masahiro, you probably don't need that kbuild tree patch any more since
-the rust tree has been rebased onto v5.16-rc3.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6aFJR8PkEMnhtrWICOf5Tma
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGu7XYACgkQAVBC80lX
-0GykyAf7BYbSm2OGBWQjnEZ4eRk0kdL79yiyHOexVdnAId7vQCw76WLj6SlLpHEw
-E+fhL8BYGuu1duNuABaYpWS9uKrMmgGgO5TCETUM7xyJ6z2JXQlwZrv7/pRu2U93
-9x/rWRAdoQ72LHTlmja0wfWRzrggEZm9SbDnd1otdT4Db7Lb955DJVCqvxlatQES
-j1JdO5wNfLD6sc0ic3AaG2k/WB0fkyGFBWPEtTswMx84Lj0enuNMHb2YfozhZdby
-4w5OpBeDWkaaItICuvMAJVFMKN33fcZ8ms3bfuHAxIEDBhTjo5TaUhk8Wvx9HgM1
-Hk5pn0viSBTQr96cHS/ExIMg0lW8GA==
-=IGGO
------END PGP SIGNATURE-----
-
---Sig_/6aFJR8PkEMnhtrWICOf5Tma--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

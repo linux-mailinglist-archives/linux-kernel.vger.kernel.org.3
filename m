@@ -2,190 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0E646C68B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D07446C694
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 22:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbhLGVU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 16:20:28 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10348 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241698AbhLGVU1 (ORCPT
+        id S233557AbhLGVWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 16:22:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232518AbhLGVWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 16:20:27 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7JejWx031821;
-        Tue, 7 Dec 2021 21:16:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=D9wP2qvugE6CCBUq5ZY/+dUBvsvOLLvvgSgIvPhnYs4=;
- b=cu1M6EPt5isErPo1cDqe0BlTfO/tvMpJY0KrgYzSo7vGDK31lF9Fq8c1Hu6rYjiInPin
- bdjGUO9drlQsuwu1+gyzrGnaOGAfVJy86IPEfEHqPFCOMcgABHPqp6QKgnTI2rUFIiCA
- HwkDNEOvmvffubnn0iNqX4ftQCNhp+f3dxnTxOseWKSvqUI6XKBSvv9B9SJtcEKL867v
- qLNn5CmYZYCcE0HThtC5pWhmzf+Q8d+29iANQYRsLvRKI/blZGvtzKam6YxP9udBo/xI
- utT+wJ0iR53SKxoWZQdzbfouC04djoJa8/veNaGtBTHbxyahQ370kj2TdM/kiEIXjp9u jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctcdbuu84-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 21:16:55 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B7Kk96T008960;
-        Tue, 7 Dec 2021 21:16:55 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctcdbuu7y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 21:16:55 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7LBnii012782;
-        Tue, 7 Dec 2021 21:16:54 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01dal.us.ibm.com with ESMTP id 3cqyyc3g0e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 21:16:54 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7LGqYU19792508
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Dec 2021 21:16:52 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10183112070;
-        Tue,  7 Dec 2021 21:16:52 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F09911206B;
-        Tue,  7 Dec 2021 21:16:47 +0000 (GMT)
-Received: from [9.211.152.43] (unknown [9.211.152.43])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Dec 2021 21:16:47 +0000 (GMT)
-Message-ID: <6041f49f-08f9-5cb6-0bc9-070f80f3284f@linux.ibm.com>
-Date:   Tue, 7 Dec 2021 16:16:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 00/32] KVM: s390: enable zPCI for interpretive execution
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Y4j5AyTfMakPcYfMLjCZG3jhq8fZNAG9
-X-Proofpoint-ORIG-GUID: zdE7gC4WwjNK-YvcL9teKJ5eYU0fgkK4
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 7 Dec 2021 16:22:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FAC061574;
+        Tue,  7 Dec 2021 13:19:03 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638911940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fejqz/bIS5UVVez3Xtjq2jInYaufJY/nLKnDbenyBtw=;
+        b=VC5Rvg7jiq8Ikfw+JFC2if6V+C51JARVBdC0uW9vUW0CHLXLMJTCVCws2bKyhUrgzzbYBD
+        TspgTWIoCN3z1mpSmBTfGbx4XIbh9GbNDRxSmFXBfJwIBX3j0sw+jnfm/oYCbc43OrEUpM
+        SS9tX2diiZM5lYRGla6ljcr7iPYUAT/RJ9qMdqhJZgpVF0sfTve/39i5qs1L2SbKmA26Kk
+        RuYaS8IxyMjfJtp5yErMcFm+uepejATF2VudC9wKWykGQzcm11Soqa0vOKrqlwq9Qy2ES/
+        hIUI+MznVV8wAM/ESPIdQN7tFRoLJxRc700tRc0QEredDULx8y3xvMEgR1lqVw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638911940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fejqz/bIS5UVVez3Xtjq2jInYaufJY/nLKnDbenyBtw=;
+        b=tpxYQz931aJ9NXdPSYYAooQnjmQcVTU6ncg1A9XfE7ZYmworf/GnMN1rkeaSCd4LIsHO3E
+        LsosR2mIUwj5rrDw==
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sinan Kaya <okaya@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [patch V2 29/36] PCI/MSI: Simplify pci_irq_get_affinity()
+In-Reply-To: <e32237f3-0ff2-cf80-cd99-0b4813d1ed21@kaod.org>
+References: <20211206210307.625116253@linutronix.de>
+ <20211206210439.235197701@linutronix.de>
+ <e32237f3-0ff2-cf80-cd99-0b4813d1ed21@kaod.org>
+Date:   Tue, 07 Dec 2021 22:19:00 +0100
+Message-ID: <87zgpc15bv.ffs@tglx>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-07_08,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=904 adultscore=0 malwarescore=0 suspectscore=0 spamscore=0
- bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112070128
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 3:57 PM, Matthew Rosato wrote:
-> Enable interpretive execution of zPCI instructions + adapter interruption
-> forwarding for s390x KVM vfio-pci.  This is done by introducing a series
-> of new vfio-pci feature ioctls that are unique vfio-pci-zdev (s390x) and
-> are used to negotiate the various aspects of zPCI interpretation setup.
-> By allowing intepretation of zPCI instructions and firmware delivery of
-> interrupts to guests, we can significantly reduce the frequency of guest
-> SIE exits for zPCI.  We then see additional gains by handling a hot-path
-> instruction that can still intercept to the hypervisor (RPCIT) directly
-> in kvm.
-> 
->  From the perspective of guest configuration, you passthrough zPCI devices
-> in the same manner as before, with intepretation support being used by
-> default if available in kernel+qemu.
-> 
-> Will reply with a link to the associated QEMU series.
+Cedric,
 
-https://lists.gnu.org/archive/html/qemu-devel/2021-12/msg00873.html
+On Tue, Dec 07 2021 at 18:42, C=C3=A9dric Le Goater wrote:
+>
+> This is breaking nvme on pseries but it's probably one of the previous
+> patches. I haven't figured out what's wrong yet. Here is the oops FYI.
 
-> 
-> Matthew Rosato (32):
->    s390/sclp: detect the zPCI interpretation facility
->    s390/sclp: detect the AISII facility
->    s390/sclp: detect the AENI facility
->    s390/sclp: detect the AISI facility
->    s390/airq: pass more TPI info to airq handlers
->    s390/airq: allow for airq structure that uses an input vector
->    s390/pci: externalize the SIC operation controls and routine
->    s390/pci: stash associated GISA designation
->    s390/pci: export some routines related to RPCIT processing
->    s390/pci: stash dtsm and maxstbl
->    s390/pci: add helper function to find device by handle
->    s390/pci: get SHM information from list pci
->    KVM: s390: pci: add basic kvm_zdev structure
->    KVM: s390: pci: do initial setup for AEN interpretation
->    KVM: s390: pci: enable host forwarding of Adapter Event Notifications
->    KVM: s390: expose the guest zPCI interpretation facility
->    KVM: s390: expose the guest Adapter Interruption Source ID facility
->    KVM: s390: expose guest Adapter Event Notification Interpretation
->      facility
->    KVM: s390: mechanism to enable guest zPCI Interpretation
->    KVM: s390: pci: provide routines for enabling/disabling interpretation
->    KVM: s390: pci: provide routines for enabling/disabling interrupt
->      forwarding
->    KVM: s390: pci: provide routines for enabling/disabling IOAT assist
->    KVM: s390: pci: handle refresh of PCI translations
->    KVM: s390: intercept the rpcit instruction
->    vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
->    vfio-pci/zdev: wire up group notifier
->    vfio-pci/zdev: wire up zPCI interpretive execution support
->    vfio-pci/zdev: wire up zPCI adapter interrupt forwarding support
->    vfio-pci/zdev: wire up zPCI IOAT assist support
->    vfio-pci/zdev: add DTSM to clp group capability
->    KVM: s390: introduce CPU feature for zPCI Interpretation
->    MAINTAINERS: additional files related kvm s390 pci passthrough
-> 
->   MAINTAINERS                      |   2 +
->   arch/s390/include/asm/airq.h     |   7 +-
->   arch/s390/include/asm/kvm_host.h |   5 +
->   arch/s390/include/asm/kvm_pci.h  |  62 +++
->   arch/s390/include/asm/pci.h      |  13 +
->   arch/s390/include/asm/pci_clp.h  |  11 +-
->   arch/s390/include/asm/pci_dma.h  |   3 +
->   arch/s390/include/asm/pci_insn.h |  29 +-
->   arch/s390/include/asm/sclp.h     |   4 +
->   arch/s390/include/asm/tpi.h      |  14 +
->   arch/s390/include/uapi/asm/kvm.h |   1 +
->   arch/s390/kvm/Makefile           |   2 +-
->   arch/s390/kvm/interrupt.c        |  97 +++-
->   arch/s390/kvm/kvm-s390.c         |  65 ++-
->   arch/s390/kvm/kvm-s390.h         |  10 +
->   arch/s390/kvm/pci.c              | 784 +++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h              |  59 +++
->   arch/s390/kvm/priv.c             |  41 ++
->   arch/s390/pci/pci.c              |  47 ++
->   arch/s390/pci/pci_clp.c          |  19 +-
->   arch/s390/pci/pci_dma.c          |   1 +
->   arch/s390/pci/pci_insn.c         |   5 +-
->   arch/s390/pci/pci_irq.c          |  50 +-
->   drivers/s390/char/sclp_early.c   |   4 +
->   drivers/s390/cio/airq.c          |  12 +-
->   drivers/s390/cio/qdio_thinint.c  |   6 +-
->   drivers/s390/crypto/ap_bus.c     |   9 +-
->   drivers/s390/virtio/virtio_ccw.c |   6 +-
->   drivers/vfio/pci/Kconfig         |  11 +
->   drivers/vfio/pci/Makefile        |   2 +-
->   drivers/vfio/pci/vfio_pci_core.c |   8 +
->   drivers/vfio/pci/vfio_pci_zdev.c | 292 +++++++++++-
->   include/linux/vfio_pci_core.h    |  44 +-
->   include/uapi/linux/vfio.h        |  22 +
->   include/uapi/linux/vfio_zdev.h   |  51 ++
->   35 files changed, 1738 insertions(+), 60 deletions(-)
->   create mode 100644 arch/s390/include/asm/kvm_pci.h
->   create mode 100644 arch/s390/kvm/pci.c
->   create mode 100644 arch/s390/kvm/pci.h
-> 
+Hrm.
+
+> [   32.494562] WARNING: CPU: 26 PID: 658 at kernel/irq/chip.c:210 irq_sta=
+rtup+0x1c0/0x1e0
+
+This complains about a manual enable_irq() on a managed interrupt.
+
+> [   32.494575] Modules linked in: ibmvscsi ibmveth scsi_transport_srp bnx=
+2x ipr libata xhci_pci xhci_hcd nvme xts vmx_crypto nvme_core mdio t10_pi l=
+ibcrc32c dm_mirror dm_region_hash dm_log dm_mod
+> [   32.494601] CPU: 26 PID: 658 Comm: kworker/26:1H Not tainted 5.16.0-rc=
+4-clg+ #54
+> [   32.494607] Workqueue: kblockd blk_mq_timeout_work
+> [   32.494681] NIP [c000000000206f00] irq_startup+0x1c0/0x1e0
+> [   32.494686] LR [c000000000206df0] irq_startup+0xb0/0x1e0
+> [   32.494690] Call Trace:
+> [   32.494692] [c0000018050f38b0] [c000000000206df0] irq_startup+0xb0/0x1=
+e0 (unreliable)
+> [   32.494699] [c0000018050f38f0] [c00000000020155c] __enable_irq+0x9c/0x=
+b0
+> [   32.494705] [c0000018050f3950] [c0000000002015d0] enable_irq+0x60/0xc0
+> [   32.494710] [c0000018050f39d0] [c008000014a54ae8] nvme_poll_irqdisable=
++0x80/0xc0 [nvme]
+> [   32.494719] [c0000018050f3a00] [c008000014a55824] nvme_timeout+0x18c/0=
+x420 [nvme]
+> [   32.494726] [c0000018050f3ae0] [c00000000076e1b8] blk_mq_check_expired=
++0xa8/0x130
+> [   32.494732] [c0000018050f3b10] [c0000000007793e8] bt_iter+0xd8/0x120
+> [   32.494737] [c0000018050f3b60] [c00000000077a34c] blk_mq_queue_tag_bus=
+y_iter+0x25c/0x3f0
+> [   32.494742] [c0000018050f3c20] [c00000000076ffa4] blk_mq_timeout_work+=
+0x84/0x1a0
+> [   32.494747] [c0000018050f3c70] [c000000000182a78] process_one_work+0x2=
+a8/0x5a0
+
+Confused. I diffed against v1, but could not spot anything except that
+properties issue which you found too.
+
+Thanks,
+
+        tglx
 

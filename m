@@ -2,142 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB1A46C1B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C38846C1BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbhLGRbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S240004AbhLGRcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbhLGRbn (ORCPT
+        with ESMTP id S239791AbhLGRcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:31:43 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD21C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:28:12 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id q25so84635oiw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:28:12 -0800 (PST)
+        Tue, 7 Dec 2021 12:32:23 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2EFC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:28:52 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id bj13so28985878oib.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:28:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=127Blks1Q4VlpHmKrrK4q+CkIfRWXTNrw0+PbJStkv4=;
-        b=FV1EPNx67UXO23hXV9Xyq3h7F7fWDd2yKX0bHvgoo4z1ZjUNL53qm6PmL4V0+6W3Nx
-         Dv3qhZzdPvO2ucuR8HrROUe8QfjBYN331KzuQMHYaWczxCVYVfUWP4PvbbDzmuhjuCAO
-         ClZYHXHsrNSd3W8wMzaajjAR1M85NwhoqKD8zcUs1qv3mS1PFS35w8uwBwdUsroPQJRD
-         qK0Qdff+TgSsFXOeRqkVfRMOp9G+zjilFQvSm5AZzUVORPOQqlukH76jm76tJTAFq/7A
-         ztukYdYKkeFKWzFeghD7Irx0F8ngWORJVE7EMsWi8LYb5DSNwDKfl6/m8TJsML2FyH3X
-         YnnQ==
+        bh=/AvOf7ER8v5H0MjABhsd0BcEX4X+zqr8vh7bP9dwVAA=;
+        b=ZvcljMy7ztZ2M2RzI/cYNwQh+ld65A/KWrGMi0BI/g1hKirUUjFuJERVQBNwc9G/nb
+         vViR2AjLmz3v4X3QEpZPDgCcEHG6OSHgAzYlCaDw4qY58CmleIVOWJF+Eruvq7Y+5sfo
+         BL6/Piynk8knxTaad4opvmEUSA1e17+Mr0tX1Fvsd4WnZxFgLAwrri+GnHagzKyPFlkw
+         y4nwcZmjzGsVT55Uc8hwTGDBtnRTNhvQI2yHGZu+7Jfv4OEl3OilEAANz0AuOc9P14Zb
+         oOYzyrJ1F2/F7TE3QqVnML7eGobICS8ZpdrN7Nzf0uCd+F+FWFmYkfFLegeyblPmonRt
+         kdPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=127Blks1Q4VlpHmKrrK4q+CkIfRWXTNrw0+PbJStkv4=;
-        b=tGEFgaSZjBzM1rLKid1dJtkmvf/3gkhi1BIG2kMDxya5ae9uPpc3EP8BkeDjEFKhI8
-         1F51SKCJgWtBGLjlBwe4kpuyqrJx8SKIklkdr2xCSO9S8M4IC4DSrCZJAWZgaMOnEZh3
-         8VfpbEb3VMZsLRFVlPr/PnskTp29+Edeg0RJfXA5iI+6UPQv03lGXyyxKBxy7YFsg55z
-         Pu2EcthBc0XcD6eCmDCxuh33CV/c7e55MWdH7fLUfh18Bo9c/Mfw8lbvg2jOH00yC1vh
-         CUsdqfrft/hdts8lJWJT1NjZ3n8ivqYJ1PTboZLvy9aJhZF/rWcR92TOhybW/dB5Fhoz
-         dlMw==
-X-Gm-Message-State: AOAM533zDavqqJVBt+XEgUGalGn7zwVXovwoDV3RqnorTyG9dOz1wL87
-        KNbSBBB4WjwRY92mmUHiux8jLi3XGTV1NG1pS24K+w==
-X-Google-Smtp-Source: ABdhPJwttMytLV3WL5lm3rs4pFXF3nwOFzB+IFRe4OLexZMF01fCVZcoMcGDdanImUMhmqKolsN+DsINpk+QRf6kJxw=
-X-Received: by 2002:aca:2319:: with SMTP id e25mr6523576oie.164.1638898091817;
- Tue, 07 Dec 2021 09:28:11 -0800 (PST)
+        bh=/AvOf7ER8v5H0MjABhsd0BcEX4X+zqr8vh7bP9dwVAA=;
+        b=xlQH0hsjLXI0TrlV8dSfSdARmVf4ynbCcsK2ZIYKIuGDSWZGbYo19zzLDvU1U89nDr
+         tElWEHm0TiWLQpUX4IiYDNOWo55tqYe86iaMyzy81CZJkODEbf2KKn4Hu2KT5SlOD980
+         JLSTz3rvjC26JbDpnPK/F12fnuF6v9kL6J/EnkllPDe0NPixkFEFAMLuIPaORMiDIY3q
+         t41MXd+bGtwgLQRyWQDWCRO+fkQn7onWjrvEPKrcmOjAVIQubaJdBzHi3lu3JDNuctZ/
+         Y0XGDsrj8CVjuTW2KnlxcGqam94EN8sw3JL/XohS+BvB8wm/1FLjcp+w4psNj+CgqDab
+         45dw==
+X-Gm-Message-State: AOAM531QOpXivTMNrUSeG3rbE+TNEv0F2j8iWGIYWf6MGEYr+TrMNugS
+        42iXhnMMoUKEjgrr24JX6ueOyyDOhaczDIRzTiW1Icfcaj87Hg==
+X-Google-Smtp-Source: ABdhPJzKZi3NPnBCVYoeIOunfFC4LiThbaSzLqhOKTlwi9M5FmOEA5dK5aAeDwO4w+3RZwxMjvr3esT4tI4hPHO6ip4=
+X-Received: by 2002:a54:4515:: with SMTP id l21mr6394061oil.15.1638898120973;
+ Tue, 07 Dec 2021 09:28:40 -0800 (PST)
 MIME-Version: 1.0
 References: <20211207043100.3357474-1-marcorr@google.com> <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
- <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com> <5e69c0ca-389c-3ace-7559-edd901a0ab3c@amd.com>
-In-Reply-To: <5e69c0ca-389c-3ace-7559-edd901a0ab3c@amd.com>
+ <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com>
+ <5e69c0ca-389c-3ace-7559-edd901a0ab3c@amd.com> <Ya+NIxO5pIkB8057@google.com>
+In-Reply-To: <Ya+NIxO5pIkB8057@google.com>
 From:   Marc Orr <marcorr@google.com>
-Date:   Tue, 7 Dec 2021 09:28:00 -0800
-Message-ID: <CAA03e5Gf=ZsAKhuLCEtYCCf0UuNXSHRXQHgmjOj3MKtbiSMbqQ@mail.gmail.com>
+Date:   Tue, 7 Dec 2021 09:28:29 -0800
+Message-ID: <CAA03e5FYm1ZZc+OEiKjdDj6jnhvgcU_fwOpV5RxofChPEHp-+Q@mail.gmail.com>
 Subject: Re: [PATCH] KVM: x86: Always set kvm_run->if_flag
-To:     Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Tom Lendacky <Thomas.Lendacky@amd.com>, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 8:00 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+On Tue, Dec 7, 2021 at 8:34 AM Sean Christopherson <seanjc@google.com> wrote:
 >
-> On 12/7/21 9:14 AM, Marc Orr wrote:
-> > On Tue, Dec 7, 2021 at 6:43 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>
-> >> On 12/6/21 10:31 PM, Marc Orr wrote:
-> >>> The kvm_run struct's if_flag is apart of the userspace/kernel API. The
-> >>> SEV-ES patches failed to set this flag because it's no longer needed by
-> >>> QEMU (according to the comment in the source code). However, other
-> >>> hypervisors may make use of this flag. Therefore, set the flag for
-> >>> guests with encrypted regiesters (i.e., with guest_state_protected set).
-> >>>
-> >>> Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
-> >>> Signed-off-by: Marc Orr <marcorr@google.com>
-> >>> ---
-> >>>    arch/x86/include/asm/kvm-x86-ops.h | 1 +
-> >>>    arch/x86/include/asm/kvm_host.h    | 1 +
-> >>>    arch/x86/kvm/svm/svm.c             | 8 ++++++++
-> >>>    arch/x86/kvm/vmx/vmx.c             | 6 ++++++
-> >>>    arch/x86/kvm/x86.c                 | 9 +--------
-> >>>    5 files changed, 17 insertions(+), 8 deletions(-)
-> >>>
-> >>> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> >>> index cefe1d81e2e8..9e50da3ed01a 100644
-> >>> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> >>> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> >>> @@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
-> >>>    KVM_X86_OP(cache_reg)
-> >>>    KVM_X86_OP(get_rflags)
-> >>>    KVM_X86_OP(set_rflags)
-> >>> +KVM_X86_OP(get_if_flag)
-> >>>    KVM_X86_OP(tlb_flush_all)
-> >>>    KVM_X86_OP(tlb_flush_current)
-> >>>    KVM_X86_OP_NULL(tlb_remote_flush)
-> >>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> >>> index 860ed500580c..a7f868ff23e7 100644
-> >>> --- a/arch/x86/include/asm/kvm_host.h
-> >>> +++ b/arch/x86/include/asm/kvm_host.h
-> >>> @@ -1349,6 +1349,7 @@ struct kvm_x86_ops {
-> >>>        void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
-> >>>        unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
-> >>>        void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
-> >>> +     bool (*get_if_flag)(struct kvm_vcpu *vcpu);
-> >>>
-> >>>        void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
-> >>>        void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
-> >>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> >>> index d0f68d11ec70..91608f8c0cde 100644
-> >>> --- a/arch/x86/kvm/svm/svm.c
-> >>> +++ b/arch/x86/kvm/svm/svm.c
-> >>> @@ -1585,6 +1585,13 @@ static void svm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
-> >>>        to_svm(vcpu)->vmcb->save.rflags = rflags;
-> >>>    }
-> >>>
-> >>> +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
-> >>> +{
-> >>> +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
-> >>> +
-> >>> +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
-> >>
-> >> I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
-> >> the better thing would be:
-> >>
-> >>          return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
-> >>                                         : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
-> >>
-> >> (Since this function returns a bool, I don't think you need the !!)
+> On Tue, Dec 07, 2021, Tom Lendacky wrote:
+> > On 12/7/21 9:14 AM, Marc Orr wrote:
+> > > On Tue, Dec 7, 2021 at 6:43 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> > > > > +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
+> > > > > +{
+> > > > > +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
+> > > > > +
+> > > > > +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
+> > > >
+> > > > I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
+> > > > the better thing would be:
+> > > >
+> > > >          return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
+> > > >                                         : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
+> > > >
+> > > > (Since this function returns a bool, I don't think you need the !!)
+> > >
+> > > I had the same reservations when writing the patch. (Why fix what's
+> > > not broken.) The reason I wrote the patch this way is based on what I
+> > > read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
+> > > Value of the RFLAGS.IF bit for the guest."
 > >
-> > I had the same reservations when writing the patch. (Why fix what's
-> > not broken.) The reason I wrote the patch this way is based on what I
-> > read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
-> > Value of the RFLAGS.IF bit for the guest."
+> > I just verified with the hardware team that this flag is indeed only set for
+> > a guest with protected state (SEV-ES / SEV-SNP). An update to the APM will
+> > be made.
 >
-> I just verified with the hardware team that this flag is indeed only set
-> for a guest with protected state (SEV-ES / SEV-SNP). An update to the APM
-> will be made.
+> svm_interrupt_blocked() should be modified to use the new svm_get_if_flag()
+> helper so that the SEV-{ES,SN} behavior is contained in a single location, e.g.
+>
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 208566f63bce..fef04e9fa9c9 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3583,14 +3583,10 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+>         if (!gif_set(svm))
+>                 return true;
+>
+> -       if (sev_es_guest(vcpu->kvm)) {
+> -               /*
+> -                * SEV-ES guests to not expose RFLAGS. Use the VMCB interrupt mask
+> -                * bit to determine the state of the IF flag.
+> -                */
+> -               if (!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK))
+> +       if (!is_guest_mode(vcpu)) {
+> +               if (!svm_get_if_flag(vcpu))
+>                         return true;
+> -       } else if (is_guest_mode(vcpu)) {
+> +       } else {
+>                 /* As long as interrupts are being delivered...  */
+>                 if ((svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
+>                     ? !(svm->vmcb01.ptr->save.rflags & X86_EFLAGS_IF)
+> @@ -3600,9 +3596,6 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+>                 /* ... vmexits aren't blocked by the interrupt shadow  */
+>                 if (nested_exit_on_intr(svm))
+>                         return false;
+> -       } else {
+> -               if (!(kvm_get_rflags(vcpu) & X86_EFLAGS_IF))
+> -                       return true;
+>         }
+>
+>         return (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK);
 
-Got it now. Then the change you suggested is a must! Thanks, Tom.
+Agreed. This is a nice change. I'll incorporate it into v2. Thanks!

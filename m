@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D01246B88F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9232146B892
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbhLGKRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
+        id S234918AbhLGKRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbhLGKRl (ORCPT
+        with ESMTP id S229818AbhLGKRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:17:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17283C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 02:14:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEE27B81741
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172AFC341C6;
-        Tue,  7 Dec 2021 10:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638872048;
-        bh=Z8xush+cX8bTg2aCb5eefwuAA4McOR4w4Faqf8Lgiig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nif0DAAJw/awo+c5HYkVrfiwK9YLJarN10nfQ2IePFO4B8njicClTVoYtUKhrxCah
-         M0KCrba5Dok0oQDdaRXtvJUoxkX4y2uqx+hzZBsjreHnSagFftm/3VkNUeN0KLTUZc
-         t4NCxbY7o1my1XiJwoYSgdKHbi1HmURpX1FCG2UA=
-Date:   Tue, 7 Dec 2021 11:14:06 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: convert type of HalData in struct
- adapter
-Message-ID: <Ya8z7q+ufy30MaOw@kroah.com>
-References: <20211206092258.3765-1-straube.linux@gmail.com>
+        Tue, 7 Dec 2021 05:17:50 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FBFC061746;
+        Tue,  7 Dec 2021 02:14:19 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bi37so32419837lfb.5;
+        Tue, 07 Dec 2021 02:14:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e8kee/N0as/hz/cg2sQd2lCPZnQthggdydHn9mrSiqU=;
+        b=Vn7zKGINM/TVnj1QqZzCB4RhDZXr5GvFm0DDRUrZ6icbPApcWsfZsMgO3UiLD70BCF
+         uOkV0ROYdKwHyS8iLSIkN28MswjzfnkK5zQDX5w224RopqbJPh2c+yUgiSikKsyGin03
+         THJ+OPgdAymtIiMRMASPqRzXhZL6jKYBt2KKP6DzuUDGusT7YXjoPRgF0Xq9gcmi2jiJ
+         PiEKuxjAGYMU0ndESLlKnF9fIjcWEAYuIQmKAbIaND9+F8vbhETUOZVOY+We4DEiyjzL
+         6kOT3gjLdor4/ZjtlRdY3Ue7n6NZ39ksC0xMa7w/Cc5QVbmHESP1CAm2AFRocceomZbv
+         FMSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e8kee/N0as/hz/cg2sQd2lCPZnQthggdydHn9mrSiqU=;
+        b=VmVHrNCgJ1/Lq5D1ZwATV4m4aczyJzFDrhOF+yPJgy2pbq/FUrqPCywCliwqTv0/O6
+         TKJGvpLVE1io6LAGXhOZx0832SNNQYxESnZHMow66oS9d1V0JYK/Jpyn/bMFtkwl1t5j
+         gKef/nFmJQES6vNkIKV56tbGeU9mpr8oOqZQhJEliTHuvld5wkkGAev3Ylo4mjs85Am0
+         xmpWj6bxhiKj7qT46FT3DVasHP6riEeY0+u40HBBqf4vkUnXYRUkfBHAq9TjsURHRLre
+         QQQr6WbcpcDbbk+vleF76VC/md+kTz7aEbo+lpbzIzpa2I293Y7VC+7U92imr2qmFpfU
+         HeFw==
+X-Gm-Message-State: AOAM533vgzm6/pR5+/1GCOpMcFtXpD+rUFGRHsTriKvuXZ5muoJdrNPE
+        eoYReOzF4sBe68nNg+JiIA03kT4Nt3s=
+X-Google-Smtp-Source: ABdhPJzQGDXpxQbq645M+Cx7NqFq4GuTvMkGZHqWfLldEcnTBw1AkZi7CP1LNhMvfB00h76mxuu0Lw==
+X-Received: by 2002:a05:6512:39d3:: with SMTP id k19mr39194848lfu.81.1638872057999;
+        Tue, 07 Dec 2021 02:14:17 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id i18sm1635047lfu.67.2021.12.07.02.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 02:14:17 -0800 (PST)
+Subject: Re: [PATCH 2/3] dt-bindings: sound: tegra: Update HDA resets
+To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, perex@perex.cz
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+ <1638858770-22594-3-git-send-email-spujar@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <13d20227-ec6b-03db-01dc-b4b00038a15c@gmail.com>
+Date:   Tue, 7 Dec 2021 13:14:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206092258.3765-1-straube.linux@gmail.com>
+In-Reply-To: <1638858770-22594-3-git-send-email-spujar@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:22:58AM +0100, Michael Straube wrote:
-> adapter->HalData is used in the GET_HAL_DATA macro all across the
-> driver code but nobody checks if its allocation in
-> rtl188eu_alloc_haldata() was successful or not.
+07.12.2021 09:32, Sameer Pujar пишет:
+> Tegra194 HDA has only two resets unlike the previous generations of
+> Tegra SoCs. Hence update the reset list accordingly.
 > 
-> To avoid errors when the allocation fails convert the type of field
-> HalData from void pointer to struct hal_data_8188eu. Remove
-> GET_HAL_DATA, rtl8188eu_alloc_haldata(), rtl8188e_free_hal_data().
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
-> Tested on x86_64 with InterTech DMG-02.
+> Fixes: 2d8f8955fe02 ("dt-bindings: tegra: Convert HDA doc to json-schema")
 
-This doesn't apply to my tree anymore, due to the other changes that
-were submitted for this driver.  Can you rebase and resend please?
-
-thanks,
-
-greg k-h
+The original txt binding was already wrong, this "fixes" tag is wrong.

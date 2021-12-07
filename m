@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7C346C792
+	by mail.lfdr.de (Postfix) with ESMTP id F404646C793
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242271AbhLGWim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:38:42 -0500
-Received: from mga09.intel.com ([134.134.136.24]:41972 "EHLO mga09.intel.com"
+        id S242285AbhLGWip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:38:45 -0500
+Received: from mga09.intel.com ([134.134.136.24]:41976 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242249AbhLGWig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S242255AbhLGWig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Dec 2021 17:38:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237509354"
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237509356"
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="237509354"
+   d="scan'208";a="237509356"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 14:35:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="515845500"
+   d="scan'208";a="515845508"
 Received: from otc-wp-03.jf.intel.com ([10.54.39.79])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Dec 2021 14:35:04 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 07 Dec 2021 14:35:05 -0800
 From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
 To:     iommu@lists.linux-foundation.org,
         LKML <linux-kernel@vger.kernel.org>,
@@ -39,9 +39,9 @@ Cc:     Jacob Pan <jacob.jun.pan@intel.com>,
         Barry Song <21cnbao@gmail.com>,
         "Zanussi, Tom" <tom.zanussi@intel.com>,
         Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
-Date:   Tue,  7 Dec 2021 05:47:13 -0800
-Message-Id: <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
+Subject: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with PASID
+Date:   Tue,  7 Dec 2021 05:47:14 -0800
+Message-Id: <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
 References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
@@ -49,191 +49,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Between DMA requests with and without PASID (legacy), DMA mapping APIs
-are used indiscriminately on a device. Therefore, we should always match
-the addressing mode of the legacy DMA when enabling kernel PASID.
+In-kernel DMA should be managed by DMA mapping API. The existing kernel
+PASID support is based on the SVA machinery in SVA lib that is intended
+for user process SVA. The binding between a kernel PASID and kernel
+mapping has many flaws. See discussions in the link below.
 
-This patch adds support for VT-d driver where the kernel PASID is
-programmed to match RIDPASID. i.e. if the device is in pass-through, the
-kernel PASID is also in pass-through; if the device is in IOVA mode, the
-kernel PASID will also be using the same IOVA space.
+This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform DMA
+requests with PASID under the same mapping managed by DMA mapping API.
+In addition, SVA-related bits for kernel DMA are removed. As a result,
+DSA users shall use DMA mapping API to obtain DMA handles instead of
+using kernel virtual addresses.
 
-There is additional handling for IOTLB and device TLB flush w.r.t. the
-kernel PASID. On VT-d, PASID-selective IOTLB flush is also on a
-per-domain basis; whereas device TLB flush is per device. Note that
-IOTLBs are used even when devices are in pass-through mode. ATS is
-enabled device-wide, but the device drivers can choose to manage ATS at
-per PASID level whenever control is available.
-
+Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
 Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 ---
- drivers/iommu/intel/iommu.c | 105 +++++++++++++++++++++++++++++++++++-
- drivers/iommu/intel/pasid.c |   7 +++
- include/linux/intel-iommu.h |   3 +-
- 3 files changed, 113 insertions(+), 2 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  6 --
+ drivers/dma/Kconfig                           | 10 ----
+ drivers/dma/idxd/idxd.h                       |  1 -
+ drivers/dma/idxd/init.c                       | 59 ++++++-------------
+ drivers/dma/idxd/sysfs.c                      |  7 ---
+ 5 files changed, 19 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 60253bc436bb..a2ef6b9e4bfc 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1743,7 +1743,14 @@ static void domain_flush_piotlb(struct intel_iommu *iommu,
- 	if (domain->default_pasid)
- 		qi_flush_piotlb(iommu, did, domain->default_pasid,
- 				addr, npages, ih);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9725c546a0d4..fe73d02c62f3 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1751,12 +1751,6 @@
+ 			In such case C2/C3 won't be used again.
+ 			idle=nomwait: Disable mwait for CPU C-states
+ 
+-	idxd.sva=	[HW]
+-			Format: <bool>
+-			Allow force disabling of Shared Virtual Memory (SVA)
+-			support for the idxd driver. By default it is set to
+-			true (1).
 -
-+	if (domain->kernel_pasid && !domain_type_is_si(domain)) {
-+		/*
-+		 * REVISIT: we only do PASID IOTLB inval for FL, we could have SL
-+		 * for PASID in the future such as vIOMMU PT. this doesn't get hit.
-+		 */
-+		qi_flush_piotlb(iommu, did, domain->kernel_pasid,
-+				addr, npages, ih);
-+	}
- 	if (!list_empty(&domain->devices))
- 		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr, npages, ih);
- }
-@@ -5695,6 +5702,100 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
+ 	idxd.tc_override= [HW]
+ 			Format: <bool>
+ 			Allow override of default traffic class configuration
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 6bcdb4e6a0d1..3b28bd720e7d 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -313,16 +313,6 @@ config INTEL_IDXD_COMPAT
+ 
+ 	  If unsure, say N.
+ 
+-# Config symbol that collects all the dependencies that's necessary to
+-# support shared virtual memory for the devices supported by idxd.
+-config INTEL_IDXD_SVM
+-	bool "Accelerator Shared Virtual Memory Support"
+-	depends on INTEL_IDXD
+-	depends on INTEL_IOMMU_SVM
+-	depends on PCI_PRI
+-	depends on PCI_PASID
+-	depends on PCI_IOV
+-
+ config INTEL_IDXD_PERFMON
+ 	bool "Intel Data Accelerators performance monitor support"
+ 	depends on INTEL_IDXD
+diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+index 0cf8d3145870..3155e3a2d3ae 100644
+--- a/drivers/dma/idxd/idxd.h
++++ b/drivers/dma/idxd/idxd.h
+@@ -262,7 +262,6 @@ struct idxd_device {
+ 	struct idxd_wq **wqs;
+ 	struct idxd_engine **engines;
+ 
+-	struct iommu_sva *sva;
+ 	unsigned int pasid;
+ 
+ 	int num_groups;
+diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+index 7bf03f371ce1..44633f8113e2 100644
+--- a/drivers/dma/idxd/init.c
++++ b/drivers/dma/idxd/init.c
+@@ -16,6 +16,7 @@
+ #include <linux/idr.h>
+ #include <linux/intel-svm.h>
+ #include <linux/iommu.h>
++#include <linux/dma-iommu.h>
+ #include <uapi/linux/idxd.h>
+ #include <linux/dmaengine.h>
+ #include "../dmaengine.h"
+@@ -28,10 +29,6 @@ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_IMPORT_NS(IDXD);
+ 
+-static bool sva = true;
+-module_param(sva, bool, 0644);
+-MODULE_PARM_DESC(sva, "Toggle SVA support on/off");
+-
+ bool tc_override;
+ module_param(tc_override, bool, 0644);
+ MODULE_PARM_DESC(tc_override, "Override traffic class defaults");
+@@ -530,36 +527,22 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
+ 
+ static int idxd_enable_system_pasid(struct idxd_device *idxd)
+ {
+-	int flags;
+-	unsigned int pasid;
+-	struct iommu_sva *sva;
+-
+-	flags = SVM_FLAG_SUPERVISOR_MODE;
+-
+-	sva = iommu_sva_bind_device(&idxd->pdev->dev, NULL, &flags);
+-	if (IS_ERR(sva)) {
+-		dev_warn(&idxd->pdev->dev,
+-			 "iommu sva bind failed: %ld\n", PTR_ERR(sva));
+-		return PTR_ERR(sva);
+-	}
++	u32 pasid;
+ 
+-	pasid = iommu_sva_get_pasid(sva);
+-	if (pasid == IOMMU_PASID_INVALID) {
+-		iommu_sva_unbind_device(sva);
++	pasid = iommu_enable_pasid_dma(&idxd->pdev->dev);
++	if (pasid == INVALID_IOASID) {
++		dev_err(&idxd->pdev->dev, "No kernel DMA PASID\n");
+ 		return -ENODEV;
  	}
- }
- 
-+static int intel_enable_pasid_dma(struct device *dev, u32 pasid)
-+{
-+	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-+	struct device_domain_info *info;
-+	unsigned long flags;
-+	int ret = 0;
-+
-+	info = get_domain_info(dev);
-+	if (!info)
-+		return -ENODEV;
-+
-+	if (!dev_is_pci(dev) || !sm_supported(info->iommu))
-+		return -EINVAL;
-+
-+	if (intel_iommu_enable_pasid(info->iommu, dev))
-+		return -ENODEV;
-+
-+	spin_lock_irqsave(&device_domain_lock, flags);
-+	spin_lock(&iommu->lock);
-+	/*
-+	 * Store PASID for IOTLB flush, but only needed for non-passthrough
-+	 * unmap case. For passthrough, we only need to do IOTLB flush during
-+	 * PASID teardown. Flush covers all devices in the same domain as the
-+	 * domain ID is the same for the same SL.
-+	 */
-+	info->domain->kernel_pasid = pasid;
-+
-+	/*
-+	 * Tracks how many attached devices are using the kernel PASID. Clear
-+	 * the domain kernel PASID when all users called disable_pasid_dma().
-+	 */
-+	atomic_inc(&info->domain->kernel_pasid_user);
-+
-+	/*
-+	 * Addressing modes (IOVA vs. PA) is a per device choice made by the
-+	 * platform code. We must treat legacy DMA (request w/o PASID) and
-+	 * DMA w/ PASID identially in terms of mapping. Here we just set up
-+	 * the kernel PASID to match the mapping of RID2PASID/PASID0.
-+	 */
-+	if (hw_pass_through && domain_type_is_si(info->domain)) {
-+		ret = intel_pasid_setup_pass_through(info->iommu, info->domain,
-+						dev, pasid);
-+		if (ret)
-+			dev_err(dev, "Failed kernel PASID %d in BYPASS", pasid);
-+
-+	} else if (domain_use_first_level(info->domain)) {
-+		/* We are using FL for IOVA, this is the default option */
-+		ret = domain_setup_first_level(info->iommu, info->domain, dev,
-+					       pasid);
-+		if (ret)
-+			dev_err(dev, "Failed kernel PASID %d IOVA FL", pasid);
-+	} else {
-+		ret = intel_pasid_setup_second_level(info->iommu, info->domain,
-+						     dev, pasid);
-+		if (ret)
-+			dev_err(dev, "Failed kernel SPASID %d IOVA SL", pasid);
-+	}
-+
-+	spin_unlock(&iommu->lock);
-+	spin_unlock_irqrestore(&device_domain_lock, flags);
-+
-+	return ret;
-+}
-+
-+static int intel_disable_pasid_dma(struct device *dev)
-+{
-+	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-+	struct device_domain_info *info;
-+	unsigned long flags;
-+	int ret = 0;
-+
-+	info = get_domain_info(dev);
-+	if (!info)
-+		return -ENODEV;
-+
-+	if (!dev_is_pci(dev) || !sm_supported(info->iommu))
-+		return -EINVAL;
-+
-+	spin_lock_irqsave(&device_domain_lock, flags);
-+	spin_lock(&iommu->lock);
-+
-+	/* Tear down kernel PASID for this device */
-+	intel_pasid_tear_down_entry(info->iommu, info->dev,
-+				    info->domain->kernel_pasid,
-+				    false);
-+	/* Clear the domain kernel PASID when there is no users */
-+	if (atomic_dec_and_test(&info->domain->kernel_pasid_user))
-+		info->domain->kernel_pasid = 0;
-+
-+	spin_unlock(&iommu->lock);
-+	spin_unlock_irqrestore(&device_domain_lock, flags);
-+	return ret;
-+}
-+
- const struct iommu_ops intel_iommu_ops = {
- 	.capable		= intel_iommu_capable,
- 	.domain_alloc		= intel_iommu_domain_alloc,
-@@ -5732,6 +5833,8 @@ const struct iommu_ops intel_iommu_ops = {
- 	.sva_get_pasid		= intel_svm_get_pasid,
- 	.page_response		= intel_svm_page_response,
- #endif
-+	.enable_pasid_dma	= intel_enable_pasid_dma,
-+	.disable_pasid_dma	= intel_disable_pasid_dma,
- };
- 
- static void quirk_iommu_igfx(struct pci_dev *dev)
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 07c390aed1fe..24e889612357 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -505,6 +505,13 @@ devtlb_invalidation_with_pasid(struct intel_iommu *iommu,
- 		qi_flush_dev_iotlb(iommu, sid, pfsid, qdep, 0, 64 - VTD_PAGE_SHIFT);
- 	else
- 		qi_flush_dev_iotlb_pasid(iommu, sid, pfsid, pasid, qdep, 0, 64 - VTD_PAGE_SHIFT);
-+	/*
-+	 * Flush the kernel PASID if used by the device. This is the case where
-+	 * a device driver uses IOVA via DMA map APIs for request with PASID.
-+	 */
-+	if (dev->pasid)
-+		qi_flush_dev_iotlb_pasid(iommu, sid, pfsid, dev->pasid, qdep, 0,
-+					 64 - VTD_PAGE_SHIFT);
- }
- 
- void intel_pasid_tear_down_entry(struct intel_iommu *iommu, struct device *dev,
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index fe9fd417d611..6725a0ddfc6a 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -567,7 +567,8 @@ struct dmar_domain {
- 					 * The default pasid used for non-SVM
- 					 * traffic on mediated devices.
- 					 */
 -
-+	u32		kernel_pasid;	/* for in-kernel DMA w/ PASID */
-+	atomic_t	kernel_pasid_user; /* count of kernel_pasid users */
- 	struct iommu_domain domain;	/* generic domain data structure for
- 					   iommu core */
- };
+-	idxd->sva = sva;
+ 	idxd->pasid = pasid;
+-	dev_dbg(&idxd->pdev->dev, "system pasid: %u\n", pasid);
++
+ 	return 0;
+ }
+ 
+ static void idxd_disable_system_pasid(struct idxd_device *idxd)
+ {
+-
+-	iommu_sva_unbind_device(idxd->sva);
+-	idxd->sva = NULL;
++	iommu_disable_pasid_dma(&idxd->pdev->dev);
++	idxd->pasid = 0;
+ }
+ 
+ static int idxd_probe(struct idxd_device *idxd)
+@@ -575,21 +558,17 @@ static int idxd_probe(struct idxd_device *idxd)
+ 
+ 	dev_dbg(dev, "IDXD reset complete\n");
+ 
+-	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
+-		rc = iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA);
+-		if (rc == 0) {
+-			rc = idxd_enable_system_pasid(idxd);
+-			if (rc < 0) {
+-				iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
+-				dev_warn(dev, "Failed to enable PASID. No SVA support: %d\n", rc);
+-			} else {
+-				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
+-			}
+-		} else {
+-			dev_warn(dev, "Unable to turn on SVA feature.\n");
+-		}
+-	} else if (!sva) {
+-		dev_warn(dev, "User forced SVA off via module param.\n");
++	/*
++	 * Try to enable both in-kernel and user DMA request with PASID.
++	 * PASID is supported unless both user and kernel PASID are
++	 * supported. Do not fail probe here in that idxd can still be
++	 * used w/o PASID or IOMMU.
++	 */
++	if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) ||
++		idxd_enable_system_pasid(idxd)) {
++		dev_warn(dev, "Failed to enable PASID\n");
++	} else {
++		set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
+ 	}
+ 
+ 	idxd_read_caps(idxd);
+diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+index a9025be940db..35737299c355 100644
+--- a/drivers/dma/idxd/sysfs.c
++++ b/drivers/dma/idxd/sysfs.c
+@@ -776,13 +776,6 @@ static ssize_t wq_name_store(struct device *dev,
+ 	if (strlen(buf) > WQ_NAME_SIZE || strlen(buf) == 0)
+ 		return -EINVAL;
+ 
+-	/*
+-	 * This is temporarily placed here until we have SVM support for
+-	 * dmaengine.
+-	 */
+-	if (wq->type == IDXD_WQT_KERNEL && device_pasid_enabled(wq->idxd))
+-		return -EOPNOTSUPP;
+-
+ 	memset(wq->name, 0, WQ_NAME_SIZE + 1);
+ 	strncpy(wq->name, buf, WQ_NAME_SIZE);
+ 	strreplace(wq->name, '\n', '\0');
 -- 
 2.25.1
 

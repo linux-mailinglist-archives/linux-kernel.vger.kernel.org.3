@@ -2,81 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7825C46C1F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1484346C1F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbhLGRmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:42:17 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:56510 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbhLGRmO (ORCPT
+        id S240110AbhLGRol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229943AbhLGRok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:42:14 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A49371C0B82; Tue,  7 Dec 2021 18:38:41 +0100 (CET)
-Date:   Tue, 7 Dec 2021 18:38:37 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/125] 5.10.84-rc2 review
-Message-ID: <20211207173837.GA27023@duo.ucw.cz>
-References: <20211207081114.760201765@linuxfoundation.org>
+        Tue, 7 Dec 2021 12:44:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A11AC061574;
+        Tue,  7 Dec 2021 09:41:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=otMhR6UQUCq1XUdG0Mow4IHQ43JJ0qaMkYpjdyTPD7E=; b=c6tZGk1g8IwPnzH4F2FkBOgNn+
+        u5NxkmWSv2WpDIkFMOhT9y3NAzhTAdhlaU/3NOi/2uG2e9eadHvCY3O03jOArgrBqAKkXBTnq4rqv
+        aaVH4jD5/GRCLZgMADPxSKhYMt9s/zNzxbt0pXE9/yfKrd9k0A3y+7IKGsg8zG3MOrD7ZUrHYO5jx
+        9sWwHPRkRYGmbDzdAMY7yV4xOlhR45ERaAbDeReUDXBTGU5k/TyyUKHIkNJFQ7UVOIwkgB5uU32oL
+        fNpW222HjWstShpVaCHJMmVdaZme+0NHecEvdlVbSsvk5mUSoWrkJxwLswnEmQabnSPCYaNeDu1RP
+        /btJRDUg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mueSg-007bZw-By; Tue, 07 Dec 2021 17:41:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 91B2030002F;
+        Tue,  7 Dec 2021 18:41:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 789FA20182F4A; Tue,  7 Dec 2021 18:41:05 +0100 (CET)
+Date:   Tue, 7 Dec 2021 18:41:05 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <Ya+csba8U3v3DMVo@hirez.programming.kicks-ass.net>
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org>
+ <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
+ <Ya9hdlBuWYUWRQzs@hirez.programming.kicks-ass.net>
+ <CAHk-=wjtvUDbbcXw0iqAPn3dmZK+RnqVMFrU9i53HzvPtWx_vw@mail.gmail.com>
+ <Ya+RPbdgEn6l6RbS@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207081114.760201765@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Ya+RPbdgEn6l6RbS@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 07, 2021 at 05:52:13PM +0100, Peter Zijlstra wrote:
+> It's a bit gross, and there seems to be a problem with macro expansion
+> of __ofl, but it 'works'.
+> 
+> ---
+> diff --git a/arch/x86/include/asm/atomic.h b/arch/x86/include/asm/atomic.h
+> index 5e754e895767..921ecfd5a40b 100644
+> --- a/arch/x86/include/asm/atomic.h
+> +++ b/arch/x86/include/asm/atomic.h
+> @@ -263,6 +263,22 @@ static __always_inline int arch_atomic_fetch_xor(int i, atomic_t *v)
+>  }
+>  #define arch_atomic_fetch_xor arch_atomic_fetch_xor
+>  
+> +#define atomic_dec_and_test_ofl(_v, __ofl)				\
+> +({									\
+> +	__label__ __zero;						\
+> +	__label__ __out;						\
+> +	bool __ret = false;						\
+> +	asm_volatile_goto (LOCK_PREFIX "decl %[var]\n\t"		\
+> +			   "jz %l[__zero]\n\t"				\
+> +			   "jl %l[__ofl]"				\
+				%l2
 
---azLHFNyN32YCQGCU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+and it works much better...
 
-Hi!
-
-> This is the start of the stable review cycle for the 5.10.84 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Thu, 09 Dec 2021 08:09:22 +0000.
-> Anything received after that time might be too late.
-CIP testing did not find any problems here:                                =
-               =20
-                                                                           =
-               =20
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y         =20
-                                                                           =
-               =20
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>                              =
-               =20
-                                                                           =
-               =20
-Best regards,                                                              =
-               =20
-                                                                Pavel      =
-               =20
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---azLHFNyN32YCQGCU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYa+cHQAKCRAw5/Bqldv6
-8gPpAJ9VH8ge+EBxF2CezwBHSdbqWV4asQCfaRUxan/99Mnqjz0utsRBZddHqXo=
-=lQ+S
------END PGP SIGNATURE-----
-
---azLHFNyN32YCQGCU--
+> +			   : : [var] "m" ((_v)->counter)		\
+> +			   : "memory"					\
+> +			   : __zero, __ofl);				\
+> +	goto __out;							\
+> +__zero:	__ret = true;							\
+> +__out:	__ret;								\
+> +})

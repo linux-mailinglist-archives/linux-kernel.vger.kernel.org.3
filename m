@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF72346BB89
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11B546BB8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbhLGMsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:48:11 -0500
-Received: from mail-wm1-f45.google.com ([209.85.128.45]:54075 "EHLO
-        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbhLGMsK (ORCPT
+        id S236589AbhLGMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236579AbhLGMsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:48:10 -0500
-Received: by mail-wm1-f45.google.com with SMTP id y196so10615416wmc.3;
-        Tue, 07 Dec 2021 04:44:40 -0800 (PST)
+        Tue, 7 Dec 2021 07:48:31 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0FC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 04:45:00 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id 30so7650730uag.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 04:45:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3ChVHxxOxhIGs4rdOWG75rsbNvdLDYwE9pw3zOgGr8M=;
+        b=cagc1Fsf3e3/RtlMkfBVVOFkZIH9p/PFEuLPjNipBOP0t1oa1QC8YVzGB+j92EPAwe
+         6DTlD2JOtMKDSlPhKnOM/oxgdUt/VXmnnMYFugCOVpgB0FnYTJy1E6vbsmqTHC0EmMFK
+         nWgrrOt3CxGahgD0XTFo6KthaMQ6T+bGXHxJg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pN83c85bka+q5D7YAhZzC6sSAnlsUaiM8jJHT16MFzc=;
-        b=a3FoKmBOVUeVak2ofD/vscCuWQJJeo1wVJ70+fHFC6zdHOc+adECuDYjPEy6c8NUI3
-         yphNzAoKrCozuF8hL1zN7QdAeD7wkHCGU660lwXEKSHwYbJZIfXNLczdkp+lP21C5qpk
-         LSAsgYreC72ubFJLW6Oa20ZQld5kSF46Xs/7NmcmQ07EBRDInifUL1KX/Swt1jcku0fe
-         1/Xjs2qtPVcegN2D7zVDzx9bqASx9I9nJPbvX2Z3d+MTm/CH9Wj9mBdVH3StYw+hjv6r
-         1ZEneS7YIwaIWQomnAhGPs0JAKWXZouMTJbHr1OsmD0EDtNHqU757wWXrn299ay3Zr7t
-         B5iA==
-X-Gm-Message-State: AOAM5301Glmp6kObLVBLkoP1zXWtVt166djFPZg4DTwWEmFWxi6JXRRX
-        Z9hfbleIc43NEHIJ2RksrQ0=
-X-Google-Smtp-Source: ABdhPJx/pKjS0xi7O6wrmjndLG6KB6gN3ng4uJvbEmaNeF0yT0vzhR3Jq/02aeW8FV84CjQOxBTGHw==
-X-Received: by 2002:a05:600c:2292:: with SMTP id 18mr6757781wmf.6.1638881079503;
-        Tue, 07 Dec 2021 04:44:39 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id a9sm15021982wrt.66.2021.12.07.04.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 04:44:39 -0800 (PST)
-Date:   Tue, 7 Dec 2021 12:44:37 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        "Jason A . Donenfeld " <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 1/5] random: Remove unused irq_flags argument from
- add_interrupt_randomness().
-Message-ID: <20211207124437.x7khddnt3bplwv4d@liuwe-devbox-debian-v2>
-References: <20211207121737.2347312-1-bigeasy@linutronix.de>
- <20211207121737.2347312-2-bigeasy@linutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3ChVHxxOxhIGs4rdOWG75rsbNvdLDYwE9pw3zOgGr8M=;
+        b=ZqPP5KMi90IqCiIirAa/A+utQL4YPYX4xxwONwZKcvk4QxmANGxHd2prDJ9sMSEMS6
+         zh9YXOhmbiha2e0XDlEF2pVSDkBEWYNJ40Qnj09eqzJZvrG0jjggX9jsZBS2vMvm/S3n
+         jKUAV9htSMgV9IjA0sdaKX1y2cOId0qghsoinkkwSdCThI8hhE5aFw8ntZTKbzl4i61X
+         0CCHxPI1fHhg/JYOkKXr7jXvi1SSxWpLDER7EhytrricW14ZUJNloVIw4m6Xxvk3m4Js
+         lnk8qkKSMoysLd3cSEdoVy5+TtB8yiqfoA8cT56l6PwI97GSfjqWqKvC9M6o8joOCOwC
+         +UKg==
+X-Gm-Message-State: AOAM533z19n+AMo0QANcS5TTcT6yulws/S5TR4MkmKjyj6cgLgSD5eK9
+        HKOv5ZosByY8sSa8hPmJ0PtGqledUi+FK+eLc5sSOPafemJKjQ==
+X-Google-Smtp-Source: ABdhPJy6rksSBimk0QbT52WvsQczQrLRNltJbKL+leXstLsmKjLOHPKljfGjuHPqEwiWodirXVF16UvBFmqK2b8HX34=
+X-Received: by 2002:a05:6102:945:: with SMTP id a5mr44302178vsi.87.1638881099983;
+ Tue, 07 Dec 2021 04:44:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207121737.2347312-2-bigeasy@linutronix.de>
+References: <1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com>
+ <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
+ <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net> <CAJfpegsVg2K0CvrPvXGSu=Jz_R3VZZOy49Jw51rThQUJ1_9e6g@mail.gmail.com>
+ <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 7 Dec 2021 13:44:49 +0100
+Message-ID: <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
+Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
+        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
+        quic_blong@quicinc.com, quic_richardp@quicinc.com,
+        quic_cdevired@quicinc.com,
+        Pradeep P V K <quic_pragalla@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 01:17:33PM +0100, Sebastian Andrzej Siewior wrote:
-> Since commit
->    ee3e00e9e7101 ("random: use registers from interrupted code for CPU's w/o a cycle counter")
-> 
-> the irq_flags argument is no longer used.
-> 
-> Remove unused irq_flags irq_flags.
+On Tue, 7 Dec 2021 at 11:42, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 11:20:59AM +0100, Miklos Szeredi wrote:
 
-Two irq_flags here.
-[...]
->  	struct fast_pool	*fast_pool = this_cpu_ptr(&irq_randomness);
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 392c1ac4f8193..7ae04ccb10438 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -1381,7 +1381,7 @@ static void vmbus_isr(void)
->  			tasklet_schedule(&hv_cpu->msg_dpc);
->  	}
->  
-> -	add_interrupt_randomness(vmbus_interrupt, 0);
-> +	add_interrupt_randomness(vmbus_interrupt);
->  }
+> > That may be good for fuse as the data is indeed shared.  It would be
+> > even better if the woken task had already a known affinity to this
+> > CPU, since that would mean thread local data wouldn't have to be
+> > migrated each time...   So I'm not sure sync wakeup alone is worth it,
+> > needs real life benchmarking.
+>
+> Hard affinities have other down-sides.. occasional migrations shouldn't
+> be a problem, constant migrations are bad.
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+Currently fuse readers are sleeping in
+wait_event_interruptible_exclusive().  wake_up_interruptible_sync()
+will pick the first thread in the queue and wake that up.  That will
+likely result in migration, right?
 
+What would be much nicer, is to look at all the threads on the waitq
+and pick one that previously ran on the current CPU if there's one.
+Could this be implemented?
+
+Thanks,
+Miklos

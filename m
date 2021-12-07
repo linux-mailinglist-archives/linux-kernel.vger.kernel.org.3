@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD31D46C15F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B362A46C163
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbhLGRLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:11:31 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29244 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235335AbhLGRLa (ORCPT
+        id S235407AbhLGRN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233743AbhLGRN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:11:30 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7FrHrj027785;
-        Tue, 7 Dec 2021 17:07:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=KV7oBdrURQGDIkQQgRY7Ef5rSkRnP4z8E1pnB7i6FNg=;
- b=J1j/s5girdbYsJ7K6XED6vEV5veo7zOI4Z4X+M1t5GWoz+aJJJz3juezq7GQww0g6pKz
- +WqEy59fXYK0gnlGX+NwrBZOJ7ZO2ruKb7+0/iIqxLOFvPkglpqUp8CHLy7P+3stFLg3
- mPczk62fMabU1eBM5Oh70nSIHkO+Ns8SsaTu4EjKjl4MyiTia1T3JmIbXJm9GH9Pc5d+
- 4+I50zqZGgHeiMM7Vj9+3MfZHBh+Ht365fGkZSrzkVj+KxtQuYw5r5Nz3th4vRlMMIjP
- iL01eS+GcEJt/LZandgeKjmncJoyjDhJwOdUM+OurpFN/DgqMdN9JO2Pw9uwdGEMw7O3 zA== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctanb1q35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 17:07:55 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7H7qxR030589;
-        Tue, 7 Dec 2021 17:07:54 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma02wdc.us.ibm.com with ESMTP id 3cqyyagjd2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 17:07:54 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7H7rUn50921938
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Dec 2021 17:07:53 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DEDEDB2068;
-        Tue,  7 Dec 2021 17:07:52 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 911C8B2070;
-        Tue,  7 Dec 2021 17:07:51 +0000 (GMT)
-Received: from localhost (unknown [9.211.135.78])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Dec 2021 17:07:50 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
-In-Reply-To: <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
-References: <20211203154321.13168-1-ldufour@linux.ibm.com>
- <87bl1so588.fsf@linux.ibm.com>
- <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
-Date:   Tue, 07 Dec 2021 11:07:50 -0600
-Message-ID: <878rwwny1l.fsf@linux.ibm.com>
+        Tue, 7 Dec 2021 12:13:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACED0C061574;
+        Tue,  7 Dec 2021 09:10:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 209B5CE1C58;
+        Tue,  7 Dec 2021 17:10:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DFCC341C3;
+        Tue,  7 Dec 2021 17:10:23 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 12:10:21 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yabin Cui <yabinc@google.com>
+Subject: Re: [RFC][PATCH] tracefs: Set all files to the same group ownership
+ as the mount option
+Message-ID: <20211207121021.4d261d6e@gandalf.local.home>
+In-Reply-To: <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
+References: <20211206211219.3eff99c9@gandalf.local.home>
+        <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: u4OqYHRlQ7DzTIQDdbgq-sLH52StFeJr
-X-Proofpoint-ORIG-GUID: u4OqYHRlQ7DzTIQDdbgq-sLH52StFeJr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-07_06,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- impostorscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112070106
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
->> Is there a reasonable fallback for VMs where this parameter doesn't
->> exist? PowerVM partitions should always have it, but what do we want the
->> behavior to be on other hypervisors?
->
-> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
-> the lparstat -i command will fall back to the device tree value. I can't
-> see any valid reason to report the value defined in the device tree
-> here.
+On Tue, 7 Dec 2021 09:04:30 -0800
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-Here's a valid reason :-)
+> One thing that I missed before: There are files that can be generated
+> after the mount, for instance when a new synthetic event is added new
+> entries for that event are created under events/synthetic/ and when a
+> new instance is created the new entries generated under instances/.
+> These new entries don't honor the gid specified when mounting. Could
+> we make it so that they also respect the specified gid?
 
-lparstat isn't the only possible consumer of the interface, and the
-'ibm,partition-name' property and the dynamic system parameter clearly
-serve a common purpose. 'ibm,partition-name' is provided by qemu.
+They don't?
 
-In any case, the function should not print an error when the return
-value is -3 (parameter not supported).
+/me looks at code
+
+Aw crap. I thought since I have this:
+
+static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+{
+[..]
+		case Opt_gid:
+			if (match_int(&args[0], &option))
+				return -EINVAL;
+			gid = make_kgid(current_user_ns(), option);
+			if (!gid_valid(gid))
+				return -EINVAL;
+
+			opts->gid = gid;
+
+			set_gid(tracefs_mount->mnt_root, gid);
+[..]
+
+
+That the new files would inherit the opts->gid. But I see that they do not.
+
+I'll add that as a separate patch.
+
+Thanks for bringing that to my attention.
+
+-- Steve

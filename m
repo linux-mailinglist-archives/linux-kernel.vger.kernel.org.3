@@ -2,190 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9E046C15A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB51E46C15D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbhLGRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:10:44 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40232 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239723AbhLGRKm (ORCPT
+        id S239835AbhLGRLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:11:04 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40966 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239804AbhLGRLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:10:42 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7EqwU5011669;
-        Tue, 7 Dec 2021 17:06:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=U0CklnoRUAd4J9T8OROHkfvvRneHXd686ccgYestuCA=;
- b=q9GNZppRuHNbOWoW9XTzJpTBix1xGJ38anWpLUe8tZAhSuLLVfQKDS3+JNIEg7liiwaM
- U6LF413roFszATsNEbt4eF0Ux8qC1EOjWNpbUSacQh5MIv97Jf50DFzlNXME7tYVF1Rv
- uiUjYXja0f2o41YZIU8xKV+8IAhUMTJlTiSTg+OyvohnFZAipZtn0tCohe+bbfZzfa9w
- Ib4TGDl7IbdsWOwibmIcsZ6dbF0IREki6yOASWyAXNb7iqiVLVk+1RcW+7pWehqwmlpH
- GB2a9IGpWWXC/EvVbLVE7P31GXPf9dKRA0vie5ITQFTrCChRH6+EnzwFkcD93+2j9TDk vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct7gke99p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 17:06:58 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B7H0H3L004403;
-        Tue, 7 Dec 2021 17:06:57 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct7gke997-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 17:06:57 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7H3raW019502;
-        Tue, 7 Dec 2021 17:06:56 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma02wdc.us.ibm.com with ESMTP id 3cqyyaghgr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 17:06:56 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7H6t0633030832
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Dec 2021 17:06:55 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 69F4D7806B;
-        Tue,  7 Dec 2021 17:06:55 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CA5678077;
-        Tue,  7 Dec 2021 17:06:52 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Dec 2021 17:06:52 +0000 (GMT)
-Message-ID: <64639b3e599b60eb755dfcb8a1dc00a1057b5bf1.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Tue, 07 Dec 2021 12:06:51 -0500
-In-Reply-To: <edaa3e45-77aa-602d-2b30-66ef9a0a7161@schaufler-ca.com>
-References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
-         <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
-         <20211207145901.awiibdgdidbshsbf@wittgenstein>
-         <10fa531054c3b9e2a02ceb3dc007fa50e1bae1ff.camel@linux.ibm.com>
-         <8491f76d5c8923f35216f55c030a68f478a0325a.camel@linux.ibm.com>
-         <edaa3e45-77aa-602d-2b30-66ef9a0a7161@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Tue, 7 Dec 2021 12:11:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 795EECE1C4B;
+        Tue,  7 Dec 2021 17:07:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8537C341D2;
+        Tue,  7 Dec 2021 17:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638896849;
+        bh=AWAI4dsGFqTjRC1xoqF0cYc1RPAXHGsAWxn92fKI3oI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gf3v2LOOtwGy6hrhLaaWTZdzvHT2yj5fU611wjvPDLNa8iEipEpydiG2MaJQdmcON
+         5lKqN3WsEE+gquCLQHNajub1oh17woTQIMr9Ec/YVS5pQLeqYAMI51bBhAhV3u39Hs
+         8XhGioMd5MdkwTerMyzbSvVtibIeZUl3TFPh7iywLJL80GmcXl2IPxHtMLoqyNlyNT
+         /CrN1hdY0hYnXgaG0xYnfi3pvMQH6BFN0pl6BOEv7NaYnFDwa/ZijuvEyMqdmf3UvB
+         +TWYf5z8QpIlhyMHDUHSGx1iSk0SsiikS16nizfpEbn/lD2qlASj9M7QZJfWXRphgF
+         /iAMoxCsfLKKQ==
+Received: by mail-wr1-f42.google.com with SMTP id d24so31052833wra.0;
+        Tue, 07 Dec 2021 09:07:29 -0800 (PST)
+X-Gm-Message-State: AOAM530iPJn3MeUwaXFr8lPwptGLsi+rJWlb84Dx8EhT6k/ArGxk0L3X
+        Qn1bk2WlQ4I0fTaiggD5tANAkpVujdb0os92c7k=
+X-Google-Smtp-Source: ABdhPJxWAtCNN0Uz78wSmLpQSouIBrjU5QdcPq1mv6T3zwlTEprnXUaZ5kdK5O0wqBz67kMO3G1bdxsApionhf3b3lc=
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr53188820wri.137.1638896847522;
+ Tue, 07 Dec 2021 09:07:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AWEyje-k00stW9ncUa80XwX6d4kFeQBJ
-X-Proofpoint-ORIG-GUID: TzQpxLG-mgyA-ZschMzSErYDBDlZrKvC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-07_06,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 phishscore=0 malwarescore=0
- mlxlogscore=999 impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112070106
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
+In-Reply-To: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 7 Dec 2021 18:07:11 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
+Message-ID: <CAK8P3a3UFFP0HP+WmHFuQbBTGK8K5YLE+mYc8mspiU7G--BqJg@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kernel test robot <lkp@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-07 at 07:48 -0800, Casey Schaufler wrote:
-> On 12/7/2021 7:40 AM, James Bottomley wrote:
-> > On Tue, 2021-12-07 at 10:16 -0500, James Bottomley wrote:
-> > > On Tue, 2021-12-07 at 15:59 +0100, Christian Brauner wrote:
-> > > > On Mon, Dec 06, 2021 at 04:14:15PM -0500, James Bottomley
-> > > > wrote:
-> > [...]
-> > > > >   static int securityfs_fill_super(struct super_block *sb,
-> > > > > struct
-> > > > > fs_context *fc)
-> > > > >   {
-> > > > >   	static const struct tree_descr files[] = {{""}};
-> > > > >   	int error;
-> > > > > +	struct user_namespace *ns = fc->user_ns;
-> > > > >   
-> > > > >   	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
-> > > > >   	if (error)
-> > > > >   		return error;
-> > > > >   
-> > > > > +	ns->securityfs_root = dget(sb->s_root);
-> > > > > +
-> > > > >   	sb->s_op = &securityfs_super_operations;
-> > > > >   
-> > > > > +	if (ns != &init_user_ns)
-> > > > > +		blocking_notifier_call_chain(&securityfs_ns_not
-> > > > > ifier,
-> > > > > +					     SECURITYFS_NS_ADD,
-> > > > > ns);
-> > > >  
-> > > > I would propose not to use the notifier logic. While it might
-> > > > be nifty it's over-engineered in my opinion.
-> > >  
-> > > The reason for a notifier is that this current patch set only
-> > > namespaces ima, but we also have integrity and evm to do.  Plus,
-> > > as Casey said, we might get apparmour and selinux.  Since each of
-> > > those will also want to add entries in fill_super, the notifier
-> > > mechanism seemed fairly tailor made for this.  The alternative is
-> > > to have a load of
-> > > 
-> > > #if CONFIG_securityfeature
-> > > callback()
-> > > #endif
-> > > 
-> > > Inside securityfs_fill_super which is a bit inelegant.
-> > > 
-> > > >   The dentry stashing in struct user_namespace currently serves
-> > > > the purpose to make it retrievable in ima_fs_ns_init(). That
-> > > > doesn't justify its existence imho.
-> > >  
-> > > I can thread the root as part of the callback.  I think I can
-> > > still use the standard securityfs calls because the only reason
-> > > for the dentry in the namespace is so the callee can pass NULL
-> > > and have the dentry created at the top level.  We can insist in
-> > > the namespaced use case that the callee always pass in the
-> > > dentry, even for the top level.
-> > > 
-> > > > There is one central place were all users of namespaced
-> > > > securityfs can create the files that they need to and that is
-> > > > in securityfs_fill_super(). (If you want to make that more
-> > > > obvious then give it a subdirectory securityfs and move inode.c
-> > > > in there.)
-> > > >  
-> > > Right, that's what the patch does.
-> > > 
-> > > > We simply will expect users to add:
-> > > > 
-> > > > ima_init_securityfs()
-> > > > mylsm_init_securityfs()
-> > >  
-> > > Yes, plus all the #ifdefs because securityfs can exist
-> > > independently of each of the features.  We can hide the ifdefs in
-> > > the header files and make the functions static do nothing if not
-> > > defined, but the ifdeffery has to live somewhere.
-> >  
-> > Actually, I've got a much better reason: securityfs is a bool; all
-> > the other LSMs and IMA are tristates.  We can't call module init
-> > functions from core code, it has to be done by something like a
-> > notifier.
-> 
-> Err, no. LSMs are not available as loadable modules.
+On Tue, Dec 7, 2021 at 4:32 PM Matthew Wilcox <willy@infradead.org> wrote:
 
-Well securityfs has EXPORT_MODULE_GPL() across all its dentry creation
-functions ... that does mean it expects to be called by a module.
+> >  #define __SWAITQUEUE_INITIALIZER(name) {                             \
+> >       .task           =3D current,                                     =
+ \
+> >       .task_list      =3D LIST_HEAD_INIT((name).task_list),            =
+ \
+>
+> swait.h doesn't need to include <linux/struct_types.h> ?
 
-However, it does appear to be it's only TPM that may use it as a module
-... this is still going to cause a problem eventually because now we'll
-have to require some of the TPM code be built in once we want to attach
-vTPMs to containers.
+I should probably add it for consistency, also in some other places.
+At the moment it works without that because the new header is pulled
+in through linux/spinlock.h.
 
-James
+> > -
+> >  #define XARRAY_INIT(name, flags) {                           \
+> >       .xa_lock =3D __SPIN_LOCK_UNLOCKED(name.xa_lock),          \
+> >       .xa_flags =3D flags,                                      \
+>
+> I think this is going to break:
+>
+> (cd tools/testing/radix-tree; make)
 
+I've tried addressing this now, but I first ran into a different problem
+that exists in linux-next but not in mainline as of today:
 
+cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
+-fsanitize=3Dundefined   -c -o main.o main.c
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from main.c:10:
+./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
+hunk=E2=80=99:
+./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
+declaration of function =E2=80=98find_next_bit=E2=80=99
+[-Wimplicit-function-declaration]
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+cc -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=3Daddress
+-fsanitize=3Dundefined   -c -o xarray.o xarray.c
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from test.h:4,
+                 from xarray.c:8:
+./linux/../../../../include/linux/xarray.h: In function =E2=80=98xas_find_c=
+hunk=E2=80=99:
+./linux/../../../../include/linux/xarray.h:1669:9: warning: implicit
+declaration of function =E2=80=98find_next_bit=E2=80=99
+[-Wimplicit-function-declaration]
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+In file included from ../../include/linux/bitmap.h:7,
+                 from ../../../lib/xarray.c:9,
+                 from xarray.c:16:
+../../include/linux/find.h: At top level:
+../../include/linux/find.h:31:15: error: conflicting types for =E2=80=98fin=
+d_next_bit=E2=80=99
+   31 | unsigned long find_next_bit(const unsigned long *addr,
+unsigned long size,
+      |               ^~~~~~~~~~~~~
+In file included from ./linux/xarray.h:2,
+                 from ./linux/../../../../include/linux/radix-tree.h:21,
+                 from ./linux/radix-tree.h:5,
+                 from test.h:4,
+                 from xarray.c:8:
+./linux/../../../../include/linux/xarray.h:1669:9: note: previous
+implicit declaration of =E2=80=98find_next_bit=E2=80=99 was here
+ 1669 |  return find_next_bit(addr, XA_CHUNK_SIZE, offset);
+      |         ^~~~~~~~~~~~~
+make: *** [<builtin>: xarray.o] Error 1
+
+It's clearly broken after Yury's recent bitops.h cleanup, but I can't
+quite find my way
+through the maze of tools/testing headers to fix it.
+
+        Arnd

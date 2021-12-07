@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE99D46B1F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F2446B1F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236143AbhLGEjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:39:25 -0500
-Received: from marcansoft.com ([212.63.210.85]:48140 "EHLO mail.marcansoft.com"
+        id S236219AbhLGEkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 23:40:20 -0500
+Received: from mga17.intel.com ([192.55.52.151]:49885 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236121AbhLGEjT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:39:19 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2442942181;
-        Tue,  7 Dec 2021 04:35:44 +0000 (UTC)
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add Apple Watchdog
-To:     Guenter Roeck <linux@roeck-us.net>, Sven Peter <sven@svenpeter.dev>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Janne Grunau <j@jannau.net>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Rob Herring <robh@kernel.org>
-References: <20211130161809.64591-1-sven@svenpeter.dev>
- <20211202144301.GA829000@roeck-us.net>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <bd9a52eb-2aca-38a9-e183-2857960a4842@marcan.st>
-Date:   Tue, 7 Dec 2021 13:35:43 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236121AbhLGEkT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 23:40:19 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218177453"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="218177453"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 20:36:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="679289237"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 06 Dec 2021 20:36:46 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muSDd-000MAl-RV; Tue, 07 Dec 2021 04:36:45 +0000
+Date:   Tue, 7 Dec 2021 12:35:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Leo Li <sunpeng.li@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <Harry.Wentland@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_optc.c:139:6:
+ warning: no previous prototype for 'optc1_set_vupdate_keepout'
+Message-ID: <202112071212.9wkItxOL-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211202144301.GA829000@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2021 23.43, Guenter Roeck wrote:
-> On Tue, Nov 30, 2021 at 05:18:08PM +0100, Sven Peter wrote:
->> Apple SoCs come with a simple embedded watchdog. This watchdog is also
->> required in order to reset the SoC.
->>
->> Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
->> ---
->> v1 --> v2:
->>    - add Mark's and Rob's r-b tags
->>
->>   .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 53 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->> new file mode 100644
->> index 000000000000..e58c56a6fdf6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->> @@ -0,0 +1,52 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple SoC Watchdog
->> +
->> +allOf:
->> +  - $ref: "watchdog.yaml#"
->> +
->> +maintainers:
->> +  - Sven Peter <sven@svenpeter.dev>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,t8103-wdt
->> +          - apple,t6000-wdt
->> +      - const: apple,wdt
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - interrupts
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    wdt: watchdog@50000000 {
->> +        compatible = "apple,t8103-wdt", "apple,wdt";
->> +        reg = <0x50000000 0x4000>;
->> +        clocks = <&clk>;
->> +        interrupts = <AIC_IRQ 123 IRQ_TYPE_LEVEL_HIGH>;
->> +    };
->> +
->> +...
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 360e9aa0205d..859201bbd4e8 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -1750,6 +1750,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
->>   F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
->>   F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
->>   F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
->> +F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->>   F:	arch/arm64/boot/dts/apple/
->>   F:	drivers/i2c/busses/i2c-pasemi-core.c
->>   F:	drivers/i2c/busses/i2c-pasemi-platform.c
->> -- 
->> 2.25.1
->>
-> 
+Hi Leo,
 
-I've gone ahead and applied this patch to the asahi-soc/dt tree, so we 
-can build off of that to add the DT nodes.
+FYI, the error/warning still remains.
 
-Sven, can you spin a v3 with the MAINTAINERS split and just the driver 
-itself, without this patch? I imagine Guenter will want to take the 
-driver itself through the linux-watchdog tree.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+commit: 9df857f930d6035996d481b4e5bc9ce082990afb drm/amd/display: Move vupdate keepout programming from DCN20 to DCN10
+date:   8 months ago
+config: i386-buildonly-randconfig-r002-20211205 (https://download.01.org/0day-ci/archive/20211207/202112071212.9wkItxOL-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9df857f930d6035996d481b4e5bc9ce082990afb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9df857f930d6035996d481b4e5bc9ce082990afb
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_optc.c:139:6: warning: no previous prototype for 'optc1_set_vupdate_keepout' [-Wmissing-prototypes]
+     139 | void optc1_set_vupdate_keepout(struct timing_generator *optc,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_optc.c:879:6: warning: no previous prototype for 'optc1_setup_manual_trigger' [-Wmissing-prototypes]
+     879 | void optc1_setup_manual_trigger(struct timing_generator *optc)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_optc.c:897:6: warning: no previous prototype for 'optc1_program_manual_trigger' [-Wmissing-prototypes]
+     897 | void optc1_program_manual_trigger(struct timing_generator *optc)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/optc1_set_vupdate_keepout +139 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_optc.c
+
+   133	
+   134	/**
+   135	 * Vupdate keepout can be set to a window to block the update lock for that pipe from changing.
+   136	 * Start offset begins with vstartup and goes for x number of clocks,
+   137	 * end offset starts from end of vupdate to x number of clocks.
+   138	 */
+ > 139	void optc1_set_vupdate_keepout(struct timing_generator *optc,
+   140				       struct vupdate_keepout_params *params)
+   141	{
+   142		struct optc *optc1 = DCN10TG_FROM_TG(optc);
+   143	
+   144		REG_SET_3(OTG_VUPDATE_KEEPOUT, 0,
+   145			  MASTER_UPDATE_LOCK_VUPDATE_KEEPOUT_START_OFFSET, params->start_offset,
+   146			  MASTER_UPDATE_LOCK_VUPDATE_KEEPOUT_END_OFFSET, params->end_offset,
+   147			  OTG_MASTER_UPDATE_LOCK_VUPDATE_KEEPOUT_EN, params->enable);
+   148	}
+   149	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

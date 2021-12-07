@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2C746C27E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5189346C1FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbhLGSRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:17:05 -0500
-Received: from mga06.intel.com ([134.134.136.31]:57593 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235897AbhLGSRE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:17:04 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298441030"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="298441030"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:42:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="542885356"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 09:42:10 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mueTh-000Mp3-Ub; Tue, 07 Dec 2021 17:42:09 +0000
-Date:   Wed, 8 Dec 2021 01:41:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390
- ZSTD_decompressSequences() warn: inconsistent indenting
-Message-ID: <202112080125.NkeawIus-lkp@intel.com>
+        id S240134AbhLGRqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240124AbhLGRqF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:46:05 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6569CC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:42:34 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso19054880otr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZyOSLRD+OOns9+yyRtcdOOhQIxKcBFv5MAHI5qU57h8=;
+        b=kI6zf53RuzrPprRdot2VD1lXiadsOrPCq3R7Y+R+e3Hnszjo8W/y248q9/MbDGTWPk
+         FE+3aCmxmwzYPfl64a3shrWHXn/Fw26u5gAnRKHQ1ynkXZdxIIbB7TY92ghtO83wMBRT
+         1f78bu534VolDVq/oibdoEjcIVSptazGW8Tr0VV6v4V+BopvbNe+1G4xhHVnk49xvLoq
+         5mwsi+sbo3tqWnTRx3O2ZgbJ4DGKSXuYSypCiUEGk0VMPTWcu0VLGTikqox/wFySGx8j
+         2LxprfiwiaH9gr61x7XQ3KPc+Xg96xeAXvqZJhpZga1hulxqhvV3Fs9CFm4x3DksOoUS
+         jj5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZyOSLRD+OOns9+yyRtcdOOhQIxKcBFv5MAHI5qU57h8=;
+        b=AHfXCJ0VtlFu/dxiq5MoGUK6e3fJChsVCwMNktRVlpnPUjlN70w+PzoaTITjKDncnH
+         dSpu/lvxrcn5P1KSPP5WRExrCh/aFGzNC/OypJEHIwLJS19VB+0uPQ+hXaLoxNG+e14a
+         44CSV1js0xuKXpeiLtXZ+OlmMSyu15pmtDnzL0mg7hJLtUPOj3ltRUCuX6zooDQRRtMF
+         1PZDElK5KFA+Z712f0bw9H4BTD3UXopDwLvnmEVYc8F7QY4kLSUYRrjNyaHmpBAhSge3
+         3J+CJGqUsbDDHVKDmsg31ao0hCQB8KIph2+4VwnzGxjBLnV1mOfSTj27EbLKLgn3Y25S
+         2Owg==
+X-Gm-Message-State: AOAM533O+/iBWF2s8Rks60bFvuhEW9vOa4fHUURb69GZTa2vdsm9ipXN
+        1bzF6YSOOO468s7lUSsxGJ0VSNa5cOlGzYk9Jz332Q==
+X-Google-Smtp-Source: ABdhPJwfBTn/IIYq01dVF804dzDnEe9hyh//gCAkH89rt4NSjhn675lKQ68LLKYKu00DJJJKgr2dW8Id55pdchBOwHA=
+X-Received: by 2002:a05:6830:601:: with SMTP id w1mr35698440oti.267.1638898953399;
+ Tue, 07 Dec 2021 09:42:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-2-likexu@tencent.com>
+ <CALMp9eTq8H_bJOVKwi_7j3Kum9RvW6o-G3zCLUFco1A1cvNrkQ@mail.gmail.com> <7ca8ffcb-eb45-a47c-f91b-6dbd35ea8893@gmail.com>
+In-Reply-To: <7ca8ffcb-eb45-a47c-f91b-6dbd35ea8893@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 7 Dec 2021 09:42:21 -0800
+Message-ID: <CALMp9eSucAtacT-4pR2Du8b_aHtFeSSLGqsZMMQnOE+XVSgK0g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/pmu: Setup pmc->eventsel for fixed PMCs
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
-date:   4 weeks ago
-config: x86_64-randconfig-m001-20211206 (https://download.01.org/0day-ci/archive/20211208/202112080125.NkeawIus-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+On Mon, Dec 6, 2021 at 10:08 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> On 7/12/2021 3:50 am, Jim Mattson wrote:
+> > On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+> >
+> >> From: Like Xu <likexu@tencent.com>
+> >>
+> >> The current pmc->eventsel for fixed counter is underutilised. The
+> >> pmc->eventsel can be setup for all known available fixed counters
+> >> since we have mapping between fixed pmc index and
+> >> the intel_arch_events array.
+> >>
+> >> Either gp or fixed counter, it will simplify the later checks for
+> >> consistency between eventsel and perf_hw_id.
+> >>
+> >> Signed-off-by: Like Xu <likexu@tencent.com>
+> >> ---
+> >>   arch/x86/kvm/vmx/pmu_intel.c | 16 ++++++++++++++++
+> >>   1 file changed, 16 insertions(+)
+> >>
+> >> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> >> index 1b7456b2177b..b7ab5fd03681 100644
+> >> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> >> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> >> @@ -459,6 +459,21 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu,
+> >> struct msr_data *msr_info)
+> >>          return 1;
+> >>   }
+> >>
+> >> +static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
+> >> +{
+> >> +       size_t size = ARRAY_SIZE(fixed_pmc_events);
+> >> +       struct kvm_pmc *pmc;
+> >> +       u32 event;
+> >> +       int i;
+> >> +
+> >> +       for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
+> >> +               pmc = &pmu->fixed_counters[i];
+> >> +               event = fixed_pmc_events[array_index_nospec(i, size)];
+> >>
+> >
+> > How do we know that i < size? For example, Ice Lake supports 4
+> > fixed counters, but fixed_pmc_events only has three entries.
+>
+> With the help of macro MAX_FIXED_COUNTERS,
+> the fourth or more fixed counter is currently not supported in KVM.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the hint. I see it now.
 
-New smatch warnings:
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390 ZSTD_decompressSequences() warn: inconsistent indenting
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1414 ZSTD_decompressSequencesLong() warn: inconsistent indenting
+> If the user space sets a super set of CPUID supported by KVM,
+> any pmu emulation failure is to be expected, right ?
 
-Old smatch warnings:
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
-arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
-arch/x86/boot/compressed/misc.c:292 parse_elf() warn: ignoring unreachable code.
+Actually, I would expect a misconfigured VM to elicit an error. I
+don't see the advantage of mis-emulating an unsupported configuration.
+But maybe that's just me.
 
-vim +1390 arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c
+> Waiting for more comments from you on this patch set.
 
-  1369	
-  1370	typedef size_t (*ZSTD_decompressSequences_t)(
-  1371	                            ZSTD_DCtx* dctx,
-  1372	                            void* dst, size_t maxDstSize,
-  1373	                            const void* seqStart, size_t seqSize, int nbSeq,
-  1374	                            const ZSTD_longOffset_e isLongOffset,
-  1375	                            const int frame);
-  1376	
-  1377	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG
-  1378	static size_t
-  1379	ZSTD_decompressSequences(ZSTD_DCtx* dctx, void* dst, size_t maxDstSize,
-  1380	                   const void* seqStart, size_t seqSize, int nbSeq,
-  1381	                   const ZSTD_longOffset_e isLongOffset,
-  1382	                   const int frame)
-  1383	{
-  1384	    DEBUGLOG(5, "ZSTD_decompressSequences");
-  1385	#if DYNAMIC_BMI2
-  1386	    if (dctx->bmi2) {
-  1387	        return ZSTD_decompressSequences_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
-  1388	    }
-  1389	#endif
-> 1390	  return ZSTD_decompressSequences_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
-  1391	}
-  1392	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG */
-  1393	
-  1394	
-  1395	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT
-  1396	/* ZSTD_decompressSequencesLong() :
-  1397	 * decompression function triggered when a minimum share of offsets is considered "long",
-  1398	 * aka out of cache.
-  1399	 * note : "long" definition seems overloaded here, sometimes meaning "wider than bitstream register", and sometimes meaning "farther than memory cache distance".
-  1400	 * This function will try to mitigate main memory latency through the use of prefetching */
-  1401	static size_t
-  1402	ZSTD_decompressSequencesLong(ZSTD_DCtx* dctx,
-  1403	                             void* dst, size_t maxDstSize,
-  1404	                             const void* seqStart, size_t seqSize, int nbSeq,
-  1405	                             const ZSTD_longOffset_e isLongOffset,
-  1406	                             const int frame)
-  1407	{
-  1408	    DEBUGLOG(5, "ZSTD_decompressSequencesLong");
-  1409	#if DYNAMIC_BMI2
-  1410	    if (dctx->bmi2) {
-  1411	        return ZSTD_decompressSequencesLong_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
-  1412	    }
-  1413	#endif
-> 1414	  return ZSTD_decompressSequencesLong_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
-  1415	}
-  1416	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT */
-  1417	
-  1418	
-  1419	
+I'll try to get to them this week. Thanks for following up while I was
+on holiday.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >
+> >
+> >> +               pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
+> >> +                       intel_arch_events[event].eventsel;
+> >> +       }
+> >> +}
+> >> +
+> >>
+> >>
+> >>
+> >

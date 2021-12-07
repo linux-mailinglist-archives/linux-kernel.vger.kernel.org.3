@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A2E46BA1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAAA46BA20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235709AbhLGLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:34:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50926 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbhLGLeg (ORCPT
+        id S234406AbhLGLgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229733AbhLGLgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:34:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7C93FCE1A76;
-        Tue,  7 Dec 2021 11:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3DEC341C3;
-        Tue,  7 Dec 2021 11:30:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638876662;
-        bh=8ViOkLWVXQZ42WEHo2tbgKGU6m3J0kq4grEJcN0vqIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VzPVKFLwqAKwAy6m8PUkNI5HtqmPCUTK9HEXbcRZCVfKMDO4PTed7qfVz/nmt4fMQ
-         uGMLIw8mzmDRhfLmF/QCkkOCQRmDhvJB0cF6RVQkUYExHllUYJokMGPdMU2qzyWGAF
-         zxJUxCtO2FElRIJhNRg9GooROgsgWg6oGwHMWHUn19MV78+O8wDSJ+lmx0+TxagJSi
-         g/lbHuIiy+6DbQjrIGIE6/PlkamS5GL/w9OtbMOsxrlONFRP+FC+J5miJSWhYr9SZO
-         yDO5xboWZUMui4tKJ9DIrc6C29Y7UOguZG67qIfF6rrGOgFvgXNidj3af7Z1K7AqiL
-         y8FVIOOONA4iQ==
-Date:   Tue, 7 Dec 2021 12:30:55 +0100
-From:   Robert Richter <rric@kernel.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH 1/2] ghes_edac: refactor memory error location processing
-Message-ID: <Ya9F75xWt/IlwcKC@rric.localdomain>
-References: <20211207031905.61906-2-xueshuai@linux.alibaba.com>
+        Tue, 7 Dec 2021 06:36:31 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECCAC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 03:33:00 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id i5so28864251wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:33:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W+jl/ZL6Ni2iJkvnbGpHwSuKGjkdbemchwt4upixgmM=;
+        b=oFABvotOOBZR4NlvwPo/m+RR0AOH8nY+YolX4mtFCDkCZs0/oq92ZvkuJwPfm3hbUR
+         jwzjo8Cpch8bBsxLIoAr1J6gcqPAy7lY9ECZ7rFK3FebmVtjYy6xRtDCnH86AeQAG/N3
+         8aMH5FEVFP0b4/r4sLis56jXp2xcf30+tjZpxKSdXg2f7jTlg5caMN0uOT2KhR+UHFtN
+         BonfxLRAfDWkOWPJv93cpKg/a5wvEfw/KnyLt/x/BI5pJu06mHn2OG6DWetkchIfJnIY
+         MlvdkLaizGz4Af0eH3sATsBEOJ/OB4ZAtaDYv0V0zO9mPSxon+dDULRveFM6DiVNyAUn
+         MVNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=W+jl/ZL6Ni2iJkvnbGpHwSuKGjkdbemchwt4upixgmM=;
+        b=fsmonLk10YfeTraCzR0WVsY5vR0m8Fj+tlKmEQ7Y743ht3QIrUHanHZoG9S8+6Eguu
+         zflsohXF+ULrhUiylEWm3IGAUKXUfZ9K2F4zlOHH/HiGSW0s45p2BIbD4qvj3NDenmBT
+         X9sNR3KPfJT/+SCTfGKgSkj4LOYN/kZcHS2vX+l0FfcFOE3mJUv3ltOaOZK2DP1g6+mU
+         pPC8WmYAp42I35ArRiQsvSkkW42ip3jzhfqo7x23fBXYc++hUN2E/s/kmjaZ9goLQLzc
+         /wQ/ct9RdLl5XADWwkxYS0dskpiTqnuDo7ENBJUlZPAWlykuE0fJe12GxwGd03NfAGoY
+         ZKGQ==
+X-Gm-Message-State: AOAM53227HqNt3eoTucRtzsmWOEi+SSDGllP4cMFTUx5iBXTVhwTn3kl
+        VTTMHnlzjVnLgzDTML6d69pUerAQ3qo=
+X-Google-Smtp-Source: ABdhPJxKdI0IOTeMzmfX2JPCpnXJdv/oNQKpU3aOxfgjSYVh+B4N5+cSb56zy/ibu8no6F+ePINcnA==
+X-Received: by 2002:adf:c10e:: with SMTP id r14mr49049778wre.558.1638876779441;
+        Tue, 07 Dec 2021 03:32:59 -0800 (PST)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id p13sm2343765wmi.0.2021.12.07.03.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 03:32:59 -0800 (PST)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: rockchip_i2s_tdm.c:undefined reference to `clk_set_parent'
+Date:   Tue, 07 Dec 2021 12:32:52 +0100
+Message-ID: <13326272.At7iLaMNiz@archbook>
+In-Reply-To: <202112070621.TnLPiADU-lkp@intel.com>
+References: <202112070621.TnLPiADU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207031905.61906-2-xueshuai@linux.alibaba.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.21 11:19:04, Shuai Xue wrote:
-> The memory error location processing in ghes_edac_report_mem_error() have
-> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
-> cper_mem_err_type_str() in drivers/firmware/efi/cper.c.
+On Montag, 6. Dezember 2021 23:46:38 CET kernel test robot wrote:
+> [...]
 > 
-> To avoid the duplicated code, this patch introduces the above cper_*() into
-> ghes_edac_report_mem_error().
-
-It is not really duplicate yet, changes are slightly different which
-could trigger problems in some parsers. At least those differences
-should be listed in the patch description. I would rather remove the
-'space' delimiter after the colon and take the ghes version of it as
-logs become harder to read. So ideally there is a unification patch
-before the "duplication" is removed with changes in both files as
-necessary for review and to document the change.
-
+> All errors (new ones prefixed by >>):
 > 
-> The EDAC error log is now properly reporting the error as follows (all
-> Validation Bits are enabled):
+>    mips-linux-ld: sound/soc/jz4740/jz4740-i2s.o: in function `jz4740_i2s_set_sysclk':
+>    jz4740-i2s.c:(.text+0x3ec): undefined reference to `clk_set_parent'
+>    mips-linux-ld: jz4740-i2s.c:(.text+0x44c): undefined reference to `clk_set_parent'
+>    mips-linux-ld: sound/soc/rockchip/rockchip_i2s_tdm.o: in function `rockchip_i2s_tdm_calibrate_mclk.isra.0':
+> >> rockchip_i2s_tdm.c:(.text+0x10d4): undefined reference to `clk_set_parent'
+> >> mips-linux-ld: rockchip_i2s_tdm.c:(.text+0x1180): undefined reference to `clk_set_parent'
 > 
-> [  375.938411] EDAC MC0: 1 CE single-symbol chipkill ECC on unknown memory (node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000 DIMM location: not present. DMI handle: 0x0000 page:0x898b86 offset:0x20 grain:1 syndrome:0x0 - APEI location: node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000 DIMM location: not present. DMI handle: 0x0000 status(0x0000000000000000): reserved)
-> [  375.938416] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
-> [  375.938417] {2}[Hardware Error]: It has been corrected by h/w and requires no further action
-> [  375.938418] {2}[Hardware Error]: event severity: corrected
-> [  375.938419] {2}[Hardware Error]:  Error 0, type: corrected
-> [  375.938420] {2}[Hardware Error]:   section_type: memory error
-> [  375.938421] {2}[Hardware Error]:   error_status: 0x0000000000000000
-> [  375.938422] {2}[Hardware Error]:   physical_address: 0x0000000898b86020
-> [  375.938422] {2}[Hardware Error]:   physical_address_mask: 0x0000000000000000
-> [  375.938426] {2}[Hardware Error]:   node: 0 card: 0 module: 0 rank: 0 bank: 513 bank_group: 2 bank_address: 1 device: 0 row: 4887 column: 1032 bit_position: 0 requestor_id: 0x0000000000000000 responder_id: 0x0000000000000000
-> [  375.938426] {2}[Hardware Error]:   error_type: 4, single-symbol chipkill ECC
-> [  375.938428] {2}[Hardware Error]:   DIMM location: not present. DMI handle: 0x0000
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+According to some previous conversations I've stumbled upon[1],
+this appears to be due to certain MIPS configurations not
+implementing the clock API properly, so they don't provide a
+clk_set_parent despite advertising that they have support for
+clocks.
+
+So my question is: do I need to care about this? This hardware
+will never be used on MIPS, and a lot of other drivers (as seen in
+the errors snippet from the test robot) have the same issue, and
+the problem is most likely not in my driver but in that specific
+configuration's clock API implementation.
 
 
-> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-> index 6ec8edec6329..08eabb2e23f8 100644
-> --- a/drivers/firmware/efi/cper.c
-> +++ b/drivers/firmware/efi/cper.c
-> @@ -211,7 +211,7 @@ const char *cper_mem_err_type_str(unsigned int etype)
->  }
->  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
->  
-> -static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
-> +int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->  {
->  	u32 len, n;
->  
-> @@ -265,7 +265,7 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
->  	return n;
->  }
->  
-> -static int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
-> +int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
->  {
->  	u32 len, n;
->  	const char *bank = NULL, *device = NULL;
+[1]: https://lore.kernel.org/lkml/8a41b718-a6f6-6b7f-1699-18ab619884c3@infradead.org/
 
-Even though the ghes driver cannot be built as module,
-EXPORT_SYMBOL_GPL()s should be added for both.
 
-It would be good to add a note to the description that the
-UEFI_CPER/EDAC_GHES dependency is always solved through
-ACPI_APEI_GHES/ACPI_APEI. But we should make the UEFI_CPER dependency
-explicit for EDAC_GHES in Kconfig anyway.
-
--Robert

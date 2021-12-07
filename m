@@ -2,146 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7381046BF01
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8733646BEFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbhLGPSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:18:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38506 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhLGPSg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234223AbhLGPSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 7 Dec 2021 10:18:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB8FBB80782;
-        Tue,  7 Dec 2021 15:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51959C341C1;
-        Tue,  7 Dec 2021 15:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638890103;
-        bh=xxF6Nm2aBsMxEff2TkdoXeMHocqjOshQ8GbBna8ovUY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qXQflwPi4XW0XAwlgafUg1Sq0TeYe27GgLJm4wNYJUfUK2N6ICN8hq8sD2/ZcRg/v
-         WHTDBsSH4zvlUICZVXLzlbimjg9keWa2yEL4mg85vLh3arSz/H7lL653jE5VjZPX9c
-         7W5gIRRYGy/QHfpjvmR1r9hFYJns7QDIqs/85W3p5JWtCZRci9pYBvdc2IGX7zgTYN
-         hOqzwtIyR1G12qXRAj0DQfU+lioEyDfywNxbqJL5vQVFxDRO3PBy3jfVR1osUdkSN/
-         OnTK/fmIhg5qr8UWZpTisuPccqRnmmiQzDbToQOwtrIPMO70C9/BctFD29orWb+x9g
-         amxcPAh1WLV3A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] iwlwifi: work around reverse dependency on MEI
-Date:   Tue,  7 Dec 2021 16:14:36 +0100
-Message-Id: <20211207151447.3338818-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233696AbhLGPSf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 10:18:35 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE31CC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 07:15:04 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id q25so28413445oiw.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 07:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hYEsDkmgy55LBBuGxMFIWjuhjsIdsYQ2MQLWd9zZFJA=;
+        b=pbSTEPN9vNs2eTDvxkECIOFuhHmgFh06GxwxUJgGN6qbNlXkIFmJYga3cRVf6uZN0C
+         K9U7YNiBon4uxVOyRbV7YxqpFxc45c80lBf1qmVCVYd94/ut2bnIA6r68qCxMoTZsBUL
+         kz26VXVwlVPJkUPyfuy7RNCFY5g0/JuRW3vt+M7K/APpUqK5TIfOlOXXEyJ71z8gf3yy
+         D+naE5Q9+b/Vp9tf+j2QZwh0og6p72mK5laTlHcjVBjZZscgj+IZTaS32xuNLEuEuUgt
+         zyYbYqLE7s6rTbE8hLU7dYPrWsW/1Kj7CTWyrfB5kkL+jp/caxHBvRM+NS0Zy6i156A1
+         yilQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hYEsDkmgy55LBBuGxMFIWjuhjsIdsYQ2MQLWd9zZFJA=;
+        b=TBIXPGT2bspeEi5M3lwFBaVb1OW+dMD7iGeS9UitfwfQABqw0m8TucfzHwUHYS3uw8
+         aVoFtjsbkCfV8Y/wfgc4JjQ3jOLmjY8hIX86JqStjf2F8I47tu2zrV+/hj93VoYBxudK
+         te+7HCDK2szlcXJ0ORooJ76wororY0E/EtyXIHzOuYzM6x0AH8yoZyA6UK4qJ0sdBK7a
+         dPSQFe7xYU7Pg/orOOHH+MEHTG22TEysE1ZdtNJaWZV287VCSBHj3PyXV6na2sCD8uy3
+         DdvL65udqaT4RVCX1/Du6UgjnC6wIxCfYEddbRHfFSEqzYvntOcAGow5VAYnoLs7R3mt
+         kmCg==
+X-Gm-Message-State: AOAM531q2W183rnRRxJE2fwVqbAh6wMPmk4izO8rZTzyDn2SbsFszFhS
+        4TUhJMVCjWSfzPeeZFSivJx8tjEFrKj1o8s8RnF0WA==
+X-Google-Smtp-Source: ABdhPJwDw/sySXKjX8gXRG2Dcsl+1iyX/CEM2kTY4CKsqQ+BujquEoOqFrIjyoT0V8s/6EdwJiDxPuVZ7+FvglzmgRo=
+X-Received: by 2002:a54:4515:: with SMTP id l21mr5695599oil.15.1638890103775;
+ Tue, 07 Dec 2021 07:15:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211207043100.3357474-1-marcorr@google.com> <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
+In-Reply-To: <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Tue, 7 Dec 2021 07:14:52 -0800
+Message-ID: <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Always set kvm_run->if_flag
+To:     Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Dec 7, 2021 at 6:43 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 12/6/21 10:31 PM, Marc Orr wrote:
+> > The kvm_run struct's if_flag is apart of the userspace/kernel API. The
+> > SEV-ES patches failed to set this flag because it's no longer needed by
+> > QEMU (according to the comment in the source code). However, other
+> > hypervisors may make use of this flag. Therefore, set the flag for
+> > guests with encrypted regiesters (i.e., with guest_state_protected set).
+> >
+> > Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
+> > Signed-off-by: Marc Orr <marcorr@google.com>
+> > ---
+> >   arch/x86/include/asm/kvm-x86-ops.h | 1 +
+> >   arch/x86/include/asm/kvm_host.h    | 1 +
+> >   arch/x86/kvm/svm/svm.c             | 8 ++++++++
+> >   arch/x86/kvm/vmx/vmx.c             | 6 ++++++
+> >   arch/x86/kvm/x86.c                 | 9 +--------
+> >   5 files changed, 17 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index cefe1d81e2e8..9e50da3ed01a 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
+> >   KVM_X86_OP(cache_reg)
+> >   KVM_X86_OP(get_rflags)
+> >   KVM_X86_OP(set_rflags)
+> > +KVM_X86_OP(get_if_flag)
+> >   KVM_X86_OP(tlb_flush_all)
+> >   KVM_X86_OP(tlb_flush_current)
+> >   KVM_X86_OP_NULL(tlb_remote_flush)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 860ed500580c..a7f868ff23e7 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1349,6 +1349,7 @@ struct kvm_x86_ops {
+> >       void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
+> >       unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
+> >       void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
+> > +     bool (*get_if_flag)(struct kvm_vcpu *vcpu);
+> >
+> >       void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
+> >       void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index d0f68d11ec70..91608f8c0cde 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -1585,6 +1585,13 @@ static void svm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
+> >       to_svm(vcpu)->vmcb->save.rflags = rflags;
+> >   }
+> >
+> > +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
+> > +{
+> > +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
+> > +
+> > +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
+>
+> I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
+> the better thing would be:
+>
+>         return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
+>                                        : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
+>
+> (Since this function returns a bool, I don't think you need the !!)
 
-If the iwlmei code is a loadable module, the main iwlwifi driver
-cannot be built-in:
+I had the same reservations when writing the patch. (Why fix what's
+not broken.) The reason I wrote the patch this way is based on what I
+read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
+Value of the RFLAGS.IF bit for the guest."
 
-x86_64-linux-ld: drivers/net/wireless/intel/iwlwifi/pcie/trans.o: in function `iwl_pcie_prepare_card_hw':
-trans.c:(.text+0x4158): undefined reference to `iwl_mei_is_connected'
+Also, I had _thought_ that `svm_interrupt_allowed()` -- the
+AMD-specific function used to populate `ready_for_interrupt_injection`
+-- was relying on `GUEST_INTERRUPT_MASK`. But now I'm reading the code
+again, and I realized I was overly focused on the SEV-ES handling.
+That code is actually extracting the IF bit from the RFLAGS register
+in the same way you've proposed here.
 
-Unfortunately, Kconfig enforces the opposite, forcing the MEI driver to
-not be built-in if iwlwifi is a module.
+Changing the patch as you've suggested SGTM. I can send out a v2. I'll
+wait a day or two to see if there are any other comments first. I
+guess the alternative would be to change `svm_interrupt_blocked()` to
+solely use the `SVM_GUEST_INTERRUPT_MASK`. If we were confident that
+it was sufficient, it would be a nice little cleanup. But regardless,
+I think we should keep the code introduced by this patch consistent
+with `svm_interrupt_blocked()`.
 
-To work around this, decouple iwlmei from iwlwifi and add the
-dependency in the other direction.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/wireless/intel/iwlwifi/Kconfig | 52 +++++++++++-----------
- 1 file changed, 26 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
-index cf1125d84929..c21c0c68849a 100644
---- a/drivers/net/wireless/intel/iwlwifi/Kconfig
-+++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
-@@ -2,6 +2,7 @@
- config IWLWIFI
- 	tristate "Intel Wireless WiFi Next Gen AGN - Wireless-N/Advanced-N/Ultimate-N (iwlwifi) "
- 	depends on PCI && HAS_IOMEM && CFG80211
-+	depends on IWLMEI || !IWLMEI
- 	select FW_LOADER
- 	help
- 	  Select to build the driver supporting the:
-@@ -92,32 +93,6 @@ config IWLWIFI_BCAST_FILTERING
- 	  If unsure, don't enable this option, as some programs might
- 	  expect incoming broadcasts for their normal operations.
- 
--config IWLMEI
--	tristate "Intel Management Engine communication over WLAN"
--	depends on INTEL_MEI
--	depends on PM
--	depends on IWLMVM
--	help
--	  Enables the iwlmei kernel module.
--
--	  CSME stands for Converged Security and Management Engine. It is a CPU
--	  on the chipset and runs a dedicated firmware. AMT (Active Management
--	  Technology) is one of the applications that run on that CPU. AMT
--	  allows to control the platform remotely.
--
--	  This kernel module allows to communicate with the Intel Management
--	  Engine over Wifi. This is supported starting from Tiger Lake
--	  platforms and has been tested on 9260 devices only.
--	  If AMT is configured not to use the wireless device, this module is
--	  harmless (and useless).
--	  Enabling this option on a platform that has a different device and
--	  has Wireless enabled on AMT can prevent WiFi from working correctly.
--
--	  For more information see
--	  <https://software.intel.com/en-us/manageability/>
--
--	  If unsure, say N.
--
- menu "Debugging Options"
- 
- config IWLWIFI_DEBUG
-@@ -172,3 +147,28 @@ config IWLWIFI_DEVICE_TRACING
- endmenu
- 
- endif
-+
-+config IWLMEI
-+	tristate "Intel Management Engine communication over WLAN"
-+	depends on INTEL_MEI
-+	depends on PM
-+	help
-+	  Enables the iwlmei kernel module.
-+
-+	  CSME stands for Converged Security and Management Engine. It is a CPU
-+	  on the chipset and runs a dedicated firmware. AMT (Active Management
-+	  Technology) is one of the applications that run on that CPU. AMT
-+	  allows to control the platform remotely.
-+
-+	  This kernel module allows to communicate with the Intel Management
-+	  Engine over Wifi. This is supported starting from Tiger Lake
-+	  platforms and has been tested on 9260 devices only.
-+	  If AMT is configured not to use the wireless device, this module is
-+	  harmless (and useless).
-+	  Enabling this option on a platform that has a different device and
-+	  has Wireless enabled on AMT can prevent WiFi from working correctly.
-+
-+	  For more information see
-+	  <https://software.intel.com/en-us/manageability/>
-+
-+	  If unsure, say N.
--- 
-2.29.2
-
+Also, noted on the `!!` not being needed when returning from a bool
+function. I'll keep this in mind in the future. Thanks!

@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C82346B658
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B66446B656
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbhLGIul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:50:41 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:42098 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbhLGIul (ORCPT
+        id S233247AbhLGIuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:50:32 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32884 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhLGIub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:50:41 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B78l2Ht097708;
-        Tue, 7 Dec 2021 02:47:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638866822;
-        bh=6U5vHZpzFUTQY97WBAPBTkMZI0yqRKpWkl7E9wlXO/M=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ynyT97hU+3wPsxMo4lkzv8f985S3a6oUyC+lrW8ZSUWISZ+HnDpS2LRPgXZMno1u8
-         cWTMOLrw6wnAnSyRDWMGsvf88pv19VC8+EgK+JNQFT7cpj9yi+bB1C+wCksroHIuIO
-         VsGID54ftOEljjCRDu2Mkhg+yXj2LRzjpM44FyDM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B78l11o023229
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Dec 2021 02:47:02 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 7
- Dec 2021 02:47:01 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 7 Dec 2021 02:47:01 -0600
-Received: from [172.24.145.75] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B78kwUh112592;
-        Tue, 7 Dec 2021 02:46:59 -0600
-Subject: Re: [PATCH] arm64: dts: ti: iot2050: Disable mcasp nodes at dtsi
- level
-To:     <jan.kiszka@siemens.com>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211117053806.10095-1-j-choudhary@ti.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-Message-ID: <d8a0c212-2275-c87f-21b5-e0cd64b4e2ea@ti.com>
-Date:   Tue, 7 Dec 2021 14:16:58 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 7 Dec 2021 03:50:31 -0500
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J7YnN5wX1zcbr5;
+        Tue,  7 Dec 2021 16:46:48 +0800 (CST)
+Received: from [127.0.0.1] (10.67.102.125) by dggeme758-chm.china.huawei.com
+ (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Tue, 7
+ Dec 2021 16:47:00 +0800
+Message-ID: <61AF1F83.6010707@hisilicon.com>
+Date:   Tue, 7 Dec 2021 16:46:59 +0800
+From:   Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-In-Reply-To: <20211117053806.10095-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>, <linuxarm@huawei.com>,
+        <mauro.chehab@huawei.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/5] arm64: dts: HiSilicon: Add support for HiKey 970
+ PCIe controller hardware
+References: <cover.1637063775.git.mchehab+huawei@kernel.org>    <884b83c1aed70735883e15f032f9668ebfd77a01.1637063775.git.mchehab+huawei@kernel.org>     <61AF16AC.1080506@hisilicon.com> <20211207093926.24f26dae@coco.lan>
+In-Reply-To: <20211207093926.24f26dae@coco.lan>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Originating-IP: [10.67.102.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
-Could you please ACK this patch if you are okay with the changes?
+Hi Mauro,
 
-On 17/11/21 11:08 am, Jayesh Choudhary wrote:
-> Disable mcasp nodes 0-2 because several required properties
-> are not present in the dtsi file as they are board specific.
-> These nodes can be enabled via an overlay whenever required.
+On 2021/12/7 16:39, Mauro Carvalho Chehab wrote:
+> Em Tue, 7 Dec 2021 16:09:16 +0800
+> Wei Xu <xuwei5@hisilicon.com> escreveu:
 > 
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+>> Hi Mauro,
+>>
+>> On 2021/11/16 19:59, Mauro Carvalho Chehab wrote:
+>>> From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>>
+>>> Add DTS bindings for the HiKey 970 board's PCIe hardware.
+>>>
+>>> Co-developed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+>>> ---
+>>>
+>>> To mailbombing on a large number of people, only mailing lists were C/C on the cover.
+>>> See [PATCH 0/5] at: https://lore.kernel.org/all/cover.1637063775.git.mchehab+huawei@kernel.org/
+>>>
+>>>  arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 107 ++++++++++++++++++++++
+>>>  1 file changed, 107 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+>>> index 636c8817df7e..225dccbcb064 100644
+>>> --- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+>>> +++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+>>> @@ -176,6 +176,12 @@ sctrl: sctrl@fff0a000 {
+>>>  			#clock-cells = <1>;
+>>>  		};
+>>>  
+>>> +		pmctrl: pmctrl@fff31000 {
+>>> +			compatible = "hisilicon,hi3670-pmctrl", "syscon";  
+>>
+>> The "hi3670-pmctrl" is not documented in the devicetree binding documents yet.
+>> Could we remove this part this time?
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-> index 65da226847f4..c9407ed67866 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-> @@ -731,3 +731,15 @@
->   &icssg2_mdio {
->   	status = "disabled";
->   };
-> +
-> +&mcasp0 {
-> +	status = "disabled";
-> +};
-> +
-> +&mcasp1 {
-> +	status = "disabled";
-> +};
-> +
-> +&mcasp2 {
-> +	status = "disabled";
-> +};
+> Without that, the PCI PHY won't work.
 > 
+> IMO, the best would be to just add this compatible to hi3670-clock,
+> where it belongs.
+> 
+> Just sent a patch.
+
+Got it.
+Thanks!
+
+Best Regards,
+Wei
+
+> 
+> Regards,
+> Mauro
+> 
+> .
+> 
+

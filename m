@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183C846BF42
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4169346BF4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbhLGPa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:30:29 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35496 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbhLGPa2 (ORCPT
+        id S238722AbhLGPdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:33:02 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44582 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238634AbhLGPdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:30:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 7 Dec 2021 10:33:01 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5001E1FDFE;
+        Tue,  7 Dec 2021 15:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638890970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qPce+P64BVI4ZDW0Ye0BHkwVzrW0PZ4iqeaPwRwX998=;
+        b=rJLhMAJ7xdJl7yL7oTpBNRwkd7XrNy/xfugYKFelg9NmK5tcvuj+Y6unmVjag/030Xcc+C
+        aZBjLUXpjSjAQQblvH8WwJrBurIM3RKCxZOFAA/DpmzWCA4wKPkUYWbo85eHMzttrNY0Mw
+        QyQM754+/w6fabTyz9uIrH3VvzEs8R4=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 22F34CE1B60;
-        Tue,  7 Dec 2021 15:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD79C341C3;
-        Tue,  7 Dec 2021 15:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638890815;
-        bh=5D5Q1AmvtXjWARlnC0jaAsPw2A+t4G1gyWjnvNJtxBQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J5F72trxI0G/4O47+6LGt08h/XTE0C2/8PRM5IIGBvAiWmqqS+LdMeZ10Gmir4Alx
-         nfVH0xG7gXOp5rHKmhXy7bzw6BmUXuCUhZ0fer723w4xi6BWXJ3Kzb0AeVTyu68yvO
-         GRGYxMKGocZVch/NS1suDljy9j1pPmEkXIeDszeH7zAkR1QVORxgmYvHDqfDAJUptQ
-         vPLKT2v3p7awUVyUzC/DpqNMDRtoOWV3BnStusTWhqSvqTKMAl3bvnizI1eNmCWVb1
-         u2oIJMGPWda+I0ayBkY3D8xcq1H/wjbmlvBaNUjbijbki+4Z4zCiepHskkmnyKkPgd
-         iL3XMkcpIEWMg==
-Date:   Tue, 7 Dec 2021 07:26:52 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Colin Foster <colin.foster@in-advantage.com>,
+        by relay2.suse.de (Postfix) with ESMTPS id 1FEBDA3B87;
+        Tue,  7 Dec 2021 15:29:30 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 16:29:29 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v4 net-next 5/5] net: mscc: ocelot: expose ocelot wm
- functions
-Message-ID: <20211207072652.36827870@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211207121121.baoi23nxiitfshdk@skbuf>
-References: <20211204182858.1052710-1-colin.foster@in-advantage.com>
-        <20211204182858.1052710-6-colin.foster@in-advantage.com>
-        <20211206180922.1efe4e51@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <Ya9KJAYEypSs6+dO@shell.armlinux.org.uk>
-        <20211207121121.baoi23nxiitfshdk@skbuf>
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+References: <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+ <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
+ <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
+ <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
+ <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 12:11:22 +0000 Vladimir Oltean wrote:
-> On Tue, Dec 07, 2021 at 11:48:52AM +0000, Russell King (Oracle) wrote:
-> > Thank you for highlighting this.
+On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
+> On 07.12.21 14:23, Michal Hocko wrote:
+> > On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
+> > [...]
+> >> But maybe I am missing something important regarding online vs. offline
+> >> nodes that your patch changes?
 > > 
-> > Vladimir told me recently over the phylink get_interfaces vs get_caps
-> > change for DSA, and I quote:
+> > I am relying on alloc_node_data setting the node online. But if we are
+> > to change the call to arch_alloc_node_data then the patch needs to be
+> > more involved. Here is what I have right now. If this happens to be the
+> > right way then there is some additional work to sync up with the hotplug
+> > code.
 > > 
-> >   David who applied your patch can correct me, but my understanding from
-> >   the little time I've spent on netdev is that dead code isn't a candidate
-> >   for getting accepted into the tree, even more so in the last few days
-> >   before the merge window, from where it got into v5.16-rc1.
-> >   ...
-> >   So yes, I take issue with that as a matter of principle, I very much
-> >   expect that a kernel developer of your experience does not set a
-> >   precedent and a pretext for people who submit various shady stuff to the
-> >   kernel just to make their downstream life easier.
-> > 
-> > This sounds very much like double-standards, especially as Vladimir
-> > reviewed this.
-> > 
-> > I'm not going to be spiteful NAK these patches, because we all need to
-> > get along with each other. I realise that it is sometimes useful to get
-> > code merged that facilitates or aids further development - provided
-> > that development is submitted in a timely manner.  
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index c5952749ad40..a296e934ad2f 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> >  	/* Initialise every node */
+> >  	mminit_verify_pageflags_layout();
+> >  	setup_nr_node_ids();
+> > -	for_each_online_node(nid) {
+> > -		pg_data_t *pgdat = NODE_DATA(nid);
+> > +	for_each_node(nid) {
+> > +		pg_data_t *pgdat;
+> > +
+> > +		if (!node_online(nid)) {
+> > +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
+> > +			pgdat = arch_alloc_nodedata(nid);
+> > +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
+> > +			arch_refresh_nodedata(nid, pgdat);
+> > +			node_set_online(nid);
 > 
-> I'm not taking this as a spiteful comment either, it is a very fair point.
-> Colin had previously submitted this as part of a 23-patch series and it
-> was me who suggested that this change could go in as part of preparation
-> work right away:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20211116062328.1949151-1-colin.foster@in-advantage.com/#24596529
-> I didn't realize that in doing so with this particular change, we would
-> end up having some symbols exported by the ocelot switch lib that aren't
-> yet in use by other drivers. So yes, this would have to go in at the
-> same time as the driver submission itself.
+> Setting all possible nodes online might result in quite some QE noice,
+> because all these nodes will then be visible in the sysfs and
+> try_offline_nodes() is essentially for the trash.
 
-I don't know the dependencies here (there are also pinctrl patches 
-in the linked series) so I'll defer to you, if there is a reason to
-merge the unused symbols it needs to be spelled out, otherwise let's
-drop the last patch for now.
+I am not sure I follow. I believe sysfs will not get populate because I
+do not call register_one_node.
+
+You are right that try_offline_nodes will be reduce which is good imho.
+More changes will be possible (hopefully to drop some ugly code) on top
+of this change (or any other that achieves that there are no NULL pgdat
+for possible nodes).
+ 
+> I agree to prealloc the pgdat, I don't think we should actually set the
+> nodes online. Node onlining/offlining should be done when we do have
+> actual CPUs/memory populated.
+
+If we keep the offline/online node state notion we are not solving an
+important aspect of the problem - confusing api.
+
+Node states do not really correspond to logical states and that makes
+it really hard to wrap head around. I think we should completely drop
+for_each_online_node because that just doesn't mean anything without
+synchronization with hotplug. People who really need to iterate over all
+numa nodes should be using for_each_node and do not expect any surprises
+that the node doesn't exist. It is much more easier to think in scope of
+completely depleted numa node (and get ENOMEM when strictly requiring
+local node resources - e.g. via __GFP_THISNODE) than some special node
+without any memory that need a special treatment.
+-- 
+Michal Hocko
+SUSE Labs

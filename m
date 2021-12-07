@@ -2,122 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C960B46BE0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7091C46BE10
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbhLGOs2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 09:48:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:15512 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231565AbhLGOs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:48:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="235100439"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="235100439"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:44:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="462312784"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2021 06:44:56 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 06:44:56 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 06:44:55 -0800
-Received: from fmsmsx612.amr.corp.intel.com ([10.18.126.92]) by
- fmsmsx612.amr.corp.intel.com ([10.18.126.92]) with mapi id 15.01.2308.020;
- Tue, 7 Dec 2021 06:44:55 -0800
-From:   "Saleem, Shiraz" <shiraz.saleem@intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     "Ismail, Mustafa" <mustafa.ismail@intel.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: RE: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
- 'irdma_prm_add_pble_mem()'
-Thread-Topic: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
- 'irdma_prm_add_pble_mem()'
-Thread-Index: AQHX6bCNMQeR51AEWEqSWwxcHSAfJ6wni3UA//+RAfA=
-Date:   Tue, 7 Dec 2021 14:44:55 +0000
-Message-ID: <0500c21d9d814715956e3275afd4f116@intel.com>
-References: <5e670b640508e14b1869c3e8e4fb970d78cbe997.1638692171.git.christophe.jaillet@wanadoo.fr>
- <20211207131428.GF1956@kadam>
-In-Reply-To: <20211207131428.GF1956@kadam>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S238181AbhLGOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233017AbhLGOtx (ORCPT
+        <rfc822;Linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:49:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9F3C061574;
+        Tue,  7 Dec 2021 06:46:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2320B817EC;
+        Tue,  7 Dec 2021 14:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EFE3C341C1;
+        Tue,  7 Dec 2021 14:46:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638888380;
+        bh=pfArM1v5io2RBwvYl7LkFtO30J/30U4dBAaivmhs8MI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BFNrh2QyRskrXqJa/AobAHcRhXVD3LtpLbbwTdsMWzpZLc4iMWN86sdMhKtjUXW1d
+         cUHxU9xFaAquoXTE44qZQhedX1QZJ0Pq9boDu2QwH7RRb5vRGczRT7Xzu41gISw2Iv
+         3m46BJwoz9fwDEsUJ8Is97ZXeyXhN6nP3+JxrYGS+BepOM2zbCOZ3xB7bnYmwm6Doq
+         7XK7A5zVMV2dIK551wyebkN353sIDa08wjXKr41so2DNsZz4n72x6sOEnN4ezfJVPr
+         JEu/rXubnkl5n5a0Eqk8tTtQ8pX5/gNdECuNbE0GaHMwq0B1DTDaUTttqfj6G73SSi
+         0t4GTp6RiBqvQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 45D05406C1; Tue,  7 Dec 2021 11:46:17 -0300 (-03)
+Date:   Tue, 7 Dec 2021 11:46:17 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jin Yao <yao.jin@linux.intel.com>
+Cc:     jolsa@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@linux.intel.com, Linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@intel.com, yao.jin@intel.com
+Subject: Re: [PATCH] perf stat: Support --cputype option for hybrid events
+Message-ID: <Ya9zufZb+1zRl+Cj@kernel.org>
+References: <20210909062215.10278-1-yao.jin@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210909062215.10278-1-yao.jin@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH] RDMA/irdma: Fix a potential memory allocation issue in
-> 'irdma_prm_add_pble_mem()'
-> 
-> On Sun, Dec 05, 2021 at 09:17:24AM +0100, Christophe JAILLET wrote:
-> > @@ -299,8 +298,7 @@ add_pble_prm(struct irdma_hmc_pble_rsrc *pble_rsrc)
-> >  	return 0;
-> >
-> >  error:
-> > -	if (chunk->bitmapbuf)
-> > -		kfree(chunk->bitmapmem.va);
-> > +	bitmap_free(chunk->bitmapbuf);
-> >  	kfree(chunk->chunkmem.va);
-> 
-> Thanks for removing the "chunk->bitmapbuf = chunk->bitmapmem.va;" stuff.
-> It was really confusing.  The kfree(chunk->chunkmem.va) is equivalent to
-> kfree(chunk).  A good rule of thumb is that when you have one error:
-> label to free everything then it's normally going to be buggy.
-> 
-> drivers/infiniband/hw/irdma/pble.c
->    281          pble_rsrc->next_fpm_addr += chunk->size;
->    282          ibdev_dbg(to_ibdev(dev),
->    283                    "PBLE: next_fpm_addr = %llx chunk_size[%llu] = 0x%llx\n",
->    284                    pble_rsrc->next_fpm_addr, chunk->size, chunk->size);
->    285          pble_rsrc->unallocated_pble -= (u32)(chunk->size >> 3);
->    286          list_add(&chunk->list, &pble_rsrc->pinfo.clist);
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> "chunk" added to the "->pinfo.clist" list.
-> 
->    287          sd_reg_val = (sd_entry_type == IRDMA_SD_TYPE_PAGED) ?
->    288                               sd_entry->u.pd_table.pd_page_addr.pa :
->    289                               sd_entry->u.bp.addr.pa;
->    290
->    291          if (!sd_entry->valid) {
->    292                  ret_code = irdma_hmc_sd_one(dev, hmc_info->hmc_fn_id,
-> sd_reg_val,
->    293                                              idx->sd_idx, sd_entry->entry_type, true);
->    294                  if (ret_code)
->    295                          goto error;
->                                 ^^^^^^^^^^^
-> 
->    296          }
->    297
->    298          sd_entry->valid = true;
->    299          return 0;
->    300
->    301  error:
->    302          if (chunk->bitmapbuf)
->    303                  kfree(chunk->bitmapmem.va);
->    304          kfree(chunk->chunkmem.va);
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-> kfree(chunk) will lead to a use after free because it's still on the list.
-> 
+Em Thu, Sep 09, 2021 at 02:22:15PM +0800, Jin Yao escreveu:
+> In previous patch, we have supported the syntax which enables
+> the event on a specified pmu, such as:
 
-Ugh! Yes, this is a bug. I will send a separate fix out shortly for this one.
+Fell thru the cracks :-\
 
-Shiraz
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> cpu_core/<event>/
+> cpu_atom/<event>/
+> 
+> While this syntax is not very easy for applying on a set of
+> events or applying on a group. In following example, we have to
+> explicitly assign the pmu prefix.
+> 
+>   # ./perf stat -e '{cpu_core/cycles/,cpu_core/instructions/}' -- sleep 1
+> 
+>    Performance counter stats for 'sleep 1':
+> 
+>            1,158,545      cpu_core/cycles/
+>            1,003,113      cpu_core/instructions/
+> 
+>          1.002428712 seconds time elapsed
+> 
+> A much easier way is:
+> 
+>   # ./perf stat --cputype core -e '{cycles,instructions}' -- sleep 1
+> 
+>    Performance counter stats for 'sleep 1':
+> 
+>            1,101,071      cpu_core/cycles/
+>              939,892      cpu_core/instructions/
+> 
+>          1.002363142 seconds time elapsed
+> 
+> For this example, the '--cputype' enables the events from specified
+> pmu (cpu_core).
+> 
+> If '--cputype' conflicts with pmu prefix, '--cputype' is ignored.
+> 
+>   # ./perf stat --cputype core -e cycles,cpu_atom/instructions/ -a -- sleep 1
+> 
+>    Performance counter stats for 'system wide':
+> 
+>           21,003,407      cpu_core/cycles/
+>              367,886      cpu_atom/instructions/
+> 
+>          1.002203520 seconds time elapsed
+> 
+> Signed-off-by: Jin Yao <yao.jin@linux.intel.com>
+> ---
+>  tools/perf/Documentation/perf-stat.txt |  4 ++++
+>  tools/perf/builtin-stat.c              | 24 ++++++++++++++++++++++++
+>  tools/perf/util/evlist.h               |  1 +
+>  tools/perf/util/parse-events-hybrid.c  |  9 ++++++---
+>  4 files changed, 35 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+> index 4c9310be6acc..33da737161a6 100644
+> --- a/tools/perf/Documentation/perf-stat.txt
+> +++ b/tools/perf/Documentation/perf-stat.txt
+> @@ -493,6 +493,10 @@ This option can be enabled in perf config by setting the variable
+>  
+>  $ perf config stat.no-csv-summary=true
+>  
+> +--cputype::
+> +Only enable events on applying cpu with this type for hybrid platform
+> +(e.g. core or atom)"
+> +
+>  EXAMPLES
+>  --------
+>  
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index f6e87b7be5fa..752e2bf1029f 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -1168,6 +1168,26 @@ static int parse_stat_cgroups(const struct option *opt,
+>  	return parse_cgroups(opt, str, unset);
+>  }
+>  
+> +static int parse_hybrid_type(const struct option *opt,
+> +			     const char *str,
+> +			     int unset __maybe_unused)
+> +{
+> +	struct evlist *evlist = *(struct evlist **)opt->value;
+> +
+> +	if (!list_empty(&evlist->core.entries)) {
+> +		fprintf(stderr, "Must define cputype before events/metrics\n");
+> +		return -1;
+> +	}
+> +
+> +	evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+> +	if (!evlist->hybrid_pmu_name) {
+> +		fprintf(stderr, "--cputype %s is not supported!\n", str);
+> +		return -1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static struct option stat_options[] = {
+>  	OPT_BOOLEAN('T', "transaction", &transaction_run,
+>  		    "hardware transaction statistics"),
+> @@ -1282,6 +1302,10 @@ static struct option stat_options[] = {
+>  		       "don't print 'summary' for CSV summary output"),
+>  	OPT_BOOLEAN(0, "quiet", &stat_config.quiet,
+>  			"don't print output (useful with record)"),
+> +	OPT_CALLBACK(0, "cputype", &evsel_list, "hybrid cpu type",
+> +		     "Only enable events on applying cpu with this type "
+> +		     "for hybrid platform (e.g. core or atom)",
+> +		     parse_hybrid_type),
+>  #ifdef HAVE_LIBPFM
+>  	OPT_CALLBACK(0, "pfm-events", &evsel_list, "event",
+>  		"libpfm4 event selector. use 'perf list' to list available events",
+> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+> index 97bfb8d0be4f..7af5b247e319 100644
+> --- a/tools/perf/util/evlist.h
+> +++ b/tools/perf/util/evlist.h
+> @@ -64,6 +64,7 @@ struct evlist {
+>  	struct evsel *selected;
+>  	struct events_stats stats;
+>  	struct perf_env	*env;
+> +	const char *hybrid_pmu_name;
+>  	void (*trace_event_sample_raw)(struct evlist *evlist,
+>  				       union perf_event *event,
+>  				       struct perf_sample *sample);
+> diff --git a/tools/perf/util/parse-events-hybrid.c b/tools/perf/util/parse-events-hybrid.c
+> index 10160ab126f9..3875a8d086e4 100644
+> --- a/tools/perf/util/parse-events-hybrid.c
+> +++ b/tools/perf/util/parse-events-hybrid.c
+> @@ -62,10 +62,13 @@ static int create_event_hybrid(__u32 config_type, int *idx,
+>  static int pmu_cmp(struct parse_events_state *parse_state,
+>  		   struct perf_pmu *pmu)
+>  {
+> -	if (!parse_state->hybrid_pmu_name)
+> -		return 0;
+> +	if (parse_state->evlist && parse_state->evlist->hybrid_pmu_name)
+> +		return strcmp(parse_state->evlist->hybrid_pmu_name, pmu->name);
+> +
+> +	if (parse_state->hybrid_pmu_name)
+> +		return strcmp(parse_state->hybrid_pmu_name, pmu->name);
+>  
+> -	return strcmp(parse_state->hybrid_pmu_name, pmu->name);
+> +	return 0;
+>  }
+>  
+>  static int add_hw_hybrid(struct parse_events_state *parse_state,
+> -- 
+> 2.17.1
+
+-- 
+
+- Arnaldo

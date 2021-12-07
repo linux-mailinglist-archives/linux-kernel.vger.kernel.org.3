@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 458B846C34D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE3146C351
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbhLGTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:07:45 -0500
-Received: from mga04.intel.com ([192.55.52.120]:21548 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231668AbhLGTHo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:07:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="236401837"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="236401837"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:04:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="502722806"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2021 11:04:11 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mufl5-000Msp-1J; Tue, 07 Dec 2021 19:04:11 +0000
-Date:   Wed, 8 Dec 2021 03:03:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202112080347.ZNyya0DH-lkp@intel.com>
+        id S240849AbhLGTJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:09:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46586 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240833AbhLGTJf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 14:09:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50F2DB81E49;
+        Tue,  7 Dec 2021 19:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367DCC341C1;
+        Tue,  7 Dec 2021 19:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638903962;
+        bh=oVDed5jqXZIErqKCATeNwJIZ2ezcymyVXAhxeiC8gvs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B6PWEc8/0wqLtrVEyCGg5gxEF5BehZ3Ey5MJAXg2nMCM4r5pbnreIjUV3RXwcGJ4U
+         qawGNBPR95iM4oZG9VVVgE6r6u6ZZx2zI9LC6SB9HRIXaAGzq0p/gZW8ZiuOgexjvX
+         KQR7j9fJizJsWN9ZDd8f0rZI7i+6OherDTFuNLvfE5kHaUpaEd5x96PyWxAnVr3F31
+         kXZVowPDxVDYGzAEQr4vne6/p1lZ5qhhK3a8rPSAeNOwu8wr3+0XBtAx9r0dURuBgW
+         f4fmkR/e6Ey5DH0q55z9os6kIA71RcQDRve+Nnax5L1chhnqdFVb0ewFcRWmH08eCf
+         lc+YiHKdWHStg==
+Date:   Tue, 7 Dec 2021 12:05:57 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?iso-8859-1?Q?Ren=E9?= Moll <Rene.Moll@xsens.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
+Message-ID: <Ya+wlfX7ZPb95mZ4@archlinux-ax161>
+References: <20211204220249.591482-1-arnd@kernel.org>
+ <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
-commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
-date:   7 weeks ago
-config: arm-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080347.ZNyya0DH-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, Dec 07, 2021 at 10:41:24AM -0800, Nick Desaulniers wrote:
+> On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > clang-14 does not like the way this driver converts a 'long double'
+> > to an integer when the target architecture disables floating point
+> > support:
+> >
+> > drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+> >         data->wde_interval = 300L * 1E6L;
+> >                                   ^
+> >
+> > Turn this into pure integer math and make it more readable at the
+> > same time using the NSEC_PER_MSEC macro instead.
+> >
+> > Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Thanks for the patch! The change in clang-14 (ToT) that triggered this
+> has had another patch on top reverting these diagnostics.
+> https://reviews.llvm.org/D114162
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I can still reproduce this failure on current ToT (33e3554ea33d) on
+x86_64 allmodconfig; it seems like that patch only fixes it for 32-bit
+x86.
 
+> That said, this change is still worthwhile for the improved semantics, IMO.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
-   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
+My patch appears to be accepted in Sebastian's branch already, it seems
+like it just needs to be sent to Linus (it also looks like that branch
+doesn't flow into -next, it probably should):
 
-vim +210 arch/arm/mach-ep93xx/clock.c
+https://git.kernel.org/sre/linux-power-supply/c/644106cdb89844be2496b21175b7c0c2e0fab381
 
-   205	
-   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
-   207					struct clk_rate_request *req)
-   208	{
-   209		unsigned long rate = req->rate;
- > 210		struct clk *best_parent = 0;
-   211		unsigned long __parent_rate;
-   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
-   213		unsigned long best_parent_rate;
-   214		int __div = 0, __pdiv = 0;
-   215		int i;
-   216	
-   217		/*
-   218		 * Try the two pll's and the external clock
-   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
-   220		 * all the clocks by 2 to avoid floating point math.
-   221		 *
-   222		 * This is based on the algorithm in the ep93xx raster guide:
-   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
-   224		 *
-   225		 */
-   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
-   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
-   228	
-   229			__parent_rate = clk_get_rate(parent);
-   230			mclk_rate = __parent_rate * 2;
-   231	
-   232			/* Try each predivider value */
-   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
-   234				__div = mclk_rate / (rate * __pdiv);
-   235				if (__div < 2 || __div > 127)
-   236					continue;
-   237	
-   238				actual_rate = mclk_rate / (__pdiv * __div);
-   239				if (is_best(rate, actual_rate, best_rate)) {
-   240					best_rate = actual_rate;
-   241					best_parent_rate = __parent_rate;
-   242					best_parent = parent;
-   243				}
-   244			}
-   245		}
-   246	
-   247		if (!best_parent)
-   248			return -EINVAL;
-   249	
-   250		req->best_parent_rate = best_parent_rate;
-   251		req->best_parent_hw = __clk_get_hw(best_parent);
-   252		req->rate = best_rate;
-   253	
-   254		return 0;
-   255	}
-   256	
+Cheers,
+Nathan
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > ---
+> >  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+> > index fbb344353fe4..9fc88a9f244c 100644
+> > --- a/drivers/power/reset/ltc2952-poweroff.c
+> > +++ b/drivers/power/reset/ltc2952-poweroff.c
+> > @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+> >
+> >  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+> >  {
+> > -       data->wde_interval = 300L * 1E6L;
+> > -       data->trigger_delay = ktime_set(2, 500L*1E6L);
+> > +       data->wde_interval = 300 * NSEC_PER_MSEC;
+> > +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+> >
+> >         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> >         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+> > --
+> > 2.29.2
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers

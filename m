@@ -2,174 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5086946B9C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD86946B9D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbhLGLJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:09:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20944 "EHLO
+        id S235593AbhLGLMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:12:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58919 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235549AbhLGLJv (ORCPT
+        by vger.kernel.org with ESMTP id S235555AbhLGLMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:09:51 -0500
+        Tue, 7 Dec 2021 06:12:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638875181;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        s=mimecast20190719; t=1638875341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nRg5DINjCe5e0zYHOQ+el+Q1dd4HwA20H1HpRmk80lA=;
-        b=ioER9X+PKW6+3Kwu5G7u9QyebmL3StAyc1NwOInC0KkpEvTyIgdH63VVkjz3s1RXyAyXHU
-        dWj8hmP85v0dfooEkb/DvMpZ9Dk2RubEZqseKgxO7Qur/itXXvI/xEPSJ/wxef1AdIBdRd
-        E+kThYdRQGRCuzrCQfonLFtEneQkr+s=
+        bh=E4KlXKiWfB3WzLMuIAg4R7RSI2mbgseCbxor89QUgRs=;
+        b=VgTor/Z+bDxyazAwE3NiHw5gp8GdUnG6u2qjanmWQDUyGGOPApIAwm9MECUqQ7Q0VOapTk
+        YPMFWMLS3dnU1zZTxmI9HxIs0fNapJWyazIkC+0cSw+blYyh0HHZA5CgTEAuP0qleCh3+8
+        0AbTU4Jn/HM+6QCXwVzGppi44oExNgw=
 Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
  [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-277-mD4R39_6Ng-NMkX3DmpJJA-1; Tue, 07 Dec 2021 06:06:19 -0500
-X-MC-Unique: mD4R39_6Ng-NMkX3DmpJJA-1
-Received: by mail-wr1-f71.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so2821184wrg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:06:18 -0800 (PST)
+ us-mta-587-cxnSA8mDOjK6xOtSmnahAQ-1; Tue, 07 Dec 2021 06:09:00 -0500
+X-MC-Unique: cxnSA8mDOjK6xOtSmnahAQ-1
+Received: by mail-wr1-f71.google.com with SMTP id p17-20020adff211000000b0017b902a7701so2805239wro.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:09:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=nRg5DINjCe5e0zYHOQ+el+Q1dd4HwA20H1HpRmk80lA=;
-        b=gWWlpAYG4tTz/J1hvvUS/9qFZ2azFeyVg3yXR0VRWKXYUHdcfoPftIXoAd7I3QYoa4
-         vCEviy0pfR73U/uydcxUV4uRBWxvOpfsR550Qwy0GnZ3hBG97uBs1bsZEyeKQxptlKt2
-         X/T8stx5ptS1D+PtxNFAwX4gaj0xR8gL25IveQaP7lW96J8MLuh+/WM5BjNXQBzyFI1O
-         vJtNdtwrWKfscidVR8PM78OOpQK6tJHDMnQH8tS+sUzWkWdHql6vCccxtNRcStAnAvNR
-         msAtdRjmXTVMBneHxQC1cj+bSJyJuEJIpYhaaT3/R4k0305G146UGrw8BpPPiu09UviW
-         qJYQ==
-X-Gm-Message-State: AOAM533f7yl8GPDWxMq3HbYyZsogTKotK/Rhp90sahh9OIBCg7JB/dGy
-        SOmc1aYcaLsSvQPeceqyWki7qugKsbjq/gIAjXspsMw/ZgUZ0DS/JaJNamcwS4bVQbX4SHUU1ZH
-        9yZ9YGdgF0CU/e++RYMr90VID
-X-Received: by 2002:a05:600c:3b28:: with SMTP id m40mr6117113wms.100.1638875177874;
-        Tue, 07 Dec 2021 03:06:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxi/ivnznn7trJTjiidNkJzjz1zRWIo5Uu4Z3R2uCviGWKVwvEBCQ2nckpYn4cvfIBk5jTULQ==
-X-Received: by 2002:a05:600c:3b28:: with SMTP id m40mr6117074wms.100.1638875177635;
-        Tue, 07 Dec 2021 03:06:17 -0800 (PST)
-Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id g4sm14083363wro.12.2021.12.07.03.06.15
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=E4KlXKiWfB3WzLMuIAg4R7RSI2mbgseCbxor89QUgRs=;
+        b=M7hEvUrYDmXMU5BDNxZnvJNHrmo8JWZw+HrWFKSCWlTZQpOtz4IWnQm5RgUVVx+2ku
+         WlTfWJ5jX+TmnfwxwN/D2ND5a01Ab3Y0CJwiv+G2797ToQFMWylfi2D/2uQ5t4p9dRQj
+         op7OJHeRrP45wtkYYo1aSjhiyy3DTOOghmb4ns7tF8zgrVX6IO4LScEkoI0yQMYuKc5h
+         cGhIBErh7VaI/4UkSjjR9oOuKYirQL2j5ZLPduwAu3RTeXp6rmNYPnaVd3a5coXw32FR
+         8t0yFBaAW3Z8KJdaDQNdKtnLhObGpG9MYvsGuH87DmH/B7zOAGhCcWqiZlI62vzwm4PI
+         tUjw==
+X-Gm-Message-State: AOAM531cw31gb+RAT2pLpT9VoQRkoiSoXhkQwSES6N84TsepMpe6D4BJ
+        QpijpaMEwilvaSmNAgm3hntBUXjQT6kuOI7+QAZvqxaZQuaCibysHCO7V+TkkYx/5/0F3nVMoDq
+        opL1UByqn7x3dn9GD0yhfuJvB
+X-Received: by 2002:adf:d1c1:: with SMTP id b1mr28284320wrd.204.1638875339380;
+        Tue, 07 Dec 2021 03:08:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxMhjIntNhbb6GmcmKPSnU3wgbIsO7E5txyyS/wn67qZyQO5XKttBSa05o8e2CXkMK4y5R0MA==
+X-Received: by 2002:adf:d1c1:: with SMTP id b1mr28284299wrd.204.1638875339141;
+        Tue, 07 Dec 2021 03:08:59 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23e57.dip0.t-ipconnect.de. [79.242.62.87])
+        by smtp.gmail.com with ESMTPSA id m9sm2529881wmq.1.2021.12.07.03.08.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 03:06:17 -0800 (PST)
-Reply-To: eric.auger@redhat.com
-Subject: Re: [RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>, eric.auger.pro@gmail.com,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, jean-philippe@linaro.org,
-        zhukeqian1@huawei.com
-Cc:     alex.williamson@redhat.com, jacob.jun.pan@linux.intel.com,
-        yi.l.liu@intel.com, kevin.tian@intel.com, ashok.raj@intel.com,
-        maz@kernel.org, peter.maydell@linaro.org, vivek.gautam@arm.com,
-        shameerali.kolothum.thodi@huawei.com, wangxingang5@huawei.com,
-        jiangkunkun@huawei.com, yuzenghui@huawei.com,
-        nicoleotsuka@gmail.com, chenxiang66@hisilicon.com,
-        sumitg@nvidia.com, nicolinc@nvidia.com, vdumpa@nvidia.com,
-        zhangfei.gao@gmail.com, lushenming@huawei.com, vsethi@nvidia.com
-References: <20211027104428.1059740-1-eric.auger@redhat.com>
- <ee119b42-92b1-5744-4321-6356bafb498f@linaro.org>
- <7763531a-625d-10c6-c35e-2ce41e75f606@redhat.com>
- <c1e9dd67-0000-28b5-81c0-239ceda560ed@linaro.org>
-From:   Eric Auger <eric.auger@redhat.com>
-Message-ID: <15a9875b-130a-e889-4e13-e063ef2ce4f9@redhat.com>
-Date:   Tue, 7 Dec 2021 12:06:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 07 Dec 2021 03:08:58 -0800 (PST)
+Message-ID: <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
+Date:   Tue, 7 Dec 2021 12:08:57 +0100
 MIME-Version: 1.0
-In-Reply-To: <c1e9dd67-0000-28b5-81c0-239ceda560ed@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
 Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>,
+        Alexey Makhalov <amakhalov@vmware.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <908909e0-4815-b580-7ff5-d824d36a141c@redhat.com>
+ <20211108202325.20304-1-amakhalov@vmware.com>
+ <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
+ <YYqstfX8PSGDfWsn@dhcp22.suse.cz> <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz> <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+In-Reply-To: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangfei,
+On 07.12.21 11:54, Michal Hocko wrote:
+> Hi,
+> I didn't have much time to dive into this deeper and I have hit some
+> problems handling this in an arch specific code so I have tried to play
+> with this instead:
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c5952749ad40..4d71759d0d9b 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8032,8 +8032,16 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>  	/* Initialise every node */
+>  	mminit_verify_pageflags_layout();
+>  	setup_nr_node_ids();
+> -	for_each_online_node(nid) {
+> +	for_each_node(nid) {
+>  		pg_data_t *pgdat = NODE_DATA(nid);
+> +
+> +		if (!node_online(nid)) {
+> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n");
+> +			alloc_node_data(nid);
 
-On 12/7/21 11:35 AM, Zhangfei Gao wrote:
->
->
-> On 2021/12/7 下午6:27, Eric Auger wrote:
->> Hi Zhangfei,
->>
->> On 12/3/21 1:27 PM, Zhangfei Gao wrote:
->>> Hi, Eric
->>>
->>> On 2021/10/27 下午6:44, Eric Auger wrote:
->>>> This series brings the IOMMU part of HW nested paging support
->>>> in the SMMUv3.
->>>>
->>>> The SMMUv3 driver is adapted to support 2 nested stages.
->>>>
->>>> The IOMMU API is extended to convey the guest stage 1
->>>> configuration and the hook is implemented in the SMMUv3 driver.
->>>>
->>>> This allows the guest to own the stage 1 tables and context
->>>> descriptors (so-called PASID table) while the host owns the
->>>> stage 2 tables and main configuration structures (STE).
->>>>
->>>> This work mainly is provided for test purpose as the upper
->>>> layer integration is under rework and bound to be based on
->>>> /dev/iommu instead of VFIO tunneling. In this version we also get
->>>> rid of the MSI BINDING ioctl, assuming the guest enforces
->>>> flat mapping of host IOVAs used to bind physical MSI doorbells.
->>>> In the current QEMU integration this is achieved by exposing
->>>> RMRs to the guest, using Shameer's series [1]. This approach
->>>> is RFC as the IORT spec is not really meant to do that
->>>> (single mapping flag limitation).
->>>>
->>>> Best Regards
->>>>
->>>> Eric
->>>>
->>>> This series (Host) can be found at:
->>>> https://github.com/eauger/linux/tree/v5.15-rc7-nested-v16
->>>> This includes a rebased VFIO integration (although not meant
->>>> to be upstreamed)
->>>>
->>>> Guest kernel branch can be found at:
->>>> https://github.com/eauger/linux/tree/shameer_rmrr_v7
->>>> featuring [1]
->>>>
->>>> QEMU integration (still based on VFIO and exposing RMRs)
->>>> can be found at:
->>>> https://github.com/eauger/qemu/tree/v6.1.0-rmr-v2-nested_smmuv3_v10
->>>> (use iommu=nested-smmuv3 ARM virt option)
->>>>
->>>> Guest dependency:
->>>> [1] [PATCH v7 0/9] ACPI/IORT: Support for IORT RMR node
->>> Thanks a lot for upgrading these patches.
->>>
->>> I have basically verified these patches on HiSilicon Kunpeng920.
->>> And integrated them to these branches.
->>> https://github.com/Linaro/linux-kernel-uadk/tree/uacce-devel-5.16
->>> https://github.com/Linaro/qemu/tree/v6.1.0-rmr-v2-nested_smmuv3_v10
->>>
->>> Though they are provided for test purpose,
->>>
->>> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
->> Thank you very much. As you mentioned, until we do not have the
->> /dev/iommu integration this is maintained for testing purpose. The SMMU
->> changes shouldn't be much impacted though.
->> The added value of this respin was to propose an MSI binding solution
->> based on RMRRs which simplify things at kernel level.
->
-> Current RMRR solution requires uefi enabled,
-> and QEMU_EFI.fd  has to be provided to start qemu.
->
-> Any plan to support dtb as well, which will be simpler since no need
-> QEMU_EFI.fd anymore.
-Yes the solution is based on ACPI IORT nodes. No clue if some DT
-integration is under work. Shameer?
+That's x86 specific and not exposed to generic code -- at least in my
+code base. I think we'd want an arch_alloc_nodedata() variant that
+allocates via memblock -- and initializes all fields to 0. So
+essentially a generic alloc_node_data().
 
-Thanks
+> +			free_area_init_memoryless_node(nid);
 
-Eric
->
-> Thanks
->
->
+That's really just free_area_init_node() below, I do wonder what value
+free_area_init_memoryless_node() has as of today.
+
+> +			continue;
+> +		}
+> +
+>  		free_area_init_node(nid);
+>  
+>  		/* Any memory on that node */
+> 
+> Could you give it a try? I do not have any machine which would exhibit
+> the problem so I cannot really test this out. I hope build_zone_info
+> will not choke on this. I assume the node distance table is
+> uninitialized for these nodes and IIUC this should lead to an assumption
+> that all other nodes are close. But who knows that can blow up there.
+> 
+> Btw. does this make any sense at all to others?
+> 
+
+__build_all_zonelists() has to update the zonelists of all nodes I think.
+
+-- 
+Thanks,
+
+David / dhildenb
 

@@ -2,93 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE4C46BDFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B452746BE04
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 15:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238035AbhLGOp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 09:45:27 -0500
-Received: from mga09.intel.com ([134.134.136.24]:33340 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233705AbhLGOp0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 09:45:26 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237394146"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="237394146"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 06:41:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="542817050"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2021 06:41:53 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Efpn0027212;
-        Tue, 7 Dec 2021 14:41:51 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@vivo.com
-Subject: Re: [PATCH] net: gro: use IS_ERR before PTR_ERR
-Date:   Tue,  7 Dec 2021 15:41:37 +0100
-Message-Id: <20211207144137.22454-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211207073116.3856-1-guozhengkui@vivo.com>
-References: <20211207073116.3856-1-guozhengkui@vivo.com>
+        id S238104AbhLGOrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 09:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231565AbhLGOrF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 09:47:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D67BC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 06:43:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0356CB817E9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F7DC341C3;
+        Tue,  7 Dec 2021 14:43:32 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 09:43:30 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Keeping <john@metanate.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] tracing: make trace_marker{,_raw} stream-like
+Message-ID: <20211207094330.578be88d@gandalf.local.home>
+In-Reply-To: <20211207142558.347029-1-john@metanate.com>
+References: <20211207142558.347029-1-john@metanate.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Zhengkui <guozhengkui@vivo.com>
-Date: Tue,  7 Dec 2021 15:31:09 +0800
+On Tue,  7 Dec 2021 14:25:58 +0000
+John Keeping <john@metanate.com> wrote:
 
-Hi, thanks for your patch.
-
-> fix following cocci warning:
-> ./net/core/gro.c:493:5-12: ERROR: PTR_ERR applied after initialization to constant on line 441
+> Resending as requested at [1].
 > 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->  net/core/gro.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/core/gro.c b/net/core/gro.c
-> index 8ec8b44596da..ee08f7b23793 100644
-> --- a/net/core/gro.c
-> +++ b/net/core/gro.c
-> @@ -490,9 +490,11 @@ static enum gro_result dev_gro_receive(struct napi_struct *napi, struct sk_buff
->  	if (&ptype->list == head)
->  		goto normal;
->  
-> -	if (PTR_ERR(pp) == -EINPROGRESS) {
-> -		ret = GRO_CONSUMED;
-> -		goto ok;
-> +	if (IS_ERR(pp)) {
-> +		if (PTR_ERR(pp) == -EINPROGRESS) {
-> +			ret = GRO_CONSUMED;
-> +			goto ok;
-> +		}
->  	}
+> [1] https://lore.kernel.org/all/20211207090347.15822d87@gandalf.local.home/
 
-`if (PTR_ERR(ptr) == -ERRNO)` itself is correct without a check for
-IS_ERR(). The former basically is a more precise test comparing to
-the latter.
-Not sure if compilers can get it well, but in ideal case the first
-will be omitted from the object code at all, and so do we.
+Thanks for resending. I added it to my queue so I will not forget it this
+time. Expect it to show up in linux-next sometime this week or next, if it
+doesn't fail any of my tests.
 
-In case I'm wrong and this is a correct fix, it at least shouldn't
-increase the indentation by one, these two conditions can be placed
-into one `if` statement.
-
-NAK.
-
->  
->  	same_flow = NAPI_GRO_CB(skb)->same_flow;
-> -- 
-> 2.20.1
-
-Al
+-- Steve

@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6392546AEEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F3346AEF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 01:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378143AbhLGAWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 19:22:11 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44594 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbhLGAWK (ORCPT
+        id S1378158AbhLGAY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 19:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348536AbhLGAYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 19:22:10 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 86915556;
-        Tue,  7 Dec 2021 01:18:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638836319;
-        bh=tflvrrDOoN1tBhmIJ33ljPH2DMjARriGjUn1Ah69U14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qjXalC194NbV5ihWRQw+CvBr4lBEgS/LzjXscwHiVsw6FJa92aesPgnu/tjEGMhT7
-         fcGKVP8K9X0bqQ6tZdDOzL/CPjJj5PvPjEmzmHzRzZWYqLZPlko8KidhUexLcHpGG9
-         1ggK5w3uvCF5xFC75zfLYG7w6VAr6qbFbmD22JT8=
-Date:   Tue, 7 Dec 2021 02:18:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Ricardo Ribalda <ricardo.ribalda@gmail.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/3] Revert "media: uvcvideo: Set unique vdev name based
- in type"
-Message-ID: <Ya6oQ9EOVKwkaLal@pendragon.ideasonboard.com>
-References: <20211207000629.4985-1-ribalda@chromium.org>
- <20211207000629.4985-2-ribalda@chromium.org>
- <Ya6nSOVasXsMGrkc@pendragon.ideasonboard.com>
+        Mon, 6 Dec 2021 19:24:19 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D0FC061746;
+        Mon,  6 Dec 2021 16:20:50 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gt5so9003888pjb.1;
+        Mon, 06 Dec 2021 16:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WqSTDjAHEVn42wztnl97tEnW1h1W5PS0PVgwPP4nQxE=;
+        b=iiRTUEdd+nsFk+Rol/TzBTrRtRIiW2YnsjYFMv5FHqei1HK+KtafllVrNw5FtonQxL
+         B5w55ppXzh9aGF0h22o5G8lppy+0EIj1fiFHhJ7B2NUksfJ+0lF8vA57WlFk9s6ahfQh
+         wQFCntoWV5AuX3eToVUl2Du0yWdlSKuSjnto5vMzzG+G0MyMB74phYrpZ1CdyubiJJcG
+         ra+JzIuvOqfBJKA4EjtuWSzp+HvilM9brMLd9c9TEIuEJfkKsoGibOP4JmavBx10AphT
+         lOUVgsSIS8f80BI6AaN36rkzUyqsdrTbVcqMqSSC31MV2Ne8sIvcGO/1YAiqnyyu7dDS
+         cg9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WqSTDjAHEVn42wztnl97tEnW1h1W5PS0PVgwPP4nQxE=;
+        b=5lQYsB22oZl8JUjPNOQm/XAveu6BHz/KkKG1VXmM1GvFJZsKRJRpt6euJvzl0b1x5/
+         I6neWGRwPPQCrv/8E0hEZ3coDEytRvBVui1nsplkdfDGyJpk+IT4X7svVLjeg7CwKAaM
+         yJXTM8wJ0U+N8dllhY19vWsbV0IGGPGJKEXkx1mEryr6sDSSPUO3Tt2IWytHUtO2MsDS
+         6VbQeNmWmCjOPaUMspCU93OOsgEe/g9EGEnhEn1xusxo35YrTyKP35hLiFTUNefugCMY
+         LWlkP3H/v4TPepiGZReM53W4mc80b3TykJVteoua7kU4KpIZR2Cxi/nJfidxrzy6KMbc
+         vvig==
+X-Gm-Message-State: AOAM532+DDpf1j3Zye22u2DtbaIJmxH45hdBdiYnoJy74+XlWHzKycwv
+        UvCrtcnHOutazZhqUPe+HZM=
+X-Google-Smtp-Source: ABdhPJwRLpVAXP34ctC4r/CpQD2ExaU8sqBYXMlN8x194FT9PW3AprQuWjQY5XS1FKbEtpb4ut8aog==
+X-Received: by 2002:a17:902:d28a:b0:142:61ce:ae4c with SMTP id t10-20020a170902d28a00b0014261ceae4cmr47270285plc.35.1638836450168;
+        Mon, 06 Dec 2021 16:20:50 -0800 (PST)
+Received: from postoffice.intern (192.243.120.180.16clouds.com. [192.243.120.180])
+        by smtp.gmail.com with ESMTPSA id o6sm13049741pfh.70.2021.12.06.16.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 16:20:49 -0800 (PST)
+Date:   Tue, 7 Dec 2021 08:20:37 +0800
+From:   David Yang <davidcomponentone@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, ptikhomirov@virtuozzo.com,
+        christian.brauner@ubuntu.com, yang.guang5@zte.com.cn,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH v2] tests: remove unneeded conversion to bool
+Message-ID: <Ya6o1Q4G3JGa5Pel@postoffice.intern>
+References: <9bca1d9eb8ccacf4a64a8813f9eefe7f7272b3d6.1638581673.git.yang.guang5@zte.com.cn>
+ <da6c119c-993b-dae5-25ff-e6cce97b55e3@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya6nSOVasXsMGrkc@pendragon.ideasonboard.com>
+In-Reply-To: <da6c119c-993b-dae5-25ff-e6cce97b55e3@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 02:14:01AM +0200, Laurent Pinchart wrote:
-> Hi Ricardo,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Dec 07, 2021 at 01:06:27AM +0100, Ricardo Ribalda wrote:
-> > A lot of userspace depends on a descriptive name for vdev. Without this
-> > patch, users have a hard time figuring out which camera shall they use
-> > for their video conferencing.
-> > 
-> > This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
-> > 
-> > Cc: <stable@vger.kernel.org>
-> > Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
-> > Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thank you for your advice.
 
-Mauro, is it possible to queue this as a fix for v5.16 ?
-
+On Mon, Dec 06, 2021 at 12:03:06PM -0700, Shuah Khan wrote:
+> On 12/5/21 5:07 PM, davidcomponentone@gmail.com wrote:
+> > From: Yang Guang <yang.guang5@zte.com.cn>
+> > 
+> > The coccinelle report
+> > ./tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c:225:18-23:
+> > WARNING: conversion to bool not needed here
+> > Relational and logical operators evaluate to bool,
+> > explicit conversion is overly verbose and unneeded.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> > 
 > > ---
-> >  drivers/media/usb/uvc/uvc_driver.c | 7 +------
-> >  1 file changed, 1 insertion(+), 6 deletions(-)
 > > 
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 7c007426e082..058d28a0344b 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -2193,7 +2193,6 @@ int uvc_register_video_device(struct uvc_device *dev,
-> >  			      const struct v4l2_file_operations *fops,
-> >  			      const struct v4l2_ioctl_ops *ioctl_ops)
-> >  {
-> > -	const char *name;
-> >  	int ret;
-> >  
-> >  	/* Initialize the video buffers queue. */
-> > @@ -2222,20 +2221,16 @@ int uvc_register_video_device(struct uvc_device *dev,
-> >  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
-> >  	default:
-> >  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> > -		name = "Video Capture";
-> >  		break;
-> >  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
-> >  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-> > -		name = "Video Output";
-> >  		break;
-> >  	case V4L2_BUF_TYPE_META_CAPTURE:
-> >  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
-> > -		name = "Metadata";
-> >  		break;
-> >  	}
-> >  
-> > -	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
-> > -		 stream->header.bTerminalLink);
-> > +	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-> >  
-> >  	/*
-> >  	 * Set the driver data before calling video_register_device, otherwise
-
--- 
-Regards,
-
-Laurent Pinchart
+> > Changes in v2:
+> > - Change the return type to bool.
+> > ---
+> >   .../move_mount_set_group/move_mount_set_group_test.c   | 10 +++++-----
+> >   1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> > index 860198f83a53..50ed5d475dd1 100644
+> > --- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> > +++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> > @@ -191,7 +191,7 @@ static bool is_shared_mount(const char *path)
+> >   #define SET_GROUP_FROM	"/tmp/move_mount_set_group_supported_from"
+> >   #define SET_GROUP_TO	"/tmp/move_mount_set_group_supported_to"
+> > -static int move_mount_set_group_supported(void)
+> > +static bool move_mount_set_group_supported(void)
+> >   {
+> >   	int ret;
+> > @@ -222,7 +222,7 @@ static int move_mount_set_group_supported(void)
+> >   		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
+> >   	umount2("/tmp", MNT_DETACH);
+> > -	return ret < 0 ? false : true;
+> > +	return ret >= 0;
+> >   }
+> >   FIXTURE(move_mount_set_group) {
+> > @@ -232,7 +232,7 @@ FIXTURE(move_mount_set_group) {
+> >   FIXTURE_SETUP(move_mount_set_group)
+> >   {
+> > -	int ret;
+> > +	bool ret;
+> >   	ASSERT_EQ(prepare_unpriv_mountns(), 0);
+> > @@ -254,7 +254,7 @@ FIXTURE_SETUP(move_mount_set_group)
+> >   FIXTURE_TEARDOWN(move_mount_set_group)
+> >   {
+> > -	int ret;
+> > +	bool ret;
+> >   	ret = move_mount_set_group_supported();
+> >   	ASSERT_GE(ret, 0);
+> > @@ -348,7 +348,7 @@ TEST_F(move_mount_set_group, complex_sharing_copying)
+> >   		.shared = false,
+> >   	};
+> >   	pid_t pid;
+> > -	int ret;
+> > +	bool ret;
+> >   	ret = move_mount_set_group_supported();
+> >   	ASSERT_GE(ret, 0);
+> > 
+> 
+> Applied. In the future use selftests/<test>: .... convention for
+> patch summary. Review "git log <filename>" history for how to
+> write summaries and change logs.
+> 
+> I fixed this one for now.
+> 
+> thanks,
+> -- Shuah

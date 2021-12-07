@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E72646C865
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2854E46C867
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238420AbhLGXvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbhLGXvf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:51:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F88C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 15:48:04 -0800 (PST)
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09658B81EBA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 23:48:03 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A9AA60E09;
-        Tue,  7 Dec 2021 23:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638920881;
-        bh=NZI5E6OTeAr2lobR6Gt7GWhIGmD0oHASC6XKqv3HqqE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZHw/TP4mHfCUxYJrBbmiI6dsQ4uG9j3FaNwFJU6oduhWIODxQkhdkv3qL+14KaF3v
-         2kY5VnUnJDmFLALpkxgzzfspPD/sgeZ76jf2qLphMUqvySdnMKlsyYvt8aXIpyMfQ0
-         axl2zJYhPRpYT1PMQp4G2ZGzkTB0+iRJz4BdCI2g=
-Date:   Tue, 7 Dec 2021 15:47:59 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joel Savitz <jsavitz@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        linux-mm@kvack.org, Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
- victim shared mutex
-Message-Id: <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
-In-Reply-To: <20211207214902.772614-1-jsavitz@redhat.com>
-References: <20211207214902.772614-1-jsavitz@redhat.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S238469AbhLGX5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:57:06 -0500
+Received: from mail-os0jpn01on2099.outbound.protection.outlook.com ([40.107.113.99]:56320
+        "EHLO JPN01-OS0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231416AbhLGX5F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 18:57:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hPHRmObrwVaYmMndXX5Hvph8R4KzwVqImJryP1z+Vw+rhVfcj80Jv+vy2dId0GNzDTLO0JCCiLMbj2QrPrSD4yFRDUoNyYZPjNVsyIq6acscJkfqifdqzGbEwhS+Hot50pjiGgYorYIP4N+OJNXaoKbHHFSOKl2cJDwac+gufQirZU14j8KSkusGI4GliM3IT42sk46t8V8AMq+hmTo3XVlmKK5XL87sHWf3CTKLCg0KwHI1YEZdTTbwZHhLAteJnCdtvf7MjzVQSt5MHrXxElzDwHvoU/OrXXicu/qY8F2k7najn4LXNUvbNsJj+jTO6zKCXVKWsuRxpJdgP2CEww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FpIk5Uy4mzzLnosfVJiBSLEKQY50VX8ftMPQp7GO5Ug=;
+ b=SOUwpLzPrrIq6gUKDScCG3x5fgj7ciLnJGw/1jN3lxU3465XGIM4ITMcRBENyZhvcqrtiez6ymyuJ6aERD/oNHKNPj2xo1piq2qaPT779djoqlPKGLkNOJW5k2JgO71+jLSWPBvZc/419c36rn6duyZ8ZM/HZ45rxItF+OPo1qxqtAaAvNcX/5ySqnhDzQrdjKm++A6O9HRICTpA6DJJupRYBn2BYBgDLU9lJeV7F94pxY0KX2hlcnOEg4+qol4a0xOfH55SNrCFl4h4VJVEdf07nqphPdYmtkFLhDeOOgA1B8rKNif+0gZNnAifBjLtcOQOAksj8UY1FD+iJsxcEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FpIk5Uy4mzzLnosfVJiBSLEKQY50VX8ftMPQp7GO5Ug=;
+ b=IzI60mhUw1+XAGXQmnR+A3aia12kHMypq8ZHPSaO84qSq3Nrp3kwPuRZqnXha6W1jIQqyIFYYDVVLdskEVMS5zg5x9HN8gK+DW1FSn1jJDotR0r4xosuP6j7Gqp+o/2s6Zabb4fJjc/a7i+vj279Zcy7ostgel5vWokszSF0aaM=
+Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com (2603:1096:400:a::10)
+ by TYCPR01MB5581.jpnprd01.prod.outlook.com (2603:1096:400:a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Tue, 7 Dec
+ 2021 23:53:31 +0000
+Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com
+ ([fe80::3d74:9c2e:e85a:df82]) by TYCPR01MB5581.jpnprd01.prod.outlook.com
+ ([fe80::3d74:9c2e:e85a:df82%5]) with mapi id 15.20.4755.023; Tue, 7 Dec 2021
+ 23:53:31 +0000
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Ameer Hamza <amhamza.mgc@gmail.com>
+CC:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] ASoC: test-component: fix null pointer dereference.
+Thread-Topic: [PATCH] ASoC: test-component: fix null pointer dereference.
+Thread-Index: AQHX6hiZRK5cTb56bk2m5NVbTZyjx6wkenEwgAC48ICAAOYnsIAAl28AgABNGACAALi/0A==
+Date:   Tue, 7 Dec 2021 23:53:31 +0000
+Message-ID: <TYCPR01MB558131047A6ABA9AA535AAC8D46E9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+References: <20211205204200.7852-1-amhamza.mgc@gmail.com>
+ <TYCPR01MB55813B26BB2B3BB6D1E072F2D46C9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+ <20211206092937.GA5609@hamza-OptiPlex-7040>
+ <TYCPR01MB5581998AD64AE249C7D86C26D46D9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+ <20211207081522.GA9690@hamza-OptiPlex-7040> <Ya9YxoUqkATCOASh@sirena.org.uk>
+In-Reply-To: <Ya9YxoUqkATCOASh@sirena.org.uk>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d5db3b89-5282-4279-14af-08d9b9dcc637
+x-ms-traffictypediagnostic: TYCPR01MB5581:EE_
+x-microsoft-antispam-prvs: <TYCPR01MB5581BC4214DED7AB6325DA93D46E9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BMsHCpkD6PYt5uKrGSJygcWZ4qyTHgdnyR/rNMn3nz077Dz8Mj5CbJlpOXuyyodYkT5CMdeaRRW5V1LUBfHKh8sAiC5iOl1tLOku3KES1qquE9WB39djDQfe2q16Gvk6EfhRHcm2G6ESMfMJ+ZpVg89eKm62Xqy7XTx3Uh90bSN9yorufiEiGLkHGR9kwDuJhA+O4KgeQZKoYJOrPzunkbnemfbQoT9S87vafU17eKpwmBGQ0v+vIfUaUBwuTybyjCqSrVs7wQ6nfAMCYL7mW+WDaJW2dUP9g89nGC1ZYLvNPab6axydTuuha9uTivhisi+oIxUIhh+J/pBHhfNNTZ+ZRbuuNPSXdA7jXtBBscbPLvlLNtHx8+goMEAHZblcWnBDVRTfsyP1eL54M3R56rYIEQ/eFyEUpjYkFD0/mSSFRApz0B04txq0YAQGGb6n63ZtkWveJfrP4p/zmxB/b8aACA9L4BCyEOCWbCUIAyN+v0MXUqrVK+hgrDitgLIocdajPwAlSNQfQaIuzrN2dudwhn/+CVuHEDtNNL9vgvBtmdBxPPem51CDxLp0BmT0BKHM5pUxZ1QbKZ9KHnWzE6hSw3P6V1GnUNX3+hupu3lFU/+Z82fi7UH6X/ClpIxXZsUnOKoN1TFYTPfHxmeV+0HSTquzhO7xM5vBHGjyfpjeTQDgylVwFzf5EvDsTkWMVvKdYbTrkUd8gFMq98iB3w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB5581.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(8676002)(508600001)(9686003)(8936002)(38100700002)(54906003)(110136005)(83380400001)(122000001)(316002)(76116006)(6506007)(2906002)(186003)(66556008)(4744005)(66476007)(66446008)(66946007)(64756008)(26005)(55016003)(52536014)(33656002)(86362001)(7696005)(4326008)(5660300002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lf3RngFNAYc3Cbvfd6WtMX8x+F/0AGQaHtANAg6Hy8WDOhOPob6PjeMHiDWT?=
+ =?us-ascii?Q?V3rkSQ4KYKllhsuKWdE/0MauVSQfesn71MbOy55PcPZmzahsqJ1ba7F+gnhH?=
+ =?us-ascii?Q?NCvstbj82revYUUdYlOp+7SPpdPYPsj0Zsf7TVTrHU0+kj64aY8dyz6lfM8H?=
+ =?us-ascii?Q?bH1nSYWTW0sJ2K1i/yKyH5aqSArZlH2mr3Jo05lzgW8B8W2Uy2htk37g3eZT?=
+ =?us-ascii?Q?evwmHk2xJizMSX1RUu5ZM/mrLl1n37dE83inaS4E1l7PZ8mP4Re34x9dtHK/?=
+ =?us-ascii?Q?0eV9NGZwVg2MvpHiv/DFK7WLKsAeKCcXBtSS5sW7FQkd7tM9hI6uaIcgYedi?=
+ =?us-ascii?Q?uvLSIZaTqBUBB1cPnTa7SDRouEyiIKKpbpHnkhVerKMzY4fsiEfXwuEn7FsY?=
+ =?us-ascii?Q?HVtSRaRUatYRY3QNoqjDBCQSWSilouCWQlUDZtZOme1hs2bD0RSUtBmZhN2o?=
+ =?us-ascii?Q?hN79zyhqem0gIkjYVph117C5GVLK4+VkFHMlICkapzoqjJEXvQM2PRgfrb2C?=
+ =?us-ascii?Q?u7/3QHdBmID2b52Jnzlsgkqma1Gk9oe4Ivq/h7rzv4fFRdSAMd0ib1duE/ap?=
+ =?us-ascii?Q?W7gqrf8C2I/dpRTwo74hmav0o5rsiqn48lwA9Atk0RaPmgVecj4XXdqFyYRg?=
+ =?us-ascii?Q?/kmyB9MhJ/hY/lpChR/vfOqx5oH2/T7hnN0iikQgxDfABqjdsI/y0nKWm1g7?=
+ =?us-ascii?Q?GlZeAntsY4zXBP3bD1wCqwPi+g+WMhpd6VnMd03nbczQfDs7nGa2Gtma2dXy?=
+ =?us-ascii?Q?iQ71E8ohn0NgODHYc/CHgxUwXomc74jNRXKpl1jnhR3FGXyTyEdQ8wceopb2?=
+ =?us-ascii?Q?Po41qRYViip93oD58jdSyKqsTjuVjMTSMg2fP1hDuqkt9cZLclybRYMjtr12?=
+ =?us-ascii?Q?WdLojBfRLW9/LGeN+aYIvbMrr90OTr5MrnzApcUGOgu47oZgrbcOR0zqqxFN?=
+ =?us-ascii?Q?Qko4koylapeZCo3b1MH530YZrD2DN7FKwCYklR6IupaTL8cFrETRNSLuLjkA?=
+ =?us-ascii?Q?Lh2TLv2icftqTyZLgcyo1MgTCFofkh7q9LHAl7tcxkkFR1MYUKmhIcat5On8?=
+ =?us-ascii?Q?xcepYwbCV2tm9uv4QhlESPf2sqqB/j0nExRHsQaw+u/Iijy0dF1rVEA/RMuU?=
+ =?us-ascii?Q?0BW6Y+7nm7q14aiOEJvVcev4TuEm0ch+l0NfE6RFjTsf64FGYUzK6J6E/IiJ?=
+ =?us-ascii?Q?4dlsrSoeI9VSzeFqgQUVeokfBCNwlPdv3OXNvCwFKEsEjWUAoWWIM0tWmEDj?=
+ =?us-ascii?Q?/WA7tCAhd79JDQKOXUFs5Dxjt/yTJujAmyK1St2oucP07J7jdSFTDcI6sSoU?=
+ =?us-ascii?Q?KkpPCHkjZlRl/9rOXwE/vMSedUOj1dZgT2M8r4upSu9wbOOSAcdEmyE0zby0?=
+ =?us-ascii?Q?YzFVN6vrEe1SEZ1Qdx8nmzPGogzIJ8HEzTeG/hmSNEnEmjZ1Cjx1MIbwSB6X?=
+ =?us-ascii?Q?LUeqXCFLFMpdLf5rCIFiZln1sEF9qAdNgP55Z1a12Tp9jTe4dnaI1ukrDlZ6?=
+ =?us-ascii?Q?OX2zWu2yXdBJuV+h/eb3XJe+diK67bpR2cyLDTlYWSsTEIkBnO+fWUV1dOio?=
+ =?us-ascii?Q?7HQipwkqFeqb4v9If9Swi0yy6zuKk1zl1zGank7ek/MJmgHNZRpb5YJlsw4C?=
+ =?us-ascii?Q?QTsVjYAdLwxsIL0DPkkjF6JCHgrKS5/InI0aWVxMfv3jLCguBWu69ILVkuNS?=
+ =?us-ascii?Q?wbUgudVHDXvHO7SWqgu4yycQQpinm9xLq1YtRaYmKEcSGSmST8f7xK5/Nn9I?=
+ =?us-ascii?Q?fCJ8VYfY0Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB5581.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5db3b89-5282-4279-14af-08d9b9dcc637
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 23:53:31.7816
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B1yOXLa+yJTe1GP1IpTKnnsl2qUPLURJz7wAJHZKhCXvNobCoj6Yeb9bd1rOq47+a1Vb4CO6D0NG+hgZ2S4YdMMkBKjLVSWlcSACl2GWgHdisPM9IHqwtBiH2znWbhar
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5581
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc's added)
 
-On Tue,  7 Dec 2021 16:49:02 -0500 Joel Savitz <jsavitz@redhat.com> wrote:
+Hi Ameer, Mark
 
-> In the case that two or more processes share a futex located within
-> a shared mmaped region, such as a process that shares a lock between
-> itself and a number of child processes, we have observed that when
-> a process holding the lock is oom killed, at least one waiter is never
-> alerted to this new development and simply continues to wait.
+>> > -	const struct test_adata *adata =3D of_id->data;
+>> > +	const struct test_adata *adata =3D of_device_get_match_data(&pdev->d=
+ev);
+>
+>> Thanks, that's a cleaner way. Can you advise how should proceed with
+>> this since previous patch is already applied. Should I send a updated
+>> version of patch, e.g., v2 or a new patch.=20
+>
+> Please send an incremental patch on top of what is already applied as
+> covered in the message saying the patch was applied.
 
-Well dang.  Is there any way of killing off that waiting process, or do
-we have a resource leak here?
+No worry.
+I will post that patch
 
-> This is visible via pthreads by checking the __owner field of the
-> pthread_mutex_t structure within a waiting process, perhaps with gdb.
-> 
-> We identify reproduction of this issue by checking a waiting process of
-> a test program and viewing the contents of the pthread_mutex_t, taking note
-> of the value in the owner field, and then checking dmesg to see if the
-> owner has already been killed.
-> 
-> This issue can be tricky to reproduce, but with the modifications of
-> this small patch, I have found it to be impossible to reproduce. There
-> may be additional considerations that I have not taken into account in
-> this patch and I welcome any comments and criticism.
-
-> Co-developed-by: Nico Pache <npache@redhat.com>
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> ---
->  mm/oom_kill.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> index 1ddabefcfb5a..fa58bd10a0df 100644
-> --- a/mm/oom_kill.c
-> +++ b/mm/oom_kill.c
-> @@ -44,6 +44,7 @@
->  #include <linux/kthread.h>
->  #include <linux/init.h>
->  #include <linux/mmu_notifier.h>
-> +#include <linux/futex.h>
->  
->  #include <asm/tlb.h>
->  #include "internal.h"
-> @@ -890,6 +891,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
->  	 * in order to prevent the OOM victim from depleting the memory
->  	 * reserves from the user space under its control.
->  	 */
-> +	futex_exit_release(victim);
->  	do_send_sig_info(SIGKILL, SEND_SIG_PRIV, victim, PIDTYPE_TGID);
->  	mark_oom_victim(victim);
->  	pr_err("%s: Killed process %d (%s) total-vm:%lukB, anon-rss:%lukB, file-rss:%lukB, shmem-rss:%lukB, UID:%u pgtables:%lukB oom_score_adj:%hd\n",
-> @@ -930,6 +932,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
->  		 */
->  		if (unlikely(p->flags & PF_KTHREAD))
->  			continue;
-> +		futex_exit_release(p);
->  		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
->  	}
->  	rcu_read_unlock();
-> -- 
-> 2.33.1
+Best regards
+---
+Kuninori Morimoto

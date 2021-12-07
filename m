@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B34D46B3D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F19C046B3D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 08:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbhLGHaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 02:30:21 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:48662 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLGHaU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 02:30:20 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B77Qjt1102414;
-        Tue, 7 Dec 2021 01:26:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638862005;
-        bh=bcyuRKsUbEucdY5bi4P+Quy6bxtDLhKllKVRytdr384=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=L/jiHSuYk0q3VEm5qZ/YXSj6zmorhdLCVzakbbvypKEGI8XMOoQUZZGtB3FNkE3PQ
-         f46Qu5q2e3uV6WYOMzv3zhAY9yKvW/lqt5mO0NyBIWimvx9Q/DJGMrxwdF1eqJ5JLN
-         B/eACjD1mPJN+PcKzuGVwmbB9VOGgaDEn50PVgjw=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B77QjGc081739
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Dec 2021 01:26:45 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 7
- Dec 2021 01:26:45 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 7 Dec 2021 01:26:45 -0600
-Received: from [10.250.232.43] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B77QgZs100046;
-        Tue, 7 Dec 2021 01:26:43 -0600
-Subject: Re: [PATCH] PCI: endpoint: Fix use after free in pci_epf_remove_cfs()
-To:     Shunsuke Mie <mie@igel.co.jp>
-CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20210621070058.37682-1-mie@igel.co.jp>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <ed4de030-e0b3-503f-f0dc-75b103769dfc@ti.com>
-Date:   Tue, 7 Dec 2021 12:56:41 +0530
+        id S230082AbhLGHad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 02:30:33 -0500
+Received: from uho.ysoft.cz ([81.19.3.130]:33086 "EHLO uho.ysoft.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230057AbhLGHac (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 02:30:32 -0500
+Received: from [10.0.30.193] (unknown [10.0.30.193])
+        by uho.ysoft.cz (Postfix) with ESMTP id C172BA08B1;
+        Tue,  7 Dec 2021 08:27:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1638862020;
+        bh=C58YyNfQVrg3hSPONSqJPFf4psftHxj/u7tAtyQjnQE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sse4SzVEGMHGmqme5VBtwAakjMaPG4gAGb/eGBi6ijBnuvLtnjsmw0xDgNszU6DNO
+         Ib+G33dhHe15hq1317xXWgjKBWIkawppshI4eswCHCqsu1C3J08wa1AeewmcWfYAej
+         zb6Fovr9nTFwqWxXfUzHKQ/taaqm7Fvyfnkei/Rw=
+Subject: Re: linux-next: build failure after merge of the imx-mxs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211207091014.06063422@canb.auug.org.au>
+From:   =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
+Message-ID: <74bc4baa-96df-f41d-2838-c18be52a5051@ysoft.com>
+Date:   Tue, 7 Dec 2021 08:27:00 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20210621070058.37682-1-mie@igel.co.jp>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20211207091014.06063422@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shunsuke,
-
-On 21/06/21 12:30 pm, Shunsuke Mie wrote:
-> All of entries are freed in a loop, however, the freed entry is accessed
-> by list_del() after the loop.
+On 06. 12. 21 23:10, Stephen Rothwell wrote:
+> Hi all,
 > 
-> When epf driver that includes pci-epf-test unload, the pci_epf_remove_cfs()
-> is called, and occurred the use after free. Therefore, kernel panics
-> randomly after or while the module unloading.
+> After merging the imx-mxs tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
 > 
-> I tested this patch with r8a77951-Salvator-xs boards.
-
-Can you provide the crash dump?
+> Error: arch/arm/boot/dts/imx6q-yapp4-crux.dts:24.1-7 Label or path codec not found
+> Error: arch/arm/boot/dts/imx6q-yapp4-crux.dts:52.1-7 Label or path sound not found
+> FATAL ERROR: Syntax error parsing input tree
+> Error: arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts:24.1-7 Label or path codec not found
+> Error: arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts:52.1-7 Label or path sound not found
+> FATAL ERROR: Syntax error parsing input tree
 > 
-> Fixes: ef1433f ("PCI: endpoint: Create configfs entry for each pci_epf_device_id table entry")
-> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> ---
->  drivers/pci/endpoint/pci-epf-core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Caused by commit
 > 
-> diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-> index e9289d10f822..538e902b0ba6 100644
-> --- a/drivers/pci/endpoint/pci-epf-core.c
-> +++ b/drivers/pci/endpoint/pci-epf-core.c
-> @@ -202,8 +202,10 @@ static void pci_epf_remove_cfs(struct pci_epf_driver *driver)
->  		return;
->  
->  	mutex_lock(&pci_epf_mutex);
-> -	list_for_each_entry_safe(group, tmp, &driver->epf_group, group_entry)
-> +	list_for_each_entry_safe(group, tmp, &driver->epf_group, group_entry) {
-> +		list_del(&group->group_entry);
+>    a4d744ac2bab ("ARM: dts: imx6dl-yapp4: Add Y Soft IOTA Crux/Crux+ board")
+> 
+> I have used the imx-mxs tree from next-20211206 for today.
+> 
 
-Need full crash dump to see if this is really required or not. Ideally this
-should be handled by configfs (or a configfs API could be used).
+Hi Stephen,
+I already send a patch for this yesterday short time after
+the kernel test robot reported the same failure. It is on
+the devicetree mailing list:
 
-Thanks,
-Kishon
+https://www.spinics.net/lists/devicetree/msg461729.html
+
+Sorry for my mistake though,
+Michal

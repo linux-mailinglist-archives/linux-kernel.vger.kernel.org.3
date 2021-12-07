@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0A346C435
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF1146C41C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbhLGUMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:12:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51316 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbhLGUMN (ORCPT
+        id S241034AbhLGUHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236087AbhLGUHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:12:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8A97B81858;
-        Tue,  7 Dec 2021 20:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CECFC341C3;
-        Tue,  7 Dec 2021 20:08:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638907720;
-        bh=7iECsE/Y/3WDH+hSKw/CvU9fAhHAsdUBKvj/iNSMXUA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eB2WlEkOxMKqWBG4/cC0k1LNrwvjHA7Tb0FsOXXKQXKo3OjZhY/XQ9H+7mTefDAnl
-         TrPVdp5vn0/aHzmEenk/h+aWRxylWK2SZp3xXQMeXPG9JVcwB8IaSfb0aeYSG5lka2
-         hWzXOkTh4wyXOGMqf0jDC80GmhIFAnYEl58IwHw5j9G8dFzNKOafKof7eub6qB3vOG
-         v+uQ+UH13bh0RK4By3SgvYZGOGjS6Bo4z00wNXO5GorHJDVL65klhKPUcm8KA+E3Xx
-         WwRln8ZGWbhHFYBUjOMYUraOFvE0Ubv+IS2Achv9Reay/Vs4iCUlNuYw2FIRydr/ok
-         P6EQacgcAurBg==
-Received: by mail-ed1-f44.google.com with SMTP id l25so374369eda.11;
-        Tue, 07 Dec 2021 12:08:40 -0800 (PST)
-X-Gm-Message-State: AOAM532X852r65PWOPHdNl0AP18qWjbxfUnhLF75DHXRBxXU3EImmM47
-        bpEnQjYTAjTbehh5o2LToyvKvB1zdChJksiPLg==
-X-Google-Smtp-Source: ABdhPJwA9TV+fIIiAm/3KclR1rrQon8NWQlFgkZJrXmBPVhVXjSQmWIYfL8TqwTlEeryByAj0Jv4ANoqhh9Y7EZxl9Y=
-X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr12237548edb.89.1638907718587;
- Tue, 07 Dec 2021 12:08:38 -0800 (PST)
+        Tue, 7 Dec 2021 15:07:23 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0270CC061574;
+        Tue,  7 Dec 2021 12:03:53 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id u80so376786pfc.9;
+        Tue, 07 Dec 2021 12:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6EkS8Nvrc0mLwPSTwo7vPbxig6A1y6814RHQt01NTVI=;
+        b=AsljNNwj8qOWOVE9bmXhbXKiE4Esi4ccz46SPr/aK5d7tMGE6rDcC4aKxX/q7MdIAR
+         6eqc5s0Usx+36Nl9Cr0WGDSMqUIP5YS0o99r5FWTOCZYtjiJ2BTQh06CUWxc3zUgjDv4
+         4/MyXIJm3jrZI8JBT7iPhzxh+TmfeS39lhLcyCCVIqB24rGA/XV1hwMCT1zp1FLkQL8w
+         nMLripi8OnnUNFuRqWYwX1U7uYNYW5PNCEuWjUe7zToBLcU73oHJSrQ0/W7Qo6EcASf1
+         y/doPuhW7FDx3CKSmm7AzlyJ2BuZOS1kGyvumFIr/5psmfHxya/4oyYw5qnz1mIRnD9s
+         wadw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6EkS8Nvrc0mLwPSTwo7vPbxig6A1y6814RHQt01NTVI=;
+        b=F0k7mzYQK1F++GQ1pnjOrUDepD4b448KkOOCHjR9d0w7RrgYchgNXiLMiIzTCYfj6r
+         m8gEFrrrQdpKTJNPkOdkKaLcyLDYVFkU+UdVwirMBAg8r7QCDcFEz2VsRh9k1nP2kF75
+         EPCn5N3KAbQQuRZkuhaZ+TJjlFqHKEIDfDQwOlk8s9QSGCSjVepUA/lbIDglZK2KKrc+
+         KYfEzEXFC0NnmhBcBuqDDhHX0w/oqcJw0orOKsHtbwq4SvgXSEoUa8r2IQthj2mO78fx
+         y12LUr8P/42bSqDmFd1IW2MaIDj/1Sui2/4we6WtSMo2mSS1g2BxOIw0aCU0N8vpUIOv
+         VXAA==
+X-Gm-Message-State: AOAM531DSptMr8EtY0q+7pxiVlK/8KlaofOmv9sGBmy6XEPLZoBxX3ew
+        KFH+6xe3o7TWDoJRqOERoQy2JCsysmo=
+X-Google-Smtp-Source: ABdhPJyDZzLVyupTsP3jSm1uQ1TVGy9Yo7iWxipVefr/je0F5T82/yBDGk6mtlZOAUTLteBzHa6PTw==
+X-Received: by 2002:a62:1909:0:b0:4a7:e88c:286b with SMTP id 9-20020a621909000000b004a7e88c286bmr1270023pfz.26.1638907431667;
+        Tue, 07 Dec 2021 12:03:51 -0800 (PST)
+Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
+        by smtp.gmail.com with ESMTPSA id d20sm563648pfl.88.2021.12.07.12.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 12:03:50 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/bridge: sn65dsi86: defer if there is no dsi host
+Date:   Tue,  7 Dec 2021 12:09:06 -0800
+Message-Id: <20211207200906.609673-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211206185242.2098683-1-f.fainelli@gmail.com>
- <20211206185242.2098683-2-f.fainelli@gmail.com> <CAL_JsqKaOkByjwYzyW6G_b90zRjCWVHvi2V0gBx_MJ8v2FmOaw@mail.gmail.com>
- <fc263ef8-10f8-206e-5df7-76f0b9d50fae@gmail.com>
-In-Reply-To: <fc263ef8-10f8-206e-5df7-76f0b9d50fae@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 7 Dec 2021 14:08:27 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL6HV-C6+9Pna_8GVT5V+uEzcYcPDaS1m6AK8LhsWnFaw@mail.gmail.com>
-Message-ID: <CAL_JsqL6HV-C6+9Pna_8GVT5V+uEzcYcPDaS1m6AK8LhsWnFaw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] ARM: dts: Cygnus: Fixed iProc PCIe controller properties
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM IPROC ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 11:44 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 12/7/21 5:49 AM, Rob Herring wrote:
-> > On Mon, Dec 6, 2021 at 12:52 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >>
-> >> Rename the msi controller unit name to 'msi' to avoid collisions
-> >> with the 'msi-controller' boolean property and add the missing
-> >> 'interrupt-controller' property which is necessary. We also need to
-> >> re-arrange the 'ranges' property to show the two cells as being separate
-> >> instead of combined since the DT checker is not able to differentiate
-> >> otherwise.
-> >>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>  arch/arm/boot/dts/bcm-cygnus.dtsi | 14 ++++++++------
-> >>  1 file changed, 8 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/arch/arm/boot/dts/bcm-cygnus.dtsi b/arch/arm/boot/dts/bcm-cygnus.dtsi
-> >> index 8ecb7861ce10..ea19d1b56400 100644
-> >> --- a/arch/arm/boot/dts/bcm-cygnus.dtsi
-> >> +++ b/arch/arm/boot/dts/bcm-cygnus.dtsi
-> >> @@ -263,6 +263,7 @@ pcie0: pcie@18012000 {
-> >>                         compatible = "brcm,iproc-pcie";
-> >>                         reg = <0x18012000 0x1000>;
-> >>
-> >> +                       interrupt-controller;
-> >
-> > How is this a fix? This doesn't even work before v5.16 with commit
-> > 041284181226 ("of/irq: Allow matching of an interrupt-map local to an
-> > interrupt controller").
->
-> What is the path forward? I suppose I could make the
-> interrupt-controller property not required for this controller but then
-> the default interrupt-controller schema is not terribly happy about
-> seeing an interrupt-map/interrupt-map-mask properties without
-> interrupt-controller.
+From: Rob Clark <robdclark@chromium.org>
 
-There's certainly no requirement for having 'interrupt-controller'.
-What error are you getting?
+Otherwise we don't get another shot at it if the bridge probes before
+the dsi host is registered.  It seems like this is what *most* (but not
+all) of the other bridges do.
 
-Rob
+It looks like this was missed in the conversion to attach dsi host at
+probe time.
+
+Fixes: c3b75d4734cb ("drm/bridge: sn65dsi86: Register and attach our DSI device at probe")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+index 02b490671f8f..3684e12fbac3 100644
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+@@ -716,7 +716,7 @@ static int ti_sn_attach_host(struct ti_sn65dsi86 *pdata)
+ 	host = of_find_mipi_dsi_host_by_node(pdata->host_node);
+ 	if (!host) {
+ 		DRM_ERROR("failed to find dsi host\n");
+-		return -ENODEV;
++		return -EPROBE_DEFER;
+ 	}
+ 
+ 	dsi = devm_mipi_dsi_device_register_full(dev, host, &info);
+-- 
+2.33.1
+

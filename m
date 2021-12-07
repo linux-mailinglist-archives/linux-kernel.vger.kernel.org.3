@@ -2,155 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A8746B67F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A6E46B683
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbhLGJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:00:35 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59900 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhLGJAd (ORCPT
+        id S233383AbhLGJC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:02:56 -0500
+Received: from mail-ua1-f48.google.com ([209.85.222.48]:41805 "EHLO
+        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231313AbhLGJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:00:33 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id ADE191F44D8B
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638867422; bh=6nmUTy2qScz4iTwXjqQt0rHoA1TXWwXjzZV/fmWui78=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=QKWHMuu5MIBaoMET43C9soRtIOij55jI75VSMpib0iawKdoiBkK20yQOfM8K0bA1H
-         mIlHI5anp3xP/om0YfO56YFbkE+x59LCgTk0P1E6jEI4TSAgOB8Bn+HudlcEl5L7Lj
-         0W1xcTyM7p8C/EIkgyAQxsMREoHfomCqmI1R35niwX3m/9U/RgcartIfFL9cYEw0NY
-         dACSCmbJNTgttlGUTumf7Ixv+qkDxuxUmLBIJId5xrGRjvcmvVUv6c5XAN0HaXhB6s
-         pnW8XiOmhbLvCpGPlYjl548ujYKn9zTyWKZHZy926Psh3P8ZEEanceqXYmtEBqgCvV
-         pIWWjhztMnuBg==
-Subject: Re: [PATCH 3/4] memory: mtk-smi: Add sleep ctrl function
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
-        anthony.huang@mediatek.com, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20211203064027.14993-1-yong.wu@mediatek.com>
- <20211203064027.14993-4-yong.wu@mediatek.com>
- <f2ffd08a-44c3-9458-1bd8-68e3c0755611@collabora.com>
- <ebc8e4c0b0519043c5a82c6c967ac6d524e8869a.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <47c30f6f-ce9d-9ea7-283c-9026ae9ed1c0@collabora.com>
-Date:   Tue, 7 Dec 2021 09:56:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 7 Dec 2021 04:02:54 -0500
+Received: by mail-ua1-f48.google.com with SMTP id p37so25077338uae.8;
+        Tue, 07 Dec 2021 00:59:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lzwgy7wXN8Jjydn3ji6mL/biJ5JYjvPjWPkziik7m2Q=;
+        b=rXAFC9Y6jwe9lHRa5PvYzJvh8gKcY2yCHBl9aahaZFexe5gbMe2KluDxDjzpcX3iN+
+         BFplnsg2/CUVKH/WpVzCBpPvqqrwPjLSaid7s6ipEIPk8ipLjQULJbjTVOTn0gC6zsK2
+         zmY7VjzUEaxFA/khRlct8ErcjwlX59EWTRJFG0PzvWwyNEtkvwULlMuGz5MFUlYNtiHK
+         zIQ7Z/9cgBYLazIn00InHCgpIScqsN6mVEe7a4ICMVOtnN2ZjSEeTj7zcgpYRLaHYlcb
+         Y3JctITP9akPtHYL4LsyJgPOQXHWDV80+lhX5wZJJYdWpHQzWp0mpEV9R3kfpw1xII8v
+         fAzw==
+X-Gm-Message-State: AOAM530alN5bTqmr4sEeb6/Cwc0el+eTKXWTazVbQmMVmDLy3/BEbNH+
+        t0c0Tnc8QcKVlhOJKq/U0jZoACo1bZJ/zQ==
+X-Google-Smtp-Source: ABdhPJyNknypxBEBvLXiYGLBYxxaP3WSWHm64oNCFMhCsvzDu4kufWeaExXh7tET8vS5nqASWwnXCw==
+X-Received: by 2002:a67:c38f:: with SMTP id s15mr42323851vsj.50.1638867564152;
+        Tue, 07 Dec 2021 00:59:24 -0800 (PST)
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
+        by smtp.gmail.com with ESMTPSA id x21sm6021040ual.11.2021.12.07.00.59.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 00:59:23 -0800 (PST)
+Received: by mail-vk1-f176.google.com with SMTP id q21so8786304vkn.2;
+        Tue, 07 Dec 2021 00:59:23 -0800 (PST)
+X-Received: by 2002:a05:6122:104f:: with SMTP id z15mr51606124vkn.39.1638867563566;
+ Tue, 07 Dec 2021 00:59:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <ebc8e4c0b0519043c5a82c6c967ac6d524e8869a.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net>
+In-Reply-To: <8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Dec 2021 09:59:12 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUep8xc3Ay5o6=KWsF8Hp7fUKdgPuW-_WOr1=KAxkou2Q@mail.gmail.com>
+Message-ID: <CAMuHMdUep8xc3Ay5o6=KWsF8Hp7fUKdgPuW-_WOr1=KAxkou2Q@mail.gmail.com>
+Subject: Re: [Bug Report] Desktop monitor sleep regression
+To:     Brandon Nielsen <nielsenb@jetfuse.net>
+Cc:     Peter Jones <pjones@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        stable <stable@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/12/21 07:24, Yong Wu ha scritto:
-> Hi AngeloGioacchino,
-> 
-> Thanks for your review.
-> 
-> On Mon, 2021-12-06 at 16:08 +0100, AngeloGioacchino Del Regno wrote:
->> Il 03/12/21 07:40, Yong Wu ha scritto:
->>> sleep control means that when the larb go to sleep, we should wait
->>> a bit
->>> until all the current commands are finished. thus, when the larb
->>> runtime
->>> suspend, we need enable this function to wait until all the existed
->>> command are finished. when the larb resume, just disable this
->>> function.
->>> This function only improve the safe of bus. Add a new flag for this
->>> function. Prepare for mt8186.
->>>
->>> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
->>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>> ---
->>>    drivers/memory/mtk-smi.c | 39
->>> +++++++++++++++++++++++++++++++++++----
->>>    1 file changed, 35 insertions(+), 4 deletions(-)
-> 
-> [snip]
-> 
->>>    static int __maybe_unused mtk_smi_larb_suspend(struct device
->>> *dev)
->>>    {
->>>    	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
->>> +	int ret = 0;
->>> +
->>> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general,
->>> MTK_SMI_FLAG_SLEEP_CTL))
->>> +		ret = mtk_smi_larb_sleep_ctrl(dev, true);
->>
->> Sorry but what happens if SLP_PROT_RDY is not getting set properly?
->>   From what I can understand in the commit description that you wrote,
->> if we reach
->> the timeout, then the LARB transactions are not over....
->>
->> I see that you are indeed returning a failure here, but you are also
->> turning off
->> the clocks regardless of whether we get a failure or a success; I'm
->> not sure that
->> this is right, as this may leave the hardware in an unpredictable
->> state (since
->> there were some more LARB transactions that didn't go through),
->> leading to crashes
->> at system resume (or when retyring to suspend).
-> 
-> Thanks for this question. In theory you are right. In this case, the
-> bus already hang.
-> 
-> We only printed a fail log in this patch. If this fail happens, we
-> should request the master to check which case cause the larb hang.
-> 
-> If the master has a good reason or limitation, the hang is expected, I
-> think we have to add larb reset in this fail case: Reset the larb when
-> the larb runtime resume.
-> 
+Add CCs
 
-Think about the case in which the system gets resumed only partially due to a
-
-failure during resume of some driver, or due to a RTC or arch timer resume and
-suspend right after... or perhaps during runtime suspend/resume of some devices.
-In that case, we definitely want to avoid any kind of failure point that would
-lead to a system crash, or any kind of user noticeable (or UX disrupting) "strange
-behavior".
-
-I think that we should make sure that the system suspends cleanly, instead of
-patching up any possible leftover issue at resume time: if this is doable with
-a LARB reset in suspend error case, that looks like being a good option indeed.
-
-As a side note, thinking about UX, losing a little more time during suspend is
-nothing really noticeable for the user... on the other hand, spending more time
-during resume may be something noticeable to the user.
-For this reason, I think that guaranteeing that the system resumes as fast as
-possible is very important, which adds up to the need of suspending cleanly.
-
-> Fortunately, we have never got this issue. We could add this reset when
-> necessary. Is this OK for you?
-> 
-> Thanks.
-> 
->>
->>>    
->>>    	clk_bulk_disable_unprepare(larb->smi.clk_num, larb->smi.clks);
->>> -	return 0;
->>> +	return ret;
->>>    }
->>>    
->>>    static const struct dev_pm_ops smi_larb_pm_ops = {
->>>
->>
->>
-
+On Tue, Dec 7, 2021 at 7:37 AM Brandon Nielsen <nielsenb@jetfuse.net> wrote:
+> Monitors no longer sleep properly on my system (dual monitor connected
+> via DP->DVI, amdgpu, x86_64). The monitors slept properly on 5.14, but
+> stopped during the 5.15 series. I have also filed this bug on the kernel
+> bugzilla[0] and downstream[1].
+>
+> I have performed a bisect, first "bad" commit to master is
+> 55285e21f04517939480966164a33898c34b2af2[1], the same change made it
+> into the 5.15 branch as e3b39825ed0813f787cb3ebdc5ecaa5131623647. I have
+> verified the issue exists in latest master
+> (a51e3ac43ddbad891c2b1a4f3aa52371d6939570).
+>
+>
+> Steps to reproduce:
+>
+>    1. Boot system (Fedora Workstation 35 in this case)
+>    2. Log in
+>    3. Lock screen (after a few seconds, monitors will enter power save
+> "sleep" state with backlight off)
+>    4. Wait (usually no more than 30 seconds, sometimes up to a few minutes)
+>    5. Observe monitor leaving "sleep" state (backlight comes back on),
+> but nothing is displayed
+>
+>
+> [0] - https://bugzilla.kernel.org/show_bug.cgi?id=215203
+> [1] - https://bugzilla.redhat.com/show_bug.cgi?id=2028613

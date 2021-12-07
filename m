@@ -2,244 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22CC46B9FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A066646B9FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbhLGLX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:23:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37786 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229703AbhLGLXZ (ORCPT
+        id S235476AbhLGLXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:23:54 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:43756 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbhLGLXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:23:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638875995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/WqjEgoU5/1dD8E9RWBUjIogdVBeKw8rMz0jGIvDp+8=;
-        b=iRQ4wXqG9MGhlETQfBQLPUKnziCrVbGAs4XXMC7MPuuqevRIVn+XqQkDuaDpMH2UveXNRF
-        X+L/spIgoA4ew32pxDNQPA5HUHyXDVKEr1fzz1DIQNwKwpZgkp13orSv8U34EKqBSAulAe
-        fnFP3tCXkEM9xP0vbBJWXn/UI6QQZZw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-DiHNk7XbOoWYQYXZUvYwqQ-1; Tue, 07 Dec 2021 06:19:53 -0500
-X-MC-Unique: DiHNk7XbOoWYQYXZUvYwqQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B19F48042E1;
-        Tue,  7 Dec 2021 11:19:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B4785D9C0;
-        Tue,  7 Dec 2021 11:19:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] netfs: Fix lockdep warning from taking sb_writers whilst
- holding mmap_lock
-From:   David Howells <dhowells@redhat.com>
-To:     jack@suse.cz, jlayton@kernel.org
-Cc:     linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Dec 2021 11:19:35 +0000
-Message-ID: <163887597541.1596626.2668163316598972956.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Tue, 7 Dec 2021 06:23:52 -0500
+Received: by mail-il1-f197.google.com with SMTP id j1-20020a056e02154100b002a181a1ce89so11394546ilu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 03:20:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=FLdmf4Rq17HycYROUSA7LsjtKRSQdTlOPzNz3T5AO/c=;
+        b=jPaFA78VfkdeeCBZ9KMmAh54jyJgH1ZEC10ZbPS7ZUg8u6fnk8hIO3IZ+ZZ2eGRnil
+         OPlXsfKDOtfn7/uYyQqeRV4Tn2QxTzHOKR4zI3oRNhGjzcBwY3d97xZTqbZDa0fJtWfK
+         XgVzZ36XBDNZ1ypBjdCVry9+8cpSZ00V0FfD1pr7Z04n2g8z+nKSkYidUzIpGwKKgDBs
+         ssKSAolAAkQIUXhxxvLso4Uuo4dviXEpr1wm05/k0uz8l8DQKg6z+ToD6PHDav8vsfr2
+         Z/EuaFGlPlfls3oyqx1qc9RQzI4ELpBbvw21disae2vwa+U8bMdjQJldcFKzPikp3Kwl
+         i6hw==
+X-Gm-Message-State: AOAM531/lJBgaKPjH92gea+bvT4EB3LPgBpQrkTSn3xXNpYSnUGkh74z
+        6nU/xBy1s1L2iaqO8ewxjc7rLLfjdetMlRFLdgYa6NFmrU2W
+X-Google-Smtp-Source: ABdhPJwXzj88yby1G8XCe3pT8+q/qG6Fbo4XGQNYFGIwh70be5G373CY2cBJkvsDSzG8dYv+1vaSWUHBmkRfcfL6s0UiJbZG5uc6
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Received: by 2002:a05:6602:2d04:: with SMTP id c4mr37776539iow.146.1638876021917;
+ Tue, 07 Dec 2021 03:20:21 -0800 (PST)
+Date:   Tue, 07 Dec 2021 03:20:21 -0800
+In-Reply-To: <00000000000051f90e05d2664f1d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001e0bf405d28c8fdb@google.com>
+Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
+From:   syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, fgheet255t@gmail.com,
+        hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, mlevitsk@redhat.com, pbonzini@redhat.com,
+        seanjc@google.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Taking sb_writers whilst holding mmap_lock isn't allowed and will result in
-a lockdep warning like that below.  The problem comes from cachefiles
-needing to take the sb_writers lock in order to do a write to the cache,
-but being asked to do this by netfslib called from readpage, readahead or
-write_begin[1].
+syzbot has found a reproducer for the following issue on:
 
-Fix this by always offloading the write to the cache off to a worker
-thread.  The main thread doesn't need to wait for it, so deadlock can be
-avoided.
+HEAD commit:    f80ef9e49fdf Merge tag 'docs-5.16-3' of git://git.lwn.net/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b11d89b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d5e878e3399b6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1d2136db9c80d4733e8
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1603533ab00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175b5f3db00000
 
-This can be tested by running the quick xfstests on something like afs or
-ceph with lockdep enabled.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
 
-WARNING: possible circular locking dependency detected
-5.15.0-rc1-build2+ #292 Not tainted
-------------------------------------------------------
-holetest/65517 is trying to acquire lock:
-ffff88810c81d730 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_fault+0x276/0x7a5
-
-but task is already holding lock:
-ffff8881595b53e8 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x28d/0x59c
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&mm->mmap_lock#2){++++}-{3:3}:
-       validate_chain+0x3c4/0x4a8
-       __lock_acquire+0x89d/0x949
-       lock_acquire+0x2dc/0x34b
-       __might_fault+0x87/0xb1
-       strncpy_from_user+0x25/0x18c
-       removexattr+0x7c/0xe5
-       __do_sys_fremovexattr+0x73/0x96
-       do_syscall_64+0x67/0x7a
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #1 (sb_writers#10){.+.+}-{0:0}:
-       validate_chain+0x3c4/0x4a8
-       __lock_acquire+0x89d/0x949
-       lock_acquire+0x2dc/0x34b
-       cachefiles_write+0x2b3/0x4bb
-       netfs_rreq_do_write_to_cache+0x3b5/0x432
-       netfs_readpage+0x2de/0x39d
-       filemap_read_page+0x51/0x94
-       filemap_get_pages+0x26f/0x413
-       filemap_read+0x182/0x427
-       new_sync_read+0xf0/0x161
-       vfs_read+0x118/0x16e
-       ksys_read+0xb8/0x12e
-       do_syscall_64+0x67/0x7a
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #0 (mapping.invalidate_lock#3){.+.+}-{3:3}:
-       check_noncircular+0xe4/0x129
-       check_prev_add+0x16b/0x3a4
-       validate_chain+0x3c4/0x4a8
-       __lock_acquire+0x89d/0x949
-       lock_acquire+0x2dc/0x34b
-       down_read+0x40/0x4a
-       filemap_fault+0x276/0x7a5
-       __do_fault+0x96/0xbf
-       do_fault+0x262/0x35a
-       __handle_mm_fault+0x171/0x1b5
-       handle_mm_fault+0x12a/0x233
-       do_user_addr_fault+0x3d2/0x59c
-       exc_page_fault+0x85/0xa5
-       asm_exc_page_fault+0x1e/0x30
-
-other info that might help us debug this:
-
-Chain exists of:
-  mapping.invalidate_lock#3 --> sb_writers#10 --> &mm->mmap_lock#2
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&mm->mmap_lock#2);
-                               lock(sb_writers#10);
-                               lock(&mm->mmap_lock#2);
-  lock(mapping.invalidate_lock#3);
-
- *** DEADLOCK ***
-
-1 lock held by holetest/65517:
- #0: ffff8881595b53e8 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x28d/0x59c
-
-stack backtrace:
-CPU: 0 PID: 65517 Comm: holetest Not tainted 5.15.0-rc1-build2+ #292
-Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
+L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 6503 at arch/x86/kvm/vmx/nested.c:4550 nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4549
+Modules linked in:
+CPU: 0 PID: 6503 Comm: syz-executor767 Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4549
+Code: df e8 07 8e a9 00 e9 b1 f7 ff ff 89 d9 80 e1 07 38 c1 0f 8c 51 eb ff ff 48 89 df e8 3d 8d a9 00 e9 44 eb ff ff e8 53 b9 5d 00 <0f> 0b e9 2e f8 ff ff e8 47 b9 5d 00 0f 0b e9 00 f1 ff ff 89 e9 80
+RSP: 0018:ffffc90001a5fa50 EFLAGS: 00010293
+RAX: ffffffff8126de2d RBX: 0000000000000000 RCX: ffff88807482d700
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000007
+RBP: 0000000000000001 R08: ffffffff8126d650 R09: ffffed10041fb808
+R10: ffffed10041fb808 R11: 0000000000000000 R12: ffff888020fdc000
+R13: ffff8880797e8000 R14: dffffc0000000000 R15: 1ffff1100f2fd05d
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020002000 CR3: 000000000c88e000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- dump_stack_lvl+0x45/0x59
- check_noncircular+0xe4/0x129
- ? print_circular_bug+0x207/0x207
- ? validate_chain+0x461/0x4a8
- ? add_chain_block+0x88/0xd9
- ? hlist_add_head_rcu+0x49/0x53
- check_prev_add+0x16b/0x3a4
- validate_chain+0x3c4/0x4a8
- ? check_prev_add+0x3a4/0x3a4
- ? mark_lock+0xa5/0x1c6
- __lock_acquire+0x89d/0x949
- lock_acquire+0x2dc/0x34b
- ? filemap_fault+0x276/0x7a5
- ? rcu_read_unlock+0x59/0x59
- ? add_to_page_cache_lru+0x13c/0x13c
- ? lock_is_held_type+0x7b/0xd3
- down_read+0x40/0x4a
- ? filemap_fault+0x276/0x7a5
- filemap_fault+0x276/0x7a5
- ? pagecache_get_page+0x2dd/0x2dd
- ? __lock_acquire+0x8bc/0x949
- ? pte_offset_kernel.isra.0+0x6d/0xc3
- __do_fault+0x96/0xbf
- ? do_fault+0x124/0x35a
- do_fault+0x262/0x35a
- ? handle_pte_fault+0x1c1/0x20d
- __handle_mm_fault+0x171/0x1b5
- ? handle_pte_fault+0x20d/0x20d
- ? __lock_release+0x151/0x254
- ? mark_held_locks+0x1f/0x78
- ? rcu_read_unlock+0x3a/0x59
- handle_mm_fault+0x12a/0x233
- do_user_addr_fault+0x3d2/0x59c
- ? pgtable_bad+0x70/0x70
- ? rcu_read_lock_bh_held+0xab/0xab
- exc_page_fault+0x85/0xa5
- ? asm_exc_page_fault+0x8/0x30
- asm_exc_page_fault+0x1e/0x30
-RIP: 0033:0x40192f
-Code: ff 48 89 c3 48 8b 05 50 28 00 00 48 85 ed 7e 23 31 d2 4b 8d 0c 2f eb 0a 0f 1f 00 48 8b 05 39 28 00 00 48 0f af c2 48 83 c2 01 <48> 89 1c 01 48 39 d5 7f e8 8b 0d f2 27 00 00 31 c0 85 c9 74 0e 8b
-RSP: 002b:00007f9931867eb0 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: 00007f9931868700 RCX: 00007f993206ac00
-RDX: 0000000000000001 RSI: 0000000000000000 RDI: 00007ffc13e06ee0
-RBP: 0000000000000100 R08: 0000000000000000 R09: 00007f9931868700
-R10: 00007f99318689d0 R11: 0000000000000202 R12: 00007ffc13e06ee0
-R13: 0000000000000c00 R14: 00007ffc13e06e00 R15: 00007f993206a000
-
-Fixes: 726218fdc22c ("netfs: Define an interface to talk to a cache")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jan Kara <jack@suse.cz>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cachefs@redhat.com
-cc: linux-fsdevel@vger.kernel.org
-Link: https://lore.kernel.org/r/20210922110420.GA21576@quack2.suse.cz/ [1]
----
-
- fs/netfs/read_helper.c |   15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
-index 7046f9bdd8dc..7c6e199618af 100644
---- a/fs/netfs/read_helper.c
-+++ b/fs/netfs/read_helper.c
-@@ -354,16 +354,11 @@ static void netfs_rreq_write_to_cache_work(struct work_struct *work)
- 	netfs_rreq_do_write_to_cache(rreq);
- }
- 
--static void netfs_rreq_write_to_cache(struct netfs_read_request *rreq,
--				      bool was_async)
-+static void netfs_rreq_write_to_cache(struct netfs_read_request *rreq)
- {
--	if (was_async) {
--		rreq->work.func = netfs_rreq_write_to_cache_work;
--		if (!queue_work(system_unbound_wq, &rreq->work))
--			BUG();
--	} else {
--		netfs_rreq_do_write_to_cache(rreq);
--	}
-+	rreq->work.func = netfs_rreq_write_to_cache_work;
-+	if (!queue_work(system_unbound_wq, &rreq->work))
-+		BUG();
- }
- 
- /*
-@@ -558,7 +553,7 @@ static void netfs_rreq_assess(struct netfs_read_request *rreq, bool was_async)
- 	wake_up_bit(&rreq->flags, NETFS_RREQ_IN_PROGRESS);
- 
- 	if (test_bit(NETFS_RREQ_WRITE_TO_CACHE, &rreq->flags))
--		return netfs_rreq_write_to_cache(rreq, was_async);
-+		return netfs_rreq_write_to_cache(rreq);
- 
- 	netfs_rreq_completed(rreq, was_async);
- }
-
+ <TASK>
+ vmx_leave_nested arch/x86/kvm/vmx/nested.c:6222 [inline]
+ nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
+ vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
+ kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10990
+ kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
+ kvm_free_vcpus arch/x86/kvm/x86.c:11427 [inline]
+ kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11546
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
+ kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
+ kvm_vm_release+0x42/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1243
+ __fput+0x3fc/0x870 fs/file_table.c:280
+ task_work_run+0x146/0x1c0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0x705/0x24f0 kernel/exit.c:832
+ do_group_exit+0x168/0x2d0 kernel/exit.c:929
+ __do_sys_exit_group+0x13/0x20 kernel/exit.c:940
+ __se_sys_exit_group+0x10/0x10 kernel/exit.c:938
+ __x64_sys_exit_group+0x37/0x40 kernel/exit.c:938
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe968c95c09
+Code: Unable to access opcode bytes at RIP 0x7fe968c95bdf.
+RSP: 002b:00007ffc762ba918 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fe968d09270 RCX: 00007fe968c95c09
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe968d09270
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 

@@ -2,187 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6069E46BCBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F5046BCBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbhLGNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S237270AbhLGNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbhLGNkC (ORCPT
+        with ESMTP id S230064AbhLGNmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:40:02 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AC5C061574;
-        Tue,  7 Dec 2021 05:36:31 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z6so13494856pfe.7;
-        Tue, 07 Dec 2021 05:36:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cf8+Y7rh6IUMzz1MWO0konQbE6bUG2tyfcoe4eupeDs=;
-        b=lUFFTFeQY7uviiiXqIgq0o8zJITMFaUA7guaC0jQUpYg862ncfm2nTy/Jj1tKfg+h5
-         9GYURNswsghn0wVv31FCRShvplshXhiMg7bXDNiSTjGedZ8B7Md6iHkyPe0RgzZ3j8wz
-         UOiiLS4FeDBk/2q0xDbtjSKquLfKjucOAb/tuHEnwgWLDPGE/XtSAJ3n1rtFaK3nEd1Z
-         +xMw5lgYFGm7Jg79TV8/2FtRafi7AZvpXCmfkp02KQU4b7paeYw/uBGZJHg8dgHrhTVE
-         s81cPCuJbf9EZluWO69gt8d4cNVDLBXmgGFRwJuVBSCIjJKQ8cyVPdkhzDEZyq0p2Zbz
-         COpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cf8+Y7rh6IUMzz1MWO0konQbE6bUG2tyfcoe4eupeDs=;
-        b=tXd6vIAfSLLm8fnF7ljqpauWjWMuEA+UiC04LSv6X0W7O9txxkw+C0Q25prm7is1jL
-         NPKq5UfLLW4K9g4CK+UmHwAay3j41q0SbNf3C/XvPvWDedgRjMHnfQ14qh60cov9F9Pi
-         Y6fcx3cRJVEw05xJ+BcZRHBHmaDopSlgAegURNTAv20cp2JlHPEFSOMPoYbCaXWB6VU7
-         av+b1faQ3gj8JC2PKAZFH75FYHBiiYSDAENr7cJFGGJ/BQVIoxqlP4hxET8z7KXPDx9n
-         l1qonabw6f7LqB/GgFzVItcz6hRPoJCipwjzxmGdO5xqL0xu7YVozvMglt4SQp+exRno
-         v5jw==
-X-Gm-Message-State: AOAM531ARO5o1wjWF2RB1Q0adknzH73NO0sdw9ai1v0Fz4QiGtEhVHGj
-        AJTdg4Tq693QtysxWotQCWg=
-X-Google-Smtp-Source: ABdhPJwr1d/AvigQmQK1cYdO1PQ74sNfNw+M2HPX2ziEc72Li9w6AOnUYOwPTYNi7+dCRXCr/r7CQg==
-X-Received: by 2002:a63:904a:: with SMTP id a71mr23561632pge.241.1638884191431;
-        Tue, 07 Dec 2021 05:36:31 -0800 (PST)
-Received: from keqing-virtualbox.mshome.net ([92.119.178.3])
-        by smtp.gmail.com with ESMTPSA id d10sm16008273pfl.139.2021.12.07.05.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 05:36:30 -0800 (PST)
-From:   Desmond Lim <peckishrine@gmail.com>
-Cc:     Desmond Lim <peckishrine@gmail.com>,
-        Kinglong Mee <kinglongmee@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH v2] HID: sigmamicro: Fix modifier keys for SiGma Micro based keyboards
-Date:   Tue,  7 Dec 2021 21:36:00 +0800
-Message-Id: <20211207133603.4947-1-peckishrine@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 7 Dec 2021 08:42:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C4EC0698D1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 05:38:37 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638884315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bX1NR0j+bztPs3e2FHXqPDFi5nwq1W3dms8h8Wa/owE=;
+        b=kA4YToSdJwK2cJnYyIGH5UHdicorNCukcaDzw7CGlVr6i00SvsdJ9GOqhlDukdJTf2zM3m
+        jxKYFCF0YpjKt2X7eAC+HBOXH40LJIYVFoN3F88SGr7Y1u3wzinySDiVDT9VciayRRy1cR
+        hyTB0VNKB61MWdmWmyumkbgyYg+i+5f549bD4qksHDBydFGgGlMlIbzCcC9vjTgbG14aN5
+        i9sV48QM8GFC47yG5VxgFrVYbaPN/q+Pbri41iP3pZU5AE2Ik7aByG375Cb5F4my4lYXUj
+        YUSb+gjI8j+OIRmL2X0/bh6+ebZucxXmw/TPW6YNZph1rqWtXSWot2DWMUiHog==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638884315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bX1NR0j+bztPs3e2FHXqPDFi5nwq1W3dms8h8Wa/owE=;
+        b=SclE7/lvMWOoowNRGdIXSuzTpXd02XpgWh5Ld9DKkq8JtjATTHU2BOrYcr8NdmkoU8QL8e
+        jpS7bOrPlE0/6lCw==
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+Subject: Re: [x86/signal]  3aac3ebea0:  will-it-scale.per_thread_ops -11.9%
+ regression
+In-Reply-To: <20211207012128.GA16074@xsang-OptiPlex-9020>
+References: <20211207012128.GA16074@xsang-OptiPlex-9020>
+Date:   Tue, 07 Dec 2021 14:38:34 +0100
+Message-ID: <87bl1s357p.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SIGMACHIP USB Keyboard (1c4f:0059) has a problem where all the
-modifier keys mapped to Shift_L.
+Hi!
 
-Fix the report descriptor to make modifier keys work as expected.
+On Tue, Dec 07 2021 at 09:21, kernel test robot wrote:
 
-Co-developed-by: Kinglong Mee <kinglongmee@gmail.com>
-Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
-Signed-off-by: Desmond Lim <peckishrine@gmail.com>
+> (please be noted we made some further analysis before reporting out,
+> and thought it's likely the regression is related with the extra spinlock
+> introducded by enalbling DYNAMIC_SIGFRAME. below is the full report.)
+>
+> FYI, we noticed a -11.9% regression of will-it-scale.per_thread_ops due t=
+o commit:
+
+Does that use sigaltstack() ?
+
+> 1bdda24c4af64cd2 3aac3ebea08f2d342364f827c89=20
+> ---------------- ---------------------------=20
+>          %stddev     %change         %stddev
+>              \          |                \=20=20
+>     754824 =C2=B1  2%     -11.9%     664668 =C2=B1  2%  will-it-scale.16.=
+threads
+>      47176 =C2=B1  2%     -11.9%      41541 =C2=B1  2%  will-it-scale.per=
+_thread_ops
+>     754824 =C2=B1  2%     -11.9%     664668 =C2=B1  2%  will-it-scale.wor=
+kload
+>    1422782 =C2=B1  8%  +3.3e+05     1751520 =C2=B1 12%  syscalls.sys_getp=
+id.noise.5%
+
+Somehow the printout got confused ...
+
+>  1.583e+10            -2.1%   1.55e+10        perf-stat.i.instructions
+>    6328594 =C2=B1  2%     +11.1%    7032338 =C2=B1  2%  perf-stat.overall=
+.path-length
+>  1.578e+10            -2.1%  1.545e+10        perf-stat.ps.instructions
+>  4.774e+12            -2.2%  4.671e+12        perf-stat.total.instructions
+>       0.00            +6.3        6.33 =C2=B1  8%  perf-profile.calltrace=
+.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock_irq.do_sigaltsta=
+ck.restore_altstack.__x64_sys_rt_sigreturn
+>       0.00            +6.5        6.51 =C2=B1  8%  perf-profile.calltrace=
+.cycles-pp._raw_spin_lock_irq.do_sigaltstack.restore_altstack.__x64_sys_rt_=
+sigreturn.do_syscall_64
+>       0.00            +6.6        6.58 =C2=B1  8%  perf-profile.calltrace=
+.cycles-pp.do_sigaltstack.restore_altstack.__x64_sys_rt_sigreturn.do_syscal=
+l_64.entry_SYSCALL_64_after_hwframe
+>       0.00            +6.6        6.62 =C2=B1  8%  perf-profile.calltrace=
+.cycles-pp.restore_altstack.__x64_sys_rt_sigreturn.do_syscall_64.entry_SYSC=
+ALL_64_after_hwframe.raise
+>       0.00            +6.9        6.88 =C2=B1  9%  perf-profile.calltrace=
+.cycles-pp.__x64_sys_rt_sigreturn.do_syscall_64.entry_SYSCALL_64_after_hwfr=
+ame.raise
+>       7.99 =C2=B1 12%      +6.0       14.00 =C2=B1  9%  perf-profile.chil=
+dren.cycles-pp.__x64_sys_rt_sigreturn
+>       0.05 =C2=B1 44%      +6.6        6.62 =C2=B1  8%  perf-profile.chil=
+dren.cycles-pp.restore_altstack
+>       0.00            +6.6        6.58 =C2=B1  8%  perf-profile.children.=
+cycles-pp.do_sigaltstack
+
+It looks like it does. The problem is that sighand->lock is process
+wide.
+
+Can you test whether the below cures it?
+
+Not pretty, but that's what I came up with for now.
+
+Thanks,
+
+        tglx
 ---
-Changes since v1:
- - Update commit message
- - Correct Kconfig dependency
----
- drivers/hid/Kconfig          | 10 ++++++++
- drivers/hid/Makefile         |  1 +
- drivers/hid/hid-ids.h        |  1 +
- drivers/hid/hid-sigmamicro.c | 45 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+)
- create mode 100644 drivers/hid/hid-sigmamicro.c
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 9f5435b55949..5b76c56bf9a4 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -970,6 +970,16 @@ config HID_SEMITEK
- 	- Woo-dy
- 	- X-Bows Nature/Knight
- 
-+config HID_SIGMAMICRO
-+	tristate "SiGma Micro based keyboards"
-+	depends on USB_HID
-+	help
-+	  Support for keyboards that use the SiGma Micro (a.k.a SigmaChip) IC.
-+
-+	  Supported devices:
-+	  - Landslides KR-700
-+	  - Rapoo V500
-+
- config HID_SONY
- 	tristate "Sony PS2/3/4 accessories"
- 	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 55a6fa3eca5a..89ea7fafb66b 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_HID_RMI)		+= hid-rmi.o
- obj-$(CONFIG_HID_SAITEK)	+= hid-saitek.o
- obj-$(CONFIG_HID_SAMSUNG)	+= hid-samsung.o
- obj-$(CONFIG_HID_SEMITEK)	+= hid-semitek.o
-+obj-$(CONFIG_HID_SIGMAMICRO)	+= hid-sigmamicro.o
- obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
- obj-$(CONFIG_HID_SONY)		+= hid-sony.o
- obj-$(CONFIG_HID_SPEEDLINK)	+= hid-speedlink.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 96a455921c67..279410bc8fce 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1083,6 +1083,7 @@
- 
- #define USB_VENDOR_ID_SIGMA_MICRO	0x1c4f
- #define USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD	0x0002
-+#define USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2	0x0059
- 
- #define USB_VENDOR_ID_SIGMATEL		0x066F
- #define USB_DEVICE_ID_SIGMATEL_STMP3780	0x3780
-diff --git a/drivers/hid/hid-sigmamicro.c b/drivers/hid/hid-sigmamicro.c
-new file mode 100644
-index 000000000000..eb34d6198083
---- /dev/null
-+++ b/drivers/hid/hid-sigmamicro.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * HID driver for SiGma Micro based keyboards
-+ *
-+ * Copyright (c) 2016 Kinglong Mee
-+ * Copyright (c) 2021 Desmond Lim
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+
-+#include "hid-ids.h"
-+
-+static __u8 *sm_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-+			     unsigned int *rsize)
-+{
-+	switch (hdev->product) {
-+	case USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2:
-+		if (*rsize == 167 && rdesc[98] == 0x81 && rdesc[99] == 0x00) {
-+			hid_info(hdev, "Fixing up SiGma Micro report descriptor\n");
-+			rdesc[99] = 0x02;
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -457,10 +457,10 @@ static inline void fpu_inherit_perms(str
+ 	if (fpu_state_size_dynamic()) {
+ 		struct fpu *src_fpu =3D &current->group_leader->thread.fpu;
+=20
+-		spin_lock_irq(&current->sighand->siglock);
++		read_lock(&current->sighand->sigaltstack_lock);
+ 		/* Fork also inherits the permissions of the parent */
+ 		dst_fpu->perm =3D src_fpu->perm;
+-		spin_unlock_irq(&current->sighand->siglock);
++		read_unlock(&current->sighand->sigaltstack_lock);
+ 	}
+ }
+=20
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1582,17 +1582,22 @@ static int validate_sigaltstack(unsigned
+ {
+ 	struct task_struct *thread, *leader =3D current->group_leader;
+ 	unsigned long framesize =3D get_sigframe_size();
++	int ret =3D 0;
+=20
+-	lockdep_assert_held(&current->sighand->siglock);
++	lockdep_assert_held_write(&current->sighand->sigaltstack_lock);
+=20
+ 	/* get_sigframe_size() is based on fpu_user_cfg.max_size */
+ 	framesize -=3D fpu_user_cfg.max_size;
+ 	framesize +=3D usize;
++	read_lock(&tasklist_lock);
+ 	for_each_thread(leader, thread) {
+-		if (thread->sas_ss_size && thread->sas_ss_size < framesize)
+-			return -ENOSPC;
++		if (thread->sas_ss_size && thread->sas_ss_size < framesize) {
++			ret =3D -ENOSPC;
++			break;
 +		}
-+		break;
-+	}
-+	return rdesc;
-+}
-+
-+static const struct hid_device_id sm_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_SIGMA_MICRO, USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, sm_devices);
-+
-+static struct hid_driver sm_driver = {
-+	.name = "sigmamicro",
-+	.id_table = sm_devices,
-+	.report_fixup = sm_report_fixup,
-+};
-+module_hid_driver(sm_driver);
-+
-+MODULE_AUTHOR("Kinglong Mee <kinglongmee@gmail.com>");
-+MODULE_AUTHOR("Desmond Lim <peckishrine@gmail.com>");
-+MODULE_DESCRIPTION("SiGma Micro HID driver");
-+MODULE_LICENSE("GPL");
-
-base-commit: 740bebf42104d2f082514b1545a14056f3b1b56c
--- 
-2.30.2
-
+ 	}
+-	return 0;
++	read_unlock(&tasklist_lock);
++	return ret;
+ }
+=20
+ static int __xstate_request_perm(u64 permitted, u64 requested)
+@@ -1627,7 +1632,7 @@ static int __xstate_request_perm(u64 per
+=20
+ 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+ 	WRITE_ONCE(fpu->perm.__state_perm, requested);
+-	/* Protected by sighand lock */
++	/* Protected by sighand::sigaltstack_lock */
+ 	fpu->perm.__state_size =3D ksize;
+ 	fpu->perm.__user_state_size =3D usize;
+ 	return ret;
+@@ -1666,10 +1671,10 @@ static int xstate_request_perm(unsigned
+ 		return 0;
+=20
+ 	/* Protect against concurrent modifications */
+-	spin_lock_irq(&current->sighand->siglock);
++	write_lock(&current->sighand->sigaltstack_lock);
+ 	permitted =3D xstate_get_host_group_perm();
+ 	ret =3D __xstate_request_perm(permitted, requested);
+-	spin_unlock_irq(&current->sighand->siglock);
++	write_unlock(&current->sighand->sigaltstack_lock);
+ 	return ret;
+ }
+=20
+@@ -1685,11 +1690,11 @@ int xfd_enable_feature(u64 xfd_err)
+ 	}
+=20
+ 	/* Protect against concurrent modifications */
+-	spin_lock_irq(&current->sighand->siglock);
++	read_lock(&current->sighand->sigaltstack_lock);
+=20
+ 	/* If not permitted let it die */
+ 	if ((xstate_get_host_group_perm() & xfd_event) !=3D xfd_event) {
+-		spin_unlock_irq(&current->sighand->siglock);
++		read_unlock(&current->sighand->sigaltstack_lock);
+ 		return -EPERM;
+ 	}
+=20
+@@ -1702,7 +1707,7 @@ int xfd_enable_feature(u64 xfd_err)
+ 	 * another task, the retrieved buffer sizes are valid for the
+ 	 * currently requested feature(s).
+ 	 */
+-	spin_unlock_irq(&current->sighand->siglock);
++	read_unlock(&current->sighand->sigaltstack_lock);
+=20
+ 	/*
+ 	 * Try to allocate a new fpstate. If that fails there is no way
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -939,17 +939,19 @@ static int __init strict_sas_size(char *
+  * the task has permissions to use dynamic features. Tasks which have no
+  * permission are checked against the size of the non-dynamic feature set
+  * if strict checking is enabled. This avoids forcing all tasks on the
+- * system to allocate large sigaltstacks even if they are never going
+- * to use a dynamic feature. As this is serialized via sighand::siglock
+- * any permission request for a dynamic feature either happened already
+- * or will see the newly install sigaltstack size in the permission checks.
++ * system to allocate large sigaltstacks even if they are never going to
++ * use a dynamic feature.
++ *
++ * As this is serialized via sighand::sigaltstack_lock any permission
++ * request for a dynamic feature either happened already or will see the
++ * newly install sigaltstack size in the permission checks.
+  */
+ bool sigaltstack_size_valid(size_t ss_size)
+ {
+ 	unsigned long fsize =3D max_frame_size - fpu_default_state_size;
+ 	u64 mask;
+=20
+-	lockdep_assert_held(&current->sighand->siglock);
++	lockdep_assert_held_read(&current->sighand->sigaltstack_lock);
+=20
+ 	if (!fpu_state_size_dynamic() && !strict_sigaltstack_size)
+ 		return true;
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -19,6 +19,9 @@
+=20
+ struct sighand_struct {
+ 	spinlock_t		siglock;
++#ifdef CONFIG_DYNAMIC_SIGFRAME
++	rwlock_t		sigaltstack_lock;
++#endif
+ 	refcount_t		count;
+ 	wait_queue_head_t	signalfd_wqh;
+ 	struct k_sigaction	action[_NSIG];
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -48,6 +48,9 @@ static struct sighand_struct init_sighan
+ 	.action		=3D { { { .sa_handler =3D SIG_DFL, } }, },
+ 	.siglock	=3D __SPIN_LOCK_UNLOCKED(init_sighand.siglock),
+ 	.signalfd_wqh	=3D __WAIT_QUEUE_HEAD_INITIALIZER(init_sighand.signalfd_wqh=
+),
++#ifdef CONFIG_DYNAMIC_SIGFRAME
++	.sigaltstack_lock	=3D __RW_LOCK_UNLOCKED(init_sighand.sigaltstack_lock),
++#endif
+ };
+=20
+ #ifdef CONFIG_SHADOW_CALL_STACK
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2900,6 +2900,9 @@ static void sighand_ctor(void *data)
+=20
+ 	spin_lock_init(&sighand->siglock);
+ 	init_waitqueue_head(&sighand->signalfd_wqh);
++#ifdef CONFIG_DYNAMIC_SIGFRAME
++	rwlock_init(&sighand->sigaltstack_lock);
++#endif
+ }
+=20
+ void __init proc_caches_init(void)
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -4141,15 +4141,15 @@ int do_sigaction(int sig, struct k_sigac
+=20
+ #ifdef CONFIG_DYNAMIC_SIGFRAME
+ static inline void sigaltstack_lock(void)
+-	__acquires(&current->sighand->siglock)
++	__acquires(&current->sighand->sigaltstack_lock)
+ {
+-	spin_lock_irq(&current->sighand->siglock);
++	read_lock(&current->sighand->sigaltstack_lock);
+ }
+=20
+ static inline void sigaltstack_unlock(void)
+-	__releases(&current->sighand->siglock)
++	__releases(&current->sighand->sigaltstack_lock)
+ {
+-	spin_unlock_irq(&current->sighand->siglock);
++	read_unlock(&current->sighand->sigaltstack_lock);
+ }
+ #else
+ static inline void sigaltstack_lock(void) { }

@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A118046AFE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B589A46AFED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 02:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238663AbhLGBmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 20:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhLGBmO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 20:42:14 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4287C061746;
-        Mon,  6 Dec 2021 17:38:44 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id j9so11612799qvm.10;
-        Mon, 06 Dec 2021 17:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TtX5Ua1bFK7U/ze5aptE0nmXvt0FV6UQIzQSovRpPk0=;
-        b=Fc0NJJWlIsvOOQPTjV7ybl0o/gG2buF2Ao4AFw3HZBtOUMHdx3N0b0GDbMrHdVHEGr
-         f2VU5s02Q5oCnpngXUvm1iyQuvbmGiGRQv6C0jmWei7y5mEJh5X0wNVhWSQ3qn0fNSiT
-         R6N4NdC32Glypm4dJBTgBddG4mlV6ACgPJlA/pFEY0If4iycaICREhU3ZY4Ib3uT+jW2
-         XhJmT8jPasUUVCewWaBBr6TzLP6R2ahvVKUgM1uDhNQeLsiKvC07MuKzhrVk5o0IYFj8
-         W4MTTTs7NJnFfd0oy97QJO+L+yjdmRyMsTrRxlYhjrCMCU2qVRs4UO1AWihwupydpPhJ
-         rwvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TtX5Ua1bFK7U/ze5aptE0nmXvt0FV6UQIzQSovRpPk0=;
-        b=M0swkeHtN/uaY4UJT/fVFLn4Ewl31x9Ra4NKNUI94NV1JmxAsv/2Okn2vZza2UAbF0
-         bhBXT3KJfx1I1hWpkEB6qNbMDtAWYJ4pv2bRdTWiM1pCWTtD6CexawhJaNZ9X5C9eTSi
-         zCmSjhndJsb5V2FB1I9oYXl+TSEPs6SgZnu70JdX3nIZy39yr8QwTYB+ybZ6sU2JAH1q
-         h20Ml8l9XNNiHU7kD6QeEou+bvQE6hb679jmW8oB/DU9oNmoAG+ligH2eBaeqAHvIws5
-         x0rgfGn/6xUXtuY+7rvr9/FEsjPV2/dRg9eO4vQwBWR+U5mpx6lMovU/XxF+F2jG0TBz
-         08Mg==
-X-Gm-Message-State: AOAM533dzkeohOcbU9hTmR26kZICmT1qX1EeZqbPvIhsmZzOi6FuFZ/p
-        0luMkVXgqgPQ6LX0qGg67iK0I5Dq3fMYGP/tRAg=
-X-Google-Smtp-Source: ABdhPJw9IBOmfDzr2lw9BdL22wzIVyQOHdH9Q/My/9L3cfmA6oJbyB4PFgg0Wceil0iKnLXIVfFpqkyL+Ebm2HeIx70=
-X-Received: by 2002:ad4:4027:: with SMTP id q7mr41260760qvp.117.1638841124062;
- Mon, 06 Dec 2021 17:38:44 -0800 (PST)
+        id S232037AbhLGBol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 20:44:41 -0500
+Received: from mga18.intel.com ([134.134.136.126]:61467 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229735AbhLGBoj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 20:44:39 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224323202"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224323202"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 17:41:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="502371270"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2021 17:41:07 -0800
+Date:   Tue, 7 Dec 2021 09:41:06 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
+ platforms
+Message-ID: <20211207014106.GB32145@shbuild999.sh.intel.com>
+References: <20211117023751.24190-1-feng.tang@intel.com>
+ <20211117023751.24190-2-feng.tang@intel.com>
+ <20211130064623.GB96474@shbuild999.sh.intel.com>
+ <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211130150256.GA19477@shbuild999.sh.intel.com>
+ <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20211206113437.2820889-1-mudongliangabcd@gmail.com>
-In-Reply-To: <20211206113437.2820889-1-mudongliangabcd@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Tue, 7 Dec 2021 09:39:24 +0800
-Message-ID: <CADBw62pSJ=rHjwTocxeeuCgtadLKqz-U7gAQek5Eo_bBQSzBzQ@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: sprd: move pm_runtime_disable to err_rpm
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Baolin Wang <baolin.wang@spreadtrum.com>,
-        dmaengine@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
+Hi Paul,
 
-On Mon, Dec 6, 2021 at 7:34 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> When pm_runtime_get_sync fails, it forgets to invoke pm_runtime_disable
-> in the label err_rpm.
->
-> Fix this by moving pm_runtime_disable to label err_rpm.
->
-> Fixes: 9b3b8171f7f4 ("dmaengine: sprd: Add Spreadtrum DMA driver")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
+On Tue, Nov 30, 2021 at 08:28:15AM -0800, Paul E. McKenney wrote:
+> On Tue, Nov 30, 2021 at 11:02:56PM +0800, Feng Tang wrote:
+> > And similar big gap between 'tsc' and 'hpet' is seen for the server
+> > case (5.5 kernel which doesn't have the cs_watchdog_read() patchset). 
+> > 
+> > [1196945.314929] clocksource: timekeeping watchdog on CPU67: Marking clocksource 'tsc' as unstable because the skew is too large:
+> > [1196945.314935] clocksource:                       'hpet' wd_now: 25272026 wd_last: 2e9ce418 mask: ffffffff
+> > [1196945.314938] clocksource:                       'tsc' cs_now: 95b400003fdf1 cs_last: 95ae7ed7c33f7 mask: ffffffffffffffff
+> > [1196945.314948] tsc: Marking TSC unstable due to clocksource watchdog
+> > [1196945.314977] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
+> > [1196945.314981] sched_clock: Marking unstable (1196945264804527, 50153181)<-(1196945399926576, -84962703)
+> > [1196945.316255] clocksource: Switched to clocksource hpet
+> > 
+> > For this case, I don't have access to the HW and only have the
+> > dmesg log, from which it seems the watchdog timer has been postponed
+> > a very long time from running.
+> 
+> Thank you for the analysis!
+> 
+> One approach to handle this situation would be to avoid checking for
+> clock skew if the time since the last watchdog read was more than (say)
+> twice the desired watchdog spacing.  This does leave open the question of
+> exactly which clocksource to use to measure the time between successive
+> clocksource reads.  My thought is to check this only once upon entry to
+> the handler and to use the designated-good clocksource.
+> 
+> Does that make sense, or would something else work better?
 
-Thanks for your patch, but looking at the code in detail, I think we
-also should decrease the rpm counter when failing to call the
-pm_runtime_get_sync().
+For this case that the watchdog timer has been delayed for too long
+time (170 seconds here), it may be a general problem. IIRC, there
+was a similar report in LKML for a non-x86 platform. 
 
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -1210,7 +1210,7 @@ static int sprd_dma_probe(struct platform_device *pdev)
-        ret = dma_async_device_register(&sdev->dma_dev);
-        if (ret < 0) {
-                dev_err(&pdev->dev, "register dma device failed:%d\n", ret);
--               goto err_register;
-+               goto err_rpm;
-        }
+As for fix, I thought about scalable comparing, say if the timer
+is delayed 10 seconds, and our checking interval is 500 ms, then
+maybe we can lift the checking margin to 20X. But this has a problem
+that the watchdog's counter could wrap, in above case, the HPET
+already wrapped once (about 170+ seconds), and the wrap time 
+could be much shorter for other timers (4 seconds for acpi_pm timer?).
+So your idea of limiting the max delay is reasonable.
 
-        sprd_dma_info.dma_cap = sdev->dma_dev.cap_mask;
-@@ -1224,10 +1224,9 @@ static int sprd_dma_probe(struct platform_device *pdev)
+Thanks,
+Feng
 
- err_of_register:
-        dma_async_device_unregister(&sdev->dma_dev);
--err_register:
-+err_rpm:
-        pm_runtime_put_noidle(&pdev->dev);
-        pm_runtime_disable(&pdev->dev);
--err_rpm:
-        sprd_dma_disable(sdev);
-        return ret;
- }
-
--- 
-Baolin Wang
+> 							Thanx, Paul

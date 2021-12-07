@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E419946B126
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9803446B12B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 04:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbhLGDDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:03:00 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29094 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhLGDDA (ORCPT
+        id S232381AbhLGDFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:05:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53732 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229567AbhLGDFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:03:00 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J7Q1N1l1sz1DK17;
-        Tue,  7 Dec 2021 10:56:40 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 10:59:28 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 10:59:28 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH] lib/list_debug.c: print more list debugging context in __list_del_entry_valid()
-Date:   Tue, 7 Dec 2021 10:58:35 +0800
-Message-ID: <20211207025835.1909-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Mon, 6 Dec 2021 22:05:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638846127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zBN+syKSSAxUFyLOlRxVGt24z0QMP6DSO9PlA+lBJtY=;
+        b=aXTYI8K8379HmPdrHvMQpLRfEm31DvEYVmNXEbvpjX8eImJEuUgip2poOsvskxYxtWNtl/
+        QU7yJnJUjf5gxMC71vMu8giiXYSWtm/CHZw2VYRT4nGOauZlztAEF+WoyWQVaqmdw9js4n
+        9PXLf2DHfYFEkuQfIKveCzug8Da7J6I=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-DiAQgblOMESxfHFIvKf9IQ-1; Mon, 06 Dec 2021 22:02:06 -0500
+X-MC-Unique: DiAQgblOMESxfHFIvKf9IQ-1
+Received: by mail-lj1-f200.google.com with SMTP id 2-20020a2e0902000000b00218c22336abso4116590ljj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 19:02:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zBN+syKSSAxUFyLOlRxVGt24z0QMP6DSO9PlA+lBJtY=;
+        b=IthE1vHsTgql/8gc7fVGaF5GTzw3ehvGsLw/OoWH5ktJ/oGH4hcf16x8i63IzI1xtB
+         ohxoRizoYHv/pdEzcAnuj+W29G2pFzLmVOYfrMtxlWtlaTTzB2x0p+cBuBs/iitPHKJD
+         Ln+qDEBZBYndm2D+7wqjeHlpfLg5cyK+ZNsROrV8Bo41BVtjY1csvUz6mFnarVU+7j+a
+         uLv1QKzC6SIL0xLU5Ye9IdfhfnwFoNeAT6bqWgjaxKKBzsJ1PMoH0BkNkMUkxl92S6mG
+         C1EdfQ5LLxJiktcYAm/UclRipytKSliYlAUVz5I+lBKvATjaDYtN80E2cGs3DQnHBJLm
+         OK1g==
+X-Gm-Message-State: AOAM530+DQphR2OtFyzVGbDp6jZpcWbHG+SgCg0LfkQdj82USKvtVWsz
+        iduPX6CaBoDBbm/IX51XTPG8261LiDsl1WZZQ3fu0MYT0kegky9tI0SyWXREPyAA4zDmznlm2Z8
+        xW2sKq2RWUPPTlJBLOQTQCUlFripcnKFChUa4PFTK
+X-Received: by 2002:a2e:b88d:: with SMTP id r13mr39374141ljp.362.1638846124615;
+        Mon, 06 Dec 2021 19:02:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxCqfug/3TpuWUxGv4K4tZ1JDQBHCFlRMNWmHhg3z1EzToZ5S5LdMB+CS75Q4G3NbAKp9Xy0GDAoi5QA0mHri8=
+X-Received: by 2002:a2e:b88d:: with SMTP id r13mr39374124ljp.362.1638846124375;
+ Mon, 06 Dec 2021 19:02:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+References: <20211206085034.2836099-1-arnd@kernel.org>
+In-Reply-To: <20211206085034.2836099-1-arnd@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 7 Dec 2021 11:01:53 +0800
+Message-ID: <CACGkMEtX4gF7i__dBhsq=pOsCvTHx4iJdGJguoRmM9cxCLCppA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] virtio: always enter drivers/virtio/
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the entry->prev and entry->next are considered to be valid as
-long as they are not LIST_POISON{1|2}. However, the memory may be
-corrupted. The prev->next is invalid probably because 'prev' is invalid,
-not because prev->next's content is illegal.
+On Mon, Dec 6, 2021 at 4:50 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> When neither VIRTIO_PCI_LIB nor VIRTIO are enabled, but the alibaba
+> vdpa driver is, the kernel runs into a link error because the legacy
+> virtio module never gets built:
+>
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
+> eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
+> eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
+> eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
+> eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
+> eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
+> x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
+>
+> When VIRTIO_PCI_LIB was added, it was correctly added to drivers/Makefile
+> as well, but for the legacy module, this is missing.  Solve this by always
+> entering drivers/virtio during the build and letting its Makefile take
+> care of the individual options, rather than having a separate line for
+> each sub-option.
+>
+> Fixes: 64b9f64f80a6 ("vdpa: introduce virtio pci driver")
 
-Unfortunately, the printk and its subfunctions will modify the registers
-that hold the 'prev' and 'next', and we don't see this valuable
-information in the BUG context.
+I think this is not true. we had:
 
-So print the contents of 'entry->prev' and 'entry->next'.
+obj-$(CONFIG_VIRTIO_PCI_LIB)   += virtio/
 
-Here's an example:
-list_del corruption. prev->next should be c0ecbf74, but was c08410dc
-kernel BUG at lib/list_debug.c:53!
-... ...
-PC is at __list_del_entry_valid+0x58/0x98
-LR is at __list_del_entry_valid+0x58/0x98
-psr: 60000093
-sp : c0ecbf30  ip : 00000000  fp : 00000001
-r10: c08410d0  r9 : 00000001  r8 : c0825e0c
-r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
-r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
-... ...
-Stack: (0xc0ecbf30 to 0xc0ecc000)
-bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
-bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
-bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
-bf80: c0e807c0 c018965c 00000000 c013f2a0 c0e807c0 c013f154 00000000 00000000
-bfa0: 00000000 00000000 00000000 c01001b0 00000000 00000000 00000000 00000000
-bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-bfe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-(__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
-(__list_del_entry) from (finish_swait+0x60/0x7c)
-(finish_swait) from (rcu_gp_kthread+0x560/0xa20)
-(rcu_gp_kthread) from (kthread+0x14c/0x15c)
-(kthread) from (ret_from_fork+0x14/0x24)
+since then.
 
-At first, I thought prev->next was overwritten. Later, I carefully
-analyzed the RCU code and the disassembly code. The error occurred when
-deleting a node from the list rcu_state.gp_wq. The System.map shows that
-the address of rcu_state is c0840c00. Then I use gdb to obtain the offset
-of rcu_state.gp_wq.task_list.
+The patch looks good to me.
 
-(gdb) p &((struct rcu_state *)0)->gp_wq.task_list
-$1 = (struct list_head *) 0x4dc
+Thanks
 
-Again:
-list_del corruption. prev->next should be c0ecbf74, but was c08410dc
-
-c08410dc = c0840c00 + 0x4dc = &rcu_state.gp_wq.task_list
-
-Because rcu_state.gp_wq has at most one node, so I can guess that
-"prev = &rcu_state.gp_wq.task_list". But for other scenes, maybe I wasn't
-so lucky, I cannot figure out the value of 'prev'.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- lib/list_debug.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/lib/list_debug.c b/lib/list_debug.c
-index 5d5424b51b746fe..9daa3fb9d1cd615 100644
---- a/lib/list_debug.c
-+++ b/lib/list_debug.c
-@@ -49,11 +49,11 @@ bool __list_del_entry_valid(struct list_head *entry)
- 			"list_del corruption, %px->prev is LIST_POISON2 (%px)\n",
- 			entry, LIST_POISON2) ||
- 	    CHECK_DATA_CORRUPTION(prev->next != entry,
--			"list_del corruption. prev->next should be %px, but was %px\n",
--			entry, prev->next) ||
-+			"list_del corruption. prev->next should be %px, but was %px. (prev=%px)\n",
-+			entry, prev->next, prev) ||
- 	    CHECK_DATA_CORRUPTION(next->prev != entry,
--			"list_del corruption. next->prev should be %px, but was %px\n",
--			entry, next->prev))
-+			"list_del corruption. next->prev should be %px, but was %px. (next=%px)\n",
-+			entry, next->prev, next))
- 		return false;
- 
- 	return true;
--- 
-2.25.1
+> Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
+> Fixes: d89c8169bd70 ("virtio-pci: introduce legacy device module")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/Makefile b/drivers/Makefile
+> index be5d40ae1488..a110338c860c 100644
+> --- a/drivers/Makefile
+> +++ b/drivers/Makefile
+> @@ -41,8 +41,7 @@ obj-$(CONFIG_DMADEVICES)      += dma/
+>  # SOC specific infrastructure drivers.
+>  obj-y                          += soc/
+>
+> -obj-$(CONFIG_VIRTIO)           += virtio/
+> -obj-$(CONFIG_VIRTIO_PCI_LIB)   += virtio/
+> +obj-y                          += virtio/
+>  obj-$(CONFIG_VDPA)             += vdpa/
+>  obj-$(CONFIG_XEN)              += xen/
+>
+> --
+> 2.29.2
+>
 

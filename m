@@ -2,141 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2982746B6DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9286D46B6DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 10:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhLGJUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 04:20:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46274 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbhLGJT7 (ORCPT
+        id S233719AbhLGJUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 04:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233705AbhLGJUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:19:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB8EDB816EF;
-        Tue,  7 Dec 2021 09:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BD3C341C3;
-        Tue,  7 Dec 2021 09:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638868587;
-        bh=XdVOxU4ph+u0W+/yCrrgINoqB49Qra3QjQc8P8wmurY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CLTl/QzjrNE/fE/QPFyICgmAIsPmgd8VkvRSOsHI9rlE4qmJgv1Fppf7HfA+r50Go
-         LPR/QetwZEdDiPwljUItxBrrdTfl56d0XWZCcAUD5sqrJGzIZsibb93lwPVyNoHWTb
-         RY/NRPZVeCNzj/HDaYRVYHDlxzGEwCPHXmQ4yJvwx6csDdWfXkU5MHTMbwxArJWhTN
-         TqRwHdVrs6KeZ4vTUBLK5l5Gjxs8G9nFUTgHRJgPtCTkOU2BVGUG+Rv5SK6JRYIvjz
-         ak9eRey4gQp+B9tUs20ZNwTQCpOsdC704lV0jjEttO9Dh54FrIEiG5lul6uQOJ81bY
-         FmwzVLJgyZOtQ==
-Date:   Tue, 7 Dec 2021 10:16:22 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        " =?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <nfraprado@protonmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] docs: allow selecting a Sphinx theme
-Message-ID: <20211207101622.6a3b3c4f@coco.lan>
-In-Reply-To: <87mtld1gy1.fsf@meer.lwn.net>
-References: <cover.1638369365.git.mchehab+huawei@kernel.org>
-        <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
-        <878rwx35v7.fsf@meer.lwn.net>
-        <20211206211421.6eeb990d@coco.lan>
-        <87mtld1gy1.fsf@meer.lwn.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Tue, 7 Dec 2021 04:20:36 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D194EC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 01:17:05 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z5so54709963edd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 01:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dwd5dEAn3MA4kor56BytGEzIDB2TFQRsbAMpOWBTitA=;
+        b=f/QD/lMUy0YmQaqqPJWBDgEEJociX9CX+d2le4r/K2kC+2xzCZJsbft4M1m4teXm74
+         50a7k06zZyx7ptyxv0qNj18pffQV9SNF6t1IkYYKnjN7fZRi6fWmqUy/7K5SLqqZelgb
+         bSSmbYHLuFEAhLoZBzfCR8aSkR91ryqQZ1ybupwvf9VjDqH7J6ZOkzCDAtHlOCym1Yxz
+         hMadGzX5NgnHAAK5rcC3Np0A5R4vO/jmBsaS7DniXeh0RcjSs85IBnEfA8YFM2QwOPVx
+         aafDMqj17aV5FN/RqanQelB1HNQl7VWsVo5LrxBcfiQFuSdO0LmhtsZ4iCFugZssymKP
+         h5wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dwd5dEAn3MA4kor56BytGEzIDB2TFQRsbAMpOWBTitA=;
+        b=RUluLQmulf0wcEvYbHSyLGx66jR2acW2IGhTs81UlCaKGuhWFhnkq03cwUey+psi93
+         tM9kr4wWj7a0MeA4UlDDkjP80RfcrT/CfMhjhV6k6K/CzTaiz0c7Go7c1FjQlHuEMi66
+         ClsP18bV41X/gY2+FFv16KgP5BLnflnHy6PV3wHAYGo1/JYIFk0/NKxKeV4LP+MYB1Qw
+         kI3Fqo2WpSJjfUcZBUaigYtjRzzlWHqkcb5PyZ+RhGuj+gpkxFvQYP5JlzMRT4ieZ7tx
+         Qg+v3ARqJjNLmW3wSB0plfgq63p9vODFrg2XjkDAxwR9Sxzn+ComjH5m1/wYfqD+4Gyv
+         bYtA==
+X-Gm-Message-State: AOAM532athvgORf02p5eNmM6VN3UXh6EmSzzDCePEz5m+4JUq1Fil6aG
+        xI3VNN87MoVevxv5sPhG6c7N26MhuFRKUFkN/l3QPA==
+X-Google-Smtp-Source: ABdhPJyfJwmPW5CI6Uzto1iOXsYCxcsEsWPbQz4ttteHzi0HhhLOfp9wjjDHmYlr4c2ppE6ilWL3B8dMsOp12j/i1cs=
+X-Received: by 2002:a17:906:7955:: with SMTP id l21mr53959605ejo.6.1638868624248;
+ Tue, 07 Dec 2021 01:17:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Dec 2021 14:46:53 +0530
+Message-ID: <CA+G9fYs0icvitkzDx4Qrp7ZAuxRppoQ769GO-+0XXzBUL2BiJw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/70] 5.4.164-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 06 Dec 2021 15:55:50 -0700
-Jonathan Corbet <corbet@lwn.net> escreveu:
+On Mon, 6 Dec 2021 at 20:42, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.164 release.
+> There are 70 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.164-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
-> 
-> > Em Mon, 06 Dec 2021 12:12:12 -0700
-> > Jonathan Corbet <corbet@lwn.net> escreveu:
-> >  
-> >> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
-> >>   
-> >> > Instead of having RTD as an almost mandatory theme, allow the
-> >> > user to select other themes via a THEMES environment var.
-> >> >
-> >> > There's a catch, though: as the current theme override logic is
-> >> > dependent of the RTD theme, we need to move the code which
-> >> > adds the CSS overrides to be inside the RTD theme logic.
-> >> >
-> >> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> >> > ---
-> >> >
-> >> > See [PATCH v3 0/4] at: https://lore.kernel.org/all/cover.1638369365.git.mchehab+huawei@kernel.org/
-> >> >
-> >> >  Documentation/Makefile             |  3 ++
-> >> >  Documentation/conf.py              | 52 +++++++++++++++++-------------
-> >> >  Documentation/doc-guide/sphinx.rst |  8 +++++
-> >> >  3 files changed, 41 insertions(+), 22 deletions(-)    
-> >> 
-> >> So I'm playing with this now, and definitely want to apply it.  I do
-> >> have one little worry, though...  THEME seems like an overly general
-> >> name to use here, and seems relatively likely to conflict with other
-> >> uses.  THEME= on the command line is fine, but what do you think about
-> >> something like DOCS_THEME for the environment variable?  Or even
-> >> HTML_THEME as Sphinx uses?  
-> >
-> > I'm not sure if we will ever consider a "THEME" environment var for anything
-> > but docs and html stuff. That's why I ended taking the shortest name (for
-> > both THEME and CSS make vars).
-> >
-> > Yet, I'm OK if to use whatever name you think it would work best.  
-> 
-> I don't doubt we'll have BPF themes one of these years...:)
 
-Heh, true :-D
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> Seriously, though, I was thinking about uses beyond building kernels.
-> If I, say, always want to build with the alabaster theme, and so set
-> THEME to effect that, will it then mess with my desktop environment or
-> some such?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Hmm... makes sense, but worse case scenario, if someone uses some other
-software that would conflict with whatever vars we use, he/she could
-always place the vars inside a script ;-)
+## Build
+* kernel: 5.4.164-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: 5d289daa9fc282e333cd99893062f9ce3e69e842
+* git describe: v5.4.163-71-g5d289daa9fc2
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+63-71-g5d289daa9fc2
 
-Here, I created this small script for testing a dark theme:
+## No Test Regressions (compared to v5.4.163)
 
-	#!/bin/bash
-	set -e
+## No Test Fixes (compared to v5.4.163)
 
-	if [ "$VIRTUAL_ENV" == "" ]; then
-		. sphinx_4.3.0/bin/activate
-	fi
-	cat << EOF > my_css.css
-		body {background-color: #0f0f0f; }
-		div.body { background-color: #1f1f1f; }
-		.sig.c   .k, .sig.c   .kt, .sig.cpp .k, .sig.cpp .kt { color: #17ff17; }
-	EOF
-	make CSS=my_css.css THEME=groundwork htmldocs
+## Test result summary
+total: 90099, pass: 74767, fail: 727, skip: 13223, xfail: 1382
 
-That not only creates a simple CSS file, but also enables the virtual 
-environment if disabled.
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 259 passed, 0 failed
+* arm64: 41 total, 36 passed, 5 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 24 total, 22 passed, 2 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 35 passed, 2 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 58 total, 50 passed, 8 failed
+* riscv: 27 total, 24 passed, 3 failed
+* s390: 16 total, 13 passed, 3 failed
+* sh: 22 total, 20 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 40 passed, 1 failed
 
-> A quick search doesn't turn up anything, so probably I'm worrying too
-> much.  Maybe I should just apply it as-is, and we can change it if a
-> conflict turns up.
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
 
-Works for me. If you prefer instead that I rename them, just let
-me know and I'll send a v4. Or, if you prefer, Feel free to just 
-do a:
-	sed s,THEME,foo_THEME,g -i patch1
-	sed s,CSS,bar_CSS,g -i patch2
-
-before applying the series ;-)
-
-Thanks,
-Mauro
+--
+Linaro LKFT
+https://lkft.linaro.org

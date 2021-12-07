@@ -2,135 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F2846C80E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D7D46C813
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239634AbhLGXSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbhLGXSv (ORCPT
+        id S242516AbhLGXTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 18:19:15 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:60130 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230465AbhLGXTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:18:51 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A855C061574;
-        Tue,  7 Dec 2021 15:15:21 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so831349otv.9;
-        Tue, 07 Dec 2021 15:15:21 -0800 (PST)
+        Tue, 7 Dec 2021 18:19:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bES/GU9/Gr59OqsaNMJp8pnGLgUSxAf2mbHy46Olebc=;
-        b=ID+7HiS1TynVfygEwQgIrK0URpV4ca5jzknz9N6/M30yLi/lux9++xlsf7Wo4C+/3s
-         itDNXNSGjbfXTcvgYsODK/qQ7+OdstuYtlRm666wAq6LCYSEGoPSWJbD5TeQ+moZpFPD
-         kZChBQ7t5AKNQQLVgxWoRh80EKm36fc1I3waNA3GePej1eTBZUraeIeZVEFuNdYUjxNK
-         e5iJ9Mtg15n8y/iStJrZVC6ffkhc59r/57sUuYShLMB063MVeLrxgrtOrFoXvD0Tp2Wc
-         eq+5E9Mt28eNovq08ZnIjoqEoc4vPrtQzJy88F7lOY+J/t/ODiyhunVWPiik2mc0vFDU
-         trcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bES/GU9/Gr59OqsaNMJp8pnGLgUSxAf2mbHy46Olebc=;
-        b=Zo3HzydBVh3me2yxk93ThMhjfqRTEvNWuKItQEpH+/RjSBvSKCJpaQH1wkLCSK1jqK
-         C1oxOb++DMT7FTQ14roBFwXq/4tsR7O6YDt3qUFPGkTBtIp2SUXK16c9RIjwIwQ8Mgf5
-         4xBJfGQ8iJM5Qyp4P6qMbuxoXOkVo5Q2D4zSiJXOfCE+JYPFy6Xm2IUR61qFmKLFi6vo
-         E6yatb4BzQltkm2ZvksQeYKn6MyCQrVg0Gke5G0bNAc6NJC4EVQ7okEAYT5At+bSiZ8t
-         ivMQ3RkoxIC7bFzb/dTU36Y/+0Vdz4R78hZL5wI+NH9ifUBrB6Lz/KM7ZObxP14KZf03
-         MScQ==
-X-Gm-Message-State: AOAM531FdTQzJRjp4p/KA/NBgvxEZnPdTIfIcd7zn78Ptj5bpDpoPcKu
-        4IgM1nsHFLnDSYZjwNiAUIPBef2Xd5Q=
-X-Google-Smtp-Source: ABdhPJzJ4yb6o16nmblWRj2GOq9gCTslgvafxiZXLRoTUQV4dR37/lYV18MRhYrFIKsJt7hyV8BLCw==
-X-Received: by 2002:a9d:1b0:: with SMTP id e45mr36620695ote.23.1638918920222;
-        Tue, 07 Dec 2021 15:15:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f12sm179471ote.75.2021.12.07.15.15.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 15:15:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20211207071521.543-1-zev@bewilderbeest.net>
- <20211207071521.543-2-zev@bewilderbeest.net>
- <20211207175015.GA772416@roeck-us.net>
- <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
- <f30241ad-f3c4-ee78-22f3-405401615b61@roeck-us.net>
- <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
- module driver
-Message-ID: <abc2e3bc-3806-dbd3-840c-e19154bc0587@roeck-us.net>
-Date:   Tue, 7 Dec 2021 15:15:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638918944; x=1670454944;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ezbyKWpVAnIl/nh3sD2hAq6INyq+RA5uzGOOjnFMrPI=;
+  b=OW5QoMu2DLMC6Psu3lOmV9nIZpk8y8l3cI+3qEchBt39uRzV8IO6GLgu
+   g6UiXVY8dbfFeZdwMI0WHprAQpuUCcj/jWSgiGlH6Ec/YSgB63TFL7Woy
+   CMI+7INy+lkTlYo39yEC3QRBnRMwle9HKIeL94M2CaxQQMdJxKbB2NoYV
+   s=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 07 Dec 2021 15:15:44 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:15:43 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 7 Dec 2021 15:15:43 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 7 Dec 2021 15:15:42 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6] drm/msm/dp:  employ bridge mechanism for display enable and disable
+Date:   Tue, 7 Dec 2021 15:15:33 -0800
+Message-ID: <1638918933-2544-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 1:53 PM, Zev Weiss wrote:
-> On Tue, Dec 07, 2021 at 11:44:01AM PST, Guenter Roeck wrote:
->> On 12/7/21 11:22 AM, Zev Weiss wrote:
->>> On Tue, Dec 07, 2021 at 09:50:15AM PST, Guenter Roeck wrote:
->>>> On Mon, Dec 06, 2021 at 11:15:20PM -0800, Zev Weiss wrote:
->>>>> This device is an integrated module of the Delta AHE-50DC Open19 power
->>>>> shelf.  For lack of proper documentation, this driver has been developed
->>>>> referencing an existing (GPL) driver that was included in a code release
->>>>> from LinkedIn [1].  It provides four fan speeds, four temperatures, and
->>>>> one voltage reading, as well as a handful of warning and fault
->>>>> indicators.
->>>>>
->>>>> [1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
->>>>>
->>>>
->>>> Hmm, that reference isn't really accurate anymore. I think it would be
->>>> better to just say that the device was found to be PMBus compliant.
->>>
->>> Sure, will do.
->>>
->>
->> Makes me wonder: How do you know that the referenced driver is for Delta AHE-50DC ?
-> 
-> We'd been waiting for the source code for the software it ships with for a while, and were finally provided with that repo; everything I've observed from the factory software is consistent with the code in that driver.  A sampling:
-> 
+Currently the msm_dp_*** functions implement the same sequence which would
+happen when drm_bridge is used. hence get rid of this intermediate layer
+and align with the drm_bridge usage to avoid customized implementation.
 
-I assume you mean "Delta AHE-50DC" when you refer to "it".
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ ... ]
->> Can you check this with real hardware, by any chance ?
->>
-> 
-> If you mean running that code on it, yes -- here's the userspace utility that invokes that library routine:
-> 
->      root@bmc-oob:~# fan-util.sh
->      fan1 speed: 7860 RPM
->      fan2 speed: 7860 RPM
->      fan3 speed: 7620 RPM
->      fan4 speed: 7560 RPM
->      temperature1: 29.20 C
->      temperature2: 27.80 C
->      temperature3: 28.50 C
->      temperature4: 30.20 C
->      vin_undervolt_fault: no
->      overtemperature_warning: no
->      fan_fault: no
->      fan_warning: no
->      fan_status: ok
-> 
+Changes in v2:
+-- revise commit text
+-- rename dp_bridge to msm_dp_bridge
+-- delete empty functions
 
-That doesn't really tell me anything in the context of the driver you submitted.
-Would it be possible to install your driver and provide the output from the
-"sensors" command ? It should match the information from the proprietary
-driver/tool.
+Changes in v3:
+-- replace kzalloc() with devm_kzalloc()
+-- replace __dp_display_enable() with dp_display_enable()
+-- replace __dp_display_disable() with dp_display_disable()
 
-Thanks,
-Guenter
+Changes in v4:
+-- msm_dp_bridge_init() called from msm_dp_modeset_init() same as dsi
 
+Changes in v5:
+-- delete attach, mode_fixup and pre_enable from dp_bridge_ops
+
+Changes in v6:
+-- rebase on msm-next-plus-fixes branch
+
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 21 --------
+ drivers/gpu/drm/msm/dp/dp_display.c         | 16 +++++-
+ drivers/gpu/drm/msm/dp/dp_display.h         |  1 +
+ drivers/gpu/drm/msm/dp/dp_drm.c             | 76 +++++++++++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_drv.h               | 12 +++--
+ 5 files changed, 99 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index c83bfda..1e648db 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -995,9 +995,6 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
+ 
+ 	trace_dpu_enc_mode_set(DRMID(drm_enc));
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS)
+-		msm_dp_display_mode_set(dpu_enc->dp, drm_enc, mode, adj_mode);
+-
+ 	list_for_each_entry(conn_iter, connector_list, head)
+ 		if (conn_iter->encoder == drm_enc)
+ 			conn = conn_iter;
+@@ -1173,14 +1170,6 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+ 
+ 	_dpu_encoder_virt_enable_helper(drm_enc);
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		ret = msm_dp_display_enable(dpu_enc->dp, drm_enc);
+-		if (ret) {
+-			DPU_ERROR_ENC(dpu_enc, "dp display enable failed: %d\n",
+-				ret);
+-			goto out;
+-		}
+-	}
+ 	dpu_enc->enabled = true;
+ 
+ out:
+@@ -1206,11 +1195,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+ 	/* wait for idle */
+ 	dpu_encoder_wait_for_event(drm_enc, MSM_ENC_TX_COMPLETE);
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		if (msm_dp_display_pre_disable(dpu_enc->dp, drm_enc))
+-			DPU_ERROR_ENC(dpu_enc, "dp display push idle failed\n");
+-	}
+-
+ 	dpu_encoder_resource_control(drm_enc, DPU_ENC_RC_EVENT_PRE_STOP);
+ 
+ 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+@@ -1235,11 +1219,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+ 
+ 	DPU_DEBUG_ENC(dpu_enc, "encoder disabled\n");
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
+-			DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
+-	}
+-
+ 	mutex_unlock(&dpu_enc->enc_lock);
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index cee4ad6..ae3e08f 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1481,6 +1481,18 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	}
+ 
+ 	priv->connectors[priv->num_connectors++] = dp_display->connector;
++
++	dp_display->bridge = msm_dp_bridge_init(dp_display, dev, encoder);
++	if (IS_ERR(dp_display->bridge)) {
++		ret = PTR_ERR(dp_display->bridge);
++		DRM_DEV_ERROR(dev->dev,
++			"failed to create dp bridge: %d\n", ret);
++		dp_display->bridge = NULL;
++		return ret;
++	}
++
++	priv->bridges[priv->num_bridges++] = dp_display->bridge;
++
+ 	return 0;
+ }
+ 
+@@ -1584,8 +1596,8 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
+ }
+ 
+ void msm_dp_display_mode_set(struct msm_dp *dp, struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode)
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
+ {
+ 	struct dp_display_private *dp_display;
+ 
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+index 8e80e3b..e3adcd5 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.h
++++ b/drivers/gpu/drm/msm/dp/dp_display.h
+@@ -13,6 +13,7 @@
+ struct msm_dp {
+ 	struct drm_device *drm_dev;
+ 	struct device *codec_dev;
++	struct drm_bridge *bridge;
+ 	struct drm_connector *connector;
+ 	struct drm_encoder *encoder;
+ 	struct drm_bridge *panel_bridge;
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index 76856c4..188e77c 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -12,6 +12,14 @@
+ #include "msm_kms.h"
+ #include "dp_drm.h"
+ 
++
++struct msm_dp_bridge {
++	struct drm_bridge bridge;
++	struct msm_dp *dp_display;
++};
++
++#define to_dp_display(x)     container_of((x), struct msm_dp_bridge, bridge)
++
+ struct dp_connector {
+ 	struct drm_connector base;
+ 	struct msm_dp *dp_display;
+@@ -173,3 +181,71 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+ 
+ 	return connector;
+ }
++
++static void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_mode_set(dp_display, drm_bridge->encoder, mode, adjusted_mode);
++}
++
++static void dp_bridge_enable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_enable(dp_display, drm_bridge->encoder);
++}
++
++static void dp_bridge_disable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_pre_disable(dp_display, drm_bridge->encoder);
++}
++
++static void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_disable(dp_display, drm_bridge->encoder);
++}
++
++static const struct drm_bridge_funcs dp_bridge_ops = {
++	.enable       = dp_bridge_enable,
++	.disable      = dp_bridge_disable,
++	.post_disable = dp_bridge_post_disable,
++	.mode_set     = dp_bridge_mode_set,
++};
++
++struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
++			struct drm_encoder *encoder)
++{
++	int rc;
++	struct msm_dp_bridge *dp_bridge;
++	struct drm_bridge *bridge;
++
++	dp_bridge = devm_kzalloc(dev->dev, sizeof(*dp_bridge), GFP_KERNEL);
++	if (!dp_bridge)
++		return ERR_PTR(-ENOMEM);
++
++	dp_bridge->dp_display = dp_display;
++
++	bridge = &dp_bridge->bridge;
++	bridge->funcs = &dp_bridge_ops;
++	bridge->encoder = encoder;
++
++	rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++	if (rc) {
++		DRM_ERROR("failed to attach bridge, rc=%d\n", rc);
++		kfree(dp_bridge);
++		return ERR_PTR(rc);
++	}
++
++	return bridge;
++}
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index abc668f..d7574e6 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -389,8 +389,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder);
+ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder);
+ int msm_dp_display_pre_disable(struct msm_dp *dp, struct drm_encoder *encoder);
+ void msm_dp_display_mode_set(struct msm_dp *dp, struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode);
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode);
++
++struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display,
++					struct drm_device *dev,
++					struct drm_encoder *encoder);
+ void msm_dp_irq_postinstall(struct msm_dp *dp_display);
+ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_display);
+ 
+@@ -427,8 +431,8 @@ static inline int msm_dp_display_pre_disable(struct msm_dp *dp,
+ }
+ static inline void msm_dp_display_mode_set(struct msm_dp *dp,
+ 				struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode)
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
+ {
+ }
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

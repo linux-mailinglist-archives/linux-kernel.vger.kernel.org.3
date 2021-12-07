@@ -2,187 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A6946C752
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABDE46C754
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237831AbhLGWVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:21:10 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:37970 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbhLGWVF (ORCPT
+        id S237678AbhLGWVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232056AbhLGWVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:21:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 77432CE1E01;
-        Tue,  7 Dec 2021 22:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F9CC341C3;
-        Tue,  7 Dec 2021 22:17:30 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 17:17:29 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yabin Cui <yabinc@google.com>
-Subject: [PATCH v2] tracefs: Set all files to the same group ownership as
- the mount option
-Message-ID: <20211207171729.2a54e1b3@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Dec 2021 17:21:49 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4440AC061574;
+        Tue,  7 Dec 2021 14:18:19 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id j11so346495pgs.2;
+        Tue, 07 Dec 2021 14:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
+        b=dymXRFQ6A00bVEIuvR7GYzuvZs4/X2covxGGnHpmuyqb5eJ/pj7rJlfj3lv3O5xhBJ
+         VfZmrdTtuUIpdOJbhquxnVVGLUqE5IwJtfpwUz3ybZRx5slp+FRFfGuwX4dvj2zqVxpA
+         zWGBRYC4z50ZcCpKYEE6cWvvT9uadqwuJ35/fKjiPlu480rKNg6yuZLXl0JANr1s8yVH
+         zm2eIR1BldsFMYqECF7Ayo/uhJec+6KbcYMsQmaLFhNwzaC10ChWXYQr6rAM22fCMdXT
+         kqBhx2qRUx8wkQtwwU4jzHA44a4ngFyroMFjfq/6mh3pdCQhi67Ok3U4iyViKWX96ahY
+         eD3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
+        b=W2Oj18b/dijhUHd0TwcfPi0ysYezcaQTdQ7cibmQhpkywsPV5/vY0V8QQvdIgodetF
+         YtHx4NyetJg+EBk0DUbRP23eItoWjM2y1kMVLwlbq8aX5GcbiM8SqIU/gsuDDYt1ZUE7
+         TMleQqiVXMybzhyt4AevjDa9wFA5blK8aT3M0w+kkJ5/L7E2u/QJ5IKquH7dy/kuQyJp
+         0xWCq5Emn5no+pffltaR2zzqUopWAeWVetlou8mBDwCw6FUbMKGEeDR47q71wQH1aQxx
+         Y3OJcl9AzqjMvxTX3OJ+C79wbl/fOmId+h+jB02qrFm4OOMFshvu6ltZa7JjdNaS9qhG
+         XVkg==
+X-Gm-Message-State: AOAM533554Ux3FEf0BwfWIIlX5QwVWzxf/yqIn3JCb8F1YxnX42k3dk4
+        Aqtz1wM9haRm2OhZBrOLO7M=
+X-Google-Smtp-Source: ABdhPJy8pEh7udQe8vFhOWAhI8Wo0P7fZi40t67T4notOuuNlQ6quLbxfQZB7FouKWrILssSlMQlwQ==
+X-Received: by 2002:a05:6a00:b83:b0:49f:b555:1183 with SMTP id g3-20020a056a000b8300b0049fb5551183mr2042539pfj.32.1638915498838;
+        Tue, 07 Dec 2021 14:18:18 -0800 (PST)
+Received: from localhost.localdomain ([103.85.9.78])
+        by smtp.gmail.com with ESMTPSA id y130sm697832pfg.202.2021.12.07.14.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 14:18:17 -0800 (PST)
+From:   Vihas Mak <makvihas@gmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vihas Mak <makvihas@gmail.com>
+Subject: [PATCH] tty: serial: return appropriate error on failure
+Date:   Wed,  8 Dec 2021 03:47:41 +0530
+Message-Id: <20211207221741.50422-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+when a user with CAP_SYS_ADMIN disabled calls ioctl (TIOCSSERIAL),
+uart_set_info() returns 0 instead of -EPERM and the user remains unware
+about what went wrong. Fix this.
 
-As people have been asking to allow non-root processes to have access to
-the tracefs directory, it was considered best to only allow groups to have
-access to the directory, where it is easier to just set the tracefs file
-system to a specific group (as other would be too dangerous), and that way
-the admins could pick which processes would have access to tracefs.
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215205
 
-Unfortunately, this broke tooling on Android that expected the other bit
-to be set. For some special cases, for non-root tools to trace the system,
-tracefs would be mounted and change the permissions of the top level
-directory which gave access to all running tasks permission to the
-tracing directory. Even though this would be dangerous to do in a
-production environment, for testing environments this can be useful.
-
-Now with the new changes to not allow other (which is still the proper
-thing to do), it breaks the testing tooling. Now more code needs to be
-loaded on the system to change ownership of the tracing directory.
-
-The real solution is to have tracefs honor the gid=xxx option when
-mounting. That is,
-
-(tracing group tracing has value 1003)
-
- mount -t tracefs -o gid=1003 tracefs /sys/kernel/tracing
-
-should have it that all files in the tracing directory should be of the
-given group.
-
-Copy the logic from d_walk() from dcache.c and simplify it for the mount
-case of tracefs if gid is set. All the files in tracefs will be walked and
-their group will be set to the value passed in.
-
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: Al Viro <viro@ZenIV.linux.org.uk>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Kalesh Singh <kaleshsingh@google.com>
-Reported-by: Yabin Cui <yabinc@google.com>
-Fixes: 49d67e445742 ("tracefs: Have tracefs directories not set OTH permission bits by default")
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Vihas Mak <makvihas@gmail.com>
 ---
-Changes since v1: https://lkml.kernel.org/r/20211207161518.3a00be3c@gandalf.local.home
-  - Removed unused "out_unlock" label.
+ drivers/tty/serial/serial_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
- fs/tracefs/inode.c | 73 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index 607b03444623..a6709c08fa54 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -161,6 +161,78 @@ struct tracefs_fs_info {
- 	struct tracefs_mount_opts mount_opts;
- };
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 61e3dd022..c204bdecc 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -960,7 +960,7 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
+ 		uport->fifosize = new_info->xmit_fifo_size;
  
-+static void change_gid(struct dentry *dentry, kgid_t gid)
-+{
-+	if (!dentry->d_inode)
-+		return;
-+	dentry->d_inode->i_gid = gid;
-+}
-+
-+/*
-+ * Taken from d_walk, but without he need for handling renames.
-+ * Nothing can be renamed while walking the list, as tracefs
-+ * does not support renames. This is only called when mounting
-+ * or remounting the file system, to set all the files to
-+ * the given gid.
-+ */
-+static void set_gid(struct dentry *parent, kgid_t gid)
-+{
-+	struct dentry *this_parent;
-+	struct list_head *next;
-+
-+	this_parent = parent;
-+	spin_lock(&this_parent->d_lock);
-+
-+	change_gid(this_parent, gid);
-+repeat:
-+	next = this_parent->d_subdirs.next;
-+resume:
-+	while (next != &this_parent->d_subdirs) {
-+		struct list_head *tmp = next;
-+		struct dentry *dentry = list_entry(tmp, struct dentry, d_child);
-+		next = tmp->next;
-+
-+		spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
-+
-+		change_gid(dentry, gid);
-+
-+		if (!list_empty(&dentry->d_subdirs)) {
-+			spin_unlock(&this_parent->d_lock);
-+			spin_release(&dentry->d_lock.dep_map, _RET_IP_);
-+			this_parent = dentry;
-+			spin_acquire(&this_parent->d_lock.dep_map, 0, 1, _RET_IP_);
-+			goto repeat;
-+		}
-+		spin_unlock(&dentry->d_lock);
-+	}
-+	/*
-+	 * All done at this level ... ascend and resume the search.
-+	 */
-+	rcu_read_lock();
-+ascend:
-+	if (this_parent != parent) {
-+		struct dentry *child = this_parent;
-+		this_parent = child->d_parent;
-+
-+		spin_unlock(&child->d_lock);
-+		spin_lock(&this_parent->d_lock);
-+
-+		/* go into the first sibling still alive */
-+		do {
-+			next = child->d_child.next;
-+			if (next == &this_parent->d_subdirs)
-+				goto ascend;
-+			child = list_entry(next, struct dentry, d_child);
-+		} while (unlikely(child->d_flags & DCACHE_DENTRY_KILLED));
-+		rcu_read_unlock();
-+		goto resume;
-+	}
-+	rcu_read_unlock();
-+
-+	spin_unlock(&this_parent->d_lock);
-+	return;
-+}
-+
- static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- {
- 	substring_t args[MAX_OPT_ARGS];
-@@ -193,6 +265,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
-+			set_gid(tracefs_mount->mnt_root, gid);
- 			break;
- 		case Opt_mode:
- 			if (match_octal(&args[0], &option))
+  check_and_exit:
+-	retval = 0;
++	retval = retval < 0 ? retval : 0;
+ 	if (uport->type == PORT_UNKNOWN)
+ 		goto exit;
+ 	if (tty_port_initialized(port)) {
 -- 
-2.31.1
+2.30.2
 

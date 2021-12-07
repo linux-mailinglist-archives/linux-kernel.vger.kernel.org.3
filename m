@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABDE46C754
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B539246C75F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbhLGWVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S237928AbhLGWYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbhLGWVt (ORCPT
+        with ESMTP id S233310AbhLGWYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:21:49 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4440AC061574;
-        Tue,  7 Dec 2021 14:18:19 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id j11so346495pgs.2;
-        Tue, 07 Dec 2021 14:18:19 -0800 (PST)
+        Tue, 7 Dec 2021 17:24:39 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D56AC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:21:09 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id v19so217614plo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:21:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
-        b=dymXRFQ6A00bVEIuvR7GYzuvZs4/X2covxGGnHpmuyqb5eJ/pj7rJlfj3lv3O5xhBJ
-         VfZmrdTtuUIpdOJbhquxnVVGLUqE5IwJtfpwUz3ybZRx5slp+FRFfGuwX4dvj2zqVxpA
-         zWGBRYC4z50ZcCpKYEE6cWvvT9uadqwuJ35/fKjiPlu480rKNg6yuZLXl0JANr1s8yVH
-         zm2eIR1BldsFMYqECF7Ayo/uhJec+6KbcYMsQmaLFhNwzaC10ChWXYQr6rAM22fCMdXT
-         kqBhx2qRUx8wkQtwwU4jzHA44a4ngFyroMFjfq/6mh3pdCQhi67Ok3U4iyViKWX96ahY
-         eD3Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
+        b=L1FSJ/KwaTmbswiwLO5H3JAbe6EdsY605iXcH//Ll1DUiWACcbZLD8gaKzKbuhgCer
+         o1p8PSf9Duc/6nNpfRi/Gd85Hft199FDAdT04hIYp+cczigwoPyeRIHGzHEhWNkXv057
+         qjc03gIBBYyeiEUtur/r6KPD9ZgOigsPkuYUC0M8ntHMeQzDQxEgEtZc6c7QDmDVOXdX
+         5fPSGwfNNDoqJQd8RETKbvrQM8sWQFl44KA4sWrNkMBH8VCQeM7mPnPLQ/vbvdr3PyBJ
+         PJWhkofV0im2TyuZ+AhmoQz2DJNBEAxC+2xvNR3kUOsC5fLdwT2Slq0dRt3lfX5JSocT
+         NRqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
-        b=W2Oj18b/dijhUHd0TwcfPi0ysYezcaQTdQ7cibmQhpkywsPV5/vY0V8QQvdIgodetF
-         YtHx4NyetJg+EBk0DUbRP23eItoWjM2y1kMVLwlbq8aX5GcbiM8SqIU/gsuDDYt1ZUE7
-         TMleQqiVXMybzhyt4AevjDa9wFA5blK8aT3M0w+kkJ5/L7E2u/QJ5IKquH7dy/kuQyJp
-         0xWCq5Emn5no+pffltaR2zzqUopWAeWVetlou8mBDwCw6FUbMKGEeDR47q71wQH1aQxx
-         Y3OJcl9AzqjMvxTX3OJ+C79wbl/fOmId+h+jB02qrFm4OOMFshvu6ltZa7JjdNaS9qhG
-         XVkg==
-X-Gm-Message-State: AOAM533554Ux3FEf0BwfWIIlX5QwVWzxf/yqIn3JCb8F1YxnX42k3dk4
-        Aqtz1wM9haRm2OhZBrOLO7M=
-X-Google-Smtp-Source: ABdhPJy8pEh7udQe8vFhOWAhI8Wo0P7fZi40t67T4notOuuNlQ6quLbxfQZB7FouKWrILssSlMQlwQ==
-X-Received: by 2002:a05:6a00:b83:b0:49f:b555:1183 with SMTP id g3-20020a056a000b8300b0049fb5551183mr2042539pfj.32.1638915498838;
-        Tue, 07 Dec 2021 14:18:18 -0800 (PST)
-Received: from localhost.localdomain ([103.85.9.78])
-        by smtp.gmail.com with ESMTPSA id y130sm697832pfg.202.2021.12.07.14.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:18:17 -0800 (PST)
-From:   Vihas Mak <makvihas@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vihas Mak <makvihas@gmail.com>
-Subject: [PATCH] tty: serial: return appropriate error on failure
-Date:   Wed,  8 Dec 2021 03:47:41 +0530
-Message-Id: <20211207221741.50422-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
+        b=y5739NqIk68ItYVv8A6CayFThdiNHa4T8+6WOGgvR6oNTZr8BOTUo83p7HHJjx89pg
+         iU06idQCWEn9r9/Ys5oIBOVAej/Mm68W+MMuRvHwayRVKrvwhGhdinmgkqTspURGPw+c
+         E3dAaLC32haIruXGMESNNvA6i1t1PWEvDSgApXcEpsF655zEz4rpXNKFVdC0WIMwF3iQ
+         A3wpdA2OSWH0YDGVOb8LtYNwqp+US0BaYysW2mf4pXRnWxRcuq6cXtbQCsfHkq+Q0nn4
+         q+O8/08nvgYri7+3KP2n4fESvGiFHYPJvOQaU1i2pqnKOUjz5UzljAMpbrUww65lxM/V
+         RGYA==
+X-Gm-Message-State: AOAM532NtnHA9I9sN1wqm1kLLaunS1T/voI9yomRfiHVklYxnHKTosw3
+        gBngJ+NZUx1/XGcalaNEGYRblxBzfmHlACWruWU5wA==
+X-Google-Smtp-Source: ABdhPJxdZxxEERlxR9HetbGs+nmDuevgLWgjNa/dJICW8sAh/CIABDON8aM6odojPC8knmmLBCz5Is1zHgk1l9i0HKE=
+X-Received: by 2002:a17:90b:230c:: with SMTP id mt12mr2394253pjb.63.1638915668434;
+ Tue, 07 Dec 2021 14:21:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211009015406.1311319-1-dlatypov@google.com> <20211009015406.1311319-2-dlatypov@google.com>
+In-Reply-To: <20211009015406.1311319-2-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 17:20:57 -0500
+Message-ID: <CAFd5g44yXaVG+w+G3EXLkbgHvxSQ3baE_=wTD7EQAK+sroaEkw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: tool: delete kunit_parser.TestResult type
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-when a user with CAP_SYS_ADMIN disabled calls ioctl (TIOCSSERIAL),
-uart_set_info() returns 0 instead of -EPERM and the user remains unware
-about what went wrong. Fix this.
+On Fri, Oct 8, 2021 at 9:54 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> The `log` field is unused, and the `status` field is accessible via
+> `test.status`.
+>
+> So it's simpler to just return the main `Test` object directly.
+>
+> And since we're no longer returning a namedtuple, which has no type
+> annotations, this hopefully means typecheckers are better equipped to
+> find any errors.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215205
-
-Signed-off-by: Vihas Mak <makvihas@gmail.com>
----
- drivers/tty/serial/serial_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 61e3dd022..c204bdecc 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -960,7 +960,7 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
- 		uport->fifosize = new_info->xmit_fifo_size;
- 
-  check_and_exit:
--	retval = 0;
-+	retval = retval < 0 ? retval : 0;
- 	if (uport->type == PORT_UNKNOWN)
- 		goto exit;
- 	if (tty_port_initialized(port)) {
--- 
-2.30.2
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

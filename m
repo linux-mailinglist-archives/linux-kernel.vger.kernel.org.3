@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAE946C7B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403AA46C7B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbhLGWu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:50:28 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:44020 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242250AbhLGWu0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:50:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=lHPnHA1nU3LhV/++RjTXfkaI1ue59guv+6zmLEaU6I4=; b=MkIxEUwL55Vv/nig/31ZujtMJN
-        ElwqwHiGg6pDJ/26rcisPncK434MXpcfHbPxPmnSqZKfngmz8NsDGNc+F006ImvekFK3eTrkliJ+h
-        v3dz+vHtzX+Cqfal3o0TWiv4rLAeYHeGslqgmSD0AEiNi2DEzRppuFpjCksI6T9FkMu8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mujEa-00FouQ-JF; Tue, 07 Dec 2021 23:46:52 +0100
-Date:   Tue, 7 Dec 2021 23:46:52 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <Ya/kXHBuWiKLLqGQ@lunn.ch>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
- <Ya/esX+GTet9PM+D@lunn.ch>
- <61afe087.1c69fb81.45db8.5d80@mx.google.com>
+        id S242343AbhLGWu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242337AbhLGWuz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 17:50:55 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A118FC061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:47:24 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id j11so398754pgs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:47:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V5/HWBzjQqRZTzFV5HrLo/i9yn5y0B3GMGZ2mf+dcNM=;
+        b=I1u9+6yTQXf5pIIRr5J6vodUUA0vPrW9vbH2iNO99tB2FGTpLNP8QBgODKTN+lBCWA
+         BXvW049+aMpxrrNkUIzZSHFR5vvGh5Gt1eliV7jz/tOqQjWRFtstbWTq7g3YCSyHTIJ3
+         BxicRAEq9Gqq1vp6EarPPCG6/zbHWheiPnQo/2/m+AsId2OFhtGtJ2O/yhCiD1h2BZ86
+         ThxF2VrrmzulzOVEs8zRuMWWWRQ5LuQfjbDbREwMwRQQs36PGJxGO8MTZBaEnqnNqWmP
+         xB+TkQnd3fVBBWTtTf/nyvMsbxlZEzSbaEp6FwJNJEf7bG4XH5Js0vSXZlrWvSu6vlpQ
+         OhsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V5/HWBzjQqRZTzFV5HrLo/i9yn5y0B3GMGZ2mf+dcNM=;
+        b=67q80psjbC9mmAKEgFqI1rWYXR1HHZ+rv7cuPB2aZ0BaeNF8MddKonSY9BBdGo9uj9
+         C9Rsrxul/zMrVebYnjUpvHwUtyM7rjeelGtqZ5bShKwe2Anst5kE5ACi0qo+6o+2fY1i
+         w07boPkTlnVpyEukaSiGpCp4XXT8WQBCkgQh+G0TvHgvHHa9gBKXTRO+y3LNS2sLNxGs
+         tPlEHNMuivRm6YFYejsvDQs/NfC3bZgmJlE5GrMn5uS32wQfWsxz8Ym8NXk4MQTZ2Enx
+         dbWa6PYWZGxQBpCNC6UsEmw+4Bcma3KtF7laXuwueX8dhEgQKmiL1MAMgyUhH4z7YDl+
+         tR9g==
+X-Gm-Message-State: AOAM532f9c5veGcK2twT6xm7ENxWeWZQQK0z8EbbrIL86Dw+fURE9bsN
+        e5eYBf1XFFHXJIVHcLs5oU+1gvmUtKvOh2HxZ9f+Bw==
+X-Google-Smtp-Source: ABdhPJwrkum3hmHSV0oSCnXlFKjmbNvzZmpeJ51V+OnhWYeXNvDwUXEC2go397HMJNDJTTnl6qJzc1UW2NGqKo71Unc=
+X-Received: by 2002:a62:7ec4:0:b0:4a3:219b:7008 with SMTP id
+ z187-20020a627ec4000000b004a3219b7008mr1986918pfc.3.1638917243861; Tue, 07
+ Dec 2021 14:47:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61afe087.1c69fb81.45db8.5d80@mx.google.com>
+References: <20211106013058.2621799-1-dlatypov@google.com> <20211106013058.2621799-2-dlatypov@google.com>
+In-Reply-To: <20211106013058.2621799-2-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 17:47:12 -0500
+Message-ID: <CAFd5g44o2_+tTREm+ChgyhfOu+zV7wxgMZ039LKJ=+VB0koFqA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: tool: add --kconfig_add to allow easily
+ tweaking kunitconfigs
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > 1) The tagger needs somewhere to store its own private data.
-> > 2) The tagger needs to share state with the switch driver.
-> > 
-> > We can probably have the DSA core provide 1). Add the size to
-> > dsa_device_ops structure, and provide helpers to go from either a
-> > master or a slave netdev to the private data.
-> 
-> I'm just implementing this. It doesn't look that hard.
-> 
-> > 
-> > 2) is harder. But as far as i know, we have an 1:N setup.  One switch
-> > driver can use N tag drivers. So we need the switch driver to be sure
-> > the tag driver is what it expects. We keep the shared state in the tag
-> > driver, so it always has valid data, but when the switch driver wants
-> > to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
-> > if it does not match, the core should return -EINVAL or similar.
-> > 
-> 
-> Mhh this looks a bit complex. I'm probably missing something but why the
-> tagger needs to share a state? To check if it does support some feature?
-> If it's ready to be used for mdio Ethernet? Or just to be future-proof?
+On Fri, Nov 5, 2021 at 9:31 PM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> E.g. run tests but with KASAN
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+>
+> This also works with --kunitconfig
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
+>
+> This flag is inspired by TuxMake's --kconfig-add, see
+> https://gitlab.com/Linaro/tuxmake#examples.
+>
+> Our version just uses "_" as the delimiter for consistency with
+> pre-existing flags like --build_dir, --make_options, --kernel_args, etc.
+>
+> Note: this does make it easier to run into a pre-existing edge case:
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64
+> This second invocation ^ still has KASAN enabled!
+>
+> kunit.py won't call olddefconfig if our current .config is already a
+> superset of the provided kunitconfig.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-This is the general problem we have, and it might not be relevant for
-this specific problem of MDIO over Ethernet.
-
-tag_sja1105 wants access to a queue of frames and a work queue shared
-with switch driver.
-
-tag_ocelot_8021q has something similar to tag_sja1105.
-
-tag_lan9303 wants to know if its two ports are in the same bridge.
-
-	Andrew
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

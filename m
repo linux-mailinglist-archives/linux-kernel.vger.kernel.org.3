@@ -2,207 +2,746 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6661146C405
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84BA46C3FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 20:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241062AbhLGT4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 14:56:52 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:11822 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240690AbhLGT42 (ORCPT
+        id S240613AbhLGTzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 14:55:46 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:37526 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236326AbhLGTzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:56:28 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7I4U1C029677;
-        Tue, 7 Dec 2021 19:52:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=kaWYFH0urKPFOrOiQHfoJph8AW1cJGi/yRevqR8ldI4=;
- b=co3m3od2MagSLQBfjIZtTKF3uyjxknEC7T4LUSWlTUNvioMdKUON4xrSqNgG6w0EEYuK
- eZwi9Rs37PuV7gabGV0alkBrKoMkr+2jVrSeKzSdaW+WbSUXDcHN0r4EI9SKc+ORlvoL
- 9yHIrbQHub7BmL9OvO2uwGLGR6GamRP64SYaGa/tfAkw3lBkD2wyij3jBr4kxxXp6wHK
- 6u9Dzi1YFr0W1C9+X2+QI7ydDH+Ml65UjvPwmcUXx+nOsDQyPaw7HSmasb2lui4BWYeq
- JY0EbKgNtD662qSGEnt6rVfNWcQcROSP7WQ8vZ+RlWgkjpJN7GWbGjM9mRufKZdKazVN lA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3csctwpe6q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Dec 2021 19:52:33 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B7Jk80S065019;
-        Tue, 7 Dec 2021 19:52:32 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
-        by aserp3020.oracle.com with ESMTP id 3cr055cnte-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Dec 2021 19:52:32 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jmoUtD20d0KiVYVIXF3EbeZvcgGB2qwsjEM2C6OP9QlS9Syzx1x+is/jebAjcvxzt+vXNL0ohNZgX7dYqfjPxVcxeg/CSpfjEKOx84Kt9ke0xCDBUg5p9g8eF73B6ZWbkXAB/J6lNU40BdKKBe6ubOHfM5Ua7NhY3IkHUPaWmmo2rUkkQ0pyELurbC6NL3U9wM8HvC06Ec1SemqwM4K1//Z9iGhVl3XPsIndnOrfSWi6ZWxgXMpSeXYsf7MF5jzElJt9auxe0JDOvHth6snbk6pKOxKmGl6Gf9/tairY3oFWrPwN8hdyAOAW2BUEOXwaX9ZaiEyfYxoLfCNkYACCWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kaWYFH0urKPFOrOiQHfoJph8AW1cJGi/yRevqR8ldI4=;
- b=RnlY4iNl2AZi4f0God+UjkYDdpU8I4L264Qu9pVDIoAgvm1fwUfFSAoI+vrNOe9weJbl9kVKk7IlaAlhHYEXY5WaHpkvdBFuDRrSHrzOAQkQggwsyjNaL3RaRQt2RArytcw4kO5JISqN7rwPnBvoPXAoL5ZL61VycjtQuipGue7FTn1OIM+qGEVKJG9sC1SJmkZVbdajMLXTAkwUjsU9tFsL7cER3x4vb6xhu+7gVv6b9c3TGIk4S421BZSQwJkC+6lYLGhBSXvaY8OwRkSETuz/Fh32zjmMv3vS0Jdp36zi6W2QnTs7M2o5vfSTTJ/IO9x2YzGrHcVvQQli+YW7ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kaWYFH0urKPFOrOiQHfoJph8AW1cJGi/yRevqR8ldI4=;
- b=o1qDOukNiiL1L3TMwfPXQDqPgFTB3yuzyXAZH/pcyweyVdZSTsSamElFeHetvlDCPkw0aXBjzqjejkv32NJm5fC7inWlRSbSjlqn28bywBoIoI8OE2FdtDXTLe4F3DWhZbqtqFdQMki4XBOBKrZofzp4anNasgoWbmeAToOI0c0=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by MW4PR10MB5750.namprd10.prod.outlook.com (2603:10b6:303:18e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Tue, 7 Dec
- 2021 19:52:30 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::143c:ea64:7017:19f]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::143c:ea64:7017:19f%4]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 19:52:30 +0000
-From:   Eric DeVolder <eric.devolder@oracle.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        eric.devolder@oracle.com
-Subject: [RFC v2 5/6] crash hp: kexec_file changes for crash hotplug support
-Date:   Tue,  7 Dec 2021 14:52:03 -0500
-Message-Id: <20211207195204.1582-6-eric.devolder@oracle.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211207195204.1582-1-eric.devolder@oracle.com>
-References: <20211207195204.1582-1-eric.devolder@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SA0PR11CA0210.namprd11.prod.outlook.com
- (2603:10b6:806:1bc::35) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
+        Tue, 7 Dec 2021 14:55:46 -0500
+Received: by mail-ot1-f53.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so299440otg.4;
+        Tue, 07 Dec 2021 11:52:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hKssFf2gCgnfRE7Q86SOukAM/1K+ofpM0kTXgBJYrI4=;
+        b=jKgQHSMIU7COlOPOP7WrteDhfVWD++l0YsCGFWA8mZrde+DFtGglOx3mpjziaes1sB
+         VrbVXHFgDtr7gibDhiAjnl7CauiphDIDTKtcNauzWwHxdnIME3KvAtNye2xt42/Owo/3
+         o/PmCWLltV7S3fa3hFB9HnLhSw4Zwt69ITvS9fcAtNnBOE2u5j1cOMqJ+Vw2pfn5x2lm
+         2uuwi6ekVZCJ7+bP9FxL5jlfWRjNYzKIAtXB8IbLiMqeO4dZnTa1bRMWPFPJJ3UwVusB
+         qGxOdFNqLMp/93zbnikNVdtDP3L6D58NtcQRwmQifgMy+oxdn/MuG5OODk0G9TjXVCRP
+         zVzw==
+X-Gm-Message-State: AOAM533URXg94BJLSS9vwDgQOzzI4zxjVUs7x95Q8OsGeAzhWDEZvznI
+        VKCeUPfNSlFubYCwafPcdBm+L93TEZMN8DPQ8Jkxdi/n
+X-Google-Smtp-Source: ABdhPJyayFXY05OtaCXGU3ivsqgn141eiOeR8z1HWP2HtQZAx1VRiOV3WZZn/25r1uI2jh8o/ufi0Ooqv19iVuvq49A=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr37183929otf.198.1638906734863;
+ Tue, 07 Dec 2021 11:52:14 -0800 (PST)
 MIME-Version: 1.0
-Received: from localhost.localdomain (138.3.201.23) by SA0PR11CA0210.namprd11.prod.outlook.com (2603:10b6:806:1bc::35) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 7 Dec 2021 19:52:28 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a4d17a3-6451-451b-0a3f-08d9b9bb1a94
-X-MS-TrafficTypeDiagnostic: MW4PR10MB5750:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR10MB575085456541A2E2079A9E27976E9@MW4PR10MB5750.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZhnT/6HNLoVMEIlK3uCEMc2kPgCqGyQ1DQBFGoFrQz9zXFITBpCkbgRbCtdhaygDTabi1IvBGwG7bKNkoGFPctI/dYaEQ/v7q6aZvnw+ZNQExoPreBIeZXXRCnph+sJbEe9IH3YrWG/oL/n+kPDpzM/xAFPZC08VKK5ruGFwc/MqL0SGZnXmfHJhKGWsOljKO3iU9Wvv+aOfO/A7iCZ4iYpo4SU/VZa7aC1SDsVWuYxH/MxG5BxW+BVwVRhYw2cHbNqvVqy92q5OrjBCgucfeD7bYO/Z9OTGPr7CiHwNr/Y5iD6Kxe4q1SHY+PLII0IgViXzakKloI3CGhx1biNihxwamyHfgb0bSDEG2ghAq8Pi2wU480crOrr+eu2jZAH66Wz9e+4id7lfTMIlZW2C0strWAXIR6i4d/XsxSoVr25QYT6pgzMBYbpTYrNvAumypP7eoTgL1I+7T4BrkicpJ9g47ogQLRRAsllcLTsG5pNvTJmT2ogebl/4kk9dyirHBD6O9FsRv5pp6FoPriu2Ldh/2dK/Sob2Wxh1FwREupJxtfyKDWqdOAJ5sK3J51cCw1SkBWiJu6kQ/S9w09JKWrujRz+odQgaXLwqLr8XuWDavqUKUjJW1Ffe17P0Z+5LBEbdkflnGc0YgQarARu6VBYOeWKekVS+O4JRllcf0+PTYXAKcy13Im4EQuM1LN++D5HWJttOllLqkF+qlEWjMw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(956004)(107886003)(38350700002)(1076003)(83380400001)(38100700002)(26005)(2616005)(66946007)(7416002)(2906002)(52116002)(66556008)(66476007)(8936002)(4326008)(86362001)(6506007)(316002)(36756003)(6486002)(6512007)(186003)(6666004)(8676002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y1vj7g9PpnJlZblcnQVntp+OpDbwsIevUozWn1Z/w1ikhTMS+C4auFc7k+O7?=
- =?us-ascii?Q?aMfu25sW0/VLYf0M5mJhzko1xyZDVJL1ggsj8klgDkpVGLaj9l+XtRSAW797?=
- =?us-ascii?Q?XfFUGOSirpRG628HimIccCS5NGC6T3yGB2m6oa7yZ14Pe2P/dVVaccf55HX0?=
- =?us-ascii?Q?i/6D7YcA2x0/m8x3kBtAzgEg0pgQ4n7/cKmVonDq5o3qbqGw4oCfG4AswC6n?=
- =?us-ascii?Q?n0j6gmqvtEzNGQFg8P0g9KChjXJWBguYOG1YM7lVglcOuuQOKUYTkG4MkuG2?=
- =?us-ascii?Q?poPpG6axmHwNNdmNh1MJhJ6f9xI//xybC6+BhU7KGDnYI2DD0vj+/X1IbC9N?=
- =?us-ascii?Q?f5DxvmU8jh10jjD85/FTkCCfv3IT2kIQ230iwuxjI4C12SWtaOqrKd2fm8E+?=
- =?us-ascii?Q?0PsiwPzLCf9h1PMCRmvmW+8jKkr0m5/a2axFUMcnJoqCt/EEcLN7N0x6PJAn?=
- =?us-ascii?Q?5g45Zs9ugVP5tdJfqxdMWYku1ut5R9nugtDcGlIt9dxju5VsAm4vRvUUryTr?=
- =?us-ascii?Q?47Ff4Cx8mpFX8hs0j1fk1Lr1D6YEKlQXxlc09dqoO74AxiHoH5qOZ+XCiqoY?=
- =?us-ascii?Q?q3FxkiHoqFyMLE3wM/MEEBmzAkTS8A1MidMdtSXQ7kGWZBtE50Yy7H57PLVU?=
- =?us-ascii?Q?//d9CcoXoMvAlPqepV7aXH915KxbF2gFvAA2ua3sLWDMe/TNMs5siXbpRe1F?=
- =?us-ascii?Q?DtkWnfmstj3kte7qcM4ta24UDbhP21BtdVN3iZQu0JA5f+Wy4wMMOwdRRMMG?=
- =?us-ascii?Q?8dnNkBAahciNTvWYgRm8M/fvs2+Dp7eIEKmkxmtZCWQnA8Nc0M8vM1FSB0bC?=
- =?us-ascii?Q?N1+GbeR5okp+yJq9WfaMGHBwC97yWsrFPyqVUGyOwuIKiyeQYe/6dpyMuyzm?=
- =?us-ascii?Q?FNgBagyHEhFEzrcVSIXX4dg05voKzNT0VDiU1tQ37VqJsXOU9GtqT0fAhQ3k?=
- =?us-ascii?Q?SYyBy0zSXFgEYpO98jkBv2UTe3d7Xw+7nc1wp+8Z72/ZHBSQLG8TN8i6TkBA?=
- =?us-ascii?Q?t3uNBPvkLc+sg5UEqw3I/PqVH5F97UY0yiIdz6koAWrPR7AMIDM2CfBQhL6Z?=
- =?us-ascii?Q?62dZvyXJDUzzYVWpUz7tk/Xu6zVL8nNG39QhM8fEGulbh3Dqh0mY2PtdznZM?=
- =?us-ascii?Q?OiQOGzA5gKjucm62mEseYCHclKVQALtsFIXASRoPczruAbx5rT1WUY4iWSuB?=
- =?us-ascii?Q?Z2faDA3pBCfL2LAglz3EfWjsQ0U5a+ozvpU4Q3NvEuKAwGsEYEiL3+xBlTBC?=
- =?us-ascii?Q?mKHsgPGc3h7H8ri85if/g9lBb2RC4EWnYZqoFt1youtdlw4MNKGDq6dabMdn?=
- =?us-ascii?Q?xJ+j+XNpXh3hsBdsaqfR1IvdtKwn0OdTwMlkbc2AuGT2KVTTb732cDJ+SN94?=
- =?us-ascii?Q?ilOOEFe9GojH9hrYDUwSjfZofp57Nzs+wdElRg0gkl4eRSUO5jKFN1mSu8eQ?=
- =?us-ascii?Q?6F1OBGv9E3a+8tqMR4J+IRAmJOU/LEv0/wNYHhta7XAWWniYja0/VeThY4Ov?=
- =?us-ascii?Q?uAUkTl9vuj/xnTZjyytb8lK1fv+Cm2etQ10defflhFAHwp0cvAmxTovyzWFi?=
- =?us-ascii?Q?q+kccH8xQ4C84FyolurBdnfvIsOyrVW9+SsYdCHg/XnknM2oOtx+KWVgRm5+?=
- =?us-ascii?Q?ZpiP+2RSezbe91H+hf1boCdGKBYWrqdecwU6zDsNOawXfWOYbb+jlmrym/iF?=
- =?us-ascii?Q?8FVUPw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a4d17a3-6451-451b-0a3f-08d9b9bb1a94
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 19:52:30.7442
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OExLJbt70FcJn7PATrNjeAyb+lUPPjdz7nen23xXbufcQFJpmHhwFUaiL31XtGKV3isz64TYc/WXQT2XbBwLhnEG8Os8fKyIFKJas4WvJk0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5750
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10191 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112070124
-X-Proofpoint-ORIG-GUID: 1RNHSfk8bPVOwDypJ23foxXvQ4SeKJoq
-X-Proofpoint-GUID: 1RNHSfk8bPVOwDypJ23foxXvQ4SeKJoq
+References: <cover.1637505679.git.yu.c.chen@intel.com> <a1f688cd4ade1257e96d13c91eba72a1aeef5d59.1637505679.git.yu.c.chen@intel.com>
+In-Reply-To: <a1f688cd4ade1257e96d13c91eba72a1aeef5d59.1637505679.git.yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 7 Dec 2021 20:52:03 +0100
+Message-ID: <CAJZ5v0gLXxvzKcjSFH0Coq_VRE9fiT9AiCD_vsg7x1Gaq62V+A@mail.gmail.com>
+Subject: Re: [PATCH v11 4/4] tools: Introduce power/acpi/tools/pfru
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two important changes to note:
+On Sun, Nov 21, 2021 at 4:18 PM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Introduce a user space tool to make use of the interface exposed by
+> Platform Firmware Runtime Update and Telemetry drivers. The users
+> can use this tool to do firmware code injection, driver update and
+> to retrieve the telemetry data.
+>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+> v11:No change since v10.
+> v10:No change since v9.
+> v9: Add this tool into tools/power/acpi build infrastructure.
+>     (Andy Shevchenko)
+> v8: Print the length of OEM information if requested.
+> v7: No change since v6.
+> v6: Simplify the userspace tool to use while loop for getopt_long().
+>     (Andy Shevchenko)
+> v5: Replace the read() with mmap() so that the userspace
+>     could mmap once, and read multiple times. (Greg Kroah-Hartman)
+> ---
+>  tools/power/acpi/.gitignore          |   1 +
+>  tools/power/acpi/Makefile            |  16 +-
+>  tools/power/acpi/Makefile.rules      |   2 +-
+>  tools/power/acpi/man/pfru.8          | 137 +++++++++
 
-The kexec_calculate_store_digests() changed to specifically EXCLUDE
-the elfcorehdr segment from its list of segments to check.
-This is an important change as it allows, in a hotplug environment,
-for the elfcorehdr segment (which contains the list of CPUs and
-memory regions) to change dynamically without the need to update
-purgatory (with the hash/digests of the segments it checks) as well.
+I would call it pfrut, because it is for both the update and telemetry
+retrieval.
 
-The crash_prepare_elf64_headers() changed to look for the offline'd
-CPU and exclude it. This due to the fact that the offline'd CPU is
-still in the for_each_present_cpu() list at this point in time on
-the cpu hotplug handler path.
+>  tools/power/acpi/tools/pfru/Makefile |  23 ++
+>  tools/power/acpi/tools/pfru/pfru.c   | 417 +++++++++++++++++++++++++++
+>  6 files changed, 587 insertions(+), 9 deletions(-)
+>  create mode 100644 tools/power/acpi/man/pfru.8
+>  create mode 100644 tools/power/acpi/tools/pfru/Makefile
+>  create mode 100644 tools/power/acpi/tools/pfru/pfru.c
+>
+> diff --git a/tools/power/acpi/.gitignore b/tools/power/acpi/.gitignore
+> index 0b319fc8bb17..a6f196912999 100644
+> --- a/tools/power/acpi/.gitignore
+> +++ b/tools/power/acpi/.gitignore
+> @@ -2,4 +2,5 @@
+>  /acpidbg
+>  /acpidump
+>  /ec
+> +/pfru
+>  /include/
+> diff --git a/tools/power/acpi/Makefile b/tools/power/acpi/Makefile
+> index a249c50ebf55..2fcf09d3add3 100644
+> --- a/tools/power/acpi/Makefile
+> +++ b/tools/power/acpi/Makefile
+> @@ -9,18 +9,18 @@ include ../../scripts/Makefile.include
+>
+>  .NOTPARALLEL:
+>
+> -all: acpidbg acpidump ec
+> -clean: acpidbg_clean acpidump_clean ec_clean
+> -install: acpidbg_install acpidump_install ec_install
+> -uninstall: acpidbg_uninstall acpidump_uninstall ec_uninstall
+> +all: acpidbg acpidump ec pfru
+> +clean: acpidbg_clean acpidump_clean ec_clean pfru_clean
+> +install: acpidbg_install acpidump_install ec_install pfru_install
+> +uninstall: acpidbg_uninstall acpidump_uninstall ec_uninstall pfru_uninstall
+>
+> -acpidbg acpidump ec: FORCE
+> +acpidbg acpidump ec pfru: FORCE
+>         $(call descend,tools/$@,all)
+> -acpidbg_clean acpidump_clean ec_clean:
+> +acpidbg_clean acpidump_clean ec_clean pfru_clean:
+>         $(call descend,tools/$(@:_clean=),clean)
+> -acpidbg_install acpidump_install ec_install:
+> +acpidbg_install acpidump_install ec_install pfru_install:
+>         $(call descend,tools/$(@:_install=),install)
+> -acpidbg_uninstall acpidump_uninstall ec_uninstall:
+> +acpidbg_uninstall acpidump_uninstall ec_uninstall pfru_uninstall:
+>         $(call descend,tools/$(@:_uninstall=),uninstall)
+>
+>  .PHONY: FORCE
+> diff --git a/tools/power/acpi/Makefile.rules b/tools/power/acpi/Makefile.rules
+> index 2a6c170b57cd..68aa7e92d554 100644
+> --- a/tools/power/acpi/Makefile.rules
+> +++ b/tools/power/acpi/Makefile.rules
+> @@ -9,7 +9,7 @@ objdir := $(OUTPUT)tools/$(TOOL)/
+>  toolobjs := $(addprefix $(objdir),$(TOOL_OBJS))
+>  $(OUTPUT)$(TOOL): $(toolobjs) FORCE
+>         $(ECHO) "  LD      " $(subst $(OUTPUT),,$@)
+> -       $(QUIET) $(LD) $(CFLAGS) $(LDFLAGS) $(toolobjs) -L$(OUTPUT) -o $@
+> +       $(QUIET) $(LD) $(CFLAGS) $(toolobjs) $(LDFLAGS) -L$(OUTPUT) -o $@
+>         $(ECHO) "  STRIP   " $(subst $(OUTPUT),,$@)
+>         $(QUIET) $(STRIPCMD) $@
+>
+> diff --git a/tools/power/acpi/man/pfru.8 b/tools/power/acpi/man/pfru.8
+> new file mode 100644
+> index 000000000000..d9cda7beaa3c
+> --- /dev/null
+> +++ b/tools/power/acpi/man/pfru.8
+> @@ -0,0 +1,137 @@
+> +.TH "PFRU" "8" "October 2021" "pfru 1.0" ""
+> +.hy
+> +.SH Name
+> +.PP
+> +pfru \- Platform Firmware Runtime Update tool
+> +.SH SYNOPSIS
+> +.PP
+> +\f[B]pfru\f[R] [\f[I]Options\f[R]]
+> +.SH DESCRIPTION
+> +.PP
+> +The PFRU(Platform Firmware Runtime Update) kernel interface is designed
+> +to
+> +.PD 0
+> +.P
+> +.PD
+> +interact with the platform firmware interface defined in the
+> +.PD 0
+> +.P
+> +.PD
+> +Management Mode Firmware Runtime
+> +Update (https://uefi.org/sites/default/files/resources/Intel_MM_OS_Interface_Spec_Rev100.pdf)
+> +.PD 0
+> +.P
+> +.PD
+> +\f[B]pfru\f[R] is the tool to interact with the kernel interface.
+> +.PD 0
+> +.P
+> +.PD
+> +.SH OPTIONS
+> +.TP
+> +.B \f[B]\-h\f[R], \f[B]\-\-help\f[R]
+> +Display helper information.
+> +.TP
+> +.B \f[B]\-l\f[R], \f[B]\-\-load\f[R]
+> +Load the capsule file into the system.
+> +To be more specific, the capsule file will be copied to the
+> +communication buffer.
+> +.TP
+> +.B \f[B]\-s\f[R], \f[B]\-\-stage\f[R]
+> +Stage the capsule image from communication buffer into Management Mode
+> +and perform authentication.
+> +.TP
+> +.B \f[B]\-a\f[R], \f[B]\-\-activate\f[R]
+> +Activate a previous staged capsule image.
+> +.TP
+> +.B \f[B]\-u\f[R], \f[B]\-\-update\f[R]
+> +Perform both stage and activation actions.
+> +.TP
+> +.B \f[B]\-q\f[R], \f[B]\-\-query\f[R]
+> +Query the update capability.
+> +.TP
+> +.B \f[B]\-d\f[R], \f[B]\-\-setrev\f[R]
+> +Set the revision ID of code injection/driver update.
+> +.TP
+> +.B \f[B]\-D\f[R], \f[B]\-\-setrevlog\f[R]
+> +Set the revision ID of telemetry.
+> +.TP
+> +.B \f[B]\-G\f[R], \f[B]\-\-getloginfo\f[R]
+> +Get telemetry log information and print it out.
+> +.TP
+> +.B \f[B]\-T\f[R], \f[B]\-\-type\f[R]
+> +Set the telemetry log data type.
+> +.TP
+> +.B \f[B]\-L\f[R], \f[B]\-\-level\f[R]
+> +Set the telemetry log level.
+> +.TP
+> +.B \f[B]\-R\f[R], \f[B]\-\-read\f[R]
+> +Read all the telemetry data and print it out.
+> +.SH EXAMPLES
+> +.PP
+> +\f[B]pfru \-G\f[R]
+> +.PP
+> +log_level:4
+> +.PD 0
+> +.P
+> +.PD
+> +log_type:0
+> +.PD 0
+> +.P
+> +.PD
+> +log_revid:2
+> +.PD 0
+> +.P
+> +.PD
+> +max_data_size:65536
+> +.PD 0
+> +.P
+> +.PD
+> +chunk1_size:0
+> +.PD 0
+> +.P
+> +.PD
+> +chunk2_size:1401
+> +.PD 0
+> +.P
+> +.PD
+> +rollover_cnt:0
+> +.PD 0
+> +.P
+> +.PD
+> +reset_cnt:4
+> +.PP
+> +\f[B]pfru \-q\f[R]
+> +.PP
+> +code injection image type:794bf8b2\-6e7b\-454e\-885f\-3fb9bb185402
+> +.PD 0
+> +.P
+> +.PD
+> +fw_version:0
+> +.PD 0
+> +.P
+> +.PD
+> +code_rt_version:1
+> +.PD 0
+> +.P
+> +.PD
+> +driver update image type:0e5f0b14\-f849\-7945\-ad81\-bc7b6d2bb245
+> +.PD 0
+> +.P
+> +.PD
+> +drv_rt_version:0
+> +.PD 0
+> +.P
+> +.PD
+> +drv_svn:0
+> +.PD 0
+> +.P
+> +.PD
+> +platform id:39214663\-b1a8\-4eaa\-9024\-f2bb53ea4723
+> +.PD 0
+> +.P
+> +.PD
+> +oem id:a36db54f\-ea2a\-e14e\-b7c4\-b5780e51ba3d
+> +.PP
+> +\f[B]pfru \-l yours.cap \-u \-T 1 \-L 4\f[R]
+> +.SH AUTHORS
+> +Chen Yu.
+> diff --git a/tools/power/acpi/tools/pfru/Makefile b/tools/power/acpi/tools/pfru/Makefile
+> new file mode 100644
+> index 000000000000..09002a81e10c
+> --- /dev/null
+> +++ b/tools/power/acpi/tools/pfru/Makefile
+> @@ -0,0 +1,23 @@
+> +# SPDX-License-Identifier: GPL-2.0+
+> +
+> +include ../../Makefile.config
+> +
+> +TOOL = pfru
+> +EXTRA_INSTALL = install-man
+> +EXTRA_UNINSTALL = uninstall-man
+> +
+> +CFLAGS += -Wall -O2
+> +CFLAGS += -DPFRU_HEADER='"../../../../../include/uapi/linux/pfru.h"'
+> +LDFLAGS += -luuid
+> +
+> +TOOL_OBJS = \
+> +       pfru.o
+> +
+> +include ../../Makefile.rules
+> +
+> +install-man: $(srctree)/man/pfru.8
+> +       $(ECHO) "  INST    " pfru.8
+> +       $(QUIET) $(INSTALL_DATA) -D $< $(DESTDIR)$(mandir)/man8/pfru.8
+> +uninstall-man:
+> +       $(ECHO) "  UNINST  " pfru.8
+> +       $(QUIET) rm -f $(DESTDIR)$(mandir)/man8/pfru.8
+> diff --git a/tools/power/acpi/tools/pfru/pfru.c b/tools/power/acpi/tools/pfru/pfru.c
+> new file mode 100644
+> index 000000000000..eeec5043f825
+> --- /dev/null
+> +++ b/tools/power/acpi/tools/pfru/pfru.c
+> @@ -0,0 +1,417 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Platform Firmware Runtime Update tool to do Management
+> + * Mode code injection/driver update and telemetry retrieval.
 
-Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
----
- kernel/kexec_file.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+I would be good to say a bit more here, like what interfaces are used
+by this tool etc.
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 8347fc158d2b..339995d42169 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -765,6 +765,12 @@ static int kexec_calculate_store_digests(struct kimage *image)
- 	for (j = i = 0; i < image->nr_segments; i++) {
- 		struct kexec_segment *ksegment;
- 
-+#ifdef CONFIG_CRASH_HOTPLUG
-+		/* This segment excluded to allow future changes via hotplug */
-+		if (image->elf_index_valid && (j == image->elf_index))
-+			continue;
-+#endif
-+
- 		ksegment = &image->segment[i];
- 		/*
- 		 * Skip purgatory as it will be modified once we put digest
-@@ -1260,8 +1266,8 @@ int crash_exclude_mem_range(struct crash_mem *mem,
- 	return 0;
- }
- 
--int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
--			  void **addr, unsigned long *sz)
-+int crash_prepare_elf64_headers(struct kimage *image, struct crash_mem *mem,
-+	int kernel_map, void **addr, unsigned long *sz)
- {
- 	Elf64_Ehdr *ehdr;
- 	Elf64_Phdr *phdr;
-@@ -1308,6 +1314,11 @@ int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
- 
- 	/* Prepare one phdr of type PT_NOTE for each present CPU */
- 	for_each_present_cpu(cpu) {
-+#ifdef CONFIG_CRASH_HOTPLUG
-+		/* Skip the soon-to-be offlined cpu */
-+		if (image->hotplug_event && (cpu == image->offlinecpu))
-+			continue;
-+#endif
- 		phdr->p_type = PT_NOTE;
- 		notes_addr = per_cpu_ptr_to_phys(per_cpu_ptr(crash_notes, cpu));
- 		phdr->p_offset = phdr->p_paddr = notes_addr;
--- 
-2.27.0
+> + */
+> +#define _GNU_SOURCE
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/types.h>
+> +#include <sys/stat.h>
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <getopt.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +#include <uuid/uuid.h>
+> +#include PFRU_HEADER
+> +
+> +char *capsule_name;
+> +int action, query_cap, log_type, log_level, log_read, log_getinfo,
+> +       revid, log_revid;
+> +int set_log_level, set_log_type,
+> +       set_revid, set_log_revid;
+> +
+> +char *progname;
+> +
+> +#define LOG_ERR                0
+> +#define LOG_WARN       1
+> +#define LOG_INFO       2
+> +#define LOG_VERB       4
+> +#define LOG_EXEC_IDX   0
+> +#define LOG_HISTORY_IDX        1
+> +#define REVID_1                1
+> +#define REVID_2                2
+> +
+> +static int valid_log_level(int level)
+> +{
+> +       return level == LOG_ERR || level == LOG_WARN ||
+> +              level == LOG_INFO || level == LOG_VERB;
+> +}
+> +
+> +static int valid_log_type(int type)
+> +{
+> +       return type == LOG_EXEC_IDX || type == LOG_HISTORY_IDX;
+> +}
+> +
+> +static inline int valid_log_revid(int id)
+> +{
+> +       return id == REVID_1 || id == REVID_2;
+> +}
+> +
+> +static void help(void)
+> +{
+> +       fprintf(stderr,
+> +               "usage: %s [OPTIONS]\n"
+> +               " code injection:\n"
+> +               "  -l, --load\n"
+> +               "  -s, --stage\n"
+> +               "  -a, --activate\n"
+> +               "  -u, --update [stage and activate]\n"
+> +               "  -q, --query\n"
+> +               "  -d, --revid update\n"
+> +               " telemetry:\n"
+> +               "  -G, --getloginfo\n"
+> +               "  -T, --type(0:execution, 1:history)\n"
+> +               "  -L, --level(0, 1, 2, 4)\n"
+> +               "  -R, --read\n"
+> +               "  -D, --revid log\n",
+> +               progname);
+> +}
+> +
+> +char *option_string = "l:sauqd:GT:L:RD:h";
+> +static struct option long_options[] = {
+> +       {"load", required_argument, 0, 'l'},
+> +       {"stage", no_argument, 0, 's'},
+> +       {"activate", no_argument, 0, 'a'},
+> +       {"update", no_argument, 0, 'u'},
+> +       {"query", no_argument, 0, 'q'},
+> +       {"getloginfo", no_argument, 0, 'G'},
+> +       {"type", required_argument, 0, 'T'},
+> +       {"level", required_argument, 0, 'L'},
+> +       {"read", no_argument, 0, 'R'},
+> +       {"setrev", required_argument, 0, 'd'},
+> +       {"setrevlog", required_argument, 0, 'D'},
+> +       {"help", no_argument, 0, 'h'},
+> +       {}
+> +};
+> +
+> +static void parse_options(int argc, char **argv)
+> +{
+> +       int option_index = 0;
+> +       char *pathname;
+> +       int opt;
+> +
+> +       pathname = strdup(argv[0]);
+> +       progname = basename(pathname);
+> +
+> +       while ((opt = getopt_long_only(argc, argv, option_string,
+> +                                      long_options, &option_index)) != -1) {
+> +               switch (opt) {
+> +               case 'l':
+> +                       capsule_name = optarg;
+> +                       break;
+> +               case 's':
+> +                       action = 1;
+> +                       break;
+> +               case 'a':
+> +                       action = 2;
+> +                       break;
+> +               case 'u':
+> +                       action = 3;
+> +                       break;
+> +               case 'q':
+> +                       query_cap = 1;
+> +                       break;
+> +               case 'G':
+> +                       log_getinfo = 1;
+> +                       break;
+> +               case 'T':
+> +                       log_type = atoi(optarg);
+> +                       set_log_type = 1;
+> +                       break;
+> +               case 'L':
+> +                       log_level = atoi(optarg);
+> +                       set_log_level = 1;
+> +                       break;
+> +               case 'R':
+> +                       log_read = 1;
+> +                       break;
+> +               case 'd':
+> +                       revid = atoi(optarg);
+> +                       set_revid = 1;
+> +                       break;
+> +               case 'D':
+> +                       log_revid = atoi(optarg);
+> +                       set_log_revid = 1;
+> +                       break;
+> +               case 'h':
+> +                       help();
+> +                       exit(0);
+> +               default:
+> +                       break;
+> +               }
+> +       }
+> +}
+> +
+> +void print_cap(struct pfru_update_cap_info *cap)
+> +{
+> +       char *uuid;
+> +
+> +       uuid = malloc(37);
+> +       if (!uuid) {
+> +               perror("Can not allocate uuid buffer\n");
+> +               exit(1);
+> +       }
+> +
+> +       uuid_unparse(cap->code_type, uuid);
+> +       printf("code injection image type:%s\n", uuid);
+> +       printf("fw_version:%d\n", cap->fw_version);
+> +       printf("code_rt_version:%d\n", cap->code_rt_version);
+> +
+> +       uuid_unparse(cap->drv_type, uuid);
+> +       printf("driver update image type:%s\n", uuid);
+> +       printf("drv_rt_version:%d\n", cap->drv_rt_version);
+> +       printf("drv_svn:%d\n", cap->drv_svn);
+> +
+> +       uuid_unparse(cap->platform_id, uuid);
+> +       printf("platform id:%s\n", uuid);
+> +       uuid_unparse(cap->oem_id, uuid);
+> +       printf("oem id:%s\n", uuid);
+> +       printf("oem information length:%d\n", cap->oem_info_len);
+> +
+> +       free(uuid);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +       int fd_update, fd_update_log, fd_capsule;
+> +       struct pfru_log_data_info data_info;
+> +       struct pfru_log_info info;
+> +       struct pfru_update_cap_info cap;
+> +       void *addr_map_capsule;
+> +       struct stat st;
+> +       char *log_buf;
+> +       int ret = 0;
+> +
+> +       if (getuid() != 0) {
+> +               printf("Please run the tool as root - Exiting.\n");
+> +               return 1;
+> +       }
+> +
+> +       parse_options(argc, argv);
+> +
+> +       fd_update = open("/dev/acpi_pfru0", O_RDWR);
+> +       if (fd_update < 0) {
+> +               printf("PFRU device not supported - Quit...\n");
+> +               return 1;
+> +       }
+> +
+> +       fd_update_log = open("/dev/acpi_pfru_telemetry0", O_RDWR);
+> +       if (fd_update_log < 0) {
+> +               printf("PFRU telemetry device not supported - Quit...\n");
+> +               return 1;
+> +       }
+> +
+> +       if (query_cap) {
+> +               ret = ioctl(fd_update, PFRU_IOC_QUERY_CAP, &cap);
+> +               if (ret)
+> +                       perror("Query Update Capability info failed.");
+> +               else
+> +                       print_cap(&cap);
+> +
+> +               close(fd_update);
+> +               close(fd_update_log);
+> +
+> +               return ret;
+> +       }
+> +
+> +       if (log_getinfo) {
+> +               ret = ioctl(fd_update_log, PFRU_LOG_IOC_GET_DATA_INFO, &data_info);
+> +               if (ret) {
+> +                       perror("Get telemetry data info failed.");
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               ret = ioctl(fd_update_log, PFRU_LOG_IOC_GET_INFO, &info);
+> +               if (ret) {
+> +                       perror("Get telemetry info failed.");
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               printf("log_level:%d\n", info.log_level);
+> +               printf("log_type:%d\n", info.log_type);
+> +               printf("log_revid:%d\n", info.log_revid);
+> +               printf("max_data_size:%d\n", data_info.max_data_size);
+> +               printf("chunk1_size:%d\n", data_info.chunk1_size);
+> +               printf("chunk2_size:%d\n", data_info.chunk2_size);
+> +               printf("rollover_cnt:%d\n", data_info.rollover_cnt);
+> +               printf("reset_cnt:%d\n", data_info.reset_cnt);
+> +
+> +               return 0;
+> +       }
+> +
+> +       info.log_level = -1;
+> +       info.log_type = -1;
+> +       info.log_revid = -1;
+> +
+> +       if (set_log_level) {
+> +               if (!valid_log_level(log_level)) {
+> +                       printf("Invalid log level %d\n",
+> +                              log_level);
+> +               } else {
+> +                       info.log_level = log_level;
+> +               }
+> +       }
+> +
+> +       if (set_log_type) {
+> +               if (!valid_log_type(log_type)) {
+> +                       printf("Invalid log type %d\n",
+> +                              log_type);
+> +               } else {
+> +                       info.log_type = log_type;
+> +               }
+> +       }
+> +
+> +       if (set_log_revid) {
+> +               if (!valid_log_revid(log_revid)) {
+> +                       printf("Invalid log revid %d, unchanged.\n",
+> +                              log_revid);
+> +               } else {
+> +                       info.log_revid = log_revid;
+> +               }
+> +       }
+> +
+> +       ret = ioctl(fd_update_log, PFRU_LOG_IOC_SET_INFO, &info);
+> +       if (ret) {
+> +               perror("Log information set failed.(log_level, log_type, log_revid)");
+> +               close(fd_update);
+> +               close(fd_update_log);
+> +
+> +               return 1;
+> +       }
+> +
+> +       if (set_revid) {
+> +               ret = ioctl(fd_update, PFRU_IOC_SET_REV, &revid);
+> +               if (ret) {
+> +                       perror("pfru update revid set failed");
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               printf("pfru update revid set to %d\n", revid);
+> +       }
+> +
+> +       if (capsule_name) {
+> +               fd_capsule = open(capsule_name, O_RDONLY);
+> +               if (fd_capsule < 0) {
+> +                       perror("Can not open capsule file...");
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               if (fstat(fd_capsule, &st) < 0) {
+> +                       perror("Can not fstat capsule file...");
+> +                       close(fd_capsule);
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               addr_map_capsule = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED,
+> +                                       fd_capsule, 0);
+> +               if (addr_map_capsule == MAP_FAILED) {
+> +                       perror("Failed to mmap capsule file.");
+> +                       close(fd_capsule);
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               ret = write(fd_update, (char *)addr_map_capsule, st.st_size);
+> +               printf("Load %d bytes of capsule file into the system\n",
+> +                      ret);
+> +
+> +               if (ret == -1) {
+> +                       perror("Failed to load capsule file");
+> +                       close(fd_capsule);
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               munmap(addr_map_capsule, st.st_size);
+> +               close(fd_capsule);
+> +               printf("Load done.\n");
+> +       }
+> +
+> +       if (action) {
+> +               if (action == 1) {
+> +                       ret = ioctl(fd_update, PFRU_IOC_STAGE, NULL);
+> +               } else if (action == 2) {
+> +                       ret = ioctl(fd_update, PFRU_IOC_ACTIVATE, NULL);
+> +               } else if (action == 3) {
+> +                       ret = ioctl(fd_update, PFRU_IOC_STAGE_ACTIVATE, NULL);
+> +               } else {
+> +                       close(fd_update);
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +               printf("Update finished, return %d\n", ret);
+> +       }
+> +
+> +       close(fd_update);
+> +
+> +       if (log_read) {
+> +               void *p_mmap;
+> +               int max_data_sz;
+> +
+> +               ret = ioctl(fd_update_log, PFRU_LOG_IOC_GET_DATA_INFO, &data_info);
+> +               if (ret) {
+> +                       perror("Get telemetry data info failed.");
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               max_data_sz = data_info.max_data_size;
+> +               if (!max_data_sz) {
+> +                       printf("No telemetry data available.\n");
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               log_buf = malloc(max_data_sz + 1);
+> +               if (!log_buf) {
+> +                       perror("log_buf allocate failed.");
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               p_mmap = mmap(NULL, max_data_sz, PROT_READ, MAP_SHARED, fd_update_log, 0);
+> +               if (p_mmap == MAP_FAILED) {
+> +                       perror("mmap error.");
+> +                       close(fd_update_log);
+> +
+> +                       return 1;
+> +               }
+> +
+> +               memcpy(log_buf, p_mmap, max_data_sz);
+> +               log_buf[max_data_sz] = '\0';
+> +               printf("%s\n", log_buf);
+> +               free(log_buf);
+> +
+> +               munmap(p_mmap, max_data_sz);
+> +       }
+> +
+> +       close(fd_update_log);
+> +
+> +       return 0;
+> +}
+> --
 
+Please adjust the patch for the build fixes sent separately.
+
+Otherwise it is fine with me.

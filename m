@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEE146B53C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7542046B53F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhLGIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:12:40 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:42030 "EHLO
+        id S232033AbhLGIMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 03:12:41 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:40148 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229505AbhLGIMi (ORCPT
+        by vger.kernel.org with ESMTP id S230107AbhLGIMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Dec 2021 03:12:38 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B740hsf018633;
-        Tue, 7 Dec 2021 09:08:54 +0100
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B75RNPd021901;
+        Tue, 7 Dec 2021 09:08:55 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=selector1;
- bh=7zsTBnorEjnmZcdGM+XPvc3la6MYGPR+Rw5pvL82FAI=;
- b=JwRv/QvOw4khR4XFOMTIIsLwAQl8co6Cts0qibLPJhVTZloIs6uxL20FBJ6R0xnqOH99
- jqinwiKxArZMMGxBzXYb/BWIgz4DNmcg0RuczFmG8eZOK+lKzpJojP0NbeNmohLkHUC5
- 5jyBlpoi5sNq/iarLxgM3ZZo9W4fpu/b5odBCVVa2ZKa4ThOIIQrzISciyR2eyEE48M+
- ejrJcxxPIDQM85XIjB74oLQY63SmRKxUN69AlY5rOouSckWr5eeXvmFzJ2za+ih4aYRx
- 9hJ/DlXuU3Q28Mbir9ph725I0ymc7siiq0JRW/0fV8SK7vn/OLYYj2W7+uCwQuqHeaHc aw== 
+ bh=eshN3+K9TXtLzi8d6WwiLBLXYlbm6YlpUT5rkK6+HFs=;
+ b=mnsJwCOp294xxTgYutBgF68k2TPGd05NOlfZB/sO7slFjI4SD07oTL5UcrNO0Ufm6gra
+ sJt7001b4FFWJFujR5+PcaQJpsmQGo6ENo8WUNiBpgIyNWXpjtHYEmXr4WCspzgJLKPZ
+ syDJwueWFOsEf7lK+E9l8uxwS7SlBMdxCJLib9UDIPCdPkRLUMzVfNZWm4t1Pgna3lwi
+ cquiTTo8I/4FQNTrYLfTiPS0VGb0JueCVIxpeG28Lcqi+dcU78+9WT4GGA4K2V9xHSbq
+ 64IuLP0RjAp2nQZvP2fMEua0JtlHc3yd1xlzluMAI4Ic95dbDgSflCFGEzonBTWZGD/f +A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csp32bc8r-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ct1fx8rfq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 09:08:54 +0100
+        Tue, 07 Dec 2021 09:08:55 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B42B7100034;
-        Tue,  7 Dec 2021 09:08:53 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 76122100038;
+        Tue,  7 Dec 2021 09:08:54 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A1DBC2220AF;
-        Tue,  7 Dec 2021 09:08:53 +0100 (CET)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 7 Dec 2021 09:08:53
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6AF012220AE;
+        Tue,  7 Dec 2021 09:08:54 +0100 (CET)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 7 Dec 2021 09:08:54
  +0100
 From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -43,16 +43,16 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
 CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <julien.massot@iot.bzh>, <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v8 01/13] rpmsg: char: Export eptdev create an destroy functions
-Date:   Tue, 7 Dec 2021 09:08:31 +0100
-Message-ID: <20211207080843.21222-2-arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v8 02/13] rpmsg: Create the rpmsg class in core instead of in rpmsg char
+Date:   Tue, 7 Dec 2021 09:08:32 +0100
+Message-ID: <20211207080843.21222-3-arnaud.pouliquen@foss.st.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
 References: <20211207080843.21222-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
@@ -61,170 +61,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To prepare the split of the code related to the control (ctrldev)
-and the endpoint (eptdev) devices in 2 separate files:
+Migrate the creation of the rpmsg class from the rpmsg_char
+to the core that the class is usable by the rpmsg_char and
+the future rpmsg_ctrl module.
 
-- Rename and export the functions in rpmsg_char.h.
-
-- Suppress the dependency with the rpmsg_ctrldev struct in the
-  rpmsg_eptdev_create function.
-
-Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
-Update vs previous revision:
-- suppress WARN_ON when CONFIG_RPMSG_CHAR not defined and return -ENXIO
----
- drivers/rpmsg/rpmsg_char.c | 18 +++++++++------
- drivers/rpmsg/rpmsg_char.h | 46 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+), 7 deletions(-)
- create mode 100644 drivers/rpmsg/rpmsg_char.h
+ drivers/rpmsg/rpmsg_char.c     | 11 +----------
+ drivers/rpmsg/rpmsg_core.c     | 15 +++++++++++++--
+ drivers/rpmsg/rpmsg_internal.h |  2 ++
+ 3 files changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index d6214cb66026..f7aa2dd302a5 100644
+index f7aa2dd302a5..55f503aaf385 100644
 --- a/drivers/rpmsg/rpmsg_char.c
 +++ b/drivers/rpmsg/rpmsg_char.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-+ * Copyright (C) 2021, STMicroelectronics
-  * Copyright (c) 2016, Linaro Ltd.
-  * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
-  * Copyright (c) 2012, PetaLogix
-@@ -25,6 +26,8 @@
- #include <linux/uaccess.h>
+@@ -27,11 +27,11 @@
  #include <uapi/linux/rpmsg.h>
  
-+#include "rpmsg_char.h"
-+
+ #include "rpmsg_char.h"
++#include "rpmsg_internal.h"
+ 
  #define RPMSG_DEV_MAX	(MINORMASK + 1)
  
  static dev_t rpmsg_major;
-@@ -79,7 +82,7 @@ struct rpmsg_eptdev {
- 	wait_queue_head_t readq;
- };
+-static struct class *rpmsg_class;
  
--static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-+int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+ static DEFINE_IDA(rpmsg_ctrl_ida);
+ static DEFINE_IDA(rpmsg_ept_ida);
+@@ -561,17 +561,9 @@ static int rpmsg_chrdev_init(void)
+ 		return ret;
+ 	}
+ 
+-	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
+-	if (IS_ERR(rpmsg_class)) {
+-		pr_err("failed to create rpmsg class\n");
+-		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+-		return PTR_ERR(rpmsg_class);
+-	}
+-
+ 	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+ 	if (ret < 0) {
+ 		pr_err("failed to register rpmsg driver\n");
+-		class_destroy(rpmsg_class);
+ 		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+ 	}
+ 
+@@ -582,7 +574,6 @@ postcore_initcall(rpmsg_chrdev_init);
+ static void rpmsg_chrdev_exit(void)
  {
- 	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
- 
-@@ -98,6 +101,7 @@ static int rpmsg_eptdev_destroy(struct device *dev, void *data)
- 
- 	return 0;
+ 	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+-	class_destroy(rpmsg_class);
+ 	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
  }
-+EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
+ module_exit(rpmsg_chrdev_exit);
+diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+index f031b2b1b21c..d2129d3e6225 100644
+--- a/drivers/rpmsg/rpmsg_core.c
++++ b/drivers/rpmsg/rpmsg_core.c
+@@ -20,6 +20,9 @@
  
- static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 			void *priv, u32 addr)
-@@ -281,7 +285,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
- 		return -EINVAL;
+ #include "rpmsg_internal.h"
  
--	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
-+	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
- }
- 
- static const struct file_operations rpmsg_eptdev_fops = {
-@@ -340,10 +344,9 @@ static void rpmsg_eptdev_release_device(struct device *dev)
- 	kfree(eptdev);
- }
- 
--static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
-+int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
- 			       struct rpmsg_channel_info chinfo)
++struct class *rpmsg_class;
++EXPORT_SYMBOL(rpmsg_class);
++
+ /**
+  * rpmsg_create_channel() - create a new rpmsg channel
+  * using its name and address info.
+@@ -650,10 +653,17 @@ static int __init rpmsg_init(void)
  {
--	struct rpmsg_device *rpdev = ctrldev->rpdev;
- 	struct rpmsg_eptdev *eptdev;
- 	struct device *dev;
  	int ret;
-@@ -363,7 +366,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
  
- 	device_initialize(dev);
- 	dev->class = rpmsg_class;
--	dev->parent = &ctrldev->dev;
-+	dev->parent = parent;
- 	dev->groups = rpmsg_eptdev_groups;
- 	dev_set_drvdata(dev, eptdev);
- 
-@@ -406,6 +409,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
- 
++	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
++	if (IS_ERR(rpmsg_class)) {
++		pr_err("failed to create rpmsg class\n");
++		return PTR_ERR(rpmsg_class);
++	}
++
+ 	ret = bus_register(&rpmsg_bus);
+-	if (ret)
++	if (ret) {
+ 		pr_err("failed to register rpmsg bus: %d\n", ret);
+-
++		class_destroy(rpmsg_class);
++	}
  	return ret;
  }
-+EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
- 
- static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
+ postcore_initcall(rpmsg_init);
+@@ -661,6 +671,7 @@ postcore_initcall(rpmsg_init);
+ static void __exit rpmsg_fini(void)
  {
-@@ -445,7 +449,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
- 	chinfo.src = eptinfo.src;
- 	chinfo.dst = eptinfo.dst;
+ 	bus_unregister(&rpmsg_bus);
++	class_destroy(rpmsg_class);
+ }
+ module_exit(rpmsg_fini);
  
--	return rpmsg_eptdev_create(ctrldev, chinfo);
-+	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
- };
+diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+index b1245d3ed7c6..416316200bde 100644
+--- a/drivers/rpmsg/rpmsg_internal.h
++++ b/drivers/rpmsg/rpmsg_internal.h
+@@ -18,6 +18,8 @@
+ #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
+ #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
  
- static const struct file_operations rpmsg_ctrldev_fops = {
-@@ -531,7 +535,7 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
- 	int ret;
- 
- 	/* Destroy all endpoints */
--	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_eptdev_destroy);
-+	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
- 	if (ret)
- 		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
- 
-diff --git a/drivers/rpmsg/rpmsg_char.h b/drivers/rpmsg/rpmsg_char.h
-new file mode 100644
-index 000000000000..dd0a16f2acd1
---- /dev/null
-+++ b/drivers/rpmsg/rpmsg_char.h
-@@ -0,0 +1,46 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) STMicroelectronics 2021.
-+ */
++extern struct class *rpmsg_class;
 +
-+#ifndef __RPMSG_CHRDEV_H__
-+#define __RPMSG_CHRDEV_H__
-+
-+#if IS_ENABLED(CONFIG_RPMSG_CHAR)
-+/**
-+ * rpmsg_chrdev_eptdev_create() - register char device based on an endpoint
-+ * @rpdev:  prepared rpdev to be used for creating endpoints
-+ * @parent: parent device
-+ * @chinfo: associated endpoint channel information.
-+ *
-+ * This function create a new rpmsg char endpoint device to instantiate a new
-+ * endpoint based on chinfo information.
-+ */
-+int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
-+			       struct rpmsg_channel_info chinfo);
-+
-+/**
-+ * rpmsg_chrdev_eptdev_destroy() - destroy created char device endpoint.
-+ * @data: private data associated to the endpoint device
-+ *
-+ * This function destroys a rpmsg char endpoint device created by the RPMSG_DESTROY_EPT_IOCTL
-+ * control.
-+ */
-+int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data);
-+
-+#else  /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
-+
-+static inline int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
-+					     struct rpmsg_channel_info chinfo)
-+{
-+	return -ENXIO;
-+}
-+
-+static inline int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-+{
-+	return -ENXIO;
-+}
-+
-+#endif /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
-+
-+#endif /*__RPMSG_CHRDEV_H__ */
+ /**
+  * struct rpmsg_device_ops - indirection table for the rpmsg_device operations
+  * @create_channel:	create backend-specific channel, optional
 -- 
 2.17.1
 

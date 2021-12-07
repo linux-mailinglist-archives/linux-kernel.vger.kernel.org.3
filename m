@@ -2,87 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B362A46C163
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4D846C164
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbhLGRN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbhLGRN7 (ORCPT
+        id S239843AbhLGROu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:14:50 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55406 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229639AbhLGROt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:13:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACED0C061574;
-        Tue,  7 Dec 2021 09:10:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 209B5CE1C58;
-        Tue,  7 Dec 2021 17:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DFCC341C3;
-        Tue,  7 Dec 2021 17:10:23 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 12:10:21 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yabin Cui <yabinc@google.com>
-Subject: Re: [RFC][PATCH] tracefs: Set all files to the same group ownership
- as the mount option
-Message-ID: <20211207121021.4d261d6e@gandalf.local.home>
-In-Reply-To: <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
-References: <20211206211219.3eff99c9@gandalf.local.home>
-        <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Dec 2021 12:14:49 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7GIOtR009677;
+        Tue, 7 Dec 2021 17:11:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=kLIlqS4szLfUDCdz0fyAEgOIbPdUMRGXzwkqQIpiWe4=;
+ b=JnjyguiPy2Pbzji3q4YZQ2PRlehWZtMNhTffwTWe/PtTumrM2RL/16JfBwA/bWvhd++N
+ VxKxGhAa8Qk5gXoiqTRl7LGGujMbcRHYsB8GIrd22K29dSbPljUr4nByLvFzYPHHJ4ew
+ S1/THKZbM7P1Uh131ooLz4+zLRH1a8zSXePsAQ85Kp6nino61IkF1f9e1hycwtC8JrK2
+ 6UzFg5EnJCIqUtdUz/p4NkYGvmJf864/ewO/GUI5BaIQkKhsTjkTeBR+SZCquZFZfe3x
+ JYHV5PF33zw3yWYYzeYPyrOR3GC28r/mcEcH0EPSziOUBDDjkIDlgQ4GCSSQk2u5hpId pg== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctajy1qem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:11:16 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7H8sST009018;
+        Tue, 7 Dec 2021 17:11:14 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3cqyy9fhtx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Dec 2021 17:11:14 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7HBAsl22872566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Dec 2021 17:11:10 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2FE5A404D;
+        Tue,  7 Dec 2021 17:11:10 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AED1A4057;
+        Tue,  7 Dec 2021 17:11:10 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.91.80])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Dec 2021 17:11:10 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>
+Subject: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
+Date:   Tue,  7 Dec 2021 18:11:09 +0100
+Message-Id: <20211207171109.22793-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vNXjdW64B_UOuh1QHI_aCAYAZAgd_x2y
+X-Proofpoint-GUID: vNXjdW64B_UOuh1QHI_aCAYAZAgd_x2y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_07,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112070106
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 09:04:30 -0800
-Kalesh Singh <kaleshsingh@google.com> wrote:
+The LPAR name may be changed after the LPAR has been started in the HMC.
+In that case lparstat command is not reporting the updated value because it
+reads it from the device tree which is read at boot time.
 
-> One thing that I missed before: There are files that can be generated
-> after the mount, for instance when a new synthetic event is added new
-> entries for that event are created under events/synthetic/ and when a
-> new instance is created the new entries generated under instances/.
-> These new entries don't honor the gid specified when mounting. Could
-> we make it so that they also respect the specified gid?
+However this value could be read from RTAS.
 
-They don't?
+Adding this value in the /proc/powerpc/lparcfg output allows to read the
+updated value.
 
-/me looks at code
+Cc: Nathan Lynch <nathanl@linux.ibm.com>
+Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+---
+v4:
+ address Nathan's new comments limiting size of the buffer.
+v3:
+ address Michael's comments.
+v2:
+ address Nathan's comments.
+ change title to partition_name aligning with existing partition_id
+---
+ arch/powerpc/platforms/pseries/lparcfg.c | 54 ++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-Aw crap. I thought since I have this:
+diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+index f71eac74ea92..058d9a5fe545 100644
+--- a/arch/powerpc/platforms/pseries/lparcfg.c
++++ b/arch/powerpc/platforms/pseries/lparcfg.c
+@@ -311,6 +311,59 @@ static void parse_mpp_x_data(struct seq_file *m)
+ 		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+ }
+ 
++/*
++ * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
++ * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
++ */
++#define SPLPAR_LPAR_NAME_TOKEN	55
++#define GET_SYS_PARM_BUF_SIZE	4002
++#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
++#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
++#endif
++static void read_lpar_name(struct seq_file *m)
++{
++	int rc, len, token;
++	union {
++		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
++		struct {
++			__be16 len;
++			char name[GET_SYS_PARM_BUF_SIZE-2];
++		};
++	} *local_buffer;
++
++	token = rtas_token("ibm,get-system-parameter");
++	if (token == RTAS_UNKNOWN_SERVICE)
++		return;
++
++	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
++	if (!local_buffer)
++		return;
++
++	do {
++		spin_lock(&rtas_data_buf_lock);
++		memset(rtas_data_buf, 0, sizeof(*local_buffer));
++		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
++			       __pa(rtas_data_buf), sizeof(*local_buffer));
++		if (!rc)
++			memcpy(local_buffer->raw_buffer, rtas_data_buf,
++			       sizeof(local_buffer->raw_buffer));
++		spin_unlock(&rtas_data_buf_lock);
++	} while (rtas_busy_delay(rc));
++
++	if (!rc) {
++		/* Force end of string */
++		len = min((int) be16_to_cpu(local_buffer->len),
++			  (int) sizeof(local_buffer->name)-1);
++		local_buffer->name[len] = '\0';
++
++		seq_printf(m, "partition_name=%s\n", local_buffer->name);
++	} else
++		pr_err_once("Error calling get-system-parameter (0x%x)\n", rc);
++
++	kfree(local_buffer);
++}
++
++
+ #define SPLPAR_CHARACTERISTICS_TOKEN 20
+ #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+ 
+@@ -496,6 +549,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+ 
+ 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+ 		/* this call handles the ibm,get-system-parameter contents */
++		read_lpar_name(m);
+ 		parse_system_parameter_string(m);
+ 		parse_ppp_data(m);
+ 		parse_mpp_data(m);
+-- 
+2.34.1
 
-static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
-{
-[..]
-		case Opt_gid:
-			if (match_int(&args[0], &option))
-				return -EINVAL;
-			gid = make_kgid(current_user_ns(), option);
-			if (!gid_valid(gid))
-				return -EINVAL;
-
-			opts->gid = gid;
-
-			set_gid(tracefs_mount->mnt_root, gid);
-[..]
-
-
-That the new files would inherit the opts->gid. But I see that they do not.
-
-I'll add that as a separate patch.
-
-Thanks for bringing that to my attention.
-
--- Steve

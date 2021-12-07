@@ -2,260 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AC246C0B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C84D46C0BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhLGQcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:32:35 -0500
-Received: from mail-dm6nam12on2061.outbound.protection.outlook.com ([40.107.243.61]:58190
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229531AbhLGQcd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:32:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e7oVN5NmxO5boVgkw//ea+gqkC1gizVi74sRhlo87rAaoYGbYx6DzU/D8bl+TnIJE23FSOsqwPOpx+B6MGKXlB2isAeZkb/TyQMOkQTxnsoToTMwFibl8ixz1JeY3/rh9cv1/goYbqVp0YGck4YhLiqgLHXLH+e8mPqqi8lTPuBgQPlQFWEtyMElJqEsChhkxdGMGe2tyu5iIH/3qmUDoVJANCf9umckB3XE4AXARo6jZI654tZXVTcwcceCjIb0cO26wHTe/LCrwrRPaHBlYESaF9DAq2IPTpd29QfzyNraHZJZYJh3DhoShQrMRBMG+s66HVg9z5srlpmypnanIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gdOlSMgUj3qk+tBxpNvzkMhVXlrHK4W3wV2x0P36q4Q=;
- b=UHfBMY751dkiDBw/UfCvbMJvFBNOy8Mq/rPsBc9vuSE0y64PbcKjEugN7rYjw8brY4FKpvYnqaiTvcIeZoyFGSK89ypO6zmv5NfaDjYIGyZDEKTRqUX+vTvw6K7DPRS4FXWj+e5hUorJqaa0y4LYOYVFmYkvYmGoLQb4O8lIr4lFaULlMln6gluJZhGmRYyIdm40BivPFAJbB5bSpR9femTxiRZtSYxO+biEq6j02cncWpY48EFNpOioaLtQvpiJdB+Lv9Sr5SyCCJElDM34jsQGatVjkAzDUqvkzqEHNu9thuvegOSf1U7z2sCdeZS66sztwt65sij9w0xDbhEPrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gdOlSMgUj3qk+tBxpNvzkMhVXlrHK4W3wV2x0P36q4Q=;
- b=jcbpwvkpw8C/cSHBdcHk0tjtAaCXh1rRV+LSSPuLeDuluI5Sme+gXdcLk5UpP0QEHrJIzptIQlprxgTLwBIgZ/sNKEN4RetAJ0U5viPDCXo3u/EgfTzy6ihmM9mWugO7WQIyeZRJshz9BJ2G0wkFzIh2egki1KkTO094pmAIivw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB3170.namprd12.prod.outlook.com (2603:10b6:408:98::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Tue, 7 Dec
- 2021 16:28:51 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::dca6:dd72:888a:9db6]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::dca6:dd72:888a:9db6%5]) with mapi id 15.20.4755.023; Tue, 7 Dec 2021
- 16:28:51 +0000
-Date:   Tue, 7 Dec 2021 16:28:42 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mukul.joshi@amd.com,
-        alexander.deucher@amd.com, william.roche@oracle.com
-Subject: Re: [PATCH 1/3] x86/MCE/AMD: Provide an "Unknown" MCA bank type
-Message-ID: <Ya+LukojuewlomeF@yaz-ubuntu>
-References: <20211203020017.728440-1-yazen.ghannam@amd.com>
- <20211203020017.728440-2-yazen.ghannam@amd.com>
- <YaqXiVjNLINxwz8G@zn.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YaqXiVjNLINxwz8G@zn.tnic>
-X-ClientProxiedBy: MN2PR16CA0040.namprd16.prod.outlook.com
- (2603:10b6:208:234::9) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        id S238243AbhLGQdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234951AbhLGQdI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 11:33:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4897C061746;
+        Tue,  7 Dec 2021 08:29:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E9FBB81CF5;
+        Tue,  7 Dec 2021 16:29:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBCEC341C8;
+        Tue,  7 Dec 2021 16:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638894574;
+        bh=EhrcWI9mWDI5wSadeNb9DYuTlUXsfjqAGucxFodehUM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sQiCDWKiLCt0NYliDY3ZjcINoLTG/4QT0oVjoabAyZ+yDpwc0LjgCzZ+QYjIKNofo
+         W8U0FzINZwNMBUYC+/3guo1B+Q1s97eIGgwBYFh35WC4I09oNJa+al4875PoPPdm/A
+         nsuuPnN+W+AGfVRzlWZSi/l8DyHgMLVpiyLG3Sokl+kaABQq8T9rjWSHn+l4OyYx+U
+         yQsERvQsP4mMZ592gPkb+am1UBSEm4PZdHlO7978P2Iy6rbSzaTCFnGQwkxJJ0oIk3
+         OZLU+MXeRKy4684n4eCl6Bw9FkJCY9yVpYKf57y1YBEShZrkVBoBPHcoDaOySDvz6b
+         trvI76qcWbeZQ==
+Received: by mail-ed1-f47.google.com with SMTP id g14so58582781edb.8;
+        Tue, 07 Dec 2021 08:29:34 -0800 (PST)
+X-Gm-Message-State: AOAM532f2W9ZreoQH9VcOnFC/ifB5eVRJCe17HoxaICUtglcqoNo6f8m
+        mX43EIyA+RbtmUWESsQQE92lFP4/0AtpMTzo/w==
+X-Google-Smtp-Source: ABdhPJz98fbAnvVe1AhaSmP08wxHXrR8BpSqIXazh8lXQCVGqRo0DowpOQD1f/F8ykH7vGksg5xQxq1VgImntCBby0Y=
+X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr5840714edz.342.1638894573258;
+ Tue, 07 Dec 2021 08:29:33 -0800 (PST)
 MIME-Version: 1.0
-Received: from yaz-ubuntu (165.204.25.250) by MN2PR16CA0040.namprd16.prod.outlook.com (2603:10b6:208:234::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20 via Frontend Transport; Tue, 7 Dec 2021 16:28:50 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aa17ca99-7fc1-4b6e-eefe-08d9b99ea718
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3170:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3170DA354857C060BBB32189F86E9@BN8PR12MB3170.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 834EUNe/CGWlCoom8GL2csfWrB3Kwk4AkA1Jz+4fz++5UHSCpYbSDzNUTuEStxjVZSDo9CGxFZ+r7iSxXRt4ZvLQ4IHk3VpseBBAfxjOp4MaUOX5sFG2qhH55+3dHioneCGAajHKJMANgCLV68S5Va9TrbeENLWssMZs9xrrH6j2g0bCKXijmz/9MwGImVIG5MKaCKAjHyZME8SY/zdz3nQlsapXmqTMbYAxNYoWq3crwGLcuD0v0Tg1JcS09SAXi21oDatsP9RC1leiNtMWiLQQf2aw1fyMC9hYjSasSLLGWMU3XMY3XFbxbfc1bX8Lq3siEbMlAtFgfJNCnX4+UJdfCDybqgOaaH9zOFSckJPAdBMprxClzoCRa/nzd3pTx6vHa8UxUT65yw7KcEySSV3L4B+6byfQeY0jUBQbhemxELYJ0y1dh9Rzz/DB3mCNKt4G7bYBVwUROmv44LPu2TJpTNFOfljQryv6Sd7L35EqF68aj4AJmcEo05GtG2rS5zPHU5qcLvOwAMJT0x22vFxfAk6wNxQTweuqt6QzJ4eKP+aGpO27QVqBdE2JhTnkfvEBBuWtyTosX/Cg0mQt5iiF8ox6OGEUXAcPr4x1qiYwvNT9hul7WFZVE58pZclewatYWhhoh+HNjPd2QAoxm9lE0g+iZFb9pOQf2XqDpXQozObB1bt6P+WhHQ+opZ45M/lcHdNdQU6HKSmlRFzpQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(55016003)(956004)(2906002)(6916009)(6666004)(8936002)(86362001)(15650500001)(66946007)(9686003)(4326008)(508600001)(5660300002)(33716001)(186003)(6496006)(38100700002)(83380400001)(26005)(66476007)(44832011)(316002)(66556008)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFcxN3d4cWQ2VmU5K1VXdndIb2VJaHkvQXRZbDFaRllBcU1UWS94SmNzQ2Y2?=
- =?utf-8?B?Q0crUkRlZ085bU1FaEg5NjBVcXJrZE5sWHNIbnVGdGFUTXd6Uncwek5LcUVE?=
- =?utf-8?B?UXB2NEQvRVhoa3I3ZHk0MFMwZklwdk93OVdyZWxneEpMV3hiTy9WMVVOd2Rr?=
- =?utf-8?B?VUx3VVV0UnlPZmx5VlFUQXJ3Y2tRUVNZVStqMVdYWXVKbTAzN0lGUlZKMDB0?=
- =?utf-8?B?bGNjTmZxRmczOHdvdk15QVIwU2VNZ0VHcUpqb0dxOGcyUmFtUFpkUnJJUnRi?=
- =?utf-8?B?ZTA1VXphYzhCamJOaUdqYkllczBvcDJaTi8zc3BZWlRTSnU2ak0wdWFQdXRD?=
- =?utf-8?B?Z21wQW1TcG5sOFZROWErTHRjcXc4SDJvR3o4dXUyNzNieWRCQ1Fnd2dFRUNC?=
- =?utf-8?B?S3BNUlVZTkZLS3VtTFRFaUJkSk8wUmpFV1RNci93ZTdaaXRPaEV0VGF0OXA5?=
- =?utf-8?B?MTBuUVU5VlFzTVgrbjlBN3hFVTM2aGZzVTBUTHl0Y1M1TEcyeFlIb0xXenE5?=
- =?utf-8?B?UVl4dm5Ta001YzFBVjRUMjlOWS9jSm01cWo3ektaTGFOOVVoOVBFZlVVYnBT?=
- =?utf-8?B?MHREZUI0UkZxTjFvbkhVY3hTSzhYeEYyUnNLdGxQNVBpVUV2emVSdDJ6NTla?=
- =?utf-8?B?SkhJN3d5ek9sSlByZGtHR3QrVXE3UjRwVFd3WnNvZGd4VndoNis5UlJUMDFh?=
- =?utf-8?B?SkFyS2ozZlRUK3d3aXJuWnpUQUF5Y09jbk8xNUUvcjdIaFhkKzZhM3c0WHBz?=
- =?utf-8?B?ZG9LcUhhSWs1K1VITi9zQ3RET3ErcVVxM1hpeWYxc25CZVZzWUhMb3FHM25l?=
- =?utf-8?B?NWVQSldWR3ErR0VjaGR6aldob2NVWk5TYkJCcGF1K2lLYTlDRmxrclBQYW9D?=
- =?utf-8?B?a1VIb1h3NFNhMmhQdy84ZFpNZ3JNdEdJbmxlajByT2xpOERPd1A0N3p5TDVV?=
- =?utf-8?B?ZitwclkwSjJjZ3V5Q2oxbGV4eVBiWHZpZmthanlBMFZNalJ0RFExZzhNOVRC?=
- =?utf-8?B?alFWR3Z4MmNxeXJEMmhpaTVjQ1NRUFh2Sys1b2NuNXNNYTZ4WDlMb04xdVRZ?=
- =?utf-8?B?VXdEcHVld1ZSSjIyZDNvVUtsOFcxZUUvWEtoWGREWCtGZzg3NEZDc1hMa2Jr?=
- =?utf-8?B?T1NJNkprbGN4K0J4ME5EVzNjUXZCY092ZGFUeEpVUnhISzNYeHBzVlJFTlZp?=
- =?utf-8?B?QzViSzVrNXlxYUJhb3hOQTB2N2szZGtiVHRrZlp1QzkzMWJQWTNUQVoyUGFl?=
- =?utf-8?B?TVJpSkxPNXlmQnQ3N0oxbzRiL1kveVpyZVlkRzFwWFJsYXVpYStjTzN3M3hX?=
- =?utf-8?B?Y0NxMytwSm5CbFMrL21Yc1VMVk1nUU8rQVJyelBQR0M0bVZWSjBuRHhqWDlE?=
- =?utf-8?B?RFNDRENzOG5XeksrVXlENzhFYk1zUWdSQi92N2FJYjhCYnA3N0RqT0xib1VD?=
- =?utf-8?B?RTVVbGtzNGRUM2lhQUErbnNGVlNNNjh5UG5hc2tqMmlPc3M1MllFazdZK1Nu?=
- =?utf-8?B?YU1jN2tPUXBMdW9QdUlkOXQvZEp2OFVnNUt6RUlFay9TZi9WdC9qbHRMdkZK?=
- =?utf-8?B?OWRvUkthWmU4MWVleVk0c2g5YXRnalpNTVdVcnZGNEJWdFhQc280anpBV2Vs?=
- =?utf-8?B?UWJNcGF5U0hmSW1qaXAyYTBYZEVFRVhkaEg3QS9zYlJDVythbE9MODFHQkNn?=
- =?utf-8?B?OE5nazQxU0U0WmJ5eHZVSGxTcmlQRkNOaDJkbGF3L21VUnVKRDhjR1kvMTNE?=
- =?utf-8?B?Z3p5QTl0VUhYbmRwTVNnNUU4RkJxZWFDZTJWTTZFckloZ0ZSeVh5cDlrRW5F?=
- =?utf-8?B?dlR4elBMWTZKYVFtQmlneEJQWDR5eE5JdFlGd1kyaVpLKzJDQTBDM3U4ZWY0?=
- =?utf-8?B?WnlxNUh6RU14T3V3OWpTTDBLZzZqZkJVblFsS2NPY3JQMG8rV0JiYTd0b0lt?=
- =?utf-8?B?TGZDU0grSW93eHFrZDdqWklSWkdoSGx4SUxSVzNZS2hXVVFLbERNaHp3WGVr?=
- =?utf-8?B?RjA2aFdxYkZpM0xpUk9mYnRxN3FUc3g3b1I0Mytja0JValluQy9vRmtNTFJp?=
- =?utf-8?B?NWo3MXhodnFxQldXSkNyM01SVnpxc0tjU3I5YWt5Yys3M0V4eUozV3Uyc1JP?=
- =?utf-8?B?WGUrZ1JoQnZPSTE2N1dHS3c1ZktTZGFWQ0F2SVhKamlPYmlGbjAzQUliZzhw?=
- =?utf-8?Q?HOZhZXIqYcCqbVlEora3AjM=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa17ca99-7fc1-4b6e-eefe-08d9b99ea718
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 16:28:51.1534
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Syl0j31VRb/VZnkWZqnvLvM+FGC6AbTpi9aSjcSD2lYMaSTU/Q4SAg01BBS994sJ2ju4uYMUkwelIf7wKpNPew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3170
+References: <20211206174153.2296977-1-robh@kernel.org> <Ya8cZ69WGfeh0G4I@orome.fritz.box>
+In-Reply-To: <Ya8cZ69WGfeh0G4I@orome.fritz.box>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 7 Dec 2021 10:29:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLmeLKeORpPtUFAZc9Uy7uFc0DnVQuczkkEvDq8CyQN1w@mail.gmail.com>
+Message-ID: <CAL_JsqLmeLKeORpPtUFAZc9Uy7uFc0DnVQuczkkEvDq8CyQN1w@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: Add missing properties used in examples
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 11:17:45PM +0100, Borislav Petkov wrote:
-> On Fri, Dec 03, 2021 at 02:00:15AM +0000, Yazen Ghannam wrote:
-> > The AMD MCA Thresholding sysfs interface populates directories for each
-> > bank and thresholding block. The name used for each directory is looked
-> > up in a table of known bank types. However, new bank types won't match
-> > in this list and will return NULL for the name. This will cause the
-> > machinecheck sysfs interface to fail to be populated.
-> > 
-> > Set new and unknown MCA bank types to the "unknown" type. Also,
-> > ensure that the bank's thresholding block directories have unique names.
-> > This will ensure that the machinecheck sysfs interface can be
-> > initialized.
-> 
-> What is the advantage of having a sysfs directory structure headed with
-> an "unknown" entry vs not having that structure at all when the kernel
-> runs on a machine for which it has not been enabled yet?
-> 
-> IOW, if those new banks would need additional enablement, what's the
-> point of having "unknown" on older kernels which do not have any
-> functionality?
-> 
-> IOW, how does this:
-> 
-> /sys/devices/system/machinecheck/machinecheck0/unknown/unknown/
-> ├── error_count
-> ├── interrupt_enable
-> └── threshold_limit
-> 
-> help a user?
+On Tue, Dec 7, 2021 at 2:33 AM Thierry Reding <thierry.reding@gmail.com> wr=
+ote:
+>
+> On Mon, Dec 06, 2021 at 11:41:52AM -0600, Rob Herring wrote:
+> > With 'unevaluatedProperties' support implemented, the following warning=
+s
+> > are generated in the net bindings:
+> >
+> > Documentation/devicetree/bindings/net/actions,owl-emac.example.dt.yaml:=
+ ethernet@b0310000: Unevaluated properties are not allowed ('mdio' was unex=
+pected)
+> > Documentation/devicetree/bindings/net/intel,dwmac-plat.example.dt.yaml:=
+ ethernet@3a000000: Unevaluated properties are not allowed ('snps,pbl', 'md=
+io0' were unexpected)
+> > Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: ether=
+net@19000000: Unevaluated properties are not allowed ('qca,ethcfg' was unex=
+pected)
+> > Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: ether=
+net@1a000000: Unevaluated properties are not allowed ('mdio' was unexpected=
+)
+> > Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethe=
+rnet@40028000: Unevaluated properties are not allowed ('reg-names', 'snps,p=
+bl' were unexpected)
+> > Documentation/devicetree/bindings/net/ti,cpsw-switch.example.dt.yaml: m=
+dio@1000: Unevaluated properties are not allowed ('clocks', 'clock-names' w=
+ere unexpected)
+> > Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.example.dt.=
+yaml: mdio@f00: Unevaluated properties are not allowed ('clocks', 'clock-na=
+mes' were unexpected)
+> >
+> > Add the missing properties/nodes as necessary.
+> >
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: "Andreas F=C3=A4rber" <afaerber@suse.de>
+> > Cc: Manivannan Sadhasivam <mani@kernel.org>
+> > Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> > Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> > Cc: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> > Cc: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> > Cc: "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>
+> > Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> > Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+> > Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-actions@lists.infradead.org
+> > Cc: linux-stm32@st-md-mailman.stormreply.com
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/net/actions,owl-emac.yaml          | 3 +++
+> >  .../devicetree/bindings/net/intel,dwmac-plat.yaml          | 2 +-
+> >  Documentation/devicetree/bindings/net/qca,ar71xx.yaml      | 5 ++++-
+> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml     | 6 ++++++
+> >  Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml | 7 +++++++
+> >  .../devicetree/bindings/net/toshiba,visconti-dwmac.yaml    | 5 ++++-
+> >  6 files changed, 25 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/actions,owl-emac.yam=
+l b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
+> > index 1626e0a821b0..e9c0d6360e74 100644
+> > --- a/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
+> > @@ -51,6 +51,9 @@ properties:
+> >      description:
+> >        Phandle to the device containing custom config.
+> >
+> > +  mdio:
+> > +    type: object
+>
+> In one of the conversions I've been working on, I've used this construct
+> for the mdio node:
+>
+>         mdio:
+>           $ref: mdio.yaml
+>
+> In the cases here this may not be necessary because we could also match
+> on the compatible string, but for the example that I've been working on
+> there is no compatible string for the MDIO bus, so that's not an option.
 
-Yeah, I see your point.
+$nodename is also used to match if there's no compatible, so the above
+is somewhat redundant (the schema will be applied twice). Matching on
+the node name is useful where we don't have a specific schema in place
+or if you want to validate DT files with just that schema, but that's
+becoming less useful as we get schemas for everything.
 
-> 
-> Btw, looking at the current layout:
-> 
-> ...
-> ├── insn_fetch
-> │   └── insn_fetch
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ├── l2_cache
-> │   └── l2_cache
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ...
-> 
-> we have those names repeated which looks wonky and useless too. I'd
-> expect them to be:
-> 
-> ...
-> ├── insn_fetch
-> │   ├── error_count
-> │   ├── interrupt_enable
-> │   └── threshold_limit
-> ├── l2_cache
-> │   ├── error_count
-> │   ├── interrupt_enable
-> │   └── threshold_limit
-> ...
-> 
-> Can we fix that too pls?
-> 
+Thinking about this some more, what we need for these is:
 
-Sure thing. But I don't think removing the second directory will be okay. The
-layout is "bank"/"block". If the "block" has special use like DRAM ECC, or L3
-Cache on older systems, then it'll have a unique name. Otherwise, the block
-will take the name of the bank.
+mdio:
+  $ref: mdio.yaml
+  unevaluatedProperties: false
 
-I think the more robust solution is to drop the unique names and use generic
-names like "bank"/"block". A new file called "type" can be introduced into the
-directory structure, and this can return the name of the bank/block. New bank
-types will return "<null>" for the "type", but the directory structure should
-remain the same and functional.
+Because mdio.yaml on its own is incomplete and allows for additional
+properties. That ensures all the properties are documented and no
+extra properties are present.
 
-I've seen this in other sysfs interfaces like cpuidle,
-e.g. /sys/devices/system/cpu/cpu0/cpuidle/stateX
+> On the other hand, it looks like the snps,dwmac-mdio that the examples
+> here use don't end up including mdio.yaml, so no validation (or rather
+> only very limited validation) will be performed on their properties and
+> children.
 
-The "blockX/type" file is like the "stateX/desc" file. Or the "type" file can
-be called "desc", since it's a description of what the bank or block
-represent.
+There is more validation than you were thinking, but it also needs the
+above added.
 
-Here are a couple of examples:
-
-/sys/devices/system/machinecheck/machinecheck0/
-├── th_bank0
-│   ├── type ("Instruction Fetch")
-│   └── th_block0
-│       ├── type ("All Errors")
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
-├── th_bank1
-│   ├── type ("Northbridge")
-│   ├── th_block0
-│   │   ├── type ("DRAM Errors")
-│   │   ├── error_count
-│   │   ├── interrupt_enable
-│   │   └── threshold_limit
-│   └── th_block1
-│       ├── type ("Link Errors")
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
-...
-
-OR
-
-/sys/devices/system/machinecheck/machinecheck0/thresholding
-├── bank0
-│   ├── desc ("Instruction Fetch")
-│   └── block0
-│       ├── desc ("All Errors")
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
-├── bank1
-│   ├── desc ("Northbridge")
-│   ├── block0
-│   │   ├── desc ("DRAM Errors")
-│   │   ├── error_count
-│   │   ├── interrupt_enable
-│   │   └── threshold_limit
-│   └── block1
-│       ├── desc ("Link Errors")
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
-...
-
-I'm inclined to the second option, since it keeps all the thresholding
-functionality under a single directory.
-
-What do you think?
-
-Thanks,
-Yazen
+Rob

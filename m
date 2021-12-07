@@ -2,133 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477A146B0CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A8146B0D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhLGCrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 21:47:35 -0500
-Received: from mail-eopbgr1300127.outbound.protection.outlook.com ([40.107.130.127]:21426
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244305AbhLGCrc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 21:47:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iIm0QzbEd7RmtG2+rRKHsBq3xPPHldojUA5l8cGDEw9W8MJ+l+sVJVQJsHrpb7uWkA9jC8GUWnwA91amKX2VKlN3hKmLFi7xKjNISxsqlp7d8xienQJ1AeF5oSZMNNas6qkH8GKfrgfZd7PwVzDd8c/E1yQv+fJTTJg/nbhDCZIAptWTWhm8DTv7NHxUPR4kKox00TrLhZ7mj6lOdjuokb/I6kH1LvspFu5L5ORispWwrXn/mK7fEukAjaE0PcmVOx6sQ2jNdcOuSaSz9yZqg0O7frn2nMui7MH9+z21QEuptShredL5nMQ4gF3d/XcGqZ0UxFtMS/lNuPsRQZvJww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cirse+5pX9YLWKdE/R3V/IMOuRRToxyqfY81JzG3l/c=;
- b=HCML6taQNJYuGdAJL+WjdJfecAw5k1LszO02bYZnjb+oZp3vbkzmOpASZd19VZKt+j4w6uKodXCZGjQAjD8A1bfvg4RiQhGNO1q/vogF9YAUNaKIXqNFDXNIJgpHe8ks7QJJ+Cw9N4liEvOKEHQKYm5jT+OdecStxKs5WKvr5Jc2Q2jEAN7zsIL+rUGjWuZn8TCYkTlJmdqO4OB3AL1YeMn7xAgGLgebkVTkcHYsVM9uMBER0SmaGCPH2XAnrzb084pkD/PicuImlRK+WsKi9HRmg0EbY8St0AeSdn+G99qr0eBy8QdiPTtaPbM2cZhR1EPLK7Lq5Re5mMbVJyYHWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cirse+5pX9YLWKdE/R3V/IMOuRRToxyqfY81JzG3l/c=;
- b=n2EoLv+7u8JGGt5JrjlvApAfYcTjkOD+F+JNgSO0t0W8paL9C+WdWnD5qlpaahMCBH2ylhMjNXlaxhSV4oOWFL/LSjzTWXpbwz2pDAR4Km/t1j1JYs4XvYF1cKkKPzGUqNpOj8RzLhQd9mpppwUgBa5avlKi5P5kppJrMgPIrl0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by TY2PR06MB2974.apcprd06.prod.outlook.com (2603:1096:404:95::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 02:44:00 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
- 02:44:00 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH] drm/shmem-helper: Remove duplicated include
-Date:   Mon,  6 Dec 2021 18:43:45 -0800
-Message-Id: <20211207024345.37262-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0192.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::21) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        id S229925AbhLGCtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 21:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbhLGCtr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 21:49:47 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17438C061746;
+        Mon,  6 Dec 2021 18:46:18 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id p4so13296101qkm.7;
+        Mon, 06 Dec 2021 18:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SElHe6V0YIn8colM6BdilzON7/VtRRQaE57fWBbme4w=;
+        b=j+HfX+x3n+d58EEidEQwNvGEmYKdyLpokG49/XjKUfTHUGXs31CRN0OQOlZke/zeWo
+         p1wLIblH0iNthwvMeStNAqsf5J3QsY+7Jt1yzrH9Pl0uZDOTKtJW/+ki+soBQDRSzTqe
+         3XXyTjJbf3tYvad0LbqKQyNJy8Z0/K/j37Ojw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SElHe6V0YIn8colM6BdilzON7/VtRRQaE57fWBbme4w=;
+        b=tNOxLnqJGDJtjXk+9IACQ6ObRdgTiNinYOPOUISIzydxvnAnkwrTGcXSmZFeiH6X/A
+         ohMGaSTphB4trBOikPziIyCzgJLUArXc/BuQhZHm2nmTVzhoypANAyU7U9SxxB5qc2Oj
+         hzIlo7AX2Yr1OPVIJui2koACXuEEYqXjPBnMP5ep80hz+m8FGOXTt1Am0445V5JlTAhH
+         +rh/Nke2F1+ZCwpPRGZMYx/FkFaDELeVz9FloZt+2gVt3E+ZfqhZkFevne3AEYeMZIE/
+         3MO402vjKC9OFt1CV+43qIOHfLWF2MP4HSVN5s0Kd3H0vuW8p06XXzLsufmyEXJ3IScC
+         c7Lw==
+X-Gm-Message-State: AOAM532XfVvEVWD38M78ExG/Oh7DeY1ZimzQVXoPFKxnx9gz0GSeaGiG
+        ZrRZr510AhcLtZwyvRXk/jMJFwNkDhumjmAI+6A=
+X-Google-Smtp-Source: ABdhPJxdO+vcgbH9/n5MHHody6QQzCajhH0mrh7jeXVqDcyalUyocJUw/GB0vHySRmA4DDXXHyGt6XppaSYhFtUTB4s=
+X-Received: by 2002:a05:620a:4081:: with SMTP id f1mr36607665qko.165.1638845177061;
+ Mon, 06 Dec 2021 18:46:17 -0800 (PST)
 MIME-Version: 1.0
-Received: from ubuntu.vivo.xyz (218.213.202.189) by SG2PR01CA0192.apcprd01.prod.exchangelabs.com (2603:1096:4:189::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Tue, 7 Dec 2021 02:43:58 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6efcd14d-26c0-4b6b-b8ee-08d9b92b6c33
-X-MS-TrafficTypeDiagnostic: TY2PR06MB2974:EE_
-X-Microsoft-Antispam-PRVS: <TY2PR06MB2974681E5CF92BFAF44D4A7CA26E9@TY2PR06MB2974.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:854;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jOnjIiWQBB7S+ryb0XkM39fHsw8z+2dKZRXnysBkKADMq99TV+ozPdTz2zmsAZbekpeSKbRi3bWHBOeoRAkIpTYHg8ZOUKLjcCZGhICZSZhItEgts20WcpRmfaxLompPDcGLq+OQefMk93kmE3ikyuFYUOwLh0quwB++ZtchHLSxHrsKNZtOubG6rdcpZz4wc+VGM5q9OnJRfCJUgxL0DGZpkIdNY/XNLQ764CrGYWOgXZbA0CHA8ZQyKqt9FnvwWCumayT4jUnonv+mv+ff1/IWc1hucoNnkVkRyohq3POvS/dbxqIvRsz/8OY3SgkR7Cr6KlVzQx4bzR6p4gfoI4rPrsuJ5EvZ27h1uzcfWveETRF323nHk3FFlePqp3MlAlmfMij0UmcxV4Fbt3videLOXI0BS+B5kSHDF80thwH+JBVDSfxAVpkgv8fB1TskO0OOUz42COxAy4I3yEvX2cGm0XpIykByXquGnMlXbWB//dbhUfvIT846v2IUMMyxrn+29qtEt6Zo0OuVbWSZI4yrEGkL9/bxl9sBnQOuGdcMc9c9khoxC2h5LpBWQ6jkhz0vN5tf2So0M+ZtFKLS7oSH/xwAahEqEF8vbpkGtjkrTzdmr5ZAolxsDomyTCtYnBStulzF8GKT6/8RwZYcwC+Ca9m3xZggRwRcpvj11K6yjcKZ8YhGvrFsMcBuu9zKaRBvLVkBBCdCNkJkObXQ+PFT5xuuYhvUzA6d5FVHD4g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4744005)(186003)(83380400001)(8676002)(316002)(8936002)(6506007)(52116002)(36756003)(5660300002)(26005)(2906002)(110136005)(1076003)(38350700002)(86362001)(66946007)(4326008)(6486002)(6666004)(508600001)(66556008)(956004)(107886003)(38100700002)(66476007)(6512007)(2616005)(182500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j0nYCboOYPp3a51zZFhVBW8XPYwupecr4QnalP8fnJOOxu/4JDTBS/cPahX5?=
- =?us-ascii?Q?qLaBcz4d+vH/FCyXuQktUykmW0SMFxfILq6XJV62bAUdhbuKziUIVNVnUH0g?=
- =?us-ascii?Q?9TfeB5swn+o7k7K/Nabw4g0SCcvUaIdCQy/Pgv6RQHHdzxwaXHD9exsrTqZd?=
- =?us-ascii?Q?SxrL8LVRLoFvtRa0Vgb0t5zyyOVM/fTorYpt/4JDpq3uz5m30vNfXvCkjtx+?=
- =?us-ascii?Q?SkHuimeY+ZN6czgGp4mKlxebr7MJpndYWlCYbytic5pT+CkTDdaRJJeOip5o?=
- =?us-ascii?Q?Bqr+r6STueH+07ppnku4x1J1uyq7VVn6DnGUbugiPss/5CVYl+QTfH2aDTSY?=
- =?us-ascii?Q?65/G4As94x8NCThnZQQRaf2leKBE+7zwV9/eJO0lvge6as0x4JGE1BhiBfNX?=
- =?us-ascii?Q?Ra5HNVHqP+/RKX0vubTGgd0RhHT+O3xadqRSk/rmIsawp3Yvp9jZdv7LJjRw?=
- =?us-ascii?Q?DlxuQgmKcU1+M/nm9wkA3xpxGxtsseBrZEW5FewzK12r2KqSfGYiwyNUkfw3?=
- =?us-ascii?Q?QoxOelExDh3gGzLZfpHq4N4dwo7xKjkKCdUJgqU3U1+Bb0uTxSLYZcCqViWC?=
- =?us-ascii?Q?Onr/EYzjYBpC7qNDW2aGe3ZGirgfabHe5I2YDsM+VfIDRXtS33rjxB6buKuS?=
- =?us-ascii?Q?/jzCvpKtX7afW9h9i+HbdQrGU10gUBVa7AUI/8V+louka9FDJMJS/v9fPnQz?=
- =?us-ascii?Q?HF8otgnjkpcYwMWpktjrJp6LK5T11dI5e59vt9FEJksB9hd96rK1IxHeuwWj?=
- =?us-ascii?Q?ga7/RTHHiUxOJuu+0/6oxxFdJKA8CW6080CSzBs09VUX140hq8aEeO/Ou1o0?=
- =?us-ascii?Q?iSh2OW4VWb6MXLOdhpzXjDO4oOFewiS7rps4ZDANwyS+TncE0LGoB9qr83IX?=
- =?us-ascii?Q?dn7Qe/8/IIwrJL8/8fJ7kFSPMk3n8pRiK/Evb60ELwQwaTrrbw+h+FAV90Hy?=
- =?us-ascii?Q?Ew8qSisw+YyR7+YOC6KvMPo5yZRmN4fgCdf5+DKASpQ3wru9SxBBU7KQcYUo?=
- =?us-ascii?Q?qImY6Ts//6lb3nykgLnf9wPV4QwcUA8uZoCp2W+rHn6S5qpFKif8PlzXfyhM?=
- =?us-ascii?Q?3WZyAc1YR8V+YNFu37n/qrFvI2oWH7a9x3GNQcn2L69znQlzPhXXMa7HGCSs?=
- =?us-ascii?Q?AY85Ur0mI1wPVoGxwbCWWF7rixb9ttTZJZJ+Ds3fTMM9p34+Xt/1kHRkGMnk?=
- =?us-ascii?Q?y60Hh70sqzQLj+xz9d5DdHcXZ451pOEblmOXjgEGauU+7avlLBVhiZVOnEdD?=
- =?us-ascii?Q?o6Z/5Dmc+1p87mE2FSXTEK2VNDSUmV7MqGtIaO353mzXdCx4unS2nDCq8XLy?=
- =?us-ascii?Q?/XXBCchdu74VOj4mlCS42Qc5XHOCh3yNnOPxwCHcEH1JBPI5ETUfuo5fui4L?=
- =?us-ascii?Q?gsLQGLzSnh1MGq7XCPYJeeaGpNq+NOSTC+gjqhIok+mK+xYGegLzsQy5RQeO?=
- =?us-ascii?Q?b9InII60B/2B+HShzpd0ohYNraJ+Q6NR4Rfw8JTwkFlNQsWY5A+t/I3Ih7dV?=
- =?us-ascii?Q?absYpdQaCzpn+NABZyooJFMzdFRy1Q2sVxkmZuVWSPZEvPNDlvUDltlBGDcU?=
- =?us-ascii?Q?VeDSXoC678T2SsiB4xzXe/qHeOQ2nT6kLUJ3z+8u/y2+R82vZ5FzjytiGyNj?=
- =?us-ascii?Q?V52+fJrhj+9GO+2MTq1v0ec=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6efcd14d-26c0-4b6b-b8ee-08d9b92b6c33
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 02:44:00.1329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fkJKmnEyk0wunSHK5XSd9kAQHGAs6Rwv/osTkPQXsjZ1Y0Pn3HQVVShRXss2K9T1WMwHTiOV5pHUc20LRLx5hQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2974
+References: <20211203234155.2319803-1-gsomlo@gmail.com> <20211203234155.2319803-4-gsomlo@gmail.com>
+ <CACPK8XfO_8=vgedmZddz1YmWbyxiM1-azF_j88wEBHzXnP6y_g@mail.gmail.com> <Ya63gv21Dmhi6J0s@errol.ini.cmu.edu>
+In-Reply-To: <Ya63gv21Dmhi6J0s@errol.ini.cmu.edu>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 7 Dec 2021 02:46:03 +0000
+Message-ID: <CACPK8Xeg2UoAqp55R+UrRLFJqerc1Kqrubh3BiEpSon+Q6bGyQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Kamil Rakoczy <krakoczy@antmicro.com>,
+        mdudek@internships.antmicro.com,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        david.abdurachmanov@sifive.com,
+        Florent Kermarrec <florent@enjoy-digital.fr>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated include in drm_gem_shmem_helper.c
+On Tue, 7 Dec 2021 at 01:23, Gabriel L. Somlo <gsomlo@gmail.com> wrote:
+> I can remove dependency on "LITEX" and, with that, succesfully build
+> the driver as a module -- same principle as the LiteETH driver.
+> I'm queueing that up for the long promised v3, soon as I clear up a
+> few remaining questions... :)
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 1 -
- 1 file changed, 1 deletion(-)
+If we have the driver as a 'tristate' we should make sure it loads and
+works as a module.
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 621924116eb4..7915047cb041 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -10,7 +10,6 @@
- #include <linux/shmem_fs.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
--#include <linux/module.h>
- 
- #ifdef CONFIG_X86
- #include <asm/set_memory.h>
--- 
-2.17.1
+>
+> Right now I have:
+>
+>         depends on OF || COMPILE_TEST
 
+The OF dependency is a requirement for the symbols you're using. See
+the discussion I had with Greet, I think going with this is reasonable
+for the first pass:
+
+ depends on OF
+ depends on PPC_MICROWATT || LITEX || COMPILE_TEST
+
+> > > +static int
+> > > +litex_get_cd(struct mmc_host *mmc)
+> > > +{
+> > > +       struct litex_mmc_host *host = mmc_priv(mmc);
+> > > +       int ret;
+> > > +
+> > > +       if (!mmc_card_is_removable(mmc))
+> > > +               return 1;
+> > > +
+> > > +       ret = mmc_gpio_get_cd(mmc);
+> >
+> > Bindings.
+>
+> This was part of the original Antmicro version of the driver, but I
+> have never actually used gpio based card detection. I'm inclined to
+> remove it from this submission entirely (and keep it around as an
+> out-of-tree fixup patch) until someone with the appropriate hardware
+> setup can provide a "tested-by" (and preferably an example on how to
+> configure it in DT).
+
+Agreed, if it's untested and unused then delete it.
+
+> > > +static u32
+> > > +litex_response_len(struct mmc_command *cmd)
+
+something else I noticed when re-reading the code; we can put the
+return arguments on the same line as the functions. The kernel has a
+nice long column limit now, so there's no need to shorten lines
+unncessarily. Feel free to go through the driver and fix that up.
+
+> > Can you put all of the irq handling together? Move the hardware sanity
+> > checking up higher and put it together too:
+
+> I moved it all as close together as possible, but it has to all go
+> *after* all of the `dev_platform_ioremap_resource[_byname]()` calls,
+> since those pointers are all used when calling `litex_write*()`.
+
+Makes sense.
+
+> I'll have it in v3, and you can let me know then if it's OK or still
+> needs yet more work.
+
+> > > +
+> > > +       ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> >
+> > Is this going to be true on all platforms? How do we handle those
+> > where it's not true?
+>
+> I'll need to do a bit of digging here, unless anyone has ideas ready
+> to go...
+
+I'm not an expert either, so let's consult the docs:
+
+Documentation/core-api/dma-api-howto.rst
+
+This suggests we should be using dma_set_mask_and_coherent?
+
+But we're setting the mask to 32, which is the default, so perhaps we
+don't need this call at all?
+
+(I was thinking of the microwatt soc, which is a 64 bit soc but the
+peripherals are on a 32 bit bus, and some of the devices are behind a
+smaller bus again. But I think we're ok, as the DMA wishbone is
+32-bit).
+
+>
+> > > +       if (ret)
+> > > +               goto err_free_host;
+> > > +
+> > > +       host->buf_size = mmc->max_req_size * 2;
+> > > +       host->buffer = dma_alloc_coherent(&pdev->dev, host->buf_size,
+> > > +                                         &host->dma, GFP_DMA);
+> >
+> > dmam_alloc_coherent?
+>
+> Does this mean I no longer have to `dma[m]_free_coherent()` at [1] and
+> [2] below, since it's automatically handled by the "managed" bits?
+
+Yep spot on.
+
+> > > +       mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
+> > > +       mmc->ops = &litex_mmc_ops;
+> > > +
+> > > +       mmc->f_min = 12.5e6;
+> > > +       mmc->f_max = 50e6;
+> >
+> > How did you pick these?
+> >
+> > Are these always absolute? (wouldn't they depend on the system they
+> > are in? host clocks?)
+>
+> They are the minimum and maximum frequency empirically observed to work
+> on typical sdcard media with LiteSDCard, in the wild. I can state that
+> in a comment (after I do another pass of double-checking, crossing Ts
+> and dotting Is), hope that's what you were looking for.
+
+Lets add a comment describing that.
+
+> > > +
+> > > +       return 0;
+> > > +
+> > > +err_free_dma:
+> > > +       dma_free_coherent(&pdev->dev, host->buf_size, host->buffer, host->dma);
+>
+> [1] is this made optional by having used `dmam_alloc_coherent()` above?
+
+Yes, we can remove this.
+
+> > > +err_free_host:
+> > > +       mmc_free_host(mmc);
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static int
+> > > +litex_mmc_remove(struct platform_device *pdev)
+> > > +{
+> > > +       struct litex_mmc_host *host = dev_get_drvdata(&pdev->dev);
+> > > +
+> > > +       if (host->irq > 0)
+> > > +               free_irq(host->irq, host->mmc);
+> > > +       mmc_remove_host(host->mmc);
+> > > +       dma_free_coherent(&pdev->dev, host->buf_size, host->buffer, host->dma);
+>
+> [2] ditto?
+
+Yep.
+
+> Thanks again for all the help and advice!
+
+No problem. Thanks for taking the time to upstream the code.

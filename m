@@ -2,213 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F2C46BBC7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C7E46BBCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 13:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbhLGMzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 07:55:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25494 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229463AbhLGMzH (ORCPT
+        id S231533AbhLGMzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 07:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229463AbhLGMzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 07:55:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638881496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IQV1xzWOEOwb9RfCG2y/1CHxMXP75lI2nbve1UdiEQk=;
-        b=UeM+9ZYDBRcy5ML/9qElCpR5YIe5QzQKwuI4LXn5U70Odz3IGK2GkFLmEgONqdjPcDGvUh
-        EtS8cj126jy4Z9r5cZwPwkdWs1lDd00TY6U4Xjb8rHJHdd2uRuhZVvK4Gg6YVfp8aaLXxe
-        ULK2rdVMqzZI2CkRunxVECR3s1XH+UY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-24-8ytB88oHN0SIKla8OL9z0A-1; Tue, 07 Dec 2021 07:51:33 -0500
-X-MC-Unique: 8ytB88oHN0SIKla8OL9z0A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ADBD534837;
-        Tue,  7 Dec 2021 12:51:32 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 945C510016F5;
-        Tue,  7 Dec 2021 12:51:29 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 20:51:24 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH V2 2/2] kobject: wait until kobject is cleaned up before
- freeing module
-Message-ID: <Ya9YzNhHpZ5VpAI4@T590>
-References: <20211129034509.2646872-1-ming.lei@redhat.com>
- <20211129034509.2646872-3-ming.lei@redhat.com>
- <YaoyuzPutBjLuVNt@kroah.com>
- <Ya1x4VQymqhy9FDD@T590>
- <Ya3EGLbhNWrpTqX+@kroah.com>
- <Ya84O2/nYCyNb/fp@alley>
+        Tue, 7 Dec 2021 07:55:35 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82E1C061574;
+        Tue,  7 Dec 2021 04:52:05 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k4so9352853plx.8;
+        Tue, 07 Dec 2021 04:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yQ8z6GgJ1CPWJpplUiIwwoMcxyJy+6LqjCNR6FhsoGM=;
+        b=PD89hTGZPgD8afBHnQbrFPV4uGV7UnDygTI6vWAdz+E9HiVIXWzwua8gc4P/D+AaVe
+         W2R5OCgidEnKMzT2U+KwDDcO2VwwacSmcDrI+ndh5KDcVkQZBM/zF5LoGW5wVvpTdnKl
+         C0hRAxQvJSusSGUmx4QISOH6H6NL0l8tPgIAIxI+S29uic2aaqG+NPEDqUUatoSrG24O
+         J1RoKTI2i6zNZPW4ul7yzfHARMhEtc9L5YfgWkUf55PYOks0x54naa5dcJf76H2BW/7N
+         pjPgt50iidbio14Bb/oYUjnYCMDubNdtWf/8pBXcSrA45YZ45XxB6OapB78obwimNvPM
+         vO0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yQ8z6GgJ1CPWJpplUiIwwoMcxyJy+6LqjCNR6FhsoGM=;
+        b=nE7oE30j5Jwst/wKgJv9UQ7fenN0Ur9oyURloGGAoeXSEstxLeTjpIeHR8mQXvLSwn
+         aSEpbEa/TJN9capQzXxz2hQE5P+nYcVY62XM0lxcUj5JyA6WbQrQpTvU4REGPsYVJMoZ
+         cwtnDnnhqO4cNYM8m7gxDBc1u2p8J6ecxJ4dvF1thb+qkDhfIg2gx/ooraW4xs0MzBEK
+         iO/E9ar7afiOEGIpddtUjM5PDlVE7BnJIXdMB0TVoDELGqhpPWJeyutH7v7sEbAG5Xo0
+         dT1Ii7r12dzEZeQ9ke0kMaE4kmh/PqmxCRMUmqQyWcciQ0jrmdviafjGIqyaOSl3Tl0r
+         wyKQ==
+X-Gm-Message-State: AOAM530u/Exr6MqdF6behJxdgcNH43JW09kzN8Y1zn9KXrGwlp4/pie1
+        3cEq6GBgSLky9rT1MFYaLjc=
+X-Google-Smtp-Source: ABdhPJzv6L8Hk7CDThqwvXqsaQnnWGzNLVLt18C4+/mYIlG86nNUBWesp/fJdMw0NFdGZ6+o3lVxiw==
+X-Received: by 2002:a17:902:dac7:b0:141:e931:3aff with SMTP id q7-20020a170902dac700b00141e9313affmr51845592plx.50.1638881525240;
+        Tue, 07 Dec 2021 04:52:05 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id d10sm15867857pfl.139.2021.12.07.04.51.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 04:52:04 -0800 (PST)
+Message-ID: <5b1c348a-fc26-e257-7bc2-82d1326de321@gmail.com>
+Date:   Tue, 7 Dec 2021 20:51:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya84O2/nYCyNb/fp@alley>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v7 09/45] x86/sev: Save the negotiated GHCB version
+Content-Language: en-US
+To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20211110220731.2396491-1-brijesh.singh@amd.com>
+ <20211110220731.2396491-10-brijesh.singh@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20211110220731.2396491-10-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:32:27AM +0100, Petr Mladek wrote:
-> On Mon 2021-12-06 09:04:40, Greg Kroah-Hartman wrote:
-> > On Mon, Dec 06, 2021 at 10:13:53AM +0800, Ming Lei wrote:
-> > > On Fri, Dec 03, 2021 at 04:07:39PM +0100, Greg Kroah-Hartman wrote:
-> > > > On Mon, Nov 29, 2021 at 11:45:09AM +0800, Ming Lei wrote:
-> > > > > kobject_put() may become asynchronously because of
-> > > > > CONFIG_DEBUG_KOBJECT_RELEASE, so once kobject_put() returns, the caller may
-> > > > > expect the kobject is released after the last refcnt is dropped, however
-> > > > > CONFIG_DEBUG_KOBJECT_RELEASE just schedules one delayed work function
-> > > > > for cleaning up the kobject.
-> > > > 
-> > > > The caller should NOT expect the kobject to be released.  That's the
-> > > > whole point of dynamic reference counted objects, you never "know" when
-> > > > the last object is released.  This option just makes it obvious so that
-> > > > you know when to fix up code that has this assumption.
-> > > 
-> > > > > Inside the cleanup handler, kobj->ktype and kobj->ktype->release are
-> > > > > required.
-> > > > 
-> > > > Yes. Is that a problem?
-> > > 
-> > > Of course for CONFIG_DEBUG_KOBJECT_RELEASE, which delays to call
-> > > ->release after random time, when the module for storing ->ktype and
-> > > ->ktype->release has been unloaded.
-> > > 
-> > > As I mentioned, the issue can be triggered 100% by 'modprobe -r
-> > > kset-example' when CONFIG_DEBUG_KOBJECT_RELEASE is enabled if the
-> > > 1st patch is applied.
-> > 
-> > Is there any "real" kernel code that this causes problems on?
-> > 
-> > Again, this is for debugging, yes, this tiny example will crash that
-> > way, but that is fine, as we can obviously see that the kernel code here
-> > is correct.
-> > 
-> > And if you really want to ensure that it works properly, let's wait on
-> > release before allowing that module to be unloaded.
-> 
-> This is exactly what this patch is trying to achieve. IMHO,
-> we should do it another way, see below.
-> 
-> 
-> > But again, module unload is NOT a normal operation and is not what
-> > this debugging option was created to help out with.
-> 
-> But people do unload module and especially when testing kernel.
-> IMHO, we want both CONFIG_DEBUG_KOBJECT_RELEASE and module unload
-> enabled when testing kernel.
-> 
-> 
-> > Again, the confusion between kobjects (which protect data) and module
-> > references (which protect code) is getting mixed up here.
-> 
-> This is perfect description of the problem. And the problem is real.
-> 
-> kobjects protect data but they need to call code (callbacks) when
-> they are released. module unload is special because it removes the
-> code. CONFIG_DEBUG_KOBJECT_RELEASE always delays the code calls.
-> It results into a crash even when everything works as expected.
-> 
-> 
-> Now, back to the proposed patch. I agree that it looks weird. It
-> makes CONFIG_DEBUG_KOBJECT_RELEASE useless in this scenario.
+Hi Brijesh:
+      We find this patch breaks AMD SEV support in the Hyper-V Isolation
+VM. Hyper-V code also uses sev_es_ghcb_hv_call() to read or write msr
+value. The sev_es_check_cpu_features() isn't called in the Hyper-V code
+and so the ghcb_version is always 0. Could you add a new parameter 
+ghcb_version for sev_es_ghcb_hv_call() and then caller may input 
+ghcb_version?
 
-Can you explain how this patch makes CONFIG_DEBUG_KOBJECT_RELEASE useless?
-The kobject is still cleaned up with random delay.
+Thanks.
 
+On 11/11/2021 6:06 AM, Brijesh Singh wrote:
+> The SEV-ES guest calls the sev_es_negotiate_protocol() to negotiate the
+> GHCB protocol version before establishing the GHCB. Cache the negotiated
+> GHCB version so that it can be used later.
 > 
-> I have another idea. What about adding a pointer to
-> struct module *mod into struct kobj_type. Some reference
-> counter and wait_queue into struct module. They might be
-> used to block the module_exit() until the reference counter
-> reaches zero.
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>   arch/x86/include/asm/sev.h   |  2 +-
+>   arch/x86/kernel/sev-shared.c | 17 ++++++++++++++---
+>   2 files changed, 15 insertions(+), 4 deletions(-)
 > 
-> I mean something like:
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index ec060c433589..9b9c190e8c3b 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -12,7 +12,7 @@
+>   #include <asm/insn.h>
+>   #include <asm/sev-common.h>
+>   
+> -#define GHCB_PROTO_OUR		0x0001UL
+> +#define GHCB_PROTOCOL_MIN	1ULL
+>   #define GHCB_PROTOCOL_MAX	1ULL
+>   #define GHCB_DEFAULT_USAGE	0ULL
+>   
+> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> index 2abf8a7d75e5..91105f5a02a8 100644
+> --- a/arch/x86/kernel/sev-shared.c
+> +++ b/arch/x86/kernel/sev-shared.c
+> @@ -14,6 +14,15 @@
+>   #define has_cpuflag(f)	boot_cpu_has(f)
+>   #endif
+>   
+> +/*
+> + * Since feature negotiation related variables are set early in the boot
+> + * process they must reside in the .data section so as not to be zeroed
+> + * out when the .bss section is later cleared.
+> + *
+> + * GHCB protocol version negotiated with the hypervisor.
+> + */
+> +static u16 ghcb_version __ro_after_init;
+> +
+>   static bool __init sev_es_check_cpu_features(void)
+>   {
+>   	if (!has_cpuflag(X86_FEATURE_RDRAND)) {
+> @@ -51,10 +60,12 @@ static bool sev_es_negotiate_protocol(void)
+>   	if (GHCB_MSR_INFO(val) != GHCB_MSR_SEV_INFO_RESP)
+>   		return false;
+>   
+> -	if (GHCB_MSR_PROTO_MAX(val) < GHCB_PROTO_OUR ||
+> -	    GHCB_MSR_PROTO_MIN(val) > GHCB_PROTO_OUR)
+> +	if (GHCB_MSR_PROTO_MAX(val) < GHCB_PROTOCOL_MIN ||
+> +	    GHCB_MSR_PROTO_MIN(val) > GHCB_PROTOCOL_MAX)
+>   		return false;
+>   
+> +	ghcb_version = min_t(size_t, GHCB_MSR_PROTO_MAX(val), GHCB_PROTOCOL_MAX);
+> +
+>   	return true;
+>   }
+>   
+> @@ -127,7 +138,7 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+>   				   u64 exit_info_1, u64 exit_info_2)
+>   {
+>   	/* Fill in protocol and format specifiers */
+> -	ghcb->protocol_version = GHCB_PROTOCOL_MAX;
+> +	ghcb->protocol_version = ghcb_version;
+>   	ghcb->ghcb_usage       = GHCB_DEFAULT_USAGE;
+>   
+>   	ghcb_set_sw_exit_code(ghcb, exit_code);
 > 
-> Let's take samples/kobject/kset-sample.c as an example.
-> We could define:
-> 
-> static struct kobj_type foo_ktype = {
-> 	.sysfs_ops = &foo_sysfs_ops,
-> 	.release = foo_release,
-> 	.default_groups = foo_default_groups,
-> 	.mod = THIS_MODULE,
-> };
-> 
-> then we might do:
-> 
-> static int kobject_add_internal(struct kobject *kobj)
-> {
-> [...]
-> 	if (kobject->ktype->mod)
-> 		module_get_kobject_referece(kobject->ktype->mod);
-> [...]
-> }
-> 
-> and
-> 
-> static void kobject_cleanup(struct kobject *kobj)
-> {
-> [...]
-> 	if (kobject->ktype->mod)
-> 		module_put_kobject_referece(kobject->ktype->mod);
-> [...]
-> }
-> 
-> where
-> 
-> void module_get_kobject_referece(struct module *mod)
-> {
-> 	mutex_lock(&module_mutex);
-> 	mod->kobject_ref++;
-> 	mutex_lock(&module_mutex);
-> }
-> 
-> void module_put_kobject_referece(struct module *mod)
-> {
-> 	struct wait_queue_head *module_kobject_wq;
-> 
-> 	mutex_lock(&module_mutex);
-> 	mod->kobject_ref--;
-> 	if (!mod->kobject_ref)
-> 		wake_up(mod->kobj_release_wq);
-> 	mutex_lock(&module_mutex);
-
-The question is why kobject is so special for taking one extra
-module ref here.
-
-> }
-> 
-> 
-> and
-> 
-> SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
-> 		unsigned int, flags)
-> {
-> [...]
-> 	wait_event_interruptible(mod->kobj_release_wq, !mod->kobj_ref);
-> [...]
-> }
-> 
-> There might be many details to be solved.
-> 
-> But it looks like a win-win solution. It should make module unload
-> much more secure. Broken modules will just get blocked in
-> module_cleanup forever. CONFIG_DEBUG_KOBJECT_RELEASE will still
-> work as designed.
-
-The above approach might work, but it needs every driver with kobjects
-to be changed, so it is more complicated.
-
-
-Thanks
-Ming
-

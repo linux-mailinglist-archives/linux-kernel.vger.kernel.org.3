@@ -2,81 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1FB46C020
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD0946C031
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239342AbhLGQBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:01:44 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46814 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239332AbhLGQBn (ORCPT
+        id S239381AbhLGQFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239371AbhLGQFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:01:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50485CE1B7E;
-        Tue,  7 Dec 2021 15:58:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268D8C341C1;
-        Tue,  7 Dec 2021 15:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638892689;
-        bh=2ryqHWEwM1f2X3lf6mB2G1XPeM+9sGpcyawrhEeaL6Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RzEXQD5lHf9f0BLEtHnIx0PuMXQtITX/Q+hPmdI+C0iiSlC7YS+rR8puoUr5b3EVp
-         d+nOEjcF5Tvk5lTBkyKgSR74Au4hVX4yB7zf9Oczz9UwvjHxveqUzKv/XvOawNheqj
-         tiG2OOGpG53zlvjJLbvUQuL2qxG0sDN6WNnrbNK0Q3Fm/4knD2ba5CKmFAFvhMuajS
-         CaQqW7iIZob7ILJLwyZhH5b31nk3jFWTYlC0WzymECVQd1LcV7Wo9+3uV4UEUNeoZM
-         SAOf+II9IDhdEkKafJ4yCpZyZHvCLrwzSw1//8COdo5PXsIBZsdjrahUx+7wUDh7wh
-         S961JTDhJTUlw==
-Date:   Tue, 7 Dec 2021 07:58:08 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        David Ahern <dsahern@gmail.com>
-Cc:     "Zhou, Jie2X" <jie2x.zhou@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, Philip" <philip.li@intel.com>, lkp <lkp@intel.com>,
-        "Ma, XinjianX" <xinjianx.ma@intel.com>,
-        "Li, ZhijianX" <zhijianx.li@intel.com>
-Subject: Re: selftests/net/fcnal-test.sh: ipv6_ping test failed
-Message-ID: <20211207075808.456e5b4f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <PH0PR11MB4792DFC72C7F7489F22B26E5C56E9@PH0PR11MB4792.namprd11.prod.outlook.com>
-References: <PH0PR11MB4792DFC72C7F7489F22B26E5C56E9@PH0PR11MB4792.namprd11.prod.outlook.com>
+        Tue, 7 Dec 2021 11:05:35 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4302C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 08:02:04 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id z7so34589170lfi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 08:02:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=0KoqMwokWoTJYma4Godv9G096meILmsJGIQ+G2Trtp4=;
+        b=on6ZdQ84q52bywjrtTKbWInlYXBTL59z5uSPorIp+xOy/cD/TfzjeH1D02qvHH7M3J
+         6Nva/bhOIMbtAckJQsKsw7knMPlke2EgP4Rlkh3n09jkaGQ6YnbpsRpzp9dArHfm4KJ6
+         DLU/DqCjJXnM3MBRemphy33kdvkyGgr1ZI6f4VQ1RUnchMFbjvEb+SLA8/GC8PjfMJOK
+         h3yGRKhOAfZ2s3L6WfIb2PRKLD0Pf5Ajg/7r2iCRuatONUI9UjxFbZpiSHcw8Pam4vhW
+         gFpxLPxoFFC5MIPbQKFESOTSc3oejBp7LI2j7xo67qOSOnmmAeg2ufaG8qkA6BYzOOEN
+         1D+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=0KoqMwokWoTJYma4Godv9G096meILmsJGIQ+G2Trtp4=;
+        b=WuctHG7W5fMGkcPKB6/WD3NcpecpAxPrXFMGhihyt+vTz8lo3oek3PnHsTVMBlm+Yk
+         8UirqGq7OkCnMtf+9/jPXh10UcauByW+9i4gcZPHaNDQzTaab2vxIRTucH8KqVCGarTn
+         u1/H8ttMjTtzKmGYq2tcOq3XceWbXKiFAel2ztKZ478GMg6PJG6I6GeKjw68K4dm/Qrr
+         YBDshcijPed+PZSwvmmZEZqvnKxOfcvJWB0+AqYj0bPtQYdglC+cQ6epmCbofstARngj
+         YXt4t+ESVKkqk2ieQAMY+1gGhrehVbP6QiNM8TpxkUiKPpZzvdvCcvBIJrVd/3Do2F6w
+         VA8A==
+X-Gm-Message-State: AOAM532tUISEw/4y/6tU2De1WgZQ/5bh8RUwemfkkKDWCeoGLvrGzMHJ
+        cEFMM5tKOwBHjDLo05o+kiVw5Tlv2m7LbSD1GWJuxw==
+X-Google-Smtp-Source: ABdhPJzBldg6RWAiZ5tB8HzosCsN0iM5UqOA8sXdpwcHt6bGKk+F1CxSGk8+iGjlB61uD3KmA8MK7co7fL4RXvMEn1g=
+X-Received: by 2002:a05:6512:1113:: with SMTP id l19mr42335730lfg.184.1638892919623;
+ Tue, 07 Dec 2021 08:01:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211203023728.3699610-1-suichen@google.com> <YapHznDoqJ+wjx8m@kunai>
+In-Reply-To: <YapHznDoqJ+wjx8m@kunai>
+From:   Sui Chen <suichen@google.com>
+Date:   Tue, 7 Dec 2021 08:00:00 -0800
+Message-ID: <CAJOps0u=seskB-YGvLBsHantJohkEX7do-mt7YSZ6zChQMQxbg@mail.gmail.com>
+Subject: Re: [RFC Patch v2 0/3] I2C statistics as sysfs attributes
+To:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
+        benjaminfair@google.com, krellan@google.com, joe@perches.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding David and Zhijian.
+On 12/3/21 8:37 AM, Wolfram Sang wrote:
+> On Thu, Dec 02, 2021 at 06:37:25PM -0800, Sui Chen wrote:
+>> Add I2C statistics such as Bus Error counts and NACK counts as sysfs
+>> attributes so they don't need to live in debugfs.
+>
+> What has changed since v1?
+>
+>  From a glimpse, none of my questions to v1 have been answered or
+> addressed?
+>
 
-On Tue, 7 Dec 2021 07:07:40 +0000 Zhou, Jie2X wrote:
-> hi,
-> 
->   I test ipv6_ping by "./fcnal-test.sh -v -t ipv6_ping".
->   There are two tests failed.
-> 
->    TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
->    TEST: ping out, VRF bind - multicast IP                                       [FAIL]
-> 
->    While in fcnal-test.sh the expected command result is 2, the result is 1, so the test failed.
->    ipv6_ping_vrf()
->    {
->     ......
->         for a in ${NSB_LINKIP6}%${VRF} ${MCAST}%${VRF}
->         do
->                 log_start
->                 show_hint "Fails since VRF device does not support linklocal or multicast"
->                 run_cmd ${ping6} -c1 -w1 ${a}
->                 log_test_addr ${a} $? 2 "ping out, VRF bind"
->         done
-> 
->     The ipv6_ping test output is attached.
->     Did I set something wrong result that these tests failed?
-> 
-> best regards,
+Apologies for missing the first email, I double-checked my mailbox
+and saw it. Difference in v2 is not much, with just the
+tx_complete_cnt added.
+
+Before answering the questions please let me give some
+background info:
+
+The motivation starts with monitoring the operation of BMCs and then
+applying what we learned to monitoring BMC health at scale. The BMCs
+we're interested in run the OpenBMC distribution, which is characterized
+by its extensive use of DBus APIs in the sensor stack and everywhere
+else in the system. We had been working on some tools centered around
+DBus and had discovered issues on certain systems by looking at related
+metrics.
+
+A snapshot of the data we look into on a running OpenBMC system may
+look like the following (a screenshot from one of the tools we're
+working on):
+
++-------dbus-top v0.xx-----------------------------------------+
+|Message Type          | msg/s |Method Call Time (us) Histogram|
+|Method Call            282.91 |  1387-:                       |
+|Method Return          282.91 |   227-::.                     |
+|Signal                  56.98 |    37-::::::              ::  |
+|Error                    0.00 |     6-::::::: ..::....::..::: |
+|Total                  622.79 |1%-99% 57.00          23899.00 |
++-------------------------------------------------------+------+
+|History     (Total msg/s)                              |
+|-                                           -700       |
+|-                                          :-525       |
+|-                                     .  : :-350       |
+|-                         .  ::       :  : :-175       |
+|-                     .:::::::::::::::::::::-0         |
++-------------------------------------------------------+---+
+| Columns 1-3 of 6                           200 sensors    |
+|   mobo_pch.......   Core_xx_CPUX...   Core_xx_CPUX      > |
+|   mobo_pch.......   Core_xx_CPUX...   Core_xx_CPUX      > |
+|   mobo_pch.......   Core_xx_CPUX      Core_XX_CPUX      > |
+|   mobo_pch.......   Core_xx_CPUX      Core_XX_CPUX ..   > |
+|   cpuX_tem.......   Core_xx_CPUX      Core_XX_CPUX      > |
+*************************************************************
+* Destination     Sender I2C Tx/s     Sender CMD            *
+* systemd         n/a                 /usr/bin/cpusensor    *
+* :1.78           n/a                 (unknown)             *
+* systemd         172.44              (unknown)             *
+* systemd         n/a                 /usr/bin/externalsenso*
+* systemd         658.28              /usr/bin/fansensor    *
+* systemd         167.94              /usr/bin/hwmontempsens*
+* systemd         10345.07            /usr/bin/psusensor    *
+* :1.15           n/a                 ipmid                 *
+* :1.59           n/a                 ipmid                 *
+* systemd         n/a                 ipmid                 *
+* :1.67           n/a                 /usr/libexec/kcsbridg *
+* :1.26166        n/a                 (unknown)             *
+* systemd         n/a                 (unknown)             *
+*************************************************************
+
+As one can see from the figure above, there are a few hundred DBus
+messages flowing through different DBus peers on the system at
+any given moment, with a few daemons reading sensor data via I2C and
+publishing them on DBus. We observe I2C to be a large chunk of the work
+the BMC is constantly doing, and actually it has been the source of a
+few problems we had seen and fixed.
+By the time we started  this tool, we have had enough experience
+and confidence to say that I2C would be interesting for both development
+and monitoring at-scale and is worth investing in.
+
+The requirement for a stable API/ABI is mostly relevant to the
+"at-scale" monitoring part. Here are the answers to the questions:
+
+> 1) Why do you need this information? I don't think values like NACK
+> count describe the health of a system. NACKs are perfectly OK in
+> regular I2C communication. So, for now, I think debugfs is the better
+> place. An exception might be the bus speed. Some people already had an
+> interest in this.
+
+- Because we're targeting at-scale monitoring of fleets of machines
+   in large numbers with identical hardware configuration, the
+   I2C counters (including NACK) can be used for apples-to-apples
+   comparison, for detecting anomaly, etc., while this may not be
+   applicable to a single machine.
+
+> 2) Even when this information is kept in debugfs, we can still add
+> some core helper to have a standardized structure for the created
+> files. This is independent from sysfs. I don't think I want this a
+> standardized ABI, currently. Unless you explain good reasons to me
+
+- The monitoring is done in a production environment, so it is not a
+   "debug" usage. Android 11 removed support for debugfs [1] due to
+   unstable and undocumented API, code quality and vulnerability issues.
+   We would like to follow a similar rationale for the I2C counters.
+
+- debugfs paths may be vendor-specific, so a monitoring framework would
+   need different code paths for different vendors without a stable
+   method for obtaining those counters. This may be resolved by the core
+   helpers, but our intention is to not use debugfs if possible.
+
+- A monitoring system includes not only lower levels such as the kernel,
+   but also higher-level standards such as Redfish, and also the OpenBMC-
+   wide DBus interfaces and C++ bindings. Redfish has already committed
+   to creating a new Schema that contains similar metrics; the Schemas
+   is expected to be stable for a considerable amount of time. OpenBMC is
+   considering adding its system-wide DBus interfaces for the I2C
+   definitions to reflect the relatively stable Redfish bindings too.
+   Therefore we kindly hope that the kernel interface for I2Cs can
+   be similarly stable just like the other two.
+
+For the errors found in the testing, and other potential errors in the
+code: we will look into them and correct them.
+
+Hope this may be useful,
+Thanks
+Sui
+
+[1] https://source.android.com/setup/start/android-11-release#debugfs

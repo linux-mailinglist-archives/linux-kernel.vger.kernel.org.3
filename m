@@ -2,60 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1586E46C242
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D95B46C244
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240307AbhLGSFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:05:24 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:45769 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240013AbhLGSFY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:05:24 -0500
-Received: from callcc.thunk.org (guestnat-104-133-8-106.corp.google.com [104.133.8.106] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1B7I1V2e029335
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Dec 2021 13:01:33 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 242EA4205DB; Tue,  7 Dec 2021 13:01:31 -0500 (EST)
-Date:   Tue, 7 Dec 2021 13:01:31 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] MAINTAINERS: co-maintain random.c
-Message-ID: <Ya+he+CE/EkS2ekQ@mit.edu>
-References: <20211130184315.258150-1-Jason@zx2c4.com>
- <1c2862682ff04463c7ca1f58f1c46aec4d6af03d.camel@perches.com>
- <CAHmME9q7kVREOGPpG+kafS25Ny1=geFPwLRREe+nkC=UkGQUHw@mail.gmail.com>
- <YauCkjsgDL4sdCId@mit.edu>
- <CAHmME9q_hYyiUKb+H82-njugXaruQc6=sVa3HCQHnOHEOsGVwQ@mail.gmail.com>
- <CAHmME9qECnsh0EhV8Zi0vFntqT4OaAbhfOXFFZBjQjzpReNAJg@mail.gmail.com>
+        id S240321AbhLGSFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:05:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:37860 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240013AbhLGSFb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 13:05:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E3FE11FB;
+        Tue,  7 Dec 2021 10:02:00 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 782953F73B;
+        Tue,  7 Dec 2021 10:01:58 -0800 (PST)
+Date:   Tue, 7 Dec 2021 18:01:48 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     qizhong cheng <qizhong.cheng@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [RESEND PATCH v2] PCI: mediatek: Delay 100ms to wait power and
+ clock to become stable
+Message-ID: <20211207180140.GA5938@lpieralisi>
+References: <20211207084153.23019-1-qizhong.cheng@mediatek.com>
+ <20211207175416.GA42725@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAHmME9qECnsh0EhV8Zi0vFntqT4OaAbhfOXFFZBjQjzpReNAJg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211207175416.GA42725@bhelgaas>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:49:10PM +0100, Jason A. Donenfeld wrote:
+On Tue, Dec 07, 2021 at 11:54:16AM -0600, Bjorn Helgaas wrote:
+> [+cc Marc, Alyssa, Mark, Luca for reset timing questions]
 > 
-> We're all set now with
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+> On Tue, Dec 07, 2021 at 04:41:53PM +0800, qizhong cheng wrote:
+> > Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+> > 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> > be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> > 
+> > Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+> > Acked-by: Pali Roh�r <pali@kernel.org>
+> > ---
+> > 
+> > v2:
+> >  - Typo fix.
+> >  - Rewrap into one paragraph.
+> 
+> 1) If you change something, even in the commit log or comments, it is
+> a new version, not a "RESEND".  A "RESEND" means "I sent this quite a
+> while ago and didn't hear anything, so I'm sending the exact same
+> thing again in case the first one got lost."
+> 
+> 2) I suggested a subject line update, which apparently got missed.
+> Here's a better one:
+> 
+>   PCI: mediatek: Assert PERST# for 100ms for power and clock to stabilize
+> 
+> 3) Most importantly, this needs to be reconciled with the similar
+> change to the apple driver:
+> 
+>   https://lore.kernel.org/r/20211123180636.80558-2-maz@kernel.org
+> 
+> In the apple driver, we're doing:
+> 
+>   - Assert PERST#
+>   - Set up REFCLK
+>   - Sleep 100us (T_perst-clk, CEM r5 2.2, 2.9.2)
+>   - Deassert PERST#
+>   - Sleep 100ms (not sure there's a name? PCIe r5 6.6.1)
+> 
+> But here in mediatek, we're doing:
+> 
+>   - Assert PERST#
+>   - Sleep 100ms (T_pvperl, CEM r5 2.2, 2.2.1, 2.9.2)
+>   - Deassert PERST#
+> 
+> My questions:
+> 
+>   - Where does apple enforce T_pvperl?  I can't tell where power to
+>     the slot is turned on.
+> 
+>   - Where does mediatek enforce the PCIe sec 6.6.1 delay after
+>     deasserting PERST# and before config requests?
+> 
+>   - Does either apple or mediatek support speeds greater than 5 GT/s,
+>     and if so, shouldn't we start the sec 6.6.1 100ms delay *after*
+>     Link training completes?
 
-Stephen, could you replace
+I dropped this patch from my pci/mediatek branch, waiting for
+clarification.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tytso/random.git
+Thanks,
+Lorenzo
 
-with
-
-https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-
-As the tree that you pull for linux-next?   Thanks!
-
-       	    	     	      		    - Ted
+> >  drivers/pci/controller/pcie-mediatek.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> > index 2f3f974977a3..a61ea3940471 100644
+> > --- a/drivers/pci/controller/pcie-mediatek.c
+> > +++ b/drivers/pci/controller/pcie-mediatek.c
+> > @@ -702,6 +702,13 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+> >  	 */
+> >  	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
+> >  
+> > +	/*
+> > +	 * Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+> > +	 * 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> > +	 * be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> > +	 */
+> > +	msleep(100);
+> > +
+> >  	/* De-assert PHY, PE, PIPE, MAC and configuration reset	*/
+> >  	val = readl(port->base + PCIE_RST_CTRL);
+> >  	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
+> > -- 
+> > 2.25.1
+> > 

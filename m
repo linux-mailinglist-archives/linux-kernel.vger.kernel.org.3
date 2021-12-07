@@ -2,272 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E716F46BF59
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E1846BF61
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 16:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbhLGPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 10:35:03 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:37887 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbhLGPfC (ORCPT
+        id S238821AbhLGPgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 10:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229563AbhLGPgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 10:35:02 -0500
-Received: by mail-oi1-f173.google.com with SMTP id bj13so28373060oib.4;
-        Tue, 07 Dec 2021 07:31:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=enKIP2qHGufOeBvFXhN+pppOHLZRILDssOKgQWWAX+I=;
-        b=GXC61U5RkbNGa+0hFMr+fqhZ3/+xbJFXIqA9PhVFthKM/BlELjRstFWFqLQ7q6sl6t
-         668EvHC8KOf0DOmJyTlQKurchMT8lebhD7TWekj6Ds011QlfnvOl+QrfRXU/SKcxr2bJ
-         jFLKd/apKEqHLpfCeTDw2gKuKDKN6Vb9UMEtsRTTqIZh0szDS8fRNXhxM4YL8Au7qL+B
-         sD0R0hoj+upEwNW6lwRZ001ByF6s4f+nqX9qxnyMqMUY8sbkZCeQ6Qwtc5twmk93jIpj
-         hiZb50UUlN639VxAPJsDLw0prW6u4xYGEYVWlc7SMGjPhOm519sKKD2JIQdsEYgNfamE
-         qrig==
-X-Gm-Message-State: AOAM530C9y/Ob2EbT9O13b4brW+0WYAzotJ3D1WnuLBwdl8IHl9byest
-        QGOsqDV18cltrD+EmsQRTA==
-X-Google-Smtp-Source: ABdhPJzDu5nD0AWrHr5plKvmGX2FyZVkx9sKoMeXbV1U4PsdvR7BGmeeeIVI1YxTI9Yycpzz/hbEaQ==
-X-Received: by 2002:aca:d07:: with SMTP id 7mr5675356oin.92.1638891091083;
-        Tue, 07 Dec 2021 07:31:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t14sm2847537otr.23.2021.12.07.07.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 07:31:30 -0800 (PST)
-Received: (nullmailer pid 214183 invoked by uid 1000);
-        Tue, 07 Dec 2021 15:31:29 -0000
-Date:   Tue, 7 Dec 2021 09:31:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     quic_vamslank@quicinc.com
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl
- bindings
-Message-ID: <Ya9+US5Zmm3EIRNR@robh.at.kernel.org>
-References: <cover.1638404936.git.quic_vamslank@quicinc.com>
- <829642d28acbe0f993b5b059cb984da9b5262fa0.1638404936.git.quic_vamslank@quicinc.com>
+        Tue, 7 Dec 2021 10:36:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAB1C061574;
+        Tue,  7 Dec 2021 07:32:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BurdL9CoYhvyq3FVTEq/kmPu0MyElA+TlhLVyir3/R0=; b=j0UyoYlZuTg6aH2j9xf4JGORW1
+        bdeqF6foQxA3ClXobjdChUFB2Xleavfo55fPkfJ9ttSFenrKUfCSy9UL/yIlGuTs+MNXBDk/lEddE
+        xh1clHwdrjdHcM/w8u46Tb4JN0r3Q/rW5Hj+AuzpZjPmIIJW/rgq1NSAhnQ7I5w1kk2P0agL5xpr3
+        sQEQZT0hwr/KaspIF6zNQz+7CPKkqKeKYFpceb+AZ/R0Z09gNxlkQ5Ed5wjyvnL/8OME0GA0gxYLb
+        1NvuUj3FETVOyTgO8Wx8DK+8R1SWi7AGYL2N/I+uQWNtMkgi/BVsa9ry6XxPw35kiyhUTzShftWAt
+        sLg0J9UQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mucSE-007UJj-8t; Tue, 07 Dec 2021 15:32:30 +0000
+Date:   Tue, 7 Dec 2021 15:32:30 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kernel test robot <lkp@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+Message-ID: <Ya9+jqIPJ8y0/Q4s@casper.infradead.org>
+References: <20211207150927.3042197-1-arnd@kernel.org>
+ <20211207150927.3042197-3-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <829642d28acbe0f993b5b059cb984da9b5262fa0.1638404936.git.quic_vamslank@quicinc.com>
+In-Reply-To: <20211207150927.3042197-3-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 04:32:20PM -0800, quic_vamslank@quicinc.com wrote:
-> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+On Tue, Dec 07, 2021 at 04:09:26PM +0100, Arnd Bergmann wrote:
+> Working towards a cleaner header structure, start by moving the most
+> commonly embedded structures into a single header file that itself
+> has only a minimum set of indirect includes. At this moment, this
+> include structures for
 > 
-> Add device tree binding Documentation details for Qualcomm SDX65
-> pinctrl driver.
-> 
-> Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 174 ++++++++++++++++++
->  1 file changed, 174 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+>  - locking
+>  - timers
+>  - work queues
+>  - waitqueues
+>  - rcu
+>  - xarray
+>  - kobject
+>  - bio_vec
+
+I generally support all of this.  I did look at adding struct xarray to
+types.h when I first added it, but was stymied by the need to embed the
+spinlock.  I looked at adding a linux/adt.h or a linux/struct.h but
+it was just too much work.  So thank you for taking this on.
+
+> diff --git a/include/linux/struct_types.h b/include/linux/struct_types.h
 > new file mode 100644
-> index 000000000000..f3487717da83
+> index 000000000000..5a06849fd347
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> @@ -0,0 +1,174 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,sdx65-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/include/linux/struct_types.h
+> @@ -0,0 +1,483 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __LINUX_STRUCT_TYPES_H
+> +#define __LINUX_STRUCT_TYPES_H
+> +/*
+> + * This header includes data structures that build on top of
+> + * the plain types from linux/types.h and that are commonly
+> + * embedded within other structures in the kernel.
+> + *
+> + * By keeping these in one place that has a minimum set of
+> + * indirect includes, we can avoid deeply nested include
+> + * hierarchies that slow down the build and cause frequent
+> + * recompiles after header changes.
+> + *
+> + * Be careful about including further headers here.
+> + */
 > +
-> +title: Qualcomm Technologies, Inc. SDX65 TLMM block
+> +#include <linux/types.h>
+> +#include <linux/bits.h>
+> +#include <linux/threads.h>
+> +#include <linux/lockdep_types.h>
+> +#include <linux/rbtree_types.h>
 > +
-> +maintainers:
-> +  - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+> +#if defined(CONFIG_SMP)
+> +# include <asm/spinlock_types.h>
+> +#else
+> +# include <linux/spinlock_types_up.h>
+> +#endif
 > +
-> +description:
-> +  This binding describes the Top Level Mode Multiplexer block found in the
-> +  SDX65 platform.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sdx65-tlmm
-> +
-> +  reg:
-> +    description: Specifies the base address and size of the TLMM register space
+> +/**
+> + * typedef refcount_t - variant of atomic_t specialized for reference counts
+> + * @refs: atomic_t counter field
+> + *
+> + * The counter saturates at REFCOUNT_SATURATED and will not move once
+> + * there. This avoids wrapping the counter and causing 'spurious'
+> + * use-after-free bugs.
+> + */
 
-Don't need a description.
+There's no corresponding patch to Documentation, so this kernel-doc is
+orphaned.
 
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: Specifies the TLMM summary IRQ
+> diff --git a/include/linux/swait.h b/include/linux/swait.h
+> index 6a8c22b8c2a5..d7798752922d 100644
+> --- a/include/linux/swait.h
+> +++ b/include/linux/swait.h
+> @@ -38,18 +38,6 @@
+>   * wait queues in most cases.
+>   */
+>  
+> -struct task_struct;
+> -
+> -struct swait_queue_head {
+> -	raw_spinlock_t		lock;
+> -	struct list_head	task_list;
+> -};
+> -
+> -struct swait_queue {
+> -	struct task_struct	*task;
+> -	struct list_head	task_list;
+> -};
+> -
+>  #define __SWAITQUEUE_INITIALIZER(name) {				\
+>  	.task		= current,					\
+>  	.task_list	= LIST_HEAD_INIT((name).task_list),		\
 
-Don't need a description.
+swait.h doesn't need to include <linux/struct_types.h> ?
 
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    description: Specifies the PIN numbers and Flags, as defined in
-> +      include/dt-bindings/interrupt-controller/irq.h
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    description: Specifying the pin number and flags, as defined in
-> +      include/dt-bindings/gpio/gpio.h
-> +    const: 2
-> +
-> +  gpio-ranges:
-> +    maxItems: 1
-> +
-> +  gpio-reserved-ranges:
-> +    maxItems: 1
-> +
-> +#PIN CONFIGURATION NODES
-> +patternProperties:
-> +  '-pins$':
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: "/schemas/pinctrl/pincfg-node.yaml"
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9])$"
-> +            - enum: [ ufs_reset, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd, sdc2_data, sdc1_rclk ]
-> +        minItems: 1
-> +        maxItems: 150
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins. Functions are only valid for gpio pins.
-> +        enum: [ blsp_uart1, blsp_spi1, blsp_i2c1, blsp_uim1, atest_tsens,
-> +                bimc_dte1, dac_calib0, blsp_spi8, blsp_uart8, blsp_uim8,
-> +                qdss_cti_trig_out_b, bimc_dte0, dac_calib1, qdss_cti_trig_in_b,
-> +                dac_calib2, atest_tsens2, atest_usb1, blsp_spi10, blsp_uart10,
-> +                blsp_uim10, atest_bbrx1, atest_usb13, atest_bbrx0, atest_usb12,
-> +                mdp_vsync, edp_lcd, blsp_i2c10, atest_gpsadc1, atest_usb11,
-> +                atest_gpsadc0, edp_hot, atest_usb10, m_voc, dac_gpio, atest_char,
-> +                cam_mclk, pll_bypassnl, qdss_stm7, blsp_i2c8, qdss_tracedata_b,
-> +                pll_reset, qdss_stm6, qdss_stm5, qdss_stm4, atest_usb2, cci_i2c,
-> +                qdss_stm3, dac_calib3, atest_usb23, atest_char3, dac_calib4,
-> +                qdss_stm2, atest_usb22, atest_char2, qdss_stm1, dac_calib5,
-> +                atest_usb21, atest_char1, dbg_out, qdss_stm0, dac_calib6,
-> +                atest_usb20, atest_char0, dac_calib10, qdss_stm10,
-> +                qdss_cti_trig_in_a, cci_timer4, blsp_spi6, blsp_uart6, blsp_uim6,
-> +                blsp2_spi, qdss_stm9, qdss_cti_trig_out_a, dac_calib11,
-> +                qdss_stm8, cci_timer0, qdss_stm13, dac_calib7, cci_timer1,
-> +                qdss_stm12, dac_calib8, cci_timer2, blsp1_spi, qdss_stm11,
-> +                dac_calib9, cci_timer3, cci_async, dac_calib12, blsp_i2c6,
-> +                qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib14,
-> +                dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
-> +                dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
-> +                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
-> +                dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_calib25,
-> +                sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
-> +                qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, blsp_i2c3,
-> +                uim3, blsp_spi9, blsp_uart9, blsp_uim9, blsp10_spi, blsp_i2c9,
-> +                blsp_spi7, blsp_uart7, blsp_uim7, qdss_tracedata_a, blsp_i2c7,
-> +                qua_mi2s, gcc_gp1_clk_a, ssc_irq, uim4, blsp_spi11, blsp_uart11,
-> +                blsp_uim11, gcc_gp2_clk_a, gcc_gp3_clk_a, blsp_i2c11, cri_trng0,
-> +                cri_trng1, cri_trng, qdss_stm18, pri_mi2s, qdss_stm17, blsp_spi4,
-> +                blsp_uart4, blsp_uim4, qdss_stm16, qdss_stm15, blsp_i2c4,
-> +                qdss_stm14, dac_calib26, spkr_i2s, audio_ref, lpass_slimbus,
-> +                isense_dbg, tsense_pwm1, tsense_pwm2, btfm_slimbus, ter_mi2s,
-> +                qdss_stm22, qdss_stm21, qdss_stm20, qdss_stm19, gcc_gp1_clk_b,
-> +                sec_mi2s, blsp_spi5, blsp_uart5, blsp_uim5, gcc_gp2_clk_b,
-> +                gcc_gp3_clk_b, blsp_i2c5, blsp_spi12, blsp_uart12, blsp_uim12,
-> +                qdss_stm25, qdss_stm31, blsp_i2c12, qdss_stm30, qdss_stm29,
-> +                tsif1_clk, qdss_stm28, tsif1_en, tsif1_data, sdc4_cmd, qdss_stm27,
-> +                qdss_traceclk_b, tsif2_error, sdc43, vfr_1, qdss_stm26, tsif2_clk,
-> +                sdc4_clk, qdss_stm24, tsif2_en, sdc42, qdss_stm23, qdss_tracectl_b,
-> +                sd_card, tsif2_data, sdc41, tsif2_sync, sdc40, mdp_vsync_p_b,
-> +                ldo_en, mdp_vsync_s_b, ldo_update, blsp11_uart_tx_b, blsp11_uart_rx_b,
-> +                blsp11_i2c_sda_b, prng_rosc, blsp11_i2c_scl_b, uim2, uim1, uim_batt,
-> +                pci_e2, pa_indicator, adsp_ext, ddr_bist, qdss_tracedata_11,
-> +                qdss_tracedata_12, modem_tsync, nav_dr, nav_pps, pci_e1, gsm_tx,
-> +                qspi_cs, ssbi2, ssbi1, mss_lte, qspi_clk, qspi0, qspi1, qspi2, qspi3,
-> +                gpio ]
-> +
-> +      drive-strength:
-> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> +        default: 2
-> +        description:
-> +          Selects the drive strength for the specified pins, in mA.
-> +
-> +      bias-pull-down: true
-> +
-> +      bias-pull-up: true
-> +
-> +      bias-disable: true
-> +
-> +      output-high: true
-> +
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +      - function
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - gpio-controller
-> +  - '#gpio-cells'
-> +  - gpio-ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
+> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+> index a91e3d90df8a..4f1e55074ef0 100644
+> --- a/include/linux/xarray.h
+> +++ b/include/linux/xarray.h
+> @@ -275,29 +275,6 @@ enum xa_lock_type {
+>  #define XA_FLAGS_ALLOC	(XA_FLAGS_TRACK_FREE | XA_FLAGS_MARK(XA_FREE_MARK))
+>  #define XA_FLAGS_ALLOC1	(XA_FLAGS_TRACK_FREE | XA_FLAGS_ZERO_BUSY)
+>  
+> -/**
+> - * struct xarray - The anchor of the XArray.
+> - * @xa_lock: Lock that protects the contents of the XArray.
+> - *
+> - * To use the xarray, define it statically or embed it in your data structure.
+> - * It is a very small data structure, so it does not usually make sense to
+> - * allocate it separately and keep a pointer to it in your data structure.
+> - *
+> - * You may use the xa_lock to protect your own data structures as well.
+> - */
+> -/*
+> - * If all of the entries in the array are NULL, @xa_head is a NULL pointer.
+> - * If the only non-NULL entry in the array is at index 0, @xa_head is that
+> - * entry.  If any other entry in the array is non-NULL, @xa_head points
+> - * to an @xa_node.
+> - */
+> -struct xarray {
+> -	spinlock_t	xa_lock;
+> -/* private: The rest of the data structure is not to be used directly. */
+> -	gfp_t		xa_flags;
+> -	void __rcu *	xa_head;
+> -};
+> -
+>  #define XARRAY_INIT(name, flags) {				\
+>  	.xa_lock = __SPIN_LOCK_UNLOCKED(name.xa_lock),		\
+>  	.xa_flags = flags,					\
 
-The indentation is not consistent. Use 4 spaces per level.
+I think this is going to break:
 
-> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +        tlmm: pinctrl@f100000 {
-
-Indent 4 fewer spaces.
-
-> +                compatible = "qcom,sdx65-tlmm";
-> +                reg = <0x03000000 0xdc2000>;
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +                gpio-ranges = <&tlmm 0 0 109>;
-> +                interrupt-controller;
-> +                #interrupt-cells = <2>;
-> +                interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +                serial-pins {
-
-Indent 8 fewer spaces.
-
-> +                    pins = "gpio8", "gpio9";
-> +                    function = "blsp_uart3";
-> +                    drive-strength = <2>;
-> +                    bias-disable;
-
-Indent 8 fewer spaces.
-
-> +                };
-> +         };
-> +...
-> -- 
-> 2.33.1
-> 
-> 
+(cd tools/testing/radix-tree; make)

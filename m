@@ -2,142 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A30D46B9F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22CC46B9FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbhLGLWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbhLGLWk (ORCPT
+        id S234871AbhLGLX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:23:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37786 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229703AbhLGLXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:22:40 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0E8C061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 03:19:10 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 7 Dec 2021 06:23:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638875995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/WqjEgoU5/1dD8E9RWBUjIogdVBeKw8rMz0jGIvDp+8=;
+        b=iRQ4wXqG9MGhlETQfBQLPUKnziCrVbGAs4XXMC7MPuuqevRIVn+XqQkDuaDpMH2UveXNRF
+        X+L/spIgoA4ew32pxDNQPA5HUHyXDVKEr1fzz1DIQNwKwpZgkp13orSv8U34EKqBSAulAe
+        fnFP3tCXkEM9xP0vbBJWXn/UI6QQZZw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-466-DiHNk7XbOoWYQYXZUvYwqQ-1; Tue, 07 Dec 2021 06:19:53 -0500
+X-MC-Unique: DiHNk7XbOoWYQYXZUvYwqQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7d964jVBz4xgY;
-        Tue,  7 Dec 2021 22:19:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1638875948;
-        bh=0XMPFg1uyLXcByQa57fLF55p79RM8131PNd2ix+ygg8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bllKWJBbZ5SepP/QI5nePCofpeapO/yXsQh3GdA7T6GRyQ3YwRoz3HU4W+hOxciuP
-         L/KZUi1UGwNjzHgWKO/BZi+TrLa+fHALGKEhRquvGlNUCcmf3V8JcVWzJseXUOtpne
-         Dl0rzR7bbVJQ9LqxFSSFUjMfCv2xVYZ2c0GmWBfNhxShRobl9qNl/CyahVxIm58HOU
-         cseXlKGcij6ojOLG1BvahU7GSonXbaxGvS45H5X/huhIjlwYGllxSHR2lVddIGoTz+
-         JXbKM6QBH1BBDnsgpLMY9yrwkLRey1sHjMGJ+TdeGCehP1D3ZhOJDEC9ylUEQP+rB7
-         tb+WksYYkS3yg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Bill Wendling <morbo@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kernel test robot <lkp@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-In-Reply-To: <Ya7ntJ0ehZPy6HKA@archlinux-ax161>
-References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
- <202111300652.0yDBNvyJ-lkp@intel.com>
- <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
- <87a6hlq408.fsf@mpe.ellerman.id.au> <YaZqs2tPxMzhgkAW@archlinux-ax161>
- <CAGG=3QX4k6MZ1qkT+sVAroJeBpbZBnOJauM_uJsu2uV1vnVObQ@mail.gmail.com>
- <CAGG=3QVQ9bwWWyKDN3_C2B0v7H6iZ4ZpNybXGCqbzwWrPjuPrg@mail.gmail.com>
- <87o85tnkzt.fsf@mpe.ellerman.id.au> <Ya7ntJ0ehZPy6HKA@archlinux-ax161>
-Date:   Tue, 07 Dec 2021 22:19:05 +1100
-Message-ID: <87lf0woe6u.fsf@mpe.ellerman.id.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B19F48042E1;
+        Tue,  7 Dec 2021 11:19:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B4785D9C0;
+        Tue,  7 Dec 2021 11:19:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] netfs: Fix lockdep warning from taking sb_writers whilst
+ holding mmap_lock
+From:   David Howells <dhowells@redhat.com>
+To:     jack@suse.cz, jlayton@kernel.org
+Cc:     linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Dec 2021 11:19:35 +0000
+Message-ID: <163887597541.1596626.2668163316598972956.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> On Tue, Dec 07, 2021 at 02:37:26PM +1100, Michael Ellerman wrote:
->> Bill Wendling <morbo@google.com> writes:
->> > On Tue, Nov 30, 2021 at 10:38 AM Bill Wendling <morbo@google.com> wrot=
-e:
->> >> On Tue, Nov 30, 2021 at 10:17 AM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->> >> > On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
->> >> > > Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->> >> > > > Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit :
->> ...
->> >> > > >> All warnings (new ones prefixed by >>):
->> >> > > >>
->> >> > > >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
->> >> > > >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpt=
-s.h:7:
->> >> > > >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'v=
-al' is uninitialized when used here [-Wuninitialized]
->> >> > > >>                     *inst =3D ppc_inst(val);
->> >> > > >>                                      ^~~
->> >> > > >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from=
- macro 'ppc_inst'
->> >> > > >>     #define ppc_inst(x) (x)
->> >> > > >>                          ^
->> >> > > >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize t=
-he variable 'val' to silence this warning
->> >> > > >>             unsigned int val, suffix;
->> >> > > >>                             ^
->> >> > > >>                              =3D 0
->> >> > > >
->> >> > > > I can't understand what's wrong here.
->> ...
->> >> > > >
->> >> > > > I see no possibility, no alternative path where val wouldn't be=
- set. The
->> >> > > > asm clearly has *addr as an output param so it is always set.
->> >> > >
->> >> > > I guess clang can't convince itself of that?
->> ...
->> >> >
->> >> > It certainly looks like there is something wrong with how clang is
->> >> > tracking the initialization of the variable because it looks to me =
-like
->> >> > val is only used in the fallthrough path, which happens after it is
->> >> > initialized via lwz.  Perhaps something is wrong with the logic of
->> >> > https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issue=
-s are
->> >> > being migrated from Bugzilla to GitHub Issues right now so I cannot=
- file
->> >> > this upstream at the moment).
->> >> >
->> >> If I remove the casts of "val" the warning doesn't appear. I suspect
->> >> that when I wrote that patch I forgot to remove those when checking.
->> >> #include "Captain_Picard_facepalm.h"
->> >>
->> >> I'll look into it.
->> >>
->> > Small retraction. It's the "*(<cast>)&val" that's the issue. (I.e. the=
- "*&")
->>=20
->> I guess for now I'll just squash this in as a workaround?
->>=20
->>=20
->> diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/=
-inst.h
->> index 631436f3f5c3..5b591c51fec9 100644
->> --- a/arch/powerpc/include/asm/inst.h
->> +++ b/arch/powerpc/include/asm/inst.h
->> @@ -157,6 +157,9 @@ static inline int copy_inst_from_kernel_nofault(ppc_=
-inst_t *inst, u32 *src)
->>  	if (unlikely(!is_kernel_addr((unsigned long)src)))
->>  		return -ERANGE;
->
-> Could we add a version check to this and a link to our bug tracker:
->
-> /* https://github.com/ClangBuiltLinux/linux/issues/1521 */
-> #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 140000
+Taking sb_writers whilst holding mmap_lock isn't allowed and will result in
+a lockdep warning like that below.  The problem comes from cachefiles
+needing to take the sb_writers lock in order to do a write to the cache,
+but being asked to do this by netfslib called from readpage, readahead or
+write_begin[1].
 
-Yep, thanks I'll use that.
+Fix this by always offloading the write to the cache off to a worker
+thread.  The main thread doesn't need to wait for it, so deadlock can be
+avoided.
 
-cheers
+This can be tested by running the quick xfstests on something like afs or
+ceph with lockdep enabled.
+
+WARNING: possible circular locking dependency detected
+5.15.0-rc1-build2+ #292 Not tainted
+------------------------------------------------------
+holetest/65517 is trying to acquire lock:
+ffff88810c81d730 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_fault+0x276/0x7a5
+
+but task is already holding lock:
+ffff8881595b53e8 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x28d/0x59c
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&mm->mmap_lock#2){++++}-{3:3}:
+       validate_chain+0x3c4/0x4a8
+       __lock_acquire+0x89d/0x949
+       lock_acquire+0x2dc/0x34b
+       __might_fault+0x87/0xb1
+       strncpy_from_user+0x25/0x18c
+       removexattr+0x7c/0xe5
+       __do_sys_fremovexattr+0x73/0x96
+       do_syscall_64+0x67/0x7a
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #1 (sb_writers#10){.+.+}-{0:0}:
+       validate_chain+0x3c4/0x4a8
+       __lock_acquire+0x89d/0x949
+       lock_acquire+0x2dc/0x34b
+       cachefiles_write+0x2b3/0x4bb
+       netfs_rreq_do_write_to_cache+0x3b5/0x432
+       netfs_readpage+0x2de/0x39d
+       filemap_read_page+0x51/0x94
+       filemap_get_pages+0x26f/0x413
+       filemap_read+0x182/0x427
+       new_sync_read+0xf0/0x161
+       vfs_read+0x118/0x16e
+       ksys_read+0xb8/0x12e
+       do_syscall_64+0x67/0x7a
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #0 (mapping.invalidate_lock#3){.+.+}-{3:3}:
+       check_noncircular+0xe4/0x129
+       check_prev_add+0x16b/0x3a4
+       validate_chain+0x3c4/0x4a8
+       __lock_acquire+0x89d/0x949
+       lock_acquire+0x2dc/0x34b
+       down_read+0x40/0x4a
+       filemap_fault+0x276/0x7a5
+       __do_fault+0x96/0xbf
+       do_fault+0x262/0x35a
+       __handle_mm_fault+0x171/0x1b5
+       handle_mm_fault+0x12a/0x233
+       do_user_addr_fault+0x3d2/0x59c
+       exc_page_fault+0x85/0xa5
+       asm_exc_page_fault+0x1e/0x30
+
+other info that might help us debug this:
+
+Chain exists of:
+  mapping.invalidate_lock#3 --> sb_writers#10 --> &mm->mmap_lock#2
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&mm->mmap_lock#2);
+                               lock(sb_writers#10);
+                               lock(&mm->mmap_lock#2);
+  lock(mapping.invalidate_lock#3);
+
+ *** DEADLOCK ***
+
+1 lock held by holetest/65517:
+ #0: ffff8881595b53e8 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x28d/0x59c
+
+stack backtrace:
+CPU: 0 PID: 65517 Comm: holetest Not tainted 5.15.0-rc1-build2+ #292
+Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
+Call Trace:
+ dump_stack_lvl+0x45/0x59
+ check_noncircular+0xe4/0x129
+ ? print_circular_bug+0x207/0x207
+ ? validate_chain+0x461/0x4a8
+ ? add_chain_block+0x88/0xd9
+ ? hlist_add_head_rcu+0x49/0x53
+ check_prev_add+0x16b/0x3a4
+ validate_chain+0x3c4/0x4a8
+ ? check_prev_add+0x3a4/0x3a4
+ ? mark_lock+0xa5/0x1c6
+ __lock_acquire+0x89d/0x949
+ lock_acquire+0x2dc/0x34b
+ ? filemap_fault+0x276/0x7a5
+ ? rcu_read_unlock+0x59/0x59
+ ? add_to_page_cache_lru+0x13c/0x13c
+ ? lock_is_held_type+0x7b/0xd3
+ down_read+0x40/0x4a
+ ? filemap_fault+0x276/0x7a5
+ filemap_fault+0x276/0x7a5
+ ? pagecache_get_page+0x2dd/0x2dd
+ ? __lock_acquire+0x8bc/0x949
+ ? pte_offset_kernel.isra.0+0x6d/0xc3
+ __do_fault+0x96/0xbf
+ ? do_fault+0x124/0x35a
+ do_fault+0x262/0x35a
+ ? handle_pte_fault+0x1c1/0x20d
+ __handle_mm_fault+0x171/0x1b5
+ ? handle_pte_fault+0x20d/0x20d
+ ? __lock_release+0x151/0x254
+ ? mark_held_locks+0x1f/0x78
+ ? rcu_read_unlock+0x3a/0x59
+ handle_mm_fault+0x12a/0x233
+ do_user_addr_fault+0x3d2/0x59c
+ ? pgtable_bad+0x70/0x70
+ ? rcu_read_lock_bh_held+0xab/0xab
+ exc_page_fault+0x85/0xa5
+ ? asm_exc_page_fault+0x8/0x30
+ asm_exc_page_fault+0x1e/0x30
+RIP: 0033:0x40192f
+Code: ff 48 89 c3 48 8b 05 50 28 00 00 48 85 ed 7e 23 31 d2 4b 8d 0c 2f eb 0a 0f 1f 00 48 8b 05 39 28 00 00 48 0f af c2 48 83 c2 01 <48> 89 1c 01 48 39 d5 7f e8 8b 0d f2 27 00 00 31 c0 85 c9 74 0e 8b
+RSP: 002b:00007f9931867eb0 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 00007f9931868700 RCX: 00007f993206ac00
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: 00007ffc13e06ee0
+RBP: 0000000000000100 R08: 0000000000000000 R09: 00007f9931868700
+R10: 00007f99318689d0 R11: 0000000000000202 R12: 00007ffc13e06ee0
+R13: 0000000000000c00 R14: 00007ffc13e06e00 R15: 00007f993206a000
+
+Fixes: 726218fdc22c ("netfs: Define an interface to talk to a cache")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jan Kara <jack@suse.cz>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cachefs@redhat.com
+cc: linux-fsdevel@vger.kernel.org
+Link: https://lore.kernel.org/r/20210922110420.GA21576@quack2.suse.cz/ [1]
+---
+
+ fs/netfs/read_helper.c |   15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
+index 7046f9bdd8dc..7c6e199618af 100644
+--- a/fs/netfs/read_helper.c
++++ b/fs/netfs/read_helper.c
+@@ -354,16 +354,11 @@ static void netfs_rreq_write_to_cache_work(struct work_struct *work)
+ 	netfs_rreq_do_write_to_cache(rreq);
+ }
+ 
+-static void netfs_rreq_write_to_cache(struct netfs_read_request *rreq,
+-				      bool was_async)
++static void netfs_rreq_write_to_cache(struct netfs_read_request *rreq)
+ {
+-	if (was_async) {
+-		rreq->work.func = netfs_rreq_write_to_cache_work;
+-		if (!queue_work(system_unbound_wq, &rreq->work))
+-			BUG();
+-	} else {
+-		netfs_rreq_do_write_to_cache(rreq);
+-	}
++	rreq->work.func = netfs_rreq_write_to_cache_work;
++	if (!queue_work(system_unbound_wq, &rreq->work))
++		BUG();
+ }
+ 
+ /*
+@@ -558,7 +553,7 @@ static void netfs_rreq_assess(struct netfs_read_request *rreq, bool was_async)
+ 	wake_up_bit(&rreq->flags, NETFS_RREQ_IN_PROGRESS);
+ 
+ 	if (test_bit(NETFS_RREQ_WRITE_TO_CACHE, &rreq->flags))
+-		return netfs_rreq_write_to_cache(rreq, was_async);
++		return netfs_rreq_write_to_cache(rreq);
+ 
+ 	netfs_rreq_completed(rreq, was_async);
+ }
+
+

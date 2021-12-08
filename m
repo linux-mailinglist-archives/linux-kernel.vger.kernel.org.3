@@ -2,169 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1367C46D06C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A38046D079
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbhLHJ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:59:07 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:53386 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbhLHJ7F (ORCPT
+        id S229542AbhLHKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:06:27 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:33056 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229455AbhLHKG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:59:05 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2BCBB218B0;
-        Wed,  8 Dec 2021 09:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638957333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=34yZn4yaf3zVBT1zz2/zUE5HMZzmdxI7YEkwnvgIihA=;
-        b=bZKVfqXQxkHqoe08XNKLXU9wQkf9xQTSG9t4xEU0QbooQfVWQzwPRQWCsT3y3pgdRtzIXB
-        q59VhveONPZNx1Jdc9HvwpPp/KjHwO6qRbirZxvlMz3+3OEt+040AKeT0xfK6QtlvQ422s
-        HmLi+5pZz2mzuRuNAS8qqYXo27LbTXs=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E7E1FA3B81;
-        Wed,  8 Dec 2021 09:55:32 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 10:55:32 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbCBFO6HL9plOURf@dhcp22.suse.cz>
-References: <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
- <YYrGpn/52HaLCAyo@fedora>
- <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbBywDwc2bCxWGAQ@dhcp22.suse.cz>
- <9DA4ABBB-264F-4AD7-A4D4-DCBD371BE051@vmware.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 8 Dec 2021 05:06:26 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B88x3xC008483;
+        Wed, 8 Dec 2021 10:02:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=XqWTgFnK2j9x2bv2in6RiR3CbBD44X8Cma3VYepKtG0=;
+ b=meBoSMu498UB71Xvq08Kjr7okq0pIJIZDTA2DISDMcPRsw2IyaPxMtJNSNtS4RAi3XRB
+ b2jDeZRj50LGTHwd4gPf24CaHvYJBmsbby3rlKby7/noc9FvbRjnHThkt9JzMJ2NLNkh
+ FZttkZYirXikRqUkb8C0bbSkw0Xlef4q8syFS3nol0sv9YqXTYAn7jFcU0wG9NzzKvp/
+ 9PDeiTsqB7vNgkfceb08AhdYn8HTff3YDSprCfNpck9VqczgwhXF9f4VAqk/xeS/8qM3
+ nQGK3zWNCAJU8G1PktlsRlcl559F4UuPgGfnSW0qfqM9748m6IvSrx0dml5l6T46uQxT mQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cscwcg29m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Dec 2021 10:02:52 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B8A08kX136596;
+        Wed, 8 Dec 2021 10:02:50 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2044.outbound.protection.outlook.com [104.47.51.44])
+        by aserp3020.oracle.com with ESMTP id 3cr0565h8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Dec 2021 10:02:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aWKDwu397GzvW6IshITLIC93RqJ7jrbWOBoFnoXeOUiAHIt394Fm3zqRu9QbceXH5sJxI1Qkn2YIl0aITrsPUtBCc3xADSaiAbSMbefdXouBHvePHqQmxZTStUaibgB40S456JNhdCiXBsExNO0WfdZ4u3oeTF/4vlETt4wwQUL7uo2VsTaHPd80ezMbrU9KBWmJKQ3yIBemVkXzUULaOFPw2trjPeiEtqpq2YpSHHJBchMHxUqaxrDiujSgpDCSHdZPrmYMEPYOhPF8HygY3fCI2q/aMZ9uq6dhE0o/XPc8irVia1PIWOrHHCF2uqq4EVmD2j+VJgbbUKHyUGLkcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XqWTgFnK2j9x2bv2in6RiR3CbBD44X8Cma3VYepKtG0=;
+ b=SiQ+8sbpjQstGGzO52CUCLjkspE1Cl/Dfburrh6tHYQZoQzzEmMpF87b8sRgp3NkIT86GYRyZ2+ZMCSdH298CgNulQJal8hvIYWTphwIv0ktl6fFVrVi62pxyDin3buq0+9Xhl2cdzl+U8BUPmqDktVkfa6w0zA9pHv45r2in7SBh+icz/KjTSTtiSulXdZSQyjHXxPGrdg2VcW/QE4+3x3awZXqv0SoagIpQL+lrlJ4jvPQ2TtLJ57pcxZiVMR3778uTx8s1szbkqfjMQlE/z1IPrAQlXGRN28Lm1RLDRaKCec/c5OmnQ8zeZtwWB3n1li2Eblu5vRmY2rONJu0uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XqWTgFnK2j9x2bv2in6RiR3CbBD44X8Cma3VYepKtG0=;
+ b=im4Mb69X/ORkKpgwyah97XRN7gbmJf7jLRkRcEppH0Uew3MeUrQtJTC4V7HYjSdS8CwKSA8goo6XpO3AdTRWSJRXvzz+DGa5d+6HDi8JufuC/SZfNDPPEdXAwSdqUF7eupYq6qtzKgAlB1qsukUi07eCywrGAWBYlhLlFqqtq58=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1549.namprd10.prod.outlook.com
+ (2603:10b6:300:26::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Wed, 8 Dec
+ 2021 10:02:49 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4755.024; Wed, 8 Dec 2021
+ 10:02:49 +0000
+Date:   Wed, 8 Dec 2021 13:02:29 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2] intel_th: remove redundant re-assignment of pointer
+ hubdrv
+Message-ID: <20211208100229.GI1956@kadam>
+References: <20211207230709.121444-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9DA4ABBB-264F-4AD7-A4D4-DCBD371BE051@vmware.com>
+In-Reply-To: <20211207230709.121444-1-colin.i.king@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0034.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::22)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+Received: from kadam (102.222.70.114) by JNXP275CA0034.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Wed, 8 Dec 2021 10:02:44 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36ce46d6-3abc-42db-22a2-08d9ba31e3ca
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1549:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1549D959697F4453CA3E0FDD8E6F9@MWHPR10MB1549.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yFFuUbagbj8qXPt6GCSnX7rBs1uH+m1kLtEV5z8qYhZYfrIliNM8tQd+SOF8c2pelQ6ixl48OMhykoXB8z+heb4OKDpaL6gI//YyToRRv2KwgnopbPuDgY7uw2Et1PoCkQjcsZ/jYPNV6vYbYDyqCEp3QBrpCVjcoRHf+UBwVHrnqk4Z2vkqTE/YeEcRMZNv18pu2vYtCd+n6OH4szlEra3yqupTESRiefHTMJCRPDHcXRBTkYxnzJjC+1W89XiezrdzA2teKCjkCh8AbtFLSZNoYl485ukpTlb3U/1vZh5lihfYbHcWWsoDJlKwuOqWFtcVwdN/61aKL7uzb7FYd1wgqNxPaj/8sH+52bjZhhlLv2fjGdXyzDqxKn3R6cEs/f2Ds1yU5PaISyOpdijl8N2zJ2wf0biJi1tRViW3mDidy6UqZPHlNKW3xqLguhGhhz0B9HgCah1L5kTfqYe3AEExONaEAmhwS5uj8pcMzDHlTuDYwqG2LJthbzXPmgr3eFlFO0ObStWJSnfpbiYzy9i+wDOKX3TGWWDcsjWPSoPB8RhRhJsi/A02uUiCcS5kqfCEp5VUIu1iPVa79V2b8JU1GZ3wLGQZhpsWK5TxsU4xI4nn92gHH72GtAPhD6qT1cxXMryZJPsGFXwyNej0jH+F85TrRJMro09Xp6vVbF1G2gUd4z5WHTJTQXBb2WI5Smr6xZW6Y7lNjzE+2OzUrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(33656002)(86362001)(6916009)(2906002)(33716001)(38100700002)(9686003)(44832011)(38350700002)(4744005)(1076003)(956004)(55016003)(66556008)(66476007)(26005)(6666004)(4326008)(6496006)(66946007)(8936002)(9576002)(316002)(508600001)(186003)(5660300002)(8676002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bFbH5zFvbg7M1hFAiNzgFCaKjxiZ1Ln81UfxxCgVO+SIejS+rNCWGmbgnMWw?=
+ =?us-ascii?Q?IzMpriXAdddDCm4CFfQiemd9e4i3tpa/GjqWjplMYN1ZJn1I5TMKmAEz4aeL?=
+ =?us-ascii?Q?9GCzSSyOF3SZ8aFv1iiI+jQGLUbYcW0YYK78EbKr3Gm0XRq6p11gUYFreExI?=
+ =?us-ascii?Q?XoWSD7v52MhHIYwHM8OF+uTrnBHFVa9av7s04k5iFLoCAfTLUNLQwSpydGCw?=
+ =?us-ascii?Q?jPjuRiyp2ipGzOBN+9Dab07XxGB0aX4HgfvrFwuh2SrNCFTkUy/vxuiGitnT?=
+ =?us-ascii?Q?e6aUiBxGBVQhkWAX1a5r8wkpYEOIui/Sn8usoPBNqomk3PwU3sE7E8ZIWIsY?=
+ =?us-ascii?Q?aqzyI/WKU4coOkB8gupmmNIB+JkssF7EwAMoq9fZVM/kVdcvvg/uDLc8U2oL?=
+ =?us-ascii?Q?wGTot4vl/MKH++AzaH1B8B6B3nO3Bovj/3GeBui98W6z0w6JZAnWhFtR/6fu?=
+ =?us-ascii?Q?yDC3h3PdIdA68SrPHfzr+cGBI9ACmLDFFGGS4iSsw/0THO5tiPVMs2Q7D4bk?=
+ =?us-ascii?Q?6+tSiLpwXEMTPlpWfiS8fX4ojy9Yk2X+nIKv6PvNz2e3h04+qE4kZx+CrOF/?=
+ =?us-ascii?Q?UgXnYgV3hwcEnHfOzPvrGdiSCJxUZ4JwVBPlRjBnHh2vxJlRLlqiH9zm3+0t?=
+ =?us-ascii?Q?GNHdUNf89wDDvF7T9uY6VBrEFVrsadEKfuOc6zfDa0PrDvywXQ1XPaX4YjFZ?=
+ =?us-ascii?Q?tV74WDWR/ZRSWLltWsFemKDPV9inJWZQUqNBYBkzH5JojVa3NqakGFQa9Lhu?=
+ =?us-ascii?Q?ob5G2S3MRmnHFjAG/vRGbvdg8j7353LitqGql5Be2K8t/1TytRUBGT/T/xok?=
+ =?us-ascii?Q?kBIcJlEgsZAABBaNAvjxi5aK1g/sHuw/nDg+YXegV0+BoxVA0pv4fE/D66q7?=
+ =?us-ascii?Q?ZMcfMMnTVSKqfuBw2Jk6HDlRO+a6pQ3f3Us7rpT2PdZsIlhYXOOYODCSljfS?=
+ =?us-ascii?Q?DFpKsNiIrU0GWrcXeZ5RwFp4z6sMFo7K8VNCOtTl75uPPVCxbu7R7yPY/sbM?=
+ =?us-ascii?Q?APEZmYZUXUoE00SyhiYf5eU0IwGqcNDRwac1pDa6yazjhNcUBf1OeKKO0xau?=
+ =?us-ascii?Q?Hg3IymFxC2EtFeOxx24hCfPksLXw6pN6prCs0v3hKxQSZIdMEkY9VuuyjJdh?=
+ =?us-ascii?Q?Xz8T2j9N8C3RZDfvRJlQZFioDpDTiBWmTTBm8fWG8ZQBSd4xq2BhBl2GOi4B?=
+ =?us-ascii?Q?jkgBvOsOP5n0BHAfLYWQM0qKGqJHTKfCufwSKw9lyO9036MhNqbbQ0v2c6Pw?=
+ =?us-ascii?Q?s+xNvW9aQSs5Jo7jvDWsSlq5LX2t8SH4lSUvkaXfV2rSKLAper90Ol3MvKlI?=
+ =?us-ascii?Q?d9H8eudMChS1iqQx3kGdIyW4Ad6+RJUjnn5xinXHDYarEW2LC8J8/CyOoxIt?=
+ =?us-ascii?Q?zwhx53UkD/ounNK34nGue+ro/7QFGirFYsfJgai7gB5XzHEazdMd5gx0sRz5?=
+ =?us-ascii?Q?cf8GnTss2w1q1Ao6yscS6DT3ZLKEiilqNhIEVNfLpuVhVp/nPXNN1kIi2jLN?=
+ =?us-ascii?Q?j5TnF0P9F+6vaZqEE24WvBbKuCy2gQTbnuP0J9pcZxSMTD/IbXvZ41LCFY27?=
+ =?us-ascii?Q?uuwtLrDSRTXK4KSWJ/LxPZHvGm9P6EA99mJc0f0LpzxRTbEiJiOSlt++gj1Q?=
+ =?us-ascii?Q?RVFpekwNcyC8E4u921nUEvkvwNILv55UfpN2rxw2pRlr+7H5+7P11Rv3maEB?=
+ =?us-ascii?Q?Vww3d3tCyt+UzJqNDBWrKfmneXY=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36ce46d6-3abc-42db-22a2-08d9ba31e3ca
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 10:02:48.9563
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nu7TfsCC5hLpzqR14tzbzfndMw2nvVZ1KifgsqK5quAKvTt6UdvhoEn4u+7R2UO4fUqw6GxwNzsuk/2IeElYyn+PuSdJiwzsPQg3hFdnyA8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1549
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10191 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112080065
+X-Proofpoint-ORIG-GUID: B-EbHBw5V_FmXdqfw5xc_Yn8VGCl-mBH
+X-Proofpoint-GUID: B-EbHBw5V_FmXdqfw5xc_Yn8VGCl-mBH
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 08-12-21 08:57:28, Alexey Makhalov wrote:
+On Tue, Dec 07, 2021 at 11:07:09PM +0000, Colin Ian King wrote:
+> The pointer hubdrv is being re-assigned the same value as it was
+> initialized with only a few lines earlier. The re-assignment is
+> redundant and can be removed.
 > 
+> As Dan Carpenter pointed out, the pointer hubdrv is hub - some_offset
+> and in this case some_offset is zero. Since hub has already been
+> dereferenced hubdrv can't be NULL so the NULL check is redundant
+> and can also be removed.
 > 
-> > On Dec 8, 2021, at 12:54 AM, Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > Alexey,
-> > this is still not finalized but it would really help if you could give
-> > it a spin on your setup. I still have to think about how to transition
-> > from a memoryless node to standard node (in hotplug code). Also there
-> > might be other surprises on the way.
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index c5952749ad40..8ed8db2ccb13 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
-> > 	if (self && !node_online(self->node_id)) {
-> > 		build_zonelists(self);
-> > 	} else {
-> > -		for_each_online_node(nid) {
-> > +		/*
-> > +		 * All possible nodes have pgdat preallocated
-> > +		 * free_area_init
-> > +		 */
-> > +		for_each_node(nid) {
-> > 			pg_data_t *pgdat = NODE_DATA(nid);
-> > 
-> > 			build_zonelists(pgdat);
-> > @@ -8032,8 +8036,32 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> > 	/* Initialise every node */
-> > 	mminit_verify_pageflags_layout();
-> > 	setup_nr_node_ids();
-> > -	for_each_online_node(nid) {
-> > -		pg_data_t *pgdat = NODE_DATA(nid);
-> > +	for_each_node(nid) {
-> > +		pg_data_t *pgdat;
-> > +
-> > +		if (!node_online(nid)) {
-> > +			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
-> > +
-> > +			/* Allocator not initialized yet */
-> > +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> > +			if (!pgdat) {
-> > +				pr_err("Cannot allocate %zuB for node %d.\n",
-> > +						sizeof(*pgdat), nid);
-> > +				continue;
-> > +			}
-> > +			/* TODO do we need this for memoryless nodes */
-> > +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-> > +			arch_refresh_nodedata(nid, pgdat);
-> > +			free_area_init_memoryless_node(nid);
-> > +			/*
-> > +			 * not marking this node online because we do not want to
-> > +			 * confuse userspace by sysfs files/directories for node
-> > +			 * without any memory attached to it (see topology_init)
-> > +			 */
-> > +			continue;
-> > +		}
-> > +
-> > +		pgdat = NODE_DATA(nid);
-> > 		free_area_init_node(nid);
-> > 
-> > 		/* Any memory on that node */
-> > 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > 
-> Sure Michal, I’ll give it a spin.
+> ---
 
 Thanks!
 
-> Thanks for attention to this topic.
-> 
-> Regarding memory waste. 
-> Here what I found while was using VM 128 possible NUMA nodes.
-> My Linux build on VM with only one numa node can be booted on 192Mb RAM,
-> But on 128 nodes it requires 1GB RAM just to boot. It is server distro,
-> minimal set of systemd services, no UI.
-> 
-> meminfo shows:
-> 1 node case: Percpu:            53760 kB
-> 128 nodes:   Percpu:           718048 kB !!!
-> 
-> Initial analisys multinode memory consumption showed at least difference in this:
-> 
-> Every memcgroup allocates mem_cgroup_per_node info for all possible node.
-> Each mem_cgroup_per_node has per cpu stats.
-> That means, each mem cgroup allocates 128*(sizeof struct mem_cgroup_per_node) + 16384*(sizeof struct lruvec_stats_percpu)
-> 
-> See: mem_cgroup_alloc() -> alloc_mem_cgroup_per_node_info()
-> 
-> There is also old comment about it in alloc_mem_cgroup_per_node_info()
->         /*
->          * This routine is called against possible nodes.
->          * But it's BUG to call kmalloc() against offline node.
->          *
->          * TODO: this routine can waste much memory for nodes which will
->          *       never be onlined. It's better to use memory hotplug callback
->          *       function.
->          */
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Please report that separately. There are likely more places like that.
-I do not think many subsystems (including MM) optimize for a very sparse
-possible node masks.
+regards,
+dan carpenter
 
--- 
-Michal Hocko
-SUSE Labs

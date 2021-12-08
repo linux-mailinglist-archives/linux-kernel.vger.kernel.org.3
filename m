@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117CD46DAE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEE246DAE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238761AbhLHSV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:21:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27232 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238782AbhLHSVZ (ORCPT
+        id S238757AbhLHSUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhLHSUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:21:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638987472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eh7hIXvlLrVY9VyTate/zWqD+zx7eGtk6Mm28VxINmo=;
-        b=g85CZF5LGqoCcFzDNsAFkpVWz9c6JeosEPuk+VyE0PyaVvwMhpsfqNXEpGZcUG4UP25wE2
-        IcPabIqsH9cgAqRQ8Tmt6iICqQhEJBPuwSOUg1V+9skqrAvNBg5R5GKB0mN2PP64rQ2YAL
-        /Y/XUsjwNTJLNYMLdmszXRq8FAojroQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-Lb7kjGJWNUGoPSky2PSe0A-1; Wed, 08 Dec 2021 13:17:49 -0500
-X-MC-Unique: Lb7kjGJWNUGoPSky2PSe0A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C65310247A7;
-        Wed,  8 Dec 2021 18:17:48 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.35.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB0F71F30E;
-        Wed,  8 Dec 2021 18:17:18 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>, Waiman Long <longman@redhat.com>,
-        linux-mm@kvack.org, Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>
-Subject: [PATCH v2] mm/oom_kill: wake futex waiters before annihilating victim shared mutex
-Date:   Wed,  8 Dec 2021 13:17:14 -0500
-Message-Id: <20211208181714.880312-1-jsavitz@redhat.com>
+        Wed, 8 Dec 2021 13:20:51 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F9EC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:17:19 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so4949402pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3f166bKRHkMHhPvddU093J8vpeto2pmeKPfGPIYP+ag=;
+        b=cL99TQ6qTeqBC/mnS0Sbgi4Lra35l+QPXJL+s5eSThP7qttO8f2pRKrpp9barCiLCG
+         woTu8bBio6AH+TEKw8oTCflH3u3FIdd1A6Vej3Uk7l8vJ6m30fMfJ7o7E2aBa0n+Jojo
+         GLybvYrDGZtX1i8uZyKy67wN0FN41BHrCDwGpvTtzDAS89TF++Wy1LA6HxvUda+2d1Fh
+         LEQLhPilkaYqLfZsQJ3J6P7Dj9ZczaHkxbk5g5I6M71Iwv2PV52pcWlBkfnPR7lS1BPh
+         eIIdkw/vQCJEQzYXH0XVhJIZNAMFCOhjaTML8TQbQ6k2NwLdSEKR0tRr3KqyJg/LN1Po
+         4Bpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3f166bKRHkMHhPvddU093J8vpeto2pmeKPfGPIYP+ag=;
+        b=zzKmeXo8gKzLe/LalFm7UJnSr8JncPht8u9UVENFgM7JXxcFecvw2totmWD5ThaR9/
+         j5w+v/WGQ4CufbwqiRFrxsXgoXwzA04cYg0j5rEfPdvtJcl920oGcB48BBjuCxJWYWPN
+         DozDlyIO2mLppDoC/QmGoUkUnGmaz2VAPzOzE3//qQ6cmewfS75EBlF14t2oMOeGX0td
+         KNG3pMdLiIOV+94AdfTVtXtBeSZln86jUqDnj7CerBLGGrvY9FmxipMK4ZTQC78K82LU
+         Lss1H32mFuo608KpbqnnAvO/12Eo98IewlmyHvuUs9m0UTqb+jBeHfKRcWC2Hoq24bl7
+         JdFQ==
+X-Gm-Message-State: AOAM531ZolxE5OBYFXx/4Rv1xtp1w1bJRw76oo15Q1d52QSh5N5M56ac
+        SLI9JE7+pzJpYU21+dOItit+HE8hMtuakw==
+X-Google-Smtp-Source: ABdhPJwmueStDqep48ij3iOz84X2oAXyKLxFMG73qqVpmizbC+ILabThfI8X1KTs/m00ikAT2XRW1w==
+X-Received: by 2002:a17:90a:8049:: with SMTP id e9mr8951250pjw.229.1638987439188;
+        Wed, 08 Dec 2021 10:17:19 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j17sm4020451pfe.174.2021.12.08.10.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 10:17:18 -0800 (PST)
+Date:   Wed, 8 Dec 2021 18:17:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/7] KVM: x86: Move .pmu_ops to kvm_x86_init_ops and
+ tagged as __initdata
+Message-ID: <YbD2q/MhBjm2OMOe@google.com>
+References: <20211108111032.24457-1-likexu@tencent.com>
+ <20211108111032.24457-6-likexu@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108111032.24457-6-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the case that two or more processes share a futex located within
-a shared mmaped region, such as a process that shares a lock between
-itself and a number of child processes, we have observed that when
-a process holding the lock is oom killed, at least one waiter is never
-alerted to this new development and simply continues to wait.
+s/tagged/tag
 
-This is visible via pthreads by checking the __owner field of the
-pthread_mutex_t structure within a waiting process, perhaps with gdb.
+On Mon, Nov 08, 2021, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> The pmu_ops should be moved to kvm_x86_init_ops and tagged as __initdata.
 
-We identify reproduction of this issue by checking a waiting process of
-a test program and viewing the contents of the pthread_mutex_t, taking note
-of the value in the owner field, and then checking dmesg to see if the
-owner has already been killed.
+State what the patch does, not what "should" be done.
 
-This issue can be tricky to reproduce, but with the modifications of
-this small patch, I have found it to be impossible to reproduce. There
-may be additional considerations that I have not taken into account in
-this patch and I welcome any comments and criticism.
+  Now that pmu_ops is copied by value during kvm_arch_hardware_setup(), move
+  the pointer to kvm_x86_init_ops and tag implementations as __initdata to make
+  the implementations unreachable once KVM is loaded, e.g. to make it harder to
+  sneak in post-init modification bugs.
 
-Changes from v1:
-- add comments before calls to futex_exit_release()
+> That'll save those precious few bytes, and more importantly make
+> the original ops unreachable, i.e. make it harder to sneak in post-init
+> modification bugs.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 4 ++--
+>  arch/x86/kvm/svm/pmu.c          | 2 +-
+>  arch/x86/kvm/svm/svm.c          | 2 +-
+>  arch/x86/kvm/vmx/pmu_intel.c    | 2 +-
+>  arch/x86/kvm/vmx/vmx.c          | 2 +-
+>  arch/x86/kvm/x86.c              | 2 +-
+>  6 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index c2d4ee2973c5..00760a3ac88c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1436,8 +1436,7 @@ struct kvm_x86_ops {
+>  	int cpu_dirty_log_size;
+>  	void (*update_cpu_dirty_logging)(struct kvm_vcpu *vcpu);
+>  
+> -	/* pmu operations of sub-arch */
+> -	const struct kvm_pmu_ops *pmu_ops;
+> +	/* nested operations of sub-arch */
 
-Co-developed-by: Nico Pache <npache@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- mm/oom_kill.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+No need for the new comment.
 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 1ddabefcfb5a..884a5f15fd06 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -44,6 +44,7 @@
- #include <linux/kthread.h>
- #include <linux/init.h>
- #include <linux/mmu_notifier.h>
-+#include <linux/futex.h>
- 
- #include <asm/tlb.h>
- #include "internal.h"
-@@ -885,6 +886,11 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
- 	count_vm_event(OOM_KILL);
- 	memcg_memory_event_mm(mm, MEMCG_OOM_KILL);
- 
-+	/*
-+	 * We call futex_exit_release() on the victim task to ensure any waiters on any
-+	 * process-shared futexes held by the victim task are woken up.
-+	 */
-+	futex_exit_release(victim);
- 	/*
- 	 * We should send SIGKILL before granting access to memory reserves
- 	 * in order to prevent the OOM victim from depleting the memory
-@@ -930,6 +936,12 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
- 		 */
- 		if (unlikely(p->flags & PF_KTHREAD))
- 			continue;
-+		/*
-+		 * We call futex_exit_release() on any task p sharing the
-+		 * victim->mm to ensure any waiters on any
-+		 * process-shared futexes held by task p are woken up.
-+		 */
-+		futex_exit_release(p);
- 		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
- 	}
- 	rcu_read_unlock();
--- 
-2.27.0
+>  	const struct kvm_x86_nested_ops *nested_ops;
+>  
+>  	/*
 
+Nits aside,
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+I'd also be a-ok squashing this with the copy-by-value patch.

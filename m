@@ -2,89 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE6246CFEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02C846CFF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbhLHJWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbhLHJWM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:22:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DAFC061746;
-        Wed,  8 Dec 2021 01:18:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AE7BB8200D;
-        Wed,  8 Dec 2021 09:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1332C341C3;
-        Wed,  8 Dec 2021 09:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638955117;
-        bh=rdVg3VWa1um6V8JdDhtynquK+COZiesUPvhcitWSMP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hiSpUKqH4tMcBEBYlETNrzFsj29YqW8Lagp1h/wmrAgmhuUykdKHGt+IFomcoWRjv
-         OLVqFmTsBUJgq+FneRJ9j1z8srKV/bfiFi+qJQwquD8KNKjCCUmJJ6jXmHSpOAY0V3
-         9X3e2xcJiAMPkAJN8VYj8jEFcCVZgAoX6WVIuc9NJsF51/aDH1HChMj4snRID2lzDd
-         tb4W+sIk3z4tifR1lzEpk9ZdQnfvL2csMffsokvZUlu4KYgdUdfsJm3O2yf6jpuRf2
-         DIkucb/lcfJF9NpZtiHOrdG1pikkuF64bYTG6a3SGzZaZR1UptUEV92u9Z0okU5NIK
-         PP+KHBJxr4r+A==
-Date:   Wed, 8 Dec 2021 11:18:33 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbB4aYK4fOESbbMl@unreal>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
- <YbBZuwXZWMV9uRXI@kroah.com>
- <YbBwSV2IwDHNUrFH@google.com>
+        id S231140AbhLHJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:23:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:54960 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229687AbhLHJXr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:23:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E75FED1;
+        Wed,  8 Dec 2021 01:20:15 -0800 (PST)
+Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87A663F5A1;
+        Wed,  8 Dec 2021 01:20:13 -0800 (PST)
+Date:   Wed, 8 Dec 2021 10:20:10 +0100
+From:   Morten Rasmussen <morten.rasmussen@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] base: arch_topology: Use policy->max to calculate
+ freq_factor
+Message-ID: <20211208091513.GB5838@e123083-lin>
+References: <20211115201010.68567-1-thara.gopinath@linaro.org>
+ <CAJZ5v0gezoJZVH69Y7fDwa-uLhE0PaqFrzM=0bequxpE_749zg@mail.gmail.com>
+ <8f7397e3-4e92-c84d-9168-087967f4d683@arm.com>
+ <CAJZ5v0iRDtr5yae5UndwU2SmVL4cak=BN0irVGbgNzQiS8K3mA@mail.gmail.com>
+ <af59de78-49b0-d2e6-4bf0-7c897c2fccb1@linaro.org>
+ <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
+ <20211202105027.GA1180274@e123083-lin>
+ <CAJZ5v0hRvsoEZj45OWe34uhAPj+J1rJWq5Wff4R0f_BYEuU5wA@mail.gmail.com>
+ <20211203094734.GA5838@e123083-lin>
+ <CAJZ5v0iGa=YErmDgLPCO1h=gOjkD6sRVonqPEUN1uf8sxpQ0qQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbBwSV2IwDHNUrFH@google.com>
+In-Reply-To: <CAJZ5v0iGa=YErmDgLPCO1h=gOjkD6sRVonqPEUN1uf8sxpQ0qQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
-> On Wed, 08 Dec 2021, Greg KH wrote:
+On Fri, Dec 03, 2021 at 04:07:30PM +0100, Rafael J. Wysocki wrote:
+> On Fri, Dec 3, 2021 at 10:48 AM Morten Rasmussen
+> <morten.rasmussen@arm.com> wrote:
+> >
+> > On Thu, Dec 02, 2021 at 05:31:53PM +0100, Rafael J. Wysocki wrote:
+> > > On Thu, Dec 2, 2021 at 11:50 AM Morten Rasmussen
+> > > <morten.rasmussen@arm.com> wrote:
+> > > >
+> > > > On Wed, Nov 17, 2021 at 06:59:05PM +0100, Rafael J. Wysocki wrote:
+> > > > > On Wed, Nov 17, 2021 at 6:01 PM Thara Gopinath
+> > > > > <thara.gopinath@linaro.org> wrote:
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > On 11/17/21 7:49 AM, Rafael J. Wysocki wrote:
+> > > > > > > On Wed, Nov 17, 2021 at 11:46 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> > > > > > >>
+> > > > > > >> Hi Rafael,
+> > > > > > >>
+> > > > > > >> On 11/16/21 7:05 PM, Rafael J. Wysocki wrote:
+> > > > > > >>> On Mon, Nov 15, 2021 at 9:10 PM Thara Gopinath
+> > > > > > >>> <thara.gopinath@linaro.org> wrote:
+> > > > > > >>>>
+> > > > > > >>>> cpuinfo.max_freq can reflect boost frequency if enabled during boot.  Since
+> > > > > > >>>> we don't consider boost frequencies while calculating cpu capacities, use
+> > > > > > >>>> policy->max to populate the freq_factor during boot up.
+> > > > > > >>>
+> > > > > > >>> I'm not sure about this.  schedutil uses cpuinfo.max_freq as the max frequency.
+> > > > > > >>
+> > > > > > >> Agree it's tricky how we treat the boost frequencies and also combine
+> > > > > > >> them with thermal pressure.
+> > > > > > >> We probably would have consider these design bits:
+> > > > > > >> 1. Should thermal pressure include boost frequency?
+> > > > > > >
+> > > > > > > Well, I guess so.
+> > > > > > >
+> > > > > > > Running at a boost frequency certainly increases thermal pressure.
+> > > > > > >
+> > > > > > >> 2. Should max capacity 1024 be a boost frequency so scheduler
+> > > > > > >>      would see it explicitly?
+> > > > > > >
+> > > > > > > That's what it is now if cpuinfo.max_freq is a boost frequency.
+> > > > > > >
+> > > > > > >> - if no, then schedutil could still request boost freq thanks to
+> > > > > > >>     map_util_perf() where we add 25% to the util and then
+> > > > > > >>     map_util_freq() would return a boost freq when util was > 1024
+> > > > > > >>
+> > > > > > >>
+> > > > > > >> I can see in schedutil only one place when cpuinfo.max_freq is used:
+> > > > > > >> get_next_freq(). If the value stored in there is a boost,
+> > > > > > >> then don't we get a higher freq value for the same util?
+> > > > > > >
+> > > > > > > Yes. we do, which basically is my point.
+> > > > > > >
+> > > > > > > The schedutil's response is proportional to cpuinfo.max_freq and that
+> > > > > > > needs to be taken into account for the results to be consistent.
+> > > > > >
+> > > > > > So IIUC, cpuinfo.max_freq is always supposed to be the highest supported
+> > > > > > frequency of a cpu, irrespective of whether boost is enabled or not.
+> > > > > > Where as policy->max is the currently available maximum cpu frequency
+> > > > > > which can be equal to cpuinfo.max_freq or lower (depending on whether
+> > > > > > boost is enabled, whether there is a constraint on policy->max placed by
+> > > > > > thermal etc).
+> > > > >
+> > > > > It may also depend on the limit set by user space.
+> > > > >
+> > > > > > So in this case isn't it better for schedutil to consider
+> > > > > > policy->max instead of cpuinfo.max ?
+> > > > >
+> > > > > Not really.
+> > > > >
+> > > > > In that case setting policy->max to 1/2 of cpuinfo.max_freq would
+> > > > > cause schedutil to choose 1/4 of cpuinfo.max_freq for 50% utilization
+> > > > > which would be rather unexpected.
+> > > > >
+> > > > > policy->max is a cap, not the current maximum capacity.
+> > > > >
+> > > > > > Like you mentioned above same
+> > > > > > utilization will relate to different frequencies depending on the
+> > > > > > maximum frequency.
+> > > > >
+> > > > > Which is not how it is expected (and defined) to work, though.
+> > > > >
+> > > > > If you really want to play with the current maximum capacity, you need
+> > > > > to change it whenever boost is disabled or enabled - and there is a
+> > > > > mechanism for updating cpufinfo.max_freq in such cases.
+> > > >
+> > > > I don't see why we would want to change max capacity on the fly. It is
+> > > > not a cheap operation as we would need to normalize the capacity for all
+> > > > CPUs if the CPU(s) with capacity = 1024 changes its capacity. Worst case
+> > > > we even have to rebuild the sched_domain hierarchy to update flags. The
+> > > > update would also temporarily mess with load and utilization signals, so
+> > > > not a cheap operation.
+> > >
+> > > I didn't say it was cheap. :-)
+> >
+> > You didn't :-) But I thought it was worth pointing out in case someone
+> > would think we need to constantly renormalize to the highest achievable
+> > performance level taking all factors into account, including thermal
+> > capping.
+> >
+> > > However, boost frequencies are not disabled and enabled very often, so
+> > > it may be acceptable to do it then.  I actually don't know.
+> >
+> > Agree.
+> >
+> > >
+> > > The point is that if you set the max capacity to correspond to the max
+> > > boosted perf and it is never reached (because boost is disabled), the
+> > > scaling will cause CPUs to appear as underutilized, but in fact there
+> > > is no spare capacity in the system.
+> >
+> > We kind of have the problem already with thermal capping but addressed
+> > it by having the thermal pressure signal to indicate the some of the
+> > capacity is unavailable. Perhaps the thermal pressure signal should be extended
+> > to cover all reasons for capacity being unavailable, or we should have
+> > another signal to track boost frequencies not being delivered, manually
+> > disabled or not possible due to system circumstances?
 > 
-> > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > > Adds get/set driver data helpers for auxiliary devices.
-> > > > 
-> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > > ---
-> > > > V2
-> > > >   - No changes
-> > > > 
-> > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > > >  1 file changed, 10 insertions(+)
-> > > 
-> > > I would really like to see an explanation why such obfuscation is really
-> > > needed. dev_*_drvdata() is a standard way to access driver data.
+> Well, even without boost frequencies, the capacity that's effectively
+> available may not be the advertised max.  For example,
+> scaling_max_freq may be set below the advertised max value (and that's
+> applied after the governor has produced its output), there may be
+> power capping in place etc.
 > 
-> I wouldn't call it obfuscation, but it does looks like abstraction for
-> the sake of abstraction, which I usually push back on.  What are the
-> technical benefits over using the dev_*() variant?
+> Taking the thermal pressure in particular into account helps to reduce
+> it, but that may just be part of the difference between the advertised
+> max and the effectively available perf, and not even the dominating
+> one for that matter.
+> 
+> And boost frequencies complicate the picture even further, because
+> they are more-or-less unsustainable and as a rule there's no
+> information on how sustainable they are or how much time it takes to
+> get to the max boost perf (and that may be configurable even).
+> 
+> So IMO the advertised max ought to be treated as the upper bound in
+> general, but it makes sense to adjust it when it is known to be too
+> large and it may stay so forever (which is the case when boost
+> frequencies are disabled).
 
-You can see it in Greg's answer, there is no technical benefits in any
-variant. It is simple copy/paste pattern from other buses.
+I agree that max performance level should be treated as upper bound.
+Thermal capping help us somewhat to figure out the currently achievable
+performance level. Removing disabled boost levels would help too. There
+might still be quite a gap between requested and delivered performance
+though.
 
-Maybe it is not clear from my response, I don't care if this patch is
-going to be applied or not, but I would like to hear someone explains
-to me what are the benefits of such one liners.
+> 
+> > > Conversely, if the max capacity corresponds to the max non-boost perf
+> > > and boost is used very often, the scaling will cause the CPUs to
+> > > appear to be 100% loaded, but there may be still spare capacity in the
+> > > system.
+> >
+> > It is even worse than that. Allowing delivered performance to exceed the
+> > CPU capacity will break utilization scale invariance at it will make
+> > per-task utilization appear smaller than it really is potentially
+> > leading to wrong task placement.
+> >
+> > I think we have to ensure that the full performance range is visible to
+> > the OS. If part of it is often unachievable we need to track the gap
+> > between requested and delivered performance and somehow take that into
+> > account when making task placement decisions.
+> 
+> I generally agree, but let me say that correlating what was asked for
+> with the delivered perf need not be straightforward.
 
-Thanks
+Yes, it won't necessarily be very accurate. I'm just wondering if we can
+do better than only taking thermal capping and maybe disabled boost
+levels into account? Tracking delivered vs requested performance avoids
+the problem of having to deal explicitly with every kind of mechanism
+that can reduce delivered performance. Delivered performance can't be
+taken as a true upper limit for performance as it might change very
+quickly.
+
+Morten

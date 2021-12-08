@@ -2,87 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A10F46D343
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9C446D348
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbhLHMaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:30:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34660 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbhLHMaS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:30:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27B01B8206E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 12:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD04C00446;
-        Wed,  8 Dec 2021 12:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638966404;
-        bh=iFjSFhkXEyxlnYAr/ODxxAw9epQ2Ot80zBQC4xTiaII=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uQpDeFMp2HkzA2TbniWCOgjE0aMxCmfdey+jmExH0cjDQruwPr81bUsQrD4Mb1zmZ
-         GxSlFs+EwjnLgVaWm6Hp47FEL9gH5Q99+apqytCOniHgdqXZnM3jHPDl/48SAzBZAi
-         pDLn4hXTu0O+5nTOVPAxHAKNUUJ2fOsdBjQfxYLL83FVaa3CVBaRQFIwlhLzZeFkaV
-         WVwDROa+s+VxRTUOvl0eKOT9bkJW5txwHr5YeHBer0+yUkAsmTt9JMy7rZ55wN2y2x
-         qh3nqS08euO5Bs6duWo8lodovRK2zn7B75nr0zFp5Lz+qjSS1q5gek7oKILrzEEZTv
-         kXolHs/lDoNuQ==
-Date:   Wed, 8 Dec 2021 21:26:38 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Ananth N Mavinakayanahalli <ananth@linux.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 8/9] ARM: kprobes: Make a frame pointer on
- __kretprobe_trampoline
-Message-Id: <20211208212638.e269d1282175c1b51014cc1e@kernel.org>
-In-Reply-To: <CAK8P3a1m01-BZRjtMwV3qPbx0H9SyuL0BgLvTXbHMxdgN1Ky9Q@mail.gmail.com>
-References: <163477765570.264901.3851692300287671122.stgit@devnote2>
-        <163477772593.264901.7405996794526239017.stgit@devnote2>
-        <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
-        <CAMj1kXF3ZQ__trDo4PDfBmJsNoiqBkNB2CLK5pTFARTEYzDOzw@mail.gmail.com>
-        <CAK8P3a1m01-BZRjtMwV3qPbx0H9SyuL0BgLvTXbHMxdgN1Ky9Q@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S233322AbhLHMcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:32:39 -0500
+Received: from mga02.intel.com ([134.134.136.20]:3829 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233310AbhLHMci (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 07:32:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225077611"
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="225077611"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 04:29:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,297,1635231600"; 
+   d="scan'208";a="461674587"
+Received: from mylly.fi.intel.com (HELO [10.237.72.56]) ([10.237.72.56])
+  by orsmga003.jf.intel.com with ESMTP; 08 Dec 2021 04:29:05 -0800
+Message-ID: <a0ac314f-9e9d-7749-6f22-fd3e44372288@linux.intel.com>
+Date:   Wed, 8 Dec 2021 14:29:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH v1 01/11] i2c: Introduce common module to instantiate CCGx
+ UCSI
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>
+References: <20211207192159.41383-1-andriy.shevchenko@linux.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20211207192159.41383-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Dec 2021 13:08:46 +0100
-Arnd Bergmann <arnd@arndb.de> wrote:
-
-> On Sat, Dec 4, 2021 at 9:45 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > Does this help?
+On 12/7/21 21:21, Andy Shevchenko wrote:
+> Introduce a common module to provide an API to instantiate UCSI device
+> for Cypress CCGx Type-C controller. Individual bus drivers need to select
+> this one on demand.
 > 
-> Yes, this fixes it, thanks for the quick help!
-
-Thanks Ard and Arnd!
-BTW, would you know what kconfig item warns this issue, or is it only
-with gcc-11?
-I would like to build the same environment.
-
-Thank you,
-
-
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/i2c/busses/Kconfig         |  7 +++++++
+>   drivers/i2c/busses/Makefile        |  3 +++
+>   drivers/i2c/busses/i2c-ccgx-ucsi.c | 27 +++++++++++++++++++++++++++
+>   drivers/i2c/busses/i2c-ccgx-ucsi.h | 11 +++++++++++
+>   4 files changed, 48 insertions(+)
+>   create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.c
+>   create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.h
 > 
->        Arnd
+I've mixed feelings about this set. I'd either put patches 3-8 first 
+since e.g. 6/11 and 8/11 are fixing existing issues or even better to 
+split CCGx UCSI stuff into another set.
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Jarkko

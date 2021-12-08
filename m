@@ -2,704 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31CD46DA9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF0846DAA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbhLHSD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238424AbhLHSDz (ORCPT
+        id S238503AbhLHSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:04:48 -0500
+Received: from mail-pl1-f170.google.com ([209.85.214.170]:39650 "EHLO
+        mail-pl1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238424AbhLHSEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:03:55 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE7CC061746;
-        Wed,  8 Dec 2021 10:00:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: adalessandro)
-        with ESMTPSA id 943451F45A0E
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638986422; bh=XCm28hU9HPWkmkaUPQpW0Hj5YSqPLSwjey8J57GSNrA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KxZqEHE7HWDVOD5q/ofvJ7mIYXMI1Db0IwjuNk50OufbjyqlB+tJvwFkM6+8MTqDI
-         CV3fJGIhPdgl11C8j0P83STE9RMSi3+3XWH12PqcRvYX3tGCuLf+ik+LyDtI4RmRXC
-         VPv1Vf51NFtCRf+BeIj9aEDO7CxzrMlR/rpq6kIqxyMGawGNVIJrLS3pe/XpfrEdCp
-         fuDmDseHF8Q3IxkY0t21MK3LEXyZXhy1bGielDgdlD9+buwYzemGpFlnjYs3ncfNjr
-         R8z24920b2gb3KNzhjflrh1vjsVgdM8rOmDJc+UfbfKCGryjWE15uaPJtwh1/D8XvB
-         txLJsxVkTeWJg==
-Subject: Re: [PATCH v2 3/5] arm64: dts: imx8mn-bsh-smm-s2/pro: Add iMX8MN BSH
- SMM S2 boards
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        festevam@gmail.com, ioana.ciornei@nxp.com,
-        jagan@amarulasolutions.com, kernel@pengutronix.de, krzk@kernel.org,
-        linux-imx@nxp.com, matt@traverse.com.au, matteo.lisi@engicam.com,
-        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
-        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        tharvey@gateworks.com
-References: <20211123151252.143631-1-ariel.dalessandro@collabora.com>
- <20211123151252.143631-4-ariel.dalessandro@collabora.com>
- <20211206012933.GN4216@dragon>
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-Message-ID: <d75386b3-6e2a-a779-6da2-9ceb892f22a2@collabora.com>
-Date:   Wed, 8 Dec 2021 15:00:10 -0300
+        Wed, 8 Dec 2021 13:04:45 -0500
+Received: by mail-pl1-f170.google.com with SMTP id z6so2037662plk.6;
+        Wed, 08 Dec 2021 10:01:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VYwIdPbXqoC3VUlE+dykVHDfu7/qH13P4YyQqv994k8=;
+        b=g5v1npGG5wthz4l3XhB/Df72E6Q/mUpWz9cfiIeqsO20RXqDqf4I/I9RhKDmLOHN2B
+         yPJVCGm+b8NJA7vcWzKr/ww28hIZjJc6AOEqILZPwsq3AEYTvGk6kpT3zWRNAViGS0RP
+         mQzppJj5FV4POBgF50LcyrfvylMs/qLF2qTQr2Og2XQMfFdoPWFj/Vrb6EmFZTZzZRfo
+         v7BHaKG2yrGqq/8CCr6qwLLZYEfyDJyAsFQFoSJPWa5fHJ/YOHh4pjQ2fjIFCGUPnHz5
+         9UCJlGPTWI4sygCTUMnSwoI5Kg1WtoltG5caA24yNj0Zty2WScKNc1WLdm7caT6jme6D
+         2apg==
+X-Gm-Message-State: AOAM5302Tlp+RZ+I9TsKW+raLYrpcHzmzQSOfqkuvZFJeOChF6fYAWtN
+        iHEMOhHn2cg1HMMfSPV1Koo=
+X-Google-Smtp-Source: ABdhPJyWdTR1kukLPFUc0+bEuKxPPtofXhY2WCTKmse6N7kuXe3PckkHVGq6KGpHI2ncIc/5oy7tsA==
+X-Received: by 2002:a17:902:e550:b0:142:2673:d873 with SMTP id n16-20020a170902e55000b001422673d873mr61255635plf.5.1638986472328;
+        Wed, 08 Dec 2021 10:01:12 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:18af:8865:db7e:6769])
+        by smtp.gmail.com with ESMTPSA id pg13sm3577873pjb.8.2021.12.08.10.01.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 10:01:11 -0800 (PST)
+Subject: Re: [PATCH v2 5/8] docs: sysfs-block: document stable_writes
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+References: <20211208005640.102814-1-ebiggers@kernel.org>
+ <20211208005640.102814-6-ebiggers@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <7d9f9469-5347-780a-c560-77fca6e7008b@acm.org>
+Date:   Wed, 8 Dec 2021 10:01:10 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211206012933.GN4216@dragon>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211208005640.102814-6-ebiggers@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shawn,
+On 12/7/21 4:56 PM, Eric Biggers wrote:
+> +What:		/sys/block/<disk>/queue/stable_writes
+> +Date:		September 2020
+> +Contact:	linux-block@vger.kernel.org
+> +Description:
+> +		[RW] If the device requires that memory must not be modified
+> +		while it is being written out to disk, this file will contain
+> +		'1'.  Otherwise it will contain '0'.  This file is writable for
+> +		testing purposes.
 
-Thanks a lot for the review.
+Hmm ... doesn't this attribute apply to the process of transferring data from
+host memory to the device instead of to writing to the disk? Whether data goes
+to the storage device cache or to the storage medium itself depends on attributes
+like FUA.
 
-On 12/5/21 10:29 PM, Shawn Guo wrote:
-> On Tue, Nov 23, 2021 at 12:12:50PM -0300, Ariel D'Alessandro wrote:
->> Introduce BSH SystemMaster (SMM) S2 board family, which consists of:
->> iMX8MN SMM S2 and iMX8MN SMM S2 PRO boards.
->>
->> Add support for iMX8MN BSH SMM S2 board:
->>
->> - 256 MiB DDR3 RAM
->> - 512 MiB NAND
->> - Megabit Ethernet PHY
->> - Wi-Fi 802.11 a/b/g/n/ac with Bluetooth 5.0
->> - USB-OTG (peripheral mode)
->>
->> Add support for iMX8MN BSH SMM S2 PRO board:
->>
->> - 512 MiB DDR3 RAM
->> - 8 GiB eMMC
->> - Megabit Ethernet PHY
->> - Wi-Fi 802.11 a/b/g/n/ac with Bluetooth 5.0
->> - USB-OTG (peripheral mode)
->>
->> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
->> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
->> ---
->>  arch/arm64/boot/dts/freescale/Makefile        |   2 +
->>  .../freescale/imx8mn-bsh-smm-s2-common.dtsi   | 426 ++++++++++++++++++
->>  .../boot/dts/freescale/imx8mn-bsh-smm-s2.dts  |  48 ++
->>  .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    |  80 ++++
->>  4 files changed, 556 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
->>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
->>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
->>
->> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
->> index a14a6173b765..c3e01c94ff7f 100644
->> --- a/arch/arm64/boot/dts/freescale/Makefile
->> +++ b/arch/arm64/boot/dts/freescale/Makefile
->> @@ -47,6 +47,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
->> +dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2.dtb
->> +dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2pro.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
->>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
->> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
->> new file mode 100644
->> index 000000000000..a49528e1601c
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
->> @@ -0,0 +1,426 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright 2021 Collabora Ltd.
->> + * Copyright 2021 BSH Hausgeraete GmbH
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "imx8mn.dtsi"
->> +
->> +/ {
->> +	chosen {
->> +		stdout-path = &uart4;
->> +	};
->> +
->> +	fec_supply: fec_supply_en {
-> 
-> Hyphen is recommended in node name.
+Thanks,
 
-Fixed in v3.
-
-> 
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "tja1101_en";
->> +		regulator-min-microvolt = <3300000>;
->> +		regulator-max-microvolt = <3300000>;
->> +		gpio = <&gpio2 20 GPIO_ACTIVE_HIGH>;
->> +		vin-supply = <&buck4_reg>;
->> +		enable-active-high;
-> 
-> Put it right below 'gpio' line.
-
-Fixed in v3.
-
-> 
->> +	};
->> +
->> +	usdhc2_pwrseq: usdhc2_pwrseq {
->> +		compatible = "mmc-pwrseq-simple";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_usdhc2_pwrseq>;
->> +		reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>;
->> +	};
->> +};
->> +
->> +&A53_0 {
->> +	cpu-supply = <&buck2_reg>;
->> +};
->> +
->> +&A53_1 {
->> +	cpu-supply = <&buck2_reg>;
->> +};
->> +
->> +&A53_2 {
->> +	cpu-supply = <&buck2_reg>;
->> +};
->> +
->> +&A53_3 {
->> +	cpu-supply = <&buck2_reg>;
->> +};
->> +
->> +&ecspi2 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_espi2>;
->> +	status = "okay";
->> +};
->> +
->> +&fec1 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_fec1>;
->> +	phy-mode = "rmii";
->> +	phy-handle = <&ethphy0>;
->> +	phy-supply = <&fec_supply>;
->> +	fsl,magic-packet;
->> +	status = "okay";
->> +
->> +	mdio {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		ethphy0: ethernet-phy@0 {
->> +			compatible = "ethernet-phy-ieee802.3-c22";
->> +			reg = <0>;
->> +			reset-gpios = <&gpio1 29 GPIO_ACTIVE_LOW>;
->> +			reset-assert-us = <20>;
->> +			reset-deassert-us = <2000>;
->> +		};
->> +	};
->> +};
->> +
->> +&i2c1 {
->> +	clock-frequency = <400000>;
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_i2c1>;
->> +	status = "okay";
->> +
->> +	bd71847: pmic@4b {
->> +		compatible = "rohm,bd71847";
->> +		reg = <0x4b>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_pmic>;
->> +		interrupt-parent = <&gpio1>;
->> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
->> +		rohm,reset-snvs-powered;
->> +
->> +		#clock-cells = <0>;
->> +		clocks = <&osc_32k 0>;
->> +		clock-output-names = "clk-32k-out";
->> +
->> +		regulators {
->> +			buck1_reg: BUCK1 {
->> +				/* PMIC_BUCK1 - VDD_SOC */
->> +				regulator-name = "buck1";
->> +				regulator-min-microvolt = <700000>;
->> +				regulator-max-microvolt = <1300000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +				regulator-ramp-delay = <1250>;
->> +			};
->> +
->> +			buck2_reg: BUCK2 {
->> +				/* PMIC_BUCK2 - VDD_ARM */
->> +				regulator-name = "buck2";
->> +				regulator-min-microvolt = <700000>;
->> +				regulator-max-microvolt = <1300000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +				regulator-ramp-delay = <1250>;
->> +			};
->> +
->> +			buck3_reg: BUCK3 {
->> +				/* PMIC_BUCK5 - VDD_DRAM_VPU_GPU */
->> +				regulator-name = "buck3";
->> +				regulator-min-microvolt = <700000>;
->> +				regulator-max-microvolt = <1350000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			buck4_reg: BUCK4 {
->> +				/* PMIC_BUCK6 - VDD_3V3 */
->> +				regulator-name = "buck4";
->> +				regulator-min-microvolt = <3000000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			buck5_reg: BUCK5 {
->> +				/* PMIC_BUCK7 - VDD_1V8 */
->> +				regulator-name = "buck5";
->> +				regulator-min-microvolt = <1605000>;
->> +				regulator-max-microvolt = <1995000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			buck6_reg: BUCK6 {
->> +				/* PMIC_BUCK8 - NVCC_DRAM */
->> +				regulator-name = "buck6";
->> +				regulator-min-microvolt = <800000>;
->> +				regulator-max-microvolt = <1400000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			ldo1_reg: LDO1 {
->> +				/* PMIC_LDO1 - NVCC_SNVS_1V8 */
->> +				regulator-name = "ldo1";
->> +				regulator-min-microvolt = <1600000>;
->> +				regulator-max-microvolt = <1900000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			ldo2_reg: LDO2 {
->> +				/* PMIC_LDO2 - VDD_SNVS_0V8 */
->> +				regulator-name = "ldo2";
->> +				regulator-min-microvolt = <800000>;
->> +				regulator-max-microvolt = <900000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			ldo3_reg: LDO3 {
->> +				/* PMIC_LDO3 - VDDA_1V8 */
->> +				regulator-name = "ldo3";
->> +				regulator-min-microvolt = <1800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			ldo4_reg: LDO4 {
->> +				/* PMIC_LDO4 - VDD_MIPI_0V9 */
->> +				regulator-name = "ldo4";
->> +				regulator-min-microvolt = <900000>;
->> +				regulator-max-microvolt = <1800000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			ldo6_reg: LDO6 {
->> +				/* PMIC_LDO6 - VDD_MIPI_1V2 */
->> +				regulator-name = "ldo6";
->> +				regulator-min-microvolt = <900000>;
->> +				regulator-max-microvolt = <1800000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&i2c3 {
->> +	clock-frequency = <400000>;
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_i2c3>;
->> +	status = "okay";
->> +};
->> +
->> +&i2c4 {
->> +	clock-frequency = <400000>;
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_i2c4>;
->> +	status = "okay";
->> +};
->> +
->> +&uart2 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_uart2>;
->> +	status = "okay";
->> +};
->> +
->> +&uart3 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_uart3>;
->> +	assigned-clocks = <&clk IMX8MN_CLK_UART3>;
->> +	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_80M>;
->> +	uart-has-rtscts;
->> +	status = "okay";
->> +
->> +	bluetooth {
->> +		compatible = "brcm,bcm43438-bt";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_bluetooth>;
->> +		shutdown-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
->> +		device-wakeup-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
->> +		host-wakeup-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
->> +		max-speed = <3000000>;
->> +	};
->> +};
->> +
->> +/* Console */
->> +&uart4 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_uart4>;
->> +	status = "okay";
->> +};
->> +
->> +&usbotg1 {
->> +	dr_mode = "peripheral";
->> +	disable-over-current;
->> +	status = "okay";
->> +};
->> +
->> +&usdhc2 {
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
->> +	pinctrl-0 = <&pinctrl_usdhc2>;
->> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
->> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
->> +	mmc-pwrseq = <&usdhc2_pwrseq>;
->> +	bus-width = <4>;
->> +	non-removable;
->> +	status = "okay";
->> +
->> +	brcmf: bcrmf@1 {
->> +		compatible = "brcm,bcm4329-fmac";
->> +		reg = <1>;
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_wlan>;
->> +		interrupt-parent = <&gpio1>;
->> +		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
->> +		interrupt-names = "host-wake";
->> +	};
->> +};
->> +
->> +&wdog1 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_wdog>;
->> +	fsl,ext-reset-output;
->> +	status = "okay";
->> +};
->> +
->> +&iomuxc {
->> +	pinctrl_espi2: espi2grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK            0x082
->> +			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI            0x082
->> +			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO            0x082
->> +			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
->> +		>;
->> +	};
->> +
->> +	pinctrl_i2c1: i2c1grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_I2C1_SCL_I2C1_SCL			0x400000c2
->> +			MX8MN_IOMUXC_I2C1_SDA_I2C1_SDA			0x400000c2
->> +		>;
->> +	};
->> +
->> +	pinctrl_i2c3: i2c3grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_I2C3_SCL_I2C3_SCL			0x400000c2
->> +			MX8MN_IOMUXC_I2C3_SDA_I2C3_SDA			0x400000c2
->> +		>;
->> +	};
->> +
->> +	pinctrl_i2c4: i2c4grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_I2C4_SCL_I2C4_SCL			0x400000c2
->> +			MX8MN_IOMUXC_I2C4_SDA_I2C4_SDA			0x400000c2
->> +		>;
->> +	};
->> +
->> +	pinctrl_pmic: pmicirq {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_GPIO1_IO03_GPIO1_IO3		0x040
->> +		>;
->> +	};
->> +
->> +	pinctrl_uart4: uart4grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_UART4_RXD_UART4_DCE_RX		0x040
->> +			MX8MN_IOMUXC_UART4_TXD_UART4_DCE_TX		0x040
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc2_pwrseq: usdhc2pwrseqgrp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SAI2_MCLK_GPIO4_IO27		0x040	/* WL_REG_ON */
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc2: usdhc2grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x090
->> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d0
->> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d0
->> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d0
->> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d0
->> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d0
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc2_100mhz: usdhc2grp100mhz {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x094
->> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d4
->> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d4
->> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d4
->> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d4
->> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d4
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc2_200mhz: usdhc2grp200mhz {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x096
->> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d6
->> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d6
->> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d6
->> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d6
->> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d6
->> +		>;
->> +	};
->> +
->> +	pinctrl_wlan: wlangrp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x0d6	/* GPIO_0 - WIFI_GPIO_0 */
->> +			MX8MN_IOMUXC_GPIO1_IO08_GPIO1_IO8		0x0d6	/* GPIO_1 - WIFI_GPIO_1 */
->> +			MX8MN_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x0d6	/* BT_GPIO_5 - WIFI_GPIO_5 */
->> +			MX8MN_IOMUXC_SPDIF_RX_GPIO5_IO4			0x0d6	/* I2S_CLK - WIFI_GPIO_6 */
->> +		>;
->> +	};
->> +
->> +	pinctrl_uart2: uart2grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_UART2_RXD_UART2_DCE_RX		0x040
->> +			MX8MN_IOMUXC_UART2_TXD_UART2_DCE_TX		0x040
->> +		>;
->> +	};
->> +
->> +	pinctrl_uart3: uart3grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_UART3_TXD_UART3_DCE_TX		0x040
->> +			MX8MN_IOMUXC_UART3_RXD_UART3_DCE_RX		0x040
->> +			MX8MN_IOMUXC_ECSPI1_MISO_UART3_DCE_CTS_B	0x040
->> +			MX8MN_IOMUXC_ECSPI1_SS0_UART3_DCE_RTS_B		0x040
->> +		>;
->> +	};
->> +
->> +	pinctrl_bluetooth: bluetoothgrp {
-> 
-> Out of alphabetical order.
-
-Fixed in v3.
-
-> 
-> Shawn
-> 
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_GPIO1_IO15_GPIO1_IO15		0x044	/* BT_REG_ON */
->> +			MX8MN_IOMUXC_ENET_TD3_GPIO1_IO18		0x046	/* BT_DEV_WAKE */
->> +			MX8MN_IOMUXC_ENET_RD2_GPIO1_IO28		0x090	/* BT_HOST_WAKE */
->> +		>;
->> +	};
->> +
->> +	pinctrl_wdog: wdoggrp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B		0x046
->> +		>;
->> +	};
->> +
->> +	pinctrl_fec1: fec1grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_ENET_MDC_ENET1_MDC			0x002
->> +			MX8MN_IOMUXC_ENET_MDIO_ENET1_MDIO		0x002
->> +			MX8MN_IOMUXC_ENET_RD0_ENET1_RGMII_RD0		0x090
->> +			MX8MN_IOMUXC_ENET_RD1_ENET1_RGMII_RD1		0x090
->> +			MX8MN_IOMUXC_ENET_RXC_ENET1_RX_ER		0x090
->> +			MX8MN_IOMUXC_ENET_TD0_ENET1_RGMII_TD0		0x016
->> +			MX8MN_IOMUXC_ENET_TD1_ENET1_RGMII_TD1		0x016
->> +			MX8MN_IOMUXC_ENET_TD2_ENET1_TX_CLK		0x016
->> +			MX8MN_IOMUXC_ENET_TX_CTL_ENET1_RGMII_TX_CTL	0x016
->> +			MX8MN_IOMUXC_ENET_RX_CTL_ENET1_RGMII_RX_CTL	0x090
->> +			MX8MN_IOMUXC_ENET_TXC_ENET1_TX_ER		0x016
->> +			MX8MN_IOMUXC_SD2_CD_B_GPIO2_IO12		0x150	/* RMII_INT - ENET_INT */
->> +			MX8MN_IOMUXC_SD2_WP_GPIO2_IO20			0x150	/* RMII_EN - ENET_EN */
->> +			MX8MN_IOMUXC_SD2_RESET_B_GPIO2_IO19		0x016	/* RMII_WAKE - GPIO_ENET_WAKE */
->> +			MX8MN_IOMUXC_ENET_RD3_GPIO1_IO29		0x016	/* RMII_RESET - GPIO_ENET_RST */
->> +		>;
->> +	};
->> +};
->> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
->> new file mode 100644
->> index 000000000000..33f98582eace
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
->> @@ -0,0 +1,48 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright 2021 Collabora Ltd.
->> + * Copyright 2021 BSH Hausgeraete GmbH
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "imx8mn-bsh-smm-s2-common.dtsi"
->> +
->> +/ {
->> +	model = "BSH SMM S2";
->> +	compatible = "bsh,imx8mn-bsh-smm-s2", "fsl,imx8mn";
->> +
->> +	memory@40000000 {
->> +		device_type = "memory";
->> +		reg = <0x0 0x40000000 0x0 0x10000000>;
->> +	};
->> +};
->> +
->> +&gpmi {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_gpmi_nand>;
->> +	nand-on-flash-bbt;
->> +	status = "okay";
->> +};
->> +
->> +&iomuxc {
->> +	pinctrl_gpmi_nand: gpmi-nand {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_NAND_ALE_RAWNAND_ALE		0x00000096
->> +			MX8MN_IOMUXC_NAND_CE0_B_RAWNAND_CE0_B		0x00000096
->> +			MX8MN_IOMUXC_NAND_CLE_RAWNAND_CLE		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA00_RAWNAND_DATA00		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA01_RAWNAND_DATA01		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA02_RAWNAND_DATA02		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA03_RAWNAND_DATA03		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA04_RAWNAND_DATA04		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA05_RAWNAND_DATA05		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA06_RAWNAND_DATA06		0x00000096
->> +			MX8MN_IOMUXC_NAND_DATA07_RAWNAND_DATA07		0x00000096
->> +			MX8MN_IOMUXC_NAND_RE_B_RAWNAND_RE_B		0x00000096
->> +			MX8MN_IOMUXC_NAND_READY_B_RAWNAND_READY_B	0x00000056
->> +			MX8MN_IOMUXC_NAND_WE_B_RAWNAND_WE_B		0x00000096
->> +			MX8MN_IOMUXC_NAND_WP_B_RAWNAND_WP_B		0x00000096
->> +		>;
->> +	};
->> +};
->> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
->> new file mode 100644
->> index 000000000000..c6a8ed6745c1
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
->> @@ -0,0 +1,80 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright 2021 Collabora Ltd.
->> + * Copyright 2021 BSH Hausgeraete GmbH
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "imx8mn-bsh-smm-s2-common.dtsi"
->> +
->> +/ {
->> +	model = "BSH SMM S2 PRO";
->> +	compatible = "bsh,imx8mn-bsh-smm-s2pro", "fsl,imx8mn";
->> +
->> +	memory@40000000 {
->> +		device_type = "memory";
->> +		reg = <0x0 0x40000000 0x0 0x20000000>;
->> +	};
->> +};
->> +
->> +/* eMMC */
->> +&usdhc1 {
->> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
->> +	pinctrl-0 = <&pinctrl_usdhc1>;
->> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
->> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
->> +	bus-width = <8>;
->> +	non-removable;
->> +	status = "okay";
->> +};
->> +
->> +&iomuxc {
->> +	pinctrl_usdhc1: usdhc1grp {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
->> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d0
->> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d0
->> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x090
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000094
->> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d4
->> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d4
->> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x094
->> +		>;
->> +	};
->> +
->> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
->> +		fsl,pins = <
->> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000096
->> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d6
->> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d6
->> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x096
->> +		>;
->> +	};
->> +};
->> -- 
->> 2.30.2
->>
-
-Regards,
-Ariel
+Bart.

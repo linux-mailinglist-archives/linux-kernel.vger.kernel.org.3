@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF2646C930
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EBA46C93D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243048AbhLHAmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S242909AbhLHAm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238724AbhLHAlr (ORCPT
+        with ESMTP id S242995AbhLHAlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:41:47 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E31C0698C8;
-        Tue,  7 Dec 2021 16:38:09 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id k4so569564pgb.8;
-        Tue, 07 Dec 2021 16:38:09 -0800 (PST)
+        Tue, 7 Dec 2021 19:41:50 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B476C061746;
+        Tue,  7 Dec 2021 16:38:12 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id h24so740492pjq.2;
+        Tue, 07 Dec 2021 16:38:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5gmXyyY9vTjgG6NNFdPthaMWLoPgaSufYqbs7mIvW+A=;
-        b=MwXiuJ/b0gxSL1j7FSe+siBazA1GRaPlNa02gOcObhcQ2YZtGmDEwbgYTOwqSf0jBc
-         di2unhIxUnJDEnjD7xX8UYfh0Te9VZ1upgG1ah39TDPl4oMki2h3gqLWn61Y7RsX5nzm
-         CsBtBfJIKtD2R18dFn20zhgVexcPSt5WmPyexUD8lUxcZXCRpX2VQSRrKNaEHu65BkI5
-         F4QzYhnU0XPoK9edBGIB8g76I7G1f7DljvedBUFc+Ilm4tbxNLkVFa4y8hVtBxZzzSU3
-         hPXU0sOIe5Jq521oy3BdQfQrd/3z8Y8gPqKbUdWD7bVNzJUXzksnh8Jv3UwT949teiKz
-         baxQ==
+        bh=lWLp0FHWwgS2RqUsytUTgTzk16sQKrqviKuiWZaiYOo=;
+        b=AZK8MKZ3uaoX14tgiQTawpe9good0zorcQOvO35ByjZgHgPKgtW8TSv46ryWj2sIos
+         l9vSQIk0qaL1s3GmTwTZrnWI145gml/eXvG0h8RZKJSkF4Gt0ouXg76C7VlNIiZDb3/v
+         VLU1yzidNSfk9Bt7bn4IdgEF9bA4mts1epsur7GJz6f3dzPj3uw7BVBnq2j8vN0jmQ+F
+         utiIrUb6pY+AVKjZhW89hQdHE1jy9XToWyoy6gGmlzCl5L/jlxGAAe5NdETKpOk88B+V
+         BldTmw3MdSz7fQC/zIjL7UU5zsXi77znx9AN6y8askp6gMlqHi4jFTCNaO3KSQv37CXq
+         DDuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5gmXyyY9vTjgG6NNFdPthaMWLoPgaSufYqbs7mIvW+A=;
-        b=NIJ8ahFsAme5ltet9oNZMRofinBVFDy0LfZI9pVs5E2Uj/FhziYq35we7vm6O6P9wj
-         xwJZr+jZJxIEUfdg+JUkjMZ+JtQfp+OU81B+Xh/rzyUtt9/y+9YGVLJuVlcQtJg4cR5Z
-         1Cy2OG0WQ3K/nNyIo/xkZhlS/WOrfrL8YQp3/slbs/RPmWe2Ugi1B1vaHmaB94zoqwlR
-         Ax1pJUwDufAMfsGbe91pP/aOEpPwzfaDDVX5kTp1cXdv/Skmt6mIqTjadPpiXLmNQxcs
-         n1DWLC2bZTXIj1KAuB93ZjVWv3+M9/sgzMo3vbZ7Rt+5XwM/ocXtLdeM2RkYPynD4Kxe
-         baNg==
-X-Gm-Message-State: AOAM533VqA7vvPEUzNc1UA/ww589E2ekTEun7uvsSJibkrpAz584bswS
-        nIEn1XHeSkNN6xYT1Vt9oV7i4GGXf9M=
-X-Google-Smtp-Source: ABdhPJx6I0VqsO9majNCKhWXpr8k35E34Ms8KS9sAJ7063yo0qrrL+bJYyd926Lh7ftQolw1HzYm7Q==
-X-Received: by 2002:a63:1d15:: with SMTP id d21mr26467833pgd.541.1638923888037;
-        Tue, 07 Dec 2021 16:38:08 -0800 (PST)
+        bh=lWLp0FHWwgS2RqUsytUTgTzk16sQKrqviKuiWZaiYOo=;
+        b=Bdfg70iJm6WaxHRM1lr8X2PWYFaHk5KrBGUwB037cixID8STXEA3KRsbUhdulUU3ie
+         r7C/Ai2r7AwwCgo7T1PxJBiJKJJHaPy0gMVecGucObOX3XWPIEHBKsOLXoIh8Uk2+MAs
+         F+CJQxxWP191/W6HFvH6lj64HdEwtg58NbSoNUh3YpoSliKjFhsxfgmrUU7TmqEXQSbA
+         lU9dOQiDCZxCiIWIVTKbtNs+98LYvpFDBOPNToL5g7gMbF0xODx3kKGnhDqkissjjzkI
+         l4bLfmBTtjqfJKpcYSPLujc8FcDgYDnc1+tACdjUbfMobRhhzRmLMnKvp+6If9eTZUC6
+         wZbA==
+X-Gm-Message-State: AOAM533SD/HIhAMN2XZzW4KltisvvISi3CbIuGdYwXmhH7PVz4s5tJ5F
+        yZA0/OpA0q2C+aGpQRGfdm4amZIIS0g=
+X-Google-Smtp-Source: ABdhPJx5ei4rA9QeHZ9ueZVRMOHZYxS0oo146YGITxD3zAB+cRn6GtLTBsA4R8BwbZ0bpWRWcuahiQ==
+X-Received: by 2002:a17:902:c7c2:b0:143:bdf7:1670 with SMTP id r2-20020a170902c7c200b00143bdf71670mr54962164pla.61.1638923891321;
+        Tue, 07 Dec 2021 16:38:11 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.05
+        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:38:07 -0800 (PST)
+        Tue, 07 Dec 2021 16:38:10 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v3 10/15] dt-bindings: rng: Convert iProc RNG200 to YAML
-Date:   Tue,  7 Dec 2021 16:37:21 -0800
-Message-Id: <20211208003727.3596577-11-f.fainelli@gmail.com>
+Subject: [PATCH v3 11/15] dt-bindings: thermal: Convert Broadcom TMON to YAML
+Date:   Tue,  7 Dec 2021 16:37:22 -0800
+Message-Id: <20211208003727.3596577-12-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211208003727.3596577-1-f.fainelli@gmail.com>
 References: <20211208003727.3596577-1-f.fainelli@gmail.com>
@@ -102,74 +102,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom iProc RNG200 HWRNG Device Tree binding to YAML to
-help with validation.
+Convert the Broadcom AVS TMON Device Tree binding to YAML to help with
+validation.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/rng/brcm,iproc-rng200.txt        | 16 ----------
- .../bindings/rng/brcm,iproc-rng200.yaml       | 29 +++++++++++++++++++
- 2 files changed, 29 insertions(+), 16 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
- create mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
+ .../bindings/thermal/brcm,avs-tmon.txt        | 23 --------
+ .../bindings/thermal/brcm,avs-tmon.yaml       | 57 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 58 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
 
-diff --git a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
+diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt b/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
 deleted file mode 100644
-index 802523196ee5..000000000000
---- a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
+index 74a9ef09db8b..000000000000
+--- a/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
 +++ /dev/null
-@@ -1,16 +0,0 @@
--HWRNG support for the iproc-rng200 driver
+@@ -1,23 +0,0 @@
+-* Broadcom STB thermal management
+-
+-Thermal management core, provided by the AVS TMON hardware block.
 -
 -Required properties:
--- compatible : Must be one of:
--	       "brcm,bcm2711-rng200"
--	       "brcm,bcm7211-rng200"
--	       "brcm,bcm7278-rng200"
--	       "brcm,iproc-rng200"
--- reg : base address and size of control register block
+-- compatible: must be one of:
+-	"brcm,avs-tmon-bcm7216"
+-	"brcm,avs-tmon-bcm7445"
+-	"brcm,avs-tmon"
+-- reg: address range for the AVS TMON registers
+-- interrupts: temperature monitor interrupt, for high/low threshold triggers,
+-	      required except for "brcm,avs-tmon-bcm7216"
+-- interrupt-names: should be "tmon"
 -
 -Example:
 -
--rng {
--        compatible = "brcm,iproc-rng200";
--        reg = <0x18032000 0x28>;
--};
-diff --git a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
+-	thermal@f04d1500 {
+-		compatible = "brcm,avs-tmon-bcm7445", "brcm,avs-tmon";
+-		reg = <0xf04d1500 0x28>;
+-		interrupts = <0x6>;
+-		interrupt-names = "tmon";
+-		interrupt-parent = <&avs_host_l2_intc>;
+-	};
+diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
 new file mode 100644
-index 000000000000..53baaec966e0
+index 000000000000..fb5c273b8bc2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
-@@ -0,0 +1,29 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/rng/brcm,iproc-rng200.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/thermal/brcm,avs-tmon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: HWRNG support for the iproc-rng200 driver
++title: Broadcom STB thermal management
++
++description: Thermal management core, provided by the AVS TMON hardware block.
 +
 +maintainers:
 +  - Florian Fainelli <f.fainelli@gmail.com>
 +
++allOf:
++  - $ref: thermal-sensor.yaml#
++
 +properties:
 +  compatible:
-+    enum:
-+      - brcm,bcm2711-rng200
-+      - brcm,bcm7211-rng200
-+      - brcm,bcm7278-rng200
-+      - brcm,iproc-rng200
++    oneOf:
++      - items:
++          - enum:
++              - brcm,avs-tmon-bcm7216
++              - brcm,avs-tmon-bcm7445
++          - const: brcm,avs-tmon
++
 +  reg:
-+    description: base address and size of control register block
++    maxItems: 1
++    description: >
++      Address range for the AVS TMON registers
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-names:
++    items:
++      - const: tmon
++
++  "#thermal-sensor-cells":
++    const: 0
 +
 +additionalProperties: false
 +
++required:
++  - compatible
++  - reg
++  - "#thermal-sensor-cells"
++
 +examples:
 +  - |
-+    rng@18032000 {
-+        compatible = "brcm,iproc-rng200";
-+        reg = <0x18032000 0x28>;
-+    };
++     thermal@f04d1500 {
++          compatible = "brcm,avs-tmon-bcm7445", "brcm,avs-tmon";
++          reg = <0xf04d1500 0x28>;
++          interrupts = <0x6>;
++          interrupt-names = "tmon";
++          interrupt-parent = <&avs_host_l2_intc>;
++          #thermal-sensor-cells = <0>;
++     };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9ac67c885159..2109b6fe8ea3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3936,7 +3936,7 @@ M:	Markus Mayer <mmayer@broadcom.com>
+ M:	bcm-kernel-feedback-list@broadcom.com
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
++F:	Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
+ F:	drivers/thermal/broadcom/brcmstb*
+ 
+ BROADCOM STB DPFE DRIVER
 -- 
 2.25.1
 

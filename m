@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB7046DAD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E50F46DAD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbhLHSRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:17:08 -0500
-Received: from mail-eopbgr80070.outbound.protection.outlook.com ([40.107.8.70]:33924
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231643AbhLHSRH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:17:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qj0yJO7s/RrQ0aevJvDz94Qpl+yoEpTtXokaTWUABr9+G3oBeYEMt90cfafqJQQSr9Eh0ujbi/VUorVlNibGhrb0odQMIFCU6miFeb91CDILBwyee+/72xiK3cY0D/1u8AS/LOPFIFScVqRaj13590bJYjObhWjqeWxy9weVxMLzT4g6YAqp1cCXP9ZYkNeKOHyidP2/pp3aDAOCDHqm5p6vqzYnUooZJIyTpmnl5wb+VuMuBeBJLGxrljLXuLE/OoqKA9qLdFmUrAxhQ31RxWIhRqv5rMnt7fuyMbqQ+qNhLR9uwz7yZ/sejnNI67B/8TdEwNWPJlxN9wTfTrT8VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8cJ1s451wCYdgjq0481m61AIsp8P7FjK33vt5GTdJ8=;
- b=JOtS0TdyjGGFeb48wYopzqZ1ivT5sVX+YcmakBmHeS5XL11UYz1ikDYIUVo1crXWUeqBQxjTlICKIX74dhZ4WrtxeKFtZlxbY4ik+ApJnWXaVXKveaX+dKvgQurHZ0DuCMH2gHQ5SmR+QHTOH00r+AshejLiBoEG0pfg8o+6xNc/eZmyvr/prczHGT+HiOrycyYu1cEAmaqm4sq0snYObJVhiMk3WB4qMCe5Ma3lXbkm2fAWJ0ZFVRrIEMpWlxXHVNWBk1sNboGTz36Tos9a/O0KeNVBZ4sHE99INxUROJY7SzFvA97/zMDbY9z5/ZrZBwHq/kw2SeUjP+CcYHbKow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8cJ1s451wCYdgjq0481m61AIsp8P7FjK33vt5GTdJ8=;
- b=ZmlLNvE50+lNtLl4fpfqUK/R3Bw61tUzDVMa3OiY/BNAj73TzU9OUE1iE8lyzaOs2W7BxWmp9UQA7xFc663VyzfCz4UTgJi9XolerLAKVH0EAS/Pj7abJPAB9+xvBoNwNceeaX94uMshzudRerMKTTXFq2BWLYjBBWTpxL1iGv4=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR04MB4224.eurprd04.prod.outlook.com (2603:10a6:803:49::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
- 2021 18:13:32 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::796e:38c:5706:b802]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::796e:38c:5706:b802%3]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
- 18:13:32 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-CC:     Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: dsa: felix: Fix memory leak in
- felix_setup_mmio_filtering
-Thread-Topic: [PATCH] net: dsa: felix: Fix memory leak in
- felix_setup_mmio_filtering
-Thread-Index: AQHX7F4qnyegL3pl/ECfN7gf9i1i1awo5eCA
-Date:   Wed, 8 Dec 2021 18:13:32 +0000
-Message-ID: <20211208181331.ptgtxg77yiz2zgb5@skbuf>
-References: <20211208180509.32587-1-jose.exposito89@gmail.com>
-In-Reply-To: <20211208180509.32587-1-jose.exposito89@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 91cee374-0377-43bc-e682-08d9ba7671b5
-x-ms-traffictypediagnostic: VI1PR04MB4224:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB4224DCC6D1AB231F01F0DCB1E06F9@VI1PR04MB4224.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vDvkKCjJ0tybEV2W9f9b28vS8egaMv+yGP7NgyX2bf9hS49DBA1af2iayUT4hTjlGwmfoFsKKrQRL9bdktjPhZ9Plo7nl4dSSB98DBRx6XrwnN4sI2XDZ+jESe1EiWLZd3TFYahIJsQgIcaXNx1mTmbJ+NZTufIU5Y3bkCE7MEr//I8LZ2NupGU9FaWgKDnPu15gDEDjx+tXk0q3wrvDmd2xN+jN62aZ330GX8xVT8gn/ivCMLGwAwBAwF0AppUoPTFptQEDrGVh339sJ1idMH38vt3Kooww1MbzlJt56SVE///P0L658Mkm/UIlw65RC+DinYWI0bfGz7Zel8lJ/MfFZQpznl9OZp044taLPks40S0bMc2TPrr+3Arn0bQ0BKO4eaguw2RLk4i4NFrhliXGWHgTBi4zOR7HcoSZSwZybgEdiKTfPUe+nN5yCB4d10HZz+TLJhjVo27Y6gTjnyuZY6kAATiHQU3Av6EhDZKBqLtJNSzx2anuL4/qvte00kaqdALHCmTPASIANMx60nUp7oReyrge22wZdB5GPe8qeXkEIOLNGfPlVx0MHqjec1xr49xAhr8bcnCWFrqT8Xez5dk5ciW18sHzegL96CVC9wbNSh13VUL38U19wjSpVhiaynPshsqvmq4AvXCmqagkgHxOlIqjiLx9jo7kmG1zFjHAPU+xcABiYfo470VwzzV41l8Xr6WRYrz1ZTo/UEa7bnZUFvniHhxG1N+nAqrBuj72/1VRT5hhLHF9JaRcl2PZF60A4bm7XIjDO/EbREmPzMPHBdC2QeyYFPHFOyU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(54906003)(316002)(76116006)(38070700005)(44832011)(508600001)(83380400001)(91956017)(7416002)(122000001)(38100700002)(66946007)(66574015)(66476007)(186003)(6916009)(5660300002)(66556008)(6506007)(4326008)(33716001)(66446008)(9686003)(6486002)(64756008)(71200400001)(86362001)(8676002)(8936002)(2906002)(1076003)(966005)(6512007)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?aXIhUDh6KrwksJ/+53jFnYerL/KReHqYGU79SWZmQRMBbBFbpewmV6zWvN?=
- =?iso-8859-1?Q?Nt6jEU+3Loxan1a70dk2/2YBSMvhkPZ8X9FIgjpfwC0cZsUR0hSTf8fsDX?=
- =?iso-8859-1?Q?gsa5+CiGtskj8w3wNUtkYxZFwq084kRxOJhiH+lMd4auHQaq+MqSasU6n3?=
- =?iso-8859-1?Q?YOqRJfPTw/iPCxUyUSR8sFAb4zGIfVShoV6oRYSFh8l4toshe82dIJw2hw?=
- =?iso-8859-1?Q?xN7EsmYL77fGLkfO4DZWTV8MBTIHPmV75mP3sFO89jjV2qCjWJuRQSJc+b?=
- =?iso-8859-1?Q?UXv443KRkmiFqKEanqIY9m4wXxwR6DwRKxkVbUpwOGZf44PNVl3gYQO9Wh?=
- =?iso-8859-1?Q?NJZM0ETCj5B/aK3wHv9Lo469GNnuuWWhO3pimRf495K48dsmu8BXVOUmv7?=
- =?iso-8859-1?Q?SJnSgCbqE+jeSG7MVrNzHevp2BrQVZhYRtfpb7tT/7f556XoH1Zn3iv2IT?=
- =?iso-8859-1?Q?a50iPcTOhPXJvJWh0PfR/upFwRofETlnDnfE80fkT9tfdA4EZQyVmoV2tK?=
- =?iso-8859-1?Q?6+2u5uO2YTQiVQYEBAwoxgj54rxkWtsLabwgHmps2Ro0Kop7tyS7fJ0TOr?=
- =?iso-8859-1?Q?K7E0dHBaySK/hzfH5ZXemKWPmggywJU+TX8ZCCm2K2yjgLYPHhmfX7z+xV?=
- =?iso-8859-1?Q?MI3R/0JL1souSVRJjshw8yID37f4Cr5pfLB0By0MFOho2tbRlr2vesPF1j?=
- =?iso-8859-1?Q?Q0Vzbw1f8zrmTSlL7Pnu9XhD9082UNAw9z4JlK4MVrKlvDC+a/FYtBQTdf?=
- =?iso-8859-1?Q?zCoPacNY0lAbTs+kcungluL7aybxIMvn1igg4oG6k36OU9V+a6pO/bUlYy?=
- =?iso-8859-1?Q?kTeAAFWN9NbJqhghuL83wzmKHhJLF6FMRhGIqKvIKoNlbdfhfbhJOpSRNI?=
- =?iso-8859-1?Q?TThZaOVUpcx9nZoF9cnC6KO2TatNuAdgFqxjH1c5qPXJxe0lsJToPSOhxh?=
- =?iso-8859-1?Q?Z2FOvQdaWq/3N77ZuTYJr6A2OOfOiNNA/fIZGWZ8ZYG0mWbhZpsrFjs0gv?=
- =?iso-8859-1?Q?jmuYTFCUM+nGPKAjmTT4tMXja3v1DZOwUHZlnQSFrwnzYsFPekAsPo2n0/?=
- =?iso-8859-1?Q?08Mc66Pxir8+M7qIH0OmckS9zkUAZnY37v12iZ1F0FUByghFbwSyCuA9GA?=
- =?iso-8859-1?Q?X4xX582eMah1FCECjSBG/5yztLlHWc5E5nAjUPAjybahyK3bhMSvs6jbMZ?=
- =?iso-8859-1?Q?yDG2d3Cv0Rh9zD6+KBZ09S7mP+h/ENWsisftiT2SWqbWlIO4iLtItV2EIL?=
- =?iso-8859-1?Q?vsGeQV5IDuE+Qdf6fp+GMC6UrrvVo4RKRMjM+pcdNkYxeDgEs+9kbcD+wz?=
- =?iso-8859-1?Q?KJFUSnlSs2cjkBM+QS6uKUz4shMMqFalvjER1TzpUrQ4KYMCuILu4N6Hzz?=
- =?iso-8859-1?Q?sPen5fwYxkAvZALCXSHYnY9WQX577xzOxrHAefqrHKY4aghBHfyZZ3Jk0+?=
- =?iso-8859-1?Q?AOMte6VvxvdhlmtBYw5xU0cEmp7u0Ht7XOTpzQM9SpBaAwgfvE38OEWgxF?=
- =?iso-8859-1?Q?8PMEyp9viSBeg2NxfBOnm3/dgpIefdJvkf6g2G08Ge8uWYVOOYnGa09wqr?=
- =?iso-8859-1?Q?Xvr89qJKg77TQRjtBZjBm35Ku39InS5yr56dbGTLclyiJRDUUrBkUq+Yry?=
- =?iso-8859-1?Q?DiaF0SBS5k+G9dNB0dSArsh8Sl59SS4p+pGMXgEJfAgb1rEDoirHoqz6J2?=
- =?iso-8859-1?Q?nJMpnFc+0wMKXHUMo0M=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <5497136E15ABA4419CCA8F8D0A85ACCD@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S238735AbhLHSRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238716AbhLHSRf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:17:35 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECCC061746;
+        Wed,  8 Dec 2021 10:14:02 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id t5so11427370edd.0;
+        Wed, 08 Dec 2021 10:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=mcPtzo6Mc48uKJRt67ru8n5CsPPRYIExPhncNpI7X2U=;
+        b=goXuzERkzrBi7PF/ABRAY1JlIs3T/p3DGwgarHIhPWMngpKnVtN9muwoQuIhthQ1NN
+         zu0CBT1/MlwJRmmtEDNGxf/ZHeEC2rBDjr4kFQgoJrfo8Na+hSQaiCi5PGwBaEOV/mH6
+         vAHhFmrqiM5gTqW6X7u2X/qt1ZjzNHcjkH9KjJK1pVeIAfvZ6MCBnRAwRQHjMigg6yA5
+         H1zZ76N2M9rUbzVSvbxpPNI8ePx7NKLGarBs4ocit/b4hUz0P26Gamqe2cC/ttpmgTfU
+         bkLgZDkKDpmQkDUn66gsWxvnUl4dg2G0gP8lNiefnKFHwPWoAofoN/uspG8Fz4d3YO+Q
+         0Wvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mcPtzo6Mc48uKJRt67ru8n5CsPPRYIExPhncNpI7X2U=;
+        b=OU0/mbSvuDGZijCpQE95b5rvONPMY9t1PWvMlrFWcQ0bDgniZr6XqVpa3ougUbmfdC
+         6xWBzw4XI7mOxSVjC6d7iMxNQjehpgWFdHJGwSfxTDqmVvPOqgGLuVkrFl92joPLVseE
+         0KOV5+YzouMZjS8guZ4CAhctc+FkxOGpYw+71hn3LEudFQBtZ7WsWWpH+vN9zgXFjCRt
+         mfq1Ix4DDxCZdUK4V2jNBDTwYosJDx9nxkgStUF5rf1R/pR7gnWEUEjX4f50rrTolq1h
+         r2hI6xPD/Mv5VoqeGksGE5MLV7sByorpace2e1CWnkj+HqniO2f15pVClAoHloQfpBBB
+         KpmQ==
+X-Gm-Message-State: AOAM530kkHPxr02HRzstc2L1OvrVdAMWsQdbWbI5dzlRvcfLwN4iFq0d
+        GuFmLXZ3J2uSXvrHwptQqdg=
+X-Google-Smtp-Source: ABdhPJwKPHdX+gzCJKNjuLehVfaV7WepeVwMXkhb/qivYPPrqm60yAGGQkEMaewHZREDIhU8WsEcSQ==
+X-Received: by 2002:a17:906:4793:: with SMTP id cw19mr9065810ejc.387.1638987241581;
+        Wed, 08 Dec 2021 10:14:01 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.128.29])
+        by smtp.gmail.com with ESMTPSA id o8sm2616767edc.25.2021.12.08.10.14.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 10:14:00 -0800 (PST)
+Message-ID: <02bcc03a-f5e1-bc7d-b4f1-323dd4495080@gmail.com>
+Date:   Wed, 8 Dec 2021 18:14:01 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91cee374-0377-43bc-e682-08d9ba7671b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 18:13:32.5039
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0hMOBGU+zoyVns1YjF5MlsPeypfi14Y4fWXJ5SRgYgs4hVBFwQ9iYSsjFzJz40HVBoI9dGhnyaVMGZvJKDEkRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4224
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_submit_one
+Content-Language: en-US
+To:     syzbot <syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, bcrl@kvack.org, linux-aio@kvack.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+References: <000000000000ad0e4105d29b6b0f@google.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <000000000000ad0e4105d29b6b0f@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 07:05:09PM +0100, Jos=E9 Exp=F3sito wrote:
-> Addresses-Coverity-ID: 1492897 ("Resource leak")
-> Addresses-Coverity-ID: 1492899 ("Resource leak")
-> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
-> ---
+On 12/8/21 05:04, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit 54a88eb838d37af930c9f19e1930a4fba6789cb5
+> Author: Pavel Begunkov <asml.silence@gmail.com>
+> Date:   Sat Oct 23 16:21:32 2021 +0000
+> 
+>      block: add single bio async direct IO helper
 
-Impossible memory leak, I might add, because DSA will error out much
-soon if there isn't any CPU port defined:
-https://elixir.bootlin.com/linux/v5.15.7/source/net/dsa/dsa2.c#L374
-I don't think I should have added the "if (cpu < 0)" check at all, but
-then it would have raised other flags, about BIT(negative number) or
-things like that. I don't know what's the best way to deal with this?
+Looks that's the same George reported yesterday, a fix is queued:
+https://git.kernel.dk/cgit/linux-block/commit/?h=block-5.16&id=75feae73a28020e492fbad2323245455ef69d687
 
-Anyway, in case we find no better alternative:
+#syz fix: block: fix single bio async DIO error handling
 
-Fixes: 8d5f7954b7c8 ("net: dsa: felix: break at first CPU port during init =
-and teardown")
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
->  drivers/net/dsa/ocelot/felix.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/feli=
-x.c
-> index 327cc4654806..f1a05e7dc818 100644
-> --- a/drivers/net/dsa/ocelot/felix.c
-> +++ b/drivers/net/dsa/ocelot/felix.c
-> @@ -290,8 +290,11 @@ static int felix_setup_mmio_filtering(struct felix *=
-felix)
->  		}
->  	}
-> =20
-> -	if (cpu < 0)
-> +	if (cpu < 0) {
-> +		kfree(tagging_rule);
-> +		kfree(redirect_rule);
->  		return -EINVAL;
-> +	}
-> =20
->  	tagging_rule->key_type =3D OCELOT_VCAP_KEY_ETYPE;
->  	*(__be16 *)tagging_rule->key.etype.etype.value =3D htons(ETH_P_1588);
-> --=20
-> 2.25.1
->=
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1615e2b9b00000
+> start commit:   04fe99a8d936 Add linux-next specific files for 20211207
+> git tree:       linux-next
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1515e2b9b00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1115e2b9b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=4589399873466942
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3587cbbc6e1868796292
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db884db00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e9eabdb00000
+> 
+> Reported-by: syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com
+> Fixes: 54a88eb838d3 ("block: add single bio async direct IO helper")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+
+-- 
+Pavel Begunkov

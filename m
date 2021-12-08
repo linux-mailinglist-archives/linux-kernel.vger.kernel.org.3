@@ -2,162 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DC646D47B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352D146D483
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbhLHNhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:37:01 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29103 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbhLHNhA (ORCPT
+        id S233581AbhLHNip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:38:45 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39276 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230186AbhLHNio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:37:00 -0500
-Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J8J2M1rlSz1DJwS;
-        Wed,  8 Dec 2021 21:30:35 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 21:33:25 +0800
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 21:33:24 +0800
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.020; Wed, 8 Dec 2021 13:33:23 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "eric.auger.pro@gmail.com" <eric.auger.pro@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        zhukeqian <zhukeqian1@huawei.com>
-CC:     "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>,
-        "yi.l.liu@intel.com" <yi.l.liu@intel.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "ashok.raj@intel.com" <ashok.raj@intel.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "peter.maydell@linaro.org" <peter.maydell@linaro.org>,
-        "vivek.gautam@arm.com" <vivek.gautam@arm.com>,
-        wangxingang <wangxingang5@huawei.com>,
-        jiangkunkun <jiangkunkun@huawei.com>,
-        yuzenghui <yuzenghui@huawei.com>,
-        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>,
-        "sumitg@nvidia.com" <sumitg@nvidia.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
-        "zhangfei.gao@gmail.com" <zhangfei.gao@gmail.com>,
-        "vsethi@nvidia.com" <vsethi@nvidia.com>
-Subject: RE: [RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)
-Thread-Topic: [RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)
-Thread-Index: AQHXyx+ynNPh4l6d+UCGL4y4ns48GKwg7BKAgAYnz4CAAAIkgIAACKEAgAG5fXA=
-Date:   Wed, 8 Dec 2021 13:33:22 +0000
-Message-ID: <e78864fff56041848eda08c60e694160@huawei.com>
-References: <20211027104428.1059740-1-eric.auger@redhat.com>
- <ee119b42-92b1-5744-4321-6356bafb498f@linaro.org>
- <7763531a-625d-10c6-c35e-2ce41e75f606@redhat.com>
- <c1e9dd67-0000-28b5-81c0-239ceda560ed@linaro.org>
- <15a9875b-130a-e889-4e13-e063ef2ce4f9@redhat.com>
-In-Reply-To: <15a9875b-130a-e889-4e13-e063ef2ce4f9@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.84.149]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 8 Dec 2021 08:38:44 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B8Cclne025876;
+        Wed, 8 Dec 2021 14:34:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=b7J60CZ4uwTeJQ0u5OzpaoMz6M8+x9zjkJxexO30IRk=;
+ b=aqZItg83GMtGbnmFwvW3j9qQlBHBWfz89uoHpa3RKpGiGAZxvkJqUgASz+ScwILbEC7f
+ ntYoJu0dkoYnO5KHKjgpQsqp0NPg3p2PrhQs+R9zI+rYBZSIiF2KOFTs0M7n9jNgj8+O
+ NmqXVZN3sOed36SWRtAnm/aIeclCteG93wkeG7ZAV/YOFqjJDv9LbZJ00firjJ3UNoMP
+ +z3RzL7M6+9CwD7gU+INJNrUKNZYgSq5A9l5k9s6oojWTxMeKc5yai/g8dJp9YUcVLP0
+ qy+wijSFYVhj544GiCPycClbS1Sjo8xo6TyMOfCUPjGE2LUPgY4AWRW6R/RgYHSEuvJZ 2A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ctrpq9x0n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 14:34:50 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E5C4A10002A;
+        Wed,  8 Dec 2021 14:34:49 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C2C1B2107EE;
+        Wed,  8 Dec 2021 14:34:49 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec
+ 2021 14:34:48 +0100
+Subject: Re: [Linux-stm32] [PATCH v2 1/4] ASoC: dt-bindings: stm32: i2s: add
+ audio-graph-card port
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "Ahmad Fatoum" <a.fatoum@pengutronix.de>
+CC:     Olivier MOYSAN <olivier.moysan@foss.st.com>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>,
+        <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        <alain.volmat@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211125144053.774-1-olivier.moysan@foss.st.com>
+ <20211125144053.774-2-olivier.moysan@foss.st.com>
+ <1637875562.357461.2858318.nullmailer@robh.at.kernel.org>
+ <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com>
+ <Yaf4jiZIp8+ndaXs@robh.at.kernel.org>
+ <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
+ <cf5f994b-aecf-e051-f5c9-4a46e6414207@pengutronix.de>
+ <cb7f19c0-3826-fcc8-227c-982838acf599@foss.st.com>
+ <YbCgSeA1++U82jtn@google.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Message-ID: <fea38140-42be-ece3-b8ea-875ee63f8618@foss.st.com>
+Date:   Wed, 8 Dec 2021 14:34:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <YbCgSeA1++U82jtn@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRXJpYyBBdWdlciBbbWFp
-bHRvOmVyaWMuYXVnZXJAcmVkaGF0LmNvbV0NCj4gU2VudDogMDcgRGVjZW1iZXIgMjAyMSAxMTow
-Ng0KPiBUbzogWmhhbmdmZWkgR2FvIDx6aGFuZ2ZlaS5nYW9AbGluYXJvLm9yZz47IGVyaWMuYXVn
-ZXIucHJvQGdtYWlsLmNvbTsNCj4gaW9tbXVAbGlzdHMubGludXgtZm91bmRhdGlvbi5vcmc7IGxp
-bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGt2bUB2Z2VyLmtlcm5lbC5vcmc7IGt2bWFy
-bUBsaXN0cy5jcy5jb2x1bWJpYS5lZHU7IGpvcm9AOGJ5dGVzLm9yZzsNCj4gd2lsbEBrZXJuZWwu
-b3JnOyByb2Jpbi5tdXJwaHlAYXJtLmNvbTsgamVhbi1waGlsaXBwZUBsaW5hcm8ub3JnOw0KPiB6
-aHVrZXFpYW4gPHpodWtlcWlhbjFAaHVhd2VpLmNvbT4NCj4gQ2M6IGFsZXgud2lsbGlhbXNvbkBy
-ZWRoYXQuY29tOyBqYWNvYi5qdW4ucGFuQGxpbnV4LmludGVsLmNvbTsNCj4geWkubC5saXVAaW50
-ZWwuY29tOyBrZXZpbi50aWFuQGludGVsLmNvbTsgYXNob2sucmFqQGludGVsLmNvbTsNCj4gbWF6
-QGtlcm5lbC5vcmc7IHBldGVyLm1heWRlbGxAbGluYXJvLm9yZzsgdml2ZWsuZ2F1dGFtQGFybS5j
-b207DQo+IFNoYW1lZXJhbGkgS29sb3RodW0gVGhvZGkgPHNoYW1lZXJhbGkua29sb3RodW0udGhv
-ZGlAaHVhd2VpLmNvbT47DQo+IHdhbmd4aW5nYW5nIDx3YW5neGluZ2FuZzVAaHVhd2VpLmNvbT47
-IGppYW5na3Vua3VuDQo+IDxqaWFuZ2t1bmt1bkBodWF3ZWkuY29tPjsgeXV6ZW5naHVpIDx5dXpl
-bmdodWlAaHVhd2VpLmNvbT47DQo+IG5pY29sZW90c3VrYUBnbWFpbC5jb207IGNoZW54aWFuZyAo
-TSkgPGNoZW54aWFuZzY2QGhpc2lsaWNvbi5jb20+Ow0KPiBzdW1pdGdAbnZpZGlhLmNvbTsgbmlj
-b2xpbmNAbnZpZGlhLmNvbTsgdmR1bXBhQG52aWRpYS5jb207DQo+IHpoYW5nZmVpLmdhb0BnbWFp
-bC5jb207IGx1c2hlbm1pbmdAaHVhd2VpLmNvbTsgdnNldGhpQG52aWRpYS5jb20NCj4gU3ViamVj
-dDogUmU6IFtSRkMgdjE2IDAvOV0gU01NVXYzIE5lc3RlZCBTdGFnZSBTZXR1cCAoSU9NTVUgcGFy
-dCkNCj4gDQo+IEhpIFpoYW5nZmVpLA0KPiANCj4gT24gMTIvNy8yMSAxMTozNSBBTSwgWmhhbmdm
-ZWkgR2FvIHdyb3RlOg0KPiA+DQo+ID4NCj4gPiBPbiAyMDIxLzEyLzcg5LiL5Y2INjoyNywgRXJp
-YyBBdWdlciB3cm90ZToNCj4gPj4gSGkgWmhhbmdmZWksDQo+ID4+DQo+ID4+IE9uIDEyLzMvMjEg
-MToyNyBQTSwgWmhhbmdmZWkgR2FvIHdyb3RlOg0KPiA+Pj4gSGksIEVyaWMNCj4gPj4+DQo+ID4+
-PiBPbiAyMDIxLzEwLzI3IOS4i+WNiDY6NDQsIEVyaWMgQXVnZXIgd3JvdGU6DQo+ID4+Pj4gVGhp
-cyBzZXJpZXMgYnJpbmdzIHRoZSBJT01NVSBwYXJ0IG9mIEhXIG5lc3RlZCBwYWdpbmcgc3VwcG9y
-dA0KPiA+Pj4+IGluIHRoZSBTTU1VdjMuDQo+ID4+Pj4NCj4gPj4+PiBUaGUgU01NVXYzIGRyaXZl
-ciBpcyBhZGFwdGVkIHRvIHN1cHBvcnQgMiBuZXN0ZWQgc3RhZ2VzLg0KPiA+Pj4+DQo+ID4+Pj4g
-VGhlIElPTU1VIEFQSSBpcyBleHRlbmRlZCB0byBjb252ZXkgdGhlIGd1ZXN0IHN0YWdlIDENCj4g
-Pj4+PiBjb25maWd1cmF0aW9uIGFuZCB0aGUgaG9vayBpcyBpbXBsZW1lbnRlZCBpbiB0aGUgU01N
-VXYzIGRyaXZlci4NCj4gPj4+Pg0KPiA+Pj4+IFRoaXMgYWxsb3dzIHRoZSBndWVzdCB0byBvd24g
-dGhlIHN0YWdlIDEgdGFibGVzIGFuZCBjb250ZXh0DQo+ID4+Pj4gZGVzY3JpcHRvcnMgKHNvLWNh
-bGxlZCBQQVNJRCB0YWJsZSkgd2hpbGUgdGhlIGhvc3Qgb3ducyB0aGUNCj4gPj4+PiBzdGFnZSAy
-IHRhYmxlcyBhbmQgbWFpbiBjb25maWd1cmF0aW9uIHN0cnVjdHVyZXMgKFNURSkuDQo+ID4+Pj4N
-Cj4gPj4+PiBUaGlzIHdvcmsgbWFpbmx5IGlzIHByb3ZpZGVkIGZvciB0ZXN0IHB1cnBvc2UgYXMg
-dGhlIHVwcGVyDQo+ID4+Pj4gbGF5ZXIgaW50ZWdyYXRpb24gaXMgdW5kZXIgcmV3b3JrIGFuZCBi
-b3VuZCB0byBiZSBiYXNlZCBvbg0KPiA+Pj4+IC9kZXYvaW9tbXUgaW5zdGVhZCBvZiBWRklPIHR1
-bm5lbGluZy4gSW4gdGhpcyB2ZXJzaW9uIHdlIGFsc28gZ2V0DQo+ID4+Pj4gcmlkIG9mIHRoZSBN
-U0kgQklORElORyBpb2N0bCwgYXNzdW1pbmcgdGhlIGd1ZXN0IGVuZm9yY2VzDQo+ID4+Pj4gZmxh
-dCBtYXBwaW5nIG9mIGhvc3QgSU9WQXMgdXNlZCB0byBiaW5kIHBoeXNpY2FsIE1TSSBkb29yYmVs
-bHMuDQo+ID4+Pj4gSW4gdGhlIGN1cnJlbnQgUUVNVSBpbnRlZ3JhdGlvbiB0aGlzIGlzIGFjaGll
-dmVkIGJ5IGV4cG9zaW5nDQo+ID4+Pj4gUk1ScyB0byB0aGUgZ3Vlc3QsIHVzaW5nIFNoYW1lZXIn
-cyBzZXJpZXMgWzFdLiBUaGlzIGFwcHJvYWNoDQo+ID4+Pj4gaXMgUkZDIGFzIHRoZSBJT1JUIHNw
-ZWMgaXMgbm90IHJlYWxseSBtZWFudCB0byBkbyB0aGF0DQo+ID4+Pj4gKHNpbmdsZSBtYXBwaW5n
-IGZsYWcgbGltaXRhdGlvbikuDQo+ID4+Pj4NCj4gPj4+PiBCZXN0IFJlZ2FyZHMNCj4gPj4+Pg0K
-PiA+Pj4+IEVyaWMNCj4gPj4+Pg0KPiA+Pj4+IFRoaXMgc2VyaWVzIChIb3N0KSBjYW4gYmUgZm91
-bmQgYXQ6DQo+ID4+Pj4gaHR0cHM6Ly9naXRodWIuY29tL2VhdWdlci9saW51eC90cmVlL3Y1LjE1
-LXJjNy1uZXN0ZWQtdjE2DQo+ID4+Pj4gVGhpcyBpbmNsdWRlcyBhIHJlYmFzZWQgVkZJTyBpbnRl
-Z3JhdGlvbiAoYWx0aG91Z2ggbm90IG1lYW50DQo+ID4+Pj4gdG8gYmUgdXBzdHJlYW1lZCkNCj4g
-Pj4+Pg0KPiA+Pj4+IEd1ZXN0IGtlcm5lbCBicmFuY2ggY2FuIGJlIGZvdW5kIGF0Og0KPiA+Pj4+
-IGh0dHBzOi8vZ2l0aHViLmNvbS9lYXVnZXIvbGludXgvdHJlZS9zaGFtZWVyX3JtcnJfdjcNCj4g
-Pj4+PiBmZWF0dXJpbmcgWzFdDQo+ID4+Pj4NCj4gPj4+PiBRRU1VIGludGVncmF0aW9uIChzdGls
-bCBiYXNlZCBvbiBWRklPIGFuZCBleHBvc2luZyBSTVJzKQ0KPiA+Pj4+IGNhbiBiZSBmb3VuZCBh
-dDoNCj4gPj4+Pg0KPiBodHRwczovL2dpdGh1Yi5jb20vZWF1Z2VyL3FlbXUvdHJlZS92Ni4xLjAt
-cm1yLXYyLW5lc3RlZF9zbW11djNfdjEwDQo+ID4+Pj4gKHVzZSBpb21tdT1uZXN0ZWQtc21tdXYz
-IEFSTSB2aXJ0IG9wdGlvbikNCj4gPj4+Pg0KPiA+Pj4+IEd1ZXN0IGRlcGVuZGVuY3k6DQo+ID4+
-Pj4gWzFdIFtQQVRDSCB2NyAwLzldIEFDUEkvSU9SVDogU3VwcG9ydCBmb3IgSU9SVCBSTVIgbm9k
-ZQ0KPiA+Pj4gVGhhbmtzIGEgbG90IGZvciB1cGdyYWRpbmcgdGhlc2UgcGF0Y2hlcy4NCj4gPj4+
-DQo+ID4+PiBJIGhhdmUgYmFzaWNhbGx5IHZlcmlmaWVkIHRoZXNlIHBhdGNoZXMgb24gSGlTaWxp
-Y29uIEt1bnBlbmc5MjAuDQo+ID4+PiBBbmQgaW50ZWdyYXRlZCB0aGVtIHRvIHRoZXNlIGJyYW5j
-aGVzLg0KPiA+Pj4gaHR0cHM6Ly9naXRodWIuY29tL0xpbmFyby9saW51eC1rZXJuZWwtdWFkay90
-cmVlL3VhY2NlLWRldmVsLTUuMTYNCj4gPj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9MaW5hcm8vcWVt
-dS90cmVlL3Y2LjEuMC1ybXItdjItbmVzdGVkX3NtbXV2M192MTANCj4gPj4+DQo+ID4+PiBUaG91
-Z2ggdGhleSBhcmUgcHJvdmlkZWQgZm9yIHRlc3QgcHVycG9zZSwNCj4gPj4+DQo+ID4+PiBUZXN0
-ZWQtYnk6IFpoYW5nZmVpIEdhbyA8emhhbmdmZWkuZ2FvQGxpbmFyby5vcmc+DQo+ID4+IFRoYW5r
-IHlvdSB2ZXJ5IG11Y2guIEFzIHlvdSBtZW50aW9uZWQsIHVudGlsIHdlIGRvIG5vdCBoYXZlIHRo
-ZQ0KPiA+PiAvZGV2L2lvbW11IGludGVncmF0aW9uIHRoaXMgaXMgbWFpbnRhaW5lZCBmb3IgdGVz
-dGluZyBwdXJwb3NlLiBUaGUgU01NVQ0KPiA+PiBjaGFuZ2VzIHNob3VsZG4ndCBiZSBtdWNoIGlt
-cGFjdGVkIHRob3VnaC4NCj4gPj4gVGhlIGFkZGVkIHZhbHVlIG9mIHRoaXMgcmVzcGluIHdhcyB0
-byBwcm9wb3NlIGFuIE1TSSBiaW5kaW5nIHNvbHV0aW9uDQo+ID4+IGJhc2VkIG9uIFJNUlJzIHdo
-aWNoIHNpbXBsaWZ5IHRoaW5ncyBhdCBrZXJuZWwgbGV2ZWwuDQo+ID4NCj4gPiBDdXJyZW50IFJN
-UlIgc29sdXRpb24gcmVxdWlyZXMgdWVmaSBlbmFibGVkLA0KPiA+IGFuZCBRRU1VX0VGSS5mZMKg
-IGhhcyB0byBiZSBwcm92aWRlZCB0byBzdGFydCBxZW11Lg0KPiA+DQo+ID4gQW55IHBsYW4gdG8g
-c3VwcG9ydCBkdGIgYXMgd2VsbCwgd2hpY2ggd2lsbCBiZSBzaW1wbGVyIHNpbmNlIG5vIG5lZWQN
-Cj4gPiBRRU1VX0VGSS5mZCBhbnltb3JlLg0KPiBZZXMgdGhlIHNvbHV0aW9uIGlzIGJhc2VkIG9u
-IEFDUEkgSU9SVCBub2Rlcy4gTm8gY2x1ZSBpZiBzb21lIERUDQo+IGludGVncmF0aW9uIGlzIHVu
-ZGVyIHdvcmsuIFNoYW1lZXI/DQoNClRoZXJlIHdhcyBzb21lIGF0dGVtcHQgaW4gdGhlIHBhc3Qg
-dG8gY3JlYXRlIGlkZW50aXR5IG1hcHBpbmdzIHVzaW5nIERULg0KVGhpcyBpcyB0aGUgbGF0ZXN0
-IEkgY2FuIGZpbmQgb24gaXQsDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1pb21tdS9Z
-VGVsREh4MlJFSUl2ViUyRk5Ab3JvbWUuZnJpdHouYm94L1QvDQoNClRoYW5rcywNClNoYW1lZXIN
-Cg0K
+On 12/8/21 1:08 PM, Lee Jones wrote:
+> On Wed, 08 Dec 2021, Alexandre TORGUE wrote:
+> 
+>> Hi Ahmad
+>>
+>> On 12/7/21 2:59 PM, Ahmad Fatoum wrote:
+>>> Hello Alex,
+>>>
+>>> On 07.12.21 14:52, Alexandre TORGUE wrote:
+>>>> Hi Rob
+>>>>
+>>>> On 12/1/21 11:34 PM, Rob Herring wrote:
+>>>>> On Fri, Nov 26, 2021 at 11:25:27AM +0100, Olivier MOYSAN wrote:
+>>>>>> Hi Rob,
+>>>>>>
+>>>>>> On 11/25/21 10:26 PM, Rob Herring wrote:
+>>>>>>> On Thu, 25 Nov 2021 15:40:50 +0100, Olivier Moysan wrote:
+>>>>>>>> The STM2 I2S DAI can be connected via the audio-graph-card.
+>>>>>>>> Add port entry into the bindings.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+>>>>>>>> ---
+>>>>>>>>      Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 5 +++++
+>>>>>>>>      1 file changed, 5 insertions(+)
+>>>>>>>>
+>>>>>>>
+>>>>>>> Running 'make dtbs_check' with the schema in this patch gives the
+>>>>>>> following warnings. Consider if they are expected or the schema is
+>>>>>>> incorrect. These may not be new warnings.
+>>>>>>>
+>>>>>>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+>>>>>>> This will change in the future.
+>>>>>>>
+>>>>>>> Full log is available here: https://patchwork.ozlabs.org/patch/1559750
+>>>>>>>
+>>>>>>>
+>>>>>>> audio-controller@4000b000: 'port' does not match any of the regexes: '^port@[0-9]', 'pinctrl-[0-9]+'
+>>>>>>>       arch/arm/boot/dts/stm32mp157a-dk1.dt.yaml
+>>>>>>>       arch/arm/boot/dts/stm32mp157c-dk2.dt.yaml
+>>>>>>>
+>>>>>>
+>>>>>> This warning is not a new one.
+>>>>>>
+>>>>>> The i2s2 node in stm32mp15xx-dkx.dtsi would require the following binding:
+>>>>>> port:
+>>>>>>       $ref: audio-graph-port.yaml#
+>>>>>>       unevaluatedProperties: false
+>>>>>>
+>>>>>> However the spi binding requires to introduce a unit address:
+>>>>>> patternProperties:
+>>>>>>      '^port@[0-9]':
+>>>>>>        $ref: audio-graph-port.yaml#
+>>>>>>        unevaluatedProperties: false
+>>>>>>
+>>>>>> The warning can be removed by re-ordering the bindings patches in the serie,
+>>>>>> as "additionalProperties: true" makes the check more tolerant on extra
+>>>>>> properties.
+>>>>>
+>>>>> That's never right.
+>>>>>
+>>>>>> The patch "ASoC: dt-bindings: stm32: i2s: add audio-graph-card port" can
+>>>>>> even be merely dropped.
+>>>>>> So, I suggest to resend the serie without audio-graph-card patch.
+>>>>>
+>>>>> Only if you aren't using audio-graph-card.
+>>>>>
+>>>>>>
+>>>>>> Does it sound too permissive to you ?
+>>>>>
+>>>>> I think perhaps you need to combine the schemas into 1. Or you need to
+>>>>> restructure your dtsi files such that you only add spi specific
+>>>>> properties when spi mode is enabled and only add i2s specific properties
+>>>>> when i2s mode is enabled. Or use the /delete-property/ directive.
+>>>>
+>>>> Initially the aim of this series was to fix a "make W=1" warnings seen on spi and i2s nodes (duplicate unit-address). Moving both nodes in a common node + using a different compatible depending on SPI or I2S usage sounded good) but it is not enough. In this series the common node is named as following: "spi2s2: spi@4000b000". It is fine for a spi usage but if we want to use this "common node" with I2S compatible and specific bindings, the node name remains spi@... and then specific spi checks are done. For this with this series applied we got this issue reported by spi-controller.yaml:
+>>>>
+>>>> spi@4000b000: port@0: 'compatible' is a required property
+>>>>
+>>>> So, if we use two separates nodes we got W=1 warning and if we use a common node we got yaml check issue. One possibility would be to use a common node with a new node name (for example i2spi@...) but I think it is not acceptable.
+>>>>
+>>>> How to progress ?
+>>>
+>>> Atmel Flexcom can be configured to be either UART, SPI or i2c. Functions
+>>> are child nodes of the flexcom node and the MFD driver matching against it,
+>>> just configure the operating mode and then calls of_platform_populate.
+>>>
+>>> Would something along these lines fit here as well?
+>>
+>> Yes it could but in my mind it was not a MFD as both feature cannot be used
+>> at the same time: it is either SPI or I2S and choice is done "statically" in
+>> device tree depending board usage.
+>>
+>> Lee, what it is your feeling about that ? Will you accept to add a MFD
+>> driver for this SPI/I2S peripheral whose prurpose is only to populate child
+>> node (either SPI or I2S) ?
+> 
+>  From your description, this doesn't sound like a good fit for MFD.
+
+Thanks Lee for your quick answer. So rename the node frop spi@... to 
+i2spi@... (or something else) looks like to be the only solution. 
+Depending the compatible used the well schema will be used (if well 
+referenced in each stm32 spi and i2s yaml files):
+
+--> spi-controller.yaml in case of "st,stm32h7-spi"
+
+-->audio-controller in case of "st,stm32h7-i2s"
+
+Rob, do you agree?
+
+regards
+alex
+
+> 
+

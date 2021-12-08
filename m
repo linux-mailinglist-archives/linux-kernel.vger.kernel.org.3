@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4EF46DD83
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C2846DD86
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbhLHVWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 16:22:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29192 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237042AbhLHVWf (ORCPT
+        id S237084AbhLHVWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 16:22:51 -0500
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:54246 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237061AbhLHVWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:22:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638998343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i3DaNxZ+DCtlOdYYs61z7M12v8oVSYtpfxHsaarpyvw=;
-        b=CQy5JOqLo9Uab0QIT+t+PSWmKksA0RmIPEcIzUgayAE/nga47GnkznljaUe7EnerqKgAY3
-        3oHD9bv375LbyqwjATQ1v5LPa1OzRhXXuwxMD4gMaRnBzJZeEixv54BXEkd3eVK+x20tau
-        Y4bLaAwxm8VeoCkdh4Xg8+GWHcF1df0=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-14RIyuw4MmednhIGNMzTdA-1; Wed, 08 Dec 2021 16:19:01 -0500
-X-MC-Unique: 14RIyuw4MmednhIGNMzTdA-1
-Received: by mail-wr1-f72.google.com with SMTP id c4-20020adfed84000000b00185ca4eba36so706834wro.21
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 13:19:01 -0800 (PST)
+        Wed, 8 Dec 2021 16:22:50 -0500
+Received: by mail-wm1-f54.google.com with SMTP id y196so2740969wmc.3;
+        Wed, 08 Dec 2021 13:19:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i3DaNxZ+DCtlOdYYs61z7M12v8oVSYtpfxHsaarpyvw=;
-        b=WjPu41ayGLggkbzGUR5k2t9njFXhPSpLWt7Iq5nJbBWgU5NdKewg3MvclttrRtt49D
-         9ltoNh+Ele4bymAwaNmmCMJFn2zUozKXuqF5ORjKmo6RDmpHFIsdyi0kvR74AC+WY2q8
-         9yqnn/ef0Dj7+0kDoPG2Aep5KkKV7dNYW/CXBDGEZKw0CoixklKxVD27S0J3u/tYrvv8
-         7rxSHGNfbaoBn5vBvMMEe1Zhg5JZlecXb1qYUefPm1W/eL5nbvpFEGPz/GCaEdlrM8aJ
-         YB6hLPGkXUI2bCC3RlDGxv8owGqQp1x/tnGvCnMonGuL8MkQI9A97cVKBY7O4hXtA8xN
-         H/kA==
-X-Gm-Message-State: AOAM531F31sRdoUF4fefelL98YmrEl+mOSrBAPY4xTmWYmXSasy3bkDH
-        8eO4Gxf4ZM4ihG3+TOEgjCInlWG7dIZ2aFRDUx17CTCnjqCzXNiZGnwchPwOrC0w5HrTWAforv1
-        4KxfHn4Ey7cSyBVb8KdUyb2Ay
-X-Received: by 2002:a7b:ce16:: with SMTP id m22mr1474971wmc.39.1638998340654;
-        Wed, 08 Dec 2021 13:19:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyAZb+D1/TGDxkBCGwSmISvdDV38qwpS2yyMvufggSdypDmeUA1tumVaXCcWxVzlmlI36HXTw==
-X-Received: by 2002:a7b:ce16:: with SMTP id m22mr1474935wmc.39.1638998340376;
-        Wed, 08 Dec 2021 13:19:00 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id p12sm4697373wrr.10.2021.12.08.13.18.59
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lGCJse956z74hTTB9jr5bIXKoOQXyIcPGQuNGuBUSrc=;
+        b=VqwQMhE40u9oL16wH/ytk5R9G2uCa1mqzixAbEtezlUjZE2dUaEWe3uKtPxIZe3iTm
+         7NmsF2sPrrILPxoJXR7bZROLVjfRqORi+4HeR5yL/54tOX9el4bF8vjb1x1PmRb6nado
+         0bkRci2S9NM45JYpc4YCbEosh4excWH9T5iuDuHBBdYzlObNUkwTWdEtdRyf0U0nMF23
+         ZkpwIJ9fUF2c+1lMvdCzaoCNPdPv5POvlQMybJd4s/0yVJ8z6Cb/DLqqz/JADCIsPjzZ
+         fHnfDMXpxZwNYKSAq420EkdjmRmIx27B326g8clsM+8KXaZxJTXiQY8yiOGe0iqpmpeA
+         lxqA==
+X-Gm-Message-State: AOAM532xeL8HnfHJjx2grpv6XYZxsvqYnAdhfNmVUs5i4cNdUp54hBZ2
+        b0sgZETUI4NZ19Ev3ySl5VE=
+X-Google-Smtp-Source: ABdhPJxE5TjdbwCurdu70/FRp2HcLs5d8u7RmvO/weZBI7PJ6qkZyX+gZ8rmDU5YmXvXj7xM6jowcw==
+X-Received: by 2002:a05:600c:202:: with SMTP id 2mr1393564wmi.167.1638998357263;
+        Wed, 08 Dec 2021 13:19:17 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id r17sm8019876wmq.5.2021.12.08.13.19.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 13:18:59 -0800 (PST)
-Date:   Wed, 8 Dec 2021 22:18:58 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Shunsuke <nakamura.shun@fujitsu.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        namhyung@kernel.org, robh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] libperf: Unify scaling of counters obtained from
- perf_evsel__read()
-Message-ID: <YbEhQvkGRzX2K1pq@krava>
-References: <20211207082245.604654-1-nakamura.shun@fujitsu.com>
+        Wed, 08 Dec 2021 13:19:15 -0800 (PST)
+Date:   Wed, 8 Dec 2021 22:19:13 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH 1/2] sizes.h: Add SZ_1T macro
+Message-ID: <YbEhUeUy7PlOk2iR@rocinante>
+References: <b03f5cf556f1a89ccb4d7ae2f56414520cfd9209.1638973836.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211207082245.604654-1-nakamura.shun@fujitsu.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b03f5cf556f1a89ccb4d7ae2f56414520cfd9209.1638973836.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:22:42PM +0900, Shunsuke wrote:
-> This patch series unifies the counters that can be obtained from
-> perf_evsel__read() to "no scaling".
-> The counter scaling will be done using a function moved from
-> tools/perf/util.
-> 
-> The first patch move perf_counts_values__scale from tools/perf/util
-> to tools/lib/perf so that it can be used with libperf.
-> 
-> The second patch removes the scaling process from
-> perf_mmap__read_self().
-> 
-> The third patch adds a verification test to make sure that it scales
-> correctly when multiplexed.
-> 
-> ---
-> Previous version at:
-> https://lore.kernel.org/linux-perf-users/20211129090627.592149-1-nakamura.shun@fujitsu.com/
-> 
-> Changes in v5:
->  - Update tools/lib/perf/Documentation/libperf.txt
+Hello Christophe,
 
-Acked-by: Jiri Olsa <jolsa@redhat.com>
+> Today drivers/pci/controller/pci-xgene.c defines SZ_1T
+> 
+> Move it into linux/sizes.h so that it can be re-used elsewhere.
 
-thanks,
-jirka
+Sounds like a good idea!
 
-> 
-> Changes in v4:
->  - Modify type s8 to type __s8
-> 
-> Changes in v3:
->  - Move scaling process from tools/perf/util to tools/lib/perf
->  - Remove scaling process from perf_mmap__read_self()
->  - Remove test to verify that no division by zero occurs
-> 
-> Changes in v2:
->  - Fix not to divide by zero when counter scaling
->  - Add test to verify that no division by zero occurs
-> 
-> 
-> [1] https://github.com/deater/perf_event_tests/blob/master/tests/rdpmc/rdpmc_multiplexing.c
-> 
-> 
-> Shunsuke Nakamura (3):
->   libperf: Move perf_counts_values__scale to tools/lib/perf
->   libperf: Remove scaling process from perf_mmap__read_self()
->   libperf tests: Add test_stat_multiplexing test
-> 
->  tools/lib/perf/Documentation/libperf.txt |   2 +
->  tools/lib/perf/evsel.c                   |  19 +++
->  tools/lib/perf/include/perf/evsel.h      |   4 +
->  tools/lib/perf/libperf.map               |   1 +
->  tools/lib/perf/mmap.c                    |   2 -
->  tools/lib/perf/tests/test-evlist.c       | 157 +++++++++++++++++++++++
->  tools/perf/util/evsel.c                  |  19 ---
->  tools/perf/util/evsel.h                  |   3 -
->  8 files changed, 183 insertions(+), 24 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+By the way, there was an earlier version of this patch, did something
+happened?  I think you simply extracted these changes from the other
+series, correct?
 
+> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
+> index 56d0d50338c8..716dcab5ca47 100644
+> --- a/drivers/pci/controller/pci-xgene.c
+> +++ b/drivers/pci/controller/pci-xgene.c
+> @@ -49,7 +49,6 @@
+>  #define EN_REG				0x00000001
+>  #define OB_LO_IO			0x00000002
+>  #define XGENE_PCIE_DEVICEID		0xE004
+> -#define SZ_1T				(SZ_1G*1024ULL)
+>  #define PIPE_PHY_RATE_RD(src)		((0xc000 & (u32)(src)) >> 0xe)
+>  
+>  #define XGENE_V1_PCI_EXP_CAP		0x40
+> diff --git a/include/linux/sizes.h b/include/linux/sizes.h
+> index 1ac79bcee2bb..84aa448d8bb3 100644
+> --- a/include/linux/sizes.h
+> +++ b/include/linux/sizes.h
+> @@ -47,6 +47,8 @@
+>  #define SZ_8G				_AC(0x200000000, ULL)
+>  #define SZ_16G				_AC(0x400000000, ULL)
+>  #define SZ_32G				_AC(0x800000000, ULL)
+> +
+> +#define SZ_1T				_AC(0x10000000000, ULL)
+>  #define SZ_64T				_AC(0x400000000000, ULL)
+>  
+>  #endif /* __LINUX_SIZES_H__ */
+
+Thank you!
+
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+
+	Krzysztof

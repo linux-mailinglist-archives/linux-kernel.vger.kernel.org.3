@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D47F46D60F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8EFA46D611
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbhLHOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S233326AbhLHOxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbhLHOwE (ORCPT
+        with ESMTP id S231620AbhLHOxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:52:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E353C061746;
-        Wed,  8 Dec 2021 06:48:32 -0800 (PST)
-Date:   Wed, 8 Dec 2021 15:48:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638974909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qtWRead05hSnhf1TWBaKHwSo0tRXaJsGd5xhhRb2fWY=;
-        b=ATd3hA5UkSaE0GR/AaIJP1SYLTMM081RkUs2lObd4CV5kQ/wKMsot4RXFZgm9Xfafp7QCA
-        5mjGzkH7Pxg7NKUt0NmqgZsBUJzqc9C87K946VRpP4EQzkjOYHUZ+boC6kKYNP+kPUeCs9
-        prfabs1XfToaUVkSptDAYIMAFL+HGb1Vxet8GCNiehe8f4RxTlV6nMDFXdpGLhlk829Eju
-        U/0V/ddgU5hfTnsQYf/54yGqFH4QtrK9oAt9tgUy3Gh7igAzVtNKRYpqnEzN7IlyhiyvV/
-        af9B7fIV2e2ueujVFm6GQHN6DHtiSUg8bPqfUwfV3P5UrP8gSPNAnkd4zV/7xw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638974909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qtWRead05hSnhf1TWBaKHwSo0tRXaJsGd5xhhRb2fWY=;
-        b=32zEQj91hd+clAMRFKsI50xY6ZMokRDpsb1sc76LoYc1rPWxJ2RF2wdLfM6XQnWnqj8AXA
-        q3nULV/uSCVC7ZCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Luis Goncalves <lgoncalv@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>, carnil@debian.org
-Subject: Re: [ANNOUNCE] 5.10.83-rt58
-Message-ID: <20211208144828.y2e2d4h3yincjyqg@linutronix.de>
-References: <YalDQe/lyXqAxB0K@uudg.org>
- <20211207201712.7yqbksbba3zgu7u3@linutronix.de>
- <20211207152049.1013e1ce@gandalf.local.home>
- <20211207205628.auc54rwl4duuisah@linutronix.de>
- <20211207160203.30206456@gandalf.local.home>
- <CAD8J--9V7KxJrT==vnoawWXpp9Ur_-o2Fhm_ebNd4-hH8ncfPg@mail.gmail.com>
+        Wed, 8 Dec 2021 09:53:15 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1246EC061746;
+        Wed,  8 Dec 2021 06:49:43 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id c32so6111088lfv.4;
+        Wed, 08 Dec 2021 06:49:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A6AQ5RwsLshkjaFWGygq+igXovLHIdNbBW/Y1yrIsSE=;
+        b=edtbly6D/+OT8HwkDGJjQMmmvUukDQwJxH9sektWgq+2vtrnEXgDPIuLQDZbMCzUjT
+         ehn3E69bsJvREITJaO6njTL6s1x0unRO/pDj5eudgb+6zzMSYv3dPxkgMZzFs58zY1oH
+         1CiuLQr49p3v0K9geojMUA5KnICmmtlfVD5zYwcUTCdA4zMsgiPkrWOxT+J+0+ZwZD/T
+         9qhv/qCNra5Uq8URmoQm9J3TtV17adJ7RIBeg7Zxc/RVQcDZ9picNCW8lMy7hwwS38FW
+         v1rUR6yoWqRklJCsHsPFMZZaxxSzeqfNI/VaCCKTkM3QoJeKMdLvSDyGxF9zSZxx6pwQ
+         ko8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A6AQ5RwsLshkjaFWGygq+igXovLHIdNbBW/Y1yrIsSE=;
+        b=GW+ap7PWCCmD4xwLibbTcW8BlLOBD292WUuyAJN/0vVRv8ptjUHMY1rHvrQGu3D8Od
+         xJ3kkmlrfOjpo3ar7bz0ijBaQNT46EXuistk1J9//m9FCGr+yf0iXyjPpBkrnvU70LKR
+         XttqD923gS6T1ZnelJW050bKJkX7jtnm3guGT1m+WfIDLQvOsPTe7gQalxr1YhTT6P2e
+         kGfDPpoXd1AQZiyxONKA9VxTRTgHt22Morou5/1RHQbmJsTR/LxIW4oPwLkXwGmEUxxL
+         GIeL9fbbOS3lrMaFcuH+mPdEN99nbwROxLSfV6cB6oG9mv+ejECnIemuHIo9I1oX005A
+         Ax5w==
+X-Gm-Message-State: AOAM5316P2ZKTawHVAX11ZAArAyD3ynGY2f5RANvP7R6obFAWn7lEUw/
+        Up74MpAS7KCRhzRPUiTwkzMbd7ZFNJc=
+X-Google-Smtp-Source: ABdhPJwaNMhyxPX38YKJFrCYdx3ruEto3eCjl/TlMxD+eADMt56U216NfdKzrYehTDrBsbArMabrMw==
+X-Received: by 2002:a19:dc1a:: with SMTP id t26mr47903524lfg.315.1638974981163;
+        Wed, 08 Dec 2021 06:49:41 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id w15sm272697lfe.184.2021.12.08.06.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 06:49:40 -0800 (PST)
+Subject: Re: [PATCH v7 6/6] iommu/tegra-smmu: Add pagetable mappings to
+ debugfs
+To:     Nicolin Chen <nicolinc@nvidia.com>, thierry.reding@gmail.com,
+        joro@8bytes.org, will@kernel.org
+Cc:     vdumpa@nvidia.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20211208084732.23363-1-nicolinc@nvidia.com>
+ <20211208084732.23363-7-nicolinc@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ccb06bfc-8ba3-b3b2-b550-d8c491082ef5@gmail.com>
+Date:   Wed, 8 Dec 2021 17:49:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211208084732.23363-7-nicolinc@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAD8J--9V7KxJrT==vnoawWXpp9Ur_-o2Fhm_ebNd4-hH8ncfPg@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-08 10:14:41 [-0300], Luis Goncalves wrote:
-> Yes, I am really sorry that escaped my review. I focused on testing
-> the code and missed something that obvious.
-> 
-> Sorry for the confusion I caused.
-> 
-> Steven, Sebastian, would it be worth a v5.10.83-rt59 with the patch
-> subjects fixed?
+08.12.2021 11:47, Nicolin Chen пишет:
+> +		seq_printf(s, "\t\t%-14s | %-4s | %-10s%s | %-10s%s | %-11s\n",
+> +			   "PTE RANGE", "ATTR",
+> +			   "PHYS", sizeof(phys_addr_t) > 4 ? "        " : "",
+> +			   "IOVA", sizeof(dma_addr_t)  > 4 ? "        " : "",
 
-No, I don't think that it is worth it. Please correct it for the next
-release.
-I'm not sure if there is a need for the base version in the patch tag.
-
-> Thanks for spotting that,
-> Luis
-
-Sebastian
+Can we change IOVA to u32?

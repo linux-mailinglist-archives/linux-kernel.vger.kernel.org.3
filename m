@@ -2,95 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D170346D924
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD8D46D92B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237489AbhLHRGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:06:01 -0500
-Received: from dcvr.yhbt.net ([64.71.152.64]:56318 "EHLO dcvr.yhbt.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237475AbhLHRF7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:05:59 -0500
-Received: from localhost (dcvr.yhbt.net [127.0.0.1])
-        by dcvr.yhbt.net (Postfix) with ESMTP id D745E1F953;
-        Wed,  8 Dec 2021 17:02:26 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 17:02:26 +0000
-From:   Eric Wong <e@80x24.org>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Junio C Hamano <gitster@pobox.com>,
-        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, git@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [RFC PATCH v1 1/1] docs: add the new commit-msg tags 'Reported:'
- and 'Reviewed:'
-Message-ID: <20211208170226.GA12748@dcvr>
-References: <20211123185237.M476855@dcvr>
- <12cefa81-495b-3083-5f19-b319c704ebf7@leemhuis.info>
- <20211126171141.GA21826@dcvr>
- <42ff6b8d-0b7c-12e0-4648-a9232b0f577c@leemhuis.info>
- <20211127195231.GA4636@dcvr>
- <xmqqtufx5p19.fsf@gitster.g>
- <87mtlnjhj6.fsf@intel.com>
- <20211129172618.GA26651@dcvr>
- <CAMuHMdWygx9kTemsrZdru-ieYyJXm=8276Q_ZSxZGkqsu5OWVg@mail.gmail.com>
- <af5ee2e8-cd59-fc9a-35fa-6fec1fc9aa33@leemhuis.info>
+        id S237514AbhLHRG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:06:59 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:39700 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229713AbhLHRG4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 12:06:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 240B31FD26;
+        Wed,  8 Dec 2021 17:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638983003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s4gf+GnBTZj35lejPEzW+m7/Sfx1dKT/0lrMZKP5eE4=;
+        b=NXQl1lHMNCTYbYqIlsYcw1pvNAEHX4MnStYqOC567FSTozMGZZ1yNgUDWlHbmYhEhS7Y1d
+        JMfrybbx/9rgom2Eojr1UDDFUHQhZLrMBYYej9N1NEP4bYiTLBck/HIv3AY+op21tU2EVV
+        8hq9q9XNZtqRqeCyL4D8Ntkk1S9A8Q0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8BCA7A3B93;
+        Wed,  8 Dec 2021 17:03:22 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 18:03:22 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrey Ryabinin <arbn@yandex-team.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru,
+        stable@vger.kernel.org, Andrea Arcangeli <aarcange@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH] mm: mempolicy: fix THP allocations escaping mempolicy
+ restrictions
+Message-ID: <YbDlWiW5P7tlqlZj@dhcp22.suse.cz>
+References: <20211208165343.22349-1-arbn@yandex-team.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af5ee2e8-cd59-fc9a-35fa-6fec1fc9aa33@leemhuis.info>
+In-Reply-To: <20211208165343.22349-1-arbn@yandex-team.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thorsten Leemhuis <linux@leemhuis.info> wrote:
-> On 30.11.21 09:24, Geert Uytterhoeven wrote:
-> > On Mon, Nov 29, 2021 at 11:29 PM Eric Wong <e@80x24.org> wrote:
-> >> It's a bit much for common cases with git-send-email and
-> >> reasonable MUAs, I think.  I don't know if formail is commonly
-> >> installed, nowadays...
+On Wed 08-12-21 19:53:43, Andrey Ryabinin wrote:
+> alloc_pages_vma() may try to allocate THP page on the local
+> NUMA node first:
+> 	page = __alloc_pages_node(hpage_node,
+> 		gfp | __GFP_THISNODE | __GFP_NORETRY, order);
 > 
-> Well, after your earlier suggestion I considered to go with this:
+> And if the allocation fails it retries allowing remote memory:
 > 
-> -	perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link:
-> https://lore.kernel.org/r/$1|g;' "$1"
-> +	perl -pi -e 's|^Message-ID:\s*<?([^>]+)>?$|Link:
-> https://lore.kernel.org/r/$1|i;' "$1"
+> 	if (!page && (gfp & __GFP_DIRECT_RECLAIM))
+>     		page = __alloc_pages_node(hpage_node,
+> 					gfp, order);
 > 
-> But...
+> However, this retry allocation completely ignores memory policy
+> nodemask allowing allocation to escape restrictions.
 > 
-> > Of course ;-) You need it to run checkpatch on patch series obtained
-> > through "b4 am", before you apply them to your tree:
-> > 
-> > $ cat *mbx | formail -s scripts/checkpatch.pl
+> The first appearance of this bug seems to be the commit ac5b2c18911f
+>  ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
+> The bug disappeared later in the commit 89c83fb539f9
+>  ("mm, thp: consolidate THP gfp handling into alloc_hugepage_direct_gfpmask")
+> and reappeared again in slightly different form in the commit 76e654cc91bb
+>  ("mm, page_alloc: allow hugepage fallback to remote nodes when madvised")
 > 
-> ...this made me wonder if formail would be the better solution. I came
-> up with this:
+> Fix this by passing correct nodemask to the __alloc_pages() call.
 > 
-> formail -A "Link: https://lore.kernel.org/r/`formail -c -x Message-ID <
-> "${1}" | sed 's!.*<\(.*\)>!\1!'`" < "${1}" | sponge "${1}"
+> The demonstration/reproducer of the problem:
+>  $ mount -oremount,size=4G,huge=always /dev/shm/
+>  $ echo always > /sys/kernel/mm/transparent_hugepage/defrag
+>  $ cat mbind_thp.c
+>  #include <unistd.h>
+>  #include <sys/mman.h>
+>  #include <sys/stat.h>
+>  #include <fcntl.h>
+>  #include <assert.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+>  #include <numaif.h>
 > 
-> Downsides: instead of perl it requires sed and sponge (part of
-> moreutils, which I guess not everyone has installed; but I tried to
-> avoid a big here document or moving files around).
+>  #define SIZE 2ULL << 30
+>  int main(int argc, char **argv)
+>  {
+>    int fd;
+>    unsigned long long i;
+>    char *addr;
+>    pid_t pid;
+>    char buf[100];
+>    unsigned long nodemask = 1;
+> 
+>    fd = open("/dev/shm/test", O_RDWR|O_CREAT);
+>    assert(fd > 0);
+>    assert(ftruncate(fd, SIZE) == 0);
+> 
+>    addr = mmap(NULL, SIZE, PROT_READ|PROT_WRITE,
+>                         MAP_SHARED, fd, 0);
+> 
+>    assert(mbind(addr, SIZE, MPOL_BIND, &nodemask, 2, MPOL_MF_STRICT|MPOL_MF_MOVE)==0);
+>    for (i = 0; i < SIZE; i+=4096) {
+>      addr[i] = 1;
+>    }
+>    pid = getpid();
+>    snprintf(buf, sizeof(buf), "grep shm /proc/%d/numa_maps", pid);
+>    system(buf);
+>    sleep(10000);
+> 
+>    return 0;
+>  }
+>  $ gcc mbind_thp.c -o mbind_thp -lnuma
+>  $ numactl -H
+>  available: 2 nodes (0-1)
+>  node 0 cpus: 0 2
+>  node 0 size: 1918 MB
+>  node 0 free: 1595 MB
+>  node 1 cpus: 1 3
+>  node 1 size: 2014 MB
+>  node 1 free: 1731 MB
+>  node distances:
+>  node   0   1
+>    0:  10  20
+>    1:  20  10
+>  $ rm -f /dev/shm/test; taskset -c 0 ./mbind_thp
+>  7fd970a00000 bind:0 file=/dev/shm/test dirty=524288 active=0 N0=396800 N1=127488 kernelpagesize_kB=4
+> 
+> Fixes: ac5b2c18911f ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
+> Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
+> Cc: <stable@vger.kernel.org>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: David Rientjes <rientjes@google.com>
 
-As Geert noted, formail is probably reasonable, but I certainly
-don't have moreutils across all the systems I'm using right now.
+Looks good to me.
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-> Is that worth it? Or is there a way to realize this in a more elegant
-> fashion with tools everyone has installed?
+Thanks!
 
-*shrug*  Since newlines after ':' are a concern and it's (probably :P)
-safe to slurp entire contents of emails into memory nowadays;
-some minor tweaks to the original perl invocation should work:
+> ---
+>  mm/mempolicy.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 10e9c87260ed..f6248affaf38 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -2140,8 +2140,7 @@ struct page *alloc_pages_vma(gfp_t gfp, int order, struct vm_area_struct *vma,
+>  			 * memory with both reclaim and compact as well.
+>  			 */
+>  			if (!page && (gfp & __GFP_DIRECT_RECLAIM))
+> -				page = __alloc_pages_node(hpage_node,
+> -								gfp, order);
+> +				page = __alloc_pages(gfp, order, hpage_node, nmask);
+>  
+>  			goto out;
+>  		}
+> -- 
+> 2.32.0
 
-* use `$/ = undef' to force Perl to operate on the entire input at once
-* use `m' RE modifier to ensure `^' and `$' still match SOL/EOL
-  ($/ is only the input record separator, it doesn't change
-   Perl's definition of "lines" for `^' and `$')
-
-perl -i -p -e 'BEGIN{$/=undef};s|^Message-ID:\s*<?([^>]+)>?$|Link:
- https://lore.kernel.org/r/$1|im;'
+-- 
+Michal Hocko
+SUSE Labs

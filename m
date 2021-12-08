@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D6B46DA4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDDB46DA4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbhLHRsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:48:16 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54684 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233612AbhLHRsP (ORCPT
+        id S235656AbhLHRs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229613AbhLHRs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:48:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC85ECE2292
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE459C00446;
-        Wed,  8 Dec 2021 17:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638985479;
-        bh=OBsbhFHSgjiIsBZG+MprcH9LNQvGBI+PWjEEiYr2P/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z+W4hNL0UGcAbWSmq4uuNzN+91ptDMp4t+MqtEeKYS58lAt2wBNlX5jvhhxvdas/d
-         AToxQhpbFxjAkRWxXYlhC2nVi524iS5hByrJnWN9NvqCumBMzj3DgYZyUPuGNhDHoS
-         qT3ZkV04DPZsBhLEhE7CFerhddNWnp7ATn3bAqxJT/olV/hlE+JqkoZAx0fZqkbxOX
-         Qqih6YuZtCrn5p+onLPPQD2fH6lUy1wQsn3NO2vWN9QEGavbAIMyqySoukbi9tULxU
-         sTk01HQB2uiUnl2s7rg2v7IUhTlGiwTioHGG3DUHDNGgVOboA7R+BLAMLXBYrY1Xh4
-         IeeuqKj60y/RA==
-Date:   Wed, 8 Dec 2021 17:44:34 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 2/6] KVM: arm64: pkvm: Disable GICv2 support
-Message-ID: <20211208174434.GC820@willie-the-truck>
-References: <20211208152300.2478542-1-qperret@google.com>
- <20211208152300.2478542-3-qperret@google.com>
+        Wed, 8 Dec 2021 12:48:57 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C777FC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:45:24 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y12so10693088eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 09:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kxcdhkn8MQwqsKhhsktfOoJBZWiG64ZAMlkAvsTSfVM=;
+        b=bklVbzkbUGBwjDoMWCU9oCeiQU/fml9+ixZOPvoWGSvUOg21/WdR/YzOcdNu5tfd8U
+         L02k0yYpHQXnIdwVoiqmEfhQfktTepwBShNNLOWmmdsSehBnhWHjAeHnamQ/t0nTjAb4
+         wtsARPLOcpjoSP6WSRHnXqwXoG9iEKWkB2cSI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kxcdhkn8MQwqsKhhsktfOoJBZWiG64ZAMlkAvsTSfVM=;
+        b=dpyKWP4Is4HIeC59Olw7Qud8G8YoIijzqQHAH3rpzHfvbzf4xzpKnQs3CsJM2BvXiR
+         S790csEkStvrQThz2w/shhI7Rwimnf8x2ZA68u3mfyrZh3NGPL88zRwzJ1r3qSXZsgHQ
+         skA4Kj/cY54hIr2f+zGDs/7+eMeqdgNn22Ps17RBFs+OPSVajVEs8Qgnowcd3rHd1Gkn
+         JYweNPqPhWRa4NgNYUafy5eojmFr4WfaMU8heBqapm4UpFGUFxEEmc7C8cgpvvfTN1o2
+         6bvuiefzQDGRsBDnmBJWRQBsCUNwId0yQajQgSIlUCmCqWi0ubQM92APeo7mPQeeVLIX
+         0GEA==
+X-Gm-Message-State: AOAM531AxVu+NhTXQRVOMi0djBwHrdv4Z4wCtUsJa41Z6+hg1Ww0b7wW
+        RPxafLc/gTZje85/0w2A3ibjvQ==
+X-Google-Smtp-Source: ABdhPJzJBM98HPC9I/dyQUGgvQpo8g8Rx5F5FXP/fYY5//OaIshH7PydXpRqRfGELJe7tqQGqAexeg==
+X-Received: by 2002:a17:906:5653:: with SMTP id v19mr9100912ejr.360.1638985523255;
+        Wed, 08 Dec 2021 09:45:23 -0800 (PST)
+Received: from localhost ([2620:10d:c093:400::5:c7b3])
+        by smtp.gmail.com with ESMTPSA id ga26sm1749285ejc.11.2021.12.08.09.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 09:45:22 -0800 (PST)
+Date:   Wed, 8 Dec 2021 17:45:22 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>, Minchan Kim <minchan@kernel.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] mm: count zram read/write into PSI_IO_WAIT
+Message-ID: <YbDvMqgRxBe3IPVS@chrisdown.name>
+References: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
+ <CAGWkznHq15QN5Dn6_QfbAm7jS9OPCV4TVqn2_9RxUBx0V9v78w@mail.gmail.com>
+ <Yaj0KTp17AaHMQyC@cmpxchg.org>
+ <CAGWkznEHTVJzrCqfZRSHN=HtFjKHBGy0yyxpK8paP+9W1DsX_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20211208152300.2478542-3-qperret@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAGWkznEHTVJzrCqfZRSHN=HtFjKHBGy0yyxpK8paP+9W1DsX_w@mail.gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 03:22:55PM +0000, Quentin Perret wrote:
-> GICv2 requires having device mappings in guests and the hypervisor,
-> which is incompatible with the current pKVM EL2 page ownership model
-> which only covers memory. While it would be desirable to support pKVM
-> with GICv2, this will require a lot more work, so let's make the
-> current assumption clear until then.
-> 
-> Co-developed-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Quentin Perret <qperret@google.com>
-> ---
->  arch/arm64/kvm/vgic/vgic-v2.c | 5 +++++
->  arch/arm64/kvm/vgic/vgic-v3.c | 2 +-
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/vgic/vgic-v2.c b/arch/arm64/kvm/vgic/vgic-v2.c
-> index 95a18cec14a3..8e337a0d7817 100644
-> --- a/arch/arm64/kvm/vgic/vgic-v2.c
-> +++ b/arch/arm64/kvm/vgic/vgic-v2.c
-> @@ -345,6 +345,11 @@ int vgic_v2_probe(const struct gic_kvm_info *info)
->  	int ret;
->  	u32 vtr;
->  
-> +	if (is_protected_kvm_enabled()) {
-> +		kvm_err("GICv2 not supported in protected mode\n");
-> +		return -ENXIO;
-> +	}
-> +
->  	if (!info->vctrl.start) {
->  		kvm_err("GICH not present in the firmware table\n");
->  		return -ENXIO;
-> diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
-> index 04f62c4b07fb..debad4e6e6c9 100644
-> --- a/arch/arm64/kvm/vgic/vgic-v3.c
-> +++ b/arch/arm64/kvm/vgic/vgic-v3.c
-> @@ -651,7 +651,7 @@ int vgic_v3_probe(const struct gic_kvm_info *info)
->  	} else if (!PAGE_ALIGNED(info->vcpu.start)) {
->  		pr_warn("GICV physical address 0x%llx not page aligned\n",
->  			(unsigned long long)info->vcpu.start);
-> -	} else {
-> +	} else if (kvm_get_mode() != KVM_MODE_PROTECTED) {
->  		kvm_vgic_global_state.vcpu_base = info->vcpu.start;
->  		kvm_vgic_global_state.can_emulate_gicv2 = true;
->  		ret = kvm_register_vgic_device(KVM_DEV_TYPE_ARM_VGIC_V2);
+Zhaoyang Huang writes:
+>No. Block device related D-state will be counted in via
+>psi_dequeue(io_wait). What I am proposing here is do NOT ignore the
+>influence on non-productive time by huge numbers of in-context swap
+>in/out (zram like). This can help to make IO pressure more accurate
+>and coordinate with the number of PSWPIN/OUT. It is like counting the
+>IO time within filemap_fault->wait_on_page_bit_common into
+>psi_mem_stall, which introduces memory pressure high by IO.
 
-Acked-by: Will Deacon <will@kernel.org>
+I think part of the confusion here is that the name "io" doesn't really just 
+mean "io", it means "disk I/O". As in, we are targeting real, physical or 
+network disk I/O. Of course, we can only do what's reasonable if the device 
+we're accounting for is layers upon layers eventually leading to a 
+memory-backed device, but _intentionally_ polluting that with more memory-bound 
+accesses doesn't make any sense when we already have separate accounting for 
+memory. Why would anyone want that?
 
-Will
+I'm with Johannes here, I think this would actively make memory pressure 
+monitoring less useful. This is a NAK from my perspective as someone who 
+actually uses these things in production.

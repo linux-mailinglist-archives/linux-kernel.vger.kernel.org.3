@@ -2,716 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1BF46D0E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CC646D0E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbhLHKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbhLHKYv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:24:51 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF0C0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 02:21:19 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso644497ood.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 02:21:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uils2eswav6EfrT7X748FgNrcPQhUDvRP9sUdcFGOb8=;
-        b=EqID1lxHINstCoq3Xc+rsHEgeSrOB+zIJwfrsRem/PqkHeKbjrcqqf74B0QPtkxrEr
-         /TX2vbrJA+oT8jVcG129ovdEl3EVNSxzHXcGOCysLd3R0C5DSabR36OajWJnlKMNet+6
-         NBkGBVwdcZGaeJb1ZzKcAJc2JSxNRtJkJYthMpPVgpmW0yEp10DYj1ebiAWmStBlqIAR
-         CbvG2Tm2rN3EMtoY+Ih6GO/uV0kp+7tmEwsw96hk1jOit6io+oZpzRryI6OF9RvSUE5B
-         BTUFTmqhvMUkrIDWf02p8/GEDAU+V8uSQNwRpCbBXWEMVy65sw9QrubPoJKuvc7F5C9A
-         Ad6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uils2eswav6EfrT7X748FgNrcPQhUDvRP9sUdcFGOb8=;
-        b=sln27e/fwlXdHC0VVbSd39mv7VWSqLbkQAss5iyDgdkLeMqNywe327o15IFn+4vAle
-         Lkr/AvJJUuVrnQ2VJZ3v6mOEm+zAKvK1rlFHs2GfYG9x5NQSStJJpxMorSatpbrx384d
-         Dj9AovKTw6FSlNtXY0wPRBmCMVfhvhCv4JEUM0FK8eiB2taFpWx2tiQcS4k5B8LYorO7
-         FiUyfj13zApBgTb6Zespb4iDw3P3eIHAYLXvAA8r3/tQMWqJRJCohP+myeldVhvP4V+A
-         BUFN4t/2FQMGjaHV59NOMSbeGjyDbAX2108cuqmXOfS6qJ7vKV+yiegFCOo2d00UjsyM
-         ZXwg==
-X-Gm-Message-State: AOAM532eQHwwKjEdkXaDm54cbZHq1qGYZCHEXXmuaQjjd1ZElDY68Q1e
-        qCOdqbxhj80EB5kjTRgRQOgfEjeSlfzNGVgQxkKXQQ==
-X-Google-Smtp-Source: ABdhPJynBwFDc6XixYTwxghIyI9A2j8hFhW9BLNkiKkUtz9vUjzRvcxOAiYb1VhX4aBR+Az/UwKUZ2JFUOhMk5h0XiA=
-X-Received: by 2002:a4a:dd04:: with SMTP id m4mr30500090oou.18.1638958878335;
- Wed, 08 Dec 2021 02:21:18 -0800 (PST)
+        id S231481AbhLHKYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:24:47 -0500
+Received: from mail-eopbgr00051.outbound.protection.outlook.com ([40.107.0.51]:50407
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231419AbhLHKYn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:24:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oZ9GkJ51B5VnD5Pl8Daxp7hYDAjrSd6raIqvLzQ3ExrYMMPWUl5abZRRBLzad0ZCeAUsvlytr0/HGgGo3va7FlLJROxVTJgu5uWMRmouRAMe6hS+dGAfG+gQYhsNAlUbGTW7kMc4yaxmGp+Z1ajUGqrpkGoXT5+m3xYTq1Xo1Q1xNsSNngTBKbenhxqUHzDPOhtD/pVsNeI1yidXfdbDK7JfuwtlpN84GkJj4Z1BynX1YlcZGceN10iJ/YEx4Bf3fdNAIWqFNhL85JQtTjIDMW70AtwZyoeEjD6w/4GMS4GdBdRAw260Uihrgr+OWtaxTSro78h/oQFee0sRKbFT5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wORAqcOeqLYrkA5Hx2502LrT22wJt7wRufOFy0hrn+M=;
+ b=LaUQ8oS8nqlYpz+LgrHVhA37ogU1r1SqH1UCV/b5Nz7M4pz6/2uRs+p4mHaK5pGEid6eASjEfXkRalzxf8wu45WIVWkzdAn+5h1YF7bd5iiF9bcSTGetk3Fk6cSkcIHNBSJ+X9XBwOX3gYPKypcLuQaRhPQgxkzMS1vR/uBBaBkV2QcXXN7SmrI8iLN5g1YrM1fzudMnOSvQj+gED+0Fl3BXyh6tJg5Kp4mx812ScsJapobkqJwqMPahGblu5DXhocWoMvVJwxfEIU3G1lFU5z5sphY0NcqA5QcXrY5oQfR717nRajxb5K3559HBV5zu1ZLzafFmS2zBsvsUicl8Pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wORAqcOeqLYrkA5Hx2502LrT22wJt7wRufOFy0hrn+M=;
+ b=Re8RrPhjvgrbflUU+Viw/yR6KAoR/1spYHdGEBX7v/xwGZklnNijpu5doGnk3izlRLRo6SboMboxO+DshVIQi0rnVXcrRsL+5xe1IhaHyojdrK0Zw+/mFeSWJ7ln74d97cfkZIzzcozR0U3SXmY/vIG5toYJuWKs5sHUmDWOJAU=
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by AM7PR04MB7045.eurprd04.prod.outlook.com (2603:10a6:20b:11e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Wed, 8 Dec
+ 2021 10:21:10 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::903a:e49c:dd60:75f7]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::903a:e49c:dd60:75f7%7]) with mapi id 15.20.4778.012; Wed, 8 Dec 2021
+ 10:21:10 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V2] tty: serial: fsl_lpuart: add timeout for
+ wait_event_interruptible in .shutdown()
+Thread-Topic: [PATCH V2] tty: serial: fsl_lpuart: add timeout for
+ wait_event_interruptible in .shutdown()
+Thread-Index: AQHX5/Kqwmx8Y7fpekKmsT/ndIUTLawoOIEAgAAafOA=
+Date:   Wed, 8 Dec 2021 10:21:09 +0000
+Message-ID: <AS8PR04MB8404B7A4AEA62821C9F553EE926F9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+References: <20211203030441.22873-1-sherry.sun@nxp.com>
+ <7fd033ff-d1a5-9f1c-d8b9-5f51d63697fd@kernel.org>
+In-Reply-To: <7fd033ff-d1a5-9f1c-d8b9-5f51d63697fd@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 11a84f32-a257-4d1d-ae67-08d9ba34745f
+x-ms-traffictypediagnostic: AM7PR04MB7045:EE_
+x-microsoft-antispam-prvs: <AM7PR04MB70452ED6B7CB5822301AF1AD926F9@AM7PR04MB7045.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nGLzJ6a6hLU276knfx45Kgkib+nIcpjOwVB4NZTSPUSywj76vsA7hlkUNJe+hOXsrYI8n+I7ofZDBpUhfOYFS9MZhC6pXRbQTXy8FPu75WOfsaND8qFxWVC/2aNdkc1ai0Zk3iLFlulSKBEo96Ku7DmpzitxWEp01139Dk8968sT+GNdfWixwORuP67QjKJQk7iVx+MWIHSV7TQiaaBvTjlZH7XLcE1EAm3ZR5UjKrp/OGTPf7AK4tejr1wAAFDUmRopXnH+xq3LPqWMIEFEwBQr/kNH98waBIddcCVpHKmUr52+rSHLG6wFvh1SJVxI47VcwN1/1CBhIsStFd+ZAY61p/fJafvvEQOpIDFgMwuZzLrQkHGOYzy9QNG+HOfDOVgRwTk2HSlN10slkEz8HiJjaec+gUoykI3WWBPxYa0VrSEyWBUQwGH13w1XKvHksvMzZmFAWpJP5K8pgN4aMBjnSyBh1VaW7rqSxE8EeUWgexRn7zZ1NRefzP/TuHDW2qL+5IWQoj/DNNL06MbYMBPDlDG6nKvUPhidj7IjmlmdDmZMotUAdZcwqLZAI79KY6W8b4DMOPklquxC5WqfTOHeTDNS22gCuiXsUmf5F8hWq4GrR25HSUgDHxUbGfLfZgoerUkw/ZNglL827GBZ4bZrgXRzyKLsTOTol7L01aJtsXIANSWK/DyuqUlmzL3AkX2OtLcPn1G3hVefn5VC+57RM8AL9/coQ8L3LL7KVg4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(316002)(33656002)(83380400001)(38100700002)(54906003)(4326008)(110136005)(38070700005)(26005)(45080400002)(6506007)(508600001)(64756008)(186003)(86362001)(71200400001)(66556008)(122000001)(66446008)(55016003)(2906002)(5660300002)(66946007)(8676002)(8936002)(9686003)(66476007)(76116006)(44832011)(7696005)(142923001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y1ZBaTNGOVp4Yy9pV0pDRVRnNzl1WHhvL1J4ZGNEbThTZk0xUS85Z1FudXNZ?=
+ =?utf-8?B?Y3B2SllZV04rd0NuZmFMaHRlaWF3QnJIKzJndzIwNFQ1RTltOW04aldxeHha?=
+ =?utf-8?B?Y055TXJ1SEhEWHFXdURoano0K3Q4OU1mYVUwanZOeVFPTTlYaVVBeTZTYzVM?=
+ =?utf-8?B?bTltOENSVGRSK01WbkpVSWVYREZXT0lPZ3h3OTJ3aitjYkJGV01Oc2RIdjlr?=
+ =?utf-8?B?Zkk4TnVWdzNpK3lVZVpseHJqbVZMd1BnampNVGZGYmtuYlRzNFVNR0ptQ1RG?=
+ =?utf-8?B?ajhxNHV1WmdEUGQrRjkyeGUrYzRScFN5amF2d0V0NjJoTjcyeE1Eb3ZFL2Zy?=
+ =?utf-8?B?TFZTb0VkbGd0Vjhyb2ZGZklCejZaTTdjV1BnUDlCOU8yOEg3RGFqdnA4eXg5?=
+ =?utf-8?B?aVdFWlluRytuU1ZsWnpSMEJZZ1M2b3EwMk91ZU1ic1VVd2c4cWIxeldpRFhT?=
+ =?utf-8?B?aXVsbHozZDNPSFR3ZzYveDhiWVBGaVV2Y1ZJbzUzUFJuVm84U2NzU3RWNnlM?=
+ =?utf-8?B?dUYxeWtaSThVZEhXdW5KNzlJOEtvZzZ0NTMwUkZlWmFpaWVveHJZbExtQTEr?=
+ =?utf-8?B?TkRuU1lZdk5YRXJyYWs5eHVQeVZ2c3dQNnRaMVAvUHhxN2lOMFRnelE3WDJh?=
+ =?utf-8?B?ZzdqdTltYmlBMzRocHdJOVdnOUM3a0RGV3AvNzVqejRnSXhQcGxUYU9PUDJW?=
+ =?utf-8?B?VldYb0lxQkdzSDh2aC85UGpMY2hFdStMbGlXTkVTVnd6N0VZclRRaW9Ga2VW?=
+ =?utf-8?B?ZURiMzZtM0M3U29LMFRlRFNob0E3dHAxMzRvWVlWUWNUOGc1ZzlMQ280eUdM?=
+ =?utf-8?B?eTZvQm85cVJFcmFSK2dDaDU3UDFsQjlFa25zZFVYV2lRNzVyY0lpNFlESkNp?=
+ =?utf-8?B?QkdQeWhpaEdHQXduM3JyYllVY2srTFRDQTdQTXB4SS9JK1pJOHRZbU5ZUFdS?=
+ =?utf-8?B?a2tIa24xaWg4am8yVzRzM1JTU0VUcjExV0E1QmhVcklLQnhubzVTaWhEQkQ0?=
+ =?utf-8?B?VEpnVk9uWSswbThMbU5DZWJ0V1FLMENHK0FrMkxuaHMrZmt6cDQzZ01pMFAw?=
+ =?utf-8?B?NG5xN2kxeVpScHE0MWV3SG1HVnYrcVJEN1pybmZ3L3NvTjBKRXVTeU9rZmRW?=
+ =?utf-8?B?S1E3NmhMMlJmOFBla1pvYlJSLzZCOGxxZ3V5Y3g5ZGM5dkErMU9EUnM4dGZM?=
+ =?utf-8?B?aVNjSndiWUUvUlJJNEFoUjBCWlJpSjlsMTFUekFNTmEydnFRTlJWNGwrUmlQ?=
+ =?utf-8?B?S2RvT1RnZzIydkNxTDhEd2xWeVF6MnFCM25QMERzK1BrKytYamVJRnNFWVcx?=
+ =?utf-8?B?emNZa2xjdS9Ib2x4ZVkyeVFxYUgxS1Y1cjFHMExtOTBZNmU4OTBnUmpnWkRF?=
+ =?utf-8?B?N1VwL0VjU1RjT1BQZ3lCYks0T1RQZ1hhSkxJSWdQZjRpMWc1eGJaWUtKZklD?=
+ =?utf-8?B?WWlxZ082dWgxRGtCOVMrRUIwd1JzaWJ0R1c5TWI2TGd3eG96WDRqZnhhVkxi?=
+ =?utf-8?B?TzJtYXEyUUx0dTcrMm1QSzNKdFEzNXpZQ014L0pLNGo0UzRtYktBcUFvRHI0?=
+ =?utf-8?B?NlZPei96Wmxzc3ZyMkc1NGk4TXFFZE93d3FFUHl2L0NOSzdTUk5LeUhKVFUy?=
+ =?utf-8?B?c25QM1oyam5IaTUray8xMnJFN0VoUTl4OS92NElHajlMcDc3K25NQjRpeG1B?=
+ =?utf-8?B?SmpZampVTDJlZnpqd3dnOFRhNUdsQlp5NGNUVXBTTHBZbWROQWJyVmoxa083?=
+ =?utf-8?B?VWtBZ0hpY1B3dlQrV2o5VzQrLytoeFFrNzdKT3RCZVY0djQwa01lQnRScHI2?=
+ =?utf-8?B?Nng0cWp6Z2tJMkJjVk9TNFVBdGFkRGNzMm5EdDkwbFhoTTVoeGN1RlF2TnJk?=
+ =?utf-8?B?QS94ci9BS3lJSGJmOG1iMkE1MjZSeVlZU1FpTi9iRGJSdEhTSFpILzA4aWNo?=
+ =?utf-8?B?dytUK3RyUi9RaUcwY040d3ZKT0xlcHpvanF4bGxMaDBOVmlNZk1Mb1RSUEhL?=
+ =?utf-8?B?VUgzdTNhNXZzNE1pdW8yWER6bmNEcGIwR1BkWE56d1Z3eWdMUXZvdEM3ZFoz?=
+ =?utf-8?B?N3ZacXpBcTlkUVZhQnZ2UEEvcGJ4WXZ4TEZ4TTI4blJGdXJGK2pjei8rSHRj?=
+ =?utf-8?B?eXlxTHB2UW5iYkt0OGhaWU42K3BiNmVOYnBHQndkaklQUXZXWmk0WkZTdjRo?=
+ =?utf-8?B?bWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-3-pcc@google.com>
-In-Reply-To: <20211208044808.872554-3-pcc@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 8 Dec 2021 11:21:06 +0100
-Message-ID: <CACT4Y+aRcD_bUnyqOp-PM3YOguFwSZxpurZnC2YHo4kFFLbiTw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] uaccess-buffer: add core code
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        David Hildenbrand <david@redhat.com>,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Thomas Cedeno <thomascedeno@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11a84f32-a257-4d1d-ae67-08d9ba34745f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 10:21:10.2191
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bmxEBhOkUftjQ4aQjZpiJ6MXgaPhHBGjiL95nMX+zm9Y6WDpyoS90YszktsOyaqb4LjMYCHItUCPXQf6stGCHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7045
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
->
-> Add the core code to support uaccess logging. Subsequent patches will
-> hook this up to the arch-specific kernel entry and exit code for
-> certain architectures.
->
-> Link: https://linux-review.googlesource.com/id/I6581765646501a5631b281d670903945ebadc57d
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> ---
-> v3:
-> - performance optimizations for entry/exit code
-> - don't use kcur == NULL to mean overflow
-> - fix potential double free in clone()
-> - don't allocate a new kernel-side uaccess buffer for each syscall
-> - fix uaccess buffer leak on exit
-> - fix some sparse warnings
->
-> v2:
-> - New interface that avoids multiple syscalls per real syscall and
->   is arch-generic
-> - Avoid logging uaccesses done by BPF programs
-> - Add documentation
-> - Split up into multiple patches
-> - Various code moves, renames etc as requested by Marco
->
->  fs/exec.c                            |   3 +
->  include/linux/instrumented-uaccess.h |   6 +-
->  include/linux/sched.h                |   5 ++
->  include/linux/uaccess-buffer-info.h  |  46 ++++++++++
->  include/linux/uaccess-buffer.h       | 112 +++++++++++++++++++++++
->  include/uapi/linux/prctl.h           |   3 +
->  include/uapi/linux/uaccess-buffer.h  |  27 ++++++
->  kernel/Makefile                      |   1 +
->  kernel/bpf/helpers.c                 |   7 +-
->  kernel/fork.c                        |   4 +
->  kernel/signal.c                      |   4 +-
->  kernel/sys.c                         |   6 ++
->  kernel/uaccess-buffer.c              | 129 +++++++++++++++++++++++++++
->  13 files changed, 350 insertions(+), 3 deletions(-)
->  create mode 100644 include/linux/uaccess-buffer-info.h
->  create mode 100644 include/linux/uaccess-buffer.h
->  create mode 100644 include/uapi/linux/uaccess-buffer.h
->  create mode 100644 kernel/uaccess-buffer.c
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 537d92c41105..c9975e790f30 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -65,6 +65,7 @@
->  #include <linux/vmalloc.h>
->  #include <linux/io_uring.h>
->  #include <linux/syscall_user_dispatch.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include <linux/uaccess.h>
->  #include <asm/mmu_context.h>
-> @@ -1313,6 +1314,8 @@ int begin_new_exec(struct linux_binprm * bprm)
->         me->personality &= ~bprm->per_clear;
->
->         clear_syscall_work_syscall_user_dispatch(me);
-> +       uaccess_buffer_set_descriptor_addr_addr(0);
-> +       uaccess_buffer_free(current);
->
->         /*
->          * We have to apply CLOEXEC before we change whether the process is
-> diff --git a/include/linux/instrumented-uaccess.h b/include/linux/instrumented-uaccess.h
-> index ece549088e50..b967f4436d15 100644
-> --- a/include/linux/instrumented-uaccess.h
-> +++ b/include/linux/instrumented-uaccess.h
-> @@ -2,7 +2,8 @@
->
->  /*
->   * This header provides generic wrappers for memory access instrumentation for
-> - * uaccess routines that the compiler cannot emit for: KASAN, KCSAN.
-> + * uaccess routines that the compiler cannot emit for: KASAN, KCSAN,
-> + * uaccess buffers.
->   */
->  #ifndef _LINUX_INSTRUMENTED_UACCESS_H
->  #define _LINUX_INSTRUMENTED_UACCESS_H
-> @@ -11,6 +12,7 @@
->  #include <linux/kasan-checks.h>
->  #include <linux/kcsan-checks.h>
->  #include <linux/types.h>
-> +#include <linux/uaccess-buffer.h>
->
->  /**
->   * instrument_copy_to_user - instrument reads of copy_to_user
-> @@ -27,6 +29,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
->  {
->         kasan_check_read(from, n);
->         kcsan_check_read(from, n);
-> +       uaccess_buffer_log_write(to, n);
->  }
->
->  /**
-> @@ -44,6 +47,7 @@ instrument_copy_from_user(const void *to, const void __user *from, unsigned long
->  {
->         kasan_check_write(to, n);
->         kcsan_check_write(to, n);
-> +       uaccess_buffer_log_read(from, n);
->  }
->
->  #endif /* _LINUX_INSTRUMENTED_UACCESS_H */
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 78c351e35fec..7c5278d7b57d 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -34,6 +34,7 @@
->  #include <linux/rseq.h>
->  #include <linux/seqlock.h>
->  #include <linux/kcsan.h>
-> +#include <linux/uaccess-buffer-info.h>
->  #include <asm/kmap_size.h>
->
->  /* task_struct member predeclarations (sorted alphabetically): */
-> @@ -1484,6 +1485,10 @@ struct task_struct {
->         struct callback_head            l1d_flush_kill;
->  #endif
->
-> +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
-> +       struct uaccess_buffer_info      uaccess_buffer;
-> +#endif
-> +
->         /*
->          * New fields for task_struct should be added above here, so that
->          * they are included in the randomized portion of task_struct.
-> diff --git a/include/linux/uaccess-buffer-info.h b/include/linux/uaccess-buffer-info.h
-> new file mode 100644
-> index 000000000000..15e2d8f7c074
-> --- /dev/null
-> +++ b/include/linux/uaccess-buffer-info.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_UACCESS_BUFFER_INFO_H
-> +#define _LINUX_UACCESS_BUFFER_INFO_H
-> +
-> +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
-> +
-> +struct uaccess_buffer_info {
-> +       /*
-> +        * The pointer to pointer to struct uaccess_descriptor. This is the
-> +        * value controlled by prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR).
-> +        */
-> +       struct uaccess_descriptor __user *__user *desc_ptr_ptr;
-> +
-> +       /*
-> +        * The pointer to struct uaccess_descriptor read at syscall entry time.
-> +        */
-> +       struct uaccess_descriptor __user *desc_ptr;
-> +
-> +       /*
-> +        * A pointer to the kernel's temporary copy of the uaccess log for the
-> +        * current syscall. We log to a kernel buffer in order to avoid leaking
-> +        * timing information to userspace.
-> +        */
-> +       struct uaccess_buffer_entry *kbegin;
-> +
-> +       /*
-> +        * The position of the next uaccess buffer entry for the current
-> +        * syscall, or NULL if we are not logging the current syscall.
-> +        */
-> +       struct uaccess_buffer_entry *kcur;
-> +
-> +       /*
-> +        * A pointer to the end of the kernel's uaccess log.
-> +        */
-> +       struct uaccess_buffer_entry *kend;
-> +
-> +       /*
-> +        * The pointer to the userspace uaccess log, as read from the
-> +        * struct uaccess_descriptor.
-> +        */
-> +       struct uaccess_buffer_entry __user *ubegin;
-> +};
-> +
-> +#endif
-> +
-> +#endif  /* _LINUX_UACCESS_BUFFER_INFO_H */
-> diff --git a/include/linux/uaccess-buffer.h b/include/linux/uaccess-buffer.h
-> new file mode 100644
-> index 000000000000..f2f46db274f3
-> --- /dev/null
-> +++ b/include/linux/uaccess-buffer.h
-> @@ -0,0 +1,112 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_UACCESS_BUFFER_H
-> +#define _LINUX_UACCESS_BUFFER_H
-> +
-> +#include <linux/sched.h>
-> +#include <uapi/linux/uaccess-buffer.h>
-> +
-> +#include <asm-generic/errno-base.h>
-> +
-> +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
-> +
-> +static inline bool uaccess_buffer_maybe_blocked(struct task_struct *tsk)
-> +{
-> +       return test_task_syscall_work(tsk, UACCESS_BUFFER_ENTRY);
-> +}
-> +
-> +void __uaccess_buffer_syscall_entry(void);
-> +static inline void uaccess_buffer_syscall_entry(void)
-> +{
-> +       __uaccess_buffer_syscall_entry();
-> +}
-> +
-> +void __uaccess_buffer_syscall_exit(void);
-> +static inline void uaccess_buffer_syscall_exit(void)
-> +{
-> +       __uaccess_buffer_syscall_exit();
-> +}
-> +
-> +bool __uaccess_buffer_pre_exit_loop(void);
-> +static inline bool uaccess_buffer_pre_exit_loop(void)
-> +{
-> +       if (!test_syscall_work(UACCESS_BUFFER_ENTRY))
-> +               return false;
-> +       return __uaccess_buffer_pre_exit_loop();
-> +}
-> +
-> +void __uaccess_buffer_post_exit_loop(void);
-> +static inline void uaccess_buffer_post_exit_loop(bool pending)
-> +{
-> +       if (pending)
-> +               __uaccess_buffer_post_exit_loop();
-> +}
-> +
-> +static inline int uaccess_buffer_set_descriptor_addr_addr(unsigned long addr)
-
-I would move the implementation to .c file. It's a rare path.
-
-> +{
-> +       current->uaccess_buffer.desc_ptr_ptr =
-> +               (struct uaccess_descriptor __user * __user *)addr;
-> +       if (addr)
-> +               set_syscall_work(UACCESS_BUFFER_ENTRY);
-> +       else
-> +               clear_syscall_work(UACCESS_BUFFER_ENTRY);
-> +       return 0;
-> +}
-> +
-> +size_t copy_from_user_nolog(void *to, const void __user *from, size_t len);
-> +
-> +void uaccess_buffer_free(struct task_struct *tsk);
-> +
-> +void __uaccess_buffer_log_read(const void __user *from, unsigned long n);
-> +static inline void uaccess_buffer_log_read(const void __user *from, unsigned long n)
-> +{
-> +       if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
-
-UACCESS_BUFFER_EXIT is only defined in future patches, so this won't compile.
-
-> +               __uaccess_buffer_log_read(from, n);
-> +}
-> +
-> +void __uaccess_buffer_log_write(void __user *to, unsigned long n);
-> +static inline void uaccess_buffer_log_write(void __user *to, unsigned long n)
-> +{
-> +       if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
-> +               __uaccess_buffer_log_write(to, n);
-> +}
-> +
-> +#else
-> +
-> +static inline bool uaccess_buffer_maybe_blocked(struct task_struct *tsk)
-> +{
-> +       return false;
-> +}
-> +static inline void uaccess_buffer_syscall_entry(void)
-> +{
-> +}
-> +static inline void uaccess_buffer_syscall_exit(void)
-> +{
-> +}
-> +static inline bool uaccess_buffer_pre_exit_loop(void)
-> +{
-> +       return false;
-> +}
-> +static inline void uaccess_buffer_post_exit_loop(bool pending)
-> +{
-> +}
-> +static inline int uaccess_buffer_set_descriptor_addr_addr(unsigned long addr)
-> +{
-> +       return -EINVAL;
-> +}
-> +static inline void uaccess_buffer_free(struct task_struct *tsk)
-> +{
-> +}
-> +
-> +#define copy_from_user_nolog(to, from, len) copy_from_user(to, from, len)
-> +
-> +static inline void uaccess_buffer_log_read(const void __user *from,
-> +                                          unsigned long n)
-> +{
-> +}
-> +static inline void uaccess_buffer_log_write(void __user *to, unsigned long n)
-> +{
-> +}
-> +
-> +#endif
-> +
-> +#endif  /* _LINUX_UACCESS_BUFFER_H */
-> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-> index bb73e9a0b24f..74b37469c7b3 100644
-> --- a/include/uapi/linux/prctl.h
-> +++ b/include/uapi/linux/prctl.h
-> @@ -272,4 +272,7 @@ struct prctl_mm_map {
->  # define PR_SCHED_CORE_SCOPE_THREAD_GROUP      1
->  # define PR_SCHED_CORE_SCOPE_PROCESS_GROUP     2
->
-> +/* Configure uaccess logging feature */
-> +#define PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR    63
-> +
->  #endif /* _LINUX_PRCTL_H */
-> diff --git a/include/uapi/linux/uaccess-buffer.h b/include/uapi/linux/uaccess-buffer.h
-> new file mode 100644
-> index 000000000000..bf10f7c78857
-> --- /dev/null
-> +++ b/include/uapi/linux/uaccess-buffer.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_UACCESS_BUFFER_H
-> +#define _UAPI_LINUX_UACCESS_BUFFER_H
-> +
-> +#include <linux/types.h>
-> +
-> +/* Location of the uaccess log. */
-> +struct uaccess_descriptor {
-> +       /* Address of the uaccess_buffer_entry array. */
-> +       __u64 addr;
-> +       /* Size of the uaccess_buffer_entry array in number of elements. */
-> +       __u64 size;
-> +};
-> +
-> +/* Format of the entries in the uaccess log. */
-> +struct uaccess_buffer_entry {
-> +       /* Address being accessed. */
-> +       __u64 addr;
-> +       /* Number of bytes that were accessed. */
-> +       __u64 size;
-> +       /* UACCESS_BUFFER_* flags. */
-> +       __u64 flags;
-> +};
-> +
-> +#define UACCESS_BUFFER_FLAG_WRITE      1 /* access was a write */
-> +
-> +#endif /* _UAPI_LINUX_UACCESS_BUFFER_H */
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 186c49582f45..d4d9be5146c3 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -114,6 +114,7 @@ obj-$(CONFIG_KCSAN) += kcsan/
->  obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
->  obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call.o
->  obj-$(CONFIG_CFI_CLANG) += cfi.o
-> +obj-$(CONFIG_HAVE_ARCH_UACCESS_BUFFER) += uaccess-buffer.o
->
->  obj-$(CONFIG_PERF_EVENTS) += events/
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 649f07623df6..ab6520a633ef 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -15,6 +15,7 @@
->  #include <linux/pid_namespace.h>
->  #include <linux/proc_ns.h>
->  #include <linux/security.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include "../../lib/kstrtox.h"
->
-> @@ -637,7 +638,11 @@ const struct bpf_func_proto bpf_event_output_data_proto =  {
->  BPF_CALL_3(bpf_copy_from_user, void *, dst, u32, size,
->            const void __user *, user_ptr)
->  {
-> -       int ret = copy_from_user(dst, user_ptr, size);
-> +       /*
-> +        * Avoid logging uaccesses here as the BPF program may not be following
-> +        * the uaccess log rules.
-> +        */
-> +       int ret = copy_from_user_nolog(dst, user_ptr, size);
->
->         if (unlikely(ret)) {
->                 memset(dst, 0, size);
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 3244cc56b697..8be2ca528a65 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -96,6 +96,7 @@
->  #include <linux/scs.h>
->  #include <linux/io_uring.h>
->  #include <linux/bpf.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include <asm/pgalloc.h>
->  #include <linux/uaccess.h>
-> @@ -754,6 +755,7 @@ void __put_task_struct(struct task_struct *tsk)
->         delayacct_tsk_free(tsk);
->         put_signal_struct(tsk->signal);
->         sched_core_free(tsk);
-> +       uaccess_buffer_free(tsk);
->
->         if (!profile_handoff_task(tsk))
->                 free_task(tsk);
-> @@ -890,6 +892,8 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
->         if (memcg_charge_kernel_stack(tsk))
->                 goto free_stack;
->
-> +       uaccess_buffer_free(orig);
-> +
->         stack_vm_area = task_stack_vm_area(tsk);
->
->         err = arch_dup_task_struct(tsk, orig);
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index a629b11bf3e0..69bf21518bd0 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -45,6 +45,7 @@
->  #include <linux/posix-timers.h>
->  #include <linux/cgroup.h>
->  #include <linux/audit.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/signal.h>
-> @@ -1031,7 +1032,8 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
->         if (sig_fatal(p, sig) &&
->             !(signal->flags & SIGNAL_GROUP_EXIT) &&
->             !sigismember(&t->real_blocked, sig) &&
-> -           (sig == SIGKILL || !p->ptrace)) {
-> +           (sig == SIGKILL ||
-> +            !(p->ptrace || uaccess_buffer_maybe_blocked(p)))) {
->                 /*
->                  * This signal will be fatal to the whole group.
->                  */
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index 8fdac0d90504..c71a9a9c0f68 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -42,6 +42,7 @@
->  #include <linux/version.h>
->  #include <linux/ctype.h>
->  #include <linux/syscall_user_dispatch.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include <linux/compat.h>
->  #include <linux/syscalls.h>
-> @@ -2530,6 +2531,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
->                 error = sched_core_share_pid(arg2, arg3, arg4, arg5);
->                 break;
->  #endif
-> +       case PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR:
-> +               if (arg3 || arg4 || arg5)
-> +                       return -EINVAL;
-> +               error = uaccess_buffer_set_descriptor_addr_addr(arg2);
-
-Does this miss uaccess_buffer_free() for the 0 case?
-It seems that when we set it to 0 we always want to free as well (e.g.
-in exec). I wonder if freeing should be done by
-uaccess_buffer_set_descriptor_addr_addr() itself.
-Both uaccess_buffer_set_descriptor_addr_addr() and
-uaccess_buffer_free() reset task work, which is fine but is somewhat
-suboptimal logically.
-Then task exit could do uaccess_buffer_set_descriptor_addr_addr(0).
-
-
-> +               break;
->         default:
->                 error = -EINVAL;
->                 break;
-> diff --git a/kernel/uaccess-buffer.c b/kernel/uaccess-buffer.c
-> new file mode 100644
-> index 000000000000..088e43f7611c
-> --- /dev/null
-> +++ b/kernel/uaccess-buffer.c
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Support for uaccess logging via uaccess buffers.
-> + *
-> + * Copyright (C) 2021, Google LLC.
-> + */
-> +
-> +#include <linux/compat.h>
-> +#include <linux/mm.h>
-> +#include <linux/prctl.h>
-> +#include <linux/ptrace.h>
-> +#include <linux/sched.h>
-> +#include <linux/signal.h>
-> +#include <linux/slab.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/uaccess-buffer.h>
-> +
-> +static void uaccess_buffer_log(unsigned long addr, unsigned long size,
-> +                             unsigned long flags)
-> +{
-> +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> +       struct uaccess_buffer_entry *entry = buf->kcur;
-> +
-> +       if (entry == buf->kend || unlikely(uaccess_kernel()))
-> +               return;
-> +       entry->addr = addr;
-> +       entry->size = size;
-> +       entry->flags = flags;
-> +
-> +       ++buf->kcur;
-> +}
-> +
-> +void __uaccess_buffer_log_read(const void __user *from, unsigned long n)
-> +{
-> +       uaccess_buffer_log((unsigned long)from, n, 0);
-> +}
-> +EXPORT_SYMBOL(__uaccess_buffer_log_read);
-> +
-> +void __uaccess_buffer_log_write(void __user *to, unsigned long n)
-> +{
-> +       uaccess_buffer_log((unsigned long)to, n, UACCESS_BUFFER_FLAG_WRITE);
-> +}
-> +EXPORT_SYMBOL(__uaccess_buffer_log_write);
-> +
-> +bool __uaccess_buffer_pre_exit_loop(void)
-> +{
-> +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> +       struct uaccess_descriptor __user *desc_ptr;
-> +       sigset_t tmp_mask;
-> +
-> +       if (get_user(desc_ptr, buf->desc_ptr_ptr) || !desc_ptr)
-> +               return false;
-> +
-> +       current->real_blocked = current->blocked;
-> +       sigfillset(&tmp_mask);
-
-This and __uaccess_buffer_post_exit_loop() runs only when we have a
-signal/timer interrupt between setting the descriptor address in
-userspace and entering the next syscall, right?
-Just want to make sure this code is not executed for normal uaccess
-tracing for performance reasons.
-
-> +       set_current_blocked(&tmp_mask);
-> +       return true;
-> +}
-> +
-> +void __uaccess_buffer_post_exit_loop(void)
-> +{
-> +       spin_lock_irq(&current->sighand->siglock);
-> +       current->blocked = current->real_blocked;
-> +       recalc_sigpending();
-> +       spin_unlock_irq(&current->sighand->siglock);
-> +}
-> +
-> +void uaccess_buffer_free(struct task_struct *tsk)
-> +{
-> +       struct uaccess_buffer_info *buf = &tsk->uaccess_buffer;
-> +
-> +       kfree(buf->kbegin);
-> +       clear_syscall_work(UACCESS_BUFFER_EXIT);
-> +       buf->kbegin = buf->kcur = buf->kend = NULL;
-> +}
-> +
-> +void __uaccess_buffer_syscall_entry(void)
-> +{
-> +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> +       struct uaccess_descriptor desc;
-> +
-> +       if (get_user(buf->desc_ptr, buf->desc_ptr_ptr) || !buf->desc_ptr ||
-> +           put_user(0, buf->desc_ptr_ptr) ||
-> +           copy_from_user(&desc, buf->desc_ptr, sizeof(desc)))
-> +               return;
-> +
-> +       if (desc.size > 1024)
-> +               desc.size = 1024;
-> +
-> +       if (buf->kend - buf->kbegin != desc.size)
-> +               buf->kbegin =
-> +                       krealloc_array(buf->kbegin, desc.size,
-> +                                      sizeof(struct uaccess_buffer_entry),
-> +                                      GFP_KERNEL);
-> +       if (!buf->kbegin)
-
-I think we also need to set at least buf->kend to NULL here.
-I am not sure what can go wrong now, but it's a strange state. On next
-iteration we will do "buf->kend - buf->kbegin", where kend is a
-dangling pointer and kbegin is NULL.
-
-> +               return;
-> +
-> +       set_syscall_work(UACCESS_BUFFER_EXIT);
-> +       buf->kcur = buf->kbegin;
-> +       buf->kend = buf->kbegin + desc.size;
-> +       buf->ubegin =
-> +               (struct uaccess_buffer_entry __user *)(unsigned long)desc.addr;
-> +}
-> +
-> +void __uaccess_buffer_syscall_exit(void)
-> +{
-> +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> +       u64 num_entries = buf->kcur - buf->kbegin;
-> +       struct uaccess_descriptor desc;
-> +
-> +       clear_syscall_work(UACCESS_BUFFER_EXIT);
-> +       desc.addr = (u64)(unsigned long)(buf->ubegin + num_entries);
-> +       desc.size = buf->kend - buf->kcur;
-> +       buf->kcur = NULL;
-> +       if (copy_to_user(buf->ubegin, buf->kbegin,
-> +                        num_entries * sizeof(struct uaccess_buffer_entry)) == 0)
-> +               (void)copy_to_user(buf->desc_ptr, &desc, sizeof(desc));
-> +}
-> +
-> +size_t copy_from_user_nolog(void *to, const void __user *from, size_t len)
-> +{
-> +       size_t retval;
-> +
-> +       clear_syscall_work(UACCESS_BUFFER_EXIT);
-> +       retval = copy_from_user(to, from, len);
-> +       if (current->uaccess_buffer.kcur)
-> +               set_syscall_work(UACCESS_BUFFER_EXIT);
-> +       return retval;
-> +}
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->
+SGkgSmlyaQ0KDQo+ID4gVXNlIHdhaXRfZXZlbnRfaW50ZXJydXB0aWJsZSBpbiBscHVhcnRfZG1h
+X3NodXRkb3duIGlzbid0IGEgcmVhc29uYWJsZQ0KPiA+IGJlaGF2aW9yLCBzaW5jZSBpdCBtYXkg
+Y2F1c2UgdGhlIHN5c3RlbSBoYW5nIGhlcmUgaWYgdGhlIGNvbmRpdGlvbg0KPiANCj4gV2FpdCwg
+X2ludGVycnVwdGlibGUgY2F1c2VzIGhhbmdzPyBVbmRlciB3aGF0IGNpcmN1bXN0YW5jZXM/DQoN
+ClRvIGJlIG1vcmUgcHJlY2lzZSwgdGhlIHN5c3RlbSBpcyBub3QgaGFuZyBoZXJlLCBidXQga2Vl
+cCB3YWl0aW5nIGhlcmUuDQpXaGlsZSB3ZSBydW4gdGhlIHN1c3BlbmQgdGVzdHMgd2hlbiB0aGUg
+bHB1YXJ0IGlzIHRyYW5zZmVycmluZyBkYXRhLCB0aGUgbGFzdCBkbWEgdHggcmVxdWVzdCBtYXkg
+bmV2ZXIgYmUgY29tcGxldGVkIGR1ZSB0byB0aGUgcGVlciBkZXZpY2UgZmxvdyBjb250cm9sLg0K
+U28gdGhlIHN1c3BlbmQgcHJvY2VzcyB3aWxsIGtlZXAgd2FpdGluZyB0aGUgZG1hX3R4X2luX3By
+b2dyZXNzIGZsYWcgaGVyZS4NCldoZW4gd2UgZW50ZXIgdGhlIENUUkwrQyB0byBpbnRlcnJ1cHQg
+dGhpcywgdGhlIHN5c3RlbSB3aWxsIGV4cG9ydCB0aGUgc3VzcGVuZCB0aW1lb3V0IHdhcm5pbmcu
+DQpXaXRoIHRoaXMgZml4IHBhdGNoLCB0aGUgc3VzcGVuZCBwcm9jZXNzIHdpbGwgd2FpdGluZyBo
+ZXJlIGZvciAzMDBtcyBpZiB0aGUgY29uZGl0aW9uIGlzIGZhbHNlLCB3aGljaCB3b24ndCBicmVh
+ayB0aGUgc3lzdGVtIHN1c3BlbmQuDQoNCnJvb3RAaW14OHVscGV2azp+IyBlY2hvIG1lbSA+IC9z
+eXMvcG93ZXIvc3RhdGUNClsgIDE4Ni44MTQ0MzBdIFBNOiBzdXNwZW5kIGVudHJ5IChkZWVwKQ0K
+WyAgMTg2LjgyMzk0M10gRmlsZXN5c3RlbXMgc3luYzogMC4wMDUgc2Vjb25kcw0KWyAgMTg2Ljgz
+ODM2MV0gRnJlZXppbmcgdXNlciBzcGFjZSBwcm9jZXNzZXMgLi4uIChlbGFwc2VkIDAuMDAxIHNl
+Y29uZHMpIGRvbmUuDQpbICAxODYuODQ3MjE4XSBPT00ga2lsbGVyIGRpc2FibGVkLg0KWyAgMTg2
+Ljg1MDU1MV0gRnJlZXppbmcgcmVtYWluaW5nIGZyZWV6YWJsZSB0YXNrcyAuLi4gKGVsYXBzZWQg
+MC4wMDEgc2Vjb25kcykgZG9uZS4NClsgIDE4Ni45Mjg3OTZdIGZzbC1scHVhcnQgMjk4NjAwMDAu
+c2VyaWFsOiB0dHlMUDI6IFVuYWJsZSB0byBkcmFpbiB0cmFuc21pdHRlcg0KDQoNCl5DWyAgMjY1
+LjgzMDQyMV0gUE06IHN1c3BlbmQgZGV2aWNlcyB0b29rIDc5Ljc5MiBzZWNvbmRzDQpbICAyNjUu
+ODM1NDE3XSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0NClsgIDI2NS44NDAx
+MjRdIENvbXBvbmVudDogc3VzcGVuZCBkZXZpY2VzLCB0aW1lOiA3OTc5Mg0KWyAgMjY1Ljg0NTEw
+NF0gV0FSTklORzogQ1BVOiAwIFBJRDogNDUwIGF0IGtlcm5lbC9wb3dlci9zdXNwZW5kX3Rlc3Qu
+Yzo1MyBzdXNwZW5kX3Rlc3RfZmluaXNoKzB4OTAvMHhiMA0KWyAgMjY1Ljg1NDMyNl0gTW9kdWxl
+cyBsaW5rZWQgaW46DQpbICAyNjUuODU3NDY1XSBDUFU6IDAgUElEOiA0NTAgQ29tbTogc2ggTm90
+IHRhaW50ZWQgNS4xNS41LTA3MTU3LWcxOGFlMzYzNzA0MzQtZGlydHkgIzMxMA0KWyAgMjY1Ljg2
+NTQ1NV0gSGFyZHdhcmUgbmFtZTogTlhQIGkuTVg4VUxQIEVWSyAoRFQpDQpbICAyNjUuODcwMTQ2
+XSBwc3RhdGU6IDQwMDAwMDA1IChuWmN2IGRhaWYgLVBBTiAtVUFPIC1UQ08gLURJVCAtU1NCUyBC
+VFlQRT0tLSkNClsgIDI2NS44NzcxODNdIHBjIDogc3VzcGVuZF90ZXN0X2ZpbmlzaCsweDkwLzB4
+YjANClsgIDI2NS44ODE3MDVdIGxyIDogc3VzcGVuZF90ZXN0X2ZpbmlzaCsweDkwLzB4YjANClsg
+IDI2NS44ODYyMjddIHNwIDogZmZmZjgwMDAxMmI0YmI1MA0KWyAgMjY1Ljg4OTYxN10geDI5OiBm
+ZmZmODAwMDEyYjRiYjUwIHgyODogZmZmZjAwMDAwNDQyODAwMCB4Mjc6IDAwMDAwMDAwMDAwMDAw
+MDANClsgIDI2NS44OTY4MzddIHgyNjogMDAwMDAwMDAwMDAwMDAwMCB4MjU6IGZmZmY4MDAwMTFk
+N2YwMDAgeDI0OiBmZmZmMDAwMDA0NDI4MDAwDQpbICAyNjUuOTA0MDU1XSB4MjM6IDAwMDAwMDAw
+MDAwMDAwMDAgeDIyOiBmZmZmODAwMDExYzBmYzYwIHgyMTogMDAwMDAwMDAwMDAwMDAwMw0KWyAg
+MjY1LjkxMTI3Ml0geDIwOiBmZmZmODAwMDExNmFlYTc4IHgxOTogMDAwMDAwMDAwMDAxMzdiMCB4
+MTg6IDAwMDAwMDAwMDAwMDAwMzANClsgIDI2NS45MTg0OTBdIHgxNzogMDAwMDAwMDAwMDAwMDAw
+MSB4MTY6IDAwMDAwMDAwMDAwMDAwMDEgeDE1OiBmZmZmMDAwMDA0NDI4NDU4DQpbICAyNjUuOTI1
+NzA4XSB4MTQ6IDAwMDAwMDAwMDAwMDAwMDAgeDEzOiBmZmZmODAwMDExYzExZTQwIHgxMjogMDAw
+MDAwMDAwMDAwMDU3MA0KWyAgMjY1LjkzMjkyNl0geDExOiAwMDAwMDAwMDAwMDAwMWQwIHgxMDog
+ZmZmZjgwMDAxMWM2OWU0MCB4OSA6IDAwMDAwMDAwZmZmZmYwMDANClsgIDI2NS45NDAxNDRdIHg4
+IDogZmZmZjgwMDAxMWMxMWU0MCB4NyA6IGZmZmY4MDAwMTFjNjllNDAgeDYgOiAwMDAwMDAwMDAw
+MDAwMDAwDQpbICAyNjUuOTQ3MzYyXSB4NSA6IDAwMDAwMDAwMDAwMDAwMDAgeDQgOiBmZmZmMDAw
+MDU3YmJiOTg4IHgzIDogZmZmZjAwMDA1N2JiZTkxMA0KWyAgMjY1Ljk1NDU4MF0geDIgOiBmZmZm
+MDAwMDU3YmJiOTg4IHgxIDogMTA4M2UxYzQyNmVkMWUwMCB4MCA6IDAwMDAwMDAwMDAwMDAwMDAN
+ClsgIDI2NS45NjE3OTldIENhbGwgdHJhY2U6DQpbICAyNjUuOTY0MzIyXSAgc3VzcGVuZF90ZXN0
+X2ZpbmlzaCsweDkwLzB4YjANClsgIDI2NS45Njg0OThdICBzdXNwZW5kX2RldmljZXNfYW5kX2Vu
+dGVyKzB4MTEwLzB4NWEwDQpbICAyNjUuOTczMzY3XSAgcG1fc3VzcGVuZCsweDJlNC8weDM1MA0K
+WyAgMjY1Ljk3NjkzNV0gIHN0YXRlX3N0b3JlKzB4OTAvMHgxMTQNClsgIDI2NS45ODA1MDNdICBr
+b2JqX2F0dHJfc3RvcmUrMHgxYy8weDMwDQpbICAyNjUuOTg0MzM0XSAgc3lzZnNfa2Zfd3JpdGUr
+MHg0OC8weDYwDQpbICAyNjUuOTg4MDgxXSAga2VybmZzX2ZvcF93cml0ZV9pdGVyKzB4MTFjLzB4
+MWFjDQpbICAyNjUuOTkyNjA1XSAgbmV3X3N5bmNfd3JpdGUrMHhlOC8weDE4MA0KWyAgMjY1Ljk5
+NjQzN10gIHZmc193cml0ZSsweDIzMC8weDI5MA0KWyAgMjY1Ljk5OTkyMF0gIGtzeXNfd3JpdGUr
+MHg2Yy8weDEwMA0KWyAgMjY2LjAwMzQwMl0gIF9fYXJtNjRfc3lzX3dyaXRlKzB4MjAvMHgzMA0K
+WyAgMjY2LjAwNzQwNl0gIGludm9rZV9zeXNjYWxsKzB4NDgvMHgxMTQNClsgIDI2Ni4wMTEyMzhd
+ICBlbDBfc3ZjX2NvbW1vbi5jb25zdHByb3AuMCsweGNjLzB4ZWMNClsgIDI2Ni4wMTYwMjJdICBk
+b19lbDBfc3ZjKzB4MjgvMHg5MA0KWyAgMjY2LjAxOTQxOF0gIGVsMF9zdmMrMHgyMC8weDYwDQpb
+ICAyNjYuMDIyNTU2XSAgZWwwdF82NF9zeW5jX2hhbmRsZXIrMHgxYTgvMHgxYjANClsgIDI2Ni4w
+MjY5OTNdICBlbDB0XzY0X3N5bmMrMHgxYTAvMHgxYTQNClsgIDI2Ni4wMzA3MzZdIC0tLVsgZW5k
+IHRyYWNlIDcwMzAzZTY5MzkxZjIwMmEgXS0tLQ0KWyAgMjY2LjAzOTg4MF0gRGlzYWJsaW5nIG5v
+bi1ib290IENQVXMgLi4uDQpbICAyNjYuMDQ1NTgzXSBwc2NpOiBDUFUxIGtpbGxlZCAocG9sbGVk
+IDAgbXMpDQoNCg0KPiANCj4gPiAhc3BvcnQtPmRtYV90eF9pbl9wcm9ncmVzcyBuZXZlciB0byBi
+ZSB0cnVlIGluIHNvbWUgY29ybmVyIGNhc2UsIHN1Y2gNCj4gPiBhcyB3aGVuIGVuYWJsZSB0aGUg
+ZmxvdyBjb250cm9sLCB0aGUgZG1hIHR4IHJlcXVlc3QgbWF5IG5ldmVyIGJlDQo+ID4gY29tcGxl
+dGVkIGR1ZSB0byB0aGUgcGVlcidzIENUUyBzZXR0aW5nIHdoZW4gcnVuIC5zaHV0ZG93bigpLg0K
+PiA+DQo+ID4gU28gaGVyZSBjaGFuZ2UgdG8gdXNlIHdhaXRfZXZlbnRfaW50ZXJydXB0aWJsZV90
+aW1lb3V0IGluc3RlYWQgb2YNCj4gPiB3YWl0X2V2ZW50X2ludGVycnVwdGlibGUsIHRoZSB0eCBk
+bWEgd2lsbCBiZSBmb3JjaWJseSB0ZXJtaW5hdGVkIGlmDQo+ID4gdGhlIHR4IGRtYSByZXF1ZXN0
+IGNhbm5vdCBiZSBjb21wbGV0ZWQgd2l0aGluIDMwMG1zLg0KPiA+IENvbnNpZGVyaW5nIHRoZSB3
+b3JzdCB0eCBkbWEgY2FzZSBpcyB0byBoYXZlIGEgNEsgYnl0ZXMgdHggYnVmZmVyLA0KPiA+IHdo
+aWNoIHdvdWxkIHJlcXVpcmUgYWJvdXQgMzAwbXMgdG8gY29tcGxldGUgd2hlbiB0aGUgYmF1ZHJh
+dGUgaXMNCj4gMTE1MjAwLg0KPiANCj4gMzAwIGxvb2tzIGxpa2UgYSBtYWdpYyBudW1iZXIgLS0g
+d2hhdCBpZiB0aGUgcmF0ZSBpcyA8IDExNTIwMD8gV2h5IG5vdCB1c2luZw0KPiBwb3J0LT50aW1l
+b3V0Pw0KPiANCj4gQW55d2F5LCBpbiB3aGF0IHNjZW5hcmlvIGlzIHRoaXMgYSBwcm9ibGVtPyBC
+b3RoIGxwdWFydCpfdHhfZW1wdHkoKSBkbzoNCj4gaWYgKHNwb3J0LT5kbWFfdHhfaW5fcHJvZ3Jl
+c3MpDQo+ICAgICAgICAgIHJldHVybiAwOw0KPiANCj4gU28gd2FpdF91bnRpbF9zZW50KCkgc2hv
+dWxkIGhhdmUgd2FpdGVkIGZvciBsb25nIGVub3VnaCBhbHJlYWR5Lg0KDQpBY3R1YWxseSBpbiB0
+aGUgIHVhcnRfc3VzcGVuZF9wb3J0KCkgZnVuY3Rpb24sIGl0IHdpbGwgY2FsbCBvcHMtPnR4X2Vt
+cHR5LCBidXQgaXQgb25seSB3YWl0aW5nIGZvciAzMG1zIGhlcmUsIGlmIHRoZSB0cmFuc21pdHRl
+ciBzdGlsbCBub3QgZW1wdHksIGl0IHdpbGwganVzdCBpZ25vcmUgaXQgYW5kIGtlZXAgcnVubmlu
+Zy4NCg0KICAgICAgICAvKg0KICAgICAgICAgKiBXYWl0IGZvciB0aGUgdHJhbnNtaXR0ZXIgdG8g
+ZW1wdHkuDQogICAgICAgICAqLw0KICAgICAgICBmb3IgKHRyaWVzID0gMzsgIW9wcy0+dHhfZW1w
+dHkodXBvcnQpICYmIHRyaWVzOyB0cmllcy0tKQ0KICAgICAgICAgICAgbXNsZWVwKDEwKTsNCg0K
+QmVzdCByZWdhcmRzDQpTaGVycnkNCg0KPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBTaGVycnkgU3Vu
+IDxzaGVycnkuc3VuQG54cC5jb20+DQo+ID4gLS0tDQo+ID4gY2hhbmdlcyBpbiBWMg0KPiA+IDEu
+IEluY3JlYXNlIHRoZSB0aW1lb3V0IHRvIDMwMG1zLCBuZWVkIHRvIGNvbnNpZGVyIHRoZSB3b3Jz
+dCB0eCBkbWEgY2FzZS4NCj4gPiAtLS0NCj4gPiAgIGRyaXZlcnMvdHR5L3NlcmlhbC9mc2xfbHB1
+YXJ0LmMgfCA0ICsrLS0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIg
+ZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2Zz
+bF9scHVhcnQuYw0KPiA+IGIvZHJpdmVycy90dHkvc2VyaWFsL2ZzbF9scHVhcnQuYyBpbmRleCBh
+YzUxMTJkZWY0MGQuLjNhZmZlNTJhMzY0ZA0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
+dHR5L3NlcmlhbC9mc2xfbHB1YXJ0LmMNCj4gPiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvZnNs
+X2xwdWFydC5jDQo+ID4gQEAgLTE3OTMsOCArMTc5Myw4IEBAIHN0YXRpYyB2b2lkIGxwdWFydF9k
+bWFfc2h1dGRvd24oc3RydWN0DQo+IGxwdWFydF9wb3J0ICpzcG9ydCkNCj4gPiAgIAl9DQo+ID4N
+Cj4gPiAgIAlpZiAoc3BvcnQtPmxwdWFydF9kbWFfdHhfdXNlKSB7DQo+ID4gLQkJaWYgKHdhaXRf
+ZXZlbnRfaW50ZXJydXB0aWJsZShzcG9ydC0+ZG1hX3dhaXQsDQo+ID4gLQkJCSFzcG9ydC0+ZG1h
+X3R4X2luX3Byb2dyZXNzKSAhPSBmYWxzZSkgew0KPiA+ICsJCWlmICh3YWl0X2V2ZW50X2ludGVy
+cnVwdGlibGVfdGltZW91dChzcG9ydC0+ZG1hX3dhaXQsDQo+ID4gKwkJCSFzcG9ydC0+ZG1hX3R4
+X2luX3Byb2dyZXNzLCBtc2Vjc190b19qaWZmaWVzKDMwMCkpDQo+IDw9IDApIHsNCj4gPiAgIAkJ
+CXNwb3J0LT5kbWFfdHhfaW5fcHJvZ3Jlc3MgPSBmYWxzZTsNCj4gPiAgIAkJCWRtYWVuZ2luZV90
+ZXJtaW5hdGVfYWxsKHNwb3J0LT5kbWFfdHhfY2hhbik7DQo+ID4gICAJCX0NCj4gPg0KPiANCj4g
+DQo+IC0tDQo+IGpzDQo+IHN1c2UgbGFicw0K

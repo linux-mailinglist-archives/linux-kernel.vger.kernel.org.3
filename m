@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B058646CA54
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95DE46CA53
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbhLHB5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:57:17 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59510 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbhLHB5P (ORCPT
+        id S238721AbhLHB5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:57:12 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28285 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238582AbhLHB5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:57:15 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 794F7CE1F7F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:53:43 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7648E60E98;
-        Wed,  8 Dec 2021 01:53:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638928421;
-        bh=JIUtT1nVOZt+ipMUhsyNal3eL3AADWDbcDFza2JgQ1E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s28Ei0baHx4OEp0c39KZjIW9kd2jRsYd1nuE6p2uhpPyY875Rwmt9gMGHFip4PsiZ
-         wFxXFKRDJHz6nC1Ji/OhNvM8x3SGPQx2ZhscHslyJz2U5VGHJ9XZ1pEEZak6wzegbq
-         Dda9bx9PYaFxkUcgSPhSfFVBvvBPfiscQJsbbtmc=
-Date:   Tue, 7 Dec 2021 17:53:38 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, mhocko@suse.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        shakeelb@google.com, ktkhai@virtuozzo.com, shy828301@gmail.com,
-        guro@fb.com, vbabka@suse.cz, vdavydov.dev@gmail.com,
-        raquini@redhat.com, david@redhat.com
-Subject: Re: [PATCH v2 1/1] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-Message-Id: <20211207175338.229c52144a67fc1a76b5840c@linux-foundation.org>
-In-Reply-To: <a1c3e952-866d-e3b4-1479-8f04e963bf11@redhat.com>
-References: <20211207224013.880775-1-npache@redhat.com>
-        <20211207224013.880775-2-npache@redhat.com>
-        <Ya/vaGdKHm6Zy3ML@casper.infradead.org>
-        <a1c3e952-866d-e3b4-1479-8f04e963bf11@redhat.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 7 Dec 2021 20:57:12 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J80Yz2mmtzbhvZ;
+        Wed,  8 Dec 2021 09:53:27 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 8 Dec 2021 09:53:39 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Wudi Wang <wangwudi@hisilicon.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>
+Subject: [PATCH] irqchip/irq-gic-v3-its.c: Return its_invall_cmd.col when building INVALL
+Date:   Wed, 8 Dec 2021 09:54:29 +0800
+Message-ID: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 19:25:25 -0500 Nico Pache <npache@redhat.com> wrote:
+From: Wudi Wang <wangwudi@hisilicon.com>
 
-> 
-> 
-> On 12/7/21 18:34, Matthew Wilcox wrote:
-> > On Tue, Dec 07, 2021 at 05:40:13PM -0500, Nico Pache wrote:
-> >> +++ b/mm/vmscan.c
-> >> @@ -222,13 +222,16 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
-> >>  	int size = map_size + defer_size;
-> >>  
-> >>  	for_each_node(nid) {
-> >> +		int tmp = nid;
-> >>  		pn = memcg->nodeinfo[nid];
-> >>  		old = shrinker_info_protected(memcg, nid);
-> >>  		/* Not yet online memcg */
-> >>  		if (!old)
-> >>  			return 0;
-> >>  
-> >> -		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
-> >> +		if(!node_online(nid))
-> >> +			tmp = numa_mem_id();
-> >> +		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, tmp);
-> >>  		if (!new)
-> > 
-> > Why should this be fixed here and not in, say, kvmalloc_node()?
-> 
-> according to Michal, the caller should be responsible for making sure it is
-> allocating on a correct node. This avoids adding branches to hot-paths and
-> wasting cycles. Im not opposed to moving it to kvmalloc_node, but it may result
-> in masking other issues from other callers.
-> > 
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
 
-Yes, kvmalloc_node(nid) should allocate on `nid', or should fail.
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
 
-A new kvmalloc_try_node() or whatever would express this idea.
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+---
+ drivers/irqchip/irq-gic-v3-its.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index eb0882d15366..0cb584d9815b 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -742,7 +742,7 @@ static struct its_collection *its_build_invall_cmd(struct its_node *its,
+ 
+ 	its_fixup_cmd(cmd);
+ 
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
+-- 
+2.33.0
+

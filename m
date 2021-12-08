@@ -2,238 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9700C46D438
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38AD46D43D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbhLHNUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:20:44 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:57762 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhLHNUn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:20:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D5EFCE2188;
-        Wed,  8 Dec 2021 13:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0BF4C00446;
-        Wed,  8 Dec 2021 13:17:00 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 14:16:56 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
-Message-ID: <20211208131656.ozsbbotttvz3bct7@wittgenstein>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-17-stefanb@linux.ibm.com>
- <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+        id S234232AbhLHNW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:22:27 -0500
+Received: from mail-eopbgr80088.outbound.protection.outlook.com ([40.107.8.88]:7550
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229613AbhLHNWZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 08:22:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SMqGo9GDS+rjgtA407JShd+Byaszs9y1vzBX6r1fjCGbkYZg7wUrPnfHBkJpL0EbTZ2+DiOqcBpccd+IfcFDq1yk0KWcTR6hn8JR9ZwPN+8RRhz78AROgw9BqowPwKTGmxKx8I+BLLWRqpQXPc7DoTLkVgjXaDzwW3CYvg9dD8WaLBgc0Mhz5LcTSFmVfxIYnv7yPDcef2RT3yeVJDZjwTrwebz0GA0i6kSpkF4uNlnoCXoDcDexctbS/+SGKCjcKAoXMH1xvQmRMmQK1SX/Z4GGacR9D/qd5VnijaHuFTG0uVMFBo0e5Sy0YxbHTF91tqpdSAn7b6BV3WbURgPxfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WZbNMKw3+wjufaPKVTsljc1zpTsJEjOXmv5hLNiWFew=;
+ b=MZ/6gPOexk3Q1Hzt0GyT0RlQ3CsrwOrAQqUIZWbP1pUkC/un7CbB3ENVAnrw+W0gnAWtz7JyzPAoPQ2LfGae86m8fxI801DR+Z0zt9/cGFz54lIJlm3zl7eIhJw5KZX7npGHKTRLlhdq/CAjHPtzKHvIBC75iwUoauzNQTyAsOGKFYDQn4M9Ei72exUtBWeX9Z34074fFbMGZ6+ZRDZd1Bc805RrReySmyIwwxo8mzw+88vUsY9HdyuBD77E9Y1PBNBHEODzZ90RFtHzGHDJX330Emhu14J6C+YUM88+8ViiZ5jyjivNx+q1FlhO+Vxe/yaxGm13+r6GI+ZvivjukQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WZbNMKw3+wjufaPKVTsljc1zpTsJEjOXmv5hLNiWFew=;
+ b=BHiBAT0l4ZE0sLydwZEdY/NpGm0CYf3VBqxfq3tVLlFXqK0FDArH8tXCjdNDPsClEXQiScyIrQLqZE6G5v1phpYYlI6QJNPOeYYPQxzYZmb9m9DIEymKkpRzZ7CazSRoGVIH9CSO8uaQWkf43TLnsVGHOxdlN/ZgtefOJZbBPMg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
+ 2021 13:18:51 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Wed, 8 Dec 2021
+ 13:18:50 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        ping.bai@nxp.com, aisheng.dong@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/3] add i.MX8ULP scmi power domain
+Date:   Wed,  8 Dec 2021 21:17:52 +0800
+Message-Id: <20211208131755.1799041-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR0302CA0008.apcprd03.prod.outlook.com
+ (2603:1096:3:2::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR0302CA0008.apcprd03.prod.outlook.com (2603:1096:3:2::18) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 8 Dec 2021 13:18:46 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b6508344-611f-4f8d-9b10-08d9ba4d4605
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DU0PR04MB9496E6EBBC9E64A3AE12B972C96F9@DU0PR04MB9496.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1186;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B8+sAZwU20cifNswsJgi6ev67QZgUjyZMoaAQKNhxmQxFMd43KibHNL4+tMSeuG9yz93mB5sceQ3pFrRFYUEEwr6comaYjn2fHWXSfvbS+LXYscufZVxCO3Z7Ae2s7HyLbdJf/TZLOciKSy6YDKSNpXDhDEyHKR9Ebcm6kiZM3Ulxi1gp/5z4Pc0oZzoLCAYZ8TJfye4sybQ3EUi8mD3dJhJ5NY4m+9Fq/3gdR6B22f3HGqKsI4hqPgBr9cseedi41DSMxT4Ud0VQMMFakAC9bn92HefBsLsBgMuDnu/AjcZ5rmEkjXWRRa6PHeoVJ8FBKXoSLZBgtbU7rCQwIi1HAprgD8Di0IeCwaxTJ6SF0+BxiyRNcV/8/NT1m2+BiZW9qVtnNbnLCqhODl4ds8ncdfoeHKZvSPj6wGWxRxpaO63dQR5i/qpQ/ZUXBbCMJMueEyhdUUMLag0l7zhXDSabFfsdEguk389UzZ0YEF4glOEuF5WNm1rK82WPmND6ULwngnSPdFZFupMCLS0BAFP3DZHa7JaycbQx8GpV4Ub4Ks507ldqfp9HEN8DwqtmF509D8F0wI/ySBVtFctLjm7O2PYHWvs7KDPUV7dXTY/o8Qr0atTjZ4tdoaants40WD/f1yVdz6gkSe9KPZ7ev0sCukwRAV/95dWGB9FU2fn7i/K6J8+0gultLkOQjFhkk69+MqIPuJUB22nIUVYavaA7Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(26005)(52116002)(6506007)(6512007)(66476007)(6486002)(5660300002)(66946007)(66556008)(6666004)(86362001)(8676002)(4744005)(4326008)(8936002)(1076003)(956004)(316002)(2616005)(2906002)(38350700002)(38100700002)(508600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YOHmAi2kiot4B+MwlL0sa2vOJFHWqZp+t8NtlyeYhEqnhzPVQiAV0A5niFcy?=
+ =?us-ascii?Q?AzzMdt6Gse0sRtQ/sUOGno5s1W+CDdNY1dDUDiySeh61qFSDPDxwpLtpv4YZ?=
+ =?us-ascii?Q?YMy78ckNSNQ+irUkHuprKubSWxcpnXaG0zrztc/HXmbXLhBN5W0ivVluEU0Q?=
+ =?us-ascii?Q?q8sfOgV7udyPF8RQOVezFi+XD83YH6/W1t8rdD2NFO2Pc78/3UxTc40qrsXi?=
+ =?us-ascii?Q?gNSw5Z3t9nk1BOKeGGx6ZenVdqQ3eX4lhYhHwliSYm+M98OCe4lyHBnBUArR?=
+ =?us-ascii?Q?p+QmRD1+0z6yX8N6V8bEXIyiJ4D+UuZWBlkcp8WUUG4jY5DUgO4Wk533TCYf?=
+ =?us-ascii?Q?tS4X+yJY6A0yYBmcycKbatb+JdRAuCMbZ0xqoUu/SzS5aMHgAPUuKQECDeD6?=
+ =?us-ascii?Q?UZ3UQ5qXH6p4t52epTGpetJeELw1No8E3pJaAf0m7TmUvgYdEqy3mR8G1W9z?=
+ =?us-ascii?Q?x4Wq96lRUNQv3arkkShV8/XP/ro1mID2sPyr5OHLQuBu2LgQ6BDQPjq5m06Y?=
+ =?us-ascii?Q?ivH/KLKTTbZf4z4Xh939AhMkPToKTQteo2LXJTHM2+ja8y9M3NgMVawjdeOm?=
+ =?us-ascii?Q?svN0yjec3JFpgCyukApj1Z8uO4e7YlNvT05+7CdRkHmEILjyVu4rjl1v8/BE?=
+ =?us-ascii?Q?Jmvj6AhIT5AS2ify5K6g4Vc7CwrS2NB74svSOvSor2Yl7V0z/HcgJo46iFZ4?=
+ =?us-ascii?Q?FdnNiKuL+tdLv109/u9NYw+TkuuzZexAPDyON65mA9t+iziPHTigQ0TvK7H2?=
+ =?us-ascii?Q?Op6CH14oD3UAjR9Mabk+3OJVuWSB3iP+tsbSdakcaWcmfOBBENKH/oUsQYOg?=
+ =?us-ascii?Q?PqYU5twFswItmezveCSX9RPH1ja8dxwHu7Ditn+U5iSPHKOteleYvsdRi6cj?=
+ =?us-ascii?Q?lUGX2g8R9c7zlJgsP3h89/TXIOADSAKJ3W/UVXI2Zufh9tXaBM4ekGX57N4H?=
+ =?us-ascii?Q?/HzTEM04iPs/zIM+ru0xR+YBacRIGLF0myC/y6L9UrUf6IaYQBhvjTnQ8HHQ?=
+ =?us-ascii?Q?bQ5Cp9HGhz1aUihqSf+rOUUkFAYZ1SPtlZrjDOWeNFQobYuLzZxNjmBEyD7x?=
+ =?us-ascii?Q?7lHeygsMEqPnF0GNbepRNOPO7Xa12RjdqfspGpi/yU7sUvO4VyDjzOcVyIzC?=
+ =?us-ascii?Q?9+PhZ3wYK7aswnuEMBzkwWFukDo3lTHJ2IGJHfVpRs2Uiw/O/GPKnqPqU5qY?=
+ =?us-ascii?Q?o95kYdHe5TyQR2/BBU3tLAFuq3hywiuG8VcerTfCSEeaJKs1pMFlnNlG9ea5?=
+ =?us-ascii?Q?zp15NZABdHmEUDiq0rqbLKnJ0Qh6zsYgJhSlzjavboH/Qh2TD1WsmrsgIUlF?=
+ =?us-ascii?Q?cKZKJciWDFP9Ni0ZBY+L01jhQ5VH9uwMLIcmalfIYVOCQBq1DHymbdqrV70/?=
+ =?us-ascii?Q?XbKMvf578n96HvG7LMYYtOIbNVEM/e3ECW5SNPwkTXu5i525RzWbKE+bTCgQ?=
+ =?us-ascii?Q?RWFIC+N3FDjlmxyuDcXMwibf2q6Ck4+OA8BCGYbkejGurYvT4jg2Rd96siGk?=
+ =?us-ascii?Q?mtoVdCaBVRaRA6TJs98fM1i3krjwzowIdnC7/+wllLUswO2F9gn1JF66H+F+?=
+ =?us-ascii?Q?ek1ttpOieUkClagOFHpoFQtl7GYdi35vXuPN6Nn6Tf0oyVZFAhm+v/J3Ruu0?=
+ =?us-ascii?Q?y9wa7I7hgz9190gwwh4YGYQ=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6508344-611f-4f8d-9b10-08d9ba4d4605
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 13:18:50.6416
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wd1dL/zZaXYY/Qm5/uePJzaNzIoEnI1IkM8zm3ChDR19eUpNsiN85vAiwyEqaqpq4HyWT8xiYIlG7d8FbYZPdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9496
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:58:14PM +0100, Christian Brauner wrote:
-> On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
-> > Setup securityfs with symlinks, directories, and files for IMA
-> > namespacing support. The same directory structure that IMA uses on the
-> > host is also created for the namespacing case.
-> > 
-> > The securityfs file and directory ownerships cannot be set when the
-> > IMA namespace is initialized. Therefore, delay the setup of the file
-> > system to a later point when securityfs is in securityfs_fill_super.
-> > 
-> > This filesystem can now be mounted as follows:
-> > 
-> > mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
-> > 
-> > The following directories, symlinks, and files are then available.
-> > 
-> > $ ls -l sys/kernel/security/
-> > total 0
-> > lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-> > drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-> > 
-> > $ ls -l sys/kernel/security/ima/
-> > total 0
-> > -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
-> > -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
-> > -rw-------. 1 root root 0 Dec  2 00:18 policy
-> > -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
-> > -r--r-----. 1 root root 0 Dec  2 00:18 violations
-> > 
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > ---
-> >  include/linux/ima.h             | 17 ++++++++++++++++-
-> >  security/inode.c                | 12 +++++++++++-
-> >  security/integrity/ima/ima_fs.c | 33 ++++++++++++++++++++++++++-------
-> >  3 files changed, 53 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/include/linux/ima.h b/include/linux/ima.h
-> > index bfb978a7f8d5..a8017272d78d 100644
-> > --- a/include/linux/ima.h
-> > +++ b/include/linux/ima.h
-> > @@ -66,6 +66,10 @@ static inline const char * const *arch_get_ima_policy(void)
-> >  }
-> >  #endif
-> >  
-> > +extern int ima_fs_ns_init(struct user_namespace *user_ns,
-> > +			  struct dentry *root);
-> > +extern void ima_fs_ns_free_dentries(struct user_namespace *user_ns);
-> > +
-> >  #else
-> >  static inline enum hash_algo ima_get_current_hash_algo(void)
-> >  {
-> > @@ -154,6 +158,15 @@ static inline int ima_measure_critical_data(const char *event_label,
-> >  	return -ENOENT;
-> >  }
-> >  
-> > +static inline int ima_fs_ns_init(struct user_namespace *ns, struct dentry *root)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static inline void ima_fs_ns_free_dentries(struct user_namespace *user_ns)
-> > +{
-> > +}
-> > +
-> >  #endif /* CONFIG_IMA */
-> >  
-> >  #ifndef CONFIG_IMA_KEXEC
-> > @@ -221,7 +234,8 @@ struct ima_h_table {
-> >  };
-> >  
-> >  enum {
-> > -	IMAFS_DENTRY_DIR = 0,
-> > +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
-> > +	IMAFS_DENTRY_DIR,
-> >  	IMAFS_DENTRY_SYMLINK,
-> >  	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
-> >  	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
-> > @@ -333,6 +347,7 @@ static inline struct ima_namespace *get_current_ns(void)
-> >  {
-> >  	return &init_ima_ns;
-> >  }
-> > +
-> >  #endif /* CONFIG_IMA_NS */
-> >  
-> >  #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-> > diff --git a/security/inode.c b/security/inode.c
-> > index 121ac1874dde..10ee20917f42 100644
-> > --- a/security/inode.c
-> > +++ b/security/inode.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/fs_context.h>
-> >  #include <linux/mount.h>
-> >  #include <linux/pagemap.h>
-> > +#include <linux/ima.h>
-> >  #include <linux/init.h>
-> >  #include <linux/namei.h>
-> >  #include <linux/security.h>
-> > @@ -41,6 +42,7 @@ static const struct super_operations securityfs_super_operations = {
-> >  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
-> >  {
-> >  	static const struct tree_descr files[] = {{""}};
-> > +	struct user_namespace *ns = fc->user_ns;
-> >  	int error;
-> >  
-> >  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
-> > @@ -49,7 +51,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
-> >  
-> >  	sb->s_op = &securityfs_super_operations;
-> >  
-> > -	return 0;
-> > +	if (ns != &init_user_ns)
-> > +		error = ima_fs_ns_init(ns, sb->s_root);
-> > +
-> > +	return error;
-> >  }
-> >  
-> >  static int securityfs_get_tree(struct fs_context *fc)
-> > @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct fs_context *fc)
-> >  
-> >  static void securityfs_kill_super(struct super_block *sb)
-> >  {
-> > +	struct user_namespace *ns = sb->s_fs_info;
-> > +
-> > +	if (ns != &init_user_ns)
-> > +		ima_fs_ns_free_dentries(ns);
-> 
-> Say securityfs is unmounted. Then all the inodes and dentries become
-> invalid. It's not allowed to hold on to any dentries or inodes after the
-> super_block is shut down. So I just want to be sure that nothing in ima
-> can access these dentries after securityfs is unmounted.
-> 
-> To put it another way: why are they stored in struct ima_namespace in
-> the first place? If you don't pin a filesystem when creating files or
-> directories like you do for securityfs in init_ima_ns then you don't
-> need to hold on to them as they will be automatically be wiped during
-> umount.
+From: Peng Fan <peng.fan@nxp.com>
 
-The way I see it you need to do the following:
-If securityfs is mounted in a userns and fill_super is called you need
-to call
+V2:
+ There is no dependency now.
+ Use Hyphen for node name in patch 2/3
+ Add A-b in patch 1/3
 
-int ima_fs_ns_init(struct user_namespace *user_ns,
+This patchset is to add device tree support for i.MX8ULP SCMI firmware,
+and enable it for USDHC node
 
-(which you really should call ima_securitfs_init()...)
+Peng Fan (3):
+  dt-bindings: power: imx8ulp: add power domain header file
+  arm64: dts: imx8ulp: add scmi firmware node
+  arm64: dts: imx8ulp: add power domain entry for usdhc
 
-and when you create those entries for non-init-securityfs you just need
-sm like:
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 38 ++++++++++++++++++++++
+ include/dt-bindings/power/imx8ulp-power.h  | 26 +++++++++++++++
+ 2 files changed, 64 insertions(+)
+ create mode 100644 include/dt-bindings/power/imx8ulp-power.h
 
-	struct dentry *dentry;
+-- 
+2.25.1
 
-	/* XXXX useless comment XXXX:
-	 * The lookup_one_len() function will always return with an
-	 * increased refcount on the dentry that you need to release.
-	 */
-	dentry = lookup_one_len(name, parent, strlen(name));
-	if (IS_ERR(dentry))
-		return dentry;
-
-	/* Return error if the file/dir already exists. */
-	if (d_really_is_positive(dentry)) {
-
-		/* 
-		 * XXXX useless comment XXXX:
-		 * Put the reference from lookup_one_len()
-		 */
-		dput(dentry);
-		return ERR_PTR(-EEXIST);
-	}
-
-	inode = new_inode(dir->i_sb);
-	if (!inode) {
-		error = -ENOMEM;
-		goto out1;
-	}
-
-	// DO A LOT OF OTHER STUFF
-
-	d_instantiate(dentry, new_inode);
-
-	// DON'T CALL dget() again
-
-The point is to not increase the refcount again like
-securityfs_create_dentry() does after d_instantiate which requires you
-to call securityfs_remove(). That's unnecessary for the
-non-init_user_ns-securityfs case and then you don't need all that
-cleanup stuff in kill_super() and can just rely on d_genocide() and the
-dcache shrinker to do all the required work.
-
-Don't hold on to objects that can go away beneath you in any structs.
-Stashing them in ima_namespace will just make people think that these
-things can be accessed without any lifetime concerns which is imho an
-invitation to disaster in the long run.

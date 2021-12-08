@@ -2,158 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F65F46D795
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFE146D79C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236452AbhLHQB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:01:56 -0500
-Received: from mail-bn8nam12on2076.outbound.protection.outlook.com ([40.107.237.76]:6113
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236447AbhLHQBy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:01:54 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=chndAGNUgD5BvxKKa3jogynbRMZnPmAPmyVxEZZp6IcGyNTtW9wkUoSUHzMMIHuhqRjpJ/vSg4jNkoP4CyUEbUOBenTXf36FvYMYan4BJQ71hPbo4G/UOngLHrbKJrz4kJLiYrS6e9VvPBQ+PFgNzNCqWx5akz7DNRXK8PJikYx9letxuIk6FrSsJTkEybED6lIQJzqW3W93qjm9DCNPEtzBKFq4IVa/n+AW8EWsnmWhrePV0bVmJNVL6aklGpza1eiilzTzGV3+CbpXD1BQ3h34P1j/hcxo9+/3+Gf17Ov4G5QgdxsjbIIYqZ8Q7pRMXfqThGu4iTkqoRZllbjNEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vhhfh1Z4OaRQAiAKVqajt2RcGp0Iv7kNsws6AfW8ZpI=;
- b=Oql9Lrdxw0j7i6nI+IeEjbjtCl+IHI9XXZvlFxODbp2YnmV+OBLRBsR/BI4cQoxN6hB6NrnUXa5mOBRu1e4qGpO61NZ4XhQnOVqvqwP6SVq0bdhZif4vmTlKxC98DjhK+l9zqUcwvn9LdRNhjHfgAmNeLUnMywA6c9xGgrQs3T8zfvL2wsA64JwrSVZyDM/EmpZkhSJyiJ45Qz7psdgzBg9OGvH7Hz9Z7R3m96HkXP3mM0mcj7eO7lnT+BPcU1Tj1OSMJ4pe6NzA+3XjX0qt6eHFVq9JbkPNZgvd0C0mCs1gjtTBRD1Cbm8sWcIarRuG+Dmk9KbBxmqF7J4Nf5PIuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Vhhfh1Z4OaRQAiAKVqajt2RcGp0Iv7kNsws6AfW8ZpI=;
- b=nMh5CiPeaRGaX/3xcOKLjL4+gmOaTyN9J+rYYY6pBEwdDLCgLHHiDC1YiZQR8OUz6m6OsseL7Ho9jtHT5c8mqJAW2doUKMF1oBCS6g25C60JVsVubSpPgPb7G/Wzp+JzVO7tqi4wO7/re5u6YL642u3i2viKc43CuzG0uCUY/J0+riKX9eWNCMsO4zltTsEW6ijMhl55Y0HAFvJ9uXy6QkxBKODMbkDfg0VvaKuolI51BobZDRKyCIjqEVcHBRYaOFntgD58cre4xsHKwfdzGW6Q/NmgDp3duuFp2HI5REi5rGTvIZ1S49M0B2J/MJ6wgvxMVuvUhSZOKhT3O3UEUg==
-Received: from BL1PR12MB5269.namprd12.prod.outlook.com (2603:10b6:208:30b::20)
- by BL1PR12MB5351.namprd12.prod.outlook.com (2603:10b6:208:317::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Wed, 8 Dec
- 2021 15:58:20 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5269.namprd12.prod.outlook.com (2603:10b6:208:30b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Wed, 8 Dec
- 2021 15:58:19 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.013; Wed, 8 Dec 2021
- 15:58:19 +0000
-Date:   Wed, 8 Dec 2021 11:58:16 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V2 19/36] PCI/MSI: Store properties in device::msi::data
-Message-ID: <20211208155816.GZ6385@nvidia.com>
-References: <20211206210307.625116253@linutronix.de>
- <20211206210438.688216619@linutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206210438.688216619@linutronix.de>
-X-ClientProxiedBy: SJ0PR05CA0049.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::24) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S236459AbhLHQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:02:14 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:46606 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236421AbhLHQCN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 11:02:13 -0500
+Received: by mail-oi1-f175.google.com with SMTP id s139so4600867oie.13;
+        Wed, 08 Dec 2021 07:58:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/gGEwJSwV5V5HUWjlwFroLh+L+wOwYAjWDVl9ra5rOQ=;
+        b=JsnPg54Vq+ktViN1ALvdZpzgKLLvsR+FjCD4AR3+KcEoPkJJF2iUCu0KAq2pRWq533
+         QxnAclwQTzcawF3EIRwZZjMEO+tOktIPkzDiMWBxRuxRBjizL9pKyzxyM6nSbpFlxM0W
+         IzsfeXSyG5oH0BF+AounjIbJvOvoG23becsN0FYhoKmg9adqkRLzJLxYgaxHe5Hr7oD+
+         DoV0bwTrr8sEZlT2ILNb8EG8E065aj9aSIRYwezXW8GDoJ9PUxccTOTDpxZvv68gfNtq
+         A9+oOpH0KI2yi4Q8zFPdI1Y0u4zjof2TdINzCbqSZfx2AjMrK97ZFu+tC/ZbRSoNvWNQ
+         sSXQ==
+X-Gm-Message-State: AOAM533S5dA4Hi97hG+RarYvSUs2666lIAQdfS8olKfuSNpA6ZJVNtpN
+        C91X9hd6OmM+6OmBIkbaBw==
+X-Google-Smtp-Source: ABdhPJz5vBtJ1bYq6RacODKIUZM7USD1CJnF5ba30SxRcxLSyMaLJ+OIXcU0C5A6DArIJKFKZhGphg==
+X-Received: by 2002:a54:468b:: with SMTP id k11mr180698oic.105.1638979121057;
+        Wed, 08 Dec 2021 07:58:41 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id bg38sm769688oib.40.2021.12.08.07.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 07:58:40 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call directly
+Date:   Wed,  8 Dec 2021 09:58:38 -0600
+Message-Id: <20211208155839.4084795-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 28a579de-45b7-4536-909e-08d9ba638dd0
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5269:EE_|BL1PR12MB5351:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB52692E87C2447367C43FE935C26F9@BL1PR12MB5269.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8A6Tqb8bg2+mXXGWrraUraNjt+Dbk+HoakX3aEWnfX58e1AzaV00tQp+0kOxXo6MbMlfHUFse3CgyaL9Y6NWq5XZerzJawx0urbwMgCM/DuLquEWhR0JhzTIuDdLKIyjlYLfacb/bcYXTD+I6/BrqLFw2wl9/UiC8bEKcw41sdVJLEAX6hUsqJHeZHQH43nJ4OCNctXMB/a0pzEJx8bYyJwcWstGzuf53a1/VrtpwA/Ksv2+TNwTjqYlAhdylMQC5/tmVCO1WP/1r+Q7Um33/ZEEtkg+4uvqbyzYiKS67W6OkOfOCFngTg7xPDuWcKhUowMy0aQXvp3WoTHAtK633R4pBQ8q/rcMqhTXNsByN9Up9p8VWhSZQ497W/0F1NeH0zaxSp0c0Ts8nNvNyr/Z3BA07/dLWBbC0/d7XmK3BiEqvzeARQp4g0/eTl9OsxtmL/XSCTvRMp3Zc+wPrpkumA5CNT3cVzigdLqeW9741yUORR0JB3Gb5h+Gm4g4//PVe7tJ2xuNKOoJ544A5cle5kOB2FsD1S2y3shHNJ8sAiWCIGyKq4P+o2G2FTtxbL6QgRRqcdtW/RL3Y9zoOZCcLT2aj4bSoGHavtGjWrzwT9J6/gRAZDwGK7dSptjohhaqJqKBiCYQvxhOiJahzLS7Pg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5269.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(7416002)(508600001)(6512007)(38100700002)(66476007)(6666004)(2616005)(33656002)(4326008)(6486002)(6506007)(26005)(6916009)(66946007)(66556008)(316002)(8676002)(5660300002)(83380400001)(1076003)(54906003)(186003)(2906002)(8936002)(86362001)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+qJJFjN+ab39S6TkbsBWOnrA2Qhu0Lg7bmLz0bRasCyrNSVAZqUoZLH12o/j?=
- =?us-ascii?Q?mwrtjEJf0Xctb7VWN6RaSJ53vsVyLvz1Fy2dia1dSmWRA7CywsiHRgyhsb4b?=
- =?us-ascii?Q?jbR9ifS79g2y8v124mTT6tk6ms6+cFK+Z9zS2T67m79O9DM2FL6wspNmz0eZ?=
- =?us-ascii?Q?4I2qu91XUZRXe2MfipurcsT84ScnfwbpRaFtKn89PE4VxnGxbc/igLU/ouYQ?=
- =?us-ascii?Q?nmx7DVe73HAfxpZMk21wkfA5ohIwmL3UVudBMSsutoFBrsqTcmh7NeoKcAon?=
- =?us-ascii?Q?mG+d0NFiHSD4oxA8MU65HtSGcrz8hctyn03do7ej4RTNVeiHElhRuWgGU/c4?=
- =?us-ascii?Q?BB+QIJ2X6jdO91L0KjIKom1xvPaM/7vkA2xSAGaEmJvjaCQqvNWx7Fbli6Ih?=
- =?us-ascii?Q?eVaQ9+W7SgOtOQywK7zbMol/wvAeV+HHNKl8XPSfWRbnUBzoTQnwrEMK74pe?=
- =?us-ascii?Q?nrqKcMEMy/bB7ricfLzpgCGamVOMGhWkwwhSZHY7WxicAj2dcoOdMgG9fOkR?=
- =?us-ascii?Q?C76ik4/rd84mTeNGFmjq3k+lxFqyFLN9UpHznhtNZQzOdgnNoCEJM9dnDJne?=
- =?us-ascii?Q?GdND7gpDT0RWpO+QPJjFWecVP0FZuc+C9E8OV7QtA/iQVzDb/WKN4tXCGuuA?=
- =?us-ascii?Q?30FtTnyxhcVdsmLqwVS+p5/LK5KLDon04cdNOUOuMPSYsRy2poGtxjsjNnwG?=
- =?us-ascii?Q?F7/RgSW3Xa6gh2W+xiXNiyP2LCS2yMrFQdcf6RTWHj6s90Uge3pWTeMJtmSJ?=
- =?us-ascii?Q?WJUl3lUv44NmZt6HN4foh5a707vA9SrMfND4fKnI55R3LllCG4fy6UTvdVen?=
- =?us-ascii?Q?b86T1q1yHKg7ygoVMz/hflupeWKPqkdgnssoWdfgPgAx2nco/ltxzp+MqO2B?=
- =?us-ascii?Q?wGyH8hubTFZ87EhalIZZfHOZ0ERUun83C6qsZk+iQpm/26+c6z04q47O0fPI?=
- =?us-ascii?Q?b4yezGpgBsOYTa1S5XS6TxVXXqc2w1f07Q5LIskTLxKXiQWUYA3AhEJFd1Cn?=
- =?us-ascii?Q?5iEppfVFqH+wE289Iymmd91AIntcjlcESu1PORIn/Gg9Q/+3sAfHWK96U+9S?=
- =?us-ascii?Q?KNMTt2tDGMZ2xmGlPkfdqN00D8NqmGg2dyWBblDx3v1y8c07A+QSkKvcU2g0?=
- =?us-ascii?Q?wtXqvAFzMYrhdTSc7xDQU8jeLiZ60rNlSlxilRRirigdqDCnnYZAl5RqW0kJ?=
- =?us-ascii?Q?lGRCTiWGgAAwh4xB9NTn7yj9PZXHS4uFXvLsuJbpRdlfBHgUZCKPCnRDlMuy?=
- =?us-ascii?Q?PyScBDWUAM2c3FozhJFemgpfHij5rJDTwGK0UELT5M2/z5sJM+ijo/RCoi2G?=
- =?us-ascii?Q?ndpn6ak6f5e14Bywc8jzVNa9bH7NMLRRgAuJcuWnX7+1q4aynp/q3BMjWNW/?=
- =?us-ascii?Q?vqfX8yojGFkQnfBcnp6mAWSKQ4TCI6AIWf0uS8XOXoGn5fNGe/EEDjou3HQJ?=
- =?us-ascii?Q?I062LqwAc4+sYXt0xjXfw0Eiq1/In/czgSNH4TPbM2RHURw2irHaCDf4Hq12?=
- =?us-ascii?Q?BCLzW1TE6qevIlh9CiTx7pij3hVcw6/O+IbfcW60nwt1k9pOwKguuLBclDMO?=
- =?us-ascii?Q?e72QxSd7SWVGnrL7Zmg=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28a579de-45b7-4536-909e-08d9ba638dd0
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 15:58:19.4670
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bYAPMq42LAnCm/sVgjoOZU1ZAepIR0bIxzYB/ZUFhj2xhN34MlFNK59fq6POtcTv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5351
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:39:26PM +0100, Thomas Gleixner wrote:
-> Store the properties which are interesting for various places so the MSI
-> descriptor fiddling can be removed.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-> V2: Use the setter function
-> ---
->  drivers/pci/msi/msi.c |    8 ++++++++
->  1 file changed, 8 insertions(+)
+Use of the of_scan_flat_dt() function predates libfdt and is discouraged
+as libfdt provides a nicer set of APIs. Rework
+early_init_dt_scan_memory() to be called directly and use libfdt.
 
-I took more time to look at this, to summarize my remarks on the other
-patches
+Cc: John Crispin <john@phrozen.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - ralink: Use 'if' instead of 'else if'
+ - early_init_dt_scan_memory: continue instead of return on no reg
+ - Fix indentation
+---
+ arch/mips/ralink/of.c      | 19 +++--------
+ arch/powerpc/kernel/prom.c | 16 ++++-----
+ drivers/of/fdt.c           | 68 ++++++++++++++++++++------------------
+ include/linux/of_fdt.h     |  3 +-
+ 4 files changed, 49 insertions(+), 57 deletions(-)
 
-I think we don't need properties. The info in the msi_desc can come
-from the pci_dev which we have easy access to. This seems overall
-clearer
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 0135376c5de5..35a87a2da10b 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -53,17 +53,6 @@ void __init device_tree_init(void)
+ 	unflatten_and_copy_device_tree();
+ }
+ 
+-static int memory_dtb;
+-
+-static int __init early_init_dt_find_memory(unsigned long node,
+-				const char *uname, int depth, void *data)
+-{
+-	if (depth == 1 && !strcmp(uname, "memory@0"))
+-		memory_dtb = 1;
+-
+-	return 0;
+-}
+-
+ void __init plat_mem_setup(void)
+ {
+ 	void *dtb;
+@@ -77,10 +66,10 @@ void __init plat_mem_setup(void)
+ 	dtb = get_fdt();
+ 	__dt_setup_arch(dtb);
+ 
+-	of_scan_flat_dt(early_init_dt_find_memory, NULL);
+-	if (memory_dtb)
+-		of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+-	else if (soc_info.mem_detect)
++	if (!early_init_dt_scan_memory())
++		return;
++
++	if (soc_info.mem_detect)
+ 		soc_info.mem_detect();
+ 	else if (soc_info.mem_size)
+ 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
+diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+index 6e1a106f02eb..63762a3b75e8 100644
+--- a/arch/powerpc/kernel/prom.c
++++ b/arch/powerpc/kernel/prom.c
+@@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
+ }
+ #endif /* CONFIG_PPC_PSERIES */
+ 
+-static int __init early_init_dt_scan_memory_ppc(unsigned long node,
+-						const char *uname,
+-						int depth, void *data)
++static int __init early_init_dt_scan_memory_ppc(void)
+ {
+ #ifdef CONFIG_PPC_PSERIES
+-	if (depth == 1 &&
+-	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
++	const void *fdt = initial_boot_params;
++	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
++
++	if (node > 0) {
+ 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
+ 		return 0;
+ 	}
+ #endif
+ 	
+-	return early_init_dt_scan_memory(node, uname, depth, data);
++	return early_init_dt_scan_memory();
+ }
+ 
+ /*
+@@ -749,7 +749,7 @@ void __init early_init_devtree(void *params)
+ 
+ 	/* Scan memory nodes and rebuild MEMBLOCKs */
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 
+ 	parse_early_param();
+ 
+@@ -858,7 +858,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
+ 	 */
+ 	add_mem_to_memblock = 0;
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 	add_mem_to_memblock = 1;
+ 
+ 	if (size)
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 5e216555fe4f..a835c458f50a 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1078,49 +1078,53 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
+ /*
+  * early_init_dt_scan_memory - Look for and parse memory nodes
+  */
+-int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data)
++int __init early_init_dt_scan_memory(void)
+ {
+-	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
+-	const __be32 *reg, *endp;
+-	int l;
+-	bool hotpluggable;
++	int node;
++	const void *fdt = initial_boot_params;
+ 
+-	/* We are scanning "memory" nodes only */
+-	if (type == NULL || strcmp(type, "memory") != 0)
+-		return 0;
++	fdt_for_each_subnode(node, fdt, 0) {
++		const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
++		const __be32 *reg, *endp;
++		int l;
++		bool hotpluggable;
+ 
+-	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+-	if (reg == NULL)
+-		reg = of_get_flat_dt_prop(node, "reg", &l);
+-	if (reg == NULL)
+-		return 0;
++		/* We are scanning "memory" nodes only */
++		if (type == NULL || strcmp(type, "memory") != 0)
++			continue;
+ 
+-	endp = reg + (l / sizeof(__be32));
+-	hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
++		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
++		if (reg == NULL)
++			reg = of_get_flat_dt_prop(node, "reg", &l);
++		if (reg == NULL)
++			continue;
+ 
+-	pr_debug("memory scan node %s, reg size %d,\n", uname, l);
++		endp = reg + (l / sizeof(__be32));
++		hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
+ 
+-	while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+-		u64 base, size;
++		pr_debug("memory scan node %s, reg size %d,\n",
++			 fdt_get_name(fdt, node, NULL), l);
+ 
+-		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+-		size = dt_mem_next_cell(dt_root_size_cells, &reg);
++		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
++			u64 base, size;
+ 
+-		if (size == 0)
+-			continue;
+-		pr_debug(" - %llx, %llx\n", base, size);
++			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
++			size = dt_mem_next_cell(dt_root_size_cells, &reg);
+ 
+-		early_init_dt_add_memory_arch(base, size);
++			if (size == 0)
++				continue;
++			pr_debug(" - %llx, %llx\n", base, size);
+ 
+-		if (!hotpluggable)
+-			continue;
++			early_init_dt_add_memory_arch(base, size);
+ 
+-		if (memblock_mark_hotplug(base, size))
+-			pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
+-				base, base + size);
+-	}
++			if (!hotpluggable)
++				continue;
+ 
++			if (memblock_mark_hotplug(base, size))
++				pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
++					base, base + size);
++		}
++	}
+ 	return 0;
+ }
+ 
+@@ -1271,7 +1275,7 @@ void __init early_init_dt_scan_nodes(void)
+ 		pr_warn("No chosen node found, continuing without\n");
+ 
+ 	/* Setup memory, calling early_init_dt_add_memory_arch */
+-	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
++	early_init_dt_scan_memory();
+ 
+ 	/* Handle linux,usable-memory-range property */
+ 	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index df3d31926c3c..914739f3c192 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -59,8 +59,7 @@ extern unsigned long of_get_flat_dt_root(void);
+ extern uint32_t of_get_flat_dt_phandle(unsigned long node);
+ 
+ extern int early_init_dt_scan_chosen(char *cmdline);
+-extern int early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data);
++extern int early_init_dt_scan_memory(void);
+ extern int early_init_dt_scan_chosen_stdout(void);
+ extern void early_init_fdt_scan_reserved_mem(void);
+ extern void early_init_fdt_reserve_self(void);
+-- 
+2.32.0
 
-The notable one is the sysfs, but that is probably better handled by
-storing a
-
-  const char *sysfs_label
-
-in the dev->msi and emitting that instead of computing it.
-
-Jason

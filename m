@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D6446C995
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6281446C99A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbhLHAyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:54:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:62743 "EHLO mga14.intel.com"
+        id S238766AbhLHAzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:55:54 -0500
+Received: from mga12.intel.com ([192.55.52.136]:14399 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234627AbhLHAyi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:54:38 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237954309"
+        id S233074AbhLHAzx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:55:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="217750492"
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="237954309"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:51:07 -0800
+   d="scan'208";a="217750492"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:52:22 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="580353148"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:51:07 -0800
-Date:   Tue, 7 Dec 2021 16:51:06 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-mm@kvack.org
-Subject: Re: [PATCH V7 03/18] x86/pks: Add additional PKEY helper macros
-Message-ID: <20211208005106.GJ3538886@iweiny-DESK2.sc.intel.com>
-References: <20210804043231.2655537-1-ira.weiny@intel.com>
- <20210804043231.2655537-4-ira.weiny@intel.com>
- <87lf1cl3cq.ffs@tglx>
+   d="scan'208";a="751677756"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Dec 2021 16:52:19 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mulBy-000NAB-Og; Wed, 08 Dec 2021 00:52:18 +0000
+Date:   Wed, 8 Dec 2021 08:51:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [V2 1/2] PCI/ASPM: Add ASPM BIOS override function
+Message-ID: <202112080830.ItjrEFOo-lkp@intel.com>
+References: <20211207223050.872095-1-david.e.box@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87lf1cl3cq.ffs@tglx>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <20211207223050.872095-1-david.e.box@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 03:25:09PM +0100, Thomas Gleixner wrote:
-> On Tue, Aug 03 2021 at 21:32, ira weiny wrote:
-> > @@ -200,16 +200,14 @@ __setup("init_pkru=", setup_init_pkru);
-> >   */
-> >  u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
-> >  {
-> > -	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
-> > -
-> >  	/*  Mask out old bit values */
-> > -	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
-> > +	pk_reg &= ~PKR_PKEY_MASK(pkey);
-> >  
-> >  	/*  Or in new values */
-> >  	if (flags & PKEY_DISABLE_ACCESS)
-> > -		pk_reg |= PKR_AD_BIT << pkey_shift;
-> > +		pk_reg |= PKR_AD_KEY(pkey);
-> >  	if (flags & PKEY_DISABLE_WRITE)
-> > -		pk_reg |= PKR_WD_BIT << pkey_shift;
-> > +		pk_reg |= PKR_WD_KEY(pkey);
-> 
-> I'm not seeing how this is improving that code. Quite the contrary.
+Hi "David,
 
-Fair enough.  Even more so when using the code you suggested for pkey_update_pkval().
+Thank you for the patch! Yet something to improve:
 
-In that case it boils down to:
+[auto build test ERROR on v5.16-rc4]
+[also build test ERROR on next-20211207]
+[cannot apply to helgaas-pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index eb6d6b872652..b7127329d115 100644
---- a/arch/x86/mm/pkeys.c
-+++ b/arch/x86/mm/pkeys.c
-@@ -198,7 +198,7 @@ __setup("init_pkru=", setup_init_pkru);
-  */
- u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
- {
--        int shift = pkey * PKR_BITS_PER_PKEY;
-+        int shift = PKR_PKEY_SHIFT(pkey);
- 
-         if (WARN_ON_ONCE(accessbits & ~PKEY_ACCESS_MASK))
-                 accessbits &= PKEY_ACCESS_MASK;
+url:    https://github.com/0day-ci/linux/commits/David-E-Box/PCI-ASPM-Add-ASPM-BIOS-override-function/20211208-063240
+base:    0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+config: nds32-defconfig (https://download.01.org/0day-ci/archive/20211208/202112080830.ItjrEFOo-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/efd5524bd4005ec84d4eb6681c54d1ba93fe9ca1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-E-Box/PCI-ASPM-Add-ASPM-BIOS-override-function/20211208-063240
+        git checkout efd5524bd4005ec84d4eb6681c54d1ba93fe9ca1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/pci/of.c:16:
+   drivers/pci/pci.h: In function 'pcie_aspm_policy_override':
+>> drivers/pci/pci.h:571:83: error: expected ';' before '}' token
+     571 | static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+         |                                                                                   ^
 
 
-Better?
+vim +571 drivers/pci/pci.h
 
-As to the reason of why to put this patch after the other one.  Why would I
-improve the old pre-refactoring code only to throw it away when moving it to
-pkey_update_pkval()?  This reasoning is even stronger when pkey_update_pkval()
-is implemented.
+   553	
+   554	/* PCI error reporting and recovery */
+   555	pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+   556			pci_channel_state_t state,
+   557			pci_ers_result_t (*reset_subordinates)(struct pci_dev *pdev));
+   558	
+   559	bool pcie_wait_for_link(struct pci_dev *pdev, bool active);
+   560	#ifdef CONFIG_PCIEASPM
+   561	void pcie_aspm_init_link_state(struct pci_dev *pdev);
+   562	void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+   563	void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+   564	void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+   565	int pcie_aspm_policy_override(struct pci_dev *dev);
+   566	#else
+   567	static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+   568	static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+   569	static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+   570	static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+ > 571	static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+   572	#endif
+   573	
 
-I agree with Dan regarding the macros though.  I think they make it easier to
-see what is going on without dealing with masks and shifts directly.  But I can
-remove this patch if you feel that strongly about it.
-
-Ira
-
-> 
-> Thanks,
-> 
->         tglx
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

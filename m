@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 860B846CDAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C5F46CDB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbhLHGYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 01:24:53 -0500
-Received: from mail-ed1-f49.google.com ([209.85.208.49]:44782 "EHLO
-        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237786AbhLHGYv (ORCPT
+        id S239878AbhLHGb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:31:27 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:57518 "EHLO
+        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239648AbhLHGb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:24:51 -0500
-Received: by mail-ed1-f49.google.com with SMTP id l25so4649131eda.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 22:21:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yLFaiVXI2PKCCjRQYkyNoYqPAYr0aGkvcoNe9DPOoAc=;
-        b=6h4X2rcMgwYHUH0QrXiiqsz+qeNMfqAJsIITockET2074um2RQUTQ0BfUhoTuiE64V
-         OKPz/eRTDcwCUkgv8UUX4W8RgIGn8vQQylWCbpXAGzpVjQJSujbLVMIRRA1dO8nCe39q
-         sUaxtHsryzYYq5/r9hrIK76IokNX2qyflpWxPash06tWINt66U0Rron3uoje2ddHjIX4
-         wtp43+5ygF+PrCgnM0ROdQGQ+a4OCl8Askb1y2ncyJPUbja8MxU9FgAg+v/HZBkM5HHC
-         Zamk7KIxRtqQ3lOIlwSkS0Mmpzs+DQ+d3LBduFUJjcPrcod78sqMLq15WLf7/vwGFa/R
-         S6Pw==
-X-Gm-Message-State: AOAM532MlOulYs12bq792luug2TZ67k+3EI/VKsBYNlRvNIwdpLE6iJG
-        a0f05lWTJJ7pWgT0imGI14a+OwDtoB8=
-X-Google-Smtp-Source: ABdhPJynEwfxQRkePYnRDNk+Iqmb9wLorNxcoSaGkRkVKj5jAC1I0CfMaofIlbsEvO3oRjIrEZh6mg==
-X-Received: by 2002:a05:6402:d73:: with SMTP id ec51mr16291073edb.175.1638944479314;
-        Tue, 07 Dec 2021 22:21:19 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id sa17sm902191ejc.123.2021.12.07.22.21.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 22:21:18 -0800 (PST)
-Message-ID: <cf8de843-fb92-3ce6-2617-d324f4d0e411@kernel.org>
-Date:   Wed, 8 Dec 2021 07:21:17 +0100
+        Wed, 8 Dec 2021 01:31:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type;
+        s=sgd; bh=cU7a7l2hUokyjWAVxGR44X/SZoxT7Ra+h9paRR3oMk8=;
+        b=RKz31+dhMlqjVtbHKq3Wkm+rsoOCTedN2hh2w6Qt4IhHNEr6zJ4KHdfbEUaJsmYOojf+
+        to0u/CCPVNkrJi/kdWANeS1x955qFm3Vlk9Hg6wMcF8qEsVbWXkuIULi5VZAtu9NRVqyiW
+        tggNCt5IwMAcCYVHLl7+p6scR/jkuXuLQq09zKDSJXEWO/nci3WQOgIFn+wdh2znidhkBP
+        bR4XfEttWxX1euFO9z2M1uVeyhEa86C+EX5Qj9dqJhgIF/XpIZQGupd3mwRosTXutUKVJk
+        r2Md0Rezyn9kkKBit6Ab09CUouGUwQ88dGJYQBSGLvxYN5S9Rfu3af0A66TpLP8Q==
+Received: by filterdrecv-7bc86b958d-n76s9 with SMTP id filterdrecv-7bc86b958d-n76s9-1-61B0506A-31
+        2021-12-08 06:27:55.052284633 +0000 UTC m=+8410090.793158700
+Received: from pearl.egauge.net (unknown)
+        by ismtpd0057p1las1.sendgrid.net (SG) with ESMTP
+        id NpgNFnvoT5aqygQKbqhhUA
+        Wed, 08 Dec 2021 06:27:54.773 +0000 (UTC)
+Received: by pearl.egauge.net (Postfix, from userid 1000)
+        id CE68E700371; Tue,  7 Dec 2021 23:27:53 -0700 (MST)
+From:   David Mosberger-Tang <davidm@egauge.net>
+Subject: [PATCH] wilc1000: Fix spurious "FW not responding" error
+Date:   Wed, 08 Dec 2021 06:27:55 +0000 (UTC)
+Message-Id: <20211208062747.3405221-1-davidm@egauge.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] tty/ldsem: Fix syntax errors in comments
-Content-Language: en-US
-To:     Xiang wangx <wangxiang@cdjrlc.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20211205161544.12104-1-wangxiang@cdjrlc.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20211205161544.12104-1-wangxiang@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvLjPqF1dYkzQ4i9aT?=
+ =?us-ascii?Q?AfhF9bpA1AGHFo=2FBAzRPqqedO32QpdHnxgt4WSB?=
+ =?us-ascii?Q?QT0BdUhpMaN3ttCdobzcgqUTuy7Crfeo4Ev7L51?=
+ =?us-ascii?Q?hGdr+vd7b+rQXIk8STsEr1tHKsy8R5FC2wS=2FAJH?=
+ =?us-ascii?Q?sYoCsIj=2FrC3r2m6mQqg52fdtdRzUrzJ9Ve+lS4Y?=
+ =?us-ascii?Q?JagyExSiA+fvlEWHkPrqw=3D=3D?=
+To:     Ajay Singh <ajay.kathat@microchip.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Mosberger-Tang <davidm@egauge.net>
+X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05. 12. 21, 17:15, Xiang wangx wrote:
-> Delete the redundant word 'are'
-> 
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+When deinitializing the driver, one or more "FW not responding" error
+appears on the console.  This appears to be due to wilc_wlan_stop()
+disabling host/WILC1000 communication, but then right afterwards, it
+tries to release the bus with chip-sleep enabled.  The problem is
+enabling the chip-sleep cannot success once host/WILC1000
+communication is disabled.  Fix by only releasing the bus.
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+---
+ drivers/net/wireless/microchip/wilc1000/wlan.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Maybe you can add also a period to the end of the sentence.
-
-> ---
->   drivers/tty/tty_ldsem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/tty_ldsem.c b/drivers/tty/tty_ldsem.c
-> index ce8291053af3..3be428c16260 100644
-> --- a/drivers/tty/tty_ldsem.c
-> +++ b/drivers/tty/tty_ldsem.c
-> @@ -163,7 +163,7 @@ down_read_failed(struct ld_semaphore *sem, long count, long timeout)
->   
->   	/*
->   	 * Try to reverse the lock attempt but if the count has changed
-> -	 * so that reversing fails, check if there are are no waiters,
-> +	 * so that reversing fails, check if there are no waiters,
->   	 * and early-out if not
->   	 */
->   	do {
-> 
-
-
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+index f1e4ac3a2ad5..5d7f5b52f6de 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.c
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+@@ -1224,7 +1224,8 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 
+ 	ret = 0;
+ release:
+-	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
++	/* host comm is disabled - we can't issue sleep command anymore: */
++	release_bus(wilc, WILC_BUS_RELEASE_ONLY);
+ 
+ 	return ret;
+ }
 -- 
-js
+2.25.1
+

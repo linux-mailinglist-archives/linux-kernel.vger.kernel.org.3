@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A82946D8F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A8946D8FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbhLHQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S237378AbhLHQ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbhLHQ5X (ORCPT
+        with ESMTP id S237373AbhLHQ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:57:23 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C667C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:53:51 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id d14so358908ila.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:53:51 -0800 (PST)
+        Wed, 8 Dec 2021 11:57:52 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DFDC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:54:20 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id m24so2546705pgn.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=onSEYhphyrw5ksP9+mtXuqQI4y1ahf7sSwREYeqo+Vk=;
-        b=U8ES09t94uicogVku+ptvUrOCG/mRsH6grOV+JzFSsbgAVaN/uwhgCyghkePkEVXLa
-         zfzUfGDhzHAR4iRYrxBURVKWAIt6+iK/jSxeNoU5IEY5B5fgGugasWeUljP0oNPW0xlP
-         rdnTKVEVJD86L2C9awUtXBciXklKczO86CEMc=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wDsVhbUZQwon98TZc0uQWii9L9HtueN7zt3xozWU+o0=;
+        b=qjKkcDy2Vnd99F+FcvoO1bC64kXXPcSt3EJIU+wYN4wrB3WKm+GgpQkRK8vgG4EyIP
+         yEmXVWLQikSBg2dl3KZBUVIO21pKCDAL5+UQcr/qWb8OA/qHpthYaB0XLGbQbVpSjdRd
+         1w8aSVUXoZ9N/w2CCkBzUFjOi21cIX7FhfwEcc+0AFCTNu+XCFz29xYyQDRNWEI0UeOq
+         XqLrgs12InSPFGTplPogvsmGvPMtB2wrVCg2Jd9H4ieohL+3kkioqBbLXbluWuW/sHMJ
+         36Ex+MxfgiTF+1zUstFYEUZi+55M56v4UMTV4U8oV/cYOlOYYOW5nQz9JbJICVp6wGII
+         Wylg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=onSEYhphyrw5ksP9+mtXuqQI4y1ahf7sSwREYeqo+Vk=;
-        b=RLSz074MPZOc54H4z8745E8HkJlPQyt2m3ZtOIuOVXhG0/SzxsR/TnY2s2HjfQyRvX
-         KYbeWEMIc1Eeg2doAUzK3s0Ah6DqQHJJRW7Jw5fk+JNyH7yrHX1jlnIWp4qUu9xm/S20
-         o6nrYc0D2INea90zfiK73y45s8Y4kVErc40Mw+LITBgUZrqWX+h9ZaOcWh11yVKytsvU
-         GbiBaoJQNvxhRm0dq5lX8KRZLKab5hOcuanbC4WtARvjiNYbMCD+SnZLL4PhqfyuzH1U
-         C99aIla84qYtcpDEwJLXDiT/YS949S1ySK2HC5wOdjHQ3Z1DKkzWa+st/JlO5EDvDAbP
-         yMsA==
-X-Gm-Message-State: AOAM533m1xONRwSD64sAkd9mlVL0YZe4nROI+/6ogG2lowWRPEl+Phz+
-        PWoGqMp0t3q0XkoLtWilcqo6k/ePb+MwTQ==
-X-Google-Smtp-Source: ABdhPJwERST8b7oiwH8nAac/PGLDVtU4ZyMUDcNqrIrRjUT6fqKttOC91poDL5Vr0qcLUGgKjOJUkw==
-X-Received: by 2002:a92:4a04:: with SMTP id m4mr7152725ilf.103.1638982430350;
-        Wed, 08 Dec 2021 08:53:50 -0800 (PST)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com. [209.85.166.47])
-        by smtp.gmail.com with ESMTPSA id w10sm2439734ill.36.2021.12.08.08.53.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 08:53:49 -0800 (PST)
-Received: by mail-io1-f47.google.com with SMTP id y16so3467189ioc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:53:49 -0800 (PST)
-X-Received: by 2002:a05:6638:2585:: with SMTP id s5mr958081jat.68.1638982429052;
- Wed, 08 Dec 2021 08:53:49 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wDsVhbUZQwon98TZc0uQWii9L9HtueN7zt3xozWU+o0=;
+        b=68Mn1QSs6c0YTLu1z5Or920RwQxD12knR8S7LvPI2G4RBaxjo/YvHp9/Ox3aM52KLo
+         0GV6Q0kXJ1aUntBuy1beX5gi3yHDUC9gJtpuOPusN07q6Tg2GpvqLwtwnjifP00naoxW
+         pl3aYXL91B+YsKNLxHg4UOuwtw8Gy+5nrvO7zr7p9Kbd8gFEObLsvWHFCYojyRsrhPHn
+         tSsEVyAoAnr1ocOhPhGOyU62dkrDyuxdCgP9Vcb4vIiAt3aNeXxFLfkhLYyxaEDRXMb7
+         r+5xGfEsh9TKGkKBq6Vi0OlSMg0Xal+HR1Mb9l654urfD6j/Yr8Qniqic9x0yinWB1hp
+         R3SA==
+X-Gm-Message-State: AOAM531d2LFExOA8Ijzd1mU8lreOHgixqezcE41RGHGkzO5odvLqrnXy
+        9bhvgwC/OWxWoItaYy890T+njg==
+X-Google-Smtp-Source: ABdhPJxE3wYM+bIKVuUEjBr3ldRIzan4Rc3pmkStEhIojWk4Ag4lA1gCH7zbcEfstO/sqqo2+3iiiA==
+X-Received: by 2002:a05:6a00:a14:b0:4a0:945:16fa with SMTP id p20-20020a056a000a1400b004a0094516famr6527927pfh.9.1638982459816;
+        Wed, 08 Dec 2021 08:54:19 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f3sm3090411pgv.51.2021.12.08.08.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 08:54:19 -0800 (PST)
+Date:   Wed, 8 Dec 2021 16:54:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, stable@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] selftests: KVM: avoid failures due to reserved
+ HyperTransport region
+Message-ID: <YbDjN68ALDavh1WQ@google.com>
+References: <20210805105423.412878-1-pbonzini@redhat.com>
+ <4b530fb6-81cc-be36-aa68-92ec01c65775@oracle.com>
+ <5f3c13be-f65d-1793-bd91-7491d3e149b0@redhat.com>
+ <bab67d1c-f9b7-0a91-2d4f-9881e3f47218@oracle.com>
+ <ac72b77c-f633-923b-8019-69347db706be@redhat.com>
 MIME-Version: 1.0
-References: <20211207215753.635841-1-robdclark@gmail.com> <CAE-0n52gbwsJXG7=hdQhcttTbucjBv9SBq+kng2Ansc=TyqCKg@mail.gmail.com>
-In-Reply-To: <CAE-0n52gbwsJXG7=hdQhcttTbucjBv9SBq+kng2Ansc=TyqCKg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 8 Dec 2021 08:53:36 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Xg+C4U0NHC6D4HMDZ1uVVstHWdV7onHwxtTvB6yh=Ciw@mail.gmail.com>
-Message-ID: <CAD=FV=Xg+C4U0NHC6D4HMDZ1uVVstHWdV7onHwxtTvB6yh=Ciw@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/bridge: sn65dsi86: defer if there is no dsi host
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac72b77c-f633-923b-8019-69347db706be@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Aug 09, 2021, Paolo Bonzini wrote:
+> So this HyperTransport region is not related to this issue, but the errata
+> does point out that FFFD_0000_0000h and upwards is special in guests.
+> 
+> The Xen folks also had to deal with it only a couple months ago
+> (https://yhbt.net/lore/all/1eb16baa-6b1b-3b18-c712-4459bd83e1aa@citrix.com/):
+> 
+>   From "Open-Source Register Reference for AMD Family 17h Processors (PUB)":
+>   https://developer.amd.com/wp-content/resources/56255_3_03.PDF
+> 
+>   "The processor defines a reserved memory address region starting at
+>   FFFD_0000_0000h and extending up to FFFF_FFFF_FFFFh."
+> 
+>   It's still doesn't say that it's at the top of physical address space
+>   although I understand that's how it's now implemented. The official
+>   document doesn't confirm it will move along with physical address space
+>   extension.
+> 
+>   [...]
+> 
+>   1) On parts with <40 bits, its fully hidden from software
+>   2) Before Fam17h, it was always 12G just below 1T, even if there was
+>   more RAM above this location
+>   3) On Fam17h and later, it is variable based on SME, and is either
+>   just below 2^48 (no encryption) or 2^43 (encryption)
+> 
+> > It's interesting that fn8000_000A EDX[28] is part of the reserved bits from
+> > that CPUID leaf.
+> 
+> It's only been defined after AMD deemed that the errata was not fixable in
+> current generation processors); it's X86_FEATURE_SVME_ADDR_CHK now.
+> 
+> I'll update the patch based on the findings from the Xen team.
 
-On Tue, Dec 7, 2021 at 8:44 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Rob Clark (2021-12-07 13:57:52)
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Otherwise we don't get another shot at it if the bridge probes before
-> > the dsi host is registered.  It seems like this is what *most* (but not
-> > all) of the other bridges do.
-> >
-> > It looks like this was missed in the conversion to attach dsi host at
-> > probe time.
-> >
-> > Fixes: c3b75d4734cb ("drm/bridge: sn65dsi86: Register and attach our DSI device at probe")
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > Reviewed-by: Doug Anderson <dianders@chromium.org>
-> > ---
->
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->
-> One more nit below
->
-> > v2: Drop DRM_ERROR() in favor of drm_err_probe() and shift around the
-> >     spot where we report the error
-> > v3: Add \n and cull error msgs a bit further
-> >
-> >  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 18 +++++++-----------
-> >  1 file changed, 7 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > index 02b490671f8f..c2928a6409b1 100644
-> > --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > @@ -740,10 +736,8 @@ static int ti_sn_attach_host(struct ti_sn65dsi86 *pdata)
-> >         pdata->dsi = dsi;
-> >
-> >         ret = devm_mipi_dsi_attach(dev, dsi);
-> > -       if (ret < 0) {
-> > -               DRM_ERROR("failed to attach dsi to host\n");
-> > +       if (ret < 0)
-> >                 return ret;
-> > -       }
-> >
-> >         return 0;
->
-> This can be simplified further to
->
->         return devm_mipi_dsi_attach(dev, dsi);
-
-Squahsed in Stephen's fix and pushed. Had to also remove "ret" which
-was no longer used in this function after Stephen's change.
-
-03848335b5b1 drm/bridge: sn65dsi86: defer if there is no dsi host
-
--Doug
+So, about that update... :-)

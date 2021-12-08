@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830EA46DD9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2671046DDE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbhLHVbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 16:31:14 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34636 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234766AbhLHVbM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:31:12 -0500
-Date:   Wed, 08 Dec 2021 21:27:37 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638998858;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIW81LCscbQfpQyvAJskFFL+jw1I3jY7/dxmCWQuu7Y=;
-        b=uHlbtG9XYg+merTvNw+9wF4F8NQ4bWOp/PgenmeVg1cDE00GjjZ6C5PpdPQqbpAUycVyMj
-        MatP4F9vhqZgwvZrQVSGRuHTQn84rV271ruNVaIyMotJ8XHjLfNx6nFupa+X26MSzPd2Ve
-        omErmco0UroW1EbyuoV0x4JppXMr+basL5SrheWNW+RGGQpGcDRZ4oGwk5U0EDDRlbPmVL
-        ViSdDdoWg5XM7uoaeN2jhjDHL3Z2aBeHZapvdOR8B8npNawk+B+6wFdTDclXVux3ebBYu7
-        WbQxhKYCrwymkukh1NAq1JbbMjrszla3wHZ+ag09xXDya9VtAu++EnPQyCQOqw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638998858;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIW81LCscbQfpQyvAJskFFL+jw1I3jY7/dxmCWQuu7Y=;
-        b=7bItRWt+mJTG3POca2825RrrlOehf5w5TTIgQCqbizXIpWU6jh73gmtAWlDdT/W3/OIkYr
-        V6dKbqc4Y3LFvDDA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched,x86: Don't use cluster topology for x86 hybrid CPUs
-Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
-References: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
+        id S237626AbhLHV4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 16:56:39 -0500
+Received: from mga05.intel.com ([192.55.52.43]:8645 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232640AbhLHV4i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 16:56:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="324216217"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="324216217"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 13:30:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="752042277"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Dec 2021 13:30:06 -0800
+Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.54.75.53])
+        by linux.intel.com (Postfix) with ESMTP id 6FC7E580966;
+        Wed,  8 Dec 2021 13:30:06 -0800 (PST)
+Message-ID: <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
+Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from
+ MFD to Auxiliary Bus
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Date:   Wed, 08 Dec 2021 13:30:06 -0800
+In-Reply-To: <YbEFuN7fwdiNI8vW@kroah.com>
+References: <20211208015015.891275-1-david.e.box@linux.intel.com>
+         <20211208015015.891275-4-david.e.box@linux.intel.com>
+         <YbDbql39x7Kw6iAC@kroah.com>
+         <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
+         <YbD1NsYHbU8FvtTN@kroah.com>
+         <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
+         <YbEFuN7fwdiNI8vW@kroah.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Message-ID: <163899885798.11128.4032422680527135079.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
+> On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
+> > On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
+> > > On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
+> > > > On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
+> > > > > On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box wrote:
+> > > > > > +static struct pci_driver intel_vsec_pci_driver = {
+> > > > > > +       .name = "intel_vsec",
+> > > > > > +       .id_table = intel_vsec_pci_ids,
+> > > > > > +       .probe = intel_vsec_pci_probe,
+> > > > > > +};
+> > > > > 
+> > > > > So when the PCI device is removed from the system you leak resources and
+> > > > > have dangling devices?
+> > > > 
+> > > > No.
+> > > > 
+> > > > > 
+> > > > > Why no PCI remove driver callback?
+> > > > 
+> > > > After probe all resources are device managed. There's nothing to explicitly clean up. When
+> > > > the
+> > > > PCI
+> > > > device is removed, all aux devices are automatically removed. This is the case for the SDSi
+> > > > driver
+> > > > as well.
+> > > 
+> > > Where is the "automatic cleanup" happening?  As this pci driver is bound
+> > > to the PCI device, when the device is removed, what is called in this
+> > > driver to remove the resources allocated in the probe callback?
+> > > 
+> > > confused,
+> > 
+> > devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev)
+> 
+> Wow that is opaque.  Why not do it on remove instead?
 
-Commit-ID:     cabdc3a8475b918e55744f43719b26a82dc8fa6b
-Gitweb:        https://git.kernel.org/tip/cabdc3a8475b918e55744f43719b26a82dc8fa6b
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sat, 04 Dec 2021 10:14:02 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 08 Dec 2021 22:15:37 +01:00
+This code is common for auxdev cleanup. AFAICT most auxiliary bus code is done by drivers that have
+some other primary function. They clean up their primary function resources in remove, but they
+clean up the auxdev using the method above. In this case the sole purpose of this driver is to
+create the auxdev. There are no other resources beyond what the auxdev is using.
 
-sched,x86: Don't use cluster topology for x86 hybrid CPUs
+Adding runtime pm to the pci driver will change this. Remove will be needed then.
 
-For x86 hybrid CPUs like Alder Lake, the order of CPU selection should
-be based strictly on CPU priority.  Don't include cluster topology for
-hybrid CPUs to avoid interference with such CPU selection order.
+> 
+> > intel_vsec_remove_aux() gets called when the PCI device is removed. It calls
+> > auxiliary_device_unit()
+> > which in turn calls the auxdev release() function that cleans up resources.
+> 
+> Does this happen when the device is removed, or when the binding of
+> driver <-> device is removed?
 
-On Alder Lake, the Atom CPU cluster has more capacity (4 Atom CPUs) vs
-Big core cluster (2 hyperthread CPUs). This could potentially bias CPU
-selection towards Atom over Big Core, when Big core CPU has higher
-priority.
+It happens when the device is removed as tested by unbinding it.
 
-Fixes: 66558b730f25 ("sched: Add cluster scheduler level for x86")
-Suggested-by: Tim Chen <tim.c.chen@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Tim Chen <tim.c.chen@linux.intel.com>
-Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Link: https://lkml.kernel.org/r/20211204091402.GM16608@worktop.programming.kicks-ass.net
----
- arch/x86/kernel/smpboot.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> 
+> > When the auxdev is removed, all resources that were dev_m added by the SDSi driver are released
+> > too
+> > which is why it has no remove() either. I'll add the tests that check this.
+> 
+> Please do so and document it well, as that is an odd "pattern".
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index ac2909f..617012f 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -579,6 +579,17 @@ static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
- 	{ NULL, },
- };
- 
-+static struct sched_domain_topology_level x86_hybrid_topology[] = {
-+#ifdef CONFIG_SCHED_SMT
-+	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-+#endif
-+#ifdef CONFIG_SCHED_MC
-+	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
-+#endif
-+	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
-+	{ NULL, },
-+};
-+
- static struct sched_domain_topology_level x86_topology[] = {
- #ifdef CONFIG_SCHED_SMT
- 	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-@@ -1469,8 +1480,11 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 
- 	calculate_max_logical_packages();
- 
-+	/* XXX for now assume numa-in-package and hybrid don't overlap */
- 	if (x86_has_numa_in_package)
- 		set_sched_topology(x86_numa_in_package_topology);
-+	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-+		set_sched_topology(x86_hybrid_topology);
- 
- 	nmi_selftest();
- 	impress_friends();
+Sure, but I don't think it's that odd in practice given what I already mentioned.
+
+David
+
+> 
+> thanks,
+> 
+> greg k-h
+
+

@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E14246D501
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B5446D505
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbhLHOH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbhLHOHx (ORCPT
+        id S234683AbhLHOIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:08:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57036 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234653AbhLHOIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:07:53 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57148C0617A1;
-        Wed,  8 Dec 2021 06:04:21 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r25so8677021edq.7;
-        Wed, 08 Dec 2021 06:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
-        b=XDQoWKFfZPYKzdXWBFgZEyaaeck29w5cQxaeXX4rc0gfQs5YayoyqELY2PHCEdGmec
-         2/nQEGtosBLPuTR6/3UhXDXfQ0nJlBJ4eOqKGAF9IBgw/yKAs3mvDd/MI/+QJm7+Juve
-         Ag0GYsr/yQKjTjhlY4mYB/iXJ80Y8MzD+Vk3m7d/7BySn5F3KcZbHGhELfgdlwIc2LdQ
-         xuJdNHtb6k5yOfCbrObR6FAnlsDSeTpsiKyBX8sQIjRUXaZcCsABt5+bSIrx90L4w452
-         N4pprP86c8Z2FhkB7s2WQ6ot5TemC4zMgCPNCs6raJU2Wm2UOyVofvUqp2V0xCEFtkxq
-         aZJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
-        b=VpBabHT7iv8pfJn3gdzXti4qgQyAQ+Mfx30555LFN1Xfwtdfyf+q2isHTB12mo2pPE
-         EboMJ3sONdDIx7KoF8yza4zbXx+dnAwHBIOAD5ZZbRyBumkK72Dzp5gyPlQW1Ovhggtw
-         GrzPE9dWqcodDfElGgBL7ITNi3XCEY8xUGZGqIrJnBtNtPFBbQVZuLlXgKdqnXZWp6j3
-         bqCpyS+oq5jj4O5wc1+q7tzHiyyUk61qEB4hYW9kUJWiIKtUE6golpJ6UFhmGyRUAvuJ
-         +fJURGr2FS5kjOcdPFUpH1J2Kkj8SbHAZLhV+gtLyfYEI8OKm9uzciOSfHYbjQD1/lmy
-         +Uxg==
-X-Gm-Message-State: AOAM532kfwfdCRZqz3wuSPODK8Wo6CfLIM6vaqGHT6S9WVXcphOuXJ1t
-        77j6fEBjrqVI0WV3TwCfA8c=
-X-Google-Smtp-Source: ABdhPJzxxlC2sYuxVCXO3ljUM6bUbtDlrhVV5jS4H2NT8K4TCYMvtjT595/ZiKCqpu1ImdiaJ1vN/w==
-X-Received: by 2002:a17:907:9802:: with SMTP id ji2mr7921534ejc.418.1638972259854;
-        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id jg32sm1817512ejc.43.2021.12.08.06.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <111d46ba-0a9b-fdb2-d8c4-fe8045edc092@redhat.com>
-Date:   Wed, 8 Dec 2021 15:04:16 +0100
+        Wed, 8 Dec 2021 09:08:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02535B820EE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 14:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D3CC00446;
+        Wed,  8 Dec 2021 14:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638972311;
+        bh=vS1icKEjwwFDMks8ZEP6VHIjK8xXwV7tmx3OxQCGPa4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dh7WNodLKyM24s9Wp1+uYZ2KSzJJiWdKVYrtanLmUsv5t74iYftQAw7bWw1LWAoqM
+         KcIppoQBS6hxp5ZRgslT2XUDa6tLwcW5ONQvitQfNtXSgV7NBS9GkpD79iLRZA5OWR
+         vK80u83eimkFeQZqEGYY7JXOvy6dnJU+0zcpuMZlErwmfBgzrCPjZFZABzOLAuwoTl
+         cev27RMFydVyvCKmKLnQhnMINCX50WrNNS93repBbTmN0L/EEdIe6XrYPVkEeqouhD
+         h/+tTMhO+9WcrrOAGggEJXxBIxfbxk/iDjygQZ/3Z9bX+F2YC9ryGL2Gntp52Jc0rt
+         0VRSylJGxhwYw==
+Date:   Wed, 8 Dec 2021 14:05:05 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Nicolin Chen <nicoleotsuka@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sound: fsl: add missing put_device() call in
+ imx_hdmi_probe()
+Message-ID: <YbC7kffqjbqoPkW5@sirena.org.uk>
+References: <1638881818-3407-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: x86: selftests: svm_int_ctl_test: fix intercept
- calculation
-Content-Language: en-US
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rKb0zWUnE/0QDh3m"
+Content-Disposition: inline
+In-Reply-To: <1638881818-3407-1-git-send-email-wangqing@vivo.com>
+X-Cookie: Alex Haley was adopted!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 00:10, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> INTERCEPT_x are bit positions, but the code was using the raw value of
-> INTERCEPT_VINTR (4) instead of BIT(INTERCEPT_VINTR).
-> This resulted in masking of bit 2 - that is, SMI instead of VINTR.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> ---
->   tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> index df04f56ce859..30a81038df46 100644
-> --- a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> @@ -75,7 +75,7 @@ static void l1_guest_code(struct svm_test_data *svm)
->   	vmcb->control.int_ctl &= ~V_INTR_MASKING_MASK;
->   
->   	/* No intercepts for real and virtual interrupts */
-> -	vmcb->control.intercept &= ~(1ULL << INTERCEPT_INTR | INTERCEPT_VINTR);
-> +	vmcb->control.intercept &= ~(BIT(INTERCEPT_INTR) | BIT(INTERCEPT_VINTR));
->   
->   	/* Make a virtual interrupt VINTR_IRQ_NUMBER pending */
->   	vmcb->control.int_ctl |= V_IRQ_MASK | (0x1 << V_INTR_PRIO_SHIFT);
-> 
 
-Queued, thanks.
+--rKb0zWUnE/0QDh3m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+On Tue, Dec 07, 2021 at 04:56:58AM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>=20
+> of_find_device_by_node() takes a reference to the embedded struct device=
+=20
+> which needs to be dropped when error return.
+
+=2E..
+
+>  	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data) {
+> +		put_device(&cpu_pdev->dev);
+
+If it's of_find_device_by_node() you need an of_node_put() since you're
+dropping a reference on the OF node.
+
+--rKb0zWUnE/0QDh3m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGwu5AACgkQJNaLcl1U
+h9DDOQf+J5zK6lF7fGbSzDyocKgHfhSXm+Zi4VikzTPBrRjWBzR7I7Xb3EzyftoK
+q8scd1RieKQjYG9+EwWFxAiw3o+L68/BfzK7PGEiiH6PoyGCl0woc87FdYofTIzV
+bfWOkjr2i151MEEhmI7Ho00H6jrCvoAYlmyV5aZhjEkv5jLwpzkM0Otk0SIfE5Kw
+pzi4d0B35D1JthsWkLp8c4R9SD1zN7G1U/RgXbBTkd3Bcj5LgFK0UpEHKt/ahqqE
+mWhpqjAC9q3V0M8T4KLW1riUZ3S2UpW0KYF8y1aoFlrUN8opchz1FFR6J88ddhpi
+/KdYZR2CzkcCZcFbxRILlTIJy5q6rw==
+=vpxc
+-----END PGP SIGNATURE-----
+
+--rKb0zWUnE/0QDh3m--

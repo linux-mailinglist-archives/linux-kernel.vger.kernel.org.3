@@ -2,196 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4AA46D06F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1367C46D06C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhLHJ70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:59:26 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48696 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230491AbhLHJ7Z (ORCPT
+        id S231238AbhLHJ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:59:07 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53386 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230491AbhLHJ7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:59:25 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B83PgUK015911;
-        Wed, 8 Dec 2021 10:55:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=TyAvxbW9AUw+fp0lLnm8rh6Mts5UvlpDwToo1N9WL3M=;
- b=QsNAjIL9gWzh2LxtdywE0Iduw0i4x8rwbTEOtjDnC9sAAp892JBLEswJwOWLIIedPV07
- U3Gl3cJiDw1KCiSM8YIqyBd12765x10brSZHOzRLBQD0Wh3J6C1EPAgMaeXXIyuniSpe
- 8pbrN14ZxPtUEw664MuG4Safds5bgItPP0L1QCexvqL9p2MLr0vXm7Vw3j5UDohUSE+j
- 6n9vjFC5CS7r8xQPUoDdHyW6Y9RZ9V1H11QmNTjbdjUfA6SbPZUzP3GSjMo4uDZ3bViE
- iY7Jbutdg8f7qvfTqBvBmEAXkk4RlDn/3NVl+I+7VoiRHDf0Kia8VSrqg0KguZ/38JSM aA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ctmsrhq7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 10:55:26 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BB5A210002A;
-        Wed,  8 Dec 2021 10:55:23 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A8BC02259A3;
-        Wed,  8 Dec 2021 10:55:21 +0100 (CET)
-Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec
- 2021 10:55:20 +0100
-Subject: Re: [Linux-stm32] [PATCH v2 1/4] ASoC: dt-bindings: stm32: i2s: add
- audio-graph-card port
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Olivier MOYSAN <olivier.moysan@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>
-CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <alain.volmat@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211125144053.774-1-olivier.moysan@foss.st.com>
- <20211125144053.774-2-olivier.moysan@foss.st.com>
- <1637875562.357461.2858318.nullmailer@robh.at.kernel.org>
- <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com>
- <Yaf4jiZIp8+ndaXs@robh.at.kernel.org>
- <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
- <cf5f994b-aecf-e051-f5c9-4a46e6414207@pengutronix.de>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Message-ID: <cb7f19c0-3826-fcc8-227c-982838acf599@foss.st.com>
-Date:   Wed, 8 Dec 2021 10:55:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Dec 2021 04:59:05 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2BCBB218B0;
+        Wed,  8 Dec 2021 09:55:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638957333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=34yZn4yaf3zVBT1zz2/zUE5HMZzmdxI7YEkwnvgIihA=;
+        b=bZKVfqXQxkHqoe08XNKLXU9wQkf9xQTSG9t4xEU0QbooQfVWQzwPRQWCsT3y3pgdRtzIXB
+        q59VhveONPZNx1Jdc9HvwpPp/KjHwO6qRbirZxvlMz3+3OEt+040AKeT0xfK6QtlvQ422s
+        HmLi+5pZz2mzuRuNAS8qqYXo27LbTXs=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E7E1FA3B81;
+        Wed,  8 Dec 2021 09:55:32 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 10:55:32 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexey Makhalov <amakhalov@vmware.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbCBFO6HL9plOURf@dhcp22.suse.cz>
+References: <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
+ <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <YbBywDwc2bCxWGAQ@dhcp22.suse.cz>
+ <9DA4ABBB-264F-4AD7-A4D4-DCBD371BE051@vmware.com>
 MIME-Version: 1.0
-In-Reply-To: <cf5f994b-aecf-e051-f5c9-4a46e6414207@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_03,2021-12-06_02,2021-12-02_01
+In-Reply-To: <9DA4ABBB-264F-4AD7-A4D4-DCBD371BE051@vmware.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ahmad
+On Wed 08-12-21 08:57:28, Alexey Makhalov wrote:
+> 
+> 
+> > On Dec 8, 2021, at 12:54 AM, Michal Hocko <mhocko@suse.com> wrote:
+> > 
+> > Alexey,
+> > this is still not finalized but it would really help if you could give
+> > it a spin on your setup. I still have to think about how to transition
+> > from a memoryless node to standard node (in hotplug code). Also there
+> > might be other surprises on the way.
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index c5952749ad40..8ed8db2ccb13 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+> > 	if (self && !node_online(self->node_id)) {
+> > 		build_zonelists(self);
+> > 	} else {
+> > -		for_each_online_node(nid) {
+> > +		/*
+> > +		 * All possible nodes have pgdat preallocated
+> > +		 * free_area_init
+> > +		 */
+> > +		for_each_node(nid) {
+> > 			pg_data_t *pgdat = NODE_DATA(nid);
+> > 
+> > 			build_zonelists(pgdat);
+> > @@ -8032,8 +8036,32 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+> > 	/* Initialise every node */
+> > 	mminit_verify_pageflags_layout();
+> > 	setup_nr_node_ids();
+> > -	for_each_online_node(nid) {
+> > -		pg_data_t *pgdat = NODE_DATA(nid);
+> > +	for_each_node(nid) {
+> > +		pg_data_t *pgdat;
+> > +
+> > +		if (!node_online(nid)) {
+> > +			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
+> > +
+> > +			/* Allocator not initialized yet */
+> > +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
+> > +			if (!pgdat) {
+> > +				pr_err("Cannot allocate %zuB for node %d.\n",
+> > +						sizeof(*pgdat), nid);
+> > +				continue;
+> > +			}
+> > +			/* TODO do we need this for memoryless nodes */
+> > +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
+> > +			arch_refresh_nodedata(nid, pgdat);
+> > +			free_area_init_memoryless_node(nid);
+> > +			/*
+> > +			 * not marking this node online because we do not want to
+> > +			 * confuse userspace by sysfs files/directories for node
+> > +			 * without any memory attached to it (see topology_init)
+> > +			 */
+> > +			continue;
+> > +		}
+> > +
+> > +		pgdat = NODE_DATA(nid);
+> > 		free_area_init_node(nid);
+> > 
+> > 		/* Any memory on that node */
+> > 
+> 
+> Sure Michal, I’ll give it a spin.
 
-On 12/7/21 2:59 PM, Ahmad Fatoum wrote:
-> Hello Alex,
-> 
-> On 07.12.21 14:52, Alexandre TORGUE wrote:
->> Hi Rob
->>
->> On 12/1/21 11:34 PM, Rob Herring wrote:
->>> On Fri, Nov 26, 2021 at 11:25:27AM +0100, Olivier MOYSAN wrote:
->>>> Hi Rob,
->>>>
->>>> On 11/25/21 10:26 PM, Rob Herring wrote:
->>>>> On Thu, 25 Nov 2021 15:40:50 +0100, Olivier Moysan wrote:
->>>>>> The STM2 I2S DAI can be connected via the audio-graph-card.
->>>>>> Add port entry into the bindings.
->>>>>>
->>>>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
->>>>>> ---
->>>>>>     Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 5 +++++
->>>>>>     1 file changed, 5 insertions(+)
->>>>>>
->>>>>
->>>>> Running 'make dtbs_check' with the schema in this patch gives the
->>>>> following warnings. Consider if they are expected or the schema is
->>>>> incorrect. These may not be new warnings.
->>>>>
->>>>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
->>>>> This will change in the future.
->>>>>
->>>>> Full log is available here: https://patchwork.ozlabs.org/patch/1559750
->>>>>
->>>>>
->>>>> audio-controller@4000b000: 'port' does not match any of the regexes: '^port@[0-9]', 'pinctrl-[0-9]+'
->>>>>      arch/arm/boot/dts/stm32mp157a-dk1.dt.yaml
->>>>>      arch/arm/boot/dts/stm32mp157c-dk2.dt.yaml
->>>>>
->>>>
->>>> This warning is not a new one.
->>>>
->>>> The i2s2 node in stm32mp15xx-dkx.dtsi would require the following binding:
->>>> port:
->>>>      $ref: audio-graph-port.yaml#
->>>>      unevaluatedProperties: false
->>>>
->>>> However the spi binding requires to introduce a unit address:
->>>> patternProperties:
->>>>     '^port@[0-9]':
->>>>       $ref: audio-graph-port.yaml#
->>>>       unevaluatedProperties: false
->>>>
->>>> The warning can be removed by re-ordering the bindings patches in the serie,
->>>> as "additionalProperties: true" makes the check more tolerant on extra
->>>> properties.
->>>
->>> That's never right.
->>>
->>>> The patch "ASoC: dt-bindings: stm32: i2s: add audio-graph-card port" can
->>>> even be merely dropped.
->>>> So, I suggest to resend the serie without audio-graph-card patch.
->>>
->>> Only if you aren't using audio-graph-card.
->>>
->>>>
->>>> Does it sound too permissive to you ?
->>>
->>> I think perhaps you need to combine the schemas into 1. Or you need to
->>> restructure your dtsi files such that you only add spi specific
->>> properties when spi mode is enabled and only add i2s specific properties
->>> when i2s mode is enabled. Or use the /delete-property/ directive.
->>
->> Initially the aim of this series was to fix a "make W=1" warnings seen on spi and i2s nodes (duplicate unit-address). Moving both nodes in a common node + using a different compatible depending on SPI or I2S usage sounded good) but it is not enough. In this series the common node is named as following: "spi2s2: spi@4000b000". It is fine for a spi usage but if we want to use this "common node" with I2S compatible and specific bindings, the node name remains spi@... and then specific spi checks are done. For this with this series applied we got this issue reported by spi-controller.yaml:
->>
->> spi@4000b000: port@0: 'compatible' is a required property
->>
->> So, if we use two separates nodes we got W=1 warning and if we use a common node we got yaml check issue. One possibility would be to use a common node with a new node name (for example i2spi@...) but I think it is not acceptable.
->>
->> How to progress ?
-> 
-> Atmel Flexcom can be configured to be either UART, SPI or i2c. Functions
-> are child nodes of the flexcom node and the MFD driver matching against it,
-> just configure the operating mode and then calls of_platform_populate.
-> 
-> Would something along these lines fit here as well?
+Thanks!
 
-Yes it could but in my mind it was not a MFD as both feature cannot be 
-used at the same time: it is either SPI or I2S and choice is done 
-"statically" in device tree depending board usage.
-
-Lee, what it is your feeling about that ? Will you accept to add a MFD 
-driver for this SPI/I2S peripheral whose prurpose is only to populate 
-child node (either SPI or I2S) ?
-
-Cheers
-Alex
-
+> Thanks for attention to this topic.
 > 
-> Cheers,
-> Ahmad
+> Regarding memory waste. 
+> Here what I found while was using VM 128 possible NUMA nodes.
+> My Linux build on VM with only one numa node can be booted on 192Mb RAM,
+> But on 128 nodes it requires 1GB RAM just to boot. It is server distro,
+> minimal set of systemd services, no UI.
 > 
->>
->> Thanks
->> Alex
->>
->>
->>> Rob
->>>
->>
->> _______________________________________________
->> Linux-stm32 mailing list
->> Linux-stm32@st-md-mailman.stormreply.com
->> https://st-md-mailman.stormreply.com/mailman/listinfo/linux-stm32
->>
+> meminfo shows:
+> 1 node case: Percpu:            53760 kB
+> 128 nodes:   Percpu:           718048 kB !!!
 > 
+> Initial analisys multinode memory consumption showed at least difference in this:
 > 
+> Every memcgroup allocates mem_cgroup_per_node info for all possible node.
+> Each mem_cgroup_per_node has per cpu stats.
+> That means, each mem cgroup allocates 128*(sizeof struct mem_cgroup_per_node) + 16384*(sizeof struct lruvec_stats_percpu)
+> 
+> See: mem_cgroup_alloc() -> alloc_mem_cgroup_per_node_info()
+> 
+> There is also old comment about it in alloc_mem_cgroup_per_node_info()
+>         /*
+>          * This routine is called against possible nodes.
+>          * But it's BUG to call kmalloc() against offline node.
+>          *
+>          * TODO: this routine can waste much memory for nodes which will
+>          *       never be onlined. It's better to use memory hotplug callback
+>          *       function.
+>          */
 
+Please report that separately. There are likely more places like that.
+I do not think many subsystems (including MM) optimize for a very sparse
+possible node masks.
+
+-- 
+Michal Hocko
+SUSE Labs

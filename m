@@ -2,104 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E50F46DAD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F0746DADD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238735AbhLHSRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238716AbhLHSRf (ORCPT
+        id S238753AbhLHSTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:19:41 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48132 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238745AbhLHSTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:17:35 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECCC061746;
-        Wed,  8 Dec 2021 10:14:02 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id t5so11427370edd.0;
-        Wed, 08 Dec 2021 10:14:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=mcPtzo6Mc48uKJRt67ru8n5CsPPRYIExPhncNpI7X2U=;
-        b=goXuzERkzrBi7PF/ABRAY1JlIs3T/p3DGwgarHIhPWMngpKnVtN9muwoQuIhthQ1NN
-         zu0CBT1/MlwJRmmtEDNGxf/ZHeEC2rBDjr4kFQgoJrfo8Na+hSQaiCi5PGwBaEOV/mH6
-         vAHhFmrqiM5gTqW6X7u2X/qt1ZjzNHcjkH9KjJK1pVeIAfvZ6MCBnRAwRQHjMigg6yA5
-         H1zZ76N2M9rUbzVSvbxpPNI8ePx7NKLGarBs4ocit/b4hUz0P26Gamqe2cC/ttpmgTfU
-         bkLgZDkKDpmQkDUn66gsWxvnUl4dg2G0gP8lNiefnKFHwPWoAofoN/uspG8Fz4d3YO+Q
-         0Wvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mcPtzo6Mc48uKJRt67ru8n5CsPPRYIExPhncNpI7X2U=;
-        b=OU0/mbSvuDGZijCpQE95b5rvONPMY9t1PWvMlrFWcQ0bDgniZr6XqVpa3ougUbmfdC
-         6xWBzw4XI7mOxSVjC6d7iMxNQjehpgWFdHJGwSfxTDqmVvPOqgGLuVkrFl92joPLVseE
-         0KOV5+YzouMZjS8guZ4CAhctc+FkxOGpYw+71hn3LEudFQBtZ7WsWWpH+vN9zgXFjCRt
-         mfq1Ix4DDxCZdUK4V2jNBDTwYosJDx9nxkgStUF5rf1R/pR7gnWEUEjX4f50rrTolq1h
-         r2hI6xPD/Mv5VoqeGksGE5MLV7sByorpace2e1CWnkj+HqniO2f15pVClAoHloQfpBBB
-         KpmQ==
-X-Gm-Message-State: AOAM530kkHPxr02HRzstc2L1OvrVdAMWsQdbWbI5dzlRvcfLwN4iFq0d
-        GuFmLXZ3J2uSXvrHwptQqdg=
-X-Google-Smtp-Source: ABdhPJwKPHdX+gzCJKNjuLehVfaV7WepeVwMXkhb/qivYPPrqm60yAGGQkEMaewHZREDIhU8WsEcSQ==
-X-Received: by 2002:a17:906:4793:: with SMTP id cw19mr9065810ejc.387.1638987241581;
-        Wed, 08 Dec 2021 10:14:01 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.128.29])
-        by smtp.gmail.com with ESMTPSA id o8sm2616767edc.25.2021.12.08.10.14.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 10:14:00 -0800 (PST)
-Message-ID: <02bcc03a-f5e1-bc7d-b4f1-323dd4495080@gmail.com>
-Date:   Wed, 8 Dec 2021 18:14:01 +0000
+        Wed, 8 Dec 2021 13:19:37 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 73E001F45E34
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638987363; bh=uggevhDieBIc9MGw0HoYM200jvIxsQdtuVaY41rH6Zc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=e36RXq6Bzr82IdRsGqUoAXx342axRfgCWwGm4m+NlUBA5SeKH0GcW3VHunPXKBGwk
+         Rjt5wxfZ4RFM+as61t+zS8OKrhojIofFcsPa17nZ1oGwhZ55ZIfoJL9NKcefskl3Nr
+         OTEmoxKI2OZjA44MtxHP9y9GCgAzbjjasDPpW/zyzEBVFGAUkV99sazJmLMkyMxPgr
+         gUfy7Jf/I1o6qjGp+2If6v4NHidA3dLGBaWddNby+GHKKgXbZUllbK6mlXo++fKBRp
+         VMbi936C4krB2SI+QcshsjBtSpT/1yuqZ1G2uttZMo1f97a43cdb/cYNOQOrpJI8+v
+         jdQXzdeKfBpfQ==
+Subject: Re: [PATCH v2 5/5] arm: dts: imx8ulz-bsh-smm-m2: Add BSH SMM-M2
+ IMX6ULZ SystemMaster
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        festevam@gmail.com, ioana.ciornei@nxp.com,
+        jagan@amarulasolutions.com, kernel@pengutronix.de, krzk@kernel.org,
+        linux-imx@nxp.com, matt@traverse.com.au, matteo.lisi@engicam.com,
+        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
+        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        tharvey@gateworks.com
+References: <20211123151252.143631-1-ariel.dalessandro@collabora.com>
+ <20211123151252.143631-6-ariel.dalessandro@collabora.com>
+ <20211206013531.GO4216@dragon>
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Message-ID: <4dbe2516-3a72-8c01-d0c9-fa4cfdddf4f6@collabora.com>
+Date:   Wed, 8 Dec 2021 15:15:52 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [syzbot] KASAN: use-after-free Write in io_submit_one
+In-Reply-To: <20211206013531.GO4216@dragon>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     syzbot <syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, bcrl@kvack.org, linux-aio@kvack.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-References: <000000000000ad0e4105d29b6b0f@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <000000000000ad0e4105d29b6b0f@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 05:04, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit 54a88eb838d37af930c9f19e1930a4fba6789cb5
-> Author: Pavel Begunkov <asml.silence@gmail.com>
-> Date:   Sat Oct 23 16:21:32 2021 +0000
-> 
->      block: add single bio async direct IO helper
+Hi Shawn,
 
-Looks that's the same George reported yesterday, a fix is queued:
-https://git.kernel.dk/cgit/linux-block/commit/?h=block-5.16&id=75feae73a28020e492fbad2323245455ef69d687
-
-#syz fix: block: fix single bio async DIO error handling
-
-
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1615e2b9b00000
-> start commit:   04fe99a8d936 Add linux-next specific files for 20211207
-> git tree:       linux-next
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1515e2b9b00000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1115e2b9b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4589399873466942
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3587cbbc6e1868796292
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db884db00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e9eabdb00000
+On 12/5/21 10:35 PM, Shawn Guo wrote:
+> On Tue, Nov 23, 2021 at 12:12:52PM -0300, Ariel D'Alessandro wrote:
+>> From: Michael Trimarchi <michael@amarulasolutions.com>
+>>
+>> Add DTS of BSH SMM-M2 SystemMaster.
+>>
+>> This version comes with:
+>> - 128 MiB DDR3 RAM
+>> - 256 MiB Nand
+>> - wifi
+>> - bluetooth
+>>
+>> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+>> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+>> ---
+>>  arch/arm/boot/dts/Makefile               |   3 +-
+>>  arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 153 +++++++++++++++++++++++
+>>  2 files changed, 155 insertions(+), 1 deletion(-)
+>>  create mode 100644 arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+>>
+>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>> index 0de64f237cd8..e6d4ad497985 100644
+>> --- a/arch/arm/boot/dts/Makefile
+>> +++ b/arch/arm/boot/dts/Makefile
+>> @@ -693,7 +693,8 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+>>  	imx6ull-phytec-segin-ff-rdk-nand.dtb \
+>>  	imx6ull-phytec-segin-ff-rdk-emmc.dtb \
+>>  	imx6ull-phytec-segin-lc-rdk-nand.dtb \
+>> -	imx6ulz-14x14-evk.dtb
+>> +	imx6ulz-14x14-evk.dtb \
+>> +	imx6ulz-bsh-smm-m2.dts
+>>  dtb-$(CONFIG_SOC_IMX7D) += \
+>>  	imx7d-cl-som-imx7.dtb \
+>>  	imx7d-colibri-aster.dtb \
+>> diff --git a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+>> new file mode 100644
+>> index 000000000000..9e82860469e3
+>> --- /dev/null
+>> +++ b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+>> @@ -0,0 +1,153 @@
+>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>> +/*
+>> + * Copyright (C) 2021 BSH Hausgeraete GmbH
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include <dt-bindings/input/input.h>
+>> +#include "imx6ulz.dtsi"
+>> +
+>> +/ {
+>> +	model = "BSH SMM M2";
+>> +	compatible = "bsh,imx6ulz-bsh-smm-m2", "fsl,imx6ull";
+>> +
+>> +	chosen {
+>> +		stdout-path = &uart4;
+>> +	};
+>> +
+>> +	usdhc2_pwrseq: usdhc2_pwrseq {
+>> +		compatible = "mmc-pwrseq-simple";
+>> +		reset-gpios = <&gpio2 21 GPIO_ACTIVE_LOW>;
+>> +		status = "okay";
 > 
-> Reported-by: syzbot+3587cbbc6e1868796292@syzkaller.appspotmail.com
-> Fixes: 54a88eb838d3 ("block: add single bio async direct IO helper")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
+> "okay" status is generally used to flip "disabled" devices.
 
--- 
-Pavel Begunkov
+Fixed in v3.
+
+> 
+>> +	};
+>> +
+>> +};
+>> +
+>> +&uart3 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_bluetooth_uart>;
+>> +	uart-has-rtscts;
+>> +
+> 
+> Unneeded newline.
+
+Fixed in v3.
+
+> 
+>> +	status = "okay";
+>> +
+>> +	bluetooth {
+>> +		compatible = "brcm,bcm4330-bt";
+>> +		max-speed = <3000000>;
+>> +		shutdown-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+>> +		device-wakeup-gpios = <&gpio2 17 GPIO_ACTIVE_HIGH>;
+>> +		host-wakeup-gpios = <&gpio2 13 GPIO_ACTIVE_HIGH>;
+>> +	};
+>> +};
+>> +
+>> +&uart4 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_debug_uart>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usbotg1 {
+>> +	dr_mode = "peripheral";
+>> +	srp-disable;
+>> +	hnp-disable;
+>> +	adp-disable;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usbphy1 {
+>> +	fsl,tx-d-cal = <106>;
+>> +};
+>> +
+>> +&usdhc2 {
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_wlan>;
+>> +	bus-width = <4>;
+>> +	no-1-8-v;
+>> +	non-removable;
+>> +	cap-power-off-card;
+>> +	pm-ignore-notify;
+> 
+> What is this?
+
+Wrong vendor property, removed in v3.
+
+Interesting there're other cases as well:
+
+$ git grep -w pm-ignore-notify
+arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts:       pm-ignore-notify;
+arch/arm64/boot/dts/freescale/imx8mm-beacon-som.dtsi:   pm-ignore-notify;
+arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dts:
+pm-ignore-notify;
+arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dts:
+pm-ignore-notify;
+arch/arm64/boot/dts/freescale/imx8mn-beacon-som.dtsi:   pm-ignore-notify;
+arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi:    pm-ignore-notify;
+
+> 
+>> +	keep-power-in-suspend;
+>> +	wifi-host;
+> 
+> and this?
+
+Wrong vendor property, removed in v3.
+
+> 
+>> +	cap-sdio-irq;
+>> +	mmc-pwrseq = <&usdhc2_pwrseq>;
+>> +	status = "okay";
+>> +
+>> +	brcmf: wifi@1 {
+>> +		reg = <1>;
+>> +		compatible = "brcm,bcm4329-fmac";
+>> +		interrupt-parent = <&gpio1>;
+>> +		interrupts = <18 IRQ_TYPE_LEVEL_HIGH>;
+>> +		interrupt-names = "host-wake";
+>> +	};
+>> +};
+>> +
+>> +&wdog1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&gpmi {
+> 
+> Out of alphabetical order.
+
+Fixed in v3.
+
+> 
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_gpmi_nand>;
+>> +	status = "okay";
+> 
+> End property list with status.
+
+Fixed in v3.
+
+> 
+>> +	nand-on-flash-bbt;
+>> +};
+>> +
+>> +&iomuxc {
+>> +	pinctrl_bluetooth_uart: uart3grp {
+> 
+> Name label and node consistently.
+
+Fixed in v3.
+
+> 
+>> +		fsl,pins = <
+>> +			MX6UL_PAD_UART3_TX_DATA__UART3_DCE_TX	0x1b0b1
+>> +			MX6UL_PAD_UART3_RX_DATA__UART3_DCE_RX	0x1b099
+>> +			MX6UL_PAD_UART3_RTS_B__UART3_DCE_RTS	0x1b0b1
+>> +			MX6UL_PAD_UART3_CTS_B__UART3_DCE_CTS	0x1b099
+>> +
+> 
+> Unnecessary newline.
+
+Fixed in v3.
+
+> 
+>> +			MX6UL_PAD_GPIO1_IO01__GPIO1_IO01	0x79		/* BT_REG_ON */
+>> +			MX6UL_PAD_SD1_CLK__GPIO2_IO17		0x100b1		/* BT_DEV_WAKE out */
+>> +			MX6UL_PAD_ENET2_TX_EN__GPIO2_IO13	0x1b0b0		/* BT_HOST_WAKE in */
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_debug_uart: uart4grp {
+>> +		fsl,pins = <
+>> +			MX6UL_PAD_UART4_TX_DATA__UART4_DCE_TX	0x1b0b1
+>> +			MX6UL_PAD_UART4_RX_DATA__UART4_DCE_RX	0x1b0b1
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_gpmi_nand: gpmi-nand {
+> 
+> Name node in the same style as others.
+
+Fixed in v3.
+
+> 
+> Shawn
+> 
+>> +		fsl,pins = <
+>> +			MX6UL_PAD_NAND_CLE__RAWNAND_CLE		0xb0b1
+>> +			MX6UL_PAD_NAND_ALE__RAWNAND_ALE		0xb0b1
+>> +			MX6UL_PAD_NAND_WP_B__RAWNAND_WP_B	0xb0b1
+>> +			MX6UL_PAD_NAND_READY_B__RAWNAND_READY_B	0xb000
+>> +			MX6UL_PAD_NAND_CE0_B__RAWNAND_CE0_B	0xb0b1
+>> +			MX6UL_PAD_NAND_RE_B__RAWNAND_RE_B	0xb0b1
+>> +			MX6UL_PAD_NAND_WE_B__RAWNAND_WE_B	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA00__RAWNAND_DATA00	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA01__RAWNAND_DATA01	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA02__RAWNAND_DATA02	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA03__RAWNAND_DATA03	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA04__RAWNAND_DATA04	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA05__RAWNAND_DATA05	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA06__RAWNAND_DATA06	0xb0b1
+>> +			MX6UL_PAD_NAND_DATA07__RAWNAND_DATA07	0xb0b1
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_wlan: wlangrp {
+>> +		fsl,pins = <
+>> +			MX6UL_PAD_CSI_HSYNC__USDHC2_CMD		0x17059
+>> +			MX6UL_PAD_CSI_VSYNC__USDHC2_CLK		0x10059
+>> +			MX6UL_PAD_CSI_DATA00__USDHC2_DATA0	0x17059
+>> +			MX6UL_PAD_CSI_DATA01__USDHC2_DATA1	0x17059
+>> +			MX6UL_PAD_CSI_DATA02__USDHC2_DATA2	0x17059
+>> +			MX6UL_PAD_CSI_DATA03__USDHC2_DATA3	0x17059
+>> +
+>> +			MX6UL_PAD_SD1_DATA3__GPIO2_IO21		0x79		/* WL_REG_ON */
+>> +			MX6UL_PAD_UART2_CTS_B__GPIO1_IO22	0x100b1		/* WL_DEV_WAKE - WiFi_GPIO_4 - WiFi FW UART */
+>> +			MX6UL_PAD_UART1_CTS_B__GPIO1_IO18	0x1b0b1		/* WL_HOST_WAKE - WIFI_GPIO_0 - OOB IRQ */
+>> +			MX6UL_PAD_ENET1_RX_EN__OSC32K_32K_OUT	0x4001b031	/* OSC 32Khz wifi clk in */
+>> +		>;
+>> +	};
+>> +};
+>> -- 
+>> 2.30.2
+>>
+
+Regards,
+Ariel

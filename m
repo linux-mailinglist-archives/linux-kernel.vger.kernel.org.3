@@ -2,225 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E190146D4D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6FA46D4E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbhLHN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:56:46 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33574 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229490AbhLHN4p (ORCPT
+        id S234448AbhLHN6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:58:36 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:44482 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhLHN6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:56:45 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CelIZ005464;
-        Wed, 8 Dec 2021 13:53:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=qaUbAiA1N4hUD2ko6JAEOAtgSUiTNDn1yZbeu5EGDW4=;
- b=aXHdVsIbDJoHOEGEaR+Xv+N6Nf3x4meAU/Pq06FSRcpdxHOftPP8VShSbpIvF/76ZkWg
- LB1UZcyjaCIAbmALjOuXW8+vipCRs6PkZXU0JD0FAaN4SJ3EoMAatEmhd/giyUFsN9/O
- n2tvSMJZ6AI0VwBWuYI2kjkvRrkoWkRadDQsVA4McnxeDtPxbdkKduocBH3Iih1bPJX9
- 0Ep7qgkC+wkn2d4HVxYy86Ai1st64m4r5PyQpdfOodJ5ec10dM2X4PAVTZghk+eSE8D+
- ncGWSTBbXarCWgcbooDg1ty2Aq/v+wn11iIhKQhjKnv6D8ELcCznxmCzRKsMBaE65iih fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctusv2wh0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 13:53:13 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8CrP6M019525;
-        Wed, 8 Dec 2021 13:53:13 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctusv2wg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 13:53:12 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Dpq6X019268;
-        Wed, 8 Dec 2021 13:53:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3cqyy9xrxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 13:53:09 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8Dr6M131588798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 13:53:06 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36CD011C058;
-        Wed,  8 Dec 2021 13:53:06 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAF4611C052;
-        Wed,  8 Dec 2021 13:53:04 +0000 (GMT)
-Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 13:53:04 +0000 (GMT)
-Message-ID: <614215b5aa14102c7b43913b234463199401a156.camel@linux.ibm.com>
-Subject: Re: [PATCH 07/32] s390/pci: externalize the SIC operation controls
- and routine
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Dec 2021 14:53:04 +0100
-In-Reply-To: <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-8-mjrosato@linux.ibm.com>
-         <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ANezq2W-3VWWQ-dz_JNa_Y196y7U-vz3
-X-Proofpoint-ORIG-GUID: iBxRDrU4pfpUqcbT_pusaRgiGllwh0Tj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080083
+        Wed, 8 Dec 2021 08:58:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1A8D2CE218E;
+        Wed,  8 Dec 2021 13:55:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D69C00446;
+        Wed,  8 Dec 2021 13:54:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638971698;
+        bh=cEDXQeIeYpoFUpOU3IKFkwMae+ywV8Wwm9nSxohi4e8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qPxTF68+tOufg86FtiXdDh2k7dM6fG7kz0Qr1ovf6kNnW40gP4C9FDhcXbDBS42rZ
+         KxE1IIakvaH5rXiRomelB3WV7wfqa8ZBVoszH5d6iFxf/5RnZjTkNgX2Ig6uDX7uUK
+         MvNUG1uS0dBMnVN238iAyUKureBuNSX4UhX3Yrnn5zK/yCBJvR29pWlE3ZXdswTvYY
+         QxUhV7V2+Qv6RveyOMzZTtiupO9/HtHf5TOpacPyc2V69Yvk7eCoxK0z6vc2ufuj1F
+         GL5rCNafkkdJ5tiAh1p/ERr4BcWbS0LfmyOcQ9qylXhkf1DU7MwtxVhSt/bQxaYhrn
+         wrN7XCzwjrZuw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 34465406C1; Wed,  8 Dec 2021 10:54:56 -0300 (-03)
+Date:   Wed, 8 Dec 2021 10:54:56 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     dwarves@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Yonghong Song <yhs@fb.com>,
+        Douglas RAILLARD <douglas.raillard@arm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Matteo Croce <mcroce@microsoft.com>
+Subject: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
+Message-ID: <YbC5MC+h+PkDZten@kernel.org>
+References: <YSQSZQnnlIWAQ06v@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YSQSZQnnlIWAQ06v@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 14:09 +0100, Christian Borntraeger wrote:
-> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> > A subsequent patch will be issuing SIC from KVM -- export the necessary
-> > routine and make the operation control definitions available from a header.
-> > Because the routine will now be exported, let's swap the purpose of
-> > zpci_set_irq_ctrl and __zpci_set_irq_ctrl, leaving the latter as a static
-> > within pci_irq.c only for SIC calls that don't specify an iib.
-> 
-> Maybe it would be simpler to export the __ version instead of renaming everything.
-> Whatever Niklas prefers.
+Hi,
+ 
+	The v1.23 release of pahole and its friends is out, this time
+the main new features are the ability to encode BTF tags, to carry
+attributes to the kernel BPF verifier for further checks and the
+inference of struct member unnatural alignment (__attribute__(__aligned__(N)))
+to help in generating compileable headers matching the original type
+layout from BTF data.
 
-See below I think it's just not worth it having both variants at all.
+Main git repo:
 
-> > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> > ---
-> >   arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
-> >   arch/s390/pci/pci_insn.c         |  3 ++-
-> >   arch/s390/pci/pci_irq.c          | 28 ++++++++++++++--------------
-> >   3 files changed, 25 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
-> > index 61cf9531f68f..5331082fa516 100644
-> > --- a/arch/s390/include/asm/pci_insn.h
-> > +++ b/arch/s390/include/asm/pci_insn.h
-> > @@ -98,6 +98,14 @@ struct zpci_fib {
-> >   	u32 gd;
-> >   } __packed __aligned(8);
-> >   
-> > +/* Set Interruption Controls Operation Controls  */
-> > +#define	SIC_IRQ_MODE_ALL		0
-> > +#define	SIC_IRQ_MODE_SINGLE		1
-> > +#define	SIC_IRQ_MODE_DIRECT		4
-> > +#define	SIC_IRQ_MODE_D_ALL		16
-> > +#define	SIC_IRQ_MODE_D_SINGLE		17
-> > +#define	SIC_IRQ_MODE_SET_CPU		18
-> > +
-> >   /* directed interruption information block */
-> >   struct zpci_diib {
-> >   	u32 : 1;
-> > @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
-> >   int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
-> >   int __zpci_store_block(const u64 *data, u64 req, u64 offset);
-> >   void zpci_barrier(void);
-> > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
-> > -
-> > -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
-> > -{
-> > -	union zpci_sic_iib iib = {{0}};
-> > -
-> > -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
-> > -}
-> > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-Since the __zpci_set_irq_ctrl() was already non static/inline the above
-inline to non-inline change shouldn't make a performance difference.
+Mirror git repo:
 
-Looking at this makes me wonder though. Wouldn't it make sense to just
-have the zpci_set_irq_ctrl() function inline in the header. Its body is
-a single instruction inline asm plus a test_facility(). The latter by
-the way I think also looks rather out of place there considering we
-call zpci_set_irq_ctrl() in the interrupt handler and facilities can't
-go away so it's pretty silly to check for it on every single
-interrupt.. unless I'm totally missing something.
+   https://github.com/acmel/dwarves.git
 
-> >   
-> >   #endif
-> > diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
-> > index 28d863aaafea..d1a8bd43ce26 100644
-> > --- a/arch/s390/pci/pci_insn.c
-> > +++ b/arch/s390/pci/pci_insn.c
-> > @@ -97,7 +97,7 @@ int zpci_refresh_trans(u64 fn, u64 addr, u64 range)
-> >   }
-> >   
-> >   /* Set Interruption Controls */
-> > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
-> > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
-> >   {
-> >   	if (!test_facility(72))
-> >   		return -EIO;
-> > @@ -108,6 +108,7 @@ int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
-> >   
-> >   	return 0;
-> >   }
-> > +EXPORT_SYMBOL_GPL(zpci_set_irq_ctrl);
-> >   
-> >   /* PCI Load */
-> >   static inline int ____pcilg(u64 *data, u64 req, u64 offset, u8 *status)
-> > diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
-> > index dfd4f3276a6d..6b29e39496d1 100644
-> > --- a/arch/s390/pci/pci_irq.c
-> > +++ b/arch/s390/pci/pci_irq.c
-> > @@ -15,13 +15,6 @@
-> >   
-> >   static enum {FLOATING, DIRECTED} irq_delivery;
-> >   
-> > -#define	SIC_IRQ_MODE_ALL		0
-> > -#define	SIC_IRQ_MODE_SINGLE		1
-> > -#define	SIC_IRQ_MODE_DIRECT		4
-> > -#define	SIC_IRQ_MODE_D_ALL		16
-> > -#define	SIC_IRQ_MODE_D_SINGLE		17
-> > -#define	SIC_IRQ_MODE_SET_CPU		18
-> > -
-> >   /*
-> >    * summary bit vector
-> >    * FLOATING - summary bit per function
-> > @@ -145,6 +138,13 @@ static int zpci_set_irq_affinity(struct irq_data *data, const struct cpumask *de
-> >   	return IRQ_SET_MASK_OK;
-> >   }
-> >   
-> > +static inline int __zpci_set_irq_ctrl(u16 ctl, u8 isc)
-> > +{
-> > +	union zpci_sic_iib iib = {{0}};
-> > +
-> > +	return zpci_set_irq_ctrl(ctl, isc, &iib);
-> > +}
-> > +
+tarball + gpg signature:
 
-I would be totally fine and slighlt prefer to have the 0 iib repeated
-at those 3 call sites that don't need it. On first glance that should
-come out to pretty much the same number of lines of code and it removes
-the potential confusion of swapping the __ prefixed and non-prefixed
-variants. What do you think?
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.sign
 
-> >   static struct irq_chip zpci_irq_chip = {
-> >   	.name = "PCI-MSI",
-> >   	.irq_unmask = pci_msi_unmask_irq,
-> > @@ -165,7 +165,7 @@ static void zpci_handle_cpu_local_irq(bool rescan)
-> > 
----8<---
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
 
+Best Regards,
+
+- Arnaldo
+
+DWARF loader:
+
+- Read DW_TAG_LLVM_annotation tags, associating it with variables, functions,
+  types. So far this is only being used by the BTF encoder, but the pretty
+  printer should use this as well in a future release, printing these
+  attributes when available.
+
+- Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
+  matching .dwo file to be used instead. Automagically doing this is in the
+  plans for a future release.
+
+- Fix heap overflow when accessing variable specification.
+
+BTF encoder:
+
+- Support the new BTF type tag attribute, encoding DW_TAG_LLVM_annotation DWARF
+  tags as BTF_KIND_TYPE_TAG and BTF_KIND_DECL_TAG.
+
+  This allows __attribute__((btf_type_tag("tag1"))) to be used for variables,
+  functions, typedefs, so that contextual information can be stored in BTF and
+  used by the kernel BPF verifier for more checks.
+
+  The --skip_encoding_btf_type_tag option can be used to suppress this.
+
+- Fix handling of percpu symbols on s390.
+
+BTF loader:
+
+- Use cacheline size to infer alignment.
+
+btfdiff:
+
+- Now that the BTF loader infers struct member alingment, and as that is just
+  an heuristic, suppress printing the alignment when pretty printing from BTF
+  info like is done when printing from DWARF.
+
+pahole:
+
+- Add --skip_missing so that we don't stop when not finding one of the types passed
+  to -C.
+
+Pretty printer:
+
+- Fix __attribute__((__aligned__(N)) printing alignment for struct members.
+
+- Fix nested __attribute__(__aligned__(N)) struct printing order, so that
+  rebuilding from the printed source circles back to the original source code
+  alignment semantics.
+
+Build:
+
+- No need to download libbpf source when using the system library (libbpf-devel).
+
+- Make python optional

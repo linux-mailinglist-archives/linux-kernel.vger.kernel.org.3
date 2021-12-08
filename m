@@ -2,88 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2048246DB34
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA60346DB32
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239028AbhLHSjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239011AbhLHSjN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239012AbhLHSjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 8 Dec 2021 13:39:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387FEC061746;
-        Wed,  8 Dec 2021 10:35:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 005BEB8225D;
-        Wed,  8 Dec 2021 18:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8508CC00446;
-        Wed,  8 Dec 2021 18:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638988538;
-        bh=f0Wxhz3A50mdmo1JOAqxqkjeSrTNeYV6wNaASAItEPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q3CNwXp7saaX0WEGY7R10UvsofC0mcSv/rjCjYowmMKJhOEMX5tzTKNDNO3TFFdAu
-         863vwoRg0y8yjqsk4j2XIiRcTfkUNUogrDQsiEFNTT5slYbR+QVKfhYm2YtN0FPrIL
-         n5eqizc1dxojF2UxioaOrOyvo3Onh3juy+/JzayYxPasUPTSJhkq9whbZZbeyHvX0J
-         ipy0Ej/skV186nd80Ecv4c1z723MtdGMtmmaf608Qsmu1D+hUP80RF2y98VTd2HDoL
-         qWZBvD/Um4AagnOkbfkIzsS2ENsiNkg6ccnRC02Sp03ikSeXrIMx51eWmAJt2NVHIw
-         xHxZ8gJugV4Hw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 07DB0406C1; Wed,  8 Dec 2021 15:35:35 -0300 (-03)
-Date:   Wed, 8 Dec 2021 15:35:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Yonghong Song <yhs@fb.com>,
-        Douglas RAILLARD <douglas.raillard@arm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Matteo Croce <mcroce@microsoft.com>
-Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
-Message-ID: <YbD696GWcp+KeMyg@kernel.org>
-References: <YSQSZQnnlIWAQ06v@kernel.org>
- <YbC5MC+h+PkDZten@kernel.org>
- <1587op7-6246-638r-5815-2ops848q5r4@vanv.qr>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233353AbhLHSjM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:39:12 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A12C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:35:40 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 133so2771855pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ECqrcggOkdznl5re9oGFK7ZI8Du24aPTOb53ONKb1g8=;
+        b=pt5Av/rJ0X0DCFI36JlgNlkQlSiRHGafG2Vzlw0ecTT5pJ/Ih257FQtCzrIEeZYxus
+         jiEvVXdop7qCE8M2yoPrwnJkTSOPoFszlu5GAB6NoD7pSpM/Rg19c01udlNhR47DqBRL
+         dnGWCKM0JcOb2Ta39ykxncVXMBHVXjrgeWkXqfESuw9zpiUsKH0DkjI7nRq6DazqbKyq
+         zCRymmrt99tMvj4vJ4xnPR1u1R6ywRGnc/YnF9pRIknCG3o3n7ZIc/ZhiTJvk/nBAa2T
+         pNC58/O3iXnn/pGzz4iJSLBeAhGue8D2W+uh7WumsM4Mv2gTIGnD019O6YaLfnZLJyct
+         MRuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ECqrcggOkdznl5re9oGFK7ZI8Du24aPTOb53ONKb1g8=;
+        b=vNiCeBx6Bgv88pR5R5uQH1CQIhFRiMJsoayCVIov4SPnZ1+k8W76bN+6l9CkxPKv7t
+         dq5rB9F4tFu2cNPgkdBFnReGXOdQnGjBv8f7/IcGOiHg3Omy2U0uu+z5wb/pLv8nKw20
+         o8Tpt36To4ZhZFPNAaHPGlgfnyOU1eT9exoKkReGKUtkgdqu8v8KX/NLIpo6ijobBBOr
+         cQhgQ+j7+ILZ/PTAGTN7zdqf7xGjgyds2Y4unQvKTmjkms+XE64RJMDO8Vff6Ae6OEDF
+         FvR0TxU4ClcZURQL02t90U8PQ8DTulFwg74naZPBj1SceM3BjHCyH0z/wbf6z/BIPu21
+         UmzA==
+X-Gm-Message-State: AOAM531MYy+JhFpnVgExEbLAboG8sQlyCUBA4u2jh/S/2NXN3LNI0L3L
+        Mb/w8L/1TO7LAO5Prto+uffmoQ==
+X-Google-Smtp-Source: ABdhPJw6GYauTEVER0R86DnpQ+Ah9xmnHGFQqqyD5T8BuCkZBXZ0YUzeA3subYfQPE883zhgmhGLOw==
+X-Received: by 2002:a63:f003:: with SMTP id k3mr21684913pgh.260.1638988539639;
+        Wed, 08 Dec 2021 10:35:39 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lb4sm7561563pjb.18.2021.12.08.10.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 10:35:39 -0800 (PST)
+Date:   Wed, 8 Dec 2021 18:35:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] KVM: x86: Introduce definitions to support static
+ calls for kvm_pmu_ops
+Message-ID: <YbD691K7B9VVbswI@google.com>
+References: <20211108111032.24457-1-likexu@tencent.com>
+ <20211108111032.24457-7-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1587op7-6246-638r-5815-2ops848q5r4@vanv.qr>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211108111032.24457-7-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Dec 08, 2021 at 03:26:31PM +0100, Jan Engelhardt escreveu:
+On Mon, Nov 08, 2021, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> On Wednesday 2021-12-08 14:54, Arnaldo Carvalho de Melo wrote:
-> > 
-> >	The v1.23 release of pahole and its friends is out, this time
-> >the main new features are the ability to encode BTF tags, to carry
+> Use static calls to improve kvm_pmu_ops performance. Introduce the
+> definitions that will be used by a subsequent patch to actualize the
+> savings. Add a new kvm-x86-pmu-ops.h header that can be used for the
+> definition of static calls. This header is also intended to be
+> used to simplify the defition of amd_pmu_ops and intel_pmu_ops.
 > 
-> [    7s] /home/abuild/rpmbuild/BUILD/dwarves-1.23/btf_encoder.c:145:10: error: 'BTF_KIND_DECL_TAG' undeclared here (not in a function); did you mean 'BTF_KIND_FLOAT'?
+> Like what we did for kvm_x86_ops, 'pmu_ops' can be covered by
+> static calls in a simlilar manner for insignificant but not
+> negligible performance impact, especially on older models.
 > 
-> libbpf-0.5.0 is present, since CMakeLists.txt checked for >= 0.4.0.
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
 
-My fault, knowing the flux that libbpf is in getting to 1.0 I should
-have retested with the perf tools container based tests.
+This absolutely shouldn't be separated from patch 7/7.  By _defining_ the static
+calls but not providing the logic to actually _update_ the calls, it's entirely
+possible to add static_call() invocations that will compile cleanly without any
+chance of doing the right thing at runtime.  
 
-Can you think about some fix for that? Lemme see if BTF_KIND_DECL_TAG is
-a define or an enum...
- 
-> The 1.23 tag is missing from git.
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 0236c1a953d0..804f98b5552e 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -99,7 +99,7 @@ static inline bool pmc_is_fixed(struct kvm_pmc *pmc)
 
-pushed out, thanks for pointing it out.
+ static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
+ {
+-       return kvm_pmu_ops.pmc_is_enabled(pmc);
++       return static_call(kvm_x86_pmu_pmc_is_enabled)(pmc);
+ }
 
-> Is git://git.kernel.org/pub/scm/devel/pahole/pahole out of date? (Last commit
-> from October 2021)
+ static inline bool kvm_valid_perf_global_ctrl(struct kvm_pmu *pmu,
 
--- 
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#if !defined(KVM_X86_PMU_OP) || !defined(KVM_X86_PMU_OP_NULL)
+> +BUILD_BUG_ON(1)
+> +#endif
+> +
+> +/*
+> + * KVM_X86_PMU_OP() and KVM_X86_PMU_OP_NULL() are used to
 
-- Arnaldo
+Please use all 80 chars.
+
+> + * help generate "static_call()"s. They are also intended for use when defining
+> + * the amd/intel KVM_X86_PMU_OPs. KVM_X86_PMU_OP() can be used
+
+AMD/Intel since this is referring to the vendor and not to function names (like
+the below reference).
+
+> + * for those functions that follow the [amd|intel]_func_name convention.
+> + * KVM_X86_PMU_OP_NULL() can leave a NULL definition for the
+
+As below, please drop the _NULL() variant.
+
+> + * case where there is no definition or a function name that
+> + * doesn't match the typical naming convention is supplied.
+> + */
+
+...
+
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 353989bf0102..bfdd9f2bc0fa 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -50,6 +50,12 @@
+>  struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
+>  EXPORT_SYMBOL_GPL(kvm_pmu_ops);
+>  
+> +#define	KVM_X86_PMU_OP(func)	\
+> +	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,	\
+> +				*(((struct kvm_pmu_ops *)0)->func))
+> +#define	KVM_X86_PMU_OP_NULL	KVM_X86_PMU_OP
+> +#include <asm/kvm-x86-pmu-ops.h>
+> +
+>  static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
+>  {
+>  	struct kvm_pmu *pmu = container_of(irq_work, struct kvm_pmu, irq_work);
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index b2fe135d395a..40e0b523637b 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -45,6 +45,11 @@ struct kvm_pmu_ops {
+>  	void (*cleanup)(struct kvm_vcpu *vcpu);
+>  };
+>  
+> +#define	KVM_X86_PMU_OP(func)	\
+> +	DECLARE_STATIC_CALL(kvm_x86_pmu_##func, *(((struct kvm_pmu_ops *)0)->func))
+> +#define	KVM_X86_PMU_OP_NULL	KVM_X86_PMU_OP
+
+I don't want to proliferate the pointless and bitrot-prone KVM_X86_OP_NULL macro,
+just omit this.  I'll send a patch to drop KVM_X86_OP_NULL.
+
+> +#include <asm/kvm-x86-pmu-ops.h>
+> +
+>  static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
+>  {
+>  	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+> -- 
+> 2.33.0
+> 

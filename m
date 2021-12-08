@@ -2,36 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D395A46D1C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780F46D1CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbhLHLRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:17:16 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:60742 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232208AbhLHLRP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:17:15 -0500
+        id S232229AbhLHLRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232208AbhLHLRR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 06:17:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD37EC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:13:45 -0800 (PST)
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F8D01EC04EC;
-        Wed,  8 Dec 2021 12:13:43 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D46B1EC052C;
+        Wed,  8 Dec 2021 12:13:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1638962023;
+        t=1638962024;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=RQ7ctsH+/oa+SdqmE+cdY+OCQhuLgoBPS/Egthm7oZA=;
-        b=qf44eYzZmJeAdyKBF6zVj47UMF+GN9eFffLqjo8+sy2MOzLWxIP9G7Nop/4Z717GLsbJ2Y
-        t7Yjrr57LNpv46mBXf2kHsWInjojUPHw3iVdtAPo64LqVQ/1gLMcxNveNdOUg8w4kX5FV3
-        XyWDsgCIHE+ymdMofT3J0gErlcN6BM8=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CWwZiczUpG+F4aiOu14wZ+otJ/UsdVUjhcOr2x0XFI8=;
+        b=GMKhSW7YYDYhZuNfFG3X5lDuAjJ9OmAe+w0AwPL6hwcBImOMFUkhKh1L/tO5zkzXbBEeWP
+        iqH6BH1bs0t+TntSiDyh3kfBp+MkMTvnlbuOgEDgQPjho+I0B8QsVmS1l/Bu2iu7osFiZ1
+        ey0Bn5NjfA+9sFl9RWMISxzua729ZhI=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Tony Luck <tony.luck@intel.com>
 Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 00/12] x86/mce: Correct the noinstr annotation
-Date:   Wed,  8 Dec 2021 12:13:31 +0100
-Message-Id: <20211208111343.8130-1-bp@alien8.de>
+Subject: [PATCH v1 01/12] x86/mce: Do not use memset to clear the banks bitmaps
+Date:   Wed,  8 Dec 2021 12:13:32 +0100
+Message-Id: <20211208111343.8130-2-bp@alien8.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20211208111343.8130-1-bp@alien8.de>
+References: <20211208111343.8130-1-bp@alien8.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -40,54 +47,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-Hi folks,
+The bitmap is a single unsigned long so no need for the function call.
 
-here's v1 with the instrumentation "sandwiching" documented, as
-requested by peterz.
+No functional changes.
 
-Tony, I'd appreciate making sure nothing in them breaks your injection
-workflows before I queue them. And it shouldn't but... :-)
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/kernel/cpu/mce/core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thx.
-
-Changelog:
-==========
-
-here's a first preliminary (it is based on some random 5.16-rc0 commit
-and is tested only in qemu) of the series which correct all the noinstr
-annotation of the #MC handler.
-
-Since it calls a bunch of external facilities, the strategy is to mark
-mce-specific functions called by the #MC handler as noinstr and when
-they "call out" so to speak, to do a begin/end sandwich around that
-call.
-
-Please have a look and let me know if it looks ok-ish.
-
-Further testing will happen after -rc1 releases, thus the "v0" version
-here.
-
-Thx.
-
-Borislav Petkov (12):
-  x86/mce: Do not use memset to clear the banks bitmaps
-  x86/mce: Remove function-local cpus variables
-  x86/mce: Use mce_rdmsrl() in severity checking code
-  x86/mce: Remove noinstr annotation from mce_setup()
-  x86/mce: Allow instrumentation during task work queueing
-  x86/mce: Prevent severity computation from being instrumented
-  x86/mce: Mark mce_panic() noinstr
-  x86/mce: Mark mce_end() noinstr
-  x86/mce: Mark mce_read_aux() noinstr
-  x86/mce: Move the tainting outside of the noinstr region
-  x86/mce: Mark mce_timed_out() noinstr
-  x86/mce: Mark mce_start() noinstr
-
- arch/x86/kernel/cpu/mce/core.c     | 128 +++++++++++++++++++++--------
- arch/x86/kernel/cpu/mce/internal.h |   2 +
- arch/x86/kernel/cpu/mce/severity.c |  38 +++++----
- 3 files changed, 119 insertions(+), 49 deletions(-)
-
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 30de00fe0d7a..7c264ee18c95 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1336,8 +1336,8 @@ static noinstr void unexpected_machine_check(struct pt_regs *regs)
+ noinstr void do_machine_check(struct pt_regs *regs)
+ {
+ 	int worst = 0, order, no_way_out, kill_current_task, lmce;
+-	DECLARE_BITMAP(valid_banks, MAX_NR_BANKS);
+-	DECLARE_BITMAP(toclear, MAX_NR_BANKS);
++	DECLARE_BITMAP(valid_banks, MAX_NR_BANKS) = { 0 };
++	DECLARE_BITMAP(toclear, MAX_NR_BANKS) = { 0 };
+ 	struct mca_config *cfg = &mca_cfg;
+ 	struct mce m, *final;
+ 	char *msg = NULL;
+@@ -1381,7 +1381,6 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	final = this_cpu_ptr(&mces_seen);
+ 	*final = m;
+ 
+-	memset(valid_banks, 0, sizeof(valid_banks));
+ 	no_way_out = mce_no_way_out(&m, &msg, valid_banks, regs);
+ 
+ 	barrier();
 -- 
 2.29.2
 

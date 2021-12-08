@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6774546DC86
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A115146DC99
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239884AbhLHT6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:58:25 -0500
-Received: from smtp.uniroma2.it ([160.80.6.16]:41949 "EHLO smtp.uniroma2.it"
+        id S239939AbhLHUGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 15:06:16 -0500
+Received: from gir.skynet.ie ([193.1.99.77]:46209 "EHLO gir.skynet.ie"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229750AbhLHT6Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:58:25 -0500
-Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 1B8JsPFF030920
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 8 Dec 2021 20:54:25 +0100
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yohei Kanemaru <yohei.kanemaru@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net] seg6: fix the iif in the IPv6 socket control block
-Date:   Wed,  8 Dec 2021 20:54:09 +0100
-Message-Id: <20211208195409.12169-1-andrea.mayer@uniroma2.it>
-X-Mailer: git-send-email 2.20.1
+        id S236542AbhLHUGP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 15:06:15 -0500
+X-Greylist: delayed 445 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 15:06:15 EST
+Received: from skynet-temp.skynet.ie (unknown [193.1.99.76])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by gir.skynet.ie (Postfix) with ESMTPS id 95B95101BD;
+        Wed,  8 Dec 2021 19:55:08 +0000 (GMT)
+Date:   Wed, 8 Dec 2021 19:55:08 +0000 (UTC)
+From:   Dave Airlie <airlied@linux.ie>
+X-X-Sender: airlied@skynet-temp.skynet.ie
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v3 0/3] agp: convert to generic power management
+In-Reply-To: <20211208193305.147072-1-helgaas@kernel.org>
+Message-ID: <alpine.DEB.2.20.2112081942330.32242@skynet-temp.skynet.ie>
+References: <20211208193305.147072-1-helgaas@kernel.org>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an IPv4 packet is received, the ip_rcv_core(...) sets the receiving
-interface index into the IPv4 socket control block (v5.16-rc4,
-net/ipv4/ip_input.c line 510):
 
-    IPCB(skb)->iif = skb->skb_iif;
+On Wed, 8 Dec 2021, Bjorn Helgaas wrote:
 
-If that IPv4 packet is meant to be encapsulated in an outer IPv6+SRH
-header, the seg6_do_srh_encap(...) performs the required encapsulation.
-In this case, the seg6_do_srh_encap function clears the IPv6 socket control
-block (v5.16-rc4 net/ipv6/seg6_iptunnel.c line 163):
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Vaibhav has converted around 180 drivers to generic power management, and
+> over 100 of those conversions have made it upstream.  If we can finish off
+> the remaining ones, we'll be able to remove quite a bit of ugly legacy code
+> from the PCI core.
+> 
+> This is a repost of Vaibhav's patches for AGP.  I rebased them to v5.16-rc1
+> and updated the commit logs to try to make it easier to verify them.
+> 
+> In the most recent posting here:
+> 
+>   https://lore.kernel.org/linux-pci/20211201025419.2797624-1-helgaas@kernel.org/
+> 
+> my commit log updates were incorrect.  This v3 has updates that I believe
+> to be correct, but of course I'd be grateful for more corrections.
 
-    memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+Hi Bjorn,
 
-The memset(...) was introduced in commit ef489749aae5 ("ipv6: sr: clear
-IP6CB(skb) on SRH ip4ip6 encapsulation") a long time ago (2019-01-29).
+Do you want to merge these via your tree?
 
-Since the IPv6 socket control block and the IPv4 socket control block share
-the same memory area (skb->cb), the receiving interface index info is lost
-(IP6CB(skb)->iif is set to zero).
+if so,
+Acked-by: Dave Airlie <airlied@redhat.com>
 
-As a side effect, that condition triggers a NULL pointer dereference if
-commit 0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig
-netdev") is applied.
+Dave.
 
-To fix that issue, we set the IP6CB(skb)->iif with the index of the
-receiving interface once again.
-
-Fixes: ef489749aae5 ("ipv6: sr: clear IP6CB(skb) on SRH ip4ip6 encapsulation")
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- net/ipv6/seg6_iptunnel.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-index 3adc5d9211ad..d64855010948 100644
---- a/net/ipv6/seg6_iptunnel.c
-+++ b/net/ipv6/seg6_iptunnel.c
-@@ -161,6 +161,14 @@ int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
- 		hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
- 
- 		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-+
-+		/* the control block has been erased, so we have to set the
-+		 * iif once again.
-+		 * We read the receiving interface index directly from the
-+		 * skb->skb_iif as it is done in the IPv4 receiving path (i.e.:
-+		 * ip_rcv_core(...)).
-+		 */
-+		IP6CB(skb)->iif = skb->skb_iif;
- 	}
- 
- 	hdr->nexthdr = NEXTHDR_ROUTING;
--- 
-2.20.1
-
+> 
+> Vaibhav Gupta (3):
+>   amd64-agp: convert to generic power management
+>   sis-agp: convert to generic power management
+>   via-agp: convert to generic power management
+> 
+>  drivers/char/agp/amd64-agp.c | 24 ++++++------------------
+>  drivers/char/agp/sis-agp.c   | 25 ++++++-------------------
+>  drivers/char/agp/via-agp.c   | 25 +++++--------------------
+>  3 files changed, 17 insertions(+), 57 deletions(-)
+> 
+> 

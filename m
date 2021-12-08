@@ -2,238 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9FD46C9A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F4646C9AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238835AbhLHA62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:58:28 -0500
-Received: from mail-bn8nam12on2047.outbound.protection.outlook.com ([40.107.237.47]:23456
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238791AbhLHA60 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:58:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M8rbP87acFr0x1o2uayOpjJzs0ISPgJhxKD8/q8uymMv75kcVcjKTv3ilctR1YLQnpDw3OznXKU0/WsMHKBUfVhb4VT5GiXaYDQVxf0g36fm9SzemM9iHzqeynFKROsYcB3nBN2jGEa/mTtvp6lU/dcEmrx2/YxT1K1HzIiDKIr77sG1G45zBtycbA7ElgbBMlGZMJNHMvAC+LlZOxS1OGfGfhI81oqIs959iKltjAvpK2hSR+wavkmD9t6B8kaMClXD7wY7+uQhV873mwnvUOgGIllIJrKhFfaN0C5tXKq/NqxQT54bSIITn+Ks83UEonPikj6nKALQhjFBqXGISA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SvzjBUg2SPSZKJEmiNu27d7I7qdlLHGZqsuFuo4IfJc=;
- b=GWYKL3TWpD0yeRJjJj62qfyb5m7blifo/w4VHBf/dOT1eMunaetq8ZyrPueXUcaChTttBz+pPziM+5cYWKqpFTU5fqyYwudw2bd0BdHPLMxvdVXBXhI9a0Vkphn6CVlEsWFX3Ob6v1PgyOCHN/oMoqXbvIEBOMx+fowA4nJ/peIOnZtgekwYTewy14Lhg5iSlBCqKGfUp48IDwh6wT9NIwf4o/PwdsDMEm9WBPxEKn/nv4cQq9Ek6U5uO0ecYSbRVGuNkqbv4g0EbUfVLY3Jj7ESGjMKK5Y7qk9xSqBuI6ZyCWzIa2rs5TR5njWPfjsl8ucGDqBnXv5IUbVwqE/mXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SvzjBUg2SPSZKJEmiNu27d7I7qdlLHGZqsuFuo4IfJc=;
- b=PYUjAT1KqozeZaroUI1pB8oCB4TJRtWAvONKoHW19Wu8psjgvBV9/4vCSyV70toLSCTtN/Ul2ajpdE/h/SqKXDkNu29BbztnfZtHoYvWh/EZJkKCGOYemx50IagyqZibamJrKvbEtOq93wkUQdp4MHFhKWtiRDVY4L+BxMBjjUs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by BN9PR12MB5033.namprd12.prod.outlook.com (2603:10b6:408:132::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22; Wed, 8 Dec
- 2021 00:54:54 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::9dfe:ccc6:102c:5300]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::9dfe:ccc6:102c:5300%7]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
- 00:54:53 +0000
-Subject: Re: [PATCH] drm/amdkfd: Fix a wild pointer dereference in
- svm_range_add()
-To:     Qingyang Zhou <zhou1615@umn.edu>
-Cc:     philip yang <yangp@amd.com>, Kangjie Lu <kjlu@umn.edu>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20211130112644.116604-1-zhou1615@umn.edu>
- <b78771ca-2ca2-a369-b67f-dc479eb87d90@amd.com>
- <4a457ba1-67df-993f-1a7a-9868a954de99@amd.com>
- <CA+Cm_xSm8O_0M2Ng9mvDUKwYaCxkZU+M7AZ=9aU26WTFELC-2w@mail.gmail.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-Message-ID: <4a5ba56f-bd6d-2dfc-266c-31b22c5e9a09@amd.com>
-Date:   Tue, 7 Dec 2021 19:54:52 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <CA+Cm_xSm8O_0M2Ng9mvDUKwYaCxkZU+M7AZ=9aU26WTFELC-2w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: BL1PR13CA0320.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::25) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        id S238640AbhLHA7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:59:04 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:27462 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229918AbhLHA7A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:59:00 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211208005527epoutp04613481bcd2f35490ff8d9f8a54a4dfae~_oYmqtTlU1016910169epoutp04M
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:55:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211208005527epoutp04613481bcd2f35490ff8d9f8a54a4dfae~_oYmqtTlU1016910169epoutp04M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1638924927;
+        bh=wQuQ44/o7M02aQ0FTR12+5aryFsCLHs176cin4ynVrM=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=CV/1hzAXGDLNWFCIXEOUX4AoE6IaYq1RKgkd3nraMS9eAR6oUNFQxW5M1VmVYn0RB
+         AaJm6ZFQvxSm2i2K8h1t6PTEP/yRSwP+sLpTYnBGr/3hXvVdbnS1nZfEVPya38inZ8
+         /a1zeEx6q2V27LAZr9dMTrwrCCsTqw5i9Ey7Efrc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20211208005526epcas2p339707d15c5a262310b102237258d269b~_oYmKkJmI2385223852epcas2p3Z;
+        Wed,  8 Dec 2021 00:55:26 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4J7zGy6VbVz4x9QH; Wed,  8 Dec
+        2021 00:55:22 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A1.0A.51767.77200B16; Wed,  8 Dec 2021 09:55:19 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20211208005519epcas2p4aec9d5e05c223be8038528bab1eba223~_oYfYpO9Y0202402024epcas2p41;
+        Wed,  8 Dec 2021 00:55:19 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211208005519epsmtrp22d186b84e70734404264684188d82cbc~_oYfXQfiC1200912009epsmtrp2F;
+        Wed,  8 Dec 2021 00:55:19 +0000 (GMT)
+X-AuditID: b6c32a45-447ff7000000ca37-a9-61b00277f8ba
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4E.26.08738.76200B16; Wed,  8 Dec 2021 09:55:03 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20211208005519epsmtip20d2e89373e9d732dc81dc41739c46afa~_oYfL5zu92559825598epsmtip2N;
+        Wed,  8 Dec 2021 00:55:19 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'David Virag'" <virag.david003@gmail.com>,
+        "'Sam Protsenko'" <semen.protsenko@linaro.org>
+Cc:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
+        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        "'Michael Turquette'" <mturquette@baylibre.com>,
+        "'Stephen Boyd'" <sboyd@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+In-Reply-To: <916c297dc20acdbebd29cd2b36c6286380c7c318.camel@gmail.com>
+Subject: RE: [PATCH v4 7/7] arm64: dts: exynos: Add initial device tree
+ support for Exynos7885 SoC
+Date:   Wed, 8 Dec 2021 09:55:19 +0900
+Message-ID: <006701d7ebce$4567a650$d036f2f0$@samsung.com>
 MIME-Version: 1.0
-Received: from [172.27.226.80] (165.204.55.251) by BL1PR13CA0320.namprd13.prod.outlook.com (2603:10b6:208:2c1::25) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 8 Dec 2021 00:54:53 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 67a5a1ea-3f99-4c07-9702-08d9b9e5589f
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5033:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB503310A6A0B89D8D44F0A2EA926F9@BN9PR12MB5033.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gaGr3THyrCJzvb8gI5PRAAXOzvbdzhsYtqs90rZeETEZMTTh2Ay7IQLLMCCpLM3uPBLdKGM8OyVjHTtrmm3a789WG/9ruylPW5EaFLsEVULE860HIcHyn65vE5Jqtf8/Si1aVsU3DHN+OYrv9Bs5x05dFyxAPYbEDYN/wqpXs0SUuOgHgkzt0VNu0jpVgkLIYPtbacaCQaR6e0R3VvD1COaExd3j63Q0Kj/Kne8tnA11WBkE7vKvQxanPNLcKr5Ph5kl8YGfxig0Gg3K/8HlVbep1jyHZAHM1q5g/OGDCx7WiZeK7HH6byjRYXuzef2EdlD9HlxjjWpuYB2a1WsWfmG41GKuDSe0r1Yu/XAUegPb1dyZPDXxDAz32szzWWiQc+t8V/J5CcTKaVzuv0clIybLVRYf2pP7yYg2Vyz4n73V/F8iQ1SEgCtx4pIAlFE2uhkzd4fFOU1shZBb2bKJn+nBMlhsXK0Rjym2OS86kL8ir+pKj+KlKwtrh286nA+rIF9b66xBhKMSDNqRGti3b3oqUZRy1CzGXDztgmhPziQ2I0kcXRRX/weOgnEcJagzbXFmToT2Z4vuL/dN/OYroCcZSOJg+mmUy0X3jVGE+OeeMwanY0OrDsV42G1PghhSNM1ScDyLobqyQmJdYpOYxpaOr9ZojjSF4YILLcJPnpI+vNkjwXQAU9wRR/Sr+ufqAj9aMYAhrwpw6vPEJec3k1Y9ETaY32AT5rATJWwK8IM+0LpeM/bhP3S27jz18yov
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(38100700002)(86362001)(8936002)(5660300002)(6486002)(66476007)(66556008)(66946007)(4001150100001)(8676002)(6916009)(83380400001)(2906002)(31696002)(4326008)(53546011)(508600001)(31686004)(316002)(2616005)(44832011)(26005)(36916002)(956004)(54906003)(186003)(16576012)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R3ZSd2tkQWlqZFRJVUk4ZFpkWHZKTCtadFpVbzFyYXZxWEdNaHo1MTMxbzJn?=
- =?utf-8?B?TUJ2dnE2L1hyK2VYVVpkOVd2alJBQVhOZU55aTBsYUplVmpvSmpxT1hqLzdw?=
- =?utf-8?B?Y3E4bFdYMnk1aWFXYlJkclJJeUcwZEE1MUJJSGI3bEIwM2YrL1ROeG1ZbFpw?=
- =?utf-8?B?eUszUzBPd3RpbXZQVHBaS3AwS3NvSHE0Nk9TVjBBRVZLQ09pNEtkcDgxS0ha?=
- =?utf-8?B?bVo3ckhzdkIyR1M2ZlcyOXdPT2w1Uy9kMU5wZVdPUXcwcGFSMEowTUQ1MDFK?=
- =?utf-8?B?TFhqZWpjYVBXTXRKVHhrbWtueW04b1UrdkovbzVxRlhSMUdtbWZKT2tkMXlp?=
- =?utf-8?B?anlLZHFGTHVBM1BHNUFlV1pvNU1WUXBXNzc5SFFVV3ZDdXpLZXhjK3hXbXVL?=
- =?utf-8?B?YXZhM1h1c2dkTFl3YTBmM0xFbUt5MWlxRk44ZVBQc0ljd21hS3FWWTJvTytX?=
- =?utf-8?B?WTFWYnovTkFjQnp6aVlBU2FUcWN2YlZ6Zy9ORUk3MEo1Rm9Ja0dkeEhKZTZj?=
- =?utf-8?B?Y09BenlvS0p3VVJXTVBBRGFsSHhHUmI0YkpPUzZIUlF5UGdEMDZEK2FEV2JR?=
- =?utf-8?B?c2FyTkxUZTlhSGluMk5YanBaMEJ2RUd6S0kwRWVqOUhiY2p0RTgrUUVmVjlr?=
- =?utf-8?B?dmtoamZIeEFzaU11WXZoeHNxcWF6VXpyQ2ZkZU94cEFUalBQQzhET3RKQ0l3?=
- =?utf-8?B?cXZ4QWNwaXUzaWttNGJsY2tFVFJBcDA5SFZhSVV1MVVLMmVHV21ZaW1LQ1Y2?=
- =?utf-8?B?RmlCRVlEUEwyTEZJTjFCVUdjMmsrUm11RjhVdEVMalVwMHY1VGdkeGhvMUha?=
- =?utf-8?B?NzlBN3VsM3ZvWFZXSE5TK2FHNjdNWFA5Slc4Tk4yQklIdmdlZFpqSHlCVytZ?=
- =?utf-8?B?U0pudmxNU1FBSUN3RTR4VURJa3liRXFYWWxtd3lGQ2YzRzkrVzU3NHROWmRY?=
- =?utf-8?B?MzBLdktSRHY2SWQwa0FZMDh5WmllNldmcmRpLzVwOEdmOCtpYjVHTm9PRk5w?=
- =?utf-8?B?aFJSczIvQzdya1UwbzdqdGxFTWNCNjcvU2Z1N0dIOWNWNE54Qm5hVkozK3JQ?=
- =?utf-8?B?cVZXb3JYbm9oZVhmUVBINFB5NjUzZHRYVnR5TkhuUkhoWERwSWtDUmd2YTRO?=
- =?utf-8?B?bCt0UkZzREY4S0YrUlRMcWprL2w5TjBvN21RQ0hOcisrZE80R2RCYXJBUmJr?=
- =?utf-8?B?RFM3bDdvWDVmNTFwcS82a1VWc0R4K2d4R2R6THNaSG4xL29CeWxiaG9qUzE5?=
- =?utf-8?B?aHdpcnBURGc5T2lVbnhTM1lhdkt2YzFYWFI1QTQ2TUhTT0VCTE5EVEtFbXpY?=
- =?utf-8?B?S3RkandWcEVZdHFMcVdudFc5QkJVRmlrSlBpT2hWTnR3ajNSZGJoZGs4Y1RU?=
- =?utf-8?B?SGR6TnM1UVhEMVVGMjJqTGtqY1ZxQURUUzhYVzJsRzZsUHNlV2ZqYzlnMWZi?=
- =?utf-8?B?WUFobEhYQUpZbStSd3V1bmJ6SWcxN1VIM3J6bHlmclhKQkF3K3NyejVTNjRW?=
- =?utf-8?B?c3VxYmlXLzMwZE1lWWg3VHluc1pobjAxT1ZTTyt3T3pHTHdNdW5QYnJocUlT?=
- =?utf-8?B?TUF2WnZJQ1JVLzN5RGxkSDFiZUdyNHM0OWs0RnQ0b1g3REZLcHZqdFhpSzlZ?=
- =?utf-8?B?Q0xHMW9jMER5VmU3blVNcEpNMWFUUjR6c05rbXJVNzJDUjkvM1BBV0tqUUlD?=
- =?utf-8?B?ZDArR2VzMHhsSStaRzcxWEVsN3FsT2E1VGVVV2Vidm5qamU4RGlPWEU5UWlC?=
- =?utf-8?B?S21LUjFBR2IrQlhQMGt4MG1KWG15cGZ0QkxMSXh3NFNYeERTMGoyYmZSaFF2?=
- =?utf-8?B?R1luVmlaZ01LelZ2NWtBSnVoc0N4cmFNS2dySVFRSHdzamZRTHpGTGdOUlNa?=
- =?utf-8?B?dnpHa3BjdlNtUGEzYUVnNXJxcEd4WDcvTEdMTmxoYmRMNUcwZ1BVNHUyT2Jt?=
- =?utf-8?B?cUd5dWx2NU5VK2NmamE3TnBuTlcxYTMrUDBqaWh5QkZKczl5RjVoUVJEckhy?=
- =?utf-8?B?bmhzaXdZSTc3dSt3d2RxL05vNXhuNEtPeHhlZWFrQk5XNjA0SThaN1Blcnkz?=
- =?utf-8?B?U3EzRlA1Ni85eERTV2ZybDF3RlFEaktZOGRXN2QyclRKeTdIU0QxV2c3MlQy?=
- =?utf-8?B?bFJPRy9QS1B0ZFBWWmthWCsvUjJXTHdTdndwTHh3SFdIY2gvWFVjd29LZ0Fa?=
- =?utf-8?Q?SzQeyroPMqVnOgOaZDrjlDM=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67a5a1ea-3f99-4c07-9702-08d9b9e5589f
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 00:54:53.7379
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tjKVEWSc999DSOoUk8kFMW8E7E3sQySFeUjOl+0k1Af9xtGVQ+jjJx36Y+VFyoKTQkCAIic5h5un4I0O+mUZig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5033
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFtSJ5guifxMDnJAP7qBkgnfWzaigGTL4zKAVvvS7cBc9QxbAHKqA5mrMudyWA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBJsWRmVeSWpSXmKPExsWy7bCmmW4504ZEg5XvdCyuf3nOajH/yDlW
+        i41vfzBZbHp8jdXiY889VovLu+awWcw4v4/J4uIpV4vWvUfYLQ6/aWe1+HdtI4vF8z6g+Kpd
+        fxgtjr9/zOjA5/H+Riu7x6yGXjaPnbPusntsWtXJ5nHn2h42j81L6j36tqxi9Pi8SS6AIyrb
+        JiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfobCWFssSc
+        UqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsbE
+        5p+sBfOZK65c6GVvYLzB1MXIySEhYCJxdOlhIJuLQ0hgB6PEjFVdjBDOJ0aJE08nskM4nxkl
+        Ni7ayQLTcvr5FlYQW0hgF6PEntVmEEUvGCWmXz/ABpJgE9CXeNmxDaxIRCBB4mrHTLBJzAJf
+        mSXuL97ADJLgFHCXOPlmFthUYYEUiU9nl7GD2CwCKhKnlz8Ga+YVsJT4c3AaG4QtKHFy5hOw
+        emYBbYllC18zQ1ykIPHz6TKoZX4SV2/eZYaoEZGY3dnGDLJYQuAKh8S8PVOgXnCR6Ju9GRoC
+        whKvjm9hh7ClJD6/28sG0dDNKNH66D9UYjWjRGejD4RtL/FrOsj/HEAbNCXW79IHMSUElCWO
+        3IK6jU+i4/Bfdogwr0RHmxBEo7rEge3ToS6Qleie85l1AqPSLCSfzULy2SwkH8xC2LWAkWUV
+        o1hqQXFuemqxUYEhPLaT83M3MYKTtJbrDsbJbz/oHWJk4mA8xCjBwawkwqv2cG2iEG9KYmVV
+        alF+fFFpTmrxIUZTYFhPZJYSTc4H5om8knhDE0sDEzMzQ3MjUwNzJXHeD/7TE4UE0hNLUrNT
+        UwtSi2D6mDg4pRqYtuxY7jJV9hn3TJYP3fGi+x2eFa2YFpD0eHlkyt2u227rVgT6J869uMn0
+        z+Qp01WfOTR99r7KssnkI3/6vIuPFbWutpv3P2dZ+V7olboKk/aBn92y+69NazDsylsc8iRI
+        USOu0a7bX1955n7b1UfP8kgmsC1XrA38nGN0LiMhtvOylN32dP9us/hrSfP1z7T8nHLuht6O
+        E1P4LfeZPdDWny7813T/bc3kTSn3Yv1L075ej2H9FLb5bevcmbd9uIwemtSLf7vHXLaMq+n0
+        KYG2i680HVPvLJi26H9j9NeecI7M7SWfNllNKz2q8mdCfeAJ0+TUzY51qzm/PRaaOKtt49/J
+        HZujj01fImM74eqpUCWW4oxEQy3mouJEAIH+JTVbBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSvG4604ZEg4/TuC2uf3nOajH/yDlW
+        i41vfzBZbHp8jdXiY889VovLu+awWcw4v4/J4uIpV4vWvUfYLQ6/aWe1+HdtI4vF8z6g+Kpd
+        fxgtjr9/zOjA5/H+Riu7x6yGXjaPnbPusntsWtXJ5nHn2h42j81L6j36tqxi9Pi8SS6AI4rL
+        JiU1J7MstUjfLoEr48zpsywFc5krdt7azd7AeI2pi5GTQ0LAROL08y2sXYxcHEICOxglepdf
+        ZIRIyEo8e7eDHcIWlrjfcgSq6BmjRNuDbawgCTYBfYmXHRC2iECCxLL729hAipgF/jJL/Dq3
+        jhmi4zCTxIudB8D2cQq4S5x8M4sFxBYWSJL4sXs/mM0ioCJxevljsEm8ApYSfw5OY4OwBSVO
+        znwCVsMsoC3x9OZTOHvZwtfMEOcpSPx8ugzqCj+JqzfvMkPUiEjM7mxjnsAoPAvJqFlIRs1C
+        MmoWkpYFjCyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCY1ZLawfjnlUf9A4xMnEw
+        HmKU4GBWEuFVe7g2UYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZ
+        Jg5OqQameL5Q5a1vX9mavd1n0BYc+Wy+hEDLuVn3FZ7/TxM7uqA3vPn9oY2KEpecN+ik3Wp8
+        Kvwz1Hqusvu6OSdZyvxXuDiIn2u5kl4xa7Puxthlm2buCWW6lFbmGHv39p79f34n2t36k1Gd
+        X3pXeZ6acrVz4dOsM4n3N4qu0hIMs/1hv/mMiGBz/obMCdVi3CeZa7L8PX7c/3515YM6tf4T
+        /11SH+/SCrHc78GQzfuAxeP96fAX10KNd64Na7Hb8C7nu2Lf+YX9l8LqPkdq2P6MZV9lLFE6
+        Z8vNjmdOvw5bOG7/sne51nO1uKwrEWe0Ji5XUVNiUFwx51XR56M7y350FvN2G5mfOnjlr/iv
+        ojt1qaxzlViKMxINtZiLihMB6pvDRUgDAAA=
+X-CMS-MailID: 20211208005519epcas2p4aec9d5e05c223be8038528bab1eba223
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211207223050epcas2p186da08bcece9605e97573a230db88308
+References: <20211206153124.427102-1-virag.david003@gmail.com>
+        <20211206153124.427102-8-virag.david003@gmail.com>
+        <CAPLW+4k3Vmg0W0jVsTChHTG8+eeg=5QF+actz1Tk0vNV9w-y-A@mail.gmail.com>
+        <CGME20211207223050epcas2p186da08bcece9605e97573a230db88308@epcas2p1.samsung.com>
+        <916c297dc20acdbebd29cd2b36c6286380c7c318.camel@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-30 12:49 p.m., Qingyang Zhou wrote:
-> Dear Felix:
->
-> This patch is not auto-generated, and as a matter of fact, it is 
-> requested by the Linux Community.
->
-> As you can see from my email address, I am a researcher from the 
-> University of Minnesota, and because of the unpleasant event that 
-> happened in April, all the patches from our university must contain 
-> enough information for the Linux Community to verify. Still I feel so 
-> sorry to take up your time.
+> > Shouldn't SoC and board files be sent as two separate patches? For
+> > example, I've checked exynos5433 and exynos7, SoC support
+>=20
+> For some reason I remembered ExynosAutoV9 sending them together but I
+> was wrong, will seperate in the future.
 
-Hi Qingyang,
+I posted it separately.
+https://lore.kernel.org/linux-samsung-soc/20211010032246.146939-1-chanho61.=
+park=40samsung.com/
 
-Sorry for the late response. I was about to apply your patch when I 
-realized that it's not unwinding things correctly in the new failure 
-case. I think I'll refactor svm_range_add and svm_range_handle_overlap a 
-bit to make sure the unwinding is handled correctly and only needs to be 
-done in one place instead of two.
+Best Regards,
+Chanho Park
 
-I'll copy you on the final patch.
-
-Regards,
-   Felix
-
-
->
-> yours sincerely,
-> zhou qingyang.
->
->
-> On Wed, Dec 1, 2021 at 1:35 AM Felix Kuehling <felix.kuehling@amd.com 
-> <mailto:felix.kuehling@amd.com>> wrote:
->
->     Am 2021-11-30 um 11:51 a.m. schrieb philip yang:
->     >
->     >
->     > On 2021-11-30 6:26 a.m., Zhou Qingyang wrote:
->     >> In svm_range_add(), the return value of svm_range_new() is assigned
->     >> to prange and &prange->insert_list is used in list_add(). There
->     is a
->     >> a dereference of &prange->insert_list in list_add(), which
->     could lead
->     >> to a wild pointer dereference on failure of vm_range_new() if
->     >> CONFIG_DEBUG_LIST is unset in .config file.
->     >>
->     >> Fix this bug by adding a check of prange.
->     >>
->     >> This bug was found by a static analyzer. The analysis employs
->     >> differential checking to identify inconsistent security operations
->     >> (e.g., checks or kfrees) between two code paths and confirms
->     that the
->     >> inconsistent operations are not recovered in the current
->     function or
->     >> the callers, so they constitute bugs.
->     >>
->     >> Note that, as a bug found by static analysis, it can be a false
->     >> positive or hard to trigger. Multiple researchers have
->     cross-reviewed
->     >> the bug.
->     >>
->     >> Builds with CONFIG_DRM_AMDGPU=m, CONFIG_HSA_AMD=y, and
->     >> CONFIG_HSA_AMD_SVM=y show no new warnings, and our static
->     analyzer no
->     >> longer warns about this code.
->     >>
->     >> Fixes: 42de677f7999 ("drm/amdkfd: register svm range")
->     >> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu
->     <mailto:zhou1615@umn.edu>>
->     > Reviewed-by: Philip Yang <Philip.Yang@amd.com
->     <mailto:Philip.Yang@amd.com>>
->
->     The patch looks good to me. It's an obvious bug and definitely not a
->     false positive. The patch description is a bit verbose. Is this
->     auto-generated output from the static checker? It could be
->     replaced with
->     something more concise. Especially the comment about this possibly
->     being
->     a false positive should not be in the final submission.
->
->     Regards,
->       Felix
->
->
->     >> ---
->     >>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 3 +++
->     >>  1 file changed, 3 insertions(+)
->     >>
->     >> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->     b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->     >> index 58b89b53ebe6..e40c2211901d 100644
->     >> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->     >> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->     >> @@ -2940,6 +2940,9 @@ svm_range_add(struct kfd_process *p,
->     uint64_t start, uint64_t size,
->     >>
->     >>      if (left) {
->     >>              prange = svm_range_new(svms, last - left + 1, last);
->     >> +            if (!prange)
->     >> +                    return -ENOMEM;
->     >> +
->     >>              list_add(&prange->insert_list, insert_list);
->     >>              list_add(&prange->update_list, update_list);
->     >>      }
->

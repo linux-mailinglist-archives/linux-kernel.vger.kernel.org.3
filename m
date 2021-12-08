@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457B346D776
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D9646D770
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbhLHP5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:57:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236409AbhLHP5d (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:57:33 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE9C061A72;
-        Wed,  8 Dec 2021 07:54:01 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id l25so9774277eda.11;
-        Wed, 08 Dec 2021 07:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iuVlLOimjUDYe52DFCRXFDhm8yvjQ5B0hyH2staIQaA=;
-        b=VCRuCkYplEh5TlfUaN+OY8wsufmwjzgQHxxMEXuWiZhe7N0DSuq/A9Bs63gxyonBO9
-         eKjYMO1q2NGlA4LXPqQQlEsxPd9XB9DXHWqF6spbmtqJbGp9YXRlHp6sQ97tf0iFmodG
-         9uokRvhrDosHJlZek64TJ8XDZ3tjDp8SCPEl+YPRTymevgxfaKSDPoYSI4G4HfANmSSf
-         INxEpfKIAbOF9piVbaJQ/XLnaQmQ9v112YmrfumCEuG44Uy0213F/1hXyxxb0tfZONQ9
-         jqv6DuGSDnUMgazFSa4WRMJljFqcQ1SaVysGM6Slx87I4iUAjloPOhm3OUVQWuEIo9yA
-         /aag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iuVlLOimjUDYe52DFCRXFDhm8yvjQ5B0hyH2staIQaA=;
-        b=X7e2uYOXLoOSS4HuXaESNnAwQ2OKE8ShqSavLV5Uv+0vkxQlAtKOg0siW1oJThkHKo
-         izOu9Vv2wXclo6x8mSxuYLMMK1EF9BQbMUKNDCaRm0PZVqBleQwZSJyRB2gelsn7INTG
-         4zMoHvGJZhozQLirqTSLvsxIwmVuS8Sx/J8D/9U0+7H1C2F1C0Cj1Z/ljKytcbyHT5Qc
-         whUaRqWDOdLt8nF/8Xv3mL266+YtAdmRV96bv8E3wFfNISiWeM1V+zxOf3zVvNdSAM12
-         eRs7WWOZgDzZsjLCoXm8Kh7hhPcOBMjaRhqYdizHqsS15PJedyrZZhpEGAjAMQiFCDir
-         ZhbQ==
-X-Gm-Message-State: AOAM533H7ZofCTiHmQ5HxsAz+8obfGHEnubus2zeoEUvvloGznhfFLq7
-        NWmzni7mqzludDQro6IPAZ4KUCq5QrZO/mUsrxE=
-X-Google-Smtp-Source: ABdhPJzeMpa8KjL88qDlFeKIlxkmly/y0k5kIgIkI4OBoza4mev2afueIns08liQLw3kilIWm+6m8lp8u1E1ZENixJQ=
-X-Received: by 2002:a17:906:c155:: with SMTP id dp21mr8377352ejc.450.1638978839532;
- Wed, 08 Dec 2021 07:53:59 -0800 (PST)
+        id S236337AbhLHP5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:57:23 -0500
+Received: from mga02.intel.com ([134.134.136.20]:20265 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhLHP5X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 10:57:23 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="225112741"
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="225112741"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:53:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="462807092"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 07:53:49 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muzGO-0000l2-Ko; Wed, 08 Dec 2021 15:53:48 +0000
+Date:   Wed, 8 Dec 2021 23:53:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 8/19] drivers/tty/mxser.c:1784:30: warning: unused
+ variable 'mxser_ops'
+Message-ID: <202112082345.v46Z3TI4-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211208145459.9590-1-xiangxia.m.yue@gmail.com> <20211208154145.647078-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20211208154145.647078-1-alexandr.lobakin@intel.com>
-From:   Tonghao Zhang <xiangxia.m.yue@gmail.com>
-Date:   Wed, 8 Dec 2021 23:53:23 +0800
-Message-ID: <CAMDZJNV2s1jjPB6uw262H9_TRCbNK732Q=RfA3aP7k3onMLjmg@mail.gmail.com>
-Subject: Re: [net v5 0/3] fix bpf_redirect to ifb netdev
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Wei Wang <weiwan@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 11:42 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Tonghao Zhang <xiangxia.m.yue@gmail.com>
-> Date: Wed,  8 Dec 2021 22:54:56 +0800
->
-> > From: Tonghao Zhang <xiangxia.m.yue@gmail.com>
-> >
-> > This patchset try to fix bpf_redirect to ifb netdev.
-> > Prevent packets loopback and perfromance drop, add check
-> > in sch egress.
->
-> Please provide a changelog in the cover letter. With the links to
-> your previous versions ideally.
-> Otherwise it becomes difficult to understand what are the changes
-> between them.
-Hi Alexander
-This version of patchset, 2/3 only updates the commit message. because the
-example in the commit message is not a usual case.
-There are no  comments, so I sent them again.
-I will provide a changelog in the next version or resend this version
-again.  Thanks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   e07aaf938405b723f435206c00fcc50a11a70399
+commit: f22cec00dbd414f61389ec805a29e70e55b9d84a [8/19] mxser: switch to uart_driver
+config: i386-buildonly-randconfig-r002-20211208 (https://download.01.org/0day-ci/archive/20211208/202112082345.v46Z3TI4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=f22cec00dbd414f61389ec805a29e70e55b9d84a
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout f22cec00dbd414f61389ec805a29e70e55b9d84a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/
 
-> >
-> > Tonghao Zhang (3):
-> >   net: core: set skb useful vars in __bpf_tx_skb
-> >   net: sched: add check tc_skip_classify in sch egress
-> >   selftests: bpf: add bpf_redirect to ifb
-> >
-> >  net/core/dev.c                                |  3 +
-> >  net/core/filter.c                             | 12 ++-
-> >  tools/testing/selftests/bpf/Makefile          |  1 +
-> >  .../bpf/progs/test_bpf_redirect_ifb.c         | 13 ++++
-> >  .../selftests/bpf/test_bpf_redirect_ifb.sh    | 73 +++++++++++++++++++
-> >  5 files changed, 101 insertions(+), 1 deletion(-)
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_bpf_redirect_ifb.c
-> >  create mode 100755 tools/testing/selftests/bpf/test_bpf_redirect_ifb.sh
-> >
-> > --
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <kafai@fb.com>
-> > Cc: Song Liu <songliubraving@fb.com>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Antoine Tenart <atenart@kernel.org>
-> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Cc: Wei Wang <weiwan@google.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > --
-> > 2.27.0
->
-> Al
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/tty/mxser.c:377:13: warning: unused function 'mxser_must_no_sw_flow_control' [-Wunused-function]
+   static void mxser_must_no_sw_flow_control(unsigned long baseio)
+               ^
+   drivers/tty/mxser.c:591:13: warning: unused function 'mxser_change_speed' [-Wunused-function]
+   static void mxser_change_speed(struct tty_struct *tty,
+               ^
+   drivers/tty/mxser.c:1394:13: warning: unused function 'mxser_start' [-Wunused-function]
+   static void mxser_start(struct tty_struct *tty)
+               ^
+>> drivers/tty/mxser.c:1784:30: warning: unused variable 'mxser_ops' [-Wunused-const-variable]
+   static const struct uart_ops mxser_ops = {
+                                ^
+   4 warnings generated.
 
 
+vim +/mxser_ops +1784 drivers/tty/mxser.c
 
--- 
-Best regards, Tonghao
+  1783	
+> 1784	static const struct uart_ops mxser_ops = {
+  1785		.tx_empty       = mxser_tx_empty,
+  1786		//.get_mctrl      = mxser_get_mctrl,
+  1787		//.set_mctrl      = mxser_set_mctrl,
+  1788		.stop_tx        = mxser_stop_tx,
+  1789		.start_tx       = mxser_start_tx,
+  1790		.stop_rx        = mxser_stop_rx,
+  1791		.break_ctl      = mxser_break_ctl,
+  1792		//.startup        = mxser_startup,
+  1793		//.shutdown       = mxser_shutdown,
+  1794		.set_termios    = mxser_set_termios,
+  1795		//.pm             = mxser_pm,
+  1796		//.type           = mxser_type,
+  1797		//.release_port   = mxser_release_port,
+  1798		//.request_port   = mxser_request_port,
+  1799		//.config_port    = mxser_config_port,
+  1800		//.verify_port    = mxser_verify_port,
+  1801	};
+  1802	
+  1803	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

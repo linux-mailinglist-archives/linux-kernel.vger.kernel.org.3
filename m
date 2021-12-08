@@ -2,145 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F249346CEDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F58346CEDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244761AbhLHIbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:31:01 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:34718 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbhLHIbA (ORCPT
+        id S244763AbhLHIbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:31:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51358 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231783AbhLHIbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:31:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638952049; x=1670488049;
-  h=from:to:cc:subject:date:message-id;
-  bh=07rYLKZoPVhTW49a+38rxxijE9s6Ji8YzFDjY44poMI=;
-  b=rndiCqOFye0cQYpAb1bDgdiza0biPxcCn1aF8hC36AbYBt2jbwwBaV+8
-   Yw9xBk7zF0yTXv5PduAgOgxdcPlMuhQTCwZ8Rn0P70kauGOfDeTTZQJ77
-   pN7NChncZyZEkXRgQAgwnbGwq2pthSkCvF+dhBQcgrS5WQZW7LY6/9ZV2
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 08 Dec 2021 00:27:28 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Dec 2021 00:27:26 -0800
-X-QCInternal: smtphost
-Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 08 Dec 2021 13:57:08 +0530
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id 921DF210F6; Wed,  8 Dec 2021 13:57:07 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com
-Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_bgodavar@quicinc.com,
-        rjliao@codeaurora.org, hbandi@codeaurora.org,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        quic_pharish@quicinc.com,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [PATCH] Bluetooth: btqca: sequential validation
-Date:   Wed,  8 Dec 2021 13:56:47 +0530
-Message-Id: <1638952007-32222-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 8 Dec 2021 03:31:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28B6FB81FDA;
+        Wed,  8 Dec 2021 08:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D8DC00446;
+        Wed,  8 Dec 2021 08:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638952068;
+        bh=pPmK5y2417ZsfVu+TkcBjwYFHvhuwnmW6X3NkxgdQGo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wnILLre7mf2C/9xk8ID3sq98JeW3ZksdNCXV7N0ra2ds8txa3YyOnN9VznPnbuMr8
+         tkq9NH4cNaC845A3XqFcfNis4wXq2il5AaXAZZeXNub0iNHQ970cS9i5ujkHqig/Nz
+         U7/YT+P4Pdy3RoW5+0by3lBphFrRn5Ck44kSRQUA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.4.294
+Date:   Wed,  8 Dec 2021 09:27:44 +0100
+Message-Id: <163895206417997@kroah.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change will have sequential validation support
-& patch config command is added
+I'm announcing the release of the 4.4.294 kernel.
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
----
- drivers/bluetooth/btqca.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/bluetooth/btqca.h |  3 +++
- 2 files changed, 48 insertions(+)
+All users of the 4.4 kernel series must upgrade.
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index be04d74..9a2fd17 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -141,6 +141,49 @@ static int qca_read_fw_build_info(struct hci_dev *hdev)
- 	return err;
- }
- 
-+int qca_send_patch_config_cmd(struct hci_dev *hdev, enum qca_btsoc_type soc_type)
-+{
-+	struct sk_buff *skb;
-+	int err = 0;
-+	u8 cmd[5] = {EDL_PATCH_CONFIG_CMD, 0x01, 0, 0, 0};
-+	u8 rlen = 0x02;
-+	struct edl_event_hdr *edl;
-+	u8 rtype = EDL_PATCH_CONFIG_CMD;
-+
-+	bt_dev_dbg(hdev, "QCA Patch config");
-+
-+	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CONFIG_CMD_LEN,
-+			cmd, HCI_EV_VENDOR, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		err = PTR_ERR(skb);
-+		bt_dev_err(hdev, "Sending QCA Patch config failed (%d)", err);
-+		return err;
-+	}
-+	if (skb->len != rlen) {
-+		bt_dev_err(hdev, "QCA Patch config cmd size mismatch len %d", skb->len);
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+	edl = (struct edl_event_hdr *)(skb->data);
-+	if (!edl) {
-+		bt_dev_err(hdev, "QCA Patch config with no header");
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+	if (edl->cresp != EDL_PATCH_CONFIG_RES_EVT || edl->rtype != rtype) {
-+		bt_dev_err(hdev, "QCA Wrong packet received %d %d", edl->cresp,
-+		 edl->rtype);
-+		err = -EIO;
-+		goto out;
-+	}
-+out:
-+	kfree(skb);
-+	if (err)
-+		bt_dev_err(hdev, "QCA Patch config cmd failed (%d)", err);
-+
-+	return err;
-+}
-+
- static int qca_send_reset(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -551,6 +594,8 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	 */
- 	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
- 
-+	if (soc_type == QCA_WCN6750)
-+		qca_send_patch_config_cmd(hdev, soc_type);
- 	/* Download rampatch file */
- 	config.type = TLV_TYPE_PATCH;
- 	if (qca_is_wcn399x(soc_type)) {
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index 30afa77..8fbb4c7 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -13,6 +13,8 @@
- #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
- #define EDL_GET_BUILD_INFO_CMD		(0x20)
- #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-+#define EDL_PATCH_CONFIG_CMD_LEN	(0x05)
-+#define EDL_PATCH_CONFIG_CMD		(0x28)
- #define MAX_SIZE_PER_TLV_SEGMENT	(243)
- #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
- #define QCA_DISABLE_LOGGING		(0xFC17)
-@@ -24,6 +26,7 @@
- #define EDL_CMD_EXE_STATUS_EVT		(0x00)
- #define EDL_SET_BAUDRATE_RSP_EVT	(0x92)
- #define EDL_NVM_ACCESS_CODE_EVT		(0x0B)
-+#define EDL_PATCH_CONFIG_RES_EVT	(0x00)
- #define QCA_DISABLE_LOGGING_SUB_OP	(0x14)
- 
- #define EDL_TAG_ID_HCI			(17)
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+The updated 4.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                            |    2 
+ arch/arm/boot/dts/bcm5301x.dtsi                     |    2 
+ arch/arm/include/asm/tlb.h                          |    8 
+ arch/arm/mach-socfpga/core.h                        |    2 
+ arch/arm/mach-socfpga/platsmp.c                     |    8 
+ arch/ia64/include/asm/tlb.h                         |   10 
+ arch/parisc/install.sh                              |    1 
+ arch/s390/include/asm/tlb.h                         |   13 +
+ arch/s390/kernel/setup.c                            |    3 
+ arch/sh/include/asm/tlb.h                           |   10 
+ arch/um/include/asm/tlb.h                           |   12 
+ drivers/android/binder.c                            |    2 
+ drivers/ata/sata_fsl.c                              |   20 +
+ drivers/block/xen-blkfront.c                        |  126 ++++++---
+ drivers/net/ethernet/dec/tulip/de4x5.c              |   34 +-
+ drivers/net/ethernet/natsemi/xtsonic.c              |    2 
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c |   10 
+ drivers/net/xen-netfront.c                          |  257 ++++++++++++--------
+ drivers/platform/x86/thinkpad_acpi.c                |   12 
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c                |    2 
+ drivers/scsi/scsi_transport_iscsi.c                 |    6 
+ drivers/staging/android/ion/ion.c                   |    6 
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c        |    3 
+ drivers/tty/hvc/hvc_xen.c                           |   17 +
+ drivers/tty/serial/amba-pl011.c                     |    1 
+ drivers/tty/serial/msm_serial.c                     |    3 
+ drivers/usb/core/hub.c                              |   23 +
+ drivers/usb/serial/option.c                         |    5 
+ drivers/video/console/vgacon.c                      |   14 -
+ drivers/xen/xenbus/xenbus_probe.c                   |   27 ++
+ fs/file.c                                           |   19 +
+ fs/file_table.c                                     |    9 
+ fs/fuse/dev.c                                       |   10 
+ fs/nfs/nfs42xdr.c                                   |    3 
+ fs/proc/vmcore.c                                    |   15 -
+ include/asm-generic/tlb.h                           |    7 
+ include/linux/file.h                                |    2 
+ include/linux/fs.h                                  |    4 
+ include/linux/ipc_namespace.h                       |   15 +
+ include/linux/kprobes.h                             |    2 
+ include/linux/sched.h                               |    2 
+ include/linux/shm.h                                 |   13 -
+ include/linux/siphash.h                             |   14 -
+ include/net/nfc/nci_core.h                          |    1 
+ include/net/nl802154.h                              |    7 
+ include/xen/interface/io/ring.h                     |  257 +++++++++-----------
+ ipc/shm.c                                           |  176 ++++++++++---
+ kernel/kprobes.c                                    |    3 
+ kernel/trace/trace_events.c                         |    7 
+ lib/siphash.c                                       |   12 
+ mm/hugetlb.c                                        |   58 +++-
+ net/ipv4/devinet.c                                  |    2 
+ net/ipv4/tcp_cubic.c                                |    5 
+ net/nfc/nci/core.c                                  |   19 +
+ sound/pci/ctxfi/ctamixer.c                          |   14 -
+ sound/pci/ctxfi/ctdaio.c                            |   16 -
+ sound/pci/ctxfi/ctresource.c                        |    7 
+ sound/pci/ctxfi/ctresource.h                        |    4 
+ sound/pci/ctxfi/ctsrc.c                             |    7 
+ sound/soc/soc-topology.c                            |    3 
+ 60 files changed, 893 insertions(+), 461 deletions(-)
+
+Alexander Aring (1):
+      net: ieee802154: handle iftypes as u32
+
+Alexander Mikhalitsyn (1):
+      shm: extend forced shm destroy to support objects from several IPC nses
+
+Arnd Bergmann (1):
+      siphash: use _unaligned version by default
+
+Baokun Li (2):
+      sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
+      sata_fsl: fix warning in remove_proc_entry when rmmod sata_fsl
+
+Dan Carpenter (1):
+      staging: rtl8192e: Fix use after free in _rtl92e_pci_disconnect()
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910S1 0x9200 composition
+
+David Hildenbrand (1):
+      proc/vmcore: fix clearing user buffer by properly using clear_user()
+
+Eric Dumazet (1):
+      tcp_cubic: fix spurious Hystart ACK train detections for not-cwnd-limited flows
+
+Florian Fainelli (1):
+      ARM: dts: BCM5301X: Add interrupt properties to GPIO node
+
+Greg Kroah-Hartman (1):
+      Linux 4.4.294
+
+Helge Deller (1):
+      parisc: Fix "make install" on newer debian releases
+
+Jens Axboe (1):
+      fs: add fget_many() and fput_many()
+
+Juergen Gross (9):
+      xen: sync include/xen/interface/io/ring.h with Xen's newest version
+      xen/blkfront: read response from backend only once
+      xen/blkfront: don't take local copy of a request from the ring page
+      xen/blkfront: don't trust the backend response data blindly
+      xen/netfront: read response from backend only once
+      xen/netfront: don't read data from request on the ring page
+      xen/netfront: disentangle tx_skb_freelist
+      xen/netfront: don't trust the backend response data blindly
+      tty: hvc: replace BUG_ON() with negative return value
+
+Lee Jones (1):
+      staging: ion: Prevent incorrect reference counting behavour
+
+Lin Ma (1):
+      NFC: add NCI_UNREG flag to eliminate the race
+
+Linus Torvalds (1):
+      fget: check that the fd still exists after getting a ref to it
+
+Maciej W. Rozycki (1):
+      vgacon: Propagate console boot parameters before calling `vc_resize'
+
+Masami Hiramatsu (1):
+      kprobes: Limit max data_size of the kretprobe instances
+
+Mathias Nyman (2):
+      usb: hub: Fix usb enumeration issue due to address0 race
+      usb: hub: Fix locking issues with address0_mutex
+
+Mike Christie (1):
+      scsi: iscsi: Unblock session then wake up error handler
+
+Mike Kravetz (1):
+      hugetlb: take PMD sharing into account when flushing tlb/caches
+
+Miklos Szeredi (2):
+      fuse: fix page stealing
+      fuse: release pipe buf after last use
+
+Mingjie Zhang (1):
+      USB: serial: option: add Fibocom FM101-GL variants
+
+Nadav Amit (1):
+      hugetlbfs: flush TLBs correctly after huge_pmd_unshare
+
+Pierre Gondois (1):
+      serial: pl011: Add ACPI SBSA UART match id
+
+Randy Dunlap (1):
+      natsemi: xtensa: fix section mismatch warnings
+
+Slark Xiao (1):
+      platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
+
+Sreekanth Reddy (1):
+      scsi: mpt3sas: Fix kernel panic during drive powercycle test
+
+Stefano Stabellini (2):
+      xen: don't continue xenstore initialization in case of errors
+      xen: detect uninitialized xenbus in xenbus_init
+
+Steven Rostedt (VMware) (1):
+      tracing: Check pid filtering when creating events
+
+Sven Eckelmann (1):
+      tty: serial: msm_serial: Deactivate RX DMA for polling support
+
+Takashi Iwai (3):
+      ALSA: ctxfi: Fix out-of-range access
+      ASoC: topology: Add missing rwsem around snd_ctl_remove() calls
+      ARM: socfpga: Fix crash with CONFIG_FORTIRY_SOURCE
+
+Teng Qi (1):
+      net: ethernet: dec: tulip: de4x5: fix possible array overflows in type3_infoblock()
+
+Todd Kjos (1):
+      binder: fix test regression due to sender_euid change
+
+Trond Myklebust (1):
+      NFSv42: Don't fail clone() unless the OP_CLONE operation failed
+
+Vasily Gorbik (1):
+      s390/setup: avoid using memblock_enforce_memory_limit
+
+Zhou Qingyang (1):
+      net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
+
+liuguoqiang (1):
+      net: return correct error code
+
+zhangyue (1):
+      net: tulip: de4x5: fix the problem that the array 'lp->phy[8]' may be out of bound
 

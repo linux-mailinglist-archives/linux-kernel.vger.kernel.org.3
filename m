@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEA646D9C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD85D46D9C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbhLHRgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S237940AbhLHRhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbhLHRgO (ORCPT
+        with ESMTP id S235097AbhLHRhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:36:14 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4D5C061746;
-        Wed,  8 Dec 2021 09:32:42 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p13so3078710pfw.2;
-        Wed, 08 Dec 2021 09:32:42 -0800 (PST)
+        Wed, 8 Dec 2021 12:37:00 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C83C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:33:28 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id x10so3598401ioj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 09:33:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GTnOygRYVjIjLSwuhIL1Lc+5UjBjxzuVt14IqySkkNA=;
-        b=OoXxuvNL1SZdgC7J4oqN/PTzUJDiznDtwII7++hd6xtR4ZdlzCPnHavbNPFnzI/alb
-         4TrfjC2Me0CcfnKVxl3HMhb4pTYxYXCCLzyaFIWAg3vwiFEwxNBBK+sanGRjt7Zpjt6c
-         9gTAlh1T5INoGRdwUpY1wx35x+rp346uy2fI9aSXJDiADe1iwQCx92+KV5ntDXaPTXxL
-         hNWoA8rLAhi8p6n8GqI9pGkIHlwvf57/Gw9zx98myvRo7oyzlJqsDL/YEJUe8zs0GN+2
-         TZPL2RlJY7/CB5ldhl4Mqz5X74nFZ2OmbRQt6Ynq3nRIQADWYNXNLB6fIQujNivo979M
-         +Dng==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zxdzBmou0nMLZSQ2PL0SgOvX3HihWUA9tdvfGZKATKc=;
+        b=oGDjeNeX/ROucVuS1Pi3hZRldbTmAltKAYC+CcJD4Kcw5Mbxx/EOtfpOHG7bzx08R7
+         1efeuZ50iJ3WKMirDadM/dpavNJBDC8CXIUQ1k63dNtyIuVNoZoYGYRkYQhxdlx7MZQd
+         uyU70jRnMsvAnsCS4rsw3x/pQ7eHx/2fDJK0ZxH5nT74u0RkJoYfAwZCWSC4B10p1oNV
+         oQRFyRomW8GM3tH7Iq0oFFo5N2uojb3dW1tbbPLfj+UdWjNCqA/dxmC7nGioHTmWLGpm
+         gBXdNHwdDb3sNaMRl+NQR1V3p2OW2y2ivta4aUzJX+7E8pxuCp4lWMSup6eX0o6WdPRR
+         SWtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GTnOygRYVjIjLSwuhIL1Lc+5UjBjxzuVt14IqySkkNA=;
-        b=Nh9TtDXxW+QnyCWCDMbG2DeCqUTKK1DZHJ2grK/8FycAqKybhcDZyny5Gy+O0242GB
-         0NFrRGn03qYPMFnmLRrnqLa25iM9bnjtOi8pnxCOBOI8GnbA2yg+Z5XPAQhTosHxnJb0
-         B62aKRCPP0f5dVLNVqvv686rjQ8lhaDC52oeiho24yfA2k0U05FGXUzHqWTbfikGfjkk
-         3HoPyYDSM99IaLjKSJJmhFoIX4Ot9ZWmRTRSgR2pHIbE1jRfKeSvNrQZ5WUW6cUBBP6s
-         rEq3uU2G13EV3WNz/0824niyZ3MHknKbNJUBs2Bp4zfvCajwUZJir9Ho2BO3prECE0RL
-         8u5Q==
-X-Gm-Message-State: AOAM533UBDU8osQbgFZ2O4EG632xLrGGokhkOyUq0UYNA99o0pEob86O
-        ew9WVAI6hUwPKjHL4QyeMu/UhY1S7R8=
-X-Google-Smtp-Source: ABdhPJyDDF2CspZ7OwtoageGUQ3rKh88TPg58DGSzt6iO8ytJwslleC2V3vOwFN7Ff8aBMLU3SUsIg==
-X-Received: by 2002:a63:4458:: with SMTP id t24mr30420895pgk.236.1638984761057;
-        Wed, 08 Dec 2021 09:32:41 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id i3sm3941617pfe.75.2021.12.08.09.32.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 09:32:40 -0800 (PST)
-Subject: Re: [PATCH v3 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
-To:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kernel@vger.kernel.org
-References: <20211208040432.3658355-1-f.fainelli@gmail.com>
- <20211208040432.3658355-7-f.fainelli@gmail.com>
- <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <536cbdb6-a541-2f86-faa6-acb1a4e1c173@gmail.com>
-Date:   Wed, 8 Dec 2021 09:32:39 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zxdzBmou0nMLZSQ2PL0SgOvX3HihWUA9tdvfGZKATKc=;
+        b=R0QH7N3u614TpsPpqbRv7mRq4FuFUG2RLF3i8rcBgKdPyxGbajC/ludt+ITYuFs5Q2
+         EoUzPuXCDmUm20U+BrUukK7D4w2oBmkR0eCbf5e3ssSdADNUl/D+MjAtxgj6Q1idzOqk
+         HBu1QaqGrrW9ihZGVRWqVbHwnSx/bgo0mWVJP9bNLaBEhqdHDBVTFDNIXkYVhflDIx+O
+         nDlgP4QTnckedcYpxCVEKS7aI2J9YzQBo3/40q3tXt7FHLhJCFGrney8naqDNKlvXv0M
+         U9oWZ/RjJTbdw78znKllOA8z/OcMPok/ee/ju/mRwcUONrMWhad2YqbUfaka6r6Q9J/P
+         Gm3Q==
+X-Gm-Message-State: AOAM531zjYcUqANsntb/OkXa62LCUia1kjB5jIzWFvOVYQkqkMmAMJ1B
+        Mw0DgZNDyFp9y90XJcf37l4WWRiD44fY4bt0SevifA==
+X-Google-Smtp-Source: ABdhPJwe0qsnrzEWY99rw92Dl247nO1g2aRfUQwFhLyufv0QQue7HHBTiLV5eGIadgi8buDTppvdOQnr73G4QW/kQOE=
+X-Received: by 2002:a6b:b886:: with SMTP id i128mr8802035iof.151.1638984807851;
+ Wed, 08 Dec 2021 09:33:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211208171113.22089-1-jose.exposito89@gmail.com>
+In-Reply-To: <20211208171113.22089-1-jose.exposito89@gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 8 Dec 2021 09:33:14 -0800
+Message-ID: <CAP-5=fUAR9uSAQGkukqafkoX+jz1fE8f-ziU5WeG59XT53jMWw@mail.gmail.com>
+Subject: Re: [PATCH] perf util: Fix use after free in metric__new
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, ak@linux.intel.com,
+        john.garry@huawei.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 5:44 AM, Rob Herring wrote:
-> On Tue, 07 Dec 2021 20:04:32 -0800, Florian Fainelli wrote:
->> Conver the iProc PCIe controller Device Tree binding to YAML now that
->> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
->>  .../bindings/pci/brcm,iproc-pcie.yaml         | 176 ++++++++++++++++++
->>  2 files changed, 176 insertions(+), 133 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
->>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1565076
-> 
-> 
-> pcie@18012000: msi-controller: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dt.yaml
-> 	arch/arm/boot/dts/bcm911360_entphn.dt.yaml
-> 	arch/arm/boot/dts/bcm911360k.dt.yaml
-> 	arch/arm/boot/dts/bcm958300k.dt.yaml
-> 	arch/arm/boot/dts/bcm958305k.dt.yaml
-> 	arch/arm/boot/dts/bcm958522er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625k.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
+On Wed, Dec 8, 2021 at 9:11 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gma=
+il.com> wrote:
+>
+> Addresses-Coverity-ID: 1494000
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
 
-Those would mean that the binding patch was applied without the DTS
-patches earlier in the series?
--- 
-Florian
+Acked-by: Ian Rogers <irogers@google,com>
+
+This can only happen in the ENOMEM case, but it is a good fix.
+
+Fixes: b85a4d61d302 (perf metric: Allow modifiers on metrics)
+
+Thanks,
+Ian
+
+> ---
+>  tools/perf/util/metricgroup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
+c
+> index fffe02aae3ed..4d2fed3aefd1 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -209,8 +209,8 @@ static struct metric *metric__new(const struct pmu_ev=
+ent *pe,
+>         m->metric_name =3D pe->metric_name;
+>         m->modifier =3D modifier ? strdup(modifier) : NULL;
+>         if (modifier && !m->modifier) {
+> -               free(m);
+>                 expr__ctx_free(m->pctx);
+> +               free(m);
+>                 return NULL;
+>         }
+>         m->metric_expr =3D pe->metric_expr;
+> --
+> 2.25.1
+>

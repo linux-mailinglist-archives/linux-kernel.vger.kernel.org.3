@@ -2,178 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38ABE46D055
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCC246D058
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbhLHJxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S230408AbhLHJzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhLHJxl (ORCPT
+        with ESMTP id S230194AbhLHJzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:53:41 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9142C061746;
-        Wed,  8 Dec 2021 01:50:09 -0800 (PST)
-Received: from [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3] (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 82E431F45AE2;
-        Wed,  8 Dec 2021 09:50:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638957008; bh=zVGIFxck9x5IerNsAjYPgRm4rJR70g1v7ksESCraX18=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=V5hPMueCR58aL9EvrTkfycXGs2uCkQW0aCd1isf4imL37WS5U6egHSqJA/YN+UmA8
-         0Fnrrw0TV/G6La/R95ym9R8T3DXYfRVd810lEnfl3D4xAS4fCc8kuG63dAuYQqog6s
-         PCqlnD3dOJ9LTOp00QsxPPgmRwxPPV2mdH+gLzVoQ+MYMvsg4T2kRcrxJUjF2B9bEQ
-         GkAHy8CT1Mga5F1Yd+Fm0PnB88P6QbQ1diA9Vqh7RCOhwZgv/FRoyxGBCeOwg3ueaz
-         hkLYhmZkmclvIxJZy9xNycIr2gVinoFmR4dVN2+/6nyYo5kG21wVLSo5iQ56aJVCbM
-         ilmnunYbGysGg==
-Subject: Re: [PATCH 1/2] iommu/mediatek: Always tlb_flush_all when each PM
- resume
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     kernel@collabora.com, Joerg Roedel <joro@8bytes.org>,
+        Wed, 8 Dec 2021 04:55:09 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6EDC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:51:37 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id o13so2974670wrs.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gldA+GhZIOtvn7+srlMnzCuMOvxYrv7KuJt8R9mUOr8=;
+        b=I5USUv0adWNsdFOcjZGJioG32G+/SMDOX9D0A47diifl3032llJ03dZ67rehpoLcCo
+         JjpPRT5bCYVQtH2wnYBwb221+dl1foyrCt+6Jp7wWFty3J06d2XkD5St37KRmlPjvn/s
+         CqYzhyYp9D9nLG6dGbT8Nol8FixWbpt2QLUih88qo78XOqHxkHpPHLSHaGJITiNzabyx
+         F0nmTWFLUYlFNarepQzJirszXMLPerNtjhhGrzZET76OPBMZHuFZb+23iGyq9HG7ZByR
+         s5kL1etsmKS5plFGaEYrteLeuZEd1mr51zyRoE4O2aPaeoRR8l83W/96SxpJR4JrBExi
+         u17g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gldA+GhZIOtvn7+srlMnzCuMOvxYrv7KuJt8R9mUOr8=;
+        b=pApxkfyKewq5nMIpAb2+FD70b63JCY3uP2/h6DpEUe43kqNK636dcetAC3j2qYBhBP
+         jHZGdnjNebQJi8HDVtTAh/tqsvky37e+rl3xhMgu2QMAW19Ui9YY7+dhWGiEaFCbeZsz
+         ZW85yoqrt8VkB3KQmgBIFV2pXs+uxJA7FjX0KP+FKiTdAHoUTovj9iH46FCBf4Uqd8q7
+         1h+75SkWdPsbsN3BkJ2QX/P0h9P8VpGP93ms2i6nYt3YnhFQ798YlE+TUA+WQY8fS1+A
+         Xm5+onl2nTUrm4j+cBop6FL1LMKtbXGwslrhjAlpvK2tyiI7oQ+N0QYQVSJtOXpF7qVC
+         EkUA==
+X-Gm-Message-State: AOAM532GFTJTqf7d44R0DX3XZDatlmpOhcGth8hp9EgeaWSFaU9SuLWF
+        /OgylDb+dUMYvk/19i4MyqL9NA==
+X-Google-Smtp-Source: ABdhPJxaWkQKHRy5eAGnuxAI4kVzboOgvmSfrlkZLSE9/5OHNPgsC5xZJ2qp6NyzrRB0QnSt+lERWg==
+X-Received: by 2002:a5d:4312:: with SMTP id h18mr58432938wrq.626.1638957095995;
+        Wed, 08 Dec 2021 01:51:35 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:210:27b8:d9b2:cac1:a973])
+        by smtp.gmail.com with ESMTPSA id d15sm2940100wri.50.2021.12.08.01.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 01:51:35 -0800 (PST)
+Date:   Wed, 8 Dec 2021 09:51:33 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Andrew Walbran <qwandor@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:MEDIATEK IOMMU DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, sebastian.reichel@collabora.com,
-        iommu@lists.linux-foundation.org
-References: <20211122104400.4160-1-dafna.hirschfeld@collabora.com>
- <20211122104400.4160-2-dafna.hirschfeld@collabora.com>
- <6abef78f6447c626b737fd35688f421c29871f43.camel@mediatek.com>
- <d30438bf-9add-7904-bad0-0764e3602263@collabora.com>
-Message-ID: <35d53ea0-68db-a516-9e9c-272e8f0ed082@collabora.com>
-Date:   Wed, 8 Dec 2021 11:50:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 06/15] KVM: arm64: Implement kvm_pgtable_hyp_unmap()
+ at EL2
+Message-ID: <YbCAJZAqUXngvjZ2@google.com>
+References: <20211201170411.1561936-1-qperret@google.com>
+ <20211201170411.1561936-7-qperret@google.com>
+ <CA+_y_2EEP5tYbBTd17c1wuOeZ2jSfhgu0M2b=CpGKjKRgU-=gw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <d30438bf-9add-7904-bad0-0764e3602263@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+_y_2EEP5tYbBTd17c1wuOeZ2jSfhgu0M2b=CpGKjKRgU-=gw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
-
-On 07.12.21 10:31, Dafna Hirschfeld wrote:
+On Tuesday 07 Dec 2021 at 14:47:14 (+0000), Andrew Walbran wrote:
+> On Wed, 1 Dec 2021 at 17:04, 'Quentin Perret' via kernel-team
+> <kernel-team@android.com> wrote:
+> >
+> > From: Will Deacon <will@kernel.org>
+> >
+> > Implement kvm_pgtable_hyp_unmap() which can be used to remove hypervisor
+> > stage-1 mappings at EL2.
+> >
+> > Signed-off-by: Will Deacon <will@kernel.org>
+> > Signed-off-by: Quentin Perret <qperret@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_pgtable.h | 21 ++++++++++
+> >  arch/arm64/kvm/hyp/pgtable.c         | 63 ++++++++++++++++++++++++++++
+> >  2 files changed, 84 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> > index 027783829584..9d076f36401d 100644
+> > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > @@ -251,6 +251,27 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt);
+> >  int kvm_pgtable_hyp_map(struct kvm_pgtable *pgt, u64 addr, u64 size, u64 phys,
+> >                         enum kvm_pgtable_prot prot);
+> >
+> > +/**
+> > + * kvm_pgtable_hyp_unmap() - Remove a mapping from a hypervisor stage-1 page-table.
+> > + * @pgt:       Page-table structure initialised by kvm_pgtable_hyp_init().
+> > + * @addr:      Virtual address from which to remove the mapping.
+> > + * @size:      Size of the mapping.
+> > + *
+> > + * The offset of @addr within a page is ignored, @size is rounded-up to
+> > + * the next page boundary and @phys is rounded-down to the previous page
+> > + * boundary.
+> > + *
+> > + * TLB invalidation is performed for each page-table entry cleared during the
+> > + * unmapping operation and the reference count for the page-table page
+> > + * containing the cleared entry is decremented, with unreferenced pages being
+> > + * freed. The unmapping operation will stop early if it encounters either an
+> > + * invalid page-table entry or a valid block mapping which maps beyond the range
+> > + * being unmapped.
 > 
-> 
-> On 27.11.21 04:46, Yong Wu wrote:
->> Hi Dafna,
->>
->> Sorry for reply late.
->>
->> On Mon, 2021-11-22 at 12:43 +0200, Dafna Hirschfeld wrote:
->>> From: Yong Wu <yong.wu@mediatek.com>
->>>
->>> Prepare for 2 HWs that sharing pgtable in different power-domains.
->>>
->>> When there are 2 M4U HWs, it may has problem in the flush_range in
->>> which
->>> we get the pm_status via the m4u dev, BUT that function don't reflect
->>> the
->>> real power-domain status of the HW since there may be other HW also
->>> use
->>> that power-domain.
->>>
->>> The function dma_alloc_attrs help allocate the iommu buffer which
->>> need the corresponding power domain since tlb flush is needed when
->>> preparing iova. BUT this function only is for allocating buffer,
->>> we have no good reason to request the user always call pm_runtime_get
->>> before calling dma_alloc_xxx. Therefore, we add a tlb_flush_all
->>> in the pm_runtime_resume to make sure the tlb always is clean.
->>>
->>> Another solution is always call pm_runtime_get in the
->>> tlb_flush_range.
->>> This will trigger pm runtime resume/backup so often when the iommu
->>> power is not active at some time(means user don't call pm_runtime_get
->>> before calling dma_alloc_xxx), This may cause the performance drop.
->>> thus we don't use this.
->>>
->>> In other case, the iommu's power should always be active via device
->>> link with smi.
->>>
->>> The previous SoC don't have PM except mt8192. the mt8192 IOMMU is
->>> display's
->>> power-domain which nearly always is enabled. thus no need fix tags
->>> here.
->>> Prepare for mt8195.
->>
->> In this patchset, this message should be not proper. I think you could
->> add the comment why this patch is needed in mt8173.
->>
->>>
->>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>> [imporvie inline doc]
->>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>> ---
->>>   drivers/iommu/mtk_iommu.c | 7 +++++++
->>>   1 file changed, 7 insertions(+)
->>>
->>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
->>> index 25b834104790..28dc4b95b6d9 100644
->>> --- a/drivers/iommu/mtk_iommu.c
->>> +++ b/drivers/iommu/mtk_iommu.c
->>> @@ -964,6 +964,13 @@ static int __maybe_unused
->>> mtk_iommu_runtime_resume(struct device *dev)
->>>           return ret;
->>>       }
->>> +    /*
->>> +     * Users may allocate dma buffer before they call
->>> pm_runtime_get,
->>> +     * in which case it will lack the necessary tlb flush.
->>> +     * Thus, make sure to update the tlb after each PM resume.
->>> +     */
->>> +    mtk_iommu_tlb_flush_all(data);
->>
->> This should not work. since current the *_tlb_flush_all call
->> pm_runtime_get_if_in_use which will always return 0 when it called from
->> this runtime_cb in my test. thus, It won't do the tlb_flush_all
->> actually.
+> How is the caller expected to break up the block mapping? Why not
+> handle that within this function?
 
-He, indeed, my mistake, although the encoder works more or less fine even
-without the full flush so I didn't catch that.
+We don't really use block mappings for the hyp stage-1, since pretty
+much forever (see the loop in pkvm_create_mappings_locked() for ex), so
+handling it here would be somewhat unnecessary complexity. Handling this
+in the pgtable code itself (which I assume would mean proactively
+re-mapping the rest of the range with page-granularity mappings or
+something along those lines) is tricky because of BBM and concurrency,
+so I'd rather avoid handling same-level aborts at EL2 and all that mess
+unless we have a good reason. Is there a use-case where you think that'd
+be needed?
 
->>
->> I guess this also depend on these two patches of mt8195 v3.
->> [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in tlb_sync_all
->> [PATCH v3 10/33] iommu/mediatek: Add tlb_lock in tlb_flush_all
-
-I'll add those two
-
->>
->> like in [10/33], I added a mtk_iommu_tlb_do_flush_all which don't have
->> the pm operation.
-
-yes, I need to remove the pm_runtime_get_if_in_use call in the 'flush_all' func
-I see there is also a patch for that in the mt8195 v3 series "[PATCH v3 13/33] iommu/mediatek: Remove the power status checking in tlb flush all"
-
-So I'll send v2, adding all those 3 patches, but I think adding mtk_iommu_tlb_do_flush_all
-on patch 9 and removing it again on patch 13 is confusing so I'll avoid that.
-
-Thanks,
-Dafna
-
-
-
->>
->> This looks has a dependence. Let me know if I can help this.
-> 
-> It did work for me, testing on elm device. I'll check that again.
-> 
-> 
->>
->>> +
->>>       /*
->>>        * Uppon first resume, only enable the clk and return, since
->>> the values of the
->>>        * registers are not yet set.
-> 
+Cheers,
+Quentin

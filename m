@@ -2,183 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04F646D11D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C5D46D124
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbhLHKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:37:20 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39136 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231731AbhLHKhP (ORCPT
+        id S231781AbhLHKkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231770AbhLHKkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:37:15 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B89pLPd009148;
-        Wed, 8 Dec 2021 11:33:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=GYxfSXf9w2NFMXCcNiHGT9pdbGEG14Y73aVi9O0OxeE=;
- b=hY8fbsDBOl4Iw05EG5pauOT8JyP923N05oSoyYtjPo4/IFQsYh9i4QfchGwRdkReP2wb
- eI55cXor4qc+hUVraf98ieLpok0jXcOvuVxYQnTI1WR68l95m6XQcIKGQs09GWqrX/Se
- JGCBYx+C3DvLjUESL6HEqTle5LrgUXteFdNBcBxnzI61q6wBpGa2XOsaH8W6VPPz1aD7
- dzb157XIqJgPzue8D2vR2SxtZRbum0iHFS7bnae1L68n2KfxXETzfSErusZzVoNd1YLr
- YvfbTkZokTP7Wa6P/PBFfWJGTT1s0qsj+cAzq79WU6epetXeprgkmSTwNQd8VcHl1Vjm cg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ct9xm4emc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:33:26 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B64D510002A;
-        Wed,  8 Dec 2021 11:33:25 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ADAFA23153B;
-        Wed,  8 Dec 2021 11:33:25 +0100 (CET)
-Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec 2021 11:33:25
- +0100
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>
-CC:     <olivier.moysan@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 2/2] ARM: dts: stm32: remove timer5 duplicate unit-address on stm32f4 series
-Date:   Wed, 8 Dec 2021 11:33:16 +0100
-Message-ID: <1638959596-6656-3-git-send-email-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
-References: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
+        Wed, 8 Dec 2021 05:40:41 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A267C061746;
+        Wed,  8 Dec 2021 02:37:10 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id s137so1704841pgs.5;
+        Wed, 08 Dec 2021 02:37:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QAO9WgbdcG7XY4iq2f+Xd4Bi6s7cs1QXT9+5RcWd2OY=;
+        b=XRF2lSZq+zGIP2Vkk5zwpHdGShHUprMtHTasrVm5VV0k7hlIj14fXYunPB4Xx++i81
+         0sEbGMPstlp7VkUhKhOhE9fOhzgtxLUhDVKWaD73HCK5mqbPSUHJ85x3XdAnYOmZlFNG
+         ofq0Yd5neuqffzsWAq2kpSNuVOlk5PRhZDmrPCmBqqD1QwdBx4OIUuMkHNi1YXRg4iNH
+         vZdn8l1JZfWF+SLvWkXAm1rzNZ2JhOlqgK78uMJNFVFns5Y+h92Dykv2keSNNjme93mq
+         EcHbBcwyBdXDjn0gcEO5N8Kb8IrQT5Isr4kjD6WX1LclHFpcNyIa/LsPpo9bBNIp84hB
+         3MDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QAO9WgbdcG7XY4iq2f+Xd4Bi6s7cs1QXT9+5RcWd2OY=;
+        b=bfS/FUCmxGFAhKxSESZJhKU2eCDu93ISLqeoTmDDv6An5SK9xsplLoAI0HBZAlSMb4
+         lxAGQbf7TPP0A0xVgOnhR9+YaCZA4CBkMJY2Dvcr8gn+ZO6Ln7R2lO9Snr3niSWV+WMO
+         qQsEqVV4pVhcEf98djeYe3ALgB7pzo3gACaC2rXqBmT6epMYt0b9UYw+U8VayCeE4EeC
+         9VhekEbN6Jkx2oaZxLOR5cKc+cYrdGU/98nYl1vIWpGTdVqK5XhU7CnHpLr0VDm9PypF
+         yAjSkjKb6FBdydX5fcbOog2Kg5YbfM94AFJmVcLvfEeL0JuM9aqpmgYEiheNHNuljFr8
+         ZCdA==
+X-Gm-Message-State: AOAM532VukTgVUpVqqAcm8intiW0Iy35C0XLWngUHdhWaHskk99bm3xg
+        HyYAzR6uCsEFVV/TGPVVA3jlrhrvDFGnTw==
+X-Google-Smtp-Source: ABdhPJyI9W9Imnrkv/isPspoZGYhH1PJFwKCqlQPI4jabpzGjOKIaRbBr1OjPZWVhWdYAjZGM1hqVg==
+X-Received: by 2002:a63:5520:: with SMTP id j32mr29677836pgb.443.1638959829878;
+        Wed, 08 Dec 2021 02:37:09 -0800 (PST)
+Received: from richard-System-Product-Name.. ([101.10.104.26])
+        by smtp.gmail.com with ESMTPSA id d21sm3247569pfu.52.2021.12.08.02.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 02:37:08 -0800 (PST)
+From:   Yuchang Hsu <saraon640529@gmail.com>
+X-Google-Original-From: Yuchang Hsu <Richard_Hsu@asmedia.com.tw>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        Richard_Hsu@asmedia.com.tw, andriy.shevchenko@linux.intel.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yd_Tseng@asmedia.com.tw, Cindy1_Hsu@asmedia.com.tw,
+        Andrew_Su@asmedia.com.tw
+Subject: [PATCH v2] gpio:amdpt:add new device ID and 24-pin support
+Date:   Wed,  8 Dec 2021 18:36:21 +0800
+Message-Id: <20211208103621.9253-1-Richard_Hsu@asmedia.com.tw>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_03,2021-12-08_01,2021-12-02_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the following warnings seen when building with W=1.
-Warning (unique_unit_address): /soc/timer@40000c00: duplicate unit-address
-(also used in node /soc/timers@40000c00)
-This approach is based on some discussions[1], to restructure the dtsi
-and dts files.
+Hi Andy Shevchenko,
+How and what to put the Changelog after '---'?i just remove '---'.
 
-Timer5 is enabled by default on stm32f4 series, to act as clockevent. In
-order to get rid of the W=1 warning, and be compliant with dt-schemas
-(e.g. dtbs_check):
-- In stm32f429.dtsi:
-  . Keep the more complete timers5 description
-  . Remove the most simple timer5 node that is duplicate
-- In each board:
-  . adopt "st,stm32-timer" compatible for timers5, also add the interrupt
-  . use /delete-property/ and /delete-node/ so the it matches the
-    clockevent bindings
+This patch adds a ACPI HID(AMDIF031) and pin number in the pt_gpio_acpi_match.
+And We retrieve pin number supporting by device_get_match_data().
 
-Note: all this is done in one shot (e.g. not split) to keep clockevent
-functionality.
+Signed-off-by: Yuchang Hsu <Richard_Hsu@asmedia.com.tw>
 
-[1] https://lore.kernel.org/linux-arm-kernel/Yaf4jiZIp8+ndaXs@robh.at.kernel.org/
+ drivers/gpio/gpio-amdpt.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- arch/arm/boot/dts/stm32429i-eval.dts  | 12 ++++++++++++
- arch/arm/boot/dts/stm32f429-disco.dts | 12 ++++++++++++
- arch/arm/boot/dts/stm32f429.dtsi      |  7 -------
- arch/arm/boot/dts/stm32f469-disco.dts | 12 ++++++++++++
- 4 files changed, 36 insertions(+), 7 deletions(-)
+diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
+index bbf53e289141..13f4e2af3800 100644
+--- a/drivers/gpio/gpio-amdpt.c
++++ b/drivers/gpio/gpio-amdpt.c
+@@ -14,6 +14,7 @@
+ #include <linux/platform_device.h>
 
-diff --git a/arch/arm/boot/dts/stm32429i-eval.dts b/arch/arm/boot/dts/stm32429i-eval.dts
-index cb46326..0d98aca 100644
---- a/arch/arm/boot/dts/stm32429i-eval.dts
-+++ b/arch/arm/boot/dts/stm32429i-eval.dts
-@@ -308,6 +308,18 @@
- 	};
+ #define PT_TOTAL_GPIO 8
++#define PT_TOTAL_GPIO_EX 24
+
+ /* PCI-E MMIO register offsets */
+ #define PT_DIRECTION_REG   0x00
+@@ -103,7 +104,7 @@ static int pt_gpio_probe(struct platform_device *pdev)
+ 	pt_gpio->gc.owner            = THIS_MODULE;
+ 	pt_gpio->gc.request          = pt_gpio_request;
+ 	pt_gpio->gc.free             = pt_gpio_free;
+-	pt_gpio->gc.ngpio            = PT_TOTAL_GPIO;
++	pt_gpio->gc.ngpio            = (uintptr_t)device_get_match_data(dev);
+ #if defined(CONFIG_OF_GPIO)
+ 	pt_gpio->gc.of_node          = dev->of_node;
+ #endif
+@@ -133,8 +134,9 @@ static int pt_gpio_remove(struct platform_device *pdev)
+ }
+
+ static const struct acpi_device_id pt_gpio_acpi_match[] = {
+-	{ "AMDF030", 0 },
+-	{ "AMDIF030", 0 },
++	{ "AMDF030", PT_TOTAL_GPIO },
++	{ "AMDIF030", PT_TOTAL_GPIO },
++	{ "AMDIF031", PT_TOTAL_GPIO_EX },
+ 	{ },
  };
- 
-+&timers5 {
-+	/* Override timer5 to act as clockevent */
-+	compatible = "st,stm32-timer";
-+	interrupts = <50>;
-+	status = "okay";
-+	/delete-property/#address-cells;
-+	/delete-property/#size-cells;
-+	/delete-property/clock-names;
-+	/delete-node/pwm;
-+	/delete-node/timer@4;
-+};
-+
- &usart1 {
- 	pinctrl-0 = <&usart1_pins_a>;
- 	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
-index 075ac57..06a7091 100644
---- a/arch/arm/boot/dts/stm32f429-disco.dts
-+++ b/arch/arm/boot/dts/stm32f429-disco.dts
-@@ -205,6 +205,18 @@
- 	};
- };
- 
-+&timers5 {
-+	/* Override timer5 to act as clockevent */
-+	compatible = "st,stm32-timer";
-+	interrupts = <50>;
-+	status = "okay";
-+	/delete-property/#address-cells;
-+	/delete-property/#size-cells;
-+	/delete-property/clock-names;
-+	/delete-node/pwm;
-+	/delete-node/timer@4;
-+};
-+
- &usart1 {
- 	pinctrl-0 = <&usart1_pins_a>;
- 	pinctrl-names = "default";
-diff --git a/arch/arm/boot/dts/stm32f429.dtsi b/arch/arm/boot/dts/stm32f429.dtsi
-index f21b322..1723346 100644
---- a/arch/arm/boot/dts/stm32f429.dtsi
-+++ b/arch/arm/boot/dts/stm32f429.dtsi
-@@ -159,13 +159,6 @@
- 			};
- 		};
- 
--		timer5: timer@40000c00 {
--			compatible = "st,stm32-timer";
--			reg = <0x40000c00 0x400>;
--			interrupts = <50>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM5)>;
--		};
--
- 		timers5: timers@40000c00 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
-index 30905ce6..cac3a67 100644
---- a/arch/arm/boot/dts/stm32f469-disco.dts
-+++ b/arch/arm/boot/dts/stm32f469-disco.dts
-@@ -224,6 +224,18 @@
- 	bus-width = <4>;
- };
- 
-+&timers5 {
-+	/* Override timer5 to act as clockevent */
-+	compatible = "st,stm32-timer";
-+	interrupts = <50>;
-+	status = "okay";
-+	/delete-property/#address-cells;
-+	/delete-property/#size-cells;
-+	/delete-property/clock-names;
-+	/delete-node/pwm;
-+	/delete-node/timer@4;
-+};
-+
- &usart3 {
- 	pinctrl-0 = <&usart3_pins_a>;
- 	pinctrl-names = "default";
--- 
-2.7.4
+ MODULE_DEVICE_TABLE(acpi, pt_gpio_acpi_match);
+--
+2.30.2
+
+BR
+ Richard
 

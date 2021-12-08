@@ -2,190 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A1846CE5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53BE46CE65
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbhLHHb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:31:26 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:51752 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235964AbhLHHbZ (ORCPT
+        id S244539AbhLHHhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:37:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27875 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233900AbhLHHhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:31:25 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B81Uh4u002860;
-        Wed, 8 Dec 2021 07:27:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=tP6uhSvHySINEU3Z6hlCf/8EFWFwlWEnJuniTfnKdcA=;
- b=vHNPCUumh9FciYl48Cdb6iyN9shdVq9O5QSP0BcKodgryEtRggmHl2FO3gXtIYsraO0E
- iAN88ntMEmxEAFFcpitvdq0gMl6rRTVJYjvnajKJxGzIxNAj5rocXDjk5zB2hJLEnwSn
- z5I/BbjZIuD+dgnHrdAqaihrX84N6sX49tzYYRyId65It2E3NBK+UL95KICGaYS12ywc
- nzyh/kMMrE3Ud+/wG7muJ541FSJrg830o7T6td7xvEZzBAb21eBwkjKHmAIsDdXCU2FW
- n7xiThzTsS6Y5gnxefwX5gY0OQZo6mD7ZMl0GiOBOElPSn1ip9RugU9w4n9zi2Gh++x7 tA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3csbbqqw42-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 Dec 2021 07:27:51 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B87GhDO121173;
-        Wed, 8 Dec 2021 07:27:50 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by userp3020.oracle.com with ESMTP id 3cr1sq8vv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 Dec 2021 07:27:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TSVDkRf/Knx55aKdxyMpFXU3xFyVt8KT4f6jmdXbMFN6k+9W5vqH7I5Ci37CWAqfe52m48l3rQU0R1PdpQG2FHtvxyEcgVqD7AwFzhXTJFqRpA6Si6USAtFjSMm8gOcQBYeisWJQXTawmRJXGywohFxP7rtjfUxQISZlwlznG5jc4hmiuqYkLRWlBnJEdm5Bpvmc4YO+rzH26fMOAT0ogDQItsbKehorK44YrDu4z0BjbnI9wBiU1XaaG9TMl2ijTeAF40twgKQqXes8TbdwDZ9DFgrh55o3kFiPmLg6r+5j5qMhg2iNfN65HjO7jIuSufu0sSiFSrtGDdX/kZ3MlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tP6uhSvHySINEU3Z6hlCf/8EFWFwlWEnJuniTfnKdcA=;
- b=PsWxuGeb4pB7bdBeopZgMwSmJnjB3LZzjajFzAYqeCYrD3NfiovUEIyP3ZpS1APwHf5yFzaOWzak8upuQ4H/nmZHcyNmKfFbCeqRsh99arrhm4DbJQRRIQOyVX4pWOJRHw9uiOnExFi/KugwwXRk3CUe7ymG9YG+giA/z/4ASwSt6wu5Kd+6EgeVuhzsNP6VQa0XMtkqZ3a8WfeleDcA98L2Jn6q3DDcahLZjZm0Rx4Gf4tquWWZbkC1mJITgHAigo3xwkx5tpiXaSKg8TtBjDC0rauY8VtpjSN0M6d4v58yPmgL8/WxJURKM1E0jKc3+R36ln9tgqV7YTmkWg/gIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tP6uhSvHySINEU3Z6hlCf/8EFWFwlWEnJuniTfnKdcA=;
- b=IX9texMwEWesJJTRAj1stnFxgZadvr7eVfq8NyTs+3wYRUU+RI3WO2NdM5UTmMBYyVvGWDFVut8Ax+94HqNtDg8hjprwRirtMD4mySLJzgDLrMvhVt9kVCgVQQNNpc3R95XD+zWumEaEJM3ynIJfn9BofEc/umfKF/jHNBrm9Yo=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR1001MB2159.namprd10.prod.outlook.com
- (2603:10b6:301:2c::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
- 2021 07:27:48 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4755.023; Wed, 8 Dec 2021
- 07:27:48 +0000
-Date:   Wed, 8 Dec 2021 10:27:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Antonino Daplas <adaplas@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH v2] fbdev: savagefb: make a variable local
-Message-ID: <20211208072736.GA17615@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0127.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:40::6) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Wed, 8 Dec 2021 02:37:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638948820;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VaQgBFKDWPtyW4rX+GpfnPjaazD4SfZz/ToOHd0Wuzc=;
+        b=iAmIaxB83Y/qYpZ2HPyygRGdhXh4AA5558MRqsGs+pYJJ+o+tQas8sTZ7ADGCg3w8jjVvC
+        V7h3DJoQlq+upyaCzLdO7Pme0cSv3MSleHzkaJ8NbCnSdXGeDTbMNGKveFWI1Dj5MwgBZi
+        L43EvKXt6AJqzA5FOkoEEYvK5xxqUwU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-51-zmOi2HSZOjKXfS2MBylEmw-1; Wed, 08 Dec 2021 02:33:37 -0500
+X-MC-Unique: zmOi2HSZOjKXfS2MBylEmw-1
+Received: by mail-wr1-f69.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so167522wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 23:33:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=VaQgBFKDWPtyW4rX+GpfnPjaazD4SfZz/ToOHd0Wuzc=;
+        b=cNVXjOYtYGjRDwDyKlyqSG8bklkloRAGN4m1evhED5k2OYxD70xj0jurbaMXQifBFj
+         V3VrnYaaCgqTDfrOehDpH4HNiHeuG+jNodkCsNt9wc4ZU1vwk3b4JP+ubB5AVTUbnFiV
+         SNgRIne6Ti73QONaeEzEV1fcAVcbthGKWY4NYQQTI0ri6FTYdnclxDC1oW1sdsDuXooY
+         as8WZO4Mwp8MOOpfX7evmt47YFtewgfoxdPIiaY3dIwRBbGh9jpswMZSkVxOeKCohqOH
+         v3M/HfvaxLGLx325sTyxRmZ+a939KEhxrFGKQVSU2LXqVMfwWU1NvjYyjE0CbHcCCUNi
+         IrhA==
+X-Gm-Message-State: AOAM533plmXmWv55amclalqplYNS9iRjm5y6cnmVZB/4YdkLjaHrcBgC
+        O9h6anW2fcdbGblIZVYaT5ua2sOJDovOu1Nc6aD0VQpavBLJf2nrpTwda1/L/woGWjgpKHpgzAT
+        3E5UlpXyp3gAhSpph9ixcarFz
+X-Received: by 2002:adf:f708:: with SMTP id r8mr57333466wrp.198.1638948816619;
+        Tue, 07 Dec 2021 23:33:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy7KoV5p8PVF3If5VE3e/tXMfPoPdiN58LX+mhb+Qk/apSQFS8E5N4maEwm2dxUTEGR+YL9hQ==
+X-Received: by 2002:adf:f708:: with SMTP id r8mr57333432wrp.198.1638948816394;
+        Tue, 07 Dec 2021 23:33:36 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id l3sm2033529wmq.46.2021.12.07.23.33.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 23:33:35 -0800 (PST)
+Reply-To: eric.auger@redhat.com
+Subject: Re: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+To:     Lu Baolu <baolu.lu@linux.intel.com>, Joerg Roedel <joro@8bytes.org>
+Cc:     peter.maydell@linaro.org, kvm@vger.kernel.org,
+        vivek.gautam@arm.com, kvmarm@lists.cs.columbia.edu,
+        eric.auger.pro@gmail.com, jean-philippe@linaro.org,
+        ashok.raj@intel.com, maz@kernel.org, vsethi@nvidia.com,
+        zhangfei.gao@linaro.org, kevin.tian@intel.com, will@kernel.org,
+        alex.williamson@redhat.com, wangxingang5@huawei.com,
+        linux-kernel@vger.kernel.org, lushenming@huawei.com,
+        iommu@lists.linux-foundation.org, robin.murphy@arm.com,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <20211027104428.1059740-2-eric.auger@redhat.com>
+ <Ya3qd6mT/DpceSm8@8bytes.org>
+ <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
+ <e6733c59-ffcb-74d4-af26-273c1ae8ce68@linux.intel.com>
+From:   Eric Auger <eric.auger@redhat.com>
+Message-ID: <fbeabcff-a6d4-dcc5-6687-7b32d6358fe3@redhat.com>
+Date:   Wed, 8 Dec 2021 08:33:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Received: from kili (102.222.70.114) by ZR0P278CA0127.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:40::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Wed, 8 Dec 2021 07:27:45 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f03754d0-22e9-448f-0ac1-08d9ba1c3bfa
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2159:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB21595C10D0AAAE23C0A85B4F8E6F9@MWHPR1001MB2159.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: og1mJFLTLkfLM7epNOSEAtyLWdvBfpLCBIYxC9mMVv/a7OsvIAGSAxjIcWMQom0rlku6913iJSBkzKEwUB0fCDdpwIL/YokubnVVOKLkcVl5mQoW6sYwts7PAnzfGwdGERdJs2dcOi3f3NmczAJ6rZjcykk+KiFbua+zR19FZDAkZ3cjG1L34gNvaBUfs88tPXkkCSOufKKG3JDFsUV2pf8+VmUA9188iQLsR4+B5C1cCdukCFO8k2KEiZa9VP4PKgoqh8m0AunK2Hzt6RS6kRzrEPIUdaZy0JUX1wXb3/Zh+SDwAaaLpdd1EVJ5N2HIYAy+JhIqb5Bnp77+f0i7XeoDIte2nI6zTKkVlDk/btC89hYTMlwdLuU89bQFuG5UrJvwA1PorvYGWfCdqJxWUiYMcm7mSmNljZRUZOYWvSGIeAzFiHJrS6mZjQ2pJCMdsUiveaYMXFMX+zfTTtWn8MwVjOuYo4z7gFB+oiTh9i7H70IVvmbaMTTHR5BQ72VD/ocrZkrQ9wDJgJkTkC1IkohQ5wVP8AbPDOklXEKCEzo0fqM+XhZ99a3l8zbXgwO4T7gbnvU9OSiF4G3xNHhOVqqZYO+imF3qK2ihXVxpe8fzDSOXf0pFkDkoKDet34VCsf82BI3CxXUqLQpSJJTBmejkOvArufWnOeuev7q8ooThXM86hTsxNd0WTHc2wRAGzs///RsLgG0OlQBHNiSfHg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(33716001)(316002)(5660300002)(6916009)(83380400001)(508600001)(55016003)(4326008)(9686003)(9576002)(6496006)(33656002)(66556008)(2906002)(186003)(66946007)(26005)(8676002)(8936002)(86362001)(956004)(52116002)(44832011)(38350700002)(6666004)(1076003)(66476007)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WmzRyf8uURYunkgiKvVKehXAyVvEfE2w37p6fYrwMXQBqQ8cpH5lCks6QtMY?=
- =?us-ascii?Q?LC8cxRWWqwdNF4/04OKpSWSdxw9+dgkwd0SPihKt7nWvcdzNOcbb8s9vm7gs?=
- =?us-ascii?Q?POzf+RmbaCL1RaAd7zHB3b9Xw3tlkjvVUR/t+sYZYxHSC4ynM8yeZVH9Du5j?=
- =?us-ascii?Q?YP1Cz2iw6ZzYTYE4aHToRogpfII/9Ih1NAgXyPeQAqMHaVZOTmNWZPvYEL9O?=
- =?us-ascii?Q?DKg6Fx7OShMigtTg0McM5jovrrZQrbCKsFAjc74RWhAK4ilE7q6VIve2iM0e?=
- =?us-ascii?Q?/I8ORXkd26619H1xbvgUI5ldEyYl59FYeocJGDvV1tqsbfCWJ0NXXEeFrLX4?=
- =?us-ascii?Q?HgqTxbD7b+tKKJkt4PEGFYYO0cZXp3v2bu1b0yBS2d6JeD4SUZUti/sCN4yR?=
- =?us-ascii?Q?grIs9IQQzucWTXzWM4UFEdg3A72TC5tZjTCAMbecQQCh4P4Xu+a0E+Hu9nSX?=
- =?us-ascii?Q?oGbB3x/aFVqFGLr1/ZLbg7AxGBypR5kebOYYFEellphDP5d2M/AAwyqzlW0T?=
- =?us-ascii?Q?2GdFYBInbgr6cIl27tshbw+bxQvxKP+mZOR3+T8jP3BTcmL1zdMDmhbay8cz?=
- =?us-ascii?Q?KvbW0+JwM6fOMCRfYWzTPD8xNdO2wCjlbXaApg4G3P5wvvuMeVNr6PwtmTtP?=
- =?us-ascii?Q?O1CCXNqkFFljEEzAKFjwvTQpp1EKLPgivFn97F6THgnhRFMggfGz8LYKZfvo?=
- =?us-ascii?Q?XkCDQB0z22WlK2zHFBdIJVwWjmWI0o9FtY7+J3nqpuSdYOBLrf5wwiyFQPTl?=
- =?us-ascii?Q?94SuVjY+lHFCTKcsPMlzEldhv0c2UCGZP0Jdzw9+0X5dXTNsvcu8pgPPlQLE?=
- =?us-ascii?Q?/ZMmsrUUrNdJsuzLNB5ajvqsjQzxm5J5SK9Rm9qF+0os5ULf2jdubVCWnf1R?=
- =?us-ascii?Q?WRmL9y5SlksjBpVPmSWv22Fkx6WF5hWiU3+Ejg5KowV7UG2C9F5zJ93P7w25?=
- =?us-ascii?Q?LWYmwGCLi6ftfJDPsD1zf1ZsNo5GQN7ZvhO8PY7iJYdPmyY/4qbWZa8YlNo9?=
- =?us-ascii?Q?xHO84+NXWPzpMMgjPsQEcN7KSjVL1XnEeIrDeLe4gvzi09PTNAIp7VrDfoo8?=
- =?us-ascii?Q?fFifg1dBFzmsR/SZu3rHPmsR2bCr0j/PBqKWpWIVDHvESzor6gfkKpk9cRrd?=
- =?us-ascii?Q?Yx51aO8Pj9vQlh/b5TN36UmemrYwf5+sqeaP/VVgqAgzWBlhoASdNQ51HpLA?=
- =?us-ascii?Q?mIXchTIf6bqH75jr1knZSrpB8OgDYgFZVD1LSFTyfjwMextWLBA+j27jm27D?=
- =?us-ascii?Q?RtMt8HVKShuhL5B9KfIzW0j+9PX6sWAEaqAowK2RZUedPHlFxK+Q7pp2ToS6?=
- =?us-ascii?Q?XbIIDnsHHjf2RONxKV3Khii8mmYPuUdGxGx+w2JLqSeDdvI5gPwpOWfMvFvs?=
- =?us-ascii?Q?2Mr1a7pRE6UzqNQ9+QTYXZBd6ir9foZH3AHLw2LQ+MAqAvRaWOyV+GzCPm3e?=
- =?us-ascii?Q?g4BRd5xF5e24Gg2gAOW3gB7IaNvXiU72rozzPm6B+REAmxaDym1gE9RXpAOC?=
- =?us-ascii?Q?uP/WUVqabZHWGJ7lv+MAcQQsjtFpcNqY4aL4hcvFBC6lfDfp5C803YhzhC1S?=
- =?us-ascii?Q?R7dyKJxrnYR0R3KayX4ZYfNXGxIVDmzYAklm0Ln5O12MaHkoTbXkp3BTzZYr?=
- =?us-ascii?Q?nTZYF2hgBc/xkOUN5JhTwZeJuVzyBuAaLQpdkG1q95EP2JSX5pGZ0expP166?=
- =?us-ascii?Q?/8fV8qgc67lgZW1AMokKXFYQJ28=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f03754d0-22e9-448f-0ac1-08d9ba1c3bfa
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 07:27:48.1516
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9D4Agin/dvbgQf6B2FgKq/7h/QDl74BOx520GrzOKoAeHSYHz1i1VD1vf2G/MZ/JQkdVeqjJBOaQrQ/yMHrePFG0Nk55Mtcew7j2MjuZGlg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2159
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10191 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112080049
-X-Proofpoint-GUID: 6eKZ2HCoa-eOA5Aw84dx-CL4S2d5qlgQ
-X-Proofpoint-ORIG-GUID: 6eKZ2HCoa-eOA5Aw84dx-CL4S2d5qlgQ
+In-Reply-To: <e6733c59-ffcb-74d4-af26-273c1ae8ce68@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "edid" struct member is only used during probe() and it's freed
-right away.  There is no point in storing a freed pointer for the
-whole life of the driver.
+Hi Baolu,
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
-v2: use __maybe_unused annotation to silence an unused variable warning
-    depending on the .config
+On 12/8/21 3:44 AM, Lu Baolu wrote:
+> Hi Eric,
+>
+> On 12/7/21 6:22 PM, Eric Auger wrote:
+>> On 12/6/21 11:48 AM, Joerg Roedel wrote:
+>>> On Wed, Oct 27, 2021 at 12:44:20PM +0200, Eric Auger wrote:
+>>>> Signed-off-by: Jean-Philippe Brucker<jean-philippe.brucker@arm.com>
+>>>> Signed-off-by: Liu, Yi L<yi.l.liu@linux.intel.com>
+>>>> Signed-off-by: Ashok Raj<ashok.raj@intel.com>
+>>>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+>>>> Signed-off-by: Eric Auger<eric.auger@redhat.com>
+>>> This Signed-of-by chain looks dubious, you are the author but the last
+>>> one in the chain?
+>> The 1st RFC in Aug 2018
+>> (https://lists.cs.columbia.edu/pipermail/kvmarm/2018-August/032478.html)
+>> said this was a generalization of Jacob's patch
+>>
+>>
+>>    [PATCH v5 01/23] iommu: introduce bind_pasid_table API function
+>>
+>>
+>>   
+>> https://lists.linuxfoundation.org/pipermail/iommu/2018-May/027647.html
+>>
+>> So indeed Jacob should be the author. I guess the multiple rebases got
+>> this eventually replaced at some point, which is not an excuse. Please
+>> forgive me for that.
+>> Now the original patch already had this list of SoB so I don't know if I
+>> shall simplify it.
+>
+> As we have decided to move the nested mode (dual stages) implementation
+> onto the developing iommufd framework, what's the value of adding this
+> into iommu core?
 
- drivers/video/fbdev/savage/savagefb.h        | 1 -
- drivers/video/fbdev/savage/savagefb_driver.c | 7 ++++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The iommu_uapi_attach_pasid_table uapi should disappear indeed as it is
+is bound to be replaced by /dev/iommu fellow API.
+However until I can rebase on /dev/iommu code I am obliged to keep it to
+maintain this integration, hence the RFC.
 
-diff --git a/drivers/video/fbdev/savage/savagefb.h b/drivers/video/fbdev/savage/savagefb.h
-index 3314d5b6b43b..b6b8cc208293 100644
---- a/drivers/video/fbdev/savage/savagefb.h
-+++ b/drivers/video/fbdev/savage/savagefb.h
-@@ -195,7 +195,6 @@ struct savagefb_par {
- 	struct savage_reg initial;
- 	struct vgastate vgastate;
- 	struct mutex open_lock;
--	unsigned char   *edid;
- 	u32 pseudo_palette[16];
- 	u32 open_count;
- 	int paletteEnabled;
-diff --git a/drivers/video/fbdev/savage/savagefb_driver.c b/drivers/video/fbdev/savage/savagefb_driver.c
-index 0ac750cc5ea1..8114c921ceb8 100644
---- a/drivers/video/fbdev/savage/savagefb_driver.c
-+++ b/drivers/video/fbdev/savage/savagefb_driver.c
-@@ -2170,6 +2170,7 @@ static int savagefb_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	struct fb_info *info;
- 	struct savagefb_par *par;
- 	u_int h_sync, v_sync;
-+	unsigned char __maybe_unused *edid;
- 	int err, lpitch;
- 	int video_len;
- 
-@@ -2212,9 +2213,9 @@ static int savagefb_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	INIT_LIST_HEAD(&info->modelist);
- #if defined(CONFIG_FB_SAVAGE_I2C)
- 	savagefb_create_i2c_busses(info);
--	savagefb_probe_i2c_connector(info, &par->edid);
--	fb_edid_to_monspecs(par->edid, &info->monspecs);
--	kfree(par->edid);
-+	savagefb_probe_i2c_connector(info, &edid);
-+	fb_edid_to_monspecs(edid, &info->monspecs);
-+	kfree(edid);
- 	fb_videomode_to_modelist(info->monspecs.modedb,
- 				 info->monspecs.modedb_len,
- 				 &info->modelist);
--- 
-2.20.1
+Thanks
+
+Eric
+>
+> Best regards,
+> baolu
+>
 

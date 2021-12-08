@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB08646D643
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A2E46D648
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbhLHPCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235732AbhLHPB4 (ORCPT
+        id S235741AbhLHPCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:02:12 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:36683 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235633AbhLHPCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:01:56 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C75C0698C7;
-        Wed,  8 Dec 2021 06:58:24 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x15so9405533edv.1;
-        Wed, 08 Dec 2021 06:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=X3M8997nv4xlUTJpKcJO9GwVF2rNYNXc8YpfLL0n9N4=;
-        b=ehXSZCA32Do3nYDYE+avDokc05jaJOqV9f6zhvuWZAEihSORdZkVBt2Bonib3nVngt
-         Hzio39pKSoqZIMqTfeH/fUFXdna0zi7WvGQNzQWbMqYvYxZuU4qK9zHKXk/bixNC6jYO
-         6I24wd3JfphYWyWUFcJiSMVWQXqtEb565kPNDykEK6U9YuDcx9Tq166KputxrQ0NB5x5
-         TSAE0e6Y/vIrGvSx7QAi6sWFzlHMq4dS1rV//WJC9gZCXAuSMoxfx2D8dea+55xHiVZd
-         XQ7kHTnw8p/YZ+mGCk+cJQHEKs8PesbF7BvmJQZ7gUJ/XBrhRqU7Mn/CejkgYd7MiQE3
-         aQxA==
+        Wed, 8 Dec 2021 10:02:09 -0500
+Received: by mail-oi1-f176.google.com with SMTP id t23so4492178oiw.3;
+        Wed, 08 Dec 2021 06:58:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X3M8997nv4xlUTJpKcJO9GwVF2rNYNXc8YpfLL0n9N4=;
-        b=wXv6XEpJjZKpbQo6AixxxwTRXgui0W5JbJMhafnq1wiHE3DOk0cvirkTf89haGscKi
-         V2b4Nk0Yv99bBYGuLgBXV0+fZJEAs2NB8fy0c8bBjnpRa86sRbz8/uGWhIAvgpEb/Oq8
-         BHt97TgaeA9n86d6iUPMt3Cx4mm0EJr5PMt/qFfajzByfMOniRyO3V6QS85UbgAYIu2e
-         wFkmYZQfuRtkyapRiu6dhHOYnujPezlo4/W64nrIDIXvPT+GDrzqMlkxHy/FATDOTQLW
-         UmbK2MD0TRUu9IfGeHl4sN6IG4sLz01S4aOGAqIqEr7YhSv0BhcJfP/+er35kd+Ep33q
-         yOwQ==
-X-Gm-Message-State: AOAM531MuiVuNrmAmvhsG2A0kWx06wNqC0RE4KhrDhMOFHJWYUXLYApZ
-        ABhzroFuG1HgWqlACnCWApM=
-X-Google-Smtp-Source: ABdhPJzN0q2F2VXdsTnGYZ67WAwepdrY3jvP2FKbCRekKcI7y3Z+ltqbZ/0SaKF+U65pOiDAYBJdTw==
-X-Received: by 2002:a05:6402:d49:: with SMTP id ec9mr19895291edb.235.1638975502609;
-        Wed, 08 Dec 2021 06:58:22 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id e1sm1598746ejy.82.2021.12.08.06.58.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:58:22 -0800 (PST)
-Message-ID: <61b0c80e.1c69fb81.4b5cc.5f7e@mx.google.com>
-X-Google-Original-Message-ID: <YbDIDGPpFOUNJENX@Ansuel-xps.>
-Date:   Wed, 8 Dec 2021 15:58:20 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH v2 0/8] Add support for qca8k mdio rw in
- Ethernet packet
-References: <20211208034040.14457-1-ansuelsmth@gmail.com>
- <20211208123222.pcljtugpq5clikhq@skbuf>
- <61b0c239.1c69fb81.9dfd0.5dc2@mx.google.com>
- <20211208145341.degqvm23bxc3vo7z@skbuf>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pYgHMZyP/SCresb9+R/6+9a+5haS0Ujj/DJvPk9PiVU=;
+        b=Jsrh8Xb/rlKz7q8oBpVQhX+svRWmoYrg5NttbPzaTpBM0jKuvvBRzcIppzwy/X4Z4h
+         Wy2lbV2Givs2fTExb/VUJp0PwePPBlcz8Y7ov1ySHFI/uKMQnWo7fMcxJ9TWAedRyn8A
+         HZNwCGQvh46qx9hdbTvt3HNAYVAD9ObCtKIhqf5dLvyciFkpmy4cRrtnv9hiWhHLeepS
+         wQaXiW4OmtLd/N77YhT+3WsYmwS/nAJ8AH5SMZCxB2HHEme055dG18cGFmDSoW+BiZeU
+         pwmcub/va9+LDXowVzrCfr5pZAdH0Y7WJOSSBgtHacaUviDFrVpoIrihac0IHU5quVKx
+         NJRg==
+X-Gm-Message-State: AOAM53244/L6fgJczoeXqTcxWmrwVmGmct04yoXnF8Mav42vg9dIHR5C
+        Jg3UJo8qEIxdOscccfaHh+PxVUBjhZsSvYc4qm4i7iof
+X-Google-Smtp-Source: ABdhPJzJLywQoA8bmDyhHvJ14lg4mSgPhruhShHGSHHoBi0bd0BNCOXk+BeElaOWsKWqMPX8ftAfkd67Ps38ExQYCcw=
+X-Received: by 2002:aca:eb0b:: with SMTP id j11mr12009677oih.51.1638975517572;
+ Wed, 08 Dec 2021 06:58:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208145341.degqvm23bxc3vo7z@skbuf>
+References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
+ <20211206122952.74139-1-kirill.shutemov@linux.intel.com> <20211206122952.74139-2-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20211206122952.74139-2-kirill.shutemov@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Dec 2021 15:58:26 +0100
+Message-ID: <CAJZ5v0g4bCYJHrbWXrQWwhYa9QNCAFfia4gB6e7PWWXeuVycAQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] ACPICA: Do not flush cache for on entering S4 and S5
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:53:41PM +0200, Vladimir Oltean wrote:
-> On Wed, Dec 08, 2021 at 03:33:27PM +0100, Ansuel Smith wrote:
-> > > But there are some problems with offering a "master_going_up/master_going_down"
-> > > set of callbacks. Specifically, we could easily hook into the NETDEV_PRE_UP/
-> > > NETDEV_GOING_DOWN netdev notifiers and transform these into DSA switch
-> > > API calls. The goal would be for the qca8k tagger to mark the
-> > > Ethernet-based register access method as available/unavailable, and in
-> > > the regmap implementation, to use that or the other. DSA would then also
-> > > be responsible for calling "master_going_up" when the switch ports and
-> > > master are sufficiently initialized that traffic should be possible.
-> > > But that first "master_going_up" notification is in fact the most
-> > > problematic one, because we may not receive a NETDEV_PRE_UP event,
-> > > because the DSA master may already be up when we probe our switch tree.
-> > > This would be a bit finicky to get right. We may, for instance, hold
-> > > rtnl_lock for the entirety of dsa_tree_setup_master(). This will block
-> > > potentially concurrent netdevice notifiers handled by dsa_slave_nb.
-> > > And while holding rtnl_lock() and immediately after each dsa_master_setup(),
-> > > we may check whether master->flags & IFF_UP is true, and if it is,
-> > > synthesize a call to ds->ops->master_going_up(). We also need to do the
-> > > reverse in dsa_tree_teardown_master().
-> > 
-> > Should we care about holding the lock for that much time? Will do some
-> > test hoping the IFF_UP is sufficient to make the Ethernet mdio work.
-> 
-> I'm certainly not smart enough to optimize things, so I'd rather hold
-> the rtnl_lock for as long as I'm comfortable is enough to avoid races.
-> The reason why we must hold rtnl_lock is because during
-> dsa_master_setup(), the value of netdev_uses_dsa(dp->master) changes
-> from false to true.
-> The idea is that if IFF_UP isn't set right now, no problem, release the
-> lock and we'll catch the NETDEV_UP notifier when that will appear.
-> But we want to
-> (a) replay the master up state if it was already up while it wasn't a
->     DSA master
-> (b) avoid a potential race where the master does go up, we receive that
->     notification, but netdev_uses_dsa() doesn't yet return true for it.
-> 
-> The model would be similar to what we have for the NETDEV_GOING_DOWN
-> handler.
-> 
-> Please wait for me to finish the sja1105 conversion. There are some
-> issues I've noticed in your connect/disconnect implementation that I
-> haven't had a chance to comment on, yet. I've tested ocelot-8021q plus
-> the tagging protocol change and these appear fine.
-> I'd like to post the changes I have, to make sure that what works for me
-> works for you, and what works for you works for me. I may also have some
-> patches laying around that track the master up/down state (I needed
-> those for some RFC DSA master change patches). I'll build a mini patch
-> series and post it soon-ish.
+On Mon, Dec 6, 2021 at 1:30 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> According to the ACPI spec v6.4, section 16.2 the cache flushing is
+> required on entering to S1, S2, and S3. ACPICA code flushes cache
+> regardless of the sleep state.
+>
+> Blind cache flush on entering S5 causes problems for TDX. Flushing
+> happens with WBINVD that is not supported in the TDX environment.
+>
+> TDX only supports S5 and adjusting ACPICA code to conform to the spec
+> fixes the issue.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Sure no problem. In the meantime we can also wait if Andrew notice other
-problem with this new implementation. (I will work on the mib handler as
-it's still wip and on fixing the error on the last patch)
+I've converted this patch to the upstream ACPICA code base format and
+submitted a pull request with it to the upstream project.
 
--- 
-	Ansuel
+Thanks!
+
+> ---
+>  drivers/acpi/acpica/hwesleep.c  | 3 ++-
+>  drivers/acpi/acpica/hwsleep.c   | 3 ++-
+>  drivers/acpi/acpica/hwxfsleep.c | 2 --
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
+> index 808fdf54aeeb..ceb5a4292efa 100644
+> --- a/drivers/acpi/acpica/hwesleep.c
+> +++ b/drivers/acpi/acpica/hwesleep.c
+> @@ -104,7 +104,8 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
+>
+>         /* Flush caches, as per ACPI specification */
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (sleep_state < ACPI_STATE_S4)
+> +               ACPI_FLUSH_CPU_CACHE();
+>
+>         status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
+>         if (status == AE_CTRL_TERMINATE) {
+> diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
+> index 34a3825f25d3..ee094a3aaaab 100644
+> --- a/drivers/acpi/acpica/hwsleep.c
+> +++ b/drivers/acpi/acpica/hwsleep.c
+> @@ -110,7 +110,8 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
+>
+>         /* Flush caches, as per ACPI specification */
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (sleep_state < ACPI_STATE_S4)
+> +               ACPI_FLUSH_CPU_CACHE();
+>
+>         status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
+>         if (status == AE_CTRL_TERMINATE) {
+> diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
+> index e4cde23a2906..ba77598ee43e 100644
+> --- a/drivers/acpi/acpica/hwxfsleep.c
+> +++ b/drivers/acpi/acpica/hwxfsleep.c
+> @@ -162,8 +162,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
+>                 return_ACPI_STATUS(status);
+>         }
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> -
+>         status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
+>                                     (u32)acpi_gbl_FADT.s4_bios_request, 8);
+>         if (ACPI_FAILURE(status)) {
+> --
+> 2.32.0
+>

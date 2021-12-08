@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8299546D8E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D673B46D8E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbhLHQx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbhLHQx4 (ORCPT
+        id S237314AbhLHQxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:53:55 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:47042 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234711AbhLHQxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:53:56 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC73C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:50:24 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id d10so7532468ybn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Ve3H3qYXxbFpvH5KxZ/byzkUd87jGsC+/Ar5Ml7q30=;
-        b=sj7Az99CmVQ4DUjCRt9g+rHD+buRiC6O0WVNPTxVKcsSrw+mBcnKNjBiEP56c+H64j
-         XnIJL1jcW5EGxbZhdyStOauRkj7tB1xyNn80RIzKZztPHrd0TU1u1qJLeGf+XI/0+m2E
-         NCzjoVGdV4h+PAN6zIUlL3AkYbh6Zkv2Rg5ytnohaMY+P3Y9TOJx0i9q47CAdL/oXw+o
-         8kR2dXWx+s3PwuPsEn02++uvvN9lqhgR+RzI92H/RMZNxTBK0OvIg5Zn3YbeKL++13tK
-         d9wvXjq3jctGPapogmqM0Pqy2NwQbr24DKwOLoiOV4Rdtq8jMj8Aw3hWjZizGFHwr4fp
-         W9MA==
+        Wed, 8 Dec 2021 11:53:53 -0500
+Received: by mail-io1-f70.google.com with SMTP id z21-20020a5e8615000000b005e22e531c8aso3900154ioj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:50:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Ve3H3qYXxbFpvH5KxZ/byzkUd87jGsC+/Ar5Ml7q30=;
-        b=xAmy6LAHA6WSnRcmZQ5yZnhd8jK6AUR2Eow5/JSv7oVZKAeMs/e7J/UDZa+ANi1Nec
-         IAgmTC22oGHnMbZU5aX0br/tbBbiI30SQyuErcfONaQp6vw4hDKm2fZgDsHynDDZAxG8
-         vcITX+ZhKevo98A8D1WF4/Th0OT1L/vzDpGPta8L/pRXTXeL0F/XnDu5hjqYbM4RRExK
-         DQr2z5N/OgZkJPI+PY8j2Rl7udmDJ4xrnKlYoFBy0M59X1QBOiJp8yMeveo2DUj1NCr+
-         yGTSlkXt3f+GB6FcF5ao4ahaNyt38zV6W7KvndFP99cAc2ei6uOO68uSeMAFlPSm18jE
-         xc2A==
-X-Gm-Message-State: AOAM532P2p8o0NK0J7qxS4oOhRr92vegkLisJv2JRMBWcB39iiG1KTHM
-        0r1XqBGmxreAyz7+IiFsssUwWw5bfV8b+i3vb6wt9A==
-X-Google-Smtp-Source: ABdhPJyzJkw8GbWYdBBxspECp6hxchfurugjZFKEPQaJO73WxSEvj4d2AGV+oaceIRhKYHACXjAn/c3wmZqqo/hetdU=
-X-Received: by 2002:a25:6ec5:: with SMTP id j188mr60198733ybc.602.1638982223412;
- Wed, 08 Dec 2021 08:50:23 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Y2MKn0H4DmrM0L6Iz1p6QeMbYkp5ONn3ncEFOG9HuPY=;
+        b=TacuBBw19AMTLm8qkmXiqkjidQUq+HkY6tr2UyMLCVyLAZA7kWvhCVrXr2ZZ/o8dVM
+         2M7pHMlF66VwZfhIYLeWr0911HMBZpII1W+fdr77Hy8g0ivmmve5Q5Eh6R9h/099BAB/
+         5iQN1jpql1f9dvxJdgHezhACHmPyX5WXyMNUvUhpg0yB0hCdMDJT/rqxc+m49x9QWUX7
+         EcZydaeS/cuQtBpVoULKUNoKM70i3NCG7+V2BorXAv1ThyZ5XERSzM1yzVsr3gEhejf0
+         1Q1sJ+v8wNAuGG80AHYQQvCHW75/j5TJGqvnWTDR4TwKczw7/LZxvdPKqutZ682jfvdu
+         CJzw==
+X-Gm-Message-State: AOAM531gubRUVAYWSFgWI96Cv6ZLGNmG1VTkp1L+ASzZdbD99SFYtEB2
+        XWbkudNS1cfZkwEkFfb+uISq3Z4pu4XixdsvGBhv+F1q5fC9
+X-Google-Smtp-Source: ABdhPJyc/riIjsNBQquRKBx3zhx7T0mOnltc1lRv7qgl6QjY5+31fT0TFfCdocEuGFSE/lTjXS8RldIflBOMK6IqQjFPpAs7TNHi
 MIME-Version: 1.0
-References: <20211207215031.2251719-1-surenb@google.com> <Ya/bFLcnqyvlVzuO@casper.infradead.org>
- <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
- <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
- <YbDIxA92ln+RTbUK@casper.infradead.org> <YbDUnkmQP3nxd5bv@dhcp22.suse.cz> <YbDXuegc6BtRzs/5@casper.infradead.org>
-In-Reply-To: <YbDXuegc6BtRzs/5@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 8 Dec 2021 08:50:12 -0800
-Message-ID: <CAJuCfpFbF4C8q=40aXcbverm3QFoPzuLgfSU0eT2e7imgp2YfQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
- lock in exit_mmap
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
+X-Received: by 2002:a92:d8cf:: with SMTP id l15mr8724262ilo.59.1638982221538;
+ Wed, 08 Dec 2021 08:50:21 -0800 (PST)
+Date:   Wed, 08 Dec 2021 08:50:21 -0800
+In-Reply-To: <000000000000b5e7f105d0d2d165@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001bab9705d2a549cb@google.com>
+Subject: Re: [syzbot] WARNING in __i2c_transfer (2)
+From:   syzbot <syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com>
+To:     dwlsalmeida@gmail.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab+huawei@kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com, wsa@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 8:05 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Wed, Dec 08, 2021 at 04:51:58PM +0100, Michal Hocko wrote:
-> > On Wed 08-12-21 15:01:24, Matthew Wilcox wrote:
-> > > On Tue, Dec 07, 2021 at 03:08:19PM -0800, Suren Baghdasaryan wrote:
-> > > > > >         /**
-> > > > > >          * @close: Called when the VMA is being removed from the MM.
-> > > > > >          * Context: Caller holds mmap_lock.
-> > > >
-> > > > BTW, is the caller always required to hold mmap_lock for write or it
-> > > > *might* hold it?
-> > >
-> > > __do_munmap() might hold it for read, thanks to:
-> > >
-> > >         if (downgrade)
-> > >                 mmap_write_downgrade(mm);
-> > >
-> > > Should probably say:
-> > >
-> > >     * Context: User context.  May sleep.  Caller holds mmap_lock.
-> > >
-> > > I don't think we should burden the implementor of the vm_ops with the
-> > > knowledge that the VM chooses to not hold the mmap_lock under certain
-> > > circumstances when it doesn't matter whether it's holding the mmap_lock
-> > > or not.
-> >
-> > If we document it like that some code might depend on that lock to be
-> > held. I think we only want to document that the holder itself is not
-> > allowed to take mmap sem or a depending lock.
->
-> The only place where we're not currently holding the mmap_lock is at
-> task exit, where the mmap_lock is effectively held because nobody else
-> can modify the task's mm.  Besides, Suren is changing that in this patch
-> series anyway, so it will be always true.
+syzbot has bisected this issue to:
 
-Ok, I'll make it a separate patch after the patch that changes
-exit_mmap and this statement will become always true. Sounds
-reasonable?
+commit f90cf6079bf67988f8b1ad1ade70fc89d0080905
+Author: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
+Date:   Fri Aug 21 12:58:47 2020 +0000
+
+    media: vidtv: add a bridge driver
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=152b58b1b00000
+start commit:   cd8c917a56f2 Makefile: Do not quote value for CONFIG_CC_IM..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=172b58b1b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=132b58b1b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
+dashboard link: https://syzkaller.appspot.com/bug?extid=e417648b303855b91d8a
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a68531b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b91d89b00000
+
+Reported-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F42846DB6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194DE46DB71
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239225AbhLHSqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:46:35 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48944 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbhLHSqe (ORCPT
+        id S239256AbhLHSqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232201AbhLHSqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:46:34 -0500
+        Wed, 8 Dec 2021 13:46:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D594C0617A1;
+        Wed,  8 Dec 2021 10:43:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 16685CE22BB;
-        Wed,  8 Dec 2021 18:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6392BC00446;
-        Wed,  8 Dec 2021 18:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638988979;
-        bh=+GpKf9l7BzP6NdY/mbki5TrzXMK1vfBAQx1RiiUBRGs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jdc13FjeeX8BpZb6nsOcLCUCJwDlxBZG6t281Q+dw35ywaq5kYi9Ouad8lWtbX0FQ
-         1haIaJE7WJHZb17vLnuP6xZ2elPg+rc+pSkQ/05cJbvJQNOjWidKxXZ0bq1mOxI1T6
-         LU6ieOMB/d+Eoo0wVw8OmRFOxC4PQrxpjdkPT/uA=
-Date:   Wed, 8 Dec 2021 19:42:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH RESEND V2 4/6] platform/x86: Add Intel Software Defined
- Silicon driver
-Message-ID: <YbD8sGDHv6OeK79H@kroah.com>
-References: <20211208015015.891275-1-david.e.box@linux.intel.com>
- <20211208015015.891275-5-david.e.box@linux.intel.com>
- <YbDcPipY/SbV3Gvs@kroah.com>
- <f13b3365d5ad7b61194ade7f1baa574964cd47e2.camel@linux.intel.com>
- <YbD1c1UdDd2SswC9@kroah.com>
- <7701e96d6063b3763eb2b893c059b070ab7b8cd0.camel@linux.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA491B820D1;
+        Wed,  8 Dec 2021 18:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3CE8C00446;
+        Wed,  8 Dec 2021 18:43:05 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 13:43:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     akpm@linux-foundation.org, keescook@chromium.org, pmladek@suse.com,
+        david@redhat.com, arnaldo.melo@gmail.com,
+        andrii.nakryiko@gmail.com, linux-mm@kvack.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH -mm 4/5] tools/perf: replace hard-coded 16 with
+ TASK_COMM_LEN
+Message-ID: <20211208134304.615abbbf@gandalf.local.home>
+In-Reply-To: <20211204095256.78042-5-laoar.shao@gmail.com>
+References: <20211204095256.78042-1-laoar.shao@gmail.com>
+        <20211204095256.78042-5-laoar.shao@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7701e96d6063b3763eb2b893c059b070ab7b8cd0.camel@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:30:27AM -0800, David E. Box wrote:
-> On Wed, 2021-12-08 at 19:12 +0100, Greg KH wrote:
-> > On Wed, Dec 08, 2021 at 09:49:36AM -0800, David E. Box wrote:
-> > > On Wed, 2021-12-08 at 17:24 +0100, Greg KH wrote:
-> > > > On Tue, Dec 07, 2021 at 05:50:13PM -0800, David E. Box wrote:
-> > > > > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
-> > > > > activating additional silicon features. Features are enabled through a
-> > > > > license activation process.  The SDSi driver provides a per socket, sysfs
-> > > > > attribute interface for applications to perform 3 main provisioning
-> > > > > functions:
-> > > > > 
-> > > > > 1. Provision an Authentication Key Certificate (AKC), a key written to
-> > > > >    internal NVRAM that is used to authenticate a capability specific
-> > > > >    activation payload.
-> > > > > 
-> > > > > 2. Provision a Capability Activation Payload (CAP), a token authenticated
-> > > > >    using the AKC and applied to the CPU configuration to activate a new
-> > > > >    feature.
-> > > > > 
-> > > > > 3. Read the SDSi State Certificate, containing the CPU configuration
-> > > > >    state.
-> > > > > 
-> > > > > The operations perform function specific mailbox commands that forward the
-> > > > > requests to SDSi hardware to perform authentication of the payloads and
-> > > > > enable the silicon configuration (to be made available after power
-> > > > > cycling).
-> > > > > 
-> > > > > The SDSi device itself is enumerated as an auxiliary device from the
-> > > > > intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
-> > > > > 
-> > > > > Link: https://github.com/intel/intel-sdsi
-> > > > 
-> > > > There is no code at this link :(
-> > > > 
-> > > 
-> > > Not yet. It's currently just documentation. But sample code was added to this patch series.
-> > 
-> > Is the sample code "real" and what you are going to use for this api?
-> 
-> It's real in that it could be used to provision real certificates on a production system.
+On Sat,  4 Dec 2021 09:52:55 +0000
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-Great, so it's all you need, you should move it to tools/ and be done
-with it!  :)
+> @@ -43,7 +45,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+>  		return -1;
+>  	}
+>  
+> -	if (evsel__test_field(evsel, "prev_comm", 16, false))
+> +	if (evsel__test_field(evsel, "prev_comm", TASK_COMM_LEN, false))
+>  		ret = -1;
+>  
+>  	if (evsel__test_field(evsel, "prev_pid", 4, true))
+> @@ -55,7 +57,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+>  	if (evsel__test_field(evsel, "prev_state", sizeof(long), true))
+>  		ret = -1;
+>  
+> -	if (evsel__test_field(evsel, "next_comm", 16, false))
+> +	if (evsel__test_field(evsel, "next_comm", TASK_COMM_LEN, false))
+>  		ret = -1;
+>  
+>  	if (evsel__test_field(evsel, "next_pid", 4, true))
+> @@ -73,7 +75,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+>  		return -1;
+>  	}
+>  
+> -	if (evsel__test_field(evsel, "comm", 16, false))
+> +	if (evsel__test_field(evsel, "comm", TASK_COMM_LEN, false))
 
-thanks,
+Shouldn't all these be TASK_COMM_LEN_16?
 
-greg k-h
+-- Steve
+
+>  		ret = -1;
+>  
+>  	if (evsel__test_field(evsel, "pid", 4, true))
+

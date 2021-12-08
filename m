@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90F946CCAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F1746CCAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244269AbhLHErb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:47:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S244274AbhLHEsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244260AbhLHEra (ORCPT
+        with ESMTP id S239721AbhLHEsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:47:30 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118B2C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:43:59 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id m6so2520402oim.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:43:59 -0800 (PST)
+        Tue, 7 Dec 2021 23:48:16 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350DFC061574;
+        Tue,  7 Dec 2021 20:44:45 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z5so4172182edd.3;
+        Tue, 07 Dec 2021 20:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=rd+j5j+A/ltOuK7rQ2SC4JfrJuxW264ZWQGgHOMWaxs=;
-        b=EPFLc6hcqSLUoOeh+GNUVsfeJF00qoKKUuzB2uAZqd8AHEb+BtVBfmE8vVZZIgkiuM
-         3KieSufO0fqA4B8cHdUS6NTshnydDBqQS0GbdRD0Fv6QtLJwmFONJ9RVwDTebWdurtUi
-         jLHhP8qSQ6/arPzR7769MWq32PsXWVg0EgEqE=
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mvjWIFDl3Z932+ulOmlLjYQdMm4oZF1plc2CmRUrZ7A=;
+        b=P1Nid0yP7jCMnNY7woFaZQ4qxE9QiSWUwm95VCAS+65R4pshASNVHc+kaP8zo/h+cX
+         gUdKV2A6GyMfsBayqvY3cVq9VPuxgRKbqzgxuY9bjdc4TYH+AEXGFio4b+ftSOiOBP7b
+         PnK1NxtGJOp0vCVxS5f0pV8RiN5t4YIOHv1owb2FcIP1AYzg6Pfxi2ei0PpnrkjeQnF5
+         bML/YwRwxoH0fQKBUjJWIZAZ4EEtHcXSlbW42QR+OIF+3m8sm2NHAz2584lZAFxYsvRg
+         QGvb+571Tvi7vGC1yhpsqCJoeOQJFudR1IrWbvIN+dJrud58KaTeSq4gcKczI01qFqjM
+         1SKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=rd+j5j+A/ltOuK7rQ2SC4JfrJuxW264ZWQGgHOMWaxs=;
-        b=ZAdHdI0gPpRUfjyqItcu/Vw4nIMLnkMzk1nWN5opIPJ41CCGIjUXKhliZRty7o8rcf
-         30/RpLO6AkU++oVy0MY86B8EkCplZvkbNZJYa2wG10BNBmLDd1GTd5mnEd86ygS0Lgyt
-         0HAt+I9JFE/RixUOyUOwcxfu1O1bJ6PvmRbJWICIE3vrA/n27Yjxn3mklXiF9l6YFWj+
-         za1zNpDoXGLVq4Vugjdd6kYyrcrwhYtxxmihyaXBUILEd+PUYvvU6Ty+SZw4pwndrEBp
-         7VYkFwRB+/O0LO5AobyzZcJzLXKn/4aKhXXdEATlVlv8PdjIqKMxgw8r0q+r/BTeQOj3
-         dSsw==
-X-Gm-Message-State: AOAM533N/Av/aT5xthdvHrixstxU+Rpz+/8I6xTgmjxjWM+yVf+/pgfW
-        E5onThMoe/jTi0InjFblTpgXLy+1kilGymPyF85d9Q==
-X-Google-Smtp-Source: ABdhPJxbPhPALpa9YOf2Yuk1/fk2GRgOHioOp0wS0T4qNd1uQnbM6dYNBdZUXWXxkz3w91sRMGI5pDArkPRWDBlG+jE=
-X-Received: by 2002:a05:6808:211f:: with SMTP id r31mr9375277oiw.64.1638938638466;
- Tue, 07 Dec 2021 20:43:58 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 7 Dec 2021 23:43:58 -0500
-MIME-Version: 1.0
-In-Reply-To: <20211207215753.635841-1-robdclark@gmail.com>
-References: <20211207215753.635841-1-robdclark@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Tue, 7 Dec 2021 23:43:58 -0500
-Message-ID: <CAE-0n52gbwsJXG7=hdQhcttTbucjBv9SBq+kng2Ansc=TyqCKg@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/bridge: sn65dsi86: defer if there is no dsi host
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Douglas Anderson <dianders@chromium.org>,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mvjWIFDl3Z932+ulOmlLjYQdMm4oZF1plc2CmRUrZ7A=;
+        b=Zved9Q2NyKGeg3AKWMhTwyvPsa5CXOSVXTLCqAg1L/kUVNkGSIWQlhrktRTTodr+RG
+         +YP5W2UV9k7lXOSnDwBc1oErTZHD4vMlSQycSugM+4l67MiQiU0H05vBuCklC9ernNMd
+         0ZaIOsOt3mPTiM22FB4IO++KTn1K2r3eQzR40SNwQWa+kNBbcZA7xx2QLOwog1m8jXz/
+         xdOi4h8b747SIYXtq1axMoAVcjzS29BmGvjvKs+4eZpqKDz0fq/BMmT0qVsQ7uYcfVWJ
+         ApJsqXv5Mb+7rGfbm/AwGH8GMl4fmAP1mJ+Yb4qruVJqOPTqXFS677qiQISjBeTti9Pz
+         GXPg==
+X-Gm-Message-State: AOAM5318ygOsMnaAQWS1/d/mnXF2b/022Op2+2Mm1xbovWe/7ygSLntZ
+        j5BXqdthnQZPknU3+KuGdDw=
+X-Google-Smtp-Source: ABdhPJwAW+j1KiEM8wN0uczT86kc03ngEICuZtXPY/dQO0Mj4zmuvAFJTqmSn7HQQwjwIimRqn/DQw==
+X-Received: by 2002:a17:906:1be2:: with SMTP id t2mr4700337ejg.399.1638938683782;
+        Tue, 07 Dec 2021 20:44:43 -0800 (PST)
+Received: from [172.16.20.20] ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id i5sm725922ejw.121.2021.12.07.20.44.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 20:44:43 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
+Subject: Re: [RFC PATCH 2/9] dt-bindings: arm: amlogic: add X96-AIR bindings
+From:   Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <Ya/Qask7Fpb6mTxb@robh.at.kernel.org>
+Date:   Wed, 8 Dec 2021 08:44:40 +0400
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Benoit Masson <yahoo@perenite.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C1918DC0-F873-4832-AF1A-91AFEF4F7151@gmail.com>
+References: <20211130060523.19161-1-christianshewitt@gmail.com>
+ <20211130060523.19161-3-christianshewitt@gmail.com>
+ <Ya/Qask7Fpb6mTxb@robh.at.kernel.org>
+To:     Rob Herring <robh@kernel.org>
+X-Mailer: Apple Mail (2.3608.120.23.2.7)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Clark (2021-12-07 13:57:52)
-> From: Rob Clark <robdclark@chromium.org>
->
-> Otherwise we don't get another shot at it if the bridge probes before
-> the dsi host is registered.  It seems like this is what *most* (but not
-> all) of the other bridges do.
->
-> It looks like this was missed in the conversion to attach dsi host at
-> probe time.
->
-> Fixes: c3b75d4734cb ("drm/bridge: sn65dsi86: Register and attach our DSI device at probe")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Doug Anderson <dianders@chromium.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> On 8 Dec 2021, at 1:21 am, Rob Herring <robh@kernel.org> wrote:
+>=20
+> On Tue, Nov 30, 2021 at 06:05:16AM +0000, Christian Hewitt wrote:
+>> Add board bindings for the Amediatech X96-AIR STB which ships with
+>> model variants distiguished by Ethernet configuration: models using
+>> internal 10/100 PHY have a -100 suffix, while models using external
+>> Gigabit PHY have a -1000 suffix.
+>=20
+> Isn't the phy described in DT? Why do you need to describe this 1=20
+> difference at the top level?
 
-One more nit below
+Users who purchase Android STBs as a cheap Linux media device (or are
+reimiaging an existing device when they give up on Android) generally
+have no idea what a PHY is, so reading a device-tree file to pick the
+correct one is beyond them. Most people blindly try all dtb files for
+a class of device until they find one that works, so top-level naming
+is simply to hint the process and reduce guesswork. It=E2=80=99s not =
+perfect,
+but it does appear to reduce the quantity of =E2=80=9CEthernet doesn=E2=80=
+=99t work!=E2=80=9D
+posts seen in support forums.
 
-> v2: Drop DRM_ERROR() in favor of drm_err_probe() and shift around the
->     spot where we report the error
-> v3: Add \n and cull error msgs a bit further
->
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 18 +++++++-----------
->  1 file changed, 7 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> index 02b490671f8f..c2928a6409b1 100644
-> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> @@ -740,10 +736,8 @@ static int ti_sn_attach_host(struct ti_sn65dsi86 *pdata)
->         pdata->dsi = dsi;
->
->         ret = devm_mipi_dsi_attach(dev, dsi);
-> -       if (ret < 0) {
-> -               DRM_ERROR("failed to attach dsi to host\n");
-> +       if (ret < 0)
->                 return ret;
-> -       }
->
->         return 0;
+Christian
 
-This can be simplified further to
+>> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+>> ---
+>> Documentation/devicetree/bindings/arm/amlogic.yaml | 2 ++
+>> 1 file changed, 2 insertions(+)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml =
+b/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> index 36081734f720..e9ab0ffe8be7 100644
+>> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> @@ -170,6 +170,8 @@ properties:
+>>       - description: Boards with the Amlogic Meson SM1 S905X3/D3/Y3 =
+SoC
+>>         items:
+>>           - enum:
+>> +              - amediatech,x96-air-100
+>> +              - amediatech,x96-air-1000
+>>               - bananapi,bpi-m5
+>>               - hardkernel,odroid-c4
+>>               - hardkernel,odroid-hc4
+>> --=20
+>> 2.17.1
+>>=20
+>>=20
 
-	return devm_mipi_dsi_attach(dev, dsi);

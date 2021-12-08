@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6596D46D2E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6227246D2E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbhLHMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S232818AbhLHMJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhLHMJE (ORCPT
+        with ESMTP id S229675AbhLHMJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:09:04 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD063C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 04:05:32 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id k37-20020a05600c1ca500b00330cb84834fso4005778wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 04:05:32 -0800 (PST)
+        Wed, 8 Dec 2021 07:09:07 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A407C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 04:05:35 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id m192so1755426qke.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 04:05:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=konsulko.com; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ggHGJ4ATATJMFS5LIR5L0EQNDYKwn8R71jjvqFWzLSE=;
-        b=Y3IqVnsvfYRZnb7jQ5fpjr2A9Dpom+OyCLn+5X9UeZQRzpjJ8+jqKZoG3T4xoudKQe
-         so6xUF2Exkx1Ytc5VYjehSl1Zxqscn0ZIynmeHi8HObY1wozje4uOs9mbNV0dWQYAWrJ
-         kbU7v4ty8pSp6jkGbzUnp6U09fbvf6Jn1LebIGmRg5b2PYHTqppzSHHdkKaBPet7rVne
-         TK16Ht6FqA/TFovE+sLLaj/eL+uWACrl8T319In9TFtVfTIxNnMyDQeCzsictampXTtI
-         VocJnTgO0VRtJMhrusZGsaVfnHzUaxIchfTGS9bq/7JHc9MRu2fVYHZEJz8OoaBL3w26
-         duYg==
+        bh=mWw1BTytddzLy6/XkEytIoB8BFx802HLDV4U7YTwmOk=;
+        b=Kl7dPUnsk3Wdnu7OCpf1WsCJr8sFVCYfg6Cdy1B1OXGh3bc4hfXC0gBXlCQtKAEdFo
+         eo9SvHo3GqDsj9usOELBj2deKZmAZqRssXjp4nSAT8bFURsxqz2AmJSr0u6qWT2xkaks
+         6lKVvKc3ymt19hzldJJL3TG7k2tCk84lH2iyo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ggHGJ4ATATJMFS5LIR5L0EQNDYKwn8R71jjvqFWzLSE=;
-        b=Cln7WD3nR4QhIv5VIquhW8Wjj1tQ5NjXl58PhUG/Ujiau3Y6Qpo8ZlumBEDs5KNduy
-         Ycp30pOQfrJoGgRMr1TZluSlowKeZ3aoTNlmr5DkGV14CYPSBBtwfulOWoi0QkH5ciHZ
-         /zdlAt8o5ttqleQi7sweMmm8MpJ76saD9Y6Tq50yfx9NfZ564DyS6ApjzED2QrDWBId+
-         VFJH3T9TcbDBo6aWjI3EvFMiCBlEte4L0sy5bcUK6AGr+sN+ysqysoxyF/R19dOXPJDw
-         m/NE7O0w/IoGsF71TnlJJeCEbpPVJTnFrUqm+XOPRi54vwRrgO6bXng3i8lNnzepmqo6
-         Igtw==
-X-Gm-Message-State: AOAM531+g6fLxqNrcTupRk6AnxSAEWqayee70R3O2FDUDME+7J2GDeFf
-        494ywZ4bvQ2rYUNwna/QROA67zc+dDSZIQ==
-X-Google-Smtp-Source: ABdhPJxDw+jb3ycmttv6BO+Ycld5++UZj4ia2guGsxPME+dZWL34ZxONGd6q0UcfzPJCt2/NBhUH2w==
-X-Received: by 2002:a1c:2685:: with SMTP id m127mr15694113wmm.42.1638965131343;
-        Wed, 08 Dec 2021 04:05:31 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.199.136])
-        by smtp.gmail.com with ESMTPSA id f8sm6230901wmf.2.2021.12.08.04.05.29
+        bh=mWw1BTytddzLy6/XkEytIoB8BFx802HLDV4U7YTwmOk=;
+        b=RV9yDCnFCmcN2Vxy8WqeujMw4H2I5nbADG1eGQlRg8CSBjhosfLPOzu8HFojlI+mK+
+         CsLslgSlp218lae2Db9cRvDGo6VF4H0YhbfZI6AV5Enw+xtc+XI9o2TsZPkEEbkTAvS7
+         FB8bB0fUZp2EoYf9HquBfEuhMdkLNLLOHK7LL0ZimjAb/IK8ldcFw4Egm5oYT7W1XS2B
+         QyFGWT4/zhfBun6qQ+E6WWsLaDEOG8psZf5T9J1lpbaHUYwIUMvIozXxVMzoMlSmSnHA
+         wlIyNDDwKhbA1K/9OwMJHgeGw7DGXdosftSUA/BI16b+NPxGnAfWSjEKg8WavKuJ8/Kn
+         /Hwg==
+X-Gm-Message-State: AOAM530EC/LYpikt1ccjNW0LKEMy8ACzK6pQbtV1A/Mv/V8RF/crm3cQ
+        x4U9+tj4mAt+DifbYAnoqz/SXw==
+X-Google-Smtp-Source: ABdhPJya/4dOTsby7BajUtkNNiFn7qz9QAjZ3c59vAzzslX4SgIHrQUjr2o26tg2nN/O8sSXTqYpvg==
+X-Received: by 2002:a05:620a:123a:: with SMTP id v26mr6068834qkj.431.1638965134013;
+        Wed, 08 Dec 2021 04:05:34 -0800 (PST)
+Received: from bill-the-cat (2603-6081-7b01-cbda-d56b-2860-e61c-702c.res6.spectrum.com. [2603:6081:7b01:cbda:d56b:2860:e61c:702c])
+        by smtp.gmail.com with ESMTPSA id o1sm1566896qtw.1.2021.12.08.04.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 04:05:30 -0800 (PST)
-Date:   Wed, 8 Dec 2021 17:05:26 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] ASoC: test-component: fix null pointer dereference.
-Message-ID: <20211208120526.GA12550@hamza-OptiPlex-7040>
-References: <Ya9YxoUqkATCOASh@sirena.org.uk>
- <20211207142309.222820-1-amhamza.mgc@gmail.com>
- <TYCPR01MB55814819F7AAAC654084615AD46F9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+        Wed, 08 Dec 2021 04:05:33 -0800 (PST)
+Date:   Wed, 8 Dec 2021 07:05:31 -0500
+From:   Tom Rini <trini@konsulko.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH] arm64: defconfig: Enable USB, PCIe and SERDES drivers
+ for TI K3 SoC
+Message-ID: <20211208120531.GD2355606@bill-the-cat>
+References: <20211208060856.16106-1-vigneshr@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYCPR01MB55814819F7AAAC654084615AD46F9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+In-Reply-To: <20211208060856.16106-1-vigneshr@ti.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 12:05:46AM +0000, Kuninori Morimoto wrote:
-> 
-> Hi Ameer
-> 
-> Ah, you posted the patch :)
-> 
-> > Subject: [PATCH v2] ASoC: test-component: fix null pointer dereference.
-> >
-> > Dereferncing of_id pointer will result in exception in current
-> > implementation since of_match_device() will assign it to NULL.
-> > Adding NULL check for protection.
-> 
-> Previous your patch was already accepted,
-> thus this is not v2 patch.
-> git log should indicate is replace of_match_device() to of_device_get_match_data()
-Thank you for your kind response and clarifying the process. Let me send
-the updated patch. :)
+On Wed, Dec 08, 2021 at 11:38:56AM +0530, Vignesh Raghavendra wrote:
 
-Best Regards,
-Ameer Hamza.
+> Enable Cadence PCIe, Cadence USB, TI USB and PCIe wrappers and required
+> SERDES drivers to support USB and PCIe on TI K3 SoCs.
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 
+Reported-by: Tom Rini <trini@konsulko.com>
+Reviewed-by: Tom Rini <trini@konsulko.com>
+
+-- 
+Tom

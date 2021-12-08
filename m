@@ -2,107 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A8946D8FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DA746D8FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237378AbhLHQ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S237403AbhLHQ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbhLHQ5w (ORCPT
+        with ESMTP id S232320AbhLHQ6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:57:52 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DFDC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:54:20 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id m24so2546705pgn.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:54:20 -0800 (PST)
+        Wed, 8 Dec 2021 11:58:15 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB9EC0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:54:43 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id t9so5160086wrx.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:54:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wDsVhbUZQwon98TZc0uQWii9L9HtueN7zt3xozWU+o0=;
-        b=qjKkcDy2Vnd99F+FcvoO1bC64kXXPcSt3EJIU+wYN4wrB3WKm+GgpQkRK8vgG4EyIP
-         yEmXVWLQikSBg2dl3KZBUVIO21pKCDAL5+UQcr/qWb8OA/qHpthYaB0XLGbQbVpSjdRd
-         1w8aSVUXoZ9N/w2CCkBzUFjOi21cIX7FhfwEcc+0AFCTNu+XCFz29xYyQDRNWEI0UeOq
-         XqLrgs12InSPFGTplPogvsmGvPMtB2wrVCg2Jd9H4ieohL+3kkioqBbLXbluWuW/sHMJ
-         36Ex+MxfgiTF+1zUstFYEUZi+55M56v4UMTV4U8oV/cYOlOYYOW5nQz9JbJICVp6wGII
-         Wylg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YN7SopJ792rYSyvS/k6+6PuXkEaW1GUeMvGKCe7x+ik=;
+        b=J+TbOkyt82nIoJaFvHEWgDDTEY6jM1fG04zXfRHK4uHp2LoCSuRsMIvzHPOloJPfsz
+         VaZ1RcPw20Qi/PxMrsxj6bgcTp87z/4dTXl2iA4FcKzjjbgaxslIvg9sdW3R6lTmb4Qy
+         JVx6pAoQfeFiVVqQQc2Paml9c7cm6lLVlywQCauLw8o6e/3gchFs23/TPwxT82ak6mWH
+         /3Hvg6pk8zCXVq+PaJHgcCWiDkz19z9r35eC4ltmWmrBjGCBRQlKs8S96fu7JIEWVitP
+         ypmTeAf6FN8NZyySe4lTY1919vCTLZ39MyJwHM8iKCFaNzMUX06r7RXtEnuHhog3ukVi
+         c2uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wDsVhbUZQwon98TZc0uQWii9L9HtueN7zt3xozWU+o0=;
-        b=68Mn1QSs6c0YTLu1z5Or920RwQxD12knR8S7LvPI2G4RBaxjo/YvHp9/Ox3aM52KLo
-         0GV6Q0kXJ1aUntBuy1beX5gi3yHDUC9gJtpuOPusN07q6Tg2GpvqLwtwnjifP00naoxW
-         pl3aYXL91B+YsKNLxHg4UOuwtw8Gy+5nrvO7zr7p9Kbd8gFEObLsvWHFCYojyRsrhPHn
-         tSsEVyAoAnr1ocOhPhGOyU62dkrDyuxdCgP9Vcb4vIiAt3aNeXxFLfkhLYyxaEDRXMb7
-         r+5xGfEsh9TKGkKBq6Vi0OlSMg0Xal+HR1Mb9l654urfD6j/Yr8Qniqic9x0yinWB1hp
-         R3SA==
-X-Gm-Message-State: AOAM531d2LFExOA8Ijzd1mU8lreOHgixqezcE41RGHGkzO5odvLqrnXy
-        9bhvgwC/OWxWoItaYy890T+njg==
-X-Google-Smtp-Source: ABdhPJxE3wYM+bIKVuUEjBr3ldRIzan4Rc3pmkStEhIojWk4Ag4lA1gCH7zbcEfstO/sqqo2+3iiiA==
-X-Received: by 2002:a05:6a00:a14:b0:4a0:945:16fa with SMTP id p20-20020a056a000a1400b004a0094516famr6527927pfh.9.1638982459816;
-        Wed, 08 Dec 2021 08:54:19 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f3sm3090411pgv.51.2021.12.08.08.54.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YN7SopJ792rYSyvS/k6+6PuXkEaW1GUeMvGKCe7x+ik=;
+        b=7kVJenDu8b20Tn/0pFCl6aVY2z7YD0p8h98kplEVHAAFGQ/Re+8XrgT6FPefeVumjC
+         oJ/mitwC1mtRuxaycqKmDSjiLN9u7sCZUT03SqtcsfTqOQ9LSpYKVvL2BIwqIqcRO8bg
+         sOZJ9Pl51aNq80/KqR+NNhGcAR0ItpI0FUXsQn0FjkGtnvYkBfHZnLwLGMEKtetkgv/p
+         LtUD7L0+ckhPjD3VZg1w8ZIiyhilJKzQh1/xPgEzIWkPr/ODrFYXMYHktzAIDlKFzW9f
+         gIJut5b/YIqCaFLNAC7cz4B0U/lShKBmOKjas+SCutmRwQ0MBYnwrGri/74457IIy9zw
+         qPKA==
+X-Gm-Message-State: AOAM531HcjxzNuukHXsc2C/8GhERvL604jmvStUYSITLhND3AEBTNcN4
+        od9vOuf6juLyGFMPI2ZUe2Jq6w==
+X-Google-Smtp-Source: ABdhPJyCsxaHwjoJGpb1kpKdErG9QngK0st0jPwjBrFDcGdCXFGG2d4SLrzhQROA3gmmJTUxyr0unw==
+X-Received: by 2002:a5d:64a2:: with SMTP id m2mr61750734wrp.248.1638982482311;
+        Wed, 08 Dec 2021 08:54:42 -0800 (PST)
+Received: from joneslee.c.googlers.com.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id y15sm4375735wry.72.2021.12.08.08.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 08:54:19 -0800 (PST)
-Date:   Wed, 8 Dec 2021 16:54:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, stable@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] selftests: KVM: avoid failures due to reserved
- HyperTransport region
-Message-ID: <YbDjN68ALDavh1WQ@google.com>
-References: <20210805105423.412878-1-pbonzini@redhat.com>
- <4b530fb6-81cc-be36-aa68-92ec01c65775@oracle.com>
- <5f3c13be-f65d-1793-bd91-7491d3e149b0@redhat.com>
- <bab67d1c-f9b7-0a91-2d4f-9881e3f47218@oracle.com>
- <ac72b77c-f633-923b-8019-69347db706be@redhat.com>
+        Wed, 08 Dec 2021 08:54:41 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: [PATCH 1/1] sctp: Protect cached endpoints to prevent possible UAF
+Date:   Wed,  8 Dec 2021 16:54:34 +0000
+Message-Id: <20211208165434.2962062-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac72b77c-f633-923b-8019-69347db706be@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 09, 2021, Paolo Bonzini wrote:
-> So this HyperTransport region is not related to this issue, but the errata
-> does point out that FFFD_0000_0000h and upwards is special in guests.
-> 
-> The Xen folks also had to deal with it only a couple months ago
-> (https://yhbt.net/lore/all/1eb16baa-6b1b-3b18-c712-4459bd83e1aa@citrix.com/):
-> 
->   From "Open-Source Register Reference for AMD Family 17h Processors (PUB)":
->   https://developer.amd.com/wp-content/resources/56255_3_03.PDF
-> 
->   "The processor defines a reserved memory address region starting at
->   FFFD_0000_0000h and extending up to FFFF_FFFF_FFFFh."
-> 
->   It's still doesn't say that it's at the top of physical address space
->   although I understand that's how it's now implemented. The official
->   document doesn't confirm it will move along with physical address space
->   extension.
-> 
->   [...]
-> 
->   1) On parts with <40 bits, its fully hidden from software
->   2) Before Fam17h, it was always 12G just below 1T, even if there was
->   more RAM above this location
->   3) On Fam17h and later, it is variable based on SME, and is either
->   just below 2^48 (no encryption) or 2^43 (encryption)
-> 
-> > It's interesting that fn8000_000A EDX[28] is part of the reserved bits from
-> > that CPUID leaf.
-> 
-> It's only been defined after AMD deemed that the errata was not fixable in
-> current generation processors); it's X86_FEATURE_SVME_ADDR_CHK now.
-> 
-> I'll update the patch based on the findings from the Xen team.
+The cause of the resultant dump_stack() reported below is a
+dereference of a freed pointer to 'struct sctp_endpoint' in
+sctp_sock_dump().
 
-So, about that update... :-)
+This race condition occurs when a transport is cached into its
+associated hash table then freed prior to its subsequent use in
+sctp_diag_dump() which uses sctp_for_each_transport() to walk the
+(now out of date) hash table calling into sctp_sock_dump() where the
+dereference occurs.
+
+To prevent this from happening we need to take a reference on the
+to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
+we know it can be safely released.
+
+When KASAN is not enabled, a similar, but slightly different NULL
+pointer derefernce crash occurs later along the thread of execution in
+inet_sctp_diag_fill() this time.
+
+  BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+  Call trace:
+   dump_backtrace+0x0/0x2dc
+   show_stack+0x20/0x2c
+   dump_stack+0x120/0x144
+   print_address_description+0x80/0x2f4
+   __kasan_report+0x174/0x194
+   kasan_report+0x10/0x18
+   __asan_load8+0x84/0x8c
+   sctp_sock_dump+0xa8/0x438 [sctp_diag]
+   sctp_for_each_transport+0x1e0/0x26c [sctp]
+   sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+   inet_diag_dump+0x12c/0x168
+   netlink_dump+0x24c/0x5b8
+   __netlink_dump_start+0x274/0x2a8
+   inet_diag_handler_cmd+0x224/0x274
+   sock_diag_rcv_msg+0x21c/0x230
+   netlink_rcv_skb+0xe0/0x1bc
+   sock_diag_rcv+0x34/0x48
+   netlink_unicast+0x3b4/0x430
+   netlink_sendmsg+0x4f0/0x574
+   sock_write_iter+0x18c/0x1f0
+   do_iter_readv_writev+0x230/0x2a8
+   do_iter_write+0xc8/0x2b4
+   vfs_writev+0xf8/0x184
+   do_writev+0xb0/0x1a8
+   __arm64_sys_writev+0x4c/0x5c
+   el0_svc_common+0x118/0x250
+   el0_svc_handler+0x3c/0x9c
+   el0_svc+0x8/0xc
+
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: lksctp developers <linux-sctp@vger.kernel.org>
+Cc: "H.P. Yarroll" <piggy@acm.org>
+Cc: Karl Knutson <karl@athena.chicago.il.us>
+Cc: Jon Grimm <jgrimm@us.ibm.com>
+Cc: Xingang Guo <xingang.guo@intel.com>
+Cc: Hui Huang <hui.huang@nokia.com>
+Cc: Sridhar Samudrala <sri@us.ibm.com>
+Cc: Daisy Chang <daisyc@us.ibm.com>
+Cc: Ryan Layer <rmlayer@us.ibm.com>
+Cc: Kevin Gao <kevin.gao@intel.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ net/sctp/associola.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/sctp/associola.c b/net/sctp/associola.c
+index be29da09cc7ab..df171a297d095 100644
+--- a/net/sctp/associola.c
++++ b/net/sctp/associola.c
+@@ -499,8 +499,9 @@ void sctp_assoc_rm_peer(struct sctp_association *asoc,
+ 
+ 	/* Remove this peer from the list. */
+ 	list_del_rcu(&peer->transports);
+-	/* Remove this peer from the transport hashtable */
++	/* Remove this peer from the transport hashtable and remove its reference */
+ 	sctp_unhash_transport(peer);
++	sctp_endpoint_put(asoc->ep);
+ 
+ 	/* Get the first transport of asoc. */
+ 	pos = asoc->peer.transport_addr_list.next;
+@@ -710,11 +711,12 @@ struct sctp_transport *sctp_assoc_add_peer(struct sctp_association *asoc,
+ 	/* Set the peer's active state. */
+ 	peer->state = peer_state;
+ 
+-	/* Add this peer into the transport hashtable */
++	/* Add this peer into the transport hashtable and take a reference */
+ 	if (sctp_hash_transport(peer)) {
+ 		sctp_transport_free(peer);
+ 		return NULL;
+ 	}
++	sctp_endpoint_hold(asoc->ep);
+ 
+ 	sctp_transport_pl_reset(peer);
+ 
+-- 
+2.34.1.400.ga245620fadb-goog
+

@@ -2,230 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EB746D04B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1914946D04E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbhLHJrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbhLHJri (ORCPT
+        id S230122AbhLHJsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:48:01 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18958 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230088AbhLHJsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:47:38 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A65EC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:44:07 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso2091681otf.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:44:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GRFcAoxkwuVsGkhu2Dhw6maDJnr0gAII4Szav5vNN6s=;
-        b=HvY+aZ9EtfTw7qvSomY+5sleArHiGqXif3xqBhf5veArOsuqVggBVJg4ysO+BtGSo0
-         UkkurL5cJPDgbSf6GGbZ2rXuOc3GwXcQQJbLTTZSRouNo1HKpNekIS8VQ0/kuRb6mPmy
-         ppU29Cm7Zie0oNK2loHR0glss0YYvOowBcJ2Kci3x25Gl/0k/qv/+5TkXGvGK6rQ5qCf
-         Q++QolwYLIYMxJb5lw+C47jHUlMiDK8gSv8d7YlBF0RU+xUnZ7WeO4CTS9pfk0fmbn6p
-         jGF+n1zpCU59bsyJh1NhT3mU0DRWSzNV9tnK0GqDOhOQqYyXdnDa2lNzhcGy036Du3az
-         xfoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GRFcAoxkwuVsGkhu2Dhw6maDJnr0gAII4Szav5vNN6s=;
-        b=vOw5OX1U59Ac+UCXEPGG9KQzmOZaApRbTUyd4mgR/ATOjMjFLpyQCyaulRMQm4+X9K
-         TZqQbsX4bb/VpN4NE0Kn+/tt1R0+iyUrKM6oiYoflb3hVA8StM5AYa6zHytLTgse208W
-         F9/xQiRAZ6rZ3Y8TN7jinpz6qAGr7FxFs2JcvsMGyaEa1COigx/GecWIShchjFComqCO
-         VYWQxkPu38bobF93oCMK7srWapfTFQpZ1TtHQ1CHbXDoghdnaKZUOFGL1CsCKZmbCiiK
-         g05OuVwJaokzDWFU5eHo82cPQNML7kJwCPQcPPwbLP4P01pNnT7yVbIeL8h2Nmxis1nH
-         BhZA==
-X-Gm-Message-State: AOAM533+lV2KXke2KvNQcxCxFESixHGksU995iKNKhwjg+dOxIBxoAEs
-        jUR+Yw1fORJ3Dl5npZYx3gMtJd696nfbJ4iH73hpbQ==
-X-Google-Smtp-Source: ABdhPJxLYdhft5vMQa4Un7FgnTJJ2BiMUnM7+VsfhKrqAIVsXJx8wvuNd5Sqc8d61O/iOjrTDQdhPhA0DTD1GdkSJQ4=
-X-Received: by 2002:a05:6830:2425:: with SMTP id k5mr39913840ots.319.1638956646011;
- Wed, 08 Dec 2021 01:44:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-5-pcc@google.com>
-In-Reply-To: <20211208044808.872554-5-pcc@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 8 Dec 2021 10:43:54 +0100
-Message-ID: <CACT4Y+ZAbpB4eqBS7zScC7QwVOdwvQSxHEKEMwxkk1=f=H8HKg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] uaccess-buffer: add CONFIG_GENERIC_ENTRY support
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        David Hildenbrand <david@redhat.com>,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Thomas Cedeno <thomascedeno@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>
+        Wed, 8 Dec 2021 04:48:00 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B89IcaP021475;
+        Wed, 8 Dec 2021 09:44:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=X106KzP5HDDfFU/aM/UB2UNxwHBMudb95OXKi1Xy1/I=;
+ b=L97sxL3m9n9yAACNZArOT7SxUVQbg0dLyWgMSBOXwK8jM7fDuy4E3Xwo9KYkh4jI2TJc
+ hmmlDYJ1g0IlH2xkKC5sDeqtnTysIY03ao4knGoWcHD5pmNQe8a8OU+EQyyttgRjRjT+
+ tdlFLjwXxHJVautUukYEKx0wkqnTO7BAvLHmWSlB+RQ3D3w0KnV5CWrsQblVmP4SQ8Ub
+ ro5MMfIVN10uOyGpE4b7gTRf/PO0JRJ+wS7ECySI+jVt20pg3AutTiob6H8YonYV3nP9
+ vh+Rybr5sAFPXxOaY5Avd7CNfRX0uv5+to0ayUlcIvxaluu1yqRxdt0NtRFUOrC/ZWCg mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctsy7gds7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 09:44:27 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B89gNd2011547;
+        Wed, 8 Dec 2021 09:44:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctsy7gdrn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 09:44:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B89gqEJ012650;
+        Wed, 8 Dec 2021 09:44:24 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cqykje6bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 09:44:24 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B89iLpO14877056
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 09:44:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DFAD6AE058;
+        Wed,  8 Dec 2021 09:44:20 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BE13AE045;
+        Wed,  8 Dec 2021 09:44:19 +0000 (GMT)
+Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 09:44:19 +0000 (GMT)
+Message-ID: <8c2f83d2186e93965eba74356126df7fd35d9a41.camel@linux.ibm.com>
+Subject: Re: [PATCH 20/32] KVM: s390: pci: provide routines for
+ enabling/disabling interpretation
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 10:44:19 +0100
+In-Reply-To: <20211207205743.150299-21-mjrosato@linux.ibm.com>
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+         <20211207205743.150299-21-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Cjfpa-oblD2e2FpldvJHdLyEh8RdKqLb
+X-Proofpoint-ORIG-GUID: spuxnzSjjEEHsu_lDU0Xh-s5OvFxKagv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_03,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ adultscore=0 clxscore=1011 phishscore=0 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 malwarescore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080062
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
->
-> Add uaccess logging support on architectures that use
-> CONFIG_GENERIC_ENTRY (currently only s390 and x86).
->
-> Link: https://linux-review.googlesource.com/id/I3c5eb19a7e4a1dbe6095f6971f7826c4b0663f7d
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
-
+On Tue, 2021-12-07 at 15:57 -0500, Matthew Rosato wrote:
+> These routines will be wired into the vfio_pci_zdev ioctl handlers to
+> respond to requests to enable / disable a device for zPCI Load/Store
+> interpretation.
+> 
+> The first time such a request is received, enable the necessary facilities
+> for the guest.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->  arch/Kconfig                 |  6 ++++++
->  include/linux/entry-common.h |  2 ++
->  include/linux/thread_info.h  |  4 ++++
->  kernel/entry/common.c        | 10 ++++++++++
->  4 files changed, 22 insertions(+)
->
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index d3c4ab249e9c..c4dcab5279ac 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -31,6 +31,7 @@ config HOTPLUG_SMT
->         bool
->
->  config GENERIC_ENTRY
-> +       select HAVE_ARCH_UACCESS_BUFFER
->         bool
->
->  config KPROBES
-> @@ -1312,6 +1313,11 @@ config ARCH_HAS_PARANOID_L1D_FLUSH
->  config DYNAMIC_SIGFRAME
->         bool
->
-> +config HAVE_ARCH_UACCESS_BUFFER
-> +       bool
-> +       help
-> +         Select if the architecture's syscall entry/exit code supports uaccess buffers.
+>  arch/s390/include/asm/kvm_pci.h |  4 ++
+>  arch/s390/kvm/pci.c             | 91 +++++++++++++++++++++++++++++++++
+>  arch/s390/pci/pci.c             |  3 ++
+>  3 files changed, 98 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index 3e491a39704c..5d6283acb54c 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> 
+---8<---
+> 		return rc;
+> +	}
 > +
->  source "kernel/gcov/Kconfig"
->
->  source "scripts/gcc-plugins/Kconfig"
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index 2e2b8d6140ed..973fcd1d48a3 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -42,12 +42,14 @@
->                                  SYSCALL_WORK_SYSCALL_EMU |             \
->                                  SYSCALL_WORK_SYSCALL_AUDIT |           \
->                                  SYSCALL_WORK_SYSCALL_USER_DISPATCH |   \
-> +                                SYSCALL_WORK_UACCESS_BUFFER_ENTRY |    \
->                                  ARCH_SYSCALL_WORK_ENTER)
->  #define SYSCALL_WORK_EXIT      (SYSCALL_WORK_SYSCALL_TRACEPOINT |      \
->                                  SYSCALL_WORK_SYSCALL_TRACE |           \
->                                  SYSCALL_WORK_SYSCALL_AUDIT |           \
->                                  SYSCALL_WORK_SYSCALL_USER_DISPATCH |   \
->                                  SYSCALL_WORK_SYSCALL_EXIT_TRAP |       \
-> +                                SYSCALL_WORK_UACCESS_BUFFER_EXIT |     \
->                                  ARCH_SYSCALL_WORK_EXIT)
->
->  /*
-> diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-> index ad0c4e041030..b0f8ea86967f 100644
-> --- a/include/linux/thread_info.h
-> +++ b/include/linux/thread_info.h
-> @@ -46,6 +46,8 @@ enum syscall_work_bit {
->         SYSCALL_WORK_BIT_SYSCALL_AUDIT,
->         SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH,
->         SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP,
-> +       SYSCALL_WORK_BIT_UACCESS_BUFFER_ENTRY,
-> +       SYSCALL_WORK_BIT_UACCESS_BUFFER_EXIT,
->  };
->
->  #define SYSCALL_WORK_SECCOMP           BIT(SYSCALL_WORK_BIT_SECCOMP)
-> @@ -55,6 +57,8 @@ enum syscall_work_bit {
->  #define SYSCALL_WORK_SYSCALL_AUDIT     BIT(SYSCALL_WORK_BIT_SYSCALL_AUDIT)
->  #define SYSCALL_WORK_SYSCALL_USER_DISPATCH BIT(SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH)
->  #define SYSCALL_WORK_SYSCALL_EXIT_TRAP BIT(SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP)
-> +#define SYSCALL_WORK_UACCESS_BUFFER_ENTRY      BIT(SYSCALL_WORK_BIT_UACCESS_BUFFER_ENTRY)
-> +#define SYSCALL_WORK_UACCESS_BUFFER_EXIT       BIT(SYSCALL_WORK_BIT_UACCESS_BUFFER_EXIT)
->  #endif
->
->  #include <asm/thread_info.h>
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index d5a61d565ad5..57c4bb01a554 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -6,6 +6,7 @@
->  #include <linux/livepatch.h>
->  #include <linux/audit.h>
->  #include <linux/tick.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include "common.h"
->
-> @@ -70,6 +71,9 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
->                         return ret;
->         }
->
-> +       if (work & SYSCALL_WORK_UACCESS_BUFFER_ENTRY)
-> +               uaccess_buffer_syscall_entry();
+> +	/*
+> +	 * Store information about the identity of the kvm guest allowed to
+> +	 * access this device via interpretation to be used by host CLP
+> +	 */
+> +	zdev->gd = gd;
 > +
->         /* Either of the above might have changed the syscall number */
->         syscall = syscall_get_nr(current, regs);
->
-> @@ -197,14 +201,17 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
->  static void exit_to_user_mode_prepare(struct pt_regs *regs)
->  {
->         unsigned long ti_work = READ_ONCE(current_thread_info()->flags);
-> +       bool uaccess_buffer_pending;
->
->         lockdep_assert_irqs_disabled();
->
->         /* Flush pending rcuog wakeup before the last need_resched() check */
->         tick_nohz_user_enter_prepare();
->
-> +       uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
->         if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
->                 ti_work = exit_to_user_mode_loop(regs, ti_work);
-> +       uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
->
->         arch_exit_to_user_mode_prepare(regs, ti_work);
->
-> @@ -247,6 +254,9 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
->
->         audit_syscall_exit(regs);
->
-> +       if (work & SYSCALL_WORK_UACCESS_BUFFER_EXIT)
-> +               uaccess_buffer_syscall_exit();
+> +	rc = zpci_enable_device(zdev);
+> +	if (rc)
+> +		goto err;
 > +
->         if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
->                 trace_sys_exit(regs, syscall_get_return_value(current, regs));
->
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->
+> +	/* Re-register the IOMMU that was already created */
+> +	rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+> +				(u64)zdev->dma_table);
+
+The zdev->dma_table is a virtual address but we need an absolute
+address in the MPCIFC so the above should use
+virt_to_phys(zdev->dma_table) to be compatible with future V != R
+kernel memory. As of now since virtual and absolute kernel addresses
+are the same this is not a bug and we've had this (wrong) pattern in
+the rest of the code but let's get it righht here from the start.
+
+See also my commit "s390/pci: use physical addresses in DMA tables"
+that is currently in the s390 feature branch.
+
+> +	if (rc)
+> +		goto err;
+> +
+> +	return rc;
+> +
+> +err:
+> +	zdev->gd = 0;
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_interp_enable);
+> +
+> +int kvm_s390_pci_interp_disable(struct zpci_dev *zdev)
+> +{
+> +	int rc;
+> +
+> +	if (zdev->gd == 0)
+> +		return -EINVAL;
+> +
+> +	/* Remove the host CLP guest designation */
+> +	zdev->gd = 0;
+> +
+> +	if (zdev_enabled(zdev)) {
+> +		rc = zpci_disable_device(zdev);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	rc = zpci_enable_device(zdev);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Re-register the IOMMU that was already created */
+> +	rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+> +				(u64)zdev->dma_table);
+
+Same as above
+
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_interp_disable);
+> +
+> 
+---8<---
+

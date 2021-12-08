@@ -2,112 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C13B46D3A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E15246D3C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbhLHMyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:54:19 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4232 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbhLHMyT (ORCPT
+        id S233833AbhLHM5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229751AbhLHM5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:54:19 -0500
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8H3W3mtnz67nPb;
-        Wed,  8 Dec 2021 20:46:31 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 13:50:45 +0100
-Received: from [10.47.91.245] (10.47.91.245) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
- 2021 12:50:43 +0000
-Subject: Re: [PATCH 02/22] perf stat: Add aggr creators that are passed a cpu.
-To:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
-        "Jiri Olsa" <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Vineet Singh" <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <eranian@google.com>
-References: <20211208024607.1784932-1-irogers@google.com>
- <20211208024607.1784932-3-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b3a5622d-ad63-5112-607e-8a79c7c52ef7@huawei.com>
-Date:   Wed, 8 Dec 2021 12:50:24 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 8 Dec 2021 07:57:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066F2C061746;
+        Wed,  8 Dec 2021 04:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XoLdah4Vhal5BMwdRxmj89JX830AjtudjkfO7UjNrhQ=; b=mb7VDEXoLh0hh3nq3LaUmRU/uJ
+        u+2Mx5oXT+8M6uZbP/70Zdtoxz58tkS8+Er8ZDFqnsmyYVv8M17wJXMUtrx4k9U+435bMBfTcjk9S
+        PWKLuuG3WlXXPcfNHRNtXJ7DWSB9bAtvbFDjlGLG4/7SCuYg/sKq0VTcQBl8BS8zZybrt0lnkz9cu
+        X+SPRH92tW3/Gp+hHdFU31w1SZPRGjXstBPYFMEttR9ybSQS/4XqO3KSmS/COf76KXom4Z2jtrSah
+        P/51STuBRXPFHBzLuoB000bO0Wv8u+jYzfSUHlSoMG0stvEQve68Sce7wLMTn6pDsJDW3K4ysoFlm
+        Tpcz2srQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muwRv-00Cbun-AQ; Wed, 08 Dec 2021 12:53:31 +0000
+Date:   Wed, 8 Dec 2021 04:53:31 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        fstests@vger.kernel.org, linux-block@vger.kernel.org, hare@suse.de,
+        dgilbert@interlog.com, jeyu@kernel.org, osandov@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] libkmod-module: add support for a patient module
+ removal option
+Message-ID: <YbCqy320/twxxCRb@bombadil.infradead.org>
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <20210810051602.3067384-4-mcgrof@kernel.org>
+ <20210923085156.scmf5wxr2phc356b@ldmartin-desk2>
+ <YVJyIGXN/TR8zdU9@bombadil.infradead.org>
+ <20210929184810.adrqpsvlfybnc5qt@ldmartin-desk2>
+ <YZLBPGtm2vF2DsTk@bombadil.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20211208024607.1784932-3-irogers@google.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.245]
-X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YZLBPGtm2vF2DsTk@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2021 02:45, Ian Rogers wrote:
-> The cpu_map and index can get confused. Add variants of the cpu_map__get
-> routines that are passed a cpu. Make the existing cpu_map__get routines
-> use the new functions with a view to remove them when no longer used.
+On Mon, Nov 15, 2021 at 12:21:16PM -0800, Luis Chamberlain wrote:
+> On Wed, Sep 29, 2021 at 11:48:31AM -0700, Lucas De Marchi wrote:
+> > > Sorry don't follow. And since I have one day before vacation, I suppose
+> > > I won't get to this until I get back. But I'd be happy if you massage
+> > > it as you see fit as you're used to the code base and I'm sure have
+> > > a better idea of what likely is best for the library.
+> > 
+> > 
+> > sure, np. I will take a look as time permits.
 > 
-> Signed-off-by: Ian Rogers<irogers@google.com>
-> ---
->   tools/perf/util/cpumap.c | 79 +++++++++++++++++++++++-----------------
->   tools/perf/util/cpumap.h |  6 ++-
->   2 files changed, 51 insertions(+), 34 deletions(-)
-> 
-> diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-> index 87d3eca9b872..49fba2c53822 100644
-> --- a/tools/perf/util/cpumap.c
-> +++ b/tools/perf/util/cpumap.c
-> @@ -128,21 +128,23 @@ int cpu_map__get_socket_id(int cpu)
->   	return ret ?: value;
->   }
->   
-> -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
-> -					void *data __maybe_unused)
-> +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_unused)
->   {
-> -	int cpu;
->   	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
->   
-> -	if (idx > map->nr)
-> -		return id;
-> -
-> -	cpu = map->map[idx];
-> -
->   	id.socket = cpu_map__get_socket_id(cpu);
->   	return id;
->   }
->   
-> +struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
+> Just a friendly poke.
 
-This is code added in this patch - so is "idx" a cpu map index? that's 
-what the commit message implies.
+Just another friendy poke.
 
-regardless of this - you add code here and then remove it later in the 
-series. Can you arrange the series such that any code added in the 
-series is not removed (later in that series)? That's a general practice 
-we adhere to.
-
-Thanks,
-John
+  Luis

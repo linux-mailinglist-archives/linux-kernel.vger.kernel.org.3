@@ -2,217 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83A546D8E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C37D46D8E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbhLHQyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:54:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14210 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237317AbhLHQyP (ORCPT
+        id S237349AbhLHQye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbhLHQyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:54:15 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FrXmx024942;
-        Wed, 8 Dec 2021 16:50:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YnOMFT+xC+Io7kTJFNiQ7HV5Wl3PXzwvPhJqHD7Wmu0=;
- b=MsP0/KuI8ezti1eJvYodkYqncUFj8/T/HvqokPANAtLYVQ4gYW7QU0ZDXOZ0WRGdSlUf
- XtigT65hhxiUxPyvnwZKYPf3dG8qWjrPkRAiIxS3zLQnwgxeAXzCYZxz1cDF/lGMOSvJ
- xxiPGUuazmuYpE1Dxh4rlqyS0X+8GGpkt6FTnYoxpPYo+sGNlzgVQltwr7orNoDaY5qq
- vhZra+3P2WY7lRrjUPMZYOSHrK/Nnwdps6xrAyll2ni4Wdjcv4U39x/Ft5CwxnsiGaAf
- fE1HFRblUUU8RaJw34Vlrzm1igd2m8mY6gg0EMy+TJ7W/Xpp8zfEtYDyu/9VmM6q5ADd 8Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctyrds6jb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 16:50:30 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8GnFP5001560;
-        Wed, 8 Dec 2021 16:50:29 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctyrds6j1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 16:50:29 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Ga1AH014748;
-        Wed, 8 Dec 2021 16:50:28 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cqyyb68fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 16:50:28 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8GoQSF26673468
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 16:50:26 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A13BDAC065;
-        Wed,  8 Dec 2021 16:50:26 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 63026AC05F;
-        Wed,  8 Dec 2021 16:50:26 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 16:50:26 +0000 (GMT)
-Message-ID: <60fa585b-984e-fa13-e76f-56083a726259@linux.ibm.com>
-Date:   Wed, 8 Dec 2021 11:50:26 -0500
+        Wed, 8 Dec 2021 11:54:33 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE767C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:51:01 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id e3so10529858edu.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:51:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
+        b=XL0p0g2mnaxR5sNE/l+nWe28s9d3M1czmNdZvqDzJYOtI9OUtCjctzb75KHJ13Fmgf
+         kxjEdIK6lI5Iqihs3D3DF1KbxA+pGkY3myenSVWEXzC6cVMdvOBIHdUDtJwxbbLH0hJC
+         ZuyS2FQBQqB3Fj+cUfkE/veQZzqrEAWYRJ0AI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7dto8X3c8dkt8cAuGIAikbVN54E5STCRsv0et+8KXh8=;
+        b=dBuOg7FovV4ZX+09kLUP0GKdAWpc83B24mFcsex47fhdQkIUnJeISDdYQLMmKnB93F
+         Piapb/P+GpV+nlDM1UhWaPI2+78Iagm5ssJ1ZkuZTAkEOkmfw7Bwy6g1yYOLWMWrcDxf
+         Su6daXECgeqAzsYDCFtU4Le9Wurt/agRoiszo38SPQ+cp3MXLdvzgvUKvnB6i040T+VM
+         V9V1W9xbNjJXAleflfgHO/i6BFg2xjGGEz0/HjLYMdh3n8peN1hN0z45fjCgLhK6PB9b
+         /mDB0Wd8yyTvhCGTflLHuhdYoLeXvJJz0v02qiXYyWz0HZA2EVGYwRgr63Nz1itr1J83
+         JCaA==
+X-Gm-Message-State: AOAM531Wkkqq93g7n/4SXkPQjgnBmvfbagp8GpaAeikix5PEEfNZnhJJ
+        unl4jsfUDe5mvJY6/3foYwdS80OBBnFM3n5LG68=
+X-Google-Smtp-Source: ABdhPJyCRJ7aUtQK15OYnUlC6GgXn4qGhmQ62Ru8GBAvKeklY866UEJ7gw7Pic0F4kWjsGC8cK0PqA==
+X-Received: by 2002:aa7:c313:: with SMTP id l19mr20635705edq.209.1638982259938;
+        Wed, 08 Dec 2021 08:50:59 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id hg19sm1692234ejc.1.2021.12.08.08.50.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 08:50:58 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id o29so2253538wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:50:58 -0800 (PST)
+X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr16865226wmg.152.1638982258068;
+ Wed, 08 Dec 2021 08:50:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v4 10/16] ima: Implement hierarchical processing of file
- accesses
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-11-stefanb@linux.ibm.com>
- <20211208120954.nnawb6d2bpp54yll@wittgenstein>
- <20211208122339.vkqtuckl74ywg3s5@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211208122339.vkqtuckl74ywg3s5@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: D4nMd3vPOy7GYsS-TTSrGvH2FELxpv9X
-X-Proofpoint-GUID: HKX50I854YnOdTyOk22t7JIcs-AAel5v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_07,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 phishscore=0
- impostorscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 mlxscore=0
- suspectscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112080097
+References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-3-arnd@kernel.org>
+ <CAHk-=wgwQg=5gZZ6ewusLHEAw-DQm7wWm7aoQt6TYO_xb0cBog@mail.gmail.com> <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+In-Reply-To: <CAK8P3a3Uy0k+SnWYqz7FMsQsu14VzivMJcjGDRBLv17adFYywA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 8 Dec 2021 08:50:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
+Message-ID: <CAHk-=wgX8ZU8eQuegqFYdJ7VciZqNWTdfsM-=ugEWJWchTnw7A@mail.gmail.com>
+Subject: Re: [RFC 2/3] headers: introduce linux/struct_types.h
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kernel test robot <lkp@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/8/21 07:23, Christian Brauner wrote:
-> On Wed, Dec 08, 2021 at 01:09:54PM +0100, Christian Brauner wrote:
->> On Tue, Dec 07, 2021 at 03:21:21PM -0500, Stefan Berger wrote:
->>> Implement hierarchical processing of file accesses in IMA namespaces by
->>> walking the list of IMA namespaces towards the init_ima_ns. This way
->>> file accesses can be audited in an IMA namespace and also be evaluated
->>> against the IMA policies of parent IMA namespaces.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>> ---
->>>   security/integrity/ima/ima_main.c | 29 +++++++++++++++++++++++++----
->>>   1 file changed, 25 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->>> index 2121a831f38a..e9fa46eedd27 100644
->>> --- a/security/integrity/ima/ima_main.c
->>> +++ b/security/integrity/ima/ima_main.c
->>> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
->>>   	ima_check_last_writer(iint, inode, file);
->>>   }
->>>   
->>> -static int process_measurement(struct ima_namespace *ns,
->>> -			       struct file *file, const struct cred *cred,
->>> -			       u32 secid, char *buf, loff_t size, int mask,
->>> -			       enum ima_hooks func)
->>> +static int _process_measurement(struct ima_namespace *ns,
->> Hm, it's much more common to use double underscores then single
->> underscores to
->>
->> __process_measurement()
->>
->> reads a lot more natural to people perusing kernel code quite often.
->>
->>> +				struct file *file, const struct cred *cred,
->>> +				u32 secid, char *buf, loff_t size, int mask,
->>> +				enum ima_hooks func)
->>>   {
->>>   	struct inode *inode = file_inode(file);
->>>   	struct integrity_iint_cache *iint = NULL;
->>> @@ -405,6 +405,27 @@ static int process_measurement(struct ima_namespace *ns,
->>>   	return 0;
->>>   }
->>>   
->>> +static int process_measurement(struct ima_namespace *ns,
->>> +			       struct file *file, const struct cred *cred,
->>> +			       u32 secid, char *buf, loff_t size, int mask,
->>> +			       enum ima_hooks func)
->>> +{
->>> +	int ret = 0;
->>> +	struct user_namespace *user_ns;
->>> +
->>> +	do {
->>> +		ret = _process_measurement(ns, file, cred, secid, buf, size, mask, func);
->>> +		if (ret)
->>> +			break;
->>> +		user_ns = ns->user_ns->parent;
->>> +		if (!user_ns)
->>> +			break;
->>> +		ns = user_ns->ima_ns;
->>> +	} while (1);
->> I'd rather write this as:
->>
->> 	struct user_namespace *user_ns = ns->user_ns;
->>
->> 	while (user_ns) {
->> 		ns = user_ns->ima_ns;
->>
->>     		ret = __process_measurement(ns, file, cred, secid, buf, size, mask, func);
->>     		if (ret)
->>     			break;
->> 		user_ns = user_ns->parent;
->> 		
->> 	}
->>
->> because the hierarchy is only an implicit property inherited by ima
->> namespaces from the implementation of user namespaces. In other words,
->> we're only indirectly walking a hierarchy of ima namespaces because
->> we're walking a hierarchy of user namespaces. So the ima ns actually
->> just gives us the entrypoint into the userns hierarchy which the double
->> deref writing it with a while() makes obvious.
-> Which brings me to another point.
+On Wed, Dec 8, 2021 at 12:56 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Technically nothing seems to prevent an ima_ns to survive the
-> destruction of its associated userns in ima_ns->user_ns?
->
-> One thread does get_ima_ns() and mucks around with it while another one
-> does put_user_ns().
->
-> Assume it's the last reference to the userns which is now -
-> asynchronously - cleaned up from ->work. So at some point you're ending
-> with a dangling pointer in ima_ns->user_ns eventually causing a UAF.
->
-> If I'm thinking correct than you need to fix this. I can think of two
-> ways right now where one of them I'm not sure how well that would work:
-> 1. ima_ns takes a reference count to userns at creation. Here you need
->     to make very sure that you're not ending up with reference counting
->     cycles where the two structs keep each other alive.
+> For the added headers, do you have a preference for whether to try grouping
+> them logically or not? I could either split them out individually into many new
+> headers (xarray_types.h, idr_types.h, percpu_rwsem_types.h, rwsem_types.h,
+> ...), or combine some of them when they define related types.
 
-Right. I am not sure what the trigger would be for ima_ns to release 
-that one reference.
+So I'd really like to have some logical grouping. I'd rather have ten
+smaller headers that each have one logical grouping than one "put
+random core kernel structs in this one".
 
+ The reason I reacted fairly strongly against this "struct_types.h"
+patch is that I quite often end up looking up some exact type
+definition and the associated initializers etc. It's admittedly seldom
+stuff that is this core (it tends to be some random odder type), but
+just to give a concrete example, that <linux/mutex.h> change was an
+example of something I really dislike.
 
-> 2. rcu trickery. That's the one I'm not sure how well that would work
->     where you'd need rcu_read_lock()/rcu_read_unlock() with a
->     get_user_ns() in the middle whenever you're trying to get a ref to
->     the userns from an ima_ns and handle the case where the userns is
->     gone.
->
-> Or maybe I'me missing something in the patch series that makes this all
-> a non-issue.
+Moving just the type definition away, particularly when it then
+depends on various kernel config options, and having the core
+initializer macros and functions somewhere different from where the
+type is defined is really nasty when you're looking at some type
+definition details.
 
-I suppose one can always call current_user_ns() to get a pointer to the 
-current user namespace that the process is accessing the file in that 
-IMA now reacts to. With the hierarchical processing we are walking 
-backwards towards init_user_ns. The problem should only exist if 
-something else frees the current user namespace (or its parents) so that 
-the hierarchy collapses. Assuming we are always in a process context 
-then 'current' should protect us, no ?
+(The mutex one is just an example: all the locking structures had the
+same pattern).
 
+I realize that the locking structs are also exactly the ones that are
+then often embedded in other structures, so I understand why they were
+so prominent in that patch. But at the same time, I think that is how
+C header files work - it has many upsides, but it certainly also has
+that problematic downside of having to get the header inclusion right
+without recursion etc.
 
+So instead of trying to split out things like the structures
+associated with locking, I'd rather aim to
+
+ (a) try to make sure that the locking headers are always
+self-contained enough that there is never any issue with including
+them, and recursion isn't an issue.
+
+ (b) I think it might be better to try to instead split out the more
+specialized and high-level structures, and try to declare _those_
+separately
+
+optimally for (b) is to not declare them at all: in many situations
+you really just want the header file for some function pointer
+declaration, and doing a forward declaration with just "struct
+super_block;" in the generic header file might be the right thing.
+
+Then the relatively few places that actually care what 'struct
+super_block' looks like could include <linux/superblock.h> or
+whatever.
+
+Because a big portion of our code probably does want to include
+<linux/fs.h>, but is not AT ALL interested in how 'struct super_block'
+actually is laid out. The fact that you want declarations for
+functions that take a pointer to it doesn't matter, for them it's
+enough to have that forward-declaration of "this is a valid struct,
+you don't care what it looks like".
+
+So I think I would be much more interested in _that_ kind of patch:
+instead of trying to collect truly core types in one (or a few) header
+files, try to see if all those random other types could not be split
+out into their own patches.
+
+And yes, yes, I realize that 'struct super_block' is actually actively
+used by inline functions in <linux/fs.h>, so they actually require
+that declaration as it stands now. But those functions are generally
+fairly specialized, and they could go along with the structure
+definition into the <superblock.h> header. And maybe some of them
+shouldn't be inline functions at all - we often end up having
+unnecessariyl big and complex headers just because it was easier to
+add an inline function (or expand a trivial one) than it was to just
+make a function declaration and then move the code into a separate C
+file.
+
+(This is also why sometimes macros are more convenient than inline
+functions - they don't need the context. So sometimes the answer for
+trivial helper functions is to just turn then into macros instead).
+
+Hmm?
+
+               Linus

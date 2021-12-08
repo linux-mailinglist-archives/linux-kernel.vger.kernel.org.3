@@ -2,160 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8194346C9E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD39446C9EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbhLHB1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:27:31 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:52979 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbhLHB1a (ORCPT
+        id S238989AbhLHB1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234928AbhLHB1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:27:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638926640; x=1670462640;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VCGiztZFtP/C7WAR4vZboInQR6f3D8gnC6Ty8l58+Pk=;
-  b=G4UQKq1UWou2meTMhg8PFRKELmSzM0xt0d6WzxQX5lqDVm/7M9+yoRgm
-   ckdGzmnrxFXEwwTW7S37JBK9yAQfYOUvsfiNJY+Ex6JdZzf1mj1k5qe/d
-   6zo2x7oTHXhuHtKi+6hQECZU5LcZ3gc+YT9rids3FFBav9tdcEqJcmFCb
-   q+QXGndMH1HoU26pyaq6FSD1vjnwypelGf7LWxG4otMOhl0Pqs8nRvc25
-   WCTLzY1UEH3XZHCZlXA6oVLvojSjzjtXLG9tnzz3mueAPjXT0AHFw7NRq
-   9df0o3NLcW5YjBw9KiuLDNII0HTZhI0Dvzh91cuCMY4oOhTecQ6NPzDZ4
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.87,295,1631548800"; 
-   d="scan'208";a="188713201"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Dec 2021 09:24:00 +0800
-IronPort-SDR: c1X9sPtoqcOxmnIx2aJmSfhuGMqaI4zA0PIovRpfWasCTfRPPfzofn3kxPA63GvCmrBDEr9txE
- 8h4mMftrwqQWJ2gn0IQFuAsZdD3nScRhP2H/lzGwdtmZB6gAEZKz9M5NL9AMfxAs8Fmeqgo5df
- tY7yEfue3fPNhn9qA+1jDiCfibFDgIE0fjtvFtwe0QQGWX21ystdE6twJH0G01PQVU7bP5y/zQ
- M7iHU+vj2as/B1KomgdqCJuc9FvV4jzvMKJPyeVrLLT9QjGT+O701rvjhZ++yWJsSQ/q4d+rO4
- sPbSqOCnVcWHWW3Z05CIGu2U
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:57:03 -0800
-IronPort-SDR: kUFf+NJssOI8IlEIojjGjDAB6zHBAlDVgYxzpV3YEJS5OxKzraRDkHhfZvTFP7AqCF6UNwimEa
- 8k95RkKT55Cyz9jw9dSCKrTmTTnqUVdJP7+NdTZtRisQ9cUThOeihQHJXd5GcN6iIXatHXgYng
- nW7uK2f95TPaBF2vd58orl5MhRwFOCFFBeSzU97YV+PwHCngsolYHO5vpQmbljKyLJeKAyvVLY
- mPo2SGzGIET5e3AVdyVLCdpMXNviI8TO1BG9s6cRIZyfeyQznHd1RC2PKy81oFAU37ipnG0Unh
- dJA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 17:23:59 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J7zvy5WfWz1Rwnx
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:23:58 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1638926638; x=1641518639; bh=VCGiztZFtP/C7WAR4vZboInQR6f3D8gnC6T
-        y8l58+Pk=; b=rpxfrWJ8PXl9z6N9wFjxz1y+enP6ivOnx1AZxKc15RSXhjgwss8
-        ahgE5xaeskLqaqMjx+2wHUg+FPiuKijoFBgyB/eei6+Uf7PHBsjT3G7zQBmPM3ux
-        UBT69nmG65j5I5gZZbNAZrG2hT13YWtPikFtm7tj+WlFkNwOyxDL72nkdsXdGdi3
-        jpxS8RrsnMxEHVV9ofzkZYEI+aBmCJDKBeaLSgCvsxMnaeKf4QpoeRF2LLOnsCfg
-        1wfwamePfnbBagkD81fW5/LVtpuMJPYPGrfvAFzI/0fIsY3OJ/HJwUlkdY12RTTM
-        2WYL5/18F3NHKCi7q8mKJZK7kuZEaUhtsTA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id l_XcRSbo8ZlA for <linux-kernel@vger.kernel.org>;
-        Tue,  7 Dec 2021 17:23:58 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J7zvr1H1Wz1RtVG;
-        Tue,  7 Dec 2021 17:23:51 -0800 (PST)
-Message-ID: <a9cdc25e-8819-30a3-8d21-81a2d429b7c2@opensource.wdc.com>
-Date:   Wed, 8 Dec 2021 10:23:50 +0900
+        Tue, 7 Dec 2021 20:27:42 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB82C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:24:11 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id z5so2934835edd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0xXQ8Z+aD37LV2ze3gAG6ixrya9vcE7/RlnSGWDE+C4=;
+        b=KdqVRucWbgoRDwGAdXwrJam4dyvOrrXi22Z8iEJANkxDzxIZFpiO7xdmt6f4035yE6
+         4y38ieaIw62a1gRJPbnlRgv8frB7584T5MyNqD1BUUhdleEr4M/x4gsruq1kg85I7t5L
+         Jj6UnbPgU5VZkIdxi83jDd3vhxg4/ye6mxFtaj+fxujqA6fLdJECFu20OBl7sAYa7K1P
+         WNpR4XpQe/94liJim3TQ5m5MdtwWBl+AJzLu8KKOyiGlAqxVzi8yEld3TUcUYjxToV9v
+         tchKSX9i5WmCfNKIEpI7XF9Ds7ejkjANttd0Osw5+W38ufIwAvx8aVi3I2RuFeH0Gx2N
+         b52A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0xXQ8Z+aD37LV2ze3gAG6ixrya9vcE7/RlnSGWDE+C4=;
+        b=gib0EHwJArE+lbJljkgl2ximGSJDqKdg1eWAv8ZsLDseiz1XC/xViQheQTjXtw6a2f
+         HXDoe34x7CUSqas5VwRrFqvY2NhNyOahydiRFiuOiO8XYQTxy/jkJhRrByhGWMXoZu2y
+         jDAMa7cgKtYQM+9DwVAuod6s2XeACfyGy0oEONOne9A1JFxBMuqHEILb0PLWnhiNr8vX
+         KUqadGysYfxLDzpfAa2jM6EBENPonkNo3U1lTZ0gEw/9LjkLsrIElIUZAepQrhzUrGPq
+         gWrNPpEFeXJEXI1m2NKJLBmZ8mzqZ3dSJN5+bumTph10mAup3YTn31O7uQIkpcyXhCaR
+         e58g==
+X-Gm-Message-State: AOAM533iN75/yhOqVY2hhPYsN7ckzLuldnu2wXXRoXUi77AzUIARYsCd
+        JR8gSQfHHYdXlBgNhd/uMap0+aldtVzUGfknvR8=
+X-Google-Smtp-Source: ABdhPJwz1tcfy+ztYvdslkEPv5S1d3kB2gZn44d4gMIXu3emj/ER2xK6DwrZ9m2zNEp+QDgC9H7h0A+1opeGFjOOXhA=
+X-Received: by 2002:a17:907:1b17:: with SMTP id mp23mr3453588ejc.521.1638926649838;
+ Tue, 07 Dec 2021 17:24:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v3 12/15] ARM: dts: NSP: Rename SATA unit name
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-13-f.fainelli@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <20211208003727.3596577-13-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211207224013.880775-1-npache@redhat.com> <20211207224013.880775-2-npache@redhat.com>
+ <20211207154438.c1e49a3f0b5ebc9245aac61b@linux-foundation.org>
+ <CAHbLzkoCds-WOoN5CKas4DThk8hU65pgtMcga10QEqEmKU2f5A@mail.gmail.com> <17a7d9e4-5ebc-1160-1e5e-97707b6e5286@redhat.com>
+In-Reply-To: <17a7d9e4-5ebc-1160-1e5e-97707b6e5286@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 7 Dec 2021 17:23:57 -0800
+Message-ID: <CAHbLzkokNjJOb2fknm2+5pgf1+PBHviZA73nug5+dCB=7NKF4w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+To:     Nico Pache <npache@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, raquini@redhat.com,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/08 9:37, Florian Fainelli wrote:
-> Rename the SATA controller unit name from ahci to sata in preparation
-> for adding the Broadcom SATA3 controller YAML binding which will bring
-> validation.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  arch/arm/boot/dts/bcm-nsp.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/bcm-nsp.dtsi b/arch/arm/boot/dts/bcm-nsp.dtsi
-> index 1c08daa18858..ded5a59e0679 100644
-> --- a/arch/arm/boot/dts/bcm-nsp.dtsi
-> +++ b/arch/arm/boot/dts/bcm-nsp.dtsi
-> @@ -534,7 +534,7 @@ sata_phy1: sata-phy@1 {
->  			};
->  		};
->  
-> -		sata: ahci@41000 {
-> +		sata: sata@41000 {
->  			compatible = "brcm,bcm-nsp-ahci";
->  			reg-names = "ahci", "top-ctrl";
->  			reg = <0x41000 0x1000>, <0x40020 0x1c>;
-> 
+On Tue, Dec 7, 2021 at 4:33 PM Nico Pache <npache@redhat.com> wrote:
+>
+>
+>
+> On 12/7/21 19:26, Yang Shi wrote:
+> > On Tue, Dec 7, 2021 at 3:44 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >>
+> >> On Tue,  7 Dec 2021 17:40:13 -0500 Nico Pache <npache@redhat.com> wrote:
+> >>
+> >>> We have run into a panic caused by a shrinker allocation being attempted
+> >>> on an offlined node.
+> >>>
+> >>> Our crash analysis has determined that the issue originates from trying
+> >>> to allocate pages on an offlined node in expand_one_shrinker_info. This
+> >>> function makes the incorrect assumption that we can allocate on any node.
+> >>> To correct this we make sure the node is online before tempting an
+> >>> allocation. If it is not online choose the closest node.
+> >>
+> >> This isn't fully accurate, is it?  We could allocate on a node which is
+> >> presently offline but which was previously onlined, by testing
+> >> NODE_DATA(nid).
+> >>
+> >> It isn't entirely clear to me from the v1 discussion why this approach
+> >> isn't being taken?
+> >>
+> >> AFAICT the proposed patch is *already* taking this approach, by having
+> >> no protection against a concurrent or subsequent node offlining?
+> >
+> > AFAICT, we have not reached agreement on how to fix it yet. I saw 3
+> > proposals at least:
+> >
+> > 1. From Michal, allocate node data for all possible nodes.
+> > https://lore.kernel.org/all/Ya89aqij6nMwJrIZ@dhcp22.suse.cz/T/#u
+> >
+> > 2. What this patch does. Proposed originally from
+> > https://lore.kernel.org/all/20211108202325.20304-1-amakhalov@vmware.com/T/#u
+>
+> Correct me if im wrong, but isn't that a different caller? This patch fixes the
+> issue in expand_one_shrinker_info.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Yes, different caller, but same approach. The cons with this approach
+is we have to fix all the places. It seems Michal and David are not
+fans for this approach IIRC.
 
--- 
-Damien Le Moal
-Western Digital Research
+>
+> > 3. From David, fix in node_zonelist().
+> > https://lore.kernel.org/all/51c65635-1dae-6ba4-daf9-db9df0ec35d8@redhat.com/T/#u
+> >
+> >>
+> >>> --- a/mm/vmscan.c
+> >>> +++ b/mm/vmscan.c
+> >>> @@ -222,13 +222,16 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+> >>>       int size = map_size + defer_size;
+> >>>
+> >>>       for_each_node(nid) {
+> >>> +             int tmp = nid;
+> >>
+> >> Not `tmp', please.  Better to use an identifier which explains the
+> >> variable's use.  target_nid?
+> >>
+> >> And a newline after defining locals, please.
+> >>
+> >>>               pn = memcg->nodeinfo[nid];
+> >>>               old = shrinker_info_protected(memcg, nid);
+> >>>               /* Not yet online memcg */
+> >>>               if (!old)
+> >>>                       return 0;
+> >>>
+> >>> -             new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
+> >>> +             if(!node_online(nid))
+> >>
+> >> s/if(/if (/
+> >>
+> >>> +                     tmp = numa_mem_id();
+> >>> +             new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, tmp);
+> >>>               if (!new)
+> >>>                       return -ENOMEM;
+> >>>
+> >>
+> >> And a code comment fully explaining what's going on here?
+> >
+>

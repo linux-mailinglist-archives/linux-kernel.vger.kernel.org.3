@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC9246D0B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743E346D0B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbhLHKRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:17:08 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34622 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbhLHKRF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231325AbhLHKRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 8 Dec 2021 05:17:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50982 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230390AbhLHKRE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:17:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5F372CE2083;
-        Wed,  8 Dec 2021 10:13:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A7A0C341C3;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6765B82058;
+        Wed,  8 Dec 2021 10:13:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8260FC341C8;
         Wed,  8 Dec 2021 10:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638958410;
-        bh=gVDD9vxvrZRD/msQTATqPEXonDeRcO8qqBMYYxq2Q3U=;
+        bh=D/sgeXocf0/GxKM6SvowVZtXTAdBKmYyF3gz3S1ywek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P7NOVIg1hcFQws1nX8o4BOipWNX4+Go+WC553zjJlylfIa5dFiVjztgCQjQ98vM+J
-         o8nvn9R/SUOAN5tLyhWMtqg7Z7eNj++OqA1rmlMOR+xISGfZ8tw8cvMX/q9mQtWctJ
-         ULw30LTBqqXoR79YWR8IFctz4qBRGygQjrCNnJ2Vvxe0/8vOl2NMYsZZV12RjkKV36
-         M1S9GLIAji9quFcmgI7wwmjZKiwlr0kFCISGYHjfZ7Vbi5R7i/S1OblDCINj+Vo+bc
-         zPJezMWj2MuvkotsOVV9Wivtk924U9EXGfuI0CHKyhWCPT4/LelJWRJZWfMX8SI1Cc
-         ky448O9r5i+RQ==
+        b=Pq+VAeQehjHotsn4OPrKIDl0/TWbru2XubRtf+MipMknjF+N8lFbsiTqf8CDDbeGk
+         PpIdy5U1hlEnQF1ZM9IE86BrlwNk0X7lktv1xbNNp1xTkB+tJe2dYtU8W/9hmLOVgn
+         Pe2dell3w6sxbrEdZ0064oWGG1aU/Ed3kok6k/51wgALHIN8TEdyXVHcC2F3JGbRFP
+         qI5k0A+EkJzORl4uMzGRBNo8JfTEJl1kMuQvdS8cdCno3uHweWl5gPXDe90mWlbFoR
+         GEvT1yOE2uBXoYqMGK+vDeq/U7Wlnd/l8NG4D7ZijhkaLcMJloH2WaWhqGUkItya39
+         zcBYYSD3OgThQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mutx2-00BgVH-DI; Wed, 08 Dec 2021 11:13:28 +0100
+        id 1mutx2-00BgVK-FK; Wed, 08 Dec 2021 11:13:28 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Robert Schlabbach" <robert_s@gmx.net>,
+        Robert Schlabbach <robert_s@gmx.net>,
         Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 1/3] media: si2157: move firmware load to a separate function
-Date:   Wed,  8 Dec 2021 11:13:24 +0100
-Message-Id: <dc8d0be6a9756bf65371e2e1e0a8062df74f0e5f.1638958050.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 2/3] media: si2157: Add optional firmware download
+Date:   Wed,  8 Dec 2021 11:13:25 +0100
+Message-Id: <68cd904138504a94c5e592b50547e0a22cd33d4d.1638958050.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638958050.git.mchehab+huawei@kernel.org>
 References: <cover.1638958050.git.mchehab+huawei@kernel.org>
@@ -53,153 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Split the firmware load code from si2157_init, in order to
-help to add further changes at the way firmware is handled on
-this device.
+From: Robert Schlabbach <robert_s@gmx.net>
 
-No functional changes.
+The Si2157 (A30) is functional with the ROM firmware 3.0.5, but can also
+be patched at runtime, e.g. to firmware 3.1.3. However, although a
+firmware filename for its firmware patch exists, that has only been used
+for the Si2177 (A30) so far (which indeed takes the binary identical
+firmware patch).
 
+Add support for downloading firmware patches into the Si2157 (A30), but
+make it optional, so that initialization can succeed with and without a
+firmware patch being available. Keep the use of request_firmware() for
+this purpose rather than firmware_request_nowarn(), so that the warning
+in the log makes users aware that it is possible to provide a firmware
+for this tuner.
+
+The firmware patch is probably also optional for other (if not all)
+tuners supported by the driver, but since I do not have the others
+available to test, they are kept mandatory for now to avoid regressions.
+
+Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 0/3] at: https://lore.kernel.org/all/cover.1638958050.git.mchehab+huawei@kernel.org/
 
- drivers/media/tuners/si2157.c | 98 ++++++++++++++++++++---------------
- 1 file changed, 56 insertions(+), 42 deletions(-)
+ drivers/media/tuners/si2157.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index 75ddf7ed1faf..481a5db7fb69 100644
+index 481a5db7fb69..ed28672c060d 100644
 --- a/drivers/media/tuners/si2157.c
 +++ b/drivers/media/tuners/si2157.c
-@@ -76,16 +76,63 @@ static int si2157_cmd_execute(struct i2c_client *client, struct si2157_cmd *cmd)
- 	return ret;
- }
- 
--static int si2157_init(struct dvb_frontend *fe)
-+static int si2157_load_firmware(struct dvb_frontend *fe,
-+				const char *fw_name)
- {
+@@ -130,6 +130,7 @@ static int si2157_init(struct dvb_frontend *fe)
  	struct i2c_client *client = fe->tuner_priv;
--	struct si2157_dev *dev = i2c_get_clientdata(client);
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	int ret, len, remaining;
--	struct si2157_cmd cmd;
- 	const struct firmware *fw;
--	const char *fw_name;
-+	int ret, len, remaining;
-+	struct si2157_cmd cmd;
-+
-+	/* request the firmware, this will block and timeout */
-+	ret = request_firmware(&fw, fw_name, &client->dev);
-+	if (ret)
-+		return ret;
-+
-+	/* firmware should be n chunks of 17 bytes */
-+	if (fw->size % 17 != 0) {
-+		dev_err(&client->dev, "firmware file '%s' is invalid\n",
-+			fw_name);
-+		ret = -EINVAL;
-+		goto err_release_firmware;
-+	}
-+
-+	dev_info(&client->dev, "downloading firmware from file '%s'\n",
-+		 fw_name);
-+
-+	for (remaining = fw->size; remaining > 0; remaining -= 17) {
-+		len = fw->data[fw->size - remaining];
-+		if (len > SI2157_ARGLEN) {
-+			dev_err(&client->dev, "Bad firmware length\n");
-+			ret = -EINVAL;
-+			goto err_release_firmware;
-+		}
-+		memcpy(cmd.args, &fw->data[(fw->size - remaining) + 1], len);
-+		cmd.wlen = len;
-+		cmd.rlen = 1;
-+		ret = si2157_cmd_execute(client, &cmd);
-+		if (ret) {
-+			dev_err(&client->dev, "firmware download failed %d\n",
-+					ret);
-+			goto err_release_firmware;
-+		}
-+	}
-+
-+err_release_firmware:
-+	release_firmware(fw);
-+
-+	return ret;
-+}
-+
-+static int si2157_init(struct dvb_frontend *fe)
-+{
-+	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
-+	struct i2c_client *client = fe->tuner_priv;
-+	struct si2157_dev *dev = i2c_get_clientdata(client);
+ 	struct si2157_dev *dev = i2c_get_clientdata(client);
  	unsigned int chip_id, xtal_trim;
-+	struct si2157_cmd cmd;
-+	const char *fw_name;
-+	int ret;
++	unsigned int fw_required;
+ 	struct si2157_cmd cmd;
+ 	const char *fw_name;
+ 	int ret;
+@@ -198,6 +199,10 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	#define SI2146_A10 ('A' << 24 | 46 << 16 | '1' << 8 | '0' << 0)
+ 	#define SI2141_A10 ('A' << 24 | 41 << 16 | '1' << 8 | '0' << 0)
  
- 	dev_dbg(&client->dev, "\n");
- 
-@@ -181,45 +228,13 @@ static int si2157_init(struct dvb_frontend *fe)
- 	if (fw_name == NULL)
- 		goto skip_fw_download;
- 
--	/* request the firmware, this will block and timeout */
--	ret = request_firmware(&fw, fw_name, &client->dev);
-+	ret = si2157_load_firmware(fe, fw_name);
- 	if (ret) {
- 		dev_err(&client->dev, "firmware file '%s' not found\n",
--				fw_name);
--		goto err;
--	}
--
--	/* firmware should be n chunks of 17 bytes */
--	if (fw->size % 17 != 0) {
--		dev_err(&client->dev, "firmware file '%s' is invalid\n",
--				fw_name);
--		ret = -EINVAL;
--		goto err_release_firmware;
--	}
--
--	dev_info(&client->dev, "downloading firmware from file '%s'\n",
- 			fw_name);
--
--	for (remaining = fw->size; remaining > 0; remaining -= 17) {
--		len = fw->data[fw->size - remaining];
--		if (len > SI2157_ARGLEN) {
--			dev_err(&client->dev, "Bad firmware length\n");
--			ret = -EINVAL;
--			goto err_release_firmware;
--		}
--		memcpy(cmd.args, &fw->data[(fw->size - remaining) + 1], len);
--		cmd.wlen = len;
--		cmd.rlen = 1;
--		ret = si2157_cmd_execute(client, &cmd);
--		if (ret) {
--			dev_err(&client->dev, "firmware download failed %d\n",
--					ret);
--			goto err_release_firmware;
--		}
-+		goto err;
- 	}
- 
--	release_firmware(fw);
--
- skip_fw_download:
- 	/* reboot the tuner with new firmware? */
- 	memcpy(cmd.args, "\x01\x01", 2);
-@@ -270,8 +285,7 @@ static int si2157_init(struct dvb_frontend *fe)
- 
- 	dev->active = true;
- 	return 0;
--err_release_firmware:
--	release_firmware(fw);
++	/* assume firmware is required, unless verified not to be */
++	/* only the SI2157_A30 has been verified not to yet */
++	fw_required = true;
 +
- err:
- 	dev_dbg(&client->dev, "failed=%d\n", ret);
- 	return ret;
+ 	switch (chip_id) {
+ 	case SI2158_A20:
+ 	case SI2148_A20:
+@@ -206,10 +211,13 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	case SI2141_A10:
+ 		fw_name = SI2141_A10_FIRMWARE;
+ 		break;
+-	case SI2177_A30:
+-		fw_name = SI2157_A30_FIRMWARE;
+-		break;
+ 	case SI2157_A30:
++		fw_name = SI2157_A30_FIRMWARE;
++		fw_required = false;
++		break;
++	case SI2177_A30:
++		fw_name = SI2157_A30_FIRMWARE;
++		break;
+ 	case SI2147_A30:
+ 	case SI2146_A10:
+ 		fw_name = NULL;
+@@ -230,6 +238,9 @@ static int si2157_init(struct dvb_frontend *fe)
+ 
+ 	ret = si2157_load_firmware(fe, fw_name);
+ 	if (ret) {
++		if (!fw_required)
++			goto skip_fw_download;
++
+ 		dev_err(&client->dev, "firmware file '%s' not found\n",
+ 			fw_name);
+ 		goto err;
 -- 
 2.33.1
 

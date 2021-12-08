@@ -2,156 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A91F46CE9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6462446CEA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244633AbhLHIHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:07:53 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:35904 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240425AbhLHIHx (ORCPT
+        id S244644AbhLHIH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:07:57 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38946 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240425AbhLHIH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:07:53 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UzrdQVf_1638950659;
-Received: from 30.21.164.163(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0UzrdQVf_1638950659)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Dec 2021 16:04:19 +0800
-Message-ID: <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
-Date:   Wed, 8 Dec 2021 16:04:19 +0800
+        Wed, 8 Dec 2021 03:07:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 05AEE1FDFC;
+        Wed,  8 Dec 2021 08:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638950664; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WMGjw44+jXQO3zu5GwYDCF7IsnMd3YaPPro0gBCKQtc=;
+        b=oXoYxxNDCEl899Jtek3M9lpNe1PAAXNc4D6+9gNPWpJ00vzAefmFwbXHgKPaeMXKyutVdx
+        nGhgvijtZ+SnWPNmkjCVUVgzeFXMf5I4yVmv77AgtZ08U0moj1dpHrJp7EY1QbSLNphxy2
+        4uS0IW4tm29TIJRXdOwWgMy++8zu/OU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C655DA3B85;
+        Wed,  8 Dec 2021 08:04:23 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 09:04:21 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexey Makhalov <amakhalov@vmware.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbBnBQLcOSJaB7Px@dhcp22.suse.cz>
+References: <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
+ <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
+ <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+ <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+ <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+ <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
- <20211207031217-mutt-send-email-mst@kernel.org>
- <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
- <20211208021947-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-In-Reply-To: <20211208021947-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2021/12/8 下午3:23, Michael S. Tsirkin 写道:
-> On Tue, Dec 07, 2021 at 05:09:56PM +0800, 王贇 wrote:
->>
->>
->> 在 2021/12/7 下午4:13, Michael S. Tsirkin 写道:
->>> On Tue, Dec 07, 2021 at 03:51:45PM +0800, 王贇 wrote:
->>>> We observed issues like:
->>>>     virtio-pci 0000:14:00.0: platform bug: legacy virtio-mmio must
->>>>     not be used with RAM above 0x4000GB
->>>>
->>>> when we have a legacy pci device which desired 32bit-pfn vq
->>>> but gain 64bit-pfn instead, lead into the failure of probe.
->>>>
->>>> vring_use_dma_api() is playing the key role in here, to help the
->>>> allocation process understand which kind of vq it should alloc,
->>>> however, it failed to take care the legacy pci device, which only
->>>> have 32bit feature flag and can never have VIRTIO_F_ACCESS_PLATFORM
->>>> setted.
->>>>
->>>> This patch introduce force_dma flag to help vring_use_dma_api()
->>>> understanding the requirement better, to avoid the failing.
->>>>
->>>> Signed-off-by: Michael Wang <yun.wang@linux.alibaba.com>
->>>
->>> This will break configs where the device appears behind
->>> a virtual iommu, so this won't fly.
->>> Just make your device support 1.0, eh?
->>
->> Hi, Michael
->>
->> Thanks for the comment, unfortunately modify device is not an option for us
->> :-(
->>
->> Is there any idea on how to solve this issue properly?
->>
->> Regards,
->> Michael Wang
-> 
-> By the way, there is a bug in the error message. Want to fix that?
-
-Could you please provide more detail about the bug? We'd like to help 
-fixing it :-)
-
-Besides, I've checked that patch but it can't address our issue, we 
-actually have this legacy pci device on arm platform, and the memory 
-layout is unfriendly since allocation rarely providing page-address 
-below 44bit, we understand the virtio-iommu case should not do force 
-dma, while we don't have that so it's just working fine.
-
-Regards,
-Michael Wang
-
+On Tue 07-12-21 17:17:27, Alexey Makhalov wrote:
 > 
 > 
->>>
->>>> ---
->>>>    drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
->>>>    drivers/virtio/virtio_ring.c       |  3 +++
->>>>    include/linux/virtio.h             |  1 +
->>>>    3 files changed, 14 insertions(+)
->>>>
->>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
->>>> b/drivers/virtio/virtio_pci_legacy.c
->>>> index d62e983..11f2ebf 100644
->>>> --- a/drivers/virtio/virtio_pci_legacy.c
->>>> +++ b/drivers/virtio/virtio_pci_legacy.c
->>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
->>>> *vp_dev)
->>>>    	vp_dev->setup_vq = setup_vq;
->>>>    	vp_dev->del_vq = del_vq;
->>>>
->>>> +	/*
->>>> +	 * The legacy pci device requre 32bit-pfn vq,
->>>> +	 * or setup_vq() will failed.
->>>> +	 *
->>>> +	 * Thus we make sure vring_use_dma_api() will
->>>> +	 * return true during the allocation by marking
->>>> +	 * force_dma here.
->>>> +	 */
->>>> +	vp_dev->vdev.force_dma = true;
->>>> +
->>>>    	return 0;
->>>>
->>>>    err_iomap:
->>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->>>> index 3035bb6..6562e01 100644
->>>> --- a/drivers/virtio/virtio_ring.c
->>>> +++ b/drivers/virtio/virtio_ring.c
->>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
->>>> virtqueue *_vq,
->>>>
->>>>    static bool vring_use_dma_api(struct virtio_device *vdev)
->>>>    {
->>>> +	if (vdev->force_dma)
->>>> +		return true;
->>>> +
->>>>    	if (!virtio_has_dma_quirk(vdev))
->>>>    		return true;
->>>>
->>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->>>> index 41edbc0..a4eb29d 100644
->>>> --- a/include/linux/virtio.h
->>>> +++ b/include/linux/virtio.h
->>>> @@ -109,6 +109,7 @@ struct virtio_device {
->>>>    	bool failed;
->>>>    	bool config_enabled;
->>>>    	bool config_change_pending;
->>>> +	bool force_dma;
->>>>    	spinlock_t config_lock;
->>>>    	spinlock_t vqs_list_lock; /* Protects VQs list access */
->>>>    	struct device dev;
->>>> -- 
->>>> 1.8.3.1
+> > On Dec 7, 2021, at 9:13 AM, David Hildenbrand <david@redhat.com> wrote:
+> > 
+> > On 07.12.21 18:02, Alexey Makhalov wrote:
+> >> 
+> >> 
+> >>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
+> >>> 
+> >>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
+> >>> [...]
+> >>>> So your proposal is to drop set_node_online from the patch and add it as
+> >>>> a separate one which handles
+> >>>> 	- sysfs part (i.e. do not register a node which doesn't span a
+> >>>> 	  physical address space)
+> >>>> 	- hotplug side of (drop the pgd allocation, register node lazily
+> >>>> 	  when a first memblocks are registered)
+> >>> 
+> >>> In other words, the first stage
+> >>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>> index c5952749ad40..f9024ba09c53 100644
+> >>> --- a/mm/page_alloc.c
+> >>> +++ b/mm/page_alloc.c
+> >>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+> >>> 	if (self && !node_online(self->node_id)) {
+> >>> 		build_zonelists(self);
+> >>> 	} else {
+> >>> -		for_each_online_node(nid) {
+> >>> +		/*
+> >>> +		 * All possible nodes have pgdat preallocated
+> >>> +		 * free_area_init
+> >>> +		 */
+> >>> +		for_each_node(nid) {
+> >>> 			pg_data_t *pgdat = NODE_DATA(nid);
+> >>> 
+> >>> 			build_zonelists(pgdat);
+> >> 
+> >> Will it blow up memory usage for the nodes which might never be onlined?
+> >> I prefer the idea of init on demand.
+> >> 
+> >> Even now there is an existing problem.
+> >> In my experiments, I observed _huge_ memory consumption increase by increasing number
+> >> of possible numa nodes. I’m going to report it in separate mail thread.
+> > 
+> > I already raised that PPC might be problematic in that regard. Which
+> > architecture / setup do you have in mind that can have a lot of possible
+> > nodes?
+> > 
+> It is x86_64 VMware VM, not the regular one, but specially configured (1 vCPU per node,
+> with hot-plug support, 128 possible nodes)  
+
+This is slightly tangent but could you elaborate more on this setup and
+reasoning behind it. I was already curious when you mentioned this
+previously. Why would you want to have so many nodes and having 1:1 with
+CPUs. What is the resulting NUMA topology?
+-- 
+Michal Hocko
+SUSE Labs

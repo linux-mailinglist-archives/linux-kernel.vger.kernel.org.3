@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0581B46CA29
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0928346CA18
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242995AbhLHBkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:40:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41020 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbhLHBkR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:40:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C132B81F41;
-        Wed,  8 Dec 2021 01:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE75FC341C8;
-        Wed,  8 Dec 2021 01:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638927404;
-        bh=FI94LMs/MZJPMgKuwfnYxQnphmZIYFclD5XbAtx6RLI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZAzUPWu+sIK0xH4jCplrLoSifKPKAIsgwtSCy9mcc+8EeZMjkFJD6n+pVLj9LQG4l
-         06CK/ThJ57ooSO0jW1r/9HDD3xJcNFgHZhvBjmV4B5bfXAS4s3SyIV5nwJ7TTZyMdm
-         g63qM3GODicvqrInsrNrupAn+Q5M8tDXsAAzcToZ3iEakn2e0rURhjWg8whHu95dJg
-         szPrP8IcHk1wYjAVAZggSagPDCmWag/qAXTot0v7eHTZC496G2qQYhCpPTjypDE1kc
-         8a9830bcOU/jUM8bI0l2vy956CdaXZ5pjSCJG0rBis/ishQwgOBnGohxUPPcTSPkhU
-         RIsieU9/nPd0g==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH v3 2/3] block: don't delete queue kobject before its children
-Date:   Tue,  7 Dec 2021 17:35:33 -0800
-Message-Id: <20211208013534.136590-3-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211208013534.136590-1-ebiggers@kernel.org>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
+        id S242840AbhLHBjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:39:10 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:44246 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234326AbhLHBjK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 20:39:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=oGqvZL2bCZkbyBRTHXbtR3qrLS4yqTi1pyKcjkCRtPw=; b=KylLcYPqSxpG0OHphp2+AODqfl
+        ISTVV+pr5DuEniJr4NE39ZJbTxZCD9VfxBQRoOOi22qr2OKiOHc4ZwnNDBQ/ViffoELnQsk/QJLLM
+        fOILvzz1fcdaZC+J0vzdE3RfcAmu1X250IRGRU3hMjFsiaC6K8KWrmJHBsXOaFDG1jVM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mulrq-00FpaB-Vl; Wed, 08 Dec 2021 02:35:34 +0100
+Date:   Wed, 8 Dec 2021 02:35:34 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <YbAL5pP6IrN1ey5e@lunn.ch>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+ <20211207224525.ckdn66tpfba5gm5z@skbuf>
+ <Ya/mD/KUYDLb7qed@lunn.ch>
+ <20211207231449.bk5mxg3z2o7mmtzg@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207231449.bk5mxg3z2o7mmtzg@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Wed, Dec 08, 2021 at 01:14:49AM +0200, Vladimir Oltean wrote:
+> On Tue, Dec 07, 2021 at 11:54:07PM +0100, Andrew Lunn wrote:
+> > > I considered a simplified form like this, but I think the tagger private
+> > > data will still stay in dp->priv, only its ownership will change.
+> > 
+> > Isn't dp a port structure. So there is one per port?
+> 
+> Yes, but dp->priv is a pointer. The thing it points to may not
+> necessarily be per port.
+> 
+> > This is where i think we need to separate shared state from tagger
+> > private data. Probably tagger private data is not per port. Shared
+> > state between the switch driver and the tagger maybe is per port?
+> 
+> I don't know whether there's such a big difference between
+> "shared state" vs "private data"?
 
-kobjects aren't supposed to be deleted before their child kobjects are
-deleted.  Apparently this is usually benign; however, a WARN will be
-triggered if one of the child kobjects has a named attribute group:
+The difference is to do with stopping the kernel exploding when the
+switch driver is not using the tagger it expects.
 
-    sysfs group 'modes' not found for kobject 'crypto'
-    WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:278 sysfs_remove_group+0x72/0x80
-    ...
-    Call Trace:
-      sysfs_remove_groups+0x29/0x40 fs/sysfs/group.c:312
-      __kobject_del+0x20/0x80 lib/kobject.c:611
-      kobject_cleanup+0xa4/0x140 lib/kobject.c:696
-      kobject_release lib/kobject.c:736 [inline]
-      kref_put include/linux/kref.h:65 [inline]
-      kobject_put+0x53/0x70 lib/kobject.c:753
-      blk_crypto_sysfs_unregister+0x10/0x20 block/blk-crypto-sysfs.c:159
-      blk_unregister_queue+0xb0/0x110 block/blk-sysfs.c:962
-      del_gendisk+0x117/0x250 block/genhd.c:610
+Anything which is private to the tagger is not a problem. Only the
+tagger uses it, so it cannot be wrong.
 
-Fix this by moving the kobject_del() and the corresponding
-kobject_uevent() to the correct place.
+Anything which is shared between the tagger and the switch driver we
+have to be careful about. We are just passing void * pointers
+about. There is no type checking. If i'm correct about the 1:N
+relationship, we can store shared state in the tagger. The tagger
+should be O.K, because it only ever needs to deal with one format of
+shared state. The switch driver needs to handle N different formats of
+shared state, depending on which of the N different taggers are in
+operation. Ideally, when it asks for the void * pointer for shared
+information, some sort of checking is performed to ensure the void *
+is what the switch driver actually expects. Maybe it needs to pass the
+tag driver it thinks it is talking to, or as well as getting the void
+* back, it also gets the tag enum and it verifies it actually knows
+about that tag driver.
 
-Fixes: 2c2086afc2b8 ("block: Protect less code with sysfs_lock in blk_{un,}register_queue()")
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- block/blk-sysfs.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 3152d244e9b36..c11242ef88558 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -952,15 +952,17 @@ void blk_unregister_queue(struct gendisk *disk)
- 	 */
- 	if (queue_is_mq(q))
- 		blk_mq_unregister_dev(disk_to_dev(disk), q);
--
--	kobject_uevent(&q->kobj, KOBJ_REMOVE);
--	kobject_del(&q->kobj);
- 	blk_trace_remove_sysfs(disk_to_dev(disk));
- 
- 	mutex_lock(&q->sysfs_lock);
- 	elv_unregister_queue(q);
- 	disk_unregister_independent_access_ranges(disk);
- 	mutex_unlock(&q->sysfs_lock);
-+
-+	/* Now that all child objects were deleted, the queue can be deleted. */
-+	kobject_uevent(&q->kobj, KOBJ_REMOVE);
-+	kobject_del(&q->kobj);
-+
- 	mutex_unlock(&q->sysfs_dir_lock);
- 
- 	kobject_put(&disk_to_dev(disk)->kobj);
--- 
-2.34.1
-
+     Andrew

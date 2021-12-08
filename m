@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5253B46D545
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9116646D54A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbhLHONh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhLHONf (ORCPT
+        id S231719AbhLHOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:14:47 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:54516 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229550AbhLHOOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:13:35 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AFEC061746;
-        Wed,  8 Dec 2021 06:10:03 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a9so4286014wrr.8;
-        Wed, 08 Dec 2021 06:10:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cDVSf9iQJRZTk+rMfGSgba1WYOB+k/OuErDztpWNhDg=;
-        b=qrXPPrGQqUcxjLgUqGRVImeZHexUmi7L34HBEkZwRGdqoL4A9IK7bLkyIdMyK2IK39
-         +cVK6P96BnmJdKqo0E+BolwSYM5E1CmVUyaLEclP3HavybcGOUYGBLgVCuiM2H0SYQLh
-         lstzvZS+BMJ6PvL0B/uNckY4q+LYbawYL6tokoOepyT4AeXYR4rtp/mQFy0rqJe4c+et
-         8OtZE2GAMRRwcRg+eOnT0sQdG06VP3Y9+/l/qUxzefSA18b4t+0QkzEk7MtYK0OkJnhn
-         meymvz9Ogbt/0JfF4u/9M6Q0uv9RXMagZPs2rKyPlekztXaTkWhvlNhtI+NV/qhBC0Kl
-         /loA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cDVSf9iQJRZTk+rMfGSgba1WYOB+k/OuErDztpWNhDg=;
-        b=b18IQittcRBP2XkE6IutTBYEe01hvqeqZFqoEvCBTblwF3DdDHLWPV1Y7RU3DvwgJq
-         klI9KHGNc4fSDz7VFaAHLtyr30fihMG3skZGa99+d/jjrL6Q/Xg8UURE6DUDBf+F1nBA
-         Aq86pyGL+wEG/yqWlM9q8eKJ9H7cXRkwOI1Lz6kSJMA5yth2e2zkAOZYd9ljui9vqMC3
-         4zE+2tp6IOtR4aNSjaa/S3Kw5FrE26DwPPZBV2UIiX5o+eYv840+by/c0rGrr/lwwV9C
-         SUsHxDpIm7vXVWbg1xoQVcSKcliB2b+cNMXYycU993//dzVjD1DlUNW4ZA8O43HhBt0w
-         I1uw==
-X-Gm-Message-State: AOAM532Q974rnvWYGu7St71HXEH2D/LyNIFI/7r1toFn+NawhaPhlqRT
-        amor5f7TkPeoMMwBx1UihA0=
-X-Google-Smtp-Source: ABdhPJyF/aJXSV5ioEx6qaNcTmrKlE3XqqJHivZXBbO2RCk92GAXrBGCtv+NHROw2ouYAiA87oM0zg==
-X-Received: by 2002:a5d:522e:: with SMTP id i14mr57882894wra.43.1638972601682;
-        Wed, 08 Dec 2021 06:10:01 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.199.136])
-        by smtp.gmail.com with ESMTPSA id z14sm2727184wrp.70.2021.12.08.06.09.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:10:01 -0800 (PST)
-Date:   Wed, 8 Dec 2021 19:09:57 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     kabel@kernel.org, kuba@kernel.org, andrew@lunn.ch
-Cc:     vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: error handling for serdes_power
- functions
-Message-ID: <20211208140957.GA96979@hamza-OptiPlex-7040>
-References: <20211207140647.6926a3e7@thinkpad>
- <20211208140413.96856-1-amhamza.mgc@gmail.com>
+        Wed, 8 Dec 2021 09:14:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638972672;
+        bh=LBc4gpSYAc1p0ve8zOKgnub9ICw3kW2zeiC0VG7Rg4U=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LLndYwNjSHwaXZhLO4QMAZ/CFZfXYbeIPfFsL+GodMQQY6+fgoYbwVHZR/4tPrO/g
+         sgXktFiH3P+soQjboUQ0tSoKj92b1hMStqBz0jRHDRKZo03oHgrCYlcwqigAiQoGxt
+         giKt0rO6sqpnb22DlOS1JAtsv3eCc3oYZScqFWpo=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A84BD12802F2;
+        Wed,  8 Dec 2021 09:11:12 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ArFS9qlh7XCj; Wed,  8 Dec 2021 09:11:12 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638972672;
+        bh=LBc4gpSYAc1p0ve8zOKgnub9ICw3kW2zeiC0VG7Rg4U=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LLndYwNjSHwaXZhLO4QMAZ/CFZfXYbeIPfFsL+GodMQQY6+fgoYbwVHZR/4tPrO/g
+         sgXktFiH3P+soQjboUQ0tSoKj92b1hMStqBz0jRHDRKZo03oHgrCYlcwqigAiQoGxt
+         giKt0rO6sqpnb22DlOS1JAtsv3eCc3oYZScqFWpo=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 201C9128007C;
+        Wed,  8 Dec 2021 09:11:11 -0500 (EST)
+Message-ID: <dd43783ae76ad3238d99f75d8aaf95e20ad28b79.camel@HansenPartnership.com>
+Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Wed, 08 Dec 2021 09:11:09 -0500
+In-Reply-To: <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+         <20211207202127.1508689-17-stefanb@linux.ibm.com>
+         <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208140413.96856-1-amhamza.mgc@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 07:04:13PM +0500, Ameer Hamza wrote:
-> mv88e6390_serdes_power() and mv88e6393x_serdes_power() should return
-> with EINVAL error if cmode is undefined.
+On Wed, 2021-12-08 at 13:58 +0100, Christian Brauner wrote:
+> On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
+[...]
+> > @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct
+> > fs_context *fc)
+> >  
+> >  static void securityfs_kill_super(struct super_block *sb)
+> >  {
+> > +	struct user_namespace *ns = sb->s_fs_info;
+> > +
+> > +	if (ns != &init_user_ns)
+> > +		ima_fs_ns_free_dentries(ns);
 > 
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/serdes.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> Say securityfs is unmounted. Then all the inodes and dentries become
+> invalid. It's not allowed to hold on to any dentries or inodes after
+> the super_block is shut down. So I just want to be sure that nothing
+> in ima can access these dentries after securityfs is unmounted.
 > 
-> diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-> index 33727439724a..f3dc1865f291 100644
-> --- a/drivers/net/dsa/mv88e6xxx/serdes.c
-> +++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-> @@ -830,7 +830,7 @@ int mv88e6390_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
->  			   bool up)
->  {
->  	u8 cmode = chip->ports[port].cmode;
-> -	int err = 0;
-> +	int err;
->  
->  	switch (cmode) {
->  	case MV88E6XXX_PORT_STS_CMODE_SGMII:
-> @@ -842,6 +842,8 @@ int mv88e6390_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
->  	case MV88E6XXX_PORT_STS_CMODE_RXAUI:
->  		err = mv88e6390_serdes_power_10g(chip, lane, up);
->  		break;
-> +	default:
-> +		return -EINVAL;
->  	}
->  
->  	if (!err && up)
-> @@ -1507,7 +1509,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
->  			    bool on)
->  {
->  	u8 cmode = chip->ports[port].cmode;
-> -	int err = 0;
-> +	int err;
->  
->  	if (port != 0 && port != 9 && port != 10)
->  		return -EOPNOTSUPP;
-> @@ -1541,6 +1543,8 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
->  	case MV88E6393X_PORT_STS_CMODE_10GBASER:
->  		err = mv88e6390_serdes_power_10g(chip, lane, on);
->  		break;
-> +	default:
-> +		return -EINVAL;
->  	}
->  
->  	if (err)
-> -- 
-> 2.25.1
->
-Hi Marek,
+> To put it another way: why are they stored in struct ima_namespace in
+> the first place? If you don't pin a filesystem when creating files or
+> directories like you do for securityfs in init_ima_ns then you don't
+> need to hold on to them as they will be automatically be wiped during
+> umount.
 
-I checked serdes.c and I found two methods mv88e6390_serdes_power() and
-mv88e6390_serdes_power() that were not returning ENINVAL in case of
-undefined cmode. Would be appreciated if  you can review the patch
-please.
+For IMA this is true because IMA can't be a module.  However, a modular
+consumer, like the TPM, must be able to remove its entries from a
+mounted securityfs because the code that serves the operations is going
+away.  In order to do this removal, it needs the dentries somewhere. 
+The current convention seems to be everything has a directory in the
+top level, so we could call d_genocide() on this directory and not have
+to worry about storing the dentries underneath, but I think we can't
+avoid storing the dentry for the top level directory.
 
-Best Regards,
-Ameer Hamza.
+James
+
+

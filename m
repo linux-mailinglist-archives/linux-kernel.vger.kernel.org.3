@@ -2,111 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D509346CD79
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427CB46CD76
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbhLHGMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 01:12:46 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:36934 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbhLHGMo (ORCPT
+        id S236578AbhLHGMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230181AbhLHGMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:12:44 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B8691Dk074752;
-        Wed, 8 Dec 2021 00:09:01 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638943741;
-        bh=VgXgIvhEq1ibs/HgZEa1zCm/Da+XDn+E4jikIKI846o=;
-        h=From:To:CC:Subject:Date;
-        b=vxQXv7Qu21yAAudqvD8YGDYp+rbTKeZ3YedC3TKGoUO5cJUNKiyfkwlI26eCzg7tQ
-         mP7Evwk18iQYTq54lxaQYka1Zpa3xHuSwcJsO0/Y0dXs4zwt0AuPQlOR8041goSTH9
-         YWoP+pcH793YRDfSkNdfhbPjISx5LRSdyb3EgHjg=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B8691Us108026
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Dec 2021 00:09:01 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
- Dec 2021 00:09:01 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 8 Dec 2021 00:09:01 -0600
-Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B868wQU112199;
-        Wed, 8 Dec 2021 00:08:58 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tom Rini <trini@konsulko.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH] arm64: defconfig: Enable USB, PCIe and SERDES drivers for TI K3 SoC
-Date:   Wed, 8 Dec 2021 11:38:56 +0530
-Message-ID: <20211208060856.16106-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Dec 2021 01:12:33 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B3C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 22:09:01 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id i9so1267379ilu.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 22:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=lIv4QVsdbvdCrazbsuQ0JkznpnxKe0kM4Mgzgv9g9Ng=;
+        b=A9IbIZkRvor3oFJkrRafTA1saGK62vBeXMbzAPSWf3F9BlVPQnMt5Xqckamqfwc4Yo
+         mbXmcNb566lv6P+7OY76DPcJtuTnqWPAOE+docKcYyDQJY9Uve16+4R2Dr/Cb0V5pZDf
+         xVHHbMnuR9zZleAWB2yco/tnuQ5TASbcwLcsrLzUnaqqUolbvQnVu4wqywWXqxJqsiE6
+         BN61CnoAngjPL/F4/UvMIY4e21LoXy1LlLEiC0XOnRVI9YYuwIHpkhgVrD2dSX7QYhW/
+         LjIMVf7JFUoGNSjAR000TS4KqrEb8rKKr9NsKqlwssIVz2NOJaRzgle46IJi7HMf33n3
+         oFrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=lIv4QVsdbvdCrazbsuQ0JkznpnxKe0kM4Mgzgv9g9Ng=;
+        b=HtO3wjPZ8y3QAJvww7YOC+Gk2wftu//S0bUOS5MF+OhEIwjxl+aARib0G7tjywwe87
+         aYD8IynELt73kH4vF7Epzi2ERGx2oOwySpz0SjGyuOQOpU5Azkg+9ToTxXaOSLK9TMc5
+         EjuUEr7Ieg2jPbz3IrqCOjjAbn1KphuVRjiVolqROq/DAxiVGhCYZ+FupVXlzbEw55fU
+         WjhrWiz7N8UYgRerDVrS26L2xD42Z22rTg+YIjXfR7xURxCjCHIq6MS76gQX0ZVl3Cqo
+         92EeiecJUjdnV0ig6iZUSszuxtKwxLHmeTnXN4NIN0WhYScgsqSZO7PkVU9ta/JQTbdG
+         u8DQ==
+X-Gm-Message-State: AOAM5320k8ZqPQ+/oIcUdU+bSutHSk/zcYGF/zGVlHX9+6KkSDHZsSaX
+        obqeKfRKOJhe3bI66PFqBqYI
+X-Google-Smtp-Source: ABdhPJxCBv/N4/T7fKIXaN//OmmhFumF7iE4BkJJGan3y7HJR3+arWPwv15nrSbvEzwjnx+SaWDf8w==
+X-Received: by 2002:a92:b112:: with SMTP id t18mr3691457ilh.301.1638943741099;
+        Tue, 07 Dec 2021 22:09:01 -0800 (PST)
+Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
+        by smtp.gmail.com with ESMTPSA id i26sm1721104ila.12.2021.12.07.22.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 22:09:00 -0800 (PST)
+Message-ID: <d1297aac11a0a3d98180ed100034ff9fc06ed98c.camel@egauge.net>
+Subject: Re: [PATCH] wilc1000: Add reset/enable GPIO support to SPI driver
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Claudiu.Beznea@microchip.com, kvalo@codeaurora.org
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        Ajay.Kathat@microchip.com, adham.abozaeid@microchip.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Dec 2021 23:08:59 -0700
+In-Reply-To: <e2a7e005-e133-ec15-df78-2302aa538a26@microchip.com>
+References: <20211202034348.2901092-1-davidm@egauge.net>
+         <e2a7e005-e133-ec15-df78-2302aa538a26@microchip.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Cadence PCIe, Cadence USB, TI USB and PCIe wrappers and required
-SERDES drivers to support USB and PCIe on TI K3 SoCs.
+On Tue, 2021-12-07 at 10:11 +0000, Claudiu.Beznea@microchip.com wrote:
+> On 02.12.2021 05:55, David Mosberger-Tang wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > This patch is based on similar code from the linux4sam/linux-at91 GIT
+> > repository.
+> > 
+> > For the SDIO driver, the RESET/ENABLE pins of WILC1000 may be
+> > controlled through the SDIO power sequence driver.  This commit adds
+> > analogous support for the SPI driver.  Specifically, during bus
+> > probing, the chip will be reset-cycled and during unloading, the chip
+> > will be placed into reset and disabled (both to reduce power
+> > consumption and to ensure the WiFi radio is off).
+> > 
+> > Both RESET and ENABLE GPIOs are optional.  However, if the ENABLE GPIO
+> > is specified, then the RESET GPIO also must be specified as otherwise
+> > there is no way to ensure proper timing of the ENABLE/RESET sequence.
+> > 
+> > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> > ---
+> >  .../net/wireless/microchip,wilc1000.yaml      | 11 +++
+> >  .../net/wireless/microchip/wilc1000/Makefile  |  2 +-
+> >  drivers/net/wireless/microchip/wilc1000/hif.h |  2 +
+> >  .../net/wireless/microchip/wilc1000/netdev.h  | 10 +++
+> >  .../net/wireless/microchip/wilc1000/power.c   | 73 +++++++++++++++++++
+> >  drivers/net/wireless/microchip/wilc1000/spi.c | 15 +++-
+> >  .../net/wireless/microchip/wilc1000/wlan.c    |  2 +-
+> >  7 files changed, 110 insertions(+), 5 deletions(-)
+> >  create mode 100644 drivers/net/wireless/microchip/wilc1000/power.c
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
+> > index 6c35682377e6..2ce316f5e353 100644
+> > --- a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
+> > +++ b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
+> > @@ -32,6 +32,15 @@ properties:
+> >    clock-names:
+> >      const: rtc
+> > 
+> > +  enable-gpios:
+> > +    maxItems: 1
+> > +    description: A GPIO line connected to the ENABLE line.  If this
+> > +      is specified, then reset-gpios also must be specified.
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> > +    description: A GPIO line connected to the RESET line.
+> > +
+> 
+> Bindings should go through a different patch.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- arch/arm64/configs/defconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+OK, will be fixed in v2.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0da6a944d5cd..55bb1e0e222d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -236,6 +236,10 @@ CONFIG_PCIE_KIRIN=y
- CONFIG_PCIE_HISI_STB=y
- CONFIG_PCIE_TEGRA194_HOST=m
- CONFIG_PCIE_VISCONTI_HOST=y
-+CONFIG_PCIE_CADENCE_PLAT_HOST=y
-+CONFIG_PCIE_CADENCE_PLAT_EP=y
-+CONFIG_PCI_J721E_HOST=y
-+CONFIG_PCI_J721E_EP=y
- CONFIG_PCI_ENDPOINT=y
- CONFIG_PCI_ENDPOINT_CONFIGFS=y
- CONFIG_PCI_EPF_TEST=m
-@@ -823,6 +827,10 @@ CONFIG_USB_RENESAS_USBHS_HCD=m
- CONFIG_USB_RENESAS_USBHS=m
- CONFIG_USB_ACM=m
- CONFIG_USB_STORAGE=y
-+CONFIG_USB_CDNS_SUPPORT=m
-+CONFIG_USB_CDNS3=m
-+CONFIG_USB_CDNS3_GADGET=y
-+CONFIG_USB_CDNS3_HOST=y
- CONFIG_USB_MTU3=y
- CONFIG_USB_MUSB_HDRC=y
- CONFIG_USB_MUSB_SUNXI=y
-@@ -1124,6 +1132,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
- CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_SUN4I_USB=y
-+CONFIG_PHY_CADENCE_SIERRA=m
- CONFIG_PHY_MIXEL_MIPI_DPHY=m
- CONFIG_PHY_HI6220_USB=y
- CONFIG_PHY_HISTB_COMBPHY=y
-@@ -1147,6 +1156,8 @@ CONFIG_PHY_SAMSUNG_UFS=y
- CONFIG_PHY_UNIPHIER_USB2=y
- CONFIG_PHY_UNIPHIER_USB3=y
- CONFIG_PHY_TEGRA_XUSB=y
-+CONFIG_PHY_AM654_SERDES=m
-+CONFIG_PHY_J721E_WIZ=m
- CONFIG_ARM_SMMU_V3_PMU=m
- CONFIG_FSL_IMX8_DDR_PMU=m
- CONFIG_HISI_PMU=y
--- 
-2.34.1
+> >  required:
+> >    - compatible
+> >    - interrupts
+> > @@ -51,6 +60,8 @@ examples:
+> >          interrupts = <27 0>;
+> >          clocks = <&pck1>;
+> >          clock-names = "rtc";
+> > +        enable-gpios = <&pioA 5 0>;
+> > +        reset-gpios = <&pioA 6 0>;
+> >        };
+> >      };
+> > 
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/Makefile b/drivers/net/wireless/microchip/wilc1000/Makefile
+> > index c3c9e34c1eaa..baf9f021a1d6 100644
+> > --- a/drivers/net/wireless/microchip/wilc1000/Makefile
+> > +++ b/drivers/net/wireless/microchip/wilc1000/Makefile
+> > @@ -2,7 +2,7 @@
+> >  obj-$(CONFIG_WILC1000) += wilc1000.o
+> > 
+> >  wilc1000-objs := cfg80211.o netdev.o mon.o \
+> > -                       hif.o wlan_cfg.o wlan.o
+> > +                       hif.o wlan_cfg.o wlan.o power.o
+> > 
+> >  obj-$(CONFIG_WILC1000_SDIO) += wilc1000-sdio.o
+> >  wilc1000-sdio-objs += sdio.o
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/hif.h b/drivers/net/wireless/microchip/wilc1000/hif.h
+> > index cccd54ed0518..a57095d8088e 100644
+> > --- a/drivers/net/wireless/microchip/wilc1000/hif.h
+> > +++ b/drivers/net/wireless/microchip/wilc1000/hif.h
+> > @@ -213,4 +213,6 @@ void wilc_network_info_received(struct wilc *wilc, u8 *buffer, u32 length);
+> >  void wilc_gnrl_async_info_received(struct wilc *wilc, u8 *buffer, u32 length);
+> >  void *wilc_parse_join_bss_param(struct cfg80211_bss *bss,
+> >                                 struct cfg80211_crypto_settings *crypto);
+> > +int wilc_of_parse_power_pins(struct wilc *wilc);
+> > +void wilc_wlan_power(struct wilc *wilc, bool on);
+> >  #endif
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.h b/drivers/net/wireless/microchip/wilc1000/netdev.h
+> > index b9a88b3e322f..b95a247322a6 100644
+> > --- a/drivers/net/wireless/microchip/wilc1000/netdev.h
+> > +++ b/drivers/net/wireless/microchip/wilc1000/netdev.h
+> > @@ -197,6 +197,15 @@ struct wilc_vif {
+> >         struct cfg80211_bss *bss;
+> >  };
+> > 
+> > +struct wilc_power_gpios {
+> > +       int reset;
+> > +       int chip_en;
+> > +};
+> > +
+> > +struct wilc_power {
+> > +       struct wilc_power_gpios gpios;
+> > +};
+> > +
+> >  struct wilc_tx_queue_status {
+> >         u8 buffer[AC_BUFFER_SIZE];
+> >         u16 end_index;
+> > @@ -265,6 +274,7 @@ struct wilc {
+> >         bool suspend_event;
+> > 
+> >         struct workqueue_struct *hif_workqueue;
+> > +       struct wilc_power power;
+> 
+> For SDIO power should be controlled though MMC pwrseq driver. Thus I would
+> keep this code for SPI only and move this member to struct wilc_spi.
+
+OK, I was left with the impression that some SDIO implementations may
+want to use GPIO control as well.  Since that doesn't seem to be the
+case, I'll make v2 for SPI only.
+
+> >         struct wilc_cfg cfg;
+> >         void *bus_data;
+> >         struct net_device *monitor_dev;
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/power.c b/drivers/net/wireless/microchip/wilc1000/power.c
+> > new file mode 100644
+> > index 000000000000..d26a39b7698d
+> > --- /dev/null
+> > +++ b/drivers/net/wireless/microchip/wilc1000/power.c
+> > @@ -0,0 +1,73 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2012 - 2018 Microchip Technology Inc., and its subsidiaries.
+> > + * All rights reserved.
+> 
+> This is not in the GIT repo. It should have been:
+> "Copyright (c) 2021 Microchip Technology Inc. and its subsidiaries"
+> 		^
+> 		current year
+
+v2 has no new files so this issue goes away.
+
+> > + */
+> > +#include <linux/delay.h>
+> > +#include <linux/gpio.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_gpio.h>
+> > +#include <linux/version.h>
+> > +
+> > +#include "netdev.h"
+> > +
+> > +/**
+> > + * wilc_of_parse_power_pins() - parse power sequence pins
+> > + *
+> > + * @wilc:      wilc data structure
+> > + *
+> > + * Returns:     0 on success, negative error number on failures.
+> > + */
+> > +int wilc_of_parse_power_pins(struct wilc *wilc)
+> > +{
+> > +       struct device_node *of = wilc->dev->of_node;
+> > +       struct wilc_power *power = &wilc->power;
+> > +       int ret;
+> > +
+> > +       power->gpios.reset = of_get_named_gpio_flags(of, "reset-gpios", 0,
+> > +                                                    NULL);
+> > +       power->gpios.chip_en = of_get_named_gpio_flags(of, "chip_en-gpios", 0,
+> > +                                                      NULL);
+> 
+> Consider using gpio descriptors and devm_gpiod_get().
+
+v2 uses of_get_named_gpio().
+
+> > +       if (!gpio_is_valid(power->gpios.reset))
+> > +               return 0;       /* assume SDIO power sequence driver is used */
+> 
+> In case of SDIO we should rely on mmc pwrseq all the time. It keeps things
+> cleaner. I would keep the code in this file only for SPI.
+
+Sure.
+
+> > +
+> > +       if (gpio_is_valid(power->gpios.chip_en)) {
+> > +               ret = devm_gpio_request(wilc->dev, power->gpios.chip_en,
+> > +                                       "CHIP_EN");
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +       return devm_gpio_request(wilc->dev, power->gpios.reset, "RESET");
+> > +}
+> > +EXPORT_SYMBOL_GPL(wilc_of_parse_power_pins);
+> > +
+> > +/**
+> > + * wilc_wlan_power() - handle power on/off commands
+> > + *
+> > + * @wilc:      wilc data structure
+> > + * @on:                requested power status
+> > + *
+> > + * Returns:    none
+> > + */
+> > +void wilc_wlan_power(struct wilc *wilc, bool on)
+> > +{
+> > +       if (!gpio_is_valid(wilc->power.gpios.reset)) {
+> > +               /* In case SDIO power sequence driver is used to power this
+> > +                * device then the powering sequence is handled by the bus
+> > +                * via pm_runtime_* functions. */
+> 
+> I see this function is called anyway only in SPI context, so, don't think
+> this handling for SDIO is necessary. Maybe these is something I miss with
+> regards to it. Ajay, please correct me if I'm wrong.
+> 
+> > +               return;
+> > +       }
+> > +
+> > +       if (on) {
+> > +               if (gpio_is_valid(wilc->power.gpios.chip_en)) {
+> > +                       gpio_direction_output(wilc->power.gpios.chip_en, 1);
+> > +                       mdelay(5);
+> > +               }
+> > +               gpio_direction_output(wilc->power.gpios.reset, 1);
+> > +       } else {
+> > +               gpio_direction_output(wilc->power.gpios.reset, 0);
+> > +               if (gpio_is_valid(wilc->power.gpios.chip_en))
+> > +                       gpio_direction_output(wilc->power.gpios.chip_en, 0);
+> > +       }
+> > +}
+> > +EXPORT_SYMBOL_GPL(wilc_wlan_power);
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+> > index 640850f989dd..884ad7f954d4 100644
+> > --- a/drivers/net/wireless/microchip/wilc1000/spi.c
+> > +++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+> > @@ -171,6 +171,10 @@ static int wilc_bus_probe(struct spi_device *spi)
+> >         wilc->bus_data = spi_priv;
+> >         wilc->dev_irq_num = spi->irq;
+> > 
+> > +       ret = wilc_of_parse_power_pins(wilc);
+> > +       if (ret)
+> > +               goto netdev_cleanup;
+> > +
+> >         wilc->rtc_clk = devm_clk_get_optional(&spi->dev, "rtc");
+> >         if (IS_ERR(wilc->rtc_clk)) {
+> >                 ret = PTR_ERR(wilc->rtc_clk);
+> > @@ -178,6 +182,10 @@ static int wilc_bus_probe(struct spi_device *spi)
+> >         }
+> >         clk_prepare_enable(wilc->rtc_clk);
+> > 
+> > +       /* ensure WILC1000 is reset and enabled: */
+> > +       wilc_wlan_power(wilc, false);
+> > +       wilc_wlan_power(wilc, true);
+> > +
+> >         return 0;
+> > 
+> >  netdev_cleanup:
+> > @@ -977,9 +985,10 @@ static int wilc_spi_reset(struct wilc *wilc)
+> > 
+> >  static int wilc_spi_deinit(struct wilc *wilc)
+> >  {
+> > -       /*
+> > -        * TODO:
+> > -        */
+> > +       struct wilc_spi *spi_priv = wilc->bus_data;
+> > +
+> > +       spi_priv->isinit = false;
+> > +       wilc_wlan_power(wilc, false);
+> >         return 0;
+> >  }
+> > 
+> > diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+> > index 82566544419a..f1e4ac3a2ad5 100644
+> > --- a/drivers/net/wireless/microchip/wilc1000/wlan.c
+> > +++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+> > @@ -1253,7 +1253,7 @@ void wilc_wlan_cleanup(struct net_device *dev)
+> >         wilc->rx_buffer = NULL;
+> >         kfree(wilc->tx_buffer);
+> >         wilc->tx_buffer = NULL;
+> > -       wilc->hif_func->hif_deinit(NULL);
+> > +       wilc->hif_func->hif_deinit(wilc);
+> >  }
+> > 
+> >  static int wilc_wlan_cfg_commit(struct wilc_vif *vif, int type,
+> > --
+> > 2.25.1
+> > 
 

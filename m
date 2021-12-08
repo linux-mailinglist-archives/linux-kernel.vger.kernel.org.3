@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F746D203
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7496046D20D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhLHLXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:23:06 -0500
-Received: from mga07.intel.com ([134.134.136.100]:2406 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230037AbhLHLXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:23:05 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="301193960"
+        id S232389AbhLHLZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:25:38 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:1852 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhLHLZg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 06:25:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638962525; x=1670498525;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=IajWy9b8Bgr7iVgAgBGqDBwtKDl9L+6RM0WsanXmgzI=;
+  b=Pn9pizKu88/akfIacVhzWhRRWku98+b1Cm95AEr3sTfPCvomdIPLD5WI
+   ++8uNBwu1Pib7MgCxpYO1uQoJ2xBY5IqFj3gclZH7DrqYnFGqdd/qAlvZ
+   4e5KQTmRF5zOXPngJiG+68KdoooDzYR8RNFzPw/bWJm1425lyJnhh2+So
+   gRtNPmtA0s1hHlKAf5iIUvCP1m0lCW/6wtXw/m/zNAko4epwwwxsR7oLF
+   4Yf2tcnI+bovf5U54piFw3AYBZw+LUUr9QydGaDY/7z/5/VTgdlv5j7OP
+   jPXiH0mXY6mIoyAEsZWqrVfWK8YEfUvP9e8nb84XCjogRu/EwmzsRyNiy
+   Q==;
+IronPort-SDR: yBLp8EtDMSlXy609KXKHVlHRD4ANYbBp2ipIZEXV3+87lnA/Wg2v3iYUcukz7HNQEilVbl0OZ0
+ BPWL1tJDDdLfxOmkwEhTstOrC26K/iTczlKBu8CeF4eUgSHYYPhgt/0CUm8rt/ScduqG8scTvk
+ bKtcw86Znqp+l75wOMBQnO5RFiG2dvROBNpwCVCUnPquJG0Ipm/kWuTzDXxcX6D/z0GoSt8nIc
+ B6AppeKj9nAEKPSrdv7aYdSTnjhxjEnIDql+8Ug3jAYzN4S7GXI9pBK2Xo/VI/S9vEV46ZN+rH
+ IMMFVI36/ry/pBQDAJrSwIlk
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="301193960"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 03:19:34 -0800
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="462729313"
-Received: from cahanley-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.1])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 03:19:31 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2 register
-In-Reply-To: <20211203084354.3105253-1-keescook@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20211203084354.3105253-1-keescook@chromium.org>
-Date:   Wed, 08 Dec 2021 13:19:28 +0200
-Message-ID: <87o85r4a4f.fsf@intel.com>
+   d="scan'208";a="141709074"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2021 04:22:04 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 8 Dec 2021 04:22:04 -0700
+Received: from [10.12.73.2] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Wed, 8 Dec 2021 04:22:02 -0700
+Subject: Re: [PATCH] ARM: dts: at91: sama5d2_xplained: remove
+ PA11__SDMMC0_VDDSEL from pinctrl
+To:     Eugen Hristev <eugen.hristev@microchip.com>,
+        <devicetree@vger.kernel.org>
+CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Mihai Sain" <mihai.sain@microchip.com>
+References: <20211026132034.678655-1-eugen.hristev@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <28f0898c-0d6c-a77e-4068-b49c6dd0aa64@microchip.com>
+Date:   Wed, 8 Dec 2021 12:22:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20211026132034.678655-1-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
-> The link_status array was not large enough to read the Adjust Request
-> Post Cursor2 register. Adjust the size to include it. Found with a
-> -Warray-bounds build:
->
-> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
-> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->    59 |         return link_status[r - DP_LANE0_1_STATUS];
->       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On 26/10/2021 at 15:20, Eugen Hristev wrote:
+> From: Mihai Sain <mihai.sain@microchip.com>
+> 
+> I/O voltage for eMMC is always 3.3V because PA11__SDMMC0_VDDSEL is
+> tied with 10K resistor to GND. U13 switch S1 is always selected as
+> voltage rail of 3.3V for VCCQ power pin from MPU controller and eMMC flash.
+> Removing PA11 from pinctrl because it remains unused.
+> 
+> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
 
-Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
-published in 2014, and Tegra is the only user of
-drm_dp_get_adjust_request_post_cursor().
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Instead of bumping the link status read size from 6 to 11 for all
-drivers I'd much rather see some other (maybe Tegra specific) solution
-to this.
-
-
-BR,
-Jani.
-
+Thanks, best regards,
+   Nicolas
 
 > ---
->  include/drm/drm_dp_helper.h | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-> index 472dac376284..277643d2fe2c 100644
-> --- a/include/drm/drm_dp_helper.h
-> +++ b/include/drm/drm_dp_helper.h
-> @@ -1517,7 +1517,15 @@ enum drm_dp_phy {
->  #define DP_MST_LOGICAL_PORT_0 8
->  
->  #define DP_LINK_CONSTANT_N_VALUE 0x8000
-> -#define DP_LINK_STATUS_SIZE	   6
-> +/*
-> + * DPCD registers in link_status:
-> + * Link Status:		0x202 through 0x204
-> + * Sink Status:		0x205
-> + * Adjust Request:	0x206 through 0x207
-> + * Training Score:	0x208 through 0x20b
-> + * AR Post Cursor2:	0x20c
-> + */
-> +#define DP_LINK_STATUS_SIZE	   11
->  bool drm_dp_channel_eq_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
->  			  int lane_count);
->  bool drm_dp_clock_recovery_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
+>   arch/arm/boot/dts/at91-sama5d2_xplained.dts | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/at91-sama5d2_xplained.dts b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+> index b1e854f658de..9bf2ec0ba3e2 100644
+> --- a/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+> +++ b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+> @@ -66,7 +66,7 @@ sdmmc0: sdio-host@a0000000 {
+>   			pinctrl-names = "default";
+>   			pinctrl-0 = <&pinctrl_sdmmc0_default>;
+>   			non-removable;
+> -			mmc-ddr-1_8v;
+> +			mmc-ddr-3_3v;
+>   			status = "okay";
+>   		};
+>   
+> @@ -619,10 +619,9 @@ cmd_data {
+>   						bias-disable;
+>   					};
+>   
+> -					ck_cd_rstn_vddsel {
+> +					ck_cd_rstn {
+>   						pinmux = <PIN_PA0__SDMMC0_CK>,
+>   							 <PIN_PA10__SDMMC0_RSTN>,
+> -							 <PIN_PA11__SDMMC0_VDDSEL>,
+>   							 <PIN_PA13__SDMMC0_CD>;
+>   						bias-disable;
+>   					};
+> 
+
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Nicolas Ferre

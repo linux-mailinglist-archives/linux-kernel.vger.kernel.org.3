@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D55546DD1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A03D46DD1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240340AbhLHUg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 15:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbhLHUg0 (ORCPT
+        id S240361AbhLHUhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 15:37:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54402 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231801AbhLHUhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 15:36:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C14C061746;
-        Wed,  8 Dec 2021 12:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/C1sx1Rrf17DkOHTiufRn+52P0irAvrEcXdsH2isf/0=; b=d2XLwSUa03ZKr1j4c51VJu+89D
-        BM5dTs8cSS6rCwSdXkAf7/GwPOE+zJVPJhAOvO+FcAFjzORw2wj6pVX+8WNK/2LWVHX5ry+0u5BHY
-        a38APjCYxx1FHtkSQ/xJOSP1yXu7W6Bl7087ZDe1JlO3k8mO6AQ+rFMDnUHprn1GdPVD50UXmyU5I
-        nM846QGaezcjj87lGm7smvmHXFtql1iNA1r0HZadj4zmA5JoTlzf3DD9ACdgGs5SHrwg7iM5fJl6r
-        t0nXOaTbKn0VXEVsXD7/+GwwuX2+lV/kE2BSMAKiWlXsELODsia+aANEN3KneBUc45sABauDmZ2Ao
-        nhFmsteA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv3cP-008khH-M6; Wed, 08 Dec 2021 20:32:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 96FBC9811F7; Wed,  8 Dec 2021 21:32:50 +0100 (CET)
-Date:   Wed, 8 Dec 2021 21:32:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <20211208203250.GA16608@worktop.programming.kicks-ass.net>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
- <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
- <Ya9hdlBuWYUWRQzs@hirez.programming.kicks-ass.net>
- <20211207202831.GA18361@worktop.programming.kicks-ass.net>
- <CAHk-=wg=yTX5DQ7xxD7xNhhaaEQw1POT2HQ9U0afYB+6aBTs6A@mail.gmail.com>
- <YbDmWFM5Kh1J2YqS@hirez.programming.kicks-ass.net>
- <CAHk-=wiFLbv2M9gRkh6_Zkwiza17QP0gJLAL7AgDqDArGBGpSQ@mail.gmail.com>
- <20211208184416.GY16608@worktop.programming.kicks-ass.net>
- <CAHk-=wg6reEPRY6ZDNA=3=cGRyK1csKhw0p3Ug57Z9by_Ev9Hw@mail.gmail.com>
+        Wed, 8 Dec 2021 15:37:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51B60B82283
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BE0C00446;
+        Wed,  8 Dec 2021 20:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638995630;
+        bh=r1/q2rQ0/0tYGAU7ST7svoRBXsOnMiacT4GBfHWjxdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H/fW5CAQfTPKV7dY2YpSc0nf28ZfU5WYILbZeoN/Br8Pb7agTZpThA1/8gfZ78yrf
+         em8fCmy113CGj84ziw60ukL50wqp8sWmkkF2lJOBG7FRDebRJnkg1hEYOGrOIGWkS/
+         xbwC8XwNrFZBGqUU4JfZDquY48fbbtVxJYM5dtkmphMMe57Uc5MbuwCysynOPrN0Dh
+         HR2b8KJHjQ0qdkxk4293ohUM1QihRnUp9ieLX/haPK6X+39ewvnooLAyWIGBJSLloO
+         xcuxFNLc8jpcxQQicYAphPca8CCtw8wsbMAdIWM1NpxFTLCveHF5XzWy33iZy4PCm6
+         ZajpDbIYrzROA==
+Date:   Wed, 8 Dec 2021 20:33:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
+        Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: max98357a: Add mixer control to mute/unmute speaker
+Message-ID: <YbEWqP6/TOCJn0gk@sirena.org.uk>
+References: <20211208185850.1555996-1-AjitKumar.Pandey@amd.com>
+ <1571a09a-a766-a733-e23f-36cf1ab14b86@perex.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TA1bawbBm9qo3pPG"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wg6reEPRY6ZDNA=3=cGRyK1csKhw0p3Ug57Z9by_Ev9Hw@mail.gmail.com>
+In-Reply-To: <1571a09a-a766-a733-e23f-36cf1ab14b86@perex.cz>
+X-Cookie: Alex Haley was adopted!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:50:10AM -0800, Linus Torvalds wrote:
-> On Wed, Dec 8, 2021 at 10:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > From testing xadd had different flags from add; I've not yet looked at
-> > the SDM to see what it said on the matter.
-> 
-> That should not be the case. Just checked, and it just says
-> 
->   "The CF, PF, AF, SF, ZF, and OF flags are set according to the
-> result of the addition, which is stored in the destination operand"
 
-I got the constraints wrong :/ They match now.
+--TA1bawbBm9qo3pPG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Dec 08, 2021 at 09:25:04PM +0100, Jaroslav Kysela wrote:
+> On 08. 12. 21 19:58, Ajit Kumar Pandey wrote:
+> > Add "Playback Switch" mixer control to mute or unmute speaker
+> > playback from ucm conf depend on use cases.
+
+> The "Playback Switch" is too short. It should be more specific (Headphone,
+> Speaker etc.).
+
+The device is a speaker driver, it's likely to be getting a prefix added
+as it's bound into the machine driver if there's any issues here.
+
+--TA1bawbBm9qo3pPG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGxFqcACgkQJNaLcl1U
+h9B8ZAf/UwgVSTLxxiaMAAeFArbqjreZZ+s4y1+l+ILfdze6v2axOfqMlvGgDZgT
+IF1tVBmcKT16JSQOdoRnx0Ca8h+LeHj6Oxa/3KMdB3IqXOmjr8Jt08/bxI/rZ4hE
+nSjONcl+0gDdbXXNJsyOXilXzQWrYENomcNbdAHjjkqTpDx+wLQjAr+5ssoJ0muO
+sSGAPxe6aYUHGSHgO4kwalfOOaY4ULFqOAWS3dPmgfb4R93r0+WURcBhrg8Dm0Ad
+pyEzt74ZEgKx/kTjP4ZX5oIkDuvKhg/S041WoCtdLah9k6yTeMc2x4HrTrK3fwlo
+hODKZLvxg9oiRe9zvJ89lpCdQRmAOQ==
+=IwSH
+-----END PGP SIGNATURE-----
+
+--TA1bawbBm9qo3pPG--

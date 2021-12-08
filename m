@@ -2,157 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D045A46D473
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC85D46D476
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbhLHNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234318AbhLHNeL (ORCPT
+        id S234335AbhLHNfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:35:37 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:15492 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231299AbhLHNfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:34:11 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014AC0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 05:30:39 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id 15so2177285ilq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 05:30:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iWfBbC7QhR5OPwWGNWFkv98J0dCoDSaq0A4LB4NYFN8=;
-        b=gf4o0MMp0qkVQAUuJxCHXHTFGP82gITzRvHtqK+aKS1A58gZeKUN1tTNF1XyKHTKum
-         U3LIf6q0TSABwK2hw6+NdfUzF5t9s3h8MMbfyXB+Q4Q6xCUBZqJYO5jkH2sqZoOvJpu1
-         UinD1XaYhOzC1Ev5ERdf+jjjOuw7THwr3DcQmBCw6cyyji4Qv5FagOg6PpIZKvEd3+UH
-         De1AyZMa3nEbGV3YGKylerbld36ce2XtOdX419AOykNGLrz43HBNr8xX+TROXThtjIvr
-         dIcDJqFJqNCiTjwKZG6ZL2BXYBXqpvhC+uB3QMqS3Ent4RyG3YcxASnauWg1ot+anB1L
-         75lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iWfBbC7QhR5OPwWGNWFkv98J0dCoDSaq0A4LB4NYFN8=;
-        b=2m5ZZAl22ifkDgzRAguq9/FmzAoxNmph5hp+rOZSkD7RlCK7eM7Np+S/LZYOdEg7mH
-         k7prWLXeOKIrGzcPQ9nfJWJImA7CQ+oLdh2Vz+bONKsP9nKvKiuTHUlBDbynIa6sJqFE
-         U9Wo1xND/jUSTGfc5w9zXejFxOotmr0c6Yo4F8OwqKySViY1tJl1K1QPXRfuD44HDJlP
-         cpMmdUaKCQuP5D0mdKgtI5gG9rOFqLCzFiD+gloJSbX1NTyFW7n200/ZcqnF+/8twa5e
-         eLH6Ji+XyoiA/jP2NUYUiFqEZdfwFBtzltz8AtjvUxeK5LUORNRZexxK6a3Eay1M4FlA
-         QiqA==
-X-Gm-Message-State: AOAM533yU1+jIVT2YbNk8VUThaEZskL9wpm31WGzrc1vtQ4e3Avep32V
-        7s8ztuksezgjHrbKzOgsB2F7tw==
-X-Google-Smtp-Source: ABdhPJw/1qZee6e0QouIINRk3opN8f9rvzGBPmi9P3MeuDSRjqUHFSwvCXCCbZb9HmXy48q4HZigMw==
-X-Received: by 2002:a05:6e02:2191:: with SMTP id j17mr6341614ila.120.1638970238491;
-        Wed, 08 Dec 2021 05:30:38 -0800 (PST)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id b8sm2198305ilj.0.2021.12.08.05.30.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 05:30:37 -0800 (PST)
-Message-ID: <6ec5aa90-6a7c-0efe-558f-44c5cde8ca14@linaro.org>
-Date:   Wed, 8 Dec 2021 07:30:36 -0600
+        Wed, 8 Dec 2021 08:35:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638970324; x=1670506324;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TY56zgAQOkoPTGFWpyt2EmMS4xIRb8tsNHpW/kK5u9o=;
+  b=Hd177mNOlG6up9eCOGSMoPSwEGrK2ZSuZ190XVC/VYo/7s5+9Ogenxmj
+   TfrV/qIq1LlVqL/n8gjnwgB0vTfaIHxvXYmv1AqBHBXk+n780IcU/ETRG
+   cxYixclzxvmlMauoW12SJXfOX35f/m/BR+JzbpDyZyD40Ku0mYGBX6OXy
+   XcCtLj4eoj18wfI3LhR8lMBLDM0km2GzXs7X+KsuvCQQJnU5F89Rj8i+8
+   wmW+aqYaC7L58CsdPZwC64tOQI9W5rlzfT8DVch95ytR5PtjiAF8O0RN2
+   ovTIxsbBnA79v5aikQF8YSDimdqWfExz2jtXtsbgMLR4RCrReHXbOFuJ3
+   A==;
+IronPort-SDR: CemCYyJJEaC/ZZ6yPAmD9UQ93E4Sdu91E/4YBRMj4rdoVnaSTzcpioEwxs0UE0E9swLaoJvnP+
+ xxfC185pLcMkkQ0f8eMuGyRqNY7CCo5S5y/4WBViXsgfo3a7VAUPNl6jfbUIfDwbHBRO7rKUln
+ S9EXtLWn0gQpUnzFvYl8kwO66C6Nv2AxnfsPRk0Z/k25RqFb93xUTe7brl6Qjp6o10XL7CEkuM
+ Ck7sCOyE7G+IA7lEHTLgCesGteX+CHhVc9ym+9U630BiVyqANrjWaxz4Gfwel53hUoswRSWYoG
+ aI4luFFhIEUNvIjwFiHEq1Kg
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="141718629"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2021 06:32:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 8 Dec 2021 06:32:03 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Wed, 8 Dec 2021 06:32:01 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: [GIT PULL] clk: at91: clk for 5.17
+Date:   Wed, 8 Dec 2021 14:31:45 +0100
+Message-ID: <20211208133145.28267-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 3/3] firmware: qcom: scm: Add function to set IOMMU
- pagetable addressing
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211208083423.22037-1-marijn.suijten@somainline.org>
- <20211208083423.22037-4-marijn.suijten@somainline.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20211208083423.22037-4-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 2:34 AM, Marijn Suijten wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> Add a function to change the IOMMU pagetable addressing to
-> AArch32 LPAE or AArch64. If doing that, then this must be
-> done for each IOMMU context (not necessarily at the same time).
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Marijn: ported from 5.3 to the unified architecture in 5.11]
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Are there no users of this function?	-Alex
+Stephen,
 
-> ---
->   drivers/firmware/qcom_scm.c | 16 ++++++++++++++++
->   drivers/firmware/qcom_scm.h |  1 +
->   include/linux/qcom_scm.h    |  1 +
->   3 files changed, 18 insertions(+)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index d5a9ba15e2ba..6f7096120023 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -1140,6 +1140,22 @@ int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt, u32 *resp)
->   }
->   EXPORT_SYMBOL(qcom_scm_hdcp_req);
->   
-> +int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt)
-> +{
-> +	struct qcom_scm_desc desc = {
-> +		.svc = QCOM_SCM_SVC_SMMU_PROGRAM,
-> +		.cmd = QCOM_SCM_SMMU_PT_FORMAT,
-> +		.arginfo = QCOM_SCM_ARGS(3),
-> +		.args[0] = sec_id,
-> +		.args[1] = ctx_num,
-> +		.args[2] = pt_fmt, /* 0: LPAE AArch32 - 1: AArch64 */
-> +		.owner = ARM_SMCCC_OWNER_SIP,
-> +	};
-> +
-> +	return qcom_scm_call(__scm->dev, &desc, NULL);
-> +}
-> +EXPORT_SYMBOL(qcom_scm_iommu_set_pt_format);
-> +
->   int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
->   {
->   	struct qcom_scm_desc desc = {
-> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> index bb627941702b..a348f2c214e5 100644
-> --- a/drivers/firmware/qcom_scm.h
-> +++ b/drivers/firmware/qcom_scm.h
-> @@ -120,6 +120,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
->   #define QCOM_SCM_LMH_LIMIT_DCVSH		0x10
->   
->   #define QCOM_SCM_SVC_SMMU_PROGRAM		0x15
-> +#define QCOM_SCM_SMMU_PT_FORMAT			0x01
->   #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
->   #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
->   
-> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> index 8a065f8660c1..ca4a88d7cbdc 100644
-> --- a/include/linux/qcom_scm.h
-> +++ b/include/linux/qcom_scm.h
-> @@ -108,6 +108,7 @@ extern bool qcom_scm_hdcp_available(void);
->   extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
->   			     u32 *resp);
->   
-> +extern int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt);
->   extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
->   
->   extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
-> 
+Here are the clk changes for 5.17 which collect changes to the lan966x product
+line. We agreed to include these Microchip patches into the at91 branch with
+Kavyasree and Horatiu.
 
+Please pull.
+
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-at91-5.17
+
+for you to fetch changes up to 5ad5915dea0047a6376d8f809ea3470ef68b1f92:
+
+  clk: lan966x: Extend lan966x clock driver for clock gating support (2021-12-08 11:19:20 +0100)
+
+----------------------------------------------------------------
+AT91 clk driver changes for 5.17:
+
+- Lan966x Generic Clock Controller driver and associated DT bindings
+- Lan966x clock driver extended to support clock gating
+
+----------------------------------------------------------------
+Horatiu Vultur (4):
+      clk: gate: Add devm_clk_hw_register_gate()
+      dt-bindings: clock: lan966x: Extend for clock gate support
+      dt-bindings: clock: lan966x: Extend includes with clock gates
+      clk: lan966x: Extend lan966x clock driver for clock gating support
+
+Kavyasree Kotagiri (3):
+      dt-bindings: clock: lan966x: Add binding includes for lan966x SoC clock IDs
+      dt-bindings: clock: lan966x: Add LAN966X Clock Controller
+      clk: lan966x: Add lan966x SoC clock driver
+
+ .../bindings/clock/microchip,lan966x-gck.yaml      |  60 +++++
+ drivers/clk/Kconfig                                |   7 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-gate.c                             |  35 +++
+ drivers/clk/clk-lan966x.c                          | 293 +++++++++++++++++++++
+ include/dt-bindings/clock/microchip,lan966x.h      |  34 +++
+ include/linux/clk-provider.h                       |  23 ++
+ 7 files changed, 453 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/microchip,lan966x-gck.yaml
+ create mode 100644 drivers/clk/clk-lan966x.c
+ create mode 100644 include/dt-bindings/clock/microchip,lan966x.h
+
+-- 
+Nicolas Ferre

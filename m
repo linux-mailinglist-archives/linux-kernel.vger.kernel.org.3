@@ -2,250 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CF046D879
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CDA46D87A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237070AbhLHQhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:37:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44688 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbhLHQhF (ORCPT
+        id S237117AbhLHQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:37:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48712 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231303AbhLHQh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:37:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Dec 2021 11:37:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638981237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kHcHzSpXdlOuf9C78Arorh98ECVCOMGS+rBAQ8eq7VE=;
+        b=EZjeKk0K+fE3SbLXsQ+o2OPtCfyKwqRDVZjz8psusUFg41q9ix/FKmaBAQN0ncMYbgFqlL
+        i/yywJmpRfsJwvC4WG0UDi1Ely4wDLMcYZsIZhwD7TvzvDkjMVmZPN1T7MTDvqLef+6Vks
+        mo+AJENqIMbPDuxW1X4SlRy7HHZRKnQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-Rm8rPcM5NLWHI0HRgJfTzw-1; Wed, 08 Dec 2021 11:33:53 -0500
+X-MC-Unique: Rm8rPcM5NLWHI0HRgJfTzw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B249FB82192;
-        Wed,  8 Dec 2021 16:33:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7124C00446;
-        Wed,  8 Dec 2021 16:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638981211;
-        bh=9OYMHuvosQxsr3N5QYHGfqV+5KdYvkegPY+0KP8eklA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vVVItom9vZbAhP8YUVhs3+YqMxNVWyw0RglK/IzOg9Ff3VlEf9yqzX90rGAnWK0Ht
-         wGq5nhRGIdGBs6YF1vtEfg6EYKYOiRXAofViK1IM0x/O76Lfyu4HT6adwxfzshySv/
-         VAXKDezLKfb2oau7zj+kif3m8d637gQsOI6kyvaw=
-Date:   Wed, 8 Dec 2021 17:33:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tun: avoid double free in tun_free_netdev
-Message-ID: <YbDeWOnESvNCCX9M@kroah.com>
-References: <1638974605-24085-1-git-send-email-george.kennedy@oracle.com>
- <YbDR/JStiIco3HQS@kroah.com>
- <022193b1-4ddd-f04e-aafa-ce249ec6d120@oracle.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C17C110247A6;
+        Wed,  8 Dec 2021 16:33:50 +0000 (UTC)
+Received: from [10.39.192.155] (unknown [10.39.192.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C00AF10016F5;
+        Wed,  8 Dec 2021 16:33:48 +0000 (UTC)
+Message-ID: <b2c95cd3-27b3-9248-e689-b8a47a831225@redhat.com>
+Date:   Wed, 8 Dec 2021 17:33:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <022193b1-4ddd-f04e-aafa-ce249ec6d120@oracle.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFCv3 3/7] HID: core: Add support for USI style events
+Content-Language: en-US
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+References: <20211201164301.44653-1-tero.kristo@linux.intel.com>
+ <20211201164301.44653-4-tero.kristo@linux.intel.com>
+ <CAO-hwJ+hzHNZVUrL9vC02t4GMBnaLym_vz7JT6+_cKEK8wEAMA@mail.gmail.com>
+In-Reply-To: <CAO-hwJ+hzHNZVUrL9vC02t4GMBnaLym_vz7JT6+_cKEK8wEAMA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 11:29:47AM -0500, George Kennedy wrote:
+On 12/8/21 16:18, Benjamin Tissoires wrote:
+> On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>>
+>> Add support for Universal Stylus Interface (USI) style events to the HID
+>> core and input layers.
+>>
+>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+>> ---
+>>   drivers/hid/hid-input.c                | 18 ++++++++++++++++++
+>>   include/linux/mod_devicetable.h        |  2 +-
+>>   include/uapi/linux/hid.h               | 10 ++++++++++
+>>   include/uapi/linux/input-event-codes.h | 22 ++++++++++++++--------
+>>   4 files changed, 43 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+>> index 73c2edda742e..b428ee9b4d9b 100644
+>> --- a/drivers/hid/hid-input.c
+>> +++ b/drivers/hid/hid-input.c
+>> @@ -829,6 +829,10 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+>>                          }
+>>                          break;
+>>
+>> +               case 0x38: /* Transducer Index */
+>> +                       map_msc(MSC_PEN_ID);
 > 
+> This is the new slot version for pens, I am not sure we really want to
+> blindly introduce that without testing.
 > 
-> On 12/8/2021 10:40 AM, Greg KH wrote:
-> > On Wed, Dec 08, 2021 at 09:43:25AM -0500, George Kennedy wrote:
-> > > Avoid double free in tun_free_netdev() by clearing tun->security
-> > > after free and using it to indicate that free has already been done.
-> > > 
-> > > BUG: KASAN: double-free or invalid-free in selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
-> > > 
-> > > CPU: 0 PID: 25750 Comm: syz-executor416 Not tainted 5.16.0-rc2-syzk #1
-> > > Hardware name: Red Hat KVM, BIOS
-> > > Call Trace:
-> > >   <TASK>
-> > >   __dump_stack lib/dump_stack.c:88 [inline]
-> > >   dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
-> > >   print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:247
-> > >   kasan_report_invalid_free+0x55/0x80 mm/kasan/report.c:372
-> > >   ____kasan_slab_free mm/kasan/common.c:346 [inline]
-> > >   __kasan_slab_free+0x107/0x120 mm/kasan/common.c:374
-> > >   kasan_slab_free include/linux/kasan.h:235 [inline]
-> > >   slab_free_hook mm/slub.c:1723 [inline]
-> > >   slab_free_freelist_hook mm/slub.c:1749 [inline]
-> > >   slab_free mm/slub.c:3513 [inline]
-> > >   kfree+0xac/0x2d0 mm/slub.c:4561
-> > >   selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
-> > >   security_tun_dev_free_security+0x4f/0x90 security/security.c:2342
-> > >   tun_free_netdev+0xe6/0x150 drivers/net/tun.c:2215
-> > >   netdev_run_todo+0x4df/0x840 net/core/dev.c:10627
-> > >   rtnl_unlock+0x13/0x20 net/core/rtnetlink.c:112
-> > >   __tun_chr_ioctl+0x80c/0x2870 drivers/net/tun.c:3302
-> > >   tun_chr_ioctl+0x2f/0x40 drivers/net/tun.c:3311
-> > >   vfs_ioctl fs/ioctl.c:51 [inline]
-> > >   __do_sys_ioctl fs/ioctl.c:874 [inline]
-> > >   __se_sys_ioctl fs/ioctl.c:860 [inline]
-> > >   __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
-> > >   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >   do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
-> > >   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > 
-> > > Reported-by: syzkaller <syzkaller@googlegroups.com>
-> > > Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-> > > ---
-> > >   drivers/net/tun.c | 11 +++++++++--
-> > >   1 file changed, 9 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> > > index 1572878..617c71f 100644
-> > > --- a/drivers/net/tun.c
-> > > +++ b/drivers/net/tun.c
-> > > @@ -2212,7 +2212,10 @@ static void tun_free_netdev(struct net_device *dev)
-> > >   	dev->tstats = NULL;
-> > >   	tun_flow_uninit(tun);
-> > > -	security_tun_dev_free_security(tun->security);
-> > > +	if (tun->security) {
-> > > +		security_tun_dev_free_security(tun->security);
-> > > +		tun->security = NULL;
-> > > +	}
-> > >   	__tun_set_ebpf(tun, &tun->steering_prog, NULL);
-> > >   	__tun_set_ebpf(tun, &tun->filter_prog, NULL);
-> > >   }
-> > > @@ -2779,7 +2782,11 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
-> > >   err_free_flow:
-> > >   	tun_flow_uninit(tun);
-> > > -	security_tun_dev_free_security(tun->security);
-> > > +	if (tun->security) {
-> > > +		security_tun_dev_free_security(tun->security);
-> > > +		/* Let tun_free_netdev() know the free has already been done. */
-> > > +		tun->security = NULL;
-> > What protects this from racing with tun_free_netdev()?
-> tun_free_netdev() is called after err_free_flow has already done the free.
-> rtnl_lock() and rtnl_unlock() prevent the race.
+> Do you have a panel that supports multiple values (at once) for this
+> usage (2 pens???). If not, I would simply skip that usage until we get
+> an actual hardware that makes use of it.
+> 
+>> +                       break;
+>> +
+>>                  case 0x3b: /* Battery Strength */
+>>                          hidinput_setup_battery(device, HID_INPUT_REPORT, field, false);
+>>                          usage->type = EV_PWR;
+>> @@ -876,6 +880,20 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+>>                          map_msc(MSC_SERIAL);
+>>                          break;
+>>
+>> +               case 0x5c: map_msc(MSC_PEN_COLOR);              break;
+>> +               case 0x5e: map_msc(MSC_PEN_LINE_WIDTH);         break;
+> 
+> We already have ABS_TOOL_WIDTH which seems to relate to that very closely.
+> 
+>> +
+>> +               case 0x70:
+>> +               case 0x71:
+>> +               case 0x72:
+>> +               case 0x73:
+>> +               case 0x74:
+>> +               case 0x75:
+>> +               case 0x76:
+>> +               case 0x77:
+>> +                       map_msc(MSC_PEN_LINE_STYLE);
+> 
+> Nope, this is wrong. It took me a long time to understand the report
+> descriptor (see my last reply to your v2).
+> Basically, we need one input event for each value between 0x72 and
+> 0x77. HID core should translate the array of 1 element into a set of
+> {depressed usage, pressed usage} and from the user-space, we will get
+> "MSC_PEN_STYLE_CHISEL_MARKER 1" for instance.
 
-Ok, good, it wasn't obvious from the context here.
+This seems to be working (on top of this RFC):
+---
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index cec0470e5485..18035c63c358 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -1027,8 +1027,12 @@ static const char *misc[MSC_MAX + 1] = {
+  	[MSC_SERIAL] = "Serial",	[MSC_PULSELED] = "Pulseled",
+  	[MSC_GESTURE] = "Gesture",	[MSC_RAW] = "RawData",
+  	[MSC_PEN_ID] = "PenID",		[MSC_PEN_COLOR] "PenColor",
+-	[MSC_PEN_LINE_WIDTH] = "PenLineWidth",
+-	[MSC_PEN_LINE_STYLE] = "PenLineStyle",
++	[MSC_PEN_LINE_STYLE_INK] = "PenLineStyleInk",
++	[MSC_PEN_LINE_STYLE_PENCIL] = "PenLineStylePencil",
++	[MSC_PEN_LINE_STYLE_HIGHLIGHTER] = "PenLineStyleHighlighter",
++	[MSC_PEN_LINE_STYLE_CHISEL_MARKER] = "PenLineStyleChiselMarker",
++	[MSC_PEN_LINE_STYLE_BRUSH] = "PenLineStyleBrush",
++	[MSC_PEN_LINE_STYLE_NO_PREFERENCE] = "PenLineStyleNoPreference",
+  };
+  
+  static const char *leds[LED_MAX + 1] = {
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 079e67c5168f..837585f4e673 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -832,8 +832,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+  			break;
+  
+  		case 0x38: /* Transducer Index */
+-			map_msc(MSC_PEN_ID);
+-			break;
++			goto ignore;
+  
+  		case 0x3b: /* Battery Strength */
+  			hidinput_setup_battery(device, HID_INPUT_REPORT, field, false);
+@@ -882,18 +881,36 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+  			map_msc(MSC_SERIAL);
+  			break;
+  
+-		case 0x5c: map_msc(MSC_PEN_COLOR);		break;
+-		case 0x5e: map_msc(MSC_PEN_LINE_WIDTH);		break;
+-
+-		case 0x70:
+-		case 0x71:
+-		case 0x72:
+-		case 0x73:
+-		case 0x74:
+-		case 0x75:
+-		case 0x76:
+-		case 0x77:
+-			map_msc(MSC_PEN_LINE_STYLE);
++		case 0x5c: /* Digitizer Preferred Color */
++			map_msc(MSC_PEN_COLOR);
++			break;
++
++		case 0x5e: /* Digitizer Preferred Line Width */
++			map_abs_clear(ABS_TOOL_WIDTH);
++			break;
++
++
++		case 0x70: /* Preferred Line Style -> not an input usage*/
++		case 0x71: /* Preferred Line Style is Locked */
++			goto ignore;
++
++		case 0x72: /* Ink */
++			map_msc(MSC_PEN_LINE_STYLE_INK);
++			break;
++		case 0x73: /* Pencil */
++			map_msc(MSC_PEN_LINE_STYLE_PENCIL);
++			break;
++		case 0x74: /* Highlighter */
++			map_msc(MSC_PEN_LINE_STYLE_HIGHLIGHTER);
++			break;
++		case 0x75: /* Chisel Marker */
++			map_msc(MSC_PEN_LINE_STYLE_CHISEL_MARKER);
++			break;
++		case 0x76: /* Brush */
++			map_msc(MSC_PEN_LINE_STYLE_BRUSH);
++			break;
++		case 0x77: /* No Preference */
++			map_msc(MSC_PEN_LINE_STYLE_NO_PREFERENCE);
+  			break;
+  
+  		default:  goto unknown;
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index a76d37082ab5..bf2b76a6e7e8 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -322,7 +322,7 @@ struct pcmcia_device_id {
+  #define INPUT_DEVICE_ID_KEY_MAX		0x2ff
+  #define INPUT_DEVICE_ID_REL_MAX		0x0f
+  #define INPUT_DEVICE_ID_ABS_MAX		0x3f
+-#define INPUT_DEVICE_ID_MSC_MAX		0x09
++#define INPUT_DEVICE_ID_MSC_MAX		0x0d
+  #define INPUT_DEVICE_ID_LED_MAX		0x0f
+  #define INPUT_DEVICE_ID_SND_MAX		0x07
+  #define INPUT_DEVICE_ID_FF_MAX		0x7f
+diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+index 98295f71941a..ff705245b7ae 100644
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -908,12 +908,16 @@
+  #define MSC_SCAN			0x04
+  #define MSC_TIMESTAMP			0x05
+  /* USI Pen events */
+-#define MSC_PEN_ID			0x06
+-#define MSC_PEN_COLOR			0x07
+-#define MSC_PEN_LINE_WIDTH		0x08
+-#define MSC_PEN_LINE_STYLE		0x09
++#define MSC_PEN_ID				0x06
++#define MSC_PEN_COLOR				0x07
++#define MSC_PEN_LINE_STYLE_INK			0x08
++#define MSC_PEN_LINE_STYLE_PENCIL		0x09
++#define MSC_PEN_LINE_STYLE_HIGHLIGHTER		0x0a
++#define MSC_PEN_LINE_STYLE_CHISEL_MARKER	0x0b
++#define MSC_PEN_LINE_STYLE_BRUSH		0x0c
++#define MSC_PEN_LINE_STYLE_NO_PREFERENCE	0x0d
+  /* TODO: Add USI diagnostic & battery events too */
+-#define MSC_MAX				0x09
++#define MSC_MAX				0x0d
+  #define MSC_CNT				(MSC_MAX + 1)
+  
+  /*
+---
+
+Cheers,
+Benjamin
 
 > 
-> Here is the full KASAN report:
+> And *maybe* we could even use KEY events there, so we could remap them
+> (but that's a very distant maybe).
 > 
-> Syzkaller hit 'KASAN: invalid-free in selinux_tun_dev_free_security' bug.
+>> +                       break;
+>> +
+>>                  default:  goto unknown;
+>>                  }
+>>                  break;
+>> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+>> index ae2e75d15b21..4ff40be7676b 100644
+>> --- a/include/linux/mod_devicetable.h
+>> +++ b/include/linux/mod_devicetable.h
+>> @@ -322,7 +322,7 @@ struct pcmcia_device_id {
+>>   #define INPUT_DEVICE_ID_KEY_MAX                0x2ff
+>>   #define INPUT_DEVICE_ID_REL_MAX                0x0f
+>>   #define INPUT_DEVICE_ID_ABS_MAX                0x3f
+>> -#define INPUT_DEVICE_ID_MSC_MAX                0x07
+>> +#define INPUT_DEVICE_ID_MSC_MAX                0x09
+>>   #define INPUT_DEVICE_ID_LED_MAX                0x0f
+>>   #define INPUT_DEVICE_ID_SND_MAX                0x07
+>>   #define INPUT_DEVICE_ID_FF_MAX         0x7f
+>> diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
+>> index 861bfbbfc565..60ef9b615a1a 100644
+>> --- a/include/uapi/linux/hid.h
+>> +++ b/include/uapi/linux/hid.h
+>> @@ -255,6 +255,7 @@
+>>   #define HID_DG_TOUCH                           0x000d0033
+>>   #define HID_DG_UNTOUCH                         0x000d0034
+>>   #define HID_DG_TAP                             0x000d0035
+>> +#define HID_DG_TRANSDUCER_INDEX                        0x000d0038
+>>   #define HID_DG_TABLETFUNCTIONKEY               0x000d0039
+>>   #define HID_DG_PROGRAMCHANGEKEY                        0x000d003a
+>>   #define HID_DG_BATTERYSTRENGTH                 0x000d003b
+>> @@ -267,6 +268,15 @@
+>>   #define HID_DG_BARRELSWITCH                    0x000d0044
+>>   #define HID_DG_ERASER                          0x000d0045
+>>   #define HID_DG_TABLETPICK                      0x000d0046
+>> +#define HID_DG_PEN_COLOR                       0x000d005c
+>> +#define HID_DG_PEN_LINE_WIDTH                  0x000d005e
+>> +#define HID_DG_PEN_LINE_STYLE                  0x000d0070
+>> +#define HID_DG_PEN_LINE_STYLE_INK              0x000d0072
+>> +#define HID_DG_PEN_LINE_STYLE_PENCIL           0x000d0073
+>> +#define HID_DG_PEN_LINE_STYLE_HIGHLIGHTER      0x000d0074
+>> +#define HID_DG_PEN_LINE_STYLE_CHISEL_MARKER    0x000d0075
+>> +#define HID_DG_PEN_LINE_STYLE_BRUSH            0x000d0076
+>> +#define HID_DG_PEN_LINE_STYLE_NO_PREFERENCE    0x000d0077
 > 
-> ==================================================================
-> BUG: KASAN: double-free or invalid-free in
-> selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
+> Could you integrate that patch before my patch "HID: export the
+> various HID defines from the spec in the uapi"? And also have it as a
+> separate patch from the mapping?
+> This way I can schedule that part earlier before we settle on the
+> actual user space usages.
 > 
-> CPU: 0 PID: 25750 Comm: syz-executor416 Not tainted 5.16.0-rc2-syzk #1
-> Hardware name: Red Hat KVM, BIOS 1.13.0-2.module+el8.3.0+7860+a7792d29
-> 04/01/2014
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
->  print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:247
->  kasan_report_invalid_free+0x55/0x80 mm/kasan/report.c:372
->  ____kasan_slab_free mm/kasan/common.c:346 [inline]
->  __kasan_slab_free+0x107/0x120 mm/kasan/common.c:374
->  kasan_slab_free include/linux/kasan.h:235 [inline]
->  slab_free_hook mm/slub.c:1723 [inline]
->  slab_free_freelist_hook mm/slub.c:1749 [inline]
->  slab_free mm/slub.c:3513 [inline]
->  kfree+0xac/0x2d0 mm/slub.c:4561
->  selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
->  security_tun_dev_free_security+0x4f/0x90 security/security.c:2342
->  tun_free_netdev+0xe6/0x150 drivers/net/tun.c:2215
->  netdev_run_todo+0x4df/0x840 net/core/dev.c:10627
->  rtnl_unlock+0x13/0x20 net/core/rtnetlink.c:112
->  __tun_chr_ioctl+0x80c/0x2870 drivers/net/tun.c:3302
->  tun_chr_ioctl+0x2f/0x40 drivers/net/tun.c:3311
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fd496f4c289
-> Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00 48 89 f8 48 89 f7
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff
-> 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
-> RSP: 002b:00007fd497632e28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000603190 RCX: 00007fd496f4c289
-> RDX: 0000000020000240 RSI: 00000000400454ca RDI: 0000000000000003
-> RBP: 0000000000603198 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000060319c
-> R13: 0000000000021000 R14: 0000000000000000 R15: 00007fd497633700
->  </TASK>
+>>
+>>   #define HID_CP_CONSUMERCONTROL                 0x000c0001
+>>   #define HID_CP_NUMERICKEYPAD                   0x000c0002
+>> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+>> index 225ec87d4f22..98295f71941a 100644
+>> --- a/include/uapi/linux/input-event-codes.h
+>> +++ b/include/uapi/linux/input-event-codes.h
+>> @@ -901,14 +901,20 @@
+>>    * Misc events
+>>    */
+>>
+>> -#define MSC_SERIAL             0x00
+>> -#define MSC_PULSELED           0x01
+>> -#define MSC_GESTURE            0x02
+>> -#define MSC_RAW                        0x03
+>> -#define MSC_SCAN               0x04
+>> -#define MSC_TIMESTAMP          0x05
+>> -#define MSC_MAX                        0x07
+>> -#define MSC_CNT                        (MSC_MAX+1)
+>> +#define MSC_SERIAL                     0x00
+>> +#define MSC_PULSELED                   0x01
+>> +#define MSC_GESTURE                    0x02
+>> +#define MSC_RAW                                0x03
+>> +#define MSC_SCAN                       0x04
+>> +#define MSC_TIMESTAMP                  0x05
+>> +/* USI Pen events */
+>> +#define MSC_PEN_ID                     0x06
+>> +#define MSC_PEN_COLOR                  0x07
+>> +#define MSC_PEN_LINE_WIDTH             0x08
 > 
-> Allocated by task 25750:
->  kasan_save_stack+0x26/0x60 mm/kasan/common.c:38
->  kasan_set_track mm/kasan/common.c:46 [inline]
->  set_alloc_info mm/kasan/common.c:434 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:513 [inline]
->  __kasan_kmalloc+0x8d/0xb0 mm/kasan/common.c:522
->  kasan_kmalloc include/linux/kasan.h:269 [inline]
->  kmem_cache_alloc_trace+0x18a/0x2d0 mm/slub.c:3261
->  kmalloc include/linux/slab.h:590 [inline]
->  kzalloc include/linux/slab.h:724 [inline]
->  selinux_tun_dev_alloc_security+0x50/0x180 security/selinux/hooks.c:5594
->  security_tun_dev_alloc_security+0x51/0xb0 security/security.c:2336
->  tun_set_iff.constprop.66+0x107f/0x1d10 drivers/net/tun.c:2727
->  __tun_chr_ioctl+0xdf8/0x2870 drivers/net/tun.c:3026
->  tun_chr_ioctl+0x2f/0x40 drivers/net/tun.c:3311
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> PEN_LINE_WIDTH should be dropped.
 > 
-> Freed by task 25750:
->  kasan_save_stack+0x26/0x60 mm/kasan/common.c:38
->  kasan_set_track+0x25/0x30 mm/kasan/common.c:46
->  kasan_set_free_info+0x24/0x40 mm/kasan/generic.c:370
->  ____kasan_slab_free mm/kasan/common.c:366 [inline]
->  ____kasan_slab_free mm/kasan/common.c:328 [inline]
->  __kasan_slab_free+0xe8/0x120 mm/kasan/common.c:374
->  kasan_slab_free include/linux/kasan.h:235 [inline]
->  slab_free_hook mm/slub.c:1723 [inline]
->  slab_free_freelist_hook mm/slub.c:1749 [inline]
->  slab_free mm/slub.c:3513 [inline]
->  kfree+0xac/0x2d0 mm/slub.c:4561
->  selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
->  security_tun_dev_free_security+0x4f/0x90 security/security.c:2342
->  tun_set_iff.constprop.66+0x9f9/0x1d10 drivers/net/tun.c:2782
->  __tun_chr_ioctl+0xdf8/0x2870 drivers/net/tun.c:3026
->  tun_chr_ioctl+0x2f/0x40 drivers/net/tun.c:3311
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> +#define MSC_PEN_LINE_STYLE             0x09
 > 
-> The buggy address belongs to the object at ffff888066b87370
->  which belongs to the cache kmalloc-8 of size 8
-> The buggy address is located 0 bytes inside of
->  8-byte region [ffff888066b87370, ffff888066b87378)
-> The buggy address belongs to the page:
-> page:0000000003b0639d refcount:1 mapcount:0 mapping:0000000000000000
-> index:0x0 pfn:0x66b87
-> flags: 0xfffffc0000200(slab|node=0|zone=1|lastcpupid=0x1fffff)
-> raw: 000fffffc0000200 dead000000000100 dead000000000122 ffff888100042280
-> raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
+> Again, PEN_LINE_STYLE is HID only and we should only map the values,
+> not the title of the array.
 > 
-> Memory state around the buggy address:
->  ffff888066b87200: fc fb fc fc fc fc 00 fc fc fc fc fa fc fc fc fc
->  ffff888066b87280: fa fc fc fc fc fa fc fc fc fc fb fc fc fc fc fa
-> >ffff888066b87300: fc fc fc fc 00 fc fc fc fc fb fc fc fc fc fa fc
->                                                              ^
->  ffff888066b87380: fc fc fc fa fc fc fc fc 00 fc fc fc fc fa fc fc
->  ffff888066b87400: fc fc fa fc fc fc fc fa fc fc fc fc fa fc fc fc
-> ==================================================================
+> Cheers,
+> Benjamin
 > 
-> > 
-> > And why can't security_tun_dev_free_security() handle a NULL value?
-> 
-> security_tun_dev_free_security() could be modified to handle the NULL value.
+>> +/* TODO: Add USI diagnostic & battery events too */
+>> +#define MSC_MAX                                0x09
+>> +#define MSC_CNT                                (MSC_MAX + 1)
+>>
+>>   /*
+>>    * LEDs
+>> --
+>> 2.25.1
+>>
 
-That's fine, most of this patch would still be needed even if you do
-that.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

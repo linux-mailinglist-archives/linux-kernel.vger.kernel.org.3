@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A678746DEFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE2F46DF00
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241135AbhLHXZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S241140AbhLHX0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235172AbhLHXZv (ORCPT
+        with ESMTP id S235103AbhLHX0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:25:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A5DC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 15:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KIQEGoY4fUnWl+kJio7CsnZTP/syTcCP6a2XL8diqvI=; b=k6XOg/QBVgraB+NcNH6jylobg6
-        V2qvv7c5gAmx/jq/pcVEVktr/VkKvd+FVsTduFhsGCe5uBlGCN1CiqEpcoNw0dvtYKhN6vHEgzcPk
-        8gAf5zMKnTD13k1NOjt4NngUtf6zJaexL3B2RlY8RUf8Q4hC7mXB5OKv0nA8J0M8OKwjkDOhZTU2S
-        /MnMBqJS/cXcWws4BeqDBenS4IxnaR6Tg0dgW/Y8uCtZX6uROP80B8XmCYK6qqZomcDNwmYLwf7fQ
-        9w/dKZgqPEy7GUQqrBXwBZu7ND8zpy8p9qkkJVx78EBhx3HX0quMhuBuUrcE1x4o0+um8WP5mQMoB
-        JHKSLHRg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv6GB-008qxE-W8; Wed, 08 Dec 2021 23:22:04 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AE6F4981728; Thu,  9 Dec 2021 00:22:03 +0100 (CET)
-Date:   Thu, 9 Dec 2021 00:22:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events
- too
-Message-ID: <20211208232203.GC16608@worktop.programming.kicks-ass.net>
-References: <20211205224843.1503081-1-namhyung@kernel.org>
+        Wed, 8 Dec 2021 18:26:45 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9B9C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 15:23:13 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id t5so13905093edd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 15:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=12eYC9cttLky1xiGkzKZrN85X2r4m8IpTalt9bP6nHY=;
+        b=QlyaI3Ku1W5hlIPYgHKuslvFHFWzLFTdq423Ieu6TH5hTrBvHrZGQLiAA0Y2A3UqnQ
+         TG2uu6OZ6sCgGywg71Nlh1wTAbDV+IsC6OIoD9k0ezM3qWuscU/NNrsWdyyPvA/FdN3v
+         hLMfADD24WDkzP3M92kz41O29cuWzDgIwUnAc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=12eYC9cttLky1xiGkzKZrN85X2r4m8IpTalt9bP6nHY=;
+        b=oHmIAYEr1PSrSty/g5RMkP3YRHj39t6Fb11MFm2/TugEqnliLFULfd5y4w3mv9CwtN
+         2ldD7RudnePBA5anwMxr8O7QZJFQWzRKEccnoO0L0oyOY2sivRf+QibHCQPmYQ0TYI0h
+         ve2If379wFtsgsxLIohQYRDEMLfTvcN9ojyirqHNpW1mxkz0cKvYM2XwSdJoBvZeT0sC
+         +aErYvjom9lhGjc1F12sJyxJBPH8RdiHr4lSGzv1LbpZY7ZAmm/t/DdQ1Xx67e+8ZZk0
+         XUymS+doifkAkOp6Txq9c9mf5G4NZrbsszjRVFzSgrrt03HEAh7hDgXoRIUvqIQ+O+iq
+         C9oQ==
+X-Gm-Message-State: AOAM532cGOQay8AOIKyJDFMUrMxjZvev7ypGV8GpE+KP+GGwuC+DWhl3
+        AS9YMIXEdFO3MTxaOWUwYy6mnw==
+X-Google-Smtp-Source: ABdhPJwMP2aotTKfhTbOOW19RqP4FL6+EYSjrQ6GDEnSdFMsqfAKIE6z7H9WLhPIVqkR19LBd6CRYg==
+X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr22956922edb.345.1639005791724;
+        Wed, 08 Dec 2021 15:23:11 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.69.72])
+        by smtp.gmail.com with ESMTPSA id y15sm2701371edr.35.2021.12.08.15.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 15:23:11 -0800 (PST)
+Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+To:     Kees Cook <keescook@chromium.org>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20211203100846.3977195-1-keescook@chromium.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <037c44cb-c5bc-9a9a-0c16-219bdf858ea7@rasmusvillemoes.dk>
+Date:   Thu, 9 Dec 2021 00:23:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205224843.1503081-1-namhyung@kernel.org>
+In-Reply-To: <20211203100846.3977195-1-keescook@chromium.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
-> While commit f79256532682 ("perf/core: fix userpage->time_enabled of
-> inactive events") fixed this problem for user rdpmc usage,
+On 03/12/2021 11.08, Kees Cook wrote:
+> It's common practice to cast small variable arguments to the find_*_bit()
+> helpers to unsigned long and then use a size argument smaller than
+> sizeof(unsigned long):
+> 
+> 	unsigned int bits;
+> 	...
+> 	out = find_first_bit((unsigned long *)&bits, 32);
 
-You're referring to 'this problem' before actually describing a problem :-(
+Those call sites need to be fixed, they are broken on BE anyway. And
+your __find_bits_deref does nothing to fix (paper over) that if, say,
+the caller uses an u32 to store an 8-bit bitmap.
 
-Also, you now have me looking at that commit again, and I'm still hating
-it. Also, I'm again struggling to make sense of it; all except the very
-last hunk that is.
+So NAK.
 
-So the whole, full-fat, mmap self-monitor thing looks like:
-
-
-	u32 seq, time_mult, time_shift, index, width = 64;
-	u64 count, enabled, running;
-	u64 cyc, time_offset, time_cycles = 0, time_mask = ~0ULL;
-	u64 quot, rem, delta;
-	s64 pmc = 0;
-
-	do {
-		seq = pc->lock;
-		barrier();
-
-		enabled = pc->time_enabled;
-		running = pc->time_running;
-
-		if (pc->cap_user_time && enabled != running) {
-			cyc = rdtsc();
-			time_offset = pc->time_offset;
-			time_mult   = pc->time_mult;
-			time_shift  = pc->time_shift;
-		}
-
-		if (pc->cap_user_time_short) {
-			time_cycles = pc->time_cycles;
-			time_mask   = pc->time_mask;
-		}
-
-		index = pc->index;
-		count = pc->offset;
-		if (pc->cap_user_rdpmc && index) {
-			width = pc->pmc_width;
-			pmc = rdpmc(index - 1);
-		}
-
-		barrier();
-	} while (pc->lock != seq);
-
-	if (width < 64) {
-		pmc <<= 64 - width;
-		pmc >>= 64 - width;
-	}
-	count += pmc;
-
-	cyc = time_cycles + ((cyc - time_cycles) & time_mask);
-
-	quot = (cyc >> time_shift);
-	rem = cyc & ((1ULL < time_shift) - 1);
-	delta = time_offset + quot * time_mult +
-		((rem * time_mult) >> time_shift);
-
-	enabled += delta;
-	if (index)
-		running += delta;
-
-	quot = count / running;
-	rem  = count % running;
-	count = quot * enabled + (rem * enabled) / running;
-
-
-Now, the thing that sticks out to me is that 'enabled' is
-unconditionally advanced. It *always* runs.
-
-So how can not updating ->time_enabled when the counter is INACTIVE due
-to rotation (which causes ->index == 0), cause enabled to not be
-up-to-date?
-
-Can we please figure that out so I can go revert all but the last hunk
-of that patch?
+Rasmus

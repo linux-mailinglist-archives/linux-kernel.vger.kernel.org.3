@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C030546D5C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A33D46D5C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbhLHOhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:37:13 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14100 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235192AbhLHOhL (ORCPT
+        id S235221AbhLHOhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231621AbhLHOho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:37:11 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8DMg0X020975;
-        Wed, 8 Dec 2021 14:33:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xIW1H2jSzOIOpq9Vd7TDRv1GCS4O1mkWCPZuT3KG6Ts=;
- b=XuiFqogsW0B+k+DebHrrdmFfZ0IVFRQtt5gJ2ypdT/IQWF4zp8KqdPNCV1AaYGCQXBfI
- CxPyMFXkBt1WaCAGSKw+j3ZZySB4U/1zXY29FCSDD7UK/R06irSupA/Nk3K25kMehJvH
- PxyrkLiwvC4tsLoCQFL8LNmGgUP6SyMlN2XVMCbcArWtYBNXIM7WDo5BxI0YSWZxV+VE
- L/2yvfmiiUeytxhM80/pJzBSy3lUMMHgDtWci1Ii8z9q/UpTMbhLeyrMuq5Z821hPQZl
- znzcMQ390tL53DlUdtLgvASYDD9lgvfp0x4pU8KBsSEcWuMgZGvQZBCmjwhEWZNmCEH8 yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctwhp9gvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:33:39 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8EIrUw038725;
-        Wed, 8 Dec 2021 14:33:38 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctwhp9gvb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:33:38 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8ERtZ1016538;
-        Wed, 8 Dec 2021 14:33:37 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3cqyycn2b1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:33:37 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8EXXcG60031350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 14:33:33 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7964136068;
-        Wed,  8 Dec 2021 14:33:33 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BE69B13604F;
-        Wed,  8 Dec 2021 14:33:31 +0000 (GMT)
-Received: from farman-thinkpad-t470p (unknown [9.211.151.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 14:33:31 +0000 (GMT)
-Message-ID: <920e05abe1116263a00a51104feb80a07acca0c1.camel@linux.ibm.com>
-Subject: Re: [PATCH 01/32] s390/sclp: detect the zPCI interpretation facility
-From:   Eric Farman <farman@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Dec 2021 09:33:30 -0500
-In-Reply-To: <3ed8f5ca-e508-e261-e71d-875f5762f2f9@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-2-mjrosato@linux.ibm.com>
-         <3ed8f5ca-e508-e261-e71d-875f5762f2f9@linux.ibm.com>
+        Wed, 8 Dec 2021 09:37:44 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E3BC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 06:34:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id g14so8878618edb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 06:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=deepsea-ai.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=EBV+/EzY7MB/2wrboM9FXYcDW8gyV9cvBPcNjQT91z0=;
+        b=SdB/IThYL4uktyND4+zwwwZ/RZ2loDCBJFcyRydmdEASUNzYv1uEnaEmeQYxYXtRIl
+         5aasd7bnz4JRK6IQMNYTB0A+5qiJtKXXJPaGMHvqqfCf0KZIPR1OMuvwJtSOJB5qFfPk
+         +dCTMsD//w/+CaykW2J5Z+UvpGyDUBdE58xkk1zKIDnOMzw7BtZ2nJYsb8RPaed2eILJ
+         J6UPJKeyEOTYsiTrkfL22q9d+lwgBmL7NfSNdf2uldl2fzhrKygOCBAjtIZyxsGan8g4
+         BobxkD+JNcVEFb//mTp+qeeyQRXe49eHz9ukKSquSsAkt6KxZCy0gvQP07SbBUt9XCRh
+         ERGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=EBV+/EzY7MB/2wrboM9FXYcDW8gyV9cvBPcNjQT91z0=;
+        b=fmpQc7C0hL5X8kWu0iZDvpSlGENg135YEFN03GUtrpTj1aqCgpOSjMUee7q89hTEEc
+         YXQAn33lkoqvFqq2BpnVOpM18UAErexu0hRoukQENCjlts+TyEIJjY+WHAdd0QYggesM
+         oSJJr2q14PUj/kxNKmF10tvx/sj6Eg1lmXL1zlJ5GmhHG7/z0/Sjng/D7NYO1eIIJCIN
+         KeXIyG/SZ7UZBnWKBY2NJdqkbcWh5UbxHYTsZ3jB4GGaVJyyTs2csvJLS33bvvI6NbAA
+         8aFwTp/y4n9bLfzs3YSXWl1BtHpf1858xmHegykrJ6Xzi3Q6SbfGc/VxXCE97awqnOfs
+         jrGA==
+X-Gm-Message-State: AOAM533bIR1lKvRlUBOI+oAyDkMiu6AmeOzzug1y76jTJgwftlZXuXZ2
+        G0dAiKA5O7TYLT/aShQ3/yoUVIirO2muLrx8pK3DYg==
+X-Google-Smtp-Source: ABdhPJw9HAv3JVbVxaloT4dZQdPntK4TN1fAMWz8pC2Tp4EUR5TgS8PYqEV22XNIhKKmuE/VhPtLvgyGBfU38nH1THY=
+X-Received: by 2002:a17:907:7f18:: with SMTP id qf24mr7900076ejc.568.1638974042851;
+ Wed, 08 Dec 2021 06:34:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20211208135644.3523024-1-n.latmos@deepsea.ai>
+In-Reply-To: <20211208135644.3523024-1-n.latmos@deepsea.ai>
+From:   Nikos Latmos <n.latmos@deepsea.ai>
+Date:   Wed, 8 Dec 2021 16:33:52 +0200
+Message-ID: <CAC-bbXbkt0oYPn+EWLdEYKyj8G_muWGDZWTApyFv3cb591dc0A@mail.gmail.com>
+Subject: [PROBLEM]: Error during probing process in inv_icm42600_i2c driver
+To:     jmaneyrol@invensense.com, jic23@kernel.org, lars@metafoo.de,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Wyn5hZyz-h2SMAZywB2SaIV3iiGurTa7
-X-Proofpoint-ORIG-GUID: p0RNlG_i9UIB6FRVmcYrOXKqTFge2_23
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 clxscore=1011
- impostorscore=0 spamscore=0 phishscore=0 adultscore=0 mlxscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080091
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 12:12 +0100, Christian Borntraeger wrote:
-> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> > Detect the zPCI Load/Store Interpretation facility.
-> > 
-> > Reviewed-by: Eric Farman <farman@linux.ibm.com>
-> > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> > ---
-> >   arch/s390/include/asm/sclp.h   | 1 +
-> >   drivers/s390/char/sclp_early.c | 1 +
-> >   2 files changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/s390/include/asm/sclp.h
-> > b/arch/s390/include/asm/sclp.h
-> > index c68ea35de498..c84e8e0ca344 100644
-> > --- a/arch/s390/include/asm/sclp.h
-> > +++ b/arch/s390/include/asm/sclp.h
-> > @@ -88,6 +88,7 @@ struct sclp_info {
-> >   	unsigned char has_diag318 : 1;
-> >   	unsigned char has_sipl : 1;
-> >   	unsigned char has_dirq : 1;
-> > +	unsigned char has_zpci_interp : 1;
-> 
-> maybe use zpci_lsi (load store interpretion) as pci interpretion
-> would be something else (also fix the the subject line).
-> With that
-> 
-> Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Hello,
 
-My r-b can stay with Christian's suggested change.
+I have an ARM device based on the Broadcom BCM2837 processor (quad-core
+ARM Cortex-A53, 1.2GHz), which has an Invensense ICM-42605 IMU chip
+connected over I2C. I'm running an unmodified Linux 5.4.83 kernel. The I2C
+driver for my device is in the following path:
+drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c.
 
-> 
-> 
-> >   	unsigned int ibc;
-> >   	unsigned int mtid;
-> >   	unsigned int mtid_cp;
-> > diff --git a/drivers/s390/char/sclp_early.c
-> > b/drivers/s390/char/sclp_early.c
-> > index b64feab62caa..2e8199b7ae50 100644
-> > --- a/drivers/s390/char/sclp_early.c
-> > +++ b/drivers/s390/char/sclp_early.c
-> > @@ -45,6 +45,7 @@ static void __init
-> > sclp_early_facilities_detect(void)
-> >   	sclp.has_gisaf = !!(sccb->fac118 & 0x08);
-> >   	sclp.has_hvs = !!(sccb->fac119 & 0x80);
-> >   	sclp.has_kss = !!(sccb->fac98 & 0x01);
-> > +	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
-> >   	if (sccb->fac85 & 0x02)
-> >   		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
-> >   	if (sccb->fac91 & 0x40)
-> > 
+The problem is that the device driver cannot be probed. More specifically,
+dmesg returns the following error message:
 
+inv-icm42600-i2c 0-0068: mounting matrix not found: using identity...
+inv-icm42600-i2c 0-0068: 0-0068 supply vdd not found, using dummy regulator
+inv-icm42600-i2c 0-0068: 0-0068 supply vddio not found, using dummy regulator
+inv-icm42600-i2c: probe of 0-0068 failed with error -121
+
+During the debugging procedure, I found out that the failure occurred when
+the driver tried to set up the I2C bus parameters. More precisely, by setting
+the INV_ICM42600_REG_INTF_CONFIG6 register according to the values described
+in the datasheet for the I2C communication, actually caused the probe function
+to fail and return the error -121.
+
+After I experimented with different values in the specific register bits,
+I came to the conclusion, that the setting of the bit
+INV_ICM42600_INTF_CONFIG6_I3C_SDR_EN caused the system to successfully
+probe the driver. Any other bit setting combinations failed to do so.
+
+Any hints on why would the driver behave so?
+
+Here is a patch that I have so far and it seems to solve the issue.
+
+Best regards,
+Nick Latmos
+
+
+From d7b3922cd0182ba880ff729edb4a156b55dfb6f0 Mon Sep 17 00:00:00 2001
+From: nicklat <n.latmos@deepsea.ai>
+Date: Wed, 8 Dec 2021 15:51:28 +0200
+Subject: [PATCH] iio: imu: inv_icm42600: enable SDR mode
+
+Add SDR (Single Data Rate) support.
+In SDR mode, data is only clocked on one edge of the clock.
+
+Without this option enabled, the probing process fails.
+
+Signed-off-by: nicklat <n.latmos@deepsea.ai>
+---
+ drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
+b/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
+index 85b1934cec60..ea31f102fbca 100644
+--- a/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
++++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
+@@ -21,7 +21,8 @@ static int inv_icm42600_i2c_bus_setup(struct
+inv_icm42600_state *st)
+        /* setup interface registers */
+        ret = regmap_update_bits(st->map, INV_ICM42600_REG_INTF_CONFIG6,
+                                 INV_ICM42600_INTF_CONFIG6_MASK,
+-                                INV_ICM42600_INTF_CONFIG6_I3C_EN);
++                                INV_ICM42600_INTF_CONFIG6_I3C_EN |
++                                INV_ICM42600_INTF_CONFIG6_I3C_SDR_EN);
+        if (ret)
+                return ret;
+
+--
+2.25.1

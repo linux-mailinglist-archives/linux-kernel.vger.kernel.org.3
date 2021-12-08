@@ -2,223 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D1746D5BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5871F46D5C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbhLHOgU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Dec 2021 09:36:20 -0500
-Received: from mail-eopbgr90041.outbound.protection.outlook.com ([40.107.9.41]:53280
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231398AbhLHOgT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:36:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IzQuPnSZ2J84YMXwFSy+HcFjzSEB1/l5U4eGEWee+DCKTJaowVkHbaP18YxSbrRk7RCetA6UVNulIu3/KsTmWX4g9vC0rHKEM2fCb/P0yOqbUseqvQ/X4nWPBollSFO1lsTk6m9AcKloPEYBihY+uLY+FoZgYyKp1unG7NstKXxjbtJlk34Ec3u96IVHbx9hQ/DEaY8fSJY1ZcN+PIK+4mmR7hrwRfW00Znu3O/StIpLiBDQbsVi+5Bxc87+ymsTRjn+8Q541CK73yLhormsH3yTYHVQ+M+mamRBI1/yttiplHjA5dURwxPSAdVyxb8PU3P3nqNLpFCZ6RORO+kIzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+t7OwxadSOpUS5cr1JIEP1Qf4IwcxeL6mx4ZbhZQykc=;
- b=Y8+06VqY4lrkVvtw7nQkuAbjzAN1C53hbjbFscgreBhp++Wz3X4I7+8r35EHw9wM/a594t4306AvKHF32G69rcUkxVOFWJu00JOG2DQd4hZdGarDYrEd9/JCrHcU1gunf05ZspjiZXiqmiXYrV3rtn3aAJIk07aUSf9dhcIYtX737+0Hln8u/Hfs4Q31zAdK+Y7e5ebZUwrw5VICh1ppVvubQaw913wn5LRTEdqPRxSdVFN14rEDGBil1JfvHIG9iRZqIFu/IhS8q/pFv1qR/wrwQbt2o9jAasbo6YL0tO6mKVAjT66fY3dVepPuADwRMx9KHAtJ1AwHelynrQvoCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0357.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:18::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
- 2021 14:32:45 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
- 14:32:45 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH 2/2] powerpc: Simplify and move arch_randomize_brk()
-Thread-Topic: [PATCH 2/2] powerpc: Simplify and move arch_randomize_brk()
-Thread-Index: AQHX7EB3EE2L+6Yk1kqjILMiGdDXTA==
-Date:   Wed, 8 Dec 2021 14:32:45 +0000
-Message-ID: <3c5ffa5d102c9edbfeec19072416b33b102fdabb.1638973836.git.christophe.leroy@csgroup.eu>
-References: <b03f5cf556f1a89ccb4d7ae2f56414520cfd9209.1638973836.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <b03f5cf556f1a89ccb4d7ae2f56414520cfd9209.1638973836.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fe428764-f7d8-4670-833e-08d9ba579a13
-x-ms-traffictypediagnostic: MRXP264MB0357:EE_
-x-microsoft-antispam-prvs: <MRXP264MB035714095CA37B78B6100459ED6F9@MRXP264MB0357.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 05Mbc6ItvW1QnVXEQ+v0MkAaD3QUGw769jFq3XKHnTPkTfgFu8nZ1c2/VV8cGVD3msqyFG6W1I2Aexj7GLmvGHwTGp3rjoMw2IDtSwAkEqrdCZYSzGeklFJ6gcdc57NMt8+tsgpFqpcXN/ZBX5YiGkZ6PLWqAtqngCpWBWOCbsAcCOrct2OfDzU4caSvaHqVUwf93UE961jL4xJrW1BrS1j0BzYwrAEW8KvPSrpEfVEVECBAsmIAjsNnUL/oUGSOMVvQY8DeYQcVmEehffGeO3VfsaCKmxuyjJ0KHsmPXi+0+99SBCIBZvTPJo2pytQt0OY+0JnQdvzY6hsPUq/IHLQH3IdNTntQCuXX96CqUWUO39/zDbPN+jZ+qYpA9DDxI4fxKwsnT8bqOyMLJOJ6zwrpd05uAdxQbKT5JwZXJSXUqebvgRoH5urYFVu73kOWmSneejuyfHcHub/ac2kwO/g1R+LvDMHKG0N16R98xVW8WPHQiJPtWodU3mTtP3dI8AZDOoFXqG4ziTT54kHpSyVplDxExz2prAqir3TmJExd5aZjSk5uw3hzqC8Izloi4v30WzH8yhLHboIZYiV+NrcAvIhzHvFWAJzmxuvcgMVzlkImCCBBbEl2yh2ADxNVx/DlatmJPp1hNe+kZR4580SbDGjbF10OeqOK2doXaBC0phfCdqBVwot/GwExcGRJcbnn2ZuUO3fVyopt0vW/8A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(8936002)(36756003)(4326008)(5660300002)(66446008)(38100700002)(122000001)(8676002)(186003)(86362001)(38070700005)(54906003)(83380400001)(66556008)(66946007)(2616005)(316002)(6512007)(64756008)(91956017)(2906002)(76116006)(66476007)(6506007)(44832011)(71200400001)(6486002)(26005)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?7Ubokz1MEtEhkB6nVYVJ5mwBwEv5BLkqMhGbgOWS/uhfqnNSDVYjTRH7W0?=
- =?iso-8859-1?Q?FwOTDnMDslFmLj1RhuR2NfypdzQeU9fKKd9KsgV80v8iqVEvHK6cV64Meq?=
- =?iso-8859-1?Q?0ekXHdmKzxZLZbJUXW6N8z3Z8/3sg9G6MhA44F1zlhyLDIaMx4iLjb7PDF?=
- =?iso-8859-1?Q?DHPI0z7Gv12+9gqNLPWn3vGAcD0dU3c4bdSQYanQvZN1U+dZcL6diaY3UM?=
- =?iso-8859-1?Q?rVub+p7N/WSmjfPgt04sYPnCzi69CnM/q/AYxWTbzKl/q3GF/i6FKVvlsF?=
- =?iso-8859-1?Q?MjwFHBMtoZVZsmdSAmxKrls9N7xZSw3ZSTvv9HM8mJw+3zrr7gCrEQi0FX?=
- =?iso-8859-1?Q?+8T+j9fAZpu+PLxLq2SIgF+1eIIP3jqVWxT9C1Aj6fpd+RrU7LM3botH1s?=
- =?iso-8859-1?Q?J5nRa6JkQWwZK0uUhnlXnLSjdolgqGbRSKAWnUi76Vjm1sZQsAVNDOT6vs?=
- =?iso-8859-1?Q?EdM28bivxY6UYd2r0vjlnSCnC/Q/C56/ez2+wTwZU21W/e+mOPJ/bQqNtn?=
- =?iso-8859-1?Q?ZXQCmiKCoqCD21zyGUQS1C3Xn1FE4WiGqqX0dV/t4W9KrTzz0UuDPMZghh?=
- =?iso-8859-1?Q?cCtnUH0NfzXNVzgG/cRtRbKvGE54mwrPCgtg/fMW7YEVHjCE/LfZTPbGXe?=
- =?iso-8859-1?Q?D7lx1e8pfIpsnnT/l/HzHPXK9AXXsMd5qPBsbsnLBhI0UwRQCzXzCr/Ek4?=
- =?iso-8859-1?Q?JVbujlzIxUDkU+xehnu1dSgfALCIpfMHXolq9rGWN8eiqtGh3HZCvva+LK?=
- =?iso-8859-1?Q?WoVm5XHQWRfeazalrwmxLBjZczDWmVixTxGK+fi6PfpNz8jjbylu+/Z6Lv?=
- =?iso-8859-1?Q?lSkSwAASmsvKuBvGj04DmMJVPi+p/Y0AKGms+5td2SYb40hKqGaSAnTzT6?=
- =?iso-8859-1?Q?2rta+6DAIXi8xWufPWsJ/HaykRtWN9OmJ9GyfVUxJlkkjfxlCaWUd5ic3s?=
- =?iso-8859-1?Q?vYvREywWyotHftiDpkFzM+NuYgeEewhgF+SJLDtzF+6hj+5GN5GpAUeBWy?=
- =?iso-8859-1?Q?LAizsnSACbJE34BXNBoonwGO4t0bEZc+0bBHyABq5EX/rNEN8XzRRCl6qB?=
- =?iso-8859-1?Q?eG4kIpkJmvRchPenUHn7SY2qzBfu5RoPambkfusKsM2jks3SfDxoJX8T5K?=
- =?iso-8859-1?Q?q6uuGFJ4akhmewPfejNaU0rLF8reSu/NEhP+D2ZAzuJ87dWN/UB/nd0jui?=
- =?iso-8859-1?Q?Cq9I6BcOEMokRgdVAvPxuwovzMEB4DHM/jOOq3iv+FTXTr/9WPcvkqi8uS?=
- =?iso-8859-1?Q?lwdZXJorAj968bK+WG7F/2OgqCnsdL+/XFeXh9p/Zgvk1GdZYvLNCduHMm?=
- =?iso-8859-1?Q?N+ddvI1fq69KM82cwGGsQFEnvuMaKoLg407IAEVRM3UqrgD4f3L/VLijph?=
- =?iso-8859-1?Q?psdrs2yPi/NiivZT60VqgzFcJ6dW7abmynKUHhTDytFMH9qvsK/50x0CJY?=
- =?iso-8859-1?Q?l83IGRCabuF85dTrtHEh6jRnUHwQy+Hq1c3+kRmQ3YbclE587b8wArP69s?=
- =?iso-8859-1?Q?XRMtTpM5Q53qFnf0uhLsytIQgBD2MeZHliwENoeryjX7VhWlmW6fzRGMqO?=
- =?iso-8859-1?Q?yR2fTc9wxK9qoEcD1pwuEgaCDLzWuWrkR4DFT4BNP8VNgaw6dgdNFEmC5T?=
- =?iso-8859-1?Q?iRZh5iAsFW56BgxzPjgg2JKGVmNfe+5MVSNqNgZ+rQTvnTL4urXIDzSLZ2?=
- =?iso-8859-1?Q?aShi/lJT74DCem5rxSZLYltRzDvi8QO6WXPYBl+FyUciJkIQAIaCdt5dsK?=
- =?iso-8859-1?Q?PVxS5BcCIb2SdaazV2e52YBB8=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S235196AbhLHOhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231398AbhLHOhD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:37:03 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B12C061746;
+        Wed,  8 Dec 2021 06:33:31 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o20so8961273eds.10;
+        Wed, 08 Dec 2021 06:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rrUz7BGkuQFjFV67wpl8KIMwocLRLd64AgF9R6IxDTE=;
+        b=EKOqGtCCKTK9oYH3Nu+4ZeoaaG7moIZTgQrw1qeAh4m/vvSpycK43mH8JvjY+GrQ40
+         LqN24G83418RKVhcPmCkqs1XfohA5MRyMWwkB8JEuczzo96qA91tkVNlvDsQ5c3DtyjF
+         3yeLshL5STMJXKH4DUsPt7gnPEzg5OesjoqX51pZDsFFi06cNcM3hbXfq6fyUiVqzZaV
+         +O0qN2cpnipm2IQ5XLmgAc7Ts9yYdMWYo69RiVaECwKvJhjrGD49hcgdnygoHC4kHofX
+         lhQZedhazuJu9tTeve9k2U31Kw+5iGqbm4vhIX51igsLHiEmnwzjjGJrhchqSYbLsZup
+         tuFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rrUz7BGkuQFjFV67wpl8KIMwocLRLd64AgF9R6IxDTE=;
+        b=kHw42F6y01Sb0kO2vW4MLsrco5E86ZVgvWtbtUkX4O+RKyFFuTJ+cMqn9lGFwKLwgm
+         ROTxWDNJqi2IaeXvXLmKq00EMiW9cvlb1j8dyDNdy0jTLLqV5NyEZMRDkgYIsyrbxFX2
+         9nNEC46oJf05rBNNUCkJNRpYEuEcPoQ+xOd4eOUAK9zFd+hTDurrH+mHb8ziSB1p1UI1
+         tLhab56HOuAF6h4hZ3abRic6rhzIpNj6ZjKrbCB2zli+VbnWIt+My+tgqAKU6Jbm6wPA
+         hmZVsS07quhKaYFiw2BRdU1J9TKareHYU4g2MdPXWGIfmz20Qrhh+zzqixzzjlQYTYCK
+         uhIQ==
+X-Gm-Message-State: AOAM533Z+57QeAVebL0VQiq5k8YZcQc3d8/8wgMeF1gQQxDqiAsBM6tT
+        mZd0IGWvDk0wYphxNOaAvAYzMl6k208=
+X-Google-Smtp-Source: ABdhPJw1Zqn0rAiN0sJXYqzuRHMKgI+CCrmV30cUwRDkuvVK0OgxKOu/zFnMTa9a7Gkr2RJqq0KRGg==
+X-Received: by 2002:a17:907:94ce:: with SMTP id dn14mr8026151ejc.85.1638974009758;
+        Wed, 08 Dec 2021 06:33:29 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id my2sm1586073ejc.109.2021.12.08.06.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 06:33:29 -0800 (PST)
+Message-ID: <61b0c239.1c69fb81.9dfd0.5dc2@mx.google.com>
+X-Google-Original-Message-ID: <YbDCNyB4UXTaRo57@Ansuel-xps.>
+Date:   Wed, 8 Dec 2021 15:33:27 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH v2 0/8] Add support for qca8k mdio rw in
+ Ethernet packet
+References: <20211208034040.14457-1-ansuelsmth@gmail.com>
+ <20211208123222.pcljtugpq5clikhq@skbuf>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe428764-f7d8-4670-833e-08d9ba579a13
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 14:32:45.8859
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eDNezULlxKUM9qMWQTaVnFTGkdbPNYIhl0NWIYjSu/pmwPGzUb1NQ08EQdfQh+u7y6+/+ciXm8gGk6y8QBDVULQS0+Ls1qmpfnVs3bHfLTs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0357
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208123222.pcljtugpq5clikhq@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch_randomize_brk() is only needed for hash on book3s/64, for other
-platforms the one provided by the default mmap layout is good enough.
+On Wed, Dec 08, 2021 at 02:32:22PM +0200, Vladimir Oltean wrote:
+> On Wed, Dec 08, 2021 at 04:40:32AM +0100, Ansuel Smith wrote:
+> > I still have to find a solution to a slowdown problem and this is where
+> > I would love to get some hint.
+> > Currently I still didn't find a good way to understand when the tagger
+> > starts to accept packets and because of this the initial setup is slow
+> > as every completion timeouts. Am I missing something or is there a way
+> > to check for this?
+> > After the initial slowdown, as soon as the cpu port is ready and starts
+> > to accept packet, every transaction is near instant and no completion
+> > timeouts.
+> 
+> My guess is that the problem with the initial slowdown is that you try
+> to use the Ethernet based register access before things are set up:
+> before the master is up and ready, before the switch is minimally set
+> up, etc.
+> 
+> I think what this Ethernet-based register access technique needs to be
+> more reliable is a notification about the DSA master going up or down.
+> Otherwise it won't be very efficient at all, to wait for every single
+> Ethernet access attempt to time out before attempting a direct MDIO
+> access.
+>
 
-Move it to hash_utils.c and use randomize_page() like the generic one.
+Yes that is the main problem. My idea would be a notification fired as
+soon as the tagger starts to send/process packet. That way we should be
+certain that Ethernet mdio is ready. (then use a bool to comunicate
+that the tagger is ready? And a dsa driver would use that or a helper to
+understand what is the correct I/O path to use? I would love to remove
+all these extra check and make something more direct but I think it
+would spam the dsa ops even more)
 
-And properly opt out the radix case instead of making an assumption
-on mmu_highuser_ssize.
+The timeout has to stay anyway to prevent any type of breakage by the
+Ethernet mdio not working.
 
-Also change to a 32M range like most other architectures instead of 8M.
+> But there are some problems with offering a "master_going_up/master_going_down"
+> set of callbacks. Specifically, we could easily hook into the NETDEV_PRE_UP/
+> NETDEV_GOING_DOWN netdev notifiers and transform these into DSA switch
+> API calls. The goal would be for the qca8k tagger to mark the
+> Ethernet-based register access method as available/unavailable, and in
+> the regmap implementation, to use that or the other. DSA would then also
+> be responsible for calling "master_going_up" when the switch ports and
+> master are sufficiently initialized that traffic should be possible.
+> But that first "master_going_up" notification is in fact the most
+> problematic one, because we may not receive a NETDEV_PRE_UP event,
+> because the DSA master may already be up when we probe our switch tree.
+> This would be a bit finicky to get right. We may, for instance, hold
+> rtnl_lock for the entirety of dsa_tree_setup_master(). This will block
+> potentially concurrent netdevice notifiers handled by dsa_slave_nb.
+> And while holding rtnl_lock() and immediately after each dsa_master_setup(),
+> we may check whether master->flags & IFF_UP is true, and if it is,
+> synthesize a call to ds->ops->master_going_up(). We also need to do the
+> reverse in dsa_tree_teardown_master().
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- Applies on top of series "powerpc: Make hash MMU code build configurable"
+Should we care about holding the lock for that much time? Will do some
+test hoping the IFF_UP is sufficient to make the Ethernet mdio work.
 
- arch/powerpc/kernel/process.c         | 41 ---------------------------
- arch/powerpc/mm/book3s64/hash_utils.c | 19 +++++++++++++
- 2 files changed, 19 insertions(+), 41 deletions(-)
-
-diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-index 984813a4d5dc..e7f809bdd433 100644
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -34,10 +34,8 @@
- #include <linux/ftrace.h>
- #include <linux/kernel_stat.h>
- #include <linux/personality.h>
--#include <linux/random.h>
- #include <linux/hw_breakpoint.h>
- #include <linux/uaccess.h>
--#include <linux/elf-randomize.h>
- #include <linux/pkeys.h>
- #include <linux/seq_buf.h>
- 
-@@ -2313,42 +2311,3 @@ unsigned long arch_align_stack(unsigned long sp)
- 		sp -= get_random_int() & ~PAGE_MASK;
- 	return sp & ~0xf;
- }
--
--static inline unsigned long brk_rnd(void)
--{
--        unsigned long rnd = 0;
--
--	/* 8MB for 32bit, 1GB for 64bit */
--	if (is_32bit_task())
--		rnd = (get_random_long() % (1UL<<(23-PAGE_SHIFT)));
--	else
--		rnd = (get_random_long() % (1UL<<(30-PAGE_SHIFT)));
--
--	return rnd << PAGE_SHIFT;
--}
--
--unsigned long arch_randomize_brk(struct mm_struct *mm)
--{
--	unsigned long base = mm->brk;
--	unsigned long ret;
--
--#ifdef CONFIG_PPC_BOOK3S_64
--	/*
--	 * If we are using 1TB segments and we are allowed to randomise
--	 * the heap, we can put it above 1TB so it is backed by a 1TB
--	 * segment. Otherwise the heap will be in the bottom 1TB
--	 * which always uses 256MB segments and this may result in a
--	 * performance penalty.
--	 */
--	if (!radix_enabled() && !is_32bit_task() && (mmu_highuser_ssize == MMU_SEGSIZE_1T))
--		base = max_t(unsigned long, mm->brk, 1UL << SID_SHIFT_1T);
--#endif
--
--	ret = PAGE_ALIGN(base + brk_rnd());
--
--	if (ret < mm->brk)
--		return mm->brk;
--
--	return ret;
--}
--
-diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-index eced266dc5e9..b179a001bfa4 100644
---- a/arch/powerpc/mm/book3s64/hash_utils.c
-+++ b/arch/powerpc/mm/book3s64/hash_utils.c
-@@ -37,6 +37,8 @@
- #include <linux/cpu.h>
- #include <linux/pgtable.h>
- #include <linux/debugfs.h>
-+#include <linux/random.h>
-+#include <linux/elf-randomize.h>
- 
- #include <asm/interrupt.h>
- #include <asm/processor.h>
-@@ -2185,3 +2187,20 @@ void __init print_system_hash_info(void)
- 	if (htab_hash_mask)
- 		pr_info("htab_hash_mask    = 0x%lx\n", htab_hash_mask);
- }
-+
-+unsigned long arch_randomize_brk(struct mm_struct *mm)
-+{
-+	/*
-+	 * If we are using 1TB segments and we are allowed to randomise
-+	 * the heap, we can put it above 1TB so it is backed by a 1TB
-+	 * segment. Otherwise the heap will be in the bottom 1TB
-+	 * which always uses 256MB segments and this may result in a
-+	 * performance penalty.
-+	 */
-+	if (is_32bit_task())
-+		return randomize_page(mm->brk, SZ_32M);
-+	else if (!radix_enabled() && mmu_highuser_ssize == MMU_SEGSIZE_1T)
-+		return randomize_page(max_t(unsigned long, mm->brk, SZ_1T), SZ_1G);
-+	else
-+		return randomize_page(mm->brk, SZ_1G);
-+}
 -- 
-2.33.1
+	Ansuel

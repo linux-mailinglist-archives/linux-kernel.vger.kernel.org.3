@@ -2,80 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B99346D2BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D5346D2BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbhLHLzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:55:39 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4229 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhLHLzi (ORCPT
+        id S231840AbhLHL6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbhLHL6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:55:38 -0500
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8Fpd2RrCz67gtT;
-        Wed,  8 Dec 2021 19:50:17 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 12:52:04 +0100
-Received: from [10.47.91.245] (10.47.91.245) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
- 2021 11:52:02 +0000
-Subject: Re: [PATCH v2 3/3] perf tools: Support register names from all archs
-To:     German Gomez <german.gomez@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>
-CC:     Alexandre Truong <alexandre.truong@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-csky@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20211207180653.1147374-1-german.gomez@arm.com>
- <20211207180653.1147374-4-german.gomez@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <90bcce69-9585-3fb4-de89-bbf2bd6def05@huawei.com>
-Date:   Wed, 8 Dec 2021 11:51:43 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 8 Dec 2021 06:58:06 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B89C061746;
+        Wed,  8 Dec 2021 03:54:34 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id y13so7390595edd.13;
+        Wed, 08 Dec 2021 03:54:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i+BBrV39yQN5ugDL1XnDCRdzJq+bmMUXwbNDLt1dK7Y=;
+        b=KY1QngnD2VTzt0Df4igdAgobgMlSMK+SA8ysBTqYOdzpiTN43Ivd77+5oUF8iLtCEw
+         XuUgZ9utb1tbtQ3z+vEUe+jwALsgyqNmgJdyoXj6VSl/WJoSNMsNI/L849G4cdwwwr8M
+         CS1mGCxDM+VFf6v7jAdHwLfpWl1KIAvCmBYDC4fqX3neOX/JEBFrN8KTW2Z3963x2/Ic
+         K+hcC28AWU1qCotas/YKd5BAQVhkdEmKhMrkLYP6dgGnZd0qJRlqlDbQGstZGgd47j51
+         PGuBTuQMZCQ/HXGU8e3jtjD00IXpj1aVoGLxbW+0E5y48IgjHWi05MBbN4KILdxJQhmi
+         qsQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i+BBrV39yQN5ugDL1XnDCRdzJq+bmMUXwbNDLt1dK7Y=;
+        b=hWdKSBs9Awwa5LEdOfFNU+iwV3heKohtGOKqhZ+3WW7jC1S3Rr2LHF4es70KnkFmcL
+         TgdRT+Hn1kKyxvi8tCDRCCHj1iPj/XWGQM+a8WD0ppCtsfmYSuuPn+qZ5aYkrCfu1qLE
+         hDAMINSmmxhbqlr+fCstyBt8kXcJtIa6NIX2Z4WqsYtBEvoACCXOurs47nknnKu+avGU
+         PBAMDSKkc8SoauNlz8zm67ATL8uFF5a/UIyRiErGFH3naBNWzYWtFU1Y/1v8XWfKvK+R
+         OJHKr2O7XGUoZktgaPHXz9bQNBF8prCl6wfZU/JGWKT7amQfQywei7OBg9mxpKo1xSrH
+         bDyg==
+X-Gm-Message-State: AOAM531wg10iKCaV3HbIvBr9zUpgYrkI9biXz2OhjeeACze/gkAyhVHn
+        OwXDRI2EhAV3rSuiduDfjQfsb7tuT5o=
+X-Google-Smtp-Source: ABdhPJwL+LA/Xj5312O7J8oVYkq4iWX4X1G7GZnVhQveiMKDc3WsvztbL50aFt1QBO0AaK0O32RzSg==
+X-Received: by 2002:aa7:dad5:: with SMTP id x21mr18234509eds.280.1638964473278;
+        Wed, 08 Dec 2021 03:54:33 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id s2sm1478895ejn.96.2021.12.08.03.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 03:54:32 -0800 (PST)
+Date:   Wed, 8 Dec 2021 13:54:31 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211208115431.av6r4occxbocglgx@skbuf>
+References: <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+ <Ya/esX+GTet9PM+D@lunn.ch>
+ <20211207234736.vpqurmattqx4a76h@skbuf>
+ <20211208000432.5nq47bjz3aqjvilp@skbuf>
+ <20211208004051.bx5u7rnpxxt2yqwc@skbuf>
+ <61afff9e.1c69fb81.92f07.6e7d@mx.google.com>
+ <20211208010947.xavzcnih3xx4dxxs@skbuf>
+ <61b0275d.1c69fb81.efd64.83fb@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <20211207180653.1147374-4-german.gomez@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.245]
-X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61b0275d.1c69fb81.efd64.83fb@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2021 18:06, German Gomez wrote:
->   tools/perf/arch/arm/include/perf_regs.h       |  42 --
->   tools/perf/arch/arm64/include/perf_regs.h     |  76 --
->   tools/perf/arch/csky/include/perf_regs.h      |  82 ---
->   tools/perf/arch/mips/include/perf_regs.h      |  69 --
->   tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
->   tools/perf/arch/riscv/include/perf_regs.h     |  74 --
->   tools/perf/arch/s390/include/perf_regs.h      |  78 --
->   tools/perf/arch/x86/include/perf_regs.h       |  82 ---
->   tools/perf/builtin-script.c                   |  18 +-
->   tools/perf/util/perf_regs.c                   | 666 ++++++++++++++++++
->   tools/perf/util/perf_regs.h                   |  10 +-
->   .../scripting-engines/trace-event-python.c    |  10 +-
->   tools/perf/util/session.c                     |  25 +-
->   13 files changed, 697 insertions(+), 601 deletions(-)
+On Wed, Dec 08, 2021 at 04:32:43AM +0100, Ansuel Smith wrote:
+> On Wed, Dec 08, 2021 at 03:09:47AM +0200, Vladimir Oltean wrote:
+> > On Wed, Dec 08, 2021 at 01:42:59AM +0100, Ansuel Smith wrote:
+> > > On Wed, Dec 08, 2021 at 02:40:51AM +0200, Vladimir Oltean wrote:
+> > > > On Wed, Dec 08, 2021 at 02:04:32AM +0200, Vladimir Oltean wrote:
+> > > > > On Wed, Dec 08, 2021 at 01:47:36AM +0200, Vladimir Oltean wrote:
+> > > > > > > 2) is harder. But as far as i know, we have an 1:N setup.  One switch
+> > > > > > > driver can use N tag drivers. So we need the switch driver to be sure
+> > > > > > > the tag driver is what it expects. We keep the shared state in the tag
+> > > > > > > driver, so it always has valid data, but when the switch driver wants
+> > > > > > > to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
+> > > > > > > if it does not match, the core should return -EINVAL or similar.
+> > > > > > 
+> > > > > > In my proposal, the tagger will allocate the memory from its side of the
+> > > > > > ->connect() call. So regardless of whether the switch driver side
+> > > > > > connects or not, the memory inside dp->priv is there for the tagger to
+> > > > > > use. The switch can access it or it can ignore it.
+> > > > > 
+> > > > > I don't think I actually said something useful here.
+> > > > > 
+> > > > > The goal would be to minimize use of dp->priv inside the switch driver,
+> > > > > outside of the actual ->connect() / ->disconnect() calls.
+> > > > > For example, in the felix driver which supports two tagging protocol
+> > > > > drivers, I think these two methods would be enough, and they would
+> > > > > replace the current felix_port_setup_tagger_data() and
+> > > > > felix_port_teardown_tagger_data() calls.
+> > > > > 
+> > > > > An additional benefit would be that in ->connect() and ->disconnect() we
+> > > > > get the actual tagging protocol in use. Currently the felix driver lacks
+> > > > > there, because felix_port_setup_tagger_data() just sets dp->priv up
+> > > > > unconditionally for the ocelot-8021q tagging protocol (luckily the
+> > > > > normal ocelot tagger doesn't need dp->priv).
+> > > > > 
+> > > > > In sja1105 the story is a bit longer, but I believe that can also be
+> > > > > cleaned up to stay within the confines of ->connect()/->disconnect().
+> > > > > 
+> > > > > So I guess we just need to be careful and push back against dubious use
+> > > > > during review.
+> > > > 
+> > > > I've started working on a prototype for converting sja1105 to this model.
+> > > > It should be clearer to me by tomorrow whether there is anything missing
+> > > > from this proposal.
+> > > 
+> > > I'm working on your suggestion and I should be able to post another RFC
+> > > this night if all works correctly with my switch.
+> > 
+> > Ok. The key point with my progress so far is that Andrew may be right
+> > and we might need separate tagger priv pointers per port and per switch.
+> > At least for the cleanliness of implementation. In the end I plan to
+> > remove dp->priv and stay with dp->tagger_priv and ds->tagger_priv.
+> > 
+> > Here's what I have so far. I have more changes locally, but the rest it
+> > isn't ready and overall also a bit irrelevant for the discussion.
+> > I'm going to sleep now.
+> >
+> 
+> BTW, I notice we made the same mistake. Don't know if it was the problem
+> and you didn't notice... The notifier is not ready at times of the first
+> tagger setup and the tag_proto_connect is never called.
+> Anyway sending v2 with your suggestion applied.
 
-Did you consider leaving the register structures where they are while
-renaming to include the arch name and then having as externs or similar? 
-I see an example of that idea for arm64_unwind_libunwind_ops.
+I didn't go past the compilation stage yesterday. Anyway, now that you
+mention it, I remember Tobias hitting this issue as well when he worked
+on changing tagging protocol via device tree, and this is why
+dsa_switch_setup_tag_protocol() exists.  I believe that's where we'd
+need to call ds->ops->connect_tag_proto from, like this:
 
-Cheers,
-John
+static int dsa_switch_setup_tag_protocol(struct dsa_switch *ds)
+{
+	const struct dsa_device_ops *tag_ops = ds->dst->tag_ops;
+	struct dsa_switch_tree *dst = ds->dst;
+	struct dsa_port *cpu_dp;
+	int err;
+
+	if (tag_ops->proto == dst->default_proto)
+		goto connect;
+
+	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
+		rtnl_lock();
+		err = ds->ops->change_tag_protocol(ds, cpu_dp->index,
+						   tag_ops->proto);
+		rtnl_unlock();
+		if (err) {
+			dev_err(ds->dev, "Unable to use tag protocol \"%s\": %pe\n",
+				tag_ops->name, ERR_PTR(err));
+			return err;
+		}
+	}
+
+connect:
+	if (ds->ops->connect_tag_protocol) {
+		err = ds->ops->connect_tag_protocol(ds, tag_ops->proto);
+		if (err) {
+			dev_err(ds->dev,
+				"Unable to connect to tag protocol \"%s\": %pe\n",
+				tag_ops->name, ERR_PTR(err));
+			return err;
+		}
+	}
+
+	return 0;
+}

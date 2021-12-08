@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11146C86C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718F346C86E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242675AbhLHAGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:06:09 -0500
-Received: from mga18.intel.com ([134.134.136.126]:19374 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242662AbhLHAGI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:06:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224587316"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="224587316"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:01:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="580341735"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2021 16:01:17 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mukOa-000N66-Ib; Wed, 08 Dec 2021 00:01:16 +0000
-Date:   Wed, 8 Dec 2021 08:00:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:guest 2/4] arch/x86/kernel/tdx-tests.c:66:12: warning: no
- previous prototype for 'kvm_unit_test_debug_init'
-Message-ID: <202112080759.vxdxKodd-lkp@intel.com>
+        id S242688AbhLHAII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242662AbhLHAIG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:08:06 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FC7C061574;
+        Tue,  7 Dec 2021 16:04:35 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so2310184edd.9;
+        Tue, 07 Dec 2021 16:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Nmbu3aWG61qILASHvk+hiCDNK64Hsn0LyV/NvnRhWow=;
+        b=CnfFs2U9AA1aEyyh1ETJWBowPNHQUwaNC/eVGXX565ZfeJqrg9qwEbm5YFanM/q9El
+         jn1czxTI6xYht0qJ/NaWgqcrZau374Zs+vI3o5q0J7kMEXGgAL+fRCKKeA/TV/sc5Fqn
+         cbJ8sqJ6lt0lli5t7wIZ2vKONdvagFPt/nTP0GYnfXKMn2Y/JW2Q363Eew4UU3z7U7NS
+         6gZ8MaPR+/ZpdZKxINwGD/OZR9yzq5dMMtAuHk7FblleuR3k8vIczFGc1wOvVSQqVrdY
+         WR4dVTkXJJNakgwQfJJE8jiCvELNNMolsLyjp++chzB3m7ZGfkx9nOcUUDYgW2/cC3IG
+         Ul/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nmbu3aWG61qILASHvk+hiCDNK64Hsn0LyV/NvnRhWow=;
+        b=cx3BDc/28g3VMbdgci8usEcmCFjmMqAVWb9UFaI/0Eie3scobRDSFAQuU5UfZXAaqF
+         gv6klwS4lbfORvMKpEVUgKiBo+lzmygg+NfjRamOVfF61wsaMeSh33ADDd2fNxSIX+U0
+         bpJ/chwExej4PEnUIJnktumUxbXnJfI3kMG4Xt/MJ1iwdgyo4a3Ih/3anrYSBrfJHKSi
+         z/r0ZMnlX8jvfLOmIUFselR3BjRwh8p+y9uo4xhALt4blTXwTmNiHSni3jhxTeIenSbI
+         ZVgwAK70j9irMLTeuTr0tfr/BY66u0pvz4F+aP06iYmheWGUaerPqejxgdBa/vCCbpr9
+         lg6g==
+X-Gm-Message-State: AOAM533HiDBfxhpkGxKHPkVKc8iT9o7Ynd9Q/Pd2lrR3GJ3EbI07gd1r
+        X3leViPt7byoiUFUZhBOcWZW4vxP0C4=
+X-Google-Smtp-Source: ABdhPJzIeCw9MWX2WjgP6pLZJ9NkxKHO4Xy3P+qJUn2AxCMsv0u3UQaSZ2+1j93nA+BPIy21CSxqgw==
+X-Received: by 2002:a17:906:4f05:: with SMTP id t5mr3326379eju.68.1638921873809;
+        Tue, 07 Dec 2021 16:04:33 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id l18sm549876ejo.114.2021.12.07.16.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 16:04:33 -0800 (PST)
+Date:   Wed, 8 Dec 2021 02:04:32 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211208000432.5nq47bjz3aqjvilp@skbuf>
+References: <20211207145942.7444-1-ansuelsmth@gmail.com>
+ <Ya+q02HlWsHMYyAe@lunn.ch>
+ <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
+ <Ya+yzNDMorw4X9CT@lunn.ch>
+ <61afb452.1c69fb81.18c6f.242e@mx.google.com>
+ <20211207205219.4eoygea6gey4iurp@skbuf>
+ <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
+ <Ya/esX+GTet9PM+D@lunn.ch>
+ <20211207234736.vpqurmattqx4a76h@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211207234736.vpqurmattqx4a76h@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest
-head:   99ee592fd433c9c999684d873636c3764019dd08
-commit: 857f6deb3a90f4d3a0ad94433929d017f31e2efd [2/4] x86/tdx-tests: Add a port of a kvm unit test
-config: i386-buildonly-randconfig-r006-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080759.vxdxKodd-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/857f6deb3a90f4d3a0ad94433929d017f31e2efd
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest
-        git checkout 857f6deb3a90f4d3a0ad94433929d017f31e2efd
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+On Wed, Dec 08, 2021 at 01:47:36AM +0200, Vladimir Oltean wrote:
+> > 2) is harder. But as far as i know, we have an 1:N setup.  One switch
+> > driver can use N tag drivers. So we need the switch driver to be sure
+> > the tag driver is what it expects. We keep the shared state in the tag
+> > driver, so it always has valid data, but when the switch driver wants
+> > to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
+> > if it does not match, the core should return -EINVAL or similar.
+> 
+> In my proposal, the tagger will allocate the memory from its side of the
+> ->connect() call. So regardless of whether the switch driver side
+> connects or not, the memory inside dp->priv is there for the tagger to
+> use. The switch can access it or it can ignore it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't think I actually said something useful here.
 
-All warnings (new ones prefixed by >>):
+The goal would be to minimize use of dp->priv inside the switch driver,
+outside of the actual ->connect() / ->disconnect() calls.
+For example, in the felix driver which supports two tagging protocol
+drivers, I think these two methods would be enough, and they would
+replace the current felix_port_setup_tagger_data() and
+felix_port_teardown_tagger_data() calls.
 
->> arch/x86/kernel/tdx-tests.c:66:12: warning: no previous prototype for 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
-      66 | int __init kvm_unit_test_debug_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/tdx-tests.c: Assembler messages:
-   arch/x86/kernel/tdx-tests.c:85: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:86: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:87: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:88: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:89: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:90: Error: bad register name `%rip)'
-   arch/x86/kernel/tdx-tests.c:111: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:112: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:113: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:114: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:115: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:116: Error: bad register name `%rip)'
-   arch/x86/kernel/tdx-tests.c:118: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:133: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:134: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:135: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:136: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:137: Error: bad register name `%rax'
-   arch/x86/kernel/tdx-tests.c:138: Error: bad register name `%rip)'
+An additional benefit would be that in ->connect() and ->disconnect() we
+get the actual tagging protocol in use. Currently the felix driver lacks
+there, because felix_port_setup_tagger_data() just sets dp->priv up
+unconditionally for the ocelot-8021q tagging protocol (luckily the
+normal ocelot tagger doesn't need dp->priv).
 
+In sja1105 the story is a bit longer, but I believe that can also be
+cleaned up to stay within the confines of ->connect()/->disconnect().
 
-vim +/kvm_unit_test_debug_init +66 arch/x86/kernel/tdx-tests.c
-
-    65	
-  > 66	int __init kvm_unit_test_debug_init(void)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So I guess we just need to be careful and push back against dubious use
+during review.

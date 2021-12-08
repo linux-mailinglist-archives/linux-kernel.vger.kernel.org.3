@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EBC46D754
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F5E46D755
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236284AbhLHPuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S236296AbhLHPvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236267AbhLHPuM (ORCPT
+        with ESMTP id S233975AbhLHPvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:50:12 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164C0C061746;
-        Wed,  8 Dec 2021 07:46:41 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so3112275otj.7;
-        Wed, 08 Dec 2021 07:46:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bSMFBH3rt0hbmhYjxvYkZRwsbPK5x5Ty6biTXnt/I4U=;
-        b=evLjb8G9G31yMKSB6kXk37pZ96PCIOrY1Zl40OsI0UlrCxXtWgq1FMwnN7kU/pEIQ0
-         6lgBw855LG21q4PnRfhz5wNQsA5lJiPMhlJPeOwsx2C2mX9j41N9x4xSfg/gygH3ZcSO
-         U78LVyBBeVtx70UmuYn65SmDea3oOVMVadwOICurB7aP4/DRTVQm2cC38X3xKlA3YuTY
-         BzFplDL/d1vsooW3GlvfFuEeD3BUQL2hLaXR5ttXNJbrVnopOC+muzvCbZLazMxfq245
-         uJ39ca8BlNzqlUUXG8hORfBzdOZVeG6I5Z9PXZViw658f6Cg+PPX8hcIusKk7WjYZx0R
-         cCjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bSMFBH3rt0hbmhYjxvYkZRwsbPK5x5Ty6biTXnt/I4U=;
-        b=dJ+Zbt5nW66UhYukYsq+mm1WxofLRoYBveGa5vuOlGNW/BySZ5l3EMR7ErglYpy/DP
-         RxL3/14HJKaKcGVNVA9aJewsLKyBYmLZ4DJ9O9Jta3iX4+8DWcJuYag1CVHLpmJx7ZFt
-         kDWg8s5a3S+xyaQWVw9yr3qHizPH0kDa6rTOhlto5q0qPlVoBeRdbvf5XwAEmurqrDVY
-         LEYFbCxZIrFt99Gca/XvGQsIJ0pfdPSqQsxRnj81Jwo8t7EoE1bipaTV+zT+OCy2osze
-         ahlcW/YhuC2iQra/AtYzLJz+JYynzlTtsBgwDmUVHR5D2Huo6IkZzdiWpRBBTgueDoCE
-         eQQA==
-X-Gm-Message-State: AOAM532ZpFtKm396JJ4aNr8GPmvqLgHebRwYyICndhw8lwrfFnPrJzPR
-        8ozLXzd3tHW1ERVr8w2EV4E=
-X-Google-Smtp-Source: ABdhPJyHq12QmwUDhxGS7+kIVWpFTLOAMqk06rGpJd8YdaqFJ4lupoTtiKzDS+QrlRJhWP+iBbPspQ==
-X-Received: by 2002:a9d:62c2:: with SMTP id z2mr252555otk.163.1638978400493;
-        Wed, 08 Dec 2021 07:46:40 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id 184sm689900oih.58.2021.12.08.07.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 07:46:40 -0800 (PST)
-Message-ID: <d6cacd7d-732c-4fad-576d-a7e9d9ca9537@gmail.com>
-Date:   Wed, 8 Dec 2021 08:46:37 -0700
+        Wed, 8 Dec 2021 10:51:07 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7DFC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:47:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WtEQqwJBUEAbt+Rn6z3KfUtCYF75TrzmNyPUTpmgJXU=; b=hHCEZdU/Kd8ONj9kU8NJqRfE6H
+        k97CA/DyB/UhwyLbKrMFYfRANIkWayLr/Yh9r7XD7rArXZiYFNB6RrFBFrMVZy2gaAmoqghXx8yWc
+        65oxqcv1UK7gg6CzRsdNIqk7hxw7sSB3csb0l4tSdl9lUhFYvCaSgXNJrAeOZvG0tDTiEDRa6315J
+        qyutCDctALOhqiJXtSrP6oNM2OVb5PUu5LKEZ5EIW1+w1dNSX59VZGfkWpX+ppkjV8rBiBVRzto5S
+        mVjoOZjde89EJehpTSxX0/ULI/MoksKwJGwvdc1uJLDHcc14LpL1vsJivVft1WiaLWwhzTfs5yXRs
+        r8XNJktA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muzA4-008YAI-GF; Wed, 08 Dec 2021 15:47:16 +0000
+Date:   Wed, 8 Dec 2021 15:47:16 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+Subject: Re: [PATCH v4 05/66] Maple Tree: Add new data structure
+Message-ID: <YbDThNl56dH0mTHZ@casper.infradead.org>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-6-Liam.Howlett@oracle.com>
+ <5ead526d-8499-4810-7657-6af5f2e96ccc@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] ipv6: fix NULL pointer dereference in ip6_output()
-Content-Language: en-US
-To:     Florian Westphal <fw@strlen.de>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>
-Cc:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ahmed Abdelsalam <ahabdels@gmail.com>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>
-References: <20211206163447.991402-1-andrea.righi@canonical.com>
- <cfedb3e3-746a-d052-b3f1-09e4b20ad061@gmail.com>
- <20211208012102.844ec898c10339e99a69db5f@uniroma2.it>
- <a20d6c2f-f64f-b432-f214-c1f2b64fdf81@gmail.com>
- <20211208105113.GE30918@breakpoint.cc>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211208105113.GE30918@breakpoint.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ead526d-8499-4810-7657-6af5f2e96ccc@suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 3:51 AM, Florian Westphal wrote:
-> David Ahern <dsahern@gmail.com> wrote:
->> On 12/7/21 5:21 PM, Andrea Mayer wrote:
->>> +        IP6CB(skb)->iif = skb->skb_iif;
->>>          [...]
->>>
->>> What do you think?
->>>
->>
->> I like that approach over the need for a fall back in core ipv6 code.
+On Tue, Dec 07, 2021 at 04:34:44PM +0100, Vlastimil Babka wrote:
+> > +/*
+> > + * We also reserve values with the bottom two bits set to '10' which are
+> > + * below 4096
+> > + */
+> > +static inline bool mt_is_reserved(const void *entry)
+> > +{
+> > +	return ((unsigned long)entry < MAPLE_RESERVED_RANGE) &&
+> > +		xa_is_internal(entry);
 > 
-> What if the device is removed after ->iif assignment and before dev lookup?
-> 
+> It's weird to suddenly see xa_ prefix here (and below). AFAICS it's nowhere
+> declared that maple tree is derived from xarray so while it's not completely
+> surprising given the overlap of authors, wouldn't it be more robust if maple
+> tree had its own independent set of these helpers?
 
-good point. SR6 should make sure the iif is not cleared, and the
-fallback to the skb->dev is still needed in case of delete.
+My intent is to merge the maple tree and xarray at some point.  The xarray
+has some pretty awful worst-case behaviour that the maple tree avoids.
+The maple tree doesn't yet have the search mark feature, and it needs a
+new leaf node type for dense nodes.  It also needs a replacement for the
+private_list used to trim the excess nodes which store workingset values.
+
+When they get merged, my thinking was that the maple tree nomenclature
+would be removed in favour of the xarray API, so I haven't been in too
+much hurry to add aliases for all the parts of the xarray API that are
+in the maple tree.

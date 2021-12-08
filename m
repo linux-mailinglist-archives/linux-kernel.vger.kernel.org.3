@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F5946D1B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA35746D1C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbhLHLPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbhLHLPe (ORCPT
+        id S232187AbhLHLQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:16:38 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25526 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229479AbhLHLQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:15:34 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ACBC061746;
-        Wed,  8 Dec 2021 03:12:02 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so3942418wme.0;
-        Wed, 08 Dec 2021 03:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=378xPFp5hnCamLfI3QIia2J4E80vAdBkgnbCBVjGhgM=;
-        b=mkkuaKIXZahpy5kT86GjsXK/OKt+cTz2CN7v/s8LIhXZr5TO+HUJCaC/hWOxTmjX+s
-         Jae5uLCMv8m9TpKvfogCntnR8GlQnplfhT5lAJm0XJ+zXJyvffTTBgBoAFROkpv/flnL
-         vdBzp//v3YuwkJWJ3YYOIhcaplDJTEwsnuJAAp9fuw1qMlR9k9ySeutSeDPgil5/tD6M
-         xSEMdiWXLPmw1tRjQIb0SnQC8QMKD+pa2NXnsokb/WD0YW7YHykoL2sHfxt38n2QjvGz
-         R0CXJAUQrKnfuAe0s3Gg1h1IcIpXXVhPV6I1rN8FRcbiuhUiwHgqQHpoRxmgN88bVAHo
-         JjCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=378xPFp5hnCamLfI3QIia2J4E80vAdBkgnbCBVjGhgM=;
-        b=n46dPt0hYpfnvHCYTJ+Ca0BHyGzC0uDqbPoaxThvQaKj9QitUjddyfsjqNf6YdO7YM
-         BQuKxdRxafzveSMmPeH1EDIZgG7I3qCNVSCQIcSyjTfWBPrpqZkJzvDYKDAObsilYqea
-         B4vKWsj/MEXAfmJCQApSUS2lbt35+dQZfKxL/Ab28alaXWfFWpiyucwwx1n/CmMl4U2M
-         UTMIT8TOH4xw38dS2Pqwodxr+nsbkD7KS+t8+8HITFOZbZH95RfXT6k1p8GwXvhQJVFB
-         XGkOagI5SQyscF9bRQ1O0kbXYI5HaeFMM9/wvgCHIgPm3J5FUK5K05XODNX/p5cWJ1Ys
-         QgHg==
-X-Gm-Message-State: AOAM530db9Tk+czHulxCcrphqEkZznebfjNZKXV2u4rdxiU0kUTvhyk/
-        GjWUx22PiztUFYBwl1P3E16gAdGM9FA8Dg==
-X-Google-Smtp-Source: ABdhPJxqKtlzI1MNYNzXPJaKaSyzT4pPm8tYDAZCBZmhub+p0NpJ2nxG1wCV+6NoqQsfqncP3fb2Cw==
-X-Received: by 2002:a05:600c:3ba5:: with SMTP id n37mr15144038wms.168.1638961921009;
-        Wed, 08 Dec 2021 03:12:01 -0800 (PST)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id w17sm2399874wmc.14.2021.12.08.03.12.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 03:12:00 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Wed, 8 Dec 2021 12:11:59 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf dlfilter: Drop unused variable
-Message-ID: <YbCS/xEis4QKbH6D@eldamar.lan>
-References: <20211123211821.132924-1-carnil@debian.org>
- <5603b487-3e42-cfbd-200b-250c46dc0bc6@arm.com>
+        Wed, 8 Dec 2021 06:16:37 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B89mZrF000839;
+        Wed, 8 Dec 2021 11:13:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HeRu8SwC9vox6YeZojQZza3ZgW6HuKUhVsZB4788DAs=;
+ b=Wq5s4XGfW/Vgto2tqsYow8vlG5e0FR6Nvn1aQkIeVdu+MMhfDr9Z0qEBPgh4FEZCdwW6
+ g84oKhyGrkAM4OGH/5ibh5qFoxMl64CTeVFfdM+NYZzn7O86/m8s0Xn8FJRzUoYijWCI
+ z8F9UG8OTomVk7704657hKtLPzrTQnYlZe74fV4zh8rgM8mzQtSJvJhXkmXgn8erqiPu
+ BMobx6xSQiJehxaquqRRJTk7VkJtni6xh6XksIZYIVsJW+P+E5xVeZwdm3acMGCoXSSX
+ cqQM7qBqg8wUdnwK/jEzY2Yq08sy7WKOM9fA7ki4xJI5IxJHhCR5rRfrhZDGUFDUnvWt Iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttdb9epj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:05 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8Awsep004261;
+        Wed, 8 Dec 2021 11:13:05 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttdb9enx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:04 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8BATns027353;
+        Wed, 8 Dec 2021 11:13:02 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3cqyy9nctx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:02 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8BCxIr28246492
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 11:12:59 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DED6611C05B;
+        Wed,  8 Dec 2021 11:12:58 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E781811C054;
+        Wed,  8 Dec 2021 11:12:57 +0000 (GMT)
+Received: from [9.171.54.177] (unknown [9.171.54.177])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 11:12:57 +0000 (GMT)
+Message-ID: <3ed8f5ca-e508-e261-e71d-875f5762f2f9@linux.ibm.com>
+Date:   Wed, 8 Dec 2021 12:12:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5603b487-3e42-cfbd-200b-250c46dc0bc6@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 01/32] s390/sclp: detect the zPCI interpretation facility
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-2-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-2-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eliOqbfoqCwPRpMYTHXAT_-MbxcB2fVI
+X-Proofpoint-ORIG-GUID: B0-q5xW2-umgVEaSKEmcco75vJDer0fD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0
+ bulkscore=0 spamscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112080071
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi German,
-
-On Wed, Dec 08, 2021 at 10:44:01AM +0000, German Gomez wrote:
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> Detect the zPCI Load/Store Interpretation facility.
 > 
-> On 23/11/2021 21:18, Salvatore Bonaccorso wrote:
-> > Compiling tools/perf/dlfilters/dlfilter-test-api-v0.c result in:
-> >
-> > 	checking for stdlib.h... dlfilters/dlfilter-test-api-v0.c: In function ‘filter_event’:
-> > 	dlfilters/dlfilter-test-api-v0.c:311:29: warning: unused variable ‘d’ [-Wunused-variable]
-> > 	  311 |         struct filter_data *d = data;
-> > 	      |
+> Reviewed-by: Eric Farman <farman@linux.ibm.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/sclp.h   | 1 +
+>   drivers/s390/char/sclp_early.c | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> Did you get this warning when issuing "make"? From my side, it generated
-> this gcc command so I didn't get it (make DEBUG=1):
+> diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
+> index c68ea35de498..c84e8e0ca344 100644
+> --- a/arch/s390/include/asm/sclp.h
+> +++ b/arch/s390/include/asm/sclp.h
+> @@ -88,6 +88,7 @@ struct sclp_info {
+>   	unsigned char has_diag318 : 1;
+>   	unsigned char has_sipl : 1;
+>   	unsigned char has_dirq : 1;
+> +	unsigned char has_zpci_interp : 1;
+
+maybe use zpci_lsi (load store interpretion) as pci interpretion would be something else (also fix the the subject line).
+With that
+
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+
+
+>   	unsigned int ibc;
+>   	unsigned int mtid;
+>   	unsigned int mtid_cp;
+> diff --git a/drivers/s390/char/sclp_early.c b/drivers/s390/char/sclp_early.c
+> index b64feab62caa..2e8199b7ae50 100644
+> --- a/drivers/s390/char/sclp_early.c
+> +++ b/drivers/s390/char/sclp_early.c
+> @@ -45,6 +45,7 @@ static void __init sclp_early_facilities_detect(void)
+>   	sclp.has_gisaf = !!(sccb->fac118 & 0x08);
+>   	sclp.has_hvs = !!(sccb->fac119 & 0x80);
+>   	sclp.has_kss = !!(sccb->fac98 & 0x01);
+> +	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
+>   	if (sccb->fac85 & 0x02)
+>   		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
+>   	if (sccb->fac91 & 0x40)
 > 
->   gcc -c -Iinclude  -o dlfilters/dlfilter-test-api-v0.o -fpic dlfilters/dlfilter-test-api-v0.c
-> 
-> Reviewed-by: German Gomez <german.gomez@arm.com>
-
-Only when passing -Wall (this is the case when building the kernel packages in
-Debian with additional flags, so this is why this was spotted):
-
-gcc -Wall -c -Iinclude  -o dlfilters/dlfilter-test-api-v0.o -fpic dlfilters/dlfilter-test-api-v0.c
-dlfilters/dlfilter-test-api-v0.c: In function ‘filter_event’:
-dlfilters/dlfilter-test-api-v0.c:311:29: warning: unused variable ‘d’ [-Wunused-variable]
-  311 |         struct filter_data *d = data;
-      |
-
-Regards,
-Salvatore

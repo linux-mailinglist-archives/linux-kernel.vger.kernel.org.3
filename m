@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B5446D505
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC3846D50D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbhLHOIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:08:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57036 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbhLHOIp (ORCPT
+        id S234726AbhLHOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234713AbhLHOJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:08:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02535B820EE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 14:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D3CC00446;
-        Wed,  8 Dec 2021 14:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638972311;
-        bh=vS1icKEjwwFDMks8ZEP6VHIjK8xXwV7tmx3OxQCGPa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dh7WNodLKyM24s9Wp1+uYZ2KSzJJiWdKVYrtanLmUsv5t74iYftQAw7bWw1LWAoqM
-         KcIppoQBS6hxp5ZRgslT2XUDa6tLwcW5ONQvitQfNtXSgV7NBS9GkpD79iLRZA5OWR
-         vK80u83eimkFeQZqEGYY7JXOvy6dnJU+0zcpuMZlErwmfBgzrCPjZFZABzOLAuwoTl
-         cev27RMFydVyvCKmKLnQhnMINCX50WrNNS93repBbTmN0L/EEdIe6XrYPVkEeqouhD
-         h/+tTMhO+9WcrrOAGggEJXxBIxfbxk/iDjygQZ/3Z9bX+F2YC9ryGL2Gntp52Jc0rt
-         0VRSylJGxhwYw==
-Date:   Wed, 8 Dec 2021 14:05:05 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Nicolin Chen <nicoleotsuka@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sound: fsl: add missing put_device() call in
- imx_hdmi_probe()
-Message-ID: <YbC7kffqjbqoPkW5@sirena.org.uk>
-References: <1638881818-3407-1-git-send-email-wangqing@vivo.com>
+        Wed, 8 Dec 2021 09:09:22 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01ADFC0617A1;
+        Wed,  8 Dec 2021 06:05:50 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id bn20so4030676ljb.8;
+        Wed, 08 Dec 2021 06:05:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rCf0zyvgJUgHg9QQB25FrOzOLqjtx+dGIHtF5AhWskA=;
+        b=Gay56VR7oXKZ61yYW2z5K9QvoVrW8L89rA0ixltHr5LjGbLNoA7io0bF8zKsp4DmjP
+         jQs7eK//M3hBdOAKMU5QrWIjUIsILYd3JOHIqsakVpSG02LOm3AoE7wG9SuqPFHl2lMW
+         XA/SbblXvb53io8vSasL5T1gXSlD7jefkWrMRwM0vTwc+0SjvFUNg4xmGBUpq1p2xwql
+         153GBe2uYprCMRfnaX5osln0KFPbNiqxvfE5cXxvIRrRAgO3wQ/yIB53bmDyFmz6Cqhu
+         EhXnwiithZcIGYmOupnyy2O57ghT5wCGXPYxGpZmZt5ZFh1VXjBjDI6pCEouXVbUFC2E
+         ocOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rCf0zyvgJUgHg9QQB25FrOzOLqjtx+dGIHtF5AhWskA=;
+        b=6Lzq/x/np6nwwPh1pvgLFD5oVPwKkwI8ctoC0CtbQdj9BzZE4NNZR6nlJWVIq4pr3D
+         I2oxtrAwW4QvXaDjfwoAccSIIQDGFVXjLrqGr0lKuAhZ3mjee19CmIUb/vNBnNPnAh4K
+         JZXGvealfQx+Jc7yH1SO9EzoxtcyPTCmdQSZN+sJvBXRjVRSF8zhq1SA5E6ycYCsqFpG
+         TY6PmY54oe8/eThNuotTZVXUjWt4jMKhojyyU0SpvtEBzxqxBWQ+wzI4OTBGnVuBVk3j
+         IUv8Q/LBuASOAzMpLP6BeQqRpH7i5KscGAMcaMeBqAHRSsoYa9cCO1m/XEkF0HH0+BjO
+         sXGw==
+X-Gm-Message-State: AOAM5331u6PmNK8mEwRirbmVyEWVdEMiB2JYLO/Qk8SsLpnyYTMEj1DK
+        t9aDZCBVTlCWgEsYGZfvO2nQbN4rOBxhJy1ML+w=
+X-Google-Smtp-Source: ABdhPJys22p+Nc7f14LfW5nZDfZN5sz0n/uzhuiDoDWANW0u5aCKvBxr4DDNPOGZvcC51LciLgu2KkgeaVdwfkOPZ0M=
+X-Received: by 2002:a2e:bb98:: with SMTP id y24mr47069192lje.315.1638972348282;
+ Wed, 08 Dec 2021 06:05:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rKb0zWUnE/0QDh3m"
-Content-Disposition: inline
-In-Reply-To: <1638881818-3407-1-git-send-email-wangqing@vivo.com>
-X-Cookie: Alex Haley was adopted!
+References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
+ <YaxWXACBguZxWmKS@kernel.org> <CAD2FfiG9wfeW_2xxZqBi9vsjzEJBRjJUZw+AQy1Taos4fh2TLA@mail.gmail.com>
+ <Ya8MUOKPOKVfBfjJ@kernel.org>
+In-Reply-To: <Ya8MUOKPOKVfBfjJ@kernel.org>
+From:   Richard Hughes <hughsient@gmail.com>
+Date:   Wed, 8 Dec 2021 14:05:36 +0000
+Message-ID: <CAD2FfiEkn7dXPpCAaMdh5w8p3gXWzNABzd-nhwdTEd_AOZ7vnw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do encryption
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 7 Dec 2021 at 07:25, Mike Rapoport <rppt@kernel.org> wrote:
+> Can you please describe the actual check for the memory encryption and how
+> it would impact the HSI rating?
 
---rKb0zWUnE/0QDh3m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The problem HSI is trying to solve is that customers are buying
+systems where the CPU supports memory encryption, where the
+motherboard and dram controller support memory encryption and where
+the vendor says it's supported. But in some cases it's not working,
+either because the system firmware is not working properly, or some
+component requires updating to enable the feature. We're found quite a
+few cases where people assumed this was all working fine, but on
+looking closer, finding out that it's not working at all. The higher
+HSI rating would only be available where most of the system RAM is
+encrypted, although we've not worked out a heuristic number for "good
+enough" yet.
 
-On Tue, Dec 07, 2021 at 04:56:58AM -0800, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
->=20
-> of_find_device_by_node() takes a reference to the embedded struct device=
-=20
-> which needs to be dropped when error return.
+> I wonder, for example, why did you choose per-node reporting rather than
+> per-region as described in UEFI spec.
 
-=2E..
+I think Dave is better to answer this question.
 
->  	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
->  	if (!data) {
-> +		put_device(&cpu_pdev->dev);
-
-If it's of_find_device_by_node() you need an of_node_put() since you're
-dropping a reference on the OF node.
-
---rKb0zWUnE/0QDh3m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGwu5AACgkQJNaLcl1U
-h9DDOQf+J5zK6lF7fGbSzDyocKgHfhSXm+Zi4VikzTPBrRjWBzR7I7Xb3EzyftoK
-q8scd1RieKQjYG9+EwWFxAiw3o+L68/BfzK7PGEiiH6PoyGCl0woc87FdYofTIzV
-bfWOkjr2i151MEEhmI7Ho00H6jrCvoAYlmyV5aZhjEkv5jLwpzkM0Otk0SIfE5Kw
-pzi4d0B35D1JthsWkLp8c4R9SD1zN7G1U/RgXbBTkd3Bcj5LgFK0UpEHKt/ahqqE
-mWhpqjAC9q3V0M8T4KLW1riUZ3S2UpW0KYF8y1aoFlrUN8opchz1FFR6J88ddhpi
-/KdYZR2CzkcCZcFbxRILlTIJy5q6rw==
-=vpxc
------END PGP SIGNATURE-----
-
---rKb0zWUnE/0QDh3m--
+Richard.

@@ -2,145 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA76E46D7D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41A546D7C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236632AbhLHQSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:18:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60867 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236627AbhLHQSY (ORCPT
+        id S236568AbhLHQNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229743AbhLHQNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:18:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638980092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=bInaPTvUBOmBWhIgzVgnh4LPgP3ZScaXb+TqtNtr3ZQ=;
-        b=SmFGnLSN01ZiHLPnpm6bj8As8Bs5+TQ7F/NblonlG8tJ1F8IYs1ZzobAg0LwK2sta/MjdV
-        nr1G/MafanvfOoQSs4YM6h6fAQgqNKlqPYFAyzph+W1n6Fg3ekvg/wHj/p85NwbZP8794K
-        Dcmx/FnVUqp5G3spHZyfuI9wR5BGzbs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-293-b12xq4b7NEWIwBvjUvX5lA-1; Wed, 08 Dec 2021 11:14:49 -0500
-X-MC-Unique: b12xq4b7NEWIwBvjUvX5lA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D9D0193F560;
-        Wed,  8 Dec 2021 16:14:47 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 012FF5E26C;
-        Wed,  8 Dec 2021 16:14:29 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 49E80415EE6F; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
-Message-ID: <20211208161000.925810050@fuller.cnet>
-User-Agent: quilt/0.66
-Date:   Wed, 08 Dec 2021 13:09:16 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch v8 10/10] mm: vmstat_refresh: avoid queueing work item if cpu stats are clean
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        Wed, 8 Dec 2021 11:13:12 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043DC061746;
+        Wed,  8 Dec 2021 08:09:40 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id c32so6583236lfv.4;
+        Wed, 08 Dec 2021 08:09:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3Ag4EH6Sr6BZslKLCR8VetO9HeoFeNRaW0N6c+Mu6Xw=;
+        b=PFeDRduoDEgkRKVw5+Jw5bcmhmPSJrKsrb2OM9rlVLnVNaW94bm1OU00TeFKkRbDq0
+         yrIXvP0FllrbrrQitulGJC14NS/G2RFq8P4eaIpAR8A24mRWGLmpuqQJIewx9o3ZBod+
+         JGTKuvxgeV1gZVgANpFAcXRIGFIwazaU8EoPz8NlGRjZsBTWtKXjxxwEGREq/VTc6NIx
+         pj03i7kpXySZewxyDrwxh3HBcwXkkcI3L0A+F1THKsba1YJIGkN2nC5CBWCxWEZ+m0tZ
+         M7M+oirfw+bkqltyrcIB8pIYzzoGkmuXrzpP9mnCFX+m8LQoOQUmhNl+/NXFihmtZgr8
+         rGyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3Ag4EH6Sr6BZslKLCR8VetO9HeoFeNRaW0N6c+Mu6Xw=;
+        b=SbOAkUZo3xeQTnnU1s97xFhyZJN2x/xRby0T9sYVfKQuYiRaAmbbAkgvQ0c59WvWJ5
+         l3I09zChnWiJVM8EsGx31aDC0FU/VaDsgT7THBo0l7a5c1FTYuSjRBV6JU6RhijWVSuh
+         om1VQtaOgiqy/oISyKAWFvbwgB7XXRLME+hLriab11u+kXLypTI1TYHoIVx9uk6MRPkR
+         jNVJwGvlibQNj7c/da3w/GaKEynKGkcJUT7MUf2EzquYrxZ1iCryFR4QZwl1Xmxql43d
+         rKQvQpA5eZGgiVZonyDQS4dWAy+AeAJCt4TAwtXHqDytooTOqh7RFEoBigL2rTxQKGwC
+         VCpg==
+X-Gm-Message-State: AOAM5329xJOYpSeGG+xBIL8S6rlvRkLOii7Ly7uMSABIkuP0iNOHlBEl
+        JjxlZ0v4uGIsYN2vd/VGxZYtPU3O/7o=
+X-Google-Smtp-Source: ABdhPJyIQ3fNw160L4AUPtLSousyLrypJOi8qtntDDg23MApW2UPh7qTKIMeeBdgiB4r9cJwhrdDTA==
+X-Received: by 2002:ac2:428b:: with SMTP id m11mr342057lfh.311.1638979778916;
+        Wed, 08 Dec 2021 08:09:38 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id e17sm292567lfq.102.2021.12.08.08.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 08:09:38 -0800 (PST)
+Subject: Re: [PATCH v7 6/6] iommu/tegra-smmu: Add pagetable mappings to
+ debugfs
+To:     Nicolin Chen <nicolinc@nvidia.com>, thierry.reding@gmail.com,
+        joro@8bytes.org, will@kernel.org
+Cc:     vdumpa@nvidia.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20211208084732.23363-1-nicolinc@nvidia.com>
+ <20211208084732.23363-7-nicolinc@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <090bcb4e-ae22-bdcd-2837-e1afc3317cb6@gmail.com>
+Date:   Wed, 8 Dec 2021 19:09:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211208084732.23363-7-nicolinc@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not necessary to queue work item to run refresh_vm_stats 
-on a remote CPU if that CPU has no dirty stats and no per-CPU
-allocations for remote nodes.
+08.12.2021 11:47, Nicolin Chen пишет:
+>  static void tegra_smmu_attach_as(struct tegra_smmu *smmu,
+>  				 struct tegra_smmu_as *as,
+>  				 unsigned int swgroup)
+> @@ -517,6 +646,12 @@ static void tegra_smmu_attach_as(struct tegra_smmu *smmu,
+>  			dev_warn(smmu->dev,
+>  				 "overwriting group->as for swgroup: %s\n", swgrp->name);
+>  		group->as = as;
+> +
+> +		if (smmu->debugfs_mappings)
+> +			debugfs_create_file(group->swgrp->name, 0444,
+> +					    smmu->debugfs_mappings, group,
+> +					    &tegra_smmu_debugfs_mappings_fops);
 
-This fixes sosreport hang (which uses vmstat_refresh) with 
-spinning SCHED_FIFO process.
+I noticed this in KMSG:
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+ tegra-mc 7000f000.memory-controller: overwriting group->as for swgroup: g2
+ debugfs: File 'g2' in directory 'mappings' already present!
+ tegra-mc 7000f000.memory-controller: overwriting group->as for swgroup: g2
+ debugfs: File 'g2' in directory 'mappings' already present
 
----
- mm/vmstat.c |   49 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 5 deletions(-)
-
-Index: linux-2.6/mm/vmstat.c
-===================================================================
---- linux-2.6.orig/mm/vmstat.c
-+++ linux-2.6/mm/vmstat.c
-@@ -1907,6 +1907,31 @@ static bool need_update(int cpu)
- }
- 
- #ifdef CONFIG_PROC_FS
-+static bool need_drain_remote_zones(int cpu)
-+{
-+#ifdef CONFIG_NUMA
-+	struct zone *zone;
-+
-+	for_each_populated_zone(zone) {
-+		struct per_cpu_pages *pcp;
-+
-+		pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
-+		if (!pcp->count)
-+			continue;
-+
-+		if (!pcp->expire)
-+			continue;
-+
-+		if (zone_to_nid(zone) == cpu_to_node(cpu))
-+			continue;
-+
-+		return true;
-+	}
-+#endif
-+
-+	return false;
-+}
-+
- static void refresh_vm_stats(struct work_struct *work)
- {
- 	refresh_cpu_vm_stats(true);
-@@ -1916,8 +1941,12 @@ int vmstat_refresh(struct ctl_table *tab
- 		   void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	long val;
--	int err;
--	int i;
-+	int i, cpu;
-+	struct work_struct __percpu *works;
-+
-+	works = alloc_percpu(struct work_struct);
-+	if (!works)
-+		return -ENOMEM;
- 
- 	/*
- 	 * The regular update, every sysctl_stat_interval, may come later
-@@ -1931,9 +1960,19 @@ int vmstat_refresh(struct ctl_table *tab
- 	 * transiently negative values, report an error here if any of
- 	 * the stats is negative, so we know to go looking for imbalance.
- 	 */
--	err = schedule_on_each_cpu(refresh_vm_stats);
--	if (err)
--		return err;
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu) {
-+		struct work_struct *work = per_cpu_ptr(works, cpu);
-+
-+		INIT_WORK(work, refresh_vm_stats);
-+		if (need_update(cpu) || need_drain_remote_zones(cpu))
-+			schedule_work_on(cpu, work);
-+	}
-+	for_each_online_cpu(cpu)
-+		flush_work(per_cpu_ptr(works, cpu));
-+	cpus_read_unlock();
-+	free_percpu(works);
-+
- 	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
- 		/*
- 		 * Skip checking stats known to go negative occasionally.
-
-
+Doesn't look okay, please fix.

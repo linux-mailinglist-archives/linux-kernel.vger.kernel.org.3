@@ -2,62 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A954146CABE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E66546CAC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239038AbhLHCTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 21:19:52 -0500
-Received: from mga09.intel.com ([134.134.136.24]:58555 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229481AbhLHCTv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 21:19:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237546326"
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="237546326"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 18:16:20 -0800
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="462586499"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.159.50])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 18:16:16 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Hasan Al Maruf <hasan3050@gmail.com>
-Cc:     akpm@linux-foundation.org, dave.hansen@linux.intel.com,
-        feng.tang@intel.com, hasanalmaruf@fb.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
-        mgorman@techsingularity.net, mhocko@suse.com, osalvador@suse.de,
-        peterz@infradead.org, riel@surriel.com, shakeelb@google.com,
-        shy828301@gmail.com, weixugc@google.com, ziy@nvidia.com
-Subject: Re: [PATCH -V10 RESEND 1/6] NUMA Balancing: add page promotion counter
-References: <20211207022757.2523359-2-ying.huang@intel.com>
-        <20211207060509.79442-1-hasanalmaruf@fb.com>
-Date:   Wed, 08 Dec 2021 10:16:14 +0800
-In-Reply-To: <20211207060509.79442-1-hasanalmaruf@fb.com> (Hasan Al Maruf's
-        message of "Tue, 7 Dec 2021 01:05:09 -0500")
-Message-ID: <871r2n4z9t.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S239125AbhLHCWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhLHCWi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 21:22:38 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CDC061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:19:07 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id 15so910970ilq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=r+WvBmZpS0dwMmf0DqvGpLxh7nbMO6CLLW18P2NNE9w=;
+        b=YbXcK3PL90cxzRUAgazB7/ojV4aWjHBPd43EFmoKOLAEVrelKo6Qvp/YgkpNOvzQOP
+         W9ftiXyet8eI6Axv2qE7oCZv2APaphv3otsV+BF+g8fQr6fPqLG0TRch3W3OsTJLJtiY
+         B0nt/AgS3RreLW2ZZS+jPdyC6za4G+SyQEeQb6scaSoQVlM16QiUFhmQiRvTSHoYI4bR
+         ITLfBFl/ZgBpmkDOVLY6fuxK53/aEaK2hc2OJi/kvDF/bp3NmxO7Mrq77bkc3TC5x1fZ
+         BjSKrdMJCg8vuK0u8+by6AGOD8mXgd/jvMRtetBRyrZlqWdlWdPlKTNevo73gE2EN6r7
+         EvlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=r+WvBmZpS0dwMmf0DqvGpLxh7nbMO6CLLW18P2NNE9w=;
+        b=M4tTcmyx8P+ImKLBVy+A2lkbj3L9nxPZHKTc2u6bYyMOiTMNsjqiM2lo+wa7JBZgqB
+         ySiSuo0tZdZY3Fk3wSmbMaRcmckNCXsj49gSZUO9HNA/gqdv8FUDWDJ+VZ5B8VCx1xrw
+         E1+5k0I4s+wHDNGRm8/xRa2rcxxJEP8ix4dFIAFbJdCW3HVkQB54QHETMzqaMbvKFk3I
+         eDhPPA4mR5/mZOEuvBb+wjR0CXEgbiU0kZVsYbgcXJNvlu3koR3z6zAv23CdBosLJHjo
+         jlkfqaYCV5puI5DtNINbgguPMLHfj09BLE0WZG/+IUdHgjHfueD0aVh2Hm/hEvwUM3nL
+         sLDQ==
+X-Gm-Message-State: AOAM531lTr2mBRs0cCZfhx89QhPd7RylpkMF4iJsYa9cMvqCxmCrzF0d
+        t7hlp6LMVhAOk+N52jWTPF1w
+X-Google-Smtp-Source: ABdhPJxrGMMmzBgFck0ZVIBYgJkKyLzNMZXkfRw9YcDo7Qq+p6xvwogBPjRvN1CyCWrX69eSNnrbuw==
+X-Received: by 2002:a05:6e02:20c9:: with SMTP id 9mr2950559ilq.245.1638929946606;
+        Tue, 07 Dec 2021 18:19:06 -0800 (PST)
+Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
+        by smtp.gmail.com with ESMTPSA id s20sm983283iog.25.2021.12.07.18.19.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 18:19:06 -0800 (PST)
+Message-ID: <6da1f2cc0ffc2c0106412c5aff52700edd183c6d.camel@egauge.net>
+Subject: Re: [PATCH 2/2] wilc1000: Fix missing newline in error message
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Joe Perches <joe@perches.com>,
+        Ajay Singh <ajay.kathat@microchip.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 07 Dec 2021 19:19:05 -0700
+In-Reply-To: <5b44cebddcda765942aa118d25740a074137d0f8.camel@perches.com>
+References: <20211206232709.3192856-1-davidm@egauge.net>
+         <20211206232709.3192856-3-davidm@egauge.net>
+         <4687b01640eaaba01b3db455a7951a534572ee31.camel@perches.com>
+         <00d44cb3-3b38-7bb6-474f-c819c2403b6a@egauge.net>
+         <5b44cebddcda765942aa118d25740a074137d0f8.camel@perches.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hasan Al Maruf <hasan3050@gmail.com> writes:
+On Tue, 2021-12-07 at 16:23 -0800, Joe Perches wrote:
+> On Tue, 2021-12-07 at 15:58 -0700, David Mosberger-Tang wrote:
+> > On 12/6/21 6:33 PM, Joe Perches wrote:
+> > 
+> > > On Mon, 2021-12-06 at 23:27 +0000, David Mosberger-Tang wrote:
+> > > > Add missing newline in pr_err() message.
+> > > []
+> > > > diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
+> > > []
+> > > > @@ -27,7 +27,7 @@ static irqreturn_t isr_uh_routine(int irq, void *user_data)
+> > > >   	struct wilc *wilc = user_data;
+> > > >   
+> > > >   	if (wilc->close) {
+> > > > -		pr_err("Can't handle UH interrupt");
+> > > > +		pr_err("Can't handle UH interrupt\n");
+> > > Ideally this would use wiphy_<level>:
+> > > 
+> > > 		wiphy_err(wilc->wiphy, "Can't handle UH interrupt\n");
+> > 
+> > Sure, but that's orthogonal to this bug fix.
+> 
+> Of course.
+> 
+> >  I do have a "cleanups" 
+> > branch with various cleanups of this sort.  I'll look into fixing pr_*() 
+> > calls in the cleanups branch (there are several of them, unsurprisingly).
+> 
+> netdev_<level> -> wiphy_<level> conversions too where feasible please.
 
-> Hi Huang,
->
->>+#ifdef CONFIG_NUMA_BALANCING
->>+	PGPROMOTE_SUCCESS,	/* promote successfully */
->
-> I find a breakdown of Anon and File page promotion can often be useful to
-> understand an application's behavior (i.e. what kind of pages are moved to
-> remote node and later being promoted). What do you think about adding
-> counters for such a breakdown?
->
-> What's your thought on adding counters for failures on different reasons?
+OK, I made a note for that, too, thanks.
 
-I think that all these provide helpful information.  But I think that we
-can add them in separate patches.  That will make reviewing simpler.
+  --david
 
-Best Regards,
-Huang, Ying
+

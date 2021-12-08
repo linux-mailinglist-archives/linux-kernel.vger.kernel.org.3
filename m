@@ -2,150 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30C546C88E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D356646C897
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242773AbhLHATV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbhLHATU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:19:20 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF2C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 16:15:49 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 8so943739pfo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 16:15:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dpbhMmude6TrSYy/W/IEKSbLw/ojh/ZM0booTmlaN5A=;
-        b=QntzNtUmLjQqBF5CnhPBS0aMcGJVADvyHOc7Oc7VegMHHK6TtMy3zmgpSgjg3EYldn
-         UTjX1BloCLnw/WUp3ffsg/0cln0Q2vlubERNGXlAM2DTv2tfNB6tETq0pZtCAjLqKmX5
-         E9zEjtWCZQmGBBKRnGWhl/uLxCrKiPHJEvnBqt2rADKvbV/17KkUkZ5pG9DwGS/vFJ+T
-         MiJxVs0IijjWvKYpfrSeECF7t3DzOF1k9B5H1mA87/P+rB7TIlFeYLy4mrF1txY6RVx5
-         tBGuEKxbYXfG55x1xcP8UDzk+2N4lcz3aW18M+b0m70wsoAtWvycp4UxOm/d6WKoAGMZ
-         AXFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dpbhMmude6TrSYy/W/IEKSbLw/ojh/ZM0booTmlaN5A=;
-        b=SIrz2k7hOxZ4BSwNJlSCrjX5d/TrtkjrI0h6nMLJec7o034aOYST9oEPe5VNdesYUz
-         JCY96lmHthCktHAcrNl3XI5SDE/J31A2n5OA++Xi4VdkqRF4Tyo4a3tRZ9tOMQi016mU
-         +61ViLg7FYhp8fx0qVak2gqQdbCoTvFcfFHHrdGOGEKa5GswNxpKhglu66mlXO8/viP1
-         IU3QZ0DT0PFQMViCL3tjXiboinv7tU5UySYbB8yIrcHXn/jbjAsst0BrQttcyV2YCA99
-         JC5AZjRbyj/KV4B9gctqlYNZmvF4gSj4YM+ZKIpjfi2A7SR79nDYU1HwJRoFUVvnMdA2
-         8m1A==
-X-Gm-Message-State: AOAM530zt3Lh/4XcIimj6Pvr6rhMyyLFUaIll+3Yc4po4T4sUk4NPFgo
-        kAs8GsbNPalXfhDvoZm1QGFsNg==
-X-Google-Smtp-Source: ABdhPJz8g/C9Oy5ixea0NmmtbiYfcCVCfeC70Of/0im+WsJI/9oJVYSctgXFGZA7dTlO4PBfYRCyXA==
-X-Received: by 2002:aa7:99cf:0:b0:49f:9d3c:ac0f with SMTP id v15-20020aa799cf000000b0049f9d3cac0fmr2536854pfi.39.1638922548800;
-        Tue, 07 Dec 2021 16:15:48 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u3sm975156pfk.32.2021.12.07.16.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:15:48 -0800 (PST)
-Date:   Wed, 8 Dec 2021 00:15:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Xiao Guangrong <guangrong.xiao@linux.intel.com>
-Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
- shadow paging if the guest PDPTEs is changed
-Message-ID: <Ya/5MOYef4L4UUAb@google.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
- <20211111144634.88972-1-jiangshanlai@gmail.com>
+        id S239715AbhLHAZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:25:49 -0500
+Received: from mga06.intel.com ([134.134.136.31]:24068 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235439AbhLHAZs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:25:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="298518382"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="298518382"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:20:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="563883177"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2021 16:20:44 -0800
+Received: from debox1-desk4.hsd1.or.comcast.net (unknown [10.251.18.198])
+        by linux.intel.com (Postfix) with ESMTP id 90ADE5804B4;
+        Tue,  7 Dec 2021 16:20:44 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com,
+        david.e.box@linux.intel.com, michael.a.bottini@linux.intel.com,
+        rafael@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/2] PCI/ASPM: Add ASPM BIOS override function
+Date:   Tue,  7 Dec 2021 16:20:42 -0800
+Message-Id: <20211208002043.882200-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211111144634.88972-1-jiangshanlai@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 11, 2021, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
-> 
-> For shadow paging, the pae_root needs to be reconstructed before the
-> coming VMENTER if the guest PDPTEs is changed.
-> 
-> But not all paths that call load_pdptrs() will cause the pae_root to be
-> reconstructed. Normally, kvm_mmu_reset_context() and kvm_mmu_free_roots()
-> are used to launch later reconstruction.
-> 
-> The commit d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and
-> CR0.NW are changed") skips kvm_mmu_reset_context() after load_pdptrs()
-> when changing CR0.CD and CR0.NW.
-> 
-> The commit 21823fbda552("KVM: x86: Invalidate all PGDs for the current
-> PCID on MOV CR3 w/ flush") skips kvm_mmu_free_roots() after
-> load_pdptrs() when rewriting the CR3 with the same value.
+From: Michael Bottini <michael.a.bottini@linux.intel.com>
 
-This isn't accurate, prior to that commit KVM wasn't guaranteed to do
-kvm_mmu_free_roots() if it got a hit on the current CR3 or if a previous CR3 in
-the cache matched the new CR3 (the "cache" has done some odd things in the past).
+Devices that appear under the Intel VMD host bridge are not visible to BIOS
+and therefore not programmed by BIOS with ASPM settings. For these devices,
+it is necessary for the driver to configure ASPM. Since ASPM settings are
+adjustable at runtime by module parameter, use the same mechanism to allow
+drivers to override the default (in this case never configured) BIOS policy
+to ASPM_STATE_ALL. Then, reconfigure ASPM on the link. Do not override if
+ASPM control is disabled.
 
-So I think this particular flavor would be:
+Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
+V2
+ - Change return type to int so caller can determine if override was
+   successful
+ - Return immediately if link is not found so that lock it not
+   unecessarily taken, suggested by kw@linux.com
+ - Don't override if aspm_disabled is true
 
-  Fixes: 7c390d350f8b ("kvm: x86: Add fast CR3 switch code path")
+ drivers/pci/pci.h       |  2 ++
+ drivers/pci/pcie/aspm.c | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+)
 
-> The commit a91a7c709600("KVM: X86: Don't reset mmu context when
-> toggling X86_CR4_PGE") skips kvm_mmu_reset_context() after
-> load_pdptrs() when changing CR4.PGE.
-> 
-> Normally, the guest doesn't change the PDPTEs before doing only the
-> above operation without touching other bits that can force pae_root to
-> be reconstructed.  Guests like linux would keep the PDPTEs unchaged
-> for every instance of pagetable.
-> 
-> Fixes: d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and CR0.NW are changed")
-> Fixes: 21823fbda552("KVM: x86: Invalidate all PGDs for the current PCID on MOV CR3 w/ flush")
-> Fixes: a91a7c709600("KVM: X86: Don't reset mmu context when toggling X86_CR4_PGE")
-> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
-> ---
->  arch/x86/kvm/x86.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0176eaa86a35..cfba337e46ab 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
->  	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
->  		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
->  		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
-> -		/* Ensure the dirty PDPTEs to be loaded. */
-> -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
-> +		/*
-> +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
-> +		 * enabled or pae_root to be reconstructed for shadow paging.
-> +		 */
-> +		if (tdp_enabled)
-> +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
-> +		else
-> +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 3d60cabde1a1..c741791f15e0 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -562,11 +562,13 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+ void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+ void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+ void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
++int pcie_aspm_policy_override(struct pci_dev *dev);
+ #else
+ static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
++static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+ #endif
+ 
+ #ifdef CONFIG_PCIE_ECRC
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 52c74682601a..e2c61e14e724 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -1140,6 +1140,25 @@ int pci_disable_link_state(struct pci_dev *pdev, int state)
+ }
+ EXPORT_SYMBOL(pci_disable_link_state);
+ 
++int pcie_aspm_policy_override(struct pci_dev *pdev)
++{
++	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
++
++	if (!link || aspm_disabled)
++		return -EINVAL;
++
++	down_read(&pci_bus_sem);
++	mutex_lock(&aspm_lock);
++	link->aspm_default = ASPM_STATE_ALL;
++	pcie_config_aspm_link(link, policy_to_aspm_state(link));
++	pcie_set_clkpm(link, policy_to_clkpm_state(link));
++	mutex_unlock(&aspm_lock);
++	up_read(&pci_bus_sem);
++
++	return 0;
++}
++EXPORT_SYMBOL(pcie_aspm_policy_override);
++
+ static int pcie_aspm_set_policy(const char *val,
+ 				const struct kernel_param *kp)
+ {
+-- 
+2.25.1
 
-Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
-of vcpu->arch.mmuvcpu->arch.mmu.
-
-To avoid a dependency on the previous patch, I think it makes sense to have this be:
-
-	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
-		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
-
-before the memcpy().
-
-Then we can decide independently if skipping the KVM_REQ_LOAD_MMU_PGD if the
-PDPTRs are unchanged with respect to the MMU is safe.

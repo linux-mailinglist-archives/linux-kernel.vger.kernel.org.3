@@ -2,91 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC7146D94D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA0046D951
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbhLHRPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S237627AbhLHRQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbhLHRPA (ORCPT
+        with ESMTP id S234605AbhLHRQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:15:00 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE9BC061746;
-        Wed,  8 Dec 2021 09:11:28 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2250778wmc.2;
-        Wed, 08 Dec 2021 09:11:28 -0800 (PST)
+        Wed, 8 Dec 2021 12:16:04 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83264C061746;
+        Wed,  8 Dec 2021 09:12:32 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z5so10751787edd.3;
+        Wed, 08 Dec 2021 09:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AxVAPKYsTcOcslHUBIs4NmVmCnEOU4UXVolRlRZG2D0=;
-        b=Lei62emZnhZk6JiogaT460xQ9SVE67RI2fh1G6BTxik+QwHLoRH0Ca1bVVJjCey1EB
-         p+UuuL0fFsLHbjHckgqEqVQ0BK791+CYxcTzXF2E4AuE08E+r8ye0XlgjXDXUuVW8CNR
-         A4sP40D1V9t3BTs1V9gSkngH5W+3RFKUBBthYfTgnp5wkeHRQx+6ka7yoWKVN7+yubvX
-         bJFj992LF2VlPJX9i1pMQBqg/WYrwGn73DO2dvcZoX/11DNY5jmVq1tNdJ1S92i/qWoo
-         SemJHfTIayvejCw38Dxii9sg8VOpisLFLJAgysN3gcLgGOG+c2SxSmeMoJnOzRscu/4J
-         8llA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zi8oo1PZizw8wEpDiOLL07lx2GDHOYXRbCD0oQdOBv4=;
+        b=BvbrsObi+qT4Kh60LTdhZFPxy4nsurH4Zpy3l+ppSrSEFTInp/yHeMSoXY5b6lc/M9
+         J+R4VBjZy3DGBwwhXWPUZCQPIMr0oLsjZxdMxWUfHqrES8d2Dh2GnkDqOahaHPHhBeDl
+         UTZaSehEDXK8f+wG8PdThQ/f9/dCJQ0zTk6xRJka+IuAnfMYWpxuZIICvB8qYuvR4R0n
+         Kn63nmBw2CxgM9fJZNWBRwghp5A9FG/Kkrh/ZNSyz1T0Z1LLY5XLpNoO02AHAuj5bO4p
+         00YiP9tvZCkc2g4dxbYZ2r3X+05+MMMgxdNXs4+4CJUsAckaGSg+sSOAyvrNLSHdcFLD
+         ExuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AxVAPKYsTcOcslHUBIs4NmVmCnEOU4UXVolRlRZG2D0=;
-        b=ETezGhje+oHNlUG4sxrkp47YYnZusiDQgX1mWrzKtUH8wv9IfeGaOJwRP4gjpv0sq1
-         WzYokg/NghbjI22h75Ui4JKpFkKXIh+6IPN6IhrzYgUWvvd1MO+bZ+3WEhHQStAox10C
-         ILj9jzQF+FYeduHpqzZeHY/lispXYyS9Dhk+DkTvfdFRuLO6nyHDX+FpXzYK/mr59T27
-         KfcOoPSYOTAFMjLd2OJYPFwV8Mc4pV4wbMiU4Y3EZn43i8ghracQ0dJRrrpmMYKTsAFH
-         IQXQntbEd6rBNHvgQ/w54A8dGh4sfrvQLdE1hsIROHRmOCWLx2lMupRxzUXd3CtXbkc/
-         36Bg==
-X-Gm-Message-State: AOAM533lFUBgM7Bu6aISUQatt5rZ8bXeRzuwYv3O4SpCPTadDuf0D3Os
-        LzQkvXTHTXky7clFMgwMzF4=
-X-Google-Smtp-Source: ABdhPJx8PkSp7b8YjFdeUth4hCMLI8vYeP/HBkVPmGJiHD7IaTalA5SdXuaodo1kXbHH2bBpnJZbtQ==
-X-Received: by 2002:a05:600c:3486:: with SMTP id a6mr17604580wmq.32.1638983486700;
-        Wed, 08 Dec 2021 09:11:26 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id e12sm4481332wrq.20.2021.12.08.09.11.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zi8oo1PZizw8wEpDiOLL07lx2GDHOYXRbCD0oQdOBv4=;
+        b=tQD3mfXj5cwvRGWVNAOM+1MBr5QVpGZKCkEb3ecwqJfCZg9fwKdSEijH3UsAVgqkdh
+         1PAi+vy/1iF5uIa3qlZ1aTuTMq6EZLRzt4BFXVnXXRa8jag557tKNbXe1aR8EgGNmyqH
+         D6RzizxY7r2Eerw6nRT/p2mc6TdY8bDD6mq2aA4vtjdmfNFXhPoJbGgiAXD2Lg7KDoTc
+         GkvEEEkvDkwMbFOKBvNG4M5j0vISIbOHEURgNWsyeHmqJpnHpIZ0OMZCWvnhYxOGMoOf
+         R2/+M/3UgkfKQ9bswCe6j7MC7fH6vyELZBHZpNzpyiyDIS0vmVyCvoHmjGffBt61M5kz
+         iqFA==
+X-Gm-Message-State: AOAM5333BqImqm1HbokChaFNOgfhaCNLR9+epqoO5ryLceAKATrJwExj
+        3DFkksaA/btLcS1IZypORA==
+X-Google-Smtp-Source: ABdhPJxNH6F6yUOi+QCXoRNyaMIvWKHl4u8joVLBEhadTge3/FhO3F9gYXEejNUNqaDm2hD7Xi9IWQ==
+X-Received: by 2002:a17:907:6291:: with SMTP id nd17mr8993126ejc.194.1638983550551;
+        Wed, 08 Dec 2021 09:12:30 -0800 (PST)
+Received: from localhost.localdomain ([46.53.251.178])
+        by smtp.gmail.com with ESMTPSA id hx14sm1725391ejc.92.2021.12.08.09.12.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 09:11:26 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, irogers@google.com, ak@linux.intel.com,
-        john.garry@huawei.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] perf util: Fix use after free in metric__new
-Date:   Wed,  8 Dec 2021 18:11:13 +0100
-Message-Id: <20211208171113.22089-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 08 Dec 2021 09:12:30 -0800 (PST)
+Date:   Wed, 8 Dec 2021 20:12:27 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     akpm@linux-foundation.org, keescook@chromium.org,
+        laniel_francis@privacyrequired.com,
+        andriy.shevchenko@linux.intel.com, linux@roeck-us.net,
+        andreyknvl@gmail.com, dja@axtens.net, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH -next 1/2] string.h: Introduce memset_range() for wiping
+ members
+Message-ID: <YbDne/nYsVai5pCV@localhost.localdomain>
+References: <20211208030451.219751-1-xiujianfeng@huawei.com>
+ <20211208030451.219751-2-xiujianfeng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211208030451.219751-2-xiujianfeng@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Addresses-Coverity-ID: 1494000
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- tools/perf/util/metricgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Dec 08, 2021 at 11:04:50AM +0800, Xiu Jianfeng wrote:
+> Motivated by memset_after() and memset_startat(), introduce a new helper,
+> memset_range() that takes the target struct instance, the byte to write,
+> and two member names where zeroing should start and end.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  include/linux/string.h | 20 ++++++++++++++++++++
+>  lib/memcpy_kunit.c     | 12 ++++++++++++
+>  2 files changed, 32 insertions(+)
+> 
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index b6572aeca2f5..7f19863253f2 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -291,6 +291,26 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+>  	       sizeof(*(obj)) - offsetof(typeof(*(obj)), member));	\
+>  })
+>  
+> +/**
+> + * memset_range - Set a value ranging from member1 to member2, boundary included.
+> + *
+> + * @obj: Address of target struct instance
+> + * @v: Byte value to repeatedly write
+> + * @member1: struct member to start writing at
+> + * @member2: struct member where writing should stop
+> + *
+> + */
+> +#define memset_range(obj, v, member_1, member_2)			\
+> +({									\
+> +	u8 *__ptr = (u8 *)(obj);					\
+> +	typeof(v) __val = (v);						\
+> +	BUILD_BUG_ON(offsetof(typeof(*(obj)), member_1) >		\
+> +		     offsetof(typeof(*(obj)), member_2));		\
+> +	memset(__ptr + offsetof(typeof(*(obj)), member_1), __val,	\
+> +	       offsetofend(typeof(*(obj)), member_2) -			\
+> +	       offsetof(typeof(*(obj)), member_1));			\
+> +})
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index fffe02aae3ed..4d2fed3aefd1 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -209,8 +209,8 @@ static struct metric *metric__new(const struct pmu_event *pe,
- 	m->metric_name = pe->metric_name;
- 	m->modifier = modifier ? strdup(modifier) : NULL;
- 	if (modifier && !m->modifier) {
--		free(m);
- 		expr__ctx_free(m->pctx);
-+		free(m);
- 		return NULL;
- 	}
- 	m->metric_expr = pe->metric_expr;
--- 
-2.25.1
+"u8*" should be "void*" as kernel legitimises pointer arithmetic on void*
+and there is no dereference.
 
+__val is redundant, just toss "v" into memset(), it will do the right
+thing. In fact, toss "__ptr" as well, it is simply unnecessary.
+
+All previous memsets are the same...

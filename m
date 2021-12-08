@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABEA46D13D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118EC46D14B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbhLHKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:48:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39690 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbhLHKsf (ORCPT
+        id S231853AbhLHKvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229475AbhLHKvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:48:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E08DAB8208C;
-        Wed,  8 Dec 2021 10:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCCEC00446;
-        Wed,  8 Dec 2021 10:44:57 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 11:44:54 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yabin Cui <yabinc@google.com>
-Subject: Re: [PATCH] tracefs: Have new files inherit the ownership of their
- parent
-Message-ID: <20211208104454.nhxyvmmn6d2qhpwl@wittgenstein>
-References: <20211207144828.3d356e26@gandalf.local.home>
+        Wed, 8 Dec 2021 05:51:13 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8BDC061746;
+        Wed,  8 Dec 2021 02:47:41 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id t18so3264179wrg.11;
+        Wed, 08 Dec 2021 02:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OkWOMCAQHmLJzaA36rEP0QlSHNfBm3OR63s6QhneOPQ=;
+        b=RWGRE1/oC5rzYOYeX9g+TpwyA5CE9+UjzYc3h9cVE5/MTED8Q5iyesc9xhgDWcVAzt
+         yZoLuRoh3lVQvID2rDSpAZaZHeKci1ge16YTBgXUlpXDzGN2OAJegchbAOW/BwELwYVD
+         qa+c5UBl3XCnvH3/Z/w/uF3f2tM6CiM1xWmn1qp1Z9jI3eB8OpapmhWYoGAl6g0T4wjT
+         FIHk+fq2XDtkwWLnNXJRAI1/3G6Nq9BjLhpdyFGV0UdqGGvyJdjxzF8mCsQdppzMOjWQ
+         I9oFSPZkUY+S9lrB4pxqphjyFknZT5KO+uqGPs77Rdus+sgf3UyZEJrCyexgq7ZHMXdr
+         ErCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OkWOMCAQHmLJzaA36rEP0QlSHNfBm3OR63s6QhneOPQ=;
+        b=OPzQadFLDxDLba0BmgmVZ1AxFIAz5bII4jtYFEHzJ1X7RQ+IxV2tL0hrCC4HIXiOMk
+         PWwySXiLqbSeTmXQ1tuPNOVqcFadlqUjotldrH7sZ10mbTlTsIBaHwAPfoaNcQbcH/nU
+         zhr28+r/bWJddR7SbVumPAUtRGJVCNrIu9ymvCSfPYlnw7gSHS+94BYOP9tbXda/js/x
+         6IrAhqLA96EIdc/nQds4XLTSwzsm355Qg50kSulKve45rA32oodi1QpHFxzKwe/p67I1
+         ZtWH3KGZGBOBoGx0aK/KNIYjVXMolWMNvPVczsdCjqlB3vucJ4B78eEavUfRv/r9ZieR
+         GaGQ==
+X-Gm-Message-State: AOAM531p7x43U573uC52wHuaNkBivU/7LVadVBMJ9uBCfgwRLT9LTW4K
+        NS5HU+5JP6TIW9xlvrsWO+I=
+X-Google-Smtp-Source: ABdhPJz6DkaIiwIIVRrUwJBHZOURim/jOwS4l4OIGb4QF45eQc0G4ttVQSu7VgfXPTbo/RaapECcKw==
+X-Received: by 2002:adf:edc6:: with SMTP id v6mr58132786wro.461.1638960459898;
+        Wed, 08 Dec 2021 02:47:39 -0800 (PST)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id o12sm2614016wmq.12.2021.12.08.02.47.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 02:47:39 -0800 (PST)
+Date:   Wed, 8 Dec 2021 10:47:37 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/125] 5.10.84-rc2 review
+Message-ID: <YbCNSU9wnAr6YOdr@debian>
+References: <20211207081114.760201765@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207144828.3d356e26@gandalf.local.home>
+In-Reply-To: <20211207081114.760201765@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 02:48:28PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Hi Greg,
+
+On Tue, Dec 07, 2021 at 09:18:22AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 125 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> If the tracefs system is set to a specific owner and group, then the files
-> and directories that are created under them should inherit the owner and
-> group of the parent.
+> Responses should be made by Thu, 09 Dec 2021 08:09:22 +0000.
+> Anything received after that time might be too late.
 
-The description reads like the owner of new directories and files is to
-be always taken from the {g,u}id mount options. It doesn't look like
-tracefs currently supports .setattr but if it ever wants to e.g. to
-allow the system administrator to delegate specific directories or
-files, the patch below will cause inheritance based on directory
-ownership not on the {g,u}id mount option. So if I were to write this
-I'd rather initialize based on mount option directly.
+Build test:
+mips (gcc version 11.2.1 20211112): 63 configs -> no new failure
+arm (gcc version 11.2.1 20211112): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20211112): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20211112): 4 configs -> no failure
 
-So sm along the - completely untested, non-prettified - lines of:
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-	static inline struct tracefs_fs_info *TRACEFS_SB(const struct super_block *sb)
-	{
-		return sb->s_fs_info;
-	}
+[1]. https://openqa.qa.codethink.co.uk/tests/483
+[2]. https://openqa.qa.codethink.co.uk/tests/480
 
-	struct tracefs_info *info;
-	[...]
 
-	inode = tracefs_get_inode(dentry->d_sb);
-	if (unlikely(!inode))
-		return failed_creating(dentry);
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-	[...]
-	
-	struct tracefs_info *info = TRACEFS_SB(inode->i_sb);
+--
+Regards
+Sudip
 
-	[...]
-	
-	inode->i_uid = info.mount_opts.uid;
-	inode->i_gid = info.mount_opts.gid;
-
-this clearly gets the semantics across, the caller doens't need to know
-that parent can be NULL and why it is retrieved via dentry->d_parent,
-and is robust even if you allow changes in ownership in different ways
-later on.
-
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
-> Reported-by: Kalesh Singh <kaleshsingh@google.com>
-> Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> ---
->  fs/tracefs/inode.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-> index f20f575cdaef..6b16d89cf187 100644
-> --- a/fs/tracefs/inode.c
-> +++ b/fs/tracefs/inode.c
-> @@ -488,6 +488,8 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
->  	inode->i_mode = mode;
->  	inode->i_fop = fops ? fops : &tracefs_file_operations;
->  	inode->i_private = data;
-> +	inode->i_uid = dentry->d_parent->d_inode->i_uid;
-> +	inode->i_gid = dentry->d_parent->d_inode->i_gid;
-
-I you stick with this I'd use the d_inode() accessor we have.
-
-inode->i_uid = d_inode(dentry->d_parent)->i_uid;
-inode->i_gid = d_inode(dentry->d_parent)->i_gid;
-
->  	d_instantiate(dentry, inode);
->  	fsnotify_create(dentry->d_parent->d_inode, dentry);
->  	return end_creating(dentry);
-> @@ -510,6 +512,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
->  	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
->  	inode->i_op = ops;
->  	inode->i_fop = &simple_dir_operations;
-> +	inode->i_uid = dentry->d_parent->d_inode->i_uid;
-> +	inode->i_gid = dentry->d_parent->d_inode->i_gid;
->  
->  	/* directory inodes start off with i_nlink == 2 (for "." entry) */
->  	inc_nlink(inode);
-> -- 
-> 2.31.1
-> 

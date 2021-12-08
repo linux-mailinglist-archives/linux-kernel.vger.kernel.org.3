@@ -2,103 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2393746CC8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 824A246CC90
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbhLHEcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:32:07 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34912 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbhLHEcG (ORCPT
+        id S240254AbhLHEe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:34:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56838 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233519AbhLHEe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:32:06 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
+        Tue, 7 Dec 2021 23:34:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B393CE1FAC;
-        Wed,  8 Dec 2021 04:28:33 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB9526052B;
-        Wed,  8 Dec 2021 04:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638937711;
-        bh=y2aFHRT3xbJ/MoeEYqljar7awQKq44QJXZDHZuqCzPg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o18aB1wlNWXcDx4GIxajZ91AO4rjNAkU75DEEEu2gYbj6NDddyNQy9+4K7fw1L2l2
-         PWfzlf/kBF48gLIUWMO8oOeZgbBw/mdMpWQCdOQR/CgUtf3Ox+3/f9hfdTrPAx0Wf6
-         8VVQBio4EFIvmW75zH6vYLNknDsu3cfdA0wUvg3Y=
-Date:   Tue, 7 Dec 2021 20:28:29 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     <keescook@chromium.org>, <laniel_francis@privacyrequired.com>,
-        <andriy.shevchenko@linux.intel.com>, <adobriyan@gmail.com>,
-        <linux@roeck-us.net>, <andreyknvl@gmail.com>, <dja@axtens.net>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-Subject: Re: [PATCH -next 1/2] string.h: Introduce memset_range() for wiping
- members
-Message-Id: <20211207202829.48d15f0ffa006e3656811784@linux-foundation.org>
-In-Reply-To: <20211208030451.219751-2-xiujianfeng@huawei.com>
-References: <20211208030451.219751-1-xiujianfeng@huawei.com>
-        <20211208030451.219751-2-xiujianfeng@huawei.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17101B81D81;
+        Wed,  8 Dec 2021 04:30:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFD6C00446;
+        Wed,  8 Dec 2021 04:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638937854;
+        bh=EOEbeN/Kgi0GMYMankSSg0gzAST/9Pr1LyNkGfdUlxA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Zn5CWZq7kQWCXlUGJFwTbIhdsZOlWu6ZHNBOI+v8wAZM9eDl5LtMJKwBy5R9zAAkV
+         +mgmQHMFesOKhq0b0b50NPwkDyx+1+DCK7kYrKPeHJ18Pv7/9vjIBrYQCxzTjuZu7F
+         vzTMbZ04ZqWlUgHfiCEPq3FEK5S4ZRnTNKcDqRFu3CsdVxy5nByUGqSWRAa6l0++SL
+         uwalAWnFAT+sXCcjFE0qe54kkEJ8McApYjbtht1s1zEgqExovfCszbIwh4j+8okLGv
+         2e+/r4bJ0IZi1JaBvUO/6+qgnN3iaLbQJFgDRCCP+J6dZrPGtag5AjdQjmCSWf67hF
+         MqkKSz8ySONMQ==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <jgJW1u3RfTQcv5ZBcVQt4fz8_sA4gvyXsN5x18zzLo_nTR5nfLpZtdAjy-WlEaCMnmnPGZjeFGV5OoiWNtA4Tn5wLhqNJdQEvPw5Cqs1z3I=@wujek.eu>
+References: <20211203141515.2448129-1-dev_public@wujek.eu> <20211206225354.BF0AFC341C6@smtp.kernel.org> <jgJW1u3RfTQcv5ZBcVQt4fz8_sA4gvyXsN5x18zzLo_nTR5nfLpZtdAjy-WlEaCMnmnPGZjeFGV5OoiWNtA4Tn5wLhqNJdQEvPw5Cqs1z3I=@wujek.eu>
+Subject: Re: [PATCH] clk: si5341: Add sysfs property to check selected input
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     wujek dev <dev_public@wujek.eu>
+Date:   Tue, 07 Dec 2021 20:30:53 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211208043054.CEFD6C00446@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 11:04:50 +0800 Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+Quoting wujek dev (2021-12-06 15:08:03)
+> Other sysfs properties used by this driver are not documented so I didn't=
+ add for this one. Even more not a single property from clk subsystem is de=
+scribed. Shall I the add description of this single property?
+>=20
 
-> Motivated by memset_after() and memset_startat(), introduce a new helper,
-> memset_range() that takes the target struct instance, the byte to write,
-> and two member names where zeroing should start and end.
-
-Is this likely to have more than a single call site?
-
-> ...
->
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -291,6 +291,26 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
->  	       sizeof(*(obj)) - offsetof(typeof(*(obj)), member));	\
->  })
->  
-> +/**
-> + * memset_range - Set a value ranging from member1 to member2, boundary included.
-
-I'm not sure what "boundary included" means.
-
-> + *
-> + * @obj: Address of target struct instance
-> + * @v: Byte value to repeatedly write
-> + * @member1: struct member to start writing at
-> + * @member2: struct member where writing should stop
-
-Perhaps "struct member before which writing should stop"?
-
-> + *
-> + */
-> +#define memset_range(obj, v, member_1, member_2)			\
-> +({									\
-> +	u8 *__ptr = (u8 *)(obj);					\
-> +	typeof(v) __val = (v);						\
-> +	BUILD_BUG_ON(offsetof(typeof(*(obj)), member_1) >		\
-> +		     offsetof(typeof(*(obj)), member_2));		\
-> +	memset(__ptr + offsetof(typeof(*(obj)), member_1), __val,	\
-> +	       offsetofend(typeof(*(obj)), member_2) -			\
-> +	       offsetof(typeof(*(obj)), member_1));			\
-> +})
-
-struct a {
-	int b;
-	int c;
-	int d;
-};
-
-How do I zero out `c' and `d'?
-
-
+Please don't top post. sysfs properties are supposed to be single value
+and for machine consumption. Is this a debugfs property?

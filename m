@@ -2,109 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5352B46CE2F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254B246CE4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240554AbhLHHS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:18:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45330 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbhLHHS0 (ORCPT
+        id S244516AbhLHHZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:25:05 -0500
+Received: from [113.204.237.245] ([113.204.237.245]:47082 "EHLO
+        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S240199AbhLHHZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:18:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E8FBB81691;
-        Wed,  8 Dec 2021 07:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BC0C00446;
-        Wed,  8 Dec 2021 07:14:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638947692;
-        bh=AWG3rNQnFaUqlVZi6qDgg8+9yS/8b11qWAJbuAsLQwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QeYOTtDkErFpuDGtcd6GYC/LZ7toAO2LM14xQDUSZkNqC0l5jc3Mo45rFRPVJNpfx
-         lzUW58lBRDO5xRk+BMW7lDfSzS2JUDkQM4XS7ACZgn2qHdPQadOsFi+COgHol21q+7
-         lIenJ0x6mvE4ApbPEw1+ZcM+vnHL2UXBr+d8h9m+xCYj+nF3489g0FGBpBSa3rwR2L
-         HfSYSLQ0Wzj21PIqPiVZxekjDniB2mDYfXCGJrLFsXtS8cSlN4mjPCoOn6McXp6e7y
-         oIKHTZf5UX7ENjgEP0wNgXcpZCXhDsdDBBXzK/nvzm1MAQluSDUaaxPhZPz52XyKUZ
-         gmcV4fHYfrwSQ==
-Date:   Wed, 8 Dec 2021 09:14:47 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 4/6] platform/x86: Add Intel Software Defined Silicon driver
-Message-ID: <YbBbZ+JMk9eEgNKl@unreal>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-5-david.e.box@linux.intel.com>
+        Wed, 8 Dec 2021 02:25:04 -0500
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by cqmailgates with MailGates ESMTP Server V5.0(21501:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Wed, 08 Dec 2021 15:16:01 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 8 Dec 2021 15:15:58 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.017; Wed, 8 Dec 2021 15:15:58 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt controller
+ driver
+Thread-Topic: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt
+ controller driver
+Thread-Index: AQHX6BmQ/JspEgyikE+suUmdAKG1nqwmO/YAgAHtkbA=
+Date:   Wed, 8 Dec 2021 07:15:57 +0000
+Message-ID: <39f9b853af7c44cb94421354744512a8@cqplus1.com>
+References: <cover.1638515726.git.qinjian@cqplus1.com>
+        <e88ea4cf28ba69a41f6d1b4dd4128b82a6095c29.1638515726.git.qinjian@cqplus1.com>
+ <87r1ao23fp.wl-maz@kernel.org>
+In-Reply-To: <87r1ao23fp.wl-maz@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207171448.799376-5-david.e.box@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 09:14:46AM -0800, David E. Box wrote:
-> Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
-> activating additional silicon features. Features are enabled through a
-> license activation process.  The SDSi driver provides a per socket, sysfs
-> attribute interface for applications to perform 3 main provisioning
-> functions:
-> 
-> 1. Provision an Authentication Key Certificate (AKC), a key written to
->    internal NVRAM that is used to authenticate a capability specific
->    activation payload.
-> 
-> 2. Provision a Capability Activation Payload (CAP), a token authenticated
->    using the AKC and applied to the CPU configuration to activate a new
->    feature.
-> 
-> 3. Read the SDSi State Certificate, containing the CPU configuration
->    state.
-> 
-> The operations perform function specific mailbox commands that forward the
-> requests to SDSi hardware to perform authentication of the payloads and
-> enable the silicon configuration (to be made available after power
-> cycling).
-> 
-> The SDSi device itself is enumerated as an auxiliary device from the
-> intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
-> 
-> Link: https://github.com/intel/intel-sdsi
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> Reviewed-by: Mark Gross <markgross@kernel.org>
-> ---
-> V2
->   - Use sysfs_emit() in guid_show()
->   - Fix language in ABI, suggested by Bjorn
->   - Fix wrong directory name in ABI doc
-
-<...>
-
-> @@ -0,0 +1,77 @@
-> +What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X
-
-<...>
-
-> +static const struct auxiliary_device_id sdsi_aux_id_table[] = {
-> +	{ .name = "intel_vsec.sdsi" },
-
-Are you sure that this sysfs is correct?
-
-Auxiliary bus set device name as a combination of module name plus suffix.
-
-  172 int __auxiliary_device_add(struct auxiliary_device *auxdev, const char *modname)
-  173 {
-  174         struct device *dev = &auxdev->dev;
-  175         int ret;
- ....
-  181
-  182         ret = dev_set_name(dev, "%s.%s.%d", modname, auxdev->name, auxdev->id);
-
-Thanks
+PiA+ICt2b2lkIHNwX2ludGNfc2V0X2V4dCh1MzIgaHdpcnEsIGludCBleHRfbnVtKQ0KPiA+ICt7
+DQo+ID4gKwlzcF9pbnRjX2Fzc2lnbl9iaXQoaHdpcnEsIFJFR19JTlRSX1BSSU9SSVRZLCAhZXh0
+X251bSk7DQo+ID4gK30NCj4gPiArRVhQT1JUX1NZTUJPTF9HUEwoc3BfaW50Y19zZXRfZXh0KTsN
+Cj4gDQo+IE5vIHdheS4gV2UgZG9uJ3QgZXhwb3J0IHJhbmRvbSBzeW1ib2xzIHdpdGhvdXQgYSBn
+b29kIGp1c3RpZmljYXRpb24sDQo+IGFuZCB5b3UgZGlkbid0IGdpdmUgYW55Lg0KPiANCg0KVGhp
+cyBmdW5jdGlvbiBjYWxsZWQgYnkgU1A3MDIxIGRpc3BsYXkgZHJpdmVyIHRvIGRlY2lkZSBESVNQ
+TEFZX0lSUQ0Kcm91dGluZyB0byB3aGljaCBwYXJlbnQgaXJxIChFWFRfSU5UMCBvciBFWFRfSU5U
+MSkuDQoNCkluIHByZXZpb3VzIHBhdGNoZXMsIHdoaWNoIGRlZmluZWQgaW4gRFQsIHBhcnNlZCAm
+IHByb2Nlc3NlZCBAIHNwX2ludGNfeGxhdGVfb2YoKQ0KRnJvbSB5b3VyIGNvbW1lbnQsIHRoaXMg
+aXMgYSBTVyBkZWNpc2lvbi4gU28gSSByZW1vdmVkIGl0IGZyb20gRFQgJiBpbnRjIGRyaXZlciwg
+b25seSANCmV4cG9ydCB0aGlzIGZ1bmN0aW9uIHRvIGFjY2VzcyB0aGUgcmVsYXRlZCBpbnRjIHJl
+Zy4NCg0K

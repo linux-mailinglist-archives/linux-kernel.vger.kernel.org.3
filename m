@@ -2,195 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 017ED46CD60
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E86A46CD65
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbhLHFv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:51:26 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55912 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236334AbhLHFvK (ORCPT
+        id S236988AbhLHFxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 00:53:46 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38160 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229806AbhLHFxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:51:10 -0500
-X-UUID: dff4018382af4a58a86d2e74ec6a8378-20211208
-X-UUID: dff4018382af4a58a86d2e74ec6a8378-20211208
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 62367869; Wed, 08 Dec 2021 13:47:35 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 8 Dec 2021 13:47:33 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 8 Dec 2021 13:47:32 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Subject: [PATCH net-next v7 6/6] net: dt-bindings: dwmac: add support for mt8195
-Date:   Wed, 8 Dec 2021 13:47:16 +0800
-Message-ID: <20211208054716.603-7-biao.huang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208054716.603-1-biao.huang@mediatek.com>
-References: <20211208054716.603-1-biao.huang@mediatek.com>
+        Wed, 8 Dec 2021 00:53:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D3C6ACE200E;
+        Wed,  8 Dec 2021 05:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3BEDC341C8;
+        Wed,  8 Dec 2021 05:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638942611;
+        bh=Qv5sBlcfvuvf3tCfH5rvSaimWR3EAyzabTCEIss5XgQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GH9/FD7GbJ67ofLkECdm/i+mp4GcOAViaKvrLcbXK9EIXYhPMxVjf+wNSq5payaRY
+         DW8ALv5aUG/FsLqGElKPkOAj7TcwqbZCBdbeNHpBf0CLCUKpW7gIasFOqK25EBtuIl
+         bLkd9t18L+syQf760buUcQcHmY1y1GbNE3nS3ZAgeGB1tftWTM8jQtPCsBEuaTt8he
+         QSQKHHaublrd+wvAk1tR2tGA8iNOum6qsmnwO4koPJfscnPTskIj7AeyxitAtqRB1N
+         ONaaeQgzEwaBcNA5ydAMymEfaCh6ItSJygkjKipRTnWfY6xCDtxCxbBaprQfMft9h8
+         1aOskPGMbqsoA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DC63D60BD0;
+        Wed,  8 Dec 2021 05:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net V2] net: fec: only clear interrupt of handling queue in
+ fec_enet_rx_queue()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163894261089.12550.12618093944925198862.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Dec 2021 05:50:10 +0000
+References: <20211206135457.15946-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20211206135457.15946-1-qiangqing.zhang@nxp.com>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        rmk+kernel@arm.linux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding document for the ethernet on mt8195.
+Hello:
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
----
- .../bindings/net/mediatek-dwmac.yaml          | 86 +++++++++++++++----
- 1 file changed, 70 insertions(+), 16 deletions(-)
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-index 9207266a6e69..fb04166404d8 100644
---- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-@@ -19,11 +19,67 @@ select:
-       contains:
-         enum:
-           - mediatek,mt2712-gmac
-+          - mediatek,mt8195-gmac
-   required:
-     - compatible
- 
- allOf:
-   - $ref: "snps,dwmac.yaml#"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt2712-gmac
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 5
-+          items:
-+            - description: AXI clock
-+            - description: APB clock
-+            - description: MAC Main clock
-+            - description: PTP clock
-+            - description: RMII reference clock provided by MAC
-+
-+        clock-names:
-+          minItems: 5
-+          items:
-+            - const: axi
-+            - const: apb
-+            - const: mac_main
-+            - const: ptp_ref
-+            - const: rmii_internal
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8195-gmac
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 6
-+          items:
-+            - description: AXI clock
-+            - description: APB clock
-+            - description: MAC clock gate
-+            - description: MAC Main clock
-+            - description: PTP clock
-+            - description: RMII reference clock provided by MAC
-+
-+        clock-names:
-+          minItems: 6
-+          items:
-+            - const: axi
-+            - const: apb
-+            - const: mac_cg
-+            - const: mac_main
-+            - const: ptp_ref
-+            - const: rmii_internal
- 
- properties:
-   compatible:
-@@ -32,22 +88,10 @@ properties:
-           - enum:
-               - mediatek,mt2712-gmac
-           - const: snps,dwmac-4.20a
--
--  clocks:
--    items:
--      - description: AXI clock
--      - description: APB clock
--      - description: MAC Main clock
--      - description: PTP clock
--      - description: RMII reference clock provided by MAC
--
--  clock-names:
--    items:
--      - const: axi
--      - const: apb
--      - const: mac_main
--      - const: ptp_ref
--      - const: rmii_internal
-+      - items:
-+          - enum:
-+              - mediatek,mt8195-gmac
-+          - const: snps,dwmac-5.10a
- 
-   mediatek,pericfg:
-     $ref: /schemas/types.yaml#/definitions/phandle
-@@ -62,6 +106,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
-+      or will round down. Range 0~31*290.
- 
-   mediatek,rx-delay-ps:
-     description:
-@@ -70,6 +116,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple
-+      of 290, or will round down. Range 0~31*290.
- 
-   mediatek,rmii-rxc:
-     type: boolean
-@@ -103,6 +151,12 @@ properties:
-       3. the inside clock, which be sent to MAC, will be inversed in RMII case when
-          the reference clock is from MAC.
- 
-+  mediatek,mac-wol:
-+    type: boolean
-+    description:
-+      If present, indicates that MAC supports WOL(Wake-On-LAN), and MAC WOL will be enabled.
-+      Otherwise, PHY WOL is perferred.
-+
- required:
-   - compatible
-   - reg
+On Mon,  6 Dec 2021 21:54:57 +0800 you wrote:
+> Background:
+> We have a customer is running a Profinet stack on the 8MM which receives and
+> responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
+> time to time the received PNIO-CM package is "stock" and is only handled when
+> receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
+> the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
+> the expected 40 ms and not the 2s delay of the DCERPC-Ping).
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,V2] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
+    https://git.kernel.org/netdev/net/c/b5bd95d17102
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

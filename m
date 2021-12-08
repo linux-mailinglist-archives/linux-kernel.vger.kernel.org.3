@@ -2,157 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A75746DBB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5181546DBB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239499AbhLHTDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:03:31 -0500
-Received: from mail-sn1anam02on2042.outbound.protection.outlook.com ([40.107.96.42]:22151
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230039AbhLHTDa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:03:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KCmZ9SSNQJm9TcvFQUeDJI+djHuWC9nSmtQcahwcnYJYFHY4a2WCq/3T30C5HVb54Jfd64wBkN+U17w9Yl1Qz4eCXDP8CVzpe1n7tJpuEPdiu4oSRtvH+BONWA+s+j9es6UbtUqw86X5uwj5ydvaE5iZyxiGjHqqP8QYM6pIl3jGYOOV4XM6h6N2cZUZA6w3lLp0lKuoV/PNmv+YIHPCFGw/1G0km5G3YhYBAlrW5IEPn4MXrCUe5ityeubSswYQPcbQpADNlLVe5H17AAY9GqbHxZUPUA4zyuNyDD8CWixSbKhyHBjrCjPrjawaUKv4/JoTLTDzgBVdtTHDOpPoIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XRHG5tIpHuwX7Xn6aQ//wk4HmVPUhWGTl+eY2XhJDpg=;
- b=BsT77dSqkZsonVV6LLx1ex1PQ3eYsiHBKKyvb4jgnUaW9W/RwtKsb4+oQtU6Fh+2z1VDRnKcRmoxuDbIaiC/TX0fg7Az8lgm3k8YdJbkrr0X94fonzG7LVwCTHj1JwkpNl5MfctD3tKnPGsvnZpdHb63NxR9+yz5K7DMXwFqxBHzLcINuKDcrcXNl4fvlpDl3bqimbP49jXfcGOdagREsB0zrk/RAy7lFmebq4b4V9Th4ZEsOL4tLdnnPFOtaD9da9FaOJGBh3ZclDj+W0C1J46ACaY8IuBvLgWuhEYi+SiDXz8hc5PP9hZMz15rGkEccVLKaLha8jSuDtgIiqdKWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XRHG5tIpHuwX7Xn6aQ//wk4HmVPUhWGTl+eY2XhJDpg=;
- b=gaZ3JEklFCQOTPLuo/oXlZnJl275opJzAfbkpfCtZRY6U4g2PK996Z8HNfyapWv0Tb9+WMXwAJVmY81SeYgOz9H0nbxpDdM+cERJKht0a6a9IQfo+788K5D+ST4n67Zr3V2lglPW56FJ16HLwe4FtUktJTKefwe0EVpVRZP3vnk=
-Received: from BN0PR03CA0023.namprd03.prod.outlook.com (2603:10b6:408:e6::28)
- by BYAPR12MB3463.namprd12.prod.outlook.com (2603:10b6:a03:ac::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Wed, 8 Dec
- 2021 18:59:55 +0000
-Received: from BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e6:cafe::bd) by BN0PR03CA0023.outlook.office365.com
- (2603:10b6:408:e6::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
- Transport; Wed, 8 Dec 2021 18:59:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT040.mail.protection.outlook.com (10.13.177.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Wed, 8 Dec 2021 18:59:55 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 8 Dec
- 2021 12:59:54 -0600
-Received: from chrome.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 8 Dec 2021 12:59:51 -0600
-From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: max98357a: Add mixer control to mute/unmute speaker
-Date:   Thu, 9 Dec 2021 00:28:49 +0530
-Message-ID: <20211208185850.1555996-1-AjitKumar.Pandey@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S235597AbhLHTDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:03:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47886 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232745AbhLHTDi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 14:03:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638990005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/s5sY1q6PQLBZ20cR9DzmY70ulSv5YBsSaYi6x4GpDY=;
+        b=QjJtTXKC5DmNt0X4XweHxmRuY5fF0wW8ncigiWMEaKI0AtaxntcT1mlfQP0e7Ttssr9Rf7
+        fP0p/eB+Z5OJGXseySzoFTt9WnsPgm4EGjSH9dLpGRIS97raqzaApDvvMzaqurU9l7pCC0
+        rTaELph05U5YBklKa+YRu86uIS8zxAQ=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-Q0L7VzqkOBuALBbwLOSHZA-1; Wed, 08 Dec 2021 14:00:04 -0500
+X-MC-Unique: Q0L7VzqkOBuALBbwLOSHZA-1
+Received: by mail-io1-f71.google.com with SMTP id 7-20020a6b0107000000b005ed196a2546so4261327iob.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:00:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/s5sY1q6PQLBZ20cR9DzmY70ulSv5YBsSaYi6x4GpDY=;
+        b=LVlTDs+9asOUjzg8PqesqvcOVT3sC9lF4Grh//yvqoJavISv/XEjm7OG6/Quj1p/M7
+         CofLEgoTXc92wRDgwjYoWHV7xGldr6pn7a89hqO1b2TDDS2WGyzux4HZL0ezqXLOAOey
+         s3pFn5GEjopBI8n6pgOCqVUazs2BynXyPnxgQoNLzwzubp9gwVj6QJ+F8lilOS33u5gt
+         ufMGSe6UmRwI8YMKPHK33XPzrGdwmi9XELx17zXJcChZztGtYm92JJILe97/K0hV1Y7A
+         pdDiHJGDzLSg3OvHHA/f90orHbiUzW39Gp6Rbmi8BCI/1/oMNpm92lBPvRwgTVQhw0si
+         aBeA==
+X-Gm-Message-State: AOAM530eR9EpD8Og/JJBUc2y9KFd/CUHVYdegVCyoMHomxPpEZek5K7E
+        NZJW0jD81AwPX55qsCe+CFJzYLwfl9eQTZWxHZ9mh7xvw8YSQKnZMxjrNrJ6CrrKI93PNx8y+he
+        AA/4lTzit92brtaDOyoEItNmw
+X-Received: by 2002:a05:6e02:1a4e:: with SMTP id u14mr9503475ilv.121.1638990003163;
+        Wed, 08 Dec 2021 11:00:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwa/4oyrYKSSiV1Tlcx49cqVJY9TfwWzcP/p9FEMpdLD7xA5zXrnnJowGLqiv143OngjfBbCw==
+X-Received: by 2002:a05:6e02:1a4e:: with SMTP id u14mr9503450ilv.121.1638990002973;
+        Wed, 08 Dec 2021 11:00:02 -0800 (PST)
+Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
+        by smtp.gmail.com with ESMTPSA id l9sm2215746ilh.82.2021.12.08.11.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 11:00:02 -0800 (PST)
+Message-ID: <aa8a8deb-0fdb-9408-48d4-adadb5602d72@redhat.com>
+Date:   Wed, 8 Dec 2021 14:00:01 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 59a2f7b1-bdd1-4194-5da2-08d9ba7cec3b
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3463:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3463DAC7735DDC472D83B7F4826F9@BYAPR12MB3463.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:551;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kKtGlwd0paRGKuDiucAitHZ7yKLJgN4SMrgJwEUSn+7O29kxGNbgkNp9a/rVxBbkpNaVrCMML7xj9aY2gPTEBkM/eSqL8v5BGqkeG7R/HTccEdCEj2EeDeyIeI79YrdpRAUIYK99EtHKOUFR6hUc8VNBtNh9Z4ceusGS8FrcbKdi5h+qlxeicFOEQymn2eHhOo1wd2BjSFmAbfH9xeriPA5VTfyU3h0eZUJkqVxYP0zpyh6Iy7b+FUFp0ZPky/Wv6EmJN1CMAYSeA65iw9obuQipo5eAhE4YUHfmjxrP6csL+jJSJLXIOl8EtoZPW5p01V6CGLLpl0W+F96HLoniXbHpcwvCbtNTCM2ZwDC6AZLw/3B2pMme6W4Jwut+5cOaZAv1f+exhExZf9idZuz36f9MSo3Sd/s75vnP+wpvD2IneS8ZWjRqhVN9Fk3vSN10BECbiGsDHRTcFrKD6kWhBA+o8VwT+8STRJb+J/puV9mVOMarG0OZyOYcpN2EyaPdnBFDj621L03fkUeZuDJqDJRX+f8719ah3d6iaCcj3VHy32nv+t17TidhNPHk6rVBLjTZpJBcDEYXq8deYqaz9f6JyoO0VQy47YhyE+yVXzYMjh6kfNIg2pmXnLOLZ65NbVea5INl8SiRL1gY6EZVDofWXZJaF0FNFjSZlpjvNYEJ9/WxIWmV2kGtUfhqF2OsmAWkqwiIc8HN50GJohd+e56oGa7TfEM8/niRG+3Mmr6FYQ3XEVfbs9M3xM/tRwrjCYiHEC+du5b840uhlzfPvy1vbnzLLawNLgvUJQq19C0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(8936002)(8676002)(70586007)(86362001)(4326008)(2616005)(82310400004)(7696005)(54906003)(1076003)(336012)(186003)(47076005)(2906002)(110136005)(70206006)(40460700001)(356005)(426003)(316002)(36860700001)(81166007)(36756003)(26005)(5660300002)(508600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 18:59:55.1191
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59a2f7b1-bdd1-4194-5da2-08d9ba7cec3b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3463
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, shakeelb@google.com,
+        shy828301@gmail.com, guro@fb.com, vbabka@suse.cz,
+        vdavydov.dev@gmail.com, raquini@redhat.com
+References: <20211206033338.743270-1-npache@redhat.com>
+ <20211206033338.743270-3-npache@redhat.com> <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
+ <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
+ <24b4455c-aff9-ca9f-e29f-350833e7a0d1@virtuozzo.com>
+ <Ya4PGJZL8tSb/Prj@dhcp22.suse.cz>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <Ya4PGJZL8tSb/Prj@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add "Playback Switch" mixer control to mute or unmute speaker
-playback from ucm conf depend on use cases.
 
-Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
----
- sound/soc/codecs/max98357a.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
 
-diff --git a/sound/soc/codecs/max98357a.c b/sound/soc/codecs/max98357a.c
-index 918812763884..9b2f16ab4498 100644
---- a/sound/soc/codecs/max98357a.c
-+++ b/sound/soc/codecs/max98357a.c
-@@ -73,6 +73,36 @@ static int max98357a_sdmode_event(struct snd_soc_dapm_widget *w,
- 	return 0;
+On 12/6/21 08:24, Michal Hocko wrote:
+> On Mon 06-12-21 16:19:12, Kirill Tkhai wrote:
+>> On 06.12.2021 13:45, David Hildenbrand wrote:
+>>>> This doesn't seen complete. Slab shrinkers are used in the reclaim
+>>>> context. Previously offline nodes could be onlined later and this would
+>>>> lead to NULL ptr because there is no hook to allocate new shrinker
+>>>> infos. This would be also really impractical because this would have to
+>>>> update all existing memcgs...
+>>>
+>>> Instead of going through the trouble of updating...
+>>>
+>>> ...  maybe just keep for_each_node() and check if the target node is
+>>> offline. If it's offline, just allocate from the first online node.
+>>> After all, we're not using __GFP_THISNODE, so there are no guarantees
+>>> either way ...
+>>
+>> Hm, can't we add shrinker maps allocation to __try_online_node() in addition
+>> to this patch? 
+> 
+> Either that or through hotplug notifier (which would be a better
+> solution). But allocating a new shrinker map for each memcg would have
+> to be done as has been mentioned earlier.
+
+I took a stab at this approach. It may be incomplete but please let me know what
+you think. This would go on top of this series.
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 0c5c403f4be6..6c842382fa73 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -520,6 +520,7 @@ static inline struct mem_cgroup *page_memcg_check(struct
+page *page)
+ 	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
  }
- 
-+static int speaker_mute_get(struct snd_kcontrol *kcontrol,
-+			    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct max98357a_priv *max98357a = snd_soc_component_get_drvdata(component);
+
++int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node);
+ #ifdef CONFIG_MEMCG_KMEM
+ /*
+  * folio_memcg_kmem - Check if the folio has the memcg_kmem flag set.
+diff --git a/include/linux/node.h b/include/linux/node.h
+index bb21fd631b16..5e8c737ea751 100644
+--- a/include/linux/node.h
++++ b/include/linux/node.h
+@@ -19,7 +19,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/list.h>
+ #include <linux/workqueue.h>
+-
++#include <linux/memcontrol.h>
+ /**
+  * struct node_hmem_attrs - heterogeneous memory performance attributes
+  *
+@@ -118,6 +118,7 @@ extern int __register_one_node(int nid);
+ /* Registers an online node */
+ static inline int register_one_node(int nid)
+ {
++	struct mem_cgroup *memcg;
+ 	int error = 0;
+
+ 	if (node_online(nid)) {
+@@ -130,6 +131,14 @@ static inline int register_one_node(int nid)
+ 			return error;
+ 		/* link memory sections under this node */
+ 		link_mem_sections(nid, start_pfn, end_pfn, MEMINIT_EARLY);
++		/* Iterate over memcgs and update nodeinfo  */
++		memcg = mem_cgroup_iter(NULL, NULL, NULL);
++		do {
++			if (alloc_mem_cgroup_per_node_info(memcg,nid)) {
++				mem_cgroup_iter_break(NULL, memcg);
++				return error;
++			}
++		} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+ 	}
+
+ 	return error;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 6863a834ed42..2d55fad3229b 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5041,18 +5041,11 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+ 	return idr_find(&mem_cgroup_idr, id);
+ }
+
+-static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
++int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+ {
+ 	struct mem_cgroup_per_node *pn;
+ 	int tmp = node;
+-	/*
+-	 * This routine is called against possible nodes.
+-	 * But it's BUG to call kmalloc() against offline node.
+-	 *
+-	 * TODO: this routine can waste much memory for nodes which will
+-	 *       never be onlined. It's better to use memory hotplug callback
+-	 *       function.
+-	 */
 +
-+	ucontrol->value.enumerated.item[0] = max98357a->sdmode_switch;
-+
-+	return 0;
-+}
-+
-+static int speaker_mute_put(struct snd_kcontrol *kcontrol,
-+			    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct max98357a_priv *max98357a = snd_soc_component_get_drvdata(component);
-+	int mode = ucontrol->value.enumerated.item[0];
-+
-+	max98357a->sdmode_switch = mode;
-+	gpiod_set_value_cansleep(max98357a->sdmode, mode);
-+	dev_dbg(component->dev, "set sdmode to %d", mode);
-+
-+	return 0;
-+}
-+
-+static const struct snd_kcontrol_new max98357a_snd_controls[] = {
-+	SOC_SINGLE_BOOL_EXT("Playback Switch", 0,
-+			    speaker_mute_get, speaker_mute_put),
-+};
-+
- static const struct snd_soc_dapm_widget max98357a_dapm_widgets[] = {
- 	SND_SOC_DAPM_OUTPUT("Speaker"),
- 	SND_SOC_DAPM_OUT_DRV_E("SD_MODE", SND_SOC_NOPM, 0, 0, NULL, 0,
-@@ -86,6 +116,8 @@ static const struct snd_soc_dapm_route max98357a_dapm_routes[] = {
- };
- 
- static const struct snd_soc_component_driver max98357a_component_driver = {
-+	.controls		= max98357a_snd_controls,
-+	.num_controls		= ARRAY_SIZE(max98357a_snd_controls),
- 	.dapm_widgets		= max98357a_dapm_widgets,
- 	.num_dapm_widgets	= ARRAY_SIZE(max98357a_dapm_widgets),
- 	.dapm_routes		= max98357a_dapm_routes,
--- 
-2.25.1
+ 	if (!node_state(node, N_NORMAL_MEMORY))
+ 		tmp = -1;
+ 	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, tmp);
+@@ -5130,7 +5123,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+ 	if (!memcg->vmstats_percpu)
+ 		goto fail;
+
+-	for_each_node(node)
++	for_each_online_node(node)
+ 		if (alloc_mem_cgroup_per_node_info(memcg, node))
+ 			goto fail;
 

@@ -2,151 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D16EA46D0B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D231146D0BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbhLHKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:17:11 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34628 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbhLHKRF (ORCPT
+        id S231355AbhLHKSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:18:09 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:19880 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229515AbhLHKSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:17:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 75083CE20FB;
-        Wed,  8 Dec 2021 10:13:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F13BC341CD;
-        Wed,  8 Dec 2021 10:13:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638958410;
-        bh=tDecbwk5LoyTmkCY8tOxOZRssd9DDpKv75KEUiOGOvw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gKvMv9+uEObtikOniX+WnPI7I9D67rtB/KkgFvyFWEsBtdkCFGsr7naOvMSaUaPqb
-         QUInSeYJpe51PnayWCiSVZPasPSiA2SpIeq+N+dWiNVLG4qcwpTiJE5slua3Rb2i92
-         QWehx2PQe9eeECyWZnePh5kKgqJy4wNnhCmXv6ZUbbAMmM7FX7s4TkNgMD7ReK8OQv
-         hGvz2t+ywVl1sLOOf64rhgxnNLz5ZiT1dfV8afKlboH4kngX6dOD9fGzLznSapzALq
-         grNUsfd1TePAxYO7/dv5hMJwWRnrNXv1oBf7JLhqOr8OHIPK2U2Rix7db/CN+qVABq
-         dWbdYFL9EsiPA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mutx2-00BgVP-Gr; Wed, 08 Dec 2021 11:13:28 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Robert Schlabbach" <robert_s@gmx.net>,
-        Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 3/3] media: si2157: rework the firmware load logic
-Date:   Wed,  8 Dec 2021 11:13:26 +0100
-Message-Id: <842e61352a54e9f1a7f44c4e3250a055c2d45e13.1638958050.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1638958050.git.mchehab+huawei@kernel.org>
-References: <cover.1638958050.git.mchehab+huawei@kernel.org>
+        Wed, 8 Dec 2021 05:18:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638958477; x=1670494477;
+  h=subject:to:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=8fvNVbusAPRFGuvksh4uPO16Z5rLgfIbr2/Vq3gqWxk=;
+  b=15GhdyjMp9i1PUJyeBGZagzwcDvR+VoCOY5HGtrcKjNhVBJlJIFuRV3S
+   jdUacb8XfMYum6RkwCvXI/kJ1Tnz7uaMENcyBtnG9fLMS6uDU5zNj26U8
+   sP4oSzXcUyt0TQq7++jDkoG+LE5M/ZdSI1bOsuHkXZo/lFNJMKd0b2i7K
+   YuymcNnKDv2aShMMoq9gqSlr3ae1KvJhraw74Gavm5RZrFlIzKqfRkc9I
+   It7lOMZW+ujX5GNdGIugGLhRIEg886eKwKywQIZLgCqX77DjMV2VDtUhk
+   ig8OjOem/epPWaUNAUuTY+t7/J+G+T0d0y5eiA86kie3ba/+LqqrpkJBN
+   w==;
+IronPort-SDR: SF+n8McBnVIdD0Slhu+E814mhYylefqWCwIv8j7JwMJSCW/2NQC18cqXvwRhXccOeIAAhk+Nxa
+ U3EY/RojxlizwMfR5Y6SFXKxLA01+7lfMa/IFIgMq/lHpDSS6T6f1hHAZrnTY9aEm+RKEtERGe
+ laf//jHD2WlwMB0C/RnHnReJSsnbfYbaQCUx49OjA4KONCk1tTyLTV0XRTW3p9GGQ/HHTqendU
+ B0354f0LM7nrAYx2GZLi+LpE1n1ReKZPZ9IFH8LmFzPgtVlWx9P98fpUA5da//8WUzcipR+p31
+ nh2ZQpJQUsydHLXcKsjuldbV
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="154692092"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2021 03:14:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 8 Dec 2021 03:14:36 -0700
+Received: from [10.12.73.2] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Wed, 8 Dec 2021 03:14:35 -0700
+Subject: Re: [RFC PATCH v4 0/4] Extend lan966x clock driver for clock gating
+ support
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <kavyasree.kotagiri@microchip.com>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211103085102.1656081-1-horatiu.vultur@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <0308422f-4a97-8d7e-8e03-ad03129db6ae@microchip.com>
+Date:   Wed, 8 Dec 2021 11:14:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20211103085102.1656081-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Loading a firmware file should not be mandatory, as devices
-could work with an eeprom firmware, if available.
+On 03/11/2021 at 09:50, Horatiu Vultur wrote:
+> This patch series depends on the following series, therefor keep it as RFC.
+> https://www.spinics.net/lists/linux-clk/msg62795.html
+> 
+> This patch series extend the clock driver to support also clock gating.
+> 
+> v3->v4:
+>   - fix reg property in the schema file
+> 
+> v2->v3:
+>   - add devm_clk_hw_register_gate function
+> 
+> v1->v2:
+>   - add Acked-by tag for patch 2
+>   - make the resource for clock gating as an optional resource
+> 
+> Horatiu Vultur (4):
+>    clk: gate: Add devm_clk_hw_register_gate()
+>    dt-bindings: clock: lan966x: Extend for clock gate support
+>    dt-bindings: clock: lan966x: Extend includes with clock gates
+>    clk: lan966x: Extend lan966x clock driver for clock gating support
 
-Yet, using the eeprom firmware could lead into unpredictable
-results, so the best is to warn about that.
+For whole series:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+I'm queuing these patches on clk-at91 branch and plan to seed a 
+pull-request to Stephen soon.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 0/3] at: https://lore.kernel.org/all/cover.1638958050.git.mchehab+huawei@kernel.org/
+In the meantime it's sitting in the at91-next branch as well which is 
+picked up by linux-next.
 
- drivers/media/tuners/si2157.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
+Best regards,
+   Nicolas
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index ed28672c060d..5f4ae8593864 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -129,8 +129,9 @@ static int si2157_init(struct dvb_frontend *fe)
- 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
- 	struct i2c_client *client = fe->tuner_priv;
- 	struct si2157_dev *dev = i2c_get_clientdata(client);
-+	bool warn_firmware_not_loaded = false;
- 	unsigned int chip_id, xtal_trim;
--	unsigned int fw_required;
-+	bool fw_required = true;
- 	struct si2157_cmd cmd;
- 	const char *fw_name;
- 	int ret;
-@@ -199,10 +200,6 @@ static int si2157_init(struct dvb_frontend *fe)
- 	#define SI2146_A10 ('A' << 24 | 46 << 16 | '1' << 8 | '0' << 0)
- 	#define SI2141_A10 ('A' << 24 | 41 << 16 | '1' << 8 | '0' << 0)
- 
--	/* assume firmware is required, unless verified not to be */
--	/* only the SI2157_A30 has been verified not to yet */
--	fw_required = true;
--
- 	switch (chip_id) {
- 	case SI2158_A20:
- 	case SI2148_A20:
-@@ -212,9 +209,8 @@ static int si2157_init(struct dvb_frontend *fe)
- 		fw_name = SI2141_A10_FIRMWARE;
- 		break;
- 	case SI2157_A30:
--		fw_name = SI2157_A30_FIRMWARE;
- 		fw_required = false;
--		break;
-+		fallthrough;
- 	case SI2177_A30:
- 		fw_name = SI2157_A30_FIRMWARE;
- 		break;
-@@ -237,12 +233,11 @@ static int si2157_init(struct dvb_frontend *fe)
- 		goto skip_fw_download;
- 
- 	ret = si2157_load_firmware(fe, fw_name);
--	if (ret) {
--		if (!fw_required)
--			goto skip_fw_download;
--
--		dev_err(&client->dev, "firmware file '%s' not found\n",
--			fw_name);
-+	if (fw_required && ret == -ENOENT)
-+		warn_firmware_not_loaded = true;
-+	else if (ret < 0) {
-+		dev_err(&client->dev, "error %d when loading firmware file '%s'\n",
-+			ret, fw_name);
- 		goto err;
- 	}
- 
-@@ -263,6 +258,11 @@ static int si2157_init(struct dvb_frontend *fe)
- 	if (ret)
- 		goto err;
- 
-+	if (warn_firmware_not_loaded) {
-+		dev_warn(&client->dev, "firmware file '%s' not found. Using firmware from eeprom.\n",
-+			 fw_name);
-+		warn_firmware_not_loaded = false;
-+	}
- 	dev_info(&client->dev, "firmware version: %c.%c.%d\n",
- 			cmd.args[6], cmd.args[7], cmd.args[8]);
- 
-@@ -298,6 +298,11 @@ static int si2157_init(struct dvb_frontend *fe)
- 	return 0;
- 
- err:
-+	if (warn_firmware_not_loaded)
-+		dev_err(&client->dev,
-+			"firmware file '%s' not found. Can't continue without a firmware.\n",
-+			fw_name);
-+
- 	dev_dbg(&client->dev, "failed=%d\n", ret);
- 	return ret;
- }
+>   .../bindings/clock/microchip,lan966x-gck.yaml |  5 +-
+>   drivers/clk/clk-gate.c                        | 35 +++++++++++
+>   drivers/clk/clk-lan966x.c                     | 59 ++++++++++++++++++-
+>   include/dt-bindings/clock/microchip,lan966x.h |  8 ++-
+>   include/linux/clk-provider.h                  | 23 ++++++++
+>   5 files changed, 125 insertions(+), 5 deletions(-)
+> 
+
+
 -- 
-2.33.1
-
+Nicolas Ferre

@@ -2,154 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8559D46D443
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C433746D43A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbhLHNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:22:40 -0500
-Received: from mail-eopbgr80089.outbound.protection.outlook.com ([40.107.8.89]:38374
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234256AbhLHNWh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:22:37 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MTD2p9rZr6Cu5uPLRncJ1z6ZcVUGUqGwqFCtFh2ixliFW/x6y7cJAC8JYkklYRtPxIInUfN/DCqVoD5JIIYr2orPsGvQvE7gJdBmNzvgTk/WZBBUxDibuvJbBmK5Vw2Ec9rxjP9Lywz05/9Z2Im4fiq4jI4gJmXQBZPFFxnFEUpLzLKbzas0SptmekW30r7ETZRoAeR12I9XKoBmtZTjs5IO28RzyhyA+BXLFZMshuo4xJidR4uUnzIL1smS7XdRSK4AP01mMt10H/zv+pWkqjqiYFHM+6e4bt2M3HnK31v7YAcqXNEJxuUXWFO1j7AifHGR4ZM0i7vjY10QhxGAFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1DoDSgu/kXlHLBsvr0b3xnspM+ExpDPzV2AFhx5g6sw=;
- b=WiYiefk4FABtHNnL4Eu1ufu3GnJFY4naxJi2c/nqO+Y7+iJzZ7auTd6zUhttG+zqjEW1jaV3stls9MFgafI5LGd1gqG2/NvJNzj2PjnlZ+vBlo4rRZqXzNsXgltHxi7c7raju+pnbjuXVfEcVu7Spozn7UyiPSofncnAIzVkzjPbERHkQ8HQHUHvQMUeaBcQWOs+CyvrFoKfvTdLcSZH5XysnABFEI6iQfNxJoRwjwEgg6rGKoFKsTMDAJzehDTd6ACjoD3h+nC81sHpaDEu0chf+ZSegdgQs4bTU772iP9gd6pzrSBX1JIQ4bQ82WzmjRqp/QSIm6QMVty9H/4v7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1DoDSgu/kXlHLBsvr0b3xnspM+ExpDPzV2AFhx5g6sw=;
- b=G2JMKiXSZLFVAWXgh3DLqTvc9f90Wtwq20KZT23eLYncY+D0BI4FWaV2opng6c1setQogTNeufGtVuJjN4hpGmG4+2HG2LVhwLp6D+PD5Rn8riacVL9MiT64VhS1xxFfS2FQiLX/viC8NpbJlJUpZHeP5kWLpMPOZgLw/ReVhh4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
- 2021 13:19:03 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Wed, 8 Dec 2021
- 13:19:03 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        ping.bai@nxp.com, aisheng.dong@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2 3/3] arm64: dts: imx8ulp: add power domain entry for usdhc
-Date:   Wed,  8 Dec 2021 21:17:55 +0800
-Message-Id: <20211208131755.1799041-4-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208131755.1799041-1-peng.fan@oss.nxp.com>
-References: <20211208131755.1799041-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR0302CA0008.apcprd03.prod.outlook.com
- (2603:1096:3:2::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        id S234219AbhLHNVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229613AbhLHNVi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 08:21:38 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE71C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 05:18:06 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id m17so2182320qvx.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 05:18:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aY8F8vGS5LQpVlvLyFz5CNctJWdRH4midCkCMB7qk0c=;
+        b=QIw7F5rdIXU/HEQB8fpvA7ywYtw9ODFb7M+AjJ3SSTlC9Tq+jAREt2jWTyAAGXWtth
+         9dchUlpusXkPsnEwfkXrFGVP4u7/WecEOwncLX6UWbrCNirSlwPhHLG5/h0tiAh48/18
+         TNcRDlTCMIM+DFPRzOZFaC1A/LXhA9N3zNNmJ0yNCX5QiIJnVFwJ4zkQGnmdcKBXahil
+         DAPpCjgNj23X5OMRptVgt/cc+K9Gz8bB7SJcDFebv8XHUlqU+DD90Zmqrjo1esV17QHH
+         ypngE2ctwbiI+BWspfZhUze+KJLTcXV4OJmtPMQEXmTGD1KFvhcX38RiiZYobzK9uVx/
+         A/vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=aY8F8vGS5LQpVlvLyFz5CNctJWdRH4midCkCMB7qk0c=;
+        b=ZorFqUeT0wWcGLEUrt1JeKXk4cmqSePnb0xPU6/r5xYCvlqQzPL+nkjqqy3r3+R3kI
+         TFZWhrxXS7V1YciXTGSFr5i+NijrHPFaDcv+nJ//tCenkAa8tfOrRoWxwXkjL6PPB2Mz
+         JzlZckQTRo3tQJGiOgUYe1z3w71CJ6KIR2Nd8rhbeVjwsSs0VF6PgY2RdmosM6tzL+40
+         w4s3IOO9GclbYlRUeGfSQcg5CmN9rrCYzIOP8Wy+b5ogxzt9X32sFErYV6NNBYiFAO99
+         M57qMTZTmDOsKNcIYSltUisIFQZCLdm+yT8Xq6uve7MhXJrys4YBCGw/0pzTiD16l/5d
+         1ZkQ==
+X-Gm-Message-State: AOAM532AK36UDyZVV4FqBOzitHtUhjh2lQWjKnA83UM4wikSJI8Sm9RH
+        z8m3GaKc5AaLzQMh9s+VfQ==
+X-Google-Smtp-Source: ABdhPJxlX0RIChvYM+4f3ro24q5AcEzLWV+II2R8WfXow3WzfHpEfX9bb/Myw67CL3kHQrlvPpoQ/g==
+X-Received: by 2002:a05:6214:8c2:: with SMTP id da2mr7245439qvb.23.1638969485626;
+        Wed, 08 Dec 2021 05:18:05 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id a17sm1419254qkp.108.2021.12.08.05.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 05:18:05 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:c45a:2d46:25a4:be1f])
+        by serve.minyard.net (Postfix) with ESMTPSA id 4EC37180013;
+        Wed,  8 Dec 2021 13:18:04 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 07:18:03 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Mian Yousaf Kaukab <ykaukab@suse.de>
+Cc:     kamlakantp@marvell.com, openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: Re: [PATCH] ipmi: ssif: initialize ssif_info->client early
+Message-ID: <20211208131803.GW15676@minyard.net>
+Reply-To: minyard@acm.org
+References: <20211208093239.4432-1-ykaukab@suse.de>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR0302CA0008.apcprd03.prod.outlook.com (2603:1096:3:2::18) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 8 Dec 2021 13:18:59 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14cbf8bc-cc58-4842-e5e8-08d9ba4d4de5
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DU0PR04MB9496E748F6F9E4F4EC9FC1BAC96F9@DU0PR04MB9496.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 29goKAJatfIiO4e0ICHwxKJGGJ1hGaVeH+TaNk21AK+IWtGzjiixQtoxeFJfnZP1MZHDFT85dyz+AWfYr81D40v8MLB8tRZqHXwUGrzt/ei2Pxk1oIosgbqozqP19gzyTSx7qE4LarvS1h7VSlvkGvq8VhIuASwIR6YHmgEk4uYzJyni+iyxoLTR0cEf2eFyWU44+bmp3pIswlhbzukTZ2euzbgX4teEnoYCL4e996V320h/KqretJuxlofGmxkvQBvSWq0y9v60VtWbgyZShjOaI6n5lrFaoLtrZp+IgbIq3gOw5xUTJ7p7/ypNF8UaPkpCjZC5n40BsZerJE6fIwjB49cdD4P43MbPIPnFe6Shym/yIVEyZLsu9vd6i1tgbirTI+FOFSvl4hi3hDs1vOIPTt9g4fqEr6S03d+Tp9QhklnlVBIvrFvAnEXpARiAiraoeQ9fUGCQWFlutFVs2bSKZNcuk/pzdO20bnSG6gwTBVnTWJrqdcwR/uC52z6kmj3FRtvxq5qej4autkI/Y/7Ar9hHs/Kvz9Xvw5w9KpSbVTWVZti7ZSDUOukAjjze8zZ5DdfouWIMWvYCFvpKG8pjqUjzCKZoQk9Lq9ZgEPW/CjK70xAa5yfNG7EmmxR72uXhuIt2QTbGDvoT9XDCjFxEF/TosOCHsLE1kW8VpDcVpi1QY2CgItgKLGBo7JlDLqCfz+KSB0Gbcd7zZTkRdYQB+gudPr+3yqAwPbqhT60=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(26005)(52116002)(6506007)(6512007)(66476007)(6486002)(5660300002)(66946007)(66556008)(6666004)(86362001)(8676002)(4326008)(8936002)(1076003)(956004)(316002)(2616005)(2906002)(38350700002)(38100700002)(508600001)(83380400001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v8xU6OquQJqivHlvtBgJExZcWDrFFuDjxwdD7kRI9EQwX7V2uJjMwnBuwY6s?=
- =?us-ascii?Q?PlRGhBwZLqTOXHp0RKj5iU18UCgcAZCS0f5FjvZe29e/QFhCHohhdae9AW/p?=
- =?us-ascii?Q?KlDG9mR/ACgOtFti0IT4sM1rhP0Cas1K+zal4ezKelt5AsSePvD/Rnp/jNiZ?=
- =?us-ascii?Q?5jezjIYx5j6BWJK1ilTq/1Aq06AjUMvVl9lbS3ZKOTYm7dAZvrp+s/68Ij5z?=
- =?us-ascii?Q?TG1qF6EXn2NkfZaYGMiHH5tpfbfK+RTE0xqo7Rm0qJC2+twfe7CcsSKH4nJM?=
- =?us-ascii?Q?D25qiKS2VUtxx0jinUWfRVh0vreO3rQugWN/vWZ0VlhQQzW4q6OKjVAUs8bv?=
- =?us-ascii?Q?Ad3h6V+1cSolNIIP734Bo40LnrlZvl4jZCPK3LBLek+R5qwtENnRhIoKiq7L?=
- =?us-ascii?Q?SyxJF0Wo8iKgMiOJ62mT1oSu/aj6c2yCBi+krndz8jh9D8ela7p11fsgrNmg?=
- =?us-ascii?Q?z5k6WBl8Ssei0Dg92o7BEVSuutbvHKiaLeJo7akhy5cFUnVlzEuVhj7eP3D3?=
- =?us-ascii?Q?+eO86bWNF4QltXE2CJAW4R7gz/I7OtXS1i4inpDIeqvCXjkYvm5gSAJszC+d?=
- =?us-ascii?Q?/Ps+r2vB3cPmtyNPRKyLzj1wIbIPp1lQ6felEjKWxqH03R1jqOVjbRklcjJl?=
- =?us-ascii?Q?gyeeAHB1eosGWDvI4v/xYyYRHcmhGKSX6HAVHrnj4oOGnLiDqHk/gFbZ8Tki?=
- =?us-ascii?Q?1hpVGCluYWFojFsmpRFOoSYfpXxScjn5Z1Zv5WRpd8oWqTiO1jDxyz4z/MLc?=
- =?us-ascii?Q?scTUKWGCJQHNhzUoJyKEwRsGZN1pVk6ebwcEmLHcHcWhch2VDxQ9uW7kqIJQ?=
- =?us-ascii?Q?76ER/UnTi9C/wW67LGXGvju/RfuG53uOWW8EtvtDvYIpM/0zj3FX/Ma8qW7d?=
- =?us-ascii?Q?8CyG3IAYT6CroXlpXjrjhDrLP/xSbPqagpyUWJe89N8zEQY4E0QfuXCy6RDN?=
- =?us-ascii?Q?DW8XiV0too9Nbvby5OjMebJz5brS826jOZsqI6d4/S9/3L/mMo31GXEfxxQN?=
- =?us-ascii?Q?6bxvj0E54r2IVlZpqWOik12hEC9YJbsmJBMxkAiMNHpt7sISdmpnECY0JJhi?=
- =?us-ascii?Q?aTGnVjldSPztmf50gCZaXMYHf3FS93xq+j3Re3qt7MDhYQJNNiIKChisRZnd?=
- =?us-ascii?Q?V6RzKHD4vnlBzH2mfEUU18HF5L23gwlz2sOZ+WDPm+JGqR8sIeRjrpII0k0m?=
- =?us-ascii?Q?H/O2Bs4M93/XQ0S4va83gV8vBlaGXCBi1EHldT5SN2bW/Bn1zVwqecxS5QIe?=
- =?us-ascii?Q?atVVIgYAcyiHB5tMW4VjEiSR8pJ8LpwrUdCX+5qA3AI6UpkDEOPQW8iVuSW1?=
- =?us-ascii?Q?Lm4gYim8+8OzfNOTMtOGsfyCT/uOwiV5rNrVEtp3b/l94n3jEtD+WrqCJHPD?=
- =?us-ascii?Q?419J0FKkr3hamNR5Z5prNMK9avjs+NRj8GlvJdjDa4wa0FBZhYrTTgqABwGG?=
- =?us-ascii?Q?SS0s0uOyn9axa1Mp6Ms1fHQeGXaJJoq9cUprJZ+1cj4WXWSENZGJq7A1yymp?=
- =?us-ascii?Q?hRLFkMwnGBq47GaayWUgh6kY4jtVDxH79lDIurCYdpFHefAUlVm++ozB4s+Y?=
- =?us-ascii?Q?mJIs8VQ1tJq0ND5siTmWZT7Szmi7jmmRUyHmxLrdi2GGC8OXHbXI6yvi6Moa?=
- =?us-ascii?Q?LKUUMLPUAimAzFpWjRdc/cc=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14cbf8bc-cc58-4842-e5e8-08d9ba4d4de5
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 13:19:03.4056
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9v9iIYh8ZF5SiV976pX4cGrzJcCWYAR5THj3ablAZ5qyEVMJ24IiIjZL4Wmlb3050MbL8rWaeOwBSn4eM1MyiA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9496
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208093239.4432-1-ykaukab@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Wed, Dec 08, 2021 at 10:32:39AM +0100, Mian Yousaf Kaukab wrote:
+> During probe ssif_info->client is dereferenced in error path. However,
+> it is set when some of the error checking has already been done. This
+> causes following kernel crash if an error path is taken:
+> 
+> [   30.645593][  T674] ipmi_ssif 0-000e: ipmi_ssif: Not probing, Interface already present
+> [   30.657616][  T674] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000088
+> ...
+> [   30.657723][  T674] pc : __dev_printk+0x28/0xa0
+> [   30.657732][  T674] lr : _dev_err+0x7c/0xa0
+> ...
+> [   30.657772][  T674] Call trace:
+> [   30.657775][  T674]  __dev_printk+0x28/0xa0
+> [   30.657778][  T674]  _dev_err+0x7c/0xa0
+> [   30.657781][  T674]  ssif_probe+0x548/0x900 [ipmi_ssif 62ce4b08badc1458fd896206d9ef69a3c31f3d3e]
+> [   30.657791][  T674]  i2c_device_probe+0x37c/0x3c0
+> ...
+> 
+> Initialize ssif_info->client before any error path can be taken. Clear
+> i2c_client data in the error path to prevent the dangling pointer from
+> leaking.
 
-Add power domain for USDHC node.
+Sigh, I just sent some fixes up to Linus, so this was bound to happen :).
+This is in my for-next tree, I'll send it up in a few days if everything
+is ok.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks,
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-index 8ee040e3cbae..a987ff7156bd 100644
---- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-@@ -329,6 +329,7 @@ usdhc0: mmc@298d0000 {
- 					 <&cgc1 IMX8ULP_CLK_XBAR_AD_DIVPLAT>,
- 					 <&pcc4 IMX8ULP_CLK_USDHC0>;
- 				clock-names = "ipg", "ahb", "per";
-+				power-domains = <&scmi_devpd IMX8ULP_PD_USDHC0>;
- 				fsl,tuning-start-tap = <20>;
- 				fsl,tuning-step= <2>;
- 				bus-width = <4>;
-@@ -343,6 +344,7 @@ usdhc1: mmc@298e0000 {
- 					 <&cgc1 IMX8ULP_CLK_NIC_PER_DIVPLAT>,
- 					 <&pcc4 IMX8ULP_CLK_USDHC1>;
- 				clock-names = "ipg", "ahb", "per";
-+				power-domains = <&scmi_devpd IMX8ULP_PD_USDHC1>;
- 				fsl,tuning-start-tap = <20>;
- 				fsl,tuning-step= <2>;
- 				bus-width = <4>;
-@@ -357,6 +359,7 @@ usdhc2: mmc@298f0000 {
- 					 <&cgc1 IMX8ULP_CLK_NIC_PER_DIVPLAT>,
- 					 <&pcc4 IMX8ULP_CLK_USDHC2>;
- 				clock-names = "ipg", "ahb", "per";
-+				power-domains = <&scmi_devpd IMX8ULP_PD_USDHC2_USB1>;
- 				fsl,tuning-start-tap = <20>;
- 				fsl,tuning-step= <2>;
- 				bus-width = <4>;
--- 
-2.25.1
+-corey
 
+> 
+> Fixes: c4436c9149c5 ("ipmi_ssif: avoid registering duplicate ssif interface")
+> Suggested-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+> ---
+>  drivers/char/ipmi/ipmi_ssif.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+> index 0c62e578749e..48aab77abebf 100644
+> --- a/drivers/char/ipmi/ipmi_ssif.c
+> +++ b/drivers/char/ipmi/ipmi_ssif.c
+> @@ -1659,6 +1659,9 @@ static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  		}
+>  	}
+>  
+> +	ssif_info->client = client;
+> +	i2c_set_clientdata(client, ssif_info);
+> +
+>  	rv = ssif_check_and_remove(client, ssif_info);
+>  	/* If rv is 0 and addr source is not SI_ACPI, continue probing */
+>  	if (!rv && ssif_info->addr_source == SI_ACPI) {
+> @@ -1679,9 +1682,6 @@ static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  		ipmi_addr_src_to_str(ssif_info->addr_source),
+>  		client->addr, client->adapter->name, slave_addr);
+>  
+> -	ssif_info->client = client;
+> -	i2c_set_clientdata(client, ssif_info);
+> -
+>  	/* Now check for system interface capabilities */
+>  	msg[0] = IPMI_NETFN_APP_REQUEST << 2;
+>  	msg[1] = IPMI_GET_SYSTEM_INTERFACE_CAPABILITIES_CMD;
+> @@ -1881,6 +1881,7 @@ static int ssif_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  
+>  		dev_err(&ssif_info->client->dev,
+>  			"Unable to start IPMI SSIF: %d\n", rv);
+> +		i2c_set_clientdata(client, NULL);
+>  		kfree(ssif_info);
+>  	}
+>  	kfree(resp);
+> -- 
+> 2.31.1
+> 

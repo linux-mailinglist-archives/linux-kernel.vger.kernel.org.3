@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF7F46DAB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51B346DABE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238610AbhLHSOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S238621AbhLHSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbhLHSOC (ORCPT
+        with ESMTP id S238613AbhLHSOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:14:02 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B7C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:10:30 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p18so2030461plf.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FQ7PKcUEO3UP2W+Pf4InayHPMU1S6OuS0wUdoJJOcGg=;
-        b=Mmp9jWEBM3adijP1etV2lJRZPGMlsXLzITNuyVxk7elsI0tiJa2tLg4dZOBzea9FNA
-         K4olauer8Fvz+m7ZI8PDYZ6qXONmUiYf6OUMQGVDn9W5ArDCG/1EHvTVntqz5cKWLI89
-         UyWp1m0n4g6QorZ8NNILJdANgqUhEFMSVmzKgocUH5KojUHBOmJXQwqCQfeoJCtRCbMJ
-         hhzsblyugW0f4XnFFmfvnuctG8vm7ywI12gkDi7tIvoXHDQtFVKXd088nVf+GCRDEeWH
-         z4gIT0YFgiDmjW5bM3ga6hRRDdeocaaLm0y93J0EwTWnfVuG2jNyaAJih+KDLEbIh/hP
-         8hLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FQ7PKcUEO3UP2W+Pf4InayHPMU1S6OuS0wUdoJJOcGg=;
-        b=btycNTvw4CU47pAB1LiutFF8xlpaJoSgefi411AT4zugjGMSx1rsRl/GMDVM5uhK5k
-         eYdfsJdy3Yjwl0GW+NvfmL585YBnkxMe1kjXjF6MMnx8MRuSinnYEQZWXm2x5c0TdfWR
-         Z4g3GQonrCJsonLWLoI89kZLSPpxcUi0lJdtV5+XVV8/72KT2CUolbE95qwqtkDJ7hHS
-         bMyu3a1rxeaKSkGMRvQryIQZ1HP77nGP4HL1+0uIbvklcy1Kl+jkLeZ3H94wzlnQYImx
-         xtQbK4Q2PC8dLjEWwvphQl7nUD6TMMNncca4pLctZABrkXC8hns4HH8jyCitiem459bZ
-         0YCg==
-X-Gm-Message-State: AOAM531VXnwkuJhfttYkCh7KXzAcLvVqVZH6e/HT/KWF2KD1a0WQ+CYl
-        C3gFen5Bf/nS7y8vCAelwISK/A==
-X-Google-Smtp-Source: ABdhPJz2NsSGxze+K4VZkPy8GXFY8LJ85R0vjcOSriovznbTMzQzJhkLXER2qloaEyFfN2DcSpCJKg==
-X-Received: by 2002:a17:90a:49c2:: with SMTP id l2mr9239325pjm.23.1638987029398;
-        Wed, 08 Dec 2021 10:10:29 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j1sm4461778pfu.47.2021.12.08.10.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 10:10:28 -0800 (PST)
-Date:   Wed, 8 Dec 2021 18:10:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] KVM: x86: Copy kvm_pmu_ops by value to eliminate
- layer of indirection
-Message-ID: <YbD1ETLLpf4uKPWY@google.com>
-References: <20211108111032.24457-1-likexu@tencent.com>
- <20211108111032.24457-5-likexu@tencent.com>
+        Wed, 8 Dec 2021 13:14:42 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2B3C0617A1;
+        Wed,  8 Dec 2021 10:11:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B25F6CE0DB2;
+        Wed,  8 Dec 2021 18:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C276C00446;
+        Wed,  8 Dec 2021 18:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638987065;
+        bh=QgoV6e2aIQSqvk2euUblMWbPunbhbGpBkvr/HHcx56A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uA89KPR1ogEE99hrjD3ngclawVcaGHlrPZhYAKw4AD2cO9i0cfhya3+X9S9OYkriE
+         kECO59hDzBBV+JfBUBvPRQ8aHWwfHdm4sDz5doc1GCbloR2NyEJ5PGT6QoHlgV51ml
+         gPNx7M92n6GT7KM/zuGWJbHuKNlwreaNrMG1DIC8=
+Date:   Wed, 8 Dec 2021 19:11:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from
+ MFD to Auxiliary Bus
+Message-ID: <YbD1NsYHbU8FvtTN@kroah.com>
+References: <20211208015015.891275-1-david.e.box@linux.intel.com>
+ <20211208015015.891275-4-david.e.box@linux.intel.com>
+ <YbDbql39x7Kw6iAC@kroah.com>
+ <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211108111032.24457-5-likexu@tencent.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 08, 2021, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
+> On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
+> > On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box wrote:
+> > > +static struct pci_driver intel_vsec_pci_driver = {
+> > > +       .name = "intel_vsec",
+> > > +       .id_table = intel_vsec_pci_ids,
+> > > +       .probe = intel_vsec_pci_probe,
+> > > +};
+> > 
+> > So when the PCI device is removed from the system you leak resources and
+> > have dangling devices?
 > 
-> Replace the kvm_pmu_ops pointer in common x86 with an instance of the
-> struct to save one pointer dereference when invoking functions. Copy the
-> struct by value to set the ops during kvm_init().
+> No.
 > 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/pmu.c | 41 ++++++++++++++++++++++-------------------
->  arch/x86/kvm/pmu.h |  4 +++-
->  arch/x86/kvm/x86.c |  1 +
->  3 files changed, 26 insertions(+), 20 deletions(-)
+> > 
+> > Why no PCI remove driver callback?
 > 
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index aa6ac9c7aff2..353989bf0102 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -47,6 +47,9 @@
->   *        * AMD:   [0 .. AMD64_NUM_COUNTERS-1] <=> gp counters
->   */
->  
-> +struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
-> +EXPORT_SYMBOL_GPL(kvm_pmu_ops);
+> After probe all resources are device managed. There's nothing to explicitly clean up. When the PCI
+> device is removed, all aux devices are automatically removed. This is the case for the SDSi driver
+> as well.
 
-This export isn't necessary.
+Where is the "automatic cleanup" happening?  As this pci driver is bound
+to the PCI device, when the device is removed, what is called in this
+driver to remove the resources allocated in the probe callback?
+
+confused,
+
+greg k-h

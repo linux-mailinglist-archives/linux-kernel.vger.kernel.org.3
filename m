@@ -2,153 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A1946D8D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8299546D8E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237287AbhLHQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:52:19 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60044 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234667AbhLHQwS (ORCPT
+        id S237326AbhLHQx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237317AbhLHQx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:52:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AEEEECE2263;
-        Wed,  8 Dec 2021 16:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA9DC341C7;
-        Wed,  8 Dec 2021 16:48:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638982122;
-        bh=qMVPh2Qo//JpTSUpFuDDiF5JmeH3DO3HcB3Rv4RljOk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=VZhAHiuk9I8X4JhBsE759+/S1OX7qdJQsYvFYy7RcyvJET4jNqc1ZZIcberY204ei
-         WZ3Q3mPE3mf8x0j8eH/N9vEhDpXj1djg8gTjVA2MYRhnxNtuuvTpLlCw4UQpH4ruE+
-         I/jSWCgMFFJFSI8e7F9ihRZ2QGJM++tCQ+Ttc8hyu6Xu134lzoUv3/ltvBcUgZnBXi
-         B3luttQjGi9G9Km/wz8phl+NswFR6JcJgQbDd6UXosyYupx2NW0nQEHUy5xBRw1A3B
-         ik9hfFUA6FvQNJa8Vq5XC5FwU/h6wCpGO9kGqQ8iQjipM/HtRD1Io9Dt/Bx29HkbBO
-         yBGZUKnPJTzqw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/11] mm/damon/dbgfs: Remove an unnecessary error message
-Date:   Wed,  8 Dec 2021 16:48:38 +0000
-Message-Id: <20211208164838.34177-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Wed, 8 Dec 2021 11:53:56 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC73C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:50:24 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id d10so7532468ybn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:50:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3Ve3H3qYXxbFpvH5KxZ/byzkUd87jGsC+/Ar5Ml7q30=;
+        b=sj7Az99CmVQ4DUjCRt9g+rHD+buRiC6O0WVNPTxVKcsSrw+mBcnKNjBiEP56c+H64j
+         XnIJL1jcW5EGxbZhdyStOauRkj7tB1xyNn80RIzKZztPHrd0TU1u1qJLeGf+XI/0+m2E
+         NCzjoVGdV4h+PAN6zIUlL3AkYbh6Zkv2Rg5ytnohaMY+P3Y9TOJx0i9q47CAdL/oXw+o
+         8kR2dXWx+s3PwuPsEn02++uvvN9lqhgR+RzI92H/RMZNxTBK0OvIg5Zn3YbeKL++13tK
+         d9wvXjq3jctGPapogmqM0Pqy2NwQbr24DKwOLoiOV4Rdtq8jMj8Aw3hWjZizGFHwr4fp
+         W9MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3Ve3H3qYXxbFpvH5KxZ/byzkUd87jGsC+/Ar5Ml7q30=;
+        b=xAmy6LAHA6WSnRcmZQ5yZnhd8jK6AUR2Eow5/JSv7oVZKAeMs/e7J/UDZa+ANi1Nec
+         IAgmTC22oGHnMbZU5aX0br/tbBbiI30SQyuErcfONaQp6vw4hDKm2fZgDsHynDDZAxG8
+         vcITX+ZhKevo98A8D1WF4/Th0OT1L/vzDpGPta8L/pRXTXeL0F/XnDu5hjqYbM4RRExK
+         DQr2z5N/OgZkJPI+PY8j2Rl7udmDJ4xrnKlYoFBy0M59X1QBOiJp8yMeveo2DUj1NCr+
+         yGTSlkXt3f+GB6FcF5ao4ahaNyt38zV6W7KvndFP99cAc2ei6uOO68uSeMAFlPSm18jE
+         xc2A==
+X-Gm-Message-State: AOAM532P2p8o0NK0J7qxS4oOhRr92vegkLisJv2JRMBWcB39iiG1KTHM
+        0r1XqBGmxreAyz7+IiFsssUwWw5bfV8b+i3vb6wt9A==
+X-Google-Smtp-Source: ABdhPJyzJkw8GbWYdBBxspECp6hxchfurugjZFKEPQaJO73WxSEvj4d2AGV+oaceIRhKYHACXjAn/c3wmZqqo/hetdU=
+X-Received: by 2002:a25:6ec5:: with SMTP id j188mr60198733ybc.602.1638982223412;
+ Wed, 08 Dec 2021 08:50:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <eaf268ed-cd1b-107c-3092-36df4277fa0f@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211207215031.2251719-1-surenb@google.com> <Ya/bFLcnqyvlVzuO@casper.infradead.org>
+ <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
+ <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
+ <YbDIxA92ln+RTbUK@casper.infradead.org> <YbDUnkmQP3nxd5bv@dhcp22.suse.cz> <YbDXuegc6BtRzs/5@casper.infradead.org>
+In-Reply-To: <YbDXuegc6BtRzs/5@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 8 Dec 2021 08:50:12 -0800
+Message-ID: <CAJuCfpFbF4C8q=40aXcbverm3QFoPzuLgfSU0eT2e7imgp2YfQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 23:13:34 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+On Wed, Dec 8, 2021 at 8:05 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Wed, Dec 08, 2021 at 04:51:58PM +0100, Michal Hocko wrote:
+> > On Wed 08-12-21 15:01:24, Matthew Wilcox wrote:
+> > > On Tue, Dec 07, 2021 at 03:08:19PM -0800, Suren Baghdasaryan wrote:
+> > > > > >         /**
+> > > > > >          * @close: Called when the VMA is being removed from the MM.
+> > > > > >          * Context: Caller holds mmap_lock.
+> > > >
+> > > > BTW, is the caller always required to hold mmap_lock for write or it
+> > > > *might* hold it?
+> > >
+> > > __do_munmap() might hold it for read, thanks to:
+> > >
+> > >         if (downgrade)
+> > >                 mmap_write_downgrade(mm);
+> > >
+> > > Should probably say:
+> > >
+> > >     * Context: User context.  May sleep.  Caller holds mmap_lock.
+> > >
+> > > I don't think we should burden the implementor of the vm_ops with the
+> > > knowledge that the VM chooses to not hold the mmap_lock under certain
+> > > circumstances when it doesn't matter whether it's holding the mmap_lock
+> > > or not.
+> >
+> > If we document it like that some code might depend on that lock to be
+> > held. I think we only want to document that the holder itself is not
+> > allowed to take mmap sem or a depending lock.
+>
+> The only place where we're not currently holding the mmap_lock is at
+> task exit, where the mmap_lock is effectively held because nobody else
+> can modify the task's mm.  Besides, Suren is changing that in this patch
+> series anyway, so it will be always true.
 
-> Hi SeongJae:
-> 
-> On 12/8/21 8:49 PM, SeongJae Park wrote:
-> > On Wed, 8 Dec 2021 14:29:40 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
-> >
-> > Hi Xin,
-> >
-> >> Hi park:
-> >>
-> >> On 12/1/21 11:04 PM, SeongJae Park wrote:
-> >>> When wrong scheme action is requested via the debugfs interface, DAMON
-> >>> prints an error message.  Because the function returns error code, this
-> >>> is not really needed.  Because the code path is triggered by the user
-> >>> specified input, this can result in kernel log mistakenly being messy.
-> >> Completely correct, but there will also be a problem that users can’t
-> >> quickly locate where the problem is,
-> >>
-> >> Especially too many parameters need to be written into the interface.
-> >>
-> >> I think it is necessary to add some debugging methods to help users find
-> >> the error without polluting the kernel log.
-> >>
-> >> And i have an idea, like this:
-> >>
-> >> in dbgfs, add a last_cmd_stat interface.
-> >>
-> >>       # echo "1 2 1 2 1 2  1 2 1 2 100 ..."  > schemes
-> >>
-> >>       #  cat last_cmd_stat
-> >>
-> >>       #  wrong action 100
-> >>
-> >> In this way, on the one hand, it will not pollute the kernel log, on the
-> >> other hand, it will help users find  the cause of the operation
-> >> interface error.
-> >>
-> >> Park, how do you think of about this idea, if ok, i will send a patch.
-> > Thank you always for your great suggestions and efforts!  BTW, I prefer to be
-> > called with my first name ;)
-> Ha-Ha, Sorry!
-> >
-> > I want DAMON kernel code to be as simple and small as possible, while putting
-> > fancy but complicated features for user conveniences in user space tools like
-> > DAMO[1].  In other words, I hope the DAMON debugfs interface to be used as an
-> > interface for such user space tools, not an interface for human hands.
-> Ok, I know what you mean.
-> >
-> > IMHO, implementing the feature you proposed in the kernel could make the code
-> > slightly bigger, while it can easily implemented in user space.  I therefore
-> > think the feature would be better to be implemented in user space.  If you
-> > could send a pull request of the feature for DAMO, it would be so great.
-> 
-> Ok,  i will do it,  But there's a problem here, If the user does not use 
-> the DAMO tools to operate  the dbgfs interface,
-
-Well, I don't think that as a problem, but a room for improvement.  Maybe we
-could improve the documentation.
-
-
-Thanks,
-SJ
-
-> 
-> the operation interface error will still hard to find the cause of errors.
-> 
-> 
-> >
-> > [1] https://github.com/awslabs/damo
-> >
-> >
-> > Thanks,
-> > SJ
-> >
-> >>> To avoid the case, this commit removes the message
-> >>>
-> >>> Fixes: af122dd8f3c0 ("mm/damon/dbgfs: support DAMON-based Operation Schemes")
-> >>> Signed-off-by: SeongJae Park <sj@kernel.org>
-> >>> ---
-> >>>    mm/damon/dbgfs.c | 4 +---
-> >>>    1 file changed, 1 insertion(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-> >>> index 4bf4204444ab..5b628990ae6e 100644
-> >>> --- a/mm/damon/dbgfs.c
-> >>> +++ b/mm/damon/dbgfs.c
-> >>> @@ -210,10 +210,8 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
-> >>>    				&wmarks.low, &parsed);
-> >>>    		if (ret != 18)
-> >>>    			break;
-> >>> -		if (!damos_action_valid(action)) {
-> >>> -			pr_err("wrong action %d\n", action);
-> >>> +		if (!damos_action_valid(action))
-> >>>    			goto fail;
-> >>> -		}
-> >>>    
-> >>>    		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
-> >>>    			goto fail;
-> >> -- 
-> >> Best Regards!
-> >> Xin Hao
-> >>
-> -- 
-> Best Regards!
-> Xin Hao
+Ok, I'll make it a separate patch after the patch that changes
+exit_mmap and this statement will become always true. Sounds
+reasonable?

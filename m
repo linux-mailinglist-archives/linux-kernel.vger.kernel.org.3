@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2045346D7D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E01146D7D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbhLHQSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:18:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46327 "EHLO
+        id S236574AbhLHQSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:18:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54516 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236621AbhLHQST (ORCPT
+        by vger.kernel.org with ESMTP id S236601AbhLHQSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:18:19 -0500
+        Wed, 8 Dec 2021 11:18:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638980086;
+        s=mimecast20190719; t=1638980082;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=6TtzeYXbzz9SQPvVDeGD0FDb6X1eQ/zkfxrGdjmPjdU=;
-        b=B2DA3fJEbj8RHWFajRdoiLsPd1ugYzzWEIKlbeuEKjZ8v+AKLBM4df13O/dkIlQwM516wN
-        NLXQTwtHDmIxYhcKOk3s8wHxoTM+RvTXq0hZScfCIWP6U3JlzkuyKkZJXsAY2Ra5o04AGW
-        W1lKZS/c8MX5S7Eg+HKqB6VCXhCfR00=
+         to:to:cc:cc; bh=3GwlbjlGkJHY9HG6AySVymplN56TpweIfVsKJFq53nU=;
+        b=YJue4fw2Cvm2i5vN+xB2FyuEUe+PKkCx4mIZK6O1tm95Ta+06IpNkfbNgBnNMY+zpnIbB4
+        86CVLWAQ2upWrXNOOSFnRS8Ucb06HNaGWtoj+If7jEflzejuOk6XEAYQQ75USmdjbixg27
+        RfZp8E7OMVP0mSimnd7sk9Pt9aTGtbY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-ZOQtHZr2NQuqpKfSNb55ow-1; Wed, 08 Dec 2021 11:14:43 -0500
-X-MC-Unique: ZOQtHZr2NQuqpKfSNb55ow-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-182-AUyfdeSfOxe5Z0NKD8XMXw-1; Wed, 08 Dec 2021 11:14:39 -0500
+X-MC-Unique: AUyfdeSfOxe5Z0NKD8XMXw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33FE592500;
-        Wed,  8 Dec 2021 16:14:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 46489101F7A1;
+        Wed,  8 Dec 2021 16:14:38 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B5F0060657;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B055D1002390;
         Wed,  8 Dec 2021 16:14:10 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 41990415EE69; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
-Message-ID: <20211208161000.744487212@fuller.cnet>
+        id 42E36415EE6A; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
+Message-ID: <20211208161000.774386991@fuller.cnet>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Dec 2021 13:09:10 -0300
+Date:   Wed, 08 Dec 2021 13:09:11 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nitesh Lal <nilal@redhat.com>,
@@ -47,112 +47,100 @@ Cc:     Nitesh Lal <nilal@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [patch v8 04/10] procfs: add per-pid task isolation state
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [patch v8 05/10] task isolation: add hook to task exit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add /proc/pid/task_isolation file, to query the state of
-task isolation configuration.
+Add task isolation specific hook to task exit routines.
+
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
 ---
- fs/proc/base.c |   68 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ include/linux/task_isolation.h |   11 +++++++++++
+ kernel/exit.c                  |    2 ++
+ kernel/fork.c                  |    1 +
+ kernel/task_isolation.c        |    4 ++++
+ 4 files changed, 18 insertions(+)
 
-Index: linux-2.6/fs/proc/base.c
+Index: linux-2.6/kernel/exit.c
 ===================================================================
---- linux-2.6.orig/fs/proc/base.c
-+++ linux-2.6/fs/proc/base.c
-@@ -97,6 +97,8 @@
- #include <linux/time_namespace.h>
- #include <linux/resctrl.h>
- #include <linux/cn_proc.h>
-+#include <linux/prctl.h>
+--- linux-2.6.orig/kernel/exit.c
++++ linux-2.6/kernel/exit.c
+@@ -64,6 +64,7 @@
+ #include <linux/compat.h>
+ #include <linux/io_uring.h>
+ #include <linux/kprobes.h>
 +#include <linux/task_isolation.h>
- #include <trace/events/oom.h>
- #include "internal.h"
- #include "fd.h"
-@@ -665,6 +667,69 @@ static int proc_pid_syscall(struct seq_f
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -785,6 +786,7 @@ void __noreturn do_exit(long code)
+ 	}
+ 
+ 	io_uring_files_cancel();
++	tsk_isol_exit(tsk);
+ 	exit_signals(tsk);  /* sets PF_EXITING */
+ 
+ 	/* sync mm's RSS info before statistics gathering */
+Index: linux-2.6/kernel/fork.c
+===================================================================
+--- linux-2.6.orig/kernel/fork.c
++++ linux-2.6/kernel/fork.c
+@@ -2444,6 +2444,7 @@ bad_fork_free_pid:
+ 	if (pid != &init_struct_pid)
+ 		free_pid(pid);
+ bad_fork_cleanup_task_isolation:
++	tsk_isol_exit(p);
+ 	tsk_isol_free(p);
+ bad_fork_cleanup_thread:
+ 	exit_thread(p);
+Index: linux-2.6/kernel/task_isolation.c
+===================================================================
+--- linux-2.6.orig/kernel/task_isolation.c
++++ linux-2.6/kernel/task_isolation.c
+@@ -21,6 +21,10 @@
+ #include <linux/mm.h>
+ #include <linux/vmstat.h>
+ 
++void __tsk_isol_exit(struct task_struct *tsk)
++{
++}
++
+ void __tsk_isol_free(struct task_struct *tsk)
+ {
+ 	if (!tsk->isol_info)
+Index: linux-2.6/include/linux/task_isolation.h
+===================================================================
+--- linux-2.6.orig/include/linux/task_isolation.h
++++ linux-2.6/include/linux/task_isolation.h
+@@ -27,6 +27,13 @@ static inline void tsk_isol_free(struct
+ 		__tsk_isol_free(tsk);
  }
- #endif /* CONFIG_HAVE_ARCH_TRACEHOOK */
  
-+#ifdef CONFIG_CPU_ISOLATION
-+
-+struct qoptions {
-+	unsigned long mask;
-+	char *name;
-+};
-+
-+static struct qoptions iopts[] = {
-+	{ISOL_F_QUIESCE, "quiesce"},
-+};
-+#define ILEN (sizeof(iopts) / sizeof(struct qoptions))
-+
-+static struct qoptions qopts[] = {
-+	{ISOL_F_QUIESCE_VMSTATS, "vmstat_sync"},
-+};
-+#define QLEN (sizeof(qopts) / sizeof(struct qoptions))
-+
-+static void show_isolation_state(struct seq_file *m,
-+				 struct qoptions *iopt,
-+				 int mask,
-+				 const char *hdr)
++void __tsk_isol_exit(struct task_struct *tsk);
++static inline void tsk_isol_exit(struct task_struct *tsk)
 +{
-+	int i;
-+
-+	seq_printf(m, hdr);
-+	for (i = 0; i < ILEN; i++) {
-+		if (mask & iopt->mask)
-+			seq_printf(m, "%s ", iopt->name);
-+		iopt++;
-+	}
-+	if (mask == 0)
-+		seq_printf(m, "none ");
-+	seq_printf(m, "\n");
++	if (tsk->isol_info)
++		__tsk_isol_exit(tsk);
 +}
 +
-+int proc_pid_task_isolation(struct seq_file *m, struct pid_namespace *ns,
-+			    struct pid *pid, struct task_struct *t)
+ int prctl_task_isolation_feat_get(unsigned long arg2, unsigned long arg3,
+ 				  unsigned long arg4, unsigned long arg5);
+ int prctl_task_isolation_cfg_get(unsigned long arg2, unsigned long arg3,
+@@ -57,6 +64,10 @@ static inline void tsk_isol_free(struct
+ {
+ }
+ 
++static inline void tsk_isol_exit(struct task_struct *tsk)
 +{
-+	int active_mask, quiesce_mask, conf_mask;
-+	struct isol_info *isol_info;
-+	struct inode *inode = m->private;
-+	struct task_struct *task = get_proc_task(inode);
-+
-+	isol_info = t->isol_info;
-+	if (!isol_info)
-+		active_mask = quiesce_mask = conf_mask = 0;
-+	else {
-+		active_mask = isol_info->active_mask;
-+		quiesce_mask = isol_info->quiesce_mask;
-+		conf_mask = isol_info->conf_mask;
-+	}
-+
-+	show_isolation_state(m, iopts, conf_mask, "Configured state: ");
-+	show_isolation_state(m, iopts, active_mask, "Active state: ");
-+	show_isolation_state(m, qopts, quiesce_mask, "Quiescing: ");
-+
-+	put_task_struct(task);
-+
-+	return 0;
 +}
 +
-+#endif /* CONFIG_CPU_ISOLATION */
-+
- /************************************************************************/
- /*                       Here the fs part begins                        */
- /************************************************************************/
-@@ -3286,6 +3351,9 @@ static const struct pid_entry tgid_base_
- #ifdef CONFIG_SECCOMP_CACHE_DEBUG
- 	ONE("seccomp_cache", S_IRUSR, proc_pid_seccomp_cache),
- #endif
-+#ifdef CONFIG_CPU_ISOLATION
-+	ONE("task_isolation", S_IRUSR, proc_pid_task_isolation),
-+#endif
- };
- 
- static int proc_tgid_base_readdir(struct file *file, struct dir_context *ctx)
+ static inline int prctl_task_isolation_feat_get(unsigned long arg2,
+ 						unsigned long arg3,
+ 						unsigned long arg4,
 
 

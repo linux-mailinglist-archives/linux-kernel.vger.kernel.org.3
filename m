@@ -2,132 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A2E46D648
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED7B46D652
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235741AbhLHPCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:02:12 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:36683 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235633AbhLHPCJ (ORCPT
+        id S233790AbhLHPDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233020AbhLHPDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:02:09 -0500
-Received: by mail-oi1-f176.google.com with SMTP id t23so4492178oiw.3;
-        Wed, 08 Dec 2021 06:58:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pYgHMZyP/SCresb9+R/6+9a+5haS0Ujj/DJvPk9PiVU=;
-        b=Jsrh8Xb/rlKz7q8oBpVQhX+svRWmoYrg5NttbPzaTpBM0jKuvvBRzcIppzwy/X4Z4h
-         Wy2lbV2Givs2fTExb/VUJp0PwePPBlcz8Y7ov1ySHFI/uKMQnWo7fMcxJ9TWAedRyn8A
-         HZNwCGQvh46qx9hdbTvt3HNAYVAD9ObCtKIhqf5dLvyciFkpmy4cRrtnv9hiWhHLeepS
-         wQaXiW4OmtLd/N77YhT+3WsYmwS/nAJ8AH5SMZCxB2HHEme055dG18cGFmDSoW+BiZeU
-         pwmcub/va9+LDXowVzrCfr5pZAdH0Y7WJOSSBgtHacaUviDFrVpoIrihac0IHU5quVKx
-         NJRg==
-X-Gm-Message-State: AOAM53244/L6fgJczoeXqTcxWmrwVmGmct04yoXnF8Mav42vg9dIHR5C
-        Jg3UJo8qEIxdOscccfaHh+PxVUBjhZsSvYc4qm4i7iof
-X-Google-Smtp-Source: ABdhPJzJLywQoA8bmDyhHvJ14lg4mSgPhruhShHGSHHoBi0bd0BNCOXk+BeElaOWsKWqMPX8ftAfkd67Ps38ExQYCcw=
-X-Received: by 2002:aca:eb0b:: with SMTP id j11mr12009677oih.51.1638975517572;
- Wed, 08 Dec 2021 06:58:37 -0800 (PST)
+        Wed, 8 Dec 2021 10:03:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7D4C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:00:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=jgCvwvBLxBj0XGij3D6WvN7slZ7rVf4ti8R9qgLF2XU=; b=TgBV/AzgLF3d+phdOY++rqp+fa
+        ZzylsQfcARw/Od7W023AInIJvHapGRO1TUqoggS/U4pbcjBhRpO1ra54aiCKtcP8vyqY9bJgqaIi+
+        FVUtDpWI+U1nLgCkxy1f/ffQXCoTH20ZxDpLfKlW76xzymAqck4UB4w2MiCOt653mvPN9UOskjLP6
+        /IBRjcM/6/0SL6texcbFrR4y3rNvW8hHFAUKAMPcdsdaohHwUZgL+Qb90J5SGPAW3JnwDsyfPvrrH
+        WDOazY+6uGrunMkDThQ8WeGS9BqCdk/QgxvBozmUq2NNiB0K/xk8XxogrykZ+Ip0u4qg1h/QYZmgX
+        3fqGicbQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muyQD-008Vue-Vv; Wed, 08 Dec 2021 14:59:54 +0000
+Message-ID: <1605c37e-4a6b-002e-e70c-eddb979f18ec@infradead.org>
+Date:   Wed, 8 Dec 2021 06:59:49 -0800
 MIME-Version: 1.0
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com> <20211206122952.74139-2-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20211206122952.74139-2-kirill.shutemov@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Dec 2021 15:58:26 +0100
-Message-ID: <CAJZ5v0g4bCYJHrbWXrQWwhYa9QNCAFfia4gB6e7PWWXeuVycAQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] ACPICA: Do not flush cache for on entering S4 and S5
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Robert Moore <robert.moore@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] binder: fix pointer cast warning
+Content-Language: en-US
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
+        Marco Ballesio <balejs@google.com>,
+        Hang Lu <hangl@codeaurora.org>, linux-kernel@vger.kernel.org
+References: <20211207122448.1185769-1-arnd@kernel.org>
+ <20211208100930.undojzgd7ylmnz3i@wittgenstein>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211208100930.undojzgd7ylmnz3i@wittgenstein>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 1:30 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> According to the ACPI spec v6.4, section 16.2 the cache flushing is
-> required on entering to S1, S2, and S3. ACPICA code flushes cache
-> regardless of the sleep state.
->
-> Blind cache flush on entering S5 causes problems for TDX. Flushing
-> happens with WBINVD that is not supported in the TDX environment.
->
-> TDX only supports S5 and adjusting ACPICA code to conform to the spec
-> fixes the issue.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-I've converted this patch to the upstream ACPICA code base format and
-submitted a pull request with it to the upstream project.
 
-Thanks!
+On 12/8/21 02:09, Christian Brauner wrote:
+> On Tue, Dec 07, 2021 at 01:24:42PM +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> binder_uintptr_t is not the same as uintptr_t, so converting it into a
+>> pointer requires a second cast:
+>>
+>> drivers/android/binder.c: In function 'binder_translate_fd_array':
+>> drivers/android/binder.c:2511:28: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>>  2511 |         sender_ufda_base = (void __user *)sender_uparent->buffer + fda->parent_offset;
+>>       |                            ^
+>>
+>> Fixes: 656e01f3ab54 ("binder: read pre-translated fds from sender buffer")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+> 
+> Looks good.
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> 
 
-> ---
->  drivers/acpi/acpica/hwesleep.c  | 3 ++-
->  drivers/acpi/acpica/hwsleep.c   | 3 ++-
->  drivers/acpi/acpica/hwxfsleep.c | 2 --
->  3 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
-> index 808fdf54aeeb..ceb5a4292efa 100644
-> --- a/drivers/acpi/acpica/hwesleep.c
-> +++ b/drivers/acpi/acpica/hwesleep.c
-> @@ -104,7 +104,8 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
->
->         /* Flush caches, as per ACPI specification */
->
-> -       ACPI_FLUSH_CPU_CACHE();
-> +       if (sleep_state < ACPI_STATE_S4)
-> +               ACPI_FLUSH_CPU_CACHE();
->
->         status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
->         if (status == AE_CTRL_TERMINATE) {
-> diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
-> index 34a3825f25d3..ee094a3aaaab 100644
-> --- a/drivers/acpi/acpica/hwsleep.c
-> +++ b/drivers/acpi/acpica/hwsleep.c
-> @@ -110,7 +110,8 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
->
->         /* Flush caches, as per ACPI specification */
->
-> -       ACPI_FLUSH_CPU_CACHE();
-> +       if (sleep_state < ACPI_STATE_S4)
-> +               ACPI_FLUSH_CPU_CACHE();
->
->         status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
->         if (status == AE_CTRL_TERMINATE) {
-> diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
-> index e4cde23a2906..ba77598ee43e 100644
-> --- a/drivers/acpi/acpica/hwxfsleep.c
-> +++ b/drivers/acpi/acpica/hwxfsleep.c
-> @@ -162,8 +162,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
->                 return_ACPI_STATUS(status);
->         }
->
-> -       ACPI_FLUSH_CPU_CACHE();
-> -
->         status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
->                                     (u32)acpi_gbl_FADT.s4_bios_request, 8);
->         if (ACPI_FAILURE(status)) {
-> --
-> 2.32.0
->
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+thanks.
+
+-- 
+~Randy

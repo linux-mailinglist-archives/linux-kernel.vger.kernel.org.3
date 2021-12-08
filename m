@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC0C46D6E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F6946D6E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbhLHP0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S235961AbhLHP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235961AbhLHP0m (ORCPT
+        with ESMTP id S235978AbhLHP0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:26:42 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5083DC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:23:10 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id j71-20020a1c234a000000b00342f418ae7cso3185061wmj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:23:10 -0800 (PST)
+        Wed, 8 Dec 2021 10:26:45 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA37C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:23:13 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso3172307wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=WFv2lXz9eCHT3yd+CF6ElCbrsux6py5SHwDqlqAaTn4=;
-        b=ZDiX6clEZwsCO576ptI4p+U8abQdk4d/G9Oef955pfW4K0FAUmdqldx2WNOMkcw9ak
-         5qSvscHuqPi9DAOEf9QVnnWjJ0eeoJurD1kc1Ea5jfSWXTNnLJWLVDBU6AJOV7sIIG8/
-         Pj1j4AYMPQGGlZR/X4DymKwUQpNV1Upw0xVjLfOPKCa+hA/UhqGSyjcFm2+Act+iJqI5
-         GSAuAGgG5gFc8GwslklSGNlNKa08cXanws+vPcdHC51+MWHmwmFsAbRHed6kq+FwtS8Q
-         SRgV/L9TyhcBHOZLXurecAnFAJEuOgoccyWzRd6O1ChhBQV/YHcSQeEYlhC+TfRaL5Je
-         kYtw==
+        bh=yo/eXM0M5vLhun4zn7QEhUouednn+qQj5dLApDQTa4k=;
+        b=YQiiyTtUq3FaM4VAJoRYtem6jDT89osDA2RviQd2g7IHWgQJ2hB10vOD4CnqbX80AH
+         Q03Kv0t3cWaNVFH1q6wRsylJ5jUi0wqfgyba5j8cMwuubV0aq//6Yx3rXFD3A7vFd+5a
+         QaJSdPOTGPYL7v2/LTUouYfSPXGBXWEV6dqjmyQm6v5eRnmQFCNoPjtn5tvVgXgzaOXf
+         UvQqBvOuCgat8swSkzUAV+FtJRHigg7wX2okKam46SRWE5L0r64Ce2BYha5fYY273J7A
+         ULh+k1+ojzQY3CDqEKIVR7qDEtjRXHo6xmgkTRZFN2V1FPXKiL26iAIlSpweK5BIkit2
+         QJrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=WFv2lXz9eCHT3yd+CF6ElCbrsux6py5SHwDqlqAaTn4=;
-        b=zgf8WGWQMJUrry3FNYGSNss5LuyQqMaDQqtqpZEJs/QBzLFsNhgy4oa7C3U61XuP31
-         bbu6Im08RqfJkyS5k4qdlzPXg7b5f7tPGwyHPsA/g9iyzv1vVKJ+d6vGNW7bsVEpobeC
-         i3vCS6V29Tvpcr+HPbsUPMu3nnEg9u3NRYEZvd0Mz8jqcM8oogs8OhJ3ayR7ameRL8LY
-         qeFUJLqojhBHV/dqnFj+HWkpy/m3akBntkhMlsHwDm7N51J1UIillx0r3PyU/xd1Cz1N
-         02eR9YK9KJ8kGeFYnx0aEgTPbv5JJzzgG7R0/zx1thOuKdjIhnPND3dgejlUIt2dZj2v
-         ixag==
-X-Gm-Message-State: AOAM531O49PP0wiZ434uMH3/tlIN3p2mTpVOPtTyXSuO9vCSY3mfUi2G
-        OC9JR7T3+Dzj9nMLZOjT+v0eP+5lfi+N
-X-Google-Smtp-Source: ABdhPJxSs8eDEFE+1XbumupLfjxLtoH5gK9ACn6/1cAzmR58bQj+dtBX/daKqvo9wufYXRpz+sc7M4xxqTKl
+        bh=yo/eXM0M5vLhun4zn7QEhUouednn+qQj5dLApDQTa4k=;
+        b=msL2utL8GAFmzTbidCyCqVa0fnMvwZuAXwY2WdCSBKIdKnpqO4WaH4/VgLk3SX+KRf
+         3qcKG9jL+I8uy8VTOVP6Uu/TZ/r63EzQjE68LQKRE2uNfWps6xrRIir/XJoT2DPDcVca
+         NsROD43fUFwkfQP76F+Qz6ruDRQbMOOtmR3fzFWvkYgSfWULwusK17ePlesfRa8911ey
+         J/enh8gIQGYgzmM6o5TdpjFM4skJd5Y76eiW3T2L9RLE85UFqFUTG6g/ZbYQohncyegF
+         Z6P3vpTCvsbL6uQ7bH2JyjqgnNoaUCCNqhbNsBjLZjM0saEWQziGTTfGYBNbHyNe72Db
+         z7NQ==
+X-Gm-Message-State: AOAM533y+WfD9Hu6VZFjzTU1Pkg79u5+Xdnq2x0VvF86fMy7bpw3yNu7
+        heX+rcswyyP9v9sXTnW0Bi+tnVCkI634
+X-Google-Smtp-Source: ABdhPJwOfjubqI7meWxcl9D37/U/vlVJzBvp2U2d2RIIBKuRn/8kPhrJIutIwFz0Y5iAUysi8gbYXfV0y2wu
 X-Received: from luke.lon.corp.google.com ([2a00:79e0:d:210:c718:14b8:982a:57d5])
- (user=qperret job=sendgmr) by 2002:a05:600c:1c1a:: with SMTP id
- j26mr17342732wms.28.1638976988812; Wed, 08 Dec 2021 07:23:08 -0800 (PST)
-Date:   Wed,  8 Dec 2021 15:22:55 +0000
+ (user=qperret job=sendgmr) by 2002:a05:6000:252:: with SMTP id
+ m18mr59432350wrz.117.1638976991841; Wed, 08 Dec 2021 07:23:11 -0800 (PST)
+Date:   Wed,  8 Dec 2021 15:22:56 +0000
 In-Reply-To: <20211208152300.2478542-1-qperret@google.com>
-Message-Id: <20211208152300.2478542-3-qperret@google.com>
+Message-Id: <20211208152300.2478542-4-qperret@google.com>
 Mime-Version: 1.0
 References: <20211208152300.2478542-1-qperret@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 2/6] KVM: arm64: pkvm: Disable GICv2 support
+Subject: [PATCH 3/6] KVM: arm64: Make the hyp memory pool static
 From:   Quentin Perret <qperret@google.com>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -66,49 +66,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GICv2 requires having device mappings in guests and the hypervisor,
-which is incompatible with the current pKVM EL2 page ownership model
-which only covers memory. While it would be desirable to support pKVM
-with GICv2, this will require a lot more work, so let's make the
-current assumption clear until then.
+The hyp memory pool struct is sized to fit exactly the needs of the
+hypervisor stage-1 page-table allocator, so it is important it is not
+used for anything else. As it is currently used only from setup.c,
+reduce its visibility by marking it static.
 
-Co-developed-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- arch/arm64/kvm/vgic/vgic-v2.c | 5 +++++
- arch/arm64/kvm/vgic/vgic-v3.c | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/kvm/hyp/include/nvhe/mm.h | 1 -
+ arch/arm64/kvm/hyp/nvhe/setup.c      | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kvm/vgic/vgic-v2.c b/arch/arm64/kvm/vgic/vgic-v2.c
-index 95a18cec14a3..8e337a0d7817 100644
---- a/arch/arm64/kvm/vgic/vgic-v2.c
-+++ b/arch/arm64/kvm/vgic/vgic-v2.c
-@@ -345,6 +345,11 @@ int vgic_v2_probe(const struct gic_kvm_info *info)
- 	int ret;
- 	u32 vtr;
+diff --git a/arch/arm64/kvm/hyp/include/nvhe/mm.h b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+index ef6a58a04235..3f60d6cc5368 100644
+--- a/arch/arm64/kvm/hyp/include/nvhe/mm.h
++++ b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+@@ -12,7 +12,6 @@
  
-+	if (is_protected_kvm_enabled()) {
-+		kvm_err("GICv2 not supported in protected mode\n");
-+		return -ENXIO;
-+	}
-+
- 	if (!info->vctrl.start) {
- 		kvm_err("GICH not present in the firmware table\n");
- 		return -ENXIO;
-diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
-index 04f62c4b07fb..debad4e6e6c9 100644
---- a/arch/arm64/kvm/vgic/vgic-v3.c
-+++ b/arch/arm64/kvm/vgic/vgic-v3.c
-@@ -651,7 +651,7 @@ int vgic_v3_probe(const struct gic_kvm_info *info)
- 	} else if (!PAGE_ALIGNED(info->vcpu.start)) {
- 		pr_warn("GICV physical address 0x%llx not page aligned\n",
- 			(unsigned long long)info->vcpu.start);
--	} else {
-+	} else if (kvm_get_mode() != KVM_MODE_PROTECTED) {
- 		kvm_vgic_global_state.vcpu_base = info->vcpu.start;
- 		kvm_vgic_global_state.can_emulate_gicv2 = true;
- 		ret = kvm_register_vgic_device(KVM_DEV_TYPE_ARM_VGIC_V2);
+ extern struct kvm_pgtable pkvm_pgtable;
+ extern hyp_spinlock_t pkvm_pgd_lock;
+-extern struct hyp_pool hpool;
+ extern u64 __io_map_base;
+ 
+ int hyp_create_idmap(u32 hyp_va_bits);
+diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+index 51e68a040d8a..e31149965204 100644
+--- a/arch/arm64/kvm/hyp/nvhe/setup.c
++++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+@@ -18,7 +18,6 @@
+ #include <nvhe/mm.h>
+ #include <nvhe/trap_handler.h>
+ 
+-struct hyp_pool hpool;
+ unsigned long hyp_nr_cpus;
+ 
+ #define hyp_percpu_size ((unsigned long)__per_cpu_end - \
+@@ -28,6 +27,7 @@ static void *vmemmap_base;
+ static void *hyp_pgt_base;
+ static void *host_s2_pgt_base;
+ static struct kvm_pgtable_mm_ops pkvm_pgtable_mm_ops;
++static struct hyp_pool hpool;
+ 
+ static int divide_memory_pool(void *virt, unsigned long size)
+ {
 -- 
 2.34.1.400.ga245620fadb-goog
 

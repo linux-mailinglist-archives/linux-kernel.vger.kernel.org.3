@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABA146D157
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D85E46D15B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbhLHKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S231919AbhLHKwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbhLHKvy (ORCPT
+        with ESMTP id S229475AbhLHKwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:51:54 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A001C061A72
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 02:48:22 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id a37so2110361ljq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 02:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b+SdIraKU1h/VTJU366bK+146L0b2CZSCkrC1RqcLiI=;
-        b=fhXHxYwOAsjpDT7PFmr/Ay2Bpv6Q52w7gzhLvGp3vi03x0kgJwC1mR2nR1tEBwpntR
-         5BIgAfnWN19+UstNXJU4S3pPdsYuWBgNebk4d3ZIyHcMtWi3YzAF0eZIz8zZvhekOaoN
-         dpXhu+rLaGYfNU3wPEK81pcn5RGWC+TYP50YKir8VfeN5bYZl1TC19FCevLctaRQ7GbS
-         gPCsf9ihaBJkTM0mvs/9FwV0KyzdDAXiEqb7QKxeQwaG8ND1MHBq/EpD6AasS8g7Ta3l
-         bXpZYLOXalhq5nbUEDXeIJBRG84NeR6F77adUrF6zH9WKGEaVG6SVgZm6ihC4RzUHLYr
-         VlWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b+SdIraKU1h/VTJU366bK+146L0b2CZSCkrC1RqcLiI=;
-        b=4UdqOjx9i1zNakNcU7oBucCH4/oKryL5nTFgepbRilTPI87ons+/qnGIIXx/hYSJ4M
-         68YwqkQ+TS7FeH+x0w5CXLAOr6rHCsNZIgUfk0P5gcShCOeDELOSLu26g7Fx32R9krsv
-         Ie7YQn0AVdROpaNe1r/gZjf3im72ZEu0fROegsvkTzLL6xtXjzSaqz/q7kQXyCij1/WA
-         wXJ9vj7pUS0qFTQM4GR/N1xl6Qg4qfqtJhym3aA58GIsApcU2GfFNGfkmmcm/muAEWav
-         q/FVwcLYAfIfr6/Anfw5AKpa7g+ZBIl0x5DthvU/j9+mzpitai1ZWahnwA7KKI4J6KTt
-         PNaw==
-X-Gm-Message-State: AOAM532DAsVhl9ABmFKSV+DJv69ptvkrx1rqtzh5YaNBdUEAgE+28yLA
-        pK0RZ/3qjVyJ3Hv+Wxm9/DKsVD+16TJVtR3DxLFXhQ==
-X-Google-Smtp-Source: ABdhPJwVpthnKSrDF/C2HexBrqNAjJ6E3HCFUU7MoAlXVzpyAbLD4i9B/Oo9exkRlkxfOdIXnrTziCam6tJi8meqZow=
-X-Received: by 2002:a2e:a22a:: with SMTP id i10mr48977767ljm.16.1638960500425;
- Wed, 08 Dec 2021 02:48:20 -0800 (PST)
+        Wed, 8 Dec 2021 05:52:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEB4C061746;
+        Wed,  8 Dec 2021 02:48:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2936B82089;
+        Wed,  8 Dec 2021 10:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54905C00446;
+        Wed,  8 Dec 2021 10:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638960521;
+        bh=aZCHSWMXNx/yJOGQvjgTK6Bw1r7H5PDORW4SOKvg2oA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XXS2a4SQPk7Vq/PRar4BbPA+s9HBID1MewzdG9Fgimuc6blGehYijv+j05LMYLj8D
+         fV1+pxfH1xA8EC93p5HYq2+00NJBzGtj+0Ew4Uvu9SajDp5AWEvpxhNXju2VEKG0ve
+         o1LnHkuNaArHN5gSa8wEbCXIhuvERe9CbbIAlGizGNmV9R2qlbHDiHYvMtqiMCySvF
+         LIAWt1YrvHoLi5vjfO2kBDu20EL9yOBo2uMOgCuCT9Od9zjVixqBn6BQYBDZ917d6X
+         AKv26JZzFtx+5QKSQ6t31tcALyIBUJvIjGwGRMG7fqfY90Zi/9QAh/9t3pn18KjoLZ
+         AexSGNgcVAxqA==
+Date:   Wed, 8 Dec 2021 12:48:36 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, lee.jones@linaro.org,
+        hdegoede@redhat.com, bhelgaas@google.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbCNhAtiueFZ/hkJ@unreal>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
+ <YbBYtJFQ47UH2h/k@unreal>
+ <YbBZuwXZWMV9uRXI@kroah.com>
+ <YbBtjSNz8z34czeN@unreal>
+ <YbBwOb6JvWkT3JWI@kroah.com>
+ <YbB29BaOWibImGf5@unreal>
+ <YbCFkQZvIDLtPJTR@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com> <20211204061042.1248028-12-Mr.Bossman075@gmail.com>
-In-Reply-To: <20211204061042.1248028-12-Mr.Bossman075@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 8 Dec 2021 11:47:44 +0100
-Message-ID: <CAPDyKFohGQ9M08sJmM5eo2jNhrvFSHA2bnb31AEgiFCFfV78ng@mail.gmail.com>
-Subject: Re: [PATCH v4 11/13] mmc: sdhci-esdhc-imx: Add sdhc support for
- i.MXRT series
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        Kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com,
-        stefan@agner.ch, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
-        adrian.hunter@intel.com, jirislaby@kernel.org,
-        giulio.benetti@benettiengineering.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbCFkQZvIDLtPJTR@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Dec 2021 at 07:11, Jesse Taube <mr.bossman075@gmail.com> wrote:
->
-> From: Jesse Taube <mr.bossman075@gmail.com>
->
-> Add support for i.MXRT1050's sdhc.
->
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+On Wed, Dec 08, 2021 at 12:14:41PM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 08, 2021 at 11:12:20AM +0200, Leon Romanovsky wrote:
+> > On Wed, Dec 08, 2021 at 09:43:37AM +0100, Greg KH wrote:
+> 
+> ...
+> 
+> > The idea that you have two APIs which do the same thing, one is
+> > obfuscated version of another.
+> > 
+> > If you don't want from people to use driver core function and structures,
+> > you shouldn't expose them in global headers.
+> 
+> For all these APIs the rationale is very simple. If you have callback that
+> takes a pointer to the container (*), you better use the APIs related to
+> this container (no need to have an explicit dereferencing). Otherwise you
+> use dev_*() APIs (when it's pointer to the pure struct device).
+> 
+> The value is to have coherent APIs around struct device containers.
+> 
+> *) under container here I assume the data structure that has the embedded
+>    struct device in it.
 
-No need to resend this, it's already been applied.
+Thanks
 
-Kind regards
-Uffe
-
-
-
-> ---
-> V1->V2:
-> * Nothing done
-> V2->V3:
-> * Rename imxrt to imxrt1050
-> * Remove BROKEN_AUTO_CMD23 and MAN_TUNING flags
-> V3->V4:
-> * Nothing done
-> ---
->  drivers/mmc/host/sdhci-esdhc-imx.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-> index 764ee1b761d9..55981b0f0b10 100644
-> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
-> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-> @@ -305,6 +305,9 @@ static struct esdhc_soc_data usdhc_imx7ulp_data = {
->                         | ESDHC_FLAG_PMQOS | ESDHC_FLAG_HS400
->                         | ESDHC_FLAG_STATE_LOST_IN_LPMODE,
->  };
-> +static struct esdhc_soc_data usdhc_imxrt1050_data = {
-> +       .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_HS200 | ESDHC_FLAG_ERR004536,
-> +};
->
->  static struct esdhc_soc_data usdhc_imx8qxp_data = {
->         .flags = ESDHC_FLAG_USDHC | ESDHC_FLAG_STD_TUNING
-> @@ -355,6 +358,7 @@ static const struct of_device_id imx_esdhc_dt_ids[] = {
->         { .compatible = "fsl,imx7ulp-usdhc", .data = &usdhc_imx7ulp_data, },
->         { .compatible = "fsl,imx8qxp-usdhc", .data = &usdhc_imx8qxp_data, },
->         { .compatible = "fsl,imx8mm-usdhc", .data = &usdhc_imx8mm_data, },
-> +       { .compatible = "fsl,imxrt1050-usdhc", .data = &usdhc_imxrt1050_data, },
->         { .compatible = "nxp,s32g2-usdhc", .data = &usdhc_s32g2_data, },
->         { /* sentinel */ }
->  };
-> --
-> 2.34.0
->
+> 
+ -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 

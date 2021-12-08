@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B923E46C8D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497D246C8E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242887AbhLHAlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S242936AbhLHAlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242858AbhLHAlK (ORCPT
+        with ESMTP id S242885AbhLHAlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:41:10 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA5C061746;
-        Tue,  7 Dec 2021 16:37:39 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id j11so597070pgs.2;
-        Tue, 07 Dec 2021 16:37:39 -0800 (PST)
+        Tue, 7 Dec 2021 19:41:13 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4DEC061746;
+        Tue,  7 Dec 2021 16:37:42 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id h24so739891pjq.2;
+        Tue, 07 Dec 2021 16:37:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fzt07ce1bSe7/IbkVLZBOEgGkOAfA/4NDEECalTgWJE=;
-        b=dE3SBRjaU2Y9Ll3skSCpNRoaLe4U4IgQwCl+p7mQF7mU+RtncumJn6JQcCL3M5md9Z
-         +M9NDu9CqMP1F6b5H5qwfbgm/qELonGxbQBY+SGSePbP/ShSRit/CDi80Wl+AUsqIF6N
-         +qJBU/0Kbn1qthCN2g4RVFpz0r0xD3ybLmhl3v7mlF0KvHLlqcaeMAjGcH4Cs2U24eFg
-         ZBJg672k/LKMq55f6wSeY3WpFwDQEdCocR0AEK/NPUvc/xwuFusvPjvUHZ1A379CN76j
-         CzvvgZ7Z9kuGvV2Y55yea2+H//6w0slmxVdZ2Ui2fNSyJA0NXgIE0OGOidq5PZn436Dl
-         fe0w==
+        bh=22u1YgEGuUE2NUBm4aUIXRHhe1NgL4IlQ7p6nHAEJMg=;
+        b=lBrp7wUtHVgBa3Dthl4LzV2k6mAosTTh2BZ0GGwACqmq3CIzP6W2cGHLbkqw8KUcup
+         h+QUfQyB70c7veObd+o1MrBmwUSgz1XXaByaTuvBrOqEohqZF0jkveUOzB0p2Emg76cY
+         mdWrPtChMKjb5a9DYNB9DR6R2sqrveqvNvzwfFpXNjd0gHQlRD00azPVocrejvkKC1pO
+         hmZDrR4AYV9kFaKwWPmaXoN+8E2reOKvB58j2+ZCoj7AY6tZXWy+thXOWMKjG7FnC+TM
+         pie0ymYDoTbQ3jPnqMZEwelBfdXnxO/0N0P7BF5lcnf60Laou9L5nCnvPHI0eVaGPVES
+         w/WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fzt07ce1bSe7/IbkVLZBOEgGkOAfA/4NDEECalTgWJE=;
-        b=A6LfLLhYF7dbdT8Wu0qJUVMVoSGhRIpUxxF3VSLaujhBIvaoYSR8JxC1JAK1VFeckX
-         rxAoSjiKedvbkC1VUF3167sR/xmfWgarLBT8kXUSSx7l4/DawYV9W2q807syqfieTXJI
-         cf0BI3dVmMYPiGOD0JP4ZkunRsR+G4Kurmq3w78FeApPnO6W/WPibz3nv5sScj7Fu9BS
-         RzOvgHE/tFazFUI7F8Vx8CwSpQovPiqHCNKcsOhS1gve5R3eN9ooBLxYLjQ0cuN+uo61
-         99gt3/y4UdGJbOOjpUs3k/oteVhjq0y7vlLllmCVb8lRUFFFILoo4nyyBopDhjrMqQSo
-         V/Ug==
-X-Gm-Message-State: AOAM531NhDeKC8oihnBA6k3/LWDcRoqlU/eN894hIt8nJHl3z3+82mdy
-        GPEdFm9esd7y+opBOAJpy4iZ5cF98ms=
-X-Google-Smtp-Source: ABdhPJyIgeihBB0FcpLgt6ApUyOqXenN/IoOAZWKj7y+zefPUC8iLYH4pidr3M8JIvz4OctUZIcKaA==
-X-Received: by 2002:a63:211b:: with SMTP id h27mr26815869pgh.203.1638923858628;
-        Tue, 07 Dec 2021 16:37:38 -0800 (PST)
+        bh=22u1YgEGuUE2NUBm4aUIXRHhe1NgL4IlQ7p6nHAEJMg=;
+        b=PFl5U0HZlP6CceUQhvvUCWBcEOnTff8+/N+6LZfOnvE06p4wqRJn+wmnKVGsGAwBo1
+         FBLF7mRvOBLfoFeH4602eN8X3OQwoZJUDSV4mDs0V+pIdi/dVyULq7U+cXWbeYKHc58Y
+         ox4nU+h6A5t0Xajf7bxJ7cLsf/BFozf58UaqXrKYLT4UrEfddVnmadV8ebiSxmjfyZAL
+         YQ4j6rb7q29mCmaKDb2ap4/J61dy1F3cB0fjNVIh5GbMp1TP5IRBznIfvfPVftS4KpHR
+         TADW5vqVv1kDdmbF/gSlMkcDMWw3/0vcAwWu6w6atIfGNck93RNmBphuVuzD5tuUAvno
+         5/7Q==
+X-Gm-Message-State: AOAM531SdO0YXVJSy3xu4uu2rJQt6HvbZW6IlOPgShkqrfsgB39qTqAb
+        bOYFswMS6R5oRr52v603+YDCIYg1jys=
+X-Google-Smtp-Source: ABdhPJzbYuklpDTPbalGGg11H25K1o5mWfgC3zU2r2fYb/whgxXYHS9O2jg9W2TxQF8vpjIQiSAXLw==
+X-Received: by 2002:a17:902:e806:b0:142:830:eaa4 with SMTP id u6-20020a170902e80600b001420830eaa4mr54788413plg.16.1638923861843;
+        Tue, 07 Dec 2021 16:37:41 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.37.35
+        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.37.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:37:38 -0800 (PST)
+        Tue, 07 Dec 2021 16:37:41 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v3 01/15] dt-bindings: mmc: Convert Broadcom STB SDHCI binding to YAML
-Date:   Tue,  7 Dec 2021 16:37:12 -0800
-Message-Id: <20211208003727.3596577-2-f.fainelli@gmail.com>
+Subject: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset to YAML
+Date:   Tue,  7 Dec 2021 16:37:13 -0800
+Message-Id: <20211208003727.3596577-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211208003727.3596577-1-f.fainelli@gmail.com>
 References: <20211208003727.3596577-1-f.fainelli@gmail.com>
@@ -102,180 +102,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB SDHCI controller Device Tree binding to YAML.
+Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/mmc/brcm,sdhci-brcmstb.txt       |  53 ----------
- .../bindings/mmc/brcm,sdhci-brcmstb.yaml      | 100 ++++++++++++++++++
- 2 files changed, 100 insertions(+), 53 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
- create mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+ .../bindings/reset/brcm,brcmstb-reset.txt     | 27 -----------
+ .../bindings/reset/brcm,brcmstb-reset.yaml    | 48 +++++++++++++++++++
+ 2 files changed, 48 insertions(+), 27 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
 
-diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+diff --git a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
 deleted file mode 100644
-index ae2074184528..000000000000
---- a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+index ee59409640f2..000000000000
+--- a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
 +++ /dev/null
-@@ -1,53 +0,0 @@
--* BROADCOM BRCMSTB/BMIPS SDHCI Controller
+@@ -1,27 +0,0 @@
+-Broadcom STB SW_INIT-style reset controller
+-===========================================
 -
--This file documents differences between the core properties in mmc.txt
--and the properties used by the sdhci-brcmstb driver.
+-Broadcom STB SoCs have a SW_INIT-style reset controller with separate
+-SET/CLEAR/STATUS registers and possibly multiple banks, each of 32 bit
+-reset lines.
 -
--NOTE: The driver disables all UHS speed modes by default and depends
--on Device Tree properties to enable them for SoC/Board combinations
--that support them.
+-Please also refer to reset.txt in this directory for common reset
+-controller binding usage.
 -
 -Required properties:
--- compatible: should be one of the following
--  - "brcm,bcm7425-sdhci"
--  - "brcm,bcm7445-sdhci"
--  - "brcm,bcm7216-sdhci"
--
--Refer to clocks/clock-bindings.txt for generic clock consumer properties.
+-- compatible: should be brcm,brcmstb-reset
+-- reg: register base and length
+-- #reset-cells: must be set to 1
 -
 -Example:
 -
--	sdhci@84b0000 {
--		sd-uhs-sdr50;
--		sd-uhs-ddr50;
--		sd-uhs-sdr104;
--		sdhci,auto-cmd12;
--		compatible = "brcm,bcm7216-sdhci",
--			   "brcm,bcm7445-sdhci",
--			   "brcm,sdhci-brcmstb";
--		reg = <0x84b0000 0x260 0x84b0300 0x200>;
--		reg-names = "host", "cfg";
--		interrupts = <0x0 0x26 0x4>;
--		interrupt-names = "sdio0_0";
--		clocks = <&scmi_clk 245>;
--		clock-names = "sw_sdio";
+-	reset: reset-controller@8404318 {
+-		compatible = "brcm,brcmstb-reset";
+-		reg = <0x8404318 0x30>;
+-		#reset-cells = <1>;
 -	};
 -
--	sdhci@84b1000 {
--		mmc-ddr-1_8v;
--		mmc-hs200-1_8v;
--		mmc-hs400-1_8v;
--		mmc-hs400-enhanced-strobe;
--		supports-cqe;
--		non-removable;
--		bus-width = <0x8>;
--		compatible = "brcm,bcm7216-sdhci",
--			   "brcm,bcm7445-sdhci",
--			   "brcm,sdhci-brcmstb";
--		reg = <0x84b1000 0x260 0x84b1300 0x200>;
--		reg-names = "host", "cfg";
--		interrupts = <0x0 0x27 0x4>;
--		interrupt-names = "sdio1_0";
--		clocks = <&scmi_clk 245>;
--		clock-names = "sw_sdio";
+-	&ethernet_switch {
+-		resets = <&reset 26>;
+-		reset-names = "switch";
 -	};
-diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+diff --git a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
 new file mode 100644
-index 000000000000..dccd5ad96981
+index 000000000000..e00efa88a198
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/mmc/brcm,sdhci-brcmstb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++$id: "http://devicetree.org/schemas/reset/brcm,brcmstb-reset.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Broadcom BRCMSTB/BMIPS SDHCI Controller binding
++title: Broadcom STB SW_INIT-style reset controller
++
++description:
++  Broadcom STB SoCs have a SW_INIT-style reset controller with separate
++  SET/CLEAR/STATUS registers and possibly multiple banks, each of 32 bit
++  reset lines.
++
++  Please also refer to reset.txt in this directory for common reset
++  controller binding usage.
 +
 +maintainers:
-+  - Al Cooper <alcooperx@gmail.com>
 +  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+allOf:
-+  - $ref: mmc-controller.yaml#
 +
 +properties:
 +  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - brcm,bcm7216-sdhci
-+          - const: brcm,bcm7445-sdhci
-+          - const: brcm,sdhci-brcmstb
-+      - items:
-+          - enum:
-+              - brcm,bcm7445-sdhci
-+          - const: brcm,sdhci-brcmstb
-+      - items:
-+          - enum:
-+              - brcm,bcm7425-sdhci
-+          - const: brcm,sdhci-brcmstb
++    const: brcm,brcmstb-reset
 +
 +  reg:
-+    minItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: host
-+      - const: cfg
-+
-+  interrupts:
 +    maxItems: 1
 +
-+  clocks:
-+    maxItems: 1
-+    description:
-+      handle to core clock for the sdhci controller.
-+
-+  clock-names:
-+    items:
-+      - const: sw_sdio
-+
-+  sdhci,auto-cmd12:
-+    type: boolean
-+    description: Specifies that controller should use auto CMD12
++  "#reset-cells":
++    const: 1
 +
 +required:
 +  - compatible
 +  - reg
-+  - interrupts
-+  - clocks
++  - "#reset-cells"
 +
-+unevaluatedProperties: false
++additionalProperties: false
 +
 +examples:
 +  - |
-+    mmc@84b0000 {
-+      sd-uhs-sdr50;
-+      sd-uhs-ddr50;
-+      sd-uhs-sdr104;
-+      sdhci,auto-cmd12;
-+      compatible = "brcm,bcm7216-sdhci",
-+                   "brcm,bcm7445-sdhci",
-+                   "brcm,sdhci-brcmstb";
-+      reg = <0x84b0000 0x260>, <0x84b0300 0x200>;
-+      reg-names = "host", "cfg";
-+      interrupts = <0x0 0x26 0x4>;
-+      interrupt-names = "sdio0_0";
-+      clocks = <&scmi_clk 245>;
-+      clock-names = "sw_sdio";
++    reset: reset-controller@8404318 {
++      compatible = "brcm,brcmstb-reset";
++      reg = <0x8404318 0x30>;
++      #reset-cells = <1>;
 +    };
 +
-+    mmc@84b1000 {
-+      mmc-ddr-1_8v;
-+      mmc-hs200-1_8v;
-+      mmc-hs400-1_8v;
-+      mmc-hs400-enhanced-strobe;
-+      supports-cqe;
-+      non-removable;
-+      bus-width = <0x8>;
-+      compatible = "brcm,bcm7216-sdhci",
-+           "brcm,bcm7445-sdhci",
-+            "brcm,sdhci-brcmstb";
-+      reg = <0x84b1000 0x260>, <0x84b1300 0x200>;
-+      reg-names = "host", "cfg";
-+      interrupts = <0x0 0x27 0x4>;
-+      interrupt-names = "sdio1_0";
-+      clocks = <&scmi_clk 245>;
-+      clock-names = "sw_sdio";
++    ethernet_switch {
++      resets = <&reset 26>;
++      reset-names = "switch";
 +    };
 -- 
 2.25.1

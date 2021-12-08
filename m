@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A52EB46D1F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EC046D1F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbhLHLVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:21:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33578 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229564AbhLHLVP (ORCPT
+        id S232254AbhLHLVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231571AbhLHLVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:21:15 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8AmNhu009097;
-        Wed, 8 Dec 2021 11:17:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=PFKQp9yvN6pWFPCbRqbUVlCDnNV4ALkVO13ydkgrKpM=;
- b=soL2gkZTE2Z0DFbNadBYo3L/sO1uRJZaD/nT018dGX/TNLfljy1I19sKQSOjuYQTukLt
- sYPmoHD+6SiMi5BnO7h1Ec438Nll7Esz6sGEE3TWkD+cHFuvBWeeKvqtclwSa4LpOSNb
- nofG3+0E/OQk7B4LZK930Ggji1N185OrjUjiUh8udG8PhqiEWwxwiT+YA26LuAzMkvEY
- e/ZjeYhQleIFtj7/ZtTTF6vqIe2POXe9vcGAtCdK1iAX76ZE7X94C+wH5lsKcT2zDft0
- KqAHkPHcUQn/kYl9cMFoOK9Fy4k397ZTi+BBZWBApyvfKOFY7CqVnz9YZhrIBMkfF/yp oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctu9b8gqm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:17:43 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8B8g5l000884;
-        Wed, 8 Dec 2021 11:17:43 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctu9b8gpx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:17:43 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8BDocw007816;
-        Wed, 8 Dec 2021 11:17:41 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3cqyy9netc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:17:40 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8BHbdd21234004
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 11:17:37 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87E3611C052;
-        Wed,  8 Dec 2021 11:17:37 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 834EC11C050;
-        Wed,  8 Dec 2021 11:17:36 +0000 (GMT)
-Received: from [9.171.54.177] (unknown [9.171.54.177])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 11:17:36 +0000 (GMT)
-Message-ID: <b3f53dfa-d54c-ef75-a584-ea1da0634abc@linux.ibm.com>
-Date:   Wed, 8 Dec 2021 12:17:36 +0100
+        Wed, 8 Dec 2021 06:21:21 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165FEC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:17:50 -0800 (PST)
+Date:   Wed, 08 Dec 2021 11:17:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638962267;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jMwppfy3UrX3I8KBgIwGLLb7q2RxDCKASFaODWEM+fk=;
+        b=uZ2V7lO+9iS64OpzDE7r+QH5Uz+mSh5Tw8xW0KEBcXcZfiKqzPu84/iZQd9Utt8l5e43Tx
+        OBfNji574WdT8SBco8K7QKASqQEhFk4iS/uAlRLKtbJ6AV0fDwxce7WW/hLdYCsalesgR7
+        EBAgbGm6o7orsP6SMS48ZBx0l3aTAsd3NYbWot8g4WYnelQCzhqfmkYbVCosDQ/h4qjBZX
+        604VLXPahd+cnN8b0JuvDUT78ceHRpHCXEMQ4vclCPjjx2hZKtS/NWP1WD7a/2LPDmTlM2
+        7m4PxNdTt7vqY3Z+MkNx+E0PjttY0YaQEI2PT20GPJSKt5E1aiaySgVBAwMrNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638962267;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jMwppfy3UrX3I8KBgIwGLLb7q2RxDCKASFaODWEM+fk=;
+        b=m0bmpNVUA+sCYc5dpVvYd4JcegdiD/9Uy+ytFZLuRN+bn9jPbe+7vbF9qcvFX0wMEDX/iQ
+        oiXvkIMF9fhAXACQ==
+From:   "irqchip-bot for Wudi Wang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/irq-gic-v3-its.c: Force
+ synchronisation when issuing INVALL
+Cc:     Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+References: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 03/32] s390/sclp: detect the AENI facility
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-4-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-4-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <163896226662.11128.5243807165796268082.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UeheQUPGQtKipDylLCr98ItxOqFFMz5d
-X-Proofpoint-ORIG-GUID: uq4CKHpZNtF6Cz-u5J8qXlQaurhABAhl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_03,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
- malwarescore=0 impostorscore=0 clxscore=1015 spamscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080071
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
+Commit-ID:     b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a
+Author:        Wudi Wang <wangwudi@hisilicon.com>
+AuthorDate:    Wed, 08 Dec 2021 09:54:29 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 08 Dec 2021 11:13:18 
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> Detect the Adapter Event Notification Interpretation facility.
-> 
-> Reviewed-by: Eric Farman <farman@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
 
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
 
-> ---
->   arch/s390/include/asm/sclp.h   | 1 +
->   drivers/s390/char/sclp_early.c | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
-> index 524a99baf221..a763563bb3e7 100644
-> --- a/arch/s390/include/asm/sclp.h
-> +++ b/arch/s390/include/asm/sclp.h
-> @@ -90,6 +90,7 @@ struct sclp_info {
->   	unsigned char has_dirq : 1;
->   	unsigned char has_zpci_interp : 1;
->   	unsigned char has_aisii : 1;
-> +	unsigned char has_aeni : 1;
->   	unsigned int ibc;
->   	unsigned int mtid;
->   	unsigned int mtid_cp;
-> diff --git a/drivers/s390/char/sclp_early.c b/drivers/s390/char/sclp_early.c
-> index a73120b8a5de..52a203ea23cc 100644
-> --- a/drivers/s390/char/sclp_early.c
-> +++ b/drivers/s390/char/sclp_early.c
-> @@ -46,6 +46,7 @@ static void __init sclp_early_facilities_detect(void)
->   	sclp.has_hvs = !!(sccb->fac119 & 0x80);
->   	sclp.has_kss = !!(sccb->fac98 & 0x01);
->   	sclp.has_aisii = !!(sccb->fac118 & 0x40);
-> +	sclp.has_aeni = !!(sccb->fac118 & 0x20);
->   	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
->   	if (sccb->fac85 & 0x02)
->   		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
-> 
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
+
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
+Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
+---
+ drivers/irqchip/irq-gic-v3-its.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index eb0882d..0cb584d 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -742,7 +742,7 @@ static struct its_collection *its_build_invall_cmd(struct its_node *its,
+ 
+ 	its_fixup_cmd(cmd);
+ 
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,

@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240E746D54E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A2B46D55F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbhLHOPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhLHOPs (ORCPT
+        id S233196AbhLHOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:16:34 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:43711 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233235AbhLHOQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:15:48 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621F6C061746;
-        Wed,  8 Dec 2021 06:12:16 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id m6so4316587oim.2;
-        Wed, 08 Dec 2021 06:12:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YZ4a2Q2JGh9XlSO7M5O7EIwFUgTCzOJasXHkco99Bw4=;
-        b=YuWPWAqeweg8HTH2XkmDa4rMIIEJdjBPBCFso+zEH0Om7eRZcAmJj+TDx+mPnt3HHO
-         ipYQ9VL9Ey620DQ4xgJHasnrL6DTe0wncd3Zcv1rMvgME4JZWNSKbmv9OriEK8B33fXf
-         y0c7W36DsJn9wYUv3rnnSH+uxs367RbSzOs6bLcpUK2AyryaVIIJRGqZYfzZyp84ioUD
-         bv/aWB0O2JRO5GZHmFeoApovpTFbotaoAKtYlWD9MSjp1GpDcLCrcSFfI2iMFGdrcWPZ
-         rBNHggLU9SpqDSjR79RXGvzfx9h/EFFJzUKtO4zDYXZrL+b9l6FA6QjCHVWN1aw33Scq
-         yWvA==
+        Wed, 8 Dec 2021 09:16:32 -0500
+Received: by mail-ot1-f50.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so2815761otu.10;
+        Wed, 08 Dec 2021 06:13:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YZ4a2Q2JGh9XlSO7M5O7EIwFUgTCzOJasXHkco99Bw4=;
-        b=rpELA4g8lD0tdOYFWrJXc7RGkTbw4qK56qmoYBeoELxRJ30jSFgfL9LSrv5DjRWFqB
-         plXMUk5KqRGXlfrUu9WrStDU1rsqY39yPAM6zbF6S4V+d8ggi3VS4RzmXy6XeHb+WHir
-         U51fXaFJJSG0m7/f3veTz4rxeqMrn7vrnhJKEnMKNaLx53elvrD/GL+2ZZvkPcBaQtji
-         TNjrH5z31tiPr+8WgW0DCvq3iuql/uQV02KUbTdGLtM0iw6pTJGkobgortDgUuyg4seM
-         TYy9MZ9+ziJQftzrwzqFVw5xzdpHNK0mWn9IWtSe4/IvAV2896XB9K9RbLdJ0CCd13fx
-         heHg==
-X-Gm-Message-State: AOAM531oMZk1PNO69ncaXlbzr6gbzO2+SI9eajulYZRJig/iYsJFSVEX
-        7iaA/kgGxseHF/dHFZnRDi9YemuyLj+u1RkqF+k=
-X-Google-Smtp-Source: ABdhPJw7LPO7mfLxF4VV98Z4T/LGrfzmkd5il9GPK8oLAHj7mQpK5n6HFvXG2xLcIfVjF9EaUOC0R8VWwoFtkq9pq68=
-X-Received: by 2002:a54:4486:: with SMTP id v6mr12060509oiv.90.1638972735722;
- Wed, 08 Dec 2021 06:12:15 -0800 (PST)
+        bh=kot1Vo3tW7X4q0oWAztyb7sc2d5t0hVeg+NoGlVrew8=;
+        b=Xegniiuy9RhQMiRQFFeiIgXwYehAEWP3W0WWDF7XZvNwJSwdmNKrCYZN2Li7A8bUG6
+         Jr7bkBHDWjGnD32jHsyxP9Za4pt01hsWo3dlwwil0RStMnu+Wk944DzBZBzu9DEp8i6l
+         5Fxvwo5kE8uVLRbYcrR0puqUEisoENZf9VOX2lN6zGefdtCt1xMflDydXbNNllAF4HCo
+         mCoC0zhmhJeAWXq5nmTblaXflfqlmK5VcIk6EJ1vDI7/MbNQe7o9TwFTugMTfXXntE+b
+         NEAhDmq/8nM99VyxweKyZSQJjsnnkzMDKvZUZn8TuseeNM2YZmSplNLEFc83ULjipzII
+         oyrA==
+X-Gm-Message-State: AOAM531SgEQMxt9nUQuZAjqGHyHa59PmfTatTdn5EswjxmP/eyTPh4o9
+        S+wq+ilyJKu0/UVXqLcm4A9SmwxpLbU3YwKhmCUPn+dX
+X-Google-Smtp-Source: ABdhPJysPaLI98z7r5Jf+ITKMnCviwdGPrRqU1FNn7oQtauRkJLz5idaoWdf/ZmXXa2cs4/90nI/5pTEZ+rC2dd+W+w=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr41268530otf.198.1638972780217;
+ Wed, 08 Dec 2021 06:13:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20211207221741.50422-1-makvihas@gmail.com> <YbBGWH0lPs3NBLQr@kroah.com>
-In-Reply-To: <YbBGWH0lPs3NBLQr@kroah.com>
-From:   Vihas Mak <makvihas@gmail.com>
-Date:   Wed, 8 Dec 2021 19:42:04 +0530
-Message-ID: <CAH1kMwThQARAoxoxP__fv+f2ep5ndutnxUbQXPEyqn410oL1mA@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: return appropriate error on failure
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20211123132330.1008671-1-yu.c.chen@intel.com>
+In-Reply-To: <20211123132330.1008671-1-yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Dec 2021 15:12:49 +0100
+Message-ID: <CAJZ5v0h6Hka8P9Ba9cYrWSwzfWtH=-prLXjOKBe+1-vEU6rH0A@mail.gmail.com>
+Subject: Re: [PATCH] tools/power/acpi: Fix the compile error when output
+ directory is specified
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Please no, do not use ? : unless you have to.  Spell it out and use a
->> real if statement.
-
-Okay. But I don't think it's required anymore, as Jiri pointed out in
-https://bugzilla.kernel.org/show_bug.cgi?id=215205#c1
-
-On Wed, Dec 8, 2021 at 11:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Tue, Nov 23, 2021 at 2:24 PM Chen Yu <yu.c.chen@intel.com> wrote:
 >
-> On Wed, Dec 08, 2021 at 03:47:41AM +0530, Vihas Mak wrote:
-> > when a user with CAP_SYS_ADMIN disabled calls ioctl (TIOCSSERIAL),
-> > uart_set_info() returns 0 instead of -EPERM and the user remains unware
-> > about what went wrong. Fix this.
-> >
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215205
-> >
-> > Signed-off-by: Vihas Mak <makvihas@gmail.com>
-> > ---
-> >  drivers/tty/serial/serial_core.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> > index 61e3dd022..c204bdecc 100644
-> > --- a/drivers/tty/serial/serial_core.c
-> > +++ b/drivers/tty/serial/serial_core.c
-> > @@ -960,7 +960,7 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
-> >               uport->fifosize = new_info->xmit_fifo_size;
-> >
-> >   check_and_exit:
-> > -     retval = 0;
-> > +     retval = retval < 0 ? retval : 0;
+> Compiling the tool when output directory parameter is specified would
+> trigger the following error:
 >
-> Please no, do not use ? : unless you have to.  Spell it out and use a
-> real if statement.
+> make O=/data/test/tmp/ -C tools/power/acpi/
 >
-> thanks,
+> make: Entering directory '/data/src/kernel/linux/tools/power/acpi'
+>   DESCEND tools/acpidbg
+> make[1]: Entering directory '/data/src/kernel/linux/tools/power/acpi/tools/acpidbg'
+>   MKDIR    include
+>   CP       include
+>   CC       tools/acpidbg/acpidbg.o
+> Assembler messages:
+> Fatal error: can't create /data/test/tmp/tools/power/acpi/tools/acpidbg/acpidbg.o: No such file or directory
+> make[1]: *** [../../Makefile.rules:24: /data/test/tmp/tools/power/acpi/tools/acpidbg/acpidbg.o] Error 1
+> make[1]: Leaving directory '/data/src/kernel/linux/tools/power/acpi/tools/acpidbg'
+> make: *** [Makefile:18: acpidbg] Error 2
+> make: Leaving directory '/data/src/kernel/linux/tools/power/acpi'
 >
-> greg k-h
+> This is because the output directory has not been created yet. Fix this issue by
+> creating the output directory before compiling.
+>
+> Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>  tools/power/acpi/Makefile.config | 1 +
+>  tools/power/acpi/Makefile.rules  | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/tools/power/acpi/Makefile.config b/tools/power/acpi/Makefile.config
+> index 331f6d30f472..cd7106876a5f 100644
+> --- a/tools/power/acpi/Makefile.config
+> +++ b/tools/power/acpi/Makefile.config
+> @@ -69,6 +69,7 @@ KERNEL_INCLUDE := $(OUTPUT)include
+>  ACPICA_INCLUDE := $(srctree)/../../../drivers/acpi/acpica
+>  CFLAGS += -D_LINUX -I$(KERNEL_INCLUDE) -I$(ACPICA_INCLUDE)
+>  CFLAGS += $(WARNINGS)
+> +MKDIR = mkdir
+>
+>  ifeq ($(strip $(V)),false)
+>         QUIET=@
+> diff --git a/tools/power/acpi/Makefile.rules b/tools/power/acpi/Makefile.rules
+> index 2a6c170b57cd..1d7616f5d0ae 100644
+> --- a/tools/power/acpi/Makefile.rules
+> +++ b/tools/power/acpi/Makefile.rules
+> @@ -21,6 +21,7 @@ $(KERNEL_INCLUDE):
+>
+>  $(objdir)%.o: %.c $(KERNEL_INCLUDE)
+>         $(ECHO) "  CC      " $(subst $(OUTPUT),,$@)
+> +       $(QUIET) $(MKDIR) -p $(objdir) 2>/dev/null
+>         $(QUIET) $(CC) -c $(CFLAGS) -o $@ $<
+>
+>  all: $(OUTPUT)$(TOOL)
+> --
 
+Applied (with some edits in the subject and changelog) as 5.16-rc material.
 
-
--- 
-Thanks,
-Vihas
+Thanks!

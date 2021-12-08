@@ -2,179 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0579846CFB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACC346CFBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbhLHJLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S230214AbhLHJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbhLHJLP (ORCPT
+        with ESMTP id S229604AbhLHJNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:11:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5965C061746;
-        Wed,  8 Dec 2021 01:07:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F178FCE2044;
-        Wed,  8 Dec 2021 09:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6F1C00446;
-        Wed,  8 Dec 2021 09:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638954460;
-        bh=T3bqbFw0/TGXHjPFkL/yl3IefsMUWQBO0/sRkAtLw8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wQgVn8JAzV1jFjmDUfX2rT2sTUtxmydRoN3tuFFVLHgQXYu1EN3sgAr+ARAVpcpeM
-         Pk5w7/H73F0BCq0Gd1BgS+LXdIhQ9mNhrhWzWi2FTBc+DcwC/CSXymzGQyU6eS72xC
-         LYr8ju67I56nxa9hCvpOGAepoR9k2Z9RhxEI9+gc=
-Date:   Wed, 8 Dec 2021 10:07:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
-        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH 1/1] bus: mhi: core: Add support for forced PM resume
-Message-ID: <YbB11M0FZ+AdELPa@kroah.com>
-References: <20211208085735.196394-1-manivannan.sadhasivam@linaro.org>
- <20211208085735.196394-2-manivannan.sadhasivam@linaro.org>
+        Wed, 8 Dec 2021 04:13:06 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E738BC061746;
+        Wed,  8 Dec 2021 01:09:34 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id l25so5966315eda.11;
+        Wed, 08 Dec 2021 01:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yxJcUg9sr80nOyHJimTgCrmoTuePLh38op6h19juAN8=;
+        b=KxmeuubkIsid0/Zjzzn7drJ0L1h6+WV6DWVWUMk2BiOWy13ruchzwLqm2oijcsPVpE
+         to/VbHRF1yMHhG0FiuJ7/OmPiPOWlYCMZhrzS0Di/7rcQD8JyNMrJwW6Lwqekk89pZ9P
+         iedFxwe+A1CFiNuA5/kS0fGrG/XIeKNP9asAPuF++KgVaQob2qhtIWMh0BYlf2+pUDmr
+         JxOFSPgmF2stkrxY19oUSfRuF7j55Jnl622/QXszvGBMuxxvNR+/MRZ72wJnYUvUAlUI
+         1gWPnqKldj6gN+JE8YwMRZc8cGOLV+O9s0MIo9wl0Jw6gazdgrW0VXLGvWS0otivgPld
+         TDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yxJcUg9sr80nOyHJimTgCrmoTuePLh38op6h19juAN8=;
+        b=nvb39WSuz4iJcUtiFLcX+FuI3b6iOpehyUQTfCDQ6sztDR/aqJ8fjbF6j/vRe2jEWA
+         hJ+bttECRE46yCcpKmW29qzZw8MCvFe6BP9CqoVwCuXxKLutt8ar3gz28D2cAqdbp06n
+         8qFT5nObEXMUiqmX1QSstmyv1HXmXS5DB7XPZ69vO8QX3TIHJXk48DumIP+YXi4DEOP8
+         zyZWJ6cqvIjyjNVZqhMHTOTF5pjA1t+CqdiymV/cVwKToNNH1sSLHmOCKW1wEl4IkEwl
+         gzAnZwF2Jb88CHsbJEdNxgAZYu5H+QHDhzt2DjQGIY/00G4Rn/AI+PJ7DDASsiYj9QRe
+         gXxw==
+X-Gm-Message-State: AOAM533BCPxnR4FwPhqFawqX7Tbp/8PdsrcXCrGhwEOcbvKmbfy6jvoW
+        mZ4dRzHZ6aKbvwio3IjhO2o=
+X-Google-Smtp-Source: ABdhPJxlOWCIQm+Jvdx6A/CtmDxo8HbH6QmDLTJeN+1HhkhDhp+9MKTNku5GvFmdsWYRXrANcF5d9g==
+X-Received: by 2002:a17:906:6a18:: with SMTP id qw24mr6143614ejc.118.1638954573547;
+        Wed, 08 Dec 2021 01:09:33 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id t5sm1632550edd.68.2021.12.08.01.09.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 01:09:33 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <60743c95-f9aa-a7c6-1709-39c70e224321@redhat.com>
+Date:   Wed, 8 Dec 2021 10:09:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208085735.196394-2-manivannan.sadhasivam@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 16/15] KVM: X86: Update mmu->pdptrs only when it is
+ changed
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+ <20211111144527.88852-1-jiangshanlai@gmail.com> <Ya/xsx1pcB0Pq/Pm@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ya/xsx1pcB0Pq/Pm@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:27:35PM +0530, Manivannan Sadhasivam wrote:
-> From: Loic Poulain <loic.poulain@linaro.org>
-> 
-> For whatever reason, some devices like QCA6390, WCN6855 using ath11k
-> are not in M3 state during PM resume, but still functional. The
-> mhi_pm_resume should then not fail in those cases, and let the higher
-> level device specific stack continue resuming process.
-> 
-> Add a new parameter to mhi_pm_resume, to force resuming, whatever the
-> current MHI state is. This fixes a regression with non functional
-> ath11k WiFi after suspend/resume cycle on some machines.
-> 
-> Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
-> 
-> Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
-> Cc: stable@vger.kernel.org #5.13
-> Link: https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/
-> Reported-by: Kalle Valo <kvalo@codeaurora.org>
-> Reported-by: Pengyu Ma <mapengyu@gmail.com>
-> Tested-by: Kalle Valo <kvalo@kernel.org>
-> Acked-by: Kalle Valo <kvalo@kernel.org>
-> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-> [mani: Added comment, bug report, reported-by tags and CCed stable]
-> Link: https://lore.kernel.org/r/20211206161059.107007-1-manivannan.sadhasivam@linaro.org
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/bus/mhi/core/pm.c             | 10 +++++++---
->  drivers/bus/mhi/pci_generic.c         |  2 +-
->  drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
->  include/linux/mhi.h                   |  3 ++-
->  4 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
-> index fb99e3727155..8a486374d57a 100644
-> --- a/drivers/bus/mhi/core/pm.c
-> +++ b/drivers/bus/mhi/core/pm.c
-> @@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
->  }
->  EXPORT_SYMBOL_GPL(mhi_pm_suspend);
->  
-> -int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
-> +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
->  {
->  	struct mhi_chan *itr, *tmp;
->  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-> @@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
->  	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
->  		return -EIO;
->  
-> -	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
-> -		return -EINVAL;
-> +	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
-> +		dev_warn(dev, "Resuming from non M3 state (%s)\n",
-> +			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
-> +		if (!force)
-> +			return -EINVAL;
-> +	}
->  
->  	/* Notify clients about exiting LPM */
->  	list_for_each_entry_safe(itr, tmp, &mhi_cntrl->lpm_chans, node) {
-> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-> index 4c577a731709..3394819e8115 100644
-> --- a/drivers/bus/mhi/pci_generic.c
-> +++ b/drivers/bus/mhi/pci_generic.c
-> @@ -962,7 +962,7 @@ static int __maybe_unused mhi_pci_runtime_resume(struct device *dev)
->  		return 0; /* Nothing to do at MHI level */
->  
->  	/* Exit M3, transition to M0 state */
-> -	err = mhi_pm_resume(mhi_cntrl);
-> +	err = mhi_pm_resume(mhi_cntrl, false);
->  	if (err) {
->  		dev_err(&pdev->dev, "failed to resume device: %d\n", err);
->  		goto err_recovery;
-> diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
-> index 26c7ae242db6..f1f2fa2d690d 100644
-> --- a/drivers/net/wireless/ath/ath11k/mhi.c
-> +++ b/drivers/net/wireless/ath/ath11k/mhi.c
-> @@ -533,7 +533,11 @@ static int ath11k_mhi_set_state(struct ath11k_pci *ab_pci,
->  		ret = mhi_pm_suspend(ab_pci->mhi_ctrl);
->  		break;
->  	case ATH11K_MHI_RESUME:
-> -		ret = mhi_pm_resume(ab_pci->mhi_ctrl);
-> +		/* Do force MHI resume as some devices like QCA6390, WCN6855
-> +		 * are not in M3 state but they are functional. So just ignore
-> +		 * the MHI state while resuming.
-> +		 */
-> +		ret = mhi_pm_resume(ab_pci->mhi_ctrl, true);
->  		break;
->  	case ATH11K_MHI_TRIGGER_RDDM:
->  		ret = mhi_force_rddm_mode(ab_pci->mhi_ctrl);
-> diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-> index 723985879035..102303288cee 100644
-> --- a/include/linux/mhi.h
-> +++ b/include/linux/mhi.h
-> @@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
->  /**
->   * mhi_pm_resume - Resume MHI from suspended state
->   * @mhi_cntrl: MHI controller
-> + * @force: Force resuming to M0 irrespective of the device MHI state
->   */
-> -int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
-> +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
+On 12/8/21 00:43, Sean Christopherson wrote:
+> what guarantees the that PDPTRs in the VMCS are sync'd with
+> mmu->pdptrs?  I'm not saying they aren't, I just want the changelog
+> to prove that they are.
 
-apis like this are horrid to work with over time.
+If they aren't synced you should *already* have dirty VCPU_EXREG_PDPTR 
+and pending KVM_REQ_LOAD_MMU_PGD, shouldn't you?  As long as the caching 
+invariants are respected, this patch is fairly safe, and if they aren't 
+there are plenty of preexisting bugs anyway.
 
-Why not just have:
-	mhi_pm_resume_force()
-which then internally can set a flag that does this?  That way the
-driver author does not have to stop every time they see this call and
-look up exactly what the true/false field means in the function call in
-their driver.
+Paolo
 
-It also lets you leave alone the existing calls to mhi_pm_suspend() that
-do not want to "force" anything.
+> The next patch does add a fairly heavy unload of the current root for
+> !TDP, but that's a bug fix and should be ordered before any
+> optimizations anyways.
 
-self-documenting code is good, this is not self-documenting at all.
-
-Also, is "force" really what you are doing here?  This is a "normal"
-resume call, which should always work.  The "force" option here really
-is just "ignore the current state of suspend for the device".  So
-perhaps mhi_pm_resume_ignore_current_state() might be better?  Or
-something shorter?
-
-Naming is hard, sorry.
-
-thanks,
-
-greg k-h

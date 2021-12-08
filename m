@@ -2,183 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB68E46D4CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E190146D4D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbhLHNxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:53:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42105 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232916AbhLHNxq (ORCPT
+        id S234431AbhLHN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:56:46 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33574 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229490AbhLHN4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:53:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638971413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ngC/o95nfjZsAGmMOXEbHrk4Lzl1lpLSiLYQBabrEsE=;
-        b=cRAB6HuBSOV280zpnBN5U0lfBrWYCWdH6IOQr/XlxwG/PK9dPqxi/pXp6tYwz4vZBv6hMf
-        zUsumiiBU/bpoF9fiOEOxIv7Md+ZNRcFwfOVwRTFwfbxRp31kFHjHXZ/0qZF3LBMyLxyUp
-        HHCxtyVJc8/PrsrXsFJdJPgooJMlQl4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-qp9zQMh2Mw2DQrjFsW0Lqw-1; Wed, 08 Dec 2021 08:50:12 -0500
-X-MC-Unique: qp9zQMh2Mw2DQrjFsW0Lqw-1
-Received: by mail-ed1-f70.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so2156100edw.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 05:50:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ngC/o95nfjZsAGmMOXEbHrk4Lzl1lpLSiLYQBabrEsE=;
-        b=DhVPEyc4i0aB+5uibkETzJePxIPvGmOtYCuOIJIipx2YlY8MPL0D0wiWJU61qTJ4CJ
-         NCi8sYDDFhiTPk+oKt6wKnWf9Y1E6PE9Fk8sC/fVaxkZaaCR+nPaRrHAfmnRC1KEyTfo
-         FGCLIqWFaFpJ3H1oEcLU8iJImCnfuDxkp6f1pEKWAfrnY805pCU2SVh3757hiKwRLbM5
-         LT1XIo2afHrlrw7DMQDsK5PkjSUw1F2gOBuOCix8sBnZ2jyyJKZYlmeHHGia2PTPIq7Z
-         J4JzyGA2zljnDvVu9EIonMNhD8JmM2AYDRj9KbImYpv/iVmWVJvTlWwtKIEjVT8vdMBm
-         MCyA==
-X-Gm-Message-State: AOAM533QZtbTBxTbxcSTYCN24LaHqArrAvT+KNR0S5f4BoV/H46ks+D/
-        Mb4JIQh9PO5whT/8F+2DNdrGRvCVkKEJp2F3PGcBeMxmXaukglyYEUyxvA+222qssDQijS0lC5W
-        ogZY2M5OMIBU0euGrtVXRTi+S
-X-Received: by 2002:a17:907:2da5:: with SMTP id gt37mr7755226ejc.316.1638971411366;
-        Wed, 08 Dec 2021 05:50:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLIOJXmw7FUtxfVB4W3JHtw41/6aeGGOGQ7t2H5HibrEe+DPzyGZu1rT2o5RzvOo5xplrq+A==
-X-Received: by 2002:a17:907:2da5:: with SMTP id gt37mr7755187ejc.316.1638971411154;
-        Wed, 08 Dec 2021 05:50:11 -0800 (PST)
-Received: from krava ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id e1sm1528572ejy.82.2021.12.08.05.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 05:50:10 -0800 (PST)
-Date:   Wed, 8 Dec 2021 14:50:09 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
-Message-ID: <YbC4EXS3pyCbh7/i@krava>
-References: <20211124084119.260239-1-jolsa@kernel.org>
- <20211124084119.260239-2-jolsa@kernel.org>
- <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com>
- <Yafp193RdskXofbH@krava>
- <CAEf4BzbmKffmcM3WhCthrgfbWZBZj52hGH0Ju0itXyJ=yD01NA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbmKffmcM3WhCthrgfbWZBZj52hGH0Ju0itXyJ=yD01NA@mail.gmail.com>
+        Wed, 8 Dec 2021 08:56:45 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CelIZ005464;
+        Wed, 8 Dec 2021 13:53:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qaUbAiA1N4hUD2ko6JAEOAtgSUiTNDn1yZbeu5EGDW4=;
+ b=aXHdVsIbDJoHOEGEaR+Xv+N6Nf3x4meAU/Pq06FSRcpdxHOftPP8VShSbpIvF/76ZkWg
+ LB1UZcyjaCIAbmALjOuXW8+vipCRs6PkZXU0JD0FAaN4SJ3EoMAatEmhd/giyUFsN9/O
+ n2tvSMJZ6AI0VwBWuYI2kjkvRrkoWkRadDQsVA4McnxeDtPxbdkKduocBH3Iih1bPJX9
+ 0Ep7qgkC+wkn2d4HVxYy86Ai1st64m4r5PyQpdfOodJ5ec10dM2X4PAVTZghk+eSE8D+
+ ncGWSTBbXarCWgcbooDg1ty2Aq/v+wn11iIhKQhjKnv6D8ELcCznxmCzRKsMBaE65iih fA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctusv2wh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 13:53:13 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8CrP6M019525;
+        Wed, 8 Dec 2021 13:53:13 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctusv2wg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 13:53:12 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Dpq6X019268;
+        Wed, 8 Dec 2021 13:53:09 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3cqyy9xrxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 13:53:09 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8Dr6M131588798
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 13:53:06 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36CD011C058;
+        Wed,  8 Dec 2021 13:53:06 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAF4611C052;
+        Wed,  8 Dec 2021 13:53:04 +0000 (GMT)
+Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 13:53:04 +0000 (GMT)
+Message-ID: <614215b5aa14102c7b43913b234463199401a156.camel@linux.ibm.com>
+Subject: Re: [PATCH 07/32] s390/pci: externalize the SIC operation controls
+ and routine
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 14:53:04 +0100
+In-Reply-To: <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+         <20211207205743.150299-8-mjrosato@linux.ibm.com>
+         <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ANezq2W-3VWWQ-dz_JNa_Y196y7U-vz3
+X-Proofpoint-ORIG-GUID: iBxRDrU4pfpUqcbT_pusaRgiGllwh0Tj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080083
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 07:15:58PM -0800, Andrii Nakryiko wrote:
-> On Wed, Dec 1, 2021 at 1:32 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Tue, Nov 30, 2021 at 10:53:58PM -0800, Andrii Nakryiko wrote:
-> > > On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > > >
-> > > > Adding support to create multiple probes within single perf event.
-> > > > This way we can associate single bpf program with multiple kprobes,
-> > > > because bpf program gets associated with the perf event.
-> > > >
-> > > > The perf_event_attr is not extended, current fields for kprobe
-> > > > attachment are used for multi attachment.
-> > >
-> > > I'm a bit concerned with complicating perf_event_attr further to
-> > > support this multi-attach. For BPF, at least, we now have
-> > > bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
-> > > syscall which allows much simpler and cleaner API to do this. Libbpf
-> > > will actually pick bpf_link-based attachment if kernel supports it. I
-> > > think we should better do bpf_link-based approach from the get go.
-> > >
-> > > Another thing I'd like you to keep in mind and think about is BPF
-> > > cookie. Currently kprobe/uprobe/tracepoint allow to associate
-> > > arbitrary user-provided u64 value which will be accessible from BPF
-> > > program with bpf_get_attach_cookie(). With multi-attach kprobes this
-> > > because extremely crucial feature to support, otherwise it's both
-> > > expensive, inconvenient and complicated to be able to distinguish
-> > > between different instances of the same multi-attach kprobe
-> > > invocation. So with that, what would be the interface to specify these
-> > > BPF cookies for this multi-attach kprobe, if we are going through
-> > > perf_event_attr. Probably picking yet another unused field and
-> > > union-izing it with a pointer. It will work, but makes the interface
-> > > even more overloaded. While for LINK_CREATE we can just add another
-> > > pointer to a u64[] with the same size as number of kfunc names and
-> > > offsets.
-> >
-> > I'm not sure we could bypass perf event easily.. perhaps introduce
-> > BPF_PROG_TYPE_RAW_KPROBE as we did for tracepoints or just new
-> > type for multi kprobe attachment like BPF_PROG_TYPE_MULTI_KPROBE
-> > that might be that way we'd have full control over the API
+On Wed, 2021-12-08 at 14:09 +0100, Christian Borntraeger wrote:
+> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> > A subsequent patch will be issuing SIC from KVM -- export the necessary
+> > routine and make the operation control definitions available from a header.
+> > Because the routine will now be exported, let's swap the purpose of
+> > zpci_set_irq_ctrl and __zpci_set_irq_ctrl, leaving the latter as a static
+> > within pci_irq.c only for SIC calls that don't specify an iib.
 > 
-> Sure, new type works.
-> 
-> >
-> > >
-> > > But other than that, I'm super happy that you are working on these
-> > > complicated multi-attach capabilities! It would be great to benchmark
-> > > one-by-one attachment vs multi-attach to the same set of kprobes once
-> > > you arrive at the final implementation.
-> >
-> > I have the change for bpftrace to use this and even though there's
-> > some speed up, it's not as substantial as for trampolines
-> >
-> > looks like we 'only' got rid of the multiple perf syscall overheads,
-> > compared to rcu syncs timeouts like we eliminated for trampolines
-> 
-> if it's just eliminating a pretty small overhead of multiple syscalls,
-> then it would be quite disappointing to add a bunch of complexity just
-> for that.
+> Maybe it would be simpler to export the __ version instead of renaming everything.
+> Whatever Niklas prefers.
 
-I meant it's not as huge save as for trampolines, but I expect some
-noticeable speedup, I'll make more becnhmarks with current patchset
+See below I think it's just not worth it having both variants at all.
 
-> Are there any reasons we can't use the same low-level ftrace
-> batch attach API to speed this up considerably? I assume it's only
-> possible if kprobe is attached at the beginning of the function (not
-> sure how kretprobe is treated here), so we can either say that this
-> new kprobe prog type can only be attached at the beginning of each
-> function and enforce that (probably would be totally reasonable
-> assumption as that's what's happening most frequently in practice).
-> Worst case, should be possible to split all requested attach targets
-> into two groups, one fast at function entry and all the rest.
-> 
-> Am I too far off on this one? There might be some more complications
-> that I don't see.
+> > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> > ---
+> >   arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
+> >   arch/s390/pci/pci_insn.c         |  3 ++-
+> >   arch/s390/pci/pci_irq.c          | 28 ++++++++++++++--------------
+> >   3 files changed, 25 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
+> > index 61cf9531f68f..5331082fa516 100644
+> > --- a/arch/s390/include/asm/pci_insn.h
+> > +++ b/arch/s390/include/asm/pci_insn.h
+> > @@ -98,6 +98,14 @@ struct zpci_fib {
+> >   	u32 gd;
+> >   } __packed __aligned(8);
+> >   
+> > +/* Set Interruption Controls Operation Controls  */
+> > +#define	SIC_IRQ_MODE_ALL		0
+> > +#define	SIC_IRQ_MODE_SINGLE		1
+> > +#define	SIC_IRQ_MODE_DIRECT		4
+> > +#define	SIC_IRQ_MODE_D_ALL		16
+> > +#define	SIC_IRQ_MODE_D_SINGLE		17
+> > +#define	SIC_IRQ_MODE_SET_CPU		18
+> > +
+> >   /* directed interruption information block */
+> >   struct zpci_diib {
+> >   	u32 : 1;
+> > @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
+> >   int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
+> >   int __zpci_store_block(const u64 *data, u64 req, u64 offset);
+> >   void zpci_barrier(void);
+> > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+> > -
+> > -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
+> > -{
+> > -	union zpci_sic_iib iib = {{0}};
+> > -
+> > -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
+> > -}
+> > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
 
-I'd need to check more on kprobes internals, but.. ;-)
+Since the __zpci_set_irq_ctrl() was already non static/inline the above
+inline to non-inline change shouldn't make a performance difference.
 
-the new ftrace interface is special for 'direct' trampolines and
-I think that although kprobes can use ftrace for attaching, they
-use it in a different way
+Looking at this makes me wonder though. Wouldn't it make sense to just
+have the zpci_set_irq_ctrl() function inline in the header. Its body is
+a single instruction inline asm plus a test_facility(). The latter by
+the way I think also looks rather out of place there considering we
+call zpci_set_irq_ctrl() in the interrupt handler and facilities can't
+go away so it's pretty silly to check for it on every single
+interrupt.. unless I'm totally missing something.
 
-also this current 'multi attach' approach is on top of current kprobe
-interface, if we wanted to use the new ftrace API we'd need to add new
-kprobe interface and change the kprobe attaching to use it (for cases
-it's attached at the function entry)
+> >   
+> >   #endif
+> > diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
+> > index 28d863aaafea..d1a8bd43ce26 100644
+> > --- a/arch/s390/pci/pci_insn.c
+> > +++ b/arch/s390/pci/pci_insn.c
+> > @@ -97,7 +97,7 @@ int zpci_refresh_trans(u64 fn, u64 addr, u64 range)
+> >   }
+> >   
+> >   /* Set Interruption Controls */
+> > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+> > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+> >   {
+> >   	if (!test_facility(72))
+> >   		return -EIO;
+> > @@ -108,6 +108,7 @@ int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
+> >   
+> >   	return 0;
+> >   }
+> > +EXPORT_SYMBOL_GPL(zpci_set_irq_ctrl);
+> >   
+> >   /* PCI Load */
+> >   static inline int ____pcilg(u64 *data, u64 req, u64 offset, u8 *status)
+> > diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+> > index dfd4f3276a6d..6b29e39496d1 100644
+> > --- a/arch/s390/pci/pci_irq.c
+> > +++ b/arch/s390/pci/pci_irq.c
+> > @@ -15,13 +15,6 @@
+> >   
+> >   static enum {FLOATING, DIRECTED} irq_delivery;
+> >   
+> > -#define	SIC_IRQ_MODE_ALL		0
+> > -#define	SIC_IRQ_MODE_SINGLE		1
+> > -#define	SIC_IRQ_MODE_DIRECT		4
+> > -#define	SIC_IRQ_MODE_D_ALL		16
+> > -#define	SIC_IRQ_MODE_D_SINGLE		17
+> > -#define	SIC_IRQ_MODE_SET_CPU		18
+> > -
+> >   /*
+> >    * summary bit vector
+> >    * FLOATING - summary bit per function
+> > @@ -145,6 +138,13 @@ static int zpci_set_irq_affinity(struct irq_data *data, const struct cpumask *de
+> >   	return IRQ_SET_MASK_OK;
+> >   }
+> >   
+> > +static inline int __zpci_set_irq_ctrl(u16 ctl, u8 isc)
+> > +{
+> > +	union zpci_sic_iib iib = {{0}};
+> > +
+> > +	return zpci_set_irq_ctrl(ctl, isc, &iib);
+> > +}
+> > +
 
-jirka
+I would be totally fine and slighlt prefer to have the 0 iib repeated
+at those 3 call sites that don't need it. On first glance that should
+come out to pretty much the same number of lines of code and it removes
+the potential confusion of swapping the __ prefixed and non-prefixed
+variants. What do you think?
 
-> 
-> >
-> > I'll make full benchmarks once we have some final solution
-> >
-> > jirka
-> >
-> 
+> >   static struct irq_chip zpci_irq_chip = {
+> >   	.name = "PCI-MSI",
+> >   	.irq_unmask = pci_msi_unmask_irq,
+> > @@ -165,7 +165,7 @@ static void zpci_handle_cpu_local_irq(bool rescan)
+> > 
+---8<---
 

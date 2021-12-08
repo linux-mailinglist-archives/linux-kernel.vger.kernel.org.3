@@ -2,31 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B87346D2FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947C846D2FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbhLHMLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:11:43 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44478 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbhLHMLl (ORCPT
+        id S233051AbhLHMLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232977AbhLHMLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:11:41 -0500
+        Wed, 8 Dec 2021 07:11:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A2AC061746;
+        Wed,  8 Dec 2021 04:08:11 -0800 (PST)
 Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E7B1B1F45C87;
-        Wed,  8 Dec 2021 12:08:07 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 43A021F45C96;
+        Wed,  8 Dec 2021 12:08:09 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638965289; bh=/ksqLGRqcx9RPvezQU0f63T25oDST3xu9zSisBbGyqQ=;
+        t=1638965290; bh=rAjPBWxPWs9ZhCznZcphsRB07TQmg0ZmOocuWwcZPdo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=i/LWg2n8z2KMdp8HIIjkNn1xo/fr0fLDwfwLt7svKE9NR2p3Gf9/2bv4lH9xOHzpD
-         /+dwsNPVKbByunLTi8ZVdEh4acbq+KKVnEbl4+2fPAhJYOOgxUwed1R6yu/Nmqni8q
-         XZuGjkKlFUI5u6zNGwHf4UlNMaOncuL2fzEHgM+x2giWgW7hjwEcVAAwWlbBnzXFJv
-         hMkCCAU5b5YKfQATsvJNRoqjzqwX1opyFxS1ZipzmaJviXYtelzgCiuGzLlpsbRNUo
-         R6DEHUTh7mfJezgGkhq1Ranbr+Fuq6RSOXh38z18YtmYh8z2t9QPuS7SiUdNBzf+ft
-         QeIZilzrM/dhQ==
+        b=f/vO251EHLPyVm053WAAlGD5ZluE01MipX147UdEpPozfAvQUmA0GqCw/VG28eiYz
+         K/eQk54EWsarB1kn5sV9dfYT6JoIcy8m5QVHzuHmBHlPEdSHMbeUMukUBU82RcbuB2
+         /6fJwiOUO54WsU/BwTZWMYAjcpwpTBlJSVj23je4jk7Be1kW11P/Mkp23k7Z2xRw/u
+         ggeknqvodXEDZaOBbZjeqGVHGfQTVsAxUS/k6PHaDlfo8XpxsPhNPYOK0Km99EGPmE
+         u1KPL9AA+Ifi4xcOUazYlQKMfFmfd1HQrtkbsq4zirX6c+YeICbbbrpSJ+g0VnLjq5
+         GXYmErfCY16Jw==
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -37,9 +40,9 @@ To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         support), linux-kernel@vger.kernel.org (open list),
         dafna.hirschfeld@collabora.com, kernel@collabora.com,
         linux-media@vger.kernel.org, sebastian.reichel@collabora.com
-Subject: [PATCH v2 1/5] iommu/mediatek: Remove for_each_m4u in tlb_sync_all
-Date:   Wed,  8 Dec 2021 14:07:40 +0200
-Message-Id: <20211208120744.2415-2-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v2 2/5] iommu/mediatek: Always check runtime PM status in tlb flush range callback
+Date:   Wed,  8 Dec 2021 14:07:41 +0200
+Message-Id: <20211208120744.2415-3-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
 References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
@@ -47,50 +50,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yong Wu <yong.wu@mediatek.com>
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-The tlb_sync_all is called from these three functions:
-a) flush_iotlb_all: it will be called for each a iommu HW.
-b) tlb_flush_range_sync: it already has for_each_m4u.
-c) in irq: When IOMMU HW translation fault, Only need flush itself.
+In case of v4l2_reqbufs() it is possible, that a TLB flush is done
+without runtime PM being enabled. In that case the "Partial TLB flush
+timed out, falling back to full flush" warning is printed.
 
-Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
+Commit c0b57581b73b ("iommu/mediatek: Add power-domain operation")
+introduced has_pm as optimization to avoid checking runtime PM
+when there is no power domain attached. But without the PM domain
+there is still the device driver's runtime PM suspend handler, which
+disables the clock. Thus flushing should also be avoided when there
+is no PM domain involved.
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/iommu/mtk_iommu.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 507123ae7485..342aa562ab6a 100644
+index 342aa562ab6a..dd2c08c54df4 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -210,17 +210,15 @@ static struct mtk_iommu_domain *to_mtk_domain(struct iommu_domain *dom)
- 
- static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
+@@ -225,16 +225,13 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
+ 					   size_t granule,
+ 					   struct mtk_iommu_data *data)
  {
--	for_each_m4u(data) {
--		if (pm_runtime_get_if_in_use(data->dev) <= 0)
--			continue;
-+	if (pm_runtime_get_if_in_use(data->dev) <= 0)
-+		return;
+-	bool has_pm = !!data->dev->pm_domain;
+ 	unsigned long flags;
+ 	int ret;
+ 	u32 tmp;
  
--		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
--			       data->base + data->plat_data->inv_sel_reg);
--		writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
--		wmb(); /* Make sure the tlb flush all done */
-+	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-+		       data->base + data->plat_data->inv_sel_reg);
-+	writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
-+	wmb(); /* Make sure the tlb flush all done */
+ 	for_each_m4u(data) {
+-		if (has_pm) {
+-			if (pm_runtime_get_if_in_use(data->dev) <= 0)
+-				continue;
+-		}
++		if (pm_runtime_get_if_in_use(data->dev) <= 0)
++			continue;
  
--		pm_runtime_put(data->dev);
--	}
-+	pm_runtime_put(data->dev);
+ 		spin_lock_irqsave(&data->tlb_lock, flags);
+ 		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+@@ -259,8 +256,7 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
+ 		writel_relaxed(0, data->base + REG_MMU_CPE_DONE);
+ 		spin_unlock_irqrestore(&data->tlb_lock, flags);
+ 
+-		if (has_pm)
+-			pm_runtime_put(data->dev);
++		pm_runtime_put(data->dev);
+ 	}
  }
  
- static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
 -- 
 2.17.1
 

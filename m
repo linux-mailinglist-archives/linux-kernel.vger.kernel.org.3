@@ -2,175 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA6946CE55
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B2746CE58
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240666AbhLHH0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:26:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50331 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235777AbhLHH0i (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:26:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638948186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3thlSuxgxJVb1tUf+MaBSf1hCp/SSFCI7BQN+d2CnYY=;
-        b=SCGAfoRFUQef5y/AAGfqzizGqObi5AUmoAFubqFRe0nRQDc+TD36ay13G1WEWF9qr3QQf3
-        kJEtJQ8Ke7W52V7JabrWy20ZFoAz5tcoLdiYbgvUwAkHp/ubAiaiQHjKDOmezGmc9OOQZe
-        pvMLWMaEjXvATjjw+tcTTTq54+MgoeY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-369-0xqDp8XYOyC-CaudOpM3Pg-1; Wed, 08 Dec 2021 02:23:05 -0500
-X-MC-Unique: 0xqDp8XYOyC-CaudOpM3Pg-1
-Received: by mail-ed1-f70.google.com with SMTP id s12-20020a50ab0c000000b003efdf5a226fso1344783edc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 23:23:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3thlSuxgxJVb1tUf+MaBSf1hCp/SSFCI7BQN+d2CnYY=;
-        b=2CGbI+pFku1W5I+Y2Pu1EBpSqJaKtdLtnHpjbCu+MEBCUIJmon5tZFiAY6srfN6sL8
-         wG0nsnVVpTPNy1xcEW0TB3ITwOIRFxBeE064c8Uuiz094TmLHwxiE7aY5EZgtj5HNJQr
-         HWwjmdd2lRv1eQgy+gtMpGeibiCfso5NMVQjRJ9jhXiHl3x/tSfmB5lz4W9Pp83iKaOW
-         gYfVmdBfBqEchL3Dh7aooR1XOc29rbKEcq6ufUkZ4Mkj/dXgNGtGiqWXMITttQ0ie3qY
-         TbXogm9MDvUFdCNNwvxKv+/6RFTBEFzm1H1FvC6XTUtQ3EPOl8T14KRUyWMUP02Sq9xX
-         OXqg==
-X-Gm-Message-State: AOAM533x+Im2rV4rdijjMHAe7V9rYadpuSiY/PsDaBdEZgKLSGj79Qvf
-        Y4481pP7W2dtR92N92E0DvIMN7K85k7EhLAfOQJHdna/6OTqP2jsR8tKKucHWJQAmTbfgnM3Fwa
-        IUAgQ2Mghj+dRcDlyBwh9Grn1
-X-Received: by 2002:a17:906:b304:: with SMTP id n4mr5534802ejz.116.1638948184419;
-        Tue, 07 Dec 2021 23:23:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx8fXmI2eQ4qLExw30n20BX0hhCuV0j8jCtUu6YqJCm4I3Lf9fKB5w67aZxdmFwHaxkpaof4Q==
-X-Received: by 2002:a17:906:b304:: with SMTP id n4mr5534779ejz.116.1638948184203;
-        Tue, 07 Dec 2021 23:23:04 -0800 (PST)
-Received: from redhat.com ([2a03:c5c0:107e:ebdb:5cc6:c351:b05:514f])
-        by smtp.gmail.com with ESMTPSA id jg32sm1059703ejc.43.2021.12.07.23.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 23:23:03 -0800 (PST)
-Date:   Wed, 8 Dec 2021 02:23:00 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
-Message-ID: <20211208021947-mutt-send-email-mst@kernel.org>
-References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
- <20211207031217-mutt-send-email-mst@kernel.org>
- <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
+        id S244526AbhLHH04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:26:56 -0500
+Received: from mga11.intel.com ([192.55.52.93]:49707 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240685AbhLHH0y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 02:26:54 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="235287395"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="235287395"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 23:23:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="502946986"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2021 23:23:22 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 23:23:22 -0800
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 23:23:22 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 7 Dec 2021 23:23:22 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 7 Dec 2021 23:23:21 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=guxqnNUYM33L/SsGSzZaKYB52ygo+PZelG3txC9O6Q1TlahKEbZLO/3HJYcFNlRX6yxdQNPei6bQ6+ZnRZ/JC4LL2Z62JytkYoRlytbPJmg2p7tzl9FIstw7Ej5Dvr3D6mMQRFAj4RnsAtELg0UE3vg4qRZAoIK7fWSDn4RS3rdDwL4hrEfCBNA79qLKh+BO+D0LzLXKolN31t4dV55DT3LCagUgNCiiL1VZJ/E7ZICT+x6SDWWjECAaSzjLOWFIvNKVHY4s27he5VJ/RNKyTXXzraFLePiZxUVD5IzZPnt61ZBFoe2pJ0dg0LQYpe0RpXoxyAb9tmSxsqCf64JqBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oW1MqK6DEt0tcYpeXvm37Y5mKkdKqSPPkuPW/RPWNIM=;
+ b=XEbmTm65fTs25m/mcCTZq/rzL1FoDU/0iu4LqVxfoAg1zftXVAeEcksIDOL7lL+5JpaY0/VqLPYRmkbxvHRiP0WHke+Hn6lSdTENsOPxXFit/oZ7TCPKoWPsHokGymxF3hbAo2tQLDKjJ7QnPZlEGJ3n+0/jS0/mOFBaWq+CR5niUnbl0qhht5So41IcXmcmB6PDxVrUYeUAiyOr3V9Mm3+m1uzyu58waBORLhcWGeGf7mO2p1MDUEw0ERWrTTM1rQuSSf4WhlH56/klgWfnczagKBRteBaYwzv8Nd1exP1kSxTUul5C1t8VZpOdHYJQwYzorTzy1jAn4lQhHFUC7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oW1MqK6DEt0tcYpeXvm37Y5mKkdKqSPPkuPW/RPWNIM=;
+ b=e4e+X29k1LlA9bGbYJxExI2pCXGdp4JBFgf8Nc4wPmpsGXo30gWnUd/eq3Xl5Uw/PYYWRYMwPz182ysCj8aELl6eVKKIFAfRj933nB6ySPck6tKuiEqCfx+SmwTI35ROBUhIfSpUFgx3daTuHt9QAQ/GlIDY5JRqhPDNS7fHaR8=
+Received: from MWHPR11MB1245.namprd11.prod.outlook.com (2603:10b6:300:28::11)
+ by MWHPR11MB1600.namprd11.prod.outlook.com (2603:10b6:301:b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 8 Dec
+ 2021 07:23:18 +0000
+Received: from MWHPR11MB1245.namprd11.prod.outlook.com
+ ([fe80::9dd3:f8f0:48a8:1506]) by MWHPR11MB1245.namprd11.prod.outlook.com
+ ([fe80::9dd3:f8f0:48a8:1506%12]) with mapi id 15.20.4755.023; Wed, 8 Dec 2021
+ 07:23:17 +0000
+From:   "Liu, Jing2" <jing2.liu@intel.com>
+To:     "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>
+CC:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>
+Subject: RE: [PATCH 13/19] kvm: x86: Disable WRMSR interception for IA32_XFD
+ on demand
+Thread-Topic: [PATCH 13/19] kvm: x86: Disable WRMSR interception for IA32_XFD
+ on demand
+Thread-Index: AQHX63yGGH5XLxNQFUm1O2KZf2XoyawoKZ6w
+Date:   Wed, 8 Dec 2021 07:23:17 +0000
+Message-ID: <MWHPR11MB1245DFEAEBDC57298ED4E073A96F9@MWHPR11MB1245.namprd11.prod.outlook.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-14-yang.zhong@intel.com>
+In-Reply-To: <20211208000359.2853257-14-yang.zhong@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ea2c1918-33ba-4315-bee0-08d9ba1b9b23
+x-ms-traffictypediagnostic: MWHPR11MB1600:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <MWHPR11MB1600E7FDB82B2C6158F91966A96F9@MWHPR11MB1600.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ERwep9qOmgrM2m9IUusJyC5bcZMYYWLIPx4VApvqlcQ8L6K09VhxmNmiHDp0UyT5FqbaW3a9JnvY+Y8FhIJ6hzFdCRt39G+91XfIPcm1AkKiIa9VimhDDOlctVAsaDG49mlN+OWDhlyNX86PcJABcODXJaXbNmVZn2TlPD//756QcUnZudDgn1+TQ2P0L/Ov7gqSxjE9CQPeZIxqvdsb6FUi50G5Pxzc+LMpWpfBGEFyG3PCI1q9rCrjVou1TvF+gYOmBHgsRhScdlpNdHF6Cnfbtj9WntfVBJ/qxRqyO0PK+/DmuJqHkuuA4917MxnWIon7HlJ1LU17v2rBFiq4nOqueIhGTHew47vopNWKRbYc0GVRK5TkDcAzhclKUsYodwo2otd0o8o/Fm10uPkvlGk2djXDSRBwU3tXxPVn4qj8vXaA5ZVBDkyKs6pkx7fXPq1elBUI+/oIDMb822goj9aP4SOAeOS1jABnzO6o4E4oHqubxRU3pQ/+v/kjwu+40y3SB61NUXBau/DMGW0EqT4ZGnZgbK8/UlYU92p5z504H6tqgSHy4l6ToqdV6fb9cJXvmda7vqPKOvYJ6nulWXEPTBYv9fVwkYEpnGSe/WjS5smmmzjpLGKb8TDB6Tx7W6QYhMwFP2tIh/mXsKBXix1eIp3bsew5HYtnPLAL4h2G7UcDjHMhdxWZdEBF8wD0AStbYx+FHIO3e72Bz/XnE7IP6PXds3a5IS3iDhKgkqU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1245.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(55016003)(2906002)(8676002)(82960400001)(316002)(9686003)(26005)(5660300002)(7416002)(53546011)(6506007)(66476007)(71200400001)(54906003)(38070700005)(76116006)(86362001)(7696005)(33656002)(508600001)(83380400001)(64756008)(66556008)(122000001)(66446008)(52536014)(8936002)(110136005)(921005)(66946007)(38100700002)(186003)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HAh3XZnFhjuDKEXKB3EkLoZa/ctXADb415rCxzMJu2aLwXzg5FROwQIWccZb?=
+ =?us-ascii?Q?FDunNcv4sbuNwavZI3ENdpJy78snXCQtTyk62ISzuCxI4MdkpKfURNPw3zmA?=
+ =?us-ascii?Q?6XI4dAncCU2xj5k2bI192GkC0kE6Obkgnes56T4ts/x1lAgKsZZn2aSb0TRj?=
+ =?us-ascii?Q?VfG72X7MARYvZOZm4wDZFJs1qmBYD8qcHAEmN0UGWq4spbNZPkT0zUV0WTpg?=
+ =?us-ascii?Q?Kr5Vtw912j2mAeannOozIaAIuPz0gO1C/l5DLW2eVd/nv8j/DOo+wFemjHwh?=
+ =?us-ascii?Q?ahG4YDOcIn6Qdrtu+bDs59IFi0remvltdb74n4ZbH9VFX7Yjc14fzpnoGFlT?=
+ =?us-ascii?Q?I05LwQI48mIqmIdb0figxVKSZ3J46Dw2D7cCJypv3X+XlzSw6YK7Ix37g5V6?=
+ =?us-ascii?Q?F49DDLlMHxG2+hLfcDFYOoax4NeWn5fbl0Q5Ki6or9nf6hQipzvO4zZbyYFt?=
+ =?us-ascii?Q?00xA9VmjJbISl6nEKK12b5JRxQau9LMcCs8n4MddFkwsUYxJBeqJ8s1nAP8o?=
+ =?us-ascii?Q?7nClcABUD1ghMyci6sTQHjVZhvEDnD11ZH8G7GQMd90tZkeVdMx1HpyeKYw0?=
+ =?us-ascii?Q?2rQnHcxV1D+1gqlFsCIRkTEVy1fb3OL/AJZ/PQ5sTcLHIms41hiuyjBbXmd0?=
+ =?us-ascii?Q?MeLNDwaMVu3xHQ32KflmOT7COmwJhhIxfS4oHp4yowKxrVs1ZVa1vuT9wWkH?=
+ =?us-ascii?Q?c7cM42v9st7zPZPTbZimR0pjSncslun5tbKhIoWwMIk+HnMdurbD2zF1PT5k?=
+ =?us-ascii?Q?4wuoI9jNQXUrG4E/ivuE39tjzmRqHuFTROGQ4kd9c94Rb+6soi30e+ylVlDO?=
+ =?us-ascii?Q?fxHtF6XnNLInwEKvK2y3yFzr6OFSMN+SSyL9zXqUPxnLjPY8r2dsmNhoj7qk?=
+ =?us-ascii?Q?JEJvpr//H749AojA6X6jjYl+Usk9ndke0c5sCquJHzzGGYW8YOWwtA2BLpzP?=
+ =?us-ascii?Q?tVqibQP3ebDS+hSID+Qy7gh/EyXfxUeeHl5I3eKYTLbtlLMli9bWBkdM4bNN?=
+ =?us-ascii?Q?CYAxTMGELtWhBMqO4W8NtkR54ns9cho8qioca1qbeK4uqLvRzKNxFZVGBLyH?=
+ =?us-ascii?Q?msKcR2SsSBeD1bwgcHiHGs6TlcguLxIMrDQYemLX447UGaI9lLIg9Ai9Vcwk?=
+ =?us-ascii?Q?gwC0bTpGBEJBhk2watDGaZU2a4XCl2ZoU+zytIF2bOqt2dls3skmUE9Bu3aB?=
+ =?us-ascii?Q?QdgFoAj7PufIpfAjgqasjJqANI/QlaffaN70MlgITjnqzlgMFz6TG2ssl6t7?=
+ =?us-ascii?Q?ntEvvgT/9Oj5kS7NGGpS5lGqTNeoHeu0qSEzhTmbDoq44JffG6juRurORB4L?=
+ =?us-ascii?Q?utPHK+Po8quHwa4NJhiPbc9ZbSMgcx/vt299xmANr5PqIWxoUcbZQn0OKact?=
+ =?us-ascii?Q?lspP/IzYArXqg11FvQGCob3fFFYlq2P5Y/v90xnTUJdBZaffZxMAsJ0HRLNo?=
+ =?us-ascii?Q?zOg0flGRHsomhugU/myzwVu89N1wG0Sx+r46AgY/jdAJ8q3imaJWKtiZaEFA?=
+ =?us-ascii?Q?WkcqwrXB3AfNsWVdD1ar0WEtI4F78/pCSAjCAfJGSe04p+MfDbFthhpnDhIs?=
+ =?us-ascii?Q?DCDNR8HibRe6vRHIi1FKOPo7SOx/ke2YNg5li3JkdfduLCW2oZnrWpVvspss?=
+ =?us-ascii?Q?1A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1245.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea2c1918-33ba-4315-bee0-08d9ba1b9b23
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 07:23:17.4462
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gvEo3iZnlNa+XQYVA0ZxlX0dBZ9AOvKweI3JS+U7e01niix6TXAu9Cg/3j0J3SoPgwtiDld2Q7pW3rcEYdlc/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1600
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:09:56PM +0800, 王贇 wrote:
-> 
-> 
-> 在 2021/12/7 下午4:13, Michael S. Tsirkin 写道:
-> > On Tue, Dec 07, 2021 at 03:51:45PM +0800, 王贇 wrote:
-> > > We observed issues like:
-> > >    virtio-pci 0000:14:00.0: platform bug: legacy virtio-mmio must
-> > >    not be used with RAM above 0x4000GB
-> > > 
-> > > when we have a legacy pci device which desired 32bit-pfn vq
-> > > but gain 64bit-pfn instead, lead into the failure of probe.
-> > > 
-> > > vring_use_dma_api() is playing the key role in here, to help the
-> > > allocation process understand which kind of vq it should alloc,
-> > > however, it failed to take care the legacy pci device, which only
-> > > have 32bit feature flag and can never have VIRTIO_F_ACCESS_PLATFORM
-> > > setted.
-> > > 
-> > > This patch introduce force_dma flag to help vring_use_dma_api()
-> > > understanding the requirement better, to avoid the failing.
-> > > 
-> > > Signed-off-by: Michael Wang <yun.wang@linux.alibaba.com>
-> > 
-> > This will break configs where the device appears behind
-> > a virtual iommu, so this won't fly.
-> > Just make your device support 1.0, eh?
-> 
-> Hi, Michael
-> 
-> Thanks for the comment, unfortunately modify device is not an option for us
-> :-(
-> 
-> Is there any idea on how to solve this issue properly?
-> 
-> Regards,
-> Michael Wang
 
-By the way, there is a bug in the error message. Want to fix that?
+On 12/8/2021 8:03 AM, Yang Zhong wrote:=20
+> From: Jing Liu <jing2.liu@intel.com>
+>=20
+> Always intercepting IA32_XFD causes non-negligible overhead when this
+> register is updated frequently in the guest.
+>=20
+> Disable WRMSR interception to IA32_XFD after fpstate reallocation is
+> completed. There are three options for when to disable the
+> interception:
+>=20
+>   1) When emulating the 1st WRMSR which requires reallocation,
+>      disable interception before exiting to userapce with the
+>      assumption that the userspace VMM should not bounch back to
+>      the kernel if reallocation fails. However it's not good to
+>      design kernel based on application behavior. If due to bug
+>      the vCPU thread comes back to the kernel after reallocation
+>      fails, XFD passthrough may lead to host memory corruption
+>      when doing XSAVES for guest fpstate which has a smaller size
+>      than what guest XFD allows.
+>=20
+>   2) Disable interception when coming back from the userspace VMM
+>      (for the 1st WRMSR which triggers reallocation). Re-check
+>      whether fpstate size can serve the new guest XFD value. Disable
+>      interception only when the check succeeds. This requires KVM
+>      to store guest XFD value in some place and then compare it
+>      to guest_fpu::user_xfeatures in the completion handler.
 
+For option 2), we are considering that fpstate->size can be used to indicat=
+e
+if reallocation is successful. Because once one of the XFD features (today,
+it's AMX) is enabled, kernel need reallocate full size, otherwise, KVM has =
+no
+chance to reallocate for other XFD features later since it's non-trapped (t=
+o
+avoid WRMSR VM EXITs due to guest toggling XFD).=20
 
-> > 
-> > > ---
-> > >   drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
-> > >   drivers/virtio/virtio_ring.c       |  3 +++
-> > >   include/linux/virtio.h             |  1 +
-> > >   3 files changed, 14 insertions(+)
-> > > 
-> > > diff --git a/drivers/virtio/virtio_pci_legacy.c
-> > > b/drivers/virtio/virtio_pci_legacy.c
-> > > index d62e983..11f2ebf 100644
-> > > --- a/drivers/virtio/virtio_pci_legacy.c
-> > > +++ b/drivers/virtio/virtio_pci_legacy.c
-> > > @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
-> > > *vp_dev)
-> > >   	vp_dev->setup_vq = setup_vq;
-> > >   	vp_dev->del_vq = del_vq;
-> > > 
-> > > +	/*
-> > > +	 * The legacy pci device requre 32bit-pfn vq,
-> > > +	 * or setup_vq() will failed.
-> > > +	 *
-> > > +	 * Thus we make sure vring_use_dma_api() will
-> > > +	 * return true during the allocation by marking
-> > > +	 * force_dma here.
-> > > +	 */
-> > > +	vp_dev->vdev.force_dma = true;
-> > > +
-> > >   	return 0;
-> > > 
-> > >   err_iomap:
-> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > index 3035bb6..6562e01 100644
-> > > --- a/drivers/virtio/virtio_ring.c
-> > > +++ b/drivers/virtio/virtio_ring.c
-> > > @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
-> > > virtqueue *_vq,
-> > > 
-> > >   static bool vring_use_dma_api(struct virtio_device *vdev)
-> > >   {
-> > > +	if (vdev->force_dma)
-> > > +		return true;
-> > > +
-> > >   	if (!virtio_has_dma_quirk(vdev))
-> > >   		return true;
-> > > 
-> > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > > index 41edbc0..a4eb29d 100644
-> > > --- a/include/linux/virtio.h
-> > > +++ b/include/linux/virtio.h
-> > > @@ -109,6 +109,7 @@ struct virtio_device {
-> > >   	bool failed;
-> > >   	bool config_enabled;
-> > >   	bool config_change_pending;
-> > > +	bool force_dma;
-> > >   	spinlock_t config_lock;
-> > >   	spinlock_t vqs_list_lock; /* Protects VQs list access */
-> > >   	struct device dev;
-> > > -- 
-> > > 1.8.3.1
+Then KVM doesn't need to store guest XFD value in some place. And kernel
+fpu core may need an API to tell guest permitted size for KVM.
+
+Thanks,
+Jing
+
+>=20
+>   3) Disable interception at the 2nd WRMSR which enables dynamic
+>      XSTATE features. If guest_fpu::user_xfeatures already includes
+>      bits for dynamic features set in guest XFD value, disable
+>      interception.
+>=20
 

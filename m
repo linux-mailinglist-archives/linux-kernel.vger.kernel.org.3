@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6370B46D374
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D891C46D377
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhLHMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:44:18 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42406 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbhLHMoO (ORCPT
+        id S233605AbhLHMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:44:28 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:39155 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231705AbhLHMo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:44:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B08BDCE214F;
-        Wed,  8 Dec 2021 12:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32915C00446;
-        Wed,  8 Dec 2021 12:40:34 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 13:40:31 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Subject: Re: [PATCH v4 14/16] ima: Use mac_admin_ns_capable() to check
- corresponding capability
-Message-ID: <20211208124031.lbutcvt3ns73vgsw@wittgenstein>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-15-stefanb@linux.ibm.com>
+        Wed, 8 Dec 2021 07:44:27 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A6975580247;
+        Wed,  8 Dec 2021 07:40:54 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 08 Dec 2021 07:40:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm2; bh=FsWeQZxZSSEz8vuc/Z5qWfMulb
+        t5I25Zs4HyBrRJlC4=; b=Q7CbvwDh3/+PZLUvxB3vusKmVbqHDsgcnZ4Bq1m+Ni
+        QmmOE59SczOw5YcXZJO51qtL3sKhKohOsMQpOCrh7PvTDbmkvpkKse+mGY5oS8uk
+        5qnc0RGxh3MIGjHMv97uL2G0q3Km+537fqYjnRI6welmqSESimy62vomEZu5fwEi
+        GD8neNObW+6RShoficN0jtP7YnnloU4Wt0S8H7E1XnNHEq8W2M1Ce5EdTejxqcll
+        uf88tIUVTQifO6OxdkcubMM+rHx6MiGuXBZlp4PdRznqFCYRxauFEWFNX20NbYFd
+        l/JFT7+mM4m3wGli8n+y8XnxlsnQAQCHYrJM8IkbgsGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=FsWeQZ
+        xZSSEz8vuc/Z5qWfMulbt5I25Zs4HyBrRJlC4=; b=BDDpzaps6+jlI4Z2TnxQfg
+        szQyRPgu6XDD2Z8hEwDKiTaUdKCqcNIQymi7unVC2WAOy8M+lz+s8lyqoOOE2PKs
+        egCnfRFTxQwhlvDK/XUKxmMwqDWvcUANvxxDF3edkekgLYgT3l+NAt3GHf1m5GXy
+        jmUrNHFxzqO6ZAH2RZcSbXuMYK9rBvTujaWCPzA6JCDBpz5JzweE7LJ6ySw2FXup
+        oApE/Jqrynzm5jO1iHwG9dszQVkseTWIBEmhCtgaXwJonouZAWLhHn2aV1xTqxUF
+        fSH46LQ44OAqjFufPEYuAj0yXDgJjBXocYEjQM0VVymwx+EczPKd1T5p6HEa/YIg
+        ==
+X-ME-Sender: <xms:1qewYfvPl6Zjvd805qLgN2P4Sq3VNgYK4MmJSi61lfFY50cfeshzgA>
+    <xme:1qewYQcs2QCbheiOCGmv9E3xRMy1YF8nyI3luTfJ54DPkFLK2OQfDZAa3syUPCmk9
+    C3HdM21WAGpB3XaA4s>
+X-ME-Received: <xmr:1qewYSxh2hlT838ghMg57ZyPwwZsOn17mHEZQId4e_DDkDmwG9ZCGu0DsXZQVxIbTVFP-64UTiWoKc3eoESa_729ilpuXOIoir0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeekgdegvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
+    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
+    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:1qewYeNTvDa6nLPTq3ZOSGg43oVILWjy8zH62bweEr2yZoL70F0ssQ>
+    <xmx:1qewYf9tFe102afa0uAOoHXbP-IijzVYPFReUYOrr3KOGJvQSLlpdQ>
+    <xmx:1qewYeWL7TwAqXoFIT3ozCamI1TDg_HyyyEyjkHljU2yEI198Jxxvg>
+    <xmx:1qewYTXVbNhmMl73WpBQW79Zs_E-INXU__Dz9Rw0wTUkMPy69qzeow>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Dec 2021 07:40:48 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     s.hauer@pengutronix.de, shawnguo@kernel.org,
+        dmitry.torokhov@gmail.com, benjamin.tissoires@redhat.com
+Cc:     jikos@kernel.org, linux-kernel@vger.kernel.org,
+        alistair23@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, Jason.Gerecke@wacom.com,
+        linux-imx@nxp.com, Ping.Cheng@wacom.com,
+        devicetree@vger.kernel.org, martin.chen@wacom.com,
+        tatsunosuke.tobita@wacom.com,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v16 0/3] Add Wacom I2C support to rM2
+Date:   Wed,  8 Dec 2021 22:40:42 +1000
+Message-Id: <20211208124045.61815-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211207202127.1508689-15-stefanb@linux.ibm.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:21:25PM -0500, Stefan Berger wrote:
-> Use mac_admin_ns_capable() to check corresponding capability to allow
-> read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
-> 
-> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  include/linux/capability.h      | 6 ++++++
->  security/integrity/ima/ima_fs.c | 2 +-
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/capability.h b/include/linux/capability.h
-> index 65efb74c3585..991579178f32 100644
-> --- a/include/linux/capability.h
-> +++ b/include/linux/capability.h
-> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
->  		ns_capable(ns, CAP_SYS_ADMIN);
->  }
->  
-> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
-> +{
-> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
-> +		ns_capable(ns, CAP_SYS_ADMIN);
-> +}
-> +
->  /* audit system wants to get cap info from files as well */
->  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
->  			   const struct dentry *dentry,
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 0e582ceecc7f..a749a3e79304 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -394,7 +394,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
->  #else
->  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
->  			return -EACCES;
-> -		if (!capable(CAP_SYS_ADMIN))
-> +		if (!mac_admin_ns_capable(ns->user_ns))
->  			return -EPERM;
-
-Hm, couldn't this rather just be:
-
-		if (ns_capable(ns, CAP_MAC_ADMIN) || capable(CAP_SYS_ADMIN))
-
-so we don't carry CAP_SYS_ADMIN as an alternative way for ima into user
-namespaces as well? This way containers don't need to drop CAP_SYS_ADMIN
-just to prevent mac policy from being altered. But that's more on the
-LSM side of questions.
+Add Wacom I2C support for the reMarkable 2 eInk tablet using the=0D
+generic I2C HID framework.=0D
+=0D
+v16:=0D
+ - Add commit message to DTS patch=0D
+=0D
+Alistair Francis (3):=0D
+  HID: quirks: Allow inverting the absolute X/Y values=0D
+  HID: i2c-hid-of: Expose the touchscreen-inverted properties=0D
+  ARM: dts: imx7d: remarkable2: add wacom digitizer device=0D
+=0D
+ .../bindings/input/hid-over-i2c.txt           |  2 +=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 59 +++++++++++++++++++=0D
+ drivers/hid/hid-input.c                       |  6 ++=0D
+ drivers/hid/i2c-hid/i2c-hid-acpi.c            |  2 +-=0D
+ drivers/hid/i2c-hid/i2c-hid-core.c            |  4 +-=0D
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c       |  2 +-=0D
+ drivers/hid/i2c-hid/i2c-hid-of.c              | 11 +++-=0D
+ drivers/hid/i2c-hid/i2c-hid.h                 |  2 +-=0D
+ include/linux/hid.h                           |  2 +=0D
+ 9 files changed, 85 insertions(+), 5 deletions(-)=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D

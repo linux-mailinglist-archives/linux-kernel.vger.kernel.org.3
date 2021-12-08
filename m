@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F5E46D755
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8427346D756
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbhLHPvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbhLHPvH (ORCPT
+        id S236305AbhLHPwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:52:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33582 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233975AbhLHPwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:51:07 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7DFC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:47:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WtEQqwJBUEAbt+Rn6z3KfUtCYF75TrzmNyPUTpmgJXU=; b=hHCEZdU/Kd8ONj9kU8NJqRfE6H
-        k97CA/DyB/UhwyLbKrMFYfRANIkWayLr/Yh9r7XD7rArXZiYFNB6RrFBFrMVZy2gaAmoqghXx8yWc
-        65oxqcv1UK7gg6CzRsdNIqk7hxw7sSB3csb0l4tSdl9lUhFYvCaSgXNJrAeOZvG0tDTiEDRa6315J
-        qyutCDctALOhqiJXtSrP6oNM2OVb5PUu5LKEZ5EIW1+w1dNSX59VZGfkWpX+ppkjV8rBiBVRzto5S
-        mVjoOZjde89EJehpTSxX0/ULI/MoksKwJGwvdc1uJLDHcc14LpL1vsJivVft1WiaLWwhzTfs5yXRs
-        r8XNJktA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muzA4-008YAI-GF; Wed, 08 Dec 2021 15:47:16 +0000
-Date:   Wed, 8 Dec 2021 15:47:16 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-Subject: Re: [PATCH v4 05/66] Maple Tree: Add new data structure
-Message-ID: <YbDThNl56dH0mTHZ@casper.infradead.org>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-6-Liam.Howlett@oracle.com>
- <5ead526d-8499-4810-7657-6af5f2e96ccc@suse.cz>
+        Wed, 8 Dec 2021 10:52:02 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FMjpn023097;
+        Wed, 8 Dec 2021 15:48:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Yh5eGB8GsYd4R2z2efaB6/Wl8ArXQGzj5FaHadAAabI=;
+ b=fUNMzleoV2eu1CKxDIbJelNiEvw61twkZyvJslZeBKsXDl17Dl+eGOsJV2gbduQ+YMVn
+ KP51ZAmUK4iZSocZAfu9mjT3YzrnYYSaZ0c2cEmWmn5tFGyxNB9guHuu6hTRvtIzXUBz
+ 46uM2kh4NBd/9zy7nP24b9pFXgfrmLEXiRQjBgFqHPe3DpU7hQSfHgvDD6Dv5ptPHbG3
+ omivY7V5Q7PDRa5PlUGkPYFalLj0moEHVLGHSVCqraR1o5UNAphwmiOax31+vR5FDYdc
+ 0IlYn3IRSdjLjg7hIFatvoIbtlPa8CN6rNu9JjaiRlZf0ZvZ+7Q/7AYa6e3xkvSahkuG OA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctya08gam-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:48:15 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8Fk2T2020964;
+        Wed, 8 Dec 2021 15:48:15 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctya08g9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:48:15 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Fbs6P008928;
+        Wed, 8 Dec 2021 15:48:12 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3cqyy9yy64-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:48:12 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8Fm92e27918816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 15:48:09 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 916A64204C;
+        Wed,  8 Dec 2021 15:48:09 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F27C4203F;
+        Wed,  8 Dec 2021 15:48:09 +0000 (GMT)
+Received: from osiris (unknown [9.145.37.164])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  8 Dec 2021 15:48:09 +0000 (GMT)
+Date:   Wed, 8 Dec 2021 16:48:07 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Jerome Marchand <jmarchan@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ftrace: disable preemption when recursion locked in
+ arch/s390/kernel/ftrace.c
+Message-ID: <YbDTt/VGOfQqXmff@osiris>
+References: <20211208151503.1510381-1-jmarchan@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5ead526d-8499-4810-7657-6af5f2e96ccc@suse.cz>
+In-Reply-To: <20211208151503.1510381-1-jmarchan@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ROvdP0JvnStDJ8Jy4mf16XiXrwu5FbWQ
+X-Proofpoint-ORIG-GUID: KDIyKoI9rnHp6OujVccR_5_rHkKKeV3X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_06,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=350 mlxscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:34:44PM +0100, Vlastimil Babka wrote:
-> > +/*
-> > + * We also reserve values with the bottom two bits set to '10' which are
-> > + * below 4096
-> > + */
-> > +static inline bool mt_is_reserved(const void *entry)
-> > +{
-> > +	return ((unsigned long)entry < MAPLE_RESERVED_RANGE) &&
-> > +		xa_is_internal(entry);
+On Wed, Dec 08, 2021 at 04:15:03PM +0100, Jerome Marchand wrote:
+> It looks like commit ce5e48036c9e76a2 ("ftrace: disable preemption
+> when recursion locked") missed a spot in kprobe_ftrace_handler() in
+> arch/s390/kernel/ftrace.c.
+> Removes the superfluous preempt_disable/enable_notrace() there too.
 > 
-> It's weird to suddenly see xa_ prefix here (and below). AFAICS it's nowhere
-> declared that maple tree is derived from xarray so while it's not completely
-> surprising given the overlap of authors, wouldn't it be more robust if maple
-> tree had its own independent set of these helpers?
+> Fixes: ce5e48036c9e76a2 ("ftrace: disable preemption when recursion locked")
+> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+> ---
+>  arch/s390/kernel/ftrace.c | 2 --
+>  1 file changed, 2 deletions(-)
 
-My intent is to merge the maple tree and xarray at some point.  The xarray
-has some pretty awful worst-case behaviour that the maple tree avoids.
-The maple tree doesn't yet have the search mark feature, and it needs a
-new leaf node type for dense nodes.  It also needs a replacement for the
-private_list used to trim the excess nodes which store workingset values.
-
-When they get merged, my thinking was that the maple tree nomenclature
-would be removed in favour of the xarray API, so I haven't been in too
-much hurry to add aliases for all the parts of the xarray API that are
-in the maple tree.
+Applied to s390 tree. Thanks!

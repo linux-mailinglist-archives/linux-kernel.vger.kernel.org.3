@@ -2,206 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BCC46D984
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBF246D98E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237877AbhLHRWU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Dec 2021 12:22:20 -0500
-Received: from mail-eopbgr120045.outbound.protection.outlook.com ([40.107.12.45]:50907
-        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234865AbhLHRWB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:22:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eiZE8ftOBXxsSnxDh+qS2PcHhjoXQopdzZnblcNLb9uKi5sQtvMffCsXmRUMSg/hTM3fKRrEQutm9HPZWc5xpBOHpbeiwxT2tY37qOs+C57S59xsSHr1NmrCzX/pM1k0zExlxhzRh8iCFG2ZYTroGOR2/WhwNgRjxXEBhs2BPtLTxUGSWpi7XD56AP+RH8AcTGqHzGCKWoS3BgwAyNskNhYsah7EdXhzmvZmyPVRtC/Dm7SshOIAp9fczUqc2VX/iWJR00rAzVRk9t1TQSYsCaoHt1RfyowNcYpA3nN7ypO0xKYFSzuvFHi5PxA4GulsbcJQZtSnzzGUUEd3HfyF0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mwyareCaN3ZlSh2+BwwdNQ1qMDia3Q7S45Cfyrw+tSI=;
- b=YF1ow86oKAgDqt+Jgs/jZ5/KaiB7AMFEyMPMQpsHLdwcwQzYx/fxL4LCfkI2xsljcEiagserEGjd+vSAaBVadFD1ERVDjrZnhxYq8s04D6dZjXCEG7xgywzMFXo5s9TIH0Y3y1wbHTsbO8WqxFyF8PuUSHsB0vpFfvlsC3cZTQnb2w2+VZMt1VqxRpDtnmmSYVZL0qDtJ83NcUMF/I2OTfMEAz/NlLAAJOHt3f6UCddMln4kcQwxt0Gret7akPFlCs7M0HSPjjVtLohafVAXMd/MUFlhNr7fIbd5PCmT2U4EndlMS9sMMOjEuRyut76Ee/DPD4vAaH6ucmM48+Gdzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0823.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:16::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 8 Dec
- 2021 17:18:23 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
- 17:18:23 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "alex@ghiti.fr" <alex@ghiti.fr>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: [PATCH v4 10/10] powerpc/mm: Properly randomise mmap with slices
-Thread-Topic: [PATCH v4 10/10] powerpc/mm: Properly randomise mmap with slices
-Thread-Index: AQHX7Fea0peO1pudxEe4GqD87shvlw==
-Date:   Wed, 8 Dec 2021 17:18:23 +0000
-Message-ID: <4249d95311ec93b0a9d421ca56d69612fb1e5811.1638976229.git.christophe.leroy@csgroup.eu>
-References: <cover.1638976228.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1638976228.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 25e52a4a-c6a3-4185-e955-08d9ba6ebd39
-x-ms-traffictypediagnostic: MRXP264MB0823:EE_
-x-microsoft-antispam-prvs: <MRXP264MB08236D4A263EDB844463DA2BED6F9@MRXP264MB0823.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lzZX7QebEXDdh9sbFiSLsMtViHHRZyuzmmraxPn14LX7E5/nwrCbd8mJ8PGk9p87L1P99dGLnZ1ksPCzqXSp/6Be2576RjnuQibka4fkV4FNFcSDbB0MU4PRj0hBGmMM2FpoUaytnYqjB7kRljJ3KOaZ5FeFgWSvfV6v7VJ6fG20QGVBziPgtKcyjQNR8JC8lf+eoolBiVmLoAZGTYYsoILhjLU3XifBKKBXxmtsR0qmgV+ta5A9rG2IL8Xqa2BQthbgQgsn1OZwNUGiMHCkmfSZlp0ExRS4mYn7A20ve+yRlS8WV5B9S3i+l4OsQzG/RE4WsBqP43afoNdG3Yt8ZiZfYsCkMNNyEG1dFSbAZxKJVjzmtjNY3S8CgCPcp4Tgc0M/kyOYUV8tugI+oulVfaIOoccdSPn+v3+u7QzLEr2m/3spFDopAak6/fp69Xl638KjlVaIpbPROfDKhsotoJHgLrzUR9M37jfkkp4GG7jYmhtr54Xuc6gqUagCNnQ7iYdc3uDq+amjJtPLHfw0D0nDgtgOA6yORm/imzYePiW64zxnq2EQFQY9JarGBQlRyIumujirAuc0TYVeFvYp8N2m0K0hUhiSUP5FYEI033fMWZPduY3R9WsnKRatTl4SrvvLCp2EEx4olQaI9/N3WTRuahDVn65tKl9WSD09gcuwwbLX7UYchkAEpr1Bv+kkvxK8F8ywmWzXKWp+KG1XvA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(316002)(83380400001)(6486002)(2906002)(36756003)(26005)(110136005)(64756008)(91956017)(66946007)(8676002)(54906003)(86362001)(44832011)(76116006)(6506007)(66476007)(66556008)(6512007)(5660300002)(508600001)(38100700002)(2616005)(66446008)(71200400001)(122000001)(186003)(8936002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?j56JBr4ekIZvDjBGiD8vnELwDxOgQ8KAn43eVuzSzeimAxdDIaiMWHiVSm?=
- =?iso-8859-1?Q?TWXs6kvr5Hp851I7ff8wq7Guu+H99+yTPOzv+iW3WqpZb89tpnaEyGexpw?=
- =?iso-8859-1?Q?ru+9sm1k0bR00qCpRx8IeQwk+nz4gXI3NbHhOHQe3YPGbnoihmiD/ml2fY?=
- =?iso-8859-1?Q?iTsWmQCDYeuFCFvhffTxtP2tYbKq4PfaM3c+nR8U5A0wzfXlHJZ0EewgHj?=
- =?iso-8859-1?Q?myXNbhWN+shOxVoUw2LVRtlVSWskMODR443E+HtlhKAa18pqFyulPQnRpl?=
- =?iso-8859-1?Q?3/f9UAJXqPqM9T7WdfOqV/hTaVC7IirlpipWdni5ou++Ax1jrRn48WeC2O?=
- =?iso-8859-1?Q?1ZOR8ObtV4onuUTcNqz/E+L4v7nprZmQQGq2KStKTi2sCnv8r/aNNMNBax?=
- =?iso-8859-1?Q?+1MTAdwZPWlVb7OiyDgzfVyAAU6cqIAuddgeS29OAR/H23pcfDzvokeF4m?=
- =?iso-8859-1?Q?W8aoPOsM5tSvxfuoJyVyCbrJS0umLytouJ90Zrulf690muIqydWqOhN2z5?=
- =?iso-8859-1?Q?mJ7bZTRmcgHfxpjfnFUbzD6+dyzeKLIgvQWjQhiOvBTeyZbqqNlfOX5w2E?=
- =?iso-8859-1?Q?a5QVqNuoN5Sjh/0nJnpgXsVkMEQUI7p/sfEAsrT6jnlijeWMSA08ROfXuj?=
- =?iso-8859-1?Q?+aE+PwWUYielOoYIOx4bQicENdHlOYfZL1WAuhA5nmHRR+AxfxvPJexbZD?=
- =?iso-8859-1?Q?oUW1pI4R8Qxxi2FxXRpzQSeeRHQ5P0SEFwT/M+zljPb59g2jnc1e5vRWX4?=
- =?iso-8859-1?Q?aDzFhv3gBHiWdEoO6xXxhg8e9gGVlYs40FVd1x9THqTQuaNwdmrMsqEqZC?=
- =?iso-8859-1?Q?duzAV5lMHMOHmFlxLS2mKkjuBQ0FNciAhy3J3S1HUgQtP48FAA6/mpjcCr?=
- =?iso-8859-1?Q?DEDf5Kwvn5znnt0AMMN1cvGnNg9BklMBDyKjOsAtKNozMpirKwWRb1wTjS?=
- =?iso-8859-1?Q?J+AkbE10wY4qCP1+8/A2MkHGpl7BBiotSWMvCD6HcabJnHu3l9gMtczmDj?=
- =?iso-8859-1?Q?QZs9aZugNrG1vA+sHJSQkDZOzC75RnGzehbEoFIii4VWGPXsDuRUKfazi8?=
- =?iso-8859-1?Q?eUOsH0xrzz1OVdCGdk9NRUsVfVDk+R9X9jhALtmnn1b9GZhJYnWWwwqitH?=
- =?iso-8859-1?Q?DfrFlpALfVfGpAMkRdT8E8uXRUyKO8Ioa21YoVPgypzvQbJzwIYj7YWxAo?=
- =?iso-8859-1?Q?6yTwNh9SP8HwZ7GGKgG+YvkwCxoUQCXJGUuiSTfTKxBwRWRGOfsYxBuJKY?=
- =?iso-8859-1?Q?XOK0UzQTCcv0+1z5zMjTixq02GtFn0SE0QtqbIxZU/tGnAgpYzNp43zYR3?=
- =?iso-8859-1?Q?lnhdMyFYuWW5G1dXal2mVzfn7k4HC1z+svwDgEMgn+lV2Uv4yWoXiWJ2Y5?=
- =?iso-8859-1?Q?iZ9OeeXOfwR/JNe41cn2qsrKhvb90A3ddEsorjILCwde+6RmG75XyPYmk5?=
- =?iso-8859-1?Q?VE2aPcDYrC2LHrZ2N1o1Y3WlcCoDe96S20CT1Ctk0FmEkRDEct38bZKqFV?=
- =?iso-8859-1?Q?Y3zDzaiZMZ5MiXmkp8Yy0hhwPHR/MlnJlFy1pNacyJhyQY6/7hKaIRDy6K?=
- =?iso-8859-1?Q?Li3HG7DMaUm5wUeAsR6jLv9YdZkT9nJ+3m9KC3SgrhydJqECDwdQINyGv4?=
- =?iso-8859-1?Q?Q7h1k3eCgnafZXgQx1Pc2PRFFk+lXZ2YI6OezH962Xgt73VK2dAL6en5Qv?=
- =?iso-8859-1?Q?OnqfjE7NFufxOnIqxZuT18sB2PA6dSepiWEohAgdSBY8DmILTSrGiTjkdO?=
- =?iso-8859-1?Q?x898TQ5/OguTnrDdq2Q2dZSOs=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S234744AbhLHRYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231442AbhLHRYh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 12:24:37 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04939C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:21:04 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id v1so10860933edx.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 09:21:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kyzUDdWg/IZru0d+jvuosuGK1ljLUFNTnYN5AnSJDXg=;
+        b=hGOd2DXmhiY03/LW8kR4Fzs1XS4MZrOOYMgzFNQlW3QzkFSk0fHm+jEd/hfPuPbUb9
+         jSnT9XG/E45e55goXHXwup8OV7EvMpUz5YnNTNX8PbokPB7LTAxr1wb5fQ18JoSR+2dz
+         7W1sBx32q6fKcJPqvMKo3QEL8pDUncUpdrqmwNkimOqstmKzRVi1Glo3tl1CAITnwBWr
+         SOzmUV4zL1L+qMphMN46Lq9w0u/Dqo94EqVT+RPNai0wEVYekJ/OXqJbzatlyLjAJsHQ
+         woH+/w4futuTQIP1iS9rns7q+IdTvoky7d4omWrlfeXiFlBWUcvwxrhrYkDGQtgU0O1M
+         tBhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kyzUDdWg/IZru0d+jvuosuGK1ljLUFNTnYN5AnSJDXg=;
+        b=cPDGoWFOF1wIgxPId/94DtwFPGvQJrGkP57bIKayApb0Ql6/WcGqKdYkGu8vPw6Agq
+         BStJGGSKhPAoXopdQTcnppW2nAAIfRrrQ16L3s3y5Jo7MslI5qlhhi4xqYbqr17nl6sS
+         gLWgulpvpVK/QNZsjVrEl5yETh5+Zdvo2JJaa5cNkTs+TfhphuRQimLWr3qedBl1banJ
+         hiK0CYBnj6ckxJq0oTlp3N4zFHX6CpRRFwltvOpr0N3UhMFz5GSM2WEkqxmpSOTv9fpm
+         6g2HKsyQq988s3K3UhCZ6cB9nefDi7rVXOK/4EvbEIwix1b7sEXnBQeiJIJ5Eug2N3Ky
+         ayiA==
+X-Gm-Message-State: AOAM533bIWiPhuuIzZVLaDPtFntXny6/XzeBQitepRk6Hqww3SCE6nXG
+        EBEBsrzJ0uz33oWsE4H8vlVzLg==
+X-Google-Smtp-Source: ABdhPJyjFzHce2qFbF0BrVsh3LEu7RhsZDOw0Mq4d7N2tuvqt9QjnSMjbiA5jluzcVko/W8H288INw==
+X-Received: by 2002:a17:906:b084:: with SMTP id x4mr8967385ejy.214.1638984063404;
+        Wed, 08 Dec 2021 09:21:03 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id b11sm2484409ede.62.2021.12.08.09.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 09:21:02 -0800 (PST)
+Date:   Wed, 8 Dec 2021 17:20:39 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Eric Auger <eric.auger@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, peter.maydell@linaro.org,
+        kvm@vger.kernel.org, vivek.gautam@arm.com,
+        kvmarm@lists.cs.columbia.edu, eric.auger.pro@gmail.com,
+        ashok.raj@intel.com, maz@kernel.org, vsethi@nvidia.com,
+        zhangfei.gao@linaro.org, kevin.tian@intel.com, will@kernel.org,
+        alex.williamson@redhat.com, wangxingang5@huawei.com,
+        linux-kernel@vger.kernel.org, lushenming@huawei.com,
+        iommu@lists.linux-foundation.org, robin.murphy@arm.com
+Subject: Re: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+Message-ID: <YbDpZ0pf7XeZcc7z@myrica>
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <20211027104428.1059740-2-eric.auger@redhat.com>
+ <Ya3qd6mT/DpceSm8@8bytes.org>
+ <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
+ <e6733c59-ffcb-74d4-af26-273c1ae8ce68@linux.intel.com>
+ <fbeabcff-a6d4-dcc5-6687-7b32d6358fe3@redhat.com>
+ <20211208125616.GN6385@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25e52a4a-c6a3-4185-e955-08d9ba6ebd39
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 17:18:23.3045
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xrmZbvib/nPauh6MNCf5h/i6IV6TryjEpzQV2pNldufeprO/+fb686MLlSvw6xDNNo/artxugnM6xp+jzPsFcTgf9xzkcnDNbHZ+BKkLUis=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0823
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208125616.GN6385@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that powerpc switched to default topdown mmap layout,
-mm->mmap_base is properly randomised.  However
-slice_find_area_bottomup() doesn't use mm->mmap_base but
-uses the fixed TASK_UNMAPPED_BASE instead.
+On Wed, Dec 08, 2021 at 08:56:16AM -0400, Jason Gunthorpe wrote:
+> From a progress perspective I would like to start with simple 'page
+> tables in userspace', ie no PASID in this step.
+> 
+> 'page tables in userspace' means an iommufd ioctl to create an
+> iommu_domain where the IOMMU HW is directly travesering a
+> device-specific page table structure in user space memory. All the HW
+> today implements this by using another iommu_domain to allow the IOMMU
+> HW DMA access to user memory - ie nesting or multi-stage or whatever.
+> 
+> This would come along with some ioctls to invalidate the IOTLB.
+> 
+> I'm imagining this step as a iommu_group->op->create_user_domain()
+> driver callback which will create a new kind of domain with
+> domain-unique ops. Ie map/unmap related should all be NULL as those
+> are impossible operations.
+> 
+> From there the usual struct device (ie RID) attach/detatch stuff needs
+> to take care of routing DMAs to this iommu_domain.
+> 
+> Step two would be to add the ability for an iommufd using driver to
+> request that a RID&PASID is connected to an iommu_domain. This
+> connection can be requested for any kind of iommu_domain, kernel owned
+> or user owned.
+> 
+> I don't quite have an answer how exactly the SMMUv3 vs Intel
+> difference in PASID routing should be resolved.
 
-slice_find_area_bottomup() being used as a fallback to
-slice_find_area_topdown(), it can't use mm->mmap_base
-directly.
+In SMMUv3 the user pgd is always stored in the PASID table (actually
+called "context descriptor table" but I want to avoid confusion with the
+VT-d "context table"). And to access the PASID table, the SMMUv3 first
+translate its GPA into a PA using the stage-2 page table. For userspace to
+pass individual pgds to the kernel, as opposed to passing whole PASID
+tables, the host kernel needs to reserve GPA space and map it in stage-2,
+so it can store the PASID table in there. Userspace manages GPA space.
 
-Instead of always using TASK_UNMAPPED_BASE as base address, leave
-it to the caller. When called from slice_find_area_topdown()
-TASK_UNMAPPED_BASE is used. Otherwise mm->mmap_base is used.
+This would be easy for a single pgd. In this case the PASID table has a
+single entry and userspace could just pass one GPA page during
+registration. However it isn't easily generalized to full PASID support,
+because managing a multi-level PASID table will require runtime GPA
+allocation, and that API is awkward. That's why we opted for "attach PASID
+table" operation rather than "attach page table" (back then the choice was
+easy since VT-d used the same concept).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/mm/book3s64/slice.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+So I think the simplest way to support nesting is still to have separate
+modes of operations depending on the hardware.
 
-diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-index 03681042b807..c0b58afb9a47 100644
---- a/arch/powerpc/mm/book3s64/slice.c
-+++ b/arch/powerpc/mm/book3s64/slice.c
-@@ -276,20 +276,18 @@ static bool slice_scan_available(unsigned long addr,
- }
- 
- static unsigned long slice_find_area_bottomup(struct mm_struct *mm,
--					      unsigned long len,
-+					      unsigned long addr, unsigned long len,
- 					      const struct slice_mask *available,
- 					      int psize, unsigned long high_limit)
- {
- 	int pshift = max_t(int, mmu_psize_defs[psize].shift, PAGE_SHIFT);
--	unsigned long addr, found, next_end;
-+	unsigned long found, next_end;
- 	struct vm_unmapped_area_info info;
- 
- 	info.flags = 0;
- 	info.length = len;
- 	info.align_mask = PAGE_MASK & ((1ul << pshift) - 1);
- 	info.align_offset = 0;
--
--	addr = TASK_UNMAPPED_BASE;
- 	/*
- 	 * Check till the allow max value for this mmap request
- 	 */
-@@ -322,12 +320,12 @@ static unsigned long slice_find_area_bottomup(struct mm_struct *mm,
- }
- 
- static unsigned long slice_find_area_topdown(struct mm_struct *mm,
--					     unsigned long len,
-+					     unsigned long addr, unsigned long len,
- 					     const struct slice_mask *available,
- 					     int psize, unsigned long high_limit)
- {
- 	int pshift = max_t(int, mmu_psize_defs[psize].shift, PAGE_SHIFT);
--	unsigned long addr, found, prev;
-+	unsigned long found, prev;
- 	struct vm_unmapped_area_info info;
- 	unsigned long min_addr = max(PAGE_SIZE, mmap_min_addr);
- 
-@@ -335,8 +333,6 @@ static unsigned long slice_find_area_topdown(struct mm_struct *mm,
- 	info.length = len;
- 	info.align_mask = PAGE_MASK & ((1ul << pshift) - 1);
- 	info.align_offset = 0;
--
--	addr = mm->mmap_base;
- 	/*
- 	 * If we are trying to allocate above DEFAULT_MAP_WINDOW
- 	 * Add the different to the mmap_base.
-@@ -377,7 +373,7 @@ static unsigned long slice_find_area_topdown(struct mm_struct *mm,
- 	 * can happen with large stack limits and large mmap()
- 	 * allocations.
- 	 */
--	return slice_find_area_bottomup(mm, len, available, psize, high_limit);
-+	return slice_find_area_bottomup(mm, TASK_UNMAPPED_BASE, len, available, psize, high_limit);
- }
- 
- 
-@@ -386,9 +382,9 @@ static unsigned long slice_find_area(struct mm_struct *mm, unsigned long len,
- 				     int topdown, unsigned long high_limit)
- {
- 	if (topdown)
--		return slice_find_area_topdown(mm, len, mask, psize, high_limit);
-+		return slice_find_area_topdown(mm, mm->mmap_base, len, mask, psize, high_limit);
- 	else
--		return slice_find_area_bottomup(mm, len, mask, psize, high_limit);
-+		return slice_find_area_bottomup(mm, mm->mmap_base, len, mask, psize, high_limit);
- }
- 
- static inline void slice_copy_mask(struct slice_mask *dst,
--- 
-2.33.1
+Thanks,
+Jean
+
+> 
+> to get answers I'm hoping to start building some sketch RFCs for these
+> different things on iommufd, hopefully in January. I'm looking at user
+> page tables, PASID, dirty tracking and userspace IO fault handling as
+> the main features iommufd must tackle.
+> 
+> The purpose of the sketches would be to validate that the HW features
+> we want to exposed can work will with the choices the base is making.
+> 
+> Jason

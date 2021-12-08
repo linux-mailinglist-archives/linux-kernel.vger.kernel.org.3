@@ -2,118 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589CB46DB44
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A0046DB3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbhLHSlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:41:31 -0500
-Received: from mga09.intel.com ([134.134.136.24]:63481 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239090AbhLHSl3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:41:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237708308"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="237708308"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:37:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="480003898"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2021 10:37:53 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mv1pA-0000uX-Fg; Wed, 08 Dec 2021 18:37:52 +0000
-Date:   Thu, 9 Dec 2021 02:37:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-Cc:     kbuild-all@lists.01.org, Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <202112090231.mEK0hpuw-lkp@intel.com>
-References: <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
+        id S239065AbhLHSlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239061AbhLHSlL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:41:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1371C0617A1;
+        Wed,  8 Dec 2021 10:37:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 49B0ECE22BB;
+        Wed,  8 Dec 2021 18:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51130C341C7;
+        Wed,  8 Dec 2021 18:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638988655;
+        bh=UGWKwIof9E7u8P/fyoJ9qbfGRCATWRY0m4gOhnlvIVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=diQo/slfiXVshACWv4UZWz/62VRLuRmjOp5pgJaJnTJzKqvrNjbkF/OHsjVFHt2Ps
+         1H+FFRQVs+nPsCeAW+rftHZC2v8QRATrSxJmv9YLmn1mFp38WWu5rF0yy1c2/qmZEC
+         DA/4pDsrkErmuxb9ZeMItalM+vbQYrIQJXsIWMxOc1cgXBKxhRVOoTMy7bJLAAa8FR
+         NuRIbrbUDa6WcDj+VTFNmv/tCM47uC1sMHjssgooSJ/hshcxd7+Wk4jXmOcHKlHjqZ
+         7MzuxACZ7tIEx8rlWujFTf+WAyw8ys0GtShPdvz157cBnDsK6bR9MzNCOQPLa5zvYV
+         m26WlpO1WGVnw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5D2E5406C1; Wed,  8 Dec 2021 15:37:33 -0300 (-03)
+Date:   Wed, 8 Dec 2021 15:37:33 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jan Engelhardt <jengelh@inai.de>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Yonghong Song <yhs@fb.com>,
+        Douglas RAILLARD <douglas.raillard@arm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Matteo Croce <mcroce@microsoft.com>
+Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
+Message-ID: <YbD7bTb3gYOlOoo3@kernel.org>
+References: <YSQSZQnnlIWAQ06v@kernel.org>
+ <YbC5MC+h+PkDZten@kernel.org>
+ <1587op7-6246-638r-5815-2ops848q5r4@vanv.qr>
+ <YbD696GWcp+KeMyg@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YbD696GWcp+KeMyg@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+Em Wed, Dec 08, 2021 at 03:35:36PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Dec 08, 2021 at 03:26:31PM +0100, Jan Engelhardt escreveu:
+> > On Wednesday 2021-12-08 14:54, Arnaldo Carvalho de Melo wrote:
+> > >	The v1.23 release of pahole and its friends is out, this time
+> > >the main new features are the ability to encode BTF tags, to carry
+> > 
+> > [    7s] /home/abuild/rpmbuild/BUILD/dwarves-1.23/btf_encoder.c:145:10: error: 'BTF_KIND_DECL_TAG' undeclared here (not in a function); did you mean 'BTF_KIND_FLOAT'?
+ 
+> > libbpf-0.5.0 is present, since CMakeLists.txt checked for >= 0.4.0.
+ 
+> My fault, knowing the flux that libbpf is in getting to 1.0 I should
+> have retested with the perf tools container based tests.
+ 
+> Can you think about some fix for that? Lemme see if BTF_KIND_DECL_TAG is
+> a define or an enum...
 
-I love your patch! Yet something to improve:
+enum {
+        BTF_KIND_UNKN           = 0,    /* Unknown      */
+        BTF_KIND_INT            = 1,    /* Integer      */
+        BTF_KIND_PTR            = 2,    /* Pointer      */
+        BTF_KIND_ARRAY          = 3,    /* Array        */
+        BTF_KIND_STRUCT         = 4,    /* Struct       */
+        BTF_KIND_UNION          = 5,    /* Union        */
+        BTF_KIND_ENUM           = 6,    /* Enumeration  */
+        BTF_KIND_FWD            = 7,    /* Forward      */
+        BTF_KIND_TYPEDEF        = 8,    /* Typedef      */
+        BTF_KIND_VOLATILE       = 9,    /* Volatile     */
+        BTF_KIND_CONST          = 10,   /* Const        */
+        BTF_KIND_RESTRICT       = 11,   /* Restrict     */
+        BTF_KIND_FUNC           = 12,   /* Function     */
+        BTF_KIND_FUNC_PROTO     = 13,   /* Function Proto       */
+        BTF_KIND_VAR            = 14,   /* Variable     */
+        BTF_KIND_DATASEC        = 15,   /* Section      */
+        BTF_KIND_FLOAT          = 16,   /* Floating point       */
+        BTF_KIND_DECL_TAG       = 17,   /* Decl Tag */
+        BTF_KIND_TYPE_TAG       = 18,   /* Type Tag */
 
-[auto build test ERROR on joro-iommu/next]
-[also build test ERROR on vkoul-dmaengine/next linux/master linus/master v5.16-rc4 next-20211208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+        NR_BTF_KINDS,
+        BTF_KIND_MAX            = NR_BTF_KINDS - 1,
+};
 
-url:    https://github.com/0day-ci/linux/commits/Jacob-Pan/Enable-PASID-for-DMA-API-users/20211208-063637
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: x86_64-randconfig-a013-20211208 (https://download.01.org/0day-ci/archive/20211209/202112090231.mEK0hpuw-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/018108bcd08fc145526791870b4b58edeecfca1e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jacob-Pan/Enable-PASID-for-DMA-API-users/20211208-063637
-        git checkout 018108bcd08fc145526791870b4b58edeecfca1e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma/idxd/
+Do you guys have any plans on updating libbpf?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/dma/idxd/init.c: In function 'idxd_enable_system_pasid':
->> drivers/dma/idxd/init.c:532:10: error: implicit declaration of function 'iommu_enable_pasid_dma'; did you mean 'iommu_enable_nesting'? [-Werror=implicit-function-declaration]
-     532 |  pasid = iommu_enable_pasid_dma(&idxd->pdev->dev);
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-         |          iommu_enable_nesting
-   drivers/dma/idxd/init.c: In function 'idxd_disable_system_pasid':
->> drivers/dma/idxd/init.c:544:2: error: implicit declaration of function 'iommu_disable_pasid_dma' [-Werror=implicit-function-declaration]
-     544 |  iommu_disable_pasid_dma(&idxd->pdev->dev);
-         |  ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +532 drivers/dma/idxd/init.c
-
-   527	
-   528	static int idxd_enable_system_pasid(struct idxd_device *idxd)
-   529	{
-   530		u32 pasid;
-   531	
- > 532		pasid = iommu_enable_pasid_dma(&idxd->pdev->dev);
-   533		if (pasid == INVALID_IOASID) {
-   534			dev_err(&idxd->pdev->dev, "No kernel DMA PASID\n");
-   535			return -ENODEV;
-   536		}
-   537		idxd->pasid = pasid;
-   538	
-   539		return 0;
-   540	}
-   541	
-   542	static void idxd_disable_system_pasid(struct idxd_device *idxd)
-   543	{
- > 544		iommu_disable_pasid_dma(&idxd->pdev->dev);
-   545		idxd->pasid = 0;
-   546	}
-   547	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- Arnaldo

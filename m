@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A18B46D74E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EBC46D754
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbhLHPtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S236284AbhLHPuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbhLHPtu (ORCPT
+        with ESMTP id S236267AbhLHPuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:49:50 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47477C0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:46:18 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id l24so5481208uak.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:46:18 -0800 (PST)
+        Wed, 8 Dec 2021 10:50:12 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164C0C061746;
+        Wed,  8 Dec 2021 07:46:41 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so3112275otj.7;
+        Wed, 08 Dec 2021 07:46:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4rb1UrIX/h2Jn3TSZ/DW3sU6ppztqP9i4XW0nwaM6dM=;
-        b=LOT5q9mbuiUnao7IdLLvqzNvafg1Yy0hrTW5Svhwa/6wzibx6XH/ybw+E3Xh5sfEMV
-         hxCh9RUX28K3/z4IoT8BqlLo82Z16Sx5MpLRLcHwQfqF7OiMKvEVOh5OPKIJtTg3TIV8
-         eevVpqZDb9In9GzCrjb4fTIiNoGgT7iKb+SP4=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bSMFBH3rt0hbmhYjxvYkZRwsbPK5x5Ty6biTXnt/I4U=;
+        b=evLjb8G9G31yMKSB6kXk37pZ96PCIOrY1Zl40OsI0UlrCxXtWgq1FMwnN7kU/pEIQ0
+         6lgBw855LG21q4PnRfhz5wNQsA5lJiPMhlJPeOwsx2C2mX9j41N9x4xSfg/gygH3ZcSO
+         U78LVyBBeVtx70UmuYn65SmDea3oOVMVadwOICurB7aP4/DRTVQm2cC38X3xKlA3YuTY
+         BzFplDL/d1vsooW3GlvfFuEeD3BUQL2hLaXR5ttXNJbrVnopOC+muzvCbZLazMxfq245
+         uJ39ca8BlNzqlUUXG8hORfBzdOZVeG6I5Z9PXZViw658f6Cg+PPX8hcIusKk7WjYZx0R
+         cCjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4rb1UrIX/h2Jn3TSZ/DW3sU6ppztqP9i4XW0nwaM6dM=;
-        b=oQC/SdgTm61LyTe30YR5MABsXGiGjVVXerlJeNQBhZvAjqTCkDVkM47fHs4C2HKgpD
-         YCLoKSmK1HLuUYuBjcImvGWfnbDArIdHE6r+UWb6S+vbsesoaDFpnpg4y9Z3PSxI0fju
-         6qfHKGGOPldyU6dOxI0QzbJeN6FW715ClS/+ki/8SDRQOo2X9Up8dgydUaI0xqxUbA2k
-         3ApKlXPrtzYdsVKXd08xujwtjZVAk8vakm3unFFmzc8M8huYKS8fzSP1tWoruqiHxnUv
-         kmC5FTFR41n6SO0EMnoSlgWVV29jB1Zj7KkHXEFuyiNt7NNMSU6aOPuTGssggp0omHnk
-         TNlg==
-X-Gm-Message-State: AOAM530Kdu9FKL6voL4D3S+ioasetoQMWKOWONe1fU+/slfCw84aV5Aj
-        YG8TK/nTGWwvOKV7XyEmxWuoJYfiMEYNc7nk6p6d0g==
-X-Google-Smtp-Source: ABdhPJxfIQM9jTLWOUUyPdo+VFL2MW60Apqt4XhPfYjiErhtAaa2PvwSRasmjstFKkXNB5gwH0rI/GuSxzEx6PZz0NI=
-X-Received: by 2002:a05:6102:945:: with SMTP id a5mr54090483vsi.87.1638978377415;
- Wed, 08 Dec 2021 07:46:17 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bSMFBH3rt0hbmhYjxvYkZRwsbPK5x5Ty6biTXnt/I4U=;
+        b=dJ+Zbt5nW66UhYukYsq+mm1WxofLRoYBveGa5vuOlGNW/BySZ5l3EMR7ErglYpy/DP
+         RxL3/14HJKaKcGVNVA9aJewsLKyBYmLZ4DJ9O9Jta3iX4+8DWcJuYag1CVHLpmJx7ZFt
+         kDWg8s5a3S+xyaQWVw9yr3qHizPH0kDa6rTOhlto5q0qPlVoBeRdbvf5XwAEmurqrDVY
+         LEYFbCxZIrFt99Gca/XvGQsIJ0pfdPSqQsxRnj81Jwo8t7EoE1bipaTV+zT+OCy2osze
+         ahlcW/YhuC2iQra/AtYzLJz+JYynzlTtsBgwDmUVHR5D2Huo6IkZzdiWpRBBTgueDoCE
+         eQQA==
+X-Gm-Message-State: AOAM532ZpFtKm396JJ4aNr8GPmvqLgHebRwYyICndhw8lwrfFnPrJzPR
+        8ozLXzd3tHW1ERVr8w2EV4E=
+X-Google-Smtp-Source: ABdhPJyHq12QmwUDhxGS7+kIVWpFTLOAMqk06rGpJd8YdaqFJ4lupoTtiKzDS+QrlRJhWP+iBbPspQ==
+X-Received: by 2002:a9d:62c2:: with SMTP id z2mr252555otk.163.1638978400493;
+        Wed, 08 Dec 2021 07:46:40 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id 184sm689900oih.58.2021.12.08.07.46.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 07:46:40 -0800 (PST)
+Message-ID: <d6cacd7d-732c-4fad-576d-a7e9d9ca9537@gmail.com>
+Date:   Wed, 8 Dec 2021 08:46:37 -0700
 MIME-Version: 1.0
-References: <1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com>
- <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
- <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net> <CAJfpegsVg2K0CvrPvXGSu=Jz_R3VZZOy49Jw51rThQUJ1_9e6g@mail.gmail.com>
- <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net> <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
- <Ya9ljdrOkhBhhnJX@hirez.programming.kicks-ass.net> <Ya9m0ME1pom49b+D@hirez.programming.kicks-ass.net>
- <CAJfpegt2x1ztuzh0niY7fgx1UKxDGsAkJbS0wVPp5awxwyhRpA@mail.gmail.com> <Ya9uxHGo7UJikEte@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ya9uxHGo7UJikEte@hirez.programming.kicks-ass.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 8 Dec 2021 16:46:06 +0100
-Message-ID: <CAJfpegupPZMG2dv27ZkpQwTeUw-WcaRZbYXSH-i=+Rt=T+UaDg@mail.gmail.com>
-Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
-        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
-        quic_blong@quicinc.com, quic_richardp@quicinc.com,
-        quic_cdevired@quicinc.com,
-        Pradeep P V K <quic_pragalla@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] ipv6: fix NULL pointer dereference in ip6_output()
+Content-Language: en-US
+To:     Florian Westphal <fw@strlen.de>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>
+Cc:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ahmed Abdelsalam <ahabdels@gmail.com>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>
+References: <20211206163447.991402-1-andrea.righi@canonical.com>
+ <cfedb3e3-746a-d052-b3f1-09e4b20ad061@gmail.com>
+ <20211208012102.844ec898c10339e99a69db5f@uniroma2.it>
+ <a20d6c2f-f64f-b432-f214-c1f2b64fdf81@gmail.com>
+ <20211208105113.GE30918@breakpoint.cc>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211208105113.GE30918@breakpoint.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 at 15:25, Peter Zijlstra <peterz@infradead.org> wrote:
+On 12/8/21 3:51 AM, Florian Westphal wrote:
+> David Ahern <dsahern@gmail.com> wrote:
+>> On 12/7/21 5:21 PM, Andrea Mayer wrote:
+>>> +        IP6CB(skb)->iif = skb->skb_iif;
+>>>          [...]
+>>>
+>>> What do you think?
+>>>
+>>
+>> I like that approach over the need for a fall back in core ipv6 code.
+> 
+> What if the device is removed after ->iif assignment and before dev lookup?
+> 
 
-> FIFO means the thread used longest ago gets to go first. If your threads
-> are an idempotent workers, FIFO might not be the best option. But I'm
-> not much familiar with the FUSE code or it's design.
-
-Okay.  Did some experiments, but couldn't see
-wake_up_interruptible_sync() actually migrate the woken task, the
-behavior was identical to wake_up_interruptible().   I guess this is
-the "less" part in "more or less", but it would be good to see more
-clearly what is happening.
-
-I'll try to describe the design to give more context:
-
-- FUSE is similar to network filesystem in that there's a server and a
-client, except both are on the same host. The client lives in the
-kernel and the server lives in userspace.
-
-- Communication between them is done with read and write syscalls.
-
-- Usually the server has multiple threads.  When a server thread is
-idle it is blocking in sys_read -> ... -> fuse_dev_do_read ->
-wait_event_interruptible_exclusive(fiq->waitq,...).
-
-- When a filesystem request comes in (e.g. mkdir) a request is
-constructed, put on the input queue (fiq->pending) and fiq->waitq
-woken up.  After this the client task goes to sleep in
-request_wait_answer -> wait_event_interruptible(req->waitq, ...).
-
-- The server thread takes the request off the pending list, copies the
-data to the userspace buffer and puts the request on the processing
-list.
-
-- The userspace part interprets the read buffer, performs the fs
-operation, and writes the reply.
-
-- During the write(2) the reply is now copied to the kernel and the
-request is looked up on the processing list.  The client is woken up
-through req->waitq.  After returning from write(2) the server thread
-again calls read(2) to get the next request.
-
-- After being woken up, the client task now returns with the result of
-the operation.
-
-- The above example is for synchronous requests.  There are async
-requests like readahead or buffered writes.  In that case the client
-does not call request_wait_answer() but returns immediately and the
-result is processed from the server thread using a callback function
-(req->args->end()).
-
-From a scheduling prospective it would be ideal if the server thread's
-CPU was matched to the client thread's CPU, since that would make the
-data stay local, and for synchronous requests a _sync type wakeup is
-perfect, since the client goes to sleep just as the server starts
-processing and vice versa.
-
-Always migrating the woken server thread to the client's CPU is not
-going to be good, since this would result in too many migrations and
-would loose locality for the server's stack.
-
-Another idea is to add per-cpu input queues.  The client then would
-queue the request on the pending queue corresponding to its CPU and
-wake up the server thread blocked on that queue.
-
-What happens though if this particular queue has no servers?  Or if a
-queue is starved because it's served by less threads than another?
-Handing these cases seems really complicated.
-
-Is there a simper way?
-
-Thanks,
-Miklos
+good point. SR6 should make sure the iif is not cleared, and the
+fallback to the skb->dev is still needed in case of delete.

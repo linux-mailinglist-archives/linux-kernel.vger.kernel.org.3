@@ -2,103 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9111B46D538
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5086846D542
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhLHOLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:11:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58544 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbhLHOL3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:11:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6814EB8210D;
-        Wed,  8 Dec 2021 14:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883AAC00446;
-        Wed,  8 Dec 2021 14:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638972475;
-        bh=6Fmc/O6IWh4KKiblSsLfPo3G5MJCj6eVA7GE+x9omuI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OUmag+9mNSiymWKwgDU6vNUcMMbCtppZ8KkmGiqIG+gHFI5fN6ZFZtJt2UB9utSKq
-         yZar2z4iCNOkNiiOwZJ87EBaEKnl3rYVtdO2AENxbNUTOMmhOncaSNutG7eDrNIiMG
-         OvjsLVhFDYZsZx7mZg0iEIVcJCb01m+pr1GODB8o=
-Date:   Wed, 8 Dec 2021 15:07:51 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Carl Yin <carl.yin@quectel.com>,
-        Carl Huang <cjhuang@codeaurora.org>, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@vivo.com
-Subject: Re: [PATCH] bus: mhi: core: replace snprintf with sysfs_emit
-Message-ID: <YbC8N/Y1Z0CJbWnY@kroah.com>
-References: <20211208080816.43351-1-hanyihao@vivo.com>
- <AJgA9gCdE-A6eTTRwvPvy4qL.9.1638951289781.Hmail.hanyihao@vivo.com.@PFliQnBjSkxVUVVZSHlnR01Aa3JvYWguY29tPg==>
- <a0f8b64e-7086-b23a-acc6-dd3255d33fc7@vivo.com>
+        id S235009AbhLHOLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:11:52 -0500
+Received: from foss.arm.com ([217.140.110.172]:60830 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235006AbhLHOLn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:11:43 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04A5CD6E;
+        Wed,  8 Dec 2021 06:08:11 -0800 (PST)
+Received: from [10.57.34.62] (unknown [10.57.34.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3763B3F73B;
+        Wed,  8 Dec 2021 06:08:08 -0800 (PST)
+Subject: Re: [PATCH] perf cs-etm: Remove duplicate and incorrect aux size
+ checks
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211208115435.610101-1-james.clark@arm.com>
+ <20211208131753.GC273781@leoy-ThinkPad-X240s>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com>
+Date:   Wed, 8 Dec 2021 14:08:04 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0f8b64e-7086-b23a-acc6-dd3255d33fc7@vivo.com>
+In-Reply-To: <20211208131753.GC273781@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:03:30PM +0800, Yihao Han wrote:
+
+
+On 08/12/2021 13:17, Leo Yan wrote:
+> Hi James,
 > 
+> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
+>> There are two checks, one is for size when running without admin, but
+>> this one is covered by the driver and reported on in more detail here
+>> (builtin-record.c):
+>>
+>>   pr_err("Permission error mapping pages.\n"
+>>          "Consider increasing "
+>>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
+>>          "or try again with a smaller value of -m/--mmap_pages.\n"
+>>          "(current value: %u,%u)\n",
 > 
-> On 2021/12/8 16:14, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 08, 2021 at 12:07:53AM -0800, Yihao Han wrote:
-> > > coccinelle report:
-> > > ./drivers/bus/mhi/core/init.c:97:8-16:
-> > > WARNING: use scnprintf or sprintf
-> > > Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-> > > 
-> > > Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> > > ---
-> > >   drivers/bus/mhi/core/init.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
-> > > index 5aaca6d0f52b..a5a5c722731e 100644
-> > > --- a/drivers/bus/mhi/core/init.c
-> > > +++ b/drivers/bus/mhi/core/init.c
-> > > @@ -94,7 +94,7 @@ static ssize_t serial_number_show(struct device *dev,
-> > >   	struct mhi_device *mhi_dev = to_mhi_device(dev);
-> > >   	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
-> > > -	return snprintf(buf, PAGE_SIZE, "Serial Number: %u\n",
-> > > +	return sysfs_emit(buf, "Serial Number: %u\n",
-> > >   			mhi_cntrl->serial_number);
-> > >   }
-> > >   static DEVICE_ATTR_RO(serial_number);
-> > > -- 
-> > > 2.17.1
-> > > 
-> > 
-> > Why are you only changing one function in this file?  If you realyl want
-> > to make a change like this, fix ALL sysfs show functions.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> Because "sysfs_emit()" is "scnprintf()" equivalent with "size" parameter
-> equals to PAGE_SIZE,So sysfs_emit can only be used here in this file. And
-> "scnprintf" is better than "snprintf" because the former returns number of
-> characters written to "buf". So I think we can use "sysfs_emit()" instead of
-> "snprintf()".
+> I looked into the kernel code and found:
+> 
+>   sysctl_perf_event_mlock = 512 + (PAGE_SIZE / 1024);  // 512KB + 1 page
+> 
+> If the system have multiple cores, let's say 8 cores, then kernel even
+> can relax the limitaion with:
+> 
+>   user_lock_limit *= num_online_cpus();
+> 
+> So means the memory lock limitation is:
+> 
+>   (512KB + 1 page) * 8 = 4MB + 8 pages.
+> 
+> Seems to me, it's much relax than the user space's limitaion 128KB.
+> And let's imagine for Arm server, the permitted buffer size can be a
+> huge value (e.g. for a system with 128 cores).
+> 
+> Could you confirm if this is right?
 
-I am not disagreeing with changing this at all that is is incorrect.  I
-am complaining that you are only changing ONE of the functions in this
-file and not ALL of them.  If this type of change is so important to
-make, please do it for all places it is needed in the file, and in all
-of the drivers/bus/mhi/ code.
+Yes that seems to be the case. And the commit message for that addition
+states the reasoning:
 
-thanks,
+  perf_counter: Increase mmap limit
+  
+  In a default 'perf top' run the tool will create a counter for
+  each online CPU. With enough CPUs this will eventually exhaust
+  the default limit.
 
-greg k-h
+  So scale it up with the number of online CPUs.
+
+To me that makes sense. Normally the memory installed also scales with the
+number of cores.
+
+Are you saying that we should look into modifying that scaling factor in
+perf_mmap()? Or that we should still add something to userspace for
+coresight to limit user supplied buffer sizes?
+
+I think it makes sense to allow the user to specify any value that will work,
+it's up to them.
+
+James
+
+> 
+> Thanks,
+> Leo
+> 
+>> This had the effect of artificially limiting the aux buffer size to a
+>> value smaller than what was allowed because perf_event_mlock_kb wasn't
+>> taken into account.
+>>
+>> The second is to check for a power of two, but this is covered here
+>> (evlist.c):
+>>
+>>   pr_info("rounding mmap pages size to %s (%lu pages)\n",
+>>           buf, pages);
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/arch/arm/util/cs-etm.c | 19 -------------------
+>>  1 file changed, 19 deletions(-)
+>>
+>> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+>> index 293a23bf8be3..8a3d54a86c9c 100644
+>> --- a/tools/perf/arch/arm/util/cs-etm.c
+>> +++ b/tools/perf/arch/arm/util/cs-etm.c
+>> @@ -407,25 +407,6 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+>>  
+>>  	}
+>>  
+>> -	/* Validate auxtrace_mmap_pages provided by user */
+>> -	if (opts->auxtrace_mmap_pages) {
+>> -		unsigned int max_page = (KiB(128) / page_size);
+>> -		size_t sz = opts->auxtrace_mmap_pages * (size_t)page_size;
+>> -
+>> -		if (!privileged &&
+>> -		    opts->auxtrace_mmap_pages > max_page) {
+>> -			opts->auxtrace_mmap_pages = max_page;
+>> -			pr_err("auxtrace too big, truncating to %d\n",
+>> -			       max_page);
+>> -		}
+>> -
+>> -		if (!is_power_of_2(sz)) {
+>> -			pr_err("Invalid mmap size for %s: must be a power of 2\n",
+>> -			       CORESIGHT_ETM_PMU_NAME);
+>> -			return -EINVAL;
+>> -		}
+>> -	}
+>> -
+>>  	if (opts->auxtrace_snapshot_mode)
+>>  		pr_debug2("%s snapshot size: %zu\n", CORESIGHT_ETM_PMU_NAME,
+>>  			  opts->auxtrace_snapshot_size);
+>> -- 
+>> 2.28.0
+>>

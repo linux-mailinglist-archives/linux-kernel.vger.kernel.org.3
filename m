@@ -2,173 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA60346DB32
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C0B46DB5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239012AbhLHSjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S239226AbhLHSoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbhLHSjM (ORCPT
+        with ESMTP id S239169AbhLHSoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:39:12 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A12C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:35:40 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 133so2771855pgc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ECqrcggOkdznl5re9oGFK7ZI8Du24aPTOb53ONKb1g8=;
-        b=pt5Av/rJ0X0DCFI36JlgNlkQlSiRHGafG2Vzlw0ecTT5pJ/Ih257FQtCzrIEeZYxus
-         jiEvVXdop7qCE8M2yoPrwnJkTSOPoFszlu5GAB6NoD7pSpM/Rg19c01udlNhR47DqBRL
-         dnGWCKM0JcOb2Ta39ykxncVXMBHVXjrgeWkXqfESuw9zpiUsKH0DkjI7nRq6DazqbKyq
-         zCRymmrt99tMvj4vJ4xnPR1u1R6ywRGnc/YnF9pRIknCG3o3n7ZIc/ZhiTJvk/nBAa2T
-         pNC58/O3iXnn/pGzz4iJSLBeAhGue8D2W+uh7WumsM4Mv2gTIGnD019O6YaLfnZLJyct
-         MRuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ECqrcggOkdznl5re9oGFK7ZI8Du24aPTOb53ONKb1g8=;
-        b=vNiCeBx6Bgv88pR5R5uQH1CQIhFRiMJsoayCVIov4SPnZ1+k8W76bN+6l9CkxPKv7t
-         dq5rB9F4tFu2cNPgkdBFnReGXOdQnGjBv8f7/IcGOiHg3Omy2U0uu+z5wb/pLv8nKw20
-         o8Tpt36To4ZhZFPNAaHPGlgfnyOU1eT9exoKkReGKUtkgdqu8v8KX/NLIpo6ijobBBOr
-         cQhgQ+j7+ILZ/PTAGTN7zdqf7xGjgyds2Y4unQvKTmjkms+XE64RJMDO8Vff6Ae6OEDF
-         FvR0TxU4ClcZURQL02t90U8PQ8DTulFwg74naZPBj1SceM3BjHCyH0z/wbf6z/BIPu21
-         UmzA==
-X-Gm-Message-State: AOAM531MYy+JhFpnVgExEbLAboG8sQlyCUBA4u2jh/S/2NXN3LNI0L3L
-        Mb/w8L/1TO7LAO5Prto+uffmoQ==
-X-Google-Smtp-Source: ABdhPJw6GYauTEVER0R86DnpQ+Ah9xmnHGFQqqyD5T8BuCkZBXZ0YUzeA3subYfQPE883zhgmhGLOw==
-X-Received: by 2002:a63:f003:: with SMTP id k3mr21684913pgh.260.1638988539639;
-        Wed, 08 Dec 2021 10:35:39 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lb4sm7561563pjb.18.2021.12.08.10.35.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 10:35:39 -0800 (PST)
-Date:   Wed, 8 Dec 2021 18:35:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] KVM: x86: Introduce definitions to support static
- calls for kvm_pmu_ops
-Message-ID: <YbD691K7B9VVbswI@google.com>
-References: <20211108111032.24457-1-likexu@tencent.com>
- <20211108111032.24457-7-likexu@tencent.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108111032.24457-7-likexu@tencent.com>
+        Wed, 8 Dec 2021 13:44:19 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A60C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ZVzT81CqQrQGX+cWwoW6wmslcdMp/xonpKJhk/m6HpU=; b=O1X/WrKbZ2sOgFV+MHBXIgf1O9
+        eXV45ws6AAGzghsrtaPU3CSeO+y/uSNhTGJDLSuc9PXuGDnOCx3XoUwWMfUN0ezA4fBpvNXUeBR1p
+        U+yYtGvzvEoocJMaVluB09YvaFcWZlXE5z6M35arktxt4HYylcV0tji6LqJjA90r3Aj2WX30p1cBP
+        cO23JMtSg30xl77ejYvNNZMozd/5nK5x/zSITxIzCexKnv3jcmaaSczS8ZlFsZz8xGk9J+UEFiKU6
+        FS+QttJ37uWtsGn+upzQH4/ot0ADXga9Nvj/C5Ycx38uQpznMGSCE+Nn7FINcPkBivwhnFLdQiyEt
+        r0JtoHbw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mv1ro-000E8k-Vq; Wed, 08 Dec 2021 18:40:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEC15300348;
+        Wed,  8 Dec 2021 19:40:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id A3E6229AF612C; Wed,  8 Dec 2021 19:40:34 +0100 (CET)
+Message-ID: <20211208183655.251963904@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 08 Dec 2021 19:36:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, peterz@infradead.org,
+        mark.rutland@arm.com, elver@google.com, keescook@chromium.org,
+        hch@infradead.org, torvalds@linux-foundation.org
+Subject: [RFC][PATCH 0/5] refcount: Improve code-gen
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 08, 2021, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Use static calls to improve kvm_pmu_ops performance. Introduce the
-> definitions that will be used by a subsequent patch to actualize the
-> savings. Add a new kvm-x86-pmu-ops.h header that can be used for the
-> definition of static calls. This header is also intended to be
-> used to simplify the defition of amd_pmu_ops and intel_pmu_ops.
-> 
-> Like what we did for kvm_x86_ops, 'pmu_ops' can be covered by
-> static calls in a simlilar manner for insignificant but not
-> negligible performance impact, especially on older models.
-> 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
+Hi,
 
-This absolutely shouldn't be separated from patch 7/7.  By _defining_ the static
-calls but not providing the logic to actually _update_ the calls, it's entirely
-possible to add static_call() invocations that will compile cleanly without any
-chance of doing the right thing at runtime.  
+Improves the refcount_t code-gen; I've still got to go through the latest thing
+Linus suggested, but figured I should get these patches out to see if there's
+other concerns etc..
 
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 0236c1a953d0..804f98b5552e 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -99,7 +99,7 @@ static inline bool pmc_is_fixed(struct kvm_pmc *pmc)
 
- static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
- {
--       return kvm_pmu_ops.pmc_is_enabled(pmc);
-+       return static_call(kvm_x86_pmu_pmc_is_enabled)(pmc);
- }
 
- static inline bool kvm_valid_perf_global_ctrl(struct kvm_pmu *pmu,
-
-> @@ -0,0 +1,32 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if !defined(KVM_X86_PMU_OP) || !defined(KVM_X86_PMU_OP_NULL)
-> +BUILD_BUG_ON(1)
-> +#endif
-> +
-> +/*
-> + * KVM_X86_PMU_OP() and KVM_X86_PMU_OP_NULL() are used to
-
-Please use all 80 chars.
-
-> + * help generate "static_call()"s. They are also intended for use when defining
-> + * the amd/intel KVM_X86_PMU_OPs. KVM_X86_PMU_OP() can be used
-
-AMD/Intel since this is referring to the vendor and not to function names (like
-the below reference).
-
-> + * for those functions that follow the [amd|intel]_func_name convention.
-> + * KVM_X86_PMU_OP_NULL() can leave a NULL definition for the
-
-As below, please drop the _NULL() variant.
-
-> + * case where there is no definition or a function name that
-> + * doesn't match the typical naming convention is supplied.
-> + */
-
-...
-
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 353989bf0102..bfdd9f2bc0fa 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -50,6 +50,12 @@
->  struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
->  EXPORT_SYMBOL_GPL(kvm_pmu_ops);
->  
-> +#define	KVM_X86_PMU_OP(func)	\
-> +	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,	\
-> +				*(((struct kvm_pmu_ops *)0)->func))
-> +#define	KVM_X86_PMU_OP_NULL	KVM_X86_PMU_OP
-> +#include <asm/kvm-x86-pmu-ops.h>
-> +
->  static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
->  {
->  	struct kvm_pmu *pmu = container_of(irq_work, struct kvm_pmu, irq_work);
-> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> index b2fe135d395a..40e0b523637b 100644
-> --- a/arch/x86/kvm/pmu.h
-> +++ b/arch/x86/kvm/pmu.h
-> @@ -45,6 +45,11 @@ struct kvm_pmu_ops {
->  	void (*cleanup)(struct kvm_vcpu *vcpu);
->  };
->  
-> +#define	KVM_X86_PMU_OP(func)	\
-> +	DECLARE_STATIC_CALL(kvm_x86_pmu_##func, *(((struct kvm_pmu_ops *)0)->func))
-> +#define	KVM_X86_PMU_OP_NULL	KVM_X86_PMU_OP
-
-I don't want to proliferate the pointless and bitrot-prone KVM_X86_OP_NULL macro,
-just omit this.  I'll send a patch to drop KVM_X86_OP_NULL.
-
-> +#include <asm/kvm-x86-pmu-ops.h>
-> +
->  static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
->  {
->  	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> -- 
-> 2.33.0
-> 

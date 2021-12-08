@@ -2,88 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9253146D489
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC21846D48F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbhLHNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:43:45 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32887 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234349AbhLHNnp (ORCPT
+        id S234376AbhLHNpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:45:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39722 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232209AbhLHNpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:43:45 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8JFB6w66zcbpt;
-        Wed,  8 Dec 2021 21:39:58 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 21:40:11 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 21:40:10 +0800
-Subject: Re: [PATCH v3 1/1] iommu/arm-smmu-v3: Simplify useless instructions
- in arm_smmu_cmdq_build_cmd()
-To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Wed, 8 Dec 2021 08:45:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 864EACE2186;
+        Wed,  8 Dec 2021 13:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E4CC00446;
+        Wed,  8 Dec 2021 13:41:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638970888;
+        bh=OZzG9mnI07oghn5FHCCn22rzmq6jbRMNjzZzcon7K5k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ehoOHaw/MOpOucsXUIk2iiupzIAmlcanjnHqswDErS3uB7Q9XXJ/peLyc1qey+XH5
+         H0iEHIKfx7wqxSWCPpIygORpjvrARA95+ptfPSs5Mf135Cw8F0ekTOKPeDUTUh+XYi
+         37khwRyB/O9zstxFMS7XH+hwlQh0bc2fsxtT9HJWYTzh55nuQw6+Ck9XHmGgvvXffp
+         XZLQG8j+WTakZx1GB0iQ42NEmKWwhLLtyWgRtW5qMeC2aNzfi6Bo8FZV8UdaKtc02h
+         SCibHf5r7UQnM6acJt/zcmywAmUeiVhp/kzQVtqPRwx/N1h4KMY8GLDf0VGl2qQuKj
+         VT9v3XZnnvFfA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muxCI-00AmHF-LW; Wed, 08 Dec 2021 13:41:26 +0000
+Date:   Wed, 08 Dec 2021 13:41:26 +0000
+Message-ID: <87fsr31aex.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-References: <20211207094109.1962-1-thunder.leizhen@huawei.com>
- <20211207094109.1962-2-thunder.leizhen@huawei.com>
- <9da73d96-c61d-4ed2-607d-4861e6bfd696@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <58e8e7c6-a47b-7816-ac74-aefa5b55dd17@huawei.com>
-Date:   Wed, 8 Dec 2021 21:40:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <9da73d96-c61d-4ed2-607d-4861e6bfd696@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 2/3] irqchip/stm32-exti: add STM32MP13 support
+In-Reply-To: <20211208130456.4002-3-alexandre.torgue@foss.st.com>
+References: <20211208130456.4002-1-alexandre.torgue@foss.st.com>
+        <20211208130456.4002-3-alexandre.torgue@foss.st.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: alexandre.torgue@foss.st.com, tglx@linutronix.de, robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/12/8 0:17, John Garry wrote:
+On Wed, 08 Dec 2021 13:04:55 +0000,
+Alexandre Torgue <alexandre.torgue@foss.st.com> wrote:
 > 
->> +
->>       return 0;
->>   }
+> Enhance stm32-exti driver to support STM32MP13 SoC. This SoC uses the same
+> hardware version than STM32MP15. Only EXTI line mapping is changed and
+> following EXTI lines are supported: GPIO, RTC, I2C[1-5], UxART[1-8],
+> USBH_EHCI, USBH_OHCI, USB_OTG, LPTIM[1-5], ETH[1-2].
 > 
-> Did you notice any performance change with this change?
-
-Hi John:
-  Thanks for the tip. I wrote a test case today, and I found that the
-performance did not go up but down. It's so weird. So I decided not to
-change it, because it's also poorly readable. So I plan to make only
-the following modifications:
-@@ -237,7 +237,7 @@ static int queue_remove_raw(struct arm_smmu_queue *q, u64 *ent)
- static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct arm_smmu_cmdq_ent *ent)
- {
-        memset(cmd, 0, 1 << CMDQ_ENT_SZ_SHIFT);
--       cmd[0] |= FIELD_PREP(CMDQ_0_OP, ent->opcode);
-+       cmd[0] = FIELD_PREP(CMDQ_0_OP, ent->opcode);
-
-        switch (ent->opcode) {
-        case CMDQ_OP_TLBI_EL2_ALL:
-
-This prevents the compiler from generating the following two inefficient
-instructions:
-     394:       f9400002        ldr     x2, [x0]	//x2 = cmd[0]
-     398:       aa020062        orr     x2, x3, x2	//x3 = FIELD_PREP(CMDQ_0_OP, ent->opcode)
-
-Maybe it's not worth changing because I've only seen a 0.x nanosecond reduction
-in performance. But one thing is, it only comes with benefits, no side effects.
-
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 > 
-> Thanks,
-> John
+> diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
+> index b7cb2da71888..9d18f47040eb 100644
+> --- a/drivers/irqchip/irq-stm32-exti.c
+> +++ b/drivers/irqchip/irq-stm32-exti.c
+> @@ -214,6 +214,48 @@ static const struct stm32_desc_irq stm32mp1_desc_irq[] = {
+>  	{ .exti = 73, .irq_parent = 129, .chip = &stm32_exti_h_chip },
+>  };
+>  
+> +static const struct stm32_desc_irq stm32mp13_desc_irq[] = {
+> +	{ .exti = 0, .irq_parent = 6, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 1, .irq_parent = 7, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 2, .irq_parent = 8, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 3, .irq_parent = 9, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 4, .irq_parent = 10, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 5, .irq_parent = 24, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 6, .irq_parent = 65, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 7, .irq_parent = 66, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 8, .irq_parent = 67, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 9, .irq_parent = 68, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 10, .irq_parent = 41, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 11, .irq_parent = 43, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 12, .irq_parent = 77, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 13, .irq_parent = 78, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 14, .irq_parent = 106, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 15, .irq_parent = 109, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 16, .irq_parent = 1, .chip = &stm32_exti_h_chip },
+> +	{ .exti = 19, .irq_parent = 3, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 21, .irq_parent = 32, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 22, .irq_parent = 34, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 23, .irq_parent = 73, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 24, .irq_parent = 93, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 25, .irq_parent = 114, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 26, .irq_parent = 38, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 27, .irq_parent = 39, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 28, .irq_parent = 40, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 29, .irq_parent = 72, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 30, .irq_parent = 53, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 31, .irq_parent = 54, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 32, .irq_parent = 83, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 33, .irq_parent = 84, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 44, .irq_parent = 96, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 47, .irq_parent = 92, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 48, .irq_parent = 116, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 50, .irq_parent = 117, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 52, .irq_parent = 118, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 53, .irq_parent = 119, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 68, .irq_parent = 63, .chip = &stm32_exti_h_chip_direct },
+> +	{ .exti = 70, .irq_parent = 98, .chip = &stm32_exti_h_chip_direct },
+> +};
+
+Why does the driver need to carry these tables? This sort of
+information should really come from DT, instead of being hardcoded in
+the driver and bloating it for no reason. This all has a funny taste
+of the board files we used to have pre-DT.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

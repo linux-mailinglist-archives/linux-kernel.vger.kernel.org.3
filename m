@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 902DC46D11C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04F646D11D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbhLHKhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:37:17 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39130 "EHLO
+        id S231796AbhLHKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:37:20 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39136 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231649AbhLHKhO (ORCPT
+        by vger.kernel.org with ESMTP id S231731AbhLHKhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:37:14 -0500
+        Wed, 8 Dec 2021 05:37:15 -0500
 Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B89r4ks009074;
-        Wed, 8 Dec 2021 11:33:25 +0100
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B89pLPd009148;
+        Wed, 8 Dec 2021 11:33:26 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=selector1;
- bh=H3TcVOyVa6tibmHw7zCu0Y8pMukbPefxkaSsOCbZmpw=;
- b=8Iez6TpdmsUygDK0uzLMGx6/IgZzaRjfJWm5RvxouQmwQPSnwLdbfoWDZZL2lbJqaL68
- UAKdcGdR1Zt58BDiuwwr2rYSbDq+9vtst68SQKOmYgnMvooxRYjzWC0sQ3IaiO7lr+qh
- gM0I9BDL9Z9TfH/ed5RsBuiTUfu7KEY1IUK2zl1ET4B5/qkRch/H/tqkY5MRCGv9utDQ
- ci0bNrGB80RPjlbr6sG6tgs8TqaV8qWgKyWCgKsa6odSE+icma/y1Km58Iqx0MKKU/ER
- te9TDnAmRZUzE5tmUvktnPrcqmeseXwlWfH3K2dnx9qHw7jvOyanaQFV1yVF3MYD8XKO dg== 
+ bh=GYxfSXf9w2NFMXCcNiHGT9pdbGEG14Y73aVi9O0OxeE=;
+ b=hY8fbsDBOl4Iw05EG5pauOT8JyP923N05oSoyYtjPo4/IFQsYh9i4QfchGwRdkReP2wb
+ eI55cXor4qc+hUVraf98ieLpok0jXcOvuVxYQnTI1WR68l95m6XQcIKGQs09GWqrX/Se
+ JGCBYx+C3DvLjUESL6HEqTle5LrgUXteFdNBcBxnzI61q6wBpGa2XOsaH8W6VPPz1aD7
+ dzb157XIqJgPzue8D2vR2SxtZRbum0iHFS7bnae1L68n2KfxXETzfSErusZzVoNd1YLr
+ YvfbTkZokTP7Wa6P/PBFfWJGTT1s0qsj+cAzq79WU6epetXeprgkmSTwNQd8VcHl1Vjm cg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ct9xm4ema-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ct9xm4emc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:33:25 +0100
+        Wed, 08 Dec 2021 11:33:26 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8E9FE100034;
-        Wed,  8 Dec 2021 11:33:24 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B64D510002A;
+        Wed,  8 Dec 2021 11:33:25 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 86B2523153B;
-        Wed,  8 Dec 2021 11:33:24 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ADAFA23153B;
+        Wed,  8 Dec 2021 11:33:25 +0100 (CET)
 Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec 2021 11:33:24
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec 2021 11:33:25
  +0100
 From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>
@@ -44,16 +44,16 @@ CC:     <olivier.moysan@foss.st.com>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 1/2] ARM: dts: stm32: remove some timer duplicate unit-address on stm32f4 series
-Date:   Wed, 8 Dec 2021 11:33:15 +0100
-Message-ID: <1638959596-6656-2-git-send-email-fabrice.gasnier@foss.st.com>
+Subject: [PATCH 2/2] ARM: dts: stm32: remove timer5 duplicate unit-address on stm32f4 series
+Date:   Wed, 8 Dec 2021 11:33:16 +0100
+Message-ID: <1638959596-6656-3-git-send-email-fabrice.gasnier@foss.st.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
 References: <1638959596-6656-1-git-send-email-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
@@ -62,102 +62,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several unused "timer" are duplicate nodes of "timers" nodes.
-There are two dt-schemas:
-- timer/st,stm32-timer.yaml: A timer is needed on STM32F4 series, on all
-  boards, to act as clockevent.
-- mfd/st,stm32-timers.yaml: Timers can be used for other purpose.
+Remove the following warnings seen when building with W=1.
+Warning (unique_unit_address): /soc/timer@40000c00: duplicate unit-address
+(also used in node /soc/timers@40000c00)
+This approach is based on some discussions[1], to restructure the dtsi
+and dts files.
 
-By default, timer5 is left enabled to be used as clockevent. Remove all
-other timer clockevent nodes that are currently unused and duplicated.
+Timer5 is enabled by default on stm32f4 series, to act as clockevent. In
+order to get rid of the W=1 warning, and be compliant with dt-schemas
+(e.g. dtbs_check):
+- In stm32f429.dtsi:
+  . Keep the more complete timers5 description
+  . Remove the most simple timer5 node that is duplicate
+- In each board:
+  . adopt "st,stm32-timer" compatible for timers5, also add the interrupt
+  . use /delete-property/ and /delete-node/ so the it matches the
+    clockevent bindings
 
-This removes several messages: Warning (unique_unit_address): /soc/timer@..
-duplicate unit-address (also used in node /soc/timers@...)
+Note: all this is done in one shot (e.g. not split) to keep clockevent
+functionality.
+
+[1] https://lore.kernel.org/linux-arm-kernel/Yaf4jiZIp8+ndaXs@robh.at.kernel.org/
 
 Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 ---
- arch/arm/boot/dts/stm32f429.dtsi | 40 ----------------------------------------
- 1 file changed, 40 deletions(-)
+ arch/arm/boot/dts/stm32429i-eval.dts  | 12 ++++++++++++
+ arch/arm/boot/dts/stm32f429-disco.dts | 12 ++++++++++++
+ arch/arm/boot/dts/stm32f429.dtsi      |  7 -------
+ arch/arm/boot/dts/stm32f469-disco.dts | 12 ++++++++++++
+ 4 files changed, 36 insertions(+), 7 deletions(-)
 
+diff --git a/arch/arm/boot/dts/stm32429i-eval.dts b/arch/arm/boot/dts/stm32429i-eval.dts
+index cb46326..0d98aca 100644
+--- a/arch/arm/boot/dts/stm32429i-eval.dts
++++ b/arch/arm/boot/dts/stm32429i-eval.dts
+@@ -308,6 +308,18 @@
+ 	};
+ };
+ 
++&timers5 {
++	/* Override timer5 to act as clockevent */
++	compatible = "st,stm32-timer";
++	interrupts = <50>;
++	status = "okay";
++	/delete-property/#address-cells;
++	/delete-property/#size-cells;
++	/delete-property/clock-names;
++	/delete-node/pwm;
++	/delete-node/timer@4;
++};
++
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_a>;
+ 	pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+index 075ac57..06a7091 100644
+--- a/arch/arm/boot/dts/stm32f429-disco.dts
++++ b/arch/arm/boot/dts/stm32f429-disco.dts
+@@ -205,6 +205,18 @@
+ 	};
+ };
+ 
++&timers5 {
++	/* Override timer5 to act as clockevent */
++	compatible = "st,stm32-timer";
++	interrupts = <50>;
++	status = "okay";
++	/delete-property/#address-cells;
++	/delete-property/#size-cells;
++	/delete-property/clock-names;
++	/delete-node/pwm;
++	/delete-node/timer@4;
++};
++
+ &usart1 {
+ 	pinctrl-0 = <&usart1_pins_a>;
+ 	pinctrl-names = "default";
 diff --git a/arch/arm/boot/dts/stm32f429.dtsi b/arch/arm/boot/dts/stm32f429.dtsi
-index 8748d58..f21b322 100644
+index f21b322..1723346 100644
 --- a/arch/arm/boot/dts/stm32f429.dtsi
 +++ b/arch/arm/boot/dts/stm32f429.dtsi
-@@ -93,14 +93,6 @@
+@@ -159,13 +159,6 @@
  			};
  		};
  
--		timer2: timer@40000000 {
+-		timer5: timer@40000c00 {
 -			compatible = "st,stm32-timer";
--			reg = <0x40000000 0x400>;
--			interrupts = <28>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM2)>;
--			status = "disabled";
+-			reg = <0x40000c00 0x400>;
+-			interrupts = <50>;
+-			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM5)>;
 -		};
 -
- 		timers2: timers@40000000 {
+ 		timers5: timers@40000c00 {
  			#address-cells = <1>;
  			#size-cells = <0>;
-@@ -123,14 +115,6 @@
- 			};
- 		};
+diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
+index 30905ce6..cac3a67 100644
+--- a/arch/arm/boot/dts/stm32f469-disco.dts
++++ b/arch/arm/boot/dts/stm32f469-disco.dts
+@@ -224,6 +224,18 @@
+ 	bus-width = <4>;
+ };
  
--		timer3: timer@40000400 {
--			compatible = "st,stm32-timer";
--			reg = <0x40000400 0x400>;
--			interrupts = <29>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM3)>;
--			status = "disabled";
--		};
--
- 		timers3: timers@40000400 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -153,14 +137,6 @@
- 			};
- 		};
- 
--		timer4: timer@40000800 {
--			compatible = "st,stm32-timer";
--			reg = <0x40000800 0x400>;
--			interrupts = <30>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM4)>;
--			status = "disabled";
--		};
--
- 		timers4: timers@40000800 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -212,14 +188,6 @@
- 			};
- 		};
- 
--		timer6: timer@40001000 {
--			compatible = "st,stm32-timer";
--			reg = <0x40001000 0x400>;
--			interrupts = <54>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM6)>;
--			status = "disabled";
--		};
--
- 		timers6: timers@40001000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -236,14 +204,6 @@
- 			};
- 		};
- 
--		timer7: timer@40001400 {
--			compatible = "st,stm32-timer";
--			reg = <0x40001400 0x400>;
--			interrupts = <55>;
--			clocks = <&rcc 0 STM32F4_APB1_CLOCK(TIM7)>;
--			status = "disabled";
--		};
--
- 		timers7: timers@40001400 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
++&timers5 {
++	/* Override timer5 to act as clockevent */
++	compatible = "st,stm32-timer";
++	interrupts = <50>;
++	status = "okay";
++	/delete-property/#address-cells;
++	/delete-property/#size-cells;
++	/delete-property/clock-names;
++	/delete-node/pwm;
++	/delete-node/timer@4;
++};
++
+ &usart3 {
+ 	pinctrl-0 = <&usart3_pins_a>;
+ 	pinctrl-names = "default";
 -- 
 2.7.4
 

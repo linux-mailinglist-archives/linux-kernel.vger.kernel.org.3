@@ -2,193 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C288C46CE01
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9492A46CDF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244396AbhLHHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:04:20 -0500
-Received: from mail-bn8nam11on2046.outbound.protection.outlook.com ([40.107.236.46]:39809
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244385AbhLHHEP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:04:15 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XFc9BJJpxmnrqosAueLj2c6Z4FwM8nS3SkjC/EcuqqoI7KirHcdoXdFVudXSWI983FCrCmX0nDlnKo0S38pTvjd5iPc2m7kpNQ2+Z3pN1zpiCOurAAtkCTkBt+jpYtjOJIXAvTGwLbBJZQam8mDb0VHhW4zLyPwhYNCga91mbv9sdF6zVDZM9y1wRJWq0D9u2HlMMWGC9ARdhAlzAToafzQqxJnNVtjYRytt7dvp9tqMgp9Sdf9twlt878SPkn066vfEmiiuFAATI7MWRJyPSAGdN74h+zNtEjCHs92m7zOuNtMrLfrZey1Pk4qZyItxSNSDfB3tOvhQxgR8Z+p+/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U41keckc4qw4/dBUqZGycfcApnmXn3HPWyp9DlJ0N/g=;
- b=K8qXsxFGXR6TymKEwDKFKkxt0oGYxozeb4+3vHsKLISQNk/EkrNMRZ+1Bh0MeMD2kwT/RKwP22vFgGNBT6sh3byyCFS+h+5LgQ2G2ytoD2SuDd/rLBcq4KfUuEgcgID1hChpGhqRVGORQk/G36UsUf1ip3Jjm0RtU4wzIO2Q6x/xt5Wy5iz14krAcV3TDCfLaP4y0HLnP5aVl4BNcjzGVjL5Gja124VKuEJqh4eR17EaCwamCkZD0aGla5tTVsHfRrLqYItyswE+sepIp9c6uDTSdAARisUatHbnFd2ajRB5TBxoXzXjNeM+TYivDRvWTot5D8F0xEo5oqiKFMinFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 203.18.50.14) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U41keckc4qw4/dBUqZGycfcApnmXn3HPWyp9DlJ0N/g=;
- b=XemEvXqSfDhZCTUIQehc98V0cD8KMMfHLwilRoD9uY+0BLOFPkWotEdVnsJ/gzdEH8tJTYxBPxW1+MQZdFjN+BlH+f4L0rVzX3c/2AMQ8INzlzNKCfGyMB2qXhVkgbe5NPcNo48A3blCfq3Z09BGvGCc/iqkAp6gSQtWYVSbPCv4/XJfpppS3VJxW99G5jzJnMRirTyUrfn6sqRzCCtNYiI9cg4mx216EsYdm59ytVgykEtrFE5D0AAY+GqqxFlIest3/l3/FaGEMmmCugNhi9v54GK1lVvjo/W1hp+oR8SAPOGWktPdPerFY2yz81CuMaigiUHrqvBK/FKLuMR7Pw==
-Received: from DS7PR03CA0359.namprd03.prod.outlook.com (2603:10b6:8:55::35) by
- DM6PR12MB3483.namprd12.prod.outlook.com (2603:10b6:5:11f::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.16; Wed, 8 Dec 2021 07:00:42 +0000
-Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::d3) by DS7PR03CA0359.outlook.office365.com
- (2603:10b6:8:55::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend
- Transport; Wed, 8 Dec 2021 07:00:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.14)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 203.18.50.14 as permitted sender) receiver=protection.outlook.com;
- client-ip=203.18.50.14; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (203.18.50.14) by
- DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Wed, 8 Dec 2021 07:00:41 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 8 Dec
- 2021 07:00:31 +0000
-Received: from nps-server-23.mtl.labs.mlnx (172.20.187.5) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9;
- Tue, 7 Dec 2021 23:00:27 -0800
-From:   Shay Drory <shayd@nvidia.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     <jiri@nvidia.com>, <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Shay Drory <shayd@nvidia.com>,
-        Moshe Shemesh <moshe@nvidia.com>
-Subject: [PATCH net-next v2 4/6] net/mlx5: Let user configure event_eq_size param
-Date:   Wed, 8 Dec 2021 09:00:04 +0200
-Message-ID: <20211208070006.13100-5-shayd@nvidia.com>
-X-Mailer: git-send-email 2.21.3
-In-Reply-To: <20211208070006.13100-1-shayd@nvidia.com>
-References: <20211208070006.13100-1-shayd@nvidia.com>
+        id S244340AbhLHHDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:03:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38210 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231193AbhLHHDv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 02:03:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75AFCB81F37;
+        Wed,  8 Dec 2021 07:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE28C00446;
+        Wed,  8 Dec 2021 07:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638946818;
+        bh=Zo58PVhiAUB7WB93jNy6jtP1aFNBJALKU2W846/Rl1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZcNvoAeQS8zNbQTu9LT03ABs+QaZ5hQBQbes9DRkHueVIBd7OvkspMkX8tIQEfTJz
+         aZ2NUkBCopYxBoJ9GzfVbZYQDLFKuzY9Mn0qkqUFmh9jYz+BzX/TsEOiTBR/1SQIJY
+         Tjlhj15LRpL8QVKAljZds4bM5Z5cXtdU9aWysvaU=
+Date:   Wed, 8 Dec 2021 08:00:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, quic_eberman@quicinc.com,
+        quic_tsoni@quicinc.com,
+        Shanker Donthineni <shankerd@codeaurora.org>,
+        Adam Wallis <awallis@codeaurora.org>,
+        Timur Tabi <timur@codeaurora.org>,
+        Elliot Berman <eberman@codeaurora.org>
+Subject: Re: [RESEND PATCHv2] tty: hvc: dcc: Bind driver to core0 for reads
+ and writes
+Message-ID: <YbBX+cLRhJ5T+hBq@kroah.com>
+References: <20211208063847.27174-1-quic_saipraka@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.20.187.5]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1abbf0a-aa76-4467-52e8-08d9ba187318
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3483:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3483A5494731397039BFA72DCF6F9@DM6PR12MB3483.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /hvr3onln7EyPbwaWRFNPLu/1jVuw6PMhrev744G7pec4soeqoq8eaJ921gWEQgIhUYSEUd24EvXDeAGpHz/c988FKFeUSPfw+8uc2eHTViouSGYSEpbWEUQCBmZLMKzmvaTrlRHpuvV70ls6JDqs2OPysdkwZYvKqCDMjLaHz+UIHJR6PCoBbgTTG0j41DcKkY9ObCON/hb5pwAFQb63Wsa9PVuUixYtzeCC+vWTIKNwS1r8oqLh8JOEcdTLAIkpfIHcZxddf+lZeZiS/Fx8/ELxYc/IPghbX1m1tv3upUmoIr9L6BVv+8BlIfY2XfByueOBRxB57MUI/R9c+E9wGZcigfKRNB3LyAUcTquNLQLO7yWYChxs6GGme6opXrr/6nx9RdP/8fsXe+ar+sCxafWyC469mYfEBdENXfKrw2/bWHLvOXyQN7gwsU4i0ip6f/U3bgjeejlW/vEvy3c1YqgR4btIj2n5KtaHR2zkHoa90LAxVgWhJFCoiM7ej5CnBrkP1X3p+sT5PZh7bqwmUpIlg3A+0teuuXl/fRwbE80LKyF5VfAokZG05kwK1GCnuJE4U98juoHvVQzWlFa0JNZWTZM3nUpyiSLgjDC+PCCWpBoQCcmlqRPvyZ5GG85ohuyLhr0UC0gBtMsAXIvn+ESKqJxoGps/XTv/FC0Prd7wj3JMXxVgVfB2Je0jnDK4Q9mdFLR+pUCdTg43KF2R10ME8/mrqIte+TpKsvPSkWqcm7C4HczvmYQMay8EMFul1558RqCbGVgzQrm50wXSy51KbsMEIOVfqljXIumGKo=
-X-Forefront-Antispam-Report: CIP:203.18.50.14;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(6666004)(26005)(2906002)(36756003)(110136005)(40460700001)(70206006)(186003)(16526019)(70586007)(83380400001)(356005)(86362001)(2616005)(5660300002)(54906003)(1076003)(107886003)(4326008)(8936002)(336012)(7636003)(316002)(8676002)(36860700001)(82310400004)(508600001)(426003)(47076005)(34070700002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 07:00:41.8216
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1abbf0a-aa76-4467-52e8-08d9ba187318
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.14];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3483
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208063847.27174-1-quic_saipraka@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Event EQ is an EQ which received the notification of almost all the
-events generated by the NIC.
-Currently, each event EQ is taking 512KB of memory. This size is not
-needed in most use cases, and is critical with large scale. Hence,
-allow user to configure the size of the event EQ.
+On Wed, Dec 08, 2021 at 12:08:47PM +0530, Sai Prakash Ranjan wrote:
+> From: Shanker Donthineni <shankerd@codeaurora.org>
+> 
+> Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
+> reads/writes from/to DCC on secondary cores. Each core has its
+> own DCC device registers, so when a core reads or writes from/to DCC,
+> it only accesses its own DCC device. Since kernel code can run on
+> any core, every time the kernel wants to write to the console, it
+> might write to a different DCC.
+> 
+> In SMP mode, Trace32 creates multiple windows, and each window shows
+> the DCC output only from that core's DCC. The result is that console
+> output is either lost or scattered across windows.
+> 
+> Selecting this option will enable code that serializes all console
+> input and output to core 0. The DCC driver will create input and
+> output FIFOs that all cores will use. Reads and writes from/to DCC
+> are handled by a workqueue that runs only core 0.
+> 
+> Link: https://lore.kernel.org/lkml/1435344756-20901-1-git-send-email-timur@codeaurora.org/
+> Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
+> Acked-by: Adam Wallis <awallis@codeaurora.org>
+> Signed-off-by: Timur Tabi <timur@codeaurora.org>
+> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
+> 
+> Resending this v2 since earlier one had a typo in the variable type.
+> 
+> Changes in v2:
+>  * Checkpatch warning fixes.
+>  * Use of IS_ENABLED macros instead of ifdefs.
+> 
+> I also thought of making it depends on !HOTPLUG_CPU since it is broken
+> in case core0 is hotplugged off, but apparently HOTPLUG_CPU kconfig
+> has weird dependency issues, i.e., gets selected by CONFIG_PM and others.
+> So it will be almost like this feature won't be selectable at all if
+> I add !HOTPLUG_CPU kconfig dependency. Also HVC_DCC is a debug feature
+> where we need Trace32 like tools to access DCC windows in which case
+> these shortcomings can be expected since manual intervention is required
+> anyways for attaching a core to Trace32, so it won't matter much.
 
-For example to reduce event EQ size to 64, execute::
-$ devlink dev param set pci/0000:00:0b.0 name event_eq_size value 64 \
-              cmode driverinit
-$ devlink dev reload pci/0000:00:0b.0
+But your code will break on systems when cpu 0 goes away, so this isn't
+going to work well at all.  Please make this work for any cpu or handle
+the case when the cpu it is running on goes away.
 
-Signed-off-by: Shay Drory <shayd@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
----
- Documentation/networking/devlink/mlx5.rst        |  3 +++
- .../net/ethernet/mellanox/mlx5/core/devlink.c    |  7 +++++++
- drivers/net/ethernet/mellanox/mlx5/core/eq.c     | 16 +++++++++++++++-
- 3 files changed, 25 insertions(+), 1 deletion(-)
+Also, this REALLY looks like you are trying to fix the kernel for a
+crazy userspace program.  Why not fix the userspace program instead?
+Isn't that easier and then that way it will work for any kernel version?
 
-diff --git a/Documentation/networking/devlink/mlx5.rst b/Documentation/networking/devlink/mlx5.rst
-index 291e7f63af73..38089f0aefcf 100644
---- a/Documentation/networking/devlink/mlx5.rst
-+++ b/Documentation/networking/devlink/mlx5.rst
-@@ -20,6 +20,9 @@ Parameters
-    * - ``io_eq_size``
-      - driverinit
-      - The range is between 64 and 4096.
-+   * - ``event_eq_size``
-+     - driverinit
-+     - The range is between 64 and 4096.
- 
- The ``mlx5`` driver also implements the following driver-specific
- parameters.
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-index d8a705a94dcc..31bbbb30acae 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
-@@ -579,6 +579,8 @@ static const struct devlink_param mlx5_devlink_params[] = {
- 			      mlx5_devlink_enable_remote_dev_reset_set, NULL),
- 	DEVLINK_PARAM_GENERIC(IO_EQ_SIZE, BIT(DEVLINK_PARAM_CMODE_DRIVERINIT),
- 			      NULL, NULL, mlx5_devlink_eq_depth_validate),
-+	DEVLINK_PARAM_GENERIC(EVENT_EQ_SIZE, BIT(DEVLINK_PARAM_CMODE_DRIVERINIT),
-+			      NULL, NULL, mlx5_devlink_eq_depth_validate),
- };
- 
- static void mlx5_devlink_set_params_init_values(struct devlink *devlink)
-@@ -622,6 +624,11 @@ static void mlx5_devlink_set_params_init_values(struct devlink *devlink)
- 	devlink_param_driverinit_value_set(devlink,
- 					   DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
- 					   value);
-+
-+	value.vu16 = MLX5_NUM_ASYNC_EQE;
-+	devlink_param_driverinit_value_set(devlink,
-+					   DEVLINK_PARAM_GENERIC_ID_EVENT_EQ_SIZE,
-+					   value);
- }
- 
- static const struct devlink_param enable_eth_param =
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-index 230f62804b73..3ec140af66fd 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-@@ -623,6 +623,20 @@ static void cleanup_async_eq(struct mlx5_core_dev *dev,
- 			      name, err);
- }
- 
-+static u16 async_eq_depth_devlink_param_get(struct mlx5_core_dev *dev)
-+{
-+	struct devlink *devlink = priv_to_devlink(dev);
-+	union devlink_param_value val;
-+	int err;
-+
-+	err = devlink_param_driverinit_value_get(devlink,
-+						 DEVLINK_PARAM_GENERIC_ID_EVENT_EQ_SIZE,
-+						 &val);
-+	if (!err)
-+		return val.vu16;
-+	mlx5_core_dbg(dev, "Failed to get param. using default. err = %d\n", err);
-+	return MLX5_NUM_ASYNC_EQE;
-+}
- static int create_async_eqs(struct mlx5_core_dev *dev)
- {
- 	struct mlx5_eq_table *table = dev->priv.eq_table;
-@@ -647,7 +661,7 @@ static int create_async_eqs(struct mlx5_core_dev *dev)
- 
- 	param = (struct mlx5_eq_param) {
- 		.irq_index = MLX5_IRQ_EQ_CTRL,
--		.nent = MLX5_NUM_ASYNC_EQE,
-+		.nent = async_eq_depth_devlink_param_get(dev),
- 	};
- 
- 	gather_async_events_mask(dev, param.mask);
--- 
-2.21.3
+thanks,
 
+greg k-h

@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F49B46D370
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6370B46D374
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbhLHMn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhLHMnz (ORCPT
+        id S230370AbhLHMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:44:18 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42406 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233575AbhLHMoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:43:55 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AE1C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 04:40:23 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id u17so3890835wrt.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 04:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K/DBuZhUDRGHeWyIemGFSVWESfZOsYaKYb9NzvIqeyk=;
-        b=RFIAPeDp55STzXxu8uXq/Ygb9Pm15wcypmAq856iXatgWal7I6ZSBtslPfz4AzoT1W
-         Xf3tbVwUgSYy0wvnr5sLoOQRebmv3rNS9jvRakRQVkxqtCRgbX+OWmVIaj/EmYswqmau
-         FyAd3v1cp3Xf+IK2oi/l4UG6qMu41Tpsue92Gndu7AMwQpVN2XUWrAHXdJbP210CVJow
-         sR73MVRofqT1xxi02OJbNIXE6zRvUYk5PF5lq4Scdi3mJQ8aUcH9kxIo/QaBJ9vjNlTC
-         X4jgwtA+1kuxyKQa0/B4rncfDAsHoQnSAb1F0RzQYtgxIgQoIRJ9zpS7D4f4WvkZxVHT
-         SJAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K/DBuZhUDRGHeWyIemGFSVWESfZOsYaKYb9NzvIqeyk=;
-        b=GJTy/+ou49eE2qN3Do5NQD1WMfkNT6GEuik4mM/oKLK9QF5GhGI9Ln27xqy/B0unuX
-         0ed3JXa9gqpwiRmkMUsBqR+8pCpFOJ9WsdGpFP9CXgVhe2d2kI/juKylWQdOyoTvvpXV
-         EIc6tsnifSBiQJQ3GnvCaie3tAMtHX3NXlfFAnWVHpBbbytRDKKB9IRnRLzbolpRDtTv
-         HiMlIT6X8qciXoPcwCXBvUOFZ0LSGtSw4jQQIzuX9RuB19PjdmVR3qHK4nHAe4UPcw7g
-         Tl2VEHhNKqvQmd1KE7ez7Xm2yMv6GSLMLekx84odPt45HVH4AehaZS9jXJXF92pbdgtx
-         cCAA==
-X-Gm-Message-State: AOAM531S0q7bzAC7W13d/Tyta2/0kOkhf8MlsjqaOU+S2x7I7q9+8H/F
-        LNf2yxJN7Oe8glK2w5303CU=
-X-Google-Smtp-Source: ABdhPJwF4fWlhWx6371UkgDlh+QrnNifqBx+j+pVkco+bQ0yns1inYtrGkhnzJftDWC5eC3zbb12SQ==
-X-Received: by 2002:a5d:6dab:: with SMTP id u11mr58232155wrs.46.1638967222364;
-        Wed, 08 Dec 2021 04:40:22 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.199.136])
-        by smtp.gmail.com with ESMTPSA id n1sm2767877wmq.6.2021.12.08.04.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 04:40:22 -0800 (PST)
-Date:   Wed, 8 Dec 2021 17:40:18 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     kuninori.morimoto.gx@renesas.com
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: test-component: replace of_match_device() to
- of_device_get_match_data()
-Message-ID: <20211208124018.GA15923@hamza-OptiPlex-7040>
-References: <20211208120526.GA12550@hamza-OptiPlex-7040>
- <20211208123659.15789-1-amhamza.mgc@gmail.com>
+        Wed, 8 Dec 2021 07:44:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B08BDCE214F;
+        Wed,  8 Dec 2021 12:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32915C00446;
+        Wed,  8 Dec 2021 12:40:34 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 13:40:31 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+Subject: Re: [PATCH v4 14/16] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+Message-ID: <20211208124031.lbutcvt3ns73vgsw@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-15-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211208123659.15789-1-amhamza.mgc@gmail.com>
+In-Reply-To: <20211207202127.1508689-15-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:36:59PM +0500, Ameer Hamza wrote:
-> Getting device data from of_device_get_match_data() for a cleaner
-> implementation.
+On Tue, Dec 07, 2021 at 03:21:25PM -0500, Stefan Berger wrote:
+> Use mac_admin_ns_capable() to check corresponding capability to allow
+> read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
 > 
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
->  sound/soc/generic/test-component.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>  include/linux/capability.h      | 6 ++++++
+>  security/integrity/ima/ima_fs.c | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/sound/soc/generic/test-component.c b/sound/soc/generic/test-component.c
-> index 8fc97d3ff011..5da4725d9e16 100644
-> --- a/sound/soc/generic/test-component.c
-> +++ b/sound/soc/generic/test-component.c
-> @@ -531,17 +531,13 @@ static int test_driver_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	struct device_node *node = dev->of_node;
->  	struct device_node *ep;
-> -	const struct of_device_id *of_id = of_match_device(test_of_match, &pdev->dev);
-> -	const struct test_adata *adata;
-> +	const struct test_adata *adata = of_device_get_match_data(&pdev->dev);
->  	struct snd_soc_component_driver *cdriv;
->  	struct snd_soc_dai_driver *ddriv;
->  	struct test_dai_name *dname;
->  	struct test_priv *priv;
->  	int num, ret, i;
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index 65efb74c3585..991579178f32 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+>  		ns_capable(ns, CAP_SYS_ADMIN);
+>  }
 >  
-> -	if (!of_id)
-> -		return -EINVAL;
-> -	adata = of_id->data;
->  	num = of_graph_get_endpoint_count(node);
->  	if (!num) {
->  		dev_err(dev, "no port exits\n");
-> @@ -552,7 +548,7 @@ static int test_driver_probe(struct platform_device *pdev)
->  	cdriv	= devm_kzalloc(dev, sizeof(*cdriv),		GFP_KERNEL);
->  	ddriv	= devm_kzalloc(dev, sizeof(*ddriv) * num,	GFP_KERNEL);
->  	dname	= devm_kzalloc(dev, sizeof(*dname) * num,	GFP_KERNEL);
-> -	if (!priv || !cdriv || !ddriv || !dname)
-> +	if (!priv || !cdriv || !ddriv || !dname || !adata)
->  		return -EINVAL;
->  
->  	priv->dev		= dev;
-> -- 
-Hi Kuninori,
-Would be really appreciated if you can review the patch please.
+> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
+> +{
+> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
+> +		ns_capable(ns, CAP_SYS_ADMIN);
+> +}
+> +
+>  /* audit system wants to get cap info from files as well */
+>  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+>  			   const struct dentry *dentry,
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index 0e582ceecc7f..a749a3e79304 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -394,7 +394,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+>  #else
+>  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>  			return -EACCES;
+> -		if (!capable(CAP_SYS_ADMIN))
+> +		if (!mac_admin_ns_capable(ns->user_ns))
+>  			return -EPERM;
 
-Best Regards,
-Ameer Hamza.
+Hm, couldn't this rather just be:
+
+		if (ns_capable(ns, CAP_MAC_ADMIN) || capable(CAP_SYS_ADMIN))
+
+so we don't carry CAP_SYS_ADMIN as an alternative way for ima into user
+namespaces as well? This way containers don't need to drop CAP_SYS_ADMIN
+just to prevent mac policy from being altered. But that's more on the
+LSM side of questions.

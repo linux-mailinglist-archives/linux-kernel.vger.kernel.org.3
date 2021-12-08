@@ -2,91 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7792B46D0C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E19846D0D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbhLHKUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:20:24 -0500
-Received: from mga02.intel.com ([134.134.136.20]:60059 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231377AbhLHKUX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:20:23 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225060189"
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="225060189"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:16:52 -0800
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="612044887"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:16:48 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mutzI-003bQu-Jr;
-        Wed, 08 Dec 2021 12:15:48 +0200
-Date:   Wed, 8 Dec 2021 12:15:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, srinivas.pandruvada@intel.com,
-        shuah@kernel.org, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbCF1DbDF/yTZPNN@smile.fi.intel.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
- <YbBZuwXZWMV9uRXI@kroah.com>
- <YbBwSV2IwDHNUrFH@google.com>
- <YbBxPPPaQwlcgz/c@kroah.com>
+        id S231451AbhLHKWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231423AbhLHKWA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:22:00 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779FCC061746;
+        Wed,  8 Dec 2021 02:18:28 -0800 (PST)
+Received: from [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3] (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 3C3151F45B78;
+        Wed,  8 Dec 2021 10:18:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638958707; bh=XIp6xgTjTz1fumiAWczWcdggIWQ+LeHxsFc60JWF7Ps=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=CvB+lbSI8KGOkVe64pC7KSWOPjGy2HdhiLNHkl8TISiHEF5zVr2bYafItXVKu4HiC
+         CyGvWKkh0Z1vpcQ7rbvwLCWVKEreJeB9vSNXZtAOXsiwTtRxsLMLeek41jmJvdIi6N
+         T9+BQaVRSlxyGH0CSO56/mEMoS0XtkvZBhoAXEz2V2LFfYHEFdrYCQQQtbxS4pEKv1
+         gZWDUknmpbI0OlylsTkD2Yed/YvxSoiZM4yUagxUkzZgZRcW1PSslyruTlkMoXvdpF
+         4sSNPaRkg4nYga3W0JhF8L1mIhk4Ds0hUTcotdo9U50WEI//Cec9Osuw0ftD54roJo
+         A/3OMDOcAMhMg==
+Subject: Re: [PATCH 1/2] iommu/mediatek: Always tlb_flush_all when each PM
+ resume
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     kernel@collabora.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:MEDIATEK IOMMU DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, sebastian.reichel@collabora.com,
+        iommu@lists.linux-foundation.org
+References: <20211122104400.4160-1-dafna.hirschfeld@collabora.com>
+ <20211122104400.4160-2-dafna.hirschfeld@collabora.com>
+ <6abef78f6447c626b737fd35688f421c29871f43.camel@mediatek.com>
+ <d30438bf-9add-7904-bad0-0764e3602263@collabora.com>
+ <35d53ea0-68db-a516-9e9c-272e8f0ed082@collabora.com>
+Message-ID: <b246cd23-f19e-e3d9-a19e-2f598b6d1425@collabora.com>
+Date:   Wed, 8 Dec 2021 12:18:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <35d53ea0-68db-a516-9e9c-272e8f0ed082@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 09:47:56AM +0100, Greg KH wrote:
-> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
-> > On Wed, 08 Dec 2021, Greg KH wrote:
-> > 
-> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > > > Adds get/set driver data helpers for auxiliary devices.
-> > > > > 
-> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > > > ---
-> > > > > V2
-> > > > >   - No changes
-> > > > > 
-> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > 
-> > > > I would really like to see an explanation why such obfuscation is really
-> > > > needed. dev_*_drvdata() is a standard way to access driver data.
-> > 
-> > I wouldn't call it obfuscation, but it does looks like abstraction for
-> > the sake of abstraction, which I usually push back on.  What are the
-> > technical benefits over using the dev_*() variant?
+
+
+On 08.12.21 11:50, Dafna Hirschfeld wrote:
 > 
-> See my response at:
-> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
-> for why it is a good thing to do.
 > 
-> In short, driver authors should not have to worry about mixing
-> bus-specific and low-level driver core functions.
+> On 07.12.21 10:31, Dafna Hirschfeld wrote:
+>>
+>>
+>> On 27.11.21 04:46, Yong Wu wrote:
+>>> Hi Dafna,
+>>>
+>>> Sorry for reply late.
+>>>
+>>> On Mon, 2021-11-22 at 12:43 +0200, Dafna Hirschfeld wrote:
+>>>> From: Yong Wu <yong.wu@mediatek.com>
+>>>>
+>>>> Prepare for 2 HWs that sharing pgtable in different power-domains.
+>>>>
+>>>> When there are 2 M4U HWs, it may has problem in the flush_range in
+>>>> which
+>>>> we get the pm_status via the m4u dev, BUT that function don't reflect
+>>>> the
+>>>> real power-domain status of the HW since there may be other HW also
+>>>> use
+>>>> that power-domain.
+>>>>
+>>>> The function dma_alloc_attrs help allocate the iommu buffer which
+>>>> need the corresponding power domain since tlb flush is needed when
+>>>> preparing iova. BUT this function only is for allocating buffer,
+>>>> we have no good reason to request the user always call pm_runtime_get
+>>>> before calling dma_alloc_xxx. Therefore, we add a tlb_flush_all
+>>>> in the pm_runtime_resume to make sure the tlb always is clean.
+>>>>
+>>>> Another solution is always call pm_runtime_get in the
+>>>> tlb_flush_range.
+>>>> This will trigger pm runtime resume/backup so often when the iommu
+>>>> power is not active at some time(means user don't call pm_runtime_get
+>>>> before calling dma_alloc_xxx), This may cause the performance drop.
+>>>> thus we don't use this.
+>>>>
+>>>> In other case, the iommu's power should always be active via device
+>>>> link with smi.
+>>>>
+>>>> The previous SoC don't have PM except mt8192. the mt8192 IOMMU is
+>>>> display's
+>>>> power-domain which nearly always is enabled. thus no need fix tags
+>>>> here.
+>>>> Prepare for mt8195.
+>>>
+>>> In this patchset, this message should be not proper. I think you could
+>>> add the comment why this patch is needed in mt8173.
+>>>
+>>>>
+>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>>> [imporvie inline doc]
+>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>>> ---
+>>>>   drivers/iommu/mtk_iommu.c | 7 +++++++
+>>>>   1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+>>>> index 25b834104790..28dc4b95b6d9 100644
+>>>> --- a/drivers/iommu/mtk_iommu.c
+>>>> +++ b/drivers/iommu/mtk_iommu.c
+>>>> @@ -964,6 +964,13 @@ static int __maybe_unused
+>>>> mtk_iommu_runtime_resume(struct device *dev)
+>>>>           return ret;
+>>>>       }
+>>>> +    /*
+>>>> +     * Users may allocate dma buffer before they call
+>>>> pm_runtime_get,
+>>>> +     * in which case it will lack the necessary tlb flush.
+>>>> +     * Thus, make sure to update the tlb after each PM resume.
+>>>> +     */
+>>>> +    mtk_iommu_tlb_flush_all(data);
+>>>
+>>> This should not work. since current the *_tlb_flush_all call
+>>> pm_runtime_get_if_in_use which will always return 0 when it called from
+>>> this runtime_cb in my test. thus, It won't do the tlb_flush_all
+>>> actually.
+> 
+> He, indeed, my mistake, although the encoder works more or less fine even
+> without the full flush so I didn't catch that.
+> 
+>>>
+>>> I guess this also depend on these two patches of mt8195 v3.
+>>> [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in tlb_sync_all
+>>> [PATCH v3 10/33] iommu/mediatek: Add tlb_lock in tlb_flush_all
+> 
+> I'll add those two
+> 
+>>>
+>>> like in [10/33], I added a mtk_iommu_tlb_do_flush_all which don't have
+>>> the pm operation.
+> 
+> yes, I need to remove the pm_runtime_get_if_in_use call in the 'flush_all' func
+> I see there is also a patch for that in the mt8195 v3 series "[PATCH v3 13/33] iommu/mediatek: Remove the power status checking in tlb flush all"
+> 
+> So I'll send v2, adding all those 3 patches, but I think adding mtk_iommu_tlb_do_flush_all
+> on patch 9 and removing it again on patch 13 is confusing so I'll avoid that.
+> 
 
-Right! I just answered to Leon with the similar view behind (using
-different words).
+In addition, the call to mtk_iommu_tlb_flush_all from mtk_iommu_runtime_resume should move to the bottom of the function
+after all values are updated
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Thanks,
+> Dafna
+> 
+> 
+> 
+>>>
+>>> This looks has a dependence. Let me know if I can help this.
+>>
+>> It did work for me, testing on elm device. I'll check that again.
+>>
+>>
+>>>
+>>>> +
+>>>>       /*
+>>>>        * Uppon first resume, only enable the clk and return, since
+>>>> the values of the
+>>>>        * registers are not yet set.
+>>

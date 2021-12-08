@@ -2,158 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C35A846D42A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B6C46D551
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbhLHNRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:17:37 -0500
-Received: from mail-mw2nam08on2076.outbound.protection.outlook.com ([40.107.101.76]:59547
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230001AbhLHNRe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:17:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RkH/oxIL+moDRbVacd6Hb85f9YPIuR5kojeDP/gFaUftSZrbCu4WAqqCHV1XLoCxAv4b9mGEtuw3LS7z/RSymMeGblA0d34HYnFHIKxyIvaH9IiNV22AAac/IAJZ49mpJRG+VgeWjqgPdzw8j5NxfU0y+JkCZO0Wdt24wVvgex08Xiz6RMUuJHzVxIunGk0xARKOh59yucZqxGTm9W7vfXjfeJFoGPne2lG6Ra1pp7uxCcaWuh9i7gub38kRFfbkVEcm/3KM3dNLFEq7AhTEj2j+M4pJbLMZeW7EQokTJDt7wmC9+mi0evzvIEH8NxALxdSfO9tXgYEzpx2MOEXaUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KDKi3j/1QrirE6QiKRp8rZAnNCq0E141dTesSNEeytM=;
- b=NNNOQ+aMFxxLZgAFip96COn4IbfpZuAaD+6GF8GIZXjR6zp0is2DeHweY6bR4Famv0mgh3gDG0Op3J/pP6v8ycYhsR6yzAjfASrvEEf3J+/0P3YwRE2z82omv8ZRahNYN6c0vvFzWCJAGHJuuuezl8FrqJcxW3cUH6PtmIjzEM0p+t8wrHor9utqANXE/IzsexXM61Ur5SallBlyi9xFbwdPiIHGHDiM6JPo5oE4JwtSepioY4trmNTDL6RxWioVnm1onnBq5zgN6wDzupTq4m93cvRiBjuiXx2tapgfZuk4v9GoUk1uAqJlKEIpbpuWCTEyfNZvIsQ3Oj0YWrsUHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDKi3j/1QrirE6QiKRp8rZAnNCq0E141dTesSNEeytM=;
- b=QKrUhWMR0SdX8cB3C1WKUVyultMAKpirDl+vmW4M4IIBX2Hvfxdt2yn4arXEON1717apLiCQe6racmEFJKj4WeXu0uxVO6hfdIzRjBZtPsEGbWHkNX349XzO6+wAfRkMkp/QRxMtca9P9mOVU38iblFG7E3dpzeiRqHWJ2Xujzjrl1y8B8wJFGyMpRbYOMjuFs37abSZh/Rp4oPs28ZQQkS4/MOqhUFY46mQ3faD0qPC6SaLQSM9CXOQ5+HzCTox6k3HEuz/uh0cm084OBZDkpnL6JUObwMkSNlxTloE6rdER2hNbXVVJHvEAxeOt1ijMifGglPpR2HNE3464qaUfg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5064.namprd12.prod.outlook.com (2603:10b6:208:30a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.28; Wed, 8 Dec
- 2021 13:14:00 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.013; Wed, 8 Dec 2021
- 13:14:00 +0000
-Date:   Wed, 8 Dec 2021 09:13:58 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <20211208131358.GR6385@nvidia.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-X-ClientProxiedBy: YT3PR01CA0019.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::33) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S232646AbhLHOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:16:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23982 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229550AbhLHOQF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:16:05 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CemvR000435;
+        Wed, 8 Dec 2021 14:12:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vjjjiP0JQaWLfFaPkq8SmQj88EzdGkD8Kt2zcs3wWas=;
+ b=E7okiFu69cJlSv5SsaqrKTHBMkQhCWB6q91Z/Lwx1JgsITIAEAzzduf6YFojcnp9Uuwd
+ R1vwtPfgj3v2z5HHMNSeeELCNpA52s2ebTocU+wBy1rhQZdYCJ2SeB47uEHcLBErXlcv
+ CSmo9M5tK0X4GkenDY6Ga/F5CDC3i99WdUIGAmK6OTLdhFYUTsLaFh54MBcwSSLwTKm8
+ W74D1aGbPYZCQhxRazrKRuYULN1t0egxuEmDgAeXSe3mB2hQFCpTGfHqggSEFw20j1eg
+ 8J3acK8MFX0TAlLzginPbbFlUg8g0G9SSgx4J2h38diVyjSjJbXIWQdlNrXrLlz14Tx/ jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctv7vavvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 14:12:33 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8DmIif026278;
+        Wed, 8 Dec 2021 14:12:33 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctv7vavv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 14:12:32 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8E7rcI020997;
+        Wed, 8 Dec 2021 14:12:31 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3cqyy9y1a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 14:12:30 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8ECRBs33030494
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 14:12:27 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAFEC52057;
+        Wed,  8 Dec 2021 14:12:27 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.3.179])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B48C652050;
+        Wed,  8 Dec 2021 14:12:26 +0000 (GMT)
+Date:   Wed, 8 Dec 2021 14:14:11 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/32] s390/airq: pass more TPI info to airq handlers
+Message-ID: <20211208141411.37fa6453@p-imbrenda>
+In-Reply-To: <20211207205743.150299-6-mjrosato@linux.ibm.com>
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+        <20211207205743.150299-6-mjrosato@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 833c1d84-671d-4834-3165-08d9ba4c994a
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5064:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5064B82E332612D493813D53C26F9@BL1PR12MB5064.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OB7yS5p0o/dntEtHItptgDUfnP4A1LtK9G3voppBYb621glMdC6kYFXcPH5YSF3/ggw1TWjBimJ6NGZOEsrnItalwP5T0NDbD4hB970OcbqrfeGj7zVxBZO2ShZtTZ3bcXadzcr4Q/OrcXsppid9jQUFUYCEPq3D37FAr3qQdYMCtL1E6AcebQ+qaFuehGh8pj7SqGhshCRG5VSOZ0p9ZLE6Z0+CMuFlGb8OQ3+2OROl8U6333SuVY0jtdEtDF8xUkVbVQs3yx2rS/+JK6/8akPgx66lPlPBLjzaVUrn1K8WLy7ETg5gKVOoiq2uNbAgYPhLrLvAvufM1aAULeaOhrDs5ZV81GJnbsh+vGv0NzS/TGY/4nsxG0fzS88BjTiBANTg+ZXECUcmEMXTkzO+tLx8PlZ45PIsKJ2c2Uzmw3jVGEGBq01BUMOcrRPmMJWfGN2L1FG1kvKd7dpkeQnvLJwcWBqN4+UuFGXLimXsa92Mf3oGw3uOMthG6DBEvlsY8F6GGYRgrM9pM+pC8vzRoNhZBXoAhlvq9CJxZmSk0sGqREXGHPQU4wrS9/t8ZwKh6AFtT/evwwROZo51axa3OOlR+9s0qBwuYZpU4gYUpXFtbB2LgjfhNdoH3764tS57VSNHxKELcDZAHhWL7dpQrw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(6486002)(66476007)(6916009)(2906002)(5660300002)(508600001)(6506007)(26005)(1076003)(66556008)(38100700002)(66946007)(7416002)(33656002)(54906003)(316002)(4326008)(83380400001)(86362001)(2616005)(8936002)(6512007)(8676002)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L3+3FX8MG/nmYC4Qdit6bkytkd+/apbZVzz16sJd8uYVZLGvmMJNabQeXUqq?=
- =?us-ascii?Q?CFuU+ZjNTA1MScoVf8HSn0IWurUzSJvthLc5Aysv4bM64rWz25GYCasgA3oR?=
- =?us-ascii?Q?6ZsUwycU4FII6xkjKM5Fxu3nj9Ou/KIirMwitJf8l80N1cYlWaoQxA0O46RB?=
- =?us-ascii?Q?u/ENQyzPsbbwkjyFqsiiFENQpZqLoXp0LcJtaV8uuTFRFM+A/rkxCk+CDpae?=
- =?us-ascii?Q?JXvEsB2X+SR59TWrpIKoR2bZpWWfPjmym+B4kPhsD4Ti002Zlp1ZcIvYxwqG?=
- =?us-ascii?Q?G7jD5WuptjdB7Xs4Jhj+W4eWIS90GwIZzLJsopd8PFV5s43ogqWjTl0O+ims?=
- =?us-ascii?Q?ymJUU/2PKMSk8LyWnESTJ8Hs4Q+M716DhydglUEl1UiX1/300Rh1p/bBWYMN?=
- =?us-ascii?Q?soFBS14RHdl/HMQa2NqwHBtosC4+Ebl4Tb+aG0ym3/z1uBsrtstsPjTfByit?=
- =?us-ascii?Q?vFMWkXT2nZ5piOOs1uTiPft5luK96Vk2mm1MQdGl4NDC5oF0aVmqGHIz11ZY?=
- =?us-ascii?Q?QQx8JlPtviRfaJzEbxmCQ5JcrrzLbgTM7OmSr/I/g2W7UtZTRsh7cRa+neJn?=
- =?us-ascii?Q?FpOjv7mmZJ/vPuQPlD6vJYZ/fvC0Wd49YkRjZXTFZtWJ0quPL4UEHKrnnNzY?=
- =?us-ascii?Q?cU51KxY8E+A4pAV8OU4+ndgFt8/YtR1bViqLp0sVsL+5HobNeMJJPqezQZYj?=
- =?us-ascii?Q?rtOcWB0sQhyNF3iVhZRi8uZQr2DlLzGN/O1QS7qrMMDj53Qjyfqp67Cd1hc5?=
- =?us-ascii?Q?SxWxp0t6+TMbQx/MemxtziYx5LG8Ajixn/8slAp4L4NLgaDe+1l5xoquBGXj?=
- =?us-ascii?Q?bVW2nT8NqNGr4//NpF99U9UQq0/OkweWmMhW+pq9V3LvjpW6tSBMzQGRAMM7?=
- =?us-ascii?Q?LBnlVfVUeo0nFWMC0IIXpSS2eASCzEZy0SSGidnz14rC1ljkq+dl6dao+UHP?=
- =?us-ascii?Q?lC50GMn2fxdDa4hh9tK0IZczeaoupBF0xxckIgRVK7MaXVuvbTZKcFJ8MBr1?=
- =?us-ascii?Q?qSDv6ZFJdouE5+C2Wj0HELylRHTdijEYU2I415j1jxule+y6XrQSD+d5b0ZV?=
- =?us-ascii?Q?wxrZu/sEKEV0AvkCbfGMT7/hQUFfwW3gEsOlULNrC6+SnEBuvt0DCu2quAqF?=
- =?us-ascii?Q?8AFIRFggOu9IltKFEiib0gZw6z7fU9Wat2uM1LE5blkwCbtqEmCOlBx0kTbV?=
- =?us-ascii?Q?cqQpibZjbZb6FfNq+aDZowk5zXQAk+fc/r8OKc8cuImRmAEe4NZVziXxeHDl?=
- =?us-ascii?Q?X3gXJo/dPt+fHCXptnjUXSPXPbhzN95Q/T7AmhK+gBQkeRifHglXsGaAq8H2?=
- =?us-ascii?Q?BuO6dfrS2DmxKASsnIT/XDrKTNGoRkIQ/7XA1tESpUq97mZwfe5Ji6W1jkmT?=
- =?us-ascii?Q?4YJT4ngqiTvNdEI+/a/4ZDtqrQHEjXfnoXyvNvJPn+Z8SwlU1xdlV2M/nj6D?=
- =?us-ascii?Q?vjOeIFH6pX4SQElWlObqSftLTck6V8+nsnTY0i1HXIBsuvbd0awPNlwQEwuu?=
- =?us-ascii?Q?waBtdxa+QiVlFd+tD/5k2LKEtng/YArvDIwj8s5v3kUnl2fPD3vF8DUwrsG4?=
- =?us-ascii?Q?fD0a4gHrJUXWztdWFhU=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 833c1d84-671d-4834-3165-08d9ba4c994a
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 13:14:00.4493
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eEgU7R2yuRPSU+s831g0ipC53TPxyhw4fhx4pMNs1dmVUlNlxTAkUQ1+Ncr+cXPI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5064
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2Kwb5oVAMSDQ1L2h2UzcDm989cGbeJ4c
+X-Proofpoint-ORIG-GUID: MypQAALQQLb8KXMst83InBSVVo70XQDS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 suspectscore=0 impostorscore=0 malwarescore=0 bulkscore=0
+ clxscore=1015 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080089
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 05:47:14AM -0800, Jacob Pan wrote:
-> In-kernel DMA should be managed by DMA mapping API. The existing kernel
-> PASID support is based on the SVA machinery in SVA lib that is intended
-> for user process SVA. The binding between a kernel PASID and kernel
-> mapping has many flaws. See discussions in the link below.
+On Tue,  7 Dec 2021 15:57:16 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+
+> A subsequent patch will introduce an airq handler that requires additional
+> TPI information beyond directed vs floating, so pass the entire tpi_info
+> structure via the handler.  Only pci actually uses this information today,
+> for the other airq handlers this is effectively a no-op.
 > 
-> This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform DMA
-> requests with PASID under the same mapping managed by DMA mapping API.
-> In addition, SVA-related bits for kernel DMA are removed. As a result,
-> DSA users shall use DMA mapping API to obtain DMA handles instead of
-> using kernel virtual addresses.
+> Reviewed-by: Eric Farman <farman@linux.ibm.com>
 
-Er, shouldn't this be adding dma_map/etc type calls?
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-You can't really say a driver is using the DMA API without actually
-calling the DMA API..
-
-> +	/*
-> +	 * Try to enable both in-kernel and user DMA request with PASID.
-> +	 * PASID is supported unless both user and kernel PASID are
-> +	 * supported. Do not fail probe here in that idxd can still be
-> +	 * used w/o PASID or IOMMU.
-> +	 */
-> +	if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) ||
-> +		idxd_enable_system_pasid(idxd)) {
-> +		dev_warn(dev, "Failed to enable PASID\n");
-> +	} else {
-> +		set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>  arch/s390/include/asm/airq.h     | 3 ++-
+>  arch/s390/kvm/interrupt.c        | 4 +++-
+>  arch/s390/pci/pci_irq.c          | 9 +++++++--
+>  drivers/s390/cio/airq.c          | 2 +-
+>  drivers/s390/cio/qdio_thinint.c  | 6 ++++--
+>  drivers/s390/crypto/ap_bus.c     | 9 ++++++---
+>  drivers/s390/virtio/virtio_ccw.c | 4 +++-
+>  7 files changed, 26 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/airq.h b/arch/s390/include/asm/airq.h
+> index 01936fdfaddb..7918a7d09028 100644
+> --- a/arch/s390/include/asm/airq.h
+> +++ b/arch/s390/include/asm/airq.h
+> @@ -12,10 +12,11 @@
+>  
+>  #include <linux/bit_spinlock.h>
+>  #include <linux/dma-mapping.h>
+> +#include <asm/tpi.h>
+>  
+>  struct airq_struct {
+>  	struct hlist_node list;		/* Handler queueing. */
+> -	void (*handler)(struct airq_struct *airq, bool floating);
+> +	void (*handler)(struct airq_struct *airq, struct tpi_info *tpi_info);
+>  	u8 *lsi_ptr;			/* Local-Summary-Indicator pointer */
+>  	u8 lsi_mask;			/* Local-Summary-Indicator mask */
+>  	u8 isc;				/* Interrupt-subclass */
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index c3bd993fdd0c..f9b872e358c6 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -28,6 +28,7 @@
+>  #include <asm/switch_to.h>
+>  #include <asm/nmi.h>
+>  #include <asm/airq.h>
+> +#include <asm/tpi.h>
+>  #include "kvm-s390.h"
+>  #include "gaccess.h"
+>  #include "trace-s390.h"
+> @@ -3261,7 +3262,8 @@ int kvm_s390_gisc_unregister(struct kvm *kvm, u32 gisc)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_s390_gisc_unregister);
+>  
+> -static void gib_alert_irq_handler(struct airq_struct *airq, bool floating)
+> +static void gib_alert_irq_handler(struct airq_struct *airq,
+> +				  struct tpi_info *tpi_info)
+>  {
+>  	inc_irq_stat(IRQIO_GAL);
+>  	process_gib_alert_list();
+> diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+> index 954bb7a83124..880bcd73f11a 100644
+> --- a/arch/s390/pci/pci_irq.c
+> +++ b/arch/s390/pci/pci_irq.c
+> @@ -11,6 +11,7 @@
+>  
+>  #include <asm/isc.h>
+>  #include <asm/airq.h>
+> +#include <asm/tpi.h>
+>  
+>  static enum {FLOATING, DIRECTED} irq_delivery;
+>  
+> @@ -216,8 +217,11 @@ static void zpci_handle_fallback_irq(void)
 >  	}
+>  }
+>  
+> -static void zpci_directed_irq_handler(struct airq_struct *airq, bool floating)
+> +static void zpci_directed_irq_handler(struct airq_struct *airq,
+> +				      struct tpi_info *tpi_info)
+>  {
+> +	bool floating = !tpi_info->directed_irq;
+> +
+>  	if (floating) {
+>  		inc_irq_stat(IRQIO_PCF);
+>  		zpci_handle_fallback_irq();
+> @@ -227,7 +231,8 @@ static void zpci_directed_irq_handler(struct airq_struct *airq, bool floating)
+>  	}
+>  }
+>  
+> -static void zpci_floating_irq_handler(struct airq_struct *airq, bool floating)
+> +static void zpci_floating_irq_handler(struct airq_struct *airq,
+> +				      struct tpi_info *tpi_info)
+>  {
+>  	unsigned long si, ai;
+>  	struct airq_iv *aibv;
+> diff --git a/drivers/s390/cio/airq.c b/drivers/s390/cio/airq.c
+> index e56535c99888..2f2226786319 100644
+> --- a/drivers/s390/cio/airq.c
+> +++ b/drivers/s390/cio/airq.c
+> @@ -99,7 +99,7 @@ static irqreturn_t do_airq_interrupt(int irq, void *dummy)
+>  	rcu_read_lock();
+>  	hlist_for_each_entry_rcu(airq, head, list)
+>  		if ((*airq->lsi_ptr & airq->lsi_mask) != 0)
+> -			airq->handler(airq, !tpi_info->directed_irq);
+> +			airq->handler(airq, tpi_info);
+>  	rcu_read_unlock();
+>  
+>  	return IRQ_HANDLED;
+> diff --git a/drivers/s390/cio/qdio_thinint.c b/drivers/s390/cio/qdio_thinint.c
+> index 8e09bf3a2fcd..9b9335dd06db 100644
+> --- a/drivers/s390/cio/qdio_thinint.c
+> +++ b/drivers/s390/cio/qdio_thinint.c
+> @@ -15,6 +15,7 @@
+>  #include <asm/qdio.h>
+>  #include <asm/airq.h>
+>  #include <asm/isc.h>
+> +#include <asm/tpi.h>
+>  
+>  #include "cio.h"
+>  #include "ioasm.h"
+> @@ -93,9 +94,10 @@ static inline u32 clear_shared_ind(void)
+>  /**
+>   * tiqdio_thinint_handler - thin interrupt handler for qdio
+>   * @airq: pointer to adapter interrupt descriptor
+> - * @floating: flag to recognize floating vs. directed interrupts (unused)
+> + * @tpi_info: interrupt information (e.g. floating vs directed -- unused)
+>   */
+> -static void tiqdio_thinint_handler(struct airq_struct *airq, bool floating)
+> +static void tiqdio_thinint_handler(struct airq_struct *airq,
+> +				   struct tpi_info *tpi_info)
+>  {
+>  	u64 irq_time = S390_lowcore.int_clock;
+>  	u32 si_used = clear_shared_ind();
+> diff --git a/drivers/s390/crypto/ap_bus.c b/drivers/s390/crypto/ap_bus.c
+> index 1986243f9cd3..df1a038442db 100644
+> --- a/drivers/s390/crypto/ap_bus.c
+> +++ b/drivers/s390/crypto/ap_bus.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/mutex.h>
+>  #include <asm/airq.h>
+> +#include <asm/tpi.h>
+>  #include <linux/atomic.h>
+>  #include <asm/isc.h>
+>  #include <linux/hrtimer.h>
+> @@ -129,7 +130,8 @@ static int ap_max_adapter_id = 63;
+>  static struct bus_type ap_bus_type;
+>  
+>  /* Adapter interrupt definitions */
+> -static void ap_interrupt_handler(struct airq_struct *airq, bool floating);
+> +static void ap_interrupt_handler(struct airq_struct *airq,
+> +				 struct tpi_info *tpi_info);
+>  
+>  static bool ap_irq_flag;
+>  
+> @@ -442,9 +444,10 @@ static enum hrtimer_restart ap_poll_timeout(struct hrtimer *unused)
+>  /**
+>   * ap_interrupt_handler() - Schedule ap_tasklet on interrupt
+>   * @airq: pointer to adapter interrupt descriptor
+> - * @floating: ignored
+> + * @tpi_info: ignored
+>   */
+> -static void ap_interrupt_handler(struct airq_struct *airq, bool floating)
+> +static void ap_interrupt_handler(struct airq_struct *airq,
+> +				 struct tpi_info *tpi_info)
+>  {
+>  	inc_irq_stat(IRQIO_APB);
+>  	tasklet_schedule(&ap_tasklet);
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index d35e7a3f7067..52c376d15978 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -33,6 +33,7 @@
+>  #include <asm/virtio-ccw.h>
+>  #include <asm/isc.h>
+>  #include <asm/airq.h>
+> +#include <asm/tpi.h>
+>  
+>  /*
+>   * virtio related functions
+> @@ -203,7 +204,8 @@ static void drop_airq_indicator(struct virtqueue *vq, struct airq_info *info)
+>  	write_unlock_irqrestore(&info->lock, flags);
+>  }
+>  
+> -static void virtio_airq_handler(struct airq_struct *airq, bool floating)
+> +static void virtio_airq_handler(struct airq_struct *airq,
+> +				struct tpi_info *tpi_info)
+>  {
+>  	struct airq_info *info = container_of(airq, struct airq_info, airq);
+>  	unsigned long ai;
 
-Huh? How can the driver keep going if PASID isn't supported? I thought
-the whole point of this was because the device cannot do DMA without
-PASID at all?
-
-Jason

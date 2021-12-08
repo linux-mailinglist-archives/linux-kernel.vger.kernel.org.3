@@ -2,190 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF44346DCE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D4C46DCE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240158AbhLHUVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 15:21:44 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:38324 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbhLHUVm (ORCPT
+        id S240145AbhLHUVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 15:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232356AbhLHUVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 15:21:42 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:51438)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mv3OC-00GZa0-On; Wed, 08 Dec 2021 13:18:08 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:39158 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mv3O9-007SGF-QD; Wed, 08 Dec 2021 13:18:08 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     <linux-kernel@vger.kernel.org>
-Cc:     <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Date:   Wed, 08 Dec 2021 14:17:22 -0600
-Message-ID: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mv3O9-007SGF-QD;;;mid=<87a6ha4zsd.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+3FWH/ytp2ZJTTsaTvzANvNSYQqitFkJE=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,FVGT_m_MULTI_ODD,T_TooManySym_01,XMNoVowels
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;<linux-kernel@vger.kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1104 ms - load_scoreonly_sql: 0.18 (0.0%),
-        signal_user_changed: 13 (1.2%), b_tie_ro: 11 (1.0%), parse: 1.93
-        (0.2%), extract_message_metadata: 9 (0.8%), get_uri_detail_list: 4.6
-        (0.4%), tests_pri_-1000: 7 (0.6%), tests_pri_-950: 2.1 (0.2%),
-        tests_pri_-900: 1.59 (0.1%), tests_pri_-90: 125 (11.3%), check_bayes:
-        122 (11.1%), b_tokenize: 21 (1.9%), b_tok_get_all: 12 (1.1%),
-        b_comp_prob: 5 (0.5%), b_tok_touch_all: 79 (7.1%), b_finish: 1.07
-        (0.1%), tests_pri_0: 909 (82.4%), check_dkim_signature: 0.99 (0.1%),
-        check_dkim_adsp: 3.6 (0.3%), poll_dns_idle: 0.90 (0.1%), tests_pri_10:
-        3.5 (0.3%), tests_pri_500: 17 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 00/10] Removal of most do_exit calls
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+        Wed, 8 Dec 2021 15:21:11 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5926FC061746;
+        Wed,  8 Dec 2021 12:17:39 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id k21so4168297ioh.4;
+        Wed, 08 Dec 2021 12:17:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=1IlLvcNlcDJQez/IYxBKSedQgBs5DpWYIT3HtbvTn/U=;
+        b=mxu9JbEUJ+Pjv54HKBrBNHCLKoxNi0tfhUxC9wBtrfqdivylb7RF073IwuKy4vKc6a
+         La57De5dW5zpWkdPm77QS3HGKDsnlb0K9tVABG/t5ror6rlmYWyP1/zrpOXjESXbMvfW
+         8VZcfRGFaLDdCprXzio+VpHAlyxBjAU6zqdGRRz1dBUpWPRn8guxgb0FCSB6i3BBXyXS
+         dGiII+VlcYuUSlQQXM8dLHK0RQfbQKB9k+AmemZfXK97wtSTyhWphOXNbi4I6pXkgJUz
+         QqeEneIb9ebTAI7vBmmNOdvMBRrzGUy89dTFX3ykspqEEv4rPLGDRvzJLAwBx0b2Oe56
+         xugw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=1IlLvcNlcDJQez/IYxBKSedQgBs5DpWYIT3HtbvTn/U=;
+        b=uU9474+YyR24P+HB1JzzYBjzH0Gvjc3zfwoE7jVArsSRcO3D6AUOI8OJF+GKjnoA36
+         OI9h+LKqD33LPRC/Lj/egRP0nIrQ0zInQeopuJ8orzTCAUyimd8gKSHbNfO9ge0A2Nlw
+         1vQzf45+Mk0is9adj3LbQ/Ksux2X8q3whGDCoDHT6U2Oxqe3Fi+3Vw+o8UokfcAKjywR
+         uRUNZqlliH+Og2xemxwMQ1wapNFuV7e2ICn8pg6Zsma0l1PKJi7BhQcMlWY/D5LvjStx
+         aWF7l19DqB3qAr83W64fEHg1G8vFUFEW/AMzhYmg+ILBmLJrvIJbnpkSJtyN4bjdSC/l
+         96gQ==
+X-Gm-Message-State: AOAM5312j99kVRikZEbL30cM5VPp2y0tVEtYXCwkdLBCQGQNuNwbtFFn
+        WTBJpGgizqS8CHoyvrRiLt0zBVaxJLe1Xw==
+X-Google-Smtp-Source: ABdhPJzlpDudPI4/6dCizKa+bIRsa8n3xcxcMKehFOVquxdBUnIHqkdhpAk7z23teoRMpoYw7Un1sA==
+X-Received: by 2002:a05:6638:24ca:: with SMTP id y10mr2280676jat.109.1638994658649;
+        Wed, 08 Dec 2021 12:17:38 -0800 (PST)
+Received: from localhost ([172.243.151.11])
+        by smtp.gmail.com with ESMTPSA id q4sm2585797ilj.7.2021.12.08.12.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 12:17:37 -0800 (PST)
+Date:   Wed, 08 Dec 2021 12:17:30 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Luca Boccassi <bluca@debian.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Message-ID: <61b112daa1b84_94d5c208c7@john.notmuch>
+In-Reply-To: <f63bef1a56b12a06ed980f9b5e094f84f2434333.camel@debian.org>
+References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
+ <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
+ <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
+ <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
+ <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
+ <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
+ <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
+ <CAADnVQ+WLGiQvaoTPwu_oRj54h4oMwh-z5RV0WAMFRA9Wco_iA@mail.gmail.com>
+ <61aae2da8c7b0_68de0208dd@john.notmuch>
+ <0079fd757676e62f45f28510a5fd13a9996870be.camel@debian.org>
+ <61ae75487d445_c5bd20827@john.notmuch>
+ <7ae146389b58f521166e9569be6c64f87359777a.camel@debian.org>
+ <f63bef1a56b12a06ed980f9b5e094f84f2434333.camel@debian.org>
+Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[...]
 
-We have a lot of calls to do_exit that really don't want the semantics
-of userspace calling pthread_exit, aka exit(2).  Instead the interesting
-semantics are those of the current task exiting.
+> > > > Hope this makes sense. Thanks!
+> > > =
 
-This set of changes removes a dead reference to do_exit on s390,
-adds a function make_task_dead and changes all of the oops
-implementations to use it, and adds function kthread_exit and
-changes all of the kthread exits to use it.
+> > > I think I understand your use case. When done as BPF helper you
+> > > can get the behavior you want with a one line BPF program
+> > > loaded at boot.
+> > > =
 
-The short term win of this set of changes is being able to move many
-sanity checks out of do_exit that are only really interesting during an
-oops.  Making it easier to see what do_exit is actually doing.
+> > > int verify_all(struct bpf_prog **prog) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return verify_signa=
+ture(prog->insn,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0prog->len * sizeof(struct=
+ bpf_insn),
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 signature, KEYRING, BPF_SIGTYP=
+E);
+> > > }
+> > > =
 
-After this set of changes the number there are only about a big screen
-full of do_exit calls left.  Making future changes much easier to
-review.
+> > > And I can write some more specific things as,
+> > > =
 
-s390 folks.  Can you please verify I read the s390 code correctly when
-observing the reference to do_exit really is dead?  I would really
-appreciate it.  I am not very familiar with s390.
+> > > int verify_blobs(void data) {
+> > > =C2=A0 int reject =3D verify_signature(data, data_len, sig, KEYRING=
+, TYPE);
+> > > =C2=A0 struct policy_key *key =3D map_get_key();
+> > > =
 
-This is on top of:
-https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/ signal-for-v5.17
+> > > =C2=A0 return policy(key, reject);=C2=A0 =
 
-It is my plan that after these changes are reviewed to apply these
-changes into my signal-for-v5.17 branch.  After that I can get to
-cleaning up where signals, coredumps and the exit code meets.
+> > > }
+> > > =
 
-Eric W. Biederman (10):
-      exit/s390: Remove dead reference to do_exit from copy_thread
-      exit: Add and use make_task_dead.
-      exit: Move oops specific logic from do_exit into make_task_dead
-      exit: Stop poorly open coding do_task_dead in make_task_dead
-      exit: Stop exporting do_exit
-      exit: Implement kthread_exit
-      exit: Rename module_put_and_exit to module_put_and_kthread_exit
-      exit: Rename complete_and_exit to kthread_complete_and_exit
-      kthread: Ensure struct kthread is present for all kthreads
-      exit/kthread: Move the exit code for kernel threads into struct kthread
+> > > map_get_key() looks into some datastor with the policy likely using=
 
- arch/alpha/kernel/traps.c                    |  6 +-
- arch/alpha/mm/fault.c                        |  2 +-
- arch/arm/kernel/traps.c                      |  2 +-
- arch/arm/mm/fault.c                          |  2 +-
- arch/arm64/kernel/traps.c                    |  2 +-
- arch/arm64/mm/fault.c                        |  2 +-
- arch/csky/abiv1/alignment.c                  |  2 +-
- arch/csky/kernel/traps.c                     |  2 +-
- arch/csky/mm/fault.c                         |  2 +-
- arch/h8300/kernel/traps.c                    |  2 +-
- arch/h8300/mm/fault.c                        |  2 +-
- arch/hexagon/kernel/traps.c                  |  2 +-
- arch/ia64/kernel/mca_drv.c                   |  2 +-
- arch/ia64/kernel/traps.c                     |  2 +-
- arch/ia64/mm/fault.c                         |  2 +-
- arch/m68k/kernel/traps.c                     |  2 +-
- arch/m68k/mm/fault.c                         |  2 +-
- arch/microblaze/kernel/exceptions.c          |  4 +-
- arch/mips/kernel/traps.c                     |  2 +-
- arch/nds32/kernel/fpu.c                      |  2 +-
- arch/nds32/kernel/traps.c                    |  8 +--
- arch/nios2/kernel/traps.c                    |  4 +-
- arch/openrisc/kernel/traps.c                 |  2 +-
- arch/parisc/kernel/traps.c                   |  2 +-
- arch/powerpc/kernel/traps.c                  |  8 +--
- arch/riscv/kernel/traps.c                    |  2 +-
- arch/riscv/mm/fault.c                        |  2 +-
- arch/s390/kernel/dumpstack.c                 |  2 +-
- arch/s390/kernel/nmi.c                       |  2 +-
- arch/s390/kernel/process.c                   |  1 -
- arch/sh/kernel/traps.c                       |  2 +-
- arch/sparc/kernel/traps_32.c                 |  4 +-
- arch/sparc/kernel/traps_64.c                 |  4 +-
- arch/x86/entry/entry_32.S                    |  6 +-
- arch/x86/entry/entry_64.S                    |  6 +-
- arch/x86/kernel/dumpstack.c                  |  4 +-
- arch/xtensa/kernel/traps.c                   |  2 +-
- crypto/algboss.c                             |  4 +-
- drivers/net/wireless/rsi/rsi_91x_coex.c      |  2 +-
- drivers/net/wireless/rsi/rsi_91x_main.c      |  2 +-
- drivers/net/wireless/rsi/rsi_91x_sdio_ops.c  |  2 +-
- drivers/net/wireless/rsi/rsi_91x_usb_ops.c   |  2 +-
- drivers/pnp/pnpbios/core.c                   |  6 +-
- drivers/staging/rts5208/rtsx.c               | 16 ++---
- drivers/usb/atm/usbatm.c                     |  2 +-
- drivers/usb/gadget/function/f_mass_storage.c |  2 +-
- fs/cifs/connect.c                            |  2 +-
- fs/exec.c                                    |  2 +
- fs/jffs2/background.c                        |  2 +-
- fs/nfs/callback.c                            |  4 +-
- fs/nfs/nfs4state.c                           |  2 +-
- fs/nfsd/nfssvc.c                             |  2 +-
- include/linux/kernel.h                       |  1 -
- include/linux/kthread.h                      |  4 +-
- include/linux/module.h                       |  6 +-
- include/linux/sched/task.h                   |  1 +
- kernel/exit.c                                | 88 ++++++++++++++--------------
- kernel/fork.c                                |  4 ++
- kernel/futex/core.c                          |  2 +-
- kernel/kexec_core.c                          |  2 +-
- kernel/kthread.c                             | 78 +++++++++++++++++-------
- kernel/module.c                              |  6 +-
- kernel/sched/core.c                          | 16 ++---
- lib/kunit/try-catch.c                        |  4 +-
- net/bluetooth/bnep/core.c                    |  2 +-
- net/bluetooth/cmtp/core.c                    |  2 +-
- net/bluetooth/hidp/core.c                    |  2 +-
- tools/objtool/check.c                        |  8 ++-
- 68 files changed, 212 insertions(+), 173 deletions(-)
+> > > 'current' to dig something up. It doesn't just apply to BPF progs
+> > > we can use it on other executables more generally. And I get more
+> > > interesting use cases like, allowing 'tc' programs unsigned, but
+> > > requiring kernel memory reads to require signatures or any N
+> > > other policies that may have value. Or only allowing my dbg user
+> > > to run read-only programs, because the dbg maybe shouldn't ever
+> > > be writing into packets, etc. Driving least privilege use cases
+> > > in fine detail.
+> > > =
 
-Eric
+> > > By making it a BPF program we side step the debate where the kernel=
+
+> > > tries to get the 'right' policy for you, me, everyone now and in
+> > > the future. The only way I can see to do this without getting N
+> > > policies baked into the kernel and at M different hook points is vi=
+a
+> > > a BPF helper.
+> > > =
+
+> > > Thanks,
+> > > John
+> > =
+
+> > Now this sounds like something that could work - we can prove that th=
+is
+> > could be loaded before any writable fs comes up anywhere, so in
+> > principle I think it would be acceptable and free of races. Matteo, w=
+e
+> > should talk about this tomorrow.
+> > And this requires some infrastructure work right? Is there a WIP git
+> > tree somewhere that we can test out?
+> > =
+
+> > Thank you!
+> =
+
+
+I don't have a WIP tree, but I believe it should be fairly easy.
+First I would add a wrapper BPF helper for verify_signature() so
+we can call it from fentry/freturn context. That can be done on
+its own IMO as its a generally useful operation.
+
+Then I would stub a hook point into the BPF load path. The exact
+place to put this is going to have some debate I think, but I
+would place it immediately after the check_bpf call.
+
+With above two you have enough to do sig verification iiuc.
+
+Early boot loading I would have to check its current status. But I know
+folks have been working on it. Maybe its done?
+
+> One question more question: with the signature + kconfig approach,
+> nothing can disable the signature check. But if the signature checker
+> is itself a bpf program, is there/can there be anything stopping root
+> from unloading it?
+
+Interesting. Not that I'm aware of. Currently something with sufficient
+privileges could unload the program. Maybe we should have a flag so
+early boot programs can signal they shouldn't be unloaded ever. I would
+be OK with this and also seems generally useful. I have a case where
+I want to always set the socket cookie and we leave it running all the
+time. It would be nice if it came up and was pinned at boot.
+
+Maybe slightly better than a flag would be to have a new CAP support
+that only early boot has like CAP_BPF_EARLY. From my point of view
+this both seems doable with just some smallish changes on BPF side.
+
+Thanks,
+John=

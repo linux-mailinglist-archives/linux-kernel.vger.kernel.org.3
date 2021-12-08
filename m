@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D589D46CA57
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0316446CA5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243197AbhLHB6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S243227AbhLHB6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbhLHB6Q (ORCPT
+        with ESMTP id S234060AbhLHB6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:58:16 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B91DC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:54:45 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id j3-20020a634a43000000b00325af3ab5f0so435633pgl.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:54:45 -0800 (PST)
+        Tue, 7 Dec 2021 20:58:20 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5D8C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:54:49 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id e12-20020aa7980c000000b0049fa3fc29d0so689059pfl.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:54:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=JPQ6j/8Xcv0ZDoVXkCoBftcZyNezl+x5YdkfDBVpnRI=;
-        b=qAqDIWUEHqQyDYxwc0+4yVfPyvyNpDFCJVxAudjYg2EtOtdKAPSrzURp++VyziDdd4
-         +sZTKUjhSYuPd8BT/jGf92EPsIMU5itBK3Mgwpr7S/TnW98GgL/OMOr1plBEbRiAibw8
-         xcOVwxCb8wL+Aj4nGsObFCq7lkhljjtdfD3bDJTmAWWewZvJ3TFRNyvAdXFoVWVozYKV
-         Wbk017UDqhXPuGbPPpUYMY7bRDsqCQYs57AZqbAsbhB39e4U7hm2IZecAv9nuLRPnF4o
-         f5P3BfzEjv2BjzRG0vyhp9Z+O5hJU5RL0U+joxSgtorf336zBd+XOm1O1U3g5fu4mSg+
-         WEYg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=t+Ei0itOPUqCS4bP4MpGZr4Y0AKiyZYQUO3shvC6OH4=;
+        b=k2YwbuxAPGemjRBHL7uFYlBdoruRLQIFroSCqiVqW7M9ZBvnUQQ9jGvvoRM5wp50BU
+         zIgGQ7HGQFBmuNg7A+QIp+NCeTdN/K7rIpyetOEYv0fFftMX25G2HHMkN4qtIQ0LfZMv
+         nEZ0SJpr3uyAnIWFfnfoFOuoynn+5sugfYnXc8Zu5xGttDxjBfbR1pzNtBX3wmGo5Eh4
+         tc+DrZgmJZQlP0JmnQUhMMdwg4C1ob1gWVBL3GTQuYBEqUYWxacTaSRVkDaRkCGPvyNC
+         fBrkeiQfSYOSRFEFYUtRYvG8vJlWJMCUTEIGnMXeL5T96k3SQN4J7z95j0CLBBRC0fn1
+         ygmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=JPQ6j/8Xcv0ZDoVXkCoBftcZyNezl+x5YdkfDBVpnRI=;
-        b=rtq7yu8IoswcnRpEB6Qz4oVM/FKmsGblQ/ydaQajxyA2aTCjzE0+Hg0j2H7bmwnO+l
-         Pd2TR7wWDBrMxXRfKlLoIOUbdHSJGhU8APsQxK+YNr83nBncuTsYctEzq17ro+Tue4Jp
-         r2b8f0UqRNDYWaQAtclJAvK/YKfng9BlINwMfOnDw8GEopAHesi+awmS9iIviU2nSjLc
-         2J0/klijIzaIqM2zOSIagVbLg72VaAasQKaZr0+Wk0oKNyQsxhnA3YkR5YA0vkTYohu9
-         Wf+M97vzrQLViPD9+uiEKgZ37Z6LytJGmOYCKWt1Xk363O7m+92Y3DzBd7x1bDs3j6er
-         9yag==
-X-Gm-Message-State: AOAM533sPKQik5VMCc5VIgdJ/mwIE/EsOZyCFLxqyElMJCcJBEfroBr8
-        R6cfPEQkZ2NKx3K+nahWmom+sr0p6G4=
-X-Google-Smtp-Source: ABdhPJzxCNWX1tuxOjc/ou63x3Jxba7eb96x4TWBltqYeCrNS7u7paGPYAYB4fpGzXGrtX5cewu2W8J1gUc=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=t+Ei0itOPUqCS4bP4MpGZr4Y0AKiyZYQUO3shvC6OH4=;
+        b=HWnsosY/egKHD2gK6fczVrf1JZeK24L/w8xEoz99Tpz3ZyAML5hb9Pk2KiCqKJNpP0
+         r0g9wXVUemX0gjdfeI9V/NFm0f0tlumCmaUDySDVcO7OxBD60rLLLYEXrBfzdHf76xNA
+         RrzTTAsEgZ1b4X7Xr0GANiX6FJsxEkgQavxitqp8ReRcn+aRf+Nu0yJTEVrN0UBMY7rn
+         /8JgJb0qGJFoB40P99PsUD4znGYw9e10R/A+Qimbqze/ivkXAsuUS8kz2zz7imetr60c
+         uEvi6531tKoQFQjefSk+ibVPnLKfZbcwEvYdbE05mG6VABHG0353ttA+iQ6qrRgI2tv9
+         VMPQ==
+X-Gm-Message-State: AOAM530sE0+BY/UDoPnaLx3wLnTiOKXVPGExT54iEliQ1ScSkRro4dsH
+        i06nMuW132m5K7S6btg2LXIt9JocdVs=
+X-Google-Smtp-Source: ABdhPJydNGMZpFjjQ57G1ZC66ywbHz44PKREG9EyVwHjLHfG2SNsZYM0b6sqBp1lD+CDQVcAS7e/s6aPdYs=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1b52:: with SMTP id
- nv18mr3632061pjb.43.1638928484575; Tue, 07 Dec 2021 17:54:44 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1486:: with SMTP id
+ js6mr342701pjb.0.1638928488764; Tue, 07 Dec 2021 17:54:48 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  8 Dec 2021 01:52:10 +0000
-Message-Id: <20211208015236.1616697-1-seanjc@google.com>
+Date:   Wed,  8 Dec 2021 01:52:11 +0000
+In-Reply-To: <20211208015236.1616697-1-seanjc@google.com>
+Message-Id: <20211208015236.1616697-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20211208015236.1616697-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
+Subject: [PATCH v3 01/26] KVM: fix avic_set_running for preemptable kernels
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Joerg Roedel <joro@8bytes.org>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -64,83 +67,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Overhaul and cleanup APIC virtualization (Posted Interrupts on Intel VMX,
-AVIC on AMD SVM) to streamline things as much as possible, remove a bunch
-of cruft, and document the lurking gotchas along the way.
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-Patch 01 is a fix from Paolo that's already been merged but hasn't made
-its way to kvm/queue.  It's included here to avoid a number of conflicts.
+avic_set_running() passes the current CPU to avic_vcpu_load(), albeit
+via vcpu->cpu rather than smp_processor_id().  If the thread is migrated
+while avic_set_running runs, the call to avic_vcpu_load() can use a stale
+value for the processor id.  Avoid this by blocking preemption over the
+entire execution of avic_set_running().
 
-Based on kvm/queue, commit 1cf84614b04a ("KVM: x86: Exit to ...")
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Not-signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/avic.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-v3:
- - Rebase to kvm/queue (and drop non-x86 patches as they've been queued). 
- - Redo AVIC patches, sadly the vcpu_(un)blocking() hooks need to stay.
- - Add a patch to fix a missing (docuentation-only) barrier in nested
-   posted interrupt delivery. [Paolo]
- - Collect reviews.
-
-v2:
- - https://lore.kernel.org/all/20211009021236.4122790-1-seanjc@google.com/
- - Collect reviews. [Christian, David]
- - Add patch to move arm64 WFI functionality out of hooks. [Marc]
- - Add RISC-V to the fun.
- - Add all the APICv fun.
-
-v1: https://lkml.kernel.org/r/20210925005528.1145584-1-seanjc@google.com
-
-Paolo Bonzini (1):
-  KVM: fix avic_set_running for preemptable kernels
-
-Sean Christopherson (25):
-  KVM: nVMX: Ensure vCPU honors event request if posting nested IRQ
-    fails
-  KVM: VMX: Clean up PI pre/post-block WARNs
-  KVM: VMX: Handle PI wakeup shenanigans during vcpu_put/load
-  KVM: Drop unused kvm_vcpu.pre_pcpu field
-  KVM: Move x86 VMX's posted interrupt list_head to vcpu_vmx
-  KVM: VMX: Move preemption timer <=> hrtimer dance to common x86
-  KVM: x86: Unexport LAPIC's switch_to_{hv,sw}_timer() helpers
-  KVM: x86: Remove defunct pre_block/post_block kvm_x86_ops hooks
-  KVM: SVM: Signal AVIC doorbell iff vCPU is in guest mode
-  KVM: SVM: Don't bother checking for "running" AVIC when kicking for
-    IPIs
-  KVM: SVM: Remove unnecessary APICv/AVIC update in vCPU unblocking path
-  KVM: SVM: Use kvm_vcpu_is_blocking() in AVIC load to handle preemption
-  KVM: SVM: Skip AVIC and IRTE updates when loading blocking vCPU
-  iommu/amd: KVM: SVM: Use pCPU to infer IsRun state for IRTE
-  KVM: VMX: Don't do full kick when triggering posted interrupt "fails"
-  KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this
-    vCPU
-  KVM: VMX: Pass desired vector instead of bool for triggering posted
-    IRQ
-  KVM: VMX: Fold fallback path into triggering posted IRQ helper
-  KVM: VMX: Don't do full kick when handling posted interrupt wakeup
-  KVM: SVM: Drop AVIC's intermediate avic_set_running() helper
-  KVM: SVM: Move svm_hardware_setup() and its helpers below svm_x86_ops
-  KVM: SVM: Nullify vcpu_(un)blocking() hooks if AVIC is disabled
-  KVM: x86: Skip APICv update if APICv is disable at the module level
-  KVM: x86: Drop NULL check on kvm_x86_ops.check_apicv_inhibit_reasons
-  KVM: x86: Unexport __kvm_request_apicv_update()
-
- arch/x86/include/asm/kvm-x86-ops.h |   2 -
- arch/x86/include/asm/kvm_host.h    |  12 -
- arch/x86/kvm/hyperv.c              |   3 +
- arch/x86/kvm/lapic.c               |   2 -
- arch/x86/kvm/svm/avic.c            | 116 ++++---
- arch/x86/kvm/svm/svm.c             | 479 ++++++++++++++---------------
- arch/x86/kvm/svm/svm.h             |  16 +-
- arch/x86/kvm/vmx/posted_intr.c     | 234 +++++++-------
- arch/x86/kvm/vmx/posted_intr.h     |   8 +-
- arch/x86/kvm/vmx/vmx.c             |  66 ++--
- arch/x86/kvm/vmx/vmx.h             |   3 +
- arch/x86/kvm/x86.c                 |  41 ++-
- drivers/iommu/amd/iommu.c          |   6 +-
- include/linux/amd-iommu.h          |   6 +-
- include/linux/kvm_host.h           |   3 -
- virt/kvm/kvm_main.c                |   3 -
- 16 files changed, 510 insertions(+), 490 deletions(-)
-
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 1d8ada5b01f8..d7132a4551a2 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -997,16 +997,18 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+ static void avic_set_running(struct kvm_vcpu *vcpu, bool is_run)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
++	int cpu = get_cpu();
+ 
++	WARN_ON(cpu != vcpu->cpu);
+ 	svm->avic_is_running = is_run;
+ 
+-	if (!kvm_vcpu_apicv_active(vcpu))
+-		return;
+-
+-	if (is_run)
+-		avic_vcpu_load(vcpu, vcpu->cpu);
+-	else
+-		avic_vcpu_put(vcpu);
++	if (kvm_vcpu_apicv_active(vcpu)) {
++		if (is_run)
++			avic_vcpu_load(vcpu, cpu);
++		else
++			avic_vcpu_put(vcpu);
++	}
++	put_cpu();
+ }
+ 
+ void svm_vcpu_blocking(struct kvm_vcpu *vcpu)
 -- 
 2.34.1.400.ga245620fadb-goog
 

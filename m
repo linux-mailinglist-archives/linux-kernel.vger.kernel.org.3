@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B097A46D6D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F5B46D6DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235923AbhLHPZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:25:11 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59888 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235895AbhLHPZJ (ORCPT
+        id S235938AbhLHPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:25:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36206 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235927AbhLHPZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:25:09 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8DHgxN009674;
-        Wed, 8 Dec 2021 15:21:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=toawrVvCPUHpquufnA13Q37Azo2nGAGLi9oPn89p26o=;
- b=BjHblkrI34tFTT0g634fePquHwWgtzK1rxOR3hdEe2SBlbxNRWTobg4CFWOeSipOI9zc
- GyhNpLSs9hrBPsaLNCslaqpdTQ4TNmhNcpcWvD02XTEG0H5AWFAQt+glCIAQpv0mtqah
- cq+ePOAQMwrsT4TjkFdz9wr2gV26gBAh5qU9EjGD82tBTo7c7jgcebBdQtLBm2jh13OR
- i1nSHwRHWEmtzgq+VNdUCmnFJOCpmBnpYqHu25ImmMOCnCmg26eGDPyqzmv6PaitbJ5O
- Z3Eglg6CpilTV0PVX1AGnt/2oOWqSiRDCMyUfz1tZmlCQPa9fwu2DgnC68A1Q/3IXXYq Hw== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctwfcapyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 15:21:33 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FCM4w028250;
-        Wed, 8 Dec 2021 15:21:32 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03wdc.us.ibm.com with ESMTP id 3cqyy8cdpn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 15:21:32 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8FLVOx50004464
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 15:21:31 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41B3AB206B;
-        Wed,  8 Dec 2021 15:21:31 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3F34B2065;
-        Wed,  8 Dec 2021 15:21:30 +0000 (GMT)
-Received: from localhost (unknown [9.211.99.77])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 15:21:30 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
-In-Reply-To: <21eb4749-42b1-da78-8833-00d360fa36e5@linux.ibm.com>
-References: <20211203154321.13168-1-ldufour@linux.ibm.com>
- <87bl1so588.fsf@linux.ibm.com>
- <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
- <878rwwny1l.fsf@linux.ibm.com>
- <21eb4749-42b1-da78-8833-00d360fa36e5@linux.ibm.com>
-Date:   Wed, 08 Dec 2021 09:21:29 -0600
-Message-ID: <874k7jnmva.fsf@linux.ibm.com>
+        Wed, 8 Dec 2021 10:25:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 523FDB8217E;
+        Wed,  8 Dec 2021 15:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19807C00446;
+        Wed,  8 Dec 2021 15:22:10 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 16:22:07 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
+Message-ID: <20211208152207.2uxfklsxom3moanz@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-17-stefanb@linux.ibm.com>
+ <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+ <dd43783ae76ad3238d99f75d8aaf95e20ad28b79.camel@HansenPartnership.com>
+ <20211208144634.rqwn3ccizrbzdq52@wittgenstein>
+ <0654f5befe3daa4915ed70be82c512b958a25c9a.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5SUFZv8zyIlLHlETlpA7y8qaT_Ol3sDl
-X-Proofpoint-ORIG-GUID: 5SUFZv8zyIlLHlETlpA7y8qaT_Ol3sDl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_06,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- spamscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
- suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080093
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0654f5befe3daa4915ed70be82c512b958a25c9a.camel@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> On 07/12/2021, 18:07:50, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
->>>> Is there a reasonable fallback for VMs where this parameter doesn't
->>>> exist? PowerVM partitions should always have it, but what do we want the
->>>> behavior to be on other hypervisors?
->>>
->>> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
->>> the lparstat -i command will fall back to the device tree value. I can't
->>> see any valid reason to report the value defined in the device tree
->>> here.
->> 
->> Here's a valid reason :-)
->> 
->> lparstat isn't the only possible consumer of the interface, and the
->> 'ibm,partition-name' property and the dynamic system parameter clearly
->> serve a common purpose. 'ibm,partition-name' is provided by qemu.
->
-> If the hypervisor is not providing this value, this is not the goal of this
-> interface to fetch it from the device tree.
->
-> Any consumer should be able to fall back on the device tree value, and
-> there is no added value to do such a trick in the kernel when it can be
-> done in the user space.
+On Wed, Dec 08, 2021 at 10:04:55AM -0500, James Bottomley wrote:
+> On Wed, 2021-12-08 at 15:46 +0100, Christian Brauner wrote:
+> > On Wed, Dec 08, 2021 at 09:11:09AM -0500, James Bottomley wrote:
+> > > On Wed, 2021-12-08 at 13:58 +0100, Christian Brauner wrote:
+> > > > On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
+> > > [...]
+> > > > > @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct
+> > > > > fs_context *fc)
+> > > > >  
+> > > > >  static void securityfs_kill_super(struct super_block *sb)
+> > > > >  {
+> > > > > +	struct user_namespace *ns = sb->s_fs_info;
+> > > > > +
+> > > > > +	if (ns != &init_user_ns)
+> > > > > +		ima_fs_ns_free_dentries(ns);
+> > > > 
+> > > > Say securityfs is unmounted. Then all the inodes and dentries
+> > > > become invalid. It's not allowed to hold on to any dentries or
+> > > > inodes after the super_block is shut down. So I just want to be
+> > > > sure that nothing in ima can access these dentries after
+> > > > securityfs is unmounted.
+> > > > 
+> > > > To put it another way: why are they stored in struct
+> > > > ima_namespace in the first place? If you don't pin a filesystem
+> > > > when creating files or directories like you do for securityfs in
+> > > > init_ima_ns then you don't need to hold on to them as they will
+> > > > be automatically be wiped during umount.
+> > > 
+> > > For IMA this is true because IMA can't be a module.  However, a
+> > > modular
+> > 
+> > This thread is about ima and its stashing of dentries in struct
+> > ima_namespace. That things might be different for other consumers is
+> > uninteresting for this specific case, I think.
+> 
+> Well, yes, but the patch series also includes namespacing securityfs. 
+> We have to get that right for all consumers, including the modular
+> ones.  So I think the way it works is we don't need a remove callback
+> in kill_sb() if we don't raise the dentry refcount in create.  However,
+> we still need to return the dentry to allow for stashing and we still
+> need to be able to cope with remove being called for the namespaced
+> entries ... for teardown on error in the IMA case and module
+> removal+teardown on error in other cases.
 
-There is value in imposing a level of abstraction so that the semantics
-are:
+This is a two-way street. Securityfs namespacing places requirements on
+the callers as well. I won't bend generic vfs infrastucture to our will
+because some users want to remove dentries at random points. It is on
+the users to make sure that they don't cause UAFs when securityfs is
+umounted. And that isn't that hard to do. You just need to guard removal
+in .kill_sb() with a lock against a concurrent securityfs_remove() call
+that some piece of code might want to issue and make sure that any
+stashed stuff is properly invalidated.
 
-* Report the name assigned to the guest by the hosting environment, if
-  available
-
-as opposed to
-
-* Return the string returned by a RTAS call to ibm,get-system-parameter
-  with token 55, if implemented
-
-The benefit is that consumers of lparcfg do not have to be coded with
-the knowledge that "if a partition_name= line is absent, the
-ibm,get-system-parameter RTAS call must have failed, so now I should
-read /sys/firmware/devicetree/base/ibm,partition_name." That's the sort
-of esoterica that is appropriate for the kernel to encapsulate.
-
-And I'd say the effort involved (falling back to a root node property
-lookup) is proportional to the benefit.
+The point is that we don't need all this right now since we only have
+ima as user. I did not say that it cannot be done I said we don't need
+to do it for ima. So I feel discussing this point further is deterring
+the patches more than it helps them.

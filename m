@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E0A46D131
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BEB46D135
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbhLHKos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:44:48 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:13814 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbhLHKos (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:44:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1638960077; x=1670496077;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=6efhgTwOQ+BksN3W7gKk5cPv0gbAT3aa2LCJO+xICYQ=;
-  b=Aq/fKIBSbz4nMVi204osP9jjuvLK2LvHSnTa5UDtRsVeX2J+dKPoyagp
-   o8q+mAOfLUUP+W54DaZI0wPBki+saLZvWwwuSHvKftZ5T4Jg9rgxTikbK
-   e4XPyBQBYOJYjUElF6dUnu7ZtXIVXv9P/rgsp4T8uJ3xdjHrmw9YByhHu
-   f5kgSRqnG6z0EyudTC1aXe0O/1m7g5HZNC1vhVJ1mXw4gJ4DegQ6M68ma
-   t7wJpWBRR8mk43VfWiUUTETc/wipuXsXCAo+j55DPo12Js6PBvnQDJDCD
-   jbgDSl9JccDLPCRPtdyJeY3wTF8R+m9Hf88cukwwt7vldQGbrDLHV0c+G
-   A==;
-IronPort-SDR: 7xfYPdqh5WDhRFwQy2okqjSInim4M7SOkW/D5djAO8OJCGLySXu5FfT+JZ6qWa/UETRCdcFiuq
- xaEIWSJv9e1BTSTNXZw35iTSlVslr9fwA6TmRvaxbL9WRiQgfcgoSqwBf+peR67tsLOfZ/n423
- coYIfMoGVHj9O6W1Ij0tNPh1v4Enk66Q1qiGELpenwx/nAI8SME0ZuWZnIi9EkPs4b1o1YW2Tl
- q4zepRxPAXfepy1HQtERDlH6Idqf54XsMGanoAwgWJ2GT2Xt2WDLId5gQ/3OLYiWmwS+owjzy1
- gPQd8Uj0ON4nqOV+R62PhiMw
+        id S231826AbhLHKqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:46:16 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61605 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229481AbhLHKqP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:46:15 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225063546"
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="141705605"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2021 03:41:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 8 Dec 2021 03:41:15 -0700
-Received: from [10.12.73.2] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Wed, 8 Dec 2021 03:41:13 -0700
-Subject: Re: [PATCH] dmaengine: at_xdmac: fix compilation warning
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <ludovic.desroches@microchip.com>, <tudor.ambarus@microchip.com>,
-        <vkoul@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20211025074002.722504-1-claudiu.beznea@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <abb29fac-b25d-e5cd-859a-020e08625b27@microchip.com>
-Date:   Wed, 8 Dec 2021 11:41:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+   d="scan'208";a="225063546"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:42:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="600594517"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2021 02:42:43 -0800
+Received: from MahaWorkThinkPad.amr.corp.intel.com (MahaWorkThinkPad.amr.corp.intel.com [10.252.128.137])
+        by linux.intel.com (Postfix) with ESMTP id A39B95806D1;
+        Wed,  8 Dec 2021 02:42:42 -0800 (PST)
+Message-ID: <e4bbeeec741c186090dc3da4fecfab034dde8d0f.camel@linux.intel.com>
+Subject: Re: [V2 4/6] platform/x86: Add Intel Software Defined Silicon driver
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Date:   Wed, 08 Dec 2021 02:42:42 -0800
+In-Reply-To: <YbBbZ+JMk9eEgNKl@unreal>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+         <20211207171448.799376-5-david.e.box@linux.intel.com>
+         <YbBbZ+JMk9eEgNKl@unreal>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <20211025074002.722504-1-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2021 at 09:40, Claudiu Beznea wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Wed, 2021-12-08 at 09:14 +0200, Leon Romanovsky wrote:
+> On Tue, Dec 07, 2021 at 09:14:46AM -0800, David E. Box wrote:
+> > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+> > activating additional silicon features. Features are enabled through a
+> > license activation process.  The SDSi driver provides a per socket, sysfs
+> > attribute interface for applications to perform 3 main provisioning
+> > functions:
+> > 
+> > 1. Provision an Authentication Key Certificate (AKC), a key written to
+> >    internal NVRAM that is used to authenticate a capability specific
+> >    activation payload.
+> > 
+> > 2. Provision a Capability Activation Payload (CAP), a token authenticated
+> >    using the AKC and applied to the CPU configuration to activate a new
+> >    feature.
+> > 
+> > 3. Read the SDSi State Certificate, containing the CPU configuration
+> >    state.
+> > 
+> > The operations perform function specific mailbox commands that forward the
+> > requests to SDSi hardware to perform authentication of the payloads and
+> > enable the silicon configuration (to be made available after power
+> > cycling).
+> > 
+> > The SDSi device itself is enumerated as an auxiliary device from the
+> > intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
+> > 
+> > Link: https://github.com/intel/intel-sdsi
+> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > ---
+> > V2
+> >   - Use sysfs_emit() in guid_show()
+> >   - Fix language in ABI, suggested by Bjorn
+> >   - Fix wrong directory name in ABI doc
 > 
-> Fixed "unused variable 'atmel_xdmac_dev_pm_ops'" compilation warning
-> when CONFIG_PM is not defined.
+> <...>
 > 
-> Fixes: 8e0c7e486014 ("dmaengine: at_xdmac: use pm_ptr()")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> > @@ -0,0 +1,77 @@
+> > +What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X
+> 
+> <...>
+> 
+> > +static const struct auxiliary_device_id sdsi_aux_id_table[] = {
+> > +	{ .name = "intel_vsec.sdsi" },
+> 
+> Are you sure that this sysfs is correct?
+> 
+> Auxiliary bus set device name as a combination of module name plus suffix.
+> 
+>   172 int __auxiliary_device_add(struct auxiliary_device *auxdev, const char
+> *modname)
+>   173 {
+>   174         struct device *dev = &auxdev->dev;
+>   175         int ret;
+>  ....
+>   181
+>   182         ret = dev_set_name(dev, "%s.%s.%d", modname, auxdev->name,
+> auxdev->id);
+> 
+> Thanks
 
-If needed:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Yes. 'intel_vsec' is the module name, 'sdsi' is the suffix, and 'X' is meant to
+indicate the unique id. Will change to '*' instead of 'X'.
 
-Thanks, best regards,
-   Nicolas
+Thanks
 
-> ---
->   drivers/dma/at_xdmac.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-> index 7fb19bd18ac3..f5d053df66a5 100644
-> --- a/drivers/dma/at_xdmac.c
-> +++ b/drivers/dma/at_xdmac.c
-> @@ -2207,7 +2207,7 @@ static int at_xdmac_remove(struct platform_device *pdev)
->          return 0;
->   }
-> 
-> -static const struct dev_pm_ops atmel_xdmac_dev_pm_ops = {
-> +static const struct dev_pm_ops __maybe_unused atmel_xdmac_dev_pm_ops = {
->          .prepare        = atmel_xdmac_prepare,
->          SET_LATE_SYSTEM_SLEEP_PM_OPS(atmel_xdmac_suspend, atmel_xdmac_resume)
->   };
-> --
-> 2.33.0
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+David
 
-
--- 
-Nicolas Ferre

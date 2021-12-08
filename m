@@ -2,85 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB1246D630
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725EA46D629
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbhLHO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:58:14 -0500
-Received: from mx1.didiglobal.com ([36.110.17.22]:3723 "HELO
-        mailgate02.didichuxing.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S229478AbhLHO6N (ORCPT
+        id S235557AbhLHO4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231951AbhLHO4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:58:13 -0500
-Received: from mail.didiglobal.com (unknown [172.20.36.33])
-        by mailgate02.didichuxing.com (Maildata Gateway V2.8) with ESMTP id 3D95E6006D217;
-        Wed,  8 Dec 2021 22:52:36 +0800 (CST)
-Received: from BJSGEXMBX12.didichuxing.com (172.20.15.142) by
- BJSGEXMBX08.didichuxing.com (172.20.15.138) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 8 Dec 2021 22:52:35 +0800
-Received: from localhost.localdomain (172.20.16.101) by
- BJSGEXMBX12.didichuxing.com (172.20.15.142) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 8 Dec 2021 22:52:35 +0800
-X-MD-Sfrom: wanghonglei@didiglobal.com
-X-MD-SrcIP: 172.20.36.33
-From:   Honglei Wang <wanghonglei@didichuxing.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>
-CC:     Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Honglei Wang <jameshongleiwang@126.com>
-Subject: [PATCH v2 3/3] sched/fair: update burst feature description
-Date:   Wed, 8 Dec 2021 22:52:23 +0800
-Message-ID: <20211208145223.64958-1-wanghonglei@didichuxing.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Wed, 8 Dec 2021 09:56:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A8FC061746;
+        Wed,  8 Dec 2021 06:52:32 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so4492248pjb.5;
+        Wed, 08 Dec 2021 06:52:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QzKcx5yPUcuops4Q+JZ93iOnQti2rPR+TjoSjnXXm9A=;
+        b=UMng7B3YW1PY/k4q0KBZkM7wtKPbKKAPUrZ31Hhr4l+5og1PggHxE/4ypeOQju2Isi
+         ddUx0FKBJeWtsiW1d88WJpsU0lTXQ0HXAPbH0PhEEnW65mFqOR86I6QzD3tdChAKLhqT
+         cSA5R2dRE+yuiuE8XvAot0dpiTVwZXQZLNVfIcQ8bSb8wMmZXTvPPxtwpdbtMj3n/qBe
+         6hw1XP5sTy+3y23o3DT+dIi0stcfydpk4W6NHn5BPriYHfLEQChiiaY2r+qL2ILdq1p4
+         iY/Bdd8cKk+AvWhF60zg224x5xyb+QOnuTery92NAIcBAH96SglyyudltDKP3uL5rMqs
+         Gmng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QzKcx5yPUcuops4Q+JZ93iOnQti2rPR+TjoSjnXXm9A=;
+        b=dUbAo9s+69uquEjxc5EfR+pAVpgYaG6g3bIKV/1tQPlHH4sdpJcZ+v0CxOmfmDi6KV
+         2qS8sqJtHAxONnlN5E+5e3c3TZZSou9j0ZVKakCqEtmd2yNt5rzYcIfDRGQkYgltdwJe
+         ce1VIoUdxPr6/g2+XipvD6ht+wk+Oh1TYgLIvHlOnzQ9kLQ8uuMr4JndHovV4wc1j16y
+         lXHoT1nvqO9UeovkmC/puQmjRTcqtgGt5ZNmK8MeFxa1b2C1DegDtansYuV7AO5wx7nC
+         qFXVMpwiL0T8xNnMuuzGYiZK881v8oYsCd7rxFsa7eFbO6LVx8kXGrSOY4Q8DgXS6xKu
+         HUag==
+X-Gm-Message-State: AOAM531YgT80aU7ByKVwTgciJft5ljxc0NanQMrEv/jEpTcFZx69G9dV
+        DkDOl7s00V07D2O6Pd9BhWg=
+X-Google-Smtp-Source: ABdhPJzYa+4js8K70gVBG7XUrUChCAHiqE9sZ9ISJ0oj8XxR8ZPal8nMUGzVAVJVm1aWQB2YLSFlgg==
+X-Received: by 2002:a17:903:300d:b0:142:744f:c74d with SMTP id o13-20020a170903300d00b00142744fc74dmr61115251pla.26.1638975152436;
+        Wed, 08 Dec 2021 06:52:32 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:3:1571:13c3:b90a:380])
+        by smtp.gmail.com with ESMTPSA id oa17sm3182861pjb.37.2021.12.08.06.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 06:52:31 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        thomas.lendacky@amd.com, Tianyu.Lan@microsoft.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
+        wei.liu@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+        parri.andrea@gmail.com, dave.hansen@intel.com,
+        linux-hyperv@vger.kernel.org
+Subject: [PATCH V6.1] x86/hyper-v: Add hyperv Isolation VM check in the cc_platform_has()
+Date:   Wed,  8 Dec 2021 09:52:28 -0500
+Message-Id: <20211208145228.42048-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211207075602.2452-3-ltykernel@gmail.com>
+References: <20211207075602.2452-3-ltykernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.20.16.101]
-X-ClientProxiedBy: BJEXCAS04.didichuxing.com (172.20.36.192) To
- BJSGEXMBX12.didichuxing.com (172.20.15.142)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the burst feature description due to the burst periods
-limit.
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
+Hyper-V provides Isolation VM which encrypt guest memory. In
+isolation VM, swiotlb bounce buffer size needs to adjust
+according to memory size in the sev_setup_arch(). Add GUEST_MEM_
+ENCRYPT check in the Isolation VM.
+
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 ---
- Documentation/scheduler/sched-bwc.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Change since v6:
+	* Change the order in the cc_platform_has() and check sev first.
 
-diff --git a/Documentation/scheduler/sched-bwc.rst b/Documentation/scheduler/sched-bwc.rst
-index 173c14110c85..eac39d42ebf9 100644
---- a/Documentation/scheduler/sched-bwc.rst
-+++ b/Documentation/scheduler/sched-bwc.rst
-@@ -65,6 +65,18 @@ there many cgroups or CPU is under utilized, the interference is
- limited. More details are shown in:
- https://lore.kernel.org/lkml/5371BD36-55AE-4F71-B9D7-B86DC32E3D2B@linux.alibaba.com/
+Change since v3:
+	* Change code style of checking GUEST_MEM attribute in the
+	  hyperv_cc_platform_has().
+---
+ arch/x86/kernel/cc_platform.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
+index 03bb2f343ddb..6cb3a675e686 100644
+--- a/arch/x86/kernel/cc_platform.c
++++ b/arch/x86/kernel/cc_platform.c
+@@ -11,6 +11,7 @@
+ #include <linux/cc_platform.h>
+ #include <linux/mem_encrypt.h>
  
-+We need to limit the burst periods to 2, because we found something interesting
-+that with the feature, tasks have chance to get more cpu than quota in working
-+periods. As every task could be scheduled out or sleep, the task group can get
-+some more cpu for its burst workload in this way. But even if there's no burst
-+workload, it can use those power to do daily jobs. If the average workload of a
-+taskgroup is just a little bit higher than its quota, it can escape from the
-+throttle and using the burst power for lots of periods.
++#include <asm/mshyperv.h>
+ #include <asm/processor.h>
+ 
+ static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
+@@ -58,12 +59,19 @@ static bool amd_cc_platform_has(enum cc_attr attr)
+ #endif
+ }
+ 
++static bool hyperv_cc_platform_has(enum cc_attr attr)
++{
++	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
++}
+ 
+ bool cc_platform_has(enum cc_attr attr)
+ {
+ 	if (sme_me_mask)
+ 		return amd_cc_platform_has(attr);
+ 
++	if (hv_is_isolation_supported())
++		return hyperv_cc_platform_has(attr);
 +
-+Permitting 2 periods for the burst cpu can help aovid such kind of 'stealing'
-+and the task group won't lose its burst power if the periods refresh lands in
-+the middle of a burst workloads.
-+
- Management
- ----------
- Quota, period and burst are managed within the cpu subsystem via cgroupfs.
+ 	return false;
+ }
+ EXPORT_SYMBOL_GPL(cc_platform_has);
 -- 
-2.14.1
+2.25.1
 

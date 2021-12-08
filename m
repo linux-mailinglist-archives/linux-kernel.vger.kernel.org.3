@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E37CA46C88A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30C546C88E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242761AbhLHAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:14:51 -0500
-Received: from mga14.intel.com ([192.55.52.115]:60042 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233913AbhLHAOu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:14:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237949433"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="237949433"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:11:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="657960036"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 16:11:17 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mukYG-000N6h-RC; Wed, 08 Dec 2021 00:11:16 +0000
-Date:   Wed, 8 Dec 2021 08:10:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 39/40] arch/riscv/kvm/aia_aplic.c:254:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202112080820.BR1BIqGS-lkp@intel.com>
+        id S242773AbhLHATV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233913AbhLHATU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:19:20 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF2C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 16:15:49 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 8so943739pfo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 16:15:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dpbhMmude6TrSYy/W/IEKSbLw/ojh/ZM0booTmlaN5A=;
+        b=QntzNtUmLjQqBF5CnhPBS0aMcGJVADvyHOc7Oc7VegMHHK6TtMy3zmgpSgjg3EYldn
+         UTjX1BloCLnw/WUp3ffsg/0cln0Q2vlubERNGXlAM2DTv2tfNB6tETq0pZtCAjLqKmX5
+         E9zEjtWCZQmGBBKRnGWhl/uLxCrKiPHJEvnBqt2rADKvbV/17KkUkZ5pG9DwGS/vFJ+T
+         MiJxVs0IijjWvKYpfrSeECF7t3DzOF1k9B5H1mA87/P+rB7TIlFeYLy4mrF1txY6RVx5
+         tBGuEKxbYXfG55x1xcP8UDzk+2N4lcz3aW18M+b0m70wsoAtWvycp4UxOm/d6WKoAGMZ
+         AXFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dpbhMmude6TrSYy/W/IEKSbLw/ojh/ZM0booTmlaN5A=;
+        b=SIrz2k7hOxZ4BSwNJlSCrjX5d/TrtkjrI0h6nMLJec7o034aOYST9oEPe5VNdesYUz
+         JCY96lmHthCktHAcrNl3XI5SDE/J31A2n5OA++Xi4VdkqRF4Tyo4a3tRZ9tOMQi016mU
+         +61ViLg7FYhp8fx0qVak2gqQdbCoTvFcfFHHrdGOGEKa5GswNxpKhglu66mlXO8/viP1
+         IU3QZ0DT0PFQMViCL3tjXiboinv7tU5UySYbB8yIrcHXn/jbjAsst0BrQttcyV2YCA99
+         JC5AZjRbyj/KV4B9gctqlYNZmvF4gSj4YM+ZKIpjfi2A7SR79nDYU1HwJRoFUVvnMdA2
+         8m1A==
+X-Gm-Message-State: AOAM530zt3Lh/4XcIimj6Pvr6rhMyyLFUaIll+3Yc4po4T4sUk4NPFgo
+        kAs8GsbNPalXfhDvoZm1QGFsNg==
+X-Google-Smtp-Source: ABdhPJz8g/C9Oy5ixea0NmmtbiYfcCVCfeC70Of/0im+WsJI/9oJVYSctgXFGZA7dTlO4PBfYRCyXA==
+X-Received: by 2002:aa7:99cf:0:b0:49f:9d3c:ac0f with SMTP id v15-20020aa799cf000000b0049f9d3cac0fmr2536854pfi.39.1638922548800;
+        Tue, 07 Dec 2021 16:15:48 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u3sm975156pfk.32.2021.12.07.16.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 16:15:48 -0800 (PST)
+Date:   Wed, 8 Dec 2021 00:15:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Xiao Guangrong <guangrong.xiao@linux.intel.com>
+Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
+ shadow paging if the guest PDPTEs is changed
+Message-ID: <Ya/5MOYef4L4UUAb@google.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+ <20211111144634.88972-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211111144634.88972-1-jiangshanlai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   eb55ca3817a59020fc1e3d5a5de0a5adcebbedd0
-commit: dc0299fdaf9714a56b13b955c086bab2f8bd4046 [39/40] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-c006-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080820.BR1BIqGS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/dc0299fdaf9714a56b13b955c086bab2f8bd4046
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout dc0299fdaf9714a56b13b955c086bab2f8bd4046
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Thu, Nov 11, 2021, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> 
+> For shadow paging, the pae_root needs to be reconstructed before the
+> coming VMENTER if the guest PDPTEs is changed.
+> 
+> But not all paths that call load_pdptrs() will cause the pae_root to be
+> reconstructed. Normally, kvm_mmu_reset_context() and kvm_mmu_free_roots()
+> are used to launch later reconstruction.
+> 
+> The commit d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and
+> CR0.NW are changed") skips kvm_mmu_reset_context() after load_pdptrs()
+> when changing CR0.CD and CR0.NW.
+> 
+> The commit 21823fbda552("KVM: x86: Invalidate all PGDs for the current
+> PCID on MOV CR3 w/ flush") skips kvm_mmu_free_roots() after
+> load_pdptrs() when rewriting the CR3 with the same value.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This isn't accurate, prior to that commit KVM wasn't guaranteed to do
+kvm_mmu_free_roots() if it got a hit on the current CR3 or if a previous CR3 in
+the cache matched the new CR3 (the "cache" has done some odd things in the past).
 
-All warnings (new ones prefixed by >>):
+So I think this particular flavor would be:
 
->> arch/riscv/kvm/aia_aplic.c:254:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:293:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:254:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:242:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+  Fixes: 7c390d350f8b ("kvm: x86: Add fast CR3 switch code path")
 
+> The commit a91a7c709600("KVM: X86: Don't reset mmu context when
+> toggling X86_CR4_PGE") skips kvm_mmu_reset_context() after
+> load_pdptrs() when changing CR4.PGE.
+> 
+> Normally, the guest doesn't change the PDPTEs before doing only the
+> above operation without touching other bits that can force pae_root to
+> be reconstructed.  Guests like linux would keep the PDPTEs unchaged
+> for every instance of pagetable.
+> 
+> Fixes: d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and CR0.NW are changed")
+> Fixes: 21823fbda552("KVM: x86: Invalidate all PGDs for the current PCID on MOV CR3 w/ flush")
+> Fixes: a91a7c709600("KVM: X86: Don't reset mmu context when toggling X86_CR4_PGE")
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> ---
+>  arch/x86/kvm/x86.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0176eaa86a35..cfba337e46ab 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
+>  	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
+>  		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
+>  		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
+> -		/* Ensure the dirty PDPTEs to be loaded. */
+> -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+> +		/*
+> +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
+> +		 * enabled or pae_root to be reconstructed for shadow paging.
+> +		 */
+> +		if (tdp_enabled)
+> +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+> +		else
+> +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
 
-vim +254 arch/riscv/kvm/aia_aplic.c
+Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
+of vcpu->arch.mmuvcpu->arch.mmu.
 
-   238	
-   239	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   240	{
-   241		u32 target;
-   242		bool inject, ie;
-   243		unsigned long flags;
-   244		struct aplic_irq *irqd;
-   245		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   246	
-   247		if (!aplic || !source || (aplic->nr_irqs <= source))
-   248			return -ENODEV;
-   249		irqd = &aplic->irqs[source];
-   250		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   251	
-   252		raw_spin_lock_irqsave(&irqd->lock, flags);
-   253	
- > 254		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   255			goto skip_unlock;
-   256	
-   257		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   258		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   259			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   260			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   261				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   262			break;
-   263		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   264			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   265			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   266				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   267			break;
-   268		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   270				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   271			break;
-   272		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   273			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   274				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   275			break;
-   276		}
-   277	
-   278		if (level)
-   279			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   280		else
-   281			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   282	
-   283		inject = false;
-   284		target = irqd->target;
-   285		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   286			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   287			inject = true;
-   288		}
-   289	
-   290	skip_unlock:
-   291		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   292	
-   293		if (inject)
-   294			aplic_inject_msi(kvm, source, target);
-   295	
-   296		return 0;
-   297	}
-   298	
+To avoid a dependency on the previous patch, I think it makes sense to have this be:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
+		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
+
+before the memcpy().
+
+Then we can decide independently if skipping the KVM_REQ_LOAD_MMU_PGD if the
+PDPTRs are unchanged with respect to the MMU is safe.

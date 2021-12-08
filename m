@@ -2,167 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD8D46D92B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B28E46D93D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237514AbhLHRG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:06:59 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39700 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbhLHRG4 (ORCPT
+        id S237547AbhLHRLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231757AbhLHRLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:06:56 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 240B31FD26;
-        Wed,  8 Dec 2021 17:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638983003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s4gf+GnBTZj35lejPEzW+m7/Sfx1dKT/0lrMZKP5eE4=;
-        b=NXQl1lHMNCTYbYqIlsYcw1pvNAEHX4MnStYqOC567FSTozMGZZ1yNgUDWlHbmYhEhS7Y1d
-        JMfrybbx/9rgom2Eojr1UDDFUHQhZLrMBYYej9N1NEP4bYiTLBck/HIv3AY+op21tU2EVV
-        8hq9q9XNZtqRqeCyL4D8Ntkk1S9A8Q0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8BCA7A3B93;
-        Wed,  8 Dec 2021 17:03:22 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 18:03:22 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrey Ryabinin <arbn@yandex-team.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru,
-        stable@vger.kernel.org, Andrea Arcangeli <aarcange@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH] mm: mempolicy: fix THP allocations escaping mempolicy
- restrictions
-Message-ID: <YbDlWiW5P7tlqlZj@dhcp22.suse.cz>
-References: <20211208165343.22349-1-arbn@yandex-team.com>
+        Wed, 8 Dec 2021 12:11:15 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D46C061746;
+        Wed,  8 Dec 2021 09:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T1bNpG+EBOuRlHH8vImEKgCRxGudYeuCoNpTVnj0b+c=; b=VQLqA4SbOYcUyV3Ay2a3uirOb+
+        zPz16CQN+Ni4oG3lBL9zWnoct6F6pLblHGiRJ04BQeKAjAAsjTg6uENPONkuYEMSYbRj2h+O6wqXq
+        WOM0HWJWqoLiwuRxD6QiwL8NKwS6XiQVycxNwtcP6vwe5nDXelhkuOpl/StENXkPUiU6T5asw6Bdh
+        IAfj7yNOVAbm9ONZrCWATl3IJ9QhMK4Iez17APXSiwnodzb9q1e06nhabTjH7k+6Wz8j0daKoz6cR
+        wvMYtzmGhfJSvxcFLW3LgddO03Szgxfa51bEka8oejnpOBtvToJiYTDoEQgOFCVOpyVZZ4rVwOn6L
+        4+x1+REQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mv0Po-008blB-SJ; Wed, 08 Dec 2021 17:07:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 64A7D3000E6;
+        Wed,  8 Dec 2021 18:07:36 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2B091264EB862; Wed,  8 Dec 2021 18:07:36 +0100 (CET)
+Date:   Wed, 8 Dec 2021 18:07:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <YbDmWFM5Kh1J2YqS@hirez.programming.kicks-ass.net>
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org>
+ <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
+ <Ya9hdlBuWYUWRQzs@hirez.programming.kicks-ass.net>
+ <20211207202831.GA18361@worktop.programming.kicks-ass.net>
+ <CAHk-=wg=yTX5DQ7xxD7xNhhaaEQw1POT2HQ9U0afYB+6aBTs6A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208165343.22349-1-arbn@yandex-team.com>
+In-Reply-To: <CAHk-=wg=yTX5DQ7xxD7xNhhaaEQw1POT2HQ9U0afYB+6aBTs6A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 08-12-21 19:53:43, Andrey Ryabinin wrote:
-> alloc_pages_vma() may try to allocate THP page on the local
-> NUMA node first:
-> 	page = __alloc_pages_node(hpage_node,
-> 		gfp | __GFP_THISNODE | __GFP_NORETRY, order);
+On Tue, Dec 07, 2021 at 03:23:02PM -0800, Linus Torvalds wrote:
+> On Tue, Dec 7, 2021 at 12:28 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > Argh.. __atomic_add_fetch() != __atomic_fetch_add(); much confusion for
+> > GCC having both. With the right primitive it becomes:
+> >
+> >         movl    $1, %eax
+> >         lock xaddl      %eax, (%rdi)
+> >         testl   %eax, %eax
+> >         je      .L5
+> >         js      .L6
+> >
+> > Which makes a whole lot more sense.
 > 
-> And if the allocation fails it retries allowing remote memory:
+> Note that the above misses the case where the old value was MAX_INT
+> and the result now became negative.
 > 
-> 	if (!page && (gfp & __GFP_DIRECT_RECLAIM))
->     		page = __alloc_pages_node(hpage_node,
-> 					gfp, order);
-> 
-> However, this retry allocation completely ignores memory policy
-> nodemask allowing allocation to escape restrictions.
-> 
-> The first appearance of this bug seems to be the commit ac5b2c18911f
->  ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
-> The bug disappeared later in the commit 89c83fb539f9
->  ("mm, thp: consolidate THP gfp handling into alloc_hugepage_direct_gfpmask")
-> and reappeared again in slightly different form in the commit 76e654cc91bb
->  ("mm, page_alloc: allow hugepage fallback to remote nodes when madvised")
-> 
-> Fix this by passing correct nodemask to the __alloc_pages() call.
-> 
-> The demonstration/reproducer of the problem:
->  $ mount -oremount,size=4G,huge=always /dev/shm/
->  $ echo always > /sys/kernel/mm/transparent_hugepage/defrag
->  $ cat mbind_thp.c
->  #include <unistd.h>
->  #include <sys/mman.h>
->  #include <sys/stat.h>
->  #include <fcntl.h>
->  #include <assert.h>
->  #include <stdlib.h>
->  #include <stdio.h>
->  #include <numaif.h>
-> 
->  #define SIZE 2ULL << 30
->  int main(int argc, char **argv)
->  {
->    int fd;
->    unsigned long long i;
->    char *addr;
->    pid_t pid;
->    char buf[100];
->    unsigned long nodemask = 1;
-> 
->    fd = open("/dev/shm/test", O_RDWR|O_CREAT);
->    assert(fd > 0);
->    assert(ftruncate(fd, SIZE) == 0);
-> 
->    addr = mmap(NULL, SIZE, PROT_READ|PROT_WRITE,
->                         MAP_SHARED, fd, 0);
-> 
->    assert(mbind(addr, SIZE, MPOL_BIND, &nodemask, 2, MPOL_MF_STRICT|MPOL_MF_MOVE)==0);
->    for (i = 0; i < SIZE; i+=4096) {
->      addr[i] = 1;
->    }
->    pid = getpid();
->    snprintf(buf, sizeof(buf), "grep shm /proc/%d/numa_maps", pid);
->    system(buf);
->    sleep(10000);
-> 
->    return 0;
->  }
->  $ gcc mbind_thp.c -o mbind_thp -lnuma
->  $ numactl -H
->  available: 2 nodes (0-1)
->  node 0 cpus: 0 2
->  node 0 size: 1918 MB
->  node 0 free: 1595 MB
->  node 1 cpus: 1 3
->  node 1 size: 2014 MB
->  node 1 free: 1731 MB
->  node distances:
->  node   0   1
->    0:  10  20
->    1:  20  10
->  $ rm -f /dev/shm/test; taskset -c 0 ./mbind_thp
->  7fd970a00000 bind:0 file=/dev/shm/test dirty=524288 active=0 N0=396800 N1=127488 kernelpagesize_kB=4
-> 
-> Fixes: ac5b2c18911f ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
-> Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
-> Cc: <stable@vger.kernel.org>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: David Rientjes <rientjes@google.com>
+> That isn't a _problem_, of course. I think it's fine. But if you cared
+> about it, you'd have to do something like
 
-Looks good to me.
-Acked-by: Michal Hocko <mhocko@suse.com>
+Hm....
 
-Thanks!
-
-> ---
->  mm/mempolicy.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> But if you don't care about the MAX_INT overflow and make the overflow
+> boundary be the next increment, then just make it be one error case:
 > 
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 10e9c87260ed..f6248affaf38 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -2140,8 +2140,7 @@ struct page *alloc_pages_vma(gfp_t gfp, int order, struct vm_area_struct *vma,
->  			 * memory with both reclaim and compact as well.
->  			 */
->  			if (!page && (gfp & __GFP_DIRECT_RECLAIM))
-> -				page = __alloc_pages_node(hpage_node,
-> -								gfp, order);
-> +				page = __alloc_pages(gfp, order, hpage_node, nmask);
->  
->  			goto out;
->  		}
-> -- 
-> 2.32.0
+> >         movl    $1, %eax
+> >         lock xaddl      %eax, (%rdi)
+> >         testl   %eax, %eax
+> >         jle      .L5
+> 
+> and then (if you absolutely have to distinguish them) you can test eax
+> again in the slow path.
 
--- 
-Michal Hocko
-SUSE Labs
+Suppose:
+
+  inc(): overflow when old value is negative or zero
+  dec(): overflow when new value is negative or zero
+
+That gives:
+
+  inc(INT_MAX) is allowed
+  dec(INT_MIN) is allowed
+
+IOW, the effective range becomes: [1..INT_MIN], which is a bit
+counter-intuitive, but then so is most of this stuff.
+
+Therefore can write this like:
+
+#define atomic_inc_ofl(v, label)
+do {
+	int old = atomic_fetch_inc(v);
+	if (unlikely(old <= 0))
+		goto label;
+} while (0)
+
+#define atomic_dec_ofl(v, label)
+do {
+	int new = atomic_dec_return(v);
+	if (unlikely(new <= 0))
+		goto label;
+} while (0)
+
+#define atomic_dec_and_test_ofl(v, label)
+({
+	bool ret = false;
+	int new = atomic_dec_return(&r->refs);
+	if (unlikely(new < 0))
+		goto label;
+	if (unlikely(new == 0)
+		ret = true;
+	ret;
+})
+
+For a consistent set of primitives, right?
+
+Which already gives better code-gen than we have today.
+
+But that then also means we can write dec_ofl as:
+
+	lock decl %[var]
+	jle %l1
+
+and dec_and_test_ofl() like:
+
+	lock decl %[var]
+	jl %l2
+	je %l[__zero]
+
+Lemme finisht the patches and send that out after dinner.

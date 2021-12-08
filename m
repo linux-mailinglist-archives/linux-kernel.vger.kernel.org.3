@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F57246D1DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3267A46D1D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbhLHLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:17:53 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:60840 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232251AbhLHLR0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:17:26 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 757771EC0535;
-        Wed,  8 Dec 2021 12:13:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1638962034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=40UMFJIIWXdHOUjSxB+Y2lR7T3b5fB/FHMQ2wRRUUOU=;
-        b=piYKDs4Cgdr0+t6opVFENeBst/ORBsdY5H13vsO0cUVrnCHdDdPUYkdFZni8rPbZbRjYCL
-        3BwNg93/8BZSYIRn2Evalxaf/w4j7Yu4EEO9tnJm+EIm5YqszmzVGlIo1NH1TcOLtjYi+o
-        /PAur3uho+4GH4KzQQ3tP7CGWu2JHLQ=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 12/12] x86/mce: Mark mce_start() noinstr
-Date:   Wed,  8 Dec 2021 12:13:43 +0100
-Message-Id: <20211208111343.8130-13-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211208111343.8130-1-bp@alien8.de>
-References: <20211208111343.8130-1-bp@alien8.de>
+        id S232278AbhLHLRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:17:32 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32884 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232292AbhLHLRZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 06:17:25 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8AIgmG030674;
+        Wed, 8 Dec 2021 11:13:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=p+hR73c7oilo2pPaxIQvq+l+IO5Si8d4qy66UdU0FA8=;
+ b=sAYirZnC1lnyfeHege36mEylyV5DgJ1P4xgApnipjEUPQSIzZhFLO3jmUHmcrjzdymIG
+ VEFBBd6DiK3XqTpv3gX6hwnyy2reIuLg6fcp7pxmQqN8HIaQQF9lm47/GTT5B7k0hSnA
+ N/URhF44Pgq1FoS3QHVcQgXuBywZk4Yd4cgxnGcHbChktMshWxCJrp/gNgOPW1SF4lyE
+ bMnUqXrKcUxkZryuYVIF5DfVKXRPXpPKuXESSkCFC8TeN6OBRwJJhW5LEBbsNiVKB6ZW
+ gKc4nTIM5SBx+PV3erHWNqiPFOG4Y2NnX0bzq3czZvWhcU2+raUSwJfpaNy4WhFjiryK uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttufrwmd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:53 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8B1AYX012091;
+        Wed, 8 Dec 2021 11:13:52 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttufrwkn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:52 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8B8SxD011082;
+        Wed, 8 Dec 2021 11:13:50 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyy9ndmx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 11:13:50 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8BDkAK22151558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 11:13:46 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B44FE11C05B;
+        Wed,  8 Dec 2021 11:13:46 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90ECD11C05C;
+        Wed,  8 Dec 2021 11:13:45 +0000 (GMT)
+Received: from [9.171.54.177] (unknown [9.171.54.177])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 11:13:45 +0000 (GMT)
+Message-ID: <b3162ece-d654-a540-8071-ebc8499db25c@linux.ibm.com>
+Date:   Wed, 8 Dec 2021 12:13:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 02/32] s390/sclp: detect the AISII facility
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-3-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-3-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hIBKaCUWixUDDN0QhjBc4Bk8xpWBaI0K
+X-Proofpoint-ORIG-GUID: rD7c68sk_RO7GYKdB0rivvFo4zP4VRsK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_04,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 phishscore=0 spamscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112080071
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> Detect the Adapter Interruption Source ID Interpretation facility.
+> 
+> Reviewed-by: Eric Farman <farman@linux.ibm.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-Fixes
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
-  vmlinux.o: warning: objtool: do_machine_check()+0x4ae: call to __const_udelay() leaves .noinstr.text section
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/kernel/cpu/mce/core.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 3fe1d6614c22..aa47ff12100f 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1007,13 +1007,13 @@ static atomic_t global_nwo;
-  * in the entry order.
-  * TBD double check parallel CPU hotunplug
-  */
--static int mce_start(int *no_way_out)
-+static noinstr int mce_start(int *no_way_out)
- {
--	int order;
- 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
-+	int order, ret = -1;
- 
- 	if (!timeout)
--		return -1;
-+		return ret;
- 
- 	atomic_add(*no_way_out, &global_nwo);
- 	/*
-@@ -1023,6 +1023,9 @@ static int mce_start(int *no_way_out)
- 	order = atomic_inc_return(&mce_callin);
- 	cpumask_clear_cpu(smp_processor_id(), &mce_missing_cpus);
- 
-+	/* Enable instrumentation around calls to external facilities */
-+	instrumentation_begin();
-+
- 	/*
- 	 * Wait for everyone.
- 	 */
-@@ -1030,7 +1033,7 @@ static int mce_start(int *no_way_out)
- 		if (mce_timed_out(&timeout,
- 				  "Timeout: Not all CPUs entered broadcast exception handler")) {
- 			atomic_set(&global_nwo, 0);
--			return -1;
-+			goto out;
- 		}
- 		ndelay(SPINUNIT);
- 	}
-@@ -1056,7 +1059,7 @@ static int mce_start(int *no_way_out)
- 			if (mce_timed_out(&timeout,
- 					  "Timeout: Subject CPUs unable to finish machine check processing")) {
- 				atomic_set(&global_nwo, 0);
--				return -1;
-+				goto out;
- 			}
- 			ndelay(SPINUNIT);
- 		}
-@@ -1067,7 +1070,12 @@ static int mce_start(int *no_way_out)
- 	 */
- 	*no_way_out = atomic_read(&global_nwo);
- 
--	return order;
-+	ret = order;
-+
-+out:
-+	instrumentation_end();
-+
-+	return ret;
- }
- 
- /*
--- 
-2.29.2
-
+> ---
+>   arch/s390/include/asm/sclp.h   | 1 +
+>   drivers/s390/char/sclp_early.c | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
+> index c84e8e0ca344..524a99baf221 100644
+> --- a/arch/s390/include/asm/sclp.h
+> +++ b/arch/s390/include/asm/sclp.h
+> @@ -89,6 +89,7 @@ struct sclp_info {
+>   	unsigned char has_sipl : 1;
+>   	unsigned char has_dirq : 1;
+>   	unsigned char has_zpci_interp : 1;
+> +	unsigned char has_aisii : 1;
+>   	unsigned int ibc;
+>   	unsigned int mtid;
+>   	unsigned int mtid_cp;
+> diff --git a/drivers/s390/char/sclp_early.c b/drivers/s390/char/sclp_early.c
+> index 2e8199b7ae50..a73120b8a5de 100644
+> --- a/drivers/s390/char/sclp_early.c
+> +++ b/drivers/s390/char/sclp_early.c
+> @@ -45,6 +45,7 @@ static void __init sclp_early_facilities_detect(void)
+>   	sclp.has_gisaf = !!(sccb->fac118 & 0x08);
+>   	sclp.has_hvs = !!(sccb->fac119 & 0x80);
+>   	sclp.has_kss = !!(sccb->fac98 & 0x01);
+> +	sclp.has_aisii = !!(sccb->fac118 & 0x40);
+>   	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
+>   	if (sccb->fac85 & 0x02)
+>   		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
+> 

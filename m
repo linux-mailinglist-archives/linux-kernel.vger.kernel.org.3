@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BCE46D6CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F12346D6CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235891AbhLHPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:23:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60389 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235878AbhLHPXK (ORCPT
+        id S235906AbhLHPXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:23:49 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51378 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235896AbhLHPXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:23:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638976777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mBq1iNWuKAbDrZ8J23xOdNqfh1OrTD+2svsf/GF1r6U=;
-        b=cUSDCH+lwc5untfWTam8d+gKaxaIHQAvrbPi5LlleRM5dbZSitmjRl9Sz93NJvWSk9ku7w
-        T1BQ5+Iqooh90r/xB9ziE+LUHzBNQk5PeU5Mqt7ZlCpt2NGXtQhY0hgmkDtHT1cOqHHgJS
-        iiOLFAN6yOkCCui+4b5im+Hmhs1DJMU=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-6u8aIVwaPraYhSrElBAxEw-1; Wed, 08 Dec 2021 10:19:36 -0500
-X-MC-Unique: 6u8aIVwaPraYhSrElBAxEw-1
-Received: by mail-pf1-f198.google.com with SMTP id e7-20020aa798c7000000b004a254db7946so1726825pfm.17
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:19:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mBq1iNWuKAbDrZ8J23xOdNqfh1OrTD+2svsf/GF1r6U=;
-        b=4Rqo//OyTMsfgZ0/6K7grEk+hTfrDKeA9dFQX6i9GlB8Q4z/FNss7A2u5zFt95gJgN
-         8DQaIEf6YdfizPXx5DrIVPpANYv9vIoWma8lX8VRnZwABJfShtJrNCTpeXkApTUuIoOk
-         jS5nNe7vtjsCV5U5XUSCcaGVxD6mwK5iAw6sa/v1wZTvZd1dLRmqCaesEDkA1gzHtMHB
-         k2Co2kMaDp7zy984aCusI2jDJDL80qYn5qx5Ufde1aNviSb/mWakX7QVadX5M0AJUP/1
-         iJuaDz0sSuHU8ZCgcoE53/6mMFXUlhSHmN6e8Tr3znVacncqfRFWyuahWqeEE6ZhjXK0
-         Fttg==
-X-Gm-Message-State: AOAM531/TifP/9LbfCO/aButJbtA2V7gRlIW3X1YdShTQ9mkX6OoSB/Y
-        7SNYTz9FunO5HU4oyYTF+gDdolRqrmZMC/7ABaHio22+0molMHOGXS6z4Iam2UYmNY1ZRwQMofU
-        YKxdechKi2a7kcoqXv9VZmuzabsvS+/hN0lJdu65k
-X-Received: by 2002:a17:90b:1185:: with SMTP id gk5mr7910562pjb.113.1638976775683;
-        Wed, 08 Dec 2021 07:19:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwklgyiSO6Zvc5u9rR6zXqW094LW7vRS1FrHYnDwUZd466ZCWZfjkhr+OZulvTLLRJpkV6JmzebqkIaq9LDa/8=
-X-Received: by 2002:a17:90b:1185:: with SMTP id gk5mr7910531pjb.113.1638976775444;
- Wed, 08 Dec 2021 07:19:35 -0800 (PST)
+        Wed, 8 Dec 2021 10:23:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8ABFECE2207;
+        Wed,  8 Dec 2021 15:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA916C341C6;
+        Wed,  8 Dec 2021 15:20:09 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 10:20:08 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Jerome Marchand" <jmarchan@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH] ftrace: disable preemption when recursion locked in
+ arch/s390/kernel/ftrace.c
+Message-ID: <20211208102008.197df008@gandalf.local.home>
+In-Reply-To: <20211208151503.1510381-1-jmarchan@redhat.com>
+References: <20211208151503.1510381-1-jmarchan@redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211201164301.44653-1-tero.kristo@linux.intel.com> <20211201164301.44653-5-tero.kristo@linux.intel.com>
-In-Reply-To: <20211201164301.44653-5-tero.kristo@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 8 Dec 2021 16:19:24 +0100
-Message-ID: <CAO-hwJKikRFfqXfEG-oU8Hg6v78b9928XKEdh-Uti97Jsy=Z0g@mail.gmail.com>
-Subject: Re: [RFCv3 4/7] HID: input: Make hidinput_find_field() static
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->
-> From: Mika Westerberg <mika.westerberg@linux.intel.com>
->
-> This function is not called outside of hid-input.c so we can make it
-> static.
->
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+This really needs to go through the s390 tree.
 
-Cheers,
-Benjamin
+-- Steve
 
+
+On Wed,  8 Dec 2021 16:15:03 +0100
+"Jerome Marchand" <jmarchan@redhat.com> wrote:
+
+> It looks like commit ce5e48036c9e76a2 ("ftrace: disable preemption
+> when recursion locked") missed a spot in kprobe_ftrace_handler() in
+> arch/s390/kernel/ftrace.c.
+> Removes the superfluous preempt_disable/enable_notrace() there too.
+> 
+> Fixes: ce5e48036c9e76a2 ("ftrace: disable preemption when recursion locked")
+> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
 > ---
->  drivers/hid/hid-input.c | 4 ++--
->  include/linux/hid.h     | 1 -
->  2 files changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index b428ee9b4d9b..f6332d269d49 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -1477,7 +1477,8 @@ void hidinput_report_event(struct hid_device *hid, struct hid_report *report)
+>  arch/s390/kernel/ftrace.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+> index 5510c7d10ddc..21d62d8b6b9a 100644
+> --- a/arch/s390/kernel/ftrace.c
+> +++ b/arch/s390/kernel/ftrace.c
+> @@ -290,7 +290,6 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  		return;
+>  
+>  	regs = ftrace_get_regs(fregs);
+> -	preempt_disable_notrace();
+>  	p = get_kprobe((kprobe_opcode_t *)ip);
+>  	if (unlikely(!p) || kprobe_disabled(p))
+>  		goto out;
+> @@ -318,7 +317,6 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  	}
+>  	__this_cpu_write(current_kprobe, NULL);
+>  out:
+> -	preempt_enable_notrace();
+>  	ftrace_test_recursion_unlock(bit);
 >  }
->  EXPORT_SYMBOL_GPL(hidinput_report_event);
->
-> -int hidinput_find_field(struct hid_device *hid, unsigned int type, unsigned int code, struct hid_field **field)
-> +static int hidinput_find_field(struct hid_device *hid, unsigned int type,
-> +                              unsigned int code, struct hid_field **field)
->  {
->         struct hid_report *report;
->         int i, j;
-> @@ -1492,7 +1493,6 @@ int hidinput_find_field(struct hid_device *hid, unsigned int type, unsigned int
->         }
->         return -1;
->  }
-> -EXPORT_SYMBOL_GPL(hidinput_find_field);
->
->  struct hid_field *hidinput_get_led_field(struct hid_device *hid)
->  {
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index 96eaca0d5322..3f1fd4fcf1a9 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -636,7 +636,6 @@ extern void hidinput_disconnect(struct hid_device *);
->
->  int hid_set_field(struct hid_field *, unsigned, __s32);
->  int hid_input_report(struct hid_device *, int type, u8 *, u32, int);
-> -int hidinput_find_field(struct hid_device *hid, unsigned int type, unsigned int code, struct hid_field **field);
->  struct hid_field *hidinput_get_led_field(struct hid_device *hid);
->  unsigned int hidinput_count_leds(struct hid_device *hid);
->  __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
-> --
-> 2.25.1
->
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
 

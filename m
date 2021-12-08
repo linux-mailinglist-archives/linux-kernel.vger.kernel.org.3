@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B38F46D1AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9F646D1AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbhLHLNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S232172AbhLHLNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbhLHLM6 (ORCPT
+        with ESMTP id S232100AbhLHLNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:12:58 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2350C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:09:26 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so4115372pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 03:09:26 -0800 (PST)
+        Wed, 8 Dec 2021 06:13:04 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13852C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:09:33 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x5so2233607pfr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 03:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/Kd9tDbqkXgV+uDS+ZN2PkifPpO4nwWCGziDx4Ai290=;
-        b=DZBRV+VFT9+KfIlW9vI1YNTWjjSwY9UVdpausVhNvxvTeFCAhQr4BL86f1ZVb5wqYx
-         daMm0jsnf1EZop+hPS3Rsl+eU347P7jXAR0P3RT2+WtY7EQ2A2yWN79dg12hx04Hs3DY
-         iR2cUpLa4sLw2jps+ZS2rPZ95nG7mTU3J1k/V23q7IYOzjDvAuCF7BShXIc9S6F75RGg
-         tKsQ5jKl/9h3kXq8Er5D+XxIEwR7FRorkvKKVlKBNuLRh7xuwrknY5JB9iLYWlgPc5Ip
-         brHSmlHdSmwtVh6ZsE/XtTcbGI9NZy6tbBUp6sONJacjKJ0aJI0Wz9IDXReHISQ2qhXx
-         46UQ==
+        bh=2ZAl8F0tOkzqNpxvhUmIBbQ/2XyCnM6LrThKg9k5W8s=;
+        b=XewnByTcwGZ5HuWSJOktdkA8rXnpKBKFuSg0cxOJL7s3BdUvTPdODuZfLIDeepUm4V
+         +UFNS5kKkZ64h2+SLoku6yR1tR/0A+eaTTMV6wH4OAgYBCykpmcbSC84xrwGT8DK5z6I
+         NAwcRUWRE5xi4yleywYOHQ3Z+PAuijS3/ucoUSnX0O8roEEkMd3TMCNQi4/Nee7ynLP8
+         YtGzd5gKmnV6H5WeuB2jtnHcA/FdVci05P8W9WFHdMj60WaDi0E67yIn6k7XYkXd2N/Q
+         Pkh/hb3+/neA+1fwV3CX98BZZHeeXZYXum/i4O8YUwzfbt+j8AeThm8SubonZeZuOnPu
+         cX4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/Kd9tDbqkXgV+uDS+ZN2PkifPpO4nwWCGziDx4Ai290=;
-        b=Nl2YFOi4mjCWQPKarI8pfObjn/KvCwv8dAYdmbcGzeNubqH2w66//9ntcylJYnSEiK
-         o3E0dxoXzGF46vF1a0U9aUy0wjmhUBCa5zG6T7Henl8qG2KUEm+wdHRKfeHL2/M3wAdN
-         43Xe5+lOR/SPMXvrkiWzb9kD55NDa1FoT98Z0/ZzpQDIoqqpXDidjy7oXQ2HhThwsya3
-         b8SqyJLg75sf6AIsorAhsa7qC4Iu9GkNkUYYJ+d8KlzRY3Dtz3k4c7XHeyec9BDepvcw
-         VA9HTxhwAy2XmCuTWi0r8kzXKViGst1+kCdpxDEqTFOHv1ax89Xo+gg2sswSof3L4JOz
-         /1gA==
-X-Gm-Message-State: AOAM532WYlf/+duVIvSnLBPUCA1c5l0urJt+bgLBlf7bvBeRWR9pg8Oy
-        Lc1Fhr59bGABVK4ZZwNVErRARMUYRdY=
-X-Google-Smtp-Source: ABdhPJwtuS/bFQhmnmbhADvj6guciKxV5lk7NvScGFOlc2udq8C8NxlaMojhnh/rnPK9YGSNXl3k8g==
-X-Received: by 2002:a17:90a:e00c:: with SMTP id u12mr6251592pjy.139.1638961766047;
-        Wed, 08 Dec 2021 03:09:26 -0800 (PST)
+        bh=2ZAl8F0tOkzqNpxvhUmIBbQ/2XyCnM6LrThKg9k5W8s=;
+        b=OKBx8GZpwbq+wBmfMlUbkLDB9GNGHHUkER78ymqG6P5zJEOcsTQnpoWbwkyZucRRt/
+         lG3b46RoAxpoySkKu7JHaUdql8osnyVHwdIT0cvb0wfloDgFOI8dNzsSVY812aODWM5w
+         YI1YTgvKLFU4XOA5YIOnplCIn+JNl3aVnBXNxeFRNQqusZO+xwaCXLsv7khPkATwFTka
+         xjMa+9RCl0dHozrnYNs6kO4HEbPYV71SvaS9GyuPKTpEBfe6Zxxfe9S+K22S8F18wIwS
+         LCosLZ/M+OuzJA1lSK0qe+0g6u4ygZhk7WHjJNdZ+wgOorNh5undPT6flfeG/YQ8LGs3
+         BB5Q==
+X-Gm-Message-State: AOAM533sPPVxvw9vNUg6Y7V89tDIDOgZT2MkAVdOfuwjGb2Unqh+PTbh
+        VG9kGCrP+PozSm90FrOi+wfdATm8les=
+X-Google-Smtp-Source: ABdhPJw1j8OimGYb+Vk6xtTFU75lvQF/n3cAmCvhA4Lo654aq4frrTPh1GDeEbLLUScPSozJ7D8kIA==
+X-Received: by 2002:a65:6a0b:: with SMTP id m11mr28632692pgu.372.1638961772554;
+        Wed, 08 Dec 2021 03:09:32 -0800 (PST)
 Received: from localhost ([47.251.3.230])
-        by smtp.gmail.com with ESMTPSA id e4sm2315444pgi.21.2021.12.08.03.09.25
+        by smtp.gmail.com with ESMTPSA id u12sm3355395pfk.71.2021.12.08.03.09.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Dec 2021 03:09:25 -0800 (PST)
+        Wed, 08 Dec 2021 03:09:32 -0800 (PST)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
@@ -55,12 +55,13 @@ Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Subject: [PATCH 10/11] x86: Remove the definition of SWAPGS
-Date:   Wed,  8 Dec 2021 19:08:32 +0800
-Message-Id: <20211208110833.65366-11-jiangshanlai@gmail.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>
+Subject: [PATCH 11/11] x86/entry: Remove the branch in sync_regs()
+Date:   Wed,  8 Dec 2021 19:08:33 +0800
+Message-Id: <20211208110833.65366-12-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20211208110833.65366-1-jiangshanlai@gmail.com>
 References: <20211208110833.65366-1-jiangshanlai@gmail.com>
@@ -72,31 +73,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-There is no user of the pv-aware SWAPGS anymore.
+In non-xenpv, the sp0 is the trampoline stack, and sync_regs() is
+called on non-xenpv only since error_entry is not called on xenpv, so
+the stack must be the trampoline stack or one of the IST stack and the
+check in sync_regs() is unneeded.
 
 Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 ---
- arch/x86/include/asm/irqflags.h | 2 --
- 1 file changed, 2 deletions(-)
+ arch/x86/kernel/traps.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index 87761396e8cc..ac2e4cc47210 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -140,13 +140,11 @@ static __always_inline void arch_local_irq_restore(unsigned long flags)
- #else
- #ifdef CONFIG_X86_64
- #ifdef CONFIG_XEN_PV
--#define SWAPGS	ALTERNATIVE "swapgs", "", X86_FEATURE_XENPV
- #define INTERRUPT_RETURN						\
- 	ANNOTATE_RETPOLINE_SAFE;					\
- 	ALTERNATIVE_TERNARY("jmp *paravirt_iret(%rip);",		\
- 		X86_FEATURE_XENPV, "jmp xen_iret;", "jmp native_iret;")
- #else
--#define SWAPGS	swapgs
- #define INTERRUPT_RETURN	jmp native_iret
- #endif
- #endif
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index a6c0bc9ee36f..63cdb7aedd67 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -708,13 +708,15 @@ DEFINE_IDTENTRY_RAW(exc_int3)
+ /*
+  * Help handler running on a per-cpu (IST or entry trampoline) stack
+  * to switch to the normal thread stack if the interrupted code was in
+- * user mode. The actual stack switch is done in entry_64.S
++ * user mode.  The actual stack switch is done in entry_64.S.  It is not
++ * called from XENPV and the caller has ensured it is not on the thread
++ * stack.
+  */
+ asmlinkage __visible noinstr struct pt_regs *sync_regs(struct pt_regs *eregs)
+ {
+ 	struct pt_regs *regs = (struct pt_regs *)this_cpu_read(cpu_current_top_of_stack) - 1;
+-	if (regs != eregs)
+-		*regs = *eregs;
++
++	*regs = *eregs;
+ 	return regs;
+ }
+ 
 -- 
 2.19.1.6.gb485710b
 

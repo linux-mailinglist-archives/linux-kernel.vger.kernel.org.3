@@ -2,164 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA62246CAAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9401546CAB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbhLHCBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 21:01:03 -0500
-Received: from mail-dm6nam11on2080.outbound.protection.outlook.com ([40.107.223.80]:50400
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233974AbhLHCBB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 21:01:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BIKoJRLNN+0TkI1pY/6PdSQY6gTWL5t7oVCDk9Zb5bke8OEwrC1YxEU8Ux65wCibtalzbJ+/jnKByoolsimVGXdl0IvQqXpWpKLrzZaplqGfODv27qdJ+oT7nNwb6SOmmTTrIePG23w8wdm8N5W0rQ9Z4PQ3aMuAQ/5HIhYlbMCgFWNsr1pBvDgosTmH8sZ40T9ZycBY1u+JSixg3J/04V9fPPtu4GjH0LrKGWAJRyvQdlOCguz7GGMQkWvrC6y+gxUt3tN+BkynX+yzaQc3+AkOJcAFqPIgdBov174MNKTuTMNSHKrFjUu17tdRf1LdSLANuUp05/1bQtdrnytrAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=irJrHldIHwkydgGx+Q8/Y+HBL7e+KndhujfjmXSfQHQ=;
- b=e7AcZc69F1vKDo3Pcf0SYgUiZWF9FP0QWmwFUdjI9nE+A+9iHLgMNsC0VD5zVCrUvoSNRmzEmFm+J8hG8Eia6Cx/mCyScfPBUPMAS1beS+UKPGy8FA7NEZ+pHzVvKFMAtItzY4II9S0F6CTvo8K5SodbMs4AiixdLsIsLCM4tEYvk0orT2E6PCwvnB6A9OXfpg9hkTwC58OiDClPyRZGDNJ1ozQk2P6hJe3VlW1wJDSV8pEkwMBqYVU015ZjSu0C8GmdAXf6fsD/568qkS0HjHZ6oxt2kIxi07kOHRr1eJZ1sklEAhzC6vbaieO/PjzkHVaqcX6dkhJXElwvtbNnGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 203.18.50.12) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=irJrHldIHwkydgGx+Q8/Y+HBL7e+KndhujfjmXSfQHQ=;
- b=Ja3rMvXMK891j3314kBcl3bo/abGwF5VABMgqOTXBfEqUzYARwJgasGTTU1OEtB5VI8Up9VJab/PfCW7CIUm4HRKO9Yj1PzYfRku6/xPRNXichPsil0dfPsmMcOF1C8qgGuMu/UaIM+WYAGeGaXSI6ggzzkFE6SElJzq93F1eHzTKqpotEJpVpV6LJKm87wx0F8BSZWgXcLr4arMMPZrDwywsuoOR+Hmq4FNv6168W2Fn5fJHpBCM92B20oWX1QzS8UglyFlD5k5yeQeXtLQpvrrbj2wBgH8BN+U6Rlv229oabUZ8Xl18YWPwyO22B2NWA4N1Xbc/j+j3DYpr7DPCQ==
-Received: from DS7PR03CA0335.namprd03.prod.outlook.com (2603:10b6:8:55::34) by
- DM6PR12MB3100.namprd12.prod.outlook.com (2603:10b6:5:11b::30) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.20; Wed, 8 Dec 2021 01:57:27 +0000
-Received: from DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::b4) by DS7PR03CA0335.outlook.office365.com
- (2603:10b6:8:55::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20 via Frontend
- Transport; Wed, 8 Dec 2021 01:57:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.12)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 203.18.50.12 as permitted sender) receiver=protection.outlook.com;
- client-ip=203.18.50.12; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (203.18.50.12) by
- DM6NAM11FT034.mail.protection.outlook.com (10.13.173.47) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Wed, 8 Dec 2021 01:57:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by HKMAIL101.nvidia.com
- (10.18.16.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 8 Dec
- 2021 01:57:24 +0000
-Received: from [172.17.173.69] (172.20.187.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Tue, 7 Dec 2021
- 17:57:21 -0800
-Subject: Re: [RFC v3 02/12] drivers: Add hardware timestamp engine (HTE)
-To:     Kent Gibson <warthog618@gmail.com>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <robh+dt@kernel.org>
-References: <20211123193039.25154-1-dipenp@nvidia.com>
- <20211123193039.25154-3-dipenp@nvidia.com> <20211126013041.GA10380@sol>
- <246d1ff4-ec51-b4bf-a664-4559c45021fb@nvidia.com>
- <20211208012136.GA18163@sol>
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-Message-ID: <f9ec603c-045e-a218-9cda-587c6c1c0a16@nvidia.com>
-Date:   Tue, 7 Dec 2021 17:59:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236936AbhLHCEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:04:36 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35466 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232311AbhLHCEf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 21:04:35 -0500
+X-UUID: f05e892a241e430e88faada1e0e9d722-20211208
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DZaORBOtJY/yncuKK0ASrYmOnUqpv3wP5VjwQJkPl2o=;
+        b=b+UDQlVg4XGmaR/qFBZQ2UnrcsS4U9u3hEOst0+evmQLKEDBQc5+YTeybF9YdI2le6UgfGcwjLYs7HK33Fld6u8aYRUCOFNIFgZSmhdtnE7TPNSKvz15SVskae9YpUMy4K36oR8VctY7reduWByuNECn+GyfqSdZtz1YUxpIpus=;
+X-UUID: f05e892a241e430e88faada1e0e9d722-20211208
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 89225687; Wed, 08 Dec 2021 10:01:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 8 Dec 2021 10:00:59 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Dec 2021 10:00:58 +0800
+Message-ID: <00e62ae7e7764296023b34395e4d109139c10325.camel@mediatek.com>
+Subject: Re: [PATCH v7 2/7] mtk-mdp: add driver to probe mdp components
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     houlong wei <houlong.wei@mediatek.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        "Hans Verkuil" <hverkuil@xs4all.nl>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?= 
+        <ck.hu@mediatek.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Yongqiang Niu =?UTF-8?Q?=28=E7=89=9B=E6=B0=B8=E5=BC=BA=29?= 
+        <yongqiang.niu@mediatek.com>,
+        Andrew-CT Chen =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?= 
+        <Andrew-CT.Chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Minghsiu Tsai =?UTF-8?Q?=28=E8=94=A1=E6=98=8E=E4=BF=AE=29?= 
+        <Minghsiu.Tsai@mediatek.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 8 Dec 2021 10:00:54 +0800
+In-Reply-To: <fc309940c9e59f80397b90c8b11424fea344e1b5.camel@mediatek.com>
+References: <20210825063323.3607738-1-eizan@chromium.org>
+         <20210825163247.v7.2.Ie6d1e6e39cf9b5d6b2108ae1096af34c3d55880b@changeid>
+         <CAAEAJfDNDXdJFfB-bHhFcqnnKZ0TY--d_wLGddKRymQOLQY4TQ@mail.gmail.com>
+         <fc309940c9e59f80397b90c8b11424fea344e1b5.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <20211208012136.GA18163@sol>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e3fff15-e3c2-43ac-c641-08d9b9ee164a
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3100:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3100FC2A1B23665C236FC19EAE6F9@DM6PR12MB3100.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xHjY39jiZbJAbEx2Tza6dWo+UGbHzmnSRgygxsHBEJZ9QkRvCaZ2bDK/DjA0cefBy3EVExYnp0O7Pqj1UTaDYLc9V6hiSQGpfdzHS8NR2xv7mWPePCpN+Ig/HR1p2KqDuUuqY9Lb9pAPM/9LLsHguf5seLkPdz21sMauUv0NQdgCr5I+ozUAGGulFKqLgF19g+a4EGC9V/K/7KFpoHsfdIezr6OztUKCkNodVLen5Q2UG+Bvw9vvk5IQrjXXGWhob1LmqsiirgBJ16ypLDpRL4ndQonAoma9EcE24j9YnyEKihH2zaSsmg03pvXBhaYf/6nZTEQmglkMyMkoox7sQp85JxubUNlOPztlqkNGyj3vimFFvVAuAdjVeN97DYf4ePob1cluQtkOVzDWrkkwt6agd4WAqdNEONHs9TmeFxplo/HRr0IWJCFFuYaoAOyDQtdBAs2+Ijg58KF1djN91UYGcdPB/+DTQ5xAMIKTOXf/WUZ7/huUFPe8akV+lO3WyLdLbeo0Z15va2BOXLzkZw6liprz1w6OoAPEWGDBf3WgqUC4DteOuEfJVA8moCNwF8bnmxU67z0sQmqjY15yxAdTIbMk2gdjALdlShXuAhMUKyCd1Atdypp74NGmu8w9RtNY72sO/HbgxEJ3YfquRCdIA7NEmv+lF8kqndXam2qniZyJGosPumb555virjSLxYDmgqywJ4f473oVj1k39UiNaH6hDlqwAILRw7bbC4pKkNAJiVSvB79lPOjjAJbAnDEdmw7RQolpJapBZEvsjQ2fyvcM2KMmcXIR3BOyt9gSaWKg1Q+P298JO2u0RjvZm/nFI/OIzWED37MyScm9NQ==
-X-Forefront-Antispam-Report: CIP:203.18.50.12;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(7636003)(186003)(40460700001)(356005)(16526019)(31686004)(6666004)(8936002)(4326008)(5660300002)(336012)(8676002)(83380400001)(426003)(2616005)(53546011)(26005)(16576012)(2906002)(34020700004)(316002)(86362001)(82310400004)(7416002)(6916009)(70206006)(70586007)(36756003)(54906003)(36860700001)(47076005)(508600001)(31696002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 01:57:27.2459
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e3fff15-e3c2-43ac-c641-08d9b9ee164a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.12];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3100
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+T24gTW9uLCAyMDIxLTA5LTA2IGF0IDAwOjIzICswODAwLCBob3Vsb25nIHdlaSB3cm90ZToNCj4g
+SGkgRXplcXVpZWwsDQo+IA0KPiBUaGFuayB5b3UgZm9yIHlvdXIgYXR0ZW50aW9uIHRvIHRoaXMg
+c2VyaWVzIG9mIHBhdGNoZXMuIEkgYW5zd2VyDQo+IHBhcnRpYWwgb2YgeW91ciBxdWVzdGlvbnMg
+YmVsb3cuDQo+IFJlZ2FyZHMsDQo+IEhvdWxvbmcNCj4gDQo+IE9uIFNhdCwgMjAyMS0wOS0wNCBh
+dCAyMDozNCArMDgwMCwgRXplcXVpZWwgR2FyY2lhIHdyb3RlOg0KPiA+IEhpIEVpemFuLA0KPiA+
+IA0KPiA+IFNvcnJ5IGZvciBzZWVpbmcgdGhpcyBzZXJpZXMgc28gbGF0ZS4NCj4gPiANCj4gPiBP
+biBXZWQsIDI1IEF1ZyAyMDIxIGF0IDAzOjM1LCBFaXphbiBNaXlhbW90byA8ZWl6YW5AY2hyb21p
+dW0ub3JnPg0KPiA+IHdyb3RlOg0KPiA+ID4gDQo+ID4gPiBCcm9hZGx5LCB0aGlzIHBhdGNoICgx
+KSBhZGRzIGEgZHJpdmVyIGZvciB2YXJpb3VzIE1USyBNRFANCj4gPiA+IGNvbXBvbmVudHMgdG8N
+Cj4gPiA+IGdvIGFsb25nc2lkZSB0aGUgbWFpbiBNVEsgTURQIGRyaXZlciwgYW5kICgyKSBob29r
+cyB0aGVtIGFsbA0KPiA+ID4gdG9nZXRoZXINCj4gPiA+IHVzaW5nIHRoZSBjb21wb25lbnQgZnJh
+bWV3b3JrLg0KPiA+ID4gDQo+ID4gPiAoMSkgVXAgdW50aWwgbm93LCB0aGUgTVRLIE1EUCBkcml2
+ZXIgY29udHJvbHMgOCBkZXZpY2VzIGluIHRoZQ0KPiA+ID4gZGV2aWNlDQo+ID4gPiB0cmVlIG9u
+IGl0cyBvd24uIFdoZW4gcnVubmluZyB0ZXN0cyBmb3IgdGhlIGhhcmR3YXJlIHZpZGVvDQo+ID4g
+PiBkZWNvZGVyLA0KPiA+ID4gd2UNCj4gPiA+IGZvdW5kIHRoYXQgdGhlIGlvbW11cyBhbmQgTEFS
+QnMgd2VyZSBub3QgYmVpbmcgcHJvcGVybHkNCj4gPiA+IGNvbmZpZ3VyZWQuDQo+ID4gDQo+ID4g
+V2h5IHdlcmUgbm90IGJlaW5nIHByb3Blcmx5IGNvbmZpZ3VyZWQ/IFdoYXQgd2FzIHRoZSBwcm9i
+bGVtPw0KPiA+IFdoeSBub3QgZml4aW5nIHRoYXQgaW5zdGVhZD8NCj4gPiANCj4gPiBEb2VzIHRo
+aXMgbWVhbiB0aGUgZHJpdmVyIGlzIGN1cnJlbnRseSBicm9rZW4gYW5kIHVudXNhYmxlPw0KPiAN
+Cj4gVGhpcyBzZXJpZXMgb2YgcGF0Y2hlcyBhcmUgc3VwcGxlbWVudHMgdG8gYW5vdGhlciBzZXJp
+ZXMsIHBsZWFzZQ0KPiByZWZlcg0KPiB0byAgDQo+IA0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVs
+Lm9yZy9wcm9qZWN0L2xpbnV4LW1lZGlhdGVrL2xpc3QvP3Nlcmllcz01MTUxMjljDQo+ICwgd2hp
+Y2ggYWRkIGRldmljZSBsaW5rIGJldHdlZW4gdGhlIG10ay1pb21tdSBjb25zdW1lciBhbmQgdGhl
+IG10ay0NCj4gbGFyYiANCj4gZGV2aWNlcy4gV2l0aG91dCB0aGF0IHNlcmllcyBvZiBwYXRjaGVz
+LCB0aGUgbXRrLW1kcCBkcml2ZXIgY2FuIHdvcmsNCj4gd2VsbCBzbyBmYXIuDQo+IEJ1dCB3aXRo
+IHRoYXQgc2VyaWVzLCBpdCBzZWVtcyB0aGUgZGV2aWNlIGxpbmsgb25seSBjYW4gYmUNCj4gZXN0
+YWJsaXNoZWQNCj4gZm9yIHRoZSBkZXZpY2Ugd2hpY2ggaXMgcmVnaXN0ZXJlZCBhcyBhIHBsYXRm
+b3JtIGRyaXZlci4gVGhhdCdzIHdoeQ0KPiBFaXphbiBhZGRzIHRoaXMgc2VyaWVzIG9mIHBhdGNo
+ZXMgdG8gbWFrZSBhbGwgbWRwIGNvbXBvbmVudHMgdG8gYmUNCj4gcmVnaXN0ZXJlZCBhcyBwbGF0
+Zm9ybSBkcml2ZXJzLg0KDQpUaGUgbXQ4MTczIG1kcCBoYXMgc2V2ZXJhbCBkZXZpY2VzOg0KICAg
+bWVkaWF0ZWssbXQ4MTczLW1kcC1yZG1hLCBtZWRpYXRlayxtdDgxNzMtbWRwICANCiAgIG1lZGlh
+dGVrLG10ODE3My1tZHAtcnN6DQogICBtZWRpYXRlayxtdDgxNzMtbWRwLXdkbWENCiAgIG1lZGlh
+dGVrLG10ODE3My1tZHAtd3JvdA0KDQpFeGNlcHQgdGhlIGZpcnN0IG9uZSwgdGhlIGxhc3QgdGhy
+ZWUgZGV2aWNlcyBhcmUgbm90IHRoZSBzdGFuZGFyZA0KcGxhdGZvcm0gZGV2aWNlcy4gVGh1cywg
+dGhleSBzaG91bGQgbm90IGJlIHRoZSBpb21tdSBjb25zdW1lciBkZXZpY2VzLg0KDQpRdWVzdGlv
+biAxOiBUaGUgbGFzdCB0aHJlZSBkZXZpY2UgZG9uJ3Qgd29yayBhY3R1YWxseSBpbiBtdDgxNzMg
+Y2hyb21lLA0KcmlnaHQ/IG9yIHRoZXkgYWNjZXNzIGNvbnRpbnVvdXMgYnVmZmVycz8NCg0KUXVl
+c3Rpb24gMjogVGhlIElPTU1VIGRldmljZS1saW5rIHBhdGNoc2V0IGp1c3QgcmVwbGFjZXMgdGhl
+IHBtIHJ1bnRpbWUNCmludGVyZmFjZXMuIEl0IGRvbid0IGltcHJvdmUgdGhlIG1kcCBmbG93LCBh
+bHNvIHNob3VsZCBub3QgaW50cm9kdWNlDQpyZWdyZXNzaW9uLiB0aHVzLCBteSB2OCBkb24ndCBy
+ZWJhc2UgdGhpcyBtZHAgcGF0Y2hlcy4gRG9lcyB0aGUgaW9tbXUNCnBhdGNoc2V0IGludHJvZHVj
+ZSByZWdyZXNzaW9uIGZvciBtZHA/DQoNCkBFaXphbiwgQGhvdWxvbmcsIENvdWxkIHlvdSBoZWxw
+IGNvbmZpcm0gdGhpcz8NClRoYW5rcy4NCg0KPiANCj4gPiANCj4gPiA+IFRvDQo+ID4gPiBjb25m
+aWd1cmUgdGhlbSwgYSBkcml2ZXIgZm9yIGVhY2ggYmUgYWRkZWQgdG8gbXRrX21kcF9jb21wIHNv
+DQo+ID4gPiB0aGF0DQo+ID4gPiBtdGtfaW9tbXVfYWRkX2RldmljZSgpIGNhbiAoZXZlbnR1YWxs
+eSkgYmUgY2FsbGVkIGZyb20NCj4gPiA+IGRtYV9jb25maWd1cmUoKQ0KPiA+ID4gaW5zaWRlIHJl
+YWxseV9wcm9iZSgpLg0KPiA+ID4gDQo+ID4gPiAoMikgVGhlIGludGVncmF0aW9uIGludG8gdGhl
+IGNvbXBvbmVudCBmcmFtZXdvcmsgYWxsb3dzIHVzIHRvDQo+ID4gPiBkZWZlcg0KPiA+ID4gdGhl
+DQo+ID4gPiByZWdpc3RyYXRpb24gd2l0aCB0aGUgdjRsMiBzdWJzeXN0ZW0gdW50aWwgYWxsIHRo
+ZSBNRFAtcmVsYXRlZA0KPiA+ID4gZGV2aWNlcw0KPiA+ID4gaGF2ZSBiZWVuIHByb2JlZCwgc28g
+dGhhdCB0aGUgcmVsZXZhbnQgZGV2aWNlIG5vZGUgZG9lcyBub3QNCj4gPiA+IGJlY29tZQ0KPiA+
+ID4gYXZhaWxhYmxlIHVudGlsIGluaXRpYWxpemF0aW9uIG9mIGFsbCB0aGUgY29tcG9uZW50cyBp
+cyBjb21wbGV0ZS4NCj4gPiA+IA0KPiA+ID4gU29tZSBub3RlcyBhYm91dCBob3cgdGhlIGNvbXBv
+bmVudCBmcmFtZXdvcmsgaGFzIGJlZW4gaW50ZWdyYXRlZDoNCj4gPiA+IA0KPiA+ID4gLSBUaGUg
+ZHJpdmVyIGZvciB0aGUgcmRtYTAgY29tcG9uZW50IHNlcnZlcyBkb3VibGUgZHV0eSBhcyB0aGUN
+Cj4gPiA+ICJtYXN0ZXIiDQo+ID4gPiAgIChhZ2dyZWdhdGUpIGRyaXZlciBhcyB3ZWxsIGFzIGEg
+Y29tcG9uZW50IGRyaXZlci4gVGhpcyBpcyBhDQo+ID4gPiBub24tDQo+ID4gPiBpZGVhbA0KPiA+
+ID4gICBjb21wcm9taXNlIHVudGlsIGEgYmV0dGVyIHNvbHV0aW9uIGlzIGRldmVsb3BlZC4gVGhp
+cyBkZXZpY2UgaXMNCj4gPiA+ICAgZGlmZmVyZW50aWF0ZWQgZnJvbSB0aGUgcmVzdCBieSBjaGVj
+a2luZyBmb3IgYSAibWVkaWF0ZWssdnB1Ig0KPiA+ID4gcHJvcGVydHkNCj4gPiA+ICAgaW4gdGhl
+IGRldmljZSBub2RlLg0KPiA+ID4gDQo+ID4gDQo+ID4gQXMgSSBoYXZlIHN0YXRlZCBpbiBZdW5m
+ZWksIEkgYW0gbm90IGNvbnZpbmNlZCB5b3UgbmVlZCBhbiBhc3luYw0KPiA+IGZyYW1ld29yaw0K
+PiA+IGF0IGFsbC4gSXQgc2VlbXMgYWxsIHRoZXNlIGRldmljZXMgY291bGQgaGF2ZSBiZWVuIGxp
+bmtlZCB0b2dldGhlcg0KPiA+IGluIHRoZSBkZXZpY2UgdHJlZSwgYW5kIHRoZW4gaGF2ZSBhIG1h
+c3RlciBkZXZpY2UgdG8gdGllIHRoZW0uDQo+ID4gDQo+ID4gSS5lLiBzb21ldGhpbmcgbGlrZQ0K
+PiA+IA0KPiA+IG1kcCB7DQo+ID4gICBtZHBfcmRtYTAgew0KPiA+ICAgfQ0KPiA+ICAgbWRwX3Jz
+ejAgew0KPiA+ICAgfQ0KPiA+ICAgbWRwX3JzejEgew0KPiA+ICAgfQ0KPiA+IH0NCj4gPiANCj4g
+DQo+IFRoZSBjb21taXQgbWVzc2FnZSBvZiB0aGUgcGF0Y2ggYmVsb3cgZXhwbGFpbnMgdGhhdCAi
+IElmIHRoZSBtZHBfKg0KPiBub2RlcyBhcmUgdW5kZXIgYW4gbWRwIHN1Yi1ub2RlLCB0aGVpciBj
+b3JyZXNwb25kaW5nIHBsYXRmb3JtIGRldmljZQ0KPiBkb2VzIG5vdCBhdXRvbWF0aWNhbGx5IGdl
+dCBpdHMgaW9tbXUgYXNzaWduZWQgcHJvcGVybHkuIg0KPiBQbGVhc2UgcmVmZXIgdG8gDQo+IA0K
+aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xp
+bnV4LmdpdC9jb21taXQvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxNzMuZHRzaT9o
+PXY1LjE0LjEmaWQ9ODEyNzg4MWY3NDFkYmJmOWExZGE5ZTliYzU5MTMzODIwMTYwYjIxNw0KPiAN
+CltzbmlwXQ0K
 
-On 12/7/21 5:21 PM, Kent Gibson wrote:
-> On Tue, Dec 07, 2021 at 04:36:35PM -0800, Dipen Patel wrote:
->> Hi,
->>
-> [snip]
->
->>>> +/**
->>>> + * enum hte_return- HTE subsystem return values used during callback.
->>>> + *
->>>> + * @HTE_CB_HANDLED: The consumer handled the data successfully.
->>>> + * @HTE_RUN_THREADED_CB: The consumer needs further processing, in that case HTE
->>>> + * subsystem will invoke kernel thread and call secondary callback provided by
->>>> + * the consumer during devm_of_hte_request_ts and hte_req_ts_by_dt_node call.
->>>> + * @HTE_CB_TS_DROPPED: The client returns when it can not store ts data.
->>>> + * @HTE_CB_ERROR: The client returns error if anything goes wrong.
->>>> + */
->>>> +enum hte_return {
->>>> +	HTE_CB_HANDLED,
->>>> +	HTE_RUN_THREADED_CB,
->>>> +	HTE_CB_TS_DROPPED,
->>>> +	HTE_CB_ERROR,
->>>> +};
->>>> +typedef enum hte_return hte_return_t;
->>>> +
->>> Wrt HTE_CB_TS_DROPPED, why is the client dropping data any of hte's
->>> business?  It is also confusing in that I would expect the dropped_ts
->>> gauge, that you increment when this code is returned, to indicate the
->>> events dropped by the hardware, not the client.  But then you have no
->>> indication of events dropped by hardware at all, though you could
->>> determine that from gaps in the sequence numbers.
->>> Anyway, the client can do the math in both cases if they care to, so not
->>> sure what its purpose is here.
->> It is used for statistical purpose and hte being subsytem it can provide
->>
->> standard interface in debugfs (so that clients do not have to) to anyone interested.
->>
->> The dropped_ts could represent total dropped ts by both hardware and
->>
->> client. I can add debugfs interface to break it down further if it helps in statistics.
->>
-> Updating stats is not what the return code here is for.
->
-> And what if the client discards the event AFTER returning from the
-> handler, say in the threaded cb?
->
-> If you want stats fedback then provide a function for the client to call
-> to update stats, rather than piggy-backing it on the callback return.
-I agree, will work that in v4.
-> I'm unconvinced that stats are a worthwhile addition, and you certainly
-> don't need to bake it into your core api.
-
-Wouldn't it help in debugging i.e. quickly check using this interface
-
-if there are drops for given application setup?
-
->
-> Cheers,
-> Kent.

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B10946CA96
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2243E46CA98
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243510AbhLHB7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S243758AbhLHB7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243343AbhLHB6v (ORCPT
+        with ESMTP id S243394AbhLHB6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:58:51 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD18C061D7E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:55:17 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id d2-20020a656202000000b00325603f7d0bso432927pgv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:55:17 -0800 (PST)
+        Tue, 7 Dec 2021 20:58:53 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43E7C0698D3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:55:18 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id z13-20020a627e0d000000b004a2849e589aso732700pfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=iR5gsD/RoTX7Ab+ckhbUw8O3OI7/VYiJinLA00sLWPI=;
-        b=WNsSNhrKWtiZPTt79yrGjP2QXJ/zO4dHXmq3vDHqWoxkLtAw17Zd8KscsmjJ5oexGb
-         kAliVyZsQqhQdPrNDF3PQfsQUXNjABbMqKTfY/BVR8fXS8Rneja+8reFa1F4jOY/pcwE
-         ciNn2DfNsN5BCZfZNfVggHMXqCUKq8favBTGeLtEPSZW/WIq7X2hNEVmhRguMWaIdO9s
-         syVWjmq8jby34MQJXy+NvG7hmIQPQQK0w5i4VP2C4a8r84Dfz7Xux7plAzDVBCSdKRWp
-         IY0wZ1LxRDp71LCRqLSV6xYBQgPTInG/LmrBIv48mELobkYVfcjaB7HqC1PidJ96oxdN
-         9/2A==
+        bh=rsEyQZ3DP35HLKbmnGk57dHMCfFGAuWmWI/6PgsECHs=;
+        b=hmKYUrxitUrLwoogjptnDL/ItRNyBWfvVS9Wu829MCVieaIX/69uvnMqZoWgsv4/Sq
+         KDhuHw01hnhIklE4ptBeKj3ufvxBQ4lnCrnn/qi7szxPYTTl/+WMp4gsAqmSl7HbeSxr
+         Kl6Is8rRCv9pnDzLHe10jdOzymQ3C1BE7AFq3WOgNf+2dcRyiY/PMBzZLplZqf2+K1qU
+         5gLqaGdirXNOKlVwItpG5Ngw09mQMVdBqSDxbAWy2O1xsdMfl4U4QGuMeO5gOJfLjjm6
+         ImLq1x3TtdSq8N5XABQHSr/HqN4q3QwMqB4vnhIkvHlX932XlxC+PfHF6L36lUGb4pqn
+         L2+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=iR5gsD/RoTX7Ab+ckhbUw8O3OI7/VYiJinLA00sLWPI=;
-        b=nW/BiJYVfnMzgyauiYDNMoMfj9Sju6fWwqcobg1SN5mY5XJEOwOUjIAP0ykwPga7uD
-         LheIB9AyuQJxZttuY+CLH98YO3oiLfe6cAzgolwMcQni6aw9mY12anXlYhWuSjSxYlGP
-         WDMAQq0aZO5Seno4gYK4WG8ls3Y8M5TLwm6Qoi4+wpEkEg8YS/MEgxeI9l50LT9WMWwE
-         AM0jVxVs7G4Ox+acgEeMdnzX8h2CQqXTdBVQj9FVHPQVIfMAVHAlnyY+bi5V9tPs4iTh
-         6Gvsv46vT/lmaRnbxe0SCLjfZo/xohK/zBveGapIfFExEk5YGykkO0SabhmbywGRWADv
-         aL8g==
-X-Gm-Message-State: AOAM530xx+M/TIzafW+5afYW1UIUN7NHr+1D0Lc4i7Bm+xcPIRrPkopV
-        AnGx67oPaYAZjMVpYRCSszwrgJjkYGs=
-X-Google-Smtp-Source: ABdhPJwcoBXXZdmSOghfbE08/EmszWpxoDmbsXidfNKiYXB2oVUXH7tNkAdX5obuN8xCpGSVDdPKRG2yOvc=
+        bh=rsEyQZ3DP35HLKbmnGk57dHMCfFGAuWmWI/6PgsECHs=;
+        b=OurWz4IvJOrI/3Z8UipBcMl2GDr1eCcn2heRy0Rv2uhHJv0oX4upWj7Rr0UeV7pvtT
+         QEr9w0kzNkFsXcb8E3EGxVS/0olLyko7qR8q3asdBpYEVqeNjRF83iuCANFaO0C11vXm
+         Afvs8pTZOE938VNBEA/rkUyAmS8U5610FKkzgi1O1LpPI5aErO9BBvucvGnp119MHGVx
+         Wp2XQu+YtGgl/bZ0bOosALFGJkJycCFMC2kQtgPoWH3rUxSLO2wyMimEXfyX8SV7s+sM
+         W2YVkOX12Yd8oYWZMW5PPCq7Lfgc4v1+mJRGsucq+6ucNXGXt6iCOmCu7uxR4iMnsOlr
+         18Rw==
+X-Gm-Message-State: AOAM533S27V4RiWjmOXLQ1oMRtK9/+GsTjOkWUUzfJUuRM+9NaFoAgiy
+        ck3DJNGNOY5I2mVKa2e/vBtQMkJOYfg=
+X-Google-Smtp-Source: ABdhPJxc6ZNvK2ni0NY4zn1pqNTbfF6S4S3QCEyDwLu/l6woBMqErCmjW6iRbSGR/2Al2p3yHA0CHhwy/Z0=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:1913:: with SMTP id
- 19mr3513966pjg.174.1638928516567; Tue, 07 Dec 2021 17:55:16 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:e810:b0:141:d8e9:a8b0 with SMTP id
+ u16-20020a170902e81000b00141d8e9a8b0mr55667312plg.9.1638928518234; Tue, 07
+ Dec 2021 17:55:18 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  8 Dec 2021 01:52:28 +0000
+Date:   Wed,  8 Dec 2021 01:52:29 +0000
 In-Reply-To: <20211208015236.1616697-1-seanjc@google.com>
-Message-Id: <20211208015236.1616697-19-seanjc@google.com>
+Message-Id: <20211208015236.1616697-20-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211208015236.1616697-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3 18/26] KVM: VMX: Pass desired vector instead of bool for
- triggering posted IRQ
+Subject: [PATCH v3 19/26] KVM: VMX: Fold fallback path into triggering posted
+ IRQ helper
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Joerg Roedel <joro@8bytes.org>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -68,52 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor the posted interrupt helper to take the desired notification
-vector instead of a bool so that the callers are self-documenting.
+Move the fallback "wake_up" path into the helper to trigger posted
+interrupt helper now that the nested and non-nested paths are identical.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 0eac98589472..ff309ebe9f2c 100644
+index ff309ebe9f2c..9153f5f5d424 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3890,11 +3890,9 @@ static void vmx_msr_filter_changed(struct kvm_vcpu *vcpu)
+@@ -3889,7 +3889,7 @@ static void vmx_msr_filter_changed(struct kvm_vcpu *vcpu)
+ 	pt_update_intercept_for_msr(vcpu);
  }
  
- static inline bool kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
--						     bool nested)
-+						     int pi_vec)
+-static inline bool kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
++static inline void kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
+ 						     int pi_vec)
  {
  #ifdef CONFIG_SMP
--	int pi_vec = nested ? POSTED_INTR_NESTED_VECTOR : POSTED_INTR_VECTOR;
--
- 	if (vcpu->mode == IN_GUEST_MODE) {
- 		/*
- 		 * The vector of interrupt to be delivered to vcpu had
-@@ -3955,7 +3953,7 @@ static int vmx_deliver_nested_posted_interrupt(struct kvm_vcpu *vcpu,
+@@ -3920,10 +3920,15 @@ static inline bool kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
+ 		 */
+ 
+ 		apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
+-		return true;
++		return;
+ 	}
+ #endif
+-	return false;
++	/*
++	 * The vCPU isn't in the guest; wake the vCPU in case it is blocking,
++	 * otherwise do nothing as KVM will grab the highest priority pending
++	 * IRQ via ->sync_pir_to_irr() in vcpu_enter_guest().
++	 */
++	kvm_vcpu_wake_up(vcpu);
+ }
+ 
+ static int vmx_deliver_nested_posted_interrupt(struct kvm_vcpu *vcpu,
+@@ -3953,8 +3958,7 @@ static int vmx_deliver_nested_posted_interrupt(struct kvm_vcpu *vcpu,
  		smp_mb__after_atomic();
  
  		/* the PIR and ON have been set by L1. */
--		if (!kvm_vcpu_trigger_posted_interrupt(vcpu, true))
-+		if (!kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_NESTED_VECTOR))
- 			kvm_vcpu_wake_up(vcpu);
+-		if (!kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_NESTED_VECTOR))
+-			kvm_vcpu_wake_up(vcpu);
++		kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_NESTED_VECTOR);
  		return 0;
  	}
-@@ -3993,7 +3991,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+ 	return -1;
+@@ -3991,9 +3995,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
  	 * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
  	 * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
  	 */
--	if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-+	if (!kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_VECTOR))
- 		kvm_vcpu_wake_up(vcpu);
- 
+-	if (!kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_VECTOR))
+-		kvm_vcpu_wake_up(vcpu);
+-
++	kvm_vcpu_trigger_posted_interrupt(vcpu, POSTED_INTR_VECTOR);
  	return 0;
+ }
+ 
 -- 
 2.34.1.400.ga245620fadb-goog
 

@@ -2,202 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31DA46CC47
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A283746CC4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239987AbhLHETZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbhLHETY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:19:24 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C667FC061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:15:52 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id e3so3981250edu.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KXCq01Yn53pJW1hOYABliYqveWIOjkRebuRptC/P/+c=;
-        b=WI+kU0eYteVhFCRJQg6ItU1OROG2v1ZCghjsuyX05GWlgZO7XebX0W2Jz69Gsy5Mi2
-         o/DQ3M4cif1a/wM3qWecmyXvJiXDayliqCSwADZzqNkqIzUD1fcwVNXoY0/Iq1bUeCXr
-         S90LiYVCFhrHopcdlqFFMISEMr0huNfyK8zlFdDnmPbSZ1lduUrrAb4ijWzABoogxBMh
-         Do3Dp+701atYpycC8jaN83VHNPK+SytjD7j+zwu2pW0qSFbxeMnm9rrhpLLCXqhp5Uk2
-         NL0bLMa4fOXVEybusuT1iO4eYOSk/XROk6bLZccT2xyMo31rpijqfkF6GXtCPF+nKd+6
-         dPqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KXCq01Yn53pJW1hOYABliYqveWIOjkRebuRptC/P/+c=;
-        b=Kq8kjpCz4m6nMlf4RpHtdepkqs5qqBNihONyAz4FAb/NePqj5A9KXEVbD7U+NDC5tY
-         xXrUI6G8Um9KqwQAiabPscE7C/zwd9FLeDwVehQEnYu7GKxOX6j7zciVlXblMGruRB28
-         qPXqBMCChjnyAYy3XEoXiqEA6b55Qfi22A4eEcLI8G4OLBz+9MjPcSRowdqy7eg3FXU/
-         SKxs3D/KnjO2xRlWbcsZFPLN80sDJ1w0JCvPchXZa0bjuUmtV4i6PWL5ZjHXw8tzfq9s
-         Q//ucs4WwWGPAbYyO2gJzsRw8Upm7X3QTsGaQweOQET0/wnSGp/XnRfb6ubuKiPjSf2q
-         eJNA==
-X-Gm-Message-State: AOAM532W/dAEn9EhYHM7BPyjp+UlUpkmzIj7WSnrSAM5RcP/hKgjlzRt
-        Bh38vquFc70RI3X88t4ThjnVsIVYXrIu2itPk8aJMA==
-X-Google-Smtp-Source: ABdhPJxMdonJDulWT5QLKCR6wBpKlOqxPVBiG3G3uOyW5TMfW2Wtsey2Rky++z45hBXwLkNgjLFR3HH5nMbVFGVPD7g=
-X-Received: by 2002:a17:906:7955:: with SMTP id l21mr4695919ejo.6.1638936951258;
- Tue, 07 Dec 2021 20:15:51 -0800 (PST)
+        id S239990AbhLHEVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:21:02 -0500
+Received: from mga07.intel.com ([134.134.136.100]:36349 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239874AbhLHEU5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 23:20:57 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="301134913"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="301134913"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 20:17:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="515607398"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 07 Dec 2021 20:17:24 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muoOS-000NOS-1v; Wed, 08 Dec 2021 04:17:24 +0000
+Date:   Wed, 8 Dec 2021 12:16:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: samsung-keypad.c:undefined reference to `devm_ioremap'
+Message-ID: <202112081217.krALIoXt-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211206145547.892668902@linuxfoundation.org>
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 8 Dec 2021 09:45:40 +0530
-Message-ID: <CA+G9fYuvAA469sMYTi7+OF01=aqNp6Vx4f2VwNeFt552CDNj_Q@mail.gmail.com>
-Subject: Re: [PATCH 4.4 00/52] 4.4.294-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 20:29, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.4.294 release.
-> There are 52 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.4.294-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
+date:   1 year, 7 months ago
+config: s390-buildonly-randconfig-r001-20211208 (https://download.01.org/0day-ci/archive/20211208/202112081217.krALIoXt-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build
-* kernel: 4.4.294-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.4.y
-* git commit: f5b0b7aefd9d2ea9170ed69c7ab2dfd751fba7d1
-* git describe: v4.4.293-53-gf5b0b7aefd9d
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.2=
-93-53-gf5b0b7aefd9d
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x6c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+   hidma.c:(.text+0x102a): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: hidma.c:(.text+0x106a): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
+   edma.c:(.text+0x29d6): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
+   omap-dma.c:(.text+0x6a): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x148): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0x72): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x2bc): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/ks-sa-rng.o: in function `ks_sa_rng_probe':
+   ks-sa-rng.c:(.text+0x334): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+   npcm-rng.c:(.text+0x1f4): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
+>> samsung-keypad.c:(.text+0x4e2): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x1fc): undefined reference to `devm_platform_ioremap_resource'
 
-## No Test Regressions (compared to v4.4.293-22-gd0a6005afb1e)
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
+   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
+   Selected by
+   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
+   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
 
-## No Test Fixes (compared to v4.4.293-22-gd0a6005afb1e)
-
-## Test result summary
-total: 56876, pass: 45655, fail: 214, skip: 9659, xfail: 1348
-
-## Build Summary
-* arm: 129 total, 129 passed, 0 failed
-* arm64: 31 total, 31 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 18 total, 18 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,120 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB40B46D5F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B413746D5F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbhLHOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:46:21 -0500
-Received: from mga07.intel.com ([134.134.136.100]:16609 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229611AbhLHOqU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:46:20 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="301223952"
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="301223952"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 06:42:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="612108832"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2021 06:42:46 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muy9d-0000gf-OI; Wed, 08 Dec 2021 14:42:45 +0000
-Date:   Wed, 8 Dec 2021 22:41:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joseph CHANG <josright123@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: Add DM9051 driver
-Message-ID: <202112082228.stoSxUom-lkp@intel.com>
-References: <20211202204656.4411-3-josright123@gmail.com>
+        id S235307AbhLHOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:46:06 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:53696 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229611AbhLHOqF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:46:05 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 0B6421C0B77; Wed,  8 Dec 2021 15:42:32 +0100 (CET)
+Date:   Wed, 8 Dec 2021 15:42:31 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [ANNOUNCE] 5.10.83-rt58
+Message-ID: <20211208144231.GA323@amd>
+References: <YalDQe/lyXqAxB0K@uudg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="envbJBWh7q8WU6mo"
 Content-Disposition: inline
-In-Reply-To: <20211202204656.4411-3-josright123@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YalDQe/lyXqAxB0K@uudg.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joseph,
 
-Thank you for the patch! Perhaps something to improve:
+--envbJBWh7q8WU6mo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on ce83278f313ce65a9bbd780a3e07fa3f62d82525]
+Hi!
+>=20
+> I'm pleased to announce the 5.10.83-rt58 stable release.
+>=20
+> This release is just an update to the new stable 5.10.83
+> version and no RT specific changes have been made.
 
-url:    https://github.com/0day-ci/linux/commits/Joseph-CHANG/ADD-DM9051-NET-DEVICE/20211208-193833
-base:   ce83278f313ce65a9bbd780a3e07fa3f62d82525
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211208/202112082228.stoSxUom-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9ee7a9a16698431c764b4b21a0839e87f3692078
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Joseph-CHANG/ADD-DM9051-NET-DEVICE/20211208-193833
-        git checkout 9ee7a9a16698431c764b4b21a0839e87f3692078
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/ethernet/davicom/
+Thank you. CIP project started doing 5.10.X based releases, and we
+include -rt tree, too. To make my job tiny bit easier, would it be
+possible to CC: pavel@denx.de on release announcemnts?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Tree is available at
+https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/log/?h=3D=
+linux-5.10.y-cip-rt
+=2E
 
-All warnings (new ones prefixed by >>):
+What may be more interesting is that we are running tests over at
+gitlab:
 
-   drivers/net/ethernet/davicom/dm9051.c: In function 'dm9051_read_mac_to_dev':
-   drivers/net/ethernet/davicom/dm9051.c:255:35: error: assignment of read-only location '*(ndev->dev_addr + (sizetype)i)'
-     255 |                 ndev->dev_addr[i] = ior(db, DM9051_PAR + i);
-         |                                   ^
-   drivers/net/ethernet/davicom/dm9051.c:260:43: error: assignment of read-only location '*(ndev->dev_addr + (sizetype)i)'
-     260 |                         ndev->dev_addr[i] = ior(db, DM9051_PAR + i);
-         |                                           ^
-   drivers/net/ethernet/davicom/dm9051.c: In function 'dm_set_mac_lock':
->> drivers/net/ethernet/davicom/dm9051.c:341:57: warning: passing argument 3 of 'dm_write_eeprom_func' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     341 |                         dm_write_eeprom_func(db, i / 2, &ndev->dev_addr[i]);
-         |                                                         ^~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/davicom/dm9051.c:156:73: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
-     156 | static void dm_write_eeprom_func(struct board_info *db, int offset, u8 *data)
-         |                                                                     ~~~~^~~~
+https://gitlab.com/cip-project/cip-kernel/linux-cip/tree/linux-5.10.y-cip-rt
 
+Thanks and best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-vim +341 drivers/net/ethernet/davicom/dm9051.c
+--envbJBWh7q8WU6mo
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-   318	
-   319	/* set mac permanently
-   320	 */
-   321	static void dm_set_mac_lock(struct board_info *db)
-   322	{
-   323		struct net_device *ndev = db->ndev;
-   324	
-   325		if (db->enter_setmac) {
-   326			int i, oft;
-   327	
-   328			db->enter_setmac = 0;
-   329			netdev_info(ndev, "set_mac_address %02x %02x %02x  %02x %02x %02x\n",
-   330				    ndev->dev_addr[0], ndev->dev_addr[1], ndev->dev_addr[2],
-   331				    ndev->dev_addr[3], ndev->dev_addr[4], ndev->dev_addr[5]);
-   332	
-   333			/* write to net device and chip */
-   334			ADDR_LOCK_HEAD_ESSENTIAL(db); //mutex_lock
-   335			for (i = 0, oft = DM9051_PAR; i < ETH_ALEN; i++, oft++)
-   336				iow(db, oft, ndev->dev_addr[i]);
-   337			ADDR_LOCK_TAIL_ESSENTIAL(db); //mutex_unlock
-   338	
-   339			/* write to EEPROM */
-   340			for (i = 0; i < ETH_ALEN; i += 2)
- > 341				dm_write_eeprom_func(db, i / 2, &ndev->dev_addr[i]);
-   342		}
-   343	}
-   344	
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+iEYEARECAAYFAmGwxFcACgkQMOfwapXb+vJP0QCfSe9w3nkvs4oP91ub6A/xCvxC
+a9YAnicVd6jnmRzTpRTOCsdSOwEsWeM9
+=96G3
+-----END PGP SIGNATURE-----
+
+--envbJBWh7q8WU6mo--

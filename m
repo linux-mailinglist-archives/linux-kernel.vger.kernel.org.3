@@ -2,78 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 398CF46DBE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E0B46DBE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbhLHTUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S233077AbhLHTUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbhLHTUT (ORCPT
+        with ESMTP id S230401AbhLHTUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:20:19 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF71C0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:16:47 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id e10-20020a17090301ca00b00141fbe2569dso1304811plh.14
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:16:47 -0800 (PST)
+        Wed, 8 Dec 2021 14:20:21 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAF1C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:16:49 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id j9-20020a17090a31c900b001abe663b508so4290609pjf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IbHH1eM7+h5JA/Wq7qVMHPIVqo/1uljJ6CH0uHyrjD8=;
-        b=C/Lkut5Vvd+odmZn3T7EImyPb9hSe/IbC+QLw/n/F8eMNrY9JgHnOANkktmMpsGv/P
-         sMp1QEUPZOLesC+96+pkElI3ReolspbG9+E9HMqkohWgkz4Btdg5ggxwaFScVxhqcPAf
-         KcuNJU3AuTQn9hZhyZm73AFW6WiMdZFXQ/lu6RKljVnrlepfv2/u910uDmYt5Ufyy6tc
-         Pd6osWEBua0Rx4F0Ueul2Jf8i+liJ0VGKfRi4gL5FruVpiU44AT0BdtVD79/FnOnhgkz
-         0gSK37HBDwzKopTpdYD6PZdbz/4Dnqn6QEhCvYl1/L7HLobGx7lV3us3CMgC4CqFdx+H
-         MUWg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ojJrL2dJFM5Q++eDGH0upQ2LSoAJ/x18fk0JOthYkyU=;
+        b=F9xUeZvVXMCohXl9eYXKYkj5Q7qFz4AxIrnY3AFhnlke6CeZOEtHdPqb4b2SkwcSPU
+         The/ULJOrwm/KIW3p+mIqGwkytI2MsPOku0O/OwSbXDchG+TqjF6WDgzjSjjou8aVk7g
+         SfEblOnKryn9vWTufvVV2fz7UwN2Vl1ndw5aosfeZe4zw5h79SteWHZmRCxzxEs+/pm2
+         EXp36xwDVCAc4+YBuPVCliTWzSV1B2yBwnPj+wV93tIxeyTT5ofXA3Gb3+nOglr6ucJF
+         hCSjVXUoouucJNvpXunstQ87fvEwthQ+5sf0IfCQywtTRfiPKHeK2WAsZrgjHuwKx3ee
+         dCMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IbHH1eM7+h5JA/Wq7qVMHPIVqo/1uljJ6CH0uHyrjD8=;
-        b=ZZUdzojzI8a4Vfc/xTiZlHyt5AkoVI/6zqzLrfDDvboJMI0lwm5hTirgTjc9bMa+QV
-         5MlWNPHIJ24jEPHdQKkSCZFRCGUNCXY9zpJIAVvpNnnfI7+XqMq2sf6J5K/PgacLwY8l
-         V2JvnOEqRZ8mrMRw9b1rxh2s/oKGnqEQflr/WGCJFOfmNVH4ZrgUHDmNrkMxlj0Znooi
-         A51qeB0kek21ZIhMHJH1Anbqyap312hGiwdvwAbGb/2FUGB/6ZmuYMB6OqJa8TKT29sx
-         XMlicctZ9zsCUXM3SK1e5FbiTc+U5D0tAywVauXRYlJCnx324fYO5X0EddnaDDPwfJfi
-         3NYw==
-X-Gm-Message-State: AOAM5325GBTlBuVysOvMkHjYLuxDXTHE6q4TwRUZdYM5Z5E5seP396zN
-        py2NwHcM0gCgW7ugMYwgRlRUpbOVjhkXb1e2rUQQt+St2xzb+rAlOFSgl8z2ZBKhjuRoJq34fIV
-        mR9YFsbPHlTor4IlThm9sDrwkVIPQAMsvNzDv3OOnzI25kNeRfWaCKm2cFEe3P15XgZ6atw==
-X-Google-Smtp-Source: ABdhPJzbQwRn8BEp17nvsf8JcBg+qKR92YLHP49MnjCculnvJHOPbV/gUD1PpGVH3Bj77mJ+nx5lepeMuIA=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ojJrL2dJFM5Q++eDGH0upQ2LSoAJ/x18fk0JOthYkyU=;
+        b=xa/JmOVN93eke6xz5ruMZ9nN8COpIbU7E+1GrKPSrtA5BZpdM4LDzAUz7G3TNMenlA
+         KOaPdxBJjenXnLH8Bz+7pP/PkYXnUQzElThkOW0G5EPW5G3NSkZMg4uJyypF+S+G6uIY
+         Qkz5T3AN3SpnSIs/fnxsv+7GRk99LU3qGG8cmqHxw1pYJO/Bhk9KV/jFsDDqpX6nvxd0
+         +ccv26CQ7IGHbVgDeFuyuflp4ubprCMqwmVX0GtdlKbrajNMip2EBIBqpZoR+vxRsOmH
+         LIfKxjc2mwg+A/bwvNGvYQkkhXNM49DYoJfhHw1vsHaCIYJiIF55cSvlRK/OxJcg/Lj7
+         gKnQ==
+X-Gm-Message-State: AOAM5317O2cuaWy9vh7CmGEePXWhnZnoluDahrUDn+v7pXiiS/SYezNY
+        j3TDozeLqiG4wEwiY3MUO1R59JZpj18NKv5Z7NtPytjlNEW2Ds0vNYP95mFI1nveGYsiP2aK1HN
+        EICPK1U5fbcvpykBo7ORX+mmCA3TchbGbP0r1T0fVvga50PiwFbluYAn+13Whhbg5hTHq8w==
+X-Google-Smtp-Source: ABdhPJwMNSfy6bFmz0+Dabi6HgIafA88yZ0BHb9FRAvnuCfanEqqNQ1GjPW0a8MU9L8duFHHHlhi3nKjo6Q=
 X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:ff20:12b0:c79e:3e6b])
- (user=pgonda job=sendgmr) by 2002:a17:90b:3849:: with SMTP id
- nl9mr9677376pjb.145.1638991006729; Wed, 08 Dec 2021 11:16:46 -0800 (PST)
-Date:   Wed,  8 Dec 2021 11:16:39 -0800
-Message-Id: <20211208191642.3792819-1-pgonda@google.com>
+ (user=pgonda job=sendgmr) by 2002:a17:903:22c4:b0:141:deda:a744 with SMTP id
+ y4-20020a17090322c400b00141dedaa744mr62116188plg.25.1638991008565; Wed, 08
+ Dec 2021 11:16:48 -0800 (PST)
+Date:   Wed,  8 Dec 2021 11:16:40 -0800
+In-Reply-To: <20211208191642.3792819-1-pgonda@google.com>
+Message-Id: <20211208191642.3792819-2-pgonda@google.com>
 Mime-Version: 1.0
+References: <20211208191642.3792819-1-pgonda@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 0/3] Fixes for SEV mirror VM tests
+Subject: [PATCH 1/3] selftests: sev_migrate_tests: Fix test_sev_mirror()
 From:   Peter Gonda <pgonda@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Orr <marcorr@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated patch series for fixing bug in sev_ioctl() which allowed test
-to look like a mirror vm could call KVM_SEV_LAUNCH_START. Adds
-additional testing to validate mirror vm can only call subset of
-commands.
+Mirrors should not be able to call LAUNCH_START. Remove the call on the
+mirror to correct the test before fixing sev_ioctl() to correctly assert
+on this failed ioctl.
 
-I could not add the patch Seanjc recommended due to issues with
-sev_platform_init() not correctly setting the fw error. I'll work ontop
-of the INIT_EX patch series to fix this issue with the PSP driver.
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Marc Orr <marcorr@google.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+---
+ tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Peter Gonda (3):
-  selftests: sev_migrate_tests: Fix test_sev_mirror()
-  selftests: sev_migrate_tests: Fix sev_ioctl()
-  selftests: sev_migrate_tests: Add mirror command tests
-
- .../selftests/kvm/x86_64/sev_migrate_tests.c  | 59 ++++++++++++++++---
- 1 file changed, 52 insertions(+), 7 deletions(-)
-
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index 29b18d565cf4..fbc742b42145 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -228,9 +228,6 @@ static void sev_mirror_create(int dst_fd, int src_fd)
+ static void test_sev_mirror(bool es)
+ {
+ 	struct kvm_vm *src_vm, *dst_vm;
+-	struct kvm_sev_launch_start start = {
+-		.policy = es ? SEV_POLICY_ES : 0
+-	};
+ 	int i;
+ 
+ 	src_vm = sev_vm_create(es);
+@@ -241,7 +238,7 @@ static void test_sev_mirror(bool es)
+ 	/* Check that we can complete creation of the mirror VM.  */
+ 	for (i = 0; i < NR_MIGRATE_TEST_VCPUS; ++i)
+ 		vm_vcpu_add(dst_vm, i);
+-	sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_START, &start);
++
+ 	if (es)
+ 		sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
+ 
 -- 
 2.34.1.400.ga245620fadb-goog
 

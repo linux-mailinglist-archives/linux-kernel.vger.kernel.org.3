@@ -2,137 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5937046D08D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AF246D064
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhLHKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:09:52 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:47588 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbhLHKJq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:09:46 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1B89eqpP032351;
-        Wed, 8 Dec 2021 17:40:54 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 8 Dec
- 2021 18:05:52 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        "kernel test robot" <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <benh@kernel.crashing.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v3 4/4] usb: aspeed-vhub: support test mode feature
-Date:   Wed, 8 Dec 2021 18:05:45 +0800
-Message-ID: <20211208100545.1441397-5-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
-References: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1B89eqpP032351
+        id S230525AbhLHJ6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:58:42 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:42628 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230129AbhLHJ6l (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:58:41 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B39191A05C1;
+        Wed,  8 Dec 2021 10:55:08 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 50C9A1A05A5;
+        Wed,  8 Dec 2021 10:55:08 +0100 (CET)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 332CE183AC4E;
+        Wed,  8 Dec 2021 17:55:06 +0800 (+08)
+From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+To:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kuba@kernel.org, qiangqing.zhang@nxp.com, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        yannick.vignon@nxp.com, boon.leong.ong@intel.com,
+        Jose.Abreu@synopsys.com, mst@redhat.com, sonic.zhang@analog.com,
+        Joao.Pinto@synopsys.com, mingkai.hu@nxp.com, leoyang.li@nxp.com,
+        xiaoliang.yang_1@nxp.com
+Subject: [PATCH net-next] net: stmmac: bump tc when get underflow error from DMA descriptor
+Date:   Wed,  8 Dec 2021 18:06:51 +0800
+Message-Id: <20211208100651.19369-1-xiaoliang.yang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support aspeed usb vhub set feature to test mode.
+In DMA threshold mode, frame underflow errors may sometimes occur when
+the TC(threshold control) value is not enough. The TC value need to be
+bumped up in this case.
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+There is no underflow interrupt bit on DMA_CH(#i)_Status of dwmac4, so
+the DMA threshold cannot be bumped up in stmmac_dma_interrupt(). The
+i.mx8mp board observed an underflow error while running NFS boot, the
+NFS rootfs could not be mounted.
+
+The underflow error can be got from the DMA descriptor TDES3 on dwmac4.
+This patch bump up tc value once underflow error is got from TDES3.
+
+Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 19 +++++++++++++++----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c | 23 +++++++++++++++++------
- 2 files changed, 32 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/common.h  |  1 +
+ .../ethernet/stmicro/stmmac/dwmac4_descs.c    |  8 +--
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 51 ++++++++-----------
+ 3 files changed, 27 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d918e8b2af3c..b0dfca43fbdc 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -110,15 +110,26 @@ static int ast_vhub_dev_feature(struct ast_vhub_dev *d,
- 				u16 wIndex, u16 wValue,
- 				bool is_set)
- {
-+	u32 val;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+index 9160f9ed363a..6b5d96bced47 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/common.h
++++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+@@ -317,6 +317,7 @@ enum tx_frame_status {
+ 	tx_not_ls = 0x1,
+ 	tx_err = 0x2,
+ 	tx_dma_own = 0x4,
++	tx_err_bump_tc = 0x8,
+ };
+ 
+ enum dma_irq_status {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+index cbf4429fb1d2..d3b4765c1a5b 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+@@ -32,6 +32,8 @@ static int dwmac4_wrback_get_tx_status(void *data, struct stmmac_extra_stats *x,
+ 		return tx_not_ls;
+ 
+ 	if (unlikely(tdes3 & TDES3_ERROR_SUMMARY)) {
++		ret = tx_err;
 +
- 	DDBG(d, "%s_FEATURE(dev val=%02x)\n",
- 	     is_set ? "SET" : "CLEAR", wValue);
+ 		if (unlikely(tdes3 & TDES3_JABBER_TIMEOUT))
+ 			x->tx_jabber++;
+ 		if (unlikely(tdes3 & TDES3_PACKET_FLUSHED))
+@@ -53,16 +55,16 @@ static int dwmac4_wrback_get_tx_status(void *data, struct stmmac_extra_stats *x,
+ 		if (unlikely(tdes3 & TDES3_EXCESSIVE_DEFERRAL))
+ 			x->tx_deferred++;
  
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_driver;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		d->wakeup_en = is_set;
-+		return std_req_complete;
-+	}
+-		if (unlikely(tdes3 & TDES3_UNDERFLOW_ERROR))
++		if (unlikely(tdes3 & TDES3_UNDERFLOW_ERROR)) {
+ 			x->tx_underflow++;
++			ret |= tx_err_bump_tc;
++		}
  
--	d->wakeup_en = is_set;
-+	if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(d->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, d->vhub->regs + AST_VHUB_CTRL);
+ 		if (unlikely(tdes3 & TDES3_IP_HDR_ERROR))
+ 			x->tx_ip_header_error++;
  
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_driver;
+ 		if (unlikely(tdes3 & TDES3_PAYLOAD_ERROR))
+ 			x->tx_payload_error++;
+-
+-		ret = tx_err;
+ 	}
+ 
+ 	if (unlikely(tdes3 & TDES3_DEFERRED))
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 4e05c1d92935..7e3e1bc0f61d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -132,6 +132,8 @@ static irqreturn_t stmmac_msi_intr_tx(int irq, void *data);
+ static irqreturn_t stmmac_msi_intr_rx(int irq, void *data);
+ static void stmmac_tx_timer_arm(struct stmmac_priv *priv, u32 queue);
+ static void stmmac_flush_tx_descriptors(struct stmmac_priv *priv, int queue);
++static void stmmac_set_dma_operation_mode(struct stmmac_priv *priv, u32 txmode,
++					  u32 rxmode, u32 chan);
+ 
+ #ifdef CONFIG_DEBUG_FS
+ static const struct net_device_ops stmmac_netdev_ops;
+@@ -2466,6 +2468,21 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
+ 	return !!budget && work_done;
  }
  
- static int ast_vhub_ep_feature(struct ast_vhub_dev *d,
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 93f27a745760..65cd4e46f031 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -212,17 +212,28 @@ static int ast_vhub_hub_dev_feature(struct ast_vhub_ep *ep,
- 				    u16 wIndex, u16 wValue,
- 				    bool is_set)
- {
-+	u32 val;
++static void stmmac_bump_dma_threshold(struct stmmac_priv *priv, u32 chan)
++{
++	if (unlikely(priv->xstats.threshold != SF_DMA_MODE) && tc <= 256) {
++		tc += 64;
 +
- 	EPDBG(ep, "%s_FEATURE(dev val=%02x)\n",
- 	      is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_stall;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		ep->vhub->wakeup_en = is_set;
-+		EPDBG(ep, "Hub remote wakeup %s\n",
-+		      is_set ? "enabled" : "disabled");
-+		return std_req_complete;
-+	}
- 
--	ep->vhub->wakeup_en = is_set;
--	EPDBG(ep, "Hub remote wakeup %s\n",
--	      is_set ? "enabled" : "disabled");
-+	if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(ep->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, ep->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
++		if (priv->plat->force_thresh_dma_mode)
++			stmmac_set_dma_operation_mode(priv, tc, tc, chan);
++		else
++			stmmac_set_dma_operation_mode(priv, tc, SF_DMA_MODE,
++						      chan);
 +
-+	return std_req_stall;
- }
++		priv->xstats.threshold = tc;
++	}
++}
++
+ /**
+  * stmmac_tx_clean - to manage the transmission completion
+  * @priv: driver private structure
+@@ -2531,6 +2548,8 @@ static int stmmac_tx_clean(struct stmmac_priv *priv, int budget, u32 queue)
+ 			/* ... verify the status error condition */
+ 			if (unlikely(status & tx_err)) {
+ 				priv->dev->stats.tx_errors++;
++				if (unlikely(status & tx_err_bump_tc))
++					stmmac_bump_dma_threshold(priv, queue);
+ 			} else {
+ 				priv->dev->stats.tx_packets++;
+ 				priv->xstats.tx_pkt_n++;
+@@ -2781,21 +2800,7 @@ static void stmmac_dma_interrupt(struct stmmac_priv *priv)
+ 	for (chan = 0; chan < tx_channel_count; chan++) {
+ 		if (unlikely(status[chan] & tx_hard_error_bump_tc)) {
+ 			/* Try to bump up the dma threshold on this failure */
+-			if (unlikely(priv->xstats.threshold != SF_DMA_MODE) &&
+-			    (tc <= 256)) {
+-				tc += 64;
+-				if (priv->plat->force_thresh_dma_mode)
+-					stmmac_set_dma_operation_mode(priv,
+-								      tc,
+-								      tc,
+-								      chan);
+-				else
+-					stmmac_set_dma_operation_mode(priv,
+-								    tc,
+-								    SF_DMA_MODE,
+-								    chan);
+-				priv->xstats.threshold = tc;
+-			}
++			stmmac_bump_dma_threshold(priv, chan);
+ 		} else if (unlikely(status[chan] == tx_hard_error)) {
+ 			stmmac_tx_err(priv, chan);
+ 		}
+@@ -5745,21 +5750,7 @@ static irqreturn_t stmmac_msi_intr_tx(int irq, void *data)
  
- static int ast_vhub_hub_ep_feature(struct ast_vhub_ep *ep,
+ 	if (unlikely(status & tx_hard_error_bump_tc)) {
+ 		/* Try to bump up the dma threshold on this failure */
+-		if (unlikely(priv->xstats.threshold != SF_DMA_MODE) &&
+-		    tc <= 256) {
+-			tc += 64;
+-			if (priv->plat->force_thresh_dma_mode)
+-				stmmac_set_dma_operation_mode(priv,
+-							      tc,
+-							      tc,
+-							      chan);
+-			else
+-				stmmac_set_dma_operation_mode(priv,
+-							      tc,
+-							      SF_DMA_MODE,
+-							      chan);
+-			priv->xstats.threshold = tc;
+-		}
++		stmmac_bump_dma_threshold(priv, chan);
+ 	} else if (unlikely(status == tx_hard_error)) {
+ 		stmmac_tx_err(priv, chan);
+ 	}
 -- 
-2.25.1
+2.17.1
 

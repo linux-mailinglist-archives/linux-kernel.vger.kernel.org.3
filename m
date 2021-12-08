@@ -2,187 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB14B46CECC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD8346CED2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbhLHI2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:28:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47431 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231496AbhLHI2R (ORCPT
+        id S244753AbhLHI3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244745AbhLHI3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:28:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638951885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mGNzfxil83BwgKb8q3ZzS1nHV7JGiQQ9FuAbcm/1Kc0=;
-        b=Cgbx0BG4ygEh0Ersv5gYotBH+GB/1ghx4zCzkWKb2vihj6/pZyNibKoTJpoO26e/f3Lh9p
-        qDC2AxxVv9HMwdBZgu8ElzvvBMHebcjns0cs7N/yzRx3YZqxvJPiqiQDdhdHRpGJDuePr+
-        G1tVorVg6h/bvZCaYFq42SuWu3EjtNU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282--MY4j4tpOfmZCHaK2l0jLA-1; Wed, 08 Dec 2021 03:24:41 -0500
-X-MC-Unique: -MY4j4tpOfmZCHaK2l0jLA-1
-Received: by mail-wm1-f71.google.com with SMTP id 145-20020a1c0197000000b0032efc3eb9bcso2664542wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:24:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=mGNzfxil83BwgKb8q3ZzS1nHV7JGiQQ9FuAbcm/1Kc0=;
-        b=hRqj1smiWf/KPalyqjbh+kVdJT+Rfu/LfyMHV2uS/4SB0X7P7qW99xcKqyorw1wB7m
-         MEAXx/widxAJ8pKFvGy2zJqapV5kiZxadNzVE4+wX2ULD0fu5EQZbZDhYx71DARJOcYP
-         wK819aVEKgwD9zb+A+KNxoJmmVk5X4U+TQfuIkuYqa4UFl62x5TVjf+pGp8IVR4PONCc
-         rfGk03F3ePRchDtOJMMcIKVrhD41cU4p/q6T9pQxaeBEa8SgUWMJCS6aeCKqqLCJSUE8
-         WFjaXHrCp7D3zSW6EGaNUeQHX3NJw2jMRboD4B3je1kmDq5C7i+ujwRtb2zC+jLrasms
-         TONA==
-X-Gm-Message-State: AOAM532vM/vVx8x8qe+hMH29dRUR+txRAmxYBINy5t4b0wmBj0opMKK9
-        6OgXabKVA8PrCONNiH9Y1uNWfCrGdkP3PrK1+sfvOGAGC6TfPKjk5efKxDkNSllOM0XubpHg72L
-        vjx8iqZwlvlUdCyjgMg+IFVwx
-X-Received: by 2002:adf:f64b:: with SMTP id x11mr58346302wrp.4.1638951880480;
-        Wed, 08 Dec 2021 00:24:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyPcE1kffLfqAUuWfGBdEEWvTivlPYMkkV5BIbduu2zNPLXeuz7ReUNWJm/wEYKcnQJHssqHQ==
-X-Received: by 2002:adf:f64b:: with SMTP id x11mr58346276wrp.4.1638951880244;
-        Wed, 08 Dec 2021 00:24:40 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62ba.dip0.t-ipconnect.de. [91.12.98.186])
-        by smtp.gmail.com with ESMTPSA id c4sm2017397wrr.37.2021.12.08.00.24.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 00:24:39 -0800 (PST)
-Message-ID: <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
-Date:   Wed, 8 Dec 2021 09:24:39 +0100
+        Wed, 8 Dec 2021 03:29:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CEAC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:25:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00982B81FE0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6019C341C3;
+        Wed,  8 Dec 2021 08:25:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638951947;
+        bh=j+/1Bbc4ClHV3nE1hAtk/I6JUrYndnXTixb73sLPF3c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BvR7zWnsyRH1OExiaOyX30ws/QKSgvzkKI7a5xvUQhl432jgh5TXNLCznEeP1gIm1
+         e5yF/Yb85bgJ95vq+SkG+bDBtHc3BWWaDAhbNB4WIZhZmtZAv882HstrmkYe7gJc5R
+         lZV4vRn/Er8kAh+KAgBTQri8S/8qYnT+8R12Ik57RYh1vck/QrCh0KpI7pytSP3lV0
+         dwMCb8hz+otPlvbNtlJHzWZxXI4DVZWkXNKQ80gVLH31ZaM8vdIzv90O9IDmgAghXx
+         ftvkshzpfDptsz5wMFJQHSSvyKgv/LLGu3CXFGXQyA67wg4QtVqR56AZCZtjO0eDDm
+         4ceQxgpc/D/Gw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1musGn-00AiPS-S5; Wed, 08 Dec 2021 08:25:45 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
- <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
- <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
- <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
- <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz> <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
- <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
- <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
- <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
- <f9786109-518f-38d4-0270-a3e87a13c4ef@redhat.com>
- <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date:   Wed, 08 Dec 2021 08:25:45 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shaokun Zhang <zhangshaokun@hisilicon.com>
+Cc:     linux-kernel@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/irq-gic-v3-its.c: Return its_invall_cmd.col when
+ building INVALL
+In-Reply-To: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+References: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <522e91148810ca7c77ad492d3a92c7a9@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: zhangshaokun@hisilicon.com, linux-kernel@vger.kernel.org, wangwudi@hisilicon.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.12.21 09:12, Michal Hocko wrote:
-> On Tue 07-12-21 19:03:28, David Hildenbrand wrote:
->> On 07.12.21 18:17, Alexey Makhalov wrote:
->>>
->>>
->>>> On Dec 7, 2021, at 9:13 AM, David Hildenbrand <david@redhat.com> wrote:
->>>>
->>>> On 07.12.21 18:02, Alexey Makhalov wrote:
->>>>>
->>>>>
->>>>>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
->>>>>>
->>>>>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
->>>>>> [...]
->>>>>>> So your proposal is to drop set_node_online from the patch and add it as
->>>>>>> a separate one which handles
->>>>>>> 	- sysfs part (i.e. do not register a node which doesn't span a
->>>>>>> 	  physical address space)
->>>>>>> 	- hotplug side of (drop the pgd allocation, register node lazily
->>>>>>> 	  when a first memblocks are registered)
->>>>>>
->>>>>> In other words, the first stage
->>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>>>> index c5952749ad40..f9024ba09c53 100644
->>>>>> --- a/mm/page_alloc.c
->>>>>> +++ b/mm/page_alloc.c
->>>>>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
->>>>>> 	if (self && !node_online(self->node_id)) {
->>>>>> 		build_zonelists(self);
->>>>>> 	} else {
->>>>>> -		for_each_online_node(nid) {
->>>>>> +		/*
->>>>>> +		 * All possible nodes have pgdat preallocated
->>>>>> +		 * free_area_init
->>>>>> +		 */
->>>>>> +		for_each_node(nid) {
->>>>>> 			pg_data_t *pgdat = NODE_DATA(nid);
->>>>>>
->>>>>> 			build_zonelists(pgdat);
->>>>>
->>>>> Will it blow up memory usage for the nodes which might never be onlined?
->>>>> I prefer the idea of init on demand.
->>>>>
->>>>> Even now there is an existing problem.
->>>>> In my experiments, I observed _huge_ memory consumption increase by increasing number
->>>>> of possible numa nodes. I’m going to report it in separate mail thread.
->>>>
->>>> I already raised that PPC might be problematic in that regard. Which
->>>> architecture / setup do you have in mind that can have a lot of possible
->>>> nodes?
->>>>
->>> It is x86_64 VMware VM, not the regular one, but specially configured (1 vCPU per node,
->>> with hot-plug support, 128 possible nodes)  
->>
->> I thought the pgdat would be smaller but I just gave it a test:
+On 2021-12-08 01:54, Shaokun Zhang wrote:
+> From: Wudi Wang <wangwudi@hisilicon.com>
 > 
-> Yes, pgdat is quite large! Just embeded zones can eat a lot.
-> 
->> On my system, pgdata_t is 173824 bytes. So 128 nodes would correspond to
->> 21 MiB, which is indeed a lot. I assume it's due to "struct zonelist",
->> which has MAX_ZONES_PER_ZONELIST == (MAX_NUMNODES * MAX_NR_ZONES) zone
->> references ...
-> 
-> This is what pahole tells me
-> struct pglist_data {
->         struct zone                node_zones[4] __attribute__((__aligned__(64))); /*     0  5632 */
->         /* --- cacheline 88 boundary (5632 bytes) --- */
->         struct zonelist            node_zonelists[1];    /*  5632    80 */
-> 	[...]
->         /* size: 6400, cachelines: 100, members: 27 */
->         /* sum members: 6369, holes: 5, sum holes: 31 */
-> 
-> with my particular config (which is !NUMA). I haven't really checked
-> whether there are other places which might scale with MAX_NUM_NODES or
-> something like that.
-> 
-> Anyway, is 21MB of wasted space for 128 Node machine something really
-> note worthy?
-> 
+> INVALL CMD specifies that the ITS must ensure any caching associated 
+> with
+> the interrupt collection defined by ICID is consistent with the LPI
+> configuration tables held in memory for all Redistributors. SYNC is
+> required to ensure that INVALL is executed.
 
-I think we'll soon might see setups (again, CXL is an example, but als
-owhen providing a dynamic amount of performance differentiated memory
-via virtio-mem) where this will most probably matter. With performance
-differentiated memory we'll see a lot more nodes getting used in
-general, and a lot more nodes eventually getting hotplugged.
+The patch title doesn't quite spell out the issue. It should say 
+something
+like:
 
-If 128 nodes is realistic, I cannot tell.
+"Force synchronisation when issuing INVALL"
 
-We could optimize by allocating some members dynamically. For example
-we'll never need MAX_NUMNODES entries, but only the number of possible
-nodes.
+> 
+> Currently, LPI configuration data may be inconsistent with that in the
+> memory within a short period of time after the INVALL command is 
+> executed.
 
--- 
+I'm curious: have you seen any issue with this on actual HW? In my
+experience, all implementations treat INVALL as a synchronous command,
+
+Or was this solely done via inspection?
+
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+
+This needs:
+
+Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
+
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c 
+> b/drivers/irqchip/irq-gic-v3-its.c
+> index eb0882d15366..0cb584d9815b 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -742,7 +742,7 @@ static struct its_collection
+> *its_build_invall_cmd(struct its_node *its,
+> 
+>  	its_fixup_cmd(cmd);
+> 
+> -	return NULL;
+> +	return desc->its_invall_cmd.col;
+>  }
+> 
+>  static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
+
+I'll fix the above locally, no need to resend.
+
 Thanks,
 
-David / dhildenb
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...

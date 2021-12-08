@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA40B46CE7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B990C46CE7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240790AbhLHHsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S240815AbhLHHuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbhLHHss (ORCPT
+        with ESMTP id S231739AbhLHHuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:48:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011EC061574;
-        Tue,  7 Dec 2021 23:45:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 90E21CE2037;
-        Wed,  8 Dec 2021 07:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853CCC341C3;
-        Wed,  8 Dec 2021 07:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638949513;
-        bh=wW9RIet2nCD3niwV3rcV7PvV9BC7tdBsrg1L8F8DdmE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FNkTtqglWMumOqKlVH+Oztoj3XnhZjMI47pI/4mALFUcnU0KHATz622LZK0km7XF8
-         cdc2z+Zusc2nYQVgWsXskm/5ppYcHMpYRTyheS/WbgJg8vU/k+f9lxvQeLsqHcEmtP
-         qhekOYqMDzrxkW+q4JyGxlKnDQGdsiQVKbR9S66KLUv32rjO1on0aAMe3nN0pfGqbL
-         oeuWS86YzrRKDOxlmbIpURLySBhgu95PWahr185TSCWpwbsKhjXjXR/0Y5CjST/tBj
-         DtAnRBLw6ka5WQOJGDN9gq7M7Y4OmjVQ5s5qkbHLeASoRjEuMWAQq4mYmnB9rNJhFg
-         Jr6pu2PG2SgPQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1murdX-00Ai3a-D7; Wed, 08 Dec 2021 07:45:11 +0000
+        Wed, 8 Dec 2021 02:50:00 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8820C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 23:46:28 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id p18so978070plf.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 23:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NtweuKbs2MfZWpt5xIw7VULyGKHm7TbvXq2wNntSpHI=;
+        b=gdVTOE/ai17mTSNNToyDWKlCUDe3++Fiq5333dNqaAZWFllNV6wdTeIwHnGFpLcNt6
+         mo9untbxCaZANNouIWrm0+XYHyL7jbUDZbD7Z96FckR9nrlspVLyrQdmcYJvxcQyiz0t
+         xMbllJcj+WLCGpADoGyoXZLghlq/OFM5MI+CADL4EvoS0KI657CePJDMpuhVEsduyZIw
+         sIhM4sloq0D5x/XO7VRtzoe9bQ65XQ3UyOkr6/bZ8EUhjso6F6RDnDzJA6qANE0s/gCU
+         zrmoCq8PTAP4gxW6+kzQmoAsl/Za+ZMHvzw8ZtqGEGAmMUjXj0ZLaArx9A7Ga+VI3G/L
+         wXTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NtweuKbs2MfZWpt5xIw7VULyGKHm7TbvXq2wNntSpHI=;
+        b=FeOXUDhxo3T6tvNARv1zmC+E6x0/pAKpToM1mzxquCyAoau7lTVDavmWPkAdY6ytVs
+         7/yxbva/kSIcum0vYaAVSni7cgTWeMnQR513Fuo5Uuwi7DX7Rspq/0vbBTJJy8fcRfzI
+         zW3esYnpREksMw5fvfpAS9+eJ6W19PiiQM/Rt7A2IgcdB4Q9ws5vEKrQ5QzygXD1xDQu
+         qIKF75n6K8IfmP97EjtVqXoJ4gNfk6w2v/OatSFz55HtlQQN5m6L/jgWMYhAU/wnJeAT
+         WLRUKz8I/ZL7WWRvbspzzO3W6MTMSfhn7efag504PBkUUTA7kH3ZMxtvCwNVS0Wn6IgR
+         2mUg==
+X-Gm-Message-State: AOAM530zUvRuzuDVNvw0Wely8dNLE6elK6UqeH/FKU7+XVLoMaPmJ86W
+        dO1RsW0Mc/oJ81VXllR35cBlaGDV3Ck=
+X-Google-Smtp-Source: ABdhPJxLWUdY5+jg/o/MLuMbGm2XLR0ZC+WwijUBNG7QGGTXHMPXPQn3tyTHWqsMJ0cS3qdtZXeTXg==
+X-Received: by 2002:a17:90a:e016:: with SMTP id u22mr5113888pjy.95.1638949588555;
+        Tue, 07 Dec 2021 23:46:28 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j16sm1673681pga.32.2021.12.07.23.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 23:46:28 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: luo.penghao@zte.com.cn
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] drm/i915/display: Delete redundant post_mask assignment
+Date:   Wed,  8 Dec 2021 07:46:19 +0000
+Message-Id: <20211208074619.404138-1-luo.penghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Wed, 08 Dec 2021 07:45:11 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     =?UTF-8?Q?qinjian=5B=E8=A6=83=E5=81=A5=5D?= <qinjian@cqplus1.com>
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        broonie@kernel.org, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        =?UTF-8?Q?Wells_Lu_=E5=91=82=E8=8A=B3?= =?UTF-8?Q?=E9=A8=B0?= 
-        <wells.lu@sunplus.com>
-Subject: Re: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt controller
- driver
-In-Reply-To: <39f9b853af7c44cb94421354744512a8@cqplus1.com>
-References: <cover.1638515726.git.qinjian@cqplus1.com>
- <e88ea4cf28ba69a41f6d1b4dd4128b82a6095c29.1638515726.git.qinjian@cqplus1.com>
- <87r1ao23fp.wl-maz@kernel.org>
- <39f9b853af7c44cb94421354744512a8@cqplus1.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <ce867937861df454823eb703bfd29256@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: qinjian@cqplus1.com, robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk, broonie@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, wells.lu@sunplus.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-08 07:15, qinjian[覃健] wrote:
->> > +void sp_intc_set_ext(u32 hwirq, int ext_num)
->> > +{
->> > +	sp_intc_assign_bit(hwirq, REG_INTR_PRIORITY, !ext_num);
->> > +}
->> > +EXPORT_SYMBOL_GPL(sp_intc_set_ext);
->> 
->> No way. We don't export random symbols without a good justification,
->> and you didn't give any.
->> 
-> 
-> This function called by SP7021 display driver to decide DISPLAY_IRQ
-> routing to which parent irq (EXT_INT0 or EXT_INT1).
+From: luo penghao <luo.penghao@zte.com.cn>
 
-Based on what? How can a display driver decide which parent is
-appropriate? What improvement does this bring?
+This value will be overwritten by the following if statement, even
+if the if is not executed, the value will not be used
 
-> In previous patches, which defined in DT, parsed & processed @
-> sp_intc_xlate_of()
-> From your comment, this is a SW decision. So I removed it from DT &
-> intc driver, only
-> export this function to access the related intc reg.
+The clang_analyzer complains as follows:
 
-If a decision has to be made, it has to be done in the interrupt
-controller driver, or rely on the standard API. Exporting random
-low level functions to other random drivers is not acceptable.
+Value stored to 'port_mask' is never read
 
-         M.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+---
+ drivers/gpu/drm/i915/display/intel_ddi.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_ddi.c b/drivers/gpu/drm/i915/display/intel_ddi.c
+index bd18432..3aad0c3 100644
+--- a/drivers/gpu/drm/i915/display/intel_ddi.c
++++ b/drivers/gpu/drm/i915/display/intel_ddi.c
+@@ -2011,7 +2011,6 @@ void intel_ddi_sanitize_encoder_pll_mapping(struct intel_encoder *encoder)
+ 			return;
+ 	}
+ 
+-	port_mask = BIT(encoder->port);
+ 	ddi_clk_needed = encoder->base.crtc;
+ 
+ 	if (encoder->type == INTEL_OUTPUT_DSI) {
 -- 
-Jazz is not dead. It just smells funny...
+2.15.2
+
+

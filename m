@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C5F46CDB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8627E46CDC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239878AbhLHGb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 01:31:27 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:57518 "EHLO
-        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239648AbhLHGb0 (ORCPT
+        id S240123AbhLHGcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239648AbhLHGcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:31:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:mime-version:to:cc:content-transfer-encoding:
-        content-type;
-        s=sgd; bh=cU7a7l2hUokyjWAVxGR44X/SZoxT7Ra+h9paRR3oMk8=;
-        b=RKz31+dhMlqjVtbHKq3Wkm+rsoOCTedN2hh2w6Qt4IhHNEr6zJ4KHdfbEUaJsmYOojf+
-        to0u/CCPVNkrJi/kdWANeS1x955qFm3Vlk9Hg6wMcF8qEsVbWXkuIULi5VZAtu9NRVqyiW
-        tggNCt5IwMAcCYVHLl7+p6scR/jkuXuLQq09zKDSJXEWO/nci3WQOgIFn+wdh2znidhkBP
-        bR4XfEttWxX1euFO9z2M1uVeyhEa86C+EX5Qj9dqJhgIF/XpIZQGupd3mwRosTXutUKVJk
-        r2Md0Rezyn9kkKBit6Ab09CUouGUwQ88dGJYQBSGLvxYN5S9Rfu3af0A66TpLP8Q==
-Received: by filterdrecv-7bc86b958d-n76s9 with SMTP id filterdrecv-7bc86b958d-n76s9-1-61B0506A-31
-        2021-12-08 06:27:55.052284633 +0000 UTC m=+8410090.793158700
-Received: from pearl.egauge.net (unknown)
-        by ismtpd0057p1las1.sendgrid.net (SG) with ESMTP
-        id NpgNFnvoT5aqygQKbqhhUA
-        Wed, 08 Dec 2021 06:27:54.773 +0000 (UTC)
-Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id CE68E700371; Tue,  7 Dec 2021 23:27:53 -0700 (MST)
-From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH] wilc1000: Fix spurious "FW not responding" error
-Date:   Wed, 08 Dec 2021 06:27:55 +0000 (UTC)
-Message-Id: <20211208062747.3405221-1-davidm@egauge.net>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 01:32:32 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDAFC061574;
+        Tue,  7 Dec 2021 22:29:01 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v1so4876377edx.2;
+        Tue, 07 Dec 2021 22:29:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ge8duN4sNFU8LlP54a+ac/TMCJbGoRstlWztgA2oT2k=;
+        b=p7Tlb9qJ5H1ZRRcrMS0mlr42Jn6hA8VP2orglLASnbMQBgx1S1WeBr/AMrOSeesXnQ
+         FRluYxOh0U5Ov4HWvBNuv3hTTSzYgFlsq7AC/NSoeEDrdP722tiB+4a45G8ysaCsuumR
+         N25uK9AtBpGiUL2MR7tvUHfXrY4R+C7lwVL22UrSyvojE1/GcpIkz0ZhSJhVcQc3EXuo
+         t1K8/XnGJZowgX+uPrPPkDOfUFvdLzuLndBaVJDj8uHnw9dAq+q/5vmn6PfqnXlaHXkV
+         GC9QBRXfkEqG4YTtx0xMcskL1XccmQ2vBPQsdaCDfBrNPvXnr2YcsX+X7j2hq+9RRlQs
+         VBPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ge8duN4sNFU8LlP54a+ac/TMCJbGoRstlWztgA2oT2k=;
+        b=VdYQ0oU03AZwKpXahwajRVV4LroqulA2PGSpUZqmqlIuSY4KaXAinPX2Uji7J7nYp+
+         +mp5LpkVDPLhH025ik/i8kIsL0I9wzPdPPsFmIesJuOgLkU8/fEF4XMNdtAUpX5Pl24n
+         nnseltVNIybMF8CFQzn949OGV3wRwCZojijzWD+bif7wIevvIY/Cth3ownKEPO/hP6Oh
+         V7IxvZcN+xl5W8p+0Oyd47N9YwTfqcOIgCyct/JfYLci1EYyGZYuewyAyUk4SqWYC2n1
+         9JpMex3ew6zh8dVXDOniuznghPIKf4OMkH+RoUby6NMbYnRBIAL5RbWatzGPB/rpxQJR
+         p8wQ==
+X-Gm-Message-State: AOAM533efU7HrkYJZ/UBBJePJPJChS91EyW3bT2Wj7hlPG/BWTW8CZBe
+        vXy/QyHkrExGNCYMD5szQk/4rtQbQVPNRXHzIgE=
+X-Google-Smtp-Source: ABdhPJzGz+VCI7qEgxFax+wzk8JXXv7V0YRLbnxVV2888/gXpKyM/ex1MlxEgxzSYFGBmpSEppU47Zmhh0wuCDsftjc=
+X-Received: by 2002:a17:906:489b:: with SMTP id v27mr4989169ejq.567.1638944939879;
+ Tue, 07 Dec 2021 22:28:59 -0800 (PST)
 MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvLjPqF1dYkzQ4i9aT?=
- =?us-ascii?Q?AfhF9bpA1AGHFo=2FBAzRPqqedO32QpdHnxgt4WSB?=
- =?us-ascii?Q?QT0BdUhpMaN3ttCdobzcgqUTuy7Crfeo4Ev7L51?=
- =?us-ascii?Q?hGdr+vd7b+rQXIk8STsEr1tHKsy8R5FC2wS=2FAJH?=
- =?us-ascii?Q?sYoCsIj=2FrC3r2m6mQqg52fdtdRzUrzJ9Ve+lS4Y?=
- =?us-ascii?Q?JagyExSiA+fvlEWHkPrqw=3D=3D?=
-To:     Ajay Singh <ajay.kathat@microchip.com>
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Mosberger-Tang <davidm@egauge.net>
-X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=us-ascii
+References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com> <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 8 Dec 2021 08:28:23 +0200
+Message-ID: <CAHp75Vd=47Tv9Sf+styPhxS2=O1H2KUDeKQXTULUYU5fDgGwwA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/5] pinctrl: qcom: Extract chip specific LPASS LPI code
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, plai@codeaurora.org,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, judyhsiao@chromium.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When deinitializing the driver, one or more "FW not responding" error
-appears on the console.  This appears to be due to wilc_wlan_stop()
-disabling host/WILC1000 communication, but then right afterwards, it
-tries to release the bus with chip-sleep enabled.  The problem is
-enabling the chip-sleep cannot success once host/WILC1000
-communication is disabled.  Fix by only releasing the bus.
+On Wed, Dec 8, 2021 at 2:39 AM Srinivasa Rao Mandadapu
+<quic_srivasam@quicinc.com> wrote:
+>
+> Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
+> to allow reusing the common code in the addition of subsequent
+> platforms.
 
-Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
----
- drivers/net/wireless/microchip/wilc1000/wlan.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
-index f1e4ac3a2ad5..5d7f5b52f6de 100644
---- a/drivers/net/wireless/microchip/wilc1000/wlan.c
-+++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
-@@ -1224,7 +1224,8 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
- 
- 	ret = 0;
- release:
--	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP);
-+	/* host comm is disabled - we can't issue sleep command anymore: */
-+	release_bus(wilc, WILC_BUS_RELEASE_ONLY);
- 
- 	return ret;
- }
+> @@ -661,8 +454,10 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
+>
+>         return ret;
+>  }
+> +EXPORT_SYMBOL(lpi_pinctrl_probe);
+
+> +
+
+Stray change.
+
+...
+
+> +#ifndef __PINCTRL_LPASS_LPI_H__
+> +#define __PINCTRL_LPASS_LPI_H__
+
+Missed headers.
+At least bits.h.
+
+...
+
+> +#define NO_SLEW                                -1
+
+Naming sucks for the header.
+
+LPI_NO_SLEW ?
+
+...
+
+> +struct lpi_pingroup {
+> +       const char *name;
+> +       const unsigned int *pins;
+> +       unsigned int npins;
+> +       unsigned int pin;
+> +       /* Bit offset in slew register for SoundWire pins only */
+> +       int slew_offset;
+> +       unsigned int *funcs;
+> +       unsigned int nfuncs;
+> +};
+
+Are you going to convert this to use struct group_desc?
+
+...
+
+> +       LPI_MUX__,
+
+Strange naming. Besides, if it is the terminator, drop the comma.
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

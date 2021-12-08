@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6469946C9D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFB246C9D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbhLHBSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:18:48 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:44226 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230292AbhLHBSq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:18:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IBOKcG1qaI9jepI2bCF3oCI/BCJ09P+8qve7w7qTBOM=; b=Ma7U5+qXsTd5kNRutCBYIya2j9
-        oBT1sp+Rcm1CJP4CKfDmViheF/7cBmZMRR/+/DKc1rPl7sYOTTLtGVfCCa9IAhcCC4oHY8NSVf4Jy
-        8xUXJmLy77v76Q9BBz+IxbRjZeTGi7sETSDdYFY4927kAdsl9xwvwQRVsa+iK7xEYoLQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mulY6-00FpWX-0N; Wed, 08 Dec 2021 02:15:10 +0100
-Date:   Wed, 8 Dec 2021 02:15:09 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <YbAHHWZ8PlzPrGYU@lunn.ch>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
- <Ya/esX+GTet9PM+D@lunn.ch>
- <20211207234736.vpqurmattqx4a76h@skbuf>
+        id S233176AbhLHBVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231966AbhLHBVf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 20:21:35 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E794C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:18:04 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id i9so815310ilu.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s0qKDyUSX7oUear5OLLim6Kwhuz4N6fkk3KXYVydv0o=;
+        b=K2ZQ4Lf8C7ESN6qbCeB7VgDPgXhCAI/5lFc1sQ2iKqPpPjbB/zYwZ7Zot9t6NKf9fZ
+         o3HMIaHR5Mp7QM98Yg757t/T7DhDiQJUnmwgEspV2xEm9eyQfLqOaPo8A7Op27rXlTHF
+         vfbCtt1so4uRqzUJVLZzxoZbezxRebRWudvf8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s0qKDyUSX7oUear5OLLim6Kwhuz4N6fkk3KXYVydv0o=;
+        b=WZuHBqCZRejrRETzFNmoVdHRs6nAyFpXU0MdrQxbEPXDbcHSZrdGsLcQEXS29EVcyg
+         HzSKLCeJoBFiyUCVneL0oFluEdGEr9LVWtBR24SGzhtICrIAwsVp5n4Q2Hhgpfsj+0zA
+         unz8yDkh4n3NKs9KV/ezq8/gHmWfK5D5OmCjJ4ID4KaBZb/s06lqJZ8GpTQOiJVP/m9c
+         9P1Q5qZdZXjHehEMqG/sopD+1Op21nRpESgvZaR9ZjiE4UbuMcpJz8KUPjD8bbYuZ9FY
+         GDUzfcHEhEV5P19oNiJ2MH9Q1WyA4Qk/65ehdIKQ5G6TOIZ8jBMsD/LNIE6+Et9c0XW4
+         J7QA==
+X-Gm-Message-State: AOAM5332TVT0PzzyjFM3r4SpHz00FK4jbo0613OWxLHVgZQYx88PuVs2
+        +gJ7+btF4lIBNj4DosYonvA6Fg==
+X-Google-Smtp-Source: ABdhPJyNIpatq/4bp0eHqStT4vvZ/gNBAMHJ52SsP1c2fN01bDH4ac5z2/YzCZPQzx9sh3SMxFnchw==
+X-Received: by 2002:a05:6e02:18ca:: with SMTP id s10mr3242412ilu.166.1638926283355;
+        Tue, 07 Dec 2021 17:18:03 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g7sm844683iln.67.2021.12.07.17.18.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 17:18:02 -0800 (PST)
+Subject: Re: [PATCH 5.10 000/125] 5.10.84-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211207081114.760201765@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d0d9734f-e62d-3c56-72ee-ec952a29b331@linuxfoundation.org>
+Date:   Tue, 7 Dec 2021 18:18:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207234736.vpqurmattqx4a76h@skbuf>
+In-Reply-To: <20211207081114.760201765@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:47:36AM +0200, Vladimir Oltean wrote:
-> On Tue, Dec 07, 2021 at 11:22:41PM +0100, Andrew Lunn wrote:
-> > > I like the idea of tagger-owend per-switch-tree private data.
-> > > Do we really need to hook logic?
-> > 
-> > We have two different things here.
-> > 
-> > 1) The tagger needs somewhere to store its own private data.
-> > 2) The tagger needs to share state with the switch driver.
-> > 
-> > We can probably have the DSA core provide 1). Add the size to
-> > dsa_device_ops structure, and provide helpers to go from either a
-> > master or a slave netdev to the private data.
+On 12/7/21 1:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 125 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We cannot "add the size to the dsa_device_ops structure", because it is
-> a singleton (const struct). It is not replicated at all, not per port,
-> not per switch, not per tree, but global to the kernel. Not to mention
-> const. Nobody needs state as shared as that.
+> Responses should be made by Thu, 09 Dec 2021 08:09:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.84-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-What i'm suggesting is 
+Compiled and booted on my test system. No dmesg regressions.
 
-static const struct dsa_device_ops edsa_netdev_ops = {
-        .name     = "edsa",
-        .proto    = DSA_TAG_PROTO_EDSA,
-        .xmit     = edsa_xmit,
-        .rcv      = edsa_rcv,
-        .needed_headroom = EDSA_HLEN,
-	.priv_size = 42;
-};
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The priv_size indicates that an instance of this tagger needs 42 bytes
-of private data. More likely it will be a sizeof(struct dsa_priv), but
-that is a detail.
-
-When a master is setup and the tagger instantiated, 42 bytes of memory
-will be allocated and put somewhere it can be found via a helper.
-
-This is not meant for shared state between the tagger and the switch
-driver, this is private to the tagger. As such it is less likely to be
-dependent on the number of ports etc. It is somewhere to store an skb
-pointer, maybe a sequence number for the management message expected
-as a reply from the switch etc.
-
-   Andrew
+thanks,
+-- Shuah

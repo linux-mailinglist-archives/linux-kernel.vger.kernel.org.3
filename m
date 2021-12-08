@@ -2,177 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762BB46CF97
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DF746CF9A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhLHJBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbhLHJBV (ORCPT
+        id S230077AbhLHJCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:02:06 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:39287 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230026AbhLHJCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:01:21 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB00C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:57:49 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id z6so1105669plk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1EzMU1kpZf0bNg61CaR9yKQ9ZNHq6WXaiAA1psC5/yI=;
-        b=AgpOPNIEZLpQH0s7NeLG68U79wF1of/nvkIn1bOSSn16ocuEh6HZ6Kf/zPjwrgwNiJ
-         BQgAKYC5ZG6h1pmqNvVCScZPqJ8jjlXZBaOO8EmqTUM6+ePBQHWswF2oNY0ZSfn3vtb2
-         f6mAazl/Qb/iZiIqTWtzGJki+kb0xOM0BGzpFxHXBKyfdVlM9KjB26c97U8HUq/ohLn5
-         PwCkWpdXHb2gq1HMyI6UzmXJJbLTHZ0jTesDKO13EG5q4rodUb9kx3Qfe+yu2Y/oqvS/
-         Dl/LgNzysrAAnxhQ+qtTuU6qYmENEutwnTM8lFYPzxVyJ4HtGmvdGzV2PceHeUHRayBD
-         kh9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1EzMU1kpZf0bNg61CaR9yKQ9ZNHq6WXaiAA1psC5/yI=;
-        b=OhItaxbHsumNIbZjZznJH8E26ib22G/BMu7ofDUNaLSJlknbMkHKPjQN0XMQetjT+P
-         ISqNLYK8vZFegRj1FPX1R36xT10kwmSK64vd9ylNqMLIgY3TD0zLxC/YwR6sM9ChF+FS
-         sf85zbqf8827ld81bPQFROAYw0CsZZKq1ChYYOSgx4qs3Q9fy/HGTxGGvWWdsKEcdawH
-         Mei11YgvQme9pemib89+14nEk0ZTCxxCK2CZsndh6oDW4bkOvp3sAK//F77iQsBUIFh2
-         fO2NYVzBmoELmOuqKb7OP2PfZ+nWhAhkomL37CPhWAXqy6BZ8q6sdUmBep2v/qXDbsCm
-         s/5g==
-X-Gm-Message-State: AOAM531z2esYmLknp7/hx7oRyn4AKhg/8gY50qk83SbaTs3DR78QhCIF
-        H1FhmtGVNeIvUFWu4JmhLIyO
-X-Google-Smtp-Source: ABdhPJxZI4pTJ7WlnK0xCbgwlNFyX2LzGi4PCg1p5Zh8m90wYE+o+TINUlIZ1HsMZNn/XvE78NEnIA==
-X-Received: by 2002:a17:902:7c8a:b0:143:bb4a:7bb3 with SMTP id y10-20020a1709027c8a00b00143bb4a7bb3mr58485986pll.46.1638953869226;
-        Wed, 08 Dec 2021 00:57:49 -0800 (PST)
-Received: from localhost.localdomain ([117.202.189.59])
-        by smtp.gmail.com with ESMTPSA id oa17sm2055470pjb.37.2021.12.08.00.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 00:57:48 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
-        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/1] bus: mhi: core: Add support for forced PM resume
-Date:   Wed,  8 Dec 2021 14:27:35 +0530
-Message-Id: <20211208085735.196394-2-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208085735.196394-1-manivannan.sadhasivam@linaro.org>
-References: <20211208085735.196394-1-manivannan.sadhasivam@linaro.org>
+        Wed, 8 Dec 2021 04:02:05 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Uzrn5-M_1638953910;
+Received: from 30.225.28.56(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0Uzrn5-M_1638953910)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Dec 2021 16:58:31 +0800
+Message-ID: <b955c5c4-bc4b-9f43-be1c-3a45973de259@linux.alibaba.com>
+Date:   Wed, 8 Dec 2021 16:58:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v2 07/14] x86/clear_page: add clear_page_uncached()
+Content-Language: en-US
+To:     Ankur Arora <ankur.a.arora@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Cc:     mingo@kernel.org, bp@alien8.de, luto@kernel.org,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        jon.grimm@amd.com, kvm@vger.kernel.org, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+References: <20211020170305.376118-1-ankur.a.arora@oracle.com>
+ <20211020170305.376118-8-ankur.a.arora@oracle.com>
+From:   Yu Xu <xuyu@linux.alibaba.com>
+In-Reply-To: <20211020170305.376118-8-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Loic Poulain <loic.poulain@linaro.org>
+On 10/21/21 1:02 AM, Ankur Arora wrote:
+> Expose the low-level uncached primitives (clear_page_movnt(),
+> clear_page_clzero()) as alternatives via clear_page_uncached().
+> Also fallback to clear_page(), if X86_FEATURE_MOVNT_SLOW is set
+> and the CPU does not have X86_FEATURE_CLZERO.
+> 
+> Both the uncached primitives use stores which are weakly ordered
+> with respect to other instructions accessing the memory hierarchy.
+> To ensure that callers don't mix accesses to different types of
+> address_spaces, annotate clear_user_page_uncached(), and
+> clear_page_uncached() as taking __incoherent pointers as arguments.
+> 
+> Also add clear_page_uncached_make_coherent() which provides the
+> necessary store fence to flush out the uncached regions.
+> 
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+> 
+> Notes:
+>      This patch adds the fallback definitions of clear_user_page_uncached()
+>      etc in include/linux/mm.h which is likely not the right place for it.
+> 
+>      I'm guessing these should be moved to include/asm-generic/page.h
+>      (or maybe a new include/asm-generic/page_uncached.h) and for
+>      architectures that do have arch/$arch/include/asm/page.h (which
+>      seems like all of them), also replicate there?
+> 
+>      Anyway, wanted to first check if that's the way to do it, before
+>      doing that.
+> 
+>   arch/x86/include/asm/page.h    | 10 ++++++++++
+>   arch/x86/include/asm/page_32.h |  9 +++++++++
+>   arch/x86/include/asm/page_64.h | 32 ++++++++++++++++++++++++++++++++
+>   include/linux/mm.h             | 14 ++++++++++++++
+>   4 files changed, 65 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/page_32.h b/arch/x86/include/asm/page_32.h
+> index 94dbd51df58f..163be03ac422 100644
+> --- a/arch/x86/include/asm/page_32.h
+> +++ b/arch/x86/include/asm/page_32.h
+> @@ -39,6 +39,15 @@ static inline void clear_page(void *page)
+>   	memset(page, 0, PAGE_SIZE);
+>   }
+>   
+> +static inline void clear_page_uncached(__incoherent void *page)
+> +{
+> +	clear_page((__force void *) page);
+> +}
+> +
+> +static inline void clear_page_uncached_make_coherent(void)
+> +{
+> +}
+> +
+>   static inline void copy_page(void *to, void *from)
+>   {
+>   	memcpy(to, from, PAGE_SIZE);
+> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+> index 3c53f8ef8818..d7946047c70f 100644
+> --- a/arch/x86/include/asm/page_64.h
+> +++ b/arch/x86/include/asm/page_64.h
+> @@ -56,6 +56,38 @@ static inline void clear_page(void *page)
+>   			   : "cc", "memory", "rax", "rcx");
+>   }
+>   
+> +/*
+> + * clear_page_uncached: only allowed on __incoherent memory regions.
+> + */
+> +static inline void clear_page_uncached(__incoherent void *page)
+> +{
+> +	alternative_call_2(clear_page_movnt,
+> +			   clear_page, X86_FEATURE_MOVNT_SLOW,
+> +			   clear_page_clzero, X86_FEATURE_CLZERO,
+> +			   "=D" (page),
+> +			   "0" (page)
+> +			   : "cc", "memory", "rax", "rcx");
+> +}
+> +
+> +/*
+> + * clear_page_uncached_make_coherent: executes the necessary store
+> + * fence after which __incoherent regions can be safely accessed.
+> + */
+> +static inline void clear_page_uncached_make_coherent(void)
+> +{
+> +	/*
+> +	 * Keep the sfence for oldinstr and clzero separate to guard against
+> +	 * the possibility that a cpu-model both has X86_FEATURE_MOVNT_SLOW
+> +	 * and X86_FEATURE_CLZERO.
+> +	 *
+> +	 * The alternatives need to be in the same order as the ones
+> +	 * in clear_page_uncached().
+> +	 */
+> +	alternative_2("sfence",
+> +		      "", X86_FEATURE_MOVNT_SLOW,
+> +		      "sfence", X86_FEATURE_CLZERO);
+> +}
+> +
+>   void copy_page(void *to, void *from);
+>   
+>   #ifdef CONFIG_X86_5LEVEL
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 73a52aba448f..b88069d1116c 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3192,6 +3192,20 @@ static inline bool vma_is_special_huge(const struct vm_area_struct *vma)
+>   
+>   #endif /* CONFIG_TRANSPARENT_HUGEPAGE || CONFIG_HUGETLBFS */
+>   
+> +#ifndef clear_user_page_uncached
 
-For whatever reason, some devices like QCA6390, WCN6855 using ath11k
-are not in M3 state during PM resume, but still functional. The
-mhi_pm_resume should then not fail in those cases, and let the higher
-level device specific stack continue resuming process.
+Hi Ankur Arora,
 
-Add a new parameter to mhi_pm_resume, to force resuming, whatever the
-current MHI state is. This fixes a regression with non functional
-ath11k WiFi after suspend/resume cycle on some machines.
+I've been looking for where clear_user_page_uncached is defined in this
+patchset, but failed.
 
-Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
+There should be something like follows in arch/x86, right?
 
-Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
-Cc: stable@vger.kernel.org #5.13
-Link: https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/
-Reported-by: Kalle Valo <kvalo@codeaurora.org>
-Reported-by: Pengyu Ma <mapengyu@gmail.com>
-Tested-by: Kalle Valo <kvalo@kernel.org>
-Acked-by: Kalle Valo <kvalo@kernel.org>
-Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-[mani: Added comment, bug report, reported-by tags and CCed stable]
-Link: https://lore.kernel.org/r/20211206161059.107007-1-manivannan.sadhasivam@linaro.org
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/bus/mhi/core/pm.c             | 10 +++++++---
- drivers/bus/mhi/pci_generic.c         |  2 +-
- drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
- include/linux/mhi.h                   |  3 ++-
- 4 files changed, 15 insertions(+), 6 deletions(-)
+static inline void clear_user_page_uncached(__incoherent void *page,
+                                unsigned long vaddr, struct page *pg)
+{
+         clear_page_uncached(page);
+}
 
-diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
-index fb99e3727155..8a486374d57a 100644
---- a/drivers/bus/mhi/core/pm.c
-+++ b/drivers/bus/mhi/core/pm.c
-@@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
- }
- EXPORT_SYMBOL_GPL(mhi_pm_suspend);
- 
--int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
-+int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
- {
- 	struct mhi_chan *itr, *tmp;
- 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-@@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
- 	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
- 		return -EIO;
- 
--	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
--		return -EINVAL;
-+	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
-+		dev_warn(dev, "Resuming from non M3 state (%s)\n",
-+			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
-+		if (!force)
-+			return -EINVAL;
-+	}
- 
- 	/* Notify clients about exiting LPM */
- 	list_for_each_entry_safe(itr, tmp, &mhi_cntrl->lpm_chans, node) {
-diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-index 4c577a731709..3394819e8115 100644
---- a/drivers/bus/mhi/pci_generic.c
-+++ b/drivers/bus/mhi/pci_generic.c
-@@ -962,7 +962,7 @@ static int __maybe_unused mhi_pci_runtime_resume(struct device *dev)
- 		return 0; /* Nothing to do at MHI level */
- 
- 	/* Exit M3, transition to M0 state */
--	err = mhi_pm_resume(mhi_cntrl);
-+	err = mhi_pm_resume(mhi_cntrl, false);
- 	if (err) {
- 		dev_err(&pdev->dev, "failed to resume device: %d\n", err);
- 		goto err_recovery;
-diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
-index 26c7ae242db6..f1f2fa2d690d 100644
---- a/drivers/net/wireless/ath/ath11k/mhi.c
-+++ b/drivers/net/wireless/ath/ath11k/mhi.c
-@@ -533,7 +533,11 @@ static int ath11k_mhi_set_state(struct ath11k_pci *ab_pci,
- 		ret = mhi_pm_suspend(ab_pci->mhi_ctrl);
- 		break;
- 	case ATH11K_MHI_RESUME:
--		ret = mhi_pm_resume(ab_pci->mhi_ctrl);
-+		/* Do force MHI resume as some devices like QCA6390, WCN6855
-+		 * are not in M3 state but they are functional. So just ignore
-+		 * the MHI state while resuming.
-+		 */
-+		ret = mhi_pm_resume(ab_pci->mhi_ctrl, true);
- 		break;
- 	case ATH11K_MHI_TRIGGER_RDDM:
- 		ret = mhi_force_rddm_mode(ab_pci->mhi_ctrl);
-diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-index 723985879035..102303288cee 100644
---- a/include/linux/mhi.h
-+++ b/include/linux/mhi.h
-@@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
- /**
-  * mhi_pm_resume - Resume MHI from suspended state
-  * @mhi_cntrl: MHI controller
-+ * @force: Force resuming to M0 irrespective of the device MHI state
-  */
--int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
-+int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
- 
- /**
-  * mhi_download_rddm_image - Download ramdump image from device for
+
+Did I miss something?
+
+> +/*
+> + * clear_user_page_uncached: fallback to the standard clear_user_page().
+> + */
+> +static inline void clear_user_page_uncached(__incoherent void *page,
+> +					unsigned long vaddr, struct page *pg)
+> +{
+> +	clear_user_page((__force void *)page, vaddr, pg);
+> +}
+> +
+> +static inline void clear_page_uncached_make_coherent(void) { }
+> +#endif
+> +
+> +
+>   #ifdef CONFIG_DEBUG_PAGEALLOC
+>   extern unsigned int _debug_guardpage_minorder;
+>   DECLARE_STATIC_KEY_FALSE(_debug_guardpage_enabled);
+> 
+
 -- 
-2.25.1
-
+Thanks,
+Yu

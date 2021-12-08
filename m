@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B9D46C94D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8F046C961
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238640AbhLHAmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S243300AbhLHAmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243220AbhLHAlx (ORCPT
+        with ESMTP id S242860AbhLHAmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:41:53 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C936FC0698D4;
-        Tue,  7 Dec 2021 16:38:18 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id g16so601893pgi.1;
-        Tue, 07 Dec 2021 16:38:18 -0800 (PST)
+        Tue, 7 Dec 2021 19:42:00 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FBEC061A32;
+        Tue,  7 Dec 2021 16:38:22 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id x131so929072pfc.12;
+        Tue, 07 Dec 2021 16:38:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F8msp/vCJlnHmyzzIp13SSEK8bBrWiNp5GqSs8r2plI=;
-        b=JmfbtVkRAW+N7m+nN7xBu2hLb5lxM2Na7suALIz7xYiRxtvD+6Lj9layQIJlJdKZOq
-         MEWfikq3ov+kBhNwkhF8rto4oNN8OcrB5RnnVtQHO10e6QOJBvc1mSB5kfwGPzYxqlYR
-         PTbKZ4oN6DdeVOdnAZk2vWrqdTHD6/x8QGTPq6uztkpaSBlWFCSmMbDSvGrv268Rhe2t
-         tvBXoyKvLzfP4VFrZ5lJv3ltNzBXDX8eAtd268uboaLryMElO5rW3+YCzymyDL6Exyeh
-         zPiGgfCLNu3djXAqDF1cR4F1FGXB3REWPS0E7M9lc/rMG8ELreo3C1RmpQPrQ8kutCNO
-         G2oA==
+        bh=LJ8xAlI4hSswSbvUfQzU0yk70eEsNl8mqXnileditR0=;
+        b=EGu3uZIbLaEBePdglON7vYbDMGLf5/o8A88zHP1YMlXBXUGfu2xB+w4ms1CC/zZ6hf
+         MrRb6H3IS/B/lia3MmnQnUvAF6aGa8i9R06A/LOsBrpAOtUz7us/EwbRPEQ719MtC01Y
+         Uwd60WLkGKXv55piJsC273ZpBfyY3WR+Cp5xYWeDT/LWwjWYpwmFgcCnnl/SZa9dZIYL
+         bJjkgJd5ByKuqJ/VnmZlcA6cRLBBBEqHN9kOe7nuUN9qoEEUyRuwJo7VibTj07/nZ5EV
+         Kp669APQwpsPmFg459XPsOCgupw5KRLBt7VmxZLiOMaPO1yK/+q4hAR7Jcw+by8WRIk7
+         yTPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F8msp/vCJlnHmyzzIp13SSEK8bBrWiNp5GqSs8r2plI=;
-        b=xC8vPR1H+DuBRAXCjWKGIMU1WH3J6frtvnSmIHdlDU5Etjm8hs0Bz6d0hymvvjs+ZF
-         xnGwcEg8toLcftuiAr2YlGU2bsklfmYDy7zE7+7e3GQnDaJCxAjwtTTUDYs1UvMZO//q
-         eBrQZGKYHJyR9WktfjhyiQmlG9vGVDJmbyDdJjkocF/QeRB8FZF4LoZN8I7EL7Hasm+G
-         Ci39vuquAFRadttE2eYn2AGPKoy2h11E6IxrUM2tH3gdsLi3ZNB6iMMqrjccTHnN2zsH
-         /fX2lcxaMKATMBZ2diu8PQ68bDPnM1r/TdJeTDbmksyiA0e5tWXlq9NCQUuCIlv556S6
-         yThA==
-X-Gm-Message-State: AOAM532BOwI8LPX22dCUsOk9eJ6mJ6T8xnVkKBLzO6fdRCU/uOckJveu
-        itNNAEaXNoeykMlGG1vgpLKVcjO9WMk=
-X-Google-Smtp-Source: ABdhPJw/2aenhqEPiqsBLTWFRdMbzGNkVsn5kNLFkkJ1A66P9ktIedrFhwQoeabu3mZVlNxlaFZh2Q==
-X-Received: by 2002:a63:e901:: with SMTP id i1mr27028438pgh.582.1638923897905;
-        Tue, 07 Dec 2021 16:38:17 -0800 (PST)
+        bh=LJ8xAlI4hSswSbvUfQzU0yk70eEsNl8mqXnileditR0=;
+        b=CLJGxzFP1j9lERxvjYo578D2koiwGXs1taJY/jJVMMSXxGaB+0k7Yez8CU5jF9GcxE
+         f+vAiz4XdVlqmvW6m46lr1oq2SPi6Pfw3Cp3oUmq9mObKtbYaJURJ4TNEWySWBLfqIJa
+         lxPm72Ov9dFLcKbo7aapH+XWRBiazSHWKzFZEArxBrh+iTemQ16ooWDtIAZqe2MwOPkK
+         ITOTC2BS6ZJHU5QCp3HCdlej7ZhdQbX+iCrH0mcJGXQ2CAkDGoEJpgsqav3deSV0gMpl
+         WcKjOkV0Q3BzuICMhQwF6Yjdivz2izca21BjbZeWbjr6NTQaOWLZog5mYaQfHUO/G5uo
+         F5jw==
+X-Gm-Message-State: AOAM533CWJMtysKn5eOOtwely/TouQwbq1IdP/+uN14kMmaD4DLwLnq4
+        KWiFX34buKMJwFSqogOyZPAW9+0NS7g=
+X-Google-Smtp-Source: ABdhPJynMlYbPx1MswgWpo1IWFDQ4IZefqflzdOagpbFyO3GbqL8QlBkC8W7YlwsGNxrUcl5uq3mSw==
+X-Received: by 2002:a63:130c:: with SMTP id i12mr26988571pgl.297.1638923901111;
+        Tue, 07 Dec 2021 16:38:21 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.15
+        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:38:17 -0800 (PST)
+        Tue, 07 Dec 2021 16:38:20 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v3 13/15] dt-bindings: ata: Convert Broadcom SATA to YAML
-Date:   Tue,  7 Dec 2021 16:37:24 -0800
-Message-Id: <20211208003727.3596577-14-f.fainelli@gmail.com>
+Subject: [PATCH v3 14/15] dt-bindings: bus: Convert GISB arbiter to YAML
+Date:   Tue,  7 Dec 2021 16:37:25 -0800
+Message-Id: <20211208003727.3596577-15-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211208003727.3596577-1-f.fainelli@gmail.com>
 References: <20211208003727.3596577-1-f.fainelli@gmail.com>
@@ -102,172 +102,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
-to help with validation.
+Convert the Broadcom STB GISB bus arbiter to YAML to help with
+validation.
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
- .../bindings/ata/brcm,sata-brcm.yaml          | 98 +++++++++++++++++++
- 2 files changed, 98 insertions(+), 45 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
- create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+ .../devicetree/bindings/bus/brcm,gisb-arb.txt | 34 ----------
+ .../bindings/bus/brcm,gisb-arb.yaml           | 66 +++++++++++++++++++
+ 2 files changed, 66 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
+ create mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
 
-diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+diff --git a/Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt b/Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
 deleted file mode 100644
-index b9ae4ce4a0a0..000000000000
---- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+index 10f6d0a8159d..000000000000
+--- a/Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
 +++ /dev/null
-@@ -1,45 +0,0 @@
--* Broadcom SATA3 AHCI Controller
--
--SATA nodes are defined to describe on-chip Serial ATA controllers.
--Each SATA controller should have its own node.
+@@ -1,34 +0,0 @@
+-Broadcom GISB bus Arbiter controller
 -
 -Required properties:
--- compatible         : should be one or more of
--			"brcm,bcm7216-ahci"
--			"brcm,bcm7425-ahci"
--			"brcm,bcm7445-ahci"
--			"brcm,bcm-nsp-ahci"
--			"brcm,sata3-ahci"
--			"brcm,bcm63138-ahci"
--- reg                : register mappings for AHCI and SATA_TOP_CTRL
--- reg-names          : "ahci" and "top-ctrl"
--- interrupts         : interrupt mapping for SATA IRQ
+-
+-- compatible:
+-    "brcm,bcm7278-gisb-arb" for V7 28nm chips
+-    "brcm,gisb-arb" or "brcm,bcm7445-gisb-arb" for other 28nm chips
+-    "brcm,bcm7435-gisb-arb" for newer 40nm chips
+-    "brcm,bcm7400-gisb-arb" for older 40nm chips and all 65nm chips
+-    "brcm,bcm7038-gisb-arb" for 130nm chips
+-- reg: specifies the base physical address and size of the registers
+-- interrupts: specifies the two interrupts (timeout and TEA) to be used from
+-  the parent interrupt controller. A third optional interrupt may be specified
+-  for breakpoints.
 -
 -Optional properties:
 -
--- reset: for "brcm,bcm7216-ahci" must be a valid reset phandle
--  pointing to the RESCAL reset controller provider node.
--- reset-names: for "brcm,bcm7216-ahci", must be "rescal".
--
--Also see ahci-platform.txt.
+-- brcm,gisb-arb-master-mask: 32-bits wide bitmask used to specify which GISB
+-  masters are valid at the system level
+-- brcm,gisb-arb-master-names: string list of the litteral name of the GISB
+-  masters. Should match the number of bits set in brcm,gisb-master-mask and
+-  the order in which they appear
 -
 -Example:
 -
--	sata@f045a000 {
--		compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
--		reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
--		reg-names = "ahci", "top-ctrl";
--		interrupts = <0 30 0>;
--		#address-cells = <1>;
--		#size-cells = <0>;
+-gisb-arb@f0400000 {
+-	compatible = "brcm,gisb-arb";
+-	reg = <0xf0400000 0x800>;
+-	interrupts = <0>, <2>;
+-	interrupt-parent = <&sun_l2_intc>;
 -
--		sata0: sata-port@0 {
--			reg = <0>;
--			phys = <&sata_phy 0>;
--		};
--
--		sata1: sata-port@1 {
--			reg = <1>;
--			phys = <&sata_phy 1>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+-	brcm,gisb-arb-master-mask = <0x7>;
+-	brcm,gisb-arb-master-names = "bsp_0", "scpu_0", "cpu_0";
+-};
+diff --git a/Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml b/Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
 new file mode 100644
-index 000000000000..3e24f45c65af
+index 000000000000..483b019275cd
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-@@ -0,0 +1,98 @@
++++ b/Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
+@@ -0,0 +1,66 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/ata/brcm,sata-brcm.yaml#
++$id: http://devicetree.org/schemas/bus/brcm,gisb-arb.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Broadcom SATA3 AHCI Controller
-+
-+description:
-+  SATA nodes are defined to describe on-chip Serial ATA controllers.
-+  Each SATA controller should have its own node.
++title: Broadcom GISB bus Arbiter controller
 +
 +maintainers:
 +  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+allOf:
-+  - $ref: sata-common.yaml#
 +
 +properties:
 +  compatible:
 +    oneOf:
 +      - items:
 +          - enum:
-+              - brcm,bcm7216-ahci
-+          - const: brcm,sata3-ahci
++              - brcm,bcm7445-gisb-arb
++          - const: brcm,gisb-arb
 +      - items:
-+          - enum:
-+              - brcm,bcm7445-ahci
-+          - const: brcm,sata3-ahci
++          - const: brcm,bcm7278-gisb-arb
 +      - items:
-+          - enum:
-+              - brcm,bcm7425-ahci
-+          - const: brcm,sata3-ahci
++          - const: brcm,bcm7435-gisb-arb
 +      - items:
-+          - const: brcm,bcm-nsp-ahci
++          - const: brcm,bcm7400-gisb-arb
 +      - items:
-+          - enum:
-+              - brcm,bcm63138-ahci
-+          - const: brcm,sata3-ahci
++          - const: brcm,bcm7038-gisb-arb
++      - items:
++          - const: brcm,gisb-arb
 +
 +  reg:
++    maxItems: 1
++
++  interrupts:
 +    minItems: 2
-+    maxItems: 2
++    maxItems: 3
 +
-+  reg-names:
-+    items:
-+      - const: ahci
-+      - const: top-ctrl
++  brcm,gisb-arb-master-mask:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: >
++      32-bits wide bitmask used to specify which GISB masters are valid at the
++      system level
 +
-+  interrupts: true
-+
-+  dma-coherent: true
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - brcm,bcm7216-ahci
-+          - brcm,bcm63138-ahci
-+then:
-+  properties:
-+    resets:
-+      maxItems: 1
-+    reset-names:
-+      enum:
-+        - rescal
-+        - ahci
++  brcm,gisb-arb-master-names:
++    $ref: /schemas/types.yaml#/definitions/string-array
++    description: >
++      String list of the litteral name of the GISB masters. Should match the
++      number of bits set in brcm,gisb-master-mask and the order in which they
++      appear
 +
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
 +
-+unevaluatedProperties: false
++additionalProperties: false
 +
 +examples:
 +  - |
-+    sata@f045a000 {
-+        compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
-+        reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
-+        reg-names = "ahci", "top-ctrl";
-+        interrupts = <0 30 0>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sata0: sata-port@0 {
-+            reg = <0>;
-+            phys = <&sata_phy 0>;
-+        };
-+
-+        sata1: sata-port@1 {
-+            reg = <1>;
-+            phys = <&sata_phy 1>;
-+        };
++    gisb-arb@f0400000 {
++      compatible = "brcm,gisb-arb";
++      reg = <0xf0400000 0x800>;
++      interrupts = <0>, <2>;
++      interrupt-parent = <&sun_l2_intc>;
++      brcm,gisb-arb-master-mask = <0x7>;
++      brcm,gisb-arb-master-names = "bsp_0", "scpu_0", "cpu_0";
 +    };
 -- 
 2.25.1

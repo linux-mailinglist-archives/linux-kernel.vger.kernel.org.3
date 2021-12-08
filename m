@@ -2,137 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A43C046C96E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A246C972
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbhLHAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S233981AbhLHApL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbhLHAoj (ORCPT
+        with ESMTP id S229643AbhLHApK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:44:39 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2E2C061574;
-        Tue,  7 Dec 2021 16:41:08 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 55EC913C;
-        Tue,  7 Dec 2021 16:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1638924067;
-        bh=s6ABec3cQrCcwPwEvvQilvY6nhXEAAn1Z6NWqTy6sz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AascMbPsQDB9NcwR0tS32+ZQuxnkbYy7eC8g/a1ysYKFM9OO8D1vjBsGt7n8N+eRC
-         N1MqH+iN/LQeiNztVbPSH843kHSOcucQxVctbvoIgBPtW8GJzyhsuFhsrjIRW2WZIp
-         ru3PUKGWqQ2QR5HwwbL29x3D9A6WAliPtpHlweu4=
-Date:   Tue, 7 Dec 2021 16:41:02 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add Delta AHE-50DC fan control
- module driver
-Message-ID: <Ya//HhC8a1DmQQAx@hatter.bewilderbeest.net>
-References: <20211207071521.543-1-zev@bewilderbeest.net>
- <20211207071521.543-2-zev@bewilderbeest.net>
- <20211207175015.GA772416@roeck-us.net>
- <Ya+0YDWIRBQFnEDb@hatter.bewilderbeest.net>
- <f30241ad-f3c4-ee78-22f3-405401615b61@roeck-us.net>
- <Ya/X46owU78iVbSO@hatter.bewilderbeest.net>
- <abc2e3bc-3806-dbd3-840c-e19154bc0587@roeck-us.net>
+        Tue, 7 Dec 2021 19:45:10 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A890C061574;
+        Tue,  7 Dec 2021 16:41:39 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so3167011pjb.2;
+        Tue, 07 Dec 2021 16:41:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fgjbgS9vuw6/lOVuAJqfmyGi4NysxGzuXq2eCdBM1gQ=;
+        b=WYOUkWyR6t/cC7TEkw0jbzOu0u2YWOlJfc1uKpSa1PHLTTGwe7a3E443ImJ1jAcqQb
+         1gsRVKFZzdNoDVleqzLbtrGluaU90XAAxIFBzlGZtrtAYh+7PZjGGBCD6esst/JI1ziP
+         WNO2EHfDqfcMDYbE7qOBbU9z/lJ+gGRqeuq6QXiSE7WLh1Z+qqEaJGSRABcWLtp0NJQR
+         tG3ENC7cxZlIDq+xZDM1yLf2G5TEfLR1yMZQBn4HPFD8tuZuWXQU4kNzd/ZA4gWnUt2A
+         WFLT4CcvLqUw9dXph6m8PPuWX0AsyTdLbZm/hCOGn1B2OR2eP9MYbupweMMgQKv31e7M
+         /bZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fgjbgS9vuw6/lOVuAJqfmyGi4NysxGzuXq2eCdBM1gQ=;
+        b=LgbDjpFE1A5viNTKbCTk00Bparr6NrkTKC4VkaKPFAEoaCEF90jxUAneoOsthsZVUV
+         W7+Ma2HGxFlmbLVplTm6E+mcPXHLByqj9j6vUKpoh1i+IM/aemmvmbyoItI+fZD0z3WS
+         3MbgCK90Jmmpka3hxwwYKgC3zOQIERnxj2rMDB+ElV/3GpEW1w0dEQ+kZD9RHyeOJond
+         O8DokyPx+59SS3EkizRdBLhLipQPJb9mwDeKAagyIt7zec8abXW8y9OKOm/p6xdfQueI
+         SlOpjkIxSf9/jN2+Axj0kq4hAbkCmoFJC4MsM6HmqQXF3dTIxur7jOK5gNLiUE/UJ/+J
+         S4Tw==
+X-Gm-Message-State: AOAM530JY7mJuaO9fuQKzSloy8kjXZI3A9wKGbF7phIbi4Dl2N4w2NRD
+        bLohzok1YzhNIcwN2BDoAx2lsO56Sh4=
+X-Google-Smtp-Source: ABdhPJz2txfuCDT/lN9EUD191Hd9N6i6Vvqm9k+NNPkltVBDJfJsuafFs72f2pB6KyAIlPh2Qo60nA==
+X-Received: by 2002:a17:90a:43c4:: with SMTP id r62mr3135014pjg.86.1638924098769;
+        Tue, 07 Dec 2021 16:41:38 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ms15sm642165pjb.26.2021.12.07.16.41.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 16:41:38 -0800 (PST)
+Subject: Re: [PATCH v5 net-next 2/4] net: dsa: ocelot: felix: Remove
+ requirement for PCS in felix devices
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+References: <20211207170030.1406601-1-colin.foster@in-advantage.com>
+ <20211207170030.1406601-3-colin.foster@in-advantage.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <f0c5ade2-65f0-17b9-7d12-7136a037aa75@gmail.com>
+Date:   Tue, 7 Dec 2021 16:41:33 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <abc2e3bc-3806-dbd3-840c-e19154bc0587@roeck-us.net>
+In-Reply-To: <20211207170030.1406601-3-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:15:18PM PST, Guenter Roeck wrote:
->On 12/7/21 1:53 PM, Zev Weiss wrote:
->>On Tue, Dec 07, 2021 at 11:44:01AM PST, Guenter Roeck wrote:
->>>On 12/7/21 11:22 AM, Zev Weiss wrote:
->>>>On Tue, Dec 07, 2021 at 09:50:15AM PST, Guenter Roeck wrote:
->>>>>On Mon, Dec 06, 2021 at 11:15:20PM -0800, Zev Weiss wrote:
->>>>>>This device is an integrated module of the Delta AHE-50DC Open19 power
->>>>>>shelf.  For lack of proper documentation, this driver has been developed
->>>>>>referencing an existing (GPL) driver that was included in a code release
->>>>>>from LinkedIn [1].  It provides four fan speeds, four temperatures, and
->>>>>>one voltage reading, as well as a handful of warning and fault
->>>>>>indicators.
->>>>>>
->>>>>>[1] https://github.com/linkedin/o19-bmc-firmware/blob/master/meta-openbmc/meta-linkedin/meta-deltapower/recipes-kernel/fancontrol-mod/files/fancontrol.c
->>>>>>
->>>>>
->>>>>Hmm, that reference isn't really accurate anymore. I think it would be
->>>>>better to just say that the device was found to be PMBus compliant.
->>>>
->>>>Sure, will do.
->>>>
->>>
->>>Makes me wonder: How do you know that the referenced driver is for Delta AHE-50DC ?
->>
->>We'd been waiting for the source code for the software it ships with for a while, and were finally provided with that repo; everything I've observed from the factory software is consistent with the code in that driver.  A sampling:
->>
->
->I assume you mean "Delta AHE-50DC" when you refer to "it".
->
+On 12/7/21 9:00 AM, Colin Foster wrote:
+> Existing felix devices all have an initialized pcs array. Future devices
+> might not, so running a NULL check on the array before dereferencing it
+> will allow those future drivers to not crash at this point
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Yes.
-
->[ ... ]
->>>Can you check this with real hardware, by any chance ?
->>>
->>
->>If you mean running that code on it, yes -- here's the userspace utility that invokes that library routine:
->>
->>     root@bmc-oob:~# fan-util.sh
->>     fan1 speed: 7860 RPM
->>     fan2 speed: 7860 RPM
->>     fan3 speed: 7620 RPM
->>     fan4 speed: 7560 RPM
->>     temperature1: 29.20 C
->>     temperature2: 27.80 C
->>     temperature3: 28.50 C
->>     temperature4: 30.20 C
->>     vin_undervolt_fault: no
->>     overtemperature_warning: no
->>     fan_fault: no
->>     fan_warning: no
->>     fan_status: ok
->>
->
->That doesn't really tell me anything in the context of the driver you submitted.
->Would it be possible to install your driver and provide the output from the
->"sensors" command ? It should match the information from the proprietary
->driver/tool.
->
-
-Thanks, in doing so I realized I'd neglected to prevent reads from 
-unsupported registers in the read_word_data function, which was leading 
-to the driver producing sysfs files for meaningless sensor limits that 
-the device doesn't actually support.  With that fix (which I'll include 
-in v4):
-
-     root@ahe-50dc:~# /tmp/sensors 'ahe50dc_fan-*'
-     ahe50dc_fan-i2c-28-30
-     Adapter: i2c-8-mux (chan_id 0)
-     vin:          12.29 V  
-     fan1:        7680 RPM
-     fan2:        7860 RPM
-     fan3:        7680 RPM
-     fan4:        7380 RPM
-     temp1:        +27.8 C  
-     temp2:        +23.4 C  
-     temp3:        +25.3 C  
-     temp4:        +24.5 C  
-
-
-
-Zev
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

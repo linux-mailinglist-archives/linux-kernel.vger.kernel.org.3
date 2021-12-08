@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDC746D30D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B5E46D310
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbhLHMNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbhLHMNi (ORCPT
+        id S233145AbhLHMNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:13:48 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58752 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233089AbhLHMNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:13:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD70C061746;
-        Wed,  8 Dec 2021 04:10:06 -0800 (PST)
+        Wed, 8 Dec 2021 07:13:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21303B81F7D;
+        by sin.source.kernel.org (Postfix) with ESMTPS id D3C2DCE1FD6;
+        Wed,  8 Dec 2021 12:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA5BC341CA;
         Wed,  8 Dec 2021 12:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAA2C341CA;
-        Wed,  8 Dec 2021 12:09:57 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 13:09:54 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v4 10/16] ima: Implement hierarchical processing of file
- accesses
-Message-ID: <20211208120954.nnawb6d2bpp54yll@wittgenstein>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-11-stefanb@linux.ibm.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638965411;
+        bh=Jm3qvJnwIM8XkCcFVtPu2jUX5ZvPVIUSd05PWLnQZVg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r1/uJZzfEdzN3Gwp+kH3PV1cdXDThRlyeFXjz5XqfG+6JxzCuSxr4KrRAzS9oFfTj
+         IQ/EsM2UykeTj2auyLkz04w67GadPXi3Slfha4S5nvkXKPlmFd6W52G1xo5lCysol1
+         FsJexiVqTQ3aXBJEtpkRag71KH+jCwi2bffNq9VZHdA05Sy0mBN1HIdqbch0FfnhXZ
+         w1J6xOmT5BB8e2Pe6PJclPQ1We+1MhpaQvm+lP4iLhSP2uTqM8g9mSSD3UXjYhaiUO
+         4Vdc/Kr3RsFuObnptku8mrinUKJWHd6oj3UKlLpirSImVxTdnD3hz/vNcn6A2GLJcv
+         uLzYJU+pJsiBQ==
+Date:   Wed, 8 Dec 2021 20:10:00 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, ping.bai@nxp.com,
+        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 2/3] arm64: dts: imx8ulp: add scmi firmware node
+Message-ID: <20211208121000.GG4216@dragon>
+References: <20211117032740.2518926-1-peng.fan@oss.nxp.com>
+ <20211117032740.2518926-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207202127.1508689-11-stefanb@linux.ibm.com>
+In-Reply-To: <20211117032740.2518926-3-peng.fan@oss.nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:21:21PM -0500, Stefan Berger wrote:
-> Implement hierarchical processing of file accesses in IMA namespaces by
-> walking the list of IMA namespaces towards the init_ima_ns. This way
-> file accesses can be audited in an IMA namespace and also be evaluated
-> against the IMA policies of parent IMA namespaces.
+On Wed, Nov 17, 2021 at 11:27:39AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> i.MX8ULP use scmi firmware based power domain and sensor support.
+> So add the firmware node and the sram it uses.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  security/integrity/ima/ima_main.c | 29 +++++++++++++++++++++++++----
->  1 file changed, 25 insertions(+), 4 deletions(-)
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 > 
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 2121a831f38a..e9fa46eedd27 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
->  	ima_check_last_writer(iint, inode, file);
->  }
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> index fb8714379026..d567ef93f8d8 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> @@ -6,6 +6,7 @@
+>  #include <dt-bindings/clock/imx8ulp-clock.h>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/power/imx8ulp-power.h>
 >  
-> -static int process_measurement(struct ima_namespace *ns,
-> -			       struct file *file, const struct cred *cred,
-> -			       u32 secid, char *buf, loff_t size, int mask,
-> -			       enum ima_hooks func)
-> +static int _process_measurement(struct ima_namespace *ns,
-
-Hm, it's much more common to use double underscores then single
-underscores to
-
-__process_measurement()
-
-reads a lot more natural to people perusing kernel code quite often.
-
-> +				struct file *file, const struct cred *cred,
-> +				u32 secid, char *buf, loff_t size, int mask,
-> +				enum ima_hooks func)
->  {
->  	struct inode *inode = file_inode(file);
->  	struct integrity_iint_cache *iint = NULL;
-> @@ -405,6 +405,27 @@ static int process_measurement(struct ima_namespace *ns,
->  	return 0;
->  }
+>  #include "imx8ulp-pinfunc.h"
 >  
-> +static int process_measurement(struct ima_namespace *ns,
-> +			       struct file *file, const struct cred *cred,
-> +			       u32 secid, char *buf, loff_t size, int mask,
-> +			       enum ima_hooks func)
-> +{
-> +	int ret = 0;
-> +	struct user_namespace *user_ns;
+> @@ -102,6 +103,40 @@ sosc: clock-sosc {
+>  		#clock-cells = <0>;
+>  	};
+>  
+> +	sram@2201f000 {
+> +		compatible = "mmio-sram";
+> +		reg = <0x0 0x2201f000 0x0 0x1000>;
 > +
-> +	do {
-> +		ret = _process_measurement(ns, file, cred, secid, buf, size, mask, func);
-> +		if (ret)
-> +			break;
-> +		user_ns = ns->user_ns->parent;
-> +		if (!user_ns)
-> +			break;
-> +		ns = user_ns->ima_ns;
-> +	} while (1);
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0 0x0 0x2201f000 0x1000>;
+> +
+> +		scmi_buf: scmi_buf@0 {
 
-I'd rather write this as:
+Hyphen is more recommended than underscore for node name.  Or just
+follow the naming in arm,scmi.yaml example?
 
-	struct user_namespace *user_ns = ns->user_ns;
+Shawn
 
-	while (user_ns) {
-		ns = user_ns->ima_ns;
-
-   		ret = __process_measurement(ns, file, cred, secid, buf, size, mask, func);
-   		if (ret)
-   			break;
-		user_ns = user_ns->parent;
-		
-	}
-
-because the hierarchy is only an implicit property inherited by ima
-namespaces from the implementation of user namespaces. In other words,
-we're only indirectly walking a hierarchy of ima namespaces because
-we're walking a hierarchy of user namespaces. So the ima ns actually
-just gives us the entrypoint into the userns hierarchy which the double
-deref writing it with a while() makes obvious.
-
-But that's just how I'd conceptualize it. This you should do however you
-prefer.
+> +			compatible = "arm,scmi-shmem";
+> +			reg = <0x0 0x400>;
+> +		};
+> +	};
+> +
+> +	firmware {
+> +		scmi {
+> +			compatible = "arm,scmi-smc";
+> +			arm,smc-id = <0xc20000fe>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			shmem = <&scmi_buf>;
+> +
+> +			scmi_devpd: protocol@11 {
+> +				reg = <0x11>;
+> +				#power-domain-cells = <1>;
+> +			};
+> +
+> +			scmi_sensor: protocol@15 {
+> +				reg = <0x15>;
+> +				#thermal-sensor-cells = <0>;
+> +			};
+> +		};
+> +	};
+> +
+>  	soc@0 {
+>  		compatible = "simple-bus";
+>  		#address-cells = <1>;
+> -- 
+> 2.25.1
+> 

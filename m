@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D3646DBDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398CF46DBE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbhLHTSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:18:13 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:33940 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbhLHTSM (ORCPT
+        id S230304AbhLHTUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhLHTUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:18:12 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638990879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=badhGGC3H+4GwJIwS5GPlqrZLkXL90Xg2ZKSrj4phbI=;
-        b=eDG0iSkVDDUGrv2wvF0QmEJDB3sl3yZQIz+tb/dGWRqG1SjWz2qfF5yfUYXdp85GXwn+yi
-        ibDbcrUxUHbNY3Oj3CmgRmYoiS9co8He9apLKN6R7lKZQRqT7/rNW9xQzm2KDaj/5BspfL
-        Kzu0oi3X8iQaYOZlx651g/KjGH0w/R8dwZ5wLgYJ1QI2Y2n66apzEVW6Ju9ah19OidzEAb
-        Ms2sSHYg5djkmn11KS+IGOKh/w4ukmZ0Kh/xJ7PBxw04KO+w/g2Kn4xssbIkp15e37/Vb7
-        vYmHVYwemtKetqofruKNGu9tuc1/PJ/TWk7paFTF3QTEvLqqFA5e3b1UsJkKdQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638990879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=badhGGC3H+4GwJIwS5GPlqrZLkXL90Xg2ZKSrj4phbI=;
-        b=882aCz1N1zdxg9VrKw2NNzLIdA9BqrkdAc7mIRHWOgPrllDz8Y9vHWG4zbNWrqkgnXJxgY
-        q79woSsCc10oTtAg==
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>
-Cc:     "Sang, Oliver" <oliver.sang@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
- regression
-In-Reply-To: <c94b8394-08cd-8273-2cd5-1ee5880d4c36@intel.com>
-References: <20211207012128.GA16074@xsang-OptiPlex-9020>
- <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
- <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
- <c94b8394-08cd-8273-2cd5-1ee5880d4c36@intel.com>
-Date:   Wed, 08 Dec 2021 20:14:38 +0100
-Message-ID: <874k7i29k1.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Wed, 8 Dec 2021 14:20:19 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF71C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:16:47 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id e10-20020a17090301ca00b00141fbe2569dso1304811plh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IbHH1eM7+h5JA/Wq7qVMHPIVqo/1uljJ6CH0uHyrjD8=;
+        b=C/Lkut5Vvd+odmZn3T7EImyPb9hSe/IbC+QLw/n/F8eMNrY9JgHnOANkktmMpsGv/P
+         sMp1QEUPZOLesC+96+pkElI3ReolspbG9+E9HMqkohWgkz4Btdg5ggxwaFScVxhqcPAf
+         KcuNJU3AuTQn9hZhyZm73AFW6WiMdZFXQ/lu6RKljVnrlepfv2/u910uDmYt5Ufyy6tc
+         Pd6osWEBua0Rx4F0Ueul2Jf8i+liJ0VGKfRi4gL5FruVpiU44AT0BdtVD79/FnOnhgkz
+         0gSK37HBDwzKopTpdYD6PZdbz/4Dnqn6QEhCvYl1/L7HLobGx7lV3us3CMgC4CqFdx+H
+         MUWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IbHH1eM7+h5JA/Wq7qVMHPIVqo/1uljJ6CH0uHyrjD8=;
+        b=ZZUdzojzI8a4Vfc/xTiZlHyt5AkoVI/6zqzLrfDDvboJMI0lwm5hTirgTjc9bMa+QV
+         5MlWNPHIJ24jEPHdQKkSCZFRCGUNCXY9zpJIAVvpNnnfI7+XqMq2sf6J5K/PgacLwY8l
+         V2JvnOEqRZ8mrMRw9b1rxh2s/oKGnqEQflr/WGCJFOfmNVH4ZrgUHDmNrkMxlj0Znooi
+         A51qeB0kek21ZIhMHJH1Anbqyap312hGiwdvwAbGb/2FUGB/6ZmuYMB6OqJa8TKT29sx
+         XMlicctZ9zsCUXM3SK1e5FbiTc+U5D0tAywVauXRYlJCnx324fYO5X0EddnaDDPwfJfi
+         3NYw==
+X-Gm-Message-State: AOAM5325GBTlBuVysOvMkHjYLuxDXTHE6q4TwRUZdYM5Z5E5seP396zN
+        py2NwHcM0gCgW7ugMYwgRlRUpbOVjhkXb1e2rUQQt+St2xzb+rAlOFSgl8z2ZBKhjuRoJq34fIV
+        mR9YFsbPHlTor4IlThm9sDrwkVIPQAMsvNzDv3OOnzI25kNeRfWaCKm2cFEe3P15XgZ6atw==
+X-Google-Smtp-Source: ABdhPJzbQwRn8BEp17nvsf8JcBg+qKR92YLHP49MnjCculnvJHOPbV/gUD1PpGVH3Bj77mJ+nx5lepeMuIA=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:ff20:12b0:c79e:3e6b])
+ (user=pgonda job=sendgmr) by 2002:a17:90b:3849:: with SMTP id
+ nl9mr9677376pjb.145.1638991006729; Wed, 08 Dec 2021 11:16:46 -0800 (PST)
+Date:   Wed,  8 Dec 2021 11:16:39 -0800
+Message-Id: <20211208191642.3792819-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH 0/3] Fixes for SEV mirror VM tests
+From:   Peter Gonda <pgonda@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08 2021 at 10:20, Dave Hansen wrote:
-> On 12/8/21 10:00 AM, Bae, Chang Seok wrote:
->> diff --git a/kernel/signal.c b/kernel/signal.c
->> index a629b11bf3e0..8194d2f38bf1 100644
->> --- a/kernel/signal.c
->> +++ b/kernel/signal.c
->> @@ -4224,6 +4224,11 @@ int restore_altstack(const stack_t __user *uss)
->>         stack_t new;
->>         if (copy_from_user(&new, uss, sizeof(stack_t)))
->>                 return -EFAULT;
->> +       if (current->sas_ss_sp == (unsigned long) new.ss_sp &&
->> +           current->sas_ss_size == new.ss_size &&
->> +           current->sas_ss_flags == new.ss_flags)
->> +               return 0;
->> +
->>         (void)do_sigaltstack(&new, NULL, current_user_stack_pointer(),
->>                              MINSIGSTKSZ);
->>         /* squash all but EFAULT for now */
->
-> This seems like a generally good optimization that could go in
-> do_sigaltstack() itself, no?
->
-> Either way, it seems like 0day botched this a bit.  '3aac3ebea0' wasn't
-> the actual culprit, it was the patch before.
+Updated patch series for fixing bug in sev_ioctl() which allowed test
+to look like a mirror vm could call KVM_SEV_LAUNCH_START. Adds
+additional testing to validate mirror vm can only call subset of
+commands.
 
-The patch it pointed to was the one which enabled that config switch.
+I could not add the patch Seanjc recommended due to issues with
+sev_platform_init() not correctly setting the fw error. I'll work ontop
+of the INIT_EX patch series to fix this issue with the PSP driver.
+
+Peter Gonda (3):
+  selftests: sev_migrate_tests: Fix test_sev_mirror()
+  selftests: sev_migrate_tests: Fix sev_ioctl()
+  selftests: sev_migrate_tests: Add mirror command tests
+
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  | 59 ++++++++++++++++---
+ 1 file changed, 52 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1.400.ga245620fadb-goog
+

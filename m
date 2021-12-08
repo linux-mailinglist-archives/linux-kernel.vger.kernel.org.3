@@ -2,125 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F1746CCAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFEE46CCAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244274AbhLHEsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S244283AbhLHEvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbhLHEsQ (ORCPT
+        with ESMTP id S235159AbhLHEvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:48:16 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350DFC061574;
-        Tue,  7 Dec 2021 20:44:45 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z5so4172182edd.3;
-        Tue, 07 Dec 2021 20:44:45 -0800 (PST)
+        Tue, 7 Dec 2021 23:51:48 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C76C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:48:17 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id l145-20020a25cc97000000b005c5d04a1d52so2419195ybf.23
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:48:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mvjWIFDl3Z932+ulOmlLjYQdMm4oZF1plc2CmRUrZ7A=;
-        b=P1Nid0yP7jCMnNY7woFaZQ4qxE9QiSWUwm95VCAS+65R4pshASNVHc+kaP8zo/h+cX
-         gUdKV2A6GyMfsBayqvY3cVq9VPuxgRKbqzgxuY9bjdc4TYH+AEXGFio4b+ftSOiOBP7b
-         PnK1NxtGJOp0vCVxS5f0pV8RiN5t4YIOHv1owb2FcIP1AYzg6Pfxi2ei0PpnrkjeQnF5
-         bML/YwRwxoH0fQKBUjJWIZAZ4EEtHcXSlbW42QR+OIF+3m8sm2NHAz2584lZAFxYsvRg
-         QGvb+571Tvi7vGC1yhpsqCJoeOQJFudR1IrWbvIN+dJrud58KaTeSq4gcKczI01qFqjM
-         1SKA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=qq/SsPDV/eM2ZHMz4pu1ftprIPb9q26nLcJqukreREg=;
+        b=Otx7NKnybZDVLygPGQ6qtLX/7BniqvfrZWEninvu8oM860KfRu0vr7Z0t/4xp/7Ddu
+         qUrxqpy8jTCUuJlN5xquFfSZ1nmtisihtsVSJnDWzCdJ7VK1OBK74rZy9F8+QSSzrA21
+         gU63YKItExxJ+Er23hvx7qQfZ9UDsxXA0I+mxtlvF7UYtFwQhWiVH5I272o7ps4oSX3h
+         Sq/hb89LfLlL/OUvOI3ysJsM/vC2t3vP1bg4G7ybT6+HVS1MnXyCFyicFUyCOszhZko6
+         5UXWwY6+TDQtGV8owJ/hux6grwkBK08ymOnWYoKyf9S+oOl4nreDiBGtE8y24nflR0qe
+         AeSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mvjWIFDl3Z932+ulOmlLjYQdMm4oZF1plc2CmRUrZ7A=;
-        b=Zved9Q2NyKGeg3AKWMhTwyvPsa5CXOSVXTLCqAg1L/kUVNkGSIWQlhrktRTTodr+RG
-         +YP5W2UV9k7lXOSnDwBc1oErTZHD4vMlSQycSugM+4l67MiQiU0H05vBuCklC9ernNMd
-         0ZaIOsOt3mPTiM22FB4IO++KTn1K2r3eQzR40SNwQWa+kNBbcZA7xx2QLOwog1m8jXz/
-         xdOi4h8b747SIYXtq1axMoAVcjzS29BmGvjvKs+4eZpqKDz0fq/BMmT0qVsQ7uYcfVWJ
-         ApJsqXv5Mb+7rGfbm/AwGH8GMl4fmAP1mJ+Yb4qruVJqOPTqXFS677qiQISjBeTti9Pz
-         GXPg==
-X-Gm-Message-State: AOAM5318ygOsMnaAQWS1/d/mnXF2b/022Op2+2Mm1xbovWe/7ygSLntZ
-        j5BXqdthnQZPknU3+KuGdDw=
-X-Google-Smtp-Source: ABdhPJwAW+j1KiEM8wN0uczT86kc03ngEICuZtXPY/dQO0Mj4zmuvAFJTqmSn7HQQwjwIimRqn/DQw==
-X-Received: by 2002:a17:906:1be2:: with SMTP id t2mr4700337ejg.399.1638938683782;
-        Tue, 07 Dec 2021 20:44:43 -0800 (PST)
-Received: from [172.16.20.20] ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id i5sm725922ejw.121.2021.12.07.20.44.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 Dec 2021 20:44:43 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
-Subject: Re: [RFC PATCH 2/9] dt-bindings: arm: amlogic: add X96-AIR bindings
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <Ya/Qask7Fpb6mTxb@robh.at.kernel.org>
-Date:   Wed, 8 Dec 2021 08:44:40 +0400
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Benoit Masson <yahoo@perenite.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C1918DC0-F873-4832-AF1A-91AFEF4F7151@gmail.com>
-References: <20211130060523.19161-1-christianshewitt@gmail.com>
- <20211130060523.19161-3-christianshewitt@gmail.com>
- <Ya/Qask7Fpb6mTxb@robh.at.kernel.org>
-To:     Rob Herring <robh@kernel.org>
-X-Mailer: Apple Mail (2.3608.120.23.2.7)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=qq/SsPDV/eM2ZHMz4pu1ftprIPb9q26nLcJqukreREg=;
+        b=HS931ByNKOEVKXeHFqYL6pjRShbD2UD/tWWlDMT8d/cjIkLr/WG6ouw01ml3SsQi2t
+         keRt2IiJmvX6Nce0RvF1w7hfM3aRKHg0ZPuXdltfADscaM2rTyZ5qIOfykZuM/12WVJK
+         RFBYuJsEkBj3rYyWxhWAvs7lhGSCFCO0Xw3ZMQOj9iG3buNvwm3jJlQJLTlVZSu8+g1E
+         xf6W9xhNtDcSI27wdLKQkVnrKS4Uo3gvjj4gB1+mGyVTtgmqtUmmAYXS+K/C7EBAzqCY
+         q2G4creRX8FI17T57h3quoQ+pylcQcqjyLMAPq+7lgxDp5vK9SFexuXNnPP0OVIrLq17
+         DYGQ==
+X-Gm-Message-State: AOAM533l8UXAxC7bxpdi4AF8bnSsfVG2919WjOIS1GKUCpI9xf3GJ9G9
+        9mNrL0mZpS1ZUTbqL0AGIDBE2iM=
+X-Google-Smtp-Source: ABdhPJwymtGTsHk4dKZ1S8NpF/pLAwI9tg0pIgvXEyfzjV+Lj5wztqdVxpnh/MWxylbznv9TyUuwvzE=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:be2d:924d:844b:d2fa])
+ (user=pcc job=sendgmr) by 2002:a25:aca6:: with SMTP id x38mr10034899ybi.515.1638938896305;
+ Tue, 07 Dec 2021 20:48:16 -0800 (PST)
+Date:   Tue,  7 Dec 2021 20:48:02 -0800
+Message-Id: <20211208044808.872554-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v3 0/6] kernel: introduce uaccess logging
+From:   Peter Collingbourne <pcc@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series introduces a kernel feature known as uaccess
+logging, which allows userspace programs to be made aware of the
+address and size of uaccesses performed by the kernel during
+the servicing of a syscall. More details on the motivation
+for and interface to this feature are available in the file
+Documentation/admin-guide/uaccess-logging.rst added by the final
+patch in the series.
 
-> On 8 Dec 2021, at 1:21 am, Rob Herring <robh@kernel.org> wrote:
->=20
-> On Tue, Nov 30, 2021 at 06:05:16AM +0000, Christian Hewitt wrote:
->> Add board bindings for the Amediatech X96-AIR STB which ships with
->> model variants distiguished by Ethernet configuration: models using
->> internal 10/100 PHY have a -100 suffix, while models using external
->> Gigabit PHY have a -1000 suffix.
->=20
-> Isn't the phy described in DT? Why do you need to describe this 1=20
-> difference at the top level?
+Because we don't have a common kernel entry/exit code path that is used
+on all architectures, uaccess logging is only implemented for arm64
+and architectures that use CONFIG_GENERIC_ENTRY, i.e. x86 and s390.
 
-Users who purchase Android STBs as a cheap Linux media device (or are
-reimiaging an existing device when they give up on Android) generally
-have no idea what a PHY is, so reading a device-tree file to pick the
-correct one is beyond them. Most people blindly try all dtb files for
-a class of device until they find one that works, so top-level naming
-is simply to hint the process and reduce guesswork. It=E2=80=99s not =
-perfect,
-but it does appear to reduce the quantity of =E2=80=9CEthernet doesn=E2=80=
-=99t work!=E2=80=9D
-posts seen in support forums.
+The proposed interface is the result of numerous iterations and
+prototyping and is based on a proposal by Dmitry Vyukov. The interface
+preserves the correspondence between uaccess log identity and syscall
+identity while tolerating incoming asynchronous signals in the interval
+between setting up the logging and the actual syscall. We considered
+a number of alternative designs but rejected them for various reasons:
 
-Christian
+- The design from v1 of this patch [1] proposed notifying the kernel
+  of the address and size of the uaccess buffer via a prctl that
+  would also automatically mask and unmask asynchronous signals as
+  needed, but this would require multiple syscalls per "real" syscall,
+  harming performance.
 
->> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
->> ---
->> Documentation/devicetree/bindings/arm/amlogic.yaml | 2 ++
->> 1 file changed, 2 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml =
-b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> index 36081734f720..e9ab0ffe8be7 100644
->> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
->> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> @@ -170,6 +170,8 @@ properties:
->>       - description: Boards with the Amlogic Meson SM1 S905X3/D3/Y3 =
-SoC
->>         items:
->>           - enum:
->> +              - amediatech,x96-air-100
->> +              - amediatech,x96-air-1000
->>               - bananapi,bpi-m5
->>               - hardkernel,odroid-c4
->>               - hardkernel,odroid-hc4
->> --=20
->> 2.17.1
->>=20
->>=20
+- We considered extending the syscall calling convention to
+  designate currently-unused registers to be used to pass the
+  location of the uaccess buffer, but this was rejected for being
+  architecture-specific.
+
+- One idea that we considered involved using the stack pointer address
+  as a unique identifier for the syscall, but this currently would
+  need to be arch-specific as we currently do not appear to have an
+  arch-generic way of retrieving the stack pointer; the userspace
+  side would also need some arch-specific code for this to work. It's
+  also possible that a longjmp() past the signal handler would make
+  the stack pointer address not unique enough for this purpose.
+
+We also evaluated implementing this on top of the existing tracepoint
+facility, but concluded that it is not suitable for this purpose:
+
+- Tracepoints have a per-task granularity at best, whereas we really want
+  to trace per-syscall. This is so that we can exclude syscalls that
+  should not be traced, such as syscalls that make up part of the
+  sanitizer implementation (to avoid infinite recursion when e.g. printing
+  an error report).
+
+- Tracing would need to be synchronous in order to produce useful
+  stack traces. For example this could be achieved using the new SIGTRAP
+  on perf events mechanism. However, this would require logging each
+  access to the stack (in the form of a sigcontext) and this is more
+  likely to overflow the stack due to being much larger than a uaccess
+  buffer entry as well as being unbounded, in contrast to the bounded
+  buffer size passed to prctl(). An approach based on signal handlers is
+  also likely to fall foul of the asynchronous signal issues mentioned
+  previously, together with needing sigreturn to be handled specially
+  (because it copies a sigcontext from userspace) otherwise we could
+  never return from the signal handler. Furthermore, arguments to the
+  trace events are not available to SIGTRAP. (This on its own wouldn't
+  be insurmountable though -- we could add the arguments as fields
+  to siginfo.)
+
+- The API in https://www.kernel.org/doc/Documentation/trace/ftrace.txt
+  -- e.g. trace_pipe_raw gives access to the internal ring buffer, but
+  I don't think it's usable because it's per-CPU and not per-task.
+
+- Tracepoints can be used by eBPF programs, but eBPF programs may
+  only be loaded as root, among other potential headaches.
+
+[1] https://lore.kernel.org/all/20210922061809.736124-1-pcc@google.com/
+
+Peter Collingbourne (6):
+  include: split out uaccess instrumentation into a separate header
+  uaccess-buffer: add core code
+  fs: use copy_from_user_nolog() to copy mount() data
+  uaccess-buffer: add CONFIG_GENERIC_ENTRY support
+  arm64: add support for uaccess logging
+  Documentation: document uaccess logging
+
+ Documentation/admin-guide/index.rst           |   1 +
+ Documentation/admin-guide/uaccess-logging.rst | 151 ++++++++++++++++++
+ arch/Kconfig                                  |   6 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/thread_info.h          |   7 +-
+ arch/arm64/kernel/ptrace.c                    |   7 +
+ arch/arm64/kernel/signal.c                    |   5 +
+ arch/arm64/kernel/syscall.c                   |   1 +
+ fs/exec.c                                     |   3 +
+ fs/namespace.c                                |   8 +-
+ include/linux/entry-common.h                  |   2 +
+ include/linux/instrumented-uaccess.h          |  53 ++++++
+ include/linux/instrumented.h                  |  34 ----
+ include/linux/sched.h                         |   5 +
+ include/linux/thread_info.h                   |   4 +
+ include/linux/uaccess-buffer-info.h           |  46 ++++++
+ include/linux/uaccess-buffer.h                | 112 +++++++++++++
+ include/linux/uaccess.h                       |   2 +-
+ include/uapi/linux/prctl.h                    |   3 +
+ include/uapi/linux/uaccess-buffer.h           |  27 ++++
+ kernel/Makefile                               |   1 +
+ kernel/bpf/helpers.c                          |   7 +-
+ kernel/entry/common.c                         |  10 ++
+ kernel/fork.c                                 |   4 +
+ kernel/signal.c                               |   4 +-
+ kernel/sys.c                                  |   6 +
+ kernel/uaccess-buffer.c                       | 129 +++++++++++++++
+ lib/iov_iter.c                                |   2 +-
+ lib/usercopy.c                                |   2 +-
+ 29 files changed, 602 insertions(+), 41 deletions(-)
+ create mode 100644 Documentation/admin-guide/uaccess-logging.rst
+ create mode 100644 include/linux/instrumented-uaccess.h
+ create mode 100644 include/linux/uaccess-buffer-info.h
+ create mode 100644 include/linux/uaccess-buffer.h
+ create mode 100644 include/uapi/linux/uaccess-buffer.h
+ create mode 100644 kernel/uaccess-buffer.c
+
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 

@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA3146DD9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830EA46DD9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbhLHVbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 16:31:06 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34618 "EHLO
+        id S234350AbhLHVbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 16:31:14 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34636 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbhLHVbF (ORCPT
+        with ESMTP id S234766AbhLHVbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:31:05 -0500
-Date:   Wed, 08 Dec 2021 21:27:30 -0000
+        Wed, 8 Dec 2021 16:31:12 -0500
+Date:   Wed, 08 Dec 2021 21:27:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638998851;
+        s=2020; t=1638998858;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2EdNhkqeZy7zrOgK4I+WWbnwvgg/fzF/4SNYclDzNpg=;
-        b=IVc3dyPw86CST+WyiSg2UMlEH+dk4KqblpMc6VpMuAyXJ7HmX6edjZdM1EON+2McV6c0d8
-        XdOfWcQxtWbuNiaHGeT2kRT8Zge7IG9t/PWlU5zHtdW8OIkkSujOKL4w7d0JAy3wT7GHTa
-        glMj50mE1rS7ydnBH2d3l06ZfAz7N3OywXdBDyoOy6GO4Yj0qdlmeZUPzqJ3pFCZZkiBv2
-        ziCFYr04Le0lLYzxvJ78HKomI17p5o60D1jiqA7J+zo0nuER108A/ruG0nGQBBtEGOhAtU
-        BeuwmP2gh+ARsb/mXv2wb6VwQWXXam9uS7MNuVf8qlKtKLk0FAfE6osBJDHAAQ==
+        bh=nIW81LCscbQfpQyvAJskFFL+jw1I3jY7/dxmCWQuu7Y=;
+        b=uHlbtG9XYg+merTvNw+9wF4F8NQ4bWOp/PgenmeVg1cDE00GjjZ6C5PpdPQqbpAUycVyMj
+        MatP4F9vhqZgwvZrQVSGRuHTQn84rV271ruNVaIyMotJ8XHjLfNx6nFupa+X26MSzPd2Ve
+        omErmco0UroW1EbyuoV0x4JppXMr+basL5SrheWNW+RGGQpGcDRZ4oGwk5U0EDDRlbPmVL
+        ViSdDdoWg5XM7uoaeN2jhjDHL3Z2aBeHZapvdOR8B8npNawk+B+6wFdTDclXVux3ebBYu7
+        WbQxhKYCrwymkukh1NAq1JbbMjrszla3wHZ+ag09xXDya9VtAu++EnPQyCQOqw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638998851;
+        s=2020e; t=1638998858;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2EdNhkqeZy7zrOgK4I+WWbnwvgg/fzF/4SNYclDzNpg=;
-        b=CpvVSOyb3lp6pR5FUrvz7Yuxuo+wqTbVYYNgbJ0OHI5KYKQ2AEg3dqh4JxmaqyNbA2urVh
-        IaOfeDIdlmnIW/BQ==
-From:   "tip-bot2 for Vincent Donnefort" <tip-bot2@linutronix.de>
+        bh=nIW81LCscbQfpQyvAJskFFL+jw1I3jY7/dxmCWQuu7Y=;
+        b=7bItRWt+mJTG3POca2825RrrlOehf5w5TTIgQCqbizXIpWU6jh73gmtAWlDdT/W3/OIkYr
+        V6dKbqc4Y3LFvDDA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Cleanup task_util and capacity type
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211207095755.859972-1-vincent.donnefort@arm.com>
-References: <20211207095755.859972-1-vincent.donnefort@arm.com>
+Subject: [tip: sched/urgent] sched,x86: Don't use cluster topology for x86 hybrid CPUs
+Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
+References: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <163899885062.11128.998557913310932670.tip-bot2@tip-bot2>
+Message-ID: <163899885798.11128.4032422680527135079.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -56,47 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+The following commit has been merged into the sched/urgent branch of tip:
 
-Commit-ID:     ef8df9798d469b7c45c66664550e93469749f1e8
-Gitweb:        https://git.kernel.org/tip/ef8df9798d469b7c45c66664550e93469749f1e8
-Author:        Vincent Donnefort <vincent.donnefort@arm.com>
-AuthorDate:    Tue, 07 Dec 2021 09:57:55 
+Commit-ID:     cabdc3a8475b918e55744f43719b26a82dc8fa6b
+Gitweb:        https://git.kernel.org/tip/cabdc3a8475b918e55744f43719b26a82dc8fa6b
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Sat, 04 Dec 2021 10:14:02 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 08 Dec 2021 22:22:02 +01:00
+CommitterDate: Wed, 08 Dec 2021 22:15:37 +01:00
 
-sched/fair: Cleanup task_util and capacity type
+sched,x86: Don't use cluster topology for x86 hybrid CPUs
 
-task_util and capacity are comparable unsigned long values. There is no
-need for an intermidiate implicit signed cast.
+For x86 hybrid CPUs like Alder Lake, the order of CPU selection should
+be based strictly on CPU priority.  Don't include cluster topology for
+hybrid CPUs to avoid interference with such CPU selection order.
 
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+On Alder Lake, the Atom CPU cluster has more capacity (4 Atom CPUs) vs
+Big core cluster (2 hyperthread CPUs). This could potentially bias CPU
+selection towards Atom over Big Core, when Big core CPU has higher
+priority.
+
+Fixes: 66558b730f25 ("sched: Add cluster scheduler level for x86")
+Suggested-by: Tim Chen <tim.c.chen@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211207095755.859972-1-vincent.donnefort@arm.com
+Acked-by: Tim Chen <tim.c.chen@linux.intel.com>
+Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Link: https://lkml.kernel.org/r/20211204091402.GM16608@worktop.programming.kicks-ass.net
 ---
- kernel/sched/fair.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/kernel/smpboot.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f34f2f3..ac5e554 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4070,7 +4070,8 @@ done:
- 	trace_sched_util_est_se_tp(&p->se);
- }
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index ac2909f..617012f 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -579,6 +579,17 @@ static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
+ 	{ NULL, },
+ };
  
--static inline int task_fits_capacity(struct task_struct *p, long capacity)
-+static inline int task_fits_capacity(struct task_struct *p,
-+				     unsigned long capacity)
- {
- 	return fits_capacity(uclamp_task_util(p), capacity);
- }
-@@ -6345,7 +6346,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
- 	return best_cpu;
- }
++static struct sched_domain_topology_level x86_hybrid_topology[] = {
++#ifdef CONFIG_SCHED_SMT
++	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
++#endif
++#ifdef CONFIG_SCHED_MC
++	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
++#endif
++	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
++	{ NULL, },
++};
++
+ static struct sched_domain_topology_level x86_topology[] = {
+ #ifdef CONFIG_SCHED_SMT
+ 	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
+@@ -1469,8 +1480,11 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
  
--static inline bool asym_fits_capacity(int task_util, int cpu)
-+static inline bool asym_fits_capacity(unsigned long task_util, int cpu)
- {
- 	if (static_branch_unlikely(&sched_asym_cpucapacity))
- 		return fits_capacity(task_util, capacity_of(cpu));
+ 	calculate_max_logical_packages();
+ 
++	/* XXX for now assume numa-in-package and hybrid don't overlap */
+ 	if (x86_has_numa_in_package)
+ 		set_sched_topology(x86_numa_in_package_topology);
++	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
++		set_sched_topology(x86_hybrid_topology);
+ 
+ 	nmi_selftest();
+ 	impress_friends();

@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 631C446DC8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3968746DC81
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbhLHT7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:59:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37711 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239920AbhLHT7Q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:59:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638993343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HmG9k+urqjCT5P/C79yXHidwD7VZjGOrgaeS5VLahvQ=;
-        b=XPVesCjp59DOXld3Qtq46oAeZSXJnLy+rxJm+q1/nwHWKXqFPdm0heln0FVatXKdjiynTL
-        +AK+7aHxY3S0RqLomA4+mhGcH/GEozrRFHbbjcPdbD7fUSnSJHgJ2eWNo43PO0tmqmwNpU
-        s7xbG/MnCSP08rsG73a81xnl1AwY7Ag=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-430-XRLCGAnMPsWUXl3CXByO0g-1; Wed, 08 Dec 2021 14:55:37 -0500
-X-MC-Unique: XRLCGAnMPsWUXl3CXByO0g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 429EE85B660;
-        Wed,  8 Dec 2021 19:55:36 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1C475C1C5;
-        Wed,  8 Dec 2021 19:55:13 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHC9VhTP-HbRU1z66MOkSyw9w7vhK7Vq8p0FrxVfEX-+tSD43A@mail.gmail.com>
-References: <CAHC9VhTP-HbRU1z66MOkSyw9w7vhK7Vq8p0FrxVfEX-+tSD43A@mail.gmail.com> <163898788970.2840238.15026995173472005588.stgit@warthog.procyon.org.uk>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        anna.schumaker@netapp.com, kolga@netapp.com,
-        casey@schaufler-ca.com, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] security: Remove security_add_mnt_opt() as it's unused
+        id S239862AbhLHTyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:54:33 -0500
+Received: from mga07.intel.com ([134.134.136.100]:45916 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229750AbhLHTyc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 14:54:32 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301307888"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="301307888"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:50:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="612215503"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:50:59 -0800
+Date:   Wed, 8 Dec 2021 11:55:16 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
+ PASID
+Message-ID: <20211208115516.1d36fed9@jacob-builder>
+In-Reply-To: <20211208131358.GR6385@nvidia.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
+        <20211208131358.GR6385@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2846547.1638993312.1@warthog.procyon.org.uk>
-Date:   Wed, 08 Dec 2021 19:55:12 +0000
-Message-ID: <2846548.1638993312@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> wrote:
+Hi Jason,
 
-> There is already a patch in the selinux/next tree which does this.
+On Wed, 8 Dec 2021 09:13:58 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Looks pretty much identical to mine.  Feel free to add:
+> > This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform
+> > DMA requests with PASID under the same mapping managed by DMA mapping
+> > API. In addition, SVA-related bits for kernel DMA are removed. As a
+> > result, DSA users shall use DMA mapping API to obtain DMA handles
+> > instead of using kernel virtual addresses.  
+> 
+> Er, shouldn't this be adding dma_map/etc type calls?
+> 
+> You can't really say a driver is using the DMA API without actually
+> calling the DMA API..
+The IDXD driver is not aware of addressing mode, it is up to the user of
+dmaengine API to prepare the buffer mappings. Here we only set up the PASID
+such that it can be picked up during DMA work submission. I tested with
+/drivers/dma/dmatest.c which does dma_map_page(), map_single etc. also
+tested with other pieces under development.
 
-	Reviewed-by: David Howells <dhowells@redhat.com>
+Thanks,
 
-David
-
+Jacob

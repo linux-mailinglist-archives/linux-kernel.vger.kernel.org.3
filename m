@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD6946CF2E
+	by mail.lfdr.de (Postfix) with ESMTP id 7373746CF2F
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240804AbhLHIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:39:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56648 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbhLHIji (ORCPT
+        id S244999AbhLHIjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240745AbhLHIjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:39:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7356B81FDE;
-        Wed,  8 Dec 2021 08:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7D1C00446;
-        Wed,  8 Dec 2021 08:36:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638952564;
-        bh=yJnXl4jzvgEprMEjZxmGkgucyejVpGfnHnH/+kNZK/k=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=ISM/9QAjbK9rehURJd8gG8WaqixuBUFaFI2Pc7F0sDmdi1K2ZJH7mvptw95fnJGl7
-         gAh2mRS7+k2RTuPv7Rj6w16NxfWLQtc/Y8mC4wG3sm5NMh15jNAz5UbSpMV4e6fuO3
-         29e8/aC5WRmkBMNq/briYVH9u8VFjqqFMc5Q7liebcMDTiFgESpepe8zDMYnlEvdsh
-         rW16Bp3Huh+cz+ep0Ex1owqizVNQ7SnQTp2KR4tTp79N/hfp3JhQKTVn1oR3yY/rle
-         oP9rwWPF+aDEcFNMxdS9HEhIRbDYRF25+KnDregNugbTo+XOzmPp1sH0wjZiCxIBSL
-         7sb1iRNAqEgLA==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 8 Dec 2021 03:39:40 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B642C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:36:08 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id j14so3316182uan.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=MeetnrBRs4jJT+BTSSnO2ue/DGD0WTzVcQ2APQoj1Bx6LJk9Rd9Tqyn7Cxec7pv658
+         2jFfLsD8upxuCJEsUMu94nS8lHwdqFZw2RK7Eoh8HPitkJJJ6WcVoGfs0v08Q22MOWCt
+         Qhvr8c4MI1eGWxBigHKuTwiVUHk1npdDesc7cPrVFFuCA+JYJgfF4EUZXWpGYek9FLMe
+         Bsq1NcW0qXXT82F6G8bJZ/RamAH0wLrIZiBK8gJqEZaqkYcQ1XtLsdZ7GZ3HSAcLHwQn
+         UzIeRa003trCG8AGQ2cMtVBrTPiclU87xKJGbryNpfDh8uOh1Qq2MF1puWKpUykyqxYY
+         nKvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=Oc4b7ZmavE6jCvrzG7IF5vgt6Do5EGSv9uBr/3X/knl5HND+IKOU/qvniSUOgUIW48
+         D8X7vQF29W8vlbqJnucecumH97lln/TNvDhfuq3h44mha1sQPVgRUj4AnSRkt7gzGc8h
+         +Y0ZZuFqZBMP2j6elUqlm8jNXrXG7c30zOlc9uoTaBQUt6B5pMidAWs4uoDPUYGQVICd
+         kAx+SQAkbsvsYxHXKmgGy3xi3SCAEriyg4faNH0xvUv09SPLdNVYUNjvr8EEFWktbV4A
+         lA6gmdBtV90ChXM8LXulehc6uMNQHMyHD/pRXs6vI4pOxt7V9eQsdoNXFJ5vQ3fAsPrn
+         Rc4Q==
+X-Gm-Message-State: AOAM530N35fKA64Cd8O6VWU4k6yjzsO02hj3Cua48Z1rBSWpe4JP6lf+
+        oIywu5JSg+PthnBhQHmW5gwY2i9T37Otv5+BtK8=
+X-Google-Smtp-Source: ABdhPJyCTnmtAMy1mesnWzb52rGznqafsNj2NVGkwQmPSCeWYSZuWHODYrSZEp/E3SfEHL4DrsNbsqrcczqZkkGHG/c=
+X-Received: by 2002:ab0:36c4:: with SMTP id v4mr6419341uau.8.1638952567713;
+ Wed, 08 Dec 2021 00:36:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] carl9170: Use the bitmap API when applicable
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
-References: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     chunkeey@googlemail.com, kvalo@codeaurora.org, davem@davemloft.net,
-        kuba@kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <163895256077.29041.18198959871670057550.kvalo@kernel.org>
-Date:   Wed,  8 Dec 2021 08:36:02 +0000 (UTC)
+Received: by 2002:a59:a8f2:0:b0:23d:ac47:853f with HTTP; Wed, 8 Dec 2021
+ 00:36:07 -0800 (PST)
+From:   harikunda1001 <harikunda1001@gmail.com>
+Date:   Wed, 8 Dec 2021 00:36:07 -0800
+Message-ID: <CALoMaspei66Z9K_oKBTHwWVDgTTpoOKfMWdb5dt-r9cSd6BeXg@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
-
-> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
-> open-coded arithmetic in allocator arguments.
-> 
-> Note, that this 'bitmap_zalloc()' divides by BITS_PER_LONG the amount of
-> memory allocated.
-> The 'roundup()' used to computed the number of needed long should have
-> been a DIV_ROUND_UP.
-> 
-> 
-> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-> consistency.
-> 
-> Use 'bitmap_zero()' to avoid hand writing it.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Acked-by: Christian Lamparter <chunkeey@gmail.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-
-Patch applied to ath-next branch of ath.git, thanks.
-
-6273c97296a8 carl9170: Use the bitmap API when applicable
-
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Hello Dear,
+My name is Dr Ava Smith from United States.I am a French and American national
+(dual)living in the U.S and sometimes in the U.K for the Purpose of Work.
+I hope you consider my friend request and consider me worthy to be your friend.
+I will share some of my pics and more details about my self when i get
+your response
+Thanks
+With love
+Ava

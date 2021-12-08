@@ -2,200 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6479A46DAEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B23846DAEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238804AbhLHSWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:22:39 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17426 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231815AbhLHSWh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:22:37 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8HrHDV008954;
-        Wed, 8 Dec 2021 18:19:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=VpuyRHQVLmacLBoAhzw36/Cfws7MZWgO8Iw88Its8xY=;
- b=Wwd9Wn79QznlP3hbbGW+OlX6E2IF69H2yb9YUcRIhrQnaB6lga458D2fif813MIBnQ+p
- lUjDA9yxWNgljjYwjMu3071HNDuijpxwCQb6X0y8OdTJRng3jdtLCUrH6DUzG4gTmcV+
- T1ZiMOSfy0/CFRhvRI19y+IWPkDskDHhmPsw4IwyZSKXz5OwEdG28DAt78dJetS2BhiP
- rgOM6Y9khAlNoUuK5DgJkfhyqNCvhdAjlI+q3skJi+wwnthfktkHPlI2ETSI8Oqbd8qg
- p7hGNmmHeGjui3/rIYEdCsYVsJ7yc+gkjVrKgDNc3F8YejbOBq+21A3Gaw5bRg0zVgoB JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cu1gjrfks-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:19:04 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8Ht2YH012428;
-        Wed, 8 Dec 2021 18:19:04 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cu1gjrfk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:19:04 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8IG1gI014955;
-        Wed, 8 Dec 2021 18:19:02 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3cqyy9ryst-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:19:02 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8IIxrQ28639538
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 18:18:59 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00EC6AE04D;
-        Wed,  8 Dec 2021 18:18:59 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE079AE045;
-        Wed,  8 Dec 2021 18:18:57 +0000 (GMT)
-Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 18:18:57 +0000 (GMT)
-Message-ID: <798938f464812c7ca7a37059434629441701e3ea.camel@linux.ibm.com>
-Subject: Re: [PATCH 07/32] s390/pci: externalize the SIC operation controls
- and routine
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Dec 2021 19:18:57 +0100
-In-Reply-To: <d1b7d0be6603f473017faf3cf5f47cab92db3bef.camel@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-8-mjrosato@linux.ibm.com>
-         <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
-         <614215b5aa14102c7b43913b234463199401a156.camel@linux.ibm.com>
-         <eea46eb2-c14e-3bc1-d8e4-b6b28c677fe2@linux.ibm.com>
-         <a53b6402cefdef7645d1771a8b74782689b4e6dc.camel@linux.ibm.com>
-         <d28e6848-8fa4-c2c4-1140-7da5bcbe1287@linux.ibm.com>
-         <d1b7d0be6603f473017faf3cf5f47cab92db3bef.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U5l3vAD5qt3dPDDB_Ee69wpHunpfjw1R
-X-Proofpoint-ORIG-GUID: 81nXNdgNawkFl5Hg5FlaEpqmI4x3WTge
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_07,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 clxscore=1015 spamscore=0 phishscore=0 malwarescore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080102
+        id S235104AbhLHSYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:24:03 -0500
+Received: from mga03.intel.com ([134.134.136.65]:48770 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229487AbhLHSYC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:24:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237840544"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="237840544"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:20:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="751985058"
+Received: from eatci-mobl.amr.corp.intel.com (HELO [10.212.194.205]) ([10.212.194.205])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:20:29 -0800
+Subject: Re: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
+ regression
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Sang, Oliver" <oliver.sang@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Tang, Feng" <feng.tang@intel.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+References: <20211207012128.GA16074@xsang-OptiPlex-9020>
+ <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
+ <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <c94b8394-08cd-8273-2cd5-1ee5880d4c36@intel.com>
+Date:   Wed, 8 Dec 2021 10:20:26 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 17:41 +0100, Niklas Schnelle wrote:
-> On Wed, 2021-12-08 at 11:20 -0500, Matthew Rosato wrote:
-> > On 12/8/21 10:59 AM, Niklas Schnelle wrote:
-> > > On Wed, 2021-12-08 at 10:33 -0500, Matthew Rosato wrote:
-> > > > On 12/8/21 8:53 AM, Niklas Schnelle wrote:
-> > > > > On Wed, 2021-12-08 at 14:09 +0100, Christian Borntraeger wrote:
-> > > > > > Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> > > > > > > A subsequent patch will be issuing SIC from KVM -- export the necessary
-> > > > > > > routine and make the operation control definitions available from a header.
-> > > > > > > Because the routine will now be exported, let's swap the purpose of
-> > > > > > > zpci_set_irq_ctrl and __zpci_set_irq_ctrl, leaving the latter as a static
-> > > > > > > within pci_irq.c only for SIC calls that don't specify an iib.
-> > > > > > 
-> > > > > > Maybe it would be simpler to export the __ version instead of renaming everything.
-> > > > > > Whatever Niklas prefers.
-> > > > > 
-> > > > > See below I think it's just not worth it having both variants at all.
-> > > > > 
-> > > > > > > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> > > > > > > ---
-> > > > > > >     arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
-> > > > > > >     arch/s390/pci/pci_insn.c         |  3 ++-
-> > > > > > >     arch/s390/pci/pci_irq.c          | 28 ++++++++++++++--------------
-> > > > > > >     3 files changed, 25 insertions(+), 23 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
-> > > > > > > index 61cf9531f68f..5331082fa516 100644
-> > > > > > > --- a/arch/s390/include/asm/pci_insn.h
-> > > > > > > +++ b/arch/s390/include/asm/pci_insn.h
-> > > > > > > @@ -98,6 +98,14 @@ struct zpci_fib {
-> > > > > > >     	u32 gd;
-> > > > > > >     } __packed __aligned(8);
-> > > > > > >     
-> > > > > > > +/* Set Interruption Controls Operation Controls  */
-> > > > > > > +#define	SIC_IRQ_MODE_ALL		0
-> > > > > > > +#define	SIC_IRQ_MODE_SINGLE		1
-> > > > > > > +#define	SIC_IRQ_MODE_DIRECT		4
-> > > > > > > +#define	SIC_IRQ_MODE_D_ALL		16
-> > > > > > > +#define	SIC_IRQ_MODE_D_SINGLE		17
-> > > > > > > +#define	SIC_IRQ_MODE_SET_CPU		18
-> > > > > > > +
-> > > > > > >     /* directed interruption information block */
-> > > > > > >     struct zpci_diib {
-> > > > > > >     	u32 : 1;
-> > > > > > > @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
-> > > > > > >     int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
-> > > > > > >     int __zpci_store_block(const u64 *data, u64 req, u64 offset);
-> > > > > > >     void zpci_barrier(void);
-> > > > > > > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
-> > > > > > > -
-> > > > > > > -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
-> > > > > > > -{
-> > > > > > > -	union zpci_sic_iib iib = {{0}};
-> > > > > > > -
-> > > > > > > -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
-> > > > > > > -}
-> > > > > > > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
-> > > > > 
-> > > > > Since the __zpci_set_irq_ctrl() was already non static/inline the above
-> > > > > inline to non-inline change shouldn't make a performance difference.
-> > > > > 
-> > > > > Looking at this makes me wonder though. Wouldn't it make sense to just
-> > > > > have the zpci_set_irq_ctrl() function inline in the header. Its body is
-> > > > > a single instruction inline asm plus a test_facility(). The latter by
-> > > > > the way I think also looks rather out of place there considering we
-> > > > > call zpci_set_irq_ctrl() in the interrupt handler and facilities can't
-> > > > > go away so it's pretty silly to check for it on every single
-> > > > > interrupt.. unless I'm totally missing something.
-> > > > 
-> > > > This test_facility isn't new to this patch
-> > > 
-> > > Yeah I got that part, your patch just made me look.
-> > > 
-> > > > , it was added via
-> > > > 
-> > > > commit 48070c73058be6de9c0d754d441ed7092dfc8f12
-> > > > Author: Christian Borntraeger <borntraeger@de.ibm.com>
-> > > > Date:   Mon Oct 30 14:38:58 2017 +0100
-> > > > 
-> > > >       s390/pci: do not require AIS facility
-> > > > 
-> > > > It looks like in the past, we would not even initialize zpci at all if
-> > > > AIS wasn't available.  With this, we initialize PCI but only do the SIC
-> > > > when we have AIS, which makes sense.
-> > > 
-> > > Ah yes I guess that is the something I was missing. I was wondering why
-> > > that wasn't just tested for during init.
-> > > 
-> > > > So for this patch, the sane thing to do is probably just keep the
-> > > > test_facility() in place and move to header, inline.
-> > > 
-> > > Yes sounds good.
+On 12/8/21 10:00 AM, Bae, Chang Seok wrote:
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index a629b11bf3e0..8194d2f38bf1 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -4224,6 +4224,11 @@ int restore_altstack(const stack_t __user *uss)
+>         stack_t new;
+>         if (copy_from_user(&new, uss, sizeof(stack_t)))
+>                 return -EFAULT;
+> +       if (current->sas_ss_sp == (unsigned long) new.ss_sp &&
+> +           current->sas_ss_size == new.ss_size &&
+> +           current->sas_ss_flags == new.ss_flags)
+> +               return 0;
+> +
+>         (void)do_sigaltstack(&new, NULL, current_user_stack_pointer(),
+>                              MINSIGSTKSZ);
+>         /* squash all but EFAULT for now */
 
-As discussed out of band, slight change of plan. Let's keep the
-implementation in pci_insn.c for now but remove the __* prefix and the
-iib 0 wrapper. This way we get rid of potential confusion of swapping
-what each variant does and we also don't need to export a __* prefixed
-function. I tried it out locally and having the iib 0 at the callsites
-indeed doesn't look worse.
+This seems like a generally good optimization that could go in
+do_sigaltstack() itself, no?
 
+Either way, it seems like 0day botched this a bit.  '3aac3ebea0' wasn't
+the actual culprit, it was the patch before.

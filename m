@@ -2,97 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2918D46DDFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6A946DE04
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240473AbhLHWIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 17:08:31 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:58195 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233375AbhLHWIa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 17:08:30 -0500
-Received: (qmail 588686 invoked by uid 1000); 8 Dec 2021 17:04:57 -0500
-Date:   Wed, 8 Dec 2021 17:04:57 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] usb: core: enable remote wakeup function for usb
- controller
-Message-ID: <YbEsCSwYLgQefQxU@rowland.harvard.edu>
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
+        id S240500AbhLHWME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 17:12:04 -0500
+Received: from elvis.franken.de ([193.175.24.41]:37076 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229604AbhLHWMD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 17:12:03 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mv56s-0006Wu-00; Wed, 08 Dec 2021 23:08:22 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id C6F57C4E05; Wed,  8 Dec 2021 23:07:59 +0100 (CET)
+Date:   Wed, 8 Dec 2021 23:07:59 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
+ nodes
+Message-ID: <20211208220759.GA6406@alpha.franken.de>
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+ <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
+ <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
+ <20211129122052.GA7921@alpha.franken.de>
+ <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
+ <YbDtiC5CJJGSL/9C@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
+In-Reply-To: <YbDtiC5CJJGSL/9C@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:39:51PM +0800, Yinbo Zhu wrote:
-> The remote wake up function is a regular function on usb device and
-> I think keeping it enabled by default will make the usb application
-> more convenient and usb device remote wake up function keep enabled
-> that ask usb controller remote wake up was enabled at first.
+On Wed, Dec 08, 2021 at 07:38:16PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 29, 2021 at 01:30:17PM +0100, Geert Uytterhoeven wrote:
+> > On Mon, Nov 29, 2021 at 1:21 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > > On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
 > 
-> This patch only enable wake up on usb root hub device, among which,
-
-You say the patch only affects root hub devices, but this doesn't appear 
-to be true.
-
-> usb3.0 root hub doesn't be set wakeup node property but use command
-> USB_INTRF_FUNC_SUSPEND to enable remote wake up function.
+> ...
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  drivers/usb/core/hub.c | 20 ++++++++++++++++++--
->  include/linux/usb.h    |  4 +++-
->  2 files changed, 21 insertions(+), 3 deletions(-)
+> > > are you ok with completly removing rbtx4938 support ? Can I rbtx4939
+> > > board support, too ?
+> > 
+> > Fine for me, I only have rbtx4927.
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 86658a8..cb4b956 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2509,6 +2509,8 @@ static void set_usb_port_removable(struct usb_device *udev)
->   */
->  int usb_new_device(struct usb_device *udev)
->  {
-> +	struct usb_host_config *config;
-> +	int ncfg;
->  	int err;
->  
->  	if (udev->parent) {
-> @@ -2540,6 +2542,18 @@ int usb_new_device(struct usb_device *udev)
->  	udev->dev.devt = MKDEV(USB_DEVICE_MAJOR,
->  			(((udev->bus->busnum-1) * 128) + (udev->devnum-1)));
->  
-> +	for (ncfg = 0; ncfg < udev->descriptor.bNumConfigurations; ncfg++) {
-> +		config = &udev->config[ncfg];
-> +		if ((config->desc.bmAttributes & (1 << 5)) == 0)
-> +			break;
-> +		if (ncfg + 1 == udev->descriptor.bNumConfigurations) {
-> +			err = usb_enable_remote_wakeup(udev);
-> +			if (err)
-> +				dev_dbg(&udev->dev,
-> +				      "won't remote wakeup, err %d\n", err);
-> +		}
-> +	}
+> Is there any news? I still see my patch well applied against latest Linux Next.
+> If the removal is going to be postponed, consider applying this patch then. So
+> we may move forward.
 
-I don't see anything in there which treats root hubs differently from 
-other devices.
+https://lore.kernel.org/all/20211130164558.85584-1-tsbogend@alpha.franken.de/
 
-Besides, enabling wakeup for root hubs is generally a bad idea.  Suppose 
-you closed a laptop's lid and then unplugged a USB device -- with wakeup 
-enabled, the unplug would cause the laptop to wake up again without your 
-knowledge.
+The second patch in that series touches drivers/mtd so I'm waiting for
+a Acked-by. But I could apply the first patch...
 
-Alan Stern
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

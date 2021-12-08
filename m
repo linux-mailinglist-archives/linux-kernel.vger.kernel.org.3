@@ -2,132 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E85246D46A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88D546D46F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbhLHNcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:32:22 -0500
-Received: from mga01.intel.com ([192.55.52.88]:64107 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229747AbhLHNcV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:32:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="261904785"
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="261904785"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 05:28:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="462759940"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 05:28:45 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mux00-0000b2-5s; Wed, 08 Dec 2021 13:28:44 +0000
-Date:   Wed, 8 Dec 2021 21:27:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>, marcel@holtmann.org,
-        johan.hedberg@gmail.com
-Cc:     kbuild-all@lists.01.org, mka@chromium.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, linux-arm-msm@vger.kernel.org,
-        quic_bgodavar@quicinc.com, rjliao@codeaurora.org,
-        hbandi@codeaurora.org
-Subject: Re: [PATCH] Bluetooth: btqca: sequential validation
-Message-ID: <202112082154.jFxxuDI4-lkp@intel.com>
-References: <1638952007-32222-1-git-send-email-quic_saluvala@quicinc.com>
+        id S233366AbhLHNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229747AbhLHNd4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 08:33:56 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACDAC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 05:30:24 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id x10so2722104ioj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 05:30:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HSGS1d79YvwktanRoTlsJEx4+yVq/zg4TlZ3ZGtYtKw=;
+        b=cC8uvc8hjaCALhAZ1k0VS+hU0HIBhKFKUmNhhn6jqmLLIRbcC/L9Kft9ZzSFYjLT6I
+         9Ak/SsKLVgwrDJS4MXa4+iQrkI+b9P5onuDLe0b1NDL9EdTLT+PyOSIId0tjy66mV/NB
+         tkAypJDF200ooWW/mAhtGSFYrbVYgFXkPOc+0V+Hxc/MyRTGeo7e7PmT33Qp2aUxyE+S
+         POlgipX/PgV8d34Hp9E6ctS86m2h8Tbs39fDN60bBN60kHak4fpukSxs7G+WbGt4o4JL
+         N85c9yMscTwwnQCZF4JpnYxL1R1uKng+o20wGfYqTO7TxmBpDE2ntHE9loPF1O7akQlE
+         8J1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HSGS1d79YvwktanRoTlsJEx4+yVq/zg4TlZ3ZGtYtKw=;
+        b=gzJ8PixWZToiVIKk2Ot+ZnDkVq21pPArEllS2hvuyi3WGHiA7T9Z/BuT4U5Guq9BHA
+         tRa3JZS69u1LnhIAsN4deBsIdm2fZAJqzK10JU7T0/WzumOxujDgRGH9NU32ogeAXv0t
+         XHBxvvJH9BPILb6SvfHFF6+u6ER20YQ2/IdT0yWMbVTl68CqnJDt64oOdcIFDOY5b5Y7
+         hnauChYSKwSDaGvNRizIg84ZLCtW5TE1m+vvuEYW8OMG6p1t4fukSiXcvs9GXjQUn5GI
+         FNJbwu67QQ98CDRpxHWS+j0fvoPGVeiw81hRXyIOw5abrDFkhNqHcIFxRE54DA4sat2X
+         VeNw==
+X-Gm-Message-State: AOAM532tH6U9PrRt3QnTPhCLe/KOLuyDQfnXb+5LeIiMRkrmaokewGw8
+        2V3HQ/WU1xnYkhW8Ws8OfeUwL4E9cPx+3aY/
+X-Google-Smtp-Source: ABdhPJyWt0fThyv24kvSEl0q1lO29MXJxWdyNJ9KKTzpFKgTj9m9SDQX0hlj7Xx22o52FZpfGvnjmg==
+X-Received: by 2002:a05:6638:150d:: with SMTP id b13mr58326249jat.101.1638970223286;
+        Wed, 08 Dec 2021 05:30:23 -0800 (PST)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id h11sm2000812ili.30.2021.12.08.05.30.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 05:30:22 -0800 (PST)
+Message-ID: <88091904-3430-d717-75a4-5928566b79b4@linaro.org>
+Date:   Wed, 8 Dec 2021 07:30:20 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638952007-32222-1-git-send-email-quic_saluvala@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/3] firmware: qcom: scm: Remove reassignment to desc
+ following initializer
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Elliot Berman <eberman@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211208083423.22037-1-marijn.suijten@somainline.org>
+ <20211208083423.22037-2-marijn.suijten@somainline.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20211208083423.22037-2-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sai,
+On 12/8/21 2:34 AM, Marijn Suijten wrote:
+> Member assignments to qcom_scm_desc were moved into struct initializers
+> in 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers") including
+> the case in qcom_scm_iommu_secure_ptbl_init, except that the - now
+> duplicate - assignment to desc was left in place. While not harmful,
+> remove this unnecessary extra reassignment.
+> 
+> Fixes: 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-Thank you for the patch! Perhaps something to improve:
+Looks good.
 
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on linux/master linus/master v5.16-rc4 next-20211208]
-[cannot apply to bluetooth/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Alex Elder <elder@linaro.org>
 
-url:    https://github.com/0day-ci/linux/commits/Sai-Teja-Aluvala/Bluetooth-btqca-sequential-validation/20211208-162834
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-config: nds32-allyesconfig (https://download.01.org/0day-ci/archive/20211208/202112082154.jFxxuDI4-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1d58d86c5374c4c82aa1ec8638036667c114f83e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sai-Teja-Aluvala/Bluetooth-btqca-sequential-validation/20211208-162834
-        git checkout 1d58d86c5374c4c82aa1ec8638036667c114f83e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/bluetooth/
+> ---
+>   drivers/firmware/qcom_scm.c | 6 ------
+>   1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 7db8066b19fd..3f67bf774821 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -749,12 +749,6 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
+>   	};
+>   	int ret;
+>   
+> -	desc.args[0] = addr;
+> -	desc.args[1] = size;
+> -	desc.args[2] = spare;
+> -	desc.arginfo = QCOM_SCM_ARGS(3, QCOM_SCM_RW, QCOM_SCM_VAL,
+> -				     QCOM_SCM_VAL);
+> -
+>   	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+>   
+>   	/* the pg table has been initialized already, ignore the error */
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/bluetooth/btqca.c:144:5: warning: no previous prototype for 'qca_send_patch_config_cmd' [-Wmissing-prototypes]
-     144 | int qca_send_patch_config_cmd(struct hci_dev *hdev, enum qca_btsoc_type soc_type)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/qca_send_patch_config_cmd +144 drivers/bluetooth/btqca.c
-
-   143	
- > 144	int qca_send_patch_config_cmd(struct hci_dev *hdev, enum qca_btsoc_type soc_type)
-   145	{
-   146		struct sk_buff *skb;
-   147		int err = 0;
-   148		u8 cmd[5] = {EDL_PATCH_CONFIG_CMD, 0x01, 0, 0, 0};
-   149		u8 rlen = 0x02;
-   150		struct edl_event_hdr *edl;
-   151		u8 rtype = EDL_PATCH_CONFIG_CMD;
-   152	
-   153		bt_dev_dbg(hdev, "QCA Patch config");
-   154	
-   155		skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CONFIG_CMD_LEN,
-   156				cmd, HCI_EV_VENDOR, HCI_INIT_TIMEOUT);
-   157		if (IS_ERR(skb)) {
-   158			err = PTR_ERR(skb);
-   159			bt_dev_err(hdev, "Sending QCA Patch config failed (%d)", err);
-   160			return err;
-   161		}
-   162		if (skb->len != rlen) {
-   163			bt_dev_err(hdev, "QCA Patch config cmd size mismatch len %d", skb->len);
-   164			err = -EILSEQ;
-   165			goto out;
-   166		}
-   167		edl = (struct edl_event_hdr *)(skb->data);
-   168		if (!edl) {
-   169			bt_dev_err(hdev, "QCA Patch config with no header");
-   170			err = -EILSEQ;
-   171			goto out;
-   172		}
-   173		if (edl->cresp != EDL_PATCH_CONFIG_RES_EVT || edl->rtype != rtype) {
-   174			bt_dev_err(hdev, "QCA Wrong packet received %d %d", edl->cresp,
-   175			 edl->rtype);
-   176			err = -EIO;
-   177			goto out;
-   178		}
-   179	out:
-   180		kfree(skb);
-   181		if (err)
-   182			bt_dev_err(hdev, "QCA Patch config cmd failed (%d)", err);
-   183	
-   184		return err;
-   185	}
-   186	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

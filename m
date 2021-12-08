@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFB146D7E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A68046D7E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbhLHQTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:19:55 -0500
-Received: from mail-oo1-f51.google.com ([209.85.161.51]:43818 "EHLO
-        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbhLHQTy (ORCPT
+        id S236685AbhLHQT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236680AbhLHQTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:19:54 -0500
-Received: by mail-oo1-f51.google.com with SMTP id w5-20020a4a2745000000b002c2649b8d5fso953181oow.10;
-        Wed, 08 Dec 2021 08:16:22 -0800 (PST)
+        Wed, 8 Dec 2021 11:19:55 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6315AC0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:16:23 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id t9so4965081wrx.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s3S6Qu67tEui0DUsR7g/4/F35A73+SPBA+zRxkUhaG8=;
+        b=MOtB1a6nj3/eQ3UtTDyQj1j+VVPdxYy6CedR8STiP6JvFUMlapTFPLi4UqGLNvsarp
+         LBJcZFgfWEfjBSAAsypXx6MZtRZIkpUiNnsuhfbv/v8ov6rSYP/ZvOMQGqIat3nqxTUE
+         sZT4IGJtCEQtYlnhi+uHHCl8gv/wD/2me2DEVJy3eYtdc4A+xHBTdxA1EjO3til/UDMm
+         H/1edaw3ZvxzNZs7S/nWmnPAoIfTzxFkuQvzRY5Zg2TIP1/22hviuBUTchcYCqzkEiCs
+         YLG2lwVRBbHfl0Z0TO8HEmsEIUF8y/l4xfS0BqKLlBXZ8DuHBBHsxnhYUoXSD5M9ohK7
+         erVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DwFWtoKE4vVog1yGDsJGm0AcWb/VEx+43Ax3eUNTpkU=;
-        b=dNvtoHHv6IVKLTYQG5hKmurSsQA8EX7eeJGm+Gwhj+X7/42LoIxiCPixWgYBraX8EY
-         ICjjHvSy4kqlfKAsvhERIYLlrCyEC+mpAwRPI/2Kc/blEFLvU5CvsAYLYokjywgsmBtL
-         IGROG52hujN43BCcsz9BnqtjmzJZPgxck9/znsRHfeo/bf5NIpXHwK3mq9YIE0Tj2nQd
-         pDp6AN+VJI+jifOffguCRxQt6mkK6aBnpftq58t6PlN40xAbW+mjgzxrNftGOuTJFFa2
-         4MP9bqsovPeBNz+yhxNJeUA60J8R4WVntkbZCF/imzOipcN/E/uH4V/P8guJbdsJ9jh+
-         cHEw==
-X-Gm-Message-State: AOAM532LyHM8jsfBDDVDfx6t914uZvCk9fRLDfGq2hoUtBwrmifWvbEc
-        Acmj8RHvQjXs+41cm//ZgYSCNq+DDig7xxEPWPI=
-X-Google-Smtp-Source: ABdhPJxHhipy1K98dWWjyZf8/N1uXhF3mAOMhZoUsYZ30DhMHuuY8PxnGuUdDNVqs7mu/uwsJA5hDb8mwHcpACa9h7k=
-X-Received: by 2002:a4a:ead8:: with SMTP id s24mr282257ooh.89.1638980182205;
- Wed, 08 Dec 2021 08:16:22 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s3S6Qu67tEui0DUsR7g/4/F35A73+SPBA+zRxkUhaG8=;
+        b=YUyrGvn72+9XFCWLTHeR+sdaCmHbI9nshY5KN/sX5gjKUGgir2ykysNwhiDVuiruTv
+         mMpb+rHOTV/VZK7w5IIc2uP30+9ZN9aP/rN3Ist+PWK0sfkFsmcRg/u6ecnaO0CdMiX7
+         ILuyzk230MQpa5zyqymmsM0FU6Z0+1agLVnfY7hgHXIp83K5jFQCACm0g1yty1GfQ34q
+         oPX1p+cuZ+xx4/CXuyvVJheTmD26NspvJObnPxFCsQJe0wJGbf6H9EaiGNqxKivSaWhx
+         uxjbTKdaGsBRmOodHJKmSQJw1SJ8P4II7SWXGWK4RblUsaZE/dpnxs6xY82bGNTuprya
+         fu/w==
+X-Gm-Message-State: AOAM530VqS6IY1gNtct9C/4/ypOkJW+Ai0Hcu1By9DpSUO2GAG+0e7iJ
+        cf4SEyy2TjzS86IiLDSBkNy3/g==
+X-Google-Smtp-Source: ABdhPJyCcP3HTyvqGn8Z6fbCxuZdPjgKKEAI4N4Ibrf6Rk4KMeup+vzySvXG4xrGLqlNMeEqm37nlA==
+X-Received: by 2002:a5d:48cf:: with SMTP id p15mr60128362wrs.277.1638980181213;
+        Wed, 08 Dec 2021 08:16:21 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d? ([2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d])
+        by smtp.googlemail.com with ESMTPSA id r83sm6322557wma.22.2021.12.08.08.16.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 08:16:20 -0800 (PST)
+Subject: Re: [PATCH v2 2/5] arm64: dts: rockchip: Add powerzones definition
+ for rock960
+To:     Rob Herring <robh@kernel.org>
+Cc:     arnd@linaro.org, heiko@sntech.de, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Robin Murphy <robin.murphy@arm.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+References: <20211126181500.3404129-1-daniel.lezcano@linaro.org>
+ <20211126181500.3404129-2-daniel.lezcano@linaro.org>
+ <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <82ac88d2-5419-4c1f-e81a-154c65b39c1b@linaro.org>
+Date:   Wed, 8 Dec 2021 17:16:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com> <20211206122952.74139-5-kirill.shutemov@linux.intel.com>
- <CAJZ5v0iH_CQC-ak_NQC5yONT-tFVC1iikSsfVWFh+z+QL5FKdg@mail.gmail.com> <20211208160450.3hplhtikjjvfrhts@black.fi.intel.com>
-In-Reply-To: <20211208160450.3hplhtikjjvfrhts@black.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Dec 2021 17:16:11 +0100
-Message-ID: <CAJZ5v0ghpZuDF0xpJ5ADVx-y8O_n5SM8VNP2O9OiXaUuFC2zsQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] ACPI: PM: Avoid cache flush on entering S4
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 5:04 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Wed, Dec 08, 2021 at 04:10:52PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Dec 6, 2021 at 1:30 PM Kirill A. Shutemov
-> > <kirill.shutemov@linux.intel.com> wrote:
-> > >
-> > > According to the ACPI spec v6.4, section 16.2 the cache flushing
-> > > required on entering to S1, S2, and S3.
-> > >
-> > > No need to flush caches on hibernation (S4).
-> > >
-> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > ---
-> > >  drivers/acpi/sleep.c | 2 --
-> > >  1 file changed, 2 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> > > index 14e8df0ac762..8166d863ed6b 100644
-> > > --- a/drivers/acpi/sleep.c
-> > > +++ b/drivers/acpi/sleep.c
-> > > @@ -902,8 +902,6 @@ static int acpi_hibernation_enter(void)
-> > >  {
-> > >         acpi_status status = AE_OK;
-> > >
-> > > -       ACPI_FLUSH_CPU_CACHE();
-> > > -
-> > >         /* This shouldn't return.  If it returns, we have a problem */
-> > >         status = acpi_enter_sleep_state(ACPI_STATE_S4);
-> > >         /* Reprogram control registers */
-> > > --
-> >
-> > Applied (with some edits in the subject and changelog) as 5.17 material, thanks!
->
-> Is it for the series or only 4/4?
 
-Just for the [4/4].
+Hi Rob,
 
-> Do I need to do something for 2/4 and 3/4?
+On 07/12/2021 19:41, Rob Herring wrote:
 
-For [2/4] you do as per the comment and let me reply to the [3/4].
+[ ... ]
+
+>>         thermal_zones: thermal-zones {
+>>                 cpu_thermal: cpu-thermal {
+>>                         polling-delay-passive = <100>;
+>> @@ -2027,6 +2050,8 @@ gpu: gpu@ff9a0000 {
+>>                 clocks = <&cru ACLK_GPU>;
+>>                 #cooling-cells = <2>;
+>>                 power-domains = <&power RK3399_PD_GPU>;
+>> +               #powerzone-cells = <0>;
+>> +               powerzone = <&PKG_PZ>;
+> 
+> Every CPU and the GPU are in the same powerzone. What is the point? Do
+> you really have to be told that CPUs and GPU are a source of heat and
+> might need to be limited?
+
+A powerzone ==> can read power && set power limit
+
+Every CPU is a powerzone as well as the GPU.
+
+They are all grouped under PKG_PZ.
+
+That means we have:
+
+ pkg
+  |-- cpu0-3
+  |
+  |-- cpu4-7
+  |
+  `-- gpu
+
+We can read the power consumption of cpu0-3, cpu4-7 or gpu and set their
+power limit.
+
+We can read the power consumption of pkg (which is the sum of the power
+consumption of cpu0-3, cpu4-7 and gpu) and I can set the power limit
+which will ensure powerof(cpu0-3 + cpu4-7 + gpu) <= powerof(pkg).
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

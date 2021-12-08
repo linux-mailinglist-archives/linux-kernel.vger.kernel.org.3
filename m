@@ -2,94 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AB346D3D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B801D46D3E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbhLHNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:00:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51210 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbhLHNA4 (ORCPT
+        id S233921AbhLHNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233881AbhLHNB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:00:56 -0500
+        Wed, 8 Dec 2021 08:01:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71424C061746;
+        Wed,  8 Dec 2021 04:58:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B66FB820EB;
-        Wed,  8 Dec 2021 12:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0EEC00446;
-        Wed,  8 Dec 2021 12:57:21 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 07:57:20 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yabin Cui <yabinc@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2] tracefs: Have new files inherit the ownership of their
- parent
-Message-ID: <20211208075720.4855d180@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37CCDB81FA1;
+        Wed,  8 Dec 2021 12:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 907DBC00446;
+        Wed,  8 Dec 2021 12:58:18 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 13:58:14 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
+Message-ID: <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-17-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211207202127.1508689-17-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
+> Setup securityfs with symlinks, directories, and files for IMA
+> namespacing support. The same directory structure that IMA uses on the
+> host is also created for the namespacing case.
+> 
+> The securityfs file and directory ownerships cannot be set when the
+> IMA namespace is initialized. Therefore, delay the setup of the file
+> system to a later point when securityfs is in securityfs_fill_super.
+> 
+> This filesystem can now be mounted as follows:
+> 
+> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
+> 
+> The following directories, symlinks, and files are then available.
+> 
+> $ ls -l sys/kernel/security/
+> total 0
+> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
+> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
+> 
+> $ ls -l sys/kernel/security/ima/
+> total 0
+> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
+> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
+> -rw-------. 1 root root 0 Dec  2 00:18 policy
+> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
+> -r--r-----. 1 root root 0 Dec  2 00:18 violations
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  include/linux/ima.h             | 17 ++++++++++++++++-
+>  security/inode.c                | 12 +++++++++++-
+>  security/integrity/ima/ima_fs.c | 33 ++++++++++++++++++++++++++-------
+>  3 files changed, 53 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index bfb978a7f8d5..a8017272d78d 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -66,6 +66,10 @@ static inline const char * const *arch_get_ima_policy(void)
+>  }
+>  #endif
+>  
+> +extern int ima_fs_ns_init(struct user_namespace *user_ns,
+> +			  struct dentry *root);
+> +extern void ima_fs_ns_free_dentries(struct user_namespace *user_ns);
+> +
+>  #else
+>  static inline enum hash_algo ima_get_current_hash_algo(void)
+>  {
+> @@ -154,6 +158,15 @@ static inline int ima_measure_critical_data(const char *event_label,
+>  	return -ENOENT;
+>  }
+>  
+> +static inline int ima_fs_ns_init(struct user_namespace *ns, struct dentry *root)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void ima_fs_ns_free_dentries(struct user_namespace *user_ns)
+> +{
+> +}
+> +
+>  #endif /* CONFIG_IMA */
+>  
+>  #ifndef CONFIG_IMA_KEXEC
+> @@ -221,7 +234,8 @@ struct ima_h_table {
+>  };
+>  
+>  enum {
+> -	IMAFS_DENTRY_DIR = 0,
+> +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
+> +	IMAFS_DENTRY_DIR,
+>  	IMAFS_DENTRY_SYMLINK,
+>  	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
+>  	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
+> @@ -333,6 +347,7 @@ static inline struct ima_namespace *get_current_ns(void)
+>  {
+>  	return &init_ima_ns;
+>  }
+> +
+>  #endif /* CONFIG_IMA_NS */
+>  
+>  #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
+> diff --git a/security/inode.c b/security/inode.c
+> index 121ac1874dde..10ee20917f42 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/fs_context.h>
+>  #include <linux/mount.h>
+>  #include <linux/pagemap.h>
+> +#include <linux/ima.h>
+>  #include <linux/init.h>
+>  #include <linux/namei.h>
+>  #include <linux/security.h>
+> @@ -41,6 +42,7 @@ static const struct super_operations securityfs_super_operations = {
+>  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+>  	static const struct tree_descr files[] = {{""}};
+> +	struct user_namespace *ns = fc->user_ns;
+>  	int error;
+>  
+>  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+> @@ -49,7 +51,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  
+>  	sb->s_op = &securityfs_super_operations;
+>  
+> -	return 0;
+> +	if (ns != &init_user_ns)
+> +		error = ima_fs_ns_init(ns, sb->s_root);
+> +
+> +	return error;
+>  }
+>  
+>  static int securityfs_get_tree(struct fs_context *fc)
+> @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct fs_context *fc)
+>  
+>  static void securityfs_kill_super(struct super_block *sb)
+>  {
+> +	struct user_namespace *ns = sb->s_fs_info;
+> +
+> +	if (ns != &init_user_ns)
+> +		ima_fs_ns_free_dentries(ns);
 
-If directories in tracefs have their ownership changed, then any new files
-and directories that are created under those directories should inherit
-the ownership of the director they are created in.
+Say securityfs is unmounted. Then all the inodes and dentries become
+invalid. It's not allowed to hold on to any dentries or inodes after the
+super_block is shut down. So I just want to be sure that nothing in ima
+can access these dentries after securityfs is unmounted.
 
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yabin Cui <yabinc@google.com>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: stable@vger.kernel.org
-Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
-Reported-by: Kalesh Singh <kaleshsingh@google.com>
-Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
-Changes since v1: https://lkml.kernel.org/r/20211207144828.3d356e26@gandalf.local.home
-  - Use d_inode() helper function as suggested by Christian.
-
- fs/tracefs/inode.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index 925a621b432e..06cf0534cc60 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -414,6 +414,8 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
- 	inode->i_mode = mode;
- 	inode->i_fop = fops ? fops : &tracefs_file_operations;
- 	inode->i_private = data;
-+	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
-+	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
- 	d_instantiate(dentry, inode);
- 	fsnotify_create(dentry->d_parent->d_inode, dentry);
- 	return end_creating(dentry);
-@@ -436,6 +438,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
- 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
- 	inode->i_op = ops;
- 	inode->i_fop = &simple_dir_operations;
-+	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
-+	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
- 
- 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
- 	inc_nlink(inode);
--- 
-2.31.1
-
+To put it another way: why are they stored in struct ima_namespace in
+the first place? If you don't pin a filesystem when creating files or
+directories like you do for securityfs in init_ima_ns then you don't
+need to hold on to them as they will be automatically be wiped during
+umount.

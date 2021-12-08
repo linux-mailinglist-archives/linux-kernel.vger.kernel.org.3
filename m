@@ -2,137 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 333D046DD94
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA3146DD9C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbhLHV2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 16:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234788AbhLHV2W (ORCPT
+        id S237503AbhLHVbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 16:31:06 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34618 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233054AbhLHVbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:28:22 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0395FC0617A2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 13:24:49 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id f186so9117516ybg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 13:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TRcltKRSwj8+Hgiab/NXzKkZSTBvpT+uIZzu90VYzUw=;
-        b=MHF8oRkDq7MqMwxef+hlrBfoz7ap+nBunJamOo5PGHFD7hAgEtZEhAnGR2ebrGetCm
-         /q24FogDE3nWhGCpbNoiJaLOFDSKFUZaEOEtKvXnYs9LnBz9T7Fm9CN3N/J+ObsbIejW
-         bFpSuDHsda5BcnePrAdJ+mm4yAUEQd+XjiKuh/25PZaQwJm7GVOj97C1JhJN5o9f0wFQ
-         TPsYGnyDcs/xStKdBQPleuya2PZufte4MaAZvs0ccTt21IMKMaIYsnYsaqt9HfttRNTj
-         HUVhGlxR0mJKThSWjiRpWA5w2fOmtajbN5xvIkpIG1NbSTrzsVzmhkc0Uqii0lbOTqQs
-         EYNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TRcltKRSwj8+Hgiab/NXzKkZSTBvpT+uIZzu90VYzUw=;
-        b=BT7Ts3ElOSxNWvIcuxbFhLzhSjkgT3BpH7yO5fqRPoI83pCnYH7milhx07gW9lhb9s
-         jjzzQLx1+URr/4DlXEz4c0qptyHRluv1nFo9OST0x147GNd+FJuXRDCLxBfDj2vAwJVI
-         C8amGt6Itv/DItvtq9C9KJHVJu9bP60eLtM59VJfJpl1B3Uf/9xzkp0pmYvGjzZFVrC+
-         C0DYZouLaFhjeH8xRIOHCci5SBDE7Ba1Se2s6ah/MZ4z2Wfj8/xbq9GCFKyDQFXGc2Og
-         NiiodYsAjuBg//aRjp+gytWlYBzJy89s+8QeaAvrd+tbEpvYfgmTu7Uv2jFMWDP7cffL
-         ZXeQ==
-X-Gm-Message-State: AOAM531OK9UlL527R2ybCXzpNWpeG9rsibAvDzHCFhkmThGyXLBQ0m3U
-        lvTuZh8twZmyCxWY6CCf8qJKWJCitSYwShUWlWPo9A==
-X-Google-Smtp-Source: ABdhPJz365JNROmBZQA3G3UsxqPz1n97Ni+IbdZ1ejWMPWjxWv5B3WyjoYwLQbBHKhZXF2ghfMxDWPO3TvgEjgAKtLs=
-X-Received: by 2002:a25:8052:: with SMTP id a18mr1388004ybn.634.1638998688726;
- Wed, 08 Dec 2021 13:24:48 -0800 (PST)
+        Wed, 8 Dec 2021 16:31:05 -0500
+Date:   Wed, 08 Dec 2021 21:27:30 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638998851;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2EdNhkqeZy7zrOgK4I+WWbnwvgg/fzF/4SNYclDzNpg=;
+        b=IVc3dyPw86CST+WyiSg2UMlEH+dk4KqblpMc6VpMuAyXJ7HmX6edjZdM1EON+2McV6c0d8
+        XdOfWcQxtWbuNiaHGeT2kRT8Zge7IG9t/PWlU5zHtdW8OIkkSujOKL4w7d0JAy3wT7GHTa
+        glMj50mE1rS7ydnBH2d3l06ZfAz7N3OywXdBDyoOy6GO4Yj0qdlmeZUPzqJ3pFCZZkiBv2
+        ziCFYr04Le0lLYzxvJ78HKomI17p5o60D1jiqA7J+zo0nuER108A/ruG0nGQBBtEGOhAtU
+        BeuwmP2gh+ARsb/mXv2wb6VwQWXXam9uS7MNuVf8qlKtKLk0FAfE6osBJDHAAQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638998851;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2EdNhkqeZy7zrOgK4I+WWbnwvgg/fzF/4SNYclDzNpg=;
+        b=CpvVSOyb3lp6pR5FUrvz7Yuxuo+wqTbVYYNgbJ0OHI5KYKQ2AEg3dqh4JxmaqyNbA2urVh
+        IaOfeDIdlmnIW/BQ==
+From:   "tip-bot2 for Vincent Donnefort" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/fair: Cleanup task_util and capacity type
+Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211207095755.859972-1-vincent.donnefort@arm.com>
+References: <20211207095755.859972-1-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-References: <20211207215031.2251719-1-surenb@google.com> <Ya/bFLcnqyvlVzuO@casper.infradead.org>
- <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
- <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
- <YbDIxA92ln+RTbUK@casper.infradead.org> <YbDUnkmQP3nxd5bv@dhcp22.suse.cz>
- <YbDXuegc6BtRzs/5@casper.infradead.org> <CAJuCfpFbF4C8q=40aXcbverm3QFoPzuLgfSU0eT2e7imgp2YfQ@mail.gmail.com>
- <CAJuCfpF0HHXGotVF7Sjo-b4raQcf8a4ckBto8-EE18n1ovmtXQ@mail.gmail.com> <YbEF3mvk3SUr6WHp@casper.infradead.org>
-In-Reply-To: <YbEF3mvk3SUr6WHp@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 8 Dec 2021 13:24:37 -0800
-Message-ID: <CAJuCfpFeKV5Kz-ssEcqDQm_omJz2Q1+Shcpkcbg0vshAha4CAQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
- lock in exit_mmap
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <163899885062.11128.998557913310932670.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 11:22 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Wed, Dec 08, 2021 at 11:13:42AM -0800, Suren Baghdasaryan wrote:
-> > On Wed, Dec 8, 2021 at 8:50 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > On Wed, Dec 8, 2021 at 8:05 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Wed, Dec 08, 2021 at 04:51:58PM +0100, Michal Hocko wrote:
-> > > > > On Wed 08-12-21 15:01:24, Matthew Wilcox wrote:
-> > > > > > On Tue, Dec 07, 2021 at 03:08:19PM -0800, Suren Baghdasaryan wrote:
-> > > > > > > > >         /**
-> > > > > > > > >          * @close: Called when the VMA is being removed from the MM.
-> > > > > > > > >          * Context: Caller holds mmap_lock.
-> > > > > > >
-> > > > > > > BTW, is the caller always required to hold mmap_lock for write or it
-> > > > > > > *might* hold it?
-> > > > > >
-> > > > > > __do_munmap() might hold it for read, thanks to:
-> > > > > >
-> > > > > >         if (downgrade)
-> > > > > >                 mmap_write_downgrade(mm);
-> > > > > >
-> > > > > > Should probably say:
-> > > > > >
-> > > > > >     * Context: User context.  May sleep.  Caller holds mmap_lock.
-> > > > > >
-> > > > > > I don't think we should burden the implementor of the vm_ops with the
-> > > > > > knowledge that the VM chooses to not hold the mmap_lock under certain
-> > > > > > circumstances when it doesn't matter whether it's holding the mmap_lock
-> > > > > > or not.
-> > > > >
-> > > > > If we document it like that some code might depend on that lock to be
-> > > > > held. I think we only want to document that the holder itself is not
-> > > > > allowed to take mmap sem or a depending lock.
-> > > >
-> > > > The only place where we're not currently holding the mmap_lock is at
-> > > > task exit, where the mmap_lock is effectively held because nobody else
-> > > > can modify the task's mm.  Besides, Suren is changing that in this patch
-> > > > series anyway, so it will be always true.
-> > >
-> > > Ok, I'll make it a separate patch after the patch that changes
-> > > exit_mmap and this statement will become always true. Sounds
-> > > reasonable?
-> >
-> > Actually, while today vma_ops->close is called with mmap_lock held, I
-> > believe we want this comment to reflect the restrictions on the
-> > callback itself, not on the user. IOW, we want to say that the
-> > callback should not take mmap_lock while the caller might or might not
-> > hold it. If so, I think *might* would make more sense here, like this:
-> >
-> > * Context: User context.  May sleep.  Caller might hold mmap_lock.
-> >
-> > WDYT?
->
-> We're documenting the contract between the caller and the callee.
-> That implies responsibilities on both sides.  For example, we're
-> placing requirements on the caller that they're not going to tear
-> down the VMA in interrupt context.  So I preferred what previous-Suren
-> said to current-Suren, "this statement will become always true".
->
+The following commit has been merged into the sched/core branch of tip:
 
-previous-Suren posted v4 at
-https://lore.kernel.org/all/20211208212211.2860249-1-surenb@google.com
-Thanks!
+Commit-ID:     ef8df9798d469b7c45c66664550e93469749f1e8
+Gitweb:        https://git.kernel.org/tip/ef8df9798d469b7c45c66664550e93469749f1e8
+Author:        Vincent Donnefort <vincent.donnefort@arm.com>
+AuthorDate:    Tue, 07 Dec 2021 09:57:55 
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 08 Dec 2021 22:22:02 +01:00
+
+sched/fair: Cleanup task_util and capacity type
+
+task_util and capacity are comparable unsigned long values. There is no
+need for an intermidiate implicit signed cast.
+
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20211207095755.859972-1-vincent.donnefort@arm.com
+---
+ kernel/sched/fair.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index f34f2f3..ac5e554 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4070,7 +4070,8 @@ done:
+ 	trace_sched_util_est_se_tp(&p->se);
+ }
+ 
+-static inline int task_fits_capacity(struct task_struct *p, long capacity)
++static inline int task_fits_capacity(struct task_struct *p,
++				     unsigned long capacity)
+ {
+ 	return fits_capacity(uclamp_task_util(p), capacity);
+ }
+@@ -6345,7 +6346,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+ 	return best_cpu;
+ }
+ 
+-static inline bool asym_fits_capacity(int task_util, int cpu)
++static inline bool asym_fits_capacity(unsigned long task_util, int cpu)
+ {
+ 	if (static_branch_unlikely(&sched_asym_cpucapacity))
+ 		return fits_capacity(task_util, capacity_of(cpu));

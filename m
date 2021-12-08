@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEE246DAE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C842746DAE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbhLHSUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhLHSUv (ORCPT
+        id S238780AbhLHSVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:21:20 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39196 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238761AbhLHSVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:20:51 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F9EC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:17:19 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so4949402pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:17:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3f166bKRHkMHhPvddU093J8vpeto2pmeKPfGPIYP+ag=;
-        b=cL99TQ6qTeqBC/mnS0Sbgi4Lra35l+QPXJL+s5eSThP7qttO8f2pRKrpp9barCiLCG
-         woTu8bBio6AH+TEKw8oTCflH3u3FIdd1A6Vej3Uk7l8vJ6m30fMfJ7o7E2aBa0n+Jojo
-         GLybvYrDGZtX1i8uZyKy67wN0FN41BHrCDwGpvTtzDAS89TF++Wy1LA6HxvUda+2d1Fh
-         LEQLhPilkaYqLfZsQJ3J6P7Dj9ZczaHkxbk5g5I6M71Iwv2PV52pcWlBkfnPR7lS1BPh
-         eIIdkw/vQCJEQzYXH0XVhJIZNAMFCOhjaTML8TQbQ6k2NwLdSEKR0tRr3KqyJg/LN1Po
-         4Bpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3f166bKRHkMHhPvddU093J8vpeto2pmeKPfGPIYP+ag=;
-        b=zzKmeXo8gKzLe/LalFm7UJnSr8JncPht8u9UVENFgM7JXxcFecvw2totmWD5ThaR9/
-         j5w+v/WGQ4CufbwqiRFrxsXgoXwzA04cYg0j5rEfPdvtJcl920oGcB48BBjuCxJWYWPN
-         DozDlyIO2mLppDoC/QmGoUkUnGmaz2VAPzOzE3//qQ6cmewfS75EBlF14t2oMOeGX0td
-         KNG3pMdLiIOV+94AdfTVtXtBeSZln86jUqDnj7CerBLGGrvY9FmxipMK4ZTQC78K82LU
-         Lss1H32mFuo608KpbqnnAvO/12Eo98IewlmyHvuUs9m0UTqb+jBeHfKRcWC2Hoq24bl7
-         JdFQ==
-X-Gm-Message-State: AOAM531ZolxE5OBYFXx/4Rv1xtp1w1bJRw76oo15Q1d52QSh5N5M56ac
-        SLI9JE7+pzJpYU21+dOItit+HE8hMtuakw==
-X-Google-Smtp-Source: ABdhPJwmueStDqep48ij3iOz84X2oAXyKLxFMG73qqVpmizbC+ILabThfI8X1KTs/m00ikAT2XRW1w==
-X-Received: by 2002:a17:90a:8049:: with SMTP id e9mr8951250pjw.229.1638987439188;
-        Wed, 08 Dec 2021 10:17:19 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j17sm4020451pfe.174.2021.12.08.10.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 10:17:18 -0800 (PST)
-Date:   Wed, 8 Dec 2021 18:17:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] KVM: x86: Move .pmu_ops to kvm_x86_init_ops and
- tagged as __initdata
-Message-ID: <YbD2q/MhBjm2OMOe@google.com>
-References: <20211108111032.24457-1-likexu@tencent.com>
- <20211108111032.24457-6-likexu@tencent.com>
+        Wed, 8 Dec 2021 13:21:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9D054CE22FD;
+        Wed,  8 Dec 2021 18:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38865C00446;
+        Wed,  8 Dec 2021 18:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638987463;
+        bh=GphJXWtAKWGWnOk8D6UZiXQve1MESdZihzekQ7unsk0=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=SpvAIRytYXwboKBCw9ipE8oSVGSrLvBIJxSyBqINpd1yXx9EpeB6LHtQSI6hLXtpo
+         Il053Of0TtKOnoGCITUC3cT/X0C8WtDr1BC2/iVXdDiaU+xkXbV6fEruevK9cgvshR
+         J2oU9uheW/UfJxiNcl4h1HS5quJOTdImEDTyOFLwehJCIMQ3CjbuvT0oydLrPxzxjw
+         7UI8p5whAPWU+YTGA/yi+1PSSfP/VWJUKqvHBR0d7EspJcb7++HjfDXvSerPaXQBst
+         k0nY077C4OEnp07k3Mo2yWtYq4ke6xgZlb0KjRlYq9H+ZQhwzKsVjccuXR3UvykbL1
+         N9lomo+I+3jFg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108111032.24457-6-likexu@tencent.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 1/3] iwlwifi: fix LED dependencies
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211204173848.873293-1-arnd@kernel.org>
+References: <20211204173848.873293-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Stanislaw Gruszka <stf_xl@wp.pl>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163898745953.8681.9953401691821732230.kvalo@kernel.org>
+Date:   Wed,  8 Dec 2021 18:17:41 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/tagged/tag
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-On Mon, Nov 08, 2021, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The pmu_ops should be moved to kvm_x86_init_ops and tagged as __initdata.
-
-State what the patch does, not what "should" be done.
-
-  Now that pmu_ops is copied by value during kvm_arch_hardware_setup(), move
-  the pointer to kvm_x86_init_ops and tag implementations as __initdata to make
-  the implementations unreachable once KVM is loaded, e.g. to make it harder to
-  sneak in post-init modification bugs.
-
-> That'll save those precious few bytes, and more importantly make
-> the original ops unreachable, i.e. make it harder to sneak in post-init
-> modification bugs.
+> The dependencies for LED configuration are highly inconsistent and too
+> complicated at the moment. One of the results is a randconfig failure I
+> get very rarely when LEDS_CLASS is in a loadable module, but the wireless
+> core is built-in:
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 4 ++--
->  arch/x86/kvm/svm/pmu.c          | 2 +-
->  arch/x86/kvm/svm/svm.c          | 2 +-
->  arch/x86/kvm/vmx/pmu_intel.c    | 2 +-
->  arch/x86/kvm/vmx/vmx.c          | 2 +-
->  arch/x86/kvm/x86.c              | 2 +-
->  6 files changed, 7 insertions(+), 7 deletions(-)
+> WARNING: unmet direct dependencies detected for MAC80211_LEDS
+>   Depends on [n]: NET [=y] && WIRELESS [=y] && MAC80211 [=y] && (LEDS_CLASS [=m]=y || LEDS_CLASS [=m]=MAC80211 [=y])
+>   Selected by [m]:
+>   - IWLEGACY [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y]
+>   - IWLWIFI_LEDS [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y] && IWLWIFI [=m] && (LEDS_CLASS [=m]=y || LEDS_CLASS [=m]=IWLWIFI [=m]) && (IWLMVM [=m] || IWLDVM [=m])
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index c2d4ee2973c5..00760a3ac88c 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1436,8 +1436,7 @@ struct kvm_x86_ops {
->  	int cpu_dirty_log_size;
->  	void (*update_cpu_dirty_logging)(struct kvm_vcpu *vcpu);
->  
-> -	/* pmu operations of sub-arch */
-> -	const struct kvm_pmu_ops *pmu_ops;
-> +	/* nested operations of sub-arch */
+> aarch64-linux-ld: drivers/net/wireless/ath/ath5k/led.o: in function `ath5k_register_led':
+> led.c:(.text+0x60): undefined reference to `led_classdev_register_ext'
+> aarch64-linux-ld: drivers/net/wireless/ath/ath5k/led.o: in function `ath5k_unregister_leds':
+> led.c:(.text+0x200): undefined reference to `led_classdev_unregister'
+> 
+> For iwlwifi, the dependency is wrong, since this config prevents the
+> MAC80211_LEDS code from being part of a built-in MAC80211 driver.
+> 
+> For iwlegacy, this is worse because the driver tries to force-enable
+> the other subsystems, which is both a layering violation and a bug
+> because it will still fail with MAC80211=y and IWLEGACY=m, leading
+> to LEDS_CLASS being a module as well.
+> 
+> The actual link failure in the ath5k driver is a result of MAC80211_LEDS
+> being enabled but not usable. With the Kconfig logic fixed in the
+> Intel drivers, the ath5k driver works as expected again.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Luca Coelho <luciano.coelho@intel.com>
 
-No need for the new comment.
+3 patches applied to wireless-drivers.git, thanks.
 
->  	const struct kvm_x86_nested_ops *nested_ops;
->  
->  	/*
+efdbfa0ad03e iwlwifi: fix LED dependencies
+c68115fc5375 brcmsmac: rework LED dependencies
+f7d55d2e439f mt76: mt7921: fix build regression
 
-Nits aside,
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211204173848.873293-1-arnd@kernel.org/
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-I'd also be a-ok squashing this with the copy-by-value patch.

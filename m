@@ -2,131 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3267A46D1D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F64546D1E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbhLHLRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:17:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32884 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232292AbhLHLRZ (ORCPT
+        id S231391AbhLHLUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbhLHLUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:17:25 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8AIgmG030674;
-        Wed, 8 Dec 2021 11:13:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=p+hR73c7oilo2pPaxIQvq+l+IO5Si8d4qy66UdU0FA8=;
- b=sAYirZnC1lnyfeHege36mEylyV5DgJ1P4xgApnipjEUPQSIzZhFLO3jmUHmcrjzdymIG
- VEFBBd6DiK3XqTpv3gX6hwnyy2reIuLg6fcp7pxmQqN8HIaQQF9lm47/GTT5B7k0hSnA
- N/URhF44Pgq1FoS3QHVcQgXuBywZk4Yd4cgxnGcHbChktMshWxCJrp/gNgOPW1SF4lyE
- bMnUqXrKcUxkZryuYVIF5DfVKXRPXpPKuXESSkCFC8TeN6OBRwJJhW5LEBbsNiVKB6ZW
- gKc4nTIM5SBx+PV3erHWNqiPFOG4Y2NnX0bzq3czZvWhcU2+raUSwJfpaNy4WhFjiryK uQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttufrwmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:13:53 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8B1AYX012091;
-        Wed, 8 Dec 2021 11:13:52 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cttufrwkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:13:52 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8B8SxD011082;
-        Wed, 8 Dec 2021 11:13:50 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3cqyy9ndmx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 11:13:50 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8BDkAK22151558
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 11:13:46 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B44FE11C05B;
-        Wed,  8 Dec 2021 11:13:46 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90ECD11C05C;
-        Wed,  8 Dec 2021 11:13:45 +0000 (GMT)
-Received: from [9.171.54.177] (unknown [9.171.54.177])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 11:13:45 +0000 (GMT)
-Message-ID: <b3162ece-d654-a540-8071-ebc8499db25c@linux.ibm.com>
-Date:   Wed, 8 Dec 2021 12:13:45 +0100
+        Wed, 8 Dec 2021 06:20:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031C5C061746;
+        Wed,  8 Dec 2021 03:16:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 34C52CE213B;
+        Wed,  8 Dec 2021 11:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB56C00446;
+        Wed,  8 Dec 2021 11:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638962195;
+        bh=fhdUJaiGKm5S+ZrwA8IyQ8XLyDaFOO5ozAko2Wy4luI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YQW4N2kokb7PyhKeZ9vmPeH9KK6hIZnSDzu7Ibbintlrjzpwx6TSMolbnBi8qpYpL
+         c2SbLtg2r5ffHlC7yyD4lWfdIs7v0syYKJwhmxsGrAdzGDjLqUCfgQrpkHWGHjfmnm
+         kbSz4DYmuW3UhLp+eRAXYQ3rT+GV9C5znVlr8sKnj2ZqGCm5G0m2jcJPIMcUaFb2A5
+         JEv/YuM2yGgbyu9Aje4RA9K6SDJDXHYEuCYapUqyx+8KVS5BPKiVMNM4DKfFKuORZw
+         DxpV9MFiMQgIfKwIGutRXA4G/kIpR7/8iQyoEpKAPfbapDQG0x7FLSZoYZ7yX799EJ
+         3b3OoQFh3saaw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muuw5-00AkSz-68; Wed, 08 Dec 2021 11:16:33 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 02/32] s390/sclp: detect the AISII facility
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-3-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-3-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Wed, 08 Dec 2021 11:16:33 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the irqchip-fixes tree
+In-Reply-To: <20211208210453.021ac89c@canb.auug.org.au>
+References: <20211208210453.021ac89c@canb.auug.org.au>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <194af79dcd37229582e675c5b92733ca@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hIBKaCUWixUDDN0QhjBc4Bk8xpWBaI0K
-X-Proofpoint-ORIG-GUID: rD7c68sk_RO7GYKdB0rivvFo4zP4VRsK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_04,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112080071
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, wangwudi@hisilicon.com, zhangshaokun@hisilicon.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> Detect the Adapter Interruption Source ID Interpretation facility.
+On 2021-12-08 10:04, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Reviewed-by: Eric Farman <farman@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> In commit
+> 
+>   d094b4332232 ("irqchip/irq-gic-v3-its.c: Force synchronisation when
+> issuing INVALL")
+> 
+> Fixes tag
+> 
+>   Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
+> 
+> has these problem(s):
+> 
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git 
+> v2.11
+>     or later) just making sure it is not set (or set to "auto").
 
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Well spotted. Now fixed.
 
-> ---
->   arch/s390/include/asm/sclp.h   | 1 +
->   drivers/s390/char/sclp_early.c | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
-> index c84e8e0ca344..524a99baf221 100644
-> --- a/arch/s390/include/asm/sclp.h
-> +++ b/arch/s390/include/asm/sclp.h
-> @@ -89,6 +89,7 @@ struct sclp_info {
->   	unsigned char has_sipl : 1;
->   	unsigned char has_dirq : 1;
->   	unsigned char has_zpci_interp : 1;
-> +	unsigned char has_aisii : 1;
->   	unsigned int ibc;
->   	unsigned int mtid;
->   	unsigned int mtid_cp;
-> diff --git a/drivers/s390/char/sclp_early.c b/drivers/s390/char/sclp_early.c
-> index 2e8199b7ae50..a73120b8a5de 100644
-> --- a/drivers/s390/char/sclp_early.c
-> +++ b/drivers/s390/char/sclp_early.c
-> @@ -45,6 +45,7 @@ static void __init sclp_early_facilities_detect(void)
->   	sclp.has_gisaf = !!(sccb->fac118 & 0x08);
->   	sclp.has_hvs = !!(sccb->fac119 & 0x80);
->   	sclp.has_kss = !!(sccb->fac98 & 0x01);
-> +	sclp.has_aisii = !!(sccb->fac118 & 0x40);
->   	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
->   	if (sccb->fac85 & 0x02)
->   		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
-> 
+         M.
+-- 
+Jazz is not dead. It just smells funny...

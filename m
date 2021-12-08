@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A5346D488
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9253146D489
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbhLHNmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:42:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40385 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234372AbhLHNmB (ORCPT
+        id S234357AbhLHNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:43:45 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32887 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234349AbhLHNnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:42:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638970709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ztz6KLLsrEQ05aQBRS4LY7DFjul40lWKNWaumF6dm64=;
-        b=GGZMvOmtgippU6yse4yn0HL98qJfT2ziPFVrippO+Mr/0+LFQCGB9f1t1GhOKBmFs1WRfL
-        0JB/zskoM9UeTJXwh9CRQjzSOPPXy0KmF9cY40rSy+wejHchaxdlrbDNl7v0K48j1SrcaB
-        v5Bo+2h8aSjY7WyKdALxzw5yGkOG41s=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-ennQOe1JMTet6QLLn-PtpQ-1; Wed, 08 Dec 2021 08:38:28 -0500
-X-MC-Unique: ennQOe1JMTet6QLLn-PtpQ-1
-Received: by mail-wm1-f72.google.com with SMTP id y141-20020a1c7d93000000b0033c2ae3583fso1312818wmc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 05:38:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ztz6KLLsrEQ05aQBRS4LY7DFjul40lWKNWaumF6dm64=;
-        b=a8JSSRO2lxtGMl2r6N8afx4bKAF8mO8YQeiOhKcNlRpV8c+MCqnujhX6wL486sZhBO
-         aXA5lPkHVmU1r8z7b6WkoRGUFrDF5cQa8oubTz7p/h/eL0B5S6A2l4uv8g1JdkzrHA25
-         1w226ysjkwBIIq1sR5tsmd4bylaUWxwKLh/q8xSik3GaFPp0pqcKgg0Lz7h+WDWf1cLE
-         /MRfXsycYDzqpNG7Whqg6IAlpT9B6vgmB6KlSY9k+0z46tTQ4vuTixpp0UXpnSDyUELJ
-         rPJKlhD/nVJcQOXmlF5rMgIyWizRBGQBlPjXWPYvZNcFnvy1cxM0XzT1522UnrfoCODa
-         EcAQ==
-X-Gm-Message-State: AOAM533KELKmsXbE62fvkbpqUFfGZ4xaA5Jb3bprYnu8Zj8NfWxHoZkh
-        c11qxZ9eBQ68JuvJ6nKTnx9XN+bagOvtMAfQHSxc+oKPgDFk1z2WQKtZCyfz3VDulJdgw0RwXx8
-        124cvM2gAUW9Wn3KQ4bb+8tvB
-X-Received: by 2002:adf:9bc4:: with SMTP id e4mr59666334wrc.476.1638970707484;
-        Wed, 08 Dec 2021 05:38:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEiEBye8AlwAU4IiEbbmZZ4AqYunkiArYw2vP4I8rJ9DE9g2ruUHD8bokG6X2z6aUs3h1v6g==
-X-Received: by 2002:adf:9bc4:: with SMTP id e4mr59666301wrc.476.1638970707306;
-        Wed, 08 Dec 2021 05:38:27 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62ba.dip0.t-ipconnect.de. [91.12.98.186])
-        by smtp.gmail.com with ESMTPSA id p13sm5739804wmi.0.2021.12.08.05.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 05:38:25 -0800 (PST)
-Message-ID: <9230f9cc-1001-e3ce-aa74-10b766c8cdb0@redhat.com>
-Date:   Wed, 8 Dec 2021 14:38:22 +0100
+        Wed, 8 Dec 2021 08:43:45 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8JFB6w66zcbpt;
+        Wed,  8 Dec 2021 21:39:58 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 8 Dec 2021 21:40:11 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 8 Dec 2021 21:40:10 +0800
+Subject: Re: [PATCH v3 1/1] iommu/arm-smmu-v3: Simplify useless instructions
+ in arm_smmu_cmdq_build_cmd()
+To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
+References: <20211207094109.1962-1-thunder.leizhen@huawei.com>
+ <20211207094109.1962-2-thunder.leizhen@huawei.com>
+ <9da73d96-c61d-4ed2-607d-4861e6bfd696@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <58e8e7c6-a47b-7816-ac74-aefa5b55dd17@huawei.com>
+Date:   Wed, 8 Dec 2021 21:40:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 4/6] crash hp: generic crash hotplug support
- infrastructure
+In-Reply-To: <9da73d96-c61d-4ed2-607d-4861e6bfd696@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20211207195204.1582-1-eric.devolder@oracle.com>
- <20211207195204.1582-5-eric.devolder@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211207195204.1582-5-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#if defined(CONFIG_MEMORY_HOTPLUG)
-> +static int crash_memhp_notifier(struct notifier_block *nb,
-> +	unsigned long val, void *v)
-> +{
-> +	struct memory_notify *mhp = v;
-> +	unsigned long start, end;
-> +
-> +	start = mhp->start_pfn << PAGE_SHIFT;
-> +	end = ((mhp->start_pfn + mhp->nr_pages) << PAGE_SHIFT) - 1;
-> +
-> +	switch (val) {
-> +	case MEM_GOING_ONLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY,
-> +			start, end-start);
-> +		break;
-> +
-> +	case MEM_OFFLINE:
-> +	case MEM_CANCEL_ONLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_MEMORY,
-> +			start, end-start);
 
-Any reason you don't handle this after the effects completely, meaning
-MEM_ONLINE and MEM_OFFLINE?
 
--- 
-Thanks,
+On 2021/12/8 0:17, John Garry wrote:
+> 
+>> +
+>>       return 0;
+>>   }
+> 
+> Did you notice any performance change with this change?
 
-David / dhildenb
+Hi John:
+  Thanks for the tip. I wrote a test case today, and I found that the
+performance did not go up but down. It's so weird. So I decided not to
+change it, because it's also poorly readable. So I plan to make only
+the following modifications:
+@@ -237,7 +237,7 @@ static int queue_remove_raw(struct arm_smmu_queue *q, u64 *ent)
+ static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct arm_smmu_cmdq_ent *ent)
+ {
+        memset(cmd, 0, 1 << CMDQ_ENT_SZ_SHIFT);
+-       cmd[0] |= FIELD_PREP(CMDQ_0_OP, ent->opcode);
++       cmd[0] = FIELD_PREP(CMDQ_0_OP, ent->opcode);
 
+        switch (ent->opcode) {
+        case CMDQ_OP_TLBI_EL2_ALL:
+
+This prevents the compiler from generating the following two inefficient
+instructions:
+     394:       f9400002        ldr     x2, [x0]	//x2 = cmd[0]
+     398:       aa020062        orr     x2, x3, x2	//x3 = FIELD_PREP(CMDQ_0_OP, ent->opcode)
+
+Maybe it's not worth changing because I've only seen a 0.x nanosecond reduction
+in performance. But one thing is, it only comes with benefits, no side effects.
+
+> 
+> Thanks,
+> John

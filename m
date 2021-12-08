@@ -2,201 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF23446D7A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC8346D7A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236481AbhLHQCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:02:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29926 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236421AbhLHQCr (ORCPT
+        id S236492AbhLHQFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:05:55 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40008 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236426AbhLHQFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:02:47 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FIEFi029115;
-        Wed, 8 Dec 2021 15:59:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=utmoP5Zpa8d3eUERjbx8XwiQbmqfm898++lg/HT7Kew=;
- b=TdfbfSZRSgXF50Bz6HkpHPcFVmQYNpLcRZJwZtTYUlVfR9RMBNHv07Tcht8R0sj47+0z
- Wvc/XmFfp+p1LuT3r6ZDN6/JPSt7Ni7UOCq+7QTsP7yYXHDYkB0TlhEyCHOPHtcCOQVm
- EFlfP43lxsLTj7ipRD1MS9JjTRNTcOKwuC3Q5p7UVk3COhvzJcBB2O08VOb0PG7H6kME
- t88Aoe6wiJD0pH9fqLzzXJk1bUK4tMNX7uWQmL4Yj+liEzrxyBkxncHlugVvozbE3ON6
- 6yrQATYAfiX0Q8BUkVMsmeOjsYcduH3XMVqAETDkM1tEMGK6W+yovla0NT8EGhcy0qgI nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cty7vgue0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 15:59:15 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8FMDeU002381;
-        Wed, 8 Dec 2021 15:59:14 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cty7vgudh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 15:59:14 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Fwst5008055;
-        Wed, 8 Dec 2021 15:59:12 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cqykjhmm7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 15:59:12 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8Fx9q620447604
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 15:59:09 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5547311C04C;
-        Wed,  8 Dec 2021 15:59:09 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 243BE11C052;
-        Wed,  8 Dec 2021 15:59:08 +0000 (GMT)
-Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 15:59:08 +0000 (GMT)
-Message-ID: <a53b6402cefdef7645d1771a8b74782689b4e6dc.camel@linux.ibm.com>
-Subject: Re: [PATCH 07/32] s390/pci: externalize the SIC operation controls
- and routine
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Dec 2021 16:59:07 +0100
-In-Reply-To: <eea46eb2-c14e-3bc1-d8e4-b6b28c677fe2@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-8-mjrosato@linux.ibm.com>
-         <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
-         <614215b5aa14102c7b43913b234463199401a156.camel@linux.ibm.com>
-         <eea46eb2-c14e-3bc1-d8e4-b6b28c677fe2@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XdoR5-4K30KyLf2GYD1vPHJYCFPi9PnH
-X-Proofpoint-ORIG-GUID: grLgBOgNd9kumXGOwJYkmEy4JW75ZH9M
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_06,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- bulkscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0
- malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112080095
+        Wed, 8 Dec 2021 11:05:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A67FECE2207;
+        Wed,  8 Dec 2021 16:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAEA9C00446;
+        Wed,  8 Dec 2021 16:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638979338;
+        bh=aYzMTGF66BBpR2FANCUsedAiT55w3D5TjpGIfAfKn1Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ULuDyyrIlxD/4XyzOSQyQM7tCBY/fMl3HwzHkXWZW4WoPCwXCdr+JomLb3OsNorTA
+         PN8OIRJkJTpOPeXycNVMq3LB8hDUJkZVvJ+rQjFqxbV852WEQGxIDaakhBH0cBd4HY
+         yTtwhAOlcIqP3oj1OduxhAbLKV/l/P67A5PYL6lZLR0eDVxN0RU3qb+q0H2YJmjRK3
+         dzsO7ln3IN9c87hCXD6briXJfpujzj8NutqyliZphyRDAhIUqa8t6z7JbG7EwZBpAa
+         MUadmBF9t4LR80ws8rW+Feg+XI3t4u/+L6K4c36UldbGnAqUjX0A6Zgb5GFvmjuAjX
+         nnB5vHnWCA7cg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1muzOa-00AoNQ-Q0; Wed, 08 Dec 2021 16:02:16 +0000
+Date:   Wed, 08 Dec 2021 16:02:16 +0000
+Message-ID: <87a6hb13w7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?InFpbmppYW5b6KaD5YGlXSI=?= <qinjian@cqplus1.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Wells Lu =?UTF-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: Re: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt controller driver
+In-Reply-To: <8fa00c3b55874e90b5baae1f84010997@cqplus1.com>
+References: <cover.1638515726.git.qinjian@cqplus1.com>
+        <e88ea4cf28ba69a41f6d1b4dd4128b82a6095c29.1638515726.git.qinjian@cqplus1.com>
+        <87r1ao23fp.wl-maz@kernel.org>
+        <39f9b853af7c44cb94421354744512a8@cqplus1.com>
+        <ce867937861df454823eb703bfd29256@kernel.org>
+        <8fa00c3b55874e90b5baae1f84010997@cqplus1.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qinjian@cqplus1.com, robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk, broonie@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, wells.lu@sunplus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 10:33 -0500, Matthew Rosato wrote:
-> On 12/8/21 8:53 AM, Niklas Schnelle wrote:
-> > On Wed, 2021-12-08 at 14:09 +0100, Christian Borntraeger wrote:
-> > > Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> > > > A subsequent patch will be issuing SIC from KVM -- export the necessary
-> > > > routine and make the operation control definitions available from a header.
-> > > > Because the routine will now be exported, let's swap the purpose of
-> > > > zpci_set_irq_ctrl and __zpci_set_irq_ctrl, leaving the latter as a static
-> > > > within pci_irq.c only for SIC calls that don't specify an iib.
-> > > 
-> > > Maybe it would be simpler to export the __ version instead of renaming everything.
-> > > Whatever Niklas prefers.
-> > 
-> > See below I think it's just not worth it having both variants at all.
-> > 
-> > > > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> > > > ---
-> > > >    arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
-> > > >    arch/s390/pci/pci_insn.c         |  3 ++-
-> > > >    arch/s390/pci/pci_irq.c          | 28 ++++++++++++++--------------
-> > > >    3 files changed, 25 insertions(+), 23 deletions(-)
-> > > > 
-> > > > diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
-> > > > index 61cf9531f68f..5331082fa516 100644
-> > > > --- a/arch/s390/include/asm/pci_insn.h
-> > > > +++ b/arch/s390/include/asm/pci_insn.h
-> > > > @@ -98,6 +98,14 @@ struct zpci_fib {
-> > > >    	u32 gd;
-> > > >    } __packed __aligned(8);
-> > > >    
-> > > > +/* Set Interruption Controls Operation Controls  */
-> > > > +#define	SIC_IRQ_MODE_ALL		0
-> > > > +#define	SIC_IRQ_MODE_SINGLE		1
-> > > > +#define	SIC_IRQ_MODE_DIRECT		4
-> > > > +#define	SIC_IRQ_MODE_D_ALL		16
-> > > > +#define	SIC_IRQ_MODE_D_SINGLE		17
-> > > > +#define	SIC_IRQ_MODE_SET_CPU		18
-> > > > +
-> > > >    /* directed interruption information block */
-> > > >    struct zpci_diib {
-> > > >    	u32 : 1;
-> > > > @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
-> > > >    int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
-> > > >    int __zpci_store_block(const u64 *data, u64 req, u64 offset);
-> > > >    void zpci_barrier(void);
-> > > > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
-> > > > -
-> > > > -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
-> > > > -{
-> > > > -	union zpci_sic_iib iib = {{0}};
-> > > > -
-> > > > -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
-> > > > -}
-> > > > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
-> > 
-> > Since the __zpci_set_irq_ctrl() was already non static/inline the above
-> > inline to non-inline change shouldn't make a performance difference.
-> > 
-> > Looking at this makes me wonder though. Wouldn't it make sense to just
-> > have the zpci_set_irq_ctrl() function inline in the header. Its body is
-> > a single instruction inline asm plus a test_facility(). The latter by
-> > the way I think also looks rather out of place there considering we
-> > call zpci_set_irq_ctrl() in the interrupt handler and facilities can't
-> > go away so it's pretty silly to check for it on every single
-> > interrupt.. unless I'm totally missing something.
-> 
-> This test_facility isn't new to this patch
+On Wed, 08 Dec 2021 09:28:42 +0000,
+"qinjian[=E8=A6=83=E5=81=A5]" <qinjian@cqplus1.com> wrote:
+>=20
+> > -----Original Message-----
+> > From: Marc Zyngier <maz@kernel.org>
+> > Sent: Wednesday, December 8, 2021 3:45 PM
+> > To: qinjian[=E8=A6=83=E5=81=A5] <qinjian@cqplus1.com>
+> > Cc: robh+dt@kernel.org; mturquette@baylibre.com; sboyd@kernel.org; tglx=
+@linutronix.de; p.zabel@pengutronix.de;
+> > linux@armlinux.org.uk; broonie@kernel.org; arnd@arndb.de; linux-arm-ker=
+nel@lists.infradead.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-clk@vger.kernel.org; Wells Lu =E5=91=82=
+=E8=8A=B3=E9=A8=B0 <wells.lu@sunplus.com>
+> > Subject: Re: [PATCH v5 08/10] irqchip: Add Sunplus SP7021 interrupt con=
+troller driver
+> >=20
+> > On 2021-12-08 07:15, qinjian[=E8=A6=83=E5=81=A5] wrote:
+> > >> > +void sp_intc_set_ext(u32 hwirq, int ext_num)
+> > >> > +{
+> > >> > +	sp_intc_assign_bit(hwirq, REG_INTR_PRIORITY, !ext_num);
+> > >> > +}
+> > >> > +EXPORT_SYMBOL_GPL(sp_intc_set_ext);
+> > >>
+> > >> No way. We don't export random symbols without a good justification,
+> > >> and you didn't give any.
+> > >>
+> > >
+> > > This function called by SP7021 display driver to decide DISPLAY_IRQ
+> > > routing to which parent irq (EXT_INT0 or EXT_INT1).
+> >=20
+> > Based on what? How can a display driver decide which parent is
+> > appropriate? What improvement does this bring?
+>=20
+> In default, all IRQ routing to EXT_INT0, which processed by CPU0
+> Some device's IRQ need low latency, like display, so routing
+> DISPLAY_IRQ to EXT_INT1, which processed by CPU1 (set
+> /proc/irq/<EXT_INT1>/smp_affinity_list)
 
-Yeah I got that part, your patch just made me look.
+Why would that have a lower latency? What if CPU1 is busy with
+interrupts disabled most of the time? How does the display driver
+finds out what is better?
 
-> , it was added via
-> 
-> commit 48070c73058be6de9c0d754d441ed7092dfc8f12
-> Author: Christian Borntraeger <borntraeger@de.ibm.com>
-> Date:   Mon Oct 30 14:38:58 2017 +0100
-> 
->      s390/pci: do not require AIS facility
-> 
-> It looks like in the past, we would not even initialize zpci at all if 
-> AIS wasn't available.  With this, we initialize PCI but only do the SIC 
-> when we have AIS, which makes sense.
+And if you really wanted a lower latency, why route the interrupt via
+a secondary interrupt controller, instead of attaching it directly to
+the upstream GIC?
 
-Ah yes I guess that is the something I was missing. I was wondering why
-that wasn't just tested for during init.
+I really don't think this is an acceptable thing to do. Configure the
+interrupt route statically if you want, but we're not exposing this
+sort of SoC-specific API to other drivers.
 
-> 
-> So for this patch, the sane thing to do is probably just keep the 
-> test_facility() in place and move to header, inline.
+	M.
 
-Yes sounds good.
-
-> 
-> Maybe there's a subsequent optimization to be made (setup a static key 
-> like have_mio vs doing test_facility all the time?)
-
-Yeah, looking again more closely at test_facilities() it's probably not
-that expensive either I'll do some tests. Maybe we can also just add a
-comment and a normal unlikely() macro since with this series KVM would
-also support AIS, correct?
-
-> 
-
----8<---
-
+--=20
+Without deviation from the norm, progress is not possible.

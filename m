@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2442146CB1E
+	by mail.lfdr.de (Postfix) with ESMTP id 9358546CB1F
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243454AbhLHCt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 21:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S243444AbhLHCt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243421AbhLHCtx (ORCPT
+        with ESMTP id S243445AbhLHCtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 21:49:53 -0500
+        Tue, 7 Dec 2021 21:49:55 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781DDC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:46:22 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id y125-20020a25dc83000000b005c2326bf744so1977407ybe.21
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:46:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5116C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:46:24 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x5-20020a2584c5000000b005f89a35e57eso2010096ybm.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+l+VOuJZ/VCl/OMUCiQtdXRt5FnGssxrmGzh4huICWg=;
-        b=NJzsPaiUuUvx0f86Rqi9mcREot5w1CN6RsVaYz3ay7070jDj4hXsgr01H3/DH0CqVz
-         SWgskDk8G1nHq1qdOk9KQW3QCJtxeOGrui04/N9CdCz6V1PlVfzZd0YHJDCdxnze71Ge
-         GZXo4rEKZRe3fF9QGIMSxBcy30WowBqQ7IyZZHZpPldkXEBHBGGJWefkkLANa4IBhMgh
-         XXCz+W1mxhF/MPcKwfbl5vkBjEMNoPTwiMnLATCVdAqk8Boufo0/cGs8weSgL7ua2yMq
-         JwDIAL1Nzy1Qd6trEkgRDYpKnyq9brnGmjEh9+eQvflCYSwhXryaW9p+cfVDaa9YZtk3
-         GGdQ==
+        bh=vvxFKCm32FDKBVVT+Y4SzOdfXNhc6rbvWIXEF6jE6DQ=;
+        b=Dv9Dc8PlF0JH4ig6YwA/rBf+Gtw9KHcOtjiP+SWGVa/jFtmFbc4EnhZJj2nnJzJtW3
+         idxhpR+Y+eMQluTVVALLMySCSG+fgBJtGwWPdni5EHVxhJ0C8BZ+/DnJ9JJOVObtSR3d
+         keliP6Ac5xD9HHkBzDB+yrZxjKPrboIuen3u82ibrUFDvu7iasd8BvpTCRyzAb6hH5vn
+         lkLRtODNObcqZj05lgdJYzwuM7wobvA2O9aq/PsGzVT7EcTz7W3dTyN0lfbtpMoRTK1a
+         NsPFK7eKY846XdiugOmAFmSsvHhRle6yNOfHTX7I3t6oTp2/AeyE22WmYsCuUETnB6a3
+         UFtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+l+VOuJZ/VCl/OMUCiQtdXRt5FnGssxrmGzh4huICWg=;
-        b=zyhWoF+habZiSP/vzxIijgl+ICI6R9nA4pwkB6TZVwmDM9iZZxe3Zi/s4ZUsFNDHSj
-         u/ESNghS9EendRqDFlHP8RWi15zLFzBISgtLvJpbfuHvfkMNBMSOYICM6YeD6QPKq9cn
-         y/5iIHTZ8dK+5HYJgOuivADioWAI028GiL03gl3Prrwu+IVaYBQoNdDTecxcATN4Bdp+
-         YUJxzDjB8uSI1rUVwamKs8csV5qZwqzDZfHPCRrSw9GvQ7HwA0lK4WlmvD+Xw54ImosQ
-         4bRLhU2V0SXVQqBS04dhHeAhmCw7KkTzdDzm55BI4xIGsODqaeZRNhX7HGWu5HATLyok
-         7BWg==
-X-Gm-Message-State: AOAM533rHTN2WCLt3at0RrnCzI0zV1jALRE66BVwZo0j/wis0BCmVklb
-        N1RWNzzzYuh2HE812eijEWfeyw5gdBCz
-X-Google-Smtp-Source: ABdhPJxTS16bNcO0JH6jC991GWj7oJfFqQN/9FlR/rbTs21pGKpoawqTLTq3T4OP54hPzB5o/b9lblBNd6WT
+        bh=vvxFKCm32FDKBVVT+Y4SzOdfXNhc6rbvWIXEF6jE6DQ=;
+        b=8PwY8UIpyJwrbl/ww2IPe9J6pGhNrHP9DFHwYxrdvigE7X3h42Di6mKv4OnS9rwZyh
+         1mbM6227N2q7ttlSXCoE4ASlzl5uBXcH4rn28IcPub0EJBdvA/hePaKwlTAxFIvGA8nh
+         KbaI6QlJJkJu0wBkL1Latf72KHBWHLYccGVEz4mlVvCcZwuR6ZYW4wXTOCwitsO0jFFX
+         iz40dnkx5kL4W4DojAZjpFhnoQnZxXS2J9ljBHQfSl8//DKDERG09A169qA4wR3gShML
+         HQYILzUlXRoxrInik9zTqUqPAkFpa8VyWE43pZE7YS8MJ/MWQBZCkJXA4Wo6Quyiv/8e
+         bq4w==
+X-Gm-Message-State: AOAM533GwbTz7+w6WgdW9uM/gu033tIFXtekXrOI6ZXw4ONqXhJNKj59
+        TyAc/rJHHhGAGcFkcZr12Rw+yZ5PJvXl
+X-Google-Smtp-Source: ABdhPJwSTlW5v0EAE95vi17bUWEMT7Z/p0SM0/bFVLeSlvg2MLnPsFe6v8FqReJztfz854YuOPi+dLKqFjfg
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:57e:1dbb:34b4:8257])
- (user=irogers job=sendgmr) by 2002:a25:aa51:: with SMTP id
- s75mr36046178ybi.485.1638931581660; Tue, 07 Dec 2021 18:46:21 -0800 (PST)
-Date:   Tue,  7 Dec 2021 18:45:49 -0800
+ (user=irogers job=sendgmr) by 2002:a25:6b4d:: with SMTP id
+ o13mr56247851ybm.291.1638931584015; Tue, 07 Dec 2021 18:46:24 -0800 (PST)
+Date:   Tue,  7 Dec 2021 18:45:50 -0800
 In-Reply-To: <20211208024607.1784932-1-irogers@google.com>
-Message-Id: <20211208024607.1784932-5-irogers@google.com>
+Message-Id: <20211208024607.1784932-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20211208024607.1784932-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 04/22] perf stat: Switch to cpu version of cpu_map__get
+Subject: [PATCH 05/22] perf cpumap: Switch cpu_map__build_map to cpu function
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,285 +79,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid bugs where the wrong index is passed with the cpu_map.
+Avoid error prone cpu_map + idx variant. Remove now unused functions.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-stat.c      | 93 +++++++++++++++++++---------------
- tools/perf/util/stat-display.c | 11 ++--
- tools/perf/util/stat.h         |  3 +-
- 3 files changed, 57 insertions(+), 50 deletions(-)
+ tools/perf/builtin-stat.c | 28 ++++------------------------
+ tools/perf/util/cpumap.c  | 12 ++++++------
+ tools/perf/util/cpumap.h  |  2 +-
+ 3 files changed, 11 insertions(+), 31 deletions(-)
 
 diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 7974933dbc77..cbccd6038109 100644
+index cbccd6038109..79a435573b44 100644
 --- a/tools/perf/builtin-stat.c
 +++ b/tools/perf/builtin-stat.c
-@@ -1299,69 +1299,63 @@ static struct option stat_options[] = {
- };
- 
- static struct aggr_cpu_id perf_stat__get_socket(struct perf_stat_config *config __maybe_unused,
--				 struct perf_cpu_map *map, int cpu)
-+						int cpu)
- {
--	return cpu_map__get_socket(map, cpu, NULL);
-+	return cpu_map__get_socket_aggr_by_cpu(cpu, /*data=*/NULL);
- }
- 
- static struct aggr_cpu_id perf_stat__get_die(struct perf_stat_config *config __maybe_unused,
--			      struct perf_cpu_map *map, int cpu)
-+					     int cpu)
- {
--	return cpu_map__get_die(map, cpu, NULL);
-+	return cpu_map__get_die_aggr_by_cpu(cpu, /*data=*/NULL);
- }
- 
- static struct aggr_cpu_id perf_stat__get_core(struct perf_stat_config *config __maybe_unused,
--			       struct perf_cpu_map *map, int cpu)
-+					      int cpu)
- {
--	return cpu_map__get_core(map, cpu, NULL);
-+	return cpu_map__get_core_aggr_by_cpu(cpu, /*data=*/NULL);
- }
- 
- static struct aggr_cpu_id perf_stat__get_node(struct perf_stat_config *config __maybe_unused,
--			       struct perf_cpu_map *map, int cpu)
-+					      int cpu)
- {
--	return cpu_map__get_node(map, cpu, NULL);
-+	return cpu_map__get_node_aggr_by_cpu(cpu, /*data=*/NULL);
- }
- 
- static struct aggr_cpu_id perf_stat__get_aggr(struct perf_stat_config *config,
--			       aggr_get_id_t get_id, struct perf_cpu_map *map, int idx)
-+					      aggr_get_id_t get_id, int cpu)
- {
--	int cpu;
- 	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
- 
--	if (idx >= map->nr)
--		return id;
--
--	cpu = map->map[idx];
--
- 	if (cpu_map__aggr_cpu_id_is_empty(config->cpus_aggr_map->map[cpu]))
--		config->cpus_aggr_map->map[cpu] = get_id(config, map, idx);
-+		config->cpus_aggr_map->map[cpu] = get_id(config, cpu);
- 
- 	id = config->cpus_aggr_map->map[cpu];
+@@ -1480,11 +1480,6 @@ static struct aggr_cpu_id perf_env__get_socket_aggr_by_cpu(int cpu, void *data)
  	return id;
  }
  
- static struct aggr_cpu_id perf_stat__get_socket_cached(struct perf_stat_config *config,
--					struct perf_cpu_map *map, int idx)
-+						       int cpu)
- {
--	return perf_stat__get_aggr(config, perf_stat__get_socket, map, idx);
-+	return perf_stat__get_aggr(config, perf_stat__get_socket, cpu);
- }
- 
- static struct aggr_cpu_id perf_stat__get_die_cached(struct perf_stat_config *config,
--					struct perf_cpu_map *map, int idx)
-+						    int cpu)
- {
--	return perf_stat__get_aggr(config, perf_stat__get_die, map, idx);
-+	return perf_stat__get_aggr(config, perf_stat__get_die, cpu);
- }
- 
- static struct aggr_cpu_id perf_stat__get_core_cached(struct perf_stat_config *config,
--				      struct perf_cpu_map *map, int idx)
-+						     int cpu)
- {
--	return perf_stat__get_aggr(config, perf_stat__get_core, map, idx);
-+	return perf_stat__get_aggr(config, perf_stat__get_core, cpu);
- }
- 
- static struct aggr_cpu_id perf_stat__get_node_cached(struct perf_stat_config *config,
--				      struct perf_cpu_map *map, int idx)
-+						     int cpu)
- {
--	return perf_stat__get_aggr(config, perf_stat__get_node, map, idx);
-+	return perf_stat__get_aggr(config, perf_stat__get_node, cpu);
- }
- 
- static bool term_percore_set(void)
-@@ -1459,8 +1453,9 @@ static void perf_stat__exit_aggr_mode(void)
- 	stat_config.cpus_aggr_map = NULL;
- }
- 
--static inline int perf_env__get_cpu(struct perf_env *env, struct perf_cpu_map *map, int idx)
-+static inline int perf_env__get_cpu(void *data, struct perf_cpu_map *map, int idx)
- {
-+	struct perf_env *env = data;
- 	int cpu;
- 
- 	if (idx > map->nr)
-@@ -1474,10 +1469,9 @@ static inline int perf_env__get_cpu(struct perf_env *env, struct perf_cpu_map *m
- 	return cpu;
- }
- 
 -static struct aggr_cpu_id perf_env__get_socket(struct perf_cpu_map *map, int idx, void *data)
-+static struct aggr_cpu_id perf_env__get_socket_aggr_by_cpu(int cpu, void *data)
+-{
+-	return perf_env__get_socket_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
+-}
+-
+ static struct aggr_cpu_id perf_env__get_die_aggr_by_cpu(int cpu, void *data)
  {
  	struct perf_env *env = data;
--	int cpu = perf_env__get_cpu(env, map, idx);
- 	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
- 
- 	if (cpu != -1)
-@@ -1486,11 +1480,15 @@ static struct aggr_cpu_id perf_env__get_socket(struct perf_cpu_map *map, int idx
+@@ -1503,11 +1498,6 @@ static struct aggr_cpu_id perf_env__get_die_aggr_by_cpu(int cpu, void *data)
  	return id;
  }
  
 -static struct aggr_cpu_id perf_env__get_die(struct perf_cpu_map *map, int idx, void *data)
-+static struct aggr_cpu_id perf_env__get_socket(struct perf_cpu_map *map, int idx, void *data)
-+{
-+	return perf_env__get_socket_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
-+}
-+
-+static struct aggr_cpu_id perf_env__get_die_aggr_by_cpu(int cpu, void *data)
+-{
+-	return perf_env__get_die_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
+-}
+-
+ static struct aggr_cpu_id perf_env__get_core_aggr_by_cpu(int cpu, void *data)
  {
  	struct perf_env *env = data;
- 	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
--	int cpu = perf_env__get_cpu(env, map, idx);
- 
- 	if (cpu != -1) {
- 		/*
-@@ -1505,11 +1503,15 @@ static struct aggr_cpu_id perf_env__get_die(struct perf_cpu_map *map, int idx, v
+@@ -1527,11 +1517,6 @@ static struct aggr_cpu_id perf_env__get_core_aggr_by_cpu(int cpu, void *data)
  	return id;
  }
  
 -static struct aggr_cpu_id perf_env__get_core(struct perf_cpu_map *map, int idx, void *data)
-+static struct aggr_cpu_id perf_env__get_die(struct perf_cpu_map *map, int idx, void *data)
-+{
-+	return perf_env__get_die_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
-+}
-+
-+static struct aggr_cpu_id perf_env__get_core_aggr_by_cpu(int cpu, void *data)
+-{
+-	return perf_env__get_core_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
+-}
+-
+ static struct aggr_cpu_id perf_env__get_node_aggr_by_cpu(int cpu, void *data)
  {
- 	struct perf_env *env = data;
  	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
--	int cpu = perf_env__get_cpu(env, map, idx);
- 
- 	if (cpu != -1) {
- 		/*
-@@ -1525,15 +1527,24 @@ static struct aggr_cpu_id perf_env__get_core(struct perf_cpu_map *map, int idx,
+@@ -1540,33 +1525,28 @@ static struct aggr_cpu_id perf_env__get_node_aggr_by_cpu(int cpu, void *data)
  	return id;
  }
  
 -static struct aggr_cpu_id perf_env__get_node(struct perf_cpu_map *map, int idx, void *data)
-+static struct aggr_cpu_id perf_env__get_core(struct perf_cpu_map *map, int idx, void *data)
-+{
-+	return perf_env__get_core_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
-+}
-+
-+static struct aggr_cpu_id perf_env__get_node_aggr_by_cpu(int cpu, void *data)
- {
--	int cpu = perf_env__get_cpu(data, map, idx);
- 	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
- 
- 	id.node = perf_env__numa_node(data, cpu);
- 	return id;
- }
- 
-+static struct aggr_cpu_id perf_env__get_node(struct perf_cpu_map *map, int idx, void *data)
-+{
-+	return perf_env__get_node_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
-+}
-+
+-{
+-	return perf_env__get_node_aggr_by_cpu(perf_env__get_cpu(data, map, idx), data);
+-}
+-
  static int perf_env__build_socket_map(struct perf_env *env, struct perf_cpu_map *cpus,
  				      struct cpu_aggr_map **sockp)
  {
-@@ -1559,26 +1570,26 @@ static int perf_env__build_node_map(struct perf_env *env, struct perf_cpu_map *c
+-	return cpu_map__build_map(cpus, sockp, perf_env__get_socket, env);
++	return cpu_map__build_map(cpus, sockp, perf_env__get_socket_aggr_by_cpu, env);
+ }
+ 
+ static int perf_env__build_die_map(struct perf_env *env, struct perf_cpu_map *cpus,
+ 				   struct cpu_aggr_map **diep)
+ {
+-	return cpu_map__build_map(cpus, diep, perf_env__get_die, env);
++	return cpu_map__build_map(cpus, diep, perf_env__get_die_aggr_by_cpu, env);
+ }
+ 
+ static int perf_env__build_core_map(struct perf_env *env, struct perf_cpu_map *cpus,
+ 				    struct cpu_aggr_map **corep)
+ {
+-	return cpu_map__build_map(cpus, corep, perf_env__get_core, env);
++	return cpu_map__build_map(cpus, corep, perf_env__get_core_aggr_by_cpu, env);
+ }
+ 
+ static int perf_env__build_node_map(struct perf_env *env, struct perf_cpu_map *cpus,
+ 				    struct cpu_aggr_map **nodep)
+ {
+-	return cpu_map__build_map(cpus, nodep, perf_env__get_node, env);
++	return cpu_map__build_map(cpus, nodep, perf_env__get_node_aggr_by_cpu, env);
  }
  
  static struct aggr_cpu_id perf_stat__get_socket_file(struct perf_stat_config *config __maybe_unused,
--				      struct perf_cpu_map *map, int idx)
-+						     int cpu)
- {
--	return perf_env__get_socket(map, idx, &perf_stat.session->header.env);
-+	return perf_env__get_socket_aggr_by_cpu(cpu, &perf_stat.session->header.env);
- }
- static struct aggr_cpu_id perf_stat__get_die_file(struct perf_stat_config *config __maybe_unused,
--				   struct perf_cpu_map *map, int idx)
-+						  int cpu)
- {
--	return perf_env__get_die(map, idx, &perf_stat.session->header.env);
-+	return perf_env__get_die_aggr_by_cpu(cpu, &perf_stat.session->header.env);
+diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+index 49fba2c53822..feaf34b25efc 100644
+--- a/tools/perf/util/cpumap.c
++++ b/tools/perf/util/cpumap.c
+@@ -163,7 +163,7 @@ static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
  }
  
- static struct aggr_cpu_id perf_stat__get_core_file(struct perf_stat_config *config __maybe_unused,
--				    struct perf_cpu_map *map, int idx)
-+						   int cpu)
+ int cpu_map__build_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **res,
+-		       struct aggr_cpu_id (*f)(struct perf_cpu_map *map, int cpu, void *data),
++		       struct aggr_cpu_id (*f)(int cpu, void *data),
+ 		       void *data)
  {
--	return perf_env__get_core(map, idx, &perf_stat.session->header.env);
-+	return perf_env__get_core_aggr_by_cpu(cpu, &perf_stat.session->header.env);
+ 	int nr = cpus->nr;
+@@ -178,7 +178,7 @@ int cpu_map__build_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **res,
+ 	c->nr = 0;
+ 
+ 	for (cpu = 0; cpu < nr; cpu++) {
+-		s1 = f(cpus, cpu, data);
++		s1 = f(cpu, data);
+ 		for (s2 = 0; s2 < c->nr; s2++) {
+ 			if (cpu_map__compare_aggr_cpu_id(s1, c->map[s2]))
+ 				break;
+@@ -290,22 +290,22 @@ struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *da
+ 
+ int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp)
+ {
+-	return cpu_map__build_map(cpus, sockp, cpu_map__get_socket, NULL);
++	return cpu_map__build_map(cpus, sockp, cpu_map__get_socket_aggr_by_cpu, NULL);
  }
  
- static struct aggr_cpu_id perf_stat__get_node_file(struct perf_stat_config *config __maybe_unused,
--				    struct perf_cpu_map *map, int idx)
-+						   int cpu)
+ int cpu_map__build_die_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **diep)
  {
--	return perf_env__get_node(map, idx, &perf_stat.session->header.env);
-+	return perf_env__get_node_aggr_by_cpu(cpu, &perf_stat.session->header.env);
+-	return cpu_map__build_map(cpus, diep, cpu_map__get_die, NULL);
++	return cpu_map__build_map(cpus, diep, cpu_map__get_die_aggr_by_cpu, NULL);
  }
  
- static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index efab39a759ff..6c40b91d5e32 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -341,8 +341,7 @@ static int first_shadow_cpu(struct perf_stat_config *config,
+ int cpu_map__build_core_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **corep)
+ {
+-	return cpu_map__build_map(cpus, corep, cpu_map__get_core, NULL);
++	return cpu_map__build_map(cpus, corep, cpu_map__get_core_aggr_by_cpu, NULL);
+ }
  
- 	cpus = evsel__cpus(evsel);
- 	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
--		if (cpu_map__compare_aggr_cpu_id(config->aggr_get_id(config, cpus, idx),
--						 id))
-+		if (cpu_map__compare_aggr_cpu_id(config->aggr_get_id(config, cpu), id))
- 			return cpu;
- 	}
- 	return 0;
-@@ -525,8 +524,7 @@ static void aggr_update_shadow(struct perf_stat_config *config,
- 			cpus = evsel__cpus(counter);
- 			val = 0;
- 			perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
--				(void)cpu;
--				s2 = config->aggr_get_id(config, cpus, idx);
-+				s2 = config->aggr_get_id(config, cpu);
- 				if (!cpu_map__compare_aggr_cpu_id(s2, id))
- 					continue;
- 				val += perf_counts(counter->counts, idx, 0)->val;
-@@ -642,8 +640,7 @@ static void aggr_cb(struct perf_stat_config *config,
- 	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
- 		struct perf_counts_values *counts;
+ int cpu_map__build_node_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **numap)
+ {
+-	return cpu_map__build_map(cpus, numap, cpu_map__get_node, NULL);
++	return cpu_map__build_map(cpus, numap, cpu_map__get_node_aggr_by_cpu, NULL);
+ }
  
--		(void)cpu;
--		s2 = config->aggr_get_id(config, cpus, idx);
-+		s2 = config->aggr_get_id(config, cpu);
- 		if (!cpu_map__compare_aggr_cpu_id(s2, ad->id))
- 			continue;
- 		if (first)
-@@ -1217,7 +1214,7 @@ static void print_percore_thread(struct perf_stat_config *config,
+ /* setup simple routines to easily access node numbers given a cpu number */
+diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+index c62d67704425..9648816c4255 100644
+--- a/tools/perf/util/cpumap.h
++++ b/tools/perf/util/cpumap.h
+@@ -63,7 +63,7 @@ int cpu__max_present_cpu(void);
+ int cpu__get_node(int cpu);
  
- 	cpus = evsel__cpus(counter);
- 	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
--		s2 = config->aggr_get_id(config, cpus, idx);
-+		s2 = config->aggr_get_id(config, cpu);
- 		for (s = 0; s < config->aggr_map->nr; s++) {
- 			id = config->aggr_map->map[s];
- 			if (cpu_map__compare_aggr_cpu_id(s2, id))
-diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-index 32c8527de347..32cf24186229 100644
---- a/tools/perf/util/stat.h
-+++ b/tools/perf/util/stat.h
-@@ -108,8 +108,7 @@ struct runtime_stat {
- 	struct rblist value_list;
- };
+ int cpu_map__build_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **res,
+-		       struct aggr_cpu_id (*f)(struct perf_cpu_map *map, int cpu, void *data),
++		       struct aggr_cpu_id (*f)(int cpu, void *data),
+ 		       void *data);
  
--typedef struct aggr_cpu_id (*aggr_get_id_t)(struct perf_stat_config *config,
--			     struct perf_cpu_map *m, int cpu);
-+typedef struct aggr_cpu_id (*aggr_get_id_t)(struct perf_stat_config *config, int cpu);
- 
- struct perf_stat_config {
- 	enum aggr_mode		 aggr_mode;
+ int cpu_map__cpu(struct perf_cpu_map *cpus, int idx);
 -- 
 2.34.1.400.ga245620fadb-goog
 

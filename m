@@ -2,124 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B5E46D310
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2DA46D316
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbhLHMNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:13:48 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58752 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbhLHMNr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:13:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3C2DCE1FD6;
-        Wed,  8 Dec 2021 12:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA5BC341CA;
-        Wed,  8 Dec 2021 12:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638965411;
-        bh=Jm3qvJnwIM8XkCcFVtPu2jUX5ZvPVIUSd05PWLnQZVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r1/uJZzfEdzN3Gwp+kH3PV1cdXDThRlyeFXjz5XqfG+6JxzCuSxr4KrRAzS9oFfTj
-         IQ/EsM2UykeTj2auyLkz04w67GadPXi3Slfha4S5nvkXKPlmFd6W52G1xo5lCysol1
-         FsJexiVqTQ3aXBJEtpkRag71KH+jCwi2bffNq9VZHdA05Sy0mBN1HIdqbch0FfnhXZ
-         w1J6xOmT5BB8e2Pe6PJclPQ1We+1MhpaQvm+lP4iLhSP2uTqM8g9mSSD3UXjYhaiUO
-         4Vdc/Kr3RsFuObnptku8mrinUKJWHd6oj3UKlLpirSImVxTdnD3hz/vNcn6A2GLJcv
-         uLzYJU+pJsiBQ==
-Date:   Wed, 8 Dec 2021 20:10:00 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, ping.bai@nxp.com,
-        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 2/3] arm64: dts: imx8ulp: add scmi firmware node
-Message-ID: <20211208121000.GG4216@dragon>
-References: <20211117032740.2518926-1-peng.fan@oss.nxp.com>
- <20211117032740.2518926-3-peng.fan@oss.nxp.com>
+        id S233170AbhLHMUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:20:18 -0500
+Received: from mga03.intel.com ([134.134.136.65]:15283 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231674AbhLHMUR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 07:20:17 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237758910"
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="237758910"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 04:16:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="679870995"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2021 04:16:43 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muvsI-0000XG-9I; Wed, 08 Dec 2021 12:16:42 +0000
+Date:   Wed, 8 Dec 2021 20:16:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [dlemoal-libata:ata-msg 34/61] drivers/ata/sata_fsl.c:316:17: error:
+ passing argument 2 of '_dev_printk' from incompatible pointer type
+Message-ID: <202112081937.KKQZRXYI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211117032740.2518926-3-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 11:27:39AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX8ULP use scmi firmware based power domain and sensor support.
-> So add the firmware node and the sram it uses.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> index fb8714379026..d567ef93f8d8 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> @@ -6,6 +6,7 @@
->  #include <dt-bindings/clock/imx8ulp-clock.h>
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/imx8ulp-power.h>
->  
->  #include "imx8ulp-pinfunc.h"
->  
-> @@ -102,6 +103,40 @@ sosc: clock-sosc {
->  		#clock-cells = <0>;
->  	};
->  
-> +	sram@2201f000 {
-> +		compatible = "mmio-sram";
-> +		reg = <0x0 0x2201f000 0x0 0x1000>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0 0x0 0x2201f000 0x1000>;
-> +
-> +		scmi_buf: scmi_buf@0 {
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git ata-msg
+head:   7d6ff0ace26c7e7f01d532d244de0b9811765f47
+commit: efab2a8f108886fa8d2d0108941bb1ccb36f8526 [34/61] sata_fsl: move DPRINTK to ata debugging
+config: powerpc-mpc837x_rdb_defconfig (https://download.01.org/0day-ci/archive/20211208/202112081937.KKQZRXYI-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git/commit/?id=efab2a8f108886fa8d2d0108941bb1ccb36f8526
+        git remote add dlemoal-libata git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
+        git fetch --no-tags dlemoal-libata ata-msg
+        git checkout efab2a8f108886fa8d2d0108941bb1ccb36f8526
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Hyphen is more recommended than underscore for node name.  Or just
-follow the naming in arm,scmi.yaml example?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Shawn
+All errors (new ones prefixed by >>):
 
-> +			compatible = "arm,scmi-shmem";
-> +			reg = <0x0 0x400>;
-> +		};
-> +	};
-> +
-> +	firmware {
-> +		scmi {
-> +			compatible = "arm,scmi-smc";
-> +			arm,smc-id = <0xc20000fe>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			shmem = <&scmi_buf>;
-> +
-> +			scmi_devpd: protocol@11 {
-> +				reg = <0x11>;
-> +				#power-domain-cells = <1>;
-> +			};
-> +
-> +			scmi_sensor: protocol@15 {
-> +				reg = <0x15>;
-> +				#thermal-sensor-cells = <0>;
-> +			};
-> +		};
-> +	};
-> +
->  	soc@0 {
->  		compatible = "simple-bus";
->  		#address-cells = <1>;
-> -- 
-> 2.25.1
-> 
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/ata/sata_fsl.c:15:
+   drivers/ata/sata_fsl.c: In function 'fsl_sata_set_irq_coalescing':
+>> drivers/ata/sata_fsl.c:316:17: error: passing argument 2 of '_dev_printk' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     316 |         dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
+         |                 ^~~~~~~~~~
+         |                 |
+         |                 struct device **
+   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                    ^~~
+   drivers/ata/sata_fsl.c:316:9: note: in expansion of macro 'dev_dbg'
+     316 |         dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
+         |         ^~~~~~~
+   include/linux/dev_printk.h:41:58: note: expected 'const struct device *' but argument is of type 'struct device **'
+      41 | void _dev_printk(const char *level, const struct device *dev,
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/ata/sata_fsl.c:318:17: error: passing argument 2 of '_dev_printk' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+         |                 ^~~~~~~~~~
+         |                 |
+         |                 struct device **
+   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                    ^~~
+   drivers/ata/sata_fsl.c:318:9: note: in expansion of macro 'dev_dbg'
+     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+         |         ^~~~~~~
+   include/linux/dev_printk.h:41:58: note: expected 'const struct device *' but argument is of type 'struct device **'
+      41 | void _dev_printk(const char *level, const struct device *dev,
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/ata/sata_fsl.c:318:29: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'void *' [-Wformat=]
+     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                         ^~~
+   include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
+     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+         |                                             ^~~~~~~
+   drivers/ata/sata_fsl.c:318:9: note: in expansion of macro 'dev_dbg'
+     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+         |         ^~~~~~~
+   drivers/ata/sata_fsl.c:318:65: note: format string is defined here
+     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+         |                                                                ~^
+         |                                                                 |
+         |                                                                 unsigned int
+         |                                                                %p
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/ata/sata_fsl.c:15:
+   drivers/ata/sata_fsl.c: In function 'sata_fsl_init_controller':
+>> drivers/ata/sata_fsl.c:1361:22: error: 'ap' undeclared (first use in this function); did you mean 'up'?
+    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
+         |                      ^~
+   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                    ^~~
+   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
+    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
+         |         ^~~~~~~
+   drivers/ata/sata_fsl.c:1361:9: note: in expansion of macro 'ata_port_dbg'
+    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
+         |         ^~~~~~~~~~~~
+   drivers/ata/sata_fsl.c:1361:22: note: each undeclared identifier is reported only once for each function it appears in
+    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
+         |                      ^~
+   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                    ^~~
+   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
+    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
+         |         ^~~~~~~
+   drivers/ata/sata_fsl.c:1361:9: note: in expansion of macro 'ata_port_dbg'
+    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
+         |         ^~~~~~~~~~~~
+   drivers/ata/sata_fsl.c: At top level:
+   drivers/ata/sata_fsl.c:1399:22: warning: initialized field overwritten [-Woverride-init]
+    1399 |         .can_queue = SATA_FSL_QUEUE_DEPTH,
+         |                      ^~~~~~~~~~~~~~~~~~~~
+   drivers/ata/sata_fsl.c:1399:22: note: (near initialization for 'sata_fsl_sht.can_queue')
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/ata/sata_fsl.c:15:
+   drivers/ata/sata_fsl.c: In function 'sata_fsl_probe':
+   drivers/ata/sata_fsl.c:1470:22: error: 'ap' undeclared (first use in this function); did you mean 'up'?
+    1470 |         ata_port_dbg(ap, "@reset i/o = 0x%x\n", ioread32(csr_base + TRANSCFG));
+         |                      ^~
+   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                    ^~~
+   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
+    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
+         |         ^~~~~~~
+   drivers/ata/sata_fsl.c:1470:9: note: in expansion of macro 'ata_port_dbg'
+    1470 |         ata_port_dbg(ap, "@reset i/o = 0x%x\n", ioread32(csr_base + TRANSCFG));
+         |         ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/_dev_printk +316 drivers/ata/sata_fsl.c
+
+   290	
+   291	static void fsl_sata_set_irq_coalescing(struct ata_host *host,
+   292			unsigned int count, unsigned int ticks)
+   293	{
+   294		struct sata_fsl_host_priv *host_priv = host->private_data;
+   295		void __iomem *hcr_base = host_priv->hcr_base;
+   296		unsigned long flags;
+   297	
+   298		if (count > ICC_MAX_INT_COUNT_THRESHOLD)
+   299			count = ICC_MAX_INT_COUNT_THRESHOLD;
+   300		else if (count < ICC_MIN_INT_COUNT_THRESHOLD)
+   301			count = ICC_MIN_INT_COUNT_THRESHOLD;
+   302	
+   303		if (ticks > ICC_MAX_INT_TICKS_THRESHOLD)
+   304			ticks = ICC_MAX_INT_TICKS_THRESHOLD;
+   305		else if ((ICC_MIN_INT_TICKS_THRESHOLD == ticks) &&
+   306				(count > ICC_MIN_INT_COUNT_THRESHOLD))
+   307			ticks = ICC_SAFE_INT_TICKS;
+   308	
+   309		spin_lock_irqsave(&host->lock, flags);
+   310		iowrite32((count << 24 | ticks), hcr_base + ICC);
+   311	
+   312		intr_coalescing_count = count;
+   313		intr_coalescing_ticks = ticks;
+   314		spin_unlock_irqrestore(&host->lock, flags);
+   315	
+ > 316		dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
+   317				intr_coalescing_count, intr_coalescing_ticks);
+   318		dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
+   319				hcr_base, ioread32(hcr_base + ICC));
+   320	}
+   321	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

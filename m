@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E3246D7DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BD646D7DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbhLHQS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:18:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44012 "EHLO
+        id S236662AbhLHQTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:19:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23633 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229656AbhLHQS5 (ORCPT
+        by vger.kernel.org with ESMTP id S234099AbhLHQS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Dec 2021 11:18:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1638980125;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=13U4gFGxBl6YVCoLUt7TZf9zbauLVopy1J8JfVKWsEo=;
-        b=Pgc3cEDsvqVZVTy6zEq6frh5VrVN5SS3DLsSu6lQbae7n+vUQXKsxgj1td4+J3C5/0l0gH
-        WCQnBHF5wmBWwVUZ3Rj+r090fNmQU642aIlPMYz3Dys4R0NR7bwqfVOSbMKInJqsQtha9u
-        YyC61+4Z7KfN7hKQ1R2oW759rCsXIK0=
+         to:to:cc:cc; bh=cFjTxe11eYle6fNDOWm+nO+Qcn7unElKd/MOx+3A4zU=;
+        b=PwB9yWDsD6tUSnkWs2KgqvTntP3/0ziNgFHA4Z3thEQcNiamvWrz+EG2YDNAkLTIaW5QVC
+        BFTXCl4lF4Ln7GOJejW7229v0bYpMrVEy+ix3BhMCMFro1kdmJiH5YsRzAg5+ad2g/04b0
+        hTABCaUAmQ1V7+2KlnsL4bOTBZrGR5c=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-Rr0XDm85NrCChG53m65N0g-1; Wed, 08 Dec 2021 11:15:22 -0500
-X-MC-Unique: Rr0XDm85NrCChG53m65N0g-1
+ us-mta-152-smA3p-f_M0i1BmhCuTkiSg-1; Wed, 08 Dec 2021 11:15:22 -0500
+X-MC-Unique: smA3p-f_M0i1BmhCuTkiSg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C8B6193F562;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2E8E61023F50;
         Wed,  8 Dec 2021 16:15:21 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E1DE60CC9;
-        Wed,  8 Dec 2021 16:14:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFB0E60C82;
+        Wed,  8 Dec 2021 16:14:38 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 3ACF1415EE67; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
-Message-ID: <20211208161000.654492429@fuller.cnet>
+        id 3D609415EE68; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
+Message-ID: <20211208161000.684779248@fuller.cnet>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Dec 2021 13:09:07 -0300
+Date:   Wed, 08 Dec 2021 13:09:08 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nitesh Lal <nilal@redhat.com>,
@@ -49,34 +49,42 @@ Cc:     Nitesh Lal <nilal@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch v8 01/10] add basic task isolation prctl interface
+Subject: [patch v8 02/10] add prctl task isolation prctl docs and samples
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic prctl task isolation interface, which allows
-informing the kernel that application is executing 
-latency sensitive code (where interruptions are undesired).
-
-Interface is described by task_isolation.rst (added by
-next patch).
+Add documentation and userspace sample code for prctl
+task isolation interface.
 
 Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
 ---
+v8:
+- Document the possibility for ISOL_F_QUIESCE_ONE, to configure
+individual features                                              (Frederic Weisbecker).
+- Fix PR_ISOL_CFG_GET typo in documentation                      (Frederic Weisbecker).
+- Rebased against linux-2.6.git.
+
+v7:
+-  No changes
 v6:
- - Move oneshot mode enablement to configuration time (Frederic Weisbecker).
- - Allow more extensions to CFG_SET of ISOL_F_QUIESCE (Frederic Weisbecker).
- - prctl_task_isolation_activate_get should copy active_mask 
-   to address in arg2.
+ - Update docs and samples regarding oneshot mode (Frederic Weisbecker).
+ - Update docs and samples regarding more extensibility of
+   CFG_SET of ISOL_F_QUIESCE                   (Frederic Weisbecker).
+
 v5:
- - No changes
+ - Fix documentation typos		      (Frederic Weisbecker).
+ - Fix oneshot example comment
+
 v4:
  - Switch to structures for parameters when possible
    (which are more extensible).
- - Switch to CFG_{S,G}ET naming and drop
+ - Switch to CFG_{S,G}ET naming and use drop
    "internal configuration" prctls            (Frederic Weisbecker).
+ - Add summary of terms to documentation      (Frederic Weisbecker).
+ - Examples for compute and one-shot modes    (Thomas G/Christoph L).
 
 v3:
  - Split in smaller patches              (Nitesh Lal).
@@ -88,688 +96,823 @@ v3:
    task isolation parameters.
 -  Remove "system default" notion (chisol should
    make it obsolete).
+ - Update documentation: add new section with explanation
+   about configuration/activation and code example.
+ - Update samples.
 
 v2:
+
 - Finer-grained control of quiescing (Frederic Weisbecker / Nicolas Saenz).
 - Avoid potential regressions by allowing applications
   to use ISOL_F_QUIESCE_DEFMASK (whose default value
   is configurable in /sys/).         (Nitesh Lal / Nicolas Saenz).
 
- include/linux/sched.h          |    5 
- include/linux/task_isolation.h |   91 ++++++++++
- include/uapi/linux/prctl.h     |   43 +++++
- init/init_task.c               |    3 
- kernel/Makefile                |    2 
- kernel/fork.c                  |   22 ++
- kernel/sys.c                   |   16 +
- kernel/task_isolation.c        |  350 +++++++++++++++++++++++++++++++++++++++++
- 8 files changed, 530 insertions(+), 2 deletions(-)
+ Documentation/userspace-api/task_isolation.rst |  370 +++++++++++++++++++++++++
+ samples/Kconfig                                |    7 
+ samples/Makefile                               |    1 
+ samples/task_isolation/Makefile                |   11 
+ samples/task_isolation/task_isol.c             |   92 ++++++
+ samples/task_isolation/task_isol.h             |    9 
+ samples/task_isolation/task_isol_computation.c |   89 ++++++
+ samples/task_isolation/task_isol_oneshot.c     |  104 +++++++
+ samples/task_isolation/task_isol_userloop.c    |   54 +++
+ 9 files changed, 737 insertions(+)
 
-Index: linux-2.6/include/uapi/linux/prctl.h
-===================================================================
---- linux-2.6.orig/include/uapi/linux/prctl.h
-+++ linux-2.6/include/uapi/linux/prctl.h
-@@ -272,4 +272,51 @@ struct prctl_mm_map {
- # define PR_SCHED_CORE_SCOPE_THREAD_GROUP	1
- # define PR_SCHED_CORE_SCOPE_PROCESS_GROUP	2
- 
-+#define PR_ISOL_FEAT_GET		63
-+#define PR_ISOL_CFG_GET			64
-+#define PR_ISOL_CFG_SET			65
-+
-+/* arg2 to CFG_GET/CFG_SET */
-+# define I_CFG_FEAT			1
-+# define I_CFG_INHERIT			2
-+
-+#define PR_ISOL_ACTIVATE_GET		66
-+#define PR_ISOL_ACTIVATE_SET		67
-+
-+
-+/* Supported features */
-+# define ISOL_F_QUIESCE			(1UL << 0)
-+
-+# define ISOL_F_QUIESCE_MULTIPLE	(1UL << 0)
-+#  define ISOL_F_QUIESCE_VMSTATS	(1UL << 0)
-+
-+struct task_isol_quiesce_extensions {
-+	__u64 flags;
-+	__u64 supported_quiesce_bits;
-+	__u64 pad[6];
-+};
-+
-+/*
-+ * This structure provides control over
-+ * inheritance of task isolation across
-+ * clone and fork.
-+ */
-+struct task_isol_inherit_control {
-+	__u8	inherit_mask;
-+	__u8	flags;
-+	__u8	pad[6];
-+};
-+
-+# define ISOL_INHERIT_CONF		(1UL << 0)
-+# define ISOL_INHERIT_ACTIVE		(1UL << 1)
-+
-+struct task_isol_quiesce_control {
-+	__u64 flags;
-+	__u64 quiesce_mask;
-+	__u64 quiesce_oneshot_mask;
-+	__u64 pad[5];
-+};
-+
-+# define QUIESCE_CONTROL		(1UL << 0)
-+
- #endif /* _LINUX_PRCTL_H */
-Index: linux-2.6/kernel/Makefile
-===================================================================
---- linux-2.6.orig/kernel/Makefile
-+++ linux-2.6/kernel/Makefile
-@@ -131,6 +131,8 @@ obj-$(CONFIG_WATCH_QUEUE) += watch_queue
- obj-$(CONFIG_RESOURCE_KUNIT_TEST) += resource_kunit.o
- obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
- 
-+obj-$(CONFIG_CPU_ISOLATION) += task_isolation.o
-+
- CFLAGS_stackleak.o += $(DISABLE_STACKLEAK_PLUGIN)
- obj-$(CONFIG_GCC_PLUGIN_STACKLEAK) += stackleak.o
- KASAN_SANITIZE_stackleak.o := n
-Index: linux-2.6/kernel/sys.c
-===================================================================
---- linux-2.6.orig/kernel/sys.c
-+++ linux-2.6/kernel/sys.c
-@@ -58,6 +58,7 @@
- #include <linux/sched/coredump.h>
- #include <linux/sched/task.h>
- #include <linux/sched/cputime.h>
-+#include <linux/task_isolation.h>
- #include <linux/rcupdate.h>
- #include <linux/uidgid.h>
- #include <linux/cred.h>
-@@ -2530,6 +2531,21 @@ SYSCALL_DEFINE5(prctl, int, option, unsi
- 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
- 		break;
- #endif
-+	case PR_ISOL_FEAT_GET:
-+		error = prctl_task_isolation_feat_get(arg2, arg3, arg4, arg5);
-+		break;
-+	case PR_ISOL_CFG_GET:
-+		error = prctl_task_isolation_cfg_get(arg2, arg3, arg4, arg5);
-+		break;
-+	case PR_ISOL_CFG_SET:
-+		error = prctl_task_isolation_cfg_set(arg2, arg3, arg4, arg5);
-+		break;
-+	case PR_ISOL_ACTIVATE_GET:
-+		error = prctl_task_isolation_activate_get(arg2, arg3, arg4, arg5);
-+		break;
-+	case PR_ISOL_ACTIVATE_SET:
-+		error = prctl_task_isolation_activate_set(arg2, arg3, arg4, arg5);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
-Index: linux-2.6/include/linux/sched.h
-===================================================================
---- linux-2.6.orig/include/linux/sched.h
-+++ linux-2.6/include/linux/sched.h
-@@ -67,6 +67,7 @@ struct sighand_struct;
- struct signal_struct;
- struct task_delay_info;
- struct task_group;
-+struct isol_info;
- 
- /*
-  * Task state bitmask. NOTE! These bits are also
-@@ -1484,6 +1485,10 @@ struct task_struct {
- 	struct callback_head		l1d_flush_kill;
- #endif
- 
-+#ifdef CONFIG_CPU_ISOLATION
-+	struct isol_info		*isol_info;
-+#endif
-+
- 	/*
- 	 * New fields for task_struct should be added above here, so that
- 	 * they are included in the randomized portion of task_struct.
-Index: linux-2.6/init/init_task.c
-===================================================================
---- linux-2.6.orig/init/init_task.c
-+++ linux-2.6/init/init_task.c
-@@ -214,6 +214,9 @@ struct task_struct init_task
- #ifdef CONFIG_SECCOMP_FILTER
- 	.seccomp	= { .filter_count = ATOMIC_INIT(0) },
- #endif
-+#ifdef CONFIG_CPU_ISOLATION
-+	.isol_info	= NULL,
-+#endif
- };
- EXPORT_SYMBOL(init_task);
- 
-Index: linux-2.6/kernel/fork.c
-===================================================================
---- linux-2.6.orig/kernel/fork.c
-+++ linux-2.6/kernel/fork.c
-@@ -96,6 +96,7 @@
- #include <linux/scs.h>
- #include <linux/io_uring.h>
- #include <linux/bpf.h>
-+#include <linux/task_isolation.h>
- 
- #include <asm/pgalloc.h>
- #include <linux/uaccess.h>
-@@ -745,6 +746,7 @@ void __put_task_struct(struct task_struc
- 	WARN_ON(refcount_read(&tsk->usage));
- 	WARN_ON(tsk == current);
- 
-+	tsk_isol_free(tsk);
- 	io_uring_free(tsk);
- 	cgroup_free(tsk);
- 	task_numa_free(tsk, true);
-@@ -1582,6 +1584,15 @@ static int copy_io(unsigned long clone_f
- 	return 0;
- }
- 
-+static int copy_task_isolation(struct task_struct *tsk)
-+{
-+#ifdef CONFIG_CPU_ISOLATION
-+	if (current->isol_info)
-+		return __copy_task_isolation(tsk);
-+#endif
-+	return 0;
-+}
-+
- static int copy_sighand(unsigned long clone_flags, struct task_struct *tsk)
- {
- 	struct sighand_struct *sig;
-@@ -2156,7 +2167,9 @@ static __latent_entropy struct task_stru
- 	RCU_INIT_POINTER(p->bpf_storage, NULL);
- 	p->bpf_ctx = NULL;
- #endif
--
-+#ifdef CONFIG_CPU_ISOLATION
-+	p->isol_info = NULL;
-+#endif
- 	/* Perform scheduler related setup. Assign this task to a CPU. */
- 	retval = sched_fork(clone_flags, p);
- 	if (retval)
-@@ -2200,6 +2213,9 @@ static __latent_entropy struct task_stru
- 	retval = copy_thread(clone_flags, args->stack, args->stack_size, p, args->tls);
- 	if (retval)
- 		goto bad_fork_cleanup_io;
-+	retval = copy_task_isolation(p);
-+	if (retval)
-+		goto bad_fork_cleanup_thread;
- 
- 	stackleak_task_init(p);
- 
-@@ -2208,7 +2224,7 @@ static __latent_entropy struct task_stru
- 				args->set_tid_size);
- 		if (IS_ERR(pid)) {
- 			retval = PTR_ERR(pid);
--			goto bad_fork_cleanup_thread;
-+			goto bad_fork_cleanup_task_isolation;
- 		}
- 	}
- 
-@@ -2427,6 +2443,8 @@ bad_fork_put_pidfd:
- bad_fork_free_pid:
- 	if (pid != &init_struct_pid)
- 		free_pid(pid);
-+bad_fork_cleanup_task_isolation:
-+	tsk_isol_free(p);
- bad_fork_cleanup_thread:
- 	exit_thread(p);
- bad_fork_cleanup_io:
-Index: linux-2.6/include/linux/task_isolation.h
+Index: linux-2.6/Documentation/userspace-api/task_isolation.rst
 ===================================================================
 --- /dev/null
-+++ linux-2.6/include/linux/task_isolation.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ linux-2.6/Documentation/userspace-api/task_isolation.rst
+@@ -0,0 +1,375 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+#ifndef __LINUX_TASK_ISOL_H
-+#define __LINUX_TASK_ISOL_H
++===============================
++Task isolation prctl interface
++===============================
 +
-+#ifdef CONFIG_CPU_ISOLATION
++Certain types of applications benefit from running uninterrupted by
++background OS activities. Realtime systems and high-bandwidth networking
++applications with user-space drivers can fall into the category.
 +
-+struct isol_info {
-+	/* Which features have been configured */
-+	u64 conf_mask;
-+	/* Which features are active */
-+	u64 active_mask;
-+	/* Quiesce mask */
-+	u64 quiesce_mask;
++To create an OS noise free environment for the application, this
++interface allows userspace to inform the kernel the start and
++end of the latency sensitive application section (with configurable
++system behaviour for that section).
 +
-+	/* Oneshot mask */
-+	u64 oneshot_mask;
++Note: the prctl interface is independent of nohz_full=.
 +
-+	u8 inherit_mask;
-+};
++The prctl options are:
 +
-+extern void __tsk_isol_free(struct task_struct *tsk);
 +
-+static inline void tsk_isol_free(struct task_struct *tsk)
++        - PR_ISOL_FEAT_GET: Retrieve supported features.
++        - PR_ISOL_CFG_GET: Retrieve task isolation configuration.
++        - PR_ISOL_CFG_SET: Set task isolation configuration.
++        - PR_ISOL_ACTIVATE_GET: Retrieve task isolation activation state.
++        - PR_ISOL_ACTIVATE_SET: Set task isolation activation state.
++
++Summary of terms:
++
++
++- feature:
++
++        A distinct attribute or aspect of task isolation. Examples of
++        features could be logging, new operating modes (eg: syscalls disallowed),
++        userspace notifications, etc. The only feature currently available is quiescing.
++
++- configuration:
++
++        A specific choice from a given set
++        of possible choices that dictate how the particular feature
++        in question should behave.
++
++- activation state:
++
++        The activation state (whether active/inactive) of the task
++        isolation features (features must be configured before
++        being activated).
++
++Inheritance of the isolation parameters and state, across
++fork(2) and clone(2), can be changed via
++PR_ISOL_CFG_GET/PR_ISOL_CFG_SET.
++
++
++At a high-level, task isolation is divided in two steps:
++
++1. Configuration.
++2. Activation.
++
++Section "Userspace support" describes how to use
++task isolation.
++
++In terms of the interface, the sequence of steps to activate
++task isolation are:
++
++1. Retrieve supported task isolation features (PR_ISOL_FEAT_GET).
++2. Configure task isolation features (PR_ISOL_CFG_GET/PR_ISOL_CFG_SET).
++3. Activate or deactivate task isolation features (PR_ISOL_ACTIVATE_GET/PR_ISOL_ACTIVATE_SET).
++
++This interface is based on ideas and code from the
++task isolation patchset from Alex Belits:
++https://lwn.net/Articles/816298/
++
++Note: if the need arises to configure an individual quiesce feature
++with its own extensible structure, please add ISOL_F_QUIESCE_ONE
++to PR_ISOL_CFG_GET/PR_ISOL_CFG_SET (ISOL_F_QUIESCE operates on
++multiple features per syscall currently).
++
++--------------------
++Feature description
++--------------------
++
++        - ``ISOL_F_QUIESCE``
++
++        This feature allows quiescing selected kernel activities on
++        return from system calls.
++
++---------------------
++Interface description
++---------------------
++
++**PR_ISOL_FEAT**:
++
++        Returns the supported features and feature
++        capabilities, as a bitmask::
++
++                prctl(PR_ISOL_FEAT, feat, arg3, arg4, arg5);
++
++        The 'feat' argument specifies whether to return
++        supported features (if zero), or feature capabilities
++        (if not zero). Possible values for 'feat' are:
++
++
++        - ``0``:
++               Return the bitmask of supported features, in the location
++               pointed  to  by  ``(int *)arg3``. The buffer should allow space
++               for 8 bytes.
++
++        - ``ISOL_F_QUIESCE``:
++
++               Return a structure containing which kernel
++               activities are supported for quiescing, in the location
++               pointed to by ``(int *)arg3``::
++
++                        struct task_isol_quiesce_extensions {
++                                __u64 flags;
++                                __u64 supported_quiesce_bits;
++                                __u64 pad[6];
++                        };
++
++               Where:
++
++               *flags*: Additional flags (should be zero).
++
++               *supported_quiesce_bits*: Bitmask indicating
++                which features are supported for quiescing.
++
++               *pad*: Additional space for future enhancements.
++
++
++        Features and its capabilities are defined at
++        include/uapi/linux/task_isolation.h.
++
++**PR_ISOL_CFG_GET**:
++
++        Retrieve task isolation configuration.
++        The general format is::
++
++                prctl(PR_ISOL_CFG_GET, what, arg3, arg4, arg5);
++
++        The 'what' argument specifies what to configure. Possible values are:
++
++        - ``I_CFG_FEAT``:
++
++                Return configuration of task isolation features. The 'arg3' argument specifies
++                whether to return configured features (if zero), or individual
++                feature configuration (if not zero), as follows.
++
++                - ``0``:
++
++                        Return the bitmask of configured features, in the location
++                        pointed  to  by  ``(int *)arg4``. The buffer should allow space
++                        for 8 bytes.
++
++                - ``ISOL_F_QUIESCE``:
++
++                        If arg4 is QUIESCE_CONTROL, return the control structure for
++                        quiescing of background kernel activities, in the location
++                        pointed to by ``(int *)arg5``::
++
++                         struct task_isol_quiesce_control {
++                                __u64 flags;
++                                __u64 quiesce_mask;
++                                __u64 quiesce_oneshot_mask;
++                                __u64 pad[5];
++                         };
++
++                        See PR_ISOL_CFG_SET description for meaning of fields.
++
++        - ``I_CFG_INHERIT``:
++
++                Retrieve inheritance configuration across fork/clone.
++
++                Return the structure which configures inheritance
++                across fork/clone, in the location pointed to
++                by ``(int *)arg4``::
++
++                        struct task_isol_inherit_control {
++                                __u8    inherit_mask;
++                                __u8    pad[7];
++                        };
++
++                See PR_ISOL_CFG_SET description for meaning of fields.
++
++**PR_ISOL_CFG_SET**:
++
++        Set task isolation configuration.
++        The general format is::
++
++                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);
++
++        The 'what' argument specifies what to configure. Possible values are:
++
++        - ``I_CFG_FEAT``:
++
++                Set configuration of task isolation features. 'arg3' specifies
++                the feature. Possible values are:
++
++                - ``ISOL_F_QUIESCE``:
++
++                        If arg4 is QUIESCE_CONTROL, set the control structure
++                        for quiescing of background kernel activities, from
++                        the location pointed to by ``(int *)arg5``::
++
++                         struct task_isol_quiesce_control {
++                                __u64 flags;
++                                __u64 quiesce_mask;
++                                __u64 quiesce_oneshot_mask;
++                                __u64 pad[5];
++                         };
++
++                        Where:
++
++                        *flags*: Additional flags (should be zero).
++
++                        *quiesce_mask*: A bitmask containing which kernel
++                        activities to quiesce.
++
++                        *quiesce_oneshot_mask*: A bitmask indicating which kernel
++                        activities should behave in oneshot mode, that is, quiescing
++                        will happen on return from prctl(PR_ISOL_ACTIVATE_SET), but not
++                        on return of subsequent system calls. The corresponding bit(s)
++                        must also be set at quiesce_mask.
++
++                        *pad*: Additional space for future enhancements.
++
++                        For quiesce_mask (and quiesce_oneshot_mask), possible bit sets are:
++
++                        - ``ISOL_F_QUIESCE_VMSTATS``
++
++                        VM statistics are maintained in per-CPU counters to
++                        improve performance. When a CPU modifies a VM statistic,
++                        this modification is kept in the per-CPU counter.
++                        Certain activities require a global count, which
++                        involves requesting each CPU to flush its local counters
++                        to the global VM counters.
++
++                        This flush is implemented via a workqueue item, which
++                        might schedule a workqueue on isolated CPUs.
++
++                        To avoid this interruption, task isolation can be
++                        configured to, upon return from system calls, synchronize
++                        the per-CPU counters to global counters, thus avoiding
++                        the interruption.
++
++        - ``I_CFG_INHERIT``:
++                Set inheritance configuration when a new task
++                is created via fork and clone.
++
++                The ``(int *)arg4`` argument is a pointer to::
++
++                        struct task_isol_inherit_control {
++                                __u8    inherit_mask;
++                                __u8    pad[7];
++                        };
++
++                inherit_mask is a bitmask that specifies which part
++                of task isolation should be inherited:
++
++                - Bit ISOL_INHERIT_CONF: Inherit task isolation configuration.
++                  This is the state written via prctl(PR_ISOL_CFG_SET, ...).
++
++                - Bit ISOL_INHERIT_ACTIVE: Inherit task isolation activation
++                  (requires ISOL_INHERIT_CONF to be set). The new task
++                  should behave, after fork/clone, in the same manner
++                  as the parent task after it executed:
++
++                        prctl(PR_ISOL_ACTIVATE_SET, &mask, ...);
++
++**PR_ISOL_ACTIVATE_GET**:
++
++        Retrieve task isolation activation state.
++
++        The general format is::
++
++                prctl(PR_ISOL_ACTIVATE_GET, pmask, arg3, arg4, arg5);
++
++        'pmask' specifies the location of a feature mask, where
++        the current active mask will be copied. See PR_ISOL_ACTIVATE_SET
++        for description of individual bits.
++
++
++**PR_ISOL_ACTIVATE_SET**:
++
++        Set task isolation activation state (activates/deactivates
++        task isolation).
++
++        The general format is::
++
++                prctl(PR_ISOL_ACTIVATE_SET, pmask, arg3, arg4, arg5);
++
++
++        The 'pmask' argument specifies the location of an 8 byte mask
++        containing which features should be activated. Features whose
++        bits are cleared will be deactivated. The possible
++        bits for this mask are:
++
++                - ``ISOL_F_QUIESCE``:
++
++                Activate quiescing of background kernel activities.
++                Quiescing happens on return to userspace from this
++                system call, and on return from subsequent
++                system calls (unless quiesce_oneshot_mask has been set at
++                PR_ISOL_CFG_SET time).
++
++        Quiescing can be adjusted (while active) by
++        prctl(PR_ISOL_ACTIVATE_SET, &new_mask, ...).
++
++
++==================
++Userspace support
++==================
++
++Task isolation is divided in two main steps: configuration and activation.
++
++Each step can be performed by an external tool or the latency sensitive
++application itself. util-linux contains the "chisol" tool for this
++purpose.
++
++This results in three combinations:
++
++1. Both configuration and activation performed by the
++latency sensitive application.
++Allows fine grained control of what task isolation
++features are enabled and when (see samples section below).
++
++2. Only activation can be performed by the latency sensitive app
++(and configuration performed by chisol).
++This allows the admin/user to control task isolation parameters,
++and applications have to be modified only once.
++
++3. Configuration and activation performed by an external tool.
++This allows unmodified applications to take advantage of
++task isolation. Activation is performed by the "-a" option
++of chisol.
++
++========
++Examples
++========
++
++The ``samples/task_isolation/`` directory contains 3 examples:
++
++* task_isol_userloop.c:
++
++        Example of program with a loop on userspace scenario.
++
++* task_isol_computation.c:
++
++        Example of program that enters task isolated mode,
++        performs an amount of computation, exits task
++        isolated mode, and writes the computation to disk.
++
++* task_isol_oneshot.c:
++
++        Example of program that enables one-shot
++        mode for quiescing, enters a processing loop, then upon an external
++        event performs a number of syscalls to handle that event.
++
++This is a snippet of code to activate task isolation if
++it has been previously configured (by chisol for example)::
++
++        #include <sys/prctl.h>
++        #include <linux/types.h>
++
++        #ifdef PR_ISOL_CFG_GET
++        unsigned long long fmask;
++
++        ret = prctl(PR_ISOL_CFG_GET, I_CFG_FEAT, 0, &fmask, 0);
++        if (ret != -1 && fmask != 0) {
++                ret = prctl(PR_ISOL_ACTIVATE_SET, &fmask, 0, 0, 0);
++                if (ret == -1) {
++                        perror("prctl PR_ISOL_ACTIVATE_SET");
++                        return ret;
++                }
++        }
++        #endif
++
+Index: linux-2.6/samples/task_isolation/task_isol.c
+===================================================================
+--- /dev/null
++++ linux-2.6/samples/task_isolation/task_isol.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <sys/mman.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <sys/prctl.h>
++#include <linux/prctl.h>
++#include <errno.h>
++#include "task_isol.h"
++
++#ifdef PR_ISOL_FEAT_GET
++int task_isol_setup(int oneshot)
 +{
-+	if (tsk->isol_info)
-+		__tsk_isol_free(tsk);
++	int ret;
++	int errnosv;
++	unsigned long long fmask;
++	struct task_isol_quiesce_extensions qext;
++	struct task_isol_quiesce_control qctrl;
++
++	/* Retrieve supported task isolation features */
++	ret = prctl(PR_ISOL_FEAT_GET, 0, &fmask, 0, 0);
++	if (ret == -1) {
++		perror("prctl PR_ISOL_FEAT");
++		return ret;
++	}
++	printf("supported features bitmask: 0x%llx\n", fmask);
++
++	/* Retrieve supported ISOL_F_QUIESCE bits */
++	ret = prctl(PR_ISOL_FEAT_GET, ISOL_F_QUIESCE, &qext, 0, 0);
++	if (ret == -1) {
++		perror("prctl PR_ISOL_FEAT (ISOL_F_QUIESCE)");
++		return ret;
++	}
++	printf("supported ISOL_F_QUIESCE bits: 0x%llx\n",
++		qext.supported_quiesce_bits);
++
++	fmask = 0;
++	ret = prctl(PR_ISOL_CFG_GET, I_CFG_FEAT, 0, &fmask, 0);
++	errnosv = errno;
++	if (ret != -1 && fmask != 0) {
++		printf("Task isolation parameters already configured!\n");
++		return ret;
++	}
++	if (ret == -1 && errnosv != ENODATA) {
++		perror("prctl PR_ISOL_GET");
++		return ret;
++	}
++	memset(&qctrl, 0, sizeof(struct task_isol_quiesce_control));
++	qctrl.quiesce_mask = ISOL_F_QUIESCE_VMSTATS;
++	if (oneshot)
++		qctrl.quiesce_oneshot_mask = ISOL_F_QUIESCE_VMSTATS;
++
++	ret = prctl(PR_ISOL_CFG_SET, I_CFG_FEAT, ISOL_F_QUIESCE,
++		    QUIESCE_CONTROL, &qctrl);
++	if (ret == -1) {
++		perror("prctl PR_ISOL_CFG_SET");
++		return ret;
++	}
++	return ISOL_F_QUIESCE;
 +}
 +
-+int prctl_task_isolation_feat_get(unsigned long arg2, unsigned long arg3,
-+				  unsigned long arg4, unsigned long arg5);
-+int prctl_task_isolation_cfg_get(unsigned long arg2, unsigned long arg3,
-+				 unsigned long arg4, unsigned long arg5);
-+int prctl_task_isolation_cfg_set(unsigned long arg2, unsigned long arg3,
-+				 unsigned long arg4, unsigned long arg5);
-+int prctl_task_isolation_activate_get(unsigned long arg2, unsigned long arg3,
-+				      unsigned long arg4, unsigned long arg5);
-+int prctl_task_isolation_activate_set(unsigned long arg2, unsigned long arg3,
-+				      unsigned long arg4, unsigned long arg5);
++int task_isol_activate_set(unsigned long long mask)
++{
++	int ret;
 +
-+int __copy_task_isolation(struct task_struct *tsk);
++	ret = prctl(PR_ISOL_ACTIVATE_SET, &mask, 0, 0, 0);
++	if (ret == -1) {
++		perror("prctl PR_ISOL_ACTIVATE_SET");
++		return -1;
++	}
++
++	return 0;
++}
 +
 +#else
 +
-+static inline void tsk_isol_free(struct task_struct *tsk)
++int task_isol_setup(void)
 +{
++	return 0;
 +}
 +
-+static inline int prctl_task_isolation_feat_get(unsigned long arg2,
-+						unsigned long arg3,
-+						unsigned long arg4,
-+						unsigned long arg5)
++int task_isol_activate_set(unsigned long long mask)
 +{
-+	return -EOPNOTSUPP;
++	return 0;
 +}
++#endif
 +
-+static inline int prctl_task_isolation_cfg_get(unsigned long arg2,
-+					       unsigned long arg3,
-+					       unsigned long arg4,
-+					       unsigned long arg5)
-+{
-+	return -EOPNOTSUPP;
-+}
 +
-+static inline int prctl_task_isolation_cfg_set(unsigned long arg2,
-+					       unsigned long arg3,
-+					       unsigned long arg4,
-+					       unsigned long arg5)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int prctl_task_isolation_activate_get(unsigned long arg2,
-+						    unsigned long arg3,
-+						    unsigned long arg4,
-+						    unsigned long arg5)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int prctl_task_isolation_activate_set(unsigned long arg2,
-+						    unsigned long arg3,
-+						    unsigned long arg4,
-+						    unsigned long arg5)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+#endif /* CONFIG_CPU_ISOLATION */
-+
-+#endif /* __LINUX_TASK_ISOL_H */
-Index: linux-2.6/kernel/task_isolation.c
+Index: linux-2.6/samples/task_isolation/task_isol.h
 ===================================================================
 --- /dev/null
-+++ linux-2.6/kernel/task_isolation.c
-@@ -0,0 +1,350 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  Implementation of task isolation.
-+ *
-+ * Authors:
-+ *   Chris Metcalf <cmetcalf@mellanox.com>
-+ *   Alex Belits <abelits@belits.com>
-+ *   Yuri Norov <ynorov@marvell.com>
-+ *   Marcelo Tosatti <mtosatti@redhat.com>
-+ */
++++ linux-2.6/samples/task_isolation/task_isol.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __TASK_ISOL_H
++#define __TASK_ISOL_H
 +
-+#include <linux/sched.h>
-+#include <linux/task_isolation.h>
++int task_isol_setup(int oneshot);
++
++int task_isol_activate_set(unsigned long long mask);
++
++#endif /* __TASK_ISOL_H */
+Index: linux-2.6/samples/task_isolation/task_isol_userloop.c
+===================================================================
+--- /dev/null
++++ linux-2.6/samples/task_isolation/task_isol_userloop.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <sys/mman.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <sys/prctl.h>
 +#include <linux/prctl.h>
-+#include <linux/slab.h>
-+#include <linux/kobject.h>
-+#include <linux/string.h>
-+#include <linux/sysfs.h>
-+#include <linux/init.h>
-+#include <linux/sched/task.h>
++#include "task_isol.h"
 +
-+void __tsk_isol_free(struct task_struct *tsk)
-+{
-+	if (!tsk->isol_info)
-+		return;
-+	kfree(tsk->isol_info);
-+	tsk->isol_info = NULL;
-+}
-+
-+static struct isol_info *tsk_isol_alloc_context(void)
-+{
-+	struct isol_info *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (unlikely(!info))
-+		return ERR_PTR(-ENOMEM);
-+
-+	return info;
-+}
-+
-+int prctl_task_isolation_feat_get(unsigned long arg2, unsigned long arg3,
-+				  unsigned long arg4, unsigned long arg5)
++int main(void)
 +{
 +	int ret;
-+	void __user *addr = (void __user *) arg3;
++	void *buf = malloc(4096);
++	unsigned long mask;
 +
-+	switch (arg2) {
-+	case 0: {
-+		u64 supported_fmask = ISOL_F_QUIESCE;
-+
-+		ret = 0;
-+		if (copy_to_user(addr, &supported_fmask, sizeof(u64)))
-+			ret = -EFAULT;
-+
-+		return ret;
++	memset(buf, 1, 4096);
++	ret = mlock(buf, 4096);
++	if (ret) {
++		perror("mlock");
++		return EXIT_FAILURE;
 +	}
-+	case ISOL_F_QUIESCE: {
-+		struct task_isol_quiesce_extensions *q_ext;
 +
-+		q_ext = kzalloc(sizeof(struct task_isol_quiesce_extensions),
-+			 GFP_KERNEL);
-+		if (!q_ext)
-+			return -ENOMEM;
++	ret = task_isol_setup(0);
++	if (ret == -1)
++		return EXIT_FAILURE;
 +
-+		q_ext->supported_quiesce_bits = ISOL_F_QUIESCE_VMSTATS;
++	mask = ret;
++	/* enable quiescing on system call return, oneshot */
++	ret = task_isol_activate_set(mask);
++	if (ret)
++		return EXIT_FAILURE;
 +
-+		ret = 0;
-+		if (copy_to_user(addr, q_ext, sizeof(*q_ext)))
-+			ret = -EFAULT;
-+		kfree(q_ext);
-+		return ret;
++#define NR_LOOPS 999999999
++#define NR_PRINT 100000000
++	/* busy loop */
++	while (ret < NR_LOOPS)  {
++		memset(buf, 0, 4096);
++		ret = ret+1;
++		if (!(ret % NR_PRINT))
++			printf("loops=%d of %d\n", ret, NR_LOOPS);
 +	}
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
++
++
++	ret = task_isol_activate_set(mask & ~ISOL_F_QUIESCE);
++	if (ret)
++		return EXIT_FAILURE;
++
++	return EXIT_SUCCESS;
 +}
 +
-+static int cfg_inherit_get(unsigned long arg3, unsigned long arg4,
-+			   unsigned long arg5)
+Index: linux-2.6/samples/Kconfig
+===================================================================
+--- linux-2.6.orig/samples/Kconfig
++++ linux-2.6/samples/Kconfig
+@@ -241,6 +241,13 @@ config SAMPLE_WATCH_QUEUE
+ 	  Build example userspace program to use the new mount_notify(),
+ 	  sb_notify() syscalls and the KEYCTL_WATCH_KEY keyctl() function.
+ 
++config SAMPLE_TASK_ISOLATION
++	bool "task isolation sample"
++	depends on CC_CAN_LINK && HEADERS_INSTALL
++	help
++	  Build example userspace program to use prctl task isolation
++	  interface.
++
+ endif # SAMPLES
+ 
+ config HAVE_SAMPLE_FTRACE_DIRECT
+Index: linux-2.6/samples/Makefile
+===================================================================
+--- linux-2.6.orig/samples/Makefile
++++ linux-2.6/samples/Makefile
+@@ -32,3 +32,4 @@ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
+ subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
+ subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
+ obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
++subdir-$(CONFIG_SAMPLE_TASK_ISOLATION)	+= task_isolation
+Index: linux-2.6/samples/task_isolation/Makefile
+===================================================================
+--- /dev/null
++++ linux-2.6/samples/task_isolation/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++userprogs-always-y += task_isol_userloop task_isol_computation task_isol_oneshot
++task_isol_userloop-objs := task_isol.o task_isol_userloop.o
++task_isol_computation-objs := task_isol.o task_isol_computation.o
++task_isol_oneshot-objs := task_isol.o task_isol_oneshot.o
++
++userccflags += -I usr/include
++
++
++#$(CC) $^ -o $@
+Index: linux-2.6/samples/task_isolation/task_isol_computation.c
+===================================================================
+--- /dev/null
++++ linux-2.6/samples/task_isolation/task_isol_computation.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Example of task isolation prctl interface with a loop:
++ *
++ *	do {
++ *		enable quiescing of kernel activities
++ *		perform computation
++ *		disable quiescing of kernel activities
++ *		write computation results to disk
++ *	} while (condition);
++ *
++ */
++#include <sys/mman.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <sys/prctl.h>
++#include <linux/prctl.h>
++#include "task_isol.h"
++
++int main(void)
 +{
-+	struct task_isol_inherit_control *i_ctrl;
-+	int ret;
-+	void __user *addr = (void __user *) arg3;
++	int ret, fd, write_loops;
++	void *buf = malloc(4096);
++	unsigned long mask;
 +
-+	if (!current->isol_info)
-+		return -EINVAL;
-+
-+	i_ctrl = kzalloc(sizeof(struct task_isol_inherit_control),
-+			 GFP_KERNEL);
-+	if (!i_ctrl)
-+		return -ENOMEM;
-+
-+	i_ctrl->inherit_mask = current->isol_info->inherit_mask;
-+
-+	ret = 0;
-+	if (copy_to_user(addr, i_ctrl, sizeof(*i_ctrl)))
-+		ret = -EFAULT;
-+	kfree(i_ctrl);
-+
-+	return ret;
-+}
-+
-+static int cfg_feat_get(unsigned long arg3, unsigned long arg4,
-+			unsigned long arg5)
-+{
-+	int ret = 0;
-+
-+	switch (arg3) {
-+	case 0: {
-+		void __user *addr = (void __user *)arg4;
-+		u64 cfg_mask = 0;
-+
-+		if (current->isol_info)
-+			cfg_mask = current->isol_info->conf_mask;
-+
-+		if (copy_to_user(addr, &cfg_mask, sizeof(u64)))
-+			ret = -EFAULT;
-+
-+		return ret;
++	fd = open("/tmp/comp_output.data", O_RDWR|O_CREAT);
++	if (fd == -1) {
++		perror("open");
++		return EXIT_FAILURE;
 +	}
-+	case ISOL_F_QUIESCE: {
-+		struct task_isol_quiesce_control *i_qctrl;
-+		void __user *addr = (void __user *)arg5;
 +
-+		if (arg4 != QUIESCE_CONTROL)
-+			return -EINVAL;
-+
-+		i_qctrl = kzalloc(sizeof(struct task_isol_quiesce_control),
-+				  GFP_KERNEL);
-+		if (!i_qctrl)
-+			return -ENOMEM;
-+
-+		if (current->isol_info)
-+			i_qctrl->quiesce_mask = current->isol_info->quiesce_mask;
-+
-+		if (copy_to_user(addr, i_qctrl, sizeof(*i_qctrl)))
-+			ret = -EFAULT;
-+
-+		kfree(i_qctrl);
-+		return ret;
++	memset(buf, 1, 4096);
++	ret = mlock(buf, 4096);
++	if (ret) {
++		perror("mlock");
++		return EXIT_FAILURE;
 +	}
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
-+}
 +
-+int prctl_task_isolation_cfg_get(unsigned long arg2, unsigned long arg3,
-+				 unsigned long arg4, unsigned long arg5)
-+{
-+	switch (arg2) {
-+	case I_CFG_FEAT:
-+		return cfg_feat_get(arg3, arg4, arg5);
-+	case I_CFG_INHERIT:
-+		return cfg_inherit_get(arg3, arg4, arg5);
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
-+}
++	ret = task_isol_setup(0);
++	if (ret == -1)
++		return EXIT_FAILURE;
 +
-+static int cfg_inherit_set(unsigned long arg3, unsigned long arg4,
-+			   unsigned long arg5)
-+{
-+	int ret = 0;
-+	struct task_isol_inherit_control *i_ctrl;
-+	const void __user *addr = (const void __user *)arg3;
++	mask = ret;
 +
-+	i_ctrl = kzalloc(sizeof(struct task_isol_inherit_control),
-+			 GFP_KERNEL);
-+	if (!i_ctrl)
-+		return -ENOMEM;
++	write_loops = 0;
++	do {
++#define NR_LOOPS 999999999
++#define NR_PRINT 100000000
++		/* enable quiescing on system call return */
++		ret = task_isol_activate_set(mask);
++		if (ret)
++			return EXIT_FAILURE;
 +
-+	ret = -EFAULT;
-+	if (copy_from_user(i_ctrl, addr, sizeof(*i_ctrl)))
-+		goto out_free;
-+
-+	ret = -EINVAL;
-+	if (i_ctrl->inherit_mask & ~(ISOL_INHERIT_CONF|ISOL_INHERIT_ACTIVE))
-+		goto out_free;
-+
-+	if (i_ctrl->inherit_mask & ISOL_INHERIT_ACTIVE)
-+		if (!(i_ctrl->inherit_mask & ISOL_INHERIT_CONF))
-+			goto out_free;
-+
-+	if (!current->isol_info) {
-+		struct isol_info *isol_info;
-+
-+		isol_info = tsk_isol_alloc_context();
-+		if (IS_ERR(isol_info)) {
-+			ret = PTR_ERR(isol_info);
-+			goto out_free;
++		/* busy loop */
++		while (ret < NR_LOOPS)  {
++			memset(buf, 0xf, 4096);
++			ret = ret+1;
++			if (!(ret % NR_PRINT))
++				printf("wloop=%d loops=%d of %d\n", write_loops,
++					ret, NR_LOOPS);
 +		}
-+		current->isol_info = isol_info;
-+	}
++		/* disable quiescing on system call return */
++		ret = task_isol_activate_set(mask & ~ISOL_F_QUIESCE);
++		if (ret)
++			return EXIT_FAILURE;
 +
-+	ret = 0;
-+	current->isol_info->inherit_mask = i_ctrl->inherit_mask;
-+
-+out_free:
-+	kfree(i_ctrl);
-+
-+	return ret;
-+}
-+
-+static int cfg_feat_quiesce_set(unsigned long arg4, unsigned long arg5)
-+{
-+	struct isol_info *isol_info;
-+	struct task_isol_quiesce_control *i_qctrl;
-+	int ret = 0;
-+	const void __user *addr = (const void __user *)arg5;
-+
-+	if (arg4 != QUIESCE_CONTROL)
-+		return -EINVAL;
-+
-+	i_qctrl = kzalloc(sizeof(struct task_isol_quiesce_control),
-+			 GFP_KERNEL);
-+	if (!i_qctrl)
-+		return -ENOMEM;
-+
-+	ret = -EFAULT;
-+	if (copy_from_user(i_qctrl, addr, sizeof(*i_qctrl)))
-+		goto out_free;
-+
-+	ret = -EINVAL;
-+	if (i_qctrl->flags != 0)
-+		goto out_free;
-+
-+	if (i_qctrl->quiesce_mask != ISOL_F_QUIESCE_VMSTATS &&
-+	    i_qctrl->quiesce_mask != 0)
-+		goto out_free;
-+
-+	if ((~i_qctrl->quiesce_mask & i_qctrl->quiesce_oneshot_mask) != 0)
-+		goto out_free;
-+
-+	/* current->isol_info is only allocated/freed from task
-+	 * context.
-+	 */
-+	if (!current->isol_info) {
-+		isol_info = tsk_isol_alloc_context();
-+		if (IS_ERR(isol_info)) {
-+			ret = PTR_ERR(isol_info);
-+			goto out_free;
++		/*
++		 * write computed data to disk, this would be
++		 * multiple writes on a real application, so
++		 * disabling quiescing is advantageous
++		 */
++		ret = write(fd, buf, 4096);
++		if (ret == -1) {
++			perror("write");
++			return EXIT_FAILURE;
 +		}
-+		current->isol_info = isol_info;
-+	}
 +
-+	isol_info = current->isol_info;
++		write_loops += 1;
++	} while (write_loops < 5);
 +
-+	isol_info->quiesce_mask = i_qctrl->quiesce_mask;
-+	isol_info->oneshot_mask = i_qctrl->quiesce_oneshot_mask;
-+	isol_info->conf_mask |= ISOL_F_QUIESCE;
-+	ret = 0;
 +
-+out_free:
-+	kfree(i_qctrl);
-+
-+	return ret;
++	return EXIT_SUCCESS;
 +}
 +
-+int prctl_task_isolation_cfg_set(unsigned long arg2, unsigned long arg3,
-+				 unsigned long arg4, unsigned long arg5)
+Index: linux-2.6/samples/task_isolation/task_isol_oneshot.c
+===================================================================
+--- /dev/null
++++ linux-2.6/samples/task_isolation/task_isol_oneshot.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Example of task isolation prctl interface using
++ * oneshot mode for quiescing.
++ *
++ *
++ *      enable oneshot quiescing of kernel activities
++ *	do {
++ *		process data (no system calls)
++ *		if (event) {
++ *			process event with syscalls
++ *			enable oneshot quiescing of kernel activities
++ *		}
++ *	} while (!exit_condition);
++ *
++ */
++#include <sys/mman.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <sys/prctl.h>
++#include <linux/prctl.h>
++#include "task_isol.h"
++
++int main(void)
 +{
-+	switch (arg2) {
-+	case I_CFG_FEAT:
-+		switch (arg3) {
-+		case ISOL_F_QUIESCE:
-+			return cfg_feat_quiesce_set(arg4, arg5);
-+		default:
-+			break;
++	int ret, fd, cnt;
++	void *buf = malloc(4096);
++	unsigned long mask;
++
++	fd = open("/dev/zero", O_RDONLY);
++	if (fd == -1) {
++		perror("open");
++		return EXIT_FAILURE;
++	}
++
++	memset(buf, 1, 4096);
++	ret = mlock(buf, 4096);
++	if (ret) {
++		perror("mlock");
++		return EXIT_FAILURE;
++	}
++
++	ret = task_isol_setup(1);
++	if (ret == -1)
++		return EXIT_FAILURE;
++
++	mask = ret;
++
++#define NR_LOOPS 999999999
++#define NR_PRINT 100000000
++
++	/* enable quiescing on system call return, oneshot */
++	ret = task_isol_activate_set(mask);
++	if (ret)
++		return EXIT_FAILURE;
++	/* busy loop */
++	cnt = 0;
++	while (cnt < NR_LOOPS)  {
++		memset(buf, 0xf, 4096);
++		cnt = cnt+1;
++		if (!(cnt % NR_PRINT)) {
++			int i, r;
++
++			/* this could be considered handling an external
++			 * event: with one-shot mode, system calls
++			 * after prctl(PR_SET_ACTIVATE) will not incur
++			 * the penalty of quiescing
++			 */
++			printf("loops=%d of %d\n", cnt, NR_LOOPS);
++			for (i = 0; i < 100; i++) {
++				r = read(fd, buf, 4096);
++				if (r == -1) {
++					perror("read");
++					return EXIT_FAILURE;
++				}
++			}
++
++			ret = munlock(buf, 4096);
++			if (ret) {
++				perror("munlock");
++				return EXIT_FAILURE;
++			}
++
++			ret = mlock(buf, 4096);
++			if (ret) {
++				perror("mlock");
++				return EXIT_FAILURE;
++			}
++
++			/* enable quiescing on system call return */
++			ret = task_isol_activate_set(mask);
++			if (ret)
++				return EXIT_FAILURE;
 +		}
-+		break;
-+	case I_CFG_INHERIT:
-+		return cfg_inherit_set(arg3, arg4, arg5);
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
-+}
-+
-+int __copy_task_isolation(struct task_struct *tsk)
-+{
-+	struct isol_info *info, *new_info;
-+
-+	info = current->isol_info;
-+	if (!(info->inherit_mask & (ISOL_INHERIT_CONF|ISOL_INHERIT_ACTIVE)))
-+		return 0;
-+
-+	new_info = tsk_isol_alloc_context();
-+	if (IS_ERR(new_info))
-+		return PTR_ERR(new_info);
-+
-+	new_info->inherit_mask = info->inherit_mask;
-+
-+	if (info->inherit_mask & ISOL_INHERIT_CONF) {
-+		new_info->quiesce_mask = info->quiesce_mask;
-+		new_info->conf_mask = info->conf_mask;
 +	}
 +
-+	if (info->inherit_mask & ISOL_INHERIT_ACTIVE)
-+		new_info->active_mask = info->active_mask;
-+
-+	tsk->isol_info = new_info;
-+
-+	return 0;
++	return EXIT_SUCCESS;
 +}
 +
-+int prctl_task_isolation_activate_set(unsigned long arg2, unsigned long arg3,
-+				      unsigned long arg4, unsigned long arg5)
-+{
-+	int ret;
-+	struct isol_info *isol_info;
-+	u64 active_mask;
-+	const void __user *addr_mask = (const void __user *)arg2;
-+
-+	ret = -EFAULT;
-+	if (copy_from_user(&active_mask, addr_mask, sizeof(u64)))
-+		goto out;
-+
-+	ret = -EINVAL;
-+	if (active_mask != ISOL_F_QUIESCE && active_mask != 0)
-+		return ret;
-+
-+	isol_info = current->isol_info;
-+	if (!isol_info)
-+		return ret;
-+
-+	isol_info->active_mask = active_mask;
-+	ret = 0;
-+
-+out:
-+	return ret;
-+}
-+
-+int prctl_task_isolation_activate_get(unsigned long arg2, unsigned long arg3,
-+				      unsigned long arg4, unsigned long arg5)
-+{
-+	struct isol_info *isol_info;
-+	void __user *addr_mask = (void __user *)arg2;
-+
-+	isol_info = current->isol_info;
-+	if (!isol_info)
-+		return -EINVAL;
-+
-+	if (copy_to_user(addr_mask, &isol_info->active_mask, sizeof(u64)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
 
 

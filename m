@@ -2,225 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7F646CC02
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AAF46CC0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbhLHEO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S244165AbhLHEQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239919AbhLHEO1 (ORCPT
+        with ESMTP id S230193AbhLHEQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:14:27 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C679C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:10:56 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id w1so3892669edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xNciXeE5mfNKBn+xLfyt+kwCN5b4hSI12y+mRmjiIe8=;
-        b=zlHMtKWLaOOAJKOaMc1D+9RXbfMxgiAz1aOpFpW5hAva1PUfYUClRpKkaMldwVbfL6
-         Qa/ysd/ueh9VKy7EDD1+pO4S8oJ+JHg5m3LIvsoOd7pLuvAGr1KJ3C6YL0/8o39MZVka
-         Mn8rwrqPJ/V0fuf6IkZn+tcOop4DdKq6ntO6HOd2p88kj4X8syhQwWFtW5xS8Sr0gtqX
-         ZvZ9MURHgW19vEkHzMegXYfTRs1FtE7ObL4diY62uAWXdKEdYya54r+Tky46gxahuOhS
-         WBnWX6oXKjlgHnG5mfc+9669IxdAoIisWPnari0AmEIFHlRJBpYKDmBtwLFi1b4UI8rL
-         84gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xNciXeE5mfNKBn+xLfyt+kwCN5b4hSI12y+mRmjiIe8=;
-        b=WFSfaspY2QYfWkD9Flm7bkWmZvFOrGNXsQeBpKGlY09QaxWQGh0BRmQd0BkJm/5b1+
-         d6/O7F1t7LarOJICywOhH6xTkzeOhfFkoUD1U8RQ3FcaOT6RemvpcEe+x/zBld0eQ60l
-         RnEXKTWPG86a/XtsNwx2hsczL3rQ7M2Fk98rrg27f4k+jab9k2QBYaCqLfTS104SvN76
-         F+Ldt3tLnhDGc1r9pQTV6TqRQKgRWpYjBfGkLwj7E7xjMNYw91Ok2dMX6qNJIB+3GgVr
-         i8NZVyrKWOksoK8lKGCDD4MQWAHDVtvvpPP67UE7K2ZrPiZ3gg2bV9wS4hX05vznmWuy
-         ibig==
-X-Gm-Message-State: AOAM53316L/fU5aMDIVYJGCiZHWFSuW+4xrF4eWGRIkN8C7lTPkRGBbD
-        drQ7FtO4UBW1boj911vqh+Icu5cuMVgaEINhu4bNmg==
-X-Google-Smtp-Source: ABdhPJzwcOZkfdTrIc9iypu8XmGotkpKMHHRKOU5Q0rJHTutHQbG1SAsDJYXygGMS1J90u7AYDE4wwXc8bMdlGaIzNc=
-X-Received: by 2002:a50:e003:: with SMTP id e3mr15514013edl.374.1638936654541;
- Tue, 07 Dec 2021 20:10:54 -0800 (PST)
+        Tue, 7 Dec 2021 23:16:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7839AC061574;
+        Tue,  7 Dec 2021 20:12:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D099B81F60;
+        Wed,  8 Dec 2021 04:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B179BC00446;
+        Wed,  8 Dec 2021 04:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638936749;
+        bh=gFJPgHU3rF0+oH3Tv/ru3zNDZuTRZu9S6ukLJe+ET+k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jH2bKsVQqTONUuVL5o90V6g5UaDw/shn9+qBIPC/wfFON1sqD+Bge2VB0ysNc/Hir
+         V83jfomzlevvQ8BMdjpDHo9TPfQji8qg34Ksc/lMWP3kvxl9iltKh4fyc9tw+QzYVE
+         bG87+yE2nL1kQUvo/E7742enyLcKNpVEYpE+9CzSMCia4UoFBb3bsPOo9UWBxvLvec
+         UEGMFhdkiYjByYQLjZQAvcP/up18IGAnE5QA2oOzjUHKmEM6YNJFcXOxMNRfWeYIRc
+         4Oa92xp3Ta6fSkHF+u+F+qWURn6qySsYYPy8uLloU63SRl15Nxsogewid8xghKEvbX
+         jqmjgG2vc4JrQ==
+Date:   Tue, 7 Dec 2021 22:12:28 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     qizhong.cheng@mediatek.com, ryder.lee@mediatek.com,
+        jianjun.wang@mediatek.com, lorenzo.pieralisi@arm.com, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com,
+        pali@kernel.org, maz@kernel.org, alyssa@rosenzweig.io,
+        luca@lucaceresoli.net
+Subject: Re: [RESEND PATCH v2] PCI: mediatek: Delay 100ms to wait power and
+ clock to become stable
+Message-ID: <20211208041228.GA103736@bhelgaas>
 MIME-Version: 1.0
-References: <20211206145549.155163074@linuxfoundation.org>
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 8 Dec 2021 09:40:42 +0530
-Message-ID: <CA+G9fYsJeJ2E1LzR=yKYKB=NcJzC7Som9MC0dz3L43ATuy4X7w@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/62] 4.9.292-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d3cb32527f48df70@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 20:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.292 release.
-> There are 62 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.292-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Dec 07, 2021 at 10:00:43PM +0100, Mark Kettenis wrote:
+> > Date: Tue, 7 Dec 2021 11:54:16 -0600
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > 
+> > [+cc Marc, Alyssa, Mark, Luca for reset timing questions]
+> 
+> Hi Bjorn,
+> 
+> > On Tue, Dec 07, 2021 at 04:41:53PM +0800, qizhong cheng wrote:
+> > > Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
+> > > 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> > > be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> > > 
+> > > Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+> > > Acked-by: Pali Rohár <pali@kernel.org>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> > ...
+> > 3) Most importantly, this needs to be reconciled with the similar
+> > change to the apple driver:
+> > 
+> >   https://lore.kernel.org/r/20211123180636.80558-2-maz@kernel.org
+> > 
+> > In the apple driver, we're doing:
+> > 
+> >   - Assert PERST#
+> >   - Set up REFCLK
+> >   - Sleep 100us (T_perst-clk, CEM r5 2.2, 2.9.2)
+> >   - Deassert PERST#
+> >   - Sleep 100ms (not sure there's a name? PCIe r5 6.6.1)
+> > 
+> > But here in mediatek, we're doing:
+> > 
+> >   - Assert PERST#
+> >   - Sleep 100ms (T_pvperl, CEM r5 2.2, 2.2.1, 2.9.2)
+> >   - Deassert PERST#
+> > 
+> > My questions:
+> 
+> My understanding of the the Apple PCIe hardware is somewhat limited but:
+> 
+> >   - Where does apple enforce T_pvperl?  I can't tell where power to
+> >     the slot is turned on.
+> 
+> So far all available machines only have PCIe devices that are soldered
+> onto the motherboard, so there are no "real" slots.  As far as we can
+> tell the PCIe power domain is already powered on at the point where
+> the m1n1 bootloader takes control.  There is a GPIO that controls
+> power to some devices (WiFi, SDHC on the M1 Pro/Max laptops) and those
+> devices are initially powered off.  The Linux driver doesn't currently
+> attempt to power these devices on, but U-Boot will power them on if
+> the appropriate GPIO is defined in the device tree.  The way this is
+> specified in the device tree is still under discussion.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Does this mean we basically assume that m1n1 and early Linux boot
+takes at least the 100ms T_pvperl required by CEM sec 2.2, but we take
+pains to delay the 100us T_perst-clk?  That seems a little weird, but
+I guess it is clear that REFCLK is *not* enabled before we enable it,
+so we do need at least the 100us there.
 
-## Build
-* kernel: 4.9.292-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.9.y
-* git commit: b14dcd4dade22e4f6d6e07a965f92c5eac548baf
-* git describe: v4.9.291-63-gb14dcd4dade2
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
-91-63-gb14dcd4dade2
+It also niggles at me a little that the spec says T_pvperl starts from
+*power stable* (not from power enable) and T_perst-clk starts from
+*REFCLK stable* (not REFCLK enable).  Since we don't know the time
+from enable to stable, it seems like native drivers should add some
+circuit-specific constants to the spec values.
 
-## No Test Regressions (compared to v4.9.291-13-g2cd9f5eb5e7f)
+> >   - Where does mediatek enforce the PCIe sec 6.6.1 delay after
+> >     deasserting PERST# and before config requests?
+> > 
+> >   - Does either apple or mediatek support speeds greater than 5 GT/s,
+> >     and if so, shouldn't we start the sec 6.6.1 100ms delay *after*
+> >     Link training completes?
+> 
+> The Apple hardware advertises support for 8 GT/s, but all the devices
+> integrated on the Mac mini support only 2.5 GT/s or 5 GT/s.
 
-## No Test Fixes (compared to v4.9.291-13-g2cd9f5eb5e7f)
+The spec doesn't say anything about what the downstream devices
+support (obviously it can't because we don't *know* what those devices
+are until after we enumerate them).  So to be pedantically correct,
+I'd argue that we should pay attention to what the Root Port
+advertises.  Of course, I don't think we do this correctly *anywhere*
+today.
 
-## Test result summary
-total: 72576, pass: 57494, fail: 566, skip: 12421, xfail: 2095
-
-## Build Summary
-* arm: 130 total, 130 passed, 0 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 19 total, 19 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Bjorn

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCC946D19D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94246D19E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbhLHLM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
+        id S232151AbhLHLMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbhLHLM0 (ORCPT
+        with ESMTP id S232145AbhLHLMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:12:26 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A95CC0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:08:54 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id i12so2152798pfd.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 03:08:54 -0800 (PST)
+        Wed, 8 Dec 2021 06:12:31 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B4C061A72
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 03:08:59 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id r130so2189162pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 03:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=94qtwsHdBUcVzdr14fQH4QqeaELVSejvb9k+dDp4o2k=;
-        b=gdJwJexPSIx1/o0kGlFH/3siK2BWmqN/Qya2wWAwRpJBABJCf7cZVPY1vV9uKphzCM
-         wDiL42S9zLojg/9rYkV+8Gcyug0bNkhyprI3HL5IVv6FPdbDYpG0Q+9f1fcLvsLyHqlJ
-         6d+3RCpxWxTSvIGQUyD3iKktmbGyZSKRYFR81PlrbYQogKQmi6fZOJTId9b93ecmVF2Q
-         eT3UjTw/vZKqvqEL/qGLIrdAM1QDCdiqpnZVGVu3jSXv5teHhN5/T/g/zvUjMZ6G722x
-         jjKFxOz0lcm/NslZErC/EI4Yi0rOzfoSzQ5g0N+HuIY4WjIjEBS0MHTo4NO9TZ3LRbFW
-         TNpg==
+        bh=GTzYOcv7GXMsuudeRCCVKvQE4p4RTznbhZKVu0xYKUU=;
+        b=km30WDN3p/x6O1LN4IM4fy77QF1NVRUPK5sP06Gal6+QGtjqpUUYFI0ArnBEImqtBx
+         AuUANxaE5TNvqfzwlIxrjFaBsxfD6p1eT/U6KemlwxP4SBJRnkOXwocKlRobPiXwphiK
+         nnKNx8a17oUYe1aBF9xVYjEfT0JHyVlsyWpuNHWRttKft7eHMogyjA4hHEpDixYozui/
+         Yp9HWHVmMbUx0pUgEzC7X+43ukc3qPqWPrcwKNA92/m1IkWkKcYC2169qQXVTznVDh9C
+         8FdQ3N0QnfLfiyMM1qnRw3/LhI95W2mPf5Ae8J85boc7Vk+qIFVR2qqDY1HLZcu21xTg
+         Tx+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=94qtwsHdBUcVzdr14fQH4QqeaELVSejvb9k+dDp4o2k=;
-        b=p96UbQyolJtXZHYWZ0/Q7KRDnL7fTR+VbaDAbC3BI6AOPvy/mubI34jrgBq+/P81Z9
-         BXOGPpLWeSa/artrIBZZxRCHrB0Tx9BpjdQ4bNVRzI+DnDzB8lGOlbM7dfOmnaNby7jh
-         liEG5YF7ywWlC5m4/7w2G12Y+CU/SuVV60Z/EB4WjTOlmObNcp5f5nBt7PfUg0GslfMY
-         89zzFymXWvx7+ojHU6D4D1uISyXCFaexzALNzk6vaMWSRbYz70w8qz6mPHSMupx3nHu1
-         A84L/L7ZwwyhL86lYhI/u3CVJkySu2kVbMpFB5GeRcbckFQYAltMI1gTfmltUCv3HlBi
-         WxFg==
-X-Gm-Message-State: AOAM5320YsXGpGMdjJHyTP64N6X9EnUYOEBfJMaljl6/XHlJER8cZr5S
-        HJflzt6ZB+Wp2NBeKNAcDYvoiAbyhnE=
-X-Google-Smtp-Source: ABdhPJzMp2m1CIOe5Z9utqdinpuLznocfHk1h5+AWYqs9CoFg7FElyyIpiFD9TM9L0u194BTWXvhUw==
-X-Received: by 2002:a62:8449:0:b0:4ad:56ba:2f1d with SMTP id k70-20020a628449000000b004ad56ba2f1dmr4928492pfd.37.1638961733585;
-        Wed, 08 Dec 2021 03:08:53 -0800 (PST)
+        bh=GTzYOcv7GXMsuudeRCCVKvQE4p4RTznbhZKVu0xYKUU=;
+        b=rk51IO8Z2pFsBJOZLXmcVFC8a57RB3cRfZa2SI6WsMsg2WmcPL+0JVaNmZ1zGc8NLp
+         GdrI/oPD7D8OCgjfdrck/x4Tx/VYKmKBdO1twosKy7DfNK7xf8jhUm7ZvNSed6jEg11R
+         uLrHCPvpAWGj6rHSGoYJRuUGfJXvTQxv73jgdjE93USAlG+x4mCFnvDMAMSw4Uo2qe+z
+         9eVFe0YGnI7nXD3h6tg6pkj/fkFbpQDjOal0IB/+ff5qsE1cAlMVlFUhWzLUNwsR7OlQ
+         Wp0WuodVosiek0whQIUvik+6PBMWB6AyE2iBIqVGoUl2GX/U1VycFkLpw3FIQMCF4KmS
+         qj9A==
+X-Gm-Message-State: AOAM533wl+Tb82663nCre/EVHuAxNpTYjjD+XHKg/0iKUeS+OuW+k1Dv
+        zN0+GRS3ANTeEEbkf7VTYGYk+s5dd7o=
+X-Google-Smtp-Source: ABdhPJyG8RspzExM0YLJHIGBovB6b/ZNv9oPLLxl7bIY/uiUpBpyPdvWlt/3qAb05wwKy/zxp0w/Lw==
+X-Received: by 2002:a05:6a00:ad0:b0:4a3:1056:e2ae with SMTP id c16-20020a056a000ad000b004a31056e2aemr4931125pfl.2.1638961739024;
+        Wed, 08 Dec 2021 03:08:59 -0800 (PST)
 Received: from localhost ([47.251.3.230])
-        by smtp.gmail.com with ESMTPSA id d3sm3454696pfv.57.2021.12.08.03.08.52
+        by smtp.gmail.com with ESMTPSA id gc22sm5791712pjb.57.2021.12.08.03.08.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Dec 2021 03:08:53 -0800 (PST)
+        Wed, 08 Dec 2021 03:08:58 -0800 (PST)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
@@ -57,9 +57,9 @@ Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH 05/11] x86/entry: Move cld to the start of idtentry
-Date:   Wed,  8 Dec 2021 19:08:27 +0800
-Message-Id: <20211208110833.65366-6-jiangshanlai@gmail.com>
+Subject: [PATCH 06/11] x86/entry: Don't call error_entry for XENPV
+Date:   Wed,  8 Dec 2021 19:08:28 +0800
+Message-Id: <20211208110833.65366-7-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20211208110833.65366-1-jiangshanlai@gmail.com>
 References: <20211208110833.65366-1-jiangshanlai@gmail.com>
@@ -71,82 +71,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Make it next to CLAC
+When in XENPV, it is already in the task stack, and it can't fault
+for native_iret() nor native_load_gs_index() since XENPV uses its own
+pvops for iret and load_gs_index().  And it doesn't need to switch CR3.
+So there is no reason to call error_entry() in XENPV.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 ---
- arch/x86/entry/entry_64.S | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/x86/entry/entry_64.S | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 72ceb4b70822..ee1d4adcdab0 100644
+index ee1d4adcdab0..383070aa9272 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -356,6 +356,7 @@ SYM_CODE_END(ret_from_fork)
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
- 	ASM_CLAC
-+	cld
+@@ -325,8 +325,17 @@ SYM_CODE_END(ret_from_fork)
+ 	PUSH_AND_CLEAR_REGS
+ 	ENCODE_FRAME_POINTER
  
- 	.if \has_error_code == 0
- 		pushq	$-1			/* ORIG_RAX: no syscall to restart */
-@@ -423,6 +424,7 @@ SYM_CODE_END(\asmsym)
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS
- 	ASM_CLAC
-+	cld
+-	call	error_entry
+-	movq	%rax, %rsp			/* switch stack settled by sync_regs() */
++	/*
++	 * Call error_entry and switch stack settled by sync_regs().
++	 *
++	 * When in XENPV, it is already in the task stack, and it can't fault
++	 * for native_iret() nor native_load_gs_index() since XENPV uses its
++	 * own pvops for iret and load_gs_index().  And it doesn't need to
++	 * switch CR3.  So it can skip invoking error_entry().
++	 */
++	ALTERNATIVE "call error_entry; movq %rax, %rsp", \
++		"", X86_FEATURE_XENPV
++
+ 	ENCODE_FRAME_POINTER
+ 	UNWIND_HINT_REGS
  
- 	pushq	$-1			/* ORIG_RAX: no syscall to restart */
- 
-@@ -478,6 +480,7 @@ SYM_CODE_END(\asmsym)
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS
- 	ASM_CLAC
-+	cld
- 
- 	/*
- 	 * If the entry is from userspace, switch stacks and treat it as
-@@ -539,6 +542,7 @@ SYM_CODE_END(\asmsym)
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS offset=8
- 	ASM_CLAC
-+	cld
- 
- 	/* paranoid_entry returns GS information for paranoid_exit in EBX. */
- 	call	paranoid_entry
-@@ -853,7 +857,6 @@ SYM_CODE_END(xen_failsafe_callback)
-  */
- SYM_CODE_START_LOCAL(paranoid_entry)
- 	UNWIND_HINT_FUNC
--	cld
- 	PUSH_AND_CLEAR_REGS save_ret=1
- 	ENCODE_FRAME_POINTER 8
- 
-@@ -971,7 +974,6 @@ SYM_CODE_END(paranoid_exit)
-  */
- SYM_CODE_START_LOCAL(error_entry)
- 	UNWIND_HINT_FUNC
--	cld
- 	testb	$3, CS+8(%rsp)
- 	jz	.Lerror_kernelspace
- 
-@@ -1104,6 +1106,7 @@ SYM_CODE_START(asm_exc_nmi)
- 	 */
- 
- 	ASM_CLAC
-+	cld
- 
- 	/* Use %rdx as our temp variable throughout */
- 	pushq	%rdx
-@@ -1123,7 +1126,6 @@ SYM_CODE_START(asm_exc_nmi)
- 	 */
- 
- 	swapgs
--	cld
- 	FENCE_SWAPGS_USER_ENTRY
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdx
- 	movq	%rsp, %rdx
 -- 
 2.19.1.6.gb485710b
 

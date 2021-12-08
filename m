@@ -2,79 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F97946CCD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC7F46CCE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbhLHFNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:13:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
+        id S231791AbhLHFUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 00:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbhLHFNm (ORCPT
+        with ESMTP id S229578AbhLHFUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:13:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F60C061574;
-        Tue,  7 Dec 2021 21:10:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17DBFB81F77;
-        Wed,  8 Dec 2021 05:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC600C00446;
-        Wed,  8 Dec 2021 05:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638940208;
-        bh=xST+sHP1UDvvtYZEnXeAwVG5Pu5fxpKjXr0ifZOX9qM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=h/tnU65s0BdafBVI9+vquWn3RquNsTDSEsys9Vt/J0V5gP1spnhqcpz/QLjEWP0/o
-         tPpHm2R6r/R4cL8TaSPzWh4seK2ZRUMoSa0c5SZNtI3H2LsQHT9a66NlyMC1W1XAIZ
-         aF9Scc4d/tMUaQEow6yCMDJ+BbHmcjGr5D+ojVOl7zG9pLZJ4gszvR8G1LBVm3rXov
-         ID3bV7upzOJfy9dPyRIT1YR/Jy2kNZwY5eNdzhdDHkH/403+Ys+JLGdBicmdA1Y3EV
-         lBTlhmTGA0SWEejQH71jQQ9GxqoF3ttsn2tamLRwsxgyOdhsXymTiIU0XoRIbPER23
-         NTRmettfusnGg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 997AF60A53;
-        Wed,  8 Dec 2021 05:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 8 Dec 2021 00:20:08 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9897CC061574;
+        Tue,  7 Dec 2021 21:16:37 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id m19so817583vko.12;
+        Tue, 07 Dec 2021 21:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k4TgxotWqQC+UlMjLdxFb8gJ1bUTmHEtBJSUoVsJhbA=;
+        b=dVBGqtg8koZ9wqmjjuaZvkBfXkRf/kw1KsZepp29Q8qDovegqcg9NxXyMW6CoR7OSm
+         b2P9yP7Pb+VfvrbkouXsZMzxmewSEVJhhvx4If4eAkek0wNCAtX5pqwsNCIS7PSuhTvj
+         MpkvE9zG+deiW7rnuk2CvcIDcQ+AtMcePhtzm3B04gQBdE1bezQ1SJ8QzW1aMrUqxeU8
+         MDgUmyhVWk+K/KUTD8hkIB+gkkHm+Hm3sui05dDYPKldSe3gTIY7ySrronq3JsMvfL5x
+         db6M4IeoB/h6jOexLFMfirmWrFtvLPUShEKeEGrYhKI5QKl8DkXpk1JnCOmNQ1Vcah4S
+         G86Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k4TgxotWqQC+UlMjLdxFb8gJ1bUTmHEtBJSUoVsJhbA=;
+        b=bDH7pTQtK0ELfp1ZXwBYnsh7Qr6019KbszQybpXB3WPcHPOPAVo9p96tIF4hsCXlOp
+         TFp0y0vGyqUjDLNLwvj3xyGJwhC0qGo5EwrWQA+mpbwRUON/PjIjgaYFk0kuwWB1lQko
+         n6Ah39cT/VHSxvdcyKkDW9jcfXYoBa8GSG59T25PfHAbx3X7X2mcRL0+T83gkBX21wIh
+         6F/CIo/r3QQLuQhMe9c150NMaB3LrncJ5iOFpXG8tTQK3xsyBiYO1+IO1DO40wNWn5B/
+         ZeHIALCgcTelWxplwf1S+C4jIBvD8fGt9Bkg3QJztvL6wfTUiA/Hy8hibSxVHjmHg/ys
+         ZyZA==
+X-Gm-Message-State: AOAM533tEpCLjk87BeeLHiNjakQd/lSZhDo5FceUnyYNGEqC0MIEBQ18
+        m/byiXO+nlUWzjTvj7YiQ6EsFLyGb+l9VwWgUos=
+X-Google-Smtp-Source: ABdhPJy5g05zqhLHrO7v+lI4QlKgKpZEKYc8OgtA3+ilRbrq9uHuXaijZGY1/p2g4C3MzOnNU8lJIXaD1kawd4yGmzc=
+X-Received: by 2002:a05:6122:21a2:: with SMTP id j34mr60403060vkd.17.1638940596668;
+ Tue, 07 Dec 2021 21:16:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] gve: fix for null pointer dereference.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163894020862.28255.17651952704191745484.git-patchwork-notify@kernel.org>
-Date:   Wed, 08 Dec 2021 05:10:08 +0000
-References: <20211205183810.8299-1-amhamza.mgc@gmail.com>
-In-Reply-To: <20211205183810.8299-1-amhamza.mgc@gmail.com>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     jeroendb@google.com, csully@google.com, awogbemila@google.com,
-        davem@davemloft.net, kuba@kernel.org, bcf@google.com,
-        willemb@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20211111220206.121610-1-jim.cromie@gmail.com> <20211111220206.121610-9-jim.cromie@gmail.com>
+ <20211112114953.GA1381@axis.com>
+In-Reply-To: <20211112114953.GA1381@axis.com>
+From:   jim.cromie@gmail.com
+Date:   Tue, 7 Dec 2021 22:16:10 -0700
+Message-ID: <CAJfuBxxnuXAR7Jgn74MNQC7MLRc0xcDLw1cCidUJ9Xyar+O_2g@mail.gmail.com>
+Subject: Re: [PATCH v10 08/10] dyndbg: add print-to-tracefs, selftest with it
+ - RFC
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>, robdclark@gmail.com,
+        Sean Paul <sean@poorly.run>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>, lyude@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        mathieu.desnoyers@efficios.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        quic_saipraka@quicinc.com, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        quic_psodagud@quicinc.com, maz@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Nov 12, 2021 at 4:49 AM Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> On Thu, Nov 11, 2021 at 03:02:04PM -0700, Jim Cromie wrote:
+> > Dynamic-Debug can do 2nd exceedingly well:
+> >
+> > A- all work is behind jump-label's NOOP, zero off cost.
+> > B- exact site selectivity, precisely the useful traffic.
+> >    can tailor enabled set interactively, at shell.
+> >
+> > Since the tracefs interface is effective for drm (the threads suggest
+> > so), adding that interface to dynamic-debug has real potential for
+> > everyone including drm.
+> >
+> > Add a new +T flag to enable tracing, independent of +p, and add and
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+>
+> I posted a patchset a while ago to do something very similar, but that
+> got stalled for some reason and I unfortunately didn't follow it up:
+>
+>  https://lore.kernel.org/lkml/20200825153338.17061-1-vincent.whitchurch@axis.com/
+>
+> A key difference between that patchset and this patch (besides that
+> small fact that I used +x instead of +T) was that my patchset allowed
+> the dyndbg trace to be emitted to the main buffer and did not force them
+> to be in an instance-specific buffer.
+>
+> That feature is quite important at least for my use case since I often
+> use dyndbg combined with function tracing, and the latter doesn't work
+> on non-main instances according to Documentation/trace/ftrace.rst.
+>
+> For example, here's a random example of a bootargs from one of my recent
+> debugging sessions:
+>
+>  trace_event=printk:* ftrace_filter=_mmc*,mmc*,sd*,dw_mci*,mci*
+>  ftrace=function trace_buf_size=20M dyndbg="file drivers/mmc/* +x"
+>
 
-On Sun,  5 Dec 2021 23:38:10 +0500 you wrote:
-> Avoid passing NULL skb to __skb_put() function call if
-> napi_alloc_skb() returns NULL.
-> 
-> Addresses-Coverity: 1494144 (Dereference NULL return value)
-> 
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-> 
-> [...]
+Hi Vincent,
 
-Here is the summary with links:
-  - [v2] gve: fix for null pointer dereference.
-    https://git.kernel.org/netdev/net/c/e6f60c51f043
+are you planning to dust this patchset off and resubmit it ?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Ive been playing with it and learning ftrace (decade+ late),
+I found your boot-line example very helpful as 1st steps
+(still havent even tried the filtering)
 
 
+with these adjustments (voiced partly to test my understanding)
+I would support it, and rework my patchset to use it.
+
+- change flag to -e, good mnemonics for event/trace-event
+   T is good too, but uppercase, no need to go there.
+
+- include/trace/events/dyndbg.h - separate file, not mixed with print.h
+  dyndbg class, so trace_event=dyndbg:*
+
+- 1 event type per pr_debug, dev_dbg, netdev_dbg ? ibdev_dbg ?
+  with the extra args: descriptor that Steven wanted,
+  probably also struct <|net|ib>dev
+
+If youre too busy for a while, I'd eventually take a (slow) run at it.

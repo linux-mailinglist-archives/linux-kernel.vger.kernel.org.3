@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DB446D508
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2678146D518
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbhLHOJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbhLHOJR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:09:17 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D16C061746;
-        Wed,  8 Dec 2021 06:05:45 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u1so4215015wru.13;
-        Wed, 08 Dec 2021 06:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FmTOFqjVxki8cZU+aa74RnBASpfg0MyIeQg/J9RS4VA=;
-        b=Mo8uxOCQye+dU+DdDSe/z/0E9dnG2Lq8RHqJ81XtKalNKURqbSDidM4yMulADErNxA
-         J1t7OYKUpv6tjN8pCY/Rxy6+gmDguyOiB0bf5pMzZJNuCWUap61QqOxFbtiM0pwVLVnQ
-         kJ/78oIPsvhVdupxq7h1uuS+7Ht9yRWElUFazJSUoipkql7FknoI0GRL+K3ED/+qfR3w
-         c7Xo6/kg5bXihrx6Ig9rmzTMfDtQmSb4Ad3EzsYW4r4jg3H9OyOh9IT7h4ss83/s+zKh
-         atliYmbmaWnU67CuwIl5RRv/2Rlnn5F8Z4KQeGamYg5yuQ3+tOwb50SWQRQb/49DCgN9
-         mLbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FmTOFqjVxki8cZU+aa74RnBASpfg0MyIeQg/J9RS4VA=;
-        b=hfuk45wm+TG6HCN2jXWsNaKPkWKlPBT6oUKZYtcUfRo7NjvyHtMkVDV4haWbCnpWfv
-         hP+rS17ACUy9Id4TO6UzD0H32cuKf+2QmvcO3V7x1wPY1DsZX3irz4v8Rpserg25eWT1
-         V6k4g1g+jwLc+pjO4ATejhbufeJOPdh3OfWJUvHm845kMo9DRow1+tr83bsnr39J7VVl
-         dTEgYuP8RZPI2WakTHrK03utARlCkqeCfWfJxAU/VZ2mE8NaPAtIDXxpOuTbg5qv91w8
-         BUFqcQUUMRB8MbwUKIAjKLGNbjGLZ/H5746Zn1hRaJ0qaa1Juoj1VNPrYgBKYupq/BC5
-         Jm6Q==
-X-Gm-Message-State: AOAM532EhkJ04f5b+aE1BUgzkm3Wd9CNL4LJra/8OwL159Um+3XCdrx+
-        8BSQP4L72WWtuEWrZkiAQWqgDCS1tJ4CfA==
-X-Google-Smtp-Source: ABdhPJwm6JslislsBSA3HkfvknWC762P26cTQK0RAd3fGuv8kwgqsqVQBWS7h11Zw1VwIURSu8iUMA==
-X-Received: by 2002:adf:a412:: with SMTP id d18mr59823794wra.529.1638972343630;
-        Wed, 08 Dec 2021 06:05:43 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id z5sm7434049wmp.26.2021.12.08.06.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:05:42 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] misc: sram: Add compatible string for Tegra234 SYSRAM
-Date:   Wed,  8 Dec 2021 15:05:41 +0100
-Message-Id: <20211208140541.520238-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S234746AbhLHOLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:11:06 -0500
+Received: from mga04.intel.com ([192.55.52.120]:20809 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231363AbhLHOLF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:11:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="236574216"
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="236574216"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 06:07:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="479908986"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2021 06:07:28 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B8E7Quc009548;
+        Wed, 8 Dec 2021 14:07:26 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v4 net-next 0/9] net: intel: napi_alloc_skb() vs metadata
+Date:   Wed,  8 Dec 2021 15:06:53 +0100
+Message-Id: <20211208140702.642741-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+This is an interpolation of [0] to other Intel Ethernet drivers
+(and is (re)based on its code).
+The main aim is to keep XDP metadata not only in case with
+build_skb(), but also when we do napi_alloc_skb() + memcpy().
 
-We want to use the same behavior as on Tegra186 and Tegra194, so add
-this the compatible string for Tegra234 SYSRAM to the list.
+All Intel drivers suffers from the same here:
+ - metadata gets lost on XDP_PASS in legacy-rx;
+ - excessive headroom allocation on XSK Rx to skbs;
+ - metadata gets lost on XSK Rx to skbs.
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/misc/sram.c | 1 +
- 1 file changed, 1 insertion(+)
+Those get especially actual in XDP Hints upcoming.
+I couldn't have addressed the first one for all Intel drivers due to
+that they don't reserve any headroom for now in legacy-rx mode even
+with XDP enabled. This is hugely wrong, but requires quite a bunch
+of work and a separate series. Luckily, ice doesn't suffer from
+that.
+igc has 1 and 3 already fixed in [0].
 
-diff --git a/drivers/misc/sram.c b/drivers/misc/sram.c
-index 4c26b19f5154..f0e7f02605eb 100644
---- a/drivers/misc/sram.c
-+++ b/drivers/misc/sram.c
-@@ -371,6 +371,7 @@ static const struct of_device_id sram_dt_ids[] = {
- 	{ .compatible = "atmel,sama5d2-securam", .data = &atmel_securam_config },
- 	{ .compatible = "nvidia,tegra186-sysram", .data = &tegra_sysram_config },
- 	{ .compatible = "nvidia,tegra194-sysram", .data = &tegra_sysram_config },
-+	{ .compatible = "nvidia,tegra234-sysram", .data = &tegra_sysram_config },
- 	{}
- };
- 
+From v3 ([1]):
+ - fix driver name and ixgbe_construct_skb() function name in the
+   commit message of #9 (Jesper);
+ - no functional changes.
+
+From v2 (unreleased upstream):
+ - tweaked 007 to pass bi->xdp directly and simplify code (Maciej);
+ - picked Michal's Reviewed-by.
+
+From v1 (unreleased upstream):
+ - drop "fixes" of legacy-rx for i40e, igb and ixgbe since they have
+   another flaw regarding headroom (see above);
+ - drop igc cosmetic fixes since they landed upstream incorporated
+   into Jesper's commits;
+ - picked one Acked-by from Maciej.
+
+[0] https://lore.kernel.org/netdev/163700856423.565980.10162564921347693758.stgit@firesoul
+[1] https://lore.kernel.org/netdev/20211207205536.563550-1-alexandr.lobakin@intel.com
+
+Alexander Lobakin (9):
+  i40e: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  i40e: respect metadata on XSK Rx to skb
+  ice: respect metadata in legacy-rx/ice_construct_skb()
+  ice: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  ice: respect metadata on XSK Rx to skb
+  igc: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  ixgbe: pass bi->xdp to ixgbe_construct_skb_zc() directly
+  ixgbe: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+  ixgbe: respect metadata on XSK Rx to skb
+
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c   | 16 +++++++-----
+ drivers/net/ethernet/intel/ice/ice_txrx.c    | 15 ++++++++---
+ drivers/net/ethernet/intel/ice/ice_xsk.c     | 16 +++++++-----
+ drivers/net/ethernet/intel/igc/igc_main.c    | 13 +++++-----
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 27 ++++++++++++--------
+ 5 files changed, 54 insertions(+), 33 deletions(-)
+
 -- 
-2.34.1
+Testing hints:
+
+Setup an XDP and AF_XDP program which will prepend metadata at the
+front of the frames and return XDP_PASS, then check that metadata
+is present after frames reach kernel network stack.
+--
+2.33.1
 

@@ -2,218 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B365246C965
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A1646C969
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbhLHAmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242978AbhLHAmH (ORCPT
+        id S229918AbhLHAoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:44:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41290 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229479AbhLHAoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:42:07 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33398C061D60;
-        Tue,  7 Dec 2021 16:38:25 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y8so435197plg.1;
-        Tue, 07 Dec 2021 16:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JUJ+46P2lZKqa9GcjTNExLZ59H82MAk46ZsUw+ykybM=;
-        b=kQ0dGckuvSlzfYtts51242F5CMsaON2/XWosifujj1OMevtvE8s8o+x2hEmyqjR296
-         Rjo8XuMSfhfnNDstj9x5usYa45ihtX+adV+5Pa4VEDUceF1kS22LYEM4ntE86YdxyFcu
-         NvAE38uaWoOH1b50xOQgJ0B/iK4/DE6Kgagwgh1hF09m6qCgpR6c+qBigjztEEDtQstm
-         j6ujntMmtpLHaJCjrd7XkgJvZldlYqvqGUtw/71SPXAD/cujUmMav3y9gpQsPSah/lqZ
-         yp27+NOYeTenDiIYk2izEbfGLyFHrZriZmjY0ZWghbmeSZlQKTslVxSWFSLxND0sXaPs
-         g8Ww==
+        Tue, 7 Dec 2021 19:44:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638924037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I5eY0me2wOSy2UVkmg3afLHAZnrnZAUcXyHGjuGOesc=;
+        b=hhcNL0kr4o0J+wt7+2dGL9J2pndkTFTYvGEjYhLITS0T4gMmdcRAor8n9vdX/vOxXon6qo
+        EpiUl/3f4guz76SyxcZWICZCVIroQdd0gfjrLiZk1Ugaw7onSdmEp4fW0wnanriPFGK50T
+        5XTX1i8ZBplfRFCnNS9k8OLIa8/o2jU=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-METpsH0wN5O6vmyF1f5Zqg-1; Tue, 07 Dec 2021 19:40:36 -0500
+X-MC-Unique: METpsH0wN5O6vmyF1f5Zqg-1
+Received: by mail-io1-f72.google.com with SMTP id h16-20020a056602155000b005ec7daa8de5so1134574iow.16
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 16:40:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JUJ+46P2lZKqa9GcjTNExLZ59H82MAk46ZsUw+ykybM=;
-        b=nPj6y7YW8as83Pf7zs/sJoTPQCzUjr/IuDAi8V/I5H0/bhnmM5NulxMZgeLGgezn9u
-         xtUps364jIf5+MkdAVduR4s8psr0D6BQKLUlAZZ6ZUY6us5/QgSX9lt6sgVgPMiTeaC3
-         fT8NSTl7FonwHhuw39tx7hJCGVfVUsYpWndjNd/ak4bNB197Tard8cb1PZPjxWqjrFCs
-         Yi6M8F9WoAY2afPEXn/guCEjitsLgOWqOHA/Ho5fyTcNtkYsrTedfZte7yKgK+Ad0R2K
-         dPnkywgkGHPehU5MODOoJqtmMu/1N9GZCxFRbZL3D9G8gAJiFic9fKsE0C7eI97ChvrU
-         coUQ==
-X-Gm-Message-State: AOAM530Lxx+Um+mu70rUCaNQSXHBkXJQBoQRbqTUUvmVtZNbVcmPk4pc
-        SY0catwDVQjOeq0L8BcheraMEZD9fkE=
-X-Google-Smtp-Source: ABdhPJzVbER2RheX/nv5rcxYawrN9DtJW3SXUAwEk5X0CPHTSNXtz/nbDTEHH763N0Nyw1JfyW5MFA==
-X-Received: by 2002:a17:90b:1c8d:: with SMTP id oo13mr3064193pjb.239.1638923904298;
-        Tue, 07 Dec 2021 16:38:24 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:38:23 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
-        ARCHITECTURE), Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE),
-        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
-        DIGITAL (SD) AND...),
-        linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-crypto@vger.kernel.org (open list:HARDWARE RANDOM NUMBER
-        GENERATOR CORE),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v3 15/15] dt-bindings: usb: Convert BDC to YAML
-Date:   Tue,  7 Dec 2021 16:37:26 -0800
-Message-Id: <20211208003727.3596577-16-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211208003727.3596577-1-f.fainelli@gmail.com>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I5eY0me2wOSy2UVkmg3afLHAZnrnZAUcXyHGjuGOesc=;
+        b=oWYCawUNYFl5g9krh47dIDjXU+6qBB2F4qyP2YSQMmoE76OGijSLAHXOIIk0CHpv1x
+         CiW553cp77yKwh6k7Fh0bXQz9LH2Udrf31p6Zut2b3n4czz+FXpWgsK9gMof5SemQZC1
+         MhIZ+oAHwwOJkwXu9Tpn4bJuLjA62VMVda6LV0I3/FHwIDOLYN549m+Ghclz1zyS9UYg
+         xeYrFYh3wqpxkAcqs/UzOaFhpxx34CVVBrPs0CJDdz3h6ZMxHVrpM/1elXxC1XkUvnIN
+         Fbk6865QM/rN5fDM3xQ1PoJ+OW31sHNu+lGHTHVQWtDSYVbkCH14q9/N1DcEC+y5IrXS
+         xgQw==
+X-Gm-Message-State: AOAM533wRqz0PQugDmSoVsWovpBk1ZUT4BbBJ8gqYtIymmLjdGOa2TW9
+        9fi3+SolZxVTzdgECiWuWOqVI4CljJ3zQ2xtNOy6c7hY8jxt/IdXIZepPExuPWLoFDDy8JWEDTg
+        3q2cVYvFqFX8JVXt8jIXh0y7d
+X-Received: by 2002:a05:6638:2512:: with SMTP id v18mr53173318jat.22.1638924035641;
+        Tue, 07 Dec 2021 16:40:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwjIKfcGrLuNYNhWA+x0K0f3bghJsRqm7e/4zb9+yPA9WYo7XgEUAmx9G3AFdnuu/7SxsdU4Q==
+X-Received: by 2002:a05:6638:2512:: with SMTP id v18mr53173290jat.22.1638924035075;
+        Tue, 07 Dec 2021 16:40:35 -0800 (PST)
+Received: from ?IPV6:2601:280:4400:a2e0:7336:512c:930d:4f0e? ([2601:280:4400:a2e0:7336:512c:930d:4f0e])
+        by smtp.gmail.com with ESMTPSA id b6sm819791ilq.18.2021.12.07.16.40.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 16:40:34 -0800 (PST)
+Message-ID: <4c4b4db2-27b9-6001-5bae-ccc500695b42@redhat.com>
+Date:   Tue, 7 Dec 2021 19:40:33 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/1] mm/vmscan.c: Prevent allocating shrinker_info on
+ offlined nodes
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        shakeelb@google.com, ktkhai@virtuozzo.com, shy828301@gmail.com,
+        guro@fb.com, vbabka@suse.cz, vdavydov.dev@gmail.com,
+        raquini@redhat.com, mhocko@suse.com, david@redhat.com
+References: <20211207224013.880775-1-npache@redhat.com>
+ <20211207224013.880775-2-npache@redhat.com>
+ <20211207154438.c1e49a3f0b5ebc9245aac61b@linux-foundation.org>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <20211207154438.c1e49a3f0b5ebc9245aac61b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom BDC device controller Device Tree binding to YAML
-to help with validation.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- .../devicetree/bindings/usb/brcm,bdc.txt      | 29 ------------
- .../devicetree/bindings/usb/brcm,bdc.yaml     | 46 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 47 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
- create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.txt b/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-deleted file mode 100644
-index c9f52b97cef1..000000000000
---- a/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Broadcom USB Device Controller (BDC)
--====================================
--
--Required properties:
--
--- compatible: must be one of:
--                "brcm,bdc-udc-v2"
--                "brcm,bdc"
--- reg: the base register address and length
--- interrupts: the interrupt line for this controller
--
--Optional properties:
--
--On Broadcom STB platforms, these properties are required:
--
--- phys: phandle to one or two USB PHY blocks
--        NOTE: Some SoC's have a single phy and some have
--        USB 2.0 and USB 3.0 phys
--- clocks: phandle to the functional clock of this block
--
--Example:
--
--        bdc@f0b02000 {
--                compatible = "brcm,bdc-udc-v2";
--                reg = <0xf0b02000 0xfc4>;
--                interrupts = <0x0 0x60 0x0>;
--                phys = <&usbphy_0 0x0>;
--                clocks = <&sw_usbd>;
--        };
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-new file mode 100644
-index 000000000000..48831b62ab31
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/brcm,bdc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom USB Device Controller (BDC)
-+
-+maintainers:
-+  - Al Cooper <alcooperx@gmail.com>
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bdc-udc-v2
-+          - brcm,bdc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+
-+  phys:
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        bdc@f0b02000 {
-+                compatible = "brcm,bdc-udc-v2";
-+                reg = <0xf0b02000 0xfc4>;
-+                interrupts = <0x0 0x60 0x0>;
-+                phys = <&usbphy_0 0x0>;
-+                clocks = <&sw_usbd>;
-+        };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2109b6fe8ea3..b18c7fa42a4f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3679,7 +3679,7 @@ M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-usb@vger.kernel.org
- L:	bcm-kernel-feedback-list@broadcom.com
- S:	Maintained
--F:	Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+F:	Documentation/devicetree/bindings/usb/brcm,bdc.yaml
- F:	drivers/usb/gadget/udc/bdc/
- 
- BROADCOM BMIPS CPUFREQ DRIVER
--- 
-2.25.1
+On 12/7/21 18:44, Andrew Morton wrote:
+> On Tue,  7 Dec 2021 17:40:13 -0500 Nico Pache <npache@redhat.com> wrote:
+> 
+>> We have run into a panic caused by a shrinker allocation being attempted
+>> on an offlined node.
+>>
+>> Our crash analysis has determined that the issue originates from trying
+>> to allocate pages on an offlined node in expand_one_shrinker_info. This
+>> function makes the incorrect assumption that we can allocate on any node.
+>> To correct this we make sure the node is online before tempting an
+>> allocation. If it is not online choose the closest node.
+> 
+> This isn't fully accurate, is it?  We could allocate on a node which is
+> presently offline but which was previously onlined, by testing
+> NODE_DATA(nid).
+
+Thanks for the review! I took your changes below into consideration for my V3.
+
+My knowledge of offlined/onlined nodes is quite limited but after looking into
+it it doesnt seem like anything clears the state of NODE_DATA(nid) after a
+try_offline_node is attempted. So theoretically the panic we saw would not
+happen. What is the expected behavior of trying to allocate a page on a offline
+node?
+
+> 
+> It isn't entirely clear to me from the v1 discussion why this approach
+> isn't being taken?
+> 
+> AFAICT the proposed patch is *already* taking this approach, by having
+> no protection against a concurrent or subsequent node offlining?
+> 
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -222,13 +222,16 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+>>  	int size = map_size + defer_size;
+>>  
+>>  	for_each_node(nid) {
+>> +		int tmp = nid;
+> 
+> Not `tmp', please.  Better to use an identifier which explains the
+> variable's use.  target_nid?
+> 
+> And a newline after defining locals, please.
+> 
+>>  		pn = memcg->nodeinfo[nid];
+>>  		old = shrinker_info_protected(memcg, nid);
+>>  		/* Not yet online memcg */
+>>  		if (!old)
+>>  			return 0;
+>>  
+>> -		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
+>> +		if(!node_online(nid))
+> 
+> s/if(/if (/
+> 
+>> +			tmp = numa_mem_id();
+>> +		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, tmp);
+>>  		if (!new)
+>>  			return -ENOMEM;
+>>  
+> 
+> And a code comment fully explaining what's going on here?
+> 
 

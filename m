@@ -2,391 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D7E46D95B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D111046D986
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbhLHRSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:18:20 -0500
-Received: from mail-bn8nam12on2046.outbound.protection.outlook.com ([40.107.237.46]:39073
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S237879AbhLHRW5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Dec 2021 12:22:57 -0500
+Received: from mail-eopbgr120045.outbound.protection.outlook.com ([40.107.12.45]:25850
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234490AbhLHRST (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:18:19 -0500
+        id S234845AbhLHRVv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 12:21:51 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GPGA5iA8bCWDLHjZxLEFocOCfWKFQ0wlpcVkOsP/vWnAtdSY6wQAhxSdY/pewKZFktjFM0b7NXKXgNMJDCHjJaS6gS4WOsLONDFUE/jgP6NLiSK+lyJrWum/+THl4aQHuInPpB4RclmgkKjpeIajV4IeD3vufuRNwhh8WTVKcsv53yyEf61Q4SuP06CpgFEN7VkR5UnTAr1alq5PjxbBz4QvZutTri1WVK4JhcPFN+mROindGv1Cplsis8SMHk2olvKzEKGlJBAakVYQj/ZDDksr9LCFoaCmQU5LIyiAJ+dG1OECicb1CIt6o1uKyuqEq1uEm79iiBjKHocQp9gWSw==
+ b=TvfIuj6XLntxsQhUMOwcqc8s7Vo12YjsGFO7wxtVGUqHeSUsHdbkJCt1/fSO4XBHFYxWZUBc7A8SlzAjop1c6rJvKIr1AupAxrW3RGlSFb4ujZogLUG+pFNiGif7Ep1OnkZgz3XtoCwZN4iSMybd1auAp9Bjh8yk3xzVqBUi7UIU7BlxKBPRKga1IUuoHR+gy9qpvQ1Rot3uBEDiIt2s8cj8z5uPqsONKVBtNcvUsIquZI9ggxyQu6OMss0e8VA3231zx92BjutVAqbnYgm+Bs82qssbWqedijs5w+ou3kcdKToX0ZEBc/oUWD7rYhm5e2X0f1KVImX5NTG52a36vw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oc7aP45eZR66I71CVOZvxmegxINBc1qO6H43QrEnOFA=;
- b=EOC//fw7IciaDnNjEYHDonTyitlsfOui5wg1Smx08iOz8V/Wogemt8vH2d2iu4Jh7uK5/DRyxStswNdGcXYCrNhoMTyoJQ8NTahzcNPIjWBv7OJpivEqu8XuXMnwH3hVyUuFbGfCOJCEfjzohh9X3j3MJSdNRDn21JpvDJXDlc8iTxqe1FeoBc+G65K4ZW9n7i9CfTHXArJye6sH12QjpjmH4Dal6GzVPNdKpZgQZAbQSC/zU6prNXGYf7FG+anXGXEu3lJWVFCsjHpYRv1HRX7wsuaLGn+/L3lZjIRFeQC5l4Nq7hWDIShpiZwoVlMpsf2F1fA34RwwoWhVQfit/w==
+ bh=7vbiVBTJEobY9e+IVs/nlsYXfKIAmFcHorRmD9PDUls=;
+ b=XnqL+8k6Skj8XgsH1T9rDT7YMvgFQ2cboj1kyu0xfnYHEzibvCN8uJE8kGhrBrr58Pt7kxxUcMDMFDf90+G9XcoJzKzFZ+gKQulTOtgfqbjC9pQEiIILqohEdrVxnsNQQNmEeEKbMMScNOWxxHYBgViWkb4+DGdzstCQ16Longy3yzacsKF4wK5sxWcJTXqaOpDDOSlucgIaFvzLgnY2rH6MejTznQH2QtFvGJFOVi9G+L1O7jQuSFcP3xXWKaMdjuxoCH/+ZsCUco1GL2TP9gKobbD66BLFU2oRK/3lPP5/0uAS7bTugwWnp0S8Bzv9Ccab09EYyCXoGbQ70b7V8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oc7aP45eZR66I71CVOZvxmegxINBc1qO6H43QrEnOFA=;
- b=zv3UfrA9ZAjwFoPaAX37fcJ3SErXLp0GtGHcfpKxS8VYbuyOHvuxjHdQ+7UUcHb7wP0vQpFkWPriaur01nGjQJYfZ/Fizj/yvJpk+Hk6CfA82BxxOIteqSOzi5oCKSryp4jXTpVYbXIqChyDlD7WZFUgrYlRaQiGPAfw/ADBM0M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3505.namprd12.prod.outlook.com (2603:10b6:408:69::17)
- by BN8PR12MB3458.namprd12.prod.outlook.com (2603:10b6:408:44::32) with
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0228.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:d::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Wed, 8 Dec
- 2021 17:14:43 +0000
-Received: from BN8PR12MB3505.namprd12.prod.outlook.com
- ([fe80::78f1:d238:dd66:cf69]) by BN8PR12MB3505.namprd12.prod.outlook.com
- ([fe80::78f1:d238:dd66:cf69%4]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
- 17:14:43 +0000
-Subject: Re: [PATCH 2/2] perf tools: Improve IBS error handling
-To:     kajoljain <kjain@linux.ibm.com>, Jiri Olsa <jolsa@redhat.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Robert Richter <robert.richter@amd.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20211004214114.188477-1-kim.phillips@amd.com>
- <20211004214114.188477-2-kim.phillips@amd.com> <YV8uQVnMnnMd1Led@krava>
- <8a8583dc-5a5d-f107-8ef0-6be96e2f9095@amd.com>
- <fdcfec83-01c6-5e25-5b99-dac05287fdae@linux.ibm.com>
- <74e17a71-98ff-e0b1-61d4-d37992b1ae15@amd.com>
- <f095bebf-77d5-94c7-5787-13a6f38867cc@linux.ibm.com>
- <4281dce8-0e2a-cfe8-3b05-1b9a455d09a9@amd.com>
- <e937591b-542d-c3ac-bc64-d5223c27f70d@linux.ibm.com>
-From:   Kim Phillips <kim.phillips@amd.com>
-Organization: AMD
-Message-ID: <ab336582-cff7-7e64-2f89-16305699cb5c@amd.com>
-Date:   Wed, 8 Dec 2021 11:14:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <e937591b-542d-c3ac-bc64-d5223c27f70d@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Wed, 8 Dec
+ 2021 17:18:17 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
+ 17:18:17 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "alex@ghiti.fr" <alex@ghiti.fr>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: [PATCH v4 00/10] Convert powerpc to default topdown mmap layout
+Thread-Topic: [PATCH v4 00/10] Convert powerpc to default topdown mmap layout
+Thread-Index: AQHX7FeWpNWmw2j+bkaG2xB080sVTg==
+Date:   Wed, 8 Dec 2021 17:18:17 +0000
+Message-ID: <cover.1638976228.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR20CA0004.namprd20.prod.outlook.com
- (2603:10b6:610:58::14) To BN8PR12MB3505.namprd12.prod.outlook.com
- (2603:10b6:408:69::17)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f696c67b-593d-462d-b02e-08d9ba6eb986
+x-ms-traffictypediagnostic: MR2P264MB0228:EE_
+x-microsoft-antispam-prvs: <MR2P264MB02283C6FE4223A96CB8DD636ED6F9@MR2P264MB0228.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cQKnLdfVn0tNemabxQPa/lKC7jCpvkp63sHjJ/mao2UHOnpei0fXOWRKOceTHZr0b2zHR7jkLbQIQV2eEXfRgVh8QGrZEPMNBv/toKoGi3BxlTitHXdlWiWua6BwD9o72lMyvKzkS/co/3l0c2pt3iKMjMnEXlouC5YkMzNPGVYfaqhelVW7+y+DzDW0lGpa5f3dmwIXxL4k5BMHkXQiId8KJc1JmMAD4aCeP7Dl0RSWcIu2QdIA068n+5MKKedxeB14j0iK9mjWPyQ7TfzoyVDqITo8jJifC8A0K3ZNWllAkp10864NxKDGS5sIGbLkb1ZONXmA25BYgrFhQ+P2RJruc3ZUSpfCI5yxiRKw+PkXoJdgM/s9KcfitXUjRudyr+/a/o165uzgGKwRWgyJpsX/Okaw7zyle286LkmOOx66VQZof12k/P5VOlNJYsF8yrsHr9qB8mYEv3bUI+VhpcP46+EvO/GN2vF7O92htlufzQKbbp35JhapwlKrOGNfCNTi5xdKgxO8ZXIWYgYY7ie1yfWuPJeG1F4yMl6x+KjiRL/sGKuVC09VTHv8eIaYKH8AylBBkDrrOeHixp12Lom8WNZ7onAie+IhYQ4HFsOgXsHoTJ7bomBj1ogSPI4MPh8n6RW4rYv+768bRZzqe/pkssX3lZYFCOOH1/oQdV2dnD8Vcl3ieI9t1k3mQ94FkP4gfjAIdU+kN56yibjl8g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(2616005)(91956017)(76116006)(66946007)(122000001)(5660300002)(38100700002)(66476007)(44832011)(6512007)(64756008)(66446008)(6486002)(66556008)(8676002)(86362001)(4326008)(8936002)(54906003)(508600001)(36756003)(71200400001)(38070700005)(316002)(83380400001)(26005)(110136005)(6506007)(2906002)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?A0F/Qd0nfiJCMuIy5Wtj7uZ9WyHpiUZ+giW00ZNlG8lDgXqr3GjK1SZItt?=
+ =?iso-8859-1?Q?ZUnX72CsATmg56NRS357RIvGAtTwVbtQkYgECmjWbnKUQF5x1nwuSDbYtW?=
+ =?iso-8859-1?Q?Zwu/verLhjDWu1i5ibBgH1Hy4xGPjgzGUT/HRSeLLc0Hm6ZyOMqPhF0cd4?=
+ =?iso-8859-1?Q?OEdC6Rs8dhX2dTBA51ilpn+q47kzXaxaOkJAVKB/25HPBtEbHbDz0w2B+Y?=
+ =?iso-8859-1?Q?u5I3as3aTLAefW8f2bUK6h2FHlb/NgGd6oqLVubU3Ceglvge4lX/sqe5gP?=
+ =?iso-8859-1?Q?X1/7YjUADoa08DyKGkzFZv/mEKv6JoBvKr0NJQEhM16nIPcaEDRsmpBwMe?=
+ =?iso-8859-1?Q?Nab7A8DOmL+DXQ0MYGEoLBnayjO0q5spmVxVg4eVwDRo+YmaNRo0K6xdA0?=
+ =?iso-8859-1?Q?QNVtxsYqu0fkxKMenYVmoDF6952u/S2FUpLLMTASzGd/yjAj3qJvgb5CuM?=
+ =?iso-8859-1?Q?6IvrYsLJLSHbV9TekQnG8vqo70OcWKm3lC7AHrip/5JG3UvW8t77xtHFCA?=
+ =?iso-8859-1?Q?AwoNz2IlQnSzd/OllAlEsi+UrVt69pzfla601PY2TImKsiD3rd3sgePSsW?=
+ =?iso-8859-1?Q?BH8QntjxszHFgzxf1dDOQ+5xKYvGtIpMA63rK2kMchkVc5akellZhtGKR/?=
+ =?iso-8859-1?Q?JNI6aO9nd66mKoTsnLbwgajoqFoMI0ZglXVBusbW/4/3oSOeeUNU6XtrDd?=
+ =?iso-8859-1?Q?SYbDLntFsFGMo7r8leF5/pIES9qI9ZTWXs5rOWYM29PbCXXmsmpFPpBqx8?=
+ =?iso-8859-1?Q?DzxJXosFXn7hGgb5tqWsvAZBumAbG9WuXPmfaK1p//k3KV8YcpwTvqmIuv?=
+ =?iso-8859-1?Q?k+f9dysGT9saSvUBhKoJ90wubsvzUMBMkiEKH1hy2JGzDVlhY7L/C0JBAc?=
+ =?iso-8859-1?Q?RecUQE5naGL9Mn6561uUlDc5v6RNDbDSru71wfb34ElOCIJgwMgr39LAl1?=
+ =?iso-8859-1?Q?Rm4gNZU++oOfREZm6VBH4a6KzuuGGh3d5fzpg1AvVpuJP2OARR0iMzZgaG?=
+ =?iso-8859-1?Q?5inHKBYK733GG75ge7LS0uB3/vjwLfOICAB6+XpUxnCFQB+L/ZnP5WKp1A?=
+ =?iso-8859-1?Q?Epzyd5/bLiEaKkesuYUprJJERXvQJz1OsV7yKhesGF+eAA8AFtMawrzZMF?=
+ =?iso-8859-1?Q?bfwGqtyVi/VZE+eYINuUQ6cY54QIcB6UibOyJH8b+OOc0mqfpYt4QZTxqa?=
+ =?iso-8859-1?Q?wJEaHPIN3vzXjwLxQ2i+eMn5LonLfHFQ7XJhWH7ty73EygaeM/wjgZCLjg?=
+ =?iso-8859-1?Q?iebWcOAVTq6jwjBc590f3U7pqG0QN2j77H1Zwb6HGg/AuEhHidn5cm0l42?=
+ =?iso-8859-1?Q?vONLoRAp681ZnZ7fM8YYFlV9UmcN8w7Qq4L4C1XPw0+iDiN+UmlMqt4UNz?=
+ =?iso-8859-1?Q?K5Vy2CFgZtmSz0xfwjErsHY3fNLB+4WzhFjEwgg2aS1qO8ifR7MwjGHT/v?=
+ =?iso-8859-1?Q?Prd//f/ki07oCJPbL+/YQZyp7SpRw8TL/RQ1E+OOsnQcAn3AP6JB0kYASM?=
+ =?iso-8859-1?Q?Hg2zxUVwDtlqZX20ZgqwbjvlmXFvpvGxMQcfHoNzEPqsdxbRk/uPwaa+oQ?=
+ =?iso-8859-1?Q?5u/SWBG7snp+N4rWP2bdpjgO7HakZCwV5IoU9s0E5SUpjEyTP+nBDmnE0f?=
+ =?iso-8859-1?Q?8299jO8CvOS1QyXIh1wIvmuNzZMDO8QBG31/CfZU9Z8xlBVD3Pq6gC3jE2?=
+ =?iso-8859-1?Q?Auzu2gurV8erYVIjGwvLGVL6eLcDzOwsqsadJixVRHphRuDvolnZzWzbSt?=
+ =?iso-8859-1?Q?2ChEE8LXuQ0Imdyfb/vm42Wuw=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: from [IPv6:2603:8080:1540:87c:5a65:fe78:b4d2:c9a5] (2603:8080:1540:87c:5a65:fe78:b4d2:c9a5) by CH2PR20CA0004.namprd20.prod.outlook.com (2603:10b6:610:58::14) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Wed, 8 Dec 2021 17:14:37 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a6ac9cc4-6b8d-4067-d8a4-08d9ba6e3966
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3458:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB34581A5385A5E2C1D992812B876F9@BN8PR12MB3458.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2bVTfhv3dsOdB7Oewmd88mhV2q64a3nyDtfS9R3Uj3xne9F74y/z5TQs6qwZw2G4sa9i//1UrS30t6vr7Cm85z6K/REbVLI9KbPKU0RoQwNnNw48p2ELLkgPgCygF5Vn/LmxQJbeMmuZtMeXBefeblO4Iljt2XS/lEVlFd1Anj8qAVHhuCXIcyFmyH/fEhg4DbRSu7/85u6ffe9eauQ1ohWo0TiYM2uD/440VhNWqciHnfN2V/nh7AhSoKKmYzoSPbb1vdtxEEMPNbE3RNPQmCq/EPfCYY2huvnyCsv5EqSFRXnP/U74VfrKVY46NA+RaXvZa+qLu1RvN2k//mCA0psO4y5ZnFzTIWEQZWYJ6/lPZKPNxEs+n0z13ce7Cj28xT9YHREkJjjaG3JZLirJ+bfNuZl5pETMvHsZG9EdthLn0Rq9GVEFqMHjvUNDvofh+gOPvoEnkrw/OtsD3Vh2UNClvbONqIjozDRBwIp51Wzd9RP/jMO6kf5XhdDPzBt/eNEsCnmOtyQTXVz+mdn/UcFU7/vLsLBZ++GSStwASuAJ36/8TzdZGkzyl7BAL2hWAY8hNQi6auCuSGgsFx7ug8Qg3aqMKRUs1hUIOX2wL+VQkstgqnC3pXljJDdcmGcjxqJmEb7wkaeCmFWNl/mXrSlwFV5wm1xD/s1XjLDb1NUVCbMlaUKRefTFPHBV1qNxIUHKtg9vkQz9BkgHFWFLRx3TgUMY5HjLj0MzSn8CPxQ22S48Sz9UfuGQFDmCARQk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3505.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(66556008)(66946007)(4326008)(66476007)(6666004)(110136005)(54906003)(86362001)(44832011)(2616005)(186003)(8676002)(31696002)(53546011)(36916002)(6486002)(316002)(36756003)(31686004)(83380400001)(8936002)(5660300002)(508600001)(7416002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1dQWW84ZnphSnE2ZUsrUjNhR3JGTFVCVlF0Z3Y5VDRCd2lyVjBKcHVNYUhQ?=
- =?utf-8?B?M3NEejVtR05qOVZORkpHTTZnSW5LZ2toSjNiQkVKbVAwOUZlU3lPNm54MGp0?=
- =?utf-8?B?T05IMExSY1BHQkw4aTAxSnk2L0U4R0pBZThSN3JqWHlsa0Z2SThrT2tDTmxO?=
- =?utf-8?B?LytlZ0NmaWVsT0VCaVRVTXVuSEVKelZwUzVsMXl1YlhiVlRheFZzVStYUlFS?=
- =?utf-8?B?Y1JiNlQvSk8wQ0plK2hkbWxhaG8ycW5aQ3lvZjdKbGlFRUlQYlNsNC9kUXZF?=
- =?utf-8?B?TW85WURYcGIwWE9CY0NRRithT0N2MzlFNW4zQ1FJZW5hOFZTNEFsUjd6YVBU?=
- =?utf-8?B?bG0xeUJ2SXZPT3p1WWszVGl4cUpsUUROOTNObWxQeWpmaE54bzRFeEdlUUNF?=
- =?utf-8?B?dzNzT2FlQng4QnBpNUtpNHFEdFd1OEtKaHlqVFdGQXYvNEgwY294azJsOHZk?=
- =?utf-8?B?bGsxUzZsZkpua3Nib1pXWTNScUxrdHpiRkdRdjl2NFNkUGpWUC9GcUltZUIv?=
- =?utf-8?B?MXUzbjlxOGR5SFJUVThtMHp2NDBoUmJRMDByeEt4R2NJNjNhQmt5UFBUR2Yx?=
- =?utf-8?B?VXpPYlIrbFNpditUTjBIZDIzVUZYMmhPcWRWNCt4Y214Z2lRNW9abXNiWDND?=
- =?utf-8?B?eUpDWFpLRnZhbS9sWWxmMU9jTG1sNkI2b0ZjLzlQNlhEK2U3NlF4b1pNQ05h?=
- =?utf-8?B?NklGWmE4VWVOWFh4Q0IyZDd5VlJnNTk2eFl0Z0VZUElLekplWUpMZnpqMGdG?=
- =?utf-8?B?bkZjKzZwd285QXRNZnhWQk01cC95dkRZR0ZFY0czd1NJQjI5MGVMVUNVWmNq?=
- =?utf-8?B?WTY3TWNiTEpqNU5ERjFjOWtUb0o2Qm42Uk42OGZIRi95ZzMrR1llMDdNQ1li?=
- =?utf-8?B?VWJUM0xUUWRENVVvOXU0ZW84UVlJSGlleFFMYi9velJpbFBsZjZjRWFkbXRq?=
- =?utf-8?B?aHJhQnBqNzRJL2Nod2NXZ2loTDJtRVZJWlNwdlJEeWUrSXg2djZML0VtY2tu?=
- =?utf-8?B?Wk1BTm9oYWdKaU9ibXpEQ1E2WGVtM1JqUC9PRjMweGRwam9ZY0p4WHhoZ3pr?=
- =?utf-8?B?VzBkYWY4NkM4U09HZ0pVWVhBMzVGcm45T0pxUVJIWnV4K1B4N3lIS1V1bklV?=
- =?utf-8?B?ZVFXVjl0Yng3NjVyMTE5U29ZbkJJV2txZUNQWHR0VXo3aTIxdTd2TnVnRDF1?=
- =?utf-8?B?d3pKcmNVMWFIenk3T2E5VE5ENDRHUDNpNVNMWk5aNGx6Rk4zemd2clpDbkR3?=
- =?utf-8?B?MnNQWVhKUXVCMnd0eldHM3RRTGVyeEorenZMQTRsb05rTEgwMlE5SjRQZjFS?=
- =?utf-8?B?a0tpUk04QnkwMG1jU280Sy9WSUZrQWhRQjBQMlVWa3ZKWnRKYVZ3RGpUWlpl?=
- =?utf-8?B?bjlqZE5kRytteUgrcGVKLy9pTll0dHRBUnNCQlF6aXk4NDJ4aTZ2ZEl4Skxs?=
- =?utf-8?B?bjBKdWs4MTMwTXZXMzZ2SVl1YVpyK2tmQkJyaXpQclN0emZjYlI1L1JjelZ0?=
- =?utf-8?B?Nk44OHowR3R5ZUhWdUFlcFpsbkJOQkpkZXZic1pxUG5WTENhZHQvQmVaSzcw?=
- =?utf-8?B?ZWRWVGhMTFZLZXZRNzM4djdmYkI5QVVYWW1YUW00OGRTQmltcjRjdll6ZFBT?=
- =?utf-8?B?SDJMQnkranM2UklmYUFNMTNGTElvQU00akZISzlpNmpXL0Z3S3pBaFQvOHBt?=
- =?utf-8?B?SjkzZWJkS1F0OTd3R2hIdWdPSktjTHI0UEE5bDBLbDV2SE1OOE91QnY5aGh1?=
- =?utf-8?B?VWVlRWQyYmRpeVlHcWt3L29GWVRLc1I1WVZCdDJGRXZndW13MXlJdDkxaldv?=
- =?utf-8?B?TWZoQndLdXRITFcyS1RXSjJkL3FpK0pERUQxUlNZVzRYZWphTGpOTjhjWnlJ?=
- =?utf-8?B?ZkVwWWxzNzd3MzRtVEgzZkpraHlSRCtBRC9rMnB4Mmc5bDdhN2NPY1JkLzJG?=
- =?utf-8?B?TFRvN2J2ZTVBMlh1VTgvUzJFY1lCdENrWk1oZ0RNMmo1TE51SnRNRXFOTzJ0?=
- =?utf-8?B?aUFrZjdRSXNoK29FdC9ndGVWSDFlUUxwaGEzdlFzVnIvc0ZWN2lVajU1MmxO?=
- =?utf-8?B?Q25GMkNUcGVvci9EQ1VXYWtIMjZZZGxaa3p6Q2VramtPMi9sdGxZbzE5azY2?=
- =?utf-8?B?UXVqeFZMbkRSZ3BLOENBSXYzNHRHMi8vYWxrd0tjbHV4UXVDNU9GSmViVzg0?=
- =?utf-8?B?anV2OGkxSm0waURLaWs5cEswcGMxZ21qZVA4eXFNVk1NSWlPc2lYc2tvSmtv?=
- =?utf-8?Q?xuL+TlQEhKvpgjMjr2Dpt7KDwChO0vjCSgW/owhtFA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6ac9cc4-6b8d-4067-d8a4-08d9ba6e3966
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3505.namprd12.prod.outlook.com
+X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 17:14:43.3720
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f696c67b-593d-462d-b02e-08d9ba6eb986
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 17:18:17.0540
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2koi4kfRgB2AfBmNNl6ZHQpL+/6Gfw1F+EY7eznxKgWbml9yzArF+iJIY67Mik12m7ZcoU50nXNabqJGGAf6aQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3458
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vkGnQDKXslgBy5m0aaC0dXUkkDKF/YGs+9O7f2SHtNXYGJLoCMD42ReOh6DJdpUQwzpfTjWoUvZ3sddxrvaTgdDKFiMvUwnUjud6/821f/o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0228
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 12:33 AM, kajoljain wrote:
-> On 11/30/21 3:39 AM, Kim Phillips wrote:
->> On 11/24/21 2:00 AM, kajoljain wrote:
->>> On 11/23/21 8:55 PM, Kim Phillips wrote:
->>>> On 11/23/21 2:40 AM, kajoljain wrote:
->>>>> On 10/8/21 12:47 AM, Kim Phillips wrote:
->>>>>> On 10/7/21 12:28 PM, Jiri Olsa wrote:
->>>>>>> On Mon, Oct 04, 2021 at 04:41:14PM -0500, Kim Phillips wrote:
->>>>>>>> ---
->>>>>>>>      tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
->>>>>>>>      1 file changed, 24 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
->>>>>>>> index b915840690d4..f8a9cbd99314 100644
->>>>>>>> --- a/tools/perf/util/evsel.c
->>>>>>>> +++ b/tools/perf/util/evsel.c
->>>>>>>> @@ -2743,9 +2743,22 @@ static bool find_process(const char *name)
->>>>>>>>          return ret ? false : true;
->>>>>>>>      }
->>>>>>>>      +static bool is_amd(const char *arch, const char *cpuid)
->>>>>>>> +{
->>>>>>>> +    return arch && !strcmp("x86", arch) && cpuid &&
->>>>>>>> strstarts(cpuid,
->>>>>>>> "AuthenticAMD");
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +static bool is_amd_ibs(struct evsel *evsel)
->>>>>>>> +{
->>>>>>>> +    return evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name,
->>>>>>>> "ibs", 3);
->>>>>>>> +}
->>>>>>>> +
->>>>>>>>      int evsel__open_strerror(struct evsel *evsel, struct target
->>>>>>>> *target,
->>>>>>>>                   int err, char *msg, size_t size)
->>>>>>>>      {
->>>>>>>> +    struct perf_env *env = evsel__env(evsel);
->>>>>>>> +    const char *arch = perf_env__arch(env);
->>>>>>>> +    const char *cpuid = perf_env__cpuid(env);
->>>>>>>>          char sbuf[STRERR_BUFSIZE];
->>>>>>>>          int printed = 0, enforced = 0;
->>>>>>>>      @@ -2841,6 +2854,17 @@ int evsel__open_strerror(struct evsel
->>>>>>>> *evsel, struct target *target,
->>>>>>>>                  return scnprintf(msg, size, "wrong clockid (%d).",
->>>>>>>> clockid);
->>>>>>>>              if (perf_missing_features.aux_output)
->>>>>>>>                  return scnprintf(msg, size, "The 'aux_output'
->>>>>>>> feature
->>>>>>>> is not supported, update the kernel.");
->>>>>>>> +        if (is_amd(arch, cpuid)) {
->>>>>>>> +            if (is_amd_ibs(evsel)) {
->>>>>>>
->>>>>>> would single 'is_amd_ibs' call be better? checking on both amd and
->>>>>>> ibs
->>>>>>
->>>>>> Good suggestion. If you look at the later patch in the
->>>>>> BRS series, I have rewritten it to add the new
->>>>>> AMD PMU like so:
->>>>>>
->>>>>>     if (is_amd()) {
->>>>>>         if (is_amd_ibs()) {
->>>>>>             if (evsel->this)
->>>>>>                 return
->>>>>>             if (evsel->that)
->>>>>>                 return
->>>>>>         }
->>>>>> +    if (is_amd_brs()) {
->>>>>> +        if (evsel->this)
->>>>>> +            return
->>>>>> +        if (evsel->that)
->>>>>> +            return
->>>>>> +    }
->>>>>>     }
->>>>>
->>>>> Hi Kim,
->>>>>         From my point of view, it won't be a good idea of adding so many
->>>>> checks in common function definition itself.
->>>>> Can you just create a check to see if its amd machine and then add a
->>>>> function call which will handle all four conditions together?
->>>>>
->>>>> which is basically for:
->>>>>
->>>>> +        if (is_amd(arch, cpuid)) {
->>>>> +            if (is_amd_ibs(evsel)) {
->>>>> +                if (evsel->core.attr.exclude_kernel)
->>>>> +                    return scnprintf(msg, size,
->>>>> +    "AMD IBS can't exclude kernel events.  Try running at a higher
->>>>> privilege level.");
->>>>> +                if (!evsel->core.system_wide)
->>>>> +                    return scnprintf(msg, size,
->>>>> +    "AMD IBS may only be available in system-wide/per-cpu mode.  Try
->>>>> using
->>>>> -a, or -C and workload affinity");
->>>>> +            }
->>>>>
->>>>> and this:
->>>>>
->>>>> +            if (is_amd_brs(evsel)) {
->>>>> +                if (evsel->core.attr.freq)
->>>>> +                    return scnprintf(msg, size,
->>>>> +    "AMD Branch Sampling does not support frequency mode sampling,
->>>>> must
->>>>> pass a fixed sampling period via -c option or
->>>>> cpu/branch-brs,period=xxxx/.");
->>>>> +                /* another reason is that the period is too small */
->>>>> +                return scnprintf(msg, size,
->>>>> +    "AMD Branch Sampling does not support sampling period smaller than
->>>>> what is reported in /sys/devices/cpu/caps/branches.");
->>>>> +            }
->>>>
->>>> IIRC, I tried something like that but carrying the
->>>>
->>>>
->>>> struct target *target, int err, char *msg, size_t size
->>>>
->>>> parameters made things worse.
->>>>
->>>>> So, incase we are in amd machine,  common function evsel__open_strerror
->>>>> will call function may be something like amd_evesel_open_strerror_check
->>>>> which will look for both ibs and brs conditions and return
->>>>> corresponding
->>>>> error statement.
->>>>
->>>> The vast majority of decisions made by evsel__open_strerror are
->>>> going to be common across most arch/uarches.  AMD has only these
->>>> two pesky exceptions to the rule and therefore IMO it's ok
->>>> to have them inline with the common function, since the decisions
->>>> are so deeply intertwined.  A new amd_evsel_open_strerror_check
->>>> sounds like it'd duplicate too much of the common function code
->>>> in order to handle the common error cases.
->>>
->>> Hi Kim,
->>>      Sorry for the confusion, what I meant by adding new function is just
->>> to handle these corner error cases and not duplicating whole
->>> evsel__open_strerror code.
->>>
->>> Maybe something like below code, Its just prototype of code to show you
->>> the flow, you can refine it and check for any build or indentation
->>> issues using checkpatch.pl script.
->>>
->>> So basically, in common function we can just have 2 calls, first to
->>> check if we are in amd system and second to return corresponding error
->>> message, rather then adding whole chunk of if's which are specific to
->>> amd.
->>>
->>> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
->>> index ac0127be0459..adefb162ae08 100644
->>> --- a/tools/perf/util/evsel.c
->>> +++ b/tools/perf/util/evsel.c
->>> @@ -2852,9 +2852,40 @@ static bool find_process(const char *name)
->>>           return ret ? false : true;
->>>    }
->>>
->>> +static bool is_amd(const char *arch, const char *cpuid)
->>> +{
->>> +       return arch && !strcmp("x86", arch) && cpuid && strstarts(cpuid,
->>> "AuthenticAMD");
->>> +}
->>> +
->>> +static int error_amd_ibs_brs(struct evsel *evsel, char *msg, size_t
->>> size)
->>> +{
->>> +       if (evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name,
->>> "ibs", 3)) {
->>> +               if (evsel->core.attr.exclude_kernel)
->>> +                       return scnprintf(msg, size,
->>> +       "AMD IBS can't exclude kernel events.  Try running at a higher
->>> privilege level.");
->>> +               if (!evsel->core.system_wide)
->>> +                       return scnprintf(msg, size,
->>> +       "AMD IBS may only be available in system-wide/per-cpu mode.  Try
->>> using -a, or -C and workload affinity");
->>> +       }
->>> +
->>> +       if (((evsel->core.attr.config & 0xff) == 0xc4) &&
->>> (evsel->core.attr.sample_type & PERF_SAMPLE_BRANCH_STACK)) {
->>> +               if (evsel->core.attr.freq) {
->>> +                       return scnprintf(msg, size,
->>> +       "AMD Branch Sampling does not support frequency mode sampling,
->>> must pass a fixed sampling
->>> +          period via -c option or cpu/branch-brs,period=xxxx/.");
->>> +                /* another reason is that the period is too small */
->>> +               return scnprintf(msg, size,
->>> +       "AMD Branch Sampling does not support sampling period smaller
->>> than what is reported in /sys/devices/cpu/caps/branches.");
->>> +               }
->>> +       }
->>> +}
->>> +
->>>    int evsel__open_strerror(struct evsel *evsel, struct target *target,
->>>                            int err, char *msg, size_t size)
->>>    {
->>> +       struct perf_env *env = evsel__env(evsel);
->>> +       const char *arch = perf_env__arch(env);
->>> +       const char *cpuid = perf_env__cpuid(env);
->>>           char sbuf[STRERR_BUFSIZE];
->>>           int printed = 0, enforced = 0;
->>>
->>> @@ -2950,6 +2981,8 @@ int evsel__open_strerror(struct evsel *evsel,
->>> struct target *target,
->>>                           return scnprintf(msg, size, "wrong clockid
->>> (%d).", clockid);
->>>                   if (perf_missing_features.aux_output)
->>>                           return scnprintf(msg, size, "The 'aux_output'
->>> feature is not supported, update the kernel.");
->>> +               if (is_amd(arch, cpuid))
->>> +                       return error_amd_ibs_brs(evsel, msg, size);
->>>                   break;
->>>           case ENODATA:
->>>                   return scnprintf(msg, size, "Cannot collect data source
->>> with the load latency event alone. "
->>
->> That change will makes AMD machines fail to fall back to the default
->> "The sys_perf_event_open() syscall returned with..." error string
->> in case it's not those AMD IBS and BRS sub-conditions.
-> 
-> Yes right, as I mentioned before, the code I pointed was just a
-> prototype to show you the flow, these corner cases can be handled on top
-> of it.
+Rebased on top of Nic's series "powerpc: Make hash MMU code build configurable" in today's powerpc/merge-test on github
 
-Right but these corner cases disrupt the existing flow: adding
-int ret; ret = foo(); if (ret) goto report_generic_einval doesn't
-go with the flow.
+This series converts powerpc to default topdown mmap layout.
 
->> Is having the AMD error code checking in the main evsel__open_strerror()
->> so bad?  Other arches and their PMU implementations may find error
->> conditions that they have in common with AMD's, therefore
->> opening up the code for opposite types of refactoring and
->> reuse than what is being requested here.  E.g., I've seen
->> other hardware configurations - not specific to one architecture -
->> that could also use this message:
->>
-> 
->  From my understanding, adding too many checks in common function
-> for a specific arch is not a good practice. Since you already adding
+powerpc requires its own arch_get_unmapped_area() only when
+slices are needed, which is only for book3s/64. First part of
+the series moves slices into book3s/64 specific directories
+and cleans up other subarchitectures.
 
-My point above is that other arches can come in and adopt
-the same error conditions and text.
+Last part converts to default topdown mmap layout.
 
-> multiple functions to get information like ,if current system is
-> amd/ibs/brs. Can't we rather just add a single function and handled all
-> these checks there?
+A small modification is done to core mm to allow
+powerpc to still provide its own arch_randomize_brk()
 
-That will remove the code from the common path.  Code that's
-possible (and in some cases likely) that will be adopted
-by other arches.
+Another modification is done to core mm to allow powerpc
+to use generic versions of get_unmapped_area functions for Radix
+while still providing its own implementation for Hash, the
+selection between Radix and Hash being doing at runtime.
 
-Thanks,
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Kim
+Changes in v4:
+- Move arch_randomize_brk() simplification out of this series
+- Add a change to core mm to enable using generic implementation
+while providing arch specific one at the same time.
+- Reworked radix get_unmapped_area to use generic implementation
+- Rebase on top of Nic's series v6
+
+Changes in v3:
+- Fixed missing <linux/elf-randomize.h> in last patch
+- Added a patch to move SZ_1T out of drivers/pci/controller/pci-xgene.c
+
+Changes in v2:
+- Moved patch 4 before patch 2
+- Make generic arch_randomize_brk() __weak
+- Added patch 9
+
+Christophe Leroy (10):
+  mm: Allow arch specific arch_randomize_brk() with
+    CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+  mm, hugetlbfs: Allow an arch to always use generic versions of
+    get_unmapped_area functions
+  powerpc/mm: Move vma_mmu_pagesize()
+  powerpc/mm: Make slice specific to book3s/64
+  powerpc/mm: Remove CONFIG_PPC_MM_SLICES
+  powerpc/mm: Use generic_get_unmapped_area() and call it from
+    arch_get_unmapped_area()
+  powerpc/mm: Use generic_hugetlb_get_unmapped_area()
+  powerpc/mm: Move get_unmapped_area functions to slice.c
+  powerpc/mm: Convert to default topdown mmap layout
+  powerpc/mm: Properly randomise mmap with slices
+
+ arch/powerpc/Kconfig                          |   2 +-
+ arch/powerpc/include/asm/book3s/64/hugetlb.h  |   4 -
+ arch/powerpc/include/asm/book3s/64/mmu-hash.h |   1 +
+ arch/powerpc/include/asm/book3s/64/mmu.h      |   6 -
+ arch/powerpc/include/asm/book3s/64/slice.h    |  24 ++
+ arch/powerpc/include/asm/hugetlb.h            |   2 +-
+ arch/powerpc/include/asm/paca.h               |   7 -
+ arch/powerpc/include/asm/page.h               |   1 -
+ arch/powerpc/include/asm/processor.h          |   2 -
+ arch/powerpc/include/asm/slice.h              |  46 ----
+ arch/powerpc/kernel/paca.c                    |   5 -
+ arch/powerpc/mm/Makefile                      |   3 +-
+ arch/powerpc/mm/book3s64/Makefile             |   2 +-
+ arch/powerpc/mm/book3s64/hash_utils.c         |  14 -
+ arch/powerpc/mm/book3s64/radix_hugetlbpage.c  |  55 ----
+ arch/powerpc/mm/{ => book3s64}/slice.c        |  71 ++++-
+ arch/powerpc/mm/hugetlbpage.c                 |  34 ---
+ arch/powerpc/mm/mmap.c                        | 256 ------------------
+ arch/powerpc/mm/nohash/mmu_context.c          |   9 -
+ arch/powerpc/mm/nohash/tlb.c                  |   4 -
+ arch/powerpc/platforms/Kconfig.cputype        |   4 -
+ fs/hugetlbfs/inode.c                          |  17 +-
+ include/linux/hugetlb.h                       |   5 +
+ include/linux/sched/mm.h                      |   9 +
+ mm/mmap.c                                     |  31 ++-
+ mm/util.c                                     |   2 +-
+ 26 files changed, 139 insertions(+), 477 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/slice.h
+ rename arch/powerpc/mm/{ => book3s64}/slice.c (91%)
+ delete mode 100644 arch/powerpc/mm/mmap.c
+
+-- 
+2.33.1

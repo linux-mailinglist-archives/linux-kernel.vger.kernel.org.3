@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 725EA46D629
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C3746D62B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235557AbhLHO4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S235464AbhLHO5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbhLHO4E (ORCPT
+        with ESMTP id S229478AbhLHO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:56:04 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A8FC061746;
-        Wed,  8 Dec 2021 06:52:32 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so4492248pjb.5;
-        Wed, 08 Dec 2021 06:52:32 -0800 (PST)
+        Wed, 8 Dec 2021 09:57:24 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB46BC061746;
+        Wed,  8 Dec 2021 06:53:52 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id r11so9092313edd.9;
+        Wed, 08 Dec 2021 06:53:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QzKcx5yPUcuops4Q+JZ93iOnQti2rPR+TjoSjnXXm9A=;
-        b=UMng7B3YW1PY/k4q0KBZkM7wtKPbKKAPUrZ31Hhr4l+5og1PggHxE/4ypeOQju2Isi
-         ddUx0FKBJeWtsiW1d88WJpsU0lTXQ0HXAPbH0PhEEnW65mFqOR86I6QzD3tdChAKLhqT
-         cSA5R2dRE+yuiuE8XvAot0dpiTVwZXQZLNVfIcQ8bSb8wMmZXTvPPxtwpdbtMj3n/qBe
-         6hw1XP5sTy+3y23o3DT+dIi0stcfydpk4W6NHn5BPriYHfLEQChiiaY2r+qL2ILdq1p4
-         iY/Bdd8cKk+AvWhF60zg224x5xyb+QOnuTery92NAIcBAH96SglyyudltDKP3uL5rMqs
-         Gmng==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sTcURiIQ8RnWwJ1LvErUaG9rDDP1ZDMbGbFVTr/q3W8=;
+        b=B1BzV0+ygHi3gibMFqpJqSzi6/lPAuO6BleXaiwaUwpF3f2d3qla5J7EL3Wiy0ZDr3
+         Nuu4MiZ4OeFcROFWMD/gyeDNsQRaQUAp8zy8FwpmAfom+Tk09NW5X/Hqhi21yVNJD92b
+         zEtNtK16HpxlwVSR2nCI/Jf9prIyMRq56BidyBKwC7VvahCTMsXcaApxUrEfio0goHgE
+         Sk9QpceRv8qnH/1NcigD37ovjAlSsKisI1Sz83khPGK0zAdVwGAxbmFRP8CNDSuJH8W+
+         GfsWfJE2cdJvLE2pRJxWLGbNK8NaADuojKGpMVBl2EmCvwR4S9lBCGduQwzVW8US1QLU
+         L8Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QzKcx5yPUcuops4Q+JZ93iOnQti2rPR+TjoSjnXXm9A=;
-        b=dUbAo9s+69uquEjxc5EfR+pAVpgYaG6g3bIKV/1tQPlHH4sdpJcZ+v0CxOmfmDi6KV
-         2qS8sqJtHAxONnlN5E+5e3c3TZZSou9j0ZVKakCqEtmd2yNt5rzYcIfDRGQkYgltdwJe
-         ce1VIoUdxPr6/g2+XipvD6ht+wk+Oh1TYgLIvHlOnzQ9kLQ8uuMr4JndHovV4wc1j16y
-         lXHoT1nvqO9UeovkmC/puQmjRTcqtgGt5ZNmK8MeFxa1b2C1DegDtansYuV7AO5wx7nC
-         qFXVMpwiL0T8xNnMuuzGYiZK881v8oYsCd7rxFsa7eFbO6LVx8kXGrSOY4Q8DgXS6xKu
-         HUag==
-X-Gm-Message-State: AOAM531YgT80aU7ByKVwTgciJft5ljxc0NanQMrEv/jEpTcFZx69G9dV
-        DkDOl7s00V07D2O6Pd9BhWg=
-X-Google-Smtp-Source: ABdhPJzYa+4js8K70gVBG7XUrUChCAHiqE9sZ9ISJ0oj8XxR8ZPal8nMUGzVAVJVm1aWQB2YLSFlgg==
-X-Received: by 2002:a17:903:300d:b0:142:744f:c74d with SMTP id o13-20020a170903300d00b00142744fc74dmr61115251pla.26.1638975152436;
-        Wed, 08 Dec 2021 06:52:32 -0800 (PST)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:3:1571:13c3:b90a:380])
-        by smtp.gmail.com with ESMTPSA id oa17sm3182861pjb.37.2021.12.08.06.52.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sTcURiIQ8RnWwJ1LvErUaG9rDDP1ZDMbGbFVTr/q3W8=;
+        b=g3CN+AimTuDtzXE+kcuRFwRmsEa8kdGKc6uHuaFNe3csKqzvFy2V4K9jJFCSpcyX4h
+         m6xVh4ALVbZCLHFqeMl+UO173uZ6z2C10RVA4Tt3hom6nSrtGQ+0HUAgGSS4uS39dZMC
+         dfXVU6VgmZVgNTla2FoUTel/TYUTAfj8RR/+LCUqeHSupDH86dIDlYLXkhQQRc3ufdmE
+         GOOVg+Aa34jQ3LOoQSYqf9HJmmYIEg88FaGz0E1PIbxcXH3WUguz52pvKuq3ecBLN40M
+         zwOijZmz510szNm9m6SRLJXBUIWcINUgwA5FIimJgHWcaV3Gld/q8gFADAdBCrHvhig/
+         aHvA==
+X-Gm-Message-State: AOAM533EpTjONp0Bg95bvS6lFbxEHidiHnzt9PiUj70xXuj/fHxcO3FU
+        3cnMXArjsJJDmFMRS0/jIhM=
+X-Google-Smtp-Source: ABdhPJxt1VvSgndQf2skuU/RFOIXZd3WIAImB9sf1ag7POEUesUB7b0ENtobFGD6UGy5g4yHVsF68g==
+X-Received: by 2002:a17:906:58d5:: with SMTP id e21mr8140684ejs.540.1638975223528;
+        Wed, 08 Dec 2021 06:53:43 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id i8sm2557243edc.12.2021.12.08.06.53.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:52:31 -0800 (PST)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        thomas.lendacky@amd.com, Tianyu.Lan@microsoft.com,
-        michael.h.kelley@microsoft.com, kys@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
-        wei.liu@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-        parri.andrea@gmail.com, dave.hansen@intel.com,
-        linux-hyperv@vger.kernel.org
-Subject: [PATCH V6.1] x86/hyper-v: Add hyperv Isolation VM check in the cc_platform_has()
-Date:   Wed,  8 Dec 2021 09:52:28 -0500
-Message-Id: <20211208145228.42048-1-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207075602.2452-3-ltykernel@gmail.com>
-References: <20211207075602.2452-3-ltykernel@gmail.com>
+        Wed, 08 Dec 2021 06:53:43 -0800 (PST)
+Date:   Wed, 8 Dec 2021 16:53:41 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH v2 0/8] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211208145341.degqvm23bxc3vo7z@skbuf>
+References: <20211208034040.14457-1-ansuelsmth@gmail.com>
+ <20211208123222.pcljtugpq5clikhq@skbuf>
+ <61b0c239.1c69fb81.9dfd0.5dc2@mx.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61b0c239.1c69fb81.9dfd0.5dc2@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+On Wed, Dec 08, 2021 at 03:33:27PM +0100, Ansuel Smith wrote:
+> > But there are some problems with offering a "master_going_up/master_going_down"
+> > set of callbacks. Specifically, we could easily hook into the NETDEV_PRE_UP/
+> > NETDEV_GOING_DOWN netdev notifiers and transform these into DSA switch
+> > API calls. The goal would be for the qca8k tagger to mark the
+> > Ethernet-based register access method as available/unavailable, and in
+> > the regmap implementation, to use that or the other. DSA would then also
+> > be responsible for calling "master_going_up" when the switch ports and
+> > master are sufficiently initialized that traffic should be possible.
+> > But that first "master_going_up" notification is in fact the most
+> > problematic one, because we may not receive a NETDEV_PRE_UP event,
+> > because the DSA master may already be up when we probe our switch tree.
+> > This would be a bit finicky to get right. We may, for instance, hold
+> > rtnl_lock for the entirety of dsa_tree_setup_master(). This will block
+> > potentially concurrent netdevice notifiers handled by dsa_slave_nb.
+> > And while holding rtnl_lock() and immediately after each dsa_master_setup(),
+> > we may check whether master->flags & IFF_UP is true, and if it is,
+> > synthesize a call to ds->ops->master_going_up(). We also need to do the
+> > reverse in dsa_tree_teardown_master().
+> 
+> Should we care about holding the lock for that much time? Will do some
+> test hoping the IFF_UP is sufficient to make the Ethernet mdio work.
 
-Hyper-V provides Isolation VM which encrypt guest memory. In
-isolation VM, swiotlb bounce buffer size needs to adjust
-according to memory size in the sev_setup_arch(). Add GUEST_MEM_
-ENCRYPT check in the Isolation VM.
+I'm certainly not smart enough to optimize things, so I'd rather hold
+the rtnl_lock for as long as I'm comfortable is enough to avoid races.
+The reason why we must hold rtnl_lock is because during
+dsa_master_setup(), the value of netdev_uses_dsa(dp->master) changes
+from false to true.
+The idea is that if IFF_UP isn't set right now, no problem, release the
+lock and we'll catch the NETDEV_UP notifier when that will appear.
+But we want to
+(a) replay the master up state if it was already up while it wasn't a
+    DSA master
+(b) avoid a potential race where the master does go up, we receive that
+    notification, but netdev_uses_dsa() doesn't yet return true for it.
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
-Change since v6:
-	* Change the order in the cc_platform_has() and check sev first.
+The model would be similar to what we have for the NETDEV_GOING_DOWN
+handler.
 
-Change since v3:
-	* Change code style of checking GUEST_MEM attribute in the
-	  hyperv_cc_platform_has().
----
- arch/x86/kernel/cc_platform.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-index 03bb2f343ddb..6cb3a675e686 100644
---- a/arch/x86/kernel/cc_platform.c
-+++ b/arch/x86/kernel/cc_platform.c
-@@ -11,6 +11,7 @@
- #include <linux/cc_platform.h>
- #include <linux/mem_encrypt.h>
- 
-+#include <asm/mshyperv.h>
- #include <asm/processor.h>
- 
- static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
-@@ -58,12 +59,19 @@ static bool amd_cc_platform_has(enum cc_attr attr)
- #endif
- }
- 
-+static bool hyperv_cc_platform_has(enum cc_attr attr)
-+{
-+	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
-+}
- 
- bool cc_platform_has(enum cc_attr attr)
- {
- 	if (sme_me_mask)
- 		return amd_cc_platform_has(attr);
- 
-+	if (hv_is_isolation_supported())
-+		return hyperv_cc_platform_has(attr);
-+
- 	return false;
- }
- EXPORT_SYMBOL_GPL(cc_platform_has);
--- 
-2.25.1
-
+Please wait for me to finish the sja1105 conversion. There are some
+issues I've noticed in your connect/disconnect implementation that I
+haven't had a chance to comment on, yet. I've tested ocelot-8021q plus
+the tagging protocol change and these appear fine.
+I'd like to post the changes I have, to make sure that what works for me
+works for you, and what works for you works for me. I may also have some
+patches laying around that track the master up/down state (I needed
+those for some RFC DSA master change patches). I'll build a mini patch
+series and post it soon-ish.

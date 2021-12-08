@@ -2,183 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B801D46D3E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E63EB46D3EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbhLHNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbhLHNB7 (ORCPT
+        id S233945AbhLHNC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:02:58 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61134 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232257AbhLHNC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:01:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71424C061746;
-        Wed,  8 Dec 2021 04:58:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37CCDB81FA1;
-        Wed,  8 Dec 2021 12:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 907DBC00446;
-        Wed,  8 Dec 2021 12:58:18 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 13:58:14 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
-Message-ID: <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-17-stefanb@linux.ibm.com>
+        Wed, 8 Dec 2021 08:02:57 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CrIHI020548;
+        Wed, 8 Dec 2021 12:59:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2R23eaCrrVtdZBHHaFMGUQMsilAYzl2387ZDrVoF20Q=;
+ b=oIMMaX4HfOwTx9zkYLVRL+qBqAUgUy+ukVDIqRZ8K6uCWlRXuBjRSRDDBIC1WvRHJ3Kx
+ /8FjfO2jjeRlTxXT5y9ksRK678W05Wj4IQSkJ2MKyhNnC0WkXZ33LNM4e02fXVyIQ4c0
+ QBSlTMmyq+KCMylneS81td8UDUZ1NxbUcg524pEvlEVVYauX8woyOGwk3AHUTHs+E8jN
+ JzTlrH4uVTQp1/l7NE02wpX9fUShHHjsFQtjOiLc0Y5umIOWBv5RGzutn76EY/i/QwU6
+ WSSYeLvPaeNqH8KQNqTkQCqd/r28RRJGR880ZTfp/Z4OJ3lA8+cJNMT66JXjIguzvD8H uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctw3w83e8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 12:59:26 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8Cv3wB031807;
+        Wed, 8 Dec 2021 12:59:25 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctw3w83d4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 12:59:25 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CsBta018166;
+        Wed, 8 Dec 2021 12:59:22 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3cqyy9p9qc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 12:59:22 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8CxJqF25624894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 12:59:19 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8B2EA404D;
+        Wed,  8 Dec 2021 12:59:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EEE58A4040;
+        Wed,  8 Dec 2021 12:59:17 +0000 (GMT)
+Received: from [9.171.54.177] (unknown [9.171.54.177])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 12:59:17 +0000 (GMT)
+Message-ID: <2a5ec1f1-a0f4-9c55-38df-c48dfe9234f7@linux.ibm.com>
+Date:   Wed, 8 Dec 2021 13:59:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211207202127.1508689-17-stefanb@linux.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 06/32] s390/airq: allow for airq structure that uses an
+ input vector
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-7-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-7-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: O0E25g8EFfYFOGfwJlLLldFUlYMRmlk-
+X-Proofpoint-GUID: YHMG5Sn74x3c_OLc-6WQ-9EgbMV5m5Xp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_04,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080080
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
-> Setup securityfs with symlinks, directories, and files for IMA
-> namespacing support. The same directory structure that IMA uses on the
-> host is also created for the namespacing case.
+
+
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> When doing device passthrough where interrupts are being forwarded
+> from host to guest, we wish to use a pinned section of guest memory
+> as the vector (the same memory used by the guest as the vector).
 > 
-> The securityfs file and directory ownerships cannot be set when the
-> IMA namespace is initialized. Therefore, delay the setup of the file
-> system to a later point when securityfs is in securityfs_fill_super.
-> 
-> This filesystem can now be mounted as follows:
-> 
-> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
-> 
-> The following directories, symlinks, and files are then available.
-> 
-> $ ls -l sys/kernel/security/
-> total 0
-> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-> 
-> $ ls -l sys/kernel/security/ima/
-> total 0
-> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
-> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
-> -rw-------. 1 root root 0 Dec  2 00:18 policy
-> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
-> -r--r-----. 1 root root 0 Dec  2 00:18 violations
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->  include/linux/ima.h             | 17 ++++++++++++++++-
->  security/inode.c                | 12 +++++++++++-
->  security/integrity/ima/ima_fs.c | 33 ++++++++++++++++++++++++++-------
->  3 files changed, 53 insertions(+), 9 deletions(-)
+>   arch/s390/include/asm/airq.h     |  4 +++-
+>   arch/s390/pci/pci_irq.c          |  8 ++++----
+>   drivers/s390/cio/airq.c          | 10 +++++++---
+>   drivers/s390/virtio/virtio_ccw.c |  2 +-
+>   4 files changed, 15 insertions(+), 9 deletions(-)
 > 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index bfb978a7f8d5..a8017272d78d 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -66,6 +66,10 @@ static inline const char * const *arch_get_ima_policy(void)
->  }
->  #endif
->  
-> +extern int ima_fs_ns_init(struct user_namespace *user_ns,
-> +			  struct dentry *root);
-> +extern void ima_fs_ns_free_dentries(struct user_namespace *user_ns);
-> +
->  #else
->  static inline enum hash_algo ima_get_current_hash_algo(void)
->  {
-> @@ -154,6 +158,15 @@ static inline int ima_measure_critical_data(const char *event_label,
->  	return -ENOENT;
->  }
->  
-> +static inline int ima_fs_ns_init(struct user_namespace *ns, struct dentry *root)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void ima_fs_ns_free_dentries(struct user_namespace *user_ns)
-> +{
-> +}
-> +
->  #endif /* CONFIG_IMA */
->  
->  #ifndef CONFIG_IMA_KEXEC
-> @@ -221,7 +234,8 @@ struct ima_h_table {
->  };
->  
->  enum {
-> -	IMAFS_DENTRY_DIR = 0,
-> +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
-> +	IMAFS_DENTRY_DIR,
->  	IMAFS_DENTRY_SYMLINK,
->  	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
->  	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
-> @@ -333,6 +347,7 @@ static inline struct ima_namespace *get_current_ns(void)
->  {
->  	return &init_ima_ns;
->  }
-> +
->  #endif /* CONFIG_IMA_NS */
->  
->  #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-> diff --git a/security/inode.c b/security/inode.c
-> index 121ac1874dde..10ee20917f42 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -16,6 +16,7 @@
->  #include <linux/fs_context.h>
->  #include <linux/mount.h>
->  #include <linux/pagemap.h>
-> +#include <linux/ima.h>
->  #include <linux/init.h>
->  #include <linux/namei.h>
->  #include <linux/security.h>
-> @@ -41,6 +42,7 @@ static const struct super_operations securityfs_super_operations = {
->  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
->  {
->  	static const struct tree_descr files[] = {{""}};
-> +	struct user_namespace *ns = fc->user_ns;
->  	int error;
->  
->  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
-> @@ -49,7 +51,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
->  
->  	sb->s_op = &securityfs_super_operations;
->  
-> -	return 0;
-> +	if (ns != &init_user_ns)
-> +		error = ima_fs_ns_init(ns, sb->s_root);
-> +
-> +	return error;
->  }
->  
->  static int securityfs_get_tree(struct fs_context *fc)
-> @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct fs_context *fc)
->  
->  static void securityfs_kill_super(struct super_block *sb)
->  {
-> +	struct user_namespace *ns = sb->s_fs_info;
-> +
-> +	if (ns != &init_user_ns)
-> +		ima_fs_ns_free_dentries(ns);
+> diff --git a/arch/s390/include/asm/airq.h b/arch/s390/include/asm/airq.h
+> index 7918a7d09028..e82e5626e139 100644
+> --- a/arch/s390/include/asm/airq.h
+> +++ b/arch/s390/include/asm/airq.h
+> @@ -47,8 +47,10 @@ struct airq_iv {
+>   #define AIRQ_IV_PTR		4	/* Allocate the ptr array */
+>   #define AIRQ_IV_DATA		8	/* Allocate the data array */
+>   #define AIRQ_IV_CACHELINE	16	/* Cacheline alignment for the vector */
+> +#define AIRQ_IV_GUESTVEC	32	/* Vector is a pinned guest page */
+>   
+> -struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags);
+> +struct airq_iv *airq_iv_create(unsigned long bits, unsigned long flags,
+> +			       unsigned long *vec);
+>   void airq_iv_release(struct airq_iv *iv);
+>   unsigned long airq_iv_alloc(struct airq_iv *iv, unsigned long num);
+>   void airq_iv_free(struct airq_iv *iv, unsigned long bit, unsigned long num);
+> diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+> index 880bcd73f11a..dfd4f3276a6d 100644
+> --- a/arch/s390/pci/pci_irq.c
+> +++ b/arch/s390/pci/pci_irq.c
+> @@ -296,7 +296,7 @@ int arch_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+>   		zdev->aisb = bit;
+>   
+>   		/* Create adapter interrupt vector */
+> -		zdev->aibv = airq_iv_create(msi_vecs, AIRQ_IV_DATA | AIRQ_IV_BITLOCK);
+> +		zdev->aibv = airq_iv_create(msi_vecs, AIRQ_IV_DATA | AIRQ_IV_BITLOCK, 0);
+>   		if (!zdev->aibv)
+>   			return -ENOMEM;
+>   
+> @@ -421,7 +421,7 @@ static int __init zpci_directed_irq_init(void)
+>   	union zpci_sic_iib iib = {{0}};
+>   	unsigned int cpu;
+>   
+> -	zpci_sbv = airq_iv_create(num_possible_cpus(), 0);
+> +	zpci_sbv = airq_iv_create(num_possible_cpus(), 0, 0);
 
-Say securityfs is unmounted. Then all the inodes and dentries become
-invalid. It's not allowed to hold on to any dentries or inodes after the
-super_block is shut down. So I just want to be sure that nothing in ima
-can access these dentries after securityfs is unmounted.
-
-To put it another way: why are they stored in struct ima_namespace in
-the first place? If you don't pin a filesystem when creating files or
-directories like you do for securityfs in init_ima_ns then you don't
-need to hold on to them as they will be automatically be wiped during
-umount.
+For a pointer use NULL? Also in other places. With the indentation fix this looks sane.

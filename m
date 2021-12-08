@@ -2,130 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7595946D041
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9805846D04A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbhLHJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S229983AbhLHJrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhLHJoN (ORCPT
+        with ESMTP id S229707AbhLHJrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:44:13 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AEBC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:40:42 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so3938938pjc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uWzgpmLO9VHXp6lkhDz4fGQuJhk+6AV1KCdyKpRVolA=;
-        b=eklJrKPspZKgFntWvR8NP54NwQ8qG9W7uiXo01EKKwoa95j2iAUFx3U7hp1/NRj0Hk
-         pMzMbCnYAeN6rcmH8z0OoZ9IrY3Vn8oXyN2v560dOkdSDmjglk83e3k8FXyfqczZ5CIw
-         t9hQ0m3WCP3YpUyUBzvUpDZ8Z3tZvQ6z6Gh3183oI0URu+IM+mgkpJ4i94RqgMxp5Pok
-         8bLc1kzZ64MmWeZr6PhCHsJ8jsnAmvYw/SMN8KPYzC8093jmt/ojLQ40sYoUjFgDSPgC
-         dDSIpyYAuHq1KnX5E3AotD2yr20k/VX2GVMaHm8q6AdAsI5Ip+PBbEpi1BfNb0o2GZJB
-         kEMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uWzgpmLO9VHXp6lkhDz4fGQuJhk+6AV1KCdyKpRVolA=;
-        b=xu1rQqO9pmc1SCnCPhs7fSkFVz8SoLQKOAcwzBGSA3YM2Nh6pv4bQsQh5fony45LXN
-         ZbL9Co2lVrsC+YGxGyUGKyGZISeifXR5zynPOdQQmYD0lKeNSLysxIehKVJyJTT+AZFZ
-         doGXJYCr0AeiYTs5f2kbFaXVuD4MTu23fD6xQP+AIre70W2GSQoPubH0Qh+dCtiPL4CS
-         qRNt/njyYkxINz+WWc4orYxeEYqODu3a9rpRg5VH2SJAIuVdIWcr7wwxgk3wtZGIs0SA
-         ADlptgQ4LETV+ItRBJNCeaHHo78G6JI+LlI5tBhgykCLOFaFZUwLLdy2fv89kQRYkrz5
-         IL8Q==
-X-Gm-Message-State: AOAM532T5lT/2satsA63Jn4FgGdOtpvFHO4Vmj6ViOClRjIxgdL1cY1c
-        BLBE/53zSNKfziPZ9uUchAya
-X-Google-Smtp-Source: ABdhPJwY9fZqXfhGo0Ye9iDFCgcftn45DiXQoZqA9ZqPx12EMWK3W9uiY/cX0pUiVc1nQAu2Bgj8Mg==
-X-Received: by 2002:a17:90b:1d90:: with SMTP id pf16mr5910775pjb.93.1638956441917;
-        Wed, 08 Dec 2021 01:40:41 -0800 (PST)
-Received: from thinkpad ([117.202.189.59])
-        by smtp.gmail.com with ESMTPSA id 13sm2600661pfp.216.2021.12.08.01.40.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 01:40:41 -0800 (PST)
-Date:   Wed, 8 Dec 2021 15:10:35 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
-        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH 1/1] bus: mhi: core: Add support for forced PM resume
-Message-ID: <20211208094035.GF70121@thinkpad>
-References: <20211208085735.196394-1-manivannan.sadhasivam@linaro.org>
- <20211208085735.196394-2-manivannan.sadhasivam@linaro.org>
- <YbB11M0FZ+AdELPa@kroah.com>
+        Wed, 8 Dec 2021 04:47:09 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:43:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E8EC6CE2046
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6445C00446;
+        Wed,  8 Dec 2021 09:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638956614;
+        bh=7KVwmZP4kb/OUL12BsPtaww8tTdt2wLQUh9C2RS84eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h3Ux8Mz5MdK0z6YQ5WyzALFAKVKmQEk0+7u4MYenjEKWSdYay/H+eLFSqkJpThpsd
+         bDunlql+anSvbDj8enIYHVUWygu7gb0yIhW8VuaUKBhHQ0cSGVTBz/q6RZxD61C6Tm
+         ZVA2ZmG8uOUATKSkIM399mZiH9XyecKC9qUhI8Lt4O8YONu7SD1bcv+5ipJB05m8uZ
+         mBJcZ7XF6g1rEOpN52UZyGYDpy+oCY4dx2nUqIzbE+tXg1bu7qNCTq/XZCk2FkZzSR
+         x2egKSR4V2pU37yAhQPbjdEdrkJhHr5Vc+ZO05KFmkY6I2LEZb6wFZ53nV/O1KK91d
+         +tW5Upq2wb+lw==
+Date:   Wed, 8 Dec 2021 11:43:23 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux@armlinux.org.uk,
+        linux@roeck-us.net, matthias.bgg@gmail.com,
+        rmk+kernel@armlinux.org.uk, wangkefeng.wang@huawei.com,
+        yj.chiang@mediatek.com
+Subject: Re: [PATCH] arm: remove [_text, _stext) from kernel code resource
+Message-ID: <YbB+O80Th2QI8sTl@kernel.org>
+References: <Ya+EUDVYdBvRa7xI@kernel.org>
+ <20211208022623.15103-1-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbB11M0FZ+AdELPa@kroah.com>
+In-Reply-To: <20211208022623.15103-1-mark-pk.tsai@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:07:32AM +0100, Greg KH wrote:
-
-[...]
-
-> > diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-> > index 723985879035..102303288cee 100644
-> > --- a/include/linux/mhi.h
-> > +++ b/include/linux/mhi.h
-> > @@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
-> >  /**
-> >   * mhi_pm_resume - Resume MHI from suspended state
-> >   * @mhi_cntrl: MHI controller
-> > + * @force: Force resuming to M0 irrespective of the device MHI state
-> >   */
-> > -int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
-> > +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
+On Wed, Dec 08, 2021 at 10:26:23AM +0800, Mark-PK Tsai wrote:
+> > On Fri, Dec 03, 2021 at 10:14:16PM +0800, Mark-PK Tsai wrote:
+> > > Remove the [_text, _stext) from Kernel Code.
+> > > Although there are some startup code in head.text, they
+> > > are freed to the buddy system after kernel boot.
+> >
+> > Hmm, I don't see it is being freed anywhere. Can you elaborate when and how
+> > the range [_text, _stext) is freed?
 > 
-> apis like this are horrid to work with over time.
+> arm_memblock_init() reserve [KERNEL_START, KERNEL_END) which are defined as following.
 > 
-> Why not just have:
-> 	mhi_pm_resume_force()
-> which then internally can set a flag that does this?  That way the
-> driver author does not have to stop every time they see this call and
-> look up exactly what the true/false field means in the function call in
-> their driver.
+> #define KERNEL_START            _stext
+> #define KERNEL_END              _end
 > 
+> free_low_memory_core_early() free all the non-reserved range in lowmem,
+> so the range [_text, _stext) is also freed here.
 
-Okay.
-
-> It also lets you leave alone the existing calls to mhi_pm_suspend() that
-> do not want to "force" anything.
+Right, I've misread KERNEL_START as if it was _text...
+ 
+> >
+> > > And we have memory protection mechanism use this
+> > > which have false alarm when some other IPs doing dma
+> > > if the dma page frame is in the [_text, _stext).
+> > >
+> > > Below are my iomem resource and reserved memory information:
+> > > console:/ # grep Kernel /proc/iomem
+> > >   20208000-219fffff : Kernel code
+> > >   21b00000-21c2e76f : Kernel data
+> > >
+> > > console:/ # cat /sys/kernel/debug/memblock/reserved
+> > > 0: 0x20201000..0x20207fff
+> > > 1: 0x20300000..0x21c2e76f
+> >
+> > What are the addresses of _text and _stext in your configuration?
 > 
-> self-documenting code is good, this is not self-documenting at all.
+> va	 pa
+> c0008000 20208000 _text
+> c0100000 20300000 _stext
 > 
-> Also, is "force" really what you are doing here?  This is a "normal"
-> resume call, which should always work.
-
-The normal resume here is resuming with M3 state only.
-
-> The "force" option here really
-> is just "ignore the current state of suspend for the device".  So
-> perhaps mhi_pm_resume_ignore_current_state() might be better?  Or
-> something shorter?
+> >
+> > What these dumps are supposed to show here?
+> >
 > 
-
-And we are actually forcing here. As per the MHI spec, the devices has to be in
-M3 state during resume. So if we allow any device to go through resume without
-being in M3, that implies we are doing a force resume.
-
-I'll use the mhi_pm_resume_force() API as you suggested.
-
-Thanks,
-Mani
-
-> Naming is hard, sorry.
+> Below is the dump info after applied this patch.
 > 
-> thanks,
+> console:/ # grep Kernel /proc/iomem
+>   20300000-219fffff : Kernel code
+>   21b00000-21c2e76f : Kernel data
 > 
-> greg k-h
+> console:/ # cat /sys/kernel/debug/memblock/reserved
+> 0: 0x20201000..0x20207fff
+> 1: 0x20300000..0x21c2e76f
+> 
+> The difference is that Kernel Code resource match the reserved memblock 1
+> which is reserved in arm_memblock_init().
+
+For that I'd extend the reservation in arm_memblock_init() to include
+[_text, _stext). 
+
+Even if the code there is not needed after init, at least we'll keep this
+consistent with other architectures.
+ 
+
+-- 
+Sincerely yours,
+Mike.

@@ -2,138 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 588EF46CB72
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 04:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E9046CB80
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 04:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbhLHDSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 22:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbhLHDSJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 22:18:09 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDFCC061574;
-        Tue,  7 Dec 2021 19:14:38 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso1341528ota.5;
-        Tue, 07 Dec 2021 19:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=329pizNCH1ZkgEomsqbDzFQr/D0jbhcoaCg4ZLi5oTI=;
-        b=HM76PKAZ6OvvFbM4N7jwgmOKGcTgB8Sy9i0CT1q+OJmLmKedpkNqIcbvXIf/iJO80H
-         JQFVZ7NWazZQDQqE+8r1whRknq3UtW3SwTd23GXsUhu8yl1T4tbc3dtDCJg9lghDcS/7
-         o+HkOMarbJ/iyWuR7L2eO5githjH+5u/xFcfkSzTjvMQP15bPiQfvGlDJuw0UfFNYYD1
-         tL4hMhpgw5ERbGIaqIKEkipSKmBP9YLWXwmfhq0L3n2xzOFMp+Gu1kDAu9tQuCzBUrvS
-         3ZdRNCIWdqcY8SL5cTsBvMV8K79hfn1ojb5hbRoVA6s5wjItHtjlKuSklw8ATt2EpnbN
-         NwkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=329pizNCH1ZkgEomsqbDzFQr/D0jbhcoaCg4ZLi5oTI=;
-        b=k9BfIHAYmXvaGbuqLfZmj5OeWCLjeEESdtJNmnzYcdtT1ec2fr5w/fq9gUTYpRGIbo
-         Exl3mLNhm1ztusV7HMBjqIznwb/KkzvXdOK1repXIu2Wa30Rmo2nQoNcjsQrYuEl4EWP
-         1oTNxvXqriI13fHJOAnNCc1sT23TjcmgAfkkvwSAoMNrPlgvknxsix+eXnRWBT14wEMD
-         CYedWUna8hpa3NVpCK/QLDBSh2DbRVytKQUm5a0phzST+gh4PV7e4rRrQvFg8UIUuiia
-         UyTskp4EiLpfu8cVP2TlYstuuxxFWMNWlE9cld73Ecv88zUo+EDOd4a5owcVV+Atn01r
-         sIJw==
-X-Gm-Message-State: AOAM532nLErLZSpwuS80up8KPJG7iDD2R9TmQdD7VJEie8TEygAave8A
-        Ts1a3awr21nIaEzJx5sfyL0=
-X-Google-Smtp-Source: ABdhPJy8wCuAbQNhdLmlL5kBWdbR4KYfaf+COvXc2VVciuWQDXVEehPxogVUROlgnaarnCzR5Lq/qA==
-X-Received: by 2002:a05:6830:280d:: with SMTP id w13mr38026526otu.101.1638933278033;
-        Tue, 07 Dec 2021 19:14:38 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id bj8sm424307oib.51.2021.12.07.19.14.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 19:14:37 -0800 (PST)
-Message-ID: <41a78a37-6136-ba45-d8fa-c7af4ee772b9@gmail.com>
-Date:   Tue, 7 Dec 2021 20:14:36 -0700
+        id S243789AbhLHDUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 22:20:07 -0500
+Received: from mga12.intel.com ([192.55.52.136]:17506 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232839AbhLHDUH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 22:20:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="217770062"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="217770062"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 19:16:35 -0800
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="502881240"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.159.50])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 19:16:30 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Hasan Al Maruf <hasan3050@gmail.com>
+Cc:     akpm@linux-foundation.org, dave.hansen@linux.intel.com,
+        feng.tang@intel.com, hasanalmaruf@fb.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mgorman@techsingularity.net, mhocko@suse.com, osalvador@suse.de,
+        peterz@infradead.org, riel@surriel.com, shakeelb@google.com,
+        shy828301@gmail.com, weixugc@google.com, ziy@nvidia.com,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [PATCH -V10 RESEND 2/6] NUMA balancing: optimize page placement
+ for memory tiering system
+References: <20211207022757.2523359-3-ying.huang@intel.com>
+        <20211207063639.83762-1-hasanalmaruf@fb.com>
+Date:   Wed, 08 Dec 2021 11:16:28 +0800
+In-Reply-To: <20211207063639.83762-1-hasanalmaruf@fb.com> (Hasan Al Maruf's
+        message of "Tue, 7 Dec 2021 01:36:39 -0500")
+Message-ID: <87wnkf3hwz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v2] selftests: net: Correct case name
-Content-Language: en-US
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jie2x Zhou <jie2x.zhou@intel.com>,
-        "Li Zhijian(intel)" <zhijianx.li@intel.com>
-References: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
- <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 11:05 PM, lizhijian@fujitsu.com wrote:
->> # TESTS=bind6 ./fcnal-test.sh
+Hasan Al Maruf <hasan3050@gmail.com> writes:
+
+> Hi Huang,
+>
+>>+void set_numabalancing_state(bool enabled)
+>>+{
+>>+	if (enabled)
+>>+		sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
+>>+	else
+>>+		sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
+>>+	__set_numabalancing_state(enabled);
+>>+}
+>>+
+>
+> One of the properties of optimized NUMA Balancing for tiered memory is we
+> are not going to scan top-tier nodes as promotion doesn't make sense there
+> (implemented in the next patch [3/6]). However, if a system has only
+> single memory node with CPU, does it make sense to run
+> `NUMA_BALANCING_NORMAL` mode there? What do you think about downgrading to
+> `NUMA_BALANCING_MEMORY_TIERING` mode if a user setup NUMA Balancing on
+> the default mode of `NUMA_BALANCING_NORMAL` on a single toptier memory
+> node?
+
+Consider a system with only 1 NUMA node and no PMEM, should we refuse
+NUMA balancing to be enabled at all?
+
+Per my understanding, the philosophy behind is to keep thing as small as
+possible instead of as smart as possible.  Do you agree?
+
+>>diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>index c266e64d2f7e..5edb5dfa8900 100644
+>>--- a/mm/vmscan.c
+>>+++ b/mm/vmscan.c
+>>@@ -56,6 +56,7 @@
 >>
->> ###########################################################################
->> IPv6 address binds
->> ###########################################################################
+>> #include <linux/swapops.h>
+>> #include <linux/balloon_compaction.h>
+>>+#include <linux/sched/sysctl.h>
 >>
+>> #include "internal.h"
 >>
->> #################################################################
->> No VRF
+>>@@ -3919,6 +3920,12 @@ static bool pgdat_watermark_boosted(pg_data_t *pgdat, int highest_zoneidx)
+>> 	return false;
+>> }
 >>
->> TEST: Raw socket bind to local address - ns-A IPv6                            [FAIL]
-
-This one passes for me.
-
-Can you run the test with '-v -p'? -v will give you the command line
-that is failing. -p will pause the tests at the failure. From there you
-can do:
-
-ip netns exec ns-A bash
-
-Look at the routing - no VRF is involved so the address should be local
-to the device and the loopback. Run the test manually to see if it
-really is failing.
-
-
->> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
->> TEST: Raw socket bind to local address - ns-A loopback IPv6                   [ OK ]
->> TEST: Raw socket bind to local address after device bind - ns-A loopback IPv6  [ OK ]
->> TEST: TCP socket bind to local address - ns-A IPv6                            [ OK ]
->> TEST: TCP socket bind to local address after device bind - ns-A IPv6          [ OK ]
->> TEST: TCP socket bind to out of scope local address - ns-A loopback IPv6      [FAIL]
-
-This one seems to be a new problem. The socket is bound to eth1 and the
-address bind is to an address on loopback. That should not be working.
-
+>>+/*
+>>+ * Keep the free pages on fast memory node a little more than the high
+>>+ * watermark to accommodate the promoted pages.
+>>+ */
+>>+#define NUMA_BALANCING_PROMOTE_WATERMARK	(10UL * 1024 * 1024 >> PAGE_SHIFT)
+>>+
+>> /*
+>>  * Returns true if there is an eligible zone balanced for the request order
+>>  * and highest_zoneidx
+>>@@ -3940,6 +3947,15 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+>> 			continue;
 >>
->> #################################################################
->> With VRF
->>
->> TEST: Raw socket bind to local address after vrf bind - ns-A IPv6             [ OK ]
->> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
->> TEST: Raw socket bind to local address after vrf bind - VRF IPv6              [ OK ]
->> TEST: Raw socket bind to local address after device bind - VRF IPv6           [ OK ]
->> TEST: Raw socket bind to invalid local address after vrf bind - ns-A loopback IPv6  [ OK ]
->> TEST: TCP socket bind to local address with VRF bind - ns-A IPv6              [ OK ]
->> TEST: TCP socket bind to local address with VRF bind - VRF IPv6               [ OK ]
->> TEST: TCP socket bind to local address with device bind - ns-A IPv6           [ OK ]
->> TEST: TCP socket bind to VRF address with device bind - VRF IPv6              [FAIL]
+>> 		mark = high_wmark_pages(zone);
+>>+		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+>>+		    numa_demotion_enabled &&
+>>+		    next_demotion_node(pgdat->node_id) != NUMA_NO_NODE) {
+>>+			unsigned long promote_mark;
+>>+
+>>+			promote_mark = min(NUMA_BALANCING_PROMOTE_WATERMARK,
+>>+					   pgdat->node_present_pages >> 6);
+>>+			mark += promote_mark;
+>>+		}
+>> 		if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
+>> 			return true;
+>> 	}
+>
+> This can be moved to a different patch. I think, this patch [2/6] can be
+> splitted into two basic patches -- 1. NUMA Balancing interface for tiered
+> memory and 2. maintaining a headroom for promotion.
 
-This failure is similar to the last one. Need to see if a recent commit
-changed something.
+Johannes has taught me that, if we introduce a new function, variable,
+or interface, it's better to introduce its user together.  So that we
+can determine whether it's necessary to do that, whether the definition
+is suitable, etc.  I think that makes sense.  So I try to do that in
+this patchset too.
 
+As in [2/5] of your patchset below, another possibility is to make
+1. NUMA balancing interface for tiered memory and 2. skip scanning top
+tier memory in NUMA balancing in one patch.  One concern is that
+although this is an optimization, there's almost no measurable
+performance difference.  This makes it hard to justify to extend the
+user space interface.  Do you have better data to support this?
 
->> TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IPv6   [ OK ]
->> TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IPv6  [ OK ]
-> 
-> 
-> Thanks
-> Zhijian
-> 
-> 
+> Instead of having a static value for `NUMA_BALANCING_PROMOTE_WATERMARK`
+> what about decoupling the allocation and reclamation and add a user-space
+> interface for controling them?
+
+This means to add a new user space ABI.  Because we may need to support
+the new ABI forever, we should have strong justification to add it.
+I am not against to add an ABI to adjust promotion watermark in
+general.  I think that the path could be,
+
+- Have a simplest solution that works without introducing new ABI, like
+  something in this patch, or revised.
+
+- Then try to add a new ABI in a separate patch with enough
+  justification, for example, with much improved performance data.
+
+Do you agree?
+
+> Do you think patch [2/5] and [3/5] of this series can be merged to your
+> current patchset?
+>
+> https://lore.kernel.org/all/cover.1637778851.git.hasanalmaruf@fb.com/
+
+Best Regards,
+Huang, Ying

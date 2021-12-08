@@ -2,141 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2854E46C867
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 00:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2C046C86B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238469AbhLGX5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 18:57:06 -0500
-Received: from mail-os0jpn01on2099.outbound.protection.outlook.com ([40.107.113.99]:56320
-        "EHLO JPN01-OS0-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231416AbhLGX5F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 18:57:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hPHRmObrwVaYmMndXX5Hvph8R4KzwVqImJryP1z+Vw+rhVfcj80Jv+vy2dId0GNzDTLO0JCCiLMbj2QrPrSD4yFRDUoNyYZPjNVsyIq6acscJkfqifdqzGbEwhS+Hot50pjiGgYorYIP4N+OJNXaoKbHHFSOKl2cJDwac+gufQirZU14j8KSkusGI4GliM3IT42sk46t8V8AMq+hmTo3XVlmKK5XL87sHWf3CTKLCg0KwHI1YEZdTTbwZHhLAteJnCdtvf7MjzVQSt5MHrXxElzDwHvoU/OrXXicu/qY8F2k7najn4LXNUvbNsJj+jTO6zKCXVKWsuRxpJdgP2CEww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpIk5Uy4mzzLnosfVJiBSLEKQY50VX8ftMPQp7GO5Ug=;
- b=SOUwpLzPrrIq6gUKDScCG3x5fgj7ciLnJGw/1jN3lxU3465XGIM4ITMcRBENyZhvcqrtiez6ymyuJ6aERD/oNHKNPj2xo1piq2qaPT779djoqlPKGLkNOJW5k2JgO71+jLSWPBvZc/419c36rn6duyZ8ZM/HZ45rxItF+OPo1qxqtAaAvNcX/5ySqnhDzQrdjKm++A6O9HRICTpA6DJJupRYBn2BYBgDLU9lJeV7F94pxY0KX2hlcnOEg4+qol4a0xOfH55SNrCFl4h4VJVEdf07nqphPdYmtkFLhDeOOgA1B8rKNif+0gZNnAifBjLtcOQOAksj8UY1FD+iJsxcEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FpIk5Uy4mzzLnosfVJiBSLEKQY50VX8ftMPQp7GO5Ug=;
- b=IzI60mhUw1+XAGXQmnR+A3aia12kHMypq8ZHPSaO84qSq3Nrp3kwPuRZqnXha6W1jIQqyIFYYDVVLdskEVMS5zg5x9HN8gK+DW1FSn1jJDotR0r4xosuP6j7Gqp+o/2s6Zabb4fJjc/a7i+vj279Zcy7ostgel5vWokszSF0aaM=
-Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com (2603:1096:400:a::10)
- by TYCPR01MB5581.jpnprd01.prod.outlook.com (2603:1096:400:a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Tue, 7 Dec
- 2021 23:53:31 +0000
-Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com
- ([fe80::3d74:9c2e:e85a:df82]) by TYCPR01MB5581.jpnprd01.prod.outlook.com
- ([fe80::3d74:9c2e:e85a:df82%5]) with mapi id 15.20.4755.023; Tue, 7 Dec 2021
- 23:53:31 +0000
-From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Ameer Hamza <amhamza.mgc@gmail.com>
-CC:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ASoC: test-component: fix null pointer dereference.
-Thread-Topic: [PATCH] ASoC: test-component: fix null pointer dereference.
-Thread-Index: AQHX6hiZRK5cTb56bk2m5NVbTZyjx6wkenEwgAC48ICAAOYnsIAAl28AgABNGACAALi/0A==
-Date:   Tue, 7 Dec 2021 23:53:31 +0000
-Message-ID: <TYCPR01MB558131047A6ABA9AA535AAC8D46E9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
-References: <20211205204200.7852-1-amhamza.mgc@gmail.com>
- <TYCPR01MB55813B26BB2B3BB6D1E072F2D46C9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
- <20211206092937.GA5609@hamza-OptiPlex-7040>
- <TYCPR01MB5581998AD64AE249C7D86C26D46D9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
- <20211207081522.GA9690@hamza-OptiPlex-7040> <Ya9YxoUqkATCOASh@sirena.org.uk>
-In-Reply-To: <Ya9YxoUqkATCOASh@sirena.org.uk>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d5db3b89-5282-4279-14af-08d9b9dcc637
-x-ms-traffictypediagnostic: TYCPR01MB5581:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB5581BC4214DED7AB6325DA93D46E9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BMsHCpkD6PYt5uKrGSJygcWZ4qyTHgdnyR/rNMn3nz077Dz8Mj5CbJlpOXuyyodYkT5CMdeaRRW5V1LUBfHKh8sAiC5iOl1tLOku3KES1qquE9WB39djDQfe2q16Gvk6EfhRHcm2G6ESMfMJ+ZpVg89eKm62Xqy7XTx3Uh90bSN9yorufiEiGLkHGR9kwDuJhA+O4KgeQZKoYJOrPzunkbnemfbQoT9S87vafU17eKpwmBGQ0v+vIfUaUBwuTybyjCqSrVs7wQ6nfAMCYL7mW+WDaJW2dUP9g89nGC1ZYLvNPab6axydTuuha9uTivhisi+oIxUIhh+J/pBHhfNNTZ+ZRbuuNPSXdA7jXtBBscbPLvlLNtHx8+goMEAHZblcWnBDVRTfsyP1eL54M3R56rYIEQ/eFyEUpjYkFD0/mSSFRApz0B04txq0YAQGGb6n63ZtkWveJfrP4p/zmxB/b8aACA9L4BCyEOCWbCUIAyN+v0MXUqrVK+hgrDitgLIocdajPwAlSNQfQaIuzrN2dudwhn/+CVuHEDtNNL9vgvBtmdBxPPem51CDxLp0BmT0BKHM5pUxZ1QbKZ9KHnWzE6hSw3P6V1GnUNX3+hupu3lFU/+Z82fi7UH6X/ClpIxXZsUnOKoN1TFYTPfHxmeV+0HSTquzhO7xM5vBHGjyfpjeTQDgylVwFzf5EvDsTkWMVvKdYbTrkUd8gFMq98iB3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB5581.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(8676002)(508600001)(9686003)(8936002)(38100700002)(54906003)(110136005)(83380400001)(122000001)(316002)(76116006)(6506007)(2906002)(186003)(66556008)(4744005)(66476007)(66446008)(66946007)(64756008)(26005)(55016003)(52536014)(33656002)(86362001)(7696005)(4326008)(5660300002)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lf3RngFNAYc3Cbvfd6WtMX8x+F/0AGQaHtANAg6Hy8WDOhOPob6PjeMHiDWT?=
- =?us-ascii?Q?V3rkSQ4KYKllhsuKWdE/0MauVSQfesn71MbOy55PcPZmzahsqJ1ba7F+gnhH?=
- =?us-ascii?Q?NCvstbj82revYUUdYlOp+7SPpdPYPsj0Zsf7TVTrHU0+kj64aY8dyz6lfM8H?=
- =?us-ascii?Q?bH1nSYWTW0sJ2K1i/yKyH5aqSArZlH2mr3Jo05lzgW8B8W2Uy2htk37g3eZT?=
- =?us-ascii?Q?evwmHk2xJizMSX1RUu5ZM/mrLl1n37dE83inaS4E1l7PZ8mP4Re34x9dtHK/?=
- =?us-ascii?Q?0eV9NGZwVg2MvpHiv/DFK7WLKsAeKCcXBtSS5sW7FQkd7tM9hI6uaIcgYedi?=
- =?us-ascii?Q?uvLSIZaTqBUBB1cPnTa7SDRouEyiIKKpbpHnkhVerKMzY4fsiEfXwuEn7FsY?=
- =?us-ascii?Q?HVtSRaRUatYRY3QNoqjDBCQSWSilouCWQlUDZtZOme1hs2bD0RSUtBmZhN2o?=
- =?us-ascii?Q?hN79zyhqem0gIkjYVph117C5GVLK4+VkFHMlICkapzoqjJEXvQM2PRgfrb2C?=
- =?us-ascii?Q?u7/3QHdBmID2b52Jnzlsgkqma1Gk9oe4Ivq/h7rzv4fFRdSAMd0ib1duE/ap?=
- =?us-ascii?Q?W7gqrf8C2I/dpRTwo74hmav0o5rsiqn48lwA9Atk0RaPmgVecj4XXdqFyYRg?=
- =?us-ascii?Q?/kmyB9MhJ/hY/lpChR/vfOqx5oH2/T7hnN0iikQgxDfABqjdsI/y0nKWm1g7?=
- =?us-ascii?Q?GlZeAntsY4zXBP3bD1wCqwPi+g+WMhpd6VnMd03nbczQfDs7nGa2Gtma2dXy?=
- =?us-ascii?Q?iQ71E8ohn0NgODHYc/CHgxUwXomc74jNRXKpl1jnhR3FGXyTyEdQ8wceopb2?=
- =?us-ascii?Q?Po41qRYViip93oD58jdSyKqsTjuVjMTSMg2fP1hDuqkt9cZLclybRYMjtr12?=
- =?us-ascii?Q?WdLojBfRLW9/LGeN+aYIvbMrr90OTr5MrnzApcUGOgu47oZgrbcOR0zqqxFN?=
- =?us-ascii?Q?Qko4koylapeZCo3b1MH530YZrD2DN7FKwCYklR6IupaTL8cFrETRNSLuLjkA?=
- =?us-ascii?Q?Lh2TLv2icftqTyZLgcyo1MgTCFofkh7q9LHAl7tcxkkFR1MYUKmhIcat5On8?=
- =?us-ascii?Q?xcepYwbCV2tm9uv4QhlESPf2sqqB/j0nExRHsQaw+u/Iijy0dF1rVEA/RMuU?=
- =?us-ascii?Q?0BW6Y+7nm7q14aiOEJvVcev4TuEm0ch+l0NfE6RFjTsf64FGYUzK6J6E/IiJ?=
- =?us-ascii?Q?4dlsrSoeI9VSzeFqgQUVeokfBCNwlPdv3OXNvCwFKEsEjWUAoWWIM0tWmEDj?=
- =?us-ascii?Q?/WA7tCAhd79JDQKOXUFs5Dxjt/yTJujAmyK1St2oucP07J7jdSFTDcI6sSoU?=
- =?us-ascii?Q?KkpPCHkjZlRl/9rOXwE/vMSedUOj1dZgT2M8r4upSu9wbOOSAcdEmyE0zby0?=
- =?us-ascii?Q?YzFVN6vrEe1SEZ1Qdx8nmzPGogzIJ8HEzTeG/hmSNEnEmjZ1Cjx1MIbwSB6X?=
- =?us-ascii?Q?LUeqXCFLFMpdLf5rCIFiZln1sEF9qAdNgP55Z1a12Tp9jTe4dnaI1ukrDlZ6?=
- =?us-ascii?Q?OX2zWu2yXdBJuV+h/eb3XJe+diK67bpR2cyLDTlYWSsTEIkBnO+fWUV1dOio?=
- =?us-ascii?Q?7HQipwkqFeqb4v9If9Swi0yy6zuKk1zl1zGank7ek/MJmgHNZRpb5YJlsw4C?=
- =?us-ascii?Q?QTsVjYAdLwxsIL0DPkkjF6JCHgrKS5/InI0aWVxMfv3jLCguBWu69ILVkuNS?=
- =?us-ascii?Q?wbUgudVHDXvHO7SWqgu4yycQQpinm9xLq1YtRaYmKEcSGSmST8f7xK5/Nn9I?=
- =?us-ascii?Q?fCJ8VYfY0Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S242564AbhLHAGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:06:07 -0500
+Received: from mga05.intel.com ([192.55.52.43]:64247 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238533AbhLHAGG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:06:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="323974210"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="323974210"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:01:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="611887767"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 07 Dec 2021 16:01:17 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mukOa-000N64-I9; Wed, 08 Dec 2021 00:01:16 +0000
+Date:   Wed, 8 Dec 2021 08:00:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [kees:memcpy/step2/next-20211206 19/19]
+ include/linux/fortify-string.h:324:4: warning: call to
+ __read_overflow2_field declared with 'warning' attribute: detected read
+ beyond size of field (2nd parameter); maybe use struct_group()?
+Message-ID: <202112080732.rL3hdjwC-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB5581.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5db3b89-5282-4279-14af-08d9b9dcc637
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 23:53:31.7816
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B1yOXLa+yJTe1GP1IpTKnnsl2qUPLURJz7wAJHZKhCXvNobCoj6Yeb9bd1rOq47+a1Vb4CO6D0NG+hgZ2S4YdMMkBKjLVSWlcSACl2GWgHdisPM9IHqwtBiH2znWbhar
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5581
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git memcpy/step2/next-20211206
+head:   082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
+commit: 082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0 [19/19] fortify: Work around Clang inlining bugs
+config: i386-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080732.rL3hdjwC-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees memcpy/step2/next-20211206
+        git checkout 082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/entry/
 
-Hi Ameer, Mark
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->> > -	const struct test_adata *adata =3D of_id->data;
->> > +	const struct test_adata *adata =3D of_device_get_match_data(&pdev->d=
-ev);
->
->> Thanks, that's a cleaner way. Can you advise how should proceed with
->> this since previous patch is already applied. Should I send a updated
->> version of patch, e.g., v2 or a new patch.=20
->
-> Please send an incremental patch on top of what is already applied as
-> covered in the message saying the patch was applied.
+All warnings (new ones prefixed by >>):
 
-No worry.
-I will post that patch
+   In file included from kernel/entry/common.c:3:
+   In file included from include/linux/context_tracking.h:5:
+   In file included from include/linux/sched.h:14:
+   In file included from include/linux/pid.h:5:
+   In file included from include/linux/rculist.h:11:
+   In file included from include/linux/rcupdate.h:27:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:12:
+   In file included from arch/x86/include/asm/page.h:14:
+   In file included from arch/x86/include/asm/page_32.h:35:
+   In file included from include/linux/string.h:253:
+>> include/linux/fortify-string.h:324:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+                           __read_overflow2_field(q_size_field, size);
+                           ^
+>> include/linux/fortify-string.h:324:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+   2 warnings generated.
 
-Best regards
+
+vim +/warning +324 include/linux/fortify-string.h
+
+2fc46de99fed34 Kees Cook      2021-06-16  255  
+2fc46de99fed34 Kees Cook      2021-06-16  256  /*
+2fc46de99fed34 Kees Cook      2021-06-16  257   * __builtin_object_size() must be captured here to avoid evaluating argument
+2fc46de99fed34 Kees Cook      2021-06-16  258   * side-effects further into the macro layers.
+2fc46de99fed34 Kees Cook      2021-06-16  259   */
+2fc46de99fed34 Kees Cook      2021-06-16  260  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+2fc46de99fed34 Kees Cook      2021-06-16  261  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
+a28a6e860c6cf2 Francis Laniel 2021-02-25  262  
+a91965903a44bf Kees Cook      2021-04-20  263  /*
+a91965903a44bf Kees Cook      2021-04-20  264   * To make sure the compiler can enforce protection against buffer overflows,
+a91965903a44bf Kees Cook      2021-04-20  265   * memcpy(), memmove(), and memset() must not be used beyond individual
+a91965903a44bf Kees Cook      2021-04-20  266   * struct members. If you need to copy across multiple members, please use
+a91965903a44bf Kees Cook      2021-04-20  267   * struct_group() to create a named mirror of an anonymous struct union.
+a91965903a44bf Kees Cook      2021-04-20  268   * (e.g. see struct sk_buff.)
+a91965903a44bf Kees Cook      2021-04-20  269   *
+a91965903a44bf Kees Cook      2021-04-20  270   * Mitigation coverage
+a91965903a44bf Kees Cook      2021-04-20  271   *					Bounds checking at:
+a91965903a44bf Kees Cook      2021-04-20  272   *					+-------+-------+-------+-------+
+a91965903a44bf Kees Cook      2021-04-20  273   *					| Compile time  | Run time      |
+a91965903a44bf Kees Cook      2021-04-20  274   * memcpy() argument sizes:		| write | read  | write | read  |
+a91965903a44bf Kees Cook      2021-04-20  275   *					+-------+-------+-------+-------+
+a91965903a44bf Kees Cook      2021-04-20  276   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+a91965903a44bf Kees Cook      2021-04-20  277   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+a91965903a44bf Kees Cook      2021-04-20  278   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+a91965903a44bf Kees Cook      2021-04-20  279   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+a91965903a44bf Kees Cook      2021-04-20  280   * memcpy(known,   known,   dynamic)	|   n   |   n   |   b   |   B   |
+a91965903a44bf Kees Cook      2021-04-20  281   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+a91965903a44bf Kees Cook      2021-04-20  282   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   b   |   V   |
+a91965903a44bf Kees Cook      2021-04-20  283   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+a91965903a44bf Kees Cook      2021-04-20  284   *					+-------+-------+-------+-------+
+a91965903a44bf Kees Cook      2021-04-20  285   *
+a91965903a44bf Kees Cook      2021-04-20  286   * y = deterministic compile-time bounds checking
+a91965903a44bf Kees Cook      2021-04-20  287   * n = cannot do deterministic compile-time bounds checking
+a91965903a44bf Kees Cook      2021-04-20  288   * n/a = no run-time bounds checking needed since compile-time deterministic
+a91965903a44bf Kees Cook      2021-04-20  289   * b = perform run-time bounds checking
+a91965903a44bf Kees Cook      2021-04-20  290   * B = can perform run-time bounds checking, but current unenforced
+a91965903a44bf Kees Cook      2021-04-20  291   * V = vulnerable to run-time overflow
+a91965903a44bf Kees Cook      2021-04-20  292   *
+a91965903a44bf Kees Cook      2021-04-20  293   */
+a91965903a44bf Kees Cook      2021-04-20  294  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+a91965903a44bf Kees Cook      2021-04-20  295  					 const size_t p_size,
+a91965903a44bf Kees Cook      2021-04-20  296  					 const size_t q_size,
+a91965903a44bf Kees Cook      2021-04-20  297  					 const size_t p_size_field,
+a91965903a44bf Kees Cook      2021-04-20  298  					 const size_t q_size_field,
+a91965903a44bf Kees Cook      2021-04-20  299  					 const char *func)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  300  {
+a28a6e860c6cf2 Francis Laniel 2021-02-25  301  	if (__builtin_constant_p(size)) {
+a91965903a44bf Kees Cook      2021-04-20  302  		/*
+a91965903a44bf Kees Cook      2021-04-20  303  		 * Length argument is a constant expression, so we
+a91965903a44bf Kees Cook      2021-04-20  304  		 * can perform compile-time bounds checking where
+a91965903a44bf Kees Cook      2021-04-20  305  		 * buffer sizes are known.
+a91965903a44bf Kees Cook      2021-04-20  306  		 */
+a91965903a44bf Kees Cook      2021-04-20  307  
+a91965903a44bf Kees Cook      2021-04-20  308  		/* Error when size is larger than enclosing struct. */
+a91965903a44bf Kees Cook      2021-04-20  309  		if (p_size > p_size_field && p_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  310  			__write_overflow();
+a91965903a44bf Kees Cook      2021-04-20  311  		if (q_size > q_size_field && q_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  312  			__read_overflow2();
+a91965903a44bf Kees Cook      2021-04-20  313  
+a91965903a44bf Kees Cook      2021-04-20  314  		/* Warn when write size argument larger than dest field. */
+a91965903a44bf Kees Cook      2021-04-20  315  		if (p_size_field < size)
+a91965903a44bf Kees Cook      2021-04-20  316  			__write_overflow_field(p_size_field, size);
+a91965903a44bf Kees Cook      2021-04-20  317  		/*
+a91965903a44bf Kees Cook      2021-04-20  318  		 * Warn for source field over-read when building with W=1
+a91965903a44bf Kees Cook      2021-04-20  319  		 * or when an over-write happened, so both can be fixed at
+a91965903a44bf Kees Cook      2021-04-20  320  		 * the same time.
+a91965903a44bf Kees Cook      2021-04-20  321  		 */
+a91965903a44bf Kees Cook      2021-04-20  322  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+a91965903a44bf Kees Cook      2021-04-20  323  		    q_size_field < size)
+a91965903a44bf Kees Cook      2021-04-20 @324  			__read_overflow2_field(q_size_field, size);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  325  	}
+a91965903a44bf Kees Cook      2021-04-20  326  	/*
+a91965903a44bf Kees Cook      2021-04-20  327  	 * At this point, length argument may not be a constant expression,
+a91965903a44bf Kees Cook      2021-04-20  328  	 * so run-time bounds checking can be done where buffer sizes are
+a91965903a44bf Kees Cook      2021-04-20  329  	 * known. (This is not an "else" because the above checks may only
+a91965903a44bf Kees Cook      2021-04-20  330  	 * be compile-time warnings, and we want to still warn for run-time
+a91965903a44bf Kees Cook      2021-04-20  331  	 * overflows.)
+a91965903a44bf Kees Cook      2021-04-20  332  	 */
+a91965903a44bf Kees Cook      2021-04-20  333  
+a91965903a44bf Kees Cook      2021-04-20  334  	/*
+a91965903a44bf Kees Cook      2021-04-20  335  	 * Always stop accesses beyond the struct that contains the
+a91965903a44bf Kees Cook      2021-04-20  336  	 * field, when the buffer's remaining size is known.
+a91965903a44bf Kees Cook      2021-04-20  337  	 * (The -1 test is to optimize away checks where the buffer
+a91965903a44bf Kees Cook      2021-04-20  338  	 * lengths are unknown.)
+a91965903a44bf Kees Cook      2021-04-20  339  	 */
+a91965903a44bf Kees Cook      2021-04-20  340  	if ((p_size != (size_t)(-1) && p_size < size) ||
+a91965903a44bf Kees Cook      2021-04-20  341  	    (q_size != (size_t)(-1) && q_size < size))
+a91965903a44bf Kees Cook      2021-04-20  342  		fortify_panic(func);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  343  }
+a28a6e860c6cf2 Francis Laniel 2021-02-25  344  
+
+:::::: The code at line 324 was first introduced by commit
+:::::: a91965903a44bf236856efc7e20c6334c4e07388 fortify: Detect struct member overflows in memcpy() at compile-time
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
+
 ---
-Kuninori Morimoto
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

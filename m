@@ -2,197 +2,704 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB9846DAA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31CD46DA9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238471AbhLHSEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:04:34 -0500
-Received: from mga06.intel.com ([134.134.136.31]:35406 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238424AbhLHSEc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:04:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="298686363"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="298686363"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:00:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="462854106"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 10:00:21 -0800
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 10:00:21 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 8 Dec 2021 10:00:21 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 8 Dec 2021 10:00:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jAT3Es5fW2LCXpr2R13A1ewE2pIAlxj0ndwBdZNAnblhanwqG/OxZnATvOBz4NKUUfzWbJY6yGOE6wRRL9FssUiL22smA0Cleu2LRO8rT45tLWZjTzi0hlYHB4oi04hO3sT1zMA+48SKdK/xa+LFbgdz9Y7OD+Pz3y5CnyQuac9avia5cD+OkFweNKYWBl3hBZmnNDMmKGiejuAdni4Y8hEAfmVDrPzvWNS2yJqmEBBjLzxPg7fL7VH7uHhP6qpm1o4KOtzUlyVVG1GH2qB8e7v6zRBGhkN+ayx2Jd1ss86QewoHLIOL5N/4BOxHlB/xpwJxgGjH3d5xIR9nqA5v+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a6tXOTaONhVINJEbiKSCDmHzI49UZiJe22NHrsMSvBM=;
- b=cnu9R+GUiLO8r4QnV8xGDzTN82/d+c+snrAHNNijTodNsgo+3KKRV9aGanOI5rWMeLHASoW0E9inCiLO9jPRUw7ofcI2TD330v+NimJQUe9TegFj4iIC4yR2Uzb+RL6KhjgVoaOc1U6PDiXXZ/SLgX9V03jyWJ86Mxlq6sk/dVcmvCUfvn04uGsmYXxyav6riTxuV2kQ1q1CCKVZzPfteuNZcjzKXr40XqfpvNF4kQG1CcD0IfSkOm89cU6r05/sb+FNOSdPiUTWYRlnBReA6MLbwo1q8qJ96BOwMLA6316BVqLJYp9EsnxrtElKss+yfdbL8achRFWztZCzGzo8wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a6tXOTaONhVINJEbiKSCDmHzI49UZiJe22NHrsMSvBM=;
- b=lEJvfUQx4siMMYafutp76bahTPIUDOqgcEcrrgNpgChZogvabx8o8OaubEJkB3b1UHerUmJSKDO9uHQ1gnWeA2EiQDwOhQrqZwVpL8z5kZTgrM9cwTmR/wix4B380zBfDM2E862dODTF4Vbnr5WSJobLvXuH5vB5WYnY3mxe35s=
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 8 Dec
- 2021 18:00:06 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::38cc:22c0:928a:95b7]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::38cc:22c0:928a:95b7%6]) with mapi id 15.20.4778.013; Wed, 8 Dec 2021
- 18:00:06 +0000
-From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
-To:     "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     "Sang, Oliver" <oliver.sang@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
- regression
-Thread-Topic: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
- regression
-Thread-Index: AQHX68BCPfwcXGFiOkq/teICNKl83awo41oA
-Date:   Wed, 8 Dec 2021 18:00:06 +0000
-Message-ID: <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
-References: <20211207012128.GA16074@xsang-OptiPlex-9020>
- <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
-In-Reply-To: <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.7)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e988d760-1508-49a0-4830-08d9ba74914d
-x-ms-traffictypediagnostic: PH0PR11MB5880:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <PH0PR11MB5880439E590B8A9FF7E7CD1AD86F9@PH0PR11MB5880.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YIK6WuBhrtMsAhgqtqdIuEiCPvpHGLkUoJ3IvtJMrmiudsKGF3Y9q/Th+PPkqOC2sVKJEtarH8BmSLbx6mJewWhUy5g7wtFzMyc1JvS3O9WYVBCShj+nsGqKZ3PmyZa562UKVsH4TsoFffyNcfbpl0AgT3waIkd5TVUlyJoFtk2SEbkno272njnn3C2dUlbUFqbjF9hupF5XJ6CUpikI97SogBPXrKy/U57vS4PS+xKYgsjgcFht69IvEUbpj14OJUJT17qvNT2bvEd0jDdVOtBPPHOloQIKmDPLofE0SRiNbB6tHBMhTwVvwQmmHhAtbpB7ybMIP7HRYLLMJ7JXFw8ceAdlenLLse1eDzArB/nQLIfJYRE7xuj5aMxWWv5Qg8d589rN0JlGAlq/TQvLTd8q3qFttL+cvbXt1zWwZ6IyUUn4D/+fkPmnLOoQD1aS95o4ljdcbexO6z9EypEKnYfCx5sTaAySqrIEqYK3PkeX+azqWE4LI37/W+aPyifU1VS/1JThzwHlb5LwOpqndufeLXH8Y2lcPbWzPusEBDbnvEsV4VhcY3rfAkXinDRraInH6DAi3X6wPkWmC8Wxuae3aJfyPNiY12bPdEeFivndKaUqMrl7TTWcYlZxFNmKSApTVuxvvZgjaYhwovCgOMRgAwfpmVGLwDOh25DqPdka6lWZILoCn3rlxAOR12eek5azQ24tFiFlZtwNpdnWHpgIi0T9t9lOSzT9/oAvTa+IIw3ZmXlPb+dx+FxZ7+0E9NOqbirvwQXoQ13eaQyG5UkglJAxEr1BS/k5j82tP0EK5wRhUX3EElSLhM+SwzOJi7fs/N9ljkTusi1euyrVWw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(64756008)(38100700002)(82960400001)(122000001)(4326008)(71200400001)(6512007)(76116006)(86362001)(508600001)(54906003)(66946007)(66476007)(2906002)(316002)(38070700005)(66446008)(110136005)(36756003)(186003)(8936002)(53546011)(966005)(8676002)(5660300002)(33656002)(26005)(83380400001)(6486002)(2616005)(6506007)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TEVkcGFPcEFxWEZSbTNzbXd4Mmk0SU51Wk9kSlhXUUMzSVVQWnR1R0tIak5V?=
- =?utf-8?B?b0YrSWtqOGdpYjcrc3lkdUtnajY2MDBHSUhDSkRnY0FJL1M3OFo4OHhmTytK?=
- =?utf-8?B?cGtEbUc3VWl2OEpMdnlOai9nakRnWHNRNk84dUZzOVpDNGtDVUZtaU9STUpD?=
- =?utf-8?B?em1pOHhGb1NYTmpMbUtaUUVkRzM5cnpZL0E2WnozM3lZRDNrc3ZOZW5mTW50?=
- =?utf-8?B?MTVKOTg2WjJrcWhjejE5TlhrUWtFTVQ3V1F0MVZPTEVDR25kNUE0OEV1U1RM?=
- =?utf-8?B?R0kySjlCLzg1WnYyT3RzM0RkdVFWcmE1L0srTDhxZS91Njlmdll6NEVVQ3Mx?=
- =?utf-8?B?R3g5d0EzenFLQ2FsWTJnNWdLS0pST1JJUnQ0WVc0OUluTTU1U0wxQkh4aUYy?=
- =?utf-8?B?SjBVT3BiK1NycWdHYnZ6L2YzRzJ0dkpsaUU1QW8yV2VTdEJNZ0oza1dCWW5v?=
- =?utf-8?B?dlplTXBHK0J3TlJ5aW1rTGFibkE5Z1hwTHpZazJLbWoyZDJKWEwvZ0laVnBS?=
- =?utf-8?B?M3ZSWnpVdjNlaVVPckFIbFo4ZTdVaEJycEpkSXV2MDFSLzMvSG13TW1OSmNE?=
- =?utf-8?B?a3NPV1gvcDAwMkRKdFZ5c2tsR1ZiN0VHUXRheEs0cGdqR2huVGFxaERFZFZJ?=
- =?utf-8?B?NmNaeURRck9Ma2lIR05iZ0crNHJTWkd3TkVVd2VJRFQvUmVHTVR1aHFMeW4x?=
- =?utf-8?B?UFIyaVB4d0pFNkljWWp6emZmMXF3QzVXcDh1L2c3emdsaXY1bHRiS3dZTmll?=
- =?utf-8?B?d05wU21jZzZacnhkMXVnRkdzQXRvQzliLzVWeEZ3TXFHWTNzTHpUQlRJZlF5?=
- =?utf-8?B?bllEbWM4aGpRWHZaZDNFY1BONktFeFRrcGZ3dGFxTmVlWHNLZ28zYVloUUVV?=
- =?utf-8?B?Y2ZoV2JUeFE3a0JySlJlcnl6YkcxZ3RxN2dNNDVzcUcwdGt0bzN6d2dYV3Fa?=
- =?utf-8?B?dXpQZlhoV1IzTDdIL2E0eWNRbllwejF4UG45SGh1anBMUS9KRFRvV3Z6ZVZZ?=
- =?utf-8?B?eFlHbGVpY1ZZemRNVGxZOEsyWTlBdVg3ZFFQR2daMkxaRmkwVkUzeXl6Smxv?=
- =?utf-8?B?NW9zNzRvWWkwenFTWERjVG9XUWlBMmhXYzNPZmRlVC9FbHBSSkRUYmRQR29t?=
- =?utf-8?B?eVEydW01Z2k5TnN1TmZwVEQrbTRoY0loODlXMVBkc2lsTWxzT0FXY0dRd2Y0?=
- =?utf-8?B?MnNzOFQzZTJpT04yWDQ4ZVZXc0pNbEtoVXhsWmc1Nk9hSXkyeXN4MHpzTHZk?=
- =?utf-8?B?Qlp6YTk1WUlFVEpBOXljZ1ZSNmtLWDF0VXdvbUdtWDU3em5BcWdwY0V0WXBK?=
- =?utf-8?B?NEdzVUVMV3NqT2dtVEQ0SnhoMkhGNUw0R0dNc205eHk3VlBXNXJMZ1Q3WFQx?=
- =?utf-8?B?ZFg0QmhpQzJXWTNIVDlWK0FHbUthWXNiUU1GSGZ6dzJKOVIzZVp0bG1YblVl?=
- =?utf-8?B?Zk8wU09HSzYzZGptS3FGb3lmNUtjaWcySXladHRpRDVQNzRudzNsYWFKaVF3?=
- =?utf-8?B?QjJZMFIrTFV4VzFUVE1PQzRDeDduYjlRWklETDhjNmxLZWlKSEtlLzM3ckVu?=
- =?utf-8?B?T0ZmQ2orakJMZUxOWllkcUkwdWRWWjVITC95c0RDbndXNkp4SWpGemwyeVkv?=
- =?utf-8?B?M0VLRUJuaFpINGZxN1NvbXhYRDRRZUxMM1BENHNGZC9OV0tvbW44MjFxSjVM?=
- =?utf-8?B?SmN0Y2F0NkJiUjBQb20xSkNIOXIxMDdCOENtYUNNanV6Rm9aSlJHYlJjNjAx?=
- =?utf-8?B?dExadFBObWl6VEs3K0R3VHRIS0ZjMXpuSy9SWmZkZDBYWEdGbmV2aDVVbU15?=
- =?utf-8?B?bmoxS05ocHlQSzFpV1NkcG83dUhaUDlhK2FraTFCV2prQzJoeUdaOHJVdFRm?=
- =?utf-8?B?NlVtT3RjMEJkRnlMZFB4Z2VvRWdQU1czVmJYTVFUZzN5MnFwNDJPdko5aHFP?=
- =?utf-8?B?T2hpdFdHblVWTzhLdUhtUmlTVEtXelZLN3g4dXNMUEl3ekVkK2FDZWNpVkJ0?=
- =?utf-8?B?QnBlYVZNRER5MEt1UTk0bVMwQkZvZGZqRXNMTnNXOVNZTDNiOVZvU3VLV1Ba?=
- =?utf-8?B?VzNCS3pseGI1YmdaZFNmWG8rOGRweVA0WE03V01LclI1SDlIdmV6Y3dpdThW?=
- =?utf-8?B?UndTTFc2azZ0TGw2UHQ2L3Z6dWI5OGhaYXhxeVJRdzdVZEIxcDdpbTBMWjZk?=
- =?utf-8?B?alcyN1M2M05JVENnR1p5bHJaNGVmbDN5R091UW9BdVhWZDgzckZDYUlJdTNq?=
- =?utf-8?Q?u8fnWBwZ7K3kkLtIw9aRlnbmCbUrbarxsNlSuEgUrI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E282A2DBD0AA1A4BB3D78BAA8E8B352E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S238428AbhLHSD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238424AbhLHSDz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:03:55 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE7CC061746;
+        Wed,  8 Dec 2021 10:00:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 943451F45A0E
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638986422; bh=XCm28hU9HPWkmkaUPQpW0Hj5YSqPLSwjey8J57GSNrA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KxZqEHE7HWDVOD5q/ofvJ7mIYXMI1Db0IwjuNk50OufbjyqlB+tJvwFkM6+8MTqDI
+         CV3fJGIhPdgl11C8j0P83STE9RMSi3+3XWH12PqcRvYX3tGCuLf+ik+LyDtI4RmRXC
+         VPv1Vf51NFtCRf+BeIj9aEDO7CxzrMlR/rpq6kIqxyMGawGNVIJrLS3pe/XpfrEdCp
+         fuDmDseHF8Q3IxkY0t21MK3LEXyZXhy1bGielDgdlD9+buwYzemGpFlnjYs3ncfNjr
+         R8z24920b2gb3KNzhjflrh1vjsVgdM8rOmDJc+UfbfKCGryjWE15uaPJtwh1/D8XvB
+         txLJsxVkTeWJg==
+Subject: Re: [PATCH v2 3/5] arm64: dts: imx8mn-bsh-smm-s2/pro: Add iMX8MN BSH
+ SMM S2 boards
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        festevam@gmail.com, ioana.ciornei@nxp.com,
+        jagan@amarulasolutions.com, kernel@pengutronix.de, krzk@kernel.org,
+        linux-imx@nxp.com, matt@traverse.com.au, matteo.lisi@engicam.com,
+        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
+        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        tharvey@gateworks.com
+References: <20211123151252.143631-1-ariel.dalessandro@collabora.com>
+ <20211123151252.143631-4-ariel.dalessandro@collabora.com>
+ <20211206012933.GN4216@dragon>
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Message-ID: <d75386b3-6e2a-a779-6da2-9ceb892f22a2@collabora.com>
+Date:   Wed, 8 Dec 2021 15:00:10 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e988d760-1508-49a0-4830-08d9ba74914d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 18:00:06.4963
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bTKziALQ8GUbMlqK9q8I8EWn4NUVFDgdGmS8EYOcVPedLnWikJ/qY0IrR2pb2sSVE8yoemlE3USAd6iig4haS3cZcSBCz4vVuKJMUlklxN8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5880
-X-OriginatorOrg: intel.com
+In-Reply-To: <20211206012933.GN4216@dragon>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRGVjIDcsIDIwMjEsIGF0IDE1OjE0LCBIYW5zZW4sIERhdmUgPGRhdmUuaGFuc2VuQGludGVs
-LmNvbT4gd3JvdGU6DQo+IA0KPiBPbGl2ZXIgb3IgQ2hhbmcsIGNvdWxkIHlvdSB0cnkgdG8gcmVw
-cm9kdWNlIHRoaXMgYnkgaGFuZCBvbiBvbmUgb2YgdGhlDQo+IHN1c3BlY3Qgc3lzdGVtcz8gIEJ1
-aWxkOg0KPiANCj4gIDFiZGRhMjRjNGEgKCJzaWduYWw6IEFkZCBhbiBvcHRpb25hbCBjaGVjayBm
-b3IgYWx0c3RhY2sgc2l6ZSIpDQo+IA0KPiB0aGVuIHJ1biB3aWxsLWl0LXNjYWxlIGJ5IGhhbmQu
-ICBUaGVuIGJ1aWxkOg0KPiANCj4gIDNhYWMzZWJlYTAgKCJ4ODYvc2lnbmFsOiBJbXBsZW1lbnQg
-c2lnYWx0c3RhY2sgc2l6ZSB2YWxpZGF0aW9uIikNCj4gDQo+IGFuZCBydW4gaXQgYWdhaW4uICBB
-bHNvLCBkbyB3ZSBzZWUgYW55IGhpZ2hlciBjb3JlLWNvdW50IHJlZ3Jlc3Npb25zPw0KPiBUaGVz
-ZSBhbGwgc2VlbSB0byBoYXBwZW4gd2l0aDoNCj4gDQo+IAltb2RlPXRocmVhZA0KPiAJbnJfdGFz
-az0xNg0KPiANCj4gVGhhdCdzIHJlYWxseSBvZGQgdG8gc2VlIHRoYXQgZm9yIHRoZXNlIHN5c3Rl
-bXMgd2l0aCBwcm9iYWJseSB+NTAgY29yZXMNCj4gZWFjaC4gIEknZCBleHBlY3QgdG8gc2VlIGl0
-IGdldCB3b3JzZSBhdCBoaWdoZXIgY29yZSBjb3VudHMuDQoNCnRnbHggYWxzbyBhc2tlZCBhIHNp
-bWlsYXIgdGhpbmcgLS0gdGVzdCBpdCB3aXRob3V0IHRoZSBweXRob24gc2NyaXB0IGJldHdlZW4N
-CjUuMTYtcmNYIHZzIDUuMTUuDQoNClNvLCByYW4gdGhpcyB3aXRoIHRob3NlIGtlcm5lbCB2ZXJz
-aW9ucyBhbmQgc29tZSBwYXRjaGVzOg0KICAgICQgLi9zaWduYWwxX3RocmVhZHMgLXMgMTAgLXQg
-MTYNCg0KVGhlIHRlc3QgYWNjb3VudHMgdG90YWwgbnVtYmVyIG9mIGRlbGl2ZXJlZCBzaWduYWxz
-IGluIDE2IHRocmVhZHMgaW4gYSBzZWNvbmQuDQpSZXBlYXQgdGhpcyAxMCB0aW1lcyBhbmQgdGhl
-biBhdmVyYWdlIG91dC4gVGhhdOKAmXMgd2hhdCAneyBhdmVyYWdlIH0nIHRlbGxzLiBTbywNCmhp
-Z2hlciBpcyBiZXR0ZXIuDQoNCkluIHRoaXMgdGVzdCwgdGhlIGxvY2sgY29udGVudGlvbiBjYW1l
-IGZyb20gdGhpcyBzaWduYWwgcmV0dXJuIHBhdGg6DQogICAgcnRfc2lncmV0dXJuKCkNCiAgICAg
-ICAgLS0+IHJlc3RvcmVfYWx0c3RhY2soKQ0KICAgICAgICAgICAgLS0+IGRvX3NpZ2FsdHN0YWNr
-KCkNCkJ1dCBkb19zaWdhbHRzdGFjaygpIGlzIG5vdCBuZWVkZWQgaGVyZSBhcyBubyBzaWdhbHRz
-dGFjayBjaGFuZ2VzLiBTbywgcGVyaGFwcw0Kc2tpcCBpdCBsaWtlIFsyXS4NCg0KVGhlbiwgSSBn
-b3QgdGhpczoNCg0KICB7IGtlcm5lbCB2ZXJzaW9uIH0JOiB7IGF2ZXJhZ2UgfSANCiAgNS4xNS4w
-CQkJCTogNTg1NTc3DQogIDUuMTYuMC1yYzQJCQk6IDUxNDk1OQ0KICA1LjE2LjAtcmM0ICsgWzFd
-CQk6IDU3NTA2Ng0KICA1LjE2LjAtcmM0ICsgWzJdCQk6IDU5NzIwMQ0KDQpJIHRoaW5rIGF0IGxl
-YXN0IHRoZSBsYXN0IGNhc2Ugc2VydmVzIGFzIGEgcHJvb2Ygb2YgY29uY2VwdCBmb3IgdGhpcyBp
-c3N1ZS4NCg0KVGhhbmtzLA0KQ2hhbmcNCg0KDQpbMV0gdGdseOKAmXMgZGlmZiBzaG93biBpbiBo
-ZXJlOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzg3YmwxczM1N3AuZmZzQHRnbHgvDQoN
-ClsyXSANCmRpZmYgLS1naXQgYS9rZXJuZWwvc2lnbmFsLmMgYi9rZXJuZWwvc2lnbmFsLmMNCmlu
-ZGV4IGE2MjliMTFiZjNlMC4uODE5NGQyZjM4YmYxIDEwMDY0NA0KLS0tIGEva2VybmVsL3NpZ25h
-bC5jDQorKysgYi9rZXJuZWwvc2lnbmFsLmMNCkBAIC00MjI0LDYgKzQyMjQsMTEgQEAgaW50IHJl
-c3RvcmVfYWx0c3RhY2soY29uc3Qgc3RhY2tfdCBfX3VzZXIgKnVzcykNCiAgICAgICAgc3RhY2tf
-dCBuZXc7DQogICAgICAgIGlmIChjb3B5X2Zyb21fdXNlcigmbmV3LCB1c3MsIHNpemVvZihzdGFj
-a190KSkpDQogICAgICAgICAgICAgICAgcmV0dXJuIC1FRkFVTFQ7DQorICAgICAgIGlmIChjdXJy
-ZW50LT5zYXNfc3Nfc3AgPT0gKHVuc2lnbmVkIGxvbmcpIG5ldy5zc19zcCAmJg0KKyAgICAgICAg
-ICAgY3VycmVudC0+c2FzX3NzX3NpemUgPT0gbmV3LnNzX3NpemUgJiYNCisgICAgICAgICAgIGN1
-cnJlbnQtPnNhc19zc19mbGFncyA9PSBuZXcuc3NfZmxhZ3MpDQorICAgICAgICAgICAgICAgcmV0
-dXJuIDA7DQorDQogICAgICAgICh2b2lkKWRvX3NpZ2FsdHN0YWNrKCZuZXcsIE5VTEwsIGN1cnJl
-bnRfdXNlcl9zdGFja19wb2ludGVyKCksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1J
-TlNJR1NUS1NaKTsNCiAgICAgICAgLyogc3F1YXNoIGFsbCBidXQgRUZBVUxUIGZvciBub3cgKi8N
-Cg0K
+Hi Shawn,
+
+Thanks a lot for the review.
+
+On 12/5/21 10:29 PM, Shawn Guo wrote:
+> On Tue, Nov 23, 2021 at 12:12:50PM -0300, Ariel D'Alessandro wrote:
+>> Introduce BSH SystemMaster (SMM) S2 board family, which consists of:
+>> iMX8MN SMM S2 and iMX8MN SMM S2 PRO boards.
+>>
+>> Add support for iMX8MN BSH SMM S2 board:
+>>
+>> - 256 MiB DDR3 RAM
+>> - 512 MiB NAND
+>> - Megabit Ethernet PHY
+>> - Wi-Fi 802.11 a/b/g/n/ac with Bluetooth 5.0
+>> - USB-OTG (peripheral mode)
+>>
+>> Add support for iMX8MN BSH SMM S2 PRO board:
+>>
+>> - 512 MiB DDR3 RAM
+>> - 8 GiB eMMC
+>> - Megabit Ethernet PHY
+>> - Wi-Fi 802.11 a/b/g/n/ac with Bluetooth 5.0
+>> - USB-OTG (peripheral mode)
+>>
+>> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+>> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+>> ---
+>>  arch/arm64/boot/dts/freescale/Makefile        |   2 +
+>>  .../freescale/imx8mn-bsh-smm-s2-common.dtsi   | 426 ++++++++++++++++++
+>>  .../boot/dts/freescale/imx8mn-bsh-smm-s2.dts  |  48 ++
+>>  .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    |  80 ++++
+>>  4 files changed, 556 insertions(+)
+>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
+>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+>>
+>> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+>> index a14a6173b765..c3e01c94ff7f 100644
+>> --- a/arch/arm64/boot/dts/freescale/Makefile
+>> +++ b/arch/arm64/boot/dts/freescale/Makefile
+>> @@ -47,6 +47,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
+>> +dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2.dtb
+>> +dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2pro.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
+>>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+>> new file mode 100644
+>> index 000000000000..a49528e1601c
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+>> @@ -0,0 +1,426 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright 2021 Collabora Ltd.
+>> + * Copyright 2021 BSH Hausgeraete GmbH
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "imx8mn.dtsi"
+>> +
+>> +/ {
+>> +	chosen {
+>> +		stdout-path = &uart4;
+>> +	};
+>> +
+>> +	fec_supply: fec_supply_en {
+> 
+> Hyphen is recommended in node name.
+
+Fixed in v3.
+
+> 
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "tja1101_en";
+>> +		regulator-min-microvolt = <3300000>;
+>> +		regulator-max-microvolt = <3300000>;
+>> +		gpio = <&gpio2 20 GPIO_ACTIVE_HIGH>;
+>> +		vin-supply = <&buck4_reg>;
+>> +		enable-active-high;
+> 
+> Put it right below 'gpio' line.
+
+Fixed in v3.
+
+> 
+>> +	};
+>> +
+>> +	usdhc2_pwrseq: usdhc2_pwrseq {
+>> +		compatible = "mmc-pwrseq-simple";
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&pinctrl_usdhc2_pwrseq>;
+>> +		reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>;
+>> +	};
+>> +};
+>> +
+>> +&A53_0 {
+>> +	cpu-supply = <&buck2_reg>;
+>> +};
+>> +
+>> +&A53_1 {
+>> +	cpu-supply = <&buck2_reg>;
+>> +};
+>> +
+>> +&A53_2 {
+>> +	cpu-supply = <&buck2_reg>;
+>> +};
+>> +
+>> +&A53_3 {
+>> +	cpu-supply = <&buck2_reg>;
+>> +};
+>> +
+>> +&ecspi2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_espi2>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&fec1 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_fec1>;
+>> +	phy-mode = "rmii";
+>> +	phy-handle = <&ethphy0>;
+>> +	phy-supply = <&fec_supply>;
+>> +	fsl,magic-packet;
+>> +	status = "okay";
+>> +
+>> +	mdio {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +
+>> +		ethphy0: ethernet-phy@0 {
+>> +			compatible = "ethernet-phy-ieee802.3-c22";
+>> +			reg = <0>;
+>> +			reset-gpios = <&gpio1 29 GPIO_ACTIVE_LOW>;
+>> +			reset-assert-us = <20>;
+>> +			reset-deassert-us = <2000>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&i2c1 {
+>> +	clock-frequency = <400000>;
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_i2c1>;
+>> +	status = "okay";
+>> +
+>> +	bd71847: pmic@4b {
+>> +		compatible = "rohm,bd71847";
+>> +		reg = <0x4b>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&pinctrl_pmic>;
+>> +		interrupt-parent = <&gpio1>;
+>> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>> +		rohm,reset-snvs-powered;
+>> +
+>> +		#clock-cells = <0>;
+>> +		clocks = <&osc_32k 0>;
+>> +		clock-output-names = "clk-32k-out";
+>> +
+>> +		regulators {
+>> +			buck1_reg: BUCK1 {
+>> +				/* PMIC_BUCK1 - VDD_SOC */
+>> +				regulator-name = "buck1";
+>> +				regulator-min-microvolt = <700000>;
+>> +				regulator-max-microvolt = <1300000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +				regulator-ramp-delay = <1250>;
+>> +			};
+>> +
+>> +			buck2_reg: BUCK2 {
+>> +				/* PMIC_BUCK2 - VDD_ARM */
+>> +				regulator-name = "buck2";
+>> +				regulator-min-microvolt = <700000>;
+>> +				regulator-max-microvolt = <1300000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +				regulator-ramp-delay = <1250>;
+>> +			};
+>> +
+>> +			buck3_reg: BUCK3 {
+>> +				/* PMIC_BUCK5 - VDD_DRAM_VPU_GPU */
+>> +				regulator-name = "buck3";
+>> +				regulator-min-microvolt = <700000>;
+>> +				regulator-max-microvolt = <1350000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			buck4_reg: BUCK4 {
+>> +				/* PMIC_BUCK6 - VDD_3V3 */
+>> +				regulator-name = "buck4";
+>> +				regulator-min-microvolt = <3000000>;
+>> +				regulator-max-microvolt = <3300000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			buck5_reg: BUCK5 {
+>> +				/* PMIC_BUCK7 - VDD_1V8 */
+>> +				regulator-name = "buck5";
+>> +				regulator-min-microvolt = <1605000>;
+>> +				regulator-max-microvolt = <1995000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			buck6_reg: BUCK6 {
+>> +				/* PMIC_BUCK8 - NVCC_DRAM */
+>> +				regulator-name = "buck6";
+>> +				regulator-min-microvolt = <800000>;
+>> +				regulator-max-microvolt = <1400000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			ldo1_reg: LDO1 {
+>> +				/* PMIC_LDO1 - NVCC_SNVS_1V8 */
+>> +				regulator-name = "ldo1";
+>> +				regulator-min-microvolt = <1600000>;
+>> +				regulator-max-microvolt = <1900000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			ldo2_reg: LDO2 {
+>> +				/* PMIC_LDO2 - VDD_SNVS_0V8 */
+>> +				regulator-name = "ldo2";
+>> +				regulator-min-microvolt = <800000>;
+>> +				regulator-max-microvolt = <900000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			ldo3_reg: LDO3 {
+>> +				/* PMIC_LDO3 - VDDA_1V8 */
+>> +				regulator-name = "ldo3";
+>> +				regulator-min-microvolt = <1800000>;
+>> +				regulator-max-microvolt = <3300000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			ldo4_reg: LDO4 {
+>> +				/* PMIC_LDO4 - VDD_MIPI_0V9 */
+>> +				regulator-name = "ldo4";
+>> +				regulator-min-microvolt = <900000>;
+>> +				regulator-max-microvolt = <1800000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +
+>> +			ldo6_reg: LDO6 {
+>> +				/* PMIC_LDO6 - VDD_MIPI_1V2 */
+>> +				regulator-name = "ldo6";
+>> +				regulator-min-microvolt = <900000>;
+>> +				regulator-max-microvolt = <1800000>;
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +			};
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&i2c3 {
+>> +	clock-frequency = <400000>;
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_i2c3>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c4 {
+>> +	clock-frequency = <400000>;
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_i2c4>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&uart2 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_uart2>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&uart3 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_uart3>;
+>> +	assigned-clocks = <&clk IMX8MN_CLK_UART3>;
+>> +	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_80M>;
+>> +	uart-has-rtscts;
+>> +	status = "okay";
+>> +
+>> +	bluetooth {
+>> +		compatible = "brcm,bcm43438-bt";
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&pinctrl_bluetooth>;
+>> +		shutdown-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+>> +		device-wakeup-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
+>> +		host-wakeup-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+>> +		max-speed = <3000000>;
+>> +	};
+>> +};
+>> +
+>> +/* Console */
+>> +&uart4 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_uart4>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usbotg1 {
+>> +	dr_mode = "peripheral";
+>> +	disable-over-current;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usdhc2 {
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+>> +	pinctrl-0 = <&pinctrl_usdhc2>;
+>> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
+>> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
+>> +	mmc-pwrseq = <&usdhc2_pwrseq>;
+>> +	bus-width = <4>;
+>> +	non-removable;
+>> +	status = "okay";
+>> +
+>> +	brcmf: bcrmf@1 {
+>> +		compatible = "brcm,bcm4329-fmac";
+>> +		reg = <1>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&pinctrl_wlan>;
+>> +		interrupt-parent = <&gpio1>;
+>> +		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
+>> +		interrupt-names = "host-wake";
+>> +	};
+>> +};
+>> +
+>> +&wdog1 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_wdog>;
+>> +	fsl,ext-reset-output;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&iomuxc {
+>> +	pinctrl_espi2: espi2grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK            0x082
+>> +			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI            0x082
+>> +			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO            0x082
+>> +			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_i2c1: i2c1grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_I2C1_SCL_I2C1_SCL			0x400000c2
+>> +			MX8MN_IOMUXC_I2C1_SDA_I2C1_SDA			0x400000c2
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_i2c3: i2c3grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_I2C3_SCL_I2C3_SCL			0x400000c2
+>> +			MX8MN_IOMUXC_I2C3_SDA_I2C3_SDA			0x400000c2
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_i2c4: i2c4grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_I2C4_SCL_I2C4_SCL			0x400000c2
+>> +			MX8MN_IOMUXC_I2C4_SDA_I2C4_SDA			0x400000c2
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_pmic: pmicirq {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_GPIO1_IO03_GPIO1_IO3		0x040
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_uart4: uart4grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_UART4_RXD_UART4_DCE_RX		0x040
+>> +			MX8MN_IOMUXC_UART4_TXD_UART4_DCE_TX		0x040
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc2_pwrseq: usdhc2pwrseqgrp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SAI2_MCLK_GPIO4_IO27		0x040	/* WL_REG_ON */
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc2: usdhc2grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x090
+>> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d0
+>> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d0
+>> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d0
+>> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d0
+>> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d0
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc2_100mhz: usdhc2grp100mhz {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x094
+>> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d4
+>> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d4
+>> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d4
+>> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d4
+>> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d4
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc2_200mhz: usdhc2grp200mhz {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD2_CLK_USDHC2_CLK			0x096
+>> +			MX8MN_IOMUXC_SD2_CMD_USDHC2_CMD			0x0d6
+>> +			MX8MN_IOMUXC_SD2_DATA0_USDHC2_DATA0		0x0d6
+>> +			MX8MN_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x0d6
+>> +			MX8MN_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x0d6
+>> +			MX8MN_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x0d6
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_wlan: wlangrp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x0d6	/* GPIO_0 - WIFI_GPIO_0 */
+>> +			MX8MN_IOMUXC_GPIO1_IO08_GPIO1_IO8		0x0d6	/* GPIO_1 - WIFI_GPIO_1 */
+>> +			MX8MN_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x0d6	/* BT_GPIO_5 - WIFI_GPIO_5 */
+>> +			MX8MN_IOMUXC_SPDIF_RX_GPIO5_IO4			0x0d6	/* I2S_CLK - WIFI_GPIO_6 */
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_uart2: uart2grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_UART2_RXD_UART2_DCE_RX		0x040
+>> +			MX8MN_IOMUXC_UART2_TXD_UART2_DCE_TX		0x040
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_uart3: uart3grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_UART3_TXD_UART3_DCE_TX		0x040
+>> +			MX8MN_IOMUXC_UART3_RXD_UART3_DCE_RX		0x040
+>> +			MX8MN_IOMUXC_ECSPI1_MISO_UART3_DCE_CTS_B	0x040
+>> +			MX8MN_IOMUXC_ECSPI1_SS0_UART3_DCE_RTS_B		0x040
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_bluetooth: bluetoothgrp {
+> 
+> Out of alphabetical order.
+
+Fixed in v3.
+
+> 
+> Shawn
+> 
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_GPIO1_IO15_GPIO1_IO15		0x044	/* BT_REG_ON */
+>> +			MX8MN_IOMUXC_ENET_TD3_GPIO1_IO18		0x046	/* BT_DEV_WAKE */
+>> +			MX8MN_IOMUXC_ENET_RD2_GPIO1_IO28		0x090	/* BT_HOST_WAKE */
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_wdog: wdoggrp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B		0x046
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_fec1: fec1grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_ENET_MDC_ENET1_MDC			0x002
+>> +			MX8MN_IOMUXC_ENET_MDIO_ENET1_MDIO		0x002
+>> +			MX8MN_IOMUXC_ENET_RD0_ENET1_RGMII_RD0		0x090
+>> +			MX8MN_IOMUXC_ENET_RD1_ENET1_RGMII_RD1		0x090
+>> +			MX8MN_IOMUXC_ENET_RXC_ENET1_RX_ER		0x090
+>> +			MX8MN_IOMUXC_ENET_TD0_ENET1_RGMII_TD0		0x016
+>> +			MX8MN_IOMUXC_ENET_TD1_ENET1_RGMII_TD1		0x016
+>> +			MX8MN_IOMUXC_ENET_TD2_ENET1_TX_CLK		0x016
+>> +			MX8MN_IOMUXC_ENET_TX_CTL_ENET1_RGMII_TX_CTL	0x016
+>> +			MX8MN_IOMUXC_ENET_RX_CTL_ENET1_RGMII_RX_CTL	0x090
+>> +			MX8MN_IOMUXC_ENET_TXC_ENET1_TX_ER		0x016
+>> +			MX8MN_IOMUXC_SD2_CD_B_GPIO2_IO12		0x150	/* RMII_INT - ENET_INT */
+>> +			MX8MN_IOMUXC_SD2_WP_GPIO2_IO20			0x150	/* RMII_EN - ENET_EN */
+>> +			MX8MN_IOMUXC_SD2_RESET_B_GPIO2_IO19		0x016	/* RMII_WAKE - GPIO_ENET_WAKE */
+>> +			MX8MN_IOMUXC_ENET_RD3_GPIO1_IO29		0x016	/* RMII_RESET - GPIO_ENET_RST */
+>> +		>;
+>> +	};
+>> +};
+>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
+>> new file mode 100644
+>> index 000000000000..33f98582eace
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dts
+>> @@ -0,0 +1,48 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright 2021 Collabora Ltd.
+>> + * Copyright 2021 BSH Hausgeraete GmbH
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "imx8mn-bsh-smm-s2-common.dtsi"
+>> +
+>> +/ {
+>> +	model = "BSH SMM S2";
+>> +	compatible = "bsh,imx8mn-bsh-smm-s2", "fsl,imx8mn";
+>> +
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +		reg = <0x0 0x40000000 0x0 0x10000000>;
+>> +	};
+>> +};
+>> +
+>> +&gpmi {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_gpmi_nand>;
+>> +	nand-on-flash-bbt;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&iomuxc {
+>> +	pinctrl_gpmi_nand: gpmi-nand {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_NAND_ALE_RAWNAND_ALE		0x00000096
+>> +			MX8MN_IOMUXC_NAND_CE0_B_RAWNAND_CE0_B		0x00000096
+>> +			MX8MN_IOMUXC_NAND_CLE_RAWNAND_CLE		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA00_RAWNAND_DATA00		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA01_RAWNAND_DATA01		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA02_RAWNAND_DATA02		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA03_RAWNAND_DATA03		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA04_RAWNAND_DATA04		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA05_RAWNAND_DATA05		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA06_RAWNAND_DATA06		0x00000096
+>> +			MX8MN_IOMUXC_NAND_DATA07_RAWNAND_DATA07		0x00000096
+>> +			MX8MN_IOMUXC_NAND_RE_B_RAWNAND_RE_B		0x00000096
+>> +			MX8MN_IOMUXC_NAND_READY_B_RAWNAND_READY_B	0x00000056
+>> +			MX8MN_IOMUXC_NAND_WE_B_RAWNAND_WE_B		0x00000096
+>> +			MX8MN_IOMUXC_NAND_WP_B_RAWNAND_WP_B		0x00000096
+>> +		>;
+>> +	};
+>> +};
+>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+>> new file mode 100644
+>> index 000000000000..c6a8ed6745c1
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+>> @@ -0,0 +1,80 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright 2021 Collabora Ltd.
+>> + * Copyright 2021 BSH Hausgeraete GmbH
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "imx8mn-bsh-smm-s2-common.dtsi"
+>> +
+>> +/ {
+>> +	model = "BSH SMM S2 PRO";
+>> +	compatible = "bsh,imx8mn-bsh-smm-s2pro", "fsl,imx8mn";
+>> +
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +		reg = <0x0 0x40000000 0x0 0x20000000>;
+>> +	};
+>> +};
+>> +
+>> +/* eMMC */
+>> +&usdhc1 {
+>> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+>> +	pinctrl-0 = <&pinctrl_usdhc1>;
+>> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+>> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
+>> +	bus-width = <8>;
+>> +	non-removable;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&iomuxc {
+>> +	pinctrl_usdhc1: usdhc1grp {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
+>> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d0
+>> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d0
+>> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x090
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000094
+>> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d4
+>> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d4
+>> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x094
+>> +		>;
+>> +	};
+>> +
+>> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
+>> +		fsl,pins = <
+>> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000096
+>> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD			0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA4_USDHC1_DATA4		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA5_USDHC1_DATA5		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA6_USDHC1_DATA6		0x0d6
+>> +			MX8MN_IOMUXC_SD1_DATA7_USDHC1_DATA7		0x0d6
+>> +			MX8MN_IOMUXC_SD1_STROBE_USDHC1_STROBE		0x096
+>> +		>;
+>> +	};
+>> +};
+>> -- 
+>> 2.30.2
+>>
+
+Regards,
+Ariel

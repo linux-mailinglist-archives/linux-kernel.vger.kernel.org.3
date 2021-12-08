@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075B446D35C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39AF46D35F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbhLHMf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhLHMf6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:35:58 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A00C061746;
-        Wed,  8 Dec 2021 04:32:26 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id g14so7780893edb.8;
-        Wed, 08 Dec 2021 04:32:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9MiUm4l5U844AA3d0EfW8ti2Wpr/IulKdw4qVFUvPc0=;
-        b=hGlkpXUJ7PRTd2AQI1BF6KYL+BqEZ6yvAbcrozgWUcYz5u0wPYvvX+JFNB2eqoWnWw
-         KDdHkQkimI3odKd6ydUxfw8GmnCzqeKNXPqJReMzkFUN842MmRXvxXa//98uR9yczksU
-         36HB1SrFQzkPu4B4f0FPvX6KV2pLBkb0ea5hMFrcBhJQO4+YdWW856nmtpmQesTKrk0N
-         vOe13TqH2aUjr7AmNrVuYfu4+eNGTsVQKJKT7affRTjOEDD97aLNGP4nsLod8V5chVoI
-         IBJsejHNPqrb3KaWpN/eYnpGAk4/wDBjFo2JIhJ11FR9uPakXOPVTvCRR0eOX87yfqNB
-         vbqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9MiUm4l5U844AA3d0EfW8ti2Wpr/IulKdw4qVFUvPc0=;
-        b=cGvIZPpHHNDT8YU0/boZXSQ5Ctg27BzVTrXmYNc5OJrokRAVQ5cn7Js6yGviS9O6q8
-         ht3jxvM81UmUrIMELTCV8TmaKRfN7XknTtMScdhZVVyrNOq/2ma7w9vh3WHFqRGLzUfL
-         YGUFtjXVsPRRUUf0JsBGdN7UnM0ualcKEh4yrbkzB9UFhn8Vfk87kt6s02/i9khYGdPb
-         kgZcy6acPvDYf/GqHWXNYrCBWeLj/Eq2D0JFiIo1X4kyHLMEK3rK9ZbwIEuBg/CibEbj
-         YeJCn44SBwKcJsglsJsUmnmbmBf4yYrcPCa1+UaqYmSzJg7H+AWrOZCMuco4izU9LlUH
-         DvpQ==
-X-Gm-Message-State: AOAM530huoPzyjfu/MZMcDQc/lEzOf1Zclph/TVdF6OMJqFBzS/csFpQ
-        g+tRz/1UAC0Y+Nt5jiZid7E=
-X-Google-Smtp-Source: ABdhPJzN0q6o+Y3hYpF6vvbs6Lb7ffzekkkrvob9e4hP9zNOzkaERXua/ip0/5yu2uMvsX5h57J0nA==
-X-Received: by 2002:a17:906:4488:: with SMTP id y8mr7000336ejo.175.1638966744494;
-        Wed, 08 Dec 2021 04:32:24 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id gs15sm1367556ejc.42.2021.12.08.04.32.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 04:32:23 -0800 (PST)
-Date:   Wed, 8 Dec 2021 14:32:22 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH v2 0/8] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <20211208123222.pcljtugpq5clikhq@skbuf>
-References: <20211208034040.14457-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
+        id S233462AbhLHMhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:37:15 -0500
+Received: from mail.thorsis.com ([92.198.35.195]:53952 "EHLO mail.thorsis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229598AbhLHMhO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 07:37:14 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id BDB6410C8;
+        Wed,  8 Dec 2021 13:33:41 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TYdj9XuRCxoj; Wed,  8 Dec 2021 13:33:41 +0100 (CET)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id EF044335A; Wed,  8 Dec 2021 13:33:39 +0100 (CET)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: axentia.se]
+        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
+        * -0.0 NO_RECEIVED Informational: message has no Received headers
+Date:   Wed, 8 Dec 2021 13:33:25 +0100
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH] pinctrl: at91: allow use of of gpio-line-names property
+Message-ID: <YbCmFac6/nU949/Z@ada-deb-carambola.ifak-system.com>
+Mail-Followup-To: Peter Rosin <peda@axentia.se>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+References: <4d17866a-d9a4-a3d7-189a-781d18dbea00@axentia.se>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208034040.14457-1-ansuelsmth@gmail.com>
+In-Reply-To: <4d17866a-d9a4-a3d7-189a-781d18dbea00@axentia.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:40:32AM +0100, Ansuel Smith wrote:
-> I still have to find a solution to a slowdown problem and this is where
-> I would love to get some hint.
-> Currently I still didn't find a good way to understand when the tagger
-> starts to accept packets and because of this the initial setup is slow
-> as every completion timeouts. Am I missing something or is there a way
-> to check for this?
-> After the initial slowdown, as soon as the cpu port is ready and starts
-> to accept packet, every transaction is near instant and no completion
-> timeouts.
+Hello Peter,
 
-My guess is that the problem with the initial slowdown is that you try
-to use the Ethernet based register access before things are set up:
-before the master is up and ready, before the switch is minimally set
-up, etc.
+Am Tue, Dec 07, 2021 at 12:32:03AM +0100 schrieb Peter Rosin:
+> If no line name is given (by not having a gpio-line-names property,
+> or by having empty "" strings for some lines), fall back to the
+> existing pioC12-style line name scheme.
+> 
+> It is useful to be able to explicitly name lines from the schematics
+> or its function, rather than having the MCU names forced upon every
+> user.
 
-I think what this Ethernet-based register access technique needs to be
-more reliable is a notification about the DSA master going up or down.
-Otherwise it won't be very efficient at all, to wait for every single
-Ethernet access attempt to time out before attempting a direct MDIO
-access.
++1 from me. 
 
-But there are some problems with offering a "master_going_up/master_going_down"
-set of callbacks. Specifically, we could easily hook into the NETDEV_PRE_UP/
-NETDEV_GOING_DOWN netdev notifiers and transform these into DSA switch
-API calls. The goal would be for the qca8k tagger to mark the
-Ethernet-based register access method as available/unavailable, and in
-the regmap implementation, to use that or the other. DSA would then also
-be responsible for calling "master_going_up" when the switch ports and
-master are sufficiently initialized that traffic should be possible.
-But that first "master_going_up" notification is in fact the most
-problematic one, because we may not receive a NETDEV_PRE_UP event,
-because the DSA master may already be up when we probe our switch tree.
-This would be a bit finicky to get right. We may, for instance, hold
-rtnl_lock for the entirety of dsa_tree_setup_master(). This will block
-potentially concurrent netdevice notifiers handled by dsa_slave_nb.
-And while holding rtnl_lock() and immediately after each dsa_master_setup(),
-we may check whether master->flags & IFF_UP is true, and if it is,
-synthesize a call to ds->ops->master_going_up(). We also need to do the
-reverse in dsa_tree_teardown_master().
+I asked about this some months ago, but I saw no clear
+direction in the discussion. So for reference:
+
+https://lore.kernel.org/linux-gpio/946021874.11132.1615900079722@seven.thorsis.com/
+
+HTH & Greets
+Alex
+
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+> ---
+>  drivers/pinctrl/pinctrl-at91.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> I don't know if it's sane to fall back to the pioC12-style on empty
+> strings, or if someone adding a gpio-line-names property should be
+> responsible for filling in those names "by hand". I generally don't
+> care what "unused" pins are named, so either is fine by me...
+> 
+> Cheers,
+> Peter
+> 
+> diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
+> index 6022496bb6a9..4f108d07e6ad 100644
+> --- a/drivers/pinctrl/pinctrl-at91.c
+> +++ b/drivers/pinctrl/pinctrl-at91.c
+> @@ -1821,7 +1821,7 @@ static int at91_gpio_probe(struct platform_device *pdev)
+>  	int irq, i;
+>  	int alias_idx = of_alias_get_id(np, "gpio");
+>  	uint32_t ngpio;
+> -	char **names;
+> +	const char **names;
+>  
+>  	BUG_ON(alias_idx >= ARRAY_SIZE(gpio_chips));
+>  	if (gpio_chips[alias_idx]) {
+> @@ -1890,8 +1890,15 @@ static int at91_gpio_probe(struct platform_device *pdev)
+>  		goto clk_enable_err;
+>  	}
+>  
+> -	for (i = 0; i < chip->ngpio; i++)
+> -		names[i] = kasprintf(GFP_KERNEL, "pio%c%d", alias_idx + 'A', i);
+> +	if (of_property_read_string_array(np, "gpio-line-names",
+> +					  names, chip->ngpio) != chip->ngpio)
+> +		memset(names, 0, chip->ngpio * sizeof(char *));
+> +
+> +	for (i = 0; i < chip->ngpio; i++) {
+> +		if (!names[i] || !names[i][0])
+> +			names[i] = kasprintf(GFP_KERNEL,
+> +					     "pio%c%d", alias_idx + 'A', i);
+> +	}
+>  
+>  	chip->names = (const char *const *)names;
+>  
+> -- 
+> 2.20.1
+> 

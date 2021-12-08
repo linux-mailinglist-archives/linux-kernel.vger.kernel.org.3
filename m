@@ -2,146 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C2246D011
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A378046D014
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbhLHJa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:30:58 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:43036 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229528AbhLHJay (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:30:54 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWsl3erBhhK0EAA--.10593S2;
-        Wed, 08 Dec 2021 17:27:19 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: Only define pci_remap_iospace() for Ralink
-Date:   Wed,  8 Dec 2021 17:27:19 +0800
-Message-Id: <1638955639-3584-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxWsl3erBhhK0EAA--.10593S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4DCF45WFW8AFyUAry3XFb_yoWrWw1fpF
-        sIvwn7Gr4rur15Cay7Ary5Jrn8Xa1qkay3try8twn0vF1q9ry7Jrs7tF18CryDJFWvqFWx
-        WFZ2gr4jqF4qyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUO-BMDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S231210AbhLHJbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhLHJbk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:31:40 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E53C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:28:08 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so2110091otl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Bdv1wVZitHdkwvd9N2hen98Yzs4kDehX4GWMlrow5E=;
+        b=g5ISx6g3oY/3qGA+ICD++4hXTFvqoFpsFA3aSuqlDPpXbptbcYCcH6Sg0ZdHTguYGf
+         NNVEidCRQVOq9L7N6wzHcQ1nEbB68+kilIxW+lRTnAy2yPcFhBDvrBPbe5c/GG2hEaWA
+         Kh2dr8hvbMOz5WLdc73jGiiYfwxCDWIZu+TNLRviTsacWxNWJ+ggWUWatHpn4y5ASLLB
+         vkYTIIC5wanQ7J0A5zzubuslB9LCItNnOhL37KvAD3ys37KMkg0yD5jzen1DmsPrdZzV
+         6KP3SGU/IOF89MeItYC1DLtd4VURvsQ0WzefCsVCQzEfzoRMu4WskNWFtOIR1Z9+79yl
+         1m6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Bdv1wVZitHdkwvd9N2hen98Yzs4kDehX4GWMlrow5E=;
+        b=DP5prsXXh7zI5OHl+0yS7bwaShvrzz25K3wm56ls+yWZoaBiK7Bmed/Q/WxC5AlCLs
+         iCgy9kQzXTT2C8GeKoDtfo9hT8LyzdC37IBLi0HDds1ci9FVrmu1sdwB/VFWiOgsQnu3
+         xKOxbzAI9e+05LXWCqkWKt9u2LH3h2slClyUPQyfuZJNgVbHFR+8bXMxR4YU9kYNU8/H
+         DjV1Lw+emvZEOKY/xo8bpSNPitkAMWh03Ey60zREojq9W/ONrPRdAVXEgk5qfLxXOEtF
+         04KmyNoZ5lvEQDA0Qldq0ufbGTCql/EbNAV7Qj3NA+weNnRZqrlW0fXD+RsMwAvpKI6Z
+         nuJg==
+X-Gm-Message-State: AOAM5301XKFJMO6oeUSQYccgE7wHMZx9HIFuKGnp+E5Vedp2iCjg4Op1
+        BieMgeZdznWhkPjwsnsxLagouK4Ydgroz/40Gu0DOA==
+X-Google-Smtp-Source: ABdhPJy8qPC9r88IhCOlGNijYmunVav4DkgYMslpZk5FeBDJglznr+89usTxjVzp3A8gIxio53fRuNQ5BpLFStDLooQ=
+X-Received: by 2002:a05:6830:1356:: with SMTP id r22mr39299475otq.196.1638955687415;
+ Wed, 08 Dec 2021 01:28:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-2-pcc@google.com>
+In-Reply-To: <20211208044808.872554-2-pcc@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 8 Dec 2021 10:27:56 +0100
+Message-ID: <CACT4Y+bLvQWb-wcq26NJtzhXiKf0G3tDbS2RtejDS7aLdiD=sA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] include: split out uaccess instrumentation into a
+ separate header
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 9f76779f2418 ("MIPS: implement architecture-specific
-'pci_remap_iospace()'"), there exists the following warning on the
-Loongson64 platform:
+On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
+>
+> In an upcoming change we are going to add uaccess instrumentation
+> that uses inline access to struct task_struct from the
+> instrumentation routines. Because instrumentation.h is included
+> from many places including (recursively) from sched.h this would
+> otherwise lead to a circular dependency. Break the dependency by
+> moving uaccess instrumentation routines into a separate header,
+> instrumentation-uaccess.h.
+>
+> Link: https://linux-review.googlesource.com/id/I625728db0c8db374e13e4ebc54985ac5c79ace7d
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
 
-    loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
-    loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
-    ------------[ cut here ]------------
-    WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
-    resource start address is not zero
-    ...
-    Call Trace:
-    [<ffffffff8020dc78>] show_stack+0x40/0x120
-    [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
-    [<ffffffff8023a0b0>] __warn+0xe0/0x110
-    [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
-    [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
-    [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
-    [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
-    [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
-    [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
-    [<ffffffff809203cc>] platform_probe+0x6c/0xe0
-    [<ffffffff8091d5d4>] really_probe+0xbc/0x340
-    [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
-    [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
-    [<ffffffff8091dea0>] __driver_attach+0x80/0x118
-    [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
-    [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
-    [<ffffffff8091ead4>] driver_register+0x8c/0x150
-    [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
-    [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
-    [<ffffffff80cfc380>] kernel_init+0x2c/0x134
-    [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
-    ---[ end trace e4a0efe10aa5cce6 ]---
-    loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
+Acked-by: Dmitry Vyukov <dvyukov@google.com>
 
-We can see that the resource start address is 0x0000020000, because
-the ISA Bridge used the zero address which is defined in the dts file
-arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
-
-    ISA Bridge: /bus@10000000/isa@18000000
-    IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
-
-Based on the above analysis, the architecture-specific pci_remap_iospace()
-is not suitable for Loongson64, we should only define pci_remap_iospace()
-for Ralink on MIPS based on the commit background.
-
-Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
- arch/mips/include/asm/pci.h                | 4 ----
- arch/mips/pci/pci-generic.c                | 2 ++
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-index 05d14c2..f7af11e 100644
---- a/arch/mips/include/asm/mach-ralink/spaces.h
-+++ b/arch/mips/include/asm/mach-ralink/spaces.h
-@@ -6,5 +6,7 @@
- #define PCI_IOSIZE	SZ_64K
- #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
- 
-+#define pci_remap_iospace pci_remap_iospace
-+
- #include <asm/mach-generic/spaces.h>
- #endif
-diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-index 421231f..9ffc819 100644
---- a/arch/mips/include/asm/pci.h
-+++ b/arch/mips/include/asm/pci.h
-@@ -20,10 +20,6 @@
- #include <linux/list.h>
- #include <linux/of.h>
- 
--#ifdef CONFIG_PCI_DRIVERS_GENERIC
--#define pci_remap_iospace pci_remap_iospace
--#endif
--
- #ifdef CONFIG_PCI_DRIVERS_LEGACY
- 
- /*
-diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-index 18eb8a4..d2d68bac 100644
---- a/arch/mips/pci/pci-generic.c
-+++ b/arch/mips/pci/pci-generic.c
-@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
- 	pci_read_bridge_bases(bus);
- }
- 
-+#ifdef pci_remap_iospace
- int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- {
- 	unsigned long vaddr;
-@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- 	set_io_port_base(vaddr);
- 	return 0;
- }
-+#endif
--- 
-2.1.0
-
+> ---
+>  include/linux/instrumented-uaccess.h | 49 ++++++++++++++++++++++++++++
+>  include/linux/instrumented.h         | 34 -------------------
+>  include/linux/uaccess.h              |  2 +-
+>  lib/iov_iter.c                       |  2 +-
+>  lib/usercopy.c                       |  2 +-
+>  5 files changed, 52 insertions(+), 37 deletions(-)
+>  create mode 100644 include/linux/instrumented-uaccess.h
+>
+> diff --git a/include/linux/instrumented-uaccess.h b/include/linux/instrumented-uaccess.h
+> new file mode 100644
+> index 000000000000..ece549088e50
+> --- /dev/null
+> +++ b/include/linux/instrumented-uaccess.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * This header provides generic wrappers for memory access instrumentation for
+> + * uaccess routines that the compiler cannot emit for: KASAN, KCSAN.
+> + */
+> +#ifndef _LINUX_INSTRUMENTED_UACCESS_H
+> +#define _LINUX_INSTRUMENTED_UACCESS_H
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+> +#include <linux/types.h>
+> +
+> +/**
+> + * instrument_copy_to_user - instrument reads of copy_to_user
+> + *
+> + * Instrument reads from kernel memory, that are due to copy_to_user (and
+> + * variants). The instrumentation must be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> +{
+> +       kasan_check_read(from, n);
+> +       kcsan_check_read(from, n);
+> +}
+> +
+> +/**
+> + * instrument_copy_from_user - instrument writes of copy_from_user
+> + *
+> + * Instrument writes to kernel memory, that are due to copy_from_user (and
+> + * variants). The instrumentation should be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
+> +{
+> +       kasan_check_write(to, n);
+> +       kcsan_check_write(to, n);
+> +}
+> +
+> +#endif /* _LINUX_INSTRUMENTED_UACCESS_H */
+> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+> index 42faebbaa202..b68f415510c7 100644
+> --- a/include/linux/instrumented.h
+> +++ b/include/linux/instrumented.h
+> @@ -102,38 +102,4 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
+>         kcsan_check_atomic_read_write(v, size);
+>  }
+>
+> -/**
+> - * instrument_copy_to_user - instrument reads of copy_to_user
+> - *
+> - * Instrument reads from kernel memory, that are due to copy_to_user (and
+> - * variants). The instrumentation must be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+> - */
+> -static __always_inline void
+> -instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> -{
+> -       kasan_check_read(from, n);
+> -       kcsan_check_read(from, n);
+> -}
+> -
+> -/**
+> - * instrument_copy_from_user - instrument writes of copy_from_user
+> - *
+> - * Instrument writes to kernel memory, that are due to copy_from_user (and
+> - * variants). The instrumentation should be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+> - */
+> -static __always_inline void
+> -instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
+> -{
+> -       kasan_check_write(to, n);
+> -       kcsan_check_write(to, n);
+> -}
+> -
+>  #endif /* _LINUX_INSTRUMENTED_H */
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index ac0394087f7d..c0c467e39657 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -3,7 +3,7 @@
+>  #define __LINUX_UACCESS_H__
+>
+>  #include <linux/fault-inject-usercopy.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>  #include <linux/minmax.h>
+>  #include <linux/sched.h>
+>  #include <linux/thread_info.h>
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 66a740e6e153..3f9dc6df7102 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -12,7 +12,7 @@
+>  #include <linux/compat.h>
+>  #include <net/checksum.h>
+>  #include <linux/scatterlist.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>
+>  #define PIPE_PARANOIA /* for now */
+>
+> diff --git a/lib/usercopy.c b/lib/usercopy.c
+> index 7413dd300516..1cd188e62d06 100644
+> --- a/lib/usercopy.c
+> +++ b/lib/usercopy.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <linux/bitops.h>
+>  #include <linux/fault-inject-usercopy.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>  #include <linux/uaccess.h>
+>
+>  /* out-of-line parts */
+> --
+> 2.34.1.173.g76aa8bc2d0-goog
+>

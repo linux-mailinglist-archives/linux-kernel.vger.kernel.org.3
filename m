@@ -2,136 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FED146CBD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F1346CBD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbhLHEEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:04:15 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:51931 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229958AbhLHEEO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:04:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Uzq5Sf3_1638936038;
-Received: from 30.22.113.150(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0Uzq5Sf3_1638936038)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Dec 2021 12:00:39 +0800
-Message-ID: <04d4d0bc-0ef4-f9a3-593b-149f835c74be@linux.alibaba.com>
-Date:   Wed, 8 Dec 2021 12:00:38 +0800
+        id S231945AbhLHEF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:05:57 -0500
+Received: from mga02.intel.com ([134.134.136.20]:34030 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229598AbhLHEF5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 23:05:57 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225008810"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="225008810"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 20:02:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="462613426"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2021 20:02:24 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muo9v-000NNS-Qu; Wed, 08 Dec 2021 04:02:23 +0000
+Date:   Wed, 08 Dec 2021 12:02:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 6a3aa1f6d19ed22b517cbb0acc0f88cda4ad42ad
+Message-ID: <61b02e45.vWZqOdPrfaQwyy4w%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
- shadow paging if the guest PDPTEs is changed
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Xiao Guangrong <guangrong.xiao@linux.intel.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
- <20211111144634.88972-1-jiangshanlai@gmail.com> <Ya/5MOYef4L4UUAb@google.com>
-From:   Lai Jiangshan <laijs@linux.alibaba.com>
-In-Reply-To: <Ya/5MOYef4L4UUAb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 6a3aa1f6d19ed22b517cbb0acc0f88cda4ad42ad  fixup! rcu-tasks: Use spin_lock_rcu_node() and friends
 
+elapsed time: 735m
 
-On 2021/12/8 08:15, Sean Christopherson wrote:
->>
->> The commit 21823fbda552("KVM: x86: Invalidate all PGDs for the current
->> PCID on MOV CR3 w/ flush") skips kvm_mmu_free_roots() after
->> load_pdptrs() when rewriting the CR3 with the same value.
-> 
-> This isn't accurate, prior to that commit KVM wasn't guaranteed to do
-> kvm_mmu_free_roots() if it got a hit on the current CR3 or if a previous CR3 in
-> the cache matched the new CR3 (the "cache" has done some odd things in the past).
-> 
-> So I think this particular flavor would be:
-> 
->    Fixes: 7c390d350f8b ("kvm: x86: Add fast CR3 switch code path")
+configs tested: 100
+configs skipped: 3
 
-If guest is 32bit, fast_cr3_switch() always return false, and
-kvm_mmu_free_roots() is always called, and no cr3 goes in prev_root.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-And from 21823fbda552, fast_cr3_switch() and kvm_mmu_free_roots() are
-both skipped when cr3 is unchanged.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                             alldefconfig
+arc                           tb10x_defconfig
+arm                           tegra_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           se7705_defconfig
+mips                           xway_defconfig
+powerpc                      cm5200_defconfig
+sparc64                             defconfig
+powerpc                         wii_defconfig
+arm                        shmobile_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arm                  randconfig-c002-20211207
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211207
+x86_64               randconfig-a005-20211207
+x86_64               randconfig-a001-20211207
+x86_64               randconfig-a002-20211207
+x86_64               randconfig-a004-20211207
+x86_64               randconfig-a003-20211207
+i386                 randconfig-a001-20211207
+i386                 randconfig-a005-20211207
+i386                 randconfig-a002-20211207
+i386                 randconfig-a003-20211207
+i386                 randconfig-a006-20211207
+i386                 randconfig-a004-20211207
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-> 
->> The commit a91a7c709600("KVM: X86: Don't reset mmu context when
->> toggling X86_CR4_PGE") skips kvm_mmu_reset_context() after
->> load_pdptrs() when changing CR4.PGE.
->>
->> Normally, the guest doesn't change the PDPTEs before doing only the
->> above operation without touching other bits that can force pae_root to
->> be reconstructed.  Guests like linux would keep the PDPTEs unchaged
->> for every instance of pagetable.
->>
->> Fixes: d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and CR0.NW are changed")
->> Fixes: 21823fbda552("KVM: x86: Invalidate all PGDs for the current PCID on MOV CR3 w/ flush")
->> Fixes: a91a7c709600("KVM: X86: Don't reset mmu context when toggling X86_CR4_PGE")
->> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
->> ---
->>   arch/x86/kvm/x86.c | 10 ++++++++--
->>   1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 0176eaa86a35..cfba337e46ab 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
->>   	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
->>   		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
->>   		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
->> -		/* Ensure the dirty PDPTEs to be loaded. */
->> -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
->> +		/*
->> +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
->> +		 * enabled or pae_root to be reconstructed for shadow paging.
->> +		 */
->> +		if (tdp_enabled)
->> +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
->> +		else
->> +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
-> 
-> Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
-> of vcpu->arch.mmuvcpu->arch.mmu.
+clang tested configs:
+x86_64               randconfig-c007-20211207
+arm                  randconfig-c002-20211207
+riscv                randconfig-c006-20211207
+mips                 randconfig-c004-20211207
+i386                 randconfig-c001-20211207
+powerpc              randconfig-c003-20211207
+s390                 randconfig-c005-20211207
+x86_64               randconfig-a016-20211207
+x86_64               randconfig-a011-20211207
+x86_64               randconfig-a013-20211207
+x86_64               randconfig-a014-20211207
+x86_64               randconfig-a015-20211207
+x86_64               randconfig-a012-20211207
+i386                 randconfig-a016-20211207
+i386                 randconfig-a013-20211207
+i386                 randconfig-a011-20211207
+i386                 randconfig-a014-20211207
+i386                 randconfig-a012-20211207
+i386                 randconfig-a015-20211207
+hexagon              randconfig-r045-20211207
+s390                 randconfig-r044-20211207
+riscv                randconfig-r042-20211207
+hexagon              randconfig-r041-20211207
 
-@mmu is the "guest mmu" (vcpu->arch.walk_mmu), which is used to walk
-including loading pdptr.
-
-vcpu->arch.mmu is for host constructing mmu for shadowed or tdp mmu
-which is used in host side management including kvm_mmu_free_roots().
-
-Even they are the same pointer now for !tdp, the meaning is different.  I prefer
-to distinguish them even before kvm_mmu is split different for guest mmu
-(vcpu->arch.walk_mmu) and host constructing mmu (vcpu->arch.mmu).
-
-(I once searched all the usage of undistinguished usage of kvm_mmu *mmu, and
-found a bug, see "Use vcpu->arch.walk_mmu for kvm_mmu_invlpg()")
-
-I think Paolo is doing the splitting, unless I would take the job because
-I have some patches pending depended them.
-
-> 
-> To avoid a dependency on the previous patch, I think it makes sense to have this be:
-> 
-> 	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
-> 		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
-> 
-
-Yes, it is a good idea to add this first.
-
-Thanks for review and suggestion.
-Lai
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

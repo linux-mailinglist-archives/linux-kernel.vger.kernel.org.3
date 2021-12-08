@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBDF46D707
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F0A46D71A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236103AbhLHPgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:36:05 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:60126 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbhLHPgD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:36:03 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CBB8E1FD2A;
-        Wed,  8 Dec 2021 15:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1638977549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6VNz+rbMG4FKJ01MyWRZjmX8ICbIRHGfA3fPOOQX6vk=;
-        b=lQmxOHPqIImGvYgUFoj/iKM+12qOie5JvMtoB4akJ2qZmCHmYbpTXL1pvnWqKwkORVb1aC
-        iybWxH9xZOdHCV+A18n0UDr++hxRn356Fzb1GqFlIPDcphqBBuHc+IbeowMYndmGnjy+zO
-        VXh4Y/0OKAdpEJBC2Q0SYA38L3Jw06s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1638977549;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6VNz+rbMG4FKJ01MyWRZjmX8ICbIRHGfA3fPOOQX6vk=;
-        b=WT1UpZk6WMHwKNVbBEX+hLKKuM7l5DRaCdSSlLONT9RxyDh2ke5UNv4X9z6Hk6yl5we44/
-        fPRHxkB4QtYWO5Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6619913F90;
-        Wed,  8 Dec 2021 15:32:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id quQdFw3QsGE3VAAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Wed, 08 Dec 2021 15:32:29 +0000
-Date:   Wed, 8 Dec 2021 16:33:47 +0100
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Zack Weinberg <zack@owlfolio.org>, Arnd Bergmann <arnd@arndb.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Message-ID: <YbDQW6uakG3XD8jV@yuki>
-References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
- <YZvIlz7J6vOEY+Xu@yuki>
- <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com>
- <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
- <913509.1638457313@warthog.procyon.org.uk>
+        id S236148AbhLHPjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:39:25 -0500
+Received: from mga12.intel.com ([192.55.52.136]:31715 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230518AbhLHPjY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 10:39:24 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="217875713"
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="217875713"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:35:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
+   d="scan'208";a="503088404"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.209.146.48]) ([10.209.146.48])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 07:35:50 -0800
+Message-ID: <1ffc1366-2711-3026-fb09-8f60a260f618@intel.com>
+Date:   Wed, 8 Dec 2021 08:35:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <913509.1638457313@warthog.procyon.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
+ PASID
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+ <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
+ <20211208131358.GR6385@nvidia.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20211208131358.GR6385@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-> > I could be persuaded otherwise with an example of a program for which
-> > changing __s64 from 'long long' to 'long' would break *binary* backward
-> > compatibility, or similarly for __u64.
-> 
-> C++ could break.
 
-Thinking of this again we can detect C++ as well so it can be safely
-enabled just for C with:
+On 12/8/2021 6:13 AM, Jason Gunthorpe wrote:
+> On Tue, Dec 07, 2021 at 05:47:14AM -0800, Jacob Pan wrote:
+>> In-kernel DMA should be managed by DMA mapping API. The existing kernel
+>> PASID support is based on the SVA machinery in SVA lib that is intended
+>> for user process SVA. The binding between a kernel PASID and kernel
+>> mapping has many flaws. See discussions in the link below.
+>>
+>> This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform DMA
+>> requests with PASID under the same mapping managed by DMA mapping API.
+>> In addition, SVA-related bits for kernel DMA are removed. As a result,
+>> DSA users shall use DMA mapping API to obtain DMA handles instead of
+>> using kernel virtual addresses.
+> Er, shouldn't this be adding dma_map/etc type calls?
+>
+> You can't really say a driver is using the DMA API without actually
+> calling the DMA API..
+>
+>> +	/*
+>> +	 * Try to enable both in-kernel and user DMA request with PASID.
+>> +	 * PASID is supported unless both user and kernel PASID are
+>> +	 * supported. Do not fail probe here in that idxd can still be
+>> +	 * used w/o PASID or IOMMU.
+>> +	 */
+>> +	if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) ||
+>> +		idxd_enable_system_pasid(idxd)) {
+>> +		dev_warn(dev, "Failed to enable PASID\n");
+>> +	} else {
+>> +		set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
+>>   	}
+> Huh? How can the driver keep going if PASID isn't supported? I thought
+> the whole point of this was because the device cannot do DMA without
+> PASID at all?
 
-#if !defined(__KERNEL__) && !defined(__cplusplus) && __BITSPERLONG == 64
-# include <asm-generic/int-l64.h>
-#else
-# include <asm-generic/int-ll64.h>
-#endif
+There are 2 types of WQ supported with the DSA devices. A dedicated WQ 
+type and a shared WQ type. The dedicated WQ type can support DMA with 
+and without PASID. The shared wq type must have a PASID to operate. The 
+driver can support dedicated WQ only without PASID usage when there is 
+no PASID support.
 
--- 
-Cyril Hrubis
-chrubis@suse.cz
+
+>
+> Jason

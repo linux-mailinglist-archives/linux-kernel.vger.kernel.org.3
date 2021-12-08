@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F07246CFBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089E046CFC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbhLHJNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S230285AbhLHJOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbhLHJNs (ORCPT
+        with ESMTP id S230231AbhLHJOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:13:48 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA700C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:10:16 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id g28so1381916qkk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:10:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vt-edu.20210112.gappssmtp.com; s=20210112;
-        h=sender:from:to:cc:subject:in-reply-to:references:mime-version:date
-         :message-id;
-        bh=vutFqY0ZTHo8JOAnQkYE1aP8GhO1tTcTsT9w9L82rCw=;
-        b=Wh0AnnpyKTCTAl4L4Hg+tQqumpf+i6VX9GSapJ7plb7VhsYuO5N1YDpY0r1+jaXsPB
-         EzCcRsg/L6OP29IAAZ2xTbeb/BknGcRa+D6ZXjNtROc6CaftcHdk8r+tpQdmasDUzU1/
-         RbKXkFHobLW/IU0SUgkUpy6hiP0HjJgKp38Oc5+5cf1xpO9Zi7SobSDObSXumMl5wIdH
-         OiFE/XAQ3hWeaXUbHnm2TYR5v5c/LmzF9/2dQ8pIN0W2NFZH9d07lN2t3QBYHHzhgxaH
-         VU6DOTubg2S+9ulSqJwqWbKT1nL8WvDOSQORZtk/+mQhXcJNv+1fdqllZecFB0G9PJAe
-         Mz7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:date:message-id;
-        bh=vutFqY0ZTHo8JOAnQkYE1aP8GhO1tTcTsT9w9L82rCw=;
-        b=TPsq6pxq5pm03PT9ztY0h8mfcJf6Lr9oBuaCRAp/jHWzlIBHC/qe3qszN3ewIdJ5Ib
-         odLy6BSGhOaqgfVEfmueJL81x6KBM5D7H7ggblIFV2KW1ZdrcCjXMrybNiyRgpvNGwJi
-         fq88BJq4wSNUz0OxEkYi961VTXTIM2Ec1yXxk9GNjTtxFAmZyVJ7kJjZZWib6DA215D4
-         W4KH1E9FM6ana38OTG7SKw7IhUaKkafNl8V2wr9WcEyXfCnxFVt/7x6F+jXetxbQYlbf
-         IhIqMte5mE21mO5tCt0bXDi0UkXLn6fJn2ZYC0G/rK0o54Br2emT/Cmaj8++WuR73zj/
-         tH/A==
-X-Gm-Message-State: AOAM532QPvbomotJumKjZTJ6CRT5rFPX/t7825mIhc4p0bQEIlzXuAu2
-        X9SBVIXPkRlvjUjCqfUTsYFe1ZyDtRP4MA==
-X-Google-Smtp-Source: ABdhPJzCPC4yk2O4IeNn0B5Mv+VGpKUAIT/OzYQHqV5gB1lSJoFmc15etvn/Wz0457y42ONq7J3aZw==
-X-Received: by 2002:a05:620a:3dd:: with SMTP id r29mr5208179qkm.208.1638954615971;
-        Wed, 08 Dec 2021 01:10:15 -0800 (PST)
-Received: from turing-police ([2601:5c0:c380:d61::359])
-        by smtp.gmail.com with ESMTPSA id y11sm1423475qta.6.2021.12.08.01.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 01:10:15 -0800 (PST)
-Sender: Valdis Kletnieks <valdis@vt.edu>
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.10.0-pre 07/05/2021 with nmh-1.7+dev
-To:     Muni Sekhar <munisekharrms@gmail.com>
-cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, tglx@linutronix.de,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: Time: new clocksource
-In-reply-to: <CAHhAz+iZe4A9bi9tvwqpHaV1ari76r2bXcO1E6Bm88Cc7XFq+A@mail.gmail.com>
-References: <CAHhAz+jpmksehY4BSH9jJPYuY+jykSHtx9TNiG-gAkq10zaXSQ@mail.gmail.com> <fe9dbf81-e060-36ab-b769-215af3d65ba7@linaro.org>
- <CAHhAz+iZe4A9bi9tvwqpHaV1ari76r2bXcO1E6Bm88Cc7XFq+A@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Date:   Wed, 08 Dec 2021 04:10:14 -0500
-Message-ID: <158505.1638954614@turing-police>
+        Wed, 8 Dec 2021 04:14:20 -0500
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAB6C061746;
+        Wed,  8 Dec 2021 01:10:48 -0800 (PST)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2251020384;
+        Wed,  8 Dec 2021 10:10:45 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/2] Global Clock Controller driver for MSM8976/56
+Date:   Wed,  8 Dec 2021 10:10:34 +0100
+Message-Id: <20211208091036.132334-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Dec 2021 13:03:07 +0530, Muni Sekhar said:
+This is the Global Clock Controller (GCC) driver for MSM8956, MSM8976
+and APQ variants and it has been tested on two Sony phones featuring the
+Qualcomm MSM8956 SoC.
 
-> Which module is responsible for resulting in the absolute time? Is
-> absolute time synchronized across multiple systems connected on the
-> network?
+In addition to GCC this driver is also responsible for providing MDSS
+and GFX3D clocks which reside in the same register space.
 
-man -k ntp
+SoMainline is dedicated to getting their long-awaited msm8976 support,
+including the Xperia X, X Compact and if feasible also the Xperia Touch
+projector (APQ8056) slowly but steadily upstreamed.
 
-Keeping the system clock in sync with external timesources and reality is too
-complicated and messy to be done inside the kernel, so it's usually done with a
-userspace daemon which on Linux boxes is usually ntpd.
+Changes since v5:
+- Set vdd_gfx-supply in yaml example, which was added as required
+  property in v5 but forgotten from the example; this is only caught by
+  running dt_binding_check in addition to dtbs_check.
 
-Depending on the clock stability of the hardware, whether you have an RTC chip
-that keeps track of time even when powered down, and the timing tolerances you
-want on your network (synced to the same minute, or same second, or same 0.001
-seconds), it may be sufficient to run ntpdate at an appropriate time during
-system boot, or from inside a cron job, or you may want to have a continually
-running ntpd process.
+v5: https://lore.kernel.org/linux-clk/20211004195255.701220-1-marijn.suijten@somainline.org/T
 
-Most sane distros have ntpd enabled by default with a reasonable set of
-defaults - systems that have non-broken clocks will fairly quickly figure out
-the clock drift rate, and your network load to keep the clocks within a few
-milliseconds of a national time standard drops to a few packets every 20
-minutes or so. In case of a network outage, it will continue to correct the
-system clock according to the last known drift rate.
+Changes since v4:
+- Insert error handling that left `int ret;` in gcc_msm8976_probe unused
+  when the original regmap read, xor, and write were replaced with
+  regmap_update_bits in v3;
+- Document vdd_gfx supply, required in oxili_gx_gdsc;
+- Dual-license the yaml Documentation and DT bindings (Rob).
 
-And if you need better than millisecond sync, you're going to be springing
-for a GPS receiver with a PPS output and/or a cesium or rubidium clock.
+Changes since v3:
+- Set the enable_mask of gcc_apss_ahb_clk and gcc_apss_axi_clk to BIT 14
+  and 13 respectively instead of overlapping gcc_crypto_ahb_clk's BIT 0.
+
+Changes since v2:
+- Rebased on v5.14;
+- Various minor cleanups (lowercase hex, const where appropriate,
+  removal of unused enum constants);
+- Fixed XOR confusion in probe;
+- All remnants of global clock name dependencies are removed, all
+  inter-driver dependencies must be fully specified in DT;
+- Added proper dt-bindings yaml validation, listing the required clocks;
+- Moved dt-bindings header to the dt-bindings patch.
+
+Changes since v1:
+- Rebased onto linux-next 20191015
+- Fixed platform driver name (qcom,gcc-8976 => gcc-msm8976)
+- Splitted changes to dt-bindings to a separate commit
+
+AngeloGioacchino Del Regno (1):
+  clk: qcom: Add MSM8976/56 Global Clock Controller (GCC) driver
+
+Marijn Suijten (1):
+  dt-bindings: clk: qcom: Document MSM8976 Global Clock Controller
+
+ .../bindings/clock/qcom,gcc-msm8976.yaml      |   97 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-msm8976.c                | 4160 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-msm8976.h  |  240 +
+ 5 files changed, 4506 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
+ create mode 100644 drivers/clk/qcom/gcc-msm8976.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8976.h
+
+
+base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+--
+2.34.1
 

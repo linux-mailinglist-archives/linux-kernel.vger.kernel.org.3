@@ -2,76 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C3646CCD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE046CCD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbhLHFJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbhLHFJA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:09:00 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EDFC061756
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:05:29 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso1173914pjl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 21:05:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+rZCR20RPDGoAf8CztEP+MjH3/Q78QqNLnDRFO/ZKK4=;
-        b=nm0VC0YOkSo4x8TCDSUgMFzzKJ2PNlINViWVZ953gIxiFkJI/38qV3fs2GL3GvUl6r
-         07TVvuHsG/PS9EtTPUfx3lL8eivNM6YZdG1YTWCmr0xouhVqLjPssISeGlHfq41GxNNB
-         sj5RCGLqqaWakdgek2IMut7ZXnJy+5SBrFRMA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+rZCR20RPDGoAf8CztEP+MjH3/Q78QqNLnDRFO/ZKK4=;
-        b=wiluS4gBIG9F8TD6HNnPijMFWFs0RKQoRjFts4M1A7PZZco+ty8YiwpVFulsI1maRc
-         tU2ot7uToPZc7wprkYntckNylst6htbb1ifD2AUbaOgicNeo0/rtN25z+WVWIt+z7/VL
-         WCqWkid89wFLiHWCSPDwvKzqFngqOeOEw/YRY2mJ+tDvf8mqn6qQ/3HPXtdUXEqizoSm
-         Qve3EsCOK8tOyamHLS1AI3Xu7TA5sJMlGTwmug3QnUmJ07aCrDWwnKi3Oqqc5NL0ZU6y
-         E5dfmHi8azJ1gfEy8oMSykRvl7C3oJ2PRf7to7Fe4Lx7eKMshIXzRy9yDcJxeUy81ThS
-         EDsg==
-X-Gm-Message-State: AOAM532wpPPyf14HQ+3w44nPIAvti87dkhoC0SNyXJ0aACQInlKUswYZ
-        xT5aK2ua2K3e/FB5WkthxGk0rQ==
-X-Google-Smtp-Source: ABdhPJxig7g3enolr5gubLSCeyG6bgCaRSItQUy8n1rTsmpgNRh1QTcEN7S5aT+2hUUJPSbAQtPIvQ==
-X-Received: by 2002:a17:90a:b015:: with SMTP id x21mr4665247pjq.84.1638939928718;
-        Tue, 07 Dec 2021 21:05:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j6sm1446050pfu.205.2021.12.07.21.05.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 21:05:28 -0800 (PST)
-Date:   Tue, 7 Dec 2021 21:05:27 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     George Cherian <gcherian@marvell.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] crypto: cavium - Use kcalloc() instead of kzalloc()
-Message-ID: <202112072105.8935E88@keescook>
-References: <20211208012459.GA145349@embeddedor>
+        id S230460AbhLHFNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 00:13:00 -0500
+Received: from mga09.intel.com ([134.134.136.24]:4733 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230316AbhLHFM7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 00:12:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237565333"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="237565333"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 21:09:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="462629629"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2021 21:09:26 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mupCo-00006G-9O; Wed, 08 Dec 2021 05:09:26 +0000
+Date:   Wed, 8 Dec 2021 13:08:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kees:memcpy/step2/next-20211206 7/19]
+ include/linux/fortify-string.h:267:25: warning: call to
+ '__write_overflow_field' declared with attribute warning: detected write
+ beyond size of field (1st parameter); maybe use struct_group()?
+Message-ID: <202112081218.SHPzkHBb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208012459.GA145349@embeddedor>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 07:24:59PM -0600, Gustavo A. R. Silva wrote:
-> Use 2-factor multiplication argument form kcalloc() instead
-> of kzalloc().
-> 
-> Link: https://github.com/KSPP/linux/issues/162
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git memcpy/step2/next-20211206
+head:   082faead4a3c2e5d9f541f97d8d4d5fa0f88dce0
+commit: a91965903a44bf236856efc7e20c6334c4e07388 [7/19] fortify: Detect struct member overflows in memcpy() at compile-time
+config: powerpc-randconfig-c023-20211207 (https://download.01.org/0day-ci/archive/20211208/202112081218.SHPzkHBb-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=a91965903a44bf236856efc7e20c6334c4e07388
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees memcpy/step2/next-20211206
+        git checkout a91965903a44bf236856efc7e20c6334c4e07388
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/intel/iavf/ fs/dlm/
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Kees Cook
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:253,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/tracepoint.h:15,
+                    from include/trace/events/dlm.h:10,
+                    from fs/dlm/lock.c:56:
+   In function 'fortify_memcpy_chk',
+       inlined from 'send_repeat_remove' at fs/dlm/lock.c:4075:2:
+>> include/linux/fortify-string.h:267:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     267 |                         __write_overflow_field(p_size_field, size);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'fortify_memcpy_chk',
+       inlined from 'shrink_bucket' at fs/dlm/lock.c:1792:3:
+>> include/linux/fortify-string.h:267:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     267 |                         __write_overflow_field(p_size_field, size);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/__write_overflow_field +267 include/linux/fortify-string.h
+
+   213	
+   214	/*
+   215	 * To make sure the compiler can enforce protection against buffer overflows,
+   216	 * memcpy(), memmove(), and memset() must not be used beyond individual
+   217	 * struct members. If you need to copy across multiple members, please use
+   218	 * struct_group() to create a named mirror of an anonymous struct union.
+   219	 * (e.g. see struct sk_buff.)
+   220	 *
+   221	 * Mitigation coverage
+   222	 *					Bounds checking at:
+   223	 *					+-------+-------+-------+-------+
+   224	 *					| Compile time  | Run time      |
+   225	 * memcpy() argument sizes:		| write | read  | write | read  |
+   226	 *					+-------+-------+-------+-------+
+   227	 * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+   228	 * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+   229	 * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+   230	 * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+   231	 * memcpy(known,   known,   dynamic)	|   n   |   n   |   b   |   B   |
+   232	 * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+   233	 * memcpy(known,   unknown, dynamic)	|   n   |   n   |   b   |   V   |
+   234	 * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+   235	 *					+-------+-------+-------+-------+
+   236	 *
+   237	 * y = deterministic compile-time bounds checking
+   238	 * n = cannot do deterministic compile-time bounds checking
+   239	 * n/a = no run-time bounds checking needed since compile-time deterministic
+   240	 * b = perform run-time bounds checking
+   241	 * B = can perform run-time bounds checking, but current unenforced
+   242	 * V = vulnerable to run-time overflow
+   243	 *
+   244	 */
+   245	__FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+   246						 const size_t p_size,
+   247						 const size_t q_size,
+   248						 const size_t p_size_field,
+   249						 const size_t q_size_field,
+   250						 const char *func)
+   251	{
+   252		if (__builtin_constant_p(size)) {
+   253			/*
+   254			 * Length argument is a constant expression, so we
+   255			 * can perform compile-time bounds checking where
+   256			 * buffer sizes are known.
+   257			 */
+   258	
+   259			/* Error when size is larger than enclosing struct. */
+   260			if (p_size > p_size_field && p_size < size)
+   261				__write_overflow();
+   262			if (q_size > q_size_field && q_size < size)
+   263				__read_overflow2();
+   264	
+   265			/* Warn when write size argument larger than dest field. */
+   266			if (p_size_field < size)
+ > 267				__write_overflow_field(p_size_field, size);
+   268			/*
+   269			 * Warn for source field over-read when building with W=1
+   270			 * or when an over-write happened, so both can be fixed at
+   271			 * the same time.
+   272			 */
+   273			if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+   274			    q_size_field < size)
+   275				__read_overflow2_field(q_size_field, size);
+   276		}
+   277		/*
+   278		 * At this point, length argument may not be a constant expression,
+   279		 * so run-time bounds checking can be done where buffer sizes are
+   280		 * known. (This is not an "else" because the above checks may only
+   281		 * be compile-time warnings, and we want to still warn for run-time
+   282		 * overflows.)
+   283		 */
+   284	
+   285		/*
+   286		 * Always stop accesses beyond the struct that contains the
+   287		 * field, when the buffer's remaining size is known.
+   288		 * (The -1 test is to optimize away checks where the buffer
+   289		 * lengths are unknown.)
+   290		 */
+   291		if ((p_size != (size_t)(-1) && p_size < size) ||
+   292		    (q_size != (size_t)(-1) && q_size < size))
+   293			fortify_panic(func);
+   294	}
+   295	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

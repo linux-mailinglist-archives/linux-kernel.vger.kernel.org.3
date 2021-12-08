@@ -2,132 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E6B46D55A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9720446D416
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbhLHOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:16:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43448 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232641AbhLHOQO (ORCPT
+        id S234089AbhLHNKw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Dec 2021 08:10:52 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:30597 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232257AbhLHNKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:16:14 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8CemjT023610;
-        Wed, 8 Dec 2021 14:12:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=HlGJLnOczjtt2ujifmTiLDXcYUWE56/nOPhLdkaDazM=;
- b=H5aMf/8Zk0pqESBsfgwlcIk5WPERD9FN6EnaUj8jumdENIpuvsnR/D85mjyCWAy3Db+7
- /f9nR+PPSdkF2e2ko6lA/WenpcyYQnTU3FxgaGFM/KanIH+YoUEz52VUF5C0bRVQ1XO0
- giucElHMUR20QXslICmVJejAG94EFX7cgKCl5VW0LxPoGJ2iHFXVTqMBz+o2c+kFKAMK
- 3xqiOAtbfsnMWUQycnz/O2Pg/qi45ShdZYmqGYoVfKKBf9ghTq94ya40+zdDrunm5q2/
- vWhZ6GtJdetxH99zd3ug+bxwr3tv7w13c5iPTfmb+I0xQMSmzC1laV3+fHq3Ddwwx5yT CQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctuq2bf6k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:12:41 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8EBus6004805;
-        Wed, 8 Dec 2021 14:12:41 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ctuq2bf5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:12:41 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8E8EkN006729;
-        Wed, 8 Dec 2021 14:12:39 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3cqyy9q0aa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:12:39 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8ECacM24314124
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 14:12:36 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53EC652059;
-        Wed,  8 Dec 2021 14:12:36 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.3.179])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 39C8E52050;
-        Wed,  8 Dec 2021 14:12:35 +0000 (GMT)
-Date:   Wed, 8 Dec 2021 14:06:51 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/32] s390/sclp: detect the zPCI interpretation
- facility
-Message-ID: <20211208140651.5c7cdb1e@p-imbrenda>
-In-Reply-To: <20211207205743.150299-2-mjrosato@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-        <20211207205743.150299-2-mjrosato@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Wed, 8 Dec 2021 08:10:52 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-185-ThzMD2xUPfu0lG4avvF8wA-1; Wed, 08 Dec 2021 13:07:14 +0000
+X-MC-Unique: ThzMD2xUPfu0lG4avvF8wA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Wed, 8 Dec 2021 13:07:13 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Wed, 8 Dec 2021 13:07:13 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Yury Norov' <yury.norov@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>
+Subject: RE: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+Thread-Topic: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+Thread-Index: AQHX68OzWcvG0uwHEUyl9NiXTvoG0KwojuWA
+Date:   Wed, 8 Dec 2021 13:07:13 +0000
+Message-ID: <1f9ab8b9e4ac4c8f9099ec77ad598fef@AcuMS.aculab.com>
+References: <20211203100846.3977195-1-keescook@chromium.org>
+ <YaoN6wnNezMvyyd5@smile.fi.intel.com> <20211203182638.GA450223@lapt>
+ <202112031450.EFE7B7B4A@keescook> <20211207233930.GA3955@lapt>
+In-Reply-To: <20211207233930.GA3955@lapt>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Sshp_8gbK3MJOvB1gj7no5-JfaT9D0KA
-X-Proofpoint-GUID: D0i4WkiXvlJ6S5avSW5ErP9fAjuK9vV-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 suspectscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 spamscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080089
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Dec 2021 15:57:12 -0500
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
-
-> Detect the zPCI Load/Store Interpretation facility.
+From: Yury Norov
+> Sent: 07 December 2021 23:40
 > 
-> Reviewed-by: Eric Farman <farman@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-I have the same comment as Christian; with that fixed:
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
-> ---
->  arch/s390/include/asm/sclp.h   | 1 +
->  drivers/s390/char/sclp_early.c | 1 +
->  2 files changed, 2 insertions(+)
+> On Fri, Dec 03, 2021 at 03:01:30PM -0800, Kees Cook wrote:
+> > On Fri, Dec 03, 2021 at 10:26:38AM -0800, Yury Norov wrote:
+> > > On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
+> > > > On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
+> > > > > It's common practice to cast small variable arguments to the find_*_bit()
+> > >
+> > > Not that common - I found 19 examples of this cast, and most of them
+> > > are in drivers.
+> >
+> > I find 51 (most are in the for_each_* wrappers):
+> >
+> > $ RE=$(echo '\b('$(echo $(grep -E '^(unsigned long find|#define for_each)_' include/linux/find.h |
+> cut -d'(' -f1 | awk '{print $NF}') | tr ' ' '|')')\(.*\(unsigned long \*\)')
+> > $ git grep -E "$RE" | wc -l
+> > 51
+> >
+> > > > > This leads to the find helper dereferencing a full unsigned long,
+> > > > > regardless of the size of the actual variable. The unwanted bits
+> > > > > get masked away, but strictly speaking, a read beyond the end of
+> > > > > the target variable happens. Builds under -Warray-bounds complain
+> > > > > about this situation, for example:
+> > > > >
+> > > > > In file included from ./include/linux/bitmap.h:9,
+> > > > >                  from drivers/iommu/intel/iommu.c:17:
+> > > > > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
+> > > > > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside
+> array bounds of 'int[1]' [-Werror=array-bounds]
+> > > > >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > > > >       |                                     ^~~~~
+> > > > > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
+> > > > >  2115 |         int pds, max_pde;
+> > > > >       |                  ^~~~~~~
+> > >
+> > > The driver should be fixed. I would suggest using one of ffs/fls/ffz from
+> > > include/asm/bitops.h
+> >
+> > I don't think it's a good API design to make developers choose between
+> > functions based on the size of their target.
 > 
-> diff --git a/arch/s390/include/asm/sclp.h b/arch/s390/include/asm/sclp.h
-> index c68ea35de498..c84e8e0ca344 100644
-> --- a/arch/s390/include/asm/sclp.h
-> +++ b/arch/s390/include/asm/sclp.h
-> @@ -88,6 +88,7 @@ struct sclp_info {
->  	unsigned char has_diag318 : 1;
->  	unsigned char has_sipl : 1;
->  	unsigned char has_dirq : 1;
-> +	unsigned char has_zpci_interp : 1;
->  	unsigned int ibc;
->  	unsigned int mtid;
->  	unsigned int mtid_cp;
-> diff --git a/drivers/s390/char/sclp_early.c b/drivers/s390/char/sclp_early.c
-> index b64feab62caa..2e8199b7ae50 100644
-> --- a/drivers/s390/char/sclp_early.c
-> +++ b/drivers/s390/char/sclp_early.c
-> @@ -45,6 +45,7 @@ static void __init sclp_early_facilities_detect(void)
->  	sclp.has_gisaf = !!(sccb->fac118 & 0x08);
->  	sclp.has_hvs = !!(sccb->fac119 & 0x80);
->  	sclp.has_kss = !!(sccb->fac98 & 0x01);
-> +	sclp.has_zpci_interp = !!(sccb->fac118 & 0x01);
->  	if (sccb->fac85 & 0x02)
->  		S390_lowcore.machine_flags |= MACHINE_FLAG_ESOP;
->  	if (sccb->fac91 & 0x40)
+> Bitmap functions work identically for all sizes from 0 to INT_MAX - 1.
+> Users don't 'choose between functions based on the size of their target'.
+> 
+> Can you explain more what you mean?
+> 
+> > This also doesn't work well
+> > for the main problem which is the for_each_* usage.
+> 
+> for_each_*_bit() requires a pointer to an array of unsigned longs. If
+> it's provided with something else, this is an error on a caller side.
+> 
+> > The existing API is totally fine: it already diverts the constant
+> > expression small sizes to ffs/etc, and this change is only to that
+> > part.
+> 
+> If you want to allow passing types other than unsigned long *, you need
+> to be consistent and propagate this change to other bitmap functions.
+> This is much more work than just fixing at most 48 wrong callers.
+> (48 because I inspected some callers manually, and they are fine.)
+
+The type must be 'unsigned long *'.
+You must not use the bitmap functions on smaller types (eg int) if you know
+the maximum size is smaller.
+The code will do completely the wrong thing on BE systems.
+
+Even on x86-86 there have been issues with 8n+4 aligned int[]
+being passed and generating slow locked accesses when the buffer
+crosses a page boundary.
+
+So code that casts the argument to any of the bitmap function
+is really inherently broken.
+
+I think you'll also find code that is using the bitmap functions
+where it doesn't need locked updates.
+The implied locked updates are horribly inefficient on some
+architectures (hashed global locks have to be used).
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

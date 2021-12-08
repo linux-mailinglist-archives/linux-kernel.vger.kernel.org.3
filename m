@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B948046D668
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CFE46D66A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235668AbhLHPIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:08:32 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:54518 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235600AbhLHPIb (ORCPT
+        id S235652AbhLHPKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:10:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55445 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229884AbhLHPKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:08:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638975899;
-        bh=Sm5R1vWRpvxmDKdGbI9FHr+/9qJwamYHqEif5HCeedw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=JkAoHh3KOCw1+eU+2EYFgAlqkIhg53U/RY4CnUYgYDyrg+f/kAHRrjfkNp2vUOEM7
-         1e/5Y35Vm0/3F25ECoLF+nsu9IFMyAx9GsJeS4jK8xIQaok7A5QV+rhH8WUmQLugwn
-         Or6zK3NhE6zn6SNGAgd0bOF/NYacOgG79CzpFr7s=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 1CE861280D7A;
-        Wed,  8 Dec 2021 10:04:59 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ue35qeCBpGnq; Wed,  8 Dec 2021 10:04:59 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638975899;
-        bh=Sm5R1vWRpvxmDKdGbI9FHr+/9qJwamYHqEif5HCeedw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=JkAoHh3KOCw1+eU+2EYFgAlqkIhg53U/RY4CnUYgYDyrg+f/kAHRrjfkNp2vUOEM7
-         1e/5Y35Vm0/3F25ECoLF+nsu9IFMyAx9GsJeS4jK8xIQaok7A5QV+rhH8WUmQLugwn
-         Or6zK3NhE6zn6SNGAgd0bOF/NYacOgG79CzpFr7s=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id F30041280D78;
-        Wed,  8 Dec 2021 10:04:56 -0500 (EST)
-Message-ID: <0654f5befe3daa4915ed70be82c512b958a25c9a.camel@HansenPartnership.com>
-Subject: Re: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 08 Dec 2021 10:04:55 -0500
-In-Reply-To: <20211208144634.rqwn3ccizrbzdq52@wittgenstein>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
-         <20211207202127.1508689-17-stefanb@linux.ibm.com>
-         <20211208125814.hdaghdq7yk5wvvor@wittgenstein>
-         <dd43783ae76ad3238d99f75d8aaf95e20ad28b79.camel@HansenPartnership.com>
-         <20211208144634.rqwn3ccizrbzdq52@wittgenstein>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Wed, 8 Dec 2021 10:10:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638975990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2dndCJtUozPgW/zrBQMFJSIBdDXug4fBC+xfl6GUxv4=;
+        b=ILsPpDn/gwEyZ71NslLnXhJ5tnXZdvGtB38XepuvptvoVxC/4s2YDclA6cUL8jfBBv0y/w
+        xumvelzSitP6KVEsvmw9/MaqXV7aQYtSJBA5SeVroEDHC5FUi0R5gECtknBs757yZIu0iY
+        UChCgWO+TI1tgcWE+gZsgtuCjc22jmE=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-1CeMR8CTO6aG8UJZi7FbOQ-1; Wed, 08 Dec 2021 10:06:29 -0500
+X-MC-Unique: 1CeMR8CTO6aG8UJZi7FbOQ-1
+Received: by mail-pj1-f72.google.com with SMTP id b8-20020a17090a10c800b001a61dff6c9dso1760566pje.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:06:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2dndCJtUozPgW/zrBQMFJSIBdDXug4fBC+xfl6GUxv4=;
+        b=qJB6vAAaWAWZLMKayxxqbGT7tlHvOYyUzs8UVKouAeza1pXhGcnE50s+Zd6uOkM2i1
+         r92MscksMpJk8jalzPqzwWxtZ9PhdveKCFsZEceR5Ww3cxt6GqRlOJILlIZ4nIOnxzLl
+         dStccROEhOJ5fO9i5ET22kVcfKZAXatop2UZkE4jt7rrr7Q8vGHvZHlKlj1TPdgsGBES
+         95fA9UWAfoZV0gctfcyps34BOAviyeOpW06Yd2xUZfiy71eZPlpZfi+Yj7+Lr3TNojVc
+         Irw/LltodU1loQnL5VdhJUO1ZF6bjfpN05oyI9j5XOu5Ai5Ja0b/CL2aqZyvMxSvAv8/
+         4GJQ==
+X-Gm-Message-State: AOAM533zbDDxuWszOfzNLwriU/EpYnIOEiT19RjPHLyMUJt4FIvIg9kt
+        qRZPsnnqW/ZJlGWlZqD5UnZXNy4PWA8ET16QLXt2kfIOXJLFx1iAIH+IXWSR3xEBcCcwFx+T4UI
+        MdU7I6vytyweeFLOraiQhupPnECZFEg+GV9LkShgL
+X-Received: by 2002:a63:ea51:: with SMTP id l17mr29454654pgk.363.1638975988458;
+        Wed, 08 Dec 2021 07:06:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7DuI8y9TyBjj2r959snuFq9sEdNZb1u8Br24srTif6Fi8P4NVrvLCN3qex9bF7jRjbutbgEot+9EG+5IBRSc=
+X-Received: by 2002:a63:ea51:: with SMTP id l17mr29454624pgk.363.1638975988150;
+ Wed, 08 Dec 2021 07:06:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20211201164301.44653-1-tero.kristo@linux.intel.com> <20211201164301.44653-3-tero.kristo@linux.intel.com>
+In-Reply-To: <20211201164301.44653-3-tero.kristo@linux.intel.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 8 Dec 2021 16:06:16 +0100
+Message-ID: <CAO-hwJ+nrL9FD2jvkx6qngMrRQv8KmHWzYy-HOwKJ7TPHz-Xmg@mail.gmail.com>
+Subject: Re: [RFCv3 2/7] HID: hid-input: Add suffix also for HID_DG_PEN
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 15:46 +0100, Christian Brauner wrote:
-> On Wed, Dec 08, 2021 at 09:11:09AM -0500, James Bottomley wrote:
-> > On Wed, 2021-12-08 at 13:58 +0100, Christian Brauner wrote:
-> > > On Tue, Dec 07, 2021 at 03:21:27PM -0500, Stefan Berger wrote:
-> > [...]
-> > > > @@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct
-> > > > fs_context *fc)
-> > > >  
-> > > >  static void securityfs_kill_super(struct super_block *sb)
-> > > >  {
-> > > > +	struct user_namespace *ns = sb->s_fs_info;
-> > > > +
-> > > > +	if (ns != &init_user_ns)
-> > > > +		ima_fs_ns_free_dentries(ns);
-> > > 
-> > > Say securityfs is unmounted. Then all the inodes and dentries
-> > > become invalid. It's not allowed to hold on to any dentries or
-> > > inodes after the super_block is shut down. So I just want to be
-> > > sure that nothing in ima can access these dentries after
-> > > securityfs is unmounted.
-> > > 
-> > > To put it another way: why are they stored in struct
-> > > ima_namespace in the first place? If you don't pin a filesystem
-> > > when creating files or directories like you do for securityfs in
-> > > init_ima_ns then you don't need to hold on to them as they will
-> > > be automatically be wiped during umount.
-> > 
-> > For IMA this is true because IMA can't be a module.  However, a
-> > modular
-> 
-> This thread is about ima and its stashing of dentries in struct
-> ima_namespace. That things might be different for other consumers is
-> uninteresting for this specific case, I think.
+On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>
+> From: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> This and HID_DG_STYLUS are pretty much the same thing so add suffix for
+> HID_DG_PEN too. This makes the input device name look better.
+>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/hid/hid-input.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> index 39ebedb2323b..73c2edda742e 100644
+> --- a/drivers/hid/hid-input.c
+> +++ b/drivers/hid/hid-input.c
+> @@ -1737,6 +1737,7 @@ static struct hid_input *hidinput_allocate(struct hid_device *hid,
+>                 case HID_GD_MOUSE:
+>                         suffix = "Mouse";
+>                         break;
+> +               case HID_DG_PEN:
 
-Well, yes, but the patch series also includes namespacing securityfs. 
-We have to get that right for all consumers, including the modular
-ones.  So I think the way it works is we don't need a remove callback
-in kill_sb() if we don't raise the dentry refcount in create.  However,
-we still need to return the dentry to allow for stashing and we still
-need to be able to cope with remove being called for the namespaced
-entries ... for teardown on error in the IMA case and module
-removal+teardown on error in other cases.
+hid-multitouch overrides this in mt_input_configured() and sets
+"Stylus" instead.
+A common code would be best, but now I realizes that this would mean:
+HID_DG_PEN -> "Stylus"
+HID_DG_STYLUS -> "Pen"
 
-> > consumer, like the TPM, must be able to remove its entries from a
-> > mounted securityfs because the code that serves the operations is
-> > going away.  In order to do this removal, it needs the dentries
-> > somewhere. 
-> 
-> That still doesn't require you to take an additional reference on the
-> dentry per se.
+This is part of the configuration API, because we can have
+configuration snippets based on the device name :)
 
-No, I don't believe it does ... however it does require a stash
-somewhere.
+So ideally, we need:
+this patch to add DG_PEN support in hid-input.c and remove the special
+case from hid-multitouch, with a comment explaining the Pen/Stylus
+mistake :)
 
-> Aside from this brings in a whole different and way bigger issue as
-> that requires way more fundamental work since this is about a (pseudo
-> or proper) device. It's not even clear that this should have entries
-> outside of init_user_ns-securityfs.
-
-adding vTPMs is a use case that people want to support, so I don't want
-to get to that bit and find it all doesn't work.
-
-> > The current convention seems to be everything has a directory in
-> > the top level, so we could call d_genocide() on this directory and
-> > not have to worry about storing the dentries underneath, but I
-> > think we can't avoid storing the dentry for the top level
-> > directory.
-> 
-> I have not heard an argument why ima needs to stash these dentries as
-> it doesn't remove them once created until umount.
-
-I'm not saying IMA does, I'm just saying we still need the dentry
-returned by the API in case a consumer does need to stash.
-
-James
+Cheers,
+Benjamin
 
 
+>                 case HID_DG_STYLUS:
+>                         suffix = "Pen";
+>                         break;
+> --
+> 2.25.1
+>
 

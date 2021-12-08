@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B49FA46D13B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABEA46D13D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbhLHKsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:48:18 -0500
-Received: from smtpout1.mo529.mail-out.ovh.net ([178.32.125.2]:40335 "EHLO
-        smtpout1.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229481AbhLHKsR (ORCPT
+        id S231908AbhLHKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:48:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39690 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbhLHKsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:48:17 -0500
-X-Greylist: delayed 68074 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 05:48:17 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.35])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 4A0F4D092F09;
-        Wed,  8 Dec 2021 11:44:42 +0100 (CET)
-Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
- 2021 11:44:40 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-96R001f5056120-68a4-4c0a-bc06-f617410d6d7e,
-                    EB01F339838E5AA67C986A6C3251B49097B81903) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 86.201.172.254
-Message-ID: <e92f2bb3-b5e1-c870-8151-3917a789a640@kaod.org>
-Date:   Wed, 8 Dec 2021 11:44:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
- worked
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>, Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>, Kalle Valo <kvalo@codeaurora.org>,
+        Wed, 8 Dec 2021 05:48:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E08DAB8208C;
+        Wed,  8 Dec 2021 10:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCCEC00446;
+        Wed,  8 Dec 2021 10:44:57 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 11:44:54 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <sparclinux@vger.kernel.org>, <x86@kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Wei Liu <wei.liu@kernel.org>, <linux-hyperv@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-References: <20211206210147.872865823@linutronix.de>
- <20211206210223.872249537@linutronix.de>
- <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
- <87ilw0odel.fsf@mpe.ellerman.id.au>
- <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org> <8735n42lld.ffs@tglx>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <8735n42lld.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: d54a9dd7-eba7-4e7f-a7a0-0dc7c43fc796
-X-Ovh-Tracer-Id: 10131410315672259365
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeekgddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeuveelvdejteegteefieevfeetffefvddvieekteevleefgeelgfeutedvfedvfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehhtggrsehlihhnuhigrdhisghmrdgtohhm
+        Yabin Cui <yabinc@google.com>
+Subject: Re: [PATCH] tracefs: Have new files inherit the ownership of their
+ parent
+Message-ID: <20211208104454.nhxyvmmn6d2qhpwl@wittgenstein>
+References: <20211207144828.3d356e26@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211207144828.3d356e26@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 21:42, Thomas Gleixner wrote:
-> Cedric,
+On Tue, Dec 07, 2021 at 02:48:28PM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 > 
-> On Tue, Dec 07 2021 at 16:50, Cédric Le Goater wrote:
->> On 12/7/21 12:36, Michael Ellerman wrote:
->>>
->>> This patch should drop those selects I guess. Can you send an
->>> incremental diff for Thomas to squash in?
->>
->> Sure.
->>
->>> Removing all the tendrils in various device tree files will probably
->>> require some archaeology, and it should be perfectly safe to leave those
->>> in the tree with the driver gone. So I think we can do that as a
->>> subsequent patch, rather than in this series.
->>
->> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
+> If the tracefs system is set to a specific owner and group, then the files
+> and directories that are created under them should inherit the owner and
+> group of the parent.
+
+The description reads like the owner of new directories and files is to
+be always taken from the {g,u}id mount options. It doesn't look like
+tracefs currently supports .setattr but if it ever wants to e.g. to
+allow the system administrator to delegate specific directories or
+files, the patch below will cause inheritance based on directory
+ownership not on the {g,u}id mount option. So if I were to write this
+I'd rather initialize based on mount option directly.
+
+So sm along the - completely untested, non-prettified - lines of:
+
+	static inline struct tracefs_fs_info *TRACEFS_SB(const struct super_block *sb)
+	{
+		return sb->s_fs_info;
+	}
+
+	struct tracefs_info *info;
+	[...]
+
+	inode = tracefs_get_inode(dentry->d_sb);
+	if (unlikely(!inode))
+		return failed_creating(dentry);
+
+	[...]
+	
+	struct tracefs_info *info = TRACEFS_SB(inode->i_sb);
+
+	[...]
+	
+	inode->i_uid = info.mount_opts.uid;
+	inode->i_gid = info.mount_opts.gid;
+
+this clearly gets the semantics across, the caller doens't need to know
+that parent can be NULL and why it is retrieved via dentry->d_parent,
+and is robust even if you allow changes in ownership in different ways
+later on.
+
 > 
-> < Lots of patch skipped />
->> @@ -141,7 +138,6 @@ config REDWOOD
->>    	select FORCE_PCI
->>    	select PPC4xx_PCI_EXPRESS
->>    	select PCI_MSI
->> -	select PPC4xx_MSI
->>    	help
->>    	  This option enables support for the AMCC PPC460SX Redwood board.
+> Cc: stable@vger.kernel.org
+> Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+> Reported-by: Kalesh Singh <kaleshsingh@google.com>
+> Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>  fs/tracefs/inode.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> While that is incremental it certainly is worth a patch on it's
-> own. Could you add a proper changelog and an SOB please?
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index f20f575cdaef..6b16d89cf187 100644
+> --- a/fs/tracefs/inode.c
+> +++ b/fs/tracefs/inode.c
+> @@ -488,6 +488,8 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
+>  	inode->i_mode = mode;
+>  	inode->i_fop = fops ? fops : &tracefs_file_operations;
+>  	inode->i_private = data;
+> +	inode->i_uid = dentry->d_parent->d_inode->i_uid;
+> +	inode->i_gid = dentry->d_parent->d_inode->i_gid;
 
-Here you are.
+I you stick with this I'd use the d_inode() accessor we have.
 
-  https://github.com/legoater/linux/commit/75d2764b11fe8f6d8bf50d60a3feb599ce27b16d
+inode->i_uid = d_inode(dentry->d_parent)->i_uid;
+inode->i_gid = d_inode(dentry->d_parent)->i_gid;
 
-Thanks,
-
-C.
+>  	d_instantiate(dentry, inode);
+>  	fsnotify_create(dentry->d_parent->d_inode, dentry);
+>  	return end_creating(dentry);
+> @@ -510,6 +512,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
+>  	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+>  	inode->i_op = ops;
+>  	inode->i_fop = &simple_dir_operations;
+> +	inode->i_uid = dentry->d_parent->d_inode->i_uid;
+> +	inode->i_gid = dentry->d_parent->d_inode->i_gid;
+>  
+>  	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+>  	inc_nlink(inode);
+> -- 
+> 2.31.1
+> 

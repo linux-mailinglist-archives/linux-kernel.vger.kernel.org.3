@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A8D46D7B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA05446D7B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236226AbhLHQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbhLHQJC (ORCPT
+        id S236518AbhLHQJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:09:18 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34604 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229743AbhLHQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:09:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C38C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:05:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eXGrGkg5NtXQdY+5+PcWCQctwATeg/9zpNpzAdgrs5s=; b=sNEb/78ju3Vr/GEz17BRIjSBCp
-        fMKLn1vqWX9wIcveNYbpvy4BSPQbE3OzfqZh0+pdaY+mBba8NCAPY7A888RUaGktOAvnQhIjjLphV
-        cm1rWfpfXm8tVtmMs7rvngNHjCWreru0F/AYUV2GEnyEMp9VxAKcd7XIAopmzw5WwB5v1hK8piQU0
-        fTrIwxiLeTj7xg5RjRSRHAjZ7Mr9lCqIspxdNstc+D+NyEPKyMuIpVfcKXClu7Z0zLHZYtNhIt4S+
-        9nZclyuXgmqiJUsNa58CA3TF6QPADq5TYrYNDDBXz/ww6vhBLfNz6JqIzjRv+pwWfHcnKl1cCRbCb
-        umuXbO2g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muzRR-008YzV-Ti; Wed, 08 Dec 2021 16:05:13 +0000
-Date:   Wed, 8 Dec 2021 16:05:13 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
- lock in exit_mmap
-Message-ID: <YbDXuegc6BtRzs/5@casper.infradead.org>
-References: <20211207215031.2251719-1-surenb@google.com>
- <Ya/bFLcnqyvlVzuO@casper.infradead.org>
- <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
- <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
- <YbDIxA92ln+RTbUK@casper.infradead.org>
- <YbDUnkmQP3nxd5bv@dhcp22.suse.cz>
+        Wed, 8 Dec 2021 11:09:17 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C47761FD26;
+        Wed,  8 Dec 2021 16:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638979544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CvcQBSNTvvCRdBpYrU4PvbzY2eZarvbTKMbxWQBvpFo=;
+        b=MDXnmweZ+FXDg5XpNVKX3/IXscxA1kWIaMVSKlpCsoZx1Ew3hATEkPZe0NRJaYjk2AKg0C
+        Gxe0Tm/HJ6Iont1ZzsZBFU79SoVnUuniIHqlkRgGDMfwkLhjxcr/wvzbSMG38F2lAb/yeL
+        p4mBgkvMSLHHsQCpD1GXv8DRXnQJPoE=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 53F6DA3B93;
+        Wed,  8 Dec 2021 16:05:44 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 17:05:43 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Message-ID: <YbDX16LAkvzgYHpH@dhcp22.suse.cz>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+ <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
+ <YbB0d6T8RbHW48sZ@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbDUnkmQP3nxd5bv@dhcp22.suse.cz>
+In-Reply-To: <YbB0d6T8RbHW48sZ@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:51:58PM +0100, Michal Hocko wrote:
-> On Wed 08-12-21 15:01:24, Matthew Wilcox wrote:
-> > On Tue, Dec 07, 2021 at 03:08:19PM -0800, Suren Baghdasaryan wrote:
-> > > > >         /**
-> > > > >          * @close: Called when the VMA is being removed from the MM.
-> > > > >          * Context: Caller holds mmap_lock.
-> > > 
-> > > BTW, is the caller always required to hold mmap_lock for write or it
-> > > *might* hold it?
-> > 
-> > __do_munmap() might hold it for read, thanks to:
-> > 
-> >         if (downgrade)
-> >                 mmap_write_downgrade(mm);
-> > 
-> > Should probably say:
-> > 
-> > 	* Context: User context.  May sleep.  Caller holds mmap_lock.
-> > 
-> > I don't think we should burden the implementor of the vm_ops with the
-> > knowledge that the VM chooses to not hold the mmap_lock under certain
-> > circumstances when it doesn't matter whether it's holding the mmap_lock
-> > or not.
+On Wed 08-12-21 10:01:44, Michal Hocko wrote:
+> On Tue 07-12-21 15:47:59, Andrew Morton wrote:
+> > (cc's added)
 > 
-> If we document it like that some code might depend on that lock to be
-> held. I think we only want to document that the holder itself is not
-> allowed to take mmap sem or a depending lock.
+> Extend CC to have all futex maintainers on board.
+>  
+> > On Tue,  7 Dec 2021 16:49:02 -0500 Joel Savitz <jsavitz@redhat.com> wrote:
+> > 
+> > > In the case that two or more processes share a futex located within
+> > > a shared mmaped region, such as a process that shares a lock between
+> > > itself and a number of child processes, we have observed that when
+> > > a process holding the lock is oom killed, at least one waiter is never
+> > > alerted to this new development and simply continues to wait.
+> > 
+> > Well dang.  Is there any way of killing off that waiting process, or do
+> > we have a resource leak here?
+> > 
+> > > This is visible via pthreads by checking the __owner field of the
+> > > pthread_mutex_t structure within a waiting process, perhaps with gdb.
+> > > 
+> > > We identify reproduction of this issue by checking a waiting process of
+> > > a test program and viewing the contents of the pthread_mutex_t, taking note
+> > > of the value in the owner field, and then checking dmesg to see if the
+> > > owner has already been killed.
+> > > 
+> > > This issue can be tricky to reproduce, but with the modifications of
+> > > this small patch, I have found it to be impossible to reproduce. There
+> > > may be additional considerations that I have not taken into account in
+> > > this patch and I welcome any comments and criticism.
+> 
+> Why does OOM killer need a special handling. All the oom killer does is
+> to send a fatal signal to the victim. Why is this any different from
+> sending SIGKILL from the userspace?
 
-The only place where we're not currently holding the mmap_lock is at
-task exit, where the mmap_lock is effectively held because nobody else
-can modify the task's mm.  Besides, Suren is changing that in this patch
-series anyway, so it will be always true.
+I have had a closer look and I guess I can see what you are trying to
+achieve. futex_exit_release is normally called from exit_mm context. You
+are likely seeing a situation when the oom victim is blocked and cannot
+exit. That is certainly possible but it shouldn't be a permanent state.
+So I would be more interested about your particular issue and how long
+the task has been stuck unable to exit.
+
+Whether this is safe to be called from the oom killer context I cannot
+really judge. That would be a question to Futex folks.
+-- 
+Michal Hocko
+SUSE Labs

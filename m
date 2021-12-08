@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F6C46D7AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A8D46D7B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbhLHQI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:08:29 -0500
-Received: from mga03.intel.com ([134.134.136.65]:33704 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236226AbhLHQI2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:08:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237799890"
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="237799890"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 08:04:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,189,1635231600"; 
-   d="scan'208";a="479944744"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2021 08:04:44 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id C74731A0; Wed,  8 Dec 2021 18:04:50 +0200 (EET)
-Date:   Wed, 8 Dec 2021 19:04:50 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>, Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH 4/4] ACPI: PM: Avoid cache flush on entering S4
-Message-ID: <20211208160450.3hplhtikjjvfrhts@black.fi.intel.com>
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com>
- <20211206122952.74139-5-kirill.shutemov@linux.intel.com>
- <CAJZ5v0iH_CQC-ak_NQC5yONT-tFVC1iikSsfVWFh+z+QL5FKdg@mail.gmail.com>
+        id S236226AbhLHQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229743AbhLHQJC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 11:09:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C38C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eXGrGkg5NtXQdY+5+PcWCQctwATeg/9zpNpzAdgrs5s=; b=sNEb/78ju3Vr/GEz17BRIjSBCp
+        fMKLn1vqWX9wIcveNYbpvy4BSPQbE3OzfqZh0+pdaY+mBba8NCAPY7A888RUaGktOAvnQhIjjLphV
+        cm1rWfpfXm8tVtmMs7rvngNHjCWreru0F/AYUV2GEnyEMp9VxAKcd7XIAopmzw5WwB5v1hK8piQU0
+        fTrIwxiLeTj7xg5RjRSRHAjZ7Mr9lCqIspxdNstc+D+NyEPKyMuIpVfcKXClu7Z0zLHZYtNhIt4S+
+        9nZclyuXgmqiJUsNa58CA3TF6QPADq5TYrYNDDBXz/ww6vhBLfNz6JqIzjRv+pwWfHcnKl1cCRbCb
+        umuXbO2g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muzRR-008YzV-Ti; Wed, 08 Dec 2021 16:05:13 +0000
+Date:   Wed, 8 Dec 2021 16:05:13 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        rientjes@google.com, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v3 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+Message-ID: <YbDXuegc6BtRzs/5@casper.infradead.org>
+References: <20211207215031.2251719-1-surenb@google.com>
+ <Ya/bFLcnqyvlVzuO@casper.infradead.org>
+ <CAJuCfpFwR+uO0GJvCLGQrCaFzB42wNg-FpeOnx2VnxipONkpmg@mail.gmail.com>
+ <CAJuCfpG-CU4AywZGDfMRiEtxMWkL4KMJ-xD1eM15C_z5eYdCJA@mail.gmail.com>
+ <YbDIxA92ln+RTbUK@casper.infradead.org>
+ <YbDUnkmQP3nxd5bv@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iH_CQC-ak_NQC5yONT-tFVC1iikSsfVWFh+z+QL5FKdg@mail.gmail.com>
+In-Reply-To: <YbDUnkmQP3nxd5bv@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:10:52PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Dec 6, 2021 at 1:30 PM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > According to the ACPI spec v6.4, section 16.2 the cache flushing
-> > required on entering to S1, S2, and S3.
-> >
-> > No need to flush caches on hibernation (S4).
-> >
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  drivers/acpi/sleep.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> > index 14e8df0ac762..8166d863ed6b 100644
-> > --- a/drivers/acpi/sleep.c
-> > +++ b/drivers/acpi/sleep.c
-> > @@ -902,8 +902,6 @@ static int acpi_hibernation_enter(void)
-> >  {
-> >         acpi_status status = AE_OK;
-> >
-> > -       ACPI_FLUSH_CPU_CACHE();
-> > -
-> >         /* This shouldn't return.  If it returns, we have a problem */
-> >         status = acpi_enter_sleep_state(ACPI_STATE_S4);
-> >         /* Reprogram control registers */
-> > --
+On Wed, Dec 08, 2021 at 04:51:58PM +0100, Michal Hocko wrote:
+> On Wed 08-12-21 15:01:24, Matthew Wilcox wrote:
+> > On Tue, Dec 07, 2021 at 03:08:19PM -0800, Suren Baghdasaryan wrote:
+> > > > >         /**
+> > > > >          * @close: Called when the VMA is being removed from the MM.
+> > > > >          * Context: Caller holds mmap_lock.
+> > > 
+> > > BTW, is the caller always required to hold mmap_lock for write or it
+> > > *might* hold it?
+> > 
+> > __do_munmap() might hold it for read, thanks to:
+> > 
+> >         if (downgrade)
+> >                 mmap_write_downgrade(mm);
+> > 
+> > Should probably say:
+> > 
+> > 	* Context: User context.  May sleep.  Caller holds mmap_lock.
+> > 
+> > I don't think we should burden the implementor of the vm_ops with the
+> > knowledge that the VM chooses to not hold the mmap_lock under certain
+> > circumstances when it doesn't matter whether it's holding the mmap_lock
+> > or not.
 > 
-> Applied (with some edits in the subject and changelog) as 5.17 material, thanks!
+> If we document it like that some code might depend on that lock to be
+> held. I think we only want to document that the holder itself is not
+> allowed to take mmap sem or a depending lock.
 
-Is it for the series or only 4/4? Do I need to do something for 2/4 and
-3/4?
-
--- 
- Kirill A. Shutemov
+The only place where we're not currently holding the mmap_lock is at
+task exit, where the mmap_lock is effectively held because nobody else
+can modify the task's mm.  Besides, Suren is changing that in this patch
+series anyway, so it will be always true.

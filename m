@@ -2,353 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 134A246D7F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FC746D7F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236738AbhLHQWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232235AbhLHQWU (ORCPT
+        id S236759AbhLHQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:22:36 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51410 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236749AbhLHQWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:22:20 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6F0C061746;
-        Wed,  8 Dec 2021 08:18:48 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:9928:73b0:79a4:e623])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 64B6D1F46128;
-        Wed,  8 Dec 2021 16:18:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638980326; bh=/t2EHDkGaVsQYxOM7ghlNzX7xP49esI+doffFRaY66g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mFYwRp9YcqxQllHYa7p8wsd1Kk17BtPajGkXpoqofs1+SFdNU5G5PCfwGp2TeMqZd
-         iM70Dw0Svspg8JRSGqQdnQS+glR0lYDNRB1YhxK3vq0T6OzFhjZGZc/SpByXgvfc/h
-         iAmqPqb/fJfL/XVkWsx5FY6x1tnlVDz1iuAK3fkGA+USd+MxSXNb/W0ImtMZamord/
-         rVAp3sUIBPaF3kLVWI4p7iP2mO+EqrO6cFnqfsHo9iQSdzgdRPiNMEqCgRXAtBZY9j
-         yFFQOwQrNAe9qJZyrmGM4Rmpl/JVqJMeQ7ioDhW1cKwU/BUO+tkr51vfXvkWzpBWzl
-         2XrHNB/W40+Kg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5] media: hantro: Make G2/HEVC use hantro_postproc_ops
-Date:   Wed,  8 Dec 2021 17:18:39 +0100
-Message-Id: <20211208161839.818397-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 8 Dec 2021 11:22:34 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8GG58C020344;
+        Wed, 8 Dec 2021 16:19:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=NCVsya2U6FmqSo37J3HNnQHPSsS7M2ZWP1KLU3Y4UD4=;
+ b=fgkUSJgy2i8xMHsCcOFZDe+MwaKKwHB2H05bwreZ8C1ZAJ4PrZMVJI30I6eJszNP43LC
+ JMinebb1fpbBsvNYgkz2jWypCG6CgwkNSmFfrj0FKCzAcrl6rKvcy21GcpEVwd57Kxvr
+ +2QeIHRu4vudkrrrkmVXJFDXSNOJzIpQmQVV+G+62685dyejF9GWQg9iaJEFPcEoFHaz
+ YwBxG1jHEbXHu3td98O/Ar2yPP2PhaWGqgryv2IHaQtwrP2IjG6/FY3x4JktpS1IVdnT
+ a57G/ypbAFu6gyJm8/m30hVuejUx70dgXHXQ/GJrbHNKM8K4eKQW/h++QgNPLdQJ44C9 Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctya4s65g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 16:19:01 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8G54Ox012586;
+        Wed, 8 Dec 2021 16:19:00 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ctya4s64k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 16:19:00 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FvJsD005136;
+        Wed, 8 Dec 2021 16:18:57 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3cqyyb1qjs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 16:18:57 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8GIsmT29688268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 16:18:54 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4EC9AAE057;
+        Wed,  8 Dec 2021 16:18:54 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10D37AE058;
+        Wed,  8 Dec 2021 16:18:53 +0000 (GMT)
+Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 16:18:52 +0000 (GMT)
+Message-ID: <74f8b38e4b36b0cdb0bcef9430c1c47e42ae4b6c.camel@linux.ibm.com>
+Subject: Re: [PATCH 10/32] s390/pci: stash dtsm and maxstbl
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 17:18:52 +0100
+In-Reply-To: <20211207205743.150299-11-mjrosato@linux.ibm.com>
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+         <20211207205743.150299-11-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jkjmmkSFqowyWrT0yD_RcrrfzKAb9S3r
+X-Proofpoint-ORIG-GUID: m1LAx3SUuIM3ATFnS5ex6fxp5aqHGsYP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_06,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112080096
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the postprocessor functions introduced by Hantro G2/VP9 codec series
-and remove duplicated buffer management.
-This allow Hantro G2/HEVC to produce NV12_4L4 and NV12.
+On Tue, 2021-12-07 at 15:57 -0500, Matthew Rosato wrote:
+> Store information about what IOAT designation types are supported by
+> underlying hardware as well as the largest store block size allowed.
+> These values will be needed by passthrough.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>  arch/s390/include/asm/pci.h     | 2 ++
+>  arch/s390/include/asm/pci_clp.h | 6 ++++--
+>  arch/s390/pci/pci_clp.c         | 2 ++
+>  3 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index 2474b8d30f2a..1a8f9f42da3a 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -126,9 +126,11 @@ struct zpci_dev {
+>  	u32		gd;		/* GISA designation for passthrough */
+>  	u16		vfn;		/* virtual function number */
+>  	u16		pchid;		/* physical channel ID */
+> +	u16		maxstbl;	/* Maximum store block size */
+>  	u8		pfgid;		/* function group ID */
+>  	u8		pft;		/* pci function type */
+>  	u8		port;
+> +	u8		dtsm;		/* Supported DT mask */
+>  	u8		rid_available	: 1;
+>  	u8		has_hp_slot	: 1;
+>  	u8		has_resources	: 1;
+> diff --git a/arch/s390/include/asm/pci_clp.h b/arch/s390/include/asm/pci_clp.h
+> index 3af8d196da74..124fadfb74b9 100644
+> --- a/arch/s390/include/asm/pci_clp.h
+> +++ b/arch/s390/include/asm/pci_clp.h
+> @@ -153,9 +153,11 @@ struct clp_rsp_query_pci_grp {
+>  	u8			:  6;
+>  	u8 frame		:  1;
+>  	u8 refresh		:  1;	/* TLB refresh mode */
+> -	u16 reserved2;
+> +	u16			:  3;
+> +	u16 maxstbl		: 13;	/* Maximum store block size */
+>  	u16 mui;
+> -	u16			: 16;
+> +	u8 dtsm;			/* Supported DT mask */
+> +	u8 reserved3;
+>  	u16 maxfaal;
+>  	u16			:  4;
+>  	u16 dnoi		: 12;
+> diff --git a/arch/s390/pci/pci_clp.c b/arch/s390/pci/pci_clp.c
+> index e9ed0e4a5cf0..bc7446566cbc 100644
+> --- a/arch/s390/pci/pci_clp.c
+> +++ b/arch/s390/pci/pci_clp.c
+> @@ -103,6 +103,8 @@ static void clp_store_query_pci_fngrp(struct zpci_dev *zdev,
+>  	zdev->max_msi = response->noi;
+>  	zdev->fmb_update = response->mui;
+>  	zdev->version = response->version;
+> +	zdev->maxstbl = response->maxstbl;
+> +	zdev->dtsm = response->dtsm;
+>  
+>  	switch (response->version) {
+>  	case 1:
 
-It fixes an issue where driver capture queue pixel format claims to be VT12
-while G2/HEVC always generate NV12 frames.
-
-video1: VIDIOC_S_FMT: type=vid-out-mplane, width=2560, height=1600, format=S265 little-endian (0x35363253), field=none, colorspace=0, num_planes=1, flags=0x0, ycbcr_enc=0, quantization=0, xfer_func=0
-plane 0: bytesperline=0 sizeimage=6144000
-video1: VIDIOC_S_EXT_CTRLS: which=0x0, count=1, error_idx=0, request_fd=0, name=HEVC Sequence Parameter Set, id/size=0x990cf0/32
-video1: VIDIOC_G_FMT: type=vid-cap-mplane, width=2560, height=1600, format=VT12 little-endian (0x32315456), field=none, colorspace=0, num_planes=1, flags=0x0, ycbcr_enc=0, quantization=0, xfer_func=0
-plane 0: bytesperline=2560 sizeimage=6144000
-video1: VIDIOC_ENUM_FMT: index=0, type=vid-cap-mplane, flags=0x0, pixelformat=NV12 little-endian (0x3231564e), mbus_code=0x0000, description='Y/CbCr 4:2:0'
-video1: VIDIOC_ENUM_FMT: error -22: index=1, type=vid-cap-mplane, flags=0x0, pixelformat=.... little-endian (0x00000000), mbus_code=0x0000, description=''
-video1: VIDIOC_G_FMT: type=vid-cap-mplane, width=2560, height=1600, format=VT12 little-endian (0x32315456), field=none, colorspace=0, num_planes=1, flags=0x0, ycbcr_enc=0, quantization=0, xfer_func=0
-
-Fluster scores are 77/147 for HEVC and 129/303 for VP9 (no regression).
-
-Beauty, Jockey and ShakeNDry bitstreams from UVG (http://ultravideo.fi/)
-set have also been tested.
-
-Fixes: 53a3e71095c5 ("media: hantro: Simplify postprocessor")
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
-v5:
-- Add logs about wrong capture pixel format and Fixes tag.
-
-v4:
-- Add fluster VP9 scores.
-
-change since v1:
-- Reword commit message.
-
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 25 +++---
- drivers/staging/media/hantro/hantro_hevc.c    | 79 +++----------------
- drivers/staging/media/hantro/hantro_hw.h      | 11 +++
- .../staging/media/hantro/hantro_postproc.c    |  3 +
- drivers/staging/media/hantro/hantro_v4l2.c    | 19 ++---
- 5 files changed, 41 insertions(+), 96 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index b35f36109a6f..6ef5430b18eb 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -341,6 +341,8 @@ static int set_ref(struct hantro_ctx *ctx)
- 	const struct v4l2_hevc_dpb_entry *dpb = decode_params->dpb;
- 	dma_addr_t luma_addr, chroma_addr, mv_addr = 0;
- 	struct hantro_dev *vpu = ctx->dev;
-+	struct vb2_v4l2_buffer *vb2_dst;
-+	struct hantro_decoded_buffer *dst;
- 	size_t cr_offset = hantro_hevc_chroma_offset(sps);
- 	size_t mv_offset = hantro_hevc_motion_vectors_offset(sps);
- 	u32 max_ref_frames;
-@@ -426,10 +428,15 @@ static int set_ref(struct hantro_ctx *ctx)
- 		hantro_write_addr(vpu, G2_REF_MV_ADDR(i), mv_addr);
- 	}
- 
--	luma_addr = hantro_hevc_get_ref_buf(ctx, decode_params->pic_order_cnt_val);
-+	vb2_dst = hantro_get_dst_buf(ctx);
-+	dst = vb2_to_hantro_decoded_buf(&vb2_dst->vb2_buf);
-+	luma_addr = hantro_get_dec_buf_addr(ctx, &dst->base.vb.vb2_buf);
- 	if (!luma_addr)
- 		return -ENOMEM;
- 
-+	if (hantro_hevc_add_ref_buf(ctx, decode_params->pic_order_cnt_val, luma_addr))
-+		return -EINVAL;
-+
- 	chroma_addr = luma_addr + cr_offset;
- 	mv_addr = luma_addr + mv_offset;
- 
-@@ -456,16 +463,12 @@ static int set_ref(struct hantro_ctx *ctx)
- 
- static void set_buffers(struct hantro_ctx *ctx)
- {
--	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+	struct vb2_v4l2_buffer *src_buf;
- 	struct hantro_dev *vpu = ctx->dev;
--	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
--	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
--	size_t cr_offset = hantro_hevc_chroma_offset(sps);
--	dma_addr_t src_dma, dst_dma;
-+	dma_addr_t src_dma;
- 	u32 src_len, src_buf_len;
- 
- 	src_buf = hantro_get_src_buf(ctx);
--	dst_buf = hantro_get_dst_buf(ctx);
- 
- 	/* Source (stream) buffer. */
- 	src_dma = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
-@@ -478,11 +481,6 @@ static void set_buffers(struct hantro_ctx *ctx)
- 	hantro_reg_write(vpu, &g2_strm_start_offset, 0);
- 	hantro_reg_write(vpu, &g2_write_mvs_e, 1);
- 
--	/* Destination (decoded frame) buffer. */
--	dst_dma = hantro_get_dec_buf_addr(ctx, &dst_buf->vb2_buf);
--
--	hantro_write_addr(vpu, G2_RS_OUT_LUMA_ADDR, dst_dma);
--	hantro_write_addr(vpu, G2_RS_OUT_CHROMA_ADDR, dst_dma + cr_offset);
- 	hantro_write_addr(vpu, G2_TILE_SIZES_ADDR, ctx->hevc_dec.tile_sizes.dma);
- 	hantro_write_addr(vpu, G2_TILE_FILTER_ADDR, ctx->hevc_dec.tile_filter.dma);
- 	hantro_write_addr(vpu, G2_TILE_SAO_ADDR, ctx->hevc_dec.tile_sao.dma);
-@@ -575,9 +573,6 @@ int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx)
- 	/* Don't compress buffers */
- 	hantro_reg_write(vpu, &g2_ref_compress_bypass, 1);
- 
--	/* use NV12 as output format */
--	hantro_reg_write(vpu, &g2_out_rs_e, 1);
--
- 	/* Bus width and max burst */
- 	hantro_reg_write(vpu, &g2_buswidth, BUS_WIDTH_128);
- 	hantro_reg_write(vpu, &g2_max_burst, 16);
-diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index ee03123e7704..b49a41d7ae91 100644
---- a/drivers/staging/media/hantro/hantro_hevc.c
-+++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -44,47 +44,6 @@ size_t hantro_hevc_motion_vectors_offset(const struct v4l2_ctrl_hevc_sps *sps)
- 	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
- }
- 
--static size_t hantro_hevc_mv_size(const struct v4l2_ctrl_hevc_sps *sps)
--{
--	u32 min_cb_log2_size_y = sps->log2_min_luma_coding_block_size_minus3 + 3;
--	u32 ctb_log2_size_y = min_cb_log2_size_y + sps->log2_diff_max_min_luma_coding_block_size;
--	u32 pic_width_in_ctbs_y = (sps->pic_width_in_luma_samples + (1 << ctb_log2_size_y) - 1)
--				  >> ctb_log2_size_y;
--	u32 pic_height_in_ctbs_y = (sps->pic_height_in_luma_samples + (1 << ctb_log2_size_y) - 1)
--				   >> ctb_log2_size_y;
--	size_t mv_size;
--
--	mv_size = pic_width_in_ctbs_y * pic_height_in_ctbs_y *
--		  (1 << (2 * (ctb_log2_size_y - 4))) * 16;
--
--	vpu_debug(4, "%dx%d (CTBs) %zu MV bytes\n",
--		  pic_width_in_ctbs_y, pic_height_in_ctbs_y, mv_size);
--
--	return mv_size;
--}
--
--static size_t hantro_hevc_ref_size(struct hantro_ctx *ctx)
--{
--	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
--	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
--
--	return hantro_hevc_motion_vectors_offset(sps) + hantro_hevc_mv_size(sps);
--}
--
--static void hantro_hevc_ref_free(struct hantro_ctx *ctx)
--{
--	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
--	struct hantro_dev *vpu = ctx->dev;
--	int i;
--
--	for (i = 0;  i < NUM_REF_PICTURES; i++) {
--		if (hevc_dec->ref_bufs[i].cpu)
--			dma_free_coherent(vpu->dev, hevc_dec->ref_bufs[i].size,
--					  hevc_dec->ref_bufs[i].cpu,
--					  hevc_dec->ref_bufs[i].dma);
--	}
--}
--
- static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
- {
- 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
-@@ -108,37 +67,25 @@ dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
- 		}
- 	}
- 
--	/* Allocate a new reference buffer */
-+	return 0;
-+}
-+
-+int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
-+{
-+	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
-+	int i;
-+
-+	/* Add a new reference buffer */
- 	for (i = 0; i < NUM_REF_PICTURES; i++) {
- 		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF) {
--			if (!hevc_dec->ref_bufs[i].cpu) {
--				struct hantro_dev *vpu = ctx->dev;
--
--				/*
--				 * Allocate the space needed for the raw data +
--				 * motion vector data. Optimizations could be to
--				 * allocate raw data in non coherent memory and only
--				 * clear the motion vector data.
--				 */
--				hevc_dec->ref_bufs[i].cpu =
--					dma_alloc_coherent(vpu->dev,
--							   hantro_hevc_ref_size(ctx),
--							   &hevc_dec->ref_bufs[i].dma,
--							   GFP_KERNEL);
--				if (!hevc_dec->ref_bufs[i].cpu)
--					return 0;
--
--				hevc_dec->ref_bufs[i].size = hantro_hevc_ref_size(ctx);
--			}
- 			hevc_dec->ref_bufs_used |= 1 << i;
--			memset(hevc_dec->ref_bufs[i].cpu, 0, hantro_hevc_ref_size(ctx));
- 			hevc_dec->ref_bufs_poc[i] = poc;
--
--			return hevc_dec->ref_bufs[i].dma;
-+			hevc_dec->ref_bufs[i].dma = addr;
-+			return 0;
- 		}
- 	}
- 
--	return 0;
-+	return -EINVAL;
- }
- 
- void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx)
-@@ -314,8 +261,6 @@ void hantro_hevc_dec_exit(struct hantro_ctx *ctx)
- 				  hevc_dec->tile_bsd.cpu,
- 				  hevc_dec->tile_bsd.dma);
- 	hevc_dec->tile_bsd.cpu = NULL;
--
--	hantro_hevc_ref_free(ctx);
- }
- 
- int hantro_hevc_dec_init(struct hantro_ctx *ctx)
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index dbe51303724b..7286404c32ab 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -345,6 +345,7 @@ void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
- int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
- int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
- dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
-+int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
- void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
- size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
- size_t hantro_hevc_motion_vectors_offset(const struct v4l2_ctrl_hevc_sps *sps);
-@@ -394,6 +395,16 @@ hantro_h264_mv_size(unsigned int width, unsigned int height)
- 	return 64 * MB_WIDTH(width) * MB_WIDTH(height) + 32;
- }
- 
-+static inline size_t
-+hantro_hevc_mv_size(unsigned int width, unsigned int height)
-+{
-+	/*
-+	 * A CTB can be 64x64, 32x32 or 16x16.
-+	 * Allocated memory for the "worse" case: 16x16
-+	 */
-+	return width * height / 16;
-+}
-+
- int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
- int rockchip_vpu2_mpeg2_dec_run(struct hantro_ctx *ctx);
- void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
-diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-index a7774ad4c445..248abe5423f0 100644
---- a/drivers/staging/media/hantro/hantro_postproc.c
-+++ b/drivers/staging/media/hantro/hantro_postproc.c
-@@ -146,6 +146,9 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
- 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
- 		buf_size += hantro_vp9_mv_size(ctx->dst_fmt.width,
- 					       ctx->dst_fmt.height);
-+	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE)
-+		buf_size += hantro_hevc_mv_size(ctx->dst_fmt.width,
-+						ctx->dst_fmt.height);
- 
- 	for (i = 0; i < num_buffers; ++i) {
- 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index e4b0645ba6fc..e1fe37afe576 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -150,20 +150,6 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
- 	unsigned int num_fmts, i, j = 0;
- 	bool skip_mode_none;
- 
--	/*
--	 * The HEVC decoder on the G2 core needs a little quirk to offer NV12
--	 * only on the capture side. Once the post-processor logic is used,
--	 * we will be able to expose NV12_4L4 and NV12 as the other cases,
--	 * and therefore remove this quirk.
--	 */
--	if (capture && ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE) {
--		if (f->index == 0) {
--			f->pixelformat = V4L2_PIX_FMT_NV12;
--			return 0;
--		}
--		return -EINVAL;
--	}
--
- 	/*
- 	 * When dealing with an encoder:
- 	 *  - on the capture side we want to filter out all MODE_NONE formats.
-@@ -304,6 +290,11 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
- 			pix_mp->plane_fmt[0].sizeimage +=
- 				hantro_vp9_mv_size(pix_mp->width,
- 						   pix_mp->height);
-+		else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE &&
-+			 !hantro_needs_postproc(ctx, fmt))
-+			pix_mp->plane_fmt[0].sizeimage +=
-+				hantro_hevc_mv_size(pix_mp->width,
-+						    pix_mp->height);
- 	} else if (!pix_mp->plane_fmt[0].sizeimage) {
- 		/*
- 		 * For coded formats the application can specify
--- 
-2.30.2
+Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
 

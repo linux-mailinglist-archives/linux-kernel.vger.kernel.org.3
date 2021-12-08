@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 881CA46D03D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7595946D041
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbhLHJoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:44:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48641 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229687AbhLHJoK (ORCPT
+        id S229901AbhLHJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229751AbhLHJoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:44:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638956438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2uSuAHdOx5fx6JiRcZg1wmWYaeDy0nKcYUXfbgfOZoc=;
-        b=ZYUfahR7EoaUhT74R1yteC96AHKA21L/8myuGheDHs8FtYbbkmBPIkOvOJ0UiuUReULOi7
-        zY94xj03NF29dU5/AKtf8cnrx8ghzwua66xdyz2IG/ZoU5JU3wLuFzRKV0EKr8rpejxio+
-        mUe98KTxe8T+FWq+0n38mNRydmrVboY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-232-1GPQK18IPwG6EXaWN7DTtA-1; Wed, 08 Dec 2021 04:40:35 -0500
-X-MC-Unique: 1GPQK18IPwG6EXaWN7DTtA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0441F81EE60;
-        Wed,  8 Dec 2021 09:40:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5920F45D72;
-        Wed,  8 Dec 2021 09:40:13 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20211206172340.fded3873aed7e853b54ab276@linux-foundation.org>
-References: <20211206172340.fded3873aed7e853b54ab276@linux-foundation.org> <1638760762-27239-1-git-send-email-huangzhaoyang@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     dhowells@redhat.com, Huangzhaoyang <huangzhaoyang@gmail.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com
-Subject: Re: [PATCH] mm: mask DIRECT_RECLAIM in kswapd
+        Wed, 8 Dec 2021 04:44:13 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AEBC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:40:42 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so3938938pjc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uWzgpmLO9VHXp6lkhDz4fGQuJhk+6AV1KCdyKpRVolA=;
+        b=eklJrKPspZKgFntWvR8NP54NwQ8qG9W7uiXo01EKKwoa95j2iAUFx3U7hp1/NRj0Hk
+         pMzMbCnYAeN6rcmH8z0OoZ9IrY3Vn8oXyN2v560dOkdSDmjglk83e3k8FXyfqczZ5CIw
+         t9hQ0m3WCP3YpUyUBzvUpDZ8Z3tZvQ6z6Gh3183oI0URu+IM+mgkpJ4i94RqgMxp5Pok
+         8bLc1kzZ64MmWeZr6PhCHsJ8jsnAmvYw/SMN8KPYzC8093jmt/ojLQ40sYoUjFgDSPgC
+         dDSIpyYAuHq1KnX5E3AotD2yr20k/VX2GVMaHm8q6AdAsI5Ip+PBbEpi1BfNb0o2GZJB
+         kEMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uWzgpmLO9VHXp6lkhDz4fGQuJhk+6AV1KCdyKpRVolA=;
+        b=xu1rQqO9pmc1SCnCPhs7fSkFVz8SoLQKOAcwzBGSA3YM2Nh6pv4bQsQh5fony45LXN
+         ZbL9Co2lVrsC+YGxGyUGKyGZISeifXR5zynPOdQQmYD0lKeNSLysxIehKVJyJTT+AZFZ
+         doGXJYCr0AeiYTs5f2kbFaXVuD4MTu23fD6xQP+AIre70W2GSQoPubH0Qh+dCtiPL4CS
+         qRNt/njyYkxINz+WWc4orYxeEYqODu3a9rpRg5VH2SJAIuVdIWcr7wwxgk3wtZGIs0SA
+         ADlptgQ4LETV+ItRBJNCeaHHo78G6JI+LlI5tBhgykCLOFaFZUwLLdy2fv89kQRYkrz5
+         IL8Q==
+X-Gm-Message-State: AOAM532T5lT/2satsA63Jn4FgGdOtpvFHO4Vmj6ViOClRjIxgdL1cY1c
+        BLBE/53zSNKfziPZ9uUchAya
+X-Google-Smtp-Source: ABdhPJwY9fZqXfhGo0Ye9iDFCgcftn45DiXQoZqA9ZqPx12EMWK3W9uiY/cX0pUiVc1nQAu2Bgj8Mg==
+X-Received: by 2002:a17:90b:1d90:: with SMTP id pf16mr5910775pjb.93.1638956441917;
+        Wed, 08 Dec 2021 01:40:41 -0800 (PST)
+Received: from thinkpad ([117.202.189.59])
+        by smtp.gmail.com with ESMTPSA id 13sm2600661pfp.216.2021.12.08.01.40.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 01:40:41 -0800 (PST)
+Date:   Wed, 8 Dec 2021 15:10:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
+        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: Re: [PATCH 1/1] bus: mhi: core: Add support for forced PM resume
+Message-ID: <20211208094035.GF70121@thinkpad>
+References: <20211208085735.196394-1-manivannan.sadhasivam@linaro.org>
+ <20211208085735.196394-2-manivannan.sadhasivam@linaro.org>
+ <YbB11M0FZ+AdELPa@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2502102.1638956412.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 08 Dec 2021 09:40:12 +0000
-Message-ID: <2502103.1638956412@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbB11M0FZ+AdELPa@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> wrote:
+On Wed, Dec 08, 2021 at 10:07:32AM +0100, Greg KH wrote:
 
-> >       __fscache_maybe_release_page
-> > 	...
-> >          if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS)) {
-> >                  fscache_stat(&fscache_n_store_vmscan_busy);
-> >                  return false;
-> >          }
-> =
+[...]
 
-> Well, we have thus far been permitting kswapd's memory allocations to
-> enter direct reclaim.  Forbidding that kernel-wide might be the right
-> thing to do, or might not be.  But disabling it kernel-wide because of
-> a peculiar hack in fscache is not good justification.
+> > diff --git a/include/linux/mhi.h b/include/linux/mhi.h
+> > index 723985879035..102303288cee 100644
+> > --- a/include/linux/mhi.h
+> > +++ b/include/linux/mhi.h
+> > @@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
+> >  /**
+> >   * mhi_pm_resume - Resume MHI from suspended state
+> >   * @mhi_cntrl: MHI controller
+> > + * @force: Force resuming to M0 irrespective of the device MHI state
+> >   */
+> > -int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
+> > +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
+> 
+> apis like this are horrid to work with over time.
+> 
+> Why not just have:
+> 	mhi_pm_resume_force()
+> which then internally can set a flag that does this?  That way the
+> driver author does not have to stop every time they see this call and
+> look up exactly what the true/false field means in the function call in
+> their driver.
+> 
 
-It's avoiding sleeping in ->releasepage() if fscache is doing something wi=
-th
-the page.  With the old I/O still used by nfs and cifs, PG_fscache means t=
-hat
-the page is known to fscache and it might be doing something with it in th=
-e
-background.  You have to ask fscache to release the page, which may requir=
-e
-I/O to take place, to get rid of the mark.
+Okay.
 
-With the new I/O, as used by 9p, afs and ceph, where we're doing async DIO
-between the page and the cache, PG_fscache just means that there's a DIO w=
-rite
-in progress from the page.  It will be cleared when the DIO completes.
+> It also lets you leave alone the existing calls to mhi_pm_suspend() that
+> do not want to "force" anything.
+> 
+> self-documenting code is good, this is not self-documenting at all.
+> 
+> Also, is "force" really what you are doing here?  This is a "normal"
+> resume call, which should always work.
 
-I'm fine with changing the condition in the if-statement.  Note that in my
-fscache-rewrite branch:
+The normal resume here is resuming with M3 state only.
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
-/?h=3Dfscache-rewrite
+> The "force" option here really
+> is just "ignore the current state of suspend for the device".  So
+> perhaps mhi_pm_resume_ignore_current_state() might be better?  Or
+> something shorter?
+> 
 
-I've been changing this to:
+And we are actually forcing here. As per the MHI spec, the devices has to be in
+M3 state during resume. So if we allow any device to go through resume without
+being in M3, that implies we are doing a force resume.
 
-	if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
+I'll use the mhi_pm_resume_force() API as you suggested.
 
-and the old I/O is gone.  This is aimed at the next merge window.  If you =
-want
-me to change it there, let me know.
+Thanks,
+Mani
 
-David
-
+> Naming is hard, sorry.
+> 
+> thanks,
+> 
+> greg k-h

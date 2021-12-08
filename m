@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A0646DA1D
+	by mail.lfdr.de (Postfix) with ESMTP id 7941946DA1E
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238414AbhLHRma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S238181AbhLHRme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238365AbhLHRl4 (ORCPT
+        with ESMTP id S238377AbhLHRl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:41:56 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C97C061A32;
-        Wed,  8 Dec 2021 09:38:23 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bu18so7185268lfb.0;
-        Wed, 08 Dec 2021 09:38:23 -0800 (PST)
+        Wed, 8 Dec 2021 12:41:57 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002CEC061746;
+        Wed,  8 Dec 2021 09:38:24 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id z7so6985267lfi.11;
+        Wed, 08 Dec 2021 09:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z+2i2S1W26dZ7VgKg6S5rlGKr4ZHMsx/PFUfrnnRofM=;
-        b=Yn9bRJ3BRnXDuMR1X8U/oKzRmdz17/4tMoHxP5Wa02BKy81sZMT31bJo8ehx3eZUgX
-         yJNOu4xAyJyKlxXAVUHED/2rWSEwm0ydfv8zC6P4P0y9JNBCzqvmPmtnMf8dp91xZ4jZ
-         kNmtlN47SMWvn9NA2R5I96flsQt8QnwUDSbccohfCcM8ydCCw2481MrghaE4G5iNKNrn
-         Mn8CtroHm9r5GY/EE4YyJLS23t3frzHEohFpKKwzFstAcsOE44cWZTiFmWE71AKgZO1n
-         hozoohYQhDO8Zoffqq5szZoKkSBA3f+qFhCwhARgY73NLJOEvhpwdak6aWb9r7q+K6Fq
-         YiHg==
+        bh=Np9rJa/x+DcWdS9hpvbDCt1l75oIF3jEHtZNJTv9nI4=;
+        b=o/l7BqD5E6YYndsRUuP2PPRmmhXTQAdKSg8MuRsgRdo8Yly/wdTUi2axBOlrf6AD7M
+         h6XnCZJsyPGlogblsEfddodhS2J5+yLNaBYNw6tlu5OrpF53tfra3/LXkQ1PiUhcoH/7
+         EitVxT/ZVNrC/wIbEaV7oX0RPG2aIXN4+HVnbV2QOlcCROfRsxe1k+DDzQ+6r28z4Lje
+         9QrFkqxgKol5soDWH1fT4p+WAny8w6Dz+BUrNxgoRS9OFZm8+mRwM6rhiXxLLTHqeP0/
+         1tAnWkVsh5vlOptxzUEh8JydI7/qWM7uzPkahok07gEOStYNkgHTKk3n7rnJKvMbcTyX
+         810w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z+2i2S1W26dZ7VgKg6S5rlGKr4ZHMsx/PFUfrnnRofM=;
-        b=4Od6PPqAae1+E+3J6tgPdz60F/98IK/XfAKE7scSA22xfvpAwbczdOYUPxykyBuUOd
-         Zi+2pQbWWqWv2/AA4FdJJTkOTCoWy6YLL696wYhG4jLzIyaeGr9JrTeQ6ylZGwaLKxiW
-         G980sL7Poc5CQajLhfh+q/MhS/nCk7rKg3kAw0r391xTfsGwKjcTx9eyEVBTZLU7pB9p
-         90YS8U8aMqm8G6in7dEHcU2US2nUCvBPxYYiGMlAqmTZHDw53UpxPWY8/dUn2A+KzSEF
-         HiJUy3ojBGDUkk4oUtmhsqUuIG8q2olyoXTgZ1yWVtH96m80gPrw9fcpUto2ZPpFJ5J2
-         Q6DA==
-X-Gm-Message-State: AOAM531uwsn842T5bDYSAjiI8/WHnECPDmVEMrZ3bQkXVRybATiNvSiy
-        B83pDnhje7SgugtdP97lvffdpivE4MQ=
-X-Google-Smtp-Source: ABdhPJwZ52+o0LKXPN/fEaighrw/2vOUPzMAGtr/maiFBDuHttsmJn0hzLQAaKNtB+pjLJHvzAIBuQ==
-X-Received: by 2002:a05:6512:1094:: with SMTP id j20mr784503lfg.237.1638985102283;
-        Wed, 08 Dec 2021 09:38:22 -0800 (PST)
+        bh=Np9rJa/x+DcWdS9hpvbDCt1l75oIF3jEHtZNJTv9nI4=;
+        b=2/QUCtSfCdCMAzGFznejWAwXG+WqqM8bZxizvPpvZrUZcGJAGoTxzGdjRCjPFlXeeW
+         uEbmoSqP+wCsutnkDVaUMHE3ymkQZVpOjykTkfyF/DIbakcUvkwGaR1dGtpJQC4qJ4hB
+         /PjZ2jNGJ3NkYbJXEYFQqDvqAgH3WLsMt4VGh3O9aArPla6/dOEvromeqUPx4vGJGgaC
+         wj6jCtfF5NDs8FLyKvhbINCtHKKhIv6t5j58EXtaCzowNKuGOU2lkDqPI1q7a+9+tvtP
+         k/QPyL4mbBtG3Jry/Fa66AwXFQtTYZA9KkdCCUU8cc/JWXUF2MYRiMZOfuUJUzyM4o1n
+         e/mg==
+X-Gm-Message-State: AOAM532fqpCSU2WZEyQ5EusJ6tq4SEKdNdpoCJeJ/LIDkFhfRjaC3fdK
+        yAPf2e+0iEAPbx/dgAWEieg=
+X-Google-Smtp-Source: ABdhPJwSNE/n3zk3jNJkp2C6VnD6MMwD/n1fAeme++K150uh5ZLlW9DCBLcSjhTcPBebAelyzhdGFQ==
+X-Received: by 2002:a05:6512:2ef:: with SMTP id m15mr854207lfq.268.1638985103270;
+        Wed, 08 Dec 2021 09:38:23 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id a25sm349159lfm.250.2021.12.08.09.38.20
+        by smtp.gmail.com with ESMTPSA id a25sm349159lfm.250.2021.12.08.09.38.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 09:38:21 -0800 (PST)
+        Wed, 08 Dec 2021 09:38:22 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 22/24] ARM: tegra: Enable video decoder on Tegra114
-Date:   Wed,  8 Dec 2021 20:36:07 +0300
-Message-Id: <20211208173609.4064-23-digetx@gmail.com>
+Subject: [PATCH v5 23/24] ARM: tegra_defconfig: Enable drivers wanted by Acer Chromebooks and ASUS tablets
+Date:   Wed,  8 Dec 2021 20:36:08 +0300
+Message-Id: <20211208173609.4064-24-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211208173609.4064-1-digetx@gmail.com>
 References: <20211208173609.4064-1-digetx@gmail.com>
@@ -79,78 +79,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Bambura <jenneron@protonmail.com>
+Enable charger and touchpad drivers found on Acer Tegra124 (Nyan)
+Chromebooks, display bridge found on ASUS TF700T and audio codecs
+found on ASUS tablets.
 
-Add Video Decoder Engine node to Tegra114 device-tree.
-
-Signed-off-by: Anton Bambura <jenneron@protonmail.com>
+Suggested-by: Thomas Graichen <thomas.graichen@gmail.com> # Nyan options
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra114.dtsi | 38 +++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ arch/arm/configs/tegra_defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra114.dtsi b/arch/arm/boot/dts/tegra114.dtsi
-index 563ee262f41d..3d08764401ce 100644
---- a/arch/arm/boot/dts/tegra114.dtsi
-+++ b/arch/arm/boot/dts/tegra114.dtsi
-@@ -17,6 +17,19 @@ memory@80000000 {
- 		reg = <0x80000000 0x0>;
- 	};
- 
-+	sram@40000000 {
-+		compatible = "mmio-sram";
-+		reg = <0x40000000 0x40000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x40000000 0x40000>;
-+
-+		vde_pool: sram@400 {
-+			reg = <0x400 0x3fc00>;
-+			pool;
-+		};
-+	};
-+
- 	host1x@50000000 {
- 		compatible = "nvidia,tegra114-host1x";
- 		reg = <0x50000000 0x00028000>;
-@@ -253,6 +266,30 @@ gpio: gpio@6000d000 {
- 		*/
- 	};
- 
-+	vde@6001a000 {
-+		compatible = "nvidia,tegra114-vde";
-+		reg = <0x6001a000 0x1000>, /* Syntax Engine */
-+		      <0x6001b000 0x1000>, /* Video Bitstream Engine */
-+		      <0x6001c000  0x100>, /* Macroblock Engine */
-+		      <0x6001c200  0x100>, /* Post-processing Engine */
-+		      <0x6001c400  0x100>, /* Motion Compensation Engine */
-+		      <0x6001c600  0x100>, /* Transform Engine */
-+		      <0x6001c800  0x100>, /* Pixel prediction block */
-+		      <0x6001ca00  0x100>, /* Video DMA */
-+		      <0x6001d800  0x400>; /* Video frame controls */
-+		reg-names = "sxe", "bsev", "mbe", "ppe", "mce",
-+			    "tfe", "ppb", "vdma", "frameid";
-+		iram = <&vde_pool>; /* IRAM region */
-+		interrupts = <GIC_SPI  9 IRQ_TYPE_LEVEL_HIGH>, /* Sync token interrupt */
-+			     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>, /* BSE-V interrupt */
-+			     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>; /* SXE interrupt */
-+		interrupt-names = "sync-token", "bsev", "sxe";
-+		clocks = <&tegra_car TEGRA114_CLK_VDE>;
-+		reset-names = "vde", "mc";
-+		resets = <&tegra_car 61>, <&mc TEGRA114_MC_RESET_VDE>;
-+		iommus = <&mc TEGRA_SWGROUP_VDE>;
-+	};
-+
- 	apbmisc@70000800 {
- 		compatible = "nvidia,tegra114-apbmisc", "nvidia,tegra20-apbmisc";
- 		reg = <0x70000800 0x64>, /* Chip revision */
-@@ -543,6 +580,7 @@ mc: memory-controller@70019000 {
- 		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
- 
- 		#iommu-cells = <1>;
-+		#reset-cells = <1>;
- 	};
- 
- 	ahub@70080000 {
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index 8a8f12b3e6dd..25bfbf11420a 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -112,6 +112,8 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_TEGRA=y
+ CONFIG_KEYBOARD_CROS_EC=y
+ CONFIG_KEYBOARD_CAP11XX=y
++CONFIG_MOUSE_ELAN_I2C=m
++CONFIG_MOUSE_ELAN_I2C_SMBUS=y
+ CONFIG_MOUSE_PS2_ELANTECH=y
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
+@@ -131,6 +133,7 @@ CONFIG_SERIAL_DEV_BUS=y
+ # CONFIG_HW_RANDOM is not set
+ # CONFIG_I2C_COMPAT is not set
+ CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX_GPIO=y
+ CONFIG_I2C_MUX_PCA954x=y
+ CONFIG_I2C_MUX_PINCTRL=y
+ CONFIG_I2C_TEGRA=y
+@@ -152,6 +155,7 @@ CONFIG_POWER_RESET=y
+ CONFIG_POWER_RESET_AS3722=y
+ CONFIG_POWER_RESET_GPIO=y
+ CONFIG_BATTERY_SBS=y
++CONFIG_CHARGER_BQ24735=y
+ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_CHARGER_GPIO=y
+ CONFIG_CHARGER_SMB347=y
+@@ -200,7 +204,9 @@ CONFIG_DRM_TEGRA_STAGING=y
+ CONFIG_DRM_PANEL_LVDS=y
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_PANEL_EDP=y
++CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=y
+ CONFIG_DRM_LVDS_CODEC=y
++CONFIG_DRM_TOSHIBA_TC358768=y
+ CONFIG_FB=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_PWM=y
 -- 
 2.33.1
 

@@ -2,119 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E8446CEC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB14B46CECC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244733AbhLHIYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbhLHIYM (ORCPT
+        id S236101AbhLHI2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:28:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47431 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231496AbhLHI2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:24:12 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD08DC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:20:40 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o29so1189185wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1w3QG5L2wJSdawJv13n1fbqmjL3sgSHFT+7XbyAvU6U=;
-        b=55DNvAYxUXa+yKMvFNkcwxQcyuMG4hyrlqdl8GCYFqXE/nvB5hzQFKynb0amMmXyPj
-         gvr6FYs5uEqtTr3S1cxwe8elBx06xxnm+aXZmnSmTpE4iBiqlMFjwG+Li/AZafgjjQ/J
-         kfVWr21Ir4haj+rGGcA+A6kC8FsP9DhwqqdIrnTSjtTK4yLGw15m+Fd/QX/zYcNaeN60
-         jtM6G0eR3psmmQ/Vrui/nwb1ZCQ7eo7nG2CngnGrj5nFE7X5MYrE/QmSZM/j7QIf17OY
-         st+lLoPx7tEWVC/AA0P3vn93dIiI37Cp8OTaqRFkScrNd9NRbxdAWoF5gSyjRXVXUDfE
-         vffQ==
+        Wed, 8 Dec 2021 03:28:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638951885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mGNzfxil83BwgKb8q3ZzS1nHV7JGiQQ9FuAbcm/1Kc0=;
+        b=Cgbx0BG4ygEh0Ersv5gYotBH+GB/1ghx4zCzkWKb2vihj6/pZyNibKoTJpoO26e/f3Lh9p
+        qDC2AxxVv9HMwdBZgu8ElzvvBMHebcjns0cs7N/yzRx3YZqxvJPiqiQDdhdHRpGJDuePr+
+        G1tVorVg6h/bvZCaYFq42SuWu3EjtNU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282--MY4j4tpOfmZCHaK2l0jLA-1; Wed, 08 Dec 2021 03:24:41 -0500
+X-MC-Unique: -MY4j4tpOfmZCHaK2l0jLA-1
+Received: by mail-wm1-f71.google.com with SMTP id 145-20020a1c0197000000b0032efc3eb9bcso2664542wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:24:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=1w3QG5L2wJSdawJv13n1fbqmjL3sgSHFT+7XbyAvU6U=;
-        b=tZQSTsahRNCGycO2j9RJHL8xIcc3bfFasNAPfAzF8Q2VO5I3epl0DACMvnE3afI2uC
-         WvOHPEH7bw4EhfAYHawv3Llg/wVCHGxzITdP+cbG675H2Ky9hViXBhq6lZyqcIJU/bkT
-         5iAbw/g9dtFDjIpvDW8WBVde28c2+b6HyD5eArUnznwWWsIzLVHIhTQqtZJSQsfa4oSf
-         NlCtCnNY8gQ8D88yRujcb21+eAoNuKjrjwWO8nvdShd97PAykZfrvZ13EJhjri16AqR1
-         xIpuGeX7hv0Jil4rhNA82C56VSZAHtlxXYdkgDHfSnAxikTezQtHYVlvkLQAtkU6eNqf
-         R/Hw==
-X-Gm-Message-State: AOAM530YAEjLixHgdZkH11kLkiPmcpHbAL32GzU/9sMhXzgZlxdQl5AL
-        tQxT2ctI1aod1ZK9xK4sbKLmuw==
-X-Google-Smtp-Source: ABdhPJzG/TNg3Piyp5TseF8rLfJFvZTaZFXGKZz5otMT3tS+daO2oHy7ZCllGK9433G4TB+hyrdAQg==
-X-Received: by 2002:a7b:c24a:: with SMTP id b10mr14015235wmj.166.1638951639255;
-        Wed, 08 Dec 2021 00:20:39 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:5245:80ea:cf46:35bb? ([2001:861:44c0:66c0:5245:80ea:cf46:35bb])
-        by smtp.gmail.com with ESMTPSA id i7sm2022410wro.58.2021.12.08.00.20.38
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=mGNzfxil83BwgKb8q3ZzS1nHV7JGiQQ9FuAbcm/1Kc0=;
+        b=hRqj1smiWf/KPalyqjbh+kVdJT+Rfu/LfyMHV2uS/4SB0X7P7qW99xcKqyorw1wB7m
+         MEAXx/widxAJ8pKFvGy2zJqapV5kiZxadNzVE4+wX2ULD0fu5EQZbZDhYx71DARJOcYP
+         wK819aVEKgwD9zb+A+KNxoJmmVk5X4U+TQfuIkuYqa4UFl62x5TVjf+pGp8IVR4PONCc
+         rfGk03F3ePRchDtOJMMcIKVrhD41cU4p/q6T9pQxaeBEa8SgUWMJCS6aeCKqqLCJSUE8
+         WFjaXHrCp7D3zSW6EGaNUeQHX3NJw2jMRboD4B3je1kmDq5C7i+ujwRtb2zC+jLrasms
+         TONA==
+X-Gm-Message-State: AOAM532vM/vVx8x8qe+hMH29dRUR+txRAmxYBINy5t4b0wmBj0opMKK9
+        6OgXabKVA8PrCONNiH9Y1uNWfCrGdkP3PrK1+sfvOGAGC6TfPKjk5efKxDkNSllOM0XubpHg72L
+        vjx8iqZwlvlUdCyjgMg+IFVwx
+X-Received: by 2002:adf:f64b:: with SMTP id x11mr58346302wrp.4.1638951880480;
+        Wed, 08 Dec 2021 00:24:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyPcE1kffLfqAUuWfGBdEEWvTivlPYMkkV5BIbduu2zNPLXeuz7ReUNWJm/wEYKcnQJHssqHQ==
+X-Received: by 2002:adf:f64b:: with SMTP id x11mr58346276wrp.4.1638951880244;
+        Wed, 08 Dec 2021 00:24:40 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c62ba.dip0.t-ipconnect.de. [91.12.98.186])
+        by smtp.gmail.com with ESMTPSA id c4sm2017397wrr.37.2021.12.08.00.24.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 00:20:38 -0800 (PST)
-Subject: Re: [RFC PATCH 0/9] arm64: dts: meson: add support for aac2xx devices
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Benoit Masson <yahoo@perenite.com>
-References: <20211130060523.19161-1-christianshewitt@gmail.com>
- <7hilw14nhx.fsf@baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <e3b404f8-758e-ba97-37c6-0178231119dd@baylibre.com>
-Date:   Wed, 8 Dec 2021 09:20:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 08 Dec 2021 00:24:39 -0800 (PST)
+Message-ID: <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
+Date:   Wed, 8 Dec 2021 09:24:39 +0100
 MIME-Version: 1.0
-In-Reply-To: <7hilw14nhx.fsf@baylibre.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
+ <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
+ <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz> <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+ <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+ <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+ <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
+ <f9786109-518f-38d4-0270-a3e87a13c4ef@redhat.com>
+ <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2021 19:06, Kevin Hilman wrote:
-> Christian Hewitt <christianshewitt@gmail.com> writes:
+On 08.12.21 09:12, Michal Hocko wrote:
+> On Tue 07-12-21 19:03:28, David Hildenbrand wrote:
+>> On 07.12.21 18:17, Alexey Makhalov wrote:
+>>>
+>>>
+>>>> On Dec 7, 2021, at 9:13 AM, David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> On 07.12.21 18:02, Alexey Makhalov wrote:
+>>>>>
+>>>>>
+>>>>>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
+>>>>>>
+>>>>>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
+>>>>>> [...]
+>>>>>>> So your proposal is to drop set_node_online from the patch and add it as
+>>>>>>> a separate one which handles
+>>>>>>> 	- sysfs part (i.e. do not register a node which doesn't span a
+>>>>>>> 	  physical address space)
+>>>>>>> 	- hotplug side of (drop the pgd allocation, register node lazily
+>>>>>>> 	  when a first memblocks are registered)
+>>>>>>
+>>>>>> In other words, the first stage
+>>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>>>>> index c5952749ad40..f9024ba09c53 100644
+>>>>>> --- a/mm/page_alloc.c
+>>>>>> +++ b/mm/page_alloc.c
+>>>>>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+>>>>>> 	if (self && !node_online(self->node_id)) {
+>>>>>> 		build_zonelists(self);
+>>>>>> 	} else {
+>>>>>> -		for_each_online_node(nid) {
+>>>>>> +		/*
+>>>>>> +		 * All possible nodes have pgdat preallocated
+>>>>>> +		 * free_area_init
+>>>>>> +		 */
+>>>>>> +		for_each_node(nid) {
+>>>>>> 			pg_data_t *pgdat = NODE_DATA(nid);
+>>>>>>
+>>>>>> 			build_zonelists(pgdat);
+>>>>>
+>>>>> Will it blow up memory usage for the nodes which might never be onlined?
+>>>>> I prefer the idea of init on demand.
+>>>>>
+>>>>> Even now there is an existing problem.
+>>>>> In my experiments, I observed _huge_ memory consumption increase by increasing number
+>>>>> of possible numa nodes. I’m going to report it in separate mail thread.
+>>>>
+>>>> I already raised that PPC might be problematic in that regard. Which
+>>>> architecture / setup do you have in mind that can have a lot of possible
+>>>> nodes?
+>>>>
+>>> It is x86_64 VMware VM, not the regular one, but specially configured (1 vCPU per node,
+>>> with hot-plug support, 128 possible nodes)  
+>>
+>> I thought the pgdat would be smaller but I just gave it a test:
 > 
->> This series adds support for several popular Amlogic S905X3 (SM1) Android
->> Set-Top Box devices. Like most Android box devices, they ship in variants
->> with multiple RAM, eMMC, WiFi and BT configurations. RAM and eMMC are not
->> something we need to consider to get a working boot, but we do need to get
->> the correct connectivity spec.
+> Yes, pgdat is quite large! Just embeded zones can eat a lot.
 > 
-> The reason we don't need to care about RAM differences is because u-boot
-> takes care of that, and updates the DT nodes accordingly.
+>> On my system, pgdata_t is 173824 bytes. So 128 nodes would correspond to
+>> 21 MiB, which is indeed a lot. I assume it's due to "struct zonelist",
+>> which has MAX_ZONES_PER_ZONELIST == (MAX_NUMNODES * MAX_NR_ZONES) zone
+>> references ...
 > 
-> In general, I'm not a fan of leaving these decisions up to u-boot,
-> but...  as an option...
+> This is what pahole tells me
+> struct pglist_data {
+>         struct zone                node_zones[4] __attribute__((__aligned__(64))); /*     0  5632 */
+>         /* --- cacheline 88 boundary (5632 bytes) --- */
+>         struct zonelist            node_zonelists[1];    /*  5632    80 */
+> 	[...]
+>         /* size: 6400, cachelines: 100, members: 27 */
+>         /* sum members: 6369, holes: 5, sum holes: 31 */
+> 
+> with my particular config (which is !NUMA). I haven't really checked
+> whether there are other places which might scale with MAX_NUM_NODES or
+> something like that.
+> 
+> Anyway, is 21MB of wasted space for 128 Node machine something really
+> note worthy?
+> 
 
-For now we always set "safe" values for RAM in DT so it could work
-even if not the entire memory is configured.
+I think we'll soon might see setups (again, CXL is an example, but als
+owhen providing a dynamic amount of performance differentiated memory
+via virtio-mem) where this will most probably matter. With performance
+differentiated memory we'll see a lot more nodes getting used in
+general, and a lot more nodes eventually getting hotplugged.
 
-Since there is no way to detect this from Linux on ARM64, we have no choice
-but hoping U-boot sets the right value...
+If 128 nodes is realistic, I cannot tell.
 
-> 
-> I'm pondering if we should do the same for the connectivity settings?  A
-> properly configured u-boot already knows if it's an internal/external
-> PHY, Mbit vs Gbit etc. so in a similar way could enable/disable the
-> right nodes.
-> 
-> We could have a single DTS for each of these board families which
-> has some reasonable defaults, then u-boot would enable/disable nodes
-> accordingly.
+We could optimize by allocating some members dynamically. For example
+we'll never need MAX_NUMNODES entries, but only the number of possible
+nodes.
 
-Yes it's technically possible, but it puts a larger dependency on the bootloader.
+-- 
+Thanks,
 
-Having a lower RAM value is not idea but the system will work, having the wrong
-PHY setup simply doesn't work.
-
-Neil
-
-> 
-> Kevin
-> 
-> 
+David / dhildenb
 

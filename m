@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B8046DA1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A0646DA1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbhLHRmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S238414AbhLHRma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238358AbhLHRl4 (ORCPT
+        with ESMTP id S238365AbhLHRl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Dec 2021 12:41:56 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F64CC0698DA;
-        Wed,  8 Dec 2021 09:38:22 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bu18so7185153lfb.0;
-        Wed, 08 Dec 2021 09:38:22 -0800 (PST)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C97C061A32;
+        Wed,  8 Dec 2021 09:38:23 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bu18so7185268lfb.0;
+        Wed, 08 Dec 2021 09:38:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gMUuIocGtaz/dim3Sr66ib6en8JPWKmr1OX/eip6Er8=;
-        b=NiSZEzDsJcb8CxU33QQfE1TFg/eNmk35X1jM0BR4Upza0OpneVFcxtDAqmFp9LqbAe
-         XpKuU/waXjb1GuXSiqtHAo0e65czdjDIWW+PZz3kQhkep0W2AUUiOsj9Gskc+g8cGs0l
-         kKZ6pvQF4lYauzHnCK+uIui9WEcfbiyzNXDYTSLwJLnW8KUcTImZxgweu/DuVhiHW4gW
-         OpB2fdiqdms5sx3vL0cFcs0RA1/YkXAf8G3Xfwat2xCtFGQWygWkHVHpYu48rBoToNeh
-         HMYAVNW1VRKSm2/9jIJGnSy6/jihTrLogSpnlpDSjnxIEwcDoLoNwI6LhH2ZnutqCl0T
-         BPtQ==
+        bh=z+2i2S1W26dZ7VgKg6S5rlGKr4ZHMsx/PFUfrnnRofM=;
+        b=Yn9bRJ3BRnXDuMR1X8U/oKzRmdz17/4tMoHxP5Wa02BKy81sZMT31bJo8ehx3eZUgX
+         yJNOu4xAyJyKlxXAVUHED/2rWSEwm0ydfv8zC6P4P0y9JNBCzqvmPmtnMf8dp91xZ4jZ
+         kNmtlN47SMWvn9NA2R5I96flsQt8QnwUDSbccohfCcM8ydCCw2481MrghaE4G5iNKNrn
+         Mn8CtroHm9r5GY/EE4YyJLS23t3frzHEohFpKKwzFstAcsOE44cWZTiFmWE71AKgZO1n
+         hozoohYQhDO8Zoffqq5szZoKkSBA3f+qFhCwhARgY73NLJOEvhpwdak6aWb9r7q+K6Fq
+         YiHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gMUuIocGtaz/dim3Sr66ib6en8JPWKmr1OX/eip6Er8=;
-        b=xCoTUsF2GjmMnhA+dxcGBB4AJr3nslSz6GCjbxDv2ZpDzyQF/pNGbcumO6xyCTq5Ib
-         C+IGMehFHOtOqu189rjPxwGHPTKpVIlES2ygCc4Ixe7XcOMRk2XIw+zaAKvxhelDRXCi
-         r/78t5t/euwdK+OI1Ybli7sYL9QR2CqgsTGPpplCVGBuqKmaSGRlO224NKFWmPfWOyKT
-         iSXL1W0lc65A0h6x8yjXEBRiKdhZmHcJFkwdoq31trTT9jSOcpinMo8AWuaObgaTl5xn
-         LcY8wXHRDqaBMbpK3dyfT5KCQBKi5TIDjM49RqHPqjdSqM7hu/Br3XWKLENw5xg9kw7b
-         Nhhg==
-X-Gm-Message-State: AOAM530kC63vKXCXThTnQ4NoOOK152HVEU1pWlzhQ1a+H3a4s+2XYoA+
-        +L1DkJi8riMXGe/OkfX47Jc=
-X-Google-Smtp-Source: ABdhPJyztRfD6DwpjCpKbUI3ms5gvdy7bWoo/b813iPFH6FK6qpGT04zT1nH+R3ED5NTSO78HV0U7Q==
-X-Received: by 2002:ac2:5dc2:: with SMTP id x2mr847968lfq.228.1638985100643;
-        Wed, 08 Dec 2021 09:38:20 -0800 (PST)
+        bh=z+2i2S1W26dZ7VgKg6S5rlGKr4ZHMsx/PFUfrnnRofM=;
+        b=4Od6PPqAae1+E+3J6tgPdz60F/98IK/XfAKE7scSA22xfvpAwbczdOYUPxykyBuUOd
+         Zi+2pQbWWqWv2/AA4FdJJTkOTCoWy6YLL696wYhG4jLzIyaeGr9JrTeQ6ylZGwaLKxiW
+         G980sL7Poc5CQajLhfh+q/MhS/nCk7rKg3kAw0r391xTfsGwKjcTx9eyEVBTZLU7pB9p
+         90YS8U8aMqm8G6in7dEHcU2US2nUCvBPxYYiGMlAqmTZHDw53UpxPWY8/dUn2A+KzSEF
+         HiJUy3ojBGDUkk4oUtmhsqUuIG8q2olyoXTgZ1yWVtH96m80gPrw9fcpUto2ZPpFJ5J2
+         Q6DA==
+X-Gm-Message-State: AOAM531uwsn842T5bDYSAjiI8/WHnECPDmVEMrZ3bQkXVRybATiNvSiy
+        B83pDnhje7SgugtdP97lvffdpivE4MQ=
+X-Google-Smtp-Source: ABdhPJwZ52+o0LKXPN/fEaighrw/2vOUPzMAGtr/maiFBDuHttsmJn0hzLQAaKNtB+pjLJHvzAIBuQ==
+X-Received: by 2002:a05:6512:1094:: with SMTP id j20mr784503lfg.237.1638985102283;
+        Wed, 08 Dec 2021 09:38:22 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id a25sm349159lfm.250.2021.12.08.09.38.19
+        by smtp.gmail.com with ESMTPSA id a25sm349159lfm.250.2021.12.08.09.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 09:38:20 -0800 (PST)
+        Wed, 08 Dec 2021 09:38:21 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,9 +67,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 21/24] ARM: tegra: nexus7: Use common LVDS display device-tree
-Date:   Wed,  8 Dec 2021 20:36:06 +0300
-Message-Id: <20211208173609.4064-22-digetx@gmail.com>
+Subject: [PATCH v5 22/24] ARM: tegra: Enable video decoder on Tegra114
+Date:   Wed,  8 Dec 2021 20:36:07 +0300
+Message-Id: <20211208173609.4064-23-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211208173609.4064-1-digetx@gmail.com>
 References: <20211208173609.4064-1-digetx@gmail.com>
@@ -79,110 +79,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Schwalm <maxim.schwalm@gmail.com>
+From: Anton Bambura <jenneron@protonmail.com>
 
-Make Nexus 7 device-tree to use common LVDS bridge description. This makes
-device-trees more consistent.
+Add Video Decoder Engine node to Tegra114 device-tree.
 
-[digetx@gmail.com: factored Nexus7 change into separate patch and wrote commit message]
-Signed-off-by: Maxim Schwalm <maxim.schwalm@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Anton Bambura <jenneron@protonmail.com>
 ---
- .../tegra30-asus-nexus7-grouper-common.dtsi   | 54 ++-----------------
- 1 file changed, 3 insertions(+), 51 deletions(-)
+ arch/arm/boot/dts/tegra114.dtsi | 38 +++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-index e6aed19a5f3b..861ac96bd806 100644
---- a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-@@ -8,6 +8,7 @@
- #include "tegra30.dtsi"
- #include "tegra30-cpu-opp.dtsi"
- #include "tegra30-cpu-opp-microvolt.dtsi"
-+#include "tegra30-asus-lvds-display.dtsi"
- 
- / {
- 	aliases {
-@@ -59,21 +60,6 @@ trustzone@bfe00000 {
- 		};
+diff --git a/arch/arm/boot/dts/tegra114.dtsi b/arch/arm/boot/dts/tegra114.dtsi
+index 563ee262f41d..3d08764401ce 100644
+--- a/arch/arm/boot/dts/tegra114.dtsi
++++ b/arch/arm/boot/dts/tegra114.dtsi
+@@ -17,6 +17,19 @@ memory@80000000 {
+ 		reg = <0x80000000 0x0>;
  	};
  
--	host1x@50000000 {
--		dc@54200000 {
--			rgb {
--				status = "okay";
--
--				port@0 {
--					lcd_output: endpoint {
--						remote-endpoint = <&lvds_encoder_input>;
--						bus-width = <24>;
--					};
--				};
--			};
--		};
--	};
--
- 	gpio@6000d000 {
- 		init-mode-hog {
- 			gpio-hog;
-@@ -1114,20 +1100,14 @@ display-panel {
- 		 */
- 		compatible = "panel-lvds";
- 
--		power-supply = <&vdd_pnl>;
--		backlight = <&backlight>;
--
- 		width-mm = <94>;
- 		height-mm = <150>;
- 		rotation = <180>;
- 
- 		data-mapping = "jeida-24";
- 
--		port {
--			panel_input: endpoint {
--				remote-endpoint = <&lvds_encoder_output>;
--			};
--		};
-+		/* DDC unconnected on Nexus 7 */
-+		/delete-property/ ddc-i2c-bus;
++	sram@40000000 {
++		compatible = "mmio-sram";
++		reg = <0x40000000 0x40000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x40000000 0x40000>;
++
++		vde_pool: sram@400 {
++			reg = <0x400 0x3fc00>;
++			pool;
++		};
++	};
++
+ 	host1x@50000000 {
+ 		compatible = "nvidia,tegra114-host1x";
+ 		reg = <0x50000000 0x00028000>;
+@@ -253,6 +266,30 @@ gpio: gpio@6000d000 {
+ 		*/
  	};
  
- 	firmware {
-@@ -1179,34 +1159,6 @@ volume-down {
- 		};
++	vde@6001a000 {
++		compatible = "nvidia,tegra114-vde";
++		reg = <0x6001a000 0x1000>, /* Syntax Engine */
++		      <0x6001b000 0x1000>, /* Video Bitstream Engine */
++		      <0x6001c000  0x100>, /* Macroblock Engine */
++		      <0x6001c200  0x100>, /* Post-processing Engine */
++		      <0x6001c400  0x100>, /* Motion Compensation Engine */
++		      <0x6001c600  0x100>, /* Transform Engine */
++		      <0x6001c800  0x100>, /* Pixel prediction block */
++		      <0x6001ca00  0x100>, /* Video DMA */
++		      <0x6001d800  0x400>; /* Video frame controls */
++		reg-names = "sxe", "bsev", "mbe", "ppe", "mce",
++			    "tfe", "ppb", "vdma", "frameid";
++		iram = <&vde_pool>; /* IRAM region */
++		interrupts = <GIC_SPI  9 IRQ_TYPE_LEVEL_HIGH>, /* Sync token interrupt */
++			     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>, /* BSE-V interrupt */
++			     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>; /* SXE interrupt */
++		interrupt-names = "sync-token", "bsev", "sxe";
++		clocks = <&tegra_car TEGRA114_CLK_VDE>;
++		reset-names = "vde", "mc";
++		resets = <&tegra_car 61>, <&mc TEGRA114_MC_RESET_VDE>;
++		iommus = <&mc TEGRA_SWGROUP_VDE>;
++	};
++
+ 	apbmisc@70000800 {
+ 		compatible = "nvidia,tegra114-apbmisc", "nvidia,tegra20-apbmisc";
+ 		reg = <0x70000800 0x64>, /* Chip revision */
+@@ -543,6 +580,7 @@ mc: memory-controller@70019000 {
+ 		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 
+ 		#iommu-cells = <1>;
++		#reset-cells = <1>;
  	};
  
--	lvds-encoder {
--		compatible = "ti,sn75lvds83", "lvds-encoder";
--
--		powerdown-gpios = <&gpio TEGRA_GPIO(N, 6) GPIO_ACTIVE_LOW>;
--		power-supply = <&vdd_3v3_sys>;
--
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			port@0 {
--				reg = <0>;
--
--				lvds_encoder_input: endpoint {
--					remote-endpoint = <&lcd_output>;
--				};
--			};
--
--			port@1 {
--				reg = <1>;
--
--				lvds_encoder_output: endpoint {
--					remote-endpoint = <&panel_input>;
--				};
--			};
--		};
--	};
--
- 	vdd_5v0_sys: regulator-5v0 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vdd_5v0";
+ 	ahub@70080000 {
 -- 
 2.33.1
 

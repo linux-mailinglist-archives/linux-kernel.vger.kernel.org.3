@@ -2,126 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2179C46CFDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AC046CFE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbhLHJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbhLHJRY (ORCPT
+        id S230445AbhLHJTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:19:39 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:64518 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230405AbhLHJTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:17:24 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6B8C0617A2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:13:53 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q3so2875096wru.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:13:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6QmATgtA2GhRHoLOX72VCjAGoOgaVTf/7uAV72vhA2Y=;
-        b=xVMypFPXZKCAS6akWukiKlAVGxtvpe4Ut+bFoLvZcUYZ2DFkJ0KZebWE5XHdIRL6e0
-         wFaKN7x5xB65VhsNgeK24VEYYTU5Z+Xftgo7r+hNUDw5g2+GqkQMM5YGrzvYMc58vfJq
-         XeSxaLTJ6yfgVrPwImb3U+wBkquN9xat+D+GMMDe3PXMJdhZsjQyZOq5Rmlnq9XmHS6J
-         C0kCt8JWIvmjgtgF3AzCN9UfGvIbyREt3Y1lEo3sK5KGPeIypvuG9IEecqrl5Up9e4GL
-         kS5wROhNtn+6I2hw1dB4cTdRq/e3Se2UxVosHSdpkwmCy+uOf3HOA1MILFezYT6DN/LN
-         FBRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6QmATgtA2GhRHoLOX72VCjAGoOgaVTf/7uAV72vhA2Y=;
-        b=LaQLTO9Ovyed6PG2beKuPi9w+iwCQGQhZfwFg892cqnF1+Y40pFfbpeOQxLZABtD3H
-         8WtruLUnVVXD8HtAr7V7/GR3AdBkKhT8+CCHeICNcaDxRZiOBUBYBR3u7U08zj9F8pnd
-         mTvByetA7jFsBg/tVtEg+345HC8p31ssWG2OSLVO6QyXlQ01df28d25Ro9b+u45PbN1r
-         dvv4bBWdvH5N/zY+YStJa3XiycGuU6pvfP1h5FlHvUjjb2VEKFo0VlfIgE7fRb8LbsKr
-         4fTDMIx6jsvswbi3ywcEU4d7GscCsZVnud+X/qaHwDH0ZK3xZpRddN1AflwPJFtTUtwY
-         T+Xg==
-X-Gm-Message-State: AOAM532wuOqWeXn3ecdcyX3F8eHAOEuCEjMxcjqNbwgD3RCreqc+8dRI
-        bgd9tu7F9CPGtk7pk+gi68A52g==
-X-Google-Smtp-Source: ABdhPJw8pmx7GfrpF9j9+pWmkiEwIEkAaDCwTKdGN1dsLM1IQgMhSDxAmI4Exq8zD8cfXfIzTqlj4g==
-X-Received: by 2002:adf:d1c1:: with SMTP id b1mr19931030wrd.296.1638954831541;
-        Wed, 08 Dec 2021 01:13:51 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id j40sm5211897wms.19.2021.12.08.01.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 01:13:51 -0800 (PST)
-Date:   Wed, 8 Dec 2021 09:13:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbB3TbU5dfPse9LU@google.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
- <YbBZuwXZWMV9uRXI@kroah.com>
- <YbBwSV2IwDHNUrFH@google.com>
- <YbBxPPPaQwlcgz/c@kroah.com>
+        Wed, 8 Dec 2021 04:19:37 -0500
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211208091604epoutp0136a4c40f6ab35ba8abf47ab6798112b8~_vNtCl_aj3208032080epoutp01q
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:16:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211208091604epoutp0136a4c40f6ab35ba8abf47ab6798112b8~_vNtCl_aj3208032080epoutp01q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1638954964;
+        bh=L3mEF7+6yV+KF0WYa6qMuoeggjqB5AvGNo4NWjRpFMQ=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=gMNmrp6UOk+SQXtCY0n9wimcjXHatJwOCj73wRnxrjmp2csqCcF8nACSQvFRMusN3
+         u6xThc75Ds/ALEu0XYVBdXNE4z2860oLzoQAtdiMyyEF1XNY8rW8lIGUttfrGDJQP/
+         X64WOuJIWYgHXrjDXW9IGloQNK5vJeKPY77QRUWk=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20211208091603epcas2p25370c4945595a153b1786cf9691dc65b~_vNsCsIW-1489114891epcas2p2R;
+        Wed,  8 Dec 2021 09:16:03 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4J8BNb1WpHz4x9Pp; Wed,  8 Dec
+        2021 09:15:59 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9A.07.12141.EC770B16; Wed,  8 Dec 2021 18:15:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20211208091557epcas2p244a77e72c91615b34d8858b22028f8cc~_vNnCbska3164431644epcas2p2B;
+        Wed,  8 Dec 2021 09:15:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211208091557epsmtrp2749423c11ba8806113bdd048b9797bef~_vNnBkzoA1588515885epsmtrp22;
+        Wed,  8 Dec 2021 09:15:57 +0000 (GMT)
+X-AuditID: b6c32a48-d73ff70000002f6d-8a-61b077ce47d3
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B3.31.29871.DC770B16; Wed,  8 Dec 2021 18:15:57 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20211208091557epsmtip1e53e5639ade92d055329c00af3879eb5~_vNm1ti9o0050600506epsmtip18;
+        Wed,  8 Dec 2021 09:15:57 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Sam Protsenko'" <semen.protsenko@linaro.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
+Cc:     "'Jaewon Kim'" <jaewon02.kim@samsung.com>,
+        "'David Virag'" <virag.david003@gmail.com>,
+        "'Youngmin Nam'" <youngmin.nam@samsung.com>,
+        <devicetree@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <20211204195757.8600-1-semen.protsenko@linaro.org>
+Subject: RE: [PATCH v3 0/5] soc: samsung: Add USI driver
+Date:   Wed, 8 Dec 2021 18:15:57 +0900
+Message-ID: <02b301d7ec14$35d65920$a1830b60$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHvNr3EVTo+lBGPAlUO2Lnnk5XtrwJqUxbhq+Zn1cA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmue658g2JBtNnSFjMP3KO1aJ58Xo2
+        ix0NR1gtNr79wWSx6fE1VovLu+awWcw4v4/J4sziXnaL1r1H2C2e9wG5x98/ZrRYfOATuwOP
+        x6yGXjaPnbPusntsWtXJ5nHn2h42j/1z17B7bF5S79G3ZRWjx+dNcgEcUdk2GamJKalFCql5
+        yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUDXKimUJeaUAoUCEouLlfTt
+        bIryS0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyBChOyMxY8nsFYcE++Yv+c
+        o2wNjBsluxg5OSQETCTevbzC0sXIxSEksINR4svpKVDOJ0aJ2/svMEE43xglWuZeZ4JpufGk
+        gRkisReo6n8/G4TzglHi7o+NLCBVbAL6Ei87trGC2CIC5xglDi50AyliFtjJJPH1/HY2kASn
+        gL3ElaU/mUFsYQELiXnN08FsFgEViS2rp4IN4hWwlPixpZMJwhaUODnzCVicWUBeYvvbOcwQ
+        JylI/Hy6DGgZB9AyK4nDx40hSkQkZne2QZVc4ZBo7LMCKZEQcJFY/tsbIiws8er4FnYIW0ri
+        87u9YL9ICHQzSrQ++g+VWM0o0dnoA2HbS/yavgVsFbOApsT6XfoQI5UljtyCOoxPouPwX3aI
+        MK9ER5sQRKO6xIHt01kgbFmJ7jmfWScwKs1C8tYsJG/NQnL/LIRdCxhZVjGKpRYU56anFhsV
+        mMDjOjk/dxMjOB1reexgnP32g94hRiYOxkOMEhzMSiK8ag/XJgrxpiRWVqUW5ccXleakFh9i
+        NAUG9ERmKdHkfGBGyCuJNzSxNDAxMzM0NzI1MFcS5/VK2ZAoJJCeWJKanZpakFoE08fEwSnV
+        wLRgA4eymHblhAcBrs1Tvnz/0BBxdUu1C+8KGTtNmQfeeuvWX0ufOt949rSKGq+g1UdVXTmF
+        X80M3HgtKunJZR/vT3wRvgFCb6R79nRW+b0uMnfnE6kV3x/mxbJk7hvhK6KN31Q/XEkR499z
+        7kaf1rWdOhwetTZ+Oqvqjx3eZ84g1x4mYDxxe7QYW2V39nx+25mqmbvfvbtpPSPHa57uZJOL
+        OySedX69O7/Ii6exK11UtEZy1sTNQfdyNzGtv/a05WdA/XSD1XLn/uiXSFl++nTiy2QHfsnr
+        WRFWE7aVH39k/beqJzGTT9ZQL3/pnANKTQzhEQmtpYUW0g66gjy7wgqWiN4XUXd4JJZZzGej
+        xFKckWioxVxUnAgADQVpq1AEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsWy7bCSnO7Z8g2JBpt7DC3mHznHatG8eD2b
+        xY6GI6wWG9/+YLLY9Pgaq8XlXXPYLGac38dkcWZxL7tF694j7BbP+4Dc4+8fM1osPvCJ3YHH
+        Y1ZDL5vHzll32T02repk87hzbQ+bx/65a9g9Ni+p9+jbsorR4/MmuQCOKC6blNSczLLUIn27
+        BK6MBY9nMBbck6/YP+coWwPjRskuRk4OCQETiRtPGpi7GLk4hAR2M0pc2XKQCSIhK/Hs3Q52
+        CFtY4n7LEVaIomeMEi0n14Ml2AT0JV52bANLiAhcYJR4d3EaG4jDLLCfSeJi6yOouRMYJR6v
+        vsMI0sIpYC9xZelPZhBbWMBCYl7zdDCbRUBFYsvqqSwgNq+ApcSPLZ1MELagxMmZT4DiHEBT
+        9STaNoKNYRaQl9j+dg4zxHkKEj+fLmMFKRERsJI4fNwYokREYnZnG/MERuFZSAbNQhg0C8mg
+        WUg6FjCyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI5OLc0djNtXfdA7xMjEwXiI
+        UYKDWUmEV+3h2kQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4
+        OKUamOzPqK6Zy9Y116MxPmvpifPmzjtKTsS/3hvasoP57ursmYcmbv9R0rS9rHNK6fdD5QsV
+        T8aVq/8TviAbeHPhwo9z2bVFNRd8yv3/QdnvCRfnwjktHPddm26s2hcRW3L08ZYTZ9uSpxbb
+        pK7NCv3Mvt7UZOFqx4BL8upMF0X2Sah+8VuwLW33jcXpuaXPL07gDDf7Pf2t+KeMm/t3tZ3g
+        VBY4JenS/2/S00aB41c3vHJYmNrRdflmSMUfcekz9+pONXYsNgn99f5vV6Dh1NnCLLPnMagX
+        vbrxruaYSFih65aZGvq6UyUlb8/OS+B/+TAjdYmk2/e30uKfzkyaL8bRu++M2T57iXVHRK3a
+        22xyrbSUWIozEg21mIuKEwHa5hqqPQMAAA==
+X-CMS-MailID: 20211208091557epcas2p244a77e72c91615b34d8858b22028f8cc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211204195806epcas2p15410815b695603ef2429fc55730ddb21
+References: <CGME20211204195806epcas2p15410815b695603ef2429fc55730ddb21@epcas2p1.samsung.com>
+        <20211204195757.8600-1-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021, Greg KH wrote:
+Hi,
 
-> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
-> > On Wed, 08 Dec 2021, Greg KH wrote:
-> > 
-> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > > > Adds get/set driver data helpers for auxiliary devices.
-> > > > > 
-> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > > > ---
-> > > > > V2
-> > > > >   - No changes
-> > > > > 
-> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > 
-> > > > I would really like to see an explanation why such obfuscation is really
-> > > > needed. dev_*_drvdata() is a standard way to access driver data.
-> > 
-> > I wouldn't call it obfuscation, but it does looks like abstraction for
-> > the sake of abstraction, which I usually push back on.  What are the
-> > technical benefits over using the dev_*() variant?
+> -----Original Message-----
+> From: Sam Protsenko <semen.protsenko@linaro.org>
+> Sent: Sunday, December 5, 2021 4:58 AM
+> To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Rob Herring
+> <robh+dt@kernel.org>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jaewon Kim <jaewon02.kim@samsung.com>; Chanho Park
+> <chanho61.park@samsung.com>; David Virag <virag.david003@gmail.com>;
+> Youngmin Nam <youngmin.nam@samsung.com>; devicetree@vger.kernel.org;
+> linux-serial@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org
+> Subject: [PATCH v3 0/5] soc: samsung: Add USI driver
 > 
-> See my response at:
-> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
-> for why it is a good thing to do.
+> USIv2 IP-core provides selectable serial protocol (UART, SPI or High-Speed
+> I2C); only one can be chosen at a time. This series implements USIv2
+> driver, which allows one to select particular USI function in device tree,
+> and also performs USI block initialization.
+> 
+> With that driver implemented, it's not needed to do USI initialization in
+> protocol drivers anymore, so that code is removed from the serial driver.
+> 
+> Because USI driver is tristate (can be built as a module), serial driver
+> was reworked so it's possible to use its console part as a module too.
+> This way we can load serial driver module from user space and still have
+> serial console functional.
+> 
+> Design features:
+>   - "reg" property contains USI registers start address (0xc0 offset);
+>     it's used in the driver to access USI_CON and USI_OPTION registers.
+>     This way all USI initialization (reset, HWACG, etc) can be done in
+>     USIv2 driver separately, rather than duplicating that code over
+>     UART/SPI/I2C drivers
+>   - System Register (system controller node) and its SW_CONF register
+>     offset are provided in "samsung,sysreg" property; it's used to
+>     select USI function (protocol to be used)
+>   - USI function is specified in "samsung,mode" property; integer value
+>     is used to simplify parsing
+>   - there is "samsung,clkreq-on" bool property, which makes driver
+>     disable HWACG control (needed for UART to work properly)
+>   - PCLK and IPCLK clocks are both provided to USI node; apparently both
+>     need to be enabled to access USI registers
+>   - protocol nodes are embedded (as a child nodes) in USI node; it
+>     allows correct init order, and reflects HW properly
+>   - USI driver is a tristate: can be also useful from Android GKI
+>     requirements point of view
+>   - driver functions are implemented with further development in mind:
+>     - we might want to add some DebugFs interface later
+>     - some functions might need to be revealed to serial drivers with
+>       EXPORT_SYMBOL(), and provide somehow pointer to needed USI driver
+>       instance
+>     - another USI revisions could be added (like USIv1)
+> 
+> Changes in v3:
+>   - Renamed compatible from samsung,exynos-usi-v2 to samsung,exynos850-usi
+>   - Used clk_bulk API instead of handling each clock separately
+>   - Spell check fixes and coding style fixes
+>   - Improved dt-bindings doc
+> 
+> Changes in v2:
+>   - Renamed all 'usi_v2' wording to just 'usi' everywhere
+>   - Removed patches adding dependency on EXYNOS_USI for UART/I2C/SPI
+>     drivers
+>   - Added patch: "tty: serial: samsung: Fix console registration from
+>     module"
+>   - Combined dt-bindings doc and dt-bindings header patches
+>   - Reworked USI driver to be ready for USIv1 addition
+>   - Improved dt-bindings
+>   - Added USI_V2_NONE mode value
+> 
+> Sam Protsenko (5):
+>   dt-bindings: soc: samsung: Add Exynos USI bindings
+>   soc: samsung: Add USI driver
+>   tty: serial: samsung: Remove USI initialization
+>   tty: serial: samsung: Enable console as module
+>   tty: serial: samsung: Fix console registration from module
 
-I saw this after I'd sent my query.
+Tested-by: Chanho Park <chanho61.park@samsung.com> with below patch.
+https://lore.kernel.org/linux-samsung-soc/20211208003946.139423-1-chanho61.p
+ark@samsung.com/T/#u
 
-> In short, driver authors should not have to worry about mixing
-> bus-specific and low-level driver core functions.
+Thanks.
 
-Okay, that makes sense.
+Best Regards,
+Chanho Park
 
-I guess my view abstraction for the sake of it is slightly higher
-level as I vehemently dislike it when driver-set writers create their
-own APIs, such as; (just off the top of my head, not a real example)
-cros_get_data() or cros_write() which are usually abstractions of top
-level APIs like platform_get_data() and regmap_write() respectively.
-
-Abstracting at *real* API level does seem like the right thing to do.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

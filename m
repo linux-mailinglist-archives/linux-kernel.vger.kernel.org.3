@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADBE46CFEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE6246CFEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbhLHJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:21:20 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16344 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbhLHJVT (ORCPT
+        id S231127AbhLHJWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230471AbhLHJWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:21:19 -0500
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J8BPw16MKz91gH;
-        Wed,  8 Dec 2021 17:17:08 +0800 (CST)
-Received: from [10.174.176.231] (10.174.176.231) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 17:17:46 +0800
-Subject: [PATCH v2 2/2] arm64: mm: Use asid feature macro for cheanup
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <wangkefeng.wang@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <wuxu.wu@huawei.com>, Hewenliang <hewenliang4@huawei.com>
-References: <506863a9-b934-3af3-c70d-3284e14478de@huawei.com>
-From:   Yunfeng Ye <yeyunfeng@huawei.com>
-Message-ID: <204aef78-cf5b-a337-af71-5d52ba845aa0@huawei.com>
-Date:   Wed, 8 Dec 2021 17:17:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 8 Dec 2021 04:22:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DAFC061746;
+        Wed,  8 Dec 2021 01:18:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AE7BB8200D;
+        Wed,  8 Dec 2021 09:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1332C341C3;
+        Wed,  8 Dec 2021 09:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638955117;
+        bh=rdVg3VWa1um6V8JdDhtynquK+COZiesUPvhcitWSMP8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hiSpUKqH4tMcBEBYlETNrzFsj29YqW8Lagp1h/wmrAgmhuUykdKHGt+IFomcoWRjv
+         OLVqFmTsBUJgq+FneRJ9j1z8srKV/bfiFi+qJQwquD8KNKjCCUmJJ6jXmHSpOAY0V3
+         9X3e2xcJiAMPkAJN8VYj8jEFcCVZgAoX6WVIuc9NJsF51/aDH1HChMj4snRID2lzDd
+         tb4W+sIk3z4tifR1lzEpk9ZdQnfvL2csMffsokvZUlu4KYgdUdfsJm3O2yf6jpuRf2
+         DIkucb/lcfJF9NpZtiHOrdG1pikkuF64bYTG6a3SGzZaZR1UptUEV92u9Z0okU5NIK
+         PP+KHBJxr4r+A==
+Date:   Wed, 8 Dec 2021 11:18:33 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbB4aYK4fOESbbMl@unreal>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
+ <YbBYtJFQ47UH2h/k@unreal>
+ <YbBZuwXZWMV9uRXI@kroah.com>
+ <YbBwSV2IwDHNUrFH@google.com>
 MIME-Version: 1.0
-In-Reply-To: <506863a9-b934-3af3-c70d-3284e14478de@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.231]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500024.china.huawei.com (7.185.36.10)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbBwSV2IwDHNUrFH@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
+> On Wed, 08 Dec 2021, Greg KH wrote:
+> 
+> > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
+> > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> > > > Adds get/set driver data helpers for auxiliary devices.
+> > > > 
+> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > > > ---
+> > > > V2
+> > > >   - No changes
+> > > > 
+> > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
+> > > >  1 file changed, 10 insertions(+)
+> > > 
+> > > I would really like to see an explanation why such obfuscation is really
+> > > needed. dev_*_drvdata() is a standard way to access driver data.
+> 
+> I wouldn't call it obfuscation, but it does looks like abstraction for
+> the sake of abstraction, which I usually push back on.  What are the
+> technical benefits over using the dev_*() variant?
 
-The commit 95b54c3e4c92 ("KVM: arm64: Add feature register flag
-definitions") introduce the ID_AA64MMFR0_ASID_8 and ID_AA64MMFR0_ASID_16
-macros.
+You can see it in Greg's answer, there is no technical benefits in any
+variant. It is simple copy/paste pattern from other buses.
 
-We can use these macros for cheanup in get_cpu_asid_bits().
+Maybe it is not clear from my response, I don't care if this patch is
+going to be applied or not, but I would like to hear someone explains
+to me what are the benefits of such one liners.
 
-No functional change.
----
- arch/arm64/mm/context.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
-index bbc2708fe928..b8b4cf0bcf39 100644
---- a/arch/arm64/mm/context.c
-+++ b/arch/arm64/mm/context.c
-@@ -50,10 +50,10 @@ static u32 get_cpu_asid_bits(void)
- 		pr_warn("CPU%d: Unknown ASID size (%d); assuming 8-bit\n",
- 					smp_processor_id(),  fld);
- 		fallthrough;
--	case 0:
-+	case ID_AA64MMFR0_ASID_8:
- 		asid = 8;
- 		break;
--	case 2:
-+	case ID_AA64MMFR0_ASID_16:
- 		asid = 16;
- 	}
-
--- 
-2.27.0
+Thanks

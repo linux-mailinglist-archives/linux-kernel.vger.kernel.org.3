@@ -2,178 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CBA46CF47
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F25646CF4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbhLHIqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S229521AbhLHIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhLHIqb (ORCPT
+        with ESMTP id S229487AbhLHIrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:46:31 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C588CC0617A2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:42:59 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id p13so1881528pfw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:42:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1y+dXBcCkVtTTqUS06lctFWwk/nUClDqIvvgzBUxsEM=;
-        b=LIedwnSB3H0UrB/1qhz5cKbBUvN7EOy72wHx8PQexHUvdmsILOBfeb3SxU6Kaimmsz
-         jplvEmfbojzRNT4Sq80gQv4Zn2oyWSyTcZjzaeUQncC9HjgByiIRong73YIJheMSxxoS
-         tzooCnNJKnPYlAhExrGaXKx3xfO5vspUWhFNymWwEwc5vIn5TsQPgCfQ68+ZEbMC9B/n
-         vQArdxTvfz70L7OelzyVs2McCtanh+kT3D6VjB25Hq0nTIjWiMm2p7oXDTTaA2Bn9g1P
-         0zwf03s5im3OVFobT2S1QrQxxoU5ovok2A8YxGNLhPD1bzlbVgJELuWyQX3FeR1gM80b
-         zC0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1y+dXBcCkVtTTqUS06lctFWwk/nUClDqIvvgzBUxsEM=;
-        b=QQJEPZFF1NH0qS/fJhfsTyUEwbp4pH9IJLkbRlinFPUMiqFh6d+oChF4mzZDgmT61O
-         N0WjcC/xi4iBfcuEmaOXvB60+6I2pCX7vbptTvzIewI6qMEQJKoXrxF0Tt5BoSulBKhE
-         RP6mxiQbMlEYfxSXMy8yjodO0qGsPFHeTBEZKB0sy56/+a175oDhxC8Ut2cOWIQedNHU
-         4cECZk8Ul4iPT4aSzYHmzpWNsIV9I89DobpHlkC11xovf1O2+6vhx8rhW4ibf28XC0vs
-         oTqKhR2aeg37uuyz8RKVRPDradtQ6Jmljn259zvGwmWe5obhz2gM248QuHsIfBPvV3V9
-         XbUA==
-X-Gm-Message-State: AOAM530fbJzNKv2ZQzHxPGIaLYtXMlpScKhC5ualVpNuPxsNmyZKIUvh
-        9z21dRjo/kHu/1Haabs6j0vD
-X-Google-Smtp-Source: ABdhPJw5E9rmnvj1IAYXO+PiR22Gni2EGztw+NGY2q4aCvVaQbJ4K2NDCeDI38pJOz69bF/QTJOnEQ==
-X-Received: by 2002:a63:5954:: with SMTP id j20mr27822286pgm.365.1638952979151;
-        Wed, 08 Dec 2021 00:42:59 -0800 (PST)
-Received: from thinkpad ([117.202.189.59])
-        by smtp.gmail.com with ESMTPSA id lp12sm2002937pjb.24.2021.12.08.00.42.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 00:42:58 -0800 (PST)
-Date:   Wed, 8 Dec 2021 14:12:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mhi@lists.linux.dev
-Cc:     hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
-        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>
-Subject: Re: [PATCH] bus: mhi: core: Add support for forced PM resume
-Message-ID: <20211208084253.GE70121@thinkpad>
-References: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
+        Wed, 8 Dec 2021 03:47:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEC2C061574;
+        Wed,  8 Dec 2021 00:43:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A718DCE2047;
+        Wed,  8 Dec 2021 08:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D21AC00446;
+        Wed,  8 Dec 2021 08:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638953019;
+        bh=pX6fUkTa7i3JJ/g9wo3OcRP1y21D2J3XbQ7gr4Uwbl0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F7nqlhpZzGaFWLGHse34ObY5rffytFT3kVD/Giqj3SO8aJhfskvF4BcS/xUOOhHTq
+         qCAhA5Q/EXZd/KqnaP+w/8nQQipZAY8Hry0Bc4Ai7P0f/bXOHw2X1BGj+5rG/14nlp
+         cyxdnk6VDFalkhti/FeORQPEVrM94HRidg/4UUUI=
+Date:   Wed, 8 Dec 2021 09:43:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David E. Box" <david.e.box@linux.intel.com>, lee.jones@linaro.org,
+        hdegoede@redhat.com, bhelgaas@google.com,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
+        shuah@kernel.org, mgross@linux.intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbBwOb6JvWkT3JWI@kroah.com>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
+ <YbBYtJFQ47UH2h/k@unreal>
+ <YbBZuwXZWMV9uRXI@kroah.com>
+ <YbBtjSNz8z34czeN@unreal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <YbBtjSNz8z34czeN@unreal>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 09:40:59PM +0530, Manivannan Sadhasivam wrote:
-> From: Loic Poulain <loic.poulain@linaro.org>
+On Wed, Dec 08, 2021 at 10:32:13AM +0200, Leon Romanovsky wrote:
+> On Wed, Dec 08, 2021 at 08:07:39AM +0100, Greg KH wrote:
+> > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
+> > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> > > > Adds get/set driver data helpers for auxiliary devices.
+> > > > 
+> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > > > ---
+> > > > V2
+> > > >   - No changes
+> > > > 
+> > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
+> > > >  1 file changed, 10 insertions(+)
+> > > 
+> > > I would really like to see an explanation why such obfuscation is really
+> > > needed. dev_*_drvdata() is a standard way to access driver data.
+> > 
+> > Lots of busses have this helper.  This is nothing new at all, and is
+> > nice to have.  Look at all of the calls to dev_get_drvdata() in
+> > include/linux/ for the examples.
 > 
-> For whatever reason, some devices like QCA6390, WCN6855 using ath11k
-> are not in M3 state during PM resume, but still functional. The
-> mhi_pm_resume should then not fail in those cases, and let the higher
-> level device specific stack continue resuming process.
-> 
-> Add a new parameter to mhi_pm_resume, to force resuming, whatever the
-> current MHI state is. This fixes a regression with non functional
-> ath11k WiFi after suspend/resume cycle on some machines.
-> 
-> Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
-> 
-> Cc: stable@vger.kernel.org #5.13
-> Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
-> Reported-by: Kalle Valo <kvalo@codeaurora.org>
-> Reported-by: Pengyu Ma <mapengyu@gmail.com>
-> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-> [mani: Added comment, bug report, added reported-by tags and CCed stable]
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> I looked and this is why I asked. From the point of person who does
+> reviews and refactoring, such obfuscations are evil.
 
-Applied to mhi-fixes! Will be submitted for v5.16-rcX.
+Then you must consider about 80 busses evil :)
 
-Thanks,
-Mani
+Again, this is a very common helper pattern in the kernel, one that we
+have had for decades now.  It allows a driver writer to only worry about
+the bus apis for that specific bus, and not have to dive down into the
+driver core functions at all.  What is wrong with that?
 
-> ---
->  drivers/bus/mhi/core/pm.c             | 10 +++++++---
->  drivers/bus/mhi/pci_generic.c         |  2 +-
->  drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
->  include/linux/mhi.h                   |  3 ++-
->  4 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
-> index 7464f5d09973..4ddd266e042e 100644
-> --- a/drivers/bus/mhi/core/pm.c
-> +++ b/drivers/bus/mhi/core/pm.c
-> @@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
->  }
->  EXPORT_SYMBOL_GPL(mhi_pm_suspend);
->  
-> -int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
-> +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
->  {
->  	struct mhi_chan *itr, *tmp;
->  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-> @@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
->  	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
->  		return -EIO;
->  
-> -	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
-> -		return -EINVAL;
-> +	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
-> +		dev_warn(dev, "Resuming from non M3 state (%s)\n",
-> +			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
-> +		if (!force)
-> +			return -EINVAL;
-> +	}
->  
->  	/* Notify clients about exiting LPM */
->  	list_for_each_entry_safe(itr, tmp, &mhi_cntrl->lpm_chans, node) {
-> diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-> index 9ef41354237c..efd1da66fdf9 100644
-> --- a/drivers/bus/mhi/pci_generic.c
-> +++ b/drivers/bus/mhi/pci_generic.c
-> @@ -959,7 +959,7 @@ static int __maybe_unused mhi_pci_runtime_resume(struct device *dev)
->  		return 0; /* Nothing to do at MHI level */
->  
->  	/* Exit M3, transition to M0 state */
-> -	err = mhi_pm_resume(mhi_cntrl);
-> +	err = mhi_pm_resume(mhi_cntrl, false);
->  	if (err) {
->  		dev_err(&pdev->dev, "failed to resume device: %d\n", err);
->  		goto err_recovery;
-> diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
-> index 26c7ae242db6..f1f2fa2d690d 100644
-> --- a/drivers/net/wireless/ath/ath11k/mhi.c
-> +++ b/drivers/net/wireless/ath/ath11k/mhi.c
-> @@ -533,7 +533,11 @@ static int ath11k_mhi_set_state(struct ath11k_pci *ab_pci,
->  		ret = mhi_pm_suspend(ab_pci->mhi_ctrl);
->  		break;
->  	case ATH11K_MHI_RESUME:
-> -		ret = mhi_pm_resume(ab_pci->mhi_ctrl);
-> +		/* Do force MHI resume as some devices like QCA6390, WCN6855
-> +		 * are not in M3 state but they are functional. So just ignore
-> +		 * the MHI state while resuming.
-> +		 */
-> +		ret = mhi_pm_resume(ab_pci->mhi_ctrl, true);
->  		break;
->  	case ATH11K_MHI_TRIGGER_RDDM:
->  		ret = mhi_force_rddm_mode(ab_pci->mhi_ctrl);
-> diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-> index 723985879035..102303288cee 100644
-> --- a/include/linux/mhi.h
-> +++ b/include/linux/mhi.h
-> @@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
->  /**
->   * mhi_pm_resume - Resume MHI from suspended state
->   * @mhi_cntrl: MHI controller
-> + * @force: Force resuming to M0 irrespective of the device MHI state
->   */
-> -int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
-> +int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
->  
->  /**
->   * mhi_download_rddm_image - Download ramdump image from device for
-> -- 
-> 2.25.1
-> 
+> If I understand your correctly, the explanation is just copy/paste, right?
+
+I do not understand what you mean by this, sorry.
+
+greg k-h

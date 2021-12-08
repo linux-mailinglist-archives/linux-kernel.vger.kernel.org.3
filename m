@@ -2,107 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C0646C9F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AF246C9F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239250AbhLHBdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbhLHBdj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:33:39 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AD3C061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:30:07 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id k2so1364467lji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:30:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oY1YzqKk4aWlmDE7Q71zlaeF3NQefpgJ3dA3BCsYPu4=;
-        b=TanE49c9j+vNtjsphwwu+auu7KpkPp9t6oDpqsR9KpWE2jkcvQhEk6OEOBCjxsocAo
-         IpFwWN9l/B5J2eGgk8Y/vEQssZ1DEE2Grjx3JXxUG5gFO0yQIcTfFqYYHIa2ppmo+sPs
-         VWZcZQW5df3SiZwqVx2vzkLqDxpHWIMAbJtmHYirApmq3Mzz5Vhuud99RWwRaquR5hMn
-         Rl/NLQg6IDpEvVQd29AbrfdbUwbZiQEjwTsBqxB786bbtei5ynb0q6Bd293w+peeoXJ/
-         xQPVxcvPmcIujIKv/yI/7zQUozAsGlfWK9iB9HCWkYAqVqbngMaLTia8w1gyyeVuZqxR
-         upfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oY1YzqKk4aWlmDE7Q71zlaeF3NQefpgJ3dA3BCsYPu4=;
-        b=YaQGCmRwFNWV7c25mo7tPAv2pm90XcDNIk9n/8l1I/qqudtZBxes1SPSJZYFtR63rz
-         Wwe7VEuf5WxvrQD0XQUPr36NWW+MWsOf5OSIKTxqUSdZ/mC0MAcFI2D4uh8HDTPfsKIp
-         IRbCYDYIv966JsrNKBXYe/quwj6M3EYpaipWyM0Ns6gHCH5y4fqXzuPhJmnZmZb8Pl31
-         UeqYlI2ihLc/+O6V7d/qkR3Y1fD+GPR0c1Wfz4YwjNZozcMtkTVjAUi4J+tiuLdwU5/+
-         M9dE42GI0/1qDByUpuyNmRaGffG2zchOME/VJ3+en1NZhcOctmll58xa5p/P56lBorYh
-         0N0w==
-X-Gm-Message-State: AOAM531zHTlX5C7Bq2Smk+csSSRD4+V0GL0Eh4tpdKCS5my+/qu+oW3U
-        597l0plVl1wiRAPHrDYnXrliC4cP4iRcq/3mMyM97g==
-X-Google-Smtp-Source: ABdhPJxmd2LH6zwPwgpPDbCVOETpHSXAwZjmhvHQMjUkXqasuAqG1D74p/kFoM4q8OpYs6prJvtVqpiLKndVoC9He3Y=
-X-Received: by 2002:a05:651c:292:: with SMTP id b18mr47002761ljo.220.1638927005840;
- Tue, 07 Dec 2021 17:30:05 -0800 (PST)
+        id S239317AbhLHBgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:36:55 -0500
+Received: from mga01.intel.com ([192.55.52.88]:33911 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234157AbhLHBgx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 20:36:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="261805971"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="261805971"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 17:33:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="679694865"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 17:33:20 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mulpf-000NCR-My; Wed, 08 Dec 2021 01:33:19 +0000
+Date:   Wed, 8 Dec 2021 09:32:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:guest 143/144] arch/x86/kernel/head_64.o: warning:
+ objtool: verify_cpu()+0x4d: unreachable instruction
+Message-ID: <202112080910.XQ4yN1LA-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-15-ojeda@kernel.org>
-In-Reply-To: <20211206140313.5653-15-ojeda@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Dec 2021 17:29:53 -0800
-Message-ID: <CAKwvOdnA+XU9u+dJ6NfmVFDTxdkCH4v04nMVaieuzauWZtBUpw@mail.gmail.com>
-Subject: Re: [PATCH 14/19] docs: add Rust documentation
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 6:07 AM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> Most of the documentation for Rust is written within the source code
-> itself, as it is idiomatic for Rust projects. This applies to both
-> the shared infrastructure at `rust/` as well as any other Rust module
-> (e.g. drivers) written across the kernel.
+tree:   https://github.com/intel/tdx.git guest
+head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
+commit: 4844d5297235bef6b92fe9d0649d2f066f623d5a [143/144] [REVERTME] x86/tdx: Add CONFIG option for KVM SDV workarounds
+config: x86_64-randconfig-a001-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080910.XQ4yN1LA-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/4844d5297235bef6b92fe9d0649d2f066f623d5a
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest
+        git checkout 4844d5297235bef6b92fe9d0649d2f066f623d5a
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-I'm sure Documentation/rust/ will grow over time; there's certainly
-more that can be added and core kernel devs will have more questions
-over time. I'm still running into a SNAFU actually building; see
-https://lore.kernel.org/lkml/CAKwvOdk9VNenJJN5HnPpGgsHT+OsRsgPGSesQgqMP2aLPWy0NQ@mail.gmail.com/.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But I read through all that was added here and didn't find anything
-problematic IMO.  I didn't verify the png's are actually the logo...
+All warnings (new ones prefixed by >>):
 
-I don't think `make htmldocs` produced any new warnings, though it's
-not exactly warning free at the moment (pre-existing before this
-series).
+>> arch/x86/kernel/head_64.o: warning: objtool: verify_cpu()+0x4d: unreachable instruction
 
-> However, these documents contain general information that does not
-> fit particularly well in the source code, like the Quick Start guide.
->
-> It also contains a few binary assets used for the `rustdoc` target
-> and a few other small changes elsewhere in the documentation folder.
-
-How is rust-logo.png being included in the docs? Is there something
-with RST that isn't grep'able for rust-logo.png?
-
-> --
-> 2.34.0
->
-
-
---
-Thanks,
-~Nick Desaulniers
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

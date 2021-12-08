@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F3246DBCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A036B46DBD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbhLHTLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S232285AbhLHTNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbhLHTLO (ORCPT
+        with ESMTP id S231301AbhLHTNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:11:14 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503B7C061746;
-        Wed,  8 Dec 2021 11:07:42 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id r25so11658450edq.7;
-        Wed, 08 Dec 2021 11:07:42 -0800 (PST)
+        Wed, 8 Dec 2021 14:13:17 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E270AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:09:44 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id m25so3103138qtq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cqg6c8GPTNxn1iTThsV1QNq6rZCOvwgzQTX5X89ySUk=;
-        b=XHiQEsBmyzP/7SVxSY7AILyfRrEFTfqtpmNl7wjz9YViTRdo8+B7LlBI44uCX3kJlE
-         adZpj1psZPHnPxeDu9UYHm9Ly92vA9VmsozNJAQ5QkXdI9i9906OdF3g2zQ1govYvV5V
-         m4iI4DihO+X9WwTakEkWv5WuuLQHrc7tlMXb6GXTuZaYSP9EJgD/kGSDkIT1v4gkdU5p
-         1VzO/lk2n2PkJDb0cWvnOzBZ6mHIHrf7KA0y2wzwVbeO67xJXFr6eH8UV0Oa+wS8uVKj
-         dnEZyZ244cs5M2n9bkS2BQ1dBxHud4DQ1S6XmCGuUXVgYVmLzN7g4eI8xPKlX5vtNaQ2
-         mG0Q==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ji1mvPknDhdOmYpOyzWQYdOGcoOMkKQYqnM5UxcNn1k=;
+        b=ePGN+fQlX9ZDIDadtyh99MJ3jIvTxzM7/e+8xxksGts1MB+YbRwB7PtErJtgiJRZUj
+         7sVewD/SARtWcJruveNmgDsYVgpggb3vP8zYClqZhlU008yWZTGp5bKP68sBXSVSu95O
+         cbPI245hJgs0z42jAvVCw6WSxuVQe/r2Yp+To=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cqg6c8GPTNxn1iTThsV1QNq6rZCOvwgzQTX5X89ySUk=;
-        b=XaBXI8huqm19HsUDxFZK6wJD8ZhHHRvp1trgUFjIjQdTKSKxVBogRt5yVuYhClTZF+
-         /Qp82Ihh5W/HOTqQGPRbZEsafrxlPJOI+Yfec6Fi5/Xq8mMs8Dx2nW5S+9658TC+bVmr
-         Tk0aB3jcfT7UFRj6bRim2Yu6oxj31AypDDK8KjCLYybM/pbpSpD3M9SNEH0jYsiQEQbI
-         K8SrR/bTi5Q50/FOlPEsnLCH6lC9qK1w24+5S/d1BBHcWsYf3cHiT5OtNftS9OYCnTKa
-         VGVcdglUVIJd83kZv0639VMYCplY7M8pGxzvErjkjAW3qRU5DcP8IqUgxGM9Lwy6wcTI
-         zyXA==
-X-Gm-Message-State: AOAM531xgKWhH2IyRDygOtx5jxQFdcV+/lF7bOvfn5HL/j8HsHU96J5X
-        r/KKucM0oS5HiOFtOB/tleVBcEPxT+RNOipP
-X-Google-Smtp-Source: ABdhPJxHc2LJ8uXX6xkzahGJR7jfwPLp2bD6ZS76HCYbTrYh7XW2ljSlwjCIokkzYP/zznjTzo352A==
-X-Received: by 2002:a17:907:6e91:: with SMTP id sh17mr10023526ejc.86.1638990460561;
-        Wed, 08 Dec 2021 11:07:40 -0800 (PST)
-Received: from [192.168.1.144] (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id x7sm2618328edd.28.2021.12.08.11.07.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 11:07:40 -0800 (PST)
-Subject: Re: [PATCH] clk: qcom: gcc-msm8974: Modernize the driver
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211118153107.8590-1-ivo.ivanov.ivanov1@gmail.com>
- <Ya40B1QkGmWmhSUX@builder.lan>
-From:   Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-Message-ID: <8792e6d6-f5a2-3055-8011-4a2f5deb0220@gmail.com>
-Date:   Wed, 8 Dec 2021 21:07:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=Ji1mvPknDhdOmYpOyzWQYdOGcoOMkKQYqnM5UxcNn1k=;
+        b=4FcrJcaWGnC0JikuGhLThLO7jnB6LILtUTRcngsRbsztwsizJ6pgPG5qK9DCVaTfLZ
+         QN0k/XmHtlxKF+kc6bhoYxWeXamX7rPSDz4/By6XRK/dmhxQsAMcdQJOfhlSL/UixPya
+         bkmSka2Xm/2h1vJpejmvHzBPP+I54x//OyadUbwzCJRKoESjZBF1iQCuqSWpDWo9bduj
+         YI+Hg1mBzUQJeA2OE0Om80f3BU0vx249RbTJ39YRhEVTKBX2plbVKW841u/dGyoNI53/
+         CZkCRnR3DaVww4JW5Os+crH6bl475la8cx/GrYgAb1kQa1NSGuttjf7GIzTYCF3xrAs8
+         guYQ==
+X-Gm-Message-State: AOAM532fZHNi9o7rbn60eeYJ47CO0dHWrm12HDhVjPfxOz+EYCZsnE4k
+        J7gb3obEscCT4XLEhqlv2xU3kg==
+X-Google-Smtp-Source: ABdhPJwfE5wTjaJrI7YGlf6iH+HGfN7+U8y+ErYNboRLOLubGkSlxTFlPcGBO7bO0YjTYP1fRWb5Nw==
+X-Received: by 2002:a05:622a:1c6:: with SMTP id t6mr10311770qtw.211.1638990584025;
+        Wed, 08 Dec 2021 11:09:44 -0800 (PST)
+Received: from markyacoub.nyc.corp.google.com ([2620:0:1003:314:eb6e:9a77:7a91:9461])
+        by smtp.gmail.com with ESMTPSA id o21sm2142939qta.89.2021.12.08.11.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 11:09:43 -0800 (PST)
+From:   Mark Yacoub <markyacoub@chromium.org>
+To:     linux-mediatek@lists.infradead.org
+Cc:     seanpaul@chromium.org, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        jason-jh.lin@mediatek.com, tzungbi@google.com,
+        Mark Yacoub <markyacoub@google.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/mediatek: Validate the CRTC LUT size.
+Date:   Wed,  8 Dec 2021 14:09:13 -0500
+Message-Id: <20211208190921.128702-1-markyacoub@chromium.org>
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
 MIME-Version: 1.0
-In-Reply-To: <Ya40B1QkGmWmhSUX@builder.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn, thanks for the review!
+From: Mark Yacoub <markyacoub@google.com>
 
-> "xo_board" is actually the crystal feeding the PMIC with a reference
-> clock, of interest here is that this is split up in the 2 digital and 3
-> analog RPM_SMD_CX_{Dx,Ay} clocks. Out of these you have RPM_SMD_CXO_D0
-> being wired up on the CXO pin on the msm8974.
-> 
-> Back when this was devices we didn't have the means of dealing with
-> rpmcc as parent to gcc, so you can in gcc_msm8974_probe() find the
-> registration of a clock "xo" which is a 19.2MHz clock parented by
-> "xo_board".
-> 
-> As such, the appropriate .name here would be "xo".
-> 
-> Likewise "xo" (or actually "cxo") would be a better name for the
-> DT-based input clock - and it should point to &rpmcc RPM_SMD_CXO_D0
-> (iiuc).
+[Why]
+The user space can allocate a LUT of any size. We must validate that it
+is the expected MTK_LUT_SIZE.
 
-I'll try to fix the mentioned issue and send a v2 in series of patches
-with other gcc-msm8974 improvements.
+[How]
+Bring the .atomic_check function internal to mediatek driver and check
+that the new CRTC state LUT size is equal to MTK_LUT_SIZE.
 
-Regards,
-Ivaylo
+Fixes igt@kms_color@pipe-A-invalid-gamma-lut-sizes
+Tested on Jacuzzi (MTK)
+
+Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c | 40 +++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index f47801737b88f..82de83656d159 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -54,9 +54,47 @@ mtk_drm_mode_fb_create(struct drm_device *dev,
+ 	return drm_gem_fb_create(dev, file, cmd);
+ }
+ 
++static bool is_lut_size_expected(const struct drm_device *dev,
++				 const struct drm_property_blob *lut)
++{
++	int len;
++
++	if (!lut)
++		return true;
++
++	len = drm_color_lut_size(lut);
++	if (len != MTK_LUT_SIZE) {
++		drm_dbg_state(dev, "Invalid LUT size; got %d, expected %d\n",
++			      len, MTK_LUT_SIZE);
++		return false;
++	}
++
++	return true;
++}
++
++static int mtk_drm_atomic_check(struct drm_device *dev,
++				struct drm_atomic_state *state)
++{
++	struct drm_crtc *crtc;
++	struct drm_crtc_state *new_crtc_state;
++	int ret, i;
++
++	ret = drm_atomic_helper_check(dev, state);
++	if (ret)
++		return ret;
++
++	for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
++		if (!is_lut_size_expected(dev, new_crtc_state->degamma_lut) ||
++		    !is_lut_size_expected(dev, new_crtc_state->gamma_lut))
++			return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static const struct drm_mode_config_funcs mtk_drm_mode_config_funcs = {
+ 	.fb_create = mtk_drm_mode_fb_create,
+-	.atomic_check = drm_atomic_helper_check,
++	.atomic_check = mtk_drm_atomic_check,
+ 	.atomic_commit = drm_atomic_helper_commit,
+ };
+ 
+-- 
+2.34.1.400.ga245620fadb-goog
+

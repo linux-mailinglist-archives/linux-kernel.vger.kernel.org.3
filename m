@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D42A46D0A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BA546D0A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhLHKOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbhLHKOS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:14:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747BC061746;
-        Wed,  8 Dec 2021 02:10:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S230271AbhLHKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:14:07 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:49818 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229453AbhLHKOG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:14:06 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62437B8205A;
-        Wed,  8 Dec 2021 10:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F739C341CD;
-        Wed,  8 Dec 2021 10:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638958244;
-        bh=OT+9Lch1JWqZwRccKmltklPXiQoLJCDosH5rT/lTSYU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CVtOyTH2Do4jQ8PReXxDHLrvU8c9RKZboTjMn/xT1W+182DjQhGvH3llmvz1ikQzp
-         XqFJhbj07g5opNagd5y+n0nUC+cK1zDkfsClH8wCCeZAlAVbAUJfhMlrUM0Gy2aGot
-         Ou6XS1gp/qVeLYhbAXM89jkc84XiJzm7Bgf6kdzevSpSvvPU49dUE/mHSMo0PPIzVF
-         QBJhOo7v+I+ixNQIAqw4axPHA/zf0+dKQ5WhYGhpQeCInBLzs9KQyZpKqCxpic1pGn
-         F7BhJTiaOT7eRuNUW2vhFO5msMExidrpy6M83epbhfnWQSRIUGePopFRBUFpeo9XeC
-         5xzpi0bcAOUBg==
-Received: by mail-wr1-f41.google.com with SMTP id a9so3117460wrr.8;
-        Wed, 08 Dec 2021 02:10:44 -0800 (PST)
-X-Gm-Message-State: AOAM530FJ7eIZptzRZoZonwDHVUrgL2ibRcwLDZ62eI0vaXoyioepnUw
-        oFu5biBayQIC/EwOlKGzmeWv98pBtIFYw0WPg2A=
-X-Google-Smtp-Source: ABdhPJxdcfE70fMjqC/LaTNmzXxGIcgZ39NJv8BbMprp0FSg5nCkJQQDL8Vsv2rrcLb1UlsXL3cowah1KZHpbW1d/54=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr57730315wrp.209.1638958242470;
- Wed, 08 Dec 2021 02:10:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20211207150927.3042197-1-arnd@kernel.org> <20211207150927.3042197-4-arnd@kernel.org>
- <20211208100514.7egjy5hraziu4pme@wittgenstein>
-In-Reply-To: <20211208100514.7egjy5hraziu4pme@wittgenstein>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 8 Dec 2021 11:10:26 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1zD=FY39vqWAjZH2yYYtvQMzFOCRayXuDae4H6sCWs1w@mail.gmail.com>
-Message-ID: <CAK8P3a1zD=FY39vqWAjZH2yYYtvQMzFOCRayXuDae4H6sCWs1w@mail.gmail.com>
-Subject: Re: [RFC 3/3] headers: repurpose linux/fs_types.h
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        kernel test robot <lkp@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B64E91EC04EC;
+        Wed,  8 Dec 2021 11:10:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638958229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DpqXWMf3G5gZNv0d220PhTyu5Y62F7o91lIeySiWr5s=;
+        b=nN0vx6QK48dPO4Egzyeff6bSZCydmc5t9l/MCVGNJ5N+8xVRvsBYVldAxIkB0eD7srP+oz
+        RFruwsxuI94VGdN1hllSGkZulEzcbVB1l3cmgFVGzRGu7glNh814PPYy2qOq5Y0UG122j/
+        OXedxb7Ky1ZIGwReu29lOjzxEMzT96w=
+Date:   Wed, 8 Dec 2021 11:10:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tejun Heo <tj@kernel.org>, kernelci@groups.io,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, reinette.chatre@intel.com,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org
+Subject: Re: [PATCH v13 2/2] x86/sgx: Add an attribute for the amount of SGX
+ memory in a NUMA node
+Message-ID: <YbCEl9kqhTz2iOY2@zn.tnic>
+References: <20211116162116.93081-1-jarkko@kernel.org>
+ <20211116162116.93081-2-jarkko@kernel.org>
+ <f25d95e6-e129-597b-5d93-d7264feae8b8@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f25d95e6-e129-597b-5d93-d7264feae8b8@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 11:05 AM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
->
-> On Tue, Dec 07, 2021 at 04:09:27PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > linux/fs_types.h traditionally describes the types of file systems we
-> > deal with, but the file name could also be interpreted to refer to
-> > data types used for interacting with file systems, similar to
-> > linux/spinlock_types.h or linux/mm_types.h.
-> >
-> > Splitting out the data type definitions from the generic header helps
-> > avoid excessive indirect include hierarchies, so steal this file
-> > name and repurpose it to contain the definitions for file, inode,
-> > address_space, super_block, file_lock, quota and filename, along with
-> > their respective callback operations, moving them out of linux/fs.h.
-> >
-> > The preprocessed linux/fs_types.h is now about 50KB, compared to
-> > over 1MB for the traditional linux/fs.h, and can be included from
-> > most other headers that currently rely on type definitions from
-> > linux/fs.h.
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
->
-> I tried to apply the series to take a closer look but it fails to apply
-> cleanup down to v5.15 and any release after that. What's the base I
-> should use for this?
+On Tue, Dec 07, 2021 at 11:36:50AM -0800, Dave Hansen wrote:
+> On 11/16/21 8:21 AM, Jarkko Sakkinen wrote:
+> > The amount of SGX memory on the system is determined by the BIOS and it
+> > varies wildly between systems.  It can be from dozens of MB's on desktops
+> > or VM's, up to many GB's on servers.  Just like for regular memory, it is
+> > sometimes useful to know the amount of usable SGX memory in the system.
+> > 
+> > Introduce CONFIG_HAVE_ARCH_NODE_DEV_GROUP opt-in flag to expose an arch
+> > specific attribute group, and add an attribute for the amount of SGX
+> > memory in bytes to each NUMA node:
+> > 
+> > /sys/devices/system/node/nodeX/x86/sgx_total_bytes
+> 
+> There's some context missing here:
 
-It is based on yesterday's linux-next plus additional patches I used
-for testing. Sorry about the extra troubles, but this was the most
-convenient way for me, as it lets me find build regressions in random
-configs more easily when I have a base tree that builds randconfig
-warning-free.
+I'll say. "it is sometimes useful" is not the proper argumentation for
+adding new stuff.
 
-The patches are at the top of my randconfig tree [1] at the moment,
-so you can try out that tree, or rebase the patches from there.
+> This serves the same function for SGX memory as /proc/meminfo or
+> /sys/devices/system/node/nodeX/meminfo does for normal RAM.  It
+> enumerates how much physical SGX memory is present so that you can size
+> enclaves on different systems.
+> 
+> This specific file (sgx_total_bytes) is needed today to help drive the
+> SGX selftests.  The SGX selftests need to create overcommitted enclaves
+> which are larger than the physical SGX memory on the system.  They
+> currently use a CPUID-based approach which can diverge from the actual
+> amount of SGX memory available.  This file ensures that the selftests
+> can work efficiently and do not attempt stupid things like creating a
+> 100,000 MB enclave on a system with 128 MB  of SGX memory.
 
-        Arnd
+Thanks, that's exactly what I was missing. Please stick that explanation
+somewhere prominent.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=randconfig-5.17-next
+> The nodeX/x86 directory is used because SGX is highly x86-specific.
+> It's very unlikely that any other architecture (or even non-Intel x86
+> vendor) will ever implement SGX.  It needs its own directory (as opposed
+> to being in the nodeX/ "root") because this is expected to be the first
+> of a few different things that need to get exported.  This avoids
+> cluttering the root with several "sgx_*" files.
+> 
+> How many of these files will there be?  Just scanning /proc/meminfo,
+> these are the no-brainers that we have for RAM, but we need for SGX:
+> 
+> MemTotal:       xxxx kB // sgx_total_bytes (this patch)
+> MemFree:        yyyy kB // sgx_free_bytes
+> SwapTotal:      zzzz kB // sgx_swapped_bytes
+> 
+> So, at *least* three.  I think we will eventually end up needing
+> something more along the lines of a dozen.
+
+Oh well, I guess.
+
+I was going to propose to make that
+
+	...nodeX/sgx/
+
+but having it be arch-specific would mean that theoretically we could
+add some non-sgx files there too, in the future, and if/when needed.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

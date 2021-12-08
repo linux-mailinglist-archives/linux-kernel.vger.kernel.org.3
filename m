@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 102C846D0EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B496846D0EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbhLHKZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 05:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbhLHKZj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:25:39 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CD1C061746;
-        Wed,  8 Dec 2021 02:22:07 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r5so1676642pgi.6;
-        Wed, 08 Dec 2021 02:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=AkjuFGC1Zb3ZOgF3UawiFRpJnUR5P1/09K86HNxgPXQ=;
-        b=IcxLoF23jnafoZvKbYIyquvGvSfYa50hKbme4qYN8/xrdPnKlUau17kH+PqpfVIn+Y
-         07YEe10iu+EfNuN2HcnIEGwnx/ptWJfaPKpn/gpE227GIb4YzcSln9lB0Y1uxa0bRaiw
-         IFQdeP5UeHI8oRueGWfGOo9TDxaMa5UlSaAySVw83LrpUEgkYIXS2RHnFqREMLWEGB9t
-         y+C0BjmRaWwOA9nNGbPJP6WVFBrR1wK8J6DG3+sCwHdq+MRHYEv1PWCZepKShGVHw7J3
-         iAuhOPnGmLIz/kKI3cgsRCWBXrrdaGSGVSWoIXUoVBW/Y96y1cmswSci1Rnc0cv0OXRg
-         J9kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=AkjuFGC1Zb3ZOgF3UawiFRpJnUR5P1/09K86HNxgPXQ=;
-        b=drJGGDJOp7xoqd4VxAwBfhF2/sNc8HCDpcYXKLxwYEPPeQxUUPbgykFVMLonUbSszK
-         wpoygmh+vdO+r1VTZr8b0dWylheEDceN6MzlrRnYAkI0dMhz4lu+VbHZ9C5P09k4WY0Z
-         iH6xdxW5Nytz3SmctdgKi1E0yt+a8biCv+Oo/41RtEfaMcEw0xLDCABrt7jCDbIGoICL
-         wNFUUS6ZhIb2ExkpzvBzylycz9/1cwuK//HM9JMML+yATrckwWILlF+ndh7yz8+o47Fd
-         nnPHk0JSc0ugurAcyTB/5NNm1VdIF4uftrOgnVE0DnwG34i6q5uJDo8GtWDDNwJlLvYq
-         nwpw==
-X-Gm-Message-State: AOAM531oVzSQ8avzXsBTmyjDIGQBAtqT7a/SuXhNecbxRp1iuB6yjlNl
-        7n9Og7eGj3xikxIbp4fiGjA=
-X-Google-Smtp-Source: ABdhPJyaA/HV60/fcOOjKzH3yzDJn7blxMkSBdAx/KECm1wZZOZX6VpSDM+bjDb5p+XAnrwvA03nvQ==
-X-Received: by 2002:a63:e954:: with SMTP id q20mr27796390pgj.375.1638958927021;
-        Wed, 08 Dec 2021 02:22:07 -0800 (PST)
-Received: from localhost.localdomain ([43.128.78.144])
-        by smtp.gmail.com with ESMTPSA id v3sm2099204pga.78.2021.12.08.02.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 02:22:06 -0800 (PST)
-Date:   Wed, 8 Dec 2021 18:21:58 +0800
-From:   Aili Yao <yaoaili126@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yaoaili@kingsoft.com
-Subject: Re: [PATCH v2] KVM: LAPIC: Per vCPU control over
- kvm_can_post_timer_interrupt
-Message-ID: <20211208182158.571fcdee@gmail.com>
-In-Reply-To: <Ya/s17QDlGZi9COR@google.com>
-References: <20211124125409.6eec3938@gmail.com>
-        <Ya/s17QDlGZi9COR@google.com>
-Organization: ksyun
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S231535AbhLHK1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 05:27:05 -0500
+Received: from mga06.intel.com ([134.134.136.31]:62057 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230050AbhLHK1E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:27:04 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="298596959"
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="298596959"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:23:33 -0800
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="606248476"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:23:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muu5n-003bY5-4m;
+        Wed, 08 Dec 2021 12:22:31 +0200
+Date:   Wed, 8 Dec 2021 12:22:30 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+Message-ID: <YbCHZmyfS7aXGuIx@smile.fi.intel.com>
+References: <20211203100846.3977195-1-keescook@chromium.org>
+ <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+ <20211203182638.GA450223@lapt>
+ <202112031450.EFE7B7B4A@keescook>
+ <20211207233930.GA3955@lapt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207233930.GA3955@lapt>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 23:23:03 +0000
-Sean Christopherson <seanjc@google.com> wrote:
-
+On Tue, Dec 07, 2021 at 03:39:30PM -0800, Yury Norov wrote:
+> On Fri, Dec 03, 2021 at 03:01:30PM -0800, Kees Cook wrote:
+> > On Fri, Dec 03, 2021 at 10:26:38AM -0800, Yury Norov wrote:
+> > > On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
+> > > > On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
+> > > > > It's common practice to cast small variable arguments to the find_*_bit()
+> > > 
+> > > Not that common - I found 19 examples of this cast, and most of them
+> > > are in drivers.
+> > 
+> > I find 51 (most are in the for_each_* wrappers):
+> > 
+> > $ RE=$(echo '\b('$(echo $(grep -E '^(unsigned long find|#define for_each)_' include/linux/find.h | cut -d'(' -f1 | awk '{print $NF}') | tr ' ' '|')')\(.*\(unsigned long \*\)')
+> > $ git grep -E "$RE" | wc -l
+> > 51
+> > 
+> > > > > This leads to the find helper dereferencing a full unsigned long,
+> > > > > regardless of the size of the actual variable. The unwanted bits
+> > > > > get masked away, but strictly speaking, a read beyond the end of
+> > > > > the target variable happens. Builds under -Warray-bounds complain
+> > > > > about this situation, for example:
+> > > > > 
+> > > > > In file included from ./include/linux/bitmap.h:9,
+> > > > >                  from drivers/iommu/intel/iommu.c:17:
+> > > > > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
+> > > > > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
+> > > > >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > > > >       |                                     ^~~~~
+> > > > > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
+> > > > >  2115 |         int pds, max_pde;
+> > > > >       |                  ^~~~~~~
+> > > 
+> > > The driver should be fixed. I would suggest using one of ffs/fls/ffz from
+> > > include/asm/bitops.h
+> > 
+> > I don't think it's a good API design to make developers choose between
+> > functions based on the size of their target.
 > 
->  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
->  {
-> -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-> +       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-> +              (kvm_mwait_in_guest(vcpu) || kvm_hlt_in_guest(vcpu));
->  }
+> Bitmap functions work identically for all sizes from 0 to INT_MAX - 1. 
+> Users don't 'choose between functions based on the size of their target'.
 > 
->  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
->  {
-> -       return kvm_x86_ops.set_hv_timer
-> -              && !(kvm_mwait_in_guest(vcpu->kvm) ||
-> -                   kvm_can_post_timer_interrupt(vcpu));
-> +       /*
-> +        * Don't use the hypervisor timer, a.k.a. VMX Preemption Timer, if the
-> +        * guest can execute MWAIT without exiting as the timer will stop
-> +        * counting if the core enters C3 or lower.  HLT in the guest is ok as
-> +        * HLT is effectively C1 and the timer counts in C0, C1, and C2.
-> +        *
-> +        * Don't use the hypervisor timer if KVM can post a timer interrupt to
-> +        * the guest since posted the timer avoids taking an extra a VM-Exit
-> +        * when the timer expires.
-> +        */
-> +       return kvm_x86_ops.set_hv_timer &&
-> +              !kvm_mwait_in_guest(vcpu->kvm) &&
-> +              !kvm_can_post_timer_interrupt(vcpu));
->  }
->  EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
-> 
+> Can you explain more what you mean?
 
-Sorry, I am little confused here now:
-if kvm_can_post_timer_interrupt(vcpu) return true(cpu-pm enabled), then the kvm_can_use_hv_timer will always be false;
-if kvm_can_post_timer_interrupt(vcpu) return false(cpu-pm disable),then kvm_mwait_in_guest(vcpu->kvm) can't be true ether;
-It seems we don't need kvm_mwait_in_guest(vcpu->kvm) here?
+I believe it was a reaction to your suggestion about ffs/ffz/etc.
 
-Sorry, I am just a little confused and not too sure about this, if anything wrong, just ignore it.
+Kees, if we _know_ that the size of the value in question will always
+fit 32/64-bit, then ffs/ffz/etc is okay to use. OTOH, if the type of
+that value is unsigned long [] and bitmap APIs() is used, then of
+course the consistent use of bitmap APIs is preferable.
 
-Thanks!
+I.o.w.
+ uXX: ffX()/etc is fine.
+ unsigned long: bitmap API.
+
+I believe that's what Yury meant.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

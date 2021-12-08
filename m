@@ -2,67 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404246D332
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBEA46D336
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbhLHMZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:25:23 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34970 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbhLHMZU (ORCPT
+        id S233309AbhLHMZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231708AbhLHMZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:25:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 728A6CE2103;
-        Wed,  8 Dec 2021 12:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70E0C00446;
-        Wed,  8 Dec 2021 12:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638966105;
-        bh=PVkkQFXWG4umRf60V6w6ydbBF3YnqKZE9jz7TAb1A80=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lSwMKS6ex2UKlsVAIL5RSkL4Y5cXPshRcPxd192LvWwy23FWPJ+Q6PDbsCO0XvxpI
-         BGxDr8dznjq1Dm2C9qBxZWoPNxGFsNZgoWVVRAa4C0M+2w5GCiPyFNEBCE5ZVHPAV2
-         jd3SuRMCVKElMUfTI07tokL3ggrs4UXX8XzJUXM0=
-Date:   Wed, 8 Dec 2021 13:21:42 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, benh@kernel.crashing.org,
-        BMC-SW@aspeedtech.com
-Subject: Re: [PATCH v3 0/4] Refactor Aspeed USB vhub driver
-Message-ID: <YbCjVqAie/d84oBm@kroah.com>
-References: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
+        Wed, 8 Dec 2021 07:25:31 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971ADC061746;
+        Wed,  8 Dec 2021 04:21:59 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id gu12so2078274qvb.6;
+        Wed, 08 Dec 2021 04:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8uy0DZF7lXHvcBRiAIjRsLK9cNEa6jf/rNNhdNudo5w=;
+        b=cHX2O0p2l777DDyIx13QKGz8UX24Uk7UaRJHIphrFXhWQpCdBq/STZ3JU+jBVhQXFQ
+         eEK73FHRc8ykrxIkcW7EwsQYpWU6hiH7uV8aTrQq5q6z9MvamNo8ByD3T0Q1O+bwdX9d
+         mrsXJpL6z7KG9Q+Tf/oWyZrkkY+sClbYwIw5oqyQ0fK7+JQrmG45imzLDKke4y2afb2Q
+         fZnfzwPckqBkkd1mqT5N+uYOuijVavructJJmCmCZHWTC9gwdoAAKeI8aKLjO1IBrob+
+         8x/McZkGWEFExIhOMVDwl+XJQT24Tq3BHUhgUtO0J+N9HOzAtgD0z8aYTJYyWd3YbQxd
+         HpMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8uy0DZF7lXHvcBRiAIjRsLK9cNEa6jf/rNNhdNudo5w=;
+        b=SgBqHCNhYLhlpFCPDif1zn63HLwkPeSV985+RUerw2ZadxthamHH9nHpZhU6JtBI1S
+         l1pWX25fKYugZRdJiShbAl82FrP0Pm7Gs/TG6wxQs7c1fLPgfwdptIDb8zYvqIxLV1o3
+         CQI9IY9SeYkQp2TNu0UswfvgKIdCvgTsmQ62Eic7NzA4Lot+NEdgvh11JZVbih9uxCNV
+         UsO78XqD281WJjAECNjS0B6gVwXDpc4anhvcC0amCsUKKVY//MoOJOL4QV5//87CS6CI
+         MKmEPekjOWgWffjY7DcU2WHR55+L7elFdUETgtEgrcUDacbKVVDRLhDceTZhlzXtQJrj
+         i0tw==
+X-Gm-Message-State: AOAM533GfvkG+SPGjevCeiREgxIk/8BQOhMl0WpyKA3BbwSdXdwlqocz
+        f2N16j288/79i96p1iHk9AwQ2HYcZYUkL+pS0tA=
+X-Google-Smtp-Source: ABdhPJw4YNDPavQA3I/O4k+Cm2sSpqxXToag596Tt+4b8OC+lHeBZ071Vp1j5+4JZaFFBqijN0cyCd68ufQr4+BQKxY=
+X-Received: by 2002:a05:6214:1909:: with SMTP id er9mr6882300qvb.118.1638966118601;
+ Wed, 08 Dec 2021 04:21:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
+References: <20211009221711.2315352-1-robimarko@gmail.com> <163890036783.24891.8718291787865192280.kvalo@kernel.org>
+In-Reply-To: <163890036783.24891.8718291787865192280.kvalo@kernel.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 8 Dec 2021 13:21:47 +0100
+Message-ID: <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com>
+Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF selection
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 06:05:41PM +0800, Neal Liu wrote:
-> These patch series include 2 parts. One is adding more features
-> to pass USB30CV compliance test, the other is fixing hw issues.
-> More detail descriptions are included below patchsets.
-> 
-> Change since v2:
-> - Add more description in changelog.
-> - Fix remote wakeup issue patch and make it more configurable.
-> 
-> Change since v1:
-> - Remove unnecessary configs for SET_CONFIGURATION.
-> - Separate supporting test mode to new patch.
-> 
-> *** BLURB HERE ***
+On Tue, 7 Dec 2021 at 19:06, Kalle Valo <kvalo@kernel.org> wrote:
+>
+> Robert Marko <robimarko@gmail.com> wrote:
+>
+> > Some ath10k IPQ40xx devices like the MikroTik hAP ac2 and ac3 require the
+> > BDF-s to be extracted from the device storage instead of shipping packaged
+> > API 2 BDF-s.
+> >
+> > This is required as MikroTik has started shipping boards that require BDF-s
+> > to be updated, as otherwise their WLAN performance really suffers.
+> > This is however impossible as the devices that require this are release
+> > under the same revision and its not possible to differentiate them from
+> > devices using the older BDF-s.
+> >
+> > In OpenWrt we are extracting the calibration data during runtime and we are
+> > able to extract the BDF-s in the same manner, however we cannot package the
+> > BDF-s to API 2 format on the fly and can only use API 1 to provide BDF-s on
+> > the fly.
+> > This is an issue as the ath10k driver explicitly looks only for the
+> > board.bin file and not for something like board-bus-device.bin like it does
+> > for pre-cal data.
+> > Due to this we have no way of providing correct BDF-s on the fly, so lets
+> > extend the ath10k driver to first look for BDF-s in the
+> > board-bus-device.bin format, for example: board-ahb-a800000.wifi.bin
+> > If that fails, look for the default board file name as defined previously.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+>
+> Can someone review this, please? I understand the need for this, but the board
+> handling is getting quite complex in ath10k so I'm hesitant.
+>
+> What about QCA6390 and other devices. Will they still work?
+Hi Kalle,
+everything else should just continue working as before unless the
+board-bus-device.bin file
+exists it will just use the current method to fetch the BDF.
 
-Blurb is missing :(
+Also, this only applies to API1 BDF-s.
+
+We are really needing this as currently there are devices with the
+wrong BDF being loaded as
+we have no way of knowing where MikroTik changed it and dynamic
+loading would resolve
+all of that since they are one of the rare vendors that embed the
+BDF-s next to calibration data.
+
+Regards,
+Robert
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/patch/20211009221711.2315352-1-robimarko@gmail.com/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+>

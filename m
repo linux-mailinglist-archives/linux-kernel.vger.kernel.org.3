@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC56846CA5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A4F46CA66
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243273AbhLHB6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S243292AbhLHB63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243240AbhLHB6W (ORCPT
+        with ESMTP id S243258AbhLHB6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:58:22 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E20BC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:54:51 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id lj10-20020a17090b344a00b001a653d07ad8so2757161pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:54:51 -0800 (PST)
+        Tue, 7 Dec 2021 20:58:24 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377F1C061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:54:53 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id x23-20020a634a17000000b003252e908ce3so456170pga.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:54:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=dJfQR7SNrodeHl+1uM4QnaH90bN7dxbb2nVm/KO0Fr0=;
-        b=E6q7ZoNKap3puayKpMyApx5aMM7cpIA29jNBAm9RU9qZ2GsBRZJfo9m90cE5YibjKS
-         /Oqgenvs55WfnwkYUvBoCk+My3oUfiaTjkyMxYFWO3kk1h8G8HtGhEo6Irx/isGI39P8
-         YAupJ+v5JJALrli/83tKDSLpVhDiUSKDU/wVs7ag7lbqCuykiVB1elNOTh55hiyT8D9v
-         jmnX+mcFaHf8KkrFeSKV3qxr2kd4tBBqfQlKRW6eshGxdpztNEqJsQJh8QwW4i9TNc0q
-         rlqaM09jieisbicgfB7o9jhF24ra4lV3zdBRr9IhEOVwZ6sT5TUz2j1F46A73P/S5cS7
-         l4RQ==
+        bh=ilHbL1zM5sA2K5veDQLis+uY2bL/xuS76iOY+nyTdGE=;
+        b=c5RtAmRaT2Y3w+R/IQqFpqUXhwlQrn4jp1yOv2W1qLQjnbCURiuvLhj9RrUC4pPDbo
+         5FJg5WrqcsuvvIAP3hE3YxaMAhxw9Q8Oe8omOqdEOMK5a3EUFxLvxajyDi2o5F4VNuIA
+         Uca6Jy4rZ9vxm9ykt1r7J3YMwFtaNOyVCsP1/xwsJ4MBBS5WPZ8oKDcTchv4BCQMmaSJ
+         p005rwSoJgFECwptXyt5k7t9BvTOCFpWNxnOnI7/HLtpGX/naDKiJxhOOr6UCmhuj6mh
+         OEi/V65CuC3hRc2HJmA5u1WrY5swWXD6xaEO89gSLS/yqycKxKM4g3jTVtwBi9f3ftn4
+         Y8OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=dJfQR7SNrodeHl+1uM4QnaH90bN7dxbb2nVm/KO0Fr0=;
-        b=k4jzA3N0tla47sxHZsIHw3UCloixX7MImoeCfUUzevLorU2MI7K5KaDvYdA+NX84eo
-         /vd7Z4xsu8nLOEdJLX7xy44WJIl9U2i4G4xbQDx2l0K1fqFWVDBarRNMaWG2eYfdaJfZ
-         4j2+jM9B5N8uWnxZeBuZ2JehZgUS/h0ADAW34Gc3uPfxlZwyCTqGK1LQRGgJcAN9cIx6
-         XBnluoTc2Oi57t6ot/ijbVPHYFnOYzFRw35CLoJzGCyozu9uAy6wO7z3vYo4OsoZaXmJ
-         G4YB/Qf49saIuhBcdQmzsE1ANP2g21lF9dqqfgc2jDIcbUGSKdyKRx1GlAgcCMEsO3tm
-         /WOA==
-X-Gm-Message-State: AOAM531Kzv8jZ8qoDKJtEoRLpQwTIRS7xwYFb4oziueqg5AOLMHB1qER
-        4sBLp0UEZpsXikFr2rt3pCROUV5eR9Y=
-X-Google-Smtp-Source: ABdhPJzRAo1jT1w67ssZL5EULvdAsrstbRdTXsE4od1JORZJT4BANLfRDFxRIq1Nz+VdNTWiu5B+Wyay4gI=
+        bh=ilHbL1zM5sA2K5veDQLis+uY2bL/xuS76iOY+nyTdGE=;
+        b=w5kwpHhvzsTrWfRrTlDnVo6miplMtWHNxarV9GOrHWvKa1AuSSLsqRUtFkR7UsBiiI
+         XRhBG9h6dQ0QbUHtT6ugUAYn3q1vblH6PNENzmkwLV+QiBGsySspmO3+ACJykpqPfltS
+         vm1Y0TfNYA0+gsYbWA+1LzKZOvwyaamDEFv8Tkml8MHFgi5ITRErzdLtQ4k7HuKAEcI1
+         pEFYD3Om0O4HeJ46nV4CME+y+cXqsPP7adFppIRtHLud8DHraIQUWEuDeUguy0DoI5jd
+         ahAnbWHhL8vJU0TPM+N7x03ufge0vWTY/B+AYG5NswY/arow+3Y1ClcvNdBiUmUgOMXT
+         hwAA==
+X-Gm-Message-State: AOAM532dMBetXbIyjiJ8Ijmwzeubt201t1VsaFHbrlPW+KfheDVfvNqb
+        GZRVIgvFLiA0QQKFsIFLFisczs+Io9Y=
+X-Google-Smtp-Source: ABdhPJwnOpyy2IErsNWYguDbB1MXtbsLB9E0BGGdyZgI+a9yD1F7l/JjN9pIk5ij2InfTRFDZI7vKkwBraY=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:903:300d:b0:142:744f:c74d with SMTP id
- o13-20020a170903300d00b00142744fc74dmr56964166pla.26.1638928490614; Tue, 07
- Dec 2021 17:54:50 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1486:: with SMTP id
+ js6mr342723pjb.0.1638928492264; Tue, 07 Dec 2021 17:54:52 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  8 Dec 2021 01:52:12 +0000
+Date:   Wed,  8 Dec 2021 01:52:13 +0000
 In-Reply-To: <20211208015236.1616697-1-seanjc@google.com>
-Message-Id: <20211208015236.1616697-3-seanjc@google.com>
+Message-Id: <20211208015236.1616697-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211208015236.1616697-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3 02/26] KVM: nVMX: Ensure vCPU honors event request if
- posting nested IRQ fails
+Subject: [PATCH v3 03/26] KVM: VMX: Clean up PI pre/post-block WARNs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Joerg Roedel <joro@8bytes.org>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -69,61 +67,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a memory barrier between writing vcpu->requests and reading
-vcpu->guest_mode to ensure the read is ordered after the write when
-(potentially) delivering an IRQ to L2 via nested posted interrupt.  If
-the request were to be completed after reading vcpu->mode, it would be
-possible for the target vCPU to enter the guest without posting the
-interrupt and without handling the event request.
+Move the WARN sanity checks out of the PI descriptor update loop so as
+not to spam the kernel log if the condition is violated and the update
+takes multiple attempts due to another writer.  This also eliminates a
+few extra uops from the retry path.
 
-Note, the barrier is only for documentation since atomic operations are
-serializing on x86.
+Technically not checking every attempt could mean KVM will now fail to
+WARN in a scenario that would have failed before, but any such failure
+would be inherently racy as some other agent (CPU or device) would have
+to concurrent modify the PI descriptor.
 
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Fixes: 6b6977117f50 ("KVM: nVMX: Fix races when sending nested PI while dest enters/leaves L2")
-Fixes: 705699a13994 ("KVM: nVMX: Enable nested posted interrupt processing")
+Add a helper to handle the actual write and more importantly to document
+why the write may need to be retried.
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/x86/kvm/vmx/posted_intr.c | 35 ++++++++++++++++++++++------------
+ 1 file changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index efcc5a58abbc..a94f0fb80fd4 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3941,6 +3941,19 @@ static int vmx_deliver_nested_posted_interrupt(struct kvm_vcpu *vcpu,
- 		 */
- 		vmx->nested.pi_pending = true;
- 		kvm_make_request(KVM_REQ_EVENT, vcpu);
-+
-+		/*
-+		 * This pairs with the smp_mb_*() after setting vcpu->mode in
-+		 * vcpu_enter_guest() to guarantee the vCPU sees the event
-+		 * request if triggering a posted interrupt "fails" because
-+		 * vcpu->mode != IN_GUEST_MODE.  The extra barrier is needed as
-+		 * the smb_wmb() in kvm_make_request() only ensures everything
-+		 * done before making the request is visible when the request
-+		 * is visible, it doesn't ensure ordering between the store to
-+		 * vcpu->requests and the load from vcpu->mode.
-+		 */
-+		smp_mb__after_atomic();
-+
- 		/* the PIR and ON have been set by L1. */
- 		if (!kvm_vcpu_trigger_posted_interrupt(vcpu, true))
- 			kvm_vcpu_kick(vcpu);
-@@ -3974,6 +3987,12 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
- 	if (pi_test_and_set_on(&vmx->pi_desc))
- 		return 0;
+diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+index 4db2b14ee7c6..88c53c521094 100644
+--- a/arch/x86/kvm/vmx/posted_intr.c
++++ b/arch/x86/kvm/vmx/posted_intr.c
+@@ -34,6 +34,20 @@ static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
+ 	return &(to_vmx(vcpu)->pi_desc);
+ }
  
++static int pi_try_set_control(struct pi_desc *pi_desc, u64 old, u64 new)
++{
 +	/*
-+	 * The implied barrier in pi_test_and_set_on() pairs with the smp_mb_*()
-+	 * after setting vcpu->mode in vcpu_enter_guest(), thus the vCPU is
-+	 * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
-+	 * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
++	 * PID.ON can be set at any time by a different vCPU or by hardware,
++	 * e.g. a device.  PID.control must be written atomically, and the
++	 * update must be retried with a fresh snapshot an ON change causes
++	 * the cmpxchg to fail.
 +	 */
- 	if (vcpu != kvm_get_running_vcpu() &&
- 	    !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
- 		kvm_vcpu_kick(vcpu);
++	if (cmpxchg64(&pi_desc->control, old, new) != old)
++		return -EBUSY;
++
++	return 0;
++}
++
+ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+ {
+ 	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+@@ -74,8 +88,7 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+ 
+ 		new.ndst = dest;
+ 		new.sn = 0;
+-	} while (cmpxchg64(&pi_desc->control, old.control,
+-			   new.control) != old.control);
++	} while (pi_try_set_control(pi_desc, old.control, new.control));
+ 
+ after_clear_sn:
+ 
+@@ -128,17 +141,17 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
+ 	if (!x2apic_mode)
+ 		dest = (dest << 8) & 0xFF00;
+ 
++	WARN(pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR,
++	     "Wakeup handler not enabled while the vCPU was blocking");
++
+ 	do {
+ 		old.control = new.control = READ_ONCE(pi_desc->control);
+-		WARN(old.nv != POSTED_INTR_WAKEUP_VECTOR,
+-		     "Wakeup handler not enabled while the VCPU is blocked\n");
+ 
+ 		new.ndst = dest;
+ 
+ 		/* set 'NV' to 'notification vector' */
+ 		new.nv = POSTED_INTR_VECTOR;
+-	} while (cmpxchg64(&pi_desc->control, old.control,
+-			   new.control) != old.control);
++	} while (pi_try_set_control(pi_desc, old.control, new.control));
+ 
+ 	vcpu->pre_pcpu = -1;
+ }
+@@ -173,17 +186,15 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+ 		      &per_cpu(blocked_vcpu_on_cpu, vcpu->cpu));
+ 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->cpu));
+ 
++	WARN(pi_desc->sn == 1,
++	     "Posted Interrupt Suppress Notification set before blocking");
++
+ 	do {
+ 		old.control = new.control = READ_ONCE(pi_desc->control);
+ 
+-		WARN((pi_desc->sn == 1),
+-		     "Warning: SN field of posted-interrupts "
+-		     "is set before blocking\n");
+-
+ 		/* set 'NV' to 'wakeup vector' */
+ 		new.nv = POSTED_INTR_WAKEUP_VECTOR;
+-	} while (cmpxchg64(&pi_desc->control, old.control,
+-			   new.control) != old.control);
++	} while (pi_try_set_control(pi_desc, old.control, new.control));
+ 
+ 	/* We should not block the vCPU if an interrupt is posted for it.  */
+ 	if (pi_test_on(pi_desc))
 -- 
 2.34.1.400.ga245620fadb-goog
 

@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C1146CA8B
+	by mail.lfdr.de (Postfix) with ESMTP id 8027746CA8A
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243596AbhLHB67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S243402AbhLHB65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243423AbhLHB6n (ORCPT
+        with ESMTP id S243323AbhLHB6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:58:43 -0500
+        Tue, 7 Dec 2021 20:58:44 -0500
 Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19605C0698C5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:55:09 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id w2-20020a627b02000000b0049fa951281fso690948pfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:55:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAB9C0698C7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:55:10 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id u4-20020a056a00098400b004946fc3e863so695724pfg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 17:55:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=RN6WvHTMttYY9G5+WvO2UU4giOt+jhBO4kXUEfmjbVY=;
-        b=ijxneh9EkX++RC8ZhHk1tJ6Zb7Yu7HTQmaTahYE7i+pCeGF9EJyb/lDqHnBsFGQJEV
-         ApQmbD5s1JrNnOUCGtZH31rfODOPlzdq3Bb1hGUJTcSrfxvdL4uo9q05pattTdOrzJap
-         /5XtsoYPuaiqXyhPY1u0N98R/HLDsAJv9sVcP+WFDb79RlMa6TiYUK7Gn1j0lZ00Ge/+
-         afrk3KdsTr2cZUjjuuhZnaLzF1TEjhdV/RMGHJTzer0BsCZyFzHAWKzuplz/wKHRBKmv
-         BxmJY04YnT5H8pRaGZeFejAdPOShDbmHQcURiEW0cVjT9L7VIL0fdrBkbHgfHnx7V4uD
-         fmog==
+        bh=Os9t3PK/1Q6X8L88GHE3qfHjmqX2bj+Lj4P7zobea20=;
+        b=GxPab2eAQ1zR+MIC7R4aaig3jil5DsGkCS9yQ8q4Z79CpuJL+SET/SFcCSTqFKGfUK
+         gGth0HAhK64hi3UbzwTDtSKi+AFgbtNUffEN1ZBuN/woQ+e3eq0NNOmE2fMddj5+Uvyn
+         A+fMa6DuJe95mkeMtBC1Djxf47VoYGT5YM9xlACTrUurxDi85vj+PbL3wpS8I6/hgUNP
+         720meHO9QbRwhUZavuQwNn52WMtS9s80CfHoA6jU1f4ho66MvnR/Mj0+HL5BL2QpcfrG
+         BQdDB1WB7G/IyCqL+oej6dueC+ctxa3Zk2OpwuNceFfyhWzVb8GwDbKw+FK2tGjukM5P
+         0CZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=RN6WvHTMttYY9G5+WvO2UU4giOt+jhBO4kXUEfmjbVY=;
-        b=oonxT4thVheixRUHsqzPkq2V3sv5UAM3FqQPnXGtoKhRIFbOhJVApRtGMKogBnefGc
-         nGMA60PsSQ5TC2rKWQvd6xk3ZC3GD3Oukl4tBsJ6wxl9HkTDXq2dtXnfJX96hNEz5eTY
-         V7p9AeZqcKAV/Yv4aCvxFp3avkmEg+cOECMPrkOtGuknRK/3LLAvMC/mKcZWPL3BJxE9
-         gwtmP0tNFO7Fex6Rb9iRqhU85o/7j28GmkP4vHmpNneqIBK3oZbVO3w7XG9Yjs3Q3g5T
-         WPLVw/ErG5xdPiu7HS6wp2k27CkmRztG/t+vU35YrUGkYSOOKI2ttD2SHgwx7IaWEeVQ
-         RtUg==
-X-Gm-Message-State: AOAM532NwSsKEsqfG7pJIOV++lfUzxs++lwWF/GDUpk/SCCIBcxEvInP
-        AH5t78HHLts33zCtmSFD9GIp+QETL5c=
-X-Google-Smtp-Source: ABdhPJwpV9KyfQg8BjQExB6hqkzZypTPztaQh+jY5QSQJCH5c9MrySGkChv+eh0Hm/a7Q2Bxuo/M4x5RTYI=
+        bh=Os9t3PK/1Q6X8L88GHE3qfHjmqX2bj+Lj4P7zobea20=;
+        b=3gTyBFUgiNnRgYFkaCAKsHSEwTRP+xCH6Zbf59hD+r3MXTZXi9x+xUIFM7rGjPXfN3
+         5HTjjSD/jdhe1sjsbc+AZSAaTOtJ2p3M5d62Cvk/E2FA0s/muONKMAZX6eNwdus17wuj
+         cfT2aH8ZAwQppX46iPOQ3KCsSbJzoMOL7ZgK5iC6bWDvo0ziVgIk9CPA0sPIlX9mA20K
+         GtQAJ8iFdfPPjOSXqLOnM0B78STyKXrORXK+A9DBdg9ombo98Is/VemcfLe1rrczw1pb
+         IUb5g/nOGfWPbAl7dOcnVcmIZ5OZBch6rAOFlG+r+wEl9Is5E8m7XSNmnY9CxM6wV5eY
+         /SBw==
+X-Gm-Message-State: AOAM530sTNrOWEb5obMLNXvxkqvUiwLndMGfPoc/boalZqOawtEk3V4b
+        tPvKwddBVKvUVF2XF+8SE137pSk8UvM=
+X-Google-Smtp-Source: ABdhPJxsMsSxtywu0s/1ig+ARF1hrT3HXASsf4sf2qoyLew9jB7OXnpi43IqnpO+NMpFJVnL2vJImWV0uqk=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:bf4a:: with SMTP id i10mr26354995pgo.196.1638928508625;
- Tue, 07 Dec 2021 17:55:08 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4a4d:: with SMTP id
+ lb13mr3543900pjb.97.1638928510003; Tue, 07 Dec 2021 17:55:10 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  8 Dec 2021 01:52:23 +0000
+Date:   Wed,  8 Dec 2021 01:52:24 +0000
 In-Reply-To: <20211208015236.1616697-1-seanjc@google.com>
-Message-Id: <20211208015236.1616697-14-seanjc@google.com>
+Message-Id: <20211208015236.1616697-15-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211208015236.1616697-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3 13/26] KVM: SVM: Use kvm_vcpu_is_blocking() in AVIC load to
- handle preemption
+Subject: [PATCH v3 14/26] KVM: SVM: Skip AVIC and IRTE updates when loading
+ blocking vCPU
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Joerg Roedel <joro@8bytes.org>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -68,99 +68,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kvm_vcpu_is_blocking() to determine whether or not the vCPU should be
-marked running during avic_vcpu_load().  Drop avic_is_running, which
-really should have been named "vcpu_is_not_blocking", as it tracked if
-the vCPU was blocking, not if it was actually running, e.g. it was set
-during svm_create_vcpu() when the vCPU was obviously not running.
-
-This is technically a teeny tiny functional change, as the vCPU will be
-marked IsRunning=1 on being reloaded if the vCPU is preempted between
-svm_vcpu_blocking() and prepare_to_rcuwait().  But that's a benign change
-as the vCPU will be marked IsRunning=0 when KVM voluntarily schedules out
-the vCPU.
+Don't bother updating the Physical APIC table or IRTE when loading a vCPU
+that is blocking, i.e. won't be marked IsRun{ning}=1, as the pCPU is
+queried if and only if IsRunning is '1'.  If the vCPU was migrated, the
+new pCPU will be picked up when avic_vcpu_load() is called by
+svm_vcpu_unblocking().
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/avic.c | 14 +++++++++-----
- arch/x86/kvm/svm/svm.c  |  6 ------
- arch/x86/kvm/svm/svm.h  |  1 -
- 3 files changed, 9 insertions(+), 12 deletions(-)
+ arch/x86/kvm/svm/avic.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
 diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 16e4ebd980a2..dc0cbe500106 100644
+index dc0cbe500106..0c6dfd85b3bb 100644
 --- a/arch/x86/kvm/svm/avic.c
 +++ b/arch/x86/kvm/svm/avic.c
-@@ -974,6 +974,7 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+@@ -974,7 +974,6 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
  {
  	u64 entry;
  	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
-+	bool is_blocking = kvm_vcpu_is_blocking(vcpu);
+-	bool is_blocking = kvm_vcpu_is_blocking(vcpu);
  	int h_physical_id = kvm_cpu_get_apicid(cpu);
  	struct vcpu_svm *svm = to_svm(vcpu);
  
-@@ -991,12 +992,17 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
+@@ -985,24 +984,25 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
+ 		return;
  
- 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
--	if (svm->avic_is_running)
-+
 +	/*
-+	 * Don't mark the vCPU as running if its blocking, i.e. if the vCPU is
-+	 * preempted after svm_vcpu_blocking() but before KVM voluntarily
-+	 * schedules out the vCPU.
++	 * No need to update anything if the vCPU is blocking, i.e. if the vCPU
++	 * is being scheduled in after being preempted.  The CPU entries in the
++	 * Physical APIC table and IRTE are consumed iff IsRun{ning} is '1'.
++	 * If the vCPU was migrated, its new CPU value will be stuffed when the
++	 * vCPU unblocks.
 +	 */
-+	if (!is_blocking)
- 		entry |= AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
++	if (kvm_vcpu_is_blocking(vcpu))
++		return;
++
+ 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
+ 	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+ 
+ 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
+ 	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
+-
+-	entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
+-
+-	/*
+-	 * Don't mark the vCPU as running if its blocking, i.e. if the vCPU is
+-	 * preempted after svm_vcpu_blocking() but before KVM voluntarily
+-	 * schedules out the vCPU.
+-	 */
+-	if (!is_blocking)
+-		entry |= AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
++	entry |= AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
  
  	WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
--	avic_update_iommu_vcpu_affinity(vcpu, h_physical_id,
--					svm->avic_is_running);
-+	avic_update_iommu_vcpu_affinity(vcpu, h_physical_id, !is_blocking);
+-	avic_update_iommu_vcpu_affinity(vcpu, h_physical_id, !is_blocking);
++	avic_update_iommu_vcpu_affinity(vcpu, h_physical_id, true);
  }
  
  void avic_vcpu_put(struct kvm_vcpu *vcpu)
-@@ -1017,11 +1023,9 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
-  */
- static void avic_set_running(struct kvm_vcpu *vcpu, bool is_run)
+@@ -1011,8 +1011,12 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
+ 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
+-	if (entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK)
+-		avic_update_iommu_vcpu_affinity(vcpu, -1, 0);
++
++	/* Nothing to do if IsRunning == '0' due to vCPU blocking. */
++	if (!(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK))
++		return;
++
++	avic_update_iommu_vcpu_affinity(vcpu, -1, 0);
+ 
+ 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
+ 	WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
+@@ -1043,5 +1047,6 @@ void svm_vcpu_blocking(struct kvm_vcpu *vcpu)
+ 
+ void svm_vcpu_unblocking(struct kvm_vcpu *vcpu)
  {
--	struct vcpu_svm *svm = to_svm(vcpu);
- 	int cpu = get_cpu();
- 
- 	WARN_ON(cpu != vcpu->cpu);
--	svm->avic_is_running = is_run;
- 
- 	if (kvm_vcpu_apicv_active(vcpu)) {
- 		if (is_run)
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 208566f63bce..dde0106ffc47 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1444,12 +1444,6 @@ static int svm_create_vcpu(struct kvm_vcpu *vcpu)
- 	if (err)
- 		goto error_free_vmsa_page;
- 
--	/* We initialize this flag to true to make sure that the is_running
--	 * bit would be set the first time the vcpu is loaded.
--	 */
--	if (irqchip_in_kernel(vcpu->kvm) && kvm_apicv_activated(vcpu->kvm))
--		svm->avic_is_running = true;
--
- 	svm->msrpm = svm_vcpu_alloc_msrpm();
- 	if (!svm->msrpm) {
- 		err = -ENOMEM;
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index ca51d6dfc8e6..83ced47fa9b9 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -226,7 +226,6 @@ struct vcpu_svm {
- 	u32 dfr_reg;
- 	struct page *avic_backing_page;
- 	u64 *avic_physical_id_cache;
--	bool avic_is_running;
- 
- 	/*
- 	 * Per-vcpu list of struct amd_svm_iommu_ir:
++
+ 	avic_set_running(vcpu, true);
+ }
 -- 
 2.34.1.400.ga245620fadb-goog
 

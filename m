@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A03D46DD1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4915C46DD1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 21:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbhLHUhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 15:37:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54402 "EHLO
+        id S240381AbhLHUhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 15:37:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54564 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbhLHUhY (ORCPT
+        with ESMTP id S240369AbhLHUhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 15:37:24 -0500
+        Wed, 8 Dec 2021 15:37:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51B60B82283
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BE0C00446;
-        Wed,  8 Dec 2021 20:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638995630;
-        bh=r1/q2rQ0/0tYGAU7ST7svoRBXsOnMiacT4GBfHWjxdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/fW5CAQfTPKV7dY2YpSc0nf28ZfU5WYILbZeoN/Br8Pb7agTZpThA1/8gfZ78yrf
-         em8fCmy113CGj84ziw60ukL50wqp8sWmkkF2lJOBG7FRDebRJnkg1hEYOGrOIGWkS/
-         xbwC8XwNrFZBGqUU4JfZDquY48fbbtVxJYM5dtkmphMMe57Uc5MbuwCysynOPrN0Dh
-         HR2b8KJHjQ0qdkxk4293ohUM1QihRnUp9ieLX/haPK6X+39ewvnooLAyWIGBJSLloO
-         xcuxFNLc8jpcxQQicYAphPca8CCtw8wsbMAdIWM1NpxFTLCveHF5XzWy33iZy4PCm6
-         ZajpDbIYrzROA==
-Date:   Wed, 8 Dec 2021 20:33:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
-        Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: max98357a: Add mixer control to mute/unmute speaker
-Message-ID: <YbEWqP6/TOCJn0gk@sirena.org.uk>
-References: <20211208185850.1555996-1-AjitKumar.Pandey@amd.com>
- <1571a09a-a766-a733-e23f-36cf1ab14b86@perex.cz>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 396DAB82284
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A61C00446;
+        Wed,  8 Dec 2021 20:34:01 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 15:34:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH 2/2] sched/tracing: Add TASK_RTLOCK_WAIT to
+ TASK_REPORT
+Message-ID: <20211208153400.1c97ad3c@gandalf.local.home>
+In-Reply-To: <20211129123601.2101873-3-valentin.schneider@arm.com>
+References: <20211129123601.2101873-1-valentin.schneider@arm.com>
+        <20211129123601.2101873-3-valentin.schneider@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TA1bawbBm9qo3pPG"
-Content-Disposition: inline
-In-Reply-To: <1571a09a-a766-a733-e23f-36cf1ab14b86@perex.cz>
-X-Cookie: Alex Haley was adopted!
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 29 Nov 2021 12:36:01 +0000
+Valentin Schneider <valentin.schneider@arm.com> wrote:
 
---TA1bawbBm9qo3pPG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
+> on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
+> 
+> The actual state is saved in p->saved_state, but reading it after reading
+> p->__state has a few issues:
+> o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
+> o ttwu_state_match() might have changed that to TASK_RUNNING
+> 
+> Add TASK_RTLOCK_WAIT to TASK_REPORT.
+> 
 
-On Wed, Dec 08, 2021 at 09:25:04PM +0100, Jaroslav Kysela wrote:
-> On 08. 12. 21 19:58, Ajit Kumar Pandey wrote:
-> > Add "Playback Switch" mixer control to mute or unmute speaker
-> > playback from ucm conf depend on use cases.
+The patch looks good, but I may play with it more. But in the mean time...
 
-> The "Playback Switch" is too short. It should be more specific (Headphone,
-> Speaker etc.).
+Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-The device is a speaker driver, it's likely to be getting a prefix added
-as it's bound into the machine driver if there's any issues here.
-
---TA1bawbBm9qo3pPG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGxFqcACgkQJNaLcl1U
-h9B8ZAf/UwgVSTLxxiaMAAeFArbqjreZZ+s4y1+l+ILfdze6v2axOfqMlvGgDZgT
-IF1tVBmcKT16JSQOdoRnx0Ca8h+LeHj6Oxa/3KMdB3IqXOmjr8Jt08/bxI/rZ4hE
-nSjONcl+0gDdbXXNJsyOXilXzQWrYENomcNbdAHjjkqTpDx+wLQjAr+5ssoJ0muO
-sSGAPxe6aYUHGSHgO4kwalfOOaY4ULFqOAWS3dPmgfb4R93r0+WURcBhrg8Dm0Ad
-pyEzt74ZEgKx/kTjP4ZX5oIkDuvKhg/S041WoCtdLah9k6yTeMc2x4HrTrK3fwlo
-hODKZLvxg9oiRe9zvJ89lpCdQRmAOQ==
-=IwSH
------END PGP SIGNATURE-----
-
---TA1bawbBm9qo3pPG--
+-- Steve

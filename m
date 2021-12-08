@@ -2,119 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF9446DE54
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F2446DE58
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbhLHW0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 17:26:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44708 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbhLHW0b (ORCPT
+        id S234852AbhLHW16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 17:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLHW15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 17:26:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 311A4B8228D;
-        Wed,  8 Dec 2021 22:22:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2345C341CC;
-        Wed,  8 Dec 2021 22:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639002176;
-        bh=eKFpyZC9BLvX9lVOCVzTFYu6b4aRhjKeW09ndCoDaCQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ev2xuooFgb69FmD7whpWXaPm0KWu6Cve7QUSR+Ie//5dYyRb8B7a2tIKS6zcVxkbo
-         2dWLTSem+a8m7AS4SSthCAc7sjW76wInQtk4Sv6Mx3ClklEtFTSZ/tohvSn2FGTV/L
-         Bf8lQkqfEnxplOQ/heoJy8Mt+1QvC8woT4dBjdeZkHegdNDLRx2NDCLJGqcx3bO7ns
-         Nd2BzH/dklX5K0M9LgLC9JqBD7MOC38N6VShkAmGcDoF7KUm7DfmNb9nqqGgtpwpuW
-         7f/JtzvB1V2MQOZjTWK1ml7PUzENfi+bTI46xBHx6grNvE2ydyyyqNdVIGNmEPRuED
-         cK7T/ck8Gyv2Q==
-Received: by mail-ed1-f46.google.com with SMTP id r25so13256456edq.7;
-        Wed, 08 Dec 2021 14:22:56 -0800 (PST)
-X-Gm-Message-State: AOAM533TwoaSU3JxEGLI8dB5oL9l55r4As+lKKBwZgTrAdpWY/Y2CW0G
-        EIsW9J1bTex+7xIPy1XygZYHlqkHgm3eeN+PNw==
-X-Google-Smtp-Source: ABdhPJxHHdaNJfvFi0sI/HjOkrWBWisEFUIu9ryX5hwydJP/Y5X5tZvxQ+QXhTZZyza5lIuAtjB5Y1K6ou/+yx97mFI=
-X-Received: by 2002:aa7:dc07:: with SMTP id b7mr22707726edu.327.1639002175205;
- Wed, 08 Dec 2021 14:22:55 -0800 (PST)
+        Wed, 8 Dec 2021 17:27:57 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B62EC061746;
+        Wed,  8 Dec 2021 14:24:25 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id v19so2496082plo.7;
+        Wed, 08 Dec 2021 14:24:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sjS5eItpdC2YAneQBFUzXQv4ThbjKdadvDzqHsuyyiM=;
+        b=TIHf2TuurWUu9NDI8Z+xbRQzvmAeW1uO9EmCg3dzjGBe1wTodqsbEUsPU3E9k1aRMS
+         uwQN5CZiRVsgqo/svigGIlw6YvFhQHDpInen7oDbAoHOLbCgwkGiPa0ub4mroYwr/3Xc
+         P9NztxUTA90bhIbDLRwZGzOhINfOuAXVFyM263s6x2XP6ZbyAgbVs2t2/U+8Y5L1Nqxc
+         wPwlaRQR7toRKBTfsvrUZeV5l1ciuhVeoGQ70mVLrRKyuSgCaT+Xn9CnNrEM9yduhx05
+         8EK35dj7f1hSLiD25/GeRF9iSY3AF3x8TWdd3LwsOgiOUqnb+//m0V0yXv42GKx3w2oD
+         tCrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sjS5eItpdC2YAneQBFUzXQv4ThbjKdadvDzqHsuyyiM=;
+        b=1kIIyIKgLURiTyxKKw4VBkF1vU3C6A58UXXdySrY2k+53tWAmxooaMRUzJX3wrLlaS
+         UGAxESE1evlmaxPySh6Vym1We4p3ihWoOeN6i7SVfOngrW/TMnOIEtk9mpsXNuF/DnYy
+         mA5CZH7pDpVyjGPeZVGhQmpnUCiW6sVyDLVqVdKFhAXXe63FLPTXtU7cWMdFU95uYSVh
+         WR1kIOXHZJSRpj+oHQb5ph6e5661DSzHdMATTwq5ExSAcd2tN56wklu4evYjQJqvlWQ5
+         u8tJD0qq4Nd2mt8sgfqKLCLW0YFD84otEpmqzh86PTjr6cDs5SLjNnzJUAKsRbhB9s0f
+         gGPQ==
+X-Gm-Message-State: AOAM533XHfn6XqVE/DmKjdv8HcxJne6QbDA/9T1RUXMyE4vBZ98XHzGK
+        wpJYDw65Fvr+qyFPTy4S5rE=
+X-Google-Smtp-Source: ABdhPJwup0a/qCgp+cDVkP8fXKl8o0ew7hh/iIElik2tQE7jRVCrx4qSZdmdxXE7A7GPoVBd6YeKKQ==
+X-Received: by 2002:a17:902:6b47:b0:142:82e1:6c92 with SMTP id g7-20020a1709026b4700b0014282e16c92mr62484623plt.84.1639002264505;
+        Wed, 08 Dec 2021 14:24:24 -0800 (PST)
+Received: from sol (14-201-12-235.tpgi.com.au. [14.201.12.235])
+        by smtp.gmail.com with ESMTPSA id ml24sm3652070pjb.16.2021.12.08.14.24.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 14:24:23 -0800 (PST)
+Date:   Thu, 9 Dec 2021 06:24:17 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        brgl@bgdev.pl, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [RFC v3 09/12] gpiolib: cdev: Add hardware timestamp clock type
+Message-ID: <20211208222417.GA4654@sol>
+References: <20211123193039.25154-1-dipenp@nvidia.com>
+ <20211123193039.25154-10-dipenp@nvidia.com>
+ <20211126013137.GC10380@sol>
+ <9ad666ec-eedd-8075-73e6-1e47a1eb228b@nvidia.com>
+ <20211201171638.GA31045@sol>
+ <4c7c3db1-a1b3-1944-4278-cb37e8a4f373@nvidia.com>
+ <20211202005349.GA7007@sol>
+ <395ba111-d620-f302-d0e7-8f20f39e6485@nvidia.com>
+ <9e53c30f-63e5-b2ca-a2ef-f85dab596b3c@nvidia.com>
 MIME-Version: 1.0
-References: <20211208040432.3658355-1-f.fainelli@gmail.com>
- <20211208040432.3658355-7-f.fainelli@gmail.com> <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
- <536cbdb6-a541-2f86-faa6-acb1a4e1c173@gmail.com> <CAL_JsqKVnX554xD4bNXk2KsWP2kXR7Lv33Q=7qMvY_gXiEAcWA@mail.gmail.com>
-In-Reply-To: <CAL_JsqKVnX554xD4bNXk2KsWP2kXR7Lv33Q=7qMvY_gXiEAcWA@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 8 Dec 2021 16:22:43 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL=M299E4jh6FxuE_TSHK4=71Pt4kc=3nbNj5TpRcsZjA@mail.gmail.com>
-Message-ID: <CAL_JsqL=M299E4jh6FxuE_TSHK4=71Pt4kc=3nbNj5TpRcsZjA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e53c30f-63e5-b2ca-a2ef-f85dab596b3c@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 4:21 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Dec 8, 2021 at 11:32 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Wed, Dec 08, 2021 at 12:14:36PM -0800, Dipen Patel wrote:
+> Hi,
+> 
+> On 12/7/21 5:42 PM, Dipen Patel wrote:
+> > On 12/1/21 4:53 PM, Kent Gibson wrote:
+> >> On Wed, Dec 01, 2021 at 10:01:46AM -0800, Dipen Patel wrote:
+> >>> Hi,
+> >>>
+> >>>
+> >>> On 12/1/21 9:16 AM, Kent Gibson wrote:
+> >>>> On Tue, Nov 30, 2021 at 07:29:20PM -0800, Dipen Patel wrote:
+> >>>>>
+> >>>>>> [snip]
+> >>>>>>> +	if (line->dir >= HTE_DIR_NOSUPP) {
+> >>>>>>> +		eflags = READ_ONCE(line->eflags);
+> >>>>>>> +		if (eflags == GPIO_V2_LINE_FLAG_EDGE_BOTH) {
+> >>>>>>> +			int level = gpiod_get_value_cansleep(line->desc);
+> >>>>>>> +
+> >>>>>>> +			if (level)
+> >>>>>>> +				/* Emit low-to-high event */
+> >>>>>>> +				le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
+> >>>>>>> +			else
+> >>>>>>> +				/* Emit high-to-low event */
+> >>>>>>> +				le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
+> >>>>>>> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_RISING) {
+> >>>>>>> +			/* Emit low-to-high event */
+> >>>>>>> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
+> >>>>>>> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_FALLING) {
+> >>>>>>> +			/* Emit high-to-low event */
+> >>>>>>> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
+> >>>>>>> +		} else {
+> >>>>>>> +			return HTE_CB_ERROR;
+> >>>>>>> +		}
+> >>>>>>> +	} else {
+> >>>>>>> +		if (line->dir == HTE_RISING_EDGE_TS)
+> >>>>>>> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
+> >>>>>>> +		else
+> >>>>>>> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
+> >>>>>>> +	}
+> >>>>>> The mapping from line->dir to le.id needs to take into account the active
+> >>>>>> low setting for the line.
+> >>>>>>
+> >>>>>> And it might be simpler if the hte_ts_data provided the level, equivalent
+> >>>>>> to gpiod_get_raw_value_cansleep(), rather than an edge direction, so you
+> >>>>>> can provide a common helper to determine the edge given the raw level.
+> >>>>> (So from the level determine the edge?) that sound right specially when
+> >>>>>
+> >>>>> HTE provider has capability to record the edge in that case why bother
+> >>>>>
+> >>>>> getting the level and determine edge?
+> >>>>>
+> >>>>> Calculating the edge from the level makes sense when hte provider does not
+> >>>>>
+> >>>>> have that feature and that is what if (line->dir >= HTE_DIR_NOSUPP) does.
+> >>>>>
+> >>>> As asked in the review of patch 02, do you have an example of hardware that
+> >>>> reports an edge direction rather than NOSUPP?
+> >>> No...
+> >> So you are adding an interface that nothing will currently use.
+> >> Are there plans for hardware that will report the edge, and you are
+> >> laying the groundwork here?
+> > Adding here for the general case should there be provider
 > >
-> > On 12/8/21 5:44 AM, Rob Herring wrote:
-> > > On Tue, 07 Dec 2021 20:04:32 -0800, Florian Fainelli wrote:
-> > >> Conver the iProc PCIe controller Device Tree binding to YAML now that
-> > >> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
-> > >>
-> > >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> > >> ---
-> > >>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
-> > >>  .../bindings/pci/brcm,iproc-pcie.yaml         | 176 ++++++++++++++++++
-> > >>  2 files changed, 176 insertions(+), 133 deletions(-)
-> > >>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
-> > >>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
-> > >>
-> > >
-> > > Running 'make dtbs_check' with the schema in this patch gives the
-> > > following warnings. Consider if they are expected or the schema is
-> > > incorrect. These may not be new warnings.
-> > >
-> > > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > > This will change in the future.
-> > >
-> > > Full log is available here: https://patchwork.ozlabs.org/patch/1565076
-> > >
-> > >
-> > > pcie@18012000: msi-controller: 'oneOf' conditional failed, one must be fixed:
-> > >       arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dt.yaml
-> > >       arch/arm/boot/dts/bcm911360_entphn.dt.yaml
-> > >       arch/arm/boot/dts/bcm911360k.dt.yaml
-> > >       arch/arm/boot/dts/bcm958300k.dt.yaml
-> > >       arch/arm/boot/dts/bcm958305k.dt.yaml
-> > >       arch/arm/boot/dts/bcm958522er.dt.yaml
-> > >       arch/arm/boot/dts/bcm958525er.dt.yaml
-> > >       arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> > >       arch/arm/boot/dts/bcm958622hr.dt.yaml
-> > >       arch/arm/boot/dts/bcm958623hr.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625hr.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625k.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> > >       arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> > >       arch/arm/boot/dts/bcm988312hr.dt.yaml
-> >
-> > Those would mean that the binding patch was applied without the DTS
-> > patches earlier in the series?
->
-> Right. I generally don't look at dts patches, but I did look at these
-> and don't see how this one is fixed (nor caused):
+> > available with such feature.
+> 
+> I have a doubt as below on how edge_irq_thread calculates le.id (Only for
+> 
+> gpiod_get_value_cansleep case), i believe clearing that doubt will help me properly
+> 
+> address this issue:
+> 
+> - Does it have potential to read level which might have changed by the time thread is run?
+> 
 
-Note that unevaluatedProperties is only enabled in the dtschema main branch.
+Yes it does.
 
-Rob
+> - Does it make sense to read it in edge_irq_handler instead at least of the chip which can
+> 
+> fetch the level without needing to sleep?
+> 
+
+That would not make it any more valid.  There is an inherent race there
+- that is the nature of the irq interface.
+The existing code does the best it can in the circumstances - for the
+more likely case that there isn't another edge between the interrupt
+handler and thread.
+
+The hte can do better - assumung it has hardware capable of providing the
+edge as well as the timestamp.
+
+Cheers,
+Kent.

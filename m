@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3907E46C872
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37CA46C88A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242706AbhLHAIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:08:19 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46270 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242690AbhLHAIR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:08:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 57E19CE1ECA;
-        Wed,  8 Dec 2021 00:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 029FDC341C5;
-        Wed,  8 Dec 2021 00:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638921883;
-        bh=HVrBSNB36jTypNFFUkXDJkWXugeWW3Ecpo4AdjI1ygY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZQQ6iAWGMymuF120zo9dKdNCNl6eiU0cit85AlJYyJtoyas5S2UxPHX3o0cwT+hbB
-         6yZQWUwsq76lATHtSVWBBzKLe5DlV3CIm0UHUJ2LgtEPbbWIxB4Hy3WLd4uxZP3G9n
-         J7oyyuFhuBhr/ng8e8+XaCRwGymOuT6GAg4NYmVEBmfTtuysf7jhzYEQVLoVovcocd
-         oRKJJesq8Jds5eAAeAdR+mwpQZN1YS+tDeLsogONg62v3noNXxvs/caRH2BHv6f2k1
-         7+T1bWmkbpJw/tnftpXDI2PiGYAYTHAbBoZd8NbUJGqi+8qTo7lvPEmX1CCg58kHgB
-         8BLzHqHVtZGeA==
-Date:   Tue, 7 Dec 2021 18:10:13 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] dmaengine: at_xdmac: Use struct_size() in
- devm_kzalloc()
-Message-ID: <20211208001013.GA62330@embeddedor>
+        id S242761AbhLHAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:14:51 -0500
+Received: from mga14.intel.com ([192.55.52.115]:60042 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233913AbhLHAOu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 19:14:50 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237949433"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="237949433"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 16:11:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="657960036"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 16:11:17 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mukYG-000N6h-RC; Wed, 08 Dec 2021 00:11:16 +0000
+Date:   Wed, 8 Dec 2021 08:10:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 39/40] arch/riscv/kvm/aia_aplic.c:254:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202112080820.BR1BIqGS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version, in
-order to avoid any potential type mistakes or integer overflows that, in
-the worst scenario, could lead to heap overflows.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   eb55ca3817a59020fc1e3d5a5de0a5adcebbedd0
+commit: dc0299fdaf9714a56b13b955c086bab2f8bd4046 [39/40] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-c006-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080820.BR1BIqGS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/dc0299fdaf9714a56b13b955c086bab2f8bd4046
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout dc0299fdaf9714a56b13b955c086bab2f8bd4046
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Link: https://github.com/KSPP/linux/issues/160
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kvm/aia_aplic.c:254:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:293:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:254:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:242:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +254 arch/riscv/kvm/aia_aplic.c
+
+   238	
+   239	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   240	{
+   241		u32 target;
+   242		bool inject, ie;
+   243		unsigned long flags;
+   244		struct aplic_irq *irqd;
+   245		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   246	
+   247		if (!aplic || !source || (aplic->nr_irqs <= source))
+   248			return -ENODEV;
+   249		irqd = &aplic->irqs[source];
+   250		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   251	
+   252		raw_spin_lock_irqsave(&irqd->lock, flags);
+   253	
+ > 254		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   255			goto skip_unlock;
+   256	
+   257		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   258		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   259			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   260			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   261				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   262			break;
+   263		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   264			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   265			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   266				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   267			break;
+   268		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   270				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   271			break;
+   272		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   273			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   274				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   275			break;
+   276		}
+   277	
+   278		if (level)
+   279			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   280		else
+   281			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   282	
+   283		inject = false;
+   284		target = irqd->target;
+   285		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   286			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   287			inject = true;
+   288		}
+   289	
+   290	skip_unlock:
+   291		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   292	
+   293		if (inject)
+   294			aplic_inject_msi(kvm, source, target);
+   295	
+   296		return 0;
+   297	}
+   298	
+
 ---
- drivers/dma/at_xdmac.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index 275a76f188ae..e42dede5b243 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -2031,7 +2031,7 @@ static int __maybe_unused atmel_xdmac_resume(struct device *dev)
- static int at_xdmac_probe(struct platform_device *pdev)
- {
- 	struct at_xdmac	*atxdmac;
--	int		irq, size, nr_channels, i, ret;
-+	int		irq, nr_channels, i, ret;
- 	void __iomem	*base;
- 	u32		reg;
- 
-@@ -2056,9 +2056,9 @@ static int at_xdmac_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	size = sizeof(*atxdmac);
--	size += nr_channels * sizeof(struct at_xdmac_chan);
--	atxdmac = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	atxdmac = devm_kzalloc(&pdev->dev,
-+			       struct_size(atxdmac, chan, nr_channels),
-+			       GFP_KERNEL);
- 	if (!atxdmac) {
- 		dev_err(&pdev->dev, "can't allocate at_xdmac structure\n");
- 		return -ENOMEM;
--- 
-2.27.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

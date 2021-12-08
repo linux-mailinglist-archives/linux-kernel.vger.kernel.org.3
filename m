@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0FC46DA6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D12C46DA55
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbhLHR5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:57:24 -0500
-Received: from mga07.intel.com ([134.134.136.100]:35194 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232466AbhLHR5X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:57:23 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301273654"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="301273654"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 09:46:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="612171811"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2021 09:46:52 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mv11n-0000sI-AZ; Wed, 08 Dec 2021 17:46:51 +0000
-Date:   Thu, 9 Dec 2021 01:46:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:linkage/alias-rework 5/7] string.c:(.text+0x528): multiple
- definition of `strchr'; arch/arm64/lib/strchr.o:(.text+0x0): first defined
- here
-Message-ID: <202112090138.feHj3vrq-lkp@intel.com>
+        id S235929AbhLHRug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233461AbhLHRue (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 12:50:34 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953A9C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:47:02 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id y13so10884740edd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 09:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+Me5M3lRIZLgtk8qeyGmh+ByAqQiPLn6X05f8coJ3JQ=;
+        b=sWzuRg45lJFUhXEf+A00DwWOCnBBM10OiQMRIhD1kuadTvqcEictGw/4EdwTcmNNqT
+         i2XfHqiw5ezLQX/sTo6VOq3ssexr5QdfMvbTl9ZJqc1C29dN6rBd5a9pDeIrxjYw0cED
+         EFZkYXcM3ig1NnktSq5GKBgc0Oao/DhN6yROA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+Me5M3lRIZLgtk8qeyGmh+ByAqQiPLn6X05f8coJ3JQ=;
+        b=FeeOsPJqJ+v7dXIE1XhepgTkYdP00yyYJ4n9HnZ3awRr62V3RT7RPRUgGrB4tYhd3x
+         6xh8KNgmMMSDLCcpPTYZ9G+FCLQGKD5W3laSZ8FrbzV2HcJ9koc3nR4gmTMEmHyqc0LF
+         oDmjxO301leA8DS6P9OU/o5NNIsulluUaZChnyCunGJIJ8nbSzFCqy+056q32yEGU0SA
+         2YJ6wTmkhz/QIvkRyOt4Kh83GHvrbje7sse7KIL1qgIXl8+H3rqHIlyXry98yyqgzqDr
+         g5Osd7Pt/vwi+VRc/zjiEhqK3qAtpphBtQ1TvFbpG5QGB5fGXcceVD80VMfShPBJdvSV
+         pHtg==
+X-Gm-Message-State: AOAM533hF3mjPJZAD9duMxjrtGvPKz/7AGl/IdWR7nvRtZ7a7gntBpkG
+        IMzc9BwKI1xTrLE23z4164rUcw==
+X-Google-Smtp-Source: ABdhPJztgW4iiSaTnuPGMua3NeMaey4mPTWIgLE/A7qMgk6EBKjA7tz2niYFGxdnJ6qWOCFInWfDZg==
+X-Received: by 2002:a05:6402:11d2:: with SMTP id j18mr22018992edw.318.1638985620992;
+        Wed, 08 Dec 2021 09:47:00 -0800 (PST)
+Received: from localhost ([2620:10d:c093:400::5:c7b3])
+        by smtp.gmail.com with ESMTPSA id y19sm2373320edq.2.2021.12.08.09.47.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 09:47:00 -0800 (PST)
+Date:   Wed, 8 Dec 2021 17:47:00 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>, Minchan Kim <minchan@kernel.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] mm: count zram read/write into PSI_IO_WAIT
+Message-ID: <YbDvlJFlLYF4X7P6@chrisdown.name>
+References: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
+ <CAGWkznHq15QN5Dn6_QfbAm7jS9OPCV4TVqn2_9RxUBx0V9v78w@mail.gmail.com>
+ <Yaj0KTp17AaHMQyC@cmpxchg.org>
+ <CAGWkznEHTVJzrCqfZRSHN=HtFjKHBGy0yyxpK8paP+9W1DsX_w@mail.gmail.com>
+ <YbDvMqgRxBe3IPVS@chrisdown.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YbDvMqgRxBe3IPVS@chrisdown.name>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-head:   869f25744367b7ec5fb196d9c92acadfbfe87419
-commit: 3bba704175bd8bcb979b1924d650350a08587257 [5/7] arm64: clean up symbol aliasing
-config: arm64-buildonly-randconfig-r004-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090138.feHj3vrq-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=3bba704175bd8bcb979b1924d650350a08587257
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark linkage/alias-rework
-        git checkout 3bba704175bd8bcb979b1924d650350a08587257
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+Chris Down writes:
+>I'm with Johannes here, I think this would actively make memory 
+>pressure monitoring less useful. This is a NAK from my perspective as 
+>someone who actually uses these things in production.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   aarch64-linux-ld: lib/string.o: in function `strchr':
->> string.c:(.text+0x528): multiple definition of `strchr'; arch/arm64/lib/strchr.o:(.text+0x0): first defined here
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+s/memory/io/

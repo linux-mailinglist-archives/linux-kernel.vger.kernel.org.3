@@ -2,264 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E5A46D4F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FBD46D4FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234554AbhLHOCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234516AbhLHOCn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:02:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE0C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 05:59:12 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muxTM-0003RN-WC; Wed, 08 Dec 2021 14:59:05 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muxTL-003Pmj-Ms; Wed, 08 Dec 2021 14:59:02 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muxTK-0001f2-Lh; Wed, 08 Dec 2021 14:59:02 +0100
-Date:   Wed, 8 Dec 2021 14:59:02 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     David Jander <david@protonic.nl>
-Cc:     David Lechner <david@lechnology.com>, linux-iio@vger.kernel.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v1] counter: interrupt-cnt: add counter_push_event()
-Message-ID: <20211208135902.7j3aawytt3jlqgwr@pengutronix.de>
-References: <20211123134540.416695-1-o.rempel@pengutronix.de>
- <YZ3XAeYyfGblfaOi@shinobu>
- <20211124072720.GA30281@pengutronix.de>
- <YZ7tv79LQwLL7h3T@shinobu>
- <f73650b6-5a08-9ea9-9ecb-c47665ef07b0@lechnology.com>
- <20211207081602.45b1423c@erd992>
+        id S234567AbhLHOHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:07:10 -0500
+Received: from mail-sgaapc01on2131.outbound.protection.outlook.com ([40.107.215.131]:61952
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234558AbhLHOHJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:07:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l0RhKSIOY3jyDhVXH/nw+P4ubQ/hAHymchiQLifAcaa2X6fP1OthN6NQmGzG5iLBNkSyKCOVAgOLA9l4WvypUuaSrOxGHI1BRYAGHBuK2043nnCboj9p/c7Te/ImXPGyZZyDZWlylMaygdd+MU6rEqaEOc/b7q+g4SGCG1Z3T3FI5Dx+Alb4fckYZ/pZ1YWXEIO2dncaDIq2SsqtlyGLurmAcYv3AFGdfsu/CEN8okeikOB5h/o9wM3JNntnVSx+rJdI7Sn4XTRPjLYIUSdZiMrsyg8Q8RuPjlFMcaHF9edj3Aj2OEx/OnGinTWHK+VWBRrGMNpeqDpCxpVxFrQyvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QACqvXK35GRapg/0GlE17KHkC7RdKAoUCwoHF6Lul5o=;
+ b=Y/gGUGhL+Rw0HCuEUzKY9iHDZoRAaq1BS7GWPwK9c2ji9xO5IaGP+S4LzRxEL/2UqTsrb5bP3tRU/B+iYJbzNOFJBoXHfUDBvvY6adUKr2UXlhV11jVX2Wb79Hqi0bY6tyI5uba2OAssd5cn9ebNsNIwl/wkYqLelKS74V1/k6mRO6rdYAkQEOGhm1Bu6XAa48Qyw2L2JAQe989oXpRkWrHqwMC0Xsf/nuFSea7iqfJ9T2ie9seXHT9K5gZSNWu60M/q6tkGMQXgF/Gz3t+6N0ok5SJSIfox++gk01J0ZRNjjMWtXEAuBgDTcXWBQUDG3p6nI6o1drWjGzWsuOZnJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QACqvXK35GRapg/0GlE17KHkC7RdKAoUCwoHF6Lul5o=;
+ b=DVx6nO4VlpHGnqEqIhg5yUrr34oC833wNJu7/lBzyOvEthLLlvBCGDBaoXiPxvRUNFsW3mpNtt02FaVVniSKuheAMEe8OjBLGmcjEw6CYayaOOPQRLnlGhjtWNXVv8cZyTMzssKclTPMNCYaG9P/eoox69MFIBps6kX3gcJ3oyw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TY2PR06MB2462.apcprd06.prod.outlook.com (2603:1096:404:4d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22; Wed, 8 Dec
+ 2021 14:03:34 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.023; Wed, 8 Dec 2021
+ 14:03:34 +0000
+Message-ID: <a0f8b64e-7086-b23a-acc6-dd3255d33fc7@vivo.com>
+Date:   Wed, 8 Dec 2021 22:03:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] bus: mhi: core: replace snprintf with sysfs_emit
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Hemant Kumar <hemantk@codeaurora.org>,
+        Bhaumik Bhatt <bbhatt@codeaurora.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Carl Yin <carl.yin@quectel.com>,
+        Carl Huang <cjhuang@codeaurora.org>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@vivo.com
+References: <20211208080816.43351-1-hanyihao@vivo.com>
+ <AJgA9gCdE-A6eTTRwvPvy4qL.9.1638951289781.Hmail.hanyihao@vivo.com.@PFliQnBjSkxVUVVZSHlnR01Aa3JvYWguY29tPg==>
+From:   Yihao Han <hanyihao@vivo.com>
+In-Reply-To: <AJgA9gCdE-A6eTTRwvPvy4qL.9.1638951289781.Hmail.hanyihao@vivo.com.@PFliQnBjSkxVUVVZSHlnR01Aa3JvYWguY29tPg==>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR06CA0003.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::15) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mkfxf4qp7vifqjee"
-Content-Disposition: inline
-In-Reply-To: <20211207081602.45b1423c@erd992>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Received: from [172.22.218.34] (218.213.202.189) by HK2PR06CA0003.apcprd06.prod.outlook.com (2603:1096:202:2e::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22 via Frontend Transport; Wed, 8 Dec 2021 14:03:33 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5d10e652-15cc-44e8-4a66-08d9ba5385fa
+X-MS-TrafficTypeDiagnostic: TY2PR06MB2462:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR06MB2462A0CEDB1929C4C451A0A1A26F9@TY2PR06MB2462.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1388;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OiGXdRPfuX0mYpID/6n9kXzLKcxlvF6CRQwDues+fCT7xVsFH0mGUBXB/YxlerOSmtXUR6htCKsBuA41dnThkUlFldbxS8Hh7BjXAs1YG7w9FSU0yLlxaif3Hv2HNisEG9uM9R4y3vb6lVY10L+QSrFjdTV5p6EUrR7ru/DxUAtg+LlFNX4Q0zAHG1tHWtC3Cv7LhawahGez/RIFYQQEhESCj7dARRCeyNmEKk7ovbZ8saKg3b5RltfYYf577VzT9FiEwXP94ZEvOr+VfXXK37s2A+CG2phICqgvYmq43BLonuqFgTmluVOkdUSl/K4lQYUc/VwuLTN+eQTRmK1LVp99oaH/VQgNIh8cN0I1jsaNt2uODg/QPklj3SJSvR+d67/isGhspgWCI3qUKtS671E6Oyoadew8U9ff2GO8WTCDZ6HGtXi+e3vVqVppLYyLGv/jGDGXdnNZpzAP9unt0a9awpu9t5eL9qqEhvH4RaUB91FYopQs+KD3wIhUa5FOiSev33vAr/PCet03MUCOO9NEM03G55+EgtqVLoecdU5YudhXEEfPsGzcwmoJ7gf48I7VO3WJ9V0gB+o9058oWFyBFvGZBz5xTCgwhmqi0AChdLP8FN6DiAH3z7LDe37M7/ILh1dny5PcpZ07VMzWFBKUDBae23WNgkNo3VrbCZL94QQKlEi/0Bpis2PYTFlLZqaWTpTkIrBcRxmbWG4Zz0uBl0BgTm6SdK68ltnIAHrRXDA5tA6LCvALkxBV23aVcMmAHZiTHGUC6Ly/Q3DuAg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(186003)(508600001)(107886003)(83380400001)(4326008)(26005)(16576012)(86362001)(6486002)(7416002)(316002)(54906003)(5660300002)(6916009)(38350700002)(8936002)(36756003)(2616005)(8676002)(38100700002)(956004)(66946007)(52116002)(2906002)(66556008)(31696002)(31686004)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0VmWTZsQzdwa25KWmgyMllpOTViNW1jQWxKQWVsbWJVNENiMmk0bUkwRll1?=
+ =?utf-8?B?NDZ0U1NHRU5IR3VJMXFscjZONjd3S3hwcmYyMzRta2JnZXZsclFiNUpNVnVL?=
+ =?utf-8?B?VHdXcUl6MHQycDF3Mjk1UHIyZVU0Vk5uY3I3UTdzZnYzQUlWaW1zMnJDeGs5?=
+ =?utf-8?B?YmxEY3c2NFRxZWJwUjlxTlhYYU9ybTUxNjc2RDFwNWdzVXdnUU50NmM4VHhr?=
+ =?utf-8?B?WkVPOS8vUGdvRklPVGQwVW5qS2l3eFVIbHJIWmJhNE5VcUp0SkpLZXpuNDZQ?=
+ =?utf-8?B?UzRrd1BLVDl2dGFHNTBrZ2V3WGtyMjlWejFiUUNUNUxwVkVWYytEdHZ6ZTZ5?=
+ =?utf-8?B?NENoSEpDSExVWjRDWE90RVFkQ3JLYVUrYVEzcnRmODZyTklzdTNpTE5HYURm?=
+ =?utf-8?B?bXExcnRhZWRqMGVXVjlCQjRjNlhvWVJqWjhYUGRJRFhicWo5TkdEVCtBblc5?=
+ =?utf-8?B?MFprSEJMMGZNdnkxNXJNVkI2K1V2T2JhVzZSVjVzWlJuZHY1NTFFdTE1MFJT?=
+ =?utf-8?B?RDZZZ2d1aVFLVC81YUtpTmUzTTJpaHl1MkdiR1UzTVNreHhnOXRzejRUODZv?=
+ =?utf-8?B?bWQ2RG1ZcXpTZ0FuamZOcHB0bktTTkNDUmNBUkY2NlI5S3dodVhQM0VncmdT?=
+ =?utf-8?B?NUorYmNjRHppMC8yaGtXQWlSOW5UYVJCd1p0WXRIb3V6dkhYUDNTWWpPWklT?=
+ =?utf-8?B?LzVoM1UyaVVIZkhLT1UxdkF3dW5ZUHQzZE45cGxocEVLQkF4aU0vdEpMOTd5?=
+ =?utf-8?B?WXZnMTQ0b1pyOHNMR2o3RUN4ZXNUb25NYytmL1RSZ2swN3hFckIvcVE3M3hm?=
+ =?utf-8?B?eWFaTHNZZ2V3bTN2cTAyUnhrUmxpOHZBTXVYaGZISnJId1laMGpMUGJDTnlN?=
+ =?utf-8?B?S2sxcFhmdE02emtkcFBaQmZoVjZHeHNnOHlNNW8rL3BIdEx4Ny9qdi9Xblpv?=
+ =?utf-8?B?K2gvZ3F1REJxSGF2b2ExeVN0MXZDOUh5OUxTVERxd0lJS0t1bnJ3eXVuN0dO?=
+ =?utf-8?B?RmU5eVBNNjNQMlErTFJmdkNSMnJQWkI2b2dibFNnWmtaZnBIUjQvQTNocFNC?=
+ =?utf-8?B?WG44T0FlekF2cEJYOGhCcnR3QVlCaDhEVFUrdFZPdG1oMi92cW05N0VWL25W?=
+ =?utf-8?B?WXRXTjhYQUVyR3I0V0wrWFpVSkJYbCs3UUJKYk85NlBvcVI0L3VKb2ZMNzNz?=
+ =?utf-8?B?K0dCSDFLVWNmRVdJYkozYUpjYmlKV1FtN2x5bUdpeGZqd2RpZis2Vkwwc2RG?=
+ =?utf-8?B?NUpXMk0xaEdMWTlQNW5RcW80U3NRbUdlR0VtQ0tUZndkUzc5b0t2TFBUVzBr?=
+ =?utf-8?B?Z3kyb3hKTmNBZ3E4WW5EVVJOT09XcTlhZGVRZllEMENmU1pFZGlMSjdlSkho?=
+ =?utf-8?B?T3h6cUI4R01jS1k5eEtLZFJYUDRDRGNwR3pJM3JtZk96WllxekEybVRwYWpQ?=
+ =?utf-8?B?NGJMZEdFc2dvRmhHc3ZiRTBtMjVxdVZ1SjRLZHJLVUN5WDZoQkQrNkhvaU5x?=
+ =?utf-8?B?UlhmeDIwU293bnJpQTJKdDN3WS9QYkRSaCtxNHgvMUlaeFBRZWhaTTJQaW44?=
+ =?utf-8?B?V3VFZ3daYlF2K1Q1dHkxdFBFa1RRTXB4MFByL2twUUVOVDRsZXBRZXFUUTdZ?=
+ =?utf-8?B?eXpDWDlpSGxRUVhGa3FBRUFnMjRZbUVFK1lWVVhyTXFjU1NBNS8vdzdxTXkz?=
+ =?utf-8?B?OS9pd2p1aGRJK0xKQVhPM2xtWnhmSStXMkhXWEZVcWNXNExZWURwN2Q3ZDlI?=
+ =?utf-8?B?MFpBM1JvZlZJTWl5VVdJUjZGTS90eS9tSjI5UDEvQlVWZ2xpZGVtRDF5MlVm?=
+ =?utf-8?B?bHY4MXJaVzhPQTBoT3pRSXdQTk5yNlZtOTZZWllhVlZ2ZWV3eXhQOFN1cGdG?=
+ =?utf-8?B?RXFkSmdDKzNVWE1wTXlobXdMa29VbW90dlgzTVQxNkwyUnZkbEhjMjdHZzNE?=
+ =?utf-8?B?QWV6Ykd5OUF3WE9yK2lFa1AwWUJVSlBkM1pXeDE2Uzk0ZzZrTXlucWdpYnZT?=
+ =?utf-8?B?Yk1KVXYxUGtOVTN3M0ozSmE3V01OTUpvbDRWVy91NW9HS08xQ2Y5clRLTlFt?=
+ =?utf-8?B?aW5EVW4rekgyNERUamc0R09remVNZDJaYS9PTnk4M2lUQXlhNndmb205dWR4?=
+ =?utf-8?B?dktMUUx6MW83RzN1S1JEdTZyTHlTYXJGblpZQ2gzSm9ubnBqdS9KMk9EK2I0?=
+ =?utf-8?Q?kY5T9TMgz96E4/PwzoIh+5o=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d10e652-15cc-44e8-4a66-08d9ba5385fa
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2021 14:03:34.3774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M6hl6Nn2f/v4iIJP+xtw/iPsCUqJXXAAMAEJi/s5hjvQQyQ8vgcxKqH03vnI7Y7JBTR14YakaqPMQ4tAH0R8uQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2462
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---mkfxf4qp7vifqjee
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello David,
+On 2021/12/8 16:14, Greg Kroah-Hartman wrote:
+> On Wed, Dec 08, 2021 at 12:07:53AM -0800, Yihao Han wrote:
+>> coccinelle report:
+>> ./drivers/bus/mhi/core/init.c:97:8-16:
+>> WARNING: use scnprintf or sprintf
+>> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+>>
+>> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+>> ---
+>>   drivers/bus/mhi/core/init.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+>> index 5aaca6d0f52b..a5a5c722731e 100644
+>> --- a/drivers/bus/mhi/core/init.c
+>> +++ b/drivers/bus/mhi/core/init.c
+>> @@ -94,7 +94,7 @@ static ssize_t serial_number_show(struct device *dev,
+>>   	struct mhi_device *mhi_dev = to_mhi_device(dev);
+>>   	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
+>>   
+>> -	return snprintf(buf, PAGE_SIZE, "Serial Number: %u\n",
+>> +	return sysfs_emit(buf, "Serial Number: %u\n",
+>>   			mhi_cntrl->serial_number);
+>>   }
+>>   static DEVICE_ATTR_RO(serial_number);
+>> -- 
+>> 2.17.1
+>>
+> 
+> Why are you only changing one function in this file?  If you realyl want
+> to make a change like this, fix ALL sysfs show functions.
+> 
+> thanks,
+> 
+> greg k-h
+Because "sysfs_emit()" is "scnprintf()" equivalent with "size" parameter 
+equals to PAGE_SIZE,So sysfs_emit can only be used here in this file. 
+And "scnprintf" is better than "snprintf" because the former returns 
+number of characters written to "buf". So I think we can use 
+"sysfs_emit()" instead of "snprintf()".
 
-On Tue, Dec 07, 2021 at 08:16:02AM +0100, David Jander wrote:
-> On Mon, 6 Dec 2021 13:24:18 -0600
-> David Lechner <david@lechnology.com> wrote:
->=20
-> > On 11/24/21 7:58 PM, William Breathitt Gray wrote:
-> > > On Wed, Nov 24, 2021 at 08:27:20AM +0100, Oleksij Rempel wrote: =20
-> > >> Hi William,
-> > >>
-> > >> On Wed, Nov 24, 2021 at 03:09:05PM +0900, William Breathitt Gray wro=
-te: =20
-> > >>> On Tue, Nov 23, 2021 at 02:45:40PM +0100, Oleksij Rempel wrote: =20
-> > >>>> Add counter_push_event() to notify user space about new pulses
-> > >>>>
-> > >>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > >>>> ---
-> > >>>>   drivers/counter/interrupt-cnt.c | 2 ++
-> > >>>>   1 file changed, 2 insertions(+)
-> > >>>>
-> > >>>> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/int=
-errupt-cnt.c
-> > >>>> index 8514a87fcbee..b237137b552b 100644
-> > >>>> --- a/drivers/counter/interrupt-cnt.c
-> > >>>> +++ b/drivers/counter/interrupt-cnt.c
-> > >>>> @@ -31,6 +31,8 @@ static irqreturn_t interrupt_cnt_isr(int irq, vo=
-id *dev_id)
-> > >>>>  =20
-> > >>>>   	atomic_inc(&priv->count);
-> > >>>>  =20
-> > >>>> +	counter_push_event(&priv->counter, COUNTER_EVENT_OVERFLOW, 0);
-> > >>>> +
-> > >>>>   	return IRQ_HANDLED;
-> > >>>>   }
-> > >>>>  =20
-> > >>>> --=20
-> > >>>> 2.30.2 =20
-> > >>>
-> > >>> Hi Oleksij,
-> > >>>
-> > >>> It looks like this is pushing a COUNTER_EVENT_OVERFLOW event every =
-time
-> > >>> an interrupt is handled, which I suspect is not what you want to ha=
-ppen.
-> > >>> The COUNTER_EVENT_OVERFLOW event indicates a count value overflow e=
-vent,
-> > >>> so you'll need to check for a count value overflow before pushing t=
-he
-> > >>> event.
-> > >>>
-> > >>> It would be good idea to implement a ceiling extension as well (you=
- can
-> > >>> use the COUNTER_COMP_CEILING() macro) so that users can configure t=
-he
-> > >>> particular point where the value overflows. =20
-> > >>
-> > >> Thank you!
-> > >>
-> > >> What would be the best and resource effective strategy for periodica=
-lly
-> > >> getting frequency of interrupts/pulses? This is actual information w=
-hich is
-> > >> needed for my use case.
-> > >>
-> > >> So far, I was pushing every event to the user space, which is working
-> > >> but probably not the most resource effective method of doing it.
-> > >>
-> > >> Regards,
-> > >> Oleskij
-> > >> --=20
-> > >> Pengutronix e.K.                           |                        =
-     |
-> > >> Steuerwalder Str. 21                       | http://www.pengutronix.=
-de/  |
-> > >> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-=
-0    |
-> > >> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-=
-5555 | =20
-> > >=20
-> > > We could introduce a new Counter change-of-state event type which wou=
-ld
-> > > trigger whenever the count value changes, but I agree with you that t=
-his
-> > > is likely not the best way for us to derive the frequency of the
-> > > interrupts due to the indirection of handling and parsing the event
-> > > data.
-> > >=20
-> > > Instead, perhaps introducing a "frequency" or "period" Count extension
-> > > would make more sense here. This extension could report the value del=
-ta
-> > > between counts, or alternatively the time delta from which you can
-> > > derive frequency. Regarding implementation, you can store the previous
-> > > value in a variable, updating it whenever an interrupt occurs, and
-> > > compute the particular delta every time a read is requested by the us=
-er.
-> > >=20
-> > > David Lechner is implementing something similar for the TI eQEP driver
-> > > to expose speed, so I'm CCing them here in case this is of interest to
-> > > them.
-> > >  =20
-> >=20
-> > Based on my experience, I would recommend that counter drivers be as
-> > "thin" as possible. They shouldn't try to provide any information that
-> > the hardware itself doesn't provide. In other words, the kernel should
-> > provide userspace the information needed to calculate the speed/rate
-> > but not try to do the actual calculation in the kernel. Inevitably
-> > there are nuances for specific use cases that can't all possibly be
-> > handled by such an implementation.
->=20
-> I completely agree with this. While interrupts aren't really meant for
-> measuring frequency, and this being somewhat of a mis-use of something, i=
-t is
-> still possible to do and very useful in many cases. That said, while the
-> counter framework is AFAIK the best fit for this, the main use-case for t=
-his
-> driver is measuring wheel speed (and similar "speeds"). For this, the min=
-imum
-> amount of information the driver needs to provide user-space with to do
-> reliable calculations, is high-resolution time-stamps of GPIO events. A s=
-imple
-> counter is not suited, because there can be glitches that need to be dete=
-cted.
-> If user-space gets a buffer full of consecutive time-stamps (don't need t=
-o be
-> all of them, just a sample of n consecutive timestamps), as well as total
-> count, all needed calculations, glitch filtering, low-pass filtering, etc=
-=2E..
-> can be done in user-space just fine.
->=20
-> > I've tried using gpio interrupts to try to calculate speed/rate in
-> > the kernel before and it simply doesn't work reliably. Interrupts
-> > get missed and the calculation will be off.
->=20
-> Exactly. Been there, done that.
-> For reliable speed calculations of a mechanical system, the properties of=
- the
-> mechanical system need to be known, like physical limits of accelerations,
-> maximum (or minimum) speed, etc. The minimum set of input data needed by a
-> user-space application to do these calculations is total pulse count in
-> addition to a buffer of timestamps of n consecutive input events (raising=
- or
-> falling edges on GPIO). So IMHO this is what the driver should provide, a=
-nd
-> in the most resource-efficient way possible. This particular driver will =
-be
-> used 3 times on the same SoC, with each up to 10-15k pulses per second. T=
-hat
-> is a lot of interrupts for an embedded system, so they better consume as
-> little resources as possible. Filling a ring buffer with timestamps shoul=
-d be
-> possible, as long as no locking is involved. Locks in IRQ context must be
-> avoided at all costs, specially in this case.
->=20
-> > For really slow counts (i.e. 1 count/second), I can see a use for
-> > generating an event on each count though. For high rates, I would
-> > just read the count every 100ms in usespace and divide the change in
-> > the number of counts by the time period to get the rate.
->=20
-> For slow counts, I agree, but for high rates, I don't (see above). There =
-can
-> be glitches and false events that can (and must) be effectively filtered =
-out.
-> For that user-space needs to know the time of each event during the
-> measurement period.
-
-No sure I understood the problem here. If you keep the driver as is and
-in userspace just read out the counter value twice and measure the time
-between the reads[1], you can calculate the average frequency of the
-event in userspace.
-
-Isn't that good enough?
-
-Best regards
-Uwe
-
-[1] maybe support this timing by providing a timestamp with the read
-    value to reduce timing jitter.
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mkfxf4qp7vifqjee
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGwuiMACgkQwfwUeK3K
-7AkzqQf9H805qI3GrlxiNoK2zp/ScyCZ8YbXwZ8dKt9uEsSyKPdwPcRW2cPrMMLj
-dUTKBEs5m4Z48mp+whQPoa+2M5+UbUWHkLThhHaa0G+RSjRfn1Ei8r7qjVV0RXhp
-4Ex+3DHlAYyUxN0vyqWb9lVzf1QHySWCnkxOn0wOnWglz/XlwHM7glD5qAqcnsPY
-+RGELJac3pg5jL265FBKsnuXGCqvt+/7NuUJy79pULvwxI+Dhk+GKW6RsZIEqDlQ
-r0DMG3j+KNoSUTaupzzzwVZ0Xo4lYB0RFXNLPYJeB4DWJH4WRVTjz24yDCOnb4Jj
-iHgn8BvvPw7p9xkfKozodO9VmlDBDA==
-=s5Z5
------END PGP SIGNATURE-----
-
---mkfxf4qp7vifqjee--
+Thanks,
+Yihao

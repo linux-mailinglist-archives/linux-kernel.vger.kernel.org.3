@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3885846DDAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B591D46DDCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 22:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbhLHVka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 16:40:30 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:32965 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229735AbhLHVk2 (ORCPT
+        id S239422AbhLHVtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 16:49:55 -0500
+Received: from mailgw2-125.onamae.ne.jp ([163.44.187.125]:60505 "EHLO
+        mailgw2.onamae.ne.jp" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229507AbhLHVty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:40:28 -0500
-Received: (qmail 588025 invoked by uid 1000); 8 Dec 2021 16:36:55 -0500
-Date:   Wed, 8 Dec 2021 16:36:55 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Li Jun <jun.li@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        kernel <kernel@vivo.com>
-Subject: Re: [PATCH] usb: core: hcd: fix bug: application of sizeof to pointer
-Message-ID: <YbEldysG5XSfsp8o@rowland.harvard.edu>
-References: <20211207135401.5507-1-guozhengkui@vivo.com>
- <Ya9yZX3JsuO8OcVJ@kroah.com>
- <AJkA6AAaE4s5AAqOmmsZjapb.9.1638915668969.Hmail.guozhengkui@vivo.com.@PFlhL2VVYmROMStBQkZWV2ZAcm93bGFuZC5oYXJ2YXJkLmVkdT4=>
- <14d2ddb6-4a4a-bb4d-48bf-4847445d6199@vivo.com>
+        Wed, 8 Dec 2021 16:49:54 -0500
+X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 16:49:54 EST
+Received: from www14.onamae.ne.jp (unknown [172.16.42.31])
+        by mailgw2.onamae.ne.jp (Postfix) with ESMTP id 1E5D2800FBC93
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:38:46 +0900 (JST)
+Received: by www14.onamae.ne.jp (Postfix, from userid 10472)
+        id 1D7D923EB61; Thu,  9 Dec 2021 06:38:46 +0900 (JST)
+To:     linux-kernel@vger.kernel.org
+Subject: =?ISO-2022-JP?B?GyRCJCpMZCQkOWckbyQ7JCIkaiQsJEgkJiQ0JDYkJCReJDckPyEjGyhC?=
+X-PHP-Script: lazurite-web.com/index.php for 138.68.155.147
+X-PHP-Filename: /home/r9126411/public_html/lazurite-web.com/index.php REMOTE_ADDR: 138.68.155.147
+Date:   Wed, 8 Dec 2021 21:38:45 +0000
+From:   =?ISO-2022-JP?B?GyRCM3Q8MDJxPFIlaSU6JWklJCVIO3ZMMzZJGyhC?= 
+        <siteinfo@lazurite-web.com>
+Reply-To: siteinfo@lazurite-web.com
+Message-ID: <dbd400c25b6a103344be1d236e7105f7@lazurite-web.com>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14d2ddb6-4a4a-bb4d-48bf-4847445d6199@vivo.com>
+Content-Type: text/plain; charset=ISO-2022-JP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 11:00:41AM +0800, Guo Zhengkui wrote:
-> On 2021/12/8 6:21, Alan Stern wrote:
-> > On Tue, Dec 07, 2021 at 03:40:37PM +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Dec 07, 2021 at 09:53:47PM +0800, Guo Zhengkui wrote:
-> > > > Fix following error:
-> > > > ./drivers/usb/core/hcd.c:1284:38-44: ERROR:
-> > > > application of sizeof to pointer.
-> > > 
-> > > What generated this error?
-> > > 
-> > > > 
-> > > > Use sizeof(*vaddr) instead.
-> > > > 
-> > > > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> > > > ---
-> > > >   drivers/usb/core/hcd.c | 2 +-
-> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > > > index 4d326ee12c36..996d5273cf60 100644
-> > > > --- a/drivers/usb/core/hcd.c
-> > > > +++ b/drivers/usb/core/hcd.c
-> > > > @@ -1281,7 +1281,7 @@ static int hcd_alloc_coherent(struct usb_bus *bus,
-> > > >   		return -EFAULT;
-> > > >   	}
-> > > > -	vaddr = hcd_buffer_alloc(bus, size + sizeof(vaddr),
-> > > > +	vaddr = hcd_buffer_alloc(bus, size + sizeof(*vaddr),
-> > > 
-> > > I think you just broke the code.
-> > > 
-> > > Look at this closer and see what the function is doing with this buffer
-> > > and if you still think your patch is correct, please rewrite the
-> > > changelog text to explain why it is so (hint, just using the output of
-> > > coccinelle isn't ok.)
-> > 
-> 
-> Sorry for my carelessness. It should be sizeof(vaddr).
-> 
-> > Although the patch is definitely wrong, the code could stand to be
-> > improved.  The value stored at the end of the buffer is *vaddr_handle
-> > converted to an unsigned long, but the space reserved for this value is
-> > sizeof(vaddr) -- which doesn't make much sense since vaddr is a pointer
-> > to unsigned char.  The code implicitly relies on the fact that unsigned
-> > long takes up the same amount of space as a pointer.
-> > 
-> > Readers wouldn't have to stop and figure this out if the amount of
-> > reserved space was simply set to sizeof(unsigned long) rather than
-> > sizeof(vaddr).
-> 
-> OK, I will commit another patch to fix this problem. Do you mind I add a
-> "Suggested-by" tag of your name (Alan Stern) in this new patch?
+----------------------------
+お問い合わせ内容
+----------------------------
 
-That's fine.
+お名前
+?? June want to meet you! Click Here: https://clck.ru/ZD9uR?hlb68 ??
 
-Alan Stern
+ふりがな
+mjwooofe
+
+メールアドレス
+linux-kernel@vger.kernel.org
+
+御社名
+gg6xnps
+
+電話番号
+481338867255
+
+お問い合わせ内容
+qba6mt
+
+
+--------------------------------------------------------
+
+お問い合わせありがとうございました。
+折り返し担当者よりご連絡させていただきますので、
+しばらくお待ちください。
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+株式会社ラズライト
+http://lazurite-web.com
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/

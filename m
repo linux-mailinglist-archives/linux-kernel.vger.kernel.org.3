@@ -2,196 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225E346DC5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E86246DC62
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236275AbhLHThg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239687AbhLHThe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:37:34 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42AC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:34:02 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id x5so3413444pfr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jSyNpPfNL4nv3Nl83ASritesFLf9KF/N3krCSnAdabQ=;
-        b=bMWE1jjtcEd3GyI6Fva9foJZbVg/olBS/RBGK3oLaGOZ6RQzFIQIlnJZXMeC7Y6VBM
-         VH+yw7rAzPbBrS/Yy/kNSbKRDec9NOzG6PX9Ub8ChObF8OfbDEPypZuCuayiIllcNR3D
-         p3TpK3IQMVbFVvlAlNGNoDDU1XTBYAQXTDUqI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jSyNpPfNL4nv3Nl83ASritesFLf9KF/N3krCSnAdabQ=;
-        b=a4IE2QpFO2C0/jywS6EQLK5uOW9kEN7oB3Oor9reBZsabMMdTEpLl5ziqqZ4ieWUFI
-         8m16vp1qWV6o3aLmX4cngsQMzLdOjXFgckNHMVU8g9hHFeFm0ZsreerFQnJY1QWc/0uw
-         nYReRT3fz9HErrI0fjYnKq6RpHaFeNFevIKDWBOE/T9Bglt4Vm6AJxgXgEAF2PBkSz5r
-         hbwVkSnTOL2smXaY3Y9o81i1zIv1ERC7Bp64o+yLX2Sfzxe8UmYJOW7aok3v6gH2vjCT
-         Gid4hjYN1ThTxjaWquc42NBurT/q4S6AfxMQ1y+eVaZt1UNDUJhCV8uJQBQ0MfT1lQY7
-         JNyw==
-X-Gm-Message-State: AOAM5306R0ZRLzC6I0HVdypPmIoK+P824cj8mfAIKWvSHFG3N7hRKb9+
-        6Z49AP/nGWxjTU/S/LV7hJz8Jw==
-X-Google-Smtp-Source: ABdhPJwfrmO6OuC4sSleROZVDgGz/w8i3eLzLrZ/yRIIlrGfRu+NcjCkwWuRt2QOUlIgndclg1Ga5A==
-X-Received: by 2002:aa7:979a:0:b0:4a7:e510:ac1c with SMTP id o26-20020aa7979a000000b004a7e510ac1cmr7386686pfp.71.1638992041775;
-        Wed, 08 Dec 2021 11:34:01 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m24sm3333830pgk.39.2021.12.08.11.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 11:34:01 -0800 (PST)
-Date:   Wed, 8 Dec 2021 11:34:00 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
- sizes
-Message-ID: <202112081128.08F5C41F8@keescook>
-References: <20211203100846.3977195-1-keescook@chromium.org>
- <YaoN6wnNezMvyyd5@smile.fi.intel.com>
- <20211203182638.GA450223@lapt>
- <202112031450.EFE7B7B4A@keescook>
- <20211207233930.GA3955@lapt>
+        id S239626AbhLHTmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:42:09 -0500
+Received: from mga07.intel.com ([134.134.136.100]:44815 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229759AbhLHTmI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 14:42:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301304548"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="301304548"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:38:20 -0800
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="752007966"
+Received: from eatci-mobl.amr.corp.intel.com (HELO [10.212.194.205]) ([10.212.194.205])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:38:19 -0800
+Subject: Re: [PATCH v13 2/2] x86/sgx: Add an attribute for the amount of SGX
+ memory in a NUMA node
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, reinette.chatre@intel.com,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org
+References: <20211116162116.93081-1-jarkko@kernel.org>
+ <20211116162116.93081-2-jarkko@kernel.org>
+ <f25d95e6-e129-597b-5d93-d7264feae8b8@intel.com> <YbCEl9kqhTz2iOY2@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <32abd0a7-bc3c-f7a7-3330-8287ef05131c@intel.com>
+Date:   Wed, 8 Dec 2021 11:38:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207233930.GA3955@lapt>
+In-Reply-To: <YbCEl9kqhTz2iOY2@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:39:30PM -0800, Yury Norov wrote:
-> I'm all for enabling -Warray-bounds, but the warnings that it spots
-> only convinced me that bitmap API is used wrongly, and it should be
-> fixed. Can you please share the list of bitmap-related issues found
-> with -Warray-bounds that concerned you? I'll take a look and try to
-> make a patch that fixes it.
+I reworked the changelog quite a bit, addressing some of Borislav's
+questions.  No code changes, though.
 
-On an x86 allmodconfig with -Warray-bounds, here are the bitmap
-warnings:
+The result is below.  I've retained Greg's ack.  I'll stick this in
+tip/x86/sgx if this looks OK to everyone.
 
+---
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/cpumask.h:5,
-                 from ./arch/x86/include/asm/msr.h:11,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/wait.h:9,
-                 from ./include/linux/wait_bit.h:8,
-                 from ./include/linux/fs.h:6,
-                 from ./include/linux/debugfs.h:15,
-                 from drivers/bus/mhi/core/init.c:7:
-drivers/bus/mhi/core/init.c: In function 'to_mhi_pm_state_str':
-./include/linux/find.h:187:37: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'enum mhi_pm_state[1]' [-Warray-bounds]
-  187 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
-      |                                     ^~~~~
-drivers/bus/mhi/core/init.c:80:51: note: while referencing 'state'
-   80 | const char *to_mhi_pm_state_str(enum mhi_pm_state state)
-      |                                 ~~~~~~~~~~~~~~~~~~^~~~~
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/smp.h:13,
-                 from ./include/linux/lockdep.h:14,
-                 from ./include/linux/mutex.h:17,
-                 from ./include/linux/notifier.h:14,
-                 from ./include/linux/clk.h:14,
-                 from drivers/irqchip/irq-ingenic-tcu.c:7:
-drivers/irqchip/irq-ingenic-tcu.c: In function 'ingenic_tcu_intc_cascade':
-./include/linux/find.h:40:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'uint32_t[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   40 |                 val = *addr & GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/irqchip/irq-ingenic-tcu.c:30:18: note: while referencing 'irq_reg'
-   30 |         uint32_t irq_reg, irq_mask;
-      |                  ^~~~~~~
+== Problem ==
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/smp.h:13,
-                 from ./include/linux/lockdep.h:14,
-                 from ./include/linux/mutex.h:17,
-                 from ./include/linux/notifier.h:14,
-                 from ./include/linux/clk.h:14,
-                 from drivers/irqchip/irq-ingenic-tcu.c:7:
-./include/linux/find.h:40:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'uint32_t[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   40 |                 val = *addr & GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/irqchip/irq-ingenic-tcu.c:30:18: note: while referencing 'irq_reg'
-   30 |         uint32_t irq_reg, irq_mask;
-      |                  ^~~~~~~
+The amount of SGX memory on a system is determined by the BIOS and it
+varies wildly between systems.  It can be as small as dozens of MB's
+and as large as many GB's on servers.  Just like how applications need
+to know how much regular RAM is available, enclave builders need to
+know how much SGX memory an enclave can consume.
 
-In file included from ./include/linux/bitmap.h:9,
-                 from drivers/iommu/intel/iommu.c:17:
-drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
-./include/linux/find.h:119:37: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Warray-bounds]
-  119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
-      |                                     ^~~~~
-drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
- 2115 |         int pds, max_pde;
-      |                  ^~~~~~~
+== Solution ==
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/cpumask.h:5,
-                 from ./arch/x86/include/asm/msr.h:11,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/swait.h:7,
-                 from ./include/linux/completion.h:12,
-                 from drivers/iio/adc/stmpe-adc.c:10:
-drivers/iio/adc/stmpe-adc.c: In function 'stmpe_adc_probe':
-./include/linux/find.h:98:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   98 |                 val = *addr | ~GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/iio/adc/stmpe-adc.c:258:13: note: while referencing 'norequest_mask'
-  258 |         u32 norequest_mask = 0;
-      |             ^~~~~~~~~~~~~~
+Introduce a new sysfs file:
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/cpumask.h:5,
-                 from ./arch/x86/include/asm/msr.h:11,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/swait.h:7,
-                 from ./include/linux/completion.h:12,
-                 from drivers/iio/adc/stmpe-adc.c:10:
-./include/linux/find.h:98:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   98 |                 val = *addr | ~GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/iio/adc/stmpe-adc.c:258:13: note: while referencing 'norequest_mask'
-  258 |         u32 norequest_mask = 0;
-      |             ^~~~~~~~~~~~~~
+	/sys/devices/system/node/nodeX/x86/sgx_total_bytes
 
+to enumerate the amount of SGX memory available in each NUMA node.
+This serves the same function for SGX as /proc/meminfo or
+/sys/devices/system/node/nodeX/meminfo does for normal RAM.
 
-I expect there are more outside of x86 allmodconfig. I still think it
-makes sense to have a single API that is forgiving with its inputs. We
-can change the API in one place and solve this for all callers.
+'sgx_total_bytes' is needed today to help drive the SGX selftests.
+SGX-specific swap code is exercised by creating overcommitted enclaves
+which are larger than the physical SGX memory on the system.  They
+currently use a CPUID-based approach which can diverge from the actual
+amount of SGX memory available.  'sgx_total_bytes' ensures that the
+selftests can work efficiently and do not attempt stupid things like
+creating a 100,000 MB enclave on a system with 128 MB of SGX memory.
 
--- 
-Kees Cook
+== Implementation Details ==
+
+Introduce CONFIG_HAVE_ARCH_NODE_DEV_GROUP opt-in flag to expose an
+arch specific attribute group, and add an attribute for the amount of
+SGX memory in bytes to each NUMA node:
+
+== ABI Design Discussion ==
+
+As opposed to the per-node ABI, a single, global ABI was considered.
+However, this would prevent enclaves from being able to size
+themselves so that they fit on a single NUMA node.  Essentially, a
+single value would rule out NUMA optimizations for enclaves.
+
+Create a new "x86/" directory inside each "nodeX/" sysfs directory.
+'sgx_total_bytes' is expected to be the first of at least a few
+sgx-specific files to be placed in the new directory.  Just scanning
+/proc/meminfo, these are the no-brainers that we have for RAM, but we
+need for SGX:
+
+	MemTotal:       xxxx kB // sgx_total_bytes (implemented here)
+	MemFree:        yyyy kB // sgx_free_bytes
+	SwapTotal:      zzzz kB // sgx_swapped_bytes
+
+So, at *least* three.  I think we will eventually end up needing
+something more along the lines of a dozen.  A new directory (as
+opposed to being in the nodeX/ "root") directory avoids cluttering the
+root with several "sgx_*" files.
+
+Place the new file in a new "nodeX/x86/" directory because SGX is
+highly x86-specific.  It is very unlikely that any other architecture
+(or even non-Intel x86 vendor) will ever implement SGX.  Using "sgx/"
+as opposed to "x86/" was also considered.  But, there is a real chance
+this can get used for other arch-specific purposes.
+
+[ dhansen: rewrite changelog ]
+
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20211116162116.93081-2-jarkko@kernel.org
+---
+ Documentation/ABI/stable/sysfs-devices-node |  6 ++++++
+ arch/Kconfig                                |  4 ++++
+ arch/x86/Kconfig                            |  1 +
+ arch/x86/kernel/cpu/sgx/main.c              | 20 ++++++++++++++++++++
+ arch/x86/kernel/cpu/sgx/sgx.h               |  1 +
+ drivers/base/node.c                         |  3 +++
+ include/linux/numa.h                        |  4 ++++
+ 7 files changed, 39 insertions(+)

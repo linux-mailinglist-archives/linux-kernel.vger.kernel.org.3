@@ -2,115 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBEA46D336
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256FB46D33B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbhLHMZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbhLHMZb (ORCPT
+        id S233232AbhLHM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:27:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33448 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhLHM1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:25:31 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971ADC061746;
-        Wed,  8 Dec 2021 04:21:59 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id gu12so2078274qvb.6;
-        Wed, 08 Dec 2021 04:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8uy0DZF7lXHvcBRiAIjRsLK9cNEa6jf/rNNhdNudo5w=;
-        b=cHX2O0p2l777DDyIx13QKGz8UX24Uk7UaRJHIphrFXhWQpCdBq/STZ3JU+jBVhQXFQ
-         eEK73FHRc8ykrxIkcW7EwsQYpWU6hiH7uV8aTrQq5q6z9MvamNo8ByD3T0Q1O+bwdX9d
-         mrsXJpL6z7KG9Q+Tf/oWyZrkkY+sClbYwIw5oqyQ0fK7+JQrmG45imzLDKke4y2afb2Q
-         fZnfzwPckqBkkd1mqT5N+uYOuijVavructJJmCmCZHWTC9gwdoAAKeI8aKLjO1IBrob+
-         8x/McZkGWEFExIhOMVDwl+XJQT24Tq3BHUhgUtO0J+N9HOzAtgD0z8aYTJYyWd3YbQxd
-         HpMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8uy0DZF7lXHvcBRiAIjRsLK9cNEa6jf/rNNhdNudo5w=;
-        b=SgBqHCNhYLhlpFCPDif1zn63HLwkPeSV985+RUerw2ZadxthamHH9nHpZhU6JtBI1S
-         l1pWX25fKYugZRdJiShbAl82FrP0Pm7Gs/TG6wxQs7c1fLPgfwdptIDb8zYvqIxLV1o3
-         CQI9IY9SeYkQp2TNu0UswfvgKIdCvgTsmQ62Eic7NzA4Lot+NEdgvh11JZVbih9uxCNV
-         UsO78XqD281WJjAECNjS0B6gVwXDpc4anhvcC0amCsUKKVY//MoOJOL4QV5//87CS6CI
-         MKmEPekjOWgWffjY7DcU2WHR55+L7elFdUETgtEgrcUDacbKVVDRLhDceTZhlzXtQJrj
-         i0tw==
-X-Gm-Message-State: AOAM533GfvkG+SPGjevCeiREgxIk/8BQOhMl0WpyKA3BbwSdXdwlqocz
-        f2N16j288/79i96p1iHk9AwQ2HYcZYUkL+pS0tA=
-X-Google-Smtp-Source: ABdhPJw4YNDPavQA3I/O4k+Cm2sSpqxXToag596Tt+4b8OC+lHeBZ071Vp1j5+4JZaFFBqijN0cyCd68ufQr4+BQKxY=
-X-Received: by 2002:a05:6214:1909:: with SMTP id er9mr6882300qvb.118.1638966118601;
- Wed, 08 Dec 2021 04:21:58 -0800 (PST)
+        Wed, 8 Dec 2021 07:27:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B904B81F37;
+        Wed,  8 Dec 2021 12:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F7FC00446;
+        Wed,  8 Dec 2021 12:23:43 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 13:23:39 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v4 10/16] ima: Implement hierarchical processing of file
+ accesses
+Message-ID: <20211208122339.vkqtuckl74ywg3s5@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-11-stefanb@linux.ibm.com>
+ <20211208120954.nnawb6d2bpp54yll@wittgenstein>
 MIME-Version: 1.0
-References: <20211009221711.2315352-1-robimarko@gmail.com> <163890036783.24891.8718291787865192280.kvalo@kernel.org>
-In-Reply-To: <163890036783.24891.8718291787865192280.kvalo@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 8 Dec 2021 13:21:47 +0100
-Message-ID: <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com>
-Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF selection
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211208120954.nnawb6d2bpp54yll@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 at 19:06, Kalle Valo <kvalo@kernel.org> wrote:
->
-> Robert Marko <robimarko@gmail.com> wrote:
->
-> > Some ath10k IPQ40xx devices like the MikroTik hAP ac2 and ac3 require the
-> > BDF-s to be extracted from the device storage instead of shipping packaged
-> > API 2 BDF-s.
-> >
-> > This is required as MikroTik has started shipping boards that require BDF-s
-> > to be updated, as otherwise their WLAN performance really suffers.
-> > This is however impossible as the devices that require this are release
-> > under the same revision and its not possible to differentiate them from
-> > devices using the older BDF-s.
-> >
-> > In OpenWrt we are extracting the calibration data during runtime and we are
-> > able to extract the BDF-s in the same manner, however we cannot package the
-> > BDF-s to API 2 format on the fly and can only use API 1 to provide BDF-s on
-> > the fly.
-> > This is an issue as the ath10k driver explicitly looks only for the
-> > board.bin file and not for something like board-bus-device.bin like it does
-> > for pre-cal data.
-> > Due to this we have no way of providing correct BDF-s on the fly, so lets
-> > extend the ath10k driver to first look for BDF-s in the
-> > board-bus-device.bin format, for example: board-ahb-a800000.wifi.bin
-> > If that fails, look for the default board file name as defined previously.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
->
-> Can someone review this, please? I understand the need for this, but the board
-> handling is getting quite complex in ath10k so I'm hesitant.
->
-> What about QCA6390 and other devices. Will they still work?
-Hi Kalle,
-everything else should just continue working as before unless the
-board-bus-device.bin file
-exists it will just use the current method to fetch the BDF.
+On Wed, Dec 08, 2021 at 01:09:54PM +0100, Christian Brauner wrote:
+> On Tue, Dec 07, 2021 at 03:21:21PM -0500, Stefan Berger wrote:
+> > Implement hierarchical processing of file accesses in IMA namespaces by
+> > walking the list of IMA namespaces towards the init_ima_ns. This way
+> > file accesses can be audited in an IMA namespace and also be evaluated
+> > against the IMA policies of parent IMA namespaces.
+> > 
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > ---
+> >  security/integrity/ima/ima_main.c | 29 +++++++++++++++++++++++++----
+> >  1 file changed, 25 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> > index 2121a831f38a..e9fa46eedd27 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
+> >  	ima_check_last_writer(iint, inode, file);
+> >  }
+> >  
+> > -static int process_measurement(struct ima_namespace *ns,
+> > -			       struct file *file, const struct cred *cred,
+> > -			       u32 secid, char *buf, loff_t size, int mask,
+> > -			       enum ima_hooks func)
+> > +static int _process_measurement(struct ima_namespace *ns,
+> 
+> Hm, it's much more common to use double underscores then single
+> underscores to
+> 
+> __process_measurement()
+> 
+> reads a lot more natural to people perusing kernel code quite often.
+> 
+> > +				struct file *file, const struct cred *cred,
+> > +				u32 secid, char *buf, loff_t size, int mask,
+> > +				enum ima_hooks func)
+> >  {
+> >  	struct inode *inode = file_inode(file);
+> >  	struct integrity_iint_cache *iint = NULL;
+> > @@ -405,6 +405,27 @@ static int process_measurement(struct ima_namespace *ns,
+> >  	return 0;
+> >  }
+> >  
+> > +static int process_measurement(struct ima_namespace *ns,
+> > +			       struct file *file, const struct cred *cred,
+> > +			       u32 secid, char *buf, loff_t size, int mask,
+> > +			       enum ima_hooks func)
+> > +{
+> > +	int ret = 0;
+> > +	struct user_namespace *user_ns;
+> > +
+> > +	do {
+> > +		ret = _process_measurement(ns, file, cred, secid, buf, size, mask, func);
+> > +		if (ret)
+> > +			break;
+> > +		user_ns = ns->user_ns->parent;
+> > +		if (!user_ns)
+> > +			break;
+> > +		ns = user_ns->ima_ns;
+> > +	} while (1);
+> 
+> I'd rather write this as:
+> 
+> 	struct user_namespace *user_ns = ns->user_ns;
+> 
+> 	while (user_ns) {
+> 		ns = user_ns->ima_ns;
+> 
+>    		ret = __process_measurement(ns, file, cred, secid, buf, size, mask, func);
+>    		if (ret)
+>    			break;
+> 		user_ns = user_ns->parent;
+> 		
+> 	}
+> 
+> because the hierarchy is only an implicit property inherited by ima
+> namespaces from the implementation of user namespaces. In other words,
+> we're only indirectly walking a hierarchy of ima namespaces because
+> we're walking a hierarchy of user namespaces. So the ima ns actually
+> just gives us the entrypoint into the userns hierarchy which the double
+> deref writing it with a while() makes obvious.
 
-Also, this only applies to API1 BDF-s.
+Which brings me to another point.
 
-We are really needing this as currently there are devices with the
-wrong BDF being loaded as
-we have no way of knowing where MikroTik changed it and dynamic
-loading would resolve
-all of that since they are one of the rare vendors that embed the
-BDF-s next to calibration data.
+Technically nothing seems to prevent an ima_ns to survive the
+destruction of its associated userns in ima_ns->user_ns?
 
-Regards,
-Robert
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/patch/20211009221711.2315352-1-robimarko@gmail.com/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
->
+One thread does get_ima_ns() and mucks around with it while another one
+does put_user_ns().
+
+Assume it's the last reference to the userns which is now -
+asynchronously - cleaned up from ->work. So at some point you're ending
+with a dangling pointer in ima_ns->user_ns eventually causing a UAF.
+
+If I'm thinking correct than you need to fix this. I can think of two
+ways right now where one of them I'm not sure how well that would work:
+1. ima_ns takes a reference count to userns at creation. Here you need
+   to make very sure that you're not ending up with reference counting
+   cycles where the two structs keep each other alive.
+2. rcu trickery. That's the one I'm not sure how well that would work
+   where you'd need rcu_read_lock()/rcu_read_unlock() with a
+   get_user_ns() in the middle whenever you're trying to get a ref to
+   the userns from an ima_ns and handle the case where the userns is
+   gone.
+
+Or maybe I'me missing something in the patch series that makes this all
+a non-issue.

@@ -2,80 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3968746DC81
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34BB46DC8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239862AbhLHTyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:54:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:45916 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229750AbhLHTyc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:54:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301307888"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="301307888"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:50:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="612215503"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:50:59 -0800
-Date:   Wed, 8 Dec 2021 11:55:16 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <20211208115516.1d36fed9@jacob-builder>
-In-Reply-To: <20211208131358.GR6385@nvidia.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-        <20211208131358.GR6385@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S239920AbhLHT74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:59:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51373 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234014AbhLHT7z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 14:59:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638993382;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qG4PVtbNoLN8AVmrX8I4VEzhm2Rfsmwm+zKfClLGO8w=;
+        b=Zl6r3PyKlMbSTFFAwDw+NatHJwsqT/tS1MVQ5TFpeIeiHmjOdA/XQBXncsNfwb2Coc03Nl
+        BGVXyFeTj+HzaAw5sbFKHzQB9il7iAivRKq78fj9IqXQHRWMqgiAAwtalLzdMUNgZXNAHZ
+        GHvTMbCw6nEYBjxGy3g534hiQCi5NzY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-t3eXp2VaOy6MPEbg9dPbYA-1; Wed, 08 Dec 2021 14:56:21 -0500
+X-MC-Unique: t3eXp2VaOy6MPEbg9dPbYA-1
+Received: by mail-wm1-f70.google.com with SMTP id v62-20020a1cac41000000b0033719a1a714so1828068wme.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:56:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qG4PVtbNoLN8AVmrX8I4VEzhm2Rfsmwm+zKfClLGO8w=;
+        b=KATKugbhfQDygp+TDMU+PfC/OSCfD314EjzdbW7+8NBBkvf1FOaWO2PPlDvajb+Qdb
+         3s4MNEHAV+JtqPwtLNFlnLFr7m2S1xUBkRNFCV6kiOwaXBB2j5/k13b2UYTiP0jw1rW3
+         7ZRT//wgHeFz7m6uw1scVliyWmt91GkqXf6ROxUjUW7rq33cVaXgKvU/2VFtImW7Ha48
+         wPAfSo6lzs5C1tnXJy7jTXRhxBIHyUHAwu3KbaU/EaqWhFYCnF0xwXUSdZlFmgs56J5Y
+         TdGx34jgFqhdwc1u7S+g9UWG1j0ADVUDej1WFfGBerbhF96uPW2I9Bpc/ZxLOUe6eRfx
+         CA5g==
+X-Gm-Message-State: AOAM530Xqy2plbApYW/XbK7a0t/vgsB89IpQOgi7cD7Ruw82yQgr3ESh
+        aAqpe7tWYHlRD2n70y48vUR6cq2s7gqAsUjiYXrfwh26DQ8gYCuwjTnpLXgRBm+Cw64wBkiG7d4
+        711mCB6QzzVMq1qSxAqWl4yCl
+X-Received: by 2002:a5d:6dc3:: with SMTP id d3mr891100wrz.159.1638993380129;
+        Wed, 08 Dec 2021 11:56:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxGLz8QJuT+yslhyH4pgav06KTCxu5937pbGMbW3hVwzuMPBhu7Mm6xS6Af8u9XCeDE2JmTJw==
+X-Received: by 2002:a5d:6dc3:: with SMTP id d3mr891083wrz.159.1638993379958;
+        Wed, 08 Dec 2021 11:56:19 -0800 (PST)
+Received: from redhat.com ([2.55.18.120])
+        by smtp.gmail.com with ESMTPSA id y15sm4921076wry.72.2021.12.08.11.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 11:56:18 -0800 (PST)
+Date:   Wed, 8 Dec 2021 14:56:15 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
+Message-ID: <20211208144916-mutt-send-email-mst@kernel.org>
+References: <20211203185522.692489-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203185522.692489-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Wed, 8 Dec 2021 09:13:58 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> > This patch utilizes iommu_enable_pasid_dma() to enable DSA to perform
-> > DMA requests with PASID under the same mapping managed by DMA mapping
-> > API. In addition, SVA-related bits for kernel DMA are removed. As a
-> > result, DSA users shall use DMA mapping API to obtain DMA handles
-> > instead of using kernel virtual addresses.  
+On Fri, Dec 03, 2021 at 07:55:14PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Er, shouldn't this be adding dma_map/etc type calls?
+> When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
+> kernel runs into a link error:
 > 
-> You can't really say a driver is using the DMA API without actually
-> calling the DMA API..
-The IDXD driver is not aware of addressing mode, it is up to the user of
-dmaengine API to prepare the buffer mappings. Here we only set up the PASID
-such that it can be picked up during DMA work submission. I tested with
-/drivers/dma/dmatest.c which does dma_map_page(), map_single etc. also
-tested with other pieces under development.
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
+> eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
+> eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
+> eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
+> eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
+> eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
+> x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
+> 
+> Selecting VIRTIO_PCI_LIB_LEGACY is not sufficient here since that is
+> only part of the VIRTIO_PCI_LIB support.
+> 
+> Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks,
 
-Jacob
+Confused. These are all part of
+drivers/virtio/virtio_pci_legacy_dev.c
+
+and
+obj-$(CONFIG_VIRTIO_PCI_LIB_LEGACY) += virtio_pci_legacy_dev.o
+
+what gives?
+
+
+> ---
+>  drivers/vdpa/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
+> index 50f45d037611..04466603021f 100644
+> --- a/drivers/vdpa/Kconfig
+> +++ b/drivers/vdpa/Kconfig
+> @@ -80,6 +80,7 @@ config VP_VDPA
+>  
+>  config ALIBABA_ENI_VDPA
+>  	tristate "vDPA driver for Alibaba ENI"
+> +	select VIRTIO_PCI_LIB
+>  	select VIRTIO_PCI_LIB_LEGACY
+>  	depends on PCI_MSI && X86
+>  	help
+> -- 
+> 2.29.2
+

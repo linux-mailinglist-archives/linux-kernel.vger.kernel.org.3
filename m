@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E702246CCB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157A546CCB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244330AbhLHEwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S244349AbhLHEwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244296AbhLHEwC (ORCPT
+        with ESMTP id S244331AbhLHEwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:52:02 -0500
+        Tue, 7 Dec 2021 23:52:04 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4355C0617A1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:48:30 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id j18-20020a258152000000b006000d292a42so2649299ybm.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:48:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E00C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:48:33 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id d27-20020a25addb000000b005c2355d9052so2565264ybe.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:48:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BuYVt4Wv0/mLVwaaIxyzVOdtPDNx8nrlLULo3MVy2n8=;
-        b=esxrbETmeoGQWN9deNhNumZ4ezPBGwub8BltXaTBLncqXRRn6ZLXDQuYvzcISWEMZ8
-         OJfaQMEAQ1dMEx77LfsOeP9simnlFHwdwgWVNds8dtw7WZG93B8gpskLMxq8cxNXbQ8m
-         FvBnChTEvCeEzenHzLRjDE+QEH07lo1iFeSnrY4jx+wNCLWoF3Z/4fXFEj3/7NcvS20N
-         mlunZVCYlA2Hc5OAbFZeVjjygqcKvg1Vh+ShwXgnWvtiYJsCySEGi2LuJdwoGwKyh/HL
-         vjUI9TQHkf37ecKRW2F/rhhlY1H2oy9RLmyBh8810ArZR4H5BeHqYY/rcewpl/+AXVUB
-         5YVg==
+        bh=a1e01/uQIMruIVMxVHsJI+lKzq1arm+BxjGSeQVMHMA=;
+        b=X5XGUkPM9DeYjKTNyLx2ogk3uEMOMqK3PIrwP0pN9HrJlyX1XaukdQVdrACI73UoI3
+         C73Tp66+6etXU4aZ1PWgFJ4WBFWZtFEroPEq02Gkr6xcejitZp76DXS8oTs3s5VOjqNP
+         Eyg7FdUgoYYDf886Tg9frjeUBQTjA5v56tFO2t8rXOkyLvD+UDdxYtuf7+mZtcYhMF5S
+         b3Up/nJeyx6W7qbr365Vs8T1S46gGaXdJ0rB1ND35ibD7sdIEKCvszFhOUOJO+BqxfKl
+         YWTcweeQkvDzzswEj6LzSd2IGtcsswqvdESk1anfzaMnXZSgwyB3WViy7sqFYkQNCL7y
+         sCug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BuYVt4Wv0/mLVwaaIxyzVOdtPDNx8nrlLULo3MVy2n8=;
-        b=ODrBZaqmVeAMCrAqs/cM91OQuo4J889KmM2enBCXqnlS7PjekbMEZ3w7qyFlrxIcVN
-         lCIkOdEUxcjZkxeZY2socqrJCJprRlbZoC9wv3P8xVfeF3Zhx/AKRadug9TPqCBLup31
-         6lbrVEqaKU5ZwbswjTUwMonLTMjPAiqXmC/lx2Zp/VfNdSWwbs4uV2NrdEEJKfSa1yLR
-         Sxno/tRPCeE6OrI4NtrASaMoeXDMkNNTaDcO7g1hdMECeI/NCZ1vf3RFA3IamasLK1d3
-         YxGHHg6YCv4At8UgulPgWpfld4RHWmymG/cFBjVxP25pfGbA/N4nH9bKaA/zFX/eYF77
-         gimQ==
-X-Gm-Message-State: AOAM530ccYgELOWk+icQ9B01XakqEUME8bJ/kGIN1NhS/K2f+qhGRd+B
-        ZtRbkNAaBa45J/ViX6fU+59rPgA=
-X-Google-Smtp-Source: ABdhPJzx+21RSReSvHN2cMMCfhyMY8AHK5hhszYJj+Y0g7m/jMQnXVXj89q9SluIIeHYaDzCTtmhne8=
+        bh=a1e01/uQIMruIVMxVHsJI+lKzq1arm+BxjGSeQVMHMA=;
+        b=uC5rDdv77M+U1fJVcECMh95AjyxbdmAY9Mw3QnZxHYUfUXWElKAItWcrjTcPLRamn3
+         fW/G7RctwwTHJFjsdKeNGA863f99b1wfT9CLCVxHux+/pmIJTCpFI72r75oanBtZEqX2
+         dAdbx2Z+iKBRdtSq1bJFDXLcRRSntnkhbQPd+Wj98I3frWeVokDjCZxlqlvlSNnbVKeu
+         pcp7yRAXXQzHeMtTFhseZcgbfZkqEgV24yt4ruOAl5WmRLxBS9iN6njGmt8Sr5ul+WzF
+         fqh7iTl1cx3F3KPdY/5gDUyIPdLpOQsbHrhNcFRGTCTaXgiawhhZGUMqfpZn2RJVDRVu
+         fzuw==
+X-Gm-Message-State: AOAM531SbXoyMoJ+jAFtvVXM05Qhw0p/UsvuXy0eVKJcTyCV3mEIm3hL
+        /OP9teseSjgTbSejr6vgagQ+XBM=
+X-Google-Smtp-Source: ABdhPJygyqIWeu10SeLNwpOjQa4crQYQeJJQ5eWQYbtj8qvL/UTnq8W35uhTakuFmHjpK4j8LLrTDGc=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:be2d:924d:844b:d2fa])
- (user=pcc job=sendgmr) by 2002:a25:b0a8:: with SMTP id f40mr54053245ybj.125.1638938909697;
- Tue, 07 Dec 2021 20:48:29 -0800 (PST)
-Date:   Tue,  7 Dec 2021 20:48:07 -0800
+ (user=pcc job=sendgmr) by 2002:a25:b0a8:: with SMTP id f40mr54053425ybj.125.1638938912219;
+ Tue, 07 Dec 2021 20:48:32 -0800 (PST)
+Date:   Tue,  7 Dec 2021 20:48:08 -0800
 In-Reply-To: <20211208044808.872554-1-pcc@google.com>
-Message-Id: <20211208044808.872554-6-pcc@google.com>
+Message-Id: <20211208044808.872554-7-pcc@google.com>
 Mime-Version: 1.0
 References: <20211208044808.872554-1-pcc@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v3 5/6] arm64: add support for uaccess logging
+Subject: [PATCH v3 6/6] Documentation: document uaccess logging
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
@@ -97,137 +97,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm64 does not use CONFIG_GENERIC_ENTRY, so add the support for
-uaccess logging directly to the architecture.
+Add documentation for the uaccess logging feature.
 
-Link: https://linux-review.googlesource.com/id/I88de539fb9c4a9d27fa8cccbe201a6e4382faf89
+Link: https://linux-review.googlesource.com/id/Ia626c0ca91bc0a3d8067d7f28406aa40693b65a2
 Signed-off-by: Peter Collingbourne <pcc@google.com>
 ---
- arch/arm64/Kconfig                   | 1 +
- arch/arm64/include/asm/thread_info.h | 7 ++++++-
- arch/arm64/kernel/ptrace.c           | 7 +++++++
- arch/arm64/kernel/signal.c           | 5 +++++
- arch/arm64/kernel/syscall.c          | 1 +
- 5 files changed, 20 insertions(+), 1 deletion(-)
+v3:
+- document what happens if passing NULL to prctl
+- be explicit about meaning of addr and size
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c4207cf9bb17..6023946abe4a 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -161,6 +161,7 @@ config ARM64
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-+	select HAVE_ARCH_UACCESS_BUFFER
- 	select HAVE_ARCH_VMAP_STACK
- 	select HAVE_ARM_SMCCC
- 	select HAVE_ASM_MODVERSIONS
-diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-index e1317b7c4525..0461b36251ea 100644
---- a/arch/arm64/include/asm/thread_info.h
-+++ b/arch/arm64/include/asm/thread_info.h
-@@ -82,6 +82,8 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
- #define TIF_SSBD		25	/* Wants SSB mitigation */
- #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
-+#define TIF_UACCESS_BUFFER_ENTRY 27     /* thread has non-zero uaccess_desc_addr_addr */
-+#define TIF_UACCESS_BUFFER_EXIT  28     /* thread has non-zero kcur */
+ Documentation/admin-guide/index.rst           |   1 +
+ Documentation/admin-guide/uaccess-logging.rst | 151 ++++++++++++++++++
+ 2 files changed, 152 insertions(+)
+ create mode 100644 Documentation/admin-guide/uaccess-logging.rst
+
+diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
+index 1bedab498104..4f6ee447ab2f 100644
+--- a/Documentation/admin-guide/index.rst
++++ b/Documentation/admin-guide/index.rst
+@@ -54,6 +54,7 @@ ABI will be found here.
+    :maxdepth: 1
  
- #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
- #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
-@@ -98,6 +100,8 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define _TIF_SVE		(1 << TIF_SVE)
- #define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
- #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
-+#define _TIF_UACCESS_BUFFER_ENTRY	(1 << TIF_UACCESS_BUFFER_ENTRY)
-+#define _TIF_UACCESS_BUFFER_EXIT	(1 << TIF_UACCESS_BUFFER_EXIT)
+    sysfs-rules
++   uaccess-logging
  
- #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
- 				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-@@ -106,7 +110,8 @@ int arch_dup_task_struct(struct task_struct *dst,
- 
- #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
- 				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
--				 _TIF_SYSCALL_EMU)
-+				 _TIF_SYSCALL_EMU | _TIF_UACCESS_BUFFER_ENTRY | \
-+				 _TIF_UACCESS_BUFFER_EXIT)
- 
- #ifdef CONFIG_SHADOW_CALL_STACK
- #define INIT_SCS							\
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 88a9034fb9b5..283372eccaeb 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -29,6 +29,7 @@
- #include <linux/regset.h>
- #include <linux/tracehook.h>
- #include <linux/elf.h>
-+#include <linux/uaccess-buffer.h>
- 
- #include <asm/compat.h>
- #include <asm/cpufeature.h>
-@@ -1854,6 +1855,9 @@ int syscall_trace_enter(struct pt_regs *regs)
- 	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
- 		trace_sys_enter(regs, regs->syscallno);
- 
-+	if (flags & _TIF_UACCESS_BUFFER_ENTRY)
-+		uaccess_buffer_syscall_entry();
+ The rest of this manual consists of various unordered guides on how to
+ configure specific aspects of kernel behavior to your liking.
+diff --git a/Documentation/admin-guide/uaccess-logging.rst b/Documentation/admin-guide/uaccess-logging.rst
+new file mode 100644
+index 000000000000..24def38bbdf8
+--- /dev/null
++++ b/Documentation/admin-guide/uaccess-logging.rst
+@@ -0,0 +1,151 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- 	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
- 			    regs->regs[2], regs->regs[3]);
- 
-@@ -1866,6 +1870,9 @@ void syscall_trace_exit(struct pt_regs *regs)
- 
- 	audit_syscall_exit(regs);
- 
-+	if (flags & _TIF_UACCESS_BUFFER_EXIT)
-+		uaccess_buffer_syscall_exit();
++===============
++Uaccess Logging
++===============
 +
- 	if (flags & _TIF_SYSCALL_TRACEPOINT)
- 		trace_sys_exit(regs, syscall_get_return_value(current, regs));
- 
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 8f6372b44b65..5bbd98e5c257 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -20,6 +20,7 @@
- #include <linux/tracehook.h>
- #include <linux/ratelimit.h>
- #include <linux/syscalls.h>
-+#include <linux/uaccess-buffer.h>
- 
- #include <asm/daifflags.h>
- #include <asm/debug-monitors.h>
-@@ -919,6 +920,8 @@ static void do_signal(struct pt_regs *regs)
- 
- void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
- {
-+	bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
++Background
++----------
 +
- 	do {
- 		if (thread_flags & _TIF_NEED_RESCHED) {
- 			/* Unmask Debug and SError for the next task */
-@@ -950,6 +953,8 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
- 		local_daif_mask();
- 		thread_flags = READ_ONCE(current_thread_info()->flags);
- 	} while (thread_flags & _TIF_WORK_MASK);
++Userspace tools such as sanitizers (ASan, MSan, HWASan) and tools
++making use of the ARM Memory Tagging Extension (MTE) need to
++monitor all memory accesses in a program so that they can detect
++memory errors. Furthermore, fuzzing tools such as syzkaller need to
++monitor all memory accesses so that they know which parts of memory
++to fuzz. For accesses made purely in userspace, this is achieved
++via compiler instrumentation, or for MTE, via direct hardware
++support. However, accesses made by the kernel on behalf of the user
++program via syscalls (i.e. uaccesses) are normally invisible to
++these tools.
 +
-+	uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
- }
- 
- unsigned long __ro_after_init signal_minsigstksz;
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index 50a0f1a38e84..d59022b594f2 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -7,6 +7,7 @@
- #include <linux/ptrace.h>
- #include <linux/randomize_kstack.h>
- #include <linux/syscalls.h>
-+#include <linux/uaccess-buffer.h>
- 
- #include <asm/daifflags.h>
- #include <asm/debug-monitors.h>
++Traditionally, the sanitizers have handled this by interposing the libc
++syscall stubs with a wrapper that checks the memory based on what we
++believe the uaccesses will be. However, this creates a maintenance
++burden: each syscall must be annotated with its uaccesses in order
++to be recognized by the sanitizer, and these annotations must be
++continuously updated as the kernel changes.
++
++The kernel's uaccess logging feature provides userspace tools with
++the address and size of each userspace access, thereby allowing these
++tools to report memory errors involving these accesses without needing
++annotations for every syscall.
++
++By relying on the kernel's actual uaccesses, rather than a
++reimplementation of them, the userspace memory safety tools may
++play a dual role of verifying the validity of kernel accesses. Even
++a sanitizer whose syscall wrappers have complete knowledge of the
++kernel's intended API may vary from the kernel's actual uaccesses due
++to kernel bugs. A sanitizer with knowledge of the kernel's actual
++uaccesses may produce more accurate error reports that reveal such
++bugs. For example, a kernel that accesses more memory than expected
++by the userspace program could indicate that either userspace or the
++kernel has the wrong idea about which kernel functionality is being
++requested -- either way, there is a bug.
++
++Interface
++---------
++
++The feature may be used via the following prctl:
++
++.. code-block:: c
++
++  uint64_t addr = 0; /* Generally will be a TLS slot or equivalent */
++  prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &addr, 0, 0, 0);
++
++Supplying a non-zero address as the second argument to ``prctl``
++will cause the kernel to read an address (referred to as the *uaccess
++descriptor address*) from that address on each kernel entry. Specifying
++an address of NULL as the second argument will restore the kernel's
++default behavior, i.e. no uaccess descriptor address is read.
++
++When entering the kernel with a non-zero uaccess descriptor address
++to handle a syscall, the kernel will read a data structure of type
++``struct uaccess_descriptor`` from the uaccess descriptor address,
++which is defined as follows:
++
++.. code-block:: c
++
++  struct uaccess_descriptor {
++    uint64_t addr, size;
++  };
++
++This data structure contains the address and size (in array elements)
++of a *uaccess buffer*, which is an array of data structures of type
++``struct uaccess_buffer_entry``. Before returning to userspace, the
++kernel will log information about uaccesses to sequential entries
++in the uaccess buffer. It will also store ``NULL`` to the uaccess
++descriptor address, and store the address and size of the unused
++portion of the uaccess buffer to the uaccess descriptor.
++
++The format of a uaccess buffer entry is defined as follows:
++
++.. code-block:: c
++
++  struct uaccess_buffer_entry {
++    uint64_t addr, size, flags;
++  };
++
++``addr`` and ``size`` contain the address and size of the user memory
++access. On arm64, tag bits are preserved in the ``addr`` field. There
++is currently one flag bit assignment for the ``flags`` field:
++
++.. code-block:: c
++
++  #define UACCESS_BUFFER_FLAG_WRITE 1
++
++This flag is set if the access was a write, or clear if it was a
++read. The meaning of all other flag bits is reserved.
++
++When entering the kernel with a non-zero uaccess descriptor
++address for a reason other than a syscall (for example, when
++IPI'd due to an incoming asynchronous signal), any signals other
++than ``SIGKILL`` and ``SIGSTOP`` are masked as if by calling
++``sigprocmask(SIG_SETMASK, set, NULL)`` where ``set`` has been
++initialized with ``sigfillset(set)``. This is to prevent incoming
++signals from interfering with uaccess logging.
++
++Example
++-------
++
++Here is an example of a code snippet that will enumerate the accesses
++performed by a ``uname(2)`` syscall:
++
++.. code-block:: c
++
++  struct uaccess_buffer_entry entries[64];
++  struct uaccess_descriptor desc;
++  uint64_t desc_addr = 0;
++  prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &desc_addr, 0, 0, 0);
++
++  desc.addr = (uint64_t)&entries;
++  desc.size = 64;
++  desc_addr = (uint64_t)&desc;
++
++  struct utsname un;
++  uname(&un);
++
++  struct uaccess_buffer_entry* entries_end = (struct uaccess_buffer_entry*)desc.addr;
++  for (struct uaccess_buffer_entry* entry = entries; entry != entries_end; ++entry) {
++    printf("%s at 0x%lx size 0x%lx\n", entry->flags & UACCESS_BUFFER_FLAG_WRITE ? "WRITE" : "READ",
++           (unsigned long)entry->addr, (unsigned long)entry->size);
++  }
++
++Limitations
++-----------
++
++This feature is currently only supported on the arm64, s390 and x86
++architectures.
++
++Uaccess buffers are a "best-effort" mechanism for logging uaccesses. Of
++course, not all of the accesses may fit in the buffer, but aside from
++that, not all internal kernel APIs that access userspace memory are
++covered. Therefore, userspace programs should tolerate unreported
++accesses.
++
++On the other hand, the kernel guarantees that it will not
++(intentionally) report accessing more data than it is specified
++to read. For example, if the kernel implements a syscall that is
++specified to read a data structure of size ``N`` bytes by first
++reading a page's worth of data and then only using the first ``N``
++bytes from it, the kernel will either report reading ``N`` bytes or
++not report the access at all.
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

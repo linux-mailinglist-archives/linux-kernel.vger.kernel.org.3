@@ -2,263 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F8746CFD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2179C46CFDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhLHJQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:16:54 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:61474 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbhLHJQu (ORCPT
+        id S230429AbhLHJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230380AbhLHJRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:16:50 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211208091317epoutp01fb04fd50f3d7b77a2267fd8a16ab40a9~_vLRQeEVD2959429594epoutp01p
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:13:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211208091317epoutp01fb04fd50f3d7b77a2267fd8a16ab40a9~_vLRQeEVD2959429594epoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1638954797;
-        bh=6VBnbLr5EcNm6LxO+sVCmqE04fcqtx6aOeVwvJwiwo8=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=EGtv/VVVcvPjyfPx4KMD0+7ggab3lVYCrkIlTo4dywIjxGKKNEWFvPVX1pAjf94im
-         gSKwHIMd27UPcQDUjp+UmC3bGZa1QWzVwuYI1qnyXLylDdOK0edltQhKx8i15uTc0r
-         DKwpVBaTgbsbtqR0dSL5pkyR2o+04zXKmWRAXiJw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20211208091316epcas2p22926dee4e50f22573355d7eb9f3a7689~_vLQxGED01695116951epcas2p2h;
-        Wed,  8 Dec 2021 09:13:16 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.88]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4J8BKL1Gltz4x9Q3; Wed,  8 Dec
-        2021 09:13:10 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.17.10018.02770B16; Wed,  8 Dec 2021 18:13:04 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211208091303epcas2p4e0d9eca2b9976015fa840d4c0561eee5~_vLE3vKSj0915709157epcas2p4H;
-        Wed,  8 Dec 2021 09:13:03 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20211208091303epsmtrp1b72fa62a647758466809abfef070a12d~_vLE2m2Nk1209712097epsmtrp1r;
-        Wed,  8 Dec 2021 09:13:03 +0000 (GMT)
-X-AuditID: b6c32a46-a25ff70000002722-32-61b07720616b
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.F0.29871.F1770B16; Wed,  8 Dec 2021 18:13:03 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20211208091303epsmtip1e6fec0e7e52f195257aff196e1ea0a57~_vLEoperi3197831978epsmtip1t;
-        Wed,  8 Dec 2021 09:13:03 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Arnd Bergmann'" <arnd@arndb.de>,
-        "'Olof Johansson'" <olof@lixom.net>
-Cc:     "'Jaewon Kim'" <jaewon02.kim@samsung.com>,
-        "'David Virag'" <virag.david003@gmail.com>,
-        "'Youngmin Nam'" <youngmin.nam@samsung.com>,
-        "'Sam Protsenko'" <semen.protsenko@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>
-In-Reply-To: <14731ee8-bc9a-8973-2bcf-e7a771ac3c07@canonical.com>
-Subject: RE: [PATCH v3 0/5] soc: samsung: Add USI driver
-Date:   Wed, 8 Dec 2021 18:13:03 +0900
-Message-ID: <02a001d7ec13$ce088e80$6a19ab80$@samsung.com>
+        Wed, 8 Dec 2021 04:17:24 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6B8C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:13:53 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q3so2875096wru.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6QmATgtA2GhRHoLOX72VCjAGoOgaVTf/7uAV72vhA2Y=;
+        b=xVMypFPXZKCAS6akWukiKlAVGxtvpe4Ut+bFoLvZcUYZ2DFkJ0KZebWE5XHdIRL6e0
+         wFaKN7x5xB65VhsNgeK24VEYYTU5Z+Xftgo7r+hNUDw5g2+GqkQMM5YGrzvYMc58vfJq
+         XeSxaLTJ6yfgVrPwImb3U+wBkquN9xat+D+GMMDe3PXMJdhZsjQyZOq5Rmlnq9XmHS6J
+         C0kCt8JWIvmjgtgF3AzCN9UfGvIbyREt3Y1lEo3sK5KGPeIypvuG9IEecqrl5Up9e4GL
+         kS5wROhNtn+6I2hw1dB4cTdRq/e3Se2UxVosHSdpkwmCy+uOf3HOA1MILFezYT6DN/LN
+         FBRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6QmATgtA2GhRHoLOX72VCjAGoOgaVTf/7uAV72vhA2Y=;
+        b=LaQLTO9Ovyed6PG2beKuPi9w+iwCQGQhZfwFg892cqnF1+Y40pFfbpeOQxLZABtD3H
+         8WtruLUnVVXD8HtAr7V7/GR3AdBkKhT8+CCHeICNcaDxRZiOBUBYBR3u7U08zj9F8pnd
+         mTvByetA7jFsBg/tVtEg+345HC8p31ssWG2OSLVO6QyXlQ01df28d25Ro9b+u45PbN1r
+         dvv4bBWdvH5N/zY+YStJa3XiycGuU6pvfP1h5FlHvUjjb2VEKFo0VlfIgE7fRb8LbsKr
+         4fTDMIx6jsvswbi3ywcEU4d7GscCsZVnud+X/qaHwDH0ZK3xZpRddN1AflwPJFtTUtwY
+         T+Xg==
+X-Gm-Message-State: AOAM532wuOqWeXn3ecdcyX3F8eHAOEuCEjMxcjqNbwgD3RCreqc+8dRI
+        bgd9tu7F9CPGtk7pk+gi68A52g==
+X-Google-Smtp-Source: ABdhPJw8pmx7GfrpF9j9+pWmkiEwIEkAaDCwTKdGN1dsLM1IQgMhSDxAmI4Exq8zD8cfXfIzTqlj4g==
+X-Received: by 2002:adf:d1c1:: with SMTP id b1mr19931030wrd.296.1638954831541;
+        Wed, 08 Dec 2021 01:13:51 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id j40sm5211897wms.19.2021.12.08.01.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 01:13:51 -0800 (PST)
+Date:   Wed, 8 Dec 2021 09:13:49 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbB3TbU5dfPse9LU@google.com>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
+ <YbBYtJFQ47UH2h/k@unreal>
+ <YbBZuwXZWMV9uRXI@kroah.com>
+ <YbBwSV2IwDHNUrFH@google.com>
+ <YbBxPPPaQwlcgz/c@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJqUxbh1QCt+OxulIgHHWgadF9h5gF5SxqWAadkv+QCbflt2arXCXkA
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMJsWRmVeSWpSXmKPExsWy7bCmha5C+YZEg9ZX3BZ/Jx1jt5h/5Byr
-        RfPi9WwWOxqOsFpsfPuDyWLT42usFpd3zWGzmHF+H5PFmcW97Banrn9ms2jde4Td4nkfUOz4
-        +8eMFosPfGJ34PP4/WsSo8eshl42j52z7rJ7bFrVyeZx59oeNo/9c9ewe2xeUu9x5UQTq0ff
-        llWMHp83yQVwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE
-        6Lpl5gB9oKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2x
-        MjQwMDIFKkzIzvix8RdTwQbDiqMXfrA1ME5X72Lk4JAQMJFYPT+ji5GLQ0hgB6PEh2OLmCCc
-        T4wSkz79Z4dwvjFKrH1znLGLkROsY8rV2YwQib2MEjcbVkNVvWCUWNX7mh2kik1AX+JlxzZW
-        EFtEoJNRYvKsGpAiZoETzBIXN39jAklwCjhKfLv5gQ3EFhawkJjXPJ0ZxGYRUJH4e28ZC4jN
-        K2ApceDNPXYIW1Di5MwnYHFmAW2JZQtfM0OcpCDx8+kyqGVuEpMvPmSHqBGRmN3ZxgyyWELg
-        DYfEse8QQyUEXCRePzrBCmELS7w6voUdwpaSeNnfxg7R0M0o0froP1RiNaNEZ6MPhG0v8Wv6
-        FlZQ8DELaEqs36UPCUlliSO3oG7jk+g4/JcdIswr0dEmBNGoLnFg+3SoC2Qluud8Zp3AqDQL
-        yWezkHw2C8kHsxB2LWBkWcUollpQnJueWmxUYASP7eT83E2M4NSt5baDccrbD3qHGJk4GA8x
-        SnAwK4nwqj1cmyjEm5JYWZValB9fVJqTWnyI0RQY1hOZpUST84HZI68k3tDE0sDEzMzQ3MjU
-        wFxJnNcrZUOikEB6YklqdmpqQWoRTB8TB6dUA1P6pjLP+RreG4yvG++4EyB6pp0jKnSqfyPH
-        iV8PumQan045aaYoOe30Nq0/T9y+VHunX+m4qi/vIepqsURTTGKxdtKsii9lL9av+3GlqtlW
-        qnS1/P786ar19c8zHP5a8yhpCjXVlwobqv5WqH6tqbBS0vGDscqbsuK8GSsUV04uZ9JnEjzX
-        LBtttHp3sfwM1sS/0Wez3i9yY1zSrXNL4S1P712Z6ugPv+esfRBi03XnWsvGB5O/+zOLVMfx
-        pbVUCKXtY/rFV7py6fJGpnPPjvEwRfDwzXh8cVHF/Ef5OYf+fH6txvl4oY9ZLrvzT/aD+767
-        6IquSlZIeHivs1/g4e3ufWYtB525eheXvWOcrsRSnJFoqMVcVJwIABvMiZZmBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsWy7bCSnK58+YZEg3cn1C3+TjrGbjH/yDlW
-        i+bF69ksdjQcYbXY+PYHk8Wmx9dYLS7vmsNmMeP8PiaLM4t72S1OXf/MZtG69wi7xfM+oNjx
-        948ZLRYf+MTuwOfx+9ckRo9ZDb1sHjtn3WX32LSqk83jzrU9bB77565h99i8pN7jyokmVo++
-        LasYPT5vkgvgiuKySUnNySxLLdK3S+DK2LW0lalgsWHFlTNd7A2Mb9S6GDk5JARMJKZcnc3Y
-        xcjFISSwm1Fi744tTBAJWYln73awQ9jCEvdbjrBCFD1jlFjw5wYrSIJNQF/iZcc2sISIQDej
-        xJu9+1lAHGaBC8wSdxsuMEO0/GKU6Ny0hw2khVPAUeLbzQ9gtrCAhcS85unMIDaLgIrE33vL
-        WEBsXgFLiQNv7rFD2IISJ2c+AYszC2hLPL35FM5etvA1M8R9ChI/ny4DO0lEwE1i8sWH7BA1
-        IhKzO9uYJzAKz0IyahaSUbOQjJqFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95Pzc
-        TYzgWNbS3MG4fdUHvUOMTByMhxglOJiVRHjVHq5NFOJNSaysSi3Kjy8qzUktPsQozcGiJM57
-        oetkvJBAemJJanZqakFqEUyWiYNTqoFpYprfzQuBj1wO5s+vv6/a3pjRoCJc//C05qIZ3nuO
-        RBxv6tb9Zmzg4rlb+O5EhsZloYu0s36/PLnwmfSmG51ZdxrUuXp5L7oU8Zdm+6txb2wxW3Uk
-        SWHiZ6uP+QxRZZ17rnw+efrazqlbrrm4nHj8Pq54ZvrNycuTo5sitzNf3C8W+snk5LYAm7B/
-        LRVrdM0T/6bYt9xKO+0k+Z5l8dnXCi+MWTQDI9RuqOSdmfpFWDJp6kP722VHumZyCH9iiHv0
-        12aNa+KJNx+yuV+c9Xr8W0nUPO8C2/XohOokkeen9NTdZrU561m9frzj+49Ztn/nfrT8XFNn
-        vdH085PyhKNdsybaiVea/LF4w/r5t76WEktxRqKhFnNRcSIAQOUudFQDAAA=
-X-CMS-MailID: 20211208091303epcas2p4e0d9eca2b9976015fa840d4c0561eee5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211206182351epcas2p4b381b620bb0f7f7928857b7003f7e83c
-References: <20211204195757.8600-1-semen.protsenko@linaro.org>
-        <fb31a159-6d2e-6c9a-439f-f19ef4fd4732@canonical.com>
-        <CGME20211206182351epcas2p4b381b620bb0f7f7928857b7003f7e83c@epcas2p4.samsung.com>
-        <14731ee8-bc9a-8973-2bcf-e7a771ac3c07@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 08 Dec 2021, Greg KH wrote:
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski=40canonical.com>
-> Sent: Tuesday, December 7, 2021 3:24 AM
-> To: Arnd Bergmann <arnd=40arndb.de>; Olof Johansson <olof=40lixom.net>
-> Cc: Jaewon Kim <jaewon02.kim=40samsung.com>; Chanho Park
-> <chanho61.park=40samsung.com>; David Virag <virag.david003=40gmail.com>;
-> Youngmin Nam <youngmin.nam=40samsung.com>; Sam Protsenko
-> <semen.protsenko=40linaro.org>; devicetree=40vger.kernel.org; linux-
-> serial=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; Greg Kr=
-oah-
-> Hartman <gregkh=40linuxfoundation.org>; linux-kernel=40vger.kernel.org; l=
-inux-
-> samsung-soc=40vger.kernel.org; Rob Herring <robh+dt=40kernel.org>
-> Subject: Re: =5BPATCH v3 0/5=5D soc: samsung: Add USI driver
->=20
-> On 05/12/2021 17:24, Krzysztof Kozlowski wrote:
-> > On 04/12/2021 20:57, Sam Protsenko wrote:
-> >> USIv2 IP-core provides selectable serial protocol (UART, SPI or
-> >> High-Speed I2C); only one can be chosen at a time. This series
-> >> implements USIv2 driver, which allows one to select particular USI
-> >> function in device tree, and also performs USI block initialization.
-> >>
-> >> With that driver implemented, it's not needed to do USI
-> >> initialization in protocol drivers anymore, so that code is removed
-> >> from the serial driver.
-> >>
-> >> Because USI driver is tristate (can be built as a module), serial
-> >> driver was reworked so it's possible to use its console part as a
-> module too.
-> >> This way we can load serial driver module from user space and still
-> >> have serial console functional.
-> >>
-> >> Design features:
-> >>   - =22reg=22 property contains USI registers start address (0xc0 offs=
-et);
-> >>     it's used in the driver to access USI_CON and USI_OPTION registers=
-.
-> >>     This way all USI initialization (reset, HWACG, etc) can be done in
-> >>     USIv2 driver separately, rather than duplicating that code over
-> >>     UART/SPI/I2C drivers
-> >>   - System Register (system controller node) and its SW_CONF register
-> >>     offset are provided in =22samsung,sysreg=22 property; it's used to
-> >>     select USI function (protocol to be used)
-> >>   - USI function is specified in =22samsung,mode=22 property; integer =
-value
-> >>     is used to simplify parsing
-> >>   - there is =22samsung,clkreq-on=22 bool property, which makes driver
-> >>     disable HWACG control (needed for UART to work properly)
-> >>   - PCLK and IPCLK clocks are both provided to USI node; apparently
-> both
-> >>     need to be enabled to access USI registers
-> >>   - protocol nodes are embedded (as a child nodes) in USI node; it
-> >>     allows correct init order, and reflects HW properly
-> >>   - USI driver is a tristate: can be also useful from Android GKI
-> >>     requirements point of view
-> >>   - driver functions are implemented with further development in mind:
-> >>     - we might want to add some DebugFs interface later
-> >>     - some functions might need to be revealed to serial drivers with
-> >>       EXPORT_SYMBOL(), and provide somehow pointer to needed USI drive=
-r
-> >>       instance
-> >>     - another USI revisions could be added (like USIv1)
-> >>
-> >> Changes in v3:
-> >>   - Renamed compatible from samsung,exynos-usi-v2 to samsung,exynos850=
--
-> usi
-> >>   - Used clk_bulk API instead of handling each clock separately
-> >>   - Spell check fixes and coding style fixes
-> >>   - Improved dt-bindings doc
-> >>
-> >> Changes in v2:
-> >>   - Renamed all 'usi_v2' wording to just 'usi' everywhere
-> >>   - Removed patches adding dependency on EXYNOS_USI for UART/I2C/SPI
-> >>     drivers
-> >>   - Added patch: =22tty: serial: samsung: Fix console registration fro=
-m
-> >>     module=22
-> >>   - Combined dt-bindings doc and dt-bindings header patches
-> >>   - Reworked USI driver to be ready for USIv1 addition
-> >>   - Improved dt-bindings
-> >>   - Added USI_V2_NONE mode value
-> >>
-> >> Sam Protsenko (5):
-> >>   dt-bindings: soc: samsung: Add Exynos USI bindings
-> >>   soc: samsung: Add USI driver
-> >>   tty: serial: samsung: Remove USI initialization
-> >>   tty: serial: samsung: Enable console as module
-> >>   tty: serial: samsung: Fix console registration from module
-> >>
-> >
-> > All this looks good to me. The serial driver changes should come
-> > together with this one (usi driver is now a dependency for them). If I
-> > am correct, mention this please in future cover letter (if there is
-> such).
-> >
-> > I will still need DTSI changes for Exynos Auto v9 and confirmation
-> > that is not being used downstream and breaking DTB ABI is okay.
-> > Because this will be a non-bisctable and also a DTB ABI break.
->=20
-> +CC Arnd and Olof,
->=20
-> Dear Arnd and Olof,
->=20
-> The patchset discussed here reworks recently added USI code to Samsung
-> Exynos UART driver in a non-bisectable and ABI-breaking way. The existing
-> code in serial driver was added in v5.15-rc1, however first user - Exyons
-> Auto v9 - appeared in v5.16-rc1.
->=20
-> The bisectability and ABI break will affect only newly upstreamed Samsung
-> Exynos SoC, so for now only Exynos Auto v9.
->=20
-> The early code has some drawbacks and limitations which came up now when
-> we want to extend the USI code to support more blocks (I2C, SPI) and
-> devices (including older Exynos chipsets). Therefore I am planning to mak=
-e
-> an ABI break of this features because:
-> 1. The code was added recently (v5.15-rc1) and users even later (v5.16-
-> rc1).
-> 2. Even though code was merged, I consider it still development phase.
-> Kernel development goes very fast and we do not defer patches waiting for
-> perfect solution.
-> 3. There are no known out-of-tree users of this because this is fairly ne=
-w.
-> For this I am waiting for confirmation from Chanho (and/or other Samsung
-> folks). I don't expect there are out of tree users because any mobile or
-> automotive product will take Samsung vendor sources and recent kernels ar=
-e
-> not a base for Samsung vendor kernels.
+> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
+> > On Wed, 08 Dec 2021, Greg KH wrote:
+> > 
+> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
+> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> > > > > Adds get/set driver data helpers for auxiliary devices.
+> > > > > 
+> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > > > > ---
+> > > > > V2
+> > > > >   - No changes
+> > > > > 
+> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > 
+> > > > I would really like to see an explanation why such obfuscation is really
+> > > > needed. dev_*_drvdata() is a standard way to access driver data.
+> > 
+> > I wouldn't call it obfuscation, but it does looks like abstraction for
+> > the sake of abstraction, which I usually push back on.  What are the
+> > technical benefits over using the dev_*() variant?
+> 
+> See my response at:
+> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
+> for why it is a good thing to do.
 
-This will be not an issue in my case. Please apply below patch with this se=
-ries.
-https://lore.kernel.org/linux-samsung-soc/20211208003946.139423-1-chanho61.=
-park=40samsung.com/T/=23u
+I saw this after I'd sent my query.
 
-Best Regards,
-Chanho Park
+> In short, driver authors should not have to worry about mixing
+> bus-specific and low-level driver core functions.
 
+Okay, that makes sense.
+
+I guess my view abstraction for the sake of it is slightly higher
+level as I vehemently dislike it when driver-set writers create their
+own APIs, such as; (just off the top of my head, not a real example)
+cros_get_data() or cros_write() which are usually abstractions of top
+level APIs like platform_get_data() and regmap_write() respectively.
+
+Abstracting at *real* API level does seem like the right thing to do.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

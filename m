@@ -2,112 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8D346CE4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0C546CE52
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244507AbhLHHY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:24:57 -0500
-Received: from mail-ed1-f41.google.com ([209.85.208.41]:43661 "EHLO
-        mail-ed1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240199AbhLHHY4 (ORCPT
+        id S244523AbhLHHZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:25:28 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:45838 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240199AbhLHHZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:24:56 -0500
-Received: by mail-ed1-f41.google.com with SMTP id o20so5112025eds.10;
-        Tue, 07 Dec 2021 23:21:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IVmLYGB580r43pIj6dV5gG4FJJTbCh6v3cE+UdalM8g=;
-        b=V+ZuzsKZEYay3290CLvbE8E3DPhw3suzxYOxk8yY8+cQ+YEvMkJcVfEkns/CGnjTsL
-         mymMtJtpCL9wcgJzwJ+a4Hl5NFr0jfeXSZMCMA9c8YGF/HAWYf1bYY7JKBLP25iGcxM7
-         6R6kBXpRR8qe5k8l7BThhfLYUkx0N8BHWjXdpKG3a/+w0K50s4gEyb1+31BFVVNsq5cL
-         aEBF07xBtUmx42xsgjDbtHbXyQ33CoZLr2v3Is+wvzXlD8cZueolVLm8rmcF9GjWzp9f
-         vAAEiXhA7orjE398jDemG/dHrpYTfLHjcwZCDdEiK4u9L4j4sJsW/Vf4WRMlb9UCHKht
-         0r/g==
-X-Gm-Message-State: AOAM5322OeBmdoLIhZ9zu0o/6+MXjpb3nLAuG9BLvkMyzeiIXF2mRFkz
-        UihkfMxia1z9IlB6dNyzN38zSCR3fXA=
-X-Google-Smtp-Source: ABdhPJwrsPsBiVxoQtOIxXjMD4bQl982DZszilVOz/NRX5HWAILpBe4AQyF1a14sEt/I/MGnQKZqZA==
-X-Received: by 2002:a17:907:ea5:: with SMTP id ho37mr5703164ejc.133.1638948083697;
-        Tue, 07 Dec 2021 23:21:23 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id jg32sm1056775ejc.43.2021.12.07.23.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 23:21:23 -0800 (PST)
-Message-ID: <7fd033ff-d1a5-9f1c-d8b9-5f51d63697fd@kernel.org>
-Date:   Wed, 8 Dec 2021 08:21:22 +0100
+        Wed, 8 Dec 2021 02:25:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638948116; x=1670484116;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XiDhpDSCpksEc3gur7+h1bHxNvPYUsOTifvpixcJeds=;
+  b=Pj2xHeYP9ZuonoIJkrGdgDxIkC0PrIQEqn0nQtCdFJZofSsCSFw8QUCk
+   zUdZT3poXtXV4ShVZDs/pocgLPChTGwHqJD0KRMJNTKXPoBsnFdk9IfmB
+   v98O8cvvryZlRhHjZGnxlRWG7gNZPkUcTuJOf+1JNl7tYYx//ofCMMIWE
+   A=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Dec 2021 23:21:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 23:21:55 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 7 Dec 2021 23:21:55 -0800
+Received: from [10.50.61.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 7 Dec 2021
+ 23:21:52 -0800
+Message-ID: <9d1d80cf-977b-561c-faae-6e2487d1247b@quicinc.com>
+Date:   Wed, 8 Dec 2021 12:51:49 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V2] tty: serial: fsl_lpuart: add timeout for
- wait_event_interruptible in .shutdown()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [RESEND PATCHv2] tty: hvc: dcc: Bind driver to core0 for reads
+ and writes
 Content-Language: en-US
-To:     Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-References: <20211203030441.22873-1-sherry.sun@nxp.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20211203030441.22873-1-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Jiri Slaby <jirislaby@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <quic_eberman@quicinc.com>,
+        <quic_tsoni@quicinc.com>
+References: <20211208063847.27174-1-quic_saipraka@quicinc.com>
+ <YbBX+cLRhJ5T+hBq@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YbBX+cLRhJ5T+hBq@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 12/8/2021 12:30 PM, Greg Kroah-Hartman wrote:
+> On Wed, Dec 08, 2021 at 12:08:47PM +0530, Sai Prakash Ranjan wrote:
+>> From: Shanker Donthineni <shankerd@codeaurora.org>
+>>
+>> Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
+>> reads/writes from/to DCC on secondary cores. Each core has its
+>> own DCC device registers, so when a core reads or writes from/to DCC,
+>> it only accesses its own DCC device. Since kernel code can run on
+>> any core, every time the kernel wants to write to the console, it
+>> might write to a different DCC.
+>>
+>> In SMP mode, Trace32 creates multiple windows, and each window shows
+>> the DCC output only from that core's DCC. The result is that console
+>> output is either lost or scattered across windows.
+>>
+>> Selecting this option will enable code that serializes all console
+>> input and output to core 0. The DCC driver will create input and
+>> output FIFOs that all cores will use. Reads and writes from/to DCC
+>> are handled by a workqueue that runs only core 0.
+>>
+>> Link: https://lore.kernel.org/lkml/1435344756-20901-1-git-send-email-timur@codeaurora.org/
+>> Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
+>> Acked-by: Adam Wallis <awallis@codeaurora.org>
+>> Signed-off-by: Timur Tabi <timur@codeaurora.org>
+>> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> ---
+>>
+>> Resending this v2 since earlier one had a typo in the variable type.
+>>
+>> Changes in v2:
+>>   * Checkpatch warning fixes.
+>>   * Use of IS_ENABLED macros instead of ifdefs.
+>>
+>> I also thought of making it depends on !HOTPLUG_CPU since it is broken
+>> in case core0 is hotplugged off, but apparently HOTPLUG_CPU kconfig
+>> has weird dependency issues, i.e., gets selected by CONFIG_PM and others.
+>> So it will be almost like this feature won't be selectable at all if
+>> I add !HOTPLUG_CPU kconfig dependency. Also HVC_DCC is a debug feature
+>> where we need Trace32 like tools to access DCC windows in which case
+>> these shortcomings can be expected since manual intervention is required
+>> anyways for attaching a core to Trace32, so it won't matter much.
+> But your code will break on systems when cpu 0 goes away, so this isn't
+> going to work well at all.  Please make this work for any cpu or handle
+> the case when the cpu it is running on goes away.
 
-On 03. 12. 21, 4:04, Sherry Sun wrote:
-> Use wait_event_interruptible in lpuart_dma_shutdown isn't a reasonable
-> behavior, since it may cause the system hang here if the condition
+It breaks as in we won't see the kernel logs in the userspace tools like 
+Trace32 when CPU0 goes
+off, it isn't any different from detaching cores from Trace32 manually. 
+There is no way to auto migrate
+to other CPU in such tools, you have to manually attach core to 
+corresponding CPUs anyways.
+How do you suppose we write code in kernel such that it auto migrate in 
+such external tools?
+Even if I did migrate to other CPU in kernel handling the hotplug case, 
+it doesn't change anything,
 
-Wait, _interruptible causes hangs? Under what circumstances?
+I can try to handle the !HOTPLUG_CPU, i.e., untangle Kconfig mess 
+although its out of scope if you
+insist, might need some time to get through Kconfig things sorted.
 
-> !sport->dma_tx_in_progress never to be true in some corner case, such as
-> when enable the flow control, the dma tx request may never be completed
-> due to the peer's CTS setting when run .shutdown().
-> 
-> So here change to use wait_event_interruptible_timeout instead of
-> wait_event_interruptible, the tx dma will be forcibly terminated if the
-> tx dma request cannot be completed within 300ms.
-> Considering the worst tx dma case is to have a 4K bytes tx buffer, which
-> would require about 300ms to complete when the baudrate is 115200.
+> Also, this REALLY looks like you are trying to fix the kernel for a
+> crazy userspace program.  Why not fix the userspace program instead?
+> Isn't that easier and then that way it will work for any kernel version?
 
-300 looks like a magic number -- what if the rate is < 115200? Why not 
-using port->timeout?
+This isn't a bug fix but mostly a feature where we wouldn't want to open 
+multiple windows to see the logs.
+Would you do the same thing for your usual uart console? i.e., open all 
+the 8 console (for 8 cpus) or 100s in
+case of 100s of CPU cores and look through each of them? I think no, so 
+similarly anyone wouldn't want to
+open 8/100 windows of Trace32 or other userspace application which 
+provides DCC functionality while debugging,
+it's not good at all.
 
-Anyway, in what scenario is this a problem? Both lpuart*_tx_empty() do:
-if (sport->dma_tx_in_progress)
-         return 0;
+Also such feature requests do not go through for such tools, also there 
+isn't a requirement for them since DCC is per
+core which is what they implement, its the **kernel which runs SMP** 
+which needs to handle this so it makes it easier
+for the user to look at **kernel logs**, not Trace32 logs.
 
-So wait_until_sent() should have waited for long enough already.
+Also what would you do for other applications like Trace32? Send this 
+feature request to all those tools out there?
+How would that work?
 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
-> changes in V2
-> 1. Increase the timeout to 300ms, need to consider the worst tx dma case.
-> ---
->   drivers/tty/serial/fsl_lpuart.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index ac5112def40d..3affe52a364d 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -1793,8 +1793,8 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
->   	}
->   
->   	if (sport->lpuart_dma_tx_use) {
-> -		if (wait_event_interruptible(sport->dma_wait,
-> -			!sport->dma_tx_in_progress) != false) {
-> +		if (wait_event_interruptible_timeout(sport->dma_wait,
-> +			!sport->dma_tx_in_progress, msecs_to_jiffies(300)) <= 0) {
->   			sport->dma_tx_in_progress = false;
->   			dmaengine_terminate_all(sport->dma_tx_chan);
->   		}
-> 
-
-
--- 
-js
-suse labs
+Thanks,
+Sai

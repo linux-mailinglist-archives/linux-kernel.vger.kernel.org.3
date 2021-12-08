@@ -2,154 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC5D46DBDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C58146DBEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbhLHTRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:17:36 -0500
-Received: from mga07.intel.com ([134.134.136.100]:42409 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233077AbhLHTRd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:17:33 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="301295246"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="301295246"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:12:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="543305679"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 11:12:42 -0800
-Date:   Wed, 8 Dec 2021 11:16:59 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
-Message-ID: <20211208111659.6de22e52@jacob-builder>
-In-Reply-To: <20211208132255.GS6385@nvidia.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
-        <20211208132255.GS6385@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S234356AbhLHTUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233594AbhLHTUu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 14:20:50 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1586C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 11:17:17 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id z6so2182871plk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DGnuOBwhoBGsqcbwh1V3s8v4tkBJox5VDKCuMWrCxRI=;
+        b=fbvEgdJVp9DubGUA5+/dSVLMkuGd39qD7pKitXNbCxQQ25h2rtA0U8zDfgG10+48kk
+         Z7fIDyR9H1m0bwe4YLYvIaJC2G+ZMyAlcUGwQ2vF3GLc0WtMed4x4mUd/+wslThcz9q3
+         WMf3jd8KpucybyJF03UVWdix26Kt8uhTxOgQGv3VHvySbxTkdiBl0gchTrLtaBnADLVv
+         UHquEeLRlh1cfmfH/ffMjCLkZ050whAVjX+Vvm8yFOqPRiD3OCKm8PIiN14meMoZ4+Qv
+         WYoh5vPhWsrSAUVpm020kApSUL2qGbplbKV5h/Nnr56+/YC/dQKLbewmqvoqNR4ZUH+z
+         XaSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DGnuOBwhoBGsqcbwh1V3s8v4tkBJox5VDKCuMWrCxRI=;
+        b=fnisERI30C/GKmGOZrZztNmlqyz9ob6urZgJEyzibHe0v9UAmQbAqQOd1a8UHPNV3Q
+         hMvRl9n9fkqrvsQeZQG42hNdVEnyCUNzPnsH8pdcPQhTkgVs3ExaVkwtISi0nYxOQZQr
+         m9OKno5C18HTrw37FOys9AOqHscjwBWaVrjVwjlVJbZL8DrMRtdfvy8fYMHiCTvHBv6D
+         WeXIqQCpC1KUyn2mln/NtK6E9HnirKBvpalyzVEMiemEZkWMy4V3bTmYqeAOQefSz5hq
+         baH5M5YdUtwLuq38ZHg5/pnPMJ7sCF27EV9X+tcgmdC6o2DPoox09tZYTaEkK9b6K2YW
+         ox+w==
+X-Gm-Message-State: AOAM531J/vej5cJhI7oeXP4n7QBGClwRhtOJfPGJB53TIdX/opcHDzIH
+        8I1MbR+bjGfp/621NFaqsDOYMQ==
+X-Google-Smtp-Source: ABdhPJzErlY5eV+qzr52TnFF6JnHqQk+b9rFrt/flyTqyxNA1fc1JM6Cv//8XdHYPVs/YWjN1lmSog==
+X-Received: by 2002:a17:902:b20b:b0:141:a92c:a958 with SMTP id t11-20020a170902b20b00b00141a92ca958mr61874259plr.24.1638991037051;
+        Wed, 08 Dec 2021 11:17:17 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y31sm4952081pfa.92.2021.12.08.11.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 11:17:16 -0800 (PST)
+Date:   Wed, 8 Dec 2021 19:17:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 04/28] KVM: x86/mmu: Retry page fault if root is
+ invalidated by memslot update
+Message-ID: <YbEEuZBjEjOO9Pws@google.com>
+References: <20211120045046.3940942-1-seanjc@google.com>
+ <20211120045046.3940942-5-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211120045046.3940942-5-seanjc@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Sat, Nov 20, 2021, Sean Christopherson wrote:
+> @@ -3976,6 +3980,20 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  	return true;
+>  }
+>  
+> +/*
+> + * Returns true if the page fault is stale and needs to be retried, i.e. if the
+> + * root was invalidated by a memslot update or a relevant mmu_notifier fired.
+> + */
+> +static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+> +				struct kvm_page_fault *fault, int mmu_seq)
+> +{
+> +	if (is_obsolete_sp(vcpu->kvm, to_shadow_page(vcpu->arch.mmu->root_hpa)))
 
-On Wed, 8 Dec 2021 09:22:55 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
+Ugh, I got so focused on TDP MMU that I completely forgot to test this with shadow
+paging.  PAE roots are not backed by shadow pages, which means this explodes on the
+very first page fault with TDP disabled.  Nested NPT will suffer the same fate.
 
-> On Tue, Dec 07, 2021 at 05:47:13AM -0800, Jacob Pan wrote:
-> > Between DMA requests with and without PASID (legacy), DMA mapping APIs
-> > are used indiscriminately on a device. Therefore, we should always match
-> > the addressing mode of the legacy DMA when enabling kernel PASID.
-> > 
-> > This patch adds support for VT-d driver where the kernel PASID is
-> > programmed to match RIDPASID. i.e. if the device is in pass-through, the
-> > kernel PASID is also in pass-through; if the device is in IOVA mode, the
-> > kernel PASID will also be using the same IOVA space.
-> > 
-> > There is additional handling for IOTLB and device TLB flush w.r.t. the
-> > kernel PASID. On VT-d, PASID-selective IOTLB flush is also on a
-> > per-domain basis; whereas device TLB flush is per device. Note that
-> > IOTLBs are used even when devices are in pass-through mode. ATS is
-> > enabled device-wide, but the device drivers can choose to manage ATS at
-> > per PASID level whenever control is available.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> >  drivers/iommu/intel/iommu.c | 105 +++++++++++++++++++++++++++++++++++-
-> >  drivers/iommu/intel/pasid.c |   7 +++
-> >  include/linux/intel-iommu.h |   3 +-
-> >  3 files changed, 113 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 60253bc436bb..a2ef6b9e4bfc 100644
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -1743,7 +1743,14 @@ static void domain_flush_piotlb(struct
-> > intel_iommu *iommu, if (domain->default_pasid)
-> >  		qi_flush_piotlb(iommu, did, domain->default_pasid,
-> >  				addr, npages, ih);
-> > -
-> > +	if (domain->kernel_pasid && !domain_type_is_si(domain)) {
-> > +		/*
-> > +		 * REVISIT: we only do PASID IOTLB inval for FL, we
-> > could have SL
-> > +		 * for PASID in the future such as vIOMMU PT. this
-> > doesn't get hit.
-> > +		 */
-> > +		qi_flush_piotlb(iommu, did, domain->kernel_pasid,
-> > +				addr, npages, ih);
-> > +	}
-> >  	if (!list_empty(&domain->devices))
-> >  		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr,
-> > npages, ih); }
-> > @@ -5695,6 +5702,100 @@ static void intel_iommu_iotlb_sync_map(struct
-> > iommu_domain *domain, }
-> >  }
-> >  
-> > +static int intel_enable_pasid_dma(struct device *dev, u32 pasid)
-> > +{  
-> 
-> This seems like completely the wrong kind of op.
-> 
-> At the level of the iommu driver things should be iommu_domain centric
-> 
-> The op should be
-> 
-> int attach_dev_pasid(struct iommu_domain *domain, struct device *dev,
-> ioasid_t pasid)
-> 
-> Where 'dev' purpose is to provide the RID
-> 
-> The iommu_domain passed in should be the 'default domain' ie the table
-> used for on-demand mapping, or the passthrough page table.
-> 
-Makes sense. DMA API is device centric, iommu API is domain centric. It
-should be the common IOMMU code to get the default domain then pass to
-vendor drivers. Then we can enforce default domain behavior across all
-vendor drivers.
-i.e. 	
-	dom = iommu_get_dma_domain(dev);
-	attach_dev_pasid(dom, dev, pasid);
+I'll figure out a patch for 5.16.  Long term, it might be nice to actually allocate
+shadow pages for the special roots.
 
-> > +	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-> > +	struct device_domain_info *info;  
-> 
-> I don't even want to know why an iommu driver is tracking its own
-> per-device state. That seems like completely wrong layering.
-> 
-This is for IOTLB and deTLB flush. IOTLB is flushed at per domain level,
-devTLB is per device.
-
-For multi-device groups, this is a need to track how many devices are using
-the kernel DMA PASID.
-
-Are you suggesting we add the tracking info in the generic layer? i.e.
-iommu_group.
-
-We could also have a generic device domain info to replace what is in VT-d
-and FSL IOMMU driver, etc.
-
-Thanks,
-
-Jacob
+> +		return true;
+> +
+> +	return fault->slot &&
+> +	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> +}

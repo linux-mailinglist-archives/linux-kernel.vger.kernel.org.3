@@ -2,148 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB7B46DF14
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D96046DF18
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238166AbhLHXsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:48:12 -0500
-Received: from relay04.th.seeweb.it ([5.144.164.165]:48939 "EHLO
-        relay04.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238031AbhLHXsM (ORCPT
+        id S241213AbhLHXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:48:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45636 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238277AbhLHXsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:48:12 -0500
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 8 Dec 2021 18:48:15 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C5E412036B;
-        Thu,  9 Dec 2021 00:44:37 +0100 (CET)
-Date:   Thu, 9 Dec 2021 00:44:36 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] firmware: qcom: scm: Add function to set the maximum
- IOMMU pool size
-Message-ID: <20211208234436.ktagmcfj6jl5jct5@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Alex Elder <elder@linaro.org>, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211208083423.22037-1-marijn.suijten@somainline.org>
- <20211208083423.22037-3-marijn.suijten@somainline.org>
- <b21686fc-3662-1ed4-8ba3-8ed5ca6eda13@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b21686fc-3662-1ed4-8ba3-8ed5ca6eda13@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA711B82312;
+        Wed,  8 Dec 2021 23:44:41 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF5CE603E4;
+        Wed,  8 Dec 2021 23:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1639007080;
+        bh=UkQani6FEO+P7NP71yI3ezLyKvLVm8th0l7ERr+VtXM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EUwAtzZ4il4NboJbOfflvB9STYCCGKnPsyM1Kx+UZicRJY2jIlEX+pWzbzZKA7rJg
+         5mXivCSeUyD9QvoEO6vhhT9wtSX3TvfYHC7X1hg6aO5TIsoZ7QMOgG+bNdm1NckAN/
+         xJBrUVFEic3wFBBoBYWBQkLpBP+Y7AUWHE3mhLm4=
+Date:   Wed, 8 Dec 2021 15:44:37 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     xiujianfeng <xiujianfeng@huawei.com>
+Cc:     <keescook@chromium.org>, <laniel_francis@privacyrequired.com>,
+        <andriy.shevchenko@linux.intel.com>, <adobriyan@gmail.com>,
+        <linux@roeck-us.net>, <andreyknvl@gmail.com>, <dja@axtens.net>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+Subject: Re: [PATCH -next 1/2] string.h: Introduce memset_range() for wiping
+ members
+Message-Id: <20211208154437.01441d2dcf4cd812a9c58a7d@linux-foundation.org>
+In-Reply-To: <e2d5936d-8490-5871-b3d4-b286d256832a@huawei.com>
+References: <20211208030451.219751-1-xiujianfeng@huawei.com>
+        <20211208030451.219751-2-xiujianfeng@huawei.com>
+        <20211207202829.48d15f0ffa006e3656811784@linux-foundation.org>
+        <e2d5936d-8490-5871-b3d4-b286d256832a@huawei.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-08 07:30:28, Alex Elder wrote:
-> On 12/8/21 2:34 AM, Marijn Suijten wrote:
-> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> > 
-> > This is not necessary for basic functionality of the IOMMU, but
-> > it's an optimization that tells to the TZ what's the maximum
-> > mappable size for the secure IOMMUs, so that it can optimize
-> > the data structures in the TZ itself.
-> 
-> Are there no users of this function?	-Alex
+On Wed, 8 Dec 2021 18:30:26 +0800 xiujianfeng <xiujianfeng@huawei.com> wrote:
 
-I should have probably mentioned in the cover letter that this function
-and the one introduced in patch 3/3 are going to be used in upcoming
-patches for IOMMUs found in msm8976, msm8974 and related SoCs (with the
-side-note that I don't see this particular set_cp_pool_size used in the
-branch that this was submitted from, but it's most likely used elsewhere
-or planned ahead to be used in the near future - I expect Angelo to be
-able to comment on that more accurately).
-
-> > 
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> > [Marijn: ported from 5.3 to the unified architecture in 5.11]
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > ---
-> >   drivers/firmware/qcom_scm.c | 15 +++++++++++++++
-> >   drivers/firmware/qcom_scm.h |  1 +
-> >   include/linux/qcom_scm.h    |  1 +
-> >   3 files changed, 17 insertions(+)
-> > 
-> > diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> > index 3f67bf774821..d5a9ba15e2ba 100644
-> > --- a/drivers/firmware/qcom_scm.c
-> > +++ b/drivers/firmware/qcom_scm.c
-> > @@ -759,6 +759,21 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
-> >   }
-> >   EXPORT_SYMBOL(qcom_scm_iommu_secure_ptbl_init);
-> >   
-> > +int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size)
-> > +{
-> > +	struct qcom_scm_desc desc = {
-> > +		.svc = QCOM_SCM_SVC_MP,
-> > +		.cmd = QCOM_SCM_MP_IOMMU_SET_CP_POOL_SIZE,
-> > +		.arginfo = QCOM_SCM_ARGS(2),
-> > +		.args[0] = size,
-> > +		.args[1] = spare,
-> > +		.owner = ARM_SMCCC_OWNER_SIP,
-> > +	};
-> > +
-> > +	return qcom_scm_call(__scm->dev, &desc, NULL);
-> > +}
-> > +EXPORT_SYMBOL(qcom_scm_iommu_set_cp_pool_size);
-> > +
-> >   int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
-> >   				   u32 cp_nonpixel_start,
-> >   				   u32 cp_nonpixel_size)
-> > diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> > index d92156ceb3ac..bb627941702b 100644
-> > --- a/drivers/firmware/qcom_scm.h
-> > +++ b/drivers/firmware/qcom_scm.h
-> > @@ -100,6 +100,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
-> >   #define QCOM_SCM_MP_RESTORE_SEC_CFG		0x02
-> >   #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_SIZE	0x03
-> >   #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_INIT	0x04
-> > +#define QCOM_SCM_MP_IOMMU_SET_CP_POOL_SIZE	0x05
-> >   #define QCOM_SCM_MP_VIDEO_VAR			0x08
-> >   #define QCOM_SCM_MP_ASSIGN			0x16
-> >   
-> > diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> > index 81cad9e1e412..8a065f8660c1 100644
-> > --- a/include/linux/qcom_scm.h
-> > +++ b/include/linux/qcom_scm.h
-> > @@ -83,6 +83,7 @@ extern bool qcom_scm_restore_sec_cfg_available(void);
-> >   extern int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
-> >   extern int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size);
-> >   extern int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare);
-> > +extern int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size);
-> >   extern int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
-> >   					  u32 cp_nonpixel_start,
-> >   					  u32 cp_nonpixel_size);
-> > 
 > 
+> 在 2021/12/8 12:28, Andrew Morton 写道:
+> > On Wed, 8 Dec 2021 11:04:50 +0800 Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+> >
+> >> Motivated by memset_after() and memset_startat(), introduce a new helper,
+> >> memset_range() that takes the target struct instance, the byte to write,
+> >> and two member names where zeroing should start and end.
+> > Is this likely to have more than a single call site?
+> There maybe more call site for this function, but I just use bpf as an 
+> example.
+> >
+> >> ...
+> >>
+> >> --- a/include/linux/string.h
+> >> +++ b/include/linux/string.h
+> >> @@ -291,6 +291,26 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+> >>   	       sizeof(*(obj)) - offsetof(typeof(*(obj)), member));	\
+> >>   })
+> >>   
+> >> +/**
+> >> + * memset_range - Set a value ranging from member1 to member2, boundary included.
+> > I'm not sure what "boundary included" means.
+> I mean zeroing from member1 to member2(including position indicated by 
+> member1 and member2)
+> >
+> >> + *
+> >> + * @obj: Address of target struct instance
+> >> + * @v: Byte value to repeatedly write
+> >> + * @member1: struct member to start writing at
+> >> + * @member2: struct member where writing should stop
+> > Perhaps "struct member before which writing should stop"?
+> memset_range should include position indicated by member2 as well
+
+In that case we could say "struct member where writing should stop
+(inclusive)", to make it very clear.
+
+> >
+> >> + *
+> >> + */
+> >> +#define memset_range(obj, v, member_1, member_2)			\
+> >> +({									\
+> >> +	u8 *__ptr = (u8 *)(obj);					\
+> >> +	typeof(v) __val = (v);						\
+> >> +	BUILD_BUG_ON(offsetof(typeof(*(obj)), member_1) >		\
+> >> +		     offsetof(typeof(*(obj)), member_2));		\
+> >> +	memset(__ptr + offsetof(typeof(*(obj)), member_1), __val,	\
+> >> +	       offsetofend(typeof(*(obj)), member_2) -			\
+> >> +	       offsetof(typeof(*(obj)), member_1));			\
+> >> +})
+> > struct a {
+> > 	int b;
+> > 	int c;
+> > 	int d;
+> > };
+> >
+> > How do I zero out `c' and `d'?
+> if you want to zero out 'c' and 'd', you can use it like 
+> memset_range(a_ptr, c, d);
+
+But I don't think that's what the code does!
+
+it expands to
+
+	memset(__ptr + offsetof(typeof(*(a)), c), __val,
+	       offsetofend(typeof(*(a)), d) -
+	       offsetof(typeof(*(a)), c));
+
+which expands to
+
+	memset(__ptr + 4, __val,
+	       8 -
+	       4);
+
+and `d' will not be written to.

@@ -2,140 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6FA46D4E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FA646D4E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbhLHN6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 08:58:36 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:44482 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhLHN6f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:58:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1A8D2CE218E;
-        Wed,  8 Dec 2021 13:55:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D69C00446;
-        Wed,  8 Dec 2021 13:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638971698;
-        bh=cEDXQeIeYpoFUpOU3IKFkwMae+ywV8Wwm9nSxohi4e8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qPxTF68+tOufg86FtiXdDh2k7dM6fG7kz0Qr1ovf6kNnW40gP4C9FDhcXbDBS42rZ
-         KxE1IIakvaH5rXiRomelB3WV7wfqa8ZBVoszH5d6iFxf/5RnZjTkNgX2Ig6uDX7uUK
-         MvNUG1uS0dBMnVN238iAyUKureBuNSX4UhX3Yrnn5zK/yCBJvR29pWlE3ZXdswTvYY
-         QxUhV7V2+Qv6RveyOMzZTtiupO9/HtHf5TOpacPyc2V69Yvk7eCoxK0z6vc2ufuj1F
-         GL5rCNafkkdJ5tiAh1p/ERr4BcWbS0LfmyOcQ9qylXhkf1DU7MwtxVhSt/bQxaYhrn
-         wrN7XCzwjrZuw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 34465406C1; Wed,  8 Dec 2021 10:54:56 -0300 (-03)
-Date:   Wed, 8 Dec 2021 10:54:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Yonghong Song <yhs@fb.com>,
-        Douglas RAILLARD <douglas.raillard@arm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Matteo Croce <mcroce@microsoft.com>
-Subject: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
-Message-ID: <YbC5MC+h+PkDZten@kernel.org>
-References: <YSQSZQnnlIWAQ06v@kernel.org>
+        id S234455AbhLHN7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 08:59:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:60510 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229490AbhLHN7P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 08:59:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CBEED6E;
+        Wed,  8 Dec 2021 05:55:43 -0800 (PST)
+Received: from [10.1.26.149] (e127744.cambridge.arm.com [10.1.26.149])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 104B43F73B;
+        Wed,  8 Dec 2021 05:55:39 -0800 (PST)
+Subject: Re: [PATCH v2 3/3] perf tools: Support register names from all archs
+To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Alexandre Truong <alexandre.truong@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20211207180653.1147374-1-german.gomez@arm.com>
+ <20211207180653.1147374-4-german.gomez@arm.com>
+ <90bcce69-9585-3fb4-de89-bbf2bd6def05@huawei.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <aee0c3b8-4d8c-6f1e-24ed-5539a7c1a7b5@arm.com>
+Date:   Wed, 8 Dec 2021 13:55:32 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YSQSZQnnlIWAQ06v@kernel.org>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <90bcce69-9585-3fb4-de89-bbf2bd6def05@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
- 
-	The v1.23 release of pahole and its friends is out, this time
-the main new features are the ability to encode BTF tags, to carry
-attributes to the kernel BPF verifier for further checks and the
-inference of struct member unnatural alignment (__attribute__(__aligned__(N)))
-to help in generating compileable headers matching the original type
-layout from BTF data.
+Hi John,
 
-Main git repo:
+On 08/12/2021 11:51, John Garry wrote:
+> On 07/12/2021 18:06, German Gomez wrote:
+>>   tools/perf/arch/arm/include/perf_regs.h       |  42 --
+>>   tools/perf/arch/arm64/include/perf_regs.h     |  76 --
+>>   tools/perf/arch/csky/include/perf_regs.h      |  82 ---
+>>   tools/perf/arch/mips/include/perf_regs.h      |  69 --
+>>   tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
+>>   tools/perf/arch/riscv/include/perf_regs.h     |  74 --
+>>   tools/perf/arch/s390/include/perf_regs.h      |  78 --
+>>   tools/perf/arch/x86/include/perf_regs.h       |  82 ---
+>>   tools/perf/builtin-script.c                   |  18 +-
+>>   tools/perf/util/perf_regs.c                   | 666 ++++++++++++++++++
+>>   tools/perf/util/perf_regs.h                   |  10 +-
+>>   .../scripting-engines/trace-event-python.c    |  10 +-
+>>   tools/perf/util/session.c                     |  25 +-
+>>   13 files changed, 697 insertions(+), 601 deletions(-)
+>
+> Did you consider leaving the register structures where they are while
+> renaming to include the arch name and then having as externs or similar? I see an example of that idea for arm64_unwind_libunwind_ops.
+>
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+If by register structures you are referring to "__perf_reg_name(int)", I
+can't leave them where they are. Only one of them would be included in
+the build.
 
-Mirror git repo:
+I think the idea from arm64_unwind_libunwind_ops makes more sense in
+that case because perf might not link against libunwind-arm64. In the
+case of registers, we always have this info available in /tools/.
 
-   https://github.com/acmel/dwarves.git
+Thanks,
+German
 
-tarball + gpg signature:
-
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.23.tar.sign
-
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
-
-Best Regards,
-
-- Arnaldo
-
-DWARF loader:
-
-- Read DW_TAG_LLVM_annotation tags, associating it with variables, functions,
-  types. So far this is only being used by the BTF encoder, but the pretty
-  printer should use this as well in a future release, printing these
-  attributes when available.
-
-- Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
-  matching .dwo file to be used instead. Automagically doing this is in the
-  plans for a future release.
-
-- Fix heap overflow when accessing variable specification.
-
-BTF encoder:
-
-- Support the new BTF type tag attribute, encoding DW_TAG_LLVM_annotation DWARF
-  tags as BTF_KIND_TYPE_TAG and BTF_KIND_DECL_TAG.
-
-  This allows __attribute__((btf_type_tag("tag1"))) to be used for variables,
-  functions, typedefs, so that contextual information can be stored in BTF and
-  used by the kernel BPF verifier for more checks.
-
-  The --skip_encoding_btf_type_tag option can be used to suppress this.
-
-- Fix handling of percpu symbols on s390.
-
-BTF loader:
-
-- Use cacheline size to infer alignment.
-
-btfdiff:
-
-- Now that the BTF loader infers struct member alingment, and as that is just
-  an heuristic, suppress printing the alignment when pretty printing from BTF
-  info like is done when printing from DWARF.
-
-pahole:
-
-- Add --skip_missing so that we don't stop when not finding one of the types passed
-  to -C.
-
-Pretty printer:
-
-- Fix __attribute__((__aligned__(N)) printing alignment for struct members.
-
-- Fix nested __attribute__(__aligned__(N)) struct printing order, so that
-  rebuilding from the printed source circles back to the original source code
-  alignment semantics.
-
-Build:
-
-- No need to download libbpf source when using the system library (libbpf-devel).
-
-- Make python optional
+> Cheers,
+> John

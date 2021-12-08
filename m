@@ -2,106 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2FB46D7EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B9246D7F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbhLHQVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S236717AbhLHQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232235AbhLHQV3 (ORCPT
+        with ESMTP id S232235AbhLHQV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:21:29 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAD8C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:17:57 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t18so4934749wrg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 08:17:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XudR5QwbKwmMIdTWdxeMrD6caTZkAvE0b72zbhBzI50=;
-        b=MSBoGk02QOdIPAonhp7MBQGtOMs2d2pLeUFrw4sx2zVj78Bot2Pu++a9IQ9arYfGc+
-         XBXI4f/Zh+MZNarXEN078pbHRx064kH5PbQMqirEVgBVhWjZE55etYdEMbK1EopO8bLT
-         5TFLKAhgu5X9i7CgutroZC2MttxWAx5ClOnsj2rLHGqZpP51P4sEZeqE6+CGtFBq8Tgt
-         rq2MvtXZuN0roGIkYcsl3xtV5/j2m4U2GRQdoN0cTq8v81064ncaR/qlyR0kI0z7JkMz
-         qufogI/Gskc7FW1oLPAiv/ogkRcx7jn4cT64D7xQnmuSjBcQdj02gxQVo9UYL+bYgKNh
-         8H7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XudR5QwbKwmMIdTWdxeMrD6caTZkAvE0b72zbhBzI50=;
-        b=ldSNlMEpxKLx6W1sYNJVUaiJIvTa6Cp5zBtPS/RXcWXN3m6o3EydekavAhJeTwdMqc
-         05nxJV0WTeyHArHivexMAynXaYRg/LB2cHmqw9nXfhpPnbpA9+g6M2aFsHrNj4lsUJkk
-         LmbDfzEEftTs/k2mhDpZgv8l/ZGV8KIGzs7RVm+e/uQOHXFy4/zVhC3l4GqTTK+eb/cn
-         ZWLxkQkOjRMNDTeyghncnbxkSEVFHNhUuvrUp+umrexOhiEcdF86XSX5WmSIGgsj0VUc
-         Aaag4+HY/EYlXQY2IK/DaYIy5bfjzuZ6lw0QAyFuawOwPqQTcniXMAmpXiVl43sPemRJ
-         fbcg==
-X-Gm-Message-State: AOAM533aoLsN2w+3I1O5bRCDyhiwl8G0pzBcL9+LINtH1PqfgmVdrd8X
-        5WLG6V2FhY6sltHOkk8/0OBWJeYO5SoqDwHUEkSoqTYsutfR3xys
-X-Google-Smtp-Source: ABdhPJzIfb/G70ZKYOvkfAgLKJkiT/YbzYOh5Qus7tyAWqMTM7hM4m+uKUW+pRNOkcUNRxjIcWaEEm6BCa+fhZnKSfg=
-X-Received: by 2002:adf:f209:: with SMTP id p9mr58643982wro.191.1638980275764;
- Wed, 08 Dec 2021 08:17:55 -0800 (PST)
+        Wed, 8 Dec 2021 11:21:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AD6C061746;
+        Wed,  8 Dec 2021 08:18:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F22B2B82153;
+        Wed,  8 Dec 2021 16:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD63EC00446;
+        Wed,  8 Dec 2021 16:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638980303;
+        bh=uPNCPj/dCHDTXvUUpIHtpAD5SCYcVvvqovVDUbdyspU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q5HqR6e7o2q7YTDeVVTMz3SvUaCCuXmWgAwkMe3xkyVyJQYQbOhV6R87Rg/R6//mW
+         PAWrgu/APqrGME8ytqI+jMBDT75Jv+xEQkBLXG9xkH1EHWarn6lg89Z+5n5eCqhQ8n
+         qYhxJEZfYKB9om/gRsIGE2OLg8eXW1ut73lttRzNmto/zwB0roqnYjqOscN+Mes4XV
+         B9M5QDG6eZwfMELfUarOki3iN+LYaEDMRwX4938CyG+zaWeKERcskTppxZyk8lehWD
+         06bMLQ5nHfbKL8AQ21qLPGtZ1tye8RewwuOQOGmeWcPIEcUtUN13hOqzIYqVm+FR+R
+         bELV9p9gxvU0A==
+Date:   Wed, 8 Dec 2021 17:18:18 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     kuba@kernel.org, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: dsa: mv88e6xxx: error handling for serdes_power
+ functions
+Message-ID: <20211208171818.4746cb39@thinkpad>
+In-Reply-To: <20211208155809.103089-1-amhamza.mgc@gmail.com>
+References: <20211208164042.6fbcddb1@thinkpad>
+        <20211208155809.103089-1-amhamza.mgc@gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211207190251.18426-1-davidgow@google.com> <202112071358.E8E6812D@keescook>
-In-Reply-To: <202112071358.E8E6812D@keescook>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 9 Dec 2021 00:17:44 +0800
-Message-ID: <CABVgOSm68xfwCrnobKJkt_Qhh95JCP6kTXrUXoDwe_pBxWWt-w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 6:02 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
-> > From: Rae Moar <rmoar@google.com>
-> >
-> > It does not make any significant additions or changes other than those
-> > already in use in the kernel: additional features can be added as they
-> > become necessary and used.
-> >
-> > [1]: https://testanything.org/tap-version-13-specification.html
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > Co-developed-by: David Gow <davidgow@google.com>
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> I like it! Thank you so much for suffering through my earlier reviews.
-> :)
->
-> The only concern I have is wonder what'll be needed to kselftest to
-> deal with indentation changes. As long as this can be implemented
-> without a subtest knowing it is a subtest, we're good.
+On Wed,  8 Dec 2021 20:58:09 +0500
+Ameer Hamza <amhamza.mgc@gmail.com> wrote:
 
-I'd think a minor tweak to the prefix.pl script should handle it for most tests:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/tools/testing/selftests/kselftest/prefix.pl
+> Added default case to handle undefined cmode scenario in
+> mv88e6393x_serdes_power() and mv88e6393x_serdes_power() methods.
+>=20
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> ---
 
-Certainly the indent should be the only difference between a top-level
-test result and a subtest now.
-
-And, if the results do use test plans (i.e., state how many tests are
-expected beforehand) it's possible to parse the results even without
-indentation. It it looks like it would be a problem, we could
-explicitly state that indentation is optional if a test plan is
-present (or provide some other mechanism for detecting the end of the
-subtests: just checking the test number has some corner cases which'd
-fail, but doing something akin to the "Subtest:" header TAP14 used
-makes this pretty robust). Things like that would overcomplicate it a
-bit, though, and might end up verging back on "tests need to know
-they're subtests" territory, depending on the exact implementation, so
-I think things are probably better as-is.
-
-Cheers,
--- David
+Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>

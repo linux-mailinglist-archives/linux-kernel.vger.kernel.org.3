@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7591E46CB1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F5846CB1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243287AbhLHCto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 21:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
+        id S243326AbhLHCtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbhLHCtn (ORCPT
+        with ESMTP id S243295AbhLHCtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 21:49:43 -0500
+        Tue, 7 Dec 2021 21:49:46 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5612CC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:46:12 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s189-20020a252cc6000000b005c1f206d91eso2067107ybs.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:46:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8994C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:46:14 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id g36-20020a25ae64000000b005c1f46f7ee6so2124316ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:46:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=CLGxeFiW2EzzDmPWUFxAzqS7mvDeKkKaNxO2GyXM6mc=;
-        b=NnKahnPPy6IIxBK1lzam+MEvU6PVxcY4VOuzxTahPQ/mzG54LSlqsjrEk8LyYS9xuL
-         S1aPKOSYaUQg1a6CoLb1gJ+sSlBADMbjxUQ3h9qwaccGprL724gfe+6aK7stynb58Il4
-         XSYlqgaMP6FzQBnyYkhog8OugVYKBTDHfG1CYstBcIEIJwOsb2VQkVlOgi2xs4xE1IrV
-         7GoMT3i/OAQlUrjt85bgcwfpluRyAoBhd8gHPE9gMI0Vrt2iLj9A8HkBgbIwnlJDQSmu
-         8wnufQTlRlrW+7UeAx80hf8Cqyy47+DueLbrn+q8rrNJ6M98iVbFEVL1njKAdN/IQtEL
-         Z3DA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=wlzvFhqo5Ob2FwSLKutkF1C2G0YnCryxWNekd2r2c2M=;
+        b=Q8t3vuVt5q7bW590pG9nfgKeyqZ0Co6klwyMM5o4/s2kFV1RCqA9wgvbb6E0+ZM6RT
+         UZQfEsOgxsd14ixKImooKlXrhBUlmsHt5SA1YCIelGWvUEC4HugO2tJ2RrCKVNNY6TfU
+         OVLkMbvmHKlVq6r8yCTzn9ICfIk6FpRkYOq160a9v8JIVFuFv7i20J2Sl9WBRsPCrL9l
+         EteHUVRn690jGncjOZRPeDgFtK5+c9TKUDPwlvCPnp2NlaDS+EV/h2o/GeXoSWcpUkzB
+         QtO8De/+wJY1LEGyW3J6QpPqUgwl9PVC2CMq/rHQYt3BMtKVpOO0aFzk/s7R5VJ8lbub
+         JAgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=CLGxeFiW2EzzDmPWUFxAzqS7mvDeKkKaNxO2GyXM6mc=;
-        b=RRTceHBWIf6DxbwsZnJ44WJPKGigqtF7A9/64pdxpefDVDGpycFeS9/pqeXM5i32C1
-         WxRzODIL7hgx9EmOWSm62hbuGMpxZEaKkEQZHkg6mUdFORYiLym7nhTAOirZNKC2D9YX
-         aiZmST++sjBmVw5mnbjDWHkrND72ARea8B7xS/3hmqkVldGPJSi9BO2dTPS5sFJ0uL2M
-         HBJBS/lg2kaFqRM2Ko556OhhFwsaX840675BaVo8+sTOMEaS/En4sClWtwM6ConOS1kV
-         L5DIxFyCCeEQoJIeL83ioAe8F+cw4WBvpozEtLkGm6pmBhbomtt4TnMDVqIrZIDGeo21
-         rh6A==
-X-Gm-Message-State: AOAM531dLB3k9+Toa0FhUz95NLCXQlP2INr8Qo6ZBkjwaprSQVEoXMGc
-        qReye6I6ss6r7tou/mr+1PfSk2MfUJKa
-X-Google-Smtp-Source: ABdhPJx2u4yOo4d/+2DtTexBsEogDPpZDxD9U129h8ooJi1bFStxNrMahQBT4CJLt33fS1Sd0d2XNVgNy5ZF
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=wlzvFhqo5Ob2FwSLKutkF1C2G0YnCryxWNekd2r2c2M=;
+        b=AlGs97al/k0sZulWusId6VO4NQtm0Ol9j0rtWZApFCLRucXvcBOyKZ6Qcpm2kodwhv
+         U1E9aSkhRuNitIIiNxwCfGQuVhwDyCTlSXrc8BhwE2dWijrENUl8ej5y/lv3yIBUvhVL
+         R4FPBQbXwaF8oOxzFh7nFsai02IJvwJFduHexm6Kol76R/SkKaBD7R8ixpNQhrjgk6Gn
+         Pp68egaw5NgLwhA/v73G+GX1/0V16wmZjsQYFucQTO2cqIJi73Zz9Xv2s5PQUYSQLnZB
+         8fcLc674gblV/2c/sUeOXm3RTD2UlpTpp2DbljYnjxQd0VyhaI/mqcU2Ma3dRj1Au3jW
+         MqOQ==
+X-Gm-Message-State: AOAM533mNXSRiwOQwLM43qRaEq1LITeGNnNUJj7F+02yTidOrNs0Td2u
+        NLjKlFBShypHaIvaXl+0pXYDXIGgFMbM
+X-Google-Smtp-Source: ABdhPJwPLdvV4+k3N1J9vtHeKfWpSN8ZFNP1H2Dx+thd1lOFDc+08AeCs8ZCcfhvyR8H0iivKwE9YjuCBMcg
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:57e:1dbb:34b4:8257])
- (user=irogers job=sendgmr) by 2002:a25:2391:: with SMTP id
- j139mr54854197ybj.382.1638931571551; Tue, 07 Dec 2021 18:46:11 -0800 (PST)
-Date:   Tue,  7 Dec 2021 18:45:45 -0800
-Message-Id: <20211208024607.1784932-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:aa43:: with SMTP id
+ s61mr52118737ybi.186.1638931574080; Tue, 07 Dec 2021 18:46:14 -0800 (PST)
+Date:   Tue,  7 Dec 2021 18:45:46 -0800
+In-Reply-To: <20211208024607.1784932-1-irogers@google.com>
+Message-Id: <20211208024607.1784932-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20211208024607.1784932-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 00/22] Refactor perf cpumap
+Subject: [PATCH 01/22] libperf: Add comments to perf_cpu_map.
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -75,57 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perf cpu map has various functions where a cpumap and index are passed
-in order to load the cpu. A problem with this is that the wrong index
-may be passed for the cpumap, causing problems like aggregation on the
-wrong CPU:
-https://lore.kernel.org/lkml/20211204023409.969668-1-irogers@google.com/
+A particular observed problem is confusing the index with the CPU value,
+documentation should hopefully reduce this type of problem.
 
-This patch set refactors the cpu map API, greatly reducing it and
-explicitly passing the cpu (rather than the pair) to functions that
-need it. Comments are added at the same time.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/lib/perf/include/internal/cpumap.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Ian Rogers (22):
-  libperf: Add comments to perf_cpu_map.
-  perf stat: Add aggr creators that are passed a cpu.
-  perf stat: Switch aggregation to use for_each loop
-  perf stat: Switch to cpu version of cpu_map__get
-  perf cpumap: Switch cpu_map__build_map to cpu function
-  perf cpumap: Remove map+index get_socket
-  perf cpumap: Remove map+index get_die
-  perf cpumap: Remove map+index get_core
-  perf cpumap: Remove map+index get_node
-  perf cpumap: Add comments to aggr_cpu_id
-  perf cpumap: Remove unused cpu_map__socket
-  perf cpumap: Simplify equal function name.
-  perf cpumap: Rename empty functions.
-  perf cpumap: Document cpu__get_node and remove redundant function
-  perf cpumap: Remove map from function names that don't use a map.
-  perf cpumap: Remove cpu_map__cpu, use libperf function.
-  perf cpumap: Refactor cpu_map__build_map
-  perf cpumap: Rename cpu_map__get_X_aggr_by_cpu functions
-  perf cpumap: Move 'has' function to libperf
-  perf cpumap: Add some comments to cpu_aggr_map
-  perf cpumap: Trim the cpu_aggr_map
-  perf stat: Fix memory leak in check_per_pkg
-
- tools/lib/perf/cpumap.c                  |   7 +-
- tools/lib/perf/include/internal/cpumap.h |   9 +-
- tools/lib/perf/include/perf/cpumap.h     |   1 +
- tools/perf/arch/arm/util/cs-etm.c        |  16 +-
- tools/perf/builtin-ftrace.c              |   2 +-
- tools/perf/builtin-sched.c               |   6 +-
- tools/perf/builtin-stat.c                | 273 ++++++++++++-----------
- tools/perf/tests/topology.c              |  10 +-
- tools/perf/util/cpumap.c                 | 182 ++++++---------
- tools/perf/util/cpumap.h                 | 102 ++++++---
- tools/perf/util/cputopo.c                |   2 +-
- tools/perf/util/env.c                    |   6 +-
- tools/perf/util/stat-display.c           |  69 +++---
- tools/perf/util/stat.c                   |   9 +-
- tools/perf/util/stat.h                   |   3 +-
- 15 files changed, 361 insertions(+), 336 deletions(-)
-
+diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
+index 840d4032587b..1c1726f4a04e 100644
+--- a/tools/lib/perf/include/internal/cpumap.h
++++ b/tools/lib/perf/include/internal/cpumap.h
+@@ -4,9 +4,16 @@
+ 
+ #include <linux/refcount.h>
+ 
++/**
++ * A sized, reference counted, sorted array of integers representing CPU
++ * numbers. This is commonly used to capture which CPUs a PMU is associated
++ * with.
++ */
+ struct perf_cpu_map {
+ 	refcount_t	refcnt;
++	/** Length of the map array. */
+ 	int		nr;
++	/** The CPU values. */
+ 	int		map[];
+ };
+ 
 -- 
 2.34.1.400.ga245620fadb-goog
 

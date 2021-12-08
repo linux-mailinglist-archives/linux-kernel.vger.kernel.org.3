@@ -2,150 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B28E46D93D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850CA46D93F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237547AbhLHRLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S237559AbhLHRMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbhLHRLP (ORCPT
+        with ESMTP id S231757AbhLHRMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:11:15 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D46C061746;
-        Wed,  8 Dec 2021 09:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T1bNpG+EBOuRlHH8vImEKgCRxGudYeuCoNpTVnj0b+c=; b=VQLqA4SbOYcUyV3Ay2a3uirOb+
-        zPz16CQN+Ni4oG3lBL9zWnoct6F6pLblHGiRJ04BQeKAjAAsjTg6uENPONkuYEMSYbRj2h+O6wqXq
-        WOM0HWJWqoLiwuRxD6QiwL8NKwS6XiQVycxNwtcP6vwe5nDXelhkuOpl/StENXkPUiU6T5asw6Bdh
-        IAfj7yNOVAbm9ONZrCWATl3IJ9QhMK4Iez17APXSiwnodzb9q1e06nhabTjH7k+6Wz8j0daKoz6cR
-        wvMYtzmGhfJSvxcFLW3LgddO03Szgxfa51bEka8oejnpOBtvToJiYTDoEQgOFCVOpyVZZ4rVwOn6L
-        4+x1+REQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv0Po-008blB-SJ; Wed, 08 Dec 2021 17:07:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 64A7D3000E6;
-        Wed,  8 Dec 2021 18:07:36 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2B091264EB862; Wed,  8 Dec 2021 18:07:36 +0100 (CET)
-Date:   Wed, 8 Dec 2021 18:07:36 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <YbDmWFM5Kh1J2YqS@hirez.programming.kicks-ass.net>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
- <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
- <Ya9hdlBuWYUWRQzs@hirez.programming.kicks-ass.net>
- <20211207202831.GA18361@worktop.programming.kicks-ass.net>
- <CAHk-=wg=yTX5DQ7xxD7xNhhaaEQw1POT2HQ9U0afYB+6aBTs6A@mail.gmail.com>
+        Wed, 8 Dec 2021 12:12:19 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BB3C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:08:47 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso3374858ots.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 09:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=OgfPDgaMPhAITwurbC63osk1dbgUc7Avx44mgX2iC1Y=;
+        b=YE9//SxfqWASUkSdePHV5uuXXPHWjZuDUc5j7Aot16/6pB8xe6o2ojbs6qKoQzlQw/
+         3iPoO3fX52nljnzZFqr31EhJVe2/bGjylwZjseqek0cFBkyqw3qaiTf/a8HuV1Jhqf/n
+         YAa8h4VMimLHT9aym5M4h2hiUnRZm4z5z2ycaulhFahx59uWUCRBoAria5NsQwmHtfLt
+         3X9Phuzc3VO7JtKtxR7/K6kJCwHxvlkWzqOu2vV2SsV2JuGZYw/T/sQKaiLSUd37P288
+         8FaqzUhZRU/sm2P3VBPbbyvnMcnD/xGHRRYuTdehEBumJrcOI0an2iuFgS9IHedQvng4
+         +5bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=OgfPDgaMPhAITwurbC63osk1dbgUc7Avx44mgX2iC1Y=;
+        b=ci3WE/76swYq8h7Rz59UaNqNc99x+/dQ9bXbQ0cZJ83BzZm0XRoV8i9n9Oz69VjpN+
+         rgDw3HxRTMKVo6HsSCoTqZsOOwTVS4OaogfHl8U9Df8KInPI/TigKgl3O/6Synmg9sLV
+         fgLqQBeChM9U70Y8dTh4wiOxOD+uGk8Lw/IAjtflqhzfytw75ob5eVezfPMz2gd961Ie
+         cYnsQ/OcU4pvvmL8J7cCrnJCgoogzWu59rzp+LyKq4uE95FewgNzUjgwVFvHXypTiMfF
+         0lX6X6kjX5+HNKf+8tNh6sNx3dmbmKcN0b2JMEzVDViLDonjnPcrZJENgiTfT5hlyCL2
+         n59g==
+X-Gm-Message-State: AOAM532DWeYSEkJ/5OyorbmNHS9euZwB/jo4sku0dGnHbqwtiFVNjx5E
+        Nk9DL/1Kp/qGolL8tBNF/8P108hUf8Mf2bqyKl4=
+X-Google-Smtp-Source: ABdhPJwjRXVGTquUlvl+qCu2A4x/FVmRJ/tLo2ITMSdE422eLm00hEInJpd42e3jjYrXhb1UMd2coUS0uS0tnI/8JnQ=
+X-Received: by 2002:a05:6830:1cc:: with SMTP id r12mr707828ota.76.1638983326346;
+ Wed, 08 Dec 2021 09:08:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg=yTX5DQ7xxD7xNhhaaEQw1POT2HQ9U0afYB+6aBTs6A@mail.gmail.com>
+Received: by 2002:a05:6830:90f:0:0:0:0 with HTTP; Wed, 8 Dec 2021 09:08:45
+ -0800 (PST)
+Reply-To: msbelinaya892@gmail.com
+From:   msbelinaya <michealraymond797@gmail.com>
+Date:   Wed, 8 Dec 2021 17:08:45 +0000
+Message-ID: <CANz3t=iaZ2GZ4hzDKoakhUGad+KTSH7F4F64tnKJj7+fVKatNg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:23:02PM -0800, Linus Torvalds wrote:
-> On Tue, Dec 7, 2021 at 12:28 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Argh.. __atomic_add_fetch() != __atomic_fetch_add(); much confusion for
-> > GCC having both. With the right primitive it becomes:
-> >
-> >         movl    $1, %eax
-> >         lock xaddl      %eax, (%rdi)
-> >         testl   %eax, %eax
-> >         je      .L5
-> >         js      .L6
-> >
-> > Which makes a whole lot more sense.
-> 
-> Note that the above misses the case where the old value was MAX_INT
-> and the result now became negative.
-> 
-> That isn't a _problem_, of course. I think it's fine. But if you cared
-> about it, you'd have to do something like
+Ich biete meine Freundschaft an und glaube, dass Sie mich mit gutem
+Herzen annehmen werden. Ich wurde gedr=C3=A4ngt, Sie zu kontaktieren und zu
+sehen, wie wir uns am besten unterst=C3=BCtzen k=C3=B6nnen. Ich bin Frau Ko=
+djovi
+Hegbor aus der T=C3=BCrkei und ich arbeite als Operations Division Manager
+bei der StandardBNP Bank Limited T=C3=BCrkei. Ich glaube, es ist Gottes
+Wille, dass ich Ihnen jetzt begegnen werde. Ich habe ein wichtiges
+gesch=C3=A4ftliches Gespr=C3=A4ch, das ich mit Ihnen teilen m=C3=B6chte, vo=
+n dem ich
+glaube, dass es Sie interessiert, da es mit Ihrem Nachnamen
+zusammenh=C3=A4ngt und Sie davon profitieren wird.
 
-Hm....
+ Im Jahr 2006 er=C3=B6ffnete ein B=C3=BCrger Ihres Landes bei meiner Bank e=
+in
+36-monatiges Nicht-Residentenkonto im Wert von =C2=A3 8.400.000,00. Das
+Ablaufdatum f=C3=BCr diese Hinterlegungsvereinbarung war der 16. Januar
+2009. Leider starb er bei einem t=C3=B6dlichen Erdbeben am 12. Mai 2008 in
+Sichuan, China, bei dem auf einer Gesch=C3=A4ftsreise mindestens 68.000
+Menschen ums Leben kamen.
 
-> But if you don't care about the MAX_INT overflow and make the overflow
-> boundary be the next increment, then just make it be one error case:
-> 
-> >         movl    $1, %eax
-> >         lock xaddl      %eax, (%rdi)
-> >         testl   %eax, %eax
-> >         jle      .L5
-> 
-> and then (if you absolutely have to distinguish them) you can test eax
-> again in the slow path.
+Die Gesch=C3=A4ftsleitung meiner Bank hat noch nichts von seinem Tod
+geh=C3=B6rt, ich wusste davon, weil er mein Freund war und ich sein
+Kontoverwalter war, als das Konto vor meiner Bef=C3=B6rderung er=C3=B6ffnet
+wurde. Aber Sir
+ hat bei der Kontoer=C3=B6ffnung die n=C3=A4chsten Angeh=C3=B6rigen / Erben=
+ nicht
+erw=C3=A4hnt und er war nicht verheiratet oder hatte keine Kinder. Letzte
+Woche bat mich meine Bankdirektion, Anweisungen zu geben, was mit
+seinem Geld zu tun sei, wenn der Vertrag verl=C3=A4ngert werden sollte.
 
-Suppose:
+Ich wei=C3=9F, dass dies passieren wird, und deshalb habe ich nach einem
+Mittel gesucht, mit der Situation umzugehen, denn wenn meine
+Bankdirektoren wissen, dass sie tot sind und keinen Erben haben,
+nehmen sie das Geld f=C3=BCr ihren pers=C3=B6nlichen Gebrauch, also tue ich=
+ es
+nicht Ich m=C3=B6chte nicht, dass so etwas passiert. Da habe ich deinen
+Nachnamen gesehen, habe mich gefreut und suche nun deine Mitarbeit, um
+dich als n=C3=A4chster Angeh=C3=B6riger / Erbe des Kontos zu pr=C3=A4sentie=
+ren, da du
+den gleichen Nachnamen wie er hast und meine Bankzentrale das Konto
+freigeben wird f=C3=BCr dich. Es besteht kein Risiko; die Transaktion wird
+im Rahmen einer legitimen Vereinbarung durchgef=C3=BChrt, die Sie vor
+Rechtsverletzungen sch=C3=BCtzt.
 
-  inc(): overflow when old value is negative or zero
-  dec(): overflow when new value is negative or zero
+Es ist besser f=C3=BCr uns, das Geld zu beanspruchen, als es den
+Bankdirektoren zu =C3=BCberlassen, sie sind bereits reich. Ich bin kein
+gieriger Mensch, also schlage ich vor, dass wir das Geld gleichm=C3=A4=C3=
+=9Fig
+aufteilen, 50/50% auf beide Parteien. Mein Anteil wird mir helfen,
+mein eigenes Unternehmen zu gr=C3=BCnden und den Erl=C3=B6s f=C3=BCr wohlt=
+=C3=A4tige
+Zwecke zu verwenden, was mein Traum war.
 
-That gives:
-
-  inc(INT_MAX) is allowed
-  dec(INT_MIN) is allowed
-
-IOW, the effective range becomes: [1..INT_MIN], which is a bit
-counter-intuitive, but then so is most of this stuff.
-
-Therefore can write this like:
-
-#define atomic_inc_ofl(v, label)
-do {
-	int old = atomic_fetch_inc(v);
-	if (unlikely(old <= 0))
-		goto label;
-} while (0)
-
-#define atomic_dec_ofl(v, label)
-do {
-	int new = atomic_dec_return(v);
-	if (unlikely(new <= 0))
-		goto label;
-} while (0)
-
-#define atomic_dec_and_test_ofl(v, label)
-({
-	bool ret = false;
-	int new = atomic_dec_return(&r->refs);
-	if (unlikely(new < 0))
-		goto label;
-	if (unlikely(new == 0)
-		ret = true;
-	ret;
-})
-
-For a consistent set of primitives, right?
-
-Which already gives better code-gen than we have today.
-
-But that then also means we can write dec_ofl as:
-
-	lock decl %[var]
-	jle %l1
-
-and dec_and_test_ofl() like:
-
-	lock decl %[var]
-	jl %l2
-	je %l[__zero]
-
-Lemme finisht the patches and send that out after dinner.
+Bitte teilen Sie mir Ihre Meinung zu meinem Vorschlag mit, ich brauche
+wirklich Ihre Hilfe bei dieser Transaktion. Ich habe dich auserw=C3=A4hlt,
+mir zu helfen, nicht aus eigener Kraft, mein Lieber, sondern bei Gott,
+ich wollte, dass du wei=C3=9Ft, dass ich mir die Zeit genommen habe, f=C3=
+=BCr
+diese Nachricht zu beten, bevor ich dich jemals kontaktiert habe, um
+deine Meinung mitzuteilen und bitte zu behandeln diese Informationen
+als STRENG GEHEIM. Nach Erhalt Ihrer Antwort ausschlie=C3=9Flich =C3=BCber =
+meine
+pers=C3=B6nliche E-Mail-Adresse msbelinaya892@gmail.com
+gibt Ihnen Details zur Transaktion. Und eine Kopie der
+Einlagenbescheinigung des Fonds und der Gr=C3=BCndungsurkunde der
+Gesellschaft, die den Fonds gegr=C3=BCndet hat.
+Gott segne in Erwartung Ihrer dringenden Antwort
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Frau. Kodjovi Hegbor
+msbelinaya892@gmail.com

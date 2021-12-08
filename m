@@ -2,223 +2,683 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E02C846CFF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B8846CFF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbhLHJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:23:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:54960 "EHLO foss.arm.com"
+        id S231164AbhLHJYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:24:23 -0500
+Received: from mga18.intel.com ([134.134.136.126]:28295 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229687AbhLHJXr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:23:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E75FED1;
-        Wed,  8 Dec 2021 01:20:15 -0800 (PST)
-Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87A663F5A1;
-        Wed,  8 Dec 2021 01:20:13 -0800 (PST)
-Date:   Wed, 8 Dec 2021 10:20:10 +0100
-From:   Morten Rasmussen <morten.rasmussen@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] base: arch_topology: Use policy->max to calculate
- freq_factor
-Message-ID: <20211208091513.GB5838@e123083-lin>
-References: <20211115201010.68567-1-thara.gopinath@linaro.org>
- <CAJZ5v0gezoJZVH69Y7fDwa-uLhE0PaqFrzM=0bequxpE_749zg@mail.gmail.com>
- <8f7397e3-4e92-c84d-9168-087967f4d683@arm.com>
- <CAJZ5v0iRDtr5yae5UndwU2SmVL4cak=BN0irVGbgNzQiS8K3mA@mail.gmail.com>
- <af59de78-49b0-d2e6-4bf0-7c897c2fccb1@linaro.org>
- <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
- <20211202105027.GA1180274@e123083-lin>
- <CAJZ5v0hRvsoEZj45OWe34uhAPj+J1rJWq5Wff4R0f_BYEuU5wA@mail.gmail.com>
- <20211203094734.GA5838@e123083-lin>
- <CAJZ5v0iGa=YErmDgLPCO1h=gOjkD6sRVonqPEUN1uf8sxpQ0qQ@mail.gmail.com>
+        id S230465AbhLHJYW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:24:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224663876"
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="224663876"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 01:20:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="516141057"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Dec 2021 01:20:47 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2E0F214F; Wed,  8 Dec 2021 11:20:52 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH v1 1/1] pinctrl: Sort Kconfig and Makefile entries alphabetically
+Date:   Wed,  8 Dec 2021 11:20:49 +0200
+Message-Id: <20211208092049.20792-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iGa=YErmDgLPCO1h=gOjkD6sRVonqPEUN1uf8sxpQ0qQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:07:30PM +0100, Rafael J. Wysocki wrote:
-> On Fri, Dec 3, 2021 at 10:48 AM Morten Rasmussen
-> <morten.rasmussen@arm.com> wrote:
-> >
-> > On Thu, Dec 02, 2021 at 05:31:53PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Dec 2, 2021 at 11:50 AM Morten Rasmussen
-> > > <morten.rasmussen@arm.com> wrote:
-> > > >
-> > > > On Wed, Nov 17, 2021 at 06:59:05PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Wed, Nov 17, 2021 at 6:01 PM Thara Gopinath
-> > > > > <thara.gopinath@linaro.org> wrote:
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > On 11/17/21 7:49 AM, Rafael J. Wysocki wrote:
-> > > > > > > On Wed, Nov 17, 2021 at 11:46 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> > > > > > >>
-> > > > > > >> Hi Rafael,
-> > > > > > >>
-> > > > > > >> On 11/16/21 7:05 PM, Rafael J. Wysocki wrote:
-> > > > > > >>> On Mon, Nov 15, 2021 at 9:10 PM Thara Gopinath
-> > > > > > >>> <thara.gopinath@linaro.org> wrote:
-> > > > > > >>>>
-> > > > > > >>>> cpuinfo.max_freq can reflect boost frequency if enabled during boot.  Since
-> > > > > > >>>> we don't consider boost frequencies while calculating cpu capacities, use
-> > > > > > >>>> policy->max to populate the freq_factor during boot up.
-> > > > > > >>>
-> > > > > > >>> I'm not sure about this.  schedutil uses cpuinfo.max_freq as the max frequency.
-> > > > > > >>
-> > > > > > >> Agree it's tricky how we treat the boost frequencies and also combine
-> > > > > > >> them with thermal pressure.
-> > > > > > >> We probably would have consider these design bits:
-> > > > > > >> 1. Should thermal pressure include boost frequency?
-> > > > > > >
-> > > > > > > Well, I guess so.
-> > > > > > >
-> > > > > > > Running at a boost frequency certainly increases thermal pressure.
-> > > > > > >
-> > > > > > >> 2. Should max capacity 1024 be a boost frequency so scheduler
-> > > > > > >>      would see it explicitly?
-> > > > > > >
-> > > > > > > That's what it is now if cpuinfo.max_freq is a boost frequency.
-> > > > > > >
-> > > > > > >> - if no, then schedutil could still request boost freq thanks to
-> > > > > > >>     map_util_perf() where we add 25% to the util and then
-> > > > > > >>     map_util_freq() would return a boost freq when util was > 1024
-> > > > > > >>
-> > > > > > >>
-> > > > > > >> I can see in schedutil only one place when cpuinfo.max_freq is used:
-> > > > > > >> get_next_freq(). If the value stored in there is a boost,
-> > > > > > >> then don't we get a higher freq value for the same util?
-> > > > > > >
-> > > > > > > Yes. we do, which basically is my point.
-> > > > > > >
-> > > > > > > The schedutil's response is proportional to cpuinfo.max_freq and that
-> > > > > > > needs to be taken into account for the results to be consistent.
-> > > > > >
-> > > > > > So IIUC, cpuinfo.max_freq is always supposed to be the highest supported
-> > > > > > frequency of a cpu, irrespective of whether boost is enabled or not.
-> > > > > > Where as policy->max is the currently available maximum cpu frequency
-> > > > > > which can be equal to cpuinfo.max_freq or lower (depending on whether
-> > > > > > boost is enabled, whether there is a constraint on policy->max placed by
-> > > > > > thermal etc).
-> > > > >
-> > > > > It may also depend on the limit set by user space.
-> > > > >
-> > > > > > So in this case isn't it better for schedutil to consider
-> > > > > > policy->max instead of cpuinfo.max ?
-> > > > >
-> > > > > Not really.
-> > > > >
-> > > > > In that case setting policy->max to 1/2 of cpuinfo.max_freq would
-> > > > > cause schedutil to choose 1/4 of cpuinfo.max_freq for 50% utilization
-> > > > > which would be rather unexpected.
-> > > > >
-> > > > > policy->max is a cap, not the current maximum capacity.
-> > > > >
-> > > > > > Like you mentioned above same
-> > > > > > utilization will relate to different frequencies depending on the
-> > > > > > maximum frequency.
-> > > > >
-> > > > > Which is not how it is expected (and defined) to work, though.
-> > > > >
-> > > > > If you really want to play with the current maximum capacity, you need
-> > > > > to change it whenever boost is disabled or enabled - and there is a
-> > > > > mechanism for updating cpufinfo.max_freq in such cases.
-> > > >
-> > > > I don't see why we would want to change max capacity on the fly. It is
-> > > > not a cheap operation as we would need to normalize the capacity for all
-> > > > CPUs if the CPU(s) with capacity = 1024 changes its capacity. Worst case
-> > > > we even have to rebuild the sched_domain hierarchy to update flags. The
-> > > > update would also temporarily mess with load and utilization signals, so
-> > > > not a cheap operation.
-> > >
-> > > I didn't say it was cheap. :-)
-> >
-> > You didn't :-) But I thought it was worth pointing out in case someone
-> > would think we need to constantly renormalize to the highest achievable
-> > performance level taking all factors into account, including thermal
-> > capping.
-> >
-> > > However, boost frequencies are not disabled and enabled very often, so
-> > > it may be acceptable to do it then.  I actually don't know.
-> >
-> > Agree.
-> >
-> > >
-> > > The point is that if you set the max capacity to correspond to the max
-> > > boosted perf and it is never reached (because boost is disabled), the
-> > > scaling will cause CPUs to appear as underutilized, but in fact there
-> > > is no spare capacity in the system.
-> >
-> > We kind of have the problem already with thermal capping but addressed
-> > it by having the thermal pressure signal to indicate the some of the
-> > capacity is unavailable. Perhaps the thermal pressure signal should be extended
-> > to cover all reasons for capacity being unavailable, or we should have
-> > another signal to track boost frequencies not being delivered, manually
-> > disabled or not possible due to system circumstances?
-> 
-> Well, even without boost frequencies, the capacity that's effectively
-> available may not be the advertised max.  For example,
-> scaling_max_freq may be set below the advertised max value (and that's
-> applied after the governor has produced its output), there may be
-> power capping in place etc.
-> 
-> Taking the thermal pressure in particular into account helps to reduce
-> it, but that may just be part of the difference between the advertised
-> max and the effectively available perf, and not even the dominating
-> one for that matter.
-> 
-> And boost frequencies complicate the picture even further, because
-> they are more-or-less unsustainable and as a rule there's no
-> information on how sustainable they are or how much time it takes to
-> get to the max boost perf (and that may be configurable even).
-> 
-> So IMO the advertised max ought to be treated as the upper bound in
-> general, but it makes sense to adjust it when it is known to be too
-> large and it may stay so forever (which is the case when boost
-> frequencies are disabled).
+Sort Kconfig and Makefile entries alphabetically for better maintenance
+in the future.
 
-I agree that max performance level should be treated as upper bound.
-Thermal capping help us somewhat to figure out the currently achievable
-performance level. Removing disabled boost levels would help too. There
-might still be quite a gap between requested and delivered performance
-though.
+While at it fix some style issues, such as wrong indentation.
 
-> 
-> > > Conversely, if the max capacity corresponds to the max non-boost perf
-> > > and boost is used very often, the scaling will cause the CPUs to
-> > > appear to be 100% loaded, but there may be still spare capacity in the
-> > > system.
-> >
-> > It is even worse than that. Allowing delivered performance to exceed the
-> > CPU capacity will break utilization scale invariance at it will make
-> > per-task utilization appear smaller than it really is potentially
-> > leading to wrong task placement.
-> >
-> > I think we have to ensure that the full performance range is visible to
-> > the OS. If part of it is often unachievable we need to track the gap
-> > between requested and delivered performance and somehow take that into
-> > account when making task placement decisions.
-> 
-> I generally agree, but let me say that correlating what was asked for
-> with the delivered perf need not be straightforward.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/Kconfig  | 431 +++++++++++++++++++--------------------
+ drivers/pinctrl/Makefile |  45 ++--
+ 2 files changed, 238 insertions(+), 238 deletions(-)
 
-Yes, it won't necessarily be very accurate. I'm just wondering if we can
-do better than only taking thermal capping and maybe disabled boost
-levels into account? Tracking delivered vs requested performance avoids
-the problem of having to deal explicitly with every kind of mechanism
-that can reduce delivered performance. Delivered performance can't be
-taken as a true upper limit for performance as it might change very
-quickly.
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 6a961d5f8726..92495fc59a79 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -31,6 +31,24 @@ config DEBUG_PINCTRL
+ 	help
+ 	  Say Y here to add some extra checks and diagnostics to PINCTRL calls.
+ 
++config PINCTRL_AMD
++	tristate "AMD GPIO pin control"
++	depends on HAS_IOMEM
++	depends on ACPI || COMPILE_TEST
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
++	select PINMUX
++	select PINCONF
++	select GENERIC_PINCONF
++	help
++	  driver for memory mapped GPIO functionality on AMD platforms
++	  (x86 or arm).Most pins are usually muxed to some other
++	  functionality by firmware,so only a small amount is available
++	  for gpio use.
++
++	  Requires ACPI/FDT device enumeration code to set up a platform
++	  device.
++
+ config PINCTRL_APPLE_GPIO
+ 	tristate "Apple SoC GPIO pin controller driver"
+ 	depends on ARCH_APPLE
+@@ -69,20 +87,6 @@ config PINCTRL_AS3722
+ 	  open drain configuration for the GPIO pins of AS3722 devices. It also
+ 	  supports the GPIO functionality through gpiolib.
+ 
+-config PINCTRL_AXP209
+-	tristate "X-Powers AXP209 PMIC pinctrl and GPIO Support"
+-	depends on MFD_AXP20X
+-	depends on OF
+-	select PINMUX
+-	select GENERIC_PINCONF
+-	select GPIOLIB
+-	help
+-	  AXP PMICs provides multiple GPIOs that can be muxed for different
+-	  functions. This driver bundles a pinctrl driver to select the function
+-	  muxing and a GPIO driver to handle the GPIO when the GPIO function is
+-	  selected.
+-	  Say yes to enable pinctrl and GPIO support for the AXP209 PMIC
+-
+ config PINCTRL_AT91
+ 	bool "AT91 pinctrl driver"
+ 	depends on OF
+@@ -109,23 +113,19 @@ config PINCTRL_AT91PIO4
+ 	  Say Y here to enable the at91 pinctrl/gpio driver for Atmel PIO4
+ 	  controller available on sama5d2 SoC.
+ 
+-config PINCTRL_AMD
+-	tristate "AMD GPIO pin control"
+-	depends on HAS_IOMEM
+-	depends on ACPI || COMPILE_TEST
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
++config PINCTRL_AXP209
++	tristate "X-Powers AXP209 PMIC pinctrl and GPIO Support"
++	depends on MFD_AXP20X
++	depends on OF
+ 	select PINMUX
+-	select PINCONF
+ 	select GENERIC_PINCONF
++	select GPIOLIB
+ 	help
+-	  driver for memory mapped GPIO functionality on AMD platforms
+-	  (x86 or arm).Most pins are usually muxed to some other
+-	  functionality by firmware,so only a small amount is available
+-	  for gpio use.
+-
+-	  Requires ACPI/FDT device enumeration code to set up a platform
+-	  device.
++	  AXP PMICs provides multiple GPIOs that can be muxed for different
++	  functions. This driver bundles a pinctrl driver to select the function
++	  muxing and a GPIO driver to handle the GPIO when the GPIO function is
++	  selected.
++	  Say yes to enable pinctrl and GPIO support for the AXP209 PMIC
+ 
+ config PINCTRL_BM1880
+ 	bool "Bitmain BM1880 Pinctrl driver"
+@@ -162,12 +162,93 @@ config PINCTRL_DIGICOLOR
+ 	select PINMUX
+ 	select GENERIC_PINCONF
+ 
++config PINCTRL_EQUILIBRIUM
++	tristate "Generic pinctrl and GPIO driver for Intel Lightning Mountain SoC"
++	depends on OF && HAS_IOMEM
++	depends on X86 || COMPILE_TEST
++	select PINMUX
++	select PINCONF
++	select GPIOLIB
++	select GPIO_GENERIC
++	select GPIOLIB_IRQCHIP
++	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
++	select GENERIC_PINMUX_FUNCTIONS
++	help
++	  Equilibrium pinctrl driver is a pinctrl & GPIO driver for Intel Lightning
++	  Mountain network processor SoC that supports both the linux GPIO and pin
++	  control frameworks. It provides interfaces to setup pinmux, assign desired
++	  pin functions, configure GPIO attributes for LGM SoC pins. Pinmux and
++	  pinconf settings are retrieved from device tree.
++
++config PINCTRL_GEMINI
++	bool
++	depends on ARCH_GEMINI
++	default ARCH_GEMINI
++	select PINMUX
++	select GENERIC_PINCONF
++	select MFD_SYSCON
++
++config PINCTRL_INGENIC
++	bool "Pinctrl driver for the Ingenic JZ47xx SoCs"
++	default MACH_INGENIC
++	depends on OF
++	depends on MIPS || COMPILE_TEST
++	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
++	select GENERIC_PINMUX_FUNCTIONS
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
++	select REGMAP_MMIO
++
++config PINCTRL_K210
++	bool "Pinctrl driver for the Canaan Kendryte K210 SoC"
++	depends on RISCV && SOC_CANAAN && OF
++	select GENERIC_PINMUX_FUNCTIONS
++	select GENERIC_PINCONF
++	select GPIOLIB
++	select OF_GPIO
++	select REGMAP_MMIO
++	default SOC_CANAAN
++	help
++	  Add support for the Canaan Kendryte K210 RISC-V SOC Field
++	  Programmable IO Array (FPIOA) controller.
++
++config PINCTRL_KEEMBAY
++	tristate "Pinctrl driver for Intel Keem Bay SoC"
++	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
++	depends on HAS_IOMEM
++	select PINMUX
++	select PINCONF
++	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
++	select GENERIC_PINMUX_FUNCTIONS
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
++	select GPIO_GENERIC
++	help
++	  This selects pin control driver for the Intel Keembay SoC.
++	  It provides pin config functions such as pullup, pulldown,
++	  interrupt, drive strength, sec lock, schmitt trigger, slew
++	  rate control and direction control. This module will be
++	  called as pinctrl-keembay.
++
+ config PINCTRL_LANTIQ
+ 	bool
+ 	depends on LANTIQ
+ 	select PINMUX
+ 	select PINCONF
+ 
++config PINCTRL_FALCON
++	bool
++	depends on SOC_FALCON
++	depends on PINCTRL_LANTIQ
++
++config PINCTRL_XWAY
++	bool
++	depends on SOC_TYPE_XWAY
++	depends on PINCTRL_LANTIQ
++
+ config PINCTRL_LPC18XX
+ 	bool "NXP LPC18XX/43XX SCU pinctrl driver"
+ 	depends on OF && (ARCH_LPC18XX || COMPILE_TEST)
+@@ -177,18 +258,16 @@ config PINCTRL_LPC18XX
+ 	help
+ 	  Pinctrl driver for NXP LPC18xx/43xx System Control Unit (SCU).
+ 
+-config PINCTRL_FALCON
+-	bool
+-	depends on SOC_FALCON
+-	depends on PINCTRL_LANTIQ
+-
+-config PINCTRL_GEMINI
+-	bool
+-	depends on ARCH_GEMINI
+-	default ARCH_GEMINI
++config PINCTRL_MAX77620
++	tristate "MAX77620/MAX20024 Pincontrol support"
++	depends on MFD_MAX77620 && OF
+ 	select PINMUX
+ 	select GENERIC_PINCONF
+-	select MFD_SYSCON
++	help
++	  Say Yes here to enable Pin control support for Maxim PMIC MAX77620.
++	  This PMIC has 8 GPIO pins that work as GPIO as well as special
++	  function in alternate mode. This driver also configure push-pull,
++	  open drain, FPS slots etc.
+ 
+ config PINCTRL_MCP23S08_I2C
+ 	tristate
+@@ -212,6 +291,37 @@ config PINCTRL_MCP23S08
+ 	  This provides a GPIO interface supporting inputs and outputs and a
+ 	  corresponding interrupt-controller.
+ 
++config PINCTRL_MICROCHIP_SGPIO
++	bool "Pinctrl driver for Microsemi/Microchip Serial GPIO"
++	depends on OF
++	depends on HAS_IOMEM
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
++	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
++	select GENERIC_PINMUX_FUNCTIONS
++	select OF_GPIO
++	help
++	  Support for the serial GPIO interface used on Microsemi and
++	  Microchip SoC's. By using a serial interface, the SIO
++	  controller significantly extends the number of available
++	  GPIOs with a minimum number of additional pins on the
++	  device. The primary purpose of the SIO controller is to
++	  connect control signals from SFP modules and to act as an
++	  LED controller.
++
++config PINCTRL_OCELOT
++	bool "Pinctrl driver for the Microsemi Ocelot and Jaguar2 SoCs"
++	depends on OF
++	depends on HAS_IOMEM
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
++	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
++	select GENERIC_PINMUX_FUNCTIONS
++	select OF_GPIO
++	select REGMAP_MMIO
++
+ config PINCTRL_OXNAS
+ 	bool
+ 	depends on OF
+@@ -223,6 +333,54 @@ config PINCTRL_OXNAS
+ 	select GPIOLIB_IRQCHIP
+ 	select MFD_SYSCON
+ 
++config PINCTRL_PALMAS
++	tristate "Pinctrl driver for the PALMAS Series MFD devices"
++	depends on OF && MFD_PALMAS
++	select PINMUX
++	select GENERIC_PINCONF
++	help
++	  Palmas device supports the configuration of pins for different
++	  functionality. This driver supports the pinmux, push-pull and
++	  open drain configuration for the Palmas series devices like
++	  TPS65913, TPS80036 etc.
++
++config PINCTRL_PIC32
++	bool "Microchip PIC32 pin controller driver"
++	depends on OF
++	depends on MACH_PIC32
++	select PINMUX
++	select GENERIC_PINCONF
++	select GPIOLIB_IRQCHIP
++	select OF_GPIO
++	help
++	  This is the pin controller and gpio driver for Microchip PIC32
++	  microcontrollers. This option is selected automatically when specific
++	  machine and arch are selected to build.
++
++config PINCTRL_PIC32MZDA
++	def_bool y if PIC32MZDA
++	select PINCTRL_PIC32
++
++config PINCTRL_PISTACHIO
++	bool "IMG Pistachio SoC pinctrl driver"
++	depends on OF && (MIPS || COMPILE_TEST)
++	depends on GPIOLIB
++	select PINMUX
++	select GENERIC_PINCONF
++	select GPIOLIB_IRQCHIP
++	select OF_GPIO
++	help
++	  This support pinctrl and gpio driver for IMG Pistachio SoC.
++
++config PINCTRL_RK805
++	tristate "Pinctrl and GPIO driver for RK805 PMIC"
++	depends on MFD_RK808
++	select GPIOLIB
++	select PINMUX
++	select GENERIC_PINCONF
++	help
++	  This selects the pinctrl driver for RK805.
++
+ config PINCTRL_ROCKCHIP
+ 	tristate "Rockchip gpio and pinctrl driver"
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+@@ -247,33 +405,6 @@ config PINCTRL_SINGLE
+ 	help
+ 	  This selects the device tree based generic pinctrl driver.
+ 
+-config PINCTRL_SX150X
+-	bool "Semtech SX150x I2C GPIO expander pinctrl driver"
+-	depends on I2C=y
+-	select PINMUX
+-	select PINCONF
+-	select GENERIC_PINCONF
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select REGMAP
+-	help
+-	  Say yes here to provide support for Semtech SX150x-series I2C
+-	  GPIO expanders as pinctrl module.
+-	  Compatible models include:
+-	  - 8 bits:  sx1508q, sx1502q
+-	  - 16 bits: sx1509q, sx1506q
+-
+-config PINCTRL_PISTACHIO
+-	bool "IMG Pistachio SoC pinctrl driver"
+-	depends on OF && (MIPS || COMPILE_TEST)
+-	depends on GPIOLIB
+-	select PINMUX
+-	select GENERIC_PINCONF
+-	select GPIOLIB_IRQCHIP
+-	select OF_GPIO
+-    help
+-	  This support pinctrl and gpio driver for IMG Pistachio SoC.
+-
+ config PINCTRL_ST
+ 	bool
+ 	depends on OF
+@@ -295,44 +426,26 @@ config PINCTRL_STMFX
+ 	  and configuring push-pull, open-drain, and can also be used as
+ 	  interrupt-controller.
+ 
+-config PINCTRL_MAX77620
+-	tristate "MAX77620/MAX20024 Pincontrol support"
+-	depends on MFD_MAX77620 && OF
+-	select PINMUX
+-	select GENERIC_PINCONF
+-	help
+-	  Say Yes here to enable Pin control support for Maxim PMIC MAX77620.
+-	  This PMIC has 8 GPIO pins that work as GPIO as well as special
+-	  function in alternate mode. This driver also configure push-pull,
+-	  open drain, FPS slots etc.
+-
+-config PINCTRL_PALMAS
+-	tristate "Pinctrl driver for the PALMAS Series MFD devices"
+-	depends on OF && MFD_PALMAS
+-	select PINMUX
+-	select GENERIC_PINCONF
+-	help
+-	  Palmas device supports the configuration of pins for different
+-	  functionality. This driver supports the pinmux, push-pull and
+-	  open drain configuration for the Palmas series devices like
+-	  TPS65913, TPS80036 etc.
+-
+-config PINCTRL_PIC32
+-	bool "Microchip PIC32 pin controller driver"
+-	depends on OF
+-	depends on MACH_PIC32
++config PINCTRL_SX150X
++	bool "Semtech SX150x I2C GPIO expander pinctrl driver"
++	depends on I2C=y
+ 	select PINMUX
++	select PINCONF
+ 	select GENERIC_PINCONF
++	select GPIOLIB
+ 	select GPIOLIB_IRQCHIP
+-	select OF_GPIO
++	select REGMAP
+ 	help
+-	  This is the pin controller and gpio driver for Microchip PIC32
+-	  microcontrollers. This option is selected automatically when specific
+-	  machine and arch are selected to build.
++	  Say yes here to provide support for Semtech SX150x-series I2C
++	  GPIO expanders as pinctrl module.
++	  Compatible models include:
++	  - 8 bits:  sx1508q, sx1502q
++	  - 16 bits: sx1509q, sx1506q
+ 
+-config PINCTRL_PIC32MZDA
+-	def_bool y if PIC32MZDA
+-	select PINCTRL_PIC32
++config PINCTRL_TB10X
++	bool
++	depends on OF && ARC_PLAT_TB10X
++	select GPIOLIB
+ 
+ config PINCTRL_ZYNQ
+ 	bool "Pinctrl driver for Xilinx Zynq"
+@@ -358,96 +471,15 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
+ 
+-config PINCTRL_INGENIC
+-	bool "Pinctrl driver for the Ingenic JZ47xx SoCs"
+-	default MACH_INGENIC
+-	depends on OF
+-	depends on MIPS || COMPILE_TEST
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select REGMAP_MMIO
+-
+-config PINCTRL_RK805
+-	tristate "Pinctrl and GPIO driver for RK805 PMIC"
+-	depends on MFD_RK808
+-	select GPIOLIB
+-	select PINMUX
+-	select GENERIC_PINCONF
+-	help
+-	  This selects the pinctrl driver for RK805.
+-
+-config PINCTRL_OCELOT
+-	bool "Pinctrl driver for the Microsemi Ocelot and Jaguar2 SoCs"
+-	depends on OF
+-	depends on HAS_IOMEM
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select OF_GPIO
+-	select REGMAP_MMIO
+-
+-config PINCTRL_MICROCHIP_SGPIO
+-	bool "Pinctrl driver for Microsemi/Microchip Serial GPIO"
+-	depends on OF
+-	depends on HAS_IOMEM
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select OF_GPIO
+-	help
+-	  Support for the serial GPIO interface used on Microsemi and
+-	  Microchip SoC's. By using a serial interface, the SIO
+-	  controller significantly extends the number of available
+-	  GPIOs with a minimum number of additional pins on the
+-	  device. The primary purpose of the SIO controller is to
+-	  connect control signals from SFP modules and to act as an
+-	  LED controller.
+-
+-config PINCTRL_K210
+-	bool "Pinctrl driver for the Canaan Kendryte K210 SoC"
+-	depends on RISCV && SOC_CANAAN && OF
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select GENERIC_PINCONF
+-	select GPIOLIB
+-	select OF_GPIO
+-	select REGMAP_MMIO
+-	default SOC_CANAAN
+-	help
+-	  Add support for the Canaan Kendryte K210 RISC-V SOC Field
+-	  Programmable IO Array (FPIOA) controller.
+-
+-config PINCTRL_KEEMBAY
+-	tristate "Pinctrl driver for Intel Keem Bay SoC"
+-	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
+-	depends on HAS_IOMEM
+-	select PINMUX
+-	select PINCONF
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-	select GPIOLIB
+-	select GPIOLIB_IRQCHIP
+-	select GPIO_GENERIC
+-	help
+-	  This selects pin control driver for the Intel Keembay SoC.
+-	  It provides pin config functions such as pullup, pulldown,
+-	  interrupt, drive strength, sec lock, schmitt trigger, slew
+-	  rate control and direction control. This module will be
+-	  called as pinctrl-keembay.
+-
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+ source "drivers/pinctrl/berlin/Kconfig"
++source "drivers/pinctrl/cirrus/Kconfig"
+ source "drivers/pinctrl/freescale/Kconfig"
+ source "drivers/pinctrl/intel/Kconfig"
++source "drivers/pinctrl/mediatek/Kconfig"
++source "drivers/pinctrl/meson/Kconfig"
+ source "drivers/pinctrl/mvebu/Kconfig"
+ source "drivers/pinctrl/nomadik/Kconfig"
+ source "drivers/pinctrl/nuvoton/Kconfig"
+@@ -463,40 +495,7 @@ source "drivers/pinctrl/sunxi/Kconfig"
+ source "drivers/pinctrl/tegra/Kconfig"
+ source "drivers/pinctrl/ti/Kconfig"
+ source "drivers/pinctrl/uniphier/Kconfig"
+-source "drivers/pinctrl/vt8500/Kconfig"
+-source "drivers/pinctrl/mediatek/Kconfig"
+-source "drivers/pinctrl/meson/Kconfig"
+-source "drivers/pinctrl/cirrus/Kconfig"
+ source "drivers/pinctrl/visconti/Kconfig"
+-
+-config PINCTRL_XWAY
+-	bool
+-	depends on SOC_TYPE_XWAY
+-	depends on PINCTRL_LANTIQ
+-
+-config PINCTRL_TB10X
+-	bool
+-	depends on OF && ARC_PLAT_TB10X
+-	select GPIOLIB
+-
+-config PINCTRL_EQUILIBRIUM
+-	tristate "Generic pinctrl and GPIO driver for Intel Lightning Mountain SoC"
+-	depends on OF && HAS_IOMEM
+-	depends on X86 || COMPILE_TEST
+-	select PINMUX
+-	select PINCONF
+-	select GPIOLIB
+-	select GPIO_GENERIC
+-	select GPIOLIB_IRQCHIP
+-	select GENERIC_PINCONF
+-	select GENERIC_PINCTRL_GROUPS
+-	select GENERIC_PINMUX_FUNCTIONS
+-
+-	help
+-	  Equilibrium pinctrl driver is a pinctrl & GPIO driver for Intel Lightning
+-	  Mountain network processor SoC that supports both the linux GPIO and pin
+-	  control frameworks. It provides interfaces to setup pinmux, assign desired
+-	  pin functions, configure GPIO attributes for LGM SoC pins. Pinmux and
+-	  pinconf settings are retrieved from device tree.
++source "drivers/pinctrl/vt8500/Kconfig"
+ 
+ endif
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index 5e63de2ffcf4..f63483fde75f 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -6,56 +6,58 @@ subdir-ccflags-$(CONFIG_DEBUG_PINCTRL)	+= -DDEBUG
+ obj-y				+= core.o pinctrl-utils.o
+ obj-$(CONFIG_PINMUX)		+= pinmux.o
+ obj-$(CONFIG_PINCONF)		+= pinconf.o
+-obj-$(CONFIG_OF)		+= devicetree.o
+ obj-$(CONFIG_GENERIC_PINCONF)	+= pinconf-generic.o
++obj-$(CONFIG_OF)		+= devicetree.o
++
++obj-$(CONFIG_PINCTRL_AMD)	+= pinctrl-amd.o
+ obj-$(CONFIG_PINCTRL_APPLE_GPIO) += pinctrl-apple-gpio.o
+ obj-$(CONFIG_PINCTRL_ARTPEC6)	+= pinctrl-artpec6.o
+ obj-$(CONFIG_PINCTRL_AS3722)	+= pinctrl-as3722.o
+-obj-$(CONFIG_PINCTRL_AXP209)	+= pinctrl-axp209.o
+ obj-$(CONFIG_PINCTRL_AT91)	+= pinctrl-at91.o
+ obj-$(CONFIG_PINCTRL_AT91PIO4)	+= pinctrl-at91-pio4.o
+-obj-$(CONFIG_PINCTRL_AMD)	+= pinctrl-amd.o
++obj-$(CONFIG_PINCTRL_AXP209)	+= pinctrl-axp209.o
+ obj-$(CONFIG_PINCTRL_BM1880)	+= pinctrl-bm1880.o
+ obj-$(CONFIG_PINCTRL_DA850_PUPD) += pinctrl-da850-pupd.o
+ obj-$(CONFIG_PINCTRL_DA9062)	+= pinctrl-da9062.o
+ obj-$(CONFIG_PINCTRL_DIGICOLOR)	+= pinctrl-digicolor.o
+-obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
++obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   += pinctrl-equilibrium.o
+ obj-$(CONFIG_PINCTRL_GEMINI)	+= pinctrl-gemini.o
++obj-$(CONFIG_PINCTRL_INGENIC)	+= pinctrl-ingenic.o
++obj-$(CONFIG_PINCTRL_K210)	+= pinctrl-k210.o
++obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
++obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
++obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
++obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
++obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
+ obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_SPI)	+= pinctrl-mcp23s08_spi.o
+ obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
+-obj-$(CONFIG_PINCTRL_MESON)	+= meson/
++obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+= pinctrl-microchip-sgpio.o
++obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
+ obj-$(CONFIG_PINCTRL_OXNAS)	+= pinctrl-oxnas.o
+ obj-$(CONFIG_PINCTRL_PALMAS)	+= pinctrl-palmas.o
+ obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
+ obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
++obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
+ obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
+ obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
++obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
++obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
+ obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
+-obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
+-obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
+-obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
+-obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
+ obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
+-obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
+-obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
+-obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
+ obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
+-obj-$(CONFIG_PINCTRL_INGENIC)	+= pinctrl-ingenic.o
+-obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
+-obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
+-obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+= pinctrl-microchip-sgpio.o
+-obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   += pinctrl-equilibrium.o
+-obj-$(CONFIG_PINCTRL_K210)	+= pinctrl-k210.o
+-obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
++obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
+ 
+ obj-y				+= actions/
+ obj-$(CONFIG_ARCH_ASPEED)	+= aspeed/
+ obj-y				+= bcm/
+ obj-$(CONFIG_PINCTRL_BERLIN)	+= berlin/
++obj-y				+= cirrus/
+ obj-y				+= freescale/
+ obj-$(CONFIG_X86)		+= intel/
++obj-y				+= mediatek/
++obj-$(CONFIG_PINCTRL_MESON)	+= meson/
+ obj-y				+= mvebu/
+ obj-y				+= nomadik/
+ obj-$(CONFIG_ARCH_NPCM7XX)	+= nuvoton/
+@@ -68,9 +70,8 @@ obj-$(CONFIG_PINCTRL_SPEAR)	+= spear/
+ obj-y				+= sprd/
+ obj-$(CONFIG_PINCTRL_STM32)	+= stm32/
+ obj-$(CONFIG_PINCTRL_SUNXI)	+= sunxi/
++obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
+ obj-y				+= ti/
+ obj-$(CONFIG_PINCTRL_UNIPHIER)	+= uniphier/
+-obj-$(CONFIG_ARCH_VT8500)	+= vt8500/
+-obj-y				+= mediatek/
+-obj-y				+= cirrus/
+ obj-$(CONFIG_PINCTRL_VISCONTI)	+= visconti/
++obj-$(CONFIG_ARCH_VT8500)	+= vt8500/
+-- 
+2.33.0
 
-Morten

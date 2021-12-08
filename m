@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B26F846D7D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2045346D7D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbhLHQSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:18:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60482 "EHLO
+        id S236611AbhLHQSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:18:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46327 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229743AbhLHQSC (ORCPT
+        by vger.kernel.org with ESMTP id S236621AbhLHQST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:18:02 -0500
+        Wed, 8 Dec 2021 11:18:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638980070;
+        s=mimecast20190719; t=1638980086;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=fEXCqJfmiP8maztUw9qUfWOvIq1kLfwdMapjhthFDj4=;
-        b=Y2L2woDlF9eVpFnC8SUGwVlsAkcQdPcgsYvLc+21GTxZjtE25S6+hb/oDRLwpdNVBvp82P
-        0T5IJVl/BQsWsu2y+piRATDlbXYwH4W2zyFtokeQQufElOcC3DnCZcHaSW1gfG7YrzhSd1
-        yMFf1i9BbAEHR7YcAQfUa95oOKMpOxg=
+         to:to:cc:cc; bh=6TtzeYXbzz9SQPvVDeGD0FDb6X1eQ/zkfxrGdjmPjdU=;
+        b=B2DA3fJEbj8RHWFajRdoiLsPd1ugYzzWEIKlbeuEKjZ8v+AKLBM4df13O/dkIlQwM516wN
+        NLXQTwtHDmIxYhcKOk3s8wHxoTM+RvTXq0hZScfCIWP6U3JlzkuyKkZJXsAY2Ra5o04AGW
+        W1lKZS/c8MX5S7Eg+HKqB6VCXhCfR00=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-WSYsaie-M4qhEnXbkCg5IQ-1; Wed, 08 Dec 2021 11:14:27 -0500
-X-MC-Unique: WSYsaie-M4qhEnXbkCg5IQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-393-ZOQtHZr2NQuqpKfSNb55ow-1; Wed, 08 Dec 2021 11:14:43 -0500
+X-MC-Unique: ZOQtHZr2NQuqpKfSNb55ow-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B6C3A8015CD;
-        Wed,  8 Dec 2021 16:14:25 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33FE592500;
+        Wed,  8 Dec 2021 16:14:42 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B601519C59;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B5F0060657;
         Wed,  8 Dec 2021 16:14:10 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 403FA415EE65; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
-Message-ID: <20211208161000.714824954@fuller.cnet>
+        id 41990415EE69; Wed,  8 Dec 2021 13:13:05 -0300 (-03)
+Message-ID: <20211208161000.744487212@fuller.cnet>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Dec 2021 13:09:09 -0300
+Date:   Wed, 08 Dec 2021 13:09:10 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nitesh Lal <nilal@redhat.com>,
@@ -47,233 +47,112 @@ Cc:     Nitesh Lal <nilal@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [patch v8 03/10] task isolation: sync vmstats on return to userspace
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [patch v8 04/10] procfs: add per-pid task isolation state
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The logic to disable vmstat worker thread, when entering
-nohz full, does not cover all scenarios. For example, it is possible
-for the following to happen:
-
-1) enter nohz_full, which calls refresh_cpu_vm_stats, syncing the stats.
-2) app runs mlock, which increases counters for mlock'ed pages.
-3) start -RT loop
-
-Since refresh_cpu_vm_stats from nohz_full logic can happen _before_
-the mlock, vmstat shepherd can restart vmstat worker thread on
-the CPU in question.
-
-To fix this, use the task isolation prctl interface to quiesce 
-deferred actions when returning to userspace.
-
-Keep task_isol_has_work returning 0 until all elements
-are in place.
-
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Add /proc/pid/task_isolation file, to query the state of
+task isolation configuration.
 
 ---
-v6: modify exit_to_user_mode_loop to cover exceptions and interrupts
-v5: no changes
-v4: add oneshot mode support
+ fs/proc/base.c |   68 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
- include/linux/task_isolation.h |   16 ++++++++++++++++
- include/linux/vmstat.h         |    8 ++++++++
- kernel/entry/common.c          |   15 +++++++++++----
- kernel/task_isolation.c        |   21 +++++++++++++++++++++
- mm/vmstat.c                    |   21 +++++++++++++++++++++
- 5 files changed, 77 insertions(+), 4 deletions(-)
-
-Index: linux-2.6/include/linux/task_isolation.h
+Index: linux-2.6/fs/proc/base.c
 ===================================================================
---- linux-2.6.orig/include/linux/task_isolation.h
-+++ linux-2.6/include/linux/task_isolation.h
-@@ -40,8 +40,19 @@ int prctl_task_isolation_activate_set(un
- 
- int __copy_task_isolation(struct task_struct *tsk);
- 
-+void isolation_exit_to_user_mode(void);
-+
-+static inline int task_isol_has_work(void)
-+{
-+	return 0;
-+}
-+
- #else
- 
-+static void isolation_exit_to_user_mode(void)
-+{
-+}
-+
- static inline void tsk_isol_free(struct task_struct *tsk)
- {
- }
-@@ -86,6 +97,11 @@ static inline int prctl_task_isolation_a
- 	return -EOPNOTSUPP;
- }
- 
-+static inline int task_isol_has_work(void)
-+{
-+	return 0;
-+}
-+
- #endif /* CONFIG_CPU_ISOLATION */
- 
- #endif /* __LINUX_TASK_ISOL_H */
-Index: linux-2.6/include/linux/vmstat.h
-===================================================================
---- linux-2.6.orig/include/linux/vmstat.h
-+++ linux-2.6/include/linux/vmstat.h
-@@ -21,6 +21,14 @@ int sysctl_vm_numa_stat_handler(struct c
- 		void *buffer, size_t *length, loff_t *ppos);
- #endif
- 
-+#ifdef CONFIG_SMP
-+void sync_vmstat(void);
-+#else
-+static inline void sync_vmstat(void)
-+{
-+}
-+#endif
-+
- struct reclaim_stat {
- 	unsigned nr_dirty;
- 	unsigned nr_unqueued_dirty;
-Index: linux-2.6/kernel/entry/common.c
-===================================================================
---- linux-2.6.orig/kernel/entry/common.c
-+++ linux-2.6/kernel/entry/common.c
-@@ -6,6 +6,7 @@
- #include <linux/livepatch.h>
- #include <linux/audit.h>
- #include <linux/tick.h>
+--- linux-2.6.orig/fs/proc/base.c
++++ linux-2.6/fs/proc/base.c
+@@ -97,6 +97,8 @@
+ #include <linux/time_namespace.h>
+ #include <linux/resctrl.h>
+ #include <linux/cn_proc.h>
++#include <linux/prctl.h>
 +#include <linux/task_isolation.h>
- 
- #include "common.h"
- 
-@@ -149,13 +150,14 @@ static void handle_signal_work(struct pt
+ #include <trace/events/oom.h>
+ #include "internal.h"
+ #include "fd.h"
+@@ -665,6 +667,69 @@ static int proc_pid_syscall(struct seq_f
  }
+ #endif /* CONFIG_HAVE_ARCH_TRACEHOOK */
  
- static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
--					    unsigned long ti_work)
-+					    unsigned long ti_work,
-+					    unsigned long tsk_isol_work)
- {
- 	/*
- 	 * Before returning to user space ensure that all pending work
- 	 * items have been completed.
- 	 */
--	while (ti_work & EXIT_TO_USER_MODE_WORK) {
-+	while ((ti_work & EXIT_TO_USER_MODE_WORK) || tsk_isol_work) {
- 
- 		local_irq_enable_exit_to_user(ti_work);
- 
-@@ -177,6 +179,9 @@ static unsigned long exit_to_user_mode_l
- 		/* Architecture specific TIF work */
- 		arch_exit_to_user_mode_work(regs, ti_work);
- 
-+		if (tsk_isol_work)
-+			isolation_exit_to_user_mode();
++#ifdef CONFIG_CPU_ISOLATION
 +
- 		/*
- 		 * Disable interrupts and reevaluate the work flags as they
- 		 * might have changed while interrupts and preemption was
-@@ -188,6 +193,7 @@ static unsigned long exit_to_user_mode_l
- 		tick_nohz_user_enter_prepare();
- 
- 		ti_work = READ_ONCE(current_thread_info()->flags);
-+		tsk_isol_work = task_isol_has_work();
- 	}
- 
- 	/* Return the latest work state for arch_exit_to_user_mode() */
-@@ -197,14 +203,15 @@ static unsigned long exit_to_user_mode_l
- static void exit_to_user_mode_prepare(struct pt_regs *regs)
- {
- 	unsigned long ti_work = READ_ONCE(current_thread_info()->flags);
-+	unsigned long tsk_isol_work = task_isol_has_work();
- 
- 	lockdep_assert_irqs_disabled();
- 
- 	/* Flush pending rcuog wakeup before the last need_resched() check */
- 	tick_nohz_user_enter_prepare();
- 
--	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
--		ti_work = exit_to_user_mode_loop(regs, ti_work);
-+	if (unlikely((ti_work & EXIT_TO_USER_MODE_WORK) || tsk_isol_work))
-+		ti_work = exit_to_user_mode_loop(regs, ti_work, tsk_isol_work);
- 
- 	arch_exit_to_user_mode_prepare(regs, ti_work);
- 
-Index: linux-2.6/kernel/task_isolation.c
-===================================================================
---- linux-2.6.orig/kernel/task_isolation.c
-+++ linux-2.6/kernel/task_isolation.c
-@@ -18,6 +18,8 @@
- #include <linux/sysfs.h>
- #include <linux/init.h>
- #include <linux/sched/task.h>
-+#include <linux/mm.h>
-+#include <linux/vmstat.h>
- 
- void __tsk_isol_free(struct task_struct *tsk)
- {
-@@ -348,3 +350,22 @@ int prctl_task_isolation_activate_get(un
- 
- 	return 0;
- }
++struct qoptions {
++	unsigned long mask;
++	char *name;
++};
 +
-+void isolation_exit_to_user_mode(void)
++static struct qoptions iopts[] = {
++	{ISOL_F_QUIESCE, "quiesce"},
++};
++#define ILEN (sizeof(iopts) / sizeof(struct qoptions))
++
++static struct qoptions qopts[] = {
++	{ISOL_F_QUIESCE_VMSTATS, "vmstat_sync"},
++};
++#define QLEN (sizeof(qopts) / sizeof(struct qoptions))
++
++static void show_isolation_state(struct seq_file *m,
++				 struct qoptions *iopt,
++				 int mask,
++				 const char *hdr)
 +{
-+	struct isol_info *i;
++	int i;
 +
-+	i = current->isol_info;
-+	if (!i)
-+		return;
-+
-+	if (i->active_mask != ISOL_F_QUIESCE)
-+		return;
-+
-+	if (i->quiesce_mask & ISOL_F_QUIESCE_VMSTATS) {
-+		sync_vmstat();
-+		if (i->oneshot_mask & ISOL_F_QUIESCE_VMSTATS)
-+			i->active_mask &= ~ISOL_F_QUIESCE_VMSTATS;
++	seq_printf(m, hdr);
++	for (i = 0; i < ILEN; i++) {
++		if (mask & iopt->mask)
++			seq_printf(m, "%s ", iopt->name);
++		iopt++;
 +	}
++	if (mask == 0)
++		seq_printf(m, "none ");
++	seq_printf(m, "\n");
 +}
-+EXPORT_SYMBOL_GPL(isolation_exit_to_user_mode);
-Index: linux-2.6/mm/vmstat.c
-===================================================================
---- linux-2.6.orig/mm/vmstat.c
-+++ linux-2.6/mm/vmstat.c
-@@ -2015,6 +2015,27 @@ static void vmstat_shepherd(struct work_
- 		round_jiffies_relative(sysctl_stat_interval));
- }
- 
-+void sync_vmstat(void)
++
++int proc_pid_task_isolation(struct seq_file *m, struct pid_namespace *ns,
++			    struct pid *pid, struct task_struct *t)
 +{
-+	int cpu;
++	int active_mask, quiesce_mask, conf_mask;
++	struct isol_info *isol_info;
++	struct inode *inode = m->private;
++	struct task_struct *task = get_proc_task(inode);
 +
-+	cpu = get_cpu();
++	isol_info = t->isol_info;
++	if (!isol_info)
++		active_mask = quiesce_mask = conf_mask = 0;
++	else {
++		active_mask = isol_info->active_mask;
++		quiesce_mask = isol_info->quiesce_mask;
++		conf_mask = isol_info->conf_mask;
++	}
 +
-+	refresh_cpu_vm_stats(false);
-+	put_cpu();
++	show_isolation_state(m, iopts, conf_mask, "Configured state: ");
++	show_isolation_state(m, iopts, active_mask, "Active state: ");
++	show_isolation_state(m, qopts, quiesce_mask, "Quiescing: ");
 +
-+	/*
-+	 * If task is migrated to another CPU between put_cpu
-+	 * and cancel_delayed_work_sync, the code below might
-+	 * cancel vmstat_update work for a different cpu
-+	 * (than the one from which the vmstats were flushed).
-+	 *
-+	 * However, vmstat shepherd will re-enable it later,
-+	 * so its harmless.
-+	 */
-+	cancel_delayed_work_sync(&per_cpu(vmstat_work, cpu));
++	put_task_struct(task);
++
++	return 0;
 +}
 +
- static void __init start_shepherd_timer(void)
- {
- 	int cpu;
++#endif /* CONFIG_CPU_ISOLATION */
++
+ /************************************************************************/
+ /*                       Here the fs part begins                        */
+ /************************************************************************/
+@@ -3286,6 +3351,9 @@ static const struct pid_entry tgid_base_
+ #ifdef CONFIG_SECCOMP_CACHE_DEBUG
+ 	ONE("seccomp_cache", S_IRUSR, proc_pid_seccomp_cache),
+ #endif
++#ifdef CONFIG_CPU_ISOLATION
++	ONE("task_isolation", S_IRUSR, proc_pid_task_isolation),
++#endif
+ };
+ 
+ static int proc_tgid_base_readdir(struct file *file, struct dir_context *ctx)
 
 

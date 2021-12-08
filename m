@@ -2,70 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA71B46DA37
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354AB46D9DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbhLHRph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:45:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:41036 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233677AbhLHRpf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:45:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="236622767"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="236622767"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 09:32:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="543270808"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 09:32:25 -0800
-Date:   Wed, 8 Dec 2021 09:36:42 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <20211208093642.094ac4a7@jacob-builder>
-In-Reply-To: <YbA69kdTgqB9tJc8@matsya>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-        <dbb90f20-d9fb-1f24-b59d-15a2a42437e2@intel.com>
-        <YbA69kdTgqB9tJc8@matsya>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235237AbhLHRk3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Dec 2021 12:40:29 -0500
+Received: from mail-eopbgr90044.outbound.protection.outlook.com ([40.107.9.44]:6416
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230418AbhLHRk2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 12:40:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P7koeUeqY5Udm11MXSQ1a88MqQuP5DysSrGELU8VIc4mV0WOmTdxnI59hIIoK1Pk3zCsBgIZkbY/XZ43gCASN6oclVKgVUM2iRqQrzLksSXaP06iIFuh5BQiEpS6Ovo0JtK05TYwFoLILU7+LKsVkWRV1V/KaiJGM7eyaOpKOqpU8eEM6aPntb6p5JyeY7Xee2+t5RZpM6Im6CBq2G8eEUG2aBvb5t5Rw3iV4oZGw/m22K3rErXOddkHUA7cqHjTmmwaph4EyFQ/KabYGplPI9Hm5hSBbDNwCTSqwlVIzpf5wJ31Ny36qicGuIlmMRoqrU1yGjzU3dRovP+GCI995w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FznmhyvBXcd3AQsGpfA6J6t4re7w31pPAGHaYHE04pA=;
+ b=AaaZhtTvp5zpJOSaMedo23ayyilh+8yq59L2cyIqZAdWO5o58qs/YFTyVmKp+caGlemb4eMKC+diU8p/qjEuQs9xK27SpRkuIfmZWpCnTHaYnvG41OCAtnWgWv7FoqPM1PeE1KBtEH3E0udW4aDLiU42DZ9g26nEpQfQjbY/WgPyQxhmEwrIUs7y7P6zRcGhdJtMJmA+1OJR2oRE+VIca3pc09hi7RRZspmAYIOk0N/lur5o/gPbuhkRSVti+XrFnzbQz1GLnQdb/qfuwvhRxGxfaZdg+eSNxndG3FNuuaQbwdNFgO2mV7LodIs82OlNqKHOdqa2Dv6ikRrlpv+RMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0419.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Wed, 8 Dec
+ 2021 17:36:53 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4755.022; Wed, 8 Dec 2021
+ 17:36:53 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: [PATCH] powerpc/powermac: Add additional missing
+ lockdep_register_key()
+Thread-Topic: [PATCH] powerpc/powermac: Add additional missing
+ lockdep_register_key()
+Thread-Index: AQHX7Fow0VFka0nYfkWuyKwlY1DdIg==
+Date:   Wed, 8 Dec 2021 17:36:52 +0000
+Message-ID: <2c7e421874e21b2fb87813d768cf662f630c2ad4.1638984999.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2bf15e22-9bbb-4335-620a-08d9ba7152ad
+x-ms-traffictypediagnostic: MR2P264MB0419:EE_
+x-microsoft-antispam-prvs: <MR2P264MB0419D50A3B0AAD6A4DF4239AED6F9@MR2P264MB0419.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:123;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ivo0TYXx29/UX5Jltp+2VyqduB27w+2SEqkUsmkD04TJKmJj6HS1IhJQRgKPkpagNyrXEJBaOVaHe67B3PNZ6sRWAp1Ie1eR8TY9wXSX9xyps3W7WWyZFgV1Rk20zA6Bvm9XTgsjQXg8DpeSp/ofmAsnnx7ctPo0bitWIdFpt3wny/hGbZmZtfZds4L06xKgHjURTIke7K01pXELR2PsM49dmq3oOclboRd63mRqdF93Q3uK7x8F0xkDlwm5Aiv8Q3vIAT0y0FbbLzIgoSL3oXpjKE/UPT9+DM2Vzwf3hps04B0RvQl9eSuTzWOxp/8PvdaA8lLNJBLUVUVpL7ebBkZTXaLNYJlNROfMUHquv0oAy4enP5QoInu6lTHpI2TgnOY6cNIIiqhkq3J+SuWvWg3rLgUYZkeCNsKf5WDR70sHt+dyeZd16LtDYJmkqJEUBOOxuLxdnF3A1WIXnl8GpLsU5eeG0Rmm5+ZNlqg+7IPPS75ro8VP7AQVwOR8UrU9fVE/jXfTFPaxT+ioRs7wmTtse/ukpuxHGeIQJTuGNbkPlurjsGV61Hv94V4tY13zDNIVtn3FTzBsnYUSw6YIakTE+xVp8fAdqpjyNChCBV+pUfU1hQIXz/2iec0D46GJ9K/yhOqx9lPUFc8MVnshV26/GiIHqbBh1b78plk+AzDNtlqKYuzkXz3MRc+4UsQzaQkukHGqX3/pxvkCUZfhx7FaCdgBSICxNyu2ab3rU9TNdYFk0xqkBO7Z/2jUnCGs6zE+Bc3obLyyO5/EwntXAtL/4+EdkPm55ZzXHos+g28=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(26005)(508600001)(54906003)(186003)(6512007)(2906002)(316002)(2616005)(6486002)(86362001)(122000001)(38100700002)(110136005)(44832011)(8676002)(83380400001)(36756003)(66446008)(66946007)(966005)(64756008)(8936002)(6506007)(66556008)(66476007)(76116006)(4326008)(5660300002)(71200400001)(91956017);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?m7ft4xYMpYF1WfkJzx12fyuxwZCez8rSnr/FQvag9UWblYLkzgHbSfJmre?=
+ =?iso-8859-1?Q?mvqBVNYT9bQaAviZxs72lq/fu67SWbGiIfsatUrBrUVm43rDXadaZY0cOS?=
+ =?iso-8859-1?Q?tQPicbN8Lf6AiqG7x9vvWE2lA301Tq1X/p+NBe0w6lsf+ZQoPQjxqNeBIC?=
+ =?iso-8859-1?Q?K3f/AiEDUHaQl+yfU52xXx33MfOd18Yz3nWEJYx03hGPZR/Cd0j6cBACcg?=
+ =?iso-8859-1?Q?PodJ+DQGsS6/3qxFc7TX4jJqyA1Tn7fkQRhCY/aAUlptOzDeIWcLQ1ay/x?=
+ =?iso-8859-1?Q?jWU1S1zvIq4DTRCl5YgoWtuUTDidIkwyegk7N7N9EbIWmFhiM4sOb2AzvX?=
+ =?iso-8859-1?Q?0BcCBe0Gv4yhrOOJDsfbijRFXPoYbfrEnd8LxjdaaJf+/QpYBuGf3sZ0Fw?=
+ =?iso-8859-1?Q?viCdx4db7mQzwYRmtkFm5NKVHBaAQZ/FXh3y5rGYm4uB0WRAnalyfmhoJn?=
+ =?iso-8859-1?Q?ebbJxeZSurpzjwYITQyRBlFbA6r2y2+RasabWg3bFVUJ75r8fSd/hl1jHe?=
+ =?iso-8859-1?Q?cqeYV7U0wLNcjSNNj34iCVkWr8rL2/vgv3XGPrPCqU6+MJLsxtGZcg/JM4?=
+ =?iso-8859-1?Q?QYZdy1npUGNJ9/UwcoQHkcp4mxnIjAXXITeEA3uEOVleIcG42PcYq/SH5T?=
+ =?iso-8859-1?Q?R/vNuLg7H6QYaP3MbYRKpnpQL4gQeKlwo4LuFYJi/Xs3G2FEgyaw6cYcLY?=
+ =?iso-8859-1?Q?KPLQU23DBs+iZn0E4iECuVYM0P/YNT/Jr0TNw9Rshch0zNj98eNq/6uxqg?=
+ =?iso-8859-1?Q?Dwbyi2v5PFh4OfrZpS8Kfo8O4vDp8aYsOU8eb7x3lHXUYrGK/J3a6kxzxd?=
+ =?iso-8859-1?Q?TANFv3BLwzzeQxAzvRZ5nyEPCmmadYjRJUy9u3kQXCQLJuUvvjl/i3fw9q?=
+ =?iso-8859-1?Q?az2B+7LLkWwW6oQCNUD2LSyhz4jat6SAsQPrUKU7/sdKbeIf48DZc6ywiw?=
+ =?iso-8859-1?Q?SQPEy3gquhU5jGNrKVhtcOAlirNgmHsWFcl8oxVb+lC8zOt8ez8lMNP2al?=
+ =?iso-8859-1?Q?1m/HtbD9OYvTd8tvyGrP6t9dZ4ELNkXB2lgctmoNj4sQqeToiRyZA03WIe?=
+ =?iso-8859-1?Q?dxR7dcuOWgs3tEuBXQ4RR68r11MBUBgZarPuskSwzcrrAuPOONJV3alKIJ?=
+ =?iso-8859-1?Q?zRBPaLtNNaNq1ibntofH8VUfFT3dmsZvDh50C1y0I7R02Y+M1x5ASdN66E?=
+ =?iso-8859-1?Q?jEQ9dOv0ZbZ2aLR7RSCX0ixmFfqKma0yL6SLThbzOs81uFepMAnNBGzZH3?=
+ =?iso-8859-1?Q?TUw33dYjP7RNurOcIVQMpGivYLjVkuxkSzgheS4OrEz3D6sBI9Ulwi2kRl?=
+ =?iso-8859-1?Q?xiMFUo4I5ohvqfFxqhKa0TqIgKTabocvwmrNSCenSGZQxFej7z/UEOkWxM?=
+ =?iso-8859-1?Q?vVGH8ABAIpwrDG4/8NaniPbxbhU0B8ETl/8VnIjm7iPKVXmLMx6pRDPl8E?=
+ =?iso-8859-1?Q?Ohx0qLesgvPZ2FxsZKpZ5NW2/afxdJUm9jrkrUKbEceBnkryqfkxJ2sCnk?=
+ =?iso-8859-1?Q?R4tVpKN97ZEZDaE3ZavdOWyqYHAvQzzb99BAi3fZhejpqHEo45Ht7Y1epN?=
+ =?iso-8859-1?Q?v45ruRgQvE1wfJ7sdDvLdaE6EF2ysEMeQW5rGuINiXw44nkavM/xKSRboS?=
+ =?iso-8859-1?Q?qeJLeV129i+8NFf7yzy0IHD3tBeKnEnOtH+xwf8PBVZvwdFYHXj1GAYznb?=
+ =?iso-8859-1?Q?TBuTjF//wpjvMeSZJCtI7Qx/ZhOctMJUtx3ZFQHHnUSHIZOjfPCVvgVL4l?=
+ =?iso-8859-1?Q?zq7T/FsjLlQmHHZfNAJ+DZsaA=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bf15e22-9bbb-4335-620a-08d9ba7152ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2021 17:36:52.9855
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4DjIUU2mo6HV6El4aUuBpHVgRBO1eEPwIAoNG/hruqTsK2B04b4FT1BHjY/6FU8pyc8ZRmqf7U4NodjjjXZx/BHmOy66i1XcNHGerSPS3mo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0419
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+Commit df1f679d19ed ("powerpc/powermac: Add missing
+lockdep_register_key()") fixed a problem that was causing a WARNING.
 
-On Wed, 8 Dec 2021 10:26:22 +0530, Vinod Koul <vkoul@kernel.org> wrote:
+There are two other places in the same file with the same problem
+originating from commit 9e607f72748d ("i2c_powermac: shut up lockdep
+warning").
 
-> Pls resend collecting acks. I dont have this in my queue
-Will do. Sorry I missed the dmaengine list.
+Add missing lockdep_register_key()
 
-Thanks,
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
+Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
+Depends-on: df1f679d19ed ("powerpc/powermac: Add missing lockdep_register_key()")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/powermac/low_i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Jacob
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index de34fa34c42d..df89d916236d 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -811,6 +811,7 @@ static void __init pmu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = pmu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = pmac_i2c_multibus;
+ 		list_add(&bus->link, &pmac_i2c_busses);
+@@ -934,6 +935,7 @@ static void __init smu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = smu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = 0;
+ 		list_add(&bus->link, &pmac_i2c_busses);
+-- 
+2.33.1

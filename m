@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4F646CF50
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4958346CF52
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbhLHIra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S229607AbhLHIrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhLHIr3 (ORCPT
+        with ESMTP id S229563AbhLHIrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:47:29 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E0FC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:43:57 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u17so2753205wrt.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:43:57 -0800 (PST)
+        Wed, 8 Dec 2021 03:47:31 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAF0C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:43:59 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x15so5954759edv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:43:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=26sZG3HIo6IT2q4mq9Jr5Z7NwmOveaei3bWuwXv9MFs=;
-        b=NIKcCoboastcACWdZi8LFsffMuyH86twlU4GhWo8sI8FkQT+kYQLLfTuE1EQX+3nhN
-         URYBRYyA5cYfMFWKKlwhIH0PDgPcJQ4a4v6NWo/aHEqrGlQbv0SvC8ZcH+XVEV+iaJSI
-         ujnmoq/JzJuf2QrWwhalRSCts1Lle2cL92CUF332idsxHOf35dlZTvOyUwj7VvrDCSen
-         g/HY1rzvYA3mTaFTzW/ed17hTxnTyY04m2vTw2S0ekYe8Y6e9S61CtyK6MCWUefFcxT5
-         5RyQwI+vWfGR8JsSewZavytQycppa44tjg/ndXvTL+bLPFzzCRZx4HNCLzwDywSf79Ng
-         xVJQ==
+         :content-disposition:in-reply-to;
+        bh=MHRdV/n7ZNhpIRjNRLtEErUQNiFQssJXqEFUzgk7Vxc=;
+        b=qXhE/1Y+LCgOH7m0jy2P+VYemRpPHl74NzF59/uHj3WElZfVGD0GzBdr86e6GzLs8v
+         rgPyIpPxARGLhF1XHUMCqwqHU92qA4tKXuWU5xrvab1rlKAfxSFe3PLbIqXI28VlbKFb
+         adSMCWTECg1ho3UTKFyUE65/BcnLrxkT5y2VhtmWPU+++ev/IMopygNI45DvhisjXZZx
+         ZHDMsNPsRfZBN2fmEqsL2lE2fWDZaTAKZOIT7QJd/1PMdYFslZGZxfkKwTSSgkHwizaw
+         ChXkj/nXB/O6/ASnJDxJl40iPuCo+IFve5SBNhxbbvtTUUZpeTwP99I1OdUrZJkvsPVP
+         WKVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=26sZG3HIo6IT2q4mq9Jr5Z7NwmOveaei3bWuwXv9MFs=;
-        b=k+mPkpe32PEmOGiw4UkW3vGelvF7qORVPRYF4kti/wEyfqKx5xTaNYNlUEu1RBwbbZ
-         iBGbLXh6+YrJfxVAd+wfHSSc2ghapQDERYXKHmuKjTG2zYtMnTJCEmK79HR4c/aQ2SLq
-         gMSl1RR3/Kz6/Q/6ztTyy02P4VtQniH4P6m8iRVE5jWVPPcZnN8VBDrVwAkgp6zJWy9e
-         jXBc68v19PthtZ4+rs8AUZyh0hhW0QK1jE5bUMX25+/Tllgeqz+6UWFGeNG/FuZd0kau
-         S0ySezv0H8y6bZnnN8qwbQyJJsFHmOwYWFc3kGRYXkpbPWVikaMcbSvjzpX+H5XDoR4Z
-         OF7A==
-X-Gm-Message-State: AOAM531PFhHMJBJLSkXqX9y6dkuS66vvaVXzH2PuP6nJhMdBBbaTceO2
-        gr/OeLgZOd9RRubmD13LPbISjA==
-X-Google-Smtp-Source: ABdhPJx8M9FZ6o3yRomu1k33t1Wd3E3SkRm4bgurf9JQn9HRuSnVxF4ZgPPyBWSls+LughFr8fvq1Q==
-X-Received: by 2002:adf:e84d:: with SMTP id d13mr57575468wrn.72.1638953035602;
-        Wed, 08 Dec 2021 00:43:55 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id l7sm2418034wry.86.2021.12.08.00.43.54
+         :mime-version:content-disposition:in-reply-to;
+        bh=MHRdV/n7ZNhpIRjNRLtEErUQNiFQssJXqEFUzgk7Vxc=;
+        b=vSZpANUgm0Mh0Mnad92abvx5rN2RUZHxJtMouSBdxcIPVPCT5QOUeWnnNs1dyAAKvV
+         7t+SJCCzrC2BuLDAfkn9/e4nc2db6GJKuuNDC1TfDM/DEB22rTuRKO/nSHBM6RClRybg
+         Yk/ULGIKrp/eWl2RXVzYHIo38TzkohPy2HoZpc9HfsPcvrKH6era3Bn6RKdGyieNg/Nv
+         ARatbUHNoAMm3rDdmMgI3aw3l88+/AQcZd2EDdc5LobriLbuGO0cqBJ/FXvq/7dKqIgO
+         xyubVmNeZwewW6tke4HFnnh9h5HmPqJT2ex0dUsMEpPEbUXIqwW1ygsmTr3lbnKbZDu4
+         2ygQ==
+X-Gm-Message-State: AOAM5300HM/u9Zy9DZMIBCBJ27tf0ay0fqXXzsAwmulWT1OcOXjOpIUL
+        nqcKtsdCBQpvpRg29hKiAVJzYg==
+X-Google-Smtp-Source: ABdhPJxxUorbWcPYmJ7REYy3pVVDwvJxoaNH3KHAFRqt9w8nDDvoDGgB+bnyyKCkPtGomBbC5wLYug==
+X-Received: by 2002:a17:907:7805:: with SMTP id la5mr5842317ejc.188.1638953038538;
+        Wed, 08 Dec 2021 00:43:58 -0800 (PST)
+Received: from localhost (mail.chocen-mesto.cz. [85.163.43.2])
+        by smtp.gmail.com with ESMTPSA id z8sm1585993edb.5.2021.12.08.00.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 00:43:55 -0800 (PST)
-Date:   Wed, 8 Dec 2021 08:43:53 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbBwSV2IwDHNUrFH@google.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
- <YbBZuwXZWMV9uRXI@kroah.com>
+        Wed, 08 Dec 2021 00:43:58 -0800 (PST)
+Date:   Wed, 8 Dec 2021 09:43:56 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Shay Drory <shayd@nvidia.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, jiri@nvidia.com,
+        saeedm@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next v2 1/6] devlink: Add new "io_eq_size" generic
+ device param
+Message-ID: <YbBwTNwmuZNwjVZU@nanopsycho>
+References: <20211208070006.13100-1-shayd@nvidia.com>
+ <20211208070006.13100-2-shayd@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbBZuwXZWMV9uRXI@kroah.com>
+In-Reply-To: <20211208070006.13100-2-shayd@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021, Greg KH wrote:
+Wed, Dec 08, 2021 at 08:00:01AM CET, shayd@nvidia.com wrote:
+>Add new device generic parameter to determine the size of the
+>I/O completion EQs.
+>
+>For example, to reduce I/O EQ size to 64, execute:
+>$ devlink dev param set pci/0000:06:00.0 \
+>              name io_eq_size value 64 cmode driverinit
+>$ devlink dev reload pci/0000:06:00.0
+>
+>Signed-off-by: Shay Drory <shayd@nvidia.com>
+>Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+>---
+> Documentation/networking/devlink/devlink-params.rst | 3 +++
+> include/net/devlink.h                               | 4 ++++
+> net/core/devlink.c                                  | 5 +++++
+> 3 files changed, 12 insertions(+)
+>
+>diff --git a/Documentation/networking/devlink/devlink-params.rst b/Documentation/networking/devlink/devlink-params.rst
+>index b7dfe693a332..cd9342305a13 100644
+>--- a/Documentation/networking/devlink/devlink-params.rst
+>+++ b/Documentation/networking/devlink/devlink-params.rst
+>@@ -129,3 +129,6 @@ own name.
+>        will NACK any attempt of other host to reset the device. This parameter
+>        is useful for setups where a device is shared by different hosts, such
+>        as multi-host setup.
+>+   * - ``io_eq_size``
+>+     - u16
 
-> On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > Adds get/set driver data helpers for auxiliary devices.
-> > > 
-> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > ---
-> > > V2
-> > >   - No changes
-> > > 
-> > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > 
-> > I would really like to see an explanation why such obfuscation is really
-> > needed. dev_*_drvdata() is a standard way to access driver data.
+Hmm, I wonder if this wouldn't be better to have it 32bits which might
+be future safe.
 
-I wouldn't call it obfuscation, but it does looks like abstraction for
-the sake of abstraction, which I usually push back on.  What are the
-technical benefits over using the dev_*() variant?
+Otherwise, this looks fine.
 
-> Lots of busses have this helper.  This is nothing new at all, and is
-> nice to have.  Look at all of the calls to dev_get_drvdata() in
-> include/linux/ for the examples.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>+     - Control the size of I/O completion EQs.
+>diff --git a/include/net/devlink.h b/include/net/devlink.h
+>index 3276a29f2b81..61efa45b8786 100644
+>--- a/include/net/devlink.h
+>+++ b/include/net/devlink.h
+>@@ -459,6 +459,7 @@ enum devlink_param_generic_id {
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_RDMA,
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_VNET,
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_IWARP,
+>+	DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
+> 
+> 	/* add new param generic ids above here*/
+> 	__DEVLINK_PARAM_GENERIC_ID_MAX,
+>@@ -511,6 +512,9 @@ enum devlink_param_generic_id {
+> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME "enable_iwarp"
+> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE DEVLINK_PARAM_TYPE_BOOL
+> 
+>+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME "io_eq_size"
+>+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE DEVLINK_PARAM_TYPE_U16
+>+
+> #define DEVLINK_PARAM_GENERIC(_id, _cmodes, _get, _set, _validate)	\
+> {									\
+> 	.id = DEVLINK_PARAM_GENERIC_ID_##_id,				\
+>diff --git a/net/core/devlink.c b/net/core/devlink.c
+>index db3b52110cf2..0d4e63d11585 100644
+>--- a/net/core/devlink.c
+>+++ b/net/core/devlink.c
+>@@ -4466,6 +4466,11 @@ static const struct devlink_param devlink_param_generic[] = {
+> 		.name = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME,
+> 		.type = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE,
+> 	},
+>+	{
+>+		.id = DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
+>+		.name = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME,
+>+		.type = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE,
+>+	},
+> };
+> 
+> static int devlink_param_generic_verify(const struct devlink_param *param)
+>-- 
+>2.21.3
+>

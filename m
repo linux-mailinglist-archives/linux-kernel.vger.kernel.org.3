@@ -2,66 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AF246C9F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4225246CA03
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbhLHBgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:36:55 -0500
-Received: from mga01.intel.com ([192.55.52.88]:33911 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234157AbhLHBgx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:36:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="261805971"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="261805971"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 17:33:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="679694865"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 17:33:20 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mulpf-000NCR-My; Wed, 08 Dec 2021 01:33:19 +0000
-Date:   Wed, 8 Dec 2021 09:32:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest 143/144] arch/x86/kernel/head_64.o: warning:
- objtool: verify_cpu()+0x4d: unreachable instruction
-Message-ID: <202112080910.XQ4yN1LA-lkp@intel.com>
+        id S239423AbhLHBh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:37:59 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:56464 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239353AbhLHBh6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 20:37:58 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1B818kGF089260;
+        Wed, 8 Dec 2021 09:08:46 +0800 (GMT-8)
+        (envelope-from tommy_huang@aspeedtech.com)
+Received: from tommy0527-VirtualBox.aspeedtech.com (192.168.2.141) by
+ TWMBX02.aspeed.com (192.168.0.24) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 8 Dec 2021 09:33:44 +0800
+From:   Tommy Haung <tommy_huang@aspeedtech.com>
+To:     <joel@jms.id.au>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <robh+dt@kernel.org>, <andrew@aj.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <dri-devel@lists.freedesktop.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <BMC-SW@aspeedtech.com>
+Subject: [PATCH v5 0/7] Add Aspeed AST2600 soc display support
+Date:   Wed, 8 Dec 2021 09:33:30 +0800
+Message-ID: <20211208013337.13806-1-tommy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [192.168.2.141]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1B818kGF089260
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest
-head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
-commit: 4844d5297235bef6b92fe9d0649d2f066f623d5a [143/144] [REVERTME] x86/tdx: Add CONFIG option for KVM SDV workarounds
-config: x86_64-randconfig-a001-20211207 (https://download.01.org/0day-ci/archive/20211208/202112080910.XQ4yN1LA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/4844d5297235bef6b92fe9d0649d2f066f623d5a
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest
-        git checkout 4844d5297235bef6b92fe9d0649d2f066f623d5a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+v5:
+  Add lost reset define.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+v4:
+  Add necessary reset control for ast2600.
+  Add chip caps for futher use.
+  These code are test on AST2500 and AST2600 by below steps.
 
-All warnings (new ones prefixed by >>):
+  1. Add below config to turn VT and LOGO on.
 
->> arch/x86/kernel/head_64.o: warning: objtool: verify_cpu()+0x4d: unreachable instruction
+	CONFIG_TTY=y
+	CONFIG_VT=y
+	CONFIG_CONSOLE_TRANSLATIONS=y
+	CONFIG_VT_CONSOLE=y
+	CONFIG_VT_CONSOLE_SLEEP=y
+	CONFIG_HW_CONSOLE=y
+	CONFIG_VT_HW_CONSOLE_BINDING=y
+	CONFIG_UNIX98_PTYS=y
+	CONFIG_LDISC_AUTOLOAD=y
+	CONFIG_DEVMEM=y
+	CONFIG_DUMMY_CONSOLE=y
+	CONFIG_FRAMEBUFFER_CONSOLE=y
+	CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+	CONFIG_LOGO=y
+	CONFIG_LOGO_LINUX_CLUT224=y
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  2. The Linux logo will be shown on the screen, when the BMC boot in Linux.
+
+v3:
+  Refine the patch for clear separate purpose.
+  Skip to send devicetree patch
+
+v2:
+  Remove some unnecessary patch.
+  Refine for reviwer request.
+
+v1:
+  First add patch.
+
+Joel Stanley (2):
+  ARM: dts: aspeed: Add GFX node to AST2600
+  ARM: dts: aspeed: ast2600-evb: Enable GFX device
+
+Tommy Haung (1):
+  dt-bindings:ast2600-clock Add CRT reset define
+
+tommy-huang (4):
+  drm/aspeed: Update INTR_STS handling
+  drm/aspeed: Add AST2600 chip support
+  drm/aspeed: Add reset and clock for AST2600
+  arm:boot:dts:aspeed-g6 Add more gfx reset control
+
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts  | 18 +++++++
+ arch/arm/boot/dts/aspeed-g6.dtsi          | 13 +++++
+ drivers/gpu/drm/aspeed/aspeed_gfx.h       | 17 +++++-
+ drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c  | 16 ++++++
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c   | 65 +++++++++++++++++++++--
+ include/dt-bindings/clock/ast2600-clock.h |  1 +
+ 6 files changed, 124 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+

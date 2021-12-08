@@ -2,91 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C8C46CBCC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 04:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FED146CBD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244040AbhLHD6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 22:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbhLHD6Q (ORCPT
+        id S231422AbhLHEEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:04:15 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:51931 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229958AbhLHEEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 22:58:16 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E63C061574;
-        Tue,  7 Dec 2021 19:54:45 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso1496407otf.0;
-        Tue, 07 Dec 2021 19:54:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RUogFM0kx8hG5CML308BJba4rCWmtzMw1GcR/PSkUeo=;
-        b=Do3nPkhUAb7ueDg6r2mwveq1BQ8yKc6tqRcSxlGMZLxTOVHKvA1VTkQAbdiPvxtVO9
-         psHxrzlESuaoJT897lNOG+PS75cDROXr5+2Ql+wQj3fnWrW2OHYMQ4HyH1M/Ql1HrcSH
-         qjeI/YTaUk6pWWu6gkUFvZ4jQy81xOR9IUu6WPvTo1XTkQPnAriAXJ0iWqzzBVpE7FIV
-         LxAdjDvjQGH9PU6cLvg84poWg+d/VAyd2bwd0meC/QPH6uHfKTUxaelFGlvx34CZtaJp
-         RrYULP7UkJCg2L/oa3xxa+7VBhd4sMjI8vsUQ3DjD1w6I8DqF/6cj3ZPPDUyEl2MO3wB
-         ok9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RUogFM0kx8hG5CML308BJba4rCWmtzMw1GcR/PSkUeo=;
-        b=o3McFKcFBcAz7JVG160kE+xJDyAz634TtixqGzW00X6P+f4jmAcMKnuTLOjB7AitQD
-         FhKQIg+6l/+N/azIc01Ap//502EHNiqPC8reU+vxbDtyIv5kT1OgYyALDdvBvAkpksm2
-         fVTiTWM2169LNZMRO6QpQLnBDbpabEskQbuRRCj4Zg+rKN9ez+/aIEoZ6UJMrPOyljHE
-         Lfanf34G2Q9CBPly+QBD5K3fu9SuqOItDnrpoNIhKdQj2hGcGjpOPippF66fycRy0VBO
-         hxn9iyY3RvFlTsc5EsBN3yl4/oiwIzht8AkX4UeSP27Ah9Rqj+zWSsFTW/whBpAdFaIB
-         QWBg==
-X-Gm-Message-State: AOAM532AnP6+uii4rIlnn75MuSSI+NZi5lIpz4yV1LgEiHYkP/yHzk4h
-        MXA5ei2KSUwNmtRQxRxe6kg=
-X-Google-Smtp-Source: ABdhPJxx2XN/X1EPFbGOO2uGv5+eyt1AMPMJ91EHnz2jR+ocwXiBRYSlPB75x+WnjaNuHXr+QAieAw==
-X-Received: by 2002:a9d:d68:: with SMTP id 95mr38087169oti.188.1638935684516;
-        Tue, 07 Dec 2021 19:54:44 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-a8853e8734sm15873fac.5.2021.12.07.19.54.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 19:54:44 -0800 (PST)
-Message-ID: <ec6245eb-4bee-f3f3-6bc1-c91ef2b06aa4@gmail.com>
-Date:   Tue, 7 Dec 2021 20:54:42 -0700
+        Tue, 7 Dec 2021 23:04:14 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Uzq5Sf3_1638936038;
+Received: from 30.22.113.150(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0Uzq5Sf3_1638936038)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Dec 2021 12:00:39 +0800
+Message-ID: <04d4d0bc-0ef4-f9a3-593b-149f835c74be@linux.alibaba.com>
+Date:   Wed, 8 Dec 2021 12:00:38 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: selftests/net/fcnal-test.sh: ipv6_ping test failed
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
+ shadow paging if the guest PDPTEs is changed
 Content-Language: en-US
-To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, Philip" <philip.li@intel.com>, lkp <lkp@intel.com>,
-        "Ma, XinjianX" <xinjianx.ma@intel.com>,
-        "Li, ZhijianX" <zhijianx.li@intel.com>
-References: <PH0PR11MB4792DFC72C7F7489F22B26E5C56E9@PH0PR11MB4792.namprd11.prod.outlook.com>
- <20211207075808.456e5b4f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <2918f246-7a48-4395-42bb-d50b943480c6@gmail.com>
- <PH0PR11MB47924ED34AE948FB0E6CF933C56F9@PH0PR11MB4792.namprd11.prod.outlook.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <PH0PR11MB47924ED34AE948FB0E6CF933C56F9@PH0PR11MB4792.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Xiao Guangrong <guangrong.xiao@linux.intel.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+ <20211111144634.88972-1-jiangshanlai@gmail.com> <Ya/5MOYef4L4UUAb@google.com>
+From:   Lai Jiangshan <laijs@linux.alibaba.com>
+In-Reply-To: <Ya/5MOYef4L4UUAb@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 8:50 PM, Zhou, Jie2X wrote:
-> hi,
+
+
+On 2021/12/8 08:15, Sean Christopherson wrote:
+>>
+>> The commit 21823fbda552("KVM: x86: Invalidate all PGDs for the current
+>> PCID on MOV CR3 w/ flush") skips kvm_mmu_free_roots() after
+>> load_pdptrs() when rewriting the CR3 with the same value.
 > 
->   man ip, the output about exit value is like following.
->   "Exit status is 0 if command was successful, and 1 if there is a syntax error.  If an error was reported by the kernel exit status is 2."
->   Did the following COMMAND have syntax error? If not, should I still change the expected rc from 2 to 1?
+> This isn't accurate, prior to that commit KVM wasn't guaranteed to do
+> kvm_mmu_free_roots() if it got a hit on the current CR3 or if a previous CR3 in
+> the cache matched the new CR3 (the "cache" has done some odd things in the past).
+> 
+> So I think this particular flavor would be:
+> 
+>    Fixes: 7c390d350f8b ("kvm: x86: Add fast CR3 switch code path")
 
-strace of ping6 shows it is failing with '1'.
+If guest is 32bit, fast_cr3_switch() always return false, and
+kvm_mmu_free_roots() is always called, and no cr3 goes in prev_root.
 
-As for 'ip', it returns the exit code of the command run. iproute2 code,
-lib/exec.c, cmd_exec().
+And from 21823fbda552, fast_cr3_switch() and kvm_mmu_free_roots() are
+both skipped when cr3 is unchanged.
+
+> 
+>> The commit a91a7c709600("KVM: X86: Don't reset mmu context when
+>> toggling X86_CR4_PGE") skips kvm_mmu_reset_context() after
+>> load_pdptrs() when changing CR4.PGE.
+>>
+>> Normally, the guest doesn't change the PDPTEs before doing only the
+>> above operation without touching other bits that can force pae_root to
+>> be reconstructed.  Guests like linux would keep the PDPTEs unchaged
+>> for every instance of pagetable.
+>>
+>> Fixes: d81135a57aa6("KVM: x86: do not reset mmu if CR0.CD and CR0.NW are changed")
+>> Fixes: 21823fbda552("KVM: x86: Invalidate all PGDs for the current PCID on MOV CR3 w/ flush")
+>> Fixes: a91a7c709600("KVM: X86: Don't reset mmu context when toggling X86_CR4_PGE")
+>> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+>> ---
+>>   arch/x86/kvm/x86.c | 10 ++++++++--
+>>   1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 0176eaa86a35..cfba337e46ab 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
+>>   	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
+>>   		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
+>>   		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
+>> -		/* Ensure the dirty PDPTEs to be loaded. */
+>> -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+>> +		/*
+>> +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
+>> +		 * enabled or pae_root to be reconstructed for shadow paging.
+>> +		 */
+>> +		if (tdp_enabled)
+>> +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+>> +		else
+>> +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+> 
+> Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
+> of vcpu->arch.mmuvcpu->arch.mmu.
+
+@mmu is the "guest mmu" (vcpu->arch.walk_mmu), which is used to walk
+including loading pdptr.
+
+vcpu->arch.mmu is for host constructing mmu for shadowed or tdp mmu
+which is used in host side management including kvm_mmu_free_roots().
+
+Even they are the same pointer now for !tdp, the meaning is different.  I prefer
+to distinguish them even before kvm_mmu is split different for guest mmu
+(vcpu->arch.walk_mmu) and host constructing mmu (vcpu->arch.mmu).
+
+(I once searched all the usage of undistinguished usage of kvm_mmu *mmu, and
+found a bug, see "Use vcpu->arch.walk_mmu for kvm_mmu_invlpg()")
+
+I think Paolo is doing the splitting, unless I would take the job because
+I have some patches pending depended them.
+
+> 
+> To avoid a dependency on the previous patch, I think it makes sense to have this be:
+> 
+> 	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
+> 		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
+> 
+
+Yes, it is a good idea to add this first.
+
+Thanks for review and suggestion.
+Lai

@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFA146D5F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC08946D5FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbhLHOqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S232999AbhLHOrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235334AbhLHOq3 (ORCPT
+        with ESMTP id S235370AbhLHOq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:46:29 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A857C061746;
-        Wed,  8 Dec 2021 06:42:57 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y13so8987131edd.13;
-        Wed, 08 Dec 2021 06:42:57 -0800 (PST)
+        Wed, 8 Dec 2021 09:46:58 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A03CC0617A1;
+        Wed,  8 Dec 2021 06:43:26 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v1so9216551edx.2;
+        Wed, 08 Dec 2021 06:43:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=52QE56s4fsZrosTAFipj2Y1uY3A08fcUY1wjgKokxbw=;
-        b=YvJmD0dlJtAnKpHk1Bkoo7I2csLtwhYEeLHcv39OxAym4U1chhsXNMqmqJEUIIbz8c
-         JOT/22Jl6X/CZ0i25qWVFgJpsYNOVcgP148FSLX9psK7iZkHW5oYj9UPBXzQ7Q/42Gui
-         ubSBOnIyegYiQUpBoiI3bBGWEBFEerC1zHCCYvILv4Ykz4AZhtDpXSE0J8N/07YGC9O+
-         A8aEA6BuL2fXlH0oQPL7WXBDoHkLyDsJyJ7gjYNCOIuqZLgFRaUNW4lrTSD1M+N7GsIx
-         symUUrnE42wOGTHmHFFrTwWPyT2zJhxjqpokKdRQinzh7DgcNyq+Of66XWTa+X4jeQ+I
-         +7zw==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rorkq0kqbS106yCnMdxNh4H+tZeEZk4vhvZMtOx+RQ4=;
+        b=T3mfDWm/XqaADQeVNwzK/X8+hI+FconPHoWo6op2K9PxyThxL1T38t2a3dx5Xh4PfW
+         iLoTV9rja69gpLtgr66N21boCJeEsaM/jY3TU/FvTOIbVY+ARWnGgqXtahW/xOQceEz0
+         eLoe43vh5rZ2SolOLIajqKHiLqQSH4YNiztYIm6KfhElEtSZ9hQJFJryyfWhiq3Qawy4
+         YQm5eBbfTdRocGGCU8z81P7fSgxvnU5sCufQzM/jYiUoAptS/wsu62k+zo7LWQ8AmcwW
+         17TOvUH9bJlBQJ1a7vm6ilUEt3K3Hbu1hYLMntw72EMbIuKovpldwpE56i+vdBMQunCy
+         EWDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=52QE56s4fsZrosTAFipj2Y1uY3A08fcUY1wjgKokxbw=;
-        b=bWwEt0YYKaG0dM8w8J11KooX1xPW81JOKp6kuFpFp3NX+D/E4EQbGOdwYbOjgRMrY6
-         E/GfecSbgo9pRZrk8d3AzJImdG2YCd3M3DQNlI77F7KRrkveC5iGYR4tTvaDwApWkm7b
-         LQfSYeZGJCUgIjGGGI3TNC+2F0oQxo6GX0tj8UGyszuyq7UfGNx0x/NldX028YFxWxpD
-         wANWBGRe5exgmAVEYD4XPLkY+og1I6booJYyaxqEU6Vey4K8+dKWwKQnwVbTtvUOolYy
-         +si8jwwfiI/saiHNozRos3Lc0xNvfDctWFQjtmPYkK9ZWxqjXT2Z70Khz376YAgUTuJS
-         ilDw==
-X-Gm-Message-State: AOAM532nZdKLnAbutUc36+lo1OFSVpBqS38Cpj02uMq0yZBWaeNsobuJ
-        XtDy5uVVpKP9fmxf2YYtpG0=
-X-Google-Smtp-Source: ABdhPJwEuuCIuc0HRRKNwOY/xQ1YGn1SQ10/EHvHdRbDnqD5w9GfmMA+pAg1uy54qEs0+/fF/hPcmQ==
-X-Received: by 2002:a05:6402:5158:: with SMTP id n24mr19812370edd.230.1638974575926;
-        Wed, 08 Dec 2021 06:42:55 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id i8sm2540725edc.12.2021.12.08.06.42.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 06:42:55 -0800 (PST)
-Date:   Wed, 8 Dec 2021 16:42:54 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH v2 7/8] net: dsa: qca8k: Add support for
- mdio read/write in Ethernet packet
-Message-ID: <20211208144254.sisj4sglcpzmkwz5@skbuf>
-References: <20211208034040.14457-1-ansuelsmth@gmail.com>
- <20211208034040.14457-8-ansuelsmth@gmail.com>
- <20211208121850.b2khmvkqpygctaad@skbuf>
- <61b0bf59.1c69fb81.9d656.8423@mx.google.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rorkq0kqbS106yCnMdxNh4H+tZeEZk4vhvZMtOx+RQ4=;
+        b=01Ki+LYCnWih4txKgmb1NiQ0Oc4+SEYHaxDbZL6FxbTeF7iAoBLUGPBKhFs6m+T8Ok
+         WD4ytykjdHTUeVcL/yFcZFESPl6w39AnAMrHj/ruJwTTz/WcS4fc3Ox9r27jhMh39wX/
+         KJE5WKuuwkipsYqR8gPTtHa/gyDUzA2OwI6rCI3WG45J7J/UNUMZu4irJ3h4gRe5QA8i
+         qCSob6H3JbeUA0rZ/iJ+xhInJHnWPA6aXEktQbCOAiFlbZz8hkKnk/9hiuzvgDrvR5qb
+         E/kYfljyB/9QeCWFk8fGcO7yBT2uHCmljkI601d4wLf2Q8zIvQpGnkfcYy9mgV3CoCBe
+         QJOA==
+X-Gm-Message-State: AOAM5318aNL6RjSnODyvETEU8Igsb7SfyWM9inG3KOPn/cddROY+dw5E
+        ExV+SA5ajvOFCNWsvkKTIZBSUUePGoE=
+X-Google-Smtp-Source: ABdhPJwfAih1UJbuG8DluPuj4Xflbizg9LMcjZmEsGKRCYoy5N5def2qOGTnZAHflDSy0OchG6cTIQ==
+X-Received: by 2002:a17:906:5f94:: with SMTP id a20mr8047146eju.256.1638974601767;
+        Wed, 08 Dec 2021 06:43:21 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id oz11sm1691246ejc.81.2021.12.08.06.43.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 06:43:21 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <e1c4ec6a-7c1e-b96c-63e6-d07b35820def@redhat.com>
+Date:   Wed, 8 Dec 2021 15:43:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61b0bf59.1c69fb81.9d656.8423@mx.google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 21/26] KVM: SVM: Drop AVIC's intermediate
+ avic_set_running() helper
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+ <20211208015236.1616697-22-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211208015236.1616697-22-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 03:21:11PM +0100, Ansuel Smith wrote:
-> > None of these structures need to stay in the data structure shared with
-> > the tagger. They can be in qca8k_priv. The tagger should only see the
-> > function pointers. It doesn't care what is done with the packets.
-> > 
-> > >  };
-> 
-> Ok so the handler should access these data by reaching the qca8k_priv
-> from the dsa port. Correct?
+On 12/8/21 02:52, Sean Christopherson wrote:
+> +	/*
+> +	 * Unload the AVIC when the vCPU is about to block,_before_  the vCPU
+> +	 * actually blocks.  The vCPU needs to be marked IsRunning=0 before the
+> +	 * final pass over the vIRR via kvm_vcpu_check_block().  Any IRQs that
+> +	 * arrive before IsRunning=0 will not signal the doorbell, i.e. it's
+> +	 * KVM's responsibility to ensure there are no pending IRQs in the vIRR
+> +	 * after IsRunning is cleared, prior to scheduling out the vCPU.
 
-Yes, this is exactly what I think, the tagger should be stateless with
-regard to the completion, if it can be stateless. Only with stuff
-related to the tagging protocol itself it can be stateful, things like
-sequence numbers if you need them, etc. But the MDIO access is payload
-as far as the tagger is concerned.
+I prefer to phrase this around paired memory barriers and the usual 
+store/smp_mb/load lockless idiom:
+
+	/*
+	 * Unload the AVIC when the vCPU is about to block, _before_
+	 * the vCPU actually blocks.
+	 *
+	 * Any IRQs that arrive before IsRunning=0 will not cause an
+	 * incomplete IPI vmexit on the source, therefore vIRR will also
+	 * be checked by kvm_vcpu_check_block() before blocking.  The
+	 * memory barrier implicit in set_current_state orders writing
+	 * IsRunning=0 before reading the vIRR.  The processor needs a
+	 * matching memory barrier on interrupt delivery between writing
+	 * IRR and reading IsRunning; the lack of this barrier might be
+	 * the cause of errata #1235).
+	 */
+
+Is there any nuance that I am missing?
+
+Paolo
+
+> +	 */
+> +	avic_vcpu_put(vcpu);
+> +
+

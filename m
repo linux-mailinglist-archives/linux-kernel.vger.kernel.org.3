@@ -2,157 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5086846D542
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5253B46D545
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbhLHOLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:11:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:60830 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235006AbhLHOLn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:11:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04A5CD6E;
-        Wed,  8 Dec 2021 06:08:11 -0800 (PST)
-Received: from [10.57.34.62] (unknown [10.57.34.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3763B3F73B;
-        Wed,  8 Dec 2021 06:08:08 -0800 (PST)
-Subject: Re: [PATCH] perf cs-etm: Remove duplicate and incorrect aux size
- checks
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, Mike Leach <mike.leach@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211208115435.610101-1-james.clark@arm.com>
- <20211208131753.GC273781@leoy-ThinkPad-X240s>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com>
-Date:   Wed, 8 Dec 2021 14:08:04 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231421AbhLHONh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229550AbhLHONf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 09:13:35 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AFEC061746;
+        Wed,  8 Dec 2021 06:10:03 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a9so4286014wrr.8;
+        Wed, 08 Dec 2021 06:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cDVSf9iQJRZTk+rMfGSgba1WYOB+k/OuErDztpWNhDg=;
+        b=qrXPPrGQqUcxjLgUqGRVImeZHexUmi7L34HBEkZwRGdqoL4A9IK7bLkyIdMyK2IK39
+         +cVK6P96BnmJdKqo0E+BolwSYM5E1CmVUyaLEclP3HavybcGOUYGBLgVCuiM2H0SYQLh
+         lstzvZS+BMJ6PvL0B/uNckY4q+LYbawYL6tokoOepyT4AeXYR4rtp/mQFy0rqJe4c+et
+         8OtZE2GAMRRwcRg+eOnT0sQdG06VP3Y9+/l/qUxzefSA18b4t+0QkzEk7MtYK0OkJnhn
+         meymvz9Ogbt/0JfF4u/9M6Q0uv9RXMagZPs2rKyPlekztXaTkWhvlNhtI+NV/qhBC0Kl
+         /loA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cDVSf9iQJRZTk+rMfGSgba1WYOB+k/OuErDztpWNhDg=;
+        b=b18IQittcRBP2XkE6IutTBYEe01hvqeqZFqoEvCBTblwF3DdDHLWPV1Y7RU3DvwgJq
+         klI9KHGNc4fSDz7VFaAHLtyr30fihMG3skZGa99+d/jjrL6Q/Xg8UURE6DUDBf+F1nBA
+         Aq86pyGL+wEG/yqWlM9q8eKJ9H7cXRkwOI1Lz6kSJMA5yth2e2zkAOZYd9ljui9vqMC3
+         4zE+2tp6IOtR4aNSjaa/S3Kw5FrE26DwPPZBV2UIiX5o+eYv840+by/c0rGrr/lwwV9C
+         SUsHxDpIm7vXVWbg1xoQVcSKcliB2b+cNMXYycU993//dzVjD1DlUNW4ZA8O43HhBt0w
+         I1uw==
+X-Gm-Message-State: AOAM532Q974rnvWYGu7St71HXEH2D/LyNIFI/7r1toFn+NawhaPhlqRT
+        amor5f7TkPeoMMwBx1UihA0=
+X-Google-Smtp-Source: ABdhPJyF/aJXSV5ioEx6qaNcTmrKlE3XqqJHivZXBbO2RCk92GAXrBGCtv+NHROw2ouYAiA87oM0zg==
+X-Received: by 2002:a5d:522e:: with SMTP id i14mr57882894wra.43.1638972601682;
+        Wed, 08 Dec 2021 06:10:01 -0800 (PST)
+Received: from hamza-OptiPlex-7040 ([39.48.199.136])
+        by smtp.gmail.com with ESMTPSA id z14sm2727184wrp.70.2021.12.08.06.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 06:10:01 -0800 (PST)
+Date:   Wed, 8 Dec 2021 19:09:57 +0500
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     kabel@kernel.org, kuba@kernel.org, andrew@lunn.ch
+Cc:     vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: error handling for serdes_power
+ functions
+Message-ID: <20211208140957.GA96979@hamza-OptiPlex-7040>
+References: <20211207140647.6926a3e7@thinkpad>
+ <20211208140413.96856-1-amhamza.mgc@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211208131753.GC273781@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208140413.96856-1-amhamza.mgc@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 08, 2021 at 07:04:13PM +0500, Ameer Hamza wrote:
+> mv88e6390_serdes_power() and mv88e6393x_serdes_power() should return
+> with EINVAL error if cmode is undefined.
+> 
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> ---
+>  drivers/net/dsa/mv88e6xxx/serdes.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
+> index 33727439724a..f3dc1865f291 100644
+> --- a/drivers/net/dsa/mv88e6xxx/serdes.c
+> +++ b/drivers/net/dsa/mv88e6xxx/serdes.c
+> @@ -830,7 +830,7 @@ int mv88e6390_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+>  			   bool up)
+>  {
+>  	u8 cmode = chip->ports[port].cmode;
+> -	int err = 0;
+> +	int err;
+>  
+>  	switch (cmode) {
+>  	case MV88E6XXX_PORT_STS_CMODE_SGMII:
+> @@ -842,6 +842,8 @@ int mv88e6390_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+>  	case MV88E6XXX_PORT_STS_CMODE_RXAUI:
+>  		err = mv88e6390_serdes_power_10g(chip, lane, up);
+>  		break;
+> +	default:
+> +		return -EINVAL;
+>  	}
+>  
+>  	if (!err && up)
+> @@ -1507,7 +1509,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+>  			    bool on)
+>  {
+>  	u8 cmode = chip->ports[port].cmode;
+> -	int err = 0;
+> +	int err;
+>  
+>  	if (port != 0 && port != 9 && port != 10)
+>  		return -EOPNOTSUPP;
+> @@ -1541,6 +1543,8 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+>  	case MV88E6393X_PORT_STS_CMODE_10GBASER:
+>  		err = mv88e6390_serdes_power_10g(chip, lane, on);
+>  		break;
+> +	default:
+> +		return -EINVAL;
+>  	}
+>  
+>  	if (err)
+> -- 
+> 2.25.1
+>
+Hi Marek,
 
+I checked serdes.c and I found two methods mv88e6390_serdes_power() and
+mv88e6390_serdes_power() that were not returning ENINVAL in case of
+undefined cmode. Would be appreciated if  you can review the patch
+please.
 
-On 08/12/2021 13:17, Leo Yan wrote:
-> Hi James,
-> 
-> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
->> There are two checks, one is for size when running without admin, but
->> this one is covered by the driver and reported on in more detail here
->> (builtin-record.c):
->>
->>   pr_err("Permission error mapping pages.\n"
->>          "Consider increasing "
->>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
->>          "or try again with a smaller value of -m/--mmap_pages.\n"
->>          "(current value: %u,%u)\n",
-> 
-> I looked into the kernel code and found:
-> 
->   sysctl_perf_event_mlock = 512 + (PAGE_SIZE / 1024);  // 512KB + 1 page
-> 
-> If the system have multiple cores, let's say 8 cores, then kernel even
-> can relax the limitaion with:
-> 
->   user_lock_limit *= num_online_cpus();
-> 
-> So means the memory lock limitation is:
-> 
->   (512KB + 1 page) * 8 = 4MB + 8 pages.
-> 
-> Seems to me, it's much relax than the user space's limitaion 128KB.
-> And let's imagine for Arm server, the permitted buffer size can be a
-> huge value (e.g. for a system with 128 cores).
-> 
-> Could you confirm if this is right?
-
-Yes that seems to be the case. And the commit message for that addition
-states the reasoning:
-
-  perf_counter: Increase mmap limit
-  
-  In a default 'perf top' run the tool will create a counter for
-  each online CPU. With enough CPUs this will eventually exhaust
-  the default limit.
-
-  So scale it up with the number of online CPUs.
-
-To me that makes sense. Normally the memory installed also scales with the
-number of cores.
-
-Are you saying that we should look into modifying that scaling factor in
-perf_mmap()? Or that we should still add something to userspace for
-coresight to limit user supplied buffer sizes?
-
-I think it makes sense to allow the user to specify any value that will work,
-it's up to them.
-
-James
-
-> 
-> Thanks,
-> Leo
-> 
->> This had the effect of artificially limiting the aux buffer size to a
->> value smaller than what was allowed because perf_event_mlock_kb wasn't
->> taken into account.
->>
->> The second is to check for a power of two, but this is covered here
->> (evlist.c):
->>
->>   pr_info("rounding mmap pages size to %s (%lu pages)\n",
->>           buf, pages);
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  tools/perf/arch/arm/util/cs-etm.c | 19 -------------------
->>  1 file changed, 19 deletions(-)
->>
->> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
->> index 293a23bf8be3..8a3d54a86c9c 100644
->> --- a/tools/perf/arch/arm/util/cs-etm.c
->> +++ b/tools/perf/arch/arm/util/cs-etm.c
->> @@ -407,25 +407,6 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
->>  
->>  	}
->>  
->> -	/* Validate auxtrace_mmap_pages provided by user */
->> -	if (opts->auxtrace_mmap_pages) {
->> -		unsigned int max_page = (KiB(128) / page_size);
->> -		size_t sz = opts->auxtrace_mmap_pages * (size_t)page_size;
->> -
->> -		if (!privileged &&
->> -		    opts->auxtrace_mmap_pages > max_page) {
->> -			opts->auxtrace_mmap_pages = max_page;
->> -			pr_err("auxtrace too big, truncating to %d\n",
->> -			       max_page);
->> -		}
->> -
->> -		if (!is_power_of_2(sz)) {
->> -			pr_err("Invalid mmap size for %s: must be a power of 2\n",
->> -			       CORESIGHT_ETM_PMU_NAME);
->> -			return -EINVAL;
->> -		}
->> -	}
->> -
->>  	if (opts->auxtrace_snapshot_mode)
->>  		pr_debug2("%s snapshot size: %zu\n", CORESIGHT_ETM_PMU_NAME,
->>  			  opts->auxtrace_snapshot_size);
->> -- 
->> 2.28.0
->>
+Best Regards,
+Ameer Hamza.

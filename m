@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 650F546DB55
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B023C46DB5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239155AbhLHSoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:44:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:38846 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230040AbhLHSoI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:44:08 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86E1A11FB;
-        Wed,  8 Dec 2021 10:40:36 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A5483F73D;
-        Wed,  8 Dec 2021 10:40:35 -0800 (PST)
-Message-ID: <aaa42ce4-7a8a-44a5-2f84-54981bf0b742@arm.com>
-Date:   Wed, 8 Dec 2021 18:40:31 +0000
+        id S239183AbhLHSoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239161AbhLHSoS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:44:18 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70100C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:40:46 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so4548999pjj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 10:40:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2esW1PgwMW/uPgw9HwrxttsSErnSmH0L2IFPbegvGZ0=;
+        b=JMOFGrTmIpVxHPJ19wMiBSNYvcNn4mkwdiP01+P4qAv6w5oI848W7a5nKo+HHiDamf
+         CgyZySrRXpQx35cciVcOAxORaZROKTbyhnq+6dGXPeuaQ9G8lTZTcs/HqoYeQzXCeexR
+         aC9M7oj8N1uyoTJ22SaBHVyL5KYIF8eEEza3rwrcm0tUVNfMiPP2T3MGPsbj1wRgZt7U
+         yInbZBE080qCbZs6+hPqLbNUFvRWtbFpScL2EaazzzSdx7i0fnJJduDEOJ63fYHIBkTj
+         9yUVsVEvoODMCxiJ70Aa8yw9QZ5ML8PdSzvcy2YO1vi25xxf+y5wlWSsG9EhFMRNTiWO
+         oeyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2esW1PgwMW/uPgw9HwrxttsSErnSmH0L2IFPbegvGZ0=;
+        b=0v+Yp7Kh+qQwr7nFvGwCWTzj9fE0eHgVXAzlwziLtpNDFiXq4Nr7yUzleHGGyMTGFz
+         PQAX7bRPl7n3DOTupj4JfJ5ZEjgfA1rRzKHaert4iRvEgaa2tLWyFnDCPjWTgGDdi41D
+         +AD+lPKldmxis9X+667YwAmtrxk1MvqLJUchnLc44QPbkVWcx6NdT5lCzRSXMGJShUcE
+         vE1C3WZTOq+IyxD1acolrrVW9yPXPiXnPitoaURDKkxKZTRxoyxXhfeJUc5yllFEde5E
+         rfGEeeqlydHX0meXzgatEypN++5iydDDcAn+1RM2tcv5utAsR3h8Mpg6DwhhQ/MYIJsE
+         2Geg==
+X-Gm-Message-State: AOAM5325Yp1telQuVNwL+o5jVueLhmNBCXfoJyNl6KludxmZupKbZfdZ
+        YeVCedRMO2Yzm5yw45DsFy3LQA==
+X-Google-Smtp-Source: ABdhPJzClCXWnuOKDKj88Rz4E8jDDb4uaV82hAB72j9+tDfCTT3P2Gq1tWJQXULxbEHjlyKhl7uk0Q==
+X-Received: by 2002:a17:902:e302:b0:141:af98:b5ea with SMTP id q2-20020a170902e30200b00141af98b5eamr60821172plc.53.1638988845033;
+        Wed, 08 Dec 2021 10:40:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r16sm3294860pgk.45.2021.12.08.10.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 10:40:44 -0800 (PST)
+Date:   Wed, 8 Dec 2021 18:40:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Li Yu <liyu.yukiteru@bytedance.com>
+Cc:     pbonzini@redhat.com, Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v3] KVM: x86/mmu: Warn on iTLB multi-hit for possible
+ problems
+Message-ID: <YbD8KFaY+emLQR+d@google.com>
+References: <YW7w8g+65PjGs2wc@google.com>
+ <20211020043131.1222542-1-liyu.yukiteru@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 1/1] iommu/arm-smmu-v3: Simplify useless instructions
- in arm_smmu_cmdq_build_cmd()
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20211207094109.1962-1-thunder.leizhen@huawei.com>
- <20211207094109.1962-2-thunder.leizhen@huawei.com>
- <9da73d96-c61d-4ed2-607d-4861e6bfd696@huawei.com>
- <58e8e7c6-a47b-7816-ac74-aefa5b55dd17@huawei.com>
- <4f296b55-a59a-49b4-ad4d-902bb83a203c@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <4f296b55-a59a-49b4-ad4d-902bb83a203c@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211020043131.1222542-1-liyu.yukiteru@bytedance.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-08 18:17, John Garry wrote:
->>> Did you notice any performance change with this change?
->>
->> Hi John:
->>    Thanks for the tip. I wrote a test case today, and I found that the
->> performance did not go up but down.
+On Wed, Oct 20, 2021, Li Yu wrote:
+> Warn for guest huge pages split if iTLB multi-hit bug is present
+> and CPU mitigations is enabled.
 > 
-> I very quickly tested on a DMA mapping benchmark very similar to the 
-> kernel DMA benchmark module - I got mixed results. For fewer CPUs (<8), 
-> a small improvement, like 0.7%. For more CPUs, a dis-improvement - 
-> that's surprising, I did expect just no change as any improvement would 
-> get dwarfed from the slower unmap rates for more CPUs. I can check this
-> more tomorrow.
+> Warn for possible CPU lockup if iTLB multi-hit bug is present but
+> CPU mitigations is disabled.
 > 
->> It's so weird. So I decided not to
->> change it, because it's also poorly readable. So I plan to make only
->> the following modifications:
->> @@ -237,7 +237,7 @@ static int queue_remove_raw(struct arm_smmu_queue 
->> *q, u64 *ent)
->>   static int arm_smmu_cmdq_build_cmd(u64 *cmd, struct 
->> arm_smmu_cmdq_ent *ent)
->>   {
->>          memset(cmd, 0, 1 << CMDQ_ENT_SZ_SHIFT);
->> -       cmd[0] |= FIELD_PREP(CMDQ_0_OP, ent->opcode);
->> +       cmd[0] = FIELD_PREP(CMDQ_0_OP, ent->opcode);
->>
->>          switch (ent->opcode) {
->>          case CMDQ_OP_TLBI_EL2_ALL:
->>
->> This prevents the compiler from generating the following two inefficient
->> instructions:
->>       394:       f9400002        ldr     x2, [x0]    //x2 = cmd[0]
->>       398:       aa020062        orr     x2, x3, x2    //x3 = 
->> FIELD_PREP(CMDQ_0_OP, ent->opcode)
->>
->> Maybe it's not worth changing because I've only seen a 0.x nanosecond 
->> reduction
->> in performance. But one thing is, it only comes with benefits, no side 
->> effects.
->>
-> 
-> I just think that with the original code that cmd[] is on the stack and 
-> cached, so if we have write-back attribute (which I think we do) then 
-> there would not necessarily a write to external memory per write to cmd[].
-> 
-> So, apart from this approach, I think that if we can just reduce the 
-> instructions through other efficiencies in the function then that would 
-> be good.
+> Signed-off-by: Li Yu <liyu.yukiteru@bytedance.com>
+> ---
 
-Not sure if it's still true, but FWIW last time the best result actually 
-came from doing the ridiculously counter-intuitive:
+Gah, my last reply in the previous version was offlist.  I would like an answer
+to the below question before we complicate KVM just to log a message.
 
-https://lore.kernel.org/linux-iommu/141de3c3278e280712d16d9ac9ab305c3b80a810.1534344167.git.robin.murphy@arm.com/
-
-Robin.
+On Wed, Oct 20, 2021 at 12:51 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Oct 20, 2021, Li Yu wrote:
+> > On 2021/10/20 00:23, Sean Christopherson wrote:
+> > I think it is necessary to log something when `nx_huge_pages` is `auto` or
+> > `off`, and the bug is present.
+>
+> Why is it necessary?  Specifically, what action can be taken based on KVM logging
+> that can't reasonably be taken based on all the other information provided by the
+> kernel?  We should teach userspace to go look at the vulnerabilites info, not to
+> scrape the kernel log.

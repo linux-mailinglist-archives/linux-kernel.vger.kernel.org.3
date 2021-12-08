@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA5D46D9AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEA646D9C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 18:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237891AbhLHRdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
+        id S237938AbhLHRgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbhLHRdW (ORCPT
+        with ESMTP id S234854AbhLHRgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:33:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095ADC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 09:29:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56499B82204
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20949C341C7;
-        Wed,  8 Dec 2021 17:29:43 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 17:29:41 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
- contextidr
-Message-ID: <YbDrhQLeBdn0wqKT@arm.com>
-References: <20211021134530.206216-1-leo.yan@linaro.org>
- <20211021134530.206216-5-leo.yan@linaro.org>
- <202110210848.35971643C6@keescook>
- <20211101152835.GB375622@leoy-ThinkPad-X240s>
- <YapEUlcyDZ6TuE6n@arm.com>
- <20211205135103.GA42658@leoy-ThinkPad-X240s>
- <Ya9J8HnMWxBy3MJv@arm.com>
- <20211207123118.GA255238@leoy-ThinkPad-X240s>
+        Wed, 8 Dec 2021 12:36:14 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4D5C061746;
+        Wed,  8 Dec 2021 09:32:42 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id p13so3078710pfw.2;
+        Wed, 08 Dec 2021 09:32:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GTnOygRYVjIjLSwuhIL1Lc+5UjBjxzuVt14IqySkkNA=;
+        b=OoXxuvNL1SZdgC7J4oqN/PTzUJDiznDtwII7++hd6xtR4ZdlzCPnHavbNPFnzI/alb
+         4TrfjC2Me0CcfnKVxl3HMhb4pTYxYXCCLzyaFIWAg3vwiFEwxNBBK+sanGRjt7Zpjt6c
+         9gTAlh1T5INoGRdwUpY1wx35x+rp346uy2fI9aSXJDiADe1iwQCx92+KV5ntDXaPTXxL
+         hNWoA8rLAhi8p6n8GqI9pGkIHlwvf57/Gw9zx98myvRo7oyzlJqsDL/YEJUe8zs0GN+2
+         TZPL2RlJY7/CB5ldhl4Mqz5X74nFZ2OmbRQt6Ynq3nRIQADWYNXNLB6fIQujNivo979M
+         +Dng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GTnOygRYVjIjLSwuhIL1Lc+5UjBjxzuVt14IqySkkNA=;
+        b=Nh9TtDXxW+QnyCWCDMbG2DeCqUTKK1DZHJ2grK/8FycAqKybhcDZyny5Gy+O0242GB
+         0NFrRGn03qYPMFnmLRrnqLa25iM9bnjtOi8pnxCOBOI8GnbA2yg+Z5XPAQhTosHxnJb0
+         B62aKRCPP0f5dVLNVqvv686rjQ8lhaDC52oeiho24yfA2k0U05FGXUzHqWTbfikGfjkk
+         3HoPyYDSM99IaLjKSJJmhFoIX4Ot9ZWmRTRSgR2pHIbE1jRfKeSvNrQZ5WUW6cUBBP6s
+         rEq3uU2G13EV3WNz/0824niyZ3MHknKbNJUBs2Bp4zfvCajwUZJir9Ho2BO3prECE0RL
+         8u5Q==
+X-Gm-Message-State: AOAM533UBDU8osQbgFZ2O4EG632xLrGGokhkOyUq0UYNA99o0pEob86O
+        ew9WVAI6hUwPKjHL4QyeMu/UhY1S7R8=
+X-Google-Smtp-Source: ABdhPJyDDF2CspZ7OwtoageGUQ3rKh88TPg58DGSzt6iO8ytJwslleC2V3vOwFN7Ff8aBMLU3SUsIg==
+X-Received: by 2002:a63:4458:: with SMTP id t24mr30420895pgk.236.1638984761057;
+        Wed, 08 Dec 2021 09:32:41 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i3sm3941617pfe.75.2021.12.08.09.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 09:32:40 -0800 (PST)
+Subject: Re: [PATCH v3 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
+To:     Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kernel@vger.kernel.org
+References: <20211208040432.3658355-1-f.fainelli@gmail.com>
+ <20211208040432.3658355-7-f.fainelli@gmail.com>
+ <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <536cbdb6-a541-2f86-faa6-acb1a4e1c173@gmail.com>
+Date:   Wed, 8 Dec 2021 09:32:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207123118.GA255238@leoy-ThinkPad-X240s>
+In-Reply-To: <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 08:31:18PM +0800, Leo Yan wrote:
-> On Tue, Dec 07, 2021 at 11:48:00AM +0000, Catalin Marinas wrote:
-> > On Sun, Dec 05, 2021 at 09:51:03PM +0800, Leo Yan wrote:
-> > > On Fri, Dec 03, 2021 at 04:22:42PM +0000, Catalin Marinas wrote:
-> > > > What's the cost of always enabling CONFIG_PID_IN_CONTEXTIDR? If it's
-> > > > negligible, I'd not bother at all with any of the enabling/disabling.
-> > > 
-> > > Yes, I compared performance for PID tracing with always enabling and
-> > > disabling CONFIG_PID_IN_CONTEXTIDR, and also compared with using
-> > > static key for enabling/disabling PID tracing.  The result shows the
-> > > cost is negligible based on the benchmark 'perf bench sched'.
-> > > 
-> > > Please see the detailed data in below link (note the testing results
-> > > came from my Juno board):
-> > > https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/
-> > 
-> > The table wasn't entirely clear to me. So the dis/enb benchmarks are
-> > without this patchset applied.
+On 12/8/21 5:44 AM, Rob Herring wrote:
+> On Tue, 07 Dec 2021 20:04:32 -0800, Florian Fainelli wrote:
+>> Conver the iProc PCIe controller Device Tree binding to YAML now that
+>> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
+>>  .../bindings/pci/brcm,iproc-pcie.yaml         | 176 ++++++++++++++++++
+>>  2 files changed, 176 insertions(+), 133 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+>>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+>>
 > 
-> Yes, dis/enb metrics don't apply this patchset.
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
 > 
-> > There seems to be a minor drop but it's
-> > probably noise. Anyway, do we need this patchset or we just make
-> > CONFIG_PID_IN_CONTEXTIDR default to y?
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
 > 
-> Good point.  I remembered before we had discussed for making
-> CONFIG_PID_IN_CONTEXTIDR to 'y', but this approach is not always valid,
-> especially when the profiling process runs in non-root PID namespace,
-> in this case, hardware tracing data (e.g. Arm SPE or CoreSight) cannot
-> trust the PID values from tracing since the PID conflicts between
-> different PID namespaces.
+> Full log is available here: https://patchwork.ozlabs.org/patch/1565076
 > 
-> So this patchset is to add the fundamental mechanism for dynamically
-> enabling and disable PID tracing into CONTEXTIDR.  Based on it, we can
-> use helpers to dynamically enable PID tracing _only_ when process runs
-> in root PID namespace.
+> 
+> pcie@18012000: msi-controller: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dt.yaml
+> 	arch/arm/boot/dts/bcm911360_entphn.dt.yaml
+> 	arch/arm/boot/dts/bcm911360k.dt.yaml
+> 	arch/arm/boot/dts/bcm958300k.dt.yaml
+> 	arch/arm/boot/dts/bcm958305k.dt.yaml
+> 	arch/arm/boot/dts/bcm958522er.dt.yaml
+> 	arch/arm/boot/dts/bcm958525er.dt.yaml
+> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
+> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
+> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
+> 	arch/arm/boot/dts/bcm958625k.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
 
-I don't think your approach fully works. Let's say you are tracing two
-processes, one in the root PID namespace, the other not. Since the
-former enables PID in CONTEXTIDR, you automatically get some PID in
-CONTEXTIDR for the latter whether you requested it explicitly or not.
-
-I wonder whether it makes more sense to turn this on per thread. You set
-some TIF flag and set the PID in contextidr_thread_switch() only if the
-flag is set. You could also check there if the PID is in the root
-namespace and avoid setting CONTEXTIDR (or write 0).
-
+Those would mean that the binding patch was applied without the DTS
+patches earlier in the series?
 -- 
-Catalin
+Florian

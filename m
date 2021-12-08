@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA58046D2EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F2946D2EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbhLHMJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:09:44 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4230 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhLHMJn (ORCPT
+        id S232860AbhLHMJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229675AbhLHMJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:09:43 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8G7c27GDz67b2S;
-        Wed,  8 Dec 2021 20:05:00 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 13:06:09 +0100
-Received: from [10.47.91.245] (10.47.91.245) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
- 2021 12:06:08 +0000
-Subject: Re: [PATCH 01/22] libperf: Add comments to perf_cpu_map.
-To:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
-        "Jiri Olsa" <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Vineet Singh" <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <eranian@google.com>
-References: <20211208024607.1784932-1-irogers@google.com>
- <20211208024607.1784932-2-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a3cf5b74-1a1b-ef85-1ad3-034e797848e2@huawei.com>
-Date:   Wed, 8 Dec 2021 12:05:49 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 8 Dec 2021 07:09:29 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FF0C061746;
+        Wed,  8 Dec 2021 04:05:57 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id k37so5227416lfv.3;
+        Wed, 08 Dec 2021 04:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WBqTn91DshTm+EF7h4CWYhAUdvliMN1/YG7EIZemZ/A=;
+        b=hC7KXTCq18inK8j/wksZ8jk/R0Jn1EVYKEjxi8PhAlPDhDWvamWsADzhKyxUK24M7r
+         64AnzN9j+c3KdoF24P/p0+2fNjgiEtiL2j7l2Yhkpkkj5S8vO0Pq5g5HrHrFT9JngQ5O
+         W6TMzBmSxZAfBjetJMD+jcape9iTT1TRtdfPzSWY6Gz3GTG2w173DwOGi3Srg1/ZoFGg
+         jCBfyxbpbDapehEblZJN+AhuYjdDmxRvH82LV5pr/CoVX2leC03F2Hmqpimt3ZZTT7Eh
+         g2w2P+OvDKPxFHjEmb2B3NYdedix4iF3t2OSi5buom7RX1Fk14htuGrAKbALtzc4klOO
+         jEdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WBqTn91DshTm+EF7h4CWYhAUdvliMN1/YG7EIZemZ/A=;
+        b=2FURFxspTjDK6bjS44wDbwGM+uXBc+ctF1mWk/AFyl89sBZdRJIRaJ00btyktNpAH+
+         3nWtE4etSNI9cdBR+3fmT779OhDJbRtelRRVKyXGd8C0UvCaZYtbnOBIwriMhycBOUxy
+         CzffiSkcoIxswTxBQTB+GeAW2Ptr9AQJiqfDQ8Y9Q7KdELz8hPg3WI008Kxz1xNJ0Vqi
+         aWJ4qRynLZc9xcDFycjtaB/f37kWBpKM1yOTlgZJHc7tsVrMuZiL8GWjucL7Q3spKNdY
+         Gz1/KR2kwwwwLc5qetFyNDgRf2FkK8YFy7nfTVpZpPw1nnUJGn9xUfP+OtlYVUTeuKV+
+         6lbA==
+X-Gm-Message-State: AOAM533Asuk3DLYjvz4eIYPXbX4xMhL6vZjAJ1H3UNnCorfIBJx5Ur2g
+        eDOj+D1rYSNTAw3GngzTweU=
+X-Google-Smtp-Source: ABdhPJwRAoidBQuHR+uavIg6rJVFE4uuyU2sNZRE3wZOa/3r0nA9fKFSbBYkuJLzyDryl1L7J2lJwA==
+X-Received: by 2002:ac2:4e98:: with SMTP id o24mr37516701lfr.639.1638965155879;
+        Wed, 08 Dec 2021 04:05:55 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id j20sm269214lfh.190.2021.12.08.04.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 04:05:55 -0800 (PST)
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
+        perex@perex.cz
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+ <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+ <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
+ <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
+ <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+ <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
+ <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
+ <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
+ <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
+ <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
+ <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
+ <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
+Date:   Wed, 8 Dec 2021 15:05:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211208024607.1784932-2-irogers@google.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.245]
-X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2021 02:45, Ian Rogers wrote:
-> diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
-> index 840d4032587b..1c1726f4a04e 100644
-> --- a/tools/lib/perf/include/internal/cpumap.h
-> +++ b/tools/lib/perf/include/internal/cpumap.h
-> @@ -4,9 +4,16 @@
->   
->   #include <linux/refcount.h>
->   
-> +/**
-> + * A sized, reference counted, sorted array of integers representing CPU
-> + * numbers. This is commonly used to capture which CPUs a PMU is associated
-> + * with.
-> + */
->   struct perf_cpu_map {
->   	refcount_t	refcnt;
-> +	/** Length of the map array. */
->   	int		nr;
-> +	/** The CPU values. */
->   	int		map[];
+08.12.2021 08:22, Sameer Pujar пишет:
+> 
+> 
+> On 12/7/2021 11:32 PM, Dmitry Osipenko wrote
+>> If display is already active, then shared power domain is already
+>> ungated.
+> 
+> If display is already active, then shared power domain is already
+> ungated. HDA reset is already applied during this ungate. In other
+> words, HDA would be reset as well when display ungates power-domain.
 
-would simply more distinct names for the variables help instead of or in 
-addition to comments?
+Now, if you'll reload the HDA driver module while display is active,
+you'll get a different reset behaviour. HDA hardware will be reset on
+pre-T186, on T186+ it won't be reset.
 
-Generally developers don't always check comments where the struct is 
-defined when the meaning could be judged intuitively
-
-Thanks,
-John
-
+Please make v2 using devm_reset_control_bulk_get_exclusive(), skipping
+the non-existent reset, or move the workaround to the BPMP driver like I
+suggested in the other reply.

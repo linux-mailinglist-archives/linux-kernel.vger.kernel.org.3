@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AE446D189
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC4646D191
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 12:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbhLHLHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:07:19 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:59530 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbhLHLHR (ORCPT
+        id S232049AbhLHLJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:09:09 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:50646 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229751AbhLHLJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:07:17 -0500
-Date:   Wed, 08 Dec 2021 11:03:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638961425;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ikhtMKkQySo8HFeDndy6XVlqsBUutI5KUYrNEghzSuI=;
-        b=v5IV/zFT5do6rLQu02I3VI3ozR1mgtl/93gU75cEXt9SIuWrL6xNNz9sf/WDyUDaUM/7qR
-        2PVg1vtRQsqjGD6F1hq866qNrLSdJ8NfWVczIGLNTEqNln4nUpkSocltcJbzD0siA62j73
-        fFzcMY5A4UqJFvrgOIfVcaNXQpZu+ygLbVwrHlc22O082o1MwbAHd/E4p6jFBDQ4od0UAj
-        yZdgxezwpBEHswWW0Ct7K+jLM7sDoR++tROIwEUIqC+h5wlKa3JQcLgiJwQWAsTAdPFaIE
-        KpPWCzRn45YIo3ihamSmMMd21iV12L1V/0bZ98lKHfnkUUEgN+g3njnCvEpE+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638961425;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ikhtMKkQySo8HFeDndy6XVlqsBUutI5KUYrNEghzSuI=;
-        b=+/4PSoXtCUiCVRid09LopLkt2gnl4JHnASiQvTKK0+J3+MbPt6R71QYuHY1qmWlHPB2/Hc
-        a/brN3qgYV60/iAw==
-From:   "tip-bot2 for Smita Koralahalli" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/mce/inject: Check if a bank is populated before injecting
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com>
-References: <20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com>
+        Wed, 8 Dec 2021 06:09:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638961537; x=1670497537;
+  h=subject:to:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=fVtd/xlmf406gu6uhmRH2kB0eieoRLHluCtqGVaFZ4w=;
+  b=lYsG5q1YWFABx8pOyigrNEsLs0+Oq+6lxTKBo1gEwq0gtbRE3AM8ICcw
+   vrY/S+ujLyBbQ8PaIUmP6pluZrMR/HBfC5vUeV1urlv9fNuEILK0K4ste
+   XvZ/owm3OzVnlZllPmj+bGsad3GWT7r8sAs6LlXd+SLb+gWeIEWHVZjQc
+   G5m9guUa85hcM6fBRrjtLpU1NnQPjiLJckzEV6fJ2qzbgikMftSTjof4b
+   VBU9oXqgFovOnP6fb/W5vgVgvqq8Q0kgiQwtMc8yOoCNKv9zqy3JVEULM
+   9fwUwc9jALccm5gnB3ErbKNq+V/i78tKqXFlTezMBzGTBYTipMAORMLYf
+   g==;
+IronPort-SDR: t4hMXdARuqqdV1QwWlT3U4l2+bIYLZi7zijVAAZFDP3/Bciks0juC13XdScKN9eesUr4Frz54N
+ iDBqu5XgmepHzYyOdiqlaOvPPbLYi+9eTwQnPaZ1XW8iGvMWe0E7YkO7N5Zc5PZrZB0KmGB4OX
+ HBNca4jTQnSH3AtzABkh+/oVFaIecvJUUncLZcAip1cNlx1jhqIS95M3/QyY4cU/NJ0EjjwAXv
+ nJIcDhrnHdDKcB+arZ8JMkMyleLeEaG0h/qSpUr2ZHR29xmu0AJ7G8TMbyH5XP3FWw0ffgcBUb
+ ENkh2VtiZ6iJ7cUC95gzHm2n
+X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
+   d="scan'208";a="78881177"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2021 04:05:35 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 8 Dec 2021 04:05:32 -0700
+Received: from [10.12.73.2] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Wed, 8 Dec 2021 04:05:30 -0700
+Subject: Re: [PATCH] ARM: dts: at91: update alternate function of signal PD20
+To:     Hari Prasath <Hari.PrasathGE@microchip.com>,
+        <claudiu.beznea@microchip.com>, <davem@davemloft.net>,
+        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@armlinux.org.uk>
+References: <20211208063553.19807-1-Hari.PrasathGE@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <47dc40fb-aaa7-dedd-034c-465f39a5a83f@microchip.com>
+Date:   Wed, 8 Dec 2021 12:05:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Message-ID: <163896142414.11128.1972175927654865503.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20211208063553.19807-1-Hari.PrasathGE@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+On 08/12/2021 at 07:35, Hari Prasath wrote:
+> The alternate function of PD20 is 4 as per the datasheet of
+> sama7g5 and not 5 as defined earlier.
+> 
+> Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
+> Signed-off-by: Hari Prasath <Hari.PrasathGE@microchip.com>
 
-Commit-ID:     e48d008bd13eaa9068ff59c65275d17516179f7b
-Gitweb:        https://git.kernel.org/tip/e48d008bd13eaa9068ff59c65275d17516179f7b
-Author:        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-AuthorDate:    Thu, 04 Nov 2021 16:58:41 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 08 Dec 2021 12:00:56 +01:00
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-x86/mce/inject: Check if a bank is populated before injecting
+Thanks Hari. Best regards,
+   Nicolas
 
-The MCA_IPID register uniquely identifies a bank's type on Scalable MCA
-(SMCA) systems. When an MCA bank is not populated, the MCA_IPID register
-will read as zero and writes to it will be ignored.
+> ---
+>   arch/arm/boot/dts/sama7g5-pinfunc.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/sama7g5-pinfunc.h b/arch/arm/boot/dts/sama7g5-pinfunc.h
+> index 22fe9e522a97..4eb30445d205 100644
+> --- a/arch/arm/boot/dts/sama7g5-pinfunc.h
+> +++ b/arch/arm/boot/dts/sama7g5-pinfunc.h
+> @@ -765,7 +765,7 @@
+>   #define PIN_PD20__PCK0			PINMUX_PIN(PIN_PD20, 1, 3)
+>   #define PIN_PD20__FLEXCOM2_IO3		PINMUX_PIN(PIN_PD20, 2, 2)
+>   #define PIN_PD20__PWMH3			PINMUX_PIN(PIN_PD20, 3, 4)
+> -#define PIN_PD20__CANTX4		PINMUX_PIN(PIN_PD20, 5, 2)
+> +#define PIN_PD20__CANTX4		PINMUX_PIN(PIN_PD20, 4, 2)
+>   #define PIN_PD20__FLEXCOM5_IO0		PINMUX_PIN(PIN_PD20, 6, 5)
+>   #define PIN_PD21			117
+>   #define PIN_PD21__GPIO			PINMUX_PIN(PIN_PD21, 0, 0)
+> 
 
-On a hw-type error injection (injection which writes the actual MCA
-registers in an attempt to cause a real MCE) check the value of this
-register before trying to inject the error.
 
-Do not impose any limitations on a sw injection and allow the user to
-test out all the decoding paths without relying on the available hardware,
-as its purpose is to just test the code.
-
- [ bp: Heavily massage. ]
-
-Link: https://lkml.kernel.org/r/20211019233641.140275-2-Smita.KoralahalliChannabasappa@amd.com
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211104215846.254012-2-Smita.KoralahalliChannabasappa@amd.com
----
- arch/x86/kernel/cpu/mce/inject.c | 42 ++++++++++++++++++++++++++++++-
- 1 file changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 0bfc140..725e8e4 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -74,7 +74,6 @@ MCE_INJECT_SET(status);
- MCE_INJECT_SET(misc);
- MCE_INJECT_SET(addr);
- MCE_INJECT_SET(synd);
--MCE_INJECT_SET(ipid);
- 
- #define MCE_INJECT_GET(reg)						\
- static int inj_##reg##_get(void *data, u64 *val)			\
-@@ -95,6 +94,20 @@ DEFINE_SIMPLE_ATTRIBUTE(status_fops, inj_status_get, inj_status_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(misc_fops, inj_misc_get, inj_misc_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(addr_fops, inj_addr_get, inj_addr_set, "%llx\n");
- DEFINE_SIMPLE_ATTRIBUTE(synd_fops, inj_synd_get, inj_synd_set, "%llx\n");
-+
-+/* Use the user provided IPID value on a sw injection. */
-+static int inj_ipid_set(void *data, u64 val)
-+{
-+	struct mce *m = (struct mce *)data;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
-+		if (inj_type == SW_INJ)
-+			m->ipid = val;
-+	}
-+
-+	return 0;
-+}
-+
- DEFINE_SIMPLE_ATTRIBUTE(ipid_fops, inj_ipid_get, inj_ipid_set, "%llx\n");
- 
- static void setup_inj_struct(struct mce *m)
-@@ -577,6 +590,33 @@ static int inj_bank_set(void *data, u64 val)
- 	}
- 
- 	m->bank = val;
-+
-+	/*
-+	 * sw-only injection allows to write arbitrary values into the MCA
-+	 * registers because it tests only the decoding paths.
-+	 */
-+	if (inj_type == SW_INJ)
-+		goto inject;
-+
-+	/*
-+	 * Read IPID value to determine if a bank is populated on the target
-+	 * CPU.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
-+		u64 ipid;
-+
-+		if (rdmsrl_on_cpu(m->extcpu, MSR_AMD64_SMCA_MCx_IPID(val), &ipid)) {
-+			pr_err("Error reading IPID on CPU%d\n", m->extcpu);
-+			return -EINVAL;
-+		}
-+
-+		if (!ipid) {
-+			pr_err("Cannot inject into unpopulated bank %llu\n", val);
-+			return -ENODEV;
-+		}
-+	}
-+
-+inject:
- 	do_inject();
- 
- 	/* Reset injection struct */
+-- 
+Nicolas Ferre

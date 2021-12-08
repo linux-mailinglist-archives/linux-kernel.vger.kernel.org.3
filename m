@@ -2,117 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E44C46D702
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0804D46D704
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbhLHPeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:34:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50252 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233264AbhLHPeO (ORCPT
+        id S236083AbhLHPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233264AbhLHPeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:34:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638977442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzCUQTQHixCkOFTrQyJFzqAE5wDab4E7u78+a05/gN0=;
-        b=fPLCex9woVTqT4fATViJxotXR7/lns6BATMI0bPWEat5C5wrBI9Guac4dTiuJ6cGS9qGU+
-        gyDgZkoh0bzJUF/pPk4/xI/4KKHONSjGOzrSsA4nkxuSDktjqWlMLAx800reUH9mSJ+ZkV
-        wxsuxHnhkTZ2ClACCVSPxPBJFWgOnoM=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-vJ2XAj5dNKChTpAZVcuZTg-1; Wed, 08 Dec 2021 10:30:40 -0500
-X-MC-Unique: vJ2XAj5dNKChTpAZVcuZTg-1
-Received: by mail-pf1-f199.google.com with SMTP id 4-20020a621604000000b004a4ab765028so1748855pfw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:30:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rzCUQTQHixCkOFTrQyJFzqAE5wDab4E7u78+a05/gN0=;
-        b=6lhtqJ4koTLirO9WbjLK7xAvBvbH2yQ1rKdDrZapTpMPt40tAbUNwUTR+HcIFLDrOj
-         qv+X6z0jE2zG4OMdyvhZ7CBV7rYt83nX92L5ufSCHketma4ivr6Leycn+u7aSWE6J1eL
-         KQ+uuvzgXrqk+1rftEqmlwswjfQLhxukkHA+t4W+LdnQftYpvMN9+FoHG2LZXR6sqZ9A
-         GE4l4eOu9X5BRkV6nzAHFxGorhDKXP31nA83vjy9XTMNJXMKLmi6Bg+4It9Ir5xRtwZP
-         k06LOmBQvMGyzbEFmoj3Cf7I7dXClxNLnNn3djdTP3fG5QrjzVHeq6OzqPsDqBGxRb/N
-         +2Jg==
-X-Gm-Message-State: AOAM532vIXqji4XlCpabpLeGPWflRpPxL3rUo0cg4lTIe/jMnZkwEhaD
-        IcLI2O1xHv293rQwQ/fKRp1Qys5Tn7RBqvb4ISVAj7MyaN5+qIEFrZO77GnORsdUapjrJp9O0Ib
-        dIB2U+w7QmRA5Mhs0c24c06BRkAnpQ1FRb55TCzSC
-X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id e7-20020a17090301c700b00141e630130cmr60620984plh.80.1638977439731;
-        Wed, 08 Dec 2021 07:30:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyixfuggonvjhI2fbihDrgrNo0uHWJ2S5UbH6Tm5PzAKbFkHDDWpqgfjt6m65mYCqwZhBbOM27jqpCWVe311Zs=
-X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id
- e7-20020a17090301c700b00141e630130cmr60620949plh.80.1638977439492; Wed, 08
- Dec 2021 07:30:39 -0800 (PST)
+        Wed, 8 Dec 2021 10:34:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B16C061746;
+        Wed,  8 Dec 2021 07:30:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A1CD3CE1FAC;
+        Wed,  8 Dec 2021 15:30:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F37C00446;
+        Wed,  8 Dec 2021 15:30:54 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 10:30:52 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH] tracefs: Use d_inode() helper function to get the dentry
+ inode
+Message-ID: <20211208103052.706253b4@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211201164301.44653-1-tero.kristo@linux.intel.com>
-In-Reply-To: <20211201164301.44653-1-tero.kristo@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 8 Dec 2021 16:30:28 +0100
-Message-ID: <CAO-hwJJRXrMAxi_cWng=vuQv4Ej7_AFweZTxVqu9_uy+C6sfzg@mail.gmail.com>
-Subject: Re: [RFCv3 0/7] USI stylus support series
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tero,
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->
-> Hi,
->
-> Another update here based on received feedback. Main change compared to v2:
+Instead of referencing the inode from a dentry via dentry->d_inode, use
+the helper function d_inode(dentry) instead. This is the considered the
+correct way to access it.
 
-If that's OK with you, I'd like to cherry-pick some patches from the
-series: 1/7, 2/7 (the version from v4 because I requested changes),
-4/7 and a lighter 5/7 where we don't have the MSC events we are still
-discussing.
+Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reported: https://lore.kernel.org/all/20211208104454.nhxyvmmn6d2qhpwl@wittgenstein/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ fs/tracefs/inode.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-So Ideally, can you post a v4 based on top of hid.git/for-next
-(without my hid-bpf changes) with those 4 patches?
-
-Patch 3 is still up for discussion, and patches 6 and 7 are obviously RFC.
-
-Actually, Patch 3 could be split into a part where you add the HID
-usages and a part with the mapping of them. The HID usages part can be
-integrated now too, and we'll have the USI mapping that would require
-Dmitry's ack in a separate patch.
-
-But if you prefer having everything in one series, that's fine by me too.
-
-Cheers,
-Benjamin
-
->
-> - Dropped patch #5 : HID: core: map USI pen style reports directly
->   This is not needed anymore, as the same result can be reached by
->   modifying the flags of the relevant field in rdesc. This is done now
->   as part of patch #7 in the BPF code.
->
-> I also dropped one of the fixes from my test branch [1] as pointed out
-> by Benjamin, it is not needed if the BPF program is executed with the
-> modalias link.
->
-> Updated test branch can be found from [2].
->
-> -Tero
->
-> [1]
-> https://github.com/t-kristo/linux/commit/81b27fd46780ce67c2706d586c0f4a437e87dbf6
-> (HID: bpf: fix file mapping)
-> [2] https://github.com/t-kristo/linux/commits/usi-5.16-rfc-v3-bpf
->
->
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 925a621b432e..9899c6078c95 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -109,12 +109,12 @@ static int tracefs_syscall_rmdir(struct inode *inode, struct dentry *dentry)
+ 	 * also the directory that is being deleted.
+ 	 */
+ 	inode_unlock(inode);
+-	inode_unlock(dentry->d_inode);
++	inode_unlock(d_inode(dentry));
+ 
+ 	ret = tracefs_ops.rmdir(name);
+ 
+ 	inode_lock_nested(inode, I_MUTEX_PARENT);
+-	inode_lock(dentry->d_inode);
++	inode_lock(d_inode(dentry));
+ 
+ 	kfree(name);
+ 
+@@ -212,7 +212,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ static int tracefs_apply_options(struct super_block *sb)
+ {
+ 	struct tracefs_fs_info *fsi = sb->s_fs_info;
+-	struct inode *inode = sb->s_root->d_inode;
++	struct inode *inode = d_inode(sb->s_root);
+ 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
+ 
+ 	inode->i_mode &= ~S_IALLUGO;
+@@ -331,18 +331,18 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
+ 	if (!parent)
+ 		parent = tracefs_mount->mnt_root;
+ 
+-	inode_lock(parent->d_inode);
+-	if (unlikely(IS_DEADDIR(parent->d_inode)))
++	inode_lock(d_inode(parent));
++	if (unlikely(IS_DEADDIR(d_inode(parent))))
+ 		dentry = ERR_PTR(-ENOENT);
+ 	else
+ 		dentry = lookup_one_len(name, parent, strlen(name));
+-	if (!IS_ERR(dentry) && dentry->d_inode) {
++	if (!IS_ERR(dentry) && d_inode(dentry)) {
+ 		dput(dentry);
+ 		dentry = ERR_PTR(-EEXIST);
+ 	}
+ 
+ 	if (IS_ERR(dentry)) {
+-		inode_unlock(parent->d_inode);
++		inode_unlock(d_inode(parent));
+ 		simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+ 	}
+ 
+@@ -351,7 +351,7 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
+ 
+ static struct dentry *failed_creating(struct dentry *dentry)
+ {
+-	inode_unlock(dentry->d_parent->d_inode);
++	inode_unlock(d_inode(dentry->d_parent));
+ 	dput(dentry);
+ 	simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+ 	return NULL;
+@@ -359,7 +359,7 @@ static struct dentry *failed_creating(struct dentry *dentry)
+ 
+ static struct dentry *end_creating(struct dentry *dentry)
+ {
+-	inode_unlock(dentry->d_parent->d_inode);
++	inode_unlock(d_inode(dentry->d_parent));
+ 	return dentry;
+ }
+ 
+@@ -415,7 +415,7 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
+ 	d_instantiate(dentry, inode);
+-	fsnotify_create(dentry->d_parent->d_inode, dentry);
++	fsnotify_create(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+ }
+ 
+@@ -440,8 +440,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+ 	d_instantiate(dentry, inode);
+-	inc_nlink(dentry->d_parent->d_inode);
+-	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
++	inc_nlink(d_inode(dentry->d_parent));
++	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+ }
+ 
+-- 
+2.31.1
 

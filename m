@@ -2,117 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF68246DDED
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4800A46DDFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237698AbhLHWDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 17:03:46 -0500
-Received: from mga14.intel.com ([192.55.52.115]:58694 "EHLO mga14.intel.com"
+        id S240088AbhLHWG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 17:06:59 -0500
+Received: from mga12.intel.com ([192.55.52.136]:2653 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237675AbhLHWDq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 17:03:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238188078"
+        id S240001AbhLHWG6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 17:06:58 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="217985661"
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="238188078"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 13:55:29 -0800
+   d="scan'208";a="217985661"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 14:02:01 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="461879525"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 13:55:28 -0800
-Date:   Wed, 8 Dec 2021 13:59:45 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <20211208135945.6d0a3b69@jacob-builder>
-In-Reply-To: <20211208203022.GF6385@nvidia.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-        <20211208131358.GR6385@nvidia.com>
-        <20211208115516.1d36fed9@jacob-builder>
-        <20211208203022.GF6385@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="462963188"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 14:01:58 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mv50g-00016Y-5V; Wed, 08 Dec 2021 22:01:58 +0000
+Date:   Thu, 9 Dec 2021 06:01:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [davidhildenbrand:foll_unshare 1/2] include/linux/seqlock.h:141:30:
+ error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+Message-ID: <202112090511.tFh8KCmb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+tree:   git://github.com/davidhildenbrand/linux foll_unshare
+head:   f4b54ddc31ca94dedc57a3aab1f42d348537a31b
+commit: f270db76384cb1df5a7f1b67226a8c8515583e5f [1/2] seqlock: provide lockdep-free raw_seqcount_t variant
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20211209/202112090511.tFh8KCmb-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/davidhildenbrand/linux/commit/f270db76384cb1df5a7f1b67226a8c8515583e5f
+        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
+        git fetch --no-tags davidhildenbrand foll_unshare
+        git checkout f270db76384cb1df5a7f1b67226a8c8515583e5f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-On Wed, 8 Dec 2021 16:30:22 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> On Wed, Dec 08, 2021 at 11:55:16AM -0800, Jacob Pan wrote:
-> > Hi Jason,
-> > 
-> > On Wed, 8 Dec 2021 09:13:58 -0400, Jason Gunthorpe <jgg@nvidia.com>
-> > wrote: 
-> > > > This patch utilizes iommu_enable_pasid_dma() to enable DSA to
-> > > > perform DMA requests with PASID under the same mapping managed by
-> > > > DMA mapping API. In addition, SVA-related bits for kernel DMA are
-> > > > removed. As a result, DSA users shall use DMA mapping API to obtain
-> > > > DMA handles instead of using kernel virtual addresses.    
-> > > 
-> > > Er, shouldn't this be adding dma_map/etc type calls?
-> > > 
-> > > You can't really say a driver is using the DMA API without actually
-> > > calling the DMA API..  
-> > The IDXD driver is not aware of addressing mode, it is up to the user of
-> > dmaengine API to prepare the buffer mappings. Here we only set up the
-> > PASID such that it can be picked up during DMA work submission. I
-> > tested with /drivers/dma/dmatest.c which does dma_map_page(),
-> > map_single etc. also tested with other pieces under development.  
-> 
-> Ignoring the work, doesn't IDXD prepare the DMA queues itself, don't
-> those need the DMA API?
-> 
-Do you mean wq completion record address? It is already using DMA API.
-	wq->compls = dma_alloc_coherent(dev, wq->compls_size,
-&wq->compls_addr, GFP_KERNEL);
-	desc->compl_dma = wq->compls_addr + idxd->data->compl_size * i;
+All errors (new ones prefixed by >>):
 
-> I'm still very confused how this can radically change from using kSVA
-> to DMA API and NOT introduce some more changes than this. They are not
-I am guessing the confusion comes from that fact the user of kSVA is not
-merged. We were in the process of upstreaming then abandon it. Perhaps that
-is why you don't see removing kSVA code?
+   In file included from include/linux/mm_types.h:18,
+                    from mm/init-mm.c:2:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   mm/init-mm.c:34:23: note: in expansion of macro 'SEQCNT_ZERO'
+      34 |  .write_protect_seq = SEQCNT_ZERO(init_mm.write_protect_seq),
+         |                       ^~~~~~~~~~~
+--
+   In file included from include/linux/hrtimer.h:20,
+                    from include/linux/sched.h:19,
+                    from include/linux/ratelimit.h:6,
+                    from fs/dcache.c:18:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:358:42: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     358 | #define SEQCNT_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:888:15: note: in expansion of macro 'SEQCNT_SPINLOCK_ZERO'
+     888 |   .seqcount = SEQCNT_SPINLOCK_ZERO(lockname, &(lockname).lock), \
+         |               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:907:18: note: in expansion of macro '__SEQLOCK_UNLOCKED'
+     907 |   seqlock_t sl = __SEQLOCK_UNLOCKED(sl)
+         |                  ^~~~~~~~~~~~~~~~~~
+   fs/dcache.c:77:28: note: in expansion of macro 'DEFINE_SEQLOCK'
+      77 | __cacheline_aligned_in_smp DEFINE_SEQLOCK(rename_lock);
+         |                            ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/dcache.h:11,
+                    from include/linux/fs.h:8,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from fs/namespace.c:11:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:358:42: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     358 | #define SEQCNT_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:888:15: note: in expansion of macro 'SEQCNT_SPINLOCK_ZERO'
+     888 |   .seqcount = SEQCNT_SPINLOCK_ZERO(lockname, &(lockname).lock), \
+         |               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:907:18: note: in expansion of macro '__SEQLOCK_UNLOCKED'
+     907 |   seqlock_t sl = __SEQLOCK_UNLOCKED(sl)
+         |                  ^~~~~~~~~~~~~~~~~~
+   fs/namespace.c:98:28: note: in expansion of macro 'DEFINE_SEQLOCK'
+      98 | __cacheline_aligned_in_smp DEFINE_SEQLOCK(mount_lock);
+         |                            ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/hrtimer.h:20,
+                    from include/linux/sched.h:19,
+                    from include/linux/sched/signal.h:7,
+                    from fs/fs_struct.c:3:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:358:42: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     358 | #define SEQCNT_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~
+   fs/fs_struct.c:166:10: note: in expansion of macro 'SEQCNT_SPINLOCK_ZERO'
+     166 |  .seq  = SEQCNT_SPINLOCK_ZERO(init_fs.seq, &init_fs.lock),
+         |          ^~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/mm_types.h:18,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/ipv4/tcp_metrics.c:5:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:358:42: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     358 | #define SEQCNT_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:888:15: note: in expansion of macro 'SEQCNT_SPINLOCK_ZERO'
+     888 |   .seqcount = SEQCNT_SPINLOCK_ZERO(lockname, &(lockname).lock), \
+         |               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/seqlock.h:907:18: note: in expansion of macro '__SEQLOCK_UNLOCKED'
+     907 |   seqlock_t sl = __SEQLOCK_UNLOCKED(sl)
+         |                  ^~~~~~~~~~~~~~~~~~
+   net/ipv4/tcp_metrics.c:541:8: note: in expansion of macro 'DEFINE_SEQLOCK'
+     541 | static DEFINE_SEQLOCK(fastopen_seqlock);
+         |        ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/mmzone.h:16,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:10,
+                    from kernel/printk/printk.c:23:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:737:15: note: in expansion of macro 'SEQCNT_ZERO'
+     737 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   kernel/printk/printk.c:381:12: note: in expansion of macro 'SEQCNT_LATCH_ZERO'
+     381 |  .latch  = SEQCNT_LATCH_ZERO(clear_seq.latch),
+         |            ^~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/mmzone.h:16,
+                    from include/linux/gfp.h:6,
+                    from include/linux/radix-tree.h:12,
+                    from include/linux/idr.h:15,
+                    from include/linux/kernfs.h:13,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/clocksource.h:19,
+                    from include/linux/timekeeper_internal.h:10,
+                    from kernel/time/timekeeping.c:6:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:357:46: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     357 | #define SEQCNT_RAW_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/timekeeping.c:52:9: note: in expansion of macro 'SEQCNT_RAW_SPINLOCK_ZERO'
+      52 |  .seq = SEQCNT_RAW_SPINLOCK_ZERO(tk_core.seq, &timekeeper_lock),
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:737:15: note: in expansion of macro 'SEQCNT_ZERO'
+     737 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   kernel/time/timekeeping.c:104:13: note: in expansion of macro 'SEQCNT_LATCH_ZERO'
+     104 |  .seq     = SEQCNT_LATCH_ZERO(tk_fast_mono.seq),
+         |             ^~~~~~~~~~~~~~~~~
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:737:15: note: in expansion of macro 'SEQCNT_ZERO'
+     737 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   kernel/time/timekeeping.c:110:13: note: in expansion of macro 'SEQCNT_LATCH_ZERO'
+     110 |  .seq     = SEQCNT_LATCH_ZERO(tk_fast_raw.seq),
+         |             ^~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/mmzone.h:16,
+                    from include/linux/gfp.h:6,
+                    from include/linux/radix-tree.h:12,
+                    from include/linux/idr.h:15,
+                    from include/linux/kernfs.h:13,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/clocksource.h:19,
+                    from kernel/time/jiffies.c:7:
+>> include/linux/seqlock.h:141:30: error: 'seqcount_t' {aka 'struct seqcount'} has no member named 'seqcount'
+     141 | #define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+         |                              ^~~~~~~~
+   include/linux/seqlock.h:353:15: note: in expansion of macro 'SEQCNT_ZERO'
+     353 |  .seqcount  = SEQCNT_ZERO(seq_name.seqcount), \
+         |               ^~~~~~~~~~~
+   include/linux/seqlock.h:357:46: note: in expansion of macro 'SEQCOUNT_LOCKNAME_ZERO'
+     357 | #define SEQCNT_RAW_SPINLOCK_ZERO(name, lock) SEQCOUNT_LOCKNAME_ZERO(name, lock)
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/jiffies.c:45:2: note: in expansion of macro 'SEQCNT_RAW_SPINLOCK_ZERO'
+      45 |  SEQCNT_RAW_SPINLOCK_ZERO(jiffies_seq, &jiffies_lock);
+         |  ^~~~~~~~~~~~~~~~~~~~~~~~
 
-> the same thing, they do not use the same IOVA's. Did you test this
-> with bypass mode off?
-Yes with dmatest. IOVA is the default, I separated out the SATC patch which
-will put internal accelerators in bypass mode. It can also be verified by
-iommu debugfs dump of DMA PASID (2) and PASID 0 (RIDPASID) are pointing to
-he same default domain. e.g
-PASID   PASID_table_entry
-0       0x0000000119ed7004:0x0000000000800002:0x000000000000004d
-1       0x0000000000000001:0x0000000000800001:0x000000000000010d
-2       0x0000000119ed7004:0x0000000000800002:0x000000000000004d
 
+vim +141 include/linux/seqlock.h
 
-> 
-> Jason
+   136	
+   137	/**
+   138	 * SEQCNT_ZERO() - static initializer for seqcount_t
+   139	 * @name: Name of the seqcount_t instance
+   140	 */
+ > 141	#define SEQCNT_ZERO(name) { .seqcount = RAW_SEQCNT_ZERO(), SEQCOUNT_DEP_MAP_INIT(name) }
+   142	
 
-
-Thanks,
-
-Jacob
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,109 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A7946CE32
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A90346CE36
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 08:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240616AbhLHHUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 02:20:01 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:21580 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhLHHUA (ORCPT
+        id S244466AbhLHHWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 02:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231363AbhLHHWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:20:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638947780;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=zer9Wm6M9T/aEwxo7eP5PvBiD7v5uvhksWn/IfzxL40=;
-    b=QyfBeJI1VweDUXY13rASeoy0hbsTKKJqdm/3nmecvRTh30byFQfBcwz6dHwCYoFIag
-    O+TpGLunT7roiTmRnwvAfsLxDSIlwH6ZxhyIB92r0qgJwzpFL2PF4fgJLWLecfXjoT1A
-    FLKwJiiAb0TuDsS7UNKDnhw5n1dDettpfUMM+74u56Qur8tyB5ZOp6QX+685EIanKIYk
-    LiqTwWRGZX79gTfLHrB9MuEV+Oj7l/CEf8epvPQI47GGhKb+6coza4vnzLpUsVXEkSnL
-    6BWbWhtNEjXDpj4ZoM/VW4my130PPBMjZbXqB6vB9MtUH22+PEkAf8EImgCwIYU5K2XG
-    +Tlw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPaJPSf8yic"
-X-RZG-CLASS-ID: mo00
-Received: from tauon.chronox.de
-    by smtp.strato.de (RZmta 47.35.1 DYNA|AUTH)
-    with ESMTPSA id m07e9dxB87GJ6E7
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 8 Dec 2021 08:16:19 +0100 (CET)
-From:   Stephan Mueller <smueller@chronox.de>
-To:     Nicolai Stange <nstange@suse.de>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicolai Stange <nstange@suse.de>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-Subject: Re: [PATCH 09/18] crypto: dh - implement private key generation primitive
-Date:   Wed, 08 Dec 2021 08:16:18 +0100
-Message-ID: <4767831.y2tiDqZFiq@tauon.chronox.de>
-In-Reply-To: <87pmq7ehxg.fsf@suse.de>
-References: <20211201004858.19831-1-nstange@suse.de> <25213093.1r3eYUQgxm@positron.chronox.de> <87pmq7ehxg.fsf@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        Wed, 8 Dec 2021 02:22:06 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E062DC061574;
+        Tue,  7 Dec 2021 23:18:34 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id l64so1295160pgl.9;
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=WSNq3zJ7WU0qx1y83Y7TKyyXelC9tIaxgdOENA640bs=;
+        b=FFbyCzgpL0sqjwPm0yxnVR6qlLAN79mQpr0fRfVtw3ryV8eBgSxA8yYiUA5iCVxIKp
+         CZzmXoWGFTIZ7stjshKMhzn1cZ3Y3NrI+1aXSkxz1GwFQJ0NAu2k+s36K1btJ2d9v+Pl
+         O033KebN10I623Gs7IsPq5k1piysHB0L+mJb9puxdOKUnJXmIlAUgOky/n+Kf/8EKODm
+         0vmhrB46dXkFYk3wZu8Ds6P1Vby6wsAS1vEuCR59AuZTtwFxsKo/i0Ibd0LG3GZM4MrX
+         xSAiBuIGEBQuYDSkeAmfrMGcIXjAgOGn3htaQKbuKPie1HBKY62hd4ZCjQRdrqTPazKx
+         HzxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WSNq3zJ7WU0qx1y83Y7TKyyXelC9tIaxgdOENA640bs=;
+        b=bqHUL0FfywqdMlIPvOzzFRPBsKecI9JGs8tgG9EML4V3b6JXO+liI4WTPhJXId5YJv
+         RWlCamqiotwSdzi1N5sRUOj4Zb9PGuwb3uiQ9m/FsRXOFBNYCamruDxKyl9xSfK24j4R
+         Trn9c47LeXmXeimwdu5vgPnQkIjJaf5uB/amyjs5w3fWCxgLWgkvmCAMA9D0h6Fe2RHS
+         5GD56rAE7Fa8EswhQIGdDrOupCTZKanF/fH4+nwEQzmsXDrbbSulTSPgrQy6wZ+jXn4d
+         0E1FL8EV428k+zmlj3SgtbHJ76a5C/CkCASc48GsuSatvXspfItQFRqZnSSbeQ1YE9Bb
+         N4fg==
+X-Gm-Message-State: AOAM532S2576yq5hSxxFTnblZHZwfDcekccKGCcTVhxqv4+mYFGYXSTu
+        675EjnjH7ZuJFM4htIvDvj8=
+X-Google-Smtp-Source: ABdhPJyfzfZS+YrYJhAigzleHWcOoizlWMTuzeO8kwTd8wCbhwZj+Nb9b7DfXbrA6FeNPMC0TukxXQ==
+X-Received: by 2002:a63:1b1c:: with SMTP id b28mr27772608pgb.288.1638947914374;
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+Received: from localhost.localdomain (59-124-112-150.hinet-ip.hinet.net. [59.124.112.150])
+        by smtp.gmail.com with ESMTPSA id k16sm2310767pfu.183.2021.12.07.23.18.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Dec 2021 23:18:34 -0800 (PST)
+From:   Steven Syu <stevensyu7@gmail.com>
+X-Google-Original-From: Steven Syu <steven_syu7@gmail.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Syu <stevensyu7@gmail.com>
+Subject: [PATCH v3] usb: typec: clear usb_pd flag if change to typec only mode
+Date:   Wed,  8 Dec 2021 15:18:25 +0800
+Message-Id: <1638947905-2502-1-git-send-email-steven_syu7@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 8. Dezember 2021, 07:20:43 CET schrieb Nicolai Stange:
+From: Steven Syu <stevensyu7@gmail.com>
 
-Hi Nicolai,
+Set usb_pd to 0 when power operation mode
+leaving power delivery. That can avoid user-sepace
+read "yes" form the supports_usb_power_delivery_show() attribute
+but power operation mode already change form power delivery to
+others mode.
 
-> >> +		return -EINVAL;
-> >> +
-> >> +	/*
-> >> +	 * 5.6.1.1.1: choose key length N such that
-> >> +	 * 2 * ->max_strength <= N <= log2(q) + 1 = ->p_size * 8 - 1
-> >> +	 * with q = (p - 1) / 2 for the safe-prime groups.
-> >> +	 * Choose the lower bound's next power of two for N in order to
-> >> +	 * avoid excessively large private keys while still
-> >> +	 * maintaining some extra reserve beyond the bare minimum in
-> >> +	 * most cases. Note that for each entry in safe_prime_groups[],
-> >> +	 * the following holds for such N:
-> >> +	 * - N >= 256, in particular it is a multiple of 2^6 = 64
-> >> +	 *   bits and
-> >> +	 * - N < log2(q) + 1, i.e. N respects the upper bound.
-> >> +	 */
-> >> +	n = roundup_pow_of_two(2 * g->max_strength);
-> >> +	WARN_ON_ONCE(n & ((1u << 6) - 1));
-> >> +	n >>= 6; /* Convert N into units of u64. */
-> > 
-> > Couldn't we pre-compute that value for each of the safeprime groups? This
-> > value should be static for each of them.
-> 
-> Can you elaborate why this would be better? As long as the value
-> calculated above is considered reasonable for every usecase, I don't see
-> the advantage of storing it somewhere.
+Signed-off-by: Steven Syu <stevensyu7@gmail.com>
+---
+changes for v3:
+resubmit and add the changes comment of v1->v2
 
-Well, I usually try to avoid using CPU resources if I have information a-
-priori. And as we have only known domain parameters in this code path, I 
-thought we can spare a few CPU cycles.
+v1->v2:
+1.remove sysfs_notify(&partner_dev->kobj, NULL, "supports_usb_power_delivery"); when operation mode is not PD.
+2.resubmitted patch by private email for remove footbar in the mail.
 
-> 
-> OTOH, calculating the value on the fly
-> - enforces conformance to 5.6.1.1.1 (>= twice the sec strength)
-> - and guarantees that it is a multiple of 64 bits, as required
->   by the implementation,
-> whereas you'd had to examine each and every individual group's setting
-> for correctness when storing precomputed values alongside the other,
-> "primary" group parameters.
+ drivers/usb/typec/class.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You are right, but when we reach this code path we only have well-known 
-parameters. Hence my suggestion.
-
-Ciao
-Stephan
-
-
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index aeef453..2043e07 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1718,6 +1718,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+ 			partner->usb_pd = 1;
+ 			sysfs_notify(&partner_dev->kobj, NULL,
+ 				     "supports_usb_power_delivery");
++		} else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
++			partner->usb_pd = 0;
+ 		}
+ 		put_device(partner_dev);
+ 	}
+-- 
+2.7.4
 

@@ -2,167 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6716846CF29
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD6946CF2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244917AbhLHIi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:38:27 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45106 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240745AbhLHIiK (ORCPT
+        id S240804AbhLHIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:39:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56648 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231316AbhLHIji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:38:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1F4B62113D;
-        Wed,  8 Dec 2021 08:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638952478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VEx7L2uKEFkh7PkDUkqZJdaZbYdaJ5/ADsblq0a2GMY=;
-        b=uOgd7PBGkpRP1E//AO+SzSyrmxpr1SlUwNEu6/JT7mflDPum0fLmNn+fggTDgNyAZvyUii
-        qKlhVqNWsYUDZ2nDAeMqQI/kFgYFwKrRzgGzbEN9cPygn2buHvYtPoeDBaa5zptKHOV6pb
-        cbBd6qiDyjesz14HH1q3NUId0LNJHKo=
-Received: from suse.cz (unknown [10.100.201.86])
+        Wed, 8 Dec 2021 03:39:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E4E87A3B85;
-        Wed,  8 Dec 2021 08:34:37 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 09:34:37 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbBuHSkvd6fDdQ9d@dhcp22.suse.cz>
-References: <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
- <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
- <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
- <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
- <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
- <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
- <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
- <f9786109-518f-38d4-0270-a3e87a13c4ef@redhat.com>
- <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
- <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7356B81FDE;
+        Wed,  8 Dec 2021 08:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7D1C00446;
+        Wed,  8 Dec 2021 08:36:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638952564;
+        bh=yJnXl4jzvgEprMEjZxmGkgucyejVpGfnHnH/+kNZK/k=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=ISM/9QAjbK9rehURJd8gG8WaqixuBUFaFI2Pc7F0sDmdi1K2ZJH7mvptw95fnJGl7
+         gAh2mRS7+k2RTuPv7Rj6w16NxfWLQtc/Y8mC4wG3sm5NMh15jNAz5UbSpMV4e6fuO3
+         29e8/aC5WRmkBMNq/briYVH9u8VFjqqFMc5Q7liebcMDTiFgESpepe8zDMYnlEvdsh
+         rW16Bp3Huh+cz+ep0Ex1owqizVNQ7SnQTp2KR4tTp79N/hfp3JhQKTVn1oR3yY/rle
+         oP9rwWPF+aDEcFNMxdS9HEhIRbDYRF25+KnDregNugbTo+XOzmPp1sH0wjZiCxIBSL
+         7sb1iRNAqEgLA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] carl9170: Use the bitmap API when applicable
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
+References: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     chunkeey@googlemail.com, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163895256077.29041.18198959871670057550.kvalo@kernel.org>
+Date:   Wed,  8 Dec 2021 08:36:02 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 08-12-21 09:24:39, David Hildenbrand wrote:
-> On 08.12.21 09:12, Michal Hocko wrote:
-> > On Tue 07-12-21 19:03:28, David Hildenbrand wrote:
-> >> On 07.12.21 18:17, Alexey Makhalov wrote:
-> >>>
-> >>>
-> >>>> On Dec 7, 2021, at 9:13 AM, David Hildenbrand <david@redhat.com> wrote:
-> >>>>
-> >>>> On 07.12.21 18:02, Alexey Makhalov wrote:
-> >>>>>
-> >>>>>
-> >>>>>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
-> >>>>>>
-> >>>>>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
-> >>>>>> [...]
-> >>>>>>> So your proposal is to drop set_node_online from the patch and add it as
-> >>>>>>> a separate one which handles
-> >>>>>>> 	- sysfs part (i.e. do not register a node which doesn't span a
-> >>>>>>> 	  physical address space)
-> >>>>>>> 	- hotplug side of (drop the pgd allocation, register node lazily
-> >>>>>>> 	  when a first memblocks are registered)
-> >>>>>>
-> >>>>>> In other words, the first stage
-> >>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> >>>>>> index c5952749ad40..f9024ba09c53 100644
-> >>>>>> --- a/mm/page_alloc.c
-> >>>>>> +++ b/mm/page_alloc.c
-> >>>>>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
-> >>>>>> 	if (self && !node_online(self->node_id)) {
-> >>>>>> 		build_zonelists(self);
-> >>>>>> 	} else {
-> >>>>>> -		for_each_online_node(nid) {
-> >>>>>> +		/*
-> >>>>>> +		 * All possible nodes have pgdat preallocated
-> >>>>>> +		 * free_area_init
-> >>>>>> +		 */
-> >>>>>> +		for_each_node(nid) {
-> >>>>>> 			pg_data_t *pgdat = NODE_DATA(nid);
-> >>>>>>
-> >>>>>> 			build_zonelists(pgdat);
-> >>>>>
-> >>>>> Will it blow up memory usage for the nodes which might never be onlined?
-> >>>>> I prefer the idea of init on demand.
-> >>>>>
-> >>>>> Even now there is an existing problem.
-> >>>>> In my experiments, I observed _huge_ memory consumption increase by increasing number
-> >>>>> of possible numa nodes. I’m going to report it in separate mail thread.
-> >>>>
-> >>>> I already raised that PPC might be problematic in that regard. Which
-> >>>> architecture / setup do you have in mind that can have a lot of possible
-> >>>> nodes?
-> >>>>
-> >>> It is x86_64 VMware VM, not the regular one, but specially configured (1 vCPU per node,
-> >>> with hot-plug support, 128 possible nodes)  
-> >>
-> >> I thought the pgdat would be smaller but I just gave it a test:
-> > 
-> > Yes, pgdat is quite large! Just embeded zones can eat a lot.
-> > 
-> >> On my system, pgdata_t is 173824 bytes. So 128 nodes would correspond to
-> >> 21 MiB, which is indeed a lot. I assume it's due to "struct zonelist",
-> >> which has MAX_ZONES_PER_ZONELIST == (MAX_NUMNODES * MAX_NR_ZONES) zone
-> >> references ...
-> > 
-> > This is what pahole tells me
-> > struct pglist_data {
-> >         struct zone                node_zones[4] __attribute__((__aligned__(64))); /*     0  5632 */
-> >         /* --- cacheline 88 boundary (5632 bytes) --- */
-> >         struct zonelist            node_zonelists[1];    /*  5632    80 */
-> > 	[...]
-> >         /* size: 6400, cachelines: 100, members: 27 */
-> >         /* sum members: 6369, holes: 5, sum holes: 31 */
-> > 
-> > with my particular config (which is !NUMA). I haven't really checked
-> > whether there are other places which might scale with MAX_NUM_NODES or
-> > something like that.
-> > 
-> > Anyway, is 21MB of wasted space for 128 Node machine something really
-> > note worthy?
-> > 
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+
+> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
+> open-coded arithmetic in allocator arguments.
 > 
-> I think we'll soon might see setups (again, CXL is an example, but als
-> owhen providing a dynamic amount of performance differentiated memory
-> via virtio-mem) where this will most probably matter. With performance
-> differentiated memory we'll see a lot more nodes getting used in
-> general, and a lot more nodes eventually getting hotplugged.
-
-There are certainly machines with many nodes. E.g. SLES kernels are
-build with CONFIG_NODES_SHIFT=10 which is a lot of potential nodes.
-And I have seen really large machines with many nodes but those usually
-come with a lot of memory and they do not tend to have non populated
-nodes AFAIR.
-
-> If 128 nodes is realistic, I cannot tell.
+> Note, that this 'bitmap_zalloc()' divides by BITS_PER_LONG the amount of
+> memory allocated.
+> The 'roundup()' used to computed the number of needed long should have
+> been a DIV_ROUND_UP.
 > 
-> We could optimize by allocating some members dynamically. For example
-> we'll never need MAX_NUMNODES entries, but only the number of possible
-> nodes.
+> 
+> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+> consistency.
+> 
+> Use 'bitmap_zero()' to avoid hand writing it.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Yes agreed. Scaling with MAX_NUMNODES is almost always wasteful.
+Patch applied to ath-next branch of ath.git, thanks.
+
+6273c97296a8 carl9170: Use the bitmap API when applicable
 
 -- 
-Michal Hocko
-SUSE Labs
+https://patchwork.kernel.org/project/linux-wireless/patch/1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

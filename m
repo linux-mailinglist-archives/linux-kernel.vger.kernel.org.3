@@ -2,131 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D770C46D65A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BED46D65C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbhLHPGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:06:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33911 "EHLO
+        id S233849AbhLHPHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:07:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35505 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229496AbhLHPGs (ORCPT
+        by vger.kernel.org with ESMTP id S233795AbhLHPHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:06:48 -0500
+        Wed, 8 Dec 2021 10:07:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638975796;
+        s=mimecast20190719; t=1638975829;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G0rnmLYR2bGbskKPMuNtMTb9vCsJDvOb8DdKbW9eR5k=;
-        b=SeBr/jT3Ni+2sg7dR7hZoZcGV0g4pMxeLzjrG+OwA3AhlupGzFqtWkYSwISV12fPLv6I69
-        IZ2NVbGBa5A2y6gazKk7NQVO70A25cP2lnC9DE4D13P2PWUbJ+PPIxtNxvNdGEa/O+eC6n
-        zT7G7WmHckJz9i3Nsojlib3isKbDUGI=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=R2jrd2Kf9So+x8Xz8AeO7h4+6EIMVdYK/e/smQ/H8MM=;
+        b=f6Aq8dbIU1Gh0qzz5/zABRu0zkITXm0KVFJ/0RD3i4DQTNZYNpM9SgArRGcKE40xXhQFI/
+        J9KxuNbY+Po0k23gfuE5FJJTPzxV47aPkFaSW+uymOgrxdQkSP8wXHryduB4sYddALsvpl
+        SuwBcaKYJP0+/oHVTOwS6HoaZmWmn30=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-599-61AxcQ-HP8av8kxN2UFFfw-1; Wed, 08 Dec 2021 10:03:14 -0500
-X-MC-Unique: 61AxcQ-HP8av8kxN2UFFfw-1
-Received: by mail-pg1-f199.google.com with SMTP id z4-20020a656104000000b00321790921fbso1458792pgu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:03:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G0rnmLYR2bGbskKPMuNtMTb9vCsJDvOb8DdKbW9eR5k=;
-        b=L6bXDoVnBxlA1HudZH7pUzil71M/2FguRy0qno7vHZY/WR2L2QaNoPr5dsoPlc+/19
-         VcaYC9jT/SYgOE4FcofCPxwhz5m766N8dsqyLeYt2leWhCiwpHbZZ0h1bSA7di4RKcMo
-         2cxyxwsvR57rcT0GfwGH8TTCfOyRC4MzQFvPpy+wbq7WSiCZq9PCIVNIRV3TR8TGeW+U
-         YGYFgN0AockOWlL+J9i723QtWP2gYlPRKyXLNP2uA9U+t9SWDNHtj75JYdVNbe6BdJCP
-         jwRVciVXZS1fKPBqinQNJqEmekfrngllUzzbBHTWwQR6XdTnKdkL00rVekpgrx361chn
-         30iQ==
-X-Gm-Message-State: AOAM533BMlXgCAgoNsWLho/NE9c/fdECEaMRKiLdxJKMGWpFSebrPgBL
-        x0Uq7459Y4ZjY5Xtd1Wsgmi/e4+OMHqROMgGm8r2JTdWZUrMw2AjYiDsUr367hmjn37NPrctc/q
-        MPKOgDCpFpJhRAxOqnTiHLy1I9lFA6OlW8rjQTiZV
-X-Received: by 2002:a17:90b:224f:: with SMTP id hk15mr8092431pjb.173.1638975793407;
-        Wed, 08 Dec 2021 07:03:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJywtfz1ltbCX4prsJ8HbqB9JwqPfaHTvYGKf+nVFZN2jXpJAsM7q+H1iNlV/lsatBP8IZ65BiteYAl2G/zyQQo=
-X-Received: by 2002:a17:90b:224f:: with SMTP id hk15mr8092399pjb.173.1638975793135;
- Wed, 08 Dec 2021 07:03:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20211201164301.44653-1-tero.kristo@linux.intel.com> <20211201164301.44653-2-tero.kristo@linux.intel.com>
-In-Reply-To: <20211201164301.44653-2-tero.kristo@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 8 Dec 2021 16:03:02 +0100
-Message-ID: <CAO-hwJLUA8ErS-s3mA351WH48ebXCYJ-s5xj-oVarqAz43DUkg@mail.gmail.com>
-Subject: Re: [RFCv3 1/7] HID: Add map_msc() to avoid boilerplate code
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
+ us-mta-589-cf0uzvLzM2eUCw3rji32Lg-1; Wed, 08 Dec 2021 10:03:45 -0500
+X-MC-Unique: cf0uzvLzM2eUCw3rji32Lg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E6647802C99;
+        Wed,  8 Dec 2021 15:03:42 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E4F019724;
+        Wed,  8 Dec 2021 15:03:38 +0000 (UTC)
+Message-ID: <f5b75c4d99c1f9e94ab9e639bc2fc8fddb9c7366.camel@redhat.com>
+Subject: Re: [PATCH v3 21/26] KVM: SVM: Drop AVIC's intermediate
+ avic_set_running() helper
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 17:03:37 +0200
+In-Reply-To: <e1c4ec6a-7c1e-b96c-63e6-d07b35820def@redhat.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+         <20211208015236.1616697-22-seanjc@google.com>
+         <e1c4ec6a-7c1e-b96c-63e6-d07b35820def@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->
-> From: Mika Westerberg <mika.westerberg@linux.intel.com>
->
-> Since we are going to have more MSC events too, add map_msc() that can
-> be used to fill in necessary fields and avoid boilerplate code.
->
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Wed, 2021-12-08 at 15:43 +0100, Paolo Bonzini wrote:
+> On 12/8/21 02:52, Sean Christopherson wrote:
+> > +	/*
+> > +	 * Unload the AVIC when the vCPU is about to block,_before_  the vCPU
+> > +	 * actually blocks.  The vCPU needs to be marked IsRunning=0 before the
+> > +	 * final pass over the vIRR via kvm_vcpu_check_block().  Any IRQs that
+> > +	 * arrive before IsRunning=0 will not signal the doorbell, i.e. it's
+> > +	 * KVM's responsibility to ensure there are no pending IRQs in the vIRR
+> > +	 * after IsRunning is cleared, prior to scheduling out the vCPU.
+> 
+> I prefer to phrase this around paired memory barriers and the usual 
+> store/smp_mb/load lockless idiom:
+> 
+> 	/*
+> 	 * Unload the AVIC when the vCPU is about to block, _before_
+> 	 * the vCPU actually blocks.
+> 	 *
+> 	 * Any IRQs that arrive before IsRunning=0 will not cause an
+> 	 * incomplete IPI vmexit on the source, therefore vIRR will also
+> 	 * be checked by kvm_vcpu_check_block() before blocking.  The
+> 	 * memory barrier implicit in set_current_state orders writing
 
-This one looks good to me and I should be able to take it in v5.17.
+If I understand correctly this is a full memory barrier and not only a write barrier?
 
-Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+ 
+Also, just to document, I also found out that lack of subsequent vIRR checking
+in the 'KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)'
+is what made AVIC totally unusable on my systems.
+That patch would set is_running right in the middle of schedule() and then
+no vIRR check would be done afterwards.
+ 
+Small update on my adventures with AVIC: On two Milan machines I got my hands on,
+on both AVIC is disabled in CPUID, but seems to work. None of my reproducers
+manage to hit that errata and on top of that I have set of patches that make
+AVIC co-exist with nesting and it appears to work while stress tested with
+my KVM unit test which I updated to run a nested guest on one of the vCPUs.
+I mostly testing the second machine though this week.
+ 
+I'll post my patches as soon as I rebase them on top of this patch series,
+after I review it.
+I’ll post the unit test soon too.
+ 
+Still my gut feeling is that the errata is still there - I am still waiting for
+AMD to provide any info they could on this.
 
-Cheers,
-Benjamin
 
-> ---
->  drivers/hid/hid-input.c | 6 ++----
->  include/linux/hid.h     | 4 ++++
->  2 files changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index 2c72ce4147b1..39ebedb2323b 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -52,6 +52,7 @@ static const struct {
->  #define map_rel(c)     hid_map_usage(hidinput, usage, &bit, &max, EV_REL, (c))
->  #define map_key(c)     hid_map_usage(hidinput, usage, &bit, &max, EV_KEY, (c))
->  #define map_led(c)     hid_map_usage(hidinput, usage, &bit, &max, EV_LED, (c))
-> +#define map_msc(c)     hid_map_usage(hidinput, usage, &bit, &max, EV_MSC, (c))
->
->  #define map_abs_clear(c)       hid_map_usage_clear(hidinput, usage, &bit, \
->                 &max, EV_ABS, (c))
-> @@ -872,10 +873,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
->
->                 case 0x5b: /* TransducerSerialNumber */
->                 case 0x6e: /* TransducerSerialNumber2 */
-> -                       usage->type = EV_MSC;
-> -                       usage->code = MSC_SERIAL;
-> -                       bit = input->mscbit;
-> -                       max = MSC_MAX;
-> +                       map_msc(MSC_SERIAL);
->                         break;
->
->                 default:  goto unknown;
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index e95800bab56a..96eaca0d5322 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -766,6 +766,10 @@ static inline void hid_map_usage(struct hid_input *hidinput,
->                 bmap = input->ledbit;
->                 limit = LED_MAX;
->                 break;
-> +       case EV_MSC:
-> +               bmap = input->mscbit;
-> +               limit = MSC_MAX;
-> +               break;
->         }
->
->         if (unlikely(c > limit || !bmap)) {
-> --
-> 2.25.1
->
+Best regards,
+	Maxim Levitsky
+
+
+> 	 * IsRunning=0 before reading the vIRR.  The processor needs a
+> 	 * matching memory barrier on interrupt delivery between writing
+> 	 * IRR and reading IsRunning; the lack of this barrier might be
+> 	 * the cause of errata #1235).
+> 	 */
+> 
+> Is there any nuance that I am missing?
+> 
+> Paolo
+> 
+> > +	 */
+> > +	avic_vcpu_put(vcpu);
+> > +
+
 

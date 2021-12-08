@@ -2,202 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC34A46D174
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF89D46D177
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 11:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbhLHLCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 06:02:15 -0500
-Received: from mga14.intel.com ([192.55.52.115]:64341 "EHLO mga14.intel.com"
+        id S231985AbhLHLCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 06:02:18 -0500
+Received: from mga06.intel.com ([134.134.136.31]:64146 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhLHLCO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:02:14 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="238034791"
+        id S229497AbhLHLCQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 06:02:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="298601199"
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="238034791"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:58:43 -0800
+   d="scan'208";a="298601199"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:58:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="564033161"
+   d="scan'208";a="679850490"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Dec 2021 02:58:40 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2021 02:58:40 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1muuem-0000RW-44; Wed, 08 Dec 2021 10:58:40 +0000
-Date:   Wed, 8 Dec 2021 18:58:29 +0800
+        id 1muuem-0000Rf-55; Wed, 08 Dec 2021 10:58:40 +0000
+Date:   Wed, 8 Dec 2021 18:58:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [dlemoal-libata:ata-msg 34/61] drivers/ata/sata_fsl.c:318:29:
- warning: format '%x' expects argument of type 'unsigned int', but argument 4
- has type 'void *'
-Message-ID: <202112081807.hUOrVSCI-lkp@intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] PCI/ASPM: Add ASPM BIOS override function
+Message-ID: <202112081821.vVNb7kbL-lkp@intel.com>
+References: <20211208002043.882200-1-david.e.box@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211208002043.882200-1-david.e.box@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git ata-msg
-head:   7d6ff0ace26c7e7f01d532d244de0b9811765f47
-commit: efab2a8f108886fa8d2d0108941bb1ccb36f8526 [34/61] sata_fsl: move DPRINTK to ata debugging
-config: powerpc-mpc837x_rdb_defconfig (https://download.01.org/0day-ci/archive/20211208/202112081807.hUOrVSCI-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
+Hi "David,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on v5.16-rc4]
+[also build test ERROR on next-20211207]
+[cannot apply to helgaas-pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/David-E-Box/PCI-ASPM-Add-ASPM-BIOS-override-function/20211208-082303
+base:    0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+config: arm64-randconfig-r022-20211207 (https://download.01.org/0day-ci/archive/20211208/202112081821.vVNb7kbL-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git/commit/?id=efab2a8f108886fa8d2d0108941bb1ccb36f8526
-        git remote add dlemoal-libata git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
-        git fetch --no-tags dlemoal-libata ata-msg
-        git checkout efab2a8f108886fa8d2d0108941bb1ccb36f8526
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/78c85417651fe465aafee7ef1841ab75619b165b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-E-Box/PCI-ASPM-Add-ASPM-BIOS-override-function/20211208-082303
+        git checkout 78c85417651fe465aafee7ef1841ab75619b165b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash ./ drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from include/linux/device.h:15,
-                    from include/linux/platform_device.h:13,
-                    from drivers/ata/sata_fsl.c:15:
-   drivers/ata/sata_fsl.c: In function 'fsl_sata_set_irq_coalescing':
-   drivers/ata/sata_fsl.c:316:17: error: passing argument 2 of '_dev_printk' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     316 |         dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
-         |                 ^~~~~~~~~~
-         |                 |
-         |                 struct device **
-   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                    ^~~
-   drivers/ata/sata_fsl.c:316:9: note: in expansion of macro 'dev_dbg'
-     316 |         dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
-         |         ^~~~~~~
-   include/linux/dev_printk.h:41:58: note: expected 'const struct device *' but argument is of type 'struct device **'
-      41 | void _dev_printk(const char *level, const struct device *dev,
-         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~
-   drivers/ata/sata_fsl.c:318:17: error: passing argument 2 of '_dev_printk' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-         |                 ^~~~~~~~~~
-         |                 |
-         |                 struct device **
-   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                    ^~~
-   drivers/ata/sata_fsl.c:318:9: note: in expansion of macro 'dev_dbg'
-     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-         |         ^~~~~~~
-   include/linux/dev_printk.h:41:58: note: expected 'const struct device *' but argument is of type 'struct device **'
-      41 | void _dev_printk(const char *level, const struct device *dev,
-         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~
->> drivers/ata/sata_fsl.c:318:29: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'void *' [-Wformat=]
-     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                         ^~~
-   include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-         |                                             ^~~~~~~
-   drivers/ata/sata_fsl.c:318:9: note: in expansion of macro 'dev_dbg'
-     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-         |         ^~~~~~~
-   drivers/ata/sata_fsl.c:318:65: note: format string is defined here
-     318 |         dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-         |                                                                ~^
-         |                                                                 |
-         |                                                                 unsigned int
-         |                                                                %p
-   In file included from include/linux/device.h:15,
-                    from include/linux/platform_device.h:13,
-                    from drivers/ata/sata_fsl.c:15:
-   drivers/ata/sata_fsl.c: In function 'sata_fsl_init_controller':
-   drivers/ata/sata_fsl.c:1361:22: error: 'ap' undeclared (first use in this function); did you mean 'up'?
-    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
-         |                      ^~
-   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                    ^~~
-   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
-    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
-         |         ^~~~~~~
-   drivers/ata/sata_fsl.c:1361:9: note: in expansion of macro 'ata_port_dbg'
-    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
-         |         ^~~~~~~~~~~~
-   drivers/ata/sata_fsl.c:1361:22: note: each undeclared identifier is reported only once for each function it appears in
-    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
-         |                      ^~
-   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                    ^~~
-   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
-    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
-         |         ^~~~~~~
-   drivers/ata/sata_fsl.c:1361:9: note: in expansion of macro 'ata_port_dbg'
-    1361 |         ata_port_dbg(ap, "icc = 0x%x\n", ioread32(hcr_base + ICC));
-         |         ^~~~~~~~~~~~
-   drivers/ata/sata_fsl.c: At top level:
-   drivers/ata/sata_fsl.c:1399:22: warning: initialized field overwritten [-Woverride-init]
-    1399 |         .can_queue = SATA_FSL_QUEUE_DEPTH,
-         |                      ^~~~~~~~~~~~~~~~~~~~
-   drivers/ata/sata_fsl.c:1399:22: note: (near initialization for 'sata_fsl_sht.can_queue')
-   In file included from include/linux/device.h:15,
-                    from include/linux/platform_device.h:13,
-                    from drivers/ata/sata_fsl.c:15:
-   drivers/ata/sata_fsl.c: In function 'sata_fsl_probe':
-   drivers/ata/sata_fsl.c:1470:22: error: 'ap' undeclared (first use in this function); did you mean 'up'?
-    1470 |         ata_port_dbg(ap, "@reset i/o = 0x%x\n", ioread32(csr_base + TRANSCFG));
-         |                      ^~
-   include/linux/dev_printk.h:129:36: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                    ^~~
-   include/linux/libata.h:1502:9: note: in expansion of macro 'dev_dbg'
-    1502 |         dev_dbg(&ap->tdev, "%s: " fmt, __func__, ##__VA_ARGS__)
-         |         ^~~~~~~
-   drivers/ata/sata_fsl.c:1470:9: note: in expansion of macro 'ata_port_dbg'
-    1470 |         ata_port_dbg(ap, "@reset i/o = 0x%x\n", ioread32(csr_base + TRANSCFG));
-         |         ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+   In file included from drivers/pci/controller/pci-aardvark.c:28:
+>> drivers/pci/controller/../pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
+--
+   In file included from drivers/pci/controller/dwc/pci-dra7xx.c:32:
+>> drivers/pci/controller/dwc/../../pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
+--
+   In file included from drivers/pci/pcie/portdrv_core.c:19:
+>> drivers/pci/pcie/../pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
+--
+   In file included from drivers/pci/hotplug/pci_hotplug_core.c:32:
+>> drivers/pci/hotplug/../pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
+--
+   In file included from drivers/xen/pci.c:18:
+>> drivers/xen/../pci/pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
+--
+   In file included from drivers/pci/controller/mobiveil/pcie-mobiveil.c:18:
+   In file included from drivers/pci/controller/mobiveil/pcie-mobiveil.h:18:
+>> drivers/pci/controller/mobiveil/../../pci.h:571:82: error: expected ';' after return statement
+   static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+                                                                                    ^
+                                                                                    ;
+   1 error generated.
 
 
-vim +318 drivers/ata/sata_fsl.c
+vim +571 drivers/pci/controller/../pci.h
 
-   290	
-   291	static void fsl_sata_set_irq_coalescing(struct ata_host *host,
-   292			unsigned int count, unsigned int ticks)
-   293	{
-   294		struct sata_fsl_host_priv *host_priv = host->private_data;
-   295		void __iomem *hcr_base = host_priv->hcr_base;
-   296		unsigned long flags;
-   297	
-   298		if (count > ICC_MAX_INT_COUNT_THRESHOLD)
-   299			count = ICC_MAX_INT_COUNT_THRESHOLD;
-   300		else if (count < ICC_MIN_INT_COUNT_THRESHOLD)
-   301			count = ICC_MIN_INT_COUNT_THRESHOLD;
-   302	
-   303		if (ticks > ICC_MAX_INT_TICKS_THRESHOLD)
-   304			ticks = ICC_MAX_INT_TICKS_THRESHOLD;
-   305		else if ((ICC_MIN_INT_TICKS_THRESHOLD == ticks) &&
-   306				(count > ICC_MIN_INT_COUNT_THRESHOLD))
-   307			ticks = ICC_SAFE_INT_TICKS;
-   308	
-   309		spin_lock_irqsave(&host->lock, flags);
-   310		iowrite32((count << 24 | ticks), hcr_base + ICC);
-   311	
-   312		intr_coalescing_count = count;
-   313		intr_coalescing_ticks = ticks;
-   314		spin_unlock_irqrestore(&host->lock, flags);
-   315	
-   316		dev_dbg(&host->dev, "interrupt coalescing, count = 0x%x, ticks = %x\n",
-   317				intr_coalescing_count, intr_coalescing_ticks);
- > 318		dev_dbg(&host->dev, "ICC register status: (hcr base: 0x%x) = 0x%x\n",
-   319				hcr_base, ioread32(hcr_base + ICC));
-   320	}
-   321	
+   553	
+   554	/* PCI error reporting and recovery */
+   555	pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+   556			pci_channel_state_t state,
+   557			pci_ers_result_t (*reset_subordinates)(struct pci_dev *pdev));
+   558	
+   559	bool pcie_wait_for_link(struct pci_dev *pdev, bool active);
+   560	#ifdef CONFIG_PCIEASPM
+   561	void pcie_aspm_init_link_state(struct pci_dev *pdev);
+   562	void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+   563	void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+   564	void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+   565	int pcie_aspm_policy_override(struct pci_dev *dev);
+   566	#else
+   567	static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+   568	static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+   569	static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+   570	static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+ > 571	static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL }
+   572	#endif
+   573	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

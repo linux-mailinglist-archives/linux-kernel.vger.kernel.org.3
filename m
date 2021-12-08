@@ -2,279 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE146D79C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF23446D7A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbhLHQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 11:02:14 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:46606 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236421AbhLHQCN (ORCPT
+        id S236481AbhLHQCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 11:02:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29926 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236421AbhLHQCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:02:13 -0500
-Received: by mail-oi1-f175.google.com with SMTP id s139so4600867oie.13;
-        Wed, 08 Dec 2021 07:58:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/gGEwJSwV5V5HUWjlwFroLh+L+wOwYAjWDVl9ra5rOQ=;
-        b=JsnPg54Vq+ktViN1ALvdZpzgKLLvsR+FjCD4AR3+KcEoPkJJF2iUCu0KAq2pRWq533
-         QxnAclwQTzcawF3EIRwZZjMEO+tOktIPkzDiMWBxRuxRBjizL9pKyzxyM6nSbpFlxM0W
-         IzsfeXSyG5oH0BF+AounjIbJvOvoG23becsN0FYhoKmg9adqkRLzJLxYgaxHe5Hr7oD+
-         DoV0bwTrr8sEZlT2ILNb8EG8E065aj9aSIRYwezXW8GDoJ9PUxccTOTDpxZvv68gfNtq
-         A9+oOpH0KI2yi4Q8zFPdI1Y0u4zjof2TdINzCbqSZfx2AjMrK97ZFu+tC/ZbRSoNvWNQ
-         sSXQ==
-X-Gm-Message-State: AOAM533S5dA4Hi97hG+RarYvSUs2666lIAQdfS8olKfuSNpA6ZJVNtpN
-        C91X9hd6OmM+6OmBIkbaBw==
-X-Google-Smtp-Source: ABdhPJz5vBtJ1bYq6RacODKIUZM7USD1CJnF5ba30SxRcxLSyMaLJ+OIXcU0C5A6DArIJKFKZhGphg==
-X-Received: by 2002:a54:468b:: with SMTP id k11mr180698oic.105.1638979121057;
-        Wed, 08 Dec 2021 07:58:41 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id bg38sm769688oib.40.2021.12.08.07.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 07:58:40 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call directly
-Date:   Wed,  8 Dec 2021 09:58:38 -0600
-Message-Id: <20211208155839.4084795-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 8 Dec 2021 11:02:47 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8FIEFi029115;
+        Wed, 8 Dec 2021 15:59:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=utmoP5Zpa8d3eUERjbx8XwiQbmqfm898++lg/HT7Kew=;
+ b=TdfbfSZRSgXF50Bz6HkpHPcFVmQYNpLcRZJwZtTYUlVfR9RMBNHv07Tcht8R0sj47+0z
+ Wvc/XmFfp+p1LuT3r6ZDN6/JPSt7Ni7UOCq+7QTsP7yYXHDYkB0TlhEyCHOPHtcCOQVm
+ EFlfP43lxsLTj7ipRD1MS9JjTRNTcOKwuC3Q5p7UVk3COhvzJcBB2O08VOb0PG7H6kME
+ t88Aoe6wiJD0pH9fqLzzXJk1bUK4tMNX7uWQmL4Yj+liEzrxyBkxncHlugVvozbE3ON6
+ 6yrQATYAfiX0Q8BUkVMsmeOjsYcduH3XMVqAETDkM1tEMGK6W+yovla0NT8EGhcy0qgI nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cty7vgue0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:59:15 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8FMDeU002381;
+        Wed, 8 Dec 2021 15:59:14 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cty7vgudh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:59:14 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Fwst5008055;
+        Wed, 8 Dec 2021 15:59:12 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cqykjhmm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:59:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8Fx9q620447604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Dec 2021 15:59:09 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5547311C04C;
+        Wed,  8 Dec 2021 15:59:09 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 243BE11C052;
+        Wed,  8 Dec 2021 15:59:08 +0000 (GMT)
+Received: from sig-9-145-190-99.de.ibm.com (unknown [9.145.190.99])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Dec 2021 15:59:08 +0000 (GMT)
+Message-ID: <a53b6402cefdef7645d1771a8b74782689b4e6dc.camel@linux.ibm.com>
+Subject: Re: [PATCH 07/32] s390/pci: externalize the SIC operation controls
+ and routine
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 16:59:07 +0100
+In-Reply-To: <eea46eb2-c14e-3bc1-d8e4-b6b28c677fe2@linux.ibm.com>
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+         <20211207205743.150299-8-mjrosato@linux.ibm.com>
+         <bc3b60f7-833d-6d50-dcd0-b102a190c69d@linux.ibm.com>
+         <614215b5aa14102c7b43913b234463199401a156.camel@linux.ibm.com>
+         <eea46eb2-c14e-3bc1-d8e4-b6b28c677fe2@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XdoR5-4K30KyLf2GYD1vPHJYCFPi9PnH
+X-Proofpoint-ORIG-GUID: grLgBOgNd9kumXGOwJYkmEy4JW75ZH9M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_06,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ bulkscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0
+ malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112080095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-as libfdt provides a nicer set of APIs. Rework
-early_init_dt_scan_memory() to be called directly and use libfdt.
+On Wed, 2021-12-08 at 10:33 -0500, Matthew Rosato wrote:
+> On 12/8/21 8:53 AM, Niklas Schnelle wrote:
+> > On Wed, 2021-12-08 at 14:09 +0100, Christian Borntraeger wrote:
+> > > Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> > > > A subsequent patch will be issuing SIC from KVM -- export the necessary
+> > > > routine and make the operation control definitions available from a header.
+> > > > Because the routine will now be exported, let's swap the purpose of
+> > > > zpci_set_irq_ctrl and __zpci_set_irq_ctrl, leaving the latter as a static
+> > > > within pci_irq.c only for SIC calls that don't specify an iib.
+> > > 
+> > > Maybe it would be simpler to export the __ version instead of renaming everything.
+> > > Whatever Niklas prefers.
+> > 
+> > See below I think it's just not worth it having both variants at all.
+> > 
+> > > > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> > > > ---
+> > > >    arch/s390/include/asm/pci_insn.h | 17 +++++++++--------
+> > > >    arch/s390/pci/pci_insn.c         |  3 ++-
+> > > >    arch/s390/pci/pci_irq.c          | 28 ++++++++++++++--------------
+> > > >    3 files changed, 25 insertions(+), 23 deletions(-)
+> > > > 
+> > > > diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
+> > > > index 61cf9531f68f..5331082fa516 100644
+> > > > --- a/arch/s390/include/asm/pci_insn.h
+> > > > +++ b/arch/s390/include/asm/pci_insn.h
+> > > > @@ -98,6 +98,14 @@ struct zpci_fib {
+> > > >    	u32 gd;
+> > > >    } __packed __aligned(8);
+> > > >    
+> > > > +/* Set Interruption Controls Operation Controls  */
+> > > > +#define	SIC_IRQ_MODE_ALL		0
+> > > > +#define	SIC_IRQ_MODE_SINGLE		1
+> > > > +#define	SIC_IRQ_MODE_DIRECT		4
+> > > > +#define	SIC_IRQ_MODE_D_ALL		16
+> > > > +#define	SIC_IRQ_MODE_D_SINGLE		17
+> > > > +#define	SIC_IRQ_MODE_SET_CPU		18
+> > > > +
+> > > >    /* directed interruption information block */
+> > > >    struct zpci_diib {
+> > > >    	u32 : 1;
+> > > > @@ -134,13 +142,6 @@ int __zpci_store(u64 data, u64 req, u64 offset);
+> > > >    int zpci_store(const volatile void __iomem *addr, u64 data, unsigned long len);
+> > > >    int __zpci_store_block(const u64 *data, u64 req, u64 offset);
+> > > >    void zpci_barrier(void);
+> > > > -int __zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+> > > > -
+> > > > -static inline int zpci_set_irq_ctrl(u16 ctl, u8 isc)
+> > > > -{
+> > > > -	union zpci_sic_iib iib = {{0}};
+> > > > -
+> > > > -	return __zpci_set_irq_ctrl(ctl, isc, &iib);
+> > > > -}
+> > > > +int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib);
+> > 
+> > Since the __zpci_set_irq_ctrl() was already non static/inline the above
+> > inline to non-inline change shouldn't make a performance difference.
+> > 
+> > Looking at this makes me wonder though. Wouldn't it make sense to just
+> > have the zpci_set_irq_ctrl() function inline in the header. Its body is
+> > a single instruction inline asm plus a test_facility(). The latter by
+> > the way I think also looks rather out of place there considering we
+> > call zpci_set_irq_ctrl() in the interrupt handler and facilities can't
+> > go away so it's pretty silly to check for it on every single
+> > interrupt.. unless I'm totally missing something.
+> 
+> This test_facility isn't new to this patch
 
-Cc: John Crispin <john@phrozen.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - ralink: Use 'if' instead of 'else if'
- - early_init_dt_scan_memory: continue instead of return on no reg
- - Fix indentation
----
- arch/mips/ralink/of.c      | 19 +++--------
- arch/powerpc/kernel/prom.c | 16 ++++-----
- drivers/of/fdt.c           | 68 ++++++++++++++++++++------------------
- include/linux/of_fdt.h     |  3 +-
- 4 files changed, 49 insertions(+), 57 deletions(-)
+Yeah I got that part, your patch just made me look.
 
-diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
-index 0135376c5de5..35a87a2da10b 100644
---- a/arch/mips/ralink/of.c
-+++ b/arch/mips/ralink/of.c
-@@ -53,17 +53,6 @@ void __init device_tree_init(void)
- 	unflatten_and_copy_device_tree();
- }
- 
--static int memory_dtb;
--
--static int __init early_init_dt_find_memory(unsigned long node,
--				const char *uname, int depth, void *data)
--{
--	if (depth == 1 && !strcmp(uname, "memory@0"))
--		memory_dtb = 1;
--
--	return 0;
--}
--
- void __init plat_mem_setup(void)
- {
- 	void *dtb;
-@@ -77,10 +66,10 @@ void __init plat_mem_setup(void)
- 	dtb = get_fdt();
- 	__dt_setup_arch(dtb);
- 
--	of_scan_flat_dt(early_init_dt_find_memory, NULL);
--	if (memory_dtb)
--		of_scan_flat_dt(early_init_dt_scan_memory, NULL);
--	else if (soc_info.mem_detect)
-+	if (!early_init_dt_scan_memory())
-+		return;
-+
-+	if (soc_info.mem_detect)
- 		soc_info.mem_detect();
- 	else if (soc_info.mem_size)
- 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
-diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-index 6e1a106f02eb..63762a3b75e8 100644
---- a/arch/powerpc/kernel/prom.c
-+++ b/arch/powerpc/kernel/prom.c
-@@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
- }
- #endif /* CONFIG_PPC_PSERIES */
- 
--static int __init early_init_dt_scan_memory_ppc(unsigned long node,
--						const char *uname,
--						int depth, void *data)
-+static int __init early_init_dt_scan_memory_ppc(void)
- {
- #ifdef CONFIG_PPC_PSERIES
--	if (depth == 1 &&
--	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
-+	const void *fdt = initial_boot_params;
-+	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
-+
-+	if (node > 0) {
- 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
- 		return 0;
- 	}
- #endif
- 	
--	return early_init_dt_scan_memory(node, uname, depth, data);
-+	return early_init_dt_scan_memory();
- }
- 
- /*
-@@ -749,7 +749,7 @@ void __init early_init_devtree(void *params)
- 
- 	/* Scan memory nodes and rebuild MEMBLOCKs */
- 	early_init_dt_scan_root();
--	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-+	early_init_dt_scan_memory_ppc();
- 
- 	parse_early_param();
- 
-@@ -858,7 +858,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
- 	 */
- 	add_mem_to_memblock = 0;
- 	early_init_dt_scan_root();
--	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-+	early_init_dt_scan_memory_ppc();
- 	add_mem_to_memblock = 1;
- 
- 	if (size)
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 5e216555fe4f..a835c458f50a 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1078,49 +1078,53 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
- /*
-  * early_init_dt_scan_memory - Look for and parse memory nodes
-  */
--int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
--				     int depth, void *data)
-+int __init early_init_dt_scan_memory(void)
- {
--	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
--	const __be32 *reg, *endp;
--	int l;
--	bool hotpluggable;
-+	int node;
-+	const void *fdt = initial_boot_params;
- 
--	/* We are scanning "memory" nodes only */
--	if (type == NULL || strcmp(type, "memory") != 0)
--		return 0;
-+	fdt_for_each_subnode(node, fdt, 0) {
-+		const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
-+		const __be32 *reg, *endp;
-+		int l;
-+		bool hotpluggable;
- 
--	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
--	if (reg == NULL)
--		reg = of_get_flat_dt_prop(node, "reg", &l);
--	if (reg == NULL)
--		return 0;
-+		/* We are scanning "memory" nodes only */
-+		if (type == NULL || strcmp(type, "memory") != 0)
-+			continue;
- 
--	endp = reg + (l / sizeof(__be32));
--	hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
-+		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
-+		if (reg == NULL)
-+			reg = of_get_flat_dt_prop(node, "reg", &l);
-+		if (reg == NULL)
-+			continue;
- 
--	pr_debug("memory scan node %s, reg size %d,\n", uname, l);
-+		endp = reg + (l / sizeof(__be32));
-+		hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
- 
--	while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
--		u64 base, size;
-+		pr_debug("memory scan node %s, reg size %d,\n",
-+			 fdt_get_name(fdt, node, NULL), l);
- 
--		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
--		size = dt_mem_next_cell(dt_root_size_cells, &reg);
-+		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
-+			u64 base, size;
- 
--		if (size == 0)
--			continue;
--		pr_debug(" - %llx, %llx\n", base, size);
-+			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
-+			size = dt_mem_next_cell(dt_root_size_cells, &reg);
- 
--		early_init_dt_add_memory_arch(base, size);
-+			if (size == 0)
-+				continue;
-+			pr_debug(" - %llx, %llx\n", base, size);
- 
--		if (!hotpluggable)
--			continue;
-+			early_init_dt_add_memory_arch(base, size);
- 
--		if (memblock_mark_hotplug(base, size))
--			pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
--				base, base + size);
--	}
-+			if (!hotpluggable)
-+				continue;
- 
-+			if (memblock_mark_hotplug(base, size))
-+				pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
-+					base, base + size);
-+		}
-+	}
- 	return 0;
- }
- 
-@@ -1271,7 +1275,7 @@ void __init early_init_dt_scan_nodes(void)
- 		pr_warn("No chosen node found, continuing without\n");
- 
- 	/* Setup memory, calling early_init_dt_add_memory_arch */
--	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
-+	early_init_dt_scan_memory();
- 
- 	/* Handle linux,usable-memory-range property */
- 	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-index df3d31926c3c..914739f3c192 100644
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@ -59,8 +59,7 @@ extern unsigned long of_get_flat_dt_root(void);
- extern uint32_t of_get_flat_dt_phandle(unsigned long node);
- 
- extern int early_init_dt_scan_chosen(char *cmdline);
--extern int early_init_dt_scan_memory(unsigned long node, const char *uname,
--				     int depth, void *data);
-+extern int early_init_dt_scan_memory(void);
- extern int early_init_dt_scan_chosen_stdout(void);
- extern void early_init_fdt_scan_reserved_mem(void);
- extern void early_init_fdt_reserve_self(void);
--- 
-2.32.0
+> , it was added via
+> 
+> commit 48070c73058be6de9c0d754d441ed7092dfc8f12
+> Author: Christian Borntraeger <borntraeger@de.ibm.com>
+> Date:   Mon Oct 30 14:38:58 2017 +0100
+> 
+>      s390/pci: do not require AIS facility
+> 
+> It looks like in the past, we would not even initialize zpci at all if 
+> AIS wasn't available.  With this, we initialize PCI but only do the SIC 
+> when we have AIS, which makes sense.
+
+Ah yes I guess that is the something I was missing. I was wondering why
+that wasn't just tested for during init.
+
+> 
+> So for this patch, the sane thing to do is probably just keep the 
+> test_facility() in place and move to header, inline.
+
+Yes sounds good.
+
+> 
+> Maybe there's a subsequent optimization to be made (setup a static key 
+> like have_mio vs doing test_facility all the time?)
+
+Yeah, looking again more closely at test_facilities() it's probably not
+that expensive either I'll do some tests. Maybe we can also just add a
+comment and a normal unlikely() macro since with this series KVM would
+also support AIS, correct?
+
+> 
+
+---8<---
 

@@ -2,227 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FEA46CBD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD3F46CBCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 04:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239645AbhLHEHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:07:02 -0500
-Received: from mga07.intel.com ([134.134.136.100]:35553 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232169AbhLHEG6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:06:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="301133475"
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="301133475"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 20:03:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
-   d="scan'208";a="479766881"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2021 20:03:24 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muoAt-000NNt-UE; Wed, 08 Dec 2021 04:03:23 +0000
-Date:   Wed, 08 Dec 2021 12:02:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 9b58e976b3b391c0cf02e038d53dd0478ed3013c
-Message-ID: <61b02e58./Ih8Ek70tvwJ6Kqf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232748AbhLHEBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:01:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42798 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229556AbhLHEBP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 23:01:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B827EB81F5A;
+        Wed,  8 Dec 2021 03:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E44EC00446;
+        Wed,  8 Dec 2021 03:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638935861;
+        bh=FtjpWZPJVoluMWs2mk5gq8BR40ZCBd76O6gXfop4EcA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iyPzdfvs9bnulUL4iH6H0goZDGQLG42pCkWpK0Diq9uRrbkxklaBjxH3Nv7O6jC9j
+         6cUFDI8DrR7nW2/DhI3N4CtUeS3Xhi3QNnae64vxBlDoPNbbZtl6PjbVRSEh3v3hUT
+         x2pRvTB5m0xoz5zaQgH9EG+UQuYPGYBwDZt27iQ8AXs7IVf4g/C/if/L/MSnWM27Um
+         Xehj1tgS9cGVgzjg2t1sE0S/QaVttyu3dVOj8L0tKncFMZYDXiR6SOJUzuYIoW0RXY
+         mzX1ks+EghL5C8i5d8RZQwE99nHCqpgHvo5d7qIFemOxpbSRu3pLbcYiuWfBidFcQg
+         YnBOzPUoFyqUg==
+Date:   Tue, 7 Dec 2021 22:03:11 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] net: huawei: hinic: Use devm_kcalloc() instead of
+ devm_kzalloc()
+Message-ID: <20211208040311.GA169838@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 9b58e976b3b391c0cf02e038d53dd0478ed3013c  sched/rt: Try to restart rt period timer when rt runtime exceeded
+Use 2-factor multiplication argument form devm_kcalloc() instead
+of devm_kzalloc().
 
-elapsed time: 736m
-
-configs tested: 167
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211207
-m68k                             alldefconfig
-csky                                defconfig
-arc                           tb10x_defconfig
-arm                           tegra_defconfig
-powerpc                 mpc837x_rdb_defconfig
-h8300                            allyesconfig
-h8300                     edosk2674_defconfig
-mips                           rs90_defconfig
-mips                      maltasmvp_defconfig
-mips                         tb0287_defconfig
-sh                                  defconfig
-powerpc                    mvme5100_defconfig
-sh                            shmin_defconfig
-mips                        bcm63xx_defconfig
-sh                           se7705_defconfig
-mips                           xway_defconfig
-powerpc                      cm5200_defconfig
-sparc64                             defconfig
-powerpc                         wii_defconfig
-sh                   sh7724_generic_defconfig
-mips                      pic32mzda_defconfig
-powerpc64                        alldefconfig
-powerpc                     kilauea_defconfig
-powerpc                   motionpro_defconfig
-parisc                           alldefconfig
-arm                           h3600_defconfig
-mips                      loongson3_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                           ip22_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc8313_rdb_defconfig
-arm                           omap1_defconfig
-powerpc                       holly_defconfig
-arm                      pxa255-idp_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                        workpad_defconfig
-sh                             espt_defconfig
-arm                      footbridge_defconfig
-powerpc                      acadia_defconfig
-sh                     sh7710voipgw_defconfig
-sh                           se7721_defconfig
-arm                        mvebu_v7_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                         ecovec24_defconfig
-arm                         orion5x_defconfig
-sh                           se7780_defconfig
-i386                             allyesconfig
-mips                         db1xxx_defconfig
-sh                          sdk7786_defconfig
-arc                            hsdk_defconfig
-powerpc                      katmai_defconfig
-s390                                defconfig
-powerpc                      tqm8xx_defconfig
-parisc                generic-64bit_defconfig
-sparc64                          alldefconfig
-arm                         mv78xx0_defconfig
-mips                          ath79_defconfig
-arm                          pcm027_defconfig
-m68k                          sun3x_defconfig
-m68k                        m5272c3_defconfig
-powerpc                     powernv_defconfig
-arc                      axs103_smp_defconfig
-mips                     cu1000-neo_defconfig
-arm                        cerfcube_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                     ppa8548_defconfig
-m68k                            q40_defconfig
-nds32                             allnoconfig
-powerpc                     tqm8548_defconfig
-sh                        sh7757lcr_defconfig
-nios2                            allyesconfig
-sh                 kfr2r09-romimage_defconfig
-arm                         at91_dt_defconfig
-sparc                               defconfig
-mips                       rbtx49xx_defconfig
-xtensa                  nommu_kc705_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      walnut_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                  randconfig-c002-20211207
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211207
-x86_64               randconfig-a005-20211207
-x86_64               randconfig-a001-20211207
-x86_64               randconfig-a002-20211207
-x86_64               randconfig-a004-20211207
-x86_64               randconfig-a003-20211207
-i386                 randconfig-a001-20211207
-i386                 randconfig-a005-20211207
-i386                 randconfig-a002-20211207
-i386                 randconfig-a003-20211207
-i386                 randconfig-a006-20211207
-i386                 randconfig-a004-20211207
-x86_64               randconfig-a016-20211208
-x86_64               randconfig-a011-20211208
-x86_64               randconfig-a013-20211208
-x86_64               randconfig-a012-20211208
-x86_64               randconfig-a015-20211208
-x86_64               randconfig-a014-20211208
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c007-20211207
-arm                  randconfig-c002-20211207
-riscv                randconfig-c006-20211207
-mips                 randconfig-c004-20211207
-i386                 randconfig-c001-20211207
-powerpc              randconfig-c003-20211207
-s390                 randconfig-c005-20211207
-x86_64               randconfig-a016-20211207
-x86_64               randconfig-a011-20211207
-x86_64               randconfig-a013-20211207
-x86_64               randconfig-a014-20211207
-x86_64               randconfig-a015-20211207
-x86_64               randconfig-a012-20211207
-i386                 randconfig-a016-20211207
-i386                 randconfig-a013-20211207
-i386                 randconfig-a011-20211207
-i386                 randconfig-a014-20211207
-i386                 randconfig-a012-20211207
-i386                 randconfig-a015-20211207
-hexagon              randconfig-r045-20211207
-s390                 randconfig-r044-20211207
-riscv                randconfig-r042-20211207
-hexagon              randconfig-r041-20211207
-
+Link: https://github.com/KSPP/linux/issues/162
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../ethernet/huawei/hinic/hinic_hw_api_cmd.c  |  5 ++--
+ .../net/ethernet/huawei/hinic/hinic_hw_cmdq.c | 10 ++++----
+ .../net/ethernet/huawei/hinic/hinic_hw_dev.c  |  5 ++--
+ .../net/ethernet/huawei/hinic/hinic_hw_eqs.c  |  9 ++++----
+ .../net/ethernet/huawei/hinic/hinic_hw_wq.c   | 23 +++++++++----------
+ .../net/ethernet/huawei/hinic/hinic_main.c    | 10 ++++----
+ drivers/net/ethernet/huawei/hinic/hinic_tx.c  |  9 ++++----
+ 7 files changed, 31 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
+index 06586173add7..998717f02136 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_api_cmd.c
+@@ -814,7 +814,6 @@ static int api_chain_init(struct hinic_api_cmd_chain *chain,
+ {
+ 	struct hinic_hwif *hwif = attr->hwif;
+ 	struct pci_dev *pdev = hwif->pdev;
+-	size_t cell_ctxt_size;
+ 
+ 	chain->hwif = hwif;
+ 	chain->chain_type  = attr->chain_type;
+@@ -826,8 +825,8 @@ static int api_chain_init(struct hinic_api_cmd_chain *chain,
+ 
+ 	sema_init(&chain->sem, 1);
+ 
+-	cell_ctxt_size = chain->num_cells * sizeof(*chain->cell_ctxt);
+-	chain->cell_ctxt = devm_kzalloc(&pdev->dev, cell_ctxt_size, GFP_KERNEL);
++	chain->cell_ctxt = devm_kcalloc(&pdev->dev, chain->num_cells,
++					sizeof(*chain->cell_ctxt), GFP_KERNEL);
+ 	if (!chain->cell_ctxt)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
+index 307a6d4af993..a627237f694b 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
+@@ -796,11 +796,10 @@ static int init_cmdqs_ctxt(struct hinic_hwdev *hwdev,
+ 	struct hinic_cmdq_ctxt *cmdq_ctxts;
+ 	struct pci_dev *pdev = hwif->pdev;
+ 	struct hinic_pfhwdev *pfhwdev;
+-	size_t cmdq_ctxts_size;
+ 	int err;
+ 
+-	cmdq_ctxts_size = HINIC_MAX_CMDQ_TYPES * sizeof(*cmdq_ctxts);
+-	cmdq_ctxts = devm_kzalloc(&pdev->dev, cmdq_ctxts_size, GFP_KERNEL);
++	cmdq_ctxts = devm_kcalloc(&pdev->dev, HINIC_MAX_CMDQ_TYPES,
++				  sizeof(*cmdq_ctxts), GFP_KERNEL);
+ 	if (!cmdq_ctxts)
+ 		return -ENOMEM;
+ 
+@@ -884,7 +883,6 @@ int hinic_init_cmdqs(struct hinic_cmdqs *cmdqs, struct hinic_hwif *hwif,
+ 	struct hinic_func_to_io *func_to_io = cmdqs_to_func_to_io(cmdqs);
+ 	struct pci_dev *pdev = hwif->pdev;
+ 	struct hinic_hwdev *hwdev;
+-	size_t saved_wqs_size;
+ 	u16 max_wqe_size;
+ 	int err;
+ 
+@@ -895,8 +893,8 @@ int hinic_init_cmdqs(struct hinic_cmdqs *cmdqs, struct hinic_hwif *hwif,
+ 	if (!cmdqs->cmdq_buf_pool)
+ 		return -ENOMEM;
+ 
+-	saved_wqs_size = HINIC_MAX_CMDQ_TYPES * sizeof(struct hinic_wq);
+-	cmdqs->saved_wqs = devm_kzalloc(&pdev->dev, saved_wqs_size, GFP_KERNEL);
++	cmdqs->saved_wqs = devm_kcalloc(&pdev->dev, HINIC_MAX_CMDQ_TYPES,
++					sizeof(*cmdqs->saved_wqs), GFP_KERNEL);
+ 	if (!cmdqs->saved_wqs) {
+ 		err = -ENOMEM;
+ 		goto err_saved_wqs;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
+index 657a15447bd0..2127a48749a8 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
+@@ -162,7 +162,6 @@ static int init_msix(struct hinic_hwdev *hwdev)
+ 	struct hinic_hwif *hwif = hwdev->hwif;
+ 	struct pci_dev *pdev = hwif->pdev;
+ 	int nr_irqs, num_aeqs, num_ceqs;
+-	size_t msix_entries_size;
+ 	int i, err;
+ 
+ 	num_aeqs = HINIC_HWIF_NUM_AEQS(hwif);
+@@ -171,8 +170,8 @@ static int init_msix(struct hinic_hwdev *hwdev)
+ 	if (nr_irqs > HINIC_HWIF_NUM_IRQS(hwif))
+ 		nr_irqs = HINIC_HWIF_NUM_IRQS(hwif);
+ 
+-	msix_entries_size = nr_irqs * sizeof(*hwdev->msix_entries);
+-	hwdev->msix_entries = devm_kzalloc(&pdev->dev, msix_entries_size,
++	hwdev->msix_entries = devm_kcalloc(&pdev->dev, nr_irqs,
++					   sizeof(*hwdev->msix_entries),
+ 					   GFP_KERNEL);
+ 	if (!hwdev->msix_entries)
+ 		return -ENOMEM;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
+index d3fc05a07fdb..045c47786a04 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_eqs.c
+@@ -631,16 +631,15 @@ static int alloc_eq_pages(struct hinic_eq *eq)
+ 	struct hinic_hwif *hwif = eq->hwif;
+ 	struct pci_dev *pdev = hwif->pdev;
+ 	u32 init_val, addr, val;
+-	size_t addr_size;
+ 	int err, pg;
+ 
+-	addr_size = eq->num_pages * sizeof(*eq->dma_addr);
+-	eq->dma_addr = devm_kzalloc(&pdev->dev, addr_size, GFP_KERNEL);
++	eq->dma_addr = devm_kcalloc(&pdev->dev, eq->num_pages,
++				    sizeof(*eq->dma_addr), GFP_KERNEL);
+ 	if (!eq->dma_addr)
+ 		return -ENOMEM;
+ 
+-	addr_size = eq->num_pages * sizeof(*eq->virt_addr);
+-	eq->virt_addr = devm_kzalloc(&pdev->dev, addr_size, GFP_KERNEL);
++	eq->virt_addr = devm_kcalloc(&pdev->dev, eq->num_pages,
++				     sizeof(*eq->virt_addr), GFP_KERNEL);
+ 	if (!eq->virt_addr) {
+ 		err = -ENOMEM;
+ 		goto err_virt_addr_alloc;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
+index 7f0f1aa3cedd..2d9b06d7caad 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
+@@ -193,20 +193,20 @@ static int alloc_page_arrays(struct hinic_wqs *wqs)
+ {
+ 	struct hinic_hwif *hwif = wqs->hwif;
+ 	struct pci_dev *pdev = hwif->pdev;
+-	size_t size;
+ 
+-	size = wqs->num_pages * sizeof(*wqs->page_paddr);
+-	wqs->page_paddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
++	wqs->page_paddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
++				       sizeof(*wqs->page_paddr), GFP_KERNEL);
+ 	if (!wqs->page_paddr)
+ 		return -ENOMEM;
+ 
+-	size = wqs->num_pages * sizeof(*wqs->page_vaddr);
+-	wqs->page_vaddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
++	wqs->page_vaddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
++				       sizeof(*wqs->page_vaddr), GFP_KERNEL);
+ 	if (!wqs->page_vaddr)
+ 		goto err_page_vaddr;
+ 
+-	size = wqs->num_pages * sizeof(*wqs->shadow_page_vaddr);
+-	wqs->shadow_page_vaddr = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
++	wqs->shadow_page_vaddr = devm_kcalloc(&pdev->dev, wqs->num_pages,
++					      sizeof(*wqs->shadow_page_vaddr),
++					      GFP_KERNEL);
+ 	if (!wqs->shadow_page_vaddr)
+ 		goto err_page_shadow_vaddr;
+ 
+@@ -379,15 +379,14 @@ static int alloc_wqes_shadow(struct hinic_wq *wq)
+ {
+ 	struct hinic_hwif *hwif = wq->hwif;
+ 	struct pci_dev *pdev = hwif->pdev;
+-	size_t size;
+ 
+-	size = wq->num_q_pages * wq->max_wqe_size;
+-	wq->shadow_wqe = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
++	wq->shadow_wqe = devm_kcalloc(&pdev->dev, wq->num_q_pages,
++				      wq->max_wqe_size, GFP_KERNEL);
+ 	if (!wq->shadow_wqe)
+ 		return -ENOMEM;
+ 
+-	size = wq->num_q_pages * sizeof(wq->prod_idx);
+-	wq->shadow_idx = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
++	wq->shadow_idx = devm_kcalloc(&pdev->dev, wq->num_q_pages,
++				      sizeof(wq->prod_idx), GFP_KERNEL);
+ 	if (!wq->shadow_idx)
+ 		goto err_shadow_idx;
+ 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index f9a766b8ac43..1e1b1be86174 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -144,13 +144,12 @@ static int create_txqs(struct hinic_dev *nic_dev)
+ {
+ 	int err, i, j, num_txqs = hinic_hwdev_num_qps(nic_dev->hwdev);
+ 	struct net_device *netdev = nic_dev->netdev;
+-	size_t txq_size;
+ 
+ 	if (nic_dev->txqs)
+ 		return -EINVAL;
+ 
+-	txq_size = num_txqs * sizeof(*nic_dev->txqs);
+-	nic_dev->txqs = devm_kzalloc(&netdev->dev, txq_size, GFP_KERNEL);
++	nic_dev->txqs = devm_kcalloc(&netdev->dev, num_txqs,
++				     sizeof(*nic_dev->txqs), GFP_KERNEL);
+ 	if (!nic_dev->txqs)
+ 		return -ENOMEM;
+ 
+@@ -241,13 +240,12 @@ static int create_rxqs(struct hinic_dev *nic_dev)
+ {
+ 	int err, i, j, num_rxqs = hinic_hwdev_num_qps(nic_dev->hwdev);
+ 	struct net_device *netdev = nic_dev->netdev;
+-	size_t rxq_size;
+ 
+ 	if (nic_dev->rxqs)
+ 		return -EINVAL;
+ 
+-	rxq_size = num_rxqs * sizeof(*nic_dev->rxqs);
+-	nic_dev->rxqs = devm_kzalloc(&netdev->dev, rxq_size, GFP_KERNEL);
++	nic_dev->rxqs = devm_kcalloc(&netdev->dev, num_rxqs,
++				     sizeof(*nic_dev->rxqs), GFP_KERNEL);
+ 	if (!nic_dev->rxqs)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_tx.c b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
+index c5bdb0d374ef..a984a7a6dd2e 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
+@@ -862,7 +862,6 @@ int hinic_init_txq(struct hinic_txq *txq, struct hinic_sq *sq,
+ 	struct hinic_dev *nic_dev = netdev_priv(netdev);
+ 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
+ 	int err, irqname_len;
+-	size_t sges_size;
+ 
+ 	txq->netdev = netdev;
+ 	txq->sq = sq;
+@@ -871,13 +870,13 @@ int hinic_init_txq(struct hinic_txq *txq, struct hinic_sq *sq,
+ 
+ 	txq->max_sges = HINIC_MAX_SQ_BUFDESCS;
+ 
+-	sges_size = txq->max_sges * sizeof(*txq->sges);
+-	txq->sges = devm_kzalloc(&netdev->dev, sges_size, GFP_KERNEL);
++	txq->sges = devm_kcalloc(&netdev->dev, txq->max_sges,
++				 sizeof(*txq->sges), GFP_KERNEL);
+ 	if (!txq->sges)
+ 		return -ENOMEM;
+ 
+-	sges_size = txq->max_sges * sizeof(*txq->free_sges);
+-	txq->free_sges = devm_kzalloc(&netdev->dev, sges_size, GFP_KERNEL);
++	txq->free_sges = devm_kcalloc(&netdev->dev, txq->max_sges,
++				      sizeof(*txq->free_sges), GFP_KERNEL);
+ 	if (!txq->free_sges) {
+ 		err = -ENOMEM;
+ 		goto err_alloc_free_sges;
+-- 
+2.27.0
+

@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A012C46CF9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4B446CFA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbhLHJC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbhLHJCy (ORCPT
+        id S230128AbhLHJFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:05:17 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47216 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229648AbhLHJFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:02:54 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F25C0617A1;
-        Wed,  8 Dec 2021 00:59:21 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id y8so1129751plg.1;
-        Wed, 08 Dec 2021 00:59:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3rKzjENNvAvq/epFlb0+479WQyvQ4+o/61h3HZ+3R9s=;
-        b=EG1iybwtQUPhwcFP1tTo7TaWi/COvGXEZtWpjfXDWq8Q6zC/4y7YHUVKVrT7m95+1a
-         Bw291CSUa2CYaQ+v46GR6ALBPxjkssBVQre11ddk4otRfd2V+E+t3hXSo2XvceOC+7aZ
-         LAbS5pUv/QI0gmIkxKc6CSDnz1Yd6RzuU7zBs0bsU8zpo7FBhvMvjV7SyKSstmMqY13t
-         ZYOqpS62PSKMK2rNuGNILcrTSDLA1IGwqu3YjvChLs3LLnhVsqfk4E5cCrxL0jdvxvni
-         fS4OQwAGjNLJoA7xLp1OiT4TvVYWALjKNraDgHFkPSKwi+EAZxeMOZ3QQC4qWhJLc3Ud
-         +TmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3rKzjENNvAvq/epFlb0+479WQyvQ4+o/61h3HZ+3R9s=;
-        b=AXuThxPuA5+iEVIno5XW+jdwVfFd9sYXK1j5f1OZZz+XLEAfp1aC+NjyBjq915UBnH
-         HTGq4R57OTjXCk9dTwskTCA6rWWuWLVyizmgtTLQkX0mvEq+0wx5+njmZbwgREsRQKSY
-         rMlId5VD5szVp5o5EmunraNKTllUCBR9qCAfZxBzRQgQi0hfF9CPUwSGkWUwT1LN3+Ei
-         TkwPrrlCvDh+LCYVKBVR+D0g3g4MKuh9uglGzwd3eyHoBVl3gNj9edWcdU+UpO2tb5VC
-         M3Rl1JMrYI+ZiTyBnVwbjtuxNnJUmT0uJKDr05OAhlbFoL0Zlw+XnD5g1iUKAmv1IoRx
-         UNxw==
-X-Gm-Message-State: AOAM5337j9gWxvfDkwIl/Q2QnpxdYrkF0P4GTX5gKZVnFVhfVD5ibsWY
-        0w2tD2eISrzwbMb8lSWVe3Y=
-X-Google-Smtp-Source: ABdhPJyrgYKY+o8ohzs5QG9Z3kRFA/6+qVMfeWexlWx9K8I9W7B3rd0Zcmu1aZZvJR7b2WAPusV+Pw==
-X-Received: by 2002:a17:90a:af97:: with SMTP id w23mr5593738pjq.128.1638953961134;
-        Wed, 08 Dec 2021 00:59:21 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id oj11sm302557pjb.46.2021.12.08.00.59.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 00:59:20 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH net-next] net: Enable neighbor sysctls that is save for userns root
-Date:   Wed,  8 Dec 2021 08:58:44 +0000
-Message-Id: <20211208085844.405570-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 04:05:16 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F37CB212C3;
+        Wed,  8 Dec 2021 09:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638954104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SPcplUKbn+26/lhn9RIJqQ7lmPcyVCiNERjtv5vh+2s=;
+        b=jrphflUAN+2NwFR/Y6VoUtqVOwgDqdWgXqyP3F2oRbbH7+BUvHm8o6Q2clTqs8pb9ER3yz
+        9HNpEwOHqe9CAbQARH8p3fGiyjEID5R8B3Wlps+HCRQfq+kGQSCPglQFp78HLFn26bxg82
+        Z/QoETq/OjMURAY7S+TW/thXN4aj+WY=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8D7EAA3B91;
+        Wed,  8 Dec 2021 09:01:43 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 10:01:43 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Message-ID: <YbB0d6T8RbHW48sZ@dhcp22.suse.cz>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+ <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On Tue 07-12-21 15:47:59, Andrew Morton wrote:
+> (cc's added)
 
-Inside netns owned by non-init userns, sysctls about ARP/neighbor is
-currently not visible and configurable.
-
-For the attributes these sysctls correspond to, any modifications make
-effects on the performance of networking(ARP, especilly) only in the
-scope of netns, which does not affect other netns.
-
-Actually, some tools via netlink can modify these attribute. iproute2 is
-an example. see as follows:
-
-$ unshare -ur -n
-$ cat /proc/sys/net/ipv4/neigh/lo/retrans_time
-cat: can't open '/proc/sys/net/ipv4/neigh/lo/retrans_time': No such file
-or directory
-$ ip ntable show dev lo
-inet arp_cache
-    dev lo
-    refcnt 1 reachable 19494 base_reachable 30000 retrans 1000
-    gc_stale 60000 delay_probe 5000 queue 101
-    app_probes 0 ucast_probes 3 mcast_probes 3
-    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000
-
-inet6 ndisc_cache
-    dev lo
-    refcnt 1 reachable 42394 base_reachable 30000 retrans 1000
-    gc_stale 60000 delay_probe 5000 queue 101
-    app_probes 0 ucast_probes 3 mcast_probes 3
-    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0
-$ ip ntable change name arp_cache dev <if> retrans 2000
-inet arp_cache
-    dev lo
-    refcnt 1 reachable 22917 base_reachable 30000 retrans 2000
-    gc_stale 60000 delay_probe 5000 queue 101
-    app_probes 0 ucast_probes 3 mcast_probes 3
-    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 1000
-
-inet6 ndisc_cache
-    dev lo
-    refcnt 1 reachable 35524 base_reachable 30000 retrans 1000
-    gc_stale 60000 delay_probe 5000 queue 101
-    app_probes 0 ucast_probes 3 mcast_probes 3
-    anycast_delay 1000 proxy_delay 800 proxy_queue 64 locktime 0
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- net/core/neighbour.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index 0cdd4d9ad942..44d90cc341ea 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -3771,10 +3771,6 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
- 			neigh_proc_base_reachable_time;
- 	}
+Extend CC to have all futex maintainers on board.
  
--	/* Don't export sysctls to unprivileged users */
--	if (neigh_parms_net(p)->user_ns != &init_user_ns)
--		t->neigh_vars[0].procname = NULL;
--
- 	switch (neigh_parms_family(p)) {
- 	case AF_INET:
- 	      p_name = "ipv4";
--- 
-2.25.1
+> On Tue,  7 Dec 2021 16:49:02 -0500 Joel Savitz <jsavitz@redhat.com> wrote:
+> 
+> > In the case that two or more processes share a futex located within
+> > a shared mmaped region, such as a process that shares a lock between
+> > itself and a number of child processes, we have observed that when
+> > a process holding the lock is oom killed, at least one waiter is never
+> > alerted to this new development and simply continues to wait.
+> 
+> Well dang.  Is there any way of killing off that waiting process, or do
+> we have a resource leak here?
+> 
+> > This is visible via pthreads by checking the __owner field of the
+> > pthread_mutex_t structure within a waiting process, perhaps with gdb.
+> > 
+> > We identify reproduction of this issue by checking a waiting process of
+> > a test program and viewing the contents of the pthread_mutex_t, taking note
+> > of the value in the owner field, and then checking dmesg to see if the
+> > owner has already been killed.
+> > 
+> > This issue can be tricky to reproduce, but with the modifications of
+> > this small patch, I have found it to be impossible to reproduce. There
+> > may be additional considerations that I have not taken into account in
+> > this patch and I welcome any comments and criticism.
 
+Why does OOM killer need a special handling. All the oom killer does is
+to send a fatal signal to the victim. Why is this any different from
+sending SIGKILL from the userspace?
+
+> > Co-developed-by: Nico Pache <npache@redhat.com>
+> > Signed-off-by: Nico Pache <npache@redhat.com>
+> > Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> > ---
+> >  mm/oom_kill.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> > index 1ddabefcfb5a..fa58bd10a0df 100644
+> > --- a/mm/oom_kill.c
+> > +++ b/mm/oom_kill.c
+> > @@ -44,6 +44,7 @@
+> >  #include <linux/kthread.h>
+> >  #include <linux/init.h>
+> >  #include <linux/mmu_notifier.h>
+> > +#include <linux/futex.h>
+> >  
+> >  #include <asm/tlb.h>
+> >  #include "internal.h"
+> > @@ -890,6 +891,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+> >  	 * in order to prevent the OOM victim from depleting the memory
+> >  	 * reserves from the user space under its control.
+> >  	 */
+> > +	futex_exit_release(victim);
+> >  	do_send_sig_info(SIGKILL, SEND_SIG_PRIV, victim, PIDTYPE_TGID);
+> >  	mark_oom_victim(victim);
+> >  	pr_err("%s: Killed process %d (%s) total-vm:%lukB, anon-rss:%lukB, file-rss:%lukB, shmem-rss:%lukB, UID:%u pgtables:%lukB oom_score_adj:%hd\n",
+> > @@ -930,6 +932,7 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+> >  		 */
+> >  		if (unlikely(p->flags & PF_KTHREAD))
+> >  			continue;
+> > +		futex_exit_release(p);
+> >  		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
+> >  	}
+> >  	rcu_read_unlock();
+> > -- 
+> > 2.33.1
+
+-- 
+Michal Hocko
+SUSE Labs

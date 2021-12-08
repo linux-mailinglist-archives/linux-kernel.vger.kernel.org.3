@@ -2,119 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBB046CF23
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6716846CF29
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244929AbhLHIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:38:20 -0500
-Received: from relay08.th.seeweb.it ([5.144.164.169]:54293 "EHLO
-        relay08.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245093AbhLHIiG (ORCPT
+        id S244917AbhLHIi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:38:27 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45106 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240745AbhLHIiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:38:06 -0500
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 8 Dec 2021 03:38:10 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1F4B62113D;
+        Wed,  8 Dec 2021 08:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638952478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VEx7L2uKEFkh7PkDUkqZJdaZbYdaJ5/ADsblq0a2GMY=;
+        b=uOgd7PBGkpRP1E//AO+SzSyrmxpr1SlUwNEu6/JT7mflDPum0fLmNn+fggTDgNyAZvyUii
+        qKlhVqNWsYUDZ2nDAeMqQI/kFgYFwKrRzgGzbEN9cPygn2buHvYtPoeDBaa5zptKHOV6pb
+        cbBd6qiDyjesz14HH1q3NUId0LNJHKo=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 604A43F3FA;
-        Wed,  8 Dec 2021 09:34:28 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Alex Elder <elder@linaro.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] firmware: qcom: scm: Add function to set IOMMU pagetable addressing
-Date:   Wed,  8 Dec 2021 09:34:23 +0100
-Message-Id: <20211208083423.22037-4-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211208083423.22037-1-marijn.suijten@somainline.org>
-References: <20211208083423.22037-1-marijn.suijten@somainline.org>
+        by relay2.suse.de (Postfix) with ESMTPS id E4E87A3B85;
+        Wed,  8 Dec 2021 08:34:37 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 09:34:37 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbBuHSkvd6fDdQ9d@dhcp22.suse.cz>
+References: <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
+ <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+ <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
+ <Ya+Nq2fWrSgl79Bn@dhcp22.suse.cz>
+ <2E174230-04F3-4798-86D5-1257859FFAD8@vmware.com>
+ <21539fc8-15a8-1c8c-4a4f-8b85734d2a0e@redhat.com>
+ <78E39A43-D094-4706-B4BD-18C0B18EB2C3@vmware.com>
+ <f9786109-518f-38d4-0270-a3e87a13c4ef@redhat.com>
+ <YbBo5uvV7wtgOYrj@dhcp22.suse.cz>
+ <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a44c44a-141c-363d-c23e-558edc23b9b4@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Wed 08-12-21 09:24:39, David Hildenbrand wrote:
+> On 08.12.21 09:12, Michal Hocko wrote:
+> > On Tue 07-12-21 19:03:28, David Hildenbrand wrote:
+> >> On 07.12.21 18:17, Alexey Makhalov wrote:
+> >>>
+> >>>
+> >>>> On Dec 7, 2021, at 9:13 AM, David Hildenbrand <david@redhat.com> wrote:
+> >>>>
+> >>>> On 07.12.21 18:02, Alexey Makhalov wrote:
+> >>>>>
+> >>>>>
+> >>>>>> On Dec 7, 2021, at 8:36 AM, Michal Hocko <mhocko@suse.com> wrote:
+> >>>>>>
+> >>>>>> On Tue 07-12-21 17:27:29, Michal Hocko wrote:
+> >>>>>> [...]
+> >>>>>>> So your proposal is to drop set_node_online from the patch and add it as
+> >>>>>>> a separate one which handles
+> >>>>>>> 	- sysfs part (i.e. do not register a node which doesn't span a
+> >>>>>>> 	  physical address space)
+> >>>>>>> 	- hotplug side of (drop the pgd allocation, register node lazily
+> >>>>>>> 	  when a first memblocks are registered)
+> >>>>>>
+> >>>>>> In other words, the first stage
+> >>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>>>>> index c5952749ad40..f9024ba09c53 100644
+> >>>>>> --- a/mm/page_alloc.c
+> >>>>>> +++ b/mm/page_alloc.c
+> >>>>>> @@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+> >>>>>> 	if (self && !node_online(self->node_id)) {
+> >>>>>> 		build_zonelists(self);
+> >>>>>> 	} else {
+> >>>>>> -		for_each_online_node(nid) {
+> >>>>>> +		/*
+> >>>>>> +		 * All possible nodes have pgdat preallocated
+> >>>>>> +		 * free_area_init
+> >>>>>> +		 */
+> >>>>>> +		for_each_node(nid) {
+> >>>>>> 			pg_data_t *pgdat = NODE_DATA(nid);
+> >>>>>>
+> >>>>>> 			build_zonelists(pgdat);
+> >>>>>
+> >>>>> Will it blow up memory usage for the nodes which might never be onlined?
+> >>>>> I prefer the idea of init on demand.
+> >>>>>
+> >>>>> Even now there is an existing problem.
+> >>>>> In my experiments, I observed _huge_ memory consumption increase by increasing number
+> >>>>> of possible numa nodes. I’m going to report it in separate mail thread.
+> >>>>
+> >>>> I already raised that PPC might be problematic in that regard. Which
+> >>>> architecture / setup do you have in mind that can have a lot of possible
+> >>>> nodes?
+> >>>>
+> >>> It is x86_64 VMware VM, not the regular one, but specially configured (1 vCPU per node,
+> >>> with hot-plug support, 128 possible nodes)  
+> >>
+> >> I thought the pgdat would be smaller but I just gave it a test:
+> > 
+> > Yes, pgdat is quite large! Just embeded zones can eat a lot.
+> > 
+> >> On my system, pgdata_t is 173824 bytes. So 128 nodes would correspond to
+> >> 21 MiB, which is indeed a lot. I assume it's due to "struct zonelist",
+> >> which has MAX_ZONES_PER_ZONELIST == (MAX_NUMNODES * MAX_NR_ZONES) zone
+> >> references ...
+> > 
+> > This is what pahole tells me
+> > struct pglist_data {
+> >         struct zone                node_zones[4] __attribute__((__aligned__(64))); /*     0  5632 */
+> >         /* --- cacheline 88 boundary (5632 bytes) --- */
+> >         struct zonelist            node_zonelists[1];    /*  5632    80 */
+> > 	[...]
+> >         /* size: 6400, cachelines: 100, members: 27 */
+> >         /* sum members: 6369, holes: 5, sum holes: 31 */
+> > 
+> > with my particular config (which is !NUMA). I haven't really checked
+> > whether there are other places which might scale with MAX_NUM_NODES or
+> > something like that.
+> > 
+> > Anyway, is 21MB of wasted space for 128 Node machine something really
+> > note worthy?
+> > 
+> 
+> I think we'll soon might see setups (again, CXL is an example, but als
+> owhen providing a dynamic amount of performance differentiated memory
+> via virtio-mem) where this will most probably matter. With performance
+> differentiated memory we'll see a lot more nodes getting used in
+> general, and a lot more nodes eventually getting hotplugged.
 
-Add a function to change the IOMMU pagetable addressing to
-AArch32 LPAE or AArch64. If doing that, then this must be
-done for each IOMMU context (not necessarily at the same time).
+There are certainly machines with many nodes. E.g. SLES kernels are
+build with CONFIG_NODES_SHIFT=10 which is a lot of potential nodes.
+And I have seen really large machines with many nodes but those usually
+come with a lot of memory and they do not tend to have non populated
+nodes AFAIR.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-[Marijn: ported from 5.3 to the unified architecture in 5.11]
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/firmware/qcom_scm.c | 16 ++++++++++++++++
- drivers/firmware/qcom_scm.h |  1 +
- include/linux/qcom_scm.h    |  1 +
- 3 files changed, 18 insertions(+)
+> If 128 nodes is realistic, I cannot tell.
+> 
+> We could optimize by allocating some members dynamically. For example
+> we'll never need MAX_NUMNODES entries, but only the number of possible
+> nodes.
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index d5a9ba15e2ba..6f7096120023 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1140,6 +1140,22 @@ int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt, u32 *resp)
- }
- EXPORT_SYMBOL(qcom_scm_hdcp_req);
- 
-+int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt)
-+{
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_SVC_SMMU_PROGRAM,
-+		.cmd = QCOM_SCM_SMMU_PT_FORMAT,
-+		.arginfo = QCOM_SCM_ARGS(3),
-+		.args[0] = sec_id,
-+		.args[1] = ctx_num,
-+		.args[2] = pt_fmt, /* 0: LPAE AArch32 - 1: AArch64 */
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
-+
-+	return qcom_scm_call(__scm->dev, &desc, NULL);
-+}
-+EXPORT_SYMBOL(qcom_scm_iommu_set_pt_format);
-+
- int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
- {
- 	struct qcom_scm_desc desc = {
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index bb627941702b..a348f2c214e5 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -120,6 +120,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
- #define QCOM_SCM_LMH_LIMIT_DCVSH		0x10
- 
- #define QCOM_SCM_SVC_SMMU_PROGRAM		0x15
-+#define QCOM_SCM_SMMU_PT_FORMAT			0x01
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
- 
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index 8a065f8660c1..ca4a88d7cbdc 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -108,6 +108,7 @@ extern bool qcom_scm_hdcp_available(void);
- extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
- 			     u32 *resp);
- 
-+extern int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt);
- extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
- 
- extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+Yes agreed. Scaling with MAX_NUMNODES is almost always wasteful.
+
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs

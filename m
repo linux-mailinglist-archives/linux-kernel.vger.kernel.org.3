@@ -2,111 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 718F346C86E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E7F46C870
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242688AbhLHAII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242662AbhLHAIG (ORCPT
+        id S242697AbhLHAIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:08:11 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:49049 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242690AbhLHAIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:08:06 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FC7C061574;
-        Tue,  7 Dec 2021 16:04:35 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id r11so2310184edd.9;
-        Tue, 07 Dec 2021 16:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nmbu3aWG61qILASHvk+hiCDNK64Hsn0LyV/NvnRhWow=;
-        b=CnfFs2U9AA1aEyyh1ETJWBowPNHQUwaNC/eVGXX565ZfeJqrg9qwEbm5YFanM/q9El
-         jn1czxTI6xYht0qJ/NaWgqcrZau374Zs+vI3o5q0J7kMEXGgAL+fRCKKeA/TV/sc5Fqn
-         cbJ8sqJ6lt0lli5t7wIZ2vKONdvagFPt/nTP0GYnfXKMn2Y/JW2Q363Eew4UU3z7U7NS
-         6gZ8MaPR+/ZpdZKxINwGD/OZR9yzq5dMMtAuHk7FblleuR3k8vIczFGc1wOvVSQqVrdY
-         WR4dVTkXJJNakgwQfJJE8jiCvELNNMolsLyjp++chzB3m7ZGfkx9nOcUUDYgW2/cC3IG
-         Ul/A==
+        Tue, 7 Dec 2021 19:08:09 -0500
+Received: by mail-il1-f199.google.com with SMTP id k9-20020a056e02156900b002a1acf9a52dso960134ilu.15
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 16:04:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nmbu3aWG61qILASHvk+hiCDNK64Hsn0LyV/NvnRhWow=;
-        b=cx3BDc/28g3VMbdgci8usEcmCFjmMqAVWb9UFaI/0Eie3scobRDSFAQuU5UfZXAaqF
-         gv6klwS4lbfORvMKpEVUgKiBo+lzmygg+NfjRamOVfF61wsaMeSh33ADDd2fNxSIX+U0
-         bpJ/chwExej4PEnUIJnktumUxbXnJfI3kMG4Xt/MJ1iwdgyo4a3Ih/3anrYSBrfJHKSi
-         z/r0ZMnlX8jvfLOmIUFselR3BjRwh8p+y9uo4xhALt4blTXwTmNiHSni3jhxTeIenSbI
-         ZVgwAK70j9irMLTeuTr0tfr/BY66u0pvz4F+aP06iYmheWGUaerPqejxgdBa/vCCbpr9
-         lg6g==
-X-Gm-Message-State: AOAM533HiDBfxhpkGxKHPkVKc8iT9o7Ynd9Q/Pd2lrR3GJ3EbI07gd1r
-        X3leViPt7byoiUFUZhBOcWZW4vxP0C4=
-X-Google-Smtp-Source: ABdhPJzIeCw9MWX2WjgP6pLZJ9NkxKHO4Xy3P+qJUn2AxCMsv0u3UQaSZ2+1j93nA+BPIy21CSxqgw==
-X-Received: by 2002:a17:906:4f05:: with SMTP id t5mr3326379eju.68.1638921873809;
-        Tue, 07 Dec 2021 16:04:33 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id l18sm549876ejo.114.2021.12.07.16.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:04:33 -0800 (PST)
-Date:   Wed, 8 Dec 2021 02:04:32 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 0/6] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <20211208000432.5nq47bjz3aqjvilp@skbuf>
-References: <20211207145942.7444-1-ansuelsmth@gmail.com>
- <Ya+q02HlWsHMYyAe@lunn.ch>
- <61afadb9.1c69fb81.7dfad.19b1@mx.google.com>
- <Ya+yzNDMorw4X9CT@lunn.ch>
- <61afb452.1c69fb81.18c6f.242e@mx.google.com>
- <20211207205219.4eoygea6gey4iurp@skbuf>
- <61afd6a1.1c69fb81.3281e.5fff@mx.google.com>
- <Ya/esX+GTet9PM+D@lunn.ch>
- <20211207234736.vpqurmattqx4a76h@skbuf>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=LLxo9yR1C18zIZFvHekT6AM9u91kgXbh230N0pjOmj0=;
+        b=0gbuxENB78ogHyhP+x6DakTkNAmlpvZV4BQDSETZfRKtXMREMmu8Md8TojPJhse8zH
+         7rbTnLIYP4x4a7op0QjMekvdB9ZezUbF4FaWpZZ3e8HH6NQhU/0U0Hjhpkm3GOasLaYU
+         k5Ti6x/bIVrMSlj1pEH3/OboYZb/HeVbNHP/wiVBpwXDIeRYeSYYkHIALmS9PTvothLl
+         bFpi3Ufqo1pCtBuyGAKdYO+QkHc9R6NRBjiAPMAGBKiS968oytZuVaxPCJV2gp33Zmm1
+         v2MJK3aPOYIThhmBXrW1+tTEOcCFicVp/qUABZ/S+tejOfe9f39Iu9IjACVgOY0+aLMj
+         BtfQ==
+X-Gm-Message-State: AOAM5334gmp1Ju+/q44niT/qZp0I/45M1JqZZDRawm1pEjsJ2TetP6Ub
+        s1eXakuDICKVV2lfEK3wYcBQ8SPDatg64M9xN8/u8mybJrO1
+X-Google-Smtp-Source: ABdhPJzwtIGXpwhfc9nPR0X8NX8x3rvEQSVjP9FRj6evJC/xYLpptRmTscIkhvqr+WbnevHpJ6HZ1lUDP0k8Su+rE4LfgJPNanqJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207234736.vpqurmattqx4a76h@skbuf>
+X-Received: by 2002:a05:6e02:1d1e:: with SMTP id i30mr2058617ila.182.1638921878414;
+ Tue, 07 Dec 2021 16:04:38 -0800 (PST)
+Date:   Tue, 07 Dec 2021 16:04:38 -0800
+In-Reply-To: <000000000000e016c205d1025f4c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000060ab3b05d2973c1a@google.com>
+Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
+From:   syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:47:36AM +0200, Vladimir Oltean wrote:
-> > 2) is harder. But as far as i know, we have an 1:N setup.  One switch
-> > driver can use N tag drivers. So we need the switch driver to be sure
-> > the tag driver is what it expects. We keep the shared state in the tag
-> > driver, so it always has valid data, but when the switch driver wants
-> > to get a pointer to it, it needs to pass a enum dsa_tag_protocol and
-> > if it does not match, the core should return -EINVAL or similar.
-> 
-> In my proposal, the tagger will allocate the memory from its side of the
-> ->connect() call. So regardless of whether the switch driver side
-> connects or not, the memory inside dp->priv is there for the tagger to
-> use. The switch can access it or it can ignore it.
+syzbot has found a reproducer for the following issue on:
 
-I don't think I actually said something useful here.
+HEAD commit:    cd8c917a56f2 Makefile: Do not quote value for CONFIG_CC_IM..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=153be575b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5247c9e141823545
+dashboard link: https://syzkaller.appspot.com/bug?extid=21e6887c0be14181206d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1218dce1b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f91d89b00000
 
-The goal would be to minimize use of dp->priv inside the switch driver,
-outside of the actual ->connect() / ->disconnect() calls.
-For example, in the felix driver which supports two tagging protocol
-drivers, I think these two methods would be enough, and they would
-replace the current felix_port_setup_tagger_data() and
-felix_port_teardown_tagger_data() calls.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com
 
-An additional benefit would be that in ->connect() and ->disconnect() we
-get the actual tagging protocol in use. Currently the felix driver lacks
-there, because felix_port_setup_tagger_data() just sets dp->priv up
-unconditionally for the ocelot-8021q tagging protocol (luckily the
-normal ocelot tagger doesn't need dp->priv).
+INFO: task syz-executor255:7795 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc4-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor255 state:D stack:28448 pid: 7795 ppid:  6531 flags:0x00024004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
+ schedule+0xd2/0x260 kernel/sched/core.c:6326
+ io_uring_cancel_generic+0x53d/0x690 fs/io_uring.c:9877
+ io_uring_files_cancel include/linux/io_uring.h:16 [inline]
+ do_exit+0x60c/0x2b40 kernel/exit.c:787
+ do_group_exit+0x125/0x310 kernel/exit.c:929
+ get_signal+0x47d/0x2220 kernel/signal.c:2852
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f413d0aaa59
+RSP: 002b:00007f413d05c308 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007f413d132408 RCX: 00007f413d0aaa59
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f413d132408
+RBP: 00007f413d132400 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f413d13240c
+R13: 0000000000000003 R14: 00007f413d05c400 R15: 0000000000022000
+ </TASK>
 
-In sja1105 the story is a bit longer, but I believe that can also be
-cleaned up to stay within the confines of ->connect()/->disconnect().
+Showing all locks held in the system:
+1 lock held by khungtaskd/27:
+ #0: ffffffff8bb811a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
+1 lock held by in:imklog/6223:
+ #0: ffff88801d98d670 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:994
 
-So I guess we just need to be careful and push back against dubious use
-during review.
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+ watchdog+0xc1d/0xf50 kernel/hung_task.c:295
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 2964 Comm: systemd-journal Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:on_stack arch/x86/include/asm/stacktrace.h:58 [inline]
+RIP: 0010:stack_access_ok arch/x86/kernel/unwind_orc.c:342 [inline]
+RIP: 0010:deref_stack_reg+0x0/0x150 arch/x86/kernel/unwind_orc.c:352
+Code: 14 24 e9 7b ff ff ff 48 89 14 24 e8 da 25 89 00 48 8b 14 24 e9 48 ff ff ff 48 89 0c 24 e8 c8 25 89 00 48 8b 0c 24 eb 9d 66 90 <48> b8 00 00 00 00 00 fc ff df 41 55 41 54 49 89 fc 55 48 89 f5 53
+RSP: 0018:ffffc90001ad79b0 EFLAGS: 00000046
+RAX: ffffc90001ad7bb8 RBX: 1ffff9200035af3f RCX: ffffffff8e10151b
+RDX: ffffc90001ad7ad8 RSI: ffffc90001ad7bb0 RDI: ffffc90001ad7a90
+RBP: 0000000000000001 R08: ffffffff8e101516 R09: 0000000000000001
+R10: fffff5200035af5d R11: 000000000008808a R12: ffffc90001ad7ad8
+R13: ffffc90001ad7ac5 R14: ffffc90001ad7a90 R15: ffffffff8e10151a
+FS:  00007f48af6af8c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f48aca93018 CR3: 000000007738a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ unwind_next_frame+0xcdc/0x1ce0 arch/x86/kernel/unwind_orc.c:534
+ arch_stack_walk+0x7d/0xe0 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x8c/0xc0 kernel/stacktrace.c:122
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:46
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free mm/kasan/common.c:328 [inline]
+ __kasan_slab_free+0xd1/0x110 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ __cache_free mm/slab.c:3445 [inline]
+ kmem_cache_free.part.0+0x91/0x200 mm/slab.c:3741
+ security_file_free+0xa4/0xd0 security/security.c:1535
+ file_free fs/file_table.c:55 [inline]
+ __fput+0x3d6/0x9f0 fs/file_table.c:298
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f48aec3e840
+Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
+RSP: 002b:00007ffd32e9b188 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: fffffffffffffffe RBX: 00007ffd32e9b490 RCX: 00007f48aec3e840
+RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 000055dc34efa230
+RBP: 000000000000000d R08: 00000000000001e0 R09: 00000000ffffffff
+R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 000055dc34eef060 R14: 00007ffd32e9b450 R15: 000055dc34efa320
+ </TASK>
+INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.354 msecs
+----------------
+Code disassembly (best guess):
+   0:	14 24                	adc    $0x24,%al
+   2:	e9 7b ff ff ff       	jmpq   0xffffff82
+   7:	48 89 14 24          	mov    %rdx,(%rsp)
+   b:	e8 da 25 89 00       	callq  0x8925ea
+  10:	48 8b 14 24          	mov    (%rsp),%rdx
+  14:	e9 48 ff ff ff       	jmpq   0xffffff61
+  19:	48 89 0c 24          	mov    %rcx,(%rsp)
+  1d:	e8 c8 25 89 00       	callq  0x8925ea
+  22:	48 8b 0c 24          	mov    (%rsp),%rcx
+  26:	eb 9d                	jmp    0xffffffc5
+  28:	66 90                	xchg   %ax,%ax
+* 2a:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax <-- trapping instruction
+  31:	fc ff df
+  34:	41 55                	push   %r13
+  36:	41 54                	push   %r12
+  38:	49 89 fc             	mov    %rdi,%r12
+  3b:	55                   	push   %rbp
+  3c:	48 89 f5             	mov    %rsi,%rbp
+  3f:	53                   	push   %rbx
+

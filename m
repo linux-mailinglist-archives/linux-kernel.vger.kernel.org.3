@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5780046D688
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA42646D685
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbhLHPPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:15:06 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:16745 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235731AbhLHPPA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S235746AbhLHPPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 8 Dec 2021 10:15:00 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:14130 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235708AbhLHPO7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 10:14:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1638976288;
-  x=1670512288;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638976287;
+  x=1670512287;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=08mDDHOlgpqqtY4M6OaMAhl5Pbv8Ss4NTgo4wUqg5vU=;
-  b=MDJT/zPeL3fQOHVowtDbdC5u8w9KEmNYE4wEnyS4tZAdhoGkPiHlGWwv
-   59ZuWxtXpfiQ/5xvTXaB4vHwBmXHt1HJVEYEhMAB/Bfm5C+SX/qRwGi8P
-   uXttnV76ZGgW6AHH+ipZx8jGnAZ4WFay+S6I+PaXmZDlNa2u8WhJh05bL
-   kZsza42pQDP0r0hQul8IQK32f5LMWazvpgY4PoXcmNbmZIuvYqkPQnH2O
-   BwiUdpgpDkSTc2+mGgtcwxCkd6HeMF0jw5WVNZgJKmLdp1559sJNjh0NL
-   9GtiDiXrU/gqyjLfOVuVdDBuAQAEeQq0I9m97NsobeEtNzGJ8922DTQ7x
-   Q==;
+  bh=VrsMtFlyBxgWCf0bvKnofWFvEDY3FGaJ9B55+Jf6Fi0=;
+  b=EJM08TmMuJS3cJWFdIyO/g/heugf5P65iFayKn2fzs0Mivz5GlAzjkYC
+   lZnO+XOAJHfxAv9043X0X7rJPsegS86JSCwNTBy8/fcUu6jos8+SDwOjS
+   NzKKP8Ce1ijqwqwrkO1dKYuXUs8lN/ArOfQVCX2WcUDOG+wXE4Mj4wt8j
+   lYEoNAplmTQJUqO0GssosfirXoCuyvjpwx4dXCs8BY6n1fHaHFH3KKOnm
+   Kc3i12h7BhoTLpKR2YgJE0RihE/muQMvNRdEmMTF2u/4Zir7k44dPK3gM
+   CYXSFIn6f+ZVxUvvR50pT8A67R8AffQvHafWZ8vIAtpGDFqW/XUavxAVF
+   w==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <jdike@addtoit.com>, <richard@nod.at>,
         <anton.ivanov@cambridgegreys.com>
 CC:     <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
         <linux-um@lists.infradead.org>, <devicetree@vger.kernel.org>,
         Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: [PATCH 1/2] um: Extract load file helper from initrd.c
-Date:   Wed, 8 Dec 2021 16:11:22 +0100
-Message-ID: <20211208151123.29313-2-vincent.whitchurch@axis.com>
+Subject: [PATCH 2/2] um: Add devicetree support
+Date:   Wed, 8 Dec 2021 16:11:23 +0100
+Message-ID: <20211208151123.29313-3-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211208151123.29313-1-vincent.whitchurch@axis.com>
 References: <20211208151123.29313-1-vincent.whitchurch@axis.com>
@@ -43,185 +43,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The file loading support in initrd.c can be re-used for
-loading devicetrees.  Move it out of initrd.c.
+Add a dtb=<filename> option to boot UML with a devicetree blob.  This
+can be used for testing driver code using UML.
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- arch/um/kernel/Makefile    |  1 +
- arch/um/kernel/initrd.c    | 48 ++++--------------------------
- arch/um/kernel/load_file.c | 61 ++++++++++++++++++++++++++++++++++++++
- arch/um/kernel/um_arch.h   |  8 +++++
- 4 files changed, 75 insertions(+), 43 deletions(-)
- create mode 100644 arch/um/kernel/load_file.c
- create mode 100644 arch/um/kernel/um_arch.h
+ arch/um/Kconfig          |  1 +
+ arch/um/kernel/Makefile  |  1 +
+ arch/um/kernel/dtb.c     | 41 ++++++++++++++++++++++++++++++++++++++++
+ arch/um/kernel/um_arch.c |  3 +++
+ arch/um/kernel/um_arch.h |  6 ++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 arch/um/kernel/dtb.c
 
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index c18b45f75d41..1cf7ef3a2b81 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -18,6 +18,7 @@ config UML
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DEBUG_BUGVERBOSE
+ 	select NO_DMA if !UML_DMA_EMULATION
++	select OF_EARLY_FLATTREE
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_CPU_DEVICES
+ 	select HAVE_GCC_PLUGINS
 diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
-index 1d18e4e46989..92692bfef7ae 100644
+index 92692bfef7ae..ebd0cca3ff26 100644
 --- a/arch/um/kernel/Makefile
 +++ b/arch/um/kernel/Makefile
-@@ -18,6 +18,7 @@ obj-y = config.o exec.o exitcode.o irq.o ksyms.o mem.o \
- 	physmem.o process.o ptrace.o reboot.o sigio.o \
- 	signal.o syscall.o sysrq.o time.o tlb.o trap.o \
- 	um_arch.o umid.o maccess.o kmsg_dump.o capflags.o skas/
-+obj-y += load_file.o
+@@ -22,6 +22,7 @@ obj-y += load_file.o
  
  obj-$(CONFIG_BLK_DEV_INITRD) += initrd.o
  obj-$(CONFIG_GPROF)	+= gprof_syms.o
-diff --git a/arch/um/kernel/initrd.c b/arch/um/kernel/initrd.c
-index c1981ffb7179..47b8cb1a1156 100644
---- a/arch/um/kernel/initrd.c
-+++ b/arch/um/kernel/initrd.c
-@@ -10,37 +10,21 @@
- #include <init.h>
++obj-$(CONFIG_OF) += dtb.o
+ obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
+ obj-$(CONFIG_STACKTRACE) += stacktrace.o
+ obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
+diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
+new file mode 100644
+index 000000000000..ca69d72025f3
+--- /dev/null
++++ b/arch/um/kernel/dtb.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/init.h>
++#include <linux/of_fdt.h>
++#include <linux/printk.h>
++#include <linux/memblock.h>
++#include <init.h>
++
++#include "um_arch.h"
++
++static char *dtb __initdata;
++
++void uml_dtb_init(void)
++{
++	long long size;
++	void *area;
++
++	area = uml_load_file(dtb, &size);
++	if (!area)
++		return;
++
++	if (!early_init_dt_scan(area)) {
++		pr_err("invalid DTB %s\n", dtb);
++		memblock_free(area, size);
++		return;
++	}
++
++	unflatten_device_tree();
++	early_init_fdt_scan_reserved_mem();
++}
++
++static int __init uml_dtb_setup(char *line, int *add)
++{
++	dtb = line;
++	return 0;
++}
++
++__uml_setup("dtb=", uml_dtb_setup,
++"dtb=<file>\n"
++"    Boot the kernel with the devicetree blob from the specified file.\n"
++);
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index 54447690de11..abceeabe29b9 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -29,6 +29,8 @@
+ #include <mem_user.h>
  #include <os.h>
  
 +#include "um_arch.h"
 +
- /* Changed by uml_initrd_setup, which is a setup */
- static char *initrd __initdata = NULL;
--static int load_initrd(char *filename, void *buf, int size);
+ #define DEFAULT_COMMAND_LINE_ROOT "root=98:0"
+ #define DEFAULT_COMMAND_LINE_CONSOLE "console=tty"
  
- int __init read_initrd(void)
- {
-+	unsigned long long size;
- 	void *area;
--	long long size;
--	int err;
--
--	if (initrd == NULL)
--		return 0;
+@@ -407,6 +409,7 @@ void __init setup_arch(char **cmdline_p)
+ 	stack_protections((unsigned long) &init_thread_info);
+ 	setup_physmem(uml_physmem, uml_reserved, physmem_size, highmem);
+ 	mem_total_pages(physmem_size, iomem_size, highmem);
++	uml_dtb_init();
+ 	read_initrd();
  
--	err = os_file_size(initrd, &size);
--	if (err)
-+	if (!initrd)
- 		return 0;
- 
--	/*
--	 * This is necessary because alloc_bootmem craps out if you
--	 * ask for no memory.
--	 */
--	if (size == 0) {
--		printk(KERN_ERR "\"%s\" is a zero-size initrd\n", initrd);
--		return 0;
--	}
--
--	area = memblock_alloc(size, SMP_CACHE_BYTES);
-+	area = uml_load_file(initrd, &size);
- 	if (!area)
--		panic("%s: Failed to allocate %llu bytes\n", __func__, size);
--
--	if (load_initrd(initrd, area, size) == -1)
- 		return 0;
- 
- 	initrd_start = (unsigned long) area;
-@@ -59,25 +43,3 @@ __uml_setup("initrd=", uml_initrd_setup,
- "    This is used to boot UML from an initrd image.  The argument is the\n"
- "    name of the file containing the image.\n\n"
- );
--
--static int load_initrd(char *filename, void *buf, int size)
--{
--	int fd, n;
--
--	fd = os_open_file(filename, of_read(OPENFLAGS()), 0);
--	if (fd < 0) {
--		printk(KERN_ERR "Opening '%s' failed - err = %d\n", filename,
--		       -fd);
--		return -1;
--	}
--	n = os_read_file(fd, buf, size);
--	if (n != size) {
--		printk(KERN_ERR "Read of %d bytes from '%s' failed, "
--		       "err = %d\n", size,
--		       filename, -n);
--		return -1;
--	}
--
--	os_close_file(fd);
--	return 0;
--}
-diff --git a/arch/um/kernel/load_file.c b/arch/um/kernel/load_file.c
-new file mode 100644
-index 000000000000..5cecd0e291fb
---- /dev/null
-+++ b/arch/um/kernel/load_file.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
-+ */
-+#include <linux/memblock.h>
-+#include <os.h>
-+
-+#include "um_arch.h"
-+
-+static int __init __uml_load_file(const char *filename, void *buf, int size)
-+{
-+	int fd, n;
-+
-+	fd = os_open_file(filename, of_read(OPENFLAGS()), 0);
-+	if (fd < 0) {
-+		printk(KERN_ERR "Opening '%s' failed - err = %d\n", filename,
-+		       -fd);
-+		return -1;
-+	}
-+	n = os_read_file(fd, buf, size);
-+	if (n != size) {
-+		printk(KERN_ERR "Read of %d bytes from '%s' failed, "
-+		       "err = %d\n", size,
-+		       filename, -n);
-+		return -1;
-+	}
-+
-+	os_close_file(fd);
-+	return 0;
-+}
-+
-+void *uml_load_file(const char *filename, unsigned long long *size)
-+{
-+	void *area;
-+	int err;
-+
-+	*size = 0;
-+
-+	if (!filename)
-+		return NULL;
-+
-+	err = os_file_size(filename, size);
-+	if (err)
-+		return NULL;
-+
-+	if (*size == 0) {
-+		printk(KERN_ERR "\"%s\" is empty\n", filename);
-+		return NULL;
-+	}
-+
-+	area = memblock_alloc(*size, SMP_CACHE_BYTES);
-+	if (!area)
-+		panic("%s: Failed to allocate %llu bytes\n", __func__, *size);
-+
-+	if (__uml_load_file(filename, area, *size)) {
-+		memblock_free(area, *size);
-+		return NULL;
-+	}
-+
-+	return area;
-+}
+ 	paging_init();
 diff --git a/arch/um/kernel/um_arch.h b/arch/um/kernel/um_arch.h
-new file mode 100644
-index 000000000000..b195df3a09a0
---- /dev/null
+index b195df3a09a0..1e07fb7ee35e 100644
+--- a/arch/um/kernel/um_arch.h
 +++ b/arch/um/kernel/um_arch.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __UML_ARCH_H__
-+#define __UML_ARCH_H__
-+
-+extern void * __init uml_load_file(const char *filename, unsigned long long *size);
-+
+@@ -5,4 +5,10 @@
+ 
+ extern void * __init uml_load_file(const char *filename, unsigned long long *size);
+ 
++#ifdef CONFIG_OF
++extern void __init uml_dtb_init(void);
++#else
++static inline void uml_dtb_init(void) { }
 +#endif
++
+ #endif
 -- 
 2.33.1
 

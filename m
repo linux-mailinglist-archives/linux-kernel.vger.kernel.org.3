@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FDA46D623
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED43746D627
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbhLHOzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbhLHOzG (ORCPT
+        id S235545AbhLHOzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:55:44 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52584 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235530AbhLHOzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:55:06 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610D0C061746;
-        Wed,  8 Dec 2021 06:51:34 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x6so9247401edr.5;
-        Wed, 08 Dec 2021 06:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QWHLsi58iBRKLpnRUwKPYaAT671ZxtkhBU1FfVlVdXg=;
-        b=K+4tRxGphRbws1f4Rrz0JYGa2Qx/72RzMwQUficOEbDv1SlOEhtiw3VGzPcnLY3Jo2
-         1P1jH2DJ2Il+6mtk7fPD06NeoCXeeNnt2d95pXGlX5eWBMj/BalrT7AJOOOFH5y4B+Yh
-         b8/2uLh2bql/u5eRW9MQFgc6RCd3QhgJOBn/VzNrFN+K03/4iWwEiusX0q52KMF94+9w
-         J7Ciwb0oFbIlV1xP3Q5cI99NcmtmsYgSsVKyS9dXEuTU3n0Y6frI6wYMO9YbKq4gRIE+
-         YIu3o09Kn/5UNq4wSkPPAnn1vwABqCMS/QkwAmQ2i9tW+t2V5+C6zjqZk2zV+Y3arYOb
-         XWPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QWHLsi58iBRKLpnRUwKPYaAT671ZxtkhBU1FfVlVdXg=;
-        b=jqbmYugse+5yrZnypmzDkPNtON6vMfc0R8H5wqPxTwmHwKwwzlpmh2ZjZSjHIINnGL
-         FX9H76nIWTtSpi4nTt0d7ytNdafdhreCMUlTNuiKIWHQqGbL+JCPQbnNggyUKfOf0iFs
-         YrcxpKwkBD/JCdd8aHknyTdJ+i9sef1Yy3tO0u0okyaZ8MmAWZxsnliUElx9QLohMvqv
-         DHKpqZGX28g91b0064GsDKePDrO9STa4xYYIdZs2g8fSLcGX2vO24+GwGzu03n5qM/R6
-         u49pda0je5VaIpmDz5PsvBgVtlZ0R7TykMHETHEyh/E6Nbanw7feUnAkpJT+eFVIx1mr
-         OvhQ==
-X-Gm-Message-State: AOAM530KgfGo1d8eEmaPS4FoZ3iZPFbdqhLzAd6GMKouXrc6AKGqDOS4
-        r/R9YXpq4z9XnOvPdv92fBI=
-X-Google-Smtp-Source: ABdhPJxCx1VEvF7FzfkCtA0NwaIDc28iCguT9i8qNKGCpeXl8YVLWLN6FoGepTtKHBM7AnLSsJFzHw==
-X-Received: by 2002:a05:6402:4302:: with SMTP id m2mr19576689edc.349.1638975092953;
-        Wed, 08 Dec 2021 06:51:32 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id h10sm2087524edr.95.2021.12.08.06.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 06:51:32 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <518c3e07-41c8-feeb-5298-702c101994c7@redhat.com>
-Date:   Wed, 8 Dec 2021 15:51:28 +0100
+        Wed, 8 Dec 2021 09:55:43 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B89sqIR020212;
+        Wed, 8 Dec 2021 15:51:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=IpuZOGwO/v7ipbt03x8yTn8Car/0TQpCG5NiK+X11ao=;
+ b=8ck3ngzmTL3Z/pah5tFBBSgSPJFOfn5R30BELfAYwrlYVBzDmNKFT5Z1/GUmtaE/cHhi
+ uXxs2YXAfZTlz1e8ute9dZP+JiMY76u5dWLV86a15TQYfIT3KskJTzQC2mP75Fxx2Njw
+ hx7HHLlwoqOPKtS/SfsNMTTySxEcjL2bpFrYKdjpxcxVpltFPFvR8kbTfA9ZCYRuZcoq
+ pLYYRRHauF4g7gzOdm3WdzyNt1i1wxEYGMJjsF/5GYMWfBYoPAjQgOruUslvwbMGLhsu
+ 9Pop5tMVGjmyGczLWotKmu34RlDFNujAZkI5ByCJhAlgVLFLjgUxwfq9S8csDivcJMkH Uw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cttga9kby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Dec 2021 15:51:52 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0DFC010002A;
+        Wed,  8 Dec 2021 15:51:51 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 00A7E22CD49;
+        Wed,  8 Dec 2021 15:51:51 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec
+ 2021 15:51:49 +0100
+Subject: Re: [PATCH 2/3] irqchip/stm32-exti: add STM32MP13 support
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+References: <20211208130456.4002-1-alexandre.torgue@foss.st.com>
+ <20211208130456.4002-3-alexandre.torgue@foss.st.com>
+ <87fsr31aex.wl-maz@kernel.org>
+ <fffb9758-8071-edd8-8fe9-d0d2a57fac05@foss.st.com>
+ <87ee6n18im.wl-maz@kernel.org>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Message-ID: <701f4954-5dc8-9b4f-674c-c40d7e6e3df1@foss.st.com>
+Date:   Wed, 8 Dec 2021 15:51:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
+In-Reply-To: <87ee6n18im.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-References: <20211208015236.1616697-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211208015236.1616697-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 02:52, Sean Christopherson wrote:
-> Overhaul and cleanup APIC virtualization (Posted Interrupts on Intel VMX,
-> AVIC on AMD SVM) to streamline things as much as possible, remove a bunch
-> of cruft, and document the lurking gotchas along the way.
+On 12/8/21 3:22 PM, Marc Zyngier wrote:
+> Hi Alexandre,
 > 
-> Patch 01 is a fix from Paolo that's already been merged but hasn't made
-> its way to kvm/queue.  It's included here to avoid a number of conflicts.
+> On Wed, 08 Dec 2021 13:58:46 +0000,
+> Alexandre TORGUE <alexandre.torgue@foss.st.com> wrote:
+>>
+>>> Why does the driver need to carry these tables? This sort of
+>>> information should really come from DT, instead of being hardcoded in
+>>> the driver and bloating it for no reason. This all has a funny taste
+>>> of the board files we used to have pre-DT.
+>>>
+>>
+>> There are absolutely no reason to have it in driver. Honestly It has
+>> been done in this way to have minimal changes adding this new SoC
+>> support (and it's not smart, I agree).
+>>
+>> I think it is better to abandon this series. I will create a new one
+>> which moves mapping table for MP15 and adds MP13 support to.
 > 
-> Based on kvm/queue, commit 1cf84614b04a ("KVM: x86: Exit to ...")
+> I'm afraid you'll have to keep the in-kernel table for MP15, since the
+> driver needs to work with old DTs. For new SoCs (such as MP13), moving
+> the table into DT would be good.
 
-Queued, thanks; patches 24-26 for 5.16 and the rest for 5.17.
+I can try to have both for MP15:use new mechanism as MP13 and keep the 
+table inside the driver as a fallback if DT mapping is not provided (for 
+old DT).
 
-Just one nit: please tune the language to have a little fewer idiomatic 
-phrases, as that can be a bit taxing on non-native speakers.  I for one 
-enjoy learning a few new words, and it even adds some "personality" to 
-the remote interactions, but it probably distracts people that aren't 
-too preficient in English.
+Thanks
 
-Paolo
-
-> v3:
->   - Rebase to kvm/queue (and drop non-x86 patches as they've been queued).
->   - Redo AVIC patches, sadly the vcpu_(un)blocking() hooks need to stay.
->   - Add a patch to fix a missing (docuentation-only) barrier in nested
->     posted interrupt delivery. [Paolo]
->   - Collect reviews.
 > 
-> v2:
->   - https://lore.kernel.org/all/20211009021236.4122790-1-seanjc@google.com/
->   - Collect reviews. [Christian, David]
->   - Add patch to move arm64 WFI functionality out of hooks. [Marc]
->   - Add RISC-V to the fun.
->   - Add all the APICv fun.
+> Thanks,
 > 
-> v1: https://lkml.kernel.org/r/20210925005528.1145584-1-seanjc@google.com
-> 
-> Paolo Bonzini (1):
->    KVM: fix avic_set_running for preemptable kernels
-> 
-> Sean Christopherson (25):
->    KVM: nVMX: Ensure vCPU honors event request if posting nested IRQ
->      fails
->    KVM: VMX: Clean up PI pre/post-block WARNs
->    KVM: VMX: Handle PI wakeup shenanigans during vcpu_put/load
->    KVM: Drop unused kvm_vcpu.pre_pcpu field
->    KVM: Move x86 VMX's posted interrupt list_head to vcpu_vmx
->    KVM: VMX: Move preemption timer <=> hrtimer dance to common x86
->    KVM: x86: Unexport LAPIC's switch_to_{hv,sw}_timer() helpers
->    KVM: x86: Remove defunct pre_block/post_block kvm_x86_ops hooks
->    KVM: SVM: Signal AVIC doorbell iff vCPU is in guest mode
->    KVM: SVM: Don't bother checking for "running" AVIC when kicking for
->      IPIs
->    KVM: SVM: Remove unnecessary APICv/AVIC update in vCPU unblocking path
->    KVM: SVM: Use kvm_vcpu_is_blocking() in AVIC load to handle preemption
->    KVM: SVM: Skip AVIC and IRTE updates when loading blocking vCPU
->    iommu/amd: KVM: SVM: Use pCPU to infer IsRun state for IRTE
->    KVM: VMX: Don't do full kick when triggering posted interrupt "fails"
->    KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this
->      vCPU
->    KVM: VMX: Pass desired vector instead of bool for triggering posted
->      IRQ
->    KVM: VMX: Fold fallback path into triggering posted IRQ helper
->    KVM: VMX: Don't do full kick when handling posted interrupt wakeup
->    KVM: SVM: Drop AVIC's intermediate avic_set_running() helper
->    KVM: SVM: Move svm_hardware_setup() and its helpers below svm_x86_ops
->    KVM: SVM: Nullify vcpu_(un)blocking() hooks if AVIC is disabled
->    KVM: x86: Skip APICv update if APICv is disable at the module level
->    KVM: x86: Drop NULL check on kvm_x86_ops.check_apicv_inhibit_reasons
->    KVM: x86: Unexport __kvm_request_apicv_update()
-> 
->   arch/x86/include/asm/kvm-x86-ops.h |   2 -
->   arch/x86/include/asm/kvm_host.h    |  12 -
->   arch/x86/kvm/hyperv.c              |   3 +
->   arch/x86/kvm/lapic.c               |   2 -
->   arch/x86/kvm/svm/avic.c            | 116 ++++---
->   arch/x86/kvm/svm/svm.c             | 479 ++++++++++++++---------------
->   arch/x86/kvm/svm/svm.h             |  16 +-
->   arch/x86/kvm/vmx/posted_intr.c     | 234 +++++++-------
->   arch/x86/kvm/vmx/posted_intr.h     |   8 +-
->   arch/x86/kvm/vmx/vmx.c             |  66 ++--
->   arch/x86/kvm/vmx/vmx.h             |   3 +
->   arch/x86/kvm/x86.c                 |  41 ++-
->   drivers/iommu/amd/iommu.c          |   6 +-
->   include/linux/amd-iommu.h          |   6 +-
->   include/linux/kvm_host.h           |   3 -
->   virt/kvm/kvm_main.c                |   3 -
->   16 files changed, 510 insertions(+), 490 deletions(-)
+> 	M.
 > 
 

@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B23846DAEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F0D46DAED
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbhLHSYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:24:03 -0500
-Received: from mga03.intel.com ([134.134.136.65]:48770 "EHLO mga03.intel.com"
+        id S238811AbhLHSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:24:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:38438 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229487AbhLHSYC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:24:02 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237840544"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="237840544"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:20:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="751985058"
-Received: from eatci-mobl.amr.corp.intel.com (HELO [10.212.194.205]) ([10.212.194.205])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 10:20:29 -0800
-Subject: Re: [x86/signal] 3aac3ebea0: will-it-scale.per_thread_ops -11.9%
- regression
-To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Sang, Oliver" <oliver.sang@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-References: <20211207012128.GA16074@xsang-OptiPlex-9020>
- <bbc24579-b6ee-37cb-4bbf-10e3476537e0@intel.com>
- <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <c94b8394-08cd-8273-2cd5-1ee5880d4c36@intel.com>
-Date:   Wed, 8 Dec 2021 10:20:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S232989AbhLHSYX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:24:23 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 867061042;
+        Wed,  8 Dec 2021 10:20:51 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A5EF3F73D;
+        Wed,  8 Dec 2021 10:20:50 -0800 (PST)
+Date:   Wed, 8 Dec 2021 18:20:47 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, boqun.feng@gmail.com, lkp@intel.com, will@kernel.org
+Subject: Re: [PATCH] locking/atomic: atomic64: remove unusable atomics
+Message-ID: <YbD3f3CnTUkInNoP@FVFF77S0Q05N>
+References: <20211126115923.41489-1-mark.rutland@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <DF832BC5-AB0F-44AD-83C3-E0108176F945@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126115923.41489-1-mark.rutland@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 10:00 AM, Bae, Chang Seok wrote:
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index a629b11bf3e0..8194d2f38bf1 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -4224,6 +4224,11 @@ int restore_altstack(const stack_t __user *uss)
->         stack_t new;
->         if (copy_from_user(&new, uss, sizeof(stack_t)))
->                 return -EFAULT;
-> +       if (current->sas_ss_sp == (unsigned long) new.ss_sp &&
-> +           current->sas_ss_size == new.ss_size &&
-> +           current->sas_ss_flags == new.ss_flags)
-> +               return 0;
-> +
->         (void)do_sigaltstack(&new, NULL, current_user_stack_pointer(),
->                              MINSIGSTKSZ);
->         /* squash all but EFAULT for now */
+Peter, did you have any thoughts on this, or would you be happy to pick it as a
+cleanup?
 
-This seems like a generally good optimization that could go in
-do_sigaltstack() itself, no?
+If there's anything on your queue that I can help to get out of the way, please
+let me know!
 
-Either way, it seems like 0day botched this a bit.  '3aac3ebea0' wasn't
-the actual culprit, it was the patch before.
+Thanks,
+Mark.
+
+On Fri, Nov 26, 2021 at 11:59:23AM +0000, Mark Rutland wrote:
+> The generic atomic64 implementation provides:
+> 
+> * atomic64_and_return()
+> * atomic64_or_return()
+> * atomic64_xor_return()
+> 
+> ... but none of these exist in the standard atomic64 API as described by
+> scripts/atomic/atomics.tbl, and none of these have prototypes exposed by
+> <asm-generic/atomic64.h>.
+> 
+> The lkp kernel test robot noted this results in warnings when building with
+> W=1:
+> 
+>   lib/atomic64.c:82:5: warning: no previous prototype for 'generic_atomic64_and_return' [-Wmissing-prototypes]
+> 
+>   lib/atomic64.c:82:5: warning: no previous prototype for 'generic_atomic64_or_return' [-Wmissing-prototypes]
+> 
+>   lib/atomic64.c:82:5: warning: no previous prototype for 'generic_atomic64_xor_return' [-Wmissing-prototypes]
+> 
+> This appears to have been a thinko in commit:
+> 
+>   28aa2bda2211f432 ("locking/atomic: Implement atomic{,64,_long}_fetch_{add,sub,and,andnot,or,xor}{,_relaxed,_acquire,_release}()")
+> 
+> ... where we grouped add/sub separately from and/ox/xor, so that we could avoid
+> implementing _return forms for the latter group, but forgot to remove
+> ATOMIC64_OP_RETURN() for that group.
+> 
+> This doesn't cause any functional problem, but it's pointless to build code
+> which cannot be used. Remove the unusable code. This does not affect add/sub,
+> for which _return forms will still be built.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/r/202111120712.RtQHZohY-lkp@intel.com
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  lib/atomic64.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/lib/atomic64.c b/lib/atomic64.c
+> index 3df653994177..caf895789a1e 100644
+> --- a/lib/atomic64.c
+> +++ b/lib/atomic64.c
+> @@ -118,7 +118,6 @@ ATOMIC64_OPS(sub, -=)
+>  #undef ATOMIC64_OPS
+>  #define ATOMIC64_OPS(op, c_op)						\
+>  	ATOMIC64_OP(op, c_op)						\
+> -	ATOMIC64_OP_RETURN(op, c_op)					\
+>  	ATOMIC64_FETCH_OP(op, c_op)
+>  
+>  ATOMIC64_OPS(and, &=)
+> @@ -127,7 +126,6 @@ ATOMIC64_OPS(xor, ^=)
+>  
+>  #undef ATOMIC64_OPS
+>  #undef ATOMIC64_FETCH_OP
+> -#undef ATOMIC64_OP_RETURN
+>  #undef ATOMIC64_OP
+>  
+>  s64 generic_atomic64_dec_if_positive(atomic64_t *v)
+> -- 
+> 2.30.2
+> 

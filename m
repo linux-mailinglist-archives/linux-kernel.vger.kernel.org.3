@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF4C46DED6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D4646DEDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241073AbhLHXKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:10:22 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:38760 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbhLHXKV (ORCPT
+        id S232478AbhLHXLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229453AbhLHXLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:10:21 -0500
-Received: by mail-oi1-f181.google.com with SMTP id r26so6213808oiw.5;
-        Wed, 08 Dec 2021 15:06:48 -0800 (PST)
+        Wed, 8 Dec 2021 18:11:07 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7CEC061746;
+        Wed,  8 Dec 2021 15:07:35 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id m9so4715230iop.0;
+        Wed, 08 Dec 2021 15:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GvxS1qroTD61QT/EFi3iPjXiqfPMtu/AfLzP0j5oWl8=;
+        b=A716lHua5S8Q0I6LxK8EbL72dqrwmaFOaGZWKh8i2V6ZCefvzwrlTpqmZbofBkji3o
+         eTcY11faHhDvzaWnlyJPjD7MAItParYA6jFITwEW1GmuBNmQpivoeP+lvJXzQFzoRt4o
+         KrRJYahvYIy5j7BOUkX/gYL9MMLme5cBDW81kzuBpbmOLzqNYjLQEj7lfLjINBTl62tu
+         6LKR4U7ia3Uft+usQCy2zYjuO84q0t57aRNsJGok6UcRGOFTAq8e022/6KwyGFU2QJ0w
+         XRDya9VZc8Wt9YttyS8IJyQLAL9LeHUiAnj73F7pRVE9OPVsxiUNFKczmtlJ85+QhuBd
+         +20g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ZTyMJI4hTyE9L4Zhb7j0sOWecejaECV3ht0mOq9ry8g=;
-        b=KhSsnwmpoa1/V85OtmTMczw3ctercu6HA+1scTqeB/KOkfrxoYuicysXJwpjjWLFHc
-         VBXtFrt/d05XF0phu2NZ6aVxBvyix5dNAPTaWJzeWNkEKHrfmxcp9dhHOhrmE1Kg5543
-         LKq5Kqe2cxb1AZPevWTFLe3Asc3Dz8FIs+4XlXhnjPDONQvXO5UYEHyuuA3imrnpxCvD
-         rt5M2bImX5DQRhR81eoq7c14Q/AENgrKPJHndK7qfCN7je9jRw4Kzp9/8FtX3cTwnoCN
-         4J7ZTOKXGsuw2ssf0nNOkyQ/feYNGbdVE9CFLh2XE8f7TA8B/LY90nWEzkCGcu9D88gA
-         x11Q==
-X-Gm-Message-State: AOAM530/xNwUgSGNjq0RHew1Is2U+2Btlf4viLvPxYHLUhSAI6Z4bRxq
-        ApGLoijfOMwv8Oo3YBR4TfArf0OKqw==
-X-Google-Smtp-Source: ABdhPJy572TEFvmQ84InPEY2Apekh9OAe6oDDy5/LdsgMAOOq8+29sIsh1dXymCw8zpSWn7RI+0T4Q==
-X-Received: by 2002:a05:6808:350:: with SMTP id j16mr2336064oie.47.1639004808210;
-        Wed, 08 Dec 2021 15:06:48 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t14sm751222oth.81.2021.12.08.15.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 15:06:47 -0800 (PST)
-Received: (nullmailer pid 596178 invoked by uid 1000);
-        Wed, 08 Dec 2021 23:06:46 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kgugala@antmicro.com,
-        mdudek@internships.antmicro.com, rdunlap@infradead.org,
-        paulus@ozlabs.org, joel@jms.id.au, geert@linux-m68k.org,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        linux-mmc@vger.kernel.org, shorne@gmail.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krakoczy@antmicro.com, ulf.hansson@linaro.org,
-        mholenko@antmicro.com
-In-Reply-To: <20211208132042.3226275-3-gsomlo@gmail.com>
-References: <20211208132042.3226275-1-gsomlo@gmail.com> <20211208132042.3226275-3-gsomlo@gmail.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
-Date:   Wed, 08 Dec 2021 17:06:46 -0600
-Message-Id: <1639004806.166681.596177.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GvxS1qroTD61QT/EFi3iPjXiqfPMtu/AfLzP0j5oWl8=;
+        b=0r/oyFZmwd46PgC/k+pk3QFzxDVuUmqv6gfWtQc4FbQ/LrCEKSpgHOIG7bPo21LoEI
+         Z+WybU/tv6ZCw9A8SgHf5IeXvjVITAFV1iyoZYltsCE4pwNHWjxF6VqKfyPizQQK7LzR
+         syeiSCGijbFObQSght9SFNX3CAvUPR38vChkaTzNAmflEfL+77eJXQpoBvF8yxqfKJlF
+         LzPmLVJtH750Dm9DiUcQFtnBVO59YlV2BqRV/MO+fIA9AJjBMU1ugIDqY6JzCYEiuhmn
+         lxMEEXMGbxWeGvD1BGGMIgOe8zie/5uVU0bhVoHbfNLx4KiEcQ6TXu4kwmOhEMw/vVDE
+         8Flw==
+X-Gm-Message-State: AOAM530W2QdisLTdEge3nn2PAYxMyJCT9/sblgcX6TIJBnXEgB+I7VWC
+        97dRcgLGiKRw1DmMNE6IFwzfYz1Tf2x+UOr2VD4=
+X-Google-Smtp-Source: ABdhPJy5PjPkLmDXdBa8v9cvnb0J8BYP4vtPofj3T3hO/HPtklP9pPvbbe0+0XmfCKfw0H5ANish9+gJVfHa7ILR6mI=
+X-Received: by 2002:a02:c78e:: with SMTP id n14mr3798423jao.40.1639004854486;
+ Wed, 08 Dec 2021 15:07:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-15-ojeda@kernel.org>
+ <CAKwvOdnA+XU9u+dJ6NfmVFDTxdkCH4v04nMVaieuzauWZtBUpw@mail.gmail.com>
+In-Reply-To: <CAKwvOdnA+XU9u+dJ6NfmVFDTxdkCH4v04nMVaieuzauWZtBUpw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 9 Dec 2021 00:07:24 +0100
+Message-ID: <CANiq72n1DehytS+n2_RbJf0uAROTD2c48voDWVGEWPaPr_V4qQ@mail.gmail.com>
+Subject: Re: [PATCH 14/19] docs: add Rust documentation
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021 08:20:41 -0500, Gabriel Somlo wrote:
-> LiteSDCard is a small footprint, configurable SDCard core for FPGA
-> based system on chips.
-> 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> 
-> New in v3:
->   - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
->     bindings document (please let me know if that was premature, and
->     happy to take further review if needed :)
->   - add dedicated DT property for source clock frequency
-> 
->  .../devicetree/bindings/mmc/litex,mmc.yaml    | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-> 
+On Wed, Dec 8, 2021 at 2:30 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> I'm sure Documentation/rust/ will grow over time; there's certainly
+> more that can be added and core kernel devs will have more questions
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Indeed -- the comment is only trying to emphasize (or explain) that
+this might be a difference with respect to C, i.e. that we should try
+to put as much of the documentation as possible closer to the code,
+rather than create "far" files in `Documentation/rust`. I will try to
+clarify the comment.
 
-yamllint warnings/errors:
+> But I read through all that was added here and didn't find anything
+> problematic IMO.  I didn't verify the png's are actually the logo...
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg-names:items: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'phy'}, {'const': 'core'}, {'const': 'reader'}, {'const': 'writer'}, {'const': 'irq (optional)'}] is not of type 'object'
-	'irq (optional)' does not match '^[a-zA-Z0-9,.\\-_ #+/]+$'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg: {'items': [{'description': 'PHY registers'}, {'description': 'CORE registers'}, {'description': 'DMA Reader buffer'}, {'description': 'DMA Writer buffer'}, {'description': 'IRQ registers (optional)'}], 'minItems': 4, 'maxItems': 5} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg-names: {'items': [{'const': 'phy'}, {'const': 'core'}, {'const': 'reader'}, {'const': 'writer'}, {'const': 'irq (optional)'}], 'minItems': 4, 'maxItems': 5} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: ignoring, error in schema: properties: reg-names: items
-warning: no schema found in file: ./Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-Documentation/devicetree/bindings/mmc/litex,mmc.example.dt.yaml:0:0: /example-0/mmc@12005000: failed to match any schema with compatible: ['litex,mmc']
+Thanks for reading through all of it!
 
-doc reference errors (make refcheckdocs):
+> I don't think `make htmldocs` produced any new warnings, though it's
+> not exactly warning free at the moment (pre-existing before this
+> series).
 
+Yeah, I also run `make htmldocs` before submitting the patch series
+rounds. And indeed, there are quite a few warnings (20+?), but none
+coming from `Documentation/rust` that I could see.
 
-See https://patchwork.ozlabs.org/patch/1565210
+> How is rust-logo.png being included in the docs? Is there something
+> with RST that isn't grep'able for rust-logo.png?
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+At the moment, the assets are simply copied to the output folder, in
+the `rust/Makefile`. (I should provide an SVG too or remove the
+reference to it, by the way).
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Cheers,
+Miguel

@@ -2,110 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A71C46D90C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406346D909
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 17:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237436AbhLHRBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 12:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S237424AbhLHRAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 12:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbhLHRBD (ORCPT
+        with ESMTP id S232422AbhLHRAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 12:01:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42B2C061746;
-        Wed,  8 Dec 2021 08:57:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ED4C5CE2216;
-        Wed,  8 Dec 2021 16:57:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2966CC00446;
-        Wed,  8 Dec 2021 16:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638982648;
-        bh=U3tTSsg5YkUND5CGysUHv+zvBNyCz4YDGgl5Nz/9Vdo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EFxOZtfpBBnu7JPqFL8tL891rBwl464/oqoKWp9UOL45PwwtACEYKTVE8kDmgPs8u
-         R22DOet+/qo/bQPlxRb0PWQoZOqxSdN87wCrIWAW/iKhSBPS3+gCya6GzcPQ04K12T
-         Uk+8XvxMtGbJZZL15EzBYWXDX7OUNBeN1/ueAyZDQdFzwCfLZiuPMstKTUboTHxn/z
-         v1W520QCov0EWrzAj6u7DIu3FJue0oB2cLo7thZQrKdezLQlzrE0N/bdNr4p85lHBa
-         oZzYZKZPNhpqPu/ZVIjHETkAuA1GC4ZyoJDD8M98Q0Zkdx9HDN8jvdqtSn6ql3QS6g
-         1BvTlwwGvuvig==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Subject: [PATCH v2] MIPS: Loongson64: Use three arguments for slti
-Date:   Wed,  8 Dec 2021 09:56:17 -0700
-Message-Id: <20211208165616.1746108-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Dec 2021 12:00:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4627C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 08:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LsK8Hq4pKKKIbhDjKiImCxt1R17M3db92+vmVGCevVA=; b=3aPILJYyOMc9/SVuOfuvR9HaDB
+        nnPqDCyJWDsdUaSGhV3/dG6b4NemlevPqTi08UFv+HZamoXq69bt0EY3ClrmLkLSFZdGUunfQB+Lv
+        lv0UeH1WLyM67D+YmqDKkh0C76gkKXQVHwum07KENjojMquaKLX0seYMsRlRsksznVoGsLkVAa3Wo
+        Tvcdx29im6xMytRlX7GA9+pusMhUSSsa+yws7T/U557M54g5bM+eGhkkuL+Fr+nVxCQYOVAmXRa69
+        0FfDEPCJ1Fd2ospWEenpXi7ohhoFzOYx5O6ZaTclibqkMxGHoiGgzwi49pGMtFwZD69R+KJy4J3DZ
+        7Lkbr6jA==;
+Received: from 54-240-197-234.amazon.com ([54.240.197.234] helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mv0Fj-00De6g-55; Wed, 08 Dec 2021 16:57:11 +0000
+Message-ID: <f67ce85c73941bd5d35e8af84765c70f56ddcdf7.camel@infradead.org>
+Subject: Re: [PATCH] use x86 cpu park to speedup smp_init in kexec situation
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     paulmck@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Schander, Johanna 'Mimoja' Amelie" <mimoja@amazon.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        hewenliang4@huawei.com, hushiyuan@huawei.com,
+        luolongjun@huawei.com, hejingxian <hejingxian@huawei.com>
+Date:   Wed, 08 Dec 2021 16:57:07 +0000
+In-Reply-To: <0824902894565e850b79e494c38a7856f8358b99.camel@infradead.org>
+References: <87ft22dxop.fsf@nanos.tec.linutronix.de>
+         <27357c74bdc3b52bdf59e6f48cd8690495116d64.camel@infradead.org>
+         <877dnedt7l.fsf@nanos.tec.linutronix.de>
+         <87zh09tcqz.fsf@nanos.tec.linutronix.de>
+         <1d2a7bc911da2bbaa4c441d269287fbb5b1bc8d7.camel@infradead.org>
+         <5039f6178715dc4725a8c7f071dfd9ef5d70ae43.camel@infradead.org>
+         <d7939a95731de8b8eb9245c330f014772e40f145.camel@infradead.org>
+         <20211208145047.GR641268@paulmck-ThinkPad-P17-Gen-1>
+         <0824902894565e850b79e494c38a7856f8358b99.camel@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-td49l7MBhKWTuSNfDjWC"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LLVM's integrated assembler does not support 'slti <reg>, <imm>':
 
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:86:2: note: while in macro instantiation
- kernel_entry_setup # cpu specific setup
- ^
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:150:2: note: while in macro instantiation
- smp_slave_setup
- ^
+--=-td49l7MBhKWTuSNfDjWC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-To increase compatibility with LLVM's integrated assembler, use the full
-form of 'slti <reg>, <reg>, <imm>', which matches the rest of
-arch/mips/. This does not result in any change for GNU as.
+On Wed, 2021-12-08 at 15:10 +0000, David Woodhouse wrote:
+> @@ -4266,13 +4266,13 @@ void rcu_cpu_starting(unsigned int cpu)
+>                 rcu_disable_urgency_upon_qs(rdp);
+>                 /* Report QS -after- changing ->qsmaskinitnext! */
+>                 rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+> +               /* Er, why didn't we drop the lock here? */
+> -       } else {
+> -               raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>         }
+>=20
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1526
-Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Oh, I see... how about this straw man then...
+
+=46rom 083c8fb2656e9fc60a17c9bfd538fcee4c5ebacc Mon Sep 17 00:00:00 2001
+From: David Woodhouse <dwmw@amazon.co.uk>
+Date: Tue, 16 Feb 2021 15:04:34 +0000
+Subject: [PATCH 1/4] rcu: Expand locking around rcu_cpu_starting() to cover
+ rnp->ofl_seq bump
+
+To allow architectures to bring APs online in parallel, we need only one
+of them to be going through rcu_cpu_starting() at a time. Expand the
+coverage of the existing per-node lock to cover the manipulation of
+rnp->ofl_seq too.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
+ kernel/rcu/tree.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-v1 -> v2: https://lore.kernel.org/r/20211207170129.578089-1-nathan@kernel.org/
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index ef8d36f580fc..544198c674f2 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4246,11 +4246,11 @@ void rcu_cpu_starting(unsigned int cpu)
+=20
+ 	rnp =3D rdp->mynode;
+ 	mask =3D rdp->grpmask;
++	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+ 	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
+ 	rcu_dynticks_eqs_online();
+ 	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+-	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+ 	newcpu =3D !(rnp->expmaskinitnext & mask);
+ 	rnp->expmaskinitnext |=3D mask;
+@@ -4261,6 +4261,11 @@ void rcu_cpu_starting(unsigned int cpu)
+ 	rdp->rcu_onl_gp_seq =3D READ_ONCE(rcu_state.gp_seq);
+ 	rdp->rcu_onl_gp_flags =3D READ_ONCE(rcu_state.gp_flags);
+=20
++	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
++	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
++	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
++	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
++
+ 	/* An incoming CPU should never be blocking a grace period. */
+ 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? *=
+/
+ 		rcu_disable_urgency_upon_qs(rdp);
+@@ -4269,10 +4274,6 @@ void rcu_cpu_starting(unsigned int cpu)
+ 	} else {
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	}
+-	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+-	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+-	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
+-	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+ }
+=20
+ /*
+--=20
+2.31.1
 
-* Fix typos in commit message ("stli" -> "slti") [Sergey]
 
- arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--=-td49l7MBhKWTuSNfDjWC
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-index 13373c5144f8..efb41b351974 100644
---- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-+++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-@@ -32,7 +32,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
-@@ -63,7 +63,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjA4MTY1NzA3WjAvBgkqhkiG9w0BCQQxIgQg3IIIEDN80yFBaA5CdNPAv1wXpnZ2av6TGIXDsr1O
+IRwwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBALBpSBAIvSWd2OEmSzwkTtO/4GLK5chj6F4zucq476IRMhQwVjRJyGZjRVHFdQwX
+aXnQmaSLUqpF1Z3nkPwA3n1uhOzHYz7wEjOFI9Y40vHPpeH8sNA236uttKb3vaWQ/qomvPAgURJp
+uq1XUOSNVK6/hE0gGI1BHD2+dHueALlEwvOvnTECg+1PWO/Fc1BjqAJhh3fKwbftkYu4p4PfEPZ3
+4rzA6jNRzh0dmjCWPJHWqadIYGZNRjDpioqTCZpwdPcCT5Y7Ed5zkVlZZKZMRWAgEtKuDOnK0OT5
+PmDjMxwT6hqTrz6fvOvbGSHlyQnSc6Q4Q3yG77VYXsGPskkE5UMAAAAAAAA=
 
-base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
--- 
-2.34.1
+
+--=-td49l7MBhKWTuSNfDjWC--
 

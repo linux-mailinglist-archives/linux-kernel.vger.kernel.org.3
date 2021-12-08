@@ -2,74 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B058746DEC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DC846DECC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241000AbhLHXD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:03:27 -0500
-Received: from mail-pj1-f46.google.com ([209.85.216.46]:34596 "EHLO
-        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240729AbhLHXD0 (ORCPT
+        id S241030AbhLHXED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241012AbhLHXEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:03:26 -0500
-Received: by mail-pj1-f46.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so4893565pjb.1;
-        Wed, 08 Dec 2021 14:59:53 -0800 (PST)
+        Wed, 8 Dec 2021 18:04:02 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B45DC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 15:00:29 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so2849922wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 15:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kryo-se.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DOKpev+2V3cKtqcej7seNPIVNOu0LVpLbhiS4arwDwo=;
+        b=GnQ6uG+aO8etYAhcx9NNwxNZgNwwsGKl5PUwumWLmqaJWCsF+wjY2gcs9IqUf9M6+l
+         o1E41FO2W16Oz66sSFtzvnv2+9aQaaRdIS0NOBO9W/97KZ14suo/MC4BldUwNywxXqj4
+         L/nuG2Pu1viONh2LSKCnTG6B+omRPQJcnUYVUdORkOi+iVLJWmQpfM5gRXZC3rqW1qBC
+         FzhEpCIn428DruhbhfBybvRC1zkt2KL0H0yr5O0sl2ruVoVNkH26t+H56c1B0KJa4mf4
+         mAIRnuxWqkezHrK4eat2IlmN19ZtmFU9ranDWPtPBcSgV0Y4y9DqRTHbFAJbLbgw4Ep1
+         ve0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7lUQRqweKeMiFosOOSe3Fkngs2maTghHnb/E/B7/xHc=;
-        b=PerpDaCme8ai/f+szB8h7o6w4WYgfh/O8Q3IzxGttQ1s9ON4lhZLOT1T1+1AaDhtRp
-         1Lbnjv2NBVz4mAgot6Mr6PdAQ8ZfkjfUYm25jWdDXDUe2LHgLwV8Sljc1l51Yhq6k9op
-         vxbOVc9l1DFgOUl+RLGCwjtq05dT8YlcgnDUu4/myV4nXXeXD1sxUBJpm7cttYLd1XPP
-         cVQa9ukEfRCuhLX9zNUHlkPkIRIqbsQiA0rwigNKh83pkJsKQJpb0yeojHI0SRligcTI
-         AWrjjyZaM5JlYF7b3AysS51+WiAh7e5VWyAkqpLFt7tN1KAUciiUwNk2/4nZa2LSI1wX
-         o2Kw==
-X-Gm-Message-State: AOAM533kkRxLB71psDCGPcv8Y6fZZRAef3XFpDOVXOXE7TXy+z+1P8kq
-        /CSN8M8nSaK6r1qIMBMbWvU=
-X-Google-Smtp-Source: ABdhPJydR/005NsaekppzKyVoRvAikrLCJBOO01sSVi56aX9BXHj7oZSMSduTbDSMhnZm5BbWHrTZw==
-X-Received: by 2002:a17:902:b210:b0:143:789a:7418 with SMTP id t16-20020a170902b21000b00143789a7418mr62680540plr.38.1639004393588;
-        Wed, 08 Dec 2021 14:59:53 -0800 (PST)
-Received: from ?IPv6:2620:0:1000:2514:2f89:deb4:72f3:8a11? ([2620:0:1000:2514:2f89:deb4:72f3:8a11])
-        by smtp.gmail.com with ESMTPSA id lr6sm3965507pjb.0.2021.12.08.14.59.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 14:59:53 -0800 (PST)
-Subject: Re: [PATCH v2 6/8] docs: sysfs-block: document virt_boundary_mask
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-References: <20211208005640.102814-1-ebiggers@kernel.org>
- <20211208005640.102814-7-ebiggers@kernel.org>
- <13462e59-82f3-d6fc-a84e-2cf3083e0cc7@acm.org> <YbEz4pq2xMfAufwJ@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <ac1cefeb-d0f1-3cfc-ffb4-e5ac37b46bcf@acm.org>
-Date:   Wed, 8 Dec 2021 14:59:51 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=DOKpev+2V3cKtqcej7seNPIVNOu0LVpLbhiS4arwDwo=;
+        b=I2Kkd+7Olbo3MNO6Y0QOgoxijkiOAH8DC0lhJgBa/bOm5mWGzh51KGFZtNpyigc6DL
+         FiFISzU2vUsB3/M1gXRRSw/I1t8KT4H4S9cCwlAlqA81m3A7DXm/ImRVbYugJdppcojm
+         kRDWX4mFlWxLnbtCUz59oN157FkvVBb3yfGWs4FaPUeAd8JIWP6QXJwqWFKbiWQBLIpk
+         myOcJ75j64JUlnNYUatDiviFSDgmgV4jkE4lCanAvan3yQwAkBVsq1iRuBhcHDW5Fk8v
+         Jn2OLZsExryKvtKNd5aFJmgxBXvvwAtMOVCUeGYHEkV5b0uHq/oETY8MZHL0yNAOUpdO
+         FxZw==
+X-Gm-Message-State: AOAM530+JwOcYQo4iMK5tXYnAtMxgOQBG+qRJbdJ5RrX7q22OcUMq4x6
+        1ufa6OIAl5oBxUZa6L8Grm3+cQ==
+X-Google-Smtp-Source: ABdhPJxPZ/0Nazb/N5GfpfOx9DNC9hdOuKxEToAJHsKiq3AeN+D+8qoqO5Xv0JHQpX1XIWt2h8RXNw==
+X-Received: by 2002:a05:600c:4e8f:: with SMTP id f15mr2252545wmq.116.1639004427891;
+        Wed, 08 Dec 2021 15:00:27 -0800 (PST)
+Received: from kerfuffle.. ([2a02:168:9619:0:e47f:e8d:2259:ad13])
+        by smtp.gmail.com with ESMTPSA id n1sm4166594wmq.6.2021.12.08.15.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 15:00:27 -0800 (PST)
+From:   Erik Ekman <erik@kryo.se>
+To:     Rasesh Mody <rmody@marvell.com>,
+        Sudarsana Kalluru <skalluru@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Erik Ekman <erik@kryo.se>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: bna: Update supported link modes
+Date:   Thu,  9 Dec 2021 00:00:22 +0100
+Message-Id: <20211208230022.153496-1-erik@kryo.se>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <YbEz4pq2xMfAufwJ@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 2:38 PM, Eric Biggers wrote:
-> Sure, I meant for it to be talking about the memory addresses.  How about this:
-> 
-> 		[RO] This file shows the I/O segment memory alignment mask for
-> 		the block device.  I/O requests to this device will be split
-> 		between segments wherever either the memory address of the end
-> 		of the previous segment or the memory address of the beginning
-> 		of the current segment is not aligned to virt_boundary_mask + 1
-> 		bytes.
+The BR-series installation guide from https://driverdownloads.qlogic.com/
+mentions the cards support 10Gbase-SR/LR as well as direct attach cables.
 
-That also sounds good to me.
+The cards only have SFP+ ports, so 10000baseT is not the right mode.
+Switch to using more specific link modes added in commit 5711a98221443
+("net: ethtool: add support for 1000BaseX and missing 10G link modes").
 
-Thanks,
+Only compile tested.
 
-Bart.
+Signed-off-by: Erik Ekman <erik@kryo.se>
+---
+ .../net/ethernet/brocade/bna/bnad_ethtool.c   | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/brocade/bna/bnad_ethtool.c b/drivers/net/ethernet/brocade/bna/bnad_ethtool.c
+index 391b85f25141..d5bf1d4c8dae 100644
+--- a/drivers/net/ethernet/brocade/bna/bnad_ethtool.c
++++ b/drivers/net/ethernet/brocade/bna/bnad_ethtool.c
+@@ -235,13 +235,18 @@ static int
+ bnad_get_link_ksettings(struct net_device *netdev,
+ 			struct ethtool_link_ksettings *cmd)
+ {
+-	u32 supported, advertising;
+-
+-	supported = SUPPORTED_10000baseT_Full;
+-	advertising = ADVERTISED_10000baseT_Full;
++	ethtool_link_ksettings_zero_link_mode(cmd, supported);
++	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
++
++	ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseCR_Full);
++	ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseSR_Full);
++	ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseLR_Full);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseCR_Full);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseSR_Full);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseLR_Full);
+ 	cmd->base.autoneg = AUTONEG_DISABLE;
+-	supported |= SUPPORTED_FIBRE;
+-	advertising |= ADVERTISED_FIBRE;
++	ethtool_link_ksettings_add_link_mode(cmd, supported, FIBRE);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, FIBRE);
+ 	cmd->base.port = PORT_FIBRE;
+ 	cmd->base.phy_address = 0;
+ 
+@@ -253,11 +258,6 @@ bnad_get_link_ksettings(struct net_device *netdev,
+ 		cmd->base.duplex = DUPLEX_UNKNOWN;
+ 	}
+ 
+-	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.supported,
+-						supported);
+-	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.advertising,
+-						advertising);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.33.1
+

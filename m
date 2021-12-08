@@ -2,445 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB6F46DF1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDBD46DF21
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbhLHXz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:55:26 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59196 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238036AbhLHXzX (ORCPT
+        id S241215AbhLHX5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:57:54 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:59830 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238442AbhLHX5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:55:23 -0500
-Received: from thelio.attlocal.net (107-203-255-60.lightspeed.sntcca.sbcglobal.net [107.203.255.60])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D6E2320B717A;
-        Wed,  8 Dec 2021 15:51:50 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D6E2320B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639007511;
-        bh=Fb0bYaBmkmSn9uAfC0tIj2bk7b69nGPELpGCsHPLalg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7jtGyamGCuK2IrMaAGVorpHyJfftKD9IZrfVNWmzExgfe36llENEdO6JkyH7b7lg
-         20ujM8Nr9j8hTY7CGp9f8YTDnvLduanUqPfYFYYu+mo49Ut7MrpS6Egdn3eDyw1kQK
-         juj9ESiq6igW6N9j+WkMVvelxbhca/Sa3TVfc0qw=
-From:   Katherine Perez <kaperez@linux.microsoft.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH v3 1/1] arm64: dts: add minimal DTS for Microsoft Surface Duo 2
-Date:   Wed,  8 Dec 2021 15:51:37 -0800
-Message-Id: <20211208235137.2751003-2-kaperez@linux.microsoft.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211208235137.2751003-1-kaperez@linux.microsoft.com>
-References: <20211208235137.2751003-1-kaperez@linux.microsoft.com>
+        Wed, 8 Dec 2021 18:57:52 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1639007660; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=u15F77aBFCZJ0MAZoaaY1dZuTLowi9SVkhbrAQjxT1U=;
+ b=hjC1tQkspDP1UpmqeaODMTsCc/YKTdvDi/K9QzECIl1AXfBEfenTtfGmY+R7j+RlSbgxbYbp
+ vLOFfq8nuvGTOF5+XyluCGG6BQhMNIkB4grWMHMRbbiaIa6QfZs3Iz78R2T9OOv8f4FqiYG4
+ kcJffNQG+gAxo9M0h9jfeFji6bg=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 61b145ab465c4a723b18d67f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 08 Dec 2021 23:54:19
+ GMT
+Sender: abhinavk=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B1AC4C4360D; Wed,  8 Dec 2021 23:54:19 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: abhinavk)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3C257C4338F;
+        Wed,  8 Dec 2021 23:54:18 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 08 Dec 2021 15:54:18 -0800
+From:   abhinavk@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Freedreno] [PATCH] drm/msm/dp: Move debugfs files into
+ subdirectory
+In-Reply-To: <YW2+oPIaVPO7QsqK@ripper>
+References: <20211015231702.1784254-1-bjorn.andersson@linaro.org>
+ <f72263e0d4c118653fff8b1341dc487b@codeaurora.org> <YWxSWlRp+log+Trz@ripper>
+ <7a77045f4069a21305e5c3614a6739f0@codeaurora.org> <YW2+oPIaVPO7QsqK@ripper>
+Message-ID: <8fa353a5fd6e37f570f3a9d4812158a2@codeaurora.org>
+X-Sender: abhinavk@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a minimal devicetree for Microsoft Surface Duo 2 with SM8350
-Chipset
+On 2021-10-18 11:36, Bjorn Andersson wrote:
+> On Mon 18 Oct 11:07 PDT 2021, abhinavk@codeaurora.org wrote:
+> 
+>> Hi Bjorn
+>> 
+>> On 2021-10-17 09:42, Bjorn Andersson wrote:
+>> > On Fri 15 Oct 16:53 PDT 2021, abhinavk@codeaurora.org wrote:
+>> >
+>> > > On 2021-10-15 16:17, Bjorn Andersson wrote:
+>> > > > In the cleanup path of the MSM DP driver the DP driver's debugfs files
+>> > > > are destroyed by invoking debugfs_remove_recursive() on debug->root,
+>> > > > which during initialization has been set to minor->debugfs_root.
+>> > > >
+>> > > > To allow cleaning up the DP driver's debugfs files either each dentry
+>> > > > needs to be kept track of or the files needs to be put in a subdirectory
+>> > > > which can be removed in one go.
+>> > > >
+>> > > > By choosing to put the debugfs files in a subdirectory, based on the
+>> > > > name of the associated connector this also solves the problem that these
+>> > > > names would collide as support for multiple DP instances are introduced.
+>> > > >
+>> > > > One alternative solution to the problem with colliding file names would
+>> > > > have been to put keep track of the individual files and put them under
+>> > > > the connector's debugfs directory. But while the drm_connector has been
+>> > > > allocated, its associated debugfs directory has not been created at the
+>> > > > time of initialization of the dp_debug.
+>> > > >
+>> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> > >
+>> > > I have been thinking about this problem ever since multi-DP has been
+>> > > posted
+>> > > :)
+>> > > Creating sub-directories seems right but at the moment it looks like
+>> > > IGT
+>> > > which
+>> > > uses these debugfs nodes doesnt check sub-directories:
+>> > >
+>> > > https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tools/msm_dp_compliance.c#L215
+>> > >
+>> > > It looks for the DP debugfs nodes under /sys/kernel/debug/dri/*/
+>> > >
+>> > > We have to fix IGT too to be able to handle multi-DP cases. I will
+>> > > try to
+>> > > come up
+>> > > with a proposal to address this.
+>> > >
+>> > > Till then, can we go with the other solution to keep track of the
+>> > > dentries?
+>> > >
+>> >
+>> > I'm afraid I don't see what you're proposing.
+>> >
+>> > Afaict we need one set of dp_test{type,active,data} per DP controller,
+>> > so even doing this by keeping track of the dentries requires that we
+>> > rename the files based on some identifier (id or connector name) - which
+>> > will cause igt to break.
+>> 
+>> Yes, I also thought the same that there needs to be some identifier.
+>> 
+>> "To allow cleaning up the DP driver's debugfs files either each dentry
+>> needs to be kept track of or the files needs to be put in a 
+>> subdirectory
+>> which can be removed in one go"
+>> 
+>> I guess I misunderstood your statement in the commit text thinking 
+>> that you
+>> had some other way to keep track of the dentries as it mentioned that
+>> use a subdirectory OR keep track of each dentry.
+>> 
+> 
+> No, I did write that code as well and then ditched it.
+> 
+> Unfortunately I don't think it would help you, because we still need to
+> add some identifier to the file names and preferably we should add that
+> to the single case as well to make things consistent.
+> 
+>> >
+>> > As such, I think the practical path forward is that we merge the
+>> > multi-DP series as currently proposed. This will not cause any issues on
+>> > single-DP systems, but on multi-DP systems we will have warnings about
+>> > duplicate debugfs entries in the kernel logs.
+>> >
+>> > Then you can figure out how to rework igt to deal with the multiple DP
+>> > instances and update the dp_debug interface accordingly.
+>> >
+>> 
+>> Fine with me, I will take care of this.
+>> 
+> 
+> Cool, thanks.
+> 
+> Regards,
+> Bjorn
+> 
+Following up on this, Rob has posted the igt change today which i acked.
+https://patchwork.freedesktop.org/patch/465930/
+With this in place, we can actually go ahead with this change.
 
-Signed-off-by: Katherine Perez <kaperez@linux.microsoft.com>
----
+Hence,
 
-Changes since v1:
-- Change remoteprocs firmware-naming scheme to qcom/sm8350/microsft/*
-- Add chassis-type
-
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../qcom/sm8350-microsoft-surface-duo2.dts    | 369 ++++++++++++++++++
- 2 files changed, 370 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 6b816eb33309..a8cc6bd3c423 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -106,4 +106,5 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-new file mode 100644
-index 000000000000..9d35e4d6e460
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-@@ -0,0 +1,369 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (C) 2021, Microsoft Corporation
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "sm8350.dtsi"
-+#include "pm8350.dtsi"
-+#include "pm8350b.dtsi"
-+#include "pm8350c.dtsi"
-+#include "pmk8350.dtsi"
-+#include "pmr735a.dtsi"
-+#include "pmr735b.dtsi"
-+
-+/ {
-+	model = "Microsoft Surface Duo 2";
-+	compatible = "microsoft,surface-duo2", "qcom,sm8350";
-+	chassis-type = "handset";
-+
-+	aliases {
-+		serial0 = &uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8350/microsoft/adsp.mbn";
-+};
-+
-+&apps_rsc {
-+	pm8350-rpmh-regulators {
-+		compatible = "qcom,pm8350-rpmh-regulators";
-+		qcom,pmic-id = "b";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-s9-supply = <&vph_pwr>;
-+		vdd-s10-supply = <&vph_pwr>;
-+		vdd-s11-supply = <&vph_pwr>;
-+		vdd-s12-supply = <&vph_pwr>;
-+
-+		vdd-l1-l4-supply = <&vreg_s11b_0p95>;
-+		vdd-l2-l7-supply = <&vreg_bob>;
-+		vdd-l3-l5-supply = <&vreg_bob>;
-+		vdd-l6-l9-l10-supply = <&vreg_s11b_0p95>;
-+		vdd-l8-supply = <&vreg_s2c_0p8>;
-+
-+		vreg_s10b_1p8: smps10 {
-+			regulator-name = "vreg_s10b_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_s11b_0p95: smps11 {
-+			regulator-name = "vreg_s11b_0p95";
-+			regulator-min-microvolt = <752000>;
-+			regulator-max-microvolt = <1000000>;
-+		};
-+
-+		vreg_s12b_1p25: smps12 {
-+			regulator-name = "vreg_s12b_1p25";
-+			regulator-min-microvolt = <1224000>;
-+			regulator-max-microvolt = <1360000>;
-+		};
-+
-+		vreg_l1b_0p88: ldo1 {
-+			regulator-name = "vreg_l1b_0p88";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <920000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l2b_3p07: ldo2 {
-+			regulator-name = "vreg_l2b_3p07";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3b_0p9: ldo3 {
-+			regulator-name = "vreg_l3b_0p9";
-+			regulator-min-microvolt = <904000>;
-+			regulator-max-microvolt = <904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l5b_0p88: ldo5 {
-+			regulator-name = "vreg_l3b_0p9";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <888000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6b_1p2: ldo6 {
-+			regulator-name = "vreg_l6b_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7b_2p96: ldo7 {
-+			regulator-name = "vreg_l7b_2p96";
-+			regulator-min-microvolt = <2400000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9b_1p2: ldo9 {
-+			regulator-name = "vreg_l9b_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	pm8350c-rpmh-regulators {
-+		compatible = "qcom,pm8350c-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-s9-supply = <&vph_pwr>;
-+		vdd-s10-supply = <&vph_pwr>;
-+
-+		vdd-l1-l12-supply = <&vreg_s1c_1p86>;
-+		vdd-l2-l8-supply = <&vreg_s1c_1p86>;
-+		vdd-l3-l4-l5-l7-l13-supply = <&vreg_bob>;
-+		vdd-l6-l9-l11-supply = <&vreg_bob>;
-+		vdd-l10-supply = <&vreg_s12b_1p25>;
-+
-+		vdd-bob-supply = <&vph_pwr>;
-+
-+		vreg_s1c_1p86: smps1 {
-+			regulator-name = "vreg_s1c_1p86";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1952000>;
-+		};
-+
-+		vreg_s2c_0p8: smps2 {
-+			regulator-name = "vreg_s2c_0p8";
-+			regulator-min-microvolt = <640000>;
-+			regulator-max-microvolt = <1000000>;
-+		};
-+
-+		vreg_s10c_1p05: smps10 {
-+			regulator-name = "vreg_s10c_1p05";
-+			regulator-min-microvolt = <1048000>;
-+			regulator-max-microvolt = <1128000>;
-+		};
-+
-+		vreg_bob: bob {
-+			regulator-name = "vreg_bob";
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
-+		};
-+
-+		vreg_l1c_1p8: ldo1 {
-+			regulator-name = "vreg_l1c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l2c_1p8: ldo2 {
-+			regulator-name = "vreg_l2c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3c_3p0: ldo3 {
-+			regulator-name = "vreg_l3c_3p0";
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l4c_uim1: ldo4 {
-+			regulator-name = "vreg_l4c_uim1";
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l5c_uim2: ldo5 {
-+			regulator-name = "vreg_l5c_uim2";
-+			regulator-min-microvolt = <1704000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6c_1p8: ldo6 {
-+			regulator-name = "vreg_l6c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7c_3p0: ldo7 {
-+			regulator-name = "vreg_l7c_3p0";
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l8c_1p8: ldo8 {
-+			regulator-name = "vreg_l8c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9c_2p96: ldo9 {
-+			regulator-name = "vreg_l9c_2p96";
-+			regulator-min-microvolt = <2960000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10c_1p2: ldo10 {
-+			regulator-name = "vreg_l10c_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l11c_2p96: ldo11 {
-+			regulator-name = "vreg_l11c_2p96";
-+			regulator-min-microvolt = <2400000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l12c_1p8: ldo12 {
-+			regulator-name = "vreg_l12c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l13c_3p0: ldo13 {
-+			regulator-name = "vreg_l13c_3p0";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+};
-+
-+&cdsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8350/microsoft/cdsp.mbn";
-+};
-+
-+&ipa {
-+	status = "okay";
-+
-+	memory-region = <&pil_ipa_fw_mem>;
-+};
-+
-+&mpss {
-+	status = "okay";
-+	firmware-name = "qcom/sm8350/microsoft/modem.mbn";
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&slpi {
-+	status = "okay";
-+	firmware-name = "qcom/sm8350/microsoft/slpi.mbn";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <4 4>, <12 4>, <56 4>, <76 4>;
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&ufs_mem_hc {
-+	status = "okay";
-+
-+	reset-gpios = <&tlmm 203 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l7b_2p96>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l9b_1p2>;
-+	vccq-max-microamp = <900000>;
-+};
-+
-+&ufs_mem_phy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l5b_0p88>;
-+	vdda-max-microamp = <91600>;
-+	vdda-pll-supply = <&vreg_l6b_1p2>;
-+	vdda-pll-max-microamp = <19000>;
-+};
-+
-+&usb_1 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_1_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5b_0p88>;
-+	vdda18-supply = <&vreg_l1c_1p8>;
-+	vdda33-supply = <&vreg_l2b_3p07>;
-+};
-+
-+&usb_1_qmpphy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l6b_1p2>;
-+	vdda-pll-supply = <&vreg_l1b_0p88>;
-+};
-+
-+&usb_2 {
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5b_0p88>;
-+	vdda18-supply = <&vreg_l1c_1p8>;
-+	vdda33-supply = <&vreg_l2b_3p07>;
-+};
-+
-+&usb_2_qmpphy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l6b_1p2>;
-+	vdda-pll-supply = <&vreg_l5b_0p88>;
-+};
---
-2.31.1
-
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> >
+>> > Which also implies that we should hold this patch back. But if we go
+>> > that path, I think we should fix dp_debug_deinit() so that it doesn't
+>> > remove /sys/kernel/debug/dri/128 when the DP driver is unloaded.
+>> Yes, lets hold this patch back till I fix multi-DP for IGT.
+>> >
+>> > Regards,
+>> > Bjorn
+>> >
+>> > > > ---
+>> > > >
+>> > > > This depends on
+>> > > > https://lore.kernel.org/linux-arm-msm/20211010030435.4000642-1-bjorn.andersson@linaro.org/
+>> > > > reducing the connector from a double pointer.
+>> > > >
+>> > > >  drivers/gpu/drm/msm/dp/dp_debug.c | 15 +++++++++------
+>> > > >  1 file changed, 9 insertions(+), 6 deletions(-)
+>> > > >
+>> > > > diff --git a/drivers/gpu/drm/msm/dp/dp_debug.c
+>> > > > b/drivers/gpu/drm/msm/dp/dp_debug.c
+>> > > > index da4323556ef3..67da4c69eca1 100644
+>> > > > --- a/drivers/gpu/drm/msm/dp/dp_debug.c
+>> > > > +++ b/drivers/gpu/drm/msm/dp/dp_debug.c
+>> > > > @@ -210,26 +210,29 @@ static const struct file_operations
+>> > > > test_active_fops = {
+>> > > >  static int dp_debug_init(struct dp_debug *dp_debug, struct drm_minor
+>> > > > *minor)
+>> > > >  {
+>> > > >  	int rc = 0;
+>> > > > +	char path[64];
+>> > > >  	struct dp_debug_private *debug = container_of(dp_debug,
+>> > > >  			struct dp_debug_private, dp_debug);
+>> > > >
+>> > > > -	debugfs_create_file("dp_debug", 0444, minor->debugfs_root,
+>> > > > +	snprintf(path, sizeof(path), "msm_dp-%s", debug->connector->name);
+>> > > > +
+>> > > > +	debug->root = debugfs_create_dir(path, minor->debugfs_root);
+>> > > > +
+>> > > > +	debugfs_create_file("dp_debug", 0444, debug->root,
+>> > > >  			debug, &dp_debug_fops);
+>> > > >
+>> > > >  	debugfs_create_file("msm_dp_test_active", 0444,
+>> > > > -			minor->debugfs_root,
+>> > > > +			debug->root,
+>> > > >  			debug, &test_active_fops);
+>> > > >
+>> > > >  	debugfs_create_file("msm_dp_test_data", 0444,
+>> > > > -			minor->debugfs_root,
+>> > > > +			debug->root,
+>> > > >  			debug, &dp_test_data_fops);
+>> > > >
+>> > > >  	debugfs_create_file("msm_dp_test_type", 0444,
+>> > > > -			minor->debugfs_root,
+>> > > > +			debug->root,
+>> > > >  			debug, &dp_test_type_fops);
+>> > > >
+>> > > > -	debug->root = minor->debugfs_root;
+>> > > > -
+>> > > >  	return rc;
+>> > > >  }

@@ -2,234 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2C546D052
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ABE46D055
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbhLHJwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S230336AbhLHJxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhLHJwe (ORCPT
+        with ESMTP id S230194AbhLHJxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:52:34 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43E6C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:49:02 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso2137688ots.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 01:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKfHlshDZdIQe2VyEOgBGrl1HW4TVTaa1Pn/w0NncUA=;
-        b=kVJZB1/U2e/QgO//itS+OKd8Wk1qjuHyoekRmOZ0r7e5oymzd6LzYLcfJL1tLcRLNd
-         zWhvgp6N+ohH4spmYJjxPYUo1pODZw77PPLMksRQ9lnYTlg3aqNYjF5ElxFkaGonm2He
-         MeDiNHWTcJuyUK7o+DS99hjzBLw1fLp5RJw97t5kHY74DjpBL4BBkyxUuQW6kMK5W9eH
-         GubK82DPAej4hhCcIb0iaCzaFMMiibjCy/alxo5jIBgkQgWAwT3PD5LNGeZlXvbiLpJ0
-         7+ACGgR++X80aC6Sb8TWjdwtX+RnSLQnwP4CcF8pfFsjLDqQPdaR40/6dfIvou2orDEs
-         Z5ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKfHlshDZdIQe2VyEOgBGrl1HW4TVTaa1Pn/w0NncUA=;
-        b=KFkuvzgT2S+5oRWN6hsCYINkaHB/8fx8SvMZV4hQo3Y+mjQANldAKsiSrcjjETT6Y1
-         h5suCGq8cJ6pu6LNaT8VG1uOmC9IbzGpR97b8jG8uWg5wwUVSqBRoUCylICZ6QA6Fsaw
-         0kxvGrvdVHCX0ixfXukPvBWeyWaTRAGuGFZ27/Cdlxod9QWCNGioURSutTmR5pFtepMH
-         axkXk8GDzetAdYebCS7WNOafnIXht+lIsDoVM0xlHtHqtux7gghzhtgIPs4690RwDXga
-         etE35seDs2kAa/HQmPfUh6Fqa6FjxqpzfOM1+dord47ejEF3757WCzjrFRplKUshM7O7
-         J6KA==
-X-Gm-Message-State: AOAM531XyaysLvBw3ZTwqSr2H8ROi2rIyjDVXwCH6Fk11/Lmk7kuUh8X
-        NwwzCjB/b0bTYN33mOA9w95dcW4wACQfYpngV7wEYQ==
-X-Google-Smtp-Source: ABdhPJxwDGf4rmGYHDeUAHHske+uuWZFUQ3FeVG0fpBWjcn9C95guHBfPx7PREpo4X10RE90YK2yGC9rRYLKtrOT7+g=
-X-Received: by 2002:a05:6830:2425:: with SMTP id k5mr39934308ots.319.1638956941957;
- Wed, 08 Dec 2021 01:49:01 -0800 (PST)
+        Wed, 8 Dec 2021 04:53:41 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9142C061746;
+        Wed,  8 Dec 2021 01:50:09 -0800 (PST)
+Received: from [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3] (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 82E431F45AE2;
+        Wed,  8 Dec 2021 09:50:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638957008; bh=zVGIFxck9x5IerNsAjYPgRm4rJR70g1v7ksESCraX18=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=V5hPMueCR58aL9EvrTkfycXGs2uCkQW0aCd1isf4imL37WS5U6egHSqJA/YN+UmA8
+         0Fnrrw0TV/G6La/R95ym9R8T3DXYfRVd810lEnfl3D4xAS4fCc8kuG63dAuYQqog6s
+         PCqlnD3dOJ9LTOp00QsxPPgmRwxPPV2mdH+gLzVoQ+MYMvsg4T2kRcrxJUjF2B9bEQ
+         GkAHy8CT1Mga5F1Yd+Fm0PnB88P6QbQ1diA9Vqh7RCOhwZgv/FRoyxGBCeOwg3ueaz
+         hkLYhmZkmclvIxJZy9xNycIr2gVinoFmR4dVN2+/6nyYo5kG21wVLSo5iQ56aJVCbM
+         ilmnunYbGysGg==
+Subject: Re: [PATCH 1/2] iommu/mediatek: Always tlb_flush_all when each PM
+ resume
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     kernel@collabora.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:MEDIATEK IOMMU DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, sebastian.reichel@collabora.com,
+        iommu@lists.linux-foundation.org
+References: <20211122104400.4160-1-dafna.hirschfeld@collabora.com>
+ <20211122104400.4160-2-dafna.hirschfeld@collabora.com>
+ <6abef78f6447c626b737fd35688f421c29871f43.camel@mediatek.com>
+ <d30438bf-9add-7904-bad0-0764e3602263@collabora.com>
+Message-ID: <35d53ea0-68db-a516-9e9c-272e8f0ed082@collabora.com>
+Date:   Wed, 8 Dec 2021 11:50:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-6-pcc@google.com>
-In-Reply-To: <20211208044808.872554-6-pcc@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 8 Dec 2021 10:48:50 +0100
-Message-ID: <CACT4Y+Ycgo_uOWrfr33VygtDLXvwPqDwee7OseMOaK6jTZSBjQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] arm64: add support for uaccess logging
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        David Hildenbrand <david@redhat.com>,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Thomas Cedeno <thomascedeno@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <d30438bf-9add-7904-bad0-0764e3602263@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
->
-> arm64 does not use CONFIG_GENERIC_ENTRY, so add the support for
-> uaccess logging directly to the architecture.
->
-> Link: https://linux-review.googlesource.com/id/I88de539fb9c4a9d27fa8cccbe201a6e4382faf89
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> ---
->  arch/arm64/Kconfig                   | 1 +
->  arch/arm64/include/asm/thread_info.h | 7 ++++++-
->  arch/arm64/kernel/ptrace.c           | 7 +++++++
->  arch/arm64/kernel/signal.c           | 5 +++++
->  arch/arm64/kernel/syscall.c          | 1 +
->  5 files changed, 20 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index c4207cf9bb17..6023946abe4a 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -161,6 +161,7 @@ config ARM64
->         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->         select HAVE_ARCH_TRACEHOOK
->         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> +       select HAVE_ARCH_UACCESS_BUFFER
->         select HAVE_ARCH_VMAP_STACK
->         select HAVE_ARM_SMCCC
->         select HAVE_ASM_MODVERSIONS
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index e1317b7c4525..0461b36251ea 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -82,6 +82,8 @@ int arch_dup_task_struct(struct task_struct *dst,
->  #define TIF_SVE_VL_INHERIT     24      /* Inherit SVE vl_onexec across exec */
->  #define TIF_SSBD               25      /* Wants SSB mitigation */
->  #define TIF_TAGGED_ADDR                26      /* Allow tagged user addresses */
-> +#define TIF_UACCESS_BUFFER_ENTRY 27     /* thread has non-zero uaccess_desc_addr_addr */
-> +#define TIF_UACCESS_BUFFER_EXIT  28     /* thread has non-zero kcur */
->
->  #define _TIF_SIGPENDING                (1 << TIF_SIGPENDING)
->  #define _TIF_NEED_RESCHED      (1 << TIF_NEED_RESCHED)
-> @@ -98,6 +100,8 @@ int arch_dup_task_struct(struct task_struct *dst,
->  #define _TIF_SVE               (1 << TIF_SVE)
->  #define _TIF_MTE_ASYNC_FAULT   (1 << TIF_MTE_ASYNC_FAULT)
->  #define _TIF_NOTIFY_SIGNAL     (1 << TIF_NOTIFY_SIGNAL)
-> +#define _TIF_UACCESS_BUFFER_ENTRY      (1 << TIF_UACCESS_BUFFER_ENTRY)
-> +#define _TIF_UACCESS_BUFFER_EXIT       (1 << TIF_UACCESS_BUFFER_EXIT)
->
->  #define _TIF_WORK_MASK         (_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
->                                  _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> @@ -106,7 +110,8 @@ int arch_dup_task_struct(struct task_struct *dst,
->
->  #define _TIF_SYSCALL_WORK      (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->                                  _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
-> -                                _TIF_SYSCALL_EMU)
-> +                                _TIF_SYSCALL_EMU | _TIF_UACCESS_BUFFER_ENTRY | \
-> +                                _TIF_UACCESS_BUFFER_EXIT)
->
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  #define INIT_SCS                                                       \
-> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> index 88a9034fb9b5..283372eccaeb 100644
-> --- a/arch/arm64/kernel/ptrace.c
-> +++ b/arch/arm64/kernel/ptrace.c
-> @@ -29,6 +29,7 @@
->  #include <linux/regset.h>
->  #include <linux/tracehook.h>
->  #include <linux/elf.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include <asm/compat.h>
->  #include <asm/cpufeature.h>
-> @@ -1854,6 +1855,9 @@ int syscall_trace_enter(struct pt_regs *regs)
->         if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->                 trace_sys_enter(regs, regs->syscallno);
->
-> +       if (flags & _TIF_UACCESS_BUFFER_ENTRY)
-> +               uaccess_buffer_syscall_entry();
-> +
->         audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
->                             regs->regs[2], regs->regs[3]);
->
-> @@ -1866,6 +1870,9 @@ void syscall_trace_exit(struct pt_regs *regs)
->
->         audit_syscall_exit(regs);
->
-> +       if (flags & _TIF_UACCESS_BUFFER_EXIT)
-> +               uaccess_buffer_syscall_exit();
-> +
->         if (flags & _TIF_SYSCALL_TRACEPOINT)
->                 trace_sys_exit(regs, syscall_get_return_value(current, regs));
->
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> index 8f6372b44b65..5bbd98e5c257 100644
-> --- a/arch/arm64/kernel/signal.c
-> +++ b/arch/arm64/kernel/signal.c
-> @@ -20,6 +20,7 @@
->  #include <linux/tracehook.h>
->  #include <linux/ratelimit.h>
->  #include <linux/syscalls.h>
-> +#include <linux/uaccess-buffer.h>
->
->  #include <asm/daifflags.h>
->  #include <asm/debug-monitors.h>
-> @@ -919,6 +920,8 @@ static void do_signal(struct pt_regs *regs)
->
->  void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
->  {
-> +       bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
-> +
->         do {
->                 if (thread_flags & _TIF_NEED_RESCHED) {
->                         /* Unmask Debug and SError for the next task */
-> @@ -950,6 +953,8 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
->                 local_daif_mask();
->                 thread_flags = READ_ONCE(current_thread_info()->flags);
->         } while (thread_flags & _TIF_WORK_MASK);
-> +
-> +       uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
->  }
->
->  unsigned long __ro_after_init signal_minsigstksz;
-> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> index 50a0f1a38e84..d59022b594f2 100644
-> --- a/arch/arm64/kernel/syscall.c
-> +++ b/arch/arm64/kernel/syscall.c
-> @@ -7,6 +7,7 @@
->  #include <linux/ptrace.h>
->  #include <linux/randomize_kstack.h>
->  #include <linux/syscalls.h>
-> +#include <linux/uaccess-buffer.h>
 
-This looks strange... Does some other header miss this include?
 
->
->  #include <asm/daifflags.h>
->  #include <asm/debug-monitors.h>
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->
+On 07.12.21 10:31, Dafna Hirschfeld wrote:
+> 
+> 
+> On 27.11.21 04:46, Yong Wu wrote:
+>> Hi Dafna,
+>>
+>> Sorry for reply late.
+>>
+>> On Mon, 2021-11-22 at 12:43 +0200, Dafna Hirschfeld wrote:
+>>> From: Yong Wu <yong.wu@mediatek.com>
+>>>
+>>> Prepare for 2 HWs that sharing pgtable in different power-domains.
+>>>
+>>> When there are 2 M4U HWs, it may has problem in the flush_range in
+>>> which
+>>> we get the pm_status via the m4u dev, BUT that function don't reflect
+>>> the
+>>> real power-domain status of the HW since there may be other HW also
+>>> use
+>>> that power-domain.
+>>>
+>>> The function dma_alloc_attrs help allocate the iommu buffer which
+>>> need the corresponding power domain since tlb flush is needed when
+>>> preparing iova. BUT this function only is for allocating buffer,
+>>> we have no good reason to request the user always call pm_runtime_get
+>>> before calling dma_alloc_xxx. Therefore, we add a tlb_flush_all
+>>> in the pm_runtime_resume to make sure the tlb always is clean.
+>>>
+>>> Another solution is always call pm_runtime_get in the
+>>> tlb_flush_range.
+>>> This will trigger pm runtime resume/backup so often when the iommu
+>>> power is not active at some time(means user don't call pm_runtime_get
+>>> before calling dma_alloc_xxx), This may cause the performance drop.
+>>> thus we don't use this.
+>>>
+>>> In other case, the iommu's power should always be active via device
+>>> link with smi.
+>>>
+>>> The previous SoC don't have PM except mt8192. the mt8192 IOMMU is
+>>> display's
+>>> power-domain which nearly always is enabled. thus no need fix tags
+>>> here.
+>>> Prepare for mt8195.
+>>
+>> In this patchset, this message should be not proper. I think you could
+>> add the comment why this patch is needed in mt8173.
+>>
+>>>
+>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>> [imporvie inline doc]
+>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>> ---
+>>>   drivers/iommu/mtk_iommu.c | 7 +++++++
+>>>   1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+>>> index 25b834104790..28dc4b95b6d9 100644
+>>> --- a/drivers/iommu/mtk_iommu.c
+>>> +++ b/drivers/iommu/mtk_iommu.c
+>>> @@ -964,6 +964,13 @@ static int __maybe_unused
+>>> mtk_iommu_runtime_resume(struct device *dev)
+>>>           return ret;
+>>>       }
+>>> +    /*
+>>> +     * Users may allocate dma buffer before they call
+>>> pm_runtime_get,
+>>> +     * in which case it will lack the necessary tlb flush.
+>>> +     * Thus, make sure to update the tlb after each PM resume.
+>>> +     */
+>>> +    mtk_iommu_tlb_flush_all(data);
+>>
+>> This should not work. since current the *_tlb_flush_all call
+>> pm_runtime_get_if_in_use which will always return 0 when it called from
+>> this runtime_cb in my test. thus, It won't do the tlb_flush_all
+>> actually.
+
+He, indeed, my mistake, although the encoder works more or less fine even
+without the full flush so I didn't catch that.
+
+>>
+>> I guess this also depend on these two patches of mt8195 v3.
+>> [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in tlb_sync_all
+>> [PATCH v3 10/33] iommu/mediatek: Add tlb_lock in tlb_flush_all
+
+I'll add those two
+
+>>
+>> like in [10/33], I added a mtk_iommu_tlb_do_flush_all which don't have
+>> the pm operation.
+
+yes, I need to remove the pm_runtime_get_if_in_use call in the 'flush_all' func
+I see there is also a patch for that in the mt8195 v3 series "[PATCH v3 13/33] iommu/mediatek: Remove the power status checking in tlb flush all"
+
+So I'll send v2, adding all those 3 patches, but I think adding mtk_iommu_tlb_do_flush_all
+on patch 9 and removing it again on patch 13 is confusing so I'll avoid that.
+
+Thanks,
+Dafna
+
+
+
+>>
+>> This looks has a dependence. Let me know if I can help this.
+> 
+> It did work for me, testing on elm device. I'll check that again.
+> 
+> 
+>>
+>>> +
+>>>       /*
+>>>        * Uppon first resume, only enable the clk and return, since
+>>> the values of the
+>>>        * registers are not yet set.
+> 

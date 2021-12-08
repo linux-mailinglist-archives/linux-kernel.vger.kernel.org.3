@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC7F46CCE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A23546CCDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbhLHFUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S231523AbhLHFSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 00:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbhLHFUI (ORCPT
+        with ESMTP id S231308AbhLHFSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:20:08 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9897CC061574;
-        Tue,  7 Dec 2021 21:16:37 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id m19so817583vko.12;
-        Tue, 07 Dec 2021 21:16:37 -0800 (PST)
+        Wed, 8 Dec 2021 00:18:35 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E55DC061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 21:15:04 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id t9-20020a4a8589000000b002c5c4d19723so445504ooh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 21:15:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k4TgxotWqQC+UlMjLdxFb8gJ1bUTmHEtBJSUoVsJhbA=;
-        b=dVBGqtg8koZ9wqmjjuaZvkBfXkRf/kw1KsZepp29Q8qDovegqcg9NxXyMW6CoR7OSm
-         b2P9yP7Pb+VfvrbkouXsZMzxmewSEVJhhvx4If4eAkek0wNCAtX5pqwsNCIS7PSuhTvj
-         MpkvE9zG+deiW7rnuk2CvcIDcQ+AtMcePhtzm3B04gQBdE1bezQ1SJ8QzW1aMrUqxeU8
-         MDgUmyhVWk+K/KUTD8hkIB+gkkHm+Hm3sui05dDYPKldSe3gTIY7ySrronq3JsMvfL5x
-         db6M4IeoB/h6jOexLFMfirmWrFtvLPUShEKeEGrYhKI5QKl8DkXpk1JnCOmNQ1Vcah4S
-         G86Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dfMISllvOyWeVC+M/Lt3oKRlwVYRNEKwNNcO13cHMrM=;
+        b=w7gbnGzi2TRt1kl7Ye3Z2EYtK7pcvLy3h8DtGE8yu71lLVdrLfLjnLhs/ofVGC+wQL
+         aDFSUtexED6u1bVPnz7CGBIKKivW/u6/EftnTLM3i7mJ+DD0ioOaN878DbmMICsMcPbc
+         MkrTq6tpeW+Amee4Kyzlxe767YdqHvGBQ/m1RsOjfmvD6mtyN9FSoXM+T/lB279emjKg
+         cmWvPCc2/6dN2JbeRPzeNHFYeG/eGbVp2RObbNHxRTfUriUSYIuIg3p636d3YtzWe2Pq
+         k6Tn5JSy8N3Gg81/7SncEQj+p+tgAF/ob/2rRwdAsR5unY1ltFqgzSyQpST/4s4o8g78
+         u1VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k4TgxotWqQC+UlMjLdxFb8gJ1bUTmHEtBJSUoVsJhbA=;
-        b=bDH7pTQtK0ELfp1ZXwBYnsh7Qr6019KbszQybpXB3WPcHPOPAVo9p96tIF4hsCXlOp
-         TFp0y0vGyqUjDLNLwvj3xyGJwhC0qGo5EwrWQA+mpbwRUON/PjIjgaYFk0kuwWB1lQko
-         n6Ah39cT/VHSxvdcyKkDW9jcfXYoBa8GSG59T25PfHAbx3X7X2mcRL0+T83gkBX21wIh
-         6F/CIo/r3QQLuQhMe9c150NMaB3LrncJ5iOFpXG8tTQK3xsyBiYO1+IO1DO40wNWn5B/
-         ZeHIALCgcTelWxplwf1S+C4jIBvD8fGt9Bkg3QJztvL6wfTUiA/Hy8hibSxVHjmHg/ys
-         ZyZA==
-X-Gm-Message-State: AOAM533tEpCLjk87BeeLHiNjakQd/lSZhDo5FceUnyYNGEqC0MIEBQ18
-        m/byiXO+nlUWzjTvj7YiQ6EsFLyGb+l9VwWgUos=
-X-Google-Smtp-Source: ABdhPJy5g05zqhLHrO7v+lI4QlKgKpZEKYc8OgtA3+ilRbrq9uHuXaijZGY1/p2g4C3MzOnNU8lJIXaD1kawd4yGmzc=
-X-Received: by 2002:a05:6122:21a2:: with SMTP id j34mr60403060vkd.17.1638940596668;
- Tue, 07 Dec 2021 21:16:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dfMISllvOyWeVC+M/Lt3oKRlwVYRNEKwNNcO13cHMrM=;
+        b=WQf7wGXx1gUj/rOuFCyYKrfS8OQTAaCd40bSjb1HZ4oGm0SSQR45kr2wrdx95Pwk+2
+         NQY0UafWmn85uxGzN7GnQ0heMpHIAJxofr0EUAPKuaSI9RmpH1Go43GIbiyJVt1S50xI
+         oZVYCs/Hpb0JQ2+u5Ia+/pA46UkP/rhOf3lJmPtddOZfXcPBGzlufYx8wBifRMw0gMCq
+         shGTrro17k6T7QTO3Ah+0+wCgkHjTkTeCVrz/uQIcB3rn764e+bDDR1NoqXjYxQlnaEr
+         U/hKCWOpq745qIW4hnRJNpAA7V+yD0copBTVmBUb0i/S7DrQJcZjmI5aaRpNu+58eWHX
+         1WrQ==
+X-Gm-Message-State: AOAM531VKL+5TxXACsub803zPO+MNl4/mZ6QBStDYSrw9+PZD4eo2EwG
+        OMWCFWqlPWeZIlLC2vpO/KYoDA==
+X-Google-Smtp-Source: ABdhPJyWLHJDdtX55Elxz47dPEkRUd9l59nFSHL4yGwZIVmqFg4uYvT1tdiVUtNZ8gwkJ4vASweeIQ==
+X-Received: by 2002:a4a:300f:: with SMTP id q15mr13770211oof.36.1638940503654;
+        Tue, 07 Dec 2021 21:15:03 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id c9sm389389oog.43.2021.12.07.21.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 21:15:03 -0800 (PST)
+Date:   Tue, 7 Dec 2021 21:16:27 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     davidcomponentone@gmail.com
+Cc:     agross@kernel.org, kishon@ti.com, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Yang Guang <yang.guang5@zte.com.cn>
+Subject: Re: [PATCH] pyh: qcom: fix the application of sizeof to pointer
+Message-ID: <YbA/q+dYoIh5qdbb@ripper>
+References: <c74d05d5197fa4fba96c4bd1cd597cd644c694b6.1638924754.git.davidcomponentone@gmail.com>
 MIME-Version: 1.0
-References: <20211111220206.121610-1-jim.cromie@gmail.com> <20211111220206.121610-9-jim.cromie@gmail.com>
- <20211112114953.GA1381@axis.com>
-In-Reply-To: <20211112114953.GA1381@axis.com>
-From:   jim.cromie@gmail.com
-Date:   Tue, 7 Dec 2021 22:16:10 -0700
-Message-ID: <CAJfuBxxnuXAR7Jgn74MNQC7MLRc0xcDLw1cCidUJ9Xyar+O_2g@mail.gmail.com>
-Subject: Re: [PATCH v10 08/10] dyndbg: add print-to-tracefs, selftest with it
- - RFC
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>, robdclark@gmail.com,
-        Sean Paul <sean@poorly.run>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>, lyude@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        mathieu.desnoyers@efficios.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        quic_saipraka@quicinc.com, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        quic_psodagud@quicinc.com, maz@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org, Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c74d05d5197fa4fba96c4bd1cd597cd644c694b6.1638924754.git.davidcomponentone@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 4:49 AM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> On Thu, Nov 11, 2021 at 03:02:04PM -0700, Jim Cromie wrote:
-> > Dynamic-Debug can do 2nd exceedingly well:
-> >
-> > A- all work is behind jump-label's NOOP, zero off cost.
-> > B- exact site selectivity, precisely the useful traffic.
-> >    can tailor enabled set interactively, at shell.
-> >
-> > Since the tracefs interface is effective for drm (the threads suggest
-> > so), adding that interface to dynamic-debug has real potential for
-> > everyone including drm.
-> >
-> > Add a new +T flag to enable tracing, independent of +p, and add and
+On Tue 07 Dec 17:03 PST 2021, davidcomponentone@gmail.com wrote:
 
->
-> I posted a patchset a while ago to do something very similar, but that
-> got stalled for some reason and I unfortunately didn't follow it up:
->
->  https://lore.kernel.org/lkml/20200825153338.17061-1-vincent.whitchurch@axis.com/
->
-> A key difference between that patchset and this patch (besides that
-> small fact that I used +x instead of +T) was that my patchset allowed
-> the dyndbg trace to be emitted to the main buffer and did not force them
-> to be in an instance-specific buffer.
->
-> That feature is quite important at least for my use case since I often
-> use dyndbg combined with function tracing, and the latter doesn't work
-> on non-main instances according to Documentation/trace/ftrace.rst.
->
-> For example, here's a random example of a bootargs from one of my recent
-> debugging sessions:
->
->  trace_event=printk:* ftrace_filter=_mmc*,mmc*,sd*,dw_mci*,mci*
->  ftrace=function trace_buf_size=20M dyndbg="file drivers/mmc/* +x"
->
+> From: David Yang <davidcomponentone@gmail.com>
+> 
+> The coccinelle check report:
+> ./drivers/phy/qualcomm/phy-qcom-edp.c:574:31-37:
+> ERROR: application of sizeof to pointer
+> 
+> Using the real size to fix it.
+> 
 
-Hi Vincent,
+Thanks for the fix David.
 
-are you planning to dust this patchset off and resubmit it ?
+Please see my answer here
+https://lore.kernel.org/all/Ya96KOynsO478cVx@ripper/
 
-Ive been playing with it and learning ftrace (decade+ late),
-I found your boot-line example very helpful as 1st steps
-(still havent even tried the filtering)
+Regards,
+Bjorn
 
-
-with these adjustments (voiced partly to test my understanding)
-I would support it, and rework my patchset to use it.
-
-- change flag to -e, good mnemonics for event/trace-event
-   T is good too, but uppercase, no need to go there.
-
-- include/trace/events/dyndbg.h - separate file, not mixed with print.h
-  dyndbg class, so trace_event=dyndbg:*
-
-- 1 event type per pr_debug, dev_dbg, netdev_dbg ? ibdev_dbg ?
-  with the extra args: descriptor that Steven wanted,
-  probably also struct <|net|ib>dev
-
-If youre too busy for a while, I'd eventually take a (slow) run at it.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-edp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
+> index 17d5653b661d..5fe4eab9cac1 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
+> @@ -571,7 +571,7 @@ static int qcom_edp_clks_register(struct qcom_edp *edp, struct device_node *np)
+>  	struct clk_init_data init = { };
+>  	int ret;
+>  
+> -	data = devm_kzalloc(edp->dev, sizeof(data), GFP_KERNEL);
+> +	data = devm_kzalloc(edp->dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+>  		return -ENOMEM;
+>  
+> -- 
+> 2.30.2
+> 

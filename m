@@ -2,34 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE82746D2F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B87346D2FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 13:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbhLHMLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 07:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbhLHMLk (ORCPT
+        id S232990AbhLHMLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 07:11:43 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44478 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232909AbhLHMLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 07:11:40 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C7BC061746;
-        Wed,  8 Dec 2021 04:08:09 -0800 (PST)
+        Wed, 8 Dec 2021 07:11:41 -0500
 Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9EC681F45C7B;
-        Wed,  8 Dec 2021 12:08:06 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E7B1B1F45C87;
+        Wed,  8 Dec 2021 12:08:07 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638965287; bh=L9d2/HDk7J7gj/gXjduUDMoRjsqJJjeSwDd7JPhOG9k=;
-        h=From:To:Subject:Date:From;
-        b=oBCBNfBpdFOfovUIiOFd2rS4JUzm/my5mfPfGW1At667YUHorYABd8psyv6pnFD7a
-         cLP0FK+r4UZdQQUb6zi5p8/3TuVTpcnqsOuK7diMwO+zugLcxk99zRUWqwD+OLb5ro
-         YFZBTw4Pxiay2V+kZdiUM9vUcF+kIQydtqtFzKROttPBmxb1UYGcZIg5sqXZgjNi2W
-         EguiMMYdgfqF93sybRg/2X0YjFtFVZb/mcuy4T0y7M1wtP9H4N0QH1L2WJr6XqD7+r
-         1k+HFC3//Oxdu2A0cOpIn+yw3Px4obMiw28qSROhcGyex/46Ee3yKUGAECDt4LW/zR
-         /JnFyRLE+b6mQ==
+        t=1638965289; bh=/ksqLGRqcx9RPvezQU0f63T25oDST3xu9zSisBbGyqQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=i/LWg2n8z2KMdp8HIIjkNn1xo/fr0fLDwfwLt7svKE9NR2p3Gf9/2bv4lH9xOHzpD
+         /+dwsNPVKbByunLTi8ZVdEh4acbq+KKVnEbl4+2fPAhJYOOgxUwed1R6yu/Nmqni8q
+         XZuGjkKlFUI5u6zNGwHf4UlNMaOncuL2fzEHgM+x2giWgW7hjwEcVAAwWlbBnzXFJv
+         hMkCCAU5b5YKfQATsvJNRoqjzqwX1opyFxS1ZipzmaJviXYtelzgCiuGzLlpsbRNUo
+         R6DEHUTh7mfJezgGkhq1Ranbr+Fuq6RSOXh38z18YtmYh8z2t9QPuS7SiUdNBzf+ft
+         QeIZilzrM/dhQ==
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -40,63 +37,60 @@ To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         support), linux-kernel@vger.kernel.org (open list),
         dafna.hirschfeld@collabora.com, kernel@collabora.com,
         linux-media@vger.kernel.org, sebastian.reichel@collabora.com
-Subject: [PATCH v2 0/5] iommu/mediatek: Fix tlb flush logic
-Date:   Wed,  8 Dec 2021 14:07:39 +0200
-Message-Id: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v2 1/5] iommu/mediatek: Remove for_each_m4u in tlb_sync_all
+Date:   Wed,  8 Dec 2021 14:07:40 +0200
+Message-Id: <20211208120744.2415-2-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
+References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Often devices allocate DMA buffers before they do
-runtime pm resume. This is the case for example with v4l2
-devices where buffers are allocated during 'VIDIOC_REQBUFS`
-and runtime resume happens later usually during 'VIDIOC_STREAMON'.
-In such cases the partial tlb flush when allocating will fail
-since the iommu is runtime suspended. This will print a warning
-and try to do full flush. But there is actually no need to flush
-the tlb before the consumer device is turned on.
+From: Yong Wu <yong.wu@mediatek.com>
 
-Fix the warning by skipping partial flush when allocating and instead
-do full flash in runtime resume.
+The tlb_sync_all is called from these three functions:
+a) flush_iotlb_all: it will be called for each a iommu HW.
+b) tlb_flush_range_sync: it already has for_each_m4u.
+c) in irq: When IOMMU HW translation fault, Only need flush itself.
 
-In order to do full flush from the resume cb, the test:
+Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
 
-if (pm_runtime_get_if_in_use(data->dev) <= 0)
-	    continue;
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/iommu/mtk_iommu.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-needs to be removed from the flush all func since pm_runtime_get_if_in_use
-returns 0 while resuming and will skip the flush
-
-
-This patchset is a combination of 4 patches already sent in a different
-patchset: [1] and a warning fix from Sebastian Reichel
-
-[1] https://lore.kernel.org/linux-devicetree/20210923115840.17813-1-yong.wu@mediatek.com/
-
-changes since v1:
------------------
-
-* Added preparation patches to remove the unneeded 'for_each_m4u' usage
-and add a spinlock to protect access to tlb control registers.
-* remove the pm runtime status check as explained above.
-* refactor commit logs and inline doc
-* move the call to full flush to the bottom of the resume cb after all registers are updated.
-
-
-Sebastian Reichel (1):
-  iommu/mediatek: Always check runtime PM status in tlb flush range
-    callback
-
-Yong Wu (4):
-  iommu/mediatek: Remove for_each_m4u in tlb_sync_all
-  iommu/mediatek: Remove the power status checking in tlb flush all
-  iommu/mediatek: Add tlb_lock in tlb_flush_all
-  iommu/mediatek: Always tlb_flush_all when each PM resume
-
- drivers/iommu/mtk_iommu.c | 42 ++++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 507123ae7485..342aa562ab6a 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -210,17 +210,15 @@ static struct mtk_iommu_domain *to_mtk_domain(struct iommu_domain *dom)
+ 
+ static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
+ {
+-	for_each_m4u(data) {
+-		if (pm_runtime_get_if_in_use(data->dev) <= 0)
+-			continue;
++	if (pm_runtime_get_if_in_use(data->dev) <= 0)
++		return;
+ 
+-		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+-			       data->base + data->plat_data->inv_sel_reg);
+-		writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
+-		wmb(); /* Make sure the tlb flush all done */
++	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
++		       data->base + data->plat_data->inv_sel_reg);
++	writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
++	wmb(); /* Make sure the tlb flush all done */
+ 
+-		pm_runtime_put(data->dev);
+-	}
++	pm_runtime_put(data->dev);
+ }
+ 
+ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
 -- 
 2.17.1
 

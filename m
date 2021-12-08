@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4BB46DC31
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A138046DC39
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbhLHTag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbhLHTaf (ORCPT
+        id S236525AbhLHTcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 14:32:06 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:37613 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232942AbhLHTcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:30:35 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0F9C061746;
-        Wed,  8 Dec 2021 11:27:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x15so12029596edv.1;
-        Wed, 08 Dec 2021 11:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AWD7QTQTBQY0167hHhHNyiI2iGNEXy68navUB5oHGUE=;
-        b=iSZTWbJ7elOMhCtyRV3gCY3YEcdNsYC0etFgSecojjiDddrZpHh0dZpj+JKUit4IUn
-         TPf5R08JhwFogiAMb20Uw19jpkgUVpwpXrl5Nmw60SN9FihLEVo3FonfJFoOVWRDkvl/
-         pg1EQLV6Am3db39uVxCPqoUu9Px+caoJpKBoovyDWGxynNS9Lp4lWroLgj6PZsWMeL3x
-         NnkcO4rcqmkLoqalctqqtMkZxYRY9rqaCG+XFnf+fWR3nexTXT+tS7faolzpRmpYJKpJ
-         zVh7udvLi0x7PblFLQ7kI4SpEHuy/RIGqXAg4n0f9esL7GRVb95XRII5JKIf+sevOl9q
-         5htw==
+        Wed, 8 Dec 2021 14:32:06 -0500
+Received: by mail-oi1-f180.google.com with SMTP id bj13so5505764oib.4;
+        Wed, 08 Dec 2021 11:28:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AWD7QTQTBQY0167hHhHNyiI2iGNEXy68navUB5oHGUE=;
-        b=FM8KdGop1BW/Xzhxst9eSgb0Ld/ar9CJGjlzzz4i8g4em/4LG7nZvnuL6K73sDJBKS
-         I2/BxnJpV+CHx9k0Z/LXNwj8Ebg6eqJ0vwXqKgkz8BWVOkLHK85KVviE3oGHo9rqZztq
-         sMRnq9ujOi+iXbkDeJetUqtK+muODcV+2hj1oFwwZvoS3GzxdgDYYgA3BNQaFbyLllnj
-         fZFvLxUYR4rrVkJe/tnssx4Mn48Cx3xjM17GDNsfQC830l+MI0+co8udJOAUR7pzBqYd
-         V2dQmftTGW4PaXgptM3bH1wuyuDyLGVrUf+STpzCfxQzUFb7bPTQaoQ+Myrn4bCFGLVR
-         Vuyg==
-X-Gm-Message-State: AOAM530TRatFjEcCO7k7VvWfhE0UKIZm4f1wr85az2A4e4MAd9CtaRJZ
-        OwllI1GV4xQw+WGAAYA8OUh/pXRaw6fifsH2Vck=
-X-Google-Smtp-Source: ABdhPJzoERlw0Vv5BhJzcvYMSnhWpELuiIRivq7dAufjb2jsbOPA74SlD1zKjdTqM3xQlceQ9GciFnUok0X8pmA1IR8=
-X-Received: by 2002:a17:907:7294:: with SMTP id dt20mr9714680ejc.321.1638991621643;
- Wed, 08 Dec 2021 11:27:01 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ei1/bJy2vB9qPW5/d6507cGAxG5aCdrek2IZnuOeREY=;
+        b=zKMAbMG+LcKe5vkjttfh8msIvub66GL6BO+49/nC69juWfruSqBt33qt9B6xLUZ54f
+         /pJm3vCo3ANnlwMDp7brkLovZkz95OfeyY5YcwMzZFrpEmAi8aImwJlLP4f6ZTs9RUvE
+         4hwHgNDAsKzex+hf7C4fyqHlVvVK/dc/KZlM7THRIxWKleuBzlMrWANhZtqLB58z2djg
+         MK2kgjegUfQKF5AgB5QJg1+r3bWotQXG5bP50b6bm1Ln8OhI9VIE+kIQwZR+/sJDJu5V
+         Zr5XLehK+ZF14U8SO+yaAxeVbsbvTB3y4xhfXQVQrPtanfTTpJXvkA9iPp8B+BRudDQ1
+         /FVA==
+X-Gm-Message-State: AOAM533xjPFalcqsqnyAWjpXfjNGe34UsnMMGBGw0uYtyLWpb06a/d3V
+        hb6eFrIIJOV7XJPyAC1XeQ==
+X-Google-Smtp-Source: ABdhPJwF+jq77ny2CvN0M9DJhRVaukgUgnt5T4DciezsLcCNsXh6daUT1e0/rDKNjYuM9PQSC80Bww==
+X-Received: by 2002:a05:6808:14c4:: with SMTP id f4mr1435157oiw.76.1638991713363;
+        Wed, 08 Dec 2021 11:28:33 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 109sm603156otv.30.2021.12.08.11.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 11:28:32 -0800 (PST)
+Received: (nullmailer pid 192567 invoked by uid 1000);
+        Wed, 08 Dec 2021 19:28:31 -0000
+Date:   Wed, 8 Dec 2021 13:28:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Scott Branden <sbranden@broadcom.com>, netdev@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-phy@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Doug Berger <opendmb@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/8] dt-bindings: net: brcm,unimac-mdio: reg-names is
+ optional
+Message-ID: <YbEHX3OyNLD/LuPZ@robh.at.kernel.org>
+References: <20211206180049.2086907-1-f.fainelli@gmail.com>
+ <20211206180049.2086907-2-f.fainelli@gmail.com>
 MIME-Version: 1.0
-References: <20211208192009.322190-1-ariel.dalessandro@collabora.com> <20211208192009.322190-6-ariel.dalessandro@collabora.com>
-In-Reply-To: <20211208192009.322190-6-ariel.dalessandro@collabora.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 8 Dec 2021 16:26:50 -0300
-Message-ID: <CAOMZO5CnzVm83yHbzg2OD8HqNEV0-sXduDH9zPHctRy2i9ErDA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] arm: dts: imx8ulz-bsh-smm-m2: Add BSH SMM-M2
- IMX6ULZ SystemMaster
-To:     "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        ioana.ciornei@nxp.com, jagan@amarulasolutions.com,
-        kernel@pengutronix.de, krzk@kernel.org, linux-imx@nxp.com,
-        matt@traverse.com.au, matteo.lisi@engicam.com,
-        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
-        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, tharvey@gateworks.com, robh@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206180049.2086907-2-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 4:21 PM Ariel D'Alessandro
-<ariel.dalessandro@collabora.com> wrote:
->
-> From: Michael Trimarchi <michael@amarulasolutions.com>
->
-> Add DTS of BSH SMM-M2 SystemMaster.
->
-> This version comes with:
-> - 128 MiB DDR3 RAM
-> - 256 MiB Nand
-> - wifi
-> - bluetooth
->
-> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+On Mon, 06 Dec 2021 10:00:42 -0800, Florian Fainelli wrote:
+> The UniMAC MDIO controller integrated into GENET does not provide a
+> reg-names property since it is optional, reflect that in the binding.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  arch/arm/boot/dts/Makefile               |   3 +-
->  arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 146 +++++++++++++++++++++++
+>  Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+> 
 
-There is a typo in the Subject: it says imx8ulz, but it should be
-imx6ulz instead.
-
-> +/ {
-> +       model = "BSH SMM M2";
-> +       compatible = "bsh,imx6ulz-bsh-smm-m2", "fsl,imx6ull";
-
-Shouldn't "fsl,imx6ulz" also be added here like it is done in
-imx6ulz-14x14-evk.dts?
+Applied, thanks!

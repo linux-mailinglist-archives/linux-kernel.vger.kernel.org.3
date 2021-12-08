@@ -2,197 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6C046DB2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4962F46DB30
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238989AbhLHSiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:38:12 -0500
-Received: from ixit.cz ([94.230.151.217]:33328 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238954AbhLHSiL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:38:11 -0500
-Received: from localhost.localdomain (unknown [213.151.89.154])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 3990221F5E;
-        Wed,  8 Dec 2021 19:34:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1638988476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Cq8s/Jy9V1OTXNRQdifNniAnhlZAOYvwgu+gFPAuA1Q=;
-        b=WTICIv2uzuwyuXeAUDBj5vXPOFIYcGiiSkGkv9VPDKkhJEOcqhxIl4tgVMDLa2x1Y/Bd01
-        EUNQiLJUqRnfFFv9RUm5orlk5a2SmpOtHol6PoJUA0nvyHqjmGcrF6TRZ4An3G9jyNti7c
-        +sB2qGuh11KUQd4Ax9bm/msi9rld1bU=
-From:   David Heidelberg <david@ixit.cz>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        id S238999AbhLHSjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:39:03 -0500
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:43597 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231196AbhLHSjB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:39:01 -0500
+Received: by mail-pj1-f42.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso2805954pjb.2;
+        Wed, 08 Dec 2021 10:35:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iRb91wcfGIDc8fcHqi52mmmZ+5JRO93HKexzRfoxhTw=;
+        b=0sbGFfynF9CJ/gGBKFUUmN5nV2uCaw8VHIT6oPg+JkKmB7/izD8FT6eQSc+Ji3+fgh
+         zD4HMFYmzYyECpyQf4G1E6XE/uJ7aZCyEMKO0i0Ovh1QiirHne8jRVSb60ETqFlFh+CO
+         ecjJ+IJkDC1tQvlAeG7V9ndRdgNOqAJHbofArWgfJ67YU5RKKf+KlilcxbfLfcXEiqC0
+         7HyoWDf9fZ19nBKZMqLT9qQGJOEpS0XPfTC5xAQQ/hu1Qf3f5mcli6hIjZRFAVnEA3Iq
+         oLv/CGXevjI7FS3/YddtQSPiTFdTROJhxcTBSOU9r79fqjSEi9pZyx7/MvJ1VTz5XvLf
+         KuoQ==
+X-Gm-Message-State: AOAM533AlR/ceYpQ2iVcsyvI1xpsV2ZNeT/vpCpblCoA9ILy+ckN1IOE
+        DiTS/BVDf+5ZpYgUVEaVk2tkse1hNpY=
+X-Google-Smtp-Source: ABdhPJwWKyyuwJcPF6t+KrhFcMVvum6dWIO1YIUA1g4+Vz2/S5LJBnBRkyx80vYcDtc89Z3yF1erJQ==
+X-Received: by 2002:a17:90a:bf8a:: with SMTP id d10mr9110777pjs.67.1638988529056;
+        Wed, 08 Dec 2021 10:35:29 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:18af:8865:db7e:6769])
+        by smtp.gmail.com with ESMTPSA id h8sm4633810pfh.10.2021.12.08.10.35.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 10:35:28 -0800 (PST)
+Subject: Re: [PATCH v2 0/8] docs: consolidate sysfs-block into
+ Documentation/ABI/
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: input: pwm-vibrator: Convert txt bindings to yaml
-Date:   Wed,  8 Dec 2021 19:34:34 +0100
-Message-Id: <20211208183434.98087-1-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
+References: <20211208005640.102814-1-ebiggers@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <32b52a87-7616-a128-bb97-b73e2125d84a@acm.org>
+Date:   Wed, 8 Dec 2021 10:35:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211208005640.102814-1-ebiggers@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts txt binding to new YAML format and simplify example.
+On 12/7/21 4:56 PM, Eric Biggers wrote:
+> This series consolidates the documentation for /sys/block/<disk>/queue/
+> into Documentation/ABI/, where it is supposed to go (as per Greg KH:
+> https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
+> 
+> This series also updates MAINTAINERS to associate the block
+> documentation with the block layer.
 
-Reviewed-by: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
-v2:
- - added Sebastian review
- - replace anyOf with minItems
+Thank you for having done this work! Once my two comments are addressed,
+feel free to add the following to all patches in this series:
 
- .../bindings/input/pwm-vibrator.txt           | 66 -------------------
- .../bindings/input/pwm-vibrator.yaml          | 57 ++++++++++++++++
- 2 files changed, 57 insertions(+), 66 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/pwm-vibrator.txt
- create mode 100644 Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-
-diff --git a/Documentation/devicetree/bindings/input/pwm-vibrator.txt b/Documentation/devicetree/bindings/input/pwm-vibrator.txt
-deleted file mode 100644
-index 88c775a3fe21..000000000000
---- a/Documentation/devicetree/bindings/input/pwm-vibrator.txt
-+++ /dev/null
-@@ -1,66 +0,0 @@
--* PWM vibrator device tree bindings
--
--Registers a PWM device as vibrator. It is expected, that the vibrator's
--strength increases based on the duty cycle of the enable PWM channel
--(100% duty cycle meaning strongest vibration, 0% meaning no vibration).
--
--The binding supports an optional direction PWM channel, that can be
--driven at fixed duty cycle. If available this is can be used to increase
--the vibration effect of some devices.
--
--Required properties:
--- compatible: should contain "pwm-vibrator"
--- pwm-names: Should contain "enable" and optionally "direction"
--- pwms: Should contain a PWM handle for each entry in pwm-names
--
--Optional properties:
--- vcc-supply: Phandle for the regulator supplying power
--- direction-duty-cycle-ns: Duty cycle of the direction PWM channel in
--                           nanoseconds, defaults to 50% of the channel's
--			   period.
--
--Example from Motorola Droid 4:
--
--&omap4_pmx_core {
--	vibrator_direction_pin: pinmux_vibrator_direction_pin {
--		pinctrl-single,pins = <
--		OMAP4_IOPAD(0x1ce, PIN_OUTPUT | MUX_MODE1) /* dmtimer8_pwm_evt (gpio_27) */
--		>;
--	};
--
--	vibrator_enable_pin: pinmux_vibrator_enable_pin {
--		pinctrl-single,pins = <
--		OMAP4_IOPAD(0X1d0, PIN_OUTPUT | MUX_MODE1) /* dmtimer9_pwm_evt (gpio_28) */
--		>;
--	};
--};
--
--/ {
--	pwm8: dmtimer-pwm {
--		pinctrl-names = "default";
--		pinctrl-0 = <&vibrator_direction_pin>;
--
--		compatible = "ti,omap-dmtimer-pwm";
--		#pwm-cells = <3>;
--		ti,timers = <&timer8>;
--		ti,clock-source = <0x01>;
--	};
--
--	pwm9: dmtimer-pwm {
--		pinctrl-names = "default";
--		pinctrl-0 = <&vibrator_enable_pin>;
--
--		compatible = "ti,omap-dmtimer-pwm";
--		#pwm-cells = <3>;
--		ti,timers = <&timer9>;
--		ti,clock-source = <0x01>;
--	};
--
--	vibrator {
--		compatible = "pwm-vibrator";
--		pwms = <&pwm9 0 1000000000 0>,
--                       <&pwm8 0 1000000000 0>;
--		pwm-names = "enable", "direction";
--		direction-duty-cycle-ns = <1000000000>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-new file mode 100644
-index 000000000000..a70a636ee112
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/input/pwm-vibrator.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: PWM vibrator
-+
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description: >
-+  Registers a PWM device as vibrator. It is expected, that the vibrator's
-+  strength increases based on the duty cycle of the enable PWM channel
-+  (100% duty cycle meaning strongest vibration, 0% meaning no vibration).
-+
-+  The binding supports an optional direction PWM channel, that can be
-+  driven at fixed duty cycle. If available this is can be used to increase
-+  the vibration effect of some devices.
-+
-+properties:
-+  compatible:
-+    const: pwm-vibrator
-+
-+  pwm-names:
-+    items:
-+      - const: enable
-+      - const: direction
-+    minItems: 1
-+
-+  pwms:
-+    minItems: 1
-+    maxItems: 2
-+
-+  vcc-supply: true
-+
-+  direction-duty-cycle-ns:
-+    description: >
-+      Duty cycle of the direction PWM channel in nanoseconds,
-+      defaults to 50% of the channel's period.
-+
-+required:
-+  - compatible
-+  - pwm-names
-+  - pwms
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    vibrator {
-+        compatible = "pwm-vibrator";
-+        pwms = <&pwm9 0 1000000000 0>,
-+               <&pwm8 0 1000000000 0>;
-+        pwm-names = "enable", "direction";
-+        direction-duty-cycle-ns = <1000000000>;
-+    };
--- 
-2.33.0
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

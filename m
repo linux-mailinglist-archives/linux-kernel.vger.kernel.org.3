@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B040546C928
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF2646C930
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242991AbhLHAmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 19:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S243048AbhLHAmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 19:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243102AbhLHAlg (ORCPT
+        with ESMTP id S238724AbhLHAlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 19:41:36 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21B7C0617A1;
-        Tue,  7 Dec 2021 16:38:05 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g19so952974pfb.8;
-        Tue, 07 Dec 2021 16:38:05 -0800 (PST)
+        Tue, 7 Dec 2021 19:41:47 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E31C0698C8;
+        Tue,  7 Dec 2021 16:38:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id k4so569564pgb.8;
+        Tue, 07 Dec 2021 16:38:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aRndETDaFJpAvn07U5V4Tg3zRU+sMtROMsLqLQ972oI=;
-        b=AxgFQBlpxUn4B0mBJxB3RsZG3Bk/Q3l+D2NYDqvWP+WIbSkx5M2TJ2ML/ydSc/Yesi
-         O87Ui+zpmpPyE5EOqAlWniwySxKvrIWyTEYiQyBA3TxBsjMfWLnIDp4t8uEmt6I7SuXH
-         QzgUVtNM+25hc2jFOVKfPXLZXI6WWquroPmuUhSj2y8fnB06Qdh5d1jcFlXVhXyLwKPG
-         Zidr9mEdR6S8enrqG+LcC0S4HTCGfr+zM7PGJl6ubfV41h6+8pUTXOQjLzNNw1+AKpnG
-         T2MSKRBxb+lIajLebqT9ZgmadOGPe5MMXM1t8+9N4UMRwbop+gGCHptWDh4UzxbFfwP7
-         zF4Q==
+        bh=5gmXyyY9vTjgG6NNFdPthaMWLoPgaSufYqbs7mIvW+A=;
+        b=MwXiuJ/b0gxSL1j7FSe+siBazA1GRaPlNa02gOcObhcQ2YZtGmDEwbgYTOwqSf0jBc
+         di2unhIxUnJDEnjD7xX8UYfh0Te9VZ1upgG1ah39TDPl4oMki2h3gqLWn61Y7RsX5nzm
+         CsBtBfJIKtD2R18dFn20zhgVexcPSt5WmPyexUD8lUxcZXCRpX2VQSRrKNaEHu65BkI5
+         F4QzYhnU0XPoK9edBGIB8g76I7G1f7DljvedBUFc+Ilm4tbxNLkVFa4y8hVtBxZzzSU3
+         hPXU0sOIe5Jq521oy3BdQfQrd/3z8Y8gPqKbUdWD7bVNzJUXzksnh8Jv3UwT949teiKz
+         baxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aRndETDaFJpAvn07U5V4Tg3zRU+sMtROMsLqLQ972oI=;
-        b=QbXgUiU7yQa/4tDoYRIGywiVSRK03MRUjCLV0VbHAxNqT0+xB4TQ4xTt/WRPAWgn09
-         9SmH1UIHP/ulEF+3TJkakZw2JREasLrnYkTPLXkAM6lBpvV4d84P6e3AFuilpmMS+AOb
-         Szh3E+4Qocj+ErMECNmBlaq4NntndmULTOjHfU/1KL6VdsNO1sHQNyrujFPQzfGsxCU/
-         H5eslHc3jzQsEYoHmCdd9P6FLSG/GxK3M+H8tLVdQPtO2jrP/1fGWD4xp0l4jyiMsViK
-         R9c5mXZ6evVDbZ8QDrbjQgXwJmcZIY5LTRbDE7jqcteVPyANXke0XbOA7EO73bEtbT+Z
-         /w8g==
-X-Gm-Message-State: AOAM533+wl5GojxBsENUVu46pHPCMyQIRPkMBbxirUmJHunMlaoKABpx
-        oV6BVDl9OlY7JrXTWhOP8hOEI47bCqQ=
-X-Google-Smtp-Source: ABdhPJyoCwSxRqyXY8EfioXpQCIoHqdJyEYsq5GNngaPzBvNK9upB3sQ4spTSyQHZDMyRRxVI15yag==
-X-Received: by 2002:a63:2a81:: with SMTP id q123mr27278911pgq.510.1638923884875;
-        Tue, 07 Dec 2021 16:38:04 -0800 (PST)
+        bh=5gmXyyY9vTjgG6NNFdPthaMWLoPgaSufYqbs7mIvW+A=;
+        b=NIJ8ahFsAme5ltet9oNZMRofinBVFDy0LfZI9pVs5E2Uj/FhziYq35we7vm6O6P9wj
+         xwJZr+jZJxIEUfdg+JUkjMZ+JtQfp+OU81B+Xh/rzyUtt9/y+9YGVLJuVlcQtJg4cR5Z
+         1Cy2OG0WQ3K/nNyIo/xkZhlS/WOrfrL8YQp3/slbs/RPmWe2Ugi1B1vaHmaB94zoqwlR
+         Ax1pJUwDufAMfsGbe91pP/aOEpPwzfaDDVX5kTp1cXdv/Skmt6mIqTjadPpiXLmNQxcs
+         n1DWLC2bZTXIj1KAuB93ZjVWv3+M9/sgzMo3vbZ7Rt+5XwM/ocXtLdeM2RkYPynD4Kxe
+         baNg==
+X-Gm-Message-State: AOAM533VqA7vvPEUzNc1UA/ww589E2ekTEun7uvsSJibkrpAz584bswS
+        nIEn1XHeSkNN6xYT1Vt9oV7i4GGXf9M=
+X-Google-Smtp-Source: ABdhPJx6I0VqsO9majNCKhWXpr8k35E34Ms8KS9sAJ7063yo0qrrL+bJYyd926Lh7ftQolw1HzYm7Q==
+X-Received: by 2002:a63:1d15:: with SMTP id d21mr26467833pgd.541.1638923888037;
+        Tue, 07 Dec 2021 16:38:08 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.01
+        by smtp.gmail.com with ESMTPSA id n16sm926379pfv.123.2021.12.07.16.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 16:38:04 -0800 (PST)
+        Tue, 07 Dec 2021 16:38:07 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v3 09/15] dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML
-Date:   Tue,  7 Dec 2021 16:37:20 -0800
-Message-Id: <20211208003727.3596577-10-f.fainelli@gmail.com>
+Subject: [PATCH v3 10/15] dt-bindings: rng: Convert iProc RNG200 to YAML
+Date:   Tue,  7 Dec 2021 16:37:21 -0800
+Message-Id: <20211208003727.3596577-11-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211208003727.3596577-1-f.fainelli@gmail.com>
 References: <20211208003727.3596577-1-f.fainelli@gmail.com>
@@ -102,130 +102,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB L2 generic Level 2 interrupt controller Device
-Tree binding to YAML to help with validation.
+Convert the Broadcom iProc RNG200 HWRNG Device Tree binding to YAML to
+help with validation.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../interrupt-controller/brcm,l2-intc.txt     | 31 --------
- .../interrupt-controller/brcm,l2-intc.yaml    | 71 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 31 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+ .../bindings/rng/brcm,iproc-rng200.txt        | 16 ----------
+ .../bindings/rng/brcm,iproc-rng200.yaml       | 29 +++++++++++++++++++
+ 2 files changed, 29 insertions(+), 16 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
+diff --git a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
 deleted file mode 100644
-index 021cf822395c..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
+index 802523196ee5..000000000000
+--- a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
 +++ /dev/null
-@@ -1,31 +0,0 @@
--Broadcom Generic Level 2 Interrupt Controller
+@@ -1,16 +0,0 @@
+-HWRNG support for the iproc-rng200 driver
 -
 -Required properties:
--
--- compatible: should be one of:
--	      "brcm,hif-spi-l2-intc" or
--	      "brcm,upg-aux-aon-l2-intc" or
--	      "brcm,l2-intc" for latched interrupt controllers
--              should be "brcm,bcm7271-l2-intc" for level interrupt controllers
--- reg: specifies the base physical address and size of the registers
--- interrupt-controller: identifies the node as an interrupt controller
--- #interrupt-cells: specifies the number of cells needed to encode an
--  interrupt source. Should be 1.
--- interrupts: specifies the interrupt line in the interrupt-parent irq space
--  to be used for cascading
--
--Optional properties:
--
--- brcm,irq-can-wake: If present, this means the L2 controller can be used as a
--  wakeup source for system suspend/resume.
+-- compatible : Must be one of:
+-	       "brcm,bcm2711-rng200"
+-	       "brcm,bcm7211-rng200"
+-	       "brcm,bcm7278-rng200"
+-	       "brcm,iproc-rng200"
+-- reg : base address and size of control register block
 -
 -Example:
 -
--hif_intr2_intc: interrupt-controller@f0441000 {
--	compatible = "brcm,l2-intc";
--	reg = <0xf0441000 0x30>;
--	interrupt-controller;
--	#interrupt-cells = <1>;
--	interrupt-parent = <&intc>;
--	interrupts = <0x0 0x20 0x0>;
+-rng {
+-        compatible = "brcm,iproc-rng200";
+-        reg = <0x18032000 0x28>;
 -};
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+diff --git a/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
 new file mode 100644
-index 000000000000..c197c85084d1
+index 000000000000..53baaec966e0
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/interrupt-controller/brcm,l2-intc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++$id: "http://devicetree.org/schemas/rng/brcm,iproc-rng200.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Broadcom Generic Level 2 Interrupt Controller
++title: HWRNG support for the iproc-rng200 driver
 +
 +maintainers:
 +  - Florian Fainelli <f.fainelli@gmail.com>
 +
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
 +properties:
 +  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - brcm,hif-spi-l2-intc
-+              - brcm,upg-aux-aon-l2-intc
-+          - const: brcm,l2-intc
-+      - items:
-+          - enum:
-+              - brcm,bcm2711-l2-intc
-+          - const: brcm,l2-intc
-+      - items:
-+          - const: brcm,bcm7271-l2-intc
-+      - items:
-+          - const: brcm,l2-intc
-+
++    enum:
++      - brcm,bcm2711-rng200
++      - brcm,bcm7211-rng200
++      - brcm,bcm7278-rng200
++      - brcm,iproc-rng200
 +  reg:
-+    maxItems: 1
-+    description: >
-+      Specifies the base physical address and size of the registers
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 1
-+
-+  interrupts: true
-+
-+  interrupt-names:
-+    maxItems: 1
-+
-+  brcm,irq-can-wake:
-+    type: boolean
-+    description: >
-+      If present, this means the L2 controller can be used as a wakeup source
-+      for system suspend/resume.
++    description: base address and size of control register block
 +
 +additionalProperties: false
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupt-controller
-+  - "#interrupt-cells"
-+  - interrupts
-+
 +examples:
 +  - |
-+    hif_intr2_intc: interrupt-controller@f0441000 {
-+      compatible = "brcm,l2-intc";
-+      reg = <0xf0441000 0x30>;
-+      interrupt-controller;
-+      #interrupt-cells = <1>;
-+      interrupt-parent = <&intc>;
-+      interrupts = <0x0 0x20 0x0>;
++    rng@18032000 {
++        compatible = "brcm,iproc-rng200";
++        reg = <0x18032000 0x28>;
 +    };
 -- 
 2.25.1

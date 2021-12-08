@@ -2,113 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF66B46DEF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA0446DEFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241115AbhLHXVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:21:37 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:56056 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbhLHXVh (ORCPT
+        id S241124AbhLHXWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235172AbhLHXWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:21:37 -0500
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A971720B7179;
-        Wed,  8 Dec 2021 15:18:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A971720B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639005484;
-        bh=phg/pXljnj81eIgtyw2wI2IJJBRwkKF0EKzr0UxFgHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lx9Oimo/YOc+kFVdqrZ1Fkvzrs3nj5Nbhtat1TZe/y0AFAbAAujhd/LQW+uuVlnzs
-         gzIY9HeZ53FQUKeAuJ6foCxSIlNUBPQRcFgMy/LtRFy2oqPmwjgwy13FprmtG9E4AQ
-         I9itPr5bBQpF2z7O2WA9c0wAexS2aAL4LVcNCWk4=
-Date:   Wed, 8 Dec 2021 15:18:03 -0800
-From:   Katherine Perez <kaperez@linux.microsoft.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-Subject: Re: [PATCH v2 2/2] arm64: dts: sm8350: fix tlmm base address
-Message-ID: <20211208231803.GA8413@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20211122190552.74073-1-kaperez@linux.microsoft.com>
- <20211122190552.74073-3-kaperez@linux.microsoft.com>
- <YZxoGp33Seaa2WEG@matsya>
- <Yabo0fGXC1rITmsM@builder.lan>
- <Ya9JhqZ/Hyj9HdRk@matsya>
- <20211208022103.GA15963@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <YbAZ/YHMWQZ27NrG@ripper>
+        Wed, 8 Dec 2021 18:22:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EDFC061746;
+        Wed,  8 Dec 2021 15:19:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 68BA8CE2416;
+        Wed,  8 Dec 2021 23:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A6EC341C3;
+        Wed,  8 Dec 2021 23:19:06 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 18:19:05 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
+ trace_event into ftrace
+Message-ID: <20211208181905.62f8f999@gandalf.local.home>
+In-Reply-To: <20211201182515.2446-3-beaub@linux.microsoft.com>
+References: <20211201182515.2446-1-beaub@linux.microsoft.com>
+        <20211201182515.2446-3-beaub@linux.microsoft.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbAZ/YHMWQZ27NrG@ripper>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 06:35:41PM -0800, Bjorn Andersson wrote:
-> On Tue 07 Dec 18:21 PST 2021, Katherine Perez wrote:
-> 
-> > On Tue, Dec 07, 2021 at 05:16:14PM +0530, Vinod Koul wrote:
-> > > On 30-11-21, 21:15, Bjorn Andersson wrote:
-> > > > On Mon 22 Nov 22:03 CST 2021, Vinod Koul wrote:
-> > > > 
-> > > > > On 22-11-21, 11:05, Katherine Perez wrote:
-> > > > > > TLMM controller base address is incorrect and will hang on some platforms.
-> > > > > > Fix by giving the correct address.
-> > > > > 
-> > > > > Thanks, recheck the spec this looks correct. We should have tlmm reg
-> > > > > space here and not tlmm base which also contains xpu region (thus hang)
-> > > > > 
-> > > > 
-> > > > Aren't you reading the patch backwards?
-> > > 
-> > > I guess :(
-> > > 
-> > > > Afaict downstream the driver carries an offset of 0x100000, which we
-> > > > dropped as we upstreamed the driver. As such changing reg to 0x0f000000
-> > > > should cause most gpio register accesses to fall outside the actual
-> > > > register window.
-> > > > 
-> > > > Or perhaps I'm missing something here?
-> > > 
-> > > I relooked and XPU is at 0xF000000 and Reg at 0xF100000
-> > > So this patch should be dropped as such. The size mentioned in
-> > > documentation is also correct
-> > > 
-> > > Katherine, can you elaborate more on the hang you have observed? Any
-> > > specific pins you use which causes this?
-> > 
-> > Hi Vinod,
-> > 
-> > Yes, it seems to hang in msm_pinctrl_probe. Specifically, line 734 in
-> > gpiolib.c: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpio/gpiolib.c#n734.
-> > On i=4, it hangs on assign_bit and the system goes into a reboot loop.
-> > When I set the TLMM address to f000000, I don't see this issue at all.
-> > 
-> 
-> The cause for that is quite likely that gc->get_direction() will read
-> the configuration from gpio<i>'s registers and gpio4 in your system is
-> reserved for use by some trusted application.
-> 
-> When you change the TLMM address you avoid this problem by just reading
-> random registers outside the region that contains protected registers.
-> 
-> 
-> Adjust the gpio-reserved-ranges in your device's tlmm node to mark gpio4
-> (probably 4 pins long) as "invalid", gpiolib will then not touch them.
-> 
-> Regards,
-> Bjorn
+On Wed,  1 Dec 2021 10:25:04 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-Thanks, Bjorn. That makes sense. I'll resubmit with the changes to my
-device's TLMM node and will drop this patch.
-
--Katherine
+> Minimal support for interacting with dynamic events, trace_event and
+> ftrace. Core outline of flow between user process, ioctl and trace_event
+> APIs.
 > 
-> > > 
-> > > 
-> > > -- 
-> > > ~Vinod
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>  kernel/trace/Kconfig             |   15 +
+>  kernel/trace/Makefile            |    1 +
+>  kernel/trace/trace_events_user.c | 1192 ++++++++++++++++++++++++++++++
+>  3 files changed, 1208 insertions(+)
+>  create mode 100644 kernel/trace/trace_events_user.c
+> 
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 420ff4bc67fd..21d00092436b 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -724,6 +724,21 @@ config SYNTH_EVENTS
+>  
+>  	  If in doubt, say N.
+>  
+> +config USER_EVENTS
+> +	bool "User trace events"
+> +	select TRACING
+> +	select DYNAMIC_EVENTS
+> +	default n
+
+default n is default, so you do not need to explicitly state that.
+
+In other words, the above line is a nop.
+
+> +	help
+> +	  User trace events are user-defined trace events that
+> +	  can be used like an existing kernel trace event.  User trace
+> +	  events are generated by writing to a tracefs file.  User
+> +	  processes can determine if their tracing events should be
+> +	  generated by memory mapping a tracefs file and checking for
+> +	  an associated byte being non-zero.
+> +
+> +	  If in doubt, say N.
+> +
+>  config HIST_TRIGGERS
+>  	bool "Histogram triggers"
+>  	depends on ARCH_HAVE_NMI_SAFE_CMPXCHG
+> diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> index bedc5caceec7..19ef3758da95 100644
+> --- a/kernel/trace/Makefile
+> +++ b/kernel/trace/Makefile
+
+
+
+
+> +/*
+> + * Handles the final close of the file from user mode.
+> + */
+> +static int user_events_release(struct inode *node, struct file *file)
+> +{
+> +	struct user_event_refs *refs;
+> +	struct user_event *user;
+> +	int i;
+> +
+> +	/*
+> +	 * refs is protected by RCU and could in theory change immediately
+> +	 * before this call on another core. To ensure we read the latest
+> +	 * version of refs we acquire the RCU read lock again.
+> +	 */
+> +	rcu_read_lock_sched();
+> +	refs = rcu_dereference_sched(file->private_data);
+> +	rcu_read_unlock_sched();
+
+This still bothers me. Can another CPU call an ioctl here?
+
+  user_events_ioctl_reg() {
+    user_events_ref_add() {
+      refs = rcu_dereference_protected(file->private_data, ..);
+      new_refs = kzalloc(size, GFP_KERNEL);
+      rcu_assign_pointer(file->private_data, new_refs);
+      if (refs)
+        kfree_rcu(refs, rcu);
+
+refs now freed.
+
+> +
+> +	if (!refs)
+> +		goto out;
+> +
+> +	/*
+> +	 * Do not need RCU while enumerating the events that were used.
+> +	 * The lifetime of refs has reached an end, it's tied to this file.
+> +	 * The underlying user_events are ref counted, and cannot be freed.
+> +	 * After this decrement, the user_events may be freed elsewhere.
+> +	 */
+> +	for (i = 0; i < refs->count; ++i) {
+
+Fault on refs->count
+
+??
+
+> +		user = refs->events[i];
+> +
+> +		if (user)
+> +			atomic_dec(&user->refcnt);
+> +	}
+> +
+> +	kfree_rcu(refs, rcu);
+> +out:
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations user_data_fops = {
+> +	.write = user_events_write,
+> +	.write_iter = user_events_write_iter,
+> +	.unlocked_ioctl	= user_events_ioctl,
+> +	.release = user_events_release,
+> +};
+> +
+> +/*
+> + * Maps the shared page into the user process for checking if event is enabled.
+> + */
+> +static int user_status_mmap(struct file *file, struct vm_area_struct *vma)
+> +{
+> +	unsigned long size = vma->vm_end - vma->vm_start;
+> +
+> +	if (size != MAX_EVENTS)
+> +		return -EINVAL;
+> +
+> +	return remap_pfn_range(vma, vma->vm_start,
+> +			       virt_to_phys(register_page_data) >> PAGE_SHIFT,
+> +			       size, vm_get_page_prot(VM_READ));
+> +}
+> +
+> +static int user_status_show(struct seq_file *m, void *p)
+> +{
+> +	struct user_event *user;
+> +	char status;
+> +	int i, active = 0, busy = 0, flags;
+> +
+> +	mutex_lock(&reg_mutex);
+> +
+> +	hash_for_each(register_table, i, user, node) {
+> +		status = register_page_data[user->index];
+> +		flags = user->flags;
+> +
+> +		seq_printf(m, "%d:%s", user->index, EVENT_NAME(user));
+> +
+> +		if (flags != 0 || status != 0)
+> +			seq_puts(m, " #");
+> +
+> +		if (status != 0) {
+> +			seq_puts(m, " Used by");
+> +			if (status & EVENT_STATUS_FTRACE)
+> +				seq_puts(m, " ftrace");
+> +			if (status & EVENT_STATUS_PERF)
+> +				seq_puts(m, " perf");
+> +			if (status & EVENT_STATUS_OTHER)
+> +				seq_puts(m, " other");
+> +			busy++;
+> +		}
+> +
+> +		if (flags & FLAG_BPF_ITER)
+> +			seq_puts(m, " FLAG:BPF_ITER");
+> +
+> +		seq_puts(m, "\n");
+> +		active++;
+> +	}
+> +
+> +	mutex_unlock(&reg_mutex);
+> +
+> +	seq_puts(m, "\n");
+> +	seq_printf(m, "Active: %d\n", active);
+> +	seq_printf(m, "Busy: %d\n", busy);
+> +	seq_printf(m, "Max: %ld\n", MAX_EVENTS);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t user_status_read(struct file *file, char __user *ubuf,
+> +				size_t count, loff_t *ppos)
+> +{
+> +	/*
+> +	 * Delay allocation of seq data until requested, most callers
+> +	 * will never read the status file. They will only mmap.
+> +	 */
+> +	if (file->private_data == NULL) {
+> +		int ret;
+> +
+> +		if (*ppos != 0)
+> +			return -EINVAL;
+> +
+> +		ret = single_open(file, user_status_show, NULL);
+> +
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return seq_read(file, ubuf, count, ppos);
+> +}
+> +
+> +static loff_t user_status_seek(struct file *file, loff_t offset, int whence)
+> +{
+> +	if (file->private_data == NULL)
+> +		return 0;
+> +
+> +	return seq_lseek(file, offset, whence);
+> +}
+> +
+> +static int user_status_release(struct inode *node, struct file *file)
+> +{
+> +	if (file->private_data == NULL)
+> +		return 0;
+> +
+> +	return single_release(node, file);
+> +}
+> +
+> +static const struct file_operations user_status_fops = {
+> +	.mmap = user_status_mmap,
+> +	.read = user_status_read,
+> +	.llseek  = user_status_seek,
+> +	.release = user_status_release,
+> +};
+> +
+> +/*
+> + * Creates a set of tracefs files to allow user mode interactions.
+> + */
+> +static int create_user_tracefs(void)
+> +{
+> +	struct dentry *edata, *emmap;
+> +
+> +	edata = tracefs_create_file("user_events_data", 0644, NULL,
+> +				    NULL, &user_data_fops);
+
+BTW, I now define:
+
+ TRACE_MODE_WRITE for files to be written to, and TRACE_MODE_READ for files
+ that are read only.
+
+And soon tracefs will honor the gid mount option to define what group all
+the tracefs files should belong to on mount.
+
+-- Steve
+
+> +
+> +	if (!edata) {
+> +		pr_warn("Could not create tracefs 'user_events_data' entry\n");
+> +		goto err;
+> +	}
+> +
+> +	/* mmap with MAP_SHARED requires writable fd */
+> +	emmap = tracefs_create_file("user_events_status", 0644, NULL,
+> +				    NULL, &user_status_fops);
+> +
+> +	if (!emmap) {
+> +		tracefs_remove(edata);
+> +		pr_warn("Could not create tracefs 'user_events_mmap' entry\n");
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +err:
+> +	return -ENODEV;
+> +}
+> +
+> +static void set_page_reservations(bool set)
+> +{
+> +	int page;
+> +
+> +	for (page = 0; page < MAX_PAGES; ++page) {
+> +		void *addr = register_page_data + (PAGE_SIZE * page);
+> +
+> +		if (set)
+> +			SetPageReserved(virt_to_page(addr));
+> +		else
+> +			ClearPageReserved(virt_to_page(addr));
+> +	}
+> +}
+> +
+> +static int __init trace_events_user_init(void)
+> +{
+> +	int ret;
+> +
+> +	/* Zero all bits beside 0 (which is reserved for failures) */
+> +	bitmap_zero(page_bitmap, MAX_EVENTS);
+> +	set_bit(0, page_bitmap);
+> +
+> +	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
+> +
+> +	if (!register_page_data)
+> +		return -ENOMEM;
+> +
+> +	set_page_reservations(true);
+> +
+> +	ret = create_user_tracefs();
+> +
+> +	if (ret) {
+> +		pr_warn("user_events could not register with tracefs\n");
+> +		set_page_reservations(false);
+> +		kfree(register_page_data);
+> +		return ret;
+> +	}
+> +
+> +	if (dyn_event_register(&user_event_dops))
+> +		pr_warn("user_events could not register with dyn_events\n");
+> +
+> +	return 0;
+> +}
+> +
+> +fs_initcall(trace_events_user_init);
+

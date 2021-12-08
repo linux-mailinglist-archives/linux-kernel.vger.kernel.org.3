@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B9146CB31
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7569746CB38
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 03:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243663AbhLHCuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 21:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243669AbhLHCuh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 21:50:37 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E43DC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 18:47:06 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s189-20020a252cc6000000b005c1f206d91eso2070415ybs.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 18:47:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=NkX3KvDSHRuiAq+LRg9aiI3XOvvC67NwXsfw+Gc/9l4=;
-        b=VBMi5n0xn14QikZgO1V2df5AmaIlpCWXK5U6dqgZQ+lhdKffn6J4Sj5e21OR8ZY0ix
-         QFixu8Hy0X/O8ZQBfBADSfLPJyMOGYy4306E3nA5C9zu+KALzWHHK42XD29Imq04W/Ac
-         sWPTVB/DKbXtsRQUEOn0iY1Wr/9EQ1g2tugTwxryT9jvhiulbQafyGOqpJIXpbq49v+L
-         cS2h0zy9vhuDo8qwFodW6LaU0ZtaI7EZs62tpjXxE9itf6GWhdE5Hy5NTPAMGnWUfsWm
-         hIRvqLxW0gKw8VECXCMMyE4TAnTNNYvh5wP+OI7Oie7x8/Pjju/YR/5oiCrLUvVv68Ci
-         7Q6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=NkX3KvDSHRuiAq+LRg9aiI3XOvvC67NwXsfw+Gc/9l4=;
-        b=vL3wvJJuWMh3kGLQ47bkjUAC+q8tHZu42oh/CoMCpYM6Si94GibTPFFq1sEXZPxQuV
-         iLxfVPZ1DfVJfB7WwnGUBQJ14RYxiWY/PWNhbIdTWR9XbuY6XYmmqh/IxMuD0/Jct839
-         nxbSci1m+mnLkRhm4tlh8bxPqx2tIecA6XBw3FDIf2Taxew02vMWjdY+QNz7XK9IwLNo
-         fpJHzvLBPTJZ5fyMzjVhfsPXBzzfmUQgehyIiCqpkqciRo6Iaoc4ctZQgPtUF3lqK0AV
-         DQOWIXXYMYiAy06KkC3wGdR3y5gydR/lOGkhbzQbk3T+VfJHDhSbSQw5Z72hqtAs4eyg
-         4rZg==
-X-Gm-Message-State: AOAM5300uhmUZe/TRe87c5oqzxnPmVEpuCRJrsOtAJfmvRRH3ysC+cIG
-        P+gbi3KwVCbghOt0AfKB/X65AgeYSx/1
-X-Google-Smtp-Source: ABdhPJyoGRMQihsAu/draf45ckQVcDZHcW0RnmZO7HeS2qA9TqQPXK7+X1r6RHgehf0o7BYpInuzrMLTox9D
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:57e:1dbb:34b4:8257])
- (user=irogers job=sendgmr) by 2002:a25:ad27:: with SMTP id
- y39mr55896029ybi.494.1638931625357; Tue, 07 Dec 2021 18:47:05 -0800 (PST)
-Date:   Tue,  7 Dec 2021 18:46:07 -0800
-In-Reply-To: <20211208024607.1784932-1-irogers@google.com>
-Message-Id: <20211208024607.1784932-23-irogers@google.com>
-Mime-Version: 1.0
-References: <20211208024607.1784932-1-irogers@google.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 22/22] perf stat: Fix memory leak in check_per_pkg
-From:   Ian Rogers <irogers@google.com>
-To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S239261AbhLHC76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:59:58 -0500
+Received: from mga04.intel.com ([192.55.52.120]:58639 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234660AbhLHC7z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 21:59:55 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="236483023"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="236483023"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 18:56:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="563919825"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2021 18:56:22 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mun82-000NJT-7v; Wed, 08 Dec 2021 02:56:22 +0000
+Date:   Wed, 8 Dec 2021 10:55:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest 2/4] arch/x86/kernel/tdx-tests.c:85: Error: bad
+ register name `%rax'
+Message-ID: <202112081039.hxR5noCJ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the key is already present then free the key used for lookup.
+tree:   https://github.com/intel/tdx.git guest
+head:   99ee592fd433c9c999684d873636c3764019dd08
+commit: 857f6deb3a90f4d3a0ad94433929d017f31e2efd [2/4] x86/tdx-tests: Add a port of a kvm unit test
+config: i386-buildonly-randconfig-r006-20211207 (https://download.01.org/0day-ci/archive/20211208/202112081039.hxR5noCJ-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/857f6deb3a90f4d3a0ad94433929d017f31e2efd
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest
+        git checkout 857f6deb3a90f4d3a0ad94433929d017f31e2efd
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Found with:
-$ perf stat -M IO_Read_BW /bin/true
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-==1749112==ERROR: LeakSanitizer: detected memory leaks
+All errors (new ones prefixed by >>):
 
-Direct leak of 32 byte(s) in 4 object(s) allocated from:
-    #0 0x7f6f6fa7d7cf in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145
-    #1 0x55acecd9d7a6 in check_per_pkg util/stat.c:343
-    #2 0x55acecd9d9c5 in process_counter_values util/stat.c:365
-    #3 0x55acecd9e0ab in process_counter_maps util/stat.c:421
-    #4 0x55acecd9e292 in perf_stat_process_counter util/stat.c:443
-    #5 0x55aceca8553e in read_counters ./tools/perf/builtin-stat.c:470
-    #6 0x55aceca88fe3 in __run_perf_stat ./tools/perf/builtin-stat.c:1023
-    #7 0x55aceca89146 in run_perf_stat ./tools/perf/builtin-stat.c:1048
-    #8 0x55aceca90858 in cmd_stat ./tools/perf/builtin-stat.c:2555
-    #9 0x55acecc05fa5 in run_builtin ./tools/perf/perf.c:313
-    #10 0x55acecc064fe in handle_internal_command ./tools/perf/perf.c:365
-    #11 0x55acecc068bb in run_argv ./tools/perf/perf.c:409
-    #12 0x55acecc070aa in main ./tools/perf/perf.c:539
+   arch/x86/kernel/tdx-tests.c:66:12: warning: no previous prototype for 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
+      66 | int __init kvm_unit_test_debug_init(void)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/tdx-tests.c: Assembler messages:
+>> arch/x86/kernel/tdx-tests.c:85: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:86: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:87: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:88: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:89: Error: bad register name `%rax'
+>> arch/x86/kernel/tdx-tests.c:90: Error: bad register name `%rip)'
+   arch/x86/kernel/tdx-tests.c:111: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:112: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:113: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:114: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:115: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:116: Error: bad register name `%rip)'
+   arch/x86/kernel/tdx-tests.c:118: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:133: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:134: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:135: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:136: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:137: Error: bad register name `%rax'
+   arch/x86/kernel/tdx-tests.c:138: Error: bad register name `%rip)'
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+
+vim +85 arch/x86/kernel/tdx-tests.c
+
+    65	
+    66	int __init kvm_unit_test_debug_init(void)
+    67	{
+    68		unsigned long start;
+    69	
+    70		register_die_notifier(&kvm_unit_test_debug_notifier);
+    71	
+    72		/*
+    73		 * cpuid and rdmsr (among others) trigger VM exits and are then
+    74		 * emulated. Test that single stepping works on emulated instructions.
+    75		 * 
+    76		 * With TDX, there are 2 possibilities: instruction is either emulated
+    77		 * by the TDX module or the #VE handler. In the former case, it's the
+    78		 * job of the TDX module to raise #DB.
+    79		 */
+    80		n = 0;
+    81	
+    82		set_debugreg(0, 6);
+    83		/* First, test #VE emulated instructions: CPUID 0x5 and RDMSR 0x8b */
+    84		asm volatile(
+  > 85			"pushf\n\t"
+    86			"pop %%rax\n\t"
+    87			"and $~(1<<8),%%rax\n\t"
+    88			"push %%rax\n\t"
+    89			"or $(1<<8),%%rax\n\t"
+  > 90			"push %%rax\n\t"
+
 ---
- tools/perf/util/stat.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-index 5c24aca0968c..c69b221f5e3e 100644
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@ -345,9 +345,10 @@ static int check_per_pkg(struct evsel *counter,
- 		return -ENOMEM;
- 
- 	*key = (uint64_t)d << 32 | s;
--	if (hashmap__find(mask, (void *)key, NULL))
-+	if (hashmap__find(mask, (void *)key, NULL)) {
- 		*skip = true;
--	else
-+		free(key);
-+	} else
- 		ret = hashmap__add(mask, (void *)key, (void *)1);
- 
- 	return ret;
--- 
-2.34.1.400.ga245620fadb-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

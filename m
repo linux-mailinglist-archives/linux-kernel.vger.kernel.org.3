@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4642446DED3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF4C46DED6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241067AbhLHXGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:06:35 -0500
-Received: from mga17.intel.com ([192.55.52.151]:58834 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237516AbhLHXGf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:06:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218657664"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="218657664"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 15:03:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="503254766"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2021 15:02:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mv5xj-0001Ac-4x; Wed, 08 Dec 2021 23:02:59 +0000
-Date:   Thu, 9 Dec 2021 07:02:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "charles.park" <charles.park@hardkernel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-5.16.y 31/75] drivers/thermal/thermal_helpers.c:79:
- warning: expecting prototype for thermal_zone_get_temp(). Prototype was for
- CRITICAL_TEMP() instead
-Message-ID: <202112090618.OVdb1IM2-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S241073AbhLHXKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:10:22 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:38760 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237479AbhLHXKV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 18:10:21 -0500
+Received: by mail-oi1-f181.google.com with SMTP id r26so6213808oiw.5;
+        Wed, 08 Dec 2021 15:06:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ZTyMJI4hTyE9L4Zhb7j0sOWecejaECV3ht0mOq9ry8g=;
+        b=KhSsnwmpoa1/V85OtmTMczw3ctercu6HA+1scTqeB/KOkfrxoYuicysXJwpjjWLFHc
+         VBXtFrt/d05XF0phu2NZ6aVxBvyix5dNAPTaWJzeWNkEKHrfmxcp9dhHOhrmE1Kg5543
+         LKq5Kqe2cxb1AZPevWTFLe3Asc3Dz8FIs+4XlXhnjPDONQvXO5UYEHyuuA3imrnpxCvD
+         rt5M2bImX5DQRhR81eoq7c14Q/AENgrKPJHndK7qfCN7je9jRw4Kzp9/8FtX3cTwnoCN
+         4J7ZTOKXGsuw2ssf0nNOkyQ/feYNGbdVE9CFLh2XE8f7TA8B/LY90nWEzkCGcu9D88gA
+         x11Q==
+X-Gm-Message-State: AOAM530/xNwUgSGNjq0RHew1Is2U+2Btlf4viLvPxYHLUhSAI6Z4bRxq
+        ApGLoijfOMwv8Oo3YBR4TfArf0OKqw==
+X-Google-Smtp-Source: ABdhPJy572TEFvmQ84InPEY2Apekh9OAe6oDDy5/LdsgMAOOq8+29sIsh1dXymCw8zpSWn7RI+0T4Q==
+X-Received: by 2002:a05:6808:350:: with SMTP id j16mr2336064oie.47.1639004808210;
+        Wed, 08 Dec 2021 15:06:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t14sm751222oth.81.2021.12.08.15.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 15:06:47 -0800 (PST)
+Received: (nullmailer pid 596178 invoked by uid 1000);
+        Wed, 08 Dec 2021 23:06:46 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Gabriel Somlo <gsomlo@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kgugala@antmicro.com,
+        mdudek@internships.antmicro.com, rdunlap@infradead.org,
+        paulus@ozlabs.org, joel@jms.id.au, geert@linux-m68k.org,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        linux-mmc@vger.kernel.org, shorne@gmail.com,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krakoczy@antmicro.com, ulf.hansson@linaro.org,
+        mholenko@antmicro.com
+In-Reply-To: <20211208132042.3226275-3-gsomlo@gmail.com>
+References: <20211208132042.3226275-1-gsomlo@gmail.com> <20211208132042.3226275-3-gsomlo@gmail.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
+Date:   Wed, 08 Dec 2021 17:06:46 -0600
+Message-Id: <1639004806.166681.596177.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/tobetter/linux odroid-5.16.y
-head:   04f296b5f991198f16f76ba15a23e9e00e30aac4
-commit: 4ea975cf78cb5d4519abedbe526e1098882bdc88 [31/75] ODROID-XU4: Update hack avoiding the invalid temperature by TMU broken
-config: i386-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211209/202112090618.OVdb1IM2-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/tobetter/linux/commit/4ea975cf78cb5d4519abedbe526e1098882bdc88
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.16.y
-        git checkout 4ea975cf78cb5d4519abedbe526e1098882bdc88
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/thermal/ mm/
+On Wed, 08 Dec 2021 08:20:41 -0500, Gabriel Somlo wrote:
+> LiteSDCard is a small footprint, configurable SDCard core for FPGA
+> based system on chips.
+> 
+> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> 
+> New in v3:
+>   - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>     bindings document (please let me know if that was premature, and
+>     happy to take further review if needed :)
+>   - add dedicated DT property for source clock frequency
+> 
+>  .../devicetree/bindings/mmc/litex,mmc.yaml    | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-All warnings (new ones prefixed by >>):
+yamllint warnings/errors:
 
->> drivers/thermal/thermal_helpers.c:79: warning: expecting prototype for thermal_zone_get_temp(). Prototype was for CRITICAL_TEMP() instead
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg-names:items: 'oneOf' conditional failed, one must be fixed:
+	[{'const': 'phy'}, {'const': 'core'}, {'const': 'reader'}, {'const': 'writer'}, {'const': 'irq (optional)'}] is not of type 'object'
+	'irq (optional)' does not match '^[a-zA-Z0-9,.\\-_ #+/]+$'
+	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg: {'items': [{'description': 'PHY registers'}, {'description': 'CORE registers'}, {'description': 'DMA Reader buffer'}, {'description': 'DMA Writer buffer'}, {'description': 'IRQ registers (optional)'}], 'minItems': 4, 'maxItems': 5} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: properties:reg-names: {'items': [{'const': 'phy'}, {'const': 'core'}, {'const': 'reader'}, {'const': 'writer'}, {'const': 'irq (optional)'}], 'minItems': 4, 'maxItems': 5} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml: ignoring, error in schema: properties: reg-names: items
+warning: no schema found in file: ./Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+Documentation/devicetree/bindings/mmc/litex,mmc.example.dt.yaml:0:0: /example-0/mmc@12005000: failed to match any schema with compatible: ['litex,mmc']
+
+doc reference errors (make refcheckdocs):
 
 
-vim +79 drivers/thermal/thermal_helpers.c
+See https://patchwork.ozlabs.org/patch/1565210
 
-    67	
-    68	/**
-    69	 * thermal_zone_get_temp() - returns the temperature of a thermal zone
-    70	 * @tz: a valid pointer to a struct thermal_zone_device
-    71	 * @temp: a valid pointer to where to store the resulting temperature.
-    72	 *
-    73	 * When a valid thermal zone reference is passed, it will fetch its
-    74	 * temperature and fill @temp.
-    75	 *
-    76	 * Return: On success returns 0, an error code otherwise
-    77	 */
-    78	
-  > 79	#define	CRITICAL_TEMP	120000
-    80	int thermal_zone_data[4] = { 0, };
-    81	
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

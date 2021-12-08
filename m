@@ -2,285 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A3F46D66C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F245646D678
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbhLHPKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:10:53 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:41782 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbhLHPKv (ORCPT
+        id S235701AbhLHPNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232243AbhLHPNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:10:51 -0500
-Received: by mail-ot1-f41.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so3000081otl.8;
-        Wed, 08 Dec 2021 07:07:19 -0800 (PST)
+        Wed, 8 Dec 2021 10:13:11 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AAFC0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 07:09:39 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id w4so2405447ilv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 07:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1+GAXE0VqreyV1r5eP+ZAlAusuf0NulXA0aP4GUThgg=;
+        b=XnuiTep5KidHlpTcNb8bVogoBSUMyCQ0MAzfV81JGYQY6tkBoej5YM9ThzUluT+O8M
+         zNkQfg8gXRApb0ZFSXSZf8J4f78X+bWbFm8dexQqMc/qDoc4Aci3jclCKyXrycT/ANpe
+         eDgukh0rsfQtd0JY3T0IrTOAAZKn0iyQuaEB2wZVctyjqjYFKz8S6fAuvtFi0kjw3MxF
+         ye2KFpKETvirGMHC4Y8r66DDRqEH9joD69jwnbI1DfiyoM4lPe60Uy+SiE3iwkCBy4zz
+         L/KIkUGPFuPiNsKocYewikUlz02VEIrS/mVD/ig0mggApg7VDPVlxZdhxhtOP0qKdxfb
+         lxkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RJJCNpefWZ9v5/O8y5C489j9lW1KhN7Cz4lEj5RJNIA=;
-        b=Ge4TaZV27YeCTUhokyaxGjI+PGFSq98Ob3acz3hn2z8lx8bZiRVM34p10T2/PRJZQ8
-         XzhN8g6JHMSXjp5QgzPhijCEpxIEhBaVMSllOMi4hrecSrq8TAbutogHLxfJz8HwefwY
-         yDaHLl66y9VaRJW42QHx/TJ965eoEXdBVgVMEtYRiXI3am4xUxGPujmjx0TOJHJT4LNd
-         RiKfeFoVKy2KH3VHtg7bNc5GRWahSqAVfXSJtu+bywPiBtGmG/Vsn5mu1IXh7XXqo9j+
-         ZR2cJnO6JK0+qNdoyuWFeXMfudwlq8jNpQLFk5RYXn4fq+uaBYQpfFnmI971m/3/HYzh
-         aw5w==
-X-Gm-Message-State: AOAM5300LpLe26hJIMBW33q1KbK4EiJkdbFWPB1fc/QhopaCd93hw1Fa
-        No0WINe8d0Z8l4bPwKNq02kK+sIcjUbASbo3G80=
-X-Google-Smtp-Source: ABdhPJxZkseiHQvO9jQwE/fBO7h382IQN8MDsFHQqrdWvOA7psJNg+7Hc6qSdY6PquxgulgWRkdblblIEmx3EGGJ+ZA=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr62222otu.254.1638976038821;
- Wed, 08 Dec 2021 07:07:18 -0800 (PST)
+        bh=1+GAXE0VqreyV1r5eP+ZAlAusuf0NulXA0aP4GUThgg=;
+        b=cP7o3ckmvVAsfjDtj9R+4GN8z1mwV4wq8L/H6yEF5yxlUjP98miwsS+JqStja5HhC/
+         gMDKfUKkd3v09R53pBMxqmgYAzBlcL9ZfP67Eoe5GyMmJMzhgHF8GwpEAJ3J2jPbw4ZX
+         IpZVuposb8ZIjIXA8ZUKawgkxPc7H1hnStOGbDRWgifyad6/sdtPiDvLkU+iF9z5ztMP
+         C5rmDe8rKepUB5PeP3ERPI+C9o4AnM1iB/IG5HQnzAPPFXgTwZaJvn33lwfGyot+UyL3
+         UznL+V7VYTvZ1oLoHCNcLkZD2ohHW3+X0qMl9svfWJsONILuPOTCwky0ZhGOuzTUbxej
+         qGVA==
+X-Gm-Message-State: AOAM53364Ea4Ki0N0/H5BKRHj8KyQL7sr76VVoKmmyQiwg7RhkX6raZW
+        AhtzwQvyyIN8LoX7hzUbfLixd4qZe6tk1sUmVYEh+A==
+X-Google-Smtp-Source: ABdhPJzqPeuFB5JLQTAHNvbSIwmMLg5uD/l5Rg7r9lU0wOT8VAo4EjUZ/mLnmAl9JY4E9BjIBtYh7QHaZFtNUc7qgu0=
+X-Received: by 2002:a05:6e02:931:: with SMTP id o17mr6795355ilt.174.1638976179029;
+ Wed, 08 Dec 2021 07:09:39 -0800 (PST)
 MIME-Version: 1.0
-References: <26decf155bffc021a97846c0a0ed09c2b5e0bef1.camel@infradead.org>
-In-Reply-To: <26decf155bffc021a97846c0a0ed09c2b5e0bef1.camel@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Dec 2021 16:07:07 +0100
-Message-ID: <CAJZ5v0gAkOqh1LVpdXKLxpswBSG-3LUaXoZgw0Op+3V69BjhZQ@mail.gmail.com>
-Subject: Re: [PATCH] PM / hibernate: Allow ACPI hardware signature to be honoured
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     linux-pm <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        benh <benh@kernel.crashing.org>,
-        "van der Linden, Frank" <fllinden@amazon.com>,
-        Amit Shah <aams@amazon.com>
+References: <20211208024607.1784932-1-irogers@google.com> <20211208024607.1784932-2-irogers@google.com>
+ <a3cf5b74-1a1b-ef85-1ad3-034e797848e2@huawei.com> <CAP-5=fV5YDghE5pHZX2+OxguZaeO_JSSXimghUGLhCaCOoCH0w@mail.gmail.com>
+In-Reply-To: <CAP-5=fV5YDghE5pHZX2+OxguZaeO_JSSXimghUGLhCaCOoCH0w@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 8 Dec 2021 07:09:26 -0800
+Message-ID: <CAP-5=fUgi+Vh8SitwXTjV27NHmyaMRV0usfmVOy=0gt5sKcsFg@mail.gmail.com>
+Subject: Re: [PATCH 01/22] libperf: Add comments to perf_cpu_map.
+To:     John Garry <john.garry@huawei.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, eranian@google.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 5:09 PM David Woodhouse <dwmw2@infradead.org> wrote:
+On Wed, Dec 8, 2021 at 6:34 AM Ian Rogers <irogers@google.com> wrote:
 >
-> From: David Woodhouse <dwmw@amazon.co.uk>
+> On Wed, Dec 8, 2021 at 4:06 AM John Garry <john.garry@huawei.com> wrote:
+> >
+> > On 08/12/2021 02:45, Ian Rogers wrote:
+> > > diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
+> > > index 840d4032587b..1c1726f4a04e 100644
+> > > --- a/tools/lib/perf/include/internal/cpumap.h
+> > > +++ b/tools/lib/perf/include/internal/cpumap.h
+> > > @@ -4,9 +4,16 @@
+> > >
+> > >   #include <linux/refcount.h>
+> > >
+> > > +/**
+> > > + * A sized, reference counted, sorted array of integers representing CPU
+> > > + * numbers. This is commonly used to capture which CPUs a PMU is associated
+> > > + * with.
+> > > + */
+> > >   struct perf_cpu_map {
+> > >       refcount_t      refcnt;
+> > > +     /** Length of the map array. */
+> > >       int             nr;
+> > > +     /** The CPU values. */
+> > >       int             map[];
+> >
+> > would simply more distinct names for the variables help instead of or in
+> > addition to comments?
 >
-> Theoretically, when the hardware signature in FACS changes, the OS
-> is supposed to gracefully decline to attempt to resume from S4:
+> Thanks John! I agree. The phrase that is often used is intention
+> revealing names. The kernel style for naming is to be brief:
+> https://www.kernel.org/doc/html/v4.10/process/coding-style.html#naming
+> These names are both brief. nr is a little unusual, of course an
+> integer is a number - size and length are common names in situations
+> like these. In this case number makes sense as it is the number of
+> CPUs in the array, and there is a certain readability in saying number
+> of CPUs and not length or size of CPUs. The name map I have issue
+> with, it is always a smell if you are calling a variable a data type.
+> Given the convention in the context of this code I decided to leave
+> it. Something like array_of_cpu_values would be more intention
+> revealing but when run through the variable name shrinkifier could end
+> up as just being array, which would be little better than map.
 >
->  "If the signature has changed, OSPM will not restore the system
->   context and can boot from scratch"
+> The guidance on comments is that they are good and to focus on the
+> what of what the code is doing:
+> https://www.kernel.org/doc/html/v4.10/process/coding-style.html#commenting
+> refcnt was intention revealing enough and so I didn't add a comment to it.
 >
-> In practice, Windows doesn't do this and many laptop vendors do allow
-> the signature to change especially when docking/undocking, so it would
-> be a bad idea to simply comply with the specification by default in the
-> general case.
+> > Generally developers don't always check comments where the struct is
+> > defined when the meaning could be judged intuitively
 >
-> However, there are use cases where we do want the compliant behaviour
-> and we know it's safe. Specifically, when resuming virtual machines where
-> we know the hypervisor has changed sufficiently that resume will fail.
-> We really want to be able to *tell* the guest kernel not to try, so it
-> boots cleanly and doesn't just crash. This patch provides a way to opt
-> in to the spec-compliant behaviour on the command line.
->
-> A follow-up patch may do this automatically for certain "known good"
-> machines based on a DMI match, or perhaps just for all hypervisor
-> guests since there's no good reason a hypervisor would change the
-> hardware_signature that it exposes to guests *unless* it wants them
-> to obey the ACPI specification.
->
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Agreed. I think there could be a follow up to change to better names.
+> As I was lacking a better suggestion I think for the time being, and
+> in this patch set, we can keep things as they are.
 
-Applied as 5.17 material, sorry for the delay.
+A related follow up could be to switch perf_cpu_map to the more
+conventional cpu_set_t:
+https://man7.org/linux/man-pages/man3/CPU_SET.3.html
+However, that wouldn't allow the reference count to be alongside the contents.
 
-Thanks!
+Thanks,
+Ian
 
-> ---
->  .../admin-guide/kernel-parameters.txt         | 15 ++++++++---
->  arch/x86/kernel/acpi/sleep.c                  |  4 ++-
->  drivers/acpi/sleep.c                          | 26 +++++++++++++++----
->  include/linux/acpi.h                          |  2 +-
->  include/linux/suspend.h                       |  1 +
->  kernel/power/power.h                          |  1 +
->  kernel/power/swap.c                           | 16 ++++++++++--
->  7 files changed, 53 insertions(+), 12 deletions(-)
+> Thanks,
+> Ian
 >
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 43dc35fe5bc0..209402f4f11d 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -225,14 +225,23 @@
->                         For broken nForce2 BIOS resulting in XT-PIC timer.
->
->         acpi_sleep=     [HW,ACPI] Sleep options
-> -                       Format: { s3_bios, s3_mode, s3_beep, s4_nohwsig,
-> -                                 old_ordering, nonvs, sci_force_enable, nobl }
-> +                       Format: { s3_bios, s3_mode, s3_beep, s4_hwsig,
-> +                                 s4_nohwsig, old_ordering, nonvs,
-> +                                 sci_force_enable, nobl }
->                         See Documentation/power/video.rst for information on
->                         s3_bios and s3_mode.
->                         s3_beep is for debugging; it makes the PC's speaker beep
->                         as soon as the kernel's real-mode entry point is called.
-> +                       s4_hwsig causes the kernel to check the ACPI hardware
-> +                       signature during resume from hibernation, and gracefully
-> +                       refuse to resume if it has changed. This complies with
-> +                       the ACPI specification but not with reality, since
-> +                       Windows does not do this and many laptops do change it
-> +                       on docking. So the default behaviour is to allow resume
-> +                       and simply warn when the signature changes, unless the
-> +                       s4_hwsig option is enabled.
->                         s4_nohwsig prevents ACPI hardware signature from being
-> -                       used during resume from hibernation.
-> +                       used (or even warned about) during resume.
->                         old_ordering causes the ACPI 1.0 ordering of the _PTS
->                         control method, with respect to putting devices into
->                         low power states, to be enforced (the ACPI 2.0 ordering
-> diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-> index 3f85fcae450c..1e97f944b47d 100644
-> --- a/arch/x86/kernel/acpi/sleep.c
-> +++ b/arch/x86/kernel/acpi/sleep.c
-> @@ -139,8 +139,10 @@ static int __init acpi_sleep_setup(char *str)
->                 if (strncmp(str, "s3_beep", 7) == 0)
->                         acpi_realmode_flags |= 4;
->  #ifdef CONFIG_HIBERNATION
-> +               if (strncmp(str, "s4_hwsig", 8) == 0)
-> +                       acpi_check_s4_hw_signature(1);
->                 if (strncmp(str, "s4_nohwsig", 10) == 0)
-> -                       acpi_no_s4_hw_signature();
-> +                       acpi_check_s4_hw_signature(0);
->  #endif
->                 if (strncmp(str, "nonvs", 5) == 0)
->                         acpi_nvs_nosave();
-> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> index 3023224515ab..fa27319e5324 100644
-> --- a/drivers/acpi/sleep.c
-> +++ b/drivers/acpi/sleep.c
-> @@ -873,11 +873,11 @@ static inline void acpi_sleep_syscore_init(void) {}
->  #ifdef CONFIG_HIBERNATION
->  static unsigned long s4_hardware_signature;
->  static struct acpi_table_facs *facs;
-> -static bool nosigcheck;
-> +static int sigcheck = -1; /* Default behaviour is just to warn */
->
-> -void __init acpi_no_s4_hw_signature(void)
-> +void __init acpi_check_s4_hw_signature(int check)
->  {
-> -       nosigcheck = true;
-> +       sigcheck = check;
->  }
->
->  static int acpi_hibernation_begin(pm_message_t stage)
-> @@ -1005,12 +1005,28 @@ static void acpi_sleep_hibernate_setup(void)
->         hibernation_set_ops(old_suspend_ordering ?
->                         &acpi_hibernation_ops_old : &acpi_hibernation_ops);
->         sleep_states[ACPI_STATE_S4] = 1;
-> -       if (nosigcheck)
-> +       if (!sigcheck)
->                 return;
->
->         acpi_get_table(ACPI_SIG_FACS, 1, (struct acpi_table_header **)&facs);
-> -       if (facs)
-> +       if (facs) {
-> +               /*
-> +                * s4_hardware_signature is the local variable which is just
-> +                * used to warn about mismatch after we're attempting to
-> +                * resume (in violation of the ACPI specification.)
-> +                */
->                 s4_hardware_signature = facs->hardware_signature;
-> +
-> +               if (sigcheck > 0) {
-> +                       /*
-> +                        * If we're actually obeying the ACPI specification
-> +                        * then the signature is written out as part of the
-> +                        * swsusp header, in order to allow the boot kernel
-> +                        * to gracefully decline to resume.
-> +                        */
-> +                       swsusp_hardware_signature = facs->hardware_signature;
-> +               }
-> +       }
->  }
->  #else /* !CONFIG_HIBERNATION */
->  static inline void acpi_sleep_hibernate_setup(void) {}
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 974d497a897d..5b6953189912 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -506,7 +506,7 @@ acpi_status acpi_release_memory(acpi_handle handle, struct resource *res,
->  int acpi_resources_are_enforced(void);
->
->  #ifdef CONFIG_HIBERNATION
-> -void __init acpi_no_s4_hw_signature(void);
-> +void __init acpi_check_s4_hw_signature(int check);
->  #endif
->
->  #ifdef CONFIG_PM_SLEEP
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 8af13ba60c7e..5785d909c321 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -446,6 +446,7 @@ extern unsigned long get_safe_page(gfp_t gfp_mask);
->  extern asmlinkage int swsusp_arch_suspend(void);
->  extern asmlinkage int swsusp_arch_resume(void);
->
-> +extern u32 swsusp_hardware_signature;
->  extern void hibernation_set_ops(const struct platform_hibernation_ops *ops);
->  extern int hibernate(void);
->  extern bool system_entering_hibernation(void);
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index 778bf431ec02..bb41a1a1c0d3 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -168,6 +168,7 @@ extern int swsusp_swap_in_use(void);
->  #define SF_PLATFORM_MODE       1
->  #define SF_NOCOMPRESS_MODE     2
->  #define SF_CRC32_MODE          4
-> +#define SF_HW_SIG              8
->
->  /* kernel/power/hibernate.c */
->  extern int swsusp_check(void);
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 3cb89baebc79..58e9641682e8 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -36,6 +36,8 @@
->
->  #define HIBERNATE_SIG  "S1SUSPEND"
->
-> +u32 swsusp_hardware_signature;
-> +
->  /*
->   * When reading an {un,}compressed image, we may restore pages in place,
->   * in which case some architectures need these pages cleaning before they
-> @@ -104,7 +106,8 @@ struct swap_map_handle {
->
->  struct swsusp_header {
->         char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
-> -                     sizeof(u32)];
-> +                     sizeof(u32) - sizeof(u32)];
-> +       u32     hw_sig;
->         u32     crc32;
->         sector_t image;
->         unsigned int flags;     /* Flags to pass to the "boot" kernel */
-> @@ -312,7 +315,6 @@ static blk_status_t hib_wait_io(struct hib_bio_batch *hb)
->  /*
->   * Saving part
->   */
-> -
->  static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
->  {
->         int error;
-> @@ -324,6 +326,10 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
->                 memcpy(swsusp_header->orig_sig,swsusp_header->sig, 10);
->                 memcpy(swsusp_header->sig, HIBERNATE_SIG, 10);
->                 swsusp_header->image = handle->first_sector;
-> +               if (swsusp_hardware_signature) {
-> +                       swsusp_header->hw_sig = swsusp_hardware_signature;
-> +                       flags |= SF_HW_SIG;
-> +               }
->                 swsusp_header->flags = flags;
->                 if (flags & SF_CRC32_MODE)
->                         swsusp_header->crc32 = handle->crc32;
-> @@ -1542,6 +1548,12 @@ int swsusp_check(void)
->                 } else {
->                         error = -EINVAL;
->                 }
-> +               if (!error && swsusp_header->flags & SF_HW_SIG &&
-> +                   swsusp_header->hw_sig != swsusp_hardware_signature) {
-> +                       pr_info("Suspend image hardware signature mismatch (%08x now %08x); aborting resume.\n",
-> +                               swsusp_header->hw_sig, swsusp_hardware_signature);
-> +                       error = -EINVAL;
-> +               }
->
->  put:
->                 if (error)
-> --
-> 2.25.1
->
+> > Thanks,
+> > John
+> >

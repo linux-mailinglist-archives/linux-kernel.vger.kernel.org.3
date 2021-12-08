@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9CF46D600
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE7046D605
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 15:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbhLHOs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:48:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47470 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbhLHOsz (ORCPT
+        id S235398AbhLHOuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232932AbhLHOuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:48:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 613B5B8212D;
-        Wed,  8 Dec 2021 14:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA22DC00446;
-        Wed,  8 Dec 2021 14:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638974721;
-        bh=7W3w8DusrddBYtU8JLe+sO2l0PnENj0zsm2FWvdtJDU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=lAxmSoOKjRrYJODMrXM+Gvw1tg73NpHH6I3Jts6iyOgzFSuMy7oPYgzPIHE278sNC
-         2wtANVjIhkuk7AX3tctnEs2TdSAMejIDuZ3ZKiFfP0iBwsLMKcrmdhNrR79A/hcGHJ
-         dip17NF5Tq3GOeS8m0jp0YQlPKzdzN5qsXiSH6PB5JgxaIDAvbsYm1xBOJZRwX4lNK
-         s8lGQJvOMhPXllJOs6QT9VWxcYTtzQCRYjycLGsdyYtxSpXYhQqNqTqX/vdUjukmga
-         4ZkXaJ5n8DQa8t9JIVAUysNk+1v6kDo8Fg4zCunOQDqJg21VksaB4XFNzH0FhXQ3jy
-         u9SCFt1zeXGmw==
-Subject: Re: [PATCH 4/4] mtd: nand: omap2: Add support for NAND Controller on
- AM64 SoC
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, tony@atomide.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-References: <20211123103609.14063-1-rogerq@kernel.org>
- <20211123103609.14063-5-rogerq@kernel.org> <20211124131552.6b9bc506@xps13>
- <e52141a6-96fc-97d6-95d7-3e26276fbac3@kernel.org>
- <20211126104231.7cc43149@xps13>
- <917ac002-9d4b-237d-94f3-bcd05f481f39@kernel.org>
- <20211129043633.myxmgp6idbrqvx5p@unlisted>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <e36c46e2-1d0d-4dac-e9a0-3a0cbdd023fa@kernel.org>
-Date:   Wed, 8 Dec 2021 16:45:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Dec 2021 09:50:18 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6EAC061746;
+        Wed,  8 Dec 2021 06:46:47 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id k4so2237790pgb.8;
+        Wed, 08 Dec 2021 06:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=abO6t0h0ZyTAKao1FORuZLKClUQrGyg7tXcyMOqZ1OA=;
+        b=CGWBvzAFHk4gwwCoMS6EvYfqDjTdGfgoAd9DwJtw15ptspglZcqwY+9LOtpzc8EsOt
+         hIh2r+01UgDUHyXpjNO+q93STzUHiCURYXEnCpqE37ex/X+kMLwxASVKlxIiseWvtozH
+         sVt6dieU0hh3BuIvRfvhAfgHPGxQNs4bRKF06U09KRLy53eExj4DpOz+LZ2LxJDrjeYX
+         xWXbvIEfGOijMn1sm+yfKT4MfdC3MMDBDvYK0JZryMgj7N3LzfCXSQs+5zb5paz6MkPc
+         PwOF/2iQ9TFf/Go6oNkmiOX99KYC0u8D+ashqLd7EGE8V+1Cc/kfXrBfIv4Ia3W4DQik
+         xQsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=abO6t0h0ZyTAKao1FORuZLKClUQrGyg7tXcyMOqZ1OA=;
+        b=yYS/KaKftoqRhH2Ts1StCahA+DkeTiGZNqbPY2fHjRdA1qK90tGcXN6qi7v0YO5W/m
+         fg7Puh3ujdDVUd4QCW+vRTWfWMjM3PHiIeYax8s2UOxGXflqqzleDQu4AcG1mSHfVnNu
+         g4tj4vbT8orYfegLiERe1yESF26klYi49c9gTU6nb5JMfs3rRBzQNGFQqvW3f+vJ+CNa
+         h+mBgolyGNwqEqyOc6wpTf4ajC8R48C0OVCDH3ir7XzgMiAfTf0w2mxOAv/EsTo78ORK
+         +HrMdhmMnJz9MJWeNt/BQjwm54YXlq0PMQRfRFkcb9rsswRZnbogp2yAlWNPBf22ss/d
+         t/xQ==
+X-Gm-Message-State: AOAM5335/juRZZDV7jxFo7Qm7GBkNbYJktWfZAktNW39rpAz1LTIFnwI
+        mu2Dx1p7W5UOe1lZ1q3DkWUdavrFZPv61w==
+X-Google-Smtp-Source: ABdhPJzRxlFT2LitZqt5q22fxIHSpBytcIkyx6Cq4uWtDot4pKiZxMB9+FSTclQJ5vYpkfNGz4mnRA==
+X-Received: by 2002:a65:6a43:: with SMTP id o3mr28961742pgu.329.1638974806321;
+        Wed, 08 Dec 2021 06:46:46 -0800 (PST)
+Received: from localhost.localdomain (27-53-123-192.adsl.fetnet.net. [27.53.123.192])
+        by smtp.gmail.com with ESMTPSA id t38sm4135280pfg.199.2021.12.08.06.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 06:46:45 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org, tzimmermann@suse.de, robh@kernel.org,
+        andriy.shevchenko@linux.intel.com, maxime@cerno.tech,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] fbdev: Fix file path that does not exist
+Date:   Wed,  8 Dec 2021 22:46:31 +0800
+Message-Id: <20211208144631.3710-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211129043633.myxmgp6idbrqvx5p@unlisted>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth,
+pvr2fb.c should be under drivers/video/fbdev/
+instead of drivers/video/
 
-On 29/11/2021 06:36, Nishanth Menon wrote:
-> On 13:10-20211126, Roger Quadros wrote:
-> [...]
-> 
->>>>>> +	/* Some SoC's have 32-bit at least, read limitation */
->>>>>> +	if (soc_device_match(k3_soc_devices)) {
->>>>>> +		dev_info(&pdev->dev, "force 32-bit\n");
->>>>>> +		info->force_32bit = true;
->>>>>> +	}
->>>>>> +  
->>>>>
->>>>> As suggested above, just adding a capability structure tied to the
->>>>> compatible string and retrieved with of_device_get_match_data() should
->>>>> be enough and replace this manual tree research.  
->>>>
->>>> The trouble comes when TI updates the silicon revision to "SR2.0" and that has the issue fixed
->>>> but still uses the same compatible. So compatible string by itself is not sufficient to identify
->>>> the troubled devices. soc_device_match() was the easiest way to address this.
->>>
->>> This is precisely what compatibles are for, I believe we should declare
->>> the necessary additional compatibles and fix the device trees that are
->>> wrong.
->>
->> AFAIK TI SoCs don't have different compatibles for different revisions of the same SoC.
->> My understanding is that the SoC is the same so compatible shouldn't change. Just that there were some
->> hardware fixes and some quirks may not be needed anymore.
->>
->> Nishanth,
->>
->> Could you please chime in on why SoC revisions can't use different compatibles?
->>
-> 
-> The permutations of boards (with add-on cards) and SRs become
-> un-manageable esp when Silicon Revisions(SRs) dont actually get into
-> production. Instead, what we do suggest are one of two things:
-> a) The dts in k.org always reflect the latest SR for the chip that is
->    going into production. Older SR revisions are supported as overlays on top
->    of the dtb.
-> b) Where possible, use the chip-id framework[1] to dynamically detect
->    the variations. This might be easier with newer K3 generation SoCs.
-> 
-> 
-> In this instance, an overlay corresponding to older SoC might be
-> feasible.
-> 
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+---
+ drivers/video/fbdev/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Did I understand correctly that we can use a different compatible for older SoC
-in the overlay? e.g. ti,am642-es1.0 ?
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index 6ed5e608dd04..93b8d84c34cf 100644
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -829,7 +829,7 @@ config FB_PVR2
+ 	  You can pass several parameters to the driver at boot time or at
+ 	  module load time.  The parameters look like "video=pvr2:XXX", where
+ 	  the meaning of XXX can be found at the end of the main source file
+-	  (<file:drivers/video/pvr2fb.c>). Please see the file
++	  (<file:drivers/video/fbdev/pvr2fb.c>). Please see the file
+ 	  <file:Documentation/fb/pvr2fb.rst>.
+ 
+ config FB_OPENCORES
+-- 
+2.25.1
 
-If so then I can get rid of soc_device_match and use compatibles matching only in this patch.
-
-> 
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/soc/ti/k3-socinfo.yaml
-> 
-
-cheers,
--roger

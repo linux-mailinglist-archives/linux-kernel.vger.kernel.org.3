@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A3846CF34
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D1F46CF37
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 09:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244994AbhLHIl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 03:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S245031AbhLHIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 03:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbhLHIl2 (ORCPT
+        with ESMTP id S236193AbhLHIlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:41:28 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94B4C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:37:56 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id iq11so1413970pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 00:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=bwXvgd5xsgfADZErjxdRU/XgBlTNkIZ/8hPlFFC57LE=;
-        b=LRfZ9sifn/hPu1USVeaa8cVFREZh9urN0dfwz/hOCCiJen+AUihuk440MuHKMcHV/d
-         aufyAlAn67BjPYlN6leVXRYV2N/66jZVgzZGl0L0qngGjpkcJKxkcXy26WWRAurlH5EV
-         dWK06Pgs2T2G3RsTLw/A9gWQWpv+DdhJD04APNRrOJb/9dFaL/WQxKE3B64hgMneWJi9
-         VEZwX/gZqtBeDmnQqJ7C8hOuF4Hmc7WSf9YzufeuLE1Skf3gFpK+Wc0FD1HHp2VHMT7I
-         dGNK91i5VDIU3l+TyqAL5ki6mmgV+T0mnt327wrbN+Hdigshui88wmcaRIpwyVBM43eN
-         8H+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=bwXvgd5xsgfADZErjxdRU/XgBlTNkIZ/8hPlFFC57LE=;
-        b=tc9UOCDrC1ECzsLEStVPAhxQDdRcxAuS572PVTxOq3cXrkx9uXbdKM/pQvinySBI9O
-         OAGRUhkDH3DAHOwRFX+JDTdewvlfVEARiXnSQVUlVXT+tcreoszNTD2KalT0sZUFk9mO
-         jpPc9j9IT7jhwCdqoA9/yh2byWt36e4B5s/1ORIwBEIgfOZaHLwf1IHbgeBcREBFV+n0
-         vsxFss+HCl9qqIFl+EcSO2dCbmJkJ/O9FXvr5H1bDlUmoR94d3+Ill+RLt/3vej1HJHk
-         vj4MxcY6w4uFD57Sk9QMLXTEzX5Y2VXgqrQRTMnHG3YoGIcMUJU5vCx9D4NoJKpurVyc
-         7uIw==
-X-Gm-Message-State: AOAM532DkQAl/flYfWpNTKAADcy4TL0aYsqgdobzSlYX5Z6soIVak1Pc
-        Pd84Vp8RTQNLfTjwfSkhZOM=
-X-Google-Smtp-Source: ABdhPJyAw4dYVYp0vvKe46EWug52vDhOfOOI9T41J7Rin8b4DrjfUMLTEgqOwp3+ZbgwpN562jlOKQ==
-X-Received: by 2002:a17:90a:17ef:: with SMTP id q102mr5519306pja.116.1638952676518;
-        Wed, 08 Dec 2021 00:37:56 -0800 (PST)
-Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id v19sm5331780pju.32.2021.12.08.00.37.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Dec 2021 00:37:56 -0800 (PST)
-From:   Huangzhaoyang <huangzhaoyang@gmail.com>
-To:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fs: judging context via current_is_kswapd instead of gfp_flag
-Date:   Wed,  8 Dec 2021 16:37:38 +0800
-Message-Id: <1638952658-20285-1-git-send-email-huangzhaoyang@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wed, 8 Dec 2021 03:41:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E06EC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 00:38:17 -0800 (PST)
+Date:   Wed, 08 Dec 2021 08:38:14 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638952695;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tGnzxE0TUgGOkAxi1j1ux7ILSzYtkGv6YIp43Mzz+DI=;
+        b=brU2tYw+yHP04vZv0Enl2afl5/EfZzDdZAQbWOjZV7XVZeo5mgmnOfxO+fL8U/d9mKJz4z
+        iSdZV6JtXGauTo4lT7MnpVu9y0sblKlVHs0xO88fvFbd9kGyK4pYxQ1aGBwj+Pnbgm0UB6
+        sjYvJsvA04iMKbV/TDWqHS75Sqocp2jW0h26Jpiiygn+bVl96ZNwBnk1bMR8dgr+B2qSZ3
+        VAIX20FZrTG+GOLs7b0MqaFNviAVG+XLqlS3fjyHNWWnWUGce1hySsgMK3ld3hymyERFbY
+        uucvQiccg2dNG4QqHG1pWy4sMWUVydP5g9Ngfk90KXc8NZSxIRRFHU3BHEPOYw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638952695;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tGnzxE0TUgGOkAxi1j1ux7ILSzYtkGv6YIp43Mzz+DI=;
+        b=FUtEJBqy6o1aAlcyNXcWUc/+JTABs3fmzC8jUNnAEK3tx9ncWeECmOqSPM08es82zqHqET
+        kOvKpVEpwj5JqbAw==
+From:   "irqchip-bot for Wudi Wang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/irq-gic-v3-its.c: Force
+ synchronisation when issuing INVALL
+Cc:     Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+References: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+MIME-Version: 1.0
+Message-ID: <163895269409.11128.10234033289375981938.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Kswapd uses GFP_KERNEL as gfp_flag which make the judgment of
-context is unexpected. fix it by using current_is_kswapd.
+Commit-ID:     d094b4332232c88d07d9884a9c32fec259984351
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d094b4332232c88d07d9884a9c32fec259984351
+Author:        Wudi Wang <wangwudi@hisilicon.com>
+AuthorDate:    Wed, 08 Dec 2021 09:54:29 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 08 Dec 2021 08:34:09 
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
+
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
+
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
+
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
+Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
 ---
- fs/afs/file.c | 2 +-
+ drivers/irqchip/irq-gic-v3-its.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index eb11d04..6c199d5 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -485,7 +485,7 @@ static int afs_releasepage(struct page *page, gfp_t gfp_flags)
- 	 * elected to wait */
- #ifdef CONFIG_AFS_FSCACHE
- 	if (PageFsCache(page)) {
--		if (!(gfp_flags & __GFP_DIRECT_RECLAIM) || !(gfp_flags & __GFP_FS))
-+		if (current_is_kswapd() || !(gfp_flags & __GFP_FS))
- 			return false;
- 		wait_on_page_fscache(page);
- 	}
--- 
-1.9.1
-
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index eb0882d..0cb584d 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -742,7 +742,7 @@ static struct its_collection *its_build_invall_cmd(struct its_node *its,
+ 
+ 	its_fixup_cmd(cmd);
+ 
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,

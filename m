@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4CC46CD35
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360E346CD3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbhLHFiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:38:08 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:60758 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231911AbhLHFiG (ORCPT
+        id S235261AbhLHFnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 00:43:45 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34300 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229745AbhLHFno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:38:06 -0500
-X-UUID: cf248f2ca8064c1ebb4fe1e09bec9971-20211208
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cREHopv2I0vmXpVmvz4oR9TOg4BtDWc6c9ra60cPwdA=;
-        b=on6EpM+AbDWjXT9jBYfizWJCj0ANlmQ2lRClcyvzjau6jLEswATkMDxC2n+Jf7eH/Hn8wFNaxc50vr5dX8Lrf297nDFRa3C5Qd1a9FV3ISNodXlBbTdJ8gy8GPRzWkCG4DBeeTDDIroPg6tDvqyLOBm6Ak72pvuDJdQXpcMjwKM=;
-X-UUID: cf248f2ca8064c1ebb4fe1e09bec9971-20211208
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 736930027; Wed, 08 Dec 2021 13:34:29 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 8 Dec 2021 13:34:28 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 8 Dec 2021 13:34:27 +0800
-Message-ID: <9d559afc6ae7c5f85bff222aa0c326f3f3e46fcf.camel@mediatek.com>
-Subject: Re: [PATCH net-next v6 5/6] stmmac: dwmac-mediatek: add support for
- mt8195
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Date:   Wed, 8 Dec 2021 13:34:23 +0800
-In-Reply-To: <20211207200450.093f94a8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20211208030354.31877-1-biao.huang@mediatek.com>
-         <20211208030354.31877-6-biao.huang@mediatek.com>
-         <20211207200450.093f94a8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 8 Dec 2021 00:43:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 25443CE1F97;
+        Wed,  8 Dec 2021 05:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 46087C341C6;
+        Wed,  8 Dec 2021 05:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638942009;
+        bh=nU5XG+b8MCrFzNwOjetq2h09RutOxnQGJxWJ+Try7+M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EPA7FpJon9+ktrdS4mnuykd4bWx5xVni5siOHmhKou636GVp7wp/0JMyRe+uztvKz
+         sNROZ9H0LgA4kZm6oskAwkqhxA5+yFLY6du+Oar51GWo60m6gNVfNETf55JrIXDIkr
+         DwmH2cUCfdgdvZwdY5DoZQ5qa68goPGuyOLf07zx1MD6NVt2Ka2LMH2CvXwwibeR9m
+         Zs3jZcE+7jTU/T+beIXPwPBnoG0V8uFEu3cnNztes5iYyKfeOP0T3RKRhMnIULLeVi
+         PuBhxjcEIEzw4Dlz07WJoEJFUjakO4ckEA1okIr1INTD27JeT4hWL5FucDYTKj78YD
+         /Qy8ZdwYfyDGA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2A16260A53;
+        Wed,  8 Dec 2021 05:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] net: hns3: Fix spelling mistake "faile" -> "failed"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163894200916.7821.12190074698627367127.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Dec 2021 05:40:09 +0000
+References: <20211206091207.113648-1-colin.i.king@gmail.com>
+In-Reply-To: <20211206091207.113648-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        davem@davemloft.net, kuba@kernel.org, huangguangbin2@huawei.com,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBKYWt1YiwNCglUaGFua3MgZm9yIHlvdXIgY29tbWVudHMuDQpPbiBUdWUsIDIwMjEtMTIt
-MDcgYXQgMjA6MDQgLTA4MDAsIEpha3ViIEtpY2luc2tpIHdyb3RlOg0KPiBPbiBXZWQsIDggRGVj
-IDIwMjEgMTE6MDM6NTMgKzA4MDAgQmlhbyBIdWFuZyB3cm90ZToNCj4gPiBBZGQgRXRoZXJuZXQg
-c3VwcG9ydCBmb3IgTWVkaWFUZWsgU29DcyBmcm9tIHRoZSBtdDgxOTUgZmFtaWx5Lg0KPiA+IA0K
-PiA+IFNpZ25lZC1vZmYtYnk6IEJpYW8gSHVhbmcgPGJpYW8uaHVhbmdAbWVkaWF0ZWsuY29tPg0K
-PiA+IEFja2VkLWJ5OiBBbmdlbG9HaW9hY2NoaW5vIERlbCBSZWdubyA8DQo+ID4gYW5nZWxvZ2lv
-YWNjaGluby5kZWxyZWdub0Bjb2xsYWJvcmEuY29tPg0KPiANCj4gZHJpdmVycy9uZXQvZXRoZXJu
-ZXQvc3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzo0Mzk6Mzogd2FybmluZzoNCj4gdmFy
-aWFibGUgJ2d0eGNfZGVsYXlfdmFsJyBpcyB1bmluaXRpYWxpemVkIHdoZW4gdXNlZCBoZXJlIFst
-DQo+IFd1bmluaXRpYWxpemVkXQ0KPiAgICAgICAgICAgICAgICAgZ3R4Y19kZWxheV92YWwgfD0g
-RklFTERfUFJFUChNVDgxOTVfRExZX0dUWENfRU5BQkxFLA0KPiAhIW1hY19kZWxheS0+dHhfZGVs
-YXkpOw0KPiAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn4NCj4gZHJpdmVycy9uZXQvZXRo
-ZXJuZXQvc3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzozNjk6MjA6IG5vdGU6DQo+IGlu
-aXRpYWxpemUgdGhlIHZhcmlhYmxlICdndHhjX2RlbGF5X3ZhbCcgdG8gc2lsZW5jZSB0aGlzIHdh
-cm5pbmcNCj4gICAgICAgICB1MzIgZ3R4Y19kZWxheV92YWwsIGRlbGF5X3ZhbCA9IDAsIHJtaWlf
-ZGVsYXlfdmFsID0gMDsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgID0gMA0KPiAxIHdhcm5pbmcgZ2VuZXJhdGVkLg0KPiBkcml2ZXJz
-L25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9kd21hYy1tZWRpYXRlay5jOjQzOTozOiB3YXJu
-aW5nOg0KPiB2YXJpYWJsZSAnZ3R4Y19kZWxheV92YWwnIGlzIHVuaW5pdGlhbGl6ZWQgd2hlbiB1
-c2VkIGhlcmUgWy0NCj4gV3VuaW5pdGlhbGl6ZWRdDQo+ICAgICAgICAgICAgICAgICBndHhjX2Rl
-bGF5X3ZhbCB8PSBGSUVMRF9QUkVQKE1UODE5NV9ETFlfR1RYQ19FTkFCTEUsDQo+ICEhbWFjX2Rl
-bGF5LT50eF9kZWxheSk7DQo+ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fg0KPiBkcml2
-ZXJzL25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9kd21hYy1tZWRpYXRlay5jOjM2OToyMDog
-bm90ZToNCj4gaW5pdGlhbGl6ZSB0aGUgdmFyaWFibGUgJ2d0eGNfZGVsYXlfdmFsJyB0byBzaWxl
-bmNlIHRoaXMgd2FybmluZw0KPiAgICAgICAgIHUzMiBndHhjX2RlbGF5X3ZhbCwgZGVsYXlfdmFs
-ID0gMCwgcm1paV9kZWxheV92YWwgPSAwOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgIF4N
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPSAwDQpJJ2xsIGZpeCB0aGUgdW5pbml0aWFs
-aXplZCB3YXJuaW5nIGluIG5leHQgc2VuZC4NCg==
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  6 Dec 2021 09:12:07 +0000 you wrote:
+> There is a spelling mistake in a dev_err message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [next] net: hns3: Fix spelling mistake "faile" -> "failed"
+    https://git.kernel.org/netdev/net-next/c/3c5290a2dcdb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

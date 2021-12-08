@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E02C46DB59
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2728346DB37
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239167AbhLHSoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbhLHSoR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:44:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B2C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 10:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=KRRWcOCysfqXAfyZZUPqjwdCcY8Atk10HH3nh5ZXh7k=; b=LB32mP3u2RVkwZ3Yn49zGgw9mC
-        nBZOi6FCh9OHgpSfeYE0FYFPSxbx9sCSU8XTMhtgCfy8rk+8lFUPv1PfMJz//MOL101SNnZlG5qOv
-        l8QO7Soeef+oep++i/WjxLyMDK7ro0pbEZDYAkkBcZI3e1UJ2IZwGnfi9rWyLWvhxAPmWHXTlOjAo
-        g5UP5KEh5C5sY5o4ZSqc0UzTA04oskcJHVudJBwV3E3qWf2CzWEHweY6g5VMg+cCrZOfJdy5++MJh
-        yy+srpEfIacrnRa5agnnGm9cHXZb1dLQ/RmAWK/QOi7VqyA8NqQK0zWPMucLr2ht1hqxQmQDRjpJ5
-        ocCHpe0A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv1rp-008gCc-Ou; Wed, 08 Dec 2021 18:40:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S239041AbhLHSlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:41:04 -0500
+Received: from mx1.riseup.net ([198.252.153.129]:40346 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231587AbhLHSlD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 13:41:03 -0500
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E1CCF3004AD;
-        Wed,  8 Dec 2021 19:40:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id B764429B30898; Wed,  8 Dec 2021 19:40:34 +0100 (CET)
-Message-ID: <20211208183906.703599388@infradead.org>
-User-Agent: quilt/0.66
-Date:   Wed, 08 Dec 2021 19:37:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     will@kernel.org, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, peterz@infradead.org,
-        mark.rutland@arm.com, elver@google.com, keescook@chromium.org,
-        hch@infradead.org, torvalds@linux-foundation.org
-Subject: [RFC][PATCH 5/5] atomic: Document the atomic_{}_ofl() functions
-References: <20211208183655.251963904@infradead.org>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4J8QrW0GDXzF4qm;
+        Wed,  8 Dec 2021 10:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1638988651; bh=keN4jgA8ImS2bk90fpfbqhACq7b5ucVVBZjDA9Ry09A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m/fCBrgKnAi5D711I99Z4a6qTqavsTMXj24elxM2ZOXQWmFgC8Gi2XUFVpd1eekik
+         SxDBcJSROLQBsKJ6dfB7Ef+07ctt815gFekw6CRLS9pMMAZ7ih/oyDqhgr5PSi7Mgw
+         oI4cl9QDB5WhgtNLvIbpqAhVbnmdr4r4P4Nq9les=
+X-Riseup-User-ID: 16FB0EB539CF40863AB33C75B101F055FFD2C273BC7BF8D8DBC90BDBA553B5CC
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4J8QrR2sCFz5vcG;
+        Wed,  8 Dec 2021 10:37:27 -0800 (PST)
+From:   Isabella Basso <isabbasso@riseup.net>
+To:     geert@linux-m68k.org, brendanhiggins@google.com,
+        dlatypov@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, skhan@linuxfoundation.org
+Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, ~lkcamp/patches@lists.sr.ht,
+        rodrigosiqueiramelo@gmail.com,
+        Isabella Basso <isabbasso@riseup.net>
+Subject: [PATCH RESEND v3 0/5] test_hash.c: refactor into KUnit
+Date:   Wed,  8 Dec 2021 15:37:06 -0300
+Message-Id: <20211208183711.390454-1-isabbasso@riseup.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Them special, them cause confusion, them needing docs for reading.
+We refactored the lib/test_hash.c file into KUnit as part of the student
+group LKCAMP [1] introductory hackathon for kernel development.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- Documentation/atomic_t.txt |   20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+This test was pointed to our group by Daniel Latypov [2], so its full
+conversion into a pure KUnit test was our goal in this patch series, but
+we ran into many problems relating to it not being split as unit tests,
+which complicated matters a bit, as the reasoning behind the original
+tests is quite cryptic for those unfamiliar with hash implementations.
 
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -44,6 +44,10 @@ The 'full' API consists of (atomic64_ an
-   atomic_add_unless(), atomic_inc_not_zero()
-   atomic_sub_and_test(), atomic_dec_and_test()
- 
-+Reference count with overflow (as used by refcount_t):
-+
-+  atomic_inc_ofl(), atomic_dec_ofl()
-+  atomic_dec_and_test_ofl()
- 
- Misc:
- 
-@@ -157,6 +161,22 @@ atomic variable) can be fully ordered an
- visible.
- 
- 
-+Overflow ops:
-+
-+The atomic_{}_ofl() ops are similar to their !_ofl() bretheren with the
-+notable exception that they take a label as their final argument to jump to
-+when the atomic op overflows.
-+
-+Overflow for inc is zero-or-negative on the value prior to increment.
-+Overflow for dec is zero-or-negative on the value after the decrement.
-+Overflow for dec_and_test is negative on the value after the decrement.
-+
-+These semantics match the reference count use-case (for which they were
-+created). Specifically incrementing from zero is a failure because 0 means the
-+object is freed (IOW use-after-free). decrementing to zero is a failure
-+because it goes undetected (see dec_and_test) and the object would leak.
-+
-+
- ORDERING  (go read memory-barriers.txt first)
- --------
- 
+Some interesting developments we'd like to highlight are:
 
+- In patch 1/5 we noticed that there was an unused define directive that
+  could be removed.
+- In patch 4/5 we noticed how stringhash and hash tests are all under
+  the lib/test_hash.c file, which might cause some confusion, and we
+  also broke those kernel config entries up.
+
+Overall KUnit developments have been made in the other patches in this
+series:
+
+In patches 2/5, 3/5 and 5/5 we refactored the lib/test_hash.c
+file so as to make it more compatible with the KUnit style, whilst
+preserving the original idea of the maintainer who designed it (i.e.
+George Spelvin), which might be undesirable for unit tests, but we
+assume it is enough for a first patch.
+
+This is our first patch series so we hope our contributions are
+interesting and also hope to get some useful criticism from the
+community. :)
+
+Changes since v2:
+- Added comments on struct elements.
+- Removed unecessary __init bits from KUnit test functions.
+- Change KUnit's "EXPECT_FALSE"s for "EXPECT_EQ"s.
+Changes since v1:
+- Fixed compilation on parisc and m68k.
+- Fixed whitespace mistakes.
+- Renamed a few functions.
+- Refactored globals into struct for test function params, thus removing
+  a patch.
+- Reworded some commit messages.
+
+[1] - https://lkcamp.dev/
+[2] - https://lore.kernel.org/linux-kselftest/CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com/
+
+Isabella Basso (5):
+  hash.h: remove unused define directive
+  test_hash.c: split test_int_hash into arch-specific functions
+  test_hash.c: split test_hash_init
+  lib/Kconfig.debug: properly split hash test kernel entries
+  test_hash.c: refactor into kunit
+
+ include/linux/hash.h       |   5 +-
+ lib/Kconfig.debug          |  28 +++-
+ lib/Makefile               |   3 +-
+ lib/test_hash.c            | 259 +++++++++++++++++--------------------
+ tools/include/linux/hash.h |   5 +-
+ 5 files changed, 147 insertions(+), 153 deletions(-)
+
+-- 
+2.34.1
 

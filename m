@@ -2,232 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5DA46DAF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F037846DB01
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238837AbhLHS1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:27:15 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51762 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229958AbhLHS1O (ORCPT
+        id S238869AbhLHS2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:28:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21055 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238847AbhLHS2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:27:14 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8HvwKQ031825;
-        Wed, 8 Dec 2021 18:22:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=aXE701bUpc6LbkYT/TJppyQHk/uuCLkRtAIV/2kpkOQ=;
- b=rs3vcGw7bOaMxTwS0oFrad5CtrLq1Wk5dkJ0oMl0HzvqbNa/6i7IOcgCvJ7X33vA4s45
- lKOYpnLxVgPUsM/zoh7/tsFABYZHGrWhXOCvmKZtmndI/qhlVggkWR28WLa+WArzNCcV
- fxOXEA2oN+YAUvKZACX0vOhAoVP7BzNmSKeaPoSDuwRTZ0zSAm8MVKsbHatVQp/nBuQo
- 0fJ4DD5jqkrAUUc9BDIpsS4Gc0MKmC5trEdXzbIV1JysmmTGY7FlHt492itHtD7XF8e0
- MY4j0pMoc/QQjzFw82b2EJc+xByAzwl65wnwUvDjatNtlsDlO7MuLFLYWasH1l/Tu3L9 fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1jmreqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:22:54 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8I0Aru009117;
-        Wed, 8 Dec 2021 18:22:53 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1jmreq4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:22:53 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8IGBVD025182;
-        Wed, 8 Dec 2021 18:22:52 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3cqyyb7vwy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 18:22:52 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8IMp8j52363648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Dec 2021 18:22:51 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99ADF7805F;
-        Wed,  8 Dec 2021 18:22:51 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C00678060;
-        Wed,  8 Dec 2021 18:22:49 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Dec 2021 18:22:46 +0000 (GMT)
-Message-ID: <395640be-e11d-c242-9e64-9ecf7b479f86@linux.ibm.com>
-Date:   Wed, 8 Dec 2021 13:22:46 -0500
+        Wed, 8 Dec 2021 13:28:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638987916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SYASKSc4xinWGQyTbDXYJVnC+zP6uiTfnZMCX9JDxjs=;
+        b=cpPShlSCFO72GNowf19Bl+lJUdesCtc6+D+oe6HkAk/x3SCfqFr/bJ6PlW75vd5BLASO/p
+        G/5iP37r0hDmMLttI8Hav1GTHYekko1a5YUk6kv2vlaJoBIab/s+f0QhmHchbo/mDBO0K1
+        4fI/9EIfayC5TcpCzmyYiSufqfZwRCU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-8Vhn9exJOuaZPS1mGo5Qvg-1; Wed, 08 Dec 2021 13:25:12 -0500
+X-MC-Unique: 8Vhn9exJOuaZPS1mGo5Qvg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6687C1927802;
+        Wed,  8 Dec 2021 18:25:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B585B196E2;
+        Wed,  8 Dec 2021 18:24:50 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [RFC PATCH 1/2] security: Remove security_add_mnt_opt() as it's
+ unused
+From:   David Howells <dhowells@redhat.com>
+To:     viro@zeniv.linux.org.uk, paul@paul-moore.com,
+        Anna.Schumaker@Netapp.com, kolga@netapp.com
+Cc:     dhowells@redhat.com, casey@schaufler-ca.com,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 08 Dec 2021 18:24:49 +0000
+Message-ID: <163898788970.2840238.15026995173472005588.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v4 10/16] ima: Implement hierarchical processing of file
- accesses
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
- <20211207202127.1508689-11-stefanb@linux.ibm.com>
- <20211208120954.nnawb6d2bpp54yll@wittgenstein>
- <20211208122339.vkqtuckl74ywg3s5@wittgenstein>
- <60fa585b-984e-fa13-e76f-56083a726259@linux.ibm.com>
-In-Reply-To: <60fa585b-984e-fa13-e76f-56083a726259@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: h1z4vx5LGtEZjacsHQQtvNsToad4VG3T
-X-Proofpoint-ORIG-GUID: TSNvOqVq5wWcRnTYmPrwAhkHt1LGYDoh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_07,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
- impostorscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112080102
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove the add_mnt_opt LSM hook as it's not actually used.  This makes it
+easier to make the context pointers in selinux_mnt_opts non-const.
 
-On 12/8/21 11:50, Stefan Berger wrote:
->
-> On 12/8/21 07:23, Christian Brauner wrote:
->> On Wed, Dec 08, 2021 at 01:09:54PM +0100, Christian Brauner wrote:
->>> On Tue, Dec 07, 2021 at 03:21:21PM -0500, Stefan Berger wrote:
->>>> Implement hierarchical processing of file accesses in IMA 
->>>> namespaces by
->>>> walking the list of IMA namespaces towards the init_ima_ns. This way
->>>> file accesses can be audited in an IMA namespace and also be evaluated
->>>> against the IMA policies of parent IMA namespaces.
->>>>
->>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>>> ---
->>>>   security/integrity/ima/ima_main.c | 29 +++++++++++++++++++++++++----
->>>>   1 file changed, 25 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/security/integrity/ima/ima_main.c 
->>>> b/security/integrity/ima/ima_main.c
->>>> index 2121a831f38a..e9fa46eedd27 100644
->>>> --- a/security/integrity/ima/ima_main.c
->>>> +++ b/security/integrity/ima/ima_main.c
->>>> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
->>>>       ima_check_last_writer(iint, inode, file);
->>>>   }
->>>>   -static int process_measurement(struct ima_namespace *ns,
->>>> -                   struct file *file, const struct cred *cred,
->>>> -                   u32 secid, char *buf, loff_t size, int mask,
->>>> -                   enum ima_hooks func)
->>>> +static int _process_measurement(struct ima_namespace *ns,
->>> Hm, it's much more common to use double underscores then single
->>> underscores to
->>>
->>> __process_measurement()
->>>
->>> reads a lot more natural to people perusing kernel code quite often.
->>>
->>>> +                struct file *file, const struct cred *cred,
->>>> +                u32 secid, char *buf, loff_t size, int mask,
->>>> +                enum ima_hooks func)
->>>>   {
->>>>       struct inode *inode = file_inode(file);
->>>>       struct integrity_iint_cache *iint = NULL;
->>>> @@ -405,6 +405,27 @@ static int process_measurement(struct 
->>>> ima_namespace *ns,
->>>>       return 0;
->>>>   }
->>>>   +static int process_measurement(struct ima_namespace *ns,
->>>> +                   struct file *file, const struct cred *cred,
->>>> +                   u32 secid, char *buf, loff_t size, int mask,
->>>> +                   enum ima_hooks func)
->>>> +{
->>>> +    int ret = 0;
->>>> +    struct user_namespace *user_ns;
->>>> +
->>>> +    do {
->>>> +        ret = _process_measurement(ns, file, cred, secid, buf, 
->>>> size, mask, func);
->>>> +        if (ret)
->>>> +            break;
->>>> +        user_ns = ns->user_ns->parent;
->>>> +        if (!user_ns)
->>>> +            break;
->>>> +        ns = user_ns->ima_ns;
->>>> +    } while (1);
->>> I'd rather write this as:
->>>
->>>     struct user_namespace *user_ns = ns->user_ns;
->>>
->>>     while (user_ns) {
->>>         ns = user_ns->ima_ns;
->>>
->>>             ret = __process_measurement(ns, file, cred, secid, buf, 
->>> size, mask, func);
->>>             if (ret)
->>>                 break;
->>>         user_ns = user_ns->parent;
->>>
->>>     }
->>>
->>> because the hierarchy is only an implicit property inherited by ima
->>> namespaces from the implementation of user namespaces. In other words,
->>> we're only indirectly walking a hierarchy of ima namespaces because
->>> we're walking a hierarchy of user namespaces. So the ima ns actually
->>> just gives us the entrypoint into the userns hierarchy which the double
->>> deref writing it with a while() makes obvious.
->> Which brings me to another point.
->>
->> Technically nothing seems to prevent an ima_ns to survive the
->> destruction of its associated userns in ima_ns->user_ns?
->>
->> One thread does get_ima_ns() and mucks around with it while another one
->> does put_user_ns().
->>
->> Assume it's the last reference to the userns which is now -
->> asynchronously - cleaned up from ->work. So at some point you're ending
->> with a dangling pointer in ima_ns->user_ns eventually causing a UAF.
->>
->> If I'm thinking correct than you need to fix this. I can think of two
->> ways right now where one of them I'm not sure how well that would work:
->> 1. ima_ns takes a reference count to userns at creation. Here you need
->>     to make very sure that you're not ending up with reference counting
->>     cycles where the two structs keep each other alive.
->
-> Right. I am not sure what the trigger would be for ima_ns to release 
-> that one reference.
->
->
->> 2. rcu trickery. That's the one I'm not sure how well that would work
->>     where you'd need rcu_read_lock()/rcu_read_unlock() with a
->>     get_user_ns() in the middle whenever you're trying to get a ref to
->>     the userns from an ima_ns and handle the case where the userns is
->>     gone.
->>
->> Or maybe I'me missing something in the patch series that makes this all
->> a non-issue.
->
-> I suppose one can always call current_user_ns() to get a pointer to 
-> the current user namespace that the process is accessing the file in 
-> that IMA now reacts to. With the hierarchical processing we are 
-> walking backwards towards init_user_ns. The problem should only exist 
-> if something else frees the current user namespace (or its parents) so 
-> that the hierarchy collapses. Assuming we are always in a process 
-> context then 'current' should protect us, no ?
->
-All existing callers to process_measurements call it at least once with 
-current_cred().
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Alexander Viro <viro@zeniv.linux.org.uk>
+cc: Paul Moore <paul@paul-moore.com>
+cc: Casey Schaufler <casey@schaufler-ca.com>
+cc: selinux@vger.kernel.org
+cc: linux-security-module@vger.kernel.org
+cc: linux-nfs@vger.kernel.org
+cc: linux-cachefs@redhat.com
+---
 
-The only problem that I see where we are accessing the IMA namespace 
-outside a process context is in 4/16 'ima: Move delayed work queue and 
-variables into ima_namespace' where a delayed work queue is used. I 
-fixed this now by getting an additional reference to the user namesapce  
-before scheduling the delayed work and release it when it ran or when it 
-is canceled (cancel_delayed_work_sync()) but it didn't run.
+ include/linux/lsm_hook_defs.h |    2 --
+ include/linux/lsm_hooks.h     |    2 --
+ include/linux/security.h      |    8 --------
+ security/security.c           |    8 --------
+ security/selinux/hooks.c      |   39 ---------------------------------------
+ 5 files changed, 59 deletions(-)
+
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index df8de62f4710..7f5c35d72082 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -78,8 +78,6 @@ LSM_HOOK(int, 0, sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
+ LSM_HOOK(int, 0, sb_clone_mnt_opts, const struct super_block *oldsb,
+ 	 struct super_block *newsb, unsigned long kern_flags,
+ 	 unsigned long *set_kern_flags)
+-LSM_HOOK(int, 0, sb_add_mnt_opt, const char *option, const char *val,
+-	 int len, void **mnt_opts)
+ LSM_HOOK(int, 0, move_mount, const struct path *from_path,
+ 	 const struct path *to_path)
+ LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index d45b6f6e27fd..73cb0ab2bc03 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -180,8 +180,6 @@
+  *	Copy all security options from a given superblock to another
+  *	@oldsb old superblock which contain information to clone
+  *	@newsb new superblock which needs filled in
+- * @sb_add_mnt_opt:
+- * 	Add one mount @option to @mnt_opts.
+  * @sb_parse_opts_str:
+  *	Parse a string of security data filling in the opts structure
+  *	@options string containing all mount options known by the LSM
+diff --git a/include/linux/security.h b/include/linux/security.h
+index bbf44a466832..a4f0c421dd0c 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -313,8 +313,6 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
+ 				struct super_block *newsb,
+ 				unsigned long kern_flags,
+ 				unsigned long *set_kern_flags);
+-int security_add_mnt_opt(const char *option, const char *val,
+-				int len, void **mnt_opts);
+ int security_move_mount(const struct path *from_path, const struct path *to_path);
+ int security_dentry_init_security(struct dentry *dentry, int mode,
+ 				  const struct qstr *name,
+@@ -711,12 +709,6 @@ static inline int security_sb_clone_mnt_opts(const struct super_block *oldsb,
+ 	return 0;
+ }
+ 
+-static inline int security_add_mnt_opt(const char *option, const char *val,
+-					int len, void **mnt_opts)
+-{
+-	return 0;
+-}
+-
+ static inline int security_move_mount(const struct path *from_path,
+ 				      const struct path *to_path)
+ {
+diff --git a/security/security.c b/security/security.c
+index c88167a414b4..0c49a1f05ac4 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -994,14 +994,6 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
+ }
+ EXPORT_SYMBOL(security_sb_clone_mnt_opts);
+ 
+-int security_add_mnt_opt(const char *option, const char *val, int len,
+-			 void **mnt_opts)
+-{
+-	return call_int_hook(sb_add_mnt_opt, -EINVAL,
+-					option, val, len, mnt_opts);
+-}
+-EXPORT_SYMBOL(security_add_mnt_opt);
+-
+ int security_move_mount(const struct path *from_path, const struct path *to_path)
+ {
+ 	return call_int_hook(move_mount, 0, from_path, to_path);
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 62d30c0a30c2..8ea92f08e6bd 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1023,44 +1023,6 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
+ 	return -EINVAL;
+ }
+ 
+-static int selinux_add_mnt_opt(const char *option, const char *val, int len,
+-			       void **mnt_opts)
+-{
+-	int token = Opt_error;
+-	int rc, i;
+-
+-	for (i = 0; i < ARRAY_SIZE(tokens); i++) {
+-		if (strcmp(option, tokens[i].name) == 0) {
+-			token = tokens[i].opt;
+-			break;
+-		}
+-	}
+-
+-	if (token == Opt_error)
+-		return -EINVAL;
+-
+-	if (token != Opt_seclabel) {
+-		val = kmemdup_nul(val, len, GFP_KERNEL);
+-		if (!val) {
+-			rc = -ENOMEM;
+-			goto free_opt;
+-		}
+-	}
+-	rc = selinux_add_opt(token, val, mnt_opts);
+-	if (unlikely(rc)) {
+-		kfree(val);
+-		goto free_opt;
+-	}
+-	return rc;
+-
+-free_opt:
+-	if (*mnt_opts) {
+-		selinux_free_mnt_opts(*mnt_opts);
+-		*mnt_opts = NULL;
+-	}
+-	return rc;
+-}
+-
+ static int show_sid(struct seq_file *m, u32 sid)
+ {
+ 	char *context = NULL;
+@@ -7298,7 +7260,6 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(fs_context_dup, selinux_fs_context_dup),
+ 	LSM_HOOK_INIT(fs_context_parse_param, selinux_fs_context_parse_param),
+ 	LSM_HOOK_INIT(sb_eat_lsm_opts, selinux_sb_eat_lsm_opts),
+-	LSM_HOOK_INIT(sb_add_mnt_opt, selinux_add_mnt_opt),
+ #ifdef CONFIG_SECURITY_NETWORK_XFRM
+ 	LSM_HOOK_INIT(xfrm_policy_clone_security, selinux_xfrm_policy_clone),
+ #endif
+
 

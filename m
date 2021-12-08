@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C1446C9AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F31846C9B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 01:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbhLHBBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:01:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53628 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbhLHBBA (ORCPT
+        id S239128AbhLHBBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 20:01:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38684 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238916AbhLHBBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:01:00 -0500
+        Tue, 7 Dec 2021 20:01:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66B78B81D80;
-        Wed,  8 Dec 2021 00:57:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E735C341C3;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 63158CE1F58;
+        Wed,  8 Dec 2021 00:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2B4C341C5;
         Wed,  8 Dec 2021 00:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638925047;
-        bh=KQADkv9+jE2sqMtcxOjCDaZTkMCKMJbcpcIbmGmt1Oc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LE1T4uk0tMwzvOM0v5m3yIETgBqsuuPLtL76KoY3dqBGVKw6J7QOa1e9e8UjtM7Hw
-         YUimVagS4QhO2S2qy+sMOv+q8Zqrs675xOk0fVZn+YgnY38qs+V44gMdnbTY5K9u3/
-         nlrNJ9yb78/Mpa+XDJCseOw1sTEKETOgTwQksOQsg7dGZYdluGFgqTnyWe3hjqe9oY
-         CroKR1646vLPRQpLHhYdgQGu50Vj+F4AbLDTQ8elw7hoVlIa3WNXChxH5crCkU546+
-         2Sy3V9DQrVz8FmtaArwE+ozw9M9JZKDMgriv54+Q9d6i17FAj0i9gZA7uLD0n08mOa
-         fr1cXRJoh71hQ==
+        bh=eyFDhLZXXF0TjsoOyaqwW+4RWrrRXJe67NtK8tlN9nU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DVjbNvLQuFmbAP9T/11p/89kLj7Oi0EXGjmXyQXHEr3brp8pnfWh0bAaV13fzpr7O
+         VyworE4Dy6N7sXvrhdMO+sAlWeMlLI0Ky/0m1mRd5vC2KvjaKGdHkuy4bovpeloEi8
+         oxGro/wbwN/+O+6hLr/C6OOT3EUoxHZGV6RxSfLYCdpSsuAXXJRo4oYSlb5gfrDqpK
+         T0xtb/FTw3+psumUKUzYEXC9yUoRDcsPvWQgufFSY9eF5X4O8i5krVoR57i8FcJCdx
+         0w6CwDjTZfqpxmcKkQEFaHwrPyzR1AJjYs97VdrpCF04Z6h9uieizfVR2d3j+lvIu4
+         1Jkn9NvtZG9Hw==
 From:   Eric Biggers <ebiggers@kernel.org>
 To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
 Cc:     linux-doc@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/8] docs: consolidate sysfs-block into Documentation/ABI/
-Date:   Tue,  7 Dec 2021 16:56:32 -0800
-Message-Id: <20211208005640.102814-1-ebiggers@kernel.org>
+Subject: [PATCH v2 1/8] docs: sysfs-block: move to stable directory
+Date:   Tue,  7 Dec 2021 16:56:33 -0800
+Message-Id: <20211208005640.102814-2-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211208005640.102814-1-ebiggers@kernel.org>
+References: <20211208005640.102814-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series consolidates the documentation for /sys/block/<disk>/queue/
-into Documentation/ABI/, where it is supposed to go (as per Greg KH:
-https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
+From: Eric Biggers <ebiggers@google.com>
 
-This series also updates MAINTAINERS to associate the block
-documentation with the block layer.
+The block layer sysfs ABI is widely used by userspace software and is
+considered stable.
 
-This series applies to linux-block/for-next.
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ Documentation/ABI/{testing => stable}/sysfs-block | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename Documentation/ABI/{testing => stable}/sysfs-block (100%)
 
-Changed v1 => v2:
-   - Added patch which moves the documentation to the stable directory.
-   - Added Reviewed-by tags.
-
-Eric Biggers (8):
-  docs: sysfs-block: move to stable directory
-  docs: sysfs-block: sort alphabetically
-  docs: sysfs-block: add contact for nomerges
-  docs: sysfs-block: fill in missing documentation from queue-sysfs.rst
-  docs: sysfs-block: document stable_writes
-  docs: sysfs-block: document virt_boundary_mask
-  docs: block: remove queue-sysfs.rst
-  MAINTAINERS: add entries for block layer documentation
-
- Documentation/ABI/stable/sysfs-block  | 668 ++++++++++++++++++++++++++
- Documentation/ABI/testing/sysfs-block | 346 -------------
- Documentation/block/index.rst         |   1 -
- Documentation/block/queue-sysfs.rst   | 321 -------------
- MAINTAINERS                           |   2 +
- 5 files changed, 670 insertions(+), 668 deletions(-)
- create mode 100644 Documentation/ABI/stable/sysfs-block
- delete mode 100644 Documentation/ABI/testing/sysfs-block
- delete mode 100644 Documentation/block/queue-sysfs.rst
-
-
-base-commit: cb3b5daece093c8d921e4e8736c5d7eff1eeb98b
+diff --git a/Documentation/ABI/testing/sysfs-block b/Documentation/ABI/stable/sysfs-block
+similarity index 100%
+rename from Documentation/ABI/testing/sysfs-block
+rename to Documentation/ABI/stable/sysfs-block
 -- 
 2.34.1
 

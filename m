@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E86A46CD65
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 06:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC9A46CD6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbhLHFxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 00:53:46 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38160 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbhLHFxp (ORCPT
+        id S237043AbhLHGDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230181AbhLHGDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 00:53:45 -0500
+        Wed, 8 Dec 2021 01:03:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF99C061574;
+        Tue,  7 Dec 2021 22:00:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3C6ACE200E;
-        Wed,  8 Dec 2021 05:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3BEDC341C8;
-        Wed,  8 Dec 2021 05:50:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F421B81D83;
+        Wed,  8 Dec 2021 06:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11E1DC00446;
+        Wed,  8 Dec 2021 06:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638942611;
-        bh=Qv5sBlcfvuvf3tCfH5rvSaimWR3EAyzabTCEIss5XgQ=;
+        s=k20201202; t=1638943210;
+        bh=O8X4GNYxkBlSc0NjM9f4eIgI9ybQBBohbXSQbbtpLCY=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GH9/FD7GbJ67ofLkECdm/i+mp4GcOAViaKvrLcbXK9EIXYhPMxVjf+wNSq5payaRY
-         DW8ALv5aUG/FsLqGElKPkOAj7TcwqbZCBdbeNHpBf0CLCUKpW7gIasFOqK25EBtuIl
-         bLkd9t18L+syQf760buUcQcHmY1y1GbNE3nS3ZAgeGB1tftWTM8jQtPCsBEuaTt8he
-         QSQKHHaublrd+wvAk1tR2tGA8iNOum6qsmnwO4koPJfscnPTskIj7AeyxitAtqRB1N
-         ONaaeQgzEwaBcNA5ydAMymEfaCh6ItSJygkjKipRTnWfY6xCDtxCxbBaprQfMft9h8
-         1aOskPGMbqsoA==
+        b=Fi8JtVde2k7GHfWaXGT1Z0/EdqyPYHTkGaDZjS0tHl8yxDjT5ue/pIfrDc5kNTcaO
+         prHACP7SZfVGUT1TCVN1jhBMh3HgVOSl+O+g3LxfnHfFqVurxabuUwEMZhbchmHQBc
+         5MY+nhLq8kesfA5kt+9HHCS1z/Rhr76MzHZ0XuiAGw5r0bM/Iusyli/qmtOeoqW7y6
+         a0g23BE+HbnWYuoQA5os+lEIuOKIBUpSMnjjt0tdt1NydYQOQh66fsvjlkkSjuhEjk
+         9tN8qIpWAQmSV2NPoQx7WzR2cPd4bZ7UgMq82Ur9Ng2XbSDk4oFq0pgpnj6gFgkLYA
+         OuNXARWCN6oaA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DC63D60BD0;
-        Wed,  8 Dec 2021 05:50:10 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E76B460A53;
+        Wed,  8 Dec 2021 06:00:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net V2] net: fec: only clear interrupt of handling queue in
- fec_enet_rx_queue()
+Subject: Re: [PATCH v5 net-next 0/4] prepare ocelot for external interface control 
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163894261089.12550.12618093944925198862.git-patchwork-notify@kernel.org>
-Date:   Wed, 08 Dec 2021 05:50:10 +0000
-References: <20211206135457.15946-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20211206135457.15946-1-qiangqing.zhang@nxp.com>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
-        rmk+kernel@arm.linux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
+Message-Id: <163894320994.16121.3519671067437027854.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Dec 2021 06:00:09 +0000
+References: <20211207170030.1406601-1-colin.foster@in-advantage.com>
+In-Reply-To: <20211207170030.1406601-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This series was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon,  6 Dec 2021 21:54:57 +0800 you wrote:
-> Background:
-> We have a customer is running a Profinet stack on the 8MM which receives and
-> responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
-> time to time the received PNIO-CM package is "stock" and is only handled when
-> receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
-> the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
-> the expected 40 ms and not the 2s delay of the DCERPC-Ping).
+On Tue,  7 Dec 2021 09:00:26 -0800 you wrote:
+> This patch set is derived from an attempt to include external control
+> for a VSC751[1234] chip via SPI. That patch set has grown large and is
+> getting unwieldy for reviewers and the developers... me.
+> 
+> I'm breaking out the changes from that patch set. Some are trivial
+>   net: dsa: ocelot: remove unnecessary pci_bar variables
+>   net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,V2] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
-    https://git.kernel.org/netdev/net/c/b5bd95d17102
+  - [v5,net-next,1/4] net: dsa: ocelot: remove unnecessary pci_bar variables
+    https://git.kernel.org/netdev/net-next/c/c99104840a95
+  - [v5,net-next,2/4] net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
+    https://git.kernel.org/netdev/net-next/c/49af6a7620c5
+  - [v5,net-next,3/4] net: dsa: ocelot: felix: add interface for custom regmaps
+    https://git.kernel.org/netdev/net-next/c/242bd0c10bbd
+  - [v5,net-next,4/4] net: mscc: ocelot: split register definitions to a separate file
+    https://git.kernel.org/netdev/net-next/c/32ecd22ba60b
 
 You are awesome, thank you!
 -- 

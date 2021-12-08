@@ -2,129 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34BB46DC8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55B046DC93
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 20:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239920AbhLHT74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 14:59:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51373 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234014AbhLHT7z (ORCPT
+        id S236048AbhLHUDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 15:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229991AbhLHUDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 14:59:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638993382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qG4PVtbNoLN8AVmrX8I4VEzhm2Rfsmwm+zKfClLGO8w=;
-        b=Zl6r3PyKlMbSTFFAwDw+NatHJwsqT/tS1MVQ5TFpeIeiHmjOdA/XQBXncsNfwb2Coc03Nl
-        BGVXyFeTj+HzaAw5sbFKHzQB9il7iAivRKq78fj9IqXQHRWMqgiAAwtalLzdMUNgZXNAHZ
-        GHvTMbCw6nEYBjxGy3g534hiQCi5NzY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-t3eXp2VaOy6MPEbg9dPbYA-1; Wed, 08 Dec 2021 14:56:21 -0500
-X-MC-Unique: t3eXp2VaOy6MPEbg9dPbYA-1
-Received: by mail-wm1-f70.google.com with SMTP id v62-20020a1cac41000000b0033719a1a714so1828068wme.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 11:56:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qG4PVtbNoLN8AVmrX8I4VEzhm2Rfsmwm+zKfClLGO8w=;
-        b=KATKugbhfQDygp+TDMU+PfC/OSCfD314EjzdbW7+8NBBkvf1FOaWO2PPlDvajb+Qdb
-         3s4MNEHAV+JtqPwtLNFlnLFr7m2S1xUBkRNFCV6kiOwaXBB2j5/k13b2UYTiP0jw1rW3
-         7ZRT//wgHeFz7m6uw1scVliyWmt91GkqXf6ROxUjUW7rq33cVaXgKvU/2VFtImW7Ha48
-         wPAfSo6lzs5C1tnXJy7jTXRhxBIHyUHAwu3KbaU/EaqWhFYCnF0xwXUSdZlFmgs56J5Y
-         TdGx34jgFqhdwc1u7S+g9UWG1j0ADVUDej1WFfGBerbhF96uPW2I9Bpc/ZxLOUe6eRfx
-         CA5g==
-X-Gm-Message-State: AOAM530Xqy2plbApYW/XbK7a0t/vgsB89IpQOgi7cD7Ruw82yQgr3ESh
-        aAqpe7tWYHlRD2n70y48vUR6cq2s7gqAsUjiYXrfwh26DQ8gYCuwjTnpLXgRBm+Cw64wBkiG7d4
-        711mCB6QzzVMq1qSxAqWl4yCl
-X-Received: by 2002:a5d:6dc3:: with SMTP id d3mr891100wrz.159.1638993380129;
-        Wed, 08 Dec 2021 11:56:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxGLz8QJuT+yslhyH4pgav06KTCxu5937pbGMbW3hVwzuMPBhu7Mm6xS6Af8u9XCeDE2JmTJw==
-X-Received: by 2002:a5d:6dc3:: with SMTP id d3mr891083wrz.159.1638993379958;
-        Wed, 08 Dec 2021 11:56:19 -0800 (PST)
-Received: from redhat.com ([2.55.18.120])
-        by smtp.gmail.com with ESMTPSA id y15sm4921076wry.72.2021.12.08.11.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 11:56:18 -0800 (PST)
-Date:   Wed, 8 Dec 2021 14:56:15 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
-Message-ID: <20211208144916-mutt-send-email-mst@kernel.org>
-References: <20211203185522.692489-1-arnd@kernel.org>
+        Wed, 8 Dec 2021 15:03:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718ACC061746;
+        Wed,  8 Dec 2021 11:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1ugDHIUqZ4JmdO1FYqmR7ZCGEMv+2r483moMKywYTH4=; b=JxVv58Afhp/FrAIzoVvHXjAwVp
+        q7uAnNc4iVe/udpBGLV0v0FqyyH4sq5jc/mipGFbjk04q2G8sHVI9GGPfN5fyjPnekvrvUsCI8CDG
+        E+1gOqeGUEOR0/4hM+lIe9vtJhwrbd5xdTBHRtccSaoEmWpfg+RA+ys7HjFSvMTVy9CJhEVaAy/GE
+        pJIxdIspSDtunzd+B/PFFpLk4NjCzW6Ios8eRNcD9TzgGz9FXlmMhbAYnXxxhF2Ve063fvXjaFZTS
+        tJTsVf7hbuLIFmawqBgHrgqBLsz7jfsx7b7s+rL9VqmL1JON9ZLxp1+4GG1kyjNMxRGXRk9BEb2Ec
+        TIvjFvAA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mv36D-00E8Zb-43; Wed, 08 Dec 2021 19:59:33 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        mcgrof@kernel.org, jeyu@kernel.org, mcgrof@bombadil.infradead.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] Next/Trees: update the modules tree
+Date:   Wed,  8 Dec 2021 11:59:31 -0800
+Message-Id: <20211208195931.3369500-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203185522.692489-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 07:55:14PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
-> kernel runs into a link error:
-> 
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
-> eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
-> eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
-> eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
-> eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
-> eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
-> x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
-> 
-> Selecting VIRTIO_PCI_LIB_LEGACY is not sufficient here since that is
-> only part of the VIRTIO_PCI_LIB support.
-> 
-> Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Upon Jessica's request I'm helping with modules maintenance
+so this patch reflect this and updates the trees to mine. For
+the last v5.16 merge window I have already sent my first
+pull request which was merged for v5.16-rc1. I'll queue up fixes
+on the modules_linus branch.
 
+I'm now queuing up changes for the next release and so will be putting
+those in the modules_next branch to match parity with the same style
+used by Jessica.
 
-Confused. These are all part of
-drivers/virtio/virtio_pci_legacy_dev.c
+Cc: Jessica Yu <jeyu@kernel.org>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ Next/Trees | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-and
-obj-$(CONFIG_VIRTIO_PCI_LIB_LEGACY) += virtio_pci_legacy_dev.o
-
-what gives?
-
-
-> ---
->  drivers/vdpa/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
-> index 50f45d037611..04466603021f 100644
-> --- a/drivers/vdpa/Kconfig
-> +++ b/drivers/vdpa/Kconfig
-> @@ -80,6 +80,7 @@ config VP_VDPA
->  
->  config ALIBABA_ENI_VDPA
->  	tristate "vDPA driver for Alibaba ENI"
-> +	select VIRTIO_PCI_LIB
->  	select VIRTIO_PCI_LIB_LEGACY
->  	depends on PCI_MSI && X86
->  	help
-> -- 
-> 2.29.2
+diff --git a/Next/Trees b/Next/Trees
+index 1348af7fdb0f..620898543919 100644
+--- a/Next/Trees
++++ b/Next/Trees
+@@ -46,7 +46,7 @@ input-current	git	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git#f
+ crypto-current	git	git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git#master
+ vfio-fixes	git	git://github.com/awilliam/linux-vfio.git#for-linus
+ kselftest-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git#fixes
+-modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-linus
++modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-linus
+ dmaengine-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git#fixes
+ backlight-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git#for-backlight-fixes
+ mtd-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git#mtd/fixes
+@@ -231,7 +231,7 @@ etnaviv		git	https://git.pengutronix.de/git/lst/linux#etnaviv/next
+ regmap		git	git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git#for-next
+ sound		git	git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git#for-next
+ sound-asoc	git	git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git#for-next
+-modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-next
++modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-next
+ input		git	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git#next
+ block		git	git://git.kernel.dk/linux-block.git#for-next
+ device-mapper	git	git://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git#for-next
+-- 
+2.33.0
 

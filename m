@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EE946DB51
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF1446DB54
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 19:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239097AbhLHSnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 13:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbhLHSna (ORCPT
+        id S239140AbhLHSnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 13:43:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60996 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230040AbhLHSnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 13:43:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BE5C061746;
-        Wed,  8 Dec 2021 10:39:58 -0800 (PST)
+        Wed, 8 Dec 2021 13:43:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EF24ECE2132;
-        Wed,  8 Dec 2021 18:39:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E54C00446;
-        Wed,  8 Dec 2021 18:39:53 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 13:39:52 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, keescook@chromium.org, pmladek@suse.com,
-        david@redhat.com, arnaldo.melo@gmail.com,
-        andrii.nakryiko@gmail.com, linux-mm@kvack.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH -mm 1/5] elfcore: replace old hard-code 16 with
- TASK_COMM_LEN_16
-Message-ID: <20211208133952.730c5fc2@gandalf.local.home>
-In-Reply-To: <20211204095256.78042-2-laoar.shao@gmail.com>
-References: <20211204095256.78042-1-laoar.shao@gmail.com>
-        <20211204095256.78042-2-laoar.shao@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3792BB8226D;
+        Wed,  8 Dec 2021 18:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F1DC00446;
+        Wed,  8 Dec 2021 18:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638988810;
+        bh=pp476RR2y8u8AR8R07J+ux4+dlPhsvc8xNy2iYUGXYA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=EPpygiqUf8PPCTl3XOYmKmx+hEMo9xDCFgSo3ZK7NprdWJ8zHdp3dvtyN0sLENQQJ
+         WnEfuinYmG375jIMN5t+0BnnrLgXZ2GPfLnObtJUWWF4c4jrWi7x+UjVveO1/Q6pV0
+         84Fctv5UBlv6uyizczvWw2Mhylm8rbU8CArUED6KE1QEfoawigI8x/6HCpgtqECZVT
+         BXDI6QbJFaW5BIglBK83+NWTTFZDf4GSG76Goi1ZhUlGnH9u2uMhevzZ7dWLGizEyx
+         z0IIVZxWkpJs/D0h1rI9ElT5PMaiuqi6Sfc3M94422YKu/HtFkAOZyengfr3D4jLkS
+         1pZdVFekSbKWQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 1/2] libertas: Add missing __packed annotation with
+ struct_group()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211201173234.578124-2-keescook@chromium.org>
+References: <20211201173234.578124-2-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Luis Carlos Cobo <luisca@cozybit.com>,
+        linux-kernel@vger.kernel.org, libertas-dev@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163898880630.25635.7269879453453801744.kvalo@kernel.org>
+Date:   Wed,  8 Dec 2021 18:40:07 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  4 Dec 2021 09:52:52 +0000
-Yafang Shao <laoar.shao@gmail.com> wrote:
+Kees Cook <keescook@chromium.org> wrote:
 
-> A new macro TASK_COMM_LEN_16 is introduced for the old hard-coded 16 to
-> make it more grepable. As explained above this marco, the difference
-> between TASK_COMM_LEN and TASK_COMM_LEN_16 is that TASK_COMM_LEN_16 must
-> be a fixed size 16 and can't be changed.
+> Build testing of the newly added struct_group() usage missed smaller
+> architecture width tests for changes to pahole output. Add the missed
+> __packed annotation with struct_group() usage in a __packed struct.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/linux-mm/202111302102.apaePz2J-lkp@intel.com
+> Fixes: 5fd32ae0433a ("libertas: Use struct_group() for memcpy() region")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-You could add:
+2 patches applied to wireless-drivers-next.git, thanks.
 
-Suggested-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+978090ae8856 libertas: Add missing __packed annotation with struct_group()
+05db148ee9a7 libertas_tf: Add missing __packed annotations
 
--- Steve
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211201173234.578124-2-keescook@chromium.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

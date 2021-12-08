@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA8B46CCB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F39346CCBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 05:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbhLHE6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 23:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S244319AbhLHE6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 23:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbhLHE6Y (ORCPT
+        with ESMTP id S239876AbhLHE6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:58:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BA4C061574;
-        Tue,  7 Dec 2021 20:54:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E72BAB81113;
-        Wed,  8 Dec 2021 04:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50484C00446;
-        Wed,  8 Dec 2021 04:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638939290;
-        bh=QzpLNlXkFfImyVZGOh/uOxoZ8fvFbbhdu2ggxLvDANU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=of5R5Yt/xECfd/NJ78cGUvMnIREShsexgwsFyBuA8QSYv/hX0VN7y29spOCfZF0R7
-         UYqsZXE53+Lr2cOplex9zr1+XNJb2AwTv/FBmZwUgFqkNyB5C8sCb3NnSvbXFiDssQ
-         Nd8xM7aL9THxGyFH1u0nXOzTsolYhvIgVbl89wLkcabdEUmbD7tnS+XVIRDARiFbuM
-         BgI7of7L3n1Xk8WDbi3uIjMDe3frLTPqOF9xQHxv/Nvj/Gdc67UqJzq5ncWemsryWM
-         PyIMSV1RtEg3PMKmF1mWIZBY0fXk4wQyWLoxrsGckWTzK9R/qWbpk5C06RvlCzHsKq
-         ljCR+KdVLCs6w==
-Date:   Tue, 7 Dec 2021 20:54:48 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>
-Cc:     hauke@hauke-m.de, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] net: lantiq_xrx200: increase buffer reservation
-Message-ID: <20211207205448.3b297e7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211206223909.749043-1-olek2@wp.pl>
-References: <20211206223909.749043-1-olek2@wp.pl>
+        Tue, 7 Dec 2021 23:58:49 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E426C061746
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 20:55:18 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id iq11so1080080pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 20:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cNfiJvO3fejBotE5iySezNhtEJJwER74TgDA97YhjHw=;
+        b=dFvbWj1YTb2rkTnoh4vumG6c98xkqmedsvStrzVGBcOXL5hS1P5l1JINBDvAe4CWYs
+         C56jIevPqd1PVb3iikh9OpUZjBNpFhNIf2ZOp6sBPFhhVkk/Y9HyfWCJKJ7Zxsg+jYgr
+         j26v5mM52Dd72VrH2kqFsdsH+aEdxKoaZ3JAo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cNfiJvO3fejBotE5iySezNhtEJJwER74TgDA97YhjHw=;
+        b=0utZxk5BK5PyQSs6VhQvGTML9sAC8Bmmj8Od3f92JyNpR4xGdcB+ToAY3Hph+yyJaB
+         Jd8M0YG4Joj1eFwAxlBY2G6XnMsihCeBqKZ2VOi0c8UTENfkUH8F23ZaLRZTpqQz3upV
+         16QA37WO7jnfKwW3mqhqIw9aoqEZy7E3bMyb7QAWX1wkXhL1HsXXt11ZXG2hKn/QVZ++
+         ZoiuFoIJbcrRt9AIoEmhBXR1fpHRyaW0kYCOuSSJob/guzr1WBWjvBudS/3LqfXJeLSv
+         j6Gmh8I8rOdVbSEzz2lkoXspWK8kie1IMGJc/wF2HXe3rsoRcea0n+dAHvTjUPezchPn
+         hUyw==
+X-Gm-Message-State: AOAM531tKNfrTviybcb/5lorz+UOfi7x9sFBnyPXx2CDmWPe1r0637kh
+        WU77AG97JFMaYo/jsayT4bRSVS23Tfx+2w==
+X-Google-Smtp-Source: ABdhPJzS2d4ffr4Pk1pU3l5zZk+LeQbBGpywoHPpAOS/5wf7KsRFrJSCYOl6vgYqGytySqvqn2Y0Gw==
+X-Received: by 2002:a17:902:860b:b0:143:87bf:648f with SMTP id f11-20020a170902860b00b0014387bf648fmr56650710plo.11.1638939317886;
+        Tue, 07 Dec 2021 20:55:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 16sm992605pgu.93.2021.12.07.20.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 20:55:17 -0800 (PST)
+Date:   Tue, 7 Dec 2021 20:55:16 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] dmaengine: at_xdmac: Use struct_size() in
+ devm_kzalloc()
+Message-ID: <202112072055.3708E99@keescook>
+References: <20211208001013.GA62330@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208001013.GA62330@embeddedor>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Dec 2021 23:39:09 +0100 Aleksander Jan Bajkowski wrote:
-> +static int xrx200_max_frame_len(int mtu)
-> +{
-> +	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
+On Tue, Dec 07, 2021 at 06:10:13PM -0600, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded version, in
+> order to avoid any potential type mistakes or integer overflows that, in
+> the worst scenario, could lead to heap overflows.
+> 
+> Link: https://github.com/KSPP/linux/issues/160
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-You sure the problem is not that this doesn't include ETH_HLEN?=20
-MTU is the length of the L2 _payload_.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> +}
-> +
-> +static int xrx200_buffer_size(int mtu)
-> +{
-> +	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN=
-);
-
-Why the - 1 ? =F0=9F=A4=94
-
-For a frame size 101 =3D> max_frame_len 109 you'll presumably want=20
-the buffer to be 116, not 108?
-
-> +}
-> +
+-- 
+Kees Cook

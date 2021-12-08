@@ -2,136 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 538C846D68F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE0B46D6B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 16:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235764AbhLHPQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 10:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbhLHPQQ (ORCPT
+        id S235833AbhLHPRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 10:17:12 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:60516 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235882AbhLHPRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:16:16 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98D7C061746;
-        Wed,  8 Dec 2021 07:12:44 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so4202403pjb.1;
-        Wed, 08 Dec 2021 07:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=LIFot1kuJKaDo2ERTnjJa+YAnRee4XeIz0i7Bu8IHyY=;
-        b=UfRrmPYx8LAwu9fVmKCDQf1/CJGMn6Ujzn3/0UGUhZyB21zFlzr8+YbXqdHtFilkJp
-         vfcyoyLoccOSdMes1hQtPZbIJ//LipFwapH2OI5I7gkm1W07sQ+htGgArlYxDC/HV0ZH
-         Mj0WW1aM/SJvp6Ech8yqDO//tqlyiqFxuW8S7fvNQ1e/rrMunSgNT2gOAw2PFTnNXk6T
-         u3M3PYrDaxMRNtsS5tJLQIajZwwwXGAhB+e0AZ9vwSFw7WHSDtpJzSMbC7iAxuVmyA4i
-         unQgBzvNdXEKwSoc6B2ku8VvmrfjR+2o1DdySasHM0MVQuQxWZVzIZDcWGvDBQE+1d1q
-         lOGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=LIFot1kuJKaDo2ERTnjJa+YAnRee4XeIz0i7Bu8IHyY=;
-        b=qyTuJ0lxl99Z4Ytd8a4j/Bv6y/hcBy+XnyCnrk2RL3EitYREF0ruZNhrNY8zh6xZRE
-         puAOeLyYMSuw2iIqceqngssUWlEIq9jPfU08uFzGTpINjgXwdw8fFodsWv/NHBwuEArO
-         QK6rtoaxbd92az5EaJHjQ+cNFayAWIQPDo0dRd+LEhvVoakUpcbG211pByFy6RG5kOpQ
-         v5u3He7zHjFJVdArOdPmT2DDcdLapyiAsYmBgwT1O3djOuCY7E8CplytjSCUfyPRxlrm
-         dApZczp3YpEUplNheTMrU4nSYfEJsDlOz6bla7H3RjwO7O0vlgaWF7VA2q1c+KJgrfCh
-         9qDw==
-X-Gm-Message-State: AOAM531cXT3fUalYQqpiU6RX/ecF4aKuPL+XB/HnCKCiCNhj7W3w0KQL
-        WKs9SoIJWANQFpVSV3DFmLY=
-X-Google-Smtp-Source: ABdhPJxPm0MpsTdkxvb8JIykqKarYeWvhh9jzsUOfLwh3/pl50sTcT99R2JNqB+DnFxEkW96VRl+eg==
-X-Received: by 2002:a17:90b:4a8e:: with SMTP id lp14mr7836001pjb.224.1638976364302;
-        Wed, 08 Dec 2021 07:12:44 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id i2sm4106421pfg.90.2021.12.08.07.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 07:12:43 -0800 (PST)
-Message-ID: <70ac7c29-6d04-b08a-f057-0461da19c307@gmail.com>
-Date:   Wed, 8 Dec 2021 23:12:37 +0800
+        Wed, 8 Dec 2021 10:17:10 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UzxF8cs_1638976414;
+Received: from B-X3VXMD6M-2058.lan(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0UzxF8cs_1638976414)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Dec 2021 23:13:36 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+Reply-To: xhao@linux.alibaba.com
+Subject: Re: [PATCH 02/11] mm/damon/dbgfs: Remove an unnecessary error message
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, shuah@kernel.org,
+        brendanhiggins@google.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211208124938.4035-1-sj@kernel.org>
+Message-ID: <eaf268ed-cd1b-107c-3092-36df4277fa0f@linux.alibaba.com>
+Date:   Wed, 8 Dec 2021 23:13:34 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V6.1] x86/hyper-v: Add hyperv Isolation VM check in the
- cc_platform_has()
-Content-Language: en-US
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
-        wei.liu@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-        parri.andrea@gmail.com, dave.hansen@intel.com,
-        linux-hyperv@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, thomas.lendacky@amd.com, Tianyu.Lan@microsoft.com,
-        michael.h.kelley@microsoft.com, kys@microsoft.com
-References: <20211207075602.2452-3-ltykernel@gmail.com>
- <20211208145228.42048-1-ltykernel@gmail.com>
-In-Reply-To: <20211208145228.42048-1-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211208124938.4035-1-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/2021 10:52 PM, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Hyper-V provides Isolation VM which encrypt guest memory. In
-> isolation VM, swiotlb bounce buffer size needs to adjust
-> according to memory size in the sev_setup_arch(). Add GUEST_MEM_
-> ENCRYPT check in the Isolation VM.
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Hi SeongJae:
 
-Hi Boris:
-	Could you check whether this version is ok with you?
+On 12/8/21 8:49 PM, SeongJae Park wrote:
+> On Wed, 8 Dec 2021 14:29:40 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+>
+> Hi Xin,
+>
+>> Hi park:
+>>
+>> On 12/1/21 11:04 PM, SeongJae Park wrote:
+>>> When wrong scheme action is requested via the debugfs interface, DAMON
+>>> prints an error message.  Because the function returns error code, this
+>>> is not really needed.  Because the code path is triggered by the user
+>>> specified input, this can result in kernel log mistakenly being messy.
+>> Completely correct, but there will also be a problem that users can’t
+>> quickly locate where the problem is,
+>>
+>> Especially too many parameters need to be written into the interface.
+>>
+>> I think it is necessary to add some debugging methods to help users find
+>> the error without polluting the kernel log.
+>>
+>> And i have an idea, like this:
+>>
+>> in dbgfs, add a last_cmd_stat interface.
+>>
+>>       # echo "1 2 1 2 1 2  1 2 1 2 100 ..."  > schemes
+>>
+>>       #  cat last_cmd_stat
+>>
+>>       #  wrong action 100
+>>
+>> In this way, on the one hand, it will not pollute the kernel log, on the
+>> other hand, it will help users find  the cause of the operation
+>> interface error.
+>>
+>> Park, how do you think of about this idea, if ok, i will send a patch.
+> Thank you always for your great suggestions and efforts!  BTW, I prefer to be
+> called with my first name ;)
+Ha-Ha, Sorry!
+>
+> I want DAMON kernel code to be as simple and small as possible, while putting
+> fancy but complicated features for user conveniences in user space tools like
+> DAMO[1].  In other words, I hope the DAMON debugfs interface to be used as an
+> interface for such user space tools, not an interface for human hands.
+Ok, I know what you mean.
+>
+> IMHO, implementing the feature you proposed in the kernel could make the code
+> slightly bigger, while it can easily implemented in user space.  I therefore
+> think the feature would be better to be implemented in user space.  If you
+> could send a pull request of the feature for DAMO, it would be so great.
 
-Thanks.
+Ok,  i will do it,  But there's a problem here, If the user does not use 
+the DAMO tools to operate  the dbgfs interface,
 
-> ---
-> Change since v6:
-> 	* Change the order in the cc_platform_has() and check sev first.
-> 
-> Change since v3:
-> 	* Change code style of checking GUEST_MEM attribute in the
-> 	  hyperv_cc_platform_has().
-> ---
->   arch/x86/kernel/cc_platform.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-> index 03bb2f343ddb..6cb3a675e686 100644
-> --- a/arch/x86/kernel/cc_platform.c
-> +++ b/arch/x86/kernel/cc_platform.c
-> @@ -11,6 +11,7 @@
->   #include <linux/cc_platform.h>
->   #include <linux/mem_encrypt.h>
->   
-> +#include <asm/mshyperv.h>
->   #include <asm/processor.h>
->   
->   static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
-> @@ -58,12 +59,19 @@ static bool amd_cc_platform_has(enum cc_attr attr)
->   #endif
->   }
->   
-> +static bool hyperv_cc_platform_has(enum cc_attr attr)
-> +{
-> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
-> +}
->   
->   bool cc_platform_has(enum cc_attr attr)
->   {
->   	if (sme_me_mask)
->   		return amd_cc_platform_has(attr);
->   
-> +	if (hv_is_isolation_supported())
-> +		return hyperv_cc_platform_has(attr);
-> +
->   	return false;
->   }
->   EXPORT_SYMBOL_GPL(cc_platform_has);
-> 
+the operation interface error will still hard to find the cause of errors.
+
+
+>
+> [1] https://github.com/awslabs/damo
+>
+>
+> Thanks,
+> SJ
+>
+>>> To avoid the case, this commit removes the message
+>>>
+>>> Fixes: af122dd8f3c0 ("mm/damon/dbgfs: support DAMON-based Operation Schemes")
+>>> Signed-off-by: SeongJae Park <sj@kernel.org>
+>>> ---
+>>>    mm/damon/dbgfs.c | 4 +---
+>>>    1 file changed, 1 insertion(+), 3 deletions(-)
+>>>
+>>> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+>>> index 4bf4204444ab..5b628990ae6e 100644
+>>> --- a/mm/damon/dbgfs.c
+>>> +++ b/mm/damon/dbgfs.c
+>>> @@ -210,10 +210,8 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+>>>    				&wmarks.low, &parsed);
+>>>    		if (ret != 18)
+>>>    			break;
+>>> -		if (!damos_action_valid(action)) {
+>>> -			pr_err("wrong action %d\n", action);
+>>> +		if (!damos_action_valid(action))
+>>>    			goto fail;
+>>> -		}
+>>>    
+>>>    		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
+>>>    			goto fail;
+>> -- 
+>> Best Regards!
+>> Xin Hao
+>>
+-- 
+Best Regards!
+Xin Hao
+

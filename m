@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95DE46CA53
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EA346CAAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 02:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238721AbhLHB5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 20:57:12 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28285 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbhLHB5M (ORCPT
+        id S234690AbhLHCBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 21:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233974AbhLHCBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 20:57:12 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J80Yz2mmtzbhvZ;
-        Wed,  8 Dec 2021 09:53:27 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 09:53:39 +0800
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Wudi Wang <wangwudi@hisilicon.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>
-Subject: [PATCH] irqchip/irq-gic-v3-its.c: Return its_invall_cmd.col when building INVALL
-Date:   Wed, 8 Dec 2021 09:54:29 +0800
-Message-ID: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+        Tue, 7 Dec 2021 21:01:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB07C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 17:58:22 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58B00B81EBF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:58:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9386C60E98;
+        Wed,  8 Dec 2021 01:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638928699;
+        bh=UHBVM39wbjqenKtvco+63lP4qWtUsYPVUFf21pmCGkU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NOXMljeOqG0L1T/Hm4N9sMFXEMlV3KiuhihWAed98uC3qDQFF0dAmdSuUmpsT5OUx
+         QNJn2Z4XDJrsr3nd90fLur2Yi+iUKnKXOOIeWCNXRTrxv6JF2NaGsngYV8pZ0LvSf9
+         4GWqffd7Ge5/lwjfHi0yZyKYKf0HHMtODwdDruEE=
+Date:   Tue, 7 Dec 2021 17:58:16 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Nico Pache <npache@redhat.com>
+Cc:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Message-Id: <20211207175816.8c45ff5b82cb964ade82d6f1@linux-foundation.org>
+In-Reply-To: <ce63e509-dedf-ce00-cd12-2c67a3e650ba@redhat.com>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+        <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
+        <ce63e509-dedf-ce00-cd12-2c67a3e650ba@redhat.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wudi Wang <wangwudi@hisilicon.com>
+On Tue, 7 Dec 2021 19:46:57 -0500 Nico Pache <npache@redhat.com> wrote:
 
-INVALL CMD specifies that the ITS must ensure any caching associated with
-the interrupt collection defined by ICID is consistent with the LPI
-configuration tables held in memory for all Redistributors. SYNC is
-required to ensure that INVALL is executed.
+> 
+> 
+> On 12/7/21 18:47, Andrew Morton wrote:
+> > (cc's added)
+> > 
+> > On Tue,  7 Dec 2021 16:49:02 -0500 Joel Savitz <jsavitz@redhat.com> wrote:
+> > 
+> >> In the case that two or more processes share a futex located within
+> >> a shared mmaped region, such as a process that shares a lock between
+> >> itself and a number of child processes, we have observed that when
+> >> a process holding the lock is oom killed, at least one waiter is never
+> >> alerted to this new development and simply continues to wait.
+> > 
+> > Well dang.  Is there any way of killing off that waiting process, or do
+> > we have a resource leak here?
+> 
+> If I understood your question correctly, there is a way to recover the system by
+> killing the process that is utilizing the futex; however, the purpose of robust
+> futexes is to avoid having to do this.
 
-Currently, LPI configuration data may be inconsistent with that in the
-memory within a short period of time after the INVALL command is executed.
+OK.  My concern was whether we have a way in which userspace can
+permanently leak memory, which opens a (lame) form of denial-of-service
+attack.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
----
- drivers/irqchip/irq-gic-v3-its.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >From my work with Joel on this it seems like a race is occurring between the
+> oom_reaper and the exit signal sent to the OMM'd process. By setting the
+> futex_exit_release before these signals are sent we avoid this.
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index eb0882d15366..0cb584d9815b 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -742,7 +742,7 @@ static struct its_collection *its_build_invall_cmd(struct its_node *its,
- 
- 	its_fixup_cmd(cmd);
- 
--	return NULL;
-+	return desc->its_invall_cmd.col;
- }
- 
- static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
--- 
-2.33.0
-
+OK.  It would be nice if the patch had some comments explaining *why*
+we're doing this strange futex thing here.  Although that wouldn't be
+necessary if futex_exit_release() was documented...

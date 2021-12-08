@@ -2,91 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A9046CFE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA97746CFE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 10:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbhLHJTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 04:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhLHJTp (ORCPT
+        id S230490AbhLHJUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 04:20:31 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29101 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbhLHJUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:19:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F73C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 01:16:13 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mut3W-0002pZ-6Q; Wed, 08 Dec 2021 10:16:06 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-e45e-c028-b01c-c307.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:e45e:c028:b01c:c307])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 25BA16BF98E;
-        Wed,  8 Dec 2021 09:16:04 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 10:16:03 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 0/5] fix statistics and payload issues for error
-Message-ID: <20211208091603.hg7pqm6stnppgfr2@pengutronix.de>
-References: <20211207121531.42941-1-mailhol.vincent@wanadoo.fr>
+        Wed, 8 Dec 2021 04:20:30 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J8BLQ5RCrz1DJxG;
+        Wed,  8 Dec 2021 17:14:06 +0800 (CST)
+Received: from [10.174.176.231] (10.174.176.231) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 8 Dec 2021 17:16:56 +0800
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <wangkefeng.wang@huawei.com>, <yeyunfeng@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wuxu.wu@huawei.com>, Hewenliang <hewenliang4@huawei.com>
+From:   Yunfeng Ye <yeyunfeng@huawei.com>
+Subject: [PATCH v2 1/2] arm64: mm: Rename asid2idx() to ctxid2asid()
+Message-ID: <506863a9-b934-3af3-c70d-3284e14478de@huawei.com>
+Date:   Wed, 8 Dec 2021 17:16:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="intcjf25qocp5gxe"
-Content-Disposition: inline
-In-Reply-To: <20211207121531.42941-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.231]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The commit 0c8ea531b774 ("arm64: mm: Allocate ASIDs in pairs") introduce
+the asid2idx and idx2asid macro, but these macros are not really useful
+after the commit f88f42f853a8 ("arm64: context: Free up kernel ASIDs if
+KPTI is not in use").
 
---intcjf25qocp5gxe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The code "(asid & ~ASID_MASK)" can be instead by a macro, which is the
+same code with asid2idx(). So rename it to ctxid2asid() for a better
+understanding.
 
-On 07.12.2021 21:15:26, Vincent Mailhol wrote:
-> Important: this patch series depends on below patch:
-> https://lore.kernel.org/linux-can/20211123111654.621610-1-mailhol.vincent=
-@wanadoo.fr/T/#u
+Also we add asid2ctxid() macro, the contextid can be generated based on
+the asid and generation through this macro.
+---
+ arch/arm64/mm/context.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-This series will go into net-next/master, I'll wait until net/master
-(which includes the above mentioned patch) is merged into
-net-next/master.
+diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
+index cd72576ae2b7..bbc2708fe928 100644
+--- a/arch/arm64/mm/context.c
++++ b/arch/arm64/mm/context.c
+@@ -35,8 +35,8 @@ static unsigned long *pinned_asid_map;
+ #define ASID_FIRST_VERSION	(1UL << asid_bits)
 
-Marc
+ #define NUM_USER_ASIDS		ASID_FIRST_VERSION
+-#define asid2idx(asid)		((asid) & ~ASID_MASK)
+-#define idx2asid(idx)		asid2idx(idx)
++#define ctxid2asid(asid)	((asid) & ~ASID_MASK)
++#define asid2ctxid(asid, genid)	((asid) | (genid))
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+ /* Get the ASIDBits supported by the current CPU */
+ static u32 get_cpu_asid_bits(void)
+@@ -120,7 +120,7 @@ static void flush_context(void)
+ 		 */
+ 		if (asid == 0)
+ 			asid = per_cpu(reserved_asids, i);
+-		__set_bit(asid2idx(asid), asid_map);
++		__set_bit(ctxid2asid(asid), asid_map);
+ 		per_cpu(reserved_asids, i) = asid;
+ 	}
 
---intcjf25qocp5gxe
-Content-Type: application/pgp-signature; name="signature.asc"
+@@ -162,7 +162,7 @@ static u64 new_context(struct mm_struct *mm)
+ 	u64 generation = atomic64_read(&asid_generation);
 
------BEGIN PGP SIGNATURE-----
+ 	if (asid != 0) {
+-		u64 newasid = generation | (asid & ~ASID_MASK);
++		u64 newasid = asid2ctxid(ctxid2asid(asid), generation);
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGwd9AACgkQqclaivrt
-76kePAgAiD47E4+0+PgjYIfKfgPkhWW6YB4tkOdih+ExgEkz0cnQPiS1BenGDxgg
-7LmsWhgOXWucJacHnQ+FlSdx7yVWxeGGpMqcJVQwS+E2iDRnYXLG/T4jLcQuGBC9
-KyO1Oidg/r/CKQsH7flaIweZ5kfU7t1nywPXCRGHSipME0/HoDGrb9G5o0M+E2lO
-oTjcJ1Md2EWycA+wXHCyvExHEoskR9cXQeRHQc3x25ZJXpsthGjD/sH/K1vvDCFS
-t9h7mBUtc59LhygL8lk2V0V110pGF6mJ07h6wN2m63I3VySyz2Kt45wCwORj8PjP
-c5bzCxv3QG1y6bD0POx+B1zos5PM3Q==
-=ompj
------END PGP SIGNATURE-----
+ 		/*
+ 		 * If our current ASID was active during a rollover, we
+@@ -183,7 +183,7 @@ static u64 new_context(struct mm_struct *mm)
+ 		 * We had a valid ASID in a previous life, so try to re-use
+ 		 * it if possible.
+ 		 */
+-		if (!__test_and_set_bit(asid2idx(asid), asid_map))
++		if (!__test_and_set_bit(ctxid2asid(asid), asid_map))
+ 			return newasid;
+ 	}
 
---intcjf25qocp5gxe--
+@@ -209,7 +209,7 @@ static u64 new_context(struct mm_struct *mm)
+ set_asid:
+ 	__set_bit(asid, asid_map);
+ 	cur_idx = asid;
+-	return idx2asid(asid) | generation;
++	return asid2ctxid(asid, generation);
+ }
+
+ void check_and_switch_context(struct mm_struct *mm)
+@@ -300,13 +300,13 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
+ 	}
+
+ 	nr_pinned_asids++;
+-	__set_bit(asid2idx(asid), pinned_asid_map);
++	__set_bit(ctxid2asid(asid), pinned_asid_map);
+ 	refcount_set(&mm->context.pinned, 1);
+
+ out_unlock:
+ 	raw_spin_unlock_irqrestore(&cpu_asid_lock, flags);
+
+-	asid &= ~ASID_MASK;
++	asid = ctxid2asid(asid);
+
+ 	/* Set the equivalent of USER_ASID_BIT */
+ 	if (asid && arm64_kernel_unmapped_at_el0())
+@@ -327,7 +327,7 @@ void arm64_mm_context_put(struct mm_struct *mm)
+ 	raw_spin_lock_irqsave(&cpu_asid_lock, flags);
+
+ 	if (refcount_dec_and_test(&mm->context.pinned)) {
+-		__clear_bit(asid2idx(asid), pinned_asid_map);
++		__clear_bit(ctxid2asid(asid), pinned_asid_map);
+ 		nr_pinned_asids--;
+ 	}
+
+-- 
+2.27.0

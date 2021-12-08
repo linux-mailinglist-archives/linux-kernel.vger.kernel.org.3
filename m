@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC9A46CD6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D509346CD79
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbhLHGDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 01:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbhLHGDo (ORCPT
+        id S237260AbhLHGMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:12:46 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:36934 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237138AbhLHGMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:03:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF99C061574;
-        Tue,  7 Dec 2021 22:00:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F421B81D83;
-        Wed,  8 Dec 2021 06:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11E1DC00446;
-        Wed,  8 Dec 2021 06:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638943210;
-        bh=O8X4GNYxkBlSc0NjM9f4eIgI9ybQBBohbXSQbbtpLCY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Fi8JtVde2k7GHfWaXGT1Z0/EdqyPYHTkGaDZjS0tHl8yxDjT5ue/pIfrDc5kNTcaO
-         prHACP7SZfVGUT1TCVN1jhBMh3HgVOSl+O+g3LxfnHfFqVurxabuUwEMZhbchmHQBc
-         5MY+nhLq8kesfA5kt+9HHCS1z/Rhr76MzHZ0XuiAGw5r0bM/Iusyli/qmtOeoqW7y6
-         a0g23BE+HbnWYuoQA5os+lEIuOKIBUpSMnjjt0tdt1NydYQOQh66fsvjlkkSjuhEjk
-         9tN8qIpWAQmSV2NPoQx7WzR2cPd4bZ7UgMq82Ur9Ng2XbSDk4oFq0pgpnj6gFgkLYA
-         OuNXARWCN6oaA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E76B460A53;
-        Wed,  8 Dec 2021 06:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 8 Dec 2021 01:12:44 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B8691Dk074752;
+        Wed, 8 Dec 2021 00:09:01 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638943741;
+        bh=VgXgIvhEq1ibs/HgZEa1zCm/Da+XDn+E4jikIKI846o=;
+        h=From:To:CC:Subject:Date;
+        b=vxQXv7Qu21yAAudqvD8YGDYp+rbTKeZ3YedC3TKGoUO5cJUNKiyfkwlI26eCzg7tQ
+         mP7Evwk18iQYTq54lxaQYka1Zpa3xHuSwcJsO0/Y0dXs4zwt0AuPQlOR8041goSTH9
+         YWoP+pcH793YRDfSkNdfhbPjISx5LRSdyb3EgHjg=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B8691Us108026
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Dec 2021 00:09:01 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
+ Dec 2021 00:09:01 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 8 Dec 2021 00:09:01 -0600
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B868wQU112199;
+        Wed, 8 Dec 2021 00:08:58 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tom Rini <trini@konsulko.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: [PATCH] arm64: defconfig: Enable USB, PCIe and SERDES drivers for TI K3 SoC
+Date:   Wed, 8 Dec 2021 11:38:56 +0530
+Message-ID: <20211208060856.16106-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 net-next 0/4] prepare ocelot for external interface control 
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163894320994.16121.3519671067437027854.git-patchwork-notify@kernel.org>
-Date:   Wed, 08 Dec 2021 06:00:09 +0000
-References: <20211207170030.1406601-1-colin.foster@in-advantage.com>
-In-Reply-To: <20211207170030.1406601-1-colin.foster@in-advantage.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Enable Cadence PCIe, Cadence USB, TI USB and PCIe wrappers and required
+SERDES drivers to support USB and PCIe on TI K3 SoCs.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
+ arch/arm64/configs/defconfig | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-On Tue,  7 Dec 2021 09:00:26 -0800 you wrote:
-> This patch set is derived from an attempt to include external control
-> for a VSC751[1234] chip via SPI. That patch set has grown large and is
-> getting unwieldy for reviewers and the developers... me.
-> 
-> I'm breaking out the changes from that patch set. Some are trivial
->   net: dsa: ocelot: remove unnecessary pci_bar variables
->   net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
-> 
-> [...]
-
-Here is the summary with links:
-  - [v5,net-next,1/4] net: dsa: ocelot: remove unnecessary pci_bar variables
-    https://git.kernel.org/netdev/net-next/c/c99104840a95
-  - [v5,net-next,2/4] net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
-    https://git.kernel.org/netdev/net-next/c/49af6a7620c5
-  - [v5,net-next,3/4] net: dsa: ocelot: felix: add interface for custom regmaps
-    https://git.kernel.org/netdev/net-next/c/242bd0c10bbd
-  - [v5,net-next,4/4] net: mscc: ocelot: split register definitions to a separate file
-    https://git.kernel.org/netdev/net-next/c/32ecd22ba60b
-
-You are awesome, thank you!
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 0da6a944d5cd..55bb1e0e222d 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -236,6 +236,10 @@ CONFIG_PCIE_KIRIN=y
+ CONFIG_PCIE_HISI_STB=y
+ CONFIG_PCIE_TEGRA194_HOST=m
+ CONFIG_PCIE_VISCONTI_HOST=y
++CONFIG_PCIE_CADENCE_PLAT_HOST=y
++CONFIG_PCIE_CADENCE_PLAT_EP=y
++CONFIG_PCI_J721E_HOST=y
++CONFIG_PCI_J721E_EP=y
+ CONFIG_PCI_ENDPOINT=y
+ CONFIG_PCI_ENDPOINT_CONFIGFS=y
+ CONFIG_PCI_EPF_TEST=m
+@@ -823,6 +827,10 @@ CONFIG_USB_RENESAS_USBHS_HCD=m
+ CONFIG_USB_RENESAS_USBHS=m
+ CONFIG_USB_ACM=m
+ CONFIG_USB_STORAGE=y
++CONFIG_USB_CDNS_SUPPORT=m
++CONFIG_USB_CDNS3=m
++CONFIG_USB_CDNS3_GADGET=y
++CONFIG_USB_CDNS3_HOST=y
+ CONFIG_USB_MTU3=y
+ CONFIG_USB_MUSB_HDRC=y
+ CONFIG_USB_MUSB_SUNXI=y
+@@ -1124,6 +1132,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
++CONFIG_PHY_CADENCE_SIERRA=m
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
+ CONFIG_PHY_HI6220_USB=y
+ CONFIG_PHY_HISTB_COMBPHY=y
+@@ -1147,6 +1156,8 @@ CONFIG_PHY_SAMSUNG_UFS=y
+ CONFIG_PHY_UNIPHIER_USB2=y
+ CONFIG_PHY_UNIPHIER_USB3=y
+ CONFIG_PHY_TEGRA_XUSB=y
++CONFIG_PHY_AM654_SERDES=m
++CONFIG_PHY_J721E_WIZ=m
+ CONFIG_ARM_SMMU_V3_PMU=m
+ CONFIG_FSL_IMX8_DDR_PMU=m
+ CONFIG_HISI_PMU=y
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 

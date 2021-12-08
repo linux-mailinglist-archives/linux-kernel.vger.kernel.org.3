@@ -2,129 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7090446DE4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3581946DE50
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 23:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbhLHWX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 17:23:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34448 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240784AbhLHWWp (ORCPT
+        id S241144AbhLHWZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 17:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235079AbhLHWZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 17:22:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639001953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PreSFQ9NMf7Pktne6qmfy8XkfYdhqYpBJuPe8BD+6Po=;
-        b=IDEvz0WsHuyJGtl0Yq2v0NXU53Udo3BNUCwt299GGBzaXlOm/OHQgXffiJ/2jqI+G6H3SM
-        Gw93w8e5hGe7/wjIx+EvUw315HCpnA+HJQux+LJx2ZBj7A8XayiOI3GZYlQZ4dVOu8fsO+
-        +S/VRcNLWhYhA7qfFPB94/yNPmMhUWg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-122-J8eCCnvuN8qUgtTZ3dKMRw-1; Wed, 08 Dec 2021 17:19:12 -0500
-X-MC-Unique: J8eCCnvuN8qUgtTZ3dKMRw-1
-Received: by mail-wm1-f72.google.com with SMTP id y141-20020a1c7d93000000b0033c2ae3583fso2031424wmc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 14:19:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PreSFQ9NMf7Pktne6qmfy8XkfYdhqYpBJuPe8BD+6Po=;
-        b=aHiNyBP6yyPf0XjwKJMOqiVBa8vFLPjDYR3NsGMOb7nDaO3EcxPCSUG2wGSEbHEa9h
-         WsJF2Tu++okheD3oa063zypJ0ZLgtxTG0T7DYTrM+z6hqRu1RUim/UfxXVvHixM3AIfC
-         Ux2Re11hJNr1QWEnyL8BejsE8RtPy5yzEV+14GoUBGXUbG5G6VPADRnbtjGd/+WGfwKy
-         wujHyU1xhSAUPbx6jsoZ73ua0YSUHZQRahmyD+9vxlQhelYDIKn+YuqhrFtFk2HZKn0b
-         uxFUXKeZfSfPxkF9IVuPDj4GYqJiQBY995w+b4Gu6mte+9E0BOrMmphtY+bqIFCkPPSq
-         rLCw==
-X-Gm-Message-State: AOAM532d/H/OWl0AkV3aM1lUvtaqPOpHcsyO6sCrBbrudKEyR0IiVHmu
-        XGwQfeTFRECEP+kvBfFJxa6y45mkDBln00UW2xgkr13/G6uor9kz5NapC4LQg6LmMFzDHACxBzE
-        3F28ANJ6phPKCIOHo6UJ8usMQ
-X-Received: by 2002:a05:600c:19d1:: with SMTP id u17mr1996589wmq.148.1639001950805;
-        Wed, 08 Dec 2021 14:19:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPeV5Bfi1VRi8kXW0PzecBfblsGTyIGjeEBtvY+g2p2clfaT3svOHOc+bqkdPnkKT0oPbV/A==
-X-Received: by 2002:a05:600c:19d1:: with SMTP id u17mr1996565wmq.148.1639001950477;
-        Wed, 08 Dec 2021 14:19:10 -0800 (PST)
-Received: from redhat.com ([2.55.18.120])
-        by smtp.gmail.com with ESMTPSA id n1sm4102671wmq.6.2021.12.08.14.19.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 14:19:09 -0800 (PST)
-Date:   Wed, 8 Dec 2021 17:19:04 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
-Message-ID: <20211208171830-mutt-send-email-mst@kernel.org>
-References: <20211203185522.692489-1-arnd@kernel.org>
- <20211208144916-mutt-send-email-mst@kernel.org>
- <CAK8P3a0w9ij80Ww7rkaxutXFynOnC6=gEBQZ-X0Va+dx5jxfPg@mail.gmail.com>
+        Wed, 8 Dec 2021 17:25:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD40CC061746;
+        Wed,  8 Dec 2021 14:21:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99BEBCE23FC;
+        Wed,  8 Dec 2021 22:21:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960A3C341C7;
+        Wed,  8 Dec 2021 22:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639002095;
+        bh=uY69kx1ohR33mjesg1ELzGH6hZScHfy0RsrVOFhyAVg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tjSKpqb4Cq9tQhlTKBBG49xxV+5ungHLpAJCON62/mxxy808hNF/wVfs42iKfv0iB
+         lyZpzI6hOcMg4V1ouncT5y5Kto4UNm61f7R4QE2pUksQmGDgRi40HsVJ8eL9e+K6we
+         3nMGG8QB/62te4/4FBIK7eqiONeqAml2aKoiJtCeF2vrIw0oeHbzmvtCpQ721ggEsX
+         s3Pv5v+K2oBdY/6/id6PC4Naty5YcthKX/mjzzXIZC2IIo1kmk07ONS7xe9gXUQuo1
+         V+xyjj2VhZjxo1IsvBpl/RGrWTXcT7ANHIDdu69iNvf0cvzRfS+3kXGj+/9QWncbCO
+         nyAS4TeVFFt9Q==
+Received: by mail-ed1-f52.google.com with SMTP id y13so13185524edd.13;
+        Wed, 08 Dec 2021 14:21:35 -0800 (PST)
+X-Gm-Message-State: AOAM533MT+vqtoWk5L5HYsxkkHMYCbmletb8SUZdjF8iQ1HaR9Bh6+1Z
+        7x/BIkKSJaowCRqmAVGvDo7l4XBQg1Yw+x91lw==
+X-Google-Smtp-Source: ABdhPJyp8J2S/aCjidvVlJ1VYH6a2RdUrCwZZcMHnQL388eyM1TL0jyUufgWRIWJEb1BKWZxV3LwiUpCKzT3N+ftEnY=
+X-Received: by 2002:a17:907:7f25:: with SMTP id qf37mr10629594ejc.147.1639002093894;
+ Wed, 08 Dec 2021 14:21:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0w9ij80Ww7rkaxutXFynOnC6=gEBQZ-X0Va+dx5jxfPg@mail.gmail.com>
+References: <20211208040432.3658355-1-f.fainelli@gmail.com>
+ <20211208040432.3658355-7-f.fainelli@gmail.com> <1638971068.781821.3857737.nullmailer@robh.at.kernel.org>
+ <536cbdb6-a541-2f86-faa6-acb1a4e1c173@gmail.com>
+In-Reply-To: <536cbdb6-a541-2f86-faa6-acb1a4e1c173@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 8 Dec 2021 16:21:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKVnX554xD4bNXk2KsWP2kXR7Lv33Q=7qMvY_gXiEAcWA@mail.gmail.com>
+Message-ID: <CAL_JsqKVnX554xD4bNXk2KsWP2kXR7Lv33Q=7qMvY_gXiEAcWA@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:31:03PM +0100, Arnd Bergmann wrote:
-> On Wed, Dec 8, 2021 at 8:56 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Wed, Dec 8, 2021 at 11:32 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 12/8/21 5:44 AM, Rob Herring wrote:
+> > On Tue, 07 Dec 2021 20:04:32 -0800, Florian Fainelli wrote:
+> >> Conver the iProc PCIe controller Device Tree binding to YAML now that
+> >> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
+> >>
+> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >> ---
+> >>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
+> >>  .../bindings/pci/brcm,iproc-pcie.yaml         | 176 ++++++++++++++++++
+> >>  2 files changed, 176 insertions(+), 133 deletions(-)
+> >>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+> >>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+> >>
 > >
-> > On Fri, Dec 03, 2021 at 07:55:14PM +0100, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
-> > > kernel runs into a link error:
-> > >
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
-> > > eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
-> > > eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
-> > > eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
-> > > eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
-> > > eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
-> > > x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
-> > >
-> > > Selecting VIRTIO_PCI_LIB_LEGACY is not sufficient here since that is
-> > > only part of the VIRTIO_PCI_LIB support.
-> > >
-> > > Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > Running 'make dtbs_check' with the schema in this patch gives the
+> > following warnings. Consider if they are expected or the schema is
+> > incorrect. These may not be new warnings.
+> >
+> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> > This will change in the future.
+> >
+> > Full log is available here: https://patchwork.ozlabs.org/patch/1565076
 > >
 > >
-> > Confused. These are all part of
-> > drivers/virtio/virtio_pci_legacy_dev.c
-> >
-> > and
-> > obj-$(CONFIG_VIRTIO_PCI_LIB_LEGACY) += virtio_pci_legacy_dev.o
-> >
-> > what gives?
-> 
-> The patch was wrong, see
-> 
-> https://lore.kernel.org/lkml/20211206085034.2836099-1-arnd@kernel.org/
-> 
-> for the correct fix.
-> 
->         Arnd
+> > pcie@18012000: msi-controller: 'oneOf' conditional failed, one must be fixed:
+> >       arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dt.yaml
+> >       arch/arm/boot/dts/bcm911360_entphn.dt.yaml
+> >       arch/arm/boot/dts/bcm911360k.dt.yaml
+> >       arch/arm/boot/dts/bcm958300k.dt.yaml
+> >       arch/arm/boot/dts/bcm958305k.dt.yaml
+> >       arch/arm/boot/dts/bcm958522er.dt.yaml
+> >       arch/arm/boot/dts/bcm958525er.dt.yaml
+> >       arch/arm/boot/dts/bcm958525xmc.dt.yaml
+> >       arch/arm/boot/dts/bcm958622hr.dt.yaml
+> >       arch/arm/boot/dts/bcm958623hr.dt.yaml
+> >       arch/arm/boot/dts/bcm958625hr.dt.yaml
+> >       arch/arm/boot/dts/bcm958625k.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+> >       arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+> >       arch/arm/boot/dts/bcm988312hr.dt.yaml
+>
+> Those would mean that the binding patch was applied without the DTS
+> patches earlier in the series?
 
-Oh, ok then, I picked that one up, that explains why the issue does not
-reproduce for me.
+Right. I generally don't look at dts patches, but I did look at these
+and don't see how this one is fixed (nor caused):
 
--- 
-MST
-
+pcie@18012000: Unevaluated properties are not allowed
+('linux,pci-domain', 'bus-range', '#address-cells', '#size-cells',
+'device_type' were unexpected)
+        arch/arm/boot/dts/bcm911360_entphn.dt.yaml
+        arch/arm/boot/dts/bcm911360k.dt.yaml
+        arch/arm/boot/dts/bcm958300k.dt.yaml
+        arch/arm/boot/dts/bcm958305k.dt.yaml

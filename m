@@ -2,147 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B684B46DF12
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB7B46DF14
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 00:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbhLHXrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 18:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238078AbhLHXrY (ORCPT
+        id S238166AbhLHXsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 18:48:12 -0500
+Received: from relay04.th.seeweb.it ([5.144.164.165]:48939 "EHLO
+        relay04.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238031AbhLHXsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 18:47:24 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878FBC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 15:43:51 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso3459421pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 15:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D2Zllh8RS1Zi9zjCh06QY/RvfPuDSokdYb3fzzSJ8v0=;
-        b=mq1FlM0Xuz3aQpWiXly0avavyF+dvXxhaqEyCb3mYFuN0cthNnCNPoJBuhh01ViSOm
-         nerM+TRGjZ1cLalph2Rxsp/l48afYhC88VdcxVl18BZ2N23wcwZAgl14/Cbk862iuWma
-         u+zhdN3JpeGuahQQTMlI5GN/EaabZfA/yLUB03GRRt2PHcw8Dsb7xBvcTW535b03vYhN
-         cRCILk7apuletDmIrD7Wco3w5LVqsMqKXa8G44z312u55+dMHzRZc9JAkGkaIysjfCZa
-         sLk1ZpyUmKb4GFjJFhCKUA/+K3ff+9u7/bR8LaS87oe1KcuKRWytUimno/Q5dfXO1m/t
-         hERw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D2Zllh8RS1Zi9zjCh06QY/RvfPuDSokdYb3fzzSJ8v0=;
-        b=W7eZ6SoR5b6vDTg7cdvkcoTJeUltnADMeX4ukpjLKNF72PzDVrP4grrQPFOkgAB3aF
-         zJoLU5Kms+13F/Q1aezKR3n2HiTeaVhoI/XQB9Ej9OZnWbIKxd9HdSiniKk1ZphOyhWG
-         EfHPmmR6qUNa9PHLvFCihDEGXordhMKIrNcV685nX50XBStuIwJB3Qz5jqNkGkyPaCKo
-         n0LU5PT4jeL0aecl5r1intq1FcJSdA3SeY+05NmkK2ztL3hiuW27sIj3AXYyNov3lTqG
-         PHj94E7Kg4S4VD9UJgF2jLBoAYfbSovYE/6Li86JRYqwDPqaXo344hBEx2m/g3NTPLA0
-         p9pQ==
-X-Gm-Message-State: AOAM531sF/3m0nTllCKZZr3FpXwoHmiXMrdLUNsc0O/86YHIXOvGR3XX
-        wSYJn+qVChs8ttEaC+a14+Xg4A==
-X-Google-Smtp-Source: ABdhPJw/+1ilvMNYIcm+3goUyHH7lRTGi/Xr7IjyerSAkXdKoQjUDtsvqMlZKCw5KsqmNJTvunnjCg==
-X-Received: by 2002:a17:902:bd02:b0:142:728b:e475 with SMTP id p2-20020a170902bd0200b00142728be475mr51304604pls.15.1639007030860;
-        Wed, 08 Dec 2021 15:43:50 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s190sm3443803pgs.74.2021.12.08.15.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 15:43:50 -0800 (PST)
-Date:   Wed, 8 Dec 2021 23:43:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
-Message-ID: <YbFDMjUdVltTSeHr@google.com>
-References: <20211208015236.1616697-1-seanjc@google.com>
- <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
+        Wed, 8 Dec 2021 18:48:12 -0500
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C5E412036B;
+        Thu,  9 Dec 2021 00:44:37 +0100 (CET)
+Date:   Thu, 9 Dec 2021 00:44:36 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Elliot Berman <eberman@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] firmware: qcom: scm: Add function to set the maximum
+ IOMMU pool size
+Message-ID: <20211208234436.ktagmcfj6jl5jct5@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Alex Elder <elder@linaro.org>, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Elliot Berman <eberman@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211208083423.22037-1-marijn.suijten@somainline.org>
+ <20211208083423.22037-3-marijn.suijten@somainline.org>
+ <b21686fc-3662-1ed4-8ba3-8ed5ca6eda13@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
+In-Reply-To: <b21686fc-3662-1ed4-8ba3-8ed5ca6eda13@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021, Maxim Levitsky wrote:
-> >   KVM: SVM: Remove unnecessary APICv/AVIC update in vCPU unblocking path
-
-...
-
-> Probably just luck (can't reproduce this anymore) but
-> while running some kvm unit tests with this patch series (and few my patches
-> for AVIC co-existance which shouldn't affect this) I got this
+On 2021-12-08 07:30:28, Alex Elder wrote:
+> On 12/8/21 2:34 AM, Marijn Suijten wrote:
+> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > 
+> > This is not necessary for basic functionality of the IOMMU, but
+> > it's an optimization that tells to the TZ what's the maximum
+> > mappable size for the secure IOMMUs, so that it can optimize
+> > the data structures in the TZ itself.
 > 
-> (warning about is_running already set)
+> Are there no users of this function?	-Alex
 
-My best guess would be the above commit that dropped the handling in the unblock
-path, but I haven't been able to concoct a scenario where avic_physical_id_cache
-can get out of sync with respect to kvm_vcpu_apicv_active().
+I should have probably mentioned in the cover letter that this function
+and the one introduced in patch 3/3 are going to be used in upcoming
+patches for IOMMUs found in msm8976, msm8974 and related SoCs (with the
+side-note that I don't see this particular set_cp_pool_size used in the
+branch that this was submitted from, but it's most likely used elsewhere
+or planned ahead to be used in the near future - I expect Angelo to be
+able to comment on that more accurately).
 
-> Dec 08 22:53:26 amdlaptop kernel: ------------[ cut here ]------------
-> Dec 08 22:53:26 amdlaptop kernel: WARNING: CPU: 3 PID: 72804 at arch/x86/kvm/svm/avic.c:1045 avic_vcpu_load+0xe3/0x100 [kvm_amd]
-> Dec 08 22:53:26 amdlaptop kernel: Modules linked in: kvm_amd(O) ccp rng_core kvm(O) irqbypass xt_conntrack ip6table_filter ip6_tables snd_soc_dmic snd_acp3x_>
-> Dec 08 22:53:26 amdlaptop kernel:  r8169 realtek 8250_pci usbmon nbd fuse autofs4 [last unloaded: rng_core]
-> Dec 08 22:53:26 amdlaptop kernel: CPU: 3 PID: 72804 Comm: qemu-system-i38 Tainted: G           O      5.16.0-rc4.unstable #6
-> Dec 08 22:53:26 amdlaptop kernel: Hardware name: LENOVO 20UF001CUS/20UF001CUS, BIOS R1CET65W(1.34 ) 06/17/2021
-> Dec 08 22:53:26 amdlaptop kernel: RIP: 0010:avic_vcpu_load+0xe3/0x100 [kvm_amd]
-> Dec 08 22:53:26 amdlaptop kernel: Code: 0d 9f e0 85 c0 74 e8 4c 89 f6 4c 89 ff e8 a5 99 f4 e0 5b 41 5c 41 5d 41 5e 41 5f 5d c3 0f 0b 5b 41 5c 41 5d 41 5e 41 >
-> Dec 08 22:53:26 amdlaptop kernel: RSP: 0018:ffffc9000b17bba8 EFLAGS: 00010247
-> Dec 08 22:53:26 amdlaptop kernel: RAX: 6f63203a756d6571 RBX: ffff888106194740 RCX: ffff88812e7ac000
-> Dec 08 22:53:26 amdlaptop kernel: RDX: ffff8883ff6c0000 RSI: 0000000000000003 RDI: 0000000000000003
-> Dec 08 22:53:26 amdlaptop kernel: RBP: ffffc9000b17bbd0 R08: ffff888106194740 R09: 0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel: R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000003
-> Dec 08 22:53:26 amdlaptop kernel: R13: 0000000000000003 R14: ffff88810023b060 R15: dead000000000100
-> Dec 08 22:53:26 amdlaptop kernel: FS:  0000000000000000(0000) GS:ffff8883ff6c0000(0000) knlGS:0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> Dec 08 22:53:26 amdlaptop kernel: CR2: 00005587e812f958 CR3: 0000000105f31000 CR4: 0000000000350ee0
-> Dec 08 22:53:26 amdlaptop kernel: DR0: 00000000004008da DR1: 0000000000000000 DR2: 0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel: DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> Dec 08 22:53:26 amdlaptop kernel: Call Trace:
-> Dec 08 22:53:26 amdlaptop kernel:  <TASK>
-> Dec 08 22:53:26 amdlaptop kernel:  svm_vcpu_load+0x56/0x60 [kvm_amd]
-> Dec 08 22:53:26 amdlaptop kernel:  kvm_arch_vcpu_load+0x32/0x210 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  vcpu_load+0x34/0x40 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  kvm_arch_destroy_vm+0xd4/0x1c0 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  kvm_destroy_vm+0x163/0x250 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  kvm_put_kvm+0x26/0x40 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  kvm_vm_release+0x22/0x30 [kvm]
-> Dec 08 22:53:26 amdlaptop kernel:  __fput+0x94/0x250
-> Dec 08 22:53:26 amdlaptop kernel:  ____fput+0xe/0x10
-> Dec 08 22:53:26 amdlaptop kernel:  task_work_run+0x63/0xa0
-> Dec 08 22:53:26 amdlaptop kernel:  do_exit+0x358/0xa30
-> Dec 08 22:53:26 amdlaptop kernel:  do_group_exit+0x3b/0xa0
-> Dec 08 22:53:26 amdlaptop kernel:  get_signal+0x15b/0x880
-> Dec 08 22:53:26 amdlaptop kernel:  ? _copy_to_user+0x20/0x30
-> Dec 08 22:53:26 amdlaptop kernel:  ? put_timespec64+0x3d/0x60
-> Dec 08 22:53:26 amdlaptop kernel:  arch_do_signal_or_restart+0x106/0x740
-> Dec 08 22:53:26 amdlaptop kernel:  ? hrtimer_nanosleep+0x9f/0x120
-> Dec 08 22:53:26 amdlaptop kernel:  ? __hrtimer_init+0xd0/0xd0
-> Dec 08 22:53:26 amdlaptop kernel:  exit_to_user_mode_prepare+0x112/0x1f0
-> Dec 08 22:53:26 amdlaptop kernel:  syscall_exit_to_user_mode+0x17/0x40
-> Dec 08 22:53:26 amdlaptop kernel:  do_syscall_64+0x42/0x80
-> Dec 08 22:53:26 amdlaptop kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> Dec 08 22:53:26 amdlaptop kernel: RIP: 0033:0x7f537abb13b5
-> Dec 08 22:53:26 amdlaptop kernel: Code: Unable to access opcode bytes at RIP 0x7f537abb138b.
-> Dec 08 22:53:26 amdlaptop kernel: RSP: 002b:00007f5376a39680 EFLAGS: 00000293 ORIG_RAX: 00000000000000e6
-> Dec 08 22:53:26 amdlaptop kernel: RAX: fffffffffffffdfc RBX: 00007f5376a396d0 RCX: 00007f537abb13b5
-> Dec 08 22:53:26 amdlaptop kernel: RDX: 00007f5376a396d0 RSI: 0000000000000000 RDI: 0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel: RBP: 00007f5376a396c0 R08: 0000000000000000 R09: 0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel: R10: 00007f5376a396c0 R11: 0000000000000293 R12: 00007f5376a3b640
-> Dec 08 22:53:26 amdlaptop kernel: R13: 0000000000000002 R14: 00007f537ab66880 R15: 0000000000000000
-> Dec 08 22:53:26 amdlaptop kernel:  </TASK>
-> Dec 08 22:53:26 amdlaptop kernel: ---[ end trace 676058aaf29d0267 ]---
-> 
-> 
-> I'll post my patches tomorrow, after some more testing.
-> 
-> Best regards,
-> 	Maxim Levitsky
+> > 
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > [Marijn: ported from 5.3 to the unified architecture in 5.11]
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> >   drivers/firmware/qcom_scm.c | 15 +++++++++++++++
+> >   drivers/firmware/qcom_scm.h |  1 +
+> >   include/linux/qcom_scm.h    |  1 +
+> >   3 files changed, 17 insertions(+)
+> > 
+> > diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> > index 3f67bf774821..d5a9ba15e2ba 100644
+> > --- a/drivers/firmware/qcom_scm.c
+> > +++ b/drivers/firmware/qcom_scm.c
+> > @@ -759,6 +759,21 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
+> >   }
+> >   EXPORT_SYMBOL(qcom_scm_iommu_secure_ptbl_init);
+> >   
+> > +int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size)
+> > +{
+> > +	struct qcom_scm_desc desc = {
+> > +		.svc = QCOM_SCM_SVC_MP,
+> > +		.cmd = QCOM_SCM_MP_IOMMU_SET_CP_POOL_SIZE,
+> > +		.arginfo = QCOM_SCM_ARGS(2),
+> > +		.args[0] = size,
+> > +		.args[1] = spare,
+> > +		.owner = ARM_SMCCC_OWNER_SIP,
+> > +	};
+> > +
+> > +	return qcom_scm_call(__scm->dev, &desc, NULL);
+> > +}
+> > +EXPORT_SYMBOL(qcom_scm_iommu_set_cp_pool_size);
+> > +
+> >   int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+> >   				   u32 cp_nonpixel_start,
+> >   				   u32 cp_nonpixel_size)
+> > diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> > index d92156ceb3ac..bb627941702b 100644
+> > --- a/drivers/firmware/qcom_scm.h
+> > +++ b/drivers/firmware/qcom_scm.h
+> > @@ -100,6 +100,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+> >   #define QCOM_SCM_MP_RESTORE_SEC_CFG		0x02
+> >   #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_SIZE	0x03
+> >   #define QCOM_SCM_MP_IOMMU_SECURE_PTBL_INIT	0x04
+> > +#define QCOM_SCM_MP_IOMMU_SET_CP_POOL_SIZE	0x05
+> >   #define QCOM_SCM_MP_VIDEO_VAR			0x08
+> >   #define QCOM_SCM_MP_ASSIGN			0x16
+> >   
+> > diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+> > index 81cad9e1e412..8a065f8660c1 100644
+> > --- a/include/linux/qcom_scm.h
+> > +++ b/include/linux/qcom_scm.h
+> > @@ -83,6 +83,7 @@ extern bool qcom_scm_restore_sec_cfg_available(void);
+> >   extern int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
+> >   extern int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size);
+> >   extern int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare);
+> > +extern int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size);
+> >   extern int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+> >   					  u32 cp_nonpixel_start,
+> >   					  u32 cp_nonpixel_size);
+> > 
 > 

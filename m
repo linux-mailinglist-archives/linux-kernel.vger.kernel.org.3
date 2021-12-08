@@ -2,153 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F9646D4F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5A46D4F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 14:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbhLHOCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 09:02:33 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:56626 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229490AbhLHOCd (ORCPT
+        id S234554AbhLHOCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 09:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234516AbhLHOCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:02:33 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B8CY0QY026672;
-        Wed, 8 Dec 2021 14:58:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=jOlUtZ/Fpyt6KRs6ErV+q8M/W6PKKOWv3CQH890HmwQ=;
- b=fwLd9HAOULjX0TFoavwNwiRU3frxjeJOe+g+wl8H9UESsZD2/uuWzJgdQLe81Xe7zZ8h
- bljwNplRdAShJVuXvCZMFeoWZ663knvuaOmkh0io5KLlXXRaD5xLn//SFvW1r7cVIg79
- 8HzP0mwG84DlBba3+wE74zr4M/y5v9tpA9eXgjL/+LpYlseuDIHPiGvPyQthT9MdiY/H
- MYhIaLO+GgJX/uE+Uypkh/JJ7fAXoMr6KBNHQB5Y5gCf/8N7aMHGD+crWy1oirxMow5O
- 8TmEmKyaREmgz54c+8HSUt86ClFGb4DuJv/wpJ85yuAKYvzyvc9gphVsoB1WD7OHbYAT LA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ctrpqa1x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 14:58:48 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7B0C110002A;
-        Wed,  8 Dec 2021 14:58:47 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6EDD4225583;
-        Wed,  8 Dec 2021 14:58:47 +0100 (CET)
-Received: from lmecxl0912.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec
- 2021 14:58:46 +0100
-Subject: Re: [PATCH 2/3] irqchip/stm32-exti: add STM32MP13 support
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>
-References: <20211208130456.4002-1-alexandre.torgue@foss.st.com>
- <20211208130456.4002-3-alexandre.torgue@foss.st.com>
- <87fsr31aex.wl-maz@kernel.org>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Message-ID: <fffb9758-8071-edd8-8fe9-d0d2a57fac05@foss.st.com>
-Date:   Wed, 8 Dec 2021 14:58:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Dec 2021 09:02:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE0C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 05:59:12 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muxTM-0003RN-WC; Wed, 08 Dec 2021 14:59:05 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muxTL-003Pmj-Ms; Wed, 08 Dec 2021 14:59:02 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1muxTK-0001f2-Lh; Wed, 08 Dec 2021 14:59:02 +0100
+Date:   Wed, 8 Dec 2021 14:59:02 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     David Jander <david@protonic.nl>
+Cc:     David Lechner <david@lechnology.com>, linux-iio@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1] counter: interrupt-cnt: add counter_push_event()
+Message-ID: <20211208135902.7j3aawytt3jlqgwr@pengutronix.de>
+References: <20211123134540.416695-1-o.rempel@pengutronix.de>
+ <YZ3XAeYyfGblfaOi@shinobu>
+ <20211124072720.GA30281@pengutronix.de>
+ <YZ7tv79LQwLL7h3T@shinobu>
+ <f73650b6-5a08-9ea9-9ecb-c47665ef07b0@lechnology.com>
+ <20211207081602.45b1423c@erd992>
 MIME-Version: 1.0
-In-Reply-To: <87fsr31aex.wl-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_05,2021-12-08_01,2021-12-02_01
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mkfxf4qp7vifqjee"
+Content-Disposition: inline
+In-Reply-To: <20211207081602.45b1423c@erd992>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc
 
-On 12/8/21 2:41 PM, Marc Zyngier wrote:
-> On Wed, 08 Dec 2021 13:04:55 +0000,
-> Alexandre Torgue <alexandre.torgue@foss.st.com> wrote:
->>
->> Enhance stm32-exti driver to support STM32MP13 SoC. This SoC uses the same
->> hardware version than STM32MP15. Only EXTI line mapping is changed and
->> following EXTI lines are supported: GPIO, RTC, I2C[1-5], UxART[1-8],
->> USBH_EHCI, USBH_OHCI, USB_OTG, LPTIM[1-5], ETH[1-2].
->>
->> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>
->> diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
->> index b7cb2da71888..9d18f47040eb 100644
->> --- a/drivers/irqchip/irq-stm32-exti.c
->> +++ b/drivers/irqchip/irq-stm32-exti.c
->> @@ -214,6 +214,48 @@ static const struct stm32_desc_irq stm32mp1_desc_irq[] = {
->>   	{ .exti = 73, .irq_parent = 129, .chip = &stm32_exti_h_chip },
->>   };
->>   
->> +static const struct stm32_desc_irq stm32mp13_desc_irq[] = {
->> +	{ .exti = 0, .irq_parent = 6, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 1, .irq_parent = 7, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 2, .irq_parent = 8, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 3, .irq_parent = 9, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 4, .irq_parent = 10, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 5, .irq_parent = 24, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 6, .irq_parent = 65, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 7, .irq_parent = 66, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 8, .irq_parent = 67, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 9, .irq_parent = 68, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 10, .irq_parent = 41, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 11, .irq_parent = 43, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 12, .irq_parent = 77, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 13, .irq_parent = 78, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 14, .irq_parent = 106, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 15, .irq_parent = 109, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 16, .irq_parent = 1, .chip = &stm32_exti_h_chip },
->> +	{ .exti = 19, .irq_parent = 3, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 21, .irq_parent = 32, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 22, .irq_parent = 34, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 23, .irq_parent = 73, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 24, .irq_parent = 93, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 25, .irq_parent = 114, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 26, .irq_parent = 38, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 27, .irq_parent = 39, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 28, .irq_parent = 40, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 29, .irq_parent = 72, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 30, .irq_parent = 53, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 31, .irq_parent = 54, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 32, .irq_parent = 83, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 33, .irq_parent = 84, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 44, .irq_parent = 96, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 47, .irq_parent = 92, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 48, .irq_parent = 116, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 50, .irq_parent = 117, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 52, .irq_parent = 118, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 53, .irq_parent = 119, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 68, .irq_parent = 63, .chip = &stm32_exti_h_chip_direct },
->> +	{ .exti = 70, .irq_parent = 98, .chip = &stm32_exti_h_chip_direct },
->> +};
-> 
-> Why does the driver need to carry these tables? This sort of
-> information should really come from DT, instead of being hardcoded in
-> the driver and bloating it for no reason. This all has a funny taste
-> of the board files we used to have pre-DT.
->
+--mkfxf4qp7vifqjee
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are absolutely no reason to have it in driver. Honestly It has 
-been done in this way to have minimal changes adding this new SoC 
-support (and it's not smart, I agree).
+Hello David,
 
-I think it is better to abandon this series. I will create a new one 
-which moves mapping table for MP15 and adds MP13 support to.
+On Tue, Dec 07, 2021 at 08:16:02AM +0100, David Jander wrote:
+> On Mon, 6 Dec 2021 13:24:18 -0600
+> David Lechner <david@lechnology.com> wrote:
+>=20
+> > On 11/24/21 7:58 PM, William Breathitt Gray wrote:
+> > > On Wed, Nov 24, 2021 at 08:27:20AM +0100, Oleksij Rempel wrote: =20
+> > >> Hi William,
+> > >>
+> > >> On Wed, Nov 24, 2021 at 03:09:05PM +0900, William Breathitt Gray wro=
+te: =20
+> > >>> On Tue, Nov 23, 2021 at 02:45:40PM +0100, Oleksij Rempel wrote: =20
+> > >>>> Add counter_push_event() to notify user space about new pulses
+> > >>>>
+> > >>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > >>>> ---
+> > >>>>   drivers/counter/interrupt-cnt.c | 2 ++
+> > >>>>   1 file changed, 2 insertions(+)
+> > >>>>
+> > >>>> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/int=
+errupt-cnt.c
+> > >>>> index 8514a87fcbee..b237137b552b 100644
+> > >>>> --- a/drivers/counter/interrupt-cnt.c
+> > >>>> +++ b/drivers/counter/interrupt-cnt.c
+> > >>>> @@ -31,6 +31,8 @@ static irqreturn_t interrupt_cnt_isr(int irq, vo=
+id *dev_id)
+> > >>>>  =20
+> > >>>>   	atomic_inc(&priv->count);
+> > >>>>  =20
+> > >>>> +	counter_push_event(&priv->counter, COUNTER_EVENT_OVERFLOW, 0);
+> > >>>> +
+> > >>>>   	return IRQ_HANDLED;
+> > >>>>   }
+> > >>>>  =20
+> > >>>> --=20
+> > >>>> 2.30.2 =20
+> > >>>
+> > >>> Hi Oleksij,
+> > >>>
+> > >>> It looks like this is pushing a COUNTER_EVENT_OVERFLOW event every =
+time
+> > >>> an interrupt is handled, which I suspect is not what you want to ha=
+ppen.
+> > >>> The COUNTER_EVENT_OVERFLOW event indicates a count value overflow e=
+vent,
+> > >>> so you'll need to check for a count value overflow before pushing t=
+he
+> > >>> event.
+> > >>>
+> > >>> It would be good idea to implement a ceiling extension as well (you=
+ can
+> > >>> use the COUNTER_COMP_CEILING() macro) so that users can configure t=
+he
+> > >>> particular point where the value overflows. =20
+> > >>
+> > >> Thank you!
+> > >>
+> > >> What would be the best and resource effective strategy for periodica=
+lly
+> > >> getting frequency of interrupts/pulses? This is actual information w=
+hich is
+> > >> needed for my use case.
+> > >>
+> > >> So far, I was pushing every event to the user space, which is working
+> > >> but probably not the most resource effective method of doing it.
+> > >>
+> > >> Regards,
+> > >> Oleskij
+> > >> --=20
+> > >> Pengutronix e.K.                           |                        =
+     |
+> > >> Steuerwalder Str. 21                       | http://www.pengutronix.=
+de/  |
+> > >> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-=
+0    |
+> > >> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-=
+5555 | =20
+> > >=20
+> > > We could introduce a new Counter change-of-state event type which wou=
+ld
+> > > trigger whenever the count value changes, but I agree with you that t=
+his
+> > > is likely not the best way for us to derive the frequency of the
+> > > interrupts due to the indirection of handling and parsing the event
+> > > data.
+> > >=20
+> > > Instead, perhaps introducing a "frequency" or "period" Count extension
+> > > would make more sense here. This extension could report the value del=
+ta
+> > > between counts, or alternatively the time delta from which you can
+> > > derive frequency. Regarding implementation, you can store the previous
+> > > value in a variable, updating it whenever an interrupt occurs, and
+> > > compute the particular delta every time a read is requested by the us=
+er.
+> > >=20
+> > > David Lechner is implementing something similar for the TI eQEP driver
+> > > to expose speed, so I'm CCing them here in case this is of interest to
+> > > them.
+> > >  =20
+> >=20
+> > Based on my experience, I would recommend that counter drivers be as
+> > "thin" as possible. They shouldn't try to provide any information that
+> > the hardware itself doesn't provide. In other words, the kernel should
+> > provide userspace the information needed to calculate the speed/rate
+> > but not try to do the actual calculation in the kernel. Inevitably
+> > there are nuances for specific use cases that can't all possibly be
+> > handled by such an implementation.
+>=20
+> I completely agree with this. While interrupts aren't really meant for
+> measuring frequency, and this being somewhat of a mis-use of something, i=
+t is
+> still possible to do and very useful in many cases. That said, while the
+> counter framework is AFAIK the best fit for this, the main use-case for t=
+his
+> driver is measuring wheel speed (and similar "speeds"). For this, the min=
+imum
+> amount of information the driver needs to provide user-space with to do
+> reliable calculations, is high-resolution time-stamps of GPIO events. A s=
+imple
+> counter is not suited, because there can be glitches that need to be dete=
+cted.
+> If user-space gets a buffer full of consecutive time-stamps (don't need t=
+o be
+> all of them, just a sample of n consecutive timestamps), as well as total
+> count, all needed calculations, glitch filtering, low-pass filtering, etc=
+=2E..
+> can be done in user-space just fine.
+>=20
+> > I've tried using gpio interrupts to try to calculate speed/rate in
+> > the kernel before and it simply doesn't work reliably. Interrupts
+> > get missed and the calculation will be off.
+>=20
+> Exactly. Been there, done that.
+> For reliable speed calculations of a mechanical system, the properties of=
+ the
+> mechanical system need to be known, like physical limits of accelerations,
+> maximum (or minimum) speed, etc. The minimum set of input data needed by a
+> user-space application to do these calculations is total pulse count in
+> addition to a buffer of timestamps of n consecutive input events (raising=
+ or
+> falling edges on GPIO). So IMHO this is what the driver should provide, a=
+nd
+> in the most resource-efficient way possible. This particular driver will =
+be
+> used 3 times on the same SoC, with each up to 10-15k pulses per second. T=
+hat
+> is a lot of interrupts for an embedded system, so they better consume as
+> little resources as possible. Filling a ring buffer with timestamps shoul=
+d be
+> possible, as long as no locking is involved. Locks in IRQ context must be
+> avoided at all costs, specially in this case.
+>=20
+> > For really slow counts (i.e. 1 count/second), I can see a use for
+> > generating an event on each count though. For high rates, I would
+> > just read the count every 100ms in usespace and divide the change in
+> > the number of counts by the time period to get the rate.
+>=20
+> For slow counts, I agree, but for high rates, I don't (see above). There =
+can
+> be glitches and false events that can (and must) be effectively filtered =
+out.
+> For that user-space needs to know the time of each event during the
+> measurement period.
 
-thanks
-Alex
+No sure I understood the problem here. If you keep the driver as is and
+in userspace just read out the counter value twice and measure the time
+between the reads[1], you can calculate the average frequency of the
+event in userspace.
 
+Isn't that good enough?
 
+Best regards
+Uwe
 
-> 	M.
-> 
+[1] maybe support this timing by providing a timestamp with the read
+    value to reduce timing jitter.
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mkfxf4qp7vifqjee
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGwuiMACgkQwfwUeK3K
+7AkzqQf9H805qI3GrlxiNoK2zp/ScyCZ8YbXwZ8dKt9uEsSyKPdwPcRW2cPrMMLj
+dUTKBEs5m4Z48mp+whQPoa+2M5+UbUWHkLThhHaa0G+RSjRfn1Ei8r7qjVV0RXhp
+4Ex+3DHlAYyUxN0vyqWb9lVzf1QHySWCnkxOn0wOnWglz/XlwHM7glD5qAqcnsPY
++RGELJac3pg5jL265FBKsnuXGCqvt+/7NuUJy79pULvwxI+Dhk+GKW6RsZIEqDlQ
+r0DMG3j+KNoSUTaupzzzwVZ0Xo4lYB0RFXNLPYJeB4DWJH4WRVTjz24yDCOnb4Jj
+iHgn8BvvPw7p9xkfKozodO9VmlDBDA==
+=s5Z5
+-----END PGP SIGNATURE-----
+
+--mkfxf4qp7vifqjee--

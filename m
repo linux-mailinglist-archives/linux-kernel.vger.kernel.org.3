@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8627E46CDC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E9B46CDC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Dec 2021 07:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240123AbhLHGcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 01:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239648AbhLHGcc (ORCPT
+        id S240182AbhLHGdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 01:33:19 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:55684 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239648AbhLHGdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:32:32 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDAFC061574;
-        Tue,  7 Dec 2021 22:29:01 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v1so4876377edx.2;
-        Tue, 07 Dec 2021 22:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ge8duN4sNFU8LlP54a+ac/TMCJbGoRstlWztgA2oT2k=;
-        b=p7Tlb9qJ5H1ZRRcrMS0mlr42Jn6hA8VP2orglLASnbMQBgx1S1WeBr/AMrOSeesXnQ
-         FRluYxOh0U5Ov4HWvBNuv3hTTSzYgFlsq7AC/NSoeEDrdP722tiB+4a45G8ysaCsuumR
-         N25uK9AtBpGiUL2MR7tvUHfXrY4R+C7lwVL22UrSyvojE1/GcpIkz0ZhSJhVcQc3EXuo
-         t1K8/XnGJZowgX+uPrPPkDOfUFvdLzuLndBaVJDj8uHnw9dAq+q/5vmn6PfqnXlaHXkV
-         GC9QBRXfkEqG4YTtx0xMcskL1XccmQ2vBPQsdaCDfBrNPvXnr2YcsX+X7j2hq+9RRlQs
-         VBPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ge8duN4sNFU8LlP54a+ac/TMCJbGoRstlWztgA2oT2k=;
-        b=VdYQ0oU03AZwKpXahwajRVV4LroqulA2PGSpUZqmqlIuSY4KaXAinPX2Uji7J7nYp+
-         +mp5LpkVDPLhH025ik/i8kIsL0I9wzPdPPsFmIesJuOgLkU8/fEF4XMNdtAUpX5Pl24n
-         nnseltVNIybMF8CFQzn949OGV3wRwCZojijzWD+bif7wIevvIY/Cth3ownKEPO/hP6Oh
-         V7IxvZcN+xl5W8p+0Oyd47N9YwTfqcOIgCyct/JfYLci1EYyGZYuewyAyUk4SqWYC2n1
-         9JpMex3ew6zh8dVXDOniuznghPIKf4OMkH+RoUby6NMbYnRBIAL5RbWatzGPB/rpxQJR
-         p8wQ==
-X-Gm-Message-State: AOAM533efU7HrkYJZ/UBBJePJPJChS91EyW3bT2Wj7hlPG/BWTW8CZBe
-        vXy/QyHkrExGNCYMD5szQk/4rtQbQVPNRXHzIgE=
-X-Google-Smtp-Source: ABdhPJzGz+VCI7qEgxFax+wzk8JXXv7V0YRLbnxVV2888/gXpKyM/ex1MlxEgxzSYFGBmpSEppU47Zmhh0wuCDsftjc=
-X-Received: by 2002:a17:906:489b:: with SMTP id v27mr4989169ejq.567.1638944939879;
- Tue, 07 Dec 2021 22:28:59 -0800 (PST)
+        Wed, 8 Dec 2021 01:33:15 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UzquZvA_1638944981;
+Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0UzquZvA_1638944981)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 08 Dec 2021 14:29:42 +0800
+Reply-To: xhao@linux.alibaba.com
+Subject: Re: [PATCH 02/11] mm/damon/dbgfs: Remove an unnecessary error message
+To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
+Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211201150440.1088-1-sj@kernel.org>
+ <20211201150440.1088-3-sj@kernel.org>
+From:   Xin Hao <xhao@linux.alibaba.com>
+Message-ID: <71535f68-4086-45df-2d4b-36a1802c9475@linux.alibaba.com>
+Date:   Wed, 8 Dec 2021 14:29:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com> <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
-In-Reply-To: <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 8 Dec 2021 08:28:23 +0200
-Message-ID: <CAHp75Vd=47Tv9Sf+styPhxS2=O1H2KUDeKQXTULUYU5fDgGwwA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] pinctrl: qcom: Extract chip specific LPASS LPI code
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, plai@codeaurora.org,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, judyhsiao@chromium.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211201150440.1088-3-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 2:39 AM Srinivasa Rao Mandadapu
-<quic_srivasam@quicinc.com> wrote:
+
+Hi park:
+
+On 12/1/21 11:04 PM, SeongJae Park wrote:
+> When wrong scheme action is requested via the debugfs interface, DAMON
+> prints an error message.  Because the function returns error code, this
+> is not really needed.  Because the code path is triggered by the user
+> specified input, this can result in kernel log mistakenly being messy.
+
+Completely correct, but there will also be a problem that users can’t 
+quickly locate where the problem is,
+
+Especially too many parameters need to be written into the interface.
+
+I think it is necessary to add some debugging methods to help users find 
+the error without polluting the kernel log.
+
+And i have an idea, like this:
+
+in dbgfs, add a last_cmd_stat interface.
+
+     # echo "1 2 1 2 1 2  1 2 1 2 100 ..."  > schemes
+
+     #  cat last_cmd_stat
+
+     #  wrong action 100
+
+In this way, on the one hand, it will not pollute the kernel log, on the 
+other hand, it will help users find  the cause of the operation 
+interface error.
+
+Park, how do you think of about this idea, if ok, i will send a patch.
+
+> To avoid the case, this commit removes the message
 >
-> Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
-> to allow reusing the common code in the addition of subsequent
-> platforms.
-
-...
-
-> @@ -661,8 +454,10 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
+> Fixes: af122dd8f3c0 ("mm/damon/dbgfs: support DAMON-based Operation Schemes")
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>   mm/damon/dbgfs.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 >
->         return ret;
->  }
-> +EXPORT_SYMBOL(lpi_pinctrl_probe);
-
-> +
-
-Stray change.
-
-...
-
-> +#ifndef __PINCTRL_LPASS_LPI_H__
-> +#define __PINCTRL_LPASS_LPI_H__
-
-Missed headers.
-At least bits.h.
-
-...
-
-> +#define NO_SLEW                                -1
-
-Naming sucks for the header.
-
-LPI_NO_SLEW ?
-
-...
-
-> +struct lpi_pingroup {
-> +       const char *name;
-> +       const unsigned int *pins;
-> +       unsigned int npins;
-> +       unsigned int pin;
-> +       /* Bit offset in slew register for SoundWire pins only */
-> +       int slew_offset;
-> +       unsigned int *funcs;
-> +       unsigned int nfuncs;
-> +};
-
-Are you going to convert this to use struct group_desc?
-
-...
-
-> +       LPI_MUX__,
-
-Strange naming. Besides, if it is the terminator, drop the comma.
+> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+> index 4bf4204444ab..5b628990ae6e 100644
+> --- a/mm/damon/dbgfs.c
+> +++ b/mm/damon/dbgfs.c
+> @@ -210,10 +210,8 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+>   				&wmarks.low, &parsed);
+>   		if (ret != 18)
+>   			break;
+> -		if (!damos_action_valid(action)) {
+> -			pr_err("wrong action %d\n", action);
+> +		if (!damos_action_valid(action))
+>   			goto fail;
+> -		}
+>   
+>   		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
+>   			goto fail;
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Best Regards!
+Xin Hao
+

@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947A346E14E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAF846E14D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbhLIDgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:36:08 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:49396 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229601AbhLIDgH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:36:07 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-03 (Coremail) with SMTP id rQCowAC3H5CReLFhfzy4AQ--.24704S2;
-        Thu, 09 Dec 2021 11:31:50 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] sched/uclamp: potential dereference of null pointer
-Date:   Thu,  9 Dec 2021 11:31:27 +0800
-Message-Id: <20211209033127.2051504-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231530AbhLIDfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhLIDfl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 22:35:41 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9CAC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:32:08 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id n26so4212493pff.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:32:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=n5D9j62aLJ1+fG9wTsNvAoJm0MnkmZ9E3fqfoRqVqgQ=;
+        b=d2n0WLemxkM3AvTgShubVt87nB+MoNU0jWskn97Aro1M162OelQj920qEtdAPJFuCz
+         Dne49bZ1dZUxJadgF2Fu6723qU9Ymk9zt1VT3Oy6dp2dCDNc7/v2r0URxOlf+yWa9Pni
+         Yw2R2Noffb/h4Y1+Vop1QSNE8ZIG4bCX1RNJlY7ZH8UqaA1saVBoVvQGAvbu3zWN5egA
+         xzcWsWRDf33Y7SHBey0sLvk1PUn32vF1IAv2bocMSj8HR5iD4gd4QefbAxohIZhAURTT
+         wVYyvibZqKtG5syR0ZOxOVu8tgysKHW68yVFqI5vU4nGczBQ31LC3fVM4xyv+zh4ctgZ
+         IqVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=n5D9j62aLJ1+fG9wTsNvAoJm0MnkmZ9E3fqfoRqVqgQ=;
+        b=mBxHVvF9Tij67SxojHhFtJPQZwmcVRufDKB0mmDd6xjUo56EspVP7o8FXB3G61nxjM
+         YtVaLaoRqmoSdP4mte8Ld3jg1JV3xanymFCe0ZVEGWSKGAUNL9tGUhmUtEb1wNGrHzgM
+         QkzeuuQ6S5jN8XVFtqvCUsTFbiZlKQs/wvdhS2SRfTBMUBU+6TjqAP2Sqriz+Mu9hkwV
+         SUAXi4NurTVnQC7T+s95B9uIJTznw0P2DJO38mtsviXfOzAY5pv9nNZZl+F2eBDYXpTK
+         y7lrTbO1NtqF6mQCyi67Tzst7nFDItzaZgOVv7qGMTMJ+vuQx+bp/lAaqAIkR04l+7Fd
+         Q92g==
+X-Gm-Message-State: AOAM531w1bnoLRqAj9JJErHNJue+EY8TYG2UEg5sanUYkf+TRMSRAHni
+        TI7/U36FAiTcgUT9nuqLlj7IzWbpraE=
+X-Google-Smtp-Source: ABdhPJw6hmO7CntdCxZ8lHNThS3s1rc6zaJgR0zqgXiUGoiyuHnsrm0RNM0XpMkJkiO3j1rKXJSh9A==
+X-Received: by 2002:a63:f749:: with SMTP id f9mr32031978pgk.330.1639020728016;
+        Wed, 08 Dec 2021 19:32:08 -0800 (PST)
+Received: from [183.173.151.43] ([183.173.151.43])
+        by smtp.gmail.com with ESMTPSA id f8sm5423951pfc.77.2021.12.08.19.32.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 19:32:07 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] gpu: drm: possible ABBA deadlock in
+ drm_gem_prime_fd_to_handle() and drm_gem_prime_handle_to_fd()
+To:     maarten.lankhorst@linux.intel.com,
+        Maxime Ripard <mripard@kernel.org>, tzimmermann@suse.de,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <ae29d7e4-2794-7d4e-becc-fccb576a706e@gmail.com>
+Date:   Thu, 9 Dec 2021 11:32:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAC3H5CReLFhfzy4AQ--.24704S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtrW8Cw15tw1kGr1DAwb_yoWxKrX_J3
-        95Wr1UG34vqw1I9r47Xr4rWryFqw1UKF4F9ws3GFZxJrWrGr9xJ345AF93Crn3Jrn7ZFZr
-        JFZIqFW7Jw1UGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JU-miiUUUUU=
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kzalloc() needs to be checked.
-To avoid use of null pointer in case of the failure of alloc.
+Hello,
 
-Fixes: 391e43da797a ("sched: Move all scheduler bits into kernel/sched/")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- kernel/sched/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+My static analysis tool reports a possible ABBA deadlock in the drm 
+driver in Linux 5.10:
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index e5858999b54d..988a4a372e14 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8125,6 +8125,8 @@ void __init sched_init(void)
- #endif
- 	if (ptr) {
- 		ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
-+		if (!ptr)
-+			return;
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 		root_task_group.se = (struct sched_entity **)ptr;
--- 
-2.25.1
+drm_gem_prime_fd_to_handle()
+   mutex_lock(&dev->object_name_lock); --> Line 313 (Lock A)
+   drm_gem_handle_delete()
+     drm_gem_object_release_handle()
+       drm_gem_remove_prime_handles()
+         mutex_lock(&filp->prime.lock); --> Line 16 (Lock B)
+
+drm_gem_prime_handle_to_fd()
+   mutex_lock(&file_priv->prime.lock); --> Line 433 (Lock B)
+   mutex_lock(&dev->object_name_lock); --> Line 466 (Lock A)
+
+When drm_gem_prime_fd_to_handle() and drm_gem_prime_handle_to_fd() are 
+concurrently executed, the deadlock can occur.
+
+I am not quite sure whether this possible deadlock is real and how to 
+fix it if it is real.
+Any feedback would be appreciated, thanks :)
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+
+
+Best wishes,
+Jia-Ju Bai
 

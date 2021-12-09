@@ -2,77 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB1646F34B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052DE46F34D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbhLISof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:44:35 -0500
-Received: from relay038.a.hostedemail.com ([64.99.140.38]:16878 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229487AbhLISoe (ORCPT
+        id S229543AbhLISqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:46:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36768 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbhLISqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:44:34 -0500
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id B79B860640;
-        Thu,  9 Dec 2021 18:40:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id B26BD2F;
-        Thu,  9 Dec 2021 18:40:58 +0000 (UTC)
-Message-ID: <411886e9e89f797d3f9513245f94b2a5f4a33e7d.camel@perches.com>
-Subject: Re: [PATCH v2 1/1] PCI: Introduce pci_bus_*() printing macros when
- device is not available
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.de>
-Date:   Thu, 09 Dec 2021 10:40:57 -0800
-In-Reply-To: <20211209182711.28709-1-andriy.shevchenko@linux.intel.com>
-References: <20211209182711.28709-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 9 Dec 2021 13:46:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7BBB5CE27D3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 18:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97946C004DD;
+        Thu,  9 Dec 2021 18:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639075356;
+        bh=QiKstchJv+BrfI7jqC+XbVfFY9A5AR8xbhxUveQsJ84=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RsQ6rNaDnRFnzSOu5reHuT5fA0es2TDMLC/VPNkc+94ULWCynlolNYOn/jz4UkaSz
+         KcoLCkFBv5CQPqtf3i/tOQVipMZp32kp/BjOw2qUgp4CXPIQGFdxh1cNLy3GhXQRvH
+         hirZ2p7YC13HbZBrZ/yCfgWxx6xGGCcYQNVt7zpu0BEGPmLEN1v+qKTSrDSWJ4PvCm
+         lJX60yzsL4Zagdhztx9PFehYA8QUAOYV6LiOtkXEtqtBUqKMPQX1mTcodxFuesp82j
+         tTdiqmzoG6a8ucKYmIxjLYUvLx7+G6mL4nWaKJKbRuVkTPcyPqt22ATNgZDxFIks+K
+         eBlSFnAGbiNng==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH] f2fs: avoid EINVAL by SBI_NEED_FSCK when pinning a file
+Date:   Thu,  9 Dec 2021 10:42:34 -0800
+Message-Id: <20211209184234.2583205-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.83
-X-Stat-Signature: m3d4tdjxymtfyyj39rq48sbnqs141ziy
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: B26BD2F
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+zSZ+fio54rGM2bgUVP0BjMA1iMRrqIhQ=
-X-HE-Tag: 1639075258-380010
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 20:27 +0200, Andy Shevchenko wrote:
-> In some cases PCI device structure is not available and we want to print
-> information based on the bus and devfn parameters. For this cases introduce
-> pci_bus_*() printing macros and replace in existing users.
-[]
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-[]
-> @@ -2482,4 +2482,12 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
->  	WARN_ONCE(condition, "%s %s: " fmt, \
->  		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
->  
-> +#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
-> +	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
-> +	       pci_domain_nr(bus), bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
+Android OTA failed due to SBI_NEED_FSCK flag when pinning the file. Let's avoid
+it since we can do in-place-updates.
 
-I have a small preference for using ... and __VA_ARGS___
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Change-Id: I3fd33c984417c10b38e23de6cec017b03d588945
+---
+ fs/f2fs/data.c |  7 +++++--
+ fs/f2fs/file.c | 10 +++++-----
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-#define pci_bus_printk(level, bus, devfn, fmt, ...) \
-	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
-	       pci_domain_nr(bus), bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##__VA_ARGS__)
-
-and likely this should have parentheses around bus
-
-	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
-	       pci_domain_nr(bus), (bus)->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##__VA_ARGS__)
-
-> +#define pci_bus_err(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_ERR, bus, devfn, fmt, ##arg)
-> +#define pci_bus_warn(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_WARNING, bus, devfn, fmt, ##arg)
-> +#define pci_bus_info(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_INFO, bus, devfn, fmt, ##arg)
-
-__VA_ARGS__ etc...
-
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index a9652a8e669b..40c0d1426a11 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2525,6 +2525,11 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 
++	/* The below cases were checked when setting it. */
++	if (f2fs_is_pinned_file(inode))
++		return false;
++	if (fio && is_sbi_flag_set(sbi, SBI_NEED_FSCK))
++		return true;
+ 	if (f2fs_lfs_mode(sbi))
+ 		return true;
+ 	if (S_ISDIR(inode->i_mode))
+@@ -2533,8 +2538,6 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
+ 		return true;
+ 	if (f2fs_is_atomic_file(inode))
+ 		return true;
+-	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+-		return true;
+ 
+ 	/* swap file is migrating in aligned write mode */
+ 	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index a15f8ba239f0..5ec6bef3937f 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3145,17 +3145,17 @@ static int f2fs_ioc_set_pin_file(struct file *filp, unsigned long arg)
+ 
+ 	inode_lock(inode);
+ 
+-	if (f2fs_should_update_outplace(inode, NULL)) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+ 	if (!pin) {
+ 		clear_inode_flag(inode, FI_PIN_FILE);
+ 		f2fs_i_gc_failures_write(inode, 0);
+ 		goto done;
+ 	}
+ 
++	if (f2fs_should_update_outplace(inode, NULL)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	if (f2fs_pin_file_control(inode, false)) {
+ 		ret = -EAGAIN;
+ 		goto out;
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 

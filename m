@@ -2,318 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC7F46EA80
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A8546EA83
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239109AbhLIPE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:04:58 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46174 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239090AbhLIPE4 (ORCPT
+        id S239117AbhLIPGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:06:00 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:20692 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238885AbhLIPF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:04:56 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9ESGSc011821;
-        Thu, 9 Dec 2021 15:01:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=qjPSf9cqFY3elru7WUptUw1nNMQBwasBcprAhDiJ6ck=;
- b=lOFxiysgC8gyd8cpJDnWFaK8qNRvGKy0Ye2bCd/UChJx1AqOC42K1BepSbOsQD1m8vmj
- HgClx5T4ov0i5FvK6ydo7VAyuReQ87syAyRMhyUkIvBYNphOzYJvdkVXGLP0ay0brXQK
- +Er/nfTwK+3FONGna4qXpptj4zCsxsOM4cXzWCGDxpLz+8y0fz8MnN4/3dUwDQ95pUnO
- SOo7psbP+sDp+UA/RDs2Tge7StecA8eYsH11sE8ggty9Sq0ScgjJG1ZlYjKXkdlVYnAc
- t2OJgHauFlVaJcnfsIy+C9c2XCOXHtBi7tHlzzT6XlDtjI7k/8KKLTns0ABcvNjcUHH3 ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cukkegsws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:01:06 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9EUIgS017613;
-        Thu, 9 Dec 2021 15:01:05 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cukkegsvu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:01:05 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9EvwMg021869;
-        Thu, 9 Dec 2021 15:01:04 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 3cqyychnv3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:01:04 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9F12HS29032770
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 15:01:02 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89BEC6E062;
-        Thu,  9 Dec 2021 15:01:02 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5034A6E05B;
-        Thu,  9 Dec 2021 15:01:00 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 15:01:00 +0000 (GMT)
-Message-ID: <f0710142-0d91-d6c4-8d2c-7eac1a946969@linux.ibm.com>
-Date:   Thu, 9 Dec 2021 10:00:59 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-16-stefanb@linux.ibm.com>
- <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
- <20211209143749.wk4agkynfqdzftbl@wittgenstein>
- <20211209144109.4xkyibwsuaqkbu47@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211209144109.4xkyibwsuaqkbu47@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5q1pABsIVYjQNXorR3WX8xglQnKNiAxK
-X-Proofpoint-ORIG-GUID: J8VKn4iBrlplLGUTS2G6yeX2NbrkuVgY
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 3 URL's were un-rewritten
+        Thu, 9 Dec 2021 10:05:58 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9DuNtf016333;
+        Thu, 9 Dec 2021 15:02:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=oxuGCzhwfUy1ort52vvi5r6K65iym64aSzWRlG1u610=;
+ b=uv8fjBHXVILUA7g1XNwX/u2mr1wTf32AXnIFnSMf/ZeyAoqbqCtEO3/a6kBh6qTTUnGC
+ QjuJh2ymljwgmO74fLjOKxYC4soVQ5Gc+ssqFrModjWkskNUfFiV9GH0ejPNtmJTA1ir
+ p5SDJlV5ShFIoShuX0pid25GVdvkTAtcfIxuvTj7o8A+erDQIGHNRGmjYzatar7teJo+
+ xg5iGMVSB2RhqT3kEwQDn1gGVGGnn6NbTX5QKg9IlJ3FdpQ6SkGuCa2BB78Mib84sZ7D
+ YpI6iAHNRrpmai9YO+ohlC4iSotnJuIVoXtdCn7KHuKIhODkV1XRoU7EId5yVtS93Gjn pA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ctse1kjvf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Dec 2021 15:02:23 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Eulem062998;
+        Thu, 9 Dec 2021 15:02:22 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+        by userp3020.oracle.com with ESMTP id 3cr1ssn4bj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Dec 2021 15:02:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RXqNrYuctjNXHrxc44MGPo1wW7j/bEGL9Pw9Ktd5rD0L+Jg7MfVFH4cENixpwtf6JfXVNkivE4Yo36oDUNq6ejJHUPVf82k8lKaYsIz2YgpvBZLSqZwJy15V3IHIj9kbaC7f/CXwkBceO4pwfn19QbJ/Ypa0GJ4iYoDEr1nHfyOEjsNSQCGIqEPCyCHECNhqL+Q+AVNrLzey3vNwSr6GwWmjIZxU/U7ZB/9bRXIizI4U5IA4xq9FUbtXirE5v15CBM7eSGPpIdqMhfeEtvCrcXdecMcvQ3KgHiV9eVc61R2FZIKP5eCKAuZeiogU4c0KTP86A3NAQ3s/C7H8Q9wX3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oxuGCzhwfUy1ort52vvi5r6K65iym64aSzWRlG1u610=;
+ b=lyqs04EBNWQzEXNCluU5FMgp72ANC/9A8nvRpc7QUKqLkSw/zh3hy22t4r7T/UV+07kcHKJ1vGNKMhYWkmgUd4b4RkJgV5XZTQiiP15ANJrFfYIvATjjvHraWBbPEljTQslHb+tCrtbUyp/b7YTiEdDu+Xy/w8XEb8YdeJmstZxeF9JSKUD3bA0PPmVIhbULTPKstKRyCerAyPMCEalAIlwAEl77kwd+ndz/zrnf8xTbu6MUk55VYfYQ39cBQei0Ukj7lkeKTwSpyuF8j3ehE/tpajLEE2Zs0J894LhmV9og+GgKNQqL3lRiFf5Rwm+aM80jZkuJNfB4H/3seR6Paw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oxuGCzhwfUy1ort52vvi5r6K65iym64aSzWRlG1u610=;
+ b=BHkMVEivlDeoN+/Ie2XoUA0djE43II/dZQ9kWJit4/d01cCBhs3vxPH0+phZm9Ve65ZhdQ22khc8xYK1ues8u3gN3csKAKGwxsRnbegWTLLG1fiPNFTTDkWzcnacrLfmlHPuDY0vvHryyTw6ijHtifmr54r4iZxkDgwdcByKWvg=
+Received: from BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8)
+ by BN8PR10MB3282.namprd10.prod.outlook.com (2603:10b6:408:d2::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
+ 2021 15:02:18 +0000
+Received: from BN0PR10MB5192.namprd10.prod.outlook.com
+ ([fe80::4440:4f39:6d92:a14c]) by BN0PR10MB5192.namprd10.prod.outlook.com
+ ([fe80::4440:4f39:6d92:a14c%6]) with mapi id 15.20.4755.022; Thu, 9 Dec 2021
+ 15:02:18 +0000
+From:   George Kennedy <george.kennedy@oracle.com>
+To:     gregkh@linuxfoundation.org, damien.lemoal@opensource.wdc.com
+Cc:     george.kennedy@oracle.com, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] libata: if T_LENGTH is zero, dma direction should be DMA_NONE
+Date:   Thu,  9 Dec 2021 10:00:20 -0500
+Message-Id: <1639062020-5621-1-git-send-email-george.kennedy@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0501CA0041.namprd05.prod.outlook.com
+ (2603:10b6:803:41::18) To BN0PR10MB5192.namprd10.prod.outlook.com
+ (2603:10b6:408:115::8)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_06,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 adultscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090082
+Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (209.17.40.47) by SN4PR0501CA0041.namprd05.prod.outlook.com (2603:10b6:803:41::18) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Thu, 9 Dec 2021 15:02:18 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ba193f3-9331-4e0b-267e-08d9bb24e511
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3282:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR10MB328289EA4B2FCE115E4FD8B0E6709@BN8PR10MB3282.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1148;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IqYqmM1iPODAxQMuGDfbV6Yxtx74KLuz+7/T9x1KJjr7Iy4JHqLQYPiWVmzSVS84O3rSIqDx6oiSKS5TlqjMWkTAxQP9Wqh02iIKkiS2jJob5xOOzYnd9wkMHzDlgTRDOVx5MmJmEQWn5fxcZUhYROzjXgT1k4WEwr353V6sMazBFgrXty3qibiEnPyoKy8kIL6CrOZjpUHh2n40lTw1B7LE1X4NPt5s7XwklmBb+2+oeE0oQrHXPblT/3kjTez8CHM/MjwXAIXCHMZbrodcqZt5c8faTxR2QZlXTeBctOP1h58bCsIVQ5TgXcKah0L8NJXNqj2uQPHY57Q4kh9me++DDwipJ6SNyJM90r9WBwdImY5Ovqi9Vq68iaHvRImqb/MK70ZNHG4aKOAW2A0mHO6Y20Yt3tZ8fCQ6DBCwhVkWHVYjKl+uDrhQ2r4WzymcmwbTwPa60De8/W7/LqARZB5KcDqhUR80l6zu5xrxylW9SdRsgD01p+TBSJH3yWzc/SgWTOGbEgEll8pkO+Ij1fdOyupmKrFhWiF6MaKr5FdjBx80p5+2VuzNcPOSoYCL4uz9UuiXg997VWVfs8EE6S17DZVdJQu7580QW/2tGXM4VOmkZrFRPuchmkHvIdOISQZqeU637uXeK7GeXSVHKwZUCx9gLnIya8w4WpIe3VpzUg1ZI5iZDjV/aaMHaU7vhV3hpa+j61G7XoEd4WL6+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5192.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(8676002)(52116002)(2906002)(26005)(38100700002)(6486002)(186003)(316002)(956004)(2616005)(6666004)(5660300002)(38350700002)(66946007)(4326008)(508600001)(6512007)(4744005)(86362001)(44832011)(66476007)(36756003)(6506007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?id969QtZdnLyF0DJuwoW2oGuthR7E03mJ2gGDVi/0VZARao8JrfQx7AlUieV?=
+ =?us-ascii?Q?4G5qvjwIYF5/qV8x/5q5C+eM4H3Qx8hp+96cedGVK82w20xgYqk87NhUjRTB?=
+ =?us-ascii?Q?rSKHPIMhk/sy5Y2jOreNTBBpdEdSnvBQBZtcOkMFn/p4jcWR+dqQoAYFH7UE?=
+ =?us-ascii?Q?A6AZtM+YXmk14jZ+v7lj580XhaeVihsuqn7bGv2MLXKAVCIBMU7QJmeFWI6N?=
+ =?us-ascii?Q?QrSPsazp5xKQFCjtv8Gf0K2bmCjWjuczszM2dP+U3Uo072Csq/F3Cts1o3Hy?=
+ =?us-ascii?Q?6I9KobEiKS8uz9QDHDDI2AFIpt9F9OiYUQQyDU/h8HLJX7RywVv8hoDqA817?=
+ =?us-ascii?Q?Igmxf1g79phGIo5Rh+lzM3GepJJqopuaNxI6FRmywc+T6nesr+fX6Yancr6j?=
+ =?us-ascii?Q?o36sqsX02UUMgNDTRC+TWU83/PO9mU8nOweUQb/xzwThrvomdtKstFdhykDB?=
+ =?us-ascii?Q?kE2Swhe+3g9ynyrNfDj1Yt0/S3Iph2WQ7ZWly3DJowAXQE+1CADo1S38yUd+?=
+ =?us-ascii?Q?bMYERDiRZ+njM0jjXvThs95lC9xGtFgiegkX3p8DPbyu2hIRk8CghcasWe03?=
+ =?us-ascii?Q?vpnqJss2/kkJ9BE8DBP1M1n9jGXOH36zWFUH6LSnHxZjuHU1JBgLxJh2RpW2?=
+ =?us-ascii?Q?/DkduVhjOLAy127nXT2nn47yqRuzcEzidJ+TjBaxqGaTgx+qha9Z+xbxBxYX?=
+ =?us-ascii?Q?1Te22H18OAXw6edeJeljsFI+8fucNJpHTWUhgFdLJl8Do4k4N1Jdx1YW5Nk5?=
+ =?us-ascii?Q?tQBkrVnrk4CE5fT3J98pWAPImQZJKlkqpA5phWo7svV+TkZWgouaGtL9+DK+?=
+ =?us-ascii?Q?TK4p92ZWVYf0vezSEsagR7AOim4NC6Ad5b0bBU5/bc8oX4m+7Vqpm3cDocSg?=
+ =?us-ascii?Q?V9a/eq5+eCm/+4UtnbqKKy6pB31CY/rDgYhrGr9Bj5ZSM4DVMpMff1mWCUAI?=
+ =?us-ascii?Q?N93uDxh4Xbd911GbwljIVVfeh8t0coJfmooYPNJ2QT3ciXZXNbbaXQ8LQ7Wl?=
+ =?us-ascii?Q?J0U4LnIU45bEIOpPWPVuCv5PBzc4FWxJmDbnZXrYwvHk989l2ZV06M1ryRQ8?=
+ =?us-ascii?Q?b42BW13XMYTw0HHeRThU31YBPcvtqRGWTnKsVWIxSDoTgH614y7VbVy557Lp?=
+ =?us-ascii?Q?AwFVsc4gMGUyfQjU90LmVWHdfYNVvGz24XPuNO7BUda1BiZ0wEbkU8Lm0ZdT?=
+ =?us-ascii?Q?VccKARmMMD/Y4cdbG9t9YT2OhknZqE8wc2y+b9vDo3fwkUCIgLozq0eNnAQ9?=
+ =?us-ascii?Q?OqOrDBDF0DV6LtZMWM1nnZbBrhVkJwprx97L9+2dxHMBhgYsC0PwyBav96Xe?=
+ =?us-ascii?Q?M7MozIw0w0/t2aOHfWEazeQDUPiJNMtmcG0Rf2xE3PzwthAC75DNaea8MpDY?=
+ =?us-ascii?Q?E/jjpeS7+Ca4FlTDw9IgCgLs/q83K4ovrBQmkIFQ/VaNI6nb4A1MkB2vOEaW?=
+ =?us-ascii?Q?d4vA7zJh6XKAMjbqweFVs2I9W7FCvBtPDWKdvNHtEbvlyG5AY1Pv6iYToBjY?=
+ =?us-ascii?Q?fryjOo8TUvJ0+iG+IpvKHsuAVrRvh0OpMAhQucs9iNZKpDhadxOeeaYIvphi?=
+ =?us-ascii?Q?XM5RKyioYg4jpvhAeYfdta8RNEm4lm3fSz8ef+LN00GcCwdSvthZPzBZ49Ts?=
+ =?us-ascii?Q?RUGS/mopw14nCksFgqmTldmlT1S/Gbkt2lEH0R4nlFxHk/A6H2StWgscAYY+?=
+ =?us-ascii?Q?/vHmwg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ba193f3-9331-4e0b-267e-08d9bb24e511
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5192.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 15:02:18.8783
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8R5PcskPSLpfxEq3m/mZcMzc4cOCs7VDhX95osvEfLCcxLYtKvRLvFQmq6Ei2FZjzFxUAh5xkgOtb/foqpNE/E7jo8noL0Zra3wv9fRR5TM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3282
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10192 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=985 mlxscore=0 spamscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112090081
+X-Proofpoint-GUID: 99cPqNwqlPQdBoyBxe9FrmgDZI9nMQaP
+X-Proofpoint-ORIG-GUID: 99cPqNwqlPQdBoyBxe9FrmgDZI9nMQaP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Avoid data corruption by rejecting pass-through commands where
+T_LENGTH is zero (No data is transferred) and the dma direction
+is not DMA_NONE.
 
-On 12/9/21 09:41, Christian Brauner wrote:
-> On Thu, Dec 09, 2021 at 03:37:49PM +0100, Christian Brauner wrote:
->> On Thu, Dec 09, 2021 at 03:34:28PM +0100, Christian Brauner wrote:
->>> On Wed, Dec 08, 2021 at 05:18:17PM -0500, Stefan Berger wrote:
->>>> Move the dentries into the ima_namespace for reuse by virtualized
->>>> SecurityFS. Implement function freeing the dentries in order of
->>>> files and symlinks before directories.
->>>>
->>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>>> ---
->>> This doesn't work as implemented, I think.
->>>
->>> What I would have preferred and what I tried to explain in the earlier
->>> review was:
->>> Keep the dentry stashing global since it is only needed for init_ima_ns.
->>> Then struct ima_namespace becomes way smaller and simpler.
->>> If you do that then it makes sense to remove the additional dget() in
->>> securityfs_create_dentry() for non-init_ima_ns.
->>> Then you can rely on auto-cleanup in .kill_sb() or on
->>> ima_securityfs_init() failure and you only need to call
->>> ima_fs_ns_free_dentries() if ns != init_ima_ns.
-> s/ns != init_ima_ns/ns == init_ima_ns/
->
->>> IIuc, it seems you're currently doing one dput() too many since you're
->>> calling securityfs_remove() in the error path for non-init_ima_ns which
->>> relies on the previous increased dget() which we removed.
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+---
+ drivers/ata/libata-scsi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I thought that securityfs_remove() will now simply influence when a 
-dentry is removed and freed. If we call it in the error cleanup path in 
-non-init_user_ns case it would go away right there and leave nothing to 
-do for .kill_sb() while an additional dget() would require the cleanup 
-as well but do another cleanup then in .kill_sb() since that brings the 
-reference count to 0 via the dput()s that it does. Am I wrong on this?
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index 1b84d55..d428392 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -2859,6 +2859,12 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
+ 		goto invalid_fld;
+ 	}
+ 
++	/* if T_LENGTH is zero (No data is transferred), then dir should be DMA_NONE */
++	if ((cdb[2 + cdb_offset] & 3) == 0 && scmd->sc_data_direction != DMA_NONE) {
++		fp = 2 + cdb_offset;
++		goto invalid_fld;
++	}
++
+ 	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
+ 		tf->protocol = ATA_PROT_NCQ_NODATA;
+ 
+-- 
+1.8.3.1
 
-
->> If you really want to move the dentry stashing into struct ima_namespace
->> even though it's really unnecessary then you may as well not care about
->> the auto-cleanup and keep that additional ima_fs_ns_free_dentries(ns)
->> call in .kill_sb(). But I really think not dragging dentry stashing into
->> struct ima_namespace is the correct way to go about this.
-
-
-I moved the dentries into the ima_namespace so that each namespace holds 
-a pointer to the dentries it owns and isolates them. We certainly 
-wouldn't want to have IMA namespaces write over the current static 
-variables and create a mess with what these are pointing to ( 
-https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_fs.c#L359 
-) and possible race conditions when doing parallel initialization (if 
-that's possible at all). This also reduces the code size and we don't 
-need two different implementations for init_user_ns and 
-non-init_user_ns. So I don't quite understand whey we wouldn't want to 
-have the dentries isolated via ima_namespace?
-
-
->>
->>>>   include/linux/ima.h             | 13 ++++++
->>>>   security/integrity/ima/ima_fs.c | 72 ++++++++++++++++++---------------
->>>>   2 files changed, 52 insertions(+), 33 deletions(-)
->>>>
->>>> diff --git a/include/linux/ima.h b/include/linux/ima.h
->>>> index 3aaf6e806db4..4dd64e318b15 100644
->>>> --- a/include/linux/ima.h
->>>> +++ b/include/linux/ima.h
->>>> @@ -220,6 +220,17 @@ struct ima_h_table {
->>>>   	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
->>>>   };
->>>>   
->>>> +enum {
->>>> +	IMAFS_DENTRY_DIR = 0,
->>>> +	IMAFS_DENTRY_SYMLINK,
->>>> +	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
->>>> +	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
->>>> +	IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT,
->>>> +	IMAFS_DENTRY_VIOLATIONS,
->>>> +	IMAFS_DENTRY_IMA_POLICY,
->>>> +	IMAFS_DENTRY_LAST
->>>> +};
->>>> +
->>>>   struct ima_namespace {
->>>>   	struct kref kref;
->>>>   	struct user_namespace *user_ns;
->>>> @@ -266,6 +277,8 @@ struct ima_namespace {
->>>>   	struct mutex ima_write_mutex;
->>>>   	unsigned long ima_fs_flags;
->>>>   	int valid_policy;
->>>> +
->>>> +	struct dentry *dentry[IMAFS_DENTRY_LAST];
->>>>   };
->>>>   
->>>>   extern struct ima_namespace init_ima_ns;
->>>> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->>>> index a749a3e79304..3810d11fb463 100644
->>>> --- a/security/integrity/ima/ima_fs.c
->>>> +++ b/security/integrity/ima/ima_fs.c
->>>> @@ -360,14 +360,6 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->>>>   	return result;
->>>>   }
->>>>   
->>>> -static struct dentry *ima_dir;
->>>> -static struct dentry *ima_symlink;
->>>> -static struct dentry *binary_runtime_measurements;
->>>> -static struct dentry *ascii_runtime_measurements;
->>>> -static struct dentry *runtime_measurements_count;
->>>> -static struct dentry *violations;
->>>> -static struct dentry *ima_policy;
->>>> -
->>>>   enum ima_fs_flags {
->>>>   	IMA_FS_BUSY,
->>>>   };
->>>> @@ -437,8 +429,8 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->>>>   
->>>>   	ima_update_policy(ns);
->>>>   #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
->>>> -	securityfs_remove(ima_policy);
->>>> -	ima_policy = NULL;
->>>> +	securityfs_remove(ns->dentry[IMAFS_DENTRY_IMA_POLICY]);
->>>> +	ns->dentry[IMAFS_DENTRY_IMA_POLICY] = NULL;
->>>>   #elif defined(CONFIG_IMA_WRITE_POLICY)
->>>>   	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->>>>   #elif defined(CONFIG_IMA_READ_POLICY)
->>>> @@ -455,58 +447,72 @@ static const struct file_operations ima_measure_policy_ops = {
->>>>   	.llseek = generic_file_llseek,
->>>>   };
->>>>   
->>>> -int __init ima_fs_init(void)
->>>> +static void ima_fs_ns_free_dentries(struct ima_namespace *ns)
->>>>   {
->>>> -	ima_dir = securityfs_create_dir("ima", integrity_dir);
->>>> -	if (IS_ERR(ima_dir))
->>>> +	int i;
->>>> +
->>>> +	for (i = IMAFS_DENTRY_LAST - 1; i >= 0; i--)
->>>> +		securityfs_remove(ns->dentry[i]);
->>>> +
->>>> +	memset(ns->dentry, 0, sizeof(ns->dentry));
->>>> +}
->>>> +
->>>> +static int __init ima_securityfs_init(struct user_namespace *user_ns)
->>>> +{
->>>> +	struct ima_namespace *ns = user_ns->ima_ns;
->>>> +	struct dentry *ima_dir;
->>>> +
->>>> +	ns->dentry[IMAFS_DENTRY_DIR] = securityfs_create_dir("ima", integrity_dir);
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_DIR]))
->>>>   		return -1;
->>>> +	ima_dir = ns->dentry[IMAFS_DENTRY_DIR];
->>>>   
->>>> -	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
->>>> -						NULL);
->>>> -	if (IS_ERR(ima_symlink))
->>>> +	ns->dentry[IMAFS_DENTRY_SYMLINK] =
->>>> +	    securityfs_create_symlink("ima", NULL, "integrity/ima", NULL);
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_SYMLINK]))
->>>>   		goto out;
->>>>   
->>>> -	binary_runtime_measurements =
->>>> +	ns->dentry[IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS] =
->>>>   	    securityfs_create_file("binary_runtime_measurements",
->>>>   				   S_IRUSR | S_IRGRP, ima_dir, NULL,
->>>>   				   &ima_measurements_ops);
->>>> -	if (IS_ERR(binary_runtime_measurements))
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS]))
->>>>   		goto out;
->>>>   
->>>> -	ascii_runtime_measurements =
->>>> +	ns->dentry[IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS] =
->>>>   	    securityfs_create_file("ascii_runtime_measurements",
->>>>   				   S_IRUSR | S_IRGRP, ima_dir, NULL,
->>>>   				   &ima_ascii_measurements_ops);
->>>> -	if (IS_ERR(ascii_runtime_measurements))
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS]))
->>>>   		goto out;
->>>>   
->>>> -	runtime_measurements_count =
->>>> +	ns->dentry[IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT] =
->>>>   	    securityfs_create_file("runtime_measurements_count",
->>>>   				   S_IRUSR | S_IRGRP, ima_dir, NULL,
->>>>   				   &ima_measurements_count_ops);
->>>> -	if (IS_ERR(runtime_measurements_count))
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT]))
->>>>   		goto out;
->>>>   
->>>> -	violations =
->>>> +	ns->dentry[IMAFS_DENTRY_VIOLATIONS] =
->>>>   	    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
->>>>   				   ima_dir, NULL, &ima_htable_violations_ops);
->>>> -	if (IS_ERR(violations))
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_VIOLATIONS]))
->>>>   		goto out;
->>>>   
->>>> -	ima_policy = securityfs_create_file("policy", POLICY_FILE_FLAGS,
->>>> +	ns->dentry[IMAFS_DENTRY_IMA_POLICY] =
->>>> +	    securityfs_create_file("policy", POLICY_FILE_FLAGS,
->>>>   					    ima_dir, NULL,
->>>>   					    &ima_measure_policy_ops);
->>>> -	if (IS_ERR(ima_policy))
->>>> +	if (IS_ERR(ns->dentry[IMAFS_DENTRY_IMA_POLICY]))
->>>>   		goto out;
->>>>   
->>>>   	return 0;
->>>>   out:
->>>> -	securityfs_remove(violations);
->>>> -	securityfs_remove(runtime_measurements_count);
->>>> -	securityfs_remove(ascii_runtime_measurements);
->>>> -	securityfs_remove(binary_runtime_measurements);
->>>> -	securityfs_remove(ima_symlink);
->>>> -	securityfs_remove(ima_dir);
->>>> -	securityfs_remove(ima_policy);
->>>> +	ima_fs_ns_free_dentries(ns);
->>>>   	return -1;
->>>>   }
->>>> +
->>>> +int __init ima_fs_init(void)
->>>> +{
->>>> +	return ima_securityfs_init(&init_user_ns);
->>>> +}
->>>> -- 
->>>> 2.31.1
->>>>
->>>>

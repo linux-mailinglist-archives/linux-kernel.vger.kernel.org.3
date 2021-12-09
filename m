@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F3546E891
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9653C46E896
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237456AbhLIMkn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 07:40:43 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51717 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbhLIMkm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:40:42 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 982F36000C;
-        Thu,  9 Dec 2021 12:37:06 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 13:37:05 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
-Message-ID: <20211209133705.621912fe@xps13>
-In-Reply-To: <1744af96-3b71-3d41-12e2-a9052684cb35@kernel.org>
-References: <20211206174209.2297565-1-robh@kernel.org>
-        <20211209104224.41d42cca@xps13>
-        <bebef734-d0d3-e78e-e07a-9160ead1f673@kernel.org>
-        <20211209114038.710139a8@xps13>
-        <1744af96-3b71-3d41-12e2-a9052684cb35@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S237480AbhLIMmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:42:09 -0500
+Received: from mga01.intel.com ([192.55.52.88]:14664 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230094AbhLIMmH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:42:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="262192313"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="262192313"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:38:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="480324314"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2021 04:38:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 657E7329; Thu,  9 Dec 2021 14:38:34 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        heikki.krogerus@linux.intel.com
+Subject: [PATCH v1 1/1] include/linux/unaligned: Replace kernel.h with the necessary inclusions
+Date:   Thu,  9 Dec 2021 14:38:23 +0200
+Message-Id: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+When kernel.h is used in the headers it adds a lot into dependency hell,
+especially when there are circular dependencies are involved.
 
-> >>>> With 'unevaluatedProperties' support implemented, the TI GPMC example
-> >>>> has a warning:
-> >>>>
-> >>>> Documentation/devicetree/bindings/memory-controllers/ti,gpmc.example.dt.yaml: nand@0,0: Unevaluated properties are not allowed ('rb-gpios' was unexpected)
-> >>>>
-> >>>> Add the missing definition for 'rb-gpios'.    
-> >>>
-> >>> rb-gpios is already defined in nand-controller.yaml. I seems like the
-> >>> real problem is that this file does not refer to it. Can you update the
-> >>> fix?    
-> >>
-> >> I don't think we can refer to nand-controller.yaml right now as we are not
-> >> fully compatible with it yet. Please see examples below.  
-> > 
-> > This is a *very* wrong way of defining a NAND setup. I will take the
-> > patch to silence the warning, but please convert this representation to  
-> 
-> Thanks!
-> 
-> > the 'new' one. I believe on the driver side it should not be too
-> > complicated to support having a few of these properties moved to a NAND
-> > chip subnode and still support the below binding. Just be very clear
-> > that if the legacy bindings are used, only a single chip is supported.  
-> 
-> I agree with you. It has been that way since ages. I will look at cleaning
-> it up whenever possible for me. I think we will have to support the old
-> bindings as well as the new one going forward as many legacy platforms
-> are using it.
+Replace kernel.h inclusion with the list of what is really being used.
 
-Yes of course, this is even a primary requirement.
+The rest of the changes are induced by the above and may not be split.
 
-Thanks,
-Miquèl
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c | 2 ++
+ include/linux/unaligned/packed_struct.h                 | 2 +-
+ lib/lz4/lz4defs.h                                       | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c
+index 2f3c451148db..2f8908074303 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c
+@@ -4,6 +4,8 @@
+  */
+ 
+ #include <asm/unaligned.h>
++
++#include <linux/math.h>
+ #include <linux/string.h>
+ #include <linux/bug.h>
+ 
+diff --git a/include/linux/unaligned/packed_struct.h b/include/linux/unaligned/packed_struct.h
+index c0d817de4df2..f4c8eaf4d012 100644
+--- a/include/linux/unaligned/packed_struct.h
++++ b/include/linux/unaligned/packed_struct.h
+@@ -1,7 +1,7 @@
+ #ifndef _LINUX_UNALIGNED_PACKED_STRUCT_H
+ #define _LINUX_UNALIGNED_PACKED_STRUCT_H
+ 
+-#include <linux/kernel.h>
++#include <linux/types.h>
+ 
+ struct __una_u16 { u16 x; } __packed;
+ struct __una_u32 { u32 x; } __packed;
+diff --git a/lib/lz4/lz4defs.h b/lib/lz4/lz4defs.h
+index 673bd206aa98..330aa539b46e 100644
+--- a/lib/lz4/lz4defs.h
++++ b/lib/lz4/lz4defs.h
+@@ -36,6 +36,8 @@
+  */
+ 
+ #include <asm/unaligned.h>
++
++#include <linux/bitops.h>
+ #include <linux/string.h>	 /* memset, memcpy */
+ 
+ #define FORCE_INLINE __always_inline
+-- 
+2.33.0
+

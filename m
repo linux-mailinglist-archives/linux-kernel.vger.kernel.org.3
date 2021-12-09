@@ -2,137 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE47846F14C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77D346F15B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242634AbhLIROe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239053AbhLIROa (ORCPT
+        id S242153AbhLIRPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:15:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25048 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239585AbhLIRPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:14:30 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C73C0617A1;
-        Thu,  9 Dec 2021 09:10:56 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i12so4757503wmq.4;
-        Thu, 09 Dec 2021 09:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Eey3ZpemVIQey3aUEzHauqKMAedPhaSMvKYTLO4vJR4=;
-        b=Qr3xahMG7jgbSv1CijjihRMn2tiI3uX2hR/Gkaf/95cs09uLEwDwKhlBxwc6pVw1vh
-         4CRnzMxg878ulkS/uKwKFyds2J0OIOmS45QKqBFNhii84FJO5Fpx/ZhV+/G0a5RBpukV
-         pKeQD5arDVdJaCNyZ1LegrU9/sxVSzi1B2R1sLN+yDSlEiCHt+RsmFah+W9J2utelPj3
-         d3SrFVfAR4moqxHbJNlwGIve7w/XnP6/ELecyY5YS7wKd38IV+KCvGPZJgPjOJH5Ar6L
-         Tz4+FmbMFpajSuO9eCUcMpsCfb+rL/u/WquNC7DRyB2leWQRL6kv8l68Cj3HQsjuECZV
-         OHDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Eey3ZpemVIQey3aUEzHauqKMAedPhaSMvKYTLO4vJR4=;
-        b=I8R7OeACJxezrmy38mq5p/drxF/coaOCno2YMqNGb0/N7wknstZ0v3/HUZbVUwHvuB
-         Zv+Sdu3huCQyi7gPsr5BtEZLvdh634ix9AutrFbADZsym5ylptJnOhBxDgNleBUJcDSN
-         heMijvHzh9s4nCpD9bM1Cmw+cUK1pbjQZK+QTkndPUOW2jpL/RZeux6/BTP2KylaweYQ
-         hoImmaQGdPw0baqwj/wD/OxQHo5T0HH7QcDz7Mvr4TnXs+xWdQPlu/tl5zbQ9Lzpegrb
-         ZYyz2I3P9AtbmuU6S0TVrzaRQdaHqxcJL/usKdmPmimIFjWb30ULmffQQarh1v7acNoy
-         68HQ==
-X-Gm-Message-State: AOAM532wDGAvdWYm7pedd31txIQxH9fVJDuFNkZVQDnzWN2Q9JTll6ho
-        HE1sLAJ8MkocWnhu4SoYRMQ=
-X-Google-Smtp-Source: ABdhPJxHfxQx2i1K4jKrLcQ+S1rdfCLHuZD0YQJBWS/cYW5VUOZTrDT446KMNTbFtpsPPGA6oOJLBA==
-X-Received: by 2002:a05:600c:1d01:: with SMTP id l1mr9141930wms.44.1639069854820;
-        Thu, 09 Dec 2021 09:10:54 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id z8sm275504wrh.54.2021.12.09.09.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 09:10:53 -0800 (PST)
-Date:   Thu, 9 Dec 2021 18:10:50 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     dan.j.williams@intel.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
-        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        vkoul@kernel.org, Pavan Kunapuli <pkunapuli@nvidia.com>
-Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Message-ID: <YbI4mtV3npK87c26@orome>
-References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
- <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
+        Thu, 9 Dec 2021 12:15:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639069933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Smq2iHbETeDCSV5UDmUclIIN3eV1C3P1o2VbgxUA3zE=;
+        b=DRxjCDXe86Tyo/QAEpXk8mdG6wYQcwCXaCaqNAXO7rUyDfQJmBrjkWKxCKqvEnSoVEr+3u
+        nONsaosNQiIAWMO/bWuhQgjpK7igjNwModmJCu7NfKs42ON2Lyp625xQFiXelHn/JAarpp
+        NRUhMw77tpchehbwTdCN5Fo4CYLzSEo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-4-qsIiEhmuNBK-OBxqkQMfrA-1; Thu, 09 Dec 2021 12:11:04 -0500
+X-MC-Unique: qsIiEhmuNBK-OBxqkQMfrA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E5B810168C3;
+        Thu,  9 Dec 2021 17:11:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E4B0119C59;
+        Thu,  9 Dec 2021 17:10:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 66/67] ceph: add fscache writeback support
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 17:10:58 +0000
+Message-ID: <163906985808.143852.1383891557313186623.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7mqnZnHDnajOmsOv"
-Content-Disposition: inline
-In-Reply-To: <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jeff Layton <jlayton@kernel.org>
 
---7mqnZnHDnajOmsOv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When updating the backing store from the pagecache (a'la writepage or
+writepages), write to the cache first. This allows us to keep caching
+files even when they are being written, as long as we have appropriate
+caps.
 
-On Mon, Dec 06, 2021 at 06:30:37PM +0530, Akhil R wrote:
-> Adding GPC DMA controller driver for Tegra186 and Tegra194. The driver
-> supports dma transfers between memory to memory, IO peripheral to memory
-> and memory to IO peripheral.
->=20
-> Signed-off-by: Pavan Kunapuli <pkunapuli@nvidia.com>
-> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  drivers/dma/Kconfig            |   12 +
->  drivers/dma/Makefile           |    1 +
->  drivers/dma/tegra186-gpc-dma.c | 1284 ++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 1297 insertions(+)
->  create mode 100644 drivers/dma/tegra186-gpc-dma.c
->=20
-> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> index 80c2c03..35095ae 100644
-> --- a/drivers/dma/Kconfig
-> +++ b/drivers/dma/Kconfig
-> @@ -629,6 +629,18 @@ config TXX9_DMAC
->  	  Support the TXx9 SoC internal DMA controller.  This can be
->  	  integrated in chips such as the Toshiba TX4927/38/39.
-> =20
-> +config TEGRA186_GPC_DMA
-> +	tristate "NVIDIA Tegra GPC DMA support"
-> +	depends on ARCH_TEGRA_186_SOC || ARCH_TEGRA_194_SOC || COMPILE_TEST
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+---
 
-I wonder if we want to maybe make this depend on ARCH_TEGRA instead to
-avoid having to add dependencies on newer SoCs (presumably Tegra234 will
-feature this GPC DMA as well).
+ fs/ceph/addr.c |   67 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 59 insertions(+), 8 deletions(-)
 
-Not worth a respin, but perhaps something to consider when adding
-Tegra234 support.
+diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+index 0ffc4c8d7c10..e836f8f1d4f8 100644
+--- a/fs/ceph/addr.c
++++ b/fs/ceph/addr.c
+@@ -5,7 +5,6 @@
+ #include <linux/fs.h>
+ #include <linux/mm.h>
+ #include <linux/pagemap.h>
+-#include <linux/writeback.h>	/* generic_writepages */
+ #include <linux/slab.h>
+ #include <linux/pagevec.h>
+ #include <linux/task_io_accounting_ops.h>
+@@ -384,6 +383,38 @@ static void ceph_readahead(struct readahead_control *ractl)
+ 	netfs_readahead(ractl, &ceph_netfs_read_ops, (void *)(uintptr_t)got);
+ }
+ 
++#ifdef CONFIG_CEPH_FSCACHE
++static void ceph_set_page_fscache(struct page *page)
++{
++	set_page_fscache(page);
++}
++
++static void ceph_fscache_write_terminated(void *priv, ssize_t error, bool was_async)
++{
++	struct inode *inode = priv;
++
++	if (IS_ERR_VALUE(error) && error != -ENOBUFS)
++		ceph_fscache_invalidate(inode, false);
++}
++
++static void ceph_fscache_write_to_cache(struct inode *inode, u64 off, u64 len, bool caching)
++{
++	struct ceph_inode_info *ci = ceph_inode(inode);
++	struct fscache_cookie *cookie = ceph_fscache_cookie(ci);
++
++	fscache_write_to_cache(cookie, inode->i_mapping, off, len, i_size_read(inode),
++			       ceph_fscache_write_terminated, inode, caching);
++}
++#else
++static inline void ceph_set_page_fscache(struct page *page)
++{
++}
++
++static inline void ceph_fscache_write_to_cache(struct inode *inode, u64 off, u64 len, bool caching)
++{
++}
++#endif /* CONFIG_CEPH_FSCACHE */
++
+ struct ceph_writeback_ctl
+ {
+ 	loff_t i_size;
+@@ -499,6 +530,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+ 	struct ceph_writeback_ctl ceph_wbc;
+ 	struct ceph_osd_client *osdc = &fsc->client->osdc;
+ 	struct ceph_osd_request *req;
++	bool caching = ceph_is_cache_enabled(inode);
+ 
+ 	dout("writepage %p idx %lu\n", page, page->index);
+ 
+@@ -537,16 +569,17 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+ 	    CONGESTION_ON_THRESH(fsc->mount_options->congestion_kb))
+ 		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
+ 
+-	set_page_writeback(page);
+ 	req = ceph_osdc_new_request(osdc, &ci->i_layout, ceph_vino(inode), page_off, &len, 0, 1,
+ 				    CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE, snapc,
+ 				    ceph_wbc.truncate_seq, ceph_wbc.truncate_size,
+ 				    true);
+-	if (IS_ERR(req)) {
+-		redirty_page_for_writepage(wbc, page);
+-		end_page_writeback(page);
++	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+-	}
++
++	set_page_writeback(page);
++	if (caching)
++		ceph_set_page_fscache(page);
++	ceph_fscache_write_to_cache(inode, page_off, len, caching);
+ 
+ 	/* it may be a short write due to an object boundary */
+ 	WARN_ON_ONCE(len > thp_size(page));
+@@ -605,6 +638,9 @@ static int ceph_writepage(struct page *page, struct writeback_control *wbc)
+ 	struct inode *inode = page->mapping->host;
+ 	BUG_ON(!inode);
+ 	ihold(inode);
++
++	wait_on_page_fscache(page);
++
+ 	err = writepage_nounlock(page, wbc);
+ 	if (err == -ERESTARTSYS) {
+ 		/* direct memory reclaimer was killed by SIGKILL. return 0
+@@ -726,6 +762,7 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 	struct ceph_writeback_ctl ceph_wbc;
+ 	bool should_loop, range_whole = false;
+ 	bool done = false;
++	bool caching = ceph_is_cache_enabled(inode);
+ 
+ 	dout("writepages_start %p (mode=%s)\n", inode,
+ 	     wbc->sync_mode == WB_SYNC_NONE ? "NONE" :
+@@ -849,7 +886,7 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 				unlock_page(page);
+ 				break;
+ 			}
+-			if (PageWriteback(page)) {
++			if (PageWriteback(page) || PageFsCache(page)) {
+ 				if (wbc->sync_mode == WB_SYNC_NONE) {
+ 					dout("%p under writeback\n", page);
+ 					unlock_page(page);
+@@ -857,6 +894,7 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 				}
+ 				dout("waiting on writeback %p\n", page);
+ 				wait_on_page_writeback(page);
++				wait_on_page_fscache(page);
+ 			}
+ 
+ 			if (!clear_page_dirty_for_io(page)) {
+@@ -989,9 +1027,19 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 		op_idx = 0;
+ 		for (i = 0; i < locked_pages; i++) {
+ 			u64 cur_offset = page_offset(pages[i]);
++			/*
++			 * Discontinuity in page range? Ceph can handle that by just passing
++			 * multiple extents in the write op.
++			 */
+ 			if (offset + len != cur_offset) {
++				/* If it's full, stop here */
+ 				if (op_idx + 1 == req->r_num_ops)
+ 					break;
++
++				/* Kick off an fscache write with what we have so far. */
++				ceph_fscache_write_to_cache(inode, offset, len, caching);
++
++				/* Start a new extent */
+ 				osd_req_op_extent_dup_last(req, op_idx,
+ 							   cur_offset - offset);
+ 				dout("writepages got pages at %llu~%llu\n",
+@@ -1002,14 +1050,17 @@ static int ceph_writepages_start(struct address_space *mapping,
+ 				osd_req_op_extent_update(req, op_idx, len);
+ 
+ 				len = 0;
+-				offset = cur_offset; 
++				offset = cur_offset;
+ 				data_pages = pages + i;
+ 				op_idx++;
+ 			}
+ 
+ 			set_page_writeback(pages[i]);
++			if (caching)
++				ceph_set_page_fscache(pages[i]);
+ 			len += thp_size(page);
+ 		}
++		ceph_fscache_write_to_cache(inode, offset, len, caching);
+ 
+ 		if (ceph_wbc.size_stable) {
+ 			len = min(len, ceph_wbc.i_size - offset);
 
-Thierry
 
---7mqnZnHDnajOmsOv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGyOJoACgkQ3SOs138+
-s6FQLw//YQbWddZFUUepCv0b7YpjZTW7Vbd3JWuPDsETBN2QinnTKblQ/sAwEPcd
-Szvbiym/rYEjolSaVq0LMnE8N6Yt4UYGNpPpZYygbfzQGXZDMLwWkSv5u9SYGxbC
-89erpmqFUUEFmJWqtW9AnsiUCacYyOuLbNJHbjPQnP5ogpOu/AHCcD5iKn9guF+4
-cpYDuo6+8Ywwt4E5fa8WjgoKSoDWeGbGdhF8Ysac6b6ImI+6MFbZUJUDSxvfn9wa
-IVH5zl5eB01o0AD7DPtTRaKGKIIukylqg2UxYKROdMUWLP3L0YdgPF8ekNI8oz4J
-bcsSdYt0Sw2kcYzVVOqQrF3cFdYvf18XrO+UOUQA0r2B/hyopqsBKXQ9+5HOToj9
-ynQBSNcvj72AGc87pnjYmZPD63UO4kw1Zz7O77WVQClpIj/KKCFKRMLUSyk2QteI
-XHPiLLFBFkyueptQpeaAWXZCNbnE4b2BYk/DuMjfdyB7awww82GnMDD1Lj/pjguZ
-0JntM8RHgCSRSTx6rmEHnWrcmHvX0vmUseAVjTaK03rH5AqIRMmEJuaaypvseYqV
-pHHKnSs2obuHaQ0UVl95LFvjJaNhWISwdvteLhjvEOWqQd5zNClWHVA427MOwF74
-tGtvLslwUzPBjbtPps5ebvJwiURyfrAP9J+3ntTV83JEw3qgweU=
-=za4a
------END PGP SIGNATURE-----
-
---7mqnZnHDnajOmsOv--

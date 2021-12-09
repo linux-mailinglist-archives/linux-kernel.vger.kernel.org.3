@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD4046E0C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2539846E0CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbhLICRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:17:55 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:60668 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229909AbhLICRy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:17:54 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-01 (Coremail) with SMTP id qwCowAA3PZ1hZrFhOcjlAQ--.27202S2;
-        Thu, 09 Dec 2021 10:13:55 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] net: sched: gred: potential dereference of null pointer
-Date:   Thu,  9 Dec 2021 10:13:46 +0800
-Message-Id: <20211209021346.2004600-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S229991AbhLICT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:19:29 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16349 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229909AbhLICT2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:19:28 -0500
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J8d0f6rHTz91Nw;
+        Thu,  9 Dec 2021 10:15:14 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 10:15:53 +0800
+Subject: Re: [PATCH -next] io_uring: use timespec64_valid() to verify time
+ value
+To:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211202064946.1424490-1-yebin10@huawei.com>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <61B166D9.8070809@huawei.com>
+Date:   Thu, 9 Dec 2021 10:15:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAA3PZ1hZrFhOcjlAQ--.27202S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryfXF18GrWxXrWfGrg_yoW3AFcEgw
-        4rKr1kAr97JF1rZrWUAr48Gr9a9F1DWw4v9r9xKrZ3tayUJF93W3y7Crs3Aryxur47CryD
-        ArZFqFy5Jw1akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUU
-        U==
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <20211202064946.1424490-1-yebin10@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kzalloc() needs to be checked.
-To avoid use of null pointer in gred_change_vq() in case
-of the failure of alloc.
 
-Fixes: 869aa41044b0 ("sch_gred: prefer GFP_KERNEL allocations")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- net/sched/sch_gred.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/net/sched/sch_gred.c b/net/sched/sch_gred.c
-index f4132dc25ac0..c0d355281baf 100644
---- a/net/sched/sch_gred.c
-+++ b/net/sched/sch_gred.c
-@@ -697,6 +697,8 @@ static int gred_change(struct Qdisc *sch, struct nlattr *opt,
- 	}
- 
- 	prealloc = kzalloc(sizeof(*prealloc), GFP_KERNEL);
-+	if (!prealloc)
-+		return -ENOMEM;
- 	sch_tree_lock(sch);
- 
- 	err = gred_change_vq(sch, ctl->DP, ctl, prio, stab, max_P, &prealloc,
--- 
-2.25.1
-
+On 2021/12/2 14:49, Ye Bin wrote:
+> It's better to use timespec64_valid() to verify time value.
+>
+> Fixes: 2087009c74d4("io_uring: validate timespec for timeout removals")
+> Fixes: f6223ff79966("io_uring: Fix undefined-behaviour in io_issue_sqe")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>   fs/io_uring.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 568729677e25..929ff732d6dc 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -6151,7 +6151,7 @@ static int io_timeout_remove_prep(struct io_kiocb *req,
+>   			return -EINVAL;
+>   		if (get_timespec64(&tr->ts, u64_to_user_ptr(sqe->addr2)))
+>   			return -EFAULT;
+> -		if (tr->ts.tv_sec < 0 || tr->ts.tv_nsec < 0)
+> +		if (!timespec64_valid(&tr->ts))
+>   			return -EINVAL;
+>   	} else if (tr->flags) {
+>   		/* timeout removal doesn't support flags */
+> @@ -6238,7 +6238,7 @@ static int io_timeout_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe,
+>   	if (get_timespec64(&data->ts, u64_to_user_ptr(sqe->addr)))
+>   		return -EFAULT;
+>   
+> -	if (data->ts.tv_sec < 0 || data->ts.tv_nsec < 0)
+> +	if (!timespec64_valid(&data->ts))
+>   		return -EINVAL;
+>   
+>   	data->mode = io_translate_timeout_mode(flags);
+ping...

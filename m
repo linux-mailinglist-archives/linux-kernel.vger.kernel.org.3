@@ -2,16 +2,16 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F47446ECBC
+	by mail.lfdr.de (Postfix) with ESMTP id B6F1C46ECBD
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241157AbhLIQL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:11:29 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:40208 "EHLO
+        id S241189AbhLIQLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:11:30 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40094 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240944AbhLIQKr (ORCPT
+        with ESMTP id S240954AbhLIQKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:10:47 -0500
+        Thu, 9 Dec 2021 11:10:48 -0500
 Date:   Thu, 09 Dec 2021 16:07:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1639066033;
@@ -20,12 +20,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YwJMbIA0J4qqNnbHfw/h0m5MVV0q4U0mOlISW9HdIvg=;
-        b=qQk5LaejLIRiWouSFQyHz5LoHRMvTaxrFmfBNn3XVwYvj14TmInQS8LyTvNWTTTT/x3X42
-        RBahs0YObnjiIQUB8opxd4UN7JG1Tu/0Qg2X7U8Flc/sAKq8zpYm10HuzlUew+WBfpprhN
-        5HL3zoSzdCZfYitvGBBfwbz2o0Ff+LZNIdCjp1Y1jkSoub374Mnd4Eiohg8FAPAPVLQGnG
-        zjk0eRnVmLDHA52wB4K9srsKmreTu77o+eaBpoUbe9Afh5uSjbO8i63oC1XT7U7MXRg1Bh
-        JPynz108DyZQ7JG32bsB2h0VHsIJZ20dCzo2f1ZLpM6t1w6a7aomWM0bqV4buw==
+        bh=peLjpNoKAwd94/C3ClAuFT0nbJQVorzfikMopJTcTnE=;
+        b=nqVd5svR3F5L8Yty47ATQma6cBSLFxjIN0hWqRInBGF9dl0H2/cWEnwkjkLhSkQasRFBO9
+        GtAjeYbnNgijkstKqB77gPuRf7hCF8rU5kA8EhxumVLiftOt41PJEfmORVG78VT9lamhAI
+        YafJNpJU/7DeEAHtCRhhi8R9wr6YIQUJoaFB8Q1Y8ROdDMusuzf5oxhykjlHLaJ7+tQJya
+        xLQIWdRqbcaf4C5ze34ZeSr4w+C9GrdyCxY/e/Rqfrg5J4G3hMzi/yB2l5ZpyP9xe7gN6c
+        XVb/4I5y7YpkB8JvO9v8ur2P4CmQkQlkFBjyHbFOrfs9KQoQxFvISVax33HU6A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1639066033;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -33,23 +33,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YwJMbIA0J4qqNnbHfw/h0m5MVV0q4U0mOlISW9HdIvg=;
-        b=kkBo5uaFCMIzTuXsRfxJYM+na5fUmdoPgc6VSLAJrLEEZxYYRqH4zgtiv6pCS9wQ6Algw7
-        XOgHg513GwR7yRAw==
+        bh=peLjpNoKAwd94/C3ClAuFT0nbJQVorzfikMopJTcTnE=;
+        b=zlK7ZkVPIAYaX5bnlTNsRbVLkufb4yPO9kOA3JYU/bKF0+QJiPRnAoRXExDpZeXb+wyYGu
+        Ep4Tp5Ca4pjybXDA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Guard sysfs code
+Subject: [tip: irq/msi] PCI/MSI: Fix pci_irq_vector()/pci_irq_get_affinity()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Juergen Gross <jgross@suse.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210223.985907940@linutronix.de>
-References: <20211206210223.985907940@linutronix.de>
+In-Reply-To: <20211206210223.929792157@linutronix.de>
+References: <20211206210223.929792157@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163906603220.11128.3589171489286442756.tip-bot2@tip-bot2>
+Message-ID: <163906603293.11128.11068406777835111377.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,69 +60,97 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     1197528aaea79ed4909aba695d18fdecc5387a36
-Gitweb:        https://git.kernel.org/tip/1197528aaea79ed4909aba695d18fdecc5387a36
+Commit-ID:     29bbc35e29d9b6347780dcacde2deb4b39344167
+Gitweb:        https://git.kernel.org/tip/29bbc35e29d9b6347780dcacde2deb4b39344167
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:27:28 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:27:26 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 09 Dec 2021 11:52:20 +01:00
 
-genirq/msi: Guard sysfs code
+PCI/MSI: Fix pci_irq_vector()/pci_irq_get_affinity()
 
-No point in building unused code when CONFIG_SYSFS=n.
+pci_irq_vector() and pci_irq_get_affinity() use the list position to find the
+MSI-X descriptor at a given index. That's correct for the normal case where
+the entry number is the same as the list position.
 
+But it's wrong for cases where MSI-X was allocated with an entries array
+describing sparse entry numbers into the hardware message descriptor
+table. That's inconsistent at best.
+
+Make it always check the entry number because that's what the zero base
+index really means. This change won't break existing users which use a
+sparse entries array for allocation because these users retrieve the Linux
+interrupt number from the entries array after allocation and none of them
+uses pci_irq_vector() or pci_irq_get_affinity().
+
+Fixes: aff171641d18 ("PCI: Provide sensible IRQ vector alloc/free routines")
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Juergen Gross <jgross@suse.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20211206210223.985907940@linutronix.de
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/r/20211206210223.929792157@linutronix.de
 
 ---
- include/linux/msi.h | 10 ++++++++++
- kernel/irq/msi.c    |  2 ++
- 2 files changed, 12 insertions(+)
+ drivers/pci/msi.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index e616f94..d43b946 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -239,9 +239,19 @@ void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
- void pci_msi_mask_irq(struct irq_data *data);
- void pci_msi_unmask_irq(struct irq_data *data);
+diff --git a/drivers/pci/msi.c b/drivers/pci/msi.c
+index 48e3f4e..00ed45f 100644
+--- a/drivers/pci/msi.c
++++ b/drivers/pci/msi.c
+@@ -1187,19 +1187,24 @@ EXPORT_SYMBOL(pci_free_irq_vectors);
  
-+#ifdef CONFIG_SYSFS
- const struct attribute_group **msi_populate_sysfs(struct device *dev);
- void msi_destroy_sysfs(struct device *dev,
- 		       const struct attribute_group **msi_irq_groups);
-+#else
-+static inline const struct attribute_group **msi_populate_sysfs(struct device *dev)
-+{
-+	return NULL;
-+}
-+static inline void msi_destroy_sysfs(struct device *dev, const struct attribute_group **msi_irq_groups)
-+{
-+}
-+#endif
- 
- /*
-  * The arch hooks to setup up msi irqs. Default functions are implemented
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 7f350ae..a8a0dae 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -72,6 +72,7 @@ void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg)
- }
- EXPORT_SYMBOL_GPL(get_cached_msi_msg);
- 
-+#ifdef CONFIG_SYSFS
- static ssize_t msi_mode_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
+ /**
+  * pci_irq_vector - return Linux IRQ number of a device vector
+- * @dev: PCI device to operate on
+- * @nr: device-relative interrupt vector index (0-based).
++ * @dev:	PCI device to operate on
++ * @nr:		Interrupt vector index (0-based)
++ *
++ * @nr has the following meanings depending on the interrupt mode:
++ *   MSI-X:	The index in the MSI-X vector table
++ *   MSI:	The index of the enabled MSI vectors
++ *   INTx:	Must be 0
++ *
++ * Return: The Linux interrupt number or -EINVAl if @nr is out of range.
+  */
+ int pci_irq_vector(struct pci_dev *dev, unsigned int nr)
  {
-@@ -204,6 +205,7 @@ void msi_destroy_sysfs(struct device *dev, const struct attribute_group **msi_ir
- 		kfree(msi_irq_groups);
- 	}
- }
-+#endif
+ 	if (dev->msix_enabled) {
+ 		struct msi_desc *entry;
+-		int i = 0;
  
- #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
- static inline void irq_chip_write_msi_msg(struct irq_data *data,
+ 		for_each_pci_msi_entry(entry, dev) {
+-			if (i == nr)
++			if (entry->msi_attrib.entry_nr == nr)
+ 				return entry->irq;
+-			i++;
+ 		}
+ 		WARN_ON_ONCE(1);
+ 		return -EINVAL;
+@@ -1223,17 +1228,22 @@ EXPORT_SYMBOL(pci_irq_vector);
+  * pci_irq_get_affinity - return the affinity of a particular MSI vector
+  * @dev:	PCI device to operate on
+  * @nr:		device-relative interrupt vector index (0-based).
++ *
++ * @nr has the following meanings depending on the interrupt mode:
++ *   MSI-X:	The index in the MSI-X vector table
++ *   MSI:	The index of the enabled MSI vectors
++ *   INTx:	Must be 0
++ *
++ * Return: A cpumask pointer or NULL if @nr is out of range
+  */
+ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+ {
+ 	if (dev->msix_enabled) {
+ 		struct msi_desc *entry;
+-		int i = 0;
+ 
+ 		for_each_pci_msi_entry(entry, dev) {
+-			if (i == nr)
++			if (entry->msi_attrib.entry_nr == nr)
+ 				return &entry->affinity->mask;
+-			i++;
+ 		}
+ 		WARN_ON_ONCE(1);
+ 		return NULL;

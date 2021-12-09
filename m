@@ -2,99 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCAB46E2FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F1B46E2FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbhLIHN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbhLIHN5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:13:57 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2B4C061746;
-        Wed,  8 Dec 2021 23:10:24 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id e136so11524592ybc.4;
-        Wed, 08 Dec 2021 23:10:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V8/zQVMqJ3oaRLl2KbvluVtKang7j1BEzSF7SOiZ1qo=;
-        b=DKRS877Fdf15OnPM+rHpkTXlleysdJyVI5SFXfigVczW+VtE8G4ELiSec/rz+nJ1qT
-         qkwzSDjjpqhP90KqtW/ithyeCm8uzEIc89ZkD6+fGMEQYiYMhHt6eaIdlvv98kUHqEXb
-         eF1g5nSINV00wm6v9oK+JWCfQqw0yfdMAv3dchmGaio3e61iytKtQoPZX9NesGs9iQcO
-         1ruJPo0KswN7EQoMbUPTPU2EexSvcYsY1vm7UzjwKckWI0qrs5Y85jhFYTyIw6X3N7r5
-         yDmUUYVRKfCi7Kgl3HwPU1M1fxTNi49u80mwo7g45aGRcD4QXggirX8aoj86FeKT1B4k
-         mYGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V8/zQVMqJ3oaRLl2KbvluVtKang7j1BEzSF7SOiZ1qo=;
-        b=XQGDmuS8BsL2/kkpk56CoAwk0EO/FsIuLQcUpxk4Nm1bqX7dbD0iZdNlxWrqsXs62G
-         W7QZptHvBegei04KQVgPXsJnfnab3U7Cvhagp/6lQGxA5E18jol0tXz/pGN0itgJjCEv
-         wEQEoygqHDTr7ko3qaVKtfoxmTpWJOoVrvopzE7/1576U9yNnF6BQiKNDjwvp0anpFJb
-         1T+uBUf4PNiZC84IGi7uMmlL5DBb329g+fmcid+fcKebGT48gDN448M1AjWsX5P3fJfK
-         PwwQbnzCMDef+lm+V31e3yle+1qkrnq/KMmOKvoyqK8qrPee35Xf1Icaiq2Zx/wxktCQ
-         s9ew==
-X-Gm-Message-State: AOAM530fXU8JaE4ss/K+lPJgOMrHBJIlK6Y39KXlC+hJOwKqbBz31sGI
-        PE8YC0ZJVMQ4/SXeu9ZUwNcCvliDvtv/Fqj2agSCQpxtokE=
-X-Google-Smtp-Source: ABdhPJx04MnMs9lClxuYtJlPwMHvlp2/P4s1Lc40fGaBtkstwsUnSrMpgoLoHJNil/AatKlfFX1/7ycWYD8VK25IEcM=
-X-Received: by 2002:a25:e406:: with SMTP id b6mr4281128ybh.529.1639033823646;
- Wed, 08 Dec 2021 23:10:23 -0800 (PST)
+        id S233548AbhLIHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:14:36 -0500
+Received: from muru.com ([72.249.23.125]:36326 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231664AbhLIHOf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 02:14:35 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id BE29C80A3;
+        Thu,  9 Dec 2021 07:11:42 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 09:10:59 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH v1] ARM: dts: elpida_ecb240abacn: Change Elpida compatible
+Message-ID: <YbGsAxOOHHJfDUCT@atomide.com>
+References: <20211019234059.29877-1-digetx@gmail.com>
+ <a584428e-99f7-986e-90d5-7e81ca213158@gmail.com>
 MIME-Version: 1.0
-References: <20211208113408.45237-1-hanyihao@vivo.com>
-In-Reply-To: <20211208113408.45237-1-hanyihao@vivo.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 8 Dec 2021 23:10:12 -0800
-Message-ID: <CAEf4BzZcMo0ud-9_58939G8NxYYFmro7kO2rguCAM4hgDXEpOA@mail.gmail.com>
-Subject: Re: [PATCH] samples/bpf: fix swap.cocci warning
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a584428e-99f7-986e-90d5-7e81ca213158@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 3:34 AM Yihao Han <hanyihao@vivo.com> wrote:
->
-> Fix following swap.cocci warning:
-> ./samples/bpf/xsk_fwd.c:660:22-23:
-> WARNING opportunity for swap()
->
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->  samples/bpf/xsk_fwd.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/samples/bpf/xsk_fwd.c b/samples/bpf/xsk_fwd.c
-> index 1cd97c84c337..e82582b225d3 100644
-> --- a/samples/bpf/xsk_fwd.c
-> +++ b/samples/bpf/xsk_fwd.c
-> @@ -653,9 +653,7 @@ static void swap_mac_addresses(void *data)
->         struct ether_addr *dst_addr = (struct ether_addr *)&eth->ether_dhost;
->         struct ether_addr tmp;
+Hi,
 
-this variable needs to be removed as well then
+* Dmitry Osipenko <digetx@gmail.com> [211027 12:19]:
+> 20.10.2021 02:40, Dmitry Osipenko пишет:
+> > Vendor prefix shouldn't start with capital letter. The Elpida Memory
+> > compatible was never used in practice, hence just correct the compatible.
+> > 
+> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> > ---
+> >  arch/arm/boot/dts/elpida_ecb240abacn.dtsi | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/elpida_ecb240abacn.dtsi b/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
+> > index d87ee4794f83..9698801cbcfb 100644
+> > --- a/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
+> > +++ b/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
+> > @@ -5,7 +5,7 @@
+> >  
+> >  / {
+> >  	elpida_ECB240ABACN: lpddr2 {
+> > -		compatible	= "Elpida,ECB240ABACN","jedec,lpddr2-s4";
+> > +		compatible	= "elpida,ECB240ABACN","jedec,lpddr2-s4";
+> >  		density		= <2048>;
+> >  		io-width	= <32>;
+> >  
+> > 
+> 
+> This patch should go via OMAP tree since there is only OMAP board which
+> uses this dtsi. To make it more clear, "elpida" variant is now
+> documented in the bindings [1][2].
+> 
+> [1]
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=9e17f71e9c334f14ad6a8ec3edc09c7a4244e12f
+> 
+> [2]
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=001b8b2594db4ea24fbea4c161e665f858917fce
+> 
+> If there is no interest in taking the patch via OMAP tree, then it may
+> go via the DT git tree. Rob, you should pick it up then.
 
->
-> -       tmp = *src_addr;
-> -       *src_addr = *dst_addr;
-> -       *dst_addr = tmp;
-> +       swap(*src_addr, *dst_addr);
->  }
->
->  static void *
-> --
-> 2.17.1
->
+Applying into omap-for-v5.17/dt thanks.
+
+Regards,
+
+Tony

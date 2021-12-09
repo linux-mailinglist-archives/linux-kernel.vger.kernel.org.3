@@ -2,206 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D746E81E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A1F46E828
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237318AbhLIMKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
+        id S237108AbhLIML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbhLIMKl (ORCPT
+        with ESMTP id S237150AbhLIMLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:10:41 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992BC061D7E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 04:07:07 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v11so9266769wrw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:07:07 -0800 (PST)
+        Thu, 9 Dec 2021 07:11:51 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5634EC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 04:08:18 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id l25so18776925eda.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:08:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/yLbHMPc4fjBfcCF0phtg6VZEZ5ftsCYoS5ciOiSFeU=;
-        b=ms6+lIoVD5aNOBnWiJw4l8WclwmAL7F9FXiPl6e5amw+1IiTB9DzQcs8uYLiV+cUGE
-         KKuSfDkp8HRA+czZK5aK4t9wvKGjTbl5NH+bJaVVDVBsvrUKRe1qDyD+hN9ViINoWD6+
-         lqZTxLzaoHIJTVtKByCfFSTXexbI0FiJ+v56DmllxdtiBagBRLBv3oOZyBQWhAGgfzYB
-         KeQGO7euVmv/mCmkMFo1OfiShZRmJMaErnWCMBb2yyEgmsRtikNs9EIqymf+QHijb7pl
-         b6PbVEX4J9T0xLpKdq4bO/XHFaQQ7DNpwE/8S3MI+nfQvvBpyxBiYIgZv6V44dVcLUHB
-         XVrQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=meMHjQXYwzr8UEaTie7G8n4pM7GBCdzDBli4kxnb0Tg=;
+        b=OOL+ElmlZGkNF9l6UIuAjPRSkANUSqCooVBdrdK/IT+RLuQgbxfg/HCZrHQGheqKGb
+         thyL511LPVXx90WTEXCWpmzdYzYktpqdbFnOgpmwkHb4Ej7CqQ5R6ii+isRTpejZj5gl
+         WFNCjePwLrlDAMH3xmcE5GYVm3DtR/9X08uIbTukgTx6Jt0O3vOoo+Q+1GCQp1XxIRei
+         urWQ0EQzu2ZOE+fTsu7817rOwGDX306xG3eFQdQY+GkHiLBj35B5tsjrKjp4mbBC60MN
+         HnEHdLaVx5jLJtCcQvBPNcvSEHkXIZKVGdKboc6h9tIxwzQ3tobICblLP7SsdpvEJhCy
+         0KSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/yLbHMPc4fjBfcCF0phtg6VZEZ5ftsCYoS5ciOiSFeU=;
-        b=IGAPTfkSPYFhs1y5NPzSFdjHCeAzRDgcO7xOHP4eU4JjBcaK7mrmtcbFAztb7h4Afy
-         15KqSd1QecJgESwhSs5m8BoYu6Zlp9Oge2NEssuWWYtjpJKfdeCEQns3tcSD3akf5/OO
-         EE+79mmUFY0wOW38IDfqKruXo7gsH1NY8lZYJQvE86rPltjJng5ctjruQfbCa9VKBG+7
-         9wAYI8YMzMMwzQivxUrM79cprv3D56A72E/SAAd8oE5cux+n9+V9DRXWoeU+9TBhePZS
-         JJSzjZohRGn7Ej5zccXZ0yTkPvzn3b0tsLwdJOnsv7PjSWppSLmjMFUyUBg0B70yB74d
-         fSXQ==
-X-Gm-Message-State: AOAM530R6U+dr9tFhyskV4vgTSAU6jiczUFEtmKr20EcLH9BsqpyKLaN
-        5B1Vk0PbPzP7Czxy80T36pu+7g==
-X-Google-Smtp-Source: ABdhPJw8A0ceeX5B3052YIiAS+wQV5uUHv/XXGVeWUYkOE3fe0yKYjHZPtOjTtTjlS00CW7zJOohqQ==
-X-Received: by 2002:adf:c5d1:: with SMTP id v17mr5748532wrg.571.1639051626129;
-        Thu, 09 Dec 2021 04:07:06 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id 4sm7513289wrz.90.2021.12.09.04.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 04:07:05 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     robh+dt@kernel.org, gregkh@linuxfoundation.org
-Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
-        jeyr@codeaurora.org, bkumar@qti.qualcomm.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 8/8] arm64: dts: qcom: add non-secure domain property to fastrpc nodes
-Date:   Thu,  9 Dec 2021 12:06:26 +0000
-Message-Id: <20211209120626.26373-9-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
-References: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=meMHjQXYwzr8UEaTie7G8n4pM7GBCdzDBli4kxnb0Tg=;
+        b=74U9SjBcAZSlfu3sorKefDGXeSI0Vha+/99FHiaWGQLbBANX1d4DHU+3UGPv2sPhM/
+         oxv83SvxHHaBkZdwomNy6cb9VZ7IJTuaoa9dOVsiB06EBvhCAc5749sy+l16UpHPgDzw
+         pV7yXvwWgnSDODwDm6wQEllyV7ds4kJWkNZUbcP6kHUYpRBUpkxAP3UHgEAhlTc6hEbf
+         0AjBjIS6D9OSahqVk5wO9/vfFGaSjjzRYQHsVuMZgTfo0pxIVlDQDfwcq444GP6M3Zzs
+         AnXsttROMq5EL0649OjCakeaJuU7obgLf9yfg5kGfNZzs5b9Ls2sw6qdWjLEn0ozUjl/
+         HX3A==
+X-Gm-Message-State: AOAM530pbGcytrlInfmr631qfS7X4BdluHB5RIGrxe/ndBavDE9cqlfV
+        /J/FI4dr8ekryh1qdQvDVErUb3es0KVOrFWOODMV81tzUIJhew==
+X-Google-Smtp-Source: ABdhPJzmVoFexMTHbuzc5bZX8n+N/oKlt/fhNlpgiA/uSQFpUzX0k6P5eGYlTM+uD2GeExXLnsoNOXFkBk1KX0EgpY8=
+X-Received: by 2002:a17:907:9196:: with SMTP id bp22mr14693911ejb.69.1639051696813;
+ Thu, 09 Dec 2021 04:08:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202112091014.OAV9O2tr-lkp@intel.com>
+In-Reply-To: <202112091014.OAV9O2tr-lkp@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 9 Dec 2021 14:06:44 +0200
+Message-ID: <CAHp75Vde4to079cN6Q71AENnGopSFfYYpBNPDsxbXK1sHw_C3A@mail.gmail.com>
+Subject: Re: [hare-scsi-devel:ata-trace.v3 13/73] drivers/ata/sata_dwc_460ex.c:744:26:
+ error: implicit declaration of function 'get_dma_dir_descript'; did you mean 'get_prot_descript'?
+To:     kernel test robot <lkp@intel.com>
+Cc:     Hannes Reinecke <hare@suse.de>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeya R <jeyr@codeaurora.org>
+On Thu, Dec 9, 2021 at 6:36 AM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git ata-trace.v3
+> head:   d973dee7af0328b9176e4a1710fb73093c334698
+> commit: a8252508eadb132c62be4596a50701e1f261e92d [13/73] sata_dwc_460ex: use generic tracepoints
+> config: arm-buildonly-randconfig-r005-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091014.OAV9O2tr-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=a8252508eadb132c62be4596a50701e1f261e92d
+>         git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+>         git fetch --no-tags hare-scsi-devel ata-trace.v3
+>         git checkout a8252508eadb132c62be4596a50701e1f261e92d
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/ata/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-FastRPC DSP domain would be set as secure if non-secure dsp property is not
-added to the fastrpc DT node. Add this property to DT files of msm8916,
-sdm845, sm8150, sm8250 and sm8350 so that nothing is broken after secure
-domain patchset.
+I believe this is related to
+https://lore.kernel.org/linux-ide/20211208163255.114660-14-hare@suse.de/
+logging rework.
+Either way I'm fully in support of tracepoints instead of dev_dbg()
+here and there.
 
-This patch is purely for backward compatibility reasons.
-
-Signed-off-by: Jeya R <jeyr@codeaurora.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 1 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi  | 2 ++
- arch/arm64/boot/dts/qcom/sm8150.dtsi  | 3 +++
- arch/arm64/boot/dts/qcom/sm8250.dtsi  | 3 +++
- arch/arm64/boot/dts/qcom/sm8350.dtsi  | 3 +++
- 5 files changed, 12 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index c1c42f26b61e..137a479449d4 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -1365,6 +1365,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,smd-channels = "fastrpcsmd-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 
- 					#address-cells = <1>;
- 					#size-cells = <0>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 526087586ba4..4aebfed4ec00 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -838,6 +838,7 @@
- 				compatible = "qcom,fastrpc";
- 				qcom,glink-channels = "fastrpcglink-apps-dsp";
- 				label = "adsp";
-+				qcom,non-secure-domain;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 
-@@ -888,6 +889,7 @@
- 				compatible = "qcom,fastrpc";
- 				qcom,glink-channels = "fastrpcglink-apps-dsp";
- 				label = "cdsp";
-+				qcom,non-secure-domain;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 81b4ff2cc4cd..9ac213bb96b7 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -1751,6 +1751,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2994,6 +2995,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -3439,6 +3441,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index f0d342aa662d..06be221ad5b6 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2265,6 +2265,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2330,6 +2331,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -4100,6 +4102,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index d134280e2939..80f753cbe91c 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1278,6 +1278,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -1347,6 +1348,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -1643,6 +1645,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
 -- 
-2.21.0
-
+With Best Regards,
+Andy Shevchenko

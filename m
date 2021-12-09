@@ -2,96 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A868146F6AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B20E46F6B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhLIWWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:22:46 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:58298 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLIWWp (ORCPT
+        id S232063AbhLIWXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhLIWXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:22:45 -0500
-Received: from [10.0.2.15] ([146.0.31.27])
-        by smtp.orange.fr with ESMTPA
-        id vRkqmeRsoMNzvvRkqmHJXw; Thu, 09 Dec 2021 23:19:10 +0100
-X-ME-Helo: [10.0.2.15]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 09 Dec 2021 23:19:10 +0100
-X-ME-IP: 146.0.31.27
-Message-ID: <52c4bc82-f8eb-c884-dfd8-2579f6632517@wanadoo.fr>
-Date:   Thu, 9 Dec 2021 23:19:08 +0100
+        Thu, 9 Dec 2021 17:23:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC54C061746;
+        Thu,  9 Dec 2021 14:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NAo2bHCGDeEK5Bqsf+dGhQmWcFTTb/rlSMp2qdc8fr8=; b=VLzpRAp8+3ctmcn6q/R2xix/ar
+        eaBJFCK0/pmj5II+biw31fXiN5PifLNYERWepLBCAkPY/FLDLFXtICkajY61DR/AkfBRf0v1hNr5V
+        1qHrg2F9V9W8SseNenMQ/1mpQuj/1Gqdpa2AHXM9dLQP7Fv358/Dzi1lBqhlLHwnQq3bojVJM7PCn
+        Mt/v0QvgLYEO2TkKiIDh5z6gXkt9GidLDOsYAKHGHbVknjf6yhsMIr+4cnb97o0n9NG+UaYbW+053
+        yEelL/edkkzLI02r7E1OFrT04HR4bolLL4xSqEdFT+SrLRR9vU0V+wOp2jSxI3Jqf25FuERRzMZeo
+        NXkL2gjQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvRlh-000DnB-7T; Thu, 09 Dec 2021 22:20:01 +0000
+Date:   Thu, 9 Dec 2021 14:20:01 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Remove myself as modules maintainer
+Message-ID: <YbKBEZ5Fuo1JY3h9@bombadil.infradead.org>
+References: <20211209084313.10621-1-jeyu@kernel.org>
+ <20211209165953.wohokahzh5z6tnw7@ldmartin-desk2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] scsi: elx: efct: Avoid a useless memset
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>, james.smart@broadcom.com,
-        ram.vegesna@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, dwagner@suse.de
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <009cddb72f4a1b6d1744d5a8ab1955eb93509e41.1639086550.git.christophe.jaillet@wanadoo.fr>
- <4208b3d08a677601c73889f78dd25e5c9f056a86.camel@perches.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <4208b3d08a677601c73889f78dd25e5c9f056a86.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209165953.wohokahzh5z6tnw7@ldmartin-desk2>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Le 09/12/2021 à 22:57, Joe Perches a écrit :
-> On Thu, 2021-12-09 at 22:51 +0100, Christophe JAILLET wrote:
->> 'io->sgl' is kzalloced just a few lines above. There is no need to memset
->> it another time.
+On Thu, Dec 09, 2021 at 08:59:53AM -0800, Lucas De Marchi wrote:
+> On Thu, Dec 09, 2021 at 09:43:13AM +0100, Jessica Yu wrote:
+> > Luis has done a great job maintaining modules so far. As I'm planning to
+> > take a break from work soon, I think we're ready to transition over fully.
+> > 
+> > Signed-off-by: Jessica Yu <jeyu@kernel.org>
 > 
-> Better to use kcalloc as well and delete the memset
+> Acked-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-Sure, thanks for spotting it Joe.
+Queued up on modules-next. 
 
-Should a clean v2 be sent or the patch in your reply is enough?
-As your proposal is better than mine, if a v2 is needed, can you do it?
+> Thanks for your work maintaining the modules! Agreed Luis is already
+> doing a great job, also sending patches for kmod userspace.
 
-CJ
+Thanks for the kind words to you both.
 
-
-> 
->> diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-> []
->> @@ -62,7 +62,6 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
->>   			return NULL;
->>   		}
->>   
->> -		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
->>   		io->sgl_allocated = num_sgl;
->>   		io->sgl_count = 0;
->>   
-> 
-> ---
->   drivers/scsi/elx/efct/efct_io.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-> index 71e21655916a9..109483f3e3dfd 100644
-> --- a/drivers/scsi/elx/efct/efct_io.c
-> +++ b/drivers/scsi/elx/efct/efct_io.c
-> @@ -56,13 +56,12 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
->   		}
->   
->   		/* Allocate SGL */
-> -		io->sgl = kzalloc(sizeof(*io->sgl) * num_sgl, GFP_KERNEL);
-> +		io->sgl = kcalloc(num_sgl, sizeof(*io->sgl), GFP_KERNEL);
->   		if (!io->sgl) {
->   			efct_io_pool_free(io_pool);
->   			return NULL;
->   		}
->   
-> -		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
->   		io->sgl_allocated = num_sgl;
->   		io->sgl_count = 0;
->   
-> 
-> 
+  Luis

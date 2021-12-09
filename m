@@ -2,156 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A2346E143
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EB946E145
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbhLIDZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:25:18 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:51768 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229601AbhLIDZN (ORCPT
+        id S231448AbhLID07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhLID06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:25:13 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V-0JcvD_1639020098;
-Received: from 30.21.164.175(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0V-0JcvD_1639020098)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 09 Dec 2021 11:21:39 +0800
-Message-ID: <a5b62e3c-5c24-dc8f-f7a3-027a67ef3bb2@linux.alibaba.com>
-Date:   Thu, 9 Dec 2021 11:21:36 +0800
+        Wed, 8 Dec 2021 22:26:58 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D13C061746;
+        Wed,  8 Dec 2021 19:23:25 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id bj13so6953820oib.4;
+        Wed, 08 Dec 2021 19:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xaiQdEjeQgtiO7My0G1bhU9pQQQWDld/fjZwkvTV2qg=;
+        b=cij8CdkzIxcadjQ1Oc8n960V/si9bwcrKT/VG+JdU8NN79NdVwJfuohpULmFpH5w9J
+         MGPVbXS49aSwYI/onvRBWAYXQ+mmSnKE5P1KrLFsZ5KGZ6nsZ6oXAuasU5mBgZG4OHaR
+         iXAbgIAN9wlKbtHyiQXBGwm6/CeH1KSK83h2AYBN4WE8Pt3+MMG/vBzx5AXx/vMiakGZ
+         a4O0+4fyZ2O3tUltgWGHtwKycrNrAOmjR1UbVAMMCJnE4amBNYMKpX7gVVDjwS+UBu5A
+         JYrr0bBj5Pq7OtWocTFSo1ZezViBPtuh+1DlYowPZw95dtKQKR64h3xW5imAUIKFgA7s
+         Ev5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xaiQdEjeQgtiO7My0G1bhU9pQQQWDld/fjZwkvTV2qg=;
+        b=jKyZMgyuDvpUWGlV/nLASYEBvrXXDw1ivZq4cJek5NDLMn5isQRjgtc1xr8BSQNkcc
+         axLvMfU4zVfM54XEUzfKuH4vDFq7lkumPI8fcneBqUoGrkmtMbItyrkkfkH/nasSiJf9
+         ccfgb4rbz8nclyoL8Dk9Xkd4sapI17xviGkvvoPzRvfHuKj1mLPOvXUWwtxuaLL+ixDE
+         kZJ5BcpRJRYKG8JdqSt0S3YKFGUeythF+e5ZwScOsqlB3RnlsaohIR+bFNwkAjdzqKYF
+         zpcrGDXXgR2ldafkoDKcZCMkJ7Q6es/wRxIkuVhiDdHwMpiBxK04y2S8w8Mr7J9TZ22a
+         2rCQ==
+X-Gm-Message-State: AOAM532lAnpGtT2zF835ILalB3t4jaRQRR4iuyatoFF3JejyGQyYQJS0
+        Hl8lOB25LBmjBd/GxVEleFk=
+X-Google-Smtp-Source: ABdhPJyImiy3jkcr5GmEBihnV7J2/At9FjEdELP4kpcSWoPLuCnnKRXARbWbmfoLR4qIuEpG86bW+Q==
+X-Received: by 2002:a54:438d:: with SMTP id u13mr3562445oiv.156.1639020205149;
+        Wed, 08 Dec 2021 19:23:25 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id q2sm880384otg.64.2021.12.08.19.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 19:23:24 -0800 (PST)
+Message-ID: <0a2668a6-e819-926c-f8bd-069957cb3db0@gmail.com>
+Date:   Wed, 8 Dec 2021 20:23:23 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [net] seg6: fix the iif in the IPv6 socket control block
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
- <20211207031217-mutt-send-email-mst@kernel.org>
- <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
- <20211208021947-mutt-send-email-mst@kernel.org>
- <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
- <20211208060115-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-In-Reply-To: <20211208060115-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yohei Kanemaru <yohei.kanemaru@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+References: <20211208195409.12169-1-andrea.mayer@uniroma2.it>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211208195409.12169-1-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/8/21 12:54 PM, Andrea Mayer wrote:
+> When an IPv4 packet is received, the ip_rcv_core(...) sets the receiving
+> interface index into the IPv4 socket control block (v5.16-rc4,
+> net/ipv4/ip_input.c line 510):
+> 
+>     IPCB(skb)->iif = skb->skb_iif;
+> 
+> If that IPv4 packet is meant to be encapsulated in an outer IPv6+SRH
+> header, the seg6_do_srh_encap(...) performs the required encapsulation.
+> In this case, the seg6_do_srh_encap function clears the IPv6 socket control
+> block (v5.16-rc4 net/ipv6/seg6_iptunnel.c line 163):
+> 
+>     memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+> 
+> The memset(...) was introduced in commit ef489749aae5 ("ipv6: sr: clear
+> IP6CB(skb) on SRH ip4ip6 encapsulation") a long time ago (2019-01-29).
+> 
+> Since the IPv6 socket control block and the IPv4 socket control block share
+> the same memory area (skb->cb), the receiving interface index info is lost
+> (IP6CB(skb)->iif is set to zero).
+> 
+> As a side effect, that condition triggers a NULL pointer dereference if
+> commit 0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig
+> netdev") is applied.
+> 
+> To fix that issue, we set the IP6CB(skb)->iif with the index of the
+> receiving interface once again.
+> 
+> Fixes: ef489749aae5 ("ipv6: sr: clear IP6CB(skb) on SRH ip4ip6 encapsulation")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  net/ipv6/seg6_iptunnel.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
 
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-在 2021/12/8 下午7:08, Michael S. Tsirkin 写道:
-[snip]
->>>>
->>>> Hi, Michael
->>>>
->>>> Thanks for the comment, unfortunately modify device is not an option for us
->>>> :-(
->>>>
->>>> Is there any idea on how to solve this issue properly?
->>>>
->>>> Regards,
->>>> Michael Wang
->>>
->>> By the way, there is a bug in the error message. Want to fix that?
->>
->> Could you please provide more detail about the bug? We'd like to help fixing
->> it :-)
-> 
-> virtio-pci 0000:14:00.0: platform bug: legacy virtio-mmio must ...
-> 
-> should be virtio-pci not virtio-mmio
-
-Patch on the way~
-
-> 
-> 
-> 
->> Besides, I've checked that patch but it can't address our issue, we actually
->> have this legacy pci device on arm platform, and the memory layout is
->> unfriendly since allocation rarely providing page-address below 44bit, we
->> understand the virtio-iommu case should not do force dma, while we don't
->> have that so it's just working fine.
->>
->> Regards,
->> Michael Wang
-> 
-> Hmm wait a sec is it a physical device or a hypervisor?
-> If a physical one then doesn't it need VIRTIO_F_ORDER_PLATFORM
-> on ARM?
-
-The PCI device is virtual, I can't see how VIRTIO_F_ORDER_PLATFORM help 
-address this issue, legacy pci config is 32bit but it's 36, seems like 
-will never be included?
-
-Regards,
-Michael Wang
-
-> 
-> 
-> 
->>>
->>>
->>>>>
->>>>>> ---
->>>>>>     drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
->>>>>>     drivers/virtio/virtio_ring.c       |  3 +++
->>>>>>     include/linux/virtio.h             |  1 +
->>>>>>     3 files changed, 14 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
->>>>>> b/drivers/virtio/virtio_pci_legacy.c
->>>>>> index d62e983..11f2ebf 100644
->>>>>> --- a/drivers/virtio/virtio_pci_legacy.c
->>>>>> +++ b/drivers/virtio/virtio_pci_legacy.c
->>>>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
->>>>>> *vp_dev)
->>>>>>     	vp_dev->setup_vq = setup_vq;
->>>>>>     	vp_dev->del_vq = del_vq;
->>>>>>
->>>>>> +	/*
->>>>>> +	 * The legacy pci device requre 32bit-pfn vq,
->>>>>> +	 * or setup_vq() will failed.
->>>>>> +	 *
->>>>>> +	 * Thus we make sure vring_use_dma_api() will
->>>>>> +	 * return true during the allocation by marking
->>>>>> +	 * force_dma here.
->>>>>> +	 */
->>>>>> +	vp_dev->vdev.force_dma = true;
->>>>>> +
->>>>>>     	return 0;
->>>>>>
->>>>>>     err_iomap:
->>>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->>>>>> index 3035bb6..6562e01 100644
->>>>>> --- a/drivers/virtio/virtio_ring.c
->>>>>> +++ b/drivers/virtio/virtio_ring.c
->>>>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
->>>>>> virtqueue *_vq,
->>>>>>
->>>>>>     static bool vring_use_dma_api(struct virtio_device *vdev)
->>>>>>     {
->>>>>> +	if (vdev->force_dma)
->>>>>> +		return true;
->>>>>> +
->>>>>>     	if (!virtio_has_dma_quirk(vdev))
->>>>>>     		return true;
->>>>>>
->>>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->>>>>> index 41edbc0..a4eb29d 100644
->>>>>> --- a/include/linux/virtio.h
->>>>>> +++ b/include/linux/virtio.h
->>>>>> @@ -109,6 +109,7 @@ struct virtio_device {
->>>>>>     	bool failed;
->>>>>>     	bool config_enabled;
->>>>>>     	bool config_change_pending;
->>>>>> +	bool force_dma;
->>>>>>     	spinlock_t config_lock;
->>>>>>     	spinlock_t vqs_list_lock; /* Protects VQs list access */
->>>>>>     	struct device dev;
->>>>>> -- 
->>>>>> 1.8.3.1

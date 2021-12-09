@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E01246E11E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6484D46E127
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbhLIDL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbhLIDLu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:11:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B76FC061746;
-        Wed,  8 Dec 2021 19:08:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A947B8236F;
-        Thu,  9 Dec 2021 03:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB985C341C7;
-        Thu,  9 Dec 2021 03:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639019293;
-        bh=OwC5+HVjHuesgoVGYQ3WpeyASnIQ6aFbde6At4MqiYU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H1rVBputbwW8bKidazrvgL1kTOJqHgHjwCvPn1Q7z3qF8xuu1iDO5Pknyavnr6CH0
-         mOB5tQMl0V91tJlXEisLIKSpKvWcdD7iMEBGdN16oyKbPQzX9dbRC+A/MBBc87R8YL
-         DVBXre0gAd2m9mP6TtxFIvMIR6ftOeuRp04J/n4/vgOIGIQoo7ZiUkPy5iWt8K7Ui/
-         J/uIYwH8G2cbz4S8079/+ugjaX5gnlfpy1kReWmJcAS3CapZdwtDmP82DlIiOy2Le3
-         D0n6ZWosDaq+7fVUmn5qBia5GPE66bo3X631kFC9tel3kpTTJrBMiVHZd5WRd2MxVb
-         llJUSmo8JspRg==
-Received: by mail-ed1-f48.google.com with SMTP id w1so14937050edc.6;
-        Wed, 08 Dec 2021 19:08:13 -0800 (PST)
-X-Gm-Message-State: AOAM532qaSgAUiaC/rE7d2xrpK3TJSy56bVbUJJI5OE5XEHU56giHH+g
-        6tj6bt6h36lzXQjR5mZbvgwQux2NXV7mLeW0sg==
-X-Google-Smtp-Source: ABdhPJyyND1t4VP0cquujrBH74RIM5qxBBAuG9q2A50vzIHpbIMiHVFHDXaavM0IHgf/bAan7vOUKxqc6AZgDTvQ+Kk=
-X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr24808372edb.89.1639019292065;
- Wed, 08 Dec 2021 19:08:12 -0800 (PST)
+        id S231308AbhLIDM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:12:29 -0500
+Received: from mail-bn8nam11on2138.outbound.protection.outlook.com ([40.107.236.138]:39168
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231251AbhLIDM1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 22:12:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VoBrKJnaUd/RyMwAKKOv5XzBGCaNKZum6hmKVBir8LOyjOwbkByLXdT9rb3XVlrwiagJhoIB6ybiupnM9Dz6mfzwYgN1EwANfS5vHWyz6ExrPrdM6zje9Je/h0SjwQz6fcghnaaHh8XUm6RLsnLvzDXSGpK+0/L73ytQ32q7yA3/p6fmZd4CWs6OeJM/zjZ2GrBW3Aeagn36rOSL1sxPOTUz1BXTVqdJuNNzNMPO/40sIzwQi95lLzG+W+Xk4UGAn6aYC1IGNhWa/Bx9xPOYFhA4LH7NGe/p9Qn9nFR6anM4AtBXrdGGWjMOjfsxCQHmmFGec1u0yy6qZJlHGtMA7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XDtZNwQWF27lQ+l5O4iu7BCa2/CB6d3l6m6TGMs8Rlc=;
+ b=dygRh0h/I8ZDdVSSe4+h2Dobp2jwlbqHANxZzNHKwV0c8Vfcum0xQNhlsUvmeW6x+3DDx54b1HGR/8nz+PC64CPNi8/ryHp252LfV3SSkZ7L8dQ2AnFrHIxC/tHh17Z1Lh+i5uPG+NO+7qE2ywyEmGbGTJIjkSFyHBQFXZrDa7f317qpS07P7Q0L6gc7ul3R7c24GjFT8rMRHq/TEpM8MaxNbj6Uzhjee7QJutJjIqDeHbP9GFFpVUZSwayW8p9fkPanxt1KhtOVq6xZ1BizaJQzwSEN3jxiLHFJFRrDk5AIxFN+SOsypBCp/6ztGIHI1Xp4bM0+fvvBpTlo1uuuNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XDtZNwQWF27lQ+l5O4iu7BCa2/CB6d3l6m6TGMs8Rlc=;
+ b=ZwsXUO3hSsKOepPVGz6rGS94ZQLMi0zeCM5Qu0wCHnEafbz08u3NDfOJD71iS0xBxWf5dMdERrA9P6hIvDYiVVZV0a2c0vqreTwDUEjmxC4ErXrVYWB8YVp8nFPgWdaTlr0oHaFeLP793SHtd2qjaOa/IXLRIBkCbv79palgmCI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from DM5PR1001MB2345.namprd10.prod.outlook.com (2603:10b6:4:2d::31)
+ by DM6PR10MB3226.namprd10.prod.outlook.com (2603:10b6:5:1a4::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
+ 2021 03:08:52 +0000
+Received: from DM5PR1001MB2345.namprd10.prod.outlook.com
+ ([fe80::6576:2647:62d6:cfdd]) by DM5PR1001MB2345.namprd10.prod.outlook.com
+ ([fe80::6576:2647:62d6:cfdd%4]) with mapi id 15.20.4755.024; Thu, 9 Dec 2021
+ 03:08:51 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v1 net-next] net: ocelot: fix missed include in the vsc7514_regs.h file
+Date:   Wed,  8 Dec 2021 19:08:40 -0800
+Message-Id: <20211209030840.1778440-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR12CA0026.namprd12.prod.outlook.com
+ (2603:10b6:301:2::12) To DM5PR1001MB2345.namprd10.prod.outlook.com
+ (2603:10b6:4:2d::31)
 MIME-Version: 1.0
-References: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 8 Dec 2021 21:08:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJUS0-ZNus__7nJJ-BaJBqQcS0NZ8a4o5QheLt4g8oK+Q@mail.gmail.com>
-Message-ID: <CAL_JsqJUS0-ZNus__7nJJ-BaJBqQcS0NZ8a4o5QheLt4g8oK+Q@mail.gmail.com>
-Subject: Re: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Received: from localhost.localdomain (67.185.175.147) by MWHPR12CA0026.namprd12.prod.outlook.com (2603:10b6:301:2::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20 via Frontend Transport; Thu, 9 Dec 2021 03:08:50 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 61600655-3b5a-492d-cd2e-08d9bac13a08
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3226:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3226E468F0A242AA40213315A4709@DM6PR10MB3226.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:350;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +In8Bgo4LuYymOmyIpixXYHVvpok61zZ7teDi0rQvoP++mFmlYO2cHd/c2vxEmXU43JRuwxmi8SM5YxQ5coM6gDITy9/S6WLlWBshNxkwvyxxYjcTvy4H6N/GJL2OfZ+p6Mua9zhwwv/YRdffzlOba96exPcFP/1AiHU8l+wWddnmwvcyyt1jdJjkIIH3tV7f1dx97EICbXzktyt7nOsYv+0kNfauotAb20Lwdol2ZN8AJ8IUYeL+GWA/Og4pooz8mB1U5ZAZ3BZFr8lKmeKZmPMrei2hfwVES/Yh0y57nUJi28Df+YUQ1jd6/m/bdyxKbtgNxsy3GKnH1bEZ+kqhhS/kjC2JssEQn5QQNhNY0c3dYvFq5mYT+VXfkWtXk6KzfhgO8I5fjtvUOtJdk28SlJnnRCyifqmi0ESO91FBxcGrSLRW1Njk8lajEScZMVak4ogZTmGZEnNtiK9zeNw/7kku0HCuhS41Ioj+ePN1ORyJkvVVz0FQnJ+4krvDHveGfELclrNUiFpPGxH5TwZ43swCnKSJziT5msuz6W7pWbIq6q57l2cwqMSX9grr6XuNC3YbevN4v9dyn3IXVLnuEOILQI+UNGHYENxntwUrd819TF0TIjonOK1hct7cycWuFDXb5Ajoqu5sqJSCSIg+kXZ5yuYcbLS955gA13bFrbctAXw+bJxlRmDj4mrJWvLuGpI2yJYVXiG4bjP4Cy+lA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1001MB2345.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39830400003)(396003)(346002)(376002)(366004)(8936002)(2906002)(6506007)(26005)(36756003)(66946007)(44832011)(316002)(2616005)(956004)(8676002)(4326008)(6512007)(86362001)(5660300002)(66556008)(4744005)(508600001)(54906003)(66476007)(7416002)(186003)(6666004)(38100700002)(1076003)(52116002)(38350700002)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?co8Q2DB94WmxwTMQ9SHJwVLRKEHakaiO67vA6z7vU4nEatCv9lnJpSI6e189?=
+ =?us-ascii?Q?GqwOLamxPXMhbLG8Oe/S0RPfaWjjh4Aujz6jmGNyGKSE9FSBAoZRxXpwcEI0?=
+ =?us-ascii?Q?j2RYpVrdPh9UrtyEslZdQdE5GBvLbrFUxX2UB4gl0i+9+hwL0wyb1EMTQJyE?=
+ =?us-ascii?Q?2n/iyAzBqfPGZuTARciN/iMdkwKNbDe/ib1HJAJ8zlaMWfrU/vQrVh2YB5Pt?=
+ =?us-ascii?Q?dsZtD1q0QYFitWUIkffQBX+Ik+/bSC4di+15MgI7YGwHQkwCnazfGOO5lBqZ?=
+ =?us-ascii?Q?gjji5qE/7qRSJwRQnCTFR1bXwWjdPLTimwxQ62Od+Hw809Xy8c3Q4M4tiJEu?=
+ =?us-ascii?Q?aqI/bS+siKC3l3/+YcBonGsMEtoARySBExdy0v5h2CcuwNx9k4vR6KzX0Sck?=
+ =?us-ascii?Q?I5mZdsVbunX9yJOk+iSxJE1V1Es67IRQ7J9wB4ECVH7Yp7Rxio1QIh+N5uZR?=
+ =?us-ascii?Q?q9iIoiii+qUykPYtNR1nZjRCZUquq+EWoSiQNbE8QxqhnBaDTuOWnCRXlYOL?=
+ =?us-ascii?Q?pKrSxN5KrE4qFV1r6te2F3Ku/MUQUIb7Mp1a/Qki3WQvqXE9GTM7DKXXdU1u?=
+ =?us-ascii?Q?SOoCxRWyTD45nL6KAqHYmWWhcLHxcnjyN3GVzbfVJwkwZOggRJJoJDhiiQy0?=
+ =?us-ascii?Q?/DQPwvuHmblgjbM9z70imBh+/UykjsG+BB/t9hwCO2hvfpm2JSn2muQCG44f?=
+ =?us-ascii?Q?lKnuhleBCdkSkcyw7+Pkk5FMz7UGt/NyTwRqbdbUnxZD0wWrujr/+GVYRmb4?=
+ =?us-ascii?Q?u8uzDaFdUWGoGhbjhK6zZPg5yn9dAf9c47j1GuyiifhF9UffdFGGRc062KHU?=
+ =?us-ascii?Q?hCtR0VSgV+C7SUWFyVnEttWIjyqRUuYSzZOE2QlvsLm1HhD0f1aeGKgJio/Y?=
+ =?us-ascii?Q?K1nQKfZIzUeb8SqVR6Ps3pPRutNzFHqMVH5RrCSClXCbF3yJzDXN6eyLPqcS?=
+ =?us-ascii?Q?UBL03HoEr6f5X5O4RHuQa74er0fFjTSmcYhF5p7Vhow2dF5FK5W/dMtepZBM?=
+ =?us-ascii?Q?D6ux3XoCrB46w9oVvADzPNJ/LZPajfZ7Cg1lOvy8d9ntwCi9HW8r/yAWyKSD?=
+ =?us-ascii?Q?Y2xthLMauwdjgxSq8QBw+dV5X69y/MhMlqJmj27L23sFDSyCWwZ38cy0k2Md?=
+ =?us-ascii?Q?+rPa3xde8hHf6kB6iv6nApn93b1hM7yAW5rUVFCZL/08TWs3DG1hIRuPfF5x?=
+ =?us-ascii?Q?n+7JeAJNUvvQgCZWAsc1h/dqwIxasJ4KBANGu3qBYuFuWHTsZY6mPpFEDb8Z?=
+ =?us-ascii?Q?Tb3kp6A4EjDuZV9wKg3hogOdX/1rEjmdxYp9Z7VnYDxKZIYsI7BFS2U1fAB7?=
+ =?us-ascii?Q?Hkls32wFmdlxC3iTYEGNiYfMgrZtZKB6Bf1YHV+7OWbNfs8gJGEDLBPFI1Sn?=
+ =?us-ascii?Q?OQF482suzmScStgReSmhIps3DLcLHmsuTGgQe9cA52zqXYZY6mfbNp9KR2ue?=
+ =?us-ascii?Q?4nyAiOdkPJ0ReUCv2ZrmmPkDDnjjKV31n1Zv6/Qw0T9J8iKqIa+f5W4NEEqD?=
+ =?us-ascii?Q?zftG36aPSG2K5/cVLpAp3z3iUcRpirDLRfmaavxyhPbH/lh42xah6FRyeOtP?=
+ =?us-ascii?Q?hs+qJixnq32nTPpxwmoBxJdavcvuVKy0MluRoPPLfnM4NLa/6Q9qGEmcYS1q?=
+ =?us-ascii?Q?iMfGI/e7/rmYisV22X72ErY20gfP6LnpMy6ReEZUPbIQuVjzTNrSYrjX7utf?=
+ =?us-ascii?Q?GXJFLQ=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61600655-3b5a-492d-cd2e-08d9bac13a08
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1001MB2345.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 03:08:51.7557
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JgFmWQpURfJ/aHaY0lBAQbiQd+xCwF+dvgp0XNTDfjdXU9PuQ4LDTf6N2Kwd9myPPw8LOT11ZphMaxlTMO3hQZ2wKUhVziVXD+FfLWtzDkQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3226
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 6:11 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> of_device_alloc() in early boot stage creates a interrupt mapping if
-> there exists a "interrupts" property in the node.
->
-> For hierarchical interrupt domains using "interrupts" property in the node
-> bypassed the hierarchical setup and messed up the irq setup.
->
-> This patch adds a check in of_device_alloc() to skip interrupt mapping if
-> "not-interrupt-producer" property is present in the node. This allows
-> nodes to describe the interrupts using "interrupts" property.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Hi All,
->
-> Spawning from discussion [1], here is simple patch (not the ideal probably
-> welcome for suggestions) from stopping the OF code from creating a map for
-> the interrupts when using "interrupts" property.
->
-> [1] https://lore.kernel.org/lkml/87pmqrck2m.wl-maz@kernel.org/
->     T/#mbd1e47c1981082aded4b32a52e2c04291e515508
->
-> Cheers,
-> Prabhakar
-> ---
->  drivers/of/platform.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index b3faf89744aa..629776ca1721 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -114,7 +114,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
->                                   struct device *parent)
->  {
->         struct platform_device *dev;
-> -       int rc, i, num_reg = 0, num_irq;
-> +       int rc, i, num_reg = 0, num_irq = 0;
->         struct resource *res, temp_res;
->
->         dev = platform_device_alloc("", PLATFORM_DEVID_NONE);
-> @@ -124,7 +124,14 @@ struct platform_device *of_device_alloc(struct device_node *np,
->         /* count the io and irq resources */
->         while (of_address_to_resource(np, num_reg, &temp_res) == 0)
->                 num_reg++;
-> -       num_irq = of_irq_count(np);
-> +
-> +       /*
-> +        * we don't want to map the interrupts of hierarchical interrupt domain
-> +        * into the parent domain yet. This will be the job of the hierarchical
-> +        * interrupt driver code to map the interrupts as and when needed.
-> +        */
-> +       if (!of_property_read_bool(np, "not-interrupt-producer"))
-> +               num_irq = of_irq_count(np);
+commit 32ecd22ba60b ("net: mscc: ocelot: split register definitions to a
+separate file") left out an include for <soc/mscc/ocelot_vcap.h>. It was
+missed because the only consumer was ocelot_vsc7514.h, which already
+included ocelot_vcap.
 
-The property won't fly for sure. A compatible match table could work
-here, but I don't really want another temporary solution.
+Fixes: 32ecd22ba60b ("net: mscc: ocelot: split register definitions to a
+separate file")
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+---
+ include/soc/mscc/vsc7514_regs.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
->         /* Populate the resource table */
->         if (num_irq || num_reg) {
-> @@ -140,7 +147,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
->                         rc = of_address_to_resource(np, i, res);
->                         WARN_ON(rc);
->                 }
-> -               if (of_irq_to_resource_table(np, res, num_irq) != num_irq)
-> +               if (num_irq && of_irq_to_resource_table(np, res, num_irq) != num_irq)
+diff --git a/include/soc/mscc/vsc7514_regs.h b/include/soc/mscc/vsc7514_regs.h
+index 98743e252012..ceee26c96959 100644
+--- a/include/soc/mscc/vsc7514_regs.h
++++ b/include/soc/mscc/vsc7514_regs.h
+@@ -8,6 +8,8 @@
+ #ifndef VSC7514_REGS_H
+ #define VSC7514_REGS_H
+ 
++#include <soc/mscc/ocelot_vcap.h>
++
+ extern const u32 vsc7514_ana_regmap[];
+ extern const u32 vsc7514_qs_regmap[];
+ extern const u32 vsc7514_qsys_regmap[];
+-- 
+2.25.1
 
-You might want to look at commit 9ec36cafe43b ("of/irq: do irq
-resolution in platform_get_irq"). The intent was to remove this code,
-but looks like the cleanup has a ways to go 7 years on. Primarily,
-it's convert any platform_get_resource(pdev, IORESOURCE_IRQ, n) call
-to platform_get_irq(). There's ~169 of those.
-
-There are probably some open coded accesses to pdev->resources too,
-but I didn't spot any.
-
-Rob

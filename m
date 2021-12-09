@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1906246E572
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F4E46E574
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235978AbhLIJZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:25:38 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37704 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbhLIJZd (ORCPT
+        id S236038AbhLIJZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235794AbhLIJZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:25:33 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3B32B1FD2A;
-        Thu,  9 Dec 2021 09:21:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639041718; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jo3sn1byKWtiTn1dBpjtwdFa6oBSNCtz/xhF6ucACsY=;
-        b=y5YzNG0rNKaO9NxPBAvDaQoQJPkQmG2LM54kVRigZuFPeyYKpKjohXF5zSI+IMLN4805NR
-        PkkekB5S0F8a10njKbZFjLTgzTAvz8uTJAnMFj/1fbYEyKhhWdWB66C9iz1Fa9DfR0cDsy
-        yshj9dKYiEAUsXxJ+DIpi0rjIY+0z9o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639041718;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jo3sn1byKWtiTn1dBpjtwdFa6oBSNCtz/xhF6ucACsY=;
-        b=UmTHULVEapvtK0ndlxOwHm+jDi1BGZ/4ZhnM7iTiCPnzFci+pO9RE5k+RBPEDy456LoCP6
-        ab98l4y69aWfTuBQ==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46A5DA3B95;
-        Thu,  9 Dec 2021 09:21:56 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 10:21:55 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
-Message-ID: <20211209092155.GO117207@kunlun.suse.cz>
-References: <cover.1637862358.git.msuchanek@suse.de>
- <8b30a3c6a4e845eb77f276298424811897efdebf.1637862358.git.msuchanek@suse.de>
- <c3c9c6e4-6371-2f5a-ac94-fa4389d5dbe5@linux.vnet.ibm.com>
+        Thu, 9 Dec 2021 04:25:40 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80F4C061B38
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:22:06 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q3so8536589wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MTOnfkZY8CBRwH1AHz5th507aRv/FFnDH2cUFSg6uGQ=;
+        b=dk1bbrQx1CBw/5WYiHQqsIIcQUEUI7KgTP8xxkDEWU9zyXwMHUx0uvAT68WVY1m94S
+         +/7xjxdlhqMmlq+hbCwk0wu5tW62uwY5UQqI0ZiryPali/BkwSXWsbvcwfca9QIMQ571
+         8ixe+whtP99NMKmP2Mvq4nSoRR7+djcjv4x4e2NuBgqDbhUXnD4ffOKlwUumMySfCZ/L
+         qhvAAmOhJ5zJn3gXRjHHArr839gKadzwRaMyxcQjhPOskwYuiTKn5Wh77CCAc3IHE4VY
+         wivFio5TQ82iT+Cc/TDW/7/TqYbt9kZNkWHfHxXdxJlGvTlvzXA5g6aETzegIi02wNNK
+         uwYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MTOnfkZY8CBRwH1AHz5th507aRv/FFnDH2cUFSg6uGQ=;
+        b=4cxVVXsICUqSwhUlv6Ly+WIzfQHSuHGX0fzo5JAzNJgHH3WgZVLFADJROAVy++HQ4Q
+         oz9zmAxSm0hAr3gxNcL0lVgbMJIPHoC6acDdF7/uiJpRTqHzqzUAH9lqSg0//xe+x+4U
+         H6SD6mLSFFsSuQhd74sbmN1PzZzagvqqLIccLYnjucBCIZz+TmoS6rx0zevWP+dVG79L
+         rCig3jolJyDdAh8vlSdCBk2gluvEFPkC1Mlzm6xPPlrtN7yavrI58P0Ifzc5Jkm21cgi
+         L4E2w0dzgYur1nzZNXSosL3vEcmb4G0b3gDgz2MxGKsAzfZvQCM7337OVgaIHFWLa9Bn
+         caLA==
+X-Gm-Message-State: AOAM531BJh+H3K+oj150uJ2tNeNVfL0YIFsZCndRWHZ7MwDGTKb0X3oV
+        L6hjla1AfQEixL/BACehO+kMntjgv1GRi+9A5w8=
+X-Google-Smtp-Source: ABdhPJyCvQyVPWTYy/xPjzdlIgg5B5w8V9A0ghTOZ6dq0p9Y7CHeyVECOMe3m/p6jE2DhzRIfMhh8Q==
+X-Received: by 2002:adf:c605:: with SMTP id n5mr5224846wrg.564.1639041725408;
+        Thu, 09 Dec 2021 01:22:05 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id p2sm8507951wmq.23.2021.12.09.01.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 01:22:05 -0800 (PST)
+Date:   Thu, 9 Dec 2021 10:22:04 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Shay Drory <shayd@nvidia.com>, g@nanopsycho
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, jiri@nvidia.com,
+        saeedm@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next v3 4/7] devlink: Add new "event_eq_size" generic
+ device param
+Message-ID: <YbHKvDY9qbo1rwgd@nanopsycho>
+References: <20211208141722.13646-1-shayd@nvidia.com>
+ <20211208141722.13646-5-shayd@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c3c9c6e4-6371-2f5a-ac94-fa4389d5dbe5@linux.vnet.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211208141722.13646-5-shayd@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Wed, Dec 08, 2021 at 03:17:19PM CET, shayd@nvidia.com wrote:
+>Add new device generic parameter to determine the size of the
+>asynchronous control events EQ.
+>
+>For example, to reduce event EQ size to 64, execute:
+>$ devlink dev param set pci/0000:06:00.0 \
+>              name event_eq_size value 64 cmode driverinit
+>$ devlink dev reload pci/0000:06:00.0
+>
+>Signed-off-by: Shay Drory <shayd@nvidia.com>
+>Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+>---
+> Documentation/networking/devlink/devlink-params.rst | 3 +++
+> include/net/devlink.h                               | 4 ++++
+> net/core/devlink.c                                  | 5 +++++
+> 3 files changed, 12 insertions(+)
+>
+>diff --git a/Documentation/networking/devlink/devlink-params.rst b/Documentation/networking/devlink/devlink-params.rst
+>index cd9342305a13..0eddee6e66f3 100644
+>--- a/Documentation/networking/devlink/devlink-params.rst
+>+++ b/Documentation/networking/devlink/devlink-params.rst
+>@@ -132,3 +132,6 @@ own name.
+>    * - ``io_eq_size``
+>      - u16
+>      - Control the size of I/O completion EQs.
+>+   * - ``event_eq_size``
+>+     - u16
 
-On Wed, Dec 08, 2021 at 08:51:47PM -0500, Nayna wrote:
+And this.
+
+
+>+     - Control the size of asynchronous control events EQ.
+>diff --git a/include/net/devlink.h b/include/net/devlink.h
+>index b5f4acd0e0cd..8d5349d2fb68 100644
+>--- a/include/net/devlink.h
+>+++ b/include/net/devlink.h
+>@@ -460,6 +460,7 @@ enum devlink_param_generic_id {
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_VNET,
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_IWARP,
+> 	DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
+>+	DEVLINK_PARAM_GENERIC_ID_EVENT_EQ_SIZE,
 > 
-> On 11/25/21 13:02, Michal Suchanek wrote:
-> > Copy the code from s390x
-> > 
-> > Signed-off-by: Michal Suchanek<msuchanek@suse.de>
-> > ---
-> >   arch/powerpc/Kconfig        | 11 +++++++++++
-> >   arch/powerpc/kexec/elf_64.c | 36 ++++++++++++++++++++++++++++++++++++
-> >   2 files changed, 47 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index ac0c515552fd..ecc1227a77f1 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -561,6 +561,17 @@ config KEXEC_FILE
-> >   config ARCH_HAS_KEXEC_PURGATORY
-> >   	def_bool KEXEC_FILE
-> > 
-> > +config KEXEC_SIG
-> > +	bool "Verify kernel signature during kexec_file_load() syscall"
-> > +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
+> 	/* add new param generic ids above here*/
+> 	__DEVLINK_PARAM_GENERIC_ID_MAX,
+>@@ -515,6 +516,9 @@ enum devlink_param_generic_id {
+> #define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME "io_eq_size"
+> #define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE DEVLINK_PARAM_TYPE_U32
 > 
-> After manually applying the patch, the build is failing with the following
-> error:
+>+#define DEVLINK_PARAM_GENERIC_EVENT_EQ_SIZE_NAME "event_eq_size"
+>+#define DEVLINK_PARAM_GENERIC_EVENT_EQ_SIZE_TYPE DEVLINK_PARAM_TYPE_U32
+>+
+> #define DEVLINK_PARAM_GENERIC(_id, _cmodes, _get, _set, _validate)	\
+> {									\
+> 	.id = DEVLINK_PARAM_GENERIC_ID_##_id,				\
+>diff --git a/net/core/devlink.c b/net/core/devlink.c
+>index 0d4e63d11585..d9f3c994e704 100644
+>--- a/net/core/devlink.c
+>+++ b/net/core/devlink.c
+>@@ -4471,6 +4471,11 @@ static const struct devlink_param devlink_param_generic[] = {
+> 		.name = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME,
+> 		.type = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE,
+> 	},
+>+	{
+>+		.id = DEVLINK_PARAM_GENERIC_ID_EVENT_EQ_SIZE,
+>+		.name = DEVLINK_PARAM_GENERIC_EVENT_EQ_SIZE_NAME,
+>+		.type = DEVLINK_PARAM_GENERIC_EVENT_EQ_SIZE_TYPE,
+>+	},
+> };
 > 
-> build failed with error "arch/powerpc/kexec/elf_64.o: In function
-> `elf64_verify_sig':
-> /root/kernel/linus/linux/arch/powerpc/kexec/elf_64.c:160: undefined
-> reference to `verify_appended_signature'"
-
-This patch does not add call to verify_appended_signature.
-
-Maybe you applied the following patch as well?
-
-Thanks
-
-Michal
+> static int devlink_param_generic_verify(const struct devlink_param *param)
+>-- 
+>2.21.3
+>

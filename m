@@ -2,160 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB15746E9B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAC346E9B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbhLIORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:17:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56786 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230154AbhLIORT (ORCPT
+        id S232691AbhLIOTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:19:54 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:10155 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232332AbhLIOTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:17:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639059225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T1S6rtyY8u3x7vV4s9QhxQiYkWds801oT9UBXiBzvq8=;
-        b=BC4Dq4dfioIzbAtWiaNKOL2Zfx3MntoC3gcKhOO9m0ShVVcV6JR64tqOWnAR0xgK97bj2Y
-        wS/W4MYdX4RK23Pv5qnqyhS2kIt1kPdv02S1k0g5Q8FjdCP0Me79OrLZrw6pftCel8xAqA
-        yUnGRFwrzwvWvqVDV+K2K7SpII58mPs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-COPTSruUMkuFYkPj2eZVRg-1; Thu, 09 Dec 2021 09:13:44 -0500
-X-MC-Unique: COPTSruUMkuFYkPj2eZVRg-1
-Received: by mail-wm1-f71.google.com with SMTP id o18-20020a05600c511200b00332fa17a02eso2549950wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:13:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T1S6rtyY8u3x7vV4s9QhxQiYkWds801oT9UBXiBzvq8=;
-        b=dx9Xy2P1maT3mSsYk/IQI1zuHyuEnoufwNmTNFW2pQb2qsU1UtGuR643eXpwrzx9wd
-         tSKZ39On+XgFRtsCgMG4KROXee1UYvgvPC0BcBATU/cr/KYFDfmffK6pRrEc6x4cRqeY
-         7K+6BMr/9w3Jv1+IpxX9XpIW2bCodaN7kUT72lbc6CIEFubqoUpuZqgTL2A2MOhYi2+G
-         q6+0NPFl8zlwI+cYcZh7Z+vpI79vWo7fumECGQPbsjSvuEKf1Y3ptu0BusGNOpEC0V0e
-         yLvKBDOxpKmcTADMpQcBDKklpQAMlJURoyjZWI1p7ZdzC2K0WubzJG0JSmNS/ul+EP/n
-         jqnQ==
-X-Gm-Message-State: AOAM532qswEv7/O7qpuS97BOl4r4ISzb6Z7bg078btLPN30qMENEvtKX
-        hjEbA+PBp2nHTfAUnO4EeSqFxtoSGQ1aPF6zDFeWzHKHrDjSu6UuhxvFYXiM8hejH+F2VdP0vuZ
-        l02p9DSqnp9hnM35qDMuC48tN
-X-Received: by 2002:a5d:5147:: with SMTP id u7mr6759859wrt.233.1639059222932;
-        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxs0t32qLpqOAfF7JuE4spcBzfo3UmhJ71TMoONwX1ETI4ah//+LMIcCd8EGICtAe5qnDS5Gw==
-X-Received: by 2002:a5d:5147:: with SMTP id u7mr6759814wrt.233.1639059222708;
-        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
-Received: from localhost (net-37-182-17-175.cust.vodafonedsl.it. [37.182.17.175])
-        by smtp.gmail.com with ESMTPSA id s8sm6179183wra.9.2021.12.09.06.13.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:13:40 +0100
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Sven Eckelmann <sven@narfation.org>
-Cc:     jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk,
-        Felix Fietkau <nbd@nbd.name>, Deren Wu <Deren.Wu@mediatek.com>,
-        Mark-YW Chen <Mark-YW.Chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Soul Huang <Soul.Huang@mediatek.com>,
-        YN Chen <YN.Chen@mediatek.com>, KM Lin <km.lin@mediatek.com>,
-        Robin Chiu <robin.chiu@mediatek.com>,
-        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
-        Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com,
-        linux-firmware <linux-firmware@kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        jf@simonwunderlich.de
-Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
-Message-ID: <YbIPFIaya1vKF6bM@lore-desk>
-References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
- <2314855.OJx0zA1Pyt@ripper>
- <3841963.FhVex8QpIh@ripper>
+        Thu, 9 Dec 2021 09:19:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639059380; x=1670595380;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=8yIO/L4Qk0YPt4jNf0sIEJWCtNx9mximIz5PuGv2w74=;
+  b=g3AAPWizqb8uh1Se/KqIA87f/FD2+RiSiKZDSOPricMhHAwi+mRT4m9x
+   6hNEURd5m9T8t2zoyRoJMuKmO1nwla7iq+ddo3GXUxLnBd/TE1Qc55nnz
+   UiQtJOi48tgUFfAUaMXXHkhvKsgIcTmzIOxIB0Ac4M272NHkaSu8M2PFn
+   0=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 09 Dec 2021 06:16:19 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:16:19 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:19 -0800
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:15 -0800
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v2 0/9] Coresight: Add support for TPDM and TPDA
+Date:   Thu, 9 Dec 2021 22:15:34 +0800
+Message-ID: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zjkU6hzf6ZLTHJOB"
-Content-Disposition: inline
-In-Reply-To: <3841963.FhVex8QpIh@ripper>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
---zjkU6hzf6ZLTHJOB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    Use IDR to maintain all the enabled sources' paths.
 
-> On Thursday, 9 December 2021 10:21:02 CET Sven Eckelmann wrote:
-> > Tested-by: Sven Eckelmann <sven@narfation.org>
->=20
-> I would like to retract this again because it seems like the firmware is =
-now=20
-> hanging all the time when the default runtime-pm/deep-sleep settings are =
-used.
->=20
->     [  521.553436] mt7921e 0000:05:00.0: Message 40000002 (seq 12) timeout
->     [  521.559884] mt7921e 0000:05:00.0: chip reset
->     [  521.661983] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build=
- Time: 20211129210838a
->     [  521.661983]=20
->     [  521.684088] mt7921e 0000:05:00.0: WM Firmware Version: ____010000,=
- Build Time: 20211129210917
->     [  521.723561] mt7921e 0000:05:00.0: Firmware init done
->=20
-> This doesn't seem to happen that often when I perform a
->=20
->    echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/runtime-pm
->    echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/deep-sleep
->=20
-> before setting up the interfaces.
->=20
-> But even then, on the first "ip link set up dev mon0" (not only for mon0 =
--=20
-> also for wlan0/...) it will crash with:
->=20
->=20
->     [  806.731357] mt7921e 0000:05:00.0: Message 00000046 (seq 4) timeout
->     [  806.737730] mt7921e 0000:05:00.0: chip reset
-> RTNETLINK answers: Connection timed out
->     [  806.867666] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build=
- Time: 20211129210838a
->     [  806.867666]=20
->     [  806.888441] mt7921e 0000:05:00.0: WM Firmware Version: ____010000,=
- Build Time: 20211129210917
->     [  806.928204] mt7921e 0000:05:00.0: Firmware init done
->=20
-> But when I then set up the device again then it seems to work. This is th=
-e=20
-> case for monitor and managed interfaces.
->=20
-> I've used commit 678071ef7029 ("mt76: mt7615: clear mcu error interrupt s=
-tatus=20
-> on mt7663") in mt76.git for this.=20
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+    Coresight: Add coresight TPDM source driver
+    dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+    coresight-tpdm: Add DSB dataset support
+    coresight-tpdm: Add integration test support
+    docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
 
-does it occur with an older fw?
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+    Coresight: Add TPDA link driver
+    dt-bindings: arm: Adds CoreSight TPDA hardware definitions
 
-Regards,
-Lorenzo
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add coresight components for SM8250
 
->=20
-> Kind regards,
-> 	Sven
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
 
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
 
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
 
---zjkU6hzf6ZLTHJOB
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes from V1:
+1. Use IDR to store the path of sources. (Mathieu Poirier)
+2. Only add integration_test/enable/disable for TPDM. No other configs.
+(Mathieu Poirier)
+3. Move coresight dtsi changes to sm8250.dtsi. (Suzuki K Poulose)
 
------BEGIN PGP SIGNATURE-----
+Mao Jinlong (9):
+  Use IDR to maintain all the enabled sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  ARM: dts: msm: Add coresight components for SM8250
 
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYbIPFAAKCRA6cBh0uS2t
-rKx+AP9d7SOcOblztzxdRBXT0mu90H/4HHELZ2txXKAjgURt8AEAivSXJ/gYEtQg
-Cx4dhBOmhYnSfz4fMWpM3Q9cyw1WiwQ=
-=2F7f
------END PGP SIGNATURE-----
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  12 +
+ .../bindings/arm/coresight-tpda.yaml          | 131 ++++
+ .../bindings/arm/coresight-tpdm.yaml          |  83 +++
+ .../devicetree/bindings/arm/coresight.txt     |   7 +
+ MAINTAINERS                                   |  13 +
+ .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 688 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
+ drivers/hwtracing/coresight/Kconfig           |  33 +
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  79 +-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 201 +++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  33 +
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 262 +++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
+ include/linux/coresight.h                     |   1 +
+ 15 files changed, 1558 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
 
---zjkU6hzf6ZLTHJOB--
+-- 
+2.17.1
 

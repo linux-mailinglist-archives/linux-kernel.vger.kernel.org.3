@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8550F46E42A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13B246E42E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234799AbhLIIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:30:25 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:36817 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234781AbhLIIaX (ORCPT
+        id S234841AbhLIIbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:31:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51095 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234807AbhLIIbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:30:23 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V-1yIM8_1639038407;
-Received: from 30.21.164.175(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0V-1yIM8_1639038407)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 09 Dec 2021 16:26:48 +0800
-Message-ID: <22c1f3f1-beab-83cb-c7ce-d61a970d0f0e@linux.alibaba.com>
-Date:   Thu, 9 Dec 2021 16:26:47 +0800
+        Thu, 9 Dec 2021 03:31:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639038462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vI6c58+KogxxW+mn2T8IAIamTxq7omRdilnleuHfMf8=;
+        b=XrjiLaDDdgTPjMwvLczD57/jRgNPUfOOAyJzWI9KqvwP+OZwp0OJ6qORnb+XtbpGd7mHIz
+        pGGgOTbUKxOETVDJ/L4t/19nvyebf4AbVm6p/8sQ6thbjYtLme8+Nm/bs8U+mZ5+9gwmQ8
+        H/EVIDP8zBcGeuuDWGJKEUOcVIT7gsI=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-603-3yepEsVcPQCcarNO4bkr3A-1; Thu, 09 Dec 2021 03:27:41 -0500
+X-MC-Unique: 3yepEsVcPQCcarNO4bkr3A-1
+Received: by mail-lj1-f199.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso1539282lji.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 00:27:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=vI6c58+KogxxW+mn2T8IAIamTxq7omRdilnleuHfMf8=;
+        b=TXwJ2XXrMo8Og30/9WFcwrVhYQJrMUke99A7PLDXMpQ1d0fzZtRUVK1w5KspZfPkn3
+         te9WcwvvKTN8wtj3Zt6UjIXFo85uYbsCYaFaRl6v59SPmqPJuT3Z0Om1rNn+gW7NudB0
+         iGRb15f2kYe7g7joFLAztQWqULXmaHZUuX/ytBoQ+jyGq5zJS2zzw3v3JoCIPinXt00K
+         lxaQy7eZm0+X5cA/zsOq4GtVY5AJyiLVQqexR7YKuG++3ZPl77pUbaL2A+kN/mAJ4nNp
+         ywDvM6qOA0l3tdFfhXhltCZeLtyUKgAtUThI1V/BrBaGCrJmkv0ortWEcPFditwVJRhz
+         q33Q==
+X-Gm-Message-State: AOAM53088rfmpTdr8JJe/P0ia38AydNPIMQWBqWUo9487nxeVIrumhft
+        O3zHDHzRzloeZffT/F6QLzRLdTX0PitT3Xrd3kCjBwZeDJt9Z9hpIXZU42h9nHXWM/UC3uQcgK1
+        BG136Z8qqGR+PvVyZv92lahY1
+X-Received: by 2002:ac2:58c3:: with SMTP id u3mr4511446lfo.103.1639038459920;
+        Thu, 09 Dec 2021 00:27:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxKqCqbVpt51CaUwHpbqJX0HXKDsb6ux7hU+HGfDgbZtG4GXp/sOpGTWxlKjSvSjzEtXMq55A==
+X-Received: by 2002:ac2:58c3:: with SMTP id u3mr4511426lfo.103.1639038459683;
+        Thu, 09 Dec 2021 00:27:39 -0800 (PST)
+Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
+        by smtp.gmail.com with ESMTPSA id i3sm462850lfu.156.2021.12.09.00.27.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 00:27:38 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <2811b35a-9179-88ce-d87a-e1f824851494@redhat.com>
+Date:   Thu, 9 Dec 2021 09:27:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 2/9] i40e: respect metadata on XSK Rx to skb
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
- <20211207031217-mutt-send-email-mst@kernel.org>
- <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
- <20211208021947-mutt-send-email-mst@kernel.org>
- <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
- <20211208060115-mutt-send-email-mst@kernel.org>
- <a5b62e3c-5c24-dc8f-f7a3-027a67ef3bb2@linux.alibaba.com>
- <20211209013833-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-In-Reply-To: <20211209013833-mutt-send-email-mst@kernel.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
+ <20211208140702.642741-3-alexandr.lobakin@intel.com>
+In-Reply-To: <20211208140702.642741-3-alexandr.lobakin@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2021/12/9 下午2:40, Michael S. Tsirkin 写道:
-[snip]
->>>> Besides, I've checked that patch but it can't address our issue, we actually
->>>> have this legacy pci device on arm platform, and the memory layout is
->>>> unfriendly since allocation rarely providing page-address below 44bit, we
->>>> understand the virtio-iommu case should not do force dma, while we don't
->>>> have that so it's just working fine.
->>>>
->>>> Regards,
->>>> Michael Wang
->>>
->>> Hmm wait a sec is it a physical device or a hypervisor?
->>> If a physical one then doesn't it need VIRTIO_F_ORDER_PLATFORM
->>> on ARM?
->>
->> The PCI device is virtual, I can't see how VIRTIO_F_ORDER_PLATFORM help
->> address this issue, legacy pci config is 32bit but it's 36, seems like will
->> never be included?
->>
->> Regards,
->> Michael Wang
-> 
-> Oh, if the device is virtual then I think you should just update it please.
-> virtio 0.X is architecturally limited to small VMs,
-> if your hypervisor supports more it should emulate virtio 1.0.
+On 08/12/2021 15.06, Alexander Lobakin wrote:
+> For now, if the XDP prog returns XDP_PASS on XSK, the metadata will
+> be lost as it doesn't get copied to the skb.
 
-I see, nice to confirm the proper approach, although we don't have that 
-option on the desk :-P
+I have an urge to add a newline here, when reading this, as IMHO it is a 
+paragraph with the problem statement.
 
-So as long as we don't have any iommu enabled, the force dma approach 
-could be safe, is this correct?
+> Copy it along with the frame headers. Account its size on skb
+> allocation, and when copying just treat it as a part of the frame
+> and do a pull after to "move" it to the "reserved" zone.
 
-Regards,
-Michael Wang
+Also newline here, as next paragraph are some extra details, you felt a 
+need to explain to the reader.
 
-> 
-> 
-> 
->>>
->>>
->>>
->>>>>
->>>>>
->>>>>>>
->>>>>>>> ---
->>>>>>>>      drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
->>>>>>>>      drivers/virtio/virtio_ring.c       |  3 +++
->>>>>>>>      include/linux/virtio.h             |  1 +
->>>>>>>>      3 files changed, 14 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
->>>>>>>> b/drivers/virtio/virtio_pci_legacy.c
->>>>>>>> index d62e983..11f2ebf 100644
->>>>>>>> --- a/drivers/virtio/virtio_pci_legacy.c
->>>>>>>> +++ b/drivers/virtio/virtio_pci_legacy.c
->>>>>>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
->>>>>>>> *vp_dev)
->>>>>>>>      	vp_dev->setup_vq = setup_vq;
->>>>>>>>      	vp_dev->del_vq = del_vq;
->>>>>>>>
->>>>>>>> +	/*
->>>>>>>> +	 * The legacy pci device requre 32bit-pfn vq,
->>>>>>>> +	 * or setup_vq() will failed.
->>>>>>>> +	 *
->>>>>>>> +	 * Thus we make sure vring_use_dma_api() will
->>>>>>>> +	 * return true during the allocation by marking
->>>>>>>> +	 * force_dma here.
->>>>>>>> +	 */
->>>>>>>> +	vp_dev->vdev.force_dma = true;
->>>>>>>> +
->>>>>>>>      	return 0;
->>>>>>>>
->>>>>>>>      err_iomap:
->>>>>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->>>>>>>> index 3035bb6..6562e01 100644
->>>>>>>> --- a/drivers/virtio/virtio_ring.c
->>>>>>>> +++ b/drivers/virtio/virtio_ring.c
->>>>>>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
->>>>>>>> virtqueue *_vq,
->>>>>>>>
->>>>>>>>      static bool vring_use_dma_api(struct virtio_device *vdev)
->>>>>>>>      {
->>>>>>>> +	if (vdev->force_dma)
->>>>>>>> +		return true;
->>>>>>>> +
->>>>>>>>      	if (!virtio_has_dma_quirk(vdev))
->>>>>>>>      		return true;
->>>>>>>>
->>>>>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->>>>>>>> index 41edbc0..a4eb29d 100644
->>>>>>>> --- a/include/linux/virtio.h
->>>>>>>> +++ b/include/linux/virtio.h
->>>>>>>> @@ -109,6 +109,7 @@ struct virtio_device {
->>>>>>>>      	bool failed;
->>>>>>>>      	bool config_enabled;
->>>>>>>>      	bool config_change_pending;
->>>>>>>> +	bool force_dma;
->>>>>>>>      	spinlock_t config_lock;
->>>>>>>>      	spinlock_t vqs_list_lock; /* Protects VQs list access */
->>>>>>>>      	struct device dev;
->>>>>>>> -- 
->>>>>>>> 1.8.3.1
+> net_prefetch() xdp->data_meta and align the copy size to speed-up
+> memcpy() a little and better match i40e_costruct_skb().
+                                      ^^^^^^xx^^^^^^^^^
+
+You have a general misspelling of this function name in all of your 
+commit messages.
+
+--Jesper
+

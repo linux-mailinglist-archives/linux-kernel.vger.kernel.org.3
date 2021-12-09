@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9AA46E7C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878EC46E7C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbhLILxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:53:43 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51492 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLILxn (ORCPT
+        id S236882AbhLILzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232177AbhLILzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:53:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9137DCE2588;
-        Thu,  9 Dec 2021 11:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAA8C004DD;
-        Thu,  9 Dec 2021 11:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639050606;
-        bh=sBa+Bn2lEzC030SisKGwQNUM8a1a5LDRVe2Ox9/ASSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jW/+essi26wXLAgU7bzuIphWkJKKp2sQOC+u5v4CAOSeYsaFn96SUD/zpp/1YNw38
-         p2O/7qW3ODmfqCqFqeFifmnRFYU8KzkbhfnI4//KA3ZNly+rhkAjQS2hCM5sHEjl4I
-         MolNsHJkRtFsE1cONF89sC+webx+ZnTZdJGCNoAgtVk+2gjumpfPpAKPiWaixHlea5
-         zSWaKU6ScpFwUCOkPdEDU3uM64JzL9jo1uXIccs06Kyne6EoWLxTVvpi20Y980+k89
-         rBLqUdeCr6yN7IJx1HfQH/C6uNoVwiRNVDwHFhNco9nyBYyho6/tWmtTNZ929w518s
-         aSJWH0TOm8dIA==
-Date:   Thu, 9 Dec 2021 17:20:02 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Milind Parab <mparab@cadence.com>
-Cc:     Swapnil Kashinath Jakhade <sjakhade@cadence.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "a-govindraju@ti.com" <a-govindraju@ti.com>
-Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
- multilink configuration
-Message-ID: <YbHtanITI9I/cONn@matsya>
-References: <20211022170236.18839-1-sjakhade@cadence.com>
- <20211022170236.18839-14-sjakhade@cadence.com>
- <YZxyja2xEkpWvStR@matsya>
- <DM6PR07MB6154FB5EB84B7BE063965619C5619@DM6PR07MB6154.namprd07.prod.outlook.com>
- <YZ8aygJQoxie+Ddn@matsya>
- <DM6PR07MB61549C25EBF70ED2639FBCF6C5699@DM6PR07MB6154.namprd07.prod.outlook.com>
- <MW2PR07MB7899EC5A08D975E646F48A96D3709@MW2PR07MB7899.namprd07.prod.outlook.com>
+        Thu, 9 Dec 2021 06:55:04 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02AEC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 03:51:30 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso4630368pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:51:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=UtNBeYFsaWjUOBjcjiCmcLYkBZOBUTSUxLJTx5J2sWY=;
+        b=l4IM/2R8RZYwYTIknCFyCrtU7GLyzKukzuPmqh7775f+gNUNOUQ7Uja91WlvqSoAjI
+         ZIIg5oK8eSHumMKWdcyml7GQdEUZ/j9NWL3ndUg4jebvqmVg1H0LtrsOZxS7iAs3rxrA
+         uWZRI+/EL0varxcrea2zI33Rt8tij/bexkJnApnlTQKUiG41B6V9slBQ1wWUx+lcjI0e
+         FQ/uj/uHO17h32iPPnlIeWE9xgEIxiRAaTA0M0P6B6Qh34+yOGJFD4EWKnku1m2Rycbl
+         zTKe5jYmVV3udd7YJfPIbTQ8HIGIyExhjZgAdLCoMQbLKfikQFijKPNzf0bp9FehXalH
+         NT9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UtNBeYFsaWjUOBjcjiCmcLYkBZOBUTSUxLJTx5J2sWY=;
+        b=0TbCVRGqH2efVHQXn+zau4nPZoyI2yf+w/t8NEDcBZgEaA99didnjELnitNYmUNvoD
+         mXm8++BbLNSqHO4KQ2EB1RnAY2muH9ulMT5Ub77nBEkBQgD+2Y3B+Bvx8WHiPSO8jvH3
+         125uyKdqhhtEMm/FmJSvWBTcSPVvfMoCLN18EdicWk/IsvullEIaj44PBwe0qL3LK401
+         3rlyyZavdYjZHdfBOvslILkrljtOAM8wgh/QJ/jYFllR4CqnPn6rjRog43Ri0IVp1kvc
+         Ir17XMqhiD26jGfhKsbI6fDze6gs8X3cT+BRDXQ/R0baaeEvgSj8xmVQNU90P6i0qUSz
+         UIyw==
+X-Gm-Message-State: AOAM530rn6grycniVr0nYCpqXTR2hzFBDqbbN/BPHnQUGMWIkdddaumR
+        SDoiSqCAHKcBKTS8jvPtlg8=
+X-Google-Smtp-Source: ABdhPJwvh5osQ1ikW22yT/NOsPI//T9UTSGuv0IrcDe4RFr8dawSNxeRL7Lw2RVTc5Lx0fjabA/Ahw==
+X-Received: by 2002:a17:902:f68b:b0:142:c60:475 with SMTP id l11-20020a170902f68b00b001420c600475mr66274169plg.8.1639050690387;
+        Thu, 09 Dec 2021 03:51:30 -0800 (PST)
+Received: from [30.240.97.54] ([205.204.117.110])
+        by smtp.gmail.com with ESMTPSA id x9sm9099452pjq.50.2021.12.09.03.51.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 03:51:29 -0800 (PST)
+Message-ID: <a4e2099d-b543-e2e3-f189-0cdfcc38420e@gmail.com>
+Date:   Thu, 9 Dec 2021 19:51:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MW2PR07MB7899EC5A08D975E646F48A96D3709@MW2PR07MB7899.namprd07.prod.outlook.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH v1 2/2] virtio-mem: prepare fake page onlining code for
+ granularity smaller than MAX_ORDER - 1
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Zi Yan <ziy@nvidia.com>,
+        Gavin Shan <gshan@redhat.com>, Hui Zhu <teawater@gmail.com>,
+        Sebastien Boeuf <sebastien.boeuf@intel.com>,
+        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
+References: <20211126134209.17332-1-david@redhat.com>
+ <20211126134209.17332-3-david@redhat.com>
+From:   Eric Ren <renzhengeek@gmail.com>
+In-Reply-To: <20211126134209.17332-3-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09-12-21, 06:11, Milind Parab wrote:
-> Hi Vinod,
-> 
-> Do you have any further comments on this.
-> The implementation follows the same approach as is done for Cadence Torrent multiprotocol Phy
+Hi,
 
-Pls do *not* top post!
+On 2021/11/26 21:42, David Hildenbrand wrote:
+> Let's prepare our fake page onlining code for subblock size smaller than
+> MAX_ORDER - 1: we might get called for ranges not covering properly
+> aligned MAX_ORDER - 1 pages. We have to detect the order to use
+> dynamically.
+>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>   drivers/virtio/virtio_mem.c | 26 +++++++++++++-------------
+>   1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+> index 03e1c5743699..50de7582c9f8 100644
+> --- a/drivers/virtio/virtio_mem.c
+> +++ b/drivers/virtio/virtio_mem.c
+> @@ -1121,15 +1121,18 @@ static void virtio_mem_clear_fake_offline(unsigned long pfn,
+>    */
+>   static void virtio_mem_fake_online(unsigned long pfn, unsigned long nr_pages)
+>   {
+> -	const unsigned long max_nr_pages = MAX_ORDER_NR_PAGES;
+> +	unsigned long order = MAX_ORDER - 1;
+>   	unsigned long i;
+>   
+>   	/*
+> -	 * We are always called at least with MAX_ORDER_NR_PAGES
+> -	 * granularity/alignment (e.g., the way subblocks work). All pages
+> -	 * inside such a block are alike.
+> +	 * We might get called for ranges that don't cover properly aligned
+> +	 * MAX_ORDER - 1 pages; however, we can only online properly aligned
+> +	 * pages with an order of MAX_ORDER - 1 at maximum.
+>   	 */
+> -	for (i = 0; i < nr_pages; i += max_nr_pages) {
+> +	while (!IS_ALIGNED(pfn | nr_pages, 1 << order))
+> +		order--;
+> +
+> +	for (i = 0; i < nr_pages; i += 1 << order) {
+>   		struct page *page = pfn_to_page(pfn + i);
+>   
+>   		/*
+> @@ -1139,14 +1142,12 @@ static void virtio_mem_fake_online(unsigned long pfn, unsigned long nr_pages)
+>   		 * alike.
+>   		 */
+>   		if (PageDirty(page)) {
+> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
+> -						      false);
+> -			generic_online_page(page, MAX_ORDER - 1);
+> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, false);
+> +			generic_online_page(page, order);
+>   		} else {
+> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
+> -						      true);
+> -			free_contig_range(pfn + i, max_nr_pages);
+> -			adjust_managed_page_count(page, max_nr_pages);
+> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, true);
+> +			free_contig_range(pfn + i, 1 << order);
+> +			adjust_managed_page_count(page, 1 << order);
+In the loop, pfn + i, 1 << order are repeatedly calculated. 1 << order 
+is a step size, pfn + i  is each step position.
+Better to figure the numer once each iter?
 
-Sure i will look into it soon..
+LGTL.
+LGTM.
+Reviewed-by: Eric Ren <renzhengeek@gmail.com>
+>   		}
+>   	}
+>   }
+> @@ -2477,7 +2478,6 @@ static int virtio_mem_init_hotplug(struct virtio_mem *vm)
+>   	/*
+>   	 * We want subblocks to span at least MAX_ORDER_NR_PAGES and
+>   	 * pageblock_nr_pages pages. This:
+> -	 * - Simplifies our fake page onlining code (virtio_mem_fake_online).
+>   	 * - Is required for now for alloc_contig_range() to work reliably -
+>   	 *   it doesn't properly handle smaller granularity on ZONE_NORMAL.
+>   	 */
 
-> 
-> Regards,
-> Milind
-> 
-> >-----Original Message-----
-> >From: Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-> >Sent: Thursday, December 2, 2021 7:43 PM
-> >To: Vinod Koul <vkoul@kernel.org>
-> >Cc: kishon@ti.com; robh+dt@kernel.org; p.zabel@pengutronix.de; linux-
-> >phy@lists.infradead.org; linux-kernel@vger.kernel.org;
-> >devicetree@vger.kernel.org; Milind Parab <mparab@cadence.com>; a-
-> >govindraju@ti.com
-> >Subject: RE: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
-> >multilink configuration
-> >
-> >Hi Vinod,
-> >
-> >> -----Original Message-----
-> >> From: Vinod Koul <vkoul@kernel.org>
-> >> Sent: Thursday, November 25, 2021 10:41 AM
-> >> To: Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-> >> Cc: kishon@ti.com; robh+dt@kernel.org; p.zabel@pengutronix.de; linux-
-> >> phy@lists.infradead.org; linux-kernel@vger.kernel.org;
-> >> devicetree@vger.kernel.org; Milind Parab <mparab@cadence.com>; a-
-> >> govindraju@ti.com
-> >> Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII
-> >> PHY multilink configuration
-> >>
-> >> EXTERNAL MAIL
-> >>
-> >>
-> >> On 24-11-21, 07:33, Swapnil Kashinath Jakhade wrote:
-> >>
-> >> > > so this is pcie->qsgmii ->ssc/external/internal ... ok
-> >> > >
-> >> > > > +				[NO_SSC] =
-> >> > > &pcie_100_no_ssc_plllc_cmn_vals,
-> >> > > > +				[EXTERNAL_SSC] =
-> >> > > &pcie_100_ext_ssc_plllc_cmn_vals,
-> >> > > > +				[INTERNAL_SSC] =
-> >> > > &pcie_100_int_ssc_plllc_cmn_vals,
-> >> > > > +			},
-> >> > > >  		},
-> >> > > >  		[TYPE_USB] = {
-> >> > > >  			[TYPE_NONE] = {
-> >> > > >  				[EXTERNAL_SSC] =
-> >> > > &usb_100_ext_ssc_cmn_vals,
-> >> > > >  			},
-> >> > > >  		},
-> >> > > > +		[TYPE_QSGMII] = {
-> >> > > > +			[TYPE_PCIE] = {
-> >> > >
-> >> > > now it is reverse! qsgmii -> pcie -> ... why?
-> >> > >
-> >> > > what is meant by pcie->qsgmii and qsgmii-> pcie?
-> >> > >
-> >> >
-> >> > Multi-protocol configuration is done in 2 phases, each for one protocol.
-> >> > e.g. for PCIe + QSGMII case,
-> >> > [TYPE_PCIE][TYPE_QSGMII] will configure common and lane registers
-> >> > for PCIe and [TYPE_QSGMII][TYPE_PCIE] will configure common and lane
-> >> registers for QSGMII.
-> >>
-> >> Then it should be always common + protocol or protocol + common, not
-> >> both please! Pls make an order and stick to it everywhere... If that
-> >> is not possible, I would like to understand why
-> >>
-> >
-> >Could you please elaborate what do you mean by " common + protocol or
-> >protocol + common, not both please!"?
-> >The order is same everywhere which is common + lane configuration for
-> >protocol 1 and then for protocol 2. For multiprotocol case, PHY configuration is
-> >based on which protocols are operating simultaneously. So e.g.
-> >[TYPE_QSGMII][TYPE_PCIE] -> QSGMII configuration when other protocol is
-> >PCIe Which might be different than [TYPE_QSGMII][TYPE_*] -> QSGMII
-> >configuration with other protocol.
-> >
-> >Thanks & regards,
-> >Swapnil
-> >
-> >> --
-> >> ~Vinod
-
--- 
-~Vinod

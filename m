@@ -2,146 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65F46ED02
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F0846ED04
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbhLIQ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbhLIQ1v (ORCPT
+        id S236171AbhLIQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:29:31 -0500
+Received: from outbound-smtp58.blacknight.com ([46.22.136.242]:42265 "EHLO
+        outbound-smtp58.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232776AbhLIQ3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:27:51 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218FC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 08:24:18 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id g17so14802105ybe.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 08:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TyvL9YX3JikjfEwvnMbTqan/wb4X4wF7RWIiupf6vyc=;
-        b=SXpLskh8ID9WUMu48p7COzm7XOWwZSI8zSjw2PIpwtRQ4RFUSbW9OdExgxyesXeWRE
-         jHd6QNSTNKTwMsSWh/mk0W2kKLb2uG6Oceccl1H3Z5UTrz+fj3bcLIT47lnk5ZTWpeND
-         7Tvd+GgLZf51WHnGpYZVZzYOMyQhBA5WHHXU4PDitEp9/JzC996EphPVHDtjogFWsbis
-         7SyPeKmKp1jTVQelWF6zJ1FzOnw7W0lL68MxhVABWCogVu38SKoir6o+aSPgN6vXM7yk
-         zP04lpq9+8Unq+BplFEnuh38QPuhx9KRQq8y5yrCnvCYNXz0p24gb9aDCGjjj77c0C51
-         D8MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TyvL9YX3JikjfEwvnMbTqan/wb4X4wF7RWIiupf6vyc=;
-        b=HdKxRF2Zba3rfptL2ulTKULfobY7DkV23rJQUZJ01DA7YRICfmox2nl55uTBNDqt8C
-         7c63rNwDNGDAh5tAeHcXllvtoqtQ+yWLh+umWKpsy6N5JFxWU3lD1W2TSPS3wu6RL0yX
-         6QMAPOF1T7QgVaH1hgF/eN+VMJHlEdT+Qc2+SkXXn9EZVCYHtIHgcs4IoT9D4m8/2xNK
-         Ie3inZ5iq88uTDJDy2NRCjeNWy7rNjHG03qp3g+LzNrKT3Pc4sdDsWZTRT/wk8RowpFj
-         7tiSCM0B6P/eGJMlC1i+vfET8bzO6Nmpxv4Lr0Z/djrMtpRjgoXd0rDOGFdTbJF/h6uW
-         ZshQ==
-X-Gm-Message-State: AOAM530Z8cS46ZEqlfVLNUMM3wAnheApptUuXet+PXFJyiSOy1Bxqevj
-        UEwnBQ/9DhrjOSBpIq36fHyL5xrSEc08Pm0XPqet+w==
-X-Google-Smtp-Source: ABdhPJzNvWXS1A5jCK7LOPHhMdyEnvfuKQORKBnUgVm497593BgIOQDrRAOYzhkTUIOoFvvu5thD/oCRJEDSh3hfWRo=
-X-Received: by 2002:a25:6ec5:: with SMTP id j188mr7418743ybc.602.1639067055146;
- Thu, 09 Dec 2021 08:24:15 -0800 (PST)
+        Thu, 9 Dec 2021 11:29:30 -0500
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp58.blacknight.com (Postfix) with ESMTPS id 5F96AFAC36
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:25:56 +0000 (GMT)
+Received: (qmail 14075 invoked from network); 9 Dec 2021 16:25:56 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 9 Dec 2021 16:25:56 -0000
+Date:   Thu, 9 Dec 2021 16:25:54 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     syzbot <syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] INFO: task can't die in reclaim_throttle
+Message-ID: <20211209162554.GO3366@techsingularity.net>
+References: <00000000000050185105d2ac05d2@google.com>
+ <d0a2acda-c939-73fa-477c-58a2d6bb28f7@suse.cz>
 MIME-Version: 1.0
-References: <20211208212211.2860249-1-surenb@google.com> <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
-In-Reply-To: <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 9 Dec 2021 08:24:04 -0800
-Message-ID: <CAJuCfpHwNS8RFPF9nzaSB8Br8Jah5_dcnQeatRZp60vmX5n6Vg@mail.gmail.com>
-Subject: Re: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <d0a2acda-c939-73fa-477c-58a2d6bb28f7@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> Do we want this on top?
+On Thu, Dec 09, 2021 at 03:51:00PM +0100, Vlastimil Babka wrote:
+> On 12/9/21 01:52, syzbot wrote:
+> > Hello,
+> 
+> + CC Mel
+> 
 
-As we discussed in this thread
-https://lore.kernel.org/all/YY4snVzZZZYhbigV@dhcp22.suse.cz,
-__oom_reap_task_mm in exit_mmap allows oom-reaper/process_mrelease to
-unmap pages in parallel with exit_mmap without blocking each other.
-Removal of __oom_reap_task_mm from exit_mmap prevents this parallelism
-and has a negative impact on performance. So the conclusion of that
-thread I thought was to keep that part. My understanding is that we
-also wanted to remove MMF_OOM_SKIP as a follow-up patch but
-__oom_reap_task_mm would stay.
+Should be fixed shortly in mmotm. Full diff as it stands is
 
-
-> ----
-> From 58b04ae6dc97b0105ea2651daca55cf2386f69b4 Mon Sep 17 00:00:00 2001
-> From: Michal Hocko <mhocko@suse.com>
-> Date: Thu, 9 Dec 2021 10:07:51 +0100
-> Subject: [PATCH] mm: drop MMF_OOM_SKIP from exit_mmap
->
-> MMF_OOM_SKIP used to play a synchronization role between exit_mmap and
-> oom repear in the past. Since the exclusive mmap_sem is held in
-> exit_mmap to cover all destructive operations the flag synchronization
-> is not needed anymore and we can safely drop it. Just make sure that
-> mm->mmap is set to NULL so that nobody will access the freed vma list.
->
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
-> ---
->  mm/mmap.c | 23 +----------------------
->  1 file changed, 1 insertion(+), 22 deletions(-)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index f4e09d390a07..0d6af9d89aa8 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -3129,28 +3129,6 @@ void exit_mmap(struct mm_struct *mm)
->         /* mm's last user has gone, and its about to be pulled down */
->         mmu_notifier_release(mm);
->
-> -       if (unlikely(mm_is_oom_victim(mm))) {
-> -               /*
-> -                * Manually reap the mm to free as much memory as possible.
-> -                * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
-> -                * this mm from further consideration.  Taking mm->mmap_lock for
-> -                * write after setting MMF_OOM_SKIP will guarantee that the oom
-> -                * reaper will not run on this mm again after mmap_lock is
-> -                * dropped.
-> -                *
-> -                * Nothing can be holding mm->mmap_lock here and the above call
-> -                * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-> -                * __oom_reap_task_mm() will not block.
-> -                *
-> -                * This needs to be done before calling unlock_range(),
-> -                * which clears VM_LOCKED, otherwise the oom reaper cannot
-> -                * reliably test it.
-> -                */
-> -               (void)__oom_reap_task_mm(mm);
-> -
-> -               set_bit(MMF_OOM_SKIP, &mm->flags);
-> -       }
-> -
->         mmap_write_lock(mm);
->         if (mm->locked_vm)
->                 unlock_range(mm->mmap, ULONG_MAX);
-> @@ -3180,6 +3158,7 @@ void exit_mmap(struct mm_struct *mm)
->                 vma = remove_vma(vma);
->                 cond_resched();
->         }
-> +       mm->mmap = NULL;
->         mmap_write_unlock(mm);
->         vm_unacct_memory(nr_accounted);
->  }
-> --
-> 2.30.2
->
-> --
-> Michal Hocko
-> SUSE Labs
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 58e744b78c2c..936dc0b6c226 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -277,6 +277,7 @@ enum vmscan_throttle_state {
+ 	VMSCAN_THROTTLE_WRITEBACK,
+ 	VMSCAN_THROTTLE_ISOLATED,
+ 	VMSCAN_THROTTLE_NOPROGRESS,
++	VMSCAN_THROTTLE_CONGESTED,
+ 	NR_VMSCAN_THROTTLE,
+ };
+ 
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index f25a6149d3ba..ca2e9009a651 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -30,12 +30,14 @@
+ #define _VMSCAN_THROTTLE_WRITEBACK	(1 << VMSCAN_THROTTLE_WRITEBACK)
+ #define _VMSCAN_THROTTLE_ISOLATED	(1 << VMSCAN_THROTTLE_ISOLATED)
+ #define _VMSCAN_THROTTLE_NOPROGRESS	(1 << VMSCAN_THROTTLE_NOPROGRESS)
++#define _VMSCAN_THROTTLE_CONGESTED	(1 << VMSCAN_THROTTLE_CONGESTED)
+ 
+ #define show_throttle_flags(flags)						\
+ 	(flags) ? __print_flags(flags, "|",					\
+ 		{_VMSCAN_THROTTLE_WRITEBACK,	"VMSCAN_THROTTLE_WRITEBACK"},	\
+ 		{_VMSCAN_THROTTLE_ISOLATED,	"VMSCAN_THROTTLE_ISOLATED"},	\
+-		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"}	\
++		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"},	\
++		{_VMSCAN_THROTTLE_CONGESTED,	"VMSCAN_THROTTLE_CONGESTED"}	\
+ 		) : "VMSCAN_THROTTLE_NONE"
+ 
+ 
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index fb9584641ac7..700434db5735 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1021,6 +1021,39 @@ static void handle_write_error(struct address_space *mapping,
+ 	unlock_page(page);
+ }
+ 
++static bool skip_throttle_noprogress(pg_data_t *pgdat)
++{
++	int reclaimable = 0, write_pending = 0;
++	int i;
++
++	/*
++	 * If kswapd is disabled, reschedule if necessary but do not
++	 * throttle as the system is likely near OOM.
++	 */
++	if (pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES)
++		return true;
++
++	/*
++	 * If there are a lot of dirty/writeback pages then do not
++	 * throttle as throttling will occur when the pages cycle
++	 * towards the end of the LRU if still under writeback.
++	 */
++	for (i = 0; i < MAX_NR_ZONES; i++) {
++		struct zone *zone = pgdat->node_zones + i;
++
++		if (!populated_zone(zone))
++			continue;
++
++		reclaimable += zone_reclaimable_pages(zone);
++		write_pending += zone_page_state_snapshot(zone,
++						  NR_ZONE_WRITE_PENDING);
++	}
++	if (2 * write_pending <= reclaimable)
++		return true;
++
++	return false;
++}
++
+ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
+ {
+ 	wait_queue_head_t *wqh = &pgdat->reclaim_wait[reason];
+@@ -1056,8 +1089,16 @@ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
+ 		}
+ 
+ 		break;
++	case VMSCAN_THROTTLE_CONGESTED:
++		fallthrough;
+ 	case VMSCAN_THROTTLE_NOPROGRESS:
+-		timeout = HZ/2;
++		if (skip_throttle_noprogress(pgdat)) {
++			cond_resched();
++			return;
++		}
++
++		timeout = 1;
++
+ 		break;
+ 	case VMSCAN_THROTTLE_ISOLATED:
+ 		timeout = HZ/50;
+@@ -3321,7 +3362,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	if (!current_is_kswapd() && current_may_throttle() &&
+ 	    !sc->hibernation_mode &&
+ 	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
+-		reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
++		reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
+ 
+ 	if (should_continue_reclaim(pgdat, sc->nr_reclaimed - nr_reclaimed,
+ 				    sc))
+@@ -3386,16 +3427,16 @@ static void consider_reclaim_throttle(pg_data_t *pgdat, struct scan_control *sc)
+ 	}
+ 
+ 	/*
+-	 * Do not throttle kswapd on NOPROGRESS as it will throttle on
+-	 * VMSCAN_THROTTLE_WRITEBACK if there are too many pages under
+-	 * writeback and marked for immediate reclaim at the tail of
+-	 * the LRU.
++	 * Do not throttle kswapd or cgroup reclaim on NOPROGRESS as it will
++	 * throttle on VMSCAN_THROTTLE_WRITEBACK if there are too many pages
++	 * under writeback and marked for immediate reclaim at the tail of the
++	 * LRU.
+ 	 */
+-	if (current_is_kswapd())
++	if (current_is_kswapd() || cgroup_reclaim(sc))
+ 		return;
+ 
+ 	/* Throttle if making no progress at high prioities. */
+-	if (sc->priority < DEF_PRIORITY - 2)
++	if (sc->priority == 1 && !sc->nr_reclaimed)
+ 		reclaim_throttle(pgdat, VMSCAN_THROTTLE_NOPROGRESS);
+ }
+ 
+@@ -3415,6 +3456,7 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
+ 	unsigned long nr_soft_scanned;
+ 	gfp_t orig_mask;
+ 	pg_data_t *last_pgdat = NULL;
++	pg_data_t *first_pgdat = NULL;
+ 
+ 	/*
+ 	 * If the number of buffer_heads in the machine exceeds the maximum
+@@ -3478,14 +3520,19 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
+ 			/* need some check for avoid more shrink_zone() */
+ 		}
+ 
++		if (!first_pgdat)
++			first_pgdat = zone->zone_pgdat;
++
+ 		/* See comment about same check for global reclaim above */
+ 		if (zone->zone_pgdat == last_pgdat)
+ 			continue;
+ 		last_pgdat = zone->zone_pgdat;
+ 		shrink_node(zone->zone_pgdat, sc);
+-		consider_reclaim_throttle(zone->zone_pgdat, sc);
+ 	}
+ 
++	if (first_pgdat)
++		consider_reclaim_throttle(first_pgdat, sc);
++
+ 	/*
+ 	 * Restore to original mask to avoid the impact on the caller if we
+ 	 * promoted it to __GFP_HIGHMEM.

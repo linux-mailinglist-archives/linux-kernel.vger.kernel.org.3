@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F1546E325
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A5B46E32A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbhLIH0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S233770AbhLIH0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbhLIH0g (ORCPT
+        with ESMTP id S233781AbhLIH0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:26:36 -0500
+        Thu, 9 Dec 2021 02:26:41 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068A3C0617A1;
-        Wed,  8 Dec 2021 23:23:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08841C061353;
+        Wed,  8 Dec 2021 23:23:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C43C2B823C2;
-        Thu,  9 Dec 2021 07:23:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C254C341C8;
-        Thu,  9 Dec 2021 07:22:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2EB1B823BC;
+        Thu,  9 Dec 2021 07:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E1EC341CC;
+        Thu,  9 Dec 2021 07:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639034581;
-        bh=rSW675GEEHzgpyGcUELORk6fFIYbBlwxF84ODxVvsZY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rcXf27U3U4J8SlR1UurnnqzenR8fOOyPTVoFFK0swifEF1THOqt3QJyy+UeOheaaO
-         HtH4fPQ628DAm+sXT8pSNI6/hsqp6ED6eYvLeHGNTEdd1WF7m4cNkoc/gR+HEVXr62
-         Oq88dUmz1fP1/3K3lwsHHdHS5P7L60jW5i1Qgu0N/w4xCuNUmpAJcioCocsDrg4wuC
-         4x2rG8LDBtkM8DoahG8xGQqLPkqNjUmvceoACfenFfDlOqHUmqOJCICim2E1YzFAC1
-         AdQQ/U/mcQdHfWigjHecV8Rm4oah5a0FCYt2WaF6YBE795nuKuKs6PsKYD3yhlCSG6
-         tr2NfItXqXyvg==
+        s=k20201202; t=1639034585;
+        bh=1J5pwfTiUMMuBJ6Mwg8ExZKlUrvw41O5UUyaCOGaFOQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E0VzZ4VnW1eEc8thSvSCdkVlP/m0kZZPDZF8iI/x4DfAfXrtMwdc5nqSP9OxVHf2Y
+         50GceTZGyCl5/uPTc2hmb2L6VWImZlbakr8W0zTcFV5GNyxWuzr1DCMDF37/nE+KOV
+         VYHgE7pg6dBfL7KsodNWw9f6SFDmBFxO1qvt6NP5Y3NXyv3X+UPnGaGTe1MJCKkwkv
+         uXzIkJB9YN+F2UavH4ZTIz9hZjm/VLKKxMmkWh3r6tw80R4IQcT4MALHteUhiwNsJO
+         2B+5tLRbp5BlKmlB2bIISnh7LYGbH8t4WGX5xw3S7XSeaRDX3RTX2mFsUiz4njRHdq
+         BYeibRt+FM5ow==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -40,39 +40,227 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Odelu Kukatla <okukatla@codeaurora.org>, viveka@codeaurora.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] Add interconnect support for SM8450
-Date:   Thu,  9 Dec 2021 12:52:49 +0530
-Message-Id: <20211209072251.185634-1-vkoul@kernel.org>
+Subject: [PATCH v2 1/2] dt-bindings: interconnect: Add Qualcomm SM8450 DT bindings
+Date:   Thu,  9 Dec 2021 12:52:50 +0530
+Message-Id: <20211209072251.185634-2-vkoul@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211209072251.185634-1-vkoul@kernel.org>
+References: <20211209072251.185634-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This add device tree binding and driver for interconnect providers found in
-SM8450 SoC.
+The Qualcomm SM8450 SoC has several bus fabrics that could be
+controlled and tuned dynamically according to the bandwidth demand
 
-Changes in v2:
- - remove sync state call
- - Make dt binding dual license
- - Fix the indexes to start from 0
-
-Vinod Koul (2):
-  dt-bindings: interconnect: Add Qualcomm SM8450 DT bindings
-  interconnect: qcom: Add SM8450 interconnect provider driver
-
- .../bindings/interconnect/qcom,rpmh.yaml      |   11 +
- drivers/interconnect/qcom/Kconfig             |    9 +
- drivers/interconnect/qcom/Makefile            |    2 +
- drivers/interconnect/qcom/sm8450.c            | 1987 +++++++++++++++++
- drivers/interconnect/qcom/sm8450.h            |  169 ++
- .../dt-bindings/interconnect/qcom,sm8450.h    |  171 ++
- 6 files changed, 2349 insertions(+)
- create mode 100644 drivers/interconnect/qcom/sm8450.c
- create mode 100644 drivers/interconnect/qcom/sm8450.h
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ .../bindings/interconnect/qcom,rpmh.yaml      |  11 ++
+ .../dt-bindings/interconnect/qcom,sm8450.h    | 171 ++++++++++++++++++
+ 2 files changed, 182 insertions(+)
  create mode 100644 include/dt-bindings/interconnect/qcom,sm8450.h
 
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+index 3fd1a134162d..cbb24f9bb609 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+@@ -104,6 +104,17 @@ properties:
+       - qcom,sm8350-mmss-noc
+       - qcom,sm8350-compute-noc
+       - qcom,sm8350-system-noc
++      - qcom,sm8450-aggre1-noc
++      - qcom,sm8450-aggre2-noc
++      - qcom,sm8450-clk-virt
++      - qcom,sm8450-config-noc
++      - qcom,sm8450-gem-noc
++      - qcom,sm8450-lpass-ag-noc
++      - qcom,sm8450-mc-virt
++      - qcom,sm8450-mmss-noc
++      - qcom,sm8450-nsp-noc
++      - qcom,sm8450-pcie-anoc
++      - qcom,sm8450-system-noc
+ 
+   '#interconnect-cells':
+     enum: [ 1, 2 ]
+diff --git a/include/dt-bindings/interconnect/qcom,sm8450.h b/include/dt-bindings/interconnect/qcom,sm8450.h
+new file mode 100644
+index 000000000000..786fce091c84
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,sm8450.h
+@@ -0,0 +1,171 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021, Linaro Limited
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM8450_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_SM8450_H
++
++#define MASTER_QSPI_0				1
++#define MASTER_QUP_1				2
++#define MASTER_A1NOC_CFG			3
++#define MASTER_SDCC_4				4
++#define MASTER_UFS_MEM				5
++#define MASTER_USB3_0				6
++#define SLAVE_A1NOC_SNOC			7
++#define SLAVE_SERVICE_A1NOC			8
++
++#define	MASTER_QDSS_BAM				1
++#define	MASTER_QUP_0				2
++#define	MASTER_QUP_2				3
++#define	MASTER_A2NOC_CFG			4
++#define	MASTER_CRYPTO				5
++#define	MASTER_IPA				6
++#define	MASTER_SENSORS_PROC			7
++#define	MASTER_SP				8
++#define	MASTER_QDSS_ETR				9
++#define	MASTER_QDSS_ETR_1			10
++#define	MASTER_SDCC_2				11
++#define	SLAVE_A2NOC_SNOC			12
++#define	SLAVE_SERVICE_A2NOC			13
++
++#define MASTER_QUP_CORE_0			1
++#define MASTER_QUP_CORE_1			2
++#define MASTER_QUP_CORE_2			3
++#define SLAVE_QUP_CORE_0			4
++#define SLAVE_QUP_CORE_1			5
++#define SLAVE_QUP_CORE_2			6
++
++#define	MASTER_GEM_NOC_CNOC			1
++#define	MASTER_GEM_NOC_PCIE_SNOC		2
++#define	SLAVE_AHB2PHY_SOUTH			3
++#define	SLAVE_AHB2PHY_NORTH			4
++#define	SLAVE_AOSS			        5
++#define	SLAVE_CAMERA_CFG			6
++#define	SLAVE_CLK_CTL			        7
++#define	SLAVE_CDSP_CFG			        8
++#define	SLAVE_RBCPR_CX_CFG			9
++#define	SLAVE_RBCPR_MMCX_CFG			10
++#define	SLAVE_RBCPR_MXA_CFG			11
++#define	SLAVE_RBCPR_MXC_CFG			12
++#define	SLAVE_CRYPTO_0_CFG			13
++#define	SLAVE_CX_RDPM				14
++#define	SLAVE_DISPLAY_CFG			15
++#define	SLAVE_GFX3D_CFG			        16
++#define	SLAVE_IMEM_CFG			        17
++#define	SLAVE_IPA_CFG			        18
++#define	SLAVE_IPC_ROUTER_CFG			19
++#define	SLAVE_LPASS			        20
++#define	SLAVE_CNOC_MSS			        21
++#define	SLAVE_MX_RDPM				22
++#define	SLAVE_PCIE_0_CFG			23
++#define	SLAVE_PCIE_1_CFG			24
++#define	SLAVE_PDM				25
++#define	SLAVE_PIMEM_CFG				26
++#define	SLAVE_PRNG				27
++#define	SLAVE_QDSS_CFG				28
++#define	SLAVE_QSPI_0				29
++#define	SLAVE_QUP_0				30
++#define	SLAVE_QUP_1				31
++#define	SLAVE_QUP_2				32
++#define	SLAVE_SDCC_2				33
++#define	SLAVE_SDCC_4				34
++#define	SLAVE_SPSS_CFG				35
++#define	SLAVE_TCSR				36
++#define	SLAVE_TLMM				37
++#define	SLAVE_TME_CFG				38
++#define	SLAVE_UFS_MEM_CFG			39
++#define	SLAVE_USB3_0				40
++#define	SLAVE_VENUS_CFG				41
++#define	SLAVE_VSENSE_CTRL_CFG			42
++#define	SLAVE_A1NOC_CFG				43
++#define	SLAVE_A2NOC_CFG				44
++#define	SLAVE_DDRSS_CFG				45
++#define	SLAVE_CNOC_MNOC_CFG			46
++#define	SLAVE_PCIE_ANOC_CFG			47
++#define	SLAVE_SNOC_CFG				48
++#define	SLAVE_IMEM				49
++#define	SLAVE_PIMEM				50
++#define	SLAVE_SERVICE_CNOC			51
++#define	SLAVE_PCIE_0				52
++#define	SLAVE_PCIE_1				53
++#define	SLAVE_QDSS_STM				54
++#define	SLAVE_TCU				55
++
++#define MASTER_GPU_TCU				1
++#define MASTER_SYS_TCU				2
++#define MASTER_APPSS_PROC			3
++#define MASTER_GFX3D				4
++#define MASTER_MSS_PROC				5
++#define MASTER_MNOC_HF_MEM_NOC			6
++#define MASTER_MNOC_SF_MEM_NOC			7
++#define MASTER_COMPUTE_NOC			8
++#define MASTER_ANOC_PCIE_GEM_NOC		9
++#define MASTER_SNOC_GC_MEM_NOC			10
++#define MASTER_SNOC_SF_MEM_NOC			11
++#define SLAVE_GEM_NOC_CNOC			12
++#define SLAVE_LLCC				13
++#define SLAVE_MEM_NOC_PCIE_SNOC			14
++#define MASTER_MNOC_HF_MEM_NOC_DISP		15
++#define MASTER_MNOC_SF_MEM_NOC_DISP		16
++#define MASTER_ANOC_PCIE_GEM_NOC_DISP		17
++#define SLAVE_LLCC_DISP				18
++
++#define MASTER_CNOC_LPASS_AG_NOC		1
++#define MASTER_LPASS_PROC			2
++#define SLAVE_LPASS_CORE_CFG			3
++#define SLAVE_LPASS_LPI_CFG			4
++#define SLAVE_LPASS_MPU_CFG			5
++#define SLAVE_LPASS_TOP_CFG			6
++#define SLAVE_LPASS_SNOC			7
++#define SLAVE_SERVICES_LPASS_AML_NOC		8
++#define SLAVE_SERVICE_LPASS_AG_NOC		9
++
++#define MASTER_LLCC				1
++#define SLAVE_EBI1				2
++#define MASTER_LLCC_DISP			3
++#define SLAVE_EBI1_DISP				4
++
++#define MASTER_CAMNOC_HF			1
++#define MASTER_CAMNOC_ICP			2
++#define MASTER_CAMNOC_SF			3
++#define MASTER_MDP				4
++#define MASTER_CNOC_MNOC_CFG			5
++#define MASTER_ROTATOR				6
++#define MASTER_CDSP_HCP				7
++#define MASTER_VIDEO				8
++#define MASTER_VIDEO_CV_PROC			9
++#define MASTER_VIDEO_PROC			10
++#define MASTER_VIDEO_V_PROC			11
++#define SLAVE_MNOC_HF_MEM_NOC			12
++#define SLAVE_MNOC_SF_MEM_NOC			13
++#define SLAVE_SERVICE_MNOC			14
++#define MASTER_MDP_DISP				15
++#define MASTER_ROTATOR_DISP			16
++#define SLAVE_MNOC_HF_MEM_NOC_DISP		17
++#define SLAVE_MNOC_SF_MEM_NOC_DISP		18
++
++#define MASTER_CDSP_NOC_CFG			1
++#define MASTER_CDSP_PROC			2
++#define SLAVE_CDSP_MEM_NOC			3
++#define SLAVE_SERVICE_NSP_NOC			4
++
++#define MASTER_PCIE_ANOC_CFG			1
++#define MASTER_PCIE_0				2
++#define MASTER_PCIE_1				3
++#define SLAVE_ANOC_PCIE_GEM_NOC			4
++#define SLAVE_SERVICE_PCIE_ANOC			5
++
++#define MASTER_GIC_AHB				1
++#define MASTER_A1NOC_SNOC			2
++#define MASTER_A2NOC_SNOC			3
++#define MASTER_LPASS_ANOC			4
++#define MASTER_SNOC_CFG				5
++#define MASTER_PIMEM				6
++#define MASTER_GIC				7
++#define SLAVE_SNOC_GEM_NOC_GC			8
++#define SLAVE_SNOC_GEM_NOC_SF			9
++#define SLAVE_SERVICE_SNOC			10
++
++#endif
 -- 
 2.31.1
 

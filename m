@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B456946E57F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9183846E584
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbhLIJ2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:28:10 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:38970 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbhLIJ2K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:28:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 63EC91FCA3;
-        Thu,  9 Dec 2021 09:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639041876; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KHvKhWni52gq8fTpBe8ZSLs4caJB+E+6F/Ed6jyGY7c=;
-        b=NORe5kboymQbuRxjx03ZsJ6KYm+M0Z1dsjHcA279+Xv7YKR234v4I3WX+CIloCutXx31Kp
-        06oXLvFQYbn/a0NjpfkqZg1j2lLZuCSmxi+TT+myqnYP//NXnb4T5jLDe055HEWfZnO/8Z
-        uacRg54VzrPTVKtb5CDSjQAZKlIMlFE=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 47538A3B94;
-        Thu,  9 Dec 2021 09:24:36 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 10:24:36 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     akpm@linux-foundation.org, valentin.schneider@arm.com,
-        peterz@infradead.org, keescook@chromium.org,
-        robdclark@chromium.org, samitolvanen@google.com,
+        id S236065AbhLIJ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:29:41 -0500
+Received: from elvis.franken.de ([193.175.24.41]:38012 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233247AbhLIJ3k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:29:40 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mvFgg-0001er-01; Thu, 09 Dec 2021 10:26:02 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4CC51C4E1D; Thu,  9 Dec 2021 10:24:47 +0100 (CET)
+Date:   Thu, 9 Dec 2021 10:24:47 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kthread: potential dereference of null pointer
-Message-ID: <YbHLVJ84QXxZdTqD@alley>
-References: <20211209064314.2074885-1-jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH v2] MIPS: Only define pci_remap_iospace() for Ralink
+Message-ID: <20211209092447.GB6981@alpha.franken.de>
+References: <1638955639-3584-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209064314.2074885-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <1638955639-3584-1-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2021-12-09 14:43:14, Jiasheng Jiang wrote:
-> The return value of kzalloc() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
+On Wed, Dec 08, 2021 at 05:27:19PM +0800, Tiezhu Yang wrote:
+> After commit 9f76779f2418 ("MIPS: implement architecture-specific
+> 'pci_remap_iospace()'"), there exists the following warning on the
+> Loongson64 platform:
 > 
-> Fixes: dc6a87f5450d ("sched: Make the idle task quack like a per-CPU
-> kthread")
-
-The hash id looks wrong:
-
-$> git log -p -1 dc6a87f5450d
-fatal: ambiguous argument 'dc6a87f5450d': unknown revision or path not in the working tree.
-
-
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>     loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
+>     loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+>     ------------[ cut here ]------------
+>     WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
+>     resource start address is not zero
+>     ...
+>     Call Trace:
+>     [<ffffffff8020dc78>] show_stack+0x40/0x120
+>     [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
+>     [<ffffffff8023a0b0>] __warn+0xe0/0x110
+>     [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
+>     [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
+>     [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
+>     [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
+>     [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
+>     [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
+>     [<ffffffff809203cc>] platform_probe+0x6c/0xe0
+>     [<ffffffff8091d5d4>] really_probe+0xbc/0x340
+>     [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
+>     [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
+>     [<ffffffff8091dea0>] __driver_attach+0x80/0x118
+>     [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
+>     [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
+>     [<ffffffff8091ead4>] driver_register+0x8c/0x150
+>     [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
+>     [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
+>     [<ffffffff80cfc380>] kernel_init+0x2c/0x134
+>     [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
+>     ---[ end trace e4a0efe10aa5cce6 ]---
+>     loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
+> 
+> We can see that the resource start address is 0x0000020000, because
+> the ISA Bridge used the zero address which is defined in the dts file
+> arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
+> 
+>     ISA Bridge: /bus@10000000/isa@18000000
+>     IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
+> 
+> Based on the above analysis, the architecture-specific pci_remap_iospace()
+> is not suitable for Loongson64, we should only define pci_remap_iospace()
+> for Ralink on MIPS based on the commit background.
+> 
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  kernel/kthread.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index 08931e525dd9..3feefeff4922 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -101,6 +101,8 @@ void set_kthread_struct(struct task_struct *p)
->  		return;
->  
->  	kthread = kzalloc(sizeof(*kthread), GFP_KERNEL);
-> +	if (!kthread)
-> +		return;
+>  arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+>  arch/mips/include/asm/pci.h                | 4 ----
+>  arch/mips/pci/pci-generic.c                | 2 ++
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 
-This does not have any effect. It will only skip the assignment:
+applied to mips-fixes.
 
-	p->set_child_tid = (__force void __user *)kthread;
+Thomas.
 
-But we are here only when p->set_child_tid is already NULL
-because of the above check:
-
-	if (__to_kthread(p))
-		return;
-
-
->  	/*
->  	 * We abuse ->set_child_tid to avoid the new member and because it
->  	 * can't be wrongly copied by copy_process(). We also rely on fact
-
-By other words. The change does not harm but it is not needed either.
-Anyway, the commit message is misleading. It suggests that it fixes
-something but it is not true.
-
-I would personally keep the code as is. The original code makes it
-more clear that the allocation failure is not handled.
-
-Best Regards,
-Petr
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

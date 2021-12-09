@@ -2,145 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491BD46E073
+	by mail.lfdr.de (Postfix) with ESMTP id 956B446E077
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237837AbhLIBzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:55:20 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62774 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229680AbhLIBzT (ORCPT
+        id S238198AbhLIBzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233346AbhLIBzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Dec 2021 20:55:19 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8NpFij020559;
-        Thu, 9 Dec 2021 01:51:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lzNkL6HlG8uoD4LD2dknfufOrMTAzaPjmA2GavdwoYk=;
- b=bGfF52MtqCIan3T31khGXLZ5V9SQmsU4tNjRDTsPk0R+5fMLn2gtnBKPbdfDuVa5s9QK
- XmTVr0wMHAec3IqMumy0uRK150V/ZkYtf4Px4RsbTrVM9NS2NME5CgfEGqgnV82aUZ00
- papvyzMMEPdotAsvuLc65+p4/1d6b7TvD2FdY3ubuGHJYgUW4w64dSV5iQqjf1stp22s
- j91697c2DmCOoxj+0FsETRnoxKIVyspCZ/X0ets/IywZblS6I8ZBW/n5mKd5sRTVMANF
- C8GODj+RezSazeQblBkrne22Q7MD+gT2+p8iZAbeqaa2y20zWnjaUpcNtyfi0g7Nsbgn 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88we-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:51:01 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B91k8st023060;
-        Thu, 9 Dec 2021 01:51:00 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88w2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:51:00 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B91mA8k014682;
-        Thu, 9 Dec 2021 01:50:59 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma04dal.us.ibm.com with ESMTP id 3cqyybtxwq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:50:59 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B91ovro28115566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 01:50:57 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00C6BC6063;
-        Thu,  9 Dec 2021 01:50:57 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1C6DC6062;
-        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
-Received: from [9.211.91.166] (unknown [9.211.91.166])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
-Message-ID: <b5e6ec36-a9ec-22f4-be58-28d48bdc38b4@linux.vnet.ibm.com>
-Date:   Wed, 8 Dec 2021 20:50:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020F3C061746;
+        Wed,  8 Dec 2021 17:51:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74FD8B8236F;
+        Thu,  9 Dec 2021 01:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75921C00446;
+        Thu,  9 Dec 2021 01:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639014704;
+        bh=5T0ucDpr39HCf8PypsCLt5HtRmXScmsEPR83rW4e950=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RYzHYbDzTs3jYNk+W5eTmiXbOhiozCA41/Erv8HRyDqrnhFPKC9OEd4iZWnpYJUNO
+         pS5lFHtiuHzaxlMwk/1CQfsb6etPcxjqmpqZWs1VXWXxSFncbYzNqaMAiTj+oyVo2k
+         i/Ou7QVxMlbBC7bhxogc21fbJr/e8QJcuoS30iz/+wD0XbJwo9LL6EnGVtd2p0GEzj
+         6hLKL27k+MshR0bsUZjU8orNwQ3rmfrqqw4DFSSBW+Ies3IKq4aIW5qBPf+kVKiGTW
+         W2Jj5UjhNGScILNtxukzyKWA0mBs4OUvTPkNzYK+nTD5R8Sg8yaCnEJcGccy1ECuC9
+         j+uHFjmarYwHA==
+Date:   Wed, 8 Dec 2021 17:51:42 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
+Subject: Re: [PATCH net-next v7 5/6] stmmac: dwmac-mediatek: add support for
+ mt8195
+Message-ID: <20211208175142.1b63afea@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <39aa23e1a48bc36a631b3074af2abfd5d1e2256d.camel@mediatek.com>
+References: <20211208054716.603-1-biao.huang@mediatek.com>
+        <20211208054716.603-6-biao.huang@mediatek.com>
+        <20211208063820.264df62d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <39aa23e1a48bc36a631b3074af2abfd5d1e2256d.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Content-Language: en-US
-To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <cover.1637862358.git.msuchanek@suse.de>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xrnPnY685HKWDzMtt8FN4mvhzwUwSKub
-X-Proofpoint-ORIG-GUID: PnjZLCiMbUjVAQT56miJWZSqnDdO6KM6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_01,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=984
- lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0
- impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090006
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 9 Dec 2021 09:48:25 +0800 Biao Huang wrote:
+> Sorry for some typo in previous reply, fix it here.
+> 
+> All these warning lines share a similar semantics:
+> delay_val |= FIELD_PREP(xxx, !!val);
+> 
+> and, should come from the expansion of FIELD_PREP in
+> include/linux/bitfiled.h:
+> 
+>   FIELD _PREP --> __BF_FILED_CHECK --> "~((_mask) >> __bf_shf(_mask)) &
+> (_val) : 0,"
+> 
+> ===============================================================
+> __BF_FILED_CHECK {
+> ...
+>   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+>                    ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
+>                    _pfx "value too large for the field"); \ ...
+> ===============================================================
+> 
+> Should I fix it by converting
+>   delay_val |= FIELD_PREP(ETH_DLY_TXC_ENABLE, !!mac_delay->tx_delay);
+> to
+>   en_val = !!mac_delay->tx_delay;
+>   delay_val |= FIELD_PREP(ETH_DLY_TXC_ENABLE, en_val);
+> 
+> or other suggestions for these warnings?
 
-On 11/25/21 13:02, Michal Suchanek wrote:
-> Hello,
-
-Hi Michael,
-
->
-> This is resend of the KEXEC_SIG patchset.
->
-> The first patch is new because it'a a cleanup that does not require any
-> change to the module verification code.
->
-> The second patch is the only one that is intended to change any
-> functionality.
->
-> The rest only deduplicates code but I did not receive any review on that
-> part so I don't know if it's desirable as implemented.
->
-> The first two patches can be applied separately without the rest.
-
-Patch 2 fails to apply on v5.16-rc4. Can you please also include git 
-tree/branch while posting the patches ?
-
-Secondly, I see that you add the powerpc support in Patch 2 and then 
-modify it again in Patch 5 after cleanup. Why not add the support for 
-powerpc after the clean up ? This will reduce some rework and also 
-probably simplify patches.
-
-Thanks & Regards,
-
-      - Nayna
-
+I see, thanks for explaining. The code is fine, we can simply ignore
+this warning IMHO.

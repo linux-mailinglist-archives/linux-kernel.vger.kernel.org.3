@@ -2,839 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DE046F151
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE47846F14C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242660AbhLIROp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:14:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21565 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242650AbhLIROf (ORCPT
+        id S242634AbhLIROe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239053AbhLIROa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:14:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639069860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DIQeaQcMb0jtSH18/09K1MM5NrN+yUn/8nNa+i3pnXs=;
-        b=CzD0f90tkntetPHt4D5MZAD9pC7Fjr++W6JSTNwnnHFWMu+3Yl8fUUZ3Y66uujPIrlYX2O
-        RWkkHelEQ5MQdDQv0PDmXKUgqRwYSsruIm5NQ3d9GHTtRu/VMAqNlhMXhM0j3vufPWQouc
-        SV1ThUVXYrK0t8ACXLK29AEBNpaNhc4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-291-wMof0OgBNEyiv2w4ZR5njw-1; Thu, 09 Dec 2021 12:10:55 -0500
-X-MC-Unique: wMof0OgBNEyiv2w4ZR5njw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D354D1927803;
-        Thu,  9 Dec 2021 17:10:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 98ADB19C59;
-        Thu,  9 Dec 2021 17:10:43 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v2 65/67] ceph: conversion to new fscache API
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 17:10:42 +0000
-Message-ID: <163906984277.143852.14697110691303589000.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Thu, 9 Dec 2021 12:14:30 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C73C0617A1;
+        Thu,  9 Dec 2021 09:10:56 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id i12so4757503wmq.4;
+        Thu, 09 Dec 2021 09:10:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Eey3ZpemVIQey3aUEzHauqKMAedPhaSMvKYTLO4vJR4=;
+        b=Qr3xahMG7jgbSv1CijjihRMn2tiI3uX2hR/Gkaf/95cs09uLEwDwKhlBxwc6pVw1vh
+         4CRnzMxg878ulkS/uKwKFyds2J0OIOmS45QKqBFNhii84FJO5Fpx/ZhV+/G0a5RBpukV
+         pKeQD5arDVdJaCNyZ1LegrU9/sxVSzi1B2R1sLN+yDSlEiCHt+RsmFah+W9J2utelPj3
+         d3SrFVfAR4moqxHbJNlwGIve7w/XnP6/ELecyY5YS7wKd38IV+KCvGPZJgPjOJH5Ar6L
+         Tz4+FmbMFpajSuO9eCUcMpsCfb+rL/u/WquNC7DRyB2leWQRL6kv8l68Cj3HQsjuECZV
+         OHDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Eey3ZpemVIQey3aUEzHauqKMAedPhaSMvKYTLO4vJR4=;
+        b=I8R7OeACJxezrmy38mq5p/drxF/coaOCno2YMqNGb0/N7wknstZ0v3/HUZbVUwHvuB
+         Zv+Sdu3huCQyi7gPsr5BtEZLvdh634ix9AutrFbADZsym5ylptJnOhBxDgNleBUJcDSN
+         heMijvHzh9s4nCpD9bM1Cmw+cUK1pbjQZK+QTkndPUOW2jpL/RZeux6/BTP2KylaweYQ
+         hoImmaQGdPw0baqwj/wD/OxQHo5T0HH7QcDz7Mvr4TnXs+xWdQPlu/tl5zbQ9Lzpegrb
+         ZYyz2I3P9AtbmuU6S0TVrzaRQdaHqxcJL/usKdmPmimIFjWb30ULmffQQarh1v7acNoy
+         68HQ==
+X-Gm-Message-State: AOAM532wDGAvdWYm7pedd31txIQxH9fVJDuFNkZVQDnzWN2Q9JTll6ho
+        HE1sLAJ8MkocWnhu4SoYRMQ=
+X-Google-Smtp-Source: ABdhPJxHfxQx2i1K4jKrLcQ+S1rdfCLHuZD0YQJBWS/cYW5VUOZTrDT446KMNTbFtpsPPGA6oOJLBA==
+X-Received: by 2002:a05:600c:1d01:: with SMTP id l1mr9141930wms.44.1639069854820;
+        Thu, 09 Dec 2021 09:10:54 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id z8sm275504wrh.54.2021.12.09.09.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 09:10:53 -0800 (PST)
+Date:   Thu, 9 Dec 2021 18:10:50 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     dan.j.williams@intel.com, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, jonathanh@nvidia.com,
+        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        vkoul@kernel.org, Pavan Kunapuli <pkunapuli@nvidia.com>
+Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Message-ID: <YbI4mtV3npK87c26@orome>
+References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
+ <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7mqnZnHDnajOmsOv"
+Content-Disposition: inline
+In-Reply-To: <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
 
-Now that the fscache API has been reworked and simplified, change ceph
-over to use it.
+--7mqnZnHDnajOmsOv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With the old API, we would only instantiate a cookie when the file was
-open for reads. Change it to instantiate the cookie when the inode is
-instantiated and call use/unuse when the file is opened/closed.
+On Mon, Dec 06, 2021 at 06:30:37PM +0530, Akhil R wrote:
+> Adding GPC DMA controller driver for Tegra186 and Tegra194. The driver
+> supports dma transfers between memory to memory, IO peripheral to memory
+> and memory to IO peripheral.
+>=20
+> Signed-off-by: Pavan Kunapuli <pkunapuli@nvidia.com>
+> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  drivers/dma/Kconfig            |   12 +
+>  drivers/dma/Makefile           |    1 +
+>  drivers/dma/tegra186-gpc-dma.c | 1284 ++++++++++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 1297 insertions(+)
+>  create mode 100644 drivers/dma/tegra186-gpc-dma.c
+>=20
+> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+> index 80c2c03..35095ae 100644
+> --- a/drivers/dma/Kconfig
+> +++ b/drivers/dma/Kconfig
+> @@ -629,6 +629,18 @@ config TXX9_DMAC
+>  	  Support the TXx9 SoC internal DMA controller.  This can be
+>  	  integrated in chips such as the Toshiba TX4927/38/39.
+> =20
+> +config TEGRA186_GPC_DMA
+> +	tristate "NVIDIA Tegra GPC DMA support"
+> +	depends on ARCH_TEGRA_186_SOC || ARCH_TEGRA_194_SOC || COMPILE_TEST
 
-Also, ensure we resize the cached data on truncates, and invalidate the
-cache in response to the appropriate events. This will allow us to
-plumb in write support later.
+I wonder if we want to maybe make this depend on ARCH_TEGRA instead to
+avoid having to add dependencies on newer SoCs (presumably Tegra234 will
+feature this GPC DMA as well).
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
----
+Not worth a respin, but perhaps something to consider when adding
+Tegra234 support.
 
- fs/ceph/Kconfig |    2 -
- fs/ceph/addr.c  |   34 +++++----
- fs/ceph/cache.c |  218 +++++++++++++++----------------------------------------
- fs/ceph/cache.h |   97 +++++++++++++++++-------
- fs/ceph/caps.c  |    3 +
- fs/ceph/file.c  |   13 +++
- fs/ceph/inode.c |   22 ++++--
- fs/ceph/super.c |   10 ---
- fs/ceph/super.h |    3 -
- 9 files changed, 178 insertions(+), 224 deletions(-)
+Thierry
 
-diff --git a/fs/ceph/Kconfig b/fs/ceph/Kconfig
-index 61f123356c3e..94df854147d3 100644
---- a/fs/ceph/Kconfig
-+++ b/fs/ceph/Kconfig
-@@ -21,7 +21,7 @@ config CEPH_FS
- if CEPH_FS
- config CEPH_FSCACHE
- 	bool "Enable Ceph client caching support"
--	depends on CEPH_FS=m && FSCACHE_OLD_API || CEPH_FS=y && FSCACHE_OLD_API=y
-+	depends on CEPH_FS=m && FSCACHE || CEPH_FS=y && FSCACHE=y
- 	help
- 	  Choose Y here to enable persistent, read-only local
- 	  caching support for Ceph clients using FS-Cache
-diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
-index e53c8541f5b2..0ffc4c8d7c10 100644
---- a/fs/ceph/addr.c
-+++ b/fs/ceph/addr.c
-@@ -126,7 +126,7 @@ static int ceph_set_page_dirty(struct page *page)
- 	BUG_ON(PagePrivate(page));
- 	attach_page_private(page, snapc);
- 
--	return __set_page_dirty_nobuffers(page);
-+	return ceph_fscache_set_page_dirty(page);
- }
- 
- /*
-@@ -141,8 +141,6 @@ static void ceph_invalidatepage(struct page *page, unsigned int offset,
- 	struct ceph_inode_info *ci;
- 	struct ceph_snap_context *snapc;
- 
--	wait_on_page_fscache(page);
--
- 	inode = page->mapping->host;
- 	ci = ceph_inode(inode);
- 
-@@ -153,28 +151,36 @@ static void ceph_invalidatepage(struct page *page, unsigned int offset,
- 	}
- 
- 	WARN_ON(!PageLocked(page));
--	if (!PagePrivate(page))
--		return;
-+	if (PagePrivate(page)) {
-+		dout("%p invalidatepage %p idx %lu full dirty page\n",
-+		     inode, page, page->index);
- 
--	dout("%p invalidatepage %p idx %lu full dirty page\n",
--	     inode, page, page->index);
-+		snapc = detach_page_private(page);
-+		ceph_put_wrbuffer_cap_refs(ci, 1, snapc);
-+		ceph_put_snap_context(snapc);
-+	}
- 
--	snapc = detach_page_private(page);
--	ceph_put_wrbuffer_cap_refs(ci, 1, snapc);
--	ceph_put_snap_context(snapc);
-+	wait_on_page_fscache(page);
- }
- 
- static int ceph_releasepage(struct page *page, gfp_t gfp)
- {
--	dout("%p releasepage %p idx %lu (%sdirty)\n", page->mapping->host,
--	     page, page->index, PageDirty(page) ? "" : "not ");
-+	struct inode *inode = page->mapping->host;
-+
-+	dout("%llx:%llx releasepage %p idx %lu (%sdirty)\n",
-+	     ceph_vinop(inode), page,
-+	     page->index, PageDirty(page) ? "" : "not ");
-+
-+	if (PagePrivate(page))
-+		return 0;
- 
- 	if (PageFsCache(page)) {
--		if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS))
-+		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
- 			return 0;
- 		wait_on_page_fscache(page);
- 	}
--	return !PagePrivate(page);
-+	ceph_fscache_note_page_release(inode);
-+	return 1;
- }
- 
- static void ceph_netfs_expand_readahead(struct netfs_read_request *rreq)
-diff --git a/fs/ceph/cache.c b/fs/ceph/cache.c
-index 457afda5498a..a01cbb4c06d0 100644
---- a/fs/ceph/cache.c
-+++ b/fs/ceph/cache.c
-@@ -12,199 +12,99 @@
- #include "super.h"
- #include "cache.h"
- 
--struct fscache_netfs ceph_cache_netfs = {
--	.name		= "ceph",
--	.version	= 0,
--};
--
--static DEFINE_MUTEX(ceph_fscache_lock);
--static LIST_HEAD(ceph_fscache_list);
--
--struct ceph_fscache_entry {
--	struct list_head list;
--	struct fscache_cookie *fscache;
--	size_t uniq_len;
--	/* The following members must be last */
--	struct ceph_fsid fsid;
--	char uniquifier[];
--};
--
--static const struct fscache_cookie_def ceph_fscache_fsid_object_def = {
--	.name		= "CEPH.fsid",
--	.type		= FSCACHE_COOKIE_TYPE_INDEX,
--};
--
--int __init ceph_fscache_register(void)
--{
--	return fscache_register_netfs(&ceph_cache_netfs);
--}
--
--void ceph_fscache_unregister(void)
--{
--	fscache_unregister_netfs(&ceph_cache_netfs);
--}
--
--int ceph_fscache_register_fs(struct ceph_fs_client* fsc, struct fs_context *fc)
-+void ceph_fscache_register_inode_cookie(struct inode *inode)
- {
--	const struct ceph_fsid *fsid = &fsc->client->fsid;
--	const char *fscache_uniq = fsc->mount_options->fscache_uniq;
--	size_t uniq_len = fscache_uniq ? strlen(fscache_uniq) : 0;
--	struct ceph_fscache_entry *ent;
--	int err = 0;
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
- 
--	mutex_lock(&ceph_fscache_lock);
--	list_for_each_entry(ent, &ceph_fscache_list, list) {
--		if (memcmp(&ent->fsid, fsid, sizeof(*fsid)))
--			continue;
--		if (ent->uniq_len != uniq_len)
--			continue;
--		if (uniq_len && memcmp(ent->uniquifier, fscache_uniq, uniq_len))
--			continue;
--
--		errorfc(fc, "fscache cookie already registered for fsid %pU, use fsc=<uniquifier> option",
--		       fsid);
--		err = -EBUSY;
--		goto out_unlock;
--	}
-+	/* No caching for filesystem? */
-+	if (!fsc->fscache)
-+		return;
- 
--	ent = kzalloc(sizeof(*ent) + uniq_len, GFP_KERNEL);
--	if (!ent) {
--		err = -ENOMEM;
--		goto out_unlock;
--	}
-+	/* Regular files only */
-+	if (!S_ISREG(inode->i_mode))
-+		return;
- 
--	memcpy(&ent->fsid, fsid, sizeof(*fsid));
--	if (uniq_len > 0) {
--		memcpy(&ent->uniquifier, fscache_uniq, uniq_len);
--		ent->uniq_len = uniq_len;
--	}
-+	/* Only new inodes! */
-+	if (!(inode->i_state & I_NEW))
-+		return;
- 
--	fsc->fscache = fscache_acquire_cookie(ceph_cache_netfs.primary_index,
--					      &ceph_fscache_fsid_object_def,
--					      &ent->fsid, sizeof(ent->fsid) + uniq_len,
--					      NULL, 0,
--					      fsc, 0, true);
-+	WARN_ON_ONCE(ci->fscache);
- 
--	if (fsc->fscache) {
--		ent->fscache = fsc->fscache;
--		list_add_tail(&ent->list, &ceph_fscache_list);
--	} else {
--		kfree(ent);
--		errorfc(fc, "unable to register fscache cookie for fsid %pU",
--		       fsid);
--		/* all other fs ignore this error */
--	}
--out_unlock:
--	mutex_unlock(&ceph_fscache_lock);
--	return err;
-+	ci->fscache = fscache_acquire_cookie(fsc->fscache, 0,
-+					     &ci->i_vino, sizeof(ci->i_vino),
-+					     &ci->i_version, sizeof(ci->i_version),
-+					     i_size_read(inode));
- }
- 
--static enum fscache_checkaux ceph_fscache_inode_check_aux(
--	void *cookie_netfs_data, const void *data, uint16_t dlen,
--	loff_t object_size)
-+void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info* ci)
- {
--	struct ceph_inode_info* ci = cookie_netfs_data;
--	struct inode* inode = &ci->vfs_inode;
-+	struct fscache_cookie *cookie = ci->fscache;
- 
--	if (dlen != sizeof(ci->i_version) ||
--	    i_size_read(inode) != object_size)
--		return FSCACHE_CHECKAUX_OBSOLETE;
-+	fscache_relinquish_cookie(cookie, false);
-+}
- 
--	if (*(u64 *)data != ci->i_version)
--		return FSCACHE_CHECKAUX_OBSOLETE;
-+void ceph_fscache_use_cookie(struct inode *inode, bool will_modify)
-+{
-+	struct ceph_inode_info *ci = ceph_inode(inode);
- 
--	dout("ceph inode 0x%p cached okay\n", ci);
--	return FSCACHE_CHECKAUX_OKAY;
-+	fscache_use_cookie(ci->fscache, will_modify);
- }
- 
--static const struct fscache_cookie_def ceph_fscache_inode_object_def = {
--	.name		= "CEPH.inode",
--	.type		= FSCACHE_COOKIE_TYPE_DATAFILE,
--	.check_aux	= ceph_fscache_inode_check_aux,
--};
--
--void ceph_fscache_register_inode_cookie(struct inode *inode)
-+void ceph_fscache_unuse_cookie(struct inode *inode, bool update)
- {
- 	struct ceph_inode_info *ci = ceph_inode(inode);
--	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
--
--	/* No caching for filesystem */
--	if (!fsc->fscache)
--		return;
- 
--	/* Only cache for regular files that are read only */
--	if (!S_ISREG(inode->i_mode))
--		return;
-+	if (update) {
-+		loff_t i_size = i_size_read(inode);
- 
--	inode_lock_nested(inode, I_MUTEX_CHILD);
--	if (!ci->fscache) {
--		ci->fscache = fscache_acquire_cookie(fsc->fscache,
--						     &ceph_fscache_inode_object_def,
--						     &ci->i_vino, sizeof(ci->i_vino),
--						     &ci->i_version, sizeof(ci->i_version),
--						     ci, i_size_read(inode), false);
-+		fscache_unuse_cookie(ci->fscache, &ci->i_version, &i_size);
-+	} else {
-+		fscache_unuse_cookie(ci->fscache, NULL, NULL);
- 	}
--	inode_unlock(inode);
- }
- 
--void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info* ci)
-+void ceph_fscache_update(struct inode *inode)
- {
--	struct fscache_cookie* cookie;
--
--	if ((cookie = ci->fscache) == NULL)
--		return;
--
--	ci->fscache = NULL;
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+	loff_t i_size = i_size_read(inode);
- 
--	fscache_relinquish_cookie(cookie, &ci->i_vino, false);
-+	fscache_update_cookie(ci->fscache, &ci->i_version, &i_size);
- }
- 
--static bool ceph_fscache_can_enable(void *data)
-+void ceph_fscache_invalidate(struct inode *inode, bool dio_write)
- {
--	struct inode *inode = data;
--	return !inode_is_open_for_write(inode);
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+
-+	fscache_invalidate(ceph_inode(inode)->fscache,
-+			   &ci->i_version, i_size_read(inode),
-+			   dio_write ? FSCACHE_INVAL_DIO_WRITE : 0);
- }
- 
--void ceph_fscache_file_set_cookie(struct inode *inode, struct file *filp)
-+int ceph_fscache_register_fs(struct ceph_fs_client* fsc, struct fs_context *fc)
- {
--	struct ceph_inode_info *ci = ceph_inode(inode);
-+	const struct ceph_fsid *fsid = &fsc->client->fsid;
-+	const char *fscache_uniq = fsc->mount_options->fscache_uniq;
-+	size_t uniq_len = fscache_uniq ? strlen(fscache_uniq) : 0;
-+	char *name;
-+	int err = 0;
- 
--	if (!fscache_cookie_valid(ci->fscache))
--		return;
-+	name = kasprintf(GFP_KERNEL, "ceph,%pU%s%s", fsid, uniq_len ? "," : "",
-+			 uniq_len ? fscache_uniq : "");
-+	if (!name)
-+		return -ENOMEM;
- 
--	if (inode_is_open_for_write(inode)) {
--		dout("fscache_file_set_cookie %p %p disabling cache\n",
--		     inode, filp);
--		fscache_disable_cookie(ci->fscache, &ci->i_vino, false);
--	} else {
--		fscache_enable_cookie(ci->fscache, &ci->i_vino, i_size_read(inode),
--				      ceph_fscache_can_enable, inode);
--		if (fscache_cookie_enabled(ci->fscache)) {
--			dout("fscache_file_set_cookie %p %p enabling cache\n",
--			     inode, filp);
--		}
-+	fsc->fscache = fscache_acquire_volume(name, NULL, 0);
-+	if (IS_ERR_OR_NULL(fsc->fscache)) {
-+		errorfc(fc, "Unable to register fscache cookie for %s", name);
-+		err = fsc->fscache ? PTR_ERR(fsc->fscache) : -EOPNOTSUPP;
-+		fsc->fscache = NULL;
- 	}
-+	kfree(name);
-+	return err;
- }
- 
- void ceph_fscache_unregister_fs(struct ceph_fs_client* fsc)
- {
--	if (fscache_cookie_valid(fsc->fscache)) {
--		struct ceph_fscache_entry *ent;
--		bool found = false;
--
--		mutex_lock(&ceph_fscache_lock);
--		list_for_each_entry(ent, &ceph_fscache_list, list) {
--			if (ent->fscache == fsc->fscache) {
--				list_del(&ent->list);
--				kfree(ent);
--				found = true;
--				break;
--			}
--		}
--		WARN_ON_ONCE(!found);
--		mutex_unlock(&ceph_fscache_lock);
--
--		__fscache_relinquish_cookie(fsc->fscache, NULL, false);
--	}
--	fsc->fscache = NULL;
-+	fscache_relinquish_volume(fsc->fscache, 0, false);
- }
-diff --git a/fs/ceph/cache.h b/fs/ceph/cache.h
-index 058ea2a04376..09164389fa66 100644
---- a/fs/ceph/cache.h
-+++ b/fs/ceph/cache.h
-@@ -12,19 +12,19 @@
- #include <linux/netfs.h>
- 
- #ifdef CONFIG_CEPH_FSCACHE
--
--extern struct fscache_netfs ceph_cache_netfs;
--
--int ceph_fscache_register(void);
--void ceph_fscache_unregister(void);
-+#include <linux/fscache.h>
- 
- int ceph_fscache_register_fs(struct ceph_fs_client* fsc, struct fs_context *fc);
- void ceph_fscache_unregister_fs(struct ceph_fs_client* fsc);
- 
- void ceph_fscache_register_inode_cookie(struct inode *inode);
- void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info* ci);
--void ceph_fscache_file_set_cookie(struct inode *inode, struct file *filp);
--void ceph_fscache_revalidate_cookie(struct ceph_inode_info *ci);
-+
-+void ceph_fscache_use_cookie(struct inode *inode, bool will_modify);
-+void ceph_fscache_unuse_cookie(struct inode *inode, bool update);
-+
-+void ceph_fscache_update(struct inode *inode);
-+void ceph_fscache_invalidate(struct inode *inode, bool dio_write);
- 
- static inline void ceph_fscache_inode_init(struct ceph_inode_info *ci)
- {
-@@ -36,37 +36,51 @@ static inline struct fscache_cookie *ceph_fscache_cookie(struct ceph_inode_info
- 	return ci->fscache;
- }
- 
--static inline void ceph_fscache_invalidate(struct inode *inode)
-+static inline void ceph_fscache_resize(struct inode *inode, loff_t to)
- {
--	fscache_invalidate(ceph_inode(inode)->fscache);
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+	struct fscache_cookie *cookie = ceph_fscache_cookie(ci);
-+
-+	if (cookie) {
-+		ceph_fscache_use_cookie(inode, true);
-+		fscache_resize_cookie(cookie, to);
-+		ceph_fscache_unuse_cookie(inode, true);
-+	}
- }
- 
--static inline bool ceph_is_cache_enabled(struct inode *inode)
-+static inline void ceph_fscache_unpin_writeback(struct inode *inode,
-+						struct writeback_control *wbc)
- {
--	struct fscache_cookie *cookie = ceph_fscache_cookie(ceph_inode(inode));
-+	fscache_unpin_writeback(wbc, ceph_fscache_cookie(ceph_inode(inode)));
-+}
-+
-+static inline int ceph_fscache_set_page_dirty(struct page *page)
-+{
-+	struct inode *inode = page->mapping->host;
-+	struct ceph_inode_info *ci = ceph_inode(inode);
- 
--	if (!cookie)
--		return false;
--	return fscache_cookie_enabled(cookie);
-+	return fscache_set_page_dirty(page, ceph_fscache_cookie(ci));
- }
- 
- static inline int ceph_begin_cache_operation(struct netfs_read_request *rreq)
- {
- 	struct fscache_cookie *cookie = ceph_fscache_cookie(ceph_inode(rreq->inode));
- 
--	return fscache_begin_read_operation(rreq, cookie);
-+	return fscache_begin_read_operation(&rreq->cache_resources, cookie);
- }
--#else
- 
--static inline int ceph_fscache_register(void)
-+static inline bool ceph_is_cache_enabled(struct inode *inode)
- {
--	return 0;
-+	return fscache_cookie_enabled(ceph_fscache_cookie(ceph_inode(inode)));
- }
- 
--static inline void ceph_fscache_unregister(void)
-+static inline void ceph_fscache_note_page_release(struct inode *inode)
- {
--}
-+	struct ceph_inode_info *ci = ceph_inode(inode);
- 
-+	fscache_note_page_release(ceph_fscache_cookie(ci));
-+}
-+#else /* CONFIG_CEPH_FSCACHE */
- static inline int ceph_fscache_register_fs(struct ceph_fs_client* fsc,
- 					   struct fs_context *fc)
- {
-@@ -81,28 +95,49 @@ static inline void ceph_fscache_inode_init(struct ceph_inode_info *ci)
- {
- }
- 
--static inline struct fscache_cookie *ceph_fscache_cookie(struct ceph_inode_info *ci)
-+static inline void ceph_fscache_register_inode_cookie(struct inode *inode)
- {
--	return NULL;
- }
- 
--static inline void ceph_fscache_register_inode_cookie(struct inode *inode)
-+static inline void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info* ci)
- {
- }
- 
--static inline void ceph_fscache_unregister_inode_cookie(struct ceph_inode_info* ci)
-+static inline void ceph_fscache_use_cookie(struct inode *inode, bool will_modify)
- {
- }
- 
--static inline void ceph_fscache_file_set_cookie(struct inode *inode,
--						struct file *filp)
-+static inline void ceph_fscache_unuse_cookie(struct inode *inode, bool update)
- {
- }
- 
--static inline void ceph_fscache_invalidate(struct inode *inode)
-+static inline void ceph_fscache_update(struct inode *inode)
- {
- }
- 
-+static inline void ceph_fscache_invalidate(struct inode *inode, bool dio_write)
-+{
-+}
-+
-+static inline struct fscache_cookie *ceph_fscache_cookie(struct ceph_inode_info *ci)
-+{
-+	return NULL;
-+}
-+
-+static inline void ceph_fscache_resize(struct inode *inode, loff_t to)
-+{
-+}
-+
-+static inline void ceph_fscache_unpin_writeback(struct inode *inode,
-+						struct writeback_control *wbc)
-+{
-+}
-+
-+static inline int ceph_fscache_set_page_dirty(struct page *page)
-+{
-+	return __set_page_dirty_nobuffers(page);
-+}
-+
- static inline bool ceph_is_cache_enabled(struct inode *inode)
- {
- 	return false;
-@@ -112,6 +147,10 @@ static inline int ceph_begin_cache_operation(struct netfs_read_request *rreq)
- {
- 	return -ENOBUFS;
- }
--#endif
- 
--#endif /* _CEPH_CACHE_H */
-+static inline void ceph_fscache_note_page_release(struct inode *inode)
-+{
-+}
-+#endif /* CONFIG_CEPH_FSCACHE */
-+
-+#endif
-diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-index b9460b6fb76f..0bc0e6c157df 100644
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@ -1856,7 +1856,7 @@ static int try_nonblocking_invalidate(struct inode *inode)
- 	u32 invalidating_gen = ci->i_rdcache_gen;
- 
- 	spin_unlock(&ci->i_ceph_lock);
--	ceph_fscache_invalidate(inode);
-+	ceph_fscache_invalidate(inode, false);
- 	invalidate_mapping_pages(&inode->i_data, 0, -1);
- 	spin_lock(&ci->i_ceph_lock);
- 
-@@ -2388,6 +2388,7 @@ int ceph_write_inode(struct inode *inode, struct writeback_control *wbc)
- 	int wait = (wbc->sync_mode == WB_SYNC_ALL && !wbc->for_sync);
- 
- 	dout("write_inode %p wait=%d\n", inode, wait);
-+	ceph_fscache_unpin_writeback(inode, wbc);
- 	if (wait) {
- 		dirty = try_flush_caps(inode, &flush_tid);
- 		if (dirty)
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 02a0a0fd9ccd..bf1017682d09 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -248,8 +248,7 @@ static int ceph_init_file(struct inode *inode, struct file *file, int fmode)
- 
- 	switch (inode->i_mode & S_IFMT) {
- 	case S_IFREG:
--		ceph_fscache_register_inode_cookie(inode);
--		ceph_fscache_file_set_cookie(inode, file);
-+		ceph_fscache_use_cookie(inode, file->f_mode & FMODE_WRITE);
- 		fallthrough;
- 	case S_IFDIR:
- 		ret = ceph_init_file_info(inode, file, fmode,
-@@ -810,6 +809,7 @@ int ceph_release(struct inode *inode, struct file *file)
- 		dout("release inode %p regular file %p\n", inode, file);
- 		WARN_ON(!list_empty(&fi->rw_contexts));
- 
-+		ceph_fscache_unuse_cookie(inode, file->f_mode & FMODE_WRITE);
- 		ceph_put_fmode(ci, fi->fmode, 1);
- 
- 		kmem_cache_free(ceph_file_cachep, fi);
-@@ -1206,7 +1206,11 @@ ceph_direct_read_write(struct kiocb *iocb, struct iov_iter *iter,
- 	     snapc, snapc ? snapc->seq : 0);
- 
- 	if (write) {
--		int ret2 = invalidate_inode_pages2_range(inode->i_mapping,
-+		int ret2;
-+
-+		ceph_fscache_invalidate(inode, true);
-+
-+		ret2 = invalidate_inode_pages2_range(inode->i_mapping,
- 					pos >> PAGE_SHIFT,
- 					(pos + count - 1) >> PAGE_SHIFT);
- 		if (ret2 < 0)
-@@ -1417,6 +1421,7 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
- 	if (ret < 0)
- 		return ret;
- 
-+	ceph_fscache_invalidate(inode, false);
- 	ret = invalidate_inode_pages2_range(inode->i_mapping,
- 					    pos >> PAGE_SHIFT,
- 					    (pos + count - 1) >> PAGE_SHIFT);
-@@ -2101,6 +2106,7 @@ static long ceph_fallocate(struct file *file, int mode,
- 		goto unlock;
- 
- 	filemap_invalidate_lock(inode->i_mapping);
-+	ceph_fscache_invalidate(inode, false);
- 	ceph_zero_pagecache_range(inode, offset, length);
- 	ret = ceph_zero_objects(inode, offset, length);
- 
-@@ -2425,6 +2431,7 @@ static ssize_t __ceph_copy_file_range(struct file *src_file, loff_t src_off,
- 		goto out_caps;
- 
- 	/* Drop dst file cached pages */
-+	ceph_fscache_invalidate(dst_inode, false);
- 	ret = invalidate_inode_pages2_range(dst_inode->i_mapping,
- 					    dst_off >> PAGE_SHIFT,
- 					    (dst_off + len) >> PAGE_SHIFT);
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index e3322fcb2e8d..ef4a980a7bf3 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -564,6 +564,8 @@ void ceph_evict_inode(struct inode *inode)
- 	percpu_counter_dec(&mdsc->metric.total_inodes);
- 
- 	truncate_inode_pages_final(&inode->i_data);
-+	if (inode->i_state & I_PINNING_FSCACHE_WB)
-+		ceph_fscache_unuse_cookie(inode, true);
- 	clear_inode(inode);
- 
- 	ceph_fscache_unregister_inode_cookie(ci);
-@@ -634,6 +636,12 @@ int ceph_fill_file_size(struct inode *inode, int issued,
- 		}
- 		i_size_write(inode, size);
- 		inode->i_blocks = calc_inode_blocks(size);
-+		/*
-+		 * If we're expanding, then we should be able to just update
-+		 * the existing cookie.
-+		 */
-+		if (size > isize)
-+			ceph_fscache_update(inode);
- 		ci->i_reported_size = size;
- 		if (truncate_seq != ci->i_truncate_seq) {
- 			dout("truncate_seq %u -> %u\n",
-@@ -666,10 +674,6 @@ int ceph_fill_file_size(struct inode *inode, int issued,
- 		     truncate_size);
- 		ci->i_truncate_size = truncate_size;
- 	}
--
--	if (queue_trunc)
--		ceph_fscache_invalidate(inode);
--
- 	return queue_trunc;
- }
- 
-@@ -1053,6 +1057,8 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
- 
- 	spin_unlock(&ci->i_ceph_lock);
- 
-+	ceph_fscache_register_inode_cookie(inode);
-+
- 	if (fill_inline)
- 		ceph_fill_inline_data(inode, locked_page,
- 				      iinfo->inline_data, iinfo->inline_len);
-@@ -1814,11 +1820,13 @@ bool ceph_inode_set_size(struct inode *inode, loff_t size)
- 	spin_lock(&ci->i_ceph_lock);
- 	dout("set_size %p %llu -> %llu\n", inode, i_size_read(inode), size);
- 	i_size_write(inode, size);
-+	ceph_fscache_update(inode);
- 	inode->i_blocks = calc_inode_blocks(size);
- 
- 	ret = __ceph_should_report_size(ci);
- 
- 	spin_unlock(&ci->i_ceph_lock);
-+
- 	return ret;
- }
- 
-@@ -1844,6 +1852,8 @@ static void ceph_do_invalidate_pages(struct inode *inode)
- 	u32 orig_gen;
- 	int check = 0;
- 
-+	ceph_fscache_invalidate(inode, false);
-+
- 	mutex_lock(&ci->i_truncate_mutex);
- 
- 	if (ceph_inode_is_shutdown(inode)) {
-@@ -1868,7 +1878,7 @@ static void ceph_do_invalidate_pages(struct inode *inode)
- 	orig_gen = ci->i_rdcache_gen;
- 	spin_unlock(&ci->i_ceph_lock);
- 
--	ceph_fscache_invalidate(inode);
-+	ceph_fscache_invalidate(inode, false);
- 	if (invalidate_inode_pages2(inode->i_mapping) < 0) {
- 		pr_err("invalidate_inode_pages2 %llx.%llx failed\n",
- 		       ceph_vinop(inode));
-@@ -1937,6 +1947,7 @@ void __ceph_do_pending_vmtruncate(struct inode *inode)
- 	     ci->i_truncate_pending, to);
- 	spin_unlock(&ci->i_ceph_lock);
- 
-+	ceph_fscache_resize(inode, to);
- 	truncate_pagecache(inode, to);
- 
- 	spin_lock(&ci->i_ceph_lock);
-@@ -2184,7 +2195,6 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
- 	if (inode_dirty_flags)
- 		__mark_inode_dirty(inode, inode_dirty_flags);
- 
--
- 	if (mask) {
- 		req->r_inode = inode;
- 		ihold(inode);
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index bab61232dc5a..bea89bdb534a 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -787,16 +787,10 @@ static int __init init_caches(void)
- 	if (!ceph_wb_pagevec_pool)
- 		goto bad_pagevec_pool;
- 
--	error = ceph_fscache_register();
--	if (error)
--		goto bad_fscache;
--
- 	return 0;
- 
--bad_fscache:
--	kmem_cache_destroy(ceph_mds_request_cachep);
- bad_pagevec_pool:
--	mempool_destroy(ceph_wb_pagevec_pool);
-+	kmem_cache_destroy(ceph_mds_request_cachep);
- bad_mds_req:
- 	kmem_cache_destroy(ceph_dir_file_cachep);
- bad_dir_file:
-@@ -828,8 +822,6 @@ static void destroy_caches(void)
- 	kmem_cache_destroy(ceph_dir_file_cachep);
- 	kmem_cache_destroy(ceph_mds_request_cachep);
- 	mempool_destroy(ceph_wb_pagevec_pool);
--
--	ceph_fscache_unregister();
- }
- 
- static void __ceph_umount_begin(struct ceph_fs_client *fsc)
-diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-index ac331aa07cfa..d0142cc5c41b 100644
---- a/fs/ceph/super.h
-+++ b/fs/ceph/super.h
-@@ -21,7 +21,6 @@
- #include <linux/ceph/libceph.h>
- 
- #ifdef CONFIG_CEPH_FSCACHE
--#define FSCACHE_USE_NEW_IO_API
- #include <linux/fscache.h>
- #endif
- 
-@@ -135,7 +134,7 @@ struct ceph_fs_client {
- #endif
- 
- #ifdef CONFIG_CEPH_FSCACHE
--	struct fscache_cookie *fscache;
-+	struct fscache_volume *fscache;
- #endif
- };
- 
+--7mqnZnHDnajOmsOv
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGyOJoACgkQ3SOs138+
+s6FQLw//YQbWddZFUUepCv0b7YpjZTW7Vbd3JWuPDsETBN2QinnTKblQ/sAwEPcd
+Szvbiym/rYEjolSaVq0LMnE8N6Yt4UYGNpPpZYygbfzQGXZDMLwWkSv5u9SYGxbC
+89erpmqFUUEFmJWqtW9AnsiUCacYyOuLbNJHbjPQnP5ogpOu/AHCcD5iKn9guF+4
+cpYDuo6+8Ywwt4E5fa8WjgoKSoDWeGbGdhF8Ysac6b6ImI+6MFbZUJUDSxvfn9wa
+IVH5zl5eB01o0AD7DPtTRaKGKIIukylqg2UxYKROdMUWLP3L0YdgPF8ekNI8oz4J
+bcsSdYt0Sw2kcYzVVOqQrF3cFdYvf18XrO+UOUQA0r2B/hyopqsBKXQ9+5HOToj9
+ynQBSNcvj72AGc87pnjYmZPD63UO4kw1Zz7O77WVQClpIj/KKCFKRMLUSyk2QteI
+XHPiLLFBFkyueptQpeaAWXZCNbnE4b2BYk/DuMjfdyB7awww82GnMDD1Lj/pjguZ
+0JntM8RHgCSRSTx6rmEHnWrcmHvX0vmUseAVjTaK03rH5AqIRMmEJuaaypvseYqV
+pHHKnSs2obuHaQ0UVl95LFvjJaNhWISwdvteLhjvEOWqQd5zNClWHVA427MOwF74
+tGtvLslwUzPBjbtPps5ebvJwiURyfrAP9J+3ntTV83JEw3qgweU=
+=za4a
+-----END PGP SIGNATURE-----
+
+--7mqnZnHDnajOmsOv--

@@ -2,221 +2,641 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BAC46F76C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418CD46F770
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbhLIXcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S234386AbhLIXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXcJ (ORCPT
+        with ESMTP id S229760AbhLIXdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:32:09 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBC6C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:28:35 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id p2so13778482uad.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:28:35 -0800 (PST)
+        Thu, 9 Dec 2021 18:33:10 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B553C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:29:36 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id z9so6885006qtj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:29:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:mime-version:thread-index:date:message-id:subject:to:cc;
-        bh=Zxpn5K0RqtvUe4FXf1HYLjTbyD3FHuwVWHJEc7Q7xz0=;
-        b=Q7FlIFfswXkh5bWDAszcVn/porhKROgjmi6caI7eqLUE1DFZzZldWxuoQox5UlcFlR
-         A3f0CNyf30BXyPlDvMY2wBiSUZec+6NdBZyCtc4z77azLMl9dfSBpSJbab5Rx+PST/p0
-         spO+IFgxe969VE97L7WpZG8qOcBCTjQmXRd9E=
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IbOEMI28nASzKHAb9buRXOtiMkMJWgekmoM38MUNYmA=;
+        b=gJQy1Lw/G9giKVRXbwOgVwUzE6UYNFqB6pnwiAkQfTPIhDeJifPg9U+iUgNyFTSjF1
+         wu28P/+/GnGUsUCXiLnISLWsK8H3qML/xg8xYDnthnhtIJr5ixATXSQnOdZEpOpdB5K/
+         J4/tKLJehHfqGqVMDJIFwNFcWPbhKwi6TiFJA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:mime-version:thread-index:date:message-id
-         :subject:to:cc;
-        bh=Zxpn5K0RqtvUe4FXf1HYLjTbyD3FHuwVWHJEc7Q7xz0=;
-        b=A/986UXY6cTuNx7dMSCPrwJm9Qrtj7bwMrDeW57KENJzKKGhbGDFSYiSDjNlQVW886
-         40Ra4vrxBAg/t5kvNpANTW/rksEFDjL0spUKX/uvSl0o1pBJD9RTfTRPVx60rkCuUv9b
-         vA1k94q5s1nZYjydVtEb6tHVY4VxmY1uI0Qpz75l+7m39OiXivfH/REpizOf+56yt4M4
-         fs5pRXUz0xmI66oomJ2JJJ63O8nHGp9P53mEc+SXGqXTzRt2wi+k3nCMcVNCVGVod+gL
-         WtBHJlbDmFNbBwvAUGq6xQrxmPjJvrmPq+hJUHaPLPD9EW9095dNatDzj0dOa12YmbZO
-         Jz+A==
-X-Gm-Message-State: AOAM533aCFT91gWiXR5dkbSLM3HbxRtqrRLgblWAttJ64flduBOEUOS0
-        ib9q/1LMNxFzDf1u/mXZo+mDeHnyVRTNbhpscljW77zEI+aPuTtrrfCH3xmyuHrRY6Cx9PN8qmX
-        MnsIvGlt8riaCQ8TVitHAoJ7c94uboaM=
-X-Google-Smtp-Source: ABdhPJzlOH72fg9KuXeXSyeilyFnAO0qWsPUXuQ8HgWi55AdsXmwdjeH8/ORlSqiygr5T5V85rrkH3mUhJY7iOP1Px0=
-X-Received: by 2002:a05:6102:2084:: with SMTP id h4mr11310544vsr.87.1639092514721;
- Thu, 09 Dec 2021 15:28:34 -0800 (PST)
-From:   Alex Komrakov <alexander.komrakov@broadcom.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IbOEMI28nASzKHAb9buRXOtiMkMJWgekmoM38MUNYmA=;
+        b=b5qYsCJvvW/Js4y4E68kU0jWDYtl9iAVxgnD0wieLSIxK0Lnq+CA5OA4x1Pvw1BeFh
+         hILLlp+UgXujYBMF7tjrVneyS59rzZ8yzFg+ZCk8m3hR3kwFn+xna44JjrFcxLIcN51p
+         Lm58dkaRKGI4IpAJPCYm4ZkYMBus2eZZ3n3S6XNvnIUBcxL2E4HSox/PT/cGmJTehVtF
+         o1bqaqHp2gu5S+ggXISGNqyZCmQuNHnHjs9VsFqrSk68tIj89l7dz6Zru6Fp4n1+LRz1
+         ndgTY66ipjChhO7Bak3GlJWxcFA58QRAfY+sJ+8Rj825eFmkATpV/ndcGYy4S32NzA5k
+         lOuQ==
+X-Gm-Message-State: AOAM533bSyiKVot5YmXdTUGjrWSRWVD/HwYUsCinQdoj2k/DtV58XZ4l
+        IXyuOSDlxXi1BuMwmWlg2QO5s+82+fwZ8wmDS7pxlA==
+X-Google-Smtp-Source: ABdhPJx4+vUufclqMNiGDGoR46zNpBsTiFyKc9lBKRpP10i+yk+/fUyDBl/Jvj1P0aws745dDryf62K7UYoeYsHUkkY=
+X-Received: by 2002:a05:622a:130e:: with SMTP id v14mr21992060qtk.458.1639092575087;
+ Thu, 09 Dec 2021 15:29:35 -0800 (PST)
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AdftVB9mMprT/7ByRC+0IgAlowfbSQ==
-Date:   Thu, 9 Dec 2021 15:28:32 -0800
-Message-ID: <70960a71e92f34bfa0d0f3cd82fb289d@mail.gmail.com>
-Subject: [PATCH 1/1] Calculate the monotonic clock from the timespec clock to
- genereate pps PPS elapsed realtime event value and stores the result into /sys/class/pps/pps0/assert_elapsed.
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Hoi Kim <hoi.kim@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001f0e1505d2bef719"
+References: <20211202034544.2750-1-yunfei.dong@mediatek.com> <20211202034544.2750-7-yunfei.dong@mediatek.com>
+In-Reply-To: <20211202034544.2750-7-yunfei.dong@mediatek.com>
+From:   Steve Cho <stevecho@chromium.org>
+Date:   Thu, 9 Dec 2021 15:29:24 -0800
+Message-ID: <CAC-pXoOCa+13u--9sCKDorh+RbuhL89Ajur1t8bSx6w=MgoyYg@mail.gmail.com>
+Subject: Re: [PATCH v12, 06/19] media: mtk-vcodec: Add to support multi
+ hardware decode
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001f0e1505d2bef719
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Few comments and questions.
 
-Hi=C2=A0 ,
-
-I created the PPS patch and it was sent PPS maintainer Rodolfo and to
-mailto:linux@vger.kernel.org to include these changes into official ML
-kernel for
-Google.
-
-Here are PPS patch and cover letter in the following locations:
-=C2=A0- [PATCH 1/1] Calculate the monotonic clock from the timespec clock
-=C2=A0 =C2=A0 https://lkml.org/lkml/2021/11/17/1247
-=C2=A0- [New] [PATCH 1/1] Calculate the monotonic clock from the timespec c=
-lock
-=C2=A0 =C2=A0 https://lkml.org/lkml/2021/11/17/1246
-
-=C2=A0Rodolfo's Ack for inclusion is below.
-
-=C2=A0Can you check the PPS patch on your side=C2=A0 because we need to hav=
-e
-inclusion
-into official ML kernel and share the commit id with Google.
-
-=C2=A0Thanks,
---Alex
-
------Original Message-----
-From: Rodolfo Giometti [mailto:mailto:giometti@enneenne.com]
-Sent: Friday, November 26, 2021 2:53 AM
-To: Alex Komrakov <mailto:alexander.komrakov@broadcom.com>
-Cc: Hoi Kim <mailto:hoi.kim@broadcom.com>
-Subject: Re: [PATCH 1/1] Calculate the monotonic clock from the timespec
-clock to genereate pps PPS elapsed realtime event value and stores the
-result into /sys/class/pps/pps0/assert_elapsed.
-
-On 26/11/21 11:26, Alex Komrakov wrote:
-> Hi Rodolfo,
+On Wed, Dec 1, 2021 at 7:46 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
 >
-> Please give me a response about last my steps about sending
->=C2=A0 mailto:linux@vger.kernel.org <mailto:mailto:linux@vger.kernel.org>.
-> Does patch is ready for official ML kernel?
+> There are more than two hardwares for decoder: LAT0, LAT1 and CORE. In order to
+> manage these hardwares, register each hardware as independent platform device
+> for the larbs are different.
 
-Acked.
+basic question: what is "larbs"?
 
-Sorry for the delay... ^__^"
+>
+> Each hardware module controls its own information which includes interrupt/power/
+> clocks/registers.
+>
+> Calling of_platform_populate in parent device, and use subdev_bitmap to record
+> whether the hardwares are registered done.
 
-Ciao,
+nit: s/registered done/registered/ ?
 
-Rodolfo
+>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  drivers/media/platform/mtk-vcodec/Makefile    |   5 +-
+>  .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 111 +++++++----
+>  .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   | 172 ++++++++++++++++++
+>  .../platform/mtk-vcodec/mtk_vcodec_dec_hw.h   |  51 ++++++
+>  .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |   1 +
+>  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |   2 +
+>  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  19 ++
+>  7 files changed, 329 insertions(+), 32 deletions(-)
+>  create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+>  create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/Makefile b/drivers/media/platform/mtk-vcodec/Makefile
+> index ca8e9e7a9c4e..c61bfb179bcc 100644
+> --- a/drivers/media/platform/mtk-vcodec/Makefile
+> +++ b/drivers/media/platform/mtk-vcodec/Makefile
+> @@ -2,7 +2,8 @@
+>
+>  obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dec.o \
+>                                        mtk-vcodec-enc.o \
+> -                                      mtk-vcodec-common.o
+> +                                      mtk-vcodec-common.o \
+> +                                      mtk-vcodec-dec-hw.o
+>
+>  mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
+>                 vdec/vdec_vp8_if.o \
+> @@ -16,6 +17,8 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
+>                 mtk_vcodec_dec_stateless.o \
+>                 mtk_vcodec_dec_pm.o \
+>
+> +mtk-vcodec-dec-hw-y := mtk_vcodec_dec_hw.o
+> +
+>  mtk-vcodec-enc-y := venc/venc_vp8_if.o \
+>                 venc/venc_h264_if.o \
+>                 mtk_vcodec_enc.o \
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> index b7a51e96d4ba..95fbe9be3f6d 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> @@ -18,19 +18,40 @@
+>
+>  #include "mtk_vcodec_drv.h"
+>  #include "mtk_vcodec_dec.h"
+> +#include "mtk_vcodec_dec_hw.h"
+>  #include "mtk_vcodec_dec_pm.h"
+>  #include "mtk_vcodec_intr.h"
+>  #include "mtk_vcodec_util.h"
+>  #include "mtk_vcodec_fw.h"
+>
+> -#define VDEC_HW_ACTIVE 0x10
+> -#define VDEC_IRQ_CFG   0x11
+> -#define VDEC_IRQ_CLR   0x10
+> -#define VDEC_IRQ_CFG_REG       0xa4
+> -
+>  module_param(mtk_v4l2_dbg_level, int, 0644);
+>  module_param(mtk_vcodec_dbg, bool, 0644);
+>
+> +static int mtk_vcodec_subdev_device_check(struct mtk_vcodec_dev *vdec_dev)
+> +{
+> +       struct platform_device *pdev = vdec_dev->plat_dev;
+> +       struct device_node *subdev_node;
+> +       enum mtk_vdec_hw_id hw_idx;
+> +       const struct of_device_id *of_id;
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(mtk_vdec_hw_match); i++) {
+> +               of_id = &mtk_vdec_hw_match[i];
+> +               subdev_node = of_find_compatible_node(NULL, NULL,
+> +                       of_id->compatible);
+> +               if (!subdev_node)
+> +                       continue;
+> +
+> +               hw_idx = (enum mtk_vdec_hw_id)(uintptr_t)of_id->data;
+> +               if (!test_bit(hw_idx, vdec_dev->subdev_bitmap)) {
+> +                       dev_err(&pdev->dev, "Vdec %d is not ready", hw_idx);
+> +                       return -EAGAIN;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+>  {
+>         struct mtk_vcodec_dev *dev = priv;
+> @@ -95,6 +116,42 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
+>         return 0;
+>  }
+>
+> +static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
+> +{
+> +       struct platform_device *pdev = dev->plat_dev;
+> +       int ret;
+> +
+> +       ret = mtk_vcodec_get_reg_bases(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (dev->vdec_pdata->is_subdev_supported)
+> +               return 0;
+> +
+> +       dev->dec_irq = platform_get_irq(pdev, 0);
+> +       if (dev->dec_irq < 0) {
+> +               dev_err(&pdev->dev, "failed to get irq number");
+> +               return dev->dec_irq;
+> +       }
+> +
+> +       irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
+> +       ret = devm_request_irq(&pdev->dev, dev->dec_irq,
+> +               mtk_vcodec_dec_irq_handler, 0, pdev->name, dev);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "failed to install dev->dec_irq %d (%d)",
+> +                       dev->dec_irq, ret);
+> +               return ret;
+> +       }
+> +
+> +       ret = mtk_vcodec_init_dec_pm(pdev, &dev->pm);
+> +       if (ret < 0) {
+> +               dev_err(&pdev->dev, "failed to get mt vcodec clock source");
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static int fops_vcodec_open(struct file *file)
+>  {
+>         struct mtk_vcodec_dev *dev = video_drvdata(file);
+> @@ -116,6 +173,12 @@ static int fops_vcodec_open(struct file *file)
+>         init_waitqueue_head(&ctx->queue);
+>         mutex_init(&ctx->lock);
+>
+> +       ret = mtk_vcodec_subdev_device_check(dev);
+> +       if (ret) {
+> +               mtk_v4l2_err("Failed to check vdec comp device.");
 
---
-GNU/Linux Solutions=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 e-mail: mailto:giometti@enneenne.com
-Linux Device Driver=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 mailto:giometti@linux.it
-Embedded Systems=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0phone:=C2=A0 +39 349 2432127
-UNIX programming=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0skype:=C2=A0 rodolfo.giometti
+basic question: what is "comp" device?
 
---=20
-This electronic communication and the information and any files transmitted=
-=20
-with it, or attached to it, are confidential and are intended solely for=20
-the use of the individual or entity to whom it is addressed and may contain=
-=20
-information that is confidential, legally privileged, protected by privacy=
-=20
-laws, or otherwise restricted from disclosure to anyone else. If you are=20
-not the intended recipient or the person responsible for delivering the=20
-e-mail to the intended recipient, you are hereby notified that any use,=20
-copying, distributing, dissemination, forwarding, printing, or copying of=
-=20
-this e-mail is strictly prohibited. If you received this e-mail in error,=
-=20
-please return the e-mail to the sender, delete it from your computer, and=
-=20
-destroy any printed copy of it.
+> +               goto err_ctrls_setup;
+> +       }
+> +
+>         ctx->type = MTK_INST_DECODER;
+>         ret = dev->vdec_pdata->ctrls_setup(ctx);
+>         if (ret) {
+> @@ -220,7 +283,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>  {
+>         struct mtk_vcodec_dev *dev;
+>         struct video_device *vfd_dec;
+> -       struct resource *res;
+>         phandle rproc_phandle;
+>         enum mtk_vcodec_fw_type fw_type;
+>         int ret;
+> @@ -249,32 +311,10 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>         if (IS_ERR(dev->fw_handler))
+>                 return PTR_ERR(dev->fw_handler);
+>
+> -       ret = mtk_vcodec_init_dec_pm(dev->plat_dev, &dev->pm);
+> -       if (ret < 0) {
+> -               dev_err(&pdev->dev, "Failed to get mt vcodec clock source");
+> -               goto err_dec_pm;
+> -       }
+> -
+> -       ret = mtk_vcodec_get_reg_bases(dev);
+> -       if (ret)
+> -               goto err_res;
+> -
+> -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -       if (res == NULL) {
+> -               dev_err(&pdev->dev, "failed to get irq resource");
+> -               ret = -ENOENT;
+> -               goto err_res;
+> -       }
+> -
+> -       dev->dec_irq = platform_get_irq(pdev, 0);
+> -       irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
+> -       ret = devm_request_irq(&pdev->dev, dev->dec_irq,
+> -                       mtk_vcodec_dec_irq_handler, 0, pdev->name, dev);
+> +       ret = mtk_vcodec_init_dec_resources(dev);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Failed to install dev->dec_irq %d (%d)",
+> -                       dev->dec_irq,
+> -                       ret);
+> -               goto err_res;
+> +               dev_err(&pdev->dev, "Failed to init dec resources");
+> +               goto err_dec_pm;
+>         }
+>
+>         mutex_init(&dev->dec_mutex);
+> @@ -329,6 +369,15 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>                 goto err_event_workq;
+>         }
+>
+> +       if (dev->vdec_pdata->is_subdev_supported) {
+> +               ret = of_platform_populate(pdev->dev.of_node, NULL, NULL,
+> +                       &pdev->dev);
+> +               if (ret) {
+> +                       mtk_v4l2_err("Main device of_platform_populate failed.");
+> +                       goto err_event_workq;
+> +               }
+> +       }
+> +
+>         if (dev->vdec_pdata->uses_stateless_api) {
+>                 dev->mdev_dec.dev = &pdev->dev;
+>                 strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+> new file mode 100644
+> index 000000000000..025a103008ba
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+> @@ -0,0 +1,172 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 MediaTek Inc.
+> + * Author: Yunfei Dong <yunfei.dong@mediatek.com>
+> + */
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include "mtk_vcodec_drv.h"
+> +#include "mtk_vcodec_dec.h"
+> +#include "mtk_vcodec_dec_hw.h"
+> +#include "mtk_vcodec_dec_pm.h"
+> +#include "mtk_vcodec_intr.h"
+> +#include "mtk_vcodec_util.h"
+> +
+> +const struct of_device_id mtk_vdec_hw_match[] = {
+> +       {
+> +               .compatible = "mediatek,mtk-vcodec-lat",
+> +               .data = (void *)MTK_VDEC_LAT0,
+> +       },
 
---0000000000001f0e1505d2bef719
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Are we supposed to have LAT1 here as well?
 
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVkwggRBoAMCAQICDHYIL0hy7FtCa0iawzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwNDMzNTVaFw0yMjA5MDEwNzU5MzNaMIGV
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDUFsZXggS29tcmFrb3YxLjAsBgkqhkiG9w0B
-CQEWH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IB
-DwAwggEKAoIBAQC9plVHzugCEzdkg+8eZF4DLPZ5fqspSSVbjMcgMDJQcAR76/SGGJnSJiHOj/rn
-okK4r4HXW8cTMmw/ePqLs+eX7+h2TlrLFdwnPs6ThKSnKe7aNihCrk9rF+WyTTX/VrqyKPYICkp0
-/XhRuIlIO0cP979rZRsxD4LKmC6x1msVkkM7JxkWhkktTzQwowAemtij6uzfYeh5BzQd2+LaWp8g
-ZX2NhNnwh9gNMFxHdE5c6+G3LG7AHwFOPA6G1TuzZ35urQXh4HWGbGoCJPszKLgccfOBBHYaXyo6
-yiBn77ZVlo89La3IlKW/J8Bg1ZiYHcR6RtGGylxCCKgFDdESfV03AgMBAAGjggHgMIIB3DAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCoGA1UdEQQjMCGBH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
-KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFElfe2CJ
-evQgM+vs7qmUiI/AGUBAMA0GCSqGSIb3DQEBCwUAA4IBAQCmTMsF9VHjT0L2ycGjBg8eb/+aTBhL
-U6r4e4vaGj/xmDd1cWfvz4brxodjpmuSnjfyWvU/odcNIepLv17Xc91OiZBWGYgr4jNViUqunvaH
-DCnJlLbrD88ITE1uo7OCdlN/SS+Sskp2dDvL/Xlyorb+PaS7/AaIwEmuGyJv2uv1wQ+UZzPXXo1B
-vOM4N+PxiEKCkmmYhfeSVye92Bta6vjf0b+oDE2JT82+D+9nAfiyJ9P/SRVTTvLlSzcO2fqX6GOc
-37xY9F5HGjunD+cc5mqKM/r5PXyM/LEzWjdU1lVUVuvLRerUn+GNFgAPzpksTVYDv2kuseIFwRrF
-845kQxaRMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
-di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
-dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCzP2QsacrpML0R
-udPwt6txUzJnhRpml7L2EGYfiPrDQzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMTEyMDkyMzI4MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
-SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEACU0MSHXAltLXFlmkpv9+SFMHdGeZbOm8
-QqkcrYAL/X/4FEktan9dxyCQAOI3itS73UhIENRYce1zrmyIMd1m7O31V9mfiAY0q4wcBRSOudqG
-3Bxs5diBbgfUGv8cAbN/K3cBTLE+7TSBBWn2/sngELMCqyAdpcoGN7jtPBI3qE10c2I0EmuE3gHH
-ydM2fbnUJHO9V/c3sqTlxhR6zz1Ws7yJJgyfg6ys6AZxPbF99xAC2yXWcXYLesJuIt/WJUQBLVa+
-I+7pKyMf1gnpTzRhvKeIIf2LKD6xhq+MII8CYmyPTC/F0ZP5QB/DjfzIRcmL5Lp4Zhh5Fh69nybh
-JA++9g==
---0000000000001f0e1505d2bef719--
+> +       {
+> +               .compatible = "mediatek,mtk-vcodec-core",
+> +               .data = (void *)MTK_VDEC_CORE,
+> +       },
+> +       {},
+> +};
+> +EXPORT_SYMBOL_GPL(mtk_vdec_hw_match);
+> +
+> +MODULE_DEVICE_TABLE(of, mtk_vdec_hw_match);
+> +
+> +static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
+> +{
+> +       struct mtk_vdec_hw_dev *dev = priv;
+> +       struct mtk_vcodec_ctx *ctx;
+> +       u32 cg_status;
+> +       unsigned int dec_done_status;
+> +       void __iomem *vdec_misc_addr = dev->reg_base[VDEC_HW_MISC] +
+> +                                       VDEC_IRQ_CFG_REG;
+> +
+> +       ctx = mtk_vcodec_get_curr_ctx(dev->main_dev);
+> +
+> +       /* check if HW active or not */
+> +       cg_status = readl(dev->reg_base[VDEC_HW_SYS]);
+> +       if (cg_status & VDEC_HW_ACTIVE) {
+> +               mtk_v4l2_err("vdec active is not 0x0 (0x%08x)",
+> +                       cg_status);
+> +               return IRQ_HANDLED;
+> +       }
+> +
+> +       dec_done_status = readl(vdec_misc_addr);
+> +       if ((dec_done_status & MTK_VDEC_IRQ_STATUS_DEC_SUCCESS) !=
+> +           MTK_VDEC_IRQ_STATUS_DEC_SUCCESS)
+> +               return IRQ_HANDLED;
+> +
+> +       /* clear interrupt */
+> +       writel(dec_done_status | VDEC_IRQ_CFG, vdec_misc_addr);
+
+Is VDEC_IRQ_CFG also intended for clear interrupt?
+
+> +       writel(dec_done_status & ~VDEC_IRQ_CLR, vdec_misc_addr);
+> +
+> +       wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
+> +
+> +       mtk_v4l2_debug(3, "wake up ctx %d, dec_done_status=%x",
+> +               ctx->id, dec_done_status);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static int mtk_vdec_hw_init_irq(struct mtk_vdec_hw_dev *dev)
+> +{
+> +       struct platform_device *pdev = dev->plat_dev;
+> +       int ret;
+> +
+> +       dev->dec_irq = platform_get_irq(pdev, 0);
+> +       if (dev->dec_irq < 0) {
+> +               dev_err(&pdev->dev, "Failed to get irq resource");
+> +               return dev->dec_irq;
+> +       }
+> +
+> +       irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
+> +       ret = devm_request_irq(&pdev->dev, dev->dec_irq,
+> +                               mtk_vdec_hw_irq_handler, 0, pdev->name, dev);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to install dev->dec_irq %d (%d)",
+> +                       dev->dec_irq, ret);
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int mtk_vdec_hw_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct mtk_vdec_hw_dev *subdev_dev;
+> +       struct mtk_vcodec_dev *main_dev;
+> +       const struct of_device_id *of_id;
+> +       int hw_idx;
+> +       int ret;
+> +
+> +       if (!dev->parent) {
+> +               dev_err(dev, "no parent for hardware devices.\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       main_dev = dev_get_drvdata(dev->parent);
+> +       if (!main_dev) {
+> +               dev_err(dev, "failed to get parent driver data");
+> +               return -EINVAL;
+> +       }
+> +
+> +       subdev_dev = devm_kzalloc(dev, sizeof(*subdev_dev), GFP_KERNEL);
+> +       if (!subdev_dev)
+> +               return -ENOMEM;
+> +
+> +       subdev_dev->plat_dev = pdev;
+> +       ret = mtk_vcodec_init_dec_pm(pdev, &subdev_dev->pm);
+> +       if (ret)
+> +               return ret;
+> +
+> +       subdev_dev->reg_base[VDEC_HW_MISC] =
+> +               devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC])) {
+> +               ret = PTR_ERR((__force void *)subdev_dev->reg_base[VDEC_HW_MISC]);
+> +               goto err;
+> +       }
+> +
+> +       ret = mtk_vdec_hw_init_irq(subdev_dev);
+> +       if (ret)
+> +               goto err;
+> +
+> +       of_id = of_match_device(mtk_vdec_hw_match, dev);
+> +       if (!of_id) {
+> +               dev_err(dev, "Can't get vdec subdev id.\n");
+> +               ret = -EINVAL;
+> +               goto err;
+> +       }
+> +
+> +       hw_idx = (enum mtk_vdec_hw_id)(uintptr_t)of_id->data;
+> +       if (hw_idx >= MTK_VDEC_HW_MAX) {
+> +               dev_err(dev, "Hardware index %d not correct.\n", hw_idx);
+> +               ret = -EINVAL;
+> +               goto err;
+> +       }
+> +
+> +       main_dev->subdev_dev[hw_idx] = subdev_dev;
+> +       subdev_dev->hw_idx = hw_idx;
+> +       subdev_dev->main_dev = main_dev;
+> +       subdev_dev->reg_base[VDEC_HW_SYS] = main_dev->reg_base[VDEC_HW_SYS];
+> +       set_bit(subdev_dev->hw_idx, main_dev->subdev_bitmap);
+> +
+> +       platform_set_drvdata(pdev, subdev_dev);
+> +       return 0;
+> +err:
+> +       mtk_vcodec_release_dec_pm(&subdev_dev->pm);
+> +       return ret;
+> +}
+> +
+> +static struct platform_driver mtk_vdec_driver = {
+> +       .probe  = mtk_vdec_hw_probe,
+> +       .driver = {
+> +               .name   = "mtk-vdec-comp",
+> +               .of_match_table = mtk_vdec_hw_match,
+> +       },
+> +};
+> +module_platform_driver(mtk_vdec_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("Mediatek video decoder hardware driver");
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+> new file mode 100644
+> index 000000000000..f7f36790629d
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 MediaTek Inc.
+> + * Author: Yunfei Dong <yunfei.dong@mediatek.com>
+> + */
+> +
+> +#ifndef _MTK_VCODEC_DEC_HW_H_
+> +#define _MTK_VCODEC_DEC_HW_H_
+> +
+> +#include <linux/io.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "mtk_vcodec_drv.h"
+> +
+> +#define VDEC_HW_ACTIVE 0x10
+> +#define VDEC_IRQ_CFG 0x11
+> +#define VDEC_IRQ_CLR 0x10
+> +#define VDEC_IRQ_CFG_REG 0xa4
+> +
+> +extern const struct of_device_id mtk_vdec_hw_match[MTK_VDEC_HW_MAX];
+> +
+> +/**
+> + * enum mtk_vdec_hw_reg_idx - subdev hardware register base index
+> + */
+> +enum mtk_vdec_hw_reg_idx {
+> +       VDEC_HW_SYS,
+> +       VDEC_HW_MISC,
+> +       VDEC_HW_MAX
+> +};
+> +
+> +/**
+> + * struct mtk_vdec_hw_dev - vdec hardware driver data
+> + * @plat_dev: platform device
+> + * @main_dev: main device
+> + * @reg_base: Mapped address of MTK Vcodec registers.
+> + *
+> + * @dec_irq: decoder irq resource
+> + * @pm: power management control
+> + * @hw_idx: each hardware index
+> + */
+> +struct mtk_vdec_hw_dev {
+> +       struct platform_device *plat_dev;
+> +       struct mtk_vcodec_dev *main_dev;
+> +       void __iomem *reg_base[VDEC_HW_MAX];
+> +
+> +       int dec_irq;
+> +       struct mtk_vcodec_pm pm;
+> +       int hw_idx;
+> +};
+> +
+> +#endif /* _MTK_VCODEC_DEC_HW_H_ */
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+> index bef49244e61b..c7f9259ad094 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+> @@ -625,4 +625,5 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
+>         .num_framesizes = NUM_SUPPORTED_FRAMESIZE,
+>         .worker = mtk_vdec_worker,
+>         .flush_decoder = mtk_vdec_flush_decoder,
+> +       .is_subdev_supported = false,
+>  };
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+> index 26e4d6f4ec04..2d285515b625 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+> @@ -357,6 +357,7 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+
+8173 might be only one for stateful. But we have multiple platforms
+for 8183. Shouldn't this name reflect this?
+
+>         .uses_stateless_api = true,
+>         .worker = mtk_vdec_worker,
+>         .flush_decoder = mtk_vdec_flush_decoder,
+> +       .is_subdev_supported = false,
+>  };
+>
+>  const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+> @@ -373,4 +374,5 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+
+Which platforms is this supposed to be used? Some comments on this
+might be helpful.
+
+>         .uses_stateless_api = true,
+>         .worker = mtk_vdec_worker,
+>         .flush_decoder = mtk_vdec_flush_decoder,
+> +       .is_subdev_supported = true,
+>  };
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index 0fa9d85114b9..2160f26263ef 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -93,6 +93,17 @@ enum mtk_fmt_type {
+>         MTK_FMT_FRAME = 2,
+>  };
+>
+> +/**
+> + * struct mtk_vdec_hw_id - Hardware index used to separate
+> + *                         different hardware
+> + */
+> +enum mtk_vdec_hw_id {
+> +       MTK_VDEC_CORE,
+> +       MTK_VDEC_LAT0,
+> +       MTK_VDEC_LAT1,
+> +       MTK_VDEC_HW_MAX,
+> +};
+> +
+>  /*
+>   * struct mtk_video_fmt - Structure used to store information about pixelformats
+>   */
+> @@ -332,6 +343,7 @@ enum mtk_chip {
+>   *
+>   * @chip: chip this decoder is compatible with
+>   *
+> + * @is_subdev_supported: whether support parent-node architecture(subdev)
+>   * @uses_stateless_api: whether the decoder uses the stateless API with requests
+>   */
+>
+> @@ -353,6 +365,7 @@ struct mtk_vcodec_dec_pdata {
+>
+>         enum mtk_chip chip;
+>
+> +       bool is_subdev_supported;
+>         bool uses_stateless_api;
+>  };
+>
+> @@ -423,6 +436,9 @@ struct mtk_vcodec_enc_pdata {
+>   * @pm: power management control
+>   * @dec_capability: used to identify decode capability, ex: 4k
+>   * @enc_capability: used to identify encode capability
+> + *
+> + * @subdev_dev: subdev hardware device
+> + * @subdev_bitmap: used to record hardware is ready or not
+>   */
+>  struct mtk_vcodec_dev {
+>         struct v4l2_device v4l2_dev;
+> @@ -460,6 +476,9 @@ struct mtk_vcodec_dev {
+>         struct mtk_vcodec_pm pm;
+>         unsigned int dec_capability;
+>         unsigned int enc_capability;
+> +
+> +       void *subdev_dev[MTK_VDEC_HW_MAX];
+> +       DECLARE_BITMAP(subdev_bitmap, MTK_VDEC_HW_MAX);
+>  };
+>
+>  static inline struct mtk_vcodec_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> --
+> 2.25.1
+>

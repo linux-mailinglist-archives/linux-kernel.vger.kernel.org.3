@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 956B446E077
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CF946E07B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238198AbhLIBzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S238189AbhLIBzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbhLIBzT (ORCPT
+        with ESMTP id S235054AbhLIBzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:55:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020F3C061746;
-        Wed,  8 Dec 2021 17:51:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74FD8B8236F;
-        Thu,  9 Dec 2021 01:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75921C00446;
-        Thu,  9 Dec 2021 01:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639014704;
-        bh=5T0ucDpr39HCf8PypsCLt5HtRmXScmsEPR83rW4e950=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RYzHYbDzTs3jYNk+W5eTmiXbOhiozCA41/Erv8HRyDqrnhFPKC9OEd4iZWnpYJUNO
-         pS5lFHtiuHzaxlMwk/1CQfsb6etPcxjqmpqZWs1VXWXxSFncbYzNqaMAiTj+oyVo2k
-         i/Ou7QVxMlbBC7bhxogc21fbJr/e8QJcuoS30iz/+wD0XbJwo9LL6EnGVtd2p0GEzj
-         6hLKL27k+MshR0bsUZjU8orNwQ3rmfrqqw4DFSSBW+Ies3IKq4aIW5qBPf+kVKiGTW
-         W2Jj5UjhNGScILNtxukzyKWA0mBs4OUvTPkNzYK+nTD5R8Sg8yaCnEJcGccy1ECuC9
-         j+uHFjmarYwHA==
-Date:   Wed, 8 Dec 2021 17:51:42 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Subject: Re: [PATCH net-next v7 5/6] stmmac: dwmac-mediatek: add support for
- mt8195
-Message-ID: <20211208175142.1b63afea@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <39aa23e1a48bc36a631b3074af2abfd5d1e2256d.camel@mediatek.com>
-References: <20211208054716.603-1-biao.huang@mediatek.com>
-        <20211208054716.603-6-biao.huang@mediatek.com>
-        <20211208063820.264df62d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <39aa23e1a48bc36a631b3074af2abfd5d1e2256d.camel@mediatek.com>
+        Wed, 8 Dec 2021 20:55:44 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63729C061746;
+        Wed,  8 Dec 2021 17:52:12 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso3660439pjb.0;
+        Wed, 08 Dec 2021 17:52:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7GbdjZpxKTr+cBu8MjLxoryaXfwCf7opXnqUnViTzNc=;
+        b=F83septNLKOqgSu+uZdyZjycU+/4KrErD+Ww20pcA8eGWEw1MccyDneFYqExumLgBx
+         8wjpjBOG5V8xXZOQQ1uNfTWL9eu0TibC5RDyd6iNakufUC9kXX+O8g3jc0wlU0iEAxJh
+         LhZaESTCQrVU0Q0/R6MI5zE+gLhWzvQuAAsjkFVCp6DAPSsZBkscbWh23IGVuHNuVoJ2
+         uuZ9aU/TvY3mkGbihTQpLhQBzPlDPTTnYx4fIgB/VW1HlJaLll432RMzj9tdHAhVDSj/
+         Iuq00QXAp5A0nfOaZOLvpdTL2Lrp5OXQ5wBgIXwX83xpo+d6f7zgupLKqlvzH7IEYUcO
+         Tk+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7GbdjZpxKTr+cBu8MjLxoryaXfwCf7opXnqUnViTzNc=;
+        b=ox6nIF8BCa10Rs+k6cqvitmMIjlphWW/dhjN1k24gtgWj0FMn2mz2RCzF1GaR9wNRx
+         AO64pjK8eQiGoQ0SK8Ae+KGWIDi9MkY/tg4d02PZIW6qTucAIKJMQGycZvX0AHqWnUE3
+         yltrOIsAfkM3C7kYWxQAVvS1Pg9s+X3JLMWd2KjZFHliQ6YrdzSpZyxdTgLXQUNQLtMy
+         QTJAX13wA+I0xgXQ+i6oMsvLgTkDYqijBYJIYrCiSqbaJ/rxfrs9d4hJeITlTU+nczPC
+         4SdiFtyCKH/uJZeXF7W6PzllGjAar4h9Na8m9UWIc+nTPDcqNCZ/Y/98Fl/rhow9RmYF
+         mHGw==
+X-Gm-Message-State: AOAM5336P59EA8NEoKiytGLNTcljYUTQgMWPagHtvUVz1++ua5ysywQJ
+        ZcdE1Zav9L4N0RcBAvYA6Tg=
+X-Google-Smtp-Source: ABdhPJw9US6Lq22zRt6rKpWC7bvPIbUiQSmSt99MlTevUlZAnPNwEmh+ahebunj4RfGhrfGp1k8Kvg==
+X-Received: by 2002:a17:90a:17ef:: with SMTP id q102mr11752563pja.116.1639014732013;
+        Wed, 08 Dec 2021 17:52:12 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o124sm4605622pfb.177.2021.12.08.17.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 17:52:11 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     selvin.xavier@broadcom.com
+Cc:     dledford@redhat.com, jgg@ziepe.ca, leon@kernel.org,
+        dennis.dalessandro@cornelisnetworks.com, galpress@amazon.com,
+        chi.minghao@zte.com.cn, trix@redhat.com, mbloch@nvidia.com,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH] drivers:ocrdma:remove unneeded variable
+Date:   Thu,  9 Dec 2021 01:52:06 +0000
+Message-Id: <20211209015206.409528-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 09:48:25 +0800 Biao Huang wrote:
-> Sorry for some typo in previous reply, fix it here.
-> 
-> All these warning lines share a similar semantics:
-> delay_val |= FIELD_PREP(xxx, !!val);
-> 
-> and, should come from the expansion of FIELD_PREP in
-> include/linux/bitfiled.h:
-> 
->   FIELD _PREP --> __BF_FILED_CHECK --> "~((_mask) >> __bf_shf(_mask)) &
-> (_val) : 0,"
-> 
-> ===============================================================
-> __BF_FILED_CHECK {
-> ...
->   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
->                    ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
->                    _pfx "value too large for the field"); \ ...
-> ===============================================================
-> 
-> Should I fix it by converting
->   delay_val |= FIELD_PREP(ETH_DLY_TXC_ENABLE, !!mac_delay->tx_delay);
-> to
->   en_val = !!mac_delay->tx_delay;
->   delay_val |= FIELD_PREP(ETH_DLY_TXC_ENABLE, en_val);
-> 
-> or other suggestions for these warnings?
+From: chiminghao <chi.minghao@zte.com.cn>
 
-I see, thanks for explaining. The code is fine, we can simply ignore
-this warning IMHO.
+return value form directly instead of
+taking this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
+---
+ drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+index 735123d0e9ec..3bfbf4ec040d 100644
+--- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
++++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+@@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
+ 
+ int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
+ {
+-	int status;
+ 	struct ocrdma_srq *srq;
+ 
+ 	srq = get_ocrdma_srq(ibsrq);
+-	status = ocrdma_mbx_query_srq(srq, srq_attr);
+-	return status;
++	return ocrdma_mbx_query_srq(srq, srq_attr);
+ }
+ 
+ int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
+@@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
+ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 			     const struct ib_send_wr *wr)
+ {
+-	int status;
+ 	struct ocrdma_sge *sge;
+ 	u32 wqe_size = sizeof(*hdr);
+ 
+@@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 		sge = (struct ocrdma_sge *)(hdr + 1);
+ 	}
+ 
+-	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+-	return status;
++	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+ }
+ 
+ static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+-- 
+2.25.1
+

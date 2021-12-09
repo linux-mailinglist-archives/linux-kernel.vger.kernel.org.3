@@ -2,238 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0ED46EC1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326E246EC21
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240318AbhLIPur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:50:47 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63588 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240139AbhLIPuo (ORCPT
+        id S240338AbhLIPut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234325AbhLIPus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:50:44 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FaHSW026478;
-        Thu, 9 Dec 2021 15:47:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=G8Ca7Hw/V7biRkUk+N5XIe2++zImpgDnYLvmqxc8hnE=;
- b=EHhs5FB8dxVCAhyvfVpiudBhT5oZxXCW7r31BKuf1sox8GCBIZnR+wZ0Bqvo6lRSyhI7
- 9BO4YFz6YSZAy+9ebVOXRkpcJCYS2G8RyWoIoVU3lpTeziHI3iIP6I3uySuHDG3F2IBo
- 47GDvcFZVCs525HKJpxtcHVJD6D11bqHZo3HILPdnf7bK1ADFS5dg+1q4dqlLmDqakEz
- sYUtBMAhbnwNk9EtZSjWwn3n37+yRlZpxwN34EvnFN+ZIrZC0Rn2npSjw6G5F8w5DEBm
- xPl8atePTALYUUPAQsBbc/wkY/PBumLtVCC/QsW3VTaZ7NjXoWiSCLgdFqIT4WRBQRQJ Ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cujwqtwt1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:47:10 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9FaSHA029323;
-        Thu, 9 Dec 2021 15:47:09 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cujwqtwsg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:47:09 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FjebC015618;
-        Thu, 9 Dec 2021 15:47:07 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cqyybb2s2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:47:07 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9Fl3Kw24248664
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 15:47:03 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4760A42047;
-        Thu,  9 Dec 2021 15:47:03 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6225442049;
-        Thu,  9 Dec 2021 15:47:02 +0000 (GMT)
-Received: from [9.171.49.66] (unknown [9.171.49.66])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 15:47:02 +0000 (GMT)
-Message-ID: <cabce091-531a-de77-5b90-9ee1f1482da7@linux.ibm.com>
-Date:   Thu, 9 Dec 2021 16:47:02 +0100
+        Thu, 9 Dec 2021 10:50:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C960C061746;
+        Thu,  9 Dec 2021 07:47:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0204DB8251E;
+        Thu,  9 Dec 2021 15:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8730FC004DD;
+        Thu,  9 Dec 2021 15:47:06 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 16:47:03 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+Message-ID: <20211209154703.4mprhv2rcgvgkmx5@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-16-stefanb@linux.ibm.com>
+ <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+ <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+ <20211209144109.4xkyibwsuaqkbu47@wittgenstein>
+ <f0710142-0d91-d6c4-8d2c-7eac1a946969@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 12/32] s390/pci: get SHM information from list pci
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-13-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-13-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HVCH-W2tim0-IJqouvBTUE473H3BpnvD
-X-Proofpoint-GUID: 8YxXMetPUvrLdlvdxtgkt_B8RhfjP5e0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_07,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 adultscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090084
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f0710142-0d91-d6c4-8d2c-7eac1a946969@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> KVM will need information on the special handle mask used to indicate
-> emulated devices.  In order to obtain this, a new type of list pci call
-> must be made to gather the information.  Remove the unused data pointer
-> from clp_list_pci and __clp_add and instead optionally pass a pointer to
-> a model-dependent-data field.  Additionally, allow for clp_list_pci calls
-> that don't specify a callback - in this case, just do the first pass of
-> list pci and exit.
+On Thu, Dec 09, 2021 at 10:00:59AM -0500, Stefan Berger wrote:
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/pci.h     |  6 ++++++
->   arch/s390/include/asm/pci_clp.h |  2 +-
->   arch/s390/pci/pci.c             | 19 +++++++++++++++++++
->   arch/s390/pci/pci_clp.c         | 16 ++++++++++------
->   4 files changed, 36 insertions(+), 7 deletions(-)
+> On 12/9/21 09:41, Christian Brauner wrote:
+> > On Thu, Dec 09, 2021 at 03:37:49PM +0100, Christian Brauner wrote:
+> > > On Thu, Dec 09, 2021 at 03:34:28PM +0100, Christian Brauner wrote:
+> > > > On Wed, Dec 08, 2021 at 05:18:17PM -0500, Stefan Berger wrote:
+> > > > > Move the dentries into the ima_namespace for reuse by virtualized
+> > > > > SecurityFS. Implement function freeing the dentries in order of
+> > > > > files and symlinks before directories.
+> > > > > 
+> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > ---
+> > > > This doesn't work as implemented, I think.
+> > > > 
+> > > > What I would have preferred and what I tried to explain in the earlier
+> > > > review was:
+> > > > Keep the dentry stashing global since it is only needed for init_ima_ns.
+> > > > Then struct ima_namespace becomes way smaller and simpler.
+> > > > If you do that then it makes sense to remove the additional dget() in
+> > > > securityfs_create_dentry() for non-init_ima_ns.
+> > > > Then you can rely on auto-cleanup in .kill_sb() or on
+> > > > ima_securityfs_init() failure and you only need to call
+> > > > ima_fs_ns_free_dentries() if ns != init_ima_ns.
+> > s/ns != init_ima_ns/ns == init_ima_ns/
+> > 
+> > > > IIuc, it seems you're currently doing one dput() too many since you're
+> > > > calling securityfs_remove() in the error path for non-init_ima_ns which
+> > > > relies on the previous increased dget() which we removed.
 > 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 00a2c24d6d2b..86f43644756d 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -219,12 +219,18 @@ int zpci_unregister_ioat(struct zpci_dev *, u8);
->   void zpci_remove_reserved_devices(void);
->   void zpci_update_fh(struct zpci_dev *zdev, u32 fh);
->   
-> +int zpci_get_mdd(u32 *mdd);
-> +
->   /* CLP */
-> +void *clp_alloc_block(gfp_t gfp_mask);
-> +void clp_free_block(void *ptr);
->   int clp_setup_writeback_mio(void);
->   int clp_scan_pci_devices(void);
->   int clp_query_pci_fn(struct zpci_dev *zdev);
->   int clp_enable_fh(struct zpci_dev *zdev, u32 *fh, u8 nr_dma_as);
->   int clp_disable_fh(struct zpci_dev *zdev, u32 *fh);
-> +int clp_list_pci(struct clp_req_rsp_list_pci *rrb, u32 *mdd,
-> +		 void (*cb)(struct clp_fh_list_entry *));
->   int clp_get_state(u32 fid, enum zpci_state *state);
->   int clp_refresh_fh(u32 fid, u32 *fh);
->   
-> diff --git a/arch/s390/include/asm/pci_clp.h b/arch/s390/include/asm/pci_clp.h
-> index 124fadfb74b9..d6bc324763f3 100644
-> --- a/arch/s390/include/asm/pci_clp.h
-> +++ b/arch/s390/include/asm/pci_clp.h
-> @@ -76,7 +76,7 @@ struct clp_req_list_pci {
->   struct clp_rsp_list_pci {
->   	struct clp_rsp_hdr hdr;
->   	u64 resume_token;
-> -	u32 reserved2;
-> +	u32 mdd;
->   	u16 max_fn;
->   	u8			: 7;
->   	u8 uid_checking		: 1;
-> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> index af1c0ae017b1..175854c861cd 100644
-> --- a/arch/s390/pci/pci.c
-> +++ b/arch/s390/pci/pci.c
-> @@ -531,6 +531,25 @@ void zpci_update_fh(struct zpci_dev *zdev, u32 fh)
->   		zpci_do_update_iomap_fh(zdev, fh);
->   }
->   
-> +int zpci_get_mdd(u32 *mdd)
-> +{
-> +	struct clp_req_rsp_list_pci *rrb;
-> +	int rc;
-> +
-> +	if (!mdd)
-> +		return -EINVAL;
-> +
-> +	rrb = clp_alloc_block(GFP_KERNEL);
-> +	if (!rrb)
-> +		return -ENOMEM;
-> +
-> +	rc = clp_list_pci(rrb, mdd, NULL);
-> +
-> +	clp_free_block(rrb);
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(zpci_get_mdd);
+> I thought that securityfs_remove() will now simply influence when a dentry
+> is removed and freed. If we call it in the error cleanup path in
+> non-init_user_ns case it would go away right there and leave nothing to do
+> for .kill_sb() while an additional dget() would require the cleanup as well
+> but do another cleanup then in .kill_sb() since that brings the reference
+> count to 0 via the dput()s that it does. Am I wrong on this?
 
-Maybe move this into pci_clp.c to avoid the export of clp_alloc_block and void clp_free_block?
-Niklas?
-In any case the code looks correct from a HW perspective.
+With your change you get one dget() from lookup_one_len() in
+securityfs_create_dentry() for non-init_ima_ns. That's added to the
+dcache via d_instantiate().
+If you call securityfs_dentry_remove() in the error path or anywhere
+else it does:
 
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+	dir = d_inode(dentry->d_parent);
+	inode_lock(dir);
+	if (simple_positive(dentry)) {
+		if (d_is_dir(dentry))
+			simple_rmdir(dir, dentry);
+		else
+			simple_unlink(dir, dentry);
+		dput(dentry);
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+That dput() right there is for the additional dget() in
+securityfs_create_dentry() but we didn't take that. So the dput() is one
+too many now since simple_rmdir() and simple_unlink() will have consumed
+one already. (You should be able to easily see this if you compile with
+sanitizers on and let your init function fail somewhere in the middle.)
 
-> +
->   static struct resource *__alloc_res(struct zpci_dev *zdev, unsigned long start,
->   				    unsigned long size, unsigned long flags)
->   {
-> diff --git a/arch/s390/pci/pci_clp.c b/arch/s390/pci/pci_clp.c
-> index bc7446566cbc..e18a548ac22d 100644
-> --- a/arch/s390/pci/pci_clp.c
-> +++ b/arch/s390/pci/pci_clp.c
-> @@ -84,12 +84,12 @@ static __always_inline int clp_req(void *data, unsigned int lps)
->   	return cc;
->   }
->   
-> -static void *clp_alloc_block(gfp_t gfp_mask)
-> +void *clp_alloc_block(gfp_t gfp_mask)
->   {
->   	return (void *) __get_free_pages(gfp_mask, get_order(CLP_BLK_SIZE));
->   }
->   
-> -static void clp_free_block(void *ptr)
-> +void clp_free_block(void *ptr)
->   {
->   	free_pages((unsigned long) ptr, get_order(CLP_BLK_SIZE));
->   }
-> @@ -358,8 +358,8 @@ static int clp_list_pci_req(struct clp_req_rsp_list_pci *rrb,
->   	return rc;
->   }
->   
-> -static int clp_list_pci(struct clp_req_rsp_list_pci *rrb, void *data,
-> -			void (*cb)(struct clp_fh_list_entry *, void *))
-> +int clp_list_pci(struct clp_req_rsp_list_pci *rrb, u32 *mdd,
-> +		 void (*cb)(struct clp_fh_list_entry *))
->   {
->   	u64 resume_token = 0;
->   	int nentries, i, rc;
-> @@ -368,8 +368,12 @@ static int clp_list_pci(struct clp_req_rsp_list_pci *rrb, void *data,
->   		rc = clp_list_pci_req(rrb, &resume_token, &nentries);
->   		if (rc)
->   			return rc;
-> +		if (mdd)
-> +			*mdd = rrb->response.mdd;
-> +		if (!cb)
-> +			return 0;
->   		for (i = 0; i < nentries; i++)
-> -			cb(&rrb->response.fh_list[i], data);
-> +			cb(&rrb->response.fh_list[i]);
->   	} while (resume_token);
->   
->   	return rc;
-> @@ -398,7 +402,7 @@ static int clp_find_pci(struct clp_req_rsp_list_pci *rrb, u32 fid,
->   	return -ENODEV;
->   }
->   
-> -static void __clp_add(struct clp_fh_list_entry *entry, void *data)
-> +static void __clp_add(struct clp_fh_list_entry *entry)
->   {
->   	struct zpci_dev *zdev;
->   
+(What usually should happen is sm like this:
+
+void binderfs_remove_file(struct dentry *dentry)
+{
+	struct inode *parent_inode;
+
+	parent_inode = d_inode(dentry->d_parent);
+	inode_lock(parent_inode);
+	if (simple_positive(dentry)) {
+		dget(dentry);
+		simple_unlink(parent_inode, dentry);
+		d_delete(dentry);
+		dput(dentry);
+	}
+	inode_unlock(parent_inode);
+})
+
 > 
+> 
+> > > If you really want to move the dentry stashing into struct ima_namespace
+> > > even though it's really unnecessary then you may as well not care about
+> > > the auto-cleanup and keep that additional ima_fs_ns_free_dentries(ns)
+> > > call in .kill_sb(). But I really think not dragging dentry stashing into
+> > > struct ima_namespace is the correct way to go about this.
+> 
+> 
+> I moved the dentries into the ima_namespace so that each namespace holds a
+> pointer to the dentries it owns and isolates them. We certainly wouldn't
+> want to have IMA namespaces write over the current static variables and
+> create a mess with what these are pointing to ( https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_fs.c#L359
+> ) and possible race conditions when doing parallel initialization (if that's
+> possible at all). This also reduces the code size and we don't need two
+> different implementations for init_user_ns and non-init_user_ns. So I don't
+> quite understand whey we wouldn't want to have the dentries isolated via
+> ima_namespace?
+
+My point was this:
+Afaict, nowhere in ima are the stashed dentries needed apart from
+ima_policy_release() which is the .release method of the
+file_operations where the policy dentry is removed.
+
+The dentries only exist because for pre-namespaced ima if you created a
+dentry going through securityfs_create_dentry() you're pinning the
+super_block of init-securityfs via simple_pin_fs(). That obliges you to
+call securityfs_remove() later on in order to call simple_unpin_fs() for
+all dentries.
+
+But for namespaced-ima with namespaced-securityfs there is no more call
+to simple_{pin,unpin}_fs(). Consequently you don't need to stash the
+dentries anywhere to have them available for removal later on. They will
+be automatically cleaned up during .kill_sb().
+
+The one exception I was unaware of reading the code before is in
+ima_policy_release(). So apologies, I didn't see that. There you remove:
+
+static int ima_release_policy(struct inode *inode, struct file *file)
+{
+	struct ima_namespace *ns = get_current_ns();
+	const char *cause = ns->valid_policy ? "completed" : "failed";
+
+	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+		return seq_release(inode, file);
+
+	if (ns->valid_policy && ima_check_policy(ns) < 0) {
+		cause = "failed";
+		ns->valid_policy = 0;
+	}
+
+	pr_info("policy update %s\n", cause);
+	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
+			    "policy_update", cause, !ns->valid_policy, 0);
+
+	if (!ns->valid_policy) {
+		ima_delete_rules(ns);
+		ns->valid_policy = 1;
+		clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+		return 0;
+	}
+
+	ima_update_policy(ns);
+#if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+	securityfs_remove(ns->dentry[IMAFS_DENTRY_IMA_POLICY]);
+	ns->dentry[IMAFS_DENTRY_IMA_POLICY] = NULL;
+
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+But even so, why then stash all those dentries if the only dentry that
+you ever remove while ima is active - and ima isn't a module so can't be
+unloaded - is the IMAFS_DENTRY_IMA_POLICY. Simply stash the single
+dentry in struct ima_namespace and forget about all the other ones and
+avoid wasting memory. But maybe I'm misunderstanding something.
+
+I'm going to get my booster shot and hopefully I'll be able to work
+tomorrow and later today but I wouldn't bet on it.
+
+Christian

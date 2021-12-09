@@ -2,89 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9D146EC60
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C16E46EC63
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240680AbhLIQBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240192AbhLIQBq (ORCPT
+        id S240709AbhLIQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:03:13 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12292 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235652AbhLIQDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:01:46 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E59BC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:58:12 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id iq11so4747085pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=biv5OTi9ySXLAnrzcd/teCA8NX2vw4nxLXTxzbrLMPQ=;
-        b=tHRLi5to+H4EjBwccLnByww/gm1JUZym5mUe+YOKjx6/ETopTeXWC94Po5bRg7j+cC
-         dwPDxyBfOEs1GndutpZzbxHDQzXX7bPSsJzVNucaadRMKjFDHjw/IhJcqobFU58zZhIn
-         VGLcdIZpXHTJOTLP1kybtC1JIMXbkzwhvthiXvk9zq0+wRdChKm64TDh07KhLyUPyIfA
-         aNy7i4swkoZLGFZJvtJFG5TovILAG2u4ZLeYiadfbsDUFtUCWBLJqA5P1GZNogUINye8
-         0shT2rGDUjKvk395Jrv7fSIB+TVd1He94kEEPk9N77bLMQDzGJDTEZlb2DV5qS2qWB/9
-         ZfOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=biv5OTi9ySXLAnrzcd/teCA8NX2vw4nxLXTxzbrLMPQ=;
-        b=2d36RZt55u4TLXNRuDbt9TDqAHiNSPVt4l5+QAlCzYboMratqgXSeOpWK1uv38auMc
-         A8GAJ5WzK6/8zsjQvZEpKo2XPS94aqlbBk3qc5cSdJDi5pxL7LumKm8AKKsVV1541Bsr
-         nFlTKXWT6ziiH+yprMPP3d50F/oVxI8yyFzg2QPp7trdNMgi3QQBC7zYONTc/fyJh85W
-         C/WYXicHkw2w96w3OUhYri1d1qdPK19T4UEcldBjoQZGYGsj2X0zItEKjWRnuYr/FniD
-         3VuSvroB5x0MKXdIV2r7UZLpnRpwpETut1C/f8QDNXhv+l+wuhL6AQuGR9SYjNI/0XJu
-         SXrQ==
-X-Gm-Message-State: AOAM530ENUtktZLqvPTU2GgGQElDyRoyNd+v5GNZI2fINebVKuHPIISf
-        hPT2m+FKUAYM872UT5rgMae65g==
-X-Google-Smtp-Source: ABdhPJx9AV16TY4XwyxRRoUmtkt9/ytp79OHBNK2x67X/9jHLAI3NsiGUhgfOsdGmFlPKdqsX6ARCQ==
-X-Received: by 2002:a17:90a:a786:: with SMTP id f6mr16637212pjq.158.1639065491356;
-        Thu, 09 Dec 2021 07:58:11 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id k15sm82825pgn.91.2021.12.09.07.58.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 07:58:10 -0800 (PST)
-Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
-To:     syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000060ab3b05d2973c1a@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <053430b4-8b7a-249e-19a9-17752b47504a@kernel.dk>
-Date:   Thu, 9 Dec 2021 08:58:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 9 Dec 2021 11:03:06 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FvwtI004239;
+        Thu, 9 Dec 2021 15:59:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MFHY0V0tY36pni901pqm/AEd5XhOlwZ+lL9Yvdmqi8c=;
+ b=f6d6ZJv046A99HUXnD8A3VNvSecou8N5Kb/NLB0B8LWNkxClK834b9xbXuQ+PrxXgAs9
+ iEOT7hIPzLT9dKMdonNCKsNrLYnzLWq2T4n64R7dbnOCYTt7ks139xLz+xieehW96SAY
+ ekalMgQUKYvutbZ6Wk8uuFfg2qYDnYJ9KOWHM66zeLZYU502uTQ99F352wnBZuACcg3F
+ Og/lqkGsF6z6v+M0tgV2H/pOgE3aW4A3AOwhQby8KU2qxrmgwg64M8JGqDaS1ZSsi10I
+ pB7E123DypGbmHOPyPgp0Bw6e4BqIKRy6YfDOeDjtc/qNLQduNhvYyxOQtNLQmgAMwPx iw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cumwgg0r8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:59:27 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FsY9Q029098;
+        Thu, 9 Dec 2021 15:59:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyya19n1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:59:25 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9FxLIp17433034
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 15:59:21 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD66952067;
+        Thu,  9 Dec 2021 15:59:21 +0000 (GMT)
+Received: from [9.145.152.236] (unknown [9.145.152.236])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 94C145205A;
+        Thu,  9 Dec 2021 15:59:21 +0000 (GMT)
+Message-ID: <d0c9ac16-eb91-95cc-77bd-08e853e31bd5@linux.ibm.com>
+Date:   Thu, 9 Dec 2021 16:59:21 +0100
 MIME-Version: 1.0
-In-Reply-To: <00000000000060ab3b05d2973c1a@google.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
 Content-Language: en-US
+To:     Nathan Lynch <nathanl@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20211203154321.13168-1-ldufour@linux.ibm.com>
+ <87bl1so588.fsf@linux.ibm.com>
+ <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
+ <878rwwny1l.fsf@linux.ibm.com>
+ <21eb4749-42b1-da78-8833-00d360fa36e5@linux.ibm.com>
+ <874k7jnmva.fsf@linux.ibm.com>
+ <b6edbf96-4349-c39b-69ee-477b4fdef511@linux.ibm.com>
+ <871r2lopes.fsf@linux.ibm.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <871r2lopes.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mcmVI1m8o9yneMPQcHaSeOKW0XKOBi5s
+X-Proofpoint-GUID: mcmVI1m8o9yneMPQcHaSeOKW0XKOBi5s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_07,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090084
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 5:04 PM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On 09/12/2021, 14:53:31, Nathan Lynch wrote:
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> On 08/12/2021, 16:21:29, Nathan Lynch wrote:
+>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>>>> On 07/12/2021, 18:07:50, Nathan Lynch wrote:
+>>>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>>>>>> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
+>>>>>>> Is there a reasonable fallback for VMs where this parameter doesn't
+>>>>>>> exist? PowerVM partitions should always have it, but what do we want the
+>>>>>>> behavior to be on other hypervisors?
+>>>>>>
+>>>>>> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
+>>>>>> the lparstat -i command will fall back to the device tree value. I can't
+>>>>>> see any valid reason to report the value defined in the device tree
+>>>>>> here.
+>>>>>
+>>>>> Here's a valid reason :-)
+>>>>>
+>>>>> lparstat isn't the only possible consumer of the interface, and the
+>>>>> 'ibm,partition-name' property and the dynamic system parameter clearly
+>>>>> serve a common purpose. 'ibm,partition-name' is provided by qemu.
+>>>>
+>>>> If the hypervisor is not providing this value, this is not the goal of this
+>>>> interface to fetch it from the device tree.
+>>>>
+>>>> Any consumer should be able to fall back on the device tree value, and
+>>>> there is no added value to do such a trick in the kernel when it can be
+>>>> done in the user space.
+>>>
+>>> There is value in imposing a level of abstraction so that the semantics
+>>> are:
+>>>
+>>> * Report the name assigned to the guest by the hosting environment, if
+>>>   available
+>>>
+>>> as opposed to
+>>>
+>>> * Return the string returned by a RTAS call to ibm,get-system-parameter
+>>>   with token 55, if implemented
+>>>
+>>> The benefit is that consumers of lparcfg do not have to be coded with
+>>> the knowledge that "if a partition_name= line is absent, the
+>>> ibm,get-system-parameter RTAS call must have failed, so now I should
+>>> read /sys/firmware/devicetree/base/ibm,partition_name." That's the sort
+>>> of esoterica that is appropriate for the kernel to encapsulate.
+>>>
+>>> And I'd say the effort involved (falling back to a root node property
+>>> lookup) is proportional to the benefit.
+>>>
+>>
+>> I don't agree.
+>> From the kernel point of view, I can't see any benefit, this is adding more
+>> complexity to do in the kernel what can be done easily in user space.
 > 
-> HEAD commit:    cd8c917a56f2 Makefile: Do not quote value for CONFIG_CC_IM..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=153be575b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5247c9e141823545
-> dashboard link: https://syzkaller.appspot.com/bug?extid=21e6887c0be14181206d
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1218dce1b00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f91d89b00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com
+> Applying this logic, I don't see how adding this to lparcfg would be
+> justified at all, because user space can already get at the parameter
+> using the privileged rtas syscall. Publish it to unprivileged programs
+> over D-Bus or something. That would minimize complexity for the kernel.
 
-#syz test git://git.kernel.dk/linux-block io_uring-5.16
-
--- 
-Jens Axboe
+As you know, there is a need for unprivileged user to read that value.
+Adding this to lparcfg solves this issue. Also, this makes it easy to read
+from user space, without the need to get plumbing like D-Bus in the
+picture. This is simple, working fine, and user space can easily make the
+choice to read the DT value if needed. Please keep in mind that most of the
+time the hypervisor is providing that value.
 

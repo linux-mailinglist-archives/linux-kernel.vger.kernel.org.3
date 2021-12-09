@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B23C46ECD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED78946ECDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237045AbhLIQNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:13:54 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55908 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbhLIQNq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:13:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D0B00CE26DA;
-        Thu,  9 Dec 2021 16:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02DCEC341CD;
-        Thu,  9 Dec 2021 16:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639066210;
-        bh=GArFYqa9vglTclhOiJ0GItI+agrBFi41MZa9MyWDgyQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=r/KMVLKQGo8gHBqB9Yb5/Q+eJNj+w8/5fN7J/+RyskhmQzH1W9Ss/NVns/NbGp65c
-         /5ZuzmsPowg6nXXIioW1mEBmSF1avSfVY+EVblYdNVkBJ3XHMKZs+ZkWdhwGo1XqQ7
-         +fgUyh9mhbohVRh4+sf7hQ7M/ptD3jM2dVxxFibGrwS9xAZwJlzzMOLBulapbvSBkL
-         1XYdvcu2+1zFbvcop6cWa6M9GSwCCtV2OK+6j5QunQWEM9CrpBKM12SIbYt7bPcSqA
-         W1C6VX3ClEIQck+12BcP8jbRmjFT9iLCekGHmA6du1/9Xs6927OYLIjcK5qwzxxkwY
-         ZkYKGOK07R5Lw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A3EE660A37;
-        Thu,  9 Dec 2021 16:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S237048AbhLIQQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:16:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:58688 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229508AbhLIQQD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:16:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CFB7ED1;
+        Thu,  9 Dec 2021 08:12:29 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.57.83.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B147E3F5A1;
+        Thu,  9 Dec 2021 08:12:27 -0800 (PST)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        valentin.schneider@arm.com, morten.rasmussen@arm.com,
+        chris.redpath@arm.com, qperret@google.com, lukasz.luba@arm.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH 0/4] feec() energy margin removal
+Date:   Thu,  9 Dec 2021 16:11:55 +0000
+Message-Id: <20211209161159.1596018-1-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] nfp: Fix memory leak in nfp_cpp_area_cache_add()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163906620966.18129.17437066396344562752.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Dec 2021 16:10:09 +0000
-References: <20211209061511.122535-1-niejianglei2021@163.com>
-In-Reply-To: <20211209061511.122535-1-niejianglei2021@163.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     simon.horman@corigine.com, kuba@kernel.org, davem@davemloft.net,
-        libaokun1@huawei.com, oss-drivers@corigine.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+find_energy_efficient() (feec()) will migrate a task to save energy only
+if it saves at least 6% of the total energy consumed by the system. This
+conservative approach is a problem on a system where a lot of small tasks
+create a huge load on the overall: very few of them will be allowed to migrate
+to a smaller CPU, wasting a lot of energy. Instead of trying to determine yet
+another margin, let's try to remove it.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+The first elements of this patch-set are various fixes and improvement that
+stabilizes task_util and ensures energy comparison fairness across all CPUs of
+the topology. Only once those fixed, we can completely remove the margin and
+let feec() aggressively place task and save energy.
 
-On Thu,  9 Dec 2021 14:15:11 +0800 you wrote:
-> In line 800 (#1), nfp_cpp_area_alloc() allocates and initializes a
-> CPP area structure. But in line 807 (#2), when the cache is allocated
-> failed, this CPP area structure is not freed, which will result in
-> memory leak.
-> 
-> We can fix it by freeing the CPP area when the cache is allocated
-> failed (#2).
-> 
-> [...]
+This has been validated by two different ways:
 
-Here is the summary with links:
-  - nfp: Fix memory leak in nfp_cpp_area_cache_add()
-    https://git.kernel.org/netdev/net/c/c56c96303e92
+First using LISA's eas_behaviour test suite. This is composed of a set of
+scenario and verify if the task placement is optimum. No failure have been
+observed and it also improved some tests such as Ramp-Down (as the placement
+is now more energy oriented) and *ThreeSmall (as no bouncing between clusters
+happen anymore).
 
-You are awesome, thank you!
+  * Hikey960: 100% PASSED
+  * DB-845C:  100% PASSED
+  * RB5:      100% PASSED
+
+Second, using an Android benchmark: PCMark2 on a Pixel4, with a lot of
+backports to have a scheduler as close as we can from mainline. 
+
+  +------------+-----------------+-----------------+
+  |    Test    |      Perf       |    Energy [1]   |
+  +------------+-----------------+-----------------+
+  | Web2       | -0.3% pval 0.03 | -1.8% pval 0.00 |
+  | Video2     | -0.3% pval 0.13 | -5.6% pval 0.00 |
+  | Photo2 [2] | -3.8% pval 0.00 | -1%   pval 0.00 |
+  | Writing2   |  0%   pval 0.13 | -1%   pval 0.00 |
+  | Data2      |  0%   pval 0.8  | -0.43 pval 0.00 |
+  +------------+-----------------+-----------------+ 
+
+The margin removal let the kernel make the best use of the Energy Model,
+tasks are more likely to be placed where they fit and this saves a 
+substantial amount of energy, while having a limited impact on performances.
+
+[1] This is an energy estimation based on the CPU activity and the Energy Model
+for this device. "All models are wrong but some are useful"; yes, this is an
+imperfect estimation that doesn't take into account some idle states and shared
+power rails. Nonetheless this is based on the information the kernel has during
+runtime and it proves the scheduler can take better decisions based solely on
+those data.
+
+[2] This is the only performance impact observed. The debugging of this test
+showed no issue with task placement. The better score was solely due to some
+critical threads held on better performing CPUs. If a thread needs a higher
+capacity CPU, the placement must result from a user input (with e.g. uclamp
+min) instead of being artificially held on less efficient CPUs by feec().
+Notice also, the experiment didn't use the Android only latency_sensitive
+feature which would hide this problem on a real-life device.
+
+
+Vincent Donnefort (4):
+  sched/fair: Provide u64 read for 32-bits arch helper
+  sched/fair: Decay task PELT values during migration
+  sched/fair: Remove task_util from effective utilization in feec()
+  sched/fair: Remove the energy margin in feec()
+
+ kernel/sched/core.c  |   7 ++
+ kernel/sched/fair.c  | 263 ++++++++++++++++++++++---------------------
+ kernel/sched/sched.h |  46 +++++++-
+ 3 files changed, 189 insertions(+), 127 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+2.25.1
+ 

@@ -2,97 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA91846E30F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A28346E312
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbhLIHW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbhLIHWz (ORCPT
+        id S233657AbhLIHXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:23:23 -0500
+Received: from mail-4319.protonmail.ch ([185.70.43.19]:56725 "EHLO
+        mail-4319.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233641AbhLIHXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:22:55 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927A2C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 23:19:22 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id a2so4467951qtx.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 23:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=wp7bsIiEGq1v0UzZDarToFJILpj4ru1SGwyQaMb3p4E=;
-        b=n+ugZQ1C7dMkoFU9ez645n+AJqXmFaYJgGVuTfIepCmJyDDnCohuhijGr9jGafo/wy
-         ke5ok+6E3zz7kA5TnbpKDDfzpnH1mUlESdrcsPQX3rQ/5EWkuzqbXbOcU7kKOUckIgth
-         O3HHcGIovw7KB4FOWO0jiUkVl5qccjHYAntQnRbxWffMfENTLHdEbWcJPbTowO9D36lh
-         64hdvosY2W7EEQR7dNWhu7EJiIi92GFTNn8C83HMjh4dkXwoXA66KkTp40tVE3kupDAq
-         JMqxYPzhj9IyRHZAsGhQpuTwy2HT4CE1oPWh6CbJnqiZk+a9EqxqpKmrpdtx6oHOyez0
-         QR3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=wp7bsIiEGq1v0UzZDarToFJILpj4ru1SGwyQaMb3p4E=;
-        b=VWvcY+O68j9ggpQC/Vx25hAThtB5V3c8Nq4PopE4i6ast3wR5XdXg6wEYyvKaMTsfi
-         lSNXZxBXUqNEUrg/iiTBrRP7DKWEfysmy136yIUaIca5NAtdTf0gx2lS76IeoS9oiIb1
-         faSu8VY/Z/DdHcme5l8Es+shtjVdsrNjO0Bc834+5/bAiS0Qls9SEG2xh/HUHQYzEboR
-         Q6ZWOg7+CPSxvrO/hWq8Zy3coxwL2U3z5uzOLXTmEEwKrH54x0tTzrftB2bZnNjQnzoJ
-         dcOyVjbDJA7iO/pJhEZ8QmCVRuB5RN17+iGNBubtBi9KD5PbImt/4/HzknP3lSZw6+5P
-         DzwA==
-X-Gm-Message-State: AOAM532ke75gGrH5geHZUBqEgQkgi2hqrkCMo7IQjxIZE3o0EO1yByXS
-        KzRsh4c9NYYXfn5Vh7ztNnkKycEfXZeCCg==
-X-Google-Smtp-Source: ABdhPJyDk5gwcYkseNoR8GrR8PAhZjoMS9Xyrz93qdo0YVs5eDJPx98/mF7EChyYF/5No6CJchsA8g==
-X-Received: by 2002:ac8:580b:: with SMTP id g11mr14831442qtg.268.1639034361429;
-        Wed, 08 Dec 2021 23:19:21 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id z4sm3382336qtj.42.2021.12.08.23.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 23:19:20 -0800 (PST)
-Date:   Wed, 8 Dec 2021 23:19:18 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm: delete unsafe BUG from page_cache_add_speculative()
-Message-ID: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
+        Thu, 9 Dec 2021 02:23:22 -0500
+Date:   Thu, 09 Dec 2021 07:19:37 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1639034387;
+        bh=ylG/kDOZ8xUJwFkV+j+MTR5/1hNMGnn5X+gVJt2Eg7o=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=W9VPUvTslasBIQlfqO9EpuseZOpL4g/fHWByft8WWXJY012wDomaw3F/V7xIkqK6C
+         H+qsQkkzxwj6Rz576uXp6zzbwpgAkkCgPyozuFLlLqgxniq2+9Vi2wxVDnCjViW97D
+         eCjB7WDG09BfEx1C0IGQuZ4h4Ve0S5n9nySmqcLDvgISb9aohY6AN5dltr7W3jc9r4
+         g1XN9rB8POWxxHST8YsNjDMSHqjc/uxxDkKeVkXvTHrNKAahSkp4iFpK09Yz7RPpUi
+         kqYUKjYbXPEKPUGXKvEuPMHqCrouXMmS1VZ/uPmpRvjfRrzL32qv+29j5UwmAHbbw5
+         kB2rsrL6jvOSQ==
+To:     Aditya Garg <gargaditya08@live.com>
+From:   Orlando Chamberlain <redecorating@protonmail.com>
+Cc:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Reply-To: Orlando Chamberlain <redecorating@protonmail.com>
+Subject: Re: [BUG] Enabling EFI runtime services causes panics in the T2 security chip on Macs equipped with it.
+Message-ID: <20211209071935.13996bb1@localhost>
+In-Reply-To: <74ACDCF3-6996-4CB4-8899-A625D154FB0C@live.com>
+References: <74ACDCF3-6996-4CB4-8899-A625D154FB0C@live.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not easily reproducible, but on 5.16-rc I have several times hit
-the VM_BUG_ON_PAGE(PageTail(page), page) in page_cache_add_speculative():
-usually from filemap_get_read_batch() for an ext4 read, yesterday from
-next_uptodate_page() from filemap_map_pages() for a shmem fault.
+On Thu, 09 Dec 2021 18:05:35 +1100
+"Aditya Garg" <gargaditya08@live.com> wrote:
 
-That BUG used to be placed where page_ref_add_unless() had succeeded,
-but now it is placed before folio_ref_add_unless() is attempted: that
-is not safe, since it is only the acquired reference which makes the
-page safe from racing THP collapse or split.
+> On enabling EFI runtime services on Macs with the T2 security chip,
+> kernel fails to boot due panics in the T2 security chip. Using
 
-We could keep the BUG, checking PageTail only when folio_ref_try_add_rcu()
-has succeeded; but I don't think it adds much value - just delete it.
+I think it only fails to boot if something is set up to write to nvram
+at boot, I can boot fine on a MacBookPro16,1 as long as I don't have
+anything writing to nvram (deleting and reading variables is fine).
 
-Fixes: 020853b6f5ea ("mm: Add folio_try_get_rcu()")
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
+> efi=3Dnoruntine (or noefi) as a kernel parameter seems to fix the
+> issue. Also, making NVRAM read-only makes kernels boot. A fix for
+> that would be appreciated.
+>=20
+> Link :- https://bugzilla.kernel.org/show_bug.cgi?id=3D215277
 
- include/linux/pagemap.h |    1 -
- 1 file changed, 1 deletion(-)
+The t2 security chip handles nvram and loading bootloaders on these
+macs. Its bridgeOS had an update that was bundled with macOS Catalina
+(this can't be downgraded, and some computers shipped with macOS
+Catalina), that made writing to nvram from Linux cause an invalid
+opcode error and a frozen system:
 
---- 5.16-rc4/include/linux/pagemap.h
-+++ linux/include/linux/pagemap.h
-@@ -285,7 +285,6 @@ static inline struct inode *folio_inode(
- 
- static inline bool page_cache_add_speculative(struct page *page, int count)
- {
--	VM_BUG_ON_PAGE(PageTail(page), page);
- 	return folio_ref_try_add_rcu((struct folio *)page, count);
- }
- 
+invalid opcode: 0000 [#1] PREEMPT SMP PTI
+CPU: 9 PID: 135 Comm: kworker/u24:2 Tainted: G S   U   C        5.16.0-rc4-=
+00054-g6c3ecb47bb75-dirty #72
+Hardware name: Apple Inc. MacBookPro16,1/Mac-E1008331FDC96864, BIOS 1715.40=
+.15.0.0 (iBridge: 19.16.10548.0.0,0) 10/03/2021
+Workqueue: efi_rts_wq efi_call_rts
+RIP: 0010:0xfffffffeefc46877
+Code: 8b 58 18 0f b6 0d e1 09 00 00 48 c1 e1 04 e8 30 03 00 00 48 89 05 d9 =
+09 00 00 80 3d a2 09 00 00 01 75 09 48 c7 07 00 10 00 00 <0f> 0b 48 8b 05 a=
+8 07 00 00 8b 40 08 48 83 c0 f0 48 89 07 48 c7 06
+RSP: 0018:ffff998d40513dd0 EFLAGS: 00010246
+RAX: ffff998d40513eb0 RBX: ffff998d43f17dd8 RCX: 0000000000000007
+RDX: ffff998d43f17dc8 RSI: ffff998d43f17dd8 RDI: ffff998d43f17dc8
+RBP: ffff998d40513e00 R08: ffff998d43f17dd0 R09: ffff998d43f17dd8
+R10: ffff998d40513c80 R11: ffffffff9b4cabe8 R12: ffff998d43f17dc8
+R13: ffff998d43f17dd0 R14: 0000000000000246 R15: 0000000000000048
+FS:  0000000000000000(0000) GS:ffff8cf8bec40000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9133594374 CR3: 0000000100200005 CR4: 00000000003706e0
+Call Trace:
+ <TASK>
+ ? _printk+0x58/0x6f
+ __efi_call+0x28/0x30
+ efi_call_rts.cold+0x83/0x104
+ process_one_work+0x219/0x3f0
+ worker_thread+0x4d/0x3d0
+ ? rescuer_thread+0x390/0x390
+ kthread+0x15c/0x180
+ ? set_kthread_struct+0x40/0x40
+ ret_from_fork+0x22/0x30
+ </TASK>
+Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_rej=
+ect_ipv4 xt_tcpudp nft_compat amdgpu nft_chain_nat nf_nat nf_conntrack nf_d=
+efrag_ipv6 nf_defrag_ipv4 nft_counter nf_tables n
+ sysimgblt fb_sys_fops cec crc16 intel_pch_thermal sbs ecdh_generic ecc rfk=
+ill apple_bl video acpi_tad mac_hid sbshc pkcs8_key_parser drm fuse crypto_=
+user bpf_preload ip_tables x_tables crct10dif_pcl
+---[ end trace 22f8aad91761cc4a ]---
+RIP: 0010:0xfffffffeefc46877
+Code: 8b 58 18 0f b6 0d e1 09 00 00 48 c1 e1 04 e8 30 03 00 00 48 89 05 d9 =
+09 00 00 80 3d a2 09 00 00 01 75 09 48 c7 07 00 10 00 00 <0f> 0b 48 8b 05 a=
+8 07 00 00 8b 40 08 48 83 c0 f0 48 89 07 48 c7 06
+RSP: 0018:ffff998d40513dd0 EFLAGS: 00010246
+RAX: ffff998d40513eb0 RBX: ffff998d43f17dd8 RCX: 0000000000000007
+RDX: ffff998d43f17dc8 RSI: ffff998d43f17dd8 RDI: ffff998d43f17dc8
+RBP: ffff998d40513e00 R08: ffff998d43f17dd0 R09: ffff998d43f17dd8
+R10: ffff998d40513c80 R11: ffffffff9b4cabe8 R12: ffff998d43f17dc8
+R13: ffff998d43f17dd0 R14: 0000000000000246 R15: 0000000000000048
+FS:  0000000000000000(0000) GS:ffff8cf8bec40000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9133594374 CR3: 0000000100200005 CR4: 00000000003706e0
+BUG: kernel NULL pointer dereference, address: 0000000000000008
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+
+This seems to be triggered by EFI_QUERY_VARIABLE_INFO here
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
+vers/firmware/efi/runtime-wrappers.c#n220
+and within that section, the invalid opcode seems to be occurring in
+this bit of assembly:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
+h/x86/platform/efi/efi_stub_64.S
+
+printing efi_call_virt's arguments with
+pr_err("1: %d, 2: %d, 3: %d, 4: %d", *(u32 *)arg1, (u64 *)arg2, (u64 *)arg3=
+, (u64 *)arg4);
+gets me "1: 7, 2: -2079343160, 3: -2079343152, 4: -2079343144"
+
+
+--=20
+

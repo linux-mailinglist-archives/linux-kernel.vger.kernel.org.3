@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABB046E24C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86D946E24E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbhLIGJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 01:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbhLIGJm (ORCPT
+        id S232657AbhLIGM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 01:12:27 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:35947 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231745AbhLIGM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 01:09:42 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D4BC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 22:06:10 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id a207-20020a621ad8000000b004aed6f7ec3fso3013343pfa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 22:06:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=pPWXqVL2VmGtL+4wfJS4Lr1QCW5EOpCcuVv/bW8wHlA=;
-        b=m445/XdfA4jroI3XDCtAyKS5RcJk3wwnVdhwXsQ243ogOY3c/PyQWynsCn+0RNOCgj
-         meJXf7IP7nbg3lOB2Nba+ytkgp2C8qGV9AUhMCTKgTsfK7gseCSBvupR//ymsixlvIZ1
-         vsGfLv0pKT5VLQ4m0g7imQGazSMcvx4ka6KA8taARhdZlZXJu774R2czYJgOvHjHs/vR
-         /kA9el3lYEGONOqtRy2FuyUMD/ZVx/7qwwnaMoGtIuErlyLX4LUTxVAMa2om/KkntDRn
-         vBdVr6pK4jeGKOWBt3lWtZ4sL1WgyTWQgyxOuypLI0QNVs32ahOiUNCpSA92pF8j/6rS
-         YxFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=pPWXqVL2VmGtL+4wfJS4Lr1QCW5EOpCcuVv/bW8wHlA=;
-        b=ocFysm/GJhbHIIiLdxgbAX/ZGDuwv1/B8XIrCe6cLm/XnThdo4DZvGT76qFxrDasvE
-         WuanN3QCB+XatKeuSFCFPh3m9D5wG3FhfOz+86384hrlrYSs26Rmd638jliv5dSc8Y0o
-         4vjVISqDQOYbeZjH6+wwPgvmoUR3E6YRsanBvFh3BzjdcsUdti9YhMIwoqUmpy+Ep9NX
-         ybKspUBdA7e8FIivoAnbfzlj1+tULP4SzY0XAx0Cm4jiffruq7a+dZFXF/EktTXch1KS
-         srstuqGDmnLD6SsdpVa+jhrENAF3hx1HdiSZN+RtKfvd/j932aut/KC04CR9m0r9nlx2
-         IU1Q==
-X-Gm-Message-State: AOAM533JhapSdTGfKfEXTe7oFtbXE325fZYQt2C0zt8nIKV9jXsCY1s2
-        a/yDi4QvB8A7P84leqFGIRGuH4r3XTk=
-X-Google-Smtp-Source: ABdhPJw5bpr56J/RPTS/V7V8gkVuRzz14Sg1Q/BeN7En+5GJvUuj9YAH473VwOhaqUXE84d1Zl1zpbv79GU=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:84d:b0:4ae:da2:9ce7 with SMTP id
- q13-20020a056a00084d00b004ae0da29ce7mr9809877pfk.16.1639029969489; Wed, 08
- Dec 2021 22:06:09 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  9 Dec 2021 06:05:52 +0000
-In-Reply-To: <20211209060552.2956723-1-seanjc@google.com>
-Message-Id: <20211209060552.2956723-8-seanjc@google.com>
-Mime-Version: 1.0
-References: <20211209060552.2956723-1-seanjc@google.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH 7/7] KVM: WARN if is_unsync_root() is called on a root without
- a shadow page
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 9 Dec 2021 01:12:26 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J8kBC4GVSz4xgY;
+        Thu,  9 Dec 2021 17:08:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1639030132;
+        bh=D8SbP/O7wam578TW1HYdDVA3VPmkytsHTRymA1Ss3gg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Tg5lQFWCAqaidtyGRXagjacrGIp7N/xOSDR014fQubYxl+gIoM6VXXAGTbya+TjNV
+         9mgppM94THhjuhSGsiiW5ivjTxJDSbH/Szd1i/C+HdojrMq4lLmBUcLXtLKfC96KEr
+         WPlNPR3Qx6QmSvmLX0tj/+M2TxDRqlPNmWKQJXxWuFSq57ibcioymYSU+yvoXZsm0t
+         HMOshmqKY4hs3W2FiN9lrJGN5rbBg7bY7OEy/G+BUbIy55WIFvQrxRuUZ3T+EX7sA3
+         oFqXc24SoL3INzYBX1D3oXPFvNND/yarp82mu0pVfKSOM5aUy4qgVSXVdzccRYbt0d
+         1eczW8i3M6+nA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mbizon@freebox.fr" <mbizon@freebox.fr>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and
+ KFENCE
+In-Reply-To: <191754d3-e13d-6fe2-db4b-99d78cbf2a2e@csgroup.eu>
+References: <aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu>
+ <12988dafdf7e14ba6db69ab483a2eb53e411fc0d.camel@freebox.fr>
+ <191754d3-e13d-6fe2-db4b-99d78cbf2a2e@csgroup.eu>
+Date:   Thu, 09 Dec 2021 17:08:48 +1100
+Message-ID: <8735n2nwcv.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WARN and bail if is_unsync_root() is passed a root for which there is no
-shadow page, i.e. is passed the physical address of one of the special
-roots, which do not have an associated shadow page.  The current usage
-squeaks by without bug reports because neither kvm_mmu_sync_roots() nor
-kvm_mmu_sync_prev_roots() calls the helper with pae_root or pml4_root,
-and 5-level AMD CPUs are not generally available, i.e. no one can coerce
-KVM into calling is_unsync_root() on pml5_root.
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 07/12/2021 =C3=A0 11:34, Maxime Bizon a =C3=A9crit=C2=A0:
+>>=20
+>> On Tue, 2021-12-07 at 06:10 +0000, Christophe Leroy wrote:
+>>=20
+>> Hello,
+>>=20
+>> With the patch applied and
+>>=20
+>> CONFIG_DEBUG_PAGEALLOC=3Dy
+>> CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=3Dy
+>> CONFIG_DEBUG_VM=3Dy
+>>=20
+>> I get tons of this during boot:
+>>=20
+>> [    0.000000] Dentry cache hash table entries: 262144 (order: 8, 104857=
+6 bytes, linear)
+>> [    0.000000] Inode-cache hash table entries: 131072 (order: 7, 524288 =
+bytes, linear)
+>> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+>> [    0.000000] ------------[ cut here ]------------
+>> [    0.000000] WARNING: CPU: 0 PID: 0 at arch/powerpc/mm/pgtable.c:194 s=
+et_pte_at+0x18/0x160
+>> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.0+ #442
+>> [    0.000000] NIP:  80015ebc LR: 80016728 CTR: 800166e4
+>> [    0.000000] REGS: 80751dd0 TRAP: 0700   Not tainted  (5.15.0+)
+>> [    0.000000] MSR:  00021032 <ME,IR,DR,RI>  CR: 42228882  XER: 20000000
+>> [    0.000000]
+>> [    0.000000] GPR00: 800b8dc8 80751e80 806c6300 807311d8 807a1000 8ffff=
+e84 80751ea8 00000000
+>> [    0.000000] GPR08: 007a1591 00000001 007a1180 00000000 42224882 00000=
+000 3ff9c608 3fffd79c
+>> [    0.000000] GPR16: 00000000 00000000 00000000 00000000 00000000 00000=
+000 800166e4 807a2000
+>> [    0.000000] GPR24: 807a1fff 807311d8 807311d8 807a2000 80768804 00000=
+000 807a1000 007a1180
+>> [    0.000000] NIP [80015ebc] set_pte_at+0x18/0x160
+>> [    0.000000] LR [80016728] set_page_attr+0x44/0xc0
+>> [    0.000000] Call Trace:
+>> [    0.000000] [80751e80] [80058570] console_unlock+0x340/0x428 (unrelia=
+ble)
+>> [    0.000000] [80751ea0] [00000000] 0x0
+>> [    0.000000] [80751ec0] [800b8dc8] __apply_to_page_range+0x144/0x2a8
+>> [    0.000000] [80751f00] [80016918] __kernel_map_pages+0x54/0x64
+>> [    0.000000] [80751f10] [800cfeb0] __free_pages_ok+0x1b0/0x440
+>> [    0.000000] [80751f50] [805cfc8c] memblock_free_all+0x1d8/0x274
+>> [    0.000000] [80751f90] [805c5e0c] mem_init+0x3c/0xd0
+>> [    0.000000] [80751fb0] [805c0bdc] start_kernel+0x404/0x5c4
+>> [    0.000000] [80751ff0] [000033f0] 0x33f0
+>> [    0.000000] Instruction dump:
+>> [    0.000000] 7c630034 83e1000c 5463d97e 7c0803a6 38210010 4e800020 942=
+1ffe0 93e1001c
+>> [    0.000000] 83e60000 81250000 71290001 41820014 <0fe00000> 7c0802a6 9=
+3c10018 90010024
+>>=20
+>>=20
+>
+> That's unrelated to this patch.
+>
+> The problem is linked to patch c988cfd38e48 ("powerpc/32: use=20
+> set_memory_attr()"), which changed from using __set_pte_at() to using=20
+> set_memory_attr() which uses set_pte_at().
+>
+> set_pte_at() has additional checks and shall not be used to updating an=20
+> existing PTE.
+>
+> Wondering if I should just use __set_pte_at() instead like in the past,=20
+> or do like commit 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against=20
+> concurrent accesses") and use pte_update()
+>
+> Michael, Aneesh, any suggestion ?
 
-Note, this doesn't fix the mess with 5-level nNPT, it just (hopefully)
-prevents KVM from crashing.
+The motivation for using pte_update() in that commit is that it does the
+update atomically and also handles flushing the HPTE for 64-bit Hash.
 
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+But the books/32 version of pte_update() doesn't do that. In fact
+there's some HPTE handling in __set_pte_at(), but then also a comment
+saying it's handling in a subsequent flush_tlb_xxx().
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b6115d8ea696..18ecaadcf616 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3666,6 +3666,14 @@ static bool is_unsync_root(hpa_t root)
- 	 */
- 	smp_rmb();
- 	sp = to_shadow_page(root);
-+
-+	/*
-+	 * PAE roots (somewhat arbitrarily) aren't backed by shadow pages, the
-+	 * PDPTEs for a given PAE root need to be synchronized individually.
-+	 */
-+	if (WARN_ON_ONCE(!sp))
-+		return false;
-+
- 	if (sp->unsync || sp->unsync_children)
- 		return true;
- 
--- 
-2.34.1.400.ga245620fadb-goog
+So that doesn't really help make a decision :)
 
+On the other hand, could you convert those set_memory_attr() calls to
+change_memory_attr() and then eventually drop the former?
+
+cheers

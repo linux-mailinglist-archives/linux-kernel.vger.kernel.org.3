@@ -2,150 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E89346F1FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9C346F204
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243029AbhLIRgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243006AbhLIRgP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:36:15 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C604C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:32:41 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id o13so10916889wrs.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MnZ8XxoV/JNSKycvbGgmmnjtRwN6D7AwRUUOOMU+Mdw=;
-        b=OXy7hbkQO4VBUZfxujencxRfCDtrWn8l6ADXaQvtZONpuVXUqGlbnDZjZ6MYuMK1kz
-         Ib3+YPOGQf+l6YXBcy77E5yJhWCLMJLfnSc+oILTWxWFa2l4sODvgwlLmizQlFSkQVGZ
-         Q8wvY/71JnyrCRlesbrXOThx1t+k9w6VSJrDRdVAeAIeHjlHKYQIJAdHfu8s8j0CgF8C
-         8WD6l2kzyF4IYzuoSIiIJSf4FZPrv0C525Yge9d8DrcLl3zkupxnFmoq75rR/0xMCHZf
-         4cKv2Of8mh0o1luLsCFTPJsObWh1beMOJpmmJm8RUsJNaRoEKNqCrjcM+26S9S2rBzr1
-         TZOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MnZ8XxoV/JNSKycvbGgmmnjtRwN6D7AwRUUOOMU+Mdw=;
-        b=nDEPZRVRauHIqmDDuhQjs6WJ/AWcdtoWmPqBUYLTnw2VgwtnbXQJDCv5xoSFHmKIKY
-         Prg3RwMosZ6HGwYrSzmNIwdsXkDpYaj56BUETp2D5hSsdh14d1fKYH83LQ2QkL5DVGeE
-         k6uxGDwOrEAyVrND546yXRPmfOeFvORPQORMEXeaD/z3+nclYrWDXkJu+Jt/U1XBMs2z
-         /xZV0LypjNTB0/6xCOZj6B3TXgcYqw3MzRcg1LzxDkP8NjpDtbHlC0WUZIDl5Bo3MtMG
-         AXmAllq4TDpA71o8rax7BWkt/QaKOOUkdjoXv92+YngFgQ0lEktXSY74UV40KnfQiVui
-         1D3A==
-X-Gm-Message-State: AOAM533JLgstGz9ovNyvnNixIQ9umUXESX6uSLCRGYGZK68end2P06rM
-        DQ0+sejlUtPySD2/5TkZq1ACnN9Yp/uJEw==
-X-Google-Smtp-Source: ABdhPJwEZnAMTP1IrzgOOydDuBQdzc5f1/tqdbw72jT2SJXr29DrudN2m4jy01eVW1SRHN131+SAhQ==
-X-Received: by 2002:a5d:6d8c:: with SMTP id l12mr8053459wrs.435.1639071159488;
-        Thu, 09 Dec 2021 09:32:39 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id d188sm9692560wmd.3.2021.12.09.09.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 09:32:39 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: nvmem: Add missing 'reg' property
-To:     Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206174133.2296265-1-robh@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <c676e23c-3c44-c28c-d572-499fe8d4ee8f@linaro.org>
-Date:   Thu, 9 Dec 2021 17:32:38 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S243068AbhLIRhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:37:22 -0500
+Received: from mga01.intel.com ([192.55.52.88]:43475 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231187AbhLIRhV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:37:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639071227; x=1670607227;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OYyTJBH2NAkzB8yRuWaFmgipZaneXGsYztwNU9Ombj0=;
+  b=RSBFNnqy5Mm8yhaymw/QkhTyMpsI+ICa5zqNq64KnX5FxLd/JaSWJS3B
+   pbRW8SVArtlkGnq//N+4PYUsz5lc/jqjujoK9kFTNVKcaqcyr4G3ZhFVj
+   xnJjLZW7WVs0u8+dW2zKNZcuCc4JdfRexfQlwURkSHTgy1WUdYK6n9MeY
+   zzZB14RQnYzRK8WVQ7MseXDW3aoZhyMHy6g8VhPMbI2y6/MakkTt5rTj2
+   6yG5kqHKTJNcb1SODQbYBOCXjP0kmBzYmeymZ0gx/l53mUeE1P7qLPjG+
+   jrC+41K1UD3UywQ9P++Z5nF13Ms1E5fDY0hHwYGaakKrePqlQ7v8ZNryD
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="262268638"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="262268638"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:33:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="658829667"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Dec 2021 09:33:42 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B9HXeqB013050;
+        Thu, 9 Dec 2021 17:33:40 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org, brouer@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 1/9] i40e: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+Date:   Thu,  9 Dec 2021 18:33:07 +0100
+Message-Id: <20211209173307.5003-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <da317f39-8679-96f7-ec6f-309216b02f33@redhat.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com> <20211208140702.642741-2-alexandr.lobakin@intel.com> <da317f39-8679-96f7-ec6f-309216b02f33@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211206174133.2296265-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+Date: Thu, 9 Dec 2021 09:19:46 +0100
 
+> On 08/12/2021 15.06, Alexander Lobakin wrote:
+> > {__,}napi_alloc_skb() allocates and reserves additional NET_SKB_PAD
+> > + NET_IP_ALIGN for any skb.
+> > OTOH, i40e_construct_skb_zc() currently allocates and reserves
+> > additional `xdp->data - xdp->data_hard_start`, which is
+> > XDP_PACKET_HEADROOM for XSK frames.
+> > There's no need for that at all as the frame is post-XDP and will
+> > go only to the networking stack core.
+> 
+> I disagree with this assumption, that headroom is not needed by netstack.
+> Why "no need for that at all" for netstack?
 
-On 06/12/2021 17:41, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the following warnings
-> are generated in the nvmem examples:
-> 
-> Documentation/devicetree/bindings/nvmem/st,stm32-romem.example.dt.yaml: efuse@1fff7800: Unevaluated properties are not allowed ('reg' was unexpected)
-> Documentation/devicetree/bindings/nvmem/rmem.example.dt.yaml: nvram@10000000: Unevaluated properties are not allowed ('reg' was unexpected)
-> Documentation/devicetree/bindings/nvmem/brcm,nvram.example.dt.yaml: nvram@1eff0000: Unevaluated properties are not allowed ('reg' was unexpected)
-> 
-> Add the missing 'reg' property definition.
-> 
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Rafał Miłecki <rafal@milecki.pl>
-> Cc: Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+napi_alloc_skb() in our particular case will reserve 64 bytes, it is
+sufficient for {TCP,UDP,SCTP,...}/IPv{4,6} etc.
 
-Applied thanks,
+> 
+> Having headroom is important for netstack in general.  When packet will 
+> grow we avoid realloc of SKB.  Use-case could also be cpumap or veth 
+> redirect, or XDP-generic, that expect this headroom.
 
---srini
-> ---
->   Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml     | 3 +++
->   Documentation/devicetree/bindings/nvmem/rmem.yaml           | 3 +++
->   Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 3 +++
->   3 files changed, 9 insertions(+)
+Well, those are not common cases at all.
+Allocating 256 bytes more for some hypothetical usecases (and having
+320 in total) is more expensive than expanding headroom in-place.
+I don't know any other drivers or ifaces which reserve
+XDP_PACKET_HEADROOM just for the case of using both driver-side
+and generic XDP at the same time. To be more precise, I can't
+remember any driver which would check whether generic XDP is enabled
+for its netdev(s).
+
+As a second option, I was trying to get exactly XDP_PACKET_HEADROOM
+of headroom, but this involves either __alloc_skb() which is slower
+than napi_alloc_skb(), or
+
+	skb = napi_alloc_skb(napi, xdp->data_end -
+				   xdp->data_hard_start -
+				   NET_SKB_PAD);
+	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start -
+			 NET_SKB_PAD);
+
+Doesn't look good for me.
+
+We could probably introduce a version of napi_alloc_skb() which
+wouldn't reserve any headroom for you to have more control over it,
+but that's more global material than these local fixes I'd say.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> index 58ff6b0bdb1a..8c3f0cd22821 100644
-> --- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> @@ -24,6 +24,9 @@ properties:
->     compatible:
->       const: brcm,nvram
->   
-> +  reg:
-> +    maxItems: 1
-> +
->   unevaluatedProperties: false
->   
->   examples:
-> diff --git a/Documentation/devicetree/bindings/nvmem/rmem.yaml b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-> index 1d85a0a30846..a4a755dcfc43 100644
-> --- a/Documentation/devicetree/bindings/nvmem/rmem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-> @@ -19,6 +19,9 @@ properties:
->             - raspberrypi,bootloader-config
->         - const: nvmem-rmem
->   
-> +  reg:
-> +    maxItems: 1
-> +
->     no-map:
->       $ref: /schemas/types.yaml#/definitions/flag
->       description:
-> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> index a48c8fa56bce..448a2678dc62 100644
-> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> @@ -24,6 +24,9 @@ properties:
->         - st,stm32f4-otp
->         - st,stm32mp15-bsec
->   
-> +  reg:
-> +    maxItems: 1
-> +
->   patternProperties:
->     "^.*@[0-9a-f]+$":
->       type: object
 > 
+> > Pass the size of the actual data only to __napi_alloc_skb() and
+> > don't reserve anything. This will give enough headroom for stack
+> > processing.
+> > 
+> > Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+> > ---
+> >   drivers/net/ethernet/intel/i40e/i40e_xsk.c | 4 +---
+> >   1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > index f08d19b8c554..9564906b7da8 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+> > @@ -245,13 +245,11 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+> >   	struct sk_buff *skb;
+> >   
+> >   	/* allocate a skb to store the frags */
+> > -	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
+> > -			       xdp->data_end - xdp->data_hard_start,
+> > +	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
+> >   			       GFP_ATOMIC | __GFP_NOWARN);
+> >   	if (unlikely(!skb))
+> >   		goto out;
+> >   
+> > -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+> >   	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+> >   	if (metasize)
+> >   		skb_metadata_set(skb, metasize);
+
+Thanks,
+Al

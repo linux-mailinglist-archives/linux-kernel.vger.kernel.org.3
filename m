@@ -2,220 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B43EC46F2CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C65446F2D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242802AbhLISNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbhLISNr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:13:47 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235DFC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 10:10:13 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id h24so5057014pjq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 10:10:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jA8vSHVXW+K7yY344yL7YoowsX5DzAhR5OZON6LdSNM=;
-        b=r7Z/+6OtH0ebYJuVdu3bV/uhor5uapLBn/vBuu+n52gqfeV1ZGx6x34PJ/el44CA2T
-         CO61ZR5WvS5+CkKS/GkBhTvowRH+Zc7nzv0IxzDSI+tP9bLn+zNCooGQJ+TJWPzxVzyG
-         PRsVq+IcwsV6nJxOGJBBCzuyrwNKOPM+FuNVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jA8vSHVXW+K7yY344yL7YoowsX5DzAhR5OZON6LdSNM=;
-        b=Sn2Va3Ta8YZsPtyOfc2rU6Bxxw7awU+7aaNvQ+8B5flk6KTkS0Cc295RwXHuI/D10d
-         EgfGeLdKhMahGvWVFI/U/tDuA2etLtY1cVuwe2B07uV0ehOpI8gyi05phxKmJiShibD0
-         yg3rbQsNPcM72rTcwXU0zIcY6BI8UG/P7odiiuTab+5ICr1hPPT4sIpiKtWOHxDDaVcV
-         zcQ3Po1tNBrD8AcRU6CpIPpz2W9c3Y5Pty0NsNAYg3ewQhpDfipPsCU/5f1yQdVWtSXt
-         UxCnr0L4tnDyxmP7paHk82mteJIvRW6bqdJSv2BFDKlpem0Tm4he+NK/GoJs/zx7WKRC
-         +Blg==
-X-Gm-Message-State: AOAM5317TVIn5Izk2oEzGK9kLZ2b/kN8HdPu7CdcYpYaifglr8mk8tAl
-        UqBNVbPuERlNLaBv9KZD5prdfNLon9FwLLjvKiFAIw==
-X-Google-Smtp-Source: ABdhPJzDXRvRM/COvmz/ZQ0Sj3ef92HF0yF4T1miNw8QZmu73+6WPV/czMvxP/1StuMM6/g7rw05DyaYH/jk2tWmrNw=
-X-Received: by 2002:a17:902:8346:b0:142:9e66:2f54 with SMTP id
- z6-20020a170902834600b001429e662f54mr68888811pln.27.1639073413304; Thu, 09
- Dec 2021 10:10:13 -0800 (PST)
+        id S243219AbhLISQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:16:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:49468 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237501AbhLISQ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 13:16:26 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225441522"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="225441522"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:09:47 -0800
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="680433388"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:09:46 -0800
+Date:   Thu, 9 Dec 2021 10:14:04 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
+Message-ID: <20211209101404.6aefbe1c@jacob-builder>
+In-Reply-To: <YbHie/Z4bIXwTInx@myrica>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
+        <YbHie/Z4bIXwTInx@myrica>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211016145827.586870-1-michael@amarulasolutions.com>
- <CAOf5uw=DffhS=WAh-OFXOCO+4kd5ey=2Eqf0Zhyrgd_d5D8meA@mail.gmail.com> <CAPY8ntCvAnu9HS1WxWRkveXnQ_vD8EOdshX-ob8vGuGqOKp+RA@mail.gmail.com>
-In-Reply-To: <CAPY8ntCvAnu9HS1WxWRkveXnQ_vD8EOdshX-ob8vGuGqOKp+RA@mail.gmail.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 9 Dec 2021 19:10:01 +0100
-Message-ID: <CAOf5uwmGjwXsQdVm-tyvkcPY0bJ++KFbewvrQ-esU=9FStmg+A@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: ilitek-ili9881c: Avoid unbalance prepare/unprepare
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave
+Hi Jean-Philippe,
 
-On Thu, Dec 9, 2021 at 6:58 PM Dave Stevenson
-<dave.stevenson@raspberrypi.com> wrote:
->
-> Hi Michael
->
-> On Thu, 9 Dec 2021 at 16:58, Michael Nazzareno Trimarchi
-> <michael@amarulasolutions.com> wrote:
-> >
-> > Hi all
-> >
-> > On Sat, Oct 16, 2021 at 4:58 PM Michael Trimarchi
-> > <michael@amarulasolutions.com> wrote:
-> > >
-> > > All the panel driver check the fact that their prepare/unprepare
-> > > call was already called. It's not an ideal solution but fix
-> > > for now the problem on ili9881c
-> > >
-> > > [ 9862.283296] ------------[ cut here ]------------
-> > > [ 9862.288490] unbalanced disables for vcc3v3_lcd
-> > > [ 9862.293555] WARNING: CPU: 0 PID: 1 at drivers/regulator/core.c:2851
-> > > _regulator_disable+0xd4/0x190
-> > >
-> > > from:
-> > >
-> > > [ 9862.038619]  drm_panel_unprepare+0x2c/0x4c
-> > > [ 9862.043212]  panel_bridge_post_disable+0x18/0x24
-> > > [ 9862.048390]  dw_mipi_dsi_bridge_post_disable+0x3c/0xf0
-> > > [ 9862.054153]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
-> > >
-> > > and:
-> > >
-> > > [ 9862.183103]  drm_panel_unprepare+0x2c/0x4c
-> > > [ 9862.187695]  panel_bridge_post_disable+0x18/0x24
-> > > [ 9862.192872]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
-> > > [ 9862.199117]  disable_outputs+0x120/0x31c
->
-> This is down to the dw-mipi-dsi driver calling the post_disable hook
-> explicitly at [1], but then also allowing the framework to call it.
-> The explicit call is down to limitations in the DSI support, so we
-> can't control the DSI host state to a fine enough degree (an ongoing
-> discussion [2] [3]). There shouldn't be a need to handle mismatched
-> calling in individual panel drivers.
->
->   Dave
->
-> [1] https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c#L894
-> [2] https://lists.freedesktop.org/archives/dri-devel/2021-November/332060.html
-> [3] https://lists.freedesktop.org/archives/dri-devel/2021-December/334007.html
+On Thu, 9 Dec 2021 11:03:23 +0000, Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
 
-I'm in the second case. I need to enable HS mode after the panel is
-initialized. Time to time I have timeout
-on dsi command or I have wrong panel initialization. So I explicit call from
-the bridge but I understand that is not correct in the design point of view.
+> Hi Jacob,
+> 
+> On Tue, Dec 07, 2021 at 05:47:11AM -0800, Jacob Pan wrote:
+> > In-kernel DMA is managed by DMA mapping APIs, which supports per device
+> > addressing mode for legacy DMA requests. With the introduction of
+> > Process Address Space ID (PASID), device DMA can now target at a finer
+> > granularity per PASID + Requester ID (RID).
+> > 
+> > However, for in-kernel DMA there is no need to differentiate between
+> > legacy DMA and DMA with PASID in terms of mapping. DMA address mapping
+> > for RID+PASID can be made identical to the RID. The benefit for the
+> > drivers is the continuation of DMA mapping APIs without change.
+> > 
+> > This patch reserves a special IOASID for devices that perform in-kernel
+> > DMA requests with PASID. This global IOASID is excluded from the
+> > IOASID allocator. The analogous case is PASID #0, a special PASID
+> > reserved for DMA requests without PASID (legacy). We could have
+> > different kernel PASIDs for individual devices, but for simplicity
+> > reasons, a globally reserved one will fit the bill.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
+> >  drivers/iommu/intel/iommu.c                     | 4 ++--
+> >  drivers/iommu/intel/pasid.h                     | 3 +--
+> >  drivers/iommu/intel/svm.c                       | 2 +-
+> >  drivers/iommu/ioasid.c                          | 2 ++
+> >  include/linux/ioasid.h                          | 4 ++++
+> >  6 files changed, 11 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> > b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c index
+> > ee66d1f4cb81..ac79a37ffe06 100644 ---
+> > a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c +++
+> > b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c @@ -329,7 +329,7 @@
+> > __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm) return
+> > ERR_PTR(-ENOMEM); 
+> >  	/* Allocate a PASID for this mm if necessary */
+> > -	ret = iommu_sva_alloc_pasid(mm, 1, (1U << master->ssid_bits) -
+> > 1);
+> > +	ret = iommu_sva_alloc_pasid(mm, IOASID_ALLOC_BASE, (1U <<
+> > master->ssid_bits) - 1);  
+> 
+> I'd rather keep hardware limits as parameters here. PASID#0 is reserved by
+> the SMMUv3 hardware so we have to pass at least 1 here, but VT-d could
+> change RID_PASID and pass 0. On the other hand IOASID_DMA_PASID depends on
+> device drivers needs and is not needed on all systems, so I think could
+> stay within the ioasid allocator. Could VT-d do an
+> ioasid_alloc()/ioasid_get() to reserve this global PASID, storing it
+> under the device_domain_lock?
+> 
+Yes, this works. We can delegate DMA PASID allocation to vendor drivers. My
+proposal here is driven by simplicity.
 
-So this patch can not be queued because it's a known problem that
-people are discussing
+> This looks like we're just one step away from device drivers needing
+> multiple PASIDs for kernel DMA so I'm trying to figure out how to evolve
+> the API towards that. It's probably as simple as keeping a kernel IOASID
+> set at first, but then we'll probably want to optimize by having multiple
+> overlapping sets for each device driver (all separate from the SVA set).
+Sounds reasonable to start with a kernel set for in-kernel DMA once we need
+multiple ones. But I am not sure what *overlapping* sets mean here, could
+you explain?
 
-Michael
-
->
->
-> > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > ---
-> > >  drivers/gpu/drm/panel/panel-ilitek-ili9881c.c | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > index 103a16018975..f75eecb0e65c 100644
-> > > --- a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > @@ -52,6 +52,8 @@ struct ili9881c {
-> > >
-> > >         struct regulator        *power;
-> > >         struct gpio_desc        *reset;
-> > > +
-> > > +       bool                    prepared;
-> > >  };
-> > >
-> >
-> > I found that this can be a general problem. Should not mandatory to
-> > track panel status
-> >
-> > DRM_PANEL_PREPARED
-> > DRM_PANEL_ENABLED
-> >
-> > Michael
-> > >  #define ILI9881C_SWITCH_PAGE_INSTR(_page)      \
-> > > @@ -707,6 +709,10 @@ static int ili9881c_prepare(struct drm_panel *panel)
-> > >         unsigned int i;
-> > >         int ret;
-> > >
-> > > +       /* Preparing when already prepared is a no-op */
-> > > +       if (ctx->prepared)
-> > > +               return 0;
-> > > +
-> > >         /* Power the panel */
-> > >         ret = regulator_enable(ctx->power);
-> > >         if (ret)
-> > > @@ -745,6 +751,8 @@ static int ili9881c_prepare(struct drm_panel *panel)
-> > >         if (ret)
-> > >                 return ret;
-> > >
-> > > +       ctx->prepared = true;
-> > > +
-> > >         return 0;
-> > >  }
-> > >
-> > > @@ -770,10 +778,16 @@ static int ili9881c_unprepare(struct drm_panel *panel)
-> > >  {
-> > >         struct ili9881c *ctx = panel_to_ili9881c(panel);
-> > >
-> > > +       /* Unpreparing when already unprepared is a no-op */
-> > > +       if (!ctx->prepared)
-> > > +               return 0;
-> > > +
-> > >         mipi_dsi_dcs_enter_sleep_mode(ctx->dsi);
-> > >         regulator_disable(ctx->power);
-> > >         gpiod_set_value(ctx->reset, 1);
-> > >
-> > > +       ctx->prepared = false;
-> > > +
-> > >         return 0;
-> > >  }
-> > >
-> > > --
-> > > 2.25.1
-> > >
-> >
-> >
-> > --
-> > Michael Nazzareno Trimarchi
-> > Co-Founder & Chief Executive Officer
-> > M. +39 347 913 2170
-> > michael@amarulasolutions.com
-> > __________________________________
-> >
-> > Amarula Solutions BV
-> > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> > T. +31 (0)85 111 9172
-> > info@amarulasolutions.com
-> > www.amarulasolutions.com
+> 
 
 
+Thanks,
 
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+Jacob

@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084F246E8B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACFC46E8BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbhLINCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbhLINCV (ORCPT
+        id S232484AbhLINDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:03:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21511 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236594AbhLINC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:02:21 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81183C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 04:58:48 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id r18-20020a4a7252000000b002c5f52d1834so1663925ooe.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lxsC+6JiZmFDaNw110BSUcqVFCAa+894CcThmcjMkw4=;
-        b=ODJRjouncmQdis6R3Wkh0AAmsVvD75zmtLay+9U5trU4UpmYi+Oafvfm9sYnpZKsNL
-         +irLZobZ5CaBUGopda5OwI8/bBOPE//XpncmNzbCZxDrcpwvZHA35nNFZZful9gS93z9
-         gffPJXdFC1OHKb9ZlVzm3VEkvl2maD5ppEcIOpcUR7zICKJlYcNPm9G3T3edTzp8qPNK
-         4RZaSjhSb0qco+YzxVmH9msEqP4GGXzg6r+yr+uustf2sqOcsAx2ut9+mYs7tW1+Ne3s
-         s03kNoTB7kVEt3lkJ/+JkIPVrQtJG+cdPH6uiAvTYrG9GiWbD60xezK8cLkJ+ErnbUZe
-         c+hg==
+        Thu, 9 Dec 2021 08:02:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639054762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZRfiHdpAROaj5RZxNmVEP8L4rsUyor5ZtzX0PkgT3DA=;
+        b=a3s3y7uqlaXJnCOWjhK55qsK3w+CK1dtj5CTmNP3udxny3YVq9trao0Z/EJJoEzxd6dk1i
+        070Yexq3wYGIX2XK57qkDQ5dchvt8hfZ9gvbQe10XFy0tdXK5H2f30bU2XtEOoHlenZSf8
+        bKqwWIC8QX8xCnAfO9y0W+KKDkXMkmI=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-za1kxU69P969DEhQNmNcWw-1; Thu, 09 Dec 2021 07:59:22 -0500
+X-MC-Unique: za1kxU69P969DEhQNmNcWw-1
+Received: by mail-pl1-f198.google.com with SMTP id l3-20020a170902f68300b00142892d0a86so2290190plg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:59:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lxsC+6JiZmFDaNw110BSUcqVFCAa+894CcThmcjMkw4=;
-        b=70MneStzqcmFJO6nuB4ceF7VF+LVr6OXZYRDjRZr+zbQgdFm8SFRLliPGuSMV3pQa3
-         y2HhmQ/5paKrFbBup17M5nR8p4cx/wzvRUza4qtlpOgDzjImOCnPGCa3nn5DsvLT0Bdx
-         2tCNEowEaTG66YEs46JhVkV4fvJZqeSdSbxeQOKrlr3ZfIShOgo2graU/mUIFkeEV0Cg
-         4f86jkREic4kX3M6CjFUanTT5VdbjNL/kQSss6zj+gyn9en4t0i/Kp3oJWimvuIRZmkL
-         2FrOhqWA2g8fqnvGIXwHbaQd1rY0Eoh6kya2fhcfbjcjA4COfyH4erk+jVYXer25yNUq
-         +CRg==
-X-Gm-Message-State: AOAM5324oxU0/2ydSCgoC5/euPH/Hop5TmrtuebjA0O5q0eWwdee/K1g
-        XLvGiHBSkD0DcmTC/I3tBey2WgwPtNukpHMsiBpJmA==
-X-Google-Smtp-Source: ABdhPJx1kHulafJl7mfoeK/Aaae12wnFfqTO5IQ/HVdFm8xIC0tzHu8TGZCUdVjrgJX5a2XnFm74ss0UQEZzk/RMIwM=
-X-Received: by 2002:a4a:cf12:: with SMTP id l18mr3585635oos.25.1639054727653;
- Thu, 09 Dec 2021 04:58:47 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ZRfiHdpAROaj5RZxNmVEP8L4rsUyor5ZtzX0PkgT3DA=;
+        b=fTdBCmDKFXarxFr1u5WQJWc5QXZY7kOBkVem2Zoz06I8GT5a1zapEJyXGh47fmaEqT
+         fGoJ2T9ltUVekIHodzhlVMbyXdP0oyg2iDc+K75mfvVRH7ST6rXHHHqZ8G3W2CZYEMb3
+         bXMT0f38EBjC7/0fIb4ffFsZdqk7GxL7NQ41Z2/tnRGdYyE+NnwgpRpY4aiMMfXnZ7gQ
+         urVKhslBgXwsm5Me1GAIs/vwA6aWA5qjWHWtaZnNXXZpn7qn1JhOfqkee6Ws0R4GCuO4
+         quUn6T23MDLMSYtOsTgUFJYZ3MWauksK/u4kCdgb7qR4YihGlQHmR+7xNnZz3kLi6/bT
+         hkzA==
+X-Gm-Message-State: AOAM5339IkCYgMlZyOTBP7scxDRY71dBL/BwxxJt0M0vCj8Ty3f8gtEh
+        89CqycKRnBuFF7GkODLOhf1679jtxFSO2rdIcDdPcZHY/NxigQRnoTa85qUeNFzXpdPn9JOfroZ
+        c9y1Ftna3oKqVlSJ2+UZZdLqo9jPwH+a252EjGw8X6MdEKZ5mZxG+cR/MmYPpl0mDjyoX/fPpPA
+        ==
+X-Received: by 2002:a17:90b:3e81:: with SMTP id rj1mr15297733pjb.111.1639054760553;
+        Thu, 09 Dec 2021 04:59:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJ4Hn9dcG5VJSl/PiX30c3D5c2KWNXaO2aZVXFVR1STmmnlkS5rxxe0hdeRex2Zh70wRB8aQ==
+X-Received: by 2002:a17:90b:3e81:: with SMTP id rj1mr15297690pjb.111.1639054760288;
+        Thu, 09 Dec 2021 04:59:20 -0800 (PST)
+Received: from [10.72.12.129] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id x1sm5631088pgh.1.2021.12.09.04.59.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 04:59:19 -0800 (PST)
+Subject: Re: [PATCH] libceph, ceph: potential dereference of null pointer
+To:     Jeff Layton <jlayton@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>, idryomov@gmail.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     ceph-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211209025038.2028112-1-jiasheng@iscas.ac.cn>
+ <2a79206d3472b279079fbef5c9507f8805061c47.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <b01fa648-b0fe-c493-f45a-4ea23ae0f06e@redhat.com>
+Date:   Thu, 9 Dec 2021 20:59:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <YbHTKUjEejZCLyhX@elver.google.com> <YbHaASWR07kPfabg@hirez.programming.kicks-ass.net>
-In-Reply-To: <YbHaASWR07kPfabg@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 9 Dec 2021 13:58:35 +0100
-Message-ID: <CANpmjNODi8sLHe8JoU-phddf++vh+1sW90b08j-yM7chsecxyg@mail.gmail.com>
-Subject: Re: randomize_kstack: To init or not to init?
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Potapenko <glider@google.com>,
-        Jann Horn <jannh@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <2a79206d3472b279079fbef5c9507f8805061c47.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 11:27, Peter Zijlstra <peterz@infradead.org> wrote:
-> On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
-[...]
-> > There are several options:
-> >
-> >       A. Make memset (and probably all other mem-transfer functions)
-> >          noinstr compatible, if that is even possible. This only solves
-> >          problem #2.
->
-> While we can shut up objtool real easy, the bigger problem is that
-> noinstr also excludes things like kprobes and breakpoints and other such
-> goodness from being placed in the text.
->
-> >       B. A workaround could be using a VLA with
-> >          __attribute__((uninitialized)), but requires some restructuring
-> >          to make sure the VLA remains in scope and other trickery to
-> >          convince the compiler to not give up that stack space.
-> >
-> >       C. Introduce a new __builtin_alloca_uninitialized().
-> >
-> > I think #C would be the most robust solution, but means this would
-> > remain as-is for a while.
-> >
-> > Preferences?
->
-> I'm with you on C.
 
-Seems simple enough, so I've sent https://reviews.llvm.org/D115440 --
-either way, there needs to be support to not initialize alloca'd
-memory. Let's see where we end up.
+On 12/9/21 7:20 PM, Jeff Layton wrote:
+> On Thu, 2021-12-09 at 10:50 +0800, Jiasheng Jiang wrote:
+>> The return value of kzalloc() needs to be checked.
+>> To avoid use of null pointer in case of the failure of alloc.
+>>
+>> Fixes: 3d14c5d2b6e1 ("ceph: factor out libceph from Ceph file system")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>> ---
+>>   net/ceph/osd_client.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
+>> index ff8624a7c964..3203e8a34370 100644
+>> --- a/net/ceph/osd_client.c
+>> +++ b/net/ceph/osd_client.c
+>> @@ -1234,6 +1234,8 @@ static struct ceph_osd *create_osd(struct ceph_osd_client *osdc, int onum)
+>>   	WARN_ON(onum == CEPH_HOMELESS_OSD);
+>>   
+>>   	osd = kzalloc(sizeof(*osd), GFP_NOIO | __GFP_NOFAIL);
+>> +	if (!osd)
+>> +		return NULL;
+>>   	osd_init(osd);
+>>   	osd->o_osdc = osdc;
+>>   	osd->o_osd = onum;
+> __GFP_NOFAIL should ensure that it never returns NULL, right?
+
+Yeah, from the comment, it make no sense to test for failure here:
+
+
+204  * %__GFP_NOFAIL: The VM implementation _must_ retry infinitely: the 
+caller
+205  * cannot handle allocation failures. The allocation could block
+206  * indefinitely but will never return with failure. Testing for
+207  * failure is pointless.
+208  * New users should be evaluated carefully (and the flag should be
+209  * used only when there is no reasonable failure policy) but it is
+210  * definitely preferable to use the flag rather than opencode endless
+211  * loop around allocator.
+212  * Using this flag for costly allocations is _highly_ discouraged.
+213  */
+
+
+
+> Also, if you're going to fix this up to handle that error then you
+> probably also need to fix lookup_create_osd to handle a NULL return from
+> create_osd as well.
+

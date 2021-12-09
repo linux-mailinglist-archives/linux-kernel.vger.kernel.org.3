@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0657546E99C
+	by mail.lfdr.de (Postfix) with ESMTP id BAD5346E99E
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbhLIOK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238298AbhLIOK5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238357AbhLIOLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:11:00 -0500
+Received: from first.geanix.com ([116.203.34.67]:37696 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230409AbhLIOK5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 09:10:57 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53772C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:07:24 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id 70so3849434vkx.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:07:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=aOiyKQmystL558bO5VkHIM1ncICMWoc5eViBcWRY0xc=;
-        b=GCUVV7TKAKr/xN0Rr3byEbzMFdnQ1aFeK13+eNVK8yteo6J4gqmeN54QMkQhx2Q0y9
-         xVtpIQL95ZHcwa5mLIAAs6Gw5QXVXVF12bg4SXgcakyg+6nNCqupHXNSPyju1nS9myvq
-         yqihwmrHfVzbmjZVogciMkgx5DBtuhuMInQbled+yazrL2loG4zbzV8SrfF+/FJNQbXr
-         SN9HsXL/OWCNrg9iVO3dKxRAYp5utW+ef8IJ/BjOllbHcwUF3FaS4x3+zRkfW3PWKV84
-         J4flmCFyLN/Ft+Mie0DUYtPdKLUIZketPdTyEUPyaONQDYozj3ZgMmiUVAuQqAMvEwkg
-         AWbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=aOiyKQmystL558bO5VkHIM1ncICMWoc5eViBcWRY0xc=;
-        b=pe9kzGc/cBEPBBJhrcEeyP0PZ9oNIa+cE7dnzWMbesCrkGnS8rSdPqiR5ExdTx4K4R
-         PDMJgEWlaUKsnYUmFKENEsT8hIdGUa9COBrmK70Z2nSnw6+CJIju0Xdogk0w5sbWJfpy
-         v9jI+8b30bzbC/uuRDqGCzjKnN3UKVsPJ6EtFghBuICzgt5wayFSRiWxR1p7XveOf6zn
-         MqV4m+A57dq7QyeT1AFBKG+mMyycepFkNW3tH86fjOvjbL6nuwElFgzPxxE3qRnqPfDV
-         38B4G/NtOKzPSl2sqtTvUKSZSApXXzKbIJrXtXdUsD9XhK8TxQVTexJTlx0j6oBzzM5m
-         nFjw==
-X-Gm-Message-State: AOAM531EEv1Nf4p2hhsaj5AkeaLy7Vsqj73aNIYtrjOgb3kJF8nfICFX
-        UuC19hTW7mhRJUBKATADwhjmC0wgshqCMaTaGQRNeQ==
-X-Google-Smtp-Source: ABdhPJxvOzCM8W4klk/CbODi03E1NwZPlh5xdjiU0IEleM9nT680cmqdlvNersGdQio2+Q6KzzAk/RAzLiAdKZoccwE=
-X-Received: by 2002:a05:6122:1306:: with SMTP id e6mr9429827vkp.13.1639058843381;
- Thu, 09 Dec 2021 06:07:23 -0800 (PST)
+Received: from skn-laptop.hinnerup (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 83129E1BC8;
+        Thu,  9 Dec 2021 14:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1639058842; bh=O3N669Y1t5MeBIeL4+y0nF9iRMMYvpmo/umTBGgqoc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Y1IEXrnF4uESXKSCH5miK1ja38hW/CwHvoNEh/tTzppELjS5iGuSsgieFNu51wwgu
+         KW/IvMQ2wodHLdrOt4wKKxlk6VFT4zVCFzTC6Mml7Ss9ITrnFm6d2edEZIA6Y0Zqog
+         mg0v+R1KfA7HwHnML57JwRjVJk6g4VQdxwc9vCo4C1pNa+KJot+ngCJwtpfnljO4zj
+         X/HOXSm3o81eN6wJvbrVmJ2Yjch5xCu8ZOKcqsPwMTkLZd4isQgOwpoCP/7k5eXBPy
+         1bp/EXXwnZPvC+74apuTM5dvOhoEB+MrhyVhPPyMkRuLwKixtIxQYHrtUExO5RwnYX
+         pwc7rdetPuM3A==
+Date:   Thu, 9 Dec 2021 15:07:21 +0100
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while in
+ suspend
+Message-ID: <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
+References: <20211123125012.ibzqu44ixmykbhkt@skn-laptop>
+ <20211123140715.280b2f70@collabora.com>
+ <20211129101908.6f1aa715@xps13>
+ <20211129094129.xn364czofrgtvfb4@skn-laptop>
+ <63be9121-18c3-1ef2-c448-f99fb861490f@samsung.com>
+ <20211130124131.6pgu7enjgk6y536m@skn-laptop>
+ <20211130141551.400331c8@collabora.com>
+ <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+ <20211130143705.5d0404aa@collabora.com>
+ <20211203143958.40645506@xps13>
 MIME-Version: 1.0
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-6-semen.protsenko@linaro.org> <YbHIWBa4VFEK1wKR@ninjato>
-In-Reply-To: <YbHIWBa4VFEK1wKR@ninjato>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 9 Dec 2021 16:07:11 +0200
-Message-ID: <CAPLW+4kPxmjqt3m3er4yHCsUPr9GrxTtkZB0hZZVvNB5k43QJw@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 5/8] i2c: exynos5: Add bus clock support
-To:     Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211203143958.40645506@xps13>
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 11:11, Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Sat, Dec 04, 2021 at 11:58:17PM +0200, Sam Protsenko wrote:
-> > In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-> > part of USIv2 block, there are two clocks provided to HSI2C controller:
-> >   - PCLK: bus clock (APB), provides access to register interface
-> >   - IPCLK: operating IP-core clock; SCL is derived from this one
-> >
-> > Both clocks have to be asserted for HSI2C to be functional in that case.
-> >
-> > Add code to obtain and enable/disable PCLK in addition to already
-> > handled operating clock. Make it optional though, as older Exynos SoC
-> > variants only have one HSI2C clock.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > Reviewed-by: Chanho Park <chanho61.park@samsung.com>
->
-> This one doesn't apply here? What tree is this based on?
->
+On Fri, Dec 03, 2021 at 02:39:58PM +0100, Miquel Raynal wrote:
+> Hello,
+> 
+> > > Fine by me, lets drop this series.
+> 
+> FYI I've dropped the entire series from mtd/next. I'm waiting for the
+> fix discussed below (without abusing the chip mutex ;-) ).
 
-Based on linux-next. Might got outdated, or maybe I had some debug
-patches in my branch at the time. Anyway, I've sent v3 only for this
-patch [1]. Can you please try to apply that one?
+Cool, looking forward to test a patch series :)
 
-Thanks!
-
-[1] https://lkml.org/lkml/2021/12/9/584
+/Sean

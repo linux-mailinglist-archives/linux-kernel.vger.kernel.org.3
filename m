@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F43346F546
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C43C646F558
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbhLIU6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbhLIU6R (ORCPT
+        id S232484AbhLIU7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:59:50 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:46932 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232405AbhLIU7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:58:17 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC966C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:54:43 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so7537167otg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 12:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HFSacAT887PNCoxtm3wOxVaKJ2m3E3kQPyuB0zZo9cM=;
-        b=fr59f5tnC4cszL5DgLtSi0UUz1Iy7+x5sh6vLQZl5Dboa3KS29zlWZOgqp2HUf7ZqG
-         qZRtuXWGmvkIIINqZWj4Bg7sCiUYAUggieow6Ygd+26sJ82tEcSP/zqdNS+u+uTs/ObJ
-         jlcaYjk6FuhNL1c1+6DejBa821NqM7C7vtZqmy4boDd6vN0E6gV7RComJxcWvM36bY3O
-         3i90hAWILkRPoViOS6xaaq+gmMqrR25QksD2nFmstnVsuOpsz7XK8+kXFUTvT7WQ9YaT
-         t7uB1pIU0A8BV6NtmPY6wE0KqAiDuCsIaFnZIN6uFNSbvIDwSEze9DKBRfopo1XaQ1Vm
-         iD+w==
+        Thu, 9 Dec 2021 15:59:44 -0500
+Received: by mail-ot1-f53.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so7486285oto.13;
+        Thu, 09 Dec 2021 12:56:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HFSacAT887PNCoxtm3wOxVaKJ2m3E3kQPyuB0zZo9cM=;
-        b=CkKi2mvFSrkwy4WE/oOHtTZyfw9lP3AW8QOcSHrQ/AgraVMN1c/jcjbT1e0uKvtaxj
-         LUgOjC7y3GusoTpXJjvaa6XqT25UXnobJcgGMHuecTaLFvg6qMuNQ8T+YeFworwlG85+
-         ++Wzy1GwqYow+1E26lD6WwYFfYWiK9Mu+4Z3DvDiqPIgnlPGtfomKOKyKV/9CEBvG7zc
-         le2kJV3fqhy+YDXwq+HveRgvo5naaWvPi2pSv0b8hqlngmge2raxMH7CoscQhjqSyOZF
-         nSNPl+ylNn0x5xAldo0BOp2R3q155fdgYIxKlI1HPYeL0iweyHQJkXom3zgjEw0JGDPq
-         yptg==
-X-Gm-Message-State: AOAM532OLAzZ+WsenI4ll5XxXTQOBunm9bq5eoV10NEAToKsI+M791Ko
-        S7eYlsMjAqaq8Y5nFR1ztWbqCame62Mect6KOuG2Ew==
-X-Google-Smtp-Source: ABdhPJx+jBbOy/MOlCU/G64fMr/tJptIk0krtWcyASmfxTgqjw/Ub5EF2E3yF1uwX3k6YK+w8LVDL6PDG5PxjGwivkQ=
-X-Received: by 2002:a9d:7548:: with SMTP id b8mr7516429otl.92.1639083282784;
- Thu, 09 Dec 2021 12:54:42 -0800 (PST)
-MIME-Version: 1.0
-References: <YbHTKUjEejZCLyhX@elver.google.com> <202112091232.51D0DE5535@keescook>
-In-Reply-To: <202112091232.51D0DE5535@keescook>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 9 Dec 2021 21:54:30 +0100
-Message-ID: <CANpmjNPJpbKzO46APQgxeirYV=K5YwCw3yssnkMKXG2SGorUPw@mail.gmail.com>
-Subject: Re: randomize_kstack: To init or not to init?
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Jann Horn <jannh@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=xankO6gBp3GIQVGfoW7EkvgG0j2YUNnq+3nk9J8aM3Y=;
+        b=Lvfr31Ir4ToOrOTOil/D++KrmODrCf3+6M26h9rzY6nM4yTc/E3lfaHYgt2VqgY5SV
+         we5AR30VOPTPnHY+KmEQfjfeEjP3ndPoCxpDf7jhS4+gn1ZyAHuT+L7LY3IIDp52a5Fw
+         LDesJf/mpWNizZAjq/rlB4PGpn/C246IRs8D7jwQOl0abA5+Ki3BESuPsyL0Ikt9ixIF
+         DMc8iaqIm8XPy0oOK0SsGA4hJHgjEMXHPap2DjBaNok54pt9RKpkPDj5zw/cIZF8hKeO
+         75XQ0Y0zzzrhI0tYDjsfMwiMhktEn6T5RSPT6Wzuu/zw8ckGvXlI0AVAIdui9T3/ZTl/
+         VUXw==
+X-Gm-Message-State: AOAM533TOyoRjzuDrWTP6oXfLaojLaN75+O6waJAUXC8W/eutYDv2qtC
+        H8ndtfSOf0QpZR6iykusEDjRzzcdrQ==
+X-Google-Smtp-Source: ABdhPJwdiucO7zUXMfidK1yeB7NQIdXOz8owmo+BnV3zHDhRQCqAGR9lTU/GuZ9/jhRAnrnrc0psMg==
+X-Received: by 2002:a05:6830:410a:: with SMTP id w10mr7711368ott.55.1639083369909;
+        Thu, 09 Dec 2021 12:56:09 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w71sm181746oiw.6.2021.12.09.12.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 12:56:09 -0800 (PST)
+Received: (nullmailer pid 3925942 invoked by uid 1000);
+        Thu, 09 Dec 2021 20:55:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     robh+dt@kernel.org, vsethi@nvidia.com, jonathanh@nvidia.com,
+        bbasu@nvidia.com, devicetree@vger.kernel.org, jsequeira@nvidia.com,
+        thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+In-Reply-To: <20211209172206.17778-3-sumitg@nvidia.com>
+References: <20211209172206.17778-1-sumitg@nvidia.com> <20211209172206.17778-3-sumitg@nvidia.com>
+Subject: Re: [Patch Resend v1 2/8] dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB1.0 binding
+Date:   Thu, 09 Dec 2021 14:55:59 -0600
+Message-Id: <1639083359.653823.3925941.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 21:48, Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
-> > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
-> > default since dcb7c0b9461c2, which is why this came on my radar. And
-> > Clang also performs auto-init of allocas when auto-init is on
-> > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
-> > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
-> > allocas.
-> >
-> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> > enabled, add_random_kstack_offset() will auto-init that unused portion
-> > of the stack used to add an offset.
-> >
-> > There are several problems with this:
-> >
-> >       1. These offsets can be as large as 1023 bytes. Performing
-> >          memset() on them isn't exactly cheap, and this is done on
-> >          every syscall entry.
-> >
-> >       2. Architectures adding add_random_kstack_offset() to syscall
-> >          entry implemented in C require them to be 'noinstr' (e.g. see
-> >          x86 and s390). The potential problem here is that a call to
-> >          memset may occur, which is not noinstr.
-> >
-> > A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> >
-> >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
-> >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> >
-> > Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
-> >
-> > To figure out what the right solution is, the first thing to figure out
-> > is, do we actually want that offset portion of the stack to be
-> > auto-init'd?
-> >
-> > There are several options:
-> >
-> >       A. Make memset (and probably all other mem-transfer functions)
-> >          noinstr compatible, if that is even possible. This only solves
-> >          problem #2.
->
-> I'd agree: "A" isn't going to work well here.
->
-> >
-> >       B. A workaround could be using a VLA with
-> >          __attribute__((uninitialized)), but requires some restructuring
-> >          to make sure the VLA remains in scope and other trickery to
-> >          convince the compiler to not give up that stack space.
->
-> I was hoping the existing trickery would work for a VLA, but it seems
-> not. It'd be nice if it could work with a VLA, which could just gain the
-> attribute and we'd be done.
->
-> >       C. Introduce a new __builtin_alloca_uninitialized().
->
-> Hrm, this means conditional logic between compilers, too. :(
+On Thu, 09 Dec 2021 22:52:00 +0530, Sumit Gupta wrote:
+> Add device-tree binding documentation to represent the error handling
+> driver for Control Backbone (CBB) version 1.0 used in Tegra194 SOC.
+> The driver prints debug information about failed transactions due to
+> illegal register accesses on receiving interrupt from CBB.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  .../arm/tegra/nvidia,tegra194-cbb.yaml        | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+> 
 
-And as Segher just pointed out, I think Clang has a "bug" because
-explicit alloca() calls aren't "automatic storage". I think Clang
-needs a new -mllvm param.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Because I think making #B work is quite ugly and also brittle. :-/
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml:96:1: [error] duplication of key "properties" in mapping (key-duplicates)
+./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml:109:1: [error] duplication of key "examples" in mapping (key-duplicates)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
+    return self.construct_document(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
+    for _dummy in generator:
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
+    value = self.construct_mapping(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
+    return BaseConstructor.construct_mapping(self, node, deep=deep)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
+    if self.check_mapping_key(node, key_node, mapping, key, value):
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
+    raise DuplicateKeyError(*args)
+ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+  in "<unicode string>", line 5, column 1
+found duplicate key "properties" with value "{}" (original value: "{}")
+  in "<unicode string>", line 96, column 1
+
+To suppress this check see:
+    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+
+make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+    testtree = dtschema.load(filename, line_number=line_number)
+  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 656, in load
+    return yaml.load(f.read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
+    return self.construct_document(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
+    for _dummy in generator:
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
+    value = self.construct_mapping(node)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
+    return BaseConstructor.construct_mapping(self, node, deep=deep)
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
+    if self.check_mapping_key(node, key_node, mapping, key, value):
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
+    raise DuplicateKeyError(*args)
+ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+  in "<unicode string>", line 5, column 1
+found duplicate key "properties" with value "{}" (original value: "{}")
+  in "<unicode string>", line 96, column 1
+
+To suppress this check see:
+    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
+    ret = check_doc(f)
+  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+AttributeError: 'DuplicateKeyError' object has no attribute 'path'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+make: *** [Makefile:1413: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1565943
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

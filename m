@@ -2,76 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B961346F255
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1A446F258
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241279AbhLIRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S236731AbhLIRp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241536AbhLIRol (ORCPT
+        with ESMTP id S233267AbhLIRpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:44:41 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769CEC0617A2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:41:07 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id z5so22389609edd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:41:07 -0800 (PST)
+        Thu, 9 Dec 2021 12:45:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14A4C061746;
+        Thu,  9 Dec 2021 09:41:51 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id y13so21624238edd.13;
+        Thu, 09 Dec 2021 09:41:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xgwf0EqG1zOV5K51D86bZBb5Zvrw1Vxqre5N6HLlv/s=;
-        b=BSJojAdwqlU2UjVnJob211Ie71far1uO/y3X3p/GvID7KC2+Noijrz3C3WGAIijESg
-         nN2BEZxD0COSoVdFS+jdZkm3XLXJFd4062mm4OImPWczg9gP/V6+KXu5C++qLZriXu/a
-         9cWeJmmQVCJtHqGb4pShPCncTPYei+UIgmwjk=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3Ha1arazSwC976tURMSNLlrwWYigXu8viEfvQRgLEuA=;
+        b=aWWzGCIcUjq74l9UMqSnNm2LbG8v+B3Mkpsmm7IIXSE1o0TGkaBcHb3yS3A3ojyAh9
+         w/6zCUNsK+wJ6wUabSY0xBMabuhio6S3ZlqIcDge4CyvZ3MaDLLFblo8uiKwQKJo//A/
+         eIFkM72eq07aXRn+kuOEZn32Srud9mH2YJzjyJiT7bpyT3HA8hELJCYi9MgFyvGV+ySN
+         dt64jLOc5G068KsomXJDsjoR5khGjmAgJ7PYtSY2Q2gAnrU506YLCiGN5RM90SfkXNPj
+         MFG8LbeBCxxlxwUvx4qxPb2zenf/3oHQ1wb8vUl2lopWScoj4EqHmqkiu1GSN9zu/I1O
+         aIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xgwf0EqG1zOV5K51D86bZBb5Zvrw1Vxqre5N6HLlv/s=;
-        b=030FcQ6JB0fg28b7vxZ7AhersP0n5T6iVkVns6J8UbhsF5AVAUNze8ulIolOMZRdgA
-         BzzIwQ45BWKgeZ0uK4ujN7u/9bY2wDbhfwxpoh01L9G+NLGniyxg5NsVjiVk0BIoomyS
-         mQAk5+PGqQnoA3IODBENH98naIRMc0PG1e9qXCq6aDt/Gt7hLlDTyu1ul8+/Dr+QuuCM
-         KiulJCFqnKf157V5tLF2e/pdrHRWRqSDvizZAuBzMCYXDFd6xj/259BkYDJklZje2KIP
-         PTfoDfdrN/z77X2+FGi1biCCY9U554Qng2pIXNQAWNHGzMpH+BXVcOfwJH74AnUbup3g
-         CPCQ==
-X-Gm-Message-State: AOAM532+8zGBjs8MPGGwcF34pHo6LygzbKPYI7WOtAVm1vxy2cA8f7iE
-        S3UI7kVrSOooDMtA3X71mv1anMlZBMJHR+3wV30=
-X-Google-Smtp-Source: ABdhPJx+yRL0RBeB47wRmfNMxcvdgr2n0/H4hF9nPwPQMfsVk5pHBifoVDwkGJwDyk3C/DaOpQ0Y4w==
-X-Received: by 2002:a17:907:c0e:: with SMTP id ga14mr17189076ejc.26.1639071537471;
-        Thu, 09 Dec 2021 09:38:57 -0800 (PST)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id z8sm223719edb.5.2021.12.09.09.38.56
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3Ha1arazSwC976tURMSNLlrwWYigXu8viEfvQRgLEuA=;
+        b=Ugm3o9fPFEQ0pOo12myvQvNTdVkpa20S8fsFP1CW2l89FErh8QetQhO4MSSwo6PCZx
+         AxEjeVMubFKe2p5x77284ScoYLNQyJr/VEh5c6HqmOEz3vvrq3f0b4O6zb3XFoDH8zYq
+         P635kZsBHLvMRVDk678rlXYp+h1Ql4Vda4VWZ10rslswpWTftsA3fLAN5ZXO36vZBSsh
+         0hlwOxHwCzWoUOrhaGN2DAhPV1r48Mdu1ve8yM1hjswi9dkFlG0h6LYLpjHW+02CHYBD
+         JxzSfImCeExLDzr4XgNj4BK1bJO//B/qw+6Dp1zw1HYywbPG5RP+oyxskP8iVmWuVlx5
+         GRFQ==
+X-Gm-Message-State: AOAM5301hxS+n8FIrleuUdGFWV0cFc0NfiKTcWDdbbRu1PCb9A3hexIG
+        +1VXJpCa/A6Ie2d9hkJq7pY=
+X-Google-Smtp-Source: ABdhPJzCL6PUYuCP0GRE2dc1g2cqm+RtZVndoItyY8lDOtkx9cTeOE501KZRx6KEhhTgGKgnNN3FsA==
+X-Received: by 2002:a05:6402:289e:: with SMTP id eg30mr30904687edb.253.1639071556590;
+        Thu, 09 Dec 2021 09:39:16 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id r3sm251195ejr.79.2021.12.09.09.39.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 09:38:57 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id i5so11030175wrb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:38:56 -0800 (PST)
-X-Received: by 2002:adf:f8c3:: with SMTP id f3mr7990589wrq.495.1639071536663;
- Thu, 09 Dec 2021 09:38:56 -0800 (PST)
+        Thu, 09 Dec 2021 09:39:16 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <7a4c9a55-91d8-84d7-89d2-e4f423fb248b@redhat.com>
+Date:   Thu, 9 Dec 2021 18:39:13 +0100
 MIME-Version: 1.0
-References: <20211209165113.150581-1-sashal@kernel.org>
-In-Reply-To: <20211209165113.150581-1-sashal@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 9 Dec 2021 09:38:40 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjfioCtywT_9HnKufGsKwgLD3fEDDR=gPTqSVZrfdmiLQ@mail.gmail.com>
-Message-ID: <CAHk-=wjfioCtywT_9HnKufGsKwgLD3fEDDR=gPTqSVZrfdmiLQ@mail.gmail.com>
-Subject: Re: [PATCH] tools/lib/lockdep: drop leftover liblockdep headers
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 11/11] x86/kvm: Silence per-cpu pr_info noise about KVM
+ clocks and steal time
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+References: <20211209150938.3518-1-dwmw2@infradead.org>
+ <20211209150938.3518-12-dwmw2@infradead.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211209150938.3518-12-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 8:51 AM Sasha Levin <sashal@kernel.org> wrote:
->
-> Clean up remaining headers that are specific to liblockdep but lived in
-> the shared header directory.
+On 12/9/21 16:09, David Woodhouse wrote:
+> From: David Woodhouse<dwmw@amazon.co.uk>
+> 
+> I made the actual CPU bringup go nice and fast... and then Linux spends
+> half a minute printing stupid nonsense about clocks and steal time for
+> each of 256 vCPUs. Don't do that. Nobody cares.
 
-Thanks, applied directly, the same way I took the original liblockdep removal.
+Queued this one, it makes sense even without the rest of the series.
 
-                 Linus
+Paolo
+
+> Signed-off-by: David Woodhouse<dwmw@amazon.co.uk>
+> ---
+>   arch/x86/kernel/kvm.c      | 6 +++---
+>   arch/x86/kernel/kvmclock.c | 2 +-
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index 59abbdad7729..a438217cbfac 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -313,7 +313,7 @@ static void kvm_register_steal_time(void)
+>   		return;
+>   
+>   	wrmsrl(MSR_KVM_STEAL_TIME, (slow_virt_to_phys(st) | KVM_MSR_ENABLED));
+> -	pr_info("stealtime: cpu %d, msr %llx\n", cpu,
+> +	pr_debug("stealtime: cpu %d, msr %llx\n", cpu,
+>   		(unsigned long long) slow_virt_to_phys(st));
+>   }
+>   
+> @@ -350,7 +350,7 @@ static void kvm_guest_cpu_init(void)
+>   
+>   		wrmsrl(MSR_KVM_ASYNC_PF_EN, pa);
+>   		__this_cpu_write(apf_reason.enabled, 1);
+> -		pr_info("setup async PF for cpu %d\n", smp_processor_id());
+> +		pr_debug("setup async PF for cpu %d\n", smp_processor_id());
+>   	}
+>   
+>   	if (kvm_para_has_feature(KVM_FEATURE_PV_EOI)) {
+> @@ -376,7 +376,7 @@ static void kvm_pv_disable_apf(void)
+>   	wrmsrl(MSR_KVM_ASYNC_PF_EN, 0);
+>   	__this_cpu_write(apf_reason.enabled, 0);
+>   
+> -	pr_info("disable async PF for cpu %d\n", smp_processor_id());
+> +	pr_debug("disable async PF for cpu %d\n", smp_processor_id());
+>   }
+>   
+>   static void kvm_disable_steal_time(void)
+> diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+> index 462dd8e9b03d..a35cbf9107af 100644
+> --- a/arch/x86/kernel/kvmclock.c
+> +++ b/arch/x86/kernel/kvmclock.c
+> @@ -174,7 +174,7 @@ static void kvm_register_clock(char *txt)
+>   
+>   	pa = slow_virt_to_phys(&src->pvti) | 0x01ULL;
+>   	wrmsrl(msr_kvm_system_time, pa);
+> -	pr_info("kvm-clock: cpu %d, msr %llx, %s", smp_processor_id(), pa, txt);
+> +	pr_debug("kvm-clock: cpu %d, msr %llx, %s", smp_processor_id(), pa, txt);
+>   }
+>   
+>   static void kvm_save_sched_clock_state(void)
+> -- 2.31.1
+> 
+

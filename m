@@ -2,219 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 464C446F591
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426DA46F5AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbhLIVK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:10:58 -0500
-Received: from mail-co1nam11on2073.outbound.protection.outlook.com ([40.107.220.73]:2272
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230304AbhLIVK4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:10:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CvuwHYElFOrDNLWTX8cnix3w+5h2mKOBZ/BIHwl7iQV8Yu+FCPTlTqcrw4AJInPEQK/KZfPRAPP4WP150xOCDQGXQ1FAUfc3uOuBDWw4PEt7vtEyuNgQl7sZhR0xlJtQUxS0GVQqq9h1GBbxsfEaf4I9tgGkT12oKUwlzEudGsZbMcQVhZBNW4vGHLRaTaIf1um1NDgPfZgaafEiaIj6oBrZ0utV7Y3fCmfoYlqDLd0eTJVmXnmNmcDxtSU1prjkSlhkRlPbLnnUU/8/aXs7fuY7n46aP8ItXRuIpH6zu/DXliegMYothtNujZTYualSPidp/mrk9USR1NXjV2cY2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E1EHN7nDnmDRcFb0ReloZBKbhW+KeEA9JdAThzWAh/0=;
- b=b4DYbQXpqPHcb72pUntvkQt7q2+gd+PU3ir40Zez3yCrqhtUJNcEzX3lIMohRYru/edxS4sUKHd6k2WDvO3UcoDpT0IgjcVzLvxDKZ8XtwOprRqidyJa2JVWW75FS31pL+bi1EUgeYkwkvBevikqiJiVtRccILV62lfGbNY8RtCNhjRdGMbGhMDyHc9owp1EneDOsimsUaumYNrQrjFnPWM8cbPPfeOEBilOeAt0tv9DlxXUWNLc4NATrUrXeUXaWIvx0viB+5AC701n9IZBzTEDUHRONL3TK6bd+d3RiZkE1CYlp2A7Qe8WGSb4O8HGm9SgB93mzlk7x7FfebyPiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E1EHN7nDnmDRcFb0ReloZBKbhW+KeEA9JdAThzWAh/0=;
- b=VFHcOrcYJyWZQWpBY6XUtD+HqHCexTfDv7sgGxXrcyRlJXqnUo/K7zTLZ1NFgkIZaWMFxta8ZiGw6AHscLbkxJ55K3uYBTTNVQ0DeOaqO6rsTSDxg0AdnGtp8oVy/rxf7HQ6uZQEsJFs8jVsJe8Q/3QM7AhQONkErn+jJMmnjmSrCUYbXtggLRPBglca8eyrOQmi03guQHr1wqZxpK0002CDPhbUPMlO/E3TQsSHkq/0BZVfoHH9QsEhpX2xtb9ImTt4C1kUO1JK9eaWJFu3kZxF1ajihFGh/xlb+08QNLAovnF6sAxLsYkqyS0ISuhqkensXTb4iJfA129StjtvwQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5046.namprd12.prod.outlook.com (2603:10b6:208:313::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22; Thu, 9 Dec
- 2021 21:07:19 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.013; Thu, 9 Dec 2021
- 21:07:19 +0000
-Date:   Thu, 9 Dec 2021 17:07:18 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Please pull RDMA subsystem changes
-Message-ID: <20211209210718.GA343585@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
-Content-Disposition: inline
-X-ClientProxiedBy: BL1P223CA0007.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::12) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S232646AbhLIVPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232627AbhLIVPc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 16:15:32 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D15C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:11:58 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id t6so6088073qkg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:11:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=f39DFnoj8lua8eJKcrSxpR3sJ0r+3/YfBmxC1RnRv7o=;
+        b=HD6w//AO6uml4ld5E8Xhkso1YCkTqbGrrybkpcBPHs6LFvdrib5ZYvWcDCzMiUEwzk
+         //CJr092ZQp5EAYBkCrwppQ33u6E8LVQ0baAIi5waPox0vU8qeFa21yTI/Pim0vMyEmc
+         KVekMMbMbogCwa6cbpO8l4rh9NbXXZu4oPECjAVBaxNxRjMRZzVX/hC4/IS57cJfxnKN
+         qYcvtHs8mOFLAvjLqdkbG+oyXNHSAwXLiYCrRNOTOIKMdfVuj2kjttoo5/V5HMimc5cM
+         9fBb0y35KpUoOnbkrp6D2GUrErAMzJIUAIiKxwOJeZTKtP4H4aOedeWtjoXZ1WUoR+NL
+         EJzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=f39DFnoj8lua8eJKcrSxpR3sJ0r+3/YfBmxC1RnRv7o=;
+        b=F50HsXsgzQBqWilCKXtvuQFySuXyx1ozPqRDT3uu5Dfr+Z1HZLtor2EqbVNwFFhFI5
+         hzouMdLdNPe/jBfgyxUrQzZyBPdgMRUyvwS2B9xD1ASDc8T0YN2wnYgqtaau2Uk1JGVc
+         /1zBhREN/DAkQDNaX4m+bNyXP4IiXMC4xV5cmx5IizDRu0VBc261//jHqjSMjs0TM4Gy
+         tjzSCmOdyfvqcSGf/4rcmExrURztGw/rZotk6yOdHiEyKy3qcDf354+CbkF+bEIAxWW+
+         mSzkrLyzBYiY0oZ/KXVXhRYzBE37KZ5a84sp+0lxESYbaibH2k19GnVdcTUdwoIoGONm
+         Ueng==
+X-Gm-Message-State: AOAM532hHa0t8JinOpKXdSoVhM+zh9HnfVv1eWcM2qYvEphbHD+zHWxJ
+        Qz0krB6/z7J8KVBN6Xfqihm08OnhxIT7+ay/CHjqNA==
+X-Google-Smtp-Source: ABdhPJxYDMrJsQkvRbmr7z1OOg+Etw1M5Jk+XurqStbkPbcRURo8sMHswotQg+nY0pRSzQohcu40qMjmBuof5M57B04=
+X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr16571622qkp.610.1639084317071;
+ Thu, 09 Dec 2021 13:11:57 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2c6ef8e-b91f-4469-9365-08d9bb57e2e0
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5046:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5046BB198E17C6ADB2579E3DC2709@BL1PR12MB5046.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:198;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ttAVtbXF/tsysj71q94FAO7XiTDsqsk09fALf91l+/pfl+J5C1b6OVYVdpOpnSkoR17HhZzWDAm8ZA/da0858FuPD3xy9BPHK81hYHuXiWwfJzY95tWqzAHA6RcL8jrFUREqGMQ2ZLyleUsqoOC5QQ5iMQrpUL3+n1mNG3v0OzOUzJh7hVX+ZgqXp+5tDjl3/I/bE2jl7V79WPX8A6yAf2BDtk87lNpmUlDBDH1bK5pgdvHIWwzdEz6l7C5ogk1i75GSAK2gS2aoJnC5TMyy6H9l5Zwuyapk7xWr19r0PzJgmYChCz0K/MPelp7EKv6+gF+KPqU0Due1onYDwM4YawTm8e7QMnz2wWOvb9s83YoZ6PN1gutUm3w0/pX5R9Rm1kUtKQ/gqXJeYo82SuGtax8rlUlRMOHc1YclG70ew+tAVkLPGnRpznnsrRfgpISIzYgHUTlj0qFvpz7UKF4+T+Z4OThvfo5bg9Omj4UVGPWSpSrpU0g3960+8aAFXGmCjjpcvuMzBuJJWxjVLippfJ7wHS6GygVdTMUedUOQTJKUHavYp+m1eLZ7Q51GsFcahH7+bA0ud5fdnzTLLzBZT2VMJkUpc4iQi4wy+/fWQYCe+qpiGEXNxXYoMCY6urufIpCvJIJpHsi+GPiq475fW18oG4OS2DquJR5IvvMqjTaB3L0M/mCkGoGZdMB/lxtjMVv0YUOnHPmaocT+Emf5QzBKB7Oa7QWubg4+TGchKMw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(1076003)(6512007)(36756003)(8676002)(6916009)(186003)(2906002)(21480400003)(4001150100001)(508600001)(6506007)(66476007)(5660300002)(66946007)(33656002)(66556008)(4326008)(38100700002)(6486002)(83380400001)(44144004)(316002)(8936002)(86362001)(26005)(2616005)(27376004)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0mdCDVKE91W3eiJzO1G5DzGIJfZkz3uWpm+MYD1v2SzOOCqMtAdBJnc/oofg?=
- =?us-ascii?Q?RYDqCdpWe4ni/J3X21I5gaPUB1z09QYY6iiJUIMGuYHE66L9HQhslH0fAt9k?=
- =?us-ascii?Q?lObx9Jo+akLQDPC/PJVcyN4eV+M/jR+ZrOWqItYvszunoB50Vf9/CcYJxt5D?=
- =?us-ascii?Q?INyqtoYm9O5H2YnsRHRlpaly3+x7E+DcPyz9AjFkeIKl2/n7NjBZyqQKwXHb?=
- =?us-ascii?Q?VEbvbOzdrTPGbpvR1EfA+xFf3HJn5jMXHRIXeO9AWDvS3vCFqVl/sOim6aDC?=
- =?us-ascii?Q?duWlnG8br+i6rfh9zc3PClqFNfhVR5ts146mQfG1AjpbrcsFuS69c6EWZJ1J?=
- =?us-ascii?Q?ytI0L5kNTbzdE2sa9zOi+bEGFS+YaR9THxn3xQSws158dJRqh29m4d2bi6Au?=
- =?us-ascii?Q?vig9NMU8wHlRplWlzBIUihGXlTCzL2vnv4OXEne+dBFUCAVAMWFh36vXoxjn?=
- =?us-ascii?Q?uT+LRn9rHBmWHvn1rXAgrq92QSjWF3FovE55+yB5FT/CvfZUpSH1Lc/anXwz?=
- =?us-ascii?Q?b0NZSHqTqVMp6PJq/Y+hDVL6fzSgxz+QPPhyXOeuvPeY1XTd9AkQ5U84Wuu2?=
- =?us-ascii?Q?pTLsecBD0JnHCZuf0C+ZwSdG889uT8ObYPSkPuqYxYeYyz/84tgez05gClQD?=
- =?us-ascii?Q?Igu5vFM8N51XSiJhQyN7UvxWLpMdRLI7ac6ea/4qz32XNNtLLSP0sDNSgDJ7?=
- =?us-ascii?Q?C3hToE2AtSfJIORzjVZaIIdE3GG/eqHOKRuofCQKAI6w7i209mE5BfYFUv89?=
- =?us-ascii?Q?CZqXpXIQy1Njgx7cOUAJ0OF6lNEeeBpvPnQHKhpeRKwAKqC549Wmgx/bGNx5?=
- =?us-ascii?Q?gSDWtvVrm34kE6q7Hl3WnkILJQKlOuwM078b27h8flweyKNuuQhy5Fl8RBxs?=
- =?us-ascii?Q?sfF5WVQRAwfPQtXtt3/oGLb2ZxA2ENTyKBBeRtuy4dz09dQOMCl1GuSc5Gan?=
- =?us-ascii?Q?MkNcj6hmMPvhDJKw1eSjYOAn4dm6FrCzK4EGYEHKC3GOEmcBYpSzTOTwCLzA?=
- =?us-ascii?Q?XS3dgY86gY0QOacztOsRbgsnhPUHpIPDiy8Exfo08zwNeDdBMEB+euIYbzqC?=
- =?us-ascii?Q?YB65hTEfUATcpQmRJKGCaRUlcRvy/mpwXMJDp/owEcZOqmYebm6XHSxq0NqI?=
- =?us-ascii?Q?78jefysiC3gspqFKD5na51UnXTKxNoPXfESJFPm4nFqE7ic3pOKZtHnrMUyF?=
- =?us-ascii?Q?MnQQS+bwIbDEbLHqY57c3+xVMWZNP4ebEMPMIKjJ5O86VIbqKJ0frEaKruSD?=
- =?us-ascii?Q?pDOzCA1KpbRb3IrGWAnRtJcHAYZVnc/v7L7JLlytaIgKAQDym0afZ16H8vQG?=
- =?us-ascii?Q?T9hsJYtYl6lji2KY7GgVueVb929GCrvnynU3vqGXsoK3SZjMrutrTSFietM/?=
- =?us-ascii?Q?KbPajQUDFUiRs6RAOWHgcNQ4sLXwiYD2tupuZ+TfLligdLbL/mIu+DJjs0i9?=
- =?us-ascii?Q?Qb+nQ6W+e1iZTMmMnqFCpzrTKVReZL9ggGbo651sYNLgsLVZyf84TO27J/Ri?=
- =?us-ascii?Q?2VYMkmg1dfRy6XiTaOjcQlc48fzjCqhPobd51QqSXCB01DOh/87+qHFl/ggI?=
- =?us-ascii?Q?xjCrC+RMZgpfl01BYb8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2c6ef8e-b91f-4469-9365-08d9bb57e2e0
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 21:07:19.3490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wg1vBTqta+iEdJWDZ5BuEDw4xWC3IsDK2G6c0UeYgvWkTip3AviFMQm+ECkwjZqh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5046
+References: <YbHTKUjEejZCLyhX@elver.google.com> <202112091232.51D0DE5535@keescook>
+ <CANpmjNPJpbKzO46APQgxeirYV=K5YwCw3yssnkMKXG2SGorUPw@mail.gmail.com>
+In-Reply-To: <CANpmjNPJpbKzO46APQgxeirYV=K5YwCw3yssnkMKXG2SGorUPw@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 9 Dec 2021 22:11:19 +0100
+Message-ID: <CAG_fn=WEOb_3_u3CrAG36=j_moeHu0hmFmqM+sXSTepnN8kLjw@mail.gmail.com>
+Subject: Re: randomize_kstack: To init or not to init?
+To:     Marco Elver <elver@google.com>, segher@kernel.crashing.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---VbJkn9YxBvnuCH5J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Dec 9, 2021 at 9:54 PM Marco Elver <elver@google.com> wrote:
+>
+> On Thu, 9 Dec 2021 at 21:48, Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
+> > > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+> > > default since dcb7c0b9461c2, which is why this came on my radar. And
+> > > Clang also performs auto-init of allocas when auto-init is on
+> > > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+> > > aware, GCC 12's upcoming -ftrivial-auto-var-init=3D doesn't yet auto-=
+init
+> > > allocas.
+> > >
+> > > add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> > > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> > > enabled, add_random_kstack_offset() will auto-init that unused portio=
+n
+> > > of the stack used to add an offset.
+> > >
+> > > There are several problems with this:
+> > >
+> > >       1. These offsets can be as large as 1023 bytes. Performing
+> > >          memset() on them isn't exactly cheap, and this is done on
+> > >          every syscall entry.
+> > >
+> > >       2. Architectures adding add_random_kstack_offset() to syscall
+> > >          entry implemented in C require them to be 'noinstr' (e.g. se=
+e
+> > >          x86 and s390). The potential problem here is that a call to
+> > >          memset may occur, which is not noinstr.
+> > >
+> > > A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> > >
+> > >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset(=
+) leaves .noinstr.text section
+> > >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to m=
+emset() leaves .noinstr.text section
+> > >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to =
+memset() leaves .noinstr.text section
+> > >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset=
+() leaves .noinstr.text section
+> > >
+> > > Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
+> > >
+> > > To figure out what the right solution is, the first thing to figure o=
+ut
+> > > is, do we actually want that offset portion of the stack to be
+> > > auto-init'd?
+> > >
+> > > There are several options:
+> > >
+> > >       A. Make memset (and probably all other mem-transfer functions)
+> > >          noinstr compatible, if that is even possible. This only solv=
+es
+> > >          problem #2.
+> >
+> > I'd agree: "A" isn't going to work well here.
+> >
+> > >
+> > >       B. A workaround could be using a VLA with
+> > >          __attribute__((uninitialized)), but requires some restructur=
+ing
+> > >          to make sure the VLA remains in scope and other trickery to
+> > >          convince the compiler to not give up that stack space.
+> >
+> > I was hoping the existing trickery would work for a VLA, but it seems
+> > not. It'd be nice if it could work with a VLA, which could just gain th=
+e
+> > attribute and we'd be done.
+> >
+> > >       C. Introduce a new __builtin_alloca_uninitialized().
+> >
+> > Hrm, this means conditional logic between compilers, too. :(
+>
+> And as Segher just pointed out, I think Clang has a "bug" because
+> explicit alloca() calls aren't "automatic storage". I think Clang
+> needs a new -mllvm param.
 
-Hi Linus,
+I don't think the original Clang flag was built with just "automatic
+storage" in mind.
+After all, people do forget to initialize their variables, regardless
+of whether they are automatic stack variables, or malloc() or alloca()
+allocations.
 
-The usual driver bug fixes, but nothing that has broke too recently.
+If __builtin_alloca() wasn't banned in the kernel, we'd probably want
+it to return initialized memory, because otherwise people would be
+making the same mistakes using it.
+Now that there's a single call to __builtin_alloca() that happens to
+suffer from initialization, it is hard to justify that initializing
+allocas is a good thing to do.
+But I believe developers in other projects don't want to worry about
+how they allocate their memory when turning stack initialization on -
+they just want to be on the safe side.
 
-Thanks,
-Jason
+> Because I think making #B work is quite ugly and also brittle. :-/
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-are available in the Git repository at:
+--=20
+Alexander Potapenko
+Software Engineer
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-for you to fetch changes up to 10467ce09fefa2e74359f5b2ab1efb8909402f19:
-
-  RDMA/irdma: Don't arm the CQ more than two times if no CE for this CQ (2021-12-07 13:53:01 -0400)
-
-----------------------------------------------------------------
-RDMA v5.16 second rc pull request
-
-Quite a few small bug fixes old and new, also Doug Ledford is retiring
-now, we thank him for his work. Details:
-
-- Use after free in rxe
-
-- mlx5 DM regression
-
-- hns bugs triggred by device reset
-
-- Two fixes for CONFIG_DEBUG_PREEMPT
-
-- Several longstanding corner case bugs in hfi1
-
-- Two irdma data path bugs in rare cases and some memory issues
-
-----------------------------------------------------------------
-Alaa Hleihel (1):
-      RDMA/mlx5: Fix releasing unallocated memory in dereg MR flow
-
-Christophe JAILLET (1):
-      RDMA/irdma: Fix a potential memory allocation issue in 'irdma_prm_add_pble_mem()'
-
-Doug Ledford (1):
-      Remove Doug Ledford from MAINTAINERS
-
-Guoqing Jiang (1):
-      RDMA/rtrs: Call {get,put}_cpu_ptr to silence a debug kernel warning
-
-Mike Marciniszyn (4):
-      IB/hfi1: Correct guard on eager buffer deallocation
-      IB/hfi1: Insure use of smp_processor_id() is preempt disabled
-      IB/hfi1: Fix early init panic
-      IB/hfi1: Fix leak of rcvhdrtail_dummy_kvaddr
-
-Pavel Skripkin (1):
-      RDMA: Fix use-after-free in rxe_queue_cleanup
-
-Shiraz Saleem (2):
-      RDMA/irdma: Fix a user-after-free in add_pble_prm
-      RDMA/irdma: Report correct WC errors
-
-Tatyana Nikolova (1):
-      RDMA/irdma: Don't arm the CQ more than two times if no CE for this CQ
-
-Yangyang Li (2):
-      RDMA/hns: Do not halt commands during reset until later
-      RDMA/hns: Do not destroy QP resources in the hw resetting phase
-
- MAINTAINERS                                  |  1 -
- drivers/infiniband/hw/hfi1/chip.c            |  2 ++
- drivers/infiniband/hw/hfi1/driver.c          |  2 ++
- drivers/infiniband/hw/hfi1/init.c            | 40 ++++++++++++----------------
- drivers/infiniband/hw/hfi1/sdma.c            |  2 +-
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c   | 14 +++++++---
- drivers/infiniband/hw/irdma/hw.c             |  7 ++++-
- drivers/infiniband/hw/irdma/main.h           |  1 +
- drivers/infiniband/hw/irdma/pble.c           |  8 +++---
- drivers/infiniband/hw/irdma/pble.h           |  1 -
- drivers/infiniband/hw/irdma/utils.c          | 24 ++++++++++++-----
- drivers/infiniband/hw/irdma/verbs.c          | 23 ++++++++++++----
- drivers/infiniband/hw/irdma/verbs.h          |  2 ++
- drivers/infiniband/hw/mlx5/mlx5_ib.h         |  6 ++---
- drivers/infiniband/hw/mlx5/mr.c              | 26 +++++++++---------
- drivers/infiniband/sw/rxe/rxe_qp.c           |  1 +
- drivers/infiniband/ulp/rtrs/rtrs-clt-stats.c |  9 ++++---
- 17 files changed, 102 insertions(+), 67 deletions(-)
-
---VbJkn9YxBvnuCH5J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfB7FMLh+8QxL+6i3OG33FX4gmxoFAmGycAMACgkQOG33FX4g
-mxpIwBAAhZjawP8+QH/wThV6ol0zYkYcuYrfCKA7Z78tshsTBU0Q2T2xYc7tWD/o
-OGnKCFsVzxOikJEPqb96fo4WugP8eSh6Atn3zDARw7jrrZejVXaodfE2Gd5BiuxA
-JwfQzGUfPBvBhC2JbGZ43WVLE26sxLcJ7CIzEAwdklE4PQKf7RXGjNxp0IJUOJCn
-KdPKAZ7Q5oUuxSTuLwFpKGqZVxXoRZGPoH80oyQt03WM97ekxPe+TtIDcDydTnoT
-bk5W8OWg3XbIgKMvLWXmi/+5Dz27QXgHNBwfW36xJ9jWx6KVfR7+YV4rT5pmJ2Lj
-nWo5/Pzlwd8XPGeUKb1wGx65z2m/Cq/7F9epg1TxWQyF6W4n22IXHTSAuVkYEkRQ
-ajNaPt3hOYhPPXeLSG86HwB3btLZvPzgWzhz8TFpmnCIN4AAIt3LUWjll06P16PE
-U02KaZe9BhGFgqEdGYlBkv8hDS8nmTOSw4eLV4ubAJXMjMqjTwXYHot3CGyxlNWU
-l8eTpDvTNoeM7uY7qD6EzUy9gE9W+qvjSaQPbivuJDa4vgSm+zcD0z3TwHwGH/BG
-CI2LOx70XrWPAR08+cIXzhd5SlQCyrdz3l2JC4fZ8R8NAbFTkLVcvOsR/PpUUnSf
-R59zjybEsT0HMa8dbXrhGBMdkaJN/DLdeQW231CZR2D3d/KDcFM=
-=JA1t
------END PGP SIGNATURE-----
-
---VbJkn9YxBvnuCH5J--
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

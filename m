@@ -2,74 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E1846E75A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B772F46E757
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbhLILS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:18:26 -0500
-Received: from mga12.intel.com ([192.55.52.136]:41599 "EHLO mga12.intel.com"
+        id S236459AbhLILRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:17:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:54450 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232764AbhLILS0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:18:26 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218100152"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="218100152"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:14:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="503453271"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:14:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvHN1-0043tW-Mv;
-        Thu, 09 Dec 2021 13:13:51 +0200
-Date:   Thu, 9 Dec 2021 13:13:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: Sort Kconfig and Makefile entries
- alphabetically
-Message-ID: <YbHk7wenlrhlizCA@smile.fi.intel.com>
-References: <20211208092049.20792-1-andriy.shevchenko@linux.intel.com>
- <CACRpkdb2ZnH7gi8TAQ_8hvbaAw=hqBZBjQftPOtyNMLR+c541g@mail.gmail.com>
+        id S232764AbhLILRc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:17:32 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 743201FB;
+        Thu,  9 Dec 2021 03:13:58 -0800 (PST)
+Received: from [10.57.33.188] (unknown [10.57.33.188])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 90D3D3F73B;
+        Thu,  9 Dec 2021 03:13:56 -0800 (PST)
+Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
+ are unavailable
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+References: <20211208160907.749482-1-james.clark@arm.com>
+ <20211208160907.749482-2-james.clark@arm.com>
+ <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
+Date:   Thu, 9 Dec 2021 11:13:55 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdb2ZnH7gi8TAQ_8hvbaAw=hqBZBjQftPOtyNMLR+c541g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 03:34:59AM +0100, Linus Walleij wrote:
-> On Wed, Dec 8, 2021 at 10:20 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+
+
+On 09/12/2021 11:00, Suzuki K Poulose wrote:
+> On 08/12/2021 16:09, James Clark wrote:
+>> Maintain consistency with the other options by failing to open when they
+>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
+>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
+>> requested but not supported by hardware.
+>>
+>> The consequence of not doing this is that the user may not be
+>> aware that they are not enabling the feature as it is silently disabled.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> index d2bafb50c66a..0a9bb943a5e5 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>>       }
+>>         /* return stack - enable if selected and supported */
+>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
+>> -        /* bit[12], Return stack enable bit */
+>> -        config->cfg |= BIT(12);
+>> -
+>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
+>> +        if (!drvdata->retstack) {
+>> +            ret = -EINVAL;
+>> +            goto out;
+>> +        } else {
+>> +            /* bit[12], Return stack enable bit */
+>> +            config->cfg |= BIT(12);
+>> +        }
 > 
-> > Sort Kconfig and Makefile entries alphabetically for better maintenance
-> > in the future.
-> >
-> > While at it fix some style issues, such as wrong indentation.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> nit: While at this, please could you change the hard coded value
+> to ETM4_CFG_BIT_RETSTK ?
 > 
-> Nice! I tried to apply it but I was queueing patches from other
-> unreviewed threads and creating misc problems.
-> Ideally I'd like a patch close to the merge window,  but if
-> you rebase this on linux-next (or the "devel" branch in my
-> tree that I insist on using) I can try to apply it again anyways,
+I started changing them all because I had trouble searching for bits by name but then
+I thought it would snowball into a bigger change so I undid it.
 
-Sure.
+I think I'll just go and do it now if it's an issue here.
 
-> we need to take the hit at some point.
-
-v2 just has been sent!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Otherwise, looks good to me
+> 
+> Suzuki

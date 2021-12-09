@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F2346E9E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3946346E9E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238525AbhLIO1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:27:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:57458 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232691AbhLIO1R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:27:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D881D1FB;
-        Thu,  9 Dec 2021 06:23:43 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8667B3F73B;
-        Thu,  9 Dec 2021 06:23:42 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCs
-In-Reply-To: <20211206151206.GH3366@techsingularity.net>
-References: <20211201151844.20488-1-mgorman@techsingularity.net> <20211201151844.20488-3-mgorman@techsingularity.net> <20211204104056.GR16608@worktop.programming.kicks-ass.net> <20211206151206.GH3366@techsingularity.net>
-Date:   Thu, 09 Dec 2021 14:23:40 +0000
-Message-ID: <87y24t97rn.mognet@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S238563AbhLIO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:28:52 -0500
+Received: from sibelius.xs4all.nl ([83.163.83.176]:58772 "EHLO
+        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232122AbhLIO2v (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 09:28:51 -0500
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 93b16357;
+        Thu, 9 Dec 2021 15:25:16 +0100 (CET)
+Date:   Thu, 9 Dec 2021 15:25:16 +0100 (CET)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     sven@svenpeter.dev, robh+dt@kernel.org, marcan@marcan.st,
+        alyssa@rosenzweig.io, kettenis@openbsd.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211209051001.70235-4-marcan@marcan.st> (message from Hector
+        Martin on Thu, 9 Dec 2021 14:10:00 +0900)
+Subject: Re: [PATCH 3/4] dt-bindings: pci: apple,pcie: Add t6000 support
+References: <20211209051001.70235-1-marcan@marcan.st> <20211209051001.70235-4-marcan@marcan.st>
+Message-ID: <d3cb39fce38bc298@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/21 15:12, Mel Gorman wrote:
-> Gautham had similar reasoning to calculate the imbalance at each
-> higher-level domain instead of using a static value throughout and
-> it does make sense. For each level and splitting the imbalance between
-> two domains, this works out as
->
->
->       /*
->        * Calculate an allowed NUMA imbalance such that LLCs do not get
->        * imbalanced.
->        */
->       for_each_cpu(i, cpu_map) {
->               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
->                       struct sched_domain *child = sd->child;
->
->                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
->                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
->                               struct sched_domain *top = sd;
->                               unsigned int llc_sq;
->
->                               /*
->                                * nr_llcs = (top->span_weight / llc_weight);
->                                * imb = (child_weight / nr_llcs) >> 1
->                                *
->                                * is equivalent to
->                                *
->                                * imb = (llc_weight^2 / top->span_weight) >> 1
->                                *
->                                */
->                               llc_sq = child->span_weight * child->span_weight;
->                               while (top) {
->                                       top->imb_numa_nr = max(1U,
->                                               (llc_sq / top->span_weight) >> 1);
->                                       top = top->parent;
->                               }
->
->                               break;
->                       }
->               }
->       }
->
+> From: Hector Martin <marcan@marcan.st>
+> Date: Thu,  9 Dec 2021 14:10:00 +0900
+> 
+> This new SoC is compatible with the existing driver, but the block
+> supports 4 downstream ports, so we need to adjust the binding to
+> allow that.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../devicetree/bindings/pci/apple,pcie.yaml   | 28 ++++++++++++++-----
+>  1 file changed, 21 insertions(+), 7 deletions(-)
 
-IIRC Peter suggested punting that logic to before domains get degenerated,
-but I don't see how that helps here. If you just want to grab the LLC
-domain (aka highest_flag_domain(cpu, SD_SHARE_PKG_RESOURCES)) and compare
-its span with that of its parents, that can happen after the degeneration,
-no?
+Not 100% certain if we really want to constrain things on a per-SoC
+basis this way.  But it matches my understanding of the hardware.
 
-> I'll test this and should have results tomorrow.
->
-> --
-> Mel Gorman
-> SUSE Labs
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+
+> diff --git a/Documentation/devicetree/bindings/pci/apple,pcie.yaml b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
+> index ef1d424ec299..7f01e15fc81c 100644
+> --- a/Documentation/devicetree/bindings/pci/apple,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/apple,pcie.yaml
+> @@ -28,19 +28,17 @@ description: |
+>    distributed over the root ports as the OS sees fit by programming
+>    the PCIe controller's port registers.
+>  
+> -allOf:
+> -  - $ref: /schemas/pci/pci-bus.yaml#
+> -  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+>      items:
+> -      - const: apple,t8103-pcie
+> +      - enum:
+> +          - apple,t8103-pcie
+> +          - apple,t6000-pcie
+>        - const: apple,pcie
+>  
+>    reg:
+>      minItems: 3
+> -    maxItems: 5
+> +    maxItems: 6
+>  
+>    reg-names:
+>      minItems: 3
+> @@ -50,6 +48,7 @@ properties:
+>        - const: port0
+>        - const: port1
+>        - const: port2
+> +      - const: port3
+>  
+>    ranges:
+>      minItems: 2
+> @@ -59,7 +58,7 @@ properties:
+>      description:
+>        Interrupt specifiers, one for each root port.
+>      minItems: 1
+> -    maxItems: 3
+> +    maxItems: 4
+>  
+>    msi-parent: true
+>  
+> @@ -81,6 +80,21 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: apple,t8103-pcie
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 5
+> +        interrupts:
+> +          maxItems: 3
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/apple-aic.h>
+> -- 
+> 2.33.0

@@ -2,97 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1883746E568
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818D46E56A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbhLIJZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S235667AbhLIJZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233041AbhLIJZ0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 04:25:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:52226 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231508AbhLIJZZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:25:25 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 145741474;
-        Thu,  9 Dec 2021 01:21:52 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 496A93F73B;
-        Thu,  9 Dec 2021 01:21:51 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Justin He <justin.he@arm.com>
-Subject: [PATCH] mailbox: pcc: Handle all PCC subtypes correctly in pcc_mbox_irq
-Date:   Thu,  9 Dec 2021 09:21:46 +0000
-Message-Id: <20211209092146.620024-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBB2C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:21:52 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id a9so8510244wrr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:21:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=St6fDpRWrbOPyw4DfGpCPD6GxfBlr4YguXkOcg68dNg=;
+        b=o+9UvLDbQOEPRilcKb/qH4X6eZuq738oiVOQMO6XUUab+xFmKbH54Bm6xchb3APmyP
+         HRjNqCG4XGX7q06CHARzf09/VLjxkjE0dVUqspqnlyMhGI8Rt1qGu6i0pETRhUz8ct4X
+         nxLVaF2TxPA+IiQF9TLxc9ukca6aN0oofW6k3ZI6zdRbyo5lZYBMJjP3oft12jG/WFXP
+         lZ0DqKVPP9ATaFHJ9V9OL61sSwZccfHK9WcJ1PjNu0qPjY1G61HQNU99/uCFdWYXFyHk
+         FF7Iq1jh+VpHts7SoAiuaNm1C0WKKIuayPmAKbGCXMP5g/DV63ZIX7BBhl9VTYdkl/f6
+         IFYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=St6fDpRWrbOPyw4DfGpCPD6GxfBlr4YguXkOcg68dNg=;
+        b=X2axMiVEBf9tB2IsyT7WEXbNxDQdmsGDqb+38TwFRQluwWFYoxxHtX0NHzZFt5SBDC
+         O6qktYTJcDnr6IxL/jgM3M7wQdgsVRWoVcqHEiGdzrjIuYUKUltmhYstRxUwe1thwoTH
+         5wWx1VrBzg8qURfD8N+e6/TR/Z0W3WDy3mfSr74NalqR43kpbuGmv0lki7WGDARPdhp9
+         PDQo/JKP26ZDRmz6Yam6WXwQ36mJ2rzRcJdQvBq5ODLv1yzFmb7NkteJ5+7Wt8qxGKLh
+         wtaHo0/lZoq4NOs4BgTGm0NalqzbdjBaEo1SHriFsrUSQSN/XffBy2ae66FvFKNMuV+I
+         Z3FA==
+X-Gm-Message-State: AOAM531H0RAGekL9OI3CSPPhD7pQcJP+VshUJDiL9nEQiM0nwujxzqR3
+        xKUp0wWr39KnEKLw6HeyDrCbig==
+X-Google-Smtp-Source: ABdhPJzNPpjoCVeIxBCP3phySICTw/Bf+6f+5JOTYxO6sV45jLHPz+AS+EAk+UCD2n8BFWxIM0PA4g==
+X-Received: by 2002:adf:df85:: with SMTP id z5mr4982298wrl.445.1639041711374;
+        Thu, 09 Dec 2021 01:21:51 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id w17sm5034369wmc.14.2021.12.09.01.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 01:21:50 -0800 (PST)
+Date:   Thu, 9 Dec 2021 10:21:50 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Shay Drory <shayd@nvidia.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, jiri@nvidia.com,
+        saeedm@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next v3 2/7] devlink: Add new "io_eq_size" generic
+ device param
+Message-ID: <YbHKrpDiuuXHttQg@nanopsycho>
+References: <20211208141722.13646-1-shayd@nvidia.com>
+ <20211208141722.13646-3-shayd@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208141722.13646-3-shayd@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC
-subspaces(type 3/4)") enabled the type3/4 of PCCT, but the change in
-pcc_mbox_irq breaks the other PCC subtypes.
+Wed, Dec 08, 2021 at 03:17:17PM CET, shayd@nvidia.com wrote:
+>Add new device generic parameter to determine the size of the
+>I/O completion EQs.
+>
+>For example, to reduce I/O EQ size to 64, execute:
+>$ devlink dev param set pci/0000:06:00.0 \
+>              name io_eq_size value 64 cmode driverinit
+>$ devlink dev reload pci/0000:06:00.0
+>
+>Signed-off-by: Shay Drory <shayd@nvidia.com>
+>Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+>---
+> Documentation/networking/devlink/devlink-params.rst | 3 +++
+> include/net/devlink.h                               | 4 ++++
+> net/core/devlink.c                                  | 5 +++++
+> 3 files changed, 12 insertions(+)
+>
+>diff --git a/Documentation/networking/devlink/devlink-params.rst b/Documentation/networking/devlink/devlink-params.rst
+>index b7dfe693a332..cd9342305a13 100644
+>--- a/Documentation/networking/devlink/devlink-params.rst
+>+++ b/Documentation/networking/devlink/devlink-params.rst
+>@@ -129,3 +129,6 @@ own name.
+>        will NACK any attempt of other host to reset the device. This parameter
+>        is useful for setups where a device is shared by different hosts, such
+>        as multi-host setup.
+>+   * - ``io_eq_size``
+>+     - u16
 
-The kernel reports a warning on an Ampere eMag server
+You missed this.
 
--->8
- CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc4 #127
- Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 0.14 02/22/2019
- Call trace:
-  dump_backtrace+0x0/0x200
-  show_stack+0x20/0x30
-  dump_stack_lvl+0x68/0x84
-  dump_stack+0x18/0x34
-  __report_bad_irq+0x54/0x17c
-  note_interrupt+0x330/0x428
-  handle_irq_event_percpu+0x90/0x98
-  handle_irq_event+0x4c/0x148
-  handle_fasteoi_irq+0xc4/0x188
-  generic_handle_domain_irq+0x44/0x68
-  gic_handle_irq+0x84/0x2ec
-  call_on_irq_stack+0x28/0x34
-  do_interrupt_handler+0x88/0x90
-  el1_interrupt+0x48/0xb0
-  el1h_64_irq_handler+0x18/0x28
-  el1h_64_irq+0x7c/0x80
----
 
-The main reason for that is the command complete register is read as 0
-if the GAS register doesn't exist for the same which is the case for
-PCC subtypes 0-2. Fix it by checking for non-zero value before masking
-with the status flag and checking for command completion.
-
-Fixes: c45ded7e1135 ("mailbox: pcc: Add support for PCCT extended PCC subspaces(type 3/4)")
-Cc: Jassi Brar <jassisinghbrar@gmail.com>
-Reported-by: Justin He <justin.he@arm.com>
-Tested-by: Justin He <justin.he@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/mailbox/pcc.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index e0a1ab3861f0..ed18936b8ce6 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -241,9 +241,11 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
- 	if (ret)
- 		return IRQ_NONE;
- 
--	val &= pchan->cmd_complete.status_mask;
--	if (!val)
--		return IRQ_NONE;
-+	if (val) { /* Ensure GAS exists and value is non-zero */
-+		val &= pchan->cmd_complete.status_mask;
-+		if (!val)
-+			return IRQ_NONE;
-+	}
- 
- 	ret = pcc_chan_reg_read(&pchan->error, &val);
- 	if (ret)
--- 
-2.25.1
-
+>+     - Control the size of I/O completion EQs.
+>diff --git a/include/net/devlink.h b/include/net/devlink.h
+>index 3276a29f2b81..b5f4acd0e0cd 100644
+>--- a/include/net/devlink.h
+>+++ b/include/net/devlink.h
+>@@ -459,6 +459,7 @@ enum devlink_param_generic_id {
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_RDMA,
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_VNET,
+> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_IWARP,
+>+	DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
+> 
+> 	/* add new param generic ids above here*/
+> 	__DEVLINK_PARAM_GENERIC_ID_MAX,
+>@@ -511,6 +512,9 @@ enum devlink_param_generic_id {
+> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME "enable_iwarp"
+> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE DEVLINK_PARAM_TYPE_BOOL
+> 
+>+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME "io_eq_size"
+>+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE DEVLINK_PARAM_TYPE_U32
+>+
+> #define DEVLINK_PARAM_GENERIC(_id, _cmodes, _get, _set, _validate)	\
+> {									\
+> 	.id = DEVLINK_PARAM_GENERIC_ID_##_id,				\
+>diff --git a/net/core/devlink.c b/net/core/devlink.c
+>index db3b52110cf2..0d4e63d11585 100644
+>--- a/net/core/devlink.c
+>+++ b/net/core/devlink.c
+>@@ -4466,6 +4466,11 @@ static const struct devlink_param devlink_param_generic[] = {
+> 		.name = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME,
+> 		.type = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE,
+> 	},
+>+	{
+>+		.id = DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
+>+		.name = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME,
+>+		.type = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE,
+>+	},
+> };
+> 
+> static int devlink_param_generic_verify(const struct devlink_param *param)
+>-- 
+>2.21.3
+>

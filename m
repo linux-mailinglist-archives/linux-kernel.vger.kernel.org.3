@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D63446E4A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520E346E4A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbhLII5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:57:49 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54718 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231370AbhLII5s (ORCPT
+        id S235370AbhLII5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235299AbhLII5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:57:48 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B98Sn17002214;
-        Thu, 9 Dec 2021 08:54:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=VmKUvcSOlDKYgtvHEH1mC9xCaRoQCxwASXycEo/RWbo=;
- b=IfM7sNXCZZttwY5C6rKINPJrksVL0qhAq7VKP/v5aZ5QN80fN96v+CrKXLe/Vd2PW/Uk
- 2Pg/oIbMOiRcj7U2C0o+xy7lrm8oaiUCEWxJRoZ6OLYfYvbmq4JiWnrr1CvpuUzlmTNz
- T61ptsG1Zpm6a8D2MPdwUEDzPcLVql37Gh6///Y4ZAnRVgySi+FWQ/Cd205gq1iMjOp8
- +Blbxq/pWjkmPvkG9gVQzikIxlZmYCwvCgkLnNNL0lyqhw5onmNS9F4nvJ5sRyeSFXTv
- PzyTo+/g/aznAcWUvKmHXIFWNlYUSS6Du1RBdLqKEp4m/+wG9J20CxKiAnpcTh5AjPBE BA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cueax0f1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 08:54:11 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B98qWMT016144;
-        Thu, 9 Dec 2021 08:54:09 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3cqyy9w666-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 08:54:08 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B98kK8I18350578
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 08:46:20 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B16DAE05D;
-        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61A37AE058;
-        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
-Received: from [9.145.152.236] (unknown [9.145.152.236])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
-Message-ID: <b6edbf96-4349-c39b-69ee-477b4fdef511@linux.ibm.com>
-Date:   Thu, 9 Dec 2021 09:54:05 +0100
+        Thu, 9 Dec 2021 03:57:53 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A35C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:54:20 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id 7so7716758oip.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 00:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OS54GWWcwsrTmTbT3JvuCSiGaQ1hB71d7lr0N1iLqQk=;
+        b=mIzGlwDNxua032moc9mIB5jGSsJtFd3Y6ysKCUSN9mczC0Kb9cGqOhn3dxZV3MtfOH
+         9bMhfpFN7crCbjA6FkT7kyibcoNX4qf8s+EJ+ed2qD8rTRDBAs4HLtBG8kAexJOQKbgs
+         TfERho74HIAubVtxTLOykzOtDDcw6hTDJUdfs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OS54GWWcwsrTmTbT3JvuCSiGaQ1hB71d7lr0N1iLqQk=;
+        b=yYg84CNqAxFpRE9ADyLDbSRm3G60pFQ0RT/gO7wjSXJF9JyzzoxJX+Wu1G3PwrOeRT
+         rO0bFfI6baLzUa1dgbMihTshbUKK6Xz1SIMcPhvsyyJfsjap6FckWm0fz9Xe5XTLhfl8
+         EfNa04h1eRCMYyIsJ4iQhZuMGgSNx2gvcCFgeY+bmXRSp3zq8vyKSQYXe9siD0KACj+s
+         L1bWmLFy7pm3JJZRX8swFWzGAjiI89daxo0bNPSUMRiQ1Rz8lnFyvYri5/lPmq37GWTO
+         qRng7SsbGKXN/PAnceLgWb+XJmfpUY11KboR5vdJDMcxNFKOcwV09i5eQPF8F1Jwl/Wl
+         oE9A==
+X-Gm-Message-State: AOAM533wRYRD1oDnZIunF/gktbkKmZau0qeo2WiqUPbRgguloOBcm7tV
+        YYpuUXJfTq+gMZStw4GYOO4dG9zHUQQZ0g==
+X-Google-Smtp-Source: ABdhPJxvzu2dDe7csPoCmNqoGo0YYwfIqqvgFZWNQCr70DS1qbHuHGDuo8GT7xH4x+wfp2tQwVEvpw==
+X-Received: by 2002:a05:6808:ec9:: with SMTP id q9mr4518028oiv.160.1639040059112;
+        Thu, 09 Dec 2021 00:54:19 -0800 (PST)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
+        by smtp.gmail.com with ESMTPSA id a3sm1173397oil.32.2021.12.09.00.54.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 00:54:18 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so5419695otv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 00:54:18 -0800 (PST)
+X-Received: by 2002:a05:6830:22f0:: with SMTP id t16mr4051388otc.349.1639040057919;
+ Thu, 09 Dec 2021 00:54:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
-Content-Language: en-US
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20211203154321.13168-1-ldufour@linux.ibm.com>
- <87bl1so588.fsf@linux.ibm.com>
- <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
- <878rwwny1l.fsf@linux.ibm.com>
- <21eb4749-42b1-da78-8833-00d360fa36e5@linux.ibm.com>
- <874k7jnmva.fsf@linux.ibm.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <874k7jnmva.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nvGaBsQb1vQFqX4oMFyP5Gyw7O2-UVSu
-X-Proofpoint-GUID: nvGaBsQb1vQFqX4oMFyP5Gyw7O2-UVSu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_03,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- adultscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090045
+References: <20211208174158.114122-1-amhamza.mgc@gmail.com>
+In-Reply-To: <20211208174158.114122-1-amhamza.mgc@gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 9 Dec 2021 09:54:06 +0100
+X-Gmail-Original-Message-ID: <CANiDSCu-Q=VqkS1_B-1pvc4uZtUZynRYkpyu2ZASddSqsmT31A@mail.gmail.com>
+Message-ID: <CANiDSCu-Q=VqkS1_B-1pvc4uZtUZynRYkpyu2ZASddSqsmT31A@mail.gmail.com>
+Subject: Re: [PATCH] media: uvcvideo: fix possible memory leak issue
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2021, 16:21:29, Nathan Lynch wrote:
-> Laurent Dufour <ldufour@linux.ibm.com> writes:
->> On 07/12/2021, 18:07:50, Nathan Lynch wrote:
->>> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>>> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
->>>>> Is there a reasonable fallback for VMs where this parameter doesn't
->>>>> exist? PowerVM partitions should always have it, but what do we want the
->>>>> behavior to be on other hypervisors?
->>>>
->>>> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
->>>> the lparstat -i command will fall back to the device tree value. I can't
->>>> see any valid reason to report the value defined in the device tree
->>>> here.
->>>
->>> Here's a valid reason :-)
->>>
->>> lparstat isn't the only possible consumer of the interface, and the
->>> 'ibm,partition-name' property and the dynamic system parameter clearly
->>> serve a common purpose. 'ibm,partition-name' is provided by qemu.
->>
->> If the hypervisor is not providing this value, this is not the goal of this
->> interface to fetch it from the device tree.
->>
->> Any consumer should be able to fall back on the device tree value, and
->> there is no added value to do such a trick in the kernel when it can be
->> done in the user space.
-> 
-> There is value in imposing a level of abstraction so that the semantics
-> are:
-> 
-> * Report the name assigned to the guest by the hosting environment, if
->   available
-> 
-> as opposed to
-> 
-> * Return the string returned by a RTAS call to ibm,get-system-parameter
->   with token 55, if implemented
-> 
-> The benefit is that consumers of lparcfg do not have to be coded with
-> the knowledge that "if a partition_name= line is absent, the
-> ibm,get-system-parameter RTAS call must have failed, so now I should
-> read /sys/firmware/devicetree/base/ibm,partition_name." That's the sort
-> of esoterica that is appropriate for the kernel to encapsulate.
-> 
-> And I'd say the effort involved (falling back to a root node property
-> lookup) is proportional to the benefit.
-> 
+Hi Ameer
 
-I don't agree.
-From the kernel point of view, I can't see any benefit, this is adding more
-complexity to do in the kernel what can be done easily in user space.
+Thanks for the patch.
 
-This is typically what should be implemented in a user space shared library.
+It is already covered by
+https://lore.kernel.org/lkml/20210917114930.47261-1-colin.king@canonical.com/
+which is in the staging branch of the media tree.
+
+Thanks!
+
+On Thu, 9 Dec 2021 at 01:33, Ameer Hamza <amhamza.mgc@gmail.com> wrote:
+>
+> In uvc_ioctl_ctrl_map() implementation, there is a possibility of memory
+> leak if control id name is not listed and kmemdup() is failed somehow.
+> This is a rare scenario but possible.
+>
+> Addresses-Coverity: 1494069 (Resource leak)
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> ---
+>  drivers/media/usb/uvc/uvc_v4l2.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index f4e4aff8ddf7..711556d13d03 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -44,8 +44,10 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
+>         if (v4l2_ctrl_get_name(map->id) == NULL) {
+>                 map->name = kmemdup(xmap->name, sizeof(xmap->name),
+>                                     GFP_KERNEL);
+> -               if (!map->name)
+> -                       return -ENOMEM;
+> +               if (!map->name) {
+> +                       ret = -ENOMEM;
+> +                       goto free_map;
+> +               }
+>         }
+>         memcpy(map->entity, xmap->entity, sizeof(map->entity));
+>         map->selector = xmap->selector;
+> --
+> 2.25.1
+>
+
+
+-- 
+Ricardo Ribalda

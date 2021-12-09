@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3410646E608
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D5046E60A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhLIKAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:00:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:34742 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbhLIKAR (ORCPT
+        id S229976AbhLIKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229863AbhLIKBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:00:17 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D57B921100;
-        Thu,  9 Dec 2021 09:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639043802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xvK0zEhdT3BGuGPYsomWUv27uncl6IYRPmZgV1UM2iE=;
-        b=t2mU/b5XSu4nCv5+rI1Yx2Zqnp7Wg0PNsgR6XXRTYPBtiIktV/9wtZPF2QC3/42EbLcnCB
-        D+Ma4XkRUQdK12zz6Gk87BfJ9OAoBntBxter9ncPIrKG0hARhz5jZsOa+MPDSQRYzs8Abi
-        mduQaMBsaSNxn256SVyiYyl1SZSSCw4=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A2D7AA3B81;
-        Thu,  9 Dec 2021 09:56:42 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 10:56:42 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
-References: <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbBywDwc2bCxWGAQ@dhcp22.suse.cz>
- <77BCF61E-224F-435D-8620-670C9E874A9A@vmware.com>
- <YbHCT1r7NXyIvpsS@dhcp22.suse.cz>
- <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
+        Thu, 9 Dec 2021 05:01:43 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35095C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:58:10 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso6086950wmr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=WEDTgzpiltL1NT8/HeGXwilTe74ZNI0f4xOOiwCoVRw=;
+        b=LGp39MjftM0OspcLXJkgCqcd7OB1O3sI0SITiKJQs5oOZSnbReKaANYsVcPG3PC07h
+         07n3KHntv3+ki7Mfzmpsmvcd5VJXySHAPRKSYchciARew9FRWwgvluFC/+KK+bu/8J6S
+         lhojSB7axu7nf7VukWinEvvVjiuMOWnwFLLIEpM7YQ8jqPNBcrBavp6w650QNhcYsPk7
+         YVK66ta/J7zfFnZNcutQWMjaLELFlkXBHq2wWwpn4vyfUsVBDNvi8h0kmFCG3+Plt94v
+         U4d1EGGssf+AMrQY5XZqbfmYSdH23/BIW6vK/ITqaB9iHPSM+46HMUBN9+9wiTJgdQ3L
+         V6Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=WEDTgzpiltL1NT8/HeGXwilTe74ZNI0f4xOOiwCoVRw=;
+        b=bMbcpGRll/LKR3ZWtmMaXGwlu2DtaZfrZl3BUu1ZAwmlRBSmJbSHXRa8I2f/LTBcJ3
+         zxjYRVkIYalJ65mB8FrxIwJv367CKRY1z3gnn0IY2I6rXhdHiP02aYKd2A1X3GWajt48
+         5jtvc8JkTA1s4lH4BYGPgKDDKMX/4cPyX2FkKMP0ksixixsLoKuNk1NxD64faLOVwrXE
+         hINQWjqriMQbHTZm2oMey4ziq1LIR7Z9bVlLxyVHcsbLDzI5DKY+EoevwSQvAYpe7XXt
+         J7VZuMaeM6Do7cEsDRt53klUYOjLy9ZHa9lFlaD24FksJUKphqlJmdKu8kgS/wGbyADQ
+         gBzA==
+X-Gm-Message-State: AOAM531oKtC4pciB9Ji7zscboTwTM7ePxKlrN2zatShokOQtfzMRyy/M
+        mljY8C51ouC8YFzQnImK84JjqQ==
+X-Google-Smtp-Source: ABdhPJxsgxY5kYS121TEh7VHEfUyE1K0dFFItk6fzDJR4MCdR5mdBamlRuqXOBTWaKs1BMSy2HmzsA==
+X-Received: by 2002:a7b:c848:: with SMTP id c8mr5903612wml.105.1639043888649;
+        Thu, 09 Dec 2021 01:58:08 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:21de:5a72:cfa8:19ce])
+        by smtp.gmail.com with ESMTPSA id f15sm6351289wmg.30.2021.12.09.01.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 01:58:07 -0800 (PST)
+Date:   Thu, 9 Dec 2021 10:58:01 +0100
+From:   Marco Elver <elver@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Subject: randomize_kstack: To init or not to init?
+Message-ID: <YbHTKUjEejZCLyhX@elver.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09-12-21 09:28:55, Alexey Makhalov wrote:
-> 
-> 
-> > On Dec 9, 2021, at 12:46 AM, Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > On Thu 09-12-21 02:16:17, Alexey Makhalov wrote:
-> >> This patch calls alloc_percpu() from setup_arch() while percpu
-> >> allocator is not yet initialized (before setup_per_cpu_areas()).
-> > 
-> > Yeah, I haven't realized the pcp is not available. I was not really sure
-> > about that. Could you try with the alloc_percpu dropped?
-> > 
-> > Thanks for testing!
-> > -- 
-> > Michal Hocko
-> > SUSE Labs
-> 
-> It boots now. dmesg has these new messages:
-> 
-> [    0.081777] Node 4 uninitialized by the platform. Please report with boot dmesg.
-> [    0.081790] Initmem setup node 4 [mem 0x0000000000000000-0x0000000000000000]
-> ...
-> [    0.086441] Node 127 uninitialized by the platform. Please report with boot dmesg.
-> [    0.086454] Initmem setup node 127 [mem 0x0000000000000000-0x0000000000000000]
+Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+default since dcb7c0b9461c2, which is why this came on my radar. And
+Clang also performs auto-init of allocas when auto-init is on
+(https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
+allocas.
 
-Interesting that only those two didn't get a proper arch specific
-initialization. Could you check why? I assume init_cpu_to_node
-doesn't see any CPU pointing at this node. Wondering why that would be
-the case but that can be a bug in the affinity tables.
+add_random_kstack_offset() uses __builtin_alloca() to add a stack
+offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+enabled, add_random_kstack_offset() will auto-init that unused portion
+of the stack used to add an offset.
 
-> vCPU/node hot add works.
-> Onlining works as well, but with warning. I do not think it is related to the patch:
-> [   36.838838] CPU4 has been hot-added
-> [   36.838987] acpi_processor_hotadd_init:205 cpu 4, node 4, online 0, ndata 00000000e9c7f79b
-> [   48.480498] Built 4 zonelists, mobility grouping on.  Total pages: 961440
-> [   48.480508] Policy zone: Normal
-> [   48.508318] smpboot: Booting Node 4 Processor 4 APIC 0x8
-> [   48.509255] Disabled fast string operations
-> [   48.509807] smpboot: CPU 4 Converting physical 8 to logical package 4
-> [   48.509825] smpboot: CPU 4 Converting physical 0 to logical die 4
-> [   48.510040] WARNING: workqueue cpumask: online intersect > possible intersect
+There are several problems with this:
 
-I will double check. There are changes required on the hotplug side. I
-would like to see that this one doesn't blow up before diving there.
+	1. These offsets can be as large as 1023 bytes. Performing
+	   memset() on them isn't exactly cheap, and this is done on
+	   every syscall entry.
 
-> [   48.510324] vmware: vmware-stealtime: cpu 4, pa 3e667000
-> [   48.511311] Will online and init hotplugged CPU: 4
-> 
-> Hot remove does not quite work. It might be issue in ACPI/Firmware code or Hypervisor. Debugging…
-> 
-> Do you want me to perform any specific tests?
+	2. Architectures adding add_random_kstack_offset() to syscall
+	   entry implemented in C require them to be 'noinstr' (e.g. see
+	   x86 and s390). The potential problem here is that a call to
+	   memset may occur, which is not noinstr.
 
-No, not really. AFAIU your issue has been reproducible during boot and
-that seems to be fixed. I will work on the hotplug side of the things
-and post something resembling a real patch soon. That would require also
-memory hotplug testing.
+A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
 
-Thanks for your help!
--- 
-Michal Hocko
-SUSE Labs
+ | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+ | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+ | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+ | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+
+Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
+
+To figure out what the right solution is, the first thing to figure out
+is, do we actually want that offset portion of the stack to be
+auto-init'd?
+
+There are several options:
+
+	A. Make memset (and probably all other mem-transfer functions)
+	   noinstr compatible, if that is even possible. This only solves
+	   problem #2.
+
+	B. A workaround could be using a VLA with
+	   __attribute__((uninitialized)), but requires some restructuring
+	   to make sure the VLA remains in scope and other trickery to
+	   convince the compiler to not give up that stack space.
+
+	C. Introduce a new __builtin_alloca_uninitialized().
+
+I think #C would be the most robust solution, but means this would
+remain as-is for a while.
+
+Preferences?
+
+Thanks,
+-- Marco

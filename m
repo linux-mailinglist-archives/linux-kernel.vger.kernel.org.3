@@ -2,194 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071B546E60E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA00C46E60B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbhLIKCz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 05:02:55 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:37219 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbhLIKB5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:01:57 -0500
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MmCyE-1mD9zy2Z0a-00iBc1; Thu, 09 Dec 2021 10:58:22 +0100
-Received: by mail-wr1-f43.google.com with SMTP id u1so8625702wru.13;
-        Thu, 09 Dec 2021 01:58:22 -0800 (PST)
-X-Gm-Message-State: AOAM533TaK5xNNPLIK81SuVkcExGkRnp4gIGS+bGh0oLTse3XG6+I3Jk
-        TwvBrSsxVrJCvUIzuc4ZovJWDt1w+IweLU4dOw0=
-X-Google-Smtp-Source: ABdhPJyxeLV7UtF1l/rFSuX941psQjIIY4BAsfEbKAiHX5Z3htWVEMTxwBq+97o3qdAvmBEF6L1VG6S/My2R0ahy3xE=
-X-Received: by 2002:a05:6000:110b:: with SMTP id z11mr5321203wrw.32.1639043901966;
- Thu, 09 Dec 2021 01:58:21 -0800 (PST)
+        id S231627AbhLIKCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:02:30 -0500
+Received: from mail-sgaapc01on2115.outbound.protection.outlook.com ([40.107.215.115]:51330
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229863AbhLIKC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:02:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nFdChmJPWgpjsNwGA/Q1Idi3Ya7A6q8Kxp6f18Hjb9Rp5kL8ikijwxnHSUSZF2+nurcxaX89EjG5QhCbORPeKNwXthVCkbHTCjB+ADGd586yW1y8lL/SgFimgbXniT6JJsjfrv1zel5Qq2fIDAwHsd67ogxoesWAFVmLgS2D1Xy36wMu6OSaSs5XBW0A6H0N7RJE2oZWBlKX/cnUbmjvGNaDMpWA8Fk8slREDHg/Co0i5yr6iOqQd/OUoW2QhMEzsi00G77olk2DRv3H9QpDb+UllTJyV5I1UoaTwdsR4g7cwbETCxTzJiZ2CJ9bBzXWZZ5SkDaOLUHK/fGzrPF/ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=84z8k/4eQBTYc7CKXhgpO/uLyH5Ouo+04uiMhCo4hrI=;
+ b=BzbpKfy1/BkShsBkl9Vcy2tyRxwpBYrCMdxXGIk5U1wGPmbWSbhbknAB6rVkIR6Z1tOcMYLkNKQCaTiRxZ5PMjCOV5HS8/JdcjaJVawuyCO0lgZrj9KnOZCh0cS2LDP2QRw9ZeO2KvF2+jzXS0IXCWJdwikcG3DrR+JE9T2VRlYEyAcwmFJGsUP+KXmm4mjzaLyZZ7nPq7wu2KEGV/Oo/7MbUP4SYDqs0y3hOuCvERL7GcCRsc4a7pk6fjwWigGT6cmKnyuxKjdhghO3hjAJstQshMGFCY6DasrVPhGLf1oJ7kNdYruYeBPlHs6U0XILSaEwVJcsgRTwne4eWykgLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=84z8k/4eQBTYc7CKXhgpO/uLyH5Ouo+04uiMhCo4hrI=;
+ b=MF2Mc2oN6PPR454IB8VG5oYH0AxvaejkFi8lG+grueul9xhJnc5kUr7GeMGaEEh28Qf2/0Zg/rRc3p9NS43HS7xjJIb9mZ7pUGrHc8tes0gifVmknIIPvkstxkhW6xJnh4YJiFUvB6QAIOpdao+eeaJBMlulcd4XzXpdpvddKlA=
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by SL2PR06MB2988.apcprd06.prod.outlook.com (2603:1096:100:34::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22; Thu, 9 Dec
+ 2021 09:58:52 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4755.023; Thu, 9 Dec 2021
+ 09:58:52 +0000
+From:   =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Nicolin Chen <nicoleotsuka@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] sound: fsl: add missing put_device() call in
+ imx_hdmi_probe()
+Thread-Topic: [PATCH] sound: fsl: add missing put_device() call in
+ imx_hdmi_probe()
+Thread-Index: AQHX7NwjmsyYvshZLE+AShkbQYaGZw==
+Date:   Thu, 9 Dec 2021 09:58:52 +0000
+Message-ID: <SL2PR06MB3082D6C1C65786A1E8DD0397BD709@SL2PR06MB3082.apcprd06.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: c94bdbf1-5c89-fee1-b066-326bb565e076
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5a8cfea3-90df-48d9-0bce-08d9bafa8135
+x-ms-traffictypediagnostic: SL2PR06MB2988:EE_
+x-microsoft-antispam-prvs: <SL2PR06MB2988CFEE0652F9D37946DD44BD709@SL2PR06MB2988.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fE+/xL7E8lpBJIaJpmmHnxspX+RyoUI1011dJjGb5KpCYOeNEjpQou19LBYi/4W3k/+oFJK7OE9DomEnM8p3Ne6h2pRIKWrTvnItXC+JFcTpHmVHbJXh92NONoZya5AvNfhsiOTtqj7bIPJ0ZXIkDb/jybE0wIUQjwA3ELkFkZXE6jBO5DRT+oGxYfeWUF0b6W4MMiozJciYO8C2v612bmGufbx5q26s4cEyB6uf/BxC430ut2YTs1iDxgEEm/mb/GuIJyKNGYBXejJnzDZbi/IqKvfegXF4l1vUc8qZ/3Pqm7nd8kDOGwMWMkTDBSzv8bNGNpBL2cYuTg5ZY+nci8sZBbNBCPzt8KoXC2MGG2YA49KN/MttBW0L8UhPZeyFueFgb2YPgMx4pw6bGhdEPzYuzg1KHTOrw44Y/YM4MOhktVYpHaOyjcMkUaDt9XY7sqqpG6ksVnUC6uruQJI2/yxUA0aRohgamEhzvwegB+JM0CMT1ETCxoBF0amDEBps4ywclB9zUtlAXHznGH7zLtQ/VoJ6w7vu8Z1gK3Vq7OlWj5Ie37/rV+ClUo46jrI/w2Z12fbHvpcxOrGDrQHYV7SBq1aqVL/xFUOltB4XcaGGXLJKHbvm+wsO+75lzSBfGkEkTGsHgzudtT1RNgCc40OUmBYkWhH7YotCnroQoVyk8Oxml99VHmpyr5vAnu3F/LjvDhWb1DCgHbaGGpxs0Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(76116006)(38070700005)(122000001)(38100700002)(4326008)(186003)(508600001)(91956017)(316002)(52536014)(26005)(8936002)(8676002)(33656002)(4744005)(7696005)(54906003)(5660300002)(55016003)(9686003)(86362001)(66446008)(64756008)(6506007)(66476007)(66556008)(66946007)(2906002)(7416002)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T3NteHhEWjZoN1BVVFdZWVh4WjgxQXR6bkdPQnc4b3BHWkVwR1dKRnhRNk9R?=
+ =?utf-8?B?c2xaTmZpRFpONlE3UDZ1a05lcG96bitlR0puUFJRakdGVWpZd3RHemoxbjBz?=
+ =?utf-8?B?bllBVFE5aTh2Q0FibkkyaXEvUmhmclVOMjRmYnhuaWJIbUs1ODlhMzQvckF5?=
+ =?utf-8?B?SDAycDFuYVNiNU9CVUptQ2MrZFRQcWRyTlJ5YjhzdWRIZU93QlZpcEFlRnpL?=
+ =?utf-8?B?VHJEVnVzM2VxK0hBK2dGVkdNZVVSN0tCbGlWV3VXUk5XaFhSM1B0WTIwVWlx?=
+ =?utf-8?B?SHVCR1lIOHJQSXhVTHVqdmJrbnFBbVFJc0JCdXBjKzgvS2dvbWpKSHlkSnZW?=
+ =?utf-8?B?RURkMjNKUzlrNW1QYk1YbEhZYXBWMXlqYk9lay9IQ1RTc1B3djZEZFQ1LzFS?=
+ =?utf-8?B?UVJJOXliVFN4Qzc2SmwyUlI5QXlJS2NDZDNXYndlS3JIcytJTUpGTnB2NndK?=
+ =?utf-8?B?L1hvNXMzOG56TnBmYWMrVmRHVnVCY3BhajBVTE0wWUxoU0JKOWtXYUt3TXhu?=
+ =?utf-8?B?alZHYysvR0pGaXJnZHJYZFJQQnp1cGZLNWRJd3ltT1NicHYxeUpxOXYyTGdy?=
+ =?utf-8?B?Zk1oU3FySWhGZzRYeUFlTjQ0MWhyWmNFK09sTmllb0tmY2JiM1loMHQvOGZZ?=
+ =?utf-8?B?UFZ1bDlqV1pqQkJNMHp5a0JDQXVJakRRaUE5ZEhSWlhKZytzSlViS2J5ckxN?=
+ =?utf-8?B?Q3RXNncyQi92TmlKVXp4NkF3VmlWYmJsbW1RazJOWGJ3aWpHazVOZFpPdmto?=
+ =?utf-8?B?S2pRVmcyNEkxWGhlNEJsRWlBaG10Qkt0aUpGMzl1aENrbkgvdnAycFd5SWs5?=
+ =?utf-8?B?UE82aFZ6U1pUOFpkVnJlaU9aczdoZ2xEOWpsZExmRzJyUHMzaGluTGwzMGNS?=
+ =?utf-8?B?UFkwT0pVQmUrYU40bzZ2b0VOV3dHWHBaaHVrYWt0VERwRkRGQjNCMTZiNVlH?=
+ =?utf-8?B?dmQxcUg5dlMxWU9XK2RjOG05Y1RpYXRxVDZHWHdML1RCemhOekpzaDQ1TUxr?=
+ =?utf-8?B?ZlBtTTluUHBNYmdQT2FmbmRKUC9jcHdWa1ZZdTFhYndNNTRBUmhGKzJvNTFL?=
+ =?utf-8?B?M1hKK2xjckpPNFpDL3ZaMVg1TzloaVRhRnFLa1JWcm85ZnpZOC9RbStOc05R?=
+ =?utf-8?B?b3YzaGJrOFdEVlBDN0d2bTRzc2hzNE0veGdBMGN6SURTbUpHeUJBdDdFL3BN?=
+ =?utf-8?B?YTRSRkRObjRpOHJJb1hwcUExVzIyR05yb0tVYXBaNnBJOFNZZ1FmSnBJUkdu?=
+ =?utf-8?B?dmIrbUlrTzloT0I4V2w3a2FrdlZHZ2tCSndMMlNWYkFMejUvWkhWS1J0QXBP?=
+ =?utf-8?B?Qm1JQTJoM09Rc1pBdDcyeStoVG5nVFVHcXNINE5nYnVlK1d5TkZFSFhCMlhj?=
+ =?utf-8?B?YmlQZ3VLbjVZVS95dkljYjZwSHFEOEpEeVpxbGZ6NmJuYWE4bDQzaG1uKzhx?=
+ =?utf-8?B?YVNpbHRWMUE1UHNSUC9UY2VOVExjM1lBK0FRNWoxUEJ0NHIxSlRGbTU0bVQ2?=
+ =?utf-8?B?ekp6cXhBWktrUEpFaWZFWGhCT3UwVzlCWGUzdzR4THRWb01aSTM2SWpSZlBt?=
+ =?utf-8?B?TGNyWUlJenNQWXR1Ujk2RloyL0RtSENaVGVIcXhQbnJvdDhOZU1NT2JZQk91?=
+ =?utf-8?B?Y3hMN25XRmw0Q0tGTXEvMnhSZDhPMVJMbFFBQnMzVzZNMk0xdHZ5bFU5QmVo?=
+ =?utf-8?B?ay8rMkpKUW51bm5vWG83a0VQaW8zV0lxR1lhLzlpTlJRTFArRHp6RDFpeUM0?=
+ =?utf-8?B?Zlh2Q1RpZlRqNzM1aUcrUjFacUxsZ1plK3Q5Nkk2cTZoZVZNdDl5cTIzWmtK?=
+ =?utf-8?B?RWhsdDZ0aUdjYmxZdDZTN2ZmdFRqOHF6T05ZaXZrLzlGZUx6SUZoV1ZZRHpJ?=
+ =?utf-8?B?T0FBSE1PaTdvUU9yYlVzNnA1VnhPRlczQlpHbHlYUzRzczZIYjlMRmVhTmpj?=
+ =?utf-8?B?NUVOU2toanNzOUplTDVQeGFFNUJNcjIxOGNjZ1pxakpUdGszNFNPaFJnSFZM?=
+ =?utf-8?B?RVh5NG1rK2hnUEZnU0hsbkhVK0NlOTFuWUR5VVlNeVoxWjJOVU1nL2Vhc0sx?=
+ =?utf-8?B?aGY2S0N0Tmlsd0g2cXU5dnJNZkhkelpwamxIR2ZaOXJPdHpaNVNYZjh6b1pF?=
+ =?utf-8?B?OXFNSWhYTjRNQ3FFeEpMUXAxc0g3aDR1TU1pNjdyL01BeGRnVUpJRXh3RUtZ?=
+ =?utf-8?Q?SBSrWJNxUNEhsV2i7v74AkQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <cover.1638515726.git.qinjian@cqplus1.com> <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
- <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
- <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com> <CAK8P3a1-4XnrkWc_0SPns9xj9Yp4xWhEahLOkeafXmAYWfbYJA@mail.gmail.com>
- <6a8271f5c6b74ce7874b7583b8d7eee4@cqplus1.com>
-In-Reply-To: <6a8271f5c6b74ce7874b7583b8d7eee4@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 9 Dec 2021 10:58:05 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2w2rava_ozRfWizYDYRe7J3j-=wMgzGA_9t0kd3qJ1NA@mail.gmail.com>
-Message-ID: <CAK8P3a2w2rava_ozRfWizYDYRe7J3j-=wMgzGA_9t0kd3qJ1NA@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-To:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linusw@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:QAcfvcI3XDtNhINEM/3DMhz24D80X89c80Oc/nY3jPP6W9CBF0t
- +uth+3os0iMJmnomH082T9XrdsDqw8XbwSi80MeGw1bavNkRlYlTPfFAKLhymMLLxASm5to
- 2J3BTtCN6YrUQ3YYYkGE9ujN8bqSgLpqYia8gmB8EgGZ9S6hh7cSHnyS+gXfWWzdly88jtS
- Sq0UNSmJTjvkogttqtSrw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JWRrvN909fA=:Bf0onvZHiT3E4v21aA2ME4
- pvWY7lbL+lu5AuEYI0Hm66ujadoSYN0q08aqUyHSWkBJD4pt2lHZe3stjsccXEtaWPUZRhFv9
- 1iqqnGgY37aE9c4Im9B7akaOUGEIu9zTQHET5ZDXdcFBRnkNiFAMe0X6BhXqBPWfBSjDZ2EsH
- RjUzEfv8LzBVhglfc2x6Bge//eHeJZlXf6YuaXHfQ3GXLkqz/P5F9JyuUMN52LwjcU0h2cM9m
- PqUcQgIETwy4lKV0S8IcWhingxc+50ZBgu/N+q0ng4PdS0/WZo1cs8YlGvZmFSNxBK3Fj+eoe
- OzFf/3vLLupRCR6mqm8tramovo7+QW4mDEBw4JcKRP0Qo7MkkvBhmN9aCE6sPuCzE2Zj/MviZ
- fHMZ2aF95AI8HEBq/0VigX/3VKUa0VihXlqPzrDqz8NoQBZD6EtpUOLoyCH1uE7MEVdxq1aI7
- VJppnOHWSola+yMncOPv6koEOQlIDndEeD+bY8jEkfD/2yqRUn88nECoalA+bMuKwRAD0MSs0
- vIKguaKaktogTBAqXRJzfmhB7oGi1NNNwDaGsBoJ7uDb+G+4ItaSh8EhVj8v+QoBXJ14pyy0t
- HRPmjNlqfPqmnaLFv0WJTatiJ4IVJigxyLzzCX/RwCXptv7fsdkilXnz07UQJHODdqRD/t+ll
- eeIIt2hY25UeiyT2pYYrB+GTk+vAInl+NTzeR4E7QKevSf5MxbIsClNqEV9wAlxGAjsEwV+F8
- vjyDA83jo/QmnbyIB+aU3gX9f/e7kotgfX3I2TH6bJ5irbvxNBbSg1ib7f2WNa76Ojk8uqBx7
- ipqSniZ0TXjqdpAV8YTAnJMcJKw4HNw8RgfyKbdiIZbgg1LNSE=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a8cfea3-90df-48d9-0bce-08d9bafa8135
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 09:58:52.0675
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Xp6jAzUofl4vJBGybp9XsXdGfZvvnx9K01rGEePnRz0gLkY8HUJ4MKajhlPmQ4xApULOkIOEoqpY4WvIuZQ0fg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB2988
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 9:49 AM qinjian[覃健] <qinjian@cqplus1.com> wrote:
-> > On Tue, Dec 7, 2021 at 8:21 AM qinjian[覃健] <qinjian@cqplus1.com> wrote:
-> > > > > @@ -152,6 +152,7 @@ textofs-$(CONFIG_ARCH_MSM8X60) := 0x00208000
-> > > > >  textofs-$(CONFIG_ARCH_MSM8960) := 0x00208000
-> > > > >  textofs-$(CONFIG_ARCH_MESON) := 0x00208000
-> > > > >  textofs-$(CONFIG_ARCH_AXXIA) := 0x00308000
-> > > > > +textofs-$(CONFIG_ARCH_SUNPLUS) := 0x00308000
-> > > >
-> > > > What is this needed for? If it boots without this line, better avoid
-> > > > adding it, because
-> > > > it will increase the kernel size for everyone else (unless they also enable
-> > > > AXXIA).
-> > > >
-> > >
-> > > SP7021 reserved the 1st 1MB memory for ARM926@P-Chip using,
-> > > The 2nd 1MB memory for IOP device and the 3rd 1MB memory for bootloader.
-> > > I'll add these comments at next commit.
-> >
-> > I think you can just remove the memory from the system memory map in the
-> > device tree and pretend it only starts after the bootloader. It's been a while
-> > since I looked at this though, so I could be misremembering what the minimum
-> > boundaries are for doing this.
->
-> I have test following 3 methods:
-
-Right, I was thinking of the third method here, which has the advantage of
-not requiring the same odd base address for all other platforms, this
-is important to us.
-I don't see what the problem is with it in your example, does that mean you
-have a little less usable memory, or that something fails to work right? I don't
-know what the requirements are for memreserve.
-
-Adding a few more people to Cc, maybe they have ideas about how this
-was solved elsewhere.
-
-          Arnd
-
-> 1. current patch
-> DT:
->         memory {
->                 reg = <0x00000000 0x20000000>; /* 512MB */
->         };
->
->         reserved-memory {
->                 #address-cells = <1>;
->                 #size-cells = <1>;
->                 ranges;
->
->                 iop_reserve: iop_device {
->                         no-map;
->                         reg = <0x00100000 0x00100000>;
->                 };
->                 a926_reserve: a926_memory {
->                         no-map;
->                         reg = <0x00000000 0x00100000>;
->                 };
->         };
-> arch/arm/Makefile:
->         textofs-$(CONFIG_ARCH_SUNPLUS) := 0x00308000
->
-> bootlog & meminfo :
-> [    0.000000] Zone ranges:
-> [    0.000000]   Normal   [mem 0x0000000000000000-0x000000001fffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000000000000-0x00000000001fffff]
-> [    0.000000]   node   0: [mem 0x0000000000200000-0x000000001fffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000001fffffff]
->
-> ~ # cat /proc/meminfo
-> MemTotal:         514008 kB
-> MemFree:          491960 kB
-> MemAvailable:     488608 kB
->
->
->
-> 2. DT same as case 1, but no modify @ arch/arm/Makefile
->
-> bootlog & meminfo :
-> [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for node 'iop_device': base 0x00100000, size 1 MiB
-> [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for node 'a926_memory': base 0x00000000, size 1 MiB
-> ...
-> [    0.000000] Zone ranges:
-> [    0.000000]   Normal   [mem 0x0000000000000000-0x000000001fffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000000000000-0x000000001fffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000001fffffff]
->
-> ~ # cat /proc/meminfo
-> MemTotal:         516056 kB
-> MemFree:          493928 kB
-> MemAvailable:     490572 kB
->
->
->
-> 3. DT:
->         memory {
->                 reg = <0x00300000 0x1FD00000>; /* 512 - 3 MB */
->         };
-> no modify @ arch/arm/Makefile
->
-> bootlog & meminfo :
-> [    0.000000] Zone ranges:
-> [    0.000000]   Normal   [mem 0x0000000000400000-0x000000001fffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000000400000-0x000000001fffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000000400000-0x000000001fffffff]
->
-> ~ # cat /proc/meminfo
-> MemTotal:         511964 kB
-> MemFree:          489636 kB
-> MemAvailable:     486292 kB
->
->
->
-> I think method 1 should be correct (compare method 2) & better (compare method 3).
->
+Cj4+IEZyb206IFdhbmcgUWluZyA8d2FuZ3FpbmdAdml2by5jb20+Cj4+IAo+PiBvZl9maW5kX2Rl
+dmljZV9ieV9ub2RlKCkgdGFrZXMgYSByZWZlcmVuY2UgdG8gdGhlIGVtYmVkZGVkIHN0cnVjdCBk
+ZXZpY2UgCj4+IHdoaWNoIG5lZWRzIHRvIGJlIGRyb3BwZWQgd2hlbiBlcnJvciByZXR1cm4uCj4K
+Pi4uLgo+Cj4+wqDCoMKgwqDCoMKgwqAgZGF0YSA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBz
+aXplb2YoKmRhdGEpLCBHRlBfS0VSTkVMKTsKPj7CoMKgwqDCoMKgwqDCoCBpZiAoIWRhdGEpIHsK
+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwdXRfZGV2aWNlKCZjcHVfcGRldi0+ZGV2KTsK
+Pgo+SWYgaXQncyBvZl9maW5kX2RldmljZV9ieV9ub2RlKCkgeW91IG5lZWQgYW4gb2Zfbm9kZV9w
+dXQoKSBzaW5jZSB5b3UncmUKPmRyb3BwaW5nIGEgcmVmZXJlbmNlIG9uIHRoZSBPRiBub2RlLgo+
+CgpMYWJlbCBmYWlsIHdpbGwgZHJvcCBhIHJlZmVyZW5jZSBvbiB0aGUgT0Ygbm9kZS4KQWxzbywg
+cHV0X2RldmljZSgpIGlzIGNhbGxlZCBsYXRlciBleGNlcHQgdGhpcyBicmFuY2gsIAp3ZSBqdXN0
+IG5lZWQgdG8gYWRkIHB1dF9kZXZpY2UoKSBoZXJlLgoKVGhhbmtzLApRaW5nCgo+PiAgICAgICAg
+ICAgICAgICByZXQgPSAtRU5PTUVNOwo+PiAgICAgICAgICAgICAgICAgZ290byBmYWlsOwo=

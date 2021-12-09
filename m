@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E23D46F270
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBEA46F273
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241298AbhLIRvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:51:15 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:53638 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbhLIRvO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:51:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 45A50CE2778;
-        Thu,  9 Dec 2021 17:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDFEC004DD;
-        Thu,  9 Dec 2021 17:47:36 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 12:47:35 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20211209124735.3d1a9707@gandalf.local.home>
-In-Reply-To: <20211209174050.GA21553@kbox>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
-        <20211201182515.2446-3-beaub@linux.microsoft.com>
-        <20211208181905.62f8f999@gandalf.local.home>
-        <20211209005823.GA21399@kbox>
-        <20211208210336.40c7741b@yoga.local.home>
-        <20211209174050.GA21553@kbox>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S241444AbhLIRv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:51:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:60262 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241380AbhLIRvo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:51:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89A86ED1;
+        Thu,  9 Dec 2021 09:48:10 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DA873F73B;
+        Thu,  9 Dec 2021 09:48:09 -0800 (PST)
+Message-ID: <ebfebc58-10b5-c12e-edbe-a22181721c2d@arm.com>
+Date:   Thu, 9 Dec 2021 17:48:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] iommu/iova: wait 'fq_timer' handler to finish before
+ destroying 'fq'
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, joro@8bytes.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     yaohongbo@huawei.com, huawei.libin@huawei.com
+References: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
+ <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
+In-Reply-To: <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 09:40:50 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On 2021-12-09 13:17, Robin Murphy wrote:
+> Sorry I missed this before...
+> 
+> On 2019-07-27 10:21, Xiongfeng Wang wrote:
+>> Fix following crash that occurs when 'fq_flush_timeout()' access
+>> 'fq->lock' while 'iovad->fq' has been cleared. This happens when the
+>> 'fq_timer' handler is being executed and we call
+>> 'free_iova_flush_queue()'. When the timer handler is being executed,
+>> its pending state is cleared and it is detached. This patch use
+>> 'del_timer_sync()' to wait for the timer handler 'fq_flush_timeout()' to
+>> finish before destroying the flush queue.
+> 
+> So if I understand correctly, you shut down the device - which naturally 
+> frees some DMA mappings into the FQ - then hotplug it out, such that 
+> tearing down its group and default domain can end up racing with the 
+> timeout firing on a different CPU? It would help if the commit message 
+> actually explained that - I've just reverse-engineered it from the given 
+> symptom - rather than focusing on details that aren't really important. 
+> fq->lock is hardly significant, since *any* access to the FQ while it's 
+> being destroyed is fundamentally unsound. I also spent way too long 
+> trying to understand the significance of the full stack trace below 
+> before realising that it is in fact just irrelevant - there's only one 
+> way fq_flush_timeout() ever gets called, and it's the obvious one.
+> 
+> The fix itself seems reasonable - the kerneldoc for del_timer_sync() is 
+> slightly scary, but since free_iova_flush_queue() doesn't touch any of 
+> the locks and definitely shouldn't run in IRQ context I believe we're OK.
+> 
+> This will affect my IOVA refactoring series a little, so I'm happy to 
+> help improve the writeup if you like - provided that my understanding is 
+> actually correct - and include it in a v2 of that.
 
-> No, this is not a fast path, and I don't have a problem moving to a
-> mutex if you feel that is better. I've likely become too close to this
-> code to know when things are confusing for others.
+FWIW, this is what I came up with:
 
-Yeah. I really dislike the "protection by algorithms" then protection by
-locking unless it is a fast path.
+https://gitlab.arm.com/linux-arm/linux-rm/-/commit/ecea6835baca75b945bd8ecfaa636ff01dabcc1d
 
-If this was a fast path then I'd be more concerned. I dislike global locks
-as well, but unless contention becomes a concern, I don't think we should
-worry about it.
+Let me know what you think.
 
-Also, for this comment:
-
-+static int user_events_release(struct inode *node, struct file *file)
-+{
-+	struct user_event_refs *refs;
-+	struct user_event *user;
-+	int i;
-+
-+	/*
-+	 * refs is protected by RCU and could in theory change immediately
-+	 * before this call on another core. To ensure we read the latest
-+	 * version of refs we acquire the RCU read lock again.
-+	 */
-+	rcu_read_lock_sched();
-+	refs = rcu_dereference_sched(file->private_data);
-+	rcu_read_unlock_sched();
-
-How do you see refs changing on another core if this can only be called
-when nothing has a reference to it?
-
-I think this comment and grabbing the rcu locks is what is causing me
-concern.
-
--- Steve
+Thanks,
+Robin.

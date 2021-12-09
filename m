@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FB046EAD1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2834346EAC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239642AbhLIPOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239421AbhLIPNs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239427AbhLIPNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 9 Dec 2021 10:13:48 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86FC061353;
-        Thu,  9 Dec 2021 07:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=M/YYv3gr+rHTtVoXKv5llOdH/rGmFevtrCyuCrq7vAs=; b=Jhzb3PUgrXAVUpMifP7+BRtt2Y
-        +lusRk/YTrgZJNJO1l0FPtVCpUieCqUhYfHjFYLw/Jy1RQsYj89ncBV9BjwRMZq9KdZBjIZHO0c5Q
-        1cqcc0331lqBOit04D5XAC6WvR33SYTf+iUm9TJcqZLh1VIsdfvz+cA2HaDjgkxfeS0uJL/3e5Grw
-        hurRnyoXnyPg/VSB3gYDguraYjN4B7n2qGbiypUCKwCzNLdf7Hb9E3b4J0DmU+yJkO2MNVMRVOu9G
-        kigGIN6afMmaLFmicMdEFh0/GYTLwgr61oDgF+lt+gtegEk7z0xhMnctcAGQcR9pars9azznVNqgJ
-        4X+a9mIA==;
-Received: from i7.infradead.org ([2001:8b0:10b:1:21e:67ff:fecb:7a92])
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvL3K-000Np4-H4; Thu, 09 Dec 2021 15:09:46 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvL3K-0000yw-6f; Thu, 09 Dec 2021 15:09:46 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-Subject: [PATCH 11/11] x86/kvm: Silence per-cpu pr_info noise about KVM clocks and steal time
-Date:   Thu,  9 Dec 2021 15:09:38 +0000
-Message-Id: <20211209150938.3518-12-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211209150938.3518-1-dwmw2@infradead.org>
-References: <20211209150938.3518-1-dwmw2@infradead.org>
+Received: from ams.source.kernel.org ([145.40.68.75]:58144 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234445AbhLIPNl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 10:13:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11EE6B82503;
+        Thu,  9 Dec 2021 15:10:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F4DC341D3;
+        Thu,  9 Dec 2021 15:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639062605;
+        bh=U6ztHGouKLYBRw/akAYNLv9KsMRJgPYo7HpUyAVcfAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AUnO/E+WkuhTnHbF9769He2y5u8eG2YnwHlCTUMWN+ofequY3YwApFr8+GS23LklD
+         LQR4BgdzPkdg/FAhbxZUQBZC6RAAmGby2E+E3wk8gQpkn0/JQce+te4xF9eUdUC6U7
+         w8MgldlL8xFs8h6ieeWGm/IMCxJKb+8lHIO9y6U8=
+Date:   Thu, 9 Dec 2021 16:10:03 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] libata: if T_LENGTH is zero, dma direction should be
+ DMA_NONE
+Message-ID: <YbIcS+07ix53hIoY@kroah.com>
+References: <1639062020-5621-1-git-send-email-george.kennedy@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639062020-5621-1-git-send-email-george.kennedy@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Thu, Dec 09, 2021 at 10:00:20AM -0500, George Kennedy wrote:
+> Avoid data corruption by rejecting pass-through commands where
+> T_LENGTH is zero (No data is transferred) and the dma direction
+> is not DMA_NONE.
+> 
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+> ---
+>  drivers/ata/libata-scsi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 1b84d55..d428392 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -2859,6 +2859,12 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
+>  		goto invalid_fld;
+>  	}
+>  
+> +	/* if T_LENGTH is zero (No data is transferred), then dir should be DMA_NONE */
+> +	if ((cdb[2 + cdb_offset] & 3) == 0 && scmd->sc_data_direction != DMA_NONE) {
+> +		fp = 2 + cdb_offset;
+> +		goto invalid_fld;
+> +	}
+> +
+>  	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
+>  		tf->protocol = ATA_PROT_NCQ_NODATA;
+>  
+> -- 
+> 1.8.3.1
+> 
 
-I made the actual CPU bringup go nice and fast... and then Linux spends
-half a minute printing stupid nonsense about clocks and steal time for
-each of 256 vCPUs. Don't do that. Nobody cares.
+Odd, why send this to me?
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/kernel/kvm.c      | 6 +++---
- arch/x86/kernel/kvmclock.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Also, you should look at:
+	https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to send patches to automatically get included in stable
+releases, which is what I think you want here.
 
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index 59abbdad7729..a438217cbfac 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -313,7 +313,7 @@ static void kvm_register_steal_time(void)
- 		return;
- 
- 	wrmsrl(MSR_KVM_STEAL_TIME, (slow_virt_to_phys(st) | KVM_MSR_ENABLED));
--	pr_info("stealtime: cpu %d, msr %llx\n", cpu,
-+	pr_debug("stealtime: cpu %d, msr %llx\n", cpu,
- 		(unsigned long long) slow_virt_to_phys(st));
- }
- 
-@@ -350,7 +350,7 @@ static void kvm_guest_cpu_init(void)
- 
- 		wrmsrl(MSR_KVM_ASYNC_PF_EN, pa);
- 		__this_cpu_write(apf_reason.enabled, 1);
--		pr_info("setup async PF for cpu %d\n", smp_processor_id());
-+		pr_debug("setup async PF for cpu %d\n", smp_processor_id());
- 	}
- 
- 	if (kvm_para_has_feature(KVM_FEATURE_PV_EOI)) {
-@@ -376,7 +376,7 @@ static void kvm_pv_disable_apf(void)
- 	wrmsrl(MSR_KVM_ASYNC_PF_EN, 0);
- 	__this_cpu_write(apf_reason.enabled, 0);
- 
--	pr_info("disable async PF for cpu %d\n", smp_processor_id());
-+	pr_debug("disable async PF for cpu %d\n", smp_processor_id());
- }
- 
- static void kvm_disable_steal_time(void)
-diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-index 462dd8e9b03d..a35cbf9107af 100644
---- a/arch/x86/kernel/kvmclock.c
-+++ b/arch/x86/kernel/kvmclock.c
-@@ -174,7 +174,7 @@ static void kvm_register_clock(char *txt)
- 
- 	pa = slow_virt_to_phys(&src->pvti) | 0x01ULL;
- 	wrmsrl(msr_kvm_system_time, pa);
--	pr_info("kvm-clock: cpu %d, msr %llx, %s", smp_processor_id(), pa, txt);
-+	pr_debug("kvm-clock: cpu %d, msr %llx, %s", smp_processor_id(), pa, txt);
- }
- 
- static void kvm_save_sched_clock_state(void)
--- 
-2.31.1
+thanks,
 
+greg k-h

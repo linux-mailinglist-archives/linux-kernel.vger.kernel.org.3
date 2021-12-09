@@ -2,132 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B512746E159
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8572A46E156
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbhLIDtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
+        id S231590AbhLIDtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbhLIDtN (ORCPT
+        with ESMTP id S229790AbhLIDtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:49:13 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3124AC0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:45:40 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id z9so4172843qtj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:45:40 -0800 (PST)
+        Wed, 8 Dec 2021 22:49:04 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B3AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:45:31 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id p18so2902043plf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qp+fhQqb63jtEJIb0aiVqToUshtJVOsAaFogxfuvcdY=;
-        b=WAqRJ30t793jmukhjFhh/tffATf4sExSXMo6XdQtr/7tlbisCy0hGGjQVOfVV1KeQB
-         EiioaBisTTNnkTusNB0q2JpdNCshwzogMXiRWHqttAeiyCo7yS6nb+IOurcrJRJF9ohC
-         t9zAZOOjhjFhbEOQ4i/04DdYPLr9uPGnPtSj4=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=njhG45usifVSAm2aSkNzlUSK10yx6nuwV6S2Kl0u5U4=;
+        b=lxly56tID1rFfrom22nKVj1Bo78mbuL35BeHfQH79mlihekrCddSi5Z+LZwr72g+Ib
+         OGMytoPiNYXJi++qs9qW6OLDloUcsHFmByYTKXbYJfrzsRODKzaRmzb3AK/WHjfC5rSD
+         AQaRRc49NahQhibS0vpWikeNSMn06Fr0jzyHOVdtDEIGNFxHreehIZI3xVXy7/00KG5n
+         3lSNN7og+b9EzdYzz4IQHlLTmENYs5GVzi5cNMUAQ7dFUOvUb8Y9Tp0RmXdohQr8PVuR
+         oEDr1ZwpdQ5o9veyEm3JYw0v8RDYE1CSPpq4zLRTPYu5fv43o3qmzWvgpQR+D6aG6tUC
+         0FZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qp+fhQqb63jtEJIb0aiVqToUshtJVOsAaFogxfuvcdY=;
-        b=UpHO+g6WDMb1IdUEmaeYHNdU2TQTgzo943LuDRD1IgmDBj6Phw9hf3PpGly7LBGETJ
-         j6zGktZM3E/yyQccj1kU67f2IOMzpilgC5S3JUHjWGl0N0jaHj8OI+NUHwOQ1o7x+QQv
-         Msaly1CaQAmIgxv0+t/fCmVGwq4Imqs9GpM1xG5MMjqWY0tRjFROdz4z+m0lHa3pEKIa
-         78ds58FEB0cU0VZMyitLRrzqAnHLi5GHvpuV2Iq9Ixr0BTnZnaCwxkF1UQePFgf0vUsA
-         Zu5GQhc44q6HDbySJdeOEYCtEKlDmDZg0SicWzn9g/4/6ellrLBL4G6LrXT0Jl8ne0Ek
-         bKNA==
-X-Gm-Message-State: AOAM531tZVeQTm1rq8N2Ahd+wG6bRuO6jWdJvG2PtORo7teqKrH0WpNV
-        PPPIGvirKrEI6uUGvbSsuUR15tkvjJytdajn4FMHwnZqAC3TOw==
-X-Google-Smtp-Source: ABdhPJx6O9m7818KPPCtox6xAOqjmZRE2jJ7uIJUczKPqaLyqP5nbELSNY9udKMJ7DAY/iW7URcRoAoIyj9GNeCC158=
-X-Received: by 2002:a05:622a:120d:: with SMTP id y13mr13465739qtx.155.1639021539383;
- Wed, 08 Dec 2021 19:45:39 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=njhG45usifVSAm2aSkNzlUSK10yx6nuwV6S2Kl0u5U4=;
+        b=CQHsucmurWCmwZNDRdcJlveGtWE/0S4j5h28E1VveSYZjxuK+0Jj60+Fj71Bk0frUA
+         JdY+Edic/GhiSjqlcqaD3AIr2jjWhnP4DqlBnouo/GwX+NQ22Di6fWvRcvyrwXua1LTO
+         ynL3ryDnlOz9PI0gJF4jbpUYBFejeptwmDXeK/x2bq4xigNea03Wt51CatJvuA8inpUg
+         ADxiHMUQvhAN7qIo3EEiVHQxxk/n7lcvVAgfsTXL/5AkdKDjT2XPiU+r+aMVJ7yp+yw6
+         aKCsjCnOv+WtHQr9xWl6tMGsOCdjcrJ7oE3S54TxnPB1DmvpR67xwyR8kwmQf7++zXfV
+         ZZTw==
+X-Gm-Message-State: AOAM5329OPGSvBO+KNIoA1QVMdPXoK2AeFBmz+4j6PJt/kX1ScDBUcLh
+        nVnUJz1uwsrb6X6YDrH3S1eLCQ==
+X-Google-Smtp-Source: ABdhPJz7tUH9m3lXUkXs8q2IISmHauEMBN0g0gHbAw9FC3FwsSbC6W27CPuO4vqyFhv7N8g8VPJ6tw==
+X-Received: by 2002:a17:903:1d2:b0:142:24f1:1213 with SMTP id e18-20020a17090301d200b0014224f11213mr64832437plh.81.1639021530561;
+        Wed, 08 Dec 2021 19:45:30 -0800 (PST)
+Received: from [172.20.4.26] ([66.185.175.30])
+        by smtp.gmail.com with ESMTPSA id i1sm3967058pgs.50.2021.12.08.19.45.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 19:45:30 -0800 (PST)
+Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
+To:     Josef Bacik <josef@toxicpanda.com>,
+        syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>
+Cc:     asml.silence@gmail.com, clm@fb.com, dsterba@suse.com,
+        fgheet255t@gmail.com, io-uring@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wqu@suse.com
+References: <000000000000e016c205d1025f4c@google.com>
+ <000000000000fadd4905d2a9c7e8@google.com>
+ <YbFvF7J220iAHqHJ@localhost.localdomain>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <f820728f-8dbd-9e36-1293-02514812eea0@kernel.dk>
+Date:   Wed, 8 Dec 2021 20:45:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 8 Dec 2021 19:45:26 -0800
-Message-ID: <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
-Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YbFvF7J220iAHqHJ@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On 12/8/21 7:51 PM, Josef Bacik wrote:
+> On Wed, Dec 08, 2021 at 02:12:09PM -0800, syzbot wrote:
+>> syzbot has bisected this issue to:
+>>
+>> commit 741ec653ab58f5f263f2b6df38157997661c7a50
+>> Author: Qu Wenruo <wqu@suse.com>
+>> Date:   Mon Sep 27 07:22:01 2021 +0000
+>>
+>>     btrfs: subpage: make end_compressed_bio_writeback() compatible
+>>
+> 
+> This isn't the right patch, this is x86 so sectorsize == pagesize, so this patch
+> didn't change anything at all.  Also unless the local fs is btrfs with
+> compression enabled I'm not entirely sure how this would even matter, the
+> reproducer seems to be purely io_uring related.  Thanks,
 
-On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi,
->
-> This removes the need for the drivers to always separately evaluate
-> the _PLD. With the USB Type-C connector and USB port mapping this
-> allows us to start using the component framework and remove the custom
-> APIs.
->
-> So far the only users of the _PLD information have been the USB
-> drivers, but it seems it will be used also at least in some camera
-> drivers later. These nevertheless touch mostly USB drivers.
->
-> Rafael, is it still OK if Greg takes these?
->
-> Prashant, can you test these?
+Yeah, it's not btrfs, it's just one of those "bisect gone awry" cases. btrfs
+guys can ignore this one.
 
-I've applied the patches to a system with the requisite _PLD entries
-in firmware, and I'm not sure I can see the connectors getting created
-correctly.
+-- 
+Jens Axboe
 
-My setup is:
-
-Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
-Mode) ----> USB Thumb drive.
-
-Here is the lsusb -t output before connecting the dock (omitting
-unrelated busses):
-localhost ~ # lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
-
-Here is the lsusb -t output (omitting unrelated busses):
-localhost ~ # lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
-    |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
-        |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
-            |__ Port 3: Dev 18, If 0, Class=Mass Storage,
-Driver=usb-storage, 5000M
-        |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
-Driver=r8152, 5000M
-
-I see the connector symlink for the root hub:
-
-localhost ~ # cd /sys/bus/usb/devices
-localhost /sys/bus/usb/devices # ls 2-2/port/connector
-data_role  device  firmware_node  port1-cable  port1-partner  power
-power_operation_mode  power_role  preferred_role  subsystem
-supported_accessory_modes  uevent  usb2-port2  usb3-port2
-usb_power_delivery_revision  usb_typec_revision  vconn_source
-
-But for none of the children devices:
-
-localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
-ls: cannot access '2-2.3/port/connector': No such file or directory
-localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
-ls: cannot access '2-2.3.3/port/connector': No such file or directory
-localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
-ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
-localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
-ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
-
-Is this as you intended with the series? My interpretation was that
-each connected usb device would get a "connector" symlink, but I may
-have misinterpreted this.
-
-Best regards,
-
--Prashant

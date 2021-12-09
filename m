@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC8946F402
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99AB46F400
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhLITiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:38:16 -0500
-Received: from mga09.intel.com ([134.134.136.24]:22242 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229710AbhLITiO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:38:14 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="237995926"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="237995926"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:34:40 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="463375164"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:34:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvPAi-004EPJ-Lw;
-        Thu, 09 Dec 2021 21:33:40 +0200
-Date:   Thu, 9 Dec 2021 21:33:40 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH v2 1/1] PCI: Introduce pci_bus_*() printing macros when
- device is not available
-Message-ID: <YbJaFM0vlkdTwxUS@smile.fi.intel.com>
-References: <20211209182711.28709-1-andriy.shevchenko@linux.intel.com>
- <411886e9e89f797d3f9513245f94b2a5f4a33e7d.camel@perches.com>
+        id S230374AbhLIThs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229710AbhLIThq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:37:46 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681BEC061746;
+        Thu,  9 Dec 2021 11:34:12 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id h16so6388229ila.4;
+        Thu, 09 Dec 2021 11:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rjbF/e4IPr6w41XoeHe90MU9VqeA6wWtIu93GK+U99I=;
+        b=VxpxA7pazg4J0Uw2yrJ468h9XVbHM3XC98y1oSNtayeUNncaxTuWP3jLdrD3yPYz+8
+         Cy4PYzhBRe0bh4+o4TschXKyCc8S69143NLLw9MzbpyvMoRnfrPHP+JSH0ykpU5/80oj
+         fK6gHhR7FpIG8HPoKD/LF8IgGl0RXhGMMkSJUcr0CkSGPhzgONrudJK9g8YVgLeh9OMn
+         9O6ylG6WRFFWwsnPafiv/kTzFa9jwbsPp1nMBjHF+R8s1lt0YatXp+31bjmds+WwZEm6
+         dlD7OQbNrYfwqYvrB4RkhIChnfiWB0Xi9ohc9ABKI/qvOzA3TvRdUimv+78J82ejERa2
+         JF9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rjbF/e4IPr6w41XoeHe90MU9VqeA6wWtIu93GK+U99I=;
+        b=lSUOOxn29z58gasOOazz+Qm1U7mTsuQEeku8orxk/HiWt8fwbJtfJNgDF3vwSZHePX
+         UkD5zVwVszoiiUYUE7FoQC85wpCvwBb2HBrLdlA+dwp02SUhfvHKfaN+GefLJTWkKiIP
+         aO3IgY+K/4mCyk/jhwIaKD+DAkl9onf6yt27sZnw16ivXvvDp7nJUEhlZJiY3G17LHqT
+         FBYpUXhVtO2fK7bJCGLF/gfEmmcZZ7SuOo3ejBZzW1a4MpPzj5iA9hqHY7GLVA+XNQjU
+         /W9WMmpu0cXjFrU6ya+e2Sl1zOHD+VrompDPkmDFPpOYl0pTIZmmvOvA8RNVWOSlSoul
+         6Y9g==
+X-Gm-Message-State: AOAM531EiJx9Qg4puTIMEbu8YxZ5Gqb/5KdGLunuuo1c2SzZd/GaflBI
+        MOK8udxIWM/UQxqdRCsoQ68kEkVqHPOyQd58xlg=
+X-Google-Smtp-Source: ABdhPJwbf4BStyul78aoixIbYXeNPT+vDDvVw180IUPyJAQY1AyTHLV4ByxbrJlu+3wi4eYKD/VfG1dO2Wq/7usImKU=
+X-Received: by 2002:a05:6e02:1ca1:: with SMTP id x1mr17110581ill.72.1639078451722;
+ Thu, 09 Dec 2021 11:34:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <411886e9e89f797d3f9513245f94b2a5f4a33e7d.camel@perches.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-6-ojeda@kernel.org>
+ <CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com>
+In-Reply-To: <CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 9 Dec 2021 20:34:00 +0100
+Message-ID: <CANiq72kUBy64D_psB2YsBs4evfyGUJO6g2eb5-5xZYg2rVETsw@mail.gmail.com>
+Subject: Re: [PATCH 05/19] rust: add `compiler_builtins` crate
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:40:57AM -0800, Joe Perches wrote:
-> On Thu, 2021-12-09 at 20:27 +0200, Andy Shevchenko wrote:
+On Wed, Dec 8, 2021 at 12:02 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Rather than panic at runtime, could we do some binary post processing
+> in Kbuild with $(NM) to error the build if any of the below symbols
+> are referenced from .o files produced by .rs sources?
 
-...
+To error the build, we only need to not define them; i.e. the issue is
+passing the build. Eventually, we should be able to avoid defining
+them (this is what the comment is referring to).
 
-> > +#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
-> > +	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
-> > +	       pci_domain_nr(bus), bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
-> 
-> I have a small preference for using ... and __VA_ARGS___
+There are other ways around, like providing an in-tree `core`, but it
+is best to see if upstream Rust can do it.
 
-It contradicts what other macros in the pci.h do.
-So I will stick with current solution for the sake of consistency.
+> If we provide definitions of these symbols, then I worry about C code
+> that previously would have failed to link at build time when
+> referencing these will now succeed at linking when CONFIG_RUST=y is
+> enabled, but may panic at runtime IF we happen to hit those code
+> paths.
 
-...
+It should be fine -- by the time we consider the Rust support
+non-experimental, we should not be defining them.
 
-> and likely this should have parentheses around bus
-> 
-> 	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
-> 	       pci_domain_nr(bus), (bus)->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##__VA_ARGS__)
-
-This makes sense, thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Cheers,
+Miguel

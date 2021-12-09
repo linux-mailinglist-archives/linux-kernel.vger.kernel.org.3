@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF9546E433
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB9646E437
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbhLIIcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S234438AbhLIIeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbhLIIcb (ORCPT
+        with ESMTP id S232375AbhLIIeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:32:31 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93172C061746;
-        Thu,  9 Dec 2021 00:28:58 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id 8so4767678pfo.4;
-        Thu, 09 Dec 2021 00:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vxr3shVG7qN/DbBNTNRxI1Vzvo0/YokyiEU01gJT4zY=;
-        b=h8gKmrQgq3UN1DWUasdTXd35dn7wsBYe8wPxSW6Kv8CE0RqqQhINbRG5c9EamfhsNX
-         jEJK2/UZ5FTxDNSihvoMC5OA+doeevnrtHZfFVBgHzssyGrw8XkXaZUUTfAchgzCp5wv
-         oIRF4DHe0rvLypnUsQhG0kPvzXIogwPuQUIXDA58Irv3O3krQm0DJq94iA4AQkvzGhve
-         XGf0mthWInB8ES0LMxdT7sLpJUw0U5tDPNX9mpnlDA3r65959JO4pmEmQoroDO4e3bxE
-         UqsQCZJJDpp6sG0J2fEG7nCSqI+w0osFUNwD3ygyJkBUeDSmDz3yOUH82bS18KWensza
-         DjXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vxr3shVG7qN/DbBNTNRxI1Vzvo0/YokyiEU01gJT4zY=;
-        b=sI/01HSuSs9ZYtpPByUI8mUTPYkdDJdd2G6brhbXidiCE05Dm1CYE0krrTFOacJA5J
-         KCiej4qHf9+yV9pJ52PIkL57qPXzIC99OQ8ILIQYd1TTB83YQoFPIh8df1hiuE6+OT28
-         GX15pZKTqISkg5geZBI341OGcDu1G72ljWS0E9xeF4sqh156a6Ydc6UCRRsGIh8+zo1r
-         z/YAyY/DL1cyYMGr2DhmW7d2HnWPmkWf3uZYYgs3S5Tr8cRwUo2iGFMbZDpYHzmOd3m1
-         GFSYbALtrRgf1itm1sERZu5PqTcTbvI4EH7kaYL57suPZxEHkGVzo/ZyluzoNQBRySzv
-         Z8Qg==
-X-Gm-Message-State: AOAM5306alm0WZOGYgNHIRwPboi24kXluW1yozcSpV+BLUHsJAsEv53U
-        4LiUV6I6WLm2dDpHsLjZTWtRVUKCyboZrnC9qHJ7wg==
-X-Google-Smtp-Source: ABdhPJyZLaQygmzR8Vq4P7ybZyNwRMoNJZ3CxGBnItfpFfMAMOqX6rQrAmGIi7vWINTl2oFnNz3Evw==
-X-Received: by 2002:a63:7907:: with SMTP id u7mr30531097pgc.465.1639038538170;
-        Thu, 09 Dec 2021 00:28:58 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id pj12sm8674294pjb.51.2021.12.09.00.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 00:28:57 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     courmisch@gmail.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH net] Phonet: refcount leak in pep_sock_accep
-Date:   Thu,  9 Dec 2021 16:28:39 +0800
-Message-Id: <20211209082839.33985-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Dec 2021 03:34:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A746C061746;
+        Thu,  9 Dec 2021 00:30:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C316CCE2503;
+        Thu,  9 Dec 2021 08:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E1DC004DD;
+        Thu,  9 Dec 2021 08:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639038627;
+        bh=MCzxBcEFTEc7oegEyl2A4TZ8NyqD8fdlm7fiXv1HsdM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ScRsORoelMLhEai6b2Dx/CfA9BNngH+fw/CqcbrxuX8hpg36Rb9ocgJMDdXlRQhzV
+         oFN7OfMdMsCfvTWm8i4XMurvuRuI/+61hTiNr3S0O5rSAI/nZBE90adz7XdN/NoBiG
+         INEfEr/IaRs1qgAecUB58/r4SVC/w088N41QGjCK3O6DpZ7mZnJDXjsDjM7j7qGalw
+         08p6xoxck2+cGg4W9nXXd/i8OyjaQUGKai0fForICrkeuoTHqD/38g2csNmt2IYYPk
+         aOeBKeTye0pBmR8ENsqbEpB4BMxwNrwzqUZhgKJ5dkO+RfMOmQhZI5oCWVehSLR83o
+         F73ndaxPi0Gvw==
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Jessica Yu <jeyu@kernel.org>
+Subject: [PATCH] MAINTAINERS: Remove myself as modules maintainer
+Date:   Thu,  9 Dec 2021 09:28:50 +0100
+Message-Id: <20211209082850.10021-1-jeyu@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
-invoked in subsequent failure branches(pep_accept_conn() != 0).
+Luis has done a great job maintaining modules so far. As I'm planning to
+take a break from work soon, I think we're ready to transition over fully.
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Jessica Yu <jeyu@kernel.org>
 ---
- net/phonet/pep.c | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/phonet/pep.c b/net/phonet/pep.c
-index a1525916885a..b4f90afb0638 100644
---- a/net/phonet/pep.c
-+++ b/net/phonet/pep.c
-@@ -868,6 +868,7 @@ static struct sock *pep_sock_accept(struct sock *sk, int flags, int *errp,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 43007f2d29e0..a92145633fbe 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12866,7 +12866,6 @@ F:	drivers/media/dvb-frontends/mn88473*
  
- 	err = pep_accept_conn(newsk, skb);
- 	if (err) {
-+		__sock_put(sk);
- 		sock_put(newsk);
- 		newsk = NULL;
- 		goto drop;
+ MODULE SUPPORT
+ M:	Luis Chamberlain <mcgrof@kernel.org>
+-M:	Jessica Yu <jeyu@kernel.org>
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git modules-next
+ F:	include/linux/module.h
 -- 
-2.25.1
+2.33.1
 

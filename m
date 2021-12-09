@@ -2,83 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C192546F674
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AE646F676
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbhLIWKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S233247AbhLIWK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbhLIWKw (ORCPT
+        with ESMTP id S232187AbhLIWK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:10:52 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C77C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:07:18 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k4so4933366plx.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:07:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AE0YjcoZsKQA/h89Qqfbr3mpuL5VXiWzoyClY6zdV/c=;
-        b=Mh9gP+hi2dBTGwqMiBo2/96mbOB4nj2Rt+LKXIAT5/6keKHqsS5OVdCBTY5dLvJnkA
-         JBRnlgGu34n9aOtQDWhLuelWdfNEbV2f/reOPrpbaOCf4sbbRfAKG/o5sYSuc8bm3vUh
-         f4COGE6GlSrxVnB8zK3HQWxJ6Kx9DWQCcP1u2OoK0OiWxAgDxlcuytQIZw/tNL/qQUMt
-         cHlJTqGGBr4BWuJ7Y4i94IrW/I5YTMBJDCkA1csh5QAEEpf/Blfb3HC2CjEY6z2myxdM
-         Jx1Y8wiOq1e3it9Ep1z50Z7LWFK9yBrdaO5PbU4gbVSJmAmZ2d5Knnj9RtQ9+BYEwx7l
-         ILGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=AE0YjcoZsKQA/h89Qqfbr3mpuL5VXiWzoyClY6zdV/c=;
-        b=NAzCaiPCZ5SbD3sNuwG96tYXqzuzsZZkXelrPwAVl08O3F16k9hDbh6CXeEFIM0YZM
-         /dRdBm5qlsPFdLS2VbYaosLgTb9GNE8Ht3W9Ro+B+Mt9ZAZGVm2YVDTfGklDssdS9QGf
-         9JAJozBHvcX+gQypgOcR7SiWB80lwOTpEMnk9py+EDCdHBMsve9+1//kvTNvMZzdUx++
-         GLoDeqXJUPcyMmbzohaw+rtmUfcDDAH1ix+BakG3ElTzM9dmNDPt7NCujYoHqhWanuOA
-         DcsGUL0QbIk+VY8c5JNAkoPFh+7/rCJH8HdCIWGtXPphk2dJu5QtuTJRcRGv9KF6YNdA
-         E4yg==
-X-Gm-Message-State: AOAM53003+dy1XsuUb9yyq6F3fpxhhFfPQfn0LvALSRtPDh5PEKgkDCs
-        PR8K/C7rkZJM9I8gmZ3KkyeI/uFfcyw=
-X-Google-Smtp-Source: ABdhPJwiJQeIVoL/HI0gJP4Oy/2hUdTDwai05hKCFZdPLrQGPi/lUi+uo10qhx7YNtNpVlPbd1rDhA==
-X-Received: by 2002:a17:90a:4894:: with SMTP id b20mr18883297pjh.121.1639087637708;
-        Thu, 09 Dec 2021 14:07:17 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id d17sm622850pfj.215.2021.12.09.14.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 14:07:16 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 9 Dec 2021 12:07:15 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>
-Subject: Re: [PATCH 6/7] workqueue: Remove the cacheline_aligned for
- nr_running
-Message-ID: <YbJ+E+HB+UCYHxSi@slm.duckdns.org>
-References: <20211207073543.61092-1-jiangshanlai@gmail.com>
- <20211207073543.61092-7-jiangshanlai@gmail.com>
+        Thu, 9 Dec 2021 17:10:56 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAB1C061746;
+        Thu,  9 Dec 2021 14:07:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J97S50V8Gz4xhB;
+        Fri, 10 Dec 2021 09:07:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639087637;
+        bh=T+Kdi+vbaEfG5wP1THycl/1FYdnwHVcRUi+N90Ph6Zk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W0NO90e0zx5WByPQWg/tkvdcrTtJZxinzNQWcZm6HOF/nD35/0XGtzzVbOd6A+F+V
+         zqaPuyYWGDTq+osTep1r0WzPVI+a6BLHPNMDBRHm1q+xHL/uq+rbgO5/XUtYETwtn8
+         ldmEXQxyB3lw0PVVYPfK37NOB7a2AoAL1jnOkcEJiCEjncXzFLvFpDi2/mtGaM7VHG
+         Iq+7W6VryrjmvSVm/NnD8psbl2xhC88JUeTBY9czhYj3ImTDGFpvXOr3YUvUGGP9iG
+         22Nb3i/S4IjuCtCPd/W5a4sf4dLJlVmcmdmuIE6rPruxFFQM1YqC01k76IO+OWZbp2
+         dW0gYnTZzlmsA==
+Date:   Fri, 10 Dec 2021 09:07:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Dec 8
+Message-ID: <20211210090716.6a991c08@canb.auug.org.au>
+In-Reply-To: <YbH3lT7fh+YCCwjx@sirena.org.uk>
+References: <20211208183814.71b0c51e@canb.auug.org.au>
+        <YbH3lT7fh+YCCwjx@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207073543.61092-7-jiangshanlai@gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/PfepCrFLRDLsGuOTotOxXj8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:35:42PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
-> 
-> nr_running is never modified remotely after the schedule callback in
-> wakeup path is removed.
-> 
-> Rather nr_running is often accessed with other fields in the pool
-> together, so the cacheline_aligned for nr_running isn't needed.
+--Sig_/PfepCrFLRDLsGuOTotOxXj8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Does it even need to be atomic anymore?
+Hi Mark,
 
-Thanks.
+On Thu, 9 Dec 2021 12:33:25 +0000 Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Dec 08, 2021 at 06:38:14PM +1100, Stephen Rothwell wrote:
+>=20
+> > News: I will (probably) do no linux-next releases between Dec 9 and Dec
+> > 19, inclusive. =20
+>=20
+> I'll try to start provide some cover for this, probably starting
+> tomorrow unless a build for today runs *very* well.
 
--- 
-tejun
+Thanks very much, Mark. Good luck :-)
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PfepCrFLRDLsGuOTotOxXj8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGyfhQACgkQAVBC80lX
+0GzwZwf/TeRyyCeb65WuWR4RzfJ5Op6p5fDbKo86PZULigQJV/PNOIUKIbl4vWUA
+kUstBx/YsDtIwtSGxJ5UsRUCAAaVWbULFI9Fc0uqZohk0Bxl/nDcfTOcCSzvuYdY
+brXrABtOVRd8AdqGNsFolL5N/4obOQ4aUUhaLRXaoQS5rxaPrRhSNkwKn6vw+aiR
+06AawE4NEABXW2yh5Y8p9CrVDuBxT3CSpJUrNHS+AYGdE6nS1vdk997RsUQr0gZL
+zCwXua/wEBnLpD0oi6LIyoeNeE0b5XG7U7lK1YhcGiDYsG1hCg66InDlyu9V6Ifh
+giLHENvyLJRN+z+6mZ/iEewiPazoRg==
+=s1Iu
+-----END PGP SIGNATURE-----
+
+--Sig_/PfepCrFLRDLsGuOTotOxXj8--

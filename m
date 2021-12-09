@@ -2,392 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A154246EB20
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA91246EB25
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbhLIPaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:30:35 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57452 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbhLIPab (ORCPT
+        id S239533AbhLIPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234345AbhLIPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:30:31 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8502E210FD;
-        Thu,  9 Dec 2021 15:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639063616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NRvh7JJq/Uy7CdAC3cTY+jsARIcDnw1RIyhr2Us3gwY=;
-        b=qrS3gq9nR0J6sd5ARS49QByBMupTCWaEZAxI8MVY9UL5GcVpzdiMaO7/jlt9gS8ja858S3
-        py0QOp3Flx7A88dL41g63GeuHGHRLTONtEC1efw5duLfDNudBlv20cakKPtFMWy54O+FJD
-        4ivEwnRfaa4EqISmnt4mqnBcQtU9k0k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1272513343;
-        Thu,  9 Dec 2021 15:26:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DhU3A0AgsmE9RAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 09 Dec 2021 15:26:56 +0000
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
- param parsing
-To:     Borislav Petkov <bp@alien8.de>, John Dorminy <jdorminy@redhat.com>
-Cc:     tip-bot2@linutronix.de, anjaneya.chagam@intel.com,
-        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
-        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
-        x86@kernel.org, Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
-Date:   Thu, 9 Dec 2021 16:26:55 +0100
+        Thu, 9 Dec 2021 10:31:19 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A4C061746;
+        Thu,  9 Dec 2021 07:27:45 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id 13so9469666ljj.11;
+        Thu, 09 Dec 2021 07:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=OD6dYNHp3btewwqvoNpB45FBLhPMDMantLC3BV7Jwf8=;
+        b=ptKqzU0lblnbFQfnFsgXMY56ZMm6hIK+YQHm7mhiCZyk98AA1QuLf+LKWJTzP4iHM5
+         7L4MXYXYRFTel5qGrkB0pkpQRj8k7rrnkN8bYzppq15x284viWL7fwJJAhcGll16XLjd
+         4BXZh+0sPpaGaevNZlSq8LwHolN1rre9Ldwm2wJlUCKoOEa/viJMibpl1KxGbdwG65Ap
+         3+czmC9WaSX3A5EOxWLcZTEZYORCQV1km0PSk85Up8L9DeaJazfvgqgFU9Ag+HMIDczR
+         L1f2WZQSwYJ6rUjs0r9kJDgfp8Bo2n05DkjQp2ap/xJq+CgNvf0aoff8gGao2PnCuP5O
+         6Z4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OD6dYNHp3btewwqvoNpB45FBLhPMDMantLC3BV7Jwf8=;
+        b=bSo9ZBcCXw7urM8UMiU3KFPvX71Gy2+Cos3/qMyZmVy4cGbv2qlv2CSc7hJTYn7ZQn
+         +32JLD/DZ2wuAsTUC5dJYRdOJ8/EOstxnyuWETd2NyAgvTxIjDSoTTR8cAPNHljttGZ4
+         +8vNPNuo0pSz+aY2LLYRVplzvuBIvR3InLzq99HQKyAlvCMSNRKUVDoJvyj6PALlc+x+
+         FRbNkuNObztBwH3yfahT3pxwSyErX/DzlMP6NQ3IehTgU9l3HEjEfcwuhEMeR2jyNV9b
+         rAbAUMXugmpufeaBsRC2r+sQYDV9P2npFPTXQx6L+X+GZETw5fMeZcdGe9wDDMNuWQCp
+         UhKg==
+X-Gm-Message-State: AOAM533gw1uO0OFRyAvrNErjvELD/pKzBaNT78Mof2ltu3bZEXJ1hr+p
+        mWOD84//Ic6ClYjnLQYbX+avrrBi2bo=
+X-Google-Smtp-Source: ABdhPJxSeQGBSZJYWjqYDF7X0RJoeNROhixN+DYE4tIatKvSS72CGZCgQCS0z23+R58yd2ZKFmcZkQ==
+X-Received: by 2002:a2e:e09:: with SMTP id 9mr6798621ljo.172.1639063663537;
+        Thu, 09 Dec 2021 07:27:43 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id y7sm21114lfj.90.2021.12.09.07.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 07:27:43 -0800 (PST)
+Subject: Re: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert
+ functions
+To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <72ea6030-5f2d-4f51-3a42-8386c3638c65@gmail.com>
+Date:   Thu, 9 Dec 2021 18:27:42 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YbIeYIM6JEBgO3tG@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="WNrzaBCogaAYTU4DxptjSOj3Qi8GmYzuY"
+In-Reply-To: <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---WNrzaBCogaAYTU4DxptjSOj3Qi8GmYzuY
-Content-Type: multipart/mixed; boundary="6Nrj8K1mPOH1iCabd27obsWXM2CpjY0zW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>, John Dorminy <jdorminy@redhat.com>
-Cc: tip-bot2@linutronix.de, anjaneya.chagam@intel.com,
- dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
- linux-tip-commits@vger.kernel.org, stable@vger.kernel.org, x86@kernel.org,
- Hugh Dickins <hughd@google.com>, "Patrick J. Volkerding"
- <volkerdi@gmail.com>, Mike Rapoport <rppt@kernel.org>
-Message-ID: <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
- param parsing
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
-In-Reply-To: <YbIeYIM6JEBgO3tG@zn.tnic>
-
---6Nrj8K1mPOH1iCabd27obsWXM2CpjY0zW
-Content-Type: multipart/mixed;
- boundary="------------3BE92FB5CF8CA8511A69597D"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------3BE92FB5CF8CA8511A69597D
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-On 09.12.21 16:19, Borislav Petkov wrote:
-> + Hugh and Patrick.
->=20
-> On Thu, Dec 09, 2021 at 09:38:10AM -0500, John Dorminy wrote:
->> Greetings;
->>
->> It seems that this patch causes a mem=3D parameter to the kernel to ha=
-ve no effect, unfortunately...
->>
->> As far as I understand, the x86 mem parameter handler parse_memopt() (=
-called by parse_early_param()) relies on being called after e820__memory_=
-setup(): it simply removes any memory above the specified limit at that m=
-oment, allowing memory to later be hotplugged without regard for the init=
-ial limit. However, the initial non-hotplugged memory must already have b=
-een set up, in e820__memory_setup(), so that it can be removed in parse_m=
-emopt(); if parse_early_param() is called before e820__memory_setup(), as=
- this change does, the parameter ends up having no effect.
->>
->> I apologize that I don't know how to fix this, but I'm happy to test p=
-atches.
->=20
-> Yeah, people have been reporting boot failures with mem=3D on the cmdli=
-ne.
->=20
-> I think I see why, can you try this one:
-
-Sigh. This will break Xen PV. Again. The comment above the call of
-early_reserve_memory() tells you why.
-
-Juergen
-
->=20
+09.12.2021 18:05, Akhil R пишет:
+> Emulate the SMBus block read using ContinueXfer and SMBus using GPIO
+> interrupt.
+> 
+> For SMBus block read, the driver  reads the first byte with ContinueXfer
+> set which will help to parse the data count and read the remaining bytes
+> without stop condition in between.
+> SMBus alert is implemented using external gpio interrupt.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 > ---
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 6a190c7f4d71..6db971e61e4b 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -862,6 +862,8 @@ void __init setup_arch(char **cmdline_p)
->   	 */
->   	x86_configure_nx();
->  =20
-> +	e820__memory_setup();
+>  drivers/i2c/busses/i2c-tegra.c | 54 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 53 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index a5be8f0..3b70013 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/err.h>
+>  #include <linux/i2c.h>
+> +#include <linux/i2c-smbus.h>
+>  #include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+> @@ -226,6 +227,11 @@ struct tegra_i2c_hw_feature {
+>  	bool has_interface_timing_reg;
+>  };
+>  
+> +struct tegra_i2c_smbalert {
+
+smbalert isn't a word, should be smbus_alert. Same for the GPIO name and
+other places.
+
+> +	struct i2c_smbus_alert_setup alert_data;
+> +	struct i2c_client *ara;
+
+What "ara" stands for? Please use meaningful names, like alert_dev for
+example.
+
+I don't see where this member is used at all, please remove it.
+
+> +};
 > +
->   	/*
->   	 * This parses early params and it needs to run before
->   	 * early_reserve_memory() because latter relies on such settings
-> @@ -884,7 +886,6 @@ void __init setup_arch(char **cmdline_p)
->   	early_reserve_memory();
->  =20
->   	iomem_resource.end =3D (1ULL << boot_cpu_data.x86_phys_bits) - 1;
-> -	e820__memory_setup();
->   	parse_setup_data();
->  =20
->   	copy_edd();
-> ---
->=20
-> Leaving in the rest for the newly added folks.
->=20
->> Typical dmesg output showing the lack of effect, built from the prior =
-change and this change:
->>
->> With a git tree synced to 8d48bf8206f77aa8687f0e241e901e5197e52423^ (w=
-orking):
->> [    0.000000] Command line: BOOT_IMAGE=3D(hd0,msdos1)/boot/vmlinuz-5.=
-16.0-rc1 root=3DUUID=3Da4f7bd84-4f29-40bc-8c98-f4a72d0856c4 ro net.ifname=
-s=3D0 crashkernel=3D128M mem=3D4G
->> ...
->> [    0.000000] BIOS-provided physical RAM map:
->> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009abff] =
-usable
->> [    0.000000] BIOS-e820: [mem 0x000000000009ac00-0x000000000009ffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000000e0000-0x00000000000fffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007dd3afff] =
-usable
->> [    0.000000] BIOS-e820: [mem 0x000000007dd3b000-0x000000007deeffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x000000007def0000-0x000000007e0d3fff] =
-ACPI NVS
->> [    0.000000] BIOS-e820: [mem 0x000000007e0d4000-0x000000007f367fff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x000000007f368000-0x000000007f7fffff] =
-ACPI NVS
->> [    0.000000] BIOS-e820: [mem 0x0000000080000000-0x000000008fffffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed3ffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000207fffffff] =
-usable
->> [    0.000000] e820: remove [mem 0x100000000-0xfffffffffffffffe] usabl=
-e
->> [    0.000000] NX (Execute Disable) protection: active
->> [    0.000000] user-defined physical RAM map:
->> [    0.000000] user: [mem 0x0000000000000000-0x000000000009abff] usabl=
-e
->> [    0.000000] user: [mem 0x000000000009ac00-0x000000000009ffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000000e0000-0x00000000000fffff] reser=
-ved
->> [    0.000000] user: [mem 0x0000000000100000-0x000000007dd3afff] usabl=
-e
->> [    0.000000] user: [mem 0x000000007dd3b000-0x000000007deeffff] reser=
-ved
->> [    0.000000] user: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI =
-NVS
->> [    0.000000] user: [mem 0x000000007e0d4000-0x000000007f367fff] reser=
-ved
->> [    0.000000] user: [mem 0x000000007f368000-0x000000007f7fffff] ACPI =
-NVS
->> [    0.000000] user: [mem 0x0000000080000000-0x000000008fffffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed3ffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000ff000000-0x00000000ffffffff] reser=
-ved
->> ...
->> [    0.025617] Memory: 1762876K/2061136K available (16394K kernel code=
-, 3568K rwdata, 10324K rodata, 2676K init, 4924K bss, 298000K reserved, 0=
-K cma-reserved)
->>
->> Synced 8d48bf8206f77aa8687f0e241e901e5197e52423 (not working):
->>
->> [    0.000000] Command line: BOOT_IMAGE=3D(hd0,msdos1)/boot/vmlinuz-5.=
-16.0-rc4+ root=3DUUID=3D0e750e61-b92e-4708-a974-c50a3fb7e969 ro net.ifnam=
-es=3D0 crashkernel=3D128M mem=3D4G
->> [    0.000000] e820: remove [mem 0x100000000-0xfffffffffffffffe] usabl=
-e
->> [    0.000000] BIOS-provided physical RAM map:
->> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009abff] =
-usable
->> [    0.000000] BIOS-e820: [mem 0x000000000009ac00-0x000000000009ffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000000e0000-0x00000000000fffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007dd3afff] =
-usable
->> [    0.000000] BIOS-e820: [mem 0x000000007dd3b000-0x000000007deeffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x000000007def0000-0x000000007e0d3fff] =
-ACPI NVS
->> [    0.000000] BIOS-e820: [mem 0x000000007e0d4000-0x000000007f367fff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x000000007f368000-0x000000007f7fffff] =
-ACPI NVS
->> [    0.000000] BIOS-e820: [mem 0x0000000080000000-0x000000008fffffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed3ffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] =
-reserved
->> [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000207fffffff] =
-usable
->> [    0.000000] NX (Execute Disable) protection: active
->> [    0.000000] user-defined physical RAM map:
->> [    0.000000] user: [mem 0x0000000000000000-0x000000000009abff] usabl=
-e
->> [    0.000000] user: [mem 0x000000000009ac00-0x000000000009ffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000000e0000-0x00000000000fffff] reser=
-ved
->> [    0.000000] user: [mem 0x0000000000100000-0x000000007dd3afff] usabl=
-e
->> [    0.000000] user: [mem 0x000000007dd3b000-0x000000007deeffff] reser=
-ved
->> [    0.000000] user: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI =
-NVS
->> [    0.000000] user: [mem 0x000000007e0d4000-0x000000007f367fff] reser=
-ved
->> [    0.000000] user: [mem 0x000000007f368000-0x000000007f7fffff] ACPI =
-NVS
->> [    0.000000] user: [mem 0x0000000080000000-0x000000008fffffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed3ffff] reser=
-ved
->> [    0.000000] user: [mem 0x00000000ff000000-0x00000000ffffffff] reser=
-ved
->> [    0.000000] user: [mem 0x0000000100000000-0x000000207fffffff] usabl=
-e
->> ...
->> [    0.695267] Memory: 131657608K/134181712K available (16394K kernel =
-code, 3568K rwdata, 10328K rodata, 2676K init, 4924K bss, 2523844K reserv=
-ed, 0K cma-reserved)
->>
->=20
+>  /**
+>   * struct tegra_i2c_dev - per device I2C context
+>   * @dev: device reference for power management
+> @@ -280,6 +286,8 @@ struct tegra_i2c_dev {
+>  	int msg_err;
+>  	u8 *msg_buf;
+>  
+> +	struct tegra_i2c_smbalert smbalert;
 
+All properties must have doc comment.
 
---------------3BE92FB5CF8CA8511A69597D
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+>  	struct completion dma_complete;
+>  	struct dma_chan *tx_dma_chan;
+>  	struct dma_chan *rx_dma_chan;
+> @@ -1232,6 +1240,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>  		return err;
+>  
+>  	i2c_dev->msg_buf = msg->buf;
+> +
+> +	/* The condition true implies smbus block read and len is already read*/
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Proper SMBus capitalization in comments. Mussing whitespace in the end
+of the comment.
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> +	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
+> +		i2c_dev->msg_buf = msg->buf + 1;
+> +
+>  	i2c_dev->msg_buf_remaining = msg->len;
+>  	i2c_dev->msg_err = I2C_ERR_NONE;
+>  	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+> @@ -1388,6 +1401,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+>  			else
+>  				end_type = MSG_END_REPEAT_START;
+>  		}
+> +		/* If M_RECV_LEN use ContinueXfer to read the first byte */
+> +		if (msgs[i].flags & I2C_M_RECV_LEN) {
+> +			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+> +			if (ret)
+> +				break;
+> +			/* Set the read byte as msg len */
+> +			msgs[i].len = msgs[i].buf[0];
+> +			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+> +		}
+>  		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+>  		if (ret)
+>  			break;
+> @@ -1415,7 +1437,8 @@ static u32 tegra_i2c_func(struct i2c_adapter *adap)
+>  {
+>  	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+>  	u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
+> -		  I2C_FUNC_10BIT_ADDR |	I2C_FUNC_PROTOCOL_MANGLING;
+> +		  I2C_FUNC_SMBUS_READ_BLOCK_DATA | I2C_FUNC_10BIT_ADDR |
+> +		  I2C_FUNC_PROTOCOL_MANGLING;
+>  
+>  	if (i2c_dev->hw->has_continue_xfer_support)
+>  		ret |= I2C_FUNC_NOSTART;
+> @@ -1727,6 +1750,29 @@ static int tegra_i2c_init_hardware(struct tegra_i2c_dev *i2c_dev)
+>  	return ret;
+>  }
+>  
+> +static int tegra_i2c_setup_smbalert(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	struct tegra_i2c_smbalert *smbalert = &i2c_dev->smbalert;
+> +	struct gpio_desc *alert_gpiod;
+> +	struct i2c_client *ara;
+> +
+> +	alert_gpiod = devm_gpiod_get(i2c_dev->dev, "smbalert", GPIOD_IN);
+> +	if (IS_ERR(alert_gpiod))
+> +		return PTR_ERR(alert_gpiod);
+> +
+> +	smbalert->alert_data.irq = gpiod_to_irq(alert_gpiod);
+> +	if (smbalert->alert_data.irq <= 0)
+> +		return smbalert->alert_data.irq;
+> +
+> +	ara = i2c_new_smbus_alert_device(&i2c_dev->adapter, &smbalert->alert_data);
+> +	if (IS_ERR(ara))
+> +		return PTR_ERR(ara);
+> +
+> +	smbalert->ara = ara;
+> +
+> +	return 0;
+> +}
+> +
+>  static int tegra_i2c_probe(struct platform_device *pdev)
+>  {
+>  	struct tegra_i2c_dev *i2c_dev;
+> @@ -1821,6 +1867,12 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+>  	if (err)
+>  		goto release_rpm;
+>  
+> +	if (device_property_read_bool(i2c_dev->dev, "smbus-alert")) {
 
---------------3BE92FB5CF8CA8511A69597D--
+I'd move this device_property_read_bool() inside of
+tegra_i2c_setup_smbus_alert(), for consistency with the rest of the code
+in this driver.
 
---6Nrj8K1mPOH1iCabd27obsWXM2CpjY0zW--
+Although, you shouldn't need it at all, use devm_gpiod_get_optional().
 
---WNrzaBCogaAYTU4DxptjSOj3Qi8GmYzuY
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> +		err = tegra_i2c_setup_smbalert(i2c_dev);
+> +		if (err)
+> +			dev_warn(&pdev->dev, "smbus-alert setup failed: %d\n", err);
 
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmGyID8FAwAAAAAACgkQsN6d1ii/Ey+y
-Ogf/bfbkq8Eo2ocQ/OqlwblOCCMYGOc1VIQMmmTVtBQdLrzTCE8tBHlFUKicyP1Ru0DqAdOZYUAv
-DRQG1h7cKU8p/aOEh+PoOhpKOC8SiwvtqsWZ/sK72eja7/aVCj3jj/DS31ewE+ItiBd3yuOOO2Dv
-qZIsw98nbecOxqu8m2EXtTVFfT8lxOE3x7MNN6VkrI3HnxNWbxkHleZiOu3MPbfEGuk4Nor97ZG5
-6fAiLQr57JDHj1pgQcr8vBlfOSoDsCOqG2CuuyrEsF/Xw1S9khvtlRume4E5naasW5m/8oWlLaDC
-UTmoWcu9L7DlG5ZrTs6oV7dEuBdkGKF8VHVh+Tjhvw==
-=vvir
------END PGP SIGNATURE-----
-
---WNrzaBCogaAYTU4DxptjSOj3Qi8GmYzuY--
+GPIO may probe-defer, must be dev_err_probe() here.

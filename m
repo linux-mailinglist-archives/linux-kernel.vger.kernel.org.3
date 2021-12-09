@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8572A46E156
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4580346E15E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbhLIDtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S231650AbhLID4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhLIDtE (ORCPT
+        with ESMTP id S231621AbhLID4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:49:04 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B3AC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:45:31 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p18so2902043plf.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:45:31 -0800 (PST)
+        Wed, 8 Dec 2021 22:56:05 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F77C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:52:32 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so4908965otj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:52:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=njhG45usifVSAm2aSkNzlUSK10yx6nuwV6S2Kl0u5U4=;
-        b=lxly56tID1rFfrom22nKVj1Bo78mbuL35BeHfQH79mlihekrCddSi5Z+LZwr72g+Ib
-         OGMytoPiNYXJi++qs9qW6OLDloUcsHFmByYTKXbYJfrzsRODKzaRmzb3AK/WHjfC5rSD
-         AQaRRc49NahQhibS0vpWikeNSMn06Fr0jzyHOVdtDEIGNFxHreehIZI3xVXy7/00KG5n
-         3lSNN7og+b9EzdYzz4IQHlLTmENYs5GVzi5cNMUAQ7dFUOvUb8Y9Tp0RmXdohQr8PVuR
-         oEDr1ZwpdQ5o9veyEm3JYw0v8RDYE1CSPpq4zLRTPYu5fv43o3qmzWvgpQR+D6aG6tUC
-         0FZg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z8cA1QeqQc7EfuUC545t2sn7dL7R+spTbdugX4U+UAQ=;
+        b=qam1aVBBSI0qxZImLufyNs8xB/xY5xdA1/OIuFLrhv2i4hf+i84hXOlYg998AxVM0Y
+         4kr/WfPfxG+fHJsmdaNxnaOeZjZdtuWNeltfRK9/PmT5HTCW3z+9iNRzQ7i4CSHrFDK/
+         1UoU7Y6tO3ltx27BcHvm1iKTxI6Z+wv2CMcUyJ6uiFDitEMjfdDGgC+AHXyvo05pSnbH
+         seqIASNz4YszfwOGbKr26Sbhpw8j6tig4ktmJhh0sPfU6DfjXEM1XgRoGZ5L7WUItA3C
+         5GCQd0d/AFCWXlFhLcZuBX+OkpE6OUYHoJncT8Fc4+RZU61RMTuShCZ0i5hi4KFpTeTm
+         w8/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=njhG45usifVSAm2aSkNzlUSK10yx6nuwV6S2Kl0u5U4=;
-        b=CQHsucmurWCmwZNDRdcJlveGtWE/0S4j5h28E1VveSYZjxuK+0Jj60+Fj71Bk0frUA
-         JdY+Edic/GhiSjqlcqaD3AIr2jjWhnP4DqlBnouo/GwX+NQ22Di6fWvRcvyrwXua1LTO
-         ynL3ryDnlOz9PI0gJF4jbpUYBFejeptwmDXeK/x2bq4xigNea03Wt51CatJvuA8inpUg
-         ADxiHMUQvhAN7qIo3EEiVHQxxk/n7lcvVAgfsTXL/5AkdKDjT2XPiU+r+aMVJ7yp+yw6
-         aKCsjCnOv+WtHQr9xWl6tMGsOCdjcrJ7oE3S54TxnPB1DmvpR67xwyR8kwmQf7++zXfV
-         ZZTw==
-X-Gm-Message-State: AOAM5329OPGSvBO+KNIoA1QVMdPXoK2AeFBmz+4j6PJt/kX1ScDBUcLh
-        nVnUJz1uwsrb6X6YDrH3S1eLCQ==
-X-Google-Smtp-Source: ABdhPJz7tUH9m3lXUkXs8q2IISmHauEMBN0g0gHbAw9FC3FwsSbC6W27CPuO4vqyFhv7N8g8VPJ6tw==
-X-Received: by 2002:a17:903:1d2:b0:142:24f1:1213 with SMTP id e18-20020a17090301d200b0014224f11213mr64832437plh.81.1639021530561;
-        Wed, 08 Dec 2021 19:45:30 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id i1sm3967058pgs.50.2021.12.08.19.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 19:45:30 -0800 (PST)
-Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
-To:     Josef Bacik <josef@toxicpanda.com>,
-        syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>
-Cc:     asml.silence@gmail.com, clm@fb.com, dsterba@suse.com,
-        fgheet255t@gmail.com, io-uring@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wqu@suse.com
-References: <000000000000e016c205d1025f4c@google.com>
- <000000000000fadd4905d2a9c7e8@google.com>
- <YbFvF7J220iAHqHJ@localhost.localdomain>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <f820728f-8dbd-9e36-1293-02514812eea0@kernel.dk>
-Date:   Wed, 8 Dec 2021 20:45:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z8cA1QeqQc7EfuUC545t2sn7dL7R+spTbdugX4U+UAQ=;
+        b=KZ5HtbNl37FObVn2G0Ulg6yUQSfPBSHNUv5RCnwV1Ah75UDygNpNeMRfBgWCl/IKGy
+         U4CrRW/KJdsTXwn9tqKGjjNL7M4A4QPqwfYbeob0u81fI2by+ZUkL7IpTJNYUr6zcfbJ
+         OUAEFJOg34eT3B5figV0EG2HL1kOd1/yIvNK8lUMEK8URf/T91UU41lINitKrHd1J0Cy
+         xG03cw4k8KKViR6i/VYXhCytESH4YkVoCFdupuUkxep+8bTXSQf10wVl5c+GhwHFkbq9
+         WhvrKKPsiEhrlmke0dzllLOyCNZtBw4SVOMc+ulJjYHIuhnPDliry5dxuLiFxr5oEdbm
+         73qg==
+X-Gm-Message-State: AOAM530Th2Pg7nouXu5AaK8FqLUq5LhZfPjm1nWjudDx6DjQzQTBL7n1
+        mC3Z+fo6tlP7M8O3GTgLCsUo/g+U2ClDGC1tTlw1FA==
+X-Google-Smtp-Source: ABdhPJyPp+/EIeqUceUL4FRahMG/SspUq7Z5DH68P5bB7G5jpEFrB+0AWYsznSK5t6C59UKGO6R7MD8BxuJBsbk6/0E=
+X-Received: by 2002:a05:6830:1417:: with SMTP id v23mr3302610otp.367.1639021951362;
+ Wed, 08 Dec 2021 19:52:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YbFvF7J220iAHqHJ@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-3-likexu@tencent.com>
+In-Reply-To: <20211130074221.93635-3-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 8 Dec 2021 19:52:20 -0800
+Message-ID: <CALMp9eRaZBftkaFsmfH8V519QdSGKTORp0OAZ2WaNi3f9X=tng@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 7:51 PM, Josef Bacik wrote:
-> On Wed, Dec 08, 2021 at 02:12:09PM -0800, syzbot wrote:
->> syzbot has bisected this issue to:
->>
->> commit 741ec653ab58f5f263f2b6df38157997661c7a50
->> Author: Qu Wenruo <wqu@suse.com>
->> Date:   Mon Sep 27 07:22:01 2021 +0000
->>
->>     btrfs: subpage: make end_compressed_bio_writeback() compatible
->>
-> 
-> This isn't the right patch, this is x86 so sectorsize == pagesize, so this patch
-> didn't change anything at all.  Also unless the local fs is btrfs with
-> compression enabled I'm not entirely sure how this would even matter, the
-> reproducer seems to be purely io_uring related.  Thanks,
+On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> The find_arch_event() returns a "unsigned int" value,
+> which is used by the pmc_reprogram_counter() to
+> program a PERF_TYPE_HARDWARE type perf_event.
+>
+> The returned value is actually the kernel defined generic
 
-Yeah, it's not btrfs, it's just one of those "bisect gone awry" cases. btrfs
-guys can ignore this one.
+Typo: generic.
 
--- 
-Jens Axboe
+> perf_hw_id, let's rename it to pmc_perf_hw_id() with simpler
+> incoming parameters for better self-explanation.
+>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.c           | 8 +-------
+>  arch/x86/kvm/pmu.h           | 3 +--
+>  arch/x86/kvm/svm/pmu.c       | 8 ++++----
+>  arch/x86/kvm/vmx/pmu_intel.c | 9 +++++----
+>  4 files changed, 11 insertions(+), 17 deletions(-)
+>
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 09873f6488f7..3b3ccf5b1106 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -174,7 +174,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
+>  void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+>  {
+>         unsigned config, type = PERF_TYPE_RAW;
+> -       u8 event_select, unit_mask;
+>         struct kvm *kvm = pmc->vcpu->kvm;
+>         struct kvm_pmu_event_filter *filter;
+>         int i;
+> @@ -206,17 +205,12 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+>         if (!allow_event)
+>                 return;
+>
+> -       event_select = eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
+> -       unit_mask = (eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+> -
+>         if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
+>                           ARCH_PERFMON_EVENTSEL_INV |
+>                           ARCH_PERFMON_EVENTSEL_CMASK |
+>                           HSW_IN_TX |
+>                           HSW_IN_TX_CHECKPOINTED))) {
 
+The mechanics of the change look fine, but I do have some questions,
+for my own understanding.
+
+Why don't we just use PERF_TYPE_RAW for guest counters all of the
+time? What is the advantage of matching entries in a table so that we
+can use PERF_TYPE_HARDWARE?
+
+Why do the HSW_IN_TX* bits result in bypassing this clause, when these
+bits are extracted as arguments to pmc_reprogram_counter below?
+
+Reviewed-by: Jim Mattson <jmattson@google.com>

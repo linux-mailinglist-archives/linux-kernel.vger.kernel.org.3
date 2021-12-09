@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4222D46E106
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4773846E109
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbhLICye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:54:34 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:39870 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230401AbhLICyd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:54:33 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-03 (Coremail) with SMTP id rQCowADHlpEAb7FhZk63AQ--.18135S2;
-        Thu, 09 Dec 2021 10:50:41 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     idryomov@gmail.com, jlayton@kernel.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     ceph-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] libceph, ceph: potential dereference of null pointer
-Date:   Thu,  9 Dec 2021 10:50:38 +0800
-Message-Id: <20211209025038.2028112-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S230518AbhLICyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230401AbhLICyi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:54:38 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42068C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 18:51:06 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id t34so4112541qtc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 18:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B979q6ddQLG5Ot2SrtxCZEXqDjlc8fbt8EspuchXQ0A=;
+        b=SLpEHH7qPnsB6X6iZm1ONom9E3gFdxFLT8KucVziTopLYhI0eqTTM2NpQctWKopKOd
+         IHOcAXkaCqZzZcpPv2cHI8dXAq/84HfHr+3XDoSzpSpvNbIK9rCT0ViJ4HkiXVkc3G2V
+         Ib31bLMBA3D3Q2dvpN1QPVSJI+Lrs1qEh0wTW6Zu815iME5aLX8DcEl0flXmNYbiAx6H
+         9JhTsPVPyQvvXxTgsYWVVdYouZVRQq7JjAWHbKRsPCIfmjPHGFh1As7QbZZRWE2lpyfF
+         FkqZmdgZ++AzS5HFeEqjbFaoy8Bxm0XMksGMfTGGWJHPwrpT2NQ73nadShshznJVvCj+
+         JX4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B979q6ddQLG5Ot2SrtxCZEXqDjlc8fbt8EspuchXQ0A=;
+        b=hzKAYKNQ11X5/qUafWOiGYLnDPiVTqnwKwRIT2lvAdEOrmajr1f50hlvo+tFTILzk3
+         F2ZMmT8gqVsBVQtCFy4qmt+iGA0aChsuC9InYOby51TF5GwAZrs+CwwDw09htGY6bU23
+         1ZNuhHtYAor9Le0dOhxiMhAgU4uQ09v3VXrd3f1A2p2G3OQ5TJFl8HgJOECmL//TZUDE
+         CpeECdheojux+pTpmtaEPEShgjkCifs6bPpyaDUOKFqjLBJ8N95m1kQhGwnl8CJErpS1
+         x3gemEGYko7cz1AtrmEt2QMfSZoLkj5l2on3MMnK4aSF9F5VSS4Tf6dwqBVzYFJBJzYu
+         5Lpg==
+X-Gm-Message-State: AOAM530OEvyZrqHdlqGZzhYnlyqbyW7oShQaBWhFZFg1yOIGZfmx9D+0
+        3ijdv5cNfyA/i/fYfB14Dp8e1L+6zLdp3g==
+X-Google-Smtp-Source: ABdhPJxg5TPBkxtZgnny57BOOmkxFtLUUU+nohfMeGsO+R62PsrQwW7PYLiURSO0uYF+oftpgSnmJg==
+X-Received: by 2002:a05:622a:287:: with SMTP id z7mr13414308qtw.223.1639018265306;
+        Wed, 08 Dec 2021 18:51:05 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id h11sm2398516qko.18.2021.12.08.18.51.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 18:51:04 -0800 (PST)
+Date:   Wed, 8 Dec 2021 21:51:03 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>
+Cc:     asml.silence@gmail.com, axboe@kernel.dk, clm@fb.com,
+        dsterba@suse.com, fgheet255t@gmail.com, io-uring@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wqu@suse.com
+Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
+Message-ID: <YbFvF7J220iAHqHJ@localhost.localdomain>
+References: <000000000000e016c205d1025f4c@google.com>
+ <000000000000fadd4905d2a9c7e8@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADHlpEAb7FhZk63AQ--.18135S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtrW8Cw18uw4DCF43GFg_yoW3Arg_Ca
-        n2vrnIvr13ZF10kanrurWrWrZ2v347Wr4rZw13KF93Cr9ruFn8Aa4xX345AF13uFyxCFyD
-        CrZ8Cry3JwnFkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUO_MaUU
-        UUU
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000fadd4905d2a9c7e8@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kzalloc() needs to be checked.
-To avoid use of null pointer in case of the failure of alloc.
+On Wed, Dec 08, 2021 at 02:12:09PM -0800, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit 741ec653ab58f5f263f2b6df38157997661c7a50
+> Author: Qu Wenruo <wqu@suse.com>
+> Date:   Mon Sep 27 07:22:01 2021 +0000
+> 
+>     btrfs: subpage: make end_compressed_bio_writeback() compatible
+>
 
-Fixes: 3d14c5d2b6e1 ("ceph: factor out libceph from Ceph file system")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- net/ceph/osd_client.c | 2 ++
- 1 file changed, 2 insertions(+)
+This isn't the right patch, this is x86 so sectorsize == pagesize, so this patch
+didn't change anything at all.  Also unless the local fs is btrfs with
+compression enabled I'm not entirely sure how this would even matter, the
+reproducer seems to be purely io_uring related.  Thanks,
 
-diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
-index ff8624a7c964..3203e8a34370 100644
---- a/net/ceph/osd_client.c
-+++ b/net/ceph/osd_client.c
-@@ -1234,6 +1234,8 @@ static struct ceph_osd *create_osd(struct ceph_osd_client *osdc, int onum)
- 	WARN_ON(onum == CEPH_HOMELESS_OSD);
- 
- 	osd = kzalloc(sizeof(*osd), GFP_NOIO | __GFP_NOFAIL);
-+	if (!osd)
-+		return NULL;
- 	osd_init(osd);
- 	osd->o_osdc = osdc;
- 	osd->o_osd = onum;
--- 
-2.25.1
-
+Josef 

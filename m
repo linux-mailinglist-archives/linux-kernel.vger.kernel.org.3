@@ -2,93 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B2D46E72C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D08446E730
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbhLILCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236328AbhLILCP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:02:15 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4791BC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:58:42 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d24so9087339wra.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PPVDqP6AO9LVEl6lajkZHncKthtZt07+0YhDuniXOPA=;
-        b=WA9/ePSao582d/GYRd7Jz94W92c3AWteQOTfTAj6orMwwIm68pFItOT9jBkkRohxcX
-         MWfS04AYWo5Rv3bRaPjWQT2uQlucEcRG/fj5PyWAIWtN1zRX8+D/bShz0e/qHSc5D5ju
-         rXdhC0yUdUvXmZKatNBKNBUAYsSCoWZdsnys53pA6JEK1cf+TcQbgdTnZnJ5cT44XTOz
-         KtwVnH1GRub6IzLWnvHoOc6JiYhjh98k/FgEErds9yi4KxxNuW72toDgsWy8DGryQjI0
-         4o0MsdECIIRsWKfAE7CaKrk7KXaQL5/+DD87p7wk07puml/bvWFuJgSZc92bET57+Mq7
-         DZ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PPVDqP6AO9LVEl6lajkZHncKthtZt07+0YhDuniXOPA=;
-        b=m1n6+EPRyhynXJktWQOcfVJhIULw13SLglM11LU5GGDM16ZuBeWfdxV2eSoo7h/AdH
-         Vrj/HGXdeRrlhLNp10PkoOJQEyt7jF13+RlMvlhArd+XINO1zkO+i5c2VfYyrmqdNfh3
-         XK7MyLKsTbAfjoCxetzwfafnv+l4GSl2J7eiRmBdxAgHrIxZd08D3uykr1kgMoGP/Cfz
-         lPCBFl2XVlvb6+Yl0u2mOJQWpUVVtiJyz/ULyEn19JhvTbhWKK0xYDQIuW5by+VM1Bbv
-         2BFz9LRtMNzPwxpJWWkdOtjUnGGpFJ70kTMMSJx4IPEr/9oIIsWZTg0JrRQdrRXc//X4
-         45iw==
-X-Gm-Message-State: AOAM531F+lyrCJyWpx2qzEMnq+K6xX9nX78lUkW8ieMx9Z655oYsZOcs
-        SpxNICw/eoYu4vvtyUtehXY=
-X-Google-Smtp-Source: ABdhPJyDnicrhx4DOizUgPooeXzxaKxflrK2kqFTZE4ANwdvUg94zdrYuIOstE390zM0g/3KmTMBFA==
-X-Received: by 2002:adf:eb42:: with SMTP id u2mr5731548wrn.521.1639047520873;
-        Thu, 09 Dec 2021 02:58:40 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id s8sm5495024wro.19.2021.12.09.02.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 02:58:40 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     LW@KARO-electronics.de
-Cc:     airlied@linux.ie, daniel@ffwll.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] drm/imx: Fix memory leak in imx_pd_connector_get_modes
-Date:   Thu,  9 Dec 2021 11:58:33 +0100
-Message-Id: <20211209105833.9921-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S236381AbhLILCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:02:46 -0500
+Received: from mail-eopbgr60065.outbound.protection.outlook.com ([40.107.6.65]:6626
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236328AbhLILCe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:02:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YuSAWOSWkWdg3ADV1Ntx5VOd0aq2ZeJ+RAej42hKVs1DfFHl/7725esT6CNneEXRcyisv0lj0d70GHuJcxe6Reh3W51uu3pkPHPM+/8MiDO+DfCq+JYQwRfzlf+SCWEJ1OnKil7TErFCFIyTJxtJfoiqNLnRASyJ89U2TYiQJN5YBQMq0DylKzJ3U9foYtKEoB5H7kAPAsklmxaPy6ZqJ7CMJKZfFAY3uJHPHLWxC+JjwmO3sHDniLWDWxhHbgbDCjBKzYYDhNswhTVsJwwfa928rPmfpbcsn1nAe0hdsfUw9JzN9eOmc9sUW/abS+qDhNGZOOV219Gx5u3For9l+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s28wkk24/qLLsJDfsYjI55v0cyUYucZrhz6tiFQ0zhs=;
+ b=oRBIEY0oK7DVSOrbtU4KuepiYikWCp7DzJ9XYbVCwzDdYC0UtczUv8RncCRNZgLBaLU63CgpyLeLfdTjACWxwrx1sgUILa6velDgeNtHXsErflkxeH6O2k2xZlVhqEqP3LEo8xl+zhmtybhIk4paaT7fj7s5qJN7B9G4l+yzejRQyATq5QQvSP60ul/QA6VWwYeKb/sySZQa0hrQ2FEu5iZkjPkrUneE3WCEyXrULohQeGLe52b06DVzf21bv6kli1Z6C0wFGpWMiBUfECrxftVhJXgw3QyrMiQAIGJ/ptHBCSIBpbpKZcByM9fdnj13GWomp8rF0jWm4x4XO1/k0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s28wkk24/qLLsJDfsYjI55v0cyUYucZrhz6tiFQ0zhs=;
+ b=UDRIbwFp98H1AK5VFoM3xlXWI32mszuL08j2b/xW3YuzMG2KTRlUMUgFrfG9TsTDyxqkEuJY7UKeXvel0MnoHxOvF7ylIaECae1VKGVRoXX/TUGQdIOKLNT2Gvp0cIeRq4sb+tTZr8yjriaPwoNQfFkxfaBzsUynvddFH+6ZhRo=
+Received: from AM0PR04MB5121.eurprd04.prod.outlook.com (2603:10a6:208:c1::16)
+ by AM0PR04MB4738.eurprd04.prod.outlook.com (2603:10a6:208:cc::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
+ 2021 10:58:58 +0000
+Received: from AM0PR04MB5121.eurprd04.prod.outlook.com
+ ([fe80::8d61:83aa:b70c:3208]) by AM0PR04MB5121.eurprd04.prod.outlook.com
+ ([fe80::8d61:83aa:b70c:3208%6]) with mapi id 15.20.4755.022; Thu, 9 Dec 2021
+ 10:58:58 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v3 2/6] dt-bindings: net: lan966x: Extend with
+ the analyzer interrupt
+Thread-Topic: [PATCH net-next v3 2/6] dt-bindings: net: lan966x: Extend with
+ the analyzer interrupt
+Thread-Index: AQHX7OGhd+X5RJxwmEebfZUvbnLxIqwp/cOA
+Date:   Thu, 9 Dec 2021 10:58:58 +0000
+Message-ID: <20211209105857.n3mnmbnjom3f7rg3@skbuf>
+References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
+ <20211209094615.329379-3-horatiu.vultur@microchip.com>
+In-Reply-To: <20211209094615.329379-3-horatiu.vultur@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bf8fa601-4bf7-4683-024d-08d9bb02e6e3
+x-ms-traffictypediagnostic: AM0PR04MB4738:EE_
+x-microsoft-antispam-prvs: <AM0PR04MB47385622861B6BAD4BA92974E0709@AM0PR04MB4738.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1060;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QSTaSoSlG1Ffr+JOMOSlhfO98Evdtzh5JApEIeh2eJpuYDg7ZQdK+si5388jS4MVxSF1qjtqbQe27qPI+rUaD3piGdeDF6jduKVP6IybNnnl3xgl5u4PTKLh9uFDEvofPQZtAkwJXXdG60JOD7e5HFdvru8a7jSY8V49IhoBCM5/4/StkiSSgnrQBk72z9o2U1lx2wnrUPJu+br9bnjpXwbiGA/4rfiY3Z2ggoXdE8TAo+uBzrZQdvskCpoLcisF4uAQbIz+qlfuiGyugRtOD1y32auhiQlsVrHMd5EJhbbpTgvkfzh0SOpdaYh1JhPFDB+KARmwnlCYLlCWcgM23yil9LCJuOi3Saf2Gx+14oVIMnvgBs8JXFK44dDCsbpIXe2Uz1IvtF5dU7cMuQez83THNUYzfJB5LyX5smTpTgQfbtjIwnGKcakUUCyLuon5A443ygsjPH7YNSLkGKrz436gIMLFtSB/2abFL5QEgBB2pnqK0RHivM5YTt+ZCXHvoHKL24Y1xTHckxEfISUKZELp9MHu18WMgwtmr9No9teTbDagwI6VU9e2CY7ftJLL1B8+5WRY375jHJZau18kPLGK7NxgU+Qokz2RdCboOkYgLkzUZkBKRu58ibEfMWfCyiejXwRGKcZNfVe/PRKTzzomd29xluKZRPoth1Mu6704pPf4JmdvlZovLqe+JshfrG2FN1NrZkEX3MwDEvLv6Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5121.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(186003)(9686003)(8676002)(1076003)(4326008)(44832011)(33716001)(7416002)(38100700002)(316002)(71200400001)(122000001)(6512007)(38070700005)(54906003)(86362001)(66946007)(91956017)(76116006)(66476007)(66446008)(64756008)(66556008)(6916009)(508600001)(6486002)(5660300002)(2906002)(8936002)(6506007)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Q3ufzZfvicIbn+oYwBfEwLES4DPBahqn7W2Ud8PVsK87Imym5/FEb52UqAb5?=
+ =?us-ascii?Q?N06b9s9qco3rp8xHlsAdGMhgJvf6CIM+ebkDrmOmFa+gSzqxpuR4O36e/KDt?=
+ =?us-ascii?Q?IPvKNgGZ7MxOC3UQbKHW+wNG1SQ9pocbRpSI9SICiQh1vd3flC6f8dYNLBNN?=
+ =?us-ascii?Q?cZP/7cnWfq0ai3lSZr/Jsy91JsWqJxAzA1aWBT17XxqK+67YSkqdblE+uyRF?=
+ =?us-ascii?Q?kvw4273mqukBbwU8yGZzSJ2mkWK+kRTYQES95ZgxBuV1tlhcQStMHvJLRTqk?=
+ =?us-ascii?Q?N3jxhVp60nW9eFjfCOUURgSzlKDjNBhUIkTDHfpor138VAyRFzKRz/6SHZv5?=
+ =?us-ascii?Q?YnWItbz8vaMyQjEOib317EwuSHTBmRcZ5yI11yXMA68SiPOZZpjGjpy7b6D9?=
+ =?us-ascii?Q?PDIY9xmxLPopXspipKPaizUm8v7h9RBpjc9DRKrePrMo3wKB3IUz+4uhZHnf?=
+ =?us-ascii?Q?bJWpGKPaQolWyuVSF0lEPbBx6TuL9Mdon5J7KqPl9OG6/6bV8nrL9l3svqd8?=
+ =?us-ascii?Q?PAo+vEgvH07R87LSGROv9n1LNeDPn+XlCrVyQn/sdKDuRwiQ97MxtDrI+S6E?=
+ =?us-ascii?Q?acFOHZr1SBcR+6XUgrYBHHqOkQSfcZokEVOm1PFd4YQoOLNFZ5ya3lfSVPvV?=
+ =?us-ascii?Q?Hfp8Qth1Y6+yu7NOxmWbrXxC6YmqsRP3C2ZTkAXks+vnIMEd48GIGpuIFWia?=
+ =?us-ascii?Q?XgbqLrASz68rip0t3TKqxzNOwFbTe2IitqvS9Q/LX7qQxukDHYACIFPpWTp2?=
+ =?us-ascii?Q?p5jsvrAyGHhzmylPC+9Fwhg0YfIrbme1vVKwsCdGSUP9OPusk2srKi38ehG6?=
+ =?us-ascii?Q?s5EUmmX14s/zIcG284oOm/X8p7ji470o0sf/a7xMOzJHXELk3hEyiMcljzwV?=
+ =?us-ascii?Q?bhlX2dRb7bcqPNeado4FkeK7/Uq5O152PjBtM8OUSnSaarV2RBtYLXSC2BPb?=
+ =?us-ascii?Q?lvBfReBsxn5N4WqekJWzz0JnVrzfVE68qqyzCJpB+ALnM6HYLj1HxA6JUvSR?=
+ =?us-ascii?Q?oEfs7mLrSnmhkgc4MIdNI5Nw+9mnqwkUcBG1KAiYxZQn8hwSIPuzfORObSD/?=
+ =?us-ascii?Q?xUvOO7k4h0ShxxejIWnyQS8FZbtCVWFP49ZmWLhEMvnqezb5gvEFCaq2G0pV?=
+ =?us-ascii?Q?zfnXPazOmYdjctBJVCA7A1yRwFZ9q0K1uhO12mPvV948v/wOPsMKxKiOarpa?=
+ =?us-ascii?Q?MZQkAqROnRzIqEC/rBaaNoE5dyK3Xw9QnKwdIYwErT9d9W9hmH8uedu8/UWp?=
+ =?us-ascii?Q?Ulu5tN80JbtSFPJzJIZk+B8F6urOSPHGnpYb0WG5VIbD+KjFFGEpSYzlW/xP?=
+ =?us-ascii?Q?zt3xubF6YKnCsLBxi5OT4reJEUXzpaSryqCn93kiqPu9odBFW5NQkX+9Xle6?=
+ =?us-ascii?Q?zUWR6t4Zd84dEUJP9olCCdv+It7h5Vrd67opfWUWEdHAbUIXropUM7kNKqBn?=
+ =?us-ascii?Q?xmMlhqUi4er76d3yVBqT3DBO4CtwhfDPC32QJ+TjHyDW3iBezXKydDDwbGix?=
+ =?us-ascii?Q?Q1+RA+haKc7KajEt+4fzR44rn9QavE7ODReniLW3aaPn475zzpnfI1WIF7a0?=
+ =?us-ascii?Q?eJJPWHGCrU64k21y2se26TESYzA/819MZEVfgTlHpHmNAoGGoq6OTv3xUEi6?=
+ =?us-ascii?Q?tE71bcBCvtkZz4YybHrpQ8s=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1CEC80D0D41FAF45B57D2F73A9FC967B@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5121.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf8fa601-4bf7-4683-024d-08d9bb02e6e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 10:58:58.6781
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: A2KNsS+Iz4eIh6G4TZNLzQCQTu4DpBzgopxBNz3WrSJLi+PvUhNlgbNlu74YJ/WBKGVzbVqz5MRzSlSnlmfiSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4738
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: 76ecd9c9fb24 ("drm/imx: parallel-display: check return code from of_get_drm_display_mode()")
-Addresses-Coverity-ID: 1443943 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/imx/parallel-display.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Thu, Dec 09, 2021 at 10:46:11AM +0100, Horatiu Vultur wrote:
+> Extend dt-bindings for lan966x with analyzer interrupt.
+> This interrupt can be generated for example when the HW learn/forgets
+> an entry in the MAC table.
+>=20
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
 
-diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
-index a8aba0141ce7..3bf8e0a4803a 100644
---- a/drivers/gpu/drm/imx/parallel-display.c
-+++ b/drivers/gpu/drm/imx/parallel-display.c
-@@ -75,8 +75,10 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
- 		ret = of_get_drm_display_mode(np, &imxpd->mode,
- 					      &imxpd->bus_flags,
- 					      OF_USE_NATIVE_MODE);
--		if (ret)
-+		if (ret) {
-+			drm_mode_destroy(connector->dev, mode);
- 			return ret;
-+		}
- 
- 		drm_mode_copy(mode, &imxpd->mode);
- 		mode->type |= DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
--- 
-2.25.1
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
+Why don't you describe your hardware in the device tree all at once?
+Doing it piece by piece means that every time when you add a new
+functionality you need to be compatible with the absence of a certain
+reg, interrupt etc.
+
+>  .../devicetree/bindings/net/microchip,lan966x-switch.yaml       | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-swit=
+ch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.ya=
+ml
+> index 5bee665d5fcf..e79e4e166ad8 100644
+> --- a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> +++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> @@ -37,12 +37,14 @@ properties:
+>      items:
+>        - description: register based extraction
+>        - description: frame dma based extraction
+> +      - description: analyzer interrupt
+> =20
+>    interrupt-names:
+>      minItems: 1
+>      items:
+>        - const: xtr
+>        - const: fdma
+> +      - const: ana
+> =20
+>    resets:
+>      items:
+> --=20
+> 2.33.0
+>=

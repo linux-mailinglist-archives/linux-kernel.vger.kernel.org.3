@@ -2,200 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C41746E832
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B044B46E834
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbhLIMPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:15:33 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58642 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhLIMPc (ORCPT
+        id S237203AbhLIMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229976AbhLIMRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:15:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F19DCE245E;
-        Thu,  9 Dec 2021 12:11:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91081C004DD;
-        Thu,  9 Dec 2021 12:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639051915;
-        bh=eADAqHBHTP/5lSMqidzF7Ig4xxyADIO5diu1cFOnGJM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=u3fpslFhOojJ+h1yBp50Bj7N+TWTKO+rsdU8WRhRlLyd02SACv4tdNI2bDS9Lmg7q
-         VNSHRBBDr8hlgntOALHnp5TAbbbfNfLUM/jHXG2YA3Tdb829AQchsjcII6p0awT68s
-         39k9N3hoV7o3jv++6b+LjGz99HTDtrAjoTkhMlBWl1sK/Yxu8utapE5defIH1QJrJP
-         T6bxV+Tfp1EX1F3ofwMfhxha9tVXeJH/+as8pS5X0j92AM/wjfBfkBTjVWpdrj3DGW
-         +WNGKTVVGCjr9pQ51o07N75XyBRpV3MIVRCp3m+Fz3Bv1jroF8Kc6+ngDTpPvBWKK/
-         6+Yq2t+V85OPA==
-Subject: Re: [PATCH] dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Rob Herring <robh@kernel.org>, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206174209.2297565-1-robh@kernel.org>
- <20211209104224.41d42cca@xps13>
- <bebef734-d0d3-e78e-e07a-9160ead1f673@kernel.org>
- <20211209114038.710139a8@xps13>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <1744af96-3b71-3d41-12e2-a9052684cb35@kernel.org>
-Date:   Thu, 9 Dec 2021 14:11:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 9 Dec 2021 07:17:33 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D9FC061746;
+        Thu,  9 Dec 2021 04:14:00 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id g14so18512118edb.8;
+        Thu, 09 Dec 2021 04:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NcqG+yIMRWbvsIxAgzL5tDWYN19ufSQbNnx+qyBgNCg=;
+        b=QgTXc4wE4avCeEzHo1LJZgS/oiLIZjIiunW9Tknt4txUs2kSkCsn738zHkg8+KhU5n
+         bUs1pdb/vsKbi/RCKitDkFHYlZY4Mev7f7TCwrT+ljOjpn+w1SZ/v1n7+BvDXrNt0qL0
+         6ycQpp+eLieRgi1QhAq5GQF1NxvTE236gXi0budmziMEFgkOl0/+4XDq6g1/jT8yldaF
+         7Aiv7qaCmU3CCi/p5H9No2xsG7HA3UTxP30UC2apEn4gJJN813l3fq9SqLBIdhZXzId1
+         yySPm8rfrhQsDeWStev+/EwibqwZI6xAp7nn5x7to+mcl8Jif4peBXEIEKV2kHaWama0
+         u4Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NcqG+yIMRWbvsIxAgzL5tDWYN19ufSQbNnx+qyBgNCg=;
+        b=3j45pZRKZxvePk1vXUzJ+L7esii+KKn3Z8JDAKPffCXXt74zOYbiMLRN0odaZDp2EL
+         lVYJxEkGyAROknIAhmhH00swHkhjX6sdVNuPS8ZyVw/nqo5c6DCck92iarTJWAccmXIW
+         Z98381FheR66Pn9GxYQRmCZXiw3ijbQr4kZnf0OQ5Plw7bfT8nShG2fbVEN7hJhGebqg
+         1GiL+gpEQfKzD70Zcc919/jKkkzkub/mQIe+ommudCG1tzarpKgf/bx4uUS8D5zqRF/C
+         H/d0sS6ukhUVA12yl9NFf5jklb0yD+knwf68AmUF6sQ4mZX4NxUsEsRZ46eIvQju6nHU
+         EKIA==
+X-Gm-Message-State: AOAM5326XmpfJk2VNC+hCo9Fl2MUHBTvWHJEnNs03LP/ydxHQ4Ox2Gm3
+        pfL1BO3qrkF2Y2/vxFFFst+k6PbmvcU8MmqxScU=
+X-Google-Smtp-Source: ABdhPJyJs+HRFH8FbMd//DCJMgOGyw2wJO5vu3Ro8RaqWU9inUQ0qYs/mopQZYqSpcimKx/Rpktlsk9bBO84sSYZg0c=
+X-Received: by 2002:a05:6402:291:: with SMTP id l17mr28483542edv.242.1639052037586;
+ Thu, 09 Dec 2021 04:13:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211209114038.710139a8@xps13>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <70b1de02-b674-ca17-9219-61fa8e1c00db@axentia.se>
+In-Reply-To: <70b1de02-b674-ca17-9219-61fa8e1c00db@axentia.se>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 9 Dec 2021 14:12:25 +0200
+Message-ID: <CAHp75Ve06-3KU60-tXFR-KMw4iSX9rOSNF3Oq7vm+ST8Qc8ujA@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: allow line names from device props to override
+ driver names
+To:     Peter Rosin <peda@axentia.se>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Alexander Dahl <ada@thorsis.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miquel,
+On Thu, Dec 9, 2021 at 1:32 PM Peter Rosin <peda@axentia.se> wrote:
+>
+> Some gpio providers set names for gpio lines that match the names of
 
-On 09/12/2021 12:40, Miquel Raynal wrote:
-> Hi Roger,
-> 
-> rogerq@kernel.org wrote on Thu, 9 Dec 2021 12:08:07 +0200:
-> 
->> Hi Miquel,
->>
->> On 09/12/2021 11:42, Miquel Raynal wrote:
->>> Hi Rob,
->>>
->>> robh@kernel.org wrote on Mon,  6 Dec 2021 11:42:09 -0600:
->>>   
->>>> With 'unevaluatedProperties' support implemented, the TI GPMC example
->>>> has a warning:
->>>>
->>>> Documentation/devicetree/bindings/memory-controllers/ti,gpmc.example.dt.yaml: nand@0,0: Unevaluated properties are not allowed ('rb-gpios' was unexpected)
->>>>
->>>> Add the missing definition for 'rb-gpios'.  
->>>
->>> rb-gpios is already defined in nand-controller.yaml. I seems like the
->>> real problem is that this file does not refer to it. Can you update the
->>> fix?  
->>
->> I don't think we can refer to nand-controller.yaml right now as we are not
->> fully compatible with it yet. Please see examples below.
-> 
-> This is a *very* wrong way of defining a NAND setup. I will take the
-> patch to silence the warning, but please convert this representation to
+gpio -> GPIO here and everywhere else in the patch where it is applicable.
 
+> the pins on the SoC, or variations on that theme. These names are
+> generally generic, such as pioC12 in the at91 case. These generic names
+
+"generally generic" (reminds me
+https://en.wiktionary.org/wiki/%D0%BC%D0%B0%D1%81%D0%BB%D0%BE_%D0%BC%D0%B0%D1%81%D0%BB%D1%8F%D0%BD%D0%BE%D0%B5)
+
+Perhaps
+
+"These names generally speaking are generic, ..." ?
+
+> block the possibility to name gpio lines with in device properties
+
+within ?
+
+> (i.e. gpio-line-names).
+>
+> Allow overriding a generic name given by the gpio driver if there is
+> a name given to the gpio line using device properties, but leave the
+> generic name alone if no better name is available.
+>
+> However, there is a risk. If user space is depending on the above
+> mentioned fixed gpio names, AND there are device properties that
+> previously did not reach the surface, the name change might cause
+> regressions. But hopefully this stays below the radar...
+
+After addressing the mentioned grammar nit-picks, FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Thanks!
 
-> the 'new' one. I believe on the driver side it should not be too
-> complicated to support having a few of these properties moved to a NAND
-> chip subnode and still support the below binding. Just be very clear
-> that if the legacy bindings are used, only a single chip is supported.
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+> ---
+>  drivers/gpio/gpiolib.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+>
+> Instead of doing this only for pinctrl-at91.c as in my recent patch [1], do
+> it for everyone.
+>
+> Cheers,
+> Peter
+>
+> [1] https://lore.kernel.org/lkml/4d17866a-d9a4-a3d7-189a-781d18dbea00@axentia.se/
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index abfbf546d159..00a2a689c202 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -422,8 +422,15 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
+>         if (count > chip->ngpio)
+>                 count = chip->ngpio;
+>
+> -       for (i = 0; i < count; i++)
+> -               gdev->descs[i].name = names[chip->offset + i];
+> +       for (i = 0; i < count; i++) {
+> +               /*
+> +                * Allow overriding "fixed" names provided by the gpio
+> +                * provider, the "fixed" names are generally generic and less
+> +                * informative than the names given in device properties.
+> +                */
+> +               if (names[chip->offset + i] && names[chip->offset + i][0])
+> +                       gdev->descs[i].name = names[chip->offset + i];
+> +       }
+>
+>         kfree(names);
+>
+> @@ -708,10 +715,12 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>         INIT_LIST_HEAD(&gdev->pin_ranges);
+>  #endif
+>
+> -       if (gc->names)
+> +       if (gc->names) {
+>                 ret = gpiochip_set_desc_names(gc);
+> -       else
+> -               ret = devprop_gpiochip_set_names(gc);
+> +               if (ret)
+> +                       goto err_remove_from_list;
+> +       }
+> +       ret = devprop_gpiochip_set_names(gc);
+>         if (ret)
+>                 goto err_remove_from_list;
+>
+> --
+> 2.20.1
+>
 
-I agree with you. It has been that way since ages. I will look at cleaning
-it up whenever possible for me. I think we will have to support the old
-bindings as well as the new one going forward as many legacy platforms
-are using it.
 
-cheers,
--roger
-
-> 
->> ti,gpmc-nand example:
->>
->>       nand@0,0 {
->>         compatible = "ti,omap2-nand";
->>         reg = <0 0 4>;          /* device IO registers */
->>         interrupt-parent = <&gpmc>;
->>         interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
->>                      <1 IRQ_TYPE_NONE>; /* termcount */
->>         ti,nand-xfer-type = "prefetch-dma";
->>         ti,nand-ecc-opt = "bch16";
->>         ti,elm-id = <&elm>;
->>         #address-cells = <1>;
->>         #size-cells = <1>;
->>
->>         /* NAND generic properties */
->>         nand-bus-width = <8>;
->>         rb-gpios = <&gpmc 0 GPIO_ACTIVE_HIGH>;  /* gpmc_wait0 */
->>
->>         /* GPMC properties*/
->>         gpmc,device-width = <1>;
->>
->>         partition@0 {
->>           label = "NAND.SPL";
->>           reg = <0x00000000 0x00040000>;
->>         };
->>         partition@1 {
->>           label = "NAND.SPL.backup1";
->>           reg = <0x00040000 0x00040000>;
->>         };
->>       };
->>
->>
->> nand-controller example:
->>
->>     nand-controller {
->>       #address-cells = <1>;
->>       #size-cells = <0>;
->>       cs-gpios = <0>, <&gpioA 1>; /* A single native CS is available */
->>
->>       /* controller specific properties */
->>
->>       nand@0 {
->>         reg = <0>; /* Native CS */
->>         nand-use-soft-ecc-engine;
->>         nand-ecc-algo = "bch";
->>
->>         /* controller specific properties */
->>       };
->>
->>       nand@1 {
->>         reg = <1>; /* GPIO CS */
->>       };
->>     };
->>
->>
->>>
->>> While at it you might also want to drop the rb-gpios property from
->>> ingenic,nand.yaml, which also defines it a second time.
->>>   
->>>> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
->>>> Cc: Richard Weinberger <richard@nod.at>
->>>> Cc: Vignesh Raghavendra <vigneshr@ti.com>
->>>> Cc: Tony Lindgren <tony@atomide.com>
->>>> Cc: Roger Quadros <rogerq@kernel.org>
->>>> Cc: linux-mtd@lists.infradead.org
->>>> Signed-off-by: Rob Herring <robh@kernel.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml | 5 +++++
->>>>  1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml b/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
->>>> index beb26b9bcfb2..1c280f52baa0 100644
->>>> --- a/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
->>>> +++ b/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
->>>> @@ -53,6 +53,11 @@ properties:
->>>>      enum: [8, 16]
->>>>      default: 8
->>>>  
->>>> +  rb-gpios:
->>>> +    description:
->>>> +      GPIO connection to R/B signal from NAND chip
->>>> +    maxItems: 1
->>>> +
->>>>  patternProperties:
->>>>    "@[0-9a-f]+$":
->>>>      $ref: "/schemas/mtd/partitions/partition.yaml"  
->>>
->>> Thanks,
->>> Miquèl
->>>   
->>
->> cheers,
->> -roger
->>
-> 
-> Thanks,
-> Miquèl
-> 
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,148 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBA846E675
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C55346E676
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbhLIKUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:20:38 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56080 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbhLIKUh (ORCPT
+        id S234027AbhLIKVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232827AbhLIKVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:20:37 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E57D81F37B;
-        Thu,  9 Dec 2021 10:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639045022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGDbsYISJh7h/2Ta+ndn57DC4dVJs1oqn6ICJc3IZw4=;
-        b=CAQvlYwWKyPwk36NhGY+4+gffauG+BPi2yv+buLVo0SVmbsFtfhJpypL0pD71vwq2fnOSP
-        GP7yGRNYQ0v/viEmvUNSczVm7J2cNjQvUEy2BD0hGBFuS6BBUnu7OmfbmOh2TOaT8e4uis
-        CcEQzaP7NHpbpI12zVi20Rs4vRo/HL8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639045022;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGDbsYISJh7h/2Ta+ndn57DC4dVJs1oqn6ICJc3IZw4=;
-        b=0nFYhy/dNkAyduMnjUKGMrYjx+dXy7JUvDOklkfQudPTMEylFYZiy2bUwMfnU7mLeIbvA5
-        Bez1vatrdVOU46Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC4D013B2D;
-        Thu,  9 Dec 2021 10:17:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hi8JKZ7XsWHSJQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 09 Dec 2021 10:17:02 +0000
-Message-ID: <747be2bc-e0a4-81fc-4f28-607d44525c52@suse.de>
-Date:   Thu, 9 Dec 2021 11:17:02 +0100
+        Thu, 9 Dec 2021 05:21:02 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D29C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:17:29 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 133so4647146pgc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qkgmXR3Qg7ObZaJ2FOxIFOIUs96TcoxwxPu3sBMau/8=;
+        b=bB5F7U3C9yoInnsJUROFJXpLXjfsfazmMqhwb3qC7YfPCxpfJ6E3empQ7yjEGmrNRz
+         SwHvDoM0aoNIGcjE8jOm8mGHvv03J9TY1CXxT+McOwTf5Tp8s74w5I5Ick0l9CT/V5as
+         Lgv01rNq3mDWqMyrQgrWHXHaO64r+yRs8/4rc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qkgmXR3Qg7ObZaJ2FOxIFOIUs96TcoxwxPu3sBMau/8=;
+        b=wScze7QXwvyIhIUpg9u0Hj9exAC7DfEMPJZU0ExrplNdwy9F3wy3YBhuqUz5lt1whl
+         09v3LMazGs2m7dXNok4Sgd/erOqT94TBSlt6ifnoSZXKMV3EIqTVqWU5jehxeWK5/rcN
+         u+0J1q6XvJWou5l0BNtE0wwGy4yC1CpPi6um1M7dOLabTkbYTotCcMGA3Mh5Vrl6GdKm
+         RTkxvlV2FHjK76WAhGzxmk57PwZbe5lk1zRUP6S2IZA79/4+cbHjoVIgIZJDiZ4zatVz
+         OJpaHWH7S2K3tRCpfwNknZ1gCtNV0K/2uBvIqBg6o2xv3kRCuYy2Tqs5Mi1eJu4MsVRq
+         2Ekg==
+X-Gm-Message-State: AOAM533YHXY5BT23bWXdPavma1FQI68uZhYaYBvzy7N48kVI6DUq8PMv
+        W9kCUc7IzOEA/Osi6WgVK9QJgb9ZgJY3kXwXTqi5X4EPQ4g=
+X-Google-Smtp-Source: ABdhPJwlgi3NF3sbonhF2xanFeVkWgLWtprLvSiH/mbXz4zKidymQ9MfvFFr7ReQvnMcwYsPKO2stf+DBSZYEMw2vL8=
+X-Received: by 2002:a63:ef58:: with SMTP id c24mr34197281pgk.94.1639045048976;
+ Thu, 09 Dec 2021 02:17:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211207072943.121961-1-marcan@marcan.st>
- <20211207072943.121961-2-marcan@marcan.st>
- <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------c7IHT9aEvAIVFTQ02gTZrBtu"
+References: <20211016145827.586870-1-michael@amarulasolutions.com>
+In-Reply-To: <20211016145827.586870-1-michael@amarulasolutions.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Thu, 9 Dec 2021 11:17:17 +0100
+Message-ID: <CAOf5uw=DffhS=WAh-OFXOCO+4kd5ey=2Eqf0Zhyrgd_d5D8meA@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: ilitek-ili9881c: Avoid unbalance prepare/unprepare
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------c7IHT9aEvAIVFTQ02gTZrBtu
-Content-Type: multipart/mixed; boundary="------------kWj606jlJ7pD7bie8TPb6ZkY";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
-Cc: David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>, dri-devel@lists.freedesktop.org,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Message-ID: <747be2bc-e0a4-81fc-4f28-607d44525c52@suse.de>
-Subject: Re: [PATCH v2 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-References: <20211207072943.121961-1-marcan@marcan.st>
- <20211207072943.121961-2-marcan@marcan.st>
- <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
+Hi all
 
---------------kWj606jlJ7pD7bie8TPb6ZkY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Sat, Oct 16, 2021 at 4:58 PM Michael Trimarchi
+<michael@amarulasolutions.com> wrote:
+>
+> All the panel driver check the fact that their prepare/unprepare
+> call was already called. It's not an ideal solution but fix
+> for now the problem on ili9881c
+>
+> [ 9862.283296] ------------[ cut here ]------------
+> [ 9862.288490] unbalanced disables for vcc3v3_lcd
+> [ 9862.293555] WARNING: CPU: 0 PID: 1 at drivers/regulator/core.c:2851
+> _regulator_disable+0xd4/0x190
+>
+> from:
+>
+> [ 9862.038619]  drm_panel_unprepare+0x2c/0x4c
+> [ 9862.043212]  panel_bridge_post_disable+0x18/0x24
+> [ 9862.048390]  dw_mipi_dsi_bridge_post_disable+0x3c/0xf0
+> [ 9862.054153]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
+>
+> and:
+>
+> [ 9862.183103]  drm_panel_unprepare+0x2c/0x4c
+> [ 9862.187695]  panel_bridge_post_disable+0x18/0x24
+> [ 9862.192872]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
+> [ 9862.199117]  disable_outputs+0x120/0x31c
+>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+>  drivers/gpu/drm/panel/panel-ilitek-ili9881c.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
+> index 103a16018975..f75eecb0e65c 100644
+> --- a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
+> +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
+> @@ -52,6 +52,8 @@ struct ili9881c {
+>
+>         struct regulator        *power;
+>         struct gpio_desc        *reset;
+> +
+> +       bool                    prepared;
+>  };
+>
 
-SGkNCg0KQW0gMDguMTIuMjEgdW0gMTg6NDkgc2NocmllYiBSb2IgSGVycmluZzoNCj4gT24g
-VHVlLCBEZWMgNywgMjAyMSBhdCAxOjMxIEFNIEhlY3RvciBNYXJ0aW4gPG1hcmNhbkBtYXJj
-YW4uc3Q+IHdyb3RlOg0KPj4NCj4+IFRoaXMgY29kZSBpcyByZXF1aXJlZCBmb3IgYm90aCBz
-aW1wbGVmYiBhbmQgc2ltcGxlZHJtLCBzbyBsZXQncyBtb3ZlIGl0DQo+PiBpbnRvIHRoZSBP
-RiBjb3JlIGluc3RlYWQgb2YgaGF2aW5nIGl0IGFzIGFuIGFkLWhvYyBpbml0Y2FsbCBpbiB0
-aGUNCj4+IGRyaXZlcnMuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogSGVjdG9yIE1hcnRpbiA8
-bWFyY2FuQG1hcmNhbi5zdD4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL29mL3BsYXRmb3JtLmMg
-ICAgICAgICAgfCAgNSArKysrKw0KPj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZi
-LmMgfCAyMSArLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+ICAgMiBmaWxlcyBjaGFuZ2VkLCA2
-IGluc2VydGlvbnMoKyksIDIwIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL29mL3BsYXRmb3JtLmMgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4+IGluZGV4
-IGIzZmFmODk3NDRhYS4uZTA5N2Y0MGIwM2MwIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9v
-Zi9wbGF0Zm9ybS5jDQo+PiArKysgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4+IEBAIC01
-NDAsNiArNTQwLDExIEBAIHN0YXRpYyBpbnQgX19pbml0IG9mX3BsYXRmb3JtX2RlZmF1bHRf
-cG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4gICAgICAgICAgICAgICAgICBvZl9ub2RlX3B1dChu
-b2RlKTsNCj4+ICAgICAgICAgIH0NCj4+DQo+PiArICAgICAgIGZvcl9lYWNoX2NoaWxkX29m
-X25vZGUob2ZfY2hvc2VuLCBub2RlKSB7DQo+PiArICAgICAgICAgICAgICAgaWYgKG9mX2Rl
-dmljZV9pc19jb21wYXRpYmxlKG5vZGUsICJzaW1wbGUtZnJhbWVidWZmZXIiKSkNCj4gDQo+
-IG5vZGUgPSBvZl9nZXRfY29tcGF0aWJsZV9jaGlsZChvZl9jaG9zZW4sICJzaW1wbGUtZnJh
-bWVidWZmZXIiKTsNCj4gb2ZfcGxhdGZvcm1fZGV2aWNlX2NyZWF0ZShub2RlLCBOVUxMLCBO
-VUxMKTsNCj4gb2Zfbm9kZV9wdXQobm9kZSk7DQo+IA0KPiBQbGVhc2UgQ2MgdGhlIERUIGxp
-c3QuIExvb2tzIGxpa2UgdGhpcyBwYXRjaCBjYW4gYmUgYXBwbGllZA0KPiBpbmRlcGVuZGVu
-dGx5LiAoQmV0dGVyIGdldCB0aGUgb3RoZXIgMiBpbnRvIGRybS1taXNjIHNvb24gb3IgaXQg
-d2lsbA0KPiBtaXNzIDUuMTcpLg0KDQpDYW4gd2UgbWVyZ2UgdGhlIHdob2xlIHBhdGNoc2V0
-IHRocm91Z2ggZHJtLW1pc2M/IFBhdGNoZXMgMiBhbmQgMyBhcmUgDQp1c2VsZXNzIHdpdGhv
-dXQgdGhlIGZpcnN0IG9uZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gUm9i
-DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxv
-cGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIu
-IDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJn
-KQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+I found that this can be a general problem. Should not mandatory to
+track panel status
 
---------------kWj606jlJ7pD7bie8TPb6ZkY--
+DRM_PANEL_PREPARED
+DRM_PANEL_ENABLED
 
---------------c7IHT9aEvAIVFTQ02gTZrBtu
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Michael
+>  #define ILI9881C_SWITCH_PAGE_INSTR(_page)      \
+> @@ -707,6 +709,10 @@ static int ili9881c_prepare(struct drm_panel *panel)
+>         unsigned int i;
+>         int ret;
+>
+> +       /* Preparing when already prepared is a no-op */
+> +       if (ctx->prepared)
+> +               return 0;
+> +
+>         /* Power the panel */
+>         ret = regulator_enable(ctx->power);
+>         if (ret)
+> @@ -745,6 +751,8 @@ static int ili9881c_prepare(struct drm_panel *panel)
+>         if (ret)
+>                 return ret;
+>
+> +       ctx->prepared = true;
+> +
+>         return 0;
+>  }
+>
+> @@ -770,10 +778,16 @@ static int ili9881c_unprepare(struct drm_panel *panel)
+>  {
+>         struct ili9881c *ctx = panel_to_ili9881c(panel);
+>
+> +       /* Unpreparing when already unprepared is a no-op */
+> +       if (!ctx->prepared)
+> +               return 0;
+> +
+>         mipi_dsi_dcs_enter_sleep_mode(ctx->dsi);
+>         regulator_disable(ctx->power);
+>         gpiod_set_value(ctx->reset, 1);
+>
+> +       ctx->prepared = false;
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.25.1
+>
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGx154FAwAAAAAACgkQlh/E3EQov+CE
-tg/+P0rnIqemk1osoaMFBeCnCR5EqRWUX5DVmrLD1A8fuFhIYxQYecNmQwd4WXCFqqHEye8shCIs
-rCTlVtNjlp8qodAaCIJ2g9ezu4bQNa7z/sYCtuH/qgn0Zx+oKZI84RVrmAAfJYpgzf5+Q0la4yjs
-0D6kPR72NeuiOQM+9zp2Y9usF3y4vc0UiXD3QtfGmNJs5/V+d5tVBTF0ZQ7qUp+3Iqtw/Vi8v4B5
-xObmUIcrAtJUtEMIHgyU6x/dHDXldWnE5DoUk2Os8LpCCVn2lYKks/f0MlvxR5ueKL5VEAnGYShX
-f+EiXRUv6Lu4zTfetvmLOhZ94SERtdzXbA0bsOckl1JsIzq+OQDTXhxWuBAkgGe/wSvVg3mzBRAB
-EoXAdbL65B+a+5euSRob8Qu3LNEaot/bDAEIddwCCTn913tmj0ivXuw27jAHohTLQ4P5zlWSzRMS
-rO8x6nymwj/e3uE4DudizuFsrx/zJyesI8qJiWJC0fnBVtBDtiB/CPG1PAujSu1SX9oVuedWrI+Q
-wAxNblABElDTOgt6CzlWyHbKztNs9TCj0DZqTlkihGCYXIAE9bP8f+m6gLcSB75zAt0275iMgj68
-cl5sk8V1T6+LQwxiaiSekpnYSfqvahzoorQ7vW210tZ10BpaGwZvSO8o1CXu5vw6qdtrOoYIn1FN
-sNA=
-=1bk9
------END PGP SIGNATURE-----
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
---------------c7IHT9aEvAIVFTQ02gTZrBtu--
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com

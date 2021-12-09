@@ -2,142 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0818D46E56A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C98946E571
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbhLIJZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S235936AbhLIJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbhLIJZ0 (ORCPT
+        with ESMTP id S235674AbhLIJZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:25:26 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBB2C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:21:52 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id a9so8510244wrr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=St6fDpRWrbOPyw4DfGpCPD6GxfBlr4YguXkOcg68dNg=;
-        b=o+9UvLDbQOEPRilcKb/qH4X6eZuq738oiVOQMO6XUUab+xFmKbH54Bm6xchb3APmyP
-         HRjNqCG4XGX7q06CHARzf09/VLjxkjE0dVUqspqnlyMhGI8Rt1qGu6i0pETRhUz8ct4X
-         nxLVaF2TxPA+IiQF9TLxc9ukca6aN0oofW6k3ZI6zdRbyo5lZYBMJjP3oft12jG/WFXP
-         lZ0DqKVPP9ATaFHJ9V9OL61sSwZccfHK9WcJ1PjNu0qPjY1G61HQNU99/uCFdWYXFyHk
-         FF7Iq1jh+VpHts7SoAiuaNm1C0WKKIuayPmAKbGCXMP5g/DV63ZIX7BBhl9VTYdkl/f6
-         IFYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=St6fDpRWrbOPyw4DfGpCPD6GxfBlr4YguXkOcg68dNg=;
-        b=X2axMiVEBf9tB2IsyT7WEXbNxDQdmsGDqb+38TwFRQluwWFYoxxHtX0NHzZFt5SBDC
-         O6qktYTJcDnr6IxL/jgM3M7wQdgsVRWoVcqHEiGdzrjIuYUKUltmhYstRxUwe1thwoTH
-         5wWx1VrBzg8qURfD8N+e6/TR/Z0W3WDy3mfSr74NalqR43kpbuGmv0lki7WGDARPdhp9
-         PDQo/JKP26ZDRmz6Yam6WXwQ36mJ2rzRcJdQvBq5ODLv1yzFmb7NkteJ5+7Wt8qxGKLh
-         wtaHo0/lZoq4NOs4BgTGm0NalqzbdjBaEo1SHriFsrUSQSN/XffBy2ae66FvFKNMuV+I
-         Z3FA==
-X-Gm-Message-State: AOAM531H0RAGekL9OI3CSPPhD7pQcJP+VshUJDiL9nEQiM0nwujxzqR3
-        xKUp0wWr39KnEKLw6HeyDrCbig==
-X-Google-Smtp-Source: ABdhPJzNPpjoCVeIxBCP3phySICTw/Bf+6f+5JOTYxO6sV45jLHPz+AS+EAk+UCD2n8BFWxIM0PA4g==
-X-Received: by 2002:adf:df85:: with SMTP id z5mr4982298wrl.445.1639041711374;
-        Thu, 09 Dec 2021 01:21:51 -0800 (PST)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id w17sm5034369wmc.14.2021.12.09.01.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 01:21:50 -0800 (PST)
-Date:   Thu, 9 Dec 2021 10:21:50 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Shay Drory <shayd@nvidia.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, jiri@nvidia.com,
-        saeedm@nvidia.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>
-Subject: Re: [PATCH net-next v3 2/7] devlink: Add new "io_eq_size" generic
- device param
-Message-ID: <YbHKrpDiuuXHttQg@nanopsycho>
-References: <20211208141722.13646-1-shayd@nvidia.com>
- <20211208141722.13646-3-shayd@nvidia.com>
+        Thu, 9 Dec 2021 04:25:32 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F942C0617A2;
+        Thu,  9 Dec 2021 01:21:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 429C0CE245E;
+        Thu,  9 Dec 2021 09:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8726C004DD;
+        Thu,  9 Dec 2021 09:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639041715;
+        bh=TEW0W8Vu/yqwzKooRUV6+GpDbQd/xLe/GfTkTMDyE1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aw272oV2rTjAhb/s/AjSgGQvqT0bTivpqlMMijQlv9vBUEpgiZ3V4zSSaLSMBa7Kn
+         MPDZ7aSoUqYwKhZCsjOQH1Yh4bg4HREFsWsBisfTwYGQK5OIfWY8loFIOl0Qlcv5N5
+         GkdcfC/rs8xr3zpAQ2tYqV3853zV2hshEWoRmFLuDzxj5WhylaSN059EsCyPQj5mLP
+         BlFGOcmeAazAP3xeb7fphsTMwy8CEccjAurtnnxIDIHJOFdH/AwynnicpaOz2SPJvL
+         oK2S5l3wGt9ePT55/O2AtnnSP/MxcgXk+1jGkyF4zrl4s7OwNKryO6ESEhmk4Ka6tX
+         EmLchwbYVv4Pw==
+Date:   Thu, 9 Dec 2021 10:21:52 +0100
+From:   "wsa@kernel.org" <wsa@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "mbizon@freebox.fr" <mbizon@freebox.fr>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Message-ID: <YbHKsI35uHz9PjwO@ninjato>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "mbizon@freebox.fr" <mbizon@freebox.fr>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211207042144.358867-1-chris.packham@alliedtelesis.co.nz>
+ <ea12555e66d4dc16c5b093ac528442ed6dddf644.camel@freebox.fr>
+ <bce48dba-c163-4fe7-50c4-984de41488c2@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C9A6rRvoZs0n2wPQ"
 Content-Disposition: inline
-In-Reply-To: <20211208141722.13646-3-shayd@nvidia.com>
+In-Reply-To: <bce48dba-c163-4fe7-50c4-984de41488c2@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Dec 08, 2021 at 03:17:17PM CET, shayd@nvidia.com wrote:
->Add new device generic parameter to determine the size of the
->I/O completion EQs.
->
->For example, to reduce I/O EQ size to 64, execute:
->$ devlink dev param set pci/0000:06:00.0 \
->              name io_eq_size value 64 cmode driverinit
->$ devlink dev reload pci/0000:06:00.0
->
->Signed-off-by: Shay Drory <shayd@nvidia.com>
->Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
->---
-> Documentation/networking/devlink/devlink-params.rst | 3 +++
-> include/net/devlink.h                               | 4 ++++
-> net/core/devlink.c                                  | 5 +++++
-> 3 files changed, 12 insertions(+)
->
->diff --git a/Documentation/networking/devlink/devlink-params.rst b/Documentation/networking/devlink/devlink-params.rst
->index b7dfe693a332..cd9342305a13 100644
->--- a/Documentation/networking/devlink/devlink-params.rst
->+++ b/Documentation/networking/devlink/devlink-params.rst
->@@ -129,3 +129,6 @@ own name.
->        will NACK any attempt of other host to reset the device. This parameter
->        is useful for setups where a device is shared by different hosts, such
->        as multi-host setup.
->+   * - ``io_eq_size``
->+     - u16
 
-You missed this.
+--C9A6rRvoZs0n2wPQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
->+     - Control the size of I/O completion EQs.
->diff --git a/include/net/devlink.h b/include/net/devlink.h
->index 3276a29f2b81..b5f4acd0e0cd 100644
->--- a/include/net/devlink.h
->+++ b/include/net/devlink.h
->@@ -459,6 +459,7 @@ enum devlink_param_generic_id {
-> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_RDMA,
-> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_VNET,
-> 	DEVLINK_PARAM_GENERIC_ID_ENABLE_IWARP,
->+	DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
-> 
-> 	/* add new param generic ids above here*/
-> 	__DEVLINK_PARAM_GENERIC_ID_MAX,
->@@ -511,6 +512,9 @@ enum devlink_param_generic_id {
-> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME "enable_iwarp"
-> #define DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE DEVLINK_PARAM_TYPE_BOOL
-> 
->+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME "io_eq_size"
->+#define DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE DEVLINK_PARAM_TYPE_U32
->+
-> #define DEVLINK_PARAM_GENERIC(_id, _cmodes, _get, _set, _validate)	\
-> {									\
-> 	.id = DEVLINK_PARAM_GENERIC_ID_##_id,				\
->diff --git a/net/core/devlink.c b/net/core/devlink.c
->index db3b52110cf2..0d4e63d11585 100644
->--- a/net/core/devlink.c
->+++ b/net/core/devlink.c
->@@ -4466,6 +4466,11 @@ static const struct devlink_param devlink_param_generic[] = {
-> 		.name = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_NAME,
-> 		.type = DEVLINK_PARAM_GENERIC_ENABLE_IWARP_TYPE,
-> 	},
->+	{
->+		.id = DEVLINK_PARAM_GENERIC_ID_IO_EQ_SIZE,
->+		.name = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_NAME,
->+		.type = DEVLINK_PARAM_GENERIC_IO_EQ_SIZE_TYPE,
->+	},
-> };
-> 
-> static int devlink_param_generic_verify(const struct devlink_param *param)
->-- 
->2.21.3
->
+> we'd hit the 100us timeout in the poll). But I see no evidence of that=20
+> actually happening (and no idea what arbitration lost means w.r.t i2c).
+
+On a bus with multiple masters, it means the other master has won the
+arbitration because the address it wants to talk to contains more 0 bits.
+
+> I don't know that there is a maximum clock stretch time (we certainly=20
+> know there are misbehaving devices that hold SCL low forever). The SMBUS=
+=20
+> protocol adds some timeouts but as far as I know i2c says nothing about=
+=20
+> how long a remote device can hold SCL.
+
+The above is all correct.
+
+Even with the unclear situation about the 100us, I think this should go
+to for-current soon, right?
+
+
+
+--C9A6rRvoZs0n2wPQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxyrAACgkQFA3kzBSg
+KbZrXBAAg4dz1LsvbcnmNyLdQ66iPTmRYU4o/47hytTcVFB9SVW+gPicn1qJEBrU
+5uLvqoFE8qrpOVRgXkSr3cCu4XkgX+QXGbroAI9W44l8e8806N5N9/Xv8uOgtAcE
+eTs5Zlzx8b8gpHTkd2WnrNe7/0A9udZ9lNBibD5/ChFDvCpEf1lmd5AIYRZDkLJl
+AqChjdMYiNg/GJHV9cwa/tuw6dPjoh/QVax1elfpcTkH3YgRZrsxgZAEiDth9otS
+XdyBUendnikHV/ItwPq8z+a/9+hHyeBCKoMBLdCXEya53l/OvnyvsMLO8jSYlDMK
+6/8VzMTPkYAu70DZEV9pxAA+f0bi7mvUZ1goEUfCtvvDJHybdhRjh8Hzq5xf5KJV
+u9b6ty+b4k6P/9+ewLmvs7pDIbopnviyL8gh97HJD2IhfAGRNXvQwPumLfE/oWWW
+Z0eEzWFOM8gqm1PMaLTL+7I3z0CodQdNvGvnKRD4iXfwJB2gD7qQ9ktdg2ps4WnS
+8s9GUSV01fQ3k7hFYgRooRgD+fu5OPFsXrzvMMiy9geW0DcVrLfsPfW5UNfJ9fbL
+aQyN7Zw8sB6aUZ7dCUw5mdUhifm4hf6Oftm2PZtAkA/jpq0j1AN0DWSljqT4BR94
+Be64hVANbI10bPu1FxdYg/na64RUHLS4YwpeJUu/ic1rpM2NqVQ=
+=t+mF
+-----END PGP SIGNATURE-----
+
+--C9A6rRvoZs0n2wPQ--

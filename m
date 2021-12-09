@@ -2,128 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF4646F499
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D47C46F4A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbhLIUJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbhLIUJW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:09:22 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4459C061746;
-        Thu,  9 Dec 2021 12:05:48 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b40so14117640lfv.10;
-        Thu, 09 Dec 2021 12:05:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=g9AJiL9uTfpDDMd7SS4C6nAmWL0XZo0V0ZfDFdYmLjY=;
-        b=COAXXVLnmQmpr5BGzCN9BcuqWFvHw2ocxZLxo6ryJ5Lhw+xJPSJQG8U5fyMK+rUwSi
-         EYiKUFWwRjqcCV5YBfFzHQXgooJ8gBMmNeHvmX/AgiZxPAVXkq9PVW+yvKPlmzOl4aYu
-         W2uDd1pXtu8UqzUIkvBXbL2Ch/O5tKOkr88Ei7WEG/HFl30t6yY/I9V2vtZteJYlrLxv
-         iWHYSmmfEP5O8RSy/8n2R2GZzIGviX+SR5pmTvEBaL0XRT/AWDwa2km8xegEcMSEcF2l
-         kf/OIUNJdOMax5XXVTNReI1Ic72Mf3qeSkVeziNzAaC0ItMUN+asYzsXxndrXbw7kj4E
-         Rwbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=g9AJiL9uTfpDDMd7SS4C6nAmWL0XZo0V0ZfDFdYmLjY=;
-        b=0U5MynlwcWqnfHghabiMKK/GMfpqDO6MVdNejJ0ZfpfnHYKxZ2kJBNO/45YDdwaPsJ
-         yHp/s6aUYJJm9mrjjviluMrVrcG+1EFS2TJahOaT6YsPNf2ZmiAK3PLMo47bxtfHdGMt
-         xsWNhLNlpYrVX8AAehHfIvLN+vl5ugzGddVpExFCR+RsscQYMfFASc1HqCRFtMZy9Li1
-         J3/pRLP5wjwHXuKSiokjnQ5pWYVCWP1rktoEGzDqEzJgkjO+4lCEYYXx7pat3hI+LL/6
-         U95i4GdDTX91Bd7qbFOhWUPYVSU2jFfx/pjhhyI3g0QccfOtZptTUAASRzbXAXW1dBQ7
-         N0yA==
-X-Gm-Message-State: AOAM531DGqMzPsqmp4XIUdocZUUds8vCXyOA+xp6YYmOm7Bnihd/7kL6
-        aRc/xpqxZIjLxBJqw/GYousJ7N/rec2bYg==
-X-Google-Smtp-Source: ABdhPJyxDwm4qD0w1ssRjatqaxocOTEkFxXrsK+gDNk3bFfYXhmsC90Kh+C73THhn+OlTC99iNMRWQ==
-X-Received: by 2002:a05:6512:ea2:: with SMTP id bi34mr8469336lfb.12.1639080346992;
-        Thu, 09 Dec 2021 12:05:46 -0800 (PST)
-Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id o12sm87371lft.134.2021.12.09.12.05.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Dec 2021 12:05:46 -0800 (PST)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>
-Subject: [PATCH V4 6/6] dt-bindings: xen: Clarify "reg" purpose
-Date:   Thu,  9 Dec 2021 22:05:36 +0200
-Message-Id: <1639080336-26573-7-git-send-email-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
-References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+        id S231604AbhLIULA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:11:00 -0500
+Received: from mga12.intel.com ([192.55.52.136]:12329 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229752AbhLIUK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 15:10:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639080446; x=1670616446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hi6i9pzDMrMYov4KZH9Zhg4JDGhGtJAz0j0T6yuD7KI=;
+  b=O1e9bccRhB4WMLsRbn5LOapMMl5fN7GADXb2gPCBoVNjIQMtOmUlLBVS
+   +3SfBDoY8c0CGynqE3gFMU2ER+MTvuWRciOgCttwuI956o9fCqGTtBIlU
+   Y4psiCHy2vpKNwB1Lgz1u5RxrNYoAPnYy1pVsr+iAjA3/KNGvTqw17bWh
+   HPvfjdqJCpsIp6GR2YOvVfV6KYZr0u3kb+4+07RwBs3rzSBVJK/ylnhc6
+   F3SfYdorOCMfTQTKyv/ojW76Ew0Ce50PZNo6C/4AArllSjpr87pfBXqpa
+   46QNTN4uj6QqCKGeFVLCubGxYJG9uZmMMzxpw4Tqyig6u9N9aOIK3vzT5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218220597"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="218220597"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 12:07:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="680474704"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 12:07:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mvPgJ-004FAU-At;
+        Thu, 09 Dec 2021 22:06:19 +0200
+Date:   Thu, 9 Dec 2021 22:06:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq()
+ and its ilk
+Message-ID: <YbJhu53WEmotslox@smile.fi.intel.com>
+References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On Sat, Nov 06, 2021 at 11:26:47PM +0300, Sergey Shtylyov wrote:
+> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
+> invalid") only calls WARN() when IRQ0 is about to be returned, however
+> using IRQ0 is considered invalid (according to Linus) outside the arch/
+> code where it's used by the i8253 drivers. Many driver subsystems treat
+> 0 specially (e.g. as an indication of the polling mode by libata), so
+> the users of platform_get_irq[_byname]() in them would have to filter
+> out IRQ0 explicitly and this (quite obviously) doesn't scale...
+> Let's finally get this straight and return -EINVAL instead of IRQ0!
 
-Xen on Arm has gained new support recently to calculate and report
-extended regions (unused address space) safe to use for external
-mappings. These regions are reported via "reg" property under
-"hypervisor" node in the guest device-tree. As region 0 is reserved
-for grant table space (always present), the indexes for extended
-regions are 1...N.
+You are changing the return value of platform_get_irq_optional().
+The problem here is the proposed change doesn't bring any value in such
+case. platform_get_irq_optional() should be able (at the end of the day)
+to return 3 types of values (as other APIs do):
+	 > 0: success
+	== 0: IRQ not found
+	 < 0: an error that must be consumed by the caller
 
-No device-tree bindings update is needed (except clarifying the text)
-as guest infers the presence of extended regions from the number
-of regions in "reg" property.
+0 is unexpected result for non-optional APIs and there you may try to play
+tricks (like replacing it by error code).
 
-While at it, remove the following sentence:
-"This property is unnecessary when booting Dom0 using ACPI."
-for "reg" and "interrupts" properties as the initialization is not
-done via device-tree "hypervisor" node in that case anyway.
+There was a discussion around the topic:
+https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/T/#u
 
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
-Changes V2 -> V3:
-   - new patch
+Wanna help?
 
-Changes V3 -> V4:
-   - add Stefano's R-b and Rob's A-b
-   - remove sentence about ACPI for "reg" and "interrupts"
-     properties
----
- Documentation/devicetree/bindings/arm/xen.txt | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
 
-diff --git a/Documentation/devicetree/bindings/arm/xen.txt b/Documentation/devicetree/bindings/arm/xen.txt
-index db5c56d..61d77ac 100644
---- a/Documentation/devicetree/bindings/arm/xen.txt
-+++ b/Documentation/devicetree/bindings/arm/xen.txt
-@@ -7,15 +7,17 @@ the following properties:
- 	compatible = "xen,xen-<version>", "xen,xen";
-   where <version> is the version of the Xen ABI of the platform.
- 
--- reg: specifies the base physical address and size of a region in
--  memory where the grant table should be mapped to, using an
--  HYPERVISOR_memory_op hypercall. The memory region is large enough to map
--  the whole grant table (it is larger or equal to gnttab_max_grant_frames()).
--  This property is unnecessary when booting Dom0 using ACPI.
-+- reg: specifies the base physical address and size of the regions in memory
-+  where the special resources should be mapped to, using an HYPERVISOR_memory_op
-+  hypercall.
-+  Region 0 is reserved for mapping grant table, it must be always present.
-+  The memory region is large enough to map the whole grant table (it is larger
-+  or equal to gnttab_max_grant_frames()).
-+  Regions 1...N are extended regions (unused address space) for mapping foreign
-+  GFNs and grants, they might be absent if there is nothing to expose.
- 
- - interrupts: the interrupt used by Xen to inject event notifications.
-   A GIC node is also required.
--  This property is unnecessary when booting Dom0 using ACPI.
- 
- To support UEFI on Xen ARM virtual platforms, Xen populates the FDT "uefi" node
- under /hypervisor with following parameters:
+Not sure.
+
 -- 
-2.7.4
+With Best Regards,
+Andy Shevchenko
+
 

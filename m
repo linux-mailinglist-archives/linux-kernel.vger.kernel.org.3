@@ -2,125 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACADC46E08F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9E646E09C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbhLICCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhLICCB (ORCPT
+        id S229665AbhLICCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:02:40 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:33383 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229670AbhLICCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:02:01 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6FAC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:58:29 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id y7so2839326plp.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ERNdknSdRVKl939EP+EZZR/PoW0Nj1vOL+LFqLPaFaE=;
-        b=VnKZQdzGR1KwvVlbMhJ9w4yN5SAgf36Tsu/EQkyNyyDawfgQ9W+WbDf1o1BNf73lum
-         LNDL0ZsH9/EqlAIF4Fno0CGooNpVWAJnpiEx/h4Ps2yE9uCrxI9wfG/Lk9U0XHtDZbSs
-         7lpV5zElgJ16wRwhg6Bx9McSbWutm+HQ/EV7H2OlaVe8d0FJv51Mtvtylcg/gy6cq5EZ
-         UCrvSfnuFJ23q+ZlJUbDbXF6sJGXVJTDI+jt4mkVgjJUvV9Rz9GXZ3+7dhS5vZXqbAaX
-         4C/iBOy85IGRN/mtQhSfYjy4y1x5WLzd60NZGpmQDiFfHv1Kf4Qm0tDulOeOFurPk/Kg
-         Eazw==
+        Wed, 8 Dec 2021 21:02:39 -0500
+Received: by mail-io1-f72.google.com with SMTP id 85-20020a6b0258000000b005ed47a95f03so5622839ioc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:59:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ERNdknSdRVKl939EP+EZZR/PoW0Nj1vOL+LFqLPaFaE=;
-        b=B+GkGqiJRRzl6DW/98l4JfUJsA4nHg98iZy5bnaafXmVmCYBpx5RpQ3yqHuWFu9KXt
-         y+y3K2YMivecFxFJMRCY2Navz+Zw8yXy7PWRS89IlCCzL5y6gT0LVkWQMwrmyV39+zS5
-         Zbk8hpa8bLReReDxcR2uKZr4b3h28YEiCPUGFTFYXB4Oxs44tiwtNnzCrZ6CJ1UQBhqE
-         pSROXoCmeQu77tgNZtEosLai9YmanfRatJ9T0UNwUoY2D61VP1SqAGN0Jby1y3HtUWgp
-         3qgs1ywq1fY46myY/rDzEamUr4IUqg3ubfE9hbn5Z9wLMvzl9+uow7YLqEXwPQ5VjjLw
-         qQxw==
-X-Gm-Message-State: AOAM533x19plxUq6+F4EgjblCCQcu+mQy5ZCwUEw8YSgz1hn3H/xMW+5
-        F1fdeE2QQLItQHho4A1hSlQ=
-X-Google-Smtp-Source: ABdhPJxALjGW3u4AEFGEvQxsHH3WOQo5kRwErZMyqNAPO4fMR36Pgv0iMSHN7+mt1Z/nZUz0vkYO5A==
-X-Received: by 2002:a17:902:6a8a:b0:143:905f:aec7 with SMTP id n10-20020a1709026a8a00b00143905faec7mr64773494plk.8.1639015108752;
-        Wed, 08 Dec 2021 17:58:28 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m10sm3619593pgv.75.2021.12.08.17.58.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:58:28 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, chi.minghao@zte.com.cn, Hawking.Zhang@amd.com,
-        john.clements@amd.com, Oak.Zeng@amd.com, rajneesh.bhardwaj@amd.com,
-        Likun.Gao@amd.com, alex.sierra@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] drm:amdgpu:remove unneeded variable
-Date:   Thu,  9 Dec 2021 01:58:23 +0000
-Message-Id: <20211209015823.409947-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=X4FiWxWmye52Y3LrKLRpr7dU5cRyOrBsZmbMNfSo5CY=;
+        b=WQWSdXQQXxZzXXpiVesLUT5uZFb+NeyNgNqWdGikRK5ypGslodSQpR9jrv8j2uoAYx
+         94XcP5VlE21p2A3ZoGRpuhE6hJ9MM3tEvhJq6cePd4Rbh9zA6hkrOE3r92M6Q+PXOnxW
+         h66HnRIIA+D2/P4mhEZMasCaVcy4pWIzU5htsAS6h/7SCuembF3VkCHf8Jq974piwect
+         7J7oIK3PnRsoYnug/gIfLY9a5COyl/x2N9PUZIaDuCxlkaDg/EdQDXGx5asRGAhifunE
+         zt8DSXUapm8dL9ILNISSyCftxvK68LYT5/GIIdQiFpyM+c02XhewnZPA1S8dkH3Fnkhw
+         PWfA==
+X-Gm-Message-State: AOAM5326Qcy0sIBNCEoi1pgrt5hbqBdG3SHmXYDk4axfvem9+tlTG2nv
+        lONMUjfmMFKZETGRNJecGcTnzlaWy+7qKeZnNGRQWsbE6VT9
+X-Google-Smtp-Source: ABdhPJwcKdNMEn0KYdQ1vLDPmmNZxklGqYWl2rCNCIb5QMi3PCt4qHD/Z9l7k31KBbRCAtfLak+fOlkcKYLqu/ng3mHqCptgF8XI
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6638:260d:: with SMTP id m13mr5339337jat.99.1639015146603;
+ Wed, 08 Dec 2021 17:59:06 -0800 (PST)
+Date:   Wed, 08 Dec 2021 17:59:06 -0800
+In-Reply-To: <00000000000029e89205d2a8718d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000098464c05d2acf3ba@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in hci_cmd_sync_cancel
+From:   syzbot <syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com>
+To:     Thinh.Nguyen@synopsys.com, bberg@redhat.com, changbin.du@intel.com,
+        christian.brauner@ubuntu.com, davem@davemloft.net,
+        edumazet@google.com, gregkh@linuxfoundation.org,
+        johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luiz.dentz@gmail.com,
+        luiz.von.dentz@intel.com, marcel@holtmann.org,
+        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        yajun.deng@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
+syzbot has bisected this issue to:
 
-return value form directly instead of
-taking this in another redundant variable.
+commit c97a747efc93f94a4ad6c707972dfbf8d774edf9
+Author: Benjamin Berg <bberg@redhat.com>
+Date:   Fri Dec 3 14:59:02 2021 +0000
 
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ioc32.c | 5 +----
- drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c     | 6 ++----
- 2 files changed, 3 insertions(+), 8 deletions(-)
+    Bluetooth: btusb: Cancel sync commands for certain URB errors
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ioc32.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ioc32.c
-index 5cf142e849bb..fb92f827eeb7 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ioc32.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ioc32.c
-@@ -37,12 +37,9 @@
- long amdgpu_kms_compat_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	unsigned int nr = DRM_IOCTL_NR(cmd);
--	int ret;
- 
- 	if (nr < DRM_COMMAND_BASE)
- 		return drm_compat_ioctl(filp, cmd, arg);
- 
--	ret = amdgpu_drm_ioctl(filp, cmd, arg);
--
--	return ret;
-+	return amdgpu_drm_ioctl(filp, cmd, arg);
- }
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-index cb82404df534..269a7b04b7e7 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-@@ -1742,7 +1742,7 @@ static int gmc_v9_0_hw_init(void *handle)
- {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
- 	bool value;
--	int r, i;
-+	int i;
- 
- 	/* The sequence of these two function calls matters.*/
- 	gmc_v9_0_init_golden_registers(adev);
-@@ -1777,9 +1777,7 @@ static int gmc_v9_0_hw_init(void *handle)
- 	if (adev->umc.funcs && adev->umc.funcs->init_registers)
- 		adev->umc.funcs->init_registers(adev);
- 
--	r = gmc_v9_0_gart_enable(adev);
--
--	return r;
-+	return gmc_v9_0_gart_enable(adev);
- }
- 
- /**
--- 
-2.25.1
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a0fdc5b00000
+start commit:   4eee8d0b64ec Add linux-next specific files for 20211208
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12a0fdc5b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a0fdc5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
+dashboard link: https://syzkaller.appspot.com/bug?extid=485cc00ea7cf41dfdbf1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e7e955b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ed3641b00000
 
+Reported-by: syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com
+Fixes: c97a747efc93 ("Bluetooth: btusb: Cancel sync commands for certain URB errors")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

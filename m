@@ -2,150 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A565746F735
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7C946F73A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbhLIXIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbhLIXI2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:08:28 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B112C061D76
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:04:50 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id r5so6440202pgi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:04:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AM7QLMUWHfMwmQDV/nARvLu6AUqKl6gTrIizSq8pCV0=;
-        b=qCUTYflpJD3Ut8S3L9vAdsRCFkfP6S1UK/pYIcT6QfgUqj3IrkrCT4ezn3jaOsf3Cl
-         QWXXPUZs+WxnhUjOZmGD3MD+yMr1uQ4MPnml+A3U6sVIr1NuDQjnxAVWqlzhj2iKBJ3v
-         UVZc3vL3u8GPqVzXjH8o2LZKH9265/3UW1CVYplUB1MgkH9c5ybvjJIKVXYJvrcLh394
-         P90V/cOnkBv/iNu+Q/0tn+tcZb57JKYcdbPJW+sK8l4beDVlSxBGGYj3kX/T4AxOqfIl
-         UB/2KhtFPncq+0yKdb9T39Tq3TJiyLrFSDV3H0HYU7qUuLOVeojoQvZgvAswjkqck/q8
-         PFSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AM7QLMUWHfMwmQDV/nARvLu6AUqKl6gTrIizSq8pCV0=;
-        b=6PfAG1kMH+hVWHIe2UhTH9qLYAGS2As1gHVBtxpArFWAdGDSxANGYJUYbiSPisTPJy
-         NRbSIqmcznxXqM+y4CTU5FYKQYH2TwZ2NsVXeJDR4ds5zMsMTLly8+4m2ezU8b39I3me
-         bbk4ElPzKHIszlPu6yDBH5TkTG9bx0kaGwgLOl2ZjZ4x2njbNyLkKTc06C0uF3dbTXyF
-         YUogTFgvw65jj0kY2YxR1ToDD3M4g7K8iVz4hC7pOlWaXmhmzFnycD+BcLpu8PZtAsZj
-         uetdgUd1NrHYFqUV8Ww1wMUh9Vm4fW5TsmBW4BdQPmjI4NgGj6IFXe/zAWcFqQ9N/FWC
-         dCUQ==
-X-Gm-Message-State: AOAM533tJLEofWiXLGXtKoDF5jkSebxQ1ajrEfNo8JeKGOn1iRCr7NhC
-        OJvWGCzjUeJp6wFj6i3bX06Fhw==
-X-Google-Smtp-Source: ABdhPJwv3BwHdZiLi1ZhC5t+Cp5jkK/HRMF9Ysg4XP1dLe3XT0E5UCPyHw6UtZFq3qUMnwim2AuqFw==
-X-Received: by 2002:a63:6dcc:: with SMTP id i195mr35590826pgc.90.1639091089661;
-        Thu, 09 Dec 2021 15:04:49 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:4686:81c:7840:3f2a])
-        by smtp.gmail.com with ESMTPSA id o1sm10610131pjs.30.2021.12.09.15.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 15:04:48 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:04:42 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Alexandru M Stan <amstan@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2] arm64: dts: mt8183: kukui: Add Type C node
-Message-ID: <YbKLiic12TTlCI5K@google.com>
-References: <20211209195112.366176-1-pmalani@chromium.org>
+        id S232099AbhLIXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:10:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:25561 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229455AbhLIXKT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 18:10:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639091206; x=1670627206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CK0iXov/RfjLTe8Mtz7TqGBq7eDW3otA38apvaR9H5A=;
+  b=XrAisUd2Id1OAgJt9hzTKPpFJxQZGVbipwYF4jUbAG/g0zlz3IwZAaT/
+   E1B0r6L88YN/TEhyTbT12Otoq3zjrn+AA0fIkudDnI/36jRiqQYjQqQz2
+   4m2AB3q2fIOrd30Gvsv8DMS90l7u0G8LRl5zYxXwp138dPsYF0sQYj5Ga
+   fdO78UcZVg7shnnQ5EVVBAhobta6x5ny7hgqeKcdFwQsDoEoQVCVzoead
+   kTvDc0BbNSAfcNhUk8JGMj93q4qW61//+72PJqWwN70Z6Ce38T+8c6I9o
+   By8TQ7JJbZjQ49784H9jrryvRBW4Zq1c8GHXIcq3QxTp1AXrEecSDujQz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236961874"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="236961874"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:06:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="463439409"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 15:06:42 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvSUs-0002UF-6f; Thu, 09 Dec 2021 23:06:42 +0000
+Date:   Fri, 10 Dec 2021 07:06:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/13] arm64: dts: qcom: Add base SM8450 QRD DTS
+Message-ID: <202112100623.XZwPiDOL-lkp@intel.com>
+References: <20211209103505.197453-6-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h0DgCffirGSPqlD0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209195112.366176-1-pmalani@chromium.org>
+In-Reply-To: <20211209103505.197453-6-vkoul@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Vinod,
 
---h0DgCffirGSPqlD0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-On Thu, Dec 09, 2021 at 11:51:12AM -0800, Prashant Malani wrote:
-> Add a node describing the USB Type C connector, in order to utilize the
-> Chromium OS USB Type-C driver that enumerates Type-C ports and connected
-> cables/peripherals and makes them visible to userspace.
->=20
-> Cc: Alexandru M Stan <amstan@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on v5.16-rc4]
+[cannot apply to next-20211208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+url:    https://github.com/0day-ci/linux/commits/Vinod-Koul/arm64-dts-qcom-Add-support-for-SM8450-SoC-and-QRD-board/20211209-183713
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-r032-20211207 (https://download.01.org/0day-ci/archive/20211210/202112100623.XZwPiDOL-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/636d2456715b3aba9cf1fa47931c6e381ca62e00
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vinod-Koul/arm64-dts-qcom-Add-support-for-SM8450-SoC-and-QRD-board/20211209-183713
+        git checkout 636d2456715b3aba9cf1fa47931c6e381ca62e00
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> ---
->=20
-> Changes in v2:
-> - Alexandru mentioned that HW specs suggest preferred power role for
->   devices like kukui to be sink, so changed try-power-role to "sink".
->=20
->  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/=
-boot/dts/mediatek/mt8183-kukui.dtsi
-> index 94c13c459194..0f9480f91261 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -886,6 +886,20 @@ usbc_extcon: extcon0 {
->  		cbas {
->  			compatible =3D "google,cros-cbas";
->  		};
-> +
-> +		typec {
-> +			compatible =3D "google,cros-ec-typec";
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +
-> +			usb_c0: connector@0 {
-> +				compatible =3D "usb-c-connector";
-> +				reg =3D <0>;
-> +				power-role =3D "dual";
-> +				data-role =3D "host";
-> +				try-power-role =3D "sink";
-> +			};
-> +		};
->  	};
->  };
-> =20
-> --=20
-> 2.34.1.173.g76aa8bc2d0-goog
->=20
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+All errors (new ones prefixed by >>):
 
---h0DgCffirGSPqlD0
-Content-Type: application/pgp-signature; name="signature.asc"
+   In file included from arch/arm64/boot/dts/qcom/sm8450-qrd.dts:8:
+>> arch/arm64/boot/dts/qcom/sm8450.dtsi:7:10: fatal error: dt-bindings/clock/qcom,gcc-sm8450.h: No such file or directory
+       7 | #include <dt-bindings/clock/qcom,gcc-sm8450.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYbKLigAKCRBzbaomhzOw
-wgTfAP0UKw0CIZnkq7XRxizWU1ISWsbA7Fg4wi8F3FRlEtjalgD/RnGrQZDBRr7E
-LnQC2+PGRByTSZwMCNTeptgTOh+8IAA=
-=fRVO
------END PGP SIGNATURE-----
+vim +7 arch/arm64/boot/dts/qcom/sm8450.dtsi
 
---h0DgCffirGSPqlD0--
+244741584ca1ceb Vinod Koul 2021-12-09  @7  #include <dt-bindings/clock/qcom,gcc-sm8450.h>
+244741584ca1ceb Vinod Koul 2021-12-09   8  #include <dt-bindings/clock/qcom,rpmh.h>
+244741584ca1ceb Vinod Koul 2021-12-09   9  #include <dt-bindings/gpio/gpio.h>
+244741584ca1ceb Vinod Koul 2021-12-09  10  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+244741584ca1ceb Vinod Koul 2021-12-09  11  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

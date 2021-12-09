@@ -2,226 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7E346E78E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3D146E78F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbhLIL37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S236656AbhLILaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbhLIL36 (ORCPT
+        with ESMTP id S236665AbhLILaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:29:58 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1113CC0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 03:26:25 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id u17so3630411plg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:26:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=RGeadJA8gWc8MMZddmbtqYIz9/bVSraQHXfB9yZL+Ro=;
-        b=GOGWLlgErncB0GSsat6CgEwbi5nx/KdwDWh+BgaCT6QaaA9Nt0/n11fwWfeQVV8Z6I
-         geY3QA3RgFtmn7qKheCiUunC9JOWLdrmhi5Zo4+hPhffAmGAqMFN4xhCIUVNPvIXFcOU
-         8Tw9M/iUUZM7cVF9gbe22t4Bb7vj6i4FNpA/oedO9lUSavYfL5dT5CzHN9+7ZAN9Ycmd
-         DVLXPthFkDl7yQ3wiAwjhHAo7i5mYNpKxDOk77phjbDXxkrYQVGTCp6LwHaITN8I5Adj
-         Go3m+fQKWJn4FTTj4j68g+T+Q5VNDp6SPGS8M9xMXjAgew4SKoEZu3I085eWOYnjeB8S
-         WCnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RGeadJA8gWc8MMZddmbtqYIz9/bVSraQHXfB9yZL+Ro=;
-        b=vnsRCZqsGVDS/vb+cgVLHoyaFUZHjxXAPDvBs3OAELc7gODIqygF7qGdumE2Bj8kP4
-         DJtxxCJRPnyheKmY+SoeXz1HvGGEzHOksx9lZfX53jThLe3/n08ORd8n2tCK1D2UJ4wR
-         pJGSpcC+MOpDitqWvKA/HnGlX6dmj/z7xKS2QDFG/GYTQAQCxMvVRtTnwoY5Tu/7D4Kc
-         m6jXFDdRvb1Jz/Juz2IR9bPUUvSkEuFxIxbpfDGxzQGfxfirZO/43Ip1OqMtange9rnI
-         hi5lPZct66b6SIyN2uAg4YgKeH0Vj+2/FKId1T+9AwqUM/h9mK/bVVRefO+x4+AxEI5e
-         2JNQ==
-X-Gm-Message-State: AOAM531CTV+CG30azGukYf6iTUHYWhcR+WzYeobttCMWol/Iuva7i3pM
-        hjAIkkSkwkMxR4mtLezL6P0=
-X-Google-Smtp-Source: ABdhPJzdp3Rzklx/x0ECcOM1y9XG2EsWdVgW2PP7h2t/AOOmWbF3//zU0f7gpEUM7092rXa4fwON/w==
-X-Received: by 2002:a17:902:e749:b0:141:edaa:fde1 with SMTP id p9-20020a170902e74900b00141edaafde1mr67087984plf.72.1639049184479;
-        Thu, 09 Dec 2021 03:26:24 -0800 (PST)
-Received: from [30.240.97.54] ([205.204.117.110])
-        by smtp.gmail.com with ESMTPSA id pc10sm6609618pjb.9.2021.12.09.03.26.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:26:24 -0800 (PST)
-Message-ID: <9f4e8334-9aaf-5ec4-3af9-884160110689@gmail.com>
-Date:   Thu, 9 Dec 2021 19:26:19 +0800
+        Thu, 9 Dec 2021 06:30:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DDFC0617A1;
+        Thu,  9 Dec 2021 03:26:31 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mvHZF-0007qf-9q; Thu, 09 Dec 2021 12:26:29 +0100
+Message-ID: <4c3d2b66-2941-bac3-ee9f-d573912ee2aa@leemhuis.info>
+Date:   Thu, 9 Dec 2021 12:26:28 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH v1 1/2] virtio-mem: prepare page onlining code for
- granularity smaller than MAX_ORDER - 1
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Gavin Shan <gshan@redhat.com>, Hui Zhu <teawater@gmail.com>,
-        Sebastien Boeuf <sebastien.boeuf@intel.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
-References: <20211126134209.17332-1-david@redhat.com>
- <20211126134209.17332-2-david@redhat.com>
-From:   Eric Ren <renzhengeek@gmail.com>
-In-Reply-To: <20211126134209.17332-2-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-BS
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     workflows@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ksummit@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <cover.1639042966.git.linux@leemhuis.info>
+Subject: Re: [RFC PATCH v2 0/2] Create 'Posted:' and 'Reported:' tags for
+ links in commit messages
+In-Reply-To: <cover.1639042966.git.linux@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1639049191;a9551039;
+X-HE-SMSGID: 1mvHZF-0007qf-9q
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+/me grumbles
 
-Thanks for working on this!
+Stupid me mixed up the the subject when editing, which should read
+'Posted:' and 'Reported:', as can be seen from the body of the cover
+letter and the subject of v2. Sorry.
 
-On 2021/11/26 21:42, David Hildenbrand wrote:
-> Let's prepare our page onlining code for subblock size smaller than
-> MAX_ORDER - 1: we'll get called for a MAX_ORDER - 1 page but might have
-> some subblocks in the range plugged and some unplugged. In that case,
-> fallback to subblock granularity to properly only expose the plugged
-> parts to the buddy.
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+/me wanders off to find a place to hide in shame
+
+On 09.12.21 10:52, Thorsten Leemhuis wrote:
+> [Preface: sorry, this likely will cause some bikeshedding; but I got the feeling
+> I should bring this up, as my Regression tracking bot relies on the Link: tag
+> and thus making its ambiguity worse]
+> 
+> The following patch proposes to create two new tags for stating URLs in commit
+> messages. They are meant to make it obvious what provided links are about. This
+> is useful for both users and scripts analyzing commits, as right now they have
+> no simple way to see what a provided URL is about – they thus have to guess from
+> the URLs or follow each one to check.
+> 
+> The proposed tag 'Posted:' should point to the last public review posting of the
+> patch in question, while 'Reported:' is meant to be used for linking to bug
+> reports. The 'Link:' tag, which until now covered these two aspects, stays
+> around for other kind of links, for example for links to PDFs or webpages with
+> background information relevant for the patch.
+> 
+> This submission partly is triggered by regzbot, my Linux kernel regression
+> tracking bot (https://linux-regtracking.leemhuis.info/regzbot/ ). It
+> automatically marks a tracked regression as resolved when it notices a commit
+> with a 'Link:' pointing to the report of the tracked regression; it also uses
+> this to detect when a proposed fix is posted for review. In preparation for this
+> I recently improved the kernel's documentation on 'Link:' to the best of my
+> understanding in commit 1f57bd42b77c ("docs: submitting-patches: make
+> section about the Link: tag more explicit"). I also started pointing out that
+> usage to various people when I noticed it was missing. Quite a few developers
+> didn't know that 'Link:' was supposed to be like this or completely unaware they
+> were supposed to links bug reports. Developers from the DRM subsystem were using
+> 'References:' instead; some developer also simply used footnotes.
+> 
+> Regzbot doesn't need a 'Reported:' and could continue to work as it does right
+> now -- with me continuing to educate developers, no big deal. But I wondered if
+> I was making the "Link: is ambiguous" problem worse. This lead to this
+> submissions, as I always found it a bit confusing that 'Link:' is used for
+> different purposes – and hence felt like I should bring this up now, as I then
+> can sleep well even if this bolt proposal is rejected. :-D
+> 
+> Obviously two new tags will force developers and maintainers to adjust habits
+> and scripts, so it's nothing that should be done lighthearted. But sticking with
+> an ambiguous Link: tag for the foreseeable future might not be the best idea
+> anyway, as we live in times where people analyze commits with scripts for
+> studies and statistics on reviews and bug reporting.
+> 
+> For 'Posted:' the change hopefully shouldn't be much work for people anyway, as
+> many just need to update their `git am` hook or switch to a hypothetical new
+> version of `b4` that was adjusted to place 'Reviewed:' tags instead of 'Link:'.
+> It's a bit more of a hassle when it comes to 'Reported:', as some people will
+> need to update their muscle memory. But the similarity to the 'Reported-by:' tag
+> (to be used in the same situation) should help here; and quite a bit of
+> education in this area is needed anyway (see above). And 'Link:' stays around,
+> so there is no harm done if it takes the world a while to adapt.
+> 
+> FWIW, this is already v2, as I sent v1/RFC to workflows list and LKML only to
+> test the waters and get some feedback. Due to that I chose to switched from the
+> "Reviewed:" tag I proposed in v1 to the "Posted:" in v2.
+> 
+> Among the feedback I got was also a suggestion from Konstantin, who proposed to
+> continue with the Link: tag, but add hashtags after the URL to specify what it's
+> about:
+> 
+>     Link: https://bugzilla.kernel.org/show_bug.cgi?id=215101   #report
+>     Link: https://lore.kernel.org/r/fobarbaz.5551212@localhost #review
+> 
+> This shouldn't break existing scripts, as that is already allowed -- but it was
+> hardly used, hence some scripts nevertheless might break. Downsides of this
+> approach IMHO are: is easy to forget these hashtags when they have to be placed
+> manually (e.g., in the Reported: case), require people to type more, and make a
+> line that often is quite long already even longer. But FWIW, it's totally fine
+> for me if it's decided to go down that route, then I'll adjust the patch
+> accordingly.
+> 
+> There were also a few suggestions to use tags closer to what users of Git forges
+> are used to, but I didn't see anything that would be a good fit. If you know
+> something (instead of "Posted:" maybe "MergeRequest:"?), let me know.
+> 
+> Furthermore, the question came up if we still need the "Reported:" tag if we
+> link to the report, as the information is available from the link. I left it, as
+> show gratitude to the reporter, which motivates people.
+> 
+> FWIW, If this bold proposal gets rejected, I'll simply submit the first patch of
+> this series to improve the documentation of the status quo.
+> 
+> Ciao, Thorsten
+> 
 > ---
->   drivers/virtio/virtio_mem.c | 86 ++++++++++++++++++++++++++-----------
->   1 file changed, 62 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-> index 96e5a8782769..03e1c5743699 100644
-> --- a/drivers/virtio/virtio_mem.c
-> +++ b/drivers/virtio/virtio_mem.c
-> @@ -20,6 +20,7 @@
->   #include <linux/mutex.h>
->   #include <linux/bitmap.h>
->   #include <linux/lockdep.h>
-> +#include <linux/log2.h>
->   
->   #include <acpi/acpi_numa.h>
->   
-> @@ -1228,28 +1229,46 @@ static void virtio_mem_fake_offline_cancel_offline(unsigned long pfn,
->   		page_ref_inc(pfn_to_page(pfn + i));
->   }
->   
-> -static void virtio_mem_online_page_cb(struct page *page, unsigned int order)
-> +static void virtio_mem_online_page(struct virtio_mem *vm,
-> +				   struct page *page, unsigned int order)
->   {
-> -	const unsigned long addr = page_to_phys(page);
-> -	unsigned long id, sb_id;
-> -	struct virtio_mem *vm;
-> +	const unsigned long start = page_to_phys(page);
-> +	const unsigned long end = start + PFN_PHYS(1 << order);
-> +	unsigned long addr, next, id, sb_id, count;
->   	bool do_online;
->   
-> -	rcu_read_lock();
-> -	list_for_each_entry_rcu(vm, &virtio_mem_devices, next) {
-> -		if (!virtio_mem_contains_range(vm, addr, PFN_PHYS(1 << order)))
-> -			continue;
-> +	/*
-> +	 * We can get called with any order up to MAX_ORDER - 1. If our
-> +	 * subblock size is smaller than that and we have a mixture of plugged
-> +	 * and unplugged subblocks within such a page, we have to process in
-> +	 * smaller granularity. In that case we'll adjust the order exactly once
-> +	 * within the loop.
-> +	 */
-> +	for (addr = start; addr < end; ) {
-> +		next = addr + PFN_PHYS(1 << order);
->   
->   		if (vm->in_sbm) {
-> -			/*
-> -			 * We exploit here that subblocks have at least
-> -			 * MAX_ORDER_NR_PAGES size/alignment - so we cannot
-> -			 * cross subblocks within one call.
-> -			 */
->   			id = virtio_mem_phys_to_mb_id(addr);
->   			sb_id = virtio_mem_phys_to_sb_id(vm, addr);
-> -			do_online = virtio_mem_sbm_test_sb_plugged(vm, id,
-> -								   sb_id, 1);
-> +			count = virtio_mem_phys_to_sb_id(vm, next - 1) - sb_id + 1;
-> +
-> +			if (virtio_mem_sbm_test_sb_plugged(vm, id, sb_id, count)) {
-> +				/* Fully plugged. */
-> +				do_online = true;
-> +			} else if (count == 1 ||
-> +				   virtio_mem_sbm_test_sb_unplugged(vm, id, sb_id, count)) {
-> +				/* Fully unplugged. */
-> +				do_online = false;
-> +			} else {
-> +				/*
-> +				 * Mixture, process sub-blocks instead. This
-> +				 * will be at least the size of a pageblock.
-> +				 * We'll run into this case exactly once.
-> +				 */
-> +				order = ilog2(vm->sbm.sb_size) - PAGE_SHIFT;
-> +				do_online = virtio_mem_sbm_test_sb_plugged(vm, id, sb_id, 1);
-> +				continue;
-> +			}
->   		} else {
->   			/*
->   			 * If the whole block is marked fake offline, keep
-> @@ -1260,18 +1279,38 @@ static void virtio_mem_online_page_cb(struct page *page, unsigned int order)
->   				    VIRTIO_MEM_BBM_BB_FAKE_OFFLINE;
->   		}
->   
-> +		if (do_online)
-> +			generic_online_page(pfn_to_page(PFN_DOWN(addr)), order);
-> +		else
-> +			virtio_mem_set_fake_offline(PFN_DOWN(addr), 1 << order,
-> +						    false);
-Should we just use PHYS_PFN() here? addr is obviously PFN aligned. 
-Anyway, it doesn't matter.
-
-LGTM.
-Reviewed-by: Eric Ren <renzhengeek@gmail.com>
-> +		addr = next;
-> +	}
-> +}
-> +
-> +static void virtio_mem_online_page_cb(struct page *page, unsigned int order)
-> +{
-> +	const unsigned long addr = page_to_phys(page);
-> +	struct virtio_mem *vm;
-> +
-> +	rcu_read_lock();
-> +	list_for_each_entry_rcu(vm, &virtio_mem_devices, next) {
->   		/*
-> -		 * virtio_mem_set_fake_offline() might sleep, we don't need
-> -		 * the device anymore. See virtio_mem_remove() how races
-> +		 * Pages we're onlining will never cross memory blocks and,
-> +		 * therefore, not virtio-mem devices.
-> +		 */
-> +		if (!virtio_mem_contains_range(vm, addr, PFN_PHYS(1 << order)))
-> +			continue;
-> +
-> +		/*
-> +		 * virtio_mem_set_fake_offline() might sleep. We can safely
-> +		 * drop the RCU lock at this point because the device
-> +		 * cannot go away. See virtio_mem_remove() how races
->   		 * between memory onlining and device removal are handled.
->   		 */
->   		rcu_read_unlock();
->   
-> -		if (do_online)
-> -			generic_online_page(page, order);
-> -		else
-> -			virtio_mem_set_fake_offline(PFN_DOWN(addr), 1 << order,
-> -						    false);
-> +		virtio_mem_online_page(vm, page, order);
->   		return;
->   	}
->   	rcu_read_unlock();
-> @@ -2438,8 +2477,7 @@ static int virtio_mem_init_hotplug(struct virtio_mem *vm)
->   	/*
->   	 * We want subblocks to span at least MAX_ORDER_NR_PAGES and
->   	 * pageblock_nr_pages pages. This:
-> -	 * - Simplifies our page onlining code (virtio_mem_online_page_cb)
-> -	 *   and fake page onlining code (virtio_mem_fake_online).
-> +	 * - Simplifies our fake page onlining code (virtio_mem_fake_online).
->   	 * - Is required for now for alloc_contig_range() to work reliably -
->   	 *   it doesn't properly handle smaller granularity on ZONE_NORMAL.
->   	 */
-
+> v2/RFC: (this version)
+> - split the non-controversial parts out into a preparatory patch
+> - s/Reviewed:/Posted:/
+> - a few minor changes due to review feedback from various people
+> - mention some of the feedback from v1 in the cover letter
+> 
+> v1/RFC: https://lore.kernel.org/lkml/cover.1637566224.git.linux@leemhuis.info/
+> - first, *rough version* to see how this idea is received in the
+>   community
+> 
+> Thorsten Leemhuis (2):
+>   docs: 5.Posting.rst: describe Fixes: and Link: tags
+>   docs: introduce the commit message tags 'Reported:' and 'Posted:'
+> 
+>  Documentation/maintainer/configure-git.rst   |  8 ++---
+>  Documentation/process/5.Posting.rst          | 37 ++++++++++++++++----
+>  Documentation/process/submitting-patches.rst | 22 ++++++------
+>  3 files changed, 46 insertions(+), 21 deletions(-)
+> 
+> 
+> base-commit: 065db2d90c6b8384c9072fe55f01c3eeda16c3c0
+> 

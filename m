@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FA346ED1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E8A46ED14
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbhLIQgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbhLIQgX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:36:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF305C061746;
-        Thu,  9 Dec 2021 08:32:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07D43B8253D;
-        Thu,  9 Dec 2021 16:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D9EC004DD;
-        Thu,  9 Dec 2021 16:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639067566;
-        bh=Hfp5b3v+XA/5IbK5LdC4TC8Lj3uCVLepSRSC6eo2XOk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BD7+YWxCPnrx0AevCZXoBB0cD13QqzwkZV3TzG/yNMIBNdKtBTvKPnGo6liXV6rBr
-         Dk4mlyxC2FjLh2RTb90SjL7D5O4efldrfDOh2Hx6zOw/Muvmt6HCNKpY72FyxyRDoq
-         uHEr+aLYBPf2PSVsG6CJ0bVnHkeDpzyi4svZNXZZI0lUjgMjOebtKkR83tV0z1g41U
-         xMw+O4aj6ZsN9Y6yW/j7fi+YAJwG+59WG1hyXvCU0kT9WaUa+JjvkoBiHbCA59rNu8
-         0VfayzowRRDBB7cr5Lu/Ll7nN4jYvc+pVyMn4IQ/wKMJH7iZl/D/MgzVprihiUDodK
-         sjPemY3cJFpLA==
-Date:   Thu, 9 Dec 2021 10:32:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <20211209163245.GA245119@bhelgaas>
+        id S235119AbhLIQes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:34:48 -0500
+Received: from mga03.intel.com ([134.134.136.65]:14334 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234595AbhLIQer (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:34:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238083843"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="238083843"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:28:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="543650742"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:28:31 -0800
+Date:   Thu, 9 Dec 2021 08:32:49 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
+Message-ID: <20211209083249.7d775512@jacob-builder>
+In-Reply-To: <1b3ee13d-0148-1156-52ad-b96bca51cb6f@linux.intel.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-3-git-send-email-jacob.jun.pan@linux.intel.com>
+        <16408193-c8bc-3046-b32f-9274bf0b415c@linux.intel.com>
+        <20211208104939.732fa5b9@jacob-builder>
+        <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <1b3ee13d-0148-1156-52ad-b96bca51cb6f@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rafael, since I used generic PM as an example]
+Hi Lu,
 
-On Wed, Dec 08, 2021 at 09:47:56AM +0100, Greg KH wrote:
-> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
-> > On Wed, 08 Dec 2021, Greg KH wrote:
-> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > > > Adds get/set driver data helpers for auxiliary devices.
-> > > > > 
-> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > > > ---
-> > > > > V2
-> > > > >   - No changes
-> > > > > 
-> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > 
-> > > > I would really like to see an explanation why such obfuscation is really
-> > > > needed. dev_*_drvdata() is a standard way to access driver data.
+On Thu, 9 Dec 2021 10:21:38 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
+
+> On 12/9/21 9:56 AM, Tian, Kevin wrote:
+> >> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> >> Sent: Thursday, December 9, 2021 2:50 AM
+> >>  
+> >>> Can a device issue DMA requests with PASID even there's no system  
+> >> IOMMU  
+> >>> or the system IOMMU is disabled?
+> >>>  
+> >> Good point.
+> >> If IOMMU is not enabled, device cannot issue DMA requests with PASID.
+> >> This API will not be available. Forgot to add dummy functions to the
+> >> header. 
 > > 
-> > I wouldn't call it obfuscation, but it does looks like abstraction for
-> > the sake of abstraction, which I usually push back on.  What are the
-> > technical benefits over using the dev_*() variant?
+> > PASID is a PCI thing, not defined by IOMMU.
+> > 
+> > I think the key is physically if IOMMU is disabled, how will root
+> > complex handle a PCI memory request including a PASID TLP prefix? Does
+> > it block such request due to no IOMMU to consume PASID or simply ignore
+> > PASID and continue routing the request to the memory controller?
+> > 
+> > If block, then having an iommu interface makes sense.
+> > 
+> > If ignore, possibly a DMA API call makes more sense instead, implying
+> > that this extension can be used even when iommu is disabled.
+> > 
+> > I think that is what Baolu wants to point out.  
 > 
-> See my response at:
-> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
-> for why it is a good thing to do.
+Thanks for clarifying, very good point.
+Looking at the PCIe spec. I don't see specific rules for RC to ignore or
+block PASID TLP if not enabled.
+"- A Root Complex that supports PASID TLP Prefixes must have a device
+specific mechanism for enabling them. By default usage of PASID TLP
+Prefixes is disabled
+ - Root Complexes may optionally support TLPs with PASID TLP Prefixes. The
+mechanism used to detect whether a Root Complex supports the PASID TLP
+Prefix is implementation specific
+"
+For all practical purposes, why would someone sets up PASID for DMA just to
+be ignored? An IOMMU interface makes sense to me.
+
+> Yes, exactly. Imagining in the VM guest environment, do we require a
+> vIOMMU for this functionality? vIOMMU is not performance friendly if we
+> put aside the security considerations.
 > 
-> In short, driver authors should not have to worry about mixing
-> bus-specific and low-level driver core functions.
+The primary use case for accelerators to use in-kernel DMA will be in
+pass-through mode. vIOMMU should be able to do PT with good performance,
+right? no nesting, IO page faults.
 
-In the very common situation of PCI drivers that use generic power
-management, authors *do* have to use both (example from [1]):
+> Best regards,
+> baolu
 
-  ioh_gpio_probe(struct pci_dev *pdev)   # pci_driver.probe()
-    pci_set_drvdata(pdev, chip);
 
-  ioh_gpio_remove(struct pci_dev *pdev)  # pci_driver.remove()
-    struct ioh_gpio *chip = pci_get_drvdata(pdev);
+Thanks,
 
-  ioh_gpio_suspend(struct device *dev)   # pci_driver.driver.pm.suspend()
-    struct ioh_gpio *chip = dev_get_drvdata(dev);   <--
-
-The pci_driver methods receive a struct pci_dev and use the
-pci_get_drvdata() wrapper.
-
-The generic power management methods receive a struct device and use
-the underlying dev_get_drvdata().
-
-It's kind of ugly that readers have to know that pci_get_drvdata()
-gives you the same thing as dev_get_drvdata().
-
-I guess the generic PM methods could do something like:
-
-  pci_get_drvdata(to_pci_dev(dev));
-
-but that seems a little bit circuitous.  It's slightly wordier, but I
-might prefer to just use this everywhere and skip the pci_* wrappers:
-
-  dev_get_drvdata(&pdev->dev);
-
-Bjorn
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpio/gpio-ml-ioh.c?id=v5.15#n505
+Jacob

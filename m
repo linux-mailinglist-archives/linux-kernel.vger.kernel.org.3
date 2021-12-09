@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A79E46ED1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CB446ED24
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbhLIQhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:37:05 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:37341 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235038AbhLIQhC (ORCPT
+        id S236767AbhLIQik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:38:40 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:44637 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233322AbhLIQij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:37:02 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V-4XSLS_1639067604;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V-4XSLS_1639067604)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 10 Dec 2021 00:33:27 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     sj@kernel.org
-Cc:     xhao@linux.alibaba.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V1 2/2] mm/damon: Modify the display form of damon tracepoint
-Date:   Fri, 10 Dec 2021 00:33:17 +0800
-Message-Id: <1e019e8ffe8c040376ec59e918d301058cc58ade.1639066954.git.xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <cover.1639066954.git.xhao@linux.alibaba.com>
-References: <cover.1639066954.git.xhao@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 9 Dec 2021 11:38:39 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 7D4FD3201E5F;
+        Thu,  9 Dec 2021 11:35:04 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Thu, 09 Dec 2021 11:35:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=/e88EbDdXsuP52MMub+jSVQ7BFtV
+        yh6OPrdW20e5hGY=; b=TVZvqq3u6iz/ZaRSOwU6x+1owKQNRCTZH3yOocrG+EOd
+        z5NR2onPA2Yq2G72BVrlDFXr0FeepmEcA71DFXNrXIkKabK50VAweEx6/oQAVauG
+        EEx82SDYsRqoWQZilc9+HuHbtFboyO7ywoz+hPkT2OL6f8IpYUaNAyXgUa6eYefD
+        nRO7w+RyfeDuvlHLM6+WVgiNbfdeiWqFHiQ9pIzh7/nmLpkm4/QXXy4l2ysZE8Od
+        hESuXnGieJ0z7BWB+G+TscV6OrIek/HdJvDG06vaG/E7H+/hGWgiZ8UnYXIProC3
+        qgsFP6Vtjp6JtMT1F9GzHj6UlpbK5e4BOb+PV0dSNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=/e88Eb
+        DdXsuP52MMub+jSVQ7BFtVyh6OPrdW20e5hGY=; b=S2ehSz91dwQ7M6SHUEIgBJ
+        tu6UEcBUssIRIpU82dgzPYx9Q80YoLL0QfP9jBZrpagu8f3riuiQ6Eps/vhGLrG3
+        jL9RheNmqfB3/kZdAro8OVSEpyn7h6SLLztI6KZxmdC94h1WKkQWtbBeAOW7uj11
+        EES1RCo3gfDeuBy8xlegi05T/OCYn7nPpEv+HHzOYiydxrZdNVH4X5j2oOcZGwDk
+        fkaJBUjrQKq0FGkF7t8fqx6qFKQxCxztKVRRhQjXIXPRokHq9GodKSBvBNhzpreZ
+        v7Y1xTK2ru2j3EqsEm9xIsvhZ5aou7XZz2eMldHsX35YFytNvdXB3+m6AkY1JIDw
+        ==
+X-ME-Sender: <xms:NzCyYeJPdyEVqlVIRfkmieNsB7eJ9PfAOG7L4QwQyFzl92Wu_OHsEw>
+    <xme:NzCyYWIr4FkctHszNZlzGtOFYoiD1eNK4rHxu6VvNXg37e-icdXTjJoAU55QzQQZM
+    YJYuonbyq24zoLPBos>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkedtgdelfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
+    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
+    htvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudehvdef
+    keffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:NzCyYevcJJ1gdsCRtbyTeMIiR3adWIHvp4FqF8Qe7RTIG0Gv7ZgL4Q>
+    <xmx:NzCyYTaetL68F-j1sZ5bWCZ4A6N1RN1pIQPJ3ri26hYUUOGnz0ZD6A>
+    <xmx:NzCyYValF2NEm1Rg91K6s1bNfwaAL4aWpWy_Me34Wqm1W4IXZxOfhQ>
+    <xmx:NzCyYYyZhaag6RzuShXHmu6qAlZoHMUHDBeJeTufgQYvNEh29H7JGw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4EEAE274050D; Thu,  9 Dec 2021 11:35:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4506-g4374de3f18-fm-20211208.001-g4374de3f
+Mime-Version: 1.0
+Message-Id: <338871e4-f856-44dc-9721-8cfd2f2382c2@www.fastmail.com>
+In-Reply-To: <20211209051001.70235-3-marcan@marcan.st>
+References: <20211209051001.70235-1-marcan@marcan.st>
+ <20211209051001.70235-3-marcan@marcan.st>
+Date:   Thu, 09 Dec 2021 17:34:43 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Rob Herring" <robh+dt@kernel.org>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Mark Kettenis" <kettenis@openbsd.org>,
+        "Marc Zyngier" <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: i2c: apple,i2c: Add apple,t6000-i2c compatible
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When I use the perf command to record damon monitor data, like below.
-    # perf record -e damon:damon_aggregated
-    # perf script
-    ...target_id=18446462667479739520 nr_regions=13 281472805928960-281472942936064...
-    ...target_id=18446462667479739520 nr_regions=13 281472942936064-281473080008704...
-    ...target_id=18446462667479739520 nr_regions=13 281473080008704-281473216634880...
 
-From a user's point of view, the 'target_id' and 'damon_region' which displays in decimal
-are not very friendly, So there do some changes, keep the 'target_id' display consistent
-with 'dbgfs/target_ids' interface and 'damon_region' is displayed in hexadecimal, just like
-below.
-    # perf record -e damon:damon_aggregated
-    # perf script
-    ...target_id=5522 nr_regions=14 ffff716a3000-ffff79893000...
-    ...target_id=5522 nr_regions=14 ffff79893000-ffff819dc000...
-    ...target_id=5522 nr_regions=14 ffff819dc000-ffff89bd9000...
 
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
----
- include/trace/events/damon.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, Dec 9, 2021, at 06:09, Hector Martin wrote:
+> This block is compatible with t8103, so just add the new per-SoC
+> compatible under apple,i2c.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  Documentation/devicetree/bindings/i2c/apple,i2c.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
-index 99ffa601e351..67de51814f4c 100644
---- a/include/trace/events/damon.h
-+++ b/include/trace/events/damon.h
-@@ -17,7 +17,7 @@ TRACE_EVENT(damon_aggregated,
- 	TP_ARGS(t, r, nr_regions),
-
- 	TP_STRUCT__entry(
--		__field(unsigned long, target_id)
-+		__field(int, target_id)
- 		__field(unsigned int, nr_regions)
- 		__field(unsigned long, start)
- 		__field(unsigned long, end)
-@@ -26,7 +26,7 @@ TRACE_EVENT(damon_aggregated,
- 	),
-
- 	TP_fast_assign(
--		__entry->target_id = t->id;
-+		__entry->target_id = (int)pid_vnr((struct pid *)t->id);
- 		__entry->nr_regions = nr_regions;
- 		__entry->start = r->ar.start;
- 		__entry->end = r->ar.end;
-@@ -34,7 +34,7 @@ TRACE_EVENT(damon_aggregated,
- 		__entry->age = r->age;
- 	),
-
--	TP_printk("target_id=%lu nr_regions=%u %lu-%lu: %u %u",
-+	TP_printk("target_id=%u nr_regions=%u %lx-%lx: %u %u",
- 			__entry->target_id, __entry->nr_regions,
- 			__entry->start, __entry->end,
- 			__entry->nr_accesses, __entry->age)
---
-2.31.0
+Reviewed-by: Sven Peter <sven@svenpeter.dev>

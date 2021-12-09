@@ -2,189 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BA646F6E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AB346F6E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbhLIWeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:34:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26842 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232389AbhLIWeV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:34:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639089046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=t+kB11hh+VnOtImVW4ebeHRG4lBJpxm4ZYPg2Y8mUU0=;
-        b=QSKvlt/1pQaKyfbicHx29venllH82rLw0023wePzctS54VzjUTaNW0aky7sqQqv1LN21mr
-        wu16qpAJ8aHkMb2dvbAmCNMi1T6dEPsrAnTvSCNDvB+xIcEdxPSoVgWtXvKcmyRVAbxDis
-        JZDplfu/EZW/RZWisZxX0yYde4zxcB8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-232-YwwddUEVPfe8NVlPUGPhxw-1; Thu, 09 Dec 2021 17:30:43 -0500
-X-MC-Unique: YwwddUEVPfe8NVlPUGPhxw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0CFFD100CE91;
-        Thu,  9 Dec 2021 22:30:42 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2CE255DF37;
-        Thu,  9 Dec 2021 22:30:41 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, vkuznets@redhat.com, mlevitsk@redhat.com,
-        joao.m.martins@oracle.com, stable@vger.kernel.org,
-        David Matlack <dmatlack@google.com>
-Subject: [PATCH v3] selftests: KVM: avoid failures due to reserved HyperTransport region
-Date:   Thu,  9 Dec 2021 17:30:40 -0500
-Message-Id: <20211209223040.304355-1-pbonzini@redhat.com>
+        id S233696AbhLIWeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:34:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:34878 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232658AbhLIWen (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 17:34:43 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E4DBD6E;
+        Thu,  9 Dec 2021 14:31:09 -0800 (PST)
+Received: from bogus (unknown [10.57.33.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 936383F73D;
+        Thu,  9 Dec 2021 14:31:06 -0800 (PST)
+Date:   Thu, 9 Dec 2021 22:31:03 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 3/3] arm64: dts: imx8qxp: add cache info
+Message-ID: <20211209223103.br2scdg2j6gpfnpl@bogus>
+References: <20211112062604.3485365-1-peng.fan@oss.nxp.com>
+ <20211112062604.3485365-4-peng.fan@oss.nxp.com>
+ <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD proceessors define an address range that is reserved by HyperTransport
-and causes a failure if used for guest physical addresses.  Avoid
-selftests failures by reserving those guest physical addresses; the
-rules are:
+On Thu, Dec 09, 2021 at 04:15:09PM -0600, Rob Herring wrote:
+> On Fri, Nov 12, 2021 at 12:27 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > i.MX8QXP A35 Cluster has 32KB Icache, 32KB Dcache and 512KB L2 Cache
+> >  - Icache is 2-way set associative
+> >  - Dcache is 4-way set associative
+> >  - L2cache is 8-way set associative
+> >  - Line size are 64bytes
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 28 ++++++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > index 617618edf77e..dbec7c106e0b 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > @@ -58,6 +58,12 @@ A35_0: cpu@0 {
+> >                         compatible = "arm,cortex-a35";
+> >                         reg = <0x0 0x0>;
+> >                         enable-method = "psci";
+> > +                       i-cache-size = <0x8000>;
+> > +                       i-cache-line-size = <64>;
+> > +                       i-cache-sets = <256>;
+> > +                       d-cache-size = <0x8000>;
+> > +                       d-cache-line-size = <64>;
+> > +                       d-cache-sets = <128>;
+> 
+> Why do you need all this for the L1? Isn't it discoverable with cache
+> ID registers?
+> 
 
-- On parts with <40 bits, its fully hidden from software.
+No, not after the following:
+Commit a8d4636f96ad ("arm64: cacheinfo: Remove CCSIDR-based cache information probing")
 
-- Before Fam17h, it was always 12G just below 1T, even if there was more
-RAM above this location.  In this case we just not use any RAM above 1T.
+which removed ID register based cache probing and we now expect to obtain
+the same via DT/ACPI unfortunately.
 
-- On Fam17h and later, it is variable based on SME, and is either just
-below 2^48 (no encryption) or 2^43 (encryption).
-
-Fixes: ef4c9f4f6546 ("KVM: selftests: Fix 32-bit truncation of vm_get_max_gfn()")
-Cc: stable@vger.kernel.org
-Cc: David Matlack <dmatlack@google.com>
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Message-Id: <20210805105423.412878-1-pbonzini@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../testing/selftests/kvm/include/kvm_util.h  |  9 +++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
- .../selftests/kvm/lib/x86_64/processor.c      | 69 +++++++++++++++++++
- 3 files changed, 79 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 6a1a37f30494..da2b702da71a 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -71,6 +71,15 @@ enum vm_guest_mode {
- 
- #endif
- 
-+#if defined(__x86_64__)
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
-+#else
-+static inline unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	return ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+}
-+#endif
-+
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 8f2e0bb1ef96..daf6fdb217a7 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -302,7 +302,7 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
- 		(1ULL << (vm->va_bits - 1)) >> vm->page_shift);
- 
- 	/* Limit physical addresses to PA-bits. */
--	vm->max_gfn = ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+	vm->max_gfn = vm_compute_max_gfn(vm);
- 
- 	/* Allocate and setup memory for guest. */
- 	vm->vpages_mapped = sparsebit_alloc();
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 82c39db91369..5e587d81dec3 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1431,3 +1431,72 @@ struct kvm_cpuid2 *vcpu_get_supported_hv_cpuid(struct kvm_vm *vm, uint32_t vcpui
- 
- 	return cpuid;
- }
-+
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx 0x68747541
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx 0x444d4163
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_edx 0x69746e65
-+
-+static inline unsigned x86_family(unsigned int eax)
-+{
-+        unsigned int x86;
-+
-+        x86 = (eax >> 8) & 0xf;
-+
-+        if (x86 == 0xf)
-+                x86 += (eax >> 20) & 0xff;
-+
-+        return x86;
-+}
-+
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	const unsigned long num_ht_pages = 12 << (30 - vm->page_shift); /* 12 GiB */
-+	unsigned long ht_gfn, max_gfn, max_pfn;
-+	uint32_t eax, ebx, ecx, edx, max_ext_leaf;
-+
-+	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
-+
-+	/* Avoid reserved HyperTransport region on AMD processors.  */
-+	eax = ecx = 0;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (ebx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx ||
-+	    ecx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx ||
-+	    edx != X86EMUL_CPUID_VENDOR_AuthenticAMD_edx)
-+		return max_gfn;
-+
-+	/* On parts with <40 physical address bits, the area is fully hidden */
-+	if (vm->pa_bits < 40)
-+		return max_gfn;
-+
-+	/* Before family 17h, the HyperTransport area is just below 1T.  */
-+	ht_gfn = (1 << 28) - num_ht_pages;
-+	eax = 1;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (x86_family(eax) < 0x17)
-+		goto done;
-+
-+	/*
-+	 * Otherwise it's at the top of the physical address
-+	 * space, possibly reduced due to SME by bits 11:6 of
-+	 * CPUID[0x8000001f].EBX.  Use the old conservative
-+	 * value if MAXPHYADDR is not enumerated.
-+	 */
-+	eax = 0x80000000;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	max_ext_leaf = eax;
-+	if (max_ext_leaf < 0x80000008)
-+		goto done;
-+
-+	eax = 0x80000008;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	max_pfn = (1ULL << ((eax & 0xff) - vm->page_shift)) - 1;
-+	if (max_ext_leaf >= 0x8000001f) {
-+		eax = 0x8000001f;
-+		cpuid(&eax, &ebx, &ecx, &edx);
-+		max_pfn >>= (ebx >> 6) & 0x3f;
-+	}
-+
-+	ht_gfn = max_pfn - num_ht_pages;
-+done:
-+	return min(max_gfn, ht_gfn - 1);
-+}
 -- 
-2.31.1
-
+Regards,
+Sudeep

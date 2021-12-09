@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC73946E022
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A03546E024
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbhLIBUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbhLIBUB (ORCPT
+        id S241842AbhLIBVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:21:01 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32889 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239122AbhLIBU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:20:01 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB42C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:16:28 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so5076060pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:16:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ngoPwqqbhfOLLeyaWlockMByhsnvfUz95KBFPY/FjQE=;
-        b=THMEvCQ4OgR2pWehVPf4SjhgrdSd0hwGC+zK3eOQX6gtv7UbSwvQZnNFnegvWv5SCl
-         BN6nVQIemMjAC0X1lgvEubz33RbIClBv/bbS51nFydO17TKYOEeA/qEw9O5eugFQLQOO
-         T8vWUQgc1p3bub/SpNfSLPraTa/vrsIyt142Eg4KVh/OZvCJ/duvL1aAhpbiovo+XzGc
-         DCCy6cDK3JySX7UOlITdWRKpGeZzQDEDTyn2eOjY5WzIT+VJBczBwib04FlNNahwLU1q
-         XR0yoRSsQFTsAe4hUQvyn7rqae8ZIYwonPlexVl9ZHco1YzI//sqilUpLp/0IqD2kFUL
-         UxHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ngoPwqqbhfOLLeyaWlockMByhsnvfUz95KBFPY/FjQE=;
-        b=GpRr/wpXXFJnsgUH+Kxz1NTF+NVpmwe0koIgKFZwjcPy1JPFoATYMf1pqm+iHneC+a
-         U8Uhpz/6bBxtCMJXCeHPdo5XSUetqT6MgcjBaCVfNT6MnEft50xODBgDEPbStlrgnDQB
-         bDAQUa4CL7t4+1rXykMF5jULHnwH01xIsEHPoQqYR93OHNNnjvpDKs6iUoIoXmuPtPrS
-         ZyVLSIfOpOtrEea/3PiOGkxZOWBvoW69uE3m2jnMJfJm4xyHWD6boE8kwzNHh3R7Wj+m
-         avgMS5aGJPFrAO7qjxZNnh4UkziXQq5qDWa41ZEMVOr7nV9MfRojud4/jgKk6MUg9b0a
-         h2/A==
-X-Gm-Message-State: AOAM5304M/DYlFhzH5QHNBQ6yUf8NQw1kktRaPfAM7/Q0ZMDIT0GRw7b
-        f0x5NAWYY+sPR4ZHimwtGJbQGE3seDwuQg==
-X-Google-Smtp-Source: ABdhPJxsVffgoFVWKf4rmd52sXQPLLkExYCQayiNn1FIpOuQK1LnqxzzkxJ7jmZOXIFUuuYuPgXl2g==
-X-Received: by 2002:a17:90b:4d08:: with SMTP id mw8mr11845971pjb.236.1639012587943;
-        Wed, 08 Dec 2021 17:16:27 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q6sm3561347pgs.19.2021.12.08.17.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:16:27 -0800 (PST)
-Date:   Thu, 9 Dec 2021 01:16:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 1/12] KVM: X86: Fix when shadow_root_level=5 && guest
- root_level<4
-Message-ID: <YbFY533IT3XSIqAK@google.com>
-References: <20211124122055.64424-1-jiangshanlai@gmail.com>
- <20211124122055.64424-2-jiangshanlai@gmail.com>
+        Wed, 8 Dec 2021 20:20:59 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8bjh6xS3zcbld;
+        Thu,  9 Dec 2021 09:17:12 +0800 (CST)
+Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
+ (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 9 Dec
+ 2021 09:17:25 +0800
+Subject: Re: [PATCH] irqchip/irq-gic-v3-its.c: Return its_invall_cmd.col when
+ building INVALL
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Wudi Wang <wangwudi@hisilicon.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
+ <522e91148810ca7c77ad492d3a92c7a9@kernel.org>
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Message-ID: <3cc66fc7-7091-37e6-350b-f9a223392804@hisilicon.com>
+Date:   Thu, 9 Dec 2021 09:17:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211124122055.64424-2-jiangshanlai@gmail.com>
+In-Reply-To: <522e91148810ca7c77ad492d3a92c7a9@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.77.175]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
-> 
-> If the is an L1 with nNPT in 32bit, the shadow walk starts with
-> pae_root.
-> 
-> Fixes: a717a780fc4e ("KVM: x86/mmu: Support shadowing NPT when 5-level paging is enabled in host)
+Hi Marc,
 
-Have you actually run with 5-level nNPT?  I don't have access to hardware, at least
-not that I know of :-)
+On 2021/12/8 16:25, Marc Zyngier wrote:
+> On 2021-12-08 01:54, Shaokun Zhang wrote:
+>> From: Wudi Wang <wangwudi@hisilicon.com>
+>>
+>> INVALL CMD specifies that the ITS must ensure any caching associated with
+>> the interrupt collection defined by ICID is consistent with the LPI
+>> configuration tables held in memory for all Redistributors. SYNC is
+>> required to ensure that INVALL is executed.
+> 
+> The patch title doesn't quite spell out the issue. It should say something
+> like:
+> 
+> "Force synchronisation when issuing INVALL">
 
-I'm staring at kvm_mmu_sync_roots() and don't see how it can possibly work for
-5-level nNPT with a 4-level NPT guest.
+Make sense.
+
+>>
+>> Currently, LPI configuration data may be inconsistent with that in the
+>> memory within a short period of time after the INVALL command is executed.
+> 
+> I'm curious: have you seen any issue with this on actual HW? In my
+> experience, all implementations treat INVALL as a synchronous command,
+> 
+> Or was this solely done via inspection?
+> 
+
+It is noticed by checking the implementation of INVALL API function, not
+by on actual HW.
+
+>>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Marc Zyngier <maz@kernel.org>
+>> Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+>> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+> 
+> This needs:
+> 
+> Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
+> 
+
+Oops, indeed, apologies that forget to add this tag.
+
+>> ---
+>>  drivers/irqchip/irq-gic-v3-its.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+>> index eb0882d15366..0cb584d9815b 100644
+>> --- a/drivers/irqchip/irq-gic-v3-its.c
+>> +++ b/drivers/irqchip/irq-gic-v3-its.c
+>> @@ -742,7 +742,7 @@ static struct its_collection
+>> *its_build_invall_cmd(struct its_node *its,
+>>
+>>      its_fixup_cmd(cmd);
+>>
+>> -    return NULL;
+>> +    return desc->its_invall_cmd.col;
+>>  }
+>>
+>>  static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
+> 
+> I'll fix the above locally, no need to resend.
+> 
+
+Thanks Marc's help.
+
+> Thanks,
+> 
+>         M.

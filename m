@@ -2,106 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED78946ECDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4366B46ECDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbhLIQQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:16:06 -0500
-Received: from foss.arm.com ([217.140.110.172]:58688 "EHLO foss.arm.com"
+        id S237140AbhLIQQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:16:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:58700 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229508AbhLIQQD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:16:03 -0500
+        id S230177AbhLIQQE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:16:04 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CFB7ED1;
-        Thu,  9 Dec 2021 08:12:29 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4154911B3;
+        Thu,  9 Dec 2021 08:12:31 -0800 (PST)
 Received: from localhost.localdomain (unknown [10.57.83.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B147E3F5A1;
-        Thu,  9 Dec 2021 08:12:27 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 99EB53F5A1;
+        Thu,  9 Dec 2021 08:12:29 -0800 (PST)
 From:   Vincent Donnefort <vincent.donnefort@arm.com>
 To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         valentin.schneider@arm.com, morten.rasmussen@arm.com,
         chris.redpath@arm.com, qperret@google.com, lukasz.luba@arm.com,
         Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH 0/4] feec() energy margin removal
-Date:   Thu,  9 Dec 2021 16:11:55 +0000
-Message-Id: <20211209161159.1596018-1-vincent.donnefort@arm.com>
+Subject: [PATCH 1/4] sched/fair: Provide u64 read for 32-bits arch helper
+Date:   Thu,  9 Dec 2021 16:11:56 +0000
+Message-Id: <20211209161159.1596018-2-vincent.donnefort@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211209161159.1596018-1-vincent.donnefort@arm.com>
+References: <20211209161159.1596018-1-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-find_energy_efficient() (feec()) will migrate a task to save energy only
-if it saves at least 6% of the total energy consumed by the system. This
-conservative approach is a problem on a system where a lot of small tasks
-create a huge load on the overall: very few of them will be allowed to migrate
-to a smaller CPU, wasting a lot of energy. Instead of trying to determine yet
-another margin, let's try to remove it.
+Introducing macro helpers u64_u32_{store,load}() to factorize lockless
+accesses to u64 variables for 32-bits architectures.
 
-The first elements of this patch-set are various fixes and improvement that
-stabilizes task_util and ensures energy comparison fairness across all CPUs of
-the topology. Only once those fixed, we can completely remove the margin and
-let feec() aggressively place task and save energy.
+Users are for now cfs_rq.min_vruntime and sched_avg.last_update_time. To
+accommodate the later where the copy lies outside of the structure
+(cfs_rq.last_udpate_time_copy instead of sched_avg.last_update_time_copy),
+use the _copy() version of those helpers.
 
-This has been validated by two different ways:
+Those new helpers encapsulate smp_rmb() and smp_wmb() synchronization and
+therefore, have a small penalty in set_task_rq_fair() and init_cfs_rq().
 
-First using LISA's eas_behaviour test suite. This is composed of a set of
-scenario and verify if the task placement is optimum. No failure have been
-observed and it also improved some tests such as Ramp-Down (as the placement
-is now more energy oriented) and *ThreeSmall (as no bouncing between clusters
-happen anymore).
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
 
-  * Hikey960: 100% PASSED
-  * DB-845C:  100% PASSED
-  * RB5:      100% PASSED
+---
+This is a follow-up for:
 
-Second, using an Android benchmark: PCMark2 on a Pixel4, with a lot of
-backports to have a scheduler as close as we can from mainline. 
+https://lkml.kernel.org/r/1595847564-239957-1-git-send-email-vincent.donnefort@arm.com
+---
 
-  +------------+-----------------+-----------------+
-  |    Test    |      Perf       |    Energy [1]   |
-  +------------+-----------------+-----------------+
-  | Web2       | -0.3% pval 0.03 | -1.8% pval 0.00 |
-  | Video2     | -0.3% pval 0.13 | -5.6% pval 0.00 |
-  | Photo2 [2] | -3.8% pval 0.00 | -1%   pval 0.00 |
-  | Writing2   |  0%   pval 0.13 | -1%   pval 0.00 |
-  | Data2      |  0%   pval 0.8  | -0.43 pval 0.00 |
-  +------------+-----------------+-----------------+ 
-
-The margin removal let the kernel make the best use of the Energy Model,
-tasks are more likely to be placed where they fit and this saves a 
-substantial amount of energy, while having a limited impact on performances.
-
-[1] This is an energy estimation based on the CPU activity and the Energy Model
-for this device. "All models are wrong but some are useful"; yes, this is an
-imperfect estimation that doesn't take into account some idle states and shared
-power rails. Nonetheless this is based on the information the kernel has during
-runtime and it proves the scheduler can take better decisions based solely on
-those data.
-
-[2] This is the only performance impact observed. The debugging of this test
-showed no issue with task placement. The better score was solely due to some
-critical threads held on better performing CPUs. If a thread needs a higher
-capacity CPU, the placement must result from a user input (with e.g. uclamp
-min) instead of being artificially held on less efficient CPUs by feec().
-Notice also, the experiment didn't use the Android only latency_sensitive
-feature which would hide this problem on a real-life device.
-
-
-Vincent Donnefort (4):
-  sched/fair: Provide u64 read for 32-bits arch helper
-  sched/fair: Decay task PELT values during migration
-  sched/fair: Remove task_util from effective utilization in feec()
-  sched/fair: Remove the energy margin in feec()
-
- kernel/sched/core.c  |   7 ++
- kernel/sched/fair.c  | 263 ++++++++++++++++++++++---------------------
- kernel/sched/sched.h |  46 +++++++-
- 3 files changed, 189 insertions(+), 127 deletions(-)
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index da85b2938bff..3e6182dabc99 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -568,11 +568,8 @@ static void update_min_vruntime(struct cfs_rq *cfs_rq)
+ 	}
+ 
+ 	/* ensure we never gain time by being placed backwards. */
+-	cfs_rq->min_vruntime = max_vruntime(cfs_rq->min_vruntime, vruntime);
+-#ifndef CONFIG_64BIT
+-	smp_wmb();
+-	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+-#endif
++	u64_u32_store(cfs_rq->min_vruntime,
++		      max_vruntime(cfs_rq->min_vruntime, vruntime));
+ }
+ 
+ static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+@@ -3247,6 +3244,11 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
+ }
+ 
+ #ifdef CONFIG_SMP
++static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
++{
++	return u64_u32_load_copy(cfs_rq->avg.last_update_time,
++				 cfs_rq->last_update_time_copy);
++}
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ /*
+  * Because list_add_leaf_cfs_rq always places a child cfs_rq on the list
+@@ -3357,27 +3359,9 @@ void set_task_rq_fair(struct sched_entity *se,
+ 	if (!(se->avg.last_update_time && prev))
+ 		return;
+ 
+-#ifndef CONFIG_64BIT
+-	{
+-		u64 p_last_update_time_copy;
+-		u64 n_last_update_time_copy;
+-
+-		do {
+-			p_last_update_time_copy = prev->load_last_update_time_copy;
+-			n_last_update_time_copy = next->load_last_update_time_copy;
+-
+-			smp_rmb();
++	p_last_update_time = cfs_rq_last_update_time(prev);
++	n_last_update_time = cfs_rq_last_update_time(next);
+ 
+-			p_last_update_time = prev->avg.last_update_time;
+-			n_last_update_time = next->avg.last_update_time;
+-
+-		} while (p_last_update_time != p_last_update_time_copy ||
+-			 n_last_update_time != n_last_update_time_copy);
+-	}
+-#else
+-	p_last_update_time = prev->avg.last_update_time;
+-	n_last_update_time = next->avg.last_update_time;
+-#endif
+ 	__update_load_avg_blocked_se(p_last_update_time, se);
+ 	se->avg.last_update_time = n_last_update_time;
+ }
+@@ -3701,8 +3685,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ 	decayed |= __update_load_avg_cfs_rq(now, cfs_rq);
+ 
+ #ifndef CONFIG_64BIT
+-	smp_wmb();
+-	cfs_rq->load_last_update_time_copy = sa->last_update_time;
++	u64_u32_store_copy(sa->last_update_time,
++			   cfs_rq->last_update_time_copy,
++			   sa->last_update_time);
+ #endif
+ 
+ 	return decayed;
+@@ -3835,27 +3820,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 	}
+ }
+ 
+-#ifndef CONFIG_64BIT
+-static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+-{
+-	u64 last_update_time_copy;
+-	u64 last_update_time;
+-
+-	do {
+-		last_update_time_copy = cfs_rq->load_last_update_time_copy;
+-		smp_rmb();
+-		last_update_time = cfs_rq->avg.last_update_time;
+-	} while (last_update_time != last_update_time_copy);
+-
+-	return last_update_time;
+-}
+-#else
+-static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
+-{
+-	return cfs_rq->avg.last_update_time;
+-}
+-#endif
+-
+ /*
+  * Synchronize entity load avg of dequeued entity without locking
+  * the previous rq.
+@@ -6951,21 +6915,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 	if (READ_ONCE(p->__state) == TASK_WAKING) {
+ 		struct sched_entity *se = &p->se;
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+-		u64 min_vruntime;
+ 
+-#ifndef CONFIG_64BIT
+-		u64 min_vruntime_copy;
+-
+-		do {
+-			min_vruntime_copy = cfs_rq->min_vruntime_copy;
+-			smp_rmb();
+-			min_vruntime = cfs_rq->min_vruntime;
+-		} while (min_vruntime != min_vruntime_copy);
+-#else
+-		min_vruntime = cfs_rq->min_vruntime;
+-#endif
+-
+-		se->vruntime -= min_vruntime;
++		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+ 	}
+ 
+ 	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+@@ -11388,10 +11339,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+ void init_cfs_rq(struct cfs_rq *cfs_rq)
+ {
+ 	cfs_rq->tasks_timeline = RB_ROOT_CACHED;
+-	cfs_rq->min_vruntime = (u64)(-(1LL << 20));
+-#ifndef CONFIG_64BIT
+-	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
+-#endif
++	u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
+ #ifdef CONFIG_SMP
+ 	raw_spin_lock_init(&cfs_rq->removed.lock);
+ #endif
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index a00fc7057d97..1bd2058d7bb5 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -528,6 +528,45 @@ struct cfs_bandwidth { };
+ 
+ #endif	/* CONFIG_CGROUP_SCHED */
+ 
++/*
++ * u64_u32_load/u64_u32_store
++ *
++ * Use a copy of a u64 value to protect against data race. This is only
++ * applicable for 32-bits architectures.
++ */
++#ifdef CONFIG_64BIT
++# define u64_u32_load_copy(var, copy)       var
++# define u64_u32_store_copy(var, copy, val) (var = val)
++#else
++# define u64_u32_load_copy(var, copy)					\
++({									\
++	u64 __val, __val_copy;						\
++	do {								\
++		__val_copy = copy;					\
++		/*							\
++		 * paired with u64_u32_store, ordering access		\
++		 * to var and copy.					\
++		 */							\
++		smp_rmb();						\
++		__val = var;						\
++	} while (__val != __val_copy);					\
++	__val;								\
++})
++# define u64_u32_store_copy(var, copy, val)				\
++do {									\
++	typeof(val) __val = (val);					\
++	var = __val;							\
++	/*								\
++	 * paired with u64_u32_load, ordering access to var and		\
++	 * copy.							\
++	 */								\
++	smp_wmb();							\
++	copy = __val;							\
++} while (0)
++#endif
++# define u64_u32_load(var)      u64_u32_load_copy(var, var##_copy)
++# define u64_u32_store(var, val) u64_u32_store_copy(var, var##_copy, val)
++
+ /* CFS-related fields in a runqueue */
+ struct cfs_rq {
+ 	struct load_weight	load;
+@@ -568,7 +607,7 @@ struct cfs_rq {
+ 	 */
+ 	struct sched_avg	avg;
+ #ifndef CONFIG_64BIT
+-	u64			load_last_update_time_copy;
++	u64			last_update_time_copy;
+ #endif
+ 	struct {
+ 		raw_spinlock_t	lock ____cacheline_aligned;
 -- 
 2.25.1
- 
+

@@ -2,375 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7893146F7BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFF946F7C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbhLJAA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:00:57 -0500
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:40718 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbhLJAAz (ORCPT
+        id S234718AbhLJABI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233036AbhLJABH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:00:55 -0500
-Received: by mail-lj1-f175.google.com with SMTP id u22so11417136lju.7;
-        Thu, 09 Dec 2021 15:57:20 -0800 (PST)
+        Thu, 9 Dec 2021 19:01:07 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75ACC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:57:33 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id 193so6360213qkh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:57:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uki05wBt2Curw3Rk1sCic8HVPmQ/onh9arpdABDNhZE=;
+        b=Lx73rRhgsqhUQaq2ygcCUymM7fIcuNnfcFeVbUxwD4LvPpxCgPAdvZ+us2j5P0S0jG
+         qhNF9BmUY0cqiJcxQX/H4oxcFCz4hRaYAJD7ARBi58y7PGyKnMRXut/xnqbwbmOogJx1
+         rQkDuM1oiyGSNkU/IoqhRxoxesnfzWKAwbBBA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HjMn4hH+fC4J4PgBgRqmBIzeV9G9Pp9PN/xEyS3F9rA=;
-        b=7+bYk6PeL7CJ09WjLpnpi49n8qKkT7PWYwkJZPqd+dcAbAigmnOh/ObjRJCn67hzhB
-         Rj3U0FBuSpAIWpP9h4Yrd+igiufWN/xlwrKI1k0WOCqQCmecVoXAS53ahDRpK/nlj+rb
-         t26BcXiZxPlAvLtkN75BRUM9fLm2a3bSbiPpLnPtvzK5mbXNviR7NI0lxGWWrVHayWib
-         9Y1lamQDgu1fNkTzd+3y+eq4ies7pUvaiQEcM9MhbC8PqYf847+VqKs1Xt0Obrq5nQN/
-         /ya/a3vSdP8h17ZrgJCk2zyA8QEPbzw+d/H3NG3lOlYSGeAvoLZE4lwCXzWlHjsTGeqt
-         6fSQ==
-X-Gm-Message-State: AOAM530BMzTi1B4LUvKXSo1dxyM5EQEgfb+mD9N82h44O7JoOFp6BeHZ
-        a/eBmJYja+HK+JFIZ/7YYeKYG+h46duWOwZLMz8=
-X-Google-Smtp-Source: ABdhPJxJDoQAPjAYs1r/bKNKJa+HLQfkI6ZRQ3PWiX55tE2B5ebNNV/4Edwf2jyuGDmfUX73FDVsgI+k0mB8ogahtV0=
-X-Received: by 2002:a2e:781a:: with SMTP id t26mr9584425ljc.90.1639094240083;
- Thu, 09 Dec 2021 15:57:20 -0800 (PST)
+        bh=Uki05wBt2Curw3Rk1sCic8HVPmQ/onh9arpdABDNhZE=;
+        b=H7NWhjHk62d/tMijLrULh9g1tvoTHm+gBi4+NMn+oCMP5+bCl7w7IyqZruhW7cIpqx
+         q8vLyEsOHwc1ALn2QomA3maIpgShXKDgqhE4ZNNxSlR638X9M3AnpzQVCeWCFJ4RSMST
+         7x5Mf1AY0KhSYmiMe3nbGRae40e0sNMiFAwpHpuERDvo9AmXsEO58Cn3v2O6OxgsxurO
+         JGkTujNZzMXyAxYLHcZnZRdm6B8w4e7gPevaJ1DxYT0AhPZ4K3Abhh4TSBln8aPtCaYo
+         0T8OGzUXngRDHnqR7ihKsFup5Pgshdu8GYGFzTzr6xYok/YptrWweJ+eAkpVZ3EjXxUd
+         FhUg==
+X-Gm-Message-State: AOAM532OIHC62Ncr2YGgSAe9UzAJCTTHsaAQtf1d2veGFo+JdRzBImP4
+        3mviC9ZP3OqxNfdislz6E6hB2QfO/L6Z2IiFdAGhNg==
+X-Google-Smtp-Source: ABdhPJxoC/884U4HksLH+wuiXs0WNjfeYhB0s6I4Zf+ZCyxoMZNQDfLnuG+wprFJ15I8geJzMLWy+Mi42/aX2oXvpjU=
+X-Received: by 2002:a05:620a:4446:: with SMTP id w6mr17194393qkp.273.1639094252842;
+ Thu, 09 Dec 2021 15:57:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211207082245.604654-1-nakamura.shun@fujitsu.com> <20211207082245.604654-4-nakamura.shun@fujitsu.com>
-In-Reply-To: <20211207082245.604654-4-nakamura.shun@fujitsu.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 9 Dec 2021 15:57:08 -0800
-Message-ID: <CAM9d7ci3Uycj21X4XXu-MxV--k=gtYkS-H+vGWheKC-YG+d3Wg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] libperf tests: Add test_stat_multiplexing test
-To:     Shunsuke <nakamura.shun@fujitsu.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
+References: <20211202034544.2750-1-yunfei.dong@mediatek.com> <20211202034544.2750-16-yunfei.dong@mediatek.com>
+In-Reply-To: <20211202034544.2750-16-yunfei.dong@mediatek.com>
+From:   Steve Cho <stevecho@chromium.org>
+Date:   Thu, 9 Dec 2021 15:57:22 -0800
+Message-ID: <CAC-pXoNYXSoL0L8OEoVg+tU1JoMU5VU-voXNKQD1is0HBYmT_A@mail.gmail.com>
+Subject: Re: [PATCH v12, 15/19] dt-bindings: media: mtk-vcodec: Adds decoder
+ dt-bindings for mt8192
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Reviewed-by: Steve Cho <stevecho@chromium.org>
 
-On Tue, Dec 7, 2021 at 12:25 AM Shunsuke <nakamura.shun@fujitsu.com> wrote:
+On Wed, Dec 1, 2021 at 7:46 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
 >
-> From: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+> Adds decoder dt-bindings for mt8192.
+
+basic question: what is dt-bindings?
+
+Is this yaml file supposed to be used for some settings?
+
 >
-> Adds a test for a counter obtained using read() system call during
-> multiplexing.
->
-> Committer testing:
->
->   $ sudo make tests -C ./tools/lib/perf V=1
->     make[1]: Entering directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
->     make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=libperf
->     make -C /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/api/ O= libapi.a
->     make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fd obj=libapi
->     make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fs obj=libapi
->     make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=tests
->     make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./tests obj=tests
->     running static:
->     - running tests/test-cpumap.c...OK
->     - running tests/test-threadmap.c...OK
->     - running tests/test-evlist.c...
->     Event  0 -- Raw count = 297991478, run = 289848838, enable = 487833990
->              Scaled count = 501538569 (59.42%, 289848838/487833990)
->     Event  1 -- Raw count = 298202297, run = 289842833, enable = 487828457
->              Scaled count = 501898097 (59.41%, 289842833/487828457)
->     Event  2 -- Raw count = 298838708, run = 290229672, enable = 487824119
->              Scaled count = 502294367 (59.49%, 290229672/487824119)
->     Event  3 -- Raw count = 299636384, run = 291223455, enable = 487819672
->              Scaled count = 501911916 (59.70%, 291223455/487819672)
->     Event  4 -- Raw count = 301039452, run = 292217461, enable = 487814690
->              Scaled count = 502541725 (59.90%, 292217461/487814690)
->     Event  5 -- Raw count = 301835436, run = 293210150, enable = 487808943
->              Scaled count = 502158690 (60.11%, 293210150/487808943)
->     Event  6 -- Raw count = 304060357, run = 294621959, enable = 487802339
->              Scaled count = 503429390 (60.40%, 294621959/487802339)
->     Event  7 -- Raw count = 305283685, run = 295613727, enable = 487794884
->              Scaled count = 503751369 (60.60%, 295613727/487794884)
->     Event  8 -- Raw count = 305475229, run = 296220779, enable = 487786737
->              Scaled count = 503026039 (60.73%, 296220779/487786737)
->     Event  9 -- Raw count = 305141917, run = 295602628, enable = 487777537
->              Scaled count = 503518435 (60.60%, 295602628/487777537)
->     Event 10 -- Raw count = 303495328, run = 294604639, enable = 487765440
->              Scaled count = 502485407 (60.40%, 294604639/487765440)
->     Event 11 -- Raw count = 302667296, run = 293605945, enable = 487755909
->              Scaled count = 502809171 (60.20%, 293605945/487755909)
->     Event 12 -- Raw count = 301051839, run = 292174676, enable = 487746418
->              Scaled count = 502565650 (59.90%, 292174676/487746418)
->     Event 13 -- Raw count = 299861567, run = 291175260, enable = 487737096
->              Scaled count = 502287213 (59.70%, 291175260/487737096)
->     Event 14 -- Raw count = 299075896, run = 290177159, enable = 487727626
->              Scaled count = 502684557 (59.50%, 290177159/487727626)
->        Expected: 501627347
->        High: 503751369   Low:  297991478   Average:  502593373
->        Average Error = 0.19%
->     OK
->     - running tests/test-evsel.c...
->             loop = 65536, count = 328182
->             loop = 131072, count = 660212
->             loop = 262144, count = 1344434
->             loop = 524288, count = 2665921
->             loop = 1048576, count = 5292260
->             loop = 65536, count = 525695
->             loop = 131072, count = 1039025
->             loop = 262144, count = 2022367
->             loop = 524288, count = 3807896
->             loop = 1048576, count = 7026126
->     OK
->     running dynamic:
->     - running tests/test-cpumap.c...OK
->     - running tests/test-threadmap.c...OK
->     - running tests/test-evlist.c...
->     Event  0 -- Raw count = 301261995, run = 297151831, enable = 496168657
->              Scaled count = 503031594 (59.89%, 297151831/496168657)
->     Event  1 -- Raw count = 301949118, run = 298145404, enable = 496165648
->              Scaled count = 502495687 (60.09%, 298145404/496165648)
->     Event  2 -- Raw count = 301996384, run = 298170976, enable = 496162496
->              Scaled count = 502528051 (60.10%, 298170976/496162496)
->     Event  3 -- Raw count = 302266025, run = 298167975, enable = 496158896
->              Scaled count = 502978152 (60.10%, 298167975/496158896)
->     Event  4 -- Raw count = 302326299, run = 298162895, enable = 496154322
->              Scaled count = 503082383 (60.09%, 298162895/496154322)
->     Event  5 -- Raw count = 301984135, run = 298160272, enable = 496149190
->              Scaled count = 502512232 (60.09%, 298160272/496149190)
->     Event  6 -- Raw count = 302227412, run = 298150911, enable = 496142936
->              Scaled count = 502926504 (60.09%, 298150911/496142936)
->     Event  7 -- Raw count = 302124492, run = 298154219, enable = 496135963
->              Scaled count = 502742595 (60.10%, 298154219/496135963)
->     Event  8 -- Raw count = 302044822, run = 298146667, enable = 496128143
->              Scaled count = 502614830 (60.09%, 298146667/496128143)
->     Event  9 -- Raw count = 301592560, run = 298031312, enable = 496119275
->              Scaled count = 502047523 (60.07%, 298031312/496119275)
->     Event 10 -- Raw count = 300695500, run = 297033588, enable = 496108098
->              Scaled count = 502224255 (59.87%, 297033588/496108098)
->     Event 11 -- Raw count = 300948104, run = 296983965, enable = 496098673
->              Scaled count = 502720593 (59.86%, 296983965/496098673)
->     Event 12 -- Raw count = 300864958, run = 296983483, enable = 496089228
->              Scaled count = 502572948 (59.86%, 296983483/496089228)
->     Event 13 -- Raw count = 301117898, run = 296973717, enable = 496079647
->              Scaled count = 503002292 (59.86%, 296973717/496079647)
->     Event 14 -- Raw count = 301224163, run = 296977949, enable = 496070093
->              Scaled count = 503162942 (59.87%, 296977949/496070093)
->        Expected: 501650928
->        High: 503162942   Low:  301261995   Average:  502709505
->        Average Error = 0.21%
->     OK
->     - running tests/test-evsel.c...
->             loop = 65536, count = 328183
->             loop = 131072, count = 740142
->             loop = 262144, count = 1339999
->             loop = 524288, count = 2696817
->             loop = 1048576, count = 5294518
->             loop = 65536, count = 517941
->             loop = 131072, count = 871035
->             loop = 262144, count = 1835805
->             loop = 524288, count = 3391920
->             loop = 1048576, count = 6891764
->     OK
->     make[1]: Leaving directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
->
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
->  tools/lib/perf/tests/test-evlist.c | 157 +++++++++++++++++++++++++++++
->  1 file changed, 157 insertions(+)
+>  .../media/mediatek,vcodec-subdev-decoder.yaml | 266 ++++++++++++++++++
+>  1 file changed, 266 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
 >
-> diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-> index ce91a582f0e4..064edd0e995c 100644
-> --- a/tools/lib/perf/tests/test-evlist.c
-> +++ b/tools/lib/perf/tests/test-evlist.c
-> @@ -21,6 +21,9 @@
->  #include "tests.h"
->  #include <internal/evsel.h>
->
-> +#define EVENT_NUM 15
-> +#define WAIT_COUNT 100000000UL
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> new file mode 100644
+> index 000000000000..67cbcf8b3373
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> @@ -0,0 +1,266 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +
->  static int libperf_print(enum libperf_print_level level,
->                          const char *fmt, va_list ap)
->  {
-> @@ -413,6 +416,159 @@ static int test_mmap_cpus(void)
->         return 0;
->  }
->
-> +static double display_error(long long average,
-> +                           long long high,
-> +                           long long low,
-> +                           long long expected)
-> +{
-> +       double error;
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
-> +       error = (((double)average - expected) / expected) * 100.0;
-> +
-> +       __T_VERBOSE("   Expected: %lld\n", expected);
-> +       __T_VERBOSE("   High: %lld   Low:  %lld   Average:  %lld\n",
-> +                   high, low, average);
-> +
-> +       __T_VERBOSE("   Average Error = %.2f%%\n", error);
-> +
-> +       return error;
-> +}
-> +
-> +static int test_stat_multiplexing(void)
-> +{
-> +       struct perf_counts_values expected_counts = { .val = 0 };
-> +       struct perf_counts_values counts[EVENT_NUM] = {{ .val = 0 },};
-> +       struct perf_thread_map *threads;
-> +       struct perf_evlist *evlist;
-> +       struct perf_evsel *evsel;
-> +       struct perf_event_attr attr = {
-> +               .type        = PERF_TYPE_HARDWARE,
-> +               .config      = PERF_COUNT_HW_INSTRUCTIONS,
-> +               .read_format = PERF_FORMAT_TOTAL_TIME_ENABLED |
-> +                              PERF_FORMAT_TOTAL_TIME_RUNNING,
-> +               .disabled    = 1,
+> +title: Mediatek Video Decode Accelerator With Multi Hardware
 
-It'd be nice if you use a less restrictive event attribute
-so that we can test it on VM or with non-root.
+Is Multi Hardware supposed to mean parent & child devices in this context?
 
-How about using SOFTWARE / CPU_CLOCKS with
-exclude_kernel = 1 ?
+> +
+> +maintainers:
+> +  - Yunfei Dong <yunfei.dong@mediatek.com>
+> +
+> +description: |
+> +  Mediatek Video Decode is the video decode hardware present in Mediatek
+> +  SoCs which supports high resolution decoding functionalities. Required
+> +  parent and child device node.
+> +
+> +  About the Decoder Hardware Block Diagram, please check below:
 
-Thanks,
-Namhyung
+Great to see this diagram and description!
 
-> +       };
-> +       int err, i, nonzero = 0;
-> +       unsigned long count;
-> +       long long max = 0, min = 0, avg = 0;
-> +       double error = 0.0;
-> +       __s8 scaled = 0;
+
 > +
-> +       /* read for non-multiplexing event count */
-> +       threads = perf_thread_map__new_dummy();
-> +       __T("failed to create threads", threads);
+> +    +---------------------------------+------------------------------------+
+> +    |                                 |                                    |
+> +    | input -> lat HW -> lat buffer --|--> lat buffer -> core HW -> output |
+> +    |            ||                   |                     ||             |
+> +    +------------||-------------------+---------------------||-------------+
+> +              lat workqueue           |              core workqueue     <parent>
+> +    -------------||-----------------------------------------||------------------
+> +                 ||                                         ||          <child>
+> +                 \/ <----------------HW index-------------->\/
+> +           +------------------------------------------------------+
+> +           |                    enable/disable                    |
+> +           |           clk     power    irq    iommu              |
+> +           |                 (lat/lat soc/core0/core1)            |
+> +           +------------------------------------------------------+
 > +
-> +       perf_thread_map__set_pid(threads, 0, 0);
+> +  As above, there are parent and child devices, child mean each hardware. The child device
+> +  controls the information of each hardware independent which include clk/power/irq.
 > +
-> +       evsel = perf_evsel__new(&attr);
-> +       __T("failed to create evsel", evsel);
+> +  There are two workqueues in parent device: lat workqueue and core workqueue. They are used
+> +  to lat and core hardware deocder. Lat workqueue need to get input bitstream and lat buffer,
+> +  then enable lat to decode, writing the result to lat buffer, dislabe hardware when lat decode
+> +  done. Core workqueue need to get lat buffer and output buffer, then enable core to decode,
+> +  writing the result to output buffer, disable hardware when core decode done. These two
+> +  hardwares will decode each frame cyclically.
 > +
-> +       err = perf_evsel__open(evsel, NULL, threads);
-> +       __T("failed to open evsel", err == 0);
+> +  For the smi common may not the same for each hardware, can't combine all hardware in one node,
+> +  or leading to iommu fault when access dram data.
 > +
-> +       err = perf_evsel__enable(evsel);
-> +       __T("failed to enable evsel", err == 0);
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8192-vcodec-dec
 > +
-> +       /* wait loop */
-> +       count = WAIT_COUNT;
-> +       while (count--)
-> +               ;
+> +  reg:
+> +    maxItems: 1
 > +
-> +       perf_evsel__read(evsel, 0, 0, &expected_counts);
-> +       __T("failed to read value for evsel", expected_counts.val != 0);
-> +       __T("failed to read non-multiplexing event count",
-> +           expected_counts.ena == expected_counts.run);
+> +  iommus:
+> +    minItems: 1
+> +    maxItems: 32
+> +    description: |
+> +      List of the hardware port in respective IOMMU block for current Socs.
+> +      Refer to bindings/iommu/mediatek,iommu.yaml.
 > +
-> +       err = perf_evsel__disable(evsel);
-> +       __T("failed to enable evsel", err == 0);
+> +  mediatek,scp:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of system control processor (SCP), using
+> +      the remoteproc & rpmsg framework.
+> +      $ref: /schemas/remoteproc/mtk,scp.yaml
 > +
-> +       perf_evsel__close(evsel);
-> +       perf_evsel__delete(evsel);
+> +  dma-ranges:
+> +    maxItems: 1
+> +    description: |
+> +      Describes the physical address space of IOMMU maps to memory.
 > +
-> +       perf_thread_map__put(threads);
+> +  "#address-cells":
+> +    const: 1
 > +
-> +       /* read for multiplexing event count */
-> +       threads = perf_thread_map__new_dummy();
-> +       __T("failed to create threads", threads);
+> +  "#size-cells":
+> +    const: 1
 > +
-> +       perf_thread_map__set_pid(threads, 0, 0);
+> +  ranges: true
 > +
-> +       evlist = perf_evlist__new();
-> +       __T("failed to create evlist", evlist);
+> +# Required child node:
+> +patternProperties:
+> +  vcodec-lat:
+> +    type: object
 > +
-> +       for (i = 0; i < EVENT_NUM; i++) {
-> +               evsel = perf_evsel__new(&attr);
-> +               __T("failed to create evsel", evsel);
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mtk-vcodec-lat
 > +
-> +               perf_evlist__add(evlist, evsel);
-> +       }
-> +       perf_evlist__set_maps(evlist, NULL, threads);
+> +      reg:
+> +        maxItems: 1
 > +
-> +       err = perf_evlist__open(evlist);
-> +       __T("failed to open evsel", err == 0);
+> +      interrupts:
+> +        maxItems: 1
 > +
-> +       perf_evlist__enable(evlist);
+> +      iommus:
+> +        minItems: 1
+> +        maxItems: 32
+> +        description: |
+> +          List of the hardware port in respective IOMMU block for current Socs.
+> +          Refer to bindings/iommu/mediatek,iommu.yaml.
 > +
-> +       /* wait loop */
-> +       count = WAIT_COUNT;
-> +       while (count--)
-> +               ;
+> +      clocks:
+> +        maxItems: 5
 > +
-> +       i = 0;
-> +       perf_evlist__for_each_evsel(evlist, evsel) {
-> +               perf_evsel__read(evsel, 0, 0, &counts[i]);
-> +               __T("failed to read value for evsel", counts[i].val != 0);
-> +               i++;
-> +       }
+> +      clock-names:
+> +        items:
+> +          - const: sel
+> +          - const: soc-vdec
+> +          - const: soc-lat
+> +          - const: vdec
+> +          - const: top
 > +
-> +       perf_evlist__disable(evlist);
+> +      assigned-clocks:
+> +        maxItems: 1
 > +
-> +       min = counts[0].val;
-> +       for (i = 0; i < EVENT_NUM; i++) {
-> +               __T_VERBOSE("Event %2d -- Raw count = %lu, run = %lu, enable = %lu\n",
-> +                           i, counts[i].val, counts[i].run, counts[i].ena);
+> +      assigned-clock-parents:
+> +        maxItems: 1
 > +
-> +               perf_counts_values__scale(&counts[i], true, &scaled);
-> +               if (scaled == 1) {
-> +                       __T_VERBOSE("\t Scaled count = %lu (%.2lf%%, %lu/%lu)\n",
-> +                                   counts[i].val,
-> +                                   (double)counts[i].run / (double)counts[i].ena * 100.0,
-> +                                   counts[i].run, counts[i].ena);
-> +               } else if (scaled == -1) {
-> +                       __T_VERBOSE("\t Not Runnnig\n");
-> +               } else {
-> +                       __T_VERBOSE("\t Not Scaling\n");
-> +               }
+> +      power-domains:
+> +        maxItems: 1
 > +
-> +               if (counts[i].val > max)
-> +                       max = counts[i].val;
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - interrupts
+> +      - iommus
+> +      - clocks
+> +      - clock-names
+> +      - assigned-clocks
+> +      - assigned-clock-parents
+> +      - power-domains
 > +
-> +               if (counts[i].val < min)
-> +                       min = counts[i].val;
+> +    additionalProperties: false
 > +
-> +               avg += counts[i].val;
+> +  vcodec-core:
+> +    type: object
 > +
-> +               if (counts[i].val != 0)
-> +                       nonzero++;
-> +       }
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mtk-vcodec-core
 > +
-> +       if (nonzero != 0)
-> +               avg = avg / nonzero;
-> +       else
-> +               avg = 0;
+> +      reg:
+> +        maxItems: 1
 > +
-> +       error = display_error(avg, max, min, expected_counts.val);
+> +      interrupts:
+> +        maxItems: 1
 > +
-> +       __T("Error out of range!", ((error <= 1.0) && (error >= -1.0)));
+> +      iommus:
+> +        minItems: 1
+> +        maxItems: 32
+> +        description: |
+> +          List of the hardware port in respective IOMMU block for current Socs.
+> +          Refer to bindings/iommu/mediatek,iommu.yaml.
 > +
-> +       perf_evlist__close(evlist);
-> +       perf_evlist__delete(evlist);
+> +      clocks:
+> +        maxItems: 5
 > +
-> +       perf_thread_map__put(threads);
+> +      clock-names:
+> +        items:
+> +          - const: sel
+> +          - const: soc-vdec
+> +          - const: soc-lat
+> +          - const: vdec
+> +          - const: top
 > +
-> +       return 0;
-> +}
+> +      assigned-clocks:
+> +        maxItems: 1
 > +
->  int test_evlist(int argc, char **argv)
->  {
->         __T_START;
-> @@ -424,6 +580,7 @@ int test_evlist(int argc, char **argv)
->         test_stat_thread_enable();
->         test_mmap_thread();
->         test_mmap_cpus();
-> +       test_stat_multiplexing();
->
->         __T_END;
->         return tests_failed == 0 ? 0 : -1;
+> +      assigned-clock-parents:
+> +        maxItems: 1
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - interrupts
+> +      - iommus
+> +      - clocks
+> +      - clock-names
+> +      - assigned-clocks
+> +      - assigned-clock-parents
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - iommus
+> +  - mediatek,scp
+> +  - dma-ranges
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/memory/mt8192-larb-port.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt8192-clk.h>
+> +    #include <dt-bindings/power/mt8192-power.h>
+> +
+> +    video-codec@16000000 {
+> +        compatible = "mediatek,mt8192-vcodec-dec";
+> +        mediatek,scp = <&scp>;
+> +        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+> +        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges = <0 0x16000000 0x40000>;
+> +        reg = <0x16000000 0x1000>;             /* VDEC_SYS */
+> +        vcodec-lat@10000 {
+> +            compatible = "mediatek,mtk-vcodec-lat";
+> +            reg = <0x10000 0x800>;
+> +            interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
+> +            iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
+> +                <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
+> +            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+> +                <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+> +                <&vdecsys_soc CLK_VDEC_SOC_LAT>,
+> +                <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
+> +                <&topckgen CLK_TOP_MAINPLL_D4>;
+> +            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
+> +            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+> +            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+> +            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
+> +        };
+> +
+> +        vcodec-core@25000 {
+> +            compatible = "mediatek,mtk-vcodec-core";
+> +            reg = <0x25000 0x1000>;
+> +            interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
+> +            iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
+> +                <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
+> +            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+> +                <&vdecsys CLK_VDEC_VDEC>,
+> +                <&vdecsys CLK_VDEC_LAT>,
+> +                <&vdecsys CLK_VDEC_LARB1>,
+> +                <&topckgen CLK_TOP_MAINPLL_D4>;
+> +            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
+> +            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+> +            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+> +            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
+> +        };
+> +    };
 > --
 > 2.25.1
 >

@@ -2,209 +2,465 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A329D46EC45
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571CD46EC43
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240551AbhLIPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S240500AbhLIPyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbhLIPy0 (ORCPT
+        with ESMTP id S235019AbhLIPyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:54:26 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3F8C061746;
-        Thu,  9 Dec 2021 07:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ps/Ac+bwV1CHhL246Xo6CP1EQ5J2zkju/lCkhUmk0eI=; b=GXIBMFv1VzGYKDXmKDJcPR9/wq
-        Iv+p9OOhGGVp/tn1bSiBgOORBsZ/vXOqBRrK/gBM3GV0yc1vyZlaVi9ta8g3WUjMm0Y970Ywqx7ft
-        q6YiToOxrV9LHdG9d/dbaQziOB9jtveK3pdy1skbsQYYPyBsVeOrqc4i0rsyVygIpIIyToX7CxJtf
-        uOUdPMp/RkSkum+8T36IeNnu7Jibu4QeJkQxvLZIjZOUiR3xDKCcWZbiRON+zoZyxQq7Tg9NRUcqX
-        Kjwc1tWxJRJ5l43Y32ITZPUUDYjxgQQdkEU5U2vmOIyKegpsFu37NC0VOx/QjLEVAwlkRBt5chjqs
-        Dl01elaw==;
-Received: from 54-240-197-234.amazon.com ([54.240.197.234] helo=freeip.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvLgn-00Gb0X-NU; Thu, 09 Dec 2021 15:50:34 +0000
-Message-ID: <3e10b062d74a6727ba4d044614af9be96493887a.camel@infradead.org>
-Subject: Re: [PATCH 08/11] x86/tsc: Avoid synchronizing TSCs with multiple
- CPUs in parallel
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-Date:   Thu, 09 Dec 2021 15:50:29 +0000
-In-Reply-To: <YbIkMyNeb72R4Ma6@hirez.programming.kicks-ass.net>
-References: <20211209150938.3518-1-dwmw2@infradead.org>
-         <20211209150938.3518-9-dwmw2@infradead.org>
-         <YbIkMyNeb72R4Ma6@hirez.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-BJ8eWXrMFevdFvsnK7M1"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 9 Dec 2021 10:54:19 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C3C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:50:45 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id u1so10373336wru.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=3CC2+Z6p/h9qiJ+Eyu7jSbZzM4S4qy9XqmndPZl7YoY=;
+        b=mH0M/Ga7bXSSXzYtIi1/VHrNkGwoIgdNBe6NZy0cYWKHNJrhux09i7v1ksAH2uc2Qr
+         TeBQvQ4Lgx4bQIpq/uKKX7fjvN0wcyyKMfFosLGhTgRVpO0Fjmu1mcfoexzbrlTppV7b
+         FsumXcb8OpujtllmSxI0tM++uKD2XcNMsDjvV1YAHhB1LRgSbgVSOeGz0FOOKpSpSL0S
+         Zhh0r4FCJn4867OpuRAS1EOJ4og885xxbqUOmXG1rsbvHwYjz3/1M2GAsCYvg6ru0vHg
+         9KcqkXMVhYUbnyWjExIP7o3eefObl4KXfOFF2lC91syEetB5k8kqkndmR2qDqVdGvLMS
+         n7PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3CC2+Z6p/h9qiJ+Eyu7jSbZzM4S4qy9XqmndPZl7YoY=;
+        b=TfGDr10fPsD62DbU965I+mpuzLl/zqyG5UcrHjh3UEBBQD5qZ9izRvF28giiU5R7eC
+         BJYc2yp4Xuera5egqV9AewKmtPc13W59Vb6QXRT9+OKirqVpu+2XVNy/5vBXshQjMMbF
+         7xS68BMdKbcooMd9cxJjnB4KneC6lCl/X+3bq8wOGJ8xr3kuxVw4+9j/iClm+NW2O4sp
+         8cTCPyRETYQf1wi/zNwpIq4LkoCigZn6Lcc+6mTTlREZ2bKpwBKcPTdtkXZIUavD5YIr
+         Zl/cSXwiPJym7mzlo5UOl+px9ivjwRv+xjpXVDKIAx6bdGJwqNfsLIYrc7TGEJQ+tdDL
+         Qn1g==
+X-Gm-Message-State: AOAM533FHGrV8ksKvhoNyOXcEbRM2rYtaJyyqbhcRR8w59dRL8ZG/8Lc
+        alraalveQwZzVBbiM9GX/mgMAXwIhHyMFw==
+X-Google-Smtp-Source: ABdhPJz/FMH3CFXSv12m0+XKr4odkgUzDciQT5IljvMKhXBtw4WTuyZm5s7pBrfG0B89ou9NvABxew==
+X-Received: by 2002:adf:fb05:: with SMTP id c5mr7184988wrr.497.1639065044005;
+        Thu, 09 Dec 2021 07:50:44 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id p12sm79970wro.33.2021.12.09.07.50.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 07:50:43 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] nvmem: Add driver for OCOTP in Sunplus SP7021
+To:     Vincent Shih <vincent.sunplus@gmail.com>,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+References: <1638867233-8383-1-git-send-email-vincent.sunplus@gmail.com>
+ <1638867233-8383-2-git-send-email-vincent.sunplus@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <1b336b98-7546-93e3-f1ed-92d041c2df35@linaro.org>
+Date:   Thu, 9 Dec 2021 15:50:42 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <1638867233-8383-2-git-send-email-vincent.sunplus@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---=-BJ8eWXrMFevdFvsnK7M1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2021-12-09 at 16:43 +0100, Peter Zijlstra wrote:
-> On Thu, Dec 09, 2021 at 03:09:35PM +0000, David Woodhouse wrote:
-> > diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
-> > index 50a4515fe0ad..4ee247d89a49 100644
-> > --- a/arch/x86/kernel/tsc_sync.c
-> > +++ b/arch/x86/kernel/tsc_sync.c
-> > @@ -202,6 +202,7 @@ bool tsc_store_and_check_tsc_adjust(bool bootcpu)
-> >   * Entry/exit counters that make sure that both CPUs
-> >   * run the measurement code at once:
-> >   */
-> > +static atomic_t tsc_sync_cpu =3D ATOMIC_INIT(-1);
-> >  static atomic_t start_count;
-> >  static atomic_t stop_count;
-> >  static atomic_t skip_test;
-> > @@ -326,6 +327,8 @@ void check_tsc_sync_source(int cpu)
-> >  		atomic_set(&test_runs, 1);
-> >  	else
-> >  		atomic_set(&test_runs, 3);
-> > +
-> > +	atomic_set(&tsc_sync_cpu, cpu);
-> >  retry:
-> >  	/*
-> >  	 * Wait for the target to start or to skip the test:
-> > @@ -407,6 +410,10 @@ void check_tsc_sync_target(void)
-> >  	if (unsynchronized_tsc())
-> >  		return;
-> > =20
-> > +	/* Wait for this CPU's turn */
-> > +	while (atomic_read(&tsc_sync_cpu) !=3D cpu)
-> > +		cpu_relax();
-> > +
-> >  	/*
-> >  	 * Store, verify and sanitize the TSC adjust register. If
-> >  	 * successful skip the test.
->=20
-> This new atomic_t seems superfluous, there isn't any actual atomic
-> operation used.
+On 07/12/2021 08:53, Vincent Shih wrote:
+> Add driver for OCOTP in Sunplus SP7021
+> 
+> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> ---
+> Changes in v2:
+>   - Merge sunplus-ocotp.h and sunplus-ocotp0.c to sunplus-ocotp.c
+>   - Clean up codes.
+> 
+>   MAINTAINERS                   |   5 +
+>   drivers/nvmem/Kconfig         |  12 ++
+>   drivers/nvmem/Makefile        |   2 +
+>   drivers/nvmem/sunplus-ocotp.c | 268 ++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 287 insertions(+)
+>   create mode 100644 drivers/nvmem/sunplus-ocotp.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 80eebc1..0e6593a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17947,6 +17947,11 @@ L:	netdev@vger.kernel.org
+>   S:	Maintained
+>   F:	drivers/net/ethernet/dlink/sundance.c
+>   
+> +SUNPLUS OCOTP DRIVER
+> +M:	Vincent Shih <vincent.sunplus@gmail.com>
+> +S:	Maintained
+> +F:	drivers/nvmem/sunplus-ocotp.c
+> +
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index da41461..fb053d6 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
+>   	  This driver provides support for Broadcom's NVRAM that can be accessed
+>   	  using I/O mapping.
+>   
+> +config NVMEM_SUNPLUS_OCOTP
+> +	tristate "Sunplus SoC OTP support"
+> +	depends on SOC_SP7021
 
-That's true; it could just be WRITE_ONCE/READ_ONCE. But the atomic is
-fairly much equivalent and does no harm.
+COMPILE_TEST ?
 
-I see this one mostly as a placeholder =E2=80=94 I'd still prefer to have a
-decent 1:many TSC sync or at least a 1:many *check* falling back to 1:1
-mode if anything actually needs to be adjusted. And/or just avoid the
-TSC sync completely when it's not needed, like on kexec.
+> +	depends on HAS_IOMEM
+> +	help
+> +	  This is a driver for the On-chip OTP controller (OCOTP) available
+> +	  on Sunplus SoCs. It provids access to 128 bytes of one-time
+
+s/provids/provides
+
+> +	  programmable eFuse.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nvmem-sunplus-ocotp.
+> +
+>   endif
+> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+> index dcbbde3..0f14cd9 100644
+> --- a/drivers/nvmem/Makefile
+> +++ b/drivers/nvmem/Makefile
+> @@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
+>   nvmem-rmem-y			:= rmem.o
+>   obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
+>   nvmem_brcm_nvram-y		:= brcm_nvram.o
+> +obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
+> +nvmem_sunplus_ocotp-y		:= sunplus-ocotp.o
+> diff --git a/drivers/nvmem/sunplus-ocotp.c b/drivers/nvmem/sunplus-ocotp.c
+> new file mode 100644
+> index 0000000..2997b29
+> --- /dev/null
+> +++ b/drivers/nvmem/sunplus-ocotp.c
+> @@ -0,0 +1,268 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * The OCOTP driver for Sunplus	SP7021
+> + *
+> + * Copyright (C) 2019 Sunplus Technology Inc., All rights reseerved.
+
+reserved ?
+
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-provider.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +
+> +/*
+> + * OTP memory
+> + * Each bank contains 4 words (32 bits).
+> + * Bank 0 starts at offset 0 from the base.
+> + */
+> +
+> +#define OTP_WORDS_PER_BANK		4
+> +#define OTP_WORD_SIZE			sizeof(u32)
+> +#define OTP_BIT_ADDR_OF_BANK		(8 * OTP_WORD_SIZE * OTP_WORDS_PER_BANK)
+> +#define QAC628_OTP_NUM_BANKS            8
+> +#define QAC628_OTP_SIZE                 (QAC628_OTP_NUM_BANKS * OTP_WORDS_PER_BANK * OTP_WORD_SIZE)
+> +#define OTP_READ_TIMEOUT                20000
+> +
+> +/* HB_GPIO */
+> +#define ADDRESS_8_DATA			0x20
+> +
+> +/* OTP_RX */
+> +#define OTP_CONTROL_2			0x48
+> +#define OTP_RD_PERIOD			GENMASK(15, 8)
+> +#define OTP_RD_PERIOD_MASK		~GENMASK(15, 8)
+> +#define ONE_CPU_CLOCK			0x1
+> +#define SEL_BAK_KEY2			BIT(5)
+> +#define SEL_BAK_KEY2_MASK		~BIT(5)
+> +#define SW_TRIM_EN			BIT(4)
+> +#define SW_TRIM_EN_MASK			~BIT(4)
+> +#define SEL_BAK_KEY			BIT(3)
+> +#define SEL_BAK_KEY_MASK		~BIT(3)
+> +#define OTP_READ			BIT(2)
+> +#define OTP_LOAD_SECURE_DATA		BIT(1)
+> +#define OTP_LOAD_SECURE_DATA_MASK	~BIT(1)
+> +#define OTP_DO_CRC			BIT(0)
+> +#define OTP_DO_CRC_MASK			~BIT(0)
+> +#define OTP_STATUS			0x4c
+> +#define OTP_READ_DONE			BIT(4)
+> +#define OTP_READ_DONE_MASK		~BIT(4)
+> +#define OTP_LOAD_SECURE_DONE_MASK	~BIT(2)
+> +#define OTP_READ_ADDRESS		0x50
+> +
+> +enum base_type {
+> +	HB_GPIO,
+> +	OTPRX,
+> +	BASEMAX,
+> +};
+> +
+> +struct sp_otp_data_t {
+> +	struct device *dev;
+> +	void __iomem *base[BASEMAX];
+> +	struct clk *clk;
+> +	struct nvmem_config *config;
+
+totally redundant to store config in this stucture as you will never use 
+this after probe.
+
+> +};
+> +
+> +struct sp_otp_vX_t {
+
+does X needs to be caps?
+
+> +	int size;
+> +};
+> +
+> +const struct sp_otp_vX_t  sp_otp_v0 = {
+> +	.size = QAC628_OTP_SIZE,
+> +};
+> +
+> +static int sp_otp_wait(void __iomem *reg_base)
+> +{
+> +	int timeout = OTP_READ_TIMEOUT;
+> +	unsigned int status;
+> +
+> +	do {
+> +		usleep_range(10);
+
+Doesn't this take two arguments?
+
+> +		if (timeout-- == 0)
+> +			return -ETIMEDOUT;
+> +
+> +		status = readl(reg_base + OTP_STATUS);
+> +	} while ((status & OTP_READ_DONE) != OTP_READ_DONE);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_otp_read_real(struct sp_otp_data_t *otp, int addr, char *value)
+> +{
+> +	unsigned int addr_data;
+> +	unsigned int byte_shift;
+> +	int ret = 0;
+
+unnecessary initializatoin here.
+
+> +
+> +	addr_data = addr % (OTP_WORD_SIZE * OTP_WORDS_PER_BANK);
+> +	addr_data = addr_data / OTP_WORD_SIZE;
+> +
+> +	byte_shift = addr % (OTP_WORD_SIZE * OTP_WORDS_PER_BANK);
+> +	byte_shift = byte_shift % OTP_WORD_SIZE;
+> +
+> +	addr = addr / (OTP_WORD_SIZE * OTP_WORDS_PER_BANK);
+> +	addr = addr * OTP_BIT_ADDR_OF_BANK;
+> +
+> +	writel(readl(otp->base[OTPRX] + OTP_STATUS) & OTP_READ_DONE_MASK &
+> +		     OTP_LOAD_SECURE_DONE_MASK, otp->base[OTPRX] + OTP_STATUS);
+> +	writel(addr, otp->base[OTPRX] + OTP_READ_ADDRESS);
+> +	writel(readl(otp->base[OTPRX] + OTP_CONTROL_2) | OTP_READ,
+> +	       otp->base[OTPRX] + OTP_CONTROL_2);
+> +	writel(readl(otp->base[OTPRX] + OTP_CONTROL_2) & SEL_BAK_KEY2_MASK & SW_TRIM_EN_MASK
+> +	       & SEL_BAK_KEY_MASK & OTP_LOAD_SECURE_DATA_MASK & OTP_DO_CRC_MASK,
+> +	       otp->base[OTPRX] + OTP_CONTROL_2);
+> +	writel((readl(otp->base[OTPRX] + OTP_CONTROL_2) & OTP_RD_PERIOD_MASK) |
+> +	       ((ONE_CPU_CLOCK * 0x1e) << 8), otp->base[OTPRX] + OTP_CONTROL_2);
+> +
+> +	ret = sp_otp_wait(otp->base[OTPRX]);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*value = (readl(otp->base[HB_GPIO] + ADDRESS_8_DATA + addr_data * OTP_WORD_SIZE)
+> +			>> (8 * byte_shift)) & 0xFF;
+> +
+> +	return ret;
+> +}
+> +
+> +static int sp_ocotp_read(void *priv, unsigned int offset, void *value, size_t bytes)
+> +{
+> +	struct sp_otp_data_t *otp = priv;
+> +	unsigned int addr;
+> +	char *buf = value;
+> +	char val[4];
+> +	int ret;
+> +
+> +	dev_dbg(otp->dev, "OTP read %u bytes at %u", bytes, offset);
+> +
+why do we need all these debug ?
+
+> +	if (offset >= QAC628_OTP_SIZE || bytes == 0 || ((offset + bytes) > QAC628_OTP_SIZE))
+> +		return -EINVAL;
+
+Core should already do this sanity test, if not these checks belong to 
+nvmem core.
+
+> +
+> +	ret = clk_enable(otp->clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*buf = 0;
+> +	for (addr = offset; addr < (offset + bytes); addr++) {
+> +		ret = sp_otp_read_real(otp, addr, val);
+> +		if (ret < 0) {
+> +			dev_err(otp->dev, "OTP read fail:%d at %d", ret, addr);
+> +			goto disable_clk;
+> +		}
+> +
+> +		*buf++ = *val;
+> +	}
+> +
+> +disable_clk:
+> +	clk_disable(otp->clk);
+> +	dev_dbg(otp->dev, "OTP read complete");
+> +
+> +	return ret;
+> +}
+> +
+> +static struct nvmem_config sp_ocotp_nvmem_config = {
+> +	.name = "sp-ocotp",
+> +	.read_only = true,
+> +	.word_size = 1,
+> +	.size = QAC628_OTP_SIZE,
+> +	.stride = 1,
+> +	.reg_read = sp_ocotp_read,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static int sp_ocotp_probe(struct platform_device *pdev)
+> +{
+> +	const struct of_device_id *match;
+> +	const struct sp_otp_vX_t *sp_otp_vX;
+> +	struct device *dev = &pdev->dev;
+> +	struct nvmem_device *nvmem;
+> +	struct sp_otp_data_t *otp;
+> +	struct resource *res;
+> +	int ret;
+> +
+
+<---
+> +	match = of_match_device(dev->driver->of_match_table, dev);
+> +	if (match && match->data)
+> +		sp_otp_vX = match->data;
+> +	else
+> +		dev_err(dev, "OTP vX does not match");
+--->
+
+This looks like dead code, variable is set but not used anywhere.
+Error case is ignored.
 
 
---=-BJ8eWXrMFevdFvsnK7M1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+> +
+> +	otp = devm_kzalloc(dev, sizeof(*otp), GFP_KERNEL);
+> +	if (!otp)
+> +		return -ENOMEM;
+> +
+> +	otp->dev = dev;
+> +	otp->config = &sp_ocotp_nvmem_config;
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hb_gpio");
+> +	otp->base[HB_GPIO] = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(otp->base[HB_GPIO]))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(otp->base[HB_GPIO]),
+> +						"hb_gpio devm_ioremap_resource fail\n");
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
-MjA5MTU1MDI5WjAvBgkqhkiG9w0BCQQxIgQgX6C/RjJsDxUgClWOjw7BfLtplHb9Q51VRjP8OdDH
-tBcwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBABi6PligEGpNR6bXvHbljKrzqTE9QjV2lP21srntOqawy7Un7yK2mly0Gxz7hEWp
-VV6lJ7QgR7cknt182eaKSSQz9GVTfq7HT1TMvQ7YTgB4umdXWzRJ9Xz91EZPAiSr/eGPebh4iMYD
-ZvRSAM66j3gWc2n+yDYhmXPOgsoYQJ9As01zJWSp2/Vrq8Gu1tQXPDLsp3BHN2OnoJaZrv9AF08r
-KD/lkZ/kSE/1i+hUFE+MzDgjvf/d3nKz0o9M+GsTx9jroSTonN/j0SpXe0X6EVYPLtcDnnlQ7vph
-inmP8nK25DtOrRAVJT5C3IR1NWq545UjL7apOOqA0dX696THfAMAAAAAAAA=
+printing error here is totally redundant.
+
+you could just do
+
+if (IS_ERR(otp->base[HB_GPIO]))
+	return PTR_ERR(otp->base[HB_GPIO]);
 
 
---=-BJ8eWXrMFevdFvsnK7M1--
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otprx");
+> +	otp->base[OTPRX] = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(otp->base[OTPRX]))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(otp->base[OTPRX]),
+> +						"otprx devm_ioremap_resource fail\n");
+> +
+same here,
 
+> +	otp->clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(otp->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(otp->clk),
+> +						"devm_clk_get fail\n");
+> +
+> +	ret = clk_prepare(otp->clk);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to prepare clk: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	sp_ocotp_nvmem_config.priv = otp;
+> +	sp_ocotp_nvmem_config.dev = dev;
+> +
+> +	nvmem = devm_nvmem_register(dev, &sp_ocotp_nvmem_config);
+> +	if (IS_ERR(nvmem))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(nvmem),
+> +						"register nvmem device fail\n");
+> +
+> +	platform_set_drvdata(pdev, nvmem);
+> +
+> +	dev_dbg(dev, "banks:%d x wpb:%d x wsize:%d = %d",
+> +		QAC628_OTP_NUM_BANKS, OTP_WORDS_PER_BANK,
+> +		OTP_WORD_SIZE, QAC628_OTP_SIZE);
+> +
+> +	dev_info(dev, "by Sunplus (C) 2020");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sp_ocotp_dt_ids[] = {
+> +	{ .compatible = "sunplus,sp7021-ocotp", .data = &sp_otp_v0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sp_ocotp_dt_ids);
+> +
+> +static struct platform_driver sp_otp_driver = {
+> +	.probe     = sp_ocotp_probe,
+> +	.driver    = {
+> +		.name           = "sunplus,sp7021-ocotp",
+> +		.of_match_table = sp_ocotp_dt_ids,
+> +	}
+> +};
+> +
+> +static int __init sp_otp0_drv_new(void)
+> +{
+> +	return platform_driver_register(&sp_otp_driver);
+> +}
+> +subsys_initcall(sp_otp0_drv_new);
+
+Why this needs to be subsys_initcall() why can't it be module_init?
+
+
+> +
+> +static void __exit sp_otp0_drv_del(void)
+> +{
+> +	platform_driver_unregister(&sp_otp_driver);
+> +}
+> +module_exit(sp_otp0_drv_del);
+> +
+> +MODULE_AUTHOR("Vincent Shih <vincent.sunplus@gmail.com>");
+> +MODULE_DESCRIPTION("Sunplus On-Chip OTP driver");
+> +MODULE_LICENSE("GPL v2");
+
+Just GPL should be good here.
+
+--srini
+> +
+> 

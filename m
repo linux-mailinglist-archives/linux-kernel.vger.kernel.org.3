@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C8D46E09F
+	by mail.lfdr.de (Postfix) with ESMTP id F17F846E0A1
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhLICCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:02:48 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29107 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbhLICCs (ORCPT
+        id S229598AbhLICC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229718AbhLICC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:02:48 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J8cZt1sw4z1DK2C;
-        Thu,  9 Dec 2021 09:56:22 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 09:59:13 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 09:59:12 +0800
-Subject: Re: [PATCH v16 10/11] of: fdt: Add memory for devices by DT property
- "linux,usable-memory-range"
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
- <20211123124646.1995-11-thunder.leizhen@huawei.com>
- <YaaitPTArUZEriob@robh.at.kernel.org>
- <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com>
-Message-ID: <281c8196-2a5c-28cf-346a-0ae2f7182f1b@huawei.com>
-Date:   Thu, 9 Dec 2021 09:59:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 8 Dec 2021 21:02:56 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C27C061746;
+        Wed,  8 Dec 2021 17:59:24 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s137so3696688pgs.5;
+        Wed, 08 Dec 2021 17:59:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzKJU9/fdgz4zCFQsZnYR8rQ00toTP+WIkyJkXRFWIM=;
+        b=OZr3wZmNqqTFiJAx7f5og5BMSj4JcKYzH3VKHx1/PSUryXYdVZuwSsbF/J8hWB/M1K
+         7Tbe794hKeqjqAgHkY94RnmaL1bxdv5Fw1GRG8ESKuP+d+VFZlTFyntcuVbQRJUdzeXJ
+         j2wybrgdQQOL5VO4gTU5UCRD9dyTmuwslv7TgtgtrXyeaMasLubjFApOiMtEcQZp7c7x
+         YsWONmLMkjAVV23slk9bpOatn17O8Te1ymv1yYCnsPHPAmIwZxEZYC4HCtqhF1aGH4pd
+         KhpufkB0Zx1ZDhDEPodIA/OBp4S2ygGz1SFEGSKam6E3OYGpMCTK0bqPxaEPvxAPOqaT
+         xpYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzKJU9/fdgz4zCFQsZnYR8rQ00toTP+WIkyJkXRFWIM=;
+        b=6M0d2s0Lz9EvsvtilC71j0o5jo0mb0Bjgp3QVT5mkDpQltxKTBlwNdDGWJ7MV+1v5x
+         SZVeVG7Ipjiw5szcoZ7Fv3OMySUD/7WR2AOPXKMxtWgp+AsMB/1TKd3r/aQ4W7mVkYyh
+         zbsxQnXv5+S7fHz37sq63Zo9p9R0qr7y1q9Dij2ggtErkfmHZ8KzTyQHHGcdqdWNSgRe
+         xImrc8jGg/vSPyfsGiHGemhcYzdlVMbJCPS8KhtZFarjh2bbiNIDmh3n6g/oC3nOjZQX
+         uPvyw9OYvazpITbTDgfdjOiPz36iMyKVz3bMyAHZuc6aCczg1EtwXEL7pYamLX5ywCoi
+         o+ZQ==
+X-Gm-Message-State: AOAM533aIXTMYoFQOcXTkKLRYQCZwOa9vNylGxH+nI/8XV2cqfPgaZvf
+        SvmaCykSkb1a/Qr4viLxRuY=
+X-Google-Smtp-Source: ABdhPJxKwSGtoAL4ai1J6zxR9GiJm5eg+1s+NhFdnI2yPRP9D4OGjb6PtzeaaD3Sg2A6dVoX3Pn+xA==
+X-Received: by 2002:a62:7a92:0:b0:49f:9a0f:6bcd with SMTP id v140-20020a627a92000000b0049f9a0f6bcdmr9071956pfc.43.1639015164031;
+        Wed, 08 Dec 2021 17:59:24 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o16sm5316435pfu.72.2021.12.08.17.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 17:59:23 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     willy@infradead.org
+Cc:     hare@suse.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chiminghao <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH] drivers:scsi:remove unneeded variable
+Date:   Thu,  9 Dec 2021 01:59:17 +0000
+Message-Id: <20211209015917.410029-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: chiminghao <chi.minghao@zte.com.cn>
 
+return value form directly instead of
+taking this in another redundant variable.
 
-On 2021/12/1 10:55, Leizhen (ThunderTown) wrote:
->>> +	}
->>>  
->>> -	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
->>> +	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
->>> +	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
->> s/ &&/,/
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
+---
+ drivers/scsi/advansys.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Hi Rob:
-  I want to keep "&&" unchanged, do you mind? I'm going to post an
-updated version tomorrow, hopefully the last.
+diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
+index ace5eff828e9..610c0be1b47b 100644
+--- a/drivers/scsi/advansys.c
++++ b/drivers/scsi/advansys.c
+@@ -6237,14 +6237,12 @@ AscMsgOutSDTR(ASC_DVC_VAR *asc_dvc, uchar sdtr_period, uchar sdtr_offset)
+ static uchar
+ AscCalSDTRData(ASC_DVC_VAR *asc_dvc, uchar sdtr_period, uchar syn_offset)
+ {
+-	uchar byte;
+ 	uchar sdtr_period_ix;
+ 
+ 	sdtr_period_ix = AscGetSynPeriodIndex(asc_dvc, sdtr_period);
+ 	if (sdtr_period_ix > asc_dvc->max_sdtr_index)
+ 		return 0xFF;
+-	byte = (sdtr_period_ix << 4) | (syn_offset & ASC_SYN_MAX_OFFSET);
+-	return byte;
++	return (sdtr_period_ix << 4) | (syn_offset & ASC_SYN_MAX_OFFSET);
+ }
+ 
+ static bool AscSetChipSynRegAtID(PortAddr iop_base, uchar id, uchar sdtr_data)
+-- 
+2.25.1
 
-> Hi Rob:
-> 
-> The comma operator may not be suitable for logical judgment. The logical judgment
-> before commas (,) is ignored.
-> 
-> Here's my test：
-> 
-> C code：
-> int main()
-> {
->         int i, j;
-> 
->         printf("&&:\n");
->         for (i = 0, j = 0; i < 2 && j < 3; i++, j++)
->                 printf("i=%d, j=%d\n", i, j);
-> 
->         printf("\ncomma:\n");
->         for (i = 0, j = 0; i < 2, j < 3; i++, j++)	//(i < 2） before comma is ignored
->                 printf("i=%d, j=%d\n", i, j);
-> 
->         return 0;
-> }
-> 
-> Output：
-> &&:
-> i=0, j=0
-> i=1, j=1
-> 
-> comma:
-> i=0, j=0
-> i=1, j=1
-> i=2, j=2
-> 
-> 

@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E425D46F644
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED81B46F647
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbhLIV54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:57:56 -0500
-Received: from st43p00im-zteg10063401.me.com ([17.58.63.175]:60272 "EHLO
-        st43p00im-zteg10063401.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232985AbhLIV5y (ORCPT
+        id S232174AbhLIWBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:01:08 -0500
+Received: from relay028.a.hostedemail.com ([64.99.140.28]:31993 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231868AbhLIWBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:57:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1639086859; bh=lSevOr7BAHftq5gxm26fGEC7mH3hZcAia+JHROve4Ww=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=q5t/DKdBvP9q+nzCkGJpn7xSxHHNxxgvmXvcW+Wi0lQwPb7+XZEm13Zr0qY3IEtRs
-         7rCEDwnzoADw9cStuRLkadK9jwEwx0XKeyhm2npxT5W6spmbdxH3QGIvfCTLZcUh7r
-         nO3lh25RzloZhhY57OnZ4pZ8t+cRBFyRKfnAE2snTnvUjNLcWAeGOvL5Oscw+MkQhC
-         u4qXOLQmx+XqXrHxxNUhIzXMDBNM0MNUQWGFJTTscfaQTA3dKr+GQbmSUYdr8tYNyK
-         5QECHCBol1M1C/oqMc3bEVVrhzgeWsZEl5sX899tr+CvN8R6/RmAk/ZNQigVH3ZXco
-         dNZV4sM19q+tA==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-zteg10063401.me.com (Postfix) with ESMTPSA id 445B04A05FD;
-        Thu,  9 Dec 2021 21:54:18 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>, avolmat@me.com
-Subject: [PATCH 5/5] ARM: dts: sti: enable PCIe on the stih418-b2264 board
-Date:   Thu,  9 Dec 2021 22:53:50 +0100
-Message-Id: <20211209215350.4207-6-avolmat@me.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211209215350.4207-1-avolmat@me.com>
-References: <20211209215350.4207-1-avolmat@me.com>
+        Thu, 9 Dec 2021 17:01:07 -0500
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id 60AD2607F3;
+        Thu,  9 Dec 2021 21:57:31 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 15E586000E;
+        Thu,  9 Dec 2021 21:57:21 +0000 (UTC)
+Message-ID: <4208b3d08a677601c73889f78dd25e5c9f056a86.camel@perches.com>
+Subject: Re: [PATCH] scsi: elx: efct: Avoid a useless memset
+From:   Joe Perches <joe@perches.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        james.smart@broadcom.com, ram.vegesna@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de,
+        dwagner@suse.de
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Date:   Thu, 09 Dec 2021 13:57:21 -0800
+In-Reply-To: <009cddb72f4a1b6d1744d5a8ab1955eb93509e41.1639086550.git.christophe.jaillet@wanadoo.fr>
+References: <009cddb72f4a1b6d1744d5a8ab1955eb93509e41.1639086550.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2021-12-08_08:2021-12-08,2021-12-08 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=708 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2009150000 definitions=main-2112090112
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.04
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 15E586000E
+X-Stat-Signature: qswf1qmnu8z4by5p3d9f3e3n8894okrx
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/OSLtqe4qK/nd1NuH+QXDkDyHLdhak/ds=
+X-HE-Tag: 1639087041-129798
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the PCIe controller with proper reset gpio pin for this board.
+On Thu, 2021-12-09 at 22:51 +0100, Christophe JAILLET wrote:
+> 'io->sgl' is kzalloced just a few lines above. There is no need to memset
+> it another time.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
+Better to use kcalloc as well and delete the memset
+
+> diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
+[]
+> @@ -62,7 +62,6 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
+>  			return NULL;
+>  		}
+>  
+> -		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
+>  		io->sgl_allocated = num_sgl;
+>  		io->sgl_count = 0;
+>  
+
 ---
- arch/arm/boot/dts/stih418-b2264.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/scsi/elx/efct/efct_io.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stih418-b2264.dts b/arch/arm/boot/dts/stih418-b2264.dts
-index a99604bebf8c..ed183292a669 100644
---- a/arch/arm/boot/dts/stih418-b2264.dts
-+++ b/arch/arm/boot/dts/stih418-b2264.dts
-@@ -130,6 +130,11 @@ &ohci1 {
- 	status = "okay";
- };
+diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
+index 71e21655916a9..109483f3e3dfd 100644
+--- a/drivers/scsi/elx/efct/efct_io.c
++++ b/drivers/scsi/elx/efct/efct_io.c
+@@ -56,13 +56,12 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
+ 		}
  
-+&pcie1 {
-+	reset-gpios = <&pio34 5 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
- &pwm1 {
- 	status = "okay";
- };
--- 
-2.25.1
+ 		/* Allocate SGL */
+-		io->sgl = kzalloc(sizeof(*io->sgl) * num_sgl, GFP_KERNEL);
++		io->sgl = kcalloc(num_sgl, sizeof(*io->sgl), GFP_KERNEL);
+ 		if (!io->sgl) {
+ 			efct_io_pool_free(io_pool);
+ 			return NULL;
+ 		}
+ 
+-		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
+ 		io->sgl_allocated = num_sgl;
+ 		io->sgl_count = 0;
+ 
+
 

@@ -2,108 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7C946F73A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDAB46F73D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbhLIXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:10:20 -0500
-Received: from mga04.intel.com ([192.55.52.120]:25561 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229455AbhLIXKT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:10:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639091206; x=1670627206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CK0iXov/RfjLTe8Mtz7TqGBq7eDW3otA38apvaR9H5A=;
-  b=XrAisUd2Id1OAgJt9hzTKPpFJxQZGVbipwYF4jUbAG/g0zlz3IwZAaT/
-   E1B0r6L88YN/TEhyTbT12Otoq3zjrn+AA0fIkudDnI/36jRiqQYjQqQz2
-   4m2AB3q2fIOrd30Gvsv8DMS90l7u0G8LRl5zYxXwp138dPsYF0sQYj5Ga
-   fdO78UcZVg7shnnQ5EVVBAhobta6x5ny7hgqeKcdFwQsDoEoQVCVzoead
-   kTvDc0BbNSAfcNhUk8JGMj93q4qW61//+72PJqWwN70Z6Ce38T+8c6I9o
-   By8TQ7JJbZjQ49784H9jrryvRBW4Zq1c8GHXIcq3QxTp1AXrEecSDujQz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236961874"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="236961874"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:06:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="463439409"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 15:06:42 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvSUs-0002UF-6f; Thu, 09 Dec 2021 23:06:42 +0000
-Date:   Fri, 10 Dec 2021 07:06:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/13] arm64: dts: qcom: Add base SM8450 QRD DTS
-Message-ID: <202112100623.XZwPiDOL-lkp@intel.com>
-References: <20211209103505.197453-6-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209103505.197453-6-vkoul@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S232635AbhLIXLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhLIXLG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 18:11:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34324C061746;
+        Thu,  9 Dec 2021 15:07:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A26FECE2944;
+        Thu,  9 Dec 2021 23:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98850C004DD;
+        Thu,  9 Dec 2021 23:07:28 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 4.19.219-rt97
+Date:   Thu, 09 Dec 2021 23:06:41 -0000
+Message-ID: <163909120133.198294.16887281421187270584@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+Hello RT-list!
 
-I love your patch! Yet something to improve:
+I'm pleased to announce the 4.19.219-rt97 stable release.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on v5.16-rc4]
-[cannot apply to next-20211208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+You can get this release via the git tree at:
 
-url:    https://github.com/0day-ci/linux/commits/Vinod-Koul/arm64-dts-qcom-Add-support-for-SM8450-SoC-and-QRD-board/20211209-183713
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-randconfig-r032-20211207 (https://download.01.org/0day-ci/archive/20211210/202112100623.XZwPiDOL-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/636d2456715b3aba9cf1fa47931c6e381ca62e00
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vinod-Koul/arm64-dts-qcom-Add-support-for-SM8450-SoC-and-QRD-board/20211209-183713
-        git checkout 636d2456715b3aba9cf1fa47931c6e381ca62e00
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  branch: v4.19-rt
+  Head SHA1: 82e461318dc307102eb36e636f1f3c34bd97ca50
 
-All errors (new ones prefixed by >>):
+Or to build 4.19.219-rt97 directly, the following patches should be applied:
 
-   In file included from arch/arm64/boot/dts/qcom/sm8450-qrd.dts:8:
->> arch/arm64/boot/dts/qcom/sm8450.dtsi:7:10: fatal error: dt-bindings/clock/qcom,gcc-sm8450.h: No such file or directory
-       7 | #include <dt-bindings/clock/qcom,gcc-sm8450.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.219.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/patch-4.19.219-rt97.patch.xz
 
 
-vim +7 arch/arm64/boot/dts/qcom/sm8450.dtsi
+You can also build from 4.19.218-rt96 by applying the incremental patch:
 
-244741584ca1ceb Vinod Koul 2021-12-09  @7  #include <dt-bindings/clock/qcom,gcc-sm8450.h>
-244741584ca1ceb Vinod Koul 2021-12-09   8  #include <dt-bindings/clock/qcom,rpmh.h>
-244741584ca1ceb Vinod Koul 2021-12-09   9  #include <dt-bindings/gpio/gpio.h>
-244741584ca1ceb Vinod Koul 2021-12-09  10  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-244741584ca1ceb Vinod Koul 2021-12-09  11  
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/incr/patch-4.19.218-rt96-rt97.patch.xz
 
+Enjoy!
+Clark
+
+Changes from v4.19.218-rt96:
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+Alexander Aring (1):
+      net: ieee802154: handle iftypes as u32
+
+Clark Williams (2):
+      Merge tag 'v4.19.219' into v4.19-rt
+      Linux 4.19.219-rt97
+
+Dan Carpenter (2):
+      staging: rtl8192e: Fix use after free in _rtl92e_pci_disconnect()
+      drm/vc4: fix error code in vc4_create_object()
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910S1 0x9200 composition
+
+David Hildenbrand (2):
+      proc/vmcore: fix clearing user buffer by properly using clear_user()
+      s390/mm: validate VMA in PGSTE manipulation functions
+
+Eric Dumazet (2):
+      ipv6: fix typos in __ip6_finish_output()
+      tcp_cubic: fix spurious Hystart ACK train detections for not-cwnd-limited flows
+
+Florian Fainelli (2):
+      ARM: dts: BCM5301X: Fix I2C controller interrupt
+      ARM: dts: BCM5301X: Add interrupt properties to GPIO node
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.219
+
+Gregory CLEMENT (1):
+      pinctrl: armada-37xx: add missing pin: PCIe1 Wakeup
+
+Guangbin Huang (1):
+      net: hns3: fix VF RSS failed problem after PF enable multi-TCs
+
+Hans Verkuil (1):
+      media: cec: copy sequence field for the reply
+
+Huang Pei (1):
+      MIPS: use 3-level pgtable for 64KB page size on MIPS_VA_BITS_48
+
+Jason Gerecke (1):
+      HID: wacom: Use "Confidence" flag to prevent reporting invalid contacts
+
+Juergen Gross (9):
+      xen: sync include/xen/interface/io/ring.h with Xen's newest version
+      xen/blkfront: read response from backend only once
+      xen/blkfront: don't take local copy of a request from the ring page
+      xen/blkfront: don't trust the backend response data blindly
+      xen/netfront: read response from backend only once
+      xen/netfront: don't read data from request on the ring page
+      xen/netfront: disentangle tx_skb_freelist
+      xen/netfront: don't trust the backend response data blindly
+      tty: hvc: replace BUG_ON() with negative return value
+
+Lin Ma (1):
+      NFC: add NCI_UNREG flag to eliminate the race
+
+Marek Behún (4):
+      PCI: aardvark: Improve link training
+      pinctrl: armada-37xx: Correct mpp definitions
+      pinctrl: armada-37xx: Correct PWM pins definitions
+      arm64: dts: marvell: armada-37xx: Set pcie_reset_pin to gpio function
+
+Mathias Nyman (2):
+      usb: hub: Fix usb enumeration issue due to address0 race
+      usb: hub: Fix locking issues with address0_mutex
+
+Miklos Szeredi (2):
+      fuse: fix page stealing
+      fuse: release pipe buf after last use
+
+Mingjie Zhang (1):
+      USB: serial: option: add Fibocom FM101-GL variants
+
+Miquel Raynal (1):
+      arm64: dts: marvell: armada-37xx: declare PCIe reset pin
+
+Nadav Amit (1):
+      hugetlbfs: flush TLBs correctly after huge_pmd_unshare
+
+Nathan Chancellor (1):
+      usb: dwc2: hcd_queue: Fix use of floating point literal
+
+Pali Rohár (12):
+      PCI: aardvark: Train link immediately after enabling training
+      PCI: aardvark: Issue PERST via GPIO
+      PCI: aardvark: Replace custom macros by standard linux/pci_regs.h macros
+      PCI: aardvark: Indicate error in 'val' when config read fails
+      PCI: aardvark: Don't touch PCIe registers if no card connected
+      PCI: aardvark: Fix compilation on s390
+      PCI: aardvark: Move PCIe reset card code to advk_pcie_train_link()
+      PCI: aardvark: Update comment about disabling link training
+      PCI: aardvark: Configure PCIe resources from 'ranges' DT property
+      PCI: aardvark: Fix PCIe Max Payload Size setting
+      PCI: aardvark: Fix link training
+      PCI: aardvark: Fix checking for link up via LTSSM state
+
+Peng Fan (1):
+      firmware: arm_scmi: pm: Propagate return value to caller
+
+Randy Dunlap (1):
+      xtensa: use CONFIG_USE_OF instead of CONFIG_OF
+
+Remi Pommarel (1):
+      PCI: aardvark: Wait for endpoint to be ready before training link
+
+Sreekanth Reddy (1):
+      scsi: mpt3sas: Fix kernel panic during drive powercycle test
+
+Srinivas Kandagatla (1):
+      ASoC: qdsp6: q6routing: Conditionally reset FrontEnd Mixer
+
+Stefano Garzarella (1):
+      vhost/vsock: fix incorrect used length reported to the guest
+
+Stefano Stabellini (2):
+      xen: don't continue xenstore initialization in case of errors
+      xen: detect uninitialized xenbus in xenbus_init
+
+Steven Rostedt (VMware) (2):
+      tracing: Fix pid filtering when triggers are attached
+      tracing: Check pid filtering when creating events
+
+Takashi Iwai (3):
+      ALSA: ctxfi: Fix out-of-range access
+      ASoC: topology: Add missing rwsem around snd_ctl_remove() calls
+      ARM: socfpga: Fix crash with CONFIG_FORTIRY_SOURCE
+
+Thomas Zeitlhofer (1):
+      PM: hibernate: use correct mode for swsusp_close()
+
+Todd Kjos (1):
+      binder: fix test regression due to sender_euid change
+
+Tony Lu (2):
+      net/smc: Ensure the active closing peer first closes clcsock
+      net/smc: Don't call clcsock shutdown twice when smc shutdown
+
+Trond Myklebust (1):
+      NFSv42: Don't fail clone() unless the OP_CLONE operation failed
+
+Wen Yang (1):
+      PCI: aardvark: Fix a leaked reference by adding missing of_node_put()
+
+yangxingwu (1):
+      netfilter: ipvs: Fix reuse connection if RS weight is 0
+---
+.../pinctrl/marvell,armada-37xx-pinctrl.txt        |  26 +-
+ Documentation/networking/ipvs-sysctl.txt           |   3 +-
+ Makefile                                           |   2 +-
+ arch/arm/boot/dts/bcm5301x.dtsi                    |   4 +-
+ arch/arm/include/asm/tlb.h                         |   8 +
+ arch/arm/mach-socfpga/core.h                       |   2 +-
+ arch/arm/mach-socfpga/platsmp.c                    |   8 +-
+ arch/arm64/boot/dts/marvell/armada-3720-db.dts     |   3 +
+ .../boot/dts/marvell/armada-3720-espressobin.dts   |   3 +
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |   9 +
+ arch/ia64/include/asm/tlb.h                        |  10 +
+ arch/mips/Kconfig                                  |   2 +-
+ arch/s390/include/asm/tlb.h                        |  16 +
+ arch/s390/mm/pgtable.c                             |  13 +
+ arch/sh/include/asm/tlb.h                          |  10 +
+ arch/um/include/asm/tlb.h                          |  12 +
+ arch/xtensa/include/asm/vectors.h                  |   2 +-
+ arch/xtensa/kernel/setup.c                         |  12 +-
+ arch/xtensa/mm/mmu.c                               |   2 +-
+ drivers/android/binder.c                           |   2 +-
+ drivers/block/xen-blkfront.c                       | 126 ++++--
+ drivers/firmware/arm_scmi/scmi_pm_domain.c         |   4 +-
+ drivers/gpu/drm/vc4/vc4_bo.c                       |   2 +-
+ drivers/hid/wacom_wac.c                            |   8 +-
+ drivers/hid/wacom_wac.h                            |   1 +
+ drivers/media/cec/cec-adap.c                       |   1 +
+ .../ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c  |   4 +-
+ drivers/net/xen-netfront.c                         | 257 +++++++-----
+ drivers/pci/controller/pci-aardvark.c              | 436 ++++++++++++++++++---
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c        |  28 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c               |   2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c       |   3 +-
+ drivers/tty/hvc/hvc_xen.c                          |  17 +-
+ drivers/usb/core/hub.c                             |  23 +-
+ drivers/usb/dwc2/hcd_queue.c                       |   2 +-
+ drivers/usb/serial/option.c                        |   5 +
+ drivers/vhost/vsock.c                              |   2 +-
+ drivers/xen/xenbus/xenbus_probe.c                  |  27 +-
+ fs/fuse/dev.c                                      |  14 +-
+ fs/nfs/nfs42xdr.c                                  |   3 +-
+ fs/proc/vmcore.c                                   |  15 +-
+ include/asm-generic/tlb.h                          |   2 +
+ include/net/nfc/nci_core.h                         |   1 +
+ include/net/nl802154.h                             |   7 +-
+ include/xen/interface/io/ring.h                    | 293 +++++++-------
+ kernel/power/hibernate.c                           |   6 +-
+ kernel/trace/trace.h                               |  24 +-
+ kernel/trace/trace_events.c                        |   7 +
+ localversion-rt                                    |   2 +-
+ mm/hugetlb.c                                       |  23 +-
+ mm/memory.c                                        |  10 +
+ net/ipv4/tcp_cubic.c                               |   5 +-
+ net/ipv6/ip6_output.c                              |   2 +-
+ net/netfilter/ipvs/ip_vs_core.c                    |   8 +-
+ net/nfc/nci/core.c                                 |  19 +-
+ net/smc/af_smc.c                                   |   8 +-
+ net/smc/smc_close.c                                |   6 +
+ sound/pci/ctxfi/ctamixer.c                         |  14 +-
+ sound/pci/ctxfi/ctdaio.c                           |  16 +-
+ sound/pci/ctxfi/ctresource.c                       |   7 +-
+ sound/pci/ctxfi/ctresource.h                       |   4 +-
+ sound/pci/ctxfi/ctsrc.c                            |   7 +-
+ sound/soc/qcom/qdsp6/q6routing.c                   |   6 +-
+ sound/soc/soc-topology.c                           |   3 +
+ 64 files changed, 1157 insertions(+), 452 deletions(-)
+---

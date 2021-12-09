@@ -2,156 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CBE46F3C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1E46F3C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbhLITT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S230490AbhLITUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:20:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhLITT5 (ORCPT
+        with ESMTP id S229537AbhLITUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:19:57 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC5C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:16:23 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id d2so5739210qki.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:16:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fLGp6ox2PvPjH1m0BC7At85njItgHrM/Ph0UnWbQo+Y=;
-        b=YH6gVYdbe3nE2kGAGwgsT4rmzXTilVq7ECkN/BmMjEmogeOalV3V2gDmD8nRW6InmR
-         6NLqc0inetJ+l3i2qdg6FPYWszQLwLb7eLIY5yeTFiUIoKZTdZ52MpAHFy1mCMgE2UJY
-         N9Pn+MJV4PcEUuzWNLAxW5hPYVFsySIwCoIpNpfUA/tcjqhuZaZiE1SlnGqVkLX223tk
-         14AzRP2bBFiznh/lzgwHoc1c5b3UFQKz1Ghd/7GZZ/PBWDHwJS5yZ0g+j7AVYioXCyCc
-         OPhCmNQQ/U0D8iSI8VF1aOrdhpiSghuOf8zSM1E6NqMWvV2rBZYYZLEK5Ipw59+n7lhd
-         2AZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fLGp6ox2PvPjH1m0BC7At85njItgHrM/Ph0UnWbQo+Y=;
-        b=FGpq2q0T9mOaMomsT6SGAh3v5EEM8t61BHI4BXd5hsBhgTuHhT5UMCeZ++s/7RSeaq
-         6M78BJ1/snJsiixWdgmh1T0jFczkeeJfQEBcXkSgaUNuXj339u40msNKg2EDsqBTQRFH
-         oz7btupDGSoRkVQUbJ1NMj0W1zCFT5BH+j+gROyxSD+KWyJCw88aDXK9IbJk732hVfLm
-         apCfSrrfzeZX6CgQOJl+zZSJvF7DDMTe2EXDU3R3jHkayOPQML1bZOiEMRPPk9x/jL0+
-         1Py0cA5PPis2P7scLG1EWky5P7vdjOAqTyZjAvBg//DqZKlaTGV0chMW/Cx0hlZtVm7f
-         O1AA==
-X-Gm-Message-State: AOAM532ZN8Aoyi80wqnhIPNTNTFHoRkGGUADkod956lD7ki0e8Yr2SVr
-        8s8UVvaEUK/DHgcS9XEnnlxHVg==
-X-Google-Smtp-Source: ABdhPJyL+b+axTEPhkSoKR7vwhFCvH+PQDM3xINNcVFRAy2JPRcVMViS3xy/RVTOy8s33NjgOtJRIA==
-X-Received: by 2002:a05:620a:284d:: with SMTP id h13mr15481593qkp.330.1639077382823;
-        Thu, 09 Dec 2021 11:16:22 -0800 (PST)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id v21sm512763qta.0.2021.12.09.11.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 11:16:22 -0800 (PST)
-Date:   Thu, 9 Dec 2021 14:16:20 -0500
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
- patch
-Message-ID: <YbJWBGaGAW/MenOn@localhost.localdomain>
-References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
- <87ee6yc00j.mognet@arm.com>
- <YaUYsUHSKI5P2ulk@localhost.localdomain>
- <87bl22byq2.mognet@arm.com>
- <YaUuyN3h07xlEx8j@localhost.localdomain>
- <878rx6bia5.mognet@arm.com>
- <87wnklaoa8.mognet@arm.com>
- <YappSLDS2EvRJmr9@localhost.localdomain>
- <87lf0y9i8x.mognet@arm.com>
- <87v8zx8zia.mognet@arm.com>
+        Thu, 9 Dec 2021 14:20:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9110DC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:16:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B083B82614
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 19:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C43FCC004DD;
+        Thu,  9 Dec 2021 19:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639077388;
+        bh=VqPjE74hUiM+wV9wag+bjqN/URzt4NeUOb8KYkowL5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sjEvlS5+hQU4fB/H9lpg9Ts/lSab8T1RBLIEr589scWZqkl2Bkc/dPI+bzGs41I1O
+         BUFfIjluzuUFhqYpPFUf0nc7HO5X2+z0sJkezTb4W1fNDBrAnLSdcZ1p86+5bNkA77
+         N1Me/mr3L1zj2Oqq22/KDABOSN66s2/TffrX0dp4AQY7sMTgf/tfmUBtdhdfFTkyXb
+         Pv88yhhaO1I4+7uHsMV4Srg/ENdeH4OoXslRUXnguMCWvz/mBK7ekTpI7lhYidVpWB
+         iKRDjFboULkE8YiJBUnEV02p6l9yjJkg/tq/RRjzsL6Yofwc7BBSCkghSZZI5e6CBn
+         Mb0i4gW2ffuDg==
+Date:   Thu, 9 Dec 2021 19:16:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
+        perex@perex.cz, linux-mediatek@lists.infradead.org,
+        lgirdwood@gmail.com, Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Paul Olaru <paul.olaru@oss.nxp.com>
+Subject: Re: [PATCH] ASoC: SOF: Remove pm_runtime_put_autosuspend() for SOF
+ OF device
+Message-ID: <YbJWBpxHo4zN4zFJ@sirena.org.uk>
+References: <20211209174657.141268-1-daniel.baluta@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hEvhH7N569Hzdzpj"
 Content-Disposition: inline
-In-Reply-To: <87v8zx8zia.mognet@arm.com>
+In-Reply-To: <20211209174657.141268-1-daniel.baluta@oss.nxp.com>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 05:22:05PM +0000, Valentin Schneider wrote:
-> On 06/12/21 09:48, Valentin Schneider wrote:
-> > On 03/12/21 14:00, Josef Bacik wrote:
-> >> On Fri, Dec 03, 2021 at 12:03:27PM +0000, Valentin Schneider wrote:
-> >>> Could you give the 4 top patches, i.e. those above
-> >>> 8c92606ab810 ("sched/cpuacct: Make user/system times in cpuacct.stat more precise")
-> >>> a try?
-> >>>
-> >>> https://git.gitlab.arm.com/linux-arm/linux-vs.git -b mainline/sched/nohz-next-update-regression
-> >>>
-> >>> I gave that a quick test on the platform that caused me to write the patch
-> >>> you bisected and looks like it didn't break the original fix. If the above
-> >>> counter-measures aren't sufficient, I'll have to go poke at your
-> >>> reproducers...
-> >>>
-> >>
-> >> It's better but still around 6% regression.  If I compare these patches to the
-> >> average of the last few days worth of runs you're 5% better than before, so
-> >> progress but not completely erased.
-> >>
-> >
-> > Hmph, time for me to reproduce this locally then. Thanks!
-> 
-> I carved out a partition out of an Ampere eMAG's HDD to play with BTRFS
-> via fsperf; this is what I get for the bisected commit (baseline is
-> bisected patchset's immediate parent, aka v5.15-rc4) via a handful of
-> ./fsperf -p before-regression -c btrfs -n 100 -t emptyfiles500k
-> 
->   write_clat_ns_p99     195395.92     198790.46      4797.01    1.74%
->   write_iops             17305.79      17471.57       250.66    0.96%
-> 
->   write_clat_ns_p99     195395.92     197694.06      4797.01    1.18%
->   write_iops             17305.79      17533.62       250.66    1.32%
-> 
->   write_clat_ns_p99     195395.92     197903.67      4797.01    1.28%
->   write_iops             17305.79      17519.71       250.66    1.24%
-> 
-> If I compare against tip/sched/core however:
-> 
->   write_clat_ns_p99     195395.92     202936.32      4797.01    3.86%
->   write_iops             17305.79      17065.46       250.66   -1.39%
-> 
->   write_clat_ns_p99     195395.92     204349.44      4797.01    4.58%
->   write_iops             17305.79      17097.79       250.66   -1.20%
-> 
->   write_clat_ns_p99     195395.92     204169.05      4797.01    4.49%
->   write_iops             17305.79      17112.29       250.66   -1.12%
-> 
-> tip/sched/core + my patches:
-> 
->   write_clat_ns_p99     195395.92     205721.60      4797.01    5.28%
->   write_iops             17305.79      16947.59       250.66   -2.07%
-> 
->   write_clat_ns_p99     195395.92     203358.04      4797.01    4.07%
->   write_iops             17305.79      16953.24       250.66   -2.04%
-> 
->   write_clat_ns_p99     195395.92     201830.40      4797.01    3.29%
->   write_iops             17305.79      17041.18       250.66   -1.53%
-> 
-> So tip/sched/core seems to have a much worse regression, and my patches
-> are making things worse on that system...
-> 
-> I've started a bisection to see where the above leads me, unfortunately
-> this machine needs more babysitting than I thought so it's gonna take a
-> while.
-> 
-> @Josef any chance you could see if the above also applies to you? tip lives
-> at https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git, though from
-> where my bisection is taking me it looks like you should see that against
-> Linus' tree as well.
-> 
 
-This has made us all curious, so we're all fucking around with schbench to see
-if we can make it show up without needing to use fsperf.  Maybe that'll help
-with the bisect, because I had to bisect twice to land on your patches, and I
-only emailed when I could see the change right before and right after your
-patch.  It would not surprise me at all if there's something else here that's
-causing us pain.
-> Thanks,
-> Valentin
+--hEvhH7N569Hzdzpj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Dec 09, 2021 at 07:46:57PM +0200, Daniel Baluta wrote:
+>=20
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+> Reviewed-by: Paul Olaru <paul.olaru@oss.nxp.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> ---
+
+
+You've not provided a Signed-off-by for this so I can't do anything with
+it, please see Documentation/process/submitting-patches.rst for details
+on what this is and why it's important.
+
+--hEvhH7N569Hzdzpj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGyVgUACgkQJNaLcl1U
+h9DXDAf/V9WKvYxWtyKZWaVx8aEh0kubvlvQRgFVA9NuUrK8ERYh83ykeUpVX6JC
+3x8VgygJLVz00vpIZ7/+Xe6kmpHTezjzdhKayOtXEdBr8uGA4UaTErSb8DWpYJ5f
+Es7u+0jIIOJa2QvHRgTmAq2EllPEEgQ4rt2aISxj/tUEhWHdF6ElY//3EzZXxf82
+U0fQq8LHRPfPdjrywngBPVbyGOUgXzM3FAYCatVYdG2cclJejWWHPD6Zc44TRIc9
+H2qDFnaEzZTvdQ6ZNvhkK9w4QLeh80YSWplXHoSLWuG/vqdivqNJkqgPqFDra4Iw
+bPaNP6k50hPDeiFdIWPFIhUH989GSQ==
+=BmDs
+-----END PGP SIGNATURE-----
+
+--hEvhH7N569Hzdzpj--

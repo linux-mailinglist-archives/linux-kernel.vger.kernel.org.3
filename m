@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9EB46EA3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B30046EA42
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238854AbhLIOqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:46:54 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4239 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbhLIOqx (ORCPT
+        id S238865AbhLIOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:50:37 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50460 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233886AbhLIOug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:46:53 -0500
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8xVt5szMz67sxC;
-        Thu,  9 Dec 2021 22:39:02 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 9 Dec 2021 15:43:17 +0100
-Received: from [10.47.91.245] (10.47.91.245) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 9 Dec
- 2021 14:43:17 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v2] blk-mq: Fix blk_mq_tagset_busy_iter() for shared tags
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Jens Axboe <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.de>, <ming.lei@redhat.com>, <linux-scsi@vger.kernel.org>
-References: <1634550083-202815-1-git-send-email-john.garry@huawei.com>
- <163482611742.37241.15630114014516067630.b4-ty@kernel.dk>
- <0b928f7dbc2f3244afe8a475b547157f@mail.gmail.com>
-Message-ID: <3389cd7b-2934-8e82-b09a-a4fdb0f00ea3@huawei.com>
-Date:   Thu, 9 Dec 2021 14:42:55 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Thu, 9 Dec 2021 09:50:36 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4349A210FD;
+        Thu,  9 Dec 2021 14:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639061222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9bhsG0HdJu2F8HCyo58ar0T6wAwNDGjuDQlcjKNYeK8=;
+        b=kKE9eipUJttdFD5Ll9pZ2/nYefSO2oppTJgxo1bD8IewH1dXrxl8Z1cGfxXN+nhml67ZYo
+        jRAepBokF5Z1/sdLKPS97ccGcEKz+UK7WPdaTTCpqSxdrxrOVTcYt9EBJYpo5LDfrBrXkF
+        0jkY3f0K0ywVm/+eyWPkLszTEkWUTG4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C09A113B2D;
+        Thu,  9 Dec 2021 14:47:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dp/1LeUWsmGpLwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 09 Dec 2021 14:47:01 +0000
+Date:   Thu, 9 Dec 2021 15:47:00 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Newsome <jnewsome@torproject.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Security Officers <security@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] exit: Retain nsproxy for exit_task_work() work entries
+Message-ID: <20211209144700.GC63648@blackbody.suse.cz>
+References: <20211208180501.11969-1-mkoutny@suse.com>
+ <87sfv3540t.fsf@email.froward.int.ebiederm.org>
+ <YbECHjMLPEHO0vqA@slm.duckdns.org>
+ <CAHk-=wjcWEYSEVKvowUA0yEeDM279Zg-ptM_SsCMxmRSPJHjAw@mail.gmail.com>
+ <YbEMPal0sKkk0+Tl@slm.duckdns.org>
+ <YbE6yvMav5Xtp5HO@slm.duckdns.org>
+ <20211209134419.GA17186@blackbody.suse.cz>
+ <20211209140826.kc2xvvwxrdrwmrtj@wittgenstein>
 MIME-Version: 1.0
-In-Reply-To: <0b928f7dbc2f3244afe8a475b547157f@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.245]
-X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209140826.kc2xvvwxrdrwmrtj@wittgenstein>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 13:52, Kashyap Desai wrote:
-> + scsi mailing list
-> 
->> On Mon, 18 Oct 2021 17:41:23 +0800, John Garry wrote:
->>> Since it is now possible for a tagset to share a single set of tags,
->>> the iter function should not re-iter the tags for the count of #hw
->>> queues in that case. Rather it should just iter once.
-> John - Recently we found issue of error hander thread never kicked off and
-> this patch fix the issue.
-> Without this patch, scsi error hander will not find correct host_busy
-> counter.
-> 
-> Take one simple case. There is one IO outstanding and that is getting
-> timedout.
-> Now SML wants to wake up EH thread only if, below condition met
-> "scsi_host_busy(shost) == shost->host_failed"
-> 
-> Without this patch, shared host tag enabled meagaraid_sas driver will find
-> host_busy = actual outstanding * nr_hw_queues.
-> Error handler thread will never be kicked-off.
-> 
-> This patch is mandatory for fixing shared host tag feature and require to be
-> part of stable kernel.
-> 
-> Do you need more data for posting to stable kernel ?
+On Thu, Dec 09, 2021 at 03:08:26PM +0100, Christian Brauner <christian.brauner@ubuntu.com> wrote:
+> send_sig() isn't used that was changed in response to a review. I'm
+> confused. 
 
-To be clear, are you saying that you see the issue which patch "blk-mq: 
-Fix blk_mq_tagset_busy_iter() for shared tags" fixes before v5.16-rc?
+Sorry for ambiguity, I meant this instance [1].
 
-This patch (now commit 0994c64eb415) and the commit which it is supposed 
-to fix, e155b0c238b2, will only be in v5.16, so I don't see anything 
-which is needed in stable.
+> Kill and freeze only do time permission checking at open. Why would you
+> introduce another write time check?
+ 
+Let's have a cgroup G with tasks t1,...,tn (run by user u) and some
+monitoring tasks m1,...,mk belonging to a different user v != u.
 
-Thanks,
-John
+Currently u can kill also the tasks of v -- I'm not sure if that's
+intentional. My argument would apply if it wasn't -- it'd be suscebtible
+to similar abuse, i.e. passing the opened fd to a more privileged
+process to kill also v's tasks. (But if the intention is to be able to
+kill anyone in the cgroup, then it likely doesn't matter.)
+
+
+Michal
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/cgroup/cgroup.c?h=v5.16-rc4#n3762

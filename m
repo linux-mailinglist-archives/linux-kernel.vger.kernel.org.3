@@ -2,207 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0B846E0FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2951446E0FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbhLICpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:45:55 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42798 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229455AbhLICpx (ORCPT
+        id S230410AbhLICqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhLICqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:45:53 -0500
-X-UUID: 1101619a108744398bc64b14bfa4ae0d-20211209
-X-UUID: 1101619a108744398bc64b14bfa4ae0d-20211209
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2124787856; Thu, 09 Dec 2021 10:42:16 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 9 Dec 2021 10:42:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 9 Dec
- 2021 10:42:14 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 10:42:13 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [next PATCH] dt-bindings: nvmem: convert mtk-efuse.txt to YAML schema
-Date:   Thu, 9 Dec 2021 10:42:13 +0800
-Message-ID: <20211209024213.16612-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 21:46:24 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35B1C061746;
+        Wed,  8 Dec 2021 18:42:51 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id w14so3847850qkf.5;
+        Wed, 08 Dec 2021 18:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ni8ukBhnwq4xfJn2KEfRGFk9CvW/EaamTsKpCF9U5jw=;
+        b=FledoWYccQAWv6FRpva8r4lIbEIfgQM+BjswBkDz+Ede5Wkeo8QjIZfKPDzFnpjhRl
+         QxEn1AjrahGgFvRzd0cqSJ2eUckDV58c4ITNjL0+zpwShqj3e3GzQEJJrRPRDFoVUbqy
+         o30GCFnGk5euP4CXUr97UvPvq8KYjwaf3iQZUJP4LvlcPSpLmp29dzjB+vLPQnYPOImv
+         5/62MrA1RYw6hgl+MJlK/vZBz7MfRRWvJC7nVMIx/grd+5AnrUm6g22228Or3MWIOGMV
+         FijRDzb8IFS4aOCXYGiqC2nBprxecfD8vuc9vHLcuwXLUJiobdQUv/tz+wefcirK74rv
+         ty3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ni8ukBhnwq4xfJn2KEfRGFk9CvW/EaamTsKpCF9U5jw=;
+        b=Lbw3tgFt8InLmhEHNUnCPaswAlqsyLIcnHNOoEYcVAPpIrUtC+2fS3qCcd7uxpjPmM
+         dYz761rGR4uPT8emYvNmblNu/0OpIXG70VqySy2StgN1heKXvddKH5HxuSrzvHRYWrQ0
+         5dLuj0Q3Fz9M08MQf+cJDuFZ49zEOKz7w304Tmf4zSc9wROj9aX4FMykV8i+Yvwm20Tb
+         WafM2yublUuKiQxVoGYMz0yZCz95bknV3vE4iRxhclwTsTvaM7uYGP7I5mkLeznbuxtu
+         eX2FIx9p9EoMg7Yz3F0Lg2DTAhm3J+IchyZN37K7nEyWP7V2z2tif8ZT3wokQlFT3usj
+         F9zw==
+X-Gm-Message-State: AOAM5327uNf5nweCk1Vg1hCBxxYnazr1eyLOvIlr2K3mlNITc7G3mI2x
+        mMPsSZm8SUEV6XYliycKF5tAUfY1EmDskdC7cUli2et6n5diekSU
+X-Google-Smtp-Source: ABdhPJzPyV2mTICg4ujehOAo8kaXJvx2de02S+39TMWQ8+kUht18v3fGS9QAWvbiXI0QEc1UOZ9N36zfY4aRtfuIbw0=
+X-Received: by 2002:a05:620a:2e3:: with SMTP id a3mr10866422qko.451.1639017771202;
+ Wed, 08 Dec 2021 18:42:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-5-laoar.shao@gmail.com>
+ <20211208134304.615abbbf@gandalf.local.home>
+In-Reply-To: <20211208134304.615abbbf@gandalf.local.home>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 9 Dec 2021 10:42:15 +0800
+Message-ID: <CALOAHbAP7w95r_soihp+i1NjWxz4KVHGizARpX80wuL3ZLO7Uw@mail.gmail.com>
+Subject: Re: [PATCH -mm 4/5] tools/perf: replace hard-coded 16 with TASK_COMM_LEN
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Linux MM <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert mtk-efuse.txt to YAML schema mediatek,efuse.yaml
+On Thu, Dec 9, 2021 at 2:43 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Sat,  4 Dec 2021 09:52:55 +0000
+> Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> > @@ -43,7 +45,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+> >               return -1;
+> >       }
+> >
+> > -     if (evsel__test_field(evsel, "prev_comm", 16, false))
+> > +     if (evsel__test_field(evsel, "prev_comm", TASK_COMM_LEN, false))
+> >               ret = -1;
+> >
+> >       if (evsel__test_field(evsel, "prev_pid", 4, true))
+> > @@ -55,7 +57,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+> >       if (evsel__test_field(evsel, "prev_state", sizeof(long), true))
+> >               ret = -1;
+> >
+> > -     if (evsel__test_field(evsel, "next_comm", 16, false))
+> > +     if (evsel__test_field(evsel, "next_comm", TASK_COMM_LEN, false))
+> >               ret = -1;
+> >
+> >       if (evsel__test_field(evsel, "next_pid", 4, true))
+> > @@ -73,7 +75,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
+> >               return -1;
+> >       }
+> >
+> > -     if (evsel__test_field(evsel, "comm", 16, false))
+> > +     if (evsel__test_field(evsel, "comm", TASK_COMM_LEN, false))
+>
+> Shouldn't all these be TASK_COMM_LEN_16?
+>
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- .../bindings/nvmem/mediatek,efuse.yaml        | 89 +++++++++++++++++++
- .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ---------
- 2 files changed, 89 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
- delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+The value here must be the same with TASK_COMM_LEN, so I use TASK_COMM_LEN here.
+But we may also change the code as
+https://lore.kernel.org/lkml/20211101060419.4682-9-laoar.shao@gmail.com/
+if TASK_COMM_LEN is changed, so TASK_COMM_LEN_16 is also okay here.
+I will change it to TASK_COMM_LEN_16 in the next version.
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-new file mode 100644
-index 000000000000..7332195e7f00
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -0,0 +1,89 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/mediatek,efuse.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek efuse device tree bindings
-+
-+description: |
-+  MediaTek's efuse is used for storing calibration data, it can be accessed
-+  on ARM devices usiong I/O mapped memory.
-+
-+maintainers:
-+  - Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  $nodename:
-+    pattern: "^efuse@[0-9a-f]+$"
-+
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - mediatek,mt7622-efuse
-+              - mediatek,mt7623-efuse
-+              - mediatek,mt8173-efuse
-+              - mediatek,mt8192-efuse
-+              - mediatek,mt8195-efuse
-+              - mediatek,mt8516-efuse
-+          - const: mediatek,efuse
-+      - const: mediatek,mt8173-efuse
-+        deprecated: true
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  "^.*@[0-9a-f]+$":
-+    type: object
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+      bits:
-+        maxItems: 1
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    efuse@10206000 {
-+        compatible = "mediatek,mt8173-efuse";
-+        reg = <0x10206000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        u2_intr_p0: usb2-intr-p0@188 {
-+            reg = <0x188 0x1>;
-+            bits = <0 5>;
-+        };
-+
-+        u2_intr_p1: usb2-intr-p1@188 {
-+            reg = <0x188 0x2>;
-+            bits = <5 5>;
-+        };
-+
-+        thermal_calibration: calib@528 {
-+            reg = <0x528 0xc>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-deleted file mode 100644
-index 39d529599444..000000000000
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--= Mediatek MTK-EFUSE device tree bindings =
--
--This binding is intended to represent MTK-EFUSE which is found in most Mediatek SOCs.
--
--Required properties:
--- compatible: should be
--	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
--	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
--	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
--	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
--	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
--	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
--- reg: Should contain registers location and length
--- bits: contain the bits range by offset and size
--
--= Data cells =
--Are child nodes of MTK-EFUSE, bindings of which as described in
--bindings/nvmem/nvmem.txt
--
--Example:
--
--	efuse: efuse@10206000 {
--		compatible = "mediatek,mt8173-efuse";
--		reg	   = <0 0x10206000 0 0x1000>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--
--		/* Data cells */
--		thermal_calibration: calib@528 {
--			reg = <0x528 0xc>;
--		};
--	};
--
--= Data consumers =
--Are device nodes which consume nvmem data cells.
--
--For example:
--
--	thermal {
--		...
--		nvmem-cells = <&thermal_calibration>;
--		nvmem-cell-names = "calibration";
--	};
+>
+> >               ret = -1;
+> >
+> >       if (evsel__test_field(evsel, "pid", 4, true))
+>
+
+
 -- 
-2.18.0
-
+Thanks
+Yafang

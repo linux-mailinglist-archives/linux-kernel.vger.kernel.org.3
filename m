@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B22E46EF63
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADC346EF5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242023AbhLIREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241839AbhLIREF (ORCPT
+        id S231617AbhLIREM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:04:12 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:60568 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241920AbhLIRD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:04:05 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC5CC061A32
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:00:32 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id ay21so11878195uab.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nr5wuPhhGNTWonGmo2iX/gwdOzJ5S4cBCmGZ538zbok=;
-        b=NuDQEGrch6pNlNwYhNqd2wRy3q6W+rwMD/HsJRZhVNBHkpuPJoUbjulXl1homoseF7
-         1kKcr1HS2zoHGQQbixwftxedLSup7HNF2iiDJ04EHLOs1thMrn+1EWilS7DaRl119Jwi
-         I153BpHn87yCHVAxsHrI3Ecf6L6WByIvOdyJj2cG6+dHgYw6WJrs6MeuBGLDZ5gqRThH
-         nrZjKsu0OEOd1GBpvvojAC3FEXgHsQeK3gKQS6RdVvw/H4Z3Qamyvkc79HPUFzLMAXdH
-         6qJVFSWpexQi3VDB9BTMZyxVICvTBg7F9Fz4+ic625GPauuEelloWtYlTBlIZ1E3BU3u
-         BHOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nr5wuPhhGNTWonGmo2iX/gwdOzJ5S4cBCmGZ538zbok=;
-        b=FazDiDDbKl6gGAQ0yf/LjR4NPsMHMSgeixCMTcydlFo3o9Vanuud/Qm+3FsT8N1+Gd
-         hIe1NAcDqsQ+aIm5LFaqjsvPi3M9OWC0rlPJn4HJT4RgiBhtmU0V1+cEmdhIQ+pdul3W
-         iJ7eG/wavrzQ2ODZzQr2gR/aGGXZKBNtOYMIK9E7UawYZpW09zp/1uEKOHwCw2XHMBHR
-         ll+DjJTv0hkYukTRH0m9OXI8/k562LlYv26rc3AJ27lIS7qOocJD9QD2ahibsEJ5RFsN
-         f3rayagA/LkwhkEFTj6+q3lj5GJT2pmThbySBf9l291RTogKlzDhBfLSiEm4J4pMD25B
-         3YUw==
-X-Gm-Message-State: AOAM531DjCPzDqitwvBuLA9bD+7dSu3k3TREiVtbnJQnTD5FgkkiTgxy
-        0bHXOWeZm+B2TixzIoMfk8pskEhpIph4LcxAT3KA+SsJx2rfdAFHdFM=
-X-Google-Smtp-Source: ABdhPJz0iRDOuw/M+YaSvjbo97c5cFzgJ2BQX0SuXLvY44zzegatZmpXZ1bu6kLKl5yEfvfXxPxcTI41wUiGmm6vGZg=
-X-Received: by 2002:a0c:fb09:: with SMTP id c9mr17896098qvp.119.1639069220198;
- Thu, 09 Dec 2021 09:00:20 -0800 (PST)
+        Thu, 9 Dec 2021 12:03:57 -0500
+Received: from callcc.thunk.org (guestnat-104-133-8-106.corp.google.com [104.133.8.106] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1B9H0HqI001602
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Dec 2021 12:00:18 -0500
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 6204D4205DB; Thu,  9 Dec 2021 12:00:16 -0500 (EST)
+Date:   Thu, 9 Dec 2021 12:00:16 -0500
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] fs: ext4: possible ABBA deadlock in
+ ext4_inline_data_truncate() and ext4_punch_hole()
+Message-ID: <YbI2IEzCVo+A6GTi@mit.edu>
+References: <03a92134-ce74-f586-59a0-baed436b275a@gmail.com>
 MIME-Version: 1.0
-References: <1639063917-9011-1-git-send-email-quic_rjendra@quicinc.com> <1639063917-9011-2-git-send-email-quic_rjendra@quicinc.com>
-In-Reply-To: <1639063917-9011-2-git-send-email-quic_rjendra@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 9 Dec 2021 20:00:09 +0300
-Message-ID: <CAA8EJpqVtGQCzQwkZ2jJ5EnhtANNRPuFOYQhQkFvHJ30xU8quQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] soc: qcom: rpmhpd: sm8450: Add the missing .peer
- for sm8450_cx_ao
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, mka@chromium.org,
-        Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <03a92134-ce74-f586-59a0-baed436b275a@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 18:32, Rajendra Nayak <quic_rjendra@quicinc.com> wrote:
->
-> sm8450_cx and sm8450_cx_ao should be peers of each other, add the
-> missing .peer entry for sm8450_cx_ao
->
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+On Thu, Dec 09, 2021 at 07:10:44PM +0800, Jia-Ju Bai wrote:
+> Hello,
+> 
+> My static analysis tool reports a possible ABBA deadlock in the ext4 module
+> in Linux 5.10:
+> 
+> ext4_inline_data_truncate()
+>   down_write(&EXT4_I(inode)->i_data_sem); --> Line 1895 (Lock A)
+>   ext4_xattr_ibody_get()
+>     ext4_xattr_inode_get()
+>       ext4_xattr_inode_iget()
+>         inode_lock(inode); --> Line 427 (Lock B)
+> 
+> ext4_punch_hole()
+>   inode_lock(inode); --> Line 4018 (Lock B)
+>   ext4_update_disksize_before_punch()
+>     ext4_update_i_disksize()
+>       down_write(&EXT4_I(inode)->i_data_sem); --> Line 3248 (Lock A)
+> 
+> When ext4_inline_data_truncate() and ext4_punch_hole() are concurrently
+> executed, the deadlock can occur.
+> 
+> I am not quite sure whether this possible deadlock is real and how to fix it
+> if it is real.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi,
 
-> ---
->  drivers/soc/qcom/rpmhpd.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index e7e150c..2032cf3 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -264,6 +264,7 @@ static struct rpmhpd sm8450_cx = {
->  static struct rpmhpd sm8450_cx_ao = {
->         .pd = { .name = "cx_ao", },
->         .active_only = true,
-> +       .peer = &sm8450_cx,
->         .res_name = "cx.lvl",
->  };
->
-> --
-> 2.7.4
->
+Thanks for the report.  I don't believe this is deadlock is possible,
+because the first thing ext4_punch_hole() does is to check to see if
+the inode has inline data --- and if so, it calls
+ext4_convert_inline_data() to convert it to a normal file.  In
+ext4_convert_inline_data(), we take the xattr lock, and then do the
+conversion, and then drop the xattr lock.  So by the time
+ext4_punch_hole() starts doing its work, the inode is not an inline
+data file.
 
+In ext4_inline_data_truncate(), we take the xattr lock, and once we
+have the xattr lock, we check to see if inode is still an inline data
+file.  If it has been converted, we then bail out.
 
--- 
-With best wishes
-Dmitry
+Hence, the ABBA deadlock that your static analysis tool has pointed
+shouldn't happen in practice.
+
+Cheers,
+
+					- Ted

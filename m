@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B1746F432
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657DC46F434
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbhLITsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S230332AbhLITsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhLITsC (ORCPT
+        with ESMTP id S230249AbhLITsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:48:02 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1194AC061746;
-        Thu,  9 Dec 2021 11:44:28 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id z7so13996847lfi.11;
-        Thu, 09 Dec 2021 11:44:27 -0800 (PST)
+        Thu, 9 Dec 2021 14:48:17 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DB3C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:44:43 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id j11so6026782pgs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:44:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W3M3FLz1taxe7b+77mKr7ESR2sB6VgJaCSXT4PXYVl4=;
-        b=eGY5CV7vI95Jbczr3qe0LqFbn9/PcXqSI7y6DZgHP6wPgwipojVAfRBYzqigkthVZn
-         UazITCDN++Y8asH79fyndNPjkk/6rBqV0rySptjAHGRUfCNqs1V4y0nQZgQk26xo86q6
-         y7FyGluxEZn5US6qjR8aA22SF2oJ2YTaz0qXNyZupPrUefcplDPGrPNJqbCuDbfJV+O0
-         6LDqlL3/v5Xbwnh0HzoSzhImVspE/D1jSZ2zC1KXgeTBj8SgfNojnHx9p6i3D11Dm/j7
-         u4S/zhpVPbcd3ApJS+gOLyf/xU50tLIfNYOPrwGR+u4kKdcdu+w5KHx2TXoIj4tB4xbw
-         wepg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=YyCJJVppVowTxkE+zlT+lHTZu0h5h64AtApwEArmpFs=;
+        b=BMyqtGe0atMVZcr+sc/g8yqBeAyYfyA6HAJZyetaLAHuOkiytwcfayZxHUqHAE9Jyw
+         A3YeHooaKkak3BNiONcYtD3rxLWiEzuTMEMMC94J56f2MSFOyLkTY3PK1gSprakz96u5
+         Nh+Su6cw+1mksFhUqM+SLIkd9Cwz/hjmJeM9lRbiABMSCVK0XqHL7oKPTUPmD5VThpvL
+         WnJc3nGC6dtm6X1RgQUcXeWEYg7SiIzj+Jfy5zJMhwS7FY7FPEq6e0H3zBQ/T9j9ie+L
+         qVpezx2U4+oQ3xSlv573k7Hxs8xEk4siIjMpx1B19DPCpEJmlY6YFwyJj43mTT3vPwdF
+         yNsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W3M3FLz1taxe7b+77mKr7ESR2sB6VgJaCSXT4PXYVl4=;
-        b=RxJy7E/dUIJ+0H9sbZfFhcCYdCVSsZ756XMPykhwaHuSVM3M9bxyqNu55McZHGsKbm
-         q4mHhVQAThoyppyIlNbBWDiZXCaDXT10AU4M78bH63iKNvyV/2y3RzdHCElk2NGk8wzm
-         8R4uegUvRquRC7h9IEsKgXW1xG80m9slrquns+SlDtBSX/D2UNgW/mwnzK18n1QXgtNe
-         UECn2KczLdx2czz5Eq/D46dQqvBb6t7QYJO3NwBPy+REPtx2rE7SQSEzm+DR0DVg8HL5
-         Idxrf+Gd70d0aM/4oAUuNVjUyIfhhYzjFG7u16Ir/9FqpTJpLZdd7mDDkpSiwXT0QLaT
-         fcYQ==
-X-Gm-Message-State: AOAM531CASMHbonwT0O9SQUnXFsBubbmSBiih2q9gEAXZe/sSsEJuvGh
-        P6/C5SFjvwtBJ7U2CWkhL8Qu+LUFyH8=
-X-Google-Smtp-Source: ABdhPJzmRqO8K8YP9qOB01q2ejoBUkmaK+Jj+SXh/lFFavAM6lm2pmNJsA/4TI8gdc+EQ2+mgufg2Q==
-X-Received: by 2002:ac2:5fca:: with SMTP id q10mr8032056lfg.281.1639079066185;
-        Thu, 09 Dec 2021 11:44:26 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id s25sm74065ljd.39.2021.12.09.11.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 11:44:25 -0800 (PST)
-Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
- debugfs
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     thierry.reding@gmail.com, joro@8bytes.org, will@kernel.org,
-        vdumpa@nvidia.com, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20211209073822.26728-1-nicolinc@nvidia.com>
- <20211209073822.26728-7-nicolinc@nvidia.com>
- <63b4c2e2-0e55-5701-4c45-70684c7e058e@gmail.com>
- <20211209192450.GA34762@Asurada-Nvidia>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <fab11209-a579-bbfb-a701-e613cecabd56@gmail.com>
-Date:   Thu, 9 Dec 2021 22:44:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=YyCJJVppVowTxkE+zlT+lHTZu0h5h64AtApwEArmpFs=;
+        b=0CLBcWOLG7nwFehj0jlfSeGGpFcn9L0ckmWz4TU5MQilj1V0RxaQxkHXgcKbsVyeBv
+         olsprg3JJdub3HjsKb3DibOJxHT56eL07EHmsx9iCl9a9o3rKUnD4ck1ZEe5++q4NWy/
+         aLyyD09iGhjMtCboFC5+wvevFeO/WTVNSKe79Gr55duyoVLfzGy/S9Bhgo6pherJanW7
+         gCWeCc/LQ5TguOOa8QZgpxeIZwH8JraixL/GI9Tkzbda8NFpqIyQnP5j+FT9VAgJxDQq
+         82qMiLqd4rbGJ6Isfyd04uRoj7EQR4nwvumAcn+/q9B9keLUhmwvyvUR7VpaCdzvRhX7
+         DhMQ==
+X-Gm-Message-State: AOAM533bfbx2Dq6vlarGgVmqsvgphqLF1etKjZ4acrYcufSf+3F6GwGB
+        1gfmsEUNssYs6Xj/3JywupRXuoB+WI0fGoUTxcnsjd8DS7754g==
+X-Google-Smtp-Source: ABdhPJwUxeZjuiA/dIvPsn42rsoytsNIhwGZFU49P3dQ4NIGS+PSXe9f0kfmvd/9vdnE7OFnIbBgtbt9oaJp2S7f5R8=
+X-Received: by 2002:a62:14c7:0:b0:4a2:a6f2:2227 with SMTP id
+ 190-20020a6214c7000000b004a2a6f22227mr13714966pfu.22.1639079071152; Thu, 09
+ Dec 2021 11:44:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211209192450.GA34762@Asurada-Nvidia>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:8ec7:0:0:0:0 with HTTP; Thu, 9 Dec 2021 11:44:30
+ -0800 (PST)
+Reply-To: compaorekone34@gmail.com
+From:   kone compaore <abbttnab20@gmail.com>
+Date:   Thu, 9 Dec 2021 11:44:30 -0800
+Message-ID: <CAEKSJ0SR0dz5xqno2b3txjix4ZOt17U4mdEq1Z6FTgRHxdKjTg@mail.gmail.com>
+Subject: Greetings from Kone
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-09.12.2021 22:24, Nicolin Chen пишет:
-> On Thu, Dec 09, 2021 at 05:49:09PM +0300, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 09.12.2021 10:38, Nicolin Chen пишет:
->>> +static unsigned long pd_pt_index_iova(unsigned int pd_index, unsigned int pt_index)
->>> +{
->>> +     return (pd_index & (SMMU_NUM_PDE - 1)) << SMMU_PDE_SHIFT |
->>> +            (pt_index & (SMMU_NUM_PTE - 1)) << SMMU_PTE_SHIFT;
->>> +}
->>
->> I'd change the return type to u32 here, for consistency.
-> 
-> The whole file defines iova using "unsigned long", which I see
-> as the consistency... If we change it to u32, it'd be probably
-> necessary to change all iova types to u32 too... So I'd rather
-> keep it "unsigned long" here. If you see a big necessity to do
-> that, an additional patch would be nicer IMHO.
-> 
+Greetings to you and your family.
 
-In general IOVA is "unsigned long", of course. But in case of Tegra
-SMMU, we know that is always u32.
+My name is Mr. Kone Compaore, the auditing general with the bank,
+Africa Develop bank (ADB) Ouagadougou, Burkina Faso, in West Africa. I
+am contacting you to seek our honesty and sincere cooperation in
+confidential manner to transfer the sum of 10.5 (Ten million five
+hundred thousand Dollars) to your existing or new bank account.
 
-Alright, I see now that there are other places in the driver code that
-use "unsigned long", so need to change it in this patch.
+This money belongs to one of our bank client, a Libyan oil exporter
+who was working with the former Libyan government; I learn t that he
+was killed by the revolutionary forces since October 2011. Our bank is
+planning to transfer this entire fund into the government public
+treasury as unclaimed fund if nobody comes to claim the money from our
+bank after four years without account activities .
+
+We did not know each other before, but due to the fact that the
+deceased is a foreigner, the bank will welcome any claim from a
+foreigner without any suspect, that is why I decided to look for
+someone whim I can trust to come and claim the fund from our bank.
+
+I will endorse your name in the deceased client file here in my office
+which will indicate to that the deceased is your legal joint account
+business partner or family member next of kin to the deceased and
+officially the bank will transfer the fund to your bank account within
+seven working days in accordance to our banking inheritance rules and
+fund claim regulation.
+
+I will share 40% for you and 60% for me after the fund is transferred
+to your bank account, we need to act fast to complete this transaction
+within seven days. I will come to your country to collect my share
+after the fund is transferred to your bank account in your country. I
+hope that you will not disappoint me after the fund is transferred to
+your bank account in your country.
+
+Waiting for your urgent response today
+Yours sincerely
+
+Kone Compaore

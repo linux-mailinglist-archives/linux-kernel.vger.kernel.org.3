@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B9246E861
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39F646E85F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbhLIMZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:25:37 -0500
-Received: from mail-sgaapc01on2095.outbound.protection.outlook.com ([40.107.215.95]:62305
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237352AbhLIMZe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:25:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BA66+Y4W/8ZUtljKFzrBJcJPSFeT7grelvgxpaNiJKslzzMQ5oDMsOb9v4tieHClq3eydEhxc4a88blfr5Pe5AtUk49YFRGbFwLlIIxqRuyFyIpbEN/9KpKSfgXbdaO4bB1FYk1DQpGjAGBBQQVop5O+Avjm0sp1YnunP3CD2HWf2mdNgvNpDMOji9OOO6v+gUW2hGkFf19fvnAXwrnePJnX43KWMgZWgZj2STLb/BIG15Fi+BC1WsWo69JY6O6IwZENwt3fzbZnvIwBhSn1b+1ZVWKmX57lWA/albi6inyeuPqZDCdT6pekGjMVK5X3tqkqbRxmj1EoLeKky/e0Ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3AcQEQCZpLaouYtjZ1O4r0ZK8x2y6EsFjAl1fE9GNG4=;
- b=gGxCvkrfTk9MD5dT3XJHaIPKUTRnLZVZ5ZdVAQQAc+VHWmU0WnpPvzyacgNkmszjX+UE2euynrmM66jgrix506z6wWdab8qTin/bIxybBC4zZS22BZqIDRKLDfsWyMwFt1seibohpiOzX33drIicQ17KfyqRaLheBcrqI4jvl71/AEba3zJ4n7PuQ19moj0/mAK3UnqjjF7ALv0pKfZMHG9u6IcIQ8LJacc33eKPd0Mmh0ElZ+yrycQFld6oGAmAm1k+/4ihn5TozwODeLf/FNZxp/Ot76OzMy9MyiLwFJuWmiKXt5Nxbhqac6ioq8d33AM7Qy/UHcoT76zsW9qQ9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3AcQEQCZpLaouYtjZ1O4r0ZK8x2y6EsFjAl1fE9GNG4=;
- b=TiowNrXDHk427079KAyeiJ5k6e5OxIpfVTeymlm9R2ev/4uAhNK+VrPzJMR/cCRKEVFGQyBCLWeyz2zwMO/5d763e4K/Hn25W/XU9o5YCJgVvW59nQcLjDjgEcY7zIbg5cpef628uQdrjOeaMXYUnDv1vNot+vVG/JsBsoAOHBs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3180.apcprd06.prod.outlook.com (2603:1096:100:34::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
- 2021 12:21:58 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4755.023; Thu, 9 Dec 2021
- 12:21:58 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] irqchip: irq-bcm7120-l2: add missing put_device() call in bcm7120_l2_intc_probe()
-Date:   Thu,  9 Dec 2021 04:21:46 -0800
-Message-Id: <1639052506-23462-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0130.apcprd02.prod.outlook.com
- (2603:1096:202:16::14) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        id S237347AbhLIMZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229990AbhLIMZa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:25:30 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D75C061746;
+        Thu,  9 Dec 2021 04:21:57 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id q21so3647016vkn.2;
+        Thu, 09 Dec 2021 04:21:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w3ReoaqnPEHjdJMe05z68xUf6XudxSIjb7gmP09rJQc=;
+        b=qAXe/PUEjSWPGwo4b8gou+dvBHVqhIAIgQxrvG4FTud65PvHoO/e55K661EV3H/B7p
+         F1xAxQHtey8CwpR7QFO7JohxqAzuvbmJiq/mZAqAcHTN9cFWocuXT5TwL9/0W3Hz2sDG
+         YfMP4QsUAohnNc8LNTza+91rJepm4DX0ikuTuZSGAg0Ecz/yuNkkS8KLdfGQOlmW5RSp
+         AUkFG3E+drqcU6ODhkf19gb7AjduYsSv51huT9XT4yCyPxi4WHJw5ywl9glFwtJV42Jm
+         GJYSap6GBjQGN0ITA23LEeDWnykD2FllYj4Ai0leFxYP4/rB+OA2FXen3wu57KLbA4f6
+         nQaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w3ReoaqnPEHjdJMe05z68xUf6XudxSIjb7gmP09rJQc=;
+        b=ROlKWS/Fdd9K93Oabvzg1rsQMtdXAaU8t3GSD6USvE3+7KEMu/uvRv3Ae0dwYx0Idd
+         LFzjJON5F6tKPe8GCermJgPSoRQH4KjE9pMF5ZXY4avG5zo+Pd2pyueJ3+KlKwAmKOpC
+         hSb2x/Jcx49P1N7BeCGarBnntWza7CyamJPeIlxFEOsjUeAvUvnygIq94y22fhLS06Nh
+         gcTRVaMVoYOKvxN8MktLFCjeVjBg4iVHjXeT40FtFfFTtJyu1hya0NNo7fi5uoKPDE0t
+         eQhjzC2Ly6PSCK1LZiK8ymtt9C2rNL2GbLcElhkGoTHWSTb59j2xPww94rXCK2bv8028
+         EtOg==
+X-Gm-Message-State: AOAM532g9UUZQXWUSKjjrZD0JW6XIBcqJEhiFU8SKS7RHijr/qoBzS7O
+        orWfDYk++5KtXUpiP81EsuM=
+X-Google-Smtp-Source: ABdhPJziCTAr2E8Bs/ThL9oUGU3K0fyG3S9LlyLkquPvm2rZNuin3u/ToaT22Fm2JY8wZ/2q2NO5EA==
+X-Received: by 2002:a05:6122:988:: with SMTP id g8mr8851565vkd.2.1639052516572;
+        Thu, 09 Dec 2021 04:21:56 -0800 (PST)
+Received: from t14s.localdomain ([177.220.172.101])
+        by smtp.gmail.com with ESMTPSA id e13sm3673249vkd.21.2021.12.09.04.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 04:21:56 -0800 (PST)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 5C510ECD30; Thu,  9 Dec 2021 09:21:54 -0300 (-03)
+Date:   Thu, 9 Dec 2021 09:21:54 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] sctp: Protect cached endpoints to prevent possible
+ UAF
+Message-ID: <YbH04oUdLf2XML23@t14s.localdomain>
+References: <20211208165434.2962062-1-lee.jones@linaro.org>
+ <YbDlFFVPm/MYEoOQ@google.com>
 MIME-Version: 1.0
-Received: from ubuntu.localdomain (103.220.76.181) by HK2PR02CA0130.apcprd02.prod.outlook.com (2603:1096:202:16::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4755.17 via Frontend Transport; Thu, 9 Dec 2021 12:21:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b676e9c3-ebd4-4bbb-1036-08d9bb0e7ee8
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3180:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR06MB3180EC14DECE82FB66F7B2BDBD709@SL2PR06MB3180.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fiIMmiJViazpPEC2/ema1bsUTr06J35gtPatKURZMbe84/nLvKSOEkJDmQjt5P7Pu9M7W6sg9OpyfV5lDWlWgUVmL6HKS+GmKOAwtYBoLRSIBjnJl/NHbdl8kmrRIAg7dAPKplY10hRvuXYtR0osXuQSO4qWzwUrqt0yPvbSMZv6kotgcHnLDazjDpdcpp6krMEqM/RHnk4iXqf3jUEpDrhBNWMghsbeg4Xsj2b6oUMYtMR3g3GOY9vluokVwnwqHLbU3RrR8dAocgndKCdQlqGZkRGfs6l1RGr9Rqb0owUyDl3c41OY6dZsHwVK4WGRIu15bdoBCTVe9Wz6WS2jcMVShNsqeZWPWc7S/2yBFKgvakV+UHgQcZmwfdZiNI6WEAzVvVh8WzsQrMDOt7+PDgBX29/ziqjwowRRwphsyH+bCZ30EqW/IyZ4FIQlbQ8wx+QKHxjAFqVLeF3MQ7d+9Yf2/m+1FKgi1LTWMPs/IyK5ByzeW/S8dRstZCuhMT2WScGSd+DSbQVUuA8jyZ6WIemFeDKuajtBYaVnWaq8sJd1dkHRRmUQvVoHcfqMkO5qAb3HQ/ApxoHlIinucOVoKpVO8ijDWYOr8S5Nj9zTutMY0dsGyCkXkQV1Kt74l641/ftxDuIPOhWQqXVTl6ES9RDX2VsWH1rCWfiIg4HsE5ipkgmBfDE+ttMZ2xM8orPtJAD9ZWJxmDXbXN1iTid9Jw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(956004)(107886003)(6666004)(4744005)(110136005)(36756003)(66946007)(6486002)(316002)(2616005)(4326008)(52116002)(6506007)(8936002)(26005)(186003)(508600001)(6512007)(38100700002)(5660300002)(38350700002)(86362001)(2906002)(66476007)(66556008)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HLRpm9DcuGVZPDxdVaY8C37/kGZCbrTbaiocpBwy/t7KX8BmGKjZJ3YCuk3T?=
- =?us-ascii?Q?ri1EYN3R34zLV4z4uOotL3v9S3qRo0WLEM7IaIjJA/z1fKtiVuGRiZoq35ka?=
- =?us-ascii?Q?Sah1qsIaqu19dRKJkUPqZUt+gqwMKKXOdXuNq1Yn3SXYzs7Q9Udf3S8d6CSZ?=
- =?us-ascii?Q?gmpb0IYwgRXyWaTZnwdFWVvzfgTJwc9iAammA/zcPmkXGOVw58MVNP/njs+a?=
- =?us-ascii?Q?mheez9VtWwAm86wlfQDHOI4rYMEIyA0ggCVlaNYRsMkkdyTuiP2rJT5K1vqu?=
- =?us-ascii?Q?sj5g1OHFEa0pfYPefNgqiyW8vqfcbb3CmWCTtT2gazBpEBILWXUF39DpZVys?=
- =?us-ascii?Q?dGklMbfaVypWvKTKyLaoLdKz+A0hT7OGRjAAoPO8q9JCaQBYA/KHc8QdpCC3?=
- =?us-ascii?Q?ccYOHIl+oktDxFFCCq5ekVViVXYLsgsmsawFqNeIZejjeb3FXPsO5UYwHCAQ?=
- =?us-ascii?Q?WYuGHiax/t5/wXaLo7wXFuTBk7RcIuD/BcAiKhrea+MkcSnEzJndCEYwpGN7?=
- =?us-ascii?Q?OahYbMyd66oDtE1y0h6lF530OJ40NBVV4y8oLz6tY0CHtftF4vipALoAtJbs?=
- =?us-ascii?Q?gT5/HS2hCSK/gK+zITi8bjns0zdTWdp/AiFiKq3AI7aE/ewspjj0t8vnbxLf?=
- =?us-ascii?Q?dlR4Chg/jajsO5MCAR1jm91bp9vuKNVZjdWDmljIdoskQpgJnwU3SDI4Hk1B?=
- =?us-ascii?Q?eqpzAx95kT/yy5ujEfiKPMRHz3p0zEmL/ewZQgYdvv5A9ocx+h+VbiMhvNXP?=
- =?us-ascii?Q?GVRFQMUQ/TlqhQK0Run3Qdm1iZIyvjagy9nW5rsudINjQl8GUrsRNvDlx7Ei?=
- =?us-ascii?Q?YdQfSmQBJPlRrRMQ4XH4cwrabFOeNpDQfyCm5P7ReS3fRfE1oOJ7BEtUJ51M?=
- =?us-ascii?Q?80vSRAxdZUTPiAWR+lgHImdVS4pZUn/78iXt+USefPglSHDaZOeglCRl7VbI?=
- =?us-ascii?Q?GTYcuX6G3jMq74vMk9GgItlqIvnLtIiZpzqnIslgjoDL2rp5WsHYiiEMCtWp?=
- =?us-ascii?Q?QHfk5kO08pkPB6G+zootxZtkNcQgc/bFnAgCYbziqEPOBm0gki9pzzBNqxBr?=
- =?us-ascii?Q?qowyNFfY1PMQN8igRh52nLK4sQRKQd3QWJDH6csSLp3b9+ynWSAI0LsV5Dxc?=
- =?us-ascii?Q?ktUInNKB8F2eGG18JSDdqDSC7zsrXbYT7N6aEItryUUG9TQCepzK8FiY4mje?=
- =?us-ascii?Q?Bjasz6emSk7c/5h/z5rxpMRTtHIpZyQOqTULPzqRPSugvD0SNNZPEFtLY+l7?=
- =?us-ascii?Q?Su26Q9QEMeCZ1nPqUd94BA9R9YlVjDVpS0J+5AwYCSf/B2zDYTY8Vu9X6L8f?=
- =?us-ascii?Q?HK3YeN/t4vCzvlr8BeygP38y0RTkU6bGnLkzdKqdll+Bt4al+Rhfxi9U/Brh?=
- =?us-ascii?Q?FJ+l4NfS21yTYJcaL7MfSRaZMhfl+kDiykL2maTa9JNCF1a249zlYnvCXD/L?=
- =?us-ascii?Q?3IBdKDXAxaO8/dANpIl2lFIYLTUO25pHSTYPwtLrJWCKsb8D678nKBxYWw7S?=
- =?us-ascii?Q?PSM5sNEIa21N2Zu86wgaeNJ4/KnWCCvhlwthNGiE7kxfoB5hWF4FcOqQvJWw?=
- =?us-ascii?Q?r084qQuE8PdAm75bZVcDn6VA6/MYmgE1Qi6H4r1Jc17ke8HJloiU4M/zhyXY?=
- =?us-ascii?Q?Lo/h+uMbr48GOpyspBpuC+U=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b676e9c3-ebd4-4bbb-1036-08d9bb0e7ee8
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 12:21:58.4316
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Urcq7zeMXV3v7nCdSMxSRaeEGoJm2wjDpmAGgc89oGCRic2ZQLbifYp0IEHSL72cQDaBXD81G+yf89h16UEmzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbDlFFVPm/MYEoOQ@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+On Wed, Dec 08, 2021 at 05:02:12PM +0000, Lee Jones wrote:
+> On Wed, 08 Dec 2021, Lee Jones wrote:
+> 
+> > The cause of the resultant dump_stack() reported below is a
+> > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > sctp_sock_dump().
+> > 
+> > This race condition occurs when a transport is cached into its
+> > associated hash table then freed prior to its subsequent use in
+> > sctp_diag_dump() which uses sctp_for_each_transport() to walk the
+> > (now out of date) hash table calling into sctp_sock_dump() where the
+> > dereference occurs.
+> > 
+> > To prevent this from happening we need to take a reference on the
+> > to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
+> > we know it can be safely released.
+> > 
+> > When KASAN is not enabled, a similar, but slightly different NULL
+> > pointer derefernce crash occurs later along the thread of execution in
+> > inet_sctp_diag_fill() this time.
+> > 
+> >   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> >   Call trace:
+> >    dump_backtrace+0x0/0x2dc
+> >    show_stack+0x20/0x2c
+> >    dump_stack+0x120/0x144
+> >    print_address_description+0x80/0x2f4
+> >    __kasan_report+0x174/0x194
+> >    kasan_report+0x10/0x18
+> >    __asan_load8+0x84/0x8c
+> >    sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> >    sctp_for_each_transport+0x1e0/0x26c [sctp]
+> >    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+> >    inet_diag_dump+0x12c/0x168
+> >    netlink_dump+0x24c/0x5b8
+> >    __netlink_dump_start+0x274/0x2a8
+> >    inet_diag_handler_cmd+0x224/0x274
+> >    sock_diag_rcv_msg+0x21c/0x230
+> >    netlink_rcv_skb+0xe0/0x1bc
+> >    sock_diag_rcv+0x34/0x48
+> >    netlink_unicast+0x3b4/0x430
+> >    netlink_sendmsg+0x4f0/0x574
+> >    sock_write_iter+0x18c/0x1f0
+> >    do_iter_readv_writev+0x230/0x2a8
+> >    do_iter_write+0xc8/0x2b4
+> >    vfs_writev+0xf8/0x184
+> >    do_writev+0xb0/0x1a8
+> >    __arm64_sys_writev+0x4c/0x5c
+> >    el0_svc_common+0x118/0x250
+> >    el0_svc_handler+0x3c/0x9c
+> >    el0_svc+0x8/0xc
+> 
+> This looks related (reported 3 years ago!)
+> 
+>   https://lore.kernel.org/all/20181122131344.GD31918@localhost.localdomain/
 
-of_find_device_by_node() takes a reference to the embedded struct device 
-which needs to be dropped when error return.
-
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/irqchip/irq-bcm7120-l2.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l2.c
-index d80e67a..24573ca
---- a/drivers/irqchip/irq-bcm7120-l2.c
-+++ b/drivers/irqchip/irq-bcm7120-l2.c
-@@ -336,6 +336,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- 		if (data->map_base[idx])
- 			iounmap(data->map_base[idx]);
- 	}
-+	put_device(&pdev->dev);
- out_free_data:
- 	kfree(data);
- 	return ret;
--- 
-2.7.4
-
+Agree, seems related. Thanks for root causing it.

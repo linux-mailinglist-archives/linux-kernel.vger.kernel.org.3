@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBEA46F273
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717C346F276
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241444AbhLIRv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:51:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:60262 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241380AbhLIRvo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:51:44 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89A86ED1;
-        Thu,  9 Dec 2021 09:48:10 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DA873F73B;
-        Thu,  9 Dec 2021 09:48:09 -0800 (PST)
-Message-ID: <ebfebc58-10b5-c12e-edbe-a22181721c2d@arm.com>
-Date:   Thu, 9 Dec 2021 17:48:05 +0000
+        id S241666AbhLIRxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234197AbhLIRxd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:53:33 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77B9C061746;
+        Thu,  9 Dec 2021 09:49:59 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x15so22574368edv.1;
+        Thu, 09 Dec 2021 09:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b2/w3Mux17JVdswuS8GICSIHr00q6jNMhNdTzH/Vkto=;
+        b=ZgUIpRKw9jjsXGEiZB+eUI2F2CkqKetRDDUL9n9xn5GrC/H4yGvMqCqmgbajTChgDk
+         Fk/GiGw0nftftK+0uwn8jqh1JlsIo+yEtPSDeD8MCSU4pFyNcFdwTStSgPN1O8oRBuH5
+         HBG3vEY1yuRKFt7uvs9GKZuZnikVW4YphUtSSu5wHvLnHabps/kSoogHYDEcZHHFwy9g
+         20SeadQptwrtVYRThqVFzcZy6mYHdC73krRvrKTF5m8vnC96DSu7uPRCOeGQoJS8UD6B
+         v0bR1EjX66ij2iG1KwMF1WEPnJPufEhPbUWSpoOGthu8+Dkr3IqwoTXZcMypn/vPnvnb
+         s7mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b2/w3Mux17JVdswuS8GICSIHr00q6jNMhNdTzH/Vkto=;
+        b=NOtw6z4eTsUyRD5a5JuMXxwOt8C7giauopLcOKPdsl5MPMNSvMPyzOmsW2ghte6Kfc
+         TmWDsH5DUZ7JQIoG0Jv74hOUrbAIShabt9ccDAmUqvseX3qfibBptQPz21UjBJlD5Amc
+         nRnO496sKR71Rbpjo9n2j5u7oTTOmB67v3OeubJ1f4WwtCKrB97Y7FMSqDpJ5eI/lASC
+         cMSMDGxWd6uhsvRg3A95ShMafr/MNZAQYHoRTvf2KpJ5qL6rpSD5lX7ryzupEqRynzDn
+         fNp2jMzpcLROdOp3r95qdAzejFSNsCRy/gc9wZ7K7QaiYk4oGsRCjsb4ZTIGwbicQ91h
+         xMzg==
+X-Gm-Message-State: AOAM5317R4EGeVAsnKWBSALt+vgfE2LDRx2ggjMFnyHpr68EPwtATeUb
+        +SEZLrEYeLj6wqJDZ2xabxQ=
+X-Google-Smtp-Source: ABdhPJzIj57JYsEUXST9cXT1SKx8xJD1bm8MZ/+NIQXJL83DlVbWwlryjlJtXUPw9zletHXHSanFeQ==
+X-Received: by 2002:aa7:c9ce:: with SMTP id i14mr30422808edt.300.1639072103950;
+        Thu, 09 Dec 2021 09:48:23 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id lv19sm240316ejb.54.2021.12.09.09.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 09:48:23 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <5f8c31b4-6223-a965-0e91-15b4ffc0335e@redhat.com>
+Date:   Thu, 9 Dec 2021 18:48:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] iommu/iova: wait 'fq_timer' handler to finish before
- destroying 'fq'
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, joro@8bytes.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     yaohongbo@huawei.com, huawei.libin@huawei.com
-References: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
- <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
-In-Reply-To: <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2] KVM: x86: Always set kvm_run->if_flag
+Content-Language: en-US
+To:     Marc Orr <marcorr@google.com>, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, thomas.lendacky@amd.com, mlevitsk@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211209155257.128747-1-marcorr@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211209155257.128747-1-marcorr@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-09 13:17, Robin Murphy wrote:
-> Sorry I missed this before...
+On 12/9/21 16:52, Marc Orr wrote:
+> The kvm_run struct's if_flag is a part of the userspace/kernel API. The
+> SEV-ES patches failed to set this flag because it's no longer needed by
+> QEMU (according to the comment in the source code). However, other
+> hypervisors may make use of this flag. Therefore, set the flag for
+> guests with encrypted registers (i.e., with guest_state_protected set).
 > 
-> On 2019-07-27 10:21, Xiongfeng Wang wrote:
->> Fix following crash that occurs when 'fq_flush_timeout()' access
->> 'fq->lock' while 'iovad->fq' has been cleared. This happens when the
->> 'fq_timer' handler is being executed and we call
->> 'free_iova_flush_queue()'. When the timer handler is being executed,
->> its pending state is cleared and it is detached. This patch use
->> 'del_timer_sync()' to wait for the timer handler 'fq_flush_timeout()' to
->> finish before destroying the flush queue.
-> 
-> So if I understand correctly, you shut down the device - which naturally 
-> frees some DMA mappings into the FQ - then hotplug it out, such that 
-> tearing down its group and default domain can end up racing with the 
-> timeout firing on a different CPU? It would help if the commit message 
-> actually explained that - I've just reverse-engineered it from the given 
-> symptom - rather than focusing on details that aren't really important. 
-> fq->lock is hardly significant, since *any* access to the FQ while it's 
-> being destroyed is fundamentally unsound. I also spent way too long 
-> trying to understand the significance of the full stack trace below 
-> before realising that it is in fact just irrelevant - there's only one 
-> way fq_flush_timeout() ever gets called, and it's the obvious one.
-> 
-> The fix itself seems reasonable - the kerneldoc for del_timer_sync() is 
-> slightly scary, but since free_iova_flush_queue() doesn't touch any of 
-> the locks and definitely shouldn't run in IRQ context I believe we're OK.
-> 
-> This will affect my IOVA refactoring series a little, so I'm happy to 
-> help improve the writeup if you like - provided that my understanding is 
-> actually correct - and include it in a v2 of that.
+> Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
+> Signed-off-by: Marc Orr<marcorr@google.com>
 
-FWIW, this is what I came up with:
+Applied, though I wonder if it is really needed by those other VMMs 
+(which? gVisor is the only one that comes to mind that is interested in 
+userspace APIC).
 
-https://gitlab.arm.com/linux-arm/linux-rm/-/commit/ecea6835baca75b945bd8ecfaa636ff01dabcc1d
+It shouldn't be necessary for in-kernel APIC (where userspace can inject 
+interrupts at any time), and ready_for_interrupt_injection is superior 
+for userspace APIC.
 
-Let me know what you think.
-
-Thanks,
-Robin.
+Paolo

@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE77E46E195
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE6B46E197
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbhLIEmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 23:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S230119AbhLIEoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 23:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbhLIEmv (ORCPT
+        with ESMTP id S229940AbhLIEoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 23:42:51 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE33C0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:39:18 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id k4so3988263pgb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:39:18 -0800 (PST)
+        Wed, 8 Dec 2021 23:44:01 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981CEC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:40:28 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id x131so4272851pfc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:40:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jCZfo737eIqYymDvP2I0a5WbCi1C4zoedhtPvFUy+O0=;
-        b=N97S/VMMCfDqXQNGlOXuKapXV8DMeCT2OBm2ulgE+iNP8dKiGt2vva0mkRz1GCPaU1
-         Jnud/ZRXYi2MNgP7UJ+uYpqPBUjS8uDSRui8CUn9uVUobKxowV/xCaeY63KOKoJlQ4Kf
-         TbAZ9wLVq6jjQcCex2gjb7nqAswsziNd2jkck=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x2ZJmq55zw7iMT2C8aZJP0B/un1vIlG/Zr8TJ6mBokY=;
+        b=AldFpIbeuaYnnTYhALwX8NZO9NLCcIazdxyYDkV3zu16+ydBlSAyb99E+5dH30ghpR
+         fq2QOBHmBuoIbbWe6JoyKsx1n9PnbpwPoHDSMpxo6i0dLQI0NgHd5yIGD3wUAhGkHOxK
+         LRcmHYftWxsGB2zau3ZjC9hWrSGjv0I/SU4CD8Rqw5pNScLaHx7nrnDE0H2a2M48V6N8
+         jG3/ekUPWOePjUu3CJSWA7NnAt43lvs0AcvjD38BCsLsQvx+2B4hApM9y6vMiYMkMUY5
+         3xOiFn9AJyT2dYCYEHtSlrdif46KMlzUZRBoD6HG85UiVVGIrW4KNES7y4DA4yDCEzZs
+         lJ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jCZfo737eIqYymDvP2I0a5WbCi1C4zoedhtPvFUy+O0=;
-        b=Mmzoo9whFbn/2m6HuEScfmf500yAZn78ok1Z9twAJVI1x+V215fgiFiPIIn1PMW5mX
-         UAJLMNhUXdkbhRdNOKsN03z+VjR4yH4HmJxyQCJ1dCAWBtiv3ZkKFXt82BQv6ERiqx53
-         JyNTKWnp+4J0XUo3BE8pIPx4BRzFMthPuxLB2Y4XYPrn8Ux5kSYICxCWqYWPVfQ9EcCM
-         uYLn4kNv8dwJzbpsuLWWTTLK1YvN2QjrSQhQ9XdZiLcq5mjj/ZM9ouWJPuncBQ7/sLjC
-         WmfSoSyUVwXSmcCWuHzbfyVCxMXLWGFKYPxa4CNF0dXRaxRkQE9DsJXWRUr/l8m6thPN
-         /uQA==
-X-Gm-Message-State: AOAM533XMoXJlgRuOFZOirvI3bp/oV326uQWbiVLAXAKPk9xJPqtecaF
-        BrD9cx2wuIzNBDvIumZUffkcuQ==
-X-Google-Smtp-Source: ABdhPJzYe1fOfNQQBb1cYonbf00InuoSvc6ETHSvTbgQnaWCy/3tiBy9ZBX1+4LZXqDyuX0VjaPskA==
-X-Received: by 2002:a05:6a00:a23:b0:4a4:e9f5:d890 with SMTP id p35-20020a056a000a2300b004a4e9f5d890mr9750599pfh.82.1639024757920;
-        Wed, 08 Dec 2021 20:39:17 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h8sm5566432pfh.10.2021.12.08.20.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 20:39:17 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] rtc: Move variable into switch case statement
-Date:   Wed,  8 Dec 2021 20:39:15 -0800
-Message-Id: <20211209043915.1378393-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x2ZJmq55zw7iMT2C8aZJP0B/un1vIlG/Zr8TJ6mBokY=;
+        b=lZmt+5xL9+3PGeBvlq7gcqJyuvnlN6ALYYMKLdZZMb7TU7PPQmWUOdxk+NmBg61GJe
+         RXMz6mSAXqwpnxTUW3ngY6Dibrm7GyslXdgQeCQBIeoBRnofW9rXyqZVzWed2j+Wbohk
+         6XSZmExLjXnpqKvkE6DWbKqCeO2llXbZsb/fyJ/D6YA2IwYwQ2Ln+7nM6VxE05tkuxxM
+         lbO/k5Ripnk+FBX4BzgoUP2/Vc2ddujqFCHO2fU9BUC3qKxwHdymRwOSj8JbNEuis++M
+         xVPY0dK1HGH9ElWIbETOPVW86XpPYdd9udmZvjALYZtnvwjBbF0tYNMAXkO+Vewfsl9s
+         RTkw==
+X-Gm-Message-State: AOAM532ld33+0z7oTKMumyWiMyD8uh6xcEbvaDOC/WdsTb8iUepau4LA
+        FYkz32U0EiOYvuQFdHq0LCxCupe5N3IugSRl5K0d9Q==
+X-Google-Smtp-Source: ABdhPJwdKvRPtHPJEjGq9zSob49lOW19xlZcoHLYxDl98/qvQnZqjFTxFi4RHLqUt1eyiErqfXv/gosJgS5PweTwLHI=
+X-Received: by 2002:a63:6a03:: with SMTP id f3mr32741915pgc.618.1639024827705;
+ Wed, 08 Dec 2021 20:40:27 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1446; h=from:subject; bh=/Ww8OLLJSU5aHz7DArexGdWzbipcRlVe6LRWYhdbeaw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhsYhyueeQ9MVmpMGYuq8gt1pQqFSIQKjCzzjQUAdP 8E0C8JaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbGIcgAKCRCJcvTf3G3AJikgD/ 9/3GdVzi9NR+fpDE5+GBglcW+YcyEC9++7ry5SzE1bwcWsia8DrCVNV41CTWcPJw3xvnaZ2Svf57rN HuZEEKLXVzpdivG5NuY6l0etIGiRKdxz4ylUOwImJPJbin230ih8QzMryTTMEd8/uH8F+4v+eVCqft jmE9oRTybhhd2FbH9PuFoeNNV7vf2wt6L0Fv6HhvJ4oo9MJ4stF4TVm+8z0Fwo27gFbcPFGcBdDMtQ LWSSJiHfan72yqGcvdlm5ruu7sXjQI8VVPoR0RwFHS2fPj+cM8bbb/a4jhEBk06Tqvre9ilMBXB34g QmC9BiL3ZGrP4GZWU990JjXnZt+9zsluNofrXJO1Yvod+nQBjTRrFEu4SHHKCev3JEpyBJdzgDs8Gv spAMBKeO0xzJpqyVC8JNdkQ5dEvVnWKusGzCTYR6mXPLnxPIczx20LdHS9vvgyYbCcoaVC2AG2yDHx HjULEnhqYG/LlfqdwQYW4e0mdF4+L4ucUxtj8puwKnYOFThWXRrfvfdcMXAIa7JLCSmeYH/h/+RB00 3q+rokaYKKWCEjjyCzxjLRSYIxeXSbGF8zr/d19b3gksEqdTTHU5+b3JXjwzS4wKQIE+HlXgdtmNgh 3ggTF8ziCSAdIYjghZWklOsmSSgxOzbLsySgNzJFWDpF0lWkbSte9BBEaN2g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-7-likexu@tencent.com>
+In-Reply-To: <20211130074221.93635-7-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 8 Dec 2021 20:40:16 -0800
+Message-ID: <CALMp9eS1PCWw9f472=vibMp39-Xers+9bthOu2vxfRvZR+5JtA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] KVM: x86: Update vPMCs when retiring branch instructions
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with automatic stack variable initialization, GCC 12
-complains about variables defined outside of switch case statements.
-Move the variable into the case that uses it, which silences the warning:
+On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Jim Mattson <jmattson@google.com>
+>
+> When KVM retires a guest branch instruction through emulation,
+> increment any vPMCs that are configured to monitor "branch
+> instructions retired," and update the sample period of those counters
+> so that they will overflow at the right time.
+>
+> Signed-off-by: Eric Hankland <ehankland@google.com>
+> [jmattson:
+>   - Split the code to increment "branch instructions retired" into a
+>     separate commit.
+>   - Moved/consolidated the calls to kvm_pmu_trigger_event() in the
+>     emulation of VMLAUNCH/VMRESUME to accommodate the evolution of
+>     that code.
+> ]
+> Fixes: f5132b01386b ("KVM: Expose a version 2 architectural PMU to a guests")
+> Signed-off-by: Jim Mattson <jmattson@google.com>
 
-drivers/rtc/dev.c: In function 'rtc_dev_ioctl':
-drivers/rtc/dev.c:394:30: warning: statement will never be executed [-Wswitch-unreachable]
-  394 |                         long offset;
-      |                              ^~~~~~
+I'm not sure if this is appropriate, but...
 
-Fixes: 6a8af1b6568a ("rtc: add parameter ioctl")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/rtc/dev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
-index e104972a28fd..69325aeede1a 100644
---- a/drivers/rtc/dev.c
-+++ b/drivers/rtc/dev.c
-@@ -391,14 +391,14 @@ static long rtc_dev_ioctl(struct file *file,
- 		}
- 
- 		switch(param.param) {
--			long offset;
- 		case RTC_PARAM_FEATURES:
- 			if (param.index != 0)
- 				err = -EINVAL;
- 			param.uvalue = rtc->features[0];
- 			break;
- 
--		case RTC_PARAM_CORRECTION:
-+		case RTC_PARAM_CORRECTION: {
-+			long offset;
- 			mutex_unlock(&rtc->ops_lock);
- 			if (param.index != 0)
- 				return -EINVAL;
-@@ -407,7 +407,7 @@ static long rtc_dev_ioctl(struct file *file,
- 			if (err == 0)
- 				param.svalue = offset;
- 			break;
--
-+		}
- 		default:
- 			if (rtc->ops->param_get)
- 				err = rtc->ops->param_get(rtc->dev.parent, &param);
--- 
-2.30.2
-
+Reviewed-by: Jim Mattson <jmattson@google.com>

@@ -2,294 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D43146ED92
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA0E46EDA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241339AbhLIQzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:55:14 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38260 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbhLIQzN (ORCPT
+        id S241348AbhLIQzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234550AbhLIQzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:55:13 -0500
+        Thu, 9 Dec 2021 11:55:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED03C061746;
+        Thu,  9 Dec 2021 08:52:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1635DCE2739
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F35C341CD;
-        Thu,  9 Dec 2021 16:51:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8B290CE2720;
+        Thu,  9 Dec 2021 16:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA60C004DD;
+        Thu,  9 Dec 2021 16:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639068696;
-        bh=SeE9LhsXrmUvDFto+PQCLGTe/QjMvyWQxM4r3s7CDWs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LMnhW5IqQYBUuytouiC4IL13VhESqt162Ro2IX5CrQEQReIfH2RoBak6/9CPTGSFF
-         8+RUIiAAK1JMxs7w6iSwi68tzdtl7/hYAlcFE04hAWG9pD+gUw7mKKZi9q4vVJ4eWV
-         sQ85iDtxbzf1FXsziW+9o1JPXS2AY8qM4lN2C07xP30vI/3PzjAGDzeKHsDicgayA5
-         /dCgL++xJngxmWvKcIuzp/N2BPRen5NfNAZ6lJFYdcj/hxydLK+15KMgKw8bgJex5b
-         qr0bWfy0isQjm36YN/HiWp/LjCKx4QiNvA89MBGWSxxWWjkyKkB3jIsU+UKfM9FPF1
-         Z8RksRn0Q1WMA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     mingo@kernel.org
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH] tools/lib/lockdep: drop leftover liblockdep headers
-Date:   Thu,  9 Dec 2021 11:51:13 -0500
-Message-Id: <20211209165113.150581-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
+        s=k20201202; t=1639068730;
+        bh=lFjiir2sD0md/TMvmilM7d7unRsKVDD5122cBpWYVHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ay8itGGWLP4hcucKaH7KnA0aif4zos10gDn7dU++YCK3HfNUvy/0g53jLbHTxq5S7
+         /QH6TKJS14zrdPM4CGBxE7SWzyI94Q/AhSaPj/FFbySAUZF6sa2tH+Z77hsJBrZrHK
+         Sc5tqt4Et5XCUhElErkw1Th3zbOBAElnj5AwACuMxTnLqlnknieoWJTzd9Ur2wkJE1
+         ZSSoxVKFeutGnVdnGdtNb4XKjiyfk2tz8knNu0ufjbEyX2+SRn9r/f0n2efhjli8Iy
+         FHhQUXO1xGdFd7I8hgHVM+5xq0E38pelMs3AXtxgwX18KC2+q9ZkNsDScN78GcB0mF
+         is4SrpUHWXCDQ==
+Received: by pali.im (Postfix)
+        id 56707111E; Thu,  9 Dec 2021 17:52:07 +0100 (CET)
+Date:   Thu, 9 Dec 2021 17:52:07 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (dell-smm) Simplify ioctl handler
+Message-ID: <20211209165207.kik56ozi7umti4xo@pali>
+References: <20211120170319.72369-1-W_Armin@gmx.de>
+ <20211120170319.72369-2-W_Armin@gmx.de>
+ <20211123161332.discv3bfx4rkowah@pali>
+ <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <5024959a-772a-ebde-089d-0668e1e188f7@gmx.de>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up remaining headers that are specific to liblockdep but lived in
-the shared header directory.
+On Monday 29 November 2021 21:57:40 Armin Wolf wrote:
+> Am 23.11.21 um 17:13 schrieb Pali Rohár:
+> 
+> > On Saturday 20 November 2021 18:03:18 Armin Wolf wrote:
+> > > The second switch-case has no real purpose:
+> > > 
+> > > - for I8K_BIOS_VERSION, val does not represent a return value,
+> > >    making the check for error values unnecessary.
+> > > - for I8K_MACHINE_ID, val remains zero, so the error check is
+> > >    unnecessary too.
+> > > 
+> > > Remove the switch-case and move the calls to copy_to_user()
+> > > into the first switch-case for I8K_BIOS_VERSION/_MACHINE_ID.
+> > > Omit buff[] since data->machineid already contains the string
+> > s/->machineid/->bios_machineid/
+> > 
+> > > with the necessary zero padding.
+> > data is allocated by devm_kzalloc() so data->bios_machineid is really
+> > zero padded.
+> > 
+> > > Tested on a Dell Inspiron 3505.
+> > > 
+> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > ---
+> > >   drivers/hwmon/dell-smm-hwmon.c | 30 +++++++++---------------------
+> > >   1 file changed, 9 insertions(+), 21 deletions(-)
+> > > 
+> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > > index 5596c211f38d..b5d1703faa62 100644
+> > > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > > @@ -454,7 +454,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > >   {
+> > >   	int val = 0;
+> > >   	int speed, err;
+> > > -	unsigned char buff[16];
+> > >   	int __user *argp = (int __user *)arg;
+> > > 
+> > >   	if (!argp)
+> > > @@ -468,15 +467,19 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > > 
+> > >   		val = (data->bios_version[0] << 16) |
+> > >   				(data->bios_version[1] << 8) | data->bios_version[2];
+> > > -		break;
+> > > 
+> > > +		if (copy_to_user(argp, &val, 4))
+> > > +			return -EFAULT;
+> > > +
+> > > +		return 0;
+> > >   	case I8K_MACHINE_ID:
+> > >   		if (restricted && !capable(CAP_SYS_ADMIN))
+> > >   			return -EPERM;
+> > > 
+> > > -		strscpy_pad(buff, data->bios_machineid, sizeof(buff));
+> > > -		break;
+> > > +		if (copy_to_user(argp, data->bios_machineid, 16))
+> > What about usage of sizeof(data->bios_machineid) instead of hardcoded
+> > constant 16? And maybe same for constant 4?
+> 
+> For the string yes, but maybe i should change the int to an u32?
 
-Note that there are still headers that were originally created for
-liblockdep, that still have liblockdep references, but they are used by
-other tools/ code at this point.
+I do not know if changing int to u32 should be done or not...
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- tools/include/linux/debug_locks.h | 14 ------
- tools/include/linux/hardirq.h     | 12 ------
- tools/include/linux/irqflags.h    | 39 -----------------
- tools/include/linux/lockdep.h     | 72 -------------------------------
- tools/include/linux/proc_fs.h     |  4 --
- tools/include/linux/spinlock.h    |  2 -
- tools/include/linux/stacktrace.h  | 33 --------------
- 7 files changed, 176 deletions(-)
- delete mode 100644 tools/include/linux/debug_locks.h
- delete mode 100644 tools/include/linux/hardirq.h
- delete mode 100644 tools/include/linux/irqflags.h
- delete mode 100644 tools/include/linux/lockdep.h
- delete mode 100644 tools/include/linux/proc_fs.h
- delete mode 100644 tools/include/linux/stacktrace.h
-
-diff --git a/tools/include/linux/debug_locks.h b/tools/include/linux/debug_locks.h
-deleted file mode 100644
-index 72d595ce764ae..0000000000000
---- a/tools/include/linux/debug_locks.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LIBLOCKDEP_DEBUG_LOCKS_H_
--#define _LIBLOCKDEP_DEBUG_LOCKS_H_
--
--#include <stddef.h>
--#include <linux/compiler.h>
--#include <asm/bug.h>
--
--#define DEBUG_LOCKS_WARN_ON(x) WARN_ON(x)
--
--extern bool debug_locks;
--extern bool debug_locks_silent;
--
--#endif
-diff --git a/tools/include/linux/hardirq.h b/tools/include/linux/hardirq.h
-deleted file mode 100644
-index b25580b6a9be4..0000000000000
---- a/tools/include/linux/hardirq.h
-+++ /dev/null
-@@ -1,12 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LIBLOCKDEP_LINUX_HARDIRQ_H_
--#define _LIBLOCKDEP_LINUX_HARDIRQ_H_
--
--#define SOFTIRQ_BITS	0UL
--#define HARDIRQ_BITS	0UL
--#define SOFTIRQ_SHIFT	0UL
--#define HARDIRQ_SHIFT	0UL
--#define hardirq_count()	0UL
--#define softirq_count()	0UL
--
--#endif
-diff --git a/tools/include/linux/irqflags.h b/tools/include/linux/irqflags.h
-deleted file mode 100644
-index 501262aee8ff2..0000000000000
---- a/tools/include/linux/irqflags.h
-+++ /dev/null
-@@ -1,39 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LIBLOCKDEP_LINUX_TRACE_IRQFLAGS_H_
--#define _LIBLOCKDEP_LINUX_TRACE_IRQFLAGS_H_
--
--# define lockdep_hardirq_context()	0
--# define lockdep_softirq_context(p)	0
--# define lockdep_hardirqs_enabled()	0
--# define lockdep_softirqs_enabled(p)	0
--# define lockdep_hardirq_enter()	do { } while (0)
--# define lockdep_hardirq_exit()		do { } while (0)
--# define lockdep_softirq_enter()	do { } while (0)
--# define lockdep_softirq_exit()		do { } while (0)
--# define INIT_TRACE_IRQFLAGS
--
--# define stop_critical_timings() do { } while (0)
--# define start_critical_timings() do { } while (0)
--
--#define raw_local_irq_disable() do { } while (0)
--#define raw_local_irq_enable() do { } while (0)
--#define raw_local_irq_save(flags) ((flags) = 0)
--#define raw_local_irq_restore(flags) ((void)(flags))
--#define raw_local_save_flags(flags) ((flags) = 0)
--#define raw_irqs_disabled_flags(flags) ((void)(flags))
--#define raw_irqs_disabled() 0
--#define raw_safe_halt()
--
--#define local_irq_enable() do { } while (0)
--#define local_irq_disable() do { } while (0)
--#define local_irq_save(flags) ((flags) = 0)
--#define local_irq_restore(flags) ((void)(flags))
--#define local_save_flags(flags)	((flags) = 0)
--#define irqs_disabled() (1)
--#define irqs_disabled_flags(flags) ((void)(flags), 0)
--#define safe_halt() do { } while (0)
--
--#define trace_lock_release(x, y)
--#define trace_lock_acquire(a, b, c, d, e, f, g)
--
--#endif
-diff --git a/tools/include/linux/lockdep.h b/tools/include/linux/lockdep.h
-deleted file mode 100644
-index e56997288f2b0..0000000000000
---- a/tools/include/linux/lockdep.h
-+++ /dev/null
-@@ -1,72 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LIBLOCKDEP_LOCKDEP_H_
--#define _LIBLOCKDEP_LOCKDEP_H_
--
--#include <sys/prctl.h>
--#include <sys/syscall.h>
--#include <string.h>
--#include <limits.h>
--#include <linux/utsname.h>
--#include <linux/compiler.h>
--#include <linux/export.h>
--#include <linux/kern_levels.h>
--#include <linux/err.h>
--#include <linux/rcu.h>
--#include <linux/list.h>
--#include <linux/hardirq.h>
--#include <unistd.h>
--
--#define MAX_LOCK_DEPTH 63UL
--
--#define asmlinkage
--#define __visible
--
--#include "../../../include/linux/lockdep.h"
--
--struct task_struct {
--	u64 curr_chain_key;
--	int lockdep_depth;
--	unsigned int lockdep_recursion;
--	struct held_lock held_locks[MAX_LOCK_DEPTH];
--	gfp_t lockdep_reclaim_gfp;
--	int pid;
--	int state;
--	char comm[17];
--};
--
--#define TASK_RUNNING 0
--
--extern struct task_struct *__curr(void);
--
--#define current (__curr())
--
--static inline int debug_locks_off(void)
--{
--	return 1;
--}
--
--#define task_pid_nr(tsk) ((tsk)->pid)
--
--#define KSYM_NAME_LEN 128
--#define printk(...) dprintf(STDOUT_FILENO, __VA_ARGS__)
--#define pr_err(format, ...) fprintf (stderr, format, ## __VA_ARGS__)
--#define pr_warn pr_err
--#define pr_cont pr_err
--
--#define list_del_rcu list_del
--
--#define atomic_t unsigned long
--#define atomic_inc(x) ((*(x))++)
--
--#define print_tainted() ""
--#define static_obj(x) 1
--
--#define debug_show_all_locks()
--extern void debug_check_no_locks_held(void);
--
--static __used bool __is_kernel_percpu_address(unsigned long addr, void *can_addr)
--{
--	return false;
--}
--
--#endif
-diff --git a/tools/include/linux/proc_fs.h b/tools/include/linux/proc_fs.h
-deleted file mode 100644
-index 8b3b03b64fda5..0000000000000
---- a/tools/include/linux/proc_fs.h
-+++ /dev/null
-@@ -1,4 +0,0 @@
--#ifndef _TOOLS_INCLUDE_LINUX_PROC_FS_H
--#define _TOOLS_INCLUDE_LINUX_PROC_FS_H
--
--#endif /* _TOOLS_INCLUDE_LINUX_PROC_FS_H */
-diff --git a/tools/include/linux/spinlock.h b/tools/include/linux/spinlock.h
-index c934572d935cc..622266b197d0d 100644
---- a/tools/include/linux/spinlock.h
-+++ b/tools/include/linux/spinlock.h
-@@ -37,6 +37,4 @@ static inline bool arch_spin_is_locked(arch_spinlock_t *mutex)
- 	return true;
- }
- 
--#include <linux/lockdep.h>
--
- #endif
-diff --git a/tools/include/linux/stacktrace.h b/tools/include/linux/stacktrace.h
-deleted file mode 100644
-index ae343ac35bfa7..0000000000000
---- a/tools/include/linux/stacktrace.h
-+++ /dev/null
-@@ -1,33 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LIBLOCKDEP_LINUX_STACKTRACE_H_
--#define _LIBLOCKDEP_LINUX_STACKTRACE_H_
--
--#include <execinfo.h>
--
--struct stack_trace {
--	unsigned int nr_entries, max_entries;
--	unsigned long *entries;
--	int skip;
--};
--
--static inline void print_stack_trace(struct stack_trace *trace, int spaces)
--{
--	backtrace_symbols_fd((void **)trace->entries, trace->nr_entries, 1);
--}
--
--#define save_stack_trace(trace)	\
--	((trace)->nr_entries =	\
--		backtrace((void **)(trace)->entries, (trace)->max_entries))
--
--static inline int dump_stack(void)
--{
--	void *array[64];
--	size_t size;
--
--	size = backtrace(array, 64);
--	backtrace_symbols_fd(array, size, 1);
--
--	return 0;
--}
--
--#endif
--- 
-2.33.0
-
+> > > +			return -EFAULT;
+> > > 
+> > > +		return 0;
+> > >   	case I8K_FN_STATUS:
+> > >   		val = i8k_get_fn_status();
+> > >   		break;
+> > > @@ -527,23 +530,8 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned int cmd
+> > >   	if (val < 0)
+> > >   		return val;
+> > > 
+> > > -	switch (cmd) {
+> > > -	case I8K_BIOS_VERSION:
+> > > -		if (copy_to_user(argp, &val, 4))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	case I8K_MACHINE_ID:
+> > > -		if (copy_to_user(argp, buff, 16))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	default:
+> > > -		if (copy_to_user(argp, &val, sizeof(int)))
+> > > -			return -EFAULT;
+> > > -
+> > > -		break;
+> > > -	}
+> > > +	if (copy_to_user(argp, &val, sizeof(int)))
+> > > +		return -EFAULT;
+> > > 
+> > >   	return 0;
+> > >   }
+> > > --
+> > > 2.30.2
+> > > 

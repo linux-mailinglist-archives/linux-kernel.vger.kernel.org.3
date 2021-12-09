@@ -2,134 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ECA46E463
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C3646E46A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234993AbhLIIl4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 03:41:56 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:33625 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbhLIIlN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:41:13 -0500
-Received: by mail-ua1-f50.google.com with SMTP id a14so9465030uak.0;
-        Thu, 09 Dec 2021 00:37:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/wHJKw72IgLDQBov78fTqhQ5wmrHUQsgonD8JrpOVc0=;
-        b=nNVyCZItkQB6t0PxUpdQqno4RTxV1HcmPXFb8Zm06syLcue/y5Csyc3kDBs/C4Uf/D
-         SBBNGQFYvdbNCCVubLG+EZAX21pslPS7JX7CMO9LET8aOnEnM6GdMm48mPZbyvXDU4k/
-         CDd/u/LIeX9RplhfymLptmwru04Y0IqhM5eWTFiRNZS4uu7hyzO8x5M0STOkN6uVziVm
-         h/oBIx31KZolXnpx37pj/q2KK3o9YdOIwcFXFAaroqEzVL1XFn7F7v2ganpVKlhn/1TH
-         QcZ7yyHZKIA2YhhW4ComOLFHZ8DCQPzG2oQVUnuK+U7LHuePNrsZGmEP1JuGieXMJh8B
-         7OYw==
-X-Gm-Message-State: AOAM530cxmCaEhUvt9S8tT0aJIm49X7iRY/Zx7ahoQ6z+GUhz8sPSAdP
-        4352gl3LMp9VyUO1kL2l7nHg1V4xZ8CHlw==
-X-Google-Smtp-Source: ABdhPJwbCkbduIdqNrb1k4q817zDR8z5HkgwiI7O7a6DY7GEyzlrguZexBsOBQQEQ75c9KecMvwdbQ==
-X-Received: by 2002:a67:fdc3:: with SMTP id l3mr5815925vsq.42.1639039059186;
-        Thu, 09 Dec 2021 00:37:39 -0800 (PST)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id j19sm903vka.4.2021.12.09.00.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 00:37:38 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id s1so3242919vks.9;
-        Thu, 09 Dec 2021 00:37:38 -0800 (PST)
-X-Received: by 2002:a05:6122:2193:: with SMTP id j19mr6958885vkd.7.1639039058208;
- Thu, 09 Dec 2021 00:37:38 -0800 (PST)
+        id S234989AbhLIInc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:43:32 -0500
+Received: from mout.gmx.net ([212.227.17.21]:34163 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231501AbhLIInb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:43:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639039183;
+        bh=mZ2mNNFQARTfTu/wMe1jwivH6hysUDFWWSUMvPKc+Ac=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=BaFY20+Lgs1PV1V/CVkw3lmbYnaWinYuwKGhGGytbgCiEQ9uqmHuuAr+CPsb8mohg
+         lxxrHGE7jj/FOOyTew+zG5g85koTpMZvbE/iyK9mtQc8zuaHDS+nprItK7Ler0TatN
+         6+nQmQYYdk7BJSIyZiKZHhY3lx0E0Dpgp6WTIvvA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MYeMt-1mztvR1CHj-00Vg7f; Thu, 09
+ Dec 2021 09:39:43 +0100
+Message-ID: <9d299505-a334-b988-2fcd-bc2129207959@gmx.com>
+Date:   Thu, 9 Dec 2021 16:39:37 +0800
 MIME-Version: 1.0
-References: <20211208132042.3226275-1-gsomlo@gmail.com> <20211208132042.3226275-3-gsomlo@gmail.com>
- <1639004806.166681.596177.nullmailer@robh.at.kernel.org> <YbFXERe0K3rfzZem@glsvmlin.ini.cmu.edu>
-In-Reply-To: <YbFXERe0K3rfzZem@glsvmlin.ini.cmu.edu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Dec 2021 09:37:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVJZdzRMedn9L_Jb=0MYB_Bxs90v+iH7UaDBzup-qzp8A@mail.gmail.com>
-Message-ID: <CAMuHMdVJZdzRMedn9L_Jb=0MYB_Bxs90v+iH7UaDBzup-qzp8A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>, david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mateusz Holenko <mholenko@antmicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] btrfs: Fix memory leak in __add_inode_ref()
+Content-Language: en-US
+To:     Jianglei Nie <niejianglei2021@163.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211209065631.124586-1-niejianglei2021@163.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20211209065631.124586-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:g91V/UPbFzq0vSE8U10kexVzQJn3fLMcvmwIDX9V2qy93MKwt0g
+ nZQGQRh8iCPCPqBsguRSs8qP1WVXl4pkRTTOWk+haI34xa7i34OyuLWzhJyFGSc9Nbi1MzP
+ fiO/hCFTDdeJkJljfkO+uXv48B732UmZpS6wKwtezA6ZDqBSEAaHfx5PGDFIQJz46M9rytG
+ obUbVs0qCCFhl8FTZiO6A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:of9nEe/Zr04=:EuKLyzqSjMDASCiQnE2X9V
+ a5KuOmBxa6JOPgpnyfcoxH1UOECrZYcXG/Ne+ZOdCAiVSixVUsJNOx1SQmI2/wPXZbKpf7ZF1
+ u8IVD6zQ2nOlYojiKO791Pwe1g6ayVwUEake5a9GxUwW+l33DMMzFJkLaN23XAP4xw1xi7r4Y
+ eOsXOusWKi+AS/hc9T+5wtZZb7tW0ZbkVQmEbls4loUbdDphB/n+tee8iFvcJsh+nHW0yL9Vy
+ yUhCwJs+PkCkPut+Ui7tEEtG9WD/G9tkAaarNnJERI2nPX3y3s2jRVwey2Avd1HquRTB1QqFk
+ saZ0uPGN6DhGVEFILnuadn0eIhycUN+peaFCTgjGhGjYWIEvcGoCOP8rjqrOCjOaCbsLfMEnl
+ vi4HisfQZm9l3MFHbK27P5cexfLUYwRk4IKB4E0IGm2O42NIcPWJQhDjSxb7k0xR4a8pxPoXJ
+ gRK9sM+NC6iKvLJT1PkFMG/7l4opSOEaHuuBSs7XNwn9Tc0/FSKRWjDtBKazPESOFtx565cV1
+ 5o8rfRI7KC/2UON0OkfxXeAk8t4aCq+cgc9Khzh+obVwRl7yVU/g6y9ashU2D3upmtykOIYzi
+ CrMTcBHfGqh2kEQR9mj/CDsNnpFv7CiTyuXeR/l+hELBFChX8NBqXOfabC6XW318o0npjba1X
+ eVank/Gn9U1e8kultGEdsLrXscvXVhLzWzzENR89vL3JZoGK55mVcU1kl5ZDcdZlAhFVoAfFU
+ dUuvOxH/kZ9FeR2UqbNpas4q1RTH4IKBO8za+c1uwUaKAji+EJQ9FMBOaziGEINFdWOhWXHLp
+ LLxe2KcpXwCYmgMZ/mQwenkDWbJMFncCALA1LpkGMCcjw4I973yt5o4F5o+xdBwdjTn83wp1P
+ kHbHO5FDqRZU5MI/LfgMzfCH9fv/hehb42Pahi/fKU8oZYOJmCBg15LYse7JYhe6NhIzMguuQ
+ rF0ytdpsgl3iIYY5QzGt+Ha1FV7l7vHudaGTSOq+Q+JBS2skVOVs34HzX34jGodDKK2vxc0+Z
+ jI0seRT9L0sffyB/Te+WNsUzN7jYuV6FSIiCYHkV+lCR61qN++hqZWkQn37tZNjfv3gA0gYtB
+ rHbwMMQ2rgdcRg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gabriel,
 
-On Thu, Dec 9, 2021 at 2:08 AM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> ... which took care of the bulk of the error messages reported. However,
-> I'm still getting the one below, whether or not I leave the `maxItems 1`
-> line there under `clocks:`
+
+On 2021/12/9 14:56, Jianglei Nie wrote:
+> Line 1169 (#3) allocates a memory chunk for victim_name by kmalloc(),
+> but  when the function returns in line 1184 (#4) victim_name allcoated
+> by line 1169 (#3) is not freed, which will lead to a memory leak.
+> There is a similar snippet of code in this function as allocating a memo=
+ry
+> chunk for victim_name in line 1104 (#1) as well as releasing the memory
+> in line 1116 (#2).
 >
-> $ make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-  dt_binding_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema-examples.json
-> /home/somlo/linux/Documentation/devicetree/bindings/clock/litex,clock.yaml: properties:clock-output-names: {'description': 'List of strings of clock output signal names indexed by the first cell in the clock specifier.', 'minItems': 1, 'maxItems': 7, 'items': [{'const': 'CLKOUT0'}, {'const': 'CLKOUT1'}, {'const': 'CLKOUT2'}, {'const': 'CLKOUT3'}, {'const': 'CLKOUT4'}, {'const': 'CLKOUT5'}, {'const': 'CLKOUT6'}]} should not be valid under {'required': ['maxItems']}
->         hint: "maxItems" is not needed with an "items" list
->         from schema $id: http://devicetree.org/meta-schemas/items.yaml#
->   SCHEMA  Documentation/devicetree/bindings/processed-schema-examples.json
-> /home/somlo/linux/Documentation/devicetree/bindings/clock/litex,clock.yaml: ignoring, error in schema: properties: clock-output-names
-> warning: no schema found in file: ./Documentation/devicetree/bindings/clock/litex,clock.yaml
->   DTEX    Documentation/devicetree/bindings/mmc/litex,mmc.example.dts
->   DTEX    Documentation/devicetree/bindings/media/renesas,imr.example.dts
->   ...
-
---- a/Documentation/devicetree/bindings/clock/litex,clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/litex,clock.yaml
-@@ -45,7 +45,6 @@ properties:
-       List of strings of clock output signal names indexed
-       by the first cell in the clock specifier.
-     minItems: 1
--    maxItems: 7
-     items:
-       - const: CLKOUT0
-       - const: CLKOUT1
-
-I have that in my local tree, but hadn't sent it to you yet, because
-litex,clock definitely need more work.
-
-> It appears as though `make dt_binding_check` is trying to read from
-> `Documentation/devicetree/bindings/clock/litex,clock.yaml`, which
-> does not exist. The clock reference I'm talking about could be *any*
-
-Oh, it does exist in your tree ;-)
-To check the examples, it has to apply all other binding files that
-might apply, hence some checks are always run.
-
-You can avoid some (but not all) such checks by adding
-
-    DT_SCHEMA_FILES=Documentation/devicetree/bindings/path/to/binding.yaml
-
-> clock elsewhere in the dts!
+> We should kfree() victim_name when the return value of backref_in_log()
+> is less than zero and before the function returns in line 1184 (#4).
 >
-> This wasn't part of the originally reported errors, not sure why I'm
-> seeing it now. Also, not sure what (if anything) I still need to do
-> about it, any advice much appreciated!
+> 1057 static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
+> 1058 				  struct btrfs_root *root,
+> 1059 				  struct btrfs_path *path,
+> 1060 				  struct btrfs_root *log_root,
+> 1061 				  struct btrfs_inode *dir,
+> 1062 				  struct btrfs_inode *inode,
+> 1063 				  u64 inode_objectid, u64 parent_objectid,
+> 1064 				  u64 ref_index, char *name, int namelen,
+> 1065 				  int *search_done)
+> 1066 {
+>
+> 1104 	victim_name =3D kmalloc(victim_name_len, GFP_NOFS);
+> 	// #1: kmalloc (victim_name-1)
+> 1105 	if (!victim_name)
+> 1106 		return -ENOMEM;
+>
+> 1112	ret =3D backref_in_log(log_root, &search_key,
+> 1113			parent_objectid, victim_name,
+> 1114			victim_name_len);
+> 1115	if (ret < 0) {
+> 1116		kfree(victim_name); // #2: kfree (victim_name-1)
+> 1117		return ret;
+> 1118	} else if (!ret) {
+>
+> 1169 	victim_name =3D kmalloc(victim_name_len, GFP_NOFS);
+> 	// #3: kmalloc (victim_name-2)
+> 1170 	if (!victim_name)
+> 1171 		return -ENOMEM;
+>
+> 1180 	ret =3D backref_in_log(log_root, &search_key,
+> 1181 			parent_objectid, victim_name,
+> 1182 			victim_name_len);
+> 1183 	if (ret < 0) {
+> 1184 		return ret; // #4: missing kfree (victim_name-2)
+> 1185 	} else if (!ret) {
+>
+> 1241 	return 0;
+> 1242 }
+>
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-Of course, as Rob doesn't have that file in his tree.
+Reviewed-by: Qu Wenruo <wqu@suse.com>
 
-Gr{oetje,eeting}s,
+BTW, mind to share the way how you exposed the missing kfree()?
 
-                        Geert
+Some awesome static analyse tool or just by eyeballing?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Qu
+> ---
+>   fs/btrfs/tree-log.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+> index 8ab33caf016f..d373fec55521 100644
+> --- a/fs/btrfs/tree-log.c
+> +++ b/fs/btrfs/tree-log.c
+> @@ -1181,6 +1181,7 @@ static inline int __add_inode_ref(struct btrfs_tra=
+ns_handle *trans,
+>   					     parent_objectid, victim_name,
+>   					     victim_name_len);
+>   			if (ret < 0) {
+> +				kfree(victim_name);
+>   				return ret;
+>   			} else if (!ret) {
+>   				ret =3D -ENOENT;
+>

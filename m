@@ -2,125 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 706DC46E7CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF09D46E7CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbhLIL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:57:40 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52520 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhLIL5j (ORCPT
+        id S236948AbhLIL6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:58:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59348 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233614AbhLIL6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:57:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Dec 2021 06:58:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639050907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v8P8gXSKRjtgzP3kwGA7Y2AqfOQb6hphXDVJ7u2cqbs=;
+        b=C30+8yxglzoc1hMoAk1mtW0/dxWDThIIHrZi4FZbghRJ+0WGW36lmG5HlbVd58cQbDouCz
+        P550Bifd/wVjlmZfQy1zXFEehCqSSIaM69BgOyYT/JW6LVudIi3G648mxUQolGPxBZNKWZ
+        SozdLu6/0aqPcBXv3Xs8DJjjxRv7huo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-mkQXJrnVME2tpw2sZN5m0Q-1; Thu, 09 Dec 2021 06:55:04 -0500
+X-MC-Unique: mkQXJrnVME2tpw2sZN5m0Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ED12FCE245E;
-        Thu,  9 Dec 2021 11:54:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34854C004DD;
-        Thu,  9 Dec 2021 11:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639050843;
-        bh=LuduuUVtRzUzUrU1F4AC42Ur8LrJtnTcV5XvLjCCZgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P5e2dNB8nKRDEbTaMlPbcP115LXIR9iFP6KpUPvXQnbXR5igdH0hk9V2Yzc1a772L
-         P2SfAjKd/6HYdrQe6THTcim1QXVkqF/yuKry13bUXVhK+jmuo5qRZwoXBfy8i32xbB
-         WV+blwXbxcNFhCOPagIg1KfvBUjXS/LWSOMlAgPVxz+oBCQDyYZvDL2kWvGLTdquuf
-         LtEi96p5aBXEKKVOC7IGXjol6hn53KqjriUMYpMFdtKVT2dSjH93an7FIjKqLokKyE
-         7TcefqtLtgZWJ6V5Dtna+nAoV1aRctmaMBOZDi8JX2Id8+vHJpzog1CLV+a08hn9M5
-         /UDTXIjflPatQ==
-Date:   Thu, 9 Dec 2021 17:23:59 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-Cc:     "kishon@ti.com" <kishon@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Milind Parab <mparab@cadence.com>,
-        "a-govindraju@ti.com" <a-govindraju@ti.com>
-Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
- multilink configuration
-Message-ID: <YbHuV/LpcZqOTuLV@matsya>
-References: <20211022170236.18839-1-sjakhade@cadence.com>
- <20211022170236.18839-14-sjakhade@cadence.com>
- <YZxyja2xEkpWvStR@matsya>
- <DM6PR07MB6154FB5EB84B7BE063965619C5619@DM6PR07MB6154.namprd07.prod.outlook.com>
- <YZ8aygJQoxie+Ddn@matsya>
- <DM6PR07MB61549C25EBF70ED2639FBCF6C5699@DM6PR07MB6154.namprd07.prod.outlook.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A8A4760C1;
+        Thu,  9 Dec 2021 11:55:02 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 828D145D7B;
+        Thu,  9 Dec 2021 11:54:41 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT)), Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH 0/6] RFC: KVM: SVM: Allow L1's AVIC to co-exist with nesting
+Date:   Thu,  9 Dec 2021 13:54:34 +0200
+Message-Id: <20211209115440.394441-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR07MB61549C25EBF70ED2639FBCF6C5699@DM6PR07MB6154.namprd07.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02-12-21, 14:12, Swapnil Kashinath Jakhade wrote:
-> Hi Vinod,
-> 
-> > -----Original Message-----
-> > From: Vinod Koul <vkoul@kernel.org>
-> > Sent: Thursday, November 25, 2021 10:41 AM
-> > To: Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-> > Cc: kishon@ti.com; robh+dt@kernel.org; p.zabel@pengutronix.de; linux-
-> > phy@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > devicetree@vger.kernel.org; Milind Parab <mparab@cadence.com>; a-
-> > govindraju@ti.com
-> > Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
-> > multilink configuration
-> > 
-> > EXTERNAL MAIL
-> > 
-> > 
-> > On 24-11-21, 07:33, Swapnil Kashinath Jakhade wrote:
-> > 
-> > > > so this is pcie->qsgmii ->ssc/external/internal ... ok
-> > > >
-> > > > > +				[NO_SSC] =
-> > > > &pcie_100_no_ssc_plllc_cmn_vals,
-> > > > > +				[EXTERNAL_SSC] =
-> > > > &pcie_100_ext_ssc_plllc_cmn_vals,
-> > > > > +				[INTERNAL_SSC] =
-> > > > &pcie_100_int_ssc_plllc_cmn_vals,
-> > > > > +			},
-> > > > >  		},
-> > > > >  		[TYPE_USB] = {
-> > > > >  			[TYPE_NONE] = {
-> > > > >  				[EXTERNAL_SSC] =
-> > > > &usb_100_ext_ssc_cmn_vals,
-> > > > >  			},
-> > > > >  		},
-> > > > > +		[TYPE_QSGMII] = {
-> > > > > +			[TYPE_PCIE] = {
-> > > >
-> > > > now it is reverse! qsgmii -> pcie -> ... why?
-> > > >
-> > > > what is meant by pcie->qsgmii and qsgmii-> pcie?
-> > > >
-> > >
-> > > Multi-protocol configuration is done in 2 phases, each for one protocol.
-> > > e.g. for PCIe + QSGMII case,
-> > > [TYPE_PCIE][TYPE_QSGMII] will configure common and lane registers for
-> > > PCIe and [TYPE_QSGMII][TYPE_PCIE] will configure common and lane
-> > registers for QSGMII.
-> > 
-> > Then it should be always common + protocol or protocol + common, not
-> > both please! Pls make an order and stick to it everywhere... If that is not
-> > possible, I would like to understand why
-> 
-> Could you please elaborate what do you mean by
-> " common + protocol or protocol + common, not both please!"?
-> The order is same everywhere which is common + lane configuration for protocol 1
-> and then for protocol 2. For multiprotocol case, PHY configuration is based on which
-> protocols are operating simultaneously. So e.g.
-> [TYPE_QSGMII][TYPE_PCIE] -> QSGMII configuration when other protocol is PCIe
-> Which might be different than
-> [TYPE_QSGMII][TYPE_*] -> QSGMII configuration with other protocol.
+This patch series aims to lift long standing restriction of=0D
+using AVIC only when nested virtualization is not exposed=0D
+to the guest.=0D
+=0D
+Notes about specific patches:=0D
+=0D
+Patch 1 addresses the fact that AVIC appears to be disabled=0D
+in CPUID on several Milan systems I am tesing on.=0D
+This adds a workaround (with a big warning and a kernel taint) to enable=0D
+it anyway if you really know what you are doing.=0D
+=0D
+It is possible that those systems have the AVIC disabled as a workaround=0D
+for the AVIC errata #1235 which might be already fixed but OEM might=0D
+not yet re-enabled it out of caution.=0D
+=0D
+Patch 6 adds the AVIC co-existance itself, and was tested with a modificati=
+on=0D
+of the ipi_stress unit test which I soon post upstream which made one=0D
+of vCPUs enter nested guest and receive the IPI while nested guest is runni=
+ng.=0D
+=0D
+It was tested on a Zen3 (Milan) machine. On Zen2 machines I have errata #12=
+35=0D
+makes my test fail quite fast.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (6):=0D
+  KVM: SVM: allow to force AVIC to be enabled=0D
+  KVM: x86: add a tracepoint for APICv/AVIC interrupt delivery=0D
+  KVM: SVM: fix AVIC race of host->guest IPI delivery vs AVIC inhibition=0D
+  KVM: SVM: fix races in the AVIC incomplete IPI delivery to vCPUs=0D
+  KVM: x86: never clear irr_pending in kvm_apic_update_apicv=0D
+  KVM: SVM: allow AVIC to co-exist with a nested guest running=0D
+=0D
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +=0D
+ arch/x86/include/asm/kvm_host.h    |  7 +++++-=0D
+ arch/x86/kvm/lapic.c               |  6 ++++-=0D
+ arch/x86/kvm/svm/avic.c            | 35 +++++++++++++++++++++++-----=0D
+ arch/x86/kvm/svm/nested.c          | 13 ++++++-----=0D
+ arch/x86/kvm/svm/svm.c             | 37 +++++++++++++++++++-----------=0D
+ arch/x86/kvm/svm/svm.h             |  1 +=0D
+ arch/x86/kvm/trace.h               | 24 +++++++++++++++++++=0D
+ arch/x86/kvm/x86.c                 | 17 ++++++++++++--=0D
+ 9 files changed, 111 insertions(+), 30 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 
-As I said I would like to understand what is the difference b/w
-[TYPE_QSGMII][TYPE_PCIE] & [TYPE_PCIE][TYPE_QSGMII] and why?
-
--- 
-~Vinod

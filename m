@@ -2,864 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA6D46E5E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF13E46E5EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbhLIJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:50:18 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:51068 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbhLIJuK (ORCPT
+        id S231285AbhLIJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229707AbhLIJwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:50:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639043197; x=1670579197;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qVwTYoi2mBwoZycjO702T5pRhl+ObNjbPV6kcQVIA7c=;
-  b=elWE9WYzuKkR/UeTXQZiQHA8w6ia/gzNyZqsPIP2oQYgM2PFCn/01Qie
-   mqvXwsNpjYprs/nyr77HDOTbQFqi4hW5JeA9g6pDkhFRGbJJbr9QAJN55
-   1ctwGE8qO/ap7Qiz01xlOmnYubECU+3vT6yxGt/ZhraA455ARTWqTPBDv
-   eUsF7sxM9FamgBFVonyTeA0JQgvrDaQPNXO4ISQkYsra8CaD9CXpwwZHI
-   1nEw19Ml4UZLb+jlHyuwoHHP3c2vXL1/cPzgK8PaEuY6opTlNlqxUM/oh
-   qBD0PwMLQ6PPVGqV7pIJ6z/vuiv7Gih16eX4SlY/Lj5QLV9cceZs28z0t
-   w==;
-IronPort-SDR: AE6QKxexwW1vAaK6a8LDBiYreMDZ4TFPbseLojXPQd8k5+Z8o2JqDvJbKNj2pWn0p458Ox2JS+
- FURpbuNJthnqzmqT6L8gbS+DsDoHBlfil1PUiOlfL3xgPDxnpbbw628SWX8enlsg2EWDN0Ogrc
- rFkBRkNo71NmTByqx+AJInaCE8YOUc8r0La/fmINqVXWfI0853ByWlWvxz6a5RBcxatElUQ83v
- ZkQk/okJ+GNYy4OPPQI1IaxqzT3O9RwFJbzQ/nEnSjt8LmIhaPXdFH62Oqs2MrNZ92bAdUqDLK
- wEIeZLpfdhMKL76W9JJOQ3mm
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="141832208"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 02:46:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Dec 2021 02:46:31 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 02:46:28 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
-        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
-        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
-Date:   Thu, 9 Dec 2021 10:46:15 +0100
-Message-ID: <20211209094615.329379-7-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211209094615.329379-1-horatiu.vultur@microchip.com>
-References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
+        Thu, 9 Dec 2021 04:52:54 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20CEC061746;
+        Thu,  9 Dec 2021 01:49:21 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id x32so12254680ybi.12;
+        Thu, 09 Dec 2021 01:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hQpKpHEkZnskW/9rn7pkazm2zuLSSCZbHGXMjb0S1Wk=;
+        b=XBnCHNEgWLjtlTJj5RH4gDr/J4mLQ3IMBPl5zArkIT3jGgHg8Vz1VPkef3Ubsghmrx
+         ytbn6u2DzlwZvvlj6hj75kvYnOBSbRUJZqdkYebWpFfnl80ybMNcAfbBueTUjK4Av40m
+         mKcWUnevstM6SvuU6c/ME+KvHEg6NHAZrc+zgaxNA2MQ2C7uqe/40yRRXZ/IJGSNXnDv
+         GPv+MkdG+89uuAiuGlmA72SJNeigaeM+youZDh5GWC4UE3q+C9mX6v+865Vd2ZnIvtYj
+         mOY8DA34y4IhukbxEEA5mnDWFQ8bwGXKfkKfttvNiVt9YY0TezVPbS6X7m3pLj+8fKqE
+         DWag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hQpKpHEkZnskW/9rn7pkazm2zuLSSCZbHGXMjb0S1Wk=;
+        b=P54CHF/nEG50ADm+z36ko1XXVdDAb8zD7Cv3pZZ4EIMAeb8pweqKn+9Tz069k/TvVL
+         8FuBF/5r8F7XfNHh8PrT/sijYNfbxk3LwEPwNh995H/E+QLMeKKla+Olz1fAbQnuXwUQ
+         WUQePOhK3ngvrjQvZqGuJr6TKtJFYXLwzyKTlQEjRBr+dP88oVpX1pRqze+ne6bxpuUg
+         atqbZ9Mb6RrA+kF/wLxzTuqJVqHLtV0/5cIj21/nNebOytQerQaL2F4py/hcoQnRtlRd
+         8iSRfnVhHYN+7SxZPbwoQt6o2y/mt7ZT/whMU2DSdXuwXEpIooLNkJWeR5b3cFGg/CIC
+         9kcg==
+X-Gm-Message-State: AOAM531kAeek6Yq/c7IM1dbRx+vYi44wvDopDy0kZHCZ4GmRge1SbFtU
+        sc9IxpRSf9AnvlcKQvI2+78zuzdnLLX06O0eEsE=
+X-Google-Smtp-Source: ABdhPJwJrt1HtCmQ3QFj4TeC573hRGf90SYf4SX6X0oN2z2dXeh9DDAsPpP7YPGoHlBVqv63FWeLsm+YoCTLwhp6toU=
+X-Received: by 2002:a25:4213:: with SMTP id p19mr5032651yba.41.1639043360866;
+ Thu, 09 Dec 2021 01:49:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAL_JsqJUS0-ZNus__7nJJ-BaJBqQcS0NZ8a4o5QheLt4g8oK+Q@mail.gmail.com>
+In-Reply-To: <CAL_JsqJUS0-ZNus__7nJJ-BaJBqQcS0NZ8a4o5QheLt4g8oK+Q@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 9 Dec 2021 09:48:54 +0000
+Message-ID: <CA+V-a8s5TpsXCFLFxzzsWj0ho3Hu+pS93mqXdHsCCh2LdzSQuQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for switchdev in lan966x.
-It offloads to the HW basic forwarding and vlan filtering. To be able to
-offload this to the HW, it is required to disable promisc mode for ports
-that are part of the bridge.
+Hi Rob,
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
- .../ethernet/microchip/lan966x/lan966x_main.c |  41 +-
- .../ethernet/microchip/lan966x/lan966x_main.h |  18 +
- .../microchip/lan966x/lan966x_switchdev.c     | 548 ++++++++++++++++++
- .../ethernet/microchip/lan966x/lan966x_vlan.c |  12 +-
- 5 files changed, 610 insertions(+), 12 deletions(-)
- create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+Thank you for the review.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-index f7e6068a91cb..d82e896c2e53 100644
---- a/drivers/net/ethernet/microchip/lan966x/Makefile
-+++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-@@ -6,4 +6,5 @@
- obj-$(CONFIG_LAN966X_SWITCH) += lan966x-switch.o
- 
- lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
--			lan966x_mac.o lan966x_ethtool.o lan966x_vlan.o
-+			lan966x_mac.o lan966x_ethtool.o lan966x_switchdev.o \
-+			lan966x_vlan.o
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1b4c7e6b4f85..aee36c1cfa17 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -306,7 +306,7 @@ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
- 	return lan966x_port_ifh_xmit(skb, ifh, dev);
- }
- 
--static void lan966x_set_promisc(struct lan966x_port *port, bool enable)
-+void lan966x_set_promisc(struct lan966x_port *port, bool enable)
- {
- 	struct lan966x *lan966x = port->lan966x;
- 
-@@ -318,14 +318,18 @@ static void lan966x_set_promisc(struct lan966x_port *port, bool enable)
- static void lan966x_port_change_rx_flags(struct net_device *dev, int flags)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
-+	bool enable;
- 
- 	if (!(flags & IFF_PROMISC))
- 		return;
- 
--	if (dev->flags & IFF_PROMISC)
--		lan966x_set_promisc(port, true);
--	else
--		lan966x_set_promisc(port, false);
-+	enable = dev->flags & IFF_PROMISC ? true : false;
-+	port->promisc = enable;
-+
-+	if (port->bridge)
-+		return;
-+
-+	lan966x_set_promisc(port, enable);
- }
- 
- static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
-@@ -340,7 +344,7 @@ static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
- 	return 0;
- }
- 
--static int lan966x_mc_unsync(struct net_device *dev, const unsigned char *addr)
-+int lan966x_mc_unsync(struct net_device *dev, const unsigned char *addr)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
- 	struct lan966x *lan966x = port->lan966x;
-@@ -348,7 +352,7 @@ static int lan966x_mc_unsync(struct net_device *dev, const unsigned char *addr)
- 	return lan966x_mac_forget(lan966x, addr, port->pvid, ENTRYTYPE_LOCKED);
- }
- 
--static int lan966x_mc_sync(struct net_device *dev, const unsigned char *addr)
-+int lan966x_mc_sync(struct net_device *dev, const unsigned char *addr)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
- 	struct lan966x *lan966x = port->lan966x;
-@@ -401,6 +405,11 @@ static const struct net_device_ops lan966x_port_netdev_ops = {
- 	.ndo_vlan_rx_kill_vid		= lan966x_vlan_rx_kill_vid,
- };
- 
-+bool lan966x_netdevice_check(const struct net_device *dev)
-+{
-+	return dev && (dev->netdev_ops == &lan966x_port_netdev_ops);
-+}
-+
- static int lan966x_port_xtr_status(struct lan966x *lan966x, u8 grp)
- {
- 	return lan_rd(lan966x, QS_XTR_RD(grp));
-@@ -537,6 +546,11 @@ static irqreturn_t lan966x_xtr_irq_handler(int irq, void *args)
- 
- 		skb->protocol = eth_type_trans(skb, dev);
- 
-+#ifdef CONFIG_NET_SWITCHDEV
-+		if (lan966x->ports[src_port]->bridge)
-+			skb->offload_fwd_mark = 1;
-+#endif
-+
- 		netif_rx_ni(skb);
- 		dev->stats.rx_bytes += len;
- 		dev->stats.rx_packets++;
-@@ -619,13 +633,16 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
- 
- 	dev->netdev_ops = &lan966x_port_netdev_ops;
- 	dev->ethtool_ops = &lan966x_ethtool_ops;
-+	dev->hw_features |= NETIF_F_HW_VLAN_CTAG_FILTER |
-+			    NETIF_F_RXFCS;
-+	dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER |
-+			 NETIF_F_HW_VLAN_CTAG_TX |
-+			 NETIF_F_HW_VLAN_STAG_TX;
-+	dev->priv_flags |= IFF_UNICAST_FLT;
- 	dev->needed_headroom = IFH_LEN * sizeof(u32);
- 
- 	eth_hw_addr_gen(dev, lan966x->base_mac, p + 1);
- 
--	lan966x_mac_learn(lan966x, PGID_CPU, dev->dev_addr, port->pvid,
--			  ENTRYTYPE_LOCKED);
--
- 	port->phylink_config.dev = &port->dev->dev;
- 	port->phylink_config.type = PHYLINK_NETDEV;
- 	port->phylink_pcs.poll = true;
-@@ -949,6 +966,8 @@ static int lan966x_probe(struct platform_device *pdev)
- 		lan966x_port_init(lan966x->ports[p]);
- 	}
- 
-+	lan966x_register_notifier_blocks(lan966x);
-+
- 	return 0;
- 
- cleanup_ports:
-@@ -967,6 +986,8 @@ static int lan966x_remove(struct platform_device *pdev)
- {
- 	struct lan966x *lan966x = platform_get_drvdata(pdev);
- 
-+	lan966x_unregister_notifier_blocks(lan966x);
-+
- 	lan966x_cleanup_ports(lan966x);
- 
- 	cancel_delayed_work_sync(&lan966x->stats_work);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index ec3eccf634b3..4a0988087167 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -80,6 +80,11 @@ struct lan966x {
- 	struct list_head mac_entries;
- 	spinlock_t mac_lock; /* lock for mac_entries list */
- 
-+	/* Notifiers */
-+	struct notifier_block netdevice_nb;
-+	struct notifier_block switchdev_nb;
-+	struct notifier_block switchdev_blocking_nb;
-+
- 	u16 vlan_mask[VLAN_N_VID];
- 	DECLARE_BITMAP(cpu_vlan_mask, VLAN_N_VID);
- 
-@@ -112,6 +117,10 @@ struct lan966x_port {
- 	struct net_device *dev;
- 	struct lan966x *lan966x;
- 
-+	struct net_device *bridge;
-+	u8 stp_state;
-+	u8 promisc;
-+
- 	u8 chip_port;
- 	u16 pvid;
- 	u16 vid;
-@@ -129,6 +138,14 @@ extern const struct phylink_mac_ops lan966x_phylink_mac_ops;
- extern const struct phylink_pcs_ops lan966x_phylink_pcs_ops;
- extern const struct ethtool_ops lan966x_ethtool_ops;
- 
-+int lan966x_mc_unsync(struct net_device *dev, const unsigned char *addr);
-+int lan966x_mc_sync(struct net_device *dev, const unsigned char *addr);
-+
-+bool lan966x_netdevice_check(const struct net_device *dev);
-+
-+int lan966x_register_notifier_blocks(struct lan966x *lan966x);
-+void lan966x_unregister_notifier_blocks(struct lan966x *lan966x);
-+
- void lan966x_stats_get(struct net_device *dev,
- 		       struct rtnl_link_stats64 *stats);
- int lan966x_stats_init(struct lan966x *lan966x);
-@@ -139,6 +156,7 @@ void lan966x_port_status_get(struct lan966x_port *port,
- 			     struct phylink_link_state *state);
- int lan966x_port_pcs_set(struct lan966x_port *port,
- 			 struct lan966x_port_config *config);
-+void lan966x_set_promisc(struct lan966x_port *port, bool enable);
- void lan966x_port_init(struct lan966x_port *port);
- 
- int lan966x_mac_learn(struct lan966x *lan966x, int port,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-new file mode 100644
-index 000000000000..ed6ec78d2d9a
---- /dev/null
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-@@ -0,0 +1,548 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <linux/if_bridge.h>
-+#include <net/switchdev.h>
-+
-+#include "lan966x_main.h"
-+
-+static struct workqueue_struct *lan966x_owq;
-+
-+struct lan966x_fdb_event_work {
-+	struct work_struct work;
-+	struct switchdev_notifier_fdb_info fdb_info;
-+	struct net_device *dev;
-+	struct lan966x *lan966x;
-+	unsigned long event;
-+};
-+
-+static void lan966x_port_attr_bridge_flags(struct lan966x_port *port,
-+					   struct switchdev_brport_flags flags)
-+{
-+	u32 val = lan_rd(port->lan966x, ANA_PGID(PGID_MC));
-+
-+	val = ANA_PGID_PGID_GET(val);
-+
-+	if (flags.mask & BR_MCAST_FLOOD) {
-+		if (flags.val & BR_MCAST_FLOOD)
-+			val |= BIT(port->chip_port);
-+		else
-+			val &= ~BIT(port->chip_port);
-+	}
-+
-+	lan_rmw(ANA_PGID_PGID_SET(val),
-+		ANA_PGID_PGID,
-+		port->lan966x, ANA_PGID(PGID_MC));
-+}
-+
-+static u32 lan966x_get_fwd_mask(struct lan966x_port *port)
-+{
-+	struct net_device *bridge = port->bridge;
-+	struct lan966x *lan966x = port->lan966x;
-+	u8 ingress_src = port->chip_port;
-+	u32 mask = 0;
-+	int p;
-+
-+	if (port->stp_state != BR_STATE_FORWARDING)
-+		goto skip_forwarding;
-+
-+	for (p = 0; p < lan966x->num_phys_ports; p++) {
-+		port = lan966x->ports[p];
-+
-+		if (!port)
-+			continue;
-+
-+		if (port->stp_state == BR_STATE_FORWARDING &&
-+		    port->bridge == bridge)
-+			mask |= BIT(p);
-+	}
-+
-+skip_forwarding:
-+	mask &= ~BIT(ingress_src);
-+
-+	return mask;
-+}
-+
-+static void lan966x_update_fwd_mask(struct lan966x *lan966x)
-+{
-+	int p;
-+
-+	for (p = 0; p < lan966x->num_phys_ports; p++) {
-+		struct lan966x_port *port = lan966x->ports[p];
-+		unsigned long mask = 0;
-+
-+		if (port->bridge)
-+			mask = lan966x_get_fwd_mask(port);
-+
-+		mask |= BIT(CPU_PORT);
-+
-+		lan_wr(ANA_PGID_PGID_SET(mask),
-+		       lan966x, ANA_PGID(PGID_SRC + p));
-+	}
-+}
-+
-+static void lan966x_attr_stp_state_set(struct lan966x_port *port,
-+				       u8 state)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	bool learn_ena = 0;
-+
-+	port->stp_state = state;
-+
-+	if (state == BR_STATE_FORWARDING || state == BR_STATE_LEARNING)
-+		learn_ena = 1;
-+
-+	lan_rmw(ANA_PORT_CFG_LEARN_ENA_SET(learn_ena),
-+		ANA_PORT_CFG_LEARN_ENA,
-+		lan966x, ANA_PORT_CFG(port->chip_port));
-+
-+	lan966x_update_fwd_mask(lan966x);
-+}
-+
-+static void lan966x_port_attr_ageing_set(struct lan966x_port *port,
-+					 unsigned long ageing_clock_t)
-+{
-+	unsigned long ageing_jiffies = clock_t_to_jiffies(ageing_clock_t);
-+	u32 ageing_time = jiffies_to_msecs(ageing_jiffies) / 1000;
-+
-+	lan966x_mac_set_ageing(port->lan966x, ageing_time);
-+}
-+
-+static int lan966x_port_attr_set(struct net_device *dev, const void *ctx,
-+				 const struct switchdev_attr *attr,
-+				 struct netlink_ext_ack *extack)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+
-+	switch (attr->id) {
-+	case SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS:
-+		lan966x_port_attr_bridge_flags(port, attr->u.brport_flags);
-+		break;
-+	case SWITCHDEV_ATTR_ID_PORT_STP_STATE:
-+		lan966x_attr_stp_state_set(port, attr->u.stp_state);
-+		break;
-+	case SWITCHDEV_ATTR_ID_BRIDGE_AGEING_TIME:
-+		lan966x_port_attr_ageing_set(port, attr->u.ageing_time);
-+		break;
-+	case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
-+		lan966x_vlan_port_set_vlan_aware(port, attr->u.vlan_filtering);
-+		lan966x_vlan_port_apply(port);
-+		lan966x_vlan_cpu_set_vlan_aware(port);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan966x_port_bridge_join(struct lan966x_port *port,
-+				    struct net_device *bridge,
-+				    struct netlink_ext_ack *extack)
-+{
-+	struct net_device *dev = port->dev;
-+	int err;
-+
-+	err = switchdev_bridge_port_offload(dev, dev, NULL, NULL, NULL,
-+					    false, extack);
-+	if (err)
-+		return err;
-+
-+	port->bridge = bridge;
-+
-+	/* Port enters in bridge mode therefor don't need to copy to CPU
-+	 * frames for multicast in case the bridge is not requesting them
-+	 */
-+	__dev_mc_unsync(dev, lan966x_mc_unsync);
-+
-+	/* make sure that the promisc is disabled when entering under the bridge
-+	 * because we don't want all the frames to come to CPU
-+	 */
-+	lan966x_set_promisc(port, false);
-+
-+	return 0;
-+}
-+
-+static void lan966x_port_bridge_leave(struct lan966x_port *port,
-+				      struct net_device *bridge)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	switchdev_bridge_port_unoffload(port->dev, NULL, NULL, NULL);
-+	port->bridge = NULL;
-+
-+	/* Set the port back to host mode */
-+	lan966x_vlan_port_set_vlan_aware(port, 0);
-+	lan966x_vlan_port_set_vid(port, HOST_PVID, false, false);
-+	lan966x_vlan_port_apply(port);
-+
-+	lan966x_mac_cpu_learn(lan966x, port->dev->dev_addr, HOST_PVID);
-+
-+	/* Port enters in host more therefore restore mc list */
-+	__dev_mc_sync(port->dev, lan966x_mc_sync, lan966x_mc_unsync);
-+
-+	/* Restore back the promisc as it was before the interfaces was added to
-+	 * the bridge
-+	 */
-+	lan966x_set_promisc(port, port->promisc);
-+}
-+
-+static int lan966x_port_changeupper(struct net_device *dev,
-+				    struct netdev_notifier_changeupper_info *info)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	struct netlink_ext_ack *extack;
-+	int err = 0;
-+
-+	extack = netdev_notifier_info_to_extack(&info->info);
-+
-+	if (netif_is_bridge_master(info->upper_dev)) {
-+		if (info->linking)
-+			err = lan966x_port_bridge_join(port, info->upper_dev,
-+						       extack);
-+		else
-+			lan966x_port_bridge_leave(port, info->upper_dev);
-+	}
-+
-+	return err;
-+}
-+
-+static int lan966x_port_add_addr(struct net_device *dev, bool up)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	struct lan966x *lan966x = port->lan966x;
-+	u16 vid;
-+
-+	vid = lan966x_vlan_port_get_pvid(port);
-+
-+	if (up)
-+		lan966x_mac_cpu_learn(lan966x, dev->dev_addr, vid);
-+	else
-+		lan966x_mac_cpu_forget(lan966x, dev->dev_addr, vid);
-+
-+	return 0;
-+}
-+
-+static int lan966x_netdevice_port_event(struct net_device *dev,
-+					struct notifier_block *nb,
-+					unsigned long event, void *ptr)
-+{
-+	int err = 0;
-+
-+	if (!lan966x_netdevice_check(dev))
-+		return 0;
-+
-+	switch (event) {
-+	case NETDEV_CHANGEUPPER:
-+		err = lan966x_port_changeupper(dev, ptr);
-+		break;
-+	case NETDEV_PRE_UP:
-+		err = lan966x_port_add_addr(dev, true);
-+		break;
-+	case NETDEV_DOWN:
-+		err = lan966x_port_add_addr(dev, false);
-+		break;
-+	}
-+
-+	return err;
-+}
-+
-+static int lan966x_netdevice_event(struct notifier_block *nb,
-+				   unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+	int ret;
-+
-+	ret = lan966x_netdevice_port_event(dev, nb, event, ptr);
-+
-+	return notifier_from_errno(ret);
-+}
-+
-+static void lan966x_fdb_event_work(struct work_struct *work)
-+{
-+	struct lan966x_fdb_event_work *fdb_work =
-+		container_of(work, struct lan966x_fdb_event_work, work);
-+	struct switchdev_notifier_fdb_info *fdb_info;
-+	struct net_device *dev = fdb_work->dev;
-+	struct lan966x_port *port;
-+	struct lan966x *lan966x;
-+
-+	rtnl_lock();
-+
-+	fdb_info = &fdb_work->fdb_info;
-+	lan966x = fdb_work->lan966x;
-+
-+	if (lan966x_netdevice_check(dev)) {
-+		port = netdev_priv(dev);
-+
-+		switch (fdb_work->event) {
-+		case SWITCHDEV_FDB_ADD_TO_DEVICE:
-+			if (!fdb_info->added_by_user)
-+				break;
-+			lan966x_mac_add_entry(lan966x, port, fdb_info->addr,
-+					      fdb_info->vid);
-+			break;
-+		case SWITCHDEV_FDB_DEL_TO_DEVICE:
-+			if (!fdb_info->added_by_user)
-+				break;
-+			lan966x_mac_del_entry(lan966x, fdb_info->addr, fdb_info->vid);
-+			break;
-+		}
-+	} else {
-+		if (!netif_is_bridge_master(dev))
-+			goto out;
-+
-+		/* If the CPU is not part of the vlan then there is no point
-+		 * to copy the frames to the CPU because they will be dropped
-+		 */
-+		if (!lan966x_vlan_cpu_member_vlan_mask(lan966x, fdb_info->vid))
-+			goto out;
-+
-+		/* In case the bridge is called */
-+		switch (fdb_work->event) {
-+		case SWITCHDEV_FDB_ADD_TO_DEVICE:
-+			/* If there is no front port in this vlan, there is no
-+			 * point to copy the frame to CPU because it would be
-+			 * just dropped at later point. So add it only if
-+			 * there is a port
-+			 */
-+			if (!lan966x_vlan_port_any_vlan_mask(lan966x, fdb_info->vid))
-+				break;
-+
-+			lan966x_mac_cpu_learn(lan966x, fdb_info->addr, fdb_info->vid);
-+			break;
-+		case SWITCHDEV_FDB_DEL_TO_DEVICE:
-+			/* It is OK to always forget the entry it */
-+			lan966x_mac_cpu_forget(lan966x, fdb_info->addr, fdb_info->vid);
-+			break;
-+		}
-+	}
-+
-+out:
-+	rtnl_unlock();
-+	kfree(fdb_work->fdb_info.addr);
-+	kfree(fdb_work);
-+	dev_put(dev);
-+}
-+
-+static int lan966x_switchdev_event(struct notifier_block *nb,
-+				   unsigned long event, void *ptr)
-+{
-+	struct lan966x *lan966x = container_of(nb, struct lan966x, switchdev_nb);
-+	struct net_device *dev = switchdev_notifier_info_to_dev(ptr);
-+	struct switchdev_notifier_fdb_info *fdb_info;
-+	struct switchdev_notifier_info *info = ptr;
-+	struct lan966x_fdb_event_work *fdb_work;
-+	int err;
-+
-+	switch (event) {
-+	case SWITCHDEV_PORT_ATTR_SET:
-+		err = switchdev_handle_port_attr_set(dev, ptr,
-+						     lan966x_netdevice_check,
-+						     lan966x_port_attr_set);
-+		return notifier_from_errno(err);
-+	case SWITCHDEV_FDB_ADD_TO_DEVICE:
-+		fallthrough;
-+	case SWITCHDEV_FDB_DEL_TO_DEVICE:
-+		fdb_work = kzalloc(sizeof(*fdb_work), GFP_ATOMIC);
-+		if (!fdb_work)
-+			return NOTIFY_BAD;
-+
-+		fdb_info = container_of(info,
-+					struct switchdev_notifier_fdb_info,
-+					info);
-+
-+		fdb_work->dev = dev;
-+		fdb_work->lan966x = lan966x;
-+		fdb_work->event = event;
-+		INIT_WORK(&fdb_work->work, lan966x_fdb_event_work);
-+		memcpy(&fdb_work->fdb_info, ptr, sizeof(fdb_work->fdb_info));
-+		fdb_work->fdb_info.addr = kzalloc(ETH_ALEN, GFP_ATOMIC);
-+		if (!fdb_work->fdb_info.addr)
-+			goto err_addr_alloc;
-+
-+		ether_addr_copy((u8 *)fdb_work->fdb_info.addr, fdb_info->addr);
-+		dev_hold(dev);
-+
-+		queue_work(lan966x_owq, &fdb_work->work);
-+		break;
-+	}
-+
-+	return NOTIFY_DONE;
-+err_addr_alloc:
-+	kfree(fdb_work);
-+	return NOTIFY_BAD;
-+}
-+
-+static int lan966x_handle_port_vlan_add(struct net_device *dev,
-+					struct notifier_block *nb,
-+					const struct switchdev_obj_port_vlan *v)
-+{
-+	struct lan966x_port *port;
-+	struct lan966x *lan966x;
-+
-+	/* When adding a port to a vlan, we get a callback for the port but
-+	 * also for the bridge. When get the callback for the bridge just bail
-+	 * out. Then when the bridge is added to the vlan, then we get a
-+	 * callback here but in this case the flags has set:
-+	 * BRIDGE_VLAN_INFO_BRENTRY. In this case it means that the CPU
-+	 * port is added to the vlan, so the broadcast frames and unicast frames
-+	 * with dmac of the bridge should be foward to CPU.
-+	 */
-+	if (netif_is_bridge_master(dev) &&
-+	    !(v->flags & BRIDGE_VLAN_INFO_BRENTRY))
-+		return 0;
-+
-+	lan966x = container_of(nb, struct lan966x, switchdev_blocking_nb);
-+
-+	/* In case the port gets called */
-+	if (!(netif_is_bridge_master(dev))) {
-+		if (!lan966x_netdevice_check(dev))
-+			return -EOPNOTSUPP;
-+
-+		port = netdev_priv(dev);
-+		return lan966x_vlan_port_add_vlan(port, v->vid,
-+						  v->flags & BRIDGE_VLAN_INFO_PVID,
-+						  v->flags & BRIDGE_VLAN_INFO_UNTAGGED);
-+	}
-+
-+	/* In case the bridge gets called */
-+	if (netif_is_bridge_master(dev))
-+		return lan966x_vlan_cpu_add_vlan(lan966x, dev, v->vid);
-+
-+	return 0;
-+}
-+
-+static int lan966x_handle_port_obj_add(struct net_device *dev,
-+				       struct notifier_block *nb,
-+				       struct switchdev_notifier_port_obj_info *info)
-+{
-+	const struct switchdev_obj *obj = info->obj;
-+	int err;
-+
-+	switch (obj->id) {
-+	case SWITCHDEV_OBJ_ID_PORT_VLAN:
-+		err = lan966x_handle_port_vlan_add(dev, nb,
-+						   SWITCHDEV_OBJ_PORT_VLAN(obj));
-+		break;
-+	default:
-+		err = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	info->handled = true;
-+	return err;
-+}
-+
-+static int lan966x_handle_port_vlan_del(struct net_device *dev,
-+					struct notifier_block *nb,
-+					const struct switchdev_obj_port_vlan *v)
-+{
-+	struct lan966x_port *port;
-+	struct lan966x *lan966x;
-+
-+	lan966x = container_of(nb, struct lan966x, switchdev_blocking_nb);
-+
-+	/* In case the physical port gets called */
-+	if (!netif_is_bridge_master(dev)) {
-+		if (!lan966x_netdevice_check(dev))
-+			return -EOPNOTSUPP;
-+
-+		port = netdev_priv(dev);
-+		return lan966x_vlan_port_del_vlan(port, v->vid);
-+	}
-+
-+	/* In case the bridge gets called */
-+	if (netif_is_bridge_master(dev))
-+		return lan966x_vlan_cpu_del_vlan(lan966x, dev, v->vid);
-+
-+	return 0;
-+}
-+
-+static int lan966x_handle_port_obj_del(struct net_device *dev,
-+				       struct notifier_block *nb,
-+				       struct switchdev_notifier_port_obj_info *info)
-+{
-+	const struct switchdev_obj *obj = info->obj;
-+	int err;
-+
-+	switch (obj->id) {
-+	case SWITCHDEV_OBJ_ID_PORT_VLAN:
-+		err = lan966x_handle_port_vlan_del(dev, nb,
-+						   SWITCHDEV_OBJ_PORT_VLAN(obj));
-+		break;
-+	default:
-+		err = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	info->handled = true;
-+	return err;
-+}
-+
-+static int lan966x_switchdev_blocking_event(struct notifier_block *nb,
-+					    unsigned long event,
-+					    void *ptr)
-+{
-+	struct net_device *dev = switchdev_notifier_info_to_dev(ptr);
-+	int err;
-+
-+	switch (event) {
-+	case SWITCHDEV_PORT_OBJ_ADD:
-+		err = lan966x_handle_port_obj_add(dev, nb, ptr);
-+		return notifier_from_errno(err);
-+	case SWITCHDEV_PORT_OBJ_DEL:
-+		err = lan966x_handle_port_obj_del(dev, nb, ptr);
-+		return notifier_from_errno(err);
-+	case SWITCHDEV_PORT_ATTR_SET:
-+		err = switchdev_handle_port_attr_set(dev, ptr,
-+						     lan966x_netdevice_check,
-+						     lan966x_port_attr_set);
-+		return notifier_from_errno(err);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+int lan966x_register_notifier_blocks(struct lan966x *lan966x)
-+{
-+	int err;
-+
-+	lan966x->netdevice_nb.notifier_call = lan966x_netdevice_event;
-+	err = register_netdevice_notifier(&lan966x->netdevice_nb);
-+	if (err)
-+		return err;
-+
-+	lan966x->switchdev_nb.notifier_call = lan966x_switchdev_event;
-+	err = register_switchdev_notifier(&lan966x->switchdev_nb);
-+	if (err)
-+		goto err_switchdev_nb;
-+
-+	lan966x->switchdev_blocking_nb.notifier_call = lan966x_switchdev_blocking_event;
-+	err = register_switchdev_blocking_notifier(&lan966x->switchdev_blocking_nb);
-+	if (err)
-+		goto err_switchdev_blocking_nb;
-+
-+	lan966x_owq = alloc_ordered_workqueue("lan966x_order", 0);
-+	if (!lan966x_owq) {
-+		err = -ENOMEM;
-+		goto err_switchdev_blocking_nb;
-+	}
-+
-+	return 0;
-+
-+err_switchdev_blocking_nb:
-+	unregister_switchdev_notifier(&lan966x->switchdev_nb);
-+err_switchdev_nb:
-+	unregister_netdevice_notifier(&lan966x->netdevice_nb);
-+
-+	return err;
-+}
-+
-+void lan966x_unregister_notifier_blocks(struct lan966x *lan966x)
-+{
-+	destroy_workqueue(lan966x_owq);
-+
-+	unregister_switchdev_blocking_notifier(&lan966x->switchdev_blocking_nb);
-+	unregister_switchdev_notifier(&lan966x->switchdev_nb);
-+	unregister_netdevice_notifier(&lan966x->netdevice_nb);
-+}
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c b/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-index e47552775d06..26644503b4e6 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-@@ -155,6 +155,9 @@ static bool lan966x_vlan_cpu_member_cpu_vlan_mask(struct lan966x *lan966x, u16 v
- 
- u16 lan966x_vlan_port_get_pvid(struct lan966x_port *port)
- {
-+	if (!port->bridge)
-+		return HOST_PVID;
-+
- 	return port->vlan_aware ? port->pvid : UNAWARE_PVID;
- }
- 
-@@ -210,6 +213,8 @@ void lan966x_vlan_cpu_set_vlan_aware(struct lan966x_port *port)
- 		 * table for the front port and the CPU
- 		 */
- 		lan966x_mac_cpu_learn(lan966x, port->dev->dev_addr, UNAWARE_PVID);
-+		lan966x_mac_cpu_learn(lan966x, port->bridge->dev_addr,
-+				      UNAWARE_PVID);
- 
- 		lan966x_vlan_port_add_vlan_mask(port, UNAWARE_PVID);
- 		lan966x_vlan_port_apply(port);
-@@ -218,6 +223,8 @@ void lan966x_vlan_cpu_set_vlan_aware(struct lan966x_port *port)
- 		 * to vlan unaware
- 		 */
- 		lan966x_mac_cpu_forget(lan966x, port->dev->dev_addr, UNAWARE_PVID);
-+		lan966x_mac_cpu_forget(lan966x, port->bridge->dev_addr,
-+				       UNAWARE_PVID);
- 
- 		lan966x_vlan_port_del_vlan_mask(port, UNAWARE_PVID);
- 		lan966x_vlan_port_apply(port);
-@@ -293,6 +300,7 @@ int lan966x_vlan_port_add_vlan(struct lan966x_port *port,
- 	 */
- 	if (lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x, vid)) {
- 		lan966x_mac_cpu_learn(lan966x, port->dev->dev_addr, vid);
-+		lan966x_mac_cpu_learn(lan966x, port->bridge->dev_addr, vid);
- 		lan966x_vlan_cpu_add_vlan_mask(lan966x, vid);
- 	}
- 
-@@ -322,8 +330,10 @@ int lan966x_vlan_port_del_vlan(struct lan966x_port *port,
- 	 * that vlan but still keep it in the mask because it may be needed
- 	 * again then another port gets added in tha vlan
- 	 */
--	if (!lan966x_vlan_port_any_vlan_mask(lan966x, vid))
-+	if (!lan966x_vlan_port_any_vlan_mask(lan966x, vid)) {
-+		lan966x_mac_cpu_forget(lan966x, port->bridge->dev_addr, vid);
- 		lan966x_vlan_cpu_del_vlan_mask(lan966x, vid);
-+	}
- 
- 	return 0;
- }
--- 
-2.33.0
+On Thu, Dec 9, 2021 at 3:08 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Wed, Dec 8, 2021 at 6:11 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > of_device_alloc() in early boot stage creates a interrupt mapping if
+> > there exists a "interrupts" property in the node.
+> >
+> > For hierarchical interrupt domains using "interrupts" property in the node
+> > bypassed the hierarchical setup and messed up the irq setup.
+> >
+> > This patch adds a check in of_device_alloc() to skip interrupt mapping if
+> > "not-interrupt-producer" property is present in the node. This allows
+> > nodes to describe the interrupts using "interrupts" property.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > Hi All,
+> >
+> > Spawning from discussion [1], here is simple patch (not the ideal probably
+> > welcome for suggestions) from stopping the OF code from creating a map for
+> > the interrupts when using "interrupts" property.
+> >
+> > [1] https://lore.kernel.org/lkml/87pmqrck2m.wl-maz@kernel.org/
+> >     T/#mbd1e47c1981082aded4b32a52e2c04291e515508
+> >
+> > Cheers,
+> > Prabhakar
+> > ---
+> >  drivers/of/platform.c | 13 ++++++++++---
+> >  1 file changed, 10 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > index b3faf89744aa..629776ca1721 100644
+> > --- a/drivers/of/platform.c
+> > +++ b/drivers/of/platform.c
+> > @@ -114,7 +114,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
+> >                                   struct device *parent)
+> >  {
+> >         struct platform_device *dev;
+> > -       int rc, i, num_reg = 0, num_irq;
+> > +       int rc, i, num_reg = 0, num_irq = 0;
+> >         struct resource *res, temp_res;
+> >
+> >         dev = platform_device_alloc("", PLATFORM_DEVID_NONE);
+> > @@ -124,7 +124,14 @@ struct platform_device *of_device_alloc(struct device_node *np,
+> >         /* count the io and irq resources */
+> >         while (of_address_to_resource(np, num_reg, &temp_res) == 0)
+> >                 num_reg++;
+> > -       num_irq = of_irq_count(np);
+> > +
+> > +       /*
+> > +        * we don't want to map the interrupts of hierarchical interrupt domain
+> > +        * into the parent domain yet. This will be the job of the hierarchical
+> > +        * interrupt driver code to map the interrupts as and when needed.
+> > +        */
+> > +       if (!of_property_read_bool(np, "not-interrupt-producer"))
+> > +               num_irq = of_irq_count(np);
+>
+> The property won't fly for sure. A compatible match table could work
+> here, but I don't really want another temporary solution.
+>
+Agreed.
 
+> >         /* Populate the resource table */
+> >         if (num_irq || num_reg) {
+> > @@ -140,7 +147,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
+> >                         rc = of_address_to_resource(np, i, res);
+> >                         WARN_ON(rc);
+> >                 }
+> > -               if (of_irq_to_resource_table(np, res, num_irq) != num_irq)
+> > +               if (num_irq && of_irq_to_resource_table(np, res, num_irq) != num_irq)
+>
+> You might want to look at commit 9ec36cafe43b ("of/irq: do irq
+> resolution in platform_get_irq"). The intent was to remove this code,
+> but looks like the cleanup has a ways to go 7 years on. Primarily,
+> it's convert any platform_get_resource(pdev, IORESOURCE_IRQ, n) call
+> to platform_get_irq(). There's ~169 of those.
+>
+That's a good point converting all the drivers to use
+platform_get_irq() so that the resource allocation happens on demand,
+and the above code can be dropped.
+
+> There are probably some open coded accesses to pdev->resources too,
+> but I didn't spot any.
+>
+I'll have a closer look.
+
+Cheers,
+Prabhakar
+
+> Rob

@@ -2,125 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB36B46F7CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6E746F7CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234788AbhLJADj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:03:39 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:11374 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbhLJADi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:03:38 -0500
+        id S232315AbhLJAEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:04:37 -0500
+Received: from mga06.intel.com ([134.134.136.31]:16520 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230490AbhLJAEg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 19:04:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639094404; x=1670630404;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nl5CWwCo+HyJCS82sRYKOmxVIBP7Goz/nQOWZ6792B8=;
-  b=RQAUpybnHK8q1ReG6Oeem0uWctJGYzMz57RxAH5K7KXZBlZEn7vMwpxm
-   abL6Rh/GMkl/qjDU9W1pIzvpNQcdKFEd3zYstLthuFDhb+vBoS4Ctq8wc
-   6mB5GvwvoDeGz10OgNroK/+vNXAP3g4emn5HEZUZenaHYuyheilFu9Z47
-   gD+3fxFjlHXDuUgJKXt/LnO1BtrsM8HJaMFBxT55z54hrlF+4enKaVsu7
-   MOcXGs31v8yfx6EOnZURarLCeszdhbUyPvKo9BuY9F/RVMT+JmPltfSKf
-   kz1DezjfY2pMlYJlay0Z9o31Vj67J5+Yb3TeBlY9qcBYtkSL8xzS8AF6M
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639094462; x=1670630462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eb/4cViKituIHR/DMC2dgTFKhqJBwaxip/BgKslpnk0=;
+  b=djfwMNO1i4S1fz9r3shXote+w3FuqC4jwf2lMXNeL6A/VXKLPsFOOFT+
+   tXZsSex5em/Jw+nzcMJ1u8s03C4F/XtT4ffLcVlM0v7S8Crfvx2DkLqu3
+   LpE18pyhuPgCrRXIyHzTNSc+lP2UtNxB57umh5wT+L5dpIrwVeVpWXw7S
+   e0zMqfrYzTQuWPIEMrddQrJkjSf4HUtRn5x+Hon8NZ3SBaJw4nvoqE+lg
+   bys9TYQaozzhXAn0x38WD+uGHzvOV0sAuPBUOTnBTCfTYx5e136VCij+Q
+   vcMvortcjRQCdb1/37DVuuB/yYx33YnFwHWCG4CGzjW6Ut4NXsUlFkYBL
    w==;
-X-IronPort-AV: E=Sophos;i="5.88,194,1635177600"; 
-   d="scan'208";a="192670756"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 08:00:03 +0800
-IronPort-SDR: iTVV6yXHc+atfqASjfhL1cOEzZGsXmwCFhMBiTzqjfMXvHQpmp/VEtxbA/l4mny9lqzi3twBpG
- cqmtIRiwlPPVMTrMDmpPl0n5NPsXeCvewJ6x4LiPyB+dsrRVEWje9ano8JMb2+SXtLg46AZ1hH
- Tuv9yhRDBJFkgtmyLzo3AYikSdKRA7bdUHmBNPX7mLdlpFiZPclI4S9nFFvDNk/0oQnmTDSA7Z
- +BKTTYrmWS5WkZ66igmwFxuVzqxO4Q/NnyyDlM++QYUSI1gNadr74eV6oLwMYLueyaetEWQ79r
- y2rfDUY73cRsGem7eeIHENY3
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:34:36 -0800
-IronPort-SDR: g38Gz2KtzUmi7qqJ4q4+O4VEGkmZjMdKSpmei+dkeIYivoOTe46AEUoJpOCbx35lnzpVB5oYwe
- RxoDMtM2A8ofp5KKeo0Flo1Rk3Sw5ODlX+mVv6yJwrOuJtkSVAvSobtkMh8iEXny0quIEjJ+T4
- 8tEsIeamWXOdr9E+nVPq6bVqYcuOwP9MyKSNGSwcarPHNGs8HJDu5KsrxQcdFwwPbQDJsupHPg
- q9dZwMf4SMedb3bHsx4KGILzeG7NHXmhwt9jPgpHnN0n3E/3Wm1wn84iDN0l2qkama/kOTE0l6
- njM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 16:00:05 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J99yC4mgsz1Rwvd
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:00:03 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1639094402; x=1641686403; bh=nl5CWwCo+HyJCS82sR
-        YKOmxVIBP7Goz/nQOWZ6792B8=; b=o2lfcKC8VYsfqVvTNNfLmya14x8mJpM1Tg
-        eGt2Yea3le2cpBSSLjD9ps4whWUQxyQSth9i02HGs2qORO5q9i1oQD8LAR/gqosh
-        mTUvxbHa87+us5siyYm+vW0XDP32fRNt7zHLqRm3cv66vhX7gseZu1Ki08awR+PS
-        GSBLWpGem852c7SY5ulYvhjsTbQcrunxOdrcTa6xYMncJrVWdYz74vB6RLCz24EN
-        EZ/8xfG48eZzamZmNmS0xqQJ+ewHlQZLItKkAFCIrXmlvuAuyD2tOnFh2Ly1sUGw
-        LWPfWw5t/j0zFLKUNvb5s3AbpD9yKVLrGJ+/Kd6+JGHPCHTkwE5A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wzkzpMPB1ll0 for <linux-kernel@vger.kernel.org>;
-        Thu,  9 Dec 2021 16:00:02 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.225.165.65])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J99y31XPdz1Rwvl;
-        Thu,  9 Dec 2021 15:59:54 -0800 (PST)
-From:   Alistair Francis <alistair.francis@opensource.wdc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dave@stgolabs.net, dvhart@infradead.org, arnd@arndb.de,
-        alistair23@gmail.com, namhyung@kernel.org, acme@kernel.org,
-        jolsa@redhat.com, linux-perf-users@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
-        mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        Alistair Francis <alistair.francis@wdc.com>
-Subject: [PATCH v5 6/6] selftests: futex: Use futex_waitv helper function
-Date:   Fri, 10 Dec 2021 09:58:57 +1000
-Message-Id: <20211209235857.423773-6-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
-References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="299022778"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="299022778"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 16:00:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="564999247"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Dec 2021 16:00:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvTLC-0002Wf-RO; Fri, 10 Dec 2021 00:00:46 +0000
+Date:   Fri, 10 Dec 2021 07:59:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [intel-tdx:guest 36/144] arch/x86/mm/mem_encrypt_common.c:14:6:
+ warning: no previous prototype for 'force_dma_unencrypted'
+Message-ID: <202112100722.xdCK1rLH-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Francis <alistair.francis@wdc.com>
+tree:   https://github.com/intel/tdx.git guest
+head:   41fe88a1b3c28543f49fa6ed9e0e9b6650ed7614
+commit: e6712c98ae60430d8f0d207fa3352e408a56c69f [36/144] x86/mm: Move force_dma_unencrypted() to common code
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211210/202112100722.xdCK1rLH-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/e6712c98ae60430d8f0d207fa3352e408a56c69f
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest
+        git checkout e6712c98ae60430d8f0d207fa3352e408a56c69f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
 
-Use the publically exposed __kernel_futex_syscall_waitv() helper
-function for the futex_waitv tests.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/mm/mem_encrypt_common.c:14:6: warning: no previous prototype for 'force_dma_unencrypted' [-Wmissing-prototypes]
+      14 | bool force_dma_unencrypted(struct device *dev)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/force_dma_unencrypted +14 arch/x86/mm/mem_encrypt_common.c
+
+    12	
+    13	/* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
+  > 14	bool force_dma_unencrypted(struct device *dev)
+
 ---
- tools/testing/selftests/futex/include/futex2test.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/t=
-esting/selftests/futex/include/futex2test.h
-index 9d305520e849..fdc0a0a270cd 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -5,6 +5,7 @@
-  * Copyright 2021 Collabora Ltd.
-  */
- #include <stdint.h>
-+#include <linux/futex_syscall.h>
-=20
- #define u64_to_ptr(x) ((void *)(uintptr_t)(x))
-=20
-@@ -18,5 +19,5 @@
- static inline int futex_waitv(volatile struct futex_waitv *waiters, unsi=
-gned long nr_waiters,
- 			      unsigned long flags, struct timespec *timo, clockid_t clockid)
- {
--	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, timo, cloc=
-kid);
-+	return __kernel_futex_syscall_waitv(waiters, nr_waiters, flags, timo, c=
-lockid);
- }
---=20
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

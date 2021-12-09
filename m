@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D95A46F627
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA1046F628
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbhLIVuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S232575AbhLIVu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbhLIVuv (ORCPT
+        with ESMTP id S232209AbhLIVux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:50:51 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3818C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:47:17 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id k26so6616237pfp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:47:17 -0800 (PST)
+        Thu, 9 Dec 2021 16:50:53 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DD9C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:47:19 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 8so6655245pfo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:47:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=22UN/WZfz3+QYellK/yP53GLUSfFKJJ2R3F2tAgAET8=;
-        b=crlPZVYNT73j5kM8EcWEaWtWHdf132nCoHr9bHqpRMOsXF6Tbyn6sCi+bH/WLX/04M
-         hmOzvTEigEvwqsv/WgDLTnRhMpSgRvm9ewWUI9TDgYP8A3UP2G6Xj80jdt2qYMxJFm7e
-         2NE0lc/MxGejNYvOIyonGtOOeJSq94vsLBkhaQfkvp9pWTS+qcxGS2rXiEsSqKYHj0/q
-         NrZ9Aik0soSXMvwrfc8PwQi8hpeyXkwocPf5zSbYCv+gU2kckT61xqdohuyOogLYA6c7
-         gqCxYsOQ+aG2LfQsGnf6N+l8OisU2/FNLyKcqAUFGdpYuOOLzt2AwrK7EaCu3IROSejk
-         NngQ==
+        bh=ceDq7F+M2EGXPTD9tNvmIZrgG0K6W+WW/I/LWWjhs78=;
+        b=WHvq8+W2CMnCUcsgl0Pvwlcttyl4c03Dv8EUkb4wDsrDWJAa51hDRypQXI7JGRyTKg
+         IMgPu45MPjyqitqII6ACZPy4bz3uYsK14VlZgDC1XLlraCyXsbxaJIpQYFFmIrOpx088
+         aqNw04d8ncgifEYbJXkgpy4O9NROAkqIG9unUF1OvDr3NZiLISlBeO7hW5Pt+GoHgpdp
+         Yh1jWCKjaVI7C4MR6xVuEayXP7KYV+I+iQvKZeu5vHHfLxJlcviXUHTQt+YcdP5iTYZF
+         82UC2BqisfXYZBK0iSUtI+DwkBztN252y+m0k8yhvvku38Gs6zvH6qNifOzXT4GQg0c9
+         X3og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=22UN/WZfz3+QYellK/yP53GLUSfFKJJ2R3F2tAgAET8=;
-        b=MpoYTlLkkOA7YDQMm1M/rxR4LjUNfnLJYNsIeotlztd3ukdc9/AXWpGrQcHsdenRhy
-         oy8sLRD12FWLK+krGYxyYhFqICYWvmbuPHFdrXzwD9ahvyuSw+bX2HvJKDRzdyf8Dh2w
-         WQT1UAPTc1RZBUh162t0df4zc//YX4x8WcrQhR+0IxJKo8B9ppAIJx/jsvGScd7S2djW
-         8Wb+pMDt/T+/m80Q4XYS+beGQvJmN/lbrvI3d5QIiyIBJmBzGeyBnpjHBdFLMq+nlHNL
-         K2JO9UWZuy2WdT3WPqPc255QpKKJd/zD4zYZHbUe0EPS43dNC6G0pNvskSKQEgtY1NAP
-         3zog==
-X-Gm-Message-State: AOAM532QYv3rmIs4gLNSmAuScYZKJ3W8ir7h2ivU8RrjE6JNltIf0gNw
-        +T1Axm3vZZOT4PLYH5sfpss=
-X-Google-Smtp-Source: ABdhPJzx0JxIsxMlhk/9r19Od8fyJzNtci3c4nOm3wCVXBhPyh+d2N/zpOeq1+rslnsz0H27YHYyIA==
-X-Received: by 2002:a63:6cc8:: with SMTP id h191mr36732362pgc.76.1639086437332;
-        Thu, 09 Dec 2021 13:47:17 -0800 (PST)
+        bh=ceDq7F+M2EGXPTD9tNvmIZrgG0K6W+WW/I/LWWjhs78=;
+        b=LYEcq9Y7kBVgUrlYRr1olI0fjQ9Kdr/lCTG//q/ZpIxjw1bwQ384WonyRCpqupfoQg
+         rPT2ommx9bb5lsIGGUvsnD2F0dxVBfJOb0D5TBd8YVnmzfwtsnhIOMwvXFBA9uExcfnC
+         Ufyy7i0USVBAwBizTiVo1+f4ZyV/z8Up7y/8Ym0Rn26TtjDLg37rwHlZP9BG1Eko+Cc+
+         XMvyjTDmxR3RHgVkd3ImE5V4BITtmrd9UYEoc53Jh98pCO8esKUG/pxYLA8TczaMIZhX
+         cdJ+r5Kt2NhTUfJfY5gDa/Q/L5IpH1598MP3qS3JElZVhih6JWuHbupg07GQAYb8Xg6m
+         sCDQ==
+X-Gm-Message-State: AOAM531Qjg/ui9GkWGbTS4yOpaOES1MCUOCp5fqU2CfYFKOcksNAp0LR
+        vZZhIGBJSDiCxYKqbwo9MtdoLw4eHbs=
+X-Google-Smtp-Source: ABdhPJzWk+vi1e4wW7FZgqRviTv2hPqDTvU4iydpc8M8DrZ4RigY81P1ATgqKdyl3z0qYs9FlfOkLA==
+X-Received: by 2002:a62:dd54:0:b0:4a2:93f7:c20a with SMTP id w81-20020a62dd54000000b004a293f7c20amr13508057pff.46.1639086439084;
+        Thu, 09 Dec 2021 13:47:19 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id rm1sm10646953pjb.3.2021.12.09.13.47.16
+        by smtp.gmail.com with ESMTPSA id o134sm605138pfg.1.2021.12.09.13.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 13:47:16 -0800 (PST)
+        Thu, 09 Dec 2021 13:47:18 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
@@ -57,176 +57,157 @@ To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
         jannh@google.com
 Cc:     linux-kernel@vger.kernel.org, security@kernel.org,
         kernel-team@fb.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 2/6] cgroup: Allocate cgroup_file_ctx for kernfs_open_file->priv
-Date:   Thu,  9 Dec 2021 11:47:03 -1000
-Message-Id: <20211209214707.805617-3-tj@kernel.org>
+Subject: [PATCH 3/6] cgroup: Use open-time cgroup namespace for process migration perm checks
+Date:   Thu,  9 Dec 2021 11:47:04 -1000
+Message-Id: <20211209214707.805617-4-tj@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211209214707.805617-1-tj@kernel.org>
 References: <20211209214707.805617-1-tj@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of->priv is currently used by each interface file implementation to store
-private information. This patch collects the current two private data usages
-into struct cgroup_file_ctx which is allocated and freed by the common path.
-This allows generic private data which applies to multiple files, which will
-be used to in the following patch.
+cgroup process migration permission checks are performed at write time as
+whether a given operation is allowed or not is dependent on the content of
+the write - the PID. This currently uses current's cgroup namespace which is
+a potential security weakness as it may allow scenarios where a less
+privileged process tricks a more privileged one into writing into a fd that
+it created.
+
+This patch makes cgroup remember the cgroup namespace at the time of open
+and uses it for migration permission checks instad of current's. Note that
+this only applies to cgroup2 as cgroup1 doesn't have namespace support.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: Michal Koutný <mkoutny@suse.com>
 ---
- kernel/cgroup/cgroup-internal.h | 12 +++++++++
- kernel/cgroup/cgroup.c          | 47 ++++++++++++++++++++++++---------
- 2 files changed, 46 insertions(+), 13 deletions(-)
+ kernel/cgroup/cgroup-internal.h |  2 ++
+ kernel/cgroup/cgroup.c          | 28 +++++++++++++++++++---------
+ 2 files changed, 21 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
-index bfbeabc17a9d..8f681f14828c 100644
+index 8f681f14828c..eb0585245b07 100644
 --- a/kernel/cgroup/cgroup-internal.h
 +++ b/kernel/cgroup/cgroup-internal.h
-@@ -65,6 +65,18 @@ static inline struct cgroup_fs_context *cgroup_fc2context(struct fs_context *fc)
- 	return container_of(kfc, struct cgroup_fs_context, kfc);
+@@ -66,6 +66,8 @@ static inline struct cgroup_fs_context *cgroup_fc2context(struct fs_context *fc)
  }
  
-+struct cgroup_file_ctx {
-+	union {
-+		struct {
-+			struct css_task_iter	*it;
-+		} procs;
+ struct cgroup_file_ctx {
++	struct cgroup_namespace	*ns;
 +
-+		struct {
-+			void			*trigger;
-+		} psi;
-+	};
-+};
-+
- /*
-  * A cgroup can be associated with multiple css_sets as different tasks may
-  * belong to different cgroups on different hierarchies.  In the other
+ 	union {
+ 		struct {
+ 			struct css_task_iter	*it;
 diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 2632e46da1d4..2992eb7e8244 100644
+index 2992eb7e8244..a3292558e96c 100644
 --- a/kernel/cgroup/cgroup.c
 +++ b/kernel/cgroup/cgroup.c
-@@ -3630,6 +3630,7 @@ static int cgroup_cpu_pressure_show(struct seq_file *seq, void *v)
- static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
- 					  size_t nbytes, enum psi_res res)
- {
-+	struct cgroup_file_ctx *ctx = of->priv;
- 	struct psi_trigger *new;
- 	struct cgroup *cgrp;
- 	struct psi_group *psi;
-@@ -3648,7 +3649,7 @@ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
- 		return PTR_ERR(new);
- 	}
- 
--	psi_trigger_replace(&of->priv, new);
-+	psi_trigger_replace(&ctx->psi.trigger, new);
- 
- 	cgroup_put(cgrp);
- 
-@@ -3679,12 +3680,16 @@ static ssize_t cgroup_cpu_pressure_write(struct kernfs_open_file *of,
- static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
- 					  poll_table *pt)
- {
--	return psi_trigger_poll(&of->priv, of->file, pt);
-+	struct cgroup_file_ctx *ctx = of->priv;
+@@ -3822,14 +3822,19 @@ static int cgroup_file_open(struct kernfs_open_file *of)
+ 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+ 		return -ENOMEM;
 +
-+	return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
++	ctx->ns = current->nsproxy->cgroup_ns;
++	get_cgroup_ns(ctx->ns);
+ 	of->priv = ctx;
+ 
+ 	if (!cft->open)
+ 		return 0;
+ 
+ 	ret = cft->open(of);
+-	if (ret)
++	if (ret) {
++		put_cgroup_ns(ctx->ns);
+ 		kfree(ctx);
++	}
+ 	return ret;
  }
  
- static void cgroup_pressure_release(struct kernfs_open_file *of)
- {
--	psi_trigger_replace(&of->priv, NULL);
-+	struct cgroup_file_ctx *ctx = of->priv;
-+
-+	psi_trigger_replace(&ctx->psi.trigger, NULL);
- }
- 
- bool cgroup_psi_enabled(void)
-@@ -3811,18 +3816,31 @@ static ssize_t cgroup_kill_write(struct kernfs_open_file *of, char *buf,
- static int cgroup_file_open(struct kernfs_open_file *of)
- {
- 	struct cftype *cft = of_cft(of);
-+	struct cgroup_file_ctx *ctx;
-+	int ret;
- 
--	if (cft->open)
--		return cft->open(of);
--	return 0;
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+	of->priv = ctx;
-+
-+	if (!cft->open)
-+		return 0;
-+
-+	ret = cft->open(of);
-+	if (ret)
-+		kfree(ctx);
-+	return ret;
- }
- 
- static void cgroup_file_release(struct kernfs_open_file *of)
- {
- 	struct cftype *cft = of_cft(of);
-+	struct cgroup_file_ctx *ctx = of->priv;
+@@ -3840,13 +3845,14 @@ static void cgroup_file_release(struct kernfs_open_file *of)
  
  	if (cft->release)
  		cft->release(of);
-+	kfree(ctx);
++	put_cgroup_ns(ctx->ns);
+ 	kfree(ctx);
  }
  
  static ssize_t cgroup_file_write(struct kernfs_open_file *of, char *buf,
-@@ -4751,21 +4769,23 @@ void css_task_iter_end(struct css_task_iter *it)
- 
- static void cgroup_procs_release(struct kernfs_open_file *of)
+ 				 size_t nbytes, loff_t off)
  {
--	if (of->priv) {
--		css_task_iter_end(of->priv);
--		kfree(of->priv);
+-	struct cgroup_namespace *ns = current->nsproxy->cgroup_ns;
 +	struct cgroup_file_ctx *ctx = of->priv;
-+
-+	if (ctx->procs.it) {
-+		css_task_iter_end(ctx->procs.it);
-+		kfree(ctx->procs.it);
- 	}
- }
+ 	struct cgroup *cgrp = of->kn->parent->priv;
+ 	struct cftype *cft = of_cft(of);
+ 	struct cgroup_subsys_state *css;
+@@ -3863,7 +3869,7 @@ static ssize_t cgroup_file_write(struct kernfs_open_file *of, char *buf,
+ 	 */
+ 	if ((cgrp->root->flags & CGRP_ROOT_NS_DELEGATE) &&
+ 	    !(cft->flags & CFTYPE_NS_DELEGATABLE) &&
+-	    ns != &init_cgroup_ns && ns->root_cset->dfl_cgrp == cgrp)
++	    ctx->ns != &init_cgroup_ns && ctx->ns->root_cset->dfl_cgrp == cgrp)
+ 		return -EPERM;
  
- static void *cgroup_procs_next(struct seq_file *s, void *v, loff_t *pos)
+ 	if (cft->write)
+@@ -4859,9 +4865,9 @@ static int cgroup_may_write(const struct cgroup *cgrp, struct super_block *sb)
+ 
+ static int cgroup_procs_write_permission(struct cgroup *src_cgrp,
+ 					 struct cgroup *dst_cgrp,
+-					 struct super_block *sb)
++					 struct super_block *sb,
++					 struct cgroup_namespace *ns)
  {
- 	struct kernfs_open_file *of = s->private;
--	struct css_task_iter *it = of->priv;
-+	struct cgroup_file_ctx *ctx = of->priv;
+-	struct cgroup_namespace *ns = current->nsproxy->cgroup_ns;
+ 	struct cgroup *com_cgrp = src_cgrp;
+ 	int ret;
  
- 	if (pos)
- 		(*pos)++;
+@@ -4890,11 +4896,12 @@ static int cgroup_procs_write_permission(struct cgroup *src_cgrp,
  
--	return css_task_iter_next(it);
-+	return css_task_iter_next(ctx->procs.it);
- }
- 
- static void *__cgroup_procs_start(struct seq_file *s, loff_t *pos,
-@@ -4773,7 +4793,8 @@ static void *__cgroup_procs_start(struct seq_file *s, loff_t *pos,
+ static int cgroup_attach_permissions(struct cgroup *src_cgrp,
+ 				     struct cgroup *dst_cgrp,
+-				     struct super_block *sb, bool threadgroup)
++				     struct super_block *sb, bool threadgroup,
++				     struct cgroup_namespace *ns)
  {
- 	struct kernfs_open_file *of = s->private;
- 	struct cgroup *cgrp = seq_css(s)->cgroup;
--	struct css_task_iter *it = of->priv;
-+	struct cgroup_file_ctx *ctx = of->priv;
-+	struct css_task_iter *it = ctx->procs.it;
+ 	int ret = 0;
  
- 	/*
- 	 * When a seq_file is seeked, it's always traversed sequentially
-@@ -4786,7 +4807,7 @@ static void *__cgroup_procs_start(struct seq_file *s, loff_t *pos,
- 		it = kzalloc(sizeof(*it), GFP_KERNEL);
- 		if (!it)
- 			return ERR_PTR(-ENOMEM);
--		of->priv = it;
-+		ctx->procs.it = it;
- 		css_task_iter_start(&cgrp->self, iter_flags, it);
- 	} else if (!(*pos)) {
- 		css_task_iter_end(it);
+-	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp, sb);
++	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp, sb, ns);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -4911,6 +4918,7 @@ static int cgroup_attach_permissions(struct cgroup *src_cgrp,
+ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
+ 				    bool threadgroup)
+ {
++	struct cgroup_file_ctx *ctx = of->priv;
+ 	struct cgroup *src_cgrp, *dst_cgrp;
+ 	struct task_struct *task;
+ 	const struct cred *saved_cred;
+@@ -4938,7 +4946,8 @@ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
+ 	 */
+ 	saved_cred = override_creds(of->file->f_cred);
+ 	ret = cgroup_attach_permissions(src_cgrp, dst_cgrp,
+-					of->file->f_path.dentry->d_sb, threadgroup);
++					of->file->f_path.dentry->d_sb,
++					threadgroup, ctx->ns);
+ 	revert_creds(saved_cred);
+ 	if (ret)
+ 		goto out_finish;
+@@ -6158,7 +6167,8 @@ static int cgroup_css_set_fork(struct kernel_clone_args *kargs)
+ 		goto err;
+ 
+ 	ret = cgroup_attach_permissions(cset->dfl_cgrp, dst_cgrp, sb,
+-					!(kargs->flags & CLONE_THREAD));
++					!(kargs->flags & CLONE_THREAD),
++					current->nsproxy->cgroup_ns);
+ 	if (ret)
+ 		goto err;
+ 
 -- 
 2.34.1
 

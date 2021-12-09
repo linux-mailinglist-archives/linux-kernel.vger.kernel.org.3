@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214C646F27A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C56546F287
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241865AbhLIRy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:54:58 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57148 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231889AbhLIRy5 (ORCPT
+        id S242083AbhLIR5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242074AbhLIR5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:54:57 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9H9bSU010677;
-        Thu, 9 Dec 2021 17:51:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=9ZTa3C/+ztR+2VEEkNIyWPQDIo1w4QfLV4PnSVIIfaw=;
- b=sq/nI0d3y3yPwNlijJj6KBKieSY8I9j8TXyWqFZn0WOMc/U/I1Ls/tzF/LUvqpjHdNq/
- eaN7GUXPgZhXtqrMym6ObUgeHW21xjyO9aPp6acWvupmjtbrDscPQ+06jHw4uDfAQbBx
- Oug7tWpbbD78UW95mOokGxiLUy1IDf+2F8auVkr9IoYSuHVdO6s73k0DIQwieNuoHyYQ
- S9LLe2YqUwdQkQL9Yj0uWChFS8ne2tnUFjpxYmygfoj2HykawDN+7yr65iazr0ka5/tD
- nhKJauePaGaWXlN/p3DapU4ep4j2t2SWSImrqg5uL8NhNyDOkmOis8IFyx9VXRtDtS65 vA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cumwk2pus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 17:51:04 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9HkqtC001434;
-        Thu, 9 Dec 2021 17:51:03 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cumwk2puc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 17:51:03 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9HjOu2032411;
-        Thu, 9 Dec 2021 17:51:02 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3cqyya2a4m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 17:51:01 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9HoxhH28442938
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 17:50:59 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 747E3A4054;
-        Thu,  9 Dec 2021 17:50:59 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 291B9A405C;
-        Thu,  9 Dec 2021 17:50:59 +0000 (GMT)
-Received: from osiris (unknown [9.145.184.102])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  9 Dec 2021 17:50:59 +0000 (GMT)
-Date:   Thu, 9 Dec 2021 18:50:57 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [for-linus][PATCH 5/5] ftrace/samples: Add module to test multi
- direct modify interface
-Message-ID: <YbJCAVYQZ5cQ9lmv@osiris>
-References: <20211209152908.459494269@goodmis.org>
- <20211209153223.843082247@goodmis.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209153223.843082247@goodmis.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: n9ppPNeqOUfmA6O5rGoT2eB-5oqn_m6D
-X-Proofpoint-ORIG-GUID: ZI2J0gVxGcPlUyBCC3TzZgBW44GNl0jN
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 9 Dec 2021 12:57:24 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35654C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:53:50 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x15so22615148edv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:53:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gfEybSiwsoU+szdJyCoyr3s7v0KYcyy4yf9cBUePh2s=;
+        b=O4IWy62uwI4QguMT07+F51bLJvECUq80pCyBjE1jmscovM/QVEeot/QqCm57U/gHHV
+         vz3fUaQfbbEQ98L7wVNsFKoSOTalubyyzSJ4ey2heKZknSFyt8KewHYnV2DjVB3JR7jS
+         1n9aE01NXzjRRPOW35GNkoBjkNB2vBl6LfEb8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gfEybSiwsoU+szdJyCoyr3s7v0KYcyy4yf9cBUePh2s=;
+        b=jcXHqJtH07meQdfMxI9dX6XAnfgzhKj/ZYN6O1OscQuIi8k+h41ur7nmNe5tevloa9
+         /hj7+gdr8PlqywbwbGscmRuywELb6eaXFr0REJksSkG7yk+5fdPxwcqz/3JCfhtwRUpn
+         1rBJuK1yJEybEuajOCS7Lkutvb91qdI6LIjkgSeRXeYN+Sill+ItymWYNhJdDQXXKfki
+         DtwZ8THtBBomhmq/ssQIgTyIILLwn5a2cAvANsg69VQwCyc5jHaPqogBzTokAIxSOt6+
+         dAbYgFZVB+notEvY1dLWYvZt7HdcE7MHHThezqfNQ/otvw4Ngm4G3P/Tvp6bu26IBdag
+         HB8g==
+X-Gm-Message-State: AOAM530RWfcOzuDBVOXjBzP9cX+49BozCZ5sicTSNIxPwpAqTh3GqHpb
+        J5HWT9weVaoCcgYqoU2IHXlnpHENv3IE9Pm+H1w=
+X-Google-Smtp-Source: ABdhPJy6r6Hs2T34mReAeAlf/1bZXtPKM221ilnkjHutNqxbTIa6k6cbI1W/etwvrItdD44j23quAg==
+X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr17262454ejc.140.1639072335232;
+        Thu, 09 Dec 2021 09:52:15 -0800 (PST)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id og14sm238739ejc.107.2021.12.09.09.52.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 09:52:13 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 133so4896440wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:52:13 -0800 (PST)
+X-Received: by 2002:a1c:800e:: with SMTP id b14mr9241880wmd.155.1639072333220;
+ Thu, 09 Dec 2021 09:52:13 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_08,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- spamscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090091
+References: <20211208183655.251963904@infradead.org> <20211208183906.548393311@infradead.org>
+ <20211209083305.GN16608@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211209083305.GN16608@worktop.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 9 Dec 2021 09:51:57 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh5UcTh6bxhk_NO05Uyk8aHY_PUQx5UyrOBMFH8ATHcWg@mail.gmail.com>
+Message-ID: <CAHk-=wh5UcTh6bxhk_NO05Uyk8aHY_PUQx5UyrOBMFH8ATHcWg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 3/5] refcount: Improve out-of-line code-gen
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:29:13AM -0500, Steven Rostedt wrote:
-> From: Jiri Olsa <jolsa@redhat.com>
-> 
-> Adding ftrace-direct-multi-modify.ko kernel module that uses
-> modify_ftrace_direct_multi API. The core functionality is taken
-> from ftrace-direct-modify.ko kernel module and changed to fit
-> multi direct interface.
-> 
-> The init function creates kthread that periodically calls
-> modify_ftrace_direct_multi to change the trampoline address
-> for the direct ftrace_ops. The ftrace trace_pipe then shows
-> trace from both trampolines.
-> 
-> Link: https://lkml.kernel.org/r/20211206182032.87248-4-jolsa@kernel.org
-> 
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> ---
->  samples/ftrace/Makefile                     |   1 +
->  samples/ftrace/ftrace-direct-multi-modify.c | 152 ++++++++++++++++++++
->  2 files changed, 153 insertions(+)
->  create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
+On Thu, Dec 9, 2021 at 12:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> For some obscure raisin it causes this: [snip]
 
-FWIW, for the s390 bits in here:
+Looks like the code generation at one point thought that it needs to
+get the return value from the slow-path function call, and by the time
+it had optimized that away it had already ended up with enough
+temporaries that it needed to spill things into %rbx.
 
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Tested-by: Heiko Carstens <hca@linux.ibm.com>
+That looks like a fairly "internal to gcc" thing, but I think dropping
+that patch is indeed the right thing to do.
+
+When you made it do
+
+        return refcount_warn_saturate(r, ..);
+
+it now means that those inline functions don't obviously always return
+'false' any more, so the compiler did end up needing a variable for
+the return value at one point, and it really was a much more complex
+decision. After it has inlined that top-level function, the return
+value is not visible to the compiler because it doesn't see that
+refcount_warn_saturate() always returns false.
+
+The fact that quite often that whole refcount_warn_saturate() call
+ended up then being in a cold part of the code, and could then be
+optimized to a tailcall if that was the last thing generated, doesn't
+end up helping in the general case, and instead only hurts: the
+compiler doesn't see what the return value is for the warning case, so
+it might end up doing other things in the place that the function was
+inlined into.
+
+I think the original patch was likely a mis-optimization triggered by
+your test-case being a function that *only* did that
+refcount_add_not_zero(), and returned the value. It didn't actually
+have other code that then depended on the return value of it.
+
+              Linus

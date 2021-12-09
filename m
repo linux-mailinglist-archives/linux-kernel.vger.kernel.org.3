@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FD446E345
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFC546E349
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbhLIHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:39:34 -0500
-Received: from mail-m975.mail.163.com ([123.126.97.5]:52840 "EHLO
-        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbhLIHjd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:39:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DO6HU
-        4EncOkezaglXGqkLLhu6c1P4IlS7DTPCfCsDuc=; b=GSa4+r+7zUSLR1dkLr9kz
-        yC2TuYP++HudQDvv6dK5ZxTb0lcSWWn9h2GDonHmgjalJ2JtJTW7xMjhtmx1gYeb
-        YiKL5LWDFEA9zvt1yyPqKA2Ud5l8VbAJEro3cuNGrB/T/tNfa+absBw3w3xyhk3h
-        5JV1IgHG4zzKh/dXE1KhAM=
-Received: from localhost.localdomain (unknown [218.106.182.227])
-        by smtp5 (Coremail) with SMTP id HdxpCgBnp+t+sbFhxrJBAw--.16111S4;
-        Thu, 09 Dec 2021 15:34:52 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        martin@kaiser.cx
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_QueryDrv()
-Date:   Thu,  9 Dec 2021 15:34:21 +0800
-Message-Id: <20211209073421.126251-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S233892AbhLIHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:41:02 -0500
+Received: from muru.com ([72.249.23.125]:36364 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229787AbhLIHlA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 02:41:00 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id A167F80A3;
+        Thu,  9 Dec 2021 07:38:08 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 09:37:25 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCHv4 0/7] Serial port generic PM to fix 8250 PM
+Message-ID: <YbGyNW2EQlA/+VIg@atomide.com>
+References: <20211115084203.56478-1-tony@atomide.com>
+ <YaX2mbUv9Yv3icl4@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgBnp+t+sbFhxrJBAw--.16111S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ur4kZw1Utw4DZF13KrWfZrb_yoW8WryrpF
-        WfK342kFW5tw17XryDtwnxZryYy3WIkFyF9rW5C39xur95ZrnYvFykCrWj9rsrC34UJF4I
-        yFW8try5Xa1DtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jqwZ7UUUUU=
-X-Originating-IP: [218.106.182.227]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbi6xxkjFXlyeZvSQAAsm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaX2mbUv9Yv3icl4@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line 6183 (#1) allocates a memory chunk for input by kmalloc().
-Line 6204 (#3) frees the input before the function returns while
-line 6190 (#2) forget to free it, which will lead to a memory leak.
+* Johan Hovold <johan@kernel.org> [211130 10:03]:
+> Specifically, it looks like tx can still stall indefinitely if the
+> autosuspend timer fires. This can happen at low baud rates and also when
+> using flow control.
 
-We should kfree() input in line 6190 (#2).
+Yeah the TX part is still problematic. Note that this is purely because
+of current Linux serial layers implementation, and not because of any
+hardware reasons.
 
-6177 static int rtw_mp_QueryDrv(struct net_device *dev,
-6178 			struct iw_request_info *info,
-6179 			union iwreq_data *wrqu, char *extra)
-6180 {
-6182	char	*input = kmalloc(wrqu->data.length, GFP_KERNEL);
-	// #1: kmalloc space
+Even after this series we still rely on serial8250_rpm_get_tx() and
+serial8250_rpm_put_tx() to decipher if we can idle the port..
 
-6186	if (!input)
-6187		return -ENOMEM;
+If anybody has good ideas where we can add the serial core TX related
+paired runtime PM calls please let me know :)
 
-6189 	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
-6190 			return -EFAULT; // #2: missing kfree
+For TX DMA, we should not do runtime PM put until at the DMA callback
+function when completed.
 
-6204 	kfree(input); // #3: kfree space
-6205 	return 0;
-6206 }
+Regards,
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 1fd375076001..0524523910f0 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -6186,8 +6186,11 @@ static int rtw_mp_QueryDrv(struct net_device *dev,
- 	if (!input)
- 		return -ENOMEM;
- 
--	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
--			return -EFAULT;
-+	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length)) {
-+		kfree(input);
-+		return -EFAULT;
-+	}
-+
- 	DBG_88E("%s:iwpriv in =%s\n", __func__, input);
- 
- 	qAutoLoad = strncmp(input, "autoload", 8); /*  strncmp true is 0 */
--- 
-2.25.1
-
+Tony

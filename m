@@ -2,123 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A40B46E089
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FB246E091
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhLIB7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S229584AbhLICCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhLIB7t (ORCPT
+        with ESMTP id S229529AbhLICCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:59:49 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EAEC061746;
-        Wed,  8 Dec 2021 17:56:16 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z6so4031428pfe.7;
-        Wed, 08 Dec 2021 17:56:16 -0800 (PST)
+        Wed, 8 Dec 2021 21:02:07 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14077C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:58:35 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id v19so2793018plo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yj/KHzXtiJk54EmuUvfEvZXW5iSFJAcLfourAbdrQ04=;
-        b=AvC7qQ3fY6ARHqbdXisocOVt0TFLn2o+xgvRtMf5tiqVV0QssI7ZKcRtyfCwftHTTq
-         fDLtNTbVoNqo3xkhiJi37KOz9yUyNcIqhBZtlwyvUNnWwH0lArPpTrdvq5c5ELMFuG/o
-         WkXRkeedt08NP4gqnPr5OKCpR6zw7vE0hlv6sEWMlGMz5aimc4HH3NY/Jj/1y2ErVwbE
-         ym6YCZQsFw+gfu4GrvFR980QGa9tmpJiPt1KGZ0d47Lo7RDXvp0tc82mNJzaPOb+cDdd
-         FxU80RU0j+7bcYXMopeknAMOYzKyxRqxyolx8bQp41/jPKcgNHYuZmwVT571jApHTxmX
-         +9rA==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=avQ6zouIiN9yCAxnJyjc2BEAENz7yIsL27blUDqPD6s=;
+        b=JGAbRkaYN5fsHQKueBsFMUoELiDEq3dqyTc+SLnHD7g2GuC5TE/6on2JWfRiBJReEo
+         UjRZKMgpBnX7qf7hnfKqjQgnnopjXi3EzIUR0a9pFmVNGWTJaYTk3AlXMJuq5T/xAQmr
+         mixde3nA+yhgweK0TmDp37CUBbTGCI4nHQecucj77SHxUmLBnJR7b1J1zefHdZ05hZee
+         S3lyxSip9BVgqrskDzzCQD1jVGYE3RwMMwHv+hAxBl3Fl6toYaI1aidOdB+Z4naClln6
+         Y1KZShl1SH6lkVp1dyog6MiKvt1T0e5ycFTs4Y1lCT7pCdKQCax6IbrVoOlE1UWzoI/1
+         WU5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yj/KHzXtiJk54EmuUvfEvZXW5iSFJAcLfourAbdrQ04=;
-        b=RP2lYpQ827VpqLCjRRQaW/mCe7Y3msS7GyAOSFUJAGUx+/tojLFpfaFzpYM0OVKr7D
-         v+ykOBHzdua60urjrMgw4K40HxTu2BibYdhGG9bnfVrxLuIkTgn9e4klsfEwVYD64ORj
-         aJcG7jZs+x+gR78tW9xyaYNWU3efI60D3lfO0nX8j1I6F090dbAwD+Wo+vMndhhqgnix
-         LJSiZ4EZpRr/HsG3iHiiHWllonbaM1OsyPySfXIonxHj35FEWySjEgt+QlmPAvokWBJj
-         Ksnk5Q07j9uNt8Y6nntCH0qeKEhc0NP3AzJd+Y2c7s0CJG9htpLyR3tywcSAYG5nD7Ek
-         JzZA==
-X-Gm-Message-State: AOAM532/QhRvj+zwkuGQL5IsPiQcBLvNpwCly86+PwoLbcFKtGn7iovh
-        hk3XZdAfhx603JjhBVJ4aHU=
-X-Google-Smtp-Source: ABdhPJx54V5jIoQN0/D/P22BeZiOxi7m+wS62SX9TKLJijQ4OTJrOPF4yeYIsv7T2jW0QNqkgR5Igw==
-X-Received: by 2002:a63:af4e:: with SMTP id s14mr14935456pgo.273.1639014976134;
-        Wed, 08 Dec 2021 17:56:16 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g22sm5376431pfj.29.2021.12.08.17.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:56:15 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] x86:intel:remove unneeded variable
-Date:   Thu,  9 Dec 2021 01:56:10 +0000
-Message-Id: <20211209015610.409791-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=avQ6zouIiN9yCAxnJyjc2BEAENz7yIsL27blUDqPD6s=;
+        b=FZ13vyZbxssUC0CF6DJRvI8o+3m8QYRLk3qbJymQwTmUYkYUhX9/p4u/JSWj+7CxZE
+         REEH0iLoJFg0f1LSd4O26GeRl8ekQrywdOtNbOg8JWe02qSeSRISs+7o9gbIt8ms1Qab
+         MIBhMro2IFQlgCeYkaWYCxXZge1oRBXbmEhf94ovPrGRqdYneoSd2og+mKegLDoTiG+M
+         v8Gv7Je3lrNUDsagfxvH0SpYLQLCTSYSsZhDnbYMKZdEbRMGII1LbVXXIfOz961ill0C
+         6qmHmmYxLz6gqC5g97sgxxC5txmLmsi2XvFj+xPZgJwvYNQYDwz6KRBUrzHUYdmaqvyQ
+         +6aw==
+X-Gm-Message-State: AOAM533lpdLzi/g15DSbCO8IS7f9Rwg3PEsCeU7IWdcmx7Srf5n/lOXt
+        pCePmzPuq04PUsRfrs4e8cs=
+X-Google-Smtp-Source: ABdhPJwlIE1PXQQI/w1u/lQW1i2uiXM5GSlwruVROb0fFETmzi7avVQ3qMGxbFKCo02w2ckhDbTTWA==
+X-Received: by 2002:a17:90b:4b01:: with SMTP id lx1mr12007824pjb.38.1639015114562;
+        Wed, 08 Dec 2021 17:58:34 -0800 (PST)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id t12sm7189747pjo.44.2021.12.08.17.58.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 08 Dec 2021 17:58:34 -0800 (PST)
+Date:   Thu, 9 Dec 2021 09:56:35 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, huyue2@yulong.com
+Subject: Re: [PATCH v2] erofs: clean up erofs_map_blocks tracepoints
+Message-ID: <20211209095635.000012e8.zbestahu@gmail.com>
+In-Reply-To: <20211209012918.30337-1-hsiangkao@linux.alibaba.com>
+References: <20211209012918.30337-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
+On Thu,  9 Dec 2021 09:29:18 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-return value form directly instead of
-taking this in another redundant variable.
+> Since the new type of chunk-based files is introduced, there is no
+> need to leave flatmode tracepoints.
+> 
+> Rename to erofs_map_blocks instead.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> ---
+> v1: https://lore.kernel.org/r/20210921143531.81356-2-hsiangkao@linux.alibaba.com
+> change since v1:
+>  - fix m_llen assignment issue pointed out by Chao;
+> 
+>  fs/erofs/data.c              | 39 ++++++++++++++++--------------------
+>  include/trace/events/erofs.h |  4 ++--
+>  2 files changed, 19 insertions(+), 24 deletions(-)
+> 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index 0e35ef3f9f3d..4f98c76ec043 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -26,20 +26,16 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+>  				     struct erofs_map_blocks *map,
+>  				     int flags)
+>  {
+> -	int err = 0;
+>  	erofs_blk_t nblocks, lastblk;
+>  	u64 offset = map->m_la;
+>  	struct erofs_inode *vi = EROFS_I(inode);
+>  	bool tailendpacking = (vi->datalayout == EROFS_INODE_FLAT_INLINE);
+>  
+> -	trace_erofs_map_blocks_flatmode_enter(inode, map, flags);
+> -
+>  	nblocks = DIV_ROUND_UP(inode->i_size, PAGE_SIZE);
+>  	lastblk = nblocks - tailendpacking;
+>  
+>  	/* there is no hole in flatmode */
+>  	map->m_flags = EROFS_MAP_MAPPED;
+> -
+>  	if (offset < blknr_to_addr(lastblk)) {
+>  		map->m_pa = blknr_to_addr(vi->raw_blkaddr) + map->m_la;
+>  		map->m_plen = blknr_to_addr(lastblk) - offset;
+> @@ -51,30 +47,23 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+>  			vi->xattr_isize + erofs_blkoff(map->m_la);
+>  		map->m_plen = inode->i_size - offset;
+>  
+> -		/* inline data should be located in one meta block */
+> -		if (erofs_blkoff(map->m_pa) + map->m_plen > PAGE_SIZE) {
+> +		/* inline data should be located in the same meta block */
+> +		if (erofs_blkoff(map->m_pa) + map->m_plen > EROFS_BLKSIZ) {
+>  			erofs_err(inode->i_sb,
+>  				  "inline data cross block boundary @ nid %llu",
+>  				  vi->nid);
+>  			DBG_BUGON(1);
+> -			err = -EFSCORRUPTED;
+> -			goto err_out;
+> +			return -EFSCORRUPTED;
+>  		}
+> -
+>  		map->m_flags |= EROFS_MAP_META;
+>  	} else {
+>  		erofs_err(inode->i_sb,
+>  			  "internal error @ nid: %llu (size %llu), m_la 0x%llx",
+>  			  vi->nid, inode->i_size, map->m_la);
+>  		DBG_BUGON(1);
+> -		err = -EIO;
+> -		goto err_out;
+> +		return -EIO;
+>  	}
+> -
+> -	map->m_llen = map->m_plen;
+> -err_out:
+> -	trace_erofs_map_blocks_flatmode_exit(inode, map, flags, 0);
+> -	return err;
+> +	return 0;
+>  }
+>  
+>  static int erofs_map_blocks(struct inode *inode,
+> @@ -89,6 +78,7 @@ static int erofs_map_blocks(struct inode *inode,
+>  	erofs_off_t pos;
+>  	int err = 0;
+>  
+> +	trace_erofs_map_blocks_enter(inode, map, flags);
+>  	map->m_deviceid = 0;
+>  	if (map->m_la >= inode->i_size) {
+>  		/* leave out-of-bound access unmapped */
+> @@ -97,8 +87,10 @@ static int erofs_map_blocks(struct inode *inode,
+>  		goto out;
+>  	}
+>  
+> -	if (vi->datalayout != EROFS_INODE_CHUNK_BASED)
+> -		return erofs_map_blocks_flatmode(inode, map, flags);
+> +	if (vi->datalayout != EROFS_INODE_CHUNK_BASED) {
+> +		err = erofs_map_blocks_flatmode(inode, map, flags);
+> +		goto out;
+> +	}
+>  
+>  	if (vi->chunkformat & EROFS_CHUNK_FORMAT_INDEXES)
+>  		unit = sizeof(*idx);			/* chunk index */
+> @@ -110,9 +102,10 @@ static int erofs_map_blocks(struct inode *inode,
+>  		    vi->xattr_isize, unit) + unit * chunknr;
+>  
+>  	page = erofs_get_meta_page(inode->i_sb, erofs_blknr(pos));
+> -	if (IS_ERR(page))
+> -		return PTR_ERR(page);
+> -
+> +	if (IS_ERR(page)) {
+> +		err = PTR_ERR(page);
+> +		goto out;
+> +	}
+>  	map->m_la = chunknr << vi->chunkbits;
+>  	map->m_plen = min_t(erofs_off_t, 1UL << vi->chunkbits,
+>  			    roundup(inode->i_size - map->m_la, EROFS_BLKSIZ));
+> @@ -146,7 +139,9 @@ static int erofs_map_blocks(struct inode *inode,
+>  	unlock_page(page);
+>  	put_page(page);
+>  out:
+> -	map->m_llen = map->m_plen;
+> +	if (!err)
+> +		map->m_llen = map->m_plen;
+> +	trace_erofs_map_blocks_exit(inode, map, flags, 0);
+>  	return err;
+>  }
+>  
+> diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
+> index 16ae7b666810..57de057bd503 100644
+> --- a/include/trace/events/erofs.h
+> +++ b/include/trace/events/erofs.h
+> @@ -169,7 +169,7 @@ DECLARE_EVENT_CLASS(erofs__map_blocks_enter,
+>  		  __entry->flags ? show_map_flags(__entry->flags) : "NULL")
+>  );
+>  
+> -DEFINE_EVENT(erofs__map_blocks_enter, erofs_map_blocks_flatmode_enter,
+> +DEFINE_EVENT(erofs__map_blocks_enter, erofs_map_blocks_enter,
+>  	TP_PROTO(struct inode *inode, struct erofs_map_blocks *map,
+>  		 unsigned flags),
+>  
+> @@ -221,7 +221,7 @@ DECLARE_EVENT_CLASS(erofs__map_blocks_exit,
+>  		  show_mflags(__entry->mflags), __entry->ret)
+>  );
+>  
+> -DEFINE_EVENT(erofs__map_blocks_exit, erofs_map_blocks_flatmode_exit,
+> +DEFINE_EVENT(erofs__map_blocks_exit, erofs_map_blocks_exit,
+>  	TP_PROTO(struct inode *inode, struct erofs_map_blocks *map,
+>  		 unsigned flags, int ret),
+>  
 
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- arch/x86/events/intel/core.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+Reviewed-by: Yue Hu <huyue2@yulong.com>
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 603964408d2d..6ba7e0ef8db4 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4106,23 +4106,17 @@ static struct event_constraint *
- glp_get_event_constraints(struct cpu_hw_events *cpuc, int idx,
- 			  struct perf_event *event)
- {
--	struct event_constraint *c;
--
- 	/* :ppp means to do reduced skid PEBS which is PMC0 only. */
- 	if (event->attr.precise_ip == 3)
- 		return &counter0_constraint;
- 
--	c = intel_get_event_constraints(cpuc, idx, event);
--
--	return c;
-+	return intel_get_event_constraints(cpuc, idx, event);
- }
- 
- static struct event_constraint *
- tnt_get_event_constraints(struct cpu_hw_events *cpuc, int idx,
- 			  struct perf_event *event)
- {
--	struct event_constraint *c;
--
- 	/*
- 	 * :ppp means to do reduced skid PEBS,
- 	 * which is available on PMC0 and fixed counter 0.
-@@ -4135,9 +4129,7 @@ tnt_get_event_constraints(struct cpu_hw_events *cpuc, int idx,
- 		return &counter0_constraint;
- 	}
- 
--	c = intel_get_event_constraints(cpuc, idx, event);
--
--	return c;
-+	return intel_get_event_constraints(cpuc, idx, event);
- }
- 
- static bool allow_tsx_force_abort = true;
--- 
-2.25.1
 

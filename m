@@ -2,158 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E67946DFEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED75646DFF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbhLIBDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbhLIBDH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:03:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927AC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:59:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4D53ECE241A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C2EC00446;
-        Thu,  9 Dec 2021 00:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639011570;
-        bh=JBRUvmlqtKYO6wmUvlnMnb6NAQ+n15ncBLmNykYGTq0=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=dSuHHwnCyqSZ83TbfNBdfPANK+Eritcp33WaSlkA1QczlgssS7cWwZ+t4F5Nu6SgV
-         wX4FMJ2s3BwWeULH5+46ezf6G+4IkoezR4TgNj2lF0vSEEknEfs1KqcQFhiPRHfagR
-         pYJD/7oKp78ewx9YbKMGkA8S+HTMVUKj+nD5/UvKFkm1JGajtPjoWRgBxIL9eLCCp2
-         6l/rCq0Ry1TVwCpNN43m+wgLzJ7JgFJLm7GfRnFgBZZpRIFvK/QIP+8aaUPMRT2VzB
-         OTZJPgK5BWVxOKi8jNSuw0fsAkqh9vkldVoAYQ3UBjiXfhWLP48eIFYiKE8ao+H4Zr
-         1J+KYSfFui8Cg==
-Date:   Wed, 8 Dec 2021 16:59:28 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr <olekstysh@gmail.com>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: Re: [PATCH V3 4/6] xen/unpopulated-alloc: Add mechanism to use Xen
- resource
-In-Reply-To: <50997667-7c6c-491d-ff04-11e093fee7f0@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112081659090.4091490@ubuntu-linux-20-04-desktop>
-References: <1637787223-21129-1-git-send-email-olekstysh@gmail.com> <1637787223-21129-5-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2111241701240.1412361@ubuntu-linux-20-04-desktop> <c2e8c00a-3856-8330-8e8f-ab8a92e93e47@gmail.com>
- <alpine.DEB.2.22.394.2112071506370.4091490@ubuntu-linux-20-04-desktop> <50997667-7c6c-491d-ff04-11e093fee7f0@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S238358AbhLIBEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:04:37 -0500
+Received: from mail-mw2nam10on2065.outbound.protection.outlook.com ([40.107.94.65]:48661
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233885AbhLIBEg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 20:04:36 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UvCbd4kDGQut/yGBRZzq4CNcchMR16AtWmODGIpoYhfE6o/cW2HJbyFb1D2avmx0bjTptDPDifkPaz6P+q6vTs2J/3QWzGb4mj81zWrrqUqtO5taBlJQttyMjWsqwPSlrHDvbZBv8823QLHJtL+tzpaCW5OQYEaU5NqaNpSYW8CLzgQIxztaGWImlT9kGn9Uz+GAbKdwGhAEuJ+n+FJ9sSIbIvQ+6Onziq3Q26YZR0Q4xcK22Pyk7eKAiDnUmal8Gg5gUPaw7Kq0ZkdEvCNngCO+61BVGccDSnkctwoE47W5Rm8X20uvcr/HbY+y4Xaap5Yl0Ce0+MTvM0Thp6YzZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KgiVroL99Eb0nfuME/RPoIYITyO9tKbqxVG0UmaTgnI=;
+ b=BbxTC4JvtR97/ON/xGxCiUjq9gy2if+iHF35WKBXhw5FDoB/2ZdnLObc9YVwrJJlt+ojH8jzzdiBc8S+7IT4jvX+BBwd+xagRbTGKWe51G652ZmkaCIw1Xzrb/KTmt3uz3XOBzvJS6zaWxfFxvShgxE9jHTwEhfN4jMn6XJ1h+GtmmBc05TFIGN75lgEN+lrvps9cZtFJVSCSB3vaalnIPORtCKC4FHJfJhT+DIIObK10ZrvPLNwFZVeWRpPiuC7fHjOKKgc4amsH4Yl8jeHGSmZPYY3heET1aEHBdTIFJReNDDdBMmoMxx3HmUlxK3KAqZHcpZFy47R/2fE2lConQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KgiVroL99Eb0nfuME/RPoIYITyO9tKbqxVG0UmaTgnI=;
+ b=szYOgFrXoNS1Q0eHU0JPXka6BAs/zPzusxtZh2SKA8Ds8Ona9pHGZuAsYMfRbAAyVpin27ERyR3DGBx7T70muSylsWw5ssJapsxVTwejCzMLOWE13r1kWTL2oFlVimRJDeiHvVaJvIUHfyx/iJwcOoyimu3VkdaiJhxwyV230RcEAD4b86FIyNesZR0+ZX+K2gZHBYT1Y7wCRpPNRF1SrMh01p+unK3kEzz6m/M16Hgf50geOIKKxLRo4r6gmoBRqjJTqOB9gVDp1I/ah82wvoVRneIgaasA0eL88yscCLke01+5w4aV3rRT2YpVc/N6v+IWSpNXQuWzIgZKVti+XA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5336.namprd12.prod.outlook.com (2603:10b6:208:314::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
+ 2021 01:01:02 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.013; Thu, 9 Dec 2021
+ 01:01:02 +0000
+Date:   Wed, 8 Dec 2021 21:01:00 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com
+Subject: Re: [patch V2 00/31] genirq/msi, PCI/MSI: Spring cleaning - Part 3
+Message-ID: <20211209010100.GM6385@nvidia.com>
+References: <20211206210600.123171746@linutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206210600.123171746@linutronix.de>
+X-ClientProxiedBy: MN2PR19CA0045.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::22) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-157919797-1639011569=:4091490"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cb2b6e79-f74f-49f0-cb95-08d9baaf5e8c
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5336:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB53365CBDAECB06902C026D8AC2709@BL1PR12MB5336.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e17lyaqu5o5/7p3ntAAj6KuFyP+SAvPCdw1kW0GAKs8hmKhu4dY592nfacJ7yrTk5BrFP9pF0V36OizX+xtF1NtVgZOptQAEZsjh7B3TbkBqx8DXtJAXI79pIy11DZWL4JJKHy6KUVSWDpOwBV7352R6PzvhPA9OB5NjaYgnaGu/tupK+npuXVIT6K2jVfhJhXnTAIATAWyebbCMuo+VryfQWhF3827r0aKkkehAOhWY/CIu8lCy6aei6+I/yxaljhi9hksEMGHkz6Rgb6JmkvSuw3DZzUZk1CRGzn2MMjnTCMmkcUENCwfWD2hZbLAVEOtI3d1AHOgGIlPbuWMrPD4ezMF3BR2ELZHsZ8KRf+2O9t41PkwtWCCC91LW+3lYR+RA6qjmCW2WuDjLCfMDO7R2wC2J61iyF3/enJ8eorhnjmbeV1Esu9QaBSPxm8THCNhOFoH9xnLfIXidpe9q0Z91egFxvQ8yImflH36CZ7mUxisrozqbegiINuD9WIapAVErHy9ghW+oSIzXRxH0/mWDA58eQCFTmwsVcelfB4olk2DujWCDP7IpPX76NAZTR7uSVbXnV/FkBUBg969Et8r6kRcWGne978RAJyQMAEpUZniqIVIh54uQ1Ac97J80Z+W5V8oqbXLVOHU3n2JuVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2616005)(66476007)(6916009)(2906002)(66946007)(4326008)(186003)(508600001)(6512007)(7416002)(66556008)(6506007)(1076003)(86362001)(38100700002)(33656002)(8936002)(8676002)(26005)(5660300002)(36756003)(4744005)(6486002)(54906003)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?shMDjip6zDxHHhUR5OdRsGXgMFMHRWYs4sZfujZtVozMtzrjzTFPQjyrSIx8?=
+ =?us-ascii?Q?omtSDQRdsTFLJ6Mgu2ug1Uz0h6SknWbu8DNfs8kKIHXd0lJH4IxD243tGA9C?=
+ =?us-ascii?Q?4on2t4MQ+kL6XRVtdcr08oiJUYIUQp4tipOM3sCo7em07I06sow/1Ox8WixA?=
+ =?us-ascii?Q?q6E2Td3wCbKPqw6FxUolKryjva/E85s18fnh7nYGoTl18eiOXm1YHxkSxXuG?=
+ =?us-ascii?Q?GmaZ/ebgLDTtj3Aa3K8tIgWZ0NeQ8LSU1tAAWWuEG0C1hkrmd5Oc1vJ5OHxq?=
+ =?us-ascii?Q?B12MbFmL/1kWrmhCE4WlxmszHKXkzJ4fpFhu8Cg2bCOLJQfLSvXWDlfyLVr8?=
+ =?us-ascii?Q?bqki540ZTeFATnfq2wgPhSS8NHpBD14yJcImYfnOx5KiM0Li4yEVlV5Fv9IE?=
+ =?us-ascii?Q?As4OvwVrxaPjfWzA3kIzAwd7SMT31z2TOhHsM+n+C4LacPRtwGHLW1PJf1NZ?=
+ =?us-ascii?Q?mzDwBC1cc4ehs7pho0BiYBrqUycXMGcIsscYZPpUOU+nVGC7bQqh74mNKewR?=
+ =?us-ascii?Q?vsxC0X5GcSCIhw4fFPuN5fU2RCOgAqsBJoQLgrviRZACjB+K3U72iy3wOdhs?=
+ =?us-ascii?Q?N8C+kjU2bAymJlE5XWF+Um5FRcaZ6POCVo6hfecnryXLdFS9FlAspGNrziO5?=
+ =?us-ascii?Q?kt0krhbNfUhavl3qbMuIzdM3H0rhf+6yuF8az15oKg3kQvCQzkNxkO5b+yaz?=
+ =?us-ascii?Q?kolMo/5mZ0EJNPxq71ZA2pKn6D3gGSpxUZ3uQw3PROJj1x3nWLDimri0/966?=
+ =?us-ascii?Q?UbDck4JTjuaNHqtpmKlL19UlhCn7a2R7BqRSmHuKn7/nRFIyOhLGqNrVVCkE?=
+ =?us-ascii?Q?6/YXoVAz38p8o8d8/SeKvVjX58TwFmMFuHHAoZNuLQTcHm3Z7d1rFz22qP1I?=
+ =?us-ascii?Q?RY+GJNiBjHLJlmtyU71FcLKEiyHHdo0DAt6KzNc538/Re22ZhEeC56Kd8bge?=
+ =?us-ascii?Q?BVppaL7E5wSXf2UqHSgVN37oGpN1GUksBAlK8cbdU1alXDSYCq3aUzQ7RG1u?=
+ =?us-ascii?Q?Pu7LkZUf2N6ajM5ud6T9c6aKXNEBs4qgBzL5VCgXGlciXa9EYhBbdpeGc/sQ?=
+ =?us-ascii?Q?HypMDnmDr35vZcCGnkro56TJLUn2dIq/jEehKJUVHx1oXIGUp8UBpiYMrAmF?=
+ =?us-ascii?Q?GT49cRyNB7ivkpviR6IPL+u1ZBvmM09Ts2k2aaomvFgje3mH2TQ5Y64dePxW?=
+ =?us-ascii?Q?KFNKx43aywyGFxSGVNSxdAdOn5F+dmbnJa4hM5YxmbJkgTKtHkN2j7+3Dcwg?=
+ =?us-ascii?Q?9c3hMi/76nXZbEal5CP8nmGseHAUX0hwpXM632u3E8ObsTuciqkPASfd6uaD?=
+ =?us-ascii?Q?/fZTct4PYQXVfX+4gpLfIs8ltipj5tsDxHVyiZLzDWRFIjj1Mqb9SDmLSKkY?=
+ =?us-ascii?Q?XWi3HLR7+UjHEfUGkPGVWnDgy/0HZHWoeVksytpNzmXSLOP7jZFj3BA3DZip?=
+ =?us-ascii?Q?Kdo9gh7v8rODP8cZfy34t54uZVQAMto9DAj2dqwvBzs3xqo6/ue3k0c7z5nG?=
+ =?us-ascii?Q?uT1bUnZyYkoo+joTvN7JabYbZEzdb96Gvjsf5z9r0kBYlnXHsBbw6iOSHT0d?=
+ =?us-ascii?Q?zU0DcX2WcswaFrAmk/Y=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb2b6e79-f74f-49f0-cb95-08d9baaf5e8c
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 01:01:02.0307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ac5j/fEW5mAA9d0JCPW6WGG1MEYtFnJRc1YLJlObCO0269ZPl958o0fLCYYWvNi+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5336
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Dec 06, 2021 at 11:51:02PM +0100, Thomas Gleixner wrote:
+> This is the third part of [PCI]MSI refactoring which aims to provide the
+> ability of expanding MSI-X vectors after enabling MSI-X.
 
---8323329-157919797-1639011569=:4091490
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+I read through this and didn't have any substantive remarks
 
-On Thu, 9 Dec 2021, Oleksandr wrote:
-> On 08.12.21 01:36, Stefano Stabellini wrote:
-> Hi Stefano
-> 
-> > On Thu, 25 Nov 2021, Oleksandr wrote:
-> > > > > Please note the following:
-> > > > > for V3 arch_xen_unpopulated_init() was moved to init() as was agreed
-> > > > > and gained __init specifier. So the target_resource is initialized
-> > > > > there.
-> > > > > 
-> > > > > With current patch series applied if CONFIG_XEN_UNPOPULATED_ALLOC
-> > > > > is enabled:
-> > > > > 
-> > > > > 1. On Arm, under normal circumstances, the
-> > > > > xen_alloc_unpopulated_pages()
-> > > > > won't be called “before” arch_xen_unpopulated_init(). It will only be
-> > > > > called "before" when either ACPI is in use or something wrong happened
-> > > > > with DT (and we failed to read xen_grant_frames), so we fallback to
-> > > > > xen_xlate_map_ballooned_pages() in
-> > > > > arm/xen/enlighten.c:xen_guest_init(),
-> > > > > please see "arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for
-> > > > > DT"
-> > > > > for details. But in that case, I think, it doesn't matter much whether
-> > > > > xen_alloc_unpopulated_pages() is called "before" of "after"
-> > > > > target_resource
-> > > > > initialization, as we don't have extended regions in place the
-> > > > > target_resource
-> > > > > will remain invalid even after initialization, so
-> > > > > xen_alloc_ballooned_pages()
-> > > > > will be used in both scenarios.
-> > > > > 
-> > > > > 2. On x86, I am not quite sure which modes use unpopulated-alloc
-> > > > > (PVH?),
-> > > > > but it looks like xen_alloc_unpopulated_pages() can (and will) be
-> > > > > called
-> > > > > “before” arch_xen_unpopulated_init().
-> > > > > At least, I see that xen_xlate_map_ballooned_pages() is called in
-> > > > > x86/xen/grant-table.c:xen_pvh_gnttab_setup(). According to the
-> > > > > initcall
-> > > > > levels for both xen_pvh_gnttab_setup() and init() I expect the former
-> > > > > to be called earlier.
-> > > > > If it is true, the sentence in the commit description which mentions
-> > > > > that “behaviour on x86 is not changed” is not precise. I don’t think
-> > > > > it would be correct to fallback to xen_alloc_ballooned_pages() just
-> > > > > because we haven’t initialized target_resource yet (on x86 it is just
-> > > > > assigning it iomem_resource), at least this doesn't look like an
-> > > > > expected
-> > > > > behaviour and unlikely would be welcome.
-> > > > > 
-> > > > > I am wondering whether it would be better to move
-> > > > > arch_xen_unpopulated_init()
-> > > > > to a dedicated init() marked with an appropriate initcall level
-> > > > > (early_initcall?)
-> > > > > to make sure it will always be called *before*
-> > > > > xen_xlate_map_ballooned_pages().
-> > > > > What do you think?
-> > >     ... here (#2). Or I really missed something and there wouldn't be an
-> > > issue?
-> > Yes, I see your point. Yeah, it makes sense to make sure that
-> > drivers/xen/unpopulated-alloc.c:init is executed before
-> > xen_pvh_gnttab_setup.
-> > 
-> > If we move it to early_initcall, then we end up running it before
-> > xen_guest_init on ARM. But that might be fine: it looks like it should
-> > work OK and would also allow us to execute xen_xlate_map_ballooned_pages
-> > with target_resource already set.
-> > 
-> > So I'd say go for it :)
-> 
-> 
-> Thank you for the confirmation! In order to be on the safe side, I would
-> probably leave drivers/xen/unpopulated-alloc.c:init as is, I mean with current
-> subsys initcall level (it expects the extra memory regions to be already
-> filled)
-> and create a separate unpopulated_init() to put arch_xen_unpopulated_init()
-> into. Something like the following:
-> 
-> static int __init unpopulated_init(void)
-> {
->     int ret;
-> 
->     if (!xen_domain())
->         return -ENODEV;
-> 
->     ret = arch_xen_unpopulated_init(&target_resource);
->     if (ret) {
->         pr_err("xen:unpopulated: Cannot initialize target resource\n");
->         target_resource = NULL;
->     }
-> 
->     return ret;
-> }
-> early_initcall(unpopulated_init);
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Sounds good
---8323329-157919797-1639011569=:4091490--
+Jason

@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F1146E49B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CD246E49E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbhLIIx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:53:56 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:38141 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbhLIIxy (ORCPT
+        id S235235AbhLIIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232177AbhLIIyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:53:54 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9D527240002;
-        Thu,  9 Dec 2021 08:50:18 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 09:50:18 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Zeh, Werner" <werner.zeh@siemens.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] x86/kernel/rtc: add sanity check for RTC date and
- time
-Message-ID: <YbHDSubjFrQXpfRk@piout.net>
-References: <20210614110946.15587-1-werner.zeh@siemens.com>
- <20210624081507.15602-1-werner.zeh@siemens.com>
- <YNn6FqAfLwQ/Wwnu@piout.net>
- <AM0PR10MB2580E68ADF9D1AC6804DB2DF9F019@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
- <YN8ebqVR0JYTurDY@piout.net>
- <AM0PR10MB258011D56CF0A2E3BC0449F99F709@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
+        Thu, 9 Dec 2021 03:54:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36EBC061746;
+        Thu,  9 Dec 2021 00:51:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85C74B82361;
+        Thu,  9 Dec 2021 08:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A3C004DD;
+        Thu,  9 Dec 2021 08:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639039871;
+        bh=PFw5JNdpaWY2OuAZ+jMV5B80awe6cfgQIRBi4sl+9qA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cvZfnHgDKCiu3OO4yMcS4Pkp8vqz+JkE8XRat3X7OQN6Ah+KWucrqhkRbqbBpYNCM
+         enrcJME30V+lnDoF7fTJVqfunoRhCavie2MKnnnoXEuieXqNcuTnJ338HN+Jz/f+0m
+         7hPC9nhx3r9XZAuxcGZ+bkMYi5A+oxtyORhpKWsNM07ObAtcMWwoUjnvsrXHc8NPtQ
+         8/BmYB3Z8BbR818mJhIER1m8c4cE+TvdpY+6qe1ZhcIF0jXdl3oZRo0Ba2ZPZiiz52
+         iScZFVXxQFC/4mN3FX8kmJ5rvXxuatvLeuQb0bz6731gYUBxb28ByhZvTAcMHx89Yz
+         LADhKNF/PPokw==
+Date:   Thu, 9 Dec 2021 09:51:07 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Conghui Chen <conghui.chen@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
+        Jie Deng <jie.deng@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: virtio: fix completion handling
+Message-ID: <YbHDe+YLH+NZkrC0@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Conghui Chen <conghui.chen@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
+        Jie Deng <jie.deng@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20211202153215.31796-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ge0jWUKZVg17/s2k"
 Content-Disposition: inline
-In-Reply-To: <AM0PR10MB258011D56CF0A2E3BC0449F99F709@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20211202153215.31796-1-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On 09/12/2021 08:05:10+0000, Zeh, Werner wrote:
-> Hi Alexandre.
-> 
-> Is there anything more I can do for that patch in order to get some process on it?
-> Or why is this patch stuck for a long time?
-> 
+--ge0jWUKZVg17/s2k
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm not the maintainer for that part of the kernel, I expect this to go
-through the x86 tree.
+On Thu, Dec 02, 2021 at 04:32:14PM +0100, Vincent Whitchurch wrote:
+> The driver currently assumes that the notify callback is only received
+> when the device is done with all the queued buffers.
+>=20
+> However, this is not true, since the notify callback could be called
+> without any of the queued buffers being completed (for example, with
+> virtio-pci and shared interrupts) or with only some of the buffers being
+> completed (since the driver makes them available to the device in
+> multiple separate virtqueue_add_sgs() calls).
+>=20
+> This can lead to incorrect data on the I2C bus or memory corruption in
+> the guest if the device operates on buffers which are have been freed by
+> the driver.  (The WARN_ON in the driver is also triggered.)
+>=20
+>  BUG kmalloc-128 (Tainted: G        W        ): Poison overwritten
+>  First byte 0x0 instead of 0x6b
+>  Allocated in i2cdev_ioctl_rdwr+0x9d/0x1de age=3D243 cpu=3D0 pid=3D28
+>  	memdup_user+0x2e/0xbd
+>  	i2cdev_ioctl_rdwr+0x9d/0x1de
+>  	i2cdev_ioctl+0x247/0x2ed
+>  	vfs_ioctl+0x21/0x30
+>  	sys_ioctl+0xb18/0xb41
+>  Freed in i2cdev_ioctl_rdwr+0x1bb/0x1de age=3D68 cpu=3D0 pid=3D28
+>  	kfree+0x1bd/0x1cc
+>  	i2cdev_ioctl_rdwr+0x1bb/0x1de
+>  	i2cdev_ioctl+0x247/0x2ed
+>  	vfs_ioctl+0x21/0x30
+>  	sys_ioctl+0xb18/0xb41
+>=20
+> Fix this by calling virtio_get_buf() from the notify handler like other
+> virtio drivers and by actually waiting for all the buffers to be
+> completed.
+>=20
+> Fixes: 3cfc88380413d20f ("i2c: virtio: add a virtio i2c frontend driver")
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-> Thanks
-> Werner
-> 
-> > -----Original Message-----
-> > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Sent: Friday, July 2, 2021 4:11 PM
-> > To: Zeh, Werner (DI MC MTS SP HW 1) <werner.zeh@siemens.com>
-> > Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de; x86@kernel.org;
-> > a.zummo@towertech.it; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 1/1] x86/kernel/rtc: add sanity check for RTC date and
-> > time
-> >
-> > On 30/06/2021 06:25:44+0000, Zeh, Werner wrote:
-> > > Hi Alexandre
-> > >
-> > > > Hello,
-> > > >
-> > > > On 24/06/2021 10:15:07+0200, Werner Zeh wrote:
-> > > > > The timekeeper is synchronized with the CMOS RTC when it is
-> > initialized.
-> > > > > If the RTC buffering is bad (not buffered at all, empty battery)
-> > > > > the RTC registers can contain random data. In order to avoid date
-> > > > > and time being completely rubbish check the sanity of the
-> > > > > registers before calling mktime64. If the values are not valid,
-> > > > > set tv_sec to 0 so that at least the starting time is valid.
-> > > > >
-> > > > > Signed-off-by: Werner Zeh <werner.zeh@siemens.com>
-> > > > > ---
-> > > > > [resent due to wrong lkml address] [added RTC maintainers to the
-> > > > > recipients] This change introduces the same validity check that is
-> > > > > already done in drivers/rtc/interface.c.
-> > > > > If it is not done here, the timekeeper can be set up wrongly in
-> > > > > the first run and won't be corrected once the RTC driver is
-> > > > > started because the validity check in the RTC driver drops the
-> > > > > time and date due to invalid entries.
-> > > > >
-> > > > >  arch/x86/kernel/rtc.c | 12 +++++++++++-
-> > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c index
-> > > > > 586f718b8e95..f4af7b18c6c0 100644
-> > > > > --- a/arch/x86/kernel/rtc.c
-> > > > > +++ b/arch/x86/kernel/rtc.c
-> > > > > @@ -9,6 +9,7 @@
-> > > > >  #include <linux/export.h>
-> > > > >  #include <linux/pnp.h>
-> > > > >  #include <linux/of.h>
-> > > > > +#include <linux/rtc.h>
-> > > > >
-> > > > >  #include <asm/vsyscall.h>
-> > > > >  #include <asm/x86_init.h>
-> > > > > @@ -64,6 +65,7 @@ void mach_get_cmos_time(struct timespec64
-> > *now)
-> > > > {
-> > > > >         unsigned int status, year, mon, day, hour, min, sec, century = 0;
-> > > > >         unsigned long flags;
-> > > > > +       struct rtc_time tm = {0};
-> > > > >
-> > > > >         /*
-> > > > >          * If pm_trace abused the RTC as storage, set the timespec to 0,
-> > > > > @@
-> > > > > -118,7 +120,15 @@ void mach_get_cmos_time(struct timespec64
-> > *now)
-> > > > >         } else
-> > > > >                 year += CMOS_YEARS_OFFS;
-> > > > >
-> > > > > -       now->tv_sec = mktime64(year, mon, day, hour, min, sec);
-> > > > > +       tm.tm_sec = sec;
-> > > > > +       tm.tm_min = min;
-> > > > > +       tm.tm_hour = hour;
-> > > > > +       tm.tm_mday = day;
-> > > > > +       tm.tm_mon = mon;
-> > > > > +       tm.tm_year = year;
-> > > > > +       now->tv_sec = 0;
-> > > > > +       if (rtc_valid_tm(&tm) == 0)
-> > > >
-> > > > Doesn't that make the x86 architecture depend on CONFIG_RTC_LIB?
-> > > >
-> > > CONFIG_RTC_LIB is already default enabled for x86, see arch/x86/Kconfig.
-> > > Do you have any other dependencies in mind I have overseen?
-> > >
-> >
-> > Nope, everything is fine, it would be better if we could get rid of
-> > mach_get_cmos_time but I don't have any clue as to why this is necessary.
-> >
-> >
-> > --
-> > Alexandre Belloni, co-owner and COO, Bootlin Embedded Linux and Kernel
-> > engineering
-> > https://bootlin.com/
-> 
+Applied to for-current, thanks!
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+--ge0jWUKZVg17/s2k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxw3sACgkQFA3kzBSg
+KbZ56Q//SQjmtTthjdX/3a2BmHjSwbNESk51bmpkZ9Hyfy+niTnbTYs8EK9ED0jq
+T4Z/al1dGBVnqnfs9m28ZNv6YuoxMqBlPfXWFQcpuCbVTMvcgYGW5MR1kYv0txbu
+GM/pTQYmdIS6sTawSfHwyHKl5oAKgFWaTL3j1soih6aeyZ4ha6cfoL8dlt62hwmR
+LzSsMzuocxUws0TBZpaGkzMFsd5eFC7+wgQBpn3/rUxCp3j2IqBc5IS/QF8A8Lft
+0VxOudfwAFdY/hplnYEV3pObTyyAl5Y/8zAGMUF3l19MhLPjT0g5S0yNJCq2o/m/
+yVUqmDg4Il1kjQolTANxLEnlDdbtePPKGwPbY1ldhj2Ry18QXFzmsfZqQB8xwG9I
+YrxMI9oh3chLtqfgyWofYOkHGFMmYvhSO8yFOHT02jsU47k4My0eoOS2i4KyIjfM
+L2Ifug4+x6DdgdAHd3ygdEWfEpi6/5ozGFn4WO6uQS7vnIMtDPjZDABUnwra1guF
+twolE4AADmKiDg+n5AKnY2lQ+Z1eJf46H4QzHK0bmhWJHoF7NiXRu65ynZug+m5x
+XpfBzx3hiuSB1ZdWEzeTgxdWnDgZ8fwsDfVlxWMmzpRVC6sdSDLtG841gWgPVlWS
+hP1cWvVUhsa9/sEmI/iZpUA+FntKNiSuJFR7Xlq/kG1/Jig68qA=
+=pFLx
+-----END PGP SIGNATURE-----
+
+--ge0jWUKZVg17/s2k--

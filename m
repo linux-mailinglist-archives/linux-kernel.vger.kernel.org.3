@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED81B46F647
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD45146F64A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbhLIWBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:01:08 -0500
-Received: from relay028.a.hostedemail.com ([64.99.140.28]:31993 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231868AbhLIWBH (ORCPT
+        id S232985AbhLIWBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:01:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25547 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232950AbhLIWBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:01:07 -0500
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id 60AD2607F3;
-        Thu,  9 Dec 2021 21:57:31 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 15E586000E;
-        Thu,  9 Dec 2021 21:57:21 +0000 (UTC)
-Message-ID: <4208b3d08a677601c73889f78dd25e5c9f056a86.camel@perches.com>
-Subject: Re: [PATCH] scsi: elx: efct: Avoid a useless memset
-From:   Joe Perches <joe@perches.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de,
-        dwagner@suse.de
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Date:   Thu, 09 Dec 2021 13:57:21 -0800
-In-Reply-To: <009cddb72f4a1b6d1744d5a8ab1955eb93509e41.1639086550.git.christophe.jaillet@wanadoo.fr>
-References: <009cddb72f4a1b6d1744d5a8ab1955eb93509e41.1639086550.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 9 Dec 2021 17:01:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639087065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nq1sf+kzjWsZVde2j+/s8Puw8BjH1Oy3rw3I3uvxMHo=;
+        b=KIpH8bqufDGwARWWONckb30XpM0WL+UW8Vw/minAEGe+ZNuDi4n/+zEfnKEG2OQbmGVbHH
+        AeXEhTgYFXNY9pL+ms+r3aPKABum2ek3pt+24iGGkZc7FxKWLWw3Fuww3nKu1Hl5qYJqjc
+        8LQz1pru+92mgbRA3RvGlunWVeNKHnU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-goLxjqsmOXuXZtknWwaRCA-1; Thu, 09 Dec 2021 16:57:42 -0500
+X-MC-Unique: goLxjqsmOXuXZtknWwaRCA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A8D3760C0;
+        Thu,  9 Dec 2021 21:57:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB9EB1017E27;
+        Thu,  9 Dec 2021 21:57:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com>
+References: <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com> <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk> <163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-afs@lists.infradead.org,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/67] fscache: Implement a hash function
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.04
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 15E586000E
-X-Stat-Signature: qswf1qmnu8z4by5p3d9f3e3n8894okrx
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/OSLtqe4qK/nd1NuH+QXDkDyHLdhak/ds=
-X-HE-Tag: 1639087041-129798
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <159179.1639087053.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 09 Dec 2021 21:57:33 +0000
+Message-ID: <159180.1639087053@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 22:51 +0100, Christophe JAILLET wrote:
-> 'io->sgl' is kzalloced just a few lines above. There is no need to memset
-> it another time.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Better to use kcalloc as well and delete the memset
+> > Implement a function to generate hashes.  It needs to be stable over t=
+ime
+> > and endianness-independent as the hashes will appear on disk in future
+> > patches.
+> =
 
-> diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-[]
-> @@ -62,7 +62,6 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
->  			return NULL;
->  		}
->  
-> -		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
->  		io->sgl_allocated = num_sgl;
->  		io->sgl_count = 0;
->  
+> I'm not actually seeing this being endianness-independent.
+> =
 
----
- drivers/scsi/elx/efct/efct_io.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Is the input just regular 32-bit data in native word order? Because
+> then it's not endianness-independent, it's purely that there *is* no
+> endianness to the data at all and it is purely native data.
+>
+> So the code may be correct, but the explanation is confusing. There is
+> absolutely nothing here that is about endianness.
 
-diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-index 71e21655916a9..109483f3e3dfd 100644
---- a/drivers/scsi/elx/efct/efct_io.c
-+++ b/drivers/scsi/elx/efct/efct_io.c
-@@ -56,13 +56,12 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
- 		}
- 
- 		/* Allocate SGL */
--		io->sgl = kzalloc(sizeof(*io->sgl) * num_sgl, GFP_KERNEL);
-+		io->sgl = kcalloc(num_sgl, sizeof(*io->sgl), GFP_KERNEL);
- 		if (!io->sgl) {
- 			efct_io_pool_free(io_pool);
- 			return NULL;
- 		}
- 
--		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
- 		io->sgl_allocated = num_sgl;
- 		io->sgl_count = 0;
- 
+What I'm trying to get at is that the hash needs to be consistent, no matt=
+er
+the endianness of the cpu, for any particular input blob.  The hashing
+function shouldn't need to know the structure of the input blob.  In the c=
+ase
+of the volume key, it's a padded printable string; in the case of the cook=
+ie
+key, it's probably some sort of structured blob, quite possibly an actual
+array of be32.
 
+The reason it needs to be consistent is that people seem to like seeding t=
+he
+cache by tarring up the cache from one machine and untarring it on another=
+.
+
+And looking again at my code:
+
+unsigned int fscache_hash(unsigned int salt, unsigned int *data, unsigned =
+int n)
+{
+	unsigned int a, x =3D 0, y =3D salt;
+
+	for (; n; n--) {
+		a =3D *data++;   <<<<<<<
+		HASH_MIX(x, y, a);
+	}
+	return fold_hash(x, y);
+}
+
+The marked line should probably use something like le/be32_to_cpu().
+
+I also need to fix 9p to canonicalise its cookie key.
+
+Thanks for catching that,
+David
 

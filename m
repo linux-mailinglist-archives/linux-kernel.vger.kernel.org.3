@@ -2,145 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FE446EBEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A0346EBF4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240105AbhLIPmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240327AbhLIPmd (ORCPT
+        id S234915AbhLIPnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:43:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52631 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232764AbhLIPni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:42:33 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43353C0698CB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:38:54 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so6323959pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KRgjVkKi95KRmYQZO51YZ/hyLvmjeSEoU+P1R5ObJmQ=;
-        b=kUC7Y0nX0pDX7m7Yt+7ygQiUU1wbPEAsZUiq3ghIfr9GnZERJrj8JmpZI9/9MBFygR
-         oqQQ4aa14uG/BQ3qUVxC/3O67gutxuPCZ8AXLBe2JRnCVw11mgsDHO9CJrzlGP06ePM5
-         n4kj6AuJFu5I4tMfGdC1jCDDBSBhTq35e5ueaZxfYyznLp58poXJ3iNGOZMt0OYlS1RD
-         60ftn8MwxBkTFgPap25Qf0G+PBMrCGtWycVARHAprC+fF+9Ocg2nVlixquTNdMd2l1O+
-         yPe+uUCWeNU5R2UM2qDbeLZwmpkeIeKF+TgnZ1ycecQWaV5ZGRd9+W6Kt8/e734QPe7s
-         6gDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KRgjVkKi95KRmYQZO51YZ/hyLvmjeSEoU+P1R5ObJmQ=;
-        b=QG2DviW9LdrGApRcJKlnX5JDt/itsVfgNpHnZ5xTITBI620fPA/ooauAxv3KQMwvlu
-         KOkqQqQkERNuEFLPT/uy9vwSU6v+MX6J3KbJvvLj/9g+IOqCPKTwAWalNih4XQBVvyTZ
-         Kl0g4YE4pKqX2PGyuyBzNW5U3pQxAbogFpCPZ90ybMPIaZc5UbT0s2kgkStn2d0nGbms
-         tMsPZ4IA+VStLFHgQXr6nhpAjYBJXLRO7+Z5qP5DbwQg6dfbqAx46dEgdmQwBPPDmQOK
-         xFJSl03MBzIT5e18TJyHSrCtAc/Id40uIyOfONM/Vb4PKQpMy/6c/flaRIsbm6mNMK02
-         2ovQ==
-X-Gm-Message-State: AOAM530ukKU4GSa5utdZah3GlCccF/OKqItTCOdALY49WS0WyqK0al+B
-        P4nVZy8l9xvM5Ci/VK8lyOXCCk2oM/dc8w==
-X-Google-Smtp-Source: ABdhPJy6DgaR3sDOg/QQ8clnEdqj4oJcqzO+5eq9dxexRlzDKEys180588yu5HFJDIiWMd0OOCR3IQ==
-X-Received: by 2002:a17:903:22c6:b0:141:fac1:b722 with SMTP id y6-20020a17090322c600b00141fac1b722mr69560300plg.23.1639064333371;
-        Thu, 09 Dec 2021 07:38:53 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c3sm112265pfv.67.2021.12.09.07.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 07:38:52 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:38:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH 4/6] KVM: SVM: fix races in the AVIC incomplete IPI
- delivery to vCPUs
-Message-ID: <YbIjCUAECOyIbsYQ@google.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
- <20211209115440.394441-5-mlevitsk@redhat.com>
+        Thu, 9 Dec 2021 10:43:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639064404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QT9+Eto76AQyhw6YgaOC53MIX23XQDyrz/FUT+QNKSA=;
+        b=dYjylCBIokIyQKxgJ1aSna9N1EbyiHGqWDSQHiIv2r+S3ugqP70v3LYBWJh0+D8FqJ/ln/
+        b0RI2zTGOiDY7Z//JWGZduwFgDaF8C0DvtvPqVkSrl1Zh9IGp8nAXWu4RDvqICPaJ0Ohd5
+        zAgP906+XSGnxNUc4OUq8u0RdmipaEk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-aqBLroqWND6umz035CDTRg-1; Thu, 09 Dec 2021 10:40:00 -0500
+X-MC-Unique: aqBLroqWND6umz035CDTRg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6AE9A100CCCB;
+        Thu,  9 Dec 2021 15:39:58 +0000 (UTC)
+Received: from [10.22.10.109] (unknown [10.22.10.109])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE0E04ABB5;
+        Thu,  9 Dec 2021 15:39:55 +0000 (UTC)
+Message-ID: <f74efd4a-eee8-3927-f975-92b4c457cb9c@redhat.com>
+Date:   Thu, 9 Dec 2021 10:39:55 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209115440.394441-5-mlevitsk@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 0/7] cgroup/cpuset: Add new cpuset partition type &
+ empty effecitve cpus
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20211205183220.818872-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211205183220.818872-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021, Maxim Levitsky wrote:
-> If the target vCPU has AVIC inhibited while the source vCPU isn't,
-> we need to set irr_pending, for the target to notice the interrupt.
-> Do it always to be safe, the same as in svm_deliver_avic_intr.
-> 
-> Also if the target has AVIC inhibited, the same kind of races
-> that happen in svm_deliver_avic_intr can happen here as well,
-> so apply the same approach of kicking the target vCPUs.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 8c1b934bfa9b..bdfc37caa64a 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -304,8 +304,17 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
->  		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
->  					GET_APIC_DEST_FIELD(icrh),
-> -					icrl & APIC_DEST_MASK))
-> -			kvm_vcpu_wake_up(vcpu);
-> +					icrl & APIC_DEST_MASK)) {
+On 12/5/21 13:32, Waiman Long wrote:
+> v9:
+>   - Add a new patch 1 to remove the child cpuset restriction on parent's
+>     "cpuset.cpus".
+>   - Relax initial root partition entry limitation to allow cpuset.cpus to
+>     overlap that of parent's.
+>   - An "isolated invalid" displayed type is added to
+>     cpuset.cpus.partition.
+>   - Resetting partition root to "member" will leave child partition root
+>     as invalid.
+>   - Update documentation and test accordingly.
+>
+> v8:
+>   - Reorganize the patch series and rationalize the features and
+>     constraints of a partition.
+>   - Update patch descriptions and documentation accordingly.
+>
+> v7:
+>   - Simplify the documentation patch (patch 5) as suggested by Tejun.
+>   - Fix a typo in patch 2 and improper commit log in patch 3.
+>
+> This patchset includes one bug fix and four enhancements to the cpuset v2 code.
+>
+>   Patch 1: Allow parent to set "cpuset.cpus" that may not be a superset
+>   of children's "cpuset.cpus" for default hierarchy.
+>
+>   Patch 2: Enable partition with no task to have empty cpuset.cpus.effective.
+>
+>   Patch 3: Refining the features and constraints of a cpuset partition
+>   clarifying what changes are allowed.
+>
+>   Patch 4: Add a new partition state "isolated" to create a partition
+>   root without load balancing. This is for handling intermitten workloads
+>   that have a strict low latency requirement.
+>
+>   Patch 5: Enable the "cpuset.cpus.partition" file to show the reason
+>   that causes invalid partition like "root invalid (No cpu available
+>   due to hotplug)".
+>
+> Patch 6 updates the cgroup-v2.rst file accordingly. Patch 7 adds a new
+> cpuset test to test the new cpuset partition code.
+>
+> Waiman Long (7):
+>    cgroup/cpuset: Don't let child cpusets restrict parent in default
+>      hierarchy
+>    cgroup/cpuset: Allow no-task partition to have empty
+>      cpuset.cpus.effective
+>    cgroup/cpuset: Refining features and constraints of a partition
+>    cgroup/cpuset: Add a new isolated cpus.partition type
+>    cgroup/cpuset: Show invalid partition reason string
+>    cgroup/cpuset: Update description of cpuset.cpus.partition in
+>      cgroup-v2.rst
+>    kselftest/cgroup: Add cpuset v2 partition root state test
+>
+>   Documentation/admin-guide/cgroup-v2.rst       | 168 +++--
+>   kernel/cgroup/cpuset.c                        | 440 +++++++-----
+>   tools/testing/selftests/cgroup/Makefile       |   5 +-
+>   .../selftests/cgroup/test_cpuset_prs.sh       | 667 ++++++++++++++++++
+>   tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
+>   5 files changed, 1142 insertions(+), 225 deletions(-)
+>   create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>   create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
+>
+Hi,
 
-What about leveraging svm_deliver_avic_intr() to handle this so that all the
-logic to handle this mess is more or less contained in one location?  And if the
-vCPU has made its way back to the guest with APICv=1, we'd avoid an unnecessary
-kick.
+Is this patch series good enough or is there other changes you would 
+still like to make in this series?
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 26ed5325c593..cf9f5caa6e1b 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -304,8 +304,12 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
-        kvm_for_each_vcpu(i, vcpu, kvm) {
-                if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
-                                        GET_APIC_DEST_FIELD(icrh),
--                                       icrl & APIC_DEST_MASK))
--                       kvm_vcpu_wake_up(vcpu);
-+                                       icrl & APIC_DEST_MASK)) {
-+                       if (svm_deliver_avic_intr(vcpu, -1) {
-+                               vcpu->arch.apic->irr_pending = true;
-+                               kvm_make_request(KVM_REQ_EVENT, vcpu);
-+                       }
-+               }
-        }
- }
- 
-
-And change svm_deliver_avic_intr() to ignore a negative vector, probably with a
-comment saying that means the vector has already been set in the IRR.
-
-	if (vec > 0) {
-		kvm_lapic_set_irr(vec, vcpu->arch.apic);
-
-		/*
-		* Pairs with the smp_mb_*() after setting vcpu->guest_mode in
-		* vcpu_enter_guest() to ensure the write to the vIRR is ordered before
-		* the read of guest_mode, which guarantees that either VMRUN will see
-		* and process the new vIRR entry, or that the below code will signal
-		* the doorbell if the vCPU is already running in the guest.
-		*/
-		smp_mb__after_atomic();
-	}
+Cheers,
+Longman
 

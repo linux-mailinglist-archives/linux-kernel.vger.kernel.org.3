@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6438C46F16A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82ACF46F15E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241792AbhLIRSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:18:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:29899 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239204AbhLIRSg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:18:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236894401"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="236894401"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:12:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="462215498"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:12:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvMxT-004BEu-Hb;
-        Thu, 09 Dec 2021 19:11:51 +0200
-Date:   Thu, 9 Dec 2021 19:11:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S239611AbhLIRQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:16:30 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:39784 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234694AbhLIRQ2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:16:28 -0500
+Received: by mail-ot1-f48.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso6870609ots.6;
+        Thu, 09 Dec 2021 09:12:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4Bi3Hs0dz1zLMbmU20z1hBT7554DenEcOj+Mm3ASJ9o=;
+        b=2LmhSlTHLx57M6P3Bchg8GVM74wbEmFz9zv9gf6/GCDgnc5f+vEfAoUGCHx/k4IZdg
+         7y6MZpxEdPODinZUE4mlQ3YFNw8OkMTF3UuqyEaHk6dNUiGMafa9FZsdgP9LFOF1XiNS
+         uuklLem0Ij/U4v2bD1V1ZIMpnIjXaQTEg3JFoi0bKAxcta0zp4+ilx4dkuCCgCOCpuo/
+         ak3DYKCnkdQvebVtLfeVXx2BmgFPoz5nLCNuIDQAsNf5kLVoaBOs9N6V4ABzjqRjafv8
+         w27wE9uaMrSSkmG7fKMfU4KcHyt1IM3onCNilK/Cma/AdVu7e+02zlV5a39Z+f0wSMcp
+         342Q==
+X-Gm-Message-State: AOAM5306UFiSzWD0wkodx27ehecs1U9VZG/Kr08/B8v/kAu/WDOkGOHG
+        gVibxEV+NLB1lm7fP+cD4A==
+X-Google-Smtp-Source: ABdhPJwOWbvOoLjUB66dcX6BdXi20kQtW84xHwSzlBDrIMbpmbcILSEgsrRy5KzEJICOytZ0YWU7Gg==
+X-Received: by 2002:a05:6830:310f:: with SMTP id b15mr6391242ots.31.1639069974305;
+        Thu, 09 Dec 2021 09:12:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j5sm67192oou.23.2021.12.09.09.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 09:12:53 -0800 (PST)
+Received: (nullmailer pid 3101528 invoked by uid 1000);
+        Thu, 09 Dec 2021 17:12:52 -0000
+Date:   Thu, 9 Dec 2021 11:12:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v3 1/1] pinctrl: Sort Kconfig and Makefile entries
- alphabetically
-Message-ID: <YbI411MeojRNlc2+@smile.fi.intel.com>
-References: <20211209113456.33977-1-andriy.shevchenko@linux.intel.com>
- <YbI2Xb7gBfN4Kyid@smile.fi.intel.com>
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [PATCH 1/4] dt-bindings: arm: apple: Add t6000/t6001 MacBook Pro
+ 14/16" compatibles
+Message-ID: <YbI5FB3n2HHwTj3A@robh.at.kernel.org>
+References: <20211209051001.70235-1-marcan@marcan.st>
+ <20211209051001.70235-2-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbI2Xb7gBfN4Kyid@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211209051001.70235-2-marcan@marcan.st>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 07:01:18PM +0200, Andy Shevchenko wrote:
-> On Thu, Dec 09, 2021 at 01:34:56PM +0200, Andy Shevchenko wrote:
-
-...
-
-> > v3: fixed more grammar issues in AMD text
+On Thu, 09 Dec 2021 14:09:58 +0900, Hector Martin wrote:
+> This adds the initial apple,t6000 platforms:
 > 
-> I have noticed that you applied v2, thanks!
-> Do you want me to sent a followup that fixes AMD help text?
+> - apple,j314s - MacBook Pro (14-inch, M1 Pro, 2021)
+> - apple,j316s - MacBook Pro (16-inch, M1 Pro, 2021)
+> 
+> And the initial apple,t6001 platforms:
+> 
+> - apple,j314c - MacBook Pro (14-inch, M1 Max, 2021)
+> - apple,j316c - MacBook Pro (16-inch, M1 Max, 2021)
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../devicetree/bindings/arm/apple.yaml        | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
 
-I sent a follow up, do what you think is better (reapply v3 or
-the mentioned follow up), thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Acked-by: Rob Herring <robh@kernel.org>

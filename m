@@ -2,154 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B492146E8F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BA746E8F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237724AbhLINU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:20:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:56700 "EHLO foss.arm.com"
+        id S237769AbhLINVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:21:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:56716 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233480AbhLINU5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:20:57 -0500
+        id S233355AbhLINVP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 08:21:15 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD511ED1;
-        Thu,  9 Dec 2021 05:17:23 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DC1E3F5A1;
-        Thu,  9 Dec 2021 05:17:22 -0800 (PST)
-Message-ID: <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
-Date:   Thu, 9 Dec 2021 13:17:19 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D345811B3;
+        Thu,  9 Dec 2021 05:17:37 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.64.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DD8E3F5A1;
+        Thu,  9 Dec 2021 05:17:36 -0800 (PST)
+Date:   Thu, 9 Dec 2021 13:17:33 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     will@kernel.org, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
+        keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org
+Subject: Re: [RFC][PATCH 2/5] refcount: Use atomic_*_ofl()
+Message-ID: <YbIB7aJU5ngCcaNj@FVFF77S0Q05N>
+References: <20211208183655.251963904@infradead.org>
+ <20211208183906.468934357@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] iommu/iova: wait 'fq_timer' handler to finish before
- destroying 'fq'
-Content-Language: en-GB
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, joro@8bytes.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     yaohongbo@huawei.com, huawei.libin@huawei.com
-References: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208183906.468934357@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry I missed this before...
+On Wed, Dec 08, 2021 at 07:36:57PM +0100, Peter Zijlstra wrote:
+> Use the shiny new atomic_*_ofl() functions in order to have better
+> code-gen.
+> 
+> Notably refcount_inc() case no longer distinguishes between
+> inc-from-zero and inc-negative in the fast path, this improves
+> code-gen:
+> 
+>     4b88:       b8 01 00 00 00          mov    $0x1,%eax
+>     4b8d:       f0 0f c1 43 28          lock xadd %eax,0x28(%rbx)
+>     4b92:       85 c0                   test   %eax,%eax
+>     4b94:       74 1b                   je     4bb1 <alloc_perf_context+0xf1>
+>     4b96:       8d 50 01                lea    0x1(%rax),%edx
+>     4b99:       09 c2                   or     %eax,%edx
+>     4b9b:       78 20                   js     4bbd <alloc_perf_context+0xfd>
+> 
+> to:
+> 
+>     4768:       b8 01 00 00 00          mov    $0x1,%eax
+>     476d:       f0 0f c1 43 28          lock xadd %eax,0x28(%rbx)
+>     4772:       85 c0                   test   %eax,%eax
+>     4774:       7e 14                   jle    478a <alloc_perf_context+0xea>
 
-On 2019-07-27 10:21, Xiongfeng Wang wrote:
-> Fix following crash that occurs when 'fq_flush_timeout()' access
-> 'fq->lock' while 'iovad->fq' has been cleared. This happens when the
-> 'fq_timer' handler is being executed and we call
-> 'free_iova_flush_queue()'. When the timer handler is being executed,
-> its pending state is cleared and it is detached. This patch use
-> 'del_timer_sync()' to wait for the timer handler 'fq_flush_timeout()' to
-> finish before destroying the flush queue.
+For comparison, I generated the same for arm64 below with kernel.org crosstool
+GCC 11.1.0 and defconfig.
 
-So if I understand correctly, you shut down the device - which naturally 
-frees some DMA mappings into the FQ - then hotplug it out, such that 
-tearing down its group and default domain can end up racing with the 
-timeout firing on a different CPU? It would help if the commit message 
-actually explained that - I've just reverse-engineered it from the given 
-symptom - rather than focusing on details that aren't really important. 
-fq->lock is hardly significant, since *any* access to the FQ while it's 
-being destroyed is fundamentally unsound. I also spent way too long 
-trying to understand the significance of the full stack trace below 
-before realising that it is in fact just irrelevant - there's only one 
-way fq_flush_timeout() ever gets called, and it's the obvious one.
+For arm64 there's an existing sub-optimiality for inc/dec where the register
+for `1` or `-1` gets generated with a `MOV;MOV` chain or `MOV;NEG` chain rather
+than a single `MOV` in either case. I think taht's due to the way we build
+LSE/LL-SC variants of add() and build a common inc() atop, and the compiler
+just loses the opportunity to constant-fold. I'll take a look at how to make
+that neater.
 
-The fix itself seems reasonable - the kerneldoc for del_timer_sync() is 
-slightly scary, but since free_iova_flush_queue() doesn't touch any of 
-the locks and definitely shouldn't run in IRQ context I believe we're OK.
+Regardless, the code goes from:
 
-This will affect my IOVA refactoring series a little, so I'm happy to 
-help improve the writeup if you like - provided that my understanding is 
-actually correct - and include it in a v2 of that.
+    51f4:       52800024        mov     w4, #0x1                        // #1
+    ...
+    5224:       2a0403e1        mov     w1, w4
+    5228:       b8210001        ldadd   w1, w1, [x0]
+    522c:       34000261        cbz     w1, 5278 <alloc_perf_context+0xf8>
+    5230:       11000422        add     w2, w1, #0x1
+    5234:       2a010041        orr     w1, w2, w1
+    5238:       37f80181        tbnz    w1, #31, 5268 <alloc_perf_context+0xe8>
+
+to:
+
+    40e8:       52800024        mov     w4, #0x1                        // #1
+    ...
+    4118:       2a0403e1        mov     w1, w4
+    411c:       b8e10001        ldaddal w1, w1, [x0]
+    4120:       7100003f        cmp     w1, #0x0
+    4124:       5400018d        b.le    4154 <alloc_perf_context+0xe0>
+
+> without sacrificing on functionality; the only thing that suffers is
+> the reported error condition, which might now 'spuriously' report
+> 'saturated' instead of 'inc-from-zero'.
+> 
+> refcount_dec_and_test() is also improved:
+> 
+>     aa40:       b8 ff ff ff ff          mov    $0xffffffff,%eax
+>     aa45:       f0 0f c1 07             lock xadd %eax,(%rdi)
+>     aa49:       83 f8 01                cmp    $0x1,%eax
+>     aa4c:       74 05                   je     aa53 <ring_buffer_put+0x13>
+>     aa4e:       85 c0                   test   %eax,%eax
+>     aa50:       7e 1e                   jle    aa70 <ring_buffer_put+0x30>
+>     aa52:       c3                      ret
+> 
+> to:
+> 
+>     a980:       b8 ff ff ff ff          mov    $0xffffffff,%eax
+>     a985:       f0 0f c1 07             lock xadd %eax,(%rdi)
+>     a989:       83 e8 01                sub    $0x1,%eax
+>     a98c:       78 20                   js     a9ae <ring_buffer_put+0x2e>
+>     a98e:       74 01                   je     a991 <ring_buffer_put+0x11>
+>     a990:       c3                      ret
+
+For arm64 (with your fixlet applied) that goes from:
+
+    c42c:       52800021        mov     w1, #0x1                        // #1
+    c430:       4b0103e1        neg     w1, w1
+    c434:       b8610001        ldaddl  w1, w1, [x0]
+    c438:       7100043f        cmp     w1, #0x1
+    c43c:       54000140        b.eq    c464 <ring_buffer_put+0x50>  // b.none
+    c440:       7100003f        cmp     w1, #0x0
+    c444:       5400028d        b.le    c494 <ring_buffer_put+0x80>
+
+to:
+
+    c3dc:       52800021        mov     w1, #0x1                        // #1
+    c3e0:       4b0103e1        neg     w1, w1
+    c3e4:       b8e10002        ldaddal w1, w2, [x0]
+    c3e8:       0b020021        add     w1, w1, w2
+    c3ec:       7100003f        cmp     w1, #0x0
+    c3f0:       5400012b        b.lt    c414 <ring_buffer_put+0x50>  // b.tstop
+    c3f4:       540001a0        b.eq    c428 <ring_buffer_put+0x64>  // b.none
+
+I think the add here is due to  the change in your fixlet:
+
+-       if (unlikely(old <= 1))                                                                                                                                                                             
++       if (unlikely(old - 1 <= 0)) 
+
+> XXX atomic_dec_and_test_ofl() is strictly stronger ordered than
+> refcount_dec_and_test() is defined -- Power and Arrghh64 ?
+
+I'll leave the ordering to Will.
 
 Thanks,
-Robin.
+Mark.
 
-> [ 9052.361840] Unable to handle kernel paging request at virtual address 0000a02fd6c66008
-> [ 9052.361843] Mem abort info:
-> [ 9052.361845]   ESR = 0x96000004
-> [ 9052.361847]   Exception class = DABT (current EL), IL = 32 bits
-> [ 9052.361849]   SET = 0, FnV = 0
-> [ 9052.361850]   EA = 0, S1PTW = 0
-> [ 9052.361852] Data abort info:
-> [ 9052.361853]   ISV = 0, ISS = 0x00000004
-> [ 9052.361855]   CM = 0, WnR = 0
-> [ 9052.361860] user pgtable: 4k pages, 48-bit VAs, pgdp = 000000009b665b91
-> [ 9052.361863] [0000a02fd6c66008] pgd=0000000000000000
-> [ 9052.361870] Internal error: Oops: 96000004 [#1] SMP
-> [ 9052.361873] Process rmmod (pid: 51122, stack limit = 0x000000003f5524f7)
-> [ 9052.361881] CPU: 69 PID: 51122 Comm: rmmod Kdump: loaded Tainted: G           OE     4.19.36-vhulk1906.3.0.h356.eulerosv2r8.aarch64 #1
-> [ 9052.361882] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 0.81 07/10/2019
-> [ 9052.361885] pstate: 80400089 (Nzcv daIf +PAN -UAO)
-> [ 9052.361902] pc : fq_flush_timeout+0x9c/0x110
-> [ 9052.361904] lr :           (null)
-> [ 9052.361906] sp : ffff00000965bd80
-> [ 9052.361907] x29: ffff00000965bd80 x28: 0000000000000202
-> [ 9052.361912] x27: 0000000000000000 x26: 0000000000000053
-> [ 9052.361915] x25: ffffa026ed805008 x24: ffff000009119810
-> [ 9052.361919] x23: ffff00000911b938 x22: ffff00000911bc04
-> [ 9052.361922] x21: ffffa026ed804f28 x20: 0000a02fd6c66008
-> [ 9052.361926] x19: 0000a02fd6c64000 x18: ffff000009117000
-> [ 9052.361929] x17: 0000000000000008 x16: 0000000000000000
-> [ 9052.361933] x15: ffff000009119708 x14: 0000000000000115
-> [ 9052.361936] x13: ffff0000092f09d7 x12: 0000000000000000
-> [ 9052.361940] x11: 0000000000000001 x10: ffff00000965be98
-> [ 9052.361943] x9 : 0000000000000000 x8 : 0000000000000007
-> [ 9052.361947] x7 : 0000000000000010 x6 : 000000d658b784ef
-> [ 9052.361950] x5 : 00ffffffffffffff x4 : 00000000ffffffff
-> [ 9052.361954] x3 : 0000000000000013 x2 : 0000000000000001
-> [ 9052.361957] x1 : 0000000000000000 x0 : 0000a02fd6c66008
-> [ 9052.361961] Call trace:
-> [ 9052.361967]  fq_flush_timeout+0x9c/0x110
-> [ 9052.361976]  call_timer_fn+0x34/0x178
-> [ 9052.361980]  expire_timers+0xec/0x158
-> [ 9052.361983]  run_timer_softirq+0xc0/0x1f8
-> [ 9052.361987]  __do_softirq+0x120/0x324
-> [ 9052.361995]  irq_exit+0x11c/0x140
-> [ 9052.362003]  __handle_domain_irq+0x6c/0xc0
-> [ 9052.362005]  gic_handle_irq+0x6c/0x150
-> [ 9052.362008]  el1_irq+0xb8/0x140
-> [ 9052.362010]  vprintk_emit+0x2b4/0x320
-> [ 9052.362013]  vprintk_default+0x54/0x90
-> [ 9052.362016]  vprintk_func+0xa0/0x150
-> [ 9052.362019]  printk+0x74/0x94
-> [ 9052.362034]  nvme_get_smart+0x200/0x220 [nvme]
-> [ 9052.362041]  nvme_remove+0x38/0x250 [nvme]
-> [ 9052.362051]  pci_device_remove+0x48/0xd8
-> [ 9052.362065]  device_release_driver_internal+0x1b4/0x250
-> [ 9052.362068]  driver_detach+0x64/0xe8
-> [ 9052.362072]  bus_remove_driver+0x64/0x118
-> [ 9052.362074]  driver_unregister+0x34/0x60
-> [ 9052.362077]  pci_unregister_driver+0x24/0xd8
-> [ 9052.362083]  nvme_exit+0x24/0x1754 [nvme]
-> [ 9052.362094]  __arm64_sys_delete_module+0x19c/0x2a0
-> [ 9052.362102]  el0_svc_common+0x78/0x130
-> [ 9052.362106]  el0_svc_handler+0x38/0x78
-> [ 9052.362108]  el0_svc+0x8/0xc
-> 
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->   drivers/iommu/iova.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+>  include/linux/refcount.h |   15 ++++++++++++---
+>  lib/refcount.c           |    5 +++++
+>  2 files changed, 17 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index 3e1a8a6..90e8035 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -64,8 +64,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
->   	if (!has_iova_flush_queue(iovad))
->   		return;
->   
-> -	if (timer_pending(&iovad->fq_timer))
-> -		del_timer(&iovad->fq_timer);
-> +	del_timer_sync(&iovad->fq_timer);
->   
->   	fq_destroy_all_entries(iovad);
->   
+> --- a/include/linux/refcount.h
+> +++ b/include/linux/refcount.h
+> @@ -264,7 +264,10 @@ static inline void __refcount_inc(refcou
+>   */
+>  static inline void refcount_inc(refcount_t *r)
+>  {
+> -	__refcount_inc(r, NULL);
+> +	atomic_inc_ofl(&r->refs, Eoverflow);
+> +	return;
+> +Eoverflow:
+> +	refcount_warn_saturate(r, REFCOUNT_ADD_OVF);
+>  }
+>  
+>  static inline __must_check bool __refcount_sub_and_test(int i, refcount_t *r, int *oldp)
+> @@ -330,7 +333,10 @@ static inline __must_check bool __refcou
+>   */
+>  static inline __must_check bool refcount_dec_and_test(refcount_t *r)
+>  {
+> -	return __refcount_dec_and_test(r, NULL);
+> +	return atomic_dec_and_test_ofl(&r->refs, Eoverflow);
+> +Eoverflow:
+> +	refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
+> +	return false;
+>  }
+>  
+>  static inline void __refcount_dec(refcount_t *r, int *oldp)
+> @@ -356,7 +362,10 @@ static inline void __refcount_dec(refcou
+>   */
+>  static inline void refcount_dec(refcount_t *r)
+>  {
+> -	__refcount_dec(r, NULL);
+> +	atomic_dec_ofl(&r->refs, Eoverflow);
+> +	return;
+> +Eoverflow:
+> +	refcount_warn_saturate(r, REFCOUNT_DEC_LEAK);
+>  }
+>  
+>  extern __must_check bool refcount_dec_if_one(refcount_t *r);
+> --- a/lib/refcount.c
+> +++ b/lib/refcount.c
+> @@ -12,8 +12,13 @@
+>  
+>  void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t)
+>  {
+> +	int old = refcount_read(r);
+>  	refcount_set(r, REFCOUNT_SATURATED);
+>  
+> +	/* racy; who cares */
+> +	if (old == 1 && t == REFCOUNT_ADD_OVF)
+> +		t = REFCOUNT_ADD_UAF;
+> +
+>  	switch (t) {
+>  	case REFCOUNT_ADD_NOT_ZERO_OVF:
+>  		REFCOUNT_WARN("saturated; leaking memory");
+> 
 > 

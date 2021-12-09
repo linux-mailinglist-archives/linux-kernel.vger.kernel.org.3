@@ -2,157 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C4646E27E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A61046E28F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhLIGda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 01:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbhLIGd3 (ORCPT
+        id S233163AbhLIGfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 01:35:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23704 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231679AbhLIGfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 01:33:29 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E3CC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 22:29:57 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id x10so5435516ioj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 22:29:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q8iVKmula6kup2FggoACJYgOZKL5qkbL208e7B7YSZ0=;
-        b=lIsVrGsHT/UrtLfGXyU57lgKV3+kffBBbS8DOnD4PJqXXM+TcoGFb8Aa7vvsW3mFj7
-         GcILKQXBND1a2zNPqau8LY8JYlD9v1p/XyNrCvwquWQKTgZge72zMANLefatUAVOCUqS
-         ShKC5y65hWZ2c6w6o5LRBc2TX71bQ8XZHklFk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q8iVKmula6kup2FggoACJYgOZKL5qkbL208e7B7YSZ0=;
-        b=tR+ItQA962lZFGTraamGWWHne8RkudnhIqbe+kdShS7Mjwl0HPXFeYTERPY/yvykbb
-         C216nVm3HPlU1gK7iWqNkPBj7M/tAPNuhh2AdeEa7xMgsO6EWrWJCfeEXgAQnnPwZ+a+
-         IuFJHvAqgcQVUtj3e7lRFDMI9CU8HCs6fU4zZAVfe3+q8z6dl2Sc7T+lLM8pk1OvL3g9
-         tJdTkQRFSctmToBpXIle7u7CefeVN5SDJygxvYwwzIs9nc3RUr4sIFDwXU/lctLAqsY0
-         JYu7mwg09HC7EuKIdBw7HJ3sBL2SnKUF2PPxvPQXnRF8QsY/ZkHwWqDLcembK60+elLd
-         qHcA==
-X-Gm-Message-State: AOAM5331TjN14zj308xaOJbMZVhSfGEE91QiHOwb2U5EMNfnlfQszRAQ
-        T8VXB6oFYddV8xEsuOG19e6eNrgagO7klCMYibergA==
-X-Google-Smtp-Source: ABdhPJz1ziC9jdN583VzYZiyMCss/621HPuZKoxSvszO++lZ7FQD6vUcUIB1z0a0HEZnAytrVVflJqwOW8m4dTCGqDg=
-X-Received: by 2002:a6b:2bc3:: with SMTP id r186mr12772991ior.167.1639031396270;
- Wed, 08 Dec 2021 22:29:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20211110130623.20553-1-granquet@baylibre.com> <20211110130623.20553-8-granquet@baylibre.com>
-In-Reply-To: <20211110130623.20553-8-granquet@baylibre.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Thu, 9 Dec 2021 14:29:30 +0800
-Message-ID: <CAJMQK-gGE78qZoR92d8OH6_vTzBR5ry04nKGS22Dw48vAo7+AA@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
+        Thu, 9 Dec 2021 01:35:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639031533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YGxYW/i2o6T83DzUiYtpl0Te2wL7mcPMqolUgsjb37E=;
+        b=SMPLFbckP9Ju6nTOjpmEiiK6jnQuiDKYBKXQYUQRxUXzcbGGjPaOH9jdNCZEsshGGlx72B
+        X8M34xarzhHZzBvjL0kwAidB4k5JddcMl7zTKsUHoAf4BtrPK4Gck5TxGzl0r9GadrttYk
+        ttY5KDmVlOKQp6zP5bNMgrpIVG9/v7w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-_ueZzm7dNzCiGEkOdZx5OQ-1; Thu, 09 Dec 2021 01:32:08 -0500
+X-MC-Unique: _ueZzm7dNzCiGEkOdZx5OQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 771B51006AA2;
+        Thu,  9 Dec 2021 06:32:06 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 783FF19C59;
+        Thu,  9 Dec 2021 06:31:57 +0000 (UTC)
+Message-ID: <864db5fb7528c84b41bc6580eac2a9f1c3485721.camel@redhat.com>
+Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 08:31:56 +0200
+In-Reply-To: <YbFdwO3RZf6dg0M5@google.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+         <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
+         <8c6c38f3cc201e42629c3b8e5cf8cdb251c9ea8d.camel@redhat.com>
+         <YbFdwO3RZf6dg0M5@google.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 9:08 PM Guillaume Ranquet <granquet@baylibre.com> wrote:
->
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
->
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC and a
-> according phy driver mediatek-dp-phy.
->
-> It supports both functional units on the mt8195, the embedded
-> DisplayPort as well as the external DisplayPort units. It offers
-> hot-plug-detection, audio up to 8 channels, and DisplayPort 1.4 with up
-> to 4 lanes.
->
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so that
-> both can work with the same register range. The phy driver sets device
-> data that is read by the parent to get the phy device that can be used
-> to control the phy properties.
->
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
->
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
+On Thu, 2021-12-09 at 01:37 +0000, Sean Christopherson wrote:
+> On Thu, Dec 09, 2021, Maxim Levitsky wrote:
+> > On Thu, 2021-12-09 at 01:00 +0200, Maxim Levitsky wrote:
+> > > Probably just luck (can't reproduce this anymore) but
+> > > while running some kvm unit tests with this patch series (and few my patches
+> > > for AVIC co-existance which shouldn't affect this) I got this
+> > > 
+> > > (warning about is_running already set)
+> 
+> ...
+>  
+> > Also got this while trying a VM with passed through device:
+> 
+> A tangentially related question: have you seen any mysterious crashes on your AMD
+> system?  I've been bisecting (well, attempting to bisect) bizarre crashes that
+> AFAICT showed up between v5.15 and v5.16-rc2.  Things like runqueues being NULL
+> deep in the scheduler when a CPU is coming out of idle.  I _think_ the issues have
+> been fixed as of v5.16-rc4, but I don't have a good reproducer so bisecting in
+> either direction has been a complete mess.  I've reproduced on multiple AMD hosts,
+> but never on an Intel system.  I have a sinking feeling that the issue is
+> relatively unique to our systems :-/
 
+I did had my 3970X lockup hard once on 5.16-rc2. It locked up completely without even
+sending anything over a a pcie serial port card I. 
 
-<snip>
+I don't remember what I was doing during the crash but probably had some VMs running.
 
-> +static int mtk_dp_probe(struct platform_device *pdev)
-> +{
-> +       struct mtk_dp *mtk_dp;
-> +       struct device *dev = &pdev->dev;
-> +       int ret;
-> +       int irq_num = 0;
-> +       struct drm_panel *panel = NULL;
-> +
-> +       mtk_dp = devm_kzalloc(dev, sizeof(*mtk_dp), GFP_KERNEL);
-> +       if (!mtk_dp)
-> +               return -ENOMEM;
-> +
-> +       mtk_dp->dev = dev;
-> +
-> +       irq_num = platform_get_irq(pdev, 0);
-> +       if (irq_num < 0) {
-> +               dev_err(dev, "failed to request dp irq resource\n");
-> +               return -EPROBE_DEFER;
-> +       }
-> +
-> +       ret = drm_of_find_panel_or_bridge(dev->of_node, 1, 0, &panel,
-> +                                         &mtk_dp->next_bridge);
-> +       if (ret == -ENODEV) {
-> +               dev_info(
-> +                       dev,
-> +                       "No panel connected in devicetree, continuing as external DP\n");
-> +               mtk_dp->next_bridge = NULL;
-> +       } else if (ret) {
-> +               dev_err(dev, "Failed to find panel or bridge: %d\n", ret);
+Since then it didn't happen again, and I am running 5.16-rc3 for some time
+with Paolo's kvm/queue merged and my own patches.
 
-Hi,
+> 
+> And a request: any testing and bug fixes you can throw at the AVIC changes would be
+> greatly appreciated.  I've been partially blocked on testing the AVIC stuff for the
+> better part of the week.  If the crashes I'm seeing have been resolved, then I should
+> be able to help hunt down the issues, but if not...
+> 
 
-We're seeing
-[    0.424599] mediatek-drm-dp 1c500000.edp_tx: Failed to find panel
-or bridge: -517
+This is what I started doing last evening, and I'll go through all of the usual testing
+I do soon.
 
-It's probably better to use dev_err_probe here.
+Best regards,
+	Maxim Levitsky
 
-Thanks
-
-> +               return ret;
-> +       }
-> +
-> +       if (panel) {
-> +               mtk_dp->next_bridge = devm_drm_panel_bridge_add(dev, panel);
-> +               if (IS_ERR(mtk_dp->next_bridge)) {
-> +                       ret = PTR_ERR(mtk_dp->next_bridge);
-> +                       dev_err(dev, "Failed to create bridge: %d\n", ret);
-> +                       return -EPROBE_DEFER;
-> +               }
-> +       }
-
-
-<snip>
-
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek

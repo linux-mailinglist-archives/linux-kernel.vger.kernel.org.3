@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBDD46EC7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EA146EC83
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbhLIQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:07:48 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:58491 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236633AbhLIQHr (ORCPT
+        id S236633AbhLIQIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236647AbhLIQIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:07:47 -0500
-Received: (qmail 607420 invoked by uid 1000); 9 Dec 2021 11:04:13 -0500
-Date:   Thu, 9 Dec 2021 11:04:13 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
-Message-ID: <YbIo/ZBRgK5NDZJb@rowland.harvard.edu>
-References: <20211208070835.8877-1-kai.heng.feng@canonical.com>
- <YbEnf2NUr/BCV4Gb@rowland.harvard.edu>
- <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+        Thu, 9 Dec 2021 11:08:07 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CDAC061746;
+        Thu,  9 Dec 2021 08:04:34 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id m12so9711089ljj.6;
+        Thu, 09 Dec 2021 08:04:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=VyNNZFntqq/7S368iziv68PH8JNo+/JFrth8MiQPnN0=;
+        b=IA7AoXxTmmSQDOR+7JKZHyzbrQBtcmUHlvjNOsI6VhwUlOOkWTKICCOXFWDtkJ5+9I
+         zmOVovEwnkRPBJXuZusPYkhCOLHcCgFyE3xc/D0BrQ00tfWhCmYJJmylb1/Y6fqP08r4
+         VtKTR9+q0cQqyn7osxibjswsFTnwV8iUVhUnqyGnYlwBNoMD36ugcWUATRYKTXR+EOBQ
+         9Knz1bXER1N69YwSURq1/WRV9wNnH1jlUXPvem/b6QE7oAMoy997fsL6Z/0qTpEX9nmS
+         INuhBlkVetXa9YG9Rht9GQgAMN1x5HZzyYFVQZm2Ut1XbKhxW0rDJG6vAPYZ3624XIpL
+         vRfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VyNNZFntqq/7S368iziv68PH8JNo+/JFrth8MiQPnN0=;
+        b=BIfp7Z8UIxalEDd5i/jZPGZ5p4pCjFVDONr/UxhCWVwB56+xPXC5tmISEfGwqCQTiu
+         fbn0Fg+C/mxD5MSWXmY6HWQ/xqNV6dWCs9y9Hxx8B3325XoG5UAQW5XjCV/RCSAElVmc
+         m9kWTqZKUvRZkmlb4q9eNKCg+T5sscr3QSc3FkOf3xZCVJeVtt9+J5q5TUSMkmjbEeSx
+         IZqOgt4wOj7huKKWlU81PaSVMp47Lcq8inb4mAzmUCyOdJ00NxYzxiBIpfQ7vS9vRGKa
+         AjYJ6isLyQ/u28fYKNluZ/gMHNg61C6Cq8nh9sUClN3u+TtPJma481MPZ6n8b4GjBMJZ
+         SsHA==
+X-Gm-Message-State: AOAM530gfTJ1Smcz6l5vR1pDzOCZx9JUQr7j76C9h7TUDwAL8wmUChog
+        5BhDLwqvdC6kaF4OZWqL888XBUpghDM=
+X-Google-Smtp-Source: ABdhPJyjIVIwTFb/jRVG1s/HtU+6iq+SlVSeTRgCyq6BgyCqa/f3O4tShJ7SxaDdE4z6Q6IQHg5qYA==
+X-Received: by 2002:a2e:aa14:: with SMTP id bf20mr7025963ljb.376.1639065872006;
+        Thu, 09 Dec 2021 08:04:32 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id a23sm16158ljh.140.2021.12.09.08.04.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 08:04:31 -0800 (PST)
+Subject: Re: [PATCH 0/2] Add SMBus features to Tegra I2C
+To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
+Date:   Thu, 9 Dec 2021 19:04:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+In-Reply-To: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:19:24AM +0800, Kai-Heng Feng wrote:
-> On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
-> > > When a new USB device gets plugged to nested hubs, the affected hub,
-> > > which connects to usb 2-1.4-port2, doesn't report there's any change,
-> > > hence the nested hubs go back to runtime suspend like nothing happened:
-> >
-> > That's a bug in the hub.  When there's a change in the connection status
-> > of one of its ports, it should report this change to the kernel.
+09.12.2021 18:05, Akhil R пишет:
+> Add support for SMBus Alert and SMBus block read functions to
+> i2c-tegra driver
 > 
-> I think it should, but when I searched through the USB spec and I
-> can't find anywhere specify hub requires to report it in change
-> status.
-
-USB-2.0 spec, section 11.24.2.7.2.1 (C_PORT_CONNECTION):
-
-	This bit is set when the PORT_CONNECTION bit changes because of an 
-	attach or detach detect event (see Section 7.1.7.3). This bit will be 
-	cleared to zero by a ClearPortFeature(C_PORT_CONNECTION) request or 
-	while the port is in the Powered-off state.
-
-> > So because of this buggy hub, you now want to wake up _every_ hub in the
-> > system whenever any wakeup event occurs?  Is this really a good idea?
-> > Is there a better way to solve the problem, such as a special quirk
-> > flag?
+> Akhil R (2):
+>   dt-bindings: i2c: tegra: Add SMBus feature properties
+>   i2c: tegra: Add SMBus block read and SMBus alert functions
 > 
-> If there's no other activities, the USB hub should go back to suspend
-> immediately, so the impact is minimal.
+>  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
+>  drivers/i2c/busses/i2c-tegra.c                     | 54 +++++++++++++++++++++-
+>  2 files changed, 57 insertions(+), 1 deletion(-)
+> 
 
-Not immediately, but after a few seconds.  However your patch will affect every 
-hub, not just the one that the new device was plugged into.
-
-> I've seen several similar bug reports so I think this solution should
-> be applied for all hubs.
-
-Maybe those bug reports all had something in common, such as the type of hub or 
-the bus speed they were running at.  Did you check?
-
-Alan Stern
+How this was tested? This series must include the DT patch. If there is
+no real user in upstream for this feature, then I don't think that we
+should bother at all about it.

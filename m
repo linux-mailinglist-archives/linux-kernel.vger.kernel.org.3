@@ -2,116 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A03546E024
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8883A46E02A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241842AbhLIBVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:21:01 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32889 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbhLIBU7 (ORCPT
+        id S239522AbhLIBXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:23:16 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51852
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232216AbhLIBXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:20:59 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8bjh6xS3zcbld;
-        Thu,  9 Dec 2021 09:17:12 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
- (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 9 Dec
- 2021 09:17:25 +0800
-Subject: Re: [PATCH] irqchip/irq-gic-v3-its.c: Return its_invall_cmd.col when
- building INVALL
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Wudi Wang <wangwudi@hisilicon.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20211208015429.5007-1-zhangshaokun@hisilicon.com>
- <522e91148810ca7c77ad492d3a92c7a9@kernel.org>
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Message-ID: <3cc66fc7-7091-37e6-350b-f9a223392804@hisilicon.com>
-Date:   Thu, 9 Dec 2021 09:17:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 8 Dec 2021 20:23:15 -0500
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 478DD3F1F0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639012778;
+        bh=QZSMwSAPhjjXEhfCQjdPv8fogjVplogvbmK+fx9KWxM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=S18liWlYCivXvWUoeCJ7w/NKBon6TI+N2WtiOc5pyLOfh3BxjIUd+7I7Sgtg8RujV
+         4Ny0zbxmaMoOxngFA0BDfiaq2kkSzDYbuqGQ9A+ef43Ll1k+WhbNFQdnuNRcROeK35
+         6Tiy2yVLT0ZWRVlFw13TEuL9fnAaEhh+GtwPziX5hlnPXJpR8r82HHPIm9+iTpYYCj
+         /wRAYBl5bkW7M7xQ/sbMO5PmFnya7xQ5AYG/f+2vHW65h+X4MhMQm36ogTvIfQYHRZ
+         NgWngVWu+Y5Vlns4VKn4Zw6Z1GGb1k1oqL3G4UekOwheKn1WeC6kThfGPkNfClUbJe
+         Fq2XYob106XxA==
+Received: by mail-oo1-f71.google.com with SMTP id z20-20020a4a8e54000000b002c632ba3a12so2403279ook.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:19:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QZSMwSAPhjjXEhfCQjdPv8fogjVplogvbmK+fx9KWxM=;
+        b=detf4Ak5fnUhugAQWUr43UOzO8o1HQaKjsKMmzyOG6L9wdUbP2HIsrpP6siNm8LHQ3
+         gQvd+9TJwPMN+rKSnkE/SAFrxQu9+K6BzkaMZtbOU/mxQvEdHsJ6wCSqCQQMIgF9jyty
+         zVEk6y1gDJ1jeaCCd36itqbDBzUgP5MqXnkM+qXB0x6pbsmtFv/L87oQdQALjUVpH4QF
+         OLZkr0fq9D+XbjgOg5fuStUHW448wPvou1pAHYOxlnwTgiQ5PD1LApac0MuCmkOAYarR
+         UwBEZQRyob8ixK+Nsb7Nhbf0a6+qjJP2zbWdsl8kQgwZbs2HZzcFOQfs1xVExpbmBbLX
+         re7A==
+X-Gm-Message-State: AOAM531NZ9ctismcuJMO2rOQk18sMFEKxfaJ3BDJNLRchN7R0HLBUjpF
+        6pI7mntpsbo1z/ZirvDzHDePlWIYEqgxbcV/b9SehCRwn8gZlOJ2sPGzTtcLplddiRvmtHY84cl
+        7cdteaIfVzWEKV0zU67G27OuRttEV3CjwVdMA36s0+HCBbhMvCPAN5gc3xg==
+X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr3239746oib.98.1639012777056;
+        Wed, 08 Dec 2021 17:19:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwjyoTObJIlskSn5nQLHUsdyJgtUsxygV//ZdRzGUmOQU6Ypv/1vHJeourZBR+oVvk+6T6BpRs/5d+qziYHw2U=
+X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr3239709oib.98.1639012776701;
+ Wed, 08 Dec 2021 17:19:36 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <522e91148810ca7c77ad492d3a92c7a9@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.77.175]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+References: <20211208070835.8877-1-kai.heng.feng@canonical.com> <YbEnf2NUr/BCV4Gb@rowland.harvard.edu>
+In-Reply-To: <YbEnf2NUr/BCV4Gb@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 9 Dec 2021 09:19:24 +0800
+Message-ID: <CAAd53p61w-AHBxy05Hx-gwae1rUxZxsaVfmH=--bQUkPxYj8Nw@mail.gmail.com>
+Subject: Re: [PATCH] usb: hub: Resume hubs to find newly connected device
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Rajat Jain <rajatja@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Thu, Dec 9, 2021 at 5:45 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, Dec 08, 2021 at 03:08:33PM +0800, Kai-Heng Feng wrote:
+> > When a new USB device gets plugged to nested hubs, the affected hub,
+> > which connects to usb 2-1.4-port2, doesn't report there's any change,
+> > hence the nested hubs go back to runtime suspend like nothing happened:
+>
+> That's a bug in the hub.  When there's a change in the connection status
+> of one of its ports, it should report this change to the kernel.
 
-On 2021/12/8 16:25, Marc Zyngier wrote:
-> On 2021-12-08 01:54, Shaokun Zhang wrote:
->> From: Wudi Wang <wangwudi@hisilicon.com>
->>
->> INVALL CMD specifies that the ITS must ensure any caching associated with
->> the interrupt collection defined by ICID is consistent with the LPI
->> configuration tables held in memory for all Redistributors. SYNC is
->> required to ensure that INVALL is executed.
-> 
-> The patch title doesn't quite spell out the issue. It should say something
-> like:
-> 
-> "Force synchronisation when issuing INVALL">
+I think it should, but when I searched through the USB spec and I
+can't find anywhere specify hub requires to report it in change
+status.
 
-Make sense.
+>
+> > [  281.032951] usb usb2: usb wakeup-resume
+> > [  281.032959] usb usb2: usb auto-resume
+> > [  281.032974] hub 2-0:1.0: hub_resume
+> > [  281.033011] usb usb2-port1: status 0263 change 0000
+> > [  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.049797] usb 2-1: usb wakeup-resume
+> > [  281.069800] usb 2-1: Waited 0ms for CONNECT
+> > [  281.069810] usb 2-1: finish resume
+> > [  281.070026] hub 2-1:1.0: hub_resume
+> > [  281.070250] usb 2-1-port4: status 0203 change 0000
+> > [  281.070272] usb usb2-port1: resume, status 0
+> > [  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.089813] usb 2-1.4: usb wakeup-resume
+> > [  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.109801] usb 2-1.4: finish resume
+> > [  281.109991] hub 2-1.4:1.0: hub_resume
+> > [  281.110147] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.110234] usb 2-1-port4: resume, status 0
+> > [  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.110426] hub 2-1.4:1.0: hub_suspend
+> > [  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.130998] hub 2-1:1.0: hub_suspend
+> > [  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.177828] usb 2-1: usb wakeup-resume
+> > [  281.197839] usb 2-1: Waited 0ms for CONNECT
+> > [  281.197850] usb 2-1: finish resume
+> > [  281.197984] hub 2-1:1.0: hub_resume
+> > [  281.198203] usb 2-1-port4: status 0203 change 0000
+> > [  281.198228] usb usb2-port1: resume, status 0
+> > [  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.217835] usb 2-1.4: usb wakeup-resume
+> > [  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.237845] usb 2-1.4: finish resume
+> > [  281.237990] hub 2-1.4:1.0: hub_resume
+> > [  281.238067] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.238148] usb 2-1-port4: resume, status 0
+> > [  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.238385] hub 2-1.4:1.0: hub_suspend
+> > [  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.258076] hub 2-1:1.0: hub_suspend
+> > [  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.285976] hub 2-0:1.0: hub_suspend
+> > [  281.285988] usb usb2: bus auto-suspend, wakeup 1
+> >
+> > So in addition to change event, wakes up the port if it's a hub to find
+> > newly connected device:
+> > [  232.069881] usb usb2: usb wakeup-resume
+> > [  232.069889] usb usb2: usb auto-resume
+> > [  232.069904] hub 2-0:1.0: hub_resume
+> > [  232.069941] usb usb2-port1: status 0263 change 0000
+> > [  232.069962] hub 2-1:1.0: state 8 ports 4 chg 0000 evt 0000
+> > [  232.070034] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  232.112701] usb 2-1: Waited 0ms for CONNECT
+> > [  232.112711] usb 2-1: finish resume
+> > [  232.112900] hub 2-1:1.0: hub_resume
+> > [  232.113218] usb 2-1-port4: status 0203 change 0000
+> > [  232.113267] hub 2-1.4:1.0: state 8 ports 4 chg 0000 evt 0000
+> > [  232.152679] usb 2-1.4: Waited 0ms for CONNECT
+> > [  232.152691] usb 2-1.4: finish resume
+> > [  232.152829] hub 2-1.4:1.0: hub_resume
+> > [  232.153057] usb 2-1.4-port2: status 0263 change 0000
+> > [  232.153094] hub 2-1.4.2:1.0: state 8 ports 3 chg 0000 evt 0000
+> > [  232.153155] usb 2-1-port4: resume, status 0
+> > [  232.153160] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  232.153192] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  232.153235] hub 2-1:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  232.153244] usb usb2-port1: resume, status 0
+> > [  232.153274] usb 2-1.4.2: usb auto-resume
+> > [  232.153444] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  232.220690] usb 2-1.4.2: Waited 0ms for CONNECT
+> > [  232.220702] usb 2-1.4.2: finish resume
+> > [  232.220849] hub 2-1.4.2:1.0: hub_resume
+> > [  232.220870] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  232.220949] usb 2-1.4.2-port2: status 0203 change 0001
+> > [  232.328747] usb 2-1.4.2-port2: status 0203, change 0000, 5.0 Gb/s
+> > [  232.408838] usb 2-1.4.2.2: new SuperSpeed USB device number 5 using xhci_hcd
+> > [  232.429734] usb 2-1.4.2.2: skipped 1 descriptor after endpoint
+> > [  232.429745] usb 2-1.4.2.2: skipped 1 descriptor after endpoint
+> > [  232.429827] usb 2-1.4.2.2: default language 0x0409
+> > [  232.430192] usb 2-1.4.2.2: udev 5, busnum 2, minor = 132
+> > [  232.430197] usb 2-1.4.2.2: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
+> > [  232.430202] usb 2-1.4.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> > [  232.430206] usb 2-1.4.2.2: Product: Ultra
+> > [  232.430209] usb 2-1.4.2.2: Manufacturer: SanDisk
+> > [  232.430212] usb 2-1.4.2.2: SerialNumber: 4C530001170905105491
+> > [  232.430488] usb 2-1.4.2.2: usb_probe_device
+> > [  232.430493] usb 2-1.4.2.2: configuration #1 chosen from 1 choice
+> > [  232.431196] usb 2-1.4.2.2: Disabling U1 link state for device below second-tier hub.
+> > [  232.431199] usb 2-1.4.2.2: Plug device into first-tier hub to decrease power consumption.
+> > [  232.431469] usb 2-1.4.2.2: adding 2-1.4.2.2:1.0 (config #1, interface 0)
+> > [  232.431610] hub 2-1.4.2:1.0: state 7 ports 3 chg 0000 evt 0004
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>
+> So because of this buggy hub, you now want to wake up _every_ hub in the
+> system whenever any wakeup event occurs?  Is this really a good idea?
+> Is there a better way to solve the problem, such as a special quirk
+> flag?
 
->>
->> Currently, LPI configuration data may be inconsistent with that in the
->> memory within a short period of time after the INVALL command is executed.
-> 
-> I'm curious: have you seen any issue with this on actual HW? In my
-> experience, all implementations treat INVALL as a synchronous command,
-> 
-> Or was this solely done via inspection?
-> 
+If there's no other activities, the USB hub should go back to suspend
+immediately, so the impact is minimal.
 
-It is noticed by checking the implementation of INVALL API function, not
-by on actual HW.
+I've seen several similar bug reports so I think this solution should
+be applied for all hubs.
 
->>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Marc Zyngier <maz@kernel.org>
->> Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
->> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-> 
-> This needs:
-> 
-> Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
-> 
+Kai-Heng
 
-Oops, indeed, apologies that forget to add this tag.
-
->> ---
->>  drivers/irqchip/irq-gic-v3-its.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
->> index eb0882d15366..0cb584d9815b 100644
->> --- a/drivers/irqchip/irq-gic-v3-its.c
->> +++ b/drivers/irqchip/irq-gic-v3-its.c
->> @@ -742,7 +742,7 @@ static struct its_collection
->> *its_build_invall_cmd(struct its_node *its,
->>
->>      its_fixup_cmd(cmd);
->>
->> -    return NULL;
->> +    return desc->its_invall_cmd.col;
->>  }
->>
->>  static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
-> 
-> I'll fix the above locally, no need to resend.
-> 
-
-Thanks Marc's help.
-
-> Thanks,
-> 
->         M.
+>
+> Alan Stern
+>
+> > ---
+> >  drivers/usb/core/hub.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 00070a8a65079..0c9442a8eab05 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -1227,6 +1227,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+> >                                               port_resumed))
+> >                               set_bit(port1, hub->change_bits);
+> >
+> > +                     if ((portstatus & USB_PORT_STAT_CONNECTION) &&
+> > +                         usb_hub_to_struct_hub(udev))
+> > +                             usb_kick_hub_wq(udev);
+> > +
+> >               } else if (udev->persist_enabled) {
+> >  #ifdef CONFIG_PM
+> >                       udev->reset_resume = 1;
+> > --
+> > 2.32.0
+> >

@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F9646F23E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B31446F243
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242550AbhLIRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:43:24 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51730 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242483AbhLIRnX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:43:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2D45ACE276D;
-        Thu,  9 Dec 2021 17:39:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F32C341CD;
-        Thu,  9 Dec 2021 17:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639071586;
-        bh=qYNFqkQwxVAeHZsMMhQPC8pTvIDP3euSi+noorx7pH0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ef7a/pLzC84q6l0bpD1Ouuu1jwXd9CWk/Vz2wkWVKxQ7tCBT3dqKVso4VDjGCCNcN
-         iOYw70pMI/Vtqz8DMuFPHN9toXpn2/49PWrnVCkvZQs8YvrdZP9JMtm5aFra7VUMp7
-         r+q6Ag0ZWAuiiBHEY98DuYrIauEmeMGClXRe9ZZbsXd8SgpSqH/C50CLOU6tpHjW6R
-         AZeQnk/fCXVbm3gCwmWcuItUckwfsfr7ebaLl/65hbv6Z8mbgWPFxGF36Vw808OXUc
-         hgtwmxv1UdgGGMYP/a/pR6tR6Ph8Xev9v33uzVll1X7fop/0nwYxLecdcfibHzpqxS
-         7p7/CiYFwfWCg==
-Received: by mail-yb1-f176.google.com with SMTP id q74so15366898ybq.11;
-        Thu, 09 Dec 2021 09:39:46 -0800 (PST)
-X-Gm-Message-State: AOAM530Rj5B5jyTGf3VhWpdqdaJQ/4l3SgyyYF6BmhauaXNqu8AtCU38
-        K0/4quzpBRvRPzjTZ0xF/dApKlhB418ej8UILmA=
-X-Google-Smtp-Source: ABdhPJwEaoB1dnsF15BdtCtWtqwmPOt+eNaurSXpzIIW1JOastQNXdj6/+OJ3JEn15TvFp68O0n7N/B+1jxAhdPcpLo=
-X-Received: by 2002:a25:3bc3:: with SMTP id i186mr8303350yba.282.1639071585209;
- Thu, 09 Dec 2021 09:39:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20211201032712.3684503-1-lijinlin3@huawei.com>
-In-Reply-To: <20211201032712.3684503-1-lijinlin3@huawei.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 9 Dec 2021 09:39:34 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5sv5D8vmiJxS9SqCcit1a05F8kw80Q1TV9+26+QJkEsA@mail.gmail.com>
-Message-ID: <CAPhsuW5sv5D8vmiJxS9SqCcit1a05F8kw80Q1TV9+26+QJkEsA@mail.gmail.com>
-Subject: Re: [PATCH] md: Fix unexpected behaviour in is_mddev_idle
-To:     Li Jinlin <lijinlin3@huawei.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
-        Tejun Heo <tj@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, linfeilong@huawei.com
+        id S243144AbhLIRni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:43:38 -0500
+Received: from mga07.intel.com ([134.134.136.100]:26441 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243127AbhLIRng (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:43:36 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301546983"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="301546983"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:40:02 -0800
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="516405372"
+Received: from braj-mobl.gar.corp.intel.com ([10.251.50.179])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:39:57 -0800
+Message-ID: <10f257b0546690983a1ca7d3c3e8842c9fd98308.camel@linux.intel.com>
+Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 09:39:53 -0800
+In-Reply-To: <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+         <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
+         <b51c9b2a-40d2-6575-7746-3059eec53519@linaro.org>
+         <20211209160346.GA7692@ranerica-svr.sc.intel.com>
+         <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 6:56 PM Li Jinlin <lijinlin3@huawei.com> wrote:
->
-> The value of curr_events may be INT_MAX when mddev initializes IO event
-> counters. Then, rdev->last_events will be set as INT_MAX.
-> If all the rdevs of mddev are in this case,
-> 'curr_events - rdev->last_events > 64' will always false, and
-> is_mddev_idle() will always return 1, which may cause non-sync IO very
-> slow.
->
-> Fix by using atomic64_t type for sync_io, and using long type for
-> curr_events/last_events.
->
-> Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
-> ---
->  drivers/md/md.c       | 6 +++---
->  drivers/md/md.h       | 4 ++--
->  include/linux/genhd.h | 2 +-
->  3 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 5111ed966947..f47035838c43 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
->  {
->         struct md_rdev *rdev;
->         int idle;
-> -       int curr_events;
-> +       long curr_events;
->
->         idle = 1;
->         rcu_read_lock();
->         rdev_for_each_rcu(rdev, mddev) {
->                 struct gendisk *disk = rdev->bdev->bd_disk;
-> -               curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
-> -                             atomic_read(&disk->sync_io);
-> +               curr_events = (long)part_stat_read_accum(disk->part0, sectors) -
-> +                             atomic64_read(&disk->sync_io);
->                 /* sync IO will cause sync_io to increase before the disk_stats
->                  * as sync_io is counted when a request starts, and
->                  * disk_stats is counted when it completes.
-> diff --git a/drivers/md/md.h b/drivers/md/md.h
-> index 53ea7a6961de..3f8327c42b7b 100644
-> --- a/drivers/md/md.h
-> +++ b/drivers/md/md.h
-> @@ -50,7 +50,7 @@ struct md_rdev {
->
->         sector_t sectors;               /* Device size (in 512bytes sectors) */
->         struct mddev *mddev;            /* RAID array if running */
-> -       int last_events;                /* IO event timestamp */
-> +       long last_events;               /* IO event timestamp */
-
-I think we need long long here to be safe on 32-bit systems.
+On Thu, 2021-12-09 at 17:57 +0100, Daniel Lezcano wrote:
+> On 09/12/2021 17:03, Ricardo Neri wrote:
+> > On Tue, Nov 30, 2021 at 10:29:46AM +0100, Daniel Lezcano wrote:
+> > > On 06/11/2021 02:33, Ricardo Neri wrote:
+> > > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > > 
+> > > > Add a new netlink event to notify change in CPU capabilities in
+> > > > terms of
+> > > > performance and efficiency.
+> > > > 
+> > > > Firmware may change CPU capabilities as a result of thermal
+> > > > events in the
+> > > > system or to account for changes in the TDP (thermal design
+> > > > power) level.
+> > > > 
+> > > > This notification type will allow user space to avoid running
+> > > > workloads
+> > > > on certain CPUs or proactively adjust power limits to avoid
+> > > > future events.
+> > > > 
+> > > 
+> > > [ ... ]
+> > > 
+> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]   = { .type =
+> > > > NLA_U32 },
+> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERF] = { .type =
+> > > > NLA_U32 },
+> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFF]  = { .type =
+> > > > NLA_U32 },
+> > > >  };
+> > > 
+> > > AFAIU, 0 <= perf < 256 and 0 <= eff < 256, right?
+> > > 
+> > > Is the following true?
+> > > 
+> > >         0 <= perf + eff < 256
+> > 
+> > No, they are not. They are set independently.
+> 
+> I understand they can be set independently but is the constraint
+> above
+> correct? For example, can the system send perf=255 and eff=255 or
+> perf=0
+> and eff=0 ?
+perf = 0 and eff = 0 is already the case in the current processors.
+Both FF is not the case as the current generation use real performance
+which can't be FF. Also it is unlikely that at max performance you have
+max efficiency.
 
 Thanks,
-Song
+Srinivas
+
+> 
+> May be I misunderstood but I was expecting at least some kind of
+> connection between perf and eff (when eff is high, perf is low and
+> the
+> opposite).
+> 
+> 
+
+

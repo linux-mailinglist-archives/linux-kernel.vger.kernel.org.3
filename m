@@ -2,114 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D25046E1BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EAC46E1C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbhLIFL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        id S230146AbhLIFNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbhLIFL0 (ORCPT
+        with ESMTP id S229897AbhLIFNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:11:26 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35395C0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:07:53 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id np3so3534073pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:07:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=oAc97uz2Cujqe9KFIgnuc9y5PwmUaHTfcJnGM0LYlTM=;
-        b=hzVw2WlgWT+n2fokbrz+vPrl1Fvko1T4p4j8g82IVa6WBD30MO0Z2ZcNGf0aPqtS9e
-         wIa1wpat9swFKgNduKo1OTZG+DRN3C1v3q3iOOIksw6IgiyFRvTK7wB+V7p7r0pZw82v
-         dsugPtXIUWsFbVrD/keLyM3owwB5OM8sttnqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=oAc97uz2Cujqe9KFIgnuc9y5PwmUaHTfcJnGM0LYlTM=;
-        b=byix36mtLQ1ndnIeA4K3ZJEYK/d7RBk2l5NJ6yFjwSMi+F8Rn0YsGaldMZ9urmvx2C
-         a6TNykUFj5ZZEHRQscg4zhb5CLAOkHQF+nBox7Ni4UArK4dzpSl9mEGPdmYi+EXgmBTd
-         qxvOI9HblQUKl12RzsfPRJVcgn/wVJI8Lit760qMeATKOLnE5YaDvgGE9A3+/ayNfQ8E
-         2qiv/IJr8eq5kdRIPd7xWNuoeNZRHiMdVf+NQjEhZSb07LN0i03ctitWjZ/YlImtw5ft
-         3nvNLmAXHwXxN4OgA2kb9mIFIr5eA3L+dQjoiiahR81lnBhuYXNVI+d9JVKAiQu14NZm
-         UdNw==
-X-Gm-Message-State: AOAM530M1tvWxCxq2efRshPIPO8cc/GtO+TuBFMc6wD6zuIEWiifmSIh
-        5IKwjPMLQAFZ1tCQc8/MWQHVFA==
-X-Google-Smtp-Source: ABdhPJzlX3NyyqZi6qmRsJyuu1pf9MJan5+mqXSsAqrMOgSJPV6WtN88xlUoNYPYv7C0HWsHNNPRjA==
-X-Received: by 2002:a17:903:300d:b0:142:744f:c74d with SMTP id o13-20020a170903300d00b00142744fc74dmr66055721pla.26.1639026472470;
-        Wed, 08 Dec 2021 21:07:52 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 59sm4273835pjz.34.2021.12.08.21.07.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 21:07:52 -0800 (PST)
-Date:   Wed, 8 Dec 2021 21:07:51 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: question about all*config and COMPILE_TEST
-Message-ID: <202112082057.C993DC6881@keescook>
+        Thu, 9 Dec 2021 00:13:46 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5004CC061746;
+        Wed,  8 Dec 2021 21:10:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 09C5841E57;
+        Thu,  9 Dec 2021 05:10:08 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] dt-bindings: Add trivial Apple t6000/t6001 SoC bindings
+Date:   Thu,  9 Dec 2021 14:09:57 +0900
+Message-Id: <20211209051001.70235-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Rob et al,
 
-tl;dr: is there a way to force a config default to "off" under
-all*config builds, but still leave it configurable? (i.e. not "depends
-on !COMPILE_TEST")
+This series adds trivial DT binding changes (compatibles and some misc
+changes) to support Apple's t6000/t6001 SoCs and the devices that use
+them. These changes are for devices that need no driver changes to
+support these new SoCs. Drivers that need changes (notably AICv2) have
+the binding change submitted as part of that series.
 
-I'm trying to understand a Kconfig behavior with regard to
-COMPILE_TEST. I'm able to use an "all*config" target, followed by specific
-additional config changes (e.g. turning off KCOV), but I can't enable
-things like DEBUG_INFO because of their "depends on !COMPILE_TEST".
-Whenever I want to examine debug info from all*config build I need to
-patch lib/Kconfig.debug to remove the depends. I was hoping I could,
-instead do:
+The only nontrivial patch is #3 for the PCIe binding, which grew a port.
+I tried to set it up so it'll fail validation if you try to have too
+many ports on t8103.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 0e2de4b375f3..e8533ffc92c3 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -212,7 +212,8 @@ menu "Compile-time checks and compiler options"
- 
- config DEBUG_INFO
- 	bool "Compile the kernel with debug info"
--	depends on DEBUG_KERNEL && !COMPILE_TEST
-+	depends on DEBUG_KERNEL
-+	default n if COMPILE_TEST
- 	help
- 	  If you say Y here the resulting kernel image will include
- 	  debugging info resulting in a larger kernel image.
+I'll be happy to merge this through the Asahi-SoC tree once reviewed :)
 
-Which would turn this off when COMPILE_TEST was enabled, but I assume it
-doesn't work because an all*config target turns everything on first, and
-therefore this "default" gets ignored since DEBUG_INFO already has a
-value set.
+Hector Martin (4):
+  dt-bindings: arm: apple: Add t6000/t6001 MacBook Pro 14/16"
+    compatibles
+  dt-bindings: i2c: apple,i2c: Add apple,t6000-i2c compatible
+  dt-bindings: pci: apple,pcie: Add t6000 support
+  dt-bindings: pinctrl: apple,pinctrl: Add apple,t6000-pinctrl
+    compatible
 
-I then thought I could use:
-
-	default !COMPILE_TEST
-
-since this works:
-
-config WERROR
-        bool "Compile the kernel with warnings as errors"
-        default COMPILE_TEST
-
-but I think the above is a no-op: it's the same as not having
-"default COMPILE_TEST" when doing an all*config build: it'll be enabled
-not because of COMPILE_TEST but because of the all*config pass.
-
-How can I make DEBUG_INFO configurable, but default off under
-all*config?
-
-Thanks!
+ .../devicetree/bindings/arm/apple.yaml        | 21 ++++++++++++++
+ .../devicetree/bindings/i2c/apple,i2c.yaml    |  4 ++-
+ .../devicetree/bindings/pci/apple,pcie.yaml   | 28 ++++++++++++++-----
+ .../bindings/pinctrl/apple,pinctrl.yaml       |  4 ++-
+ 4 files changed, 48 insertions(+), 9 deletions(-)
 
 -- 
-Kees Cook
+2.33.0
+

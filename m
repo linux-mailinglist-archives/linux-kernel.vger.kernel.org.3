@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1D446E5A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DCE46E59B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbhLIJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:35:30 -0500
-Received: from elvis.franken.de ([193.175.24.41]:38029 "EHLO elvis.franken.de"
+        id S236191AbhLIJdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:33:47 -0500
+Received: from mga06.intel.com ([134.134.136.31]:7772 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229651AbhLIJf1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:35:27 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mvFmB-0001l4-00; Thu, 09 Dec 2021 10:31:43 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0E387C4E1D; Thu,  9 Dec 2021 10:30:02 +0100 (CET)
-Date:   Thu, 9 Dec 2021 10:30:01 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     geert@linux-m68k.org
-Subject: Re: [PATCH 1/3] MIPS: TXX9: Remove rbtx4938 board support
-Message-ID: <20211209093001.GA7077@alpha.franken.de>
-References: <20211130164558.85584-1-tsbogend@alpha.franken.de>
+        id S229710AbhLIJdq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:33:46 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="298847424"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="298847424"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 01:30:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="606786633"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Dec 2021 01:30:10 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id E245915C; Thu,  9 Dec 2021 11:30:16 +0200 (EET)
+Date:   Thu, 9 Dec 2021 12:30:16 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm: delete unsafe BUG from page_cache_add_speculative()
+Message-ID: <20211209093016.eivzxmgr6c4twmus@black.fi.intel.com>
+References: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130164558.85584-1-tsbogend@alpha.franken.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:45:54PM +0100, Thomas Bogendoerfer wrote:
-> No active MIPS user own this board, so let's remove it.
+On Wed, Dec 08, 2021 at 11:19:18PM -0800, Hugh Dickins wrote:
+> It is not easily reproducible, but on 5.16-rc I have several times hit
+> the VM_BUG_ON_PAGE(PageTail(page), page) in page_cache_add_speculative():
+> usually from filemap_get_read_batch() for an ext4 read, yesterday from
+> next_uptodate_page() from filemap_map_pages() for a shmem fault.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/configs/rbtx49xx_defconfig  |   2 -
->  arch/mips/include/asm/txx9/boards.h   |   3 -
->  arch/mips/include/asm/txx9/rbtx4938.h | 145 ----------
->  arch/mips/include/asm/txx9/spi.h      |  34 ---
->  arch/mips/pci/Makefile                |   1 -
->  arch/mips/pci/fixup-rbtx4938.c        |  53 ----
->  arch/mips/txx9/Kconfig                |  28 --
->  arch/mips/txx9/Makefile               |   1 -
->  arch/mips/txx9/generic/Makefile       |   1 -
->  arch/mips/txx9/generic/setup.c        |   5 -
->  arch/mips/txx9/generic/spi_eeprom.c   | 104 -------
->  arch/mips/txx9/rbtx4938/Makefile      |   2 -
->  arch/mips/txx9/rbtx4938/irq.c         | 157 -----------
->  arch/mips/txx9/rbtx4938/prom.c        |  22 --
->  arch/mips/txx9/rbtx4938/setup.c       | 372 --------------------------
->  15 files changed, 930 deletions(-)
->  delete mode 100644 arch/mips/include/asm/txx9/rbtx4938.h
->  delete mode 100644 arch/mips/include/asm/txx9/spi.h
->  delete mode 100644 arch/mips/pci/fixup-rbtx4938.c
->  delete mode 100644 arch/mips/txx9/generic/spi_eeprom.c
->  delete mode 100644 arch/mips/txx9/rbtx4938/Makefile
->  delete mode 100644 arch/mips/txx9/rbtx4938/irq.c
->  delete mode 100644 arch/mips/txx9/rbtx4938/prom.c
->  delete mode 100644 arch/mips/txx9/rbtx4938/setup.c
+> That BUG used to be placed where page_ref_add_unless() had succeeded,
+> but now it is placed before folio_ref_add_unless() is attempted: that
+> is not safe, since it is only the acquired reference which makes the
+> page safe from racing THP collapse or split.
+> 
+> We could keep the BUG, checking PageTail only when folio_ref_try_add_rcu()
+> has succeeded; but I don't think it adds much value - just delete it.
+> 
+> Fixes: 020853b6f5ea ("mm: Add folio_try_get_rcu()")
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-applied to mips-next.
-
-Thomas.
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ Kirill A. Shutemov

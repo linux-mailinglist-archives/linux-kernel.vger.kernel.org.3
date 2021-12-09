@@ -2,209 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B5846F7A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCC46F7A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbhLIXpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
+        id S234590AbhLIXs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXpr (ORCPT
+        with ESMTP id S233089AbhLIXs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:45:47 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D61C061746;
-        Thu,  9 Dec 2021 15:42:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NQOkz+58iIwh074kD5OkKJo4F6+sW4mgDBTSjwuk9Xw=; b=fNpoCaPuk7AjINfB/4pcInCRI1
-        tTUjrnqw4YM1Sz+1JYv0Z7TD/M0d027ULhbyAGxlusT/q3rhLL1wanyKYYj7rpwIuY3e/ggE4vH47
-        y9RqkwMI4vulwLgq6ciTEkbZL1bRbSFKySlYLN+VmrOTgL/ZpC6BfmdS7aaOII7gf8tIffPhE74is
-        bB/zhRPwQaB1hH1x8J4fwa1OAtOuYoaDVe2MhIUdGpIzOHsHocHRVU+VtsmWerhAAQ4H1Bya0odRq
-        jZjAOvXkxwoxKUBtjaR9UMtCRAXb2xU3zJWKnX4z2T6+KXys5Y8BrtQSgIBbxTBx1TToz/fF933mz
-        k3zbqTaw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvT3A-000PjW-90; Thu, 09 Dec 2021 23:42:08 +0000
-Date:   Thu, 9 Dec 2021 15:42:08 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>, Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com
-Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
-Message-ID: <YbKUUJUtjBk/n913@bombadil.infradead.org>
-References: <20211124173327.3878177-1-atomlin@redhat.com>
- <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
- <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
+        Thu, 9 Dec 2021 18:48:26 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FC3C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:44:52 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id p3so6583853qvj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:44:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z8ul/68TTMd0vCXelwEXbTf2Y8+4CmIOh8pjnYzpEeY=;
+        b=HKchMdZDouQpqT1O5HjguvjPWBPz5meO4ShyPblqGvL14MCZ+bL7PTDY/4z9k56BpQ
+         KZCb2a2oVelWePKPdWYqk3djkd1IimxvXoic+QwJFtOjUv8T6uBHfuHOfBVQOVd6sOaW
+         fQJ5P1RPrRuXBjunLQ+OT9IAVh/3dd4uJx0Bg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z8ul/68TTMd0vCXelwEXbTf2Y8+4CmIOh8pjnYzpEeY=;
+        b=Uk4y43ZAfldZlk6DtsRU0tJICuiVjgvSrHH+Z+fVEeua6bpkVcYckYh+BCJJ26HuKo
+         cx8+al9NISm1XrzYfwIJ8yuRfyydTGAKcF/u51H/5fXx81b6hwOcHQ1dygQkmO5gMLoq
+         06zah11D8NHtmBqq8+uuOYqZJ39EtB/ErVsg6GrH3b5guje9mA9Liafq1udVDSaaN3fY
+         Yhel5D3M+NX9HECtAHPKJMAiOOCHnCXTnfWiwI3Ji4Jc2AiTX+SzuGlGDqDlTiQjPJUh
+         kkqs+TYOkvOm3ojqqPwTvt/euFSa3tNiSXrg71ktluSeAL8jJc7bQf7KrfRb/QoDJte/
+         lPUw==
+X-Gm-Message-State: AOAM532+7+gQV7LXyZVHbekHlNBZCqv6SA+S7JQfo5X2Hwcp6BIyTv0G
+        ghIa0MeLkAGVDfgfPHyfziI5nchzMPKVxnQ4Sojt3Q==
+X-Google-Smtp-Source: ABdhPJzV6/TnXjUOLjFzM/ma9fmG9Nt8FCU/gSZz36pPI4LByD43heeF0Dr9GJ2LVcnM2DQhO0cSrj4qiEKvoaPI/+c=
+X-Received: by 2002:a05:6214:5193:: with SMTP id kl19mr20845472qvb.77.1639093491509;
+ Thu, 09 Dec 2021 15:44:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20211202034544.2750-1-yunfei.dong@mediatek.com> <20211202034544.2750-14-yunfei.dong@mediatek.com>
+In-Reply-To: <20211202034544.2750-14-yunfei.dong@mediatek.com>
+From:   Steve Cho <stevecho@chromium.org>
+Date:   Thu, 9 Dec 2021 15:44:41 -0800
+Message-ID: <CAC-pXoPV0MrX91DfuiscmkOwviJ6Gh4RcYRZ+GW6482NpMGFtg@mail.gmail.com>
+Subject: Re: [PATCH v12, 13/19] media: mtk-vcodec: Add work queue for core
+ hardware decode
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 04:49:17PM +0000, Aaron Tomlin wrote:
-> On Wed 2021-12-08 12:47 -0800, Luis Chamberlain wrote:
-> > > If the previously unloaded module is loaded once again it will be removed
-> > > from the list only if the taints bitmask is the same.
-> > 
-> > That doesn't seem to be clear. What if say a user loads a module which
-> > taints the kernel, and then unloads it, and then tries to load a similar
-> > module with the same name but that it does not taint the kernel?
-> > 
-> > Would't we loose visibility that at one point the tainting module was
-> > loaded? OK I see after reviewing the patch that we keep track of each
-> > module instance unloaded with an attached unsigned long taints. So if
-> > a module was unloaded with a different taint, we'd see it twice. Is that
-> > right?
-> 
-> Indeed - is this acceptable to you? I prefer this approach rather than
-> remove it from the aforementioned list solely based on the module name.
+On Wed, Dec 1, 2021 at 7:46 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> Add work queue to process core hardware information.
+> First, get lat_buf from message queue, then call core
+> hardware of each codec(H264/VP9/AV1) to decode, finally
+> puts lat_buf back to the message.
+>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 16 +++++++-
+>  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  3 ++
+>  .../platform/mtk-vcodec/vdec_msg_queue.c      | 41 ++++++++++++++++---
+>  .../platform/mtk-vcodec/vdec_msg_queue.h      |  8 ++--
+>  4 files changed, 57 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> index d460703f335d..4fbff61d2334 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> @@ -341,6 +341,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>                 goto err_dec_pm;
+>         }
+>
+> +       if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch)) {
+> +               vdec_msg_queue_init_ctx(&dev->msg_queue_core_ctx, MTK_VDEC_CORE);
+> +               dev->core_workqueue = alloc_ordered_workqueue("core-decoder",
+> +                       WQ_MEM_RECLAIM | WQ_FREEZABLE);
+> +               if (!dev->core_workqueue) {
+> +                       mtk_v4l2_err("Failed to create core workqueue");
+> +                       ret = -EINVAL;
+> +                       goto err_res;
+> +               }
+> +       }
+> +
+>         for (i = 0; i < MTK_VDEC_HW_MAX; i++)
+>                 mutex_init(&dev->dec_mutex[i]);
+>         spin_lock_init(&dev->irqlock);
+> @@ -351,7 +362,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>         ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+>         if (ret) {
+>                 mtk_v4l2_err("v4l2_device_register err=%d", ret);
+> -               goto err_res;
+> +               goto err_core_workq;
+>         }
+>
+>         init_waitqueue_head(&dev->queue);
+> @@ -450,6 +461,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>         video_unregister_device(vfd_dec);
+>  err_dec_alloc:
+>         v4l2_device_unregister(&dev->v4l2_dev);
+> +err_core_workq:
+> +       if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch))
+> +               destroy_workqueue(dev->core_workqueue);
+>  err_res:
+>         mtk_vcodec_release_dec_pm(&dev->pm);
+>  err_dec_pm:
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index cbaed96dcfa2..a558cc16026d 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -27,6 +27,7 @@
+>  #define MTK_VCODEC_MAX_PLANES  3
+>  #define MTK_V4L2_BENCHMARK     0
+>  #define WAIT_INTR_TIMEOUT_MS   1000
+> +#define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
 
-Sure, it makes sense to keep all the stupid ways we are harming the
-kernel. Makes sense. The other point I made about count though would
-be good, in case the taint was the same.
+Basic question: What is practical meaning of this? What architectures
+are supported?
 
-> > wc -l kernel/*.c| sort -r -n -k 1| head
-> > 84550 total
-> > 6143 kernel/workqueue.c
-> > 4810 kernel/module.c
-> > 4789 kernel/signal.c
-> > 3170 kernel/fork.c
-> > 2997 kernel/auditsc.c
-> > 2902 kernel/kprobes.c
-> > 2857 kernel/sysctl.c
-> > 2760 kernel/sys.c
-> > 2712 kernel/cpu.c
-> > 
-> > I think it is time we start splitting module.c out into components,
-> > and here we might have a good opportunity to do that. There are tons
-> > of nasty cob webs I'd like to start cleaning up from module.c. So
-> > how about we start by moving module stuff out to kernel/modules/main.c
-> > and then you can bring in your taint friend into that directory.
-> > 
-> > That way we can avoid the #ifdefs, which seem to attract huge spiders.
-> 
-> Agreed. This makes sense. I'll work on it.
+>
+>  /*
+>   * enum mtk_hw_reg_idx - MTK hw register base index
+> @@ -464,6 +465,7 @@ struct mtk_vcodec_enc_pdata {
+>   * @dec_capability: used to identify decode capability, ex: 4k
+>   * @enc_capability: used to identify encode capability
+>   *
+> + * @core_workqueue: queue used for core hardware decode
+>   * @msg_queue_core_ctx: msg queue context used for core workqueue
+>   *
+>   * @subdev_dev: subdev hardware device
+> @@ -506,6 +508,7 @@ struct mtk_vcodec_dev {
+>         unsigned int dec_capability;
+>         unsigned int enc_capability;
+>
+> +       struct workqueue_struct *core_workqueue;
+>         struct vdec_msg_queue_ctx msg_queue_core_ctx;
+>
+>         void *subdev_dev[MTK_VDEC_HW_MAX];
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+> index 913aefa67618..24f1d03df9f1 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+> @@ -68,6 +68,9 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
+>
+>         if (msg_ctx->hardware_index != MTK_VDEC_CORE)
+>                 wake_up_all(&msg_ctx->ready_to_use);
+> +       else
+> +               queue_work(buf->ctx->dev->core_workqueue,
+> +                       &buf->ctx->msg_queue.core_work);
 
-Wonderful, thanks!
+need {} for else here?
 
-> > Maybe live patch stuff go in its own file too?
-> 
-> At first glance, I believe this is possible too.
+>
+>         mtk_v4l2_debug(3, "enqueue buf type: %d addr: 0x%p num: %d",
+>                 msg_ctx->hardware_index, buf, msg_ctx->ready_num);
+> @@ -169,8 +172,7 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+>         return false;
+>  }
+>
+> -void vdec_msg_queue_deinit(
+> -       struct vdec_msg_queue *msg_queue,
+> +void vdec_msg_queue_deinit(struct vdec_msg_queue *msg_queue,
+>         struct mtk_vcodec_ctx *ctx)
+>  {
+>         struct vdec_lat_buf *lat_buf;
+> @@ -196,10 +198,36 @@ void vdec_msg_queue_deinit(
+>         }
+>  }
+>
+> -int vdec_msg_queue_init(
+> -       struct vdec_msg_queue *msg_queue,
+> -       struct mtk_vcodec_ctx *ctx,
+> -       core_decode_cb_t core_decode,
+> +static void vdec_msg_queue_core_work(struct work_struct *work)
+> +{
+> +       struct vdec_msg_queue *msg_queue =
+> +               container_of(work, struct vdec_msg_queue, core_work);
+> +       struct mtk_vcodec_ctx *ctx =
+> +               container_of(msg_queue, struct mtk_vcodec_ctx, msg_queue);
+> +       struct mtk_vcodec_dev *dev = ctx->dev;
+> +       struct vdec_lat_buf *lat_buf;
+> +
+> +       lat_buf = vdec_msg_queue_dqbuf(&dev->msg_queue_core_ctx);
+> +       if (!lat_buf)
+> +               return;
 
-Great! Thanks for being willing to doing this!
+If we were to return in this error condition,
+isn't it better to also differentiate this error with return code and
+change void return type?
 
-> > Loading and unloading modules... to keep track of *which ones are
-> > tainted*. I'd find it extremely hard to believe this is such a common
-> > thing and hot path that we need this.
-> > 
-> > In any case, since a linked list is used, I'm curious why did you
-> > decide to bound this to an arbitrary limit of say 20? If this
-> > feature is enabled why not make this boundless?
-> 
-> It can be, once set to 0. Indeed, the limit specified above is arbitrary.
-> Personally, I prefer to have some limit that can be controlled by the user.
-> In fact, if agreed, I can incorporate the limit [when specified] into the
-> output generated via print_modules().
+> +
+> +       ctx = lat_buf->ctx;
+> +       mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
+> +
+> +       lat_buf->core_decode(lat_buf);
+> +
+> +       mtk_vcodec_set_curr_ctx(dev, NULL, MTK_VDEC_CORE);
+> +       vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
+> +
+> +       if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
+> +               mtk_v4l2_debug(3, "re-schedule to decode for core",
+> +                       dev->msg_queue_core_ctx.ready_num);
+> +               queue_work(dev->core_workqueue, &msg_queue->core_work);
+> +       }
+> +}
+> +
+> +int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+> +       struct mtk_vcodec_ctx *ctx,     core_decode_cb_t core_decode,
+>         int private_size)
+>  {
+>         struct vdec_lat_buf *lat_buf;
+> @@ -210,6 +238,7 @@ int vdec_msg_queue_init(
+>                 return 0;
+>
+>         vdec_msg_queue_init_ctx(&msg_queue->lat_ctx, MTK_VDEC_LAT0);
+> +       INIT_WORK(&msg_queue->core_work, vdec_msg_queue_core_work);
+>         msg_queue->wdma_addr.size = vde_msg_queue_get_trans_size(
+>                 ctx->picinfo.buf_w, ctx->picinfo.buf_h);
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+> index 21a9c0aeb1b4..43eae638a2a8 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+> +++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+> @@ -67,6 +67,7 @@ struct vdec_lat_buf {
+>   * @wdma_addr: wdma address used for ube
+>   * @wdma_rptr_addr: ube read point
+>   * @wdma_wptr_addr: ube write point
+> + * @core_work: core hardware work
+>   * @lat_ctx: used to store lat buffer list
+>   */
+>  struct vdec_msg_queue {
+> @@ -76,6 +77,7 @@ struct vdec_msg_queue {
+>         uint64_t wdma_rptr_addr;
+>         uint64_t wdma_wptr_addr;
+>
+> +       struct work_struct core_work;
+>         struct vdec_msg_queue_ctx lat_ctx;
+>  };
+>
+> @@ -86,10 +88,8 @@ struct vdec_msg_queue {
+>   * @core_decode: core decode callback for each codec
+>   * @private_size: the private data size used to share with core
+>   */
+> -int vdec_msg_queue_init(
+> -       struct vdec_msg_queue *msg_queue,
+> -       struct mtk_vcodec_ctx *ctx,
+> -       core_decode_cb_t core_decode,
+> +int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+> +       struct mtk_vcodec_ctx *ctx,     core_decode_cb_t core_decode,
 
-If someone enables this feature I can't think of a reason why they
-would want to limit this to some arbitrary number. So my preference
-is to remove that limitation completely. I see no point to it.
+Not sure about the formatting rule, but is it supposed to be one param per line?
+If so, this comment also applied to function definition part.
 
-> > > @@ -3703,6 +3778,16 @@ static noinline int do_init_module(struct module *mod)
-> > >  	mod->state = MODULE_STATE_LIVE;
-> > >  	blocking_notifier_call_chain(&module_notify_list,
-> > >  				     MODULE_STATE_LIVE, mod);
-> > > +#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-> > > +	mutex_lock(&module_mutex);
-> > > +	old = find_mod_unload_taint(mod->name, strlen(mod->name),
-> > > +				mod->taints);
-> > > +	if (old) {
-> > > +		list_del_rcu(&old->list);
-> > > +		synchronize_rcu();
-> > > +	}
-> > > +	mutex_unlock(&module_mutex);
-> > 
-> > But here we seem to delete an old instance of the module taint
-> > history if it is loaded again and has the same taint properties.
-> > Why?
-> 
-> At first glance, in this particular case, I believe this makes sense to
-> avoid duplication
-
-If you just bump the count then its not duplication, it just adds
-more information that the same module name with the same taint flag
-has been unloaded now more than once.
-
-> i.e. the taint module would be stored in the 'modules'
-> list thus should be shown once via print_modules(). So, the initial
-> objective was to only track a "tainted" module when unloaded and once
-> added/or loaded again [with the same taint(s)] further tracking cease.
-
-This makes me wonder, why not just grow the list at driver insertion
-time, rather than removal.
-
-> > I mean, if a taint happened once, and our goal is to keep track
-> > of them, I'd imagine I'd want to know that this had happened
-> > before, so instead how about just an increment counter for this,
-> > so know how many times this has happened? Please use u64 for that.
-> > I have some test environments where module unloaded happens *a lot*.
-> 
-> If I understand correctly, I do not like this approach but indeed it could
-> work.
-
-I'm a bit confused, because here you seem to suggest you don't like the
-idea, and then...
-
-> Personally, I would like to incorporate the above idea i.e. track
-> the unload count, into the initial goal.
-
-Here you say you'd like to keep the unloud count.
-
-> > Please see kernel/sysctl.c changes on linux-next, we're moving away
-> > from everyone stuffing their sysclts in kernel/sysctl.c and there
-> > you can find helpers and examples of how *not* to do this. Its
-> > on the kernel table so you should be able to just
-> > register_sysctl_init("kernel", modules_sysctls) and while at it,
-> > if you spot any sysctls for module under the kern_table, please
-> > move those over and then your patch would be adding just one new
-> > entry to that new local modules_sysctls table.
-> > 
-> > We'll have to coordinate with Andrew given that if your changes
-> > depend on those changes then we might as well get all your
-> > changes through Andrew for the next release cycle.
-> 
-> All right. I will make the required changes. Thanks once again.
-
-Sure, so hey just one more thing. Can you add a simple selftest
-lib/test_taint.c which can be used to test tainting and you new
-tracker ? You can add a new selftest on
-
-tools/testing/selftests/module/
-
-I had already written some module based testing on
-tools/testing/selftests/kmod/kmod.sh so you can borrow stuff
-from there if you find it useful. But I think we need to start
-doing basic testing for module. I know Lucas has tons of test
-on kmod, so we should also look at what is there and what needs
-testing outside of that.
-
-Then there is the question of what should be tested using kunit and
-or selftests. From my experience, if you need a shell, use selftests.
-Also, if you need parallelization, use selftests, given kunit by
-default uses a uniprocessor architecture, user-mode-linux. I'll let
-you figure out what is the best place to add the test for this. It
-could just be its a better place to add these tests to kmod upstream
-as there are tons of tests there already. But kunit test can't be
-added there.
-
-Live patching already has its own set of selftests.
-
-  Luis
+>         int private_size);
+>
+>  /**
+> --
+> 2.25.1
+>

@@ -2,88 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AE646F676
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D3A46F678
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbhLIWK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S233239AbhLIWL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbhLIWK4 (ORCPT
+        with ESMTP id S233204AbhLIWL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:10:56 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAB1C061746;
-        Thu,  9 Dec 2021 14:07:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J97S50V8Gz4xhB;
-        Fri, 10 Dec 2021 09:07:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639087637;
-        bh=T+Kdi+vbaEfG5wP1THycl/1FYdnwHVcRUi+N90Ph6Zk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W0NO90e0zx5WByPQWg/tkvdcrTtJZxinzNQWcZm6HOF/nD35/0XGtzzVbOd6A+F+V
-         zqaPuyYWGDTq+osTep1r0WzPVI+a6BLHPNMDBRHm1q+xHL/uq+rbgO5/XUtYETwtn8
-         ldmEXQxyB3lw0PVVYPfK37NOB7a2AoAL1jnOkcEJiCEjncXzFLvFpDi2/mtGaM7VHG
-         Iq+7W6VryrjmvSVm/NnD8psbl2xhC88JUeTBY9czhYj3ImTDGFpvXOr3YUvUGGP9iG
-         22Nb3i/S4IjuCtCPd/W5a4sf4dLJlVmcmdmuIE6rPruxFFQM1YqC01k76IO+OWZbp2
-         dW0gYnTZzlmsA==
-Date:   Fri, 10 Dec 2021 09:07:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 8
-Message-ID: <20211210090716.6a991c08@canb.auug.org.au>
-In-Reply-To: <YbH3lT7fh+YCCwjx@sirena.org.uk>
-References: <20211208183814.71b0c51e@canb.auug.org.au>
-        <YbH3lT7fh+YCCwjx@sirena.org.uk>
+        Thu, 9 Dec 2021 17:11:28 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBEAC0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:07:54 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id x15so24707265edv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RHArNxFMHgs9P3JmMQUjRcZVsX1YeVD3wW/DAeZt5nA=;
+        b=JhUfOUJjxhGRzHwksR/Q8zG3IINBIKaphSkRwJzWYADLahSsN6d7219QvbpoEd8Y7k
+         Ufk/H24zbV7UnfRzWnZtmEkNZrNUh/75SD5YVhHcTNkE8nvjcjbuV/8uU1FIxASJeztH
+         4gA4ykWichWHKmWefAIY/la0fzYo0je1n6xY0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RHArNxFMHgs9P3JmMQUjRcZVsX1YeVD3wW/DAeZt5nA=;
+        b=CxEMcsdXaAecRvYqRqbvsQ9QQDkybZkaXGMrj1rGdAWYkCLX0i73v6ly0NnVRBEW70
+         VSLzGDtFP4SneNEY647jPK94PwMyxRlcBYF/WnTs/LsZTvXXEzCvMI9XXhjUGqWg+sLl
+         JaWY0zynlTEEPq+deHY0VTKObSJO8/LwKB2l0RvGKSsx47Qio3bYl/XlcknzMNdbNjKa
+         a89oEEVXXHLcqYB/wgvDV5qU6P4Yk1CyQ72XHx3x+289jLhZ0MyPky/9KXxcsyZhqrph
+         fycBW+HAF/fBckTIPGGpDYXSCkqzn09FC0DOBVfQtwV7qH8lmomBXxUVM50pUe2b5Rbu
+         Ljag==
+X-Gm-Message-State: AOAM531hRjERVL0s/xSLSZF3RxDICuH9UKNp1GxKD4Ii2hWla36U4zGw
+        N/dX55Hjut1OOTAJyKHyTTGnJ4AyN5ZcBOeRICM=
+X-Google-Smtp-Source: ABdhPJyl/R47shGdv+vraApv5kfhlacBHbpfLK/+B6tTWkZVGM1YrwjWXnE7IlOfvSqOVl5G2M2zCw==
+X-Received: by 2002:a17:906:9754:: with SMTP id o20mr18336901ejy.277.1639087673219;
+        Thu, 09 Dec 2021 14:07:53 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id d19sm478582edt.34.2021.12.09.14.07.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 14:07:51 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id u17so12119307wrt.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:07:49 -0800 (PST)
+X-Received: by 2002:adf:f8c3:: with SMTP id f3mr9535285wrq.495.1639087669394;
+ Thu, 09 Dec 2021 14:07:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PfepCrFLRDLsGuOTotOxXj8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+ <163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk>
+ <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com> <159180.1639087053@warthog.procyon.org.uk>
+In-Reply-To: <159180.1639087053@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 9 Dec 2021 14:07:33 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com>
+Message-ID: <CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/67] fscache: Implement a hash function
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-afs@lists.infradead.org,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PfepCrFLRDLsGuOTotOxXj8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Mark,
-
-On Thu, 9 Dec 2021 12:33:25 +0000 Mark Brown <broonie@kernel.org> wrote:
+On Thu, Dec 9, 2021 at 1:57 PM David Howells <dhowells@redhat.com> wrote:
 >
-> On Wed, Dec 08, 2021 at 06:38:14PM +1100, Stephen Rothwell wrote:
->=20
-> > News: I will (probably) do no linux-next releases between Dec 9 and Dec
-> > 19, inclusive. =20
->=20
-> I'll try to start provide some cover for this, probably starting
-> tomorrow unless a build for today runs *very* well.
+> What I'm trying to get at is that the hash needs to be consistent, no matter
+> the endianness of the cpu, for any particular input blob.
 
-Thanks very much, Mark. Good luck :-)
+Yeah, if that's the case, then you should probably make that "unsigned
+int *data" argument probably just be "void *" and then:
 
---=20
-Cheers,
-Stephen Rothwell
+>                 a = *data++;   <<<<<<<
+>                 HASH_MIX(x, y, a);
+>         }
+>         return fold_hash(x, y);
+> }
+>
+> The marked line should probably use something like le/be32_to_cpu().
 
---Sig_/PfepCrFLRDLsGuOTotOxXj8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Yes, it should be using a '__le32 *' inside that function and you
+should use l32_to_cpu(). Obviously, BE would work too, but cause
+unnecessary work on common hardware.
 
------BEGIN PGP SIGNATURE-----
+But as mentioned for the other patches, you should then also be a lot
+more careful about always using the end result as an 'unsigned int'
+(or maybe 'u32') too, and when comparing hashes for binary search or
+other, you should always do th4e compare in some stable format.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGyfhQACgkQAVBC80lX
-0GzwZwf/TeRyyCeb65WuWR4RzfJ5Op6p5fDbKo86PZULigQJV/PNOIUKIbl4vWUA
-kUstBx/YsDtIwtSGxJ5UsRUCAAaVWbULFI9Fc0uqZohk0Bxl/nDcfTOcCSzvuYdY
-brXrABtOVRd8AdqGNsFolL5N/4obOQ4aUUhaLRXaoQS5rxaPrRhSNkwKn6vw+aiR
-06AawE4NEABXW2yh5Y8p9CrVDuBxT3CSpJUrNHS+AYGdE6nS1vdk997RsUQr0gZL
-zCwXua/wEBnLpD0oi6LIyoeNeE0b5XG7U7lK1YhcGiDYsG1hCg66InDlyu9V6Ifh
-giLHENvyLJRN+z+6mZ/iEewiPazoRg==
-=s1Iu
------END PGP SIGNATURE-----
+Because doing
 
---Sig_/PfepCrFLRDLsGuOTotOxXj8--
+        return (long)hash_a - (long)hash_b;
+
+and looking at the sign doesn't actually result in a stable ordering
+on 32-bit architectures. You don't get a transitive ordering (ie a < b
+and b < c doesn't imply a < c).
+
+And presumably if the hashes are meaningful across machines, then hash
+comparisons should also be meaningful across machines.
+
+So when comparing hashes, you need to compare them either in a truly
+bigger signed type (and make sure that doesn't get truncated) - kind
+of like how a lot of 'memcmp()' functions do 'unsigned char'
+subtractions in an 'int' - or you need to compare them _as_ 'unsigned
+int'.
+
+Otherwise the comparisons will be all kinds of messed up.
+
+          Linus

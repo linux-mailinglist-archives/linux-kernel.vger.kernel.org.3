@@ -2,97 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657DC46F434
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB64346F439
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhLITsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S230484AbhLITtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhLITsR (ORCPT
+        with ESMTP id S230389AbhLITtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:48:17 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DB3C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:44:43 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id j11so6026782pgs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:44:43 -0800 (PST)
+        Thu, 9 Dec 2021 14:49:13 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15529C0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:45:40 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id bu11so6131218qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=YyCJJVppVowTxkE+zlT+lHTZu0h5h64AtApwEArmpFs=;
-        b=BMyqtGe0atMVZcr+sc/g8yqBeAyYfyA6HAJZyetaLAHuOkiytwcfayZxHUqHAE9Jyw
-         A3YeHooaKkak3BNiONcYtD3rxLWiEzuTMEMMC94J56f2MSFOyLkTY3PK1gSprakz96u5
-         Nh+Su6cw+1mksFhUqM+SLIkd9Cwz/hjmJeM9lRbiABMSCVK0XqHL7oKPTUPmD5VThpvL
-         WnJc3nGC6dtm6X1RgQUcXeWEYg7SiIzj+Jfy5zJMhwS7FY7FPEq6e0H3zBQ/T9j9ie+L
-         qVpezx2U4+oQ3xSlv573k7Hxs8xEk4siIjMpx1B19DPCpEJmlY6YFwyJj43mTT3vPwdF
-         yNsw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wvpmIkayqdMprhcCUS7F0gK4w6zIHIrz7QooN+hl7RM=;
+        b=W+0r42S0CsGpyHEjtoj3tMnfoP29cGlOuVGVgGkr9jnO9r5IbEuOxc86Vt06mhf4zV
+         lk1ciG1S9gNJDucFoa0ZpRLTZy6qtcmN54QyZtxhvkYX5BEYC6xrq1cDJEb6Cot/FFwr
+         tI3ZQXGE6FUclTi5uX1VHjRVpvW3e6Hjz4Pog=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=YyCJJVppVowTxkE+zlT+lHTZu0h5h64AtApwEArmpFs=;
-        b=0CLBcWOLG7nwFehj0jlfSeGGpFcn9L0ckmWz4TU5MQilj1V0RxaQxkHXgcKbsVyeBv
-         olsprg3JJdub3HjsKb3DibOJxHT56eL07EHmsx9iCl9a9o3rKUnD4ck1ZEe5++q4NWy/
-         aLyyD09iGhjMtCboFC5+wvevFeO/WTVNSKe79Gr55duyoVLfzGy/S9Bhgo6pherJanW7
-         gCWeCc/LQ5TguOOa8QZgpxeIZwH8JraixL/GI9Tkzbda8NFpqIyQnP5j+FT9VAgJxDQq
-         82qMiLqd4rbGJ6Isfyd04uRoj7EQR4nwvumAcn+/q9B9keLUhmwvyvUR7VpaCdzvRhX7
-         DhMQ==
-X-Gm-Message-State: AOAM533bfbx2Dq6vlarGgVmqsvgphqLF1etKjZ4acrYcufSf+3F6GwGB
-        1gfmsEUNssYs6Xj/3JywupRXuoB+WI0fGoUTxcnsjd8DS7754g==
-X-Google-Smtp-Source: ABdhPJwUxeZjuiA/dIvPsn42rsoytsNIhwGZFU49P3dQ4NIGS+PSXe9f0kfmvd/9vdnE7OFnIbBgtbt9oaJp2S7f5R8=
-X-Received: by 2002:a62:14c7:0:b0:4a2:a6f2:2227 with SMTP id
- 190-20020a6214c7000000b004a2a6f22227mr13714966pfu.22.1639079071152; Thu, 09
- Dec 2021 11:44:31 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wvpmIkayqdMprhcCUS7F0gK4w6zIHIrz7QooN+hl7RM=;
+        b=EfDPbT/PNI2k9NzlchnzcRMIJA6yQKBfdLoQGpWWlVgjVbKbUVcOyI+gtmd4Uldpj5
+         CH5qoNTLLRLhu1z7E7TfLSYM5IMSzRpPOX8qR65qy64uQVeXTzP+yMoLCxinNCDGDJSL
+         2CUtsYlXFsQ5cd9Ep+k9pYXIaHkGFunogB33m5AQI+YiWiGs+7UtC9F20r8oNQ/tXQXp
+         2lBBfGSQR8YMrjSXX28X4GbfKr+o8vCoxmPyYHfXXW2kcpzezJ8s4/RaVTYq9jg9gqQb
+         5oLRFRS4VKhS7P3Lnm/pxSaewAnd1A8FXhiThxA/vhmHuaLr4yx5aoQFx3frcf5r86Vh
+         gYlQ==
+X-Gm-Message-State: AOAM532nXVy7ZuWk6bmqSJeCT/t7zF09wMXLFX1IFKRjnc3CUJdiBEfp
+        nZQG0Nbmz27DNCyljwcBVJIffGWgIB4hO6SdtfcUeg==
+X-Google-Smtp-Source: ABdhPJzs5sjxRU8nFJVhY9SA3aqJ+0AHPiUMPWexktLZKk76goFLPsJtkDhO3YuXPjKIxWV6Y1ZwWUNO46zO2amVVTU=
+X-Received: by 2002:ad4:5cef:: with SMTP id iv15mr19084182qvb.82.1639079139150;
+ Thu, 09 Dec 2021 11:45:39 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:8ec7:0:0:0:0 with HTTP; Thu, 9 Dec 2021 11:44:30
- -0800 (PST)
-Reply-To: compaorekone34@gmail.com
-From:   kone compaore <abbttnab20@gmail.com>
-Date:   Thu, 9 Dec 2021 11:44:30 -0800
-Message-ID: <CAEKSJ0SR0dz5xqno2b3txjix4ZOt17U4mdEq1Z6FTgRHxdKjTg@mail.gmail.com>
-Subject: Greetings from Kone
-To:     undisclosed-recipients:;
+References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
+ <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com> <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+In-Reply-To: <YbHVDikM6eodP/MR@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 9 Dec 2021 11:45:27 -0800
+Message-ID: <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings to you and your family.
+Hey Heikki,
 
-My name is Mr. Kone Compaore, the auditing general with the bank,
-Africa Develop bank (ADB) Ouagadougou, Burkina Faso, in West Africa. I
-am contacting you to seek our honesty and sincere cooperation in
-confidential manner to transfer the sum of 10.5 (Ten million five
-hundred thousand Dollars) to your existing or new bank account.
+On Thu, Dec 9, 2021 at 2:06 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> Thanks for testing these..
+>
+> On Wed, Dec 08, 2021 at 07:45:26PM -0800, Prashant Malani wrote:
+> > Hi Heikki,
+> >
+> > On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This removes the need for the drivers to always separately evaluate
+> > > the _PLD. With the USB Type-C connector and USB port mapping this
+> > > allows us to start using the component framework and remove the custom
+> > > APIs.
+> > >
+> > > So far the only users of the _PLD information have been the USB
+> > > drivers, but it seems it will be used also at least in some camera
+> > > drivers later. These nevertheless touch mostly USB drivers.
+> > >
+> > > Rafael, is it still OK if Greg takes these?
+> > >
+> > > Prashant, can you test these?
+> >
+> > I've applied the patches to a system with the requisite _PLD entries
+> > in firmware, and I'm not sure I can see the connectors getting created
+> > correctly.
+> >
+> > My setup is:
+> >
+> > Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
+> > Mode) ----> USB Thumb drive.
+> >
+> > Here is the lsusb -t output before connecting the dock (omitting
+> > unrelated busses):
+> > localhost ~ # lsusb -t
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> >
+> > Here is the lsusb -t output (omitting unrelated busses):
+> > localhost ~ # lsusb -t
+> > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
+> >     |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
+> >         |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
+> >             |__ Port 3: Dev 18, If 0, Class=Mass Storage,
+> > Driver=usb-storage, 5000M
+> >         |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
+> > Driver=r8152, 5000M
+> >
+> > I see the connector symlink for the root hub:
+> >
+> > localhost ~ # cd /sys/bus/usb/devices
+> > localhost /sys/bus/usb/devices # ls 2-2/port/connector
+> > data_role  device  firmware_node  port1-cable  port1-partner  power
+> > power_operation_mode  power_role  preferred_role  subsystem
+> > supported_accessory_modes  uevent  usb2-port2  usb3-port2
+> > usb_power_delivery_revision  usb_typec_revision  vconn_source
+> >
+> > But for none of the children devices:
+> >
+> > localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
+> > ls: cannot access '2-2.3/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
+> > ls: cannot access '2-2.3.3/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
+> > ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
+> > localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
+> > ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
+> >
+> > Is this as you intended with the series? My interpretation was that
+> > each connected usb device would get a "connector" symlink, but I may
+> > have misinterpreted this.
+>
+> It is as intended. The usb ports on the board will have the connector
+> symlink, not the devices attached to them - the firmware is only aware
+> of the connectors on the board of course. It looks like this series is
+> working as it should.
 
-This money belongs to one of our bank client, a Libyan oil exporter
-who was working with the former Libyan government; I learn t that he
-was killed by the revolutionary forces since October 2011. Our bank is
-planning to transfer this entire fund into the government public
-treasury as unclaimed fund if nobody comes to claim the money from our
-bank after four years without account activities .
+Thanks for clarifying my understanding here.
 
-We did not know each other before, but due to the fact that the
-deceased is a foreigner, the bank will welcome any claim from a
-foreigner without any suspect, that is why I decided to look for
-someone whim I can trust to come and claim the fund from our bank.
+>
+> If you want to extend this solution so that also every device in the
+> usb topology will have the link to the connector on board, then that
+> should be now possible, but that is out side of the scope of this
+> series. You need to propose that separately.
+>
+> But I must ask, why can't you just walk down the topology until you
+> reach the on-board ports that will have the connector links?
+>
 
-I will endorse your name in the deceased client file here in my office
-which will indicate to that the deceased is your legal joint account
-business partner or family member next of kin to the deceased and
-officially the bank will transfer the fund to your bank account within
-seven working days in accordance to our banking inheritance rules and
-fund claim regulation.
+Right, we can certainly do that; having it in each device is just
+convenient. But as you said, that's the subject of another series.
 
-I will share 40% for you and 60% for me after the fund is transferred
-to your bank account, we need to act fast to complete this transaction
-within seven days. I will come to your country to collect my share
-after the fund is transferred to your bank account in your country. I
-hope that you will not disappoint me after the fund is transferred to
-your bank account in your country.
+You mentioned there would be a v2, so I'll add my Tested-By then.
 
-Waiting for your urgent response today
-Yours sincerely
-
-Kone Compaore
+Best regards,

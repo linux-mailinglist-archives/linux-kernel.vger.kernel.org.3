@@ -2,139 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E6D46F79C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9687746F79D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbhLIXo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S234542AbhLIXpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXoY (ORCPT
+        with ESMTP id S229760AbhLIXpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:44:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664BCC061746;
-        Thu,  9 Dec 2021 15:40:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B4ACB8270A;
-        Thu,  9 Dec 2021 23:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6277DC004DD;
-        Thu,  9 Dec 2021 23:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639093247;
-        bh=nnZsPoAmi114JwLrOsBaJlHzvJP82n/hX1V8BTv/Rfk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XnfawriabHqjlX6ocp4UNXZ3O5+17puWjgRm3kXrPAVyw4hoAPqthUcPU+Yga6leR
-         5sJmnSVJx5IHPfoheVQJDJj4+QAGqKg3S59zU744ZGBrK1ZPSPzVHINO6fAi3Sc3wI
-         uxwUAsQ9YGI3eu1mImtDIjM46c8bYjjeQXKTuVXFTHvzwGGSqR0l47EsLenlSuWVjI
-         xX/MV+/4RAFaks3YbJ+kjJGX0Zk19LUE3xDuq6WsbJOQBsqY+XjOrooHN7JBAf6JQe
-         EYHM16GcXQ4DnRAti/VzCZQqEbPL/2XEFjZC8/MBWsYdu2AJ4JTkBasQK3QgpHuCV0
-         oyDbU6wpyQ/pw==
-Date:   Thu, 9 Dec 2021 15:40:46 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v3 3/3] blk-crypto: show crypto capabilities in sysfs
-Message-ID: <YbKT/lcp6iZ+lD4n@sol.localdomain>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
- <20211208013534.136590-4-ebiggers@kernel.org>
- <6ff4d074-7508-4f4c-de06-f36899668168@acm.org>
+        Thu, 9 Dec 2021 18:45:02 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C84C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:41:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v23so5590154pjr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:41:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r5IxUk7IoRTtrl9b80LUZD9vVdZvTnVgPepWlX6Ohsg=;
+        b=jdweGnXL6ND3BiYR6OrJRdg5Np7KCGmUX0f6pWmIZofXaOe97M4P6exXy9VtmzFCIx
+         98frCoSGt4fnj1kVXOYDRhRccWPuK0L10zo03sxW2Kic2fIoxAYQ3fFXW9fWADAswkgK
+         UG/ty3h235tjYAvc3RVKU0nlEccy7zoJpzcGE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r5IxUk7IoRTtrl9b80LUZD9vVdZvTnVgPepWlX6Ohsg=;
+        b=kKSa/HcPu3nz7W6R04s4AOgrpjJsDRJ0tX5nDmlxbx9huMGG0qlhd93T61LycZxCDQ
+         VoOb2KB6lckChX79uOZQ+KBsideWd3cUIf8s5wa9K3jera+Fj/BN/OPgB9Cc1iG/DAPX
+         vXmisijpMleZbo9Jtsr/uyZP+LWdSwOMXzX9spM4CokDAG1VsNzUdZ+Hx97oFFU0wG5J
+         FTlZnbj2zOa5pgi2HO2wt9C95ktql7gjMt4eY1vi+VRZzkKooh0vDgD14ExhxcibyE5A
+         QwyTk62+0GEP+4bY9TfpQI1j5lyjkeQDKRbcgBVmpL9mZ87tg9UFyF/HpsQaj9a7ERBR
+         r0hg==
+X-Gm-Message-State: AOAM531YEYjYceVYyWTCkJx+xMwQBD9MUJzvNquoB5mxc+WK0T1Xget0
+        ImYssd07m1j2dacIVxptkPCB9g==
+X-Google-Smtp-Source: ABdhPJzyk4sf1WNPIubTmnLyaDj9YqUyzvUL41XvKfsOUs2io7OX0emxdLtUfl9UQJ01SI14m51qjw==
+X-Received: by 2002:a17:90b:3ecd:: with SMTP id rm13mr19136275pjb.157.1639093287759;
+        Thu, 09 Dec 2021 15:41:27 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mu4sm11720860pjb.8.2021.12.09.15.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 15:41:27 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:41:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
+ register
+Message-ID: <202112091539.6B349AC@keescook>
+References: <20211203084354.3105253-1-keescook@chromium.org>
+ <87o85r4a4f.fsf@intel.com>
+ <202112082220.81ECDC63D@keescook>
+ <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6ff4d074-7508-4f4c-de06-f36899668168@acm.org>
+In-Reply-To: <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:51:59PM -0800, Bart Van Assche wrote:
-> On 12/7/21 5:35 PM, Eric Biggers wrote:
-> > +What:		/sys/block/<disk>/queue/crypto/modes/<mode>
-> > +Date:		December 2021
-> > +Contact:	linux-block@vger.kernel.org
-> > +Description:
-> > +		[RO] For each crypto mode (i.e., encryption/decryption
-> > +		algorithm) the device supports with inline encryption, a file
-> > +		will exist at this location.  It will contain a hexadecimal
-> > +		number that is a bitmask of the supported data unit sizes, in
-> > +		bytes, for that crypto mode.
-> > +
-> > +		Currently, the crypto modes that may be supported are:
-> > +
-> > +		   * AES-256-XTS
-> > +		   * AES-128-CBC-ESSIV
-> > +		   * Adiantum
-> > +
-> > +		For example, if a device supports AES-256-XTS inline encryption
-> > +		with data unit sizes of 512 and 4096 bytes, the file
-> > +		/sys/block/<disk>/queue/crypto/modes/AES-256-XTS will exist and
-> > +		will contain "0x1200".
+On Thu, Dec 09, 2021 at 05:20:45PM -0500, Harry Wentland wrote:
 > 
-> So a bitmask is used to combine multiple values into a single number?
+> 
+> On 2021-12-09 01:23, Kees Cook wrote:
+> > On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
+> >> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+> >>> The link_status array was not large enough to read the Adjust Request
+> >>> Post Cursor2 register. Adjust the size to include it. Found with a
+> >>> -Warray-bounds build:
+> >>>
+> >>> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> >>> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+> >>>    59 |         return link_status[r - DP_LANE0_1_STATUS];
+> >>>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> >>> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+> >>>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> >>>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>>
+> >>> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+> >>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> >>
+> >> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
+> >> published in 2014, and Tegra is the only user of
+> >> drm_dp_get_adjust_request_post_cursor().
+> > 
+> > I see POST_CURSOR2 is used here too:
+> > 
+> > drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> > 
+> 
+> Looks like we read and parse that in the admgpu driver without
+> using drm_dp_get_adjust_request_post_cursor.
 
-You could think of it that way, yes.
-
-> Has it been considered to report each value separately, e.g. 512\n4096\n
-> instead of 0x1200\n?  I think the former approach is more friendly for shell
-> scripts.
-
-I don't think that would be acceptable to the sysfs folks, as they only allow
-one value per file.  I suppose a bitmask could be viewed as unacceptable too,
-but it seemed to make sense here, given that the data unit sizes are always
-powers of 2, and the hardware reports them as bitmasks.
-
-Greg already reviewed this patch, but maybe he wasn't looking at this part.
-
-Greg, any opinion on the best way to report a set of power-of-2 values via
-sysfs?
+Right, and probably that could be switched to use it, but I'm not sure
+what the impact of the larger link_status read is.
 
 > 
-> > +struct blk_crypto_attr {
-> > +	struct attribute attr;
-> > +	ssize_t (*show)(struct blk_crypto_profile *profile,
-> > +			struct blk_crypto_attr *attr, char *page);
-> > +};
-> 
-> It is not clear to me why this structure has been introduced instead of using the
-> existing kobj_attribute structure?
+> I don't have a strong feeling but I liked your original
+> patch a bit better. I'm not sure what it means when part
+> of a spec is deprecated. Once a spec is written display
+> vendors might implement it. We should make sure that
+> displays like that are always handled in a sane manner.
 
-kobj_attribute isn't strongly-typed to the specific type of kobject.  It also
-includes a store function pointer, which is not necessary here.
+Jani, Dave, any guidance here? I'm fine with whatever, but the current
+code is for sure broken. ;)
 
-What I'm doing here is very common; take a look at some other code that
-implements sysfs attributes.  Even block/blk-sysfs.c.
+-Kees
 
-> > +static int __init blk_crypto_sysfs_init(void)
-> > +{
-> > +	int i;
-> > +
-> > +	BUILD_BUG_ON(BLK_ENCRYPTION_MODE_INVALID != 0);
-> > +	for (i = 1; i < BLK_ENCRYPTION_MODE_MAX; i++) {
-> > +		struct blk_crypto_attr *attr = &__blk_crypto_mode_attrs[i];
-> > +
-> > +		attr->attr.name = blk_crypto_modes[i].name;
-> > +		attr->attr.mode = 0444;
-> > +		attr->show = blk_crypto_mode_show;
-> > +		blk_crypto_mode_attrs[i - 1] = &attr->attr;
-> > +	}
-> > +	return 0;
-> > +}
-> > +subsys_initcall(blk_crypto_sysfs_init);
-> 
-> Would it be possible to remove the use of subsys_initcall() if the crypto attributes and
-> blk_crypto_modes[] would be defined in the same file?
-
-I want to make it so that all crypto modes show up in sysfs without having to
-write extra code every time a new crypto mode is added.  That's not possible if
-the attributes are defined statically.  Defining them in the same array would
-come close, since then it would be hard for people to forgot to update one place
-and not the other.  But that would mix together the sysfs support and the core
-blk-crypto support, which seems undesirable.
-
-- Eric
+-- 
+Kees Cook

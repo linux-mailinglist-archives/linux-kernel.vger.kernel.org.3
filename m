@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6597746F398
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5450646F399
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbhLITHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbhLITHe (ORCPT
+        id S230162AbhLITIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:08:17 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:11178 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230112AbhLITIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:07:34 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC898C0617A2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:03:59 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id e136so15991625ybc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:03:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=two5tWS0eGFOwgvR2SUAW/v768W9Njq3kAUeHb+0A4Q=;
-        b=Lwiup1KxwBFyc07FAmO5nKhY05sgszhLXDqINwnOoO1lFEc8Y/u1J2GTVuy7p2BUzj
-         fT7ftz1+EmywUzrlqjNoQ4YaC+RxQccsjCtTUku1d1TRQBu7eFY2grZ1yx8vcnvkL/cy
-         WeTQX/cJPLqK15ZZ+nJpwJhqBZmqQVTKeukO52X1SRIOBJvhuMvx7Opwk5c/YDnX6r/K
-         EdsTJpzMYmheZLwlHenEVAhnZWW9B3Hbd3PB6Q/vCSuUnoPp8JJHTP8jswnti+t7me7d
-         KtA3DZRrG86Ne4ieRt9tWFoM9/NH3IP4yFxA4BLt9M9A9PE17J9vMLRkJ3ZR+0RbIXfz
-         /yPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=two5tWS0eGFOwgvR2SUAW/v768W9Njq3kAUeHb+0A4Q=;
-        b=cT911RXUO4SnwTGIzAC93FBVs36WIw+4nKsc12BweuZB4tgSGFjOLSq8Nc6xnKPl90
-         4Lxchk0dOgpH6pdnu76zF/o9zln+fJiy0MoMX5/5GvYLXf/q/UO0KQIrPyyQsH6FzziT
-         RxqnVYZLYCQ4iyTWiHltdmhD9kDB3FyB4/YrqXZ4a0JaEkLKfRQqnQvSkbG/dCnNfDq8
-         Aj3HAfgcjaQkNGHcdfzoJQCVTWwEmUfcKk+IayuW854OT1tbJGzrMe53m8NzbnS5jP+T
-         coHaAbOQskOrA4G16U0m/EYPbZFmLyP6yP/q6bEo9lVi/5Qlm1gYXV6iGM5vzyH+J70v
-         r7Pw==
-X-Gm-Message-State: AOAM532IOxTExrcAY+Xhsu9dTCdjB0ydjaJ/GAj6qhV5hzWyF3R2gSwr
-        d0QC5N/6UygLi3J4Tm+ujk9mImY6pnYf+CXKchY4Pg==
-X-Google-Smtp-Source: ABdhPJyecQYcqcyB3VigbPT/iwpHLSqnyETAoJb0G5MHHeKta4v9w6O15VNzF6yzZaUdu3RkQuz6hcW7XgA+lP52SNI=
-X-Received: by 2002:a25:a448:: with SMTP id f66mr8383450ybi.225.1639076637791;
- Thu, 09 Dec 2021 11:03:57 -0800 (PST)
+        Thu, 9 Dec 2021 14:08:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639076683; x=1670612683;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iz/wXRu33P1x1tyycLT6awGPeINKLjvLTr6sCfJHrCg=;
+  b=IPWA+2zqNKJ4zYVdBLbnJacT8/AY/Dh0waqVKMSfAX6y8Jwk69Uqd1Kr
+   oFSEPSO/AXstmQWHRw6DpfgoDZVVCfBjHscwmoUAmNq45EvIh53Ajr8Ab
+   Y/onXxDtxjrIyUUCRfuzfLEykP+MSIm8h5TKJNOuUlDZOYjriuKA9OJ3x
+   y0G2I+bIoq9jjzyPQIbz/SfLnAu/wrIu2Af0x5sVg59ZjVNwC2lv5r0g/
+   OruPMoKN+Qjt8vv0PPsr9wz2/IikeESCJr6Zqn/p4VDgei4yZ+Hxi0sA2
+   8CSFNaTapRYIOs+QJGq1YB4rbZfo4ZGS/FSD556l4YEnTUDnCazWWH3mx
+   Q==;
+IronPort-SDR: Dr27Q0Aqr1naB51eowebzSme6O07Q5/fWEyx9gJw4gKlCCRfPyHSK8cZUwzVTc+JOK3dFqT4Jt
+ H+ZXjzFzbjqOIbxsVNvoemWtH/hlIjCu6pElXDVRugVZoOLDSPMkSTDbfiReCBuSB8E6pcIgSy
+ a/Div93VlCAWrKLOAKuq438zLm0xUIsW9/uU2Ix1O36VWpmXP0lZO4QIZtSwXebRG/NMAKtW87
+ Nps+kX1A76FDP7BvKPYTiP0+gjs9uN4fUHCv3iHo+QK3vH1w7JBO94p8RtARELQusdeVe9MLrT
+ iPnzGJjcm+rR/ZfyxbeIliwb
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="141897012"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 12:04:42 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 9 Dec 2021 12:04:42 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 12:04:39 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <p.yadav@ti.com>, <michael@walle.cc>
+CC:     <vigneshr@ti.com>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <nicolas.ferre@microchip.com>, <zhengxunli@mxic.com.tw>,
+        <jaimeliao@mxic.com.tw>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH v2 1/2] mtd: spi-nor: core: Introduce SPI_NOR_SOFT_RESET flash_info fixup_flag
+Date:   Thu, 9 Dec 2021 21:04:35 +0200
+Message-ID: <20211209190436.401946-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211208212211.2860249-1-surenb@google.com> <20211208212211.2860249-3-surenb@google.com>
- <YbHFVxd34P0CvfpG@dhcp22.suse.cz>
-In-Reply-To: <YbHFVxd34P0CvfpG@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 9 Dec 2021 11:03:46 -0800
-Message-ID: <CAJuCfpHQ0H+Uqb2J2iW4UtgEn+OogvByMzoKrthBaS9gR4OYug@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] mm/oom_kill: allow process_mrelease to run under
- mmap_lock protection
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 12:59 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 08-12-21 13:22:11, Suren Baghdasaryan wrote:
-> > With exit_mmap holding mmap_write_lock during free_pgtables call,
-> > process_mrelease does not need to elevate mm->mm_users in order to
-> > prevent exit_mmap from destrying pagetables while __oom_reap_task_mm
-> > is walking the VMA tree. The change prevents process_mrelease from
-> > calling the last mmput, which can lead to waiting for IO completion
-> > in exit_aio.
-> >
-> > Fixes: 337546e83fc7 ("mm/oom_kill.c: prevent a race between process_mrelease and exit_mmap")
->
-> I am not sure I have brought this up already but I do not think Fixes
-> tag is a good fit. 337546e83fc7 is a correct way to handle the race. It
-> is just slightly less optimal than this fix.
+The Soft Reset and Rescue Sequence Support is defined in BFPT_DWORD(16)
+starting with JESD216A. The first version of SFDP, JESD216 (April 2011),
+defines just the first 9 BFPT DWORDS, thus it does not contain information
+about the Software Reset and Rescue Support. Since this support can not
+be discovered by parsing the first SFDP version, introduce a flash_info
+fixup_flag that will be used either by flashes that define
+JESD216 (April 2011) or by flashes that do not define SFDP at all.
+In case a flash defines BFPT_DWORD(16) but with wrong values, one should
+instead use a post_bfpt() hook and set SNOR_F_SOFT_RESET.
 
-Will post v5 without it. Thanks!
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+v2: no changes
 
->
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
-> Thanks!
-> > ---
-> >  mm/oom_kill.c | 27 +++++++++++++++------------
-> >  1 file changed, 15 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> > index 1ddabefcfb5a..67780386f478 100644
-> > --- a/mm/oom_kill.c
-> > +++ b/mm/oom_kill.c
-> > @@ -1169,15 +1169,15 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
-> >               goto put_task;
-> >       }
-> >
-> > -     if (mmget_not_zero(p->mm)) {
-> > -             mm = p->mm;
-> > -             if (task_will_free_mem(p))
-> > -                     reap = true;
-> > -             else {
-> > -                     /* Error only if the work has not been done already */
-> > -                     if (!test_bit(MMF_OOM_SKIP, &mm->flags))
-> > -                             ret = -EINVAL;
-> > -             }
-> > +     mm = p->mm;
-> > +     mmgrab(mm);
-> > +
-> > +     if (task_will_free_mem(p))
-> > +             reap = true;
-> > +     else {
-> > +             /* Error only if the work has not been done already */
-> > +             if (!test_bit(MMF_OOM_SKIP, &mm->flags))
-> > +                     ret = -EINVAL;
-> >       }
-> >       task_unlock(p);
-> >
-> > @@ -1188,13 +1188,16 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
-> >               ret = -EINTR;
-> >               goto drop_mm;
-> >       }
-> > -     if (!__oom_reap_task_mm(mm))
-> > +     /*
-> > +      * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
-> > +      * possible change in exit_mmap is seen
-> > +      */
-> > +     if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
-> >               ret = -EAGAIN;
-> >       mmap_read_unlock(mm);
-> >
-> >  drop_mm:
-> > -     if (mm)
-> > -             mmput(mm);
-> > +     mmdrop(mm);
-> >  put_task:
-> >       put_task_struct(task);
-> >       return ret;
-> > --
-> > 2.34.1.400.ga245620fadb-goog
->
-> --
-> Michal Hocko
-> SUSE Labs
+ drivers/mtd/spi-nor/core.c | 3 +++
+ drivers/mtd/spi-nor/core.h | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 2e21d5ac0e2d..32d80fdaa2a2 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2699,6 +2699,9 @@ static void spi_nor_init_fixup_flags(struct spi_nor *nor)
+ 
+ 	if (fixup_flags & SPI_NOR_IO_MODE_EN_VOLATILE)
+ 		nor->flags |= SNOR_F_IO_MODE_EN_VOLATILE;
++
++	if (fixup_flags & SPI_NOR_SOFT_RESET)
++		nor->flags |= SNOR_F_SOFT_RESET;
+ }
+ 
+ /**
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 2afb610853a9..70c6bb7f5f04 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -373,6 +373,8 @@ struct spi_nor_fixups {
+  *                            memory size above 128Mib.
+  *   SPI_NOR_IO_MODE_EN_VOLATILE: flash enables the best available I/O mode
+  *                            via a volatile bit.
++ *   SPI_NOR_SOFT_RESET:      flash supports software reset enable, reset
++ *                            sequence.
+  * @mfr_flags:      manufacturer private flags. Used in the manufacturer fixup
+  *                  hooks to differentiate support between flashes of the same
+  *                  manufacturer.
+@@ -416,6 +418,7 @@ struct flash_info {
+ 	u8 fixup_flags;
+ #define SPI_NOR_4B_OPCODES		BIT(0)
+ #define SPI_NOR_IO_MODE_EN_VOLATILE	BIT(1)
++#define SPI_NOR_SOFT_RESET		BIT(2)
+ 
+ 	u8 mfr_flags;
+ 
+-- 
+2.25.1
+

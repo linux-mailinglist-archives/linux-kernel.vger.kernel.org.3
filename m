@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B35ED46E376
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D014346E378
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbhLIHtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:49:21 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:54925 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbhLIHtV (ORCPT
+        id S232290AbhLIHtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230154AbhLIHta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:49:21 -0500
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MtOT0-1mhPrY3WIA-00utx2; Thu, 09 Dec 2021 08:45:46 +0100
-Received: by mail-wr1-f43.google.com with SMTP id v11so8087856wrw.10;
-        Wed, 08 Dec 2021 23:45:46 -0800 (PST)
-X-Gm-Message-State: AOAM533zVpHpOkrulmlQznt3UpEyJmMVY5ijE7xVElBw+i2yXnjAEltp
-        8Laj/yhvu+H/1S796FJ5UFi5dE+0TFlqIO71TWc=
-X-Google-Smtp-Source: ABdhPJy97hcdhDzB0ZZuC766TNriU5+YGxr1UxnyqspMCvNb+wDJIZH2WBY4AXOy4gCRePgUFYH4z/KfUsEtf0tj1rE=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr4538439wrp.209.1639035946415;
- Wed, 08 Dec 2021 23:45:46 -0800 (PST)
+        Thu, 9 Dec 2021 02:49:30 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE8BC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 23:45:57 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 8so4680344pfo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 23:45:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S6sljBlTTFv4LyM3w/XYfSB/y8cuCgv6qRRvYOM58bo=;
+        b=bTTq3Fc8zqIWiPIv0qyowDZ02fTob/teqhwg5s1M+8upNrw6f6A7/H7BhIbjGTUI3i
+         9O7uP9Q7vqtDuY7xp/fO3yVuxhfr3MYcVYj03X5KVsGH1K+jQIPHILMrAccfL97yn8Fe
+         LtCjk9Gk+6VOiX1Pb1bjQlFNDukElregC8rqGEIFwpf3LAEcZ4bPyaGajNz7C1hF/fex
+         GB4JfcFWKklvnpig+PJ3WswnxelColuNpVWC+ifWgRlWFhoDTu4QoEKooD/3e4AJTFkq
+         cMuX+ZfNLjLAhWhRmWHTeyNyXJ+taEpl9uvVvktx7gBZBvrScpxmsNM2zgP/u9B9bD/T
+         Rx2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S6sljBlTTFv4LyM3w/XYfSB/y8cuCgv6qRRvYOM58bo=;
+        b=R7nQkeXXylkd/MwF9K57hqKNxIEeCUQA6i0aSmHD+JDfC+UylENRBS63ILlzNdKNCP
+         BnXAfG+Vfzbwnwhpo8G0q6k89WLVl/bgcn1Gehm9xfDL2DYGmC8ReGMnmm5Q4RG9lkeJ
+         2eBPXt9e2oaPIcaosWk3uaUUa+hmqJWgwL+znI+vSvX/FIlPJPPzhjqtrBon4Sq67uCq
+         pEQufgfGO3KIkgat6YhaI6vKyp2/whprG/gB6VMZnUdmIo97Tz67x8orrAW4RdFdHcB3
+         3IOyIWgRU+sXkmdkqs3w4rR7VSAYsuOiDzhqCcQeuTf8wabmA6tqIT+nshzM7qkrrhGY
+         zX6A==
+X-Gm-Message-State: AOAM533iVurU/a3kRHDepGH3m3ZDhP+mRJXdPsEdDAoRHxneoCcKOKn/
+        IMdr7ILKyKUZqoKOoYGAAUNwdQ==
+X-Google-Smtp-Source: ABdhPJy4vLVK4vNJiSv25VuTqdUwuEzS7XUOtNkjDw/CRuoa3MUT3oLkzCtaNr74NgLOMeqWqbReOw==
+X-Received: by 2002:a63:2b03:: with SMTP id r3mr32170691pgr.328.1639035956433;
+        Wed, 08 Dec 2021 23:45:56 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:636e:d54:3de7:fbc7])
+        by smtp.gmail.com with ESMTPSA id a23sm4571889pgh.35.2021.12.08.23.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 23:45:56 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:45:53 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, matthias.bgg@gmail.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        trevor.wu@mediatek.com, yc.hung@mediatek.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ASoC: mediatek: assign correct type to argument
+Message-ID: <YbG0MRKHi0VrYD1A@google.com>
+References: <20211209073224.21793-1-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-References: <202112082057.C993DC6881@keescook>
-In-Reply-To: <202112082057.C993DC6881@keescook>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 9 Dec 2021 08:45:30 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1wsa1makDonP8xdbMt5Tc4rU2a_4LDfXLpSp9+uFd73w@mail.gmail.com>
-Message-ID: <CAK8P3a1wsa1makDonP8xdbMt5Tc4rU2a_4LDfXLpSp9+uFd73w@mail.gmail.com>
-Subject: Re: question about all*config and COMPILE_TEST
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:A6s//GqMFrdshu/Cwjo4T6b7QU/Pj8O7UW9TqPIByvUetgUrJ18
- jeA2rUJ5tRTFlN3KIDez86R424tU0SFBFZxQ5uOamuD4dk/EKFVXa13kD81CXprf/4n8ghh
- 2XuH+HDYbAgelfsgLS+l9GqsQkoAVAqTJvkUJJK8hg247GJwVo6BZ6Yo8TSuT7eeeYKQKcq
- kJCO/Anct2MWKflXF4FRg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pM4SBZvEWJA=:qY7t0EjGAvi6geaBDFSEl3
- SLaom5nPH1FqIT+yhhjPae1J2OKDYpDM3reXZHZNq1ODzklyphobwhUT2wXIOf/x6JmewyZ/c
- Wlg0mKbU6r7+VUA5G3qzZiVfsFZHZ/AuzFO4vImwn6cqi/l0JSI3o0hgaKWp6QAVJvCjfR3i/
- RHijDB/334nH1g2ioyKZ15eNK4d83cqg6Vg8C3oIZl8g38BGfWDxEpIn4r+jYRTWL4m57sngb
- oxja3OiRpScSkHuz3DQ1ghAznyOv/e1SXxfxegYhG4l1E+RzUcbyVNce1clMtVkLTyxxtLF0C
- 12dAtHJpGHq41gmDOOza0YsB+cj/ZXznmO6809gUEtJv8beC+3KUz3ritTtlbRJRelLNsNOi+
- nGZo+3acqg96mCnTe8LRtz5P0JNTcUIDPld9Hs01sWsBUxaR3sKPIZT3CbI71xx/amB3NS32K
- Swl95mWJMxBc9WQrplX3A9V3vNrKHWDhCqGF51cxva0yAw8KarvTZn2GyLMWqZ8yLYMBtJOOz
- dFXBwtoEbv+a8SxQYLQE4LzKTnFVLKBUyaoUYFfFcGU3pd5d89p4X5Bx6xX2ytaewoMXRQw8o
- h5PSsTL+ZXi5uP3Jrx7iAsus3Tx8UdfkXLvGo7gffVbWvXzVPTdOWAqEpnF+wWc/EYB8ZDWrX
- rTngEdhiuePs5IVLNE4qtDFiHkTJ5+VcRG6Z9ni9Pf9AyLYb51LUYd/WnR95tuEIoFRU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209073224.21793-1-jiaxin.yu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 6:07 AM Kees Cook <keescook@chromium.org> wrote:
->
-> tl;dr: is there a way to force a config default to "off" under
-> all*config builds, but still leave it configurable? (i.e. not "depends
-> on !COMPILE_TEST")
->
-> I'm trying to understand a Kconfig behavior with regard to
-> COMPILE_TEST. I'm able to use an "all*config" target, followed by specific
-> additional config changes (e.g. turning off KCOV), but I can't enable
-> things like DEBUG_INFO because of their "depends on !COMPILE_TEST".
-> Whenever I want to examine debug info from all*config build I need to
-> patch lib/Kconfig.debug to remove the depends. I was hoping I could,
-> instead do:
+On Thu, Dec 09, 2021 at 03:32:24PM +0800, Jiaxin Yu wrote:
+> Fix the following sparse warning: (new ones prefixed by >>)
+> >> sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c:370:33:
+>      sparse: sparse: incorrect type in argument 3 (different base types)
+>    sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c:370:33: sparse:
+>      expected unsigned int to
+>    sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c:370:33: sparse:
+>      got restricted snd_pcm_format_t [usertype]
+> 
+> Correct discription of format, use S32_LE and S24_LE to distinguish the
+> different 32bit.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-This would be a minor hassle for my randconfig testing because I really
-want to have DEBUG_INFO disabled when building randconfigs in order
-to keep down compile times. I could however just force DEBUG_INFO=n
-the same way as forcing COMPILE_TEST=y at the moment.
-
-
-> I then thought I could use:
->
->         default !COMPILE_TEST
->
-> since this works:
->
-> config WERROR
->         bool "Compile the kernel with warnings as errors"
->         default COMPILE_TEST
->
-> but I think the above is a no-op: it's the same as not having
-> "default COMPILE_TEST" when doing an all*config build: it'll be enabled
-> not because of COMPILE_TEST but because of the all*config pass.
-
-Correct. One trick that works here is to use a 'choice' statement, as those
-still honor the 'default' value even for allmodconfig -- Kconfig has no
-idea which one of them is the 'all' version.
-
-> How can I make DEBUG_INFO configurable, but default off under
-> all*config?
-
-I'd try generalizing the "DWARF version" choice to offer 'none' as a
-default, like
-
-choice
-       prompt "Debug information"
-       default DEBUG_INFO_NONE  if COMPILE_TEST
-       default DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT if DEBUG_KERNEL
-
-config DEBUG_INFO_NONE
-       bool "Turn off all debug information"
-
-config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-       bool "Rely on the toolchain's implicit default DWARF version"
-
-config DEBUG_INFO_DWARF4
-       bool "Generate DWARF Version 4 debuginfo"
-
-config DEBUG_INFO_DWARF5
-        bool "Generate DWARF Version 5 debuginfo"
-        depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM ||
-(AS_IS_GNU && AS_VERSION >= 23502)))
-        depends on !DEBUG_INFO_BTF
-
-endchoice
-
-        Arnd
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>

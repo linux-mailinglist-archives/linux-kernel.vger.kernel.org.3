@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1B046DF55
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE0146DF58
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241429AbhLIARG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 19:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S241442AbhLIATh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 19:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241413AbhLIARF (ORCPT
+        with ESMTP id S238337AbhLIATh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:17:05 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9992FC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=YKaq7u2ZvlBjsqTL7W0J4+7gh5LsbD02rf6n5cT3NHE=; b=aYUGOucC+1mSIQCxeuiQs6k4O3
-        uZnNI29VLHIC5gsjn6MphBM4pzwqSDJt2SgobOPe43ICDfh78X9Yl4W7dLYDtZfFg5V0jq1EM2gDX
-        uyrdXpp1UHujvzsN10dqs/F08wzhXv4AuK3pDEexq2R9s/n14VS7rFITs1b6rdjQ4TkO7e6dmbRKG
-        EZdFgOSGB7HvJnIxmautqAVkfgk4NC8mjfQJbTXpLXiACxPUbGgfnX9IMqUL+91+xVuSYUaEwG92s
-        56fedlxBXZoN1VkZd3vfwwtYlDxGtBkpx/4zEOZSENo3zcZWvRLw1mirhEvGmS2hJLa3U1kAmesJI
-        Wnjksj0w==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv73z-00EZwZ-HT; Thu, 09 Dec 2021 00:13:31 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Conor Culhane <conor.culhane@silvaco.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] MAINTAINERS: mark more list instances as moderated
-Date:   Wed,  8 Dec 2021 16:13:30 -0800
-Message-Id: <20211209001330.18558-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Wed, 8 Dec 2021 19:19:37 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3738AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:16:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2ADD5CE2339
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247D1C00446
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639008960;
+        bh=oVSOBOa6BXE/T1paveXxdxhNyigIeoXyMRSYZn5ztc8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Xbh8zW9a4BNtJUamHUMgd/G0U8wsAoNVgu1NdgnUQI0ziYSTS+YgLYditYytslYMV
+         gpYPw9Hed6vDfqNYjGjQHm6CYrQayp5dUoqMH9GDL3Hxf0v3JXgggWq75Vg0UHvPF+
+         twc+0rdfYigCw0aVZNhLRLo/HP3iWhwwF6twjVb3yT4vWUcQiYAVbjLaazlyHAIUli
+         dEkh9xiFVxGU4ZJWeUDF+mwjhuSE46dbwDtxXv/wDBu/aUZGA/8NzfI+2YdsnpAN/J
+         JxylvXVMA0wdeknmQ/Bg+KnTQEV0y4T4tkDlsTXUIKf8EkNhql0t7hEShiiVHPSCit
+         Mx4A/NqJ6Vywg==
+Received: by mail-ed1-f47.google.com with SMTP id r11so13792162edd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 16:16:00 -0800 (PST)
+X-Gm-Message-State: AOAM531cv1xBJsRYIcW9RTJvlo3mOFvOYHcB7XYHOwDDU/0K3aRUUDYe
+        nwaTVzRhf900Z+d5VGYogfOeKzgTvbne1rbHyA==
+X-Google-Smtp-Source: ABdhPJwbRkLlN1DN6NRjc1MrpWhMmKdZKIytk32WxKVDcsvTdDXYzOYWNAqhEtEdWyy6APe77L/rn1RVklA5TSKKC5c=
+X-Received: by 2002:a50:d883:: with SMTP id p3mr24003865edj.94.1639008958411;
+ Wed, 08 Dec 2021 16:15:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211027162806.2014022-1-markyacoub@chromium.org>
+In-Reply-To: <20211027162806.2014022-1-markyacoub@chromium.org>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Thu, 9 Dec 2021 08:15:42 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9xG5NrPZjxcV-SY1q+44WDLLk3UsDJt74FEEnx6kVYug@mail.gmail.com>
+Message-ID: <CAAOTY_9xG5NrPZjxcV-SY1q+44WDLLk3UsDJt74FEEnx6kVYug@mail.gmail.com>
+Subject: Re: [PATCH] drm/mediatek: Set the default value of rotation to DRM_MODE_ROTATE_0
+To:     markyacoub@chromium.org
+Cc:     Sean Paul <seanpaul@chromium.org>,
+        Mark Yacoub <markyacoub@google.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some lists that are moderated are not marked as moderated
-consistently, so mark them all as moderated.
+Hi Mark:
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
----
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Conor Culhane <conor.culhane@silvaco.com>
-Cc: Ryder Lee <ryder.lee@mediatek.com>
-Cc: Jianjun Wang <jianjun.wang@mediatek.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Mark Yacoub <markyacoub@chromium.org> =E6=96=BC 2021=E5=B9=B410=E6=9C=8828=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:28=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> From: Mark Yacoub <markyacoub@google.com>
+>
+> At the reset hook, call __drm_atomic_helper_plane_reset which is
+> called at the initialization of the plane and sets the default value of
+> rotation on all planes to DRM_MODE_ROTATE_0 which is equal to 1.
 
- MAINTAINERS |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch looks good to me, but please fix this checkpatch warning:
 
---- linux-next-20211208.orig/MAINTAINERS
-+++ linux-next-20211208/MAINTAINERS
-@@ -14929,7 +14929,7 @@ PCIE DRIVER FOR MEDIATEK
- M:	Ryder Lee <ryder.lee@mediatek.com>
- M:	Jianjun Wang <jianjun.wang@mediatek.com>
- L:	linux-pci@vger.kernel.org
--L:	linux-mediatek@lists.infradead.org
-+L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/pci/mediatek*
- F:	drivers/pci/controller/*mediatek*
-@@ -17536,7 +17536,7 @@ F:	drivers/video/fbdev/sm712*
- SILVACO I3C DUAL-ROLE MASTER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- M:	Conor Culhane <conor.culhane@silvaco.com>
--L:	linux-i3c@lists.infradead.org
-+L:	linux-i3c@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
- F:	drivers/i3c/master/svc-i3c-master.c
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Mark
+Yacoub <markyacoub@google.com>' !=3D 'Signed-off-by: Mark Yacoub
+<markyacoub@chromium.org>'
+
+total: 0 errors, 1 warnings, 11 lines checked
+
+Regards,
+Chun-Kuang.
+
+>
+> Tested on Jacuzzi (MTK).
+> Resolves IGT@kms_properties@plane-properties-{legacy,atomic}
+>
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_plane.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/m=
+ediatek/mtk_drm_plane.c
+> index e6dcb34d30522..accd26481b9fb 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> @@ -44,9 +44,10 @@ static void mtk_plane_reset(struct drm_plane *plane)
+>                 state =3D kzalloc(sizeof(*state), GFP_KERNEL);
+>                 if (!state)
+>                         return;
+> -               plane->state =3D &state->base;
+>         }
+>
+> +       __drm_atomic_helper_plane_reset(plane, &state->base);
+> +
+>         state->base.plane =3D plane;
+>         state->pending.format =3D DRM_FORMAT_RGB565;
+>  }
+> --
+> 2.33.0.1079.g6e70778dc9-goog
+>

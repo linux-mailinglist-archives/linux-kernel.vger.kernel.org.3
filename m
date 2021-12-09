@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FC346E521
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1392A46E523
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbhLIJMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhLIJMC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:12:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A341C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:08:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2583B82361
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF42BC004DD;
-        Thu,  9 Dec 2021 09:08:24 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 09:08:21 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     dan.carpenter@oracle.com, robh@kernel.org, will@kernel.org,
-        kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bauerman@linux.ibm.com, qiuguorui1@huawei.com
-Subject: Re: [PATCH] arm64: kexec: Fix missing error code 'ret' warning in
- load_other_segments()
-Message-ID: <YbHHhRnpR/EtSV3f@arm.com>
-References: <20211209004522.91926-1-nramas@linux.microsoft.com>
+        id S232135AbhLIJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:12:28 -0500
+Received: from mail.djicorp.com ([14.21.64.4]:65363 "EHLO mail.djicorp.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229530AbhLIJM0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:12:26 -0500
+IronPort-SDR: hL+plS6Moyziz0ismXmLsmmsj86HxLufbY6EjzzrRNjT6pdem2vOndvQ4t/c/4N58b2XI+h3+6
+ x7aLkVLBDGAw==
+X-IronPort-AV: E=Sophos;i="5.88,192,1635177600"; 
+   d="scan'208";a="11816815"
+From:   wigin zeng <wigin.zeng@dji.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        First Light <xiaoguang.chen@dji.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtQQVRDSF0gc2VyaWFsOiA4MjUwOiBhZGQgbG9j?=
+ =?utf-8?Q?k_for_dma_rx?=
+Thread-Topic: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRt?=
+ =?utf-8?Q?a_rx?=
+Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw
+Date:   Thu, 9 Dec 2021 09:08:51 +0000
+Message-ID: <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
+References: <20211209073339.21694-1-wigin.zeng@dji.com>
+ <YbGygPtkz6ihyW51@kroah.com>
+ <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
+ <YbHBb2uB9JRP0tWc@kroah.com>
+In-Reply-To: <YbHBb2uB9JRP0tWc@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [58.34.188.114]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209004522.91926-1-nramas@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:45:22PM -0800, Lakshmi Ramasubramanian wrote:
-> Since commit ac10be5cdbfa ("arm64: Use common
-> of_kexec_alloc_and_setup_fdt()"), smatch reports the following warning:
-> 
->   arch/arm64/kernel/machine_kexec_file.c:152 load_other_segments()
->   warn: missing error code 'ret'
-> 
-> Return code is not set to an error code in load_other_segments() when
-> of_kexec_alloc_and_setup_fdt() call returns a NULL dtb. This results
-> in status success (return code set to 0) being returned from
-> load_other_segments().
-> 
-> Set return code to -ENOMEM if of_kexec_alloc_and_setup_fdt() returns
-> NULL dtb.
-> 
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Fixes: ac10be5cdbfa ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
-> ---
-> Patch created in dt/next branch in git repo
-> https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-> 
->  arch/arm64/kernel/machine_kexec_file.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
-> index 63634b4d72c1..04d072885e64 100644
-> --- a/arch/arm64/kernel/machine_kexec_file.c
-> +++ b/arch/arm64/kernel/machine_kexec_file.c
-> @@ -149,6 +149,7 @@ int load_other_segments(struct kimage *image,
->  					   initrd_len, cmdline, 0);
->  	if (!dtb) {
->  		pr_err("Preparing for new dtb failed\n");
-> +		ret = -ENOMEM;
->  		goto out_err;
->  	}
-
-Above the 'if' block we have:
-
-	dtb = of_kexec_alloc_and_setup_fdt(image, initrd_load_addr,
-					   initrd_len, cmdline, 0);
-
-Looking at this function, it has several ways to fail, not just on
-allocation. However, we assume above that it's always -ENOMEM. We could
-do like powerpc and use -EINVAL as more likely than allocation failure
-or change of_kexec_alloc_and_setup_fdt() to return ERR_PTR() and we use
-that. The latter would be my preferred option, though it probably
-doesn't matter much. The second best would be -EINVAL.
-
--- 
-Catalin
+PiBXaGF0IGlzc3VlIGV4YWN0bHk/DQpUaGUgaW50ZXJ2YWwgb2YgVUFSVCBpbnB1dCBwYWNrYWdl
+cyBpcyB2ZXJ5IHNtYWxsKDFtc34gMTBtcyksIGFuZCBzb21lIHBhY2thZ2Ugc2l6ZSBsYXJnZXIg
+dGhhbiBjb25maWd1cmVkIERNQSB0cmFuc2ZlciBzaXplLg0KDQo+IEJ1dCB3aGF0IGRhdGEgaXMg
+YmVpbmcgYWNjZXNzZWQgYXQgdGhlIHNhbWUgdGltZSB0byBjYXVzZSBhIGNyYXNoPw0KPiBIb3cg
+aXMgZGF0YSBiZWluZyBhZGRlZCBpbnRvIHRoZSBidWZmZXIgYXQgdGhlIHNhbWUgdGltZSBpbiB0
+d28gZGlmZmVyZW50IHBsYWNlcyBpbnRvIHRoZSBzYW1lIHF1ZXVlPyAgV2hhdCB1c2Vyc3BhY2Ug
+cHJvZ3JhbXMgYXJlIGNhdXNpbmcgdGhpcz8NCkJvdGggcGxhY2VzIHdpbGwgbW9kaWZ5IHR0eV9w
+b3J0ICpwb3J0LT5idWYudGFpbCAoa21hbGxvYyBvcGVyYXRpb24gYW5kIHdyaXRlIHRoZSBkYXRh
+L2ZsYWcgaW50byB0aGlzIGFkZHJlc3MpDQoNCj5TbyBhbGwgdHR5IGJ1ZmZlciBhY2Nlc3NlcyBu
+ZWVkIHRvIGJlIHByb3RlY3RlZCBieSB5b3VyIG5ldyBsb2NrPw0KTmV3IGxvY2sgb25seSBwcm90
+ZWN0ZWQgdGhlIHR0eV9idWZmZXIgYWxsb2MgYW5kIHdyaXRlIG9wZXJhdGlvbiBpbiBzZXJpYWwt
+dHR5IGNhc2UuIA0KDQpCUnMNCldpZ2luDQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bk
+uro6IEdyZWcgS0ggW21haWx0bzpncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZ10gDQrlj5HpgIHm
+l7bpl7Q6IDIwMjHlubQxMuaciDnml6UgMTY6NDINCuaUtuS7tuS6ujogd2lnaW4gemVuZyA8d2ln
+aW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVsLm9yZzsgbGludXgtc2Vy
+aWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K5Li76aKY
+OiBSZTog562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRtYSByeA0K
+DQrjgJBFWFRFUk5BTCBFTUFJTOOAkSBETyBOT1QgQ0xJQ0sgYW55IGxpbmtzIG9yIGF0dGFjaG1l
+bnRzIHVubGVzcyB5b3UgY2FuIG1ha2Ugc3VyZSBib3RoIHRoZSBzZW5kZXIgYW5kIHRoZSBjb250
+ZW50IGFyZSB0cnVzdHdvcnRoeS4NCg0KDQrjgJDlpJbpg6jpgq7ku7bmj5DphpLjgJHku6XkuIvp
+gq7ku7bmnaXmupDkuo7lhazlj7jlpJbpg6jvvIzor7fli7/ngrnlh7vpk77mjqXmiJbpmYTku7bv
+vIzpmaTpnZ7mgqjnoa7orqTpgq7ku7blj5Hku7bkurrlkozlhoXlrrnlj6/kv6HjgIINCg0KDQoN
+CkE6IGh0dHA6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvVG9wX3Bvc3QNClE6IFdlcmUgZG8gSSBm
+aW5kIGluZm8gYWJvdXQgdGhpcyB0aGluZyBjYWxsZWQgdG9wLXBvc3Rpbmc/DQpBOiBCZWNhdXNl
+IGl0IG1lc3NlcyB1cCB0aGUgb3JkZXIgaW4gd2hpY2ggcGVvcGxlIG5vcm1hbGx5IHJlYWQgdGV4
+dC4NClE6IFdoeSBpcyB0b3AtcG9zdGluZyBzdWNoIGEgYmFkIHRoaW5nPw0KQTogVG9wLXBvc3Rp
+bmcuDQpROiBXaGF0IGlzIHRoZSBtb3N0IGFubm95aW5nIHRoaW5nIGluIGUtbWFpbD8NCg0KQTog
+Tm8uDQpROiBTaG91bGQgSSBpbmNsdWRlIHF1b3RhdGlvbnMgYWZ0ZXIgbXkgcmVwbHk/DQoNCmh0
+dHA6Ly9kYXJpbmdmaXJlYmFsbC5uZXQvMjAwNy8wNy9vbl90b3ANCg0KT24gVGh1LCBEZWMgMDks
+IDIwMjEgYXQgMDg6MTU6MDBBTSArMDAwMCwgd2lnaW4gemVuZyB3cm90ZToNCj4gV2UgZW5jb3Vu
+dGVyZWQgdGhpcyBpc3N1ZSB3aGVuIFVBUlQgdHJhbnNmZXIgdmVyeSBpbnRlbnNpdmUuDQoNCldo
+YXQgaXNzdWUgZXhhY3RseT8NCg0KPiBETUEgaXJxLXRocmVhZCBwcm9jZXNzZWQgb24gQ1BVMCBh
+bmQgc2VyaWFsIGlycS10aHJlYWQgZXhlY3V0aW5nIG9uIA0KPiBDUFUxLCBJbiBETUEgaXJxLXRo
+cmVhZCB3aWxsIGludm9rZSAidHR5X2luc2VydF9maWxwX3N0cmluZyIgZnVuY3Rpb24gdG8gYWRk
+IHRoZSByeF9idWYgaW50byB0dHlfYnVmZmVyLg0KPiBJbiBzZXJpYWwgaXJxLXRocmVhZCBhbHNv
+IGhhcyBjaGFuY2UgdG8gYWNjZXNzIHR0eV9pbnNlcnRfZmxpcF9jaGFyKGluIHNlcmlhbDgyNTBf
+cnhfY2hhcnMgKSB0byBhY2Nlc3MgdHR5X2J1ZmZlci4NCj4gdGhlcmUgaXMgcmFjZSBjb25kaXRp
+b24sIHNvbWV0aW1lcyB3aWxsIGNhdXNlIHBhbmljLg0KDQpCdXQgd2hhdCBkYXRhIGlzIGJlaW5n
+IGFjY2Vzc2VkIGF0IHRoZSBzYW1lIHRpbWUgdG8gY2F1c2UgYSBjcmFzaD8NCkhvdyBpcyBkYXRh
+IGJlaW5nIGFkZGVkIGludG8gdGhlIGJ1ZmZlciBhdCB0aGUgc2FtZSB0aW1lIGluIHR3byBkaWZm
+ZXJlbnQgcGxhY2VzIGludG8gdGhlIHNhbWUgcXVldWU/ICBXaGF0IHVzZXJzcGFjZSBwcm9ncmFt
+cyBhcmUgY2F1c2luZyB0aGlzPw0KDQo+IFdlIGFkZCB0aGUgc3Bpbl9sb2NrIHRvIHN5bmMgdGhl
+IHR0eV9idWZmZXIgb3BlcmF0aW9uLCBhbmQgdGhlIGlzc3VlIGdvbmUgYWZ0ZXIgYXBwbGllZCB0
+aGUgcGF0Y2guDQoNClNvIGFsbCB0dHkgYnVmZmVyIGFjY2Vzc2VzIG5lZWQgdG8gYmUgcHJvdGVj
+dGVkIGJ5IHlvdXIgbmV3IGxvY2s/DQoNCnRoYW5rcywNCg0KZ3JlZyBrLWgNClRoaXMgZW1haWwg
+YW5kIGFueSBhdHRhY2htZW50cyB0aGVyZXRvIG1heSBjb250YWluIHByaXZhdGUsIGNvbmZpZGVu
+dGlhbCwgYW5kIHByaXZpbGVnZWQgbWF0ZXJpYWwgZm9yIHRoZSBzb2xlIHVzZSBvZiB0aGUgaW50
+ZW5kZWQgcmVjaXBpZW50LiBBbnkgcmV2aWV3LCBjb3B5aW5nLCBvciBkaXN0cmlidXRpb24gb2Yg
+dGhpcyBlbWFpbCAob3IgYW55IGF0dGFjaG1lbnRzIHRoZXJldG8pIGJ5IG90aGVycyBpcyBzdHJp
+Y3RseSBwcm9oaWJpdGVkLiBJZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50LCBw
+bGVhc2UgY29udGFjdCB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBwZXJtYW5lbnRseSBkZWxl
+dGUgdGhlIG9yaWdpbmFsIGFuZCBhbnkgY29waWVzIG9mIHRoaXMgZW1haWwgYW5kIGFueSBhdHRh
+Y2htZW50cyB0aGVyZXRvLg0KDQrmraTnlLXlrZDpgq7ku7blj4rpmYTku7bmiYDljIXlkKvlhoXl
+rrnlhbfmnInmnLrlr4bmgKfvvIzkuJTku4XpmZDkuo7mjqXmlLbkurrkvb/nlKjjgILmnKrnu4/l
+hYHorrjvvIznpoHmraLnrKzkuInkurrpmIXor7vjgIHlpI3liLbmiJbkvKDmkq3or6XnlLXlrZDp
+gq7ku7bkuK3nmoTku7vkvZXkv6Hmga/jgILlpoLmnpzmgqjkuI3lsZ7kuo7ku6XkuIrnlLXlrZDp
+gq7ku7bnmoTnm67moIfmjqXmlLbogIXvvIzor7fmgqjnq4vljbPpgJrnn6Xlj5HpgIHkurrlubbl
+iKDpmaTljp/nlLXlrZDpgq7ku7blj4rlhbbnm7jlhbPnmoTpmYTku7bjgIINCg==

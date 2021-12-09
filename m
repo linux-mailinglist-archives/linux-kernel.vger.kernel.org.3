@@ -2,165 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5E946F45C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3475B46F460
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhLIT6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:58:06 -0500
-Received: from mail-oln040093013011.outbound.protection.outlook.com ([40.93.13.11]:38548
-        "EHLO na01-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229446AbhLIT6F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:58:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CQT/oLfbabZdIccOx98hX3xh0o5qE+pBELkP+OOkGilVe6Mo9XK2WVZdMG+9pEvoXUVBMHvKtzHr3R2FE4R++UlauYLlMNKFQz6s7Qik7k9O4hFhvRAXocSd5mTaDfiigKfQb0B1vFYh4am1OB/SozPeLsyk/BxG7Jq11hHKIedgSGAQ0+ROU25HMIdtscZyCvu3T8UHEBNT+BesmttJBsleS0XfLvTBFzYr7UR4h4gNN0F/mdv6j2r/04fF/ef/mMkUQWltOhvBBlLQDzWyLEV9vCAvYFe0cRXj6UAe67oFfD8aTm7Ozy+VBwrrtuBX1KEVmJggtrZp6DlJJLxgEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X0L0Ehq5i1LLTscdsN9CDciqSiV+8JC+QlPIwMcRVvs=;
- b=GFHydvdy6GGwEniLCejX61uQ3o4Vm4JD9Tw9LuSOwNx30znCXFT1jzHfIBn8axwQ5FDVm8hiS9rtw5mlGjtOdyyHME71ZNimESKKhoIs+NITTzwQ98gpkIGtZnM0Iw3KN44lKZrYG8XGxDcOaZATj55RpUIk2gf3r7QYJQsEqBo6ms4EqRsevQNMMTXIAqqxSyt8FxMzpY5U6vL/YKTu3GLn6XSJ7E5vC+/+seoNJ6ePFfm49/V9TwHJNAWt0Ln6w/3Xzx4GnXna/mXvqOhd1KNY3MbRb6kDOw3aqiATQfJ53MJRw5LWdTuGdMpwdaLRJJYH3zCza3lRTlNitMumlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X0L0Ehq5i1LLTscdsN9CDciqSiV+8JC+QlPIwMcRVvs=;
- b=h2y5lJl1SM2LSuMqP3w2LP6USGSOeShzPf8h4y/SmVp3eWLWGQdbv5N5HzfLFq3uX3v4VQCT4/d6RnGqYYjdQ2fdXp/a1COq6HjjMBrUqCIGt1JeWa95ACwL8CWXlfgT9uxB2sm2qVY5Hiqk4FcSKCCeexrrWb/zZzn39R1lPbw=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by SN6PR2101MB1855.namprd21.prod.outlook.com (2603:10b6:805:10::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.6; Thu, 9 Dec
- 2021 19:54:26 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::e9ea:fc3b:df77:af3e]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::e9ea:fc3b:df77:af3e%8]) with mapi id 15.20.4801.007; Thu, 9 Dec 2021
- 19:54:26 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Haiyang Zhang <haiyangz@microsoft.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V6 5/5] net: netvsc: Add Isolation VM support for netvsc
- driver
-Thread-Topic: [PATCH V6 5/5] net: netvsc: Add Isolation VM support for netvsc
- driver
-Thread-Index: AQHX6z/p4N8f/0zLXkWT82yvkJZgZ6wpCdOAgAGKX2A=
-Date:   Thu, 9 Dec 2021 19:54:25 +0000
-Message-ID: <MWHPR21MB1593AF3BB6CBCA14B3805D35D7709@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <20211207075602.2452-1-ltykernel@gmail.com>
- <20211207075602.2452-6-ltykernel@gmail.com>
- <BN8PR21MB128401EEDE6B8C8553CC8009CA6F9@BN8PR21MB1284.namprd21.prod.outlook.com>
-In-Reply-To: <BN8PR21MB128401EEDE6B8C8553CC8009CA6F9@BN8PR21MB1284.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8f2b756c-5454-4ec4-ac2e-44d9b23f1862;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-08T20:06:08Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3532b909-8c81-40c9-37db-08d9bb4db440
-x-ms-traffictypediagnostic: SN6PR2101MB1855:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <SN6PR2101MB185583DB943F6F7B7FA4C86BD7709@SN6PR2101MB1855.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a12OiXrXBuq2z78iDNctTXpwb6SYusTzIYEXIzF9bh6qUJr+LPsUGLxrcWOtnKejH/jA71Vn3/hRhrkr30zyxbxYnbikKr32YMKpzQHx6t10ImzIyCjFkBP3AFFQmZmCJe3aTn8FhHKRXcC9q1xaAlrVHK8C43bpiiUc4FLI58GspvRZwQbeYL2ZeAXWMPoFbnGH7BwQMYNBjv8PKHpCG3nPNaIUNTe9mqVrJatLTEFNmfUTLKE6ZW1p+BDNc+ww0ISpOSUZBDpTY5bBTtlXrYJaeXquWHEAs9qHKYfJOhgmz0Wpg4TFLieZa/6eTNy6xE+sBKIovZd7Jal6emeOPAmU/X+4V1WmiGLueIJaIFdlnOVPEppFuWcKEm7plrmH6IG8LwNLBNV9ov77Wmef2EYwxgDv82NW+tpgjB5lLSjRAQwl2UNEKjtdf11IJku3YH5wKpabLHSCzenKsW9O5i3hyDMOXu5riqrVjxA3fayZY0ifMe5vQHPnhmxD6oEK8TYq10/95B0w94naU2Ob6tb9nKvQeUfYGLGuzgAiH4xrLR4xT7N83jsZGDZosC+GUk5q/yj1hGHgXm+KlLy8H8ua94WqcCJFJsNYnKk5W8wBYnaM/hLCZLUieea4ej/sfZ7O1H0UtSR0K8d9cWU+ZPRp4mv7WWddMaeut/ASmaF287FHT4sdI0Q+Ic2/Jvrn
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(83380400001)(6506007)(8936002)(921005)(7696005)(508600001)(82950400001)(82960400001)(10290500003)(71200400001)(7416002)(33656002)(38100700002)(5660300002)(9686003)(38070700005)(52536014)(2906002)(54906003)(64756008)(316002)(4326008)(186003)(76116006)(8990500004)(110136005)(66946007)(66446008)(26005)(66556008)(7406005)(55016003)(122000001)(8676002)(66476007)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 4IpGc1OhfBdKKqxnSdVHZ28drWU2IzchduNAjcc/J5wUvTz48FgxnjzlMJVzb6KtIcYWPxwyl6Ok9N00/DAK8/TCfjjbQkgarowUex+wgYMEktEAlXMffnBbO20XPTz+LbKbqobIV1uK5JWQgzHUj5PkXCJ1vEnGJG3iBgx1+YmsbkgaCxa27EUrKnRpPn+xH75dVKll5XOWwaIycRHyPAp5SkbE8fdTbXoHJB5NeYXk5olNfFiRtYKgCu+KMmDVuZyhJXresCOI8fSqNsHe3CIQO/ni+HWa9Xku5+AxfMZMDkrrwEbtpPt0b5XaiBDN0Zn4yojPCCkMzThhMi/YZ+VjC8q9puc7YG4UgA4fITsDBigauNxGIStXqOL625y9/c072MUAXxkw4bOhj3N2HYLO08i5wp+CGBGK2jVtmupDycl5637/MdZM9RAWl6qrIhxCX89BKME7+nkA+qcMT5IvSbz4EL5z2c1I/zQ3lR0xJhBX2q59axe1t/CBKPgP
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S231239AbhLIT6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:58:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8172 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229554AbhLIT6Q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:58:16 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Jpv3g009099;
+        Thu, 9 Dec 2021 19:54:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eq+gQxDBMHrHyZ4ljSLma72E+SoqLxYa2qKFBOkPncc=;
+ b=YvQ1Gwhen/1YKCJzO0Dbl/jfei7cstRhJNCJuJyW92gmBejEhDNUboaf0CAij86lwVXt
+ 0GNOknKXRKVZqhaEyiQy6ubTZDT2utV3Js3mGRNFz6Jo/UljmxQRZpLsf4g3dXcHNYF1
+ SJUOkTyhdfq1mNENfIkJ7M2Lw5Aqthzh7ZLi8h3mDIMSGKLn2sZP4+YR1+AAzFZ2Z0fQ
+ V+66owx26plmWbXRwJjcmOT0EpQkfz9UZ8aLR6yZi29KuZpwnI2PouFik10wOZCw29OD
+ 4FRu+wWJ+qOPYi8G+puswn2xkyEZPYqMBI0MTRxD9lYwADzqe+tHQTlh6uy427oLF/wJ Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cuqhr90hy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 19:54:42 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9JmNEU029542;
+        Thu, 9 Dec 2021 19:54:41 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cuqhr90ha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 19:54:41 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Jl4of013214;
+        Thu, 9 Dec 2021 19:54:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cqykjw0yn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 19:54:40 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9JsaWX31850970
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 19:54:36 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D298E42045;
+        Thu,  9 Dec 2021 19:54:36 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C469E42041;
+        Thu,  9 Dec 2021 19:54:35 +0000 (GMT)
+Received: from [9.171.1.84] (unknown [9.171.1.84])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 19:54:35 +0000 (GMT)
+Message-ID: <596857e3-ab13-7513-eeda-ed407fe22732@linux.ibm.com>
+Date:   Thu, 9 Dec 2021 20:54:35 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3532b909-8c81-40c9-37db-08d9bb4db440
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 19:54:25.8519
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GIMQ+6UyJhE6eyTFBlqtGCgXVSWCbcshMc4F2DixgP0wOOkGjwIQBIz4e+87S+CsF/bpsOV1zqmlk83x+Ao0u6krNJQbWt0BBtVdKGfxm4o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1855
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 14/32] KVM: s390: pci: do initial setup for AEN
+ interpretation
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-15-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-15-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wNt2EGKUELc3fCUTvmeo0NsSGPgkNHPJ
+X-Proofpoint-ORIG-GUID: EK7wsKeJ-Wr-bN2XmnalsDAtdccC0lRs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_09,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ suspectscore=0 adultscore=0 impostorscore=0 mlxscore=0 phishscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090101
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haiyang Zhang <haiyangz@microsoft.com> Sent: Wednesday, December 8, 2=
-021 12:14 PM
-> > From: Tianyu Lan <ltykernel@gmail.com>
-> > Sent: Tuesday, December 7, 2021 2:56 AM
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> Initial setup for Adapter Event Notification Interpretation for zPCI
+> passthrough devices.  Specifically, allocate a structure for forwarding of
+> adapter events and pass the address of this structure to firmware.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/pci_insn.h |  12 ++++
+>   arch/s390/kvm/interrupt.c        |  17 +++++
+>   arch/s390/kvm/kvm-s390.c         |   3 +
+>   arch/s390/kvm/pci.c              | 113 +++++++++++++++++++++++++++++++
+>   arch/s390/kvm/pci.h              |  42 ++++++++++++
+>   5 files changed, 187 insertions(+)
+>   create mode 100644 arch/s390/kvm/pci.h
+> 
+> diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
+> index 5331082fa516..e5f57cfe1d45 100644
+> --- a/arch/s390/include/asm/pci_insn.h
+> +++ b/arch/s390/include/asm/pci_insn.h
+> @@ -101,6 +101,7 @@ struct zpci_fib {
+>   /* Set Interruption Controls Operation Controls  */
+>   #define	SIC_IRQ_MODE_ALL		0
+>   #define	SIC_IRQ_MODE_SINGLE		1
+> +#define	SIC_SET_AENI_CONTROLS		2
+>   #define	SIC_IRQ_MODE_DIRECT		4
+>   #define	SIC_IRQ_MODE_D_ALL		16
+>   #define	SIC_IRQ_MODE_D_SINGLE		17
+> @@ -127,9 +128,20 @@ struct zpci_cdiib {
+>   	u64 : 64;
+>   } __packed __aligned(8);
+>   
+> +/* adapter interruption parameters block */
+> +struct zpci_aipb {
+> +	u64 faisb;
+> +	u64 gait;
+> +	u16 : 13;
+> +	u16 afi : 3;
+> +	u32 : 32;
+> +	u16 faal;
+> +} __packed __aligned(8);
+> +
+>   union zpci_sic_iib {
+>   	struct zpci_diib diib;
+>   	struct zpci_cdiib cdiib;
+> +	struct zpci_aipb aipb;
+>   };
+>   
+>   DECLARE_STATIC_KEY_FALSE(have_mio);
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index f9b872e358c6..4efe0e95a40f 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -32,6 +32,7 @@
+>   #include "kvm-s390.h"
+>   #include "gaccess.h"
+>   #include "trace-s390.h"
+> +#include "pci.h"
+>   
+>   #define PFAULT_INIT 0x0600
+>   #define PFAULT_DONE 0x0680
+> @@ -3276,8 +3277,16 @@ static struct airq_struct gib_alert_irq = {
+>   
+>   void kvm_s390_gib_destroy(void)
+>   {
+> +	struct zpci_aift *aift;
+> +
+>   	if (!gib)
+>   		return;
+> +	aift = kvm_s390_pci_get_aift();
+> +	if (aift) {
+> +		mutex_lock(&aift->lock)
 
-[snip]
+aift is a static variable and later patches seem to access that directly without the wrapper.
+Can we get rid of kvm_s390_pci_get_aift?
+;
+> +		kvm_s390_pci_aen_exit();
+> +		mutex_unlock(&aift->lock);
+> +	}
+>   	chsc_sgib(0);
+>   	unregister_adapter_interrupt(&gib_alert_irq);
+>   	free_page((unsigned long)gib);
+> @@ -3315,6 +3324,14 @@ int kvm_s390_gib_init(u8 nisc)
+>   		goto out_unreg_gal;
+>   	}
+>   
+> +	if (IS_ENABLED(CONFIG_PCI) && sclp.has_aeni) {
+> +		if (kvm_s390_pci_aen_init(nisc)) {
+> +			pr_err("Initializing AEN for PCI failed\n");
+> +			rc = -EIO;
+> +			goto out_unreg_gal;
+> +		}
+> +	}
+> +
+>   	KVM_EVENT(3, "gib 0x%pK (nisc=%d) initialized", gib, gib->nisc);
+>   	goto out;
+>   
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 14a18ba5ff2c..9cd3c8eb59e8 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -48,6 +48,7 @@
+>   #include <asm/fpu/api.h>
+>   #include "kvm-s390.h"
+>   #include "gaccess.h"
+> +#include "pci.h"
+>   
+>   #define CREATE_TRACE_POINTS
+>   #include "trace.h"
+> @@ -503,6 +504,8 @@ int kvm_arch_init(void *opaque)
+>   		goto out;
+>   	}
+>   
+> +	kvm_s390_pci_init();
+> +
+>   	rc = kvm_s390_gib_init(GAL_ISC);
+>   	if (rc)
+>   		goto out;
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index ecfc458a5b39..f0e5386ff943 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -10,6 +10,113 @@
+>   #include <linux/kvm_host.h>
+>   #include <linux/pci.h>
+>   #include <asm/kvm_pci.h>
+> +#include "pci.h"
+> +
+> +static struct zpci_aift aift;
 
-> >  static inline int netvsc_send_pkt(
-> >  	struct hv_device *device,
-> >  	struct hv_netvsc_packet *packet,
-> > @@ -986,14 +1105,24 @@ static inline int netvsc_send_pkt(
-> >
-> >  	trace_nvsp_send_pkt(ndev, out_channel, rpkt);
-> >
-> > +	packet->dma_range =3D NULL;
-> >  	if (packet->page_buf_cnt) {
-> >  		if (packet->cp_partial)
-> >  			pb +=3D packet->rmsg_pgcnt;
-> >
-> > +		ret =3D netvsc_dma_map(ndev_ctx->device_ctx, packet, pb);
-> > +		if (ret) {
-> > +			ret =3D -EAGAIN;
-> > +			goto exit;
-> > +		}
->=20
-> Returning EAGAIN will let the upper network layer busy retry,
-> which may make things worse.
-> I suggest to return ENOSPC here like another place in this
-> function, which will just drop the packet, and let the network
-> protocol/app layer decide how to recover.
->=20
-> Thanks,
-> - Haiyang
+see below.
+> +
+> +static inline int __set_irq_noiib(u16 ctl, u8 isc)
+> +{
+> +	union zpci_sic_iib iib = {{0}};
+> +
+> +	return zpci_set_irq_ctrl(ctl, isc, &iib);
+> +}
+> +
+> +struct zpci_aift *kvm_s390_pci_get_aift(void)
+> +{
+> +	return &aift;
+> +}
+> +
+> +/* Caller must hold the aift lock before calling this function */
+> +void kvm_s390_pci_aen_exit(void)
+> +{
+> +	struct zpci_gaite *gait;
+> +	unsigned long flags;
+> +	struct airq_iv *sbv;
+> +	struct kvm_zdev **gait_kzdev;
+> +	int size;
+> +
+> +	/* Clear the GAIT and forwarding summary vector */
+> +	__set_irq_noiib(SIC_SET_AENI_CONTROLS, 0);
+> +
+> +	spin_lock_irqsave(&aift.gait_lock, flags);
+> +	gait = aift.gait;
+> +	sbv = aift.sbv;
+> +	gait_kzdev = aift.kzdev;
+> +	aift.gait = 0;
+> +	aift.sbv = 0;
+> +	aift.kzdev = 0;
+> +	spin_unlock_irqrestore(&aift.gait_lock, flags);
+> +
+> +	if (sbv)
+> +		airq_iv_release(sbv);
+> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
+> +				    sizeof(struct zpci_gaite)));
+> +	free_pages((unsigned long)gait, size);
+> +	kfree(gait_kzdev);
+> +}
+> +
+> +int kvm_s390_pci_aen_init(u8 nisc)
+> +{
+> +	union zpci_sic_iib iib = {{0}};
+> +	struct page *page;
+> +	int rc = 0, size;
+> +
+> +	/* If already enabled for AEN, bail out now */
+> +	if (aift.gait || aift.sbv)
+> +		return -EPERM;
+> +
+> +	mutex_lock(&aift.lock);
+> +	aift.kzdev = kcalloc(ZPCI_NR_DEVICES, sizeof(struct kvm_zdev),
+> +			     GFP_KERNEL);
+> +	if (!aift.kzdev) {
+> +		rc = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +	aift.sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, 0);
+> +	if (!aift.sbv) {
+> +		rc = -ENOMEM;
+> +		goto free_zdev;
+> +	}
+> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
+> +				    sizeof(struct zpci_gaite)));
+> +	page = alloc_pages(GFP_KERNEL | __GFP_ZERO, size);
+> +	if (!page) {
+> +		rc = -ENOMEM;
+> +		goto free_sbv;
+> +	}
+> +	aift.gait = (struct zpci_gaite *)page_to_phys(page);
+> +
+> +	iib.aipb.faisb = (u64)aift.sbv->vector;
+> +	iib.aipb.gait = (u64)aift.gait;
+> +	iib.aipb.afi = nisc;
+> +	iib.aipb.faal = ZPCI_NR_DEVICES;
+> +
+> +	/* Setup Adapter Event Notification Interpretation */
+> +	if (zpci_set_irq_ctrl(SIC_SET_AENI_CONTROLS, 0, &iib)) {
+> +		rc = -EIO;
+> +		goto free_gait;
+> +	}
+> +
+> +	/* Enable floating IRQs */
+> +	if (__set_irq_noiib(SIC_IRQ_MODE_SINGLE, nisc)) {
+> +		rc = -EIO;
+> +		kvm_s390_pci_aen_exit();
+> +	}
+> +
+> +	goto unlock;
+> +
+> +free_gait:
+> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
+> +				    sizeof(struct zpci_gaite)));
+> +	free_pages((unsigned long)aift.gait, size);
+> +free_sbv:
+> +	airq_iv_release(aift.sbv);
+> +free_zdev:
+> +	kfree(aift.kzdev);
+> +unlock:
+> +	mutex_unlock(&aift.lock);
+> +	return rc;
+> +}
+>   
+>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+>   {
+> @@ -55,3 +162,9 @@ int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
+> +
+> +void kvm_s390_pci_init(void)
+> +{
+> +	spin_lock_init(&aift.gait_lock);
+> +	mutex_init(&aift.lock);
+> +}
 
-I made the original suggestion to return -EAGAIN here.   A
-DMA mapping failure should occur only if swiotlb bounce
-buffer space is unavailable, which is a transient condition.
-The existing code already stops the queue and returns
--EAGAIN when the ring buffer is full, which is also a transient
-condition.  My sense is that the two conditions should be
-handled the same way.  Or is there a reason why a ring
-buffer full condition should stop the queue and retry, while
-a mapping failure should drop the packet?
+Can we maybe use designated initializer for the static definition of aift, e.g. something
+like
+static struct zpci_aift aift = {
+	.gait_lock = __SPIN_LOCK_UNLOCKED(aift.gait_lock),
+	.lock	= __MUTEX_INITIALIZER(aift.lock),
+}
+and get rid of the init function?
 
-Michael
+
+> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
+> new file mode 100644
+> index 000000000000..74b06d39be3b
+> --- /dev/null
+> +++ b/arch/s390/kvm/pci.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * s390 kvm PCI passthrough support
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +#ifndef __KVM_S390_PCI_H
+> +#define __KVM_S390_PCI_H
+> +
+> +#include <linux/pci.h>
+> +#include <linux/mutex.h>
+> +#include <asm/airq.h>
+> +#include <asm/kvm_pci.h>
+> +
+> +struct zpci_gaite {
+> +	unsigned int gisa;
+
+since we use u8 below, what about u32
+> +	u8 gisc;
+> +	u8 count;
+> +	u8 reserved;
+> +	u8 aisbo;
+> +	unsigned long aisb;
+
+and u64 ?
+> +};
+> +
+> +struct zpci_aift {
+> +	struct zpci_gaite *gait;
+> +	struct airq_iv *sbv;
+> +	struct kvm_zdev **kzdev;
+> +	spinlock_t gait_lock; /* Protects the gait, used during AEN forward */
+> +	struct mutex lock; /* Protects the other structures in aift */
+> +};
+> +
+> +struct zpci_aift *kvm_s390_pci_get_aift(void);
+> +
+> +int kvm_s390_pci_aen_init(u8 nisc);
+> +void kvm_s390_pci_aen_exit(void);
+> +
+> +void kvm_s390_pci_init(void);
+> +
+> +#endif /* __KVM_S390_PCI_H */
+> 

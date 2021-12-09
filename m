@@ -2,115 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F7746EC56
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD56A46EC53
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240670AbhLIP6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:58:03 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38384 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S240624AbhLIP6B (ORCPT
+        id S240647AbhLIP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:58:00 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33744 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240624AbhLIP56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:58:01 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FZu9Z003189;
-        Thu, 9 Dec 2021 15:54:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=BFSBV0h0s+qneGtaghD/MCG8lX99wogL4FQwzPgIEsk=;
- b=pdy7w29XZt7iIDdx9zapMEn3Cdd7MPzzXId/LGjX6OLCTp9pvcNVwBepQPFNuQ5Qp3Ft
- pHbvEFoWt+9rAp2qlAICoGIfuSDi9vHMBEhxM0tzOE8RJjOADvku/LibTxCgmAXOqxj/
- EhV8luX8QR2MaGbpgR5BQXf1K/HmrNwYRCDxGeExpPbrcU9wF4+jn7biGQg7CjenTd+W
- AARrbePuJd8y6C8XWZJdWciByCDd7wDjkBYTYlVEPTMiMP10yngPcU/h4xmm1zBv7132
- WdNWR/qFlPYd/H6XVNLD9qo10xU7N6nd3+zeflDieCh/WeltXFpRof1lDyCBil5fho93 Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cumja0em6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:54:27 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9Fat6i008851;
-        Thu, 9 Dec 2021 15:54:26 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cumja0ekt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:54:26 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FrRJV026184;
-        Thu, 9 Dec 2021 15:54:24 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cqyybb59w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:54:24 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9FkYsc22610262
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 15:46:34 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D282CAE057;
-        Thu,  9 Dec 2021 15:54:19 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B6FCAE055;
-        Thu,  9 Dec 2021 15:54:19 +0000 (GMT)
-Received: from osiris (unknown [9.145.184.102])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  9 Dec 2021 15:54:19 +0000 (GMT)
-Date:   Thu, 9 Dec 2021 16:54:17 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, gor@linux.ibm.com
-Subject: Re: [PATCH v5 1/1] s390x: KVM: accept STSI for CPU topology
- information
-Message-ID: <YbImqX/NEus71tZ1@osiris>
-References: <20211122131443.66632-1-pmorel@linux.ibm.com>
- <20211122131443.66632-2-pmorel@linux.ibm.com>
- <20211209133616.650491fd@p-imbrenda>
+        Thu, 9 Dec 2021 10:57:58 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 69C74210FF;
+        Thu,  9 Dec 2021 15:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639065264; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AirTl4zzb+ByVFQqyjWDo2/YusdyzMaM/JV9rnLAGhg=;
+        b=ZmP+VnU+b1W746U8flhMFpjdkMRwi9alKI2iVvMT2FowgOicY90ed0irLm+PGcqpTOC4vy
+        b1HPOF2bJIetNz8ZmIIUbeNugWcQCRujlYrbV7VP6YPpMTu5QHxgnNtgeGtrmmhSjFyRtm
+        UBBHWcWtCYBtugvb/WmwEhKNNqp4Kqs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639065264;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AirTl4zzb+ByVFQqyjWDo2/YusdyzMaM/JV9rnLAGhg=;
+        b=MkkCrAJNyfx8FI+8r16J08CYAGBJsJsWZJ8pXT+nSAB9qMRShj/SDFoyA7n9WALRP07hwC
+        D7ROczCSAO4e6PCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E4A313343;
+        Thu,  9 Dec 2021 15:54:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eF2YBrAmsmHCUAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 09 Dec 2021 15:54:24 +0000
+Message-ID: <ffbb5843-4c5a-99c1-12a6-2ff3ae818e3c@suse.cz>
+Date:   Thu, 9 Dec 2021 16:54:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209133616.650491fd@p-imbrenda>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3Py32cFlbf1m0w5jzkAF65OWKHlzVEb7
-X-Proofpoint-GUID: e4tUfDWOCbKKkIGusBBv---pWWTMFr7K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_07,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- bulkscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- adultscore=0 suspectscore=0 mlxlogscore=869 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112090084
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-9-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 08/66] mmap: Use the VMA iterator in
+ count_vma_pages_range()
+In-Reply-To: <20211201142918.921493-9-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 01:36:16PM +0100, Claudio Imbrenda wrote:
-> On Mon, 22 Nov 2021 14:14:43 +0100
-> Pierre Morel <pmorel@linux.ibm.com> wrote:
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 > 
-> > We let the userland hypervisor know if the machine support the CPU
-> > topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
-> > 
-> > The PTF instruction will report a topology change if there is any change
-> > with a previous STSI_15_1_2 SYSIB.
-> > Changes inside a STSI_15_1_2 SYSIB occur if CPU bits are set or clear
-> > inside the CPU Topology List Entry CPU mask field, which happens with
-> > changes in CPU polarization, dedication, CPU types and adding or
-> > removing CPUs in a socket.
-> > 
-> > The reporting to the guest is done using the Multiprocessor
-> > Topology-Change-Report (MTCR) bit of the utility entry of the guest's
-> > SCA which will be cleared during the interpretation of PTF.
-> > 
-> > To check if the topology has been modified we use a new field of the
-> > arch vCPU to save the previous real CPU ID at the end of a schedule
-> > and verify on next schedule that the CPU used is in the same socket.
-> > 
-> > We assume in this patch:
-> > - no polarization change: only horizontal polarization is currently
-> >   used in linux.
+> This simplifies the implementation and is faster than using the linked
+> list.
 
-Why is this assumption necessary? The statement that Linux runs only
-with horizontal polarization is not true.
+You mean faster because more cache friendly?
+OTOH you do max(addr, vma->vm_start) which wasn't the case.
+
+I doubt it matters though and yeah it's much simpler...
+
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+Btw, no signed-off-by Liam?
+
+I now also notice some other patches (e.g. patch 4) have From: and s-o-b by
+Liam followed by Matthew, despite it's Liam sending them. I guess that's
+less of an issue than the missing one.
+
+Anyway something for you to check and make consistent in the whole series, I
+won't point it out individually.
+
+> ---
+>  mm/mmap.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 9fee6e6b276f..de78fc0ce809 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -669,29 +669,19 @@ munmap_vma_range(struct mm_struct *mm, unsigned long start, unsigned long len,
+>  
+>  	return 0;
+>  }
+> +
+>  static unsigned long count_vma_pages_range(struct mm_struct *mm,
+>  		unsigned long addr, unsigned long end)
+>  {
+> -	unsigned long nr_pages = 0;
+> +	VMA_ITERATOR(vmi, mm, addr);
+>  	struct vm_area_struct *vma;
+> +	unsigned long nr_pages = 0;
+>  
+> -	/* Find first overlapping mapping */
+> -	vma = find_vma_intersection(mm, addr, end);
+> -	if (!vma)
+> -		return 0;
+> -
+> -	nr_pages = (min(end, vma->vm_end) -
+> -		max(addr, vma->vm_start)) >> PAGE_SHIFT;
+> -
+> -	/* Iterate over the rest of the overlaps */
+> -	for (vma = vma->vm_next; vma; vma = vma->vm_next) {
+> -		unsigned long overlap_len;
+> -
+> -		if (vma->vm_start > end)
+> -			break;
+> +	for_each_vma_range(vmi, vma, end) {
+> +		unsigned long vm_start = max(addr, vma->vm_start);
+> +		unsigned long vm_end = min(end, vma->vm_end);
+>  
+> -		overlap_len = min(end, vma->vm_end) - vma->vm_start;
+> -		nr_pages += overlap_len >> PAGE_SHIFT;
+> +		nr_pages += (vm_end - vm_start) / PAGE_SIZE;
+>  	}
+>  
+>  	return nr_pages;
+

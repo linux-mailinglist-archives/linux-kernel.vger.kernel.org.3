@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2239846ED1E
+	by mail.lfdr.de (Postfix) with ESMTP id 9A79E46ED1F
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbhLIQhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:37:03 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:55009 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236830AbhLIQhB (ORCPT
+        id S237377AbhLIQhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:37:05 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:37341 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235038AbhLIQhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:37:01 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V-4XSLS_1639067604;
+        Thu, 9 Dec 2021 11:37:02 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V-4XSLS_1639067604;
 Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V-4XSLS_1639067604)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 10 Dec 2021 00:33:26 +0800
+          Fri, 10 Dec 2021 00:33:27 +0800
 From:   Xin Hao <xhao@linux.alibaba.com>
 To:     sj@kernel.org
 Cc:     xhao@linux.alibaba.com, akpm@linux-foundation.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V1 1/2] mm/damon/dbgfs: Avoid target_ids display wrong pid value
-Date:   Fri, 10 Dec 2021 00:33:16 +0800
-Message-Id: <008dfc6bc5edb802f759227111f5a0eff153e279.1639066954.git.xhao@linux.alibaba.com>
+Subject: [PATCH V1 2/2] mm/damon: Modify the display form of damon tracepoint
+Date:   Fri, 10 Dec 2021 00:33:17 +0800
+Message-Id: <1e019e8ffe8c040376ec59e918d301058cc58ade.1639066954.git.xhao@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <cover.1639066954.git.xhao@linux.alibaba.com>
 References: <cover.1639066954.git.xhao@linux.alibaba.com>
@@ -32,40 +32,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of pid_vnr() is pid_t type which is defined by 'int', this may
-get a wrong pid value, if we set the return value type as 'unsigned long'.
-So there fix it.
+When I use the perf command to record damon monitor data, like below.
+    # perf record -e damon:damon_aggregated
+    # perf script
+    ...target_id=18446462667479739520 nr_regions=13 281472805928960-281472942936064...
+    ...target_id=18446462667479739520 nr_regions=13 281472942936064-281473080008704...
+    ...target_id=18446462667479739520 nr_regions=13 281473080008704-281473216634880...
+
+From a user's point of view, the 'target_id' and 'damon_region' which displays in decimal
+are not very friendly, So there do some changes, keep the 'target_id' display consistent
+with 'dbgfs/target_ids' interface and 'damon_region' is displayed in hexadecimal, just like
+below.
+    # perf record -e damon:damon_aggregated
+    # perf script
+    ...target_id=5522 nr_regions=14 ffff716a3000-ffff79893000...
+    ...target_id=5522 nr_regions=14 ffff79893000-ffff819dc000...
+    ...target_id=5522 nr_regions=14 ffff819dc000-ffff89bd9000...
 
 Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
 ---
- mm/damon/dbgfs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ include/trace/events/damon.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 991b7fa0e858..97eebfb70ddf 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -281,17 +281,15 @@ static inline bool targetid_is_pid(const struct damon_ctx *ctx)
- static ssize_t sprint_target_ids(struct damon_ctx *ctx, char *buf, ssize_t len)
- {
- 	struct damon_target *t;
--	unsigned long id;
--	int written = 0;
-+	int id, written = 0;
- 	int rc;
- 
- 	damon_for_each_target(t, ctx) {
--		id = t->id;
- 		if (targetid_is_pid(ctx))
- 			/* Show pid numbers to debugfs users */
--			id = (unsigned long)pid_vnr((struct pid *)id);
-+			id = (int)pid_vnr((struct pid *)t->id);
- 
--		rc = scnprintf(&buf[written], len - written, "%lu ", id);
-+		rc = scnprintf(&buf[written], len - written, "%d ", id);
- 		if (!rc)
- 			return -ENOMEM;
- 		written += rc;
--- 
+diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
+index 99ffa601e351..67de51814f4c 100644
+--- a/include/trace/events/damon.h
++++ b/include/trace/events/damon.h
+@@ -17,7 +17,7 @@ TRACE_EVENT(damon_aggregated,
+ 	TP_ARGS(t, r, nr_regions),
+
+ 	TP_STRUCT__entry(
+-		__field(unsigned long, target_id)
++		__field(int, target_id)
+ 		__field(unsigned int, nr_regions)
+ 		__field(unsigned long, start)
+ 		__field(unsigned long, end)
+@@ -26,7 +26,7 @@ TRACE_EVENT(damon_aggregated,
+ 	),
+
+ 	TP_fast_assign(
+-		__entry->target_id = t->id;
++		__entry->target_id = (int)pid_vnr((struct pid *)t->id);
+ 		__entry->nr_regions = nr_regions;
+ 		__entry->start = r->ar.start;
+ 		__entry->end = r->ar.end;
+@@ -34,7 +34,7 @@ TRACE_EVENT(damon_aggregated,
+ 		__entry->age = r->age;
+ 	),
+
+-	TP_printk("target_id=%lu nr_regions=%u %lu-%lu: %u %u",
++	TP_printk("target_id=%u nr_regions=%u %lx-%lx: %u %u",
+ 			__entry->target_id, __entry->nr_regions,
+ 			__entry->start, __entry->end,
+ 			__entry->nr_accesses, __entry->age)
+--
 2.31.0
-

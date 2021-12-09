@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C38846E9CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FA446E9CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbhLIOUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:20:41 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:61677 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238495AbhLIOUe (ORCPT
+        id S238495AbhLIOUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:20:53 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:5132 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238549AbhLIOUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:20:34 -0500
+        Thu, 9 Dec 2021 09:20:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639059421; x=1670595421;
+  t=1639059428; x=1670595428;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=Tsb8Ukn+VNxBthIIOk431AQ0YerI8izT+fR5DeXUq4c=;
-  b=zNOZHvUiF9rD3mYpD1leMghzEeImmM+nMNmieMr8vValDcNxqwKH+JqP
-   NAzkzH+J6U9P2XnRs5PF/akRgeb/S5VDEwNakSPJ6VImKPlWjRg8Pr2E9
-   XF+FHKgLbJGHEnLEd1R+fNZS8RpOq7SHNT2u1E2pXlMORsMGgeXx6TFNt
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Dec 2021 06:17:00 -0800
+  bh=+gEGiTe5F7Hgf4jkiA8JEJg9Ffn33edoUDRll/gXJQY=;
+  b=pmqcco2QuYm/tljfPExhT/XEqgZW2r/dh1gQhQvAFq4GOQGmuXIpQKBI
+   BT/OgLni/hSU+ksiPBMsPw1RXxg6LSPuK2KmCRwSeU3gzWPs5x8r4VW4m
+   JwakKJmFGchxsWO0P2o3wu3NkVga4DbqjYoFRCJR1p5M3lQkg2MPafKeA
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Dec 2021 06:17:08 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:17:00 -0800
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:17:08 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:17:00 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:17:07 -0800
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:16:57 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:17:04 -0800
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -51,9 +51,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Tao Zhang <quic_taozha@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v2 7/9] Coresight: Add TPDA link driver
-Date:   Thu, 9 Dec 2021 22:15:41 +0800
-Message-ID: <20211209141543.21314-8-quic_jinlmao@quicinc.com>
+Subject: [PATCH v2 8/9] dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+Date:   Thu, 9 Dec 2021 22:15:42 +0800
+Message-ID: <20211209141543.21314-9-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
 References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
@@ -66,329 +66,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TPDA(Trace, Profiling and Diagnostics Aggregator) is
-to provide packetization, funneling and timestamping of
-TPDM data. Multiple monitors are connected to different
-input ports of TPDA.This change is to add tpda
-enable/disable/probe functions for coresight tpda driver.
-
- - - - -         - - - -        - - - -
-| TPDM 0|      | TPDM 1 |     | TPDM 2|
- - - - -         - - - -        - - - -
-    |               |             |
-    |_ _ _ _ _ _    |     _ _ _ _ |
-                |   |    |
-                |   |    |
-           ------------------
-          |        TPDA      |
-           ------------------
-                    |
-                    |
-           ------------------
-          |    Trace Funnel  |
-           ------------------
+Adds new coresight-tpda.yaml file describing the bindings required
+to define tpda in the device trees.
 
 Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- MAINTAINERS                                  |   1 +
- drivers/hwtracing/coresight/Kconfig          |  11 +
- drivers/hwtracing/coresight/Makefile         |   1 +
- drivers/hwtracing/coresight/coresight-tpda.c | 201 +++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpda.h |  33 +++
- 5 files changed, 247 insertions(+)
- create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
- create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ .../bindings/arm/coresight-tpda.yaml          | 131 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 132 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
 
+diff --git a/Documentation/devicetree/bindings/arm/coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+new file mode 100644
+index 000000000000..4ce8c81a109a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+@@ -0,0 +1,131 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++# Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/coresight-tpda.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Trace, Profiling and Diagnostics Aggregator - TPDA
++
++description: |
++  TPDAs are responsible for packetization and timestamping of data sets
++  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
++  more attached TPDM and pushing the resultant (packetized) data out a
++  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
++  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
++
++maintainers:
++  - Tao Zhang <quic_taozha@quicinc.com>
++  - Mao Jinlong <quic_jinlmao@quicinc.com>
++  - Suzuki K Poulose <suzuki.poulose@arm.com>
++  - Mathieu Poirier <mathieu.poirier@linaro.org>
++
++properties:
++  $nodename:
++    pattern: "^tpda(@[0-9a-f]+)$"
++  compatible:
++    items:
++      - const: qcom,coresight-tpda
++      - const: arm,primecell
++
++  reg:
++    maxItems: 1
++
++  qcom,tpda-atid:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 1
++    description: |
++      Use the ATID field for trace source identification. This allows
++      multiple TPDMs to be interleaved and formatted via the Coresight
++      trace formatter framing protocol and de-formatted/parsed on a host
++      or debugger.
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: apb_pclk
++
++  in-ports:
++    type: object
++    description: |
++      Input connections from TPDM to TPDA
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      '#address-cells':
++        const: 1
++
++      '#size-cells':
++        const: 0
++
++    patternProperties:
++      "^port@[0-9a-f]+$":
++        type: object
++        required:
++          - reg
++
++    required:
++      - '#size-cells'
++      - '#address-cells'
++
++  out-ports:
++    type: object
++    description: |
++      Output connections from the TPDA to legacy CoreSight trace bus.
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++     port:
++       description:
++         Output connection from the TPDA to legacy CoreSight Trace bus.
++       $ref: /schemas/graph.yaml#/properties/port
++
++required:
++    - compatible
++    - reg
++    - qcom,tpda-atid
++    - clocks
++    - clock-names
++    - in-ports
++    - out-ports
++
++additionalProperties: false
++
++examples:
++  # minimum tpda definition.
++  - |
++    tpda@6004000 {
++       compatible = "qcom,coresight-tpda", "arm,primecell";
++       reg = <0x6004000 0x1000>;
++
++       qcom,tpda-atid = <65>;
++
++       clocks = <&aoss_qmp>;
++       clock-names = "apb_pclk";
++
++       in-ports {
++         #address-cells = <1>;
++         #size-cells = <0>;
++
++        port@0 {
++          reg = <0>;
++          tpda_qdss_0_in_tpdm_dcc: endpoint {
++            remote-endpoint =
++              <&tpdm_dcc_out_tpda_qdss_0>;
++            };
++        };
++      };
++
++       out-ports {
++         port {
++                 tpda_qdss_out_funnel_in0: endpoint {
++                    remote-endpoint =
++                    <&funnel_in0_in_tpda_qdss>;
++                  };
++          };
++       };
++    };
++
++...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 7e2898f1550b..12e4e56a252c 100644
+index 12e4e56a252c..d3b7ce75ba9d 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15568,6 +15568,7 @@ M:	Suzuki K Poulose <suzuki.poulose@arm.com>
+@@ -15567,6 +15567,7 @@ M:	Mathieu Poirier <mathieu.poirier@linaro.org>
+ M:	Suzuki K Poulose <suzuki.poulose@arm.com>
  S:	Maintained
  F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
++F:	Documentation/devicetree/bindings/arm/coresight-tpda.yaml
  F:	Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-+F:	drivers/hwtracing/coresight/coresight-tpda.c
+ F:	drivers/hwtracing/coresight/coresight-tpda.c
  F:	drivers/hwtracing/coresight/coresight-tpdm.c
- 
- QEMU MACHINE EMULATOR AND VIRTUALIZER SUPPORT
-diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-index 60248fef4089..317c5e7f4819 100644
---- a/drivers/hwtracing/coresight/Kconfig
-+++ b/drivers/hwtracing/coresight/Kconfig
-@@ -223,4 +223,15 @@ config CORESIGHT_TPDM_INTEGRATION_TEST
- 	  operation to facilitate integration testing and software bringup
- 	  and/or to instrument topology discovery. The TPDM utilizes integration
- 	  mode to accomplish integration testing and software bringup.
-+
-+config CORESIGHT_TPDA
-+	tristate "CoreSight Trace, Profiling & Diagnostics Aggregator driver"
-+	help
-+	  This driver provides support for configuring aggregator. This is
-+	  primarily useful for pulling the data sets from one or more
-+	  attached monitors and pushing the resultant data out. Multiple
-+	  monitors are connected on different input ports of TPDA.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called coresight-tpda.
- endif
-diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-index e7392a0dddeb..cd8079ec276d 100644
---- a/drivers/hwtracing/coresight/Makefile
-+++ b/drivers/hwtracing/coresight/Makefile
-@@ -26,5 +26,6 @@ obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
- obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
- obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
- obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
-+obj-$(CONFIG_CORESIGHT_TPDA) += coresight-tpda.o
- coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
- 		   coresight-cti-sysfs.o
-diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
-new file mode 100644
-index 000000000000..e51624fac567
---- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-tpda.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/amba/bus.h>
-+#include <linux/bitmap.h>
-+#include <linux/coresight.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/fs.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#include "coresight-priv.h"
-+#include "coresight-tpda.h"
-+
-+DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
-+
-+/* Settings pre enabling port control register */
-+static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
-+{
-+	u32 val;
-+
-+	val = readl_relaxed(drvdata->base + TPDA_CR);
-+	val |= (drvdata->atid << 6);
-+	writel_relaxed(val, drvdata->base + TPDA_CR);
-+}
-+
-+static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
-+{
-+	u32 val;
-+
-+	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
-+	/* Enable the port */
-+	val = val | BIT(0);
-+	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
-+}
-+
-+/* Settings post enabling port control register */
-+static void tpda_enable_post_port(struct tpda_drvdata *drvdata)
-+{
-+	u32 val;
-+
-+	val = readl_relaxed(drvdata->base + TPDA_SYNCR);
-+	/* Clear the mode */
-+	val = val & ~BIT(12);
-+	/* Program the counter value */
-+	val = val | 0xFFF;
-+	writel_relaxed(val, drvdata->base + TPDA_SYNCR);
-+}
-+
-+static void _tpda_enable(struct tpda_drvdata *drvdata, int port)
-+{
-+	CS_UNLOCK(drvdata->base);
-+
-+	if (!drvdata->enable)
-+		tpda_enable_pre_port(drvdata);
-+
-+	tpda_enable_port(drvdata, port);
-+
-+	if (!drvdata->enable)
-+		tpda_enable_post_port(drvdata);
-+
-+	CS_LOCK(drvdata->base);
-+}
-+
-+static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
-+{
-+	struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-+
-+	mutex_lock(&drvdata->lock);
-+	_tpda_enable(drvdata, inport);
-+	drvdata->enable = true;
-+	mutex_unlock(&drvdata->lock);
-+
-+	dev_info(drvdata->dev, "TPDA inport %d enabled\n", inport);
-+	return 0;
-+}
-+
-+static void _tpda_disable(struct tpda_drvdata *drvdata, int port)
-+{
-+	u32 val;
-+
-+	CS_UNLOCK(drvdata->base);
-+
-+	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
-+	val = val & ~BIT(0);
-+	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
-+
-+	CS_LOCK(drvdata->base);
-+}
-+
-+static void tpda_disable(struct coresight_device *csdev, int inport,
-+			   int outport)
-+{
-+	struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-+
-+	mutex_lock(&drvdata->lock);
-+	_tpda_disable(drvdata, inport);
-+	drvdata->enable = false;
-+	mutex_unlock(&drvdata->lock);
-+
-+	dev_info(drvdata->dev, "TPDA inport %d disabled\n", inport);
-+}
-+
-+static const struct coresight_ops_link tpda_link_ops = {
-+	.enable		= tpda_enable,
-+	.disable	= tpda_disable,
-+};
-+
-+static const struct coresight_ops tpda_cs_ops = {
-+	.link_ops	= &tpda_link_ops,
-+};
-+
-+static int tpda_parse_of_data(struct tpda_drvdata *drvdata)
-+{
-+	int ret;
-+	struct device_node *node = drvdata->dev->of_node;
-+
-+	ret = of_property_read_u32(node, "qcom,tpda-atid", &drvdata->atid);
-+	if (ret) {
-+		dev_err(drvdata->dev, "TPDA ATID is not specified\n");
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
-+{
-+	int ret;
-+	struct device *dev = &adev->dev;
-+	struct coresight_platform_data *pdata;
-+	struct tpda_drvdata *drvdata;
-+	struct coresight_desc desc = { 0 };
-+
-+	desc.name = coresight_alloc_device_name(&tpda_devs, dev);
-+	if (!desc.name)
-+		return -ENOMEM;
-+	pdata = coresight_get_platform_data(dev);
-+	if (IS_ERR(pdata))
-+		return PTR_ERR(pdata);
-+	adev->dev.platform_data = pdata;
-+
-+	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
-+
-+	drvdata->dev = &adev->dev;
-+	dev_set_drvdata(dev, drvdata);
-+
-+	drvdata->base = devm_ioremap_resource(dev, &adev->res);
-+	if (!drvdata->base)
-+		return -ENOMEM;
-+
-+	mutex_init(&drvdata->lock);
-+
-+	ret = tpda_parse_of_data(drvdata);
-+	if (ret)
-+		return ret;
-+
-+	desc.type = CORESIGHT_DEV_TYPE_LINK;
-+	desc.subtype.link_subtype = CORESIGHT_DEV_SUBTYPE_LINK_MERG;
-+	desc.ops = &tpda_cs_ops;
-+	desc.pdata = adev->dev.platform_data;
-+	desc.dev = &adev->dev;
-+	drvdata->csdev = coresight_register(&desc);
-+	if (IS_ERR(drvdata->csdev))
-+		return PTR_ERR(drvdata->csdev);
-+
-+	pm_runtime_put(&adev->dev);
-+
-+	dev_dbg(drvdata->dev, "TPDA initialized\n");
-+	return 0;
-+}
-+
-+static struct amba_id tpda_ids[] = {
-+	{
-+		.id     = 0x000f0f00,
-+		.mask   = 0x000fff00,
-+	},
-+	{ 0, 0},
-+};
-+
-+static struct amba_driver tpda_driver = {
-+	.drv = {
-+		.name   = "coresight-tpda",
-+		.owner	= THIS_MODULE,
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe          = tpda_probe,
-+	.id_table	= tpda_ids,
-+};
-+
-+module_amba_driver(tpda_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Aggregator driver");
-diff --git a/drivers/hwtracing/coresight/coresight-tpda.h b/drivers/hwtracing/coresight/coresight-tpda.h
-new file mode 100644
-index 000000000000..35723571ea13
---- /dev/null
-+++ b/drivers/hwtracing/coresight/coresight-tpda.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _CORESIGHT_CORESIGHT_TPDA_H
-+#define _CORESIGHT_CORESIGHT_TPDA_H
-+
-+#define TPDA_CR			(0x000)
-+#define TPDA_Pn_CR(n)		(0x004 + (n * 4))
-+#define TPDA_SYNCR		(0x08C)
-+
-+#define TPDA_MAX_INPORTS	32
-+
-+/**
-+ * struct tpda_drvdata - specifics associated to an TPDA component
-+ * @base:       memory mapped base address for this component.
-+ * @dev:        The device entity associated to this component.
-+ * @csdev:      component vitals needed by the framework.
-+ * @lock:       lock for the enable value.
-+ * @enable:     enable status of the component.
-+ * @traceid:    trace source identification for the data packet by TPDA.
-+ */
-+struct tpda_drvdata {
-+	void __iomem		*base;
-+	struct device		*dev;
-+	struct coresight_device	*csdev;
-+	struct mutex		lock;
-+	bool			enable;
-+	u32				atid;
-+};
-+
-+#endif  /* _CORESIGHT_CORESIGHT_TPDA_H */
 -- 
 2.17.1
 

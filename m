@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450D946E69B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719B146E69E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234451AbhLIKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:33:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57833 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234403AbhLIKdc (ORCPT
+        id S234402AbhLIKgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:36:49 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53094 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLIKgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:33:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639045798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=avqglDHR3vd4/WSSWtIhIY1zOoetjsGwKLe9cebJDlg=;
-        b=Uz+ZrRPJX5i5orNvBN57dLW9Jnd6lPyCgAvVM9XaWmmntVztI/lK6vgLyho/1pyHYku7z0
-        EThk+6Jx0/wgyXofp/K35nzvAUh7TbP0cEQD0+jnM8LdLJG6nlmSGMug4UQ7vv33Mrhz35
-        WqXE9J5FBlcTO/eIAlatEWj1hvqAxG4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-53954IRTPKi4HdSagMG3jA-1; Thu, 09 Dec 2021 05:29:55 -0500
-X-MC-Unique: 53954IRTPKi4HdSagMG3jA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Dec 2021 05:36:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C711100D09F;
-        Thu,  9 Dec 2021 10:29:54 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.195.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 09A7D5ED2C;
-        Thu,  9 Dec 2021 10:29:38 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Wait for IPIs to be delivered when handling Hyper-V TLB flush hypercall
-Date:   Thu,  9 Dec 2021 11:29:37 +0100
-Message-Id: <20211209102937.584397-1-vkuznets@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1FF18CE255B;
+        Thu,  9 Dec 2021 10:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172E6C341C6;
+        Thu,  9 Dec 2021 10:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639045992;
+        bh=cCjdkQQEAw3IgfatSfUxzwtJJai/1rs90YbSLTa/0Gk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=elx2XscFlwhwzK04VGG1r3ze4mi4mgGJ7fp1C+Z5TBPyGLO04WpHT4S8h77/U3kUf
+         HDEMFyvK2FvPOIl8B1X5WjN/AfSAZlJv12I8e3v/hqLAom4Q+KChiemhOqkCIwqa/g
+         zpwqEdjefUqGSBgFldhcHc67cst8Id+12jGZfW1/vD77haH6fkUqFM1X2x09F22gcP
+         7kmGXquahtrPLTBFpWklMRflgN+r5RnHM9Pee53KVKdObbnpqSWm97EtJ91MRg0k6t
+         l+BOJJ3UAxmT7iiGpLCPXDWKRJ99YH3sn0cZZb1Z+eOdzAcSJCKIJbP/p9NY4fpcjq
+         eTGNA8HZZfLFA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mvGjd-00Azp7-TW; Thu, 09 Dec 2021 10:33:10 +0000
+Date:   Thu, 09 Dec 2021 10:33:09 +0000
+Message-ID: <875yry1316.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
+In-Reply-To: <CA+V-a8vUCXQa38NmYu9znakcq4A=Uedyn8w5+hXQ_WKf58oHRQ@mail.gmail.com>
+References: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <d290850bf95f4bdf0c329f278db458c7@kernel.org>
+        <CA+V-a8vUCXQa38NmYu9znakcq4A=Uedyn8w5+hXQ_WKf58oHRQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com, robh+dt@kernel.org, frowand.list@gmail.com, tglx@linutronix.de, geert+renesas@glider.be, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to commit 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use
-tlb_flush_guest()"), kvm_hv_flush_tlb() was using 'KVM_REQ_TLB_FLUSH |
-KVM_REQUEST_NO_WAKEUP' when making a request to flush TLBs on other vCPUs
-and KVM_REQ_TLB_FLUSH is/was defined as:
+On Thu, 09 Dec 2021 10:00:44 +0000,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> 
+> > The root of the issue is that all the resource allocation is done
+> > upfront, way before we even have a driver that could potentially
+> > deal with this device. This is a potential waste of resource, and
+> > it triggers the issue you noticed.
+> >
+> > If you delay the resource allocation until there is an actual
+> > match with a driver, you could have a per-driver flag telling you
+> > whether the IRQ allocation should be performed before the probe()
+> > function is called.
+> >
+> As suggested by Rob, if we switch the drivers to use
+> platform_get_resource(pdev, IORESOURCE_IRQ, n) call with
+> platform_get_irq() this code should go away and with this switch the
+> resource allocation will happen demand. Is this approach OK?
 
- (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+If you get rid of of_irq_to_resource_table() altogether, then yes,
+this has a fighting chance to work.
 
-so KVM_REQUEST_WAIT was lost. Hyper-V TLFS, however, requires that
-"This call guarantees that by the time control returns back to the
-caller, the observable effects of all flushes on the specified virtual
-processors have occurred." and without KVM_REQUEST_WAIT there's a small
-chance that the vCPU making the TLB flush will resume running before
-all IPIs get delivered to other vCPUs and a stale mapping can get read
-there.
+	M.
 
-Fix the issue by adding KVM_REQUEST_WAIT flag to KVM_REQ_TLB_FLUSH_GUEST:
-kvm_hv_flush_tlb() is the sole caller which uses it for
-kvm_make_all_cpus_request()/kvm_make_vcpus_request_mask() where
-KVM_REQUEST_WAIT makes a difference.
 
-Cc: stable@kernel.org
-Fixes: 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use tlb_flush_guest()")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
-- Note, the issue was found by code inspection. Sporadic crashes of
-big Windows guests using Hyper-V TLB flush enlightenment were reported
-but I have no proof that these crashes are anyhow related.
----
- arch/x86/include/asm/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index e41ad1ead721..8afb21c8a64f 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -97,7 +97,7 @@
- 	KVM_ARCH_REQ_FLAGS(25, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_TLB_FLUSH_CURRENT	KVM_ARCH_REQ(26)
- #define KVM_REQ_TLB_FLUSH_GUEST \
--	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_NO_WAKEUP)
-+	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_APF_READY		KVM_ARCH_REQ(28)
- #define KVM_REQ_MSR_FILTER_CHANGED	KVM_ARCH_REQ(29)
- #define KVM_REQ_UPDATE_CPU_DIRTY_LOGGING \
 -- 
-2.33.1
-
+Without deviation from the norm, progress is not possible.

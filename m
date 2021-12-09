@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B9046EAAC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9556546EAAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbhLIPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:12:10 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59664 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbhLIPMJ (ORCPT
+        id S239236AbhLIPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239231AbhLIPMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:12:09 -0500
+        Thu, 9 Dec 2021 10:12:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B201AC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:08:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5929ECE2643
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:08:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E8DC004DD;
-        Thu,  9 Dec 2021 15:08:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB546CE2643
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF44C004DD;
+        Thu,  9 Dec 2021 15:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639062511;
-        bh=WTHAP2zC5FCHpsSxty3S5cxTlkk8IRYS8wYdTydioQs=;
+        s=korg; t=1639062525;
+        bh=+DZzUPb0MXEP6/SL2iCITxve4BK9yABbHTlC4f2A+B0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s2goKKOHpEUbIIl6pk/9VwLEJexCnLiC0SUuLLaXuCZygxCcOr2oxohSk8vbBJJNO
-         NI4AMmIuOlsye5m3sa1ZkjobxDc789PPCVhFrNiTFtLzIqORzM2LzmYNlDLBAp+qXZ
-         rP2bRsEVPl5uTuNBX5RTeiMqkftAIvxyo+GGOWEU=
-Date:   Thu, 9 Dec 2021 16:08:27 +0100
+        b=PsjywAGu6jkA3Vlhq9H7wLcR5prEbnCEL8gAjBorFhqHIy913sb3yY12DSKxM+oTn
+         l8kdpO83Lu1zFKwTBhmepsakWYwAxJ9iE2iC8VmumadOV8tEwFdscEOutneHtrcn+I
+         yDaekilxYR1dwrGvtt6Eq/rV5zNSPuwyj7DIdLh4=
+Date:   Thu, 9 Dec 2021 16:08:42 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Jianglei Nie <niejianglei2021@163.com>
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_pwrtrk()
-Message-ID: <YbIb65kjhl6FSfBv@kroah.com>
+Subject: Re: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_QueryDrv()
+Message-ID: <YbIb+jbuU9OSvjyN@kroah.com>
 References: <20211209132516.8387-1-niejianglei2021@163.com>
+ <20211209132516.8387-2-niejianglei2021@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209132516.8387-1-niejianglei2021@163.com>
+In-Reply-To: <20211209132516.8387-2-niejianglei2021@163.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:25:15PM +0800, Jianglei Nie wrote:
-> Line 5968 (#1) allocates a memory chunk for input by kmalloc().
-> Line 5973 (#2), line 5989 (#4) and line 5994 (#5) free the input
-> before the function returns while line 5986 (#3) forget to free it,
-> which will lead to a memory leak. This bug influences all stable
-> versions from 5.15.1 to 5.15.7.
+On Thu, Dec 09, 2021 at 09:25:16PM +0800, Jianglei Nie wrote:
+> Line 6191 (#1) allocates a memory chunk for input by kmalloc().
+> Line 6213 (#3) frees the input before the function returns while
+> line 6199 (#2) forget to free it, which will lead to a memory leak.
+> This bug influences all stable versions from 5.15.1 to 5.15.7.
 > 
-> We should kfree() input in line 5986 (#3).
+> We should kfree() input in line 6199 (#2).
 > 
-> 5960 static int rtw_mp_pwrtrk(struct net_device *dev,
-> 5961 			struct iw_request_info *info,
-> 5962 			struct iw_point *wrqu, char *extra)
-> 5963 {
-> 5968 	char	*input = kmalloc(wrqu->length, GFP_KERNEL);
+> 6186 static int rtw_mp_QueryDrv(struct net_device *dev,
+> 6187 			struct iw_request_info *info,
+> 6188 			union iwreq_data *wrqu, char *extra)
+> 6189 {
+> 6191	char	*input = kmalloc(wrqu->data.length, GFP_KERNEL);
 > 	// #1: kmalloc space
-> 5970 	if (!input)
-> 5971 		return -ENOMEM;
-> 5972 	if (copy_from_user(input, wrqu->pointer, wrqu->length)) {
-> 5973 		kfree(input); // #2: kfree space
-> 5974 		return -EFAULT;
-> 5975	}
 > 
-> 5980	if (strncmp(input, "stop", 4) == 0) {
-> 5981		enable = 0;
-> 5982		sprintf(extra, "mp tx power tracking stop");
-> 5983	} else if (sscanf(input, "ther =%d", &thermal)) {
-> 5984		ret = Hal_SetThermalMeter(padapter, (u8)thermal);
-> 5985		if (ret == _FAIL)
-> 5986			return -EPERM; // #3: missing kfree
-> 5987		sprintf(extra, "mp tx power tracking start,
-> 			target value =%d ok ", thermal);
-> 5988	} else {
-> 5989		kfree(input); // #4: kfree space
-> 5990		return -EINVAL;
-> 5991	}
+> 6195	if (!input)
+> 6196		return -ENOMEM;
 > 
-> 5994	kfree(input); // #5: kfree space
+> 6198 	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
+> 6199 			return -EFAULT; // #2: missing kfree
 > 
-> 6000	return 0;
-> 6001 }
+> 6213 	kfree(input); // #3: kfree space
+> 6214 	return 0;
+> 6215 }
 > 
 > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > ---
->  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> index 0eccce57c63a..906a57eae1af 100644
+> index 906a57eae1af..edc660f15436 100644
 > --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
 > +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> @@ -5982,8 +5982,10 @@ static int rtw_mp_pwrtrk(struct net_device *dev,
->  			sprintf(extra, "mp tx power tracking stop");
->  		} else if (sscanf(input, "ther =%d", &thermal)) {
->  				ret = Hal_SetThermalMeter(padapter, (u8)thermal);
-> -				if (ret == _FAIL)
-> +				if (ret == _FAIL) {
-> +					kfree(input);
->  					return -EPERM;
-> +				}
->  				sprintf(extra, "mp tx power tracking start, target value =%d ok ", thermal);
->  		} else {
->  			kfree(input);
+> @@ -6195,8 +6195,11 @@ static int rtw_mp_QueryDrv(struct net_device *dev,
+>  	if (!input)
+>  		return -ENOMEM;
+>  
+> -	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
+> -			return -EFAULT;
+> +	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length)) {
+> +		kfree(input);
+> +		return -EFAULT;
+> +	}
+> +
+>  	DBG_88E("%s:iwpriv in =%s\n", __func__, input);
+>  
+>  	qAutoLoad = strncmp(input, "autoload", 8); /*  strncmp true is 0 */
 > -- 
 > 2.25.1
 > 

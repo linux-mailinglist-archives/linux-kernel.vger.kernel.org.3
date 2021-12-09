@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA3846EC17
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7693D46EC19
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240271AbhLIPtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240158AbhLIPtg (ORCPT
+        id S240288AbhLIPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:50:07 -0500
+Received: from relay03.th.seeweb.it ([5.144.164.164]:42047 "EHLO
+        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240139AbhLIPuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:49:36 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E92BC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:46:02 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id k37so12834167lfv.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:46:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ZxV+fDtUiooj7CgVSvQYercPIjoPkRCu2t/WG/Oga+A=;
-        b=POmFMIIFsK5N8d/C2BBfly4VIzjx6dcYTO1K/1OVHbGTb/hxC9GtUAzJUtlbT4RJD2
-         WSBzxhjYMvK4kxi8hYSpfUr23KdkeZGdnFF6BcfyfOwtLjGg+UJBLyGXGOY5Pgs0esVY
-         H2aZb6w3PeczwOblF8fZ7AVc4t5cLFmYob94SUZwRc6jNN+1Ab39pGfhH7N6XlUTjk2R
-         9yM/ONLR5mRpm++pHUZRx5zM4K5aizZtbiUZg1bt6A7JYxCm0fJo/mIAMFd37n80eG+u
-         9BYlTaog1uurOV0XfRWtTfXvCP11QNjUvE4Vtucs6znn4tZbxr3TmAnpP/w/qobVVNyl
-         YWDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ZxV+fDtUiooj7CgVSvQYercPIjoPkRCu2t/WG/Oga+A=;
-        b=T8AzCo8GVhaFH1N0WspJKbRULBn/f59RMIxNSGQtt1E4Dg/ZvW28Tk8PQTMAjMT3tp
-         Ad5Y+fhx29+Itj6CVpwoAmlKwavUgTF9ID23238IPKXbxyGvg+jK5x0Iy7+F0eIqlfK2
-         NXcqIWIdHs1YvCjajO4nWMHOdGMjF55s/xfeKtnb76P3yd/DkPDNUvKQgdW1mPPwsNd2
-         GCKJqmnES4sJZU+vYm/dDqhFDJF7dlx3rA3NyCaN5RaaMrFWXuuEto4lMBYwtY7B3Hr8
-         fF4vsVg45P4DJGzjd9Gh/W+4DaPTSVYexYUU/LKPtsgJbMjDDPG4oc4QjvudT96TAp0B
-         7evg==
-X-Gm-Message-State: AOAM533uM1ce3XVPwMluLl3N8yK9pZ0/iJ6++sQap9AnyDKO+z8J9NCg
-        aIjCyvI/zMbdjH9jAKysAl6QWF0+qSbk0CM5GCA=
-X-Google-Smtp-Source: ABdhPJzS+3XHfnvJKeqq3AsnoPd3blM354pjWHWJUccU5+zosRnjbPbhc5HCzxRD9kqHaMmWvYUC2eeEPDMc0WUPndI=
-X-Received: by 2002:a05:6512:11cf:: with SMTP id h15mr6772624lfr.138.1639064760558;
- Thu, 09 Dec 2021 07:46:00 -0800 (PST)
+        Thu, 9 Dec 2021 10:50:05 -0500
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 127FA200DE;
+        Thu,  9 Dec 2021 16:46:29 +0100 (CET)
+Message-ID: <d87429f0-bd56-880f-9606-6812bc69d445@somainline.org>
+Date:   Thu, 9 Dec 2021 16:46:28 +0100
 MIME-Version: 1.0
-Received: by 2002:a2e:a68f:0:0:0:0:0 with HTTP; Thu, 9 Dec 2021 07:46:00 -0800 (PST)
-Reply-To: rolandnyemih200@gmail.com
-From:   Rowland Nyemih <tchanariyempaguidi@gmail.com>
-Date:   Thu, 9 Dec 2021 16:46:00 +0100
-Message-ID: <CALc1DuNjGDPGjjj0SH6p16gvypdQsVJOmJRbV-+tRurarWxutQ@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v2 09/13] arm64: dts: qcom: sm8450: add interconnect nodes
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211209103505.197453-1-vkoul@kernel.org>
+ <20211209103505.197453-10-vkoul@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20211209103505.197453-10-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-I called to know if you received my previous email, reply to me
-asap.
-Rowland
+On 09/12/2021 11:35, Vinod Koul wrote:
+> And the various interconnect nodes found in SM8450 SoC and use it for
+> UFS controller.
+>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 80 ++++++++++++++++++++++++++++
+>   1 file changed, 80 insertions(+)
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+
+Konrad
+

@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4773846E109
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC72646E10D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbhLICyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbhLICyi (ORCPT
+        id S230496AbhLIC6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:58:02 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:55340 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229446AbhLIC6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:54:38 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42068C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 18:51:06 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id t34so4112541qtc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 18:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B979q6ddQLG5Ot2SrtxCZEXqDjlc8fbt8EspuchXQ0A=;
-        b=SLpEHH7qPnsB6X6iZm1ONom9E3gFdxFLT8KucVziTopLYhI0eqTTM2NpQctWKopKOd
-         IHOcAXkaCqZzZcpPv2cHI8dXAq/84HfHr+3XDoSzpSpvNbIK9rCT0ViJ4HkiXVkc3G2V
-         Ib31bLMBA3D3Q2dvpN1QPVSJI+Lrs1qEh0wTW6Zu815iME5aLX8DcEl0flXmNYbiAx6H
-         9JhTsPVPyQvvXxTgsYWVVdYouZVRQq7JjAWHbKRsPCIfmjPHGFh1As7QbZZRWE2lpyfF
-         FkqZmdgZ++AzS5HFeEqjbFaoy8Bxm0XMksGMfTGGWJHPwrpT2NQ73nadShshznJVvCj+
-         JX4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B979q6ddQLG5Ot2SrtxCZEXqDjlc8fbt8EspuchXQ0A=;
-        b=hzKAYKNQ11X5/qUafWOiGYLnDPiVTqnwKwRIT2lvAdEOrmajr1f50hlvo+tFTILzk3
-         F2ZMmT8gqVsBVQtCFy4qmt+iGA0aChsuC9InYOby51TF5GwAZrs+CwwDw09htGY6bU23
-         1ZNuhHtYAor9Le0dOhxiMhAgU4uQ09v3VXrd3f1A2p2G3OQ5TJFl8HgJOECmL//TZUDE
-         CpeECdheojux+pTpmtaEPEShgjkCifs6bPpyaDUOKFqjLBJ8N95m1kQhGwnl8CJErpS1
-         x3gemEGYko7cz1AtrmEt2QMfSZoLkj5l2on3MMnK4aSF9F5VSS4Tf6dwqBVzYFJBJzYu
-         5Lpg==
-X-Gm-Message-State: AOAM530OEvyZrqHdlqGZzhYnlyqbyW7oShQaBWhFZFg1yOIGZfmx9D+0
-        3ijdv5cNfyA/i/fYfB14Dp8e1L+6zLdp3g==
-X-Google-Smtp-Source: ABdhPJxg5TPBkxtZgnny57BOOmkxFtLUUU+nohfMeGsO+R62PsrQwW7PYLiURSO0uYF+oftpgSnmJg==
-X-Received: by 2002:a05:622a:287:: with SMTP id z7mr13414308qtw.223.1639018265306;
-        Wed, 08 Dec 2021 18:51:05 -0800 (PST)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id h11sm2398516qko.18.2021.12.08.18.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 18:51:04 -0800 (PST)
-Date:   Wed, 8 Dec 2021 21:51:03 -0500
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     syzbot <syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com>
-Cc:     asml.silence@gmail.com, axboe@kernel.dk, clm@fb.com,
-        dsterba@suse.com, fgheet255t@gmail.com, io-uring@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wqu@suse.com
-Subject: Re: [syzbot] INFO: task hung in io_uring_cancel_generic (2)
-Message-ID: <YbFvF7J220iAHqHJ@localhost.localdomain>
-References: <000000000000e016c205d1025f4c@google.com>
- <000000000000fadd4905d2a9c7e8@google.com>
+        Wed, 8 Dec 2021 21:58:01 -0500
+X-UUID: a02a5383e5c34f1bb5976d6943a0babf-20211209
+X-UUID: a02a5383e5c34f1bb5976d6943a0babf-20211209
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 667723867; Thu, 09 Dec 2021 10:54:25 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 9 Dec 2021 10:54:24 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 9 Dec
+ 2021 10:54:24 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 9 Dec 2021 10:54:23 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Ikjoon Jang <ikjn@chromium.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eddie Hung" <eddie.hung@mediatek.com>
+Subject: [PATCH] usb: xhci-mtk: fix list_del warning when enable list debug
+Date:   Thu, 9 Dec 2021 10:54:22 +0800
+Message-ID: <20211209025422.17108-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000fadd4905d2a9c7e8@google.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:12:09PM -0800, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit 741ec653ab58f5f263f2b6df38157997661c7a50
-> Author: Qu Wenruo <wqu@suse.com>
-> Date:   Mon Sep 27 07:22:01 2021 +0000
-> 
->     btrfs: subpage: make end_compressed_bio_writeback() compatible
->
+There is warning of 'list_del corruption' when enable list debug
+(CONFIG_DEBUG_LIST=y), fix it by using list_del_init()
 
-This isn't the right patch, this is x86 so sectorsize == pagesize, so this patch
-didn't change anything at all.  Also unless the local fs is btrfs with
-compression enabled I'm not entirely sure how this would even matter, the
-reproducer seems to be purely io_uring related.  Thanks,
+Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in drop_endpoint")
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/host/xhci-mtk-sch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Josef 
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 1edef7527c11..edbfa82c6565 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -781,7 +781,7 @@ int xhci_mtk_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 
+ 	ret = xhci_check_bandwidth(hcd, udev);
+ 	if (!ret)
+-		INIT_LIST_HEAD(&mtk->bw_ep_chk_list);
++		list_del_init(&mtk->bw_ep_chk_list);
+ 
+ 	return ret;
+ }
+-- 
+2.18.0
+

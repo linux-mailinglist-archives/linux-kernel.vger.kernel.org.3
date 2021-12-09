@@ -2,85 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D4846E97D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0FB46E988
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238264AbhLIN7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S238285AbhLIOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbhLIN7b (ORCPT
+        with ESMTP id S238206AbhLIOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:59:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24C8C061746;
-        Thu,  9 Dec 2021 05:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1+LEczdi59AY2/papldS92pldhESqdSy5rOO+LXFl/Y=; b=BN5zR4Fap4OgbbW6sVMj4jsSBW
-        ilAnzN36cbHQO/TcIlS7AGgmaJEGWgjklvLL8UYTAqWAvaYX1k6e/+tlghjFURWAcOMIaNCIlTqrq
-        EQxnogm7lkO6cKp4Xe7wWXN6kKowrwd8oLAmDfuxyre3ek1mvbUe7JaT/tgWY3JMhfx//48e82tMw
-        NAfRHXggAMFolsWz/6cYamZIi/SxeNZ65Eg15PASz2d3U5Eor2e0S/cJPJFzZtdVrMiKFu1bmYjMQ
-        aGaDxdoZ+l+UU86+SUjonqqsSlyV0/Gp6jHlCsc8Y9Vuxsq2sYFSP3CiFXaXqc0pkiGLzxGt/3vcy
-        LcRiZktw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvJtf-009Oqj-PV; Thu, 09 Dec 2021 13:55:43 +0000
-Date:   Thu, 9 Dec 2021 13:55:43 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] mm: delete unsafe BUG from page_cache_add_speculative()
-Message-ID: <YbIK3xTo0Pt1zOrh@casper.infradead.org>
-References: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
+        Thu, 9 Dec 2021 09:01:51 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E859C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:58:18 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d24so9954492wra.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:cc:references:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=irzv4Yj6Wo7BalHCoEamumf5BEF2FaBwNYArSGF/1dU=;
+        b=wXjXxoruFqKMEKzF6THA77mts51jjQ3H5eXjP5a4IfMYWQ6MOCmf5gJy7aFyoyLTEi
+         2xh/nlRDKYcn7hliU7S3L1SH6zV/+DrXKav1W7VzEl5h0xnNdFkGNDyvI5lDTM0FdhMo
+         3hiL6WJEOedAslMdSQvPSlabUBKJYkAsDfFP9oyq+xL383JUSApk/y/lIKNv8c4t/d0l
+         0EL4FtRHhHeMXR7qn72YGpjFLZ63hcPb+jzNx4LnrZA/ztZuJrXxfDglTdltNkUPbOu/
+         pjO3h3iMobWdoySp8XWT2jVDK9x+sA7TzWdZONFckiWbFZ0yasMrCjUdWiL2CwGCN9B2
+         ORjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=irzv4Yj6Wo7BalHCoEamumf5BEF2FaBwNYArSGF/1dU=;
+        b=ormfla9Foyw4PbzOafpEeu688bM5kSjQ3WQr+Pp6pUwea6merKZZpYOgctyYTySI7c
+         XKnvZvr3Y06vovHlBN/YrTw8Vn9hhx5GKMX2VDqU85xmWKEuY2WG9LIBqZPCIQ5mYc0j
+         u7Weyf+tneSCsmXg4+DVN6ZQBnQ6Z2apLoUqOcQUOr2xfPrLZG2Ya5EVkakFGJ+OUVIH
+         LmlCvudnHE7w1WUSTGtRVp9ymmy/AekT5v7ty+1ZZZVATvIY4EyBSFPaf38+O4XJY1Ck
+         tGbKNjAdEkgIloT8AL8Wi+u9xR9iokXxJPukwkuoZLhiPKw+GUiXdFbJugelL4TfvHgI
+         tyug==
+X-Gm-Message-State: AOAM531NctrYcHK4WYmeV0+DT9OLfNJteoNP5LNUfX35wNQl+bSTVHPN
+        84GuRrTAHlnMfFdVsiEIPAaNnw==
+X-Google-Smtp-Source: ABdhPJzp/kgnmsNWfTGb+BFTulG/DV8JfG2m4xfygJ3bRV4Q2IE3Lc7NOno7Jc8rpG1imfreCO1eiw==
+X-Received: by 2002:adf:f80f:: with SMTP id s15mr6694260wrp.542.1639058296721;
+        Thu, 09 Dec 2021 05:58:16 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:ee1f:92e9:bcbf:be87? ([2001:861:44c0:66c0:ee1f:92e9:bcbf:be87])
+        by smtp.gmail.com with ESMTPSA id r11sm5895846wrw.5.2021.12.09.05.58.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 05:58:16 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: arm: amlogic: add S4 based AQ222 bindings
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     "xianwei.zhao" <xianwei.zhao@amlogic.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Vyacheslav Bocharov <adeep@lexina.in>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211208093347.4837-1-xianwei.zhao@amlogic.com>
+ <bd981d0c-af5c-2b29-0ae3-df6bf01ea485@baylibre.com>
+Organization: Baylibre
+Message-ID: <357b657c-161e-9977-976f-387165aa4883@baylibre.com>
+Date:   Thu, 9 Dec 2021 14:58:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
+In-Reply-To: <bd981d0c-af5c-2b29-0ae3-df6bf01ea485@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 11:19:18PM -0800, Hugh Dickins wrote:
-> It is not easily reproducible, but on 5.16-rc I have several times hit
-> the VM_BUG_ON_PAGE(PageTail(page), page) in page_cache_add_speculative():
-> usually from filemap_get_read_batch() for an ext4 read, yesterday from
-> next_uptodate_page() from filemap_map_pages() for a shmem fault.
+On 09/12/2021 14:55, Neil Armstrong wrote:
+> +cc linux-amlogic@lists.infradead.org linux-arm-kernel@lists.infradead.org
 > 
-> That BUG used to be placed where page_ref_add_unless() had succeeded,
-> but now it is placed before folio_ref_add_unless() is attempted: that
-> is not safe, since it is only the acquired reference which makes the
-> page safe from racing THP collapse or split.
-> 
-> We could keep the BUG, checking PageTail only when folio_ref_try_add_rcu()
-> has succeeded; but I don't think it adds much value - just delete it.
+> On 08/12/2021 10:33, xianwei.zhao wrote:
+>> Add bindings for the new Amlogic S4 SoC family,
+>> and the compatible for the Amlogic S4 Based AQ222 board.
 
-Whoops, that was careless of me.  I agree with your reasoning and patch.
+What's the SoC commercial name ? s805x2 ? and the board model ? AQ222 and the family ? S4 ?
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>
+>> S4 is an application processor designed for hybrid OTT/IP Set To
+>> Box(STB) and high-end media box applications, with quad core Cortex-A35.
+>>
+>> Signed-off-by: xianwei.zhao <xianwei.zhao@amlogic.com>
+>> ---
+>>  Documentation/devicetree/bindings/arm/amlogic.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> index 36081734f720..63037ebdd7bf 100644
+>> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+>> @@ -183,6 +183,12 @@ properties:
+>>                - amlogic,ad401
+>>            - const: amlogic,a1
+>>  
+>> +      - description: Boards with the Amlogic Meson S4 AQ222 SoC
 
-> Fixes: 020853b6f5ea ("mm: Add folio_try_get_rcu()")
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
+So it should be:
+      - description: Boards with the Amlogic Meson S4 S805X2 SoC
+
+>> +        items:
+>> +          - enum:
+>> +              - amlogic,aq222
+>> +          - const: amlogic,s4
+>> +
+>>  additionalProperties: true
+>>  
+>>  ...
+>>
+>> base-commit: a3ebdcc8fb3d94de390e58ad3da6161826a58a87
+>>
 > 
->  include/linux/pagemap.h |    1 -
->  1 file changed, 1 deletion(-)
-> 
-> --- 5.16-rc4/include/linux/pagemap.h
-> +++ linux/include/linux/pagemap.h
-> @@ -285,7 +285,6 @@ static inline struct inode *folio_inode(
->  
->  static inline bool page_cache_add_speculative(struct page *page, int count)
->  {
-> -	VM_BUG_ON_PAGE(PageTail(page), page);
->  	return folio_ref_try_add_rcu((struct folio *)page, count);
->  }
->  
+
+Neil

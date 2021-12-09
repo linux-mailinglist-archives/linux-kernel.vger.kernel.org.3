@@ -2,247 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3B346DFEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E67946DFEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241757AbhLIBCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:02:03 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:37728 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241801AbhLIBCB (ORCPT
+        id S238137AbhLIBDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233885AbhLIBDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:02:01 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3BE4220B7179;
-        Wed,  8 Dec 2021 16:58:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3BE4220B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639011508;
-        bh=fbpYg6NynM2UPTKU7eao6GSHdvxjImqs1TQpymIEs9g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dSvpTXLvCMg3PWsEGKiBHG+ekMCixfHJh6iKpuP4LCLPZqCDJiDT5Yljd5N1e4t9h
-         LL6klqR850HP/1FSakcuu2lZELDxZWvo2HDshRmsvuhXgVND2GoSPnUUX5Jd7LETaG
-         ik8yd99HJgPFTqJO0GmC45XUyzZhpyzJZQQYmsB4=
-Date:   Wed, 8 Dec 2021 16:58:23 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20211209005823.GA21399@kbox>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
- <20211201182515.2446-3-beaub@linux.microsoft.com>
- <20211208181905.62f8f999@gandalf.local.home>
+        Wed, 8 Dec 2021 20:03:07 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:59:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4D53ECE241A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:59:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C2EC00446;
+        Thu,  9 Dec 2021 00:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639011570;
+        bh=JBRUvmlqtKYO6wmUvlnMnb6NAQ+n15ncBLmNykYGTq0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=dSuHHwnCyqSZ83TbfNBdfPANK+Eritcp33WaSlkA1QczlgssS7cWwZ+t4F5Nu6SgV
+         wX4FMJ2s3BwWeULH5+46ezf6G+4IkoezR4TgNj2lF0vSEEknEfs1KqcQFhiPRHfagR
+         pYJD/7oKp78ewx9YbKMGkA8S+HTMVUKj+nD5/UvKFkm1JGajtPjoWRgBxIL9eLCCp2
+         6l/rCq0Ry1TVwCpNN43m+wgLzJ7JgFJLm7GfRnFgBZZpRIFvK/QIP+8aaUPMRT2VzB
+         OTZJPgK5BWVxOKi8jNSuw0fsAkqh9vkldVoAYQ3UBjiXfhWLP48eIFYiKE8ao+H4Zr
+         1J+KYSfFui8Cg==
+Date:   Wed, 8 Dec 2021 16:59:28 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr <olekstysh@gmail.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
+Subject: Re: [PATCH V3 4/6] xen/unpopulated-alloc: Add mechanism to use Xen
+ resource
+In-Reply-To: <50997667-7c6c-491d-ff04-11e093fee7f0@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112081659090.4091490@ubuntu-linux-20-04-desktop>
+References: <1637787223-21129-1-git-send-email-olekstysh@gmail.com> <1637787223-21129-5-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2111241701240.1412361@ubuntu-linux-20-04-desktop> <c2e8c00a-3856-8330-8e8f-ab8a92e93e47@gmail.com>
+ <alpine.DEB.2.22.394.2112071506370.4091490@ubuntu-linux-20-04-desktop> <50997667-7c6c-491d-ff04-11e093fee7f0@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208181905.62f8f999@gandalf.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/mixed; boundary="8323329-157919797-1639011569=:4091490"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 06:19:05PM -0500, Steven Rostedt wrote:
-> On Wed,  1 Dec 2021 10:25:04 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-157919797-1639011569=:4091490
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Thu, 9 Dec 2021, Oleksandr wrote:
+> On 08.12.21 01:36, Stefano Stabellini wrote:
+> Hi Stefano
 > 
-> > Minimal support for interacting with dynamic events, trace_event and
-> > ftrace. Core outline of flow between user process, ioctl and trace_event
-> > APIs.
+> > On Thu, 25 Nov 2021, Oleksandr wrote:
+> > > > > Please note the following:
+> > > > > for V3 arch_xen_unpopulated_init() was moved to init() as was agreed
+> > > > > and gained __init specifier. So the target_resource is initialized
+> > > > > there.
+> > > > > 
+> > > > > With current patch series applied if CONFIG_XEN_UNPOPULATED_ALLOC
+> > > > > is enabled:
+> > > > > 
+> > > > > 1. On Arm, under normal circumstances, the
+> > > > > xen_alloc_unpopulated_pages()
+> > > > > won't be called “before” arch_xen_unpopulated_init(). It will only be
+> > > > > called "before" when either ACPI is in use or something wrong happened
+> > > > > with DT (and we failed to read xen_grant_frames), so we fallback to
+> > > > > xen_xlate_map_ballooned_pages() in
+> > > > > arm/xen/enlighten.c:xen_guest_init(),
+> > > > > please see "arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for
+> > > > > DT"
+> > > > > for details. But in that case, I think, it doesn't matter much whether
+> > > > > xen_alloc_unpopulated_pages() is called "before" of "after"
+> > > > > target_resource
+> > > > > initialization, as we don't have extended regions in place the
+> > > > > target_resource
+> > > > > will remain invalid even after initialization, so
+> > > > > xen_alloc_ballooned_pages()
+> > > > > will be used in both scenarios.
+> > > > > 
+> > > > > 2. On x86, I am not quite sure which modes use unpopulated-alloc
+> > > > > (PVH?),
+> > > > > but it looks like xen_alloc_unpopulated_pages() can (and will) be
+> > > > > called
+> > > > > “before” arch_xen_unpopulated_init().
+> > > > > At least, I see that xen_xlate_map_ballooned_pages() is called in
+> > > > > x86/xen/grant-table.c:xen_pvh_gnttab_setup(). According to the
+> > > > > initcall
+> > > > > levels for both xen_pvh_gnttab_setup() and init() I expect the former
+> > > > > to be called earlier.
+> > > > > If it is true, the sentence in the commit description which mentions
+> > > > > that “behaviour on x86 is not changed” is not precise. I don’t think
+> > > > > it would be correct to fallback to xen_alloc_ballooned_pages() just
+> > > > > because we haven’t initialized target_resource yet (on x86 it is just
+> > > > > assigning it iomem_resource), at least this doesn't look like an
+> > > > > expected
+> > > > > behaviour and unlikely would be welcome.
+> > > > > 
+> > > > > I am wondering whether it would be better to move
+> > > > > arch_xen_unpopulated_init()
+> > > > > to a dedicated init() marked with an appropriate initcall level
+> > > > > (early_initcall?)
+> > > > > to make sure it will always be called *before*
+> > > > > xen_xlate_map_ballooned_pages().
+> > > > > What do you think?
+> > >     ... here (#2). Or I really missed something and there wouldn't be an
+> > > issue?
+> > Yes, I see your point. Yeah, it makes sense to make sure that
+> > drivers/xen/unpopulated-alloc.c:init is executed before
+> > xen_pvh_gnttab_setup.
 > > 
-> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > ---
-> >  kernel/trace/Kconfig             |   15 +
-> >  kernel/trace/Makefile            |    1 +
-> >  kernel/trace/trace_events_user.c | 1192 ++++++++++++++++++++++++++++++
-> >  3 files changed, 1208 insertions(+)
-> >  create mode 100644 kernel/trace/trace_events_user.c
+> > If we move it to early_initcall, then we end up running it before
+> > xen_guest_init on ARM. But that might be fine: it looks like it should
+> > work OK and would also allow us to execute xen_xlate_map_ballooned_pages
+> > with target_resource already set.
 > > 
-> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> > index 420ff4bc67fd..21d00092436b 100644
-> > --- a/kernel/trace/Kconfig
-> > +++ b/kernel/trace/Kconfig
-> > @@ -724,6 +724,21 @@ config SYNTH_EVENTS
-> >  
-> >  	  If in doubt, say N.
-> >  
-> > +config USER_EVENTS
-> > +	bool "User trace events"
-> > +	select TRACING
-> > +	select DYNAMIC_EVENTS
-> > +	default n
-> 
-> default n is default, so you do not need to explicitly state that.
-> 
-> In other words, the above line is a nop.
-> 
-
-Got it.
-
-> > +	help
-> > +	  User trace events are user-defined trace events that
-> > +	  can be used like an existing kernel trace event.  User trace
-> > +	  events are generated by writing to a tracefs file.  User
-> > +	  processes can determine if their tracing events should be
-> > +	  generated by memory mapping a tracefs file and checking for
-> > +	  an associated byte being non-zero.
-> > +
-> > +	  If in doubt, say N.
-> > +
-> >  config HIST_TRIGGERS
-> >  	bool "Histogram triggers"
-> >  	depends on ARCH_HAVE_NMI_SAFE_CMPXCHG
-> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-> > index bedc5caceec7..19ef3758da95 100644
-> > --- a/kernel/trace/Makefile
-> > +++ b/kernel/trace/Makefile
+> > So I'd say go for it :)
 > 
 > 
+> Thank you for the confirmation! In order to be on the safe side, I would
+> probably leave drivers/xen/unpopulated-alloc.c:init as is, I mean with current
+> subsys initcall level (it expects the extra memory regions to be already
+> filled)
+> and create a separate unpopulated_init() to put arch_xen_unpopulated_init()
+> into. Something like the following:
 > 
+> static int __init unpopulated_init(void)
+> {
+>     int ret;
 > 
-> > +/*
-> > + * Handles the final close of the file from user mode.
-> > + */
-> > +static int user_events_release(struct inode *node, struct file *file)
-> > +{
-> > +	struct user_event_refs *refs;
-> > +	struct user_event *user;
-> > +	int i;
-> > +
-> > +	/*
-> > +	 * refs is protected by RCU and could in theory change immediately
-> > +	 * before this call on another core. To ensure we read the latest
-> > +	 * version of refs we acquire the RCU read lock again.
-> > +	 */
-> > +	rcu_read_lock_sched();
-> > +	refs = rcu_dereference_sched(file->private_data);
-> > +	rcu_read_unlock_sched();
+>     if (!xen_domain())
+>         return -ENODEV;
 > 
-> This still bothers me. Can another CPU call an ioctl here?
-
-Sorry :)
-
-No, another CPU cannot call the ioctl on the file, since if another CPU
-had a reference to this file release couldn't be called.
-
-user_events_release is only called when the final reference to the file
-has been closed, so there cannot be another ioctl pending, starting or
-finishing for this file at the time it is called.
-
-The last user mode program to call close() on the file will end up
-invoking user_events_release.
-
-The user_event_refs is only accessible via the file's private_data, which
-now has zero references when release is executing. This means the
-private_data can no longer change and the rcu deref ensures we have the
-latest version.
-
-refs is per-file, so while there can be other ioctl's occurring for
-other files, they are completely different ref objects than the one
-being cleaned up in the release of the file, it's not shared outside of
-this file lifetime, which has now ended.
-
+>     ret = arch_xen_unpopulated_init(&target_resource);
+>     if (ret) {
+>         pr_err("xen:unpopulated: Cannot initialize target resource\n");
+>         target_resource = NULL;
+>     }
 > 
->   user_events_ioctl_reg() {
->     user_events_ref_add() {
->       refs = rcu_dereference_protected(file->private_data, ..);
->       new_refs = kzalloc(size, GFP_KERNEL);
->       rcu_assign_pointer(file->private_data, new_refs);
->       if (refs)
->         kfree_rcu(refs, rcu);
-> 
-> refs now freed.
-> 
+>     return ret;
+> }
+> early_initcall(unpopulated_init);
 
-If user_events_ioctl is executing for that same file, user_events_release
-could not have been called due to the file being in use to issue the
-ioctl.
-
-> > +
-> > +	if (!refs)
-> > +		goto out;
-> > +
-> > +	/*
-> > +	 * Do not need RCU while enumerating the events that were used.
-> > +	 * The lifetime of refs has reached an end, it's tied to this file.
-> > +	 * The underlying user_events are ref counted, and cannot be freed.
-> > +	 * After this decrement, the user_events may be freed elsewhere.
-> > +	 */
-> > +	for (i = 0; i < refs->count; ++i) {
-> 
-> Fault on refs->count
-> 
-> ??
-
-refs after rcu_dereference is checked for null before accessing.
-
-refs cannot be changed when release is being executed, since that would
-mean the ioctl ran without a file reference (not sure how that could happen).
-
-This is why it's important that release get the latest version of refs,
-an ioctl could have JUST happened before the final close() in user mode, and
-if it jumped CPUs we could (in theory) get an old value. If we got an
-old value, then yes, the fault could occur.
-
-This code uses the file ops release method as a final sync point to
-clean up everything for that file only after there are no more
-references to it at all, so nobody can do this kind of thing.
-
-Is there some case I am missing where an ioctl on a file can be
-performed without a reference to that file?
-
-Are you worried about a malicious user calling close on the file and
-then immediately issuing an ioctl on the now closed file?
-
-If so, wouldn't ioctl just reject that file reference being used as not
-in the processes file table / invalid and not let the ioctl go through?
-
-> 
-> > +		user = refs->events[i];
-> > +
-> > +		if (user)
-> > +			atomic_dec(&user->refcnt);
-> > +	}
-> > +
-> > +	kfree_rcu(refs, rcu);
-> > +out:
-> > +	return 0;
-> > +}
-> > +
-
-[..]
-
-> > +static const struct file_operations user_status_fops = {
-> > +	.mmap = user_status_mmap,
-> > +	.read = user_status_read,
-> > +	.llseek  = user_status_seek,
-> > +	.release = user_status_release,
-> > +};
-> > +
-> > +/*
-> > + * Creates a set of tracefs files to allow user mode interactions.
-> > + */
-> > +static int create_user_tracefs(void)
-> > +{
-> > +	struct dentry *edata, *emmap;
-> > +
-> > +	edata = tracefs_create_file("user_events_data", 0644, NULL,
-> > +				    NULL, &user_data_fops);
-> 
-> BTW, I now define:
-> 
->  TRACE_MODE_WRITE for files to be written to, and TRACE_MODE_READ for files
->  that are read only.
-> 
-> And soon tracefs will honor the gid mount option to define what group all
-> the tracefs files should belong to on mount.
-
-Perfect, thank you.
-
-> 
-> -- Steve
-> 
-
-Thanks,
--Beau
+Sounds good
+--8323329-157919797-1639011569=:4091490--

@@ -2,131 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE37D46E917
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B745646E914
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbhLIN1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:27:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18370 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237913AbhLIN1e (ORCPT
+        id S237908AbhLIN1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230461AbhLIN1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:27:34 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9CTIYF001755;
-        Thu, 9 Dec 2021 13:23:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=Peb/1+zlJfUFXCByvdrVxxZHXcbEVfe/h5BLXGK8cfU=;
- b=TZu4JI3e+xJjXvuO6TdMssLpPULlJfSh8gKiMp9lj2jqu8/n6VVwXlRABqo8mUdXnKkM
- FvS9YAizUPouMCUS1UcKMNs1PTjHWQZ8loPFJoMJHovh+QOfal60A0pUVvndpBCUa8i0
- 0ApzNGyJIaF35dVUzyl4gJG3TobY5xZoeWOAmwhsn+WVzdClwrq8hM4dns3KCrBzq1xO
- aFqkrLQpM/ZAgf/RjmeJdoNq6Ea6P44eONkDUzgM9Qq2YZdt3stFX82yrQ1CKywedwQG
- eLUml95hQ9b97uNGGj1ofIvz8cm87gZA8QzPpruGVI/mB7YYVjP7SjSbtBqypdLYLw04 /Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 13:23:45 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9CV3pe009524;
-        Thu, 9 Dec 2021 13:23:44 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ab-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 13:23:44 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9DIDgO031552;
-        Thu, 9 Dec 2021 13:23:43 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04dal.us.ibm.com with ESMTP id 3cqyyc6u9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 13:23:43 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9DNfBX43843924
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 13:23:41 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2208478068;
-        Thu,  9 Dec 2021 13:23:41 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2CD6978067;
-        Thu,  9 Dec 2021 13:23:37 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 13:23:36 +0000 (GMT)
-Message-ID: <e285cfdc3f6380c7ca5f6e22378ba8343bedf622.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
- corresponding capability
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Denis Semakin <denis.semakin@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "containers@lists.linux.dev" <containers@lists.linux.dev>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "mpeters@redhat.com" <mpeters@redhat.com>,
-        "lhinds@redhat.com" <lhinds@redhat.com>,
-        "lsturman@redhat.com" <lsturman@redhat.com>,
-        "puiterwi@redhat.com" <puiterwi@redhat.com>,
-        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "rgb@redhat.com" <rgb@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>
-Date:   Thu, 09 Dec 2021 08:23:35 -0500
-In-Reply-To: <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-15-stefanb@linux.ibm.com>
-         <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: R8r8z7DhB-xEleZFpzp9M3XvfZJ9a0Ll
-X-Proofpoint-ORIG-GUID: u46tJdfnkoEbFj8j50kxjEePKVoTFNlO
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 9 Dec 2021 08:27:23 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FADC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:23:50 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id a23so476944pgm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:23:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=bDKo3hKT48NQa/vbf5baRtFKhs14EtNKRXElmvT3Y+0=;
+        b=BXpukMZCLUg/UcXX3hqjlAIhaV6UW0DP3MpvaGZVg8mj1QzO3gVT6neZswtFvGttIM
+         O017oXkmhER0bUUovRaP8xl850IYRSUlMbiLG8uNLk0+sxlkDVGE5B5WDK2CaXESBDpH
+         5+eAyfKIX5kKhYn0KN7FoyCPkG1OfBfcyZhYk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=bDKo3hKT48NQa/vbf5baRtFKhs14EtNKRXElmvT3Y+0=;
+        b=kJpKXzXPHpR8yooJbzUedIuqllfNpWFO5nSQDrJ6ID9j4PbV1D+38fsFeq1F1vykDw
+         cczVe/E5ab1LRlUYt/saRojpduGblrGJ9ZR1f7ymFSeLWcHTLQDthv6n5B0idkMeaHtg
+         8/PT7CGEMIaFvU6C/6rj7mj052jeesTrUzJg7PXcAl+pRSYeXiNkxUVp2VL6ct0maXOQ
+         wxXQLXxggNrk5uo8gRgxcuMEDR51aYc84loQd4HpgacCOcpZLnQ/IDm3xIFMtm2owi/X
+         aZoQthPjZDwTtQa+/7Xwq1MTNqLrRo196EWGrle2hMR0e6y/QANkyTfHeS2eYysubBe1
+         9Peg==
+X-Gm-Message-State: AOAM533xUWVg/n2Nah4xXbn0JqFgh9xSwyi0pXt4cxVR5lDLK8nhuzKv
+        PN3Sy7QiT/I5HRH/vz3YfXRftA==
+X-Google-Smtp-Source: ABdhPJynUZSl6r8agp262cQbIJKesqqwlWb+MNdV356k2qAXOzX/g6RzqcepaJwVAMQ41jfXMWzBig==
+X-Received: by 2002:aa7:8883:0:b0:49f:f87a:95de with SMTP id z3-20020aa78883000000b0049ff87a95demr11771812pfe.53.1639056230080;
+        Thu, 09 Dec 2021 05:23:50 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id nh21sm5928437pjb.30.2021.12.09.05.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 05:23:48 -0800 (PST)
+Message-ID: <5b90480f-ae24-7b4c-0b2a-4c3076877571@broadcom.com>
+Date:   Thu, 9 Dec 2021 14:23:42 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_04,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- impostorscore=0 priorityscore=1501 clxscore=1015 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112090073
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v1 1/1] include/linux/unaligned: Replace kernel.h with the
+ necessary inclusions
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        heikki.krogerus@linux.intel.com
+References: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000061c3f305d2b68470"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 07:22 +0000, Denis Semakin wrote:
-> Hi. 
-> My question won't be about capabilities. I'm wondering how IMA-ns
-> which is associated with USER-ns and is created during USER-ns
-> creation would be used by some namespaces orchestration systems, e.g.
-> Kubernetes?
+--00000000000061c3f305d2b68470
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Orchestration systems that don't adopt the user namespace can't really
-run containers requiring admin correctly without giving them root minus
-some capabilities, which is rather unsafe, so the expectation is that
-they'll all figure it out eventually for security reasons.
+On 12/9/2021 1:38 PM, Andy Shevchenko wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Replace kernel.h inclusion with the list of what is really being used.
+> 
+> The rest of the changes are induced by the above and may not be split.
 
-> .. It seems that it can be run without any user namespaces... 
-> Their community just discuss this opportunity to support User
-> namespaces. (see https://github.com/kubernetes/enhancements/pull/2101
-> ) Looks like currently IMA-ns will not be applicable for Kubernetes.
+For brcmfmac change:
 
-Well, lets just say it adds one more reason to get kubernetes to
-finally run rootless privileged containers correctly ...
+Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c | 2 ++
+>   include/linux/unaligned/packed_struct.h                 | 2 +-
+>   lib/lz4/lz4defs.h                                       | 2 ++
+>   3 files changed, 5 insertions(+), 1 deletion(-)
 
-James
+--00000000000061c3f305d2b68470
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDdgkutgKgDkzU0jmgD
+83cmXJ4RSTTOxwJfTQXxOgIWwTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMTEyMDkxMzIzNTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXy6aYpN+eSysKUQEMybOgfkyo7MDwcuJ6Jtz
+80lETI6DQd2aLtn10xopu0iPVFrxDsU1zUaTBQAMGmQgKfzMbajxOz2S5g0yLfxK36GtQLEclV7W
+oPRjnvE/Hm4NKiGtOOL9EeWBkE4psX2gjEXXZU5G6SQvDSZZ0m8FktpcIuD1mwn+lUtS97cTQi2x
+1pkwKOeDcK0sJftHxB6+wqVPoecnRUnDwWdXBs6f7IOKbY128i/CFAEWLTxQwcUW2eF1VNsxd8x+
+XCZwD4tSS8gEpGJopdtJUjcW1qO35HJI4GNy7MLlET8byScvMFK7vYSoAPDkUAkDDuarPZb1sflc
+zQ==
+--00000000000061c3f305d2b68470--

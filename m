@@ -2,77 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82ACF46F15E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DC746F1A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239611AbhLIRQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:16:30 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:39784 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbhLIRQ2 (ORCPT
+        id S242857AbhLIR2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbhLIR2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:16:28 -0500
-Received: by mail-ot1-f48.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso6870609ots.6;
-        Thu, 09 Dec 2021 09:12:54 -0800 (PST)
+        Thu, 9 Dec 2021 12:28:13 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3C3C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:24:39 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id y12so21292094eda.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:24:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3tHtN7G3YGgTFoTuLt2UtzoWso0slwegtyye0NyKD6E=;
+        b=EkUZICBj3sLfwkSa6PVgwK3UJYMBWKD3Zl6QL503dGClSkUivH631EePhpBTiQgDNd
+         VoCL1zBnYteGbjvNrexkMxulvtqSc6W1x7ANtURNimEiRxxY81sHWsZDJM+iJu2oAiti
+         SYA5FO15uZ/NSRZ6dw7jltE7xXAi1A4hAYadw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4Bi3Hs0dz1zLMbmU20z1hBT7554DenEcOj+Mm3ASJ9o=;
-        b=2LmhSlTHLx57M6P3Bchg8GVM74wbEmFz9zv9gf6/GCDgnc5f+vEfAoUGCHx/k4IZdg
-         7y6MZpxEdPODinZUE4mlQ3YFNw8OkMTF3UuqyEaHk6dNUiGMafa9FZsdgP9LFOF1XiNS
-         uuklLem0Ij/U4v2bD1V1ZIMpnIjXaQTEg3JFoi0bKAxcta0zp4+ilx4dkuCCgCOCpuo/
-         ak3DYKCnkdQvebVtLfeVXx2BmgFPoz5nLCNuIDQAsNf5kLVoaBOs9N6V4ABzjqRjafv8
-         w27wE9uaMrSSkmG7fKMfU4KcHyt1IM3onCNilK/Cma/AdVu7e+02zlV5a39Z+f0wSMcp
-         342Q==
-X-Gm-Message-State: AOAM5306UFiSzWD0wkodx27ehecs1U9VZG/Kr08/B8v/kAu/WDOkGOHG
-        gVibxEV+NLB1lm7fP+cD4A==
-X-Google-Smtp-Source: ABdhPJwOWbvOoLjUB66dcX6BdXi20kQtW84xHwSzlBDrIMbpmbcILSEgsrRy5KzEJICOytZ0YWU7Gg==
-X-Received: by 2002:a05:6830:310f:: with SMTP id b15mr6391242ots.31.1639069974305;
-        Thu, 09 Dec 2021 09:12:54 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j5sm67192oou.23.2021.12.09.09.12.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 09:12:53 -0800 (PST)
-Received: (nullmailer pid 3101528 invoked by uid 1000);
-        Thu, 09 Dec 2021 17:12:52 -0000
-Date:   Thu, 9 Dec 2021 11:12:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [PATCH 1/4] dt-bindings: arm: apple: Add t6000/t6001 MacBook Pro
- 14/16" compatibles
-Message-ID: <YbI5FB3n2HHwTj3A@robh.at.kernel.org>
-References: <20211209051001.70235-1-marcan@marcan.st>
- <20211209051001.70235-2-marcan@marcan.st>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3tHtN7G3YGgTFoTuLt2UtzoWso0slwegtyye0NyKD6E=;
+        b=PSOOU3en8vz5PmwBDqTSYeo7fgZrhw4KCY5kolB5IeavET5ZvbQrHX88rZOxqN1mUs
+         Tskzpc3fT7og4FET27UObdyOqpMb659IV8MtX9xnpXOqm8X2bbK2EBInsbtIw/WPySRe
+         s0DbfveSD5ycsa5XP0SAAB12H54RS3AOd9X1dG4Cth1FAdgtnDKA0Z9szLPa5bEWLWnQ
+         hEdDfK383IfvPjKRhbNfElO+TVErc1sONKsmDBcE9rLF0G8/k45lzL0o5sYU1jeKH1XV
+         /WoFT1GpV6sCVyS4zcut/ynJIXHR4yhrsM7gfdXHDthYVuzb8RihLg7yGBMWCkygaSZd
+         5aAA==
+X-Gm-Message-State: AOAM531KyHBhGnxD8X11p4ouGUD8Le4p2F+e/e4hBOILHXB6H3o6Wi8u
+        h2CG+6F9cNn2wAcsTW9JNLqHfzzbhWZrIZil
+X-Google-Smtp-Source: ABdhPJy+nyo1Fm1xjxa8pX43Nel3Np0vxOKmqOJt7USnQSm3gu4cMvcGYNdWtbMYJz+HHHLQqQOxyg==
+X-Received: by 2002:a17:907:7250:: with SMTP id ds16mr17151622ejc.54.1639070480344;
+        Thu, 09 Dec 2021 09:21:20 -0800 (PST)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id qk9sm214601ejc.68.2021.12.09.09.21.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 09:21:20 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id m25-20020a7bcb99000000b0033aa12cdd33so5660935wmi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:21:20 -0800 (PST)
+X-Received: by 2002:a05:600c:1914:: with SMTP id j20mr8992229wmq.26.1639069994552;
+ Thu, 09 Dec 2021 09:13:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209051001.70235-2-marcan@marcan.st>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+ <163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 9 Dec 2021 09:12:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com>
+Message-ID: <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/67] fscache: Implement a hash function
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-afs@lists.infradead.org,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 14:09:58 +0900, Hector Martin wrote:
-> This adds the initial apple,t6000 platforms:
-> 
-> - apple,j314s - MacBook Pro (14-inch, M1 Pro, 2021)
-> - apple,j316s - MacBook Pro (16-inch, M1 Pro, 2021)
-> 
-> And the initial apple,t6001 platforms:
-> 
-> - apple,j314c - MacBook Pro (14-inch, M1 Max, 2021)
-> - apple,j316c - MacBook Pro (16-inch, M1 Max, 2021)
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../devicetree/bindings/arm/apple.yaml        | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
+On Thu, Dec 9, 2021 at 8:54 AM David Howells <dhowells@redhat.com> wrote:
+>
+> Implement a function to generate hashes.  It needs to be stable over time
+> and endianness-independent as the hashes will appear on disk in future
+> patches.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I'm not actually seeing this being endianness-independent.
+
+Is the input just regular 32-bit data in native word order? Because
+then it's not endianness-independent, it's purely that there *is* no
+endianness to the data at all and it is purely native data.
+
+So the code may be correct, but the explanation is confusing. There is
+absolutely nothing here that is about endianness.
+
+           Linus

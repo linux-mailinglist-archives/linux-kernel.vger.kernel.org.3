@@ -2,93 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBC346E8F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B492146E8F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237776AbhLINUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237762AbhLINUW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:20:22 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245C0C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:16:49 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t9so9642479wrx.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Lr8CMzo3EKfaVRi8NKOM7PsaQt1QpnCMNjRjYv/qQyo=;
-        b=XXe6wyI1/vTCtKfUDcdu1iY6BQSB2loNeEXPNWWzgK6qaW0X54tZlazKL/8dqN9owz
-         hLwJTVfg8rrLThmH2iIzNn2ZT95Uwa56qjCtQb/nsba9zc3cEWvqnY1/d1G57nv/ygcJ
-         AkB6xSsiChyiTbs2vyX+C+cBo4r/3qAqAKAubF8at3DGpb42L4heGeZOffygBzc5t71t
-         Gk6TMvlpYr2g6HH8eo8CNllRmsRfo8248agGy2ns9ffs2U/NtN71HbB84pxTSw6p7WAA
-         GSISYIITEd3n4l5fkpe8iYCZvv4Hz3ZD8OZ9ZA/iEBmAq1wi6mRS05MOo2UAU3necv8J
-         pIOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Lr8CMzo3EKfaVRi8NKOM7PsaQt1QpnCMNjRjYv/qQyo=;
-        b=td2dsMuEnv/71EXeWJmWYsHLPVCEijqezA1qKdAcJ+LCVbuC9wY3Piqo6wbnT9S08j
-         Jqik5YxUKxeTCedM08iQ0ZkjPpj7vwNkD7GnVzXIZag9e8vgnQvV4PaXuNrbQsgHB+wx
-         uBS8WhsU/ZZjCJhbvuG4C7lPTeRO5RRCg4I7x63YOxFSPF/xgOlYou6PLfyJC+VHcgUc
-         1qTPjQAG8yVUd3ZfNJ1IZgvLpOAIU+cokUhUg6psLbcC2it1aQMcwuszIr9XbyuyBNYz
-         S4qFK5tbnpudi8r4LF1gXi1pW0Xef9tIJO1cldW9arnQbegDRZKphNrhM/QKFQeWVAtn
-         ZDqA==
-X-Gm-Message-State: AOAM531ohrHSqgzfI5o+UpmRbtBj64NUeT/fn3GDIgUCYtEpxWEsFTeM
-        8MS2VIuDsh0wgje52n4nIHbV2K7COvNqrA==
-X-Google-Smtp-Source: ABdhPJwwpW8Ir/iCl7C30/hUgRXiTRH+c/yG+7fviA7bFM91faOskb6Oa9KtWPEfHbfbKETbAySF9g==
-X-Received: by 2002:a5d:6351:: with SMTP id b17mr6243176wrw.151.1639055807403;
-        Thu, 09 Dec 2021 05:16:47 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d? ([2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d])
-        by smtp.googlemail.com with ESMTPSA id a198sm8619735wme.1.2021.12.09.05.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 05:16:46 -0800 (PST)
-Subject: Re: [PATCH] clocksource/drivers/pistachio: Fix
- -Wunused-but-set-variable warning
-To:     Drew Fustini <dfustini@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-References: <20211123192524.1038304-1-dfustini@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <52d2195b-6675-690e-e579-c57b4c9377e5@linaro.org>
-Date:   Thu, 9 Dec 2021 14:16:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S237724AbhLINU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:20:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:56700 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233480AbhLINU5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 08:20:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD511ED1;
+        Thu,  9 Dec 2021 05:17:23 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DC1E3F5A1;
+        Thu,  9 Dec 2021 05:17:22 -0800 (PST)
+Message-ID: <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
+Date:   Thu, 9 Dec 2021 13:17:19 +0000
 MIME-Version: 1.0
-In-Reply-To: <20211123192524.1038304-1-dfustini@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] iommu/iova: wait 'fq_timer' handler to finish before
+ destroying 'fq'
+Content-Language: en-GB
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, joro@8bytes.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     yaohongbo@huawei.com, huawei.libin@huawei.com
+References: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2021 20:25, Drew Fustini wrote:
-> Variable 'overflow' set but not used, but this is the intended behavior.
-> The hardware only updates the counter register after the overflow
-> register read. However, the value of overflow is not actually needed.
+Sorry I missed this before...
+
+On 2019-07-27 10:21, Xiongfeng Wang wrote:
+> Fix following crash that occurs when 'fq_flush_timeout()' access
+> 'fq->lock' while 'iovad->fq' has been cleared. This happens when the
+> 'fq_timer' handler is being executed and we call
+> 'free_iova_flush_queue()'. When the timer handler is being executed,
+> its pending state is cleared and it is detached. This patch use
+> 'del_timer_sync()' to wait for the timer handler 'fq_flush_timeout()' to
+> finish before destroying the flush queue.
+
+So if I understand correctly, you shut down the device - which naturally 
+frees some DMA mappings into the FQ - then hotplug it out, such that 
+tearing down its group and default domain can end up racing with the 
+timeout firing on a different CPU? It would help if the commit message 
+actually explained that - I've just reverse-engineered it from the given 
+symptom - rather than focusing on details that aren't really important. 
+fq->lock is hardly significant, since *any* access to the FQ while it's 
+being destroyed is fundamentally unsound. I also spent way too long 
+trying to understand the significance of the full stack trace below 
+before realising that it is in fact just irrelevant - there's only one 
+way fq_flush_timeout() ever gets called, and it's the obvious one.
+
+The fix itself seems reasonable - the kerneldoc for del_timer_sync() is 
+slightly scary, but since free_iova_flush_queue() doesn't touch any of 
+the locks and definitely shouldn't run in IRQ context I believe we're OK.
+
+This will affect my IOVA refactoring series a little, so I'm happy to 
+help improve the writeup if you like - provided that my understanding is 
+actually correct - and include it in a v2 of that.
+
+Thanks,
+Robin.
+
+> [ 9052.361840] Unable to handle kernel paging request at virtual address 0000a02fd6c66008
+> [ 9052.361843] Mem abort info:
+> [ 9052.361845]   ESR = 0x96000004
+> [ 9052.361847]   Exception class = DABT (current EL), IL = 32 bits
+> [ 9052.361849]   SET = 0, FnV = 0
+> [ 9052.361850]   EA = 0, S1PTW = 0
+> [ 9052.361852] Data abort info:
+> [ 9052.361853]   ISV = 0, ISS = 0x00000004
+> [ 9052.361855]   CM = 0, WnR = 0
+> [ 9052.361860] user pgtable: 4k pages, 48-bit VAs, pgdp = 000000009b665b91
+> [ 9052.361863] [0000a02fd6c66008] pgd=0000000000000000
+> [ 9052.361870] Internal error: Oops: 96000004 [#1] SMP
+> [ 9052.361873] Process rmmod (pid: 51122, stack limit = 0x000000003f5524f7)
+> [ 9052.361881] CPU: 69 PID: 51122 Comm: rmmod Kdump: loaded Tainted: G           OE     4.19.36-vhulk1906.3.0.h356.eulerosv2r8.aarch64 #1
+> [ 9052.361882] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 0.81 07/10/2019
+> [ 9052.361885] pstate: 80400089 (Nzcv daIf +PAN -UAO)
+> [ 9052.361902] pc : fq_flush_timeout+0x9c/0x110
+> [ 9052.361904] lr :           (null)
+> [ 9052.361906] sp : ffff00000965bd80
+> [ 9052.361907] x29: ffff00000965bd80 x28: 0000000000000202
+> [ 9052.361912] x27: 0000000000000000 x26: 0000000000000053
+> [ 9052.361915] x25: ffffa026ed805008 x24: ffff000009119810
+> [ 9052.361919] x23: ffff00000911b938 x22: ffff00000911bc04
+> [ 9052.361922] x21: ffffa026ed804f28 x20: 0000a02fd6c66008
+> [ 9052.361926] x19: 0000a02fd6c64000 x18: ffff000009117000
+> [ 9052.361929] x17: 0000000000000008 x16: 0000000000000000
+> [ 9052.361933] x15: ffff000009119708 x14: 0000000000000115
+> [ 9052.361936] x13: ffff0000092f09d7 x12: 0000000000000000
+> [ 9052.361940] x11: 0000000000000001 x10: ffff00000965be98
+> [ 9052.361943] x9 : 0000000000000000 x8 : 0000000000000007
+> [ 9052.361947] x7 : 0000000000000010 x6 : 000000d658b784ef
+> [ 9052.361950] x5 : 00ffffffffffffff x4 : 00000000ffffffff
+> [ 9052.361954] x3 : 0000000000000013 x2 : 0000000000000001
+> [ 9052.361957] x1 : 0000000000000000 x0 : 0000a02fd6c66008
+> [ 9052.361961] Call trace:
+> [ 9052.361967]  fq_flush_timeout+0x9c/0x110
+> [ 9052.361976]  call_timer_fn+0x34/0x178
+> [ 9052.361980]  expire_timers+0xec/0x158
+> [ 9052.361983]  run_timer_softirq+0xc0/0x1f8
+> [ 9052.361987]  __do_softirq+0x120/0x324
+> [ 9052.361995]  irq_exit+0x11c/0x140
+> [ 9052.362003]  __handle_domain_irq+0x6c/0xc0
+> [ 9052.362005]  gic_handle_irq+0x6c/0x150
+> [ 9052.362008]  el1_irq+0xb8/0x140
+> [ 9052.362010]  vprintk_emit+0x2b4/0x320
+> [ 9052.362013]  vprintk_default+0x54/0x90
+> [ 9052.362016]  vprintk_func+0xa0/0x150
+> [ 9052.362019]  printk+0x74/0x94
+> [ 9052.362034]  nvme_get_smart+0x200/0x220 [nvme]
+> [ 9052.362041]  nvme_remove+0x38/0x250 [nvme]
+> [ 9052.362051]  pci_device_remove+0x48/0xd8
+> [ 9052.362065]  device_release_driver_internal+0x1b4/0x250
+> [ 9052.362068]  driver_detach+0x64/0xe8
+> [ 9052.362072]  bus_remove_driver+0x64/0x118
+> [ 9052.362074]  driver_unregister+0x34/0x60
+> [ 9052.362077]  pci_unregister_driver+0x24/0xd8
+> [ 9052.362083]  nvme_exit+0x24/0x1754 [nvme]
+> [ 9052.362094]  __arm64_sys_delete_module+0x19c/0x2a0
+> [ 9052.362102]  el0_svc_common+0x78/0x130
+> [ 9052.362106]  el0_svc_handler+0x38/0x78
+> [ 9052.362108]  el0_svc+0x8/0xc
 > 
-> Link: https://lore.kernel.org/lkml/202111200402.afQsussU-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 > ---
-
-Applied, thanks
-
-  -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>   drivers/iommu/iova.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index 3e1a8a6..90e8035 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -64,8 +64,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
+>   	if (!has_iova_flush_queue(iovad))
+>   		return;
+>   
+> -	if (timer_pending(&iovad->fq_timer))
+> -		del_timer(&iovad->fq_timer);
+> +	del_timer_sync(&iovad->fq_timer);
+>   
+>   	fq_destroy_all_entries(iovad);
+>   
+> 

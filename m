@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C56546F287
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7145246F289
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242083AbhLIR5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S242360AbhLIR5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242074AbhLIR5Y (ORCPT
+        with ESMTP id S242078AbhLIR5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:57:24 -0500
+        Thu, 9 Dec 2021 12:57:35 -0500
 Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35654C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:53:50 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x15so22615148edv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:53:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B93C061746;
+        Thu,  9 Dec 2021 09:54:01 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v1so22373495edx.2;
+        Thu, 09 Dec 2021 09:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gfEybSiwsoU+szdJyCoyr3s7v0KYcyy4yf9cBUePh2s=;
-        b=O4IWy62uwI4QguMT07+F51bLJvECUq80pCyBjE1jmscovM/QVEeot/QqCm57U/gHHV
-         vz3fUaQfbbEQ98L7wVNsFKoSOTalubyyzSJ4ey2heKZknSFyt8KewHYnV2DjVB3JR7jS
-         1n9aE01NXzjRRPOW35GNkoBjkNB2vBl6LfEb8=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=678cBG8EpN1DFb6ImU5fHcIRCMdxEdhtC0zcEhiXW58=;
+        b=SzS0ZMjLigt/ibaWZ6/885pEc5GjOOXMLdbHopS8Lrl3W8cMn+SUuH20F+d2a7mkpV
+         oL5LpUC8qG5V7OVJx4174vV/PMaAfCrx0AAbSjb43enfNyNo19XII3mWad0NuR2E0Lep
+         P9xJIj08fh7fxWQO6T5GX2RblMR7mnf9hfJYlDLuONf7iXK+Bl0kCTEY8C6Mc5pLd7lP
+         y4QtSDF4M+ejUV88a4nEnoZvm6kKpLvsXOHPHf59JvDLjSLStMbkcYxjJYIncAFvlVp3
+         18qU6n6GcH/vBxIHodjlv/wEMfdjiZuwG3J9c6RNz5O9CW6aW+MSUklRSdUm1T4Wwfk1
+         ZJ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gfEybSiwsoU+szdJyCoyr3s7v0KYcyy4yf9cBUePh2s=;
-        b=jcXHqJtH07meQdfMxI9dX6XAnfgzhKj/ZYN6O1OscQuIi8k+h41ur7nmNe5tevloa9
-         /hj7+gdr8PlqywbwbGscmRuywELb6eaXFr0REJksSkG7yk+5fdPxwcqz/3JCfhtwRUpn
-         1rBJuK1yJEybEuajOCS7Lkutvb91qdI6LIjkgSeRXeYN+Sill+ItymWYNhJdDQXXKfki
-         DtwZ8THtBBomhmq/ssQIgTyIILLwn5a2cAvANsg69VQwCyc5jHaPqogBzTokAIxSOt6+
-         dAbYgFZVB+notEvY1dLWYvZt7HdcE7MHHThezqfNQ/otvw4Ngm4G3P/Tvp6bu26IBdag
-         HB8g==
-X-Gm-Message-State: AOAM530RWfcOzuDBVOXjBzP9cX+49BozCZ5sicTSNIxPwpAqTh3GqHpb
-        J5HWT9weVaoCcgYqoU2IHXlnpHENv3IE9Pm+H1w=
-X-Google-Smtp-Source: ABdhPJy6r6Hs2T34mReAeAlf/1bZXtPKM221ilnkjHutNqxbTIa6k6cbI1W/etwvrItdD44j23quAg==
-X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr17262454ejc.140.1639072335232;
-        Thu, 09 Dec 2021 09:52:15 -0800 (PST)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id og14sm238739ejc.107.2021.12.09.09.52.13
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=678cBG8EpN1DFb6ImU5fHcIRCMdxEdhtC0zcEhiXW58=;
+        b=hqgf3B52aJtc5F9rOIXCSRCAjKteAZ/+5xecqCLxNuxKncYhOD4bJr2ieBE2Vawgdc
+         XZPx71fmr8fzmeijyY+RucFvivd6yFMpdYon52QHqIR/VRN1BliHV/1xh5p/6rPMSTOg
+         k3q9HG9LFAgnXoVpgBbykoWO/QUXKdeC0tzT/H9W1XyGGIANMA3rfopsvGGFSAjw7qRC
+         l4M3udhsYoqoq0NV9liUBRRP46WVetHgb7JSkllidAu6MfVbGt1L2QFzMT6678SYqCBT
+         m2JpTW4eXzOGfBmOLbwUf7OdHyQTArj9BHCKVmSzzeHrpeTi+wJpVjj5Yv1ZltiIiRad
+         pU1g==
+X-Gm-Message-State: AOAM530pi/6MuMm8U4Vop8h232VZNcy/KXTG6q8CchWH6+p3p4Wq4gXf
+        /uAAam9ZKivquKFaGSgH2ZQ=
+X-Google-Smtp-Source: ABdhPJyTicmcpmQQw3X+d6VI7pBqQk98I+HArJUyGF2phD3z3EYzIbRDV49wDGoQAsU1hqa0mCMzGw==
+X-Received: by 2002:a17:906:dc8d:: with SMTP id cs13mr17835571ejc.323.1639072322838;
+        Thu, 09 Dec 2021 09:52:02 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id hu7sm238454ejc.62.2021.12.09.09.52.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 09:52:13 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id 133so4896440wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:52:13 -0800 (PST)
-X-Received: by 2002:a1c:800e:: with SMTP id b14mr9241880wmd.155.1639072333220;
- Thu, 09 Dec 2021 09:52:13 -0800 (PST)
+        Thu, 09 Dec 2021 09:52:02 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <0d540a6b-8838-bdf5-ddad-f3b9576ca9f2@redhat.com>
+Date:   Thu, 9 Dec 2021 18:52:01 +0100
 MIME-Version: 1.0
-References: <20211208183655.251963904@infradead.org> <20211208183906.548393311@infradead.org>
- <20211209083305.GN16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211209083305.GN16608@worktop.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 9 Dec 2021 09:51:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh5UcTh6bxhk_NO05Uyk8aHY_PUQx5UyrOBMFH8ATHcWg@mail.gmail.com>
-Message-ID: <CAHk-=wh5UcTh6bxhk_NO05Uyk8aHY_PUQx5UyrOBMFH8ATHcWg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 3/5] refcount: Improve out-of-line code-gen
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: x86: Always set kvm_run->if_flag
+Content-Language: en-US
+To:     Marc Orr <marcorr@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207043100.3357474-1-marcorr@google.com>
+ <c8889028-9c4e-cade-31b6-ea92a32e4f66@amd.com>
+ <CAA03e5E7-ns7w9B9Tu7pSWzCo0Nh7Ba5jwQXcn_XYPf_reRq9Q@mail.gmail.com>
+ <5e69c0ca-389c-3ace-7559-edd901a0ab3c@amd.com>
+ <CAA03e5Gf=ZsAKhuLCEtYCCf0UuNXSHRXQHgmjOj3MKtbiSMbqQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAA03e5Gf=ZsAKhuLCEtYCCf0UuNXSHRXQHgmjOj3MKtbiSMbqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 12:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On 12/7/21 18:28, Marc Orr wrote:
+>>>>> +static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
+>>>>> +{
+>>>>> +     struct vmcb *vmcb = to_svm(vcpu)->vmcb;
+>>>>> +
+>>>>> +     return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
+>>>> I'm not sure if this is always valid to use for non SEV-ES guests. Maybe
+>>>> the better thing would be:
+>>>>
+>>>>           return sev_es_guest(vcpu->kvm) ? vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK
+>>>>                                          : kvm_get_rflags(vcpu) & X86_EFLAGS_IF;
+>>>>
+>>>> (Since this function returns a bool, I don't think you need the !!)
+>>>
+>>> I had the same reservations when writing the patch. (Why fix what's
+>>> not broken.) The reason I wrote the patch this way is based on what I
+>>> read in APM vol2: Appendix B Layout of VMCB: "GUEST_INTERRUPT_MASK -
+>>> Value of the RFLAGS.IF bit for the guest."
+>>
+>> I just verified with the hardware team that this flag is indeed only set
+>> for a guest with protected state (SEV-ES / SEV-SNP). An update to the APM
+>> will be made.
 >
-> For some obscure raisin it causes this: [snip]
+> Got it now. Then the change you suggested is a must! Thanks, Tom.
 
-Looks like the code generation at one point thought that it needs to
-get the return value from the slow-path function call, and by the time
-it had optimized that away it had already ended up with enough
-temporaries that it needed to spill things into %rbx.
+Besides, the bit wouldn't have existed on old (pre-SEV-ES) processors.
 
-That looks like a fairly "internal to gcc" thing, but I think dropping
-that patch is indeed the right thing to do.
-
-When you made it do
-
-        return refcount_warn_saturate(r, ..);
-
-it now means that those inline functions don't obviously always return
-'false' any more, so the compiler did end up needing a variable for
-the return value at one point, and it really was a much more complex
-decision. After it has inlined that top-level function, the return
-value is not visible to the compiler because it doesn't see that
-refcount_warn_saturate() always returns false.
-
-The fact that quite often that whole refcount_warn_saturate() call
-ended up then being in a cold part of the code, and could then be
-optimized to a tailcall if that was the last thing generated, doesn't
-end up helping in the general case, and instead only hurts: the
-compiler doesn't see what the return value is for the warning case, so
-it might end up doing other things in the place that the function was
-inlined into.
-
-I think the original patch was likely a mis-optimization triggered by
-your test-case being a function that *only* did that
-refcount_add_not_zero(), and returned the value. It didn't actually
-have other code that then depended on the return value of it.
-
-              Linus
+Paolo

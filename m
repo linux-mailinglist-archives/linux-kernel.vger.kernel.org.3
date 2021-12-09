@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBB846F6A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1644D46F6A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbhLIWTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S233518AbhLIWTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbhLIWTg (ORCPT
+        with ESMTP id S233480AbhLIWTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:19:36 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90629C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:16:02 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b15-20020a25ae8f000000b005c20f367790so13096659ybj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:16:02 -0800 (PST)
+        Thu, 9 Dec 2021 17:19:39 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482D5C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:16:05 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v20-20020a25fc14000000b005c2109e5ad1so12966552ybd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:16:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=FqrxnquBZTtko9BgXrPYz8OM9HQeZt54ZJSaNv8spPQ=;
-        b=jQlgqpqABmoSDMhC0f6Qnl7fD27iyQFDbN5T3LT3Lqxa6lEVdKbUcNYfBhPXkY45rU
-         BXcZKwud2NUlWZ3kU1dYlexeBjY51JW4XuxO2VAWGDwDv8LZfKHrHvAwxW6I77JxMoek
-         TpP2g0OWY8LDi4kr05Sj8id/av85FV+Dd2QpNlGmPpBI5o6HrF9GPUlPWjrW8crWSEVq
-         8vK3/T7G/GLj0fOEsDL11ZAldUawwtlrUjC3Rb9PrFBlAXnxQCRK9aLzK8TQQTMI/EJq
-         Ih86fCRJuVBphQCEWO4vHu+S/JhBEHf8M9Nd1VnQrbXIInApfvisvBMyZE+kCod1MAqJ
-         AnKQ==
+        bh=iFPytGgCXAEsrjhrGa1Z7QyY9naeGPAt+mdu0JuwAhY=;
+        b=aC5AbIgBtCmBOawnf8+Eu9jc/bHGwEECFebeAmn2zdnC6Drn0OG23esT8abGXFQWxC
+         H0gki52Fna1A0H8wcYimsMqdI0gqDnXdLkzPX/dKG5/Cz4bCKMQ7FIdvCCIgto3W4Ubt
+         +eP5iKIkPwOPWks6BsYoZAzWGSUfbBaywd9e86i6IRvOSewWF5OC6qE5NoR/HGEyo/co
+         3E1teh7iFX2s+iEx41c/nuWXV3pWkAIhNjme6edBnF1SNthNRuHvEqzP/Q1TCPaGiqVj
+         LxSmrIv0CI08iGHkxQSZFk3vxxsfsoG0xDAyqVr1SU3r8e5QFRBOkHfeQ8axygz34ptU
+         JDgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=FqrxnquBZTtko9BgXrPYz8OM9HQeZt54ZJSaNv8spPQ=;
-        b=ypdgQpmBS/o9b4VK5xZQh9/clm2xWKZ5V4YnhdhVhv55kYBv3xuUMpYrBopXnCH076
-         Tr7JkGzAupfFk9NFCISLbjxqwqg76STZ+easKNed3KEv7AfhB9AVTBhmISgEaVS2u3u/
-         gtO/+fu5dEupZJvxghftIMqUMMjkAuIRAohpE2RCFYZONId8QAdM8rLYRAmVi0KBUs0V
-         UkQil5f9j9ryYXDwosr+gdHbc3YfR9uACLcggM+ecHtp1sOg9OusuWrnNk2d2z84SIgu
-         KkwND+Xszmix+FVbq/LQ2gHiXnZS43GvrjEnmMZJpoOL9BVlQm5Q/kX65FdJa9VMbr7e
-         Jrwg==
-X-Gm-Message-State: AOAM530puU3gdQfWdfEpdTeNyUjh7beAFPNFxLmlgZMh9cNLmMh4TWfH
-        d8KwJDgHxIZNOMSd512G0yinUGI=
-X-Google-Smtp-Source: ABdhPJz7A/DINf05BcsrLAG8T6qlShSq6crx7l0ZreU7rhk+PSIj2ScgiWw65k8/EeZ03uva6ksbsbA=
+        bh=iFPytGgCXAEsrjhrGa1Z7QyY9naeGPAt+mdu0JuwAhY=;
+        b=pShGXm6vE2nJDbWz8nPd+15pYVdsUh4SMvJygWYRrUs2VMEwtVdHcgGZZFm+Va44Fn
+         p0doKPofyHW+GVv4J8Lt9a8tsWyB6svtUCagg4cLqEnEKRnc5zhgH0hHFVtVwBMKHBmZ
+         i0Q1DsQX/5z2JOWNvU8lfuz7TPU8MfVtV2lANw9v6LWSwjFbVbM/C1S+BykIZ3mwe8h/
+         9ZY7EdfkB00G5u1UWwUClesjWF72f01OiK9YKy3DSmgBJR/Uk2FwpMpaoSxU3O5xBbLa
+         yZVH/D30jeKhnphqOlwn0y8Khc04MrimedjOAAdfod2iCq0zCi/3SGACRcnFgbT4f7XX
+         8ySQ==
+X-Gm-Message-State: AOAM532pLTAR4JEfsN+sqXQ2i7wjjBEs2HmtrL7CDuimj4ayIquR0iR2
+        /kK6Ad2Qgz2kY6d2ObLsGzdepJM=
+X-Google-Smtp-Source: ABdhPJyYB7QYl/yNNSsx3aR3SNfH5iv+4KL2+UlKSeyCz8qdnjzt+Wi/BubxQn+H7Z/MMSL25Tc7YX0=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:f233:e324:8aa0:f65c])
- (user=pcc job=sendgmr) by 2002:a25:69c1:: with SMTP id e184mr9817470ybc.235.1639088161742;
- Thu, 09 Dec 2021 14:16:01 -0800 (PST)
-Date:   Thu,  9 Dec 2021 14:15:41 -0800
+ (user=pcc job=sendgmr) by 2002:a25:c789:: with SMTP id w131mr9854631ybe.227.1639088164465;
+ Thu, 09 Dec 2021 14:16:04 -0800 (PST)
+Date:   Thu,  9 Dec 2021 14:15:42 -0800
 In-Reply-To: <20211209221545.2333249-1-pcc@google.com>
-Message-Id: <20211209221545.2333249-5-pcc@google.com>
+Message-Id: <20211209221545.2333249-6-pcc@google.com>
 Mime-Version: 1.0
 References: <20211209221545.2333249-1-pcc@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v4 4/7] uaccess-buffer: add CONFIG_GENERIC_ENTRY support
+Subject: [PATCH v4 5/7] arm64: add support for uaccess logging
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
@@ -97,128 +97,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add uaccess logging support on architectures that use
-CONFIG_GENERIC_ENTRY (currently only s390 and x86).
+arm64 does not use CONFIG_GENERIC_ENTRY, so add the support for
+uaccess logging directly to the architecture.
 
-Link: https://linux-review.googlesource.com/id/I3c5eb19a7e4a1dbe6095f6971f7826c4b0663f7d
+Link: https://linux-review.googlesource.com/id/I88de539fb9c4a9d27fa8cccbe201a6e4382faf89
 Signed-off-by: Peter Collingbourne <pcc@google.com>
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
 ---
 v4:
-- move pre/post-exit-loop calls into if statement
+- remove unnecessary hunk
 
- arch/Kconfig                 |  1 +
- include/linux/entry-common.h |  2 ++
- include/linux/thread_info.h  |  4 ++++
- kernel/entry/common.c        | 14 +++++++++++++-
- 4 files changed, 20 insertions(+), 1 deletion(-)
+ arch/arm64/Kconfig                   | 1 +
+ arch/arm64/include/asm/thread_info.h | 7 ++++++-
+ arch/arm64/kernel/ptrace.c           | 7 +++++++
+ arch/arm64/kernel/signal.c           | 5 +++++
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 17819f53ea80..bc849a61b636 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -31,6 +31,7 @@ config HOTPLUG_SMT
- 	bool
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c4207cf9bb17..6023946abe4a 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -161,6 +161,7 @@ config ARM64
+ 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
++	select HAVE_ARCH_UACCESS_BUFFER
+ 	select HAVE_ARCH_VMAP_STACK
+ 	select HAVE_ARM_SMCCC
+ 	select HAVE_ASM_MODVERSIONS
+diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+index e1317b7c4525..0461b36251ea 100644
+--- a/arch/arm64/include/asm/thread_info.h
++++ b/arch/arm64/include/asm/thread_info.h
+@@ -82,6 +82,8 @@ int arch_dup_task_struct(struct task_struct *dst,
+ #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
+ #define TIF_SSBD		25	/* Wants SSB mitigation */
+ #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
++#define TIF_UACCESS_BUFFER_ENTRY 27     /* thread has non-zero uaccess_desc_addr_addr */
++#define TIF_UACCESS_BUFFER_EXIT  28     /* thread has non-zero kcur */
  
- config GENERIC_ENTRY
-+       select HAVE_ARCH_UACCESS_BUFFER
-        bool
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+ #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+@@ -98,6 +100,8 @@ int arch_dup_task_struct(struct task_struct *dst,
+ #define _TIF_SVE		(1 << TIF_SVE)
+ #define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
+ #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
++#define _TIF_UACCESS_BUFFER_ENTRY	(1 << TIF_UACCESS_BUFFER_ENTRY)
++#define _TIF_UACCESS_BUFFER_EXIT	(1 << TIF_UACCESS_BUFFER_EXIT)
  
- config KPROBES
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 2e2b8d6140ed..973fcd1d48a3 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -42,12 +42,14 @@
- 				 SYSCALL_WORK_SYSCALL_EMU |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
- 				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
-+				 SYSCALL_WORK_UACCESS_BUFFER_ENTRY |	\
- 				 ARCH_SYSCALL_WORK_ENTER)
- #define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
- 				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
- 				 SYSCALL_WORK_SYSCALL_EXIT_TRAP	|	\
-+				 SYSCALL_WORK_UACCESS_BUFFER_EXIT |	\
- 				 ARCH_SYSCALL_WORK_EXIT)
+ #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+ 				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+@@ -106,7 +110,8 @@ int arch_dup_task_struct(struct task_struct *dst,
  
- /*
-diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-index ad0c4e041030..b0f8ea86967f 100644
---- a/include/linux/thread_info.h
-+++ b/include/linux/thread_info.h
-@@ -46,6 +46,8 @@ enum syscall_work_bit {
- 	SYSCALL_WORK_BIT_SYSCALL_AUDIT,
- 	SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH,
- 	SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP,
-+	SYSCALL_WORK_BIT_UACCESS_BUFFER_ENTRY,
-+	SYSCALL_WORK_BIT_UACCESS_BUFFER_EXIT,
- };
+ #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+ 				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+-				 _TIF_SYSCALL_EMU)
++				 _TIF_SYSCALL_EMU | _TIF_UACCESS_BUFFER_ENTRY | \
++				 _TIF_UACCESS_BUFFER_EXIT)
  
- #define SYSCALL_WORK_SECCOMP		BIT(SYSCALL_WORK_BIT_SECCOMP)
-@@ -55,6 +57,8 @@ enum syscall_work_bit {
- #define SYSCALL_WORK_SYSCALL_AUDIT	BIT(SYSCALL_WORK_BIT_SYSCALL_AUDIT)
- #define SYSCALL_WORK_SYSCALL_USER_DISPATCH BIT(SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH)
- #define SYSCALL_WORK_SYSCALL_EXIT_TRAP	BIT(SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP)
-+#define SYSCALL_WORK_UACCESS_BUFFER_ENTRY	BIT(SYSCALL_WORK_BIT_UACCESS_BUFFER_ENTRY)
-+#define SYSCALL_WORK_UACCESS_BUFFER_EXIT	BIT(SYSCALL_WORK_BIT_UACCESS_BUFFER_EXIT)
- #endif
- 
- #include <asm/thread_info.h>
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index d5a61d565ad5..59ec6e3f793b 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -6,6 +6,7 @@
- #include <linux/livepatch.h>
- #include <linux/audit.h>
- #include <linux/tick.h>
+ #ifdef CONFIG_SHADOW_CALL_STACK
+ #define INIT_SCS							\
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 88a9034fb9b5..283372eccaeb 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -29,6 +29,7 @@
+ #include <linux/regset.h>
+ #include <linux/tracehook.h>
+ #include <linux/elf.h>
 +#include <linux/uaccess-buffer.h>
  
- #include "common.h"
+ #include <asm/compat.h>
+ #include <asm/cpufeature.h>
+@@ -1854,6 +1855,9 @@ int syscall_trace_enter(struct pt_regs *regs)
+ 	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+ 		trace_sys_enter(regs, regs->syscallno);
  
-@@ -70,6 +71,9 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
- 			return ret;
- 	}
- 
-+	if (work & SYSCALL_WORK_UACCESS_BUFFER_ENTRY)
++	if (flags & _TIF_UACCESS_BUFFER_ENTRY)
 +		uaccess_buffer_syscall_entry();
 +
- 	/* Either of the above might have changed the syscall number */
- 	syscall = syscall_get_nr(current, regs);
+ 	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
+ 			    regs->regs[2], regs->regs[3]);
  
-@@ -197,14 +201,19 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
- static void exit_to_user_mode_prepare(struct pt_regs *regs)
- {
- 	unsigned long ti_work = READ_ONCE(current_thread_info()->flags);
-+	bool uaccess_buffer_pending;
- 
- 	lockdep_assert_irqs_disabled();
- 
- 	/* Flush pending rcuog wakeup before the last need_resched() check */
- 	tick_nohz_user_enter_prepare();
- 
--	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
-+	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK)) {
-+		bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
-+
- 		ti_work = exit_to_user_mode_loop(regs, ti_work);
-+		uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
-+	}
- 
- 	arch_exit_to_user_mode_prepare(regs, ti_work);
- 
-@@ -247,6 +256,9 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
+@@ -1866,6 +1870,9 @@ void syscall_trace_exit(struct pt_regs *regs)
  
  	audit_syscall_exit(regs);
  
-+	if (work & SYSCALL_WORK_UACCESS_BUFFER_EXIT)
++	if (flags & _TIF_UACCESS_BUFFER_EXIT)
 +		uaccess_buffer_syscall_exit();
 +
- 	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
+ 	if (flags & _TIF_SYSCALL_TRACEPOINT)
  		trace_sys_exit(regs, syscall_get_return_value(current, regs));
  
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 8f6372b44b65..5bbd98e5c257 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -20,6 +20,7 @@
+ #include <linux/tracehook.h>
+ #include <linux/ratelimit.h>
+ #include <linux/syscalls.h>
++#include <linux/uaccess-buffer.h>
+ 
+ #include <asm/daifflags.h>
+ #include <asm/debug-monitors.h>
+@@ -919,6 +920,8 @@ static void do_signal(struct pt_regs *regs)
+ 
+ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
+ {
++	bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
++
+ 	do {
+ 		if (thread_flags & _TIF_NEED_RESCHED) {
+ 			/* Unmask Debug and SError for the next task */
+@@ -950,6 +953,8 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
+ 		local_daif_mask();
+ 		thread_flags = READ_ONCE(current_thread_info()->flags);
+ 	} while (thread_flags & _TIF_WORK_MASK);
++
++	uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
+ }
+ 
+ unsigned long __ro_after_init signal_minsigstksz;
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

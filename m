@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E6146E699
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450D946E69B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbhLIKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbhLIKdG (ORCPT
+        id S234451AbhLIKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:33:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57833 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234403AbhLIKdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:33:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D00C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:29:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Dec 2021 05:33:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639045798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=avqglDHR3vd4/WSSWtIhIY1zOoetjsGwKLe9cebJDlg=;
+        b=Uz+ZrRPJX5i5orNvBN57dLW9Jnd6lPyCgAvVM9XaWmmntVztI/lK6vgLyho/1pyHYku7z0
+        EThk+6Jx0/wgyXofp/K35nzvAUh7TbP0cEQD0+jnM8LdLJG6nlmSGMug4UQ7vv33Mrhz35
+        WqXE9J5FBlcTO/eIAlatEWj1hvqAxG4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-53954IRTPKi4HdSagMG3jA-1; Thu, 09 Dec 2021 05:29:55 -0500
+X-MC-Unique: 53954IRTPKi4HdSagMG3jA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 75352CE1FC8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 10:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0745EC004DD;
-        Thu,  9 Dec 2021 10:29:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639045769;
-        bh=/QmpjCuL6s7njp6n+riNneGXXg+eNgJnvQsS9FTssPs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kg0OeLHSNtdKhMVXmUzK4SbKdfW/VPLENXZuwCaVbwkm3WO4VU8H9W5Tis5BKW2/1
-         hwLrw/mYRHZXzd3PuTFvKdF6WA4nzlv+icBWWczLcuscBt3cIajskOgByQRmpV+JI8
-         ddtFZja/LVZRt7kzrq2fVnqLfl7KTKBDw7GhZfsDLSfsV0FeGSA5xQZBEb3xhl11uB
-         mUEl5zf/Ehn3amARhmC8KMYAC8b92UbnjJBS1cNqb7BpI1CwDDaUPZPuZxJtLAR8TU
-         ICRbqfkcKDcZjU2UPInYyCCz2OfMr/bCQNJoqNRwi5lBSJ0Qevao1eN9lEBRiQXRhB
-         8QJb5R4CJQJOQ==
-Date:   Thu, 9 Dec 2021 10:29:24 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 03/15] KVM: arm64: Refcount hyp stage-1 pgtable pages
-Message-ID: <20211209102924.GC1833@willie-the-truck>
-References: <20211201170411.1561936-1-qperret@google.com>
- <20211201170411.1561936-4-qperret@google.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C711100D09F;
+        Thu,  9 Dec 2021 10:29:54 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09A7D5ED2C;
+        Thu,  9 Dec 2021 10:29:38 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Wait for IPIs to be delivered when handling Hyper-V TLB flush hypercall
+Date:   Thu,  9 Dec 2021 11:29:37 +0100
+Message-Id: <20211209102937.584397-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201170411.1561936-4-qperret@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 05:03:57PM +0000, Quentin Perret wrote:
-> To prepare the ground for allowing hyp stage-1 mappings to be removed at
-> run-time, update the KVM page-table code to maintain a correct refcount
-> using the ->{get,put}_page() function callbacks.
-> 
-> Signed-off-by: Quentin Perret <qperret@google.com>
-> ---
->  arch/arm64/kvm/hyp/pgtable.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index f8ceebe4982e..768a58835153 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -408,8 +408,10 @@ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
->  		return false;
->  
->  	new = kvm_init_valid_leaf_pte(phys, data->attr, level);
-> -	if (hyp_pte_needs_update(old, new))
-> +	if (hyp_pte_needs_update(old, new)) {
->  		smp_store_release(ptep, new);
-> +		data->mm_ops->get_page(ptep);
+Prior to commit 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use
+tlb_flush_guest()"), kvm_hv_flush_tlb() was using 'KVM_REQ_TLB_FLUSH |
+KVM_REQUEST_NO_WAKEUP' when making a request to flush TLBs on other vCPUs
+and KVM_REQ_TLB_FLUSH is/was defined as:
 
-In the case where we're just updating software bits for a valid pte, doesn't
-this result in us taking a spurious reference to the page?
+ (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
 
-> @@ -482,8 +485,16 @@ static int hyp_free_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
->  			   enum kvm_pgtable_walk_flags flag, void * const arg)
->  {
->  	struct kvm_pgtable_mm_ops *mm_ops = arg;
-> +	kvm_pte_t pte = *ptep;
-> +
-> +	if (!kvm_pte_valid(pte))
-> +		return 0;
-> +
-> +	mm_ops->put_page(ptep);
-> +
-> +	if (kvm_pte_table(pte, level))
-> +		mm_ops->put_page(kvm_pte_follow(pte, mm_ops));
->  
-> -	mm_ops->put_page((void *)kvm_pte_follow(*ptep, mm_ops));
->  	return 0;
+so KVM_REQUEST_WAIT was lost. Hyper-V TLFS, however, requires that
+"This call guarantees that by the time control returns back to the
+caller, the observable effects of all flushes on the specified virtual
+processors have occurred." and without KVM_REQUEST_WAIT there's a small
+chance that the vCPU making the TLB flush will resume running before
+all IPIs get delivered to other vCPUs and a stale mapping can get read
+there.
 
-This looks pretty similar to the stage-2 walker now, but given how small the
-functions are, I'm not sure we'd really gain much by abstracting the "pte
-counted" check.
+Fix the issue by adding KVM_REQUEST_WAIT flag to KVM_REQ_TLB_FLUSH_GUEST:
+kvm_hv_flush_tlb() is the sole caller which uses it for
+kvm_make_all_cpus_request()/kvm_make_vcpus_request_mask() where
+KVM_REQUEST_WAIT makes a difference.
 
-Will
+Cc: stable@kernel.org
+Fixes: 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use tlb_flush_guest()")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+- Note, the issue was found by code inspection. Sporadic crashes of
+big Windows guests using Hyper-V TLB flush enlightenment were reported
+but I have no proof that these crashes are anyhow related.
+---
+ arch/x86/include/asm/kvm_host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index e41ad1ead721..8afb21c8a64f 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -97,7 +97,7 @@
+ 	KVM_ARCH_REQ_FLAGS(25, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_TLB_FLUSH_CURRENT	KVM_ARCH_REQ(26)
+ #define KVM_REQ_TLB_FLUSH_GUEST \
+-	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_NO_WAKEUP)
++	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_APF_READY		KVM_ARCH_REQ(28)
+ #define KVM_REQ_MSR_FILTER_CHANGED	KVM_ARCH_REQ(29)
+ #define KVM_REQ_UPDATE_CPU_DIRTY_LOGGING \
+-- 
+2.33.1
+

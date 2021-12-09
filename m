@@ -2,247 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9514A46F3AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF9546F3AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbhLITO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:14:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42156 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhLITO5 (ORCPT
+        id S230370AbhLITRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbhLITRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:14:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 43783CE27EF;
-        Thu,  9 Dec 2021 19:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E17AC341CA;
-        Thu,  9 Dec 2021 19:11:14 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 20:11:09 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
- related variables into ima_namespace
-Message-ID: <20211209191109.o3x7nynnm52zhygz@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-14-stefanb@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211208221818.1519628-14-stefanb@linux.ibm.com>
+        Thu, 9 Dec 2021 14:17:04 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2A8C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:13:30 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x5-20020a2584c5000000b005f89a35e57eso12061949ybm.19
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:13:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iP6OFT0YZhBctvqcWIj5MZywUhn3cHVX5RMNAeQUo1A=;
+        b=jUTWtoDW+lW2eysMZOwD8mkRgut+cjRxDaSoCvuduzR8mUCxdf8WG7ntQjhOEcLQ1T
+         aaDYa2vrJyl+idaBN7hwroB5GfZij+ik8jukThK1/e3/aCAX/fr953tOEHnXAzQN0Af5
+         AD6uflmjVnnppsgwjBCe3aX5bsBt0iJe85wzutNYszCcujaVVTgO7zEX4gmELOBq/uiu
+         WBjFgz7lbPvtPN9VNLH1N/U7Y9IRQyO343//H/BpbaqnbcERRZwUZBlsEisF67kEzyRQ
+         1GrE9FDjQE5MfzI+9TqZyC1ArdwYBqDKIbCj1zhUdNt8uObUMaYcQqw9pav1v8hRorEx
+         ZR0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iP6OFT0YZhBctvqcWIj5MZywUhn3cHVX5RMNAeQUo1A=;
+        b=yXnKhWs63ySGSIejQKnlrgya+IF1LlcrxaFjTe/pgiZ171QpPP5S88kUa6CDX05Lqn
+         Ou4RKj5woLkMrRt4srAJTPelNeUhZ0Ja/A/MAwgqyFK7OSvhYUsg5y+sQZJzjYU1Dpkl
+         eys9nN+FpkBVljGPECLquu9BUOCfxq0jiAEpUd2LlCBJ/a2NuQTXpRr1e53lOSm7eqvj
+         WTI3WRwj/BB0Oy7s7lGbj4RDoLMPWUwvn0QqL3JDx1O3tFeYwyB0AG0Ko49JyHtIwTqq
+         muafYa3DKpByvecwxlazxkkMHjyWaATUoTHmpbCV+tj6HvSoSXb1kRJwPGt3+w17nSHs
+         9GnA==
+X-Gm-Message-State: AOAM5324JC0YOGPseIXONpxxsZa/jmaYInTMOVMlauRPQjx0faaE4dR5
+        ZljdaB0L5owPoCrAfzKZfqkMaRzC2Aw=
+X-Google-Smtp-Source: ABdhPJwRa0DrovLmXnVJtJ/EBrf/knW3YT2e46j6n37V+4D5mBIE+WTkDPzGI87t5yBEusZSVhTpSs4h37w=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:8b23:8fcc:c6e4:3a65])
+ (user=surenb job=sendgmr) by 2002:a25:d16:: with SMTP id 22mr8606614ybn.51.1639077209831;
+ Thu, 09 Dec 2021 11:13:29 -0800 (PST)
+Date:   Thu,  9 Dec 2021 11:13:23 -0800
+Message-Id: <20211209191325.3069345-1-surenb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v5 1/3] mm: protect free_pgtables with mmap_lock write lock in exit_mmap
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     mhocko@kernel.org, mhocko@suse.com, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:18:15PM -0500, Stefan Berger wrote:
-> Move the ima_write_mutex, ima_fs_flag, and valid_policy variables into
-> ima_namespace. This way each IMA namespace can set those variables
-> independently.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  include/linux/ima.h                      |  5 ++++
->  security/integrity/ima/ima_fs.c          | 32 +++++++++++-------------
->  security/integrity/ima/ima_init_ima_ns.c |  4 +++
->  3 files changed, 23 insertions(+), 18 deletions(-)
-> 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index 2ce801bfc449..3aaf6e806db4 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -261,6 +261,11 @@ struct ima_namespace {
->  	struct ima_h_table ima_htable;
->  	struct list_head ima_measurements;
->  	unsigned long binary_runtime_size;
-> +
-> +	/* IMA's filesystem */
-> +	struct mutex ima_write_mutex;
-> +	unsigned long ima_fs_flags;
-> +	int valid_policy;
->  };
->  
->  extern struct ima_namespace init_ima_ns;
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 38b1c26479b3..0e582ceecc7f 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -25,8 +25,6 @@
->  
->  #include "ima.h"
->  
-> -static DEFINE_MUTEX(ima_write_mutex);
-> -
->  bool ima_canonical_fmt;
->  static int __init default_canonical_fmt_setup(char *str)
->  {
-> @@ -37,8 +35,6 @@ static int __init default_canonical_fmt_setup(char *str)
->  }
->  __setup("ima_canonical_fmt", default_canonical_fmt_setup);
->  
-> -static int valid_policy = 1;
-> -
->  static ssize_t ima_show_htable_value(char __user *buf, size_t count,
->  				     loff_t *ppos, atomic_long_t *val)
->  {
-> @@ -339,7 +335,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->  		goto out;
->  	}
->  
-> -	result = mutex_lock_interruptible(&ima_write_mutex);
-> +	result = mutex_lock_interruptible(&ns->ima_write_mutex);
->  	if (result < 0)
->  		goto out_free;
->  
-> @@ -354,12 +350,12 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->  	} else {
->  		result = ima_parse_add_rule(ns, data);
->  	}
-> -	mutex_unlock(&ima_write_mutex);
-> +	mutex_unlock(&ns->ima_write_mutex);
->  out_free:
->  	kfree(data);
->  out:
->  	if (result < 0)
-> -		valid_policy = 0;
-> +		ns->valid_policy = 0;
->  
->  	return result;
->  }
-> @@ -376,8 +372,6 @@ enum ima_fs_flags {
->  	IMA_FS_BUSY,
->  };
->  
-> -static unsigned long ima_fs_flags;
-> -
->  #ifdef	CONFIG_IMA_READ_POLICY
->  static const struct seq_operations ima_policy_seqops = {
->  		.start = ima_policy_start,
-> @@ -392,6 +386,8 @@ static const struct seq_operations ima_policy_seqops = {
->   */
->  static int ima_open_policy(struct inode *inode, struct file *filp)
->  {
-> +	struct ima_namespace *ns = get_current_ns();
-> +
+oom-reaper and process_mrelease system call should protect against
+races with exit_mmap which can destroy page tables while they
+walk the VMA tree. oom-reaper protects from that race by setting
+MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
+before taking and releasing mmap_write_lock. process_mrelease has
+to elevate mm->mm_users to prevent such race. Both oom-reaper and
+process_mrelease hold mmap_read_lock when walking the VMA tree.
+The locking rules and mechanisms could be simpler if exit_mmap takes
+mmap_write_lock while executing destructive operations such as
+free_pgtables.
+Change exit_mmap to hold the mmap_write_lock when calling
+unlock_range, free_pgtables and remove_vma. Note also that because
+oom-reaper checks VM_LOCKED flag, unlock_range() should not be allowed
+to race with it. Before this patch, remove_vma used to be called with
+no locks held, however with fput being executed asynchronously and
+vm_ops->close not being allowed to hold mmap_lock (it is called from
+__split_vma with mmap_sem held for write), changing that should be fine.
+In most cases this lock should be uncontended. Previously, Kirill
+reported ~4% regression caused by a similar change [1]. We reran the
+same test and although the individual results are quite noisy, the
+percentiles show lower regression with 1.6% being the worst case [2].
+The change allows oom-reaper and process_mrelease to execute safely
+under mmap_read_lock without worries that exit_mmap might destroy page
+tables from under them.
 
-I'm a bit confused here. In all those callbacks:
-	.open = ima_open_policy,
-	.write = ima_write_policy,
-	.release = ima_release_policy,
-you're calling get_current_ns() at the top of it. What guarantees that
-the same ima_namespace is returned here? What if the fd is sent to
-someone who is in a different user namespace and the write to that
-file?
+[1] https://lore.kernel.org/all/20170725141723.ivukwhddk2voyhuc@node.shutemov.name/
+[2] https://lore.kernel.org/all/CAJuCfpGC9-c9P40x7oy=jy5SphMcd0o0G_6U1-+JAziGKG6dGA@mail.gmail.com/
 
-Maybe I'm just confused but wouldn't you want something like this?
-
-From 1f03dc427c583d5e9ebc9ebe9de77c3c535bbebe Mon Sep 17 00:00:00 2001
-From: Christian Brauner <christian.brauner@ubuntu.com>
-Date: Thu, 9 Dec 2021 20:07:02 +0100
-Subject: [PATCH] !!!! HERE BE DRAGONS - UNTESTED !!!!
-
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- security/integrity/ima/ima_fs.c | 43 +++++++++++++++++++++++++++++----
- 1 file changed, 38 insertions(+), 5 deletions(-)
+changes in v5
+- Corrected patch description, per Michal Hocko
+- Added Acked-by
 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 583462b29cb5..d5b302b925b8 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -317,10 +317,14 @@ static ssize_t ima_read_policy(char *path)
- static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 				size_t datalen, loff_t *ppos)
- {
--	struct ima_namespace *ns = get_current_ns();
-+	struct ima_namespace *ns;
-+	struct user_namespace *user_ns;
- 	char *data;
- 	ssize_t result;
+ mm/mmap.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/mm/mmap.c b/mm/mmap.c
+index bfb0ea164a90..f4e09d390a07 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -3142,25 +3142,27 @@ void exit_mmap(struct mm_struct *mm)
+ 		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+ 		 * __oom_reap_task_mm() will not block.
+ 		 *
+-		 * This needs to be done before calling munlock_vma_pages_all(),
++		 * This needs to be done before calling unlock_range(),
+ 		 * which clears VM_LOCKED, otherwise the oom reaper cannot
+ 		 * reliably test it.
+ 		 */
+ 		(void)__oom_reap_task_mm(mm);
  
-+	user_ns = ima_filp_private(filp);
-+	ns = user_ns->ima_ns
-+
- 	if (datalen >= PAGE_SIZE)
- 		datalen = PAGE_SIZE - 1;
- 
-@@ -373,26 +377,51 @@ static const struct seq_operations ima_policy_seqops = {
- };
- #endif
- 
-+static struct user_namespace *ima_filp_private(struct file *filp)
-+{
-+	if (!(filp->f_flags & O_WRONLY)) {
-+#ifdef CONFIG_IMA_READ_POLICY
-+		struct seq_file *seq;
-+
-+		seq = filp->private_data;
-+		return seq->private;
-+#endif
-+	}
-+	return filp->private_data;
-+}
-+
- /*
-  * ima_open_policy: sequentialize access to the policy file
-  */
- static int ima_open_policy(struct inode *inode, struct file *filp)
- {
--	struct ima_namespace *ns = get_current_ns();
-+	struct user_namespace *user_ns = current_user_ns();
-+	struct ima_namespace *ns = user_ns->ima_ns;
- 
- 	if (!(filp->f_flags & O_WRONLY)) {
- #ifndef	CONFIG_IMA_READ_POLICY
- 		return -EACCES;
- #else
-+		int err;
-+		struct seq_file *seq;
-+
- 		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
- 			return -EACCES;
--		if (!mac_admin_ns_capable(ima_user_ns(ns)))
-+		if (!mac_admin_ns_capable(user_ns))
- 			return -EPERM;
--		return seq_open(filp, &ima_policy_seqops);
-+		err = seq_open(filp, &ima_policy_seqops);
-+		if (err)
-+			return err;
-+
-+		seq = filp->private_data;
-+		seq->private = user_ns;
-+		return 0;
- #endif
+ 		set_bit(MMF_OOM_SKIP, &mm->flags);
+-		mmap_write_lock(mm);
+-		mmap_write_unlock(mm);
  	}
- 	if (test_and_set_bit(IMA_FS_BUSY, &ns->ima_fs_flags))
- 		return -EBUSY;
-+
-+	filp->private_data = user_ns;
- 	return 0;
+ 
++	mmap_write_lock(mm);
+ 	if (mm->locked_vm)
+ 		unlock_range(mm->mmap, ULONG_MAX);
+ 
+ 	arch_exit_mmap(mm);
+ 
+ 	vma = mm->mmap;
+-	if (!vma)	/* Can happen if dup_mmap() received an OOM */
++	if (!vma) {
++		/* Can happen if dup_mmap() received an OOM */
++		mmap_write_unlock(mm);
+ 		return;
++	}
+ 
+ 	lru_add_drain();
+ 	flush_cache_mm(mm);
+@@ -3171,16 +3173,14 @@ void exit_mmap(struct mm_struct *mm)
+ 	free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
+ 	tlb_finish_mmu(&tlb);
+ 
+-	/*
+-	 * Walk the list again, actually closing and freeing it,
+-	 * with preemption enabled, without holding any MM locks.
+-	 */
++	/* Walk the list again, actually closing and freeing it. */
+ 	while (vma) {
+ 		if (vma->vm_flags & VM_ACCOUNT)
+ 			nr_accounted += vma_pages(vma);
+ 		vma = remove_vma(vma);
+ 		cond_resched();
+ 	}
++	mmap_write_unlock(mm);
+ 	vm_unacct_memory(nr_accounted);
  }
  
-@@ -405,9 +434,13 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
-  */
- static int ima_release_policy(struct inode *inode, struct file *file)
- {
--	struct ima_namespace *ns = get_current_ns();
-+	struct ima_namespace *ns;
-+	struct user_namespace *user_ns;
- 	const char *cause = ns->valid_policy ? "completed" : "failed";
- 
-+	user_ns = ima_filp_private(filp);
-+	ns = user_ns->ima_ns
-+
- 	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
- 		return seq_release(inode, file);
- 
 -- 
-2.30.2
+2.34.1.173.g76aa8bc2d0-goog
 

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE4346F691
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B97C46F692
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbhLIWQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S233202AbhLIWR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbhLIWQw (ORCPT
+        with ESMTP id S230526AbhLIWR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:16:52 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2EDC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:13:18 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id k21so8381338ioh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:13:18 -0800 (PST)
+        Thu, 9 Dec 2021 17:17:57 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D8C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:14:22 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id x10so8369312ioj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AjLHKSHDbhs5ITj+u2yH037yf3qXDPr/UqUZDRsWZpE=;
-        b=Xx2BzqYqdHVJRxYtPTlmnEfSVXKwDZegMLQFWQDeP6WuOROvqB6ka2rXCgqU3IhMu3
-         ql/vPhI/QRhikxci3d3W70W+H4OOESKAOmFvz6ZF4T+sUq0LTZxgujAZaNNixgryWGRo
-         p5pBT48lbtZFx42IIkHT0UvBJ+IE6mH6nD141z1qsb12E/IXHXKaM9CQW2IHQfjlvnJg
-         ibOD6IcnJlsphnvF3BLxtuBPjQ2O3y5PjckRkcom2zLqhbQP0vmcwFExUC9/Q1q1WehY
-         d4g/tWpxh9D3K7BlYJUGE8uF3lmrFhCVI5ItrnY2CxtqxU+yeolnEGf8kn5MNKko1C2b
-         Sdsw==
+        bh=4l66WH6Emw7qflgcgTMneIiQdKI6jbeh15CxWfhJjHY=;
+        b=F0iwFnlT1NceQ6dupL2LzlgnZtOwSRmWRGzj5EouOfvlVoPEynafC8KoQ2fCksr8eq
+         RDz8id9Cdb9o4EaUAXqIrDUqnSMMSTL/VRgXANGwq/98c2vZAMFsM2i1tx20rz4JvE/F
+         wEsHXL9cAPfjSFOJUXYCF09q6BKaXnhsHQc4V7ejO8n5k8SHLvz2IYUOHF4GBuqwTi04
+         3yVUQKb2xS5qNIH/reLKewPlD0cKT8Sb/+2Yf8emkidBhZsE/gAcf3MJnmtLSvST2Ys3
+         J3H3rOJby7wb9Y9nJRTXgGveN8SRW/4WNq/+tfsE+2OjfyecEOLTq4hWGVFlbMHxcFRu
+         a5pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AjLHKSHDbhs5ITj+u2yH037yf3qXDPr/UqUZDRsWZpE=;
-        b=Wobttd1lg+idZdmg9ENY0zky/Mm7bM/N4EcTS/92elbHRaMgUuWmy3lYsFEDbY8Yfy
-         tNmS2ozGlEXkcCt1jzHXafcdJ975p8GUeJGHEujGsw21pOf3ywWlzEOeFSRd2yC0RQmL
-         dMh3Fwc/hPEO5IHkiLjx6QC9ij9kKTs9CgAxNjWNzItZxSA+Ssk6nbT+592sqqAFn7NE
-         qNpeR74ZUnpen2qX1UAtZ5Ebll6YPM2Lz9TKumYGyPrKr6blr9xWKJLOIiWYM8TQ8rf0
-         T1lld8UaVGut4n2/kuQmlv2k8Pbg1vzb8HFJ+K/QlyW+MK/HXWB9UVfJiMa3AuytbARL
-         syXw==
-X-Gm-Message-State: AOAM532JxekNxWTNFqfA0yNG6IFJRt43/H+/343i9UZ5IS67HQxEGnyV
-        gI/ObxPh8vceGKMPAFm7zYqrbobc/ENM1bJu7u8Xzw==
-X-Google-Smtp-Source: ABdhPJzsR4MuNWyLnk58EBxuuizXPzDdL/Kk4630P+D9NfWQNzYxPiE2xnhWJTh8O4B3q36RJ5O6pX4uoLF7OzdCwNs=
-X-Received: by 2002:a05:6638:2590:: with SMTP id s16mr13212572jat.93.1639087997242;
- Thu, 09 Dec 2021 14:13:17 -0800 (PST)
+        bh=4l66WH6Emw7qflgcgTMneIiQdKI6jbeh15CxWfhJjHY=;
+        b=LuaxnqhMWUfUUv1ayk3RVvRd1GPs74h7/tbAw5YovvcLb63+ejIypUXIQOdeHgZe2k
+         EtVvG3jYGP7sTARVj4h0GjGZvhSr4FmjG9oEBM69nwROkOUA8dyjxY7WAoBuSYpxvsae
+         9qXmZbeA/YoDTWdJI8Jl/mhEsQteVlOjTVMWD/+HkU9GUTyyj9wX9eZXZRRoDYV1QkLp
+         plmyAeieyGi3Qxhz9fC7YywhTVZvOc0g3zwk7cEk9/lQCW+CBMZUukVoqeRKiD/uzhcn
+         O+BrZO9kUlPAJFSsc9hAh6HxLCOMmcYxxf6BA8RPg7tRvdqebq8cofGGURLhSHDl8wX7
+         2ovg==
+X-Gm-Message-State: AOAM531z7OpXNp6kvdL22xdTA8mhzfXewrQvw9La+nyD2Q9agxz3mu/0
+        CdXT2vOQQ4rJ+1rSZFtHTF1L4R8ERQvwgdIWKJaTLQ==
+X-Google-Smtp-Source: ABdhPJwijfpsvtI+5YmUK3B++TIL4gmGFiBBsxLsp+kgWA2bnrxjnnCaSbcd2ctudVUC3HQH3qgrmyFJB8ezbZ/KOKY=
+X-Received: by 2002:a05:6638:300a:: with SMTP id r10mr12601602jak.91.1639088061347;
+ Thu, 09 Dec 2021 14:14:21 -0800 (PST)
 MIME-Version: 1.0
 References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-3-pcc@google.com>
- <CACT4Y+aRcD_bUnyqOp-PM3YOguFwSZxpurZnC2YHo4kFFLbiTw@mail.gmail.com>
-In-Reply-To: <CACT4Y+aRcD_bUnyqOp-PM3YOguFwSZxpurZnC2YHo4kFFLbiTw@mail.gmail.com>
+ <YbDhUHoE67Uh6hj1@elver.google.com>
+In-Reply-To: <YbDhUHoE67Uh6hj1@elver.google.com>
 From:   Peter Collingbourne <pcc@google.com>
-Date:   Thu, 9 Dec 2021 14:13:06 -0800
-Message-ID: <CAMn1gO7jXPdSf60d5pd4uEvTEVmcK=cBf0ceW4F1F44wbFg9SQ@mail.gmail.com>
+Date:   Thu, 9 Dec 2021 14:14:10 -0800
+Message-ID: <CAMn1gO5W1kydUdmFFFChdWBsz8r_V1fSJ2N9ckDhS4w9qxkKCw@mail.gmail.com>
 Subject: Re: [PATCH v3 2/6] uaccess-buffer: add core code
-To:     Dmitry Vyukov <dvyukov@google.com>
+To:     Marco Elver <elver@google.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -78,6 +78,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Chris Wilson <chris@chris-wilson.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Alexey Gladkov <legion@kernel.org>,
@@ -86,7 +87,6 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Xiaofeng Cao <caoxiaofeng@yulong.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Thomas Cedeno <thomascedeno@google.com>,
-        Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Evgenii Stepanov <eugenis@google.com>
@@ -95,10 +95,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+On Wed, Dec 8, 2021 at 8:46 AM Marco Elver <elver@google.com> wrote:
 >
-> On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
-> >
+> On Tue, Dec 07, 2021 at 08:48PM -0800, Peter Collingbourne wrote:
 > > Add the core code to support uaccess logging. Subsequent patches will
 > > hook this up to the arch-specific kernel entry and exit code for
 > > certain architectures.
@@ -154,14 +153,14 @@ On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > >  #include <linux/uaccess.h>
 > >  #include <asm/mmu_context.h>
 > > @@ -1313,6 +1314,8 @@ int begin_new_exec(struct linux_binprm * bprm)
-> >         me->personality &= ~bprm->per_clear;
+> >       me->personality &= ~bprm->per_clear;
 > >
-> >         clear_syscall_work_syscall_user_dispatch(me);
-> > +       uaccess_buffer_set_descriptor_addr_addr(0);
-> > +       uaccess_buffer_free(current);
+> >       clear_syscall_work_syscall_user_dispatch(me);
+> > +     uaccess_buffer_set_descriptor_addr_addr(0);
+> > +     uaccess_buffer_free(current);
 > >
-> >         /*
-> >          * We have to apply CLOEXEC before we change whether the process is
+> >       /*
+> >        * We have to apply CLOEXEC before we change whether the process is
 > > diff --git a/include/linux/instrumented-uaccess.h b/include/linux/instrumented-uaccess.h
 > > index ece549088e50..b967f4436d15 100644
 > > --- a/include/linux/instrumented-uaccess.h
@@ -186,17 +185,17 @@ On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > >   * instrument_copy_to_user - instrument reads of copy_to_user
 > > @@ -27,6 +29,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
 > >  {
-> >         kasan_check_read(from, n);
-> >         kcsan_check_read(from, n);
-> > +       uaccess_buffer_log_write(to, n);
+> >       kasan_check_read(from, n);
+> >       kcsan_check_read(from, n);
+> > +     uaccess_buffer_log_write(to, n);
 > >  }
 > >
 > >  /**
 > > @@ -44,6 +47,7 @@ instrument_copy_from_user(const void *to, const void __user *from, unsigned long
 > >  {
-> >         kasan_check_write(to, n);
-> >         kcsan_check_write(to, n);
-> > +       uaccess_buffer_log_read(from, n);
+> >       kasan_check_write(to, n);
+> >       kcsan_check_write(to, n);
+> > +     uaccess_buffer_log_read(from, n);
 > >  }
 > >
 > >  #endif /* _LINUX_INSTRUMENTED_UACCESS_H */
@@ -213,16 +212,16 @@ On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > >
 > >  /* task_struct member predeclarations (sorted alphabetically): */
 > > @@ -1484,6 +1485,10 @@ struct task_struct {
-> >         struct callback_head            l1d_flush_kill;
+> >       struct callback_head            l1d_flush_kill;
 > >  #endif
 > >
 > > +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
-> > +       struct uaccess_buffer_info      uaccess_buffer;
+> > +     struct uaccess_buffer_info      uaccess_buffer;
 > > +#endif
 > > +
-> >         /*
-> >          * New fields for task_struct should be added above here, so that
-> >          * they are included in the randomized portion of task_struct.
+> >       /*
+> >        * New fields for task_struct should be added above here, so that
+> >        * they are included in the randomized portion of task_struct.
 > > diff --git a/include/linux/uaccess-buffer-info.h b/include/linux/uaccess-buffer-info.h
 > > new file mode 100644
 > > index 000000000000..15e2d8f7c074
@@ -236,40 +235,40 @@ On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > > +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
 > > +
 > > +struct uaccess_buffer_info {
-> > +       /*
-> > +        * The pointer to pointer to struct uaccess_descriptor. This is the
-> > +        * value controlled by prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR).
-> > +        */
-> > +       struct uaccess_descriptor __user *__user *desc_ptr_ptr;
+> > +     /*
+> > +      * The pointer to pointer to struct uaccess_descriptor. This is the
+> > +      * value controlled by prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR).
+> > +      */
+> > +     struct uaccess_descriptor __user *__user *desc_ptr_ptr;
 > > +
-> > +       /*
-> > +        * The pointer to struct uaccess_descriptor read at syscall entry time.
-> > +        */
-> > +       struct uaccess_descriptor __user *desc_ptr;
+> > +     /*
+> > +      * The pointer to struct uaccess_descriptor read at syscall entry time.
+> > +      */
+> > +     struct uaccess_descriptor __user *desc_ptr;
 > > +
-> > +       /*
-> > +        * A pointer to the kernel's temporary copy of the uaccess log for the
-> > +        * current syscall. We log to a kernel buffer in order to avoid leaking
-> > +        * timing information to userspace.
-> > +        */
-> > +       struct uaccess_buffer_entry *kbegin;
+> > +     /*
+> > +      * A pointer to the kernel's temporary copy of the uaccess log for the
+> > +      * current syscall. We log to a kernel buffer in order to avoid leaking
+> > +      * timing information to userspace.
+> > +      */
+> > +     struct uaccess_buffer_entry *kbegin;
 > > +
-> > +       /*
-> > +        * The position of the next uaccess buffer entry for the current
-> > +        * syscall, or NULL if we are not logging the current syscall.
-> > +        */
-> > +       struct uaccess_buffer_entry *kcur;
+> > +     /*
+> > +      * The position of the next uaccess buffer entry for the current
+> > +      * syscall, or NULL if we are not logging the current syscall.
+> > +      */
+> > +     struct uaccess_buffer_entry *kcur;
 > > +
-> > +       /*
-> > +        * A pointer to the end of the kernel's uaccess log.
-> > +        */
-> > +       struct uaccess_buffer_entry *kend;
+> > +     /*
+> > +      * A pointer to the end of the kernel's uaccess log.
+> > +      */
+> > +     struct uaccess_buffer_entry *kend;
 > > +
-> > +       /*
-> > +        * The pointer to the userspace uaccess log, as read from the
-> > +        * struct uaccess_descriptor.
-> > +        */
-> > +       struct uaccess_buffer_entry __user *ubegin;
+> > +     /*
+> > +      * The pointer to the userspace uaccess log, as read from the
+> > +      * struct uaccess_descriptor.
+> > +      */
+> > +     struct uaccess_buffer_entry __user *ubegin;
 > > +};
 > > +
 > > +#endif
@@ -291,88 +290,85 @@ On Wed, Dec 8, 2021 at 2:21 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 > > +#include <asm-generic/errno-base.h>
 > > +
 > > +#ifdef CONFIG_HAVE_ARCH_UACCESS_BUFFER
+>
+> Kernel-doc comments for each of the below would be useful (if __ prefixed
+> functions are implementation details, they can be left as-is).
+
+Done.
+
 > > +
 > > +static inline bool uaccess_buffer_maybe_blocked(struct task_struct *tsk)
 > > +{
-> > +       return test_task_syscall_work(tsk, UACCESS_BUFFER_ENTRY);
+> > +     return test_task_syscall_work(tsk, UACCESS_BUFFER_ENTRY);
 > > +}
 > > +
 > > +void __uaccess_buffer_syscall_entry(void);
 > > +static inline void uaccess_buffer_syscall_entry(void)
 > > +{
-> > +       __uaccess_buffer_syscall_entry();
+> > +     __uaccess_buffer_syscall_entry();
 > > +}
 > > +
 > > +void __uaccess_buffer_syscall_exit(void);
 > > +static inline void uaccess_buffer_syscall_exit(void)
 > > +{
-> > +       __uaccess_buffer_syscall_exit();
+> > +     __uaccess_buffer_syscall_exit();
 > > +}
 > > +
 > > +bool __uaccess_buffer_pre_exit_loop(void);
 > > +static inline bool uaccess_buffer_pre_exit_loop(void)
 > > +{
-> > +       if (!test_syscall_work(UACCESS_BUFFER_ENTRY))
-> > +               return false;
-> > +       return __uaccess_buffer_pre_exit_loop();
+> > +     if (!test_syscall_work(UACCESS_BUFFER_ENTRY))
+> > +             return false;
+> > +     return __uaccess_buffer_pre_exit_loop();
 > > +}
 > > +
 > > +void __uaccess_buffer_post_exit_loop(void);
 > > +static inline void uaccess_buffer_post_exit_loop(bool pending)
 > > +{
-> > +       if (pending)
-> > +               __uaccess_buffer_post_exit_loop();
+> > +     if (pending)
+> > +             __uaccess_buffer_post_exit_loop();
 > > +}
 > > +
 > > +static inline int uaccess_buffer_set_descriptor_addr_addr(unsigned long addr)
->
-> I would move the implementation to .c file. It's a rare path.
-
-Done.
-
 > > +{
-> > +       current->uaccess_buffer.desc_ptr_ptr =
-> > +               (struct uaccess_descriptor __user * __user *)addr;
-> > +       if (addr)
-> > +               set_syscall_work(UACCESS_BUFFER_ENTRY);
-> > +       else
-> > +               clear_syscall_work(UACCESS_BUFFER_ENTRY);
-> > +       return 0;
+> > +     current->uaccess_buffer.desc_ptr_ptr =
+> > +             (struct uaccess_descriptor __user * __user *)addr;
+> > +     if (addr)
+> > +             set_syscall_work(UACCESS_BUFFER_ENTRY);
+> > +     else
+> > +             clear_syscall_work(UACCESS_BUFFER_ENTRY);
+> > +     return 0;
 > > +}
 > > +
 > > +size_t copy_from_user_nolog(void *to, const void __user *from, size_t len);
+>
+> copy_from_user() has unsigned long for @len and also return type. I'd
+> make them match.
+
+Done.
+
 > > +
 > > +void uaccess_buffer_free(struct task_struct *tsk);
 > > +
 > > +void __uaccess_buffer_log_read(const void __user *from, unsigned long n);
 > > +static inline void uaccess_buffer_log_read(const void __user *from, unsigned long n)
 > > +{
-> > +       if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
->
-> UACCESS_BUFFER_EXIT is only defined in future patches, so this won't compile.
-
-Right, but there's no way for CONFIG_UACCESS_BUFFER to be defined at this point,
-so this won't compile anyway. We define the constants for this
-(TIF_UACCESS_BUFFER_EXIT for arm64, SYSCALL_WORK_UACCESS_BUFFER_EXIT for
-GENERIC_ENTRY) at the same time as we enable the respective architecture
-support.
-
->
-> > +               __uaccess_buffer_log_read(from, n);
+> > +     if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
+> > +             __uaccess_buffer_log_read(from, n);
 > > +}
 > > +
 > > +void __uaccess_buffer_log_write(void __user *to, unsigned long n);
 > > +static inline void uaccess_buffer_log_write(void __user *to, unsigned long n)
 > > +{
-> > +       if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
-> > +               __uaccess_buffer_log_write(to, n);
+> > +     if (unlikely(test_syscall_work(UACCESS_BUFFER_EXIT)))
+> > +             __uaccess_buffer_log_write(to, n);
 > > +}
 > > +
 > > +#else
 > > +
 > > +static inline bool uaccess_buffer_maybe_blocked(struct task_struct *tsk)
 > > +{
-> > +       return false;
+> > +     return false;
 > > +}
 > > +static inline void uaccess_buffer_syscall_entry(void)
 > > +{
@@ -382,328 +378,22 @@ support.
 > > +}
 > > +static inline bool uaccess_buffer_pre_exit_loop(void)
 > > +{
-> > +       return false;
+> > +     return false;
 > > +}
 > > +static inline void uaccess_buffer_post_exit_loop(bool pending)
 > > +{
 > > +}
 > > +static inline int uaccess_buffer_set_descriptor_addr_addr(unsigned long addr)
 > > +{
-> > +       return -EINVAL;
+> > +     return -EINVAL;
 > > +}
 > > +static inline void uaccess_buffer_free(struct task_struct *tsk)
 > > +{
 > > +}
 > > +
 > > +#define copy_from_user_nolog(to, from, len) copy_from_user(to, from, len)
-> > +
-> > +static inline void uaccess_buffer_log_read(const void __user *from,
-> > +                                          unsigned long n)
-> > +{
-> > +}
-> > +static inline void uaccess_buffer_log_write(void __user *to, unsigned long n)
-> > +{
-> > +}
-> > +
-> > +#endif
-> > +
-> > +#endif  /* _LINUX_UACCESS_BUFFER_H */
-> > diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-> > index bb73e9a0b24f..74b37469c7b3 100644
-> > --- a/include/uapi/linux/prctl.h
-> > +++ b/include/uapi/linux/prctl.h
-> > @@ -272,4 +272,7 @@ struct prctl_mm_map {
-> >  # define PR_SCHED_CORE_SCOPE_THREAD_GROUP      1
-> >  # define PR_SCHED_CORE_SCOPE_PROCESS_GROUP     2
-> >
-> > +/* Configure uaccess logging feature */
-> > +#define PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR    63
-> > +
-> >  #endif /* _LINUX_PRCTL_H */
-> > diff --git a/include/uapi/linux/uaccess-buffer.h b/include/uapi/linux/uaccess-buffer.h
-> > new file mode 100644
-> > index 000000000000..bf10f7c78857
-> > --- /dev/null
-> > +++ b/include/uapi/linux/uaccess-buffer.h
-> > @@ -0,0 +1,27 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +#ifndef _UAPI_LINUX_UACCESS_BUFFER_H
-> > +#define _UAPI_LINUX_UACCESS_BUFFER_H
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +/* Location of the uaccess log. */
-> > +struct uaccess_descriptor {
-> > +       /* Address of the uaccess_buffer_entry array. */
-> > +       __u64 addr;
-> > +       /* Size of the uaccess_buffer_entry array in number of elements. */
-> > +       __u64 size;
-> > +};
-> > +
-> > +/* Format of the entries in the uaccess log. */
-> > +struct uaccess_buffer_entry {
-> > +       /* Address being accessed. */
-> > +       __u64 addr;
-> > +       /* Number of bytes that were accessed. */
-> > +       __u64 size;
-> > +       /* UACCESS_BUFFER_* flags. */
-> > +       __u64 flags;
-> > +};
-> > +
-> > +#define UACCESS_BUFFER_FLAG_WRITE      1 /* access was a write */
-> > +
-> > +#endif /* _UAPI_LINUX_UACCESS_BUFFER_H */
-> > diff --git a/kernel/Makefile b/kernel/Makefile
-> > index 186c49582f45..d4d9be5146c3 100644
-> > --- a/kernel/Makefile
-> > +++ b/kernel/Makefile
-> > @@ -114,6 +114,7 @@ obj-$(CONFIG_KCSAN) += kcsan/
-> >  obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
-> >  obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call.o
-> >  obj-$(CONFIG_CFI_CLANG) += cfi.o
-> > +obj-$(CONFIG_HAVE_ARCH_UACCESS_BUFFER) += uaccess-buffer.o
-> >
-> >  obj-$(CONFIG_PERF_EVENTS) += events/
-> >
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 649f07623df6..ab6520a633ef 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/pid_namespace.h>
-> >  #include <linux/proc_ns.h>
-> >  #include <linux/security.h>
-> > +#include <linux/uaccess-buffer.h>
-> >
-> >  #include "../../lib/kstrtox.h"
-> >
-> > @@ -637,7 +638,11 @@ const struct bpf_func_proto bpf_event_output_data_proto =  {
-> >  BPF_CALL_3(bpf_copy_from_user, void *, dst, u32, size,
-> >            const void __user *, user_ptr)
-> >  {
-> > -       int ret = copy_from_user(dst, user_ptr, size);
-> > +       /*
-> > +        * Avoid logging uaccesses here as the BPF program may not be following
-> > +        * the uaccess log rules.
-> > +        */
-> > +       int ret = copy_from_user_nolog(dst, user_ptr, size);
-> >
-> >         if (unlikely(ret)) {
-> >                 memset(dst, 0, size);
-> > diff --git a/kernel/fork.c b/kernel/fork.c
-> > index 3244cc56b697..8be2ca528a65 100644
-> > --- a/kernel/fork.c
-> > +++ b/kernel/fork.c
-> > @@ -96,6 +96,7 @@
-> >  #include <linux/scs.h>
-> >  #include <linux/io_uring.h>
-> >  #include <linux/bpf.h>
-> > +#include <linux/uaccess-buffer.h>
-> >
-> >  #include <asm/pgalloc.h>
-> >  #include <linux/uaccess.h>
-> > @@ -754,6 +755,7 @@ void __put_task_struct(struct task_struct *tsk)
-> >         delayacct_tsk_free(tsk);
-> >         put_signal_struct(tsk->signal);
-> >         sched_core_free(tsk);
-> > +       uaccess_buffer_free(tsk);
-> >
-> >         if (!profile_handoff_task(tsk))
-> >                 free_task(tsk);
-> > @@ -890,6 +892,8 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
-> >         if (memcg_charge_kernel_stack(tsk))
-> >                 goto free_stack;
-> >
-> > +       uaccess_buffer_free(orig);
-> > +
-> >         stack_vm_area = task_stack_vm_area(tsk);
-> >
-> >         err = arch_dup_task_struct(tsk, orig);
-> > diff --git a/kernel/signal.c b/kernel/signal.c
-> > index a629b11bf3e0..69bf21518bd0 100644
-> > --- a/kernel/signal.c
-> > +++ b/kernel/signal.c
-> > @@ -45,6 +45,7 @@
-> >  #include <linux/posix-timers.h>
-> >  #include <linux/cgroup.h>
-> >  #include <linux/audit.h>
-> > +#include <linux/uaccess-buffer.h>
-> >
-> >  #define CREATE_TRACE_POINTS
-> >  #include <trace/events/signal.h>
-> > @@ -1031,7 +1032,8 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
-> >         if (sig_fatal(p, sig) &&
-> >             !(signal->flags & SIGNAL_GROUP_EXIT) &&
-> >             !sigismember(&t->real_blocked, sig) &&
-> > -           (sig == SIGKILL || !p->ptrace)) {
-> > +           (sig == SIGKILL ||
-> > +            !(p->ptrace || uaccess_buffer_maybe_blocked(p)))) {
-> >                 /*
-> >                  * This signal will be fatal to the whole group.
-> >                  */
-> > diff --git a/kernel/sys.c b/kernel/sys.c
-> > index 8fdac0d90504..c71a9a9c0f68 100644
-> > --- a/kernel/sys.c
-> > +++ b/kernel/sys.c
-> > @@ -42,6 +42,7 @@
-> >  #include <linux/version.h>
-> >  #include <linux/ctype.h>
-> >  #include <linux/syscall_user_dispatch.h>
-> > +#include <linux/uaccess-buffer.h>
-> >
-> >  #include <linux/compat.h>
-> >  #include <linux/syscalls.h>
-> > @@ -2530,6 +2531,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
-> >                 error = sched_core_share_pid(arg2, arg3, arg4, arg5);
-> >                 break;
-> >  #endif
-> > +       case PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR:
-> > +               if (arg3 || arg4 || arg5)
-> > +                       return -EINVAL;
-> > +               error = uaccess_buffer_set_descriptor_addr_addr(arg2);
 >
-> Does this miss uaccess_buffer_free() for the 0 case?
-> It seems that when we set it to 0 we always want to free as well (e.g.
-> in exec). I wonder if freeing should be done by
-> uaccess_buffer_set_descriptor_addr_addr() itself.
-> Both uaccess_buffer_set_descriptor_addr_addr() and
-> uaccess_buffer_free() reset task work, which is fine but is somewhat
-> suboptimal logically.
-> Then task exit could do uaccess_buffer_set_descriptor_addr_addr(0).
-
-We don't need to free in that case because we can just log to the original
-location. I originally had uaccess_buffer_set_descriptor_addr_addr() do the
-freeing, but you asked me to change it to avoid the free [1]. I guess I don't
-have a strong opinion but slightly prefer having the two functions do orthogonal
-things.
-
-[1] https://lore.kernel.org/all/CACT4Y+aoiT+z+3CMBNmO0SwXBXpfDCsHY7pPLf54S8V=c-a8ag@mail.gmail.com/#:~:text=Is%20this%20necessary
-
->
-> > +               break;
-> >         default:
-> >                 error = -EINVAL;
-> >                 break;
-> > diff --git a/kernel/uaccess-buffer.c b/kernel/uaccess-buffer.c
-> > new file mode 100644
-> > index 000000000000..088e43f7611c
-> > --- /dev/null
-> > +++ b/kernel/uaccess-buffer.c
-> > @@ -0,0 +1,129 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Support for uaccess logging via uaccess buffers.
-> > + *
-> > + * Copyright (C) 2021, Google LLC.
-> > + */
-> > +
-> > +#include <linux/compat.h>
-> > +#include <linux/mm.h>
-> > +#include <linux/prctl.h>
-> > +#include <linux/ptrace.h>
-> > +#include <linux/sched.h>
-> > +#include <linux/signal.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/uaccess.h>
-> > +#include <linux/uaccess-buffer.h>
-> > +
-> > +static void uaccess_buffer_log(unsigned long addr, unsigned long size,
-> > +                             unsigned long flags)
-> > +{
-> > +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> > +       struct uaccess_buffer_entry *entry = buf->kcur;
-> > +
-> > +       if (entry == buf->kend || unlikely(uaccess_kernel()))
-> > +               return;
-> > +       entry->addr = addr;
-> > +       entry->size = size;
-> > +       entry->flags = flags;
-> > +
-> > +       ++buf->kcur;
-> > +}
-> > +
-> > +void __uaccess_buffer_log_read(const void __user *from, unsigned long n)
-> > +{
-> > +       uaccess_buffer_log((unsigned long)from, n, 0);
-> > +}
-> > +EXPORT_SYMBOL(__uaccess_buffer_log_read);
-> > +
-> > +void __uaccess_buffer_log_write(void __user *to, unsigned long n)
-> > +{
-> > +       uaccess_buffer_log((unsigned long)to, n, UACCESS_BUFFER_FLAG_WRITE);
-> > +}
-> > +EXPORT_SYMBOL(__uaccess_buffer_log_write);
-> > +
-> > +bool __uaccess_buffer_pre_exit_loop(void)
-> > +{
-> > +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> > +       struct uaccess_descriptor __user *desc_ptr;
-> > +       sigset_t tmp_mask;
-> > +
-> > +       if (get_user(desc_ptr, buf->desc_ptr_ptr) || !desc_ptr)
-> > +               return false;
-> > +
-> > +       current->real_blocked = current->blocked;
-> > +       sigfillset(&tmp_mask);
->
-> This and __uaccess_buffer_post_exit_loop() runs only when we have a
-> signal/timer interrupt between setting the descriptor address in
-> userspace and entering the next syscall, right?
-> Just want to make sure this code is not executed for normal uaccess
-> tracing for performance reasons.
-
-They only need to run if something in _TIF_WORK_MASK (arm64) or
-EXIT_TO_USER_MODE_WORK (GENERIC_ENTRY) is set, i.e. signals pending
-or some kind of tracing enabled. That's how it works on the arm64
-side (check is in the caller of do_notify_resume) but I had neglected
-to move the calls into the if statement on the GENERIC_ENTRY side;
-done in v4.
-
-> > +       set_current_blocked(&tmp_mask);
-> > +       return true;
-> > +}
-> > +
-> > +void __uaccess_buffer_post_exit_loop(void)
-> > +{
-> > +       spin_lock_irq(&current->sighand->siglock);
-> > +       current->blocked = current->real_blocked;
-> > +       recalc_sigpending();
-> > +       spin_unlock_irq(&current->sighand->siglock);
-> > +}
-> > +
-> > +void uaccess_buffer_free(struct task_struct *tsk)
-> > +{
-> > +       struct uaccess_buffer_info *buf = &tsk->uaccess_buffer;
-> > +
-> > +       kfree(buf->kbegin);
-> > +       clear_syscall_work(UACCESS_BUFFER_EXIT);
-> > +       buf->kbegin = buf->kcur = buf->kend = NULL;
-> > +}
-> > +
-> > +void __uaccess_buffer_syscall_entry(void)
-> > +{
-> > +       struct uaccess_buffer_info *buf = &current->uaccess_buffer;
-> > +       struct uaccess_descriptor desc;
-> > +
-> > +       if (get_user(buf->desc_ptr, buf->desc_ptr_ptr) || !buf->desc_ptr ||
-> > +           put_user(0, buf->desc_ptr_ptr) ||
-> > +           copy_from_user(&desc, buf->desc_ptr, sizeof(desc)))
-> > +               return;
-> > +
-> > +       if (desc.size > 1024)
-> > +               desc.size = 1024;
-> > +
-> > +       if (buf->kend - buf->kbegin != desc.size)
-> > +               buf->kbegin =
-> > +                       krealloc_array(buf->kbegin, desc.size,
-> > +                                      sizeof(struct uaccess_buffer_entry),
-> > +                                      GFP_KERNEL);
-> > +       if (!buf->kbegin)
->
-> I think we also need to set at least buf->kend to NULL here.
-> I am not sure what can go wrong now, but it's a strange state. On next
-> iteration we will do "buf->kend - buf->kbegin", where kend is a
-> dangling pointer and kbegin is NULL.
+> "#define copy_from_user_nolog copy_from_user" ?
 
 Done.
 

@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9DF46F5F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCA946F5F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbhLIVeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:34:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35396 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLIVeA (ORCPT
+        id S232507AbhLIVer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232405AbhLIVea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:34:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE062B8268C;
-        Thu,  9 Dec 2021 21:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B198C341C7;
-        Thu,  9 Dec 2021 21:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639085423;
-        bh=0nLiGm6DRDI48lr5XPK/3aMQSk0B5ldWPNaWbeZDORE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GEskyYFfxQ1ojYuDEvF79vtFaEsMF7UwU0vr2OBCMYdV616mpJe3K7LUFZVBgyjfm
-         znKq6cuwNBgeiXyDgYdiCBPzChQVt0B6mv97mb5TBrnC7d8Q+hN8ZTKxj3DNBaJpn3
-         DFLIz6ysMYVb9EZsF+xAPLj2SD5C1UMqG7WCT36nMxrjRttcnLc+Oslc3Lgci39NBI
-         L4xcjCOQMZtFVUsUPa0SO3A37j+opB8pGKz4Ls2fUvBLMYGZb1/lUrmnsDystY25ae
-         XpOO0uUlnR6bUwADclbINISGCZeG1gKIdQIKdDiCVUo2KBCfQ9D2AkZDAxWsRaVB+9
-         klpD3+aHgWvIQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6F4A2609D7;
-        Thu,  9 Dec 2021 21:30:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Dec 2021 16:34:30 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39065C061746;
+        Thu,  9 Dec 2021 13:30:55 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b13so4889544plg.2;
+        Thu, 09 Dec 2021 13:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Y/ZVcjvrOjTQ0Dc8WSLSUrXRuA4o36h0bl/L74FNWlo=;
+        b=Okz+++657Awg3VBLaFnhbWcL8N1LBqhKjDdV9kJXbsBo62eyhhunmpy4iq/1oh5NOr
+         HAkmGEUKvsUGVzWn+uJ4V/EQh0iXq6gR9J8srbzEYjToula305stBl+36B25Ewfa31GC
+         CblACqxfiXtdrQPdAfZ4QBKd5r+hwPw0P0jrlISFjtbKfwFtD9sbqVGlDp395no4fieu
+         W41ce4tqopeVUKn6w9QiwFeOsyNBSQz0E5toogGx/yrgKcQ0ezvw32yu9nc6tDPl7tjt
+         IXcC1qPcMenNhLUkLoId3RCx6NL6+CZwFwXDzTI9KdF+QjWDAQ9KzYrlraJDOkEUx/KO
+         Yj0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Y/ZVcjvrOjTQ0Dc8WSLSUrXRuA4o36h0bl/L74FNWlo=;
+        b=kgYoarsrHKDTeAKXi4wcDf3AFtydewvvFAHFnbLfT4mCZ4C6dQvNy4LSZNLgd5Khbj
+         abFjE0lstGnwhUoM4AxxohjP5s2LGAzW4rrrhYycUh0zi9BKLT4ccRevXKafSNTfRUOc
+         Qg2rceIM2mw3rJsFY5BUjue9lK9IY1uJxi3BnYGvvxSU+3BNOiH3h35nojwU4ld37s02
+         wjQub3o/GaqWutwf5FB4zBtKOo8/iapDf74GMZeCPaxEzE2nstlVHRi+gzCrDbAxTDgl
+         df8P96OAP2UZf+OdzLU2xAFLy8vlpyrrekGJGyqYpMyR5PzMAveQ8Sa5nmODouoMROfK
+         Uv9g==
+X-Gm-Message-State: AOAM532zQUz2Vs5jD3dbEpA0k4OBFXq95NFzkTdEJE1sreKvYycinpHT
+        qSzPQGjhyKja8cZYpL0a+pt3xjlKTlI=
+X-Google-Smtp-Source: ABdhPJxiCOxLQjpfL+R2es6NHT1t+LY88/yP151OhBS3m9NwG7bNNy0oud5fdHavKDTECrrONuZx8w==
+X-Received: by 2002:a17:90b:3b8e:: with SMTP id pc14mr18303926pjb.129.1639085454410;
+        Thu, 09 Dec 2021 13:30:54 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s5sm620496pfk.65.2021.12.09.13.30.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 13:30:53 -0800 (PST)
+Subject: Re: [PATCH v1 2/4] MIPS: bmips: Add support PCIe controller device
+ nodes
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211209204726.6676-1-jim2101024@gmail.com>
+ <20211209204726.6676-3-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <26e6eb5b-858b-4b4a-e6cb-7b86bb312379@gmail.com>
+Date:   Thu, 9 Dec 2021 13:30:51 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] skbuff: Extract list pointers to silence compiler warnings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163908542345.522.6404194998355353542.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Dec 2021 21:30:23 +0000
-References: <20211207062758.2324338-1-keescook@chromium.org>
-In-Reply-To: <20211207062758.2324338-1-keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kuba@kernel.org, davem@davemloft.net, jonathan.lemon@gmail.com,
-        edumazet@google.com, elver@google.com, alobakin@pm.me,
-        pabeni@redhat.com, cong.wang@bytedance.com, talalahmad@google.com,
-        haokexin@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+In-Reply-To: <20211209204726.6676-3-jim2101024@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  6 Dec 2021 22:27:58 -0800 you wrote:
-> Under both -Warray-bounds and the object_size sanitizer, the compiler is
-> upset about accessing prev/next of sk_buff when the object it thinks it
-> is coming from is sk_buff_head. The warning is a false positive due to
-> the compiler taking a conservative approach, opting to warn at casting
-> time rather than access time.
+On 12/9/21 12:47 PM, Jim Quinlan wrote:
+> For Broadcom STB PCIe HW. The 7425 and 7435 are MIPs-based SOCs.  Not much
+> difference between the two for the DT properties except that they have
+> slightly different PCIe interrupt assignments.
 > 
-> However, in support of enabling -Warray-bounds globally (which has
-> found many real bugs), arrange things for sk_buff so that the compiler
-> can unambiguously see that there is no intention to access anything
-> except prev/next.  Introduce and cast to a separate struct sk_buff_list,
-> which contains _only_ the first two fields, silencing the warnings:
-> 
-> [...]
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 
-Here is the summary with links:
-  - skbuff: Extract list pointers to silence compiler warnings
-    https://git.kernel.org/netdev/net-next/c/1a2fb220edca
-
-You are awesome, thank you!
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Florian

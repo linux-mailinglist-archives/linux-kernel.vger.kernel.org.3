@@ -2,122 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1D746EF53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB04846EF71
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241980AbhLIREI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:04:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:59478 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242041AbhLIRD5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:03:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2929ED1;
-        Thu,  9 Dec 2021 09:00:22 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.64.187])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 762DB3F5A1;
-        Thu,  9 Dec 2021 09:00:21 -0800 (PST)
-Date:   Thu, 9 Dec 2021 17:00:18 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     will@kernel.org, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
-        keescook@chromium.org, hch@infradead.org,
-        torvalds@linux-foundation.org
-Subject: Re: [RFC][PATCH 2/5] refcount: Use atomic_*_ofl()
-Message-ID: <YbI2IjU7qoSTlCH6@FVFF77S0Q05N>
-References: <20211208183655.251963904@infradead.org>
- <20211208183906.468934357@infradead.org>
- <YbIB7aJU5ngCcaNj@FVFF77S0Q05N>
+        id S241912AbhLIREV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:04:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48255 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241991AbhLIREJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:04:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639069235;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5oGKicqT5K5hg8GsON7+ysTZJszf7/nyM29VGtzQujs=;
+        b=hnJjcT+Z0vZ1CShOQHWxFN/0PQyFX7tPotHyR2xEAZlXIy3xUV03mR1KBcIgjCXTSBbTTY
+        rqhXJ6la/b+nTMxhgON3qzwbc81FROcUksV5CSWy788y89PSaxlhqTBbyk8P2nVgnNbiJL
+        zqMwjmYcfr+/de5lEJdFPUP3d389t0E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-3pDGLpE9P7G1OAv_91_kfQ-1; Thu, 09 Dec 2021 12:00:32 -0500
+X-MC-Unique: 3pDGLpE9P7G1OAv_91_kfQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2E4B3802C8F;
+        Thu,  9 Dec 2021 17:00:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B29DD4ABA1;
+        Thu,  9 Dec 2021 17:00:24 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 29/67] fscache: Provide a function to resize a cookie
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 17:00:23 +0000
+Message-ID: <163906922387.143852.16394459879816147793.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbIB7aJU5ngCcaNj@FVFF77S0Q05N>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 01:17:33PM +0000, Mark Rutland wrote:
-> On Wed, Dec 08, 2021 at 07:36:57PM +0100, Peter Zijlstra wrote:
-> > Use the shiny new atomic_*_ofl() functions in order to have better
-> > code-gen.
-> > 
-> > Notably refcount_inc() case no longer distinguishes between
-> > inc-from-zero and inc-negative in the fast path, this improves
-> > code-gen:
-> > 
-> >     4b88:       b8 01 00 00 00          mov    $0x1,%eax
-> >     4b8d:       f0 0f c1 43 28          lock xadd %eax,0x28(%rbx)
-> >     4b92:       85 c0                   test   %eax,%eax
-> >     4b94:       74 1b                   je     4bb1 <alloc_perf_context+0xf1>
-> >     4b96:       8d 50 01                lea    0x1(%rax),%edx
-> >     4b99:       09 c2                   or     %eax,%edx
-> >     4b9b:       78 20                   js     4bbd <alloc_perf_context+0xfd>
-> > 
-> > to:
-> > 
-> >     4768:       b8 01 00 00 00          mov    $0x1,%eax
-> >     476d:       f0 0f c1 43 28          lock xadd %eax,0x28(%rbx)
-> >     4772:       85 c0                   test   %eax,%eax
-> >     4774:       7e 14                   jle    478a <alloc_perf_context+0xea>
-> 
-> For comparison, I generated the same for arm64 below with kernel.org crosstool
-> GCC 11.1.0 and defconfig.
-> 
-> For arm64 there's an existing sub-optimiality for inc/dec where the register
-> for `1` or `-1` gets generated with a `MOV;MOV` chain or `MOV;NEG` chain rather
-> than a single `MOV` in either case. I think taht's due to the way we build
-> LSE/LL-SC variants of add() and build a common inc() atop, and the compiler
-> just loses the opportunity to constant-fold. I'll take a look at how to make
-> that neater.
+Provide a function to change the size of the storage attached to a cookie,
+to match the size of the file being cached when it's changed by truncate or
+fallocate:
 
-With some improvement's to arm64's LSE atomics, that becomes a comparable
-sequence to x86's:
+	void fscache_resize_cookie(struct fscache_cookie *cookie,
+				   loff_t new_size);
 
-    2df8:       52800021        mov     w1, #0x1                        // #1
-    ...
-    2e20:       b8e10002        ldaddal w1, w2, [x0]
-    2e24:       7100005f        cmp     w2, #0x0
-    2e28:       5400012d        b.le    2e4c <alloc_perf_context+0xc8>
+This acts synchronously and is expected to run under the inode lock of the
+caller.
 
-> > without sacrificing on functionality; the only thing that suffers is
-> > the reported error condition, which might now 'spuriously' report
-> > 'saturated' instead of 'inc-from-zero'.
-> > 
-> > refcount_dec_and_test() is also improved:
-> > 
-> >     aa40:       b8 ff ff ff ff          mov    $0xffffffff,%eax
-> >     aa45:       f0 0f c1 07             lock xadd %eax,(%rdi)
-> >     aa49:       83 f8 01                cmp    $0x1,%eax
-> >     aa4c:       74 05                   je     aa53 <ring_buffer_put+0x13>
-> >     aa4e:       85 c0                   test   %eax,%eax
-> >     aa50:       7e 1e                   jle    aa70 <ring_buffer_put+0x30>
-> >     aa52:       c3                      ret
-> > 
-> > to:
-> > 
-> >     a980:       b8 ff ff ff ff          mov    $0xffffffff,%eax
-> >     a985:       f0 0f c1 07             lock xadd %eax,(%rdi)
-> >     a989:       83 e8 01                sub    $0x1,%eax
-> >     a98c:       78 20                   js     a9ae <ring_buffer_put+0x2e>
-> >     a98e:       74 01                   je     a991 <ring_buffer_put+0x11>
-> >     a990:       c3                      ret
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819621839.215744.7895597119803515402.stgit@warthog.procyon.org.uk/ # v1
+---
 
-Likewise I can get the arm64 equivalent down to:
+ fs/fscache/internal.h          |    3 +++
+ fs/fscache/io.c                |   25 +++++++++++++++++++++++++
+ fs/fscache/stats.c             |    9 +++++++--
+ include/linux/fscache-cache.h  |    4 ++++
+ include/linux/fscache.h        |   18 ++++++++++++++++++
+ include/trace/events/fscache.h |   25 +++++++++++++++++++++++++
+ 6 files changed, 82 insertions(+), 2 deletions(-)
 
-    bebc:       12800001        mov     w1, #0xffffffff                 // #-1
-    ...
-    becc:       b8e10001        ldaddal w1, w1, [x0]
-    bed0:       71000421        subs    w1, w1, #0x1
-    bed4:       540000c4        b.mi    beec <ring_buffer_put+0x3c>  // b.first
-    bed8:       54000120        b.eq    befc <ring_buffer_put+0x4c>  // b.none
+diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
+index 1308bfff94fb..87884f4b34fb 100644
+--- a/fs/fscache/internal.h
++++ b/fs/fscache/internal.h
+@@ -122,6 +122,9 @@ extern atomic_t fscache_n_relinquishes;
+ extern atomic_t fscache_n_relinquishes_retire;
+ extern atomic_t fscache_n_relinquishes_dropped;
+ 
++extern atomic_t fscache_n_resizes;
++extern atomic_t fscache_n_resizes_null;
++
+ static inline void fscache_stat(atomic_t *stat)
+ {
+ 	atomic_inc(stat);
+diff --git a/fs/fscache/io.c b/fs/fscache/io.c
+index e9e5d6758ea8..bed7628a5a9d 100644
+--- a/fs/fscache/io.c
++++ b/fs/fscache/io.c
+@@ -291,3 +291,28 @@ void __fscache_write_to_cache(struct fscache_cookie *cookie,
+ 		term_func(term_func_priv, ret, false);
+ }
+ EXPORT_SYMBOL(__fscache_write_to_cache);
++
++/*
++ * Change the size of a backing object.
++ */
++void __fscache_resize_cookie(struct fscache_cookie *cookie, loff_t new_size)
++{
++	struct netfs_cache_resources cres;
++
++	trace_fscache_resize(cookie, new_size);
++	if (fscache_begin_operation(&cres, cookie, FSCACHE_WANT_WRITE,
++				    fscache_access_io_resize) == 0) {
++		fscache_stat(&fscache_n_resizes);
++		set_bit(FSCACHE_COOKIE_NEEDS_UPDATE, &cookie->flags);
++
++		/* We cannot defer a resize as we need to do it inside the
++		 * netfs's inode lock so that we're serialised with respect to
++		 * writes.
++		 */
++		cookie->volume->cache->ops->resize_cookie(&cres, new_size);
++		fscache_end_operation(&cres);
++	} else {
++		fscache_stat(&fscache_n_resizes_null);
++	}
++}
++EXPORT_SYMBOL(__fscache_resize_cookie);
+diff --git a/fs/fscache/stats.c b/fs/fscache/stats.c
+index db42beb1ba3f..798ee68b3e9d 100644
+--- a/fs/fscache/stats.c
++++ b/fs/fscache/stats.c
+@@ -35,6 +35,9 @@ atomic_t fscache_n_relinquishes;
+ atomic_t fscache_n_relinquishes_retire;
+ atomic_t fscache_n_relinquishes_dropped;
+ 
++atomic_t fscache_n_resizes;
++atomic_t fscache_n_resizes_null;
++
+ atomic_t fscache_n_read;
+ EXPORT_SYMBOL(fscache_n_read);
+ atomic_t fscache_n_write;
+@@ -69,8 +72,10 @@ int fscache_stats_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "Invals : n=%u\n",
+ 		   atomic_read(&fscache_n_invalidates));
+ 
+-	seq_printf(m, "Updates: n=%u\n",
+-		   atomic_read(&fscache_n_updates));
++	seq_printf(m, "Updates: n=%u rsz=%u rsn=%u\n",
++		   atomic_read(&fscache_n_updates),
++		   atomic_read(&fscache_n_resizes),
++		   atomic_read(&fscache_n_resizes_null));
+ 
+ 	seq_printf(m, "Relinqs: n=%u rtr=%u drop=%u\n",
+ 		   atomic_read(&fscache_n_relinquishes),
+diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
+index 796c8b5c5305..3fa4902dc87c 100644
+--- a/include/linux/fscache-cache.h
++++ b/include/linux/fscache-cache.h
+@@ -64,6 +64,10 @@ struct fscache_cache_ops {
+ 	/* Withdraw an object without any cookie access counts held */
+ 	void (*withdraw_cookie)(struct fscache_cookie *cookie);
+ 
++	/* Change the size of a data object */
++	void (*resize_cookie)(struct netfs_cache_resources *cres,
++			      loff_t new_size);
++
+ 	/* Invalidate an object */
+ 	bool (*invalidate_cookie)(struct fscache_cookie *cookie);
+ 
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index fed7def0fbe0..b38d233c9fad 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -162,6 +162,7 @@ extern struct fscache_cookie *__fscache_acquire_cookie(
+ extern void __fscache_use_cookie(struct fscache_cookie *, bool);
+ extern void __fscache_unuse_cookie(struct fscache_cookie *, const void *, const loff_t *);
+ extern void __fscache_relinquish_cookie(struct fscache_cookie *, bool);
++extern void __fscache_resize_cookie(struct fscache_cookie *, loff_t);
+ extern void __fscache_invalidate(struct fscache_cookie *, const void *, loff_t, unsigned int);
+ extern int __fscache_begin_read_operation(struct netfs_cache_resources *, struct fscache_cookie *);
+ 
+@@ -362,6 +363,23 @@ void fscache_update_cookie(struct fscache_cookie *cookie, const void *aux_data,
+ 		__fscache_update_cookie(cookie, aux_data, object_size);
+ }
+ 
++/**
++ * fscache_resize_cookie - Request that a cache object be resized
++ * @cookie: The cookie representing the cache object
++ * @new_size: The new size of the object (may be NULL)
++ *
++ * Request that the size of an object be changed.
++ *
++ * See Documentation/filesystems/caching/netfs-api.txt for a complete
++ * description.
++ */
++static inline
++void fscache_resize_cookie(struct fscache_cookie *cookie, loff_t new_size)
++{
++	if (fscache_cookie_enabled(cookie))
++		__fscache_resize_cookie(cookie, new_size);
++}
++
+ /**
+  * fscache_invalidate - Notify cache that an object needs invalidation
+  * @cookie: The cookie representing the cache object
+diff --git a/include/trace/events/fscache.h b/include/trace/events/fscache.h
+index 2459d75659cf..5fa37a8b4ec7 100644
+--- a/include/trace/events/fscache.h
++++ b/include/trace/events/fscache.h
+@@ -78,6 +78,7 @@ enum fscache_access_trace {
+ 	fscache_access_invalidate_cookie_end,
+ 	fscache_access_io_not_live,
+ 	fscache_access_io_read,
++	fscache_access_io_resize,
+ 	fscache_access_io_wait,
+ 	fscache_access_io_write,
+ 	fscache_access_lookup_cookie,
+@@ -149,6 +150,7 @@ enum fscache_access_trace {
+ 	EM(fscache_access_invalidate_cookie_end,"END   inval  ")	\
+ 	EM(fscache_access_io_not_live,		"END   io_notl")	\
+ 	EM(fscache_access_io_read,		"BEGIN io_read")	\
++	EM(fscache_access_io_resize,		"BEGIN io_resz")	\
+ 	EM(fscache_access_io_wait,		"WAIT  io     ")	\
+ 	EM(fscache_access_io_write,		"BEGIN io_writ")	\
+ 	EM(fscache_access_lookup_cookie,	"BEGIN lookup ")	\
+@@ -418,6 +420,29 @@ TRACE_EVENT(fscache_invalidate,
+ 		      __entry->cookie, __entry->new_size)
+ 	    );
+ 
++TRACE_EVENT(fscache_resize,
++	    TP_PROTO(struct fscache_cookie *cookie, loff_t new_size),
++
++	    TP_ARGS(cookie, new_size),
++
++	    TP_STRUCT__entry(
++		    __field(unsigned int,		cookie		)
++		    __field(loff_t,			old_size	)
++		    __field(loff_t,			new_size	)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->cookie	= cookie->debug_id;
++		    __entry->old_size	= cookie->object_size;
++		    __entry->new_size	= new_size;
++			   ),
++
++	    TP_printk("c=%08x os=%08llx sz=%08llx",
++		      __entry->cookie,
++		      __entry->old_size,
++		      __entry->new_size)
++	    );
++
+ #endif /* _TRACE_FSCACHE_H */
+ 
+ /* This part must be outside protection */
 
-I've pushed my WIP patches to:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/atomics/improvements
-  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/atomics/improvements
-
-... and I'll try to get those cleaned up and posted soon.
-
-Thanks,
-Mark.

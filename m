@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F4246ED3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0D246ED3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241151AbhLIQlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:41:22 -0500
-Received: from box.trvn.ru ([194.87.146.52]:34419 "EHLO box.trvn.ru"
+        id S241148AbhLIQlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:41:24 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:33878 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239931AbhLIQlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S239675AbhLIQlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 11:41:19 -0500
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id D13DF41F30;
-        Thu,  9 Dec 2021 21:37:39 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1639067860; bh=ITv8oy4gH8hvt2xoJZdnpKjB0KS+uuWG14QJNxq0uPI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PdTOfoNUh2FZzHLgyhKHTuJiEN7RICt1iz9vSWGI4vcYLO8WqzPb/NZBSICTfb9qY
-         BtCUOMnbqCMLPh5/IS3tVUKlF+ijp/f6J4XH9p27bxgu/I1b/paCSmkc2TOBQ/mLeH
-         uXYxin9jEwM1DeU+No2fparO5u8xWGaa7xRgeQ6VtiTTQ7xbvH3a8OfkcIBdiaUIVU
-         1Ooo5nRmWIGQp3HuTVtBYG8UwvUhCSQ+pJGEobKYUoG7gE/0OhzfPt1NX3hDtqD+cq
-         TNhQ7WK2M4E8Y6aXr1SYd5i5STg+f7twYFsytl25htkJZT8vKlEnFKYIQLdCWdfozQ
-         mZvCDv/ib3OVA==
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     mturquette@baylibre.com, sboyd@kernel.org, linus.walleij@linaro.org
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, tdas@codeaurora.org,
-        joonwoop@codeaurora.org, svarbanov@mm-sol.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH 4/4] clk: qcom: gcc-msm8916: Add rates to the GP clocks
-Date:   Thu,  9 Dec 2021 21:37:20 +0500
-Message-Id: <20211209163720.106185-5-nikita@trvn.ru>
-In-Reply-To: <20211209163720.106185-1-nikita@trvn.ru>
-References: <20211209163720.106185-1-nikita@trvn.ru>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 13FC61EC04D3;
+        Thu,  9 Dec 2021 17:37:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639067860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t0nLQ0BMqQ23yc81J1J+FHAbSSeprtKANW3l+l71OuQ=;
+        b=XsiLRniZfsshKpCSL78DEBz7Y6xMDdigdCADTE++5aGBZjYaZt4IwEfpS8HXovg53YDA8l
+        ftyNhquX9ok4X2TlBHPQKk4ZaTMPUD45KTZxu+MDPfjzBMVydmbo83556Wt/MKlrOJ0UvF
+        sp4stXlUKHo7xpagGrPT7t0i7aBTNYA=
+Date:   Thu, 9 Dec 2021 17:37:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
+        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        stable@vger.kernel.org, x86@kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        "Patrick J. Volkerding" <volkerdi@gmail.com>
+Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
+ early param parsing
+Message-ID: <YbIw1nUYJ3KlkjJQ@zn.tnic>
+References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
+ <20211209143810.452527-1-jdorminy@redhat.com>
+ <YbIeYIM6JEBgO3tG@zn.tnic>
+ <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
+ <YbIgsO/7oQW9h6wv@zn.tnic>
+ <YbIu55LZKoK3IVaF@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbIu55LZKoK3IVaF@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-msm8916 has (at least) 6 "General Purpose" clocks that can be muxed to
-SoC pins. These clocks are:
+On Thu, Dec 09, 2021 at 06:29:27PM +0200, Mike Rapoport wrote:
+> On Thu, Dec 09, 2021 at 04:28:48PM +0100, Borislav Petkov wrote:
+> > On Thu, Dec 09, 2021 at 04:26:55PM +0100, Juergen Gross wrote:
+> > > Sigh. This will break Xen PV. Again. The comment above the call of
+> > > early_reserve_memory() tells you why.
+> > 
+> > I know. I was just looking at how to fix that particular thing and was
+> > going to find you on IRC to talk to you about it...
+> 
+> The memory reservation in arch/x86/platform/efi/efi.c depends on at least
+> two command line parameters, I think it's better put it back later in the
+> boot process and move efi_memblock_x86_reserve_range() out of
+> early_memory_reserve().
+> 
+> I.e. revert c0f2077baa41 ("x86/boot: Mark prepare_command_line() __init")
+> and 8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param
+> parsing") and add the patch below on top.
+> 
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 49b596db5631..da36b8f8430b 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
+>  
+>  	early_reserve_initrd();
+>  
+> -	if (efi_enabled(EFI_BOOT))
+> -		efi_memblock_x86_reserve_range();
+> -
+>  	memblock_x86_reserve_range_setup_data();
+>  
+>  	reserve_ibft_region();
+> @@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
+>  
+>  	parse_early_param();
+>  
+> +	if (efi_enabled(EFI_BOOT)) {
+> +		efi_memblock_x86_reserve_range();
+> +
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+>  	/*
+>  	 * Memory used by the kernel cannot be hot-removed because Linux
+> 
+> -- 
 
-GP_CLK{0, 1} : GPIO_{31, 32} (Belongs to CAMSS according to Linux)
-GP_CLK_{1-3}{A, B} : GPIO_{49-51, 97, 12, 13} (Belongs to GCC itself)
-GP_MN : GPIO_110 (Doesn't seem to be described in gcc,
-    ignored in this patch)
+Jürgen and I were thinking about a different fix but that's probably
+ok too. But I've said that already about this mess and there's always
+something we haven't thought about.
 
-Those clocks may be used as e.g. PWM sources for external peripherals.
-Add more frequencies to the table for those clocks so it's possible
-for arbitrary peripherals to make use of them.
+Whatever we do, it needs to be tested by all folks on Cc who already
+reported regressions, i.e., Anjaneya, Hugh, John and Patrick.
 
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
----
- drivers/clk/qcom/gcc-msm8916.c | 35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+Thx.
 
-diff --git a/drivers/clk/qcom/gcc-msm8916.c b/drivers/clk/qcom/gcc-msm8916.c
-index 17e4a5a2a9fd..9a46794f6eb8 100644
---- a/drivers/clk/qcom/gcc-msm8916.c
-+++ b/drivers/clk/qcom/gcc-msm8916.c
-@@ -765,7 +765,20 @@ static struct clk_rcg2 cci_clk_src = {
- 	},
- };
- 
-+/*
-+ * This is a frequency table for "General Purpose" clocks.
-+ * These clocks can be muxed to the SoC pins and may be used by
-+ * external devices. They're often used as PWM source.
-+ *
-+ * See comment at ftbl_gcc_gp1_3_clk.
-+ */
- static const struct freq_tbl ftbl_gcc_camss_gp0_1_clk[] = {
-+	F(10000,   P_XO,    16,  1, 120),
-+	F(100000,  P_XO,    16,  1,  12),
-+	F(500000,  P_GPLL0, 16,  1, 100),
-+	F(1000000, P_GPLL0, 16,  1,  50),
-+	F(2500000, P_GPLL0, 16,  1,  20),
-+	F(5000000, P_GPLL0, 16,  1,  10),
- 	F(100000000, P_GPLL0, 8, 0, 0),
- 	F(200000000, P_GPLL0, 4, 0, 0),
- 	{ }
-@@ -927,7 +940,29 @@ static struct clk_rcg2 crypto_clk_src = {
- 	},
- };
- 
-+/*
-+ * This is a frequency table for "General Purpose" clocks.
-+ * These clocks can be muxed to the SoC pins and may be used by
-+ * external devices. They're often used as PWM source.
-+ *
-+ * Please note that MND divider must be enabled for duty-cycle
-+ * control to be possible. (M != N) Also since D register is configured
-+ * with a value multiplied by 2, and duty cycle is calculated as
-+ *                             (2 * D) % 2^W
-+ *                DutyCycle = ----------------
-+ *                              2 * (N % 2^W)
-+ * (where W = .mnd_width)
-+ * N must be half or less than maximum value for the register.
-+ * Otherwise duty-cycle control would be limited.
-+ * (e.g. for 8-bit NMD N should be less than 128)
-+ */
- static const struct freq_tbl ftbl_gcc_gp1_3_clk[] = {
-+	F(10000,   P_XO,    16,  1, 120),
-+	F(100000,  P_XO,    16,  1,  12),
-+	F(500000,  P_GPLL0, 16,  1, 100),
-+	F(1000000, P_GPLL0, 16,  1,  50),
-+	F(2500000, P_GPLL0, 16,  1,  20),
-+	F(5000000, P_GPLL0, 16,  1,  10),
- 	F(19200000, P_XO, 1, 0,	0),
- 	{ }
- };
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

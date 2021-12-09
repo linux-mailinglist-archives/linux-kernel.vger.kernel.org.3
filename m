@@ -2,209 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B261746E807
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454A346E80A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236579AbhLIMJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:09:41 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.168]:17803 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhLIMJk (ORCPT
+        id S237084AbhLIMKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231774AbhLIMKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:09:40 -0500
-X-KPN-MessageId: 52f93686-58e8-11ec-8862-005056aba152
-Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 52f93686-58e8-11ec-8862-005056aba152;
-        Thu, 09 Dec 2021 13:05:38 +0100 (CET)
+        Thu, 9 Dec 2021 07:10:31 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE4CC0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 04:06:57 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id o13so9251390wrs.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:06:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=Ogf4qPFDpILI8srWVyRxWxfGiXgWfw2eLqbmuPPtebs=;
-        b=i4u2r+wYSfRWubJofx8JVWzA/cIncDuA3LEbXwbo/tC/ReD6/wWiZXBWmaBIcpCTGBLHEW/D+i6ET
-         Qc2/vOqtnELfdCBh5dtcKlPcHw9+BW1qfmidQ8qExG6z5hl1T8STEm3o4eC3TaveRgUo7iU51TD5D4
-         TUnddgrkQ/mJ91zMLv8yr8QPdwRlaUXOCkwOvZhaLTKwT/PYnsGoriQHMwzsRk2skQo7aO1tTFjDOa
-         isFZbXvy+sBCqWC119W+jZalnSRkTiMHVHWeev5Gn5T3wEDiQFrNET9Hfu7cV1HEkJs3VOsqOm8cPc
-         1llnDRZ5i6++jDe5XKD87BEE6oefqZw==
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|yjxbYxNyYZHtPZkMlzosYrLcAeUa9rqBtDr1SKN6PKtP3fQXLILk8DzHsfJ24Ax
- vdve64I6zbiv3k0ejnIA3cw==
-X-Originating-IP: 193.91.129.219
-Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 62d29ed9-58e8-11ec-b76f-005056ab7584;
-        Thu, 09 Dec 2021 13:06:06 +0100 (CET)
-Message-ID: <899b2f8c-14de-ae68-2b16-cb9a16c310ca@xs4all.nl>
-Date:   Thu, 9 Dec 2021 13:06:05 +0100
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B4jzaZ5YOJWu9qAvUf9/4CV89gWjgVfjWYj9x/kP2HA=;
+        b=hfcRJLtLiVbPbRF4KYYE1ebR7ZfnDM508HNZLaUNAsnv084HrNTvRgeGbymQrsP73F
+         7kCWBmRE9/FvmBifXPnF2YXbpkkq9DlCwcUtAJrOvmirv0o9uf2sk5TQao+YraIO8ivr
+         +piXSH2QVbamvpDna+Ce5yv9dAP3k2h0RJEbvDshABs2AlnMVSBpmW0yPus18bMBQ/Ke
+         x/UQWvsQKMpRV0DpLMaq9xuIvtpv537/muuMZ7Zhl8WBAt/icnPvY3RVdBeaF7VGX532
+         KkA9hHn6i5Pb/UgUwxSMHehCI5kw1mfUxuUf1nQPEqgXHZGKnezghXiDTIHFIj8bTl2u
+         XdKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B4jzaZ5YOJWu9qAvUf9/4CV89gWjgVfjWYj9x/kP2HA=;
+        b=MSDneEooi+iPrseFzl0quT0knW12fEDMCg2cc4ygt7vnS6W146v+4PqbTUVsmpPFFn
+         9ol4C1+bxxt1QmeHxj6/BSyf62FseU9UIbP/NalJrI0dKFoHZ8tIfhHVkMolZVdJMJV2
+         /vKmjpjNHEDRKOVudNu4Ty31xQtFONOqqw51Jvbci1o3MGQq2m4Nxf8H2KQwArOdd14J
+         U5sLRnJVxHLgzTdzRiRQWiJPLDF6QmBg1jmZsbvskNMrnpekb5XZ+dkdl0vdODs+Ho2V
+         683i+fTJS66ZcEK80rPu9I3hHhkzY1IvXXYyHpFn8+5c2kBCjIZEbRJ15RE9Jgppr8OZ
+         MSQw==
+X-Gm-Message-State: AOAM533SsFWd6SVw+TmAAj/WErSklwLBIlobZnzgLVyAD4cdgrw/zDGp
+        MpbIK5OvoWQWRWR6jhzN5mNlxw==
+X-Google-Smtp-Source: ABdhPJzZfw3mlbeipW3+11C2/S0zlS2fPPTFDvdDIuXdoewUGyedFIfxJ3HNrw1JuefDqKtL1WiY8g==
+X-Received: by 2002:adf:d1e2:: with SMTP id g2mr6212838wrd.105.1639051616283;
+        Thu, 09 Dec 2021 04:06:56 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id 4sm7513289wrz.90.2021.12.09.04.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 04:06:55 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     robh+dt@kernel.org, gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
+        jeyr@codeaurora.org, bkumar@qti.qualcomm.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 0/8] misc: fastrpc: Add missing DSP FastRPC features
+Date:   Thu,  9 Dec 2021 12:06:18 +0000
+Message-Id: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.2
-Subject: Re: [PATCH] media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP
- buffers across ioctls
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211209062926.991516-2-wenst@chromium.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20211209062926.991516-2-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 07:29, Chen-Yu Tsai wrote:
-> DST_QUEUE_OFF_BASE is applied to offset/mem_offset on MMAP capture buffers
-> only for the VIDIOC_QUERYBUF ioctl, while the userspace fields (including
-> offset/mem_offset) are filled in for VIDIOC_{QUERY,PREPARE,Q,DQ}BUF
-> ioctls. This leads to differences in the values presented to userspace.
-> If userspace attempts to mmap the capture buffer directly using values
-> from DQBUF, it will fail.
-> 
-> Move the code that applies the magic offset into a helper, and call
-> that helper from all four ioctl entry points.
-> 
-> Fixes: 7f98639def42 ("V4L/DVB: add memory-to-memory device helper framework for videobuf")
-> Fixes: 908a0d7c588e ("[media] v4l: mem2mem: port to videobuf2")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
-> This was tested on RK3399 with
-> 
->     gst-launch-1.0 videotestsrc num-buffers=2 ! v4l2jpegenc ! fakesink
-> 
-> and verifying the values using the V4L2 debug messages:
-> 
->     video2: VIDIOC_QUERYBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004000, field=any, sequence=0, memory=mmap
->     plane 0: bytesused=0, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
->     video2: VIDIOC_QUERYBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004000, field=any, sequence=0, memory=mmap
->     plane 0: bytesused=0, data_offset=0x00000000, offset/userptr=0x0, length=153600
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-> 
->     video2: VIDIOC_QBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004003, field=any, sequence=0, memory=mmap
->     plane 0: bytesused=2097152, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
->     video2: VIDIOC_QBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004003, field=none, sequence=0, memory=mmap
->     plane 0: bytesused=153600, data_offset=0x00000000, offset/userptr=0x0, length=153600
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-> 
->     video2: VIDIOC_DQBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004001, field=none, sequence=0, memory=mmap
->     plane 0: bytesused=6324, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
->     video2: VIDIOC_DQBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004001, field=none, sequence=0, memory=mmap
->     plane 0: bytesused=153600, data_offset=0x00000000, offset/userptr=0x0, length=153600
->     timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-> 
-> Gstreamer doesn't do PREPAREBUF calls, so that path was not verified.
-> However the code changes are exactly the same, so I'm quite confident
-> about them.
-> 
-> ---
->  drivers/media/v4l2-core/v4l2-mem2mem.c | 46 ++++++++++++++++++++------
->  1 file changed, 35 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> index e2654b422334..b47f25297c43 100644
-> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-> @@ -585,19 +585,14 @@ int v4l2_m2m_reqbufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
->  }
->  EXPORT_SYMBOL_GPL(v4l2_m2m_reqbufs);
->  
-> -int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-> -		      struct v4l2_buffer *buf)
-> +static void v4l2_m2m_adjust_mem_offset(struct vb2_queue *vq,
-> +				       struct v4l2_buffer *buf)
->  {
-> -	struct vb2_queue *vq;
-> -	int ret = 0;
-> -	unsigned int i;
-> -
-> -	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-> -	ret = vb2_querybuf(vq, buf);
-> -
->  	/* Adjust MMAP memory offsets for the CAPTURE queue */
->  	if (buf->memory == V4L2_MEMORY_MMAP && V4L2_TYPE_IS_CAPTURE(vq->type)) {
->  		if (V4L2_TYPE_IS_MULTIPLANAR(vq->type)) {
-> +			unsigned int i;
-> +
->  			for (i = 0; i < buf->length; ++i)
->  				buf->m.planes[i].m.mem_offset
->  					+= DST_QUEUE_OFF_BASE;
-> @@ -605,6 +600,19 @@ int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
->  			buf->m.offset += DST_QUEUE_OFF_BASE;
->  		}
->  	}
-> +}
-> +
-> +int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-> +		      struct v4l2_buffer *buf)
-> +{
-> +	struct vb2_queue *vq;
-> +	int ret = 0;
-> +
-> +	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-> +	ret = vb2_querybuf(vq, buf);
-> +
-> +	/* Adjust MMAP memory offsets for the CAPTURE queue */
-> +	v4l2_m2m_adjust_mem_offset(vq, buf);
->  
->  	return ret;
->  }
-> @@ -760,6 +768,10 @@ int v4l2_m2m_qbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
->  	}
->  
->  	ret = vb2_qbuf(vq, vdev->v4l2_dev->mdev, buf);
-> +
-> +	/* Adjust MMAP memory offsets for the CAPTURE queue */
-> +	v4l2_m2m_adjust_mem_offset(vq, buf);
-> +
->  	if (ret)
->  		return ret;
->  
-> @@ -784,9 +796,15 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
->  		   struct v4l2_buffer *buf)
->  {
->  	struct vb2_queue *vq;
-> +	int ret;
->  
->  	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-> -	return vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-> +	ret = vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-> +
-> +	/* Adjust MMAP memory offsets for the CAPTURE queue */
-> +	v4l2_m2m_adjust_mem_offset(vq, buf);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(v4l2_m2m_dqbuf);
->  
-> @@ -795,9 +813,15 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
->  {
->  	struct video_device *vdev = video_devdata(file);
->  	struct vb2_queue *vq;
-> +	int ret;
->  
->  	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-> -	return vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-> +	ret = vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-> +
-> +	/* Adjust MMAP memory offsets for the CAPTURE queue */
-> +	v4l2_m2m_adjust_mem_offset(vq, buf);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
->  
-> 
+This patchset adds below DSP FastRPC features that have been missing in
+upstream fastrpc driver and also cleans up channel context structure with kref.
 
-For all these functions you should only call v4l2_m2m_adjust_mem_offset() if !ret.
-If the vb2_* function returned an error, then the offset fields aren't filled in,
-so it makes no sense to update them. And besides, the struct isn't copied back to
-userspace anyway on error.
+- Add ablity to reflect if the DSP domain is secure/unsecure by creating
+ seperate device nodes for secured domain, this would used by SE policy
+ to restrict applications loading process on the DSP.
+- Add new IOCTL to get DSP capabilites
+- Add IOCTL to support mapping memory on the DSP.
 
-Regards,
+Tested this series on DragonBoard 845c with TensorFlow.
 
-	Hans
+dt bindings patch has dependency this yaml conversion patch:
+"dt-bindings: misc: fastrpc convert bindings to yaml"
+https://lore.kernel.org/lkml/20211208101508.24582-1-david@ixit.cz/T/
+
+Jeya R (6):
+  misc: fastrpc: add remote process attributes
+  misc: fastrpc: add support for FASTRPC_IOCTL_MEM_MAP/UNMAP
+  misc: fastrpc: Add support to get DSP capabilities
+  dt-bindings: misc: add property to support non-secure DSP
+  misc: fastrpc: check before loading process to the DSP
+  arm64: dts: qcom: add non-secure domain property to fastrpc nodes
+
+Srinivas Kandagatla (2):
+  misc: fastrpc: separate fastrpc device from channel context
+  misc: fastrpc: add secure domain support
+
+ .../bindings/misc/qcom,fastrpc.yaml           |   5 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   2 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   3 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   3 +
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |   3 +
+ drivers/misc/fastrpc.c                        | 390 +++++++++++++++++-
+ include/uapi/misc/fastrpc.h                   |  76 ++++
+ 8 files changed, 470 insertions(+), 13 deletions(-)
+
+-- 
+2.21.0
 

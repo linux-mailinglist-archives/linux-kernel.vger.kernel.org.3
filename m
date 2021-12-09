@@ -2,109 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC3F46F796
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223D946F797
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbhLIXlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXlT (ORCPT
+        id S234463AbhLIXnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:43:10 -0500
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:36506 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229760AbhLIXnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:41:19 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F63C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:37:45 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z6so5075631plk.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2djF0P4/pIiIN2tn2/N0Kxd449t54dXIhZh8UA9W5m0=;
-        b=AsoDzv/qewrgwQFk+1LG/Q5IZ5JNhPI2jMNNToGHWKcru+V88AmBdb6PebMs2sZ2bh
-         Bm6xB2omaLLkax8Ap731YYd05k4Jf4H8LLLKrMjscvyelECxoaSNmAtCPN/aQITNQd2W
-         o5Iz6GlxcqnCxinVCrDZ3xgmqQvIx08sjij5A=
+        Thu, 9 Dec 2021 18:43:07 -0500
+Received: by mail-lf1-f43.google.com with SMTP id k37so15087590lfv.3;
+        Thu, 09 Dec 2021 15:39:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2djF0P4/pIiIN2tn2/N0Kxd449t54dXIhZh8UA9W5m0=;
-        b=JXlNmYTiWA7tgGg8gJtw4InFzD1eLtXCXqcn5XzvqvmDcfcZ9gQd719Q7Mba/nuTwQ
-         vum0u+G+BBxxZyhjRQolOXjpaKGa+ey7BXJMxmRYpYGcTbQgc/+jO90fdRyztWYK2aBw
-         GeqiS8AJPqg1/dLajq15FJCuhkx3234yGu4uJT739sMxxfLKRscDSXmekZoUNXCanvTI
-         9KQ5JW+qH0Tsph0jgrjskuWr97jEYy13yBsfoxFpLnCDnEV8OaG6olOkTEqPwLjdR+4I
-         nXn4nSvHx6n2RQuBf94y2KLnYPeewaTQCMEtblPjkYIZvPVqdLw74AQG2LOUbLUP+Ywg
-         Dp8Q==
-X-Gm-Message-State: AOAM53272Jz9UCGBJ/Kzpwz44o8lUjZ2D/ryVSFvjbzEPPPfsQdlRann
-        iRgFGVH2NysTZz0e9Ri/Jc8CSQ==
-X-Google-Smtp-Source: ABdhPJzm9FnroTff4RdxY1rNi5NMwYvwjDB+MJJSwjZNCUJhLA7OKf5Bg/Xd1vkVwPTjlOP0idl9MA==
-X-Received: by 2002:a17:90a:880a:: with SMTP id s10mr19407803pjn.214.1639093064920;
-        Thu, 09 Dec 2021 15:37:44 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f7sm192558pfj.41.2021.12.09.15.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 15:37:44 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:37:43 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] x86/boot/string: Add missing function declarations
-Message-ID: <202112091536.2DDF0DF@keescook>
-References: <20211119175325.3668419-1-keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R1sOw782ij7VT+oHmIJRrDqdq4cl5dydAg6hTJDnPW8=;
+        b=wNwOW14ghCN0gKJh7NKJg4B8LWADf4ahHueRn2gdPqd9WH6JTz8/zfeGriJHm78cbX
+         ZoCjbE0mmxhye+UKyQ/hAV5iU7PMVJbKxeUkX/Jzg94UykjDPk3yukgYEs0KEhiVjULu
+         3+zMahgUObWFL5r4pIU1iN0+CWZiHjuZr+pWRuye/di8lqvuODHbsDuOxy0p/9Rw7ueC
+         afkc79mgMBriDuIIOTaHRNfjWrSf/d8wn6Uc2poCWs3I8YEJZn0ergTNJa5Hds9CjkSg
+         mcQmFxz/2ppfDoBwN/IHKEPM8l/DsymUMKrLCwJDup4sXR8TfzLb6oZtYy+BRz3zA7ib
+         KSsw==
+X-Gm-Message-State: AOAM533fnsfzZ79k3EzSWpWc8OhgpsLjTZbtMKnp+wRnWgYbEAv6LQHR
+        a7kCS9oxS+7hEmMwWKqJ4ph7Bu7UQIwdofK1tdIYKp96
+X-Google-Smtp-Source: ABdhPJwdyV40u3vYU6XnMrwwSDxehp6b2A7BvLtcZSa/cqBYJn2UVm9XZsRjmkM+BmnxSJZs1MOlAQY08QxCCeXFuHk=
+X-Received: by 2002:a05:6512:b8c:: with SMTP id b12mr8847965lfv.99.1639093172216;
+ Thu, 09 Dec 2021 15:39:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119175325.3668419-1-keescook@chromium.org>
+References: <20211209200425.303561-1-jolsa@kernel.org>
+In-Reply-To: <20211209200425.303561-1-jolsa@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 9 Dec 2021 15:39:20 -0800
+Message-ID: <CAM9d7cjyN_sxMe9yajgnuDRy5234NZQ5sd0e4ynBmCnQSv=WFQ@mail.gmail.com>
+Subject: Re: [RFC] perf record: Disable debuginfod by default
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        "Frank Ch. Eigler" <fche@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 09:53:25AM -0800, Kees Cook wrote:
-> Silence "missing function declaration" warnings from string.h when
-> building under W=1.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+Hi Jiri,
 
-Hi, just a quick ping on this little fix.
+On Thu, Dec 9, 2021 at 12:04 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> hi,
+> after migrating to fedora 35 I found perf record hanging on exit
+> and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
+> debuginfod query which might take long time to process.
+>
+> I discussed this briefly with Frank and I'm sending the change
+> to disable debuginfod by default in perf record.
+>
+> Frank had other idea we could discuss here to fork or just spawn
+> "/usr/bin/debuginfod-find ...." into background after perf record.
+>
+> Perhaps there are other ways as well, hence this is RFC ;-)
 
-Thanks!
+I thought the debuginfod was for perf report, not record.
+Maybe I'm missing something but how about moving it to
+report?  We can talk to debuginfod after checking the local
+build-id cache and binary on the system.
 
--Kees
+Still, we can have perf buildid-cache to move it from the
+debuginfod to local cache.
 
->  arch/x86/boot/string.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/x86/boot/string.h b/arch/x86/boot/string.h
-> index a232da487cd2..e5d2c6b8c2f1 100644
-> --- a/arch/x86/boot/string.h
-> +++ b/arch/x86/boot/string.h
-> @@ -8,8 +8,10 @@
->  #undef memcmp
->  
->  void *memcpy(void *dst, const void *src, size_t len);
-> +void *memmove(void *dst, const void *src, size_t len);
->  void *memset(void *dst, int c, size_t len);
->  int memcmp(const void *s1, const void *s2, size_t len);
-> +int bcmp(const void *s1, const void *s2, size_t len);
->  
->  /* Access builtin version by default. */
->  #define memcpy(d,s,l) __builtin_memcpy(d,s,l)
-> @@ -25,6 +27,7 @@ extern size_t strnlen(const char *s, size_t maxlen);
->  extern unsigned int atou(const char *s);
->  extern unsigned long long simple_strtoull(const char *cp, char **endp,
->  					  unsigned int base);
-> +long simple_strtol(const char *cp, char **endp, unsigned int base);
->  
->  int kstrtoull(const char *s, unsigned int base, unsigned long long *res);
->  int boot_kstrtoul(const char *s, unsigned int base, unsigned long *res);
-> -- 
-> 2.30.2
-> 
-
--- 
-Kees Cook
+Thanks,
+Namhyung

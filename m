@@ -2,167 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C55346E676
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65CE46E678
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234027AbhLIKVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S232771AbhLIKVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbhLIKVC (ORCPT
+        with ESMTP id S232827AbhLIKVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:21:02 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D29C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:17:29 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 133so4647146pgc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qkgmXR3Qg7ObZaJ2FOxIFOIUs96TcoxwxPu3sBMau/8=;
-        b=bB5F7U3C9yoInnsJUROFJXpLXjfsfazmMqhwb3qC7YfPCxpfJ6E3empQ7yjEGmrNRz
-         SwHvDoM0aoNIGcjE8jOm8mGHvv03J9TY1CXxT+McOwTf5Tp8s74w5I5Ick0l9CT/V5as
-         Lgv01rNq3mDWqMyrQgrWHXHaO64r+yRs8/4rc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qkgmXR3Qg7ObZaJ2FOxIFOIUs96TcoxwxPu3sBMau/8=;
-        b=wScze7QXwvyIhIUpg9u0Hj9exAC7DfEMPJZU0ExrplNdwy9F3wy3YBhuqUz5lt1whl
-         09v3LMazGs2m7dXNok4Sgd/erOqT94TBSlt6ifnoSZXKMV3EIqTVqWU5jehxeWK5/rcN
-         u+0J1q6XvJWou5l0BNtE0wwGy4yC1CpPi6um1M7dOLabTkbYTotCcMGA3Mh5Vrl6GdKm
-         RTkxvlV2FHjK76WAhGzxmk57PwZbe5lk1zRUP6S2IZA79/4+cbHjoVIgIZJDiZ4zatVz
-         OJpaHWH7S2K3tRCpfwNknZ1gCtNV0K/2uBvIqBg6o2xv3kRCuYy2Tqs5Mi1eJu4MsVRq
-         2Ekg==
-X-Gm-Message-State: AOAM533YHXY5BT23bWXdPavma1FQI68uZhYaYBvzy7N48kVI6DUq8PMv
-        W9kCUc7IzOEA/Osi6WgVK9QJgb9ZgJY3kXwXTqi5X4EPQ4g=
-X-Google-Smtp-Source: ABdhPJwlgi3NF3sbonhF2xanFeVkWgLWtprLvSiH/mbXz4zKidymQ9MfvFFr7ReQvnMcwYsPKO2stf+DBSZYEMw2vL8=
-X-Received: by 2002:a63:ef58:: with SMTP id c24mr34197281pgk.94.1639045048976;
- Thu, 09 Dec 2021 02:17:28 -0800 (PST)
+        Thu, 9 Dec 2021 05:21:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373A5C061746;
+        Thu,  9 Dec 2021 02:17:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6C23FCE252A;
+        Thu,  9 Dec 2021 10:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB0FC004DD;
+        Thu,  9 Dec 2021 10:17:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639045053;
+        bh=iiFK0xmih2wWtgCAO4h7MEOiE9UREM+HuXkiPB8K6rY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QqLQ1O6kWYVbmlRVdUsCF8LKLZ+uF/BZ3ILFpDnQB+hn3dIdCvm7gdG8FPwSsEydJ
+         F6Sd3BYewbH2i3SaFEVB1UOUtvcL9x83vnU5v1sDo15tFjoR4l2j2M+B0EiocOGj2j
+         5m5KFMNkat5PcANvZRGOj0+RGf7PcItTDqvZbqhXtdUsW+B6KsRufgNxfgfFxS6QPZ
+         smw//lUCceRwYKdl6tBpAZ0id0EYphAXTHdljqzTBSpE+kxaclTcOYWqOITFBNeaE3
+         eRrEU2eof3Hs9InHyp+xsiPaqgA4FQQd7aQhatp7DjQw/yrYqq9dnxVGQ6yhgvAxOc
+         X+hCRKRUJaciw==
+Date:   Thu, 9 Dec 2021 10:17:30 +0000
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] btrfs: Fix memory leak in __add_inode_ref()
+Message-ID: <YbHXupg/zk8BLWFZ@debian9.Home>
+References: <20211209065631.124586-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-References: <20211016145827.586870-1-michael@amarulasolutions.com>
-In-Reply-To: <20211016145827.586870-1-michael@amarulasolutions.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 9 Dec 2021 11:17:17 +0100
-Message-ID: <CAOf5uw=DffhS=WAh-OFXOCO+4kd5ey=2Eqf0Zhyrgd_d5D8meA@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: ilitek-ili9881c: Avoid unbalance prepare/unprepare
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209065631.124586-1-niejianglei2021@163.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all
+On Thu, Dec 09, 2021 at 02:56:31PM +0800, Jianglei Nie wrote:
+> Line 1169 (#3) allocates a memory chunk for victim_name by kmalloc(),
+> but  when the function returns in line 1184 (#4) victim_name allcoated
+> by line 1169 (#3) is not freed, which will lead to a memory leak.
+> There is a similar snippet of code in this function as allocating a memory
+> chunk for victim_name in line 1104 (#1) as well as releasing the memory
+> in line 1116 (#2).
+> 
+> We should kfree() victim_name when the return value of backref_in_log()
+> is less than zero and before the function returns in line 1184 (#4).
+> 
+> 1057 static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
+> 1058 				  struct btrfs_root *root,
+> 1059 				  struct btrfs_path *path,
+> 1060 				  struct btrfs_root *log_root,
+> 1061 				  struct btrfs_inode *dir,
+> 1062 				  struct btrfs_inode *inode,
+> 1063 				  u64 inode_objectid, u64 parent_objectid,
+> 1064 				  u64 ref_index, char *name, int namelen,
+> 1065 				  int *search_done)
+> 1066 {
+> 
+> 1104 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+> 	// #1: kmalloc (victim_name-1)
+> 1105 	if (!victim_name)
+> 1106 		return -ENOMEM;
+> 
+> 1112	ret = backref_in_log(log_root, &search_key,
+> 1113			parent_objectid, victim_name,
+> 1114			victim_name_len);
+> 1115	if (ret < 0) {
+> 1116		kfree(victim_name); // #2: kfree (victim_name-1)
+> 1117		return ret;
+> 1118	} else if (!ret) {
+> 
+> 1169 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+> 	// #3: kmalloc (victim_name-2)
+> 1170 	if (!victim_name)
+> 1171 		return -ENOMEM;
+> 
+> 1180 	ret = backref_in_log(log_root, &search_key,
+> 1181 			parent_objectid, victim_name,
+> 1182 			victim_name_len);
+> 1183 	if (ret < 0) {
+> 1184 		return ret; // #4: missing kfree (victim_name-2)
+> 1185 	} else if (!ret) {
+> 
+> 1241 	return 0;
+> 1242 }
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-On Sat, Oct 16, 2021 at 4:58 PM Michael Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> All the panel driver check the fact that their prepare/unprepare
-> call was already called. It's not an ideal solution but fix
-> for now the problem on ili9881c
->
-> [ 9862.283296] ------------[ cut here ]------------
-> [ 9862.288490] unbalanced disables for vcc3v3_lcd
-> [ 9862.293555] WARNING: CPU: 0 PID: 1 at drivers/regulator/core.c:2851
-> _regulator_disable+0xd4/0x190
->
-> from:
->
-> [ 9862.038619]  drm_panel_unprepare+0x2c/0x4c
-> [ 9862.043212]  panel_bridge_post_disable+0x18/0x24
-> [ 9862.048390]  dw_mipi_dsi_bridge_post_disable+0x3c/0xf0
-> [ 9862.054153]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
->
-> and:
->
-> [ 9862.183103]  drm_panel_unprepare+0x2c/0x4c
-> [ 9862.187695]  panel_bridge_post_disable+0x18/0x24
-> [ 9862.192872]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
-> [ 9862.199117]  disable_outputs+0x120/0x31c
->
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Fixes: d3316c8233bb05 ("btrfs: Properly handle backref_in_log retval")
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+
+Looks good, thanks.
+
 > ---
->  drivers/gpu/drm/panel/panel-ilitek-ili9881c.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> index 103a16018975..f75eecb0e65c 100644
-> --- a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> @@ -52,6 +52,8 @@ struct ili9881c {
->
->         struct regulator        *power;
->         struct gpio_desc        *reset;
-> +
-> +       bool                    prepared;
->  };
->
-
-I found that this can be a general problem. Should not mandatory to
-track panel status
-
-DRM_PANEL_PREPARED
-DRM_PANEL_ENABLED
-
-Michael
->  #define ILI9881C_SWITCH_PAGE_INSTR(_page)      \
-> @@ -707,6 +709,10 @@ static int ili9881c_prepare(struct drm_panel *panel)
->         unsigned int i;
->         int ret;
->
-> +       /* Preparing when already prepared is a no-op */
-> +       if (ctx->prepared)
-> +               return 0;
-> +
->         /* Power the panel */
->         ret = regulator_enable(ctx->power);
->         if (ret)
-> @@ -745,6 +751,8 @@ static int ili9881c_prepare(struct drm_panel *panel)
->         if (ret)
->                 return ret;
->
-> +       ctx->prepared = true;
-> +
->         return 0;
->  }
->
-> @@ -770,10 +778,16 @@ static int ili9881c_unprepare(struct drm_panel *panel)
->  {
->         struct ili9881c *ctx = panel_to_ili9881c(panel);
->
-> +       /* Unpreparing when already unprepared is a no-op */
-> +       if (!ctx->prepared)
-> +               return 0;
-> +
->         mipi_dsi_dcs_enter_sleep_mode(ctx->dsi);
->         regulator_disable(ctx->power);
->         gpiod_set_value(ctx->reset, 1);
->
-> +       ctx->prepared = false;
-> +
->         return 0;
->  }
->
-> --
+>  fs/btrfs/tree-log.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+> index 8ab33caf016f..d373fec55521 100644
+> --- a/fs/btrfs/tree-log.c
+> +++ b/fs/btrfs/tree-log.c
+> @@ -1181,6 +1181,7 @@ static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
+>  					     parent_objectid, victim_name,
+>  					     victim_name_len);
+>  			if (ret < 0) {
+> +				kfree(victim_name);
+>  				return ret;
+>  			} else if (!ret) {
+>  				ret = -ENOENT;
+> -- 
 > 2.25.1
->
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+> 

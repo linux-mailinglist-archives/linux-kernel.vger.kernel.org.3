@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED2746E647
+	by mail.lfdr.de (Postfix) with ESMTP id 8755046E648
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbhLIKMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:12:00 -0500
-Received: from mail-vi1eur05on2122.outbound.protection.outlook.com ([40.107.21.122]:58784
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        id S232847AbhLIKMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:12:03 -0500
+Received: from mail-eopbgr130110.outbound.protection.outlook.com ([40.107.13.110]:23271
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232951AbhLIKL4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:11:56 -0500
+        id S233163AbhLIKL6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:11:58 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d/Se2dVX/BPPafKqbW5tvC3UvFyGB7791LYPXDQfafsiCHFJ2t3JO1C2fmGDH8tfpjRESqEuHiPlF5uhh9wwjqjVOyf33NZRErvgCLWSzaVy2gSQs0h7IrOtiZ53MLnhnZxLDmC8g+BPYKBlK2ZnLPtzAFd7JXU8tHwKSR8sRJaRq85bCnuws15WgMmxKcUr3AUSS3f+lCnPjnIj6jFebzKUSVTP22EiSiOmE/Ubj1BbqGZWPfopG7yH6DmRTf7ecGKKDKo6x9/Wo1AnrX6HW9yRCgjQspPhFrRDNhed5cT3v83w5lrqNlNbLH36e5HB4IWnsdPoONpMOEzbdc4Zmw==
+ b=Km80ZZ3UAXvK+KO+TP3zGDt5Hie5XY/IIqKTXxoZhmGvX/AqgWZg4sy9CHxA/VQbbWJAv4CQIVTy+CQdyuibS8sTTlXrZGPSu+5kYDDQWCc4mf1g2NyKhm8NnUYbglonB1wYCnCXfurX+CRWOG/b9ZEFX3IT+5GjcNaJDFOrsaTgi4mjDuCfHS7aP82dlCtuzhWM8iw7wAQlj4BXWluZSuVIw8XprhuFHCuyB3HeuSmQB3BiGHUdcxkGVN+Q6YswlxOr8h8PA03sIdnGAvTCte7xFJ3D/AjHZM25Q1PTD+Re4GF/OI70nCBZ63+d3NvLaxKt4yYrIlOnPVo0IKPfdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q9/ad6WY8keWTZzt3EuyWxwhErr+3x6Zpt734Zu3ICk=;
- b=U9sqNf4rCREHUiqUlqSzA/Jqw+8YdGA27eoAkyVA+wPrEShzaD0H/8CWbcWPgCoW4hdtrQT3x2KFM4tvXotsOd77UeO0rfmgyZUZpCb09jcWYwLwcpGh9Nmb9t0FvoFUjGYyFHQM+2y0ymjeL/Ph4wjqOexkxgHigFN+5hcw9Lu2aXaed+0KUVVTmLKP6PZDikiLASxcg4uft/RSVvenyoV4WnbXOLr7RGgFO7NEssCwfoT3TmBJheSDZT64UuFurji+GepLZejJB4uF81go0S7Kf+pfj4MARlaJ+y3F9osp2m5jwKPDO/3B1YoSJWTAIEkO0U/9EIl5DywK5onHsw==
+ bh=oIGDkm+XX0RwKVhcNI57y2sTlIQBCcvKIfcL+VtKeCk=;
+ b=nqT9/ah3xF+t24Vyoa4WBhcnW4nA/zGyhAr4EbyS7e6NfNJlGoCRICsCCkGdEsYGYlF7RvfrojF3TohcThY3Cm0oPSC1WGOBZv41kJhPJd35gNtBE5u4WWMporVoUCPWeO15PS/KVOlvEsHvmVHkulIat78+AF5I/ezmM5KBQfkn6AvnuPqnP55Dpys8AsRsATVRD7kBGn9t3afSosUZ/Nm1z3jYSNC5Fl8lUfrRHV5EXTHusSRFFWKlXjwKSntvkrM3cXK5oOm+TSd9DqM2KgKbP0VeB525D/TENYPl8a6xuYz4dqXWO9XvL/o8ZFuj0hM5vDjJcarH8lw3XTsSew==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q9/ad6WY8keWTZzt3EuyWxwhErr+3x6Zpt734Zu3ICk=;
- b=FsTNqdcY6N62bBV/sjrZ/a+rdAK+kMpp1ZpDjeF/n25pHQiGtgb8NjYdkhutV0o8utr4CaEpLVsbI3tGDUfi91d/HGKrGmHY87kikjbGdX1R8C1OiYw48y+MQWbwcQySJIRXqCbmLECpYlq2/pBnbhSmW2AefZTAdgNEiWbDfJg=
-Received: from DB8PR03CA0021.eurprd03.prod.outlook.com (2603:10a6:10:be::34)
- by PR3PR07MB8210.eurprd07.prod.outlook.com (2603:10a6:102:175::22) with
+ bh=oIGDkm+XX0RwKVhcNI57y2sTlIQBCcvKIfcL+VtKeCk=;
+ b=yF/5+s2Cyso5gA8FnCt4Z2W2yYngoAbPZQ1apt8rzDE9v644NxiX9U/vvop5F5dQXVOHjynINgZ3Vl3Nw+Q19Dd+XGBawHYnVc1akJ/JiRwDl1f0MJHOF2Jo77eyjMowSzvSs+ApseFnL+6qlfjPSj3oxAbSkPhM6LywsMyS9ts=
+Received: from AS8PR07CA0049.eurprd07.prod.outlook.com (2603:10a6:20b:459::30)
+ by VI1PR0701MB2413.eurprd07.prod.outlook.com (2603:10a6:800:6c::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.5; Thu, 9 Dec
- 2021 10:08:20 +0000
-Received: from DB5EUR03FT023.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:be:cafe::8b) by DB8PR03CA0021.outlook.office365.com
- (2603:10a6:10:be::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.19 via Frontend
- Transport; Thu, 9 Dec 2021 10:08:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
+ 2021 10:08:23 +0000
+Received: from VE1EUR03FT035.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:459:cafe::a6) by AS8PR07CA0049.outlook.office365.com
+ (2603:10a6:20b:459::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
+ Transport; Thu, 9 Dec 2021 10:08:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
  smtp.mailfrom=nokia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia.com;
@@ -45,12 +45,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
  131.228.2.8 as permitted sender) receiver=protection.outlook.com;
  client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net;
 Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
- DB5EUR03FT023.mail.protection.outlook.com (10.152.20.68) with Microsoft SMTP
+ VE1EUR03FT035.mail.protection.outlook.com (10.152.18.110) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.12 via Frontend Transport; Thu, 9 Dec 2021 10:08:20 +0000
+ 15.20.4778.12 via Frontend Transport; Thu, 9 Dec 2021 10:08:22 +0000
 Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
-        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 1B9A8HIY012620;
-        Thu, 9 Dec 2021 10:08:17 GMT
+        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 1B9A8HIZ012620;
+        Thu, 9 Dec 2021 10:08:20 GMT
 From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
 To:     linux-mtd@lists.infradead.org
 Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
@@ -61,115 +61,66 @@ Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] mtd: spi-nor: Introduce erase_proto
-Date:   Thu,  9 Dec 2021 11:08:12 +0100
-Message-Id: <20211209100813.61713-1-alexander.sverdlin@nokia.com>
+Subject: [PATCH 2/2] mtd: spi-nor: micron/st: Hardcode erase_proto to 1-1-1
+Date:   Thu,  9 Dec 2021 11:08:13 +0100
+Message-Id: <20211209100813.61713-2-alexander.sverdlin@nokia.com>
 X-Mailer: git-send-email 2.10.2
+In-Reply-To: <20211209100813.61713-1-alexander.sverdlin@nokia.com>
+References: <20211209100813.61713-1-alexander.sverdlin@nokia.com>
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 347b749c-9f70-4d0e-b966-08d9bafbd3fb
-X-MS-TrafficTypeDiagnostic: PR3PR07MB8210:
-X-Microsoft-Antispam-PRVS: <PR3PR07MB82105DC10C85A10E3FE7711588709@PR3PR07MB8210.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Office365-Filtering-Correlation-Id: 69eace52-6816-4594-7c36-08d9bafbd538
+X-MS-TrafficTypeDiagnostic: VI1PR0701MB2413:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0701MB24133327F9BBF75423C4AC9288709@VI1PR0701MB2413.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XEpVU80b7RNx8A+Te7emiq8w71GG6Mr1HevddWPtjC+MFmEDjmKTbE4F/vJ1uMgcuSnkZtJTaBO01Qr2P/jylX7BclxfCbZylcNj75GhFMiCT38M2G/ri487Y5mDzpyIF9CELw6mVyw6ZMFM8H4bUvqxOXo6Kdic6TSYuETPu1McSg0HIFDU25nGVllFPcBHfdX5yWUtn1xsWuevEOfq01yTAR+vJqswhUnh1saEhTNckIdnPcDRnoq+dQU2SaVLXl6dLQSQ1ZpkX67nwmbdoTdPbwIvra1e3/7Nm+2rSOMcXE2kw1oRwMRtDyJSBZRnQnM3eA0jzvDnVUrXFfgD5zZS7z5VKsfxs+M8MHLdAeY890jYliRn5f8tlv+WlT+vQcQcez0PHNHCyZzcJcxqCtit46pBhISJhdM/+O+TXfRL1llNy2jr26EN+yFl4ZR3+F9tL5XHri5vGqwPaF9/oI5iTj0YJgDWK+yl007yflFZE/aHZMFTe2FJChbAlOW7uQ4l0Q+oocE7mDtpo/ql0QGZXNBr6IvvH5EgzIUkAoZMzlTsl0Gd/XAMEBdazbMLzHuXolkIfCmFwouqLTcxqQNnFq18OjaevetSQGYZOSHkH7MT4ROcI2812ZXl74r3hq3IxD2mvI/RlIRcazloouMQwc7GXvmdJPcFTW714KXNUTTJAo44NzaEE8XWOeJ4JDuf9WRiU3iYAysPuIORuOB7bCzB/gKqDhzCZ054pib3pEYOnMAUbOhZIlWyz+ynFa6IOUfphPXkQs7lpEdc5DuWbYtPH6w0ucQWKbvCs7Q=
-X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(186003)(336012)(5660300002)(54906003)(6916009)(2616005)(70586007)(316002)(6666004)(2906002)(1076003)(70206006)(47076005)(36860700001)(8676002)(82960400001)(4326008)(82310400004)(36756003)(40460700001)(86362001)(26005)(356005)(508600001)(81166007)(8936002)(83380400001)(36900700001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 4hjFBoENe52jmTQ1LH5HpZ/Z4xIoexLJbYnjl2meVBJ7IZdmODZzxG40A3FYhyOHB7IxRnVHIe9yH/rBbcddN+8bAB0T5E2cyz+tnDZQrkKtU1+K3aOIC78RqK6TWR8w2WLMFRfaq2xYmxxrvH4UTqgfOt07b8nPp6YMHCVbPrH6rSduDAAtMPF2AHx6NUltUzqmPL9XrGzfr7BwBapD2uMFsMfa29ICr1iQIp47k81ZaFZzipYcPNVtipvwZuAcj3D+6U/xZQY2yTJanPqETh0l9Axlz4HduDKe5OtpOlaWBKvflZ13x5VrPo9sumicN6j7P0IVjXsO7xGGavqWchgAiNR4Uzy5aeKQX6v1vgKwSwBfnwf/lX0zypve7jttumSlZrqCDolOYVQrStP66DZ19v/RkSVqkr3mpg6OrOeSbYku0y13X/U71lE2TFbgmtTbC81Zb225A1mjMtJ2R5xb5pfqn7+EeoWdkw0287cW2yOCGuhb7pADb+sZIX6fowKFhjaCBRlxGXOyC1r2GaeLZEWVPss+D8qCnBw0+f6Mt4vZ7kBRhdJbgnIrAOwe9UbuguqkzOi8LVWXupxpuJwBbdwaSRm9+L1gIhtlOlsNiKmQfiCoNe3BY2SMJGjK6uM1+S7ysBHoCjONrNyx1gHXjvevVj2iFsTBal5zc07wvmezPtwqgo0pHew/3oj5ISJxQQQ7x2zFZ6UdW/1IaN791yo7dkWOYTzMuNpS9DIKpKJm5VlDjGjiJYavnxhzHXZWqKzfLc6surN57VhBHLLG1ZMzJeyFML/TlSAGgkS6LpUPNamQTKqP9tHC6tQUzEardosjiSegtRSfPoIIRQC5t3IuHH5ODLRAME3RPoY=
+X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(26005)(82310400004)(8936002)(356005)(70586007)(6666004)(70206006)(82960400001)(36756003)(316002)(40460700001)(2906002)(6916009)(54906003)(8676002)(81166007)(5660300002)(508600001)(86362001)(4744005)(186003)(4326008)(336012)(1076003)(2616005)(47076005)(36860700001)(36900700001);DIR:OUT;SFP:1102;
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 10:08:20.4589
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 10:08:22.5504
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 347b749c-9f70-4d0e-b966-08d9bafbd3fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69eace52-6816-4594-7c36-08d9bafbd538
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.8];Helo=[fihe3nok0734.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT023.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT035.eop-EUR03.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB8210
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2413
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-I've been looking into non-working erase on mt25qu256a and pinpointed it to
-be write_proto 1-4-4 selected from SFDP while the chip only supports 1-1-0
-erase.
-
-For now just introduce the separate protocol without functional change and
-leave the real fix for the following patch.
+This fixes sector erase on mt25qu256aba8e12-1sit.
+Looks like others like mt35xu512aba could be affected as well.
 
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 ---
- drivers/mtd/spi-nor/core.c  | 9 ++++++---
- include/linux/mtd/spi-nor.h | 4 +++-
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ drivers/mtd/spi-nor/micron-st.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 2e21d5a..dcd02ea 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -177,7 +177,7 @@ static int spi_nor_controller_ops_write_reg(struct spi_nor *nor, u8 opcode,
- 
- static int spi_nor_controller_ops_erase(struct spi_nor *nor, loff_t offs)
- {
--	if (spi_nor_protocol_is_dtr(nor->write_proto))
-+	if (spi_nor_protocol_is_dtr(nor->erase_proto))
- 		return -EOPNOTSUPP;
- 
- 	return nor->controller_ops->erase(nor, offs);
-@@ -1186,7 +1186,7 @@ static int spi_nor_erase_chip(struct spi_nor *nor)
- 				   SPI_MEM_OP_NO_DUMMY,
- 				   SPI_MEM_OP_NO_DATA);
- 
--		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
-+		spi_nor_spimem_setup_op(nor, &op, nor->erase_proto);
- 
- 		ret = spi_mem_exec_op(nor->spimem, &op);
- 	} else {
-@@ -1331,7 +1331,7 @@ int spi_nor_erase_sector(struct spi_nor *nor, u32 addr)
- 				   SPI_MEM_OP_NO_DUMMY,
- 				   SPI_MEM_OP_NO_DATA);
- 
--		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
-+		spi_nor_spimem_setup_op(nor, &op, nor->erase_proto);
- 
- 		return spi_mem_exec_op(nor->spimem, &op);
- 	} else if (nor->controller_ops->erase) {
-@@ -2727,6 +2727,9 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
- 	 */
- 	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
- 		spi_nor_init_default_locking_ops(nor);
+diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+index 2f3054b..058bbb7 100644
+--- a/drivers/mtd/spi-nor/micron-st.c
++++ b/drivers/mtd/spi-nor/micron-st.c
+@@ -267,6 +267,12 @@ static void micron_st_default_init(struct spi_nor *nor)
+ 	nor->flags &= ~SNOR_F_HAS_16BIT_SR;
+ 	nor->params->quad_enable = NULL;
+ 	nor->params->set_4byte_addr_mode = st_micron_set_4byte_addr_mode;
 +
-+	if (!nor->erase_proto)
-+		nor->erase_proto = nor->write_proto;
++	/*
++	 * mt25qu doesn't support all possible write protocols for erase, only
++	 * 1-1-0, 2-2-0, 4-4-0.
++	 */
++	nor->erase_proto = SNOR_PROTO_1_1_1;
  }
  
- /**
-diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
-index fc90fce..23a901b 100644
---- a/include/linux/mtd/spi-nor.h
-+++ b/include/linux/mtd/spi-nor.h
-@@ -381,7 +381,8 @@ struct spi_nor_flash_parameter;
-  * @cmd_ext_type:	the command opcode extension type for DTR mode.
-  * @read_proto:		the SPI protocol for read operations
-  * @write_proto:	the SPI protocol for write operations
-- * @reg_proto:		the SPI protocol for read_reg/write_reg/erase operations
-+ * @reg_proto:		the SPI protocol for read_reg/write_reg operations
-+ * @erase_proto:	the SPI protocol for erase operations
-  * @sfdp:		the SFDP data of the flash
-  * @controller_ops:	SPI NOR controller driver specific operations.
-  * @params:		[FLASH-SPECIFIC] SPI NOR flash parameters and settings.
-@@ -408,6 +409,7 @@ struct spi_nor {
- 	enum spi_nor_protocol	read_proto;
- 	enum spi_nor_protocol	write_proto;
- 	enum spi_nor_protocol	reg_proto;
-+	enum spi_nor_protocol	erase_proto;
- 	bool			sst_write_second;
- 	u32			flags;
- 	enum spi_nor_cmd_ext	cmd_ext_type;
+ static const struct spi_nor_fixups micron_st_fixups = {
 -- 
 2.10.2
 

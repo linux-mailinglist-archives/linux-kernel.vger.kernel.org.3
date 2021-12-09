@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B35D46F732
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A565746F735
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbhLIXI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:08:29 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:34951 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234119AbhLIXIR (ORCPT
+        id S234223AbhLIXIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234345AbhLIXI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:08:17 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D8885580336;
-        Thu,  9 Dec 2021 18:04:42 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 09 Dec 2021 18:04:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=AnymEuCYCocHA
-        Ds+cC0A+imh3dmQP2pOP/ONvg/OKOg=; b=EWH4R1T6XLR7/XPYv2+SuW3bSclZ2
-        Kvvb5NsB7w82sEJmQn0JTB+0tYZOTesLZT4rKW45XSVxeH1bnS7C74KuCr4rc4MT
-        p8BtjGButAGWBNV4uo+rZcJ3rKJswkkAJkPSP+Zqdo7YaZ6Zf+UbAsWH2oQ1IVu5
-        y7x1kCiTvV6CbZBdLUT2NhuhIGI0vBByiLkfoLEdr6U32Cu6Rz/ZGFsfDuIYwnms
-        wLY7nz1uydR2fz3GqBsSnRTesabSsmAgM5e6agHA8En5BtHs2HlAphAH1MBOpPsu
-        m4O5k9GgUc1WCJD0+OoSKxbUvdWgPIcq+VlI1Uso6SDFOSpgDCfEEXzdw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=AnymEuCYCocHADs+cC0A+imh3dmQP2pOP/ONvg/OKOg=; b=HZtl8rio
-        tiDaICvgAUzv/4f1nQmSHjhBIUEQFY861mwC2NyYz6pCsrC7nu3u9UtEXyZVB/mx
-        BjBVhTTTu0BpzEwPwkHvBsIVW5nwvpZQgy+QrLPmAH1nl952z6L38W21OrhYwnhc
-        peJfhNpeHrz2BC7QfBdFv4KCbeG/ZZhUQWLtQy4lYqiwpdWIWIqCWQd4ToWrz5GP
-        9N+4GLDRjrKZai/PggjolYf5hbvep3tSuZMRz/X/MuyX5iv7HYnYBXPwaOZiP3m8
-        wAcugQbbt7v/J1Mf/NXWwgXTu4BjEh+XMdDtHqmxke9L9OqmXsy3lbasdxV1vKnd
-        T6WCa5FKe+ZVTA==
-X-ME-Sender: <xms:iouyYeTVgH8ecDbOlF7wKOSH2hbfe-phC6rhzNtLNbpHdlCYt1dIIg>
-    <xme:iouyYTwGLDgDIEHg_Eaw_iNPBtu0RXQqNkJba78sHdTf9RiHSZNgQzS_JVIPJ2IdD
-    x0vjj438dKjHVxP0g>
-X-ME-Received: <xmr:iouyYb3nCDeuVSMgAhBPzHQBkjPbsZgdOD6I8i1CDXXu32PtmMKuxZJb-VgDZp3rmYzEfzr4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkedugddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggr
-    nhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeeuvd
-    euudeuhfeghfehieeuvdetvdeugfeigeevteeuieeuhedtgeduheefleenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnh
-    htrdgtohhm
-X-ME-Proxy: <xmx:iouyYaDlHTwHozoQD7OJ2ylBL_etQamuyf48-S6eHzhvK4FtAUES7Q>
-    <xmx:iouyYXhJzCDzQtVD3NYsG4zcpqTAUAAJtH0AY-SZdLojN1sLOvUsvg>
-    <xmx:iouyYWq0g8wwEte4zQhjjH6ln3n-DKcn94VCAAu62nPln3WBKoAB4g>
-    <xmx:iouyYQaZscSeRo5m2okFZdWcKobvbA7nU8mLQF60niy2bvnUQLaDjg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Dec 2021 18:04:42 -0500 (EST)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH v2 7/7] arch: powerpc: adjust fadump alignment to be pageblock aligned.
-Date:   Thu,  9 Dec 2021 18:04:14 -0500
-Message-Id: <20211209230414.2766515-8-zi.yan@sent.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211209230414.2766515-1-zi.yan@sent.com>
-References: <20211209230414.2766515-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Thu, 9 Dec 2021 18:08:28 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B112C061D76
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:04:50 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id r5so6440202pgi.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:04:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AM7QLMUWHfMwmQDV/nARvLu6AUqKl6gTrIizSq8pCV0=;
+        b=qCUTYflpJD3Ut8S3L9vAdsRCFkfP6S1UK/pYIcT6QfgUqj3IrkrCT4ezn3jaOsf3Cl
+         QWXXPUZs+WxnhUjOZmGD3MD+yMr1uQ4MPnml+A3U6sVIr1NuDQjnxAVWqlzhj2iKBJ3v
+         UVZc3vL3u8GPqVzXjH8o2LZKH9265/3UW1CVYplUB1MgkH9c5ybvjJIKVXYJvrcLh394
+         P90V/cOnkBv/iNu+Q/0tn+tcZb57JKYcdbPJW+sK8l4beDVlSxBGGYj3kX/T4AxOqfIl
+         UB/2KhtFPncq+0yKdb9T39Tq3TJiyLrFSDV3H0HYU7qUuLOVeojoQvZgvAswjkqck/q8
+         PFSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AM7QLMUWHfMwmQDV/nARvLu6AUqKl6gTrIizSq8pCV0=;
+        b=6PfAG1kMH+hVWHIe2UhTH9qLYAGS2As1gHVBtxpArFWAdGDSxANGYJUYbiSPisTPJy
+         NRbSIqmcznxXqM+y4CTU5FYKQYH2TwZ2NsVXeJDR4ds5zMsMTLly8+4m2ezU8b39I3me
+         bbk4ElPzKHIszlPu6yDBH5TkTG9bx0kaGwgLOl2ZjZ4x2njbNyLkKTc06C0uF3dbTXyF
+         YUogTFgvw65jj0kY2YxR1ToDD3M4g7K8iVz4hC7pOlWaXmhmzFnycD+BcLpu8PZtAsZj
+         uetdgUd1NrHYFqUV8Ww1wMUh9Vm4fW5TsmBW4BdQPmjI4NgGj6IFXe/zAWcFqQ9N/FWC
+         dCUQ==
+X-Gm-Message-State: AOAM533tJLEofWiXLGXtKoDF5jkSebxQ1ajrEfNo8JeKGOn1iRCr7NhC
+        OJvWGCzjUeJp6wFj6i3bX06Fhw==
+X-Google-Smtp-Source: ABdhPJwv3BwHdZiLi1ZhC5t+Cp5jkK/HRMF9Ysg4XP1dLe3XT0E5UCPyHw6UtZFq3qUMnwim2AuqFw==
+X-Received: by 2002:a63:6dcc:: with SMTP id i195mr35590826pgc.90.1639091089661;
+        Thu, 09 Dec 2021 15:04:49 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:4686:81c:7840:3f2a])
+        by smtp.gmail.com with ESMTPSA id o1sm10610131pjs.30.2021.12.09.15.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 15:04:48 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:04:42 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Alexandru M Stan <amstan@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: mt8183: kukui: Add Type C node
+Message-ID: <YbKLiic12TTlCI5K@google.com>
+References: <20211209195112.366176-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h0DgCffirGSPqlD0"
+Content-Disposition: inline
+In-Reply-To: <20211209195112.366176-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
 
-CMA only requires pageblock alignment now. Change CMA alignment in
-fadump too.
+--h0DgCffirGSPqlD0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- arch/powerpc/include/asm/fadump-internal.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Thu, Dec 09, 2021 at 11:51:12AM -0800, Prashant Malani wrote:
+> Add a node describing the USB Type C connector, in order to utilize the
+> Chromium OS USB Type-C driver that enumerates Type-C ports and connected
+> cables/peripherals and makes them visible to userspace.
+>=20
+> Cc: Alexandru M Stan <amstan@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-diff --git a/arch/powerpc/include/asm/fadump-internal.h b/arch/powerpc/incl=
-ude/asm/fadump-internal.h
-index 8d61c8f3fec4..9198f20b6b68 100644
---- a/arch/powerpc/include/asm/fadump-internal.h
-+++ b/arch/powerpc/include/asm/fadump-internal.h
-@@ -20,9 +20,7 @@
- #define memblock_num_regions(memblock_type)	(memblock.memblock_type.cnt)
-=20
- /* Alignment per CMA requirement. */
--#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE <<				\
--				 max_t(unsigned long, MAX_ORDER - 1,	\
--				 pageblock_order))
-+#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE << pageblock_order)
-=20
- /* FAD commands */
- #define FADUMP_REGISTER			1
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+> ---
+>=20
+> Changes in v2:
+> - Alexandru mentioned that HW specs suggest preferred power role for
+>   devices like kukui to be sink, so changed try-power-role to "sink".
+>=20
+>  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/=
+boot/dts/mediatek/mt8183-kukui.dtsi
+> index 94c13c459194..0f9480f91261 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> @@ -886,6 +886,20 @@ usbc_extcon: extcon0 {
+>  		cbas {
+>  			compatible =3D "google,cros-cbas";
+>  		};
+> +
+> +		typec {
+> +			compatible =3D "google,cros-ec-typec";
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <0>;
+> +
+> +			usb_c0: connector@0 {
+> +				compatible =3D "usb-c-connector";
+> +				reg =3D <0>;
+> +				power-role =3D "dual";
+> +				data-role =3D "host";
+> +				try-power-role =3D "sink";
+> +			};
+> +		};
+>  	};
+>  };
+> =20
+> --=20
+> 2.34.1.173.g76aa8bc2d0-goog
+>=20
+
 --=20
-2.33.0
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
 
+--h0DgCffirGSPqlD0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYbKLigAKCRBzbaomhzOw
+wgTfAP0UKw0CIZnkq7XRxizWU1ISWsbA7Fg4wi8F3FRlEtjalgD/RnGrQZDBRr7E
+LnQC2+PGRByTSZwMCNTeptgTOh+8IAA=
+=fRVO
+-----END PGP SIGNATURE-----
+
+--h0DgCffirGSPqlD0--

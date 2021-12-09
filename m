@@ -2,135 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFC046E415
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FED346E3FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbhLIIZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:25:47 -0500
-Received: from mail.djicorp.com ([14.21.64.4]:57494 "EHLO mail.djicorp.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229689AbhLIIZq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:25:46 -0500
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 03:25:45 EST
-IronPort-SDR: 3IXqrvnP4bfn0C/5179SKw0ukaSpUlJqA7SPEJGdViKEIJInjJGJcCKd6xKtlYTTbSXQxqSH8A
- 8W6N/AewaTBg==
-X-IronPort-AV: E=Sophos;i="5.88,191,1635177600"; 
-   d="scan'208";a="11814614"
-From:   wigin zeng <wigin.zeng@dji.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRt?=
- =?utf-8?Q?a_rx?=
-Thread-Topic: [PATCH] serial: 8250: add lock for dma rx
-Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/A=
-Date:   Thu, 9 Dec 2021 08:15:00 +0000
-Message-ID: <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
-References: <20211209073339.21694-1-wigin.zeng@dji.com>
- <YbGygPtkz6ihyW51@kroah.com>
-In-Reply-To: <YbGygPtkz6ihyW51@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [58.34.188.114]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S234551AbhLIIV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:21:27 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24220 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229536AbhLIIV0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:21:26 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B96wfjI015155;
+        Thu, 9 Dec 2021 08:17:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=iyRuyMnrsSYQQ3mu0VpKzkSvgVH8i9BqZ94wHtEHpTM=;
+ b=h8zWskPfGLOKCW95i39bydo+Hu4p4qtYpm8Ok1GsLU09TDwd4qFfitBPLLpU7/cYql26
+ /OQ55yva6Q2Q7BVQETW4METE1l9SI1lXQkrf25kwDtTkcTav4dDYqLSadRD37RyJd7EM
+ OZUtpWKFUISJFU/2vzMYb0p3qLu4Ae1nZ5L4a7SM8Zf/Am3p5pGjtSAMNn2//DAf3TV+
+ LiXalOCrEQ0k2CFTVBGWgJoOVsfbCQpR2Tx/ZPjsKwVAsaeuZQcsmyX2VnzAhJJ118E5
+ k/0wlpVWvr2Xm6NTSvDONnNtLwEI7OimwtcdoByyzH6y/ploRZSJVl4sd60fLaKTyEGa 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cud0esfr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 08:17:20 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B97sL4h024036;
+        Thu, 9 Dec 2021 08:17:20 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cud0esfqn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 08:17:20 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B98Cvs8013571;
+        Thu, 9 Dec 2021 08:17:18 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cqykjpqq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 08:17:18 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B98HFYr32309678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 08:17:15 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE9A111C05E;
+        Thu,  9 Dec 2021 08:17:14 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 247DE11C073;
+        Thu,  9 Dec 2021 08:17:14 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.4.115])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 08:17:14 +0000 (GMT)
+Date:   Thu, 9 Dec 2021 09:17:12 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH 6/7] KVM: Drop KVM_REQ_MMU_RELOAD and update
+ vcpu-requests.rst documentation
+Message-ID: <20211209091712.78ddd2c9@p-imbrenda>
+In-Reply-To: <20211209060552.2956723-7-seanjc@google.com>
+References: <20211209060552.2956723-1-seanjc@google.com>
+        <20211209060552.2956723-7-seanjc@google.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WmrQ3ZcQ74B7keqUzC6JZv2BqAASUL87
+X-Proofpoint-ORIG-GUID: RlmryqTfuyC4xn3SUyihBgNcGmwVS3Yp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 clxscore=1011 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090043
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2UgZW5jb3VudGVyZWQgdGhpcyBpc3N1ZSB3aGVuIFVBUlQgdHJhbnNmZXIgdmVyeSBpbnRlbnNp
-dmUuDQpETUEgaXJxLXRocmVhZCBwcm9jZXNzZWQgb24gQ1BVMCBhbmQgc2VyaWFsIGlycS10aHJl
-YWQgZXhlY3V0aW5nIG9uIENQVTEsIA0KSW4gRE1BIGlycS10aHJlYWQgd2lsbCBpbnZva2UgInR0
-eV9pbnNlcnRfZmlscF9zdHJpbmciIGZ1bmN0aW9uIHRvIGFkZCB0aGUgcnhfYnVmIGludG8gdHR5
-X2J1ZmZlci4NCkluIHNlcmlhbCBpcnEtdGhyZWFkIGFsc28gaGFzIGNoYW5jZSB0byBhY2Nlc3Mg
-dHR5X2luc2VydF9mbGlwX2NoYXIoaW4gc2VyaWFsODI1MF9yeF9jaGFycyApIHRvIGFjY2VzcyB0
-dHlfYnVmZmVyLg0KdGhlcmUgaXMgcmFjZSBjb25kaXRpb24sIHNvbWV0aW1lcyB3aWxsIGNhdXNl
-IHBhbmljLg0KV2UgYWRkIHRoZSBzcGluX2xvY2sgdG8gc3luYyB0aGUgdHR5X2J1ZmZlciBvcGVy
-YXRpb24sIGFuZCB0aGUgaXNzdWUgZ29uZSBhZnRlciBhcHBsaWVkIHRoZSBwYXRjaC4NCg0KQlJz
-DQpXZWlqdW4NCg0KLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0K5Y+R5Lu25Lq6OiBHcmVnIEtIIFtt
-YWlsdG86Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmddIA0K5Y+R6YCB5pe26Ze0OiAyMDIx5bm0
-MTLmnIg55pelIDE1OjM5DQrmlLbku7bkuro6IHdpZ2luIHplbmcgPHdpZ2luLnplbmdAZGppLmNv
-bT4NCuaKhOmAgTogamlyaXNsYWJ5QGtlcm5lbC5vcmc7IGxpbnV4LXNlcmlhbEB2Z2VyLmtlcm5l
-bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCuS4u+mimDogUmU6IFtQQVRDSF0g
-c2VyaWFsOiA4MjUwOiBhZGQgbG9jayBmb3IgZG1hIHJ4DQoNCuOAkEVYVEVSTkFMIEVNQUlM44CR
-IERPIE5PVCBDTElDSyBhbnkgbGlua3Mgb3IgYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gbWFr
-ZSBzdXJlIGJvdGggdGhlIHNlbmRlciBhbmQgdGhlIGNvbnRlbnQgYXJlIHRydXN0d29ydGh5Lg0K
-DQoNCuOAkOWklumDqOmCruS7tuaPkOmGkuOAkeS7peS4i+mCruS7tuadpea6kOS6juWFrOWPuOWk
-lumDqO+8jOivt+WLv+eCueWHu+mTvuaOpeaIlumZhOS7tu+8jOmZpOmdnuaCqOehruiupOmCruS7
-tuWPkeS7tuS6uuWSjOWGheWuueWPr+S/oeOAgg0KDQoNCg0KT24gVGh1LCBEZWMgMDksIDIwMjEg
-YXQgMDM6MzM6MzlQTSArMDgwMCwgd2lnaW4uemVuZyB3cm90ZToNCj4gTmVlZCB0byBhZGQgbG9j
-ayB0byBwcm90ZWN0IHRoZSB0dHkgYnVmZmVyIGluIGRtYSByeCBoYW5kbGVyIGFuZCANCj4gc2Vy
-aWFsIGludGVycnVwdCBoYW5kbGVyLCB0aGVyZSBpcyBjaGFuY2UgdGhhdCBzZXJpYWwgaGFuZGxl
-ciBhbmQgZG1hIA0KPiBoYW5kbGVyIGV4ZWN1dGluZyBpbiBzYW1lIHRpbWUgaW4gbXVsdGkgY29y
-ZXMgYW5kIFJUIGVuYWJsZWQgc2NlbmFyaW8uDQoNCkFyZSB5b3Ugc3VyZT8gIFdoeSBoYXMgdGhp
-cyBub3QgYmVlbiBhIHByb2JsZW0gYmVmb3JlIG5vdz8gIFdoYXQgY2hhbmdlZD8NCg0KPiBTaWdu
-ZWQtb2ZmLWJ5OiB3aWdpbi56ZW5nIDx3aWdpbi56ZW5nQGRqaS5jb20+DQoNCkkgZG8gbm90IHRo
-aW5rIHlvdSBoYXZlIGEgIi4iIGluIHRoZSBuYW1lIHlvdSB1c2UgdG8gc2lnbiBkb2N1bWVudHMs
-IHJpZ2h0PyAgUGxlYXNlIHVzZSB5b3VyIHJlYWwgbmFtZSBoZXJlLg0KDQoNCj4gLS0tDQo+ICBk
-cml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX2RtYS5jICB8IDIgKysgIA0KPiBkcml2ZXJzL3R0
-eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYyB8IDMgKysrDQo+ICBpbmNsdWRlL2xpbnV4L3Nlcmlh
-bF9jb3JlLmggICAgICAgICB8IDEgKw0KPiAgMyBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMo
-KykNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfZG1hLmMg
-DQo+IGIvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9kbWEuYw0KPiBpbmRleCA4OTBmYTdk
-ZGFhN2YuLjU5MmI5OTA2ZTI3NiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgy
-NTAvODI1MF9kbWEuYw0KPiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX2RtYS5j
-DQo+IEBAIC00OCw2ICs0OCw3IEBAIHN0YXRpYyB2b2lkIF9fZG1hX3J4X2NvbXBsZXRlKHZvaWQg
-KnBhcmFtKQ0KPiAgICAgICAgIHN0cnVjdCBkbWFfdHhfc3RhdGUgICAgIHN0YXRlOw0KPiAgICAg
-ICAgIGludCAgICAgICAgICAgICAgICAgICAgIGNvdW50Ow0KPg0KPiArICAgICAgIHNwaW5fbG9j
-aygmcC0+cG9ydC5yeF9sb2NrKTsNCj4gICAgICAgICBkbWEtPnJ4X3J1bm5pbmcgPSAwOw0KPiAg
-ICAgICAgIGRtYWVuZ2luZV90eF9zdGF0dXMoZG1hLT5yeGNoYW4sIGRtYS0+cnhfY29va2llLCAm
-c3RhdGUpOw0KPg0KPiBAQCAtNTUsNiArNTYsNyBAQCBzdGF0aWMgdm9pZCBfX2RtYV9yeF9jb21w
-bGV0ZSh2b2lkICpwYXJhbSkNCj4NCj4gICAgICAgICB0dHlfaW5zZXJ0X2ZsaXBfc3RyaW5nKHR0
-eV9wb3J0LCBkbWEtPnJ4X2J1ZiwgY291bnQpOw0KPiAgICAgICAgIHAtPnBvcnQuaWNvdW50LnJ4
-ICs9IGNvdW50Ow0KPiArICAgICAgIHNwaW5fdW5sb2NrKCZwLT5wb3J0LnJ4X2xvY2spOw0KPg0K
-PiAgICAgICAgIHR0eV9mbGlwX2J1ZmZlcl9wdXNoKHR0eV9wb3J0KTsgIH0gZGlmZiAtLWdpdCAN
-Cj4gYS9kcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYyANCj4gYi9kcml2ZXJzL3R0
-eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYw0KPiBpbmRleCA1Nzc1Y2JmZjhmNmUuLjRkODY2MmRm
-OGQ2MSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMN
-Cj4gKysrIGIvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMNCj4gQEAgLTE3ODAs
-NiArMTc4MCw3IEBAIHVuc2lnbmVkIGNoYXIgc2VyaWFsODI1MF9yeF9jaGFycyhzdHJ1Y3QgdWFy
-dF84MjUwX3BvcnQgKnVwLCB1bnNpZ25lZCBjaGFyIGxzcikNCj4gICAgICAgICBzdHJ1Y3QgdWFy
-dF9wb3J0ICpwb3J0ID0gJnVwLT5wb3J0Ow0KPiAgICAgICAgIGludCBtYXhfY291bnQgPSAyNTY7
-DQo+DQo+ICsgICAgICAgc3Bpbl9sb2NrKCZwb3J0LT5yeF9sb2NrKTsNCj4gICAgICAgICBkbyB7
-DQo+ICAgICAgICAgICAgICAgICBzZXJpYWw4MjUwX3JlYWRfY2hhcih1cCwgbHNyKTsNCj4gICAg
-ICAgICAgICAgICAgIGlmICgtLW1heF9jb3VudCA9PSAwKQ0KPiBAQCAtMTc4Nyw2ICsxNzg4LDcg
-QEAgdW5zaWduZWQgY2hhciBzZXJpYWw4MjUwX3J4X2NoYXJzKHN0cnVjdCB1YXJ0XzgyNTBfcG9y
-dCAqdXAsIHVuc2lnbmVkIGNoYXIgbHNyKQ0KPiAgICAgICAgICAgICAgICAgbHNyID0gc2VyaWFs
-X2luKHVwLCBVQVJUX0xTUik7DQo+ICAgICAgICAgfSB3aGlsZSAobHNyICYgKFVBUlRfTFNSX0RS
-IHwgVUFSVF9MU1JfQkkpKTsNCj4NCj4gKyAgICAgICBzcGluX3VubG9jaygmcG9ydC0+cnhfbG9j
-ayk7DQo+ICAgICAgICAgdHR5X2ZsaXBfYnVmZmVyX3B1c2goJnBvcnQtPnN0YXRlLT5wb3J0KTsN
-Cj4gICAgICAgICByZXR1cm4gbHNyOw0KPiAgfQ0KPiBAQCAtMzI2Nyw2ICszMjY5LDcgQEAgdm9p
-ZCBzZXJpYWw4MjUwX2luaXRfcG9ydChzdHJ1Y3QgdWFydF84MjUwX3BvcnQgKnVwKQ0KPiAgICAg
-ICAgIHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQgPSAmdXAtPnBvcnQ7DQo+DQo+ICAgICAgICAgc3Bp
-bl9sb2NrX2luaXQoJnBvcnQtPmxvY2spOw0KPiArICAgICAgIHNwaW5fbG9ja19pbml0KCZwb3J0
-LT5yeF9sb2NrKTsNCj4gICAgICAgICBwb3J0LT5vcHMgPSAmc2VyaWFsODI1MF9wb3BzOw0KPiAg
-ICAgICAgIHBvcnQtPmhhc19zeXNycSA9IElTX0VOQUJMRUQoQ09ORklHX1NFUklBTF84MjUwX0NP
-TlNPTEUpOw0KPg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9zZXJpYWxfY29yZS5oIGIv
-aW5jbHVkZS9saW51eC9zZXJpYWxfY29yZS5oIA0KPiBpbmRleCBjNThjYzE0MmQyM2YuLjc3OTgw
-YjZmMGMyNyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9zZXJpYWxfY29yZS5oDQo+ICsr
-KyBiL2luY2x1ZGUvbGludXgvc2VyaWFsX2NvcmUuaA0KPiBAQCAtMTA1LDYgKzEwNSw3IEBAIHR5
-cGVkZWYgdW5zaWduZWQgaW50IF9fYml0d2lzZSB1cHN0YXRfdDsNCj4NCj4gIHN0cnVjdCB1YXJ0
-X3BvcnQgew0KPiAgICAgICAgIHNwaW5sb2NrX3QgICAgICAgICAgICAgIGxvY2s7ICAgICAgICAg
-ICAgICAgICAgIC8qIHBvcnQgbG9jayAqLw0KPiArICAgICAgIHNwaW5sb2NrX3QgICAgICAgICAg
-ICAgIHJ4X2xvY2s7ICAgICAgICAgICAgICAgIC8qIHBvcnQgcnggbG9jayAqLw0KDQpXaHkgY2Fu
-IHlvdSBub3QganVzdCB1c2UgJ2xvY2snIGhlcmUgaW5zdGVhZCBpZiB0aGlzIGlzIHJlYWxseSBh
-biBpc3N1ZT8NCg0KQW5kIGRvZXNuJ3QgdGhpcyBzbG93IHRoaW5ncyBkb3duPw0KDQp0aGFua3Ms
-DQoNCmdyZWcgay1oDQpUaGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0byBtYXkg
-Y29udGFpbiBwcml2YXRlLCBjb25maWRlbnRpYWwsIGFuZCBwcml2aWxlZ2VkIG1hdGVyaWFsIGZv
-ciB0aGUgc29sZSB1c2Ugb2YgdGhlIGludGVuZGVkIHJlY2lwaWVudC4gQW55IHJldmlldywgY29w
-eWluZywgb3IgZGlzdHJpYnV0aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFueSBhdHRhY2htZW50cyB0
-aGVyZXRvKSBieSBvdGhlcnMgaXMgc3RyaWN0bHkgcHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3Qg
-dGhlIGludGVuZGVkIHJlY2lwaWVudCwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBpbW1lZGlh
-dGVseSBhbmQgcGVybWFuZW50bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBhbmQgYW55IGNvcGllcyBv
-ZiB0aGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0by4NCg0K5q2k55S15a2Q6YKu
-5Lu25Y+K6ZmE5Lu25omA5YyF5ZCr5YaF5a655YW35pyJ5py65a+G5oCn77yM5LiU5LuF6ZmQ5LqO
-5o6l5pS25Lq65L2/55So44CC5pyq57uP5YWB6K6477yM56aB5q2i56ys5LiJ5Lq66ZiF6K+744CB
-5aSN5Yi25oiW5Lyg5pKt6K+l55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V5L+h5oGv44CC5aaC5p6c
-5oKo5LiN5bGe5LqO5Lul5LiK55S15a2Q6YKu5Lu255qE55uu5qCH5o6l5pS26ICF77yM6K+35oKo
-56uL5Y2z6YCa55+l5Y+R6YCB5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu5Lu25Y+K5YW255u45YWz
-55qE6ZmE5Lu244CCDQo=
+On Thu,  9 Dec 2021 06:05:51 +0000
+Sean Christopherson <seanjc@google.com> wrote:
+
+> Remove the now unused KVM_REQ_MMU_RELOAD, shift KVM_REQ_VM_DEAD into the
+> unoccupied space, and update vcpu-requests.rst, which was missing an
+> entry for KVM_REQ_VM_DEAD.  Switching KVM_REQ_VM_DEAD to entry '1' also
+> fixes the stale comment about bits 4-7 being reserved.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+
+> ---
+>  Documentation/virt/kvm/vcpu-requests.rst | 7 +++----
+>  include/linux/kvm_host.h                 | 3 +--
+>  2 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/vcpu-requests.rst b/Documentation/virt/kvm/vcpu-requests.rst
+> index ad2915ef7020..98b8f02b7a19 100644
+> --- a/Documentation/virt/kvm/vcpu-requests.rst
+> +++ b/Documentation/virt/kvm/vcpu-requests.rst
+> @@ -112,11 +112,10 @@ KVM_REQ_TLB_FLUSH
+>    choose to use the common kvm_flush_remote_tlbs() implementation will
+>    need to handle this VCPU request.
+>  
+> -KVM_REQ_MMU_RELOAD
+> +KVM_REQ_VM_DEAD
+>  
+> -  When shadow page tables are used and memory slots are removed it's
+> -  necessary to inform each VCPU to completely refresh the tables.  This
+> -  request is used for that.
+> +  This request informs all VCPUs that the VM is dead and unusable, e.g. due to
+> +  fatal error or because the VMs state has been intentionally destroyed.
+>  
+>  KVM_REQ_UNBLOCK
+>  
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 636e62c09964..7e444c4e406d 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -151,10 +151,9 @@ static inline bool is_error_page(struct page *page)
+>   * Bits 4-7 are reserved for more arch-independent bits.
+>   */
+>  #define KVM_REQ_TLB_FLUSH         (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+> -#define KVM_REQ_MMU_RELOAD        (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+> +#define KVM_REQ_VM_DEAD           (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>  #define KVM_REQ_UNBLOCK           2
+>  #define KVM_REQ_UNHALT            3
+> -#define KVM_REQ_VM_DEAD           (4 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>  #define KVM_REQUEST_ARCH_BASE     8
+>  
+>  #define KVM_ARCH_REQ_FLAGS(nr, flags) ({ \
+

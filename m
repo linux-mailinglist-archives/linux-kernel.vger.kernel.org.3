@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C424446E0D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981FA46E0D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhLICVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbhLICVD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:21:03 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA5CC061746;
-        Wed,  8 Dec 2021 18:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4aUXBeHiOjhDLfMcvdGJ+eMnajheA/MncO3IxA/riwA=; b=TOdkoaTePicaBkWsS3oqOnXuke
-        YtJpOJKcfFUmkV/aN7Emqe5RV5EYrASnfNnrGzV4qauKM/qn6YuVkDBCOJVxZvc8hzUqvSw9fhm+Y
-        FgZ/Jpu+LfNaBWw9fR6xtuZVTQM7TZP+I4VrhHsTJlO2RIIQ7f+gBhMqGcgZpd4ACuxvmnEE+x2ht
-        EX8Ad7OAn2af1XUsWgB953DAn5qlgkKuWHNI0dA3EL8dSCkQ8PirjUsbX53SFvIrBzLnLP1WllolY
-        halaa7GAtso0ZUTUkj5IJUifuKo9bh6RKqsqH6P8fM5ktHlJA2DrjtFMwQKfVkhIuUN+0/JFWaQ/R
-        KyKX93Zw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mv8zq-008xK1-2D; Thu, 09 Dec 2021 02:17:22 +0000
-Date:   Thu, 9 Dec 2021 02:17:22 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        william.kucharski@oracle.com,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        schmitzmic@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>, weixugc@google.com,
-        Greg Thelen <gthelen@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>
-Subject: Re: [PATCH 01/10] mm: page_ref_add_unless() does not trace 'u'
- argument
-Message-ID: <YbFnMnVxftnsxoF5@casper.infradead.org>
-References: <20211208203544.2297121-1-pasha.tatashin@soleen.com>
- <20211208203544.2297121-2-pasha.tatashin@soleen.com>
- <YbEbvwU81QKK/wUu@casper.infradead.org>
- <CA+CK2bCLkMoJXooxGw-z+-qz20YtE96JxmDYPYM8N0f0eFb52w@mail.gmail.com>
+        id S230049AbhLICZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:25:26 -0500
+Received: from mga11.intel.com ([192.55.52.93]:16958 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229909AbhLICZZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:25:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235511220"
+X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
+   d="scan'208";a="235511220"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:21:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
+   d="scan'208";a="516080276"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 08 Dec 2021 18:21:47 -0800
+Cc:     baolu.lu@linux.intel.com,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+ <1638884834-83028-3-git-send-email-jacob.jun.pan@linux.intel.com>
+ <16408193-c8bc-3046-b32f-9274bf0b415c@linux.intel.com>
+ <20211208104939.732fa5b9@jacob-builder>
+ <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <1b3ee13d-0148-1156-52ad-b96bca51cb6f@linux.intel.com>
+Date:   Thu, 9 Dec 2021 10:21:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CK2bCLkMoJXooxGw-z+-qz20YtE96JxmDYPYM8N0f0eFb52w@mail.gmail.com>
+In-Reply-To: <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 08:25:22PM -0500, Pasha Tatashin wrote:
-> On Wed, Dec 8, 2021 at 3:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Wed, Dec 08, 2021 at 08:35:35PM +0000, Pasha Tatashin wrote:
-> > > In other page_ref_* functions all arguments and returns are traced, but
-> > > in page_ref_add_unless the 'u' argument which stands for unless boolean
-> > > is not traced. However, what is more confusing is that in the tracing
-> > > routine:
-> > >       __page_ref_mod_unless(struct page *page, int v, int u);
-> > >
-> > > The 'u' argument present, but instead a return value is passed into
-> > > this argument.
-> > >
-> > > Add a new template specific for page_ref_add_unless(), and trace all
-> > > arguments and the return value.
-> >
-> > The special casing of '1' for device pages is going away, so NAK
-> > to this user-visible change.
+On 12/9/21 9:56 AM, Tian, Kevin wrote:
+>> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+>> Sent: Thursday, December 9, 2021 2:50 AM
+>>
+>>> Can a device issue DMA requests with PASID even there's no system
+>> IOMMU
+>>> or the system IOMMU is disabled?
+>>>
+>> Good point.
+>> If IOMMU is not enabled, device cannot issue DMA requests with PASID. This
+>> API will not be available. Forgot to add dummy functions to the header.
+>>
 > 
-> I can drop this patch, as it really intended to fix existing oddities
-> and missing info. However, I do not really understand your NAK reason.
-> Can you please explain about the special casing of "1" for device
-> pages?
+> PASID is a PCI thing, not defined by IOMMU.
+> 
+> I think the key is physically if IOMMU is disabled, how will root complex
+> handle a PCI memory request including a PASID TLP prefix? Does it block
+> such request due to no IOMMU to consume PASID or simply ignore PASID
+> and continue routing the request to the memory controller?
+> 
+> If block, then having an iommu interface makes sense.
+> 
+> If ignore, possibly a DMA API call makes more sense instead, implying that
+> this extension can be used even when iommu is disabled.
+> 
+> I think that is what Baolu wants to point out.
 
-$ git grep page_ref_add_unless
-include/linux/mm.h:     return page_ref_add_unless(page, 1, 0);
-include/linux/page_ref.h:static inline bool page_ref_add_unless(struct page *page, int nr, int u)
-include/linux/page_ref.h:       return page_ref_add_unless(&folio->page, nr, u);
-mm/memcontrol.c:                if (!page_ref_add_unless(page, 1, 1))
+Yes, exactly. Imagining in the VM guest environment, do we require a
+vIOMMU for this functionality? vIOMMU is not performance friendly if we
+put aside the security considerations.
 
-'u' is always 0, except for the caller in mm/memcontrol.c:
-
-        if (is_device_private_entry(ent)) {
-                page = pfn_swap_entry_to_page(ent);
-                /*
-                 * MEMORY_DEVICE_PRIVATE means ZONE_DEVICE page and which have
-                 * a refcount of 1 when free (unlike normal page)
-                 */
-                if (!page_ref_add_unless(page, 1, 1))
-                        return NULL;
-                return page;
-        }
-
-That special casing of ZONE_DEVICE pages is being fixed, so 'u' will
-soon always be 0, and I'm sure we'll delete it as an argument.  So
-there's no point in tracing what it 'used to be'.
+Best regards,
+baolu

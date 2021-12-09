@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9280146E911
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE37D46E917
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237847AbhLIN1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbhLIN1L (ORCPT
+        id S237920AbhLIN1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:27:36 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18370 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237913AbhLIN1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:27:11 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1529AC061746;
-        Thu,  9 Dec 2021 05:23:38 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id o13so9621900wrs.12;
-        Thu, 09 Dec 2021 05:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sWAp2ggkhQGw0U/SSX5e9v4KP4A6WQ1KHQZ7jWAyzYA=;
-        b=qMzVKbz2hpe+Jx+SmcNppNi41tuBVGZZlzHnWuXRUgaamvgT9Ewi1u0oxvOcXhnhIQ
-         vel6H1zm7lld/gQZ/lmcr0WEwFjFK33tc52crhxGVN7mXu6FFfAOzg7UakeIppcJwSzp
-         DgTObFEfUcaW70Q35zpB52hGDfYkTOVpp/+EADy6xeMWwBjFPF4s+p29GlRIfZd9ZGWY
-         yIvARARgoubV5pLHNFJE48pD4jA2ZtpZrRBck8uZ7z523jRLrd0dl7ayHyBzwxyIFXp9
-         Fsb8STGeygq+L5YL9QV9WDdzwosU7MMHdC/IR8nTB3MU5LqgCPgCP+oWxYb4DdOQsv6w
-         SbtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sWAp2ggkhQGw0U/SSX5e9v4KP4A6WQ1KHQZ7jWAyzYA=;
-        b=Ksoi/tf1S/PrMAeR6dT6Uoc151pEg83usJ9QwA3PeE+sgqdlaMOqaVRPXzmkoYDf48
-         H1C5eiG4YgminKzQwQBjoPCqKl7XSXZJdO8K0qp2iPLOi5Ix2P5C/mAdMHg10GN7QmX1
-         pBa2Nd2/zxep226JAOGHU8NDv3k9iZf7EtKdSIeMdR5xaS2YfXCGQgMkG9MMql9c4s1q
-         ISFFJ7dxR5IKOV6iwmi35N/ASw11pgSt1YReXA830FuBVGFalbUcC7eFsarBss50Yns2
-         sfsgOoHbrpT0sMVPzjvLiaxigicgqj57EvG7pNUuLe5HdwP+2RHZ/daqrqDXP8o9lsu5
-         1fQg==
-X-Gm-Message-State: AOAM530xr7kzaBaMEC2TMnWcbGL9W+MHoZBpU7LXlULGVWeg4XLxG0ya
-        tabz7h7nrGkVSxcrBr3/cRU=
-X-Google-Smtp-Source: ABdhPJwDaA96JIa79qhS1/j/8JpvUkiuG8tA7mUD0LKctJqfu4Her35jH0h8uoKjPugLsUVE8IPBUQ==
-X-Received: by 2002:a5d:6d8b:: with SMTP id l11mr6260737wrs.458.1639056216551;
-        Thu, 09 Dec 2021 05:23:36 -0800 (PST)
-Received: from lpc (bzq-79-179-1-77.red.bezeqint.net. [79.179.1.77])
-        by smtp.gmail.com with ESMTPSA id p13sm8603891wmi.0.2021.12.09.05.23.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 05:23:36 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:23:32 +0200
-From:   Shachar Sharon <synarete@gmail.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, quic_stummala@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_sayalil@quicinc.com,
-        quic_aiquny@quicinc.com, quic_zljing@quicinc.com,
-        quic_blong@quicinc.com, quic_richardp@quicinc.com,
-        quic_cdevired@quicinc.com,
-        Pradeep P V K <quic_pragalla@quicinc.com>
-Subject: Re: [PATCH V1] fuse: give wakeup hints to the scheduler
-Message-ID: <YbIDVMouwlHyjZT+@lpc>
-References: <CAJfpegvDfc9JUo6VASRyYXzj1=j3t6oU9W3QGWO08vhfWHf-UA@mail.gmail.com>
- <Ya8ycLODlcvLx4xB@hirez.programming.kicks-ass.net>
- <CAJfpegsVg2K0CvrPvXGSu=Jz_R3VZZOy49Jw51rThQUJ1_9e6g@mail.gmail.com>
- <Ya86coKm4RuQDmVS@hirez.programming.kicks-ass.net>
- <CAJfpegumZ1RQLBCtbrOiOAT9ygDtDThpySwb8yCpWGBu1fRQmw@mail.gmail.com>
- <Ya9ljdrOkhBhhnJX@hirez.programming.kicks-ass.net>
- <Ya9m0ME1pom49b+D@hirez.programming.kicks-ass.net>
- <CAJfpegt2x1ztuzh0niY7fgx1UKxDGsAkJbS0wVPp5awxwyhRpA@mail.gmail.com>
- <Ya9uxHGo7UJikEte@hirez.programming.kicks-ass.net>
- <CAJfpegupPZMG2dv27ZkpQwTeUw-WcaRZbYXSH-i=+Rt=T+UaDg@mail.gmail.com>
+        Thu, 9 Dec 2021 08:27:34 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9CTIYF001755;
+        Thu, 9 Dec 2021 13:23:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=Peb/1+zlJfUFXCByvdrVxxZHXcbEVfe/h5BLXGK8cfU=;
+ b=TZu4JI3e+xJjXvuO6TdMssLpPULlJfSh8gKiMp9lj2jqu8/n6VVwXlRABqo8mUdXnKkM
+ FvS9YAizUPouMCUS1UcKMNs1PTjHWQZ8loPFJoMJHovh+QOfal60A0pUVvndpBCUa8i0
+ 0ApzNGyJIaF35dVUzyl4gJG3TobY5xZoeWOAmwhsn+WVzdClwrq8hM4dns3KCrBzq1xO
+ aFqkrLQpM/ZAgf/RjmeJdoNq6Ea6P44eONkDUzgM9Qq2YZdt3stFX82yrQ1CKywedwQG
+ eLUml95hQ9b97uNGGj1ofIvz8cm87gZA8QzPpruGVI/mB7YYVjP7SjSbtBqypdLYLw04 /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:45 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9CV3pe009524;
+        Thu, 9 Dec 2021 13:23:44 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:44 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9DIDgO031552;
+        Thu, 9 Dec 2021 13:23:43 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04dal.us.ibm.com with ESMTP id 3cqyyc6u9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:43 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9DNfBX43843924
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 13:23:41 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2208478068;
+        Thu,  9 Dec 2021 13:23:41 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CD6978067;
+        Thu,  9 Dec 2021 13:23:37 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 13:23:36 +0000 (GMT)
+Message-ID: <e285cfdc3f6380c7ca5f6e22378ba8343bedf622.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Denis Semakin <denis.semakin@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers@lists.linux.dev" <containers@lists.linux.dev>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "mpeters@redhat.com" <mpeters@redhat.com>,
+        "lhinds@redhat.com" <lhinds@redhat.com>,
+        "lsturman@redhat.com" <lsturman@redhat.com>,
+        "puiterwi@redhat.com" <puiterwi@redhat.com>,
+        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "rgb@redhat.com" <rgb@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>
+Date:   Thu, 09 Dec 2021 08:23:35 -0500
+In-Reply-To: <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-15-stefanb@linux.ibm.com>
+         <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R8r8z7DhB-xEleZFpzp9M3XvfZJ9a0Ll
+X-Proofpoint-ORIG-GUID: u46tJdfnkoEbFj8j50kxjEePKVoTFNlO
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJfpegupPZMG2dv27ZkpQwTeUw-WcaRZbYXSH-i=+Rt=T+UaDg@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_04,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 clxscore=1015 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112090073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:46:06PM +0100, Miklos Szeredi wrote:
->On Tue, 7 Dec 2021 at 15:25, Peter Zijlstra <peterz@infradead.org> wrote:
->
->> FIFO means the thread used longest ago gets to go first. If your threads
->> are an idempotent workers, FIFO might not be the best option. But I'm
->> not much familiar with the FUSE code or it's design.
->
->Okay.  Did some experiments, but couldn't see
->wake_up_interruptible_sync() actually migrate the woken task, the
->behavior was identical to wake_up_interruptible().   I guess this is
->the "less" part in "more or less", but it would be good to see more
->clearly what is happening.
->
->I'll try to describe the design to give more context:
->
->- FUSE is similar to network filesystem in that there's a server and a
->client, except both are on the same host. The client lives in the
->kernel and the server lives in userspace.
->
->- Communication between them is done with read and write syscalls.
->
->- Usually the server has multiple threads.  When a server thread is
->idle it is blocking in sys_read -> ... -> fuse_dev_do_read ->
->wait_event_interruptible_exclusive(fiq->waitq,...).
->
->- When a filesystem request comes in (e.g. mkdir) a request is
->constructed, put on the input queue (fiq->pending) and fiq->waitq
->woken up.  After this the client task goes to sleep in
->request_wait_answer -> wait_event_interruptible(req->waitq, ...).
->
->- The server thread takes the request off the pending list, copies the
->data to the userspace buffer and puts the request on the processing
->list.
->
->- The userspace part interprets the read buffer, performs the fs
->operation, and writes the reply.
->
->- During the write(2) the reply is now copied to the kernel and the
->request is looked up on the processing list.  The client is woken up
->through req->waitq.  After returning from write(2) the server thread
->again calls read(2) to get the next request.
->
->- After being woken up, the client task now returns with the result of
->the operation.
->
->- The above example is for synchronous requests.  There are async
->requests like readahead or buffered writes.  In that case the client
->does not call request_wait_answer() but returns immediately and the
->result is processed from the server thread using a callback function
->(req->args->end()).
->
->From a scheduling prospective it would be ideal if the server thread's
->CPU was matched to the client thread's CPU, since that would make the
->data stay local, and for synchronous requests a _sync type wakeup is
->perfect, since the client goes to sleep just as the server starts
->processing and vice versa.
->
->Always migrating the woken server thread to the client's CPU is not
->going to be good, since this would result in too many migrations and
->would loose locality for the server's stack.
->
->Another idea is to add per-cpu input queues.  The client then would
->queue the request on the pending queue corresponding to its CPU and
->wake up the server thread blocked on that queue.
->
->What happens though if this particular queue has no servers?  Or if a
->queue is starved because it's served by less threads than another?
->Handing these cases seems really complicated.
->
-Per-CPU input queue is a great idea. It was a key concept in ZUFS[1]
-design. However, describing it as complicated would be an understatement,
-to say the least.
+On Thu, 2021-12-09 at 07:22 +0000, Denis Semakin wrote:
+> Hi. 
+> My question won't be about capabilities. I'm wondering how IMA-ns
+> which is associated with USER-ns and is created during USER-ns
+> creation would be used by some namespaces orchestration systems, e.g.
+> Kubernetes?
 
->Is there a simper way?
-Here is an idea: hint the userspace server on which cpu to execute the
-_next_ request via the (unused) fuse_in_header.padding field in current
-request. Naturally, this method would be effective only for cases where
-queue-size > 1.
+Orchestration systems that don't adopt the user namespace can't really
+run containers requiring admin correctly without giving them root minus
+some capabilities, which is rather unsafe, so the expectation is that
+they'll all figure it out eventually for security reasons.
 
->
->Thanks,
->Miklos
+> .. It seems that it can be run without any user namespaces... 
+> Their community just discuss this opportunity to support User
+> namespaces. (see https://github.com/kubernetes/enhancements/pull/2101
+> ) Looks like currently IMA-ns will not be applicable for Kubernetes.
 
-[1] https://lwn.net/Articles/795996/
+Well, lets just say it adds one more reason to get kubernetes to
+finally run rootless privileged containers correctly ...
+
+James
+
 

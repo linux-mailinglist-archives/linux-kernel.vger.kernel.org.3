@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B18C46E9C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A5146E9C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbhLIOUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:20:34 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:61662 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238495AbhLIOUY (ORCPT
+        id S232981AbhLIOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:20:26 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:5079 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238488AbhLIOUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 09:20:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -17,24 +17,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1639059411; x=1670595411;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=xqJAJ9D7+IA8ZR9lL4oi9H+spKYV1MaDmW9XUuI/wcI=;
-  b=zU+i/QhP63opHPDuE9hxautDSXmOcW+DPeY1mG25YbfKs2OHLuWjJp2W
-   91FfBM9l3FW9QVD+eu6kZrVfpKjBU7FvHMND0qkZoW/FSfQvAb7iarN6Y
-   sC9R9k7SL8iOP3eSRfll3kgUrCUzxh+duUdQ968MIBNDfxtBnJ3Wd3xO0
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Dec 2021 06:16:51 -0800
+  bh=JFDQNbUNGiv4D/mPwv92UusMXXIWIjon/rOD7iJlQsY=;
+  b=MPJE9ewf9iLi+vbqI48caOOZykP6HjfI/To+870Yxt3SxbMaP62QDH1W
+   J6rTEbwCPsUOmmW5MZGNEKBsQV/o7WHo9OcTTzfOkNTwatCvUueRXiEZD
+   tRcBy8+BCF06sls0dI1BJYUnxlFOzl9c+veWhKPXdkfvPtt/S5/VkSSJ1
+   E=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Dec 2021 06:16:50 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:16:46 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:16:50 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:16:45 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:50 -0800
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:16:41 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:46 -0800
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -51,9 +51,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Tao Zhang <quic_taozha@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v2 4/9] coresight-tpdm: Add DSB dataset support
-Date:   Thu, 9 Dec 2021 22:15:38 +0800
-Message-ID: <20211209141543.21314-5-quic_jinlmao@quicinc.com>
+Subject: [PATCH v2 5/9] coresight-tpdm: Add integration test support
+Date:   Thu, 9 Dec 2021 22:15:39 +0800
+Message-ID: <20211209141543.21314-6-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
 References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
@@ -66,164 +66,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TPDM serves as data collection component for various dataset types.
-DSB(Discrete Single Bit) is one of the dataset types. DSB subunit
-can be enabled for data collection by writing 1 to the first bit of
-DSB_CR register. This change is to add enable/disable function for
-DSB dataset by writing DSB_CR register.
+Integration test for tpdm can help to generate the data for
+verification of the topology during TPDM software bring up.
+
+Sample:
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm1/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm1/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm1/integration_test
+cat /dev/tmc_etf0 > /data/etf-tpdm1.bin
 
 Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- drivers/hwtracing/coresight/coresight-tpdm.c | 56 ++++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpdm.h | 23 ++++++++
- 2 files changed, 79 insertions(+)
+ drivers/hwtracing/coresight/Kconfig          |  9 ++++
+ drivers/hwtracing/coresight/coresight-tpdm.c | 54 ++++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h |  8 +++
+ 3 files changed, 71 insertions(+)
 
+diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+index 5c506a1cd08f..60248fef4089 100644
+--- a/drivers/hwtracing/coresight/Kconfig
++++ b/drivers/hwtracing/coresight/Kconfig
+@@ -214,4 +214,13 @@ config CORESIGHT_TPDM
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called coresight-tpdm.
+ 
++config CORESIGHT_TPDM_INTEGRATION_TEST
++	bool "Enable CoreSight Integration Test For TPDM"
++	depends on CORESIGHT_TPDM
++	help
++	  This option adds support for the CoreSight integration test on this
++	  devie. Coresight architecture provides integration control modes of
++	  operation to facilitate integration testing and software bringup
++	  and/or to instrument topology discovery. The TPDM utilizes integration
++	  mode to accomplish integration testing and software bringup.
+ endif
 diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-index f494cef4fb24..c0dd216f70eb 100644
+index c0dd216f70eb..891c3efaf30d 100644
 --- a/drivers/hwtracing/coresight/coresight-tpdm.c
 +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -20,6 +20,27 @@
- 
- DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
- 
-+static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
-+{
-+	u32 val;
-+
-+	/* Set the enable bit of DSB control register to 1 */
-+	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-+	val = val | BIT(0);
-+	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
-+}
-+
-+static void _tpdm_enable(struct tpdm_drvdata *drvdata)
-+{
-+	CS_UNLOCK(drvdata->base);
-+
-+	/* Check if DSB datasets is present for TPDM. */
-+	if (test_bit(TPDM_DS_DSB, drvdata->datasets))
-+		tpdm_enable_dsb(drvdata);
-+
-+	CS_LOCK(drvdata->base);
-+}
-+
- static int tpdm_enable(struct coresight_device *csdev,
- 		       struct perf_event *event, u32 mode)
- {
-@@ -31,6 +52,7 @@ static int tpdm_enable(struct coresight_device *csdev,
- 		return -EBUSY;
- 	}
- 
-+	_tpdm_enable(drvdata);
- 	drvdata->enable = true;
- 	mutex_unlock(&drvdata->lock);
- 
-@@ -38,6 +60,28 @@ static int tpdm_enable(struct coresight_device *csdev,
- 	return 0;
+@@ -135,6 +135,59 @@ static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+ 	CS_LOCK(drvdata->base);
  }
  
-+static void tpdm_disable_dsb(struct tpdm_drvdata *drvdata)
++#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
++static ssize_t integration_test_store(struct device *dev,
++					  struct device_attribute *attr,
++					  const char *buf,
++					  size_t size)
 +{
-+	u32 val;
++	int i, ret = 0;
++	unsigned long val;
++	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
 +
-+	/* Set the enable bit of DSB control register to 0 */
-+	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-+	val = val & ~BIT(0);
-+	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
-+}
++	ret = kstrtoul(buf, 10, &val);
++	if (ret)
++		return ret;
 +
-+static void _tpdm_disable(struct tpdm_drvdata *drvdata)
-+{
++	if (val != 1 && val != 2)
++		return -EINVAL;
++
++	if (!drvdata->enable)
++		return -EINVAL;
++
++	if (val == 1)
++		val = ATBCNTRL_VAL_64;
++	else
++		val = ATBCNTRL_VAL_32;
 +	CS_UNLOCK(drvdata->base);
++	writel_relaxed(0x1, drvdata->base + TPDM_ITCNTRL);
 +
-+	/* Check if DSB datasets is present for TPDM. */
-+	if (test_bit(TPDM_DS_DSB, drvdata->datasets))
-+		tpdm_disable_dsb(drvdata);
++	for (i = 1; i < 5; i++)
++		writel_relaxed(val, drvdata->base + TPDM_ITATBCNTRL);
 +
++	writel_relaxed(0, drvdata->base + TPDM_ITCNTRL);
 +	CS_LOCK(drvdata->base);
-+
++	return size;
 +}
++static DEVICE_ATTR_WO(integration_test);
++#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
 +
- static void tpdm_disable(struct coresight_device *csdev,
- 			 struct perf_event *event)
- {
-@@ -49,6 +93,7 @@ static void tpdm_disable(struct coresight_device *csdev,
- 		return;
- 	}
- 
-+	_tpdm_disable(drvdata);
- 	drvdata->enable = false;
- 	mutex_unlock(&drvdata->lock);
- 
-@@ -75,8 +120,19 @@ static const struct coresight_ops tpdm_cs_ops = {
- static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
- {
- 	static int traceid = TPDM_TRACE_ID_START;
-+	int i;
-+	u32 pidr;
- 
-+	CS_UNLOCK(drvdata->base);
- 	drvdata->traceid = traceid++;
++static struct attribute *tpdm_attrs[] = {
++#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
++	&dev_attr_integration_test.attr,
++#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
++	NULL,
++};
 +
-+	/*  Get the datasets present on the TPDM. */
-+	pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
-+	for (i = 0; i < TPDM_DATASETS; i++) {
-+		if (pidr & BIT(i))
-+			__set_bit(i, drvdata->datasets);
-+	}
-+	CS_LOCK(drvdata->base);
- }
- 
++static struct attribute_group tpdm_attr_grp = {
++	.attrs = tpdm_attrs,
++};
++
++static const struct attribute_group *tpdm_attr_grps[] = {
++	&tpdm_attr_grp,
++	NULL,
++};
++
  static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+ {
+ 	struct device *dev = &adev->dev;
+@@ -167,6 +220,7 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+ 	desc.ops = &tpdm_cs_ops;
+ 	desc.pdata = adev->dev.platform_data;
+ 	desc.dev = &adev->dev;
++	desc.groups = tpdm_attr_grps;
+ 	drvdata->csdev = coresight_register(&desc);
+ 	if (IS_ERR(drvdata->csdev))
+ 		return PTR_ERR(drvdata->csdev);
 diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-index 980ae90ff1c8..ba99c20e12bb 100644
+index ba99c20e12bb..9929a26f0f0b 100644
 --- a/drivers/hwtracing/coresight/coresight-tpdm.h
 +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-@@ -8,6 +8,27 @@
+@@ -14,6 +14,14 @@
+ /* DSB Subunit Registers */
+ #define TPDM_DSB_CR		(0x780)
  
- /* Default value of the traceid */
- #define TPDM_TRACE_ID_START 128
-+/* The max number of the datasets that TPDM supports */
-+#define TPDM_DATASETS       7
++/* TPDM integration test registers */
++#define TPDM_ITATBCNTRL		(0xEF0)
++#define TPDM_ITCNTRL		(0xF00)
 +
-+/* DSB Subunit Registers */
-+#define TPDM_DSB_CR		(0x780)
++/* Register value for integration test */
++#define ATBCNTRL_VAL_32		0xC00F1409
++#define ATBCNTRL_VAL_64		0xC01F1409
 +
-+/**
-+ * This enum is for PERIPHIDR0 register of TPDM.
-+ * The fields [6:0] of PERIPHIDR0 are used to determine what
-+ * interfaces and subunits are present on a given TPDM.
-+ *
-+ * PERIPHIDR0[0] : Fix to 1 if ImplDef subunit present, else 0.
-+ *                 No TPDM supports ImplDef subunit now. But
-+ *                 the first bit of PERIPHIDR0 is for ImplDef
-+ *                 subunit for initial design.
-+ * PERIPHIDR0[1] : Fix to 1 if DSB subunit present, else 0.
-+ */
-+enum tpdm_dataset {
-+	TPDM_DS_IMPLDEF,
-+	TPDM_DS_DSB,
-+};
- 
  /**
-  * struct tpdm_drvdata - specifics associated to an TPDM component
-@@ -16,6 +37,7 @@
-  * @csdev:      component vitals needed by the framework.
-  * @lock:       lock for the enable value.
-  * @enable:     enable status of the component.
-+ * @datasets:   The datasets types present of the TPDM.
-  * @traceid:    value of the current ID for this component.
-  */
- 
-@@ -25,6 +47,7 @@ struct tpdm_drvdata {
- 	struct coresight_device	*csdev;
- 	struct mutex		lock;
- 	bool			enable;
-+	DECLARE_BITMAP(datasets, TPDM_DATASETS);
- 	int			traceid;
- };
- 
+  * This enum is for PERIPHIDR0 register of TPDM.
+  * The fields [6:0] of PERIPHIDR0 are used to determine what
 -- 
 2.17.1
 

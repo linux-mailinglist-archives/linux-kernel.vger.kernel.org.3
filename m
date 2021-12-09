@@ -2,184 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD8A46E233
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E75F46E234
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbhLIF5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S232584AbhLIF5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhLIF5J (ORCPT
+        with ESMTP id S232570AbhLIF5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:57:09 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBD6C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:53:36 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso5151023otj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:53:36 -0800 (PST)
+        Thu, 9 Dec 2021 00:57:55 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515ADC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:54:22 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id l64so4117881pgl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:54:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n17CfDjkfVu1x0A2zg/wbnx62qbr1TlYzDoDW7maqgM=;
-        b=BGxKtZWLm9X8tukgLULrnrgzzuYmOH3Lm3z4cFC/ithx5Do/8r6DEv/dZGvCIVDzUa
-         pMAiZ+u1J8JyUrIQVVxFDQO/vSlGNxHRd6JPkqE0a9N5VG9d0d2D7Lez+QVWffs1FB9f
-         cd+4gWsBTa4MRDnf8UYWcMYP/Jmrp30+Cg60J1VjFEa4SKfYTtYLq0Fr42LTOlLdI7Lj
-         ZTzFU0MbgGJmf+30j9R2FpXPSPD0Vre59NJgNjcVGWtFGe9p2ogsU0M9M1c5/4fgbGVU
-         +zBLnvwkGMIE05TkimwOGZcARqpGumwAHaWOxA92Qy71YO6olYgYrAdPYUf4hb72fZMr
-         1+ag==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VrQSge7TRWDKkJ/NvI+IySV465glHv+ZocrZlO0KKLc=;
+        b=GwxsWc9TXhDApOFEL/JXhjsV9zSbjJeT0oLyTkyB6ZihumuUGdydtg8KBz0U/BPemU
+         PjDBnSYoxW96WhtWCFQwAdCivrglko3agPb3OzbCtWAbWnKytB1JimtDtnP6iU+ujBL+
+         LTT9w4xm2Xv0YXmzAgJZkFs6RDlsEZ3C7BHoc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n17CfDjkfVu1x0A2zg/wbnx62qbr1TlYzDoDW7maqgM=;
-        b=BeAB3jssmLnL+u02P7ewHri/6hpkNPSSuJQbfSQ05FAvJy+4ErsnuF6fRFtiGU4dqM
-         +Nuh7sy303nDSHxPgcESScQOtE46D773vlnYjMdLdi/QMGGauHx9S73ti+NefI5Vhzf6
-         l4Px0ZPAqYBm2niESVxUJHn5sl2Yivn4qxDbHP4H5cLl8zP26H3cIoORnGMRNTVm1Xzo
-         MokNqf9n8PkR1VtXbP2AgqIUGfT4m18IVU2JdM8q2Ad9CftEETFst5Od/o3amn2s5Ov7
-         BymdNsxCssscOx/1lhuk7u1knsxZrJgKJ+utU3LwBK1Io5PAFX67yWlWxo/Tp4aDJB4n
-         +kAQ==
-X-Gm-Message-State: AOAM533wQB3kci6wTpPNEF/xGlrB85bGiOK2QfoBr1z/0WDp9vwOEZZa
-        F745phHBKtDkRMNun4ytgfiRl7C7bd1NK/80AKBhFlLy9O/F4w==
-X-Google-Smtp-Source: ABdhPJyafxz4N1Yt1dER7ZAjF/Xyv4Biy1XVnYWlMNPW6NSIkD6ZBaHO6FfdJtHuCY1sHUNKXyuGzxG+Xb+JJT285QI=
-X-Received: by 2002:a9d:ed6:: with SMTP id 80mr3678667otj.35.1639029216036;
- Wed, 08 Dec 2021 21:53:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VrQSge7TRWDKkJ/NvI+IySV465glHv+ZocrZlO0KKLc=;
+        b=6diU1l7cdpnFczFGiCGip3jMQWPnrnEUigk485wNdXbu2zZcg6cYmp+ZxrkyW0HGA0
+         JbBWYqgFNrqfcJBaQhdHw2wPkGdoxDubPT7wPtb/FaLwHlK+0W2TW3/fCctUq/nLOw4M
+         8tvywI8Xqiz1xZboWb85t3Lx5Bgew+hx4ubD8HVOU4g2cvmb8rMkCe2VmvpMVTU37pPt
+         050Miq30apa5FJbO6yXoux10ar6HhZyPCN+2YXSve7tljgPa1YDosLW1YFciRtr8iA4W
+         hz2s1IzPjLjBoSWBdnCD/RfnYRjEAa088SwvI2KgXLKLl64owk6fy//sDsTBUoYZvpuc
+         ddPA==
+X-Gm-Message-State: AOAM532XxXMAlWo3LdE1wwJriLVGCjTvk/r9VAkIf5nlJXRe2SF+ZgzL
+        5Nu7IVwd65ztf58Ol6ICJb0epC0HGBhhDQ==
+X-Google-Smtp-Source: ABdhPJw8fMNaqi867+Q0o7P8PwLjqLLz+a8UL0QwyJXwzAIkjkGfkpnsGWaw+UK72GiByB5F9hC9CQ==
+X-Received: by 2002:a63:2212:: with SMTP id i18mr32303736pgi.586.1639029261855;
+        Wed, 08 Dec 2021 21:54:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i185sm5416946pfg.80.2021.12.08.21.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 21:54:21 -0800 (PST)
+Date:   Wed, 8 Dec 2021 21:54:20 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
+ register
+Message-ID: <202112082143.3BE8ABAE@keescook>
+References: <20211203084354.3105253-1-keescook@chromium.org>
+ <87o85r4a4f.fsf@intel.com>
 MIME-Version: 1.0
-References: <20211208191642.3792819-1-pgonda@google.com> <20211208191642.3792819-4-pgonda@google.com>
-In-Reply-To: <20211208191642.3792819-4-pgonda@google.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Wed, 8 Dec 2021 21:53:25 -0800
-Message-ID: <CAA03e5H6TxcL6WVYcBs5aX5zHLB=sCYcrBLggAtmLZADn_BHyA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] selftests: sev_migrate_tests: Add mirror command tests
-To:     Peter Gonda <pgonda@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o85r4a4f.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 11:16 AM Peter Gonda <pgonda@google.com> wrote:
->
-> Add tests to confirm mirror vms can only run correct subset of commands.
->
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  .../selftests/kvm/x86_64/sev_migrate_tests.c  | 55 +++++++++++++++++--
->  1 file changed, 51 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> index 4bb960ca6486..80056bbbb003 100644
-> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> @@ -21,7 +21,7 @@
->  #define NR_LOCK_TESTING_THREADS 3
->  #define NR_LOCK_TESTING_ITERATIONS 10000
->
-> -static void sev_ioctl(int vm_fd, int cmd_id, void *data)
-> +static int __sev_ioctl(int vm_fd, int cmd_id, void *data, __u32 *fw_error)
->  {
->         struct kvm_sev_cmd cmd = {
->                 .id = cmd_id,
-> @@ -30,11 +30,20 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
->         };
->         int ret;
->
-> -
->         ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
-> -       TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
-> +       *fw_error = cmd.error;
-> +       return ret;
-> +}
-> +
-> +static void sev_ioctl(int vm_fd, int cmd_id, void *data)
-> +{
-> +       int ret;
-> +       __u32 fw_error;
-> +
-> +       ret = __sev_ioctl(vm_fd, cmd_id, data, &fw_error);
-> +       TEST_ASSERT(ret == 0 && fw_error == SEV_RET_SUCCESS,
->                     "%d failed: return code: %d, errno: %d, fw error: %d",
-> -                   cmd_id, ret, errno, cmd.error);
-> +                   cmd_id, ret, errno, fw_error);
->  }
->
->  static struct kvm_vm *sev_vm_create(bool es)
-> @@ -226,6 +235,42 @@ static void sev_mirror_create(int dst_fd, int src_fd)
->         TEST_ASSERT(!ret, "Copying context failed, ret: %d, errno: %d\n", ret, errno);
->  }
->
-> +static void verify_mirror_allowed_cmds(int vm_fd)
-> +{
-> +       struct kvm_sev_guest_status status;
-> +
-> +       for (int cmd_id = KVM_SEV_INIT; cmd_id < KVM_SEV_NR_MAX; ++cmd_id) {
-> +               int ret;
-> +               __u32 fw_error;
-> +
-> +               /*
-> +                * These commands are allowed for mirror VMs, all others are
-> +                * not.
-> +                */
-> +               switch (cmd_id) {
-> +               case KVM_SEV_LAUNCH_UPDATE_VMSA:
-> +               case KVM_SEV_GUEST_STATUS:
-> +               case KVM_SEV_DBG_DECRYPT:
-> +               case KVM_SEV_DBG_ENCRYPT:
-> +                       continue;
-> +               default:
-> +                       break;
-> +               }
-> +
-> +               /*
-> +                * These commands should be disallowed before the data
-> +                * parameter is examined so NULL is OK here.
-> +                */
-> +               ret = __sev_ioctl(vm_fd, cmd_id, NULL, &fw_error);
-> +               TEST_ASSERT(
-> +                       ret == -1 && errno == EINVAL,
-> +                       "Should not be able call command: %d. ret: %d, errno: %d\n",
-> +                       cmd_id, ret, errno);
-> +       }
-> +
-> +       sev_ioctl(vm_fd, KVM_SEV_GUEST_STATUS, &status);
+On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
+> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+> > The link_status array was not large enough to read the Adjust Request
+> > Post Cursor2 register. Adjust the size to include it. Found with a
+> > -Warray-bounds build:
+> >
+> > drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> > drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+> >    59 |         return link_status[r - DP_LANE0_1_STATUS];
+> >       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+> >   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> >       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
+> published in 2014, and Tegra is the only user of
+> drm_dp_get_adjust_request_post_cursor().
+> 
+> Instead of bumping the link status read size from 6 to 11 for all
+> drivers I'd much rather see some other (maybe Tegra specific) solution
+> to this.
 
-Why is this here? I'd either delete it or maybe alternatively move it
-into the `case KVM_SEV_GUEST_STATUS` with a corresponding TEST_ASSERT
-to check that the command succeeded. Something like:
+Hmmm... Well given this is currently non-functional on Tegra (and is an
+OOB memory read), how about just removing it entirely?
 
-...
-               switch (cmd_id) {
-               case KVM_SEV_GUEST_STATUS:
-                    sev_ioctl(vm_fd, KVM_SEV_GUEST_STATUS, &status);
-                    TEST_ASSERT(ret == 0 && fw_error == SEV_RET_SUCCESS, ...);
-                    continue;
-               case KVM_SEV_LAUNCH_UPDATE_VMSA:
-               case KVM_SEV_DBG_DECRYPT:
-               case KVM_SEV_DBG_ENCRYPT:
-                       continue;
-               default:
-                       break;
-               }
+diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
+index 23f9073bc473..c9528aa62c9c 100644
+--- a/drivers/gpu/drm/drm_dp_helper.c
++++ b/drivers/gpu/drm/drm_dp_helper.c
+@@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
+ }
+ EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
+ 
+-u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+-					 unsigned int lane)
+-{
+-	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
+-	u8 value = dp_link_status(link_status, offset);
+-
+-	return (value >> (lane << 1)) & 0x3;
+-}
+-EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
+-
+ static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
+ {
+ 	if (rd_interval > 4)
+diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
+index 70dfb7d1dec5..bb5bfa93950f 100644
+--- a/drivers/gpu/drm/tegra/dp.c
++++ b/drivers/gpu/drm/tegra/dp.c
+@@ -559,8 +559,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
+ 			drm_dp_get_adjust_request_pre_emphasis(status, i) >>
+ 				DP_TRAIN_PRE_EMPHASIS_SHIFT;
+ 
+-		adjust->post_cursor[i] =
+-			drm_dp_get_adjust_request_post_cursor(status, i);
++		adjust->post_cursor[i] = 0;
+ 	}
+ }
+ 
+diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+index 30359e434c3f..28378db676c8 100644
+--- a/include/drm/drm_dp_helper.h
++++ b/include/drm/drm_dp_helper.h
+@@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
+ 					  int lane);
+ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
+ 				   int lane);
+-u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+-					 unsigned int lane);
+ 
+ #define DP_BRANCH_OUI_HEADER_SIZE	0xc
+ #define DP_RECEIVER_CAP_SIZE		0xf
 
-> +}
-> +
->  static void test_sev_mirror(bool es)
->  {
->         struct kvm_vm *src_vm, *dst_vm;
-> @@ -243,6 +288,8 @@ static void test_sev_mirror(bool es)
->         if (es)
->                 sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
->
-> +       verify_mirror_allowed_cmds(dst_vm->fd);
-> +
->         kvm_vm_free(src_vm);
->         kvm_vm_free(dst_vm);
->  }
-> --
-> 2.34.1.400.ga245620fadb-goog
->
+
+Or maybe do a long link status read in Tegra only?
+
+-- 
+Kees Cook

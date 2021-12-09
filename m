@@ -2,100 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE2D46E6FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0098646E6FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbhLIKvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:51:49 -0500
-Received: from mail.emtrion.de ([87.139.198.129]:20966 "EHLO mail3.emtrion.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230283AbhLIKvt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:51:49 -0500
-Received: from EMT-KA-S004.emtrion.local (2003:f9:5824:1:c59f:32f4:72e5:b9e1)
- by EMT-KA-S004.emtrion.local (2003:f9:5824:1:c59f:32f4:72e5:b9e1) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 9 Dec 2021
- 11:48:13 +0100
-Received: from EMT-KA-S004.emtrion.local ([fe80::c59f:32f4:72e5:b9e1]) by
- EMT-KA-S004.emtrion.local ([fe80::c59f:32f4:72e5:b9e1%11]) with mapi id
- 15.02.0922.019; Thu, 9 Dec 2021 11:48:13 +0100
-From:   "Mueller, Reinhold" <Reinhold.Mueller@emtrion.de>
-To:     'Rob Herring' <robh@kernel.org>
-CC:     "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: AW: [PATCH 1/2] dt-bindings: arm/stm32: Add emtrion hardware
- emSBC-Argon
-Thread-Topic: [PATCH 1/2] dt-bindings: arm/stm32: Add emtrion hardware
- emSBC-Argon
-Thread-Index: AQHX5cKtPvbr3rHvD0CvAl/d/dQRE6wnhZsAgAKA7pA=
-Date:   Thu, 9 Dec 2021 10:48:13 +0000
-Message-ID: <ba4e038f606b4c51841630e8da0070c5@emtrion.de>
-References: <20211130081654.119028-1-reinhold.mueller@emtrion.com>
- <20211130081654.119028-2-reinhold.mueller@emtrion.com>
- <Ya/RRFKQ35shFCzg@robh.at.kernel.org>
-In-Reply-To: <Ya/RRFKQ35shFCzg@robh.at.kernel.org>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [2003:f9:5824:1:5c90:40d3:cc94:d44e]
-x-c2processedorg: 5b249fcb-306f-4927-9982-5d11b1d300ce
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235741AbhLIKwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:52:17 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:42938 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230283AbhLIKwQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:52:16 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 744D2210FF;
+        Thu,  9 Dec 2021 10:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639046922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SSQmDk3q7sHfu7o9XE7LmloN7f0Ebyxqu8tzZjKkvGs=;
+        b=WNRvD8SGFbr3ukCQhTktI9c3bKVj0pTjSD3tZ8ggNa+cGspkTSH+hfAocP8CqsBeNT2XXT
+        hK3IvWZ+qCX/21SnjLpQAfNt3i4WAitEIIvS9XZ5/uCf07FHMVCocagskmCQ+3ahDoCMUq
+        VPZ06VLEWvf8L8BBdZrUx6IEnWQNh7M=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3FD50A3B81;
+        Thu,  9 Dec 2021 10:48:42 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 11:48:38 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexey Makhalov <amakhalov@vmware.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Nico Pache <npache@redhat.com>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
+References: <20211108202325.20304-1-amakhalov@vmware.com>
+ <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
+ <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
+ <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUm9iLA0KDQpwbGVhc2Ugc2VlIHRoZSBjb21tZW50cyBiZWxvdy4NCg0KUmVnYXJkcw0KUmVp
-bmhvbGQNCg0KDQpSZWluaG9sZCBNdWVsbGVyDQpTb2Z0d2FyZSBlbmdpbmVlcg0KDQoNCmVtdHJp
-b24gR21iSA0KQW0gSGFzZW5iaWVsIDYgfCA3NjI5NyBTdHV0ZW5zZWUgfCBHZXJtYW55DQoNClBo
-b25lICs0OSA3MjQ0IDYyNjk0IDIwDQpGYXggKzQ5IDcyNDQgNjI2OTQgMTkNCkVtYWlsIFJlaW5o
-b2xkLk11ZWxsZXJAZW10cmlvbi5kZQ0KT25saW5lIHd3dy5lbXRyaW9uLmRlDQoNCg0KDQoNCmVt
-dHJpb24gR21iSCDigKIgQW10c2dlcmljaHQgTWFubmhlaW0g4oCiIEhSQiAxMTAgMzAwIOKAoiBH
-ZXNjaMOkZnRzZsO8aHJlcjogUmFtb25hIE1hdXJlciwgQWNobWVkIEhhZGRvdSDigKIgVW1zYXR6
-c3RldWVyaWRlbnRpZmlrYXRpb25zbnVtbWVyOkRFODEzNjk0MjYwIOKAoiBJbXByZXNzdW06IHd3
-dy5lbXRyaW9uLmRlL2RlL2ltcHJlc3N1bS5odG1sDQoNCkhJTldFSVM6IFBlcnNvbmVuYmV6b2dl
-bmUgRGF0ZW4sIGRpZSBTaWUgcGVyIEUtTWFpbCBhbiB1bnMgw7xiZXJtaXR0ZWxuLCB3ZXJkZW4g
-YmVpIHVucyBnZXNwZWljaGVydCB1bmQgdmVyYXJiZWl0ZXQuIEluZm9ybWF0aW9uZW4genUgdW5z
-ZXJlbiBnZXNldHpsaWNoZW4gSW5mb3JtYXRpb25zcGZsaWNodGVuLCB6dSB1bnMgdW5kIHVuc2Vy
-ZW4gRGllbnN0bGVpc3R1bmdlbiBmaW5kZW4gU2llIGluIHVuc2VyZW4gRGF0ZW5zY2h1dHpoaW53
-ZWlzZW4uDQpEaWVzZSBFLU1haWwga2FubiB2ZXJ0cmF1bGljaGUgdW5kIC8gb2RlciByZWNodGxp
-Y2ggZ2VzY2jDvHR6dGUgSW5mb3JtYXRpb25lbiBlbnRoYWx0ZW4uIFdlbm4gU2llIG5pY2h0IGRl
-ciByaWNodGlnZSBBZHJlc3NhdCBzaW5kLCBvZGVyIGRpZXNlIEUtTWFpbCBpcnJ0w7xtbGljaCBl
-cmhhbHRlbiBoYWJlbiwgaW5mb3JtaWVyZW4gU2llIGJpdHRlIGRlbiBBYnNlbmRlciB1bmQgdmVy
-bmljaHRlbiBkaWVzZSBNYWlsLiBEYXMgdW5lcmxhdWJ0ZSBrb3BpZXJlbiwgc293aWUgZGllIHVu
-YmVmdWd0ZSBXZWl0ZXJnYWJlIGRpZXNlciBNYWlsIGlzdCBuaWNodCBnZXN0YXR0ZXQuDQo+IC0t
-LS0tVXJzcHLDvG5nbGljaGUgTmFjaHJpY2h0LS0tLS0NCj4gVm9uOiBSb2IgSGVycmluZyA8cm9i
-aEBrZXJuZWwub3JnPg0KPiBHZXNlbmRldDogRGllbnN0YWcsIDcuIERlemVtYmVyIDIwMjEgMjI6
-MjUNCj4gQW46IE11ZWxsZXIsIFJlaW5ob2xkIDxSZWluaG9sZC5NdWVsbGVyQGVtdHJpb24uZGU+
-DQo+IENjOiBhbGV4YW5kcmUudG9yZ3VlQGZvc3Muc3QuY29tOyBkZXZpY2V0cmVlQHZnZXIua2Vy
-bmVsLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQmV0cmVmZjogUmU6
-IFtQQVRDSCAxLzJdIGR0LWJpbmRpbmdzOiBhcm0vc3RtMzI6IEFkZCBlbXRyaW9uIGhhcmR3YXJl
-DQo+IGVtU0JDLUFyZ29uDQo+DQo+IE9uIFR1ZSwgTm92IDMwLCAyMDIxIGF0IDA5OjE2OjUzQU0g
-KzAxMDAsIHJlaW5ob2xkLm11ZWxsZXJAZW10cmlvbi5jb20NCj4gd3JvdGU6DQo+ID4gRnJvbTog
-UmVpbmhvbGQgTXVlbGxlciA8cmVpbmhvbGQubXVlbGxlckBlbXRyaW9uLmNvbT4NCj4gPg0KPiA+
-IFRoaXMgcGF0Y2ggcHJlc2VudHMgdGhlIHlhbWwgcGF0Y2ggZm9yIHRoZSBlbXRyaW9uIEdtYkgN
-Cj4gPiBBcmdvbiBib2FyZCBzZXJpZXMuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSZWluaG9s
-ZCBNdWVsbGVyIDxyZWluaG9sZC5tdWVsbGVyQGVtdHJpb24uY29tPg0KPiA+IC0tLQ0KPiA+ICBE
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3N0bTMyL3N0bTMyLnlhbWwgfCA4
-DQo+ICsrKysrKysrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykNCj4gPg0K
-PiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3N0
-bTMyL3N0bTMyLnlhbWwNCj4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJt
-L3N0bTMyL3N0bTMyLnlhbWwNCj4gPiBpbmRleCBiY2FmN2JlM2FiMzcuLjcxMDIzMDg0N2RjZCAx
-MDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3N0
-bTMyL3N0bTMyLnlhbWwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvYXJtL3N0bTMyL3N0bTMyLnlhbWwNCj4gPiBAQCAtMjgsNiArMjgsMTQgQEAgcHJvcGVydGll
-czoNCj4gPiAgICAgICAgICAgIC0gZW51bToNCj4gPiAgICAgICAgICAgICAgICAtIHN0LHN0bTMy
-bXAxNTMNCj4gPiAgICAgICAgICAgICAgICAtIHN0LHN0bTMybXAxNTcNCj4gPiArDQo+ID4gKyAg
-ICAgIC0gZGVzY3JpcHRpb246IGVtdHJpb24gU1RNMzJNUDEgQXJnb24gYmFzZWQgQm9hcmRzDQo+
-ID4gKyAgICAgICAgaXRlbXM6DQo+ID4gKyAgICAgICAgICAtIGVudW06DQo+ID4gKyAgICAgICAg
-ICAgICAgLSBlbXRyaW9uLHN0bTMybXAxNTdjLWVtc2JjLWFyZ29uDQo+ID4gKyAgICAgICAgICAt
-IGVudW06DQo+ID4gKyAgICAgICAgICAgICAgLSBlbXRyaW9uLHN0bTMybXAxNTdjLWVtc3RhbXAt
-YXJnb24NCj4NCj4gSXMgdGhlcmUgZ29pbmcgdG8gYmUgbXVsdGlwbGUgZW50cmllcyBoZXJlPyBJ
-ZiBub3QsIHVzZSAnY29uc3QnIGluc3RlYWQNCj4gb2YgJ2VudW0nLg0KPg0KY3VycmVudGx5IG5v
-IG1vcmUgZW50cmllcywgaSB3aWxsIHJlc2VudCBhIG1vZGlmaWVkIHBhdGNoc2V0DQo+ID4gKyAg
-ICAgICAgICAtIGNvbnN0OiBzdCxzdG0zMm1wMTU3DQo+ID4gICAgICAgIC0gaXRlbXM6DQo+ID4g
-ICAgICAgICAgICAtIGVudW06DQo+ID4gICAgICAgICAgICAgICAgLSBzdCxzdG0zMmY0MjlpLWRp
-c2NvDQo+ID4gLS0NCj4gPiAyLjIwLjENCj4gPg0KPiA+DQo=
+[Cc Nico who has reported a similar problem]
+
+Another attempt to handle the issue. Can you give this a try please?
+David could you have a look whether anything hotplug related is missing
+at this stage. Once we are settled on this fix I would like to get rid
+of the node_state (offline/online) but that is a work on top.
+---
+From 36782ebaab2eaec637627506ab627c554bb948de Mon Sep 17 00:00:00 2001
+From: Michal Hocko <mhocko@suse.com>
+Date: Thu, 9 Dec 2021 10:00:02 +0100
+Subject: [PATCH] mm: handle uninitialized numa nodes gracefully
+
+We have had several reports [1][2][3] that page allocator blows up when
+an allocation from a possible node is requested. The underlying reason
+is that NODE_DATA for the specific node is not allocated.
+
+NUMA specific initialization is arch specific and it can vary a lot.
+E.g. x86 tries to initialize all nodes that have some cpu affinity (see
+init_cpu_to_node) but this can be insufficient because the node might be
+cpuless for example.
+
+One way to address this problem would be to check for !node_online nodes
+when trying to get a zonelist and silently fall back to another node.
+That is unfortunately adding a branch into allocator hot path and it
+doesn't handle any other potential NODE_DATA users.
+
+This patch takes a different approach (following a lead of [3]) and it
+pre allocates pgdat for all possible nodes in an arch indipendent code
+- free_area_init. All uninitialized nodes are treated as memoryless
+nodes. node_state of the node is not changed because that would lead to
+other side effects - e.g. sysfs representation of such a node and from
+past discussions [4] it is known that some tools might have problems
+digesting that.
+
+Newly allocated pgdat only gets a minimal initialization and the rest of
+the work is expected to be done by the memory hotplug - hotadd_new_pgdat
+(renamed to hotadd_init_pgdat).
+
+generic_alloc_nodedata is changed to use the memblock allocator because
+neither page nor slab allocators are available at the stage when all
+pgdats are allocated. Hotplug doesn't allocate pgdat anymore so we can
+use the early boot allocator. The only arch specific implementation is
+ia64 and that is changed to use the early allocator as well.
+
+Reported-by: Alexey Makhalov <amakhalov@vmware.com>
+Reported-by: Nico Pache <npache@redhat.com>
+Signed-off-by: Michal Hocko <mhocko@suse.com>
+
+[1] http://lkml.kernel.org/r/20211101201312.11589-1-amakhalov@vmware.com
+[2] http://lkml.kernel.org/r/20211207224013.880775-1-npache@redhat.com
+[3] http://lkml.kernel.org/r/20190114082416.30939-1-mhocko@kernel.org
+[4] http://lkml.kernel.org/r/20200428093836.27190-1-srikar@linux.vnet.ibm.com
+---
+ arch/ia64/mm/discontig.c       |  2 +-
+ include/linux/memory_hotplug.h |  5 ++---
+ mm/memory_hotplug.c            | 21 +++++++++------------
+ mm/page_alloc.c                | 34 +++++++++++++++++++++++++++++++---
+ 4 files changed, 43 insertions(+), 19 deletions(-)
+
+diff --git a/arch/ia64/mm/discontig.c b/arch/ia64/mm/discontig.c
+index 791d4176e4a6..9a7a09e0aa52 100644
+--- a/arch/ia64/mm/discontig.c
++++ b/arch/ia64/mm/discontig.c
+@@ -613,7 +613,7 @@ pg_data_t *arch_alloc_nodedata(int nid)
+ {
+ 	unsigned long size = compute_pernodesize(nid);
+ 
+-	return kzalloc(size, GFP_KERNEL);
++	return memblock_alloc(size, SMP_CACHE_BYTES);
+ }
+ 
+ void arch_free_nodedata(pg_data_t *pgdat)
+diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+index be48e003a518..38f8d33f0884 100644
+--- a/include/linux/memory_hotplug.h
++++ b/include/linux/memory_hotplug.h
+@@ -176,14 +176,13 @@ extern void arch_refresh_nodedata(int nid, pg_data_t *pgdat);
+ 
+ #ifdef CONFIG_NUMA
+ /*
+- * If ARCH_HAS_NODEDATA_EXTENSION=n, this func is used to allocate pgdat.
+- * XXX: kmalloc_node() can't work well to get new node's memory at this time.
++ * XXX: node aware allocation can't work well to get new node's memory at this time.
+  *	Because, pgdat for the new node is not allocated/initialized yet itself.
+  *	To use new node's memory, more consideration will be necessary.
+  */
+ #define generic_alloc_nodedata(nid)				\
+ ({								\
+-	kzalloc(sizeof(pg_data_t), GFP_KERNEL);			\
++	memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);	\
+ })
+ /*
+  * This definition is just for error path in node hotadd.
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 852041f6be41..2d38a431f62f 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1161,19 +1161,21 @@ static void reset_node_present_pages(pg_data_t *pgdat)
+ }
+ 
+ /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
+-static pg_data_t __ref *hotadd_new_pgdat(int nid)
++static pg_data_t __ref *hotadd_init_pgdat(int nid)
+ {
+ 	struct pglist_data *pgdat;
+ 
+ 	pgdat = NODE_DATA(nid);
+-	if (!pgdat) {
+-		pgdat = arch_alloc_nodedata(nid);
+-		if (!pgdat)
+-			return NULL;
+ 
++	/*
++	 * NODE_DATA is preallocated (free_area_init) but its internal
++	 * state is not allocated completely. Add missing pieces.
++	 * Completely offline nodes stay around and they just need
++	 * reintialization.
++	 */
++	if (!pgdat->per_cpu_nodestats) {
+ 		pgdat->per_cpu_nodestats =
+ 			alloc_percpu(struct per_cpu_nodestat);
+-		arch_refresh_nodedata(nid, pgdat);
+ 	} else {
+ 		int cpu;
+ 		/*
+@@ -1192,8 +1194,6 @@ static pg_data_t __ref *hotadd_new_pgdat(int nid)
+ 		}
+ 	}
+ 
+-	/* we can use NODE_DATA(nid) from here */
+-	pgdat->node_id = nid;
+ 	pgdat->node_start_pfn = 0;
+ 
+ 	/* init node's zones as empty zones, we don't have any present pages.*/
+@@ -1245,7 +1245,7 @@ static int __try_online_node(int nid, bool set_node_online)
+ 	if (node_online(nid))
+ 		return 0;
+ 
+-	pgdat = hotadd_new_pgdat(nid);
++	pgdat = hotadd_init_pgdat(nid);
+ 	if (!pgdat) {
+ 		pr_err("Cannot online node %d due to NULL pgdat\n", nid);
+ 		ret = -ENOMEM;
+@@ -1444,9 +1444,6 @@ int __ref add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+ 
+ 	return ret;
+ error:
+-	/* rollback pgdat allocation and others */
+-	if (new_node)
+-		rollback_node_hotadd(nid);
+ 	if (IS_ENABLED(CONFIG_ARCH_KEEP_MEMBLOCK))
+ 		memblock_remove(start, size);
+ error_mem_hotplug_end:
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index c5952749ad40..f2ceffadf4eb 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6382,7 +6382,11 @@ static void __build_all_zonelists(void *data)
+ 	if (self && !node_online(self->node_id)) {
+ 		build_zonelists(self);
+ 	} else {
+-		for_each_online_node(nid) {
++		/*
++		 * All possible nodes have pgdat preallocated
++		 * free_area_init
++		 */
++		for_each_node(nid) {
+ 			pg_data_t *pgdat = NODE_DATA(nid);
+ 
+ 			build_zonelists(pgdat);
+@@ -8032,8 +8036,32 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ 	/* Initialise every node */
+ 	mminit_verify_pageflags_layout();
+ 	setup_nr_node_ids();
+-	for_each_online_node(nid) {
+-		pg_data_t *pgdat = NODE_DATA(nid);
++	for_each_node(nid) {
++		pg_data_t *pgdat;
++
++		if (!node_online(nid)) {
++			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
++
++			/* Allocator not initialized yet */
++			pgdat = arch_alloc_nodedata(nid);
++			if (!pgdat) {
++				pr_err("Cannot allocate %zuB for node %d.\n",
++						sizeof(*pgdat), nid);
++				continue;
++			}
++			arch_refresh_nodedata(nid, pgdat);
++			free_area_init_memoryless_node(nid);
++			/*
++			 * not marking this node online because we do not want to
++			 * confuse userspace by sysfs files/directories for node
++			 * without any memory attached to it (see topology_init)
++			 * The pgdat will get fully initialized when a memory is
++			 * hotpluged into it by hotadd_init_pgdat
++			 */
++			continue;
++		}
++
++		pgdat = NODE_DATA(nid);
+ 		free_area_init_node(nid);
+ 
+ 		/* Any memory on that node */
+-- 
+2.30.2
+
+-- 
+Michal Hocko
+SUSE Labs

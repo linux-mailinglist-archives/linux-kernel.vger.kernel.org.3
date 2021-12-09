@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D13B246E42E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73346E431
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbhLIIbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:31:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51095 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234807AbhLIIbQ (ORCPT
+        id S233379AbhLIIcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229675AbhLIIcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:31:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639038462;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vI6c58+KogxxW+mn2T8IAIamTxq7omRdilnleuHfMf8=;
-        b=XrjiLaDDdgTPjMwvLczD57/jRgNPUfOOAyJzWI9KqvwP+OZwp0OJ6qORnb+XtbpGd7mHIz
-        pGGgOTbUKxOETVDJ/L4t/19nvyebf4AbVm6p/8sQ6thbjYtLme8+Nm/bs8U+mZ5+9gwmQ8
-        H/EVIDP8zBcGeuuDWGJKEUOcVIT7gsI=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-603-3yepEsVcPQCcarNO4bkr3A-1; Thu, 09 Dec 2021 03:27:41 -0500
-X-MC-Unique: 3yepEsVcPQCcarNO4bkr3A-1
-Received: by mail-lj1-f199.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso1539282lji.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 00:27:41 -0800 (PST)
+        Thu, 9 Dec 2021 03:32:21 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157B8C061746;
+        Thu,  9 Dec 2021 00:28:48 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id g18so4749551pfk.5;
+        Thu, 09 Dec 2021 00:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:organization:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=wAw4GaETCJwFjSf4QQMuKwI7SfoEPjcbvTNAwY41CxU=;
+        b=gSzw9JRB2fiY4afJoqjnlHvcsG6jmpKu78PqDvH77WB/RT4EoQ/41wVvTrlN5qKY6R
+         BwJg7seS9PMR67CfpFQ8Fnnn9NUnQrdYb6NUkf7NmpcsrDcCxD4fiCPjpYR+voDMlZdE
+         poPOFdz/CaXmEuKP7yItwHYTgFZydyuUxbCDZqHBGxE9GL569xeXOBK6Nz7CLKuXq8Kg
+         cBvOA1nkAriQIcukF6ZCArtm/rZ/V8F3JjPZC0jN7a45kfklF+EVu4nj1EG9SSRsf36q
+         PjyYU+GlL6DzD3oobi1gYraUAiQ18hdtih/KCYejXtpmTA+ktqTR/L4qwKzAtkG+Rlxg
+         gNSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
-         :subject:content-language:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=vI6c58+KogxxW+mn2T8IAIamTxq7omRdilnleuHfMf8=;
-        b=TXwJ2XXrMo8Og30/9WFcwrVhYQJrMUke99A7PLDXMpQ1d0fzZtRUVK1w5KspZfPkn3
-         te9WcwvvKTN8wtj3Zt6UjIXFo85uYbsCYaFaRl6v59SPmqPJuT3Z0Om1rNn+gW7NudB0
-         iGRb15f2kYe7g7joFLAztQWqULXmaHZUuX/ytBoQ+jyGq5zJS2zzw3v3JoCIPinXt00K
-         lxaQy7eZm0+X5cA/zsOq4GtVY5AJyiLVQqexR7YKuG++3ZPl77pUbaL2A+kN/mAJ4nNp
-         ywDvM6qOA0l3tdFfhXhltCZeLtyUKgAtUThI1V/BrBaGCrJmkv0ortWEcPFditwVJRhz
-         q33Q==
-X-Gm-Message-State: AOAM53088rfmpTdr8JJe/P0ia38AydNPIMQWBqWUo9487nxeVIrumhft
-        O3zHDHzRzloeZffT/F6QLzRLdTX0PitT3Xrd3kCjBwZeDJt9Z9hpIXZU42h9nHXWM/UC3uQcgK1
-        BG136Z8qqGR+PvVyZv92lahY1
-X-Received: by 2002:ac2:58c3:: with SMTP id u3mr4511446lfo.103.1639038459920;
-        Thu, 09 Dec 2021 00:27:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKqCqbVpt51CaUwHpbqJX0HXKDsb6ux7hU+HGfDgbZtG4GXp/sOpGTWxlKjSvSjzEtXMq55A==
-X-Received: by 2002:ac2:58c3:: with SMTP id u3mr4511426lfo.103.1639038459683;
-        Thu, 09 Dec 2021 00:27:39 -0800 (PST)
-Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
-        by smtp.gmail.com with ESMTPSA id i3sm462850lfu.156.2021.12.09.00.27.37
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=wAw4GaETCJwFjSf4QQMuKwI7SfoEPjcbvTNAwY41CxU=;
+        b=H36E8jC4waxrAprEixqUyedTz+kPbcI0kVW2uWYBgsXspAyKzlhyjF6bSHijcLYriE
+         SOmzCdfxq7g881aCuEQ27mDNVfFG7RkkNzq629UuKDUTZwBc9UAvwgRE5fTE1r/a2Xy6
+         KwmCh0jb67xOVMnUdH+ULkECwtSc41Q57jlRbHhs34XzPICtnaZAcq0RP2rCYETwQCKL
+         Z3lpsrpBJyDzsBNi9SqJibX+KA6OGPbqk7cu8plvsNV0DwhTY7qUTjlo8S3M7FFVkLsq
+         3usQpczo7haDvnvZt/6UUC6fA0k1blw8jjUBv22MHH+Fc8wVEmjl9/yX41rB07iNyyFZ
+         knvQ==
+X-Gm-Message-State: AOAM530HzWTkCC0MPW/oyq7WDA/guAi6sFVQ79M0by6QqucJS2vuqN5p
+        C61+bXmk+H0JnpThmjF38B0=
+X-Google-Smtp-Source: ABdhPJzEdVCrSE380Ni7T2O3O4DKiN67b8IYbPut5TaX6Is4X8iiWYY64y08Nm/HZz55SA+0Yc/FCg==
+X-Received: by 2002:a63:80c8:: with SMTP id j191mr34100523pgd.143.1639038527583;
+        Thu, 09 Dec 2021 00:28:47 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id a3sm4774959pgj.2.2021.12.09.00.28.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 00:27:38 -0800 (PST)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <2811b35a-9179-88ce-d87a-e1f824851494@redhat.com>
-Date:   Thu, 9 Dec 2021 09:27:37 +0100
+        Thu, 09 Dec 2021 00:28:47 -0800 (PST)
+Message-ID: <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com>
+Date:   Thu, 9 Dec 2021 16:28:37 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Cc:     brouer@redhat.com, Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 2/9] i40e: respect metadata on XSK Rx to skb
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
 Content-Language: en-US
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        intel-wired-lan@lists.osuosl.org
-References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
- <20211208140702.642741-3-alexandr.lobakin@intel.com>
-In-Reply-To: <20211208140702.642741-3-alexandr.lobakin@intel.com>
+To:     Jim Mattson <jmattson@google.com>, Andi Kleen <ak@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20211130074221.93635-1-likexu@tencent.com>
+ <20211130074221.93635-5-likexu@tencent.com>
+ <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor
+ kvm_perf_overflow{_intr}()
+In-Reply-To: <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/12/2021 12:25 pm, Jim Mattson wrote:
+> 
+> Not your change, but if the event is counting anything based on
+> cycles, and the guest TSC is scaled to run at a different rate from
+> the host TSC, doesn't the initial value of the underlying hardware
+> counter have to be adjusted as well, so that the interrupt arrives
+> when the guest's counter overflows rather than when the host's counter
+> overflows?
 
+I've thought about this issue too and at least the Intel Specification
+did not let me down on this detail:
 
-On 08/12/2021 15.06, Alexander Lobakin wrote:
-> For now, if the XDP prog returns XDP_PASS on XSK, the metadata will
-> be lost as it doesn't get copied to the skb.
+	"The counter changes in the VMX non-root mode will follow
+	VMM's use of the TSC offset or TSC scaling VMX controls"
 
-I have an urge to add a newline here, when reading this, as IMHO it is a 
-paragraph with the problem statement.
+Not knowing if AMD or the real world hardware
+will live up to this expectation and I'm pessimistic.
 
-> Copy it along with the frame headers. Account its size on skb
-> allocation, and when copying just treat it as a part of the frame
-> and do a pull after to "move" it to the "reserved" zone.
-
-Also newline here, as next paragraph are some extra details, you felt a 
-need to explain to the reader.
-
-> net_prefetch() xdp->data_meta and align the copy size to speed-up
-> memcpy() a little and better match i40e_costruct_skb().
-                                      ^^^^^^xx^^^^^^^^^
-
-You have a general misspelling of this function name in all of your 
-commit messages.
-
---Jesper
+cc Andi and Kim.
 

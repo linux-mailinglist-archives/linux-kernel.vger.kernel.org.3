@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B45C46EC96
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A63B46EC98
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240847AbhLIQKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S240869AbhLIQKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240779AbhLIQKe (ORCPT
+        with ESMTP id S240784AbhLIQKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:10:34 -0500
+        Thu, 9 Dec 2021 11:10:35 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1558C0617A1;
-        Thu,  9 Dec 2021 08:07:00 -0800 (PST)
-Date:   Thu, 09 Dec 2021 16:06:58 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F9EC061353;
+        Thu,  9 Dec 2021 08:07:01 -0800 (PST)
+Date:   Thu, 09 Dec 2021 16:06:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639066019;
+        s=2020; t=1639066020;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DL5aNwCL8SU6/0MFOiWxUekz5vA48Pvp+L8xH6Q5kMM=;
-        b=352K4lGyAw94fZPw7j+tMy9ASUhV+kQ09vwdrhXe9xseXRxf6Mp21LP2tkEGAw0LRq+64s
-        TDlRubRstf1Rs2o1vFv/XdDeKn5dBox+HrUA7o7gWcj+2wja+0iuz63R7CqO0l39OVlrd/
-        v0lGfQReSHZaDtml7RnAVDa5J7AH+sVJmoXiO1djUQ6Wn/0Fhq5RrMQQreDyx2ukxDZfvS
-        APcNVmYCtfA4+UUyhLv2MTtHSbLPKnTR8tbcevhU2opRo+s73XkVnf5wTZszoMY2EBERVr
-        qx+HsRUuQsJ0hDxY0t8g/6i+zf1ynTMS7gsSXs2XWg8RiShqh/FMWxBwEgdygg==
+        bh=gNZslH21GNKn29MI/1xlVV+YkUth1+N/vTwDUsEHbCs=;
+        b=fSgcvO6tV2IRFcVN6myPD0tM6ZVqYlE+40j8OJ3wsX5GdAEC2OyD18juYrtsETk6PbkV2s
+        q7PThVBD/AT/Pgb+1g+QKhBYcYLufOCHWMPcySokhM7sTX5cj9by9dPOT6yg7uhJbghXgy
+        SCwEJK+hMAqOB30pbeJw/jT6kCkXj158aKfL23w2f6QzWR86GG4ogx/EgGcJm0+anPZUGu
+        ndAcfV6bgtuIEXfuaf+Ar22RtQbDbJSzTgnvHcbinbkWxVHZNWkVZRd3tnr39wGXEixTMm
+        f+70oI7o0GGPywq55wJrvSoS+VPcqQTUYu8Z6Cp3AC566BWqbM+omc7oDjYtrA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639066019;
+        s=2020e; t=1639066020;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DL5aNwCL8SU6/0MFOiWxUekz5vA48Pvp+L8xH6Q5kMM=;
-        b=sWjvVDu7VMUrpPvAkxDWc4d1LQW0aIjfcensAwnRbcgi7REeskR4/U3S1KpPybPOKiO/pY
-        xzV/864Y8Vm6LsCg==
+        bh=gNZslH21GNKn29MI/1xlVV+YkUth1+N/vTwDUsEHbCs=;
+        b=BXxc3QToWPB3MWXRUrIgaLP51QYMo5hUOnY3tp+jgD+idHLY3tWMqZLsJot37BIAqDOBjS
+        jM6u1RIFPdi8ScBg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] PCI/MSI: Make pci_msi_domain_check_cap() static
+Subject: [tip: irq/msi] PCI/MSI: Move msi_lock to struct pci_dev
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210224.980989243@linutronix.de>
-References: <20211206210224.980989243@linutronix.de>
+In-Reply-To: <20211206210224.925241961@linutronix.de>
+References: <20211206210224.925241961@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163906601852.11128.4818897968892458783.tip-bot2@tip-bot2>
+Message-ID: <163906601949.11128.5546155304919293462.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,55 +63,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     57ce3a3c99b21e9c4f951ef01e0a3603c987c259
-Gitweb:        https://git.kernel.org/tip/57ce3a3c99b21e9c4f951ef01e0a3603c987c259
+Commit-ID:     cd119b09a87d8beb50356d8c5c6aa42d89c44eb7
+Gitweb:        https://git.kernel.org/tip/cd119b09a87d8beb50356d8c5c6aa42d89c44eb7
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:27:57 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:27:56 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 09 Dec 2021 11:52:22 +01:00
 
-PCI/MSI: Make pci_msi_domain_check_cap() static
+PCI/MSI: Move msi_lock to struct pci_dev
 
-No users outside of that file.
+It's only required for PCI/MSI. So no point in having it in every struct
+device.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20211206210224.980989243@linutronix.de
+Link: https://lore.kernel.org/r/20211206210224.925241961@linutronix.de
 
 ---
- drivers/pci/msi/irqdomain.c | 5 +++--
- include/linux/msi.h         | 2 --
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/base/core.c    | 1 -
+ drivers/pci/msi/msi.c  | 2 +-
+ drivers/pci/probe.c    | 4 +++-
+ include/linux/device.h | 2 --
+ include/linux/pci.h    | 1 +
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-index 123450e..6abd8af 100644
---- a/drivers/pci/msi/irqdomain.c
-+++ b/drivers/pci/msi/irqdomain.c
-@@ -79,8 +79,9 @@ static inline bool pci_msi_desc_is_multi_msi(struct msi_desc *desc)
-  *  1 if Multi MSI is requested, but the domain does not support it
-  *  -ENOTSUPP otherwise
-  */
--int pci_msi_domain_check_cap(struct irq_domain *domain,
--			     struct msi_domain_info *info, struct device *dev)
-+static int pci_msi_domain_check_cap(struct irq_domain *domain,
-+				    struct msi_domain_info *info,
-+				    struct device *dev)
- {
- 	struct msi_desc *desc = first_pci_msi_entry(to_pci_dev(dev));
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index fd034d7..f26c668 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2875,7 +2875,6 @@ void device_initialize(struct device *dev)
+ 	device_pm_init(dev);
+ 	set_dev_node(dev, NUMA_NO_NODE);
+ #ifdef CONFIG_GENERIC_MSI_IRQ
+-	raw_spin_lock_init(&dev->msi_lock);
+ 	INIT_LIST_HEAD(&dev->msi_list);
+ #endif
+ 	INIT_LIST_HEAD(&dev->links.consumers);
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index 465fe9e..443a16c 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -18,7 +18,7 @@ int pci_msi_ignore_mask;
  
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 7ff7cf2..5248678 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -439,8 +439,6 @@ void *platform_msi_get_host_data(struct irq_domain *domain);
- struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
- 					     struct msi_domain_info *info,
- 					     struct irq_domain *parent);
--int pci_msi_domain_check_cap(struct irq_domain *domain,
--			     struct msi_domain_info *info, struct device *dev);
- u32 pci_msi_domain_get_msi_rid(struct irq_domain *domain, struct pci_dev *pdev);
- struct irq_domain *pci_msi_get_device_domain(struct pci_dev *pdev);
- bool pci_dev_has_special_msi_domain(struct pci_dev *pdev);
+ static noinline void pci_msi_update_mask(struct msi_desc *desc, u32 clear, u32 set)
+ {
+-	raw_spinlock_t *lock = &desc->dev->msi_lock;
++	raw_spinlock_t *lock = &to_pci_dev(desc->dev)->msi_lock;
+ 	unsigned long flags;
+ 
+ 	if (!desc->pci.msi_attrib.can_mask)
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 087d365..443efb0 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2311,7 +2311,9 @@ struct pci_dev *pci_alloc_dev(struct pci_bus *bus)
+ 	INIT_LIST_HEAD(&dev->bus_list);
+ 	dev->dev.type = &pci_dev_type;
+ 	dev->bus = pci_bus_get(bus);
+-
++#ifdef CONFIG_PCI_MSI
++	raw_spin_lock_init(&dev->msi_lock);
++#endif
+ 	return dev;
+ }
+ EXPORT_SYMBOL(pci_alloc_dev);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index e270cb7..2a22875 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -407,7 +407,6 @@ struct dev_links_info {
+  * @em_pd:	device's energy model performance domain
+  * @pins:	For device pin management.
+  *		See Documentation/driver-api/pin-control.rst for details.
+- * @msi_lock:	Lock to protect MSI mask cache and mask register
+  * @msi_list:	Hosts MSI descriptors
+  * @msi_domain: The generic MSI domain this device is using.
+  * @numa_node:	NUMA node this device is close to.
+@@ -508,7 +507,6 @@ struct device {
+ 	struct dev_pin_info	*pins;
+ #endif
+ #ifdef CONFIG_GENERIC_MSI_IRQ
+-	raw_spinlock_t		msi_lock;
+ 	struct list_head	msi_list;
+ #endif
+ #ifdef CONFIG_DMA_OPS
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 8cb1036..5cc46ba 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -474,6 +474,7 @@ struct pci_dev {
+ #endif
+ #ifdef CONFIG_PCI_MSI
+ 	void __iomem	*msix_base;
++	raw_spinlock_t	msi_lock;
+ 	const struct attribute_group **msi_irq_groups;
+ #endif
+ 	struct pci_vpd	vpd;

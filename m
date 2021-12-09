@@ -2,224 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777E546E995
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2319E46E998
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238321AbhLIOGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238289AbhLIOGw (ORCPT
+        id S238337AbhLIOIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:08:04 -0500
+Received: from dvalin.narfation.org ([213.160.73.56]:57638 "EHLO
+        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238289AbhLIOID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:06:52 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51987C061353
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:03:18 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id cf39so78449lfb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=64krO+V+IZo2Ha5bj0DHTuWWmyjAZcg9ZgxN6UxHjhc=;
-        b=QmbBl0RK8fMZW7jCPF4AINoMtMTkYKsKIpCpz9ztgxx2eFxIBhi2zZO21ITS+68I8x
-         NkQO2MVnoUpAVlObcrPPgXEV4XxhXwLTKWsiY07WpZHhMXE+cpw+I2ExQrqjqFQXNdwm
-         BGBogUE7ifomLMjvlPrfOJ1ApN304tZZW3KajiL3xrPSr7PSDHt3j8glSHbah0n0JYt7
-         e1BIWu0/xbBlTLJdwIqQ2nt5rJ5bgZbQxLzVfaww2giBpyw3H8rGAH+a4bX3rL2LX0js
-         57ndvMgd/chpxAUWC0IPIcWL8QLUCDdrxxzPGq0ED/g2xvZz968FXSAXFbWntbIJALOJ
-         afVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=64krO+V+IZo2Ha5bj0DHTuWWmyjAZcg9ZgxN6UxHjhc=;
-        b=cPSNnyFgBW+nNFMIqYy8vNW6guCcqRqsJ9E9pI1gVbMIrrthEIPfwA3sHntsuxEvV8
-         Txt0bjqOKTsBaGXAIfSpc16pII2Z3Z5mTprMdQbZbKiSYVjnDRvpyyN6Wqou/mCYxBnE
-         32qEaaXAj9+9HtCn+g/Aa5r2NpvWxwOv2g1uXShQk9ITyK7IDopUilMEwYhUMI4S/lvF
-         /ffURu3Sqfbsp8t8zQbNYuMPSbpkxztTSuiGuHi/D4ceU20qxGGOPM/MztW4LMfcqfQM
-         1Z6g3BqwKfMNWOEnGAQBud7KQGgdAzf5hT+IKWsYzntPylbUNr08eLM/roXwZbRl6imo
-         D0kw==
-X-Gm-Message-State: AOAM5318YOgktrebfDiXFAJabHVh6qeVwRT33qaQwN9+OVMQWkrAwlrM
-        D6GCNP+GDMXHmfYU12MJk4K9tA==
-X-Google-Smtp-Source: ABdhPJzH+2XDoYBLN0Ewa6UxTwrV8nLvPrwWp9MqA9YDScekvmu/bEAAVXbMSBGr+tOHebmPSFZdYA==
-X-Received: by 2002:ac2:5615:: with SMTP id v21mr6418380lfd.112.1639058595951;
-        Thu, 09 Dec 2021 06:03:15 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id bp41sm539482lfb.129.2021.12.09.06.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 06:03:15 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3] i2c: exynos5: Add bus clock support
-Date:   Thu,  9 Dec 2021 16:03:13 +0200
-Message-Id: <20211209140313.14926-1-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 9 Dec 2021 09:08:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1639058668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=27CpbSSRvy1jd6MiYfFrehhgJ2HcF0yT0PcMYD8pezQ=;
+        b=v877vYqEST5qU/KfaHJNsLcjCMbvAjseY3TcVcuWUwsU2ERn+AbCt9vJa5pGJoHPqZkFAQ
+        w+w7E4l/80DAqC0djEqWfT+yE5Nz8M63qrjiX9vDf6sO68AsXRZ/Xl7zv0Q3gKi+TUNKgF
+        uC/PamQZSMMvQwxGKs48bCjAhsEeDZ8=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Deren Wu <Deren.Wu@mediatek.com>
+Cc:     Mark-YW Chen <Mark-YW.Chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Soul Huang <Soul.Huang@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        Deren Wu <Deren.Wu@mediatek.com>, KM Lin <km.lin@mediatek.com>,
+        Robin Chiu <robin.chiu@mediatek.com>,
+        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
+        Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com,
+        linux-firmware <linux-firmware@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Deren Wu <deren.wu@mediatek.com>, jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date:   Thu, 09 Dec 2021 15:04:24 +0100
+Message-ID: <3841963.FhVex8QpIh@ripper>
+In-Reply-To: <2314855.OJx0zA1Pyt@ripper>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com> <2314855.OJx0zA1Pyt@ripper>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="nextPart1990156.1ky84pn987"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-part of USIv2 block, there are two clocks provided to HSI2C controller:
-  - PCLK: bus clock (APB), provides access to register interface
-  - IPCLK: operating IP-core clock; SCL is derived from this one
+--nextPart1990156.1ky84pn987
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk, Felix Fietkau <nbd@nbd.name>, Lorenzo Bianconi <lorenzo.bianconi@redhat.com>, Deren Wu <Deren.Wu@mediatek.com>
+Cc: Mark-YW Chen <Mark-YW.Chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Soul Huang <Soul.Huang@mediatek.com>, YN Chen <YN.Chen@mediatek.com>, Deren Wu <Deren.Wu@mediatek.com>, KM Lin <km.lin@mediatek.com>, Robin Chiu <robin.chiu@mediatek.com>, CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>, Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com, linux-firmware <linux-firmware@kernel.org>, linux-wireless <linux-wireless@vger.kernel.org>, linux-mediatek <linux-mediatek@lists.infradead.org>, linux-kernel <linux-kernel@vger.kernel.org>, Deren Wu <deren.wu@mediatek.com>, jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date: Thu, 09 Dec 2021 15:04:24 +0100
+Message-ID: <3841963.FhVex8QpIh@ripper>
+In-Reply-To: <2314855.OJx0zA1Pyt@ripper>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com> <2314855.OJx0zA1Pyt@ripper>
 
-Both clocks have to be asserted for HSI2C to be functional in that case.
+On Thursday, 9 December 2021 10:21:02 CET Sven Eckelmann wrote:
+> Tested-by: Sven Eckelmann <sven@narfation.org>
 
-Add code to obtain and enable/disable PCLK in addition to already
-handled operating clock. Make it optional though, as older Exynos SoC
-variants only have one HSI2C clock.
+I would like to retract this again because it seems like the firmware is now 
+hanging all the time when the default runtime-pm/deep-sleep settings are used.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
----
-Changes in v3:
-  - Rebased correctly on top of linux-next
+    [  521.553436] mt7921e 0000:05:00.0: Message 40000002 (seq 12) timeout
+    [  521.559884] mt7921e 0000:05:00.0: chip reset
+    [  521.661983] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build Time: 20211129210838a
+    [  521.661983] 
+    [  521.684088] mt7921e 0000:05:00.0: WM Firmware Version: ____010000, Build Time: 20211129210917
+    [  521.723561] mt7921e 0000:05:00.0: Firmware init done
 
-Changes in v2:
-  - Added R-b tag by Krzysztof Kozlowski
-  - Added R-b tag by Chanho Park
+This doesn't seem to happen that often when I perform a
 
- drivers/i2c/busses/i2c-exynos5.c | 46 ++++++++++++++++++++++++++------
- 1 file changed, 38 insertions(+), 8 deletions(-)
+   echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/runtime-pm
+   echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/deep-sleep
 
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index c7e3cae99d13..693903e80892 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -182,7 +182,8 @@ struct exynos5_i2c {
- 	unsigned int		irq;
- 
- 	void __iomem		*regs;
--	struct clk		*clk;
-+	struct clk		*clk;		/* operating clock */
-+	struct clk		*pclk;		/* bus clock */
- 	struct device		*dev;
- 	int			state;
- 
-@@ -757,10 +758,14 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
- 	struct exynos5_i2c *i2c = adap->algo_data;
- 	int i, ret;
- 
--	ret = clk_enable(i2c->clk);
-+	ret = clk_enable(i2c->pclk);
- 	if (ret)
- 		return ret;
- 
-+	ret = clk_enable(i2c->clk);
-+	if (ret)
-+		goto err_pclk;
-+
- 	for (i = 0; i < num; ++i) {
- 		ret = exynos5_i2c_xfer_msg(i2c, msgs + i, i + 1 == num);
- 		if (ret)
-@@ -768,6 +773,8 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
- 	}
- 
- 	clk_disable(i2c->clk);
-+err_pclk:
-+	clk_disable(i2c->pclk);
- 
- 	return ret ?: num;
- }
-@@ -807,10 +814,18 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
- 		return -ENOENT;
- 	}
- 
--	ret = clk_prepare_enable(i2c->clk);
-+	i2c->pclk = devm_clk_get(&pdev->dev, "hsi2c_pclk");
-+	if (IS_ERR(i2c->pclk))
-+		i2c->pclk = NULL; /* pclk is optional */
-+
-+	ret = clk_prepare_enable(i2c->pclk);
- 	if (ret)
- 		return ret;
- 
-+	ret = clk_prepare_enable(i2c->clk);
-+	if (ret)
-+		goto err_pclk;
-+
- 	i2c->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(i2c->regs)) {
- 		ret = PTR_ERR(i2c->regs);
-@@ -853,11 +868,15 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, i2c);
- 
- 	clk_disable(i2c->clk);
-+	clk_disable(i2c->pclk);
- 
- 	return 0;
- 
-  err_clk:
- 	clk_disable_unprepare(i2c->clk);
-+
-+ err_pclk:
-+	clk_disable_unprepare(i2c->pclk);
- 	return ret;
- }
- 
-@@ -868,6 +887,7 @@ static int exynos5_i2c_remove(struct platform_device *pdev)
- 	i2c_del_adapter(&i2c->adap);
- 
- 	clk_unprepare(i2c->clk);
-+	clk_unprepare(i2c->pclk);
- 
- 	return 0;
- }
-@@ -879,6 +899,7 @@ static int exynos5_i2c_suspend_noirq(struct device *dev)
- 
- 	i2c_mark_adapter_suspended(&i2c->adap);
- 	clk_unprepare(i2c->clk);
-+	clk_unprepare(i2c->pclk);
- 
- 	return 0;
- }
-@@ -888,21 +909,30 @@ static int exynos5_i2c_resume_noirq(struct device *dev)
- 	struct exynos5_i2c *i2c = dev_get_drvdata(dev);
- 	int ret = 0;
- 
--	ret = clk_prepare_enable(i2c->clk);
-+	ret = clk_prepare_enable(i2c->pclk);
- 	if (ret)
- 		return ret;
- 
-+	ret = clk_prepare_enable(i2c->clk);
-+	if (ret)
-+		goto err_pclk;
-+
- 	ret = exynos5_hsi2c_clock_setup(i2c);
--	if (ret) {
--		clk_disable_unprepare(i2c->clk);
--		return ret;
--	}
-+	if (ret)
-+		goto err_clk;
- 
- 	exynos5_i2c_init(i2c);
- 	clk_disable(i2c->clk);
-+	clk_disable(i2c->pclk);
- 	i2c_mark_adapter_resumed(&i2c->adap);
- 
- 	return 0;
-+
-+err_clk:
-+	clk_disable_unprepare(i2c->clk);
-+err_pclk:
-+	clk_disable_unprepare(i2c->pclk);
-+	return ret;
- }
- #endif
- 
--- 
-2.30.2
+before setting up the interfaces.
+
+But even then, on the first "ip link set up dev mon0" (not only for mon0 - 
+also for wlan0/...) it will crash with:
+
+
+    [  806.731357] mt7921e 0000:05:00.0: Message 00000046 (seq 4) timeout
+    [  806.737730] mt7921e 0000:05:00.0: chip reset
+RTNETLINK answers: Connection timed out
+    [  806.867666] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build Time: 20211129210838a
+    [  806.867666] 
+    [  806.888441] mt7921e 0000:05:00.0: WM Firmware Version: ____010000, Build Time: 20211129210917
+    [  806.928204] mt7921e 0000:05:00.0: Firmware init done
+
+But when I then set up the device again then it seems to work. This is the 
+case for monitor and managed interfaces.
+
+I've used commit 678071ef7029 ("mt76: mt7615: clear mcu error interrupt status 
+on mt7663") in mt76.git for this. 
+
+Kind regards,
+	Sven
+--nextPart1990156.1ky84pn987
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGyDOgACgkQXYcKB8Em
+e0bkhBAAkqBMV5xrzHFlOV75veDIUYPQjwNP/KZsTUL7bCc1NDkhuQHd73iwqM9H
+5xpdF/8DQm0A5Sbqip8Sxi29zbwffh35iO+J+E8opxi000oHuslOUMCWg0Og6XZD
+yB7J8ONjDSC+yZ3gNNeESAMoU06PDQQg7oJ2zA9lUPWtRNZ/Eiq6QH4mJRyXHUP2
+IQSQ+d0DdVDFx9j77kkyJNAKIRPNSB/M23y8bAxvQ9m+gXlmTsFfAOzCke+Z3qN6
+clkpHhXqAaSIin2XjCTHzSjYcnEmgMFu4tof6Vk6geMxvc16tl0/sky6AzZf4mHk
+XPhIEOUK3gxyZPpD+z8QeqIBtOZPtyTjtpDlYiMCoBGXnYM35ZZuTHivX1UvuSg4
+3v/TKHmftEJ7J+8dRAKO5aw1BJm6bLO7rmMz/niwYdKwN7q6Kj66nM0HGCfmXNav
+N3Lkjkz34k0o1i4PSnEI1e4kff2Ll2nnahChmud6ReFjaIzrZjmYDgeimBZT5kma
+Rck74zBstLqB3eD79mzNPd20Fd7MnCCOgUclFxwEETwedNVVRKEaHktnsyq5KB3/
+xS5wQzeci879l1XuyZFiz65riN6XyGOYJaOFld+ALkaIO9QQ1l3qh9YAB4ba9v/w
+nav7b07bmgpSHaDoekFPec6N6E5/MsKK6nXlZphJw2+lmXSLu7w=
+=iVCx
+-----END PGP SIGNATURE-----
+
+--nextPart1990156.1ky84pn987--
+
+
 

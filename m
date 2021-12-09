@@ -2,131 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C65446F2D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F52946F2DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243219AbhLISQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:16:28 -0500
-Received: from mga02.intel.com ([134.134.136.20]:49468 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237501AbhLISQ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:16:26 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225441522"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="225441522"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:09:47 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="680433388"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:09:46 -0800
-Date:   Thu, 9 Dec 2021 10:14:04 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
-Message-ID: <20211209101404.6aefbe1c@jacob-builder>
-In-Reply-To: <YbHie/Z4bIXwTInx@myrica>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
-        <YbHie/Z4bIXwTInx@myrica>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S242731AbhLISUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237501AbhLISUw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 13:20:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C707C061746;
+        Thu,  9 Dec 2021 10:17:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5573FB825F3;
+        Thu,  9 Dec 2021 18:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9742AC004DD;
+        Thu,  9 Dec 2021 18:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639073836;
+        bh=5WzgwuFREHai1LZ5Fq/7JGMVg+y6UKpM33QWtTaDVw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cfk0MVT1xKw7fkymLlas0hLesF6lRPvFZEy2xSspQlEisOd3xLXx7JzD15NZJ9Whn
+         ENxP284SzeMKE8g5DFAG33LIDaT0IrCNK83MXmMvr2nJErj5JEJrb34F8Tdh4c3OAC
+         1iCVGLy+oIadLF17OSPQwfSLonFl/WbzTdqgJ19PWiH4nNb4MSfTWNtpIaOK2l81wO
+         QN0vokt8kVUKK4YkcFvrqte8hph/9W2SOzEgH7CTcJWXzSsLqQVgYbn4MAvqBNkRs0
+         Nm5gzRruoVj+Jm300AvxssG0mRgedF6gOy7NYBOiufylKK1UruBH2AGlWWxzcxajrE
+         Nb79xuLqVSjNQ==
+Date:   Thu, 9 Dec 2021 20:17:11 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Avihai Horon <avihaih@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>
+Subject: Re: [PATCH rdma-next v1 1/3] RDMA/core: Modify rdma_query_gid() to
+ return accurate error codes
+Message-ID: <YbJIJ7Lh95v8xAad@unreal>
+References: <cover.1639055490.git.leonro@nvidia.com>
+ <1f2b65dfb4d995e74b621e3e21e7c7445d187956.1639055490.git.leonro@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f2b65dfb4d995e74b621e3e21e7c7445d187956.1639055490.git.leonro@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Philippe,
-
-On Thu, 9 Dec 2021 11:03:23 +0000, Jean-Philippe Brucker
-<jean-philippe@linaro.org> wrote:
-
-> Hi Jacob,
+On Thu, Dec 09, 2021 at 03:16:05PM +0200, Leon Romanovsky wrote:
+> From: Avihai Horon <avihaih@nvidia.com>
 > 
-> On Tue, Dec 07, 2021 at 05:47:11AM -0800, Jacob Pan wrote:
-> > In-kernel DMA is managed by DMA mapping APIs, which supports per device
-> > addressing mode for legacy DMA requests. With the introduction of
-> > Process Address Space ID (PASID), device DMA can now target at a finer
-> > granularity per PASID + Requester ID (RID).
-> > 
-> > However, for in-kernel DMA there is no need to differentiate between
-> > legacy DMA and DMA with PASID in terms of mapping. DMA address mapping
-> > for RID+PASID can be made identical to the RID. The benefit for the
-> > drivers is the continuation of DMA mapping APIs without change.
-> > 
-> > This patch reserves a special IOASID for devices that perform in-kernel
-> > DMA requests with PASID. This global IOASID is excluded from the
-> > IOASID allocator. The analogous case is PASID #0, a special PASID
-> > reserved for DMA requests without PASID (legacy). We could have
-> > different kernel PASIDs for individual devices, but for simplicity
-> > reasons, a globally reserved one will fit the bill.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
-> >  drivers/iommu/intel/iommu.c                     | 4 ++--
-> >  drivers/iommu/intel/pasid.h                     | 3 +--
-> >  drivers/iommu/intel/svm.c                       | 2 +-
-> >  drivers/iommu/ioasid.c                          | 2 ++
-> >  include/linux/ioasid.h                          | 4 ++++
-> >  6 files changed, 11 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c index
-> > ee66d1f4cb81..ac79a37ffe06 100644 ---
-> > a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c +++
-> > b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c @@ -329,7 +329,7 @@
-> > __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm) return
-> > ERR_PTR(-ENOMEM); 
-> >  	/* Allocate a PASID for this mm if necessary */
-> > -	ret = iommu_sva_alloc_pasid(mm, 1, (1U << master->ssid_bits) -
-> > 1);
-> > +	ret = iommu_sva_alloc_pasid(mm, IOASID_ALLOC_BASE, (1U <<
-> > master->ssid_bits) - 1);  
+> Modify rdma_query_gid() to return -ENOENT for empty entries. This will
+> make error reporting more accurate and will be used in next patches.
 > 
-> I'd rather keep hardware limits as parameters here. PASID#0 is reserved by
-> the SMMUv3 hardware so we have to pass at least 1 here, but VT-d could
-> change RID_PASID and pass 0. On the other hand IOASID_DMA_PASID depends on
-> device drivers needs and is not needed on all systems, so I think could
-> stay within the ioasid allocator. Could VT-d do an
-> ioasid_alloc()/ioasid_get() to reserve this global PASID, storing it
-> under the device_domain_lock?
+> Signed-off-by: Avihai Horon <avihaih@nvidia.com>
+> Reviewed-by: Mark Zhang <markzhang@nvidia.com>
+> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> ---
+>  drivers/infiniband/core/cache.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-Yes, this works. We can delegate DMA PASID allocation to vendor drivers. My
-proposal here is driven by simplicity.
+> diff --git a/drivers/infiniband/core/cache.c b/drivers/infiniband/core/cache.c
+> index 0c98dd3dee67..edddcca62ece 100644
+> --- a/drivers/infiniband/core/cache.c
+> +++ b/drivers/infiniband/core/cache.c
+> @@ -955,7 +955,7 @@ int rdma_query_gid(struct ib_device *device, u32 port_num,
+>  {
+>  	struct ib_gid_table *table;
+>  	unsigned long flags;
+> -	int res = -EINVAL;
+> +	int res;
+>  
+>  	if (!rdma_is_port_valid(device, port_num))
+>  		return -EINVAL;
+> @@ -963,9 +963,15 @@ int rdma_query_gid(struct ib_device *device, u32 port_num,
+>  	table = rdma_gid_table(device, port_num);
+>  	read_lock_irqsave(&table->rwlock, flags);
+>  
+> -	if (index < 0 || index >= table->sz ||
+> -	    !is_gid_entry_valid(table->data_vec[index]))
+> +	if (index < 0 || index >= table->sz) {
+> +		res = -EINVAL
 
-> This looks like we're just one step away from device drivers needing
-> multiple PASIDs for kernel DMA so I'm trying to figure out how to evolve
-> the API towards that. It's probably as simple as keeping a kernel IOASID
-> set at first, but then we'll probably want to optimize by having multiple
-> overlapping sets for each device driver (all separate from the SVA set).
-Sounds reasonable to start with a kernel set for in-kernel DMA once we need
-multiple ones. But I am not sure what *overlapping* sets mean here, could
-you explain?
+Jason,
 
+I made stupid mistake here, and missed ";".
+Can you fix it locally?
+
+Thanks
+
+>  		goto done;
+> +	}
+> +
+> +	if (!is_gid_entry_valid(table->data_vec[index])) {
+> +		res = -ENOENT;
+> +		goto done;
+> +	}
+>  
+>  	memcpy(gid, &table->data_vec[index]->attr.gid, sizeof(*gid));
+>  	res = 0;
+> -- 
+> 2.33.1
 > 
-
-
-Thanks,
-
-Jacob

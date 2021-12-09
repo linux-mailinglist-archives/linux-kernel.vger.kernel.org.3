@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C3446E222
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB2046E226
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbhLIFvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:51:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23672 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230154AbhLIFvE (ORCPT
+        id S232445AbhLIFwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230154AbhLIFwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:51:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639028851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MTAn1ztGmocc9lVa3A3/+M3LMLwmgt1eLb7L68uXAdc=;
-        b=E8Z6RRx5gT5mcb7jnlunYCPofg6v/fj9Nllwn14Cf8dAknjiD0JqIM1Ekxja1n9VTxQh16
-        ZZ8DpvM24nX87vmOTf5kHRE0HwXuSEOXSfeJwKzPn6mugFwWBuVyWZVsQdONDwUcgiZxWN
-        JqWQbY6nhU3/EZDP8ZmsLpQ9j9IOeV8=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-AfVfHjQfMZe4VLFgNHgobw-1; Thu, 09 Dec 2021 00:47:29 -0500
-X-MC-Unique: AfVfHjQfMZe4VLFgNHgobw-1
-Received: by mail-lf1-f71.google.com with SMTP id k17-20020a05651239d100b0041c32e98751so2211940lfu.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:47:29 -0800 (PST)
+        Thu, 9 Dec 2021 00:52:18 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1C7C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:48:45 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id z6so3094177plk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:48:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FzhXQ1DXqGpAK74xOecr+4scScmoJYLSnvomuB1FD0U=;
+        b=BADIb+O6VlmOsH2ot7sr8I/LgM+/1Erp3VzO0L62CYAvfDpT39oYOost1vDELWjJkO
+         PwrZRhUtG5nmMk6DjpXKteDDN6Z1s8gLn95F4wrhK7En/nFNyovupc81mAafHEsI0c6E
+         xuWTxL4eEtG09r7g3exKTtKq9p53nQ2U1OlG0uyAIGqPvwPFKs+toAf1poNNtpZAZ2bH
+         JiGvyZC0n0eztlzps8kQVa6p9f6lrS4Avbd4muNdFg2sG79OJmMkx135z19M52COBoxr
+         6Cep8skFNqrLj43uW0vAApP5/itd8eNd6i97yBErigcPxACewEwlLn+bI1qsPvzkTD1P
+         Je/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MTAn1ztGmocc9lVa3A3/+M3LMLwmgt1eLb7L68uXAdc=;
-        b=CgqDFULp2FXgMyc/BfX+R1knCyxHWCKxaLstnp384mUFp4Uuqa7pOi6FmvDzDzLhIg
-         nsTG7HvDYaYCg6YPXj5/WSJ8wsAWMuhgMUMuqcxprnOnSF+5jx00FWD6vSWsyAH/gCmt
-         5rPUPlFCEiRJMLIpZV92UM+zQYPwbZpbRJ8Yn+HBSFhNRMzB8ISBcHKs8i11vnerRfSN
-         A4CPtsJgrX3jEjpRikTpMg6ff1fScEcfrXWhXey8uxt7B+CPSQsLRaSvqif36yoSWE+J
-         c21kV4/j3x4QCI7XNZx/MrYAmGli6SLjs5v5CN+j42B/EZXAxhbuLLM7R6Nek88RVh8F
-         xiCA==
-X-Gm-Message-State: AOAM531+9WrwLzrkZOPUaNfHBL9YyHxZ0pwtcYBlc72M5jNhpnEyOBOd
-        IkGZWh5w5fJyL6yammWpDxS8CVLrqhqP/rA2dR9QxBvCspD+6iYYnkSrYvHwOvw+NT772YPCLt7
-        aEghNI4qgijBjJPJnE44y4WtjPYDwoyFWekHncVkk
-X-Received: by 2002:a2e:3012:: with SMTP id w18mr4000073ljw.217.1639028848438;
-        Wed, 08 Dec 2021 21:47:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwq/umBaPtYwDOFSZQvlFRjjQexm+OmnMnO6A8JPT/yt1E5P3J0cUOqEOEr99euJsOw+HZezXtE5wjdaUSNzOc=
-X-Received: by 2002:a2e:3012:: with SMTP id w18mr4000032ljw.217.1639028848143;
- Wed, 08 Dec 2021 21:47:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FzhXQ1DXqGpAK74xOecr+4scScmoJYLSnvomuB1FD0U=;
+        b=Ee2mfHH97cqiCZuoYxzwpzWbkQ3atM/LeZcyfP6QTDPKKhXZLVgGynvpX5xAoHSemH
+         dXX4B35ns7dm/Q8T85XaeSH9dMzDIlHCCPOiUFuiE9eXyF6Syw8khKGYlrh63kZ2Qosa
+         seDosbxMTAiRwVuFz8v+gRP6n9WWobkDNUmTBAwHz/6elUOMa7jwrDgUsjtJ3ZPQtwNQ
+         ONY6SkLT7sDbiuk47qdndn2aDTbswahUSfCRYH/gM0oQzzsw8Wb/N+/8lHoNyZX+i08n
+         iMnEqTpBo3Q/vY7Up+wXrmwxHiVkOP2JKW0/zAAMsb1L22JKaLY0v+CAR+k/UHeR3+mi
+         wHAw==
+X-Gm-Message-State: AOAM530Mi2MxirNafU8PtJqDshDiVBpcNcRQ3GgGArO7Cf6mAtchVJue
+        bCFoXfHp4LrVakMo0+Ei7E122A==
+X-Google-Smtp-Source: ABdhPJz+5oR8X4Gf87uVbWD+Y+QqoIGVsmUwPwjIfHJuMEPDQXLKvLOtsSRCXJIBGBW14OrfMxdazQ==
+X-Received: by 2002:a17:90a:b015:: with SMTP id x21mr13176095pjq.84.1639028924871;
+        Wed, 08 Dec 2021 21:48:44 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f4sm5229428pfg.34.2021.12.08.21.48.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 21:48:44 -0800 (PST)
+Date:   Thu, 9 Dec 2021 05:48:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] KVM: x86: Rep string I/O WARN removal and test
+Message-ID: <YbGYuDgaqcRH/CZo@google.com>
+References: <20211025201311.1881846-1-seanjc@google.com>
 MIME-Version: 1.0
-References: <87v909bf2k.ffs@tglx> <20211130202800.GE4670@nvidia.com>
- <87o861banv.ffs@tglx> <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
- <20211201130023.GH4670@nvidia.com> <87y2548byw.ffs@tglx> <20211201181406.GM4670@nvidia.com>
- <87mtlk84ae.ffs@tglx> <87r1av7u3d.ffs@tglx> <20211202135502.GP4670@nvidia.com>
- <BN9PR11MB527696C0E8D08680FFFB6BAB8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB527696C0E8D08680FFFB6BAB8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 9 Dec 2021 13:47:17 +0800
-Message-ID: <CACGkMEv_b=WLUp1_fUtfaxo9_Y95x=u+Za2-sxTRrmXe-J_jRA@mail.gmail.com>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211025201311.1881846-1-seanjc@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 1:41 PM Tian, Kevin <kevin.tian@intel.com> wrote:
->
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Thursday, December 2, 2021 9:55 PM
-> >
-> > Further, there is no reason why IMS should be reserved exclusively for
-> > VFIO!
->
-> This is correct. Just as what you agreed with Thomas, the only difference
-> between IMS and MSI is on where the messages are stored. Physically
-> it is unreasonable for the HW to check whether an interrupt is used for
-> a specific software usage (e.g. virtualization) since it doesn't have such
-> knowledge. At most an entry is associated to PASID, but again the PASID
-> can be used anywhere.
+On Mon, Oct 25, 2021, Sean Christopherson wrote:
+> Remove a WARN that was added as part of the recent I/O overhaul to play
+> nice with SEV-ES string I/O.
+> 
+> For the record, my FIXME in lieu of a WARN was deliberate, as I suspected
+> userspace could trigger a WARN ;-)
+> 
+> Based on kvm/master, commit 95e16b4792b0 ("KVM: SEV-ES: go over the
+> sev_pio_data buffer in multiple passes if needed").
+> 
+> Sean Christopherson (2):
+>   KVM: x86: Don't WARN if userspace mucks with RCX during string I/O
+>     exit
+>   KVM: selftests: Add test to verify KVM doesn't explode on "bad" I/O
+> 
+>  arch/x86/kvm/x86.c                            |   9 +-
+>  tools/testing/selftests/kvm/.gitignore        |   1 +
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../selftests/kvm/x86_64/userspace_io_test.c  | 114 ++++++++++++++++++
+>  4 files changed, 123 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/userspace_io_test.c
 
-Note that vDPA had the plan to use IMS for the parent that can have a
-huge amount of instances.
-
-Thanks
-
->
-> The wording in current IDXD spec is not clear on this part. We'll talk to
-> the spec owner to have it fixed.
->
-> Thanks
-> Kevin
->
-
+Ping.  I completely forgot about this too, until I unintentionally ran a
+userspace_io_test that was lying around.

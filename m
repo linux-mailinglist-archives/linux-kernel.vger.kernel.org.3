@@ -2,100 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B9A46F698
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818C846F699
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbhLIWTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbhLIWTA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:19:00 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B257AC0617A1;
-        Thu,  9 Dec 2021 14:15:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4B33BCE2905;
-        Thu,  9 Dec 2021 22:15:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2038EC341CC;
-        Thu,  9 Dec 2021 22:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639088122;
-        bh=8+5iejOgt4a0kV0Vay3REpdXFmJ05lGq8mKVYoJ5mOU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qsuO8wX3P6ivizjIYASOLUKS7Pg2Q6WQTRv02j7MCcj+oQL8LdxYQz4A19xAenjHS
-         j8WSCYO2ndqayDdLKDFM6iPKbi/oJc0mT9phzQ8Ljv3iW/3cGfZ3fvY/gcIMZWzy1W
-         WGphXEutdaonqh1OWSuMW5gA3dWMPuraMq/S3IGXVv8uzTZwoXtlOQxULtrZjoPiTh
-         OPyDqzS6lRqud/UbrisuHI39P8AidKN0NGVvpvqAwpKp7BVK3jRraRX7kjSOhE9+BK
-         dxb5O3kz7GLTbsHPtpaGrOW+0pupd+bg/PJHSGvuo+I+egi95zx4DDxpc90vgv82JC
-         TXfZjvs62NxJg==
-Received: by mail-ed1-f42.google.com with SMTP id r11so23701872edd.9;
-        Thu, 09 Dec 2021 14:15:22 -0800 (PST)
-X-Gm-Message-State: AOAM533J3kS5jzK7BL0Gsqt9xNTcaybuSL9YJPy7R659tw5g6t76M1eH
-        blGgO7nJexOjACPFy5E+qIc9OMdRrDumXvZRMA==
-X-Google-Smtp-Source: ABdhPJyWGE4yophjLw+aj1ZHBnOdC34qdnBApVThTxytcLV4NKNORgY2HorbJ+2FVd+KDAYIp8Z7QHfm5oklNSpg1mo=
-X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr32502014edx.306.1639088120352;
- Thu, 09 Dec 2021 14:15:20 -0800 (PST)
+        id S233369AbhLIWTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:19:17 -0500
+Received: from mga09.intel.com ([134.134.136.24]:34986 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231280AbhLIWTQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 17:19:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639088143; x=1670624143;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NaV9wSZ3O6RZdaSQmiENlsN0LEElS+bJEY+1wBkjRkw=;
+  b=PJRA20TvtKzYCaysSFt2t3QRKT2KOxzitQhqmWR/0cg+5ApNllWE65AW
+   CfjdV0yPdRiZs3u2E4lMG9NN+R83+Q9PAJK+/HRuOy1rB4LWMNHKCWY5e
+   5jInwXbVcraps4eZbqy+t9o/C55IHdYqXs+DH2+n8sMrd3ZQp7i2vw62J
+   sgnCi9kEGiZLKegBWvtvuZTAorg8M0yuAyxyrm59Pv++DQcMW2TImAqSq
+   0fubjS116ucYtlrEQ9YNwF7PFjUf0HtPEBv8hN7QpZD6o0iEXcMmwApCF
+   KKpqvgZEWBUnMffh9KJo8bsUTMvFHVjJxv3F2wjM8UaVvvAqOFsA89cbM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238020322"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="238020322"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:15:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="463424094"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 14:15:40 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvRhU-0002Qj-81; Thu, 09 Dec 2021 22:15:40 +0000
+Date:   Fri, 10 Dec 2021 06:15:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: mm/page_alloc.c:8046:33: error: implicit declaration of function
+ 'arch_alloc_nodedata'; did you mean 'arch_alloc_page'?
+Message-ID: <202112100657.wrZJcCEG-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211112062604.3485365-1-peng.fan@oss.nxp.com> <20211112062604.3485365-4-peng.fan@oss.nxp.com>
-In-Reply-To: <20211112062604.3485365-4-peng.fan@oss.nxp.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 9 Dec 2021 16:15:09 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
-Message-ID: <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: imx8qxp: add cache info
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 12:27 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> i.MX8QXP A35 Cluster has 32KB Icache, 32KB Dcache and 512KB L2 Cache
->  - Icache is 2-way set associative
->  - Dcache is 4-way set associative
->  - L2cache is 8-way set associative
->  - Line size are 64bytes
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 28 ++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> index 617618edf77e..dbec7c106e0b 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> @@ -58,6 +58,12 @@ A35_0: cpu@0 {
->                         compatible = "arm,cortex-a35";
->                         reg = <0x0 0x0>;
->                         enable-method = "psci";
-> +                       i-cache-size = <0x8000>;
-> +                       i-cache-line-size = <64>;
-> +                       i-cache-sets = <256>;
-> +                       d-cache-size = <0x8000>;
-> +                       d-cache-line-size = <64>;
-> +                       d-cache-sets = <128>;
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211209-184929/Alexey-Makhalov/mm-fix-panic-in-__alloc_pages/20211102-041405
+head:   652e780546c1fdbe1adcbbe04106f4020e3bfb56
+commit: 652e780546c1fdbe1adcbbe04106f4020e3bfb56 mm: fix panic in __alloc_pages
+date:   11 hours ago
+config: csky-buildonly-randconfig-r005-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100657.wrZJcCEG-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/652e780546c1fdbe1adcbbe04106f4020e3bfb56
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20211209-184929/Alexey-Makhalov/mm-fix-panic-in-__alloc_pages/20211102-041405
+        git checkout 652e780546c1fdbe1adcbbe04106f4020e3bfb56
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
 
-Why do you need all this for the L1? Isn't it discoverable with cache
-ID registers?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Rob
+All error/warnings (new ones prefixed by >>):
+
+   mm/page_alloc.c:3804:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
+    3804 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c: In function 'free_area_init':
+>> mm/page_alloc.c:8046:33: error: implicit declaration of function 'arch_alloc_nodedata'; did you mean 'arch_alloc_page'? [-Werror=implicit-function-declaration]
+    8046 |                         pgdat = arch_alloc_nodedata(nid);
+         |                                 ^~~~~~~~~~~~~~~~~~~
+         |                                 arch_alloc_page
+>> mm/page_alloc.c:8046:31: warning: assignment to 'pg_data_t *' {aka 'struct pglist_data *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    8046 |                         pgdat = arch_alloc_nodedata(nid);
+         |                               ^
+>> mm/page_alloc.c:8052:25: error: implicit declaration of function 'arch_refresh_nodedata' [-Werror=implicit-function-declaration]
+    8052 |                         arch_refresh_nodedata(nid, pgdat);
+         |                         ^~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +8046 mm/page_alloc.c
+
+  7949	
+  7950	/**
+  7951	 * free_area_init - Initialise all pg_data_t and zone data
+  7952	 * @max_zone_pfn: an array of max PFNs for each zone
+  7953	 *
+  7954	 * This will call free_area_init_node() for each active node in the system.
+  7955	 * Using the page ranges provided by memblock_set_node(), the size of each
+  7956	 * zone in each node and their holes is calculated. If the maximum PFN
+  7957	 * between two adjacent zones match, it is assumed that the zone is empty.
+  7958	 * For example, if arch_max_dma_pfn == arch_max_dma32_pfn, it is assumed
+  7959	 * that arch_max_dma32_pfn has no pages. It is also assumed that a zone
+  7960	 * starts where the previous one ended. For example, ZONE_DMA32 starts
+  7961	 * at arch_max_dma_pfn.
+  7962	 */
+  7963	void __init free_area_init(unsigned long *max_zone_pfn)
+  7964	{
+  7965		unsigned long start_pfn, end_pfn;
+  7966		int i, nid, zone;
+  7967		bool descending;
+  7968	
+  7969		/* Record where the zone boundaries are */
+  7970		memset(arch_zone_lowest_possible_pfn, 0,
+  7971					sizeof(arch_zone_lowest_possible_pfn));
+  7972		memset(arch_zone_highest_possible_pfn, 0,
+  7973					sizeof(arch_zone_highest_possible_pfn));
+  7974	
+  7975		start_pfn = find_min_pfn_with_active_regions();
+  7976		descending = arch_has_descending_max_zone_pfns();
+  7977	
+  7978		for (i = 0; i < MAX_NR_ZONES; i++) {
+  7979			if (descending)
+  7980				zone = MAX_NR_ZONES - i - 1;
+  7981			else
+  7982				zone = i;
+  7983	
+  7984			if (zone == ZONE_MOVABLE)
+  7985				continue;
+  7986	
+  7987			end_pfn = max(max_zone_pfn[zone], start_pfn);
+  7988			arch_zone_lowest_possible_pfn[zone] = start_pfn;
+  7989			arch_zone_highest_possible_pfn[zone] = end_pfn;
+  7990	
+  7991			start_pfn = end_pfn;
+  7992		}
+  7993	
+  7994		/* Find the PFNs that ZONE_MOVABLE begins at in each node */
+  7995		memset(zone_movable_pfn, 0, sizeof(zone_movable_pfn));
+  7996		find_zone_movable_pfns_for_nodes();
+  7997	
+  7998		/* Print out the zone ranges */
+  7999		pr_info("Zone ranges:\n");
+  8000		for (i = 0; i < MAX_NR_ZONES; i++) {
+  8001			if (i == ZONE_MOVABLE)
+  8002				continue;
+  8003			pr_info("  %-8s ", zone_names[i]);
+  8004			if (arch_zone_lowest_possible_pfn[i] ==
+  8005					arch_zone_highest_possible_pfn[i])
+  8006				pr_cont("empty\n");
+  8007			else
+  8008				pr_cont("[mem %#018Lx-%#018Lx]\n",
+  8009					(u64)arch_zone_lowest_possible_pfn[i]
+  8010						<< PAGE_SHIFT,
+  8011					((u64)arch_zone_highest_possible_pfn[i]
+  8012						<< PAGE_SHIFT) - 1);
+  8013		}
+  8014	
+  8015		/* Print out the PFNs ZONE_MOVABLE begins at in each node */
+  8016		pr_info("Movable zone start for each node\n");
+  8017		for (i = 0; i < MAX_NUMNODES; i++) {
+  8018			if (zone_movable_pfn[i])
+  8019				pr_info("  Node %d: %#018Lx\n", i,
+  8020				       (u64)zone_movable_pfn[i] << PAGE_SHIFT);
+  8021		}
+  8022	
+  8023		/*
+  8024		 * Print out the early node map, and initialize the
+  8025		 * subsection-map relative to active online memory ranges to
+  8026		 * enable future "sub-section" extensions of the memory map.
+  8027		 */
+  8028		pr_info("Early memory node ranges\n");
+  8029		for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
+  8030			pr_info("  node %3d: [mem %#018Lx-%#018Lx]\n", nid,
+  8031				(u64)start_pfn << PAGE_SHIFT,
+  8032				((u64)end_pfn << PAGE_SHIFT) - 1);
+  8033			subsection_map_init(start_pfn, end_pfn - start_pfn);
+  8034		}
+  8035	
+  8036		/* Initialise every node */
+  8037		mminit_verify_pageflags_layout();
+  8038		setup_nr_node_ids();
+  8039		for_each_node(nid) {
+  8040			pg_data_t *pgdat;
+  8041	
+  8042			if (!node_online(nid)) {
+  8043				pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
+  8044	
+  8045				/* Allocator not initialized yet */
+> 8046				pgdat = arch_alloc_nodedata(nid);
+  8047				if (!pgdat) {
+  8048					pr_err("Cannot allocate %zuB for node %d.\n",
+  8049							sizeof(*pgdat), nid);
+  8050					continue;
+  8051				}
+> 8052				arch_refresh_nodedata(nid, pgdat);
+  8053				free_area_init_memoryless_node(nid);
+  8054				/*
+  8055				 * not marking this node online because we do not want to
+  8056				 * confuse userspace by sysfs files/directories for node
+  8057				 * without any memory attached to it (see topology_init)
+  8058				 * The pgdat will get fully initialized when a memory is
+  8059				 * hotpluged into it by hotadd_init_pgdat
+  8060				 */
+  8061				continue;
+  8062			}
+  8063	
+  8064			pgdat = NODE_DATA(nid);
+  8065			free_area_init_node(nid);
+  8066	
+  8067			/* Any memory on that node */
+  8068			if (pgdat->node_present_pages)
+  8069				node_set_state(nid, N_MEMORY);
+  8070			check_for_memory(pgdat, nid);
+  8071		}
+  8072	
+  8073		memmap_init();
+  8074	}
+  8075	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

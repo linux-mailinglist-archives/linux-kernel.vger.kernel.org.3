@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD8046EA4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D3C46EA4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238889AbhLIOwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:52:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41285 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238887AbhLIOwJ (ORCPT
+        id S238921AbhLIOwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:52:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47122 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238887AbhLIOwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:52:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639061315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q9ohOzueGM6Q6CzM/nc70ucDOBZyHf1ga4ugF012GdQ=;
-        b=FGAE+0VwoHpdcyMslmLgggllA5rPWrRgbbyMxXJiu/jlzUpTqmHjs9MD9Aqqy2B3zvL6AA
-        J3/6Z2SAwFIM7tE8AgreKMYhI+5i48hpONxzzFvGLd+6Mt8fjzjz18VVHouLDQSyKUXMt6
-        a7l21l4LwNXDDj0wQl9Zv07Ss/CTam0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-bzWYdvgnOhOv5cycTJfqQQ-1; Thu, 09 Dec 2021 09:48:32 -0500
-X-MC-Unique: bzWYdvgnOhOv5cycTJfqQQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Dec 2021 09:52:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2462A343D8;
-        Thu,  9 Dec 2021 14:48:31 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A1B760BF1;
-        Thu,  9 Dec 2021 14:48:26 +0000 (UTC)
-Message-ID: <346f5a5e93077ba20188a9b0e67bb3a44e2cad48.camel@redhat.com>
-Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 16:48:25 +0200
-In-Reply-To: <3bf8d500-0c1e-92dd-20c8-c3c231d2cbed@redhat.com>
-References: <20211208015236.1616697-1-seanjc@google.com>
-         <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
-         <8c6c38f3cc201e42629c3b8e5cf8cdb251c9ea8d.camel@redhat.com>
-         <YbFHsYJ5ua3J286o@google.com>
-         <3bf8d500-0c1e-92dd-20c8-c3c231d2cbed@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39D67B824B5;
+        Thu,  9 Dec 2021 14:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C01BC341C7;
+        Thu,  9 Dec 2021 14:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639061339;
+        bh=3AROl7X9Vv9Qbid0OkUVo5FHFoXTjHs4kQFn1KMmBRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Btg4UEOr0rLkJ8TUTxdt4nM7W3QIBkB3nXUjUxzYa5J7SsoJpy9YAO5LPZSABqz73
+         OkwNCGxnv8ArdDTXT8Gc5j4vUPfkI0LbNWMfIJ0pIcgfFD5TNKgtlcOsfFLGEek1uM
+         TGcq1AyFd03eHWsOPuLYmEhEHKO+XYax0GUWGEncOSLHOjseQznW5e2bbaDxTsYw/e
+         5Lb2JDU0LxpA/nLWk7ykek7vmTV00y0EljUT35bcx6kNgv/GrvCqookHU9RmKN+7bs
+         AfqMYGxs1pDwoJH/E0AfMjnY9OA+PD2KhCaHi9mT3mzgAY7+08TIAmNAQFR3G6svnH
+         KGSXVtaQT7MWw==
+Date:   Thu, 9 Dec 2021 15:48:55 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND 7/8] arm: dts: exynos: Rename hsi2c nodes to
+ i2c for Exynos5260
+Message-ID: <YbIXVw+as1Sj6yDW@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+References: <20211204215820.17378-1-semen.protsenko@linaro.org>
+ <20211204215820.17378-8-semen.protsenko@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lUU571btWketcgAb"
+Content-Disposition: inline
+In-Reply-To: <20211204215820.17378-8-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 15:29 +0100, Paolo Bonzini wrote:
-> On 12/9/21 01:02, Sean Christopherson wrote:
-> > RDX, a.k.a. ir_data is NULL.  This check in svm_ir_list_add()
-> > 
-> > 	if (pi->ir_data && (pi->prev_ga_tag != 0)) {
-> > 
-> > implies pi->ir_data can be NULL, but neither avic_update_iommu_vcpu_affinity()
-> > nor amd_iommu_update_ga() check ir->data for NULL.
-> > 
-> > amd_ir_set_vcpu_affinity() returns "success" without clearing pi.is_guest_mode
-> > 
-> > 	/* Note:
-> > 	 * This device has never been set up for guest mode.
-> > 	 * we should not modify the IRTE
-> > 	 */
-> > 	if (!dev_data || !dev_data->use_vapic)
-> > 		return 0;
-> > 
-> > so it's plausible svm_ir_list_add() could add to the list with a NULL pi->ir_data.
-> > 
-> > But none of the relevant code has seen any meaningful changes since 5.15, so odds
-> > are good I broke something :-/
 
-Doesn't reproduce here yet even with my iommu changes :-(
-Oh well.
+--lUU571btWketcgAb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-	Maxim Levitsky
+On Sat, Dec 04, 2021 at 11:58:19PM +0200, Sam Protsenko wrote:
+> In Device Tree specification it's recommended to use "i2c" name for I2C
+> nodes. Now that i2c-exynos5 dt-schema binding was added, it shows some
+> warnings like this when validating HS-I2C nodes:
+>=20
+>     hsi2c@xxxxxxxxx: $nodename:0: 'hsi2c@xxxxxxxx' does not match
+>                                   '^i2c(@.*)?'
+>     From schema: Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+>=20
+> Rename hsi2c@* to i2c@* to fix those warnings.
+>=20
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+Applied to for-next, thanks!
 
 
-> > 
-> 
-> Ok, I'll take this.
-> 
-> Paolo
-> 
+--lUU571btWketcgAb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyF1cACgkQFA3kzBSg
+Kbbv4A//XwoeLJzxrVQDigKwrW4Yd6SEuqCUNxmW6A/y1UG4Gn9bMK1MqWvHCjwA
+jsLOKJbIXMW0uwSPFQbK29lT0ENr9tIBjjB78AIbWAqWFb75S/sQXLYcvwGy/ReZ
+DRZtRaBSUsl6DO34MN0bglkNqpsxZJOZUNXL68d2xiD2u7yO7oJfcbRK0E29QDrc
+VLqLixhcs6xqHPD2JoHlS2WfmwjLPwzpYYfmDobMNCLMhwVrg9zprHO7ebfPUti2
+ELQLqnIPNaC/f06YfdjuI6iqC2bngCac84orqXagZgZBccj5WTddlR+gWmImIktn
++30HnTK6P3OjQiz09R0KW+SAY51x2RKXwPNdDdi47nUYngdxnNTHflvDR7gMFMzM
+nY3CTFVGcEuzUmTe81ayzfPyGfm8MB+OILdchs8ii03AdYuwr9VFDtSW8t4zH74G
+jJCSaOhjJTnXbF4tLvIAVitm2mL+wAalTYANy3c0i7zd1dVHwO+xpf2WXZask7ST
+ZauFfypAisIFjMNRAimaIpgnVJkN5vOiS/dGYVFoFse7Vr4XguifsquGtFwahJqQ
+cShVmqPrGX400rDfKxJXB+Y/n7vrO0iQOIwk3GbClF6/Xi4qo83RUHDeXtEgPwaQ
+b5mfE2+ehG+iFoAM2GBDxtulsh2WXOiCk7fkXELRRSPXoQls4cg=
+=9e0q
+-----END PGP SIGNATURE-----
+
+--lUU571btWketcgAb--

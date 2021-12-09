@@ -2,187 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC07E46F544
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F43346F546
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbhLIU4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:56:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54532 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229842AbhLIU4i (ORCPT
+        id S232341AbhLIU6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231237AbhLIU6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:56:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639083183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=c4oEqkagy/qMAjzlctANbGGhASHOez2GnoWuetKkoIE=;
-        b=d3XymxJhlR3lxSoryOY3u0HOBagukTMYpxMLZhrBQJRp47VrgFma3P3DfX07nuvScMsFLt
-        UMXv6YhAQpNhMLAWusYTnnoZsb5BGWsscb4CF1yRJ0Uu6cRwrALczNljQj0bBoDWe6y6D/
-        s3dQKGKrUny/shnEXPMJ7JBxS7m2WBI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-103-0Uj2qM8UN3KBIJA2ezlUIQ-1; Thu, 09 Dec 2021 15:53:00 -0500
-X-MC-Unique: 0Uj2qM8UN3KBIJA2ezlUIQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7398A835E22;
-        Thu,  9 Dec 2021 20:52:59 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F82C197FC;
-        Thu,  9 Dec 2021 20:52:56 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, vkuznets@redhat.com, mlevitsk@redhat.com,
-        joao.m.martins@oracle.com, stable@vger.kernel.org,
-        David Matlack <dmatlack@google.com>
-Subject: [PATCH v2] selftests: KVM: avoid failures due to reserved HyperTransport region
-Date:   Thu,  9 Dec 2021 15:52:56 -0500
-Message-Id: <20211209205256.301140-1-pbonzini@redhat.com>
+        Thu, 9 Dec 2021 15:58:17 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC966C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:54:43 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so7537167otg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 12:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HFSacAT887PNCoxtm3wOxVaKJ2m3E3kQPyuB0zZo9cM=;
+        b=fr59f5tnC4cszL5DgLtSi0UUz1Iy7+x5sh6vLQZl5Dboa3KS29zlWZOgqp2HUf7ZqG
+         qZRtuXWGmvkIIINqZWj4Bg7sCiUYAUggieow6Ygd+26sJ82tEcSP/zqdNS+u+uTs/ObJ
+         jlcaYjk6FuhNL1c1+6DejBa821NqM7C7vtZqmy4boDd6vN0E6gV7RComJxcWvM36bY3O
+         3i90hAWILkRPoViOS6xaaq+gmMqrR25QksD2nFmstnVsuOpsz7XK8+kXFUTvT7WQ9YaT
+         t7uB1pIU0A8BV6NtmPY6wE0KqAiDuCsIaFnZIN6uFNSbvIDwSEze9DKBRfopo1XaQ1Vm
+         iD+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HFSacAT887PNCoxtm3wOxVaKJ2m3E3kQPyuB0zZo9cM=;
+        b=CkKi2mvFSrkwy4WE/oOHtTZyfw9lP3AW8QOcSHrQ/AgraVMN1c/jcjbT1e0uKvtaxj
+         LUgOjC7y3GusoTpXJjvaa6XqT25UXnobJcgGMHuecTaLFvg6qMuNQ8T+YeFworwlG85+
+         ++Wzy1GwqYow+1E26lD6WwYFfYWiK9Mu+4Z3DvDiqPIgnlPGtfomKOKyKV/9CEBvG7zc
+         le2kJV3fqhy+YDXwq+HveRgvo5naaWvPi2pSv0b8hqlngmge2raxMH7CoscQhjqSyOZF
+         nSNPl+ylNn0x5xAldo0BOp2R3q155fdgYIxKlI1HPYeL0iweyHQJkXom3zgjEw0JGDPq
+         yptg==
+X-Gm-Message-State: AOAM532OLAzZ+WsenI4ll5XxXTQOBunm9bq5eoV10NEAToKsI+M791Ko
+        S7eYlsMjAqaq8Y5nFR1ztWbqCame62Mect6KOuG2Ew==
+X-Google-Smtp-Source: ABdhPJx+jBbOy/MOlCU/G64fMr/tJptIk0krtWcyASmfxTgqjw/Ub5EF2E3yF1uwX3k6YK+w8LVDL6PDG5PxjGwivkQ=
+X-Received: by 2002:a9d:7548:: with SMTP id b8mr7516429otl.92.1639083282784;
+ Thu, 09 Dec 2021 12:54:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <YbHTKUjEejZCLyhX@elver.google.com> <202112091232.51D0DE5535@keescook>
+In-Reply-To: <202112091232.51D0DE5535@keescook>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 9 Dec 2021 21:54:30 +0100
+Message-ID: <CANpmjNPJpbKzO46APQgxeirYV=K5YwCw3yssnkMKXG2SGorUPw@mail.gmail.com>
+Subject: Re: randomize_kstack: To init or not to init?
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD proceessors define an address range that is reserved by HyperTransport
-and causes a failure if used for guest physical addresses.  Avoid
-selftests failures by reserving those guest physical addresses; the
-rules are:
+On Thu, 9 Dec 2021 at 21:48, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
+> > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+> > default since dcb7c0b9461c2, which is why this came on my radar. And
+> > Clang also performs auto-init of allocas when auto-init is on
+> > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+> > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
+> > allocas.
+> >
+> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> > enabled, add_random_kstack_offset() will auto-init that unused portion
+> > of the stack used to add an offset.
+> >
+> > There are several problems with this:
+> >
+> >       1. These offsets can be as large as 1023 bytes. Performing
+> >          memset() on them isn't exactly cheap, and this is done on
+> >          every syscall entry.
+> >
+> >       2. Architectures adding add_random_kstack_offset() to syscall
+> >          entry implemented in C require them to be 'noinstr' (e.g. see
+> >          x86 and s390). The potential problem here is that a call to
+> >          memset may occur, which is not noinstr.
+> >
+> > A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> >
+> >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> >
+> > Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
+> >
+> > To figure out what the right solution is, the first thing to figure out
+> > is, do we actually want that offset portion of the stack to be
+> > auto-init'd?
+> >
+> > There are several options:
+> >
+> >       A. Make memset (and probably all other mem-transfer functions)
+> >          noinstr compatible, if that is even possible. This only solves
+> >          problem #2.
+>
+> I'd agree: "A" isn't going to work well here.
+>
+> >
+> >       B. A workaround could be using a VLA with
+> >          __attribute__((uninitialized)), but requires some restructuring
+> >          to make sure the VLA remains in scope and other trickery to
+> >          convince the compiler to not give up that stack space.
+>
+> I was hoping the existing trickery would work for a VLA, but it seems
+> not. It'd be nice if it could work with a VLA, which could just gain the
+> attribute and we'd be done.
+>
+> >       C. Introduce a new __builtin_alloca_uninitialized().
+>
+> Hrm, this means conditional logic between compilers, too. :(
 
-- On parts with <40 bits, its fully hidden from software.
+And as Segher just pointed out, I think Clang has a "bug" because
+explicit alloca() calls aren't "automatic storage". I think Clang
+needs a new -mllvm param.
 
-- Before Fam17h, it was always 12G just below 1T, even if there was more
-RAM above this location.  In this case we just not use any RAM above 1T.
-
-- On Fam17h and later, it is variable based on SME, and is either just
-below 2^48 (no encryption) or 2^43 (encryption).
-
-Fixes: ef4c9f4f6546 ("KVM: selftests: Fix 32-bit truncation of vm_get_max_gfn()")
-Cc: stable@vger.kernel.org
-Cc: David Matlack <dmatlack@google.com>
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Message-Id: <20210805105423.412878-1-pbonzini@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../testing/selftests/kvm/include/kvm_util.h  |  9 +++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
- .../selftests/kvm/lib/x86_64/processor.c      | 67 +++++++++++++++++++
- 3 files changed, 77 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 6a1a37f30494..da2b702da71a 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -71,6 +71,15 @@ enum vm_guest_mode {
- 
- #endif
- 
-+#if defined(__x86_64__)
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
-+#else
-+static inline unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	return ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+}
-+#endif
-+
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 8f2e0bb1ef96..daf6fdb217a7 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -302,7 +302,7 @@ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
- 		(1ULL << (vm->va_bits - 1)) >> vm->page_shift);
- 
- 	/* Limit physical addresses to PA-bits. */
--	vm->max_gfn = ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+	vm->max_gfn = vm_compute_max_gfn(vm);
- 
- 	/* Allocate and setup memory for guest. */
- 	vm->vpages_mapped = sparsebit_alloc();
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 82c39db91369..b7105692661b 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1431,3 +1431,70 @@ struct kvm_cpuid2 *vcpu_get_supported_hv_cpuid(struct kvm_vm *vm, uint32_t vcpui
- 
- 	return cpuid;
- }
-+
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx 0x68747541
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx 0x444d4163
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_edx 0x69746e65
-+
-+static inline unsigned x86_family(unsigned int eax)
-+{
-+        unsigned int x86;
-+
-+        x86 = (eax >> 8) & 0xf;
-+
-+        if (x86 == 0xf)
-+                x86 += (eax >> 20) & 0xff;
-+
-+        return x86;
-+}
-+
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	const unsigned long num_ht_pages = 12 << 18; /* 12 GiB */
-+	unsigned long ht_gfn, max_gfn, max_pfn;
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
-+
-+	/* Avoid reserved HyperTransport region on AMD processors.  */
-+	eax = ecx = 0;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (ebx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx ||
-+	    ecx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx ||
-+	    edx != X86EMUL_CPUID_VENDOR_AuthenticAMD_edx)
-+		return max_gfn;
-+
-+	/* On parts with <40 physical address bits, the area is fully hidden */
-+	if (vm->pa_bits < 40)
-+		return max_gfn;
-+
-+	eax = 1;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (x86_family(eax) < 0x17) {
-+		/* Before family 17h, the HyperTransport area is just below 1T.  */
-+		ht_gfn = (1 << 28) - num_ht_pages;
-+	} else {
-+		/*
-+		 * Otherwise it's at the top of the physical address
-+		 * space, possibly reduced due to SME by bits 11:6 of
-+		 * CPUID[0x8000001f].EBX.
-+		 */
-+		eax = 0x80000008;
-+		cpuid(&eax, &ebx, &ecx, &edx);
-+		max_pfn = (1ULL << ((eax & 255) - vm->page_shift)) - 1;
-+
-+		eax = 0x80000000;
-+		cpuid(&eax, &ebx, &ecx, &edx);
-+		if (eax >= 0x8000001f) {
-+			eax = 0x8000001f;
-+			cpuid(&eax, &ebx, &ecx, &edx);
-+			max_pfn >>= (ebx >> 6) & 0x3f;
-+		}
-+		ht_gfn = max_pfn - num_ht_pages;
-+	}
-+
-+	if (max_gfn < ht_gfn)
-+		return max_gfn;
-+
-+	return ht_gfn - 1;
-+}
--- 
-2.31.1
-
+Because I think making #B work is quite ugly and also brittle. :-/

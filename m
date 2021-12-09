@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E4D46EA54
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E5646EA56
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbhLIOwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S238966AbhLIOws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbhLIOwp (ORCPT
+        with ESMTP id S229753AbhLIOwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:52:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F61C061746;
-        Thu,  9 Dec 2021 06:49:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4BFDB8232B;
-        Thu,  9 Dec 2021 14:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F6B0C341C3;
-        Thu,  9 Dec 2021 14:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639061349;
-        bh=fncNNwEZZ13cx/cFlMkuO4R/u4X00Tt6BQorHaAhDvE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p4igpzns9W6eNGFejOTyyo77pIkgrOPO8MOq/j0CVeBg8KVjkCXDR17gIeBoeVlCt
-         hjM3J1oGxumw2RgcQC/+NHgYBzetBeW6pwveH1rwJhTSy61G3u0u9wUAmr7VqlxUDa
-         CXdXaJAbrs5+mLA6GJTf6ktA/Qdt5LHTZzbyeYRxZ+Kfxy6uveLSiuUDxuqIOX5IOh
-         0f8j+NXNH0936YRVqGZwU0isBOF62/B1okv0X/4QXmFk7rgD0xoksK8Rsql3SwNC15
-         cJOt15rSLJZJWl3N4wI6Tgvi447mXGZBaucC9fHckXQrINzldjKK85BVASoIC6Pgoq
-         jSwlGBJngP5rw==
-Date:   Thu, 9 Dec 2021 15:49:06 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: exynos5: Add bus clock support
-Message-ID: <YbIXYinx3J9cfYrr@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20211209140313.14926-1-semen.protsenko@linaro.org>
+        Thu, 9 Dec 2021 09:52:46 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF63C061746;
+        Thu,  9 Dec 2021 06:49:13 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id d10so12440677lfg.6;
+        Thu, 09 Dec 2021 06:49:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iZsjpEQisLwXWoTUZrMGpEP/rg7ykKTtHEohB5VlKjo=;
+        b=N5KjOh0h/gLmW6AEoNGbcGu0XY6tfmxd2fVt19IudyLQZCPO23kvIhHZjj9RgVCzyK
+         PFGRZ85o8bF7psna2RyZOBS2hzIbsJYXHYD8AH6ZNCGCEa5mYwmN9FWKuMDxJQqrHXQM
+         743HfXGZ9R/aAXXd9IW+jzuB/Jlcmu4Iqe1S3OG+vG1ha27rCfLQJR7BYPCwGaPlg09+
+         wuLAjWxSuPZTlb5vZtDbCv2ZCLHgI4mxCRsMsMI11tzS88TP6qnRdT5dtbYtbMW4ff/H
+         eZe17X/svYezyTqC/NlXCrsyNNjQynURycwCmoL0GZhAksKqbIxdnr1B9O61yUsShwNU
+         rbXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iZsjpEQisLwXWoTUZrMGpEP/rg7ykKTtHEohB5VlKjo=;
+        b=JrspClLegu9e3djZPfjkJ/tW2dQTRWbaoVzxX4Wo8fO5FvuIiTeWuuCvTPjq5umwOQ
+         xQ/chfe4unTyHCvuIoup3Yb6NeEhktYqeT4JKEh3ZOp8xRr5LZdjenO9AzmgfOzatSJl
+         TSw8IKRvbCRt9v5z1tbI0zP6pvr0W2lBkb0khX9pH+QcMhOaItO64z3rFdtcUewmJG8s
+         9ntQJGzdyz+oVb5Nanfxsnk/bGaHey0J00TY8k7PMu8UHSO9ncjcJi12t61JCewjp+TG
+         x28yQ4lL9ABUNdMGq/2Fr1bH4VUo1tlwslVMUg+1MO1C9X/kC9PdgbxYkSj1xvXdJqY7
+         99yA==
+X-Gm-Message-State: AOAM532Hs8jZscU/2l+5Z9aBNd/lwn6faU+ZGrIYLIc2tlY8RAKICR3X
+        M59bpHLs9zhMb6i5sYoneVaxVcNlcMk=
+X-Google-Smtp-Source: ABdhPJypck+AA6tuc9nKMOs2vH1DUNXy2B1oE3nA2AC6Mpu9/HK1zrngQhEiSxB38uM0iykfpGgPAA==
+X-Received: by 2002:ac2:52b5:: with SMTP id r21mr6236723lfm.127.1639061350601;
+        Thu, 09 Dec 2021 06:49:10 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id b6sm1834ljr.103.2021.12.09.06.49.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 06:49:10 -0800 (PST)
+Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
+ debugfs
+To:     Nicolin Chen <nicolinc@nvidia.com>, thierry.reding@gmail.com,
+        joro@8bytes.org, will@kernel.org
+Cc:     vdumpa@nvidia.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20211209073822.26728-1-nicolinc@nvidia.com>
+ <20211209073822.26728-7-nicolinc@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <63b4c2e2-0e55-5701-4c45-70684c7e058e@gmail.com>
+Date:   Thu, 9 Dec 2021 17:49:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DEQvb2BR+ftSzNBZ"
-Content-Disposition: inline
-In-Reply-To: <20211209140313.14926-1-semen.protsenko@linaro.org>
+In-Reply-To: <20211209073822.26728-7-nicolinc@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+09.12.2021 10:38, Nicolin Chen пишет:
+> +static unsigned long pd_pt_index_iova(unsigned int pd_index, unsigned int pt_index)
+> +{
+> +	return (pd_index & (SMMU_NUM_PDE - 1)) << SMMU_PDE_SHIFT |
+> +	       (pt_index & (SMMU_NUM_PTE - 1)) << SMMU_PTE_SHIFT;
+> +}
 
---DEQvb2BR+ftSzNBZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Dec 09, 2021 at 04:03:13PM +0200, Sam Protsenko wrote:
-> In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-> part of USIv2 block, there are two clocks provided to HSI2C controller:
->   - PCLK: bus clock (APB), provides access to register interface
->   - IPCLK: operating IP-core clock; SCL is derived from this one
->=20
-> Both clocks have to be asserted for HSI2C to be functional in that case.
->=20
-> Add code to obtain and enable/disable PCLK in addition to already
-> handled operating clock. Make it optional though, as older Exynos SoC
-> variants only have one HSI2C clock.
->=20
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-
-Applied to for-next, thanks!
-
-
---DEQvb2BR+ftSzNBZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyF2IACgkQFA3kzBSg
-KbadixAAth7qW3Rnrv1+LKeOBXDyB7R6MKGLgThiQop8aOkeCFKx6EEDoCvwR63l
-MC6zQlref+iiRUFzRX0AERM0vZN+q4qGXw6RQ+6V05mRmZ7hM3JHvMNtPwHHH7ET
-8qbZDc1OBr/1CEZAwN0S49WRo4VlntZnv9fkZjGF2Ow2wyjMF+0MHsroHg+pqVTU
-yLYApaLmUf+yGD+0BYLsdKCgD995pv0SAy3aEpwGRXwncbYYGGwaGrIf2GRawiyo
-iykjcH+6pjAJPVN1c4T1O+81htqfBYlytstXPNoYw+rrCeTIg5Rv2E51PLsHm+T5
-71DQt4B1/W/ZTXgjW6UySt6N1YkISIvC32RrZM+bX2Nk/m9mdX8CooZRH+GklSHo
-znfqQ5j2rLJfyTXYBGnJo8mA79eBbi0Xr8ln4+pYxYW9Gkl0DkZsX9JObvNaKhoM
-JiWWhh6UXFKQTz00CoHawzQTE7Selopy9B469R03z+nATAqAr3KTnQSwy5+dUPVA
-ScZT+uva4D7lWKT8CzFZDQFOakinkmGG5BnaEf5IEy4NLavkL5SR+sE3lj4iHEUJ
-68Tlk0SRJGpQ47tRGHXaau/gNw5Y9n9klnEy3eyOPfnx/oWy7pNgm7ZofBBwtF0D
-D1JjAWttjsNpJlbd5ja3sCuvVDCfnVwnB8vtIJ3IG77VBYI05YE=
-=6qqn
------END PGP SIGNATURE-----
-
---DEQvb2BR+ftSzNBZ--
+I'd change the return type to u32 here, for consistency.

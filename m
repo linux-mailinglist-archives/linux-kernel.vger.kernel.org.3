@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2900546F505
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E423346F504
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbhLIUjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhLIUjB (ORCPT
+        id S232116AbhLIUi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:38:29 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33836 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229446AbhLIUi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:39:01 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9D1C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:35:27 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id t9so11759733wrx.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 12:35:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FwcKS2UKLAvrcYdIiK6cdE3C3+gkf0RAZDU5sfPJejQ=;
-        b=D3ys7W8YHQ8ff73vPJeuZIkwQHOATBjZjS1jgt20S6un0v0RaJsBnhWs1hO/9UQv0O
-         UUAhH5QMMLcsM8a57z66QAL6nr/3gWcHOKsi/L30BOU96aWM/VR5o4BrjGRfA6hrN5yD
-         SYiyvYTmvhtvPuzQaCZb5SdP+Hc+5gLOJKmMps7hIDw7tcjhIxsHrGY9lISD8F6Y1uGI
-         lRxzDddbZLMfTmPxQ9Wwfctbdj4KYUMZ9rRSTD4ob9+/svat6HLwtNNtT8M8gmFPeYzq
-         5x4mAmf6APvWBV9CYXBgv/SDDweMuZQLTumP1Xkpg4vWMXfclETJUZ7gnuxCWTa9vnm4
-         eD9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FwcKS2UKLAvrcYdIiK6cdE3C3+gkf0RAZDU5sfPJejQ=;
-        b=DFS8rHM2hcpKvxqkL83Wrb3xgIlkNYwiDFnOgn/bInP4rgBQTa0a/ZYEkf5hk3ehoo
-         u4Lt9Anl0MzxCz48/JYVrSaE0P3+FLfC+az3cf8scPbb5+sW8Y9We6d0kuPBlcRLrWv+
-         N56jvfu8gwPZ1YryytAMlVU0a12BeTtknbxcAWzL7JGM9cJXKRDcqd3Iz5T7VQsZzhe3
-         5Zvzm4bKRKij/w/GotznBWYGn8J9KQrxqU7HY1UEGnzkzk9IhN+buH12zQMQx4+TIcws
-         BZvKOtIPn93lqGA4uAkgRmeztD7cAaJUhydlShGFseMggI72O1PNRtZIzuqNNHyQrpov
-         FFrg==
-X-Gm-Message-State: AOAM532298bUwEK6sOnmnS7UO0ZqpTaUwPu0yh1vcyY9UUSHvHiMIy9/
-        LD2luu7jAwQjH1H3P8Ntyv8Hh6QLNfw3Gw==
-X-Google-Smtp-Source: ABdhPJzwdRdl5coG2LAl5Ilrn9X/+X+ZSGHghqb/s3JcwDwqstfm7yigA3NadoQUcDugKHlowvf5Lw==
-X-Received: by 2002:adf:f0c5:: with SMTP id x5mr8744354wro.484.1639082125664;
-        Thu, 09 Dec 2021 12:35:25 -0800 (PST)
-Received: from giga1.localdomain ([195.245.21.30])
-        by smtp.gmail.com with ESMTPSA id e12sm990684wrq.20.2021.12.09.12.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 12:35:25 -0800 (PST)
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmx.de>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH] ep93xx: clock: Fix "plain integer as NULL pointer" warning
-Date:   Thu,  9 Dec 2021 21:34:29 +0100
-Message-Id: <20211209203429.140751-1-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 9 Dec 2021 15:38:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D600FCE25DC;
+        Thu,  9 Dec 2021 20:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0671FC341C7;
+        Thu,  9 Dec 2021 20:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639082092;
+        bh=8OIODPu60ojwJLuPAooGJ33W0G3lVL6ddOC3nAtXdcY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=anYTLate8ia7xVbzhhv7Gb24kTiUz12Mzmz/6Y1GG5G5AfbaVXVTCPiVN7s6bRhLM
+         MaWuyF2HWmYX86sMVu1brYdp2PWaKC4w4kQQGDX7nJfmJAWiVdjq/fbRIbNUp0KWEw
+         S3JAttR17lxhr+ckMTLScuGIEalH98V1XM6gsGuEkad4GuuxXFngl7GKJlbds4xaGj
+         u6fM2PHjp4RHypTKaQRZmjXpMHr8lBWiHx5lv1/QaW4YFEAtfQ9HH4LBxxpkos2TwG
+         o0Gb1ehjjDDSYf/ZBoS3KoJ5xZ8as/G2Q1gbQndz0rCCXmHXqTy7wTR6J6fgLtJ3dd
+         aFcxCF4Um9i9A==
+Received: by mail-ed1-f52.google.com with SMTP id x10so6143339edd.5;
+        Thu, 09 Dec 2021 12:34:51 -0800 (PST)
+X-Gm-Message-State: AOAM531X9tBcs2r80JgrmGksHXJruCfPW9spL6vE8LDHN8Zb6yhj2JUu
+        K0R71SZ4A1leRXLesPagOAbsz+ZnDZzpFDqmGQ==
+X-Google-Smtp-Source: ABdhPJxabk3IUkwoF8SyW/p7rw1cBHsKcMY0eJTM6vMEIFjCFicfsbuIVXNI72XoPrtQ3AEtms/uq8ddZt7bcqMYUaI=
+X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr31830041edx.306.1639082090290;
+ Thu, 09 Dec 2021 12:34:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <d290850bf95f4bdf0c329f278db458c7@kernel.org> <CA+V-a8vUCXQa38NmYu9znakcq4A=Uedyn8w5+hXQ_WKf58oHRQ@mail.gmail.com>
+ <875yry1316.wl-maz@kernel.org> <CA+V-a8vNUhVBFNf-M6s1BmXbdCpdyJOx2g=t=QJf1jQzUA3xow@mail.gmail.com>
+In-Reply-To: <CA+V-a8vNUhVBFNf-M6s1BmXbdCpdyJOx2g=t=QJf1jQzUA3xow@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 9 Dec 2021 14:34:38 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+H54oX8GCHcwPVaUC3brjJa+5+OTU21D-3d7QUqM+jcg@mail.gmail.com>
+Message-ID: <CAL_Jsq+H54oX8GCHcwPVaUC3brjJa+5+OTU21D-3d7QUqM+jcg@mail.gmail.com>
+Subject: Re: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@gmx.de>
+On Thu, Dec 9, 2021 at 5:35 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Rob and Marc,
+>
+> On Thu, Dec 9, 2021 at 10:33 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Thu, 09 Dec 2021 10:00:44 +0000,
+> > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > > The root of the issue is that all the resource allocation is done
+> > > > upfront, way before we even have a driver that could potentially
+> > > > deal with this device. This is a potential waste of resource, and
+> > > > it triggers the issue you noticed.
+> > > >
+> > > > If you delay the resource allocation until there is an actual
+> > > > match with a driver, you could have a per-driver flag telling you
+> > > > whether the IRQ allocation should be performed before the probe()
+> > > > function is called.
+> > > >
+> > > As suggested by Rob, if we switch the drivers to use
+> > > platform_get_resource(pdev, IORESOURCE_IRQ, n) call with
+> > > platform_get_irq() this code should go away and with this switch the
+> > > resource allocation will happen demand. Is this approach OK?
+> >
+> > If you get rid of of_irq_to_resource_table() altogether, then yes,
+> > this has a fighting chance to work.
+> >
+> Yes, switching to platform_get_irq() will eventually cause
+> of_irq_to_resource_table() to go away.
+>
+> On second thought, instead of touching all the drivers, if we update
+> platform_get_resource/platform_get_resource_byname to internally call
+> platform_get_irq() internally if it's a IORESOURCE_IRQ resource. Does
+> that sound good or should I just get on changing all the drivers to
+> use platform_get_irq() instead?
 
-Fix sparse warning (use "NULL" where appropriate).
+Except that platform_get_irq() already internally calls
+platform_get_resource()... I think changing the drivers is the right
+way. Happy to do some if you want to divide it up.
 
-Link: https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/WU46Y7J42IOXN3BCLEEA2U5SHD2E2M2M/
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmx.de>
----
- arch/arm/mach-ep93xx/clock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Using coccigrep, I think I've found all the places using
+platform_device.resource directly. A large swath are Sparc drivers
+which don't matter. The few that do matter I've prepared patches for
+here[1]. Most of what I found were DT based drivers that copy
+resources to a child platform device. That case will not work with
+platform_get_irq() callers either unless the child device has it's DT
+node set to the parent node which is the change I made.
 
-diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
-index cc75087134d3..3dfeef00ac5b 100644
---- a/arch/arm/mach-ep93xx/clock.c
-+++ b/arch/arm/mach-ep93xx/clock.c
-@@ -207,7 +207,7 @@ static int ep93xx_mux_determine_rate(struct clk_hw *hw,
- 				struct clk_rate_request *req)
- {
- 	unsigned long rate = req->rate;
--	struct clk *best_parent = 0;
-+	struct clk *best_parent = NULL;
- 	unsigned long __parent_rate;
- 	unsigned long best_rate = 0, actual_rate, mclk_rate;
- 	unsigned long best_parent_rate;
--- 
-2.32.0
+Rob
 
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci

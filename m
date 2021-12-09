@@ -2,81 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBE646F769
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BAC46F76C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbhLIXaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:30:10 -0500
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:41600 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXaJ (ORCPT
+        id S234124AbhLIXcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229760AbhLIXcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:30:09 -0500
-Received: by mail-pf1-f180.google.com with SMTP id g19so6840014pfb.8;
-        Thu, 09 Dec 2021 15:26:35 -0800 (PST)
+        Thu, 9 Dec 2021 18:32:09 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBC6C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:28:35 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id p2so13778482uad.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:mime-version:thread-index:date:message-id:subject:to:cc;
+        bh=Zxpn5K0RqtvUe4FXf1HYLjTbyD3FHuwVWHJEc7Q7xz0=;
+        b=Q7FlIFfswXkh5bWDAszcVn/porhKROgjmi6caI7eqLUE1DFZzZldWxuoQox5UlcFlR
+         A3f0CNyf30BXyPlDvMY2wBiSUZec+6NdBZyCtc4z77azLMl9dfSBpSJbab5Rx+PST/p0
+         spO+IFgxe969VE97L7WpZG8qOcBCTjQmXRd9E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pm55gXwdU1qO3Hxz5NUq9N4WUhc0k2zl1y3BfimlzRY=;
-        b=Uuics3Gx2q/KhValaeBTVV+lz67kGIIyYO0lvRLeMjJ6QVbN7PeIzWwQ7ZSe5wSF06
-         xCbUQ7bkfFb71c8Pjhljw6M7efI5fiHewoN9caM14J1EYAzbHene0uhJJV8+DN9TTHVd
-         HUoPOgvug1D3IksUK1b5Y7iRSBdfWRsLcy5ii7XbsRS6Pf0E3JzGog8w/4jF0Q6jFSd+
-         jE7AHx+VT8zFauNSIILkax9OG8q8CtwOnFHmYbusub+f4C02rj1v0G2sUdTE+Ih5NMvJ
-         1qWjCcUphLxADYQXRmdq3lay2TZcHwQ6tGXMUW+dizWhEhDjYzCx1ixesx0OUYVd4WFb
-         IkEQ==
-X-Gm-Message-State: AOAM533K+jI0f0k7Lo5AhbVT9COBn9SP0/ttXshpz8oxBwPUZjV/wjza
-        ss5Nf/VjV2PxRSeaFdekSZE=
-X-Google-Smtp-Source: ABdhPJz+1Y5BZCgBBn9sLNTxgOukl+SUIWVtE6akZ0/lb+7RkHwTA6w/S5DVyXRR3nwV2z7NuQQVTA==
-X-Received: by 2002:a05:6a00:2401:b0:4a8:909:1d01 with SMTP id z1-20020a056a00240100b004a809091d01mr14653287pfh.83.1639092394641;
-        Thu, 09 Dec 2021 15:26:34 -0800 (PST)
-Received: from ?IPv6:2620:0:1000:2514:4f5b:f494:7264:b4d4? ([2620:0:1000:2514:4f5b:f494:7264:b4d4])
-        by smtp.gmail.com with ESMTPSA id r6sm649739pjg.21.2021.12.09.15.26.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 15:26:34 -0800 (PST)
-Subject: Re: [PATCH v3 2/3] block: don't delete queue kobject before its
- children
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hannes Reinecke <hare@suse.de>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
- <20211208013534.136590-3-ebiggers@kernel.org>
- <2a029611-10da-9114-b66b-345a68a5bd36@acm.org>
- <YbKOj3lBEdJLE8mr@sol.localdomain>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <1dcedb60-300a-bfca-9ca8-62e121ac6b61@acm.org>
-Date:   Thu, 9 Dec 2021 15:26:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:from:mime-version:thread-index:date:message-id
+         :subject:to:cc;
+        bh=Zxpn5K0RqtvUe4FXf1HYLjTbyD3FHuwVWHJEc7Q7xz0=;
+        b=A/986UXY6cTuNx7dMSCPrwJm9Qrtj7bwMrDeW57KENJzKKGhbGDFSYiSDjNlQVW886
+         40Ra4vrxBAg/t5kvNpANTW/rksEFDjL0spUKX/uvSl0o1pBJD9RTfTRPVx60rkCuUv9b
+         vA1k94q5s1nZYjydVtEb6tHVY4VxmY1uI0Qpz75l+7m39OiXivfH/REpizOf+56yt4M4
+         fs5pRXUz0xmI66oomJ2JJJ63O8nHGp9P53mEc+SXGqXTzRt2wi+k3nCMcVNCVGVod+gL
+         WtBHJlbDmFNbBwvAUGq6xQrxmPjJvrmPq+hJUHaPLPD9EW9095dNatDzj0dOa12YmbZO
+         Jz+A==
+X-Gm-Message-State: AOAM533aCFT91gWiXR5dkbSLM3HbxRtqrRLgblWAttJ64flduBOEUOS0
+        ib9q/1LMNxFzDf1u/mXZo+mDeHnyVRTNbhpscljW77zEI+aPuTtrrfCH3xmyuHrRY6Cx9PN8qmX
+        MnsIvGlt8riaCQ8TVitHAoJ7c94uboaM=
+X-Google-Smtp-Source: ABdhPJzlOH72fg9KuXeXSyeilyFnAO0qWsPUXuQ8HgWi55AdsXmwdjeH8/ORlSqiygr5T5V85rrkH3mUhJY7iOP1Px0=
+X-Received: by 2002:a05:6102:2084:: with SMTP id h4mr11310544vsr.87.1639092514721;
+ Thu, 09 Dec 2021 15:28:34 -0800 (PST)
+From:   Alex Komrakov <alexander.komrakov@broadcom.com>
 MIME-Version: 1.0
-In-Reply-To: <YbKOj3lBEdJLE8mr@sol.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdftVB9mMprT/7ByRC+0IgAlowfbSQ==
+Date:   Thu, 9 Dec 2021 15:28:32 -0800
+Message-ID: <70960a71e92f34bfa0d0f3cd82fb289d@mail.gmail.com>
+Subject: [PATCH 1/1] Calculate the monotonic clock from the timespec clock to
+ genereate pps PPS elapsed realtime event value and stores the result into /sys/class/pps/pps0/assert_elapsed.
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Hoi Kim <hoi.kim@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001f0e1505d2bef719"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 3:17 PM, Eric Biggers wrote:
-> On Thu, Dec 09, 2021 at 02:38:02PM -0800, Bart Van Assche wrote:
->> On 12/7/21 5:35 PM, Eric Biggers wrote:
->>> +	/* Now that all child objects were deleted, the queue can be deleted. */
->>
->> Shouldn't the present tense be used above (were -> are)? Anyway:
->>
->> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> 
-> "deleted" is an action here, not a state.  I think it's fine as-is, but maybe
-> you would prefer the following?
-> 
-> 	/* Now that we've deleted all child objects, we can delete the queue. */
+--0000000000001f0e1505d2bef719
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Both alternatives work for me.
+Hi=C2=A0 ,
 
-Thanks,
+I created the PPS patch and it was sent PPS maintainer Rodolfo and to
+mailto:linux@vger.kernel.org to include these changes into official ML
+kernel for
+Google.
 
-Bart.
+Here are PPS patch and cover letter in the following locations:
+=C2=A0- [PATCH 1/1] Calculate the monotonic clock from the timespec clock
+=C2=A0 =C2=A0 https://lkml.org/lkml/2021/11/17/1247
+=C2=A0- [New] [PATCH 1/1] Calculate the monotonic clock from the timespec c=
+lock
+=C2=A0 =C2=A0 https://lkml.org/lkml/2021/11/17/1246
+
+=C2=A0Rodolfo's Ack for inclusion is below.
+
+=C2=A0Can you check the PPS patch on your side=C2=A0 because we need to hav=
+e
+inclusion
+into official ML kernel and share the commit id with Google.
+
+=C2=A0Thanks,
+--Alex
+
+-----Original Message-----
+From: Rodolfo Giometti [mailto:mailto:giometti@enneenne.com]
+Sent: Friday, November 26, 2021 2:53 AM
+To: Alex Komrakov <mailto:alexander.komrakov@broadcom.com>
+Cc: Hoi Kim <mailto:hoi.kim@broadcom.com>
+Subject: Re: [PATCH 1/1] Calculate the monotonic clock from the timespec
+clock to genereate pps PPS elapsed realtime event value and stores the
+result into /sys/class/pps/pps0/assert_elapsed.
+
+On 26/11/21 11:26, Alex Komrakov wrote:
+> Hi Rodolfo,
+>
+> Please give me a response about last my steps about sending
+>=C2=A0 mailto:linux@vger.kernel.org <mailto:mailto:linux@vger.kernel.org>.
+> Does patch is ready for official ML kernel?
+
+Acked.
+
+Sorry for the delay... ^__^"
+
+Ciao,
+
+Rodolfo
+
+--
+GNU/Linux Solutions=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 e-mail: mailto:giometti@enneenne.com
+Linux Device Driver=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 mailto:giometti@linux.it
+Embedded Systems=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0phone:=C2=A0 +39 349 2432127
+UNIX programming=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0skype:=C2=A0 rodolfo.giometti
+
+--=20
+This electronic communication and the information and any files transmitted=
+=20
+with it, or attached to it, are confidential and are intended solely for=20
+the use of the individual or entity to whom it is addressed and may contain=
+=20
+information that is confidential, legally privileged, protected by privacy=
+=20
+laws, or otherwise restricted from disclosure to anyone else. If you are=20
+not the intended recipient or the person responsible for delivering the=20
+e-mail to the intended recipient, you are hereby notified that any use,=20
+copying, distributing, dissemination, forwarding, printing, or copying of=
+=20
+this e-mail is strictly prohibited. If you received this e-mail in error,=
+=20
+please return the e-mail to the sender, delete it from your computer, and=
+=20
+destroy any printed copy of it.
+
+--0000000000001f0e1505d2bef719
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+ZX2NhNnwh9gNMFxHdE5c6+G3LG7AHwFOPA6G1TuzZ35urQXh4HWGbGoCJPszKLgccfOBBHYaXyo6
+yiBn77ZVlo89La3IlKW/J8Bg1ZiYHcR6RtGGylxCCKgFDdESfV03AgMBAAGjggHgMIIB3DAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCoGA1UdEQQjMCGBH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
+KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFElfe2CJ
+evQgM+vs7qmUiI/AGUBAMA0GCSqGSIb3DQEBCwUAA4IBAQCmTMsF9VHjT0L2ycGjBg8eb/+aTBhL
+U6r4e4vaGj/xmDd1cWfvz4brxodjpmuSnjfyWvU/odcNIepLv17Xc91OiZBWGYgr4jNViUqunvaH
+DCnJlLbrD88ITE1uo7OCdlN/SS+Sskp2dDvL/Xlyorb+PaS7/AaIwEmuGyJv2uv1wQ+UZzPXXo1B
+vOM4N+PxiEKCkmmYhfeSVye92Bta6vjf0b+oDE2JT82+D+9nAfiyJ9P/SRVTTvLlSzcO2fqX6GOc
+37xY9F5HGjunD+cc5mqKM/r5PXyM/LEzWjdU1lVUVuvLRerUn+GNFgAPzpksTVYDv2kuseIFwRrF
+845kQxaRMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
+di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
+dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCzP2QsacrpML0R
+udPwt6txUzJnhRpml7L2EGYfiPrDQzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
+DQEJBTEPFw0yMTEyMDkyMzI4MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEACU0MSHXAltLXFlmkpv9+SFMHdGeZbOm8
+QqkcrYAL/X/4FEktan9dxyCQAOI3itS73UhIENRYce1zrmyIMd1m7O31V9mfiAY0q4wcBRSOudqG
+3Bxs5diBbgfUGv8cAbN/K3cBTLE+7TSBBWn2/sngELMCqyAdpcoGN7jtPBI3qE10c2I0EmuE3gHH
+ydM2fbnUJHO9V/c3sqTlxhR6zz1Ws7yJJgyfg6ys6AZxPbF99xAC2yXWcXYLesJuIt/WJUQBLVa+
+I+7pKyMf1gnpTzRhvKeIIf2LKD6xhq+MII8CYmyPTC/F0ZP5QB/DjfzIRcmL5Lp4Zhh5Fh69nybh
+JA++9g==
+--0000000000001f0e1505d2bef719--

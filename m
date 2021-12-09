@@ -2,96 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C8146EC4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF42746EC52
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240565AbhLIP5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236456AbhLIP5K (ORCPT
+        id S240620AbhLIP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:57:55 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22790 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236456AbhLIP5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:57:10 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F56C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:53:36 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso6577738otf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=teCAGr085bdZ4lPWE27L7iqOE1BiGOFh69OcRYHaJr8=;
-        b=pGyjg0/+xZVng2cVQXWWsKUc88C6swklcuvBgvdA111gyYqgJNG5z2ptXZwADZsFLr
-         N3BYsYYT9VmRYqZox6QoxvtnjB7Ya+a6r2CwuqnTlPuWqv/AQs1i/mWPPyhBmWziItVN
-         +yi7NtPOBOPgzeAhNm8qDvmj/VIBhH8VXb/rgaGJeFfInDzuwgpSl1gYBpsDnqYXUey4
-         gQS2+GJoko5doX4eCIeDwnfVdBwDLtlzBdwegQ5sQu6viS/EpuTiyR4+42Aq2BxQ3DxG
-         +aoqXQ+rPMNs7c2yUjbaNRY9t+jTjVpELEyWL5pJrtxwGFpBWcaYic1yBGLrLHZHw/70
-         kp4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=teCAGr085bdZ4lPWE27L7iqOE1BiGOFh69OcRYHaJr8=;
-        b=49x74ctmSPVOaUlYixxtXIkehivIniELAiatwShKFUYHP+0NIJqQqe84ke6INaq65a
-         hnliwsyC1rutbnDs87vKeurvmBpaYPgCVxDpiSxy+isDjMpdFBZ1nFNtyAuW6DeBm2dR
-         mvKqUDfdSwtsz8LCYx6ZdMvS2+asSAj59I/yHmEbOA2/O8udvbCcjBT4c8zAw0DblzY+
-         uNiHQXDPw95mJ7qvGoVvTFSMmEvsx51o7hXawm7LnwwTza0vDP3ZvByakVLkvBl0LwDB
-         FfNRiGU+iCMsIVRWKzRawVhC1UFh38ZuAwY9hxrKu1pgapfjeI7YFxdD1MYblz/C0bt5
-         cJjQ==
-X-Gm-Message-State: AOAM533Xf9sbP58IdIcrrO8PyWxl1uLPYm/WHejpjF3nnaJDre9PmkJy
-        nx7Hp8RuWL+jmrGREdG5MFwQ3g==
-X-Google-Smtp-Source: ABdhPJwYlieaUMEQSN7A+roUw7LnHpjqAoycTJXj2RAf9b0rCTv3PWHP0FnyuVcmdtKQYTXjKPBDVw==
-X-Received: by 2002:a9d:17cc:: with SMTP id j70mr5960254otj.313.1639065215683;
-        Thu, 09 Dec 2021 07:53:35 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id x16sm43682ott.8.2021.12.09.07.53.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 07:53:35 -0800 (PST)
-Date:   Thu, 9 Dec 2021 09:53:32 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org, mka@chromium.org
-Subject: Re: [PATCH v3 0/4] soc: qcom: rpmhpd: Cleanups and fixups for
- sc7280/sm8450
-Message-ID: <YbImfOvIpO4ujxTx@builder.lan>
-References: <1639063917-9011-1-git-send-email-quic_rjendra@quicinc.com>
+        Thu, 9 Dec 2021 10:57:54 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FgGbV025865;
+        Thu, 9 Dec 2021 15:54:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WjhqF8FvEjT0X5Z+sWXTyVJCUWJTm5srS7KWE5DdzrU=;
+ b=mnVi5f1St6GMNO8150VoU/QHNoMhFjaUrcuwM3AJb+7+vtSvQecGcrCByKfPvrVgVLmx
+ bz1VAtqdDQkMRNT4+l03603S6EsmUXDAVMtp12mCTnsc7E9zfgEIGQUXt0r2IQCXJ4gx
+ J6DwjPFVJDAsGhfp2XXQNm25GgSiCE7DKk4kBqKpmNnQI8tesSQ9eAmR1j5X7mjn8qec
+ BQN1Q+u6+tTP7J/4ySfF7uStFyqAsqKqyvjHg7ciTWElK6tqkYiUAH4cEAt1hwWbhpew
+ zm60hrZyHfVkK7ohZgzLYEmf237COTRpOd7iA8zXEm/gZWU+ehuNFo1dk4QwkAe8630V HQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cumnu09v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:54:20 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9FgVjo027048;
+        Thu, 9 Dec 2021 15:54:20 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cumnu09uj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:54:20 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Fidhk013959;
+        Thu, 9 Dec 2021 15:54:18 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyya188n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:54:17 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9FsEOA30212454
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 15:54:14 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5241E42049;
+        Thu,  9 Dec 2021 15:54:14 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8480A4204F;
+        Thu,  9 Dec 2021 15:54:13 +0000 (GMT)
+Received: from [9.171.49.66] (unknown [9.171.49.66])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 15:54:13 +0000 (GMT)
+Message-ID: <31c5cb5a-a027-a4a9-1dc1-c00664b871f9@linux.ibm.com>
+Date:   Thu, 9 Dec 2021 16:54:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639063917-9011-1-git-send-email-quic_rjendra@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 13/32] KVM: s390: pci: add basic kvm_zdev structure
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-14-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-14-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FBy1FrQ0iXIU-y6Q-9ickLgItv_xMVeO
+X-Proofpoint-ORIG-GUID: A7L14lurIopJCp4R8nXOGJryFGH_ZN87
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_07,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090084
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09 Dec 09:31 CST 2021, Rajendra Nayak wrote:
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> This structure will be used to carry kvm passthrough information related to
+> zPCI devices.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-> v3:
-> * used the _w_<parent-name>_parent suffix instead of _no_parent
-> * Added a minor fix for sm8450 while rebasing 
-> 
-> v2:
-> * Fixed the wrong assumption in v1 that only sdm845 needed mx to be
-> parent of cx, turned out all existing upstream SoCs need it except sc7280
-> * Added another cleanup patch to sort power-domain defines and lists in
-> alphabetical order as suggested by Matthias
-> 
-> Mostly cleanups, with a fixup to remove the parent/child relationship
-> across mx/cx for sc7280 SoC, and a fixup to add missing .peer for sm8450
-> 
+Mostly a skeleton but looks ok
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
-> Rajendra Nayak (4):
->   soc: qcom: rpmhpd: sm8450: Add the missing .peer for sm8450_cx_ao
->   soc: qcom: rpmhpd: Rename rpmhpd struct names
->   soc: qcom: rpmhpd: Remove mx/cx relationship on sc7280
->   soc: qcom: rpmhpd: Sort power-domain definitions and lists
+> ---
+>   arch/s390/include/asm/kvm_pci.h | 29 +++++++++++++++++
+>   arch/s390/include/asm/pci.h     |  3 ++
+>   arch/s390/kvm/Makefile          |  2 +-
+>   arch/s390/kvm/pci.c             | 57 +++++++++++++++++++++++++++++++++
+>   4 files changed, 90 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/s390/include/asm/kvm_pci.h
+>   create mode 100644 arch/s390/kvm/pci.c
 > 
->  drivers/soc/qcom/rpmhpd.c | 358 +++++++++++++++++++++++-----------------------
->  1 file changed, 181 insertions(+), 177 deletions(-)
-> 
-> -- 
-> 2.7.4
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> new file mode 100644
+> index 000000000000..3e491a39704c
+> --- /dev/null
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * KVM PCI Passthrough for virtual machines on s390
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +
+> +#ifndef ASM_KVM_PCI_H
+> +#define ASM_KVM_PCI_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/kvm_types.h>
+> +#include <linux/kvm_host.h>
+> +#include <linux/kvm.h>
+> +#include <linux/pci.h>
+> +
+> +struct kvm_zdev {
+> +	struct zpci_dev *zdev;
+> +	struct kvm *kvm;
+> +};
+> +
+> +extern int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+> +extern void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
+> +extern int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+> +
+> +#endif /* ASM_KVM_PCI_H */
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index 86f43644756d..32810e1ed308 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
+>   };
+>   
+>   struct s390_domain;
+> +struct kvm_zdev;
+>   
+>   #define ZPCI_FUNCTIONS_PER_BUS 256
+>   struct zpci_bus {
+> @@ -190,6 +191,8 @@ struct zpci_dev {
+>   	struct dentry	*debugfs_dev;
+>   
+>   	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
+> +
+> +	struct kvm_zdev *kzdev; /* passthrough data */
+>   };
+>   
+>   static inline bool zdev_enabled(struct zpci_dev *zdev)
+> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+> index b3aaadc60ead..95ea865e5d29 100644
+> --- a/arch/s390/kvm/Makefile
+> +++ b/arch/s390/kvm/Makefile
+> @@ -10,6 +10,6 @@ common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
+>   ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+>   
+>   kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o sigp.o
+> -kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
+> +kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o pci.o
+>   
+>   obj-$(CONFIG_KVM) += kvm.o
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> new file mode 100644
+> index 000000000000..ecfc458a5b39
+> --- /dev/null
+> +++ b/arch/s390/kvm/pci.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * s390 kvm PCI passthrough support
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +#include <linux/kvm_host.h>
+> +#include <linux/pci.h>
+> +#include <asm/kvm_pci.h>
+> +
+> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+> +{
+> +	struct kvm_zdev *kzdev;
+> +
+> +	if (zdev == NULL)
+> +		return -ENODEV;
+> +
+> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
+> +	if (!kzdev)
+> +		return -ENOMEM;
+> +
+> +	kzdev->zdev = zdev;
+> +	zdev->kzdev = kzdev;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
+> +
+> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+> +{
+> +	struct kvm_zdev *kzdev;
+> +
+> +	if (!zdev || !zdev->kzdev)
+> +		return;
+> +
+> +	kzdev = zdev->kzdev;
+> +	WARN_ON(kzdev->zdev != zdev);
+> +	zdev->kzdev = 0;
+> +	kfree(kzdev);
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_release);
+> +
+> +int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+> +{
+> +	struct kvm_zdev *kzdev = zdev->kzdev;
+> +
+> +	if (!kzdev)
+> +		return -ENODEV;
+> +
+> +	kzdev->kvm = kvm;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
 > 

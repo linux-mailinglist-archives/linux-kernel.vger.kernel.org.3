@@ -2,146 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AFD46E57E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9368646E579
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbhLIJ1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:27:39 -0500
-Received: from mail-sgaapc01on2099.outbound.protection.outlook.com ([40.107.215.99]:3681
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233327AbhLIJ1i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:27:38 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QlqHLrXwg+GbyLtk5TW95dhWqmGkN+cK5u/6FWXRZDntzePnqnizk+OIpuB9IPFGSqEnk78kWJMXff7FYTj+9d7DT67GsrXgJrqbXdyb+1knK64wk/XXro3FJzRYNyzeCdUKoLSfyV2XmXM3zyXnU2UaLdh95hQ3BtgdaPOwkERjX1PqwPH0FHZnrA5LcWytBAfZNtmuwDgminSqK/83VjKnyzafwJWtABRmIoty7Imhqc8JjuZeTfNtOcfw4Wn7Ipxt0gL+tCOnwwiu1huaz7Fr/4e4QyzuSU5RVO/NbUGLzo2HefMfR5Aus/QMkXAvIOdurswLJbE632Ptvv0iPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T3NJ5iInjPFP6OGwA1eZNNjwqk+mrDT/lCtyg0eU+Jc=;
- b=Jr6vLSgckVRH/hF8TRmbXDy0mPk08st2hUEIA1kKcUIFjvgw1556hOxOihV4zLDlFqleznz1F1iydGdY+yF3BPb81/DBzE3KbjfWqoqxLyCTc6zXPC5etcvXP3X4Pdy7+buIrq3ljltuP89y/4sg7m1Km5mKSeJ+31lM3LnRtJvFd6ZZwyjc4yrgR5DCxNudR4G9jiwKJttXhk/EFU8F0JZHlyAabPiE4iei024TsH0ekyO6NxCVhrwA/h2ZSg1nFz3fi72ntRDk3adaWolDsvp2r9+EWFOtt7USG7iymR3SHqUVvZOtynYP+tjYF/0PHtJLJ0Kb43EgsVOJQnrxug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T3NJ5iInjPFP6OGwA1eZNNjwqk+mrDT/lCtyg0eU+Jc=;
- b=f4dCN66XMBFxoLvNuskQSYK+YAPUvHKVQdSxB72SUUYqa5Ma5f4SPuVsm2rAwIk1SXudY4IAMyXJ34YT9LYEU16f9xPjA+8fu+apeZyxS+vLDqwR/VmQfeymnHyycWWCXKzQii1AVCRSXPstFdhERoGbLyw+QwqKhQyisNKIT98=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by TY2PR06MB3486.apcprd06.prod.outlook.com (2603:1096:404:107::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
- 2021 09:23:59 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092%8]) with mapi id 15.20.4755.024; Thu, 9 Dec 2021
- 09:23:59 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH v2] samples/bpf: xdpsock: fix swap.cocci warning
-Date:   Thu,  9 Dec 2021 01:22:50 -0800
-Message-Id: <20211209092250.56430-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR0401CA0020.apcprd04.prod.outlook.com
- (2603:1096:202:2::30) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        id S233270AbhLIJ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229657AbhLIJ1Q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:27:16 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C3DC061746;
+        Thu,  9 Dec 2021 01:23:43 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 8so4885645pfo.4;
+        Thu, 09 Dec 2021 01:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
+         :references:organization:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=ix3LtrBew/RMx5h8Ldwr0h6disFG6r+cyTWZjtpcymw=;
+        b=GdBkaBMPd0hCF3t6inhS4ytSUUqbqW7ETlZF+ue4y1LiWttYi1SEOrCvp/blVMUxjw
+         3q/Jstda5eDLyyhcvuB0vH09OPN8Ulvhh24AlpEb0mYZkg2Uq3biU5LUX16BuDKRqAyZ
+         64a1URZD1ylmOSIWo0m6Rxts6RbeSUu1eLC1LGXQme3jOTRNxAhtwLT4JxHLjsi+YTgV
+         x0Co+t7c4iG40W1vKk69jf8Y7HTbFawNxzWtVCBFeNFn+n6XLhi6HMFdB/j2kLXqvNsp
+         s8kp8rP26rvm48xwUszE6aUWQKfBmMImeMw1P8UJyVQYUGH0uWMPPZbv3rNZBXLsVWZj
+         dP4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:references:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=ix3LtrBew/RMx5h8Ldwr0h6disFG6r+cyTWZjtpcymw=;
+        b=LRbpe6zXu8WmNERuNbEoiyQ0eRjLMFrwvWNUVPQsUZLZQUl6GT4ufq1c3ZMP1pYWoh
+         NPqRJLJrqWujcXT4KLorR+WOViFwNJBqRWP83yTBvVFyIL95daUZeqauRET7zaEi5B0X
+         jm/A6fe7nMn6mLEGvfUms9Ua6SayUAvsYwnkazAWhFU2TSvopY3XSNNP/2LGsRw0G/v6
+         J9tn6j9liDE2KZB9knhZKM3uzKAk3pHNjXvPxHxdyxLAxWcYHdM+cp0svVzIurNditWl
+         cAq+IVTM4EvV/JrXOw2+y7dZgPVr5Ux+BVHI62+9xSwnwV1+HSWPoI6+7Qv5sXbOkgjl
+         SG7w==
+X-Gm-Message-State: AOAM533rM59OTrYv/UPdirP0w0EkYSrOhOlm+8orvFtPnPFH58gLzRHD
+        l2Nd3bV+kdUSFDQWfdhpBxw=
+X-Google-Smtp-Source: ABdhPJyoPwb22KS8T/w2NOcpeKhikXvTu2RPXcWy+A5+3GvdIW2+pTwkHTKLtdazwl2mGfapCUYY6A==
+X-Received: by 2002:a63:f19:: with SMTP id e25mr13286830pgl.518.1639041822841;
+        Thu, 09 Dec 2021 01:23:42 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id k8sm6638169pfc.197.2021.12.09.01.23.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 01:23:42 -0800 (PST)
+Message-ID: <38c66794-32f8-aeeb-b2f8-9a0c0f341925@gmail.com>
+Date:   Thu, 9 Dec 2021 17:23:36 +0800
 MIME-Version: 1.0
-Received: from ubuntu.vivo.xyz (218.213.202.189) by HK2PR0401CA0020.apcprd04.prod.outlook.com (2603:1096:202:2::30) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Thu, 9 Dec 2021 09:23:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c251d159-ad09-4fa3-7602-08d9baf5a1b9
-X-MS-TrafficTypeDiagnostic: TY2PR06MB3486:EE_
-X-Microsoft-Antispam-PRVS: <TY2PR06MB3486133A00A32D323ED0EBF6A2709@TY2PR06MB3486.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LEr8QO7Kxf/0viYeuw8F860qOSXZeIcDgXkKmN0Bpk3hZaPokz2kREEWG1oyRs+Tfa4qTX1nwGRQl4J2tNjGn3hs58rLkPP3/Q+u8GYxM0aJhQpzY2F2hJhD9/fbZJ2gtI9+XNJXOdOln3gjcrtq/GQTOw+fFbJUBtXES0zhIOAHf8cs38vX1biCP73dAK+I/fw+C8B51CoGpaeETVXwDIDZ3oq+q2g/D7J8V1zxzn/JkHNYqu3DXhEErNKy2VbCn13sP9ZVVWqYY0+YjdMeiGGCjaGVmxwlm+2FWZZITRhotWeaFEYL56WY6fpHC6hOYb8VEH7hzuRs3om7WG/Nm7AmYTGHOohpleuDD8Jv7drl7Tr/1LexqNPHk2gh8qw43utt4waXM6tyzhaobNxzm0C81a21q0T2pTjqjNcuSOCfxM74Pp8UV2EzH8oj9M8KF2E+MQqSXdHUrmQ51h3nybBhVb476iUdkXw+vq55mycdQG6fwZINimqlZ7MNqIgkN4oxR3W40IKNLTO1/1g6syg7PY6q8S9uyMrQNfAbCo8SA+FgsVp0ojNxomxfqPCYjAori9PyDlKpKjXFUdQTR5N6yXNZ/GphCon53eP3XQW434JJJkpc48XCnDFJe02FywLAuVBT9APzVv+KOz3Bu7E0vBdVicxabYYkM51NwtLVaObxNxKj8NA879x+KhDYIgfSUkO7Eta2kzgaH4jZjF05NvOSdHsgK1DZT9/UIl98/fGLdosoKpDxoaShBllm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(1076003)(8676002)(2906002)(83380400001)(66476007)(86362001)(921005)(36756003)(110136005)(508600001)(66556008)(66946007)(316002)(6666004)(8936002)(6486002)(26005)(956004)(52116002)(6512007)(186003)(2616005)(4326008)(4744005)(5660300002)(38100700002)(7416002)(38350700002)(107886003)(6506007)(182500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jl7AZs48NRRGb3DlY6qsugZZKIgXLkTYYokHQ7LwU13fZMk7/+SGkpjq3MaX?=
- =?us-ascii?Q?j+9zm2iicIKMKEQAq3X/wUfq2Kmy8ubaCmFeg9bboy1ccytaPP+/9Z0Bqfti?=
- =?us-ascii?Q?izVu8GlucPT0JMfuoh50VhN9LHYLW1DdOQ0ldc6dtK5NQS1pi9uxLLrnqBHB?=
- =?us-ascii?Q?9khimlR2O7BtUwUwMxm/hsM+CjP1X/kmUrwAGUD9NuSQnWZmAY8zxWwHy/FW?=
- =?us-ascii?Q?zw33gGqdq3nUwVYHqCOAWEJcob+QDFXp0CHD0nzBvbUEK1IvFeXSZc/EJ5Bb?=
- =?us-ascii?Q?tUixEB7pWfH6XM22zyC0fyy4yuesmLvTz1S+ArQwyeTHHKDT7WWgBB8NX5BZ?=
- =?us-ascii?Q?e7tdKtZDaXA1GXBHUcVCe9Qrd2+9x3dokdF+8Oysz6Yi07yZAp9rT18FVwgi?=
- =?us-ascii?Q?7J8W2AbBHlWfmgmchDMxsYTcHSGmskFF6XYRyemD+jdE06PIyknpbKuCELok?=
- =?us-ascii?Q?JKYuMdsoWCo/0FVT4tXhprDiOEeywO4OBioAigM/3sfxo8xa2U4LcCCynLbt?=
- =?us-ascii?Q?a/ufR3zQxDfR9zFPu27f8+xZXy9AWy0155B/DPD9+vcfe4zeCl8aGlCDCWu7?=
- =?us-ascii?Q?s3KcDzsAvB7AnI1uVcxO7Qc17R7cBu98MJ7ycQD1VvmcHP7b8bG66u7SbD4p?=
- =?us-ascii?Q?S06plil6P4HlldOqw/7uR0IuMKm8wfsI2BfOZLHi/8FBchgrzL3WBKIbFGWo?=
- =?us-ascii?Q?coGpugDHHIFNZzfeuP5iQn/WHZlwPTkM8fFgmg8ySJ/3AlMIP9VPzJ19w4WA?=
- =?us-ascii?Q?bTxJKxP1cF2y5yakF4snOw4w+0TatDMCK0UE6vBQsNGXmk7xlbffRefoXIQ/?=
- =?us-ascii?Q?rQcdAOl51/z9+biJIxeDW31qbzL0/rbaOOKWEvd7WPqOOhQ482WI7XkZw7Kl?=
- =?us-ascii?Q?ak+cF/a4dhzsaWely33jZumzBdu8dwOHVMTnIHBkRCyCOG9FEHB3rde1ARZD?=
- =?us-ascii?Q?jvd9M1urGFDTkUI69pBlDAmSTLJXYAcBZA484ID4kVVwF+QSdBwQKzWmOrRt?=
- =?us-ascii?Q?OO2Hc+DKISLbM4I8EBbxcrWeNwyGZkJAteNLYIL0ThnTVndyxa3a2lP6tDfU?=
- =?us-ascii?Q?KOid1OqhDbU/cQIzijDNdZmKOSee1wCxGtEVzVd45njmo9cTyUVIgWis+FK4?=
- =?us-ascii?Q?c6e411Q5o9tk56umtT5gKFOiQ2ut1LGZQyv5Rbgx6sT1hjq1rMcn6cxgRFTO?=
- =?us-ascii?Q?oSmG9/yWv1TQ5XYXkupMemz0PjJOoKTHRxvrgdw2LFiEOm830pWSkRT+18bl?=
- =?us-ascii?Q?5Dokx5PKhXw45L7ep/OIBxDxZhA7uKe3kotJSStxvhuyhbZ34KR3slaj85ye?=
- =?us-ascii?Q?AIftJomqB0ffLEyNAzbhMYd7owccN8wC/f3c2azAj5XWfIdxtG47g3dAfLy9?=
- =?us-ascii?Q?irCD3++JrMhy3dFNLTKJ32W0huU9RFatWMNhy89c5mGz1qmV76AVRt9Ne5JQ?=
- =?us-ascii?Q?QGkNncgEBKhvcXdRD7kO2U9O3LjBhBZo0jcehAFE5Jwg7esj0KLUi59n2hCK?=
- =?us-ascii?Q?2gGrXl5KxzLFkiUdnXRw9Mhh4BJRr/DYUEhJpv+D+gioHfZR59YCsyWZY37J?=
- =?us-ascii?Q?jboFHMAcPIihDRMyS/YW6NKa6YcptSneIqA2KsJRmDoaKG7EOlovZuIKsP5V?=
- =?us-ascii?Q?jixVsZBY+6m5SNvlBQNF/HU=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c251d159-ad09-4fa3-7602-08d9baf5a1b9
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 09:23:59.4278
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5DNSZJQJrFTrdrhEs4dvWvqIliiSai4V2FK6B8z3rn5K+85rtmfczhXe8vupEYB0Bmh27enX85VLR+Tnk9Zr8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB3486
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20211130074221.93635-1-likexu@tencent.com>
+ <20211130074221.93635-6-likexu@tencent.com>
+ <CALMp9eQxW_0JBe_6doNTGLXHsXM_Y0YSfnrM1yqTumUQqg7A2A@mail.gmail.com>
+ <ad06fc9f-4617-3262-414d-e061d3d68b9d@gmail.com>
+Organization: Tencent
+Subject: Re: [PATCH v2 5/6] KVM: x86: Update vPMCs when retiring instructions
+In-Reply-To: <ad06fc9f-4617-3262-414d-e061d3d68b9d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following swap.cocci warning:
-./samples/bpf/xdpsock_user.c:528:22-23:
-WARNING opportunity for swap()
+>>> +               /* Ignore checks for edge detect, pin control, invert and 
+>>> CMASK bits */
+>>
+>> I don't understand how we can ignore these checks. Doesn't that
+>> violate the architectural specification?
+> 
+> OK, let's take a conservative approach in the V3.
+> 
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
-Change log:
-v2:
-- Remove temp variable.
----
- samples/bpf/xsk_fwd.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Hi Jim, does this version look good to you ?
 
-diff --git a/samples/bpf/xsk_fwd.c b/samples/bpf/xsk_fwd.c
-index 1cd97c84c337..db15323728c0 100644
---- a/samples/bpf/xsk_fwd.c
-+++ b/samples/bpf/xsk_fwd.c
-@@ -651,11 +651,8 @@ static void swap_mac_addresses(void *data)
- 	struct ether_header *eth = (struct ether_header *)data;
- 	struct ether_addr *src_addr = (struct ether_addr *)&eth->ether_shost;
- 	struct ether_addr *dst_addr = (struct ether_addr *)&eth->ether_dhost;
--	struct ether_addr tmp;
- 
--	tmp = *src_addr;
--	*src_addr = *dst_addr;
--	*dst_addr = tmp;
-+	swap(*src_addr, *dst_addr);
- }
- 
- static void *
+---
+
+ From 4ad42d98ce26d324fa2f72c38fe2c42fe04f2d6d Mon Sep 17 00:00:00 2001
+From: Like Xu <likexu@tencent.com>
+Date: Tue, 30 Nov 2021 15:42:20 +0800
+Subject: [PATCH 5/6] KVM: x86: Update vPMCs when retiring instructions
+
+From: Like Xu <likexu@tencent.com>
+
+When KVM retires a guest instruction through emulation, increment any
+vPMCs that are configured to monitor "instructions retired," and
+update the sample period of those counters so that they will overflow
+at the right time.
+
+Signed-off-by: Eric Hankland <ehankland@google.com>
+[jmattson:
+   - Split the code to increment "branch instructions retired" into a
+     separate commit.
+   - Added 'static' to kvm_pmu_incr_counter() definition.
+   - Modified kvm_pmu_incr_counter() to check pmc->perf_event->state ==
+     PERF_EVENT_STATE_ACTIVE.
+]
+Fixes: f5132b01386b ("KVM: Expose a version 2 architectural PMU to a guests")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+[likexu:
+   - Drop checks for pmc->perf_event or event state or event type
+   - Increase a counter only its umask bits and the first 8 select bits are matched
+   - Rewrite kvm_pmu_incr_counter() with a less invasive approach to the host perf;
+   - Rename kvm_pmu_record_event to kvm_pmu_trigger_event;
+   - Add counter enable and CPL check for kvm_pmu_trigger_event();
+]
+Cc: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+  arch/x86/kvm/pmu.c | 73 ++++++++++++++++++++++++++++++++++++++++++----
+  arch/x86/kvm/pmu.h |  1 +
+  arch/x86/kvm/x86.c |  3 ++
+  3 files changed, 72 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index a20207ee4014..db510dae3241 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -22,6 +22,14 @@
+  /* This is enough to filter the vast majority of currently defined events. */
+  #define KVM_PMU_EVENT_FILTER_MAX_EVENTS 300
+
++#define PMC_EVENTSEL_ARCH_MASK \
++	(ARCH_PERFMON_EVENTSEL_EVENT | \
++	 ARCH_PERFMON_EVENTSEL_UMASK | \
++	 ARCH_PERFMON_EVENTSEL_USR | \
++	 ARCH_PERFMON_EVENTSEL_OS | \
++	 ARCH_PERFMON_EVENTSEL_INT | \
++	 ARCH_PERFMON_EVENTSEL_ENABLE)
++
+  /* NOTE:
+   * - Each perf counter is defined as "struct kvm_pmc";
+   * - There are two types of perf counters: general purpose (gp) and fixed.
+@@ -203,11 +211,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+  	if (!allow_event)
+  		return;
+
+-	if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
+-			  ARCH_PERFMON_EVENTSEL_INV |
+-			  ARCH_PERFMON_EVENTSEL_CMASK |
+-			  HSW_IN_TX |
+-			  HSW_IN_TX_CHECKPOINTED))) {
++	if (!(eventsel & ~PMC_EVENTSEL_ARCH_MASK)) {
+  		config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
+  		if (config != PERF_COUNT_HW_MAX)
+  			type = PERF_TYPE_HARDWARE;
+@@ -482,6 +486,65 @@ void kvm_pmu_destroy(struct kvm_vcpu *vcpu)
+  	kvm_pmu_reset(vcpu);
+  }
+
++static void kvm_pmu_incr_counter(struct kvm_pmc *pmc)
++{
++	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
++	u64 prev_count;
++
++	prev_count = pmc->counter;
++	pmc->counter = (pmc->counter + 1) & pmc_bitmask(pmc);
++
++	reprogram_counter(pmu, pmc->idx);
++	if (pmc->counter < prev_count)
++		__kvm_perf_overflow(pmc, false);
++}
++
++static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
++	unsigned int perf_hw_id)
++{
++	if (pmc->eventsel & ~PMC_EVENTSEL_ARCH_MASK)
++		return false;
++
++	return kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc) == perf_hw_id;
++}
++
++static inline bool cpl_is_matched(struct kvm_pmc *pmc)
++{
++	bool select_os, select_user;
++	u64 config = pmc->current_config;
++
++	if (pmc_is_gp(pmc)) {
++		select_os = config & ARCH_PERFMON_EVENTSEL_OS;
++		select_user = config & ARCH_PERFMON_EVENTSEL_USR;
++	} else {
++		select_os = config & 0x1;
++		select_user = config & 0x2;
++	}
++
++	return (static_call(kvm_x86_get_cpl)(pmc->vcpu) == 0) ? select_os : select_user;
++}
++
++void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id)
++{
++	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
++	struct kvm_pmc *pmc;
++	int i;
++
++	if (!pmu->version)
++		return;
++
++	for_each_set_bit(i, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX) {
++		pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, i);
++
++		if (!pmc || !pmc_is_enabled(pmc) || !pmc_speculative_in_use(pmc))
++			continue;
++
++		if (eventsel_match_perf_hw_id(pmc, perf_hw_id) && cpl_is_matched(pmc))
++			kvm_pmu_incr_counter(pmc);
++	}
++}
++EXPORT_SYMBOL_GPL(kvm_pmu_trigger_event);
++
+  int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
+  {
+  	struct kvm_pmu_event_filter tmp, *filter;
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index c91d9725aafd..7a7b8d5b775e 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -157,6 +157,7 @@ void kvm_pmu_init(struct kvm_vcpu *vcpu);
+  void kvm_pmu_cleanup(struct kvm_vcpu *vcpu);
+  void kvm_pmu_destroy(struct kvm_vcpu *vcpu);
+  int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp);
++void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id);
+
+  bool is_vmware_backdoor_pmc(u32 pmc_idx);
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 1aaf37e1bd0f..68b65e243eb3 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7980,6 +7980,8 @@ int kvm_skip_emulated_instruction(struct kvm_vcpu *vcpu)
+  	if (unlikely(!r))
+  		return 0;
+
++	kvm_pmu_trigger_event(vcpu, PERF_COUNT_HW_INSTRUCTIONS);
++
+  	/*
+  	 * rflags is the old, "raw" value of the flags.  The new value has
+  	 * not been saved yet.
+@@ -8242,6 +8244,7 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t 
+cr2_or_gpa,
+  		vcpu->arch.emulate_regs_need_sync_to_vcpu = false;
+  		if (!ctxt->have_exception ||
+  		    exception_type(ctxt->exception.vector) == EXCPT_TRAP) {
++			kvm_pmu_trigger_event(vcpu, PERF_COUNT_HW_INSTRUCTIONS);
+  			kvm_rip_write(vcpu, ctxt->eip);
+  			if (r && (ctxt->tf || (vcpu->guest_debug & KVM_GUESTDBG_SINGLESTEP)))
+  				r = kvm_vcpu_do_singlestep(vcpu);
 -- 
-2.17.1
+2.33.1
+
 

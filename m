@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620E746E440
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB8646E445
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbhLIIfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S234890AbhLIIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbhLIIfe (ORCPT
+        with ESMTP id S232700AbhLIIgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:35:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59201C061746;
-        Thu,  9 Dec 2021 00:32:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A58FBCE241B;
-        Thu,  9 Dec 2021 08:31:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BAAC004DD;
-        Thu,  9 Dec 2021 08:31:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639038717;
-        bh=tnpW+JsUuLj2wWcANc9sa+ZLsGkL3XLw2Vx85Xbamp4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Od3HY/3NlYUc2Z6ofVIIkbDLdhgAXsGcsEsEAfH8Mk1bhj2CjoINR3sN+t1GUDP34
-         glUYfP8Zc8vyoK8A+SuwRYCWblG5mwMtxDZQpYs5mi3i1PLpTln+5u6fW6ocVQPX/P
-         Krpka/KBh42ItGeeNqxCgK1bRXnrz4OP/4G0PxExfcHFyctGeazqdAE8C/tt4Ywvr5
-         qWgYuFrMu9LLjzLR7wJ2yikDDEsGcf9g73eztqr1QhdEfzIzE0qIg2vUviKdUKMZSO
-         QpNheyX5snXV++iG17vaypf8M6BsN+Okbo+GNgGoa0ohhzlpi8pbFAZ9qhfoiNm3B4
-         bUzNrhvUuW2rg==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Dec 2021 03:36:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8CAC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fyCt+Na28XXba2KV4kePYVgvsEEky23cSo4ML/g/LYE=; b=d7hrcDLvoJZShUBJ5eAkPGUyrl
+        3PHMS8FBNp7ePkFUD6iYiPgBmslEI8BF+/MQELkypuAC6xb6Lg1jJQnpDx2yrMbU6NWZsy5XoylKd
+        YkCmPx9+D7DpMBl++QtGvOvKi5ANvpdSBcTigCMNr8L0fKpd+6BZUCygsY1dXcv0l5CmLNB3dKYSa
+        Qro2FHuEbDaNJvjdBr2il0B1f0jSUqovj3KUfNgEDNyiGL9CTuzH2W+kC4lr03arffZ6w9yPkDcVo
+        OdnAUT08+0/Si8iVI5FdF96kzED42HUnPkPV6j7DZf6EodoDLD6pkK7hE80P6vRUgQksYA+OEv/H0
+        8MoNCo5A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvErR-009B1V-0b; Thu, 09 Dec 2021 08:33:05 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 41BBD9817E0; Thu,  9 Dec 2021 09:33:05 +0100 (CET)
+Date:   Thu, 9 Dec 2021 09:33:05 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, mark.rutland@arm.com,
+        elver@google.com, keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: Re: [RFC][PATCH 3/5] refcount: Improve out-of-line code-gen
+Message-ID: <20211209083305.GN16608@worktop.programming.kicks-ass.net>
+References: <20211208183655.251963904@infradead.org>
+ <20211208183906.548393311@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211208133145.28267-1-nicolas.ferre@microchip.com>
-References: <20211208133145.28267-1-nicolas.ferre@microchip.com>
-Subject: Re: [GIT PULL] clk: at91: clk for 5.17
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        nicolas.ferre@microchip.com
-Date:   Thu, 09 Dec 2021 00:31:56 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211209083157.C0BAAC004DD@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208183906.548393311@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting nicolas.ferre@microchip.com (2021-12-08 05:31:45)
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->=20
-> Stephen,
->=20
-> Here are the clk changes for 5.17 which collect changes to the lan966x pr=
-oduct
-> line. We agreed to include these Microchip patches into the at91 branch w=
-ith
-> Kavyasree and Horatiu.
->=20
-> Please pull.
->=20
-> Thanks, best regards,
->   Nicolas
->=20
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0d=
-bf:
->=20
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-a=
-t91-5.17
->=20
-> for you to fetch changes up to 5ad5915dea0047a6376d8f809ea3470ef68b1f92:
->=20
->   clk: lan966x: Extend lan966x clock driver for clock gating support (202=
-1-12-08 11:19:20 +0100)
->=20
-> ----------------------------------------------------------------
+On Wed, Dec 08, 2021 at 07:36:58PM +0100, Peter Zijlstra wrote:
+> Allow a number of ops to tail-call refcount_warn_saturate() in order
+> to generate smaller out-of-line code.
+> 
+>    text    data     bss     dec     hex filename
+>   97341    4985    1116  103442   19412 defconfig-build/kernel/events/core.o
+>   97299    4985    1116  103400   193e8 defconfig-build/kernel/events/core.o
+> 
 
-Thanks. Pulled into clk-next
+This patch also makes GCC do worse code-gen on the fast path, so I'll
+drop it.
+
+For some obscure raisin it causes this:
+
+ring_buffer_put:
+    a950:       f0 ff 0f                lock decl (%rdi)
+    a953:       7c 20                   jl     a975 <ring_buffer_put+0x25>
+    a955:       74 01                   je     a958 <ring_buffer_put+0x8>
+    a957:       c3                      ret
+
+
+ring_buffer_put:
+    a940:       53                      push   %rbx
+    a941:       48 89 fb                mov    %rdi,%rbx
+    a944:       f0 ff 0f                lock decl (%rdi)
+    a947:       7c 04                   jl     a94d <ring_buffer_put+0xd>
+    a949:       74 10                   je     a95b <ring_buffer_put+0x1b>
+    a94b:       5b                      pop    %rbx
+    a94c:       c3                      ret
+
+Which is just unacceptible...

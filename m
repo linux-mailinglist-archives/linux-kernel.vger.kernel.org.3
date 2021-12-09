@@ -2,2603 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3634F46E32E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136EE46E32F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbhLIH0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:26:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47018 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbhLIH0p (ORCPT
+        id S233801AbhLIH1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229942AbhLIH1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:26:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B578B823CC;
-        Thu,  9 Dec 2021 07:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18250C341DA;
-        Thu,  9 Dec 2021 07:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639034589;
-        bh=/cmTLcR0TOXUHTPBsDk7bZLhVqYs3xPuTkQPf9lIRTw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sn30w4naDR/K3A+YJenCgqtoiNDorzBO837LVm0DEfTDr2ZyTYBleCpc6wE6NAvMZ
-         G/Vjp33leXiBzfF71bAVOJHqLtb90ooe3/ucysoLC/iOSZPe2ahT5WDU1bOOT/gj2C
-         6ICGzrKgAyjSQ6Ys1yLvz3PrWLDmTh98rXJ68LBAtwOJpsS5sNIFEL3hegZalBbeyN
-         cRq5+/fVOCiIL4hQYDY7e+r/Y7qW6+XdlXLhlHmPkoFh8pD0Q/bywe26PpFm0WEwwA
-         zczvPXXWitBW1h1cR7rGbvPmTmkA/HfAjcQW/B5eyqZVVnb5OV+VTPcu/OJeuGhBU5
-         aTPUBvN+S0DZQ==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>, viveka@codeaurora.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] interconnect: qcom: Add SM8450 interconnect provider driver
-Date:   Thu,  9 Dec 2021 12:52:51 +0530
-Message-Id: <20211209072251.185634-3-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211209072251.185634-1-vkoul@kernel.org>
-References: <20211209072251.185634-1-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 9 Dec 2021 02:27:54 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC59C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 23:24:21 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id f20so4521189qtb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 23:24:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edi.works; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=NBh2FtOhN9V4AaYJCGgnULr5RlKifG8K4kl2lNElkqE=;
+        b=dIoU0XEyugtg1Fe2bPpH7wzdzKvXTAXc3KL9Z6npueqZiH0qtF/YtLnsyOlTbdZhSu
+         F7bt/nVHNrNfB1O5MkYHm0tiquhJAqwe/SGcU8C/kazHaEN2U2llPdmns270QrS7ebBw
+         E4VkAqkKJvS6qsVlXjTh20qHdH8zeumBr2/luRpmpzr5BRBKJuVOUPDWa7/jqys2WekI
+         R4NdkdeLyhA2DELWgsWRweTv4bAhEcMgC2fqJSxQtS0aDGKJ9V5B9cgcKt0G6b3CLMFd
+         zyoexv1850Dn79utmgbFqSwDdD7vZgV39EtphdiB3qAo3pvbk9/eMS9RZQlKsNo35OE7
+         wA9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=NBh2FtOhN9V4AaYJCGgnULr5RlKifG8K4kl2lNElkqE=;
+        b=FMNK+tMFeYNyctVSAsyorwwl0ACIDil1hRgZv7jRMxqOGweaqvjQNQJNJq6joJcZep
+         b2L76ve6sw8PygsSrb24/N8OzjkIJfGauT8SlRUhT4jRDqRk816Zr9RLl4qkk39IE20g
+         noAfr8DzZRRiF/bOTPD/LsJNSaHWjcRZbgTfH15Y1JpXXcYjMJw0XY8gBjyi+YDTsWvI
+         O9MdmiyCREC26S184DqfNEG0OCMULiDcVB0D9DHqN8t4W3FRZiskrPLKd3tLk2x8qWDU
+         RApANk/20+KDFoXQxVr1qYFT2oPj1eTp6mUdL0eg86DDm5E1kjCobgeOZwdRR+CL0Ppt
+         wpuA==
+X-Gm-Message-State: AOAM531RSn6GclN7ERZu8z+tcrZ4Rp7qkHaE7O2IbVo2uwuQ+5bqYDhF
+        oOUP+pVGQkkS5v8VhsLqLdrlaqmF9HzaAA==
+X-Google-Smtp-Source: ABdhPJytuoYkwpk9eT43sFCClb+a55nb+d8+FBlZl6072GJvTh07ntBMbC9woi5lutycMfXsCowCNA==
+X-Received: by 2002:ac8:58c9:: with SMTP id u9mr14923345qta.583.1639034660203;
+        Wed, 08 Dec 2021 23:24:20 -0800 (PST)
+Received: from localhost.localdomain (c-67-169-44-201.hsd1.ca.comcast.net. [67.169.44.201])
+        by smtp.gmail.com with ESMTPSA id t11sm3432244qtx.48.2021.12.08.23.24.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 Dec 2021 23:24:19 -0800 (PST)
+From:   bot@edi.works
+To:     yuzhao@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, corbet@lwn.net,
+        michael@michaellarabel.com, sofia.trinh@edi.works
+Subject: Re: [PATCH v5 00/10] Multigenerational LRU Framework
+Date:   Wed,  8 Dec 2021 23:24:16 -0800
+Message-Id: <20211209072416.33606-1-bot@edi.works>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211111041510.402534-1-yuzhao@google.com>
+References: <20211111041510.402534-1-yuzhao@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for the Qualcomm interconnect buses found in SM8450 based
-platforms. The topology consists of several NoCs that are controlled by
-a remote processor that collects the aggregated bandwidth for each
-master-slave pairs.
+Kernel / Apache Hadoop benchmark with MGLRU
 
-This is based on the downstream driver by
-Vivek Aknurwar <viveka@codeaurora.org>
+TLDR
+====
+With the MGLRU, Apache Hadoop took 95% CIs [5.31, 9.69]% and [2.02,
+7.86]% less wall time to finish TeraSort, respectively, under the
+medium- and the high-concurrency conditions, when swap was on. There
+were no statistically significant changes in wall time for the rest
+of the test matrix.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/interconnect/qcom/Kconfig             |    9 +
- drivers/interconnect/qcom/Makefile            |    2 +
- drivers/interconnect/qcom/sm8450.c            | 1987 +++++++++++++++++
- drivers/interconnect/qcom/sm8450.h            |  169 ++
- .../dt-bindings/interconnect/qcom,sm8450.h    |  302 +--
- 5 files changed, 2318 insertions(+), 151 deletions(-)
- create mode 100644 drivers/interconnect/qcom/sm8450.c
- create mode 100644 drivers/interconnect/qcom/sm8450.h
+Background
+==========
+Memory overcommit can increase utilization and, if carried out
+properly, can also increase throughput. The challenges are to improve
+working set estimation and to optimize page reclaim. The risks are
+performance degradation and OOM kills. Short of overcoming the
+challenges, the only way to reduce the risks is to underutilize
+memory.
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index daf1e25f6042..e2207f9a1a47 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -146,5 +146,14 @@ config INTERCONNECT_QCOM_SM8350
- 	  This is a driver for the Qualcomm Network-on-Chip on SM8350-based
- 	  platforms.
- 
-+config INTERCONNECT_QCOM_SM8450
-+	tristate "Qualcomm SM8450 interconnect driver"
-+	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-+	select INTERCONNECT_QCOM_RPMH
-+	select INTERCONNECT_QCOM_BCM_VOTER
-+	help
-+	  This is a driver for the Qualcomm Network-on-Chip on SM8450-based
-+	  platforms.
-+
- config INTERCONNECT_QCOM_SMD_RPM
- 	tristate
-diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-index 69300b1d48ef..180046d532df 100644
---- a/drivers/interconnect/qcom/Makefile
-+++ b/drivers/interconnect/qcom/Makefile
-@@ -16,6 +16,7 @@ qnoc-sdx55-objs				:= sdx55.o
- qnoc-sm8150-objs			:= sm8150.o
- qnoc-sm8250-objs			:= sm8250.o
- qnoc-sm8350-objs			:= sm8350.o
-+qnoc-sm8450-objs			:= sm8450.o
- icc-smd-rpm-objs			:= smd-rpm.o icc-rpm.o
- 
- obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += icc-bcm-voter.o
-@@ -34,4 +35,5 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SDX55) += qnoc-sdx55.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) += qnoc-sm8150.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) += qnoc-sm8250.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
-+obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
-diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
-new file mode 100644
-index 000000000000..8d99ee6421df
---- /dev/null
-+++ b/drivers/interconnect/qcom/sm8450.c
-@@ -0,0 +1,1987 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021, Linaro Limited
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/interconnect.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <dt-bindings/interconnect/qcom,sm8450.h>
-+
-+#include "bcm-voter.h"
-+#include "icc-rpmh.h"
-+#include "sm8450.h"
-+
-+static struct qcom_icc_node qhm_qspi = {
-+	.name = "qhm_qspi",
-+	.id = SM8450_MASTER_QSPI_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qhm_qup1 = {
-+	.name = "qhm_qup1",
-+	.id = SM8450_MASTER_QUP_1,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qnm_a1noc_cfg = {
-+	.name = "qnm_a1noc_cfg",
-+	.id = SM8450_MASTER_A1NOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_A1NOC },
-+};
-+
-+static struct qcom_icc_node xm_sdc4 = {
-+	.name = "xm_sdc4",
-+	.id = SM8450_MASTER_SDCC_4,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node xm_ufs_mem = {
-+	.name = "xm_ufs_mem",
-+	.id = SM8450_MASTER_UFS_MEM,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node xm_usb3_0 = {
-+	.name = "xm_usb3_0",
-+	.id = SM8450_MASTER_USB3_0,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qhm_qdss_bam = {
-+	.name = "qhm_qdss_bam",
-+	.id = SM8450_MASTER_QDSS_BAM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qhm_qup0 = {
-+	.name = "qhm_qup0",
-+	.id = SM8450_MASTER_QUP_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qhm_qup2 = {
-+	.name = "qhm_qup2",
-+	.id = SM8450_MASTER_QUP_2,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qnm_a2noc_cfg = {
-+	.name = "qnm_a2noc_cfg",
-+	.id = SM8450_MASTER_A2NOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_A2NOC },
-+};
-+
-+static struct qcom_icc_node qxm_crypto = {
-+	.name = "qxm_crypto",
-+	.id = SM8450_MASTER_CRYPTO,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qxm_ipa = {
-+	.name = "qxm_ipa",
-+	.id = SM8450_MASTER_IPA,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qxm_sensorss_q6 = {
-+	.name = "qxm_sensorss_q6",
-+	.id = SM8450_MASTER_SENSORS_PROC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qxm_sp = {
-+	.name = "qxm_sp",
-+	.id = SM8450_MASTER_SP,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node xm_qdss_etr_0 = {
-+	.name = "xm_qdss_etr_0",
-+	.id = SM8450_MASTER_QDSS_ETR,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node xm_qdss_etr_1 = {
-+	.name = "xm_qdss_etr_1",
-+	.id = SM8450_MASTER_QDSS_ETR_1,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node xm_sdc2 = {
-+	.name = "xm_sdc2",
-+	.id = SM8450_MASTER_SDCC_2,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node qup0_core_master = {
-+	.name = "qup0_core_master",
-+	.id = SM8450_MASTER_QUP_CORE_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_QUP_CORE_0 },
-+};
-+
-+static struct qcom_icc_node qup1_core_master = {
-+	.name = "qup1_core_master",
-+	.id = SM8450_MASTER_QUP_CORE_1,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_QUP_CORE_1 },
-+};
-+
-+static struct qcom_icc_node qup2_core_master = {
-+	.name = "qup2_core_master",
-+	.id = SM8450_MASTER_QUP_CORE_2,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_QUP_CORE_2 },
-+};
-+
-+static struct qcom_icc_node qnm_gemnoc_cnoc = {
-+	.name = "qnm_gemnoc_cnoc",
-+	.id = SM8450_MASTER_GEM_NOC_CNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 51,
-+	.links = { SM8450_SLAVE_AHB2PHY_SOUTH, SM8450_SLAVE_AHB2PHY_NORTH,
-+		   SM8450_SLAVE_AOSS, SM8450_SLAVE_CAMERA_CFG,
-+		   SM8450_SLAVE_CLK_CTL, SM8450_SLAVE_CDSP_CFG,
-+		   SM8450_SLAVE_RBCPR_CX_CFG, SM8450_SLAVE_RBCPR_MMCX_CFG,
-+		   SM8450_SLAVE_RBCPR_MXA_CFG, SM8450_SLAVE_RBCPR_MXC_CFG,
-+		   SM8450_SLAVE_CRYPTO_0_CFG, SM8450_SLAVE_CX_RDPM,
-+		   SM8450_SLAVE_DISPLAY_CFG, SM8450_SLAVE_GFX3D_CFG,
-+		   SM8450_SLAVE_IMEM_CFG, SM8450_SLAVE_IPA_CFG,
-+		   SM8450_SLAVE_IPC_ROUTER_CFG, SM8450_SLAVE_LPASS,
-+		   SM8450_SLAVE_CNOC_MSS, SM8450_SLAVE_MX_RDPM,
-+		   SM8450_SLAVE_PCIE_0_CFG, SM8450_SLAVE_PCIE_1_CFG,
-+		   SM8450_SLAVE_PDM, SM8450_SLAVE_PIMEM_CFG,
-+		   SM8450_SLAVE_PRNG, SM8450_SLAVE_QDSS_CFG,
-+		   SM8450_SLAVE_QSPI_0, SM8450_SLAVE_QUP_0,
-+		   SM8450_SLAVE_QUP_1, SM8450_SLAVE_QUP_2,
-+		   SM8450_SLAVE_SDCC_2, SM8450_SLAVE_SDCC_4,
-+		   SM8450_SLAVE_SPSS_CFG, SM8450_SLAVE_TCSR,
-+		   SM8450_SLAVE_TLMM, SM8450_SLAVE_TME_CFG,
-+		   SM8450_SLAVE_UFS_MEM_CFG, SM8450_SLAVE_USB3_0,
-+		   SM8450_SLAVE_VENUS_CFG, SM8450_SLAVE_VSENSE_CTRL_CFG,
-+		   SM8450_SLAVE_A1NOC_CFG, SM8450_SLAVE_A2NOC_CFG,
-+		   SM8450_SLAVE_DDRSS_CFG, SM8450_SLAVE_CNOC_MNOC_CFG,
-+		   SM8450_SLAVE_PCIE_ANOC_CFG, SM8450_SLAVE_SNOC_CFG,
-+		   SM8450_SLAVE_IMEM, SM8450_SLAVE_PIMEM,
-+		   SM8450_SLAVE_SERVICE_CNOC, SM8450_SLAVE_QDSS_STM,
-+		   SM8450_SLAVE_TCU },
-+};
-+
-+static struct qcom_icc_node qnm_gemnoc_pcie = {
-+	.name = "qnm_gemnoc_pcie",
-+	.id = SM8450_MASTER_GEM_NOC_PCIE_SNOC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_PCIE_0, SM8450_SLAVE_PCIE_1 },
-+};
-+
-+static struct qcom_icc_node alm_gpu_tcu = {
-+	.name = "alm_gpu_tcu",
-+	.id = SM8450_MASTER_GPU_TCU,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node alm_sys_tcu = {
-+	.name = "alm_sys_tcu",
-+	.id = SM8450_MASTER_SYS_TCU,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node chm_apps = {
-+	.name = "chm_apps",
-+	.id = SM8450_MASTER_APPSS_PROC,
-+	.channels = 3,
-+	.buswidth = 32,
-+	.num_links = 3,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC,
-+		   SM8450_SLAVE_MEM_NOC_PCIE_SNOC },
-+};
-+
-+static struct qcom_icc_node qnm_gpu = {
-+	.name = "qnm_gpu",
-+	.id = SM8450_MASTER_GFX3D,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_mdsp = {
-+	.name = "qnm_mdsp",
-+	.id = SM8450_MASTER_MSS_PROC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 3,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC,
-+		   SM8450_SLAVE_MEM_NOC_PCIE_SNOC },
-+};
-+
-+static struct qcom_icc_node qnm_mnoc_hf = {
-+	.name = "qnm_mnoc_hf",
-+	.id = SM8450_MASTER_MNOC_HF_MEM_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_mnoc_sf = {
-+	.name = "qnm_mnoc_sf",
-+	.id = SM8450_MASTER_MNOC_SF_MEM_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_nsp_gemnoc = {
-+	.name = "qnm_nsp_gemnoc",
-+	.id = SM8450_MASTER_COMPUTE_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_pcie = {
-+	.name = "qnm_pcie",
-+	.id = SM8450_MASTER_ANOC_PCIE_GEM_NOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 2,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_snoc_gc = {
-+	.name = "qnm_snoc_gc",
-+	.id = SM8450_MASTER_SNOC_GC_MEM_NOC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_LLCC },
-+};
-+
-+static struct qcom_icc_node qnm_snoc_sf = {
-+	.name = "qnm_snoc_sf",
-+	.id = SM8450_MASTER_SNOC_SF_MEM_NOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 3,
-+	.links = { SM8450_SLAVE_GEM_NOC_CNOC, SM8450_SLAVE_LLCC,
-+		   SM8450_SLAVE_MEM_NOC_PCIE_SNOC },
-+};
-+
-+static struct qcom_icc_node qhm_config_noc = {
-+	.name = "qhm_config_noc",
-+	.id = SM8450_MASTER_CNOC_LPASS_AG_NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 6,
-+	.links = { SM8450_SLAVE_LPASS_CORE_CFG, SM8450_SLAVE_LPASS_LPI_CFG,
-+		   SM8450_SLAVE_LPASS_MPU_CFG, SM8450_SLAVE_LPASS_TOP_CFG,
-+		   SM8450_SLAVE_SERVICES_LPASS_AML_NOC, SM8450_SLAVE_SERVICE_LPASS_AG_NOC },
-+};
-+
-+static struct qcom_icc_node qxm_lpass_dsp = {
-+	.name = "qxm_lpass_dsp",
-+	.id = SM8450_MASTER_LPASS_PROC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 4,
-+	.links = { SM8450_SLAVE_LPASS_TOP_CFG, SM8450_SLAVE_LPASS_SNOC,
-+		   SM8450_SLAVE_SERVICES_LPASS_AML_NOC, SM8450_SLAVE_SERVICE_LPASS_AG_NOC },
-+};
-+
-+static struct qcom_icc_node llcc_mc = {
-+	.name = "llcc_mc",
-+	.id = SM8450_MASTER_LLCC,
-+	.channels = 4,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_EBI1 },
-+};
-+
-+static struct qcom_icc_node qnm_camnoc_hf = {
-+	.name = "qnm_camnoc_hf",
-+	.id = SM8450_MASTER_CAMNOC_HF,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_HF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_camnoc_icp = {
-+	.name = "qnm_camnoc_icp",
-+	.id = SM8450_MASTER_CAMNOC_ICP,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_camnoc_sf = {
-+	.name = "qnm_camnoc_sf",
-+	.id = SM8450_MASTER_CAMNOC_SF,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_mdp = {
-+	.name = "qnm_mdp",
-+	.id = SM8450_MASTER_MDP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_HF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_mnoc_cfg = {
-+	.name = "qnm_mnoc_cfg",
-+	.id = SM8450_MASTER_CNOC_MNOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_MNOC },
-+};
-+
-+static struct qcom_icc_node qnm_rot = {
-+	.name = "qnm_rot",
-+	.id = SM8450_MASTER_ROTATOR,
-+	.channels = 1,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_vapss_hcp = {
-+	.name = "qnm_vapss_hcp",
-+	.id = SM8450_MASTER_CDSP_HCP,
-+	.channels = 1,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_video = {
-+	.name = "qnm_video",
-+	.id = SM8450_MASTER_VIDEO,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_video_cv_cpu = {
-+	.name = "qnm_video_cv_cpu",
-+	.id = SM8450_MASTER_VIDEO_CV_PROC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_video_cvp = {
-+	.name = "qnm_video_cvp",
-+	.id = SM8450_MASTER_VIDEO_PROC,
-+	.channels = 1,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_video_v_cpu = {
-+	.name = "qnm_video_v_cpu",
-+	.id = SM8450_MASTER_VIDEO_V_PROC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qhm_nsp_noc_config = {
-+	.name = "qhm_nsp_noc_config",
-+	.id = SM8450_MASTER_CDSP_NOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_NSP_NOC },
-+};
-+
-+static struct qcom_icc_node qxm_nsp = {
-+	.name = "qxm_nsp",
-+	.id = SM8450_MASTER_CDSP_PROC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_CDSP_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qnm_pcie_anoc_cfg = {
-+	.name = "qnm_pcie_anoc_cfg",
-+	.id = SM8450_MASTER_PCIE_ANOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_PCIE_ANOC },
-+};
-+
-+static struct qcom_icc_node xm_pcie3_0 = {
-+	.name = "xm_pcie3_0",
-+	.id = SM8450_MASTER_PCIE_0,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_ANOC_PCIE_GEM_NOC },
-+};
-+
-+static struct qcom_icc_node xm_pcie3_1 = {
-+	.name = "xm_pcie3_1",
-+	.id = SM8450_MASTER_PCIE_1,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_ANOC_PCIE_GEM_NOC },
-+};
-+
-+static struct qcom_icc_node qhm_gic = {
-+	.name = "qhm_gic",
-+	.id = SM8450_MASTER_GIC_AHB,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_SF },
-+};
-+
-+static struct qcom_icc_node qnm_aggre1_noc = {
-+	.name = "qnm_aggre1_noc",
-+	.id = SM8450_MASTER_A1NOC_SNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_SF },
-+};
-+
-+static struct qcom_icc_node qnm_aggre2_noc = {
-+	.name = "qnm_aggre2_noc",
-+	.id = SM8450_MASTER_A2NOC_SNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_SF },
-+};
-+
-+static struct qcom_icc_node qnm_lpass_noc = {
-+	.name = "qnm_lpass_noc",
-+	.id = SM8450_MASTER_LPASS_ANOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_SF },
-+};
-+
-+static struct qcom_icc_node qnm_snoc_cfg = {
-+	.name = "qnm_snoc_cfg",
-+	.id = SM8450_MASTER_SNOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SERVICE_SNOC },
-+};
-+
-+static struct qcom_icc_node qxm_pimem = {
-+	.name = "qxm_pimem",
-+	.id = SM8450_MASTER_PIMEM,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_GC },
-+};
-+
-+static struct qcom_icc_node xm_gic = {
-+	.name = "xm_gic",
-+	.id = SM8450_MASTER_GIC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_SNOC_GEM_NOC_GC },
-+};
-+
-+static struct qcom_icc_node qnm_mnoc_hf_disp = {
-+	.name = "qnm_mnoc_hf_disp",
-+	.id = SM8450_MASTER_MNOC_HF_MEM_NOC_DISP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_LLCC_DISP },
-+};
-+
-+static struct qcom_icc_node qnm_mnoc_sf_disp = {
-+	.name = "qnm_mnoc_sf_disp",
-+	.id = SM8450_MASTER_MNOC_SF_MEM_NOC_DISP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_LLCC_DISP },
-+};
-+
-+static struct qcom_icc_node qnm_pcie_disp = {
-+	.name = "qnm_pcie_disp",
-+	.id = SM8450_MASTER_ANOC_PCIE_GEM_NOC_DISP,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_LLCC_DISP },
-+};
-+
-+static struct qcom_icc_node llcc_mc_disp = {
-+	.name = "llcc_mc_disp",
-+	.id = SM8450_MASTER_LLCC_DISP,
-+	.channels = 4,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_EBI1_DISP },
-+};
-+
-+static struct qcom_icc_node qnm_mdp_disp = {
-+	.name = "qnm_mdp_disp",
-+	.id = SM8450_MASTER_MDP_DISP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_HF_MEM_NOC_DISP },
-+};
-+
-+static struct qcom_icc_node qnm_rot_disp = {
-+	.name = "qnm_rot_disp",
-+	.id = SM8450_MASTER_ROTATOR_DISP,
-+	.channels = 1,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_SLAVE_MNOC_SF_MEM_NOC_DISP },
-+};
-+
-+static struct qcom_icc_node qns_a1noc_snoc = {
-+	.name = "qns_a1noc_snoc",
-+	.id = SM8450_SLAVE_A1NOC_SNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_A1NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node srvc_aggre1_noc = {
-+	.name = "srvc_aggre1_noc",
-+	.id = SM8450_SLAVE_SERVICE_A1NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_a2noc_snoc = {
-+	.name = "qns_a2noc_snoc",
-+	.id = SM8450_SLAVE_A2NOC_SNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_A2NOC_SNOC },
-+};
-+
-+static struct qcom_icc_node srvc_aggre2_noc = {
-+	.name = "srvc_aggre2_noc",
-+	.id = SM8450_SLAVE_SERVICE_A2NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qup0_core_slave = {
-+	.name = "qup0_core_slave",
-+	.id = SM8450_SLAVE_QUP_CORE_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qup1_core_slave = {
-+	.name = "qup1_core_slave",
-+	.id = SM8450_SLAVE_QUP_CORE_1,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qup2_core_slave = {
-+	.name = "qup2_core_slave",
-+	.id = SM8450_SLAVE_QUP_CORE_2,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_ahb2phy0 = {
-+	.name = "qhs_ahb2phy0",
-+	.id = SM8450_SLAVE_AHB2PHY_SOUTH,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_ahb2phy1 = {
-+	.name = "qhs_ahb2phy1",
-+	.id = SM8450_SLAVE_AHB2PHY_NORTH,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_aoss = {
-+	.name = "qhs_aoss",
-+	.id = SM8450_SLAVE_AOSS,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_camera_cfg = {
-+	.name = "qhs_camera_cfg",
-+	.id = SM8450_SLAVE_CAMERA_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_clk_ctl = {
-+	.name = "qhs_clk_ctl",
-+	.id = SM8450_SLAVE_CLK_CTL,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_compute_cfg = {
-+	.name = "qhs_compute_cfg",
-+	.id = SM8450_SLAVE_CDSP_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { MASTER_CDSP_NOC_CFG },
-+};
-+
-+static struct qcom_icc_node qhs_cpr_cx = {
-+	.name = "qhs_cpr_cx",
-+	.id = SM8450_SLAVE_RBCPR_CX_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_cpr_mmcx = {
-+	.name = "qhs_cpr_mmcx",
-+	.id = SM8450_SLAVE_RBCPR_MMCX_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_cpr_mxa = {
-+	.name = "qhs_cpr_mxa",
-+	.id = SM8450_SLAVE_RBCPR_MXA_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_cpr_mxc = {
-+	.name = "qhs_cpr_mxc",
-+	.id = SM8450_SLAVE_RBCPR_MXC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_crypto0_cfg = {
-+	.name = "qhs_crypto0_cfg",
-+	.id = SM8450_SLAVE_CRYPTO_0_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_cx_rdpm = {
-+	.name = "qhs_cx_rdpm",
-+	.id = SM8450_SLAVE_CX_RDPM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_display_cfg = {
-+	.name = "qhs_display_cfg",
-+	.id = SM8450_SLAVE_DISPLAY_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_gpuss_cfg = {
-+	.name = "qhs_gpuss_cfg",
-+	.id = SM8450_SLAVE_GFX3D_CFG,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_imem_cfg = {
-+	.name = "qhs_imem_cfg",
-+	.id = SM8450_SLAVE_IMEM_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_ipa = {
-+	.name = "qhs_ipa",
-+	.id = SM8450_SLAVE_IPA_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_ipc_router = {
-+	.name = "qhs_ipc_router",
-+	.id = SM8450_SLAVE_IPC_ROUTER_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_lpass_cfg = {
-+	.name = "qhs_lpass_cfg",
-+	.id = SM8450_SLAVE_LPASS,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { MASTER_CNOC_LPASS_AG_NOC },
-+};
-+
-+static struct qcom_icc_node qhs_mss_cfg = {
-+	.name = "qhs_mss_cfg",
-+	.id = SM8450_SLAVE_CNOC_MSS,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_mx_rdpm = {
-+	.name = "qhs_mx_rdpm",
-+	.id = SM8450_SLAVE_MX_RDPM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_pcie0_cfg = {
-+	.name = "qhs_pcie0_cfg",
-+	.id = SM8450_SLAVE_PCIE_0_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_pcie1_cfg = {
-+	.name = "qhs_pcie1_cfg",
-+	.id = SM8450_SLAVE_PCIE_1_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_pdm = {
-+	.name = "qhs_pdm",
-+	.id = SM8450_SLAVE_PDM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_pimem_cfg = {
-+	.name = "qhs_pimem_cfg",
-+	.id = SM8450_SLAVE_PIMEM_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_prng = {
-+	.name = "qhs_prng",
-+	.id = SM8450_SLAVE_PRNG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_qdss_cfg = {
-+	.name = "qhs_qdss_cfg",
-+	.id = SM8450_SLAVE_QDSS_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_qspi = {
-+	.name = "qhs_qspi",
-+	.id = SM8450_SLAVE_QSPI_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_qup0 = {
-+	.name = "qhs_qup0",
-+	.id = SM8450_SLAVE_QUP_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_qup1 = {
-+	.name = "qhs_qup1",
-+	.id = SM8450_SLAVE_QUP_1,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_qup2 = {
-+	.name = "qhs_qup2",
-+	.id = SM8450_SLAVE_QUP_2,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_sdc2 = {
-+	.name = "qhs_sdc2",
-+	.id = SM8450_SLAVE_SDCC_2,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_sdc4 = {
-+	.name = "qhs_sdc4",
-+	.id = SM8450_SLAVE_SDCC_4,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_spss_cfg = {
-+	.name = "qhs_spss_cfg",
-+	.id = SM8450_SLAVE_SPSS_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_tcsr = {
-+	.name = "qhs_tcsr",
-+	.id = SM8450_SLAVE_TCSR,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_tlmm = {
-+	.name = "qhs_tlmm",
-+	.id = SM8450_SLAVE_TLMM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_tme_cfg = {
-+	.name = "qhs_tme_cfg",
-+	.id = SM8450_SLAVE_TME_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_ufs_mem_cfg = {
-+	.name = "qhs_ufs_mem_cfg",
-+	.id = SM8450_SLAVE_UFS_MEM_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_usb3_0 = {
-+	.name = "qhs_usb3_0",
-+	.id = SM8450_SLAVE_USB3_0,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_venus_cfg = {
-+	.name = "qhs_venus_cfg",
-+	.id = SM8450_SLAVE_VENUS_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_vsense_ctrl_cfg = {
-+	.name = "qhs_vsense_ctrl_cfg",
-+	.id = SM8450_SLAVE_VSENSE_CTRL_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_a1_noc_cfg = {
-+	.name = "qns_a1_noc_cfg",
-+	.id = SM8450_SLAVE_A1NOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_A1NOC_CFG },
-+};
-+
-+static struct qcom_icc_node qns_a2_noc_cfg = {
-+	.name = "qns_a2_noc_cfg",
-+	.id = SM8450_SLAVE_A2NOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_A2NOC_CFG },
-+};
-+
-+static struct qcom_icc_node qns_ddrss_cfg = {
-+	.name = "qns_ddrss_cfg",
-+	.id = SM8450_SLAVE_DDRSS_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	//FIXME where is link
-+};
-+
-+static struct qcom_icc_node qns_mnoc_cfg = {
-+	.name = "qns_mnoc_cfg",
-+	.id = SM8450_SLAVE_CNOC_MNOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_CNOC_MNOC_CFG },
-+};
-+
-+static struct qcom_icc_node qns_pcie_anoc_cfg = {
-+	.name = "qns_pcie_anoc_cfg",
-+	.id = SM8450_SLAVE_PCIE_ANOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_PCIE_ANOC_CFG },
-+};
-+
-+static struct qcom_icc_node qns_snoc_cfg = {
-+	.name = "qns_snoc_cfg",
-+	.id = SM8450_SLAVE_SNOC_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_SNOC_CFG },
-+};
-+
-+static struct qcom_icc_node qxs_imem = {
-+	.name = "qxs_imem",
-+	.id = SM8450_SLAVE_IMEM,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qxs_pimem = {
-+	.name = "qxs_pimem",
-+	.id = SM8450_SLAVE_PIMEM,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node srvc_cnoc = {
-+	.name = "srvc_cnoc",
-+	.id = SM8450_SLAVE_SERVICE_CNOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node xs_pcie_0 = {
-+	.name = "xs_pcie_0",
-+	.id = SM8450_SLAVE_PCIE_0,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node xs_pcie_1 = {
-+	.name = "xs_pcie_1",
-+	.id = SM8450_SLAVE_PCIE_1,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node xs_qdss_stm = {
-+	.name = "xs_qdss_stm",
-+	.id = SM8450_SLAVE_QDSS_STM,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node xs_sys_tcu_cfg = {
-+	.name = "xs_sys_tcu_cfg",
-+	.id = SM8450_SLAVE_TCU,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_gem_noc_cnoc = {
-+	.name = "qns_gem_noc_cnoc",
-+	.id = SM8450_SLAVE_GEM_NOC_CNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_GEM_NOC_CNOC },
-+};
-+
-+static struct qcom_icc_node qns_llcc = {
-+	.name = "qns_llcc",
-+	.id = SM8450_SLAVE_LLCC,
-+	.channels = 4,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_LLCC },
-+};
-+
-+static struct qcom_icc_node qns_pcie = {
-+	.name = "qns_pcie",
-+	.id = SM8450_SLAVE_MEM_NOC_PCIE_SNOC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_GEM_NOC_PCIE_SNOC },
-+};
-+
-+static struct qcom_icc_node qhs_lpass_core = {
-+	.name = "qhs_lpass_core",
-+	.id = SM8450_SLAVE_LPASS_CORE_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_lpass_lpi = {
-+	.name = "qhs_lpass_lpi",
-+	.id = SM8450_SLAVE_LPASS_LPI_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_lpass_mpu = {
-+	.name = "qhs_lpass_mpu",
-+	.id = SM8450_SLAVE_LPASS_MPU_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qhs_lpass_top = {
-+	.name = "qhs_lpass_top",
-+	.id = SM8450_SLAVE_LPASS_TOP_CFG,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_sysnoc = {
-+	.name = "qns_sysnoc",
-+	.id = SM8450_SLAVE_LPASS_SNOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_LPASS_ANOC },
-+};
-+
-+static struct qcom_icc_node srvc_niu_aml_noc = {
-+	.name = "srvc_niu_aml_noc",
-+	.id = SM8450_SLAVE_SERVICES_LPASS_AML_NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node srvc_niu_lpass_agnoc = {
-+	.name = "srvc_niu_lpass_agnoc",
-+	.id = SM8450_SLAVE_SERVICE_LPASS_AG_NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node ebi = {
-+	.name = "ebi",
-+	.id = SM8450_SLAVE_EBI1,
-+	.channels = 4,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_mem_noc_hf = {
-+	.name = "qns_mem_noc_hf",
-+	.id = SM8450_SLAVE_MNOC_HF_MEM_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_MNOC_HF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qns_mem_noc_sf = {
-+	.name = "qns_mem_noc_sf",
-+	.id = SM8450_SLAVE_MNOC_SF_MEM_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_MNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node srvc_mnoc = {
-+	.name = "srvc_mnoc",
-+	.id = SM8450_SLAVE_SERVICE_MNOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_nsp_gemnoc = {
-+	.name = "qns_nsp_gemnoc",
-+	.id = SM8450_SLAVE_CDSP_MEM_NOC,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_COMPUTE_NOC },
-+};
-+
-+static struct qcom_icc_node service_nsp_noc = {
-+	.name = "service_nsp_noc",
-+	.id = SM8450_SLAVE_SERVICE_NSP_NOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_pcie_mem_noc = {
-+	.name = "qns_pcie_mem_noc",
-+	.id = SM8450_SLAVE_ANOC_PCIE_GEM_NOC,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_ANOC_PCIE_GEM_NOC },
-+};
-+
-+static struct qcom_icc_node srvc_pcie_aggre_noc = {
-+	.name = "srvc_pcie_aggre_noc",
-+	.id = SM8450_SLAVE_SERVICE_PCIE_ANOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_gemnoc_gc = {
-+	.name = "qns_gemnoc_gc",
-+	.id = SM8450_SLAVE_SNOC_GEM_NOC_GC,
-+	.channels = 1,
-+	.buswidth = 8,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_SNOC_GC_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node qns_gemnoc_sf = {
-+	.name = "qns_gemnoc_sf",
-+	.id = SM8450_SLAVE_SNOC_GEM_NOC_SF,
-+	.channels = 1,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_SNOC_SF_MEM_NOC },
-+};
-+
-+static struct qcom_icc_node srvc_snoc = {
-+	.name = "srvc_snoc",
-+	.id = SM8450_SLAVE_SERVICE_SNOC,
-+	.channels = 1,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_llcc_disp = {
-+	.name = "qns_llcc_disp",
-+	.id = SM8450_SLAVE_LLCC_DISP,
-+	.channels = 4,
-+	.buswidth = 16,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_LLCC_DISP },
-+};
-+
-+static struct qcom_icc_node ebi_disp = {
-+	.name = "ebi_disp",
-+	.id = SM8450_SLAVE_EBI1_DISP,
-+	.channels = 4,
-+	.buswidth = 4,
-+	.num_links = 0,
-+};
-+
-+static struct qcom_icc_node qns_mem_noc_hf_disp = {
-+	.name = "qns_mem_noc_hf_disp",
-+	.id = SM8450_SLAVE_MNOC_HF_MEM_NOC_DISP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_MNOC_HF_MEM_NOC_DISP },
-+};
-+
-+static struct qcom_icc_node qns_mem_noc_sf_disp = {
-+	.name = "qns_mem_noc_sf_disp",
-+	.id = SM8450_SLAVE_MNOC_SF_MEM_NOC_DISP,
-+	.channels = 2,
-+	.buswidth = 32,
-+	.num_links = 1,
-+	.links = { SM8450_MASTER_MNOC_SF_MEM_NOC_DISP },
-+};
-+
-+static struct qcom_icc_bcm bcm_acv = {
-+	.name = "ACV",
-+	.num_nodes = 1,
-+	.nodes = { &ebi },
-+};
-+
-+static struct qcom_icc_bcm bcm_ce0 = {
-+	.name = "CE0",
-+	.num_nodes = 1,
-+	.nodes = { &qxm_crypto },
-+};
-+
-+static struct qcom_icc_bcm bcm_cn0 = {
-+	.name = "CN0",
-+	.keepalive = true,
-+	.num_nodes = 55,
-+	.nodes = { &qnm_gemnoc_cnoc, &qnm_gemnoc_pcie,
-+		   &qhs_ahb2phy0, &qhs_ahb2phy1,
-+		   &qhs_aoss, &qhs_camera_cfg,
-+		   &qhs_clk_ctl, &qhs_compute_cfg,
-+		   &qhs_cpr_cx, &qhs_cpr_mmcx,
-+		   &qhs_cpr_mxa, &qhs_cpr_mxc,
-+		   &qhs_crypto0_cfg, &qhs_cx_rdpm,
-+		   &qhs_display_cfg, &qhs_gpuss_cfg,
-+		   &qhs_imem_cfg, &qhs_ipa,
-+		   &qhs_ipc_router, &qhs_lpass_cfg,
-+		   &qhs_mss_cfg, &qhs_mx_rdpm,
-+		   &qhs_pcie0_cfg, &qhs_pcie1_cfg,
-+		   &qhs_pdm, &qhs_pimem_cfg,
-+		   &qhs_prng, &qhs_qdss_cfg,
-+		   &qhs_qspi, &qhs_qup0,
-+		   &qhs_qup1, &qhs_qup2,
-+		   &qhs_sdc2, &qhs_sdc4,
-+		   &qhs_spss_cfg, &qhs_tcsr,
-+		   &qhs_tlmm, &qhs_tme_cfg,
-+		   &qhs_ufs_mem_cfg, &qhs_usb3_0,
-+		   &qhs_venus_cfg, &qhs_vsense_ctrl_cfg,
-+		   &qns_a1_noc_cfg, &qns_a2_noc_cfg,
-+		   &qns_ddrss_cfg, &qns_mnoc_cfg,
-+		   &qns_pcie_anoc_cfg, &qns_snoc_cfg,
-+		   &qxs_imem, &qxs_pimem,
-+		   &srvc_cnoc, &xs_pcie_0,
-+		   &xs_pcie_1, &xs_qdss_stm,
-+		   &xs_sys_tcu_cfg },
-+};
-+
-+static struct qcom_icc_bcm bcm_co0 = {
-+	.name = "CO0",
-+	.num_nodes = 2,
-+	.nodes = { &qxm_nsp, &qns_nsp_gemnoc },
-+};
-+
-+static struct qcom_icc_bcm bcm_mc0 = {
-+	.name = "MC0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &ebi },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm0 = {
-+	.name = "MM0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_hf },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm1 = {
-+	.name = "MM1",
-+	.num_nodes = 12,
-+	.nodes = { &qnm_camnoc_hf, &qnm_camnoc_icp,
-+		   &qnm_camnoc_sf, &qnm_mdp,
-+		   &qnm_mnoc_cfg, &qnm_rot,
-+		   &qnm_vapss_hcp, &qnm_video,
-+		   &qnm_video_cv_cpu, &qnm_video_cvp,
-+		   &qnm_video_v_cpu, &qns_mem_noc_sf },
-+};
-+
-+static struct qcom_icc_bcm bcm_qup0 = {
-+	.name = "QUP0",
-+	.keepalive = true,
-+	.vote_scale = 1,
-+	.num_nodes = 1,
-+	.nodes = { &qup0_core_slave },
-+};
-+
-+static struct qcom_icc_bcm bcm_qup1 = {
-+	.name = "QUP1",
-+	.keepalive = true,
-+	.vote_scale = 1,
-+	.num_nodes = 1,
-+	.nodes = { &qup1_core_slave },
-+};
-+
-+static struct qcom_icc_bcm bcm_qup2 = {
-+	.name = "QUP2",
-+	.keepalive = true,
-+	.vote_scale = 1,
-+	.num_nodes = 1,
-+	.nodes = { &qup2_core_slave },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh0 = {
-+	.name = "SH0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_llcc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh1 = {
-+	.name = "SH1",
-+	.num_nodes = 7,
-+	.nodes = { &alm_gpu_tcu, &alm_sys_tcu,
-+		   &qnm_nsp_gemnoc, &qnm_pcie,
-+		   &qnm_snoc_gc, &qns_gem_noc_cnoc,
-+		   &qns_pcie },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn0 = {
-+	.name = "SN0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_gemnoc_sf },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn1 = {
-+	.name = "SN1",
-+	.num_nodes = 4,
-+	.nodes = { &qhm_gic, &qxm_pimem,
-+		   &xm_gic, &qns_gemnoc_gc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn2 = {
-+	.name = "SN2",
-+	.num_nodes = 1,
-+	.nodes = { &qnm_aggre1_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn3 = {
-+	.name = "SN3",
-+	.num_nodes = 1,
-+	.nodes = { &qnm_aggre2_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn4 = {
-+	.name = "SN4",
-+	.num_nodes = 1,
-+	.nodes = { &qnm_lpass_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn7 = {
-+	.name = "SN7",
-+	.num_nodes = 1,
-+	.nodes = { &qns_pcie_mem_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_acv_disp = {
-+	.name = "ACV",
-+	.num_nodes = 1,
-+	.nodes = { &ebi_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mc0_disp = {
-+	.name = "MC0",
-+	.num_nodes = 1,
-+	.nodes = { &ebi_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm0_disp = {
-+	.name = "MM0",
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_hf_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm1_disp = {
-+	.name = "MM1",
-+	.num_nodes = 3,
-+	.nodes = { &qnm_mdp_disp, &qnm_rot_disp,
-+		   &qns_mem_noc_sf_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh0_disp = {
-+	.name = "SH0",
-+	.num_nodes = 1,
-+	.nodes = { &qns_llcc_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh1_disp = {
-+	.name = "SH1",
-+	.num_nodes = 1,
-+	.nodes = { &qnm_pcie_disp },
-+};
-+
-+static struct qcom_icc_bcm *aggre1_noc_bcms[] = {
-+};
-+
-+static struct qcom_icc_node *aggre1_noc_nodes[] = {
-+	[MASTER_QSPI_0] = &qhm_qspi,
-+	[MASTER_QUP_1] = &qhm_qup1,
-+	[MASTER_A1NOC_CFG] = &qnm_a1noc_cfg,
-+	[MASTER_SDCC_4] = &xm_sdc4,
-+	[MASTER_UFS_MEM] = &xm_ufs_mem,
-+	[MASTER_USB3_0] = &xm_usb3_0,
-+	[SLAVE_A1NOC_SNOC] = &qns_a1noc_snoc,
-+	[SLAVE_SERVICE_A1NOC] = &srvc_aggre1_noc,
-+};
-+
-+static struct qcom_icc_desc sm8450_aggre1_noc = {
-+	.nodes = aggre1_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
-+	.bcms = aggre1_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *aggre2_noc_bcms[] = {
-+	&bcm_ce0,
-+};
-+
-+static struct qcom_icc_node *aggre2_noc_nodes[] = {
-+	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
-+	[MASTER_QUP_0] = &qhm_qup0,
-+	[MASTER_QUP_2] = &qhm_qup2,
-+	[MASTER_A2NOC_CFG] = &qnm_a2noc_cfg,
-+	[MASTER_CRYPTO] = &qxm_crypto,
-+	[MASTER_IPA] = &qxm_ipa,
-+	[MASTER_SENSORS_PROC] = &qxm_sensorss_q6,
-+	[MASTER_SP] = &qxm_sp,
-+	[MASTER_QDSS_ETR] = &xm_qdss_etr_0,
-+	[MASTER_QDSS_ETR_1] = &xm_qdss_etr_1,
-+	[MASTER_SDCC_2] = &xm_sdc2,
-+	[SLAVE_A2NOC_SNOC] = &qns_a2noc_snoc,
-+	[SLAVE_SERVICE_A2NOC] = &srvc_aggre2_noc,
-+};
-+
-+static struct qcom_icc_desc sm8450_aggre2_noc = {
-+	.nodes = aggre2_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
-+	.bcms = aggre2_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *clk_virt_bcms[] = {
-+	&bcm_qup0,
-+	&bcm_qup1,
-+	&bcm_qup2,
-+};
-+
-+static struct qcom_icc_node *clk_virt_nodes[] = {
-+	[MASTER_QUP_CORE_0] = &qup0_core_master,
-+	[MASTER_QUP_CORE_1] = &qup1_core_master,
-+	[MASTER_QUP_CORE_2] = &qup2_core_master,
-+	[SLAVE_QUP_CORE_0] = &qup0_core_slave,
-+	[SLAVE_QUP_CORE_1] = &qup1_core_slave,
-+	[SLAVE_QUP_CORE_2] = &qup2_core_slave,
-+};
-+
-+static struct qcom_icc_desc sm8450_clk_virt = {
-+	.nodes = clk_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
-+	.bcms = clk_virt_bcms,
-+	.num_bcms = ARRAY_SIZE(clk_virt_bcms),
-+};
-+
-+static struct qcom_icc_bcm *config_noc_bcms[] = {
-+	&bcm_cn0,
-+};
-+
-+static struct qcom_icc_node *config_noc_nodes[] = {
-+	[MASTER_GEM_NOC_CNOC] = &qnm_gemnoc_cnoc,
-+	[MASTER_GEM_NOC_PCIE_SNOC] = &qnm_gemnoc_pcie,
-+	[SLAVE_AHB2PHY_SOUTH] = &qhs_ahb2phy0,
-+	[SLAVE_AHB2PHY_NORTH] = &qhs_ahb2phy1,
-+	[SLAVE_AOSS] = &qhs_aoss,
-+	[SLAVE_CAMERA_CFG] = &qhs_camera_cfg,
-+	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
-+	[SLAVE_CDSP_CFG] = &qhs_compute_cfg,
-+	[SLAVE_RBCPR_CX_CFG] = &qhs_cpr_cx,
-+	[SLAVE_RBCPR_MMCX_CFG] = &qhs_cpr_mmcx,
-+	[SLAVE_RBCPR_MXA_CFG] = &qhs_cpr_mxa,
-+	[SLAVE_RBCPR_MXC_CFG] = &qhs_cpr_mxc,
-+	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
-+	[SLAVE_CX_RDPM] = &qhs_cx_rdpm,
-+	[SLAVE_DISPLAY_CFG] = &qhs_display_cfg,
-+	[SLAVE_GFX3D_CFG] = &qhs_gpuss_cfg,
-+	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
-+	[SLAVE_IPA_CFG] = &qhs_ipa,
-+	[SLAVE_IPC_ROUTER_CFG] = &qhs_ipc_router,
-+	[SLAVE_LPASS] = &qhs_lpass_cfg,
-+	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
-+	[SLAVE_MX_RDPM] = &qhs_mx_rdpm,
-+	[SLAVE_PCIE_0_CFG] = &qhs_pcie0_cfg,
-+	[SLAVE_PCIE_1_CFG] = &qhs_pcie1_cfg,
-+	[SLAVE_PDM] = &qhs_pdm,
-+	[SLAVE_PIMEM_CFG] = &qhs_pimem_cfg,
-+	[SLAVE_PRNG] = &qhs_prng,
-+	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
-+	[SLAVE_QSPI_0] = &qhs_qspi,
-+	[SLAVE_QUP_0] = &qhs_qup0,
-+	[SLAVE_QUP_1] = &qhs_qup1,
-+	[SLAVE_QUP_2] = &qhs_qup2,
-+	[SLAVE_SDCC_2] = &qhs_sdc2,
-+	[SLAVE_SDCC_4] = &qhs_sdc4,
-+	[SLAVE_SPSS_CFG] = &qhs_spss_cfg,
-+	[SLAVE_TCSR] = &qhs_tcsr,
-+	[SLAVE_TLMM] = &qhs_tlmm,
-+	[SLAVE_TME_CFG] = &qhs_tme_cfg,
-+	[SLAVE_UFS_MEM_CFG] = &qhs_ufs_mem_cfg,
-+	[SLAVE_USB3_0] = &qhs_usb3_0,
-+	[SLAVE_VENUS_CFG] = &qhs_venus_cfg,
-+	[SLAVE_VSENSE_CTRL_CFG] = &qhs_vsense_ctrl_cfg,
-+	[SLAVE_A1NOC_CFG] = &qns_a1_noc_cfg,
-+	[SLAVE_A2NOC_CFG] = &qns_a2_noc_cfg,
-+	[SLAVE_DDRSS_CFG] = &qns_ddrss_cfg,
-+	[SLAVE_CNOC_MNOC_CFG] = &qns_mnoc_cfg,
-+	[SLAVE_PCIE_ANOC_CFG] = &qns_pcie_anoc_cfg,
-+	[SLAVE_SNOC_CFG] = &qns_snoc_cfg,
-+	[SLAVE_IMEM] = &qxs_imem,
-+	[SLAVE_PIMEM] = &qxs_pimem,
-+	[SLAVE_SERVICE_CNOC] = &srvc_cnoc,
-+	[SLAVE_PCIE_0] = &xs_pcie_0,
-+	[SLAVE_PCIE_1] = &xs_pcie_1,
-+	[SLAVE_QDSS_STM] = &xs_qdss_stm,
-+	[SLAVE_TCU] = &xs_sys_tcu_cfg,
-+};
-+
-+static struct qcom_icc_desc sm8450_config_noc = {
-+	.nodes = config_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(config_noc_nodes),
-+	.bcms = config_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(config_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *gem_noc_bcms[] = {
-+	&bcm_sh0,
-+	&bcm_sh1,
-+	&bcm_sh0_disp,
-+	&bcm_sh1_disp,
-+};
-+
-+static struct qcom_icc_node *gem_noc_nodes[] = {
-+	[MASTER_GPU_TCU] = &alm_gpu_tcu,
-+	[MASTER_SYS_TCU] = &alm_sys_tcu,
-+	[MASTER_APPSS_PROC] = &chm_apps,
-+	[MASTER_GFX3D] = &qnm_gpu,
-+	[MASTER_MSS_PROC] = &qnm_mdsp,
-+	[MASTER_MNOC_HF_MEM_NOC] = &qnm_mnoc_hf,
-+	[MASTER_MNOC_SF_MEM_NOC] = &qnm_mnoc_sf,
-+	[MASTER_COMPUTE_NOC] = &qnm_nsp_gemnoc,
-+	[MASTER_ANOC_PCIE_GEM_NOC] = &qnm_pcie,
-+	[MASTER_SNOC_GC_MEM_NOC] = &qnm_snoc_gc,
-+	[MASTER_SNOC_SF_MEM_NOC] = &qnm_snoc_sf,
-+	[SLAVE_GEM_NOC_CNOC] = &qns_gem_noc_cnoc,
-+	[SLAVE_LLCC] = &qns_llcc,
-+	[SLAVE_MEM_NOC_PCIE_SNOC] = &qns_pcie,
-+	[MASTER_MNOC_HF_MEM_NOC_DISP] = &qnm_mnoc_hf_disp,
-+	[MASTER_MNOC_SF_MEM_NOC_DISP] = &qnm_mnoc_sf_disp,
-+	[MASTER_ANOC_PCIE_GEM_NOC_DISP] = &qnm_pcie_disp,
-+	[SLAVE_LLCC_DISP] = &qns_llcc_disp,
-+};
-+
-+static struct qcom_icc_desc sm8450_gem_noc = {
-+	.nodes = gem_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
-+	.bcms = gem_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *lpass_ag_noc_bcms[] = {
-+};
-+
-+static struct qcom_icc_node *lpass_ag_noc_nodes[] = {
-+	[MASTER_CNOC_LPASS_AG_NOC] = &qhm_config_noc,
-+	[MASTER_LPASS_PROC] = &qxm_lpass_dsp,
-+	[SLAVE_LPASS_CORE_CFG] = &qhs_lpass_core,
-+	[SLAVE_LPASS_LPI_CFG] = &qhs_lpass_lpi,
-+	[SLAVE_LPASS_MPU_CFG] = &qhs_lpass_mpu,
-+	[SLAVE_LPASS_TOP_CFG] = &qhs_lpass_top,
-+	[SLAVE_LPASS_SNOC] = &qns_sysnoc,
-+	[SLAVE_SERVICES_LPASS_AML_NOC] = &srvc_niu_aml_noc,
-+	[SLAVE_SERVICE_LPASS_AG_NOC] = &srvc_niu_lpass_agnoc,
-+};
-+
-+static struct qcom_icc_desc sm8450_lpass_ag_noc = {
-+	.nodes = lpass_ag_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
-+	.bcms = lpass_ag_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(lpass_ag_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *mc_virt_bcms[] = {
-+	&bcm_acv,
-+	&bcm_mc0,
-+	&bcm_acv_disp,
-+	&bcm_mc0_disp,
-+};
-+
-+static struct qcom_icc_node *mc_virt_nodes[] = {
-+	[MASTER_LLCC] = &llcc_mc,
-+	[SLAVE_EBI1] = &ebi,
-+	[MASTER_LLCC_DISP] = &llcc_mc_disp,
-+	[SLAVE_EBI1_DISP] = &ebi_disp,
-+};
-+
-+static struct qcom_icc_desc sm8450_mc_virt = {
-+	.nodes = mc_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
-+	.bcms = mc_virt_bcms,
-+	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
-+};
-+
-+static struct qcom_icc_bcm *mmss_noc_bcms[] = {
-+	&bcm_mm0,
-+	&bcm_mm1,
-+	&bcm_mm0_disp,
-+	&bcm_mm1_disp,
-+};
-+
-+static struct qcom_icc_node *mmss_noc_nodes[] = {
-+	[MASTER_CAMNOC_HF] = &qnm_camnoc_hf,
-+	[MASTER_CAMNOC_ICP] = &qnm_camnoc_icp,
-+	[MASTER_CAMNOC_SF] = &qnm_camnoc_sf,
-+	[MASTER_MDP] = &qnm_mdp,
-+	[MASTER_CNOC_MNOC_CFG] = &qnm_mnoc_cfg,
-+	[MASTER_ROTATOR] = &qnm_rot,
-+	[MASTER_CDSP_HCP] = &qnm_vapss_hcp,
-+	[MASTER_VIDEO] = &qnm_video,
-+	[MASTER_VIDEO_CV_PROC] = &qnm_video_cv_cpu,
-+	[MASTER_VIDEO_PROC] = &qnm_video_cvp,
-+	[MASTER_VIDEO_V_PROC] = &qnm_video_v_cpu,
-+	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
-+	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
-+	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
-+	[MASTER_MDP_DISP] = &qnm_mdp_disp,
-+	[MASTER_ROTATOR_DISP] = &qnm_rot_disp,
-+	[SLAVE_MNOC_HF_MEM_NOC_DISP] = &qns_mem_noc_hf_disp,
-+	[SLAVE_MNOC_SF_MEM_NOC_DISP] = &qns_mem_noc_sf_disp,
-+};
-+
-+static struct qcom_icc_desc sm8450_mmss_noc = {
-+	.nodes = mmss_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
-+	.bcms = mmss_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *nsp_noc_bcms[] = {
-+	&bcm_co0,
-+};
-+
-+static struct qcom_icc_node *nsp_noc_nodes[] = {
-+	[MASTER_CDSP_NOC_CFG] = &qhm_nsp_noc_config,
-+	[MASTER_CDSP_PROC] = &qxm_nsp,
-+	[SLAVE_CDSP_MEM_NOC] = &qns_nsp_gemnoc,
-+	[SLAVE_SERVICE_NSP_NOC] = &service_nsp_noc,
-+};
-+
-+static struct qcom_icc_desc sm8450_nsp_noc = {
-+	.nodes = nsp_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
-+	.bcms = nsp_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(nsp_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *pcie_anoc_bcms[] = {
-+	&bcm_sn7,
-+};
-+
-+static struct qcom_icc_node *pcie_anoc_nodes[] = {
-+	[MASTER_PCIE_ANOC_CFG] = &qnm_pcie_anoc_cfg,
-+	[MASTER_PCIE_0] = &xm_pcie3_0,
-+	[MASTER_PCIE_1] = &xm_pcie3_1,
-+	[SLAVE_ANOC_PCIE_GEM_NOC] = &qns_pcie_mem_noc,
-+	[SLAVE_SERVICE_PCIE_ANOC] = &srvc_pcie_aggre_noc,
-+};
-+
-+static struct qcom_icc_desc sm8450_pcie_anoc = {
-+	.nodes = pcie_anoc_nodes,
-+	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
-+	.bcms = pcie_anoc_bcms,
-+	.num_bcms = ARRAY_SIZE(pcie_anoc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *system_noc_bcms[] = {
-+	&bcm_sn0,
-+	&bcm_sn1,
-+	&bcm_sn2,
-+	&bcm_sn3,
-+	&bcm_sn4,
-+};
-+
-+static struct qcom_icc_node *system_noc_nodes[] = {
-+	[MASTER_GIC_AHB] = &qhm_gic,
-+	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
-+	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
-+	[MASTER_LPASS_ANOC] = &qnm_lpass_noc,
-+	[MASTER_SNOC_CFG] = &qnm_snoc_cfg,
-+	[MASTER_PIMEM] = &qxm_pimem,
-+	[MASTER_GIC] = &xm_gic,
-+	[SLAVE_SNOC_GEM_NOC_GC] = &qns_gemnoc_gc,
-+	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
-+	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-+};
-+
-+static struct qcom_icc_desc sm8450_system_noc = {
-+	.nodes = system_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(system_noc_nodes),
-+	.bcms = system_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(system_noc_bcms),
-+};
-+
-+static int qnoc_probe(struct platform_device *pdev)
-+{
-+	const struct qcom_icc_desc *desc;
-+	struct icc_onecell_data *data;
-+	struct icc_provider *provider;
-+	struct qcom_icc_node **qnodes;
-+	struct qcom_icc_provider *qp;
-+	struct icc_node *node;
-+	size_t num_nodes, i;
-+	int ret;
-+
-+	desc = device_get_match_data(&pdev->dev);
-+	if (!desc)
-+		return -EINVAL;
-+
-+	qnodes = desc->nodes;
-+	num_nodes = desc->num_nodes;
-+
-+	qp = devm_kzalloc(&pdev->dev, sizeof(*qp), GFP_KERNEL);
-+	if (!qp)
-+		return -ENOMEM;
-+
-+	data = devm_kcalloc(&pdev->dev, num_nodes, sizeof(*node), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	provider = &qp->provider;
-+	provider->dev = &pdev->dev;
-+	provider->set = qcom_icc_set;
-+	provider->pre_aggregate = qcom_icc_pre_aggregate;
-+	provider->aggregate = qcom_icc_aggregate;
-+	provider->xlate_extended = qcom_icc_xlate_extended;
-+	INIT_LIST_HEAD(&provider->nodes);
-+	provider->data = data;
-+
-+	qp->dev = &pdev->dev;
-+	qp->bcms = desc->bcms;
-+	qp->num_bcms = desc->num_bcms;
-+
-+	qp->voter = of_bcm_voter_get(qp->dev, NULL);
-+	if (IS_ERR(qp->voter))
-+		return PTR_ERR(qp->voter);
-+
-+	ret = icc_provider_add(provider);
-+	if (ret) {
-+		dev_err(&pdev->dev, "error adding interconnect provider\n");
-+		return ret;
-+	}
-+
-+	for (i = 0; i < qp->num_bcms; i++)
-+		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-+
-+	for (i = 0; i < num_nodes; i++) {
-+		size_t j;
-+
-+		if (!qnodes[i])
-+			continue;
-+
-+		node = icc_node_create(qnodes[i]->id);
-+		if (IS_ERR(node)) {
-+			ret = PTR_ERR(node);
-+			goto err;
-+		}
-+
-+		node->name = qnodes[i]->name;
-+		node->data = qnodes[i];
-+		icc_node_add(node, provider);
-+
-+		for (j = 0; j < qnodes[i]->num_links; j++)
-+			icc_link_create(node, qnodes[i]->links[j]);
-+
-+		data->nodes[i] = node;
-+	}
-+	data->num_nodes = num_nodes;
-+
-+	platform_set_drvdata(pdev, qp);
-+
-+	return 0;
-+err:
-+	icc_nodes_remove(provider);
-+	icc_provider_del(provider);
-+	return ret;
-+}
-+
-+static int qnoc_remove(struct platform_device *pdev)
-+{
-+	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
-+
-+	icc_nodes_remove(&qp->provider);
-+	return icc_provider_del(&qp->provider);
-+}
-+
-+static const struct of_device_id qnoc_of_match[] = {
-+	{ .compatible = "qcom,sm8450-aggre1-noc",
-+	  .data = &sm8450_aggre1_noc},
-+	{ .compatible = "qcom,sm8450-aggre2-noc",
-+	  .data = &sm8450_aggre2_noc},
-+	{ .compatible = "qcom,sm8450-clk-virt",
-+	  .data = &sm8450_clk_virt},
-+	{ .compatible = "qcom,sm8450-config-noc",
-+	  .data = &sm8450_config_noc},
-+	{ .compatible = "qcom,sm8450-gem-noc",
-+	  .data = &sm8450_gem_noc},
-+	{ .compatible = "qcom,sm8450-lpass-ag-noc",
-+	  .data = &sm8450_lpass_ag_noc},
-+	{ .compatible = "qcom,sm8450-mc-virt",
-+	  .data = &sm8450_mc_virt},
-+	{ .compatible = "qcom,sm8450-mmss-noc",
-+	  .data = &sm8450_mmss_noc},
-+	{ .compatible = "qcom,sm8450-nsp-noc",
-+	  .data = &sm8450_nsp_noc},
-+	{ .compatible = "qcom,sm8450-pcie-anoc",
-+	  .data = &sm8450_pcie_anoc},
-+	{ .compatible = "qcom,sm8450-system-noc",
-+	  .data = &sm8450_system_noc},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, qnoc_of_match);
-+
-+static struct platform_driver qnoc_driver = {
-+	.probe = qnoc_probe,
-+	.remove = qnoc_remove,
-+	.driver = {
-+		.name = "qnoc-sm8450",
-+		.of_match_table = qnoc_of_match,
-+	},
-+};
-+
-+static int __init qnoc_driver_init(void)
-+{
-+	return platform_driver_register(&qnoc_driver);
-+}
-+core_initcall(qnoc_driver_init);
-+
-+static void __exit qnoc_driver_exit(void)
-+{
-+	platform_driver_unregister(&qnoc_driver);
-+}
-+module_exit(qnoc_driver_exit);
-+
-+MODULE_DESCRIPTION("sm8450 NoC driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/interconnect/qcom/sm8450.h b/drivers/interconnect/qcom/sm8450.h
-new file mode 100644
-index 000000000000..a5790ec6767b
---- /dev/null
-+++ b/drivers/interconnect/qcom/sm8450.h
-@@ -0,0 +1,169 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * SM8450 interconnect IDs
-+ *
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021, Linaro Limited
-+ */
-+
-+#ifndef __DRIVERS_INTERCONNECT_QCOM_SM8450_H
-+#define __DRIVERS_INTERCONNECT_QCOM_SM8450_H
-+
-+#define SM8450_MASTER_GPU_TCU				0
-+#define SM8450_MASTER_SYS_TCU				1
-+#define SM8450_MASTER_APPSS_PROC			2
-+#define SM8450_MASTER_LLCC				3
-+#define SM8450_MASTER_CNOC_LPASS_AG_NOC			4
-+#define SM8450_MASTER_GIC_AHB				5
-+#define SM8450_MASTER_CDSP_NOC_CFG			6
-+#define SM8450_MASTER_QDSS_BAM				7
-+#define SM8450_MASTER_QSPI_0				8
-+#define SM8450_MASTER_QUP_0				9
-+#define SM8450_MASTER_QUP_1				10
-+#define SM8450_MASTER_QUP_2				11
-+#define SM8450_MASTER_A1NOC_CFG				12
-+#define SM8450_MASTER_A2NOC_CFG				13
-+#define SM8450_MASTER_A1NOC_SNOC			14
-+#define SM8450_MASTER_A2NOC_SNOC			15
-+#define SM8450_MASTER_CAMNOC_HF				16
-+#define SM8450_MASTER_CAMNOC_ICP			17
-+#define SM8450_MASTER_CAMNOC_SF				18
-+#define SM8450_MASTER_GEM_NOC_CNOC			19
-+#define SM8450_MASTER_GEM_NOC_PCIE_SNOC			20
-+#define SM8450_MASTER_GFX3D				21
-+#define SM8450_MASTER_LPASS_ANOC			22
-+#define SM8450_MASTER_MDP				23
-+#define SM8450_MASTER_MDP0				SM8450_MASTER_MDP
-+#define SM8450_MASTER_MDP1				SM8450_MASTER_MDP
-+#define SM8450_MASTER_MSS_PROC				24
-+#define SM8450_MASTER_CNOC_MNOC_CFG			25
-+#define SM8450_MASTER_MNOC_HF_MEM_NOC			26
-+#define SM8450_MASTER_MNOC_SF_MEM_NOC			27
-+#define SM8450_MASTER_COMPUTE_NOC			28
-+#define SM8450_MASTER_ANOC_PCIE_GEM_NOC			29
-+#define SM8450_MASTER_PCIE_ANOC_CFG			30
-+#define SM8450_MASTER_ROTATOR				31
-+#define SM8450_MASTER_SNOC_CFG				32
-+#define SM8450_MASTER_SNOC_GC_MEM_NOC			33
-+#define SM8450_MASTER_SNOC_SF_MEM_NOC			34
-+#define SM8450_MASTER_CDSP_HCP				35
-+#define SM8450_MASTER_VIDEO				36
-+#define SM8450_MASTER_VIDEO_P0				SM8450_MASTER_VIDEO
-+#define SM8450_MASTER_VIDEO_P1				SM8450_MASTER_VIDEO
-+#define SM8450_MASTER_VIDEO_CV_PROC			37
-+#define SM8450_MASTER_VIDEO_PROC			38
-+#define SM8450_MASTER_VIDEO_V_PROC			39
-+#define SM8450_MASTER_QUP_CORE_0			40
-+#define SM8450_MASTER_QUP_CORE_1			41
-+#define SM8450_MASTER_QUP_CORE_2			42
-+#define SM8450_MASTER_CRYPTO				43
-+#define SM8450_MASTER_IPA				44
-+#define SM8450_MASTER_LPASS_PROC			45
-+#define SM8450_MASTER_CDSP_PROC				46
-+#define SM8450_MASTER_PIMEM				47
-+#define SM8450_MASTER_SENSORS_PROC			48
-+#define SM8450_MASTER_SP				49
-+#define SM8450_MASTER_GIC				50
-+#define SM8450_MASTER_PCIE_0				51
-+#define SM8450_MASTER_PCIE_1				52
-+#define SM8450_MASTER_QDSS_ETR				53
-+#define SM8450_MASTER_QDSS_ETR_1			54
-+#define SM8450_MASTER_SDCC_2				55
-+#define SM8450_MASTER_SDCC_4				56
-+#define SM8450_MASTER_UFS_MEM				57
-+#define SM8450_MASTER_USB3_0				58
-+#define SM8450_SLAVE_EBI1				512
-+#define SM8450_SLAVE_AHB2PHY_SOUTH			513
-+#define SM8450_SLAVE_AHB2PHY_NORTH			514
-+#define SM8450_SLAVE_AOSS				515
-+#define SM8450_SLAVE_CAMERA_CFG				516
-+#define SM8450_SLAVE_CLK_CTL				517
-+#define SM8450_SLAVE_CDSP_CFG				518
-+#define SM8450_SLAVE_RBCPR_CX_CFG			519
-+#define SM8450_SLAVE_RBCPR_MMCX_CFG			520
-+#define SM8450_SLAVE_RBCPR_MXA_CFG			521
-+#define SM8450_SLAVE_RBCPR_MXC_CFG			522
-+#define SM8450_SLAVE_CRYPTO_0_CFG			523
-+#define SM8450_SLAVE_CX_RDPM				524
-+#define SM8450_SLAVE_DISPLAY_CFG			525
-+#define SM8450_SLAVE_GFX3D_CFG				526
-+#define SM8450_SLAVE_IMEM_CFG				527
-+#define SM8450_SLAVE_IPA_CFG				528
-+#define SM8450_SLAVE_IPC_ROUTER_CFG			529
-+#define SM8450_SLAVE_LPASS				530
-+#define SM8450_SLAVE_LPASS_CORE_CFG			531
-+#define SM8450_SLAVE_LPASS_LPI_CFG			532
-+#define SM8450_SLAVE_LPASS_MPU_CFG			533
-+#define SM8450_SLAVE_LPASS_TOP_CFG			534
-+#define SM8450_SLAVE_CNOC_MSS				535
-+#define SM8450_SLAVE_MX_RDPM				536
-+#define SM8450_SLAVE_PCIE_0_CFG				537
-+#define SM8450_SLAVE_PCIE_1_CFG				538
-+#define SM8450_SLAVE_PDM				539
-+#define SM8450_SLAVE_PIMEM_CFG				540
-+#define SM8450_SLAVE_PRNG				541
-+#define SM8450_SLAVE_QDSS_CFG				542
-+#define SM8450_SLAVE_QSPI_0				543
-+#define SM8450_SLAVE_QUP_0				544
-+#define SM8450_SLAVE_QUP_1				545
-+#define SM8450_SLAVE_QUP_2				546
-+#define SM8450_SLAVE_SDCC_2				547
-+#define SM8450_SLAVE_SDCC_4				548
-+#define SM8450_SLAVE_SPSS_CFG				549
-+#define SM8450_SLAVE_TCSR				550
-+#define SM8450_SLAVE_TLMM				551
-+#define SM8450_SLAVE_TME_CFG				552
-+#define SM8450_SLAVE_UFS_MEM_CFG			553
-+#define SM8450_SLAVE_USB3_0				554
-+#define SM8450_SLAVE_VENUS_CFG				555
-+#define SM8450_SLAVE_VSENSE_CTRL_CFG			556
-+#define SM8450_SLAVE_A1NOC_CFG				557
-+#define SM8450_SLAVE_A1NOC_SNOC				558
-+#define SM8450_SLAVE_A2NOC_CFG				559
-+#define SM8450_SLAVE_A2NOC_SNOC				560
-+#define SM8450_SLAVE_DDRSS_CFG				561
-+#define SM8450_SLAVE_GEM_NOC_CNOC			562
-+#define SM8450_SLAVE_SNOC_GEM_NOC_GC			563
-+#define SM8450_SLAVE_SNOC_GEM_NOC_SF			564
-+#define SM8450_SLAVE_LLCC				565
-+#define SM8450_SLAVE_MNOC_HF_MEM_NOC			566
-+#define SM8450_SLAVE_MNOC_SF_MEM_NOC			567
-+#define SM8450_SLAVE_CNOC_MNOC_CFG			568
-+#define SM8450_SLAVE_CDSP_MEM_NOC			569
-+#define SM8450_SLAVE_MEM_NOC_PCIE_SNOC			570
-+#define SM8450_SLAVE_PCIE_ANOC_CFG			571
-+#define SM8450_SLAVE_ANOC_PCIE_GEM_NOC			572
-+#define SM8450_SLAVE_SNOC_CFG				573
-+#define SM8450_SLAVE_LPASS_SNOC				574
-+#define SM8450_SLAVE_QUP_CORE_0				575
-+#define SM8450_SLAVE_QUP_CORE_1				576
-+#define SM8450_SLAVE_QUP_CORE_2				577
-+#define SM8450_SLAVE_IMEM				578
-+#define SM8450_SLAVE_PIMEM				579
-+#define SM8450_SLAVE_SERVICE_NSP_NOC			580
-+#define SM8450_SLAVE_SERVICE_A1NOC			581
-+#define SM8450_SLAVE_SERVICE_A2NOC			582
-+#define SM8450_SLAVE_SERVICE_CNOC			583
-+#define SM8450_SLAVE_SERVICE_MNOC			584
-+#define SM8450_SLAVE_SERVICES_LPASS_AML_NOC		585
-+#define SM8450_SLAVE_SERVICE_LPASS_AG_NOC		586
-+#define SM8450_SLAVE_SERVICE_PCIE_ANOC			587
-+#define SM8450_SLAVE_SERVICE_SNOC			588
-+#define SM8450_SLAVE_PCIE_0				589
-+#define SM8450_SLAVE_PCIE_1				590
-+#define SM8450_SLAVE_QDSS_STM				591
-+#define SM8450_SLAVE_TCU				592
-+#define SM8450_MASTER_LLCC_DISP				1000
-+#define SM8450_MASTER_MDP_DISP				1001
-+#define SM8450_MASTER_MDP0_DISP				SM8450_MASTER_MDP_DISP
-+#define SM8450_MASTER_MDP1_DISP				SM8450_MASTER_MDP_DISP
-+#define SM8450_MASTER_MNOC_HF_MEM_NOC_DISP		1002
-+#define SM8450_MASTER_MNOC_SF_MEM_NOC_DISP		1003
-+#define SM8450_MASTER_ANOC_PCIE_GEM_NOC_DISP		1004
-+#define SM8450_MASTER_ROTATOR_DISP			1005
-+#define SM8450_SLAVE_EBI1_DISP				1512
-+#define SM8450_SLAVE_LLCC_DISP				1513
-+#define SM8450_SLAVE_MNOC_HF_MEM_NOC_DISP		1514
-+#define SM8450_SLAVE_MNOC_SF_MEM_NOC_DISP		1515
-+
-+#endif
-diff --git a/include/dt-bindings/interconnect/qcom,sm8450.h b/include/dt-bindings/interconnect/qcom,sm8450.h
-index 786fce091c84..8f3c5e1fb4c4 100644
---- a/include/dt-bindings/interconnect/qcom,sm8450.h
-+++ b/include/dt-bindings/interconnect/qcom,sm8450.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
- /*
-  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-  * Copyright (c) 2021, Linaro Limited
-@@ -7,165 +7,165 @@
- #ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM8450_H
- #define __DT_BINDINGS_INTERCONNECT_QCOM_SM8450_H
- 
--#define MASTER_QSPI_0				1
--#define MASTER_QUP_1				2
--#define MASTER_A1NOC_CFG			3
--#define MASTER_SDCC_4				4
--#define MASTER_UFS_MEM				5
--#define MASTER_USB3_0				6
--#define SLAVE_A1NOC_SNOC			7
--#define SLAVE_SERVICE_A1NOC			8
-+#define MASTER_QSPI_0				0
-+#define MASTER_QUP_1				1
-+#define MASTER_A1NOC_CFG			2
-+#define MASTER_SDCC_4				3
-+#define MASTER_UFS_MEM				4
-+#define MASTER_USB3_0				5
-+#define SLAVE_A1NOC_SNOC			6
-+#define SLAVE_SERVICE_A1NOC			7
- 
--#define	MASTER_QDSS_BAM				1
--#define	MASTER_QUP_0				2
--#define	MASTER_QUP_2				3
--#define	MASTER_A2NOC_CFG			4
--#define	MASTER_CRYPTO				5
--#define	MASTER_IPA				6
--#define	MASTER_SENSORS_PROC			7
--#define	MASTER_SP				8
--#define	MASTER_QDSS_ETR				9
--#define	MASTER_QDSS_ETR_1			10
--#define	MASTER_SDCC_2				11
--#define	SLAVE_A2NOC_SNOC			12
--#define	SLAVE_SERVICE_A2NOC			13
-+#define	MASTER_QDSS_BAM				0
-+#define	MASTER_QUP_0				1
-+#define	MASTER_QUP_2				2
-+#define	MASTER_A2NOC_CFG			3
-+#define	MASTER_CRYPTO				4
-+#define	MASTER_IPA				5
-+#define	MASTER_SENSORS_PROC			6
-+#define	MASTER_SP				7
-+#define	MASTER_QDSS_ETR				8
-+#define	MASTER_QDSS_ETR_1			9
-+#define	MASTER_SDCC_2				10
-+#define	SLAVE_A2NOC_SNOC			11
-+#define	SLAVE_SERVICE_A2NOC			12
- 
--#define MASTER_QUP_CORE_0			1
--#define MASTER_QUP_CORE_1			2
--#define MASTER_QUP_CORE_2			3
--#define SLAVE_QUP_CORE_0			4
--#define SLAVE_QUP_CORE_1			5
--#define SLAVE_QUP_CORE_2			6
-+#define MASTER_QUP_CORE_0			0
-+#define MASTER_QUP_CORE_1			1
-+#define MASTER_QUP_CORE_2			2
-+#define SLAVE_QUP_CORE_0			3
-+#define SLAVE_QUP_CORE_1			4
-+#define SLAVE_QUP_CORE_2			5
- 
--#define	MASTER_GEM_NOC_CNOC			1
--#define	MASTER_GEM_NOC_PCIE_SNOC		2
--#define	SLAVE_AHB2PHY_SOUTH			3
--#define	SLAVE_AHB2PHY_NORTH			4
--#define	SLAVE_AOSS			        5
--#define	SLAVE_CAMERA_CFG			6
--#define	SLAVE_CLK_CTL			        7
--#define	SLAVE_CDSP_CFG			        8
--#define	SLAVE_RBCPR_CX_CFG			9
--#define	SLAVE_RBCPR_MMCX_CFG			10
--#define	SLAVE_RBCPR_MXA_CFG			11
--#define	SLAVE_RBCPR_MXC_CFG			12
--#define	SLAVE_CRYPTO_0_CFG			13
--#define	SLAVE_CX_RDPM				14
--#define	SLAVE_DISPLAY_CFG			15
--#define	SLAVE_GFX3D_CFG			        16
--#define	SLAVE_IMEM_CFG			        17
--#define	SLAVE_IPA_CFG			        18
--#define	SLAVE_IPC_ROUTER_CFG			19
--#define	SLAVE_LPASS			        20
--#define	SLAVE_CNOC_MSS			        21
--#define	SLAVE_MX_RDPM				22
--#define	SLAVE_PCIE_0_CFG			23
--#define	SLAVE_PCIE_1_CFG			24
--#define	SLAVE_PDM				25
--#define	SLAVE_PIMEM_CFG				26
--#define	SLAVE_PRNG				27
--#define	SLAVE_QDSS_CFG				28
--#define	SLAVE_QSPI_0				29
--#define	SLAVE_QUP_0				30
--#define	SLAVE_QUP_1				31
--#define	SLAVE_QUP_2				32
--#define	SLAVE_SDCC_2				33
--#define	SLAVE_SDCC_4				34
--#define	SLAVE_SPSS_CFG				35
--#define	SLAVE_TCSR				36
--#define	SLAVE_TLMM				37
--#define	SLAVE_TME_CFG				38
--#define	SLAVE_UFS_MEM_CFG			39
--#define	SLAVE_USB3_0				40
--#define	SLAVE_VENUS_CFG				41
--#define	SLAVE_VSENSE_CTRL_CFG			42
--#define	SLAVE_A1NOC_CFG				43
--#define	SLAVE_A2NOC_CFG				44
--#define	SLAVE_DDRSS_CFG				45
--#define	SLAVE_CNOC_MNOC_CFG			46
--#define	SLAVE_PCIE_ANOC_CFG			47
--#define	SLAVE_SNOC_CFG				48
--#define	SLAVE_IMEM				49
--#define	SLAVE_PIMEM				50
--#define	SLAVE_SERVICE_CNOC			51
--#define	SLAVE_PCIE_0				52
--#define	SLAVE_PCIE_1				53
--#define	SLAVE_QDSS_STM				54
--#define	SLAVE_TCU				55
-+#define	MASTER_GEM_NOC_CNOC			0
-+#define	MASTER_GEM_NOC_PCIE_SNOC		1
-+#define	SLAVE_AHB2PHY_SOUTH			2
-+#define	SLAVE_AHB2PHY_NORTH			3
-+#define	SLAVE_AOSS			        4
-+#define	SLAVE_CAMERA_CFG			5
-+#define	SLAVE_CLK_CTL			        6
-+#define	SLAVE_CDSP_CFG			        7
-+#define	SLAVE_RBCPR_CX_CFG			8
-+#define	SLAVE_RBCPR_MMCX_CFG			9
-+#define	SLAVE_RBCPR_MXA_CFG			10
-+#define	SLAVE_RBCPR_MXC_CFG			11
-+#define	SLAVE_CRYPTO_0_CFG			12
-+#define	SLAVE_CX_RDPM				13
-+#define	SLAVE_DISPLAY_CFG			14
-+#define	SLAVE_GFX3D_CFG			        15
-+#define	SLAVE_IMEM_CFG			        16
-+#define	SLAVE_IPA_CFG			        17
-+#define	SLAVE_IPC_ROUTER_CFG			18
-+#define	SLAVE_LPASS			        19
-+#define	SLAVE_CNOC_MSS			        20
-+#define	SLAVE_MX_RDPM				21
-+#define	SLAVE_PCIE_0_CFG			22
-+#define	SLAVE_PCIE_1_CFG			23
-+#define	SLAVE_PDM				24
-+#define	SLAVE_PIMEM_CFG				25
-+#define	SLAVE_PRNG				26
-+#define	SLAVE_QDSS_CFG				27
-+#define	SLAVE_QSPI_0				28
-+#define	SLAVE_QUP_0				29
-+#define	SLAVE_QUP_1				30
-+#define	SLAVE_QUP_2				31
-+#define	SLAVE_SDCC_2				32
-+#define	SLAVE_SDCC_4				33
-+#define	SLAVE_SPSS_CFG				34
-+#define	SLAVE_TCSR				35
-+#define	SLAVE_TLMM				36
-+#define	SLAVE_TME_CFG				37
-+#define	SLAVE_UFS_MEM_CFG			38
-+#define	SLAVE_USB3_0				39
-+#define	SLAVE_VENUS_CFG				40
-+#define	SLAVE_VSENSE_CTRL_CFG			41
-+#define	SLAVE_A1NOC_CFG				42
-+#define	SLAVE_A2NOC_CFG				43
-+#define	SLAVE_DDRSS_CFG				44
-+#define	SLAVE_CNOC_MNOC_CFG			45
-+#define	SLAVE_PCIE_ANOC_CFG			46
-+#define	SLAVE_SNOC_CFG				47
-+#define	SLAVE_IMEM				48
-+#define	SLAVE_PIMEM				49
-+#define	SLAVE_SERVICE_CNOC			50
-+#define	SLAVE_PCIE_0				51
-+#define	SLAVE_PCIE_1				52
-+#define	SLAVE_QDSS_STM				53
-+#define	SLAVE_TCU				54
- 
--#define MASTER_GPU_TCU				1
--#define MASTER_SYS_TCU				2
--#define MASTER_APPSS_PROC			3
--#define MASTER_GFX3D				4
--#define MASTER_MSS_PROC				5
--#define MASTER_MNOC_HF_MEM_NOC			6
--#define MASTER_MNOC_SF_MEM_NOC			7
--#define MASTER_COMPUTE_NOC			8
--#define MASTER_ANOC_PCIE_GEM_NOC		9
--#define MASTER_SNOC_GC_MEM_NOC			10
--#define MASTER_SNOC_SF_MEM_NOC			11
--#define SLAVE_GEM_NOC_CNOC			12
--#define SLAVE_LLCC				13
--#define SLAVE_MEM_NOC_PCIE_SNOC			14
--#define MASTER_MNOC_HF_MEM_NOC_DISP		15
--#define MASTER_MNOC_SF_MEM_NOC_DISP		16
--#define MASTER_ANOC_PCIE_GEM_NOC_DISP		17
--#define SLAVE_LLCC_DISP				18
-+#define MASTER_GPU_TCU				0
-+#define MASTER_SYS_TCU				1
-+#define MASTER_APPSS_PROC			2
-+#define MASTER_GFX3D				3
-+#define MASTER_MSS_PROC				4
-+#define MASTER_MNOC_HF_MEM_NOC			5
-+#define MASTER_MNOC_SF_MEM_NOC			6
-+#define MASTER_COMPUTE_NOC			7
-+#define MASTER_ANOC_PCIE_GEM_NOC		8
-+#define MASTER_SNOC_GC_MEM_NOC			9
-+#define MASTER_SNOC_SF_MEM_NOC			10
-+#define SLAVE_GEM_NOC_CNOC			11
-+#define SLAVE_LLCC				12
-+#define SLAVE_MEM_NOC_PCIE_SNOC			13
-+#define MASTER_MNOC_HF_MEM_NOC_DISP		14
-+#define MASTER_MNOC_SF_MEM_NOC_DISP		15
-+#define MASTER_ANOC_PCIE_GEM_NOC_DISP		16
-+#define SLAVE_LLCC_DISP				17
- 
--#define MASTER_CNOC_LPASS_AG_NOC		1
--#define MASTER_LPASS_PROC			2
--#define SLAVE_LPASS_CORE_CFG			3
--#define SLAVE_LPASS_LPI_CFG			4
--#define SLAVE_LPASS_MPU_CFG			5
--#define SLAVE_LPASS_TOP_CFG			6
--#define SLAVE_LPASS_SNOC			7
--#define SLAVE_SERVICES_LPASS_AML_NOC		8
--#define SLAVE_SERVICE_LPASS_AG_NOC		9
-+#define MASTER_CNOC_LPASS_AG_NOC		0
-+#define MASTER_LPASS_PROC			1
-+#define SLAVE_LPASS_CORE_CFG			2
-+#define SLAVE_LPASS_LPI_CFG			3
-+#define SLAVE_LPASS_MPU_CFG			4
-+#define SLAVE_LPASS_TOP_CFG			5
-+#define SLAVE_LPASS_SNOC			6
-+#define SLAVE_SERVICES_LPASS_AML_NOC		7
-+#define SLAVE_SERVICE_LPASS_AG_NOC		8
- 
--#define MASTER_LLCC				1
--#define SLAVE_EBI1				2
--#define MASTER_LLCC_DISP			3
--#define SLAVE_EBI1_DISP				4
-+#define MASTER_LLCC				0
-+#define SLAVE_EBI1				1
-+#define MASTER_LLCC_DISP			2
-+#define SLAVE_EBI1_DISP				3
- 
--#define MASTER_CAMNOC_HF			1
--#define MASTER_CAMNOC_ICP			2
--#define MASTER_CAMNOC_SF			3
--#define MASTER_MDP				4
--#define MASTER_CNOC_MNOC_CFG			5
--#define MASTER_ROTATOR				6
--#define MASTER_CDSP_HCP				7
--#define MASTER_VIDEO				8
--#define MASTER_VIDEO_CV_PROC			9
--#define MASTER_VIDEO_PROC			10
--#define MASTER_VIDEO_V_PROC			11
--#define SLAVE_MNOC_HF_MEM_NOC			12
--#define SLAVE_MNOC_SF_MEM_NOC			13
--#define SLAVE_SERVICE_MNOC			14
--#define MASTER_MDP_DISP				15
--#define MASTER_ROTATOR_DISP			16
--#define SLAVE_MNOC_HF_MEM_NOC_DISP		17
--#define SLAVE_MNOC_SF_MEM_NOC_DISP		18
-+#define MASTER_CAMNOC_HF			0
-+#define MASTER_CAMNOC_ICP			1
-+#define MASTER_CAMNOC_SF			2
-+#define MASTER_MDP				3
-+#define MASTER_CNOC_MNOC_CFG			4
-+#define MASTER_ROTATOR				5
-+#define MASTER_CDSP_HCP				6
-+#define MASTER_VIDEO				7
-+#define MASTER_VIDEO_CV_PROC			8
-+#define MASTER_VIDEO_PROC			9
-+#define MASTER_VIDEO_V_PROC			10
-+#define SLAVE_MNOC_HF_MEM_NOC			11
-+#define SLAVE_MNOC_SF_MEM_NOC			12
-+#define SLAVE_SERVICE_MNOC			13
-+#define MASTER_MDP_DISP				14
-+#define MASTER_ROTATOR_DISP			15
-+#define SLAVE_MNOC_HF_MEM_NOC_DISP		16
-+#define SLAVE_MNOC_SF_MEM_NOC_DISP		17
- 
--#define MASTER_CDSP_NOC_CFG			1
--#define MASTER_CDSP_PROC			2
--#define SLAVE_CDSP_MEM_NOC			3
--#define SLAVE_SERVICE_NSP_NOC			4
-+#define MASTER_CDSP_NOC_CFG			0
-+#define MASTER_CDSP_PROC			1
-+#define SLAVE_CDSP_MEM_NOC			2
-+#define SLAVE_SERVICE_NSP_NOC			3
- 
--#define MASTER_PCIE_ANOC_CFG			1
--#define MASTER_PCIE_0				2
--#define MASTER_PCIE_1				3
--#define SLAVE_ANOC_PCIE_GEM_NOC			4
--#define SLAVE_SERVICE_PCIE_ANOC			5
-+#define MASTER_PCIE_ANOC_CFG			0
-+#define MASTER_PCIE_0				1
-+#define MASTER_PCIE_1				2
-+#define SLAVE_ANOC_PCIE_GEM_NOC			3
-+#define SLAVE_SERVICE_PCIE_ANOC			4
- 
--#define MASTER_GIC_AHB				1
--#define MASTER_A1NOC_SNOC			2
--#define MASTER_A2NOC_SNOC			3
--#define MASTER_LPASS_ANOC			4
--#define MASTER_SNOC_CFG				5
--#define MASTER_PIMEM				6
--#define MASTER_GIC				7
--#define SLAVE_SNOC_GEM_NOC_GC			8
--#define SLAVE_SNOC_GEM_NOC_SF			9
--#define SLAVE_SERVICE_SNOC			10
-+#define MASTER_GIC_AHB				0
-+#define MASTER_A1NOC_SNOC			1
-+#define MASTER_A2NOC_SNOC			2
-+#define MASTER_LPASS_ANOC			3
-+#define MASTER_SNOC_CFG				4
-+#define MASTER_PIMEM				5
-+#define MASTER_GIC				6
-+#define SLAVE_SNOC_GEM_NOC_GC			7
-+#define SLAVE_SNOC_GEM_NOC_SF			8
-+#define SLAVE_SERVICE_SNOC			9
- 
- #endif
--- 
-2.31.1
+Apache Hadoop is one of the most popular open-source big-data
+frameworks. TeraSort is the most widely used benchmark for Apache
+Hadoop.
 
+Matrix
+======
+Kernels: version [+ patchset]
+* Baseline: 5.15
+* Patched: 5.15 + MGLRU
+
+Swap configurations:
+* Off
+* On
+
+Concurrency conditions: average # of tasks per CPU
+* Low: 1/2
+* Medium: 1
+* High: 2
+
+Cluster mode: local (12 concurrent jobs)
+Dataset size: 100 million records from TeraGen
+
+Total configurations: 12
+Data points per configuration: 10
+Total run duration (minutes) per data point: ~20
+
+Procedure
+=========
+The latest MGLRU patchset for the 5.15 kernel is available at
+git fetch https://linux-mm.googlesource.com/page-reclaim \
+    refs/changes/30/1430/2
+
+Baseline and patched 5.15 kernel images are available at
+https://drive.google.com/drive/folders/1eMkQleAFGkP2vzM_JyRA21oKE0ESHBqp
+
+<install and configure OS>
+teragen 100000000 /mnt/data/raw
+e2image <backup /mnt/data>
+
+<for each kernel>
+    grub-set-default <baseline, patched>
+    <for each swap configuration>
+        <swapoff, swapon>
+        <update run_terasort.sh>
+        <for each concurrency condition>
+            <update run_terasort.sh>
+            <for each data point>
+                e2image <restore /mnt/data>
+                reboot
+                run_terasort.sh
+                <collect wall time>
+
+Hardware
+========
+Memory (GB): 256
+CPU (total #): 48
+NVMe SSD (GB): 2048
+
+OS
+==
+$ cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=21.10
+DISTRIB_CODENAME=impish
+DISTRIB_DESCRIPTION="Ubuntu 21.10"
+
+$ cat /proc/swaps
+Filename          Type          Size          Used     Priority
+/swap.img         partition     67108860      0        -2
+
+$ cat /proc/sys/vm/overcommit_memory
+1
+
+$ cat /proc/sys/vm/swappiness
+1
+
+Apache Hadoop
+=============
+$ hadoop version
+Hadoop 3.3.1
+Source code repository https://github.com/apache/hadoop.git -r
+a3b9c37a397ad4188041dd80621bdeefc46885f2
+Compiled by ubuntu on 2021-06-15T05:13Z
+Compiled with protoc 3.7.1
+From source with checksum 88a4ddb2299aca054416d6b7f81ca55
+This command was run using
+/root/hadoop-3.3.1/share/hadoop/common/hadoop-common-3.3.1.jar
+
+$ cat run_terasort.sh
+export HADOOP_ROOT_LOGGER="WARN,DRFA"
+export HADOOP_HEAPSIZE_MAX=<swapoff: 20G, swapon: 22G>
+
+for ((i = 0; i < 12; i++))
+do
+    /usr/bin/time -f "%e" hadoop jar \
+        hadoop-mapreduce-examples-3.3.1.jar terasort \
+        -Dfile.stream-buffer-size=8388608 \
+        -Dio.file.buffer.size=8388608 \
+        -Dmapreduce.job.heap.memory-mb.ratio=1.0 \
+        -Dmapreduce.reduce.input.buffer.percent=1.0 \
+        -Dmapreduce.reduce.merge.inmem.threshold=0 \
+        -Dmapreduce.task.io.sort.factor=100 \
+        -Dmapreduce.task.io.sort.mb=1000 \
+        -Dmapreduce.terasort.final.sync=false \
+        -Dmapreduce.terasort.num.partitions=100 \
+        -Dmapreduce.terasort.partitions.sample=1000000 \
+        -Dmapreduce.local.map.tasks.maximum=<2, 4, 8> \
+        -Dmapreduce.local.reduce.tasks.maximum=<2, 4, 8> \
+        -Dmapreduce.reduce.shuffle.parallelcopies=<2, 4, 8> \
+        -Dhadoop.tmp.dir=/mnt/data/tmp$i \
+        /mnt/data/raw /mnt/data/sorted$i
+done
+
+wait
+
+Results
+=======
+Comparing the patched with the baseline kernel, Apache Hadoop took
+95% CIs [5.31, 9.69]% and [2.02, 7.86]% less wall time to finish
+TeraSort, respectively, under the medium- and the high-concurrency
+conditions, when swap was on. There were no statistically significant
+changes in wall time for the rest of the test matrix.
+
++--------------------+------------------+------------------+
+| Mean wall time (s) | Swap off         | Swap on          |
+| [95% CI]           |                  |                  |
++--------------------+------------------+------------------+
+| Low concurrency    | 758.43 / 746.83  | 740.78 / 733.42  |
+|                    | [-26.80, 3.60]   | [-18.07, 3.35]   |
++--------------------+------------------+------------------+
+| Medium concurrency | 911.81 / 910.19  | 911.53 / 843.15  |
+|                    | [-26.70, 23.46]  | [-88.35, -48.39] |
++--------------------+------------------+------------------+
+| High concurrency   | 921.17 / 929.51  | 1042.85 / 991.33 |
+|                    | [-25.50, 42.18]  | [-81.94, -21.08] |
++--------------------+------------------+------------------+
+Table 1. Comparison between the baseline and the patched kernels
+
+Comparing swap on with swap off, Apache Hadoop took 95% CIs [-3.39,
+-1.27]% and [10.69, 15.73]% more wall time to finish TeraSort,
+respectively, under the low- and the high-concurrency conditions,
+when using the baseline kernel; 95% CIs [-9.34, -5.39]% and [2.52,
+10.78]% more wall time, respectively, under the medium- and the
+high-concurrency conditions, when using the patched kernel. There
+were no statistically significant changes in wall time for the rest
+of the test matrix.
+
++--------------------+------------------+------------------+
+| Mean wall time (s) | Baseline kernel  | Patched kernel   |
+| [95% CI]           |                  |                  |
++--------------------+------------------+------------------+
+| Low concurrency    | 758.43 / 740.78  | 746.83 / 733.42  |
+|                    | [-25.67, -9.64]  | [-29.80, 2.97]   |
++--------------------+------------------+------------------+
+| Medium concurrency | 911.81 / 911.53  | 910.19 / 843.15  |
+|                    | [-26.62, 26.06]  | [-84.98, -49.09] |
++--------------------+------------------+------------------+
+| High concurrency   | 921.17 / 1042.85 | 929.51 / 991.33  |
+|                    | [98.51, 144.85]  | [23.43, 100.21]  |
++--------------------+------------------+------------------+
+Table 2. Comparison between swap off and on
+
+Metrics collected during each run are available at
+https://github.com/ediworks/KernelPerf/tree/master/mglru/hadoop/5.15
+
+Appendix
+========
+$ cat raw_data_hadoop.r
+v <- c(
+    # baseline swapoff 2mr
+    742.83, 751.91, 755.75, 757.50, 757.83, 758.16, 758.25, 763.58, 766.58, 772.00,
+    # baseline swapoff 4mr
+    863.25, 868.08, 886.58, 894.66, 901.16, 918.25, 940.91, 944.08, 949.66, 951.50,
+    # baseline swapoff 8mr
+    892.16, 895.75, 909.25, 922.58, 922.91, 922.91, 923.16, 926.00, 935.33, 961.66,
+    # baseline swapon 2mr
+    731.58, 732.08, 736.66, 737.75, 738.00, 738.08, 740.08, 740.33, 752.58, 760.66,
+    # baseline swapon 4mr
+    878.83, 886.33, 902.75, 904.83, 907.25, 918.50, 921.33, 925.50, 927.58, 942.41,
+    # baseline swapon 8mr
+    1016.58, 1017.33, 1019.33, 1019.50, 1026.08, 1030.50, 1065.16, 1070.50, 1075.25, 1088.33,
+    # patched swapoff 2mr
+    720.41, 724.58, 727.41, 732.00, 745.41, 748.00, 754.50, 767.91, 773.16, 775.00,
+    # patched swapoff 4mr
+    887.16, 887.50, 906.66, 907.41, 915.00, 915.58, 915.66, 916.91, 925.00, 925.08,
+    # patched swapoff 8mr
+    857.08, 864.41, 910.25, 918.58, 921.91, 933.75, 949.50, 966.75, 984.00, 988.91,
+    # patched swapon 2mr
+    719.33, 721.91, 724.41, 724.83, 725.75, 728.75, 737.83, 743.91, 749.41, 758.08,
+    # patched swapon 4mr
+    813.33, 819.00, 821.91, 829.33, 839.50, 846.75, 850.25, 857.00, 875.83, 878.66,
+    # patched swapon 8mr
+    929.41, 955.83, 961.16, 974.66, 988.75, 1004.00, 1009.08, 1019.91, 1030.58, 1040.00
+)
+
+a <- array(v, dim = c(10, 3, 2, 2))
+
+# baseline vs patched
+for (swap in 1:2) {
+    for (mr in 1:3) {
+        r <- t.test(a[, mr, swap, 1], a[, mr, swap, 2])
+        print(r)
+
+        p <- r$conf.int * 100 / r$estimate[1]
+        if ((p[1] > 0 && p[2] < 0) || (p[1] < 0 && p[2] > 0)) {
+            s <- sprintf("swap%d mr%d: no significance", swap, mr)
+        } else {
+            s <- sprintf("swap%d mr%d: [%.2f, %.2f]%%", swap, mr, -p[2], -p[1])
+        }
+        print(s)
+    }
+}
+
+# swapoff vs swapon
+for (kern in 1:2) {
+    for (mr in 1:3) {
+        r <- t.test(a[, mr, 1, kern], a[, mr, 2, kern])
+        print(r)
+
+        p <- r$conf.int * 100 / r$estimate[1]
+        if ((p[1] > 0 && p[2] < 0) || (p[1] < 0 && p[2] > 0)) {
+            s <- sprintf("kern%d mr%d: no significance", kern, mr)
+        } else {
+            s <- sprintf("kern%d mr%d: [%.2f, %.2f]%%", kern, mr, -p[2], -p[1])
+        }
+        print(s)
+    }
+}
+
+$ R -q -s -f raw_data_hadoop.r
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = 1.6677, df = 11.658, p-value = 0.122
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -3.604753 26.806753
+sample estimates:
+mean of x mean of y
+  758.439   746.838
+
+[1] "swap1 mr1: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = 0.14071, df = 11.797, p-value = 0.8905
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -23.4695  26.7035
+sample estimates:
+mean of x mean of y
+  911.813   910.196
+
+[1] "swap1 mr2: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = -0.53558, df = 12.32, p-value = 0.6018
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -42.18602  25.50002
+sample estimates:
+mean of x mean of y
+  921.171   929.514
+
+[1] "swap1 mr3: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = 1.4568, df = 15.95, p-value = 0.1646
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -3.352318 18.070318
+sample estimates:
+mean of x mean of y
+  740.780   733.421
+
+[1] "swap2 mr1: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = 7.204, df = 17.538, p-value = 1.229e-06
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 48.39677 88.35323
+sample estimates:
+mean of x mean of y
+  911.531   843.156
+
+[1] "swap2 mr2: [-9.69, -5.31]%"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, swap, 1] and a[, mr, swap, 2]
+t = 3.5698, df = 17.125, p-value = 0.002336
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 21.08655 81.94945
+sample estimates:
+mean of x mean of y
+ 1042.856   991.338
+
+[1] "swap2 mr3: [-7.86, -2.02]%"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = 4.6319, df = 17.718, p-value = 0.0002153
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  9.640197 25.677803
+sample estimates:
+mean of x mean of y
+  758.439   740.780
+
+[1] "kern1 mr1: [-3.39, -1.27]%"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = 0.0229, df = 14.372, p-value = 0.982
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -26.06533  26.62933
+sample estimates:
+mean of x mean of y
+  911.813   911.531
+
+[1] "kern1 mr2: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = -11.129, df = 16.051, p-value = 5.874e-09
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -144.8574  -98.5126
+sample estimates:
+mean of x mean of y
+  921.171  1042.856
+
+[1] "kern1 mr3: [10.69, 15.73]%"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = 1.7413, df = 15.343, p-value = 0.1016
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -2.974529 29.808529
+sample estimates:
+mean of x mean of y
+  746.838   733.421
+
+[1] "kern2 mr1: no significance"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = 7.9839, df = 14.571, p-value = 1.073e-06
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 49.09637 84.98363
+sample estimates:
+mean of x mean of y
+  910.196   843.156
+
+[1] "kern2 mr2: [-9.34, -5.39]%"
+
+        Welch Two Sample t-test
+
+data:  a[, mr, 1, kern] and a[, mr, 2, kern]
+t = -3.3962, df = 17.1, p-value = 0.003413
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -100.21425  -23.43375
+sample estimates:
+mean of x mean of y
+  929.514   991.338
+
+[1] "kern2 mr3: [2.52, 10.78]%"

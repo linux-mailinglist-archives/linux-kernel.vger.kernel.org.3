@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC8F46F2EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEED146F2ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243243AbhLIS0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S243256AbhLIS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242731AbhLISZ6 (ORCPT
+        with ESMTP id S242731AbhLIS0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:25:58 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E319C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 10:22:24 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 133so5780337pgc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 10:22:24 -0800 (PST)
+        Thu, 9 Dec 2021 13:26:07 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD845C061A72;
+        Thu,  9 Dec 2021 10:22:33 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id t26so13622738lfk.9;
+        Thu, 09 Dec 2021 10:22:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QXsXBVsCEAsPdVp73Q8QYplpMzVSNmLHtx7jAzyZz/g=;
-        b=A9ab+4IB3zWhHgErBY9YpCwtN/ofuIZs5LmpOdFt5qyytxlMoMr6/sd4LNzZCFjM0Y
-         dxH4aye7kR9YKOWzDySf2JvPZ/V8qp8btTOj4i4NkfQwBZNG17ft41iEy3b7dTCvOerd
-         pPudCZpbmu56qmdKVzTnXWWqgN/K1AgPykNVCZ9s31uoYDn8leD/bmNXryOde4aXs8W1
-         aW/w/+1oBIcRXg0yAR+Nf3KStER6D3JC/T6zFK4isRkExuvH9sOgLPGtw0a+193O5dIU
-         YbXlTnleAGzqhsE0V+vywup0d8L5SxUS41UcViG42k6mSxsbLIj5CO5tir3aonjHvC7i
-         SMig==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=QxWGzwiQK1H9THXhhSK1MS0BSvGH8EGX6peXdw0hns0=;
+        b=O4VpfJBV9bqM4uCF3IFZ9LswiKvtA6fnK9DxckWyYKxCNIrMSW8y8rbDnYNrHlxAOK
+         Mhq8P2Xb8G4zTnv5dn1HrTkdla0a6xhg+iZePUVCKUM8QNBY/gNzJJfUbsYBa/DDaCOj
+         sjSuzKc9JStNjjN3nz8MOwjTt68i3YPRQZJJRcxtB/aQijcI6QInAE8kVvOOdgQgrDa3
+         nnUGFST9r7CrW32JHiMNxpuMnBqeEU/a1xdep1bOBuGRAzQSUDSvbcDcCrkMTz0b1iGo
+         bgoopPQ+V1L0hW/2ETX4hjay8g+fVhvKZQlnugDZfEWwYTDRMTNwik7cNu5k5OtEnsNn
+         /IxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QXsXBVsCEAsPdVp73Q8QYplpMzVSNmLHtx7jAzyZz/g=;
-        b=hJFi4w6iTgSrfKYu51jPA4NgEStb1r9qEo5Vb5fmVGbj+RdC0fh0F/i4r8rpLBN9Qb
-         kS4iQn4zauRMN7Lexf58XWVYfg9a+Oq0gE6XnU0DWH99XzLsuiFEvf5aet1FMCkE1wE8
-         RMis66q2+prIt9KR6xoAz9xygSWKiVlqfEi5zGusu4K+bujzvYdSB6Ljz3DAq1VUAFs2
-         nsidJouvcoetveG99k0WLNRnaczqrXGXMrTjcg02aqDRDecFGAZHOKQGpHcMv4oyoe7p
-         4w87BZIUwW8PPaK5IVlPXbMUf1QlLixsyzlBMJ7Rr1fFpTgrGHyJuMl+OL2M6MoCc9Kl
-         borw==
-X-Gm-Message-State: AOAM5310do3N/AtjHedBu6IhiqYyBQN97D7tmHn1+g0P+6mrBhS9GQyc
-        zCkCMuKN4DmHY9hd0fmZyZVfKQ==
-X-Google-Smtp-Source: ABdhPJyMfXL61yxua1Ptnp5Q55WP8Tc9mU4Ab+Nc95i0m4mzML89fq0MFLSKI3all5FnKZWFOUKaPw==
-X-Received: by 2002:a63:fc58:: with SMTP id r24mr27039346pgk.342.1639074143952;
-        Thu, 09 Dec 2021 10:22:23 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w1sm405094pfg.11.2021.12.09.10.22.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 10:22:23 -0800 (PST)
-Date:   Thu, 9 Dec 2021 18:22:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Orr <marcorr@google.com>,
-        vkuznets@redhat.com, wanpengli@tencent.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        thomas.lendacky@amd.com, mlevitsk@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: x86: Always set kvm_run->if_flag
-Message-ID: <YbJJXKFevTV/L3in@google.com>
-References: <20211209155257.128747-1-marcorr@google.com>
- <5f8c31b4-6223-a965-0e91-15b4ffc0335e@redhat.com>
- <CALMp9eThf3UtvoLFjajkrXtvOEWQvc8_=Xf6-m6fHXkOhET+GA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QxWGzwiQK1H9THXhhSK1MS0BSvGH8EGX6peXdw0hns0=;
+        b=r8dToj7jHydJ7dxB/7yvzBa5i7eeFftKAIxQXvEAlePVTF69BPL0K9/JDEO2e/FUKj
+         VRCmTZi6bIR8X172G+B0rsXr/YwbmmBaGXmZjpI1aI49Firl/lmSy7MCcyDsHZtmPUHY
+         w8GcaxPEanBssEcBZK/VLxS0yG6QiuDbqk++e+X8+IHCEg3/lCy+YCcvwecANxB5fJGI
+         OplGKkuZUHkxz+4esRNxlA7RayBWh9/szCgH/TVgQmRtSOkRKIjGfrvdwMNvi1Na0MoT
+         BghQPUpBIMhYE7IiJzZ9QxGKpKsWGDqqyMcT89Q/BMkx/xKoa0Hrd99k0APGkA4wjzDH
+         pw/Q==
+X-Gm-Message-State: AOAM530as0E3f00KKplGDf6/varsg/N6nN1rk2uZhJjAN4/Nrc3fm5Vm
+        1qufX8JkzeyRQssl6TrMoOQ=
+X-Google-Smtp-Source: ABdhPJxdnwXbD+UJp67OF+eJClo0r5F/dqDG4cmKZ1p7TKeK+wLIx2/o6A+8ucS2M3od9a+BtNKtLQ==
+X-Received: by 2002:a05:6512:3f27:: with SMTP id y39mr7531588lfa.675.1639074152039;
+        Thu, 09 Dec 2021 10:22:32 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.236])
+        by smtp.gmail.com with ESMTPSA id n12sm58025lfq.3.2021.12.09.10.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 10:22:31 -0800 (PST)
+Message-ID: <0c116de3-1e55-f888-2b4f-285484082085@gmail.com>
+Date:   Thu, 9 Dec 2021 21:22:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALMp9eThf3UtvoLFjajkrXtvOEWQvc8_=Xf6-m6fHXkOhET+GA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [syzbot] INFO: task hung in r871xu_dev_remove
+Content-Language: en-US
+To:     syzbot <syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com>,
+        Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000042e11e05d2b0b39b@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <00000000000042e11e05d2b0b39b@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021, Jim Mattson wrote:
-> On Thu, Dec 9, 2021 at 9:48 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > On 12/9/21 16:52, Marc Orr wrote:
-> > > The kvm_run struct's if_flag is a part of the userspace/kernel API. The
-> > > SEV-ES patches failed to set this flag because it's no longer needed by
-> > > QEMU (according to the comment in the source code). However, other
-> > > hypervisors may make use of this flag. Therefore, set the flag for
-> > > guests with encrypted registers (i.e., with guest_state_protected set).
-> > >
-> > > Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
-> > > Signed-off-by: Marc Orr<marcorr@google.com>
-> >
-> > Applied, though I wonder if it is really needed by those other VMMs
-> > (which? gVisor is the only one that comes to mind that is interested in
-> > userspace APIC).
+On 12/9/21 09:27, syzbot wrote:
+> Hello,
 > 
-> Vanadium appears to have one use of it.
+> syzbot found the following issue on:
 > 
-> > It shouldn't be necessary for in-kernel APIC (where userspace can inject
-> > interrupts at any time), and ready_for_interrupt_injection is superior
-> > for userspace APIC.
+> HEAD commit:    d598c3c46ea6 Merge 5.16-rc4 into usb-next
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14cf0e55b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c6df5f09a0b9c823
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
-> LOL. Here's that one use...
+> Unfortunately, I don't have any reproducer for this issue yet.
 > 
-> if (vcpu_run_state_->request_interrupt_window &&
-> vcpu_run_state_->ready_for_interrupt_injection &&
-> vcpu_run_state_->if_flag) {
-> ...
-> }
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com
 > 
-> So, maybe this is much ado about nothing?
+> INFO: task kworker/0:6:4133 blocked for more than 143 seconds.
+>        Not tainted 5.16.0-rc4-syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:kworker/0:6     state:D stack:21848 pid: 4133 ppid:     2 flags:0x00004000
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:4972 [inline]
+>   __schedule+0x931/0x2320 kernel/sched/core.c:6253
+>   schedule+0xd2/0x260 kernel/sched/core.c:6326
+>   schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
+>   __mutex_lock_common kernel/locking/mutex.c:680 [inline]
+>   __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
+>   unregister_netdev+0xe/0x20 net/core/dev.c:11138
+>   r871xu_dev_remove+0x24f/0x2c0 drivers/staging/rtl8712/usb_intf.c:599
 
-I assume the issue is that SEV-ES always squishes if_flag, so that above statement
-can never evaluate true.
+Seems like syz-executor ddosed the kernel. unregister_netdev() tries to 
+lock rtnl and there are 8 mentions of rtnl_mutex in "Showing all locks 
+held in the system" section.
+
+Looks false-positive to me
+
+
+
+
+With regards,
+Pavel Skripkin

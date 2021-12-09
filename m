@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6879746E931
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877AC46E933
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238016AbhLINhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:37:08 -0500
-Received: from mga18.intel.com ([134.134.136.126]:22050 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229521AbhLINhH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:37:07 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224963065"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="224963065"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 05:33:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="606848385"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Dec 2021 05:33:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 29FC9329; Thu,  9 Dec 2021 15:33:35 +0200 (EET)
-Date:   Thu, 9 Dec 2021 16:33:35 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH 3/4] ACPI: processor idle: Only flush cache on entering C3
-Message-ID: <20211209133335.u4suzd2u5sjly67l@black.fi.intel.com>
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com>
- <20211206122952.74139-4-kirill.shutemov@linux.intel.com>
- <Ya4mTij+eQPq8dnu@hirez.programming.kicks-ass.net>
- <CAJZ5v0hjcKn0g=Tc90aK_EchOG+sWi8na1HVb0GdtQsYn7sAKQ@mail.gmail.com>
+        id S238026AbhLINhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229521AbhLINhx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 08:37:53 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1573AC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B6f8tntiTzzAseKWTv2hDwefK0R/Vt35xAxhbJywlpk=; b=qxDw+ksXKt+7cndN0em5gMQ9l+
+        MSzVsNg5yI7OuufW8KAWomirK6He53N8DT8qvpNaa0lRiam3/wP3Do/mFLwpgM1yseMAElZ+GjmPu
+        09VN7XYg3LIXaxMRu3S+8uck8MhwE92ndghTpW5Pg0vsW95itSwKWEsibWq8VEKnnK5+jgwTup10H
+        85Cgmrg+NXCfHKhr0SR7gc8X5wMfk6ALUZK1p8scK0reahaKT7pOAa6TS15ZkS2sjAfnJa7h7HxrI
+        FIMMWdhcXebGL2bQ1b6XAL53YYnxTXjqpJBxAlx3kXSdqIzpLRtvnVm5H6nh3s0P8Ai/jhuLT9vgy
+        M0chSoHA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvJYr-000N2r-8g; Thu, 09 Dec 2021 13:34:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EE7C63000E6;
+        Thu,  9 Dec 2021 14:34:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B1B692BBA4086; Thu,  9 Dec 2021 14:34:11 +0100 (CET)
+Date:   Thu, 9 Dec 2021 14:34:11 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     will@kernel.org, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
+        keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: Re: [RFC][PATCH 1/5] atomic: Introduce
+ atomic_{inc,dec,dec_and_test}_ofl()
+Message-ID: <YbIF02MADsQvPyHz@hirez.programming.kicks-ass.net>
+References: <20211208183655.251963904@infradead.org>
+ <20211208183906.389506784@infradead.org>
+ <YbH5x4FuIwj5krMO@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hjcKn0g=Tc90aK_EchOG+sWi8na1HVb0GdtQsYn7sAKQ@mail.gmail.com>
+In-Reply-To: <YbH5x4FuIwj5krMO@FVFF77S0Q05N>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:26:12PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Dec 6, 2021 at 4:03 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Mon, Dec 06, 2021 at 03:29:51PM +0300, Kirill A. Shutemov wrote:
-> > > According to the ACPI spec v6.4, section 8.2, cache flushing required
-> > > on entering C3 power state.
-> > >
-> > > Avoid flushing cache on entering other power states.
-> > >
-> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > ---
-> > >  drivers/acpi/processor_idle.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> > > index 76ef1bcc8848..01495aca850e 100644
-> > > --- a/drivers/acpi/processor_idle.c
-> > > +++ b/drivers/acpi/processor_idle.c
-> > > @@ -567,7 +567,8 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
-> > >  {
-> > >       struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
-> > >
-> > > -     ACPI_FLUSH_CPU_CACHE();
-> > > +     if (cx->type == ACPI_STATE_C3)
-> > > +             ACPI_FLUSH_CPU_CACHE();
-> > >
-> >
-> > acpi_idle_enter() already does this, acpi_idle_enter_s2idle() has it
-> > confused again,
+On Thu, Dec 09, 2021 at 12:42:47PM +0000, Mark Rutland wrote:
+> On Wed, Dec 08, 2021 at 07:36:56PM +0100, Peter Zijlstra wrote:
+> > In order to facilitate architecture support for refcount_t, introduce
+> > a number of new atomic primitives that have a uaccess style exception
+> > for overflow.
+> > 
+> > Notably:
+> > 
+> >   atomic_inc_ofl(v, Label) -- increment and goto Label when
+> > 			      v is zero or negative.
+> > 
+> >   atomic_dec_ofl(v, Label) -- decrement and goto Label when
+> > 			      the result is zero or negative
+> > 
+> >   atomic_dec_and_test_ofl(v, Label) -- decrement and return true when
+> > 				       the result is zero and goto Label
+> > 				       when the result is negative
 > 
-> No, they do the same thing: acpi_idle_enter_bm() if flags.bm_check is set.
+> Just to check, atomic_inc_ofl() tests the *old* value of `v`, and the other
+> cases check the *new* value of `v`?
 > 
-> > Also, I think acpi_idle_enter() does it too late; consider
-> > acpi_idle_enter_mb(). Either that or the BM crud needs more comments.
+> For clarity, in the descriptions it might be worth:
 > 
-> I think the latter.
+>   s/v/the old value of v/
+>   s/the result/the new value of v/
 > 
-> Evidently, acpi_idle_play_dead(() doesn't support FFH and the BM
-> thing, so it is only necessary to flush the cache when using
-> ACPI_CSTATE_SYSTEMIO and when cx->type is C3.
+> ... which I think makes that clearer.
 
-I'm new to this and not completely follow what I need to change.
+Right, I'll clarify.
 
-Does it look correct?
+> > Since the GCC 'Labels as Values' extention doesn't allow having the
+> > goto in an inline function, these new 'functions' must in fact be
+> > implemented as macro magic.
+> 
+> Oh; fun... :(
 
-From 3c544bc95a16d6a23dcb0aa50ee905d5e97c9ce5 Mon Sep 17 00:00:00 2001
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Date: Thu, 9 Dec 2021 16:24:44 +0300
-Subject: [PATCH] ACPI: processor idle: Only flush cache on entering C3
+Yeah, I tried all sorta things, it's all >.< close to working but then
+GCC refuses to do the sensible thing.
 
-According to the ACPI spec v6.4, section 8.2, cache flushing required
-on entering C3 power state.
+> > This meant extending the atomic generation scripts to deal with
+> > wrapping macros instead of inline functions. Since
+> > xchg/cmpxchg/try_cmpxchg were already macro magic, there was existant
+> > code for that. While extending/improving that a few latent
+> > 'instrumentation' bugs were uncovered and 'accidentally' fixed.
+> 
+> I assume for non-RFC we can split that out into a preparatory patch. :)
 
-Avoid flushing cache on entering other power states.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- drivers/acpi/processor_idle.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 76ef1bcc8848..d2a4d4446eff 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -567,7 +567,9 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
- {
- 	struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
- 
--	ACPI_FLUSH_CPU_CACHE();
-+	if (cx->entry_method == ACPI_CSTATE_SYSTEMIO &&
-+	    cx->type == ACPI_STATE_C3)
-+		ACPI_FLUSH_CPU_CACHE();
- 
- 	while (1) {
- 
--- 
- Kirill A. Shutemov
+Sure, I can split it in two; one add the infra and fix bugs and two
+introduce the new ops.

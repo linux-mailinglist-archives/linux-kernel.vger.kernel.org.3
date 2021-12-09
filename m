@@ -2,137 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C40846F17C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76BF46F17F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242693AbhLIRXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:23:11 -0500
-Received: from mga04.intel.com ([192.55.52.120]:30358 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242472AbhLIRXK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:23:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639070377; x=1670606377;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p13HYdA78gGYb5YUmGUWNrOvFjqweYjLhA5kxPLO9E0=;
-  b=Xp18dQDJ0SrptRqm863fG4LVOeizAKk8AD0uPitXcLM8s9vc29/15bIA
-   nxTw6YnAQtjP9olfslQIFN3ZPVN2HUGUSvc0hSM85eaRzLgNHLqTN2dnl
-   yE1FuRyrzdWvR9KWP7CxmCW3+BBOlV6yBr2esHJqknwmsYAVIYg8T4JAY
-   2VOwvuhyiOQCdkuOpikQKMlFXfvQSB2DPIi6PW79L+3sn/0/87MC2U+gK
-   kqfrTS8dJSVuhgF8vcaeASnzgf5YmVutRF1roXI3aEHvo4qqIZ/AwTrNg
-   95lC/i5eBRkwQC2hgatFCKB+ijgl0JhLIAKkRmQUWnUlKccr1gTasOuR0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236896327"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="236896327"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:19:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="564897213"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Dec 2021 09:19:35 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvN4w-0002Cw-G0; Thu, 09 Dec 2021 17:19:34 +0000
-Date:   Fri, 10 Dec 2021 01:19:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Avihai Horon <avihaih@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        Mark Zhang <markzhang@nvidia.com>
-Subject: [leon-rdma:rdma-next 24/31] drivers/infiniband/core/cache.c:967:16:
- error: expected ';' after expression
-Message-ID: <202112100121.3lkxU859-lkp@intel.com>
+        id S242710AbhLIRYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235879AbhLIRYA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:24:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E9C061746;
+        Thu,  9 Dec 2021 09:20:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 592DCB825CB;
+        Thu,  9 Dec 2021 17:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E648C004DD;
+        Thu,  9 Dec 2021 17:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639070424;
+        bh=dneNXQvoqpcTtOygF9rQY2ezYBD+tcFoer9GUop9wPs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FZWudXJL7H307kRFKHi2ZtVG64kRgcRdFX4h6ekrnwYO1WcEWwc+pOxFagRMRUk8V
+         h/ij0UwGEfOUJ8ekKJUisbrLnb9PpPvTtvFzQijhnGjg7XhAyJqpZiyaTQ7Z/duohF
+         hGj0fFwSlBj7zCsrmeQJBYTqrBfpFL/idY1dbF+c7dp5rW8+/BfgcJujQxTDeaUrDy
+         5Vcx7nKle23uq+0D8Xxx31WqdEJ+ccGk0PkrqCt1x9oLYw/yGo0y9o2V8Q9ha+tdAy
+         F+OXG/zXqapmAPujkvZrU77koGsNolwqlkWaKXdJDiL3slzQ+ragSSqodY/jlxMuQp
+         oYCU/Fc/y6yuQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E2ABB5C414D; Thu,  9 Dec 2021 09:20:23 -0800 (PST)
+Date:   Thu, 9 Dec 2021 09:20:23 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+Subject: Re: [PATCH 03/11] rcu: Add mutex for rcu boost kthread spawning and
+ affinity setting
+Message-ID: <20211209172023.GE641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211209150938.3518-1-dwmw2@infradead.org>
+ <20211209150938.3518-4-dwmw2@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211209150938.3518-4-dwmw2@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   3851deadf6de976fe0d2f72ca1084b47a044c2c7
-commit: 1f2b65dfb4d995e74b621e3e21e7c7445d187956 [24/31] RDMA/core: Modify rdma_query_gid() to return accurate error codes
-config: riscv-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100121.3lkxU859-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/commit/?id=1f2b65dfb4d995e74b621e3e21e7c7445d187956
-        git remote add leon-rdma https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git
-        git fetch --no-tags leon-rdma rdma-next
-        git checkout 1f2b65dfb4d995e74b621e3e21e7c7445d187956
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/infiniband/core/
+On Thu, Dec 09, 2021 at 03:09:30PM +0000, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> As we handle parallel CPU bringup, we will need to take care to avoid
+> spawning multiple boost threads, or race conditions when setting their
+> affinity. Spotted by Paul McKenney.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+And again, if testing goes well and you don't get it there first, I
+expect to push this during the v5.18 merge window.  In case you
+would like to push this with the rest of this series:
 
-All errors (new ones prefixed by >>):
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
->> drivers/infiniband/core/cache.c:967:16: error: expected ';' after expression
-                   res = -EINVAL
-                                ^
-                                ;
-   1 error generated.
-
-
-vim +967 drivers/infiniband/core/cache.c
-
-   938	
-   939	/**
-   940	 * rdma_query_gid - Read the GID content from the GID software cache
-   941	 * @device:		Device to query the GID
-   942	 * @port_num:		Port number of the device
-   943	 * @index:		Index of the GID table entry to read
-   944	 * @gid:		Pointer to GID where to store the entry's GID
-   945	 *
-   946	 * rdma_query_gid() only reads the GID entry content for requested device,
-   947	 * port and index. It reads for IB, RoCE and iWarp link layers.  It doesn't
-   948	 * hold any reference to the GID table entry in the HCA or software cache.
-   949	 *
-   950	 * Returns 0 on success or appropriate error code.
-   951	 *
-   952	 */
-   953	int rdma_query_gid(struct ib_device *device, u32 port_num,
-   954			   int index, union ib_gid *gid)
-   955	{
-   956		struct ib_gid_table *table;
-   957		unsigned long flags;
-   958		int res;
-   959	
-   960		if (!rdma_is_port_valid(device, port_num))
-   961			return -EINVAL;
-   962	
-   963		table = rdma_gid_table(device, port_num);
-   964		read_lock_irqsave(&table->rwlock, flags);
-   965	
-   966		if (index < 0 || index >= table->sz) {
- > 967			res = -EINVAL
-   968			goto done;
-   969		}
-   970	
-   971		if (!is_gid_entry_valid(table->data_vec[index])) {
-   972			res = -ENOENT;
-   973			goto done;
-   974		}
-   975	
-   976		memcpy(gid, &table->data_vec[index]->attr.gid, sizeof(*gid));
-   977		res = 0;
-   978	
-   979	done:
-   980		read_unlock_irqrestore(&table->rwlock, flags);
-   981		return res;
-   982	}
-   983	EXPORT_SYMBOL(rdma_query_gid);
-   984	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+>  kernel/rcu/tree.c        |  1 +
+>  kernel/rcu/tree.h        |  3 +++
+>  kernel/rcu/tree_plugin.h | 10 ++++++++--
+>  3 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index a1bb0b1229ed..809855474b39 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -4527,6 +4527,7 @@ static void __init rcu_init_one(void)
+>  			init_waitqueue_head(&rnp->exp_wq[2]);
+>  			init_waitqueue_head(&rnp->exp_wq[3]);
+>  			spin_lock_init(&rnp->exp_lock);
+> +			mutex_init(&rnp->boost_kthread_mutex);
+>  		}
+>  	}
+>  
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index aff4cc9303fb..055e30b3e5e0 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -108,6 +108,9 @@ struct rcu_node {
+>  				/*  side effect, not as a lock. */
+>  	unsigned long boost_time;
+>  				/* When to start boosting (jiffies). */
+> +	struct mutex boost_kthread_mutex;
+> +				/* Exclusion for thread spawning and affinity */
+> +				/*  manipulation. */
+>  	struct task_struct *boost_kthread_task;
+>  				/* kthread that takes care of priority */
+>  				/*  boosting for this rcu_node structure. */
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 5199559fbbf0..3b4ee0933710 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1162,15 +1162,16 @@ static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
+>  	struct sched_param sp;
+>  	struct task_struct *t;
+>  
+> +	mutex_lock(&rnp->boost_kthread_mutex);
+>  	if (rnp->boost_kthread_task || !rcu_scheduler_fully_active)
+> -		return;
+> +		goto out;
+>  
+>  	rcu_state.boost = 1;
+>  
+>  	t = kthread_create(rcu_boost_kthread, (void *)rnp,
+>  			   "rcub/%d", rnp_index);
+>  	if (WARN_ON_ONCE(IS_ERR(t)))
+> -		return;
+> +		goto out;
+>  
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>  	rnp->boost_kthread_task = t;
+> @@ -1178,6 +1179,9 @@ static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
+>  	sp.sched_priority = kthread_prio;
+>  	sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
+>  	wake_up_process(t); /* get to TASK_INTERRUPTIBLE quickly. */
+> +
+> + out:
+> +	mutex_unlock(&rnp->boost_kthread_mutex);
+>  }
+>  
+>  /*
+> @@ -1200,6 +1204,7 @@ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+>  		return;
+>  	if (!zalloc_cpumask_var(&cm, GFP_KERNEL))
+>  		return;
+> +	mutex_lock(&rnp->boost_kthread_mutex);
+>  	for_each_leaf_node_possible_cpu(rnp, cpu)
+>  		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
+>  		    cpu != outgoingcpu)
+> @@ -1207,6 +1212,7 @@ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+>  	if (cpumask_weight(cm) == 0)
+>  		cpumask_setall(cm);
+>  	set_cpus_allowed_ptr(t, cm);
+> +	mutex_unlock(&rnp->boost_kthread_mutex);
+>  	free_cpumask_var(cm);
+>  }
+>  
+> -- 
+> 2.31.1
+> 

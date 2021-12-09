@@ -2,101 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382BB46E8EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E7046E8F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237720AbhLINUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:20:04 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43060 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237724AbhLINUD (ORCPT
+        id S237753AbhLINUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237724AbhLINUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:20:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 369F3CE25B2;
-        Thu,  9 Dec 2021 13:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94451C004DD;
-        Thu,  9 Dec 2021 13:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639055786;
-        bh=F3m5fBX84JidvrgmrY/pV9dmlTEPpKnxeK6GPMGoKrg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=saSMYIv8cEjCLq+tS77bmSzDxE3ooJ+uFgb16Oa79OmL+yowGpmnzxm1ZBITjP9RX
-         o8XqhtGkc7GXUZs58hnWzWVUm9n8FL0/cRdvcJDbnWZ2IYgqEX6SvHR37EN2UcXJAq
-         AZitj/fSumCHv2hDs1+4WdZHAXSmhaNPErYele7QqsgVvRj/EqFY2l4n59IXvy2RzU
-         LNJSPhi2j3Mv03Xbyl0iWbjjQsb4My7DGcFRcs5Se3v4auThQvFPZe+kRH6Xut1r1R
-         MuZwwbAAUbLbbKO+WyGUnVlIQB0MRohMTvprGYqXcTOZtKmJ1Bfb6cD2Ezt8kSA7bk
-         Fc0pUPTvpOtow==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Avihai Horon <avihaih@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>
-Subject: [PATCH rdma-next v1 3/3] RDMA/cma: Let cma_resolve_ib_dev() continue search even after empty entry
-Date:   Thu,  9 Dec 2021 15:16:07 +0200
-Message-Id: <b7346307e3bb396c43d67d924348c6c496493991.1639055490.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1639055490.git.leonro@nvidia.com>
-References: <cover.1639055490.git.leonro@nvidia.com>
+        Thu, 9 Dec 2021 08:20:15 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD139C0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:16:41 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso4819482pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:16:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JdDY5ij0RZVpRPH4PPkpJNHpzmZFEQMl/Zl2mv0q3gY=;
+        b=lDl1VuXtMXA7wRFoKDUgDn3q4xhysFr5zJMACY+32x88H0EOmVtCZE34vaTW79/KJb
+         qKIRo8w9JCRojsRqtmeZ7IM1HreQv4j1s21YPkanWoQ7c43yKaMUw2nztLkTflJz8lEJ
+         VhRRzUKp00tXFBeQP8vBQ7P0KseWxGLBz6OnKZmP5Bs89UNVDEEJG4K3DQVjbPDTKYqW
+         rgUPPOSlDM81fOld08rILF7VqxrexIeRJ5s1QCSfVUzri8nNII/l4biOrFz2+oUpwL10
+         dQC8i7tsHf4voyvnOH4Co2MiX6kI08s/+qT4WiFxXwg78SoIYzT+iJZBLKfK0KLz0Tfq
+         +DVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JdDY5ij0RZVpRPH4PPkpJNHpzmZFEQMl/Zl2mv0q3gY=;
+        b=CowAidmlf3+JaRFCKweM3Y9hB/jtTiU/RVbDV1rh0JztH9bbDnApowh1BRXu97rkMx
+         kF00kSs0bmUI4DU9wzQxx4c+jwmW8wtlU3i2UYxl+SsTWvlzF3ff/kYxRtY7+iuPuPXa
+         I7uG9Do+HNk+pSjcJRMxHuFp9I9IowUgo67fvga4QuRViyifoKk7Cq5jAXxhRdyFpM+V
+         TnSGiyOEObyGXxg17Q2iRHkq5UUYEA2LfLFXSw0De86JyNxF2GgfxLjp2XOJmua3L5O3
+         3/yAMIYeAPjRUfwGVpt8b47JvBGG0nrUtnUYD8N5hKDVPfOWSJL9une8wPUN+ULtGu3h
+         d6hQ==
+X-Gm-Message-State: AOAM531dRtxPn+efpunYtE0Qq6iZkEM10uvFG9+ME0EFQeUHHhlFHfIq
+        ktc1fgkAwkhnxSgNjZ6rJwx8
+X-Google-Smtp-Source: ABdhPJwoPqUPuxXvgZszBjudXWUF9FIm/paRD0EaLXFP5jSKiuwj93WOjzmB1wi7bg5tOXdMiOoSRA==
+X-Received: by 2002:a17:90b:4f49:: with SMTP id pj9mr15037953pjb.159.1639055801240;
+        Thu, 09 Dec 2021 05:16:41 -0800 (PST)
+Received: from localhost.localdomain ([202.21.42.41])
+        by smtp.gmail.com with ESMTPSA id q6sm5591169pgs.19.2021.12.09.05.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 05:16:40 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
+        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] bus: mhi: core: Add support for forced PM resume
+Date:   Thu,  9 Dec 2021 18:46:33 +0530
+Message-Id: <20211209131633.4168-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Avihai Horon <avihaih@nvidia.com>
+From: Loic Poulain <loic.poulain@linaro.org>
 
-Currently, when cma_resolve_ib_dev() searches for a matching GID it will
-stop searching after encountering the first empty GID table entry. This
-behavior is wrong since neither IB nor RoCE spec enforce tightly packed
-GID tables.
+For whatever reason, some devices like QCA6390, WCN6855 using ath11k
+are not in M3 state during PM resume, but still functional. The
+mhi_pm_resume should then not fail in those cases, and let the higher
+level device specific stack continue resuming process.
 
-For example, when the matching valid GID entry exists at index N, and if
-a GID entry is empty at index N-1, cma_resolve_ib_dev() will fail to
-find the matching valid entry.
+Add an API mhi_pm_resume_force(), to force resuming irrespective of the
+current MHI state. This fixes a regression with non functional ath11k WiFi
+after suspend/resume cycle on some machines.
 
-Fix it by making cma_resolve_ib_dev() continue searching even after
-encountering missing entries.
+Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
 
-Fixes: f17df3b0dede ("RDMA/cma: Add support for AF_IB to rdma_resolve_addr()")
-Signed-off-by: Avihai Horon <avihaih@nvidia.com>
-Reviewed-by: Mark Zhang <markzhang@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
+Cc: stable@vger.kernel.org #5.13
+Link: https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/
+Reported-by: Kalle Valo <kvalo@codeaurora.org>
+Reported-by: Pengyu Ma <mapengyu@gmail.com>
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+[mani: Switched to API, added bug report, reported-by tags and CCed stable]
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/infiniband/core/cma.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 8a98aa90956f..27a00ce2e101 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -766,6 +766,7 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
- 	unsigned int p;
- 	u16 pkey, index;
- 	enum ib_port_state port_state;
-+	int ret;
- 	int i;
+Changes in v2:
+
+* Switched to a new API "mhi_pm_resume_force()" instead of the "force" flag as
+  suggested by Greg. The "force" flag is now used inside the API.
+
+Greg: I'm sending this patch directly to you so that you can apply it to
+char-misc once we get an ACK from Kalle.
+
+ drivers/bus/mhi/core/pm.c             | 21 ++++++++++++++++++---
+ drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
+ include/linux/mhi.h                   | 13 +++++++++++++
+ 3 files changed, 36 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
+index fb99e3727155..547e6e769546 100644
+--- a/drivers/bus/mhi/core/pm.c
++++ b/drivers/bus/mhi/core/pm.c
+@@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
+ }
+ EXPORT_SYMBOL_GPL(mhi_pm_suspend);
  
- 	cma_dev = NULL;
-@@ -784,9 +785,14 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
+-int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
++static int __mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
+ {
+ 	struct mhi_chan *itr, *tmp;
+ 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+@@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
+ 	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
+ 		return -EIO;
  
- 			if (ib_get_cached_port_state(cur_dev->device, p, &port_state))
- 				continue;
--			for (i = 0; !rdma_query_gid(cur_dev->device,
--						    p, i, &gid);
--			     i++) {
+-	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
+-		return -EINVAL;
++	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
++		dev_warn(dev, "Resuming from non M3 state (%s)\n",
++			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
++		if (!force)
++			return -EINVAL;
++	}
+ 
+ 	/* Notify clients about exiting LPM */
+ 	list_for_each_entry_safe(itr, tmp, &mhi_cntrl->lpm_chans, node) {
+@@ -940,8 +944,19 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
+ 
+ 	return 0;
+ }
 +
-+			for (i = 0; i < cur_dev->device->port_data[p].immutable.gid_tbl_len;
-+			     ++i) {
-+				ret = rdma_query_gid(cur_dev->device, p, i,
-+						     &gid);
-+				if (ret)
-+					continue;
++int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
++{
++	return __mhi_pm_resume(mhi_cntrl, false);
++}
+ EXPORT_SYMBOL_GPL(mhi_pm_resume);
+ 
++int mhi_pm_resume_force(struct mhi_controller *mhi_cntrl)
++{
++	return __mhi_pm_resume(mhi_cntrl, true);
++}
++EXPORT_SYMBOL_GPL(mhi_pm_resume_force);
 +
- 				if (!memcmp(&gid, dgid, sizeof(gid))) {
- 					cma_dev = cur_dev;
- 					sgid = gid;
+ int __mhi_device_get_sync(struct mhi_controller *mhi_cntrl)
+ {
+ 	int ret;
+diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+index 26c7ae242db6..49c0b1ad40a0 100644
+--- a/drivers/net/wireless/ath/ath11k/mhi.c
++++ b/drivers/net/wireless/ath/ath11k/mhi.c
+@@ -533,7 +533,11 @@ static int ath11k_mhi_set_state(struct ath11k_pci *ab_pci,
+ 		ret = mhi_pm_suspend(ab_pci->mhi_ctrl);
+ 		break;
+ 	case ATH11K_MHI_RESUME:
+-		ret = mhi_pm_resume(ab_pci->mhi_ctrl);
++		/* Do force MHI resume as some devices like QCA6390, WCN6855
++		 * are not in M3 state but they are functional. So just ignore
++		 * the MHI state while resuming.
++		 */
++		ret = mhi_pm_resume_force(ab_pci->mhi_ctrl);
+ 		break;
+ 	case ATH11K_MHI_TRIGGER_RDDM:
+ 		ret = mhi_force_rddm_mode(ab_pci->mhi_ctrl);
+diff --git a/include/linux/mhi.h b/include/linux/mhi.h
+index 723985879035..a5cc4cdf9cc8 100644
+--- a/include/linux/mhi.h
++++ b/include/linux/mhi.h
+@@ -663,6 +663,19 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
+  */
+ int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
+ 
++/**
++ * mhi_pm_resume_force - Force resume MHI from suspended state
++ * @mhi_cntrl: MHI controller
++ *
++ * Resume the device irrespective of its MHI state. As per the MHI spec, devices
++ * has to be in M3 state during resume. But some devices seem to be in a
++ * different MHI state other than M3 but they continue working fine if allowed.
++ * This API is intented to be used for such devices.
++ *
++ * Return: 0 if the resume succeeds, a negative error code otherwise
++ */
++int mhi_pm_resume_force(struct mhi_controller *mhi_cntrl);
++
+ /**
+  * mhi_download_rddm_image - Download ramdump image from device for
+  *                           debugging purpose.
 -- 
-2.33.1
+2.25.1
 

@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D7946E190
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D6946E193
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhLIEjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 23:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbhLIEjL (ORCPT
+        id S230002AbhLIElv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 23:41:51 -0500
+Received: from mail-vk1-f171.google.com ([209.85.221.171]:46957 "EHLO
+        mail-vk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229835AbhLIElu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 23:39:11 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8F2C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:35:38 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id z6so4295540pfe.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:35:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OTnH146W1h2tRqN4JJ2cRB6UCxYgrVEb9ej66jz/hvo=;
-        b=N9rptxSRnfF0MLgUuQ6pniD9NY0xD5gmN9NJ7q7nYIWlGUP0fj+D8bni97+3KJBESg
-         YTDJakMn80kzpqKS5vbuzleqCKcNAbRDoV5rKpWPOaKKoANlS3Y3HOLQUCPqmKekZD5N
-         DzMUZAR0D2WT1NFLrwnRVJ8pdQaeOC0bE3SbE=
+        Wed, 8 Dec 2021 23:41:50 -0500
+Received: by mail-vk1-f171.google.com with SMTP id m16so2911082vkl.13;
+        Wed, 08 Dec 2021 20:38:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OTnH146W1h2tRqN4JJ2cRB6UCxYgrVEb9ej66jz/hvo=;
-        b=4ONyq/WEdWjsc51UrnsOiWwg0PxVhBXMP3djM76c47DMLk191XpdiPuS+4oU9y+F93
-         ybOPAvHrvKySnbrvGHC+wcPl66qU3NqLxMKj/d6t7I3pA1EGwUq8vdYi1Ua/PZOFZfiK
-         3A2wkqwl1QWABeWzT7xdSROD19f6sIxVF0boK2hABkWKlTFsjRs3VjQUJb6o71Hj+zJS
-         beHCrFNK7HNeUaZw+eWyFAp8O379GhQqBARG5z2tdjkgUE5cr5P9dlxa96dQFQMYqj2C
-         RVAaha8D0vgVbHi8zZQjplxwAYP85GGoRTXyTFRwuKeYv+JNTI6MlJUtgFKxyAlRQil8
-         TkrQ==
-X-Gm-Message-State: AOAM533MqUY6q7d5xEJEuD79g7+yPurYlQHHP210Bq/qKrws09cAj84l
-        ZIgPRA/GMFla6AqeMygM0Hsm8Q==
-X-Google-Smtp-Source: ABdhPJySi11U26fyrl+v1mQbCHqtQHoohp4ZDdBFMGnKAY4y2rJnvnEeVrvpPP2RjYxbn2uGWN4Mxg==
-X-Received: by 2002:a63:1b02:: with SMTP id b2mr31784110pgb.263.1639024537867;
-        Wed, 08 Dec 2021 20:35:37 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p49sm4871738pfw.43.2021.12.08.20.35.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 20:35:37 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] x86/uaccess: Move variable into switch case statement
-Date:   Wed,  8 Dec 2021 20:34:56 -0800
-Message-Id: <20211209043456.1377875-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1BrJIivy5ULsFEw3z8mK7xap0WSge261MqOp/JZDTo8=;
+        b=A0wt1CMda7yMU5cxAC2VIA+LpjGjvpbvhbmVxlkg6F9kG6axwQP7ZFXUGihefp2wOt
+         s5L/QfOK2uCpMqrGW/nKLaaDmNl8+iUf7n6DxH04H3Ftm1rTGpYgsmVeUxA4WJt+NPdU
+         2y0QKNBvHLItg0b+uwMxcAIVhg4LAm2vbOCTjU6lVrP7u/BLU8rERqqaOMnKyUc381f4
+         VwAJcGUME4rqQ5rnIOFPMWrctpNzw6RTgL/wa2mNLE+AMCHZ7YITn1ozucbWBnA32pDq
+         Md9iN9necMmWa218DgwjBUz8Qo9GynJQMuhVPdEkYzdKwSdBYpAfohWYt6pXvrLqgSZn
+         YCpg==
+X-Gm-Message-State: AOAM533tb5VBW4+VAh3Nz22Rr6gAxYMGMbuM4iTRus7/tYyY4cypetFz
+        9+pp4jqTUAMGzg9z0roXkkWTwxTWQEKfg1XgkZY=
+X-Google-Smtp-Source: ABdhPJzSEdRFkQlrsU6LaBJXJV+aoGM05IKnp1wULRAtWmhxiPu+RBIET8ui3f40bJ3D15iquJlaXgHFN/RJYjnJ5Vw=
+X-Received: by 2002:a1f:c193:: with SMTP id r141mr5251257vkf.27.1639024696997;
+ Wed, 08 Dec 2021 20:38:16 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1283; h=from:subject; bh=CQ9kD+xEuCd2isJBoD5npKFBg9v/JSWJJPAtzMVJS04=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhsYdwZw0rJHtAVcR94cnaDCxyjWyuuqFcZGv3g4c/ hLnWAcSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbGHcAAKCRCJcvTf3G3AJv9SEA CP/7AJxBiaUjVDBOGfIIJpFgNWQf4HuttbJHMmPFyRwMXVG/0joQz8bEc4a850KZE+zJoTqQ9iMhqg gJQTFpLjzbJZh2NnYyZ8dlkvlGz9S4EGShw0WCExxwK1A5iu952CUR22xpgQl39N56Lu0Q1hxSbRdv Fv0YjMhNkckU3pwWjVHb0loOrGSVQHzijkGVvsf2F8noQNiR6gRCHMFaJbGG42aqP6ESpaer0jx7mU AXolO4e5ZOO7jI54h1veFFvQR7OcFGDhDcg2Ywt9CMDqhRaLB4rvDIeZ3RefIsyaw5I4+ZFS5Vw5SJ ztfQKD0GJyPqE2fsautriZzYqkO+qXokvFYwWRg9BN0zgFOZflToTKF6mODp980yOOy33eLFxloWRd r+cl0Vuwze/1CLOE2DvQSozQaOVDRnzbcYqVkm3F9wYodFHdYoEx6PBr2mqjfONDfebverxAIs+yY5 Y04fu4t/HzFTJLmbhPxOSxuKtkUM9U6D7ksvxJC5MQR4pL97Ju3aBGcGLrPjN/fng8RlDEjIkckHad pKzXTKi8eqRwbtpBc/2KIMAvr0Pl47BzP4eTdD+L4FeujC7eC0xjgRy0wFEvlhltfpvCv/oQYBzxqm 8ZSRnmZEt/H/AOpMx4lkaKlYLRgujleG5NwJXE28Na0HSnILtIFrSG7ED25Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
+ <YagEai+VPAnjAq4X@robh.at.kernel.org> <CAMuHMdW5Ng9225a6XK0VKd0kj=m8a1xr_oKeazQYxdpvn4Db=g@mail.gmail.com>
+ <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
+From:   Harini Katakam <harinik@xilinx.com>
+Date:   Thu, 9 Dec 2021 10:08:06 +0530
+Message-ID: <CAFcVEC++u1DxG+DNa+rpAQZ-LXtyFApiK3wgjZPDdU27Xp0ccg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with automatic stack variable initialization, GCC 12
-complains about variables defined outside of switch case statements.
-Move the variable into the case that uses it, which silences the warning:
+Hi Rob, Geert,
 
-./arch/x86/include/asm/uaccess.h:317:23: warning: statement will never be executed [-Wswitch-unreachable]
-  317 |         unsigned char x_u8__; \
-      |                       ^~~~~~
+On Mon, Dec 6, 2021 at 6:32 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Dec 2, 2021 at 4:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Hi Rob,
+> >
+> > CC Michal
+> >
+<snip>
+> >
+> > It wasn't clear to me if this is still needed, or legacy. Michal?
+>
+> They should update to the iommu binding instead of the legacy smmu
+> one. It's been around for years now.
 
-Fixes: 865c50e1d279 ("x86/uaccess: utilize CONFIG_CC_HAS_ASM_GOTO_OUTPUT")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/include/asm/uaccess.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Yes, this is a legacy entry and not used anymore. We'll plan to update our
+devicetree.
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 33a68407def3..8ab9e79abb2b 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -314,11 +314,12 @@ do {									\
- do {									\
- 	__chk_user_ptr(ptr);						\
- 	switch (size) {							\
--	unsigned char x_u8__;						\
--	case 1:								\
-+	case 1:	{							\
-+		unsigned char x_u8__;					\
- 		__get_user_asm(x_u8__, ptr, "b", "=q", label);		\
- 		(x) = x_u8__;						\
- 		break;							\
-+	}								\
- 	case 2:								\
- 		__get_user_asm(x, ptr, "w", "=r", label);		\
- 		break;							\
--- 
-2.30.2
-
+Regards,
+Harini

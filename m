@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805D046EBE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D07946EBEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240602AbhLIPmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:42:11 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:26565 "EHLO
+        id S240123AbhLIPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:43:02 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:50932 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240052AbhLIPlW (ORCPT
+        with ESMTP id S240290AbhLIPlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:41:22 -0500
+        Thu, 9 Dec 2021 10:41:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639064268; x=1670600268;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
+  t=1639064272; x=1670600272;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
   bh=UpT28YC0KrF9kWVQLXAsbKKLKjYyf/we8UP/MINHjgA=;
-  b=dtIsZz2NRNgijeN22J00gImLEnRCEYwj32AEW84MCqD8ql0IU1iT+RqP
-   7IibIh1aSErjTZtMwKHxpOSY2CCWUD9Lr1U3Zj2/2SrbP01E/zeyLwfyG
-   rnRrxzcKtSTpdIQXvqZ1uGyeDvzqWRREJ1fdXD1Q+IwpsPx3Wg12cwU6e
-   SYTSxHfxJU+aI3pvs0VMJ8Z7YFbGrCdYYQhWsiNLrK9xSrn1tGeL2+VWC
-   twBtvX80PLXOgeqa6SHiu1RBUmezDI8kYHGLgBEE3c3ncVTI6Yjz9Tsqx
-   TB+5G2jknibrDinoY4PkhMzA82ER30hwqrwLf5yuHOHcZiYS/y/67VoRr
-   A==;
-IronPort-SDR: 6lnTbjpIXVQXb8V/zrp1D7usz7Csa0bWPfE9HbIa2LmaQBpbSrEYOMuDkSN+Th2aNdnnFDFrvs
- eJEu/9GPyZYpJkBkpk7U0/TI8ZAnqVw++yt+RCRZhP12GPpNzmwttJPrzoL3JNJKbq1MLNArZL
- V0SDeUWqjeZIMzlQQqhPuR2Uv5KEAt/P/g9chyAOiZK5AXiOd87UOi/2byqWUkwU6GHpeuSddy
- aMZoq8vdcw7RwB1pM227RpY/qThXWGE2KepJIzQxhBX0u5AY5gfl+Sg7HLXp+erLKfS3728ZGM
- gJKgTNfLpwlzlxx2VD7h9W7D
+  b=WRpY9y2ZizzUNK+D6no1beKLOcxK2LuvC52QfPhsfVrrgcBTspDCxR30
+   9AvvkApxSlwZ5Ik/DCM+rticAB/QzPqjPSjmQ2ExBo93vgzauTHozwrFT
+   siit1oU+wjMJ2g7RoRCY99zBGojmR3Q4768PmGQHGAEQVbPaqwmG74hoJ
+   9vxL1DDMh8yohiWm4nTgPF0DhYdVz6h/plEB4Zl0JZyrdJI7e4jb2zTdA
+   XMrTQesjudqR+UMSUXDhn2PodqeURWF9YPmJI87mkyeQ2MxAQaQ01HAWY
+   yG71j3LiMw87toCSZ2wPaOKclKd1wVmlfw5RETUiQ/bqYxfvfo3SV0/02
+   Q==;
+IronPort-SDR: la1EJyslJEKmOiI12nKpcPdCLYqGttvS3Lh3X9Bx2cSYlJRqaEELeEejK2qU5Usz6pP6xMFWo4
+ KP7qBzFNkhm8v3KsJxDgIoxskYNATDteRVOwR2RSGMgEgoT9fMyamyw+yqYkxcJgVBRgWr5zk9
+ mRxB6JKXfVfVWSoiqU9/09yg6DeD7cxFctsuq7mcu78KexjsvzU+WVoSi/ITgZWFI8QUWZJUX0
+ kDO3/UzEH/cQaN+5FBBOC5RBqlgYV3qOiQge96V2Ex91+ew+E3G+n8QGDoN1/NkoDD1W2Neeow
+ lHY0RYTNPumiR8WEhU/PLDLj
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="154886806"
+   d="scan'208";a="146102046"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 08:37:47 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 08:37:51 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Dec 2021 08:37:47 -0700
+ 15.1.2375.17; Thu, 9 Dec 2021 08:37:50 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 08:37:45 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 08:37:47 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <nicolas.ferre@microchip.com>
 CC:     <linux@armlinux.org.uk>, <claudiu.beznea@microchip.com>,
@@ -49,9 +49,11 @@ CC:     <linux@armlinux.org.uk>, <claudiu.beznea@microchip.com>,
         <linux-kernel@vger.kernel.org>,
         "Tudor Ambarus" <tudor.ambarus@microchip.com>
 Subject: [PATCH] ARM: configs: at91: sama7: Enable SPI NOR and QSPI controller
-Date:   Thu, 9 Dec 2021 17:37:43 +0200
-Message-ID: <20211209153744.357465-1-tudor.ambarus@microchip.com>
+Date:   Thu, 9 Dec 2021 17:37:44 +0200
+Message-ID: <20211209153744.357465-2-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211209153744.357465-1-tudor.ambarus@microchip.com>
+References: <20211209153744.357465-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain

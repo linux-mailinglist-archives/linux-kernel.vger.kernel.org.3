@@ -2,91 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4531546E9AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB15746E9B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbhLIOQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLIOQP (ORCPT
+        id S232549AbhLIORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:17:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56786 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230154AbhLIORT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:16:15 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5ACC061746;
-        Thu,  9 Dec 2021 06:12:42 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y12so19640321eda.12;
-        Thu, 09 Dec 2021 06:12:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZKElaajDOEkfrjEsxS9M6gGKFWTRHDQiJWcgcyRkQpo=;
-        b=GdLNp3j3BpMVlruZDlCF0206p2jRj4VNmaADdXYXeqE8mnqlgOuw3K8Z9/acK2pVsL
-         V3berzH8VSRSZ6FfF0sNADeakU/76SqyNKBOfhNMMoqwxMd9DVr0Eug+oC5EcWGvRF/H
-         deXrZCCcqRCi5h8OuIfpHnkSFQo/0m/HmY4TtIj5ISOsSeZZquYXKpsTh9VnYjEotAcZ
-         42gSX6R0t8275nRRtI+9vV+L6VY6iDhYHQfh0r030OfDpEwCwuZA0HksmrHSNuQQ2EdK
-         BOoNl1o9ZIoxuuqbBWoZ44FqI62xrXwkSKJ4ekK2tBFu2wQ83nETWVN+3sVHvdObcaEP
-         fiOw==
+        Thu, 9 Dec 2021 09:17:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639059225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T1S6rtyY8u3x7vV4s9QhxQiYkWds801oT9UBXiBzvq8=;
+        b=BC4Dq4dfioIzbAtWiaNKOL2Zfx3MntoC3gcKhOO9m0ShVVcV6JR64tqOWnAR0xgK97bj2Y
+        wS/W4MYdX4RK23Pv5qnqyhS2kIt1kPdv02S1k0g5Q8FjdCP0Me79OrLZrw6pftCel8xAqA
+        yUnGRFwrzwvWvqVDV+K2K7SpII58mPs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-COPTSruUMkuFYkPj2eZVRg-1; Thu, 09 Dec 2021 09:13:44 -0500
+X-MC-Unique: COPTSruUMkuFYkPj2eZVRg-1
+Received: by mail-wm1-f71.google.com with SMTP id o18-20020a05600c511200b00332fa17a02eso2549950wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:13:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZKElaajDOEkfrjEsxS9M6gGKFWTRHDQiJWcgcyRkQpo=;
-        b=H6DlGE72wndUR7MCZNFvkbOWPKBL1eNdoxj/s2nX6aP8uQvk+FoJmRZI/Y5zSL6YqE
-         Mf7VX+h/7YB4oqFU4wzE40mdo2iCUNFvnfFdh4BDQ370TPEkLANN293L6c0FeTOMsEXw
-         qDfhnlF4WiCe7C2KobBl8RPTpYbkAwRWfaIGtSBWY9dUIsYlvGe1gPetDOFjAXF4dNY/
-         wrzEdmhnAPh4k+YoE6dqzq/aU384lo+AZgashR6bDCJcNPsp3cayPmsn2esoZyvWABEL
-         6j20gL0d0h0litFbZloYVF91n1TqhoU3UqsqeeIPAUbewhwdCW08u6r2EJDVyTVnXPuR
-         Jd4g==
-X-Gm-Message-State: AOAM5315InCVOva9lK/IZlEnsyNSkclS+8gt3QzjWaDbGzeO5AbfAG8l
-        XherlWXhqKiLa/IjILVq8Hg=
-X-Google-Smtp-Source: ABdhPJyi6eaM2wuf0Zr783a2v1d54lABFpWK/cYQbPoVnv1jrgUKsHUZ9R8QEAiDWCYgEIMKOIDp5A==
-X-Received: by 2002:a17:906:4787:: with SMTP id cw7mr17127226ejc.311.1639059158557;
-        Thu, 09 Dec 2021 06:12:38 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id e12sm2832350ejs.86.2021.12.09.06.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 06:12:38 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <350532d2-b01b-1d7c-fff3-c3cb171996e8@redhat.com>
-Date:   Thu, 9 Dec 2021 15:12:36 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T1S6rtyY8u3x7vV4s9QhxQiYkWds801oT9UBXiBzvq8=;
+        b=dx9Xy2P1maT3mSsYk/IQI1zuHyuEnoufwNmTNFW2pQb2qsU1UtGuR643eXpwrzx9wd
+         tSKZ39On+XgFRtsCgMG4KROXee1UYvgvPC0BcBATU/cr/KYFDfmffK6pRrEc6x4cRqeY
+         7K+6BMr/9w3Jv1+IpxX9XpIW2bCodaN7kUT72lbc6CIEFubqoUpuZqgTL2A2MOhYi2+G
+         q6+0NPFl8zlwI+cYcZh7Z+vpI79vWo7fumECGQPbsjSvuEKf1Y3ptu0BusGNOpEC0V0e
+         yLvKBDOxpKmcTADMpQcBDKklpQAMlJURoyjZWI1p7ZdzC2K0WubzJG0JSmNS/ul+EP/n
+         jqnQ==
+X-Gm-Message-State: AOAM532qswEv7/O7qpuS97BOl4r4ISzb6Z7bg078btLPN30qMENEvtKX
+        hjEbA+PBp2nHTfAUnO4EeSqFxtoSGQ1aPF6zDFeWzHKHrDjSu6UuhxvFYXiM8hejH+F2VdP0vuZ
+        l02p9DSqnp9hnM35qDMuC48tN
+X-Received: by 2002:a5d:5147:: with SMTP id u7mr6759859wrt.233.1639059222932;
+        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxs0t32qLpqOAfF7JuE4spcBzfo3UmhJ71TMoONwX1ETI4ah//+LMIcCd8EGICtAe5qnDS5Gw==
+X-Received: by 2002:a5d:5147:: with SMTP id u7mr6759814wrt.233.1639059222708;
+        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
+Received: from localhost (net-37-182-17-175.cust.vodafonedsl.it. [37.182.17.175])
+        by smtp.gmail.com with ESMTPSA id s8sm6179183wra.9.2021.12.09.06.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 06:13:42 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:13:40 +0100
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     Sven Eckelmann <sven@narfation.org>
+Cc:     jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk,
+        Felix Fietkau <nbd@nbd.name>, Deren Wu <Deren.Wu@mediatek.com>,
+        Mark-YW Chen <Mark-YW.Chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Soul Huang <Soul.Huang@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>, KM Lin <km.lin@mediatek.com>,
+        Robin Chiu <robin.chiu@mediatek.com>,
+        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
+        Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com,
+        linux-firmware <linux-firmware@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Message-ID: <YbIPFIaya1vKF6bM@lore-desk>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
+ <2314855.OJx0zA1Pyt@ripper>
+ <3841963.FhVex8QpIh@ripper>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
- kvm_apic_update_apicv
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
- <20211209115440.394441-6-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211209115440.394441-6-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zjkU6hzf6ZLTHJOB"
+Content-Disposition: inline
+In-Reply-To: <3841963.FhVex8QpIh@ripper>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 12:54, Maxim Levitsky wrote:
-> Also reorder call to kvm_apic_update_apicv to be after
-> .refresh_apicv_exec_ctrl, although that doesn't guarantee
-> that it will see up to date IRR bits.
 
-Can you spell out why do that?
+--zjkU6hzf6ZLTHJOB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+> On Thursday, 9 December 2021 10:21:02 CET Sven Eckelmann wrote:
+> > Tested-by: Sven Eckelmann <sven@narfation.org>
+>=20
+> I would like to retract this again because it seems like the firmware is =
+now=20
+> hanging all the time when the default runtime-pm/deep-sleep settings are =
+used.
+>=20
+>     [  521.553436] mt7921e 0000:05:00.0: Message 40000002 (seq 12) timeout
+>     [  521.559884] mt7921e 0000:05:00.0: chip reset
+>     [  521.661983] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build=
+ Time: 20211129210838a
+>     [  521.661983]=20
+>     [  521.684088] mt7921e 0000:05:00.0: WM Firmware Version: ____010000,=
+ Build Time: 20211129210917
+>     [  521.723561] mt7921e 0000:05:00.0: Firmware init done
+>=20
+> This doesn't seem to happen that often when I perform a
+>=20
+>    echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/runtime-pm
+>    echo 0 > /sys/kernel/debug/ieee80211/phy0/mt76/deep-sleep
+>=20
+> before setting up the interfaces.
+>=20
+> But even then, on the first "ip link set up dev mon0" (not only for mon0 =
+-=20
+> also for wlan0/...) it will crash with:
+>=20
+>=20
+>     [  806.731357] mt7921e 0000:05:00.0: Message 00000046 (seq 4) timeout
+>     [  806.737730] mt7921e 0000:05:00.0: chip reset
+> RTNETLINK answers: Connection timed out
+>     [  806.867666] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build=
+ Time: 20211129210838a
+>     [  806.867666]=20
+>     [  806.888441] mt7921e 0000:05:00.0: WM Firmware Version: ____010000,=
+ Build Time: 20211129210917
+>     [  806.928204] mt7921e 0000:05:00.0: Firmware init done
+>=20
+> But when I then set up the device again then it seems to work. This is th=
+e=20
+> case for monitor and managed interfaces.
+>=20
+> I've used commit 678071ef7029 ("mt76: mt7615: clear mcu error interrupt s=
+tatus=20
+> on mt7663") in mt76.git for this.=20
+
+does it occur with an older fw?
+
+Regards,
+Lorenzo
+
+>=20
+> Kind regards,
+> 	Sven
+
+
+
+--zjkU6hzf6ZLTHJOB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYbIPFAAKCRA6cBh0uS2t
+rKx+AP9d7SOcOblztzxdRBXT0mu90H/4HHELZ2txXKAjgURt8AEAivSXJ/gYEtQg
+Cx4dhBOmhYnSfz4fMWpM3Q9cyw1WiwQ=
+=2F7f
+-----END PGP SIGNATURE-----
+
+--zjkU6hzf6ZLTHJOB--
+

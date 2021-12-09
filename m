@@ -2,69 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F5946F172
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2633D46F177
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242650AbhLIRTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:19:37 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:46907 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbhLIRTg (ORCPT
+        id S242661AbhLIRVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235172AbhLIRVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:19:36 -0500
-Received: by mail-oi1-f182.google.com with SMTP id s139so9505316oie.13;
-        Thu, 09 Dec 2021 09:16:02 -0800 (PST)
+        Thu, 9 Dec 2021 12:21:09 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B00C061746;
+        Thu,  9 Dec 2021 09:17:36 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v138so15288979ybb.8;
+        Thu, 09 Dec 2021 09:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KJRsMEiCufFN8dYu+nozb0ZGQF4pRkj8EjJsyMDC1hA=;
+        b=pA2iGHk6K6TLdCgL34LbE89MSGKM5QwLVYICG1FP4iMYDgH5CXR40XTTErwPfAfXsJ
+         NVHBBR4vgxs6SqpI+y8mIC0JYxZ4YJpEGWA5k6SNw3qMdu5GO+efL9g0z5AdWwrja95W
+         IZ6J7jC76UNIQz2cdw/MW0eGHqwLc12l4Z0511Gj8o2d0V6i0+DRJsHVduAn5hmFdCdc
+         bK6+w99Q1K7ibJP+3vHuRt1Ae1OvYP7ZkB/dGwWSjPRjH4rNlYFK7XxgHfNw1xVnwI6u
+         3WYKvRmF4j0EaerTmZ2aUSenGpZD7BFuX0wlxFUuqbqQ6k9x4mTdNtCyRn+PMXM9Kk+g
+         EN+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PJCW62x3onBcBzA0Avsq6dkT2NmwvIY0nnwCLojME8o=;
-        b=6avTJJ/uMovZe273+z+vkDsEIr8/978IEbbactbaxEmrwEuhYsIUIn2ToOqVCcXCBD
-         4A43/aABw8Qkn6aQ/e50qcZsOfpvai91tRfD/sPsOwZYUq1yqZLIJFksG2VKI+uYQiTe
-         fd7NHwR4Dz+/yXwpG3f2Sqm8j0baawRLtgudeLfvul/yFzXvuxqsWvsAAj1Ly4NI9p8P
-         aFSvfM2x5e4U8Q6oAsE8BnKRVpsw+iiywJvBW6ix0NYTXMpLkYMRyf0J5XSdmp1t6v0/
-         B5pIxKauQfLv+E2d87yr8K9FjNKjkCUtarUPAjmb2xwVJzRop56k3572s3vSYuN8gTLC
-         0Ufw==
-X-Gm-Message-State: AOAM5311m/10haqy37+OcuBQPjadENA0H6NAIJmlczJ25sQd7oyDyJOB
-        qecc5JP9fIwj5sK4/Hou0cZwiQBAvg==
-X-Google-Smtp-Source: ABdhPJzF2oVhniuWDtFTM8NyNEbNV55E/dfyOIDuyw3i9Ju503xU3rvXvpyop+tJdpRoA9zMACTNnA==
-X-Received: by 2002:a05:6808:f15:: with SMTP id m21mr7200694oiw.68.1639070162382;
-        Thu, 09 Dec 2021 09:16:02 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h3sm65676oon.34.2021.12.09.09.16.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 09:16:01 -0800 (PST)
-Received: (nullmailer pid 3115487 invoked by uid 1000);
-        Thu, 09 Dec 2021 17:16:01 -0000
-Date:   Thu, 9 Dec 2021 11:16:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>, devicetree@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Rob Herring <robh+dt@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: pinctrl: apple,pinctrl: Add
- apple,t6000-pinctrl compatible
-Message-ID: <YbI50T2dDww3nVf/@robh.at.kernel.org>
-References: <20211209051001.70235-1-marcan@marcan.st>
- <20211209051001.70235-5-marcan@marcan.st>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KJRsMEiCufFN8dYu+nozb0ZGQF4pRkj8EjJsyMDC1hA=;
+        b=Txfh1mNNViYeU3q8bpjkx7zyLEFtZ8diPLVm8hizkVHEh6no7rmFkAHzAWwrcw7eDc
+         mvB+nEf3FgOcoyK8LP9/LIIDX2slBB5O2+520gtQ4D/oozQLJj5GCHAM6mSxP/WAbRCg
+         g4sro/IsVHej9TX/JXts1zmKoKdzssPFooutrVoagsckjfqbAB7lL2e73FwTuuYpJwEr
+         psnqSKY1hjJzhvw4YNH/BoLuO1L9AtYht7eS+nMoQrqgFnG3YKSrj8Nl2j0cLHO4vEcT
+         xGdfreuBqr0qzICW9d85AAkN4nbeo8qC1NRrVlcBrxU5oDhavxumjT4lo7dUBjvPUyOW
+         mD1Q==
+X-Gm-Message-State: AOAM531RZneizUSMH7W6aY2bpGW2t2832vzqdp3e/LYRlsrRET3/Zoym
+        dgmfdUpnRIug6ze4+XKHXs0+aLY7fO0T4xCjNlE=
+X-Google-Smtp-Source: ABdhPJzD7sQLxXI+0ul6gHy1pLJfEc2cVbG3P/mxPmTfZZd3BBsFt3PkohYiJkNuvuaL0HOXgiJS9rdT/Cx5m6Dy/FQ=
+X-Received: by 2002:a25:3c9:: with SMTP id 192mr7999253ybd.766.1639070255451;
+ Thu, 09 Dec 2021 09:17:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209051001.70235-5-marcan@marcan.st>
+References: <20211209120327.551952-1-emmanuel.deloget@eho.link>
+In-Reply-To: <20211209120327.551952-1-emmanuel.deloget@eho.link>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 9 Dec 2021 09:17:24 -0800
+Message-ID: <CAEf4BzYJ+GPpjcMMYQM_BfQ1-aq6dz_JbF-m5meiCZ=oPbrM=w@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf 1/1] libbpf: don't force user-supplied ifname
+ string to be of fixed size
+To:     Emmanuel Deloget <emmanuel.deloget@eho.link>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 14:10:01 +0900, Hector Martin wrote:
-> This new SoC uses the same pinctrl hardware, so just add a new per-SoC
-> compatible.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+On Thu, Dec 9, 2021 at 4:03 AM Emmanuel Deloget
+<emmanuel.deloget@eho.link> wrote:
+>
+> When calling either xsk_socket__create_shared() or xsk_socket__create()
+> the user supplies a const char *ifname which is implicitely supposed to
+> be a pointer to the start of a char[IFNAMSIZ] array. The internal
+> function xsk_create_ctx() then blindly copy IFNAMSIZ bytes from this
+> string into the xsk context.
+>
+> This is counter-intuitive and error-prone.
+>
+> For example,
+>
+>         int r = xsk_socket__create(..., "eth0", ...)
+>
+> may result in an invalid object because of the blind copy. The "eth0"
+> string might be followed by random data from the ro data section,
+> resulting in ctx->ifname being filled with the correct interface name
+> then a bunch and invalid bytes.
+>
+> The same kind of issue arises when the ifname string is located on the
+> stack:
+>
+>         char ifname[] = "eth0";
+>         int r = xsk_socket__create(..., ifname, ...);
+>
+> Or comes from the command line
+>
+>         const char *ifname = argv[n];
+>         int r = xsk_socket__create(..., ifname, ...);
+>
+> In both case we'll fill ctx->ifname with random data from the stack.
+>
+> In practice, we saw that this issue caused various small errors which,
+> in then end, prevented us to setup a valid xsk context that would have
+> allowed us to capture packets on our interfaces. We fixed this issue in
+> our code by forcing our char ifname[] to be of size IFNAMSIZ but that felt
+> weird and unnecessary.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I might be missing something, but the eth0 example above would include
+terminating zero at the right place, so ifname will still have
+"eth0\0" which is a valid string. Yes there will be some garbage after
+that, but it shouldn't matter. It could cause ASAN to complain about
+reading beyond allocated memory, of course, but I'm curious what
+problems you actually ran into in practice.
+
+>
+> Fixes: 2f6324a3937f8 (libbpf: Support shared umems between queues and devices)
+> Signed-off-by: Emmanuel Deloget <emmanuel.deloget@eho.link>
+> ---
+>  tools/lib/bpf/xsk.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index 81f8fbc85e70..8dda80bcefcc 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -944,6 +944,7 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
+>  {
+>         struct xsk_ctx *ctx;
+>         int err;
+> +       size_t ifnamlen;
+>
+>         ctx = calloc(1, sizeof(*ctx));
+>         if (!ctx)
+> @@ -965,8 +966,10 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
+>         ctx->refcount = 1;
+>         ctx->umem = umem;
+>         ctx->queue_id = queue_id;
+> -       memcpy(ctx->ifname, ifname, IFNAMSIZ - 1);
+> -       ctx->ifname[IFNAMSIZ - 1] = '\0';
+> +
+> +       ifnamlen = strnlen(ifname, IFNAMSIZ);
+> +       memcpy(ctx->ifname, ifname, ifnamlen);
+
+maybe use strncpy instead of strnlen + memcpy? keep the guaranteed
+zero termination (and keep '\0', why did you change it?)
+
+Also, note that xsk.c is deprecated in libbpf and has been moved into
+libxdp, so please contribute a similar fix there.
+
+> +       ctx->ifname[IFNAMSIZ - 1] = 0;
+>
+>         ctx->fill = fill;
+>         ctx->comp = comp;
+> --
+> 2.32.0
+>

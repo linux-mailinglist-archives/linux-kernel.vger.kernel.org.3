@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A5146E9C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A6C46E9C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbhLIOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:20:26 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:5079 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238488AbhLIOUY (ORCPT
+        id S238536AbhLIOUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:20:38 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:51974 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238519AbhLIOU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:20:24 -0500
+        Thu, 9 Dec 2021 09:20:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639059411; x=1670595411;
+  t=1639059416; x=1670595416;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=JFDQNbUNGiv4D/mPwv92UusMXXIWIjon/rOD7iJlQsY=;
-  b=MPJE9ewf9iLi+vbqI48caOOZykP6HjfI/To+870Yxt3SxbMaP62QDH1W
-   J6rTEbwCPsUOmmW5MZGNEKBsQV/o7WHo9OcTTzfOkNTwatCvUueRXiEZD
-   tRcBy8+BCF06sls0dI1BJYUnxlFOzl9c+veWhKPXdkfvPtt/S5/VkSSJ1
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Dec 2021 06:16:50 -0800
+  bh=zCV/o4MZswpET3jmHvOYj26gTy/f1Uf64OvOr/HEOaU=;
+  b=jiONEJiy6nyLFeZlBWqu2f/HiYy7ldQen5NjXqMGLx8xvKySLaa0/avV
+   993IShA4hpX2csp5aVEOVn2NEKYvCYbL+rPuT2G8vBdgGcLZGyB/y5hKD
+   WyS2SkW2Q/AmskMz3fP6sO2jfBE9eD/7G6y0hZwHKXJqh9Ai245jGc7y6
+   A=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 09 Dec 2021 06:16:55 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:16:50 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:16:56 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:16:50 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:55 -0800
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:16:46 -0800
+ 15.2.922.19; Thu, 9 Dec 2021 06:16:51 -0800
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -51,9 +51,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Tao Zhang <quic_taozha@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v2 5/9] coresight-tpdm: Add integration test support
-Date:   Thu, 9 Dec 2021 22:15:39 +0800
-Message-ID: <20211209141543.21314-6-quic_jinlmao@quicinc.com>
+Subject: [PATCH v2 6/9] docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+Date:   Thu, 9 Dec 2021 22:15:40 +0800
+Message-ID: <20211209141543.21314-7-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
 References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
@@ -66,133 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Integration test for tpdm can help to generate the data for
-verification of the topology during TPDM software bring up.
+Add API usage document for sysfs API in TPDM driver.
 
-Sample:
-echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
-echo 1 > /sys/bus/coresight/devices/tpdm1/enable_source
-echo 1 > /sys/bus/coresight/devices/tpdm1/integration_test
-echo 2 > /sys/bus/coresight/devices/tpdm1/integration_test
-cat /dev/tmc_etf0 > /data/etf-tpdm1.bin
-
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- drivers/hwtracing/coresight/Kconfig          |  9 ++++
- drivers/hwtracing/coresight/coresight-tpdm.c | 54 ++++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpdm.h |  8 +++
- 3 files changed, 71 insertions(+)
+ .../ABI/testing/sysfs-bus-coresight-devices-tpdm     | 12 ++++++++++++
+ MAINTAINERS                                          |  1 +
+ 2 files changed, 13 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
 
-diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-index 5c506a1cd08f..60248fef4089 100644
---- a/drivers/hwtracing/coresight/Kconfig
-+++ b/drivers/hwtracing/coresight/Kconfig
-@@ -214,4 +214,13 @@ config CORESIGHT_TPDM
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called coresight-tpdm.
+diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+new file mode 100644
+index 000000000000..fdd0bd0e1c33
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+@@ -0,0 +1,12 @@
++What:		/sys/bus/coresight/devices/<tpdm-name>/available_datasets
++Date:		December 2021
++KernelVersion	5.16
++Contact:	Jinlong Mao or Tao Zhang
++Description:	(Read) Show available datasets for TPDM.
++
++What:		/sys/bus/coresight/devices/<tpdm-name>/integration_test
++Date:		December 2020
++KernelVersion	5.16
++Contact:	Jinlong Mao or Tao Zhang
++Description:	(Write) Run integration test for tpdm.
++
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d763ba684b99..7e2898f1550b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15566,6 +15566,7 @@ M:	Jinlong Mao <quic_jinlmao@quicinc.com>
+ M:	Mathieu Poirier <mathieu.poirier@linaro.org>
+ M:	Suzuki K Poulose <suzuki.poulose@arm.com>
+ S:	Maintained
++F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ F:	Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+ F:	drivers/hwtracing/coresight/coresight-tpdm.c
  
-+config CORESIGHT_TPDM_INTEGRATION_TEST
-+	bool "Enable CoreSight Integration Test For TPDM"
-+	depends on CORESIGHT_TPDM
-+	help
-+	  This option adds support for the CoreSight integration test on this
-+	  devie. Coresight architecture provides integration control modes of
-+	  operation to facilitate integration testing and software bringup
-+	  and/or to instrument topology discovery. The TPDM utilizes integration
-+	  mode to accomplish integration testing and software bringup.
- endif
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-index c0dd216f70eb..891c3efaf30d 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.c
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -135,6 +135,59 @@ static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
- 	CS_LOCK(drvdata->base);
- }
- 
-+#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
-+static ssize_t integration_test_store(struct device *dev,
-+					  struct device_attribute *attr,
-+					  const char *buf,
-+					  size_t size)
-+{
-+	int i, ret = 0;
-+	unsigned long val;
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+
-+	ret = kstrtoul(buf, 10, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != 1 && val != 2)
-+		return -EINVAL;
-+
-+	if (!drvdata->enable)
-+		return -EINVAL;
-+
-+	if (val == 1)
-+		val = ATBCNTRL_VAL_64;
-+	else
-+		val = ATBCNTRL_VAL_32;
-+	CS_UNLOCK(drvdata->base);
-+	writel_relaxed(0x1, drvdata->base + TPDM_ITCNTRL);
-+
-+	for (i = 1; i < 5; i++)
-+		writel_relaxed(val, drvdata->base + TPDM_ITATBCNTRL);
-+
-+	writel_relaxed(0, drvdata->base + TPDM_ITCNTRL);
-+	CS_LOCK(drvdata->base);
-+	return size;
-+}
-+static DEVICE_ATTR_WO(integration_test);
-+#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
-+
-+static struct attribute *tpdm_attrs[] = {
-+#ifdef CONFIG_CORESIGHT_TPDM_INTEGRATION_TEST
-+	&dev_attr_integration_test.attr,
-+#endif /* CORESIGHT_TPDM_INTEGRATION_TEST */
-+	NULL,
-+};
-+
-+static struct attribute_group tpdm_attr_grp = {
-+	.attrs = tpdm_attrs,
-+};
-+
-+static const struct attribute_group *tpdm_attr_grps[] = {
-+	&tpdm_attr_grp,
-+	NULL,
-+};
-+
- static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
- {
- 	struct device *dev = &adev->dev;
-@@ -167,6 +220,7 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
- 	desc.ops = &tpdm_cs_ops;
- 	desc.pdata = adev->dev.platform_data;
- 	desc.dev = &adev->dev;
-+	desc.groups = tpdm_attr_grps;
- 	drvdata->csdev = coresight_register(&desc);
- 	if (IS_ERR(drvdata->csdev))
- 		return PTR_ERR(drvdata->csdev);
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-index ba99c20e12bb..9929a26f0f0b 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.h
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-@@ -14,6 +14,14 @@
- /* DSB Subunit Registers */
- #define TPDM_DSB_CR		(0x780)
- 
-+/* TPDM integration test registers */
-+#define TPDM_ITATBCNTRL		(0xEF0)
-+#define TPDM_ITCNTRL		(0xF00)
-+
-+/* Register value for integration test */
-+#define ATBCNTRL_VAL_32		0xC00F1409
-+#define ATBCNTRL_VAL_64		0xC01F1409
-+
- /**
-  * This enum is for PERIPHIDR0 register of TPDM.
-  * The fields [6:0] of PERIPHIDR0 are used to determine what
 -- 
 2.17.1
 

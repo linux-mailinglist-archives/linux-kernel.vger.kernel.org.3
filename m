@@ -2,82 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E765446E66D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09E646E66A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbhLIKQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:16:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:41301 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232856AbhLIKQh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:16:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238291700"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="238291700"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:13:03 -0800
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="463163094"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:13:02 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvGPC-0042mr-K1;
-        Thu, 09 Dec 2021 12:12:02 +0200
-Date:   Thu, 9 Dec 2021 12:12:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
- nodes
-Message-ID: <YbHWcvrYXiS5sCm1@smile.fi.intel.com>
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <20211129122052.GA7921@alpha.franken.de>
- <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
- <YbDtiC5CJJGSL/9C@smile.fi.intel.com>
- <20211208220759.GA6406@alpha.franken.de>
+        id S233728AbhLIKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:16:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48044 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230330AbhLIKQC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:16:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D256EB82417;
+        Thu,  9 Dec 2021 10:12:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A555C341CF;
+        Thu,  9 Dec 2021 10:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639044746;
+        bh=cEmt8CLs9SbD6QJkC26M6lS7gchfwBo62aRiAyOrkCI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eGkf+NdeNP5J9seRktnul7rN7LNw/fuL132tf474y/7f1Z09dQpgiWVMeth3JtvcF
+         wojOXhFxjGDgA2iQhZBDFFOPCcsMfhXQ+9gN+dMSsQkbXC9dZFx38toeIkQa5Lqj/e
+         wAASKPyOVC+Ch0O7wtaUl1heBI7pRrGwpHf2ZLQTTXjw76jIN/yf+3ivlHvrEkfKOY
+         ZYWY+vSsZFL93Jt6I3jhSttL6W3w6lX5GGnfebnoLqXI6LmaWQHaqM5/ztSsMEY0Jx
+         u8EMY/h7/hQBMeAH5Q0FZnbVG5wnsVvNlfFqnZOT+5R5Amv4tsx1ETTM/9Hfsq8SFP
+         2TDOGkjuH1+xw==
+Received: by mail-oi1-f172.google.com with SMTP id t23so8050680oiw.3;
+        Thu, 09 Dec 2021 02:12:26 -0800 (PST)
+X-Gm-Message-State: AOAM532wP8YzVHQ/3atfdv7Wb4r777BfikfMXDq1DliOfLNJrf4JxwdO
+        SJwRw4nLSPTXqyM2Y+wtUMIYGS9iR+u4YDv0owg=
+X-Google-Smtp-Source: ABdhPJwmFwFH7yNeKLDGv9ESijsgrsV3qnfotlQUfaxSR/wldiFyeSXczBI/C4IrzfM5JXfi3LehFhiyMyvYaYlYddw=
+X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr4832308oib.33.1639044745638;
+ Thu, 09 Dec 2021 02:12:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208220759.GA6406@alpha.franken.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1638515726.git.qinjian@cqplus1.com> <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
+ <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
+ <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com> <CAK8P3a1-4XnrkWc_0SPns9xj9Yp4xWhEahLOkeafXmAYWfbYJA@mail.gmail.com>
+ <6a8271f5c6b74ce7874b7583b8d7eee4@cqplus1.com> <CAK8P3a2w2rava_ozRfWizYDYRe7J3j-=wMgzGA_9t0kd3qJ1NA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2w2rava_ozRfWizYDYRe7J3j-=wMgzGA_9t0kd3qJ1NA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 9 Dec 2021 11:12:13 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEAQi58iXwoBoVHzqcM9EVU1O-_D+HaAVWpQYvjRYT+mg@mail.gmail.com>
+Message-ID: <CAMj1kXEAQi58iXwoBoVHzqcM9EVU1O-_D+HaAVWpQYvjRYT+mg@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
+ SP7021 SoC
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Linus Walleij <linusw@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 11:07:59PM +0100, Thomas Bogendoerfer wrote:
-> On Wed, Dec 08, 2021 at 07:38:16PM +0200, Andy Shevchenko wrote:
-> > On Mon, Nov 29, 2021 at 01:30:17PM +0100, Geert Uytterhoeven wrote:
-> > > On Mon, Nov 29, 2021 at 1:21 PM Thomas Bogendoerfer
-> > > <tsbogend@alpha.franken.de> wrote:
-> > > > On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
+On Thu, 9 Dec 2021 at 10:58, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Dec 9, 2021 at 9:49 AM qinjian[=E8=A6=83=E5=81=A5] <qinjian@cqplu=
+s1.com> wrote:
+> > > On Tue, Dec 7, 2021 at 8:21 AM qinjian[=E8=A6=83=E5=81=A5] <qinjian@c=
+qplus1.com> wrote:
+> > > > > > @@ -152,6 +152,7 @@ textofs-$(CONFIG_ARCH_MSM8X60) :=3D 0x00208=
+000
+> > > > > >  textofs-$(CONFIG_ARCH_MSM8960) :=3D 0x00208000
+> > > > > >  textofs-$(CONFIG_ARCH_MESON) :=3D 0x00208000
+> > > > > >  textofs-$(CONFIG_ARCH_AXXIA) :=3D 0x00308000
+> > > > > > +textofs-$(CONFIG_ARCH_SUNPLUS) :=3D 0x00308000
+> > > > >
+> > > > > What is this needed for? If it boots without this line, better av=
+oid
+> > > > > adding it, because
+> > > > > it will increase the kernel size for everyone else (unless they a=
+lso enable
+> > > > > AXXIA).
+> > > > >
+> > > >
+> > > > SP7021 reserved the 1st 1MB memory for ARM926@P-Chip using,
+> > > > The 2nd 1MB memory for IOP device and the 3rd 1MB memory for bootlo=
+ader.
+> > > > I'll add these comments at next commit.
+> > >
+> > > I think you can just remove the memory from the system memory map in =
+the
+> > > device tree and pretend it only starts after the bootloader. It's bee=
+n a while
+> > > since I looked at this though, so I could be misremembering what the =
+minimum
+> > > boundaries are for doing this.
+> >
+> > I have test following 3 methods:
+>
+> Right, I was thinking of the third method here, which has the advantage o=
+f
+> not requiring the same odd base address for all other platforms, this
+> is important to us.
+> I don't see what the problem is with it in your example, does that mean y=
+ou
+> have a little less usable memory, or that something fails to work right? =
+I don't
+> know what the requirements are for memreserve.
+>
+> Adding a few more people to Cc, maybe they have ideas about how this
+> was solved elsewhere.
+>
 
-...
+The phys2virt patching now assumes a granularity of 2 MiB. This means
+that by removing 3 MiB at the start of DRAM, you lose 1 MIB of usable
+memory unless you find a way to memremap() it directly.
 
-> > > > are you ok with completly removing rbtx4938 support ? Can I rbtx4939
-> > > > board support, too ?
-> > > 
-> > > Fine for me, I only have rbtx4927.
-> > 
-> > Is there any news? I still see my patch well applied against latest Linux Next.
-> > If the removal is going to be postponed, consider applying this patch then. So
-> > we may move forward.
-> 
-> https://lore.kernel.org/all/20211130164558.85584-1-tsbogend@alpha.franken.de/
-> 
-> The second patch in that series touches drivers/mtd so I'm waiting for
-> a Acked-by. But I could apply the first patch...
+So I think a combination of the two approaches might work here
+- remove 2 MiB from the the /memory node.
+- add 1 MiB to the text offset instead of 3 MiB.
 
-Yes, please!
+Note that this is a compromise, and still not our preferred approach.
+It would be far better to move these reserved regions to the end of
+DRAM instead.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+> > 1. current patch
+> > DT:
+> >         memory {
+> >                 reg =3D <0x00000000 0x20000000>; /* 512MB */
+> >         };
+> >
+> >         reserved-memory {
+> >                 #address-cells =3D <1>;
+> >                 #size-cells =3D <1>;
+> >                 ranges;
+> >
+> >                 iop_reserve: iop_device {
+> >                         no-map;
+> >                         reg =3D <0x00100000 0x00100000>;
+> >                 };
+> >                 a926_reserve: a926_memory {
+> >                         no-map;
+> >                         reg =3D <0x00000000 0x00100000>;
+> >                 };
+> >         };
+> > arch/arm/Makefile:
+> >         textofs-$(CONFIG_ARCH_SUNPLUS) :=3D 0x00308000
+> >
+> > bootlog & meminfo :
+> > [    0.000000] Zone ranges:
+> > [    0.000000]   Normal   [mem 0x0000000000000000-0x000000001fffffff]
+> > [    0.000000] Movable zone start for each node
+> > [    0.000000] Early memory node ranges
+> > [    0.000000]   node   0: [mem 0x0000000000000000-0x00000000001fffff]
+> > [    0.000000]   node   0: [mem 0x0000000000200000-0x000000001fffffff]
+> > [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000001=
+fffffff]
+> >
+> > ~ # cat /proc/meminfo
+> > MemTotal:         514008 kB
+> > MemFree:          491960 kB
+> > MemAvailable:     488608 kB
+> >
+> >
+> >
+> > 2. DT same as case 1, but no modify @ arch/arm/Makefile
+> >
+> > bootlog & meminfo :
+> > [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for n=
+ode 'iop_device': base 0x00100000, size 1 MiB
+> > [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for n=
+ode 'a926_memory': base 0x00000000, size 1 MiB
+> > ...
+> > [    0.000000] Zone ranges:
+> > [    0.000000]   Normal   [mem 0x0000000000000000-0x000000001fffffff]
+> > [    0.000000] Movable zone start for each node
+> > [    0.000000] Early memory node ranges
+> > [    0.000000]   node   0: [mem 0x0000000000000000-0x000000001fffffff]
+> > [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000001=
+fffffff]
+> >
+> > ~ # cat /proc/meminfo
+> > MemTotal:         516056 kB
+> > MemFree:          493928 kB
+> > MemAvailable:     490572 kB
+> >
+> >
+> >
+> > 3. DT:
+> >         memory {
+> >                 reg =3D <0x00300000 0x1FD00000>; /* 512 - 3 MB */
+> >         };
+> > no modify @ arch/arm/Makefile
+> >
+> > bootlog & meminfo :
+> > [    0.000000] Zone ranges:
+> > [    0.000000]   Normal   [mem 0x0000000000400000-0x000000001fffffff]
+> > [    0.000000] Movable zone start for each node
+> > [    0.000000] Early memory node ranges
+> > [    0.000000]   node   0: [mem 0x0000000000400000-0x000000001fffffff]
+> > [    0.000000] Initmem setup node 0 [mem 0x0000000000400000-0x000000001=
+fffffff]
+> >
+> > ~ # cat /proc/meminfo
+> > MemTotal:         511964 kB
+> > MemFree:          489636 kB
+> > MemAvailable:     486292 kB
+> >
+> >
+> >
+> > I think method 1 should be correct (compare method 2) & better (compare=
+ method 3).
+> >

@@ -2,69 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC6A46F4F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED4346F4F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhLIUfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:35:31 -0500
-Received: from mxout01.lancloud.ru ([45.84.86.81]:48156 "EHLO
-        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbhLIUf3 (ORCPT
+        id S232089AbhLIUgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229657AbhLIUgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:35:29 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 0A74D20AB94D
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d841bc59-a2a6-27f5-10af-05fe2e24067a@omp.ru>
- <YbI/6OIKM7qvLQcp@smile.fi.intel.com>
- <bfd96f5a-94c7-cee6-9546-14dc59cb8542@omp.ru>
- <YbJXjmsDJWlr3xpB@smile.fi.intel.com> <YbJYr7jg162RVP12@smile.fi.intel.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <fbc6f255-09e8-49be-8656-fac20968854c@omp.ru>
-Date:   Thu, 9 Dec 2021 23:31:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 9 Dec 2021 15:36:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC8C061746;
+        Thu,  9 Dec 2021 12:32:45 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639081963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2Zx4DzHcJuKFVR6I6pM84QqZd+nRGuDXek8rfRkIMk=;
+        b=PMlHc47jMHeHpw99BO9sg3zedLq5d4B8nc3AxuM6euhsArxYRgHrHGCwaVgT6koam6q5Fb
+        7IjyWHHcnuesdfp9jyBgc9ldc07rTB+ZCXXZ3tiHeLSgWFNSGaF11VKKpzij6SanhQ5g6i
+        lZbtftMQFAmyK1fyrHXZQtwJ171iCSKKMfZep2mtrRxMd/0P3lI55EUG0HEjx2Fnz7DbeU
+        DV4wBmFy7GEtXMUz0Pty++mqTHGOWwvtDvE+Jtu8ejdELCsF082WxVkklmlPlnvaqiabnt
+        jEW2zMrN6ILYghH7VFsjyu4Wv7EOCKwrtDR2XCW9drIVh1aBWYRZrolwCoywWA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639081963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2Zx4DzHcJuKFVR6I6pM84QqZd+nRGuDXek8rfRkIMk=;
+        b=u5GXr0BaWLLYyA2le45d4B9fuhsMSv0ml5F/eXn19auKX+MOSBHJylA2QvG23s4uSJwHUK
+        mZuRMCGg3H/EBLDw==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <20211209162129.GS6385@nvidia.com>
+References: <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com> <878rx480fk.ffs@tglx>
+ <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <87sfv2yy19.ffs@tglx> <20211209162129.GS6385@nvidia.com>
+Date:   Thu, 09 Dec 2021 21:32:42 +0100
+Message-ID: <878rwtzfh1.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <YbJYr7jg162RVP12@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 10:27 PM, Andy Shevchenko wrote:
+On Thu, Dec 09 2021 at 12:21, Jason Gunthorpe wrote:
+> On Thu, Dec 09, 2021 at 09:37:06AM +0100, Thomas Gleixner wrote:
+> If we keep the MSI emulation in the hypervisor then MSI != IMS.  The
+> MSI code needs to write a addr/data pair compatible with the emulation
+> and the IMS code needs to write an addr/data pair from the
+> hypercall. Seems like this scenario is best avoided!
+>
+> From this perspective I haven't connected how virtual interrupt
+> remapping helps in the guest? Is this a way to provide the hypercall
+> I'm imagining above?
 
-[...]
->>>> Does it fix platform_get_irq_optional()?
->>>
->>>    Of course! :-)
->>
->> Can you share link to lore.kernel.org, please?
->> It will make much easier to try and comment.
-> 
-> For the record it does not fix platform_get_irq_optional() AFAICS.
+That was my thought to avoid having different mechanisms.
 
-   Again, why? My only issue is stoppping to return IRQ0 --- which it does. :-)
+The address/data pair is computed in two places:
 
-> Have you read the discussion:
-> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/T/#u
-> ?
+  1) Activation of an interrupt
+  2) Affinity setting on an interrupt
 
-  Yes, I have. I just don't care about it much... :-)
+Both configure the IRTE when interrupt remapping is in place.
 
-MBR, Sergey
+In both cases a vector is allocated in the vector domain and based on
+the resulting target APIC / vector number pair the IRTE is
+(re)configured.
+
+So putting the hypercall into the vIRTE update is the obvious
+place. Both activation and affinity setting can fail and propagate an
+error code down to the originating caller.
+
+Hmm?
+
+Thanks,
+
+        tglx
+
+

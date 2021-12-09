@@ -2,73 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE7746E21E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CE846E21F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbhLIFs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S232405AbhLIFs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbhLIFsy (ORCPT
+        with ESMTP id S232371AbhLIFsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 00:48:54 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A7AC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:45:21 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id m25so4319709qtq.13
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014B9C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:45:22 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso5136788otj.1
         for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:45:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=Wcs4fYEQI1Jqq6kBZB1ZnOXmYbDoVM5sVRAmN4BWitA=;
-        b=MlsalTZOPPARgWp5jOY14+HoXjQAVBQippX01GmqBUhmdTlU7N/JS8/KlWFaGahL26
-         Yg8+DkXwOSEDVhlnMSkHwKhtHE5AT3gMDX+bMisQ8WuulUJWsUpqfY1EHwlA0SIAYC9f
-         ItYECk4YZkQhMm28hA6XfMiefA2hP8n2V89gNzvFOmO3517TwwGnVRhd8PYN1BhgdfXE
-         d33NhXdfiUVSFJj/m23zAKzo3AEjWn54NNk1zuV2ltqKvFxK7dq6rn7cguvZWbgenHVV
-         f/HSnYgv/Wi92pHRigo+Xef6z/ErJcJTkgXXTNikpmkJh1shNr8yOaLaCIDKCyDhSxhR
-         jr8A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jPO824oWCqCAIylGScuHcjXuh3MiVM0SEMprq9fJc/Y=;
+        b=WMzwG7UOLY4168mrKFiRMptFiXBJl+31LJ0dy3IJIMLhcM6bcR8SqPSdxrJsJBRpMI
+         F0hMwJNaZkk38qgLWETeaM68s1XFZ73xPJQlTW/Vlub5Ovu9YX5G5Beh140447JM5CIh
+         OzVMeJPZdFD6EVQswHE1L0PAt5DSPIJsxdbnJczYskmIIRSe2lk8tcrWzuZ2I69TkP40
+         9Br9vXC9cfxCamf6orYvfu8oJ5kYfF++uesT0JK4/xRl59q6XWyfdnfFZKte35AJ5ybJ
+         WbOQzjZWy2XTr1aLIxF4Z7eb5vR+Hl1rKB37LaMs8uDtv/0AGfeI2fPprEm5uOdaVxa9
+         6zVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=Wcs4fYEQI1Jqq6kBZB1ZnOXmYbDoVM5sVRAmN4BWitA=;
-        b=CfzXExYRZ1/VAZXjgZpvY1q3IbQrxfAWobmJLU/PmGKbVsn7S8rHxYUQFZQsVDTlV7
-         m8wFLAZ+9N9/tai5o0sZVZMzrzZgrAMkUBoEAflxzCxhZCh2KrY4DWEHWdVKt87xmUbL
-         iJ04/R1uQUSTwBxi/dn3jNa25Fxp/kMB1KMVZCXO1lUNZgtd/DN6qnCkuqTdqRrTq2Rd
-         KIQu5qe5p+vvSGrbAOqS46aPfGbwnta3/sp7dkmE/RsL0jyK7Na3CiYZlNIDisFQkcg9
-         6gxKboOC1oY8ZGOFfgkuXiEE66mSCcY7xvlArJh8kanaJgc+MbhuE4gMdvQjmhCgjJLg
-         4jxA==
-X-Gm-Message-State: AOAM532dmDfEMBIOr00UZ3avFs4AjhR76MBK7SrrJLydYxUCWtvBygQ/
-        kHnTc6OejWRBtduQPE1SlgZVlwORbcfElA==
-X-Google-Smtp-Source: ABdhPJyeMj/jXj5Z9K4zAIgi5asZ4Lpf4iEFpjV/t6ROs+o5QQcPTdf46Dn4NpIzOTNmeKupmTrnLA==
-X-Received: by 2002:ac8:7d47:: with SMTP id h7mr14606926qtb.486.1639028720171;
-        Wed, 08 Dec 2021 21:45:20 -0800 (PST)
-Received: from [192.168.1.227] (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id f34sm3522424qtb.7.2021.12.08.21.45.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 21:45:19 -0800 (PST)
-Date:   Wed, 8 Dec 2021 21:44:54 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Borislav Petkov <bp@suse.de>
-cc:     Dan Williams <dan.j.williams@intel.com>,
-        Anjaneya Chagam <ajaneya.chagam@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: 5.16-rc: "x86/boot: Pull up cmdline" breaks mem=
-Message-ID: <ae2bb14d-d27a-e76d-adde-ef888d373343@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jPO824oWCqCAIylGScuHcjXuh3MiVM0SEMprq9fJc/Y=;
+        b=qDRWdHaZYTrRDnlrrEgqWydTJd3E9Sfec7ybpaKZf3eWEAtpg8b23ALgdaZNYTYZZ9
+         TdsspIIBeDpWDZpVCPo2bxzkXZg4HPBVy9GrKboNKuKed8wK2dXK7emJeQMTi+cZrku1
+         Qf/O3B30ndwaEg0I9+wSRpNvYoE/iM/IiKH9N0IGXNxFbG1aw4rcKGCtBWDIWsIe+W8y
+         cO4UyrdPU5/F26wUqBFzIsPZIBCtGrPCAstC4pPaySoueyZPFkDDG8M2HcO7lfBk/KeI
+         1rMUKLAAmS5+pLXcQSTPex2JuWVmXc5iLixChlImgXfR0G1RhiiJCkRlbwqkMfJ6N8Ks
+         W7GQ==
+X-Gm-Message-State: AOAM530nsMw8JEiBLCwG8jmNNDaTqGGsUpf7k+V7ifyBUa2Vrg93h4Ou
+        F4wvKZKPNfGiKzq3C/Ala97bPJWt2nbhJPdPI+j9V/EpqiQ=
+X-Google-Smtp-Source: ABdhPJyEb3+1aoSxlf1ofj1Dity6vMLR7eXtunxwDH83OfJkfcr7Q5xflQstjPI17uGGO1g1ACIGNW84/t9UOIqkumU=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr3657304otj.35.1639028721086;
+ Wed, 08 Dec 2021 21:45:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20211208191642.3792819-1-pgonda@google.com> <20211208191642.3792819-3-pgonda@google.com>
+In-Reply-To: <20211208191642.3792819-3-pgonda@google.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Wed, 8 Dec 2021 21:45:09 -0800
+Message-ID: <CAA03e5EX7NtaPvMo=xz0t3rEGCvDfeRUW9J-5pPVPicS1T5w8A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] selftests: sev_migrate_tests: Fix sev_ioctl()
+To:     Peter Gonda <pgonda@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bad news, I'm afraid: I boot with "mem=1G" on the cmdline for testing,
-which worked fine on 5.16-rc1, but does not work on 5.16-rc2 onwards.
+On Wed, Dec 8, 2021 at 11:16 AM Peter Gonda <pgonda@google.com> wrote:
+>
+> TEST_ASSERT in SEV ioctl was allowing errors because it checked return
+> value was good OR the FW error code was OK. This TEST_ASSERT should
+> require both (aka. AND) values are OK. Removes the LAUNCH_START from the
+> mirror VM because this call correctly fails because mirror VMs cannot
+> call this command. Currently issues with the PSP driver functions mean
 
-Bisection arrived at 8d48bf8206f7 ("x86/boot: Pull up cmdline preparation
-and early param parsing"); and reverting c0f2077baa41 ("x86/boot: Mark
-prepare_command_line() __init") then 8d48bf820cf7 does fix my "mem=1G".
+This commit description is now stale. The previous patch removes the
+LAUNCH_START -- not this patch.
 
-I have not tried 5.15-stable, but guess that is likewise afflicted.
-Sympathy, but no suggestions from me: early init ordering is hard!
+> the firmware error is not always reset to SEV_RET_SUCCESS when a call is
+> successful. Mainly sev_platform_init() doesn't correctly set the fw
+> error if the platform has already been initialized.
+>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Marc Orr <marcorr@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> ---
+>  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> index fbc742b42145..4bb960ca6486 100644
+> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> @@ -30,8 +30,9 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+>         };
+>         int ret;
+>
+> +
 
-Hugh
+nit: Looks like you picked up an extra new line. Since you need to
+fixup the commit description, let's fix this up too.
+
+>         ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
+> -       TEST_ASSERT((ret == 0 || cmd.error == SEV_RET_SUCCESS),
+> +       TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
+>                     "%d failed: return code: %d, errno: %d, fw error: %d",
+>                     cmd_id, ret, errno, cmd.error);
+>  }
+> --
+> 2.34.1.400.ga245620fadb-goog
+>

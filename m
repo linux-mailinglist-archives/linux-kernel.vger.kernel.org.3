@@ -2,171 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96AE46E55E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07B446E589
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbhLIJWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:22:04 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57710 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbhLIJWC (ORCPT
+        id S236143AbhLIJbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:31:53 -0500
+Received: from dvalin.narfation.org ([213.160.73.56]:52302 "EHLO
+        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231586AbhLIJbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:22:02 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3106F210FE;
-        Thu,  9 Dec 2021 09:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639041508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 9 Dec 2021 04:31:52 -0500
+X-Greylist: delayed 433 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 04:31:52 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1639041665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=6QbRyvBJU2JXdRLiMrJcVE+/FZ0lf/5cszXO/3hkGeA=;
-        b=br7GlOg3MXNIzCHMhtyt7zDsiMaTOousswnpmK8aBb2nzWt9e1wSltwPsYn88WopT1ljRh
-        lRMtkGoNRe7yfGT+Aov2iywIHrzfoFPxVkXXvr6YccmSlNE83HOUbj2W/3rxTzsO7/sVib
-        h/OgLLw/lS+/WRjOlXRRdn4omPtA7NA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639041508;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6QbRyvBJU2JXdRLiMrJcVE+/FZ0lf/5cszXO/3hkGeA=;
-        b=LtBEQO3g4DUG39BKOwhj4qJAibV+NyZab5/zl4O8H6F+tp48NFrMXpCM4xo957NtcFKG4i
-        qQ3G7OmlFhiGJdAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D81013CBE;
-        Thu,  9 Dec 2021 09:18:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yZx3IOPJsWFqcgAAMHmgww
-        (envelope-from <nstange@suse.de>); Thu, 09 Dec 2021 09:18:27 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Stephan =?utf-8?Q?M=C3=BCller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-Subject: Re: [PATCH 08/18] crypto: testmgr - run only subset of DH vectors based on config
-References: <20211201004858.19831-1-nstange@suse.de>
-        <20211201004858.19831-9-nstange@suse.de>
-        <e93452b8-5779-c2a8-b099-3910eba9a88e@suse.de>
-Date:   Thu, 09 Dec 2021 10:18:27 +0100
-In-Reply-To: <e93452b8-5779-c2a8-b099-3910eba9a88e@suse.de> (Hannes Reinecke's
-        message of "Wed, 1 Dec 2021 08:28:00 +0100")
-Message-ID: <87sfv2kufw.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+        bh=HKfoBlRfsPWUt5hnOkqJORTtA2aNncI/9GyUqXURfVQ=;
+        b=wKzcE01/NZcjkvW5RMDJ2EPP36tRpCwo0vG+t7E/66evxG9D5lx0y5VQQy0B0RJQVXUuTV
+        PMg/f8kgcqOf9Rjek3YnAqQrTtjYbOU11faThswZXApeD559sjQqLDfG8DxN2GSVne3gTb
+        kuRGeiKZ5cjpBgKY5dNeZPO7aDduZRU=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Deren Wu <Deren.Wu@mediatek.com>
+Cc:     Mark-YW Chen <Mark-YW.Chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Soul Huang <Soul.Huang@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        Deren Wu <Deren.Wu@mediatek.com>, KM Lin <km.lin@mediatek.com>,
+        Robin Chiu <robin.chiu@mediatek.com>,
+        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
+        Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com,
+        linux-firmware <linux-firmware@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Deren Wu <deren.wu@mediatek.com>, jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date:   Thu, 09 Dec 2021 10:21:02 +0100
+Message-ID: <2314855.OJx0zA1Pyt@ripper>
+In-Reply-To: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="nextPart3341260.rLAWO6SjPS"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hannes Reinecke <hare@suse.de> writes:
+--nextPart3341260.rLAWO6SjPS
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk, Felix Fietkau <nbd@nbd.name>, Lorenzo Bianconi <lorenzo.bianconi@redhat.com>, Deren Wu <Deren.Wu@mediatek.com>
+Cc: Mark-YW Chen <Mark-YW.Chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Soul Huang <Soul.Huang@mediatek.com>, YN Chen <YN.Chen@mediatek.com>, Deren Wu <Deren.Wu@mediatek.com>, KM Lin <km.lin@mediatek.com>, Robin Chiu <robin.chiu@mediatek.com>, CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>, Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com, linux-firmware <linux-firmware@kernel.org>, linux-wireless <linux-wireless@vger.kernel.org>, linux-mediatek <linux-mediatek@lists.infradead.org>, linux-kernel <linux-kernel@vger.kernel.org>, Deren Wu <deren.wu@mediatek.com>, jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date: Thu, 09 Dec 2021 10:21:02 +0100
+Message-ID: <2314855.OJx0zA1Pyt@ripper>
+In-Reply-To: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com>
 
-> On 12/1/21 1:48 AM, Nicolai Stange wrote:
->> With the previous patches, the testmgr now has up to four test vectors f=
-or
->> DH which all test more or less the same thing:
->> - the two vectors from before this series,
->> - the vector for the ffdhe2048 group, enabled if
->>    CONFIG_CRYPTO_DH_GROUPS_RFC7919 is set and
->> - the vector for the modp2048 group, similarly enabled if
->>    CONFIG_CRYPTO_DH_GROUPS_RFC3526 is set.
->>
->> In order to avoid too much redundancy during DH testing, enable only a
->> subset of these depending on the kernel config:
->> - if CONFIG_CRYPTO_DH_GROUPS_RFC7919 is set, enable only the ffdhe2048
->>    vector,
->> - otherwise, if CONFIG_CRYPTO_DH_GROUPS_RFC3526 is set, enable only
->>    the modp2048 vector and
->> - only enable the original two vectors if neither of these options
->>    has been selected.
->>
->> Note that an upcoming patch will make the DH implementation to reject any
->> domain parameters not corresponding to some safe-prime group approved by
->> SP800-56Arev3 in FIPS mode. Thus, having CONFIG_FIPS enabled, but
->> both of CONFIG_CRYPTO_DH_GROUPS_RFC7919 and
->> CONFIG_CRYPTO_DH_GROUPS_RFC3526 unset wouldn't make much sense as it wou=
-ld
->> render the DH implementation unusable in FIPS mode. Conversely, any
->> reasonable configuration would ensure that the original, non-conforming
->> test vectors would not get to run in FIPS mode.
->>
->
-> For some weird reason the NVMe spec mandates for its TLS profile the
-> ffdhe3072 group, so I would prefer if you would be using that as the
-> default group for testing.
+On Thursday, 9 December 2021 09:24:11 CET Deren Wu wrote:
+> From: Deren Wu <deren.wu@mediatek.com>
+> 
+> Update binary firmware for MT7921 WiFi devices
+> 
+> File: mediatek/WIFI_MT7961_patch_mcu_1_2_hdr.bin
+> Version: 20211129210838a
+> File: mediatek/WIFI_RAM_CODE_MT7961_1.bin
+> Version: 20211129210917
 
-Done for v2.
+Thank you for the firmware update. With this firmware and the mt76.git 
+commit 678071ef7029 ("mt76: mt7615: clear mcu error interrupt status on 
+mt7663") + hostapd commit 14ab4a816c68 ("Reject ap_vendor_elements if
+its length is odd") , I was able to connect to an 6GHz AP:
 
->
->> Signed-off-by: Nicolai Stange <nstange@suse.de>
->> ---
->>   crypto/testmgr.h | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/crypto/testmgr.h b/crypto/testmgr.h
->> index d18844c7499e..b295512c8f22 100644
->> --- a/crypto/testmgr.h
->> +++ b/crypto/testmgr.h
->> @@ -1331,8 +1331,7 @@ static const struct kpp_testvec dh_tv_template[] =
-=3D {
->>   	.expected_a_public_size =3D 256,
->>   	.expected_ss_size =3D 256,
->>   	},
->> -#endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC7919) */
->> -#if IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526)
->> +#elif IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526)
->>   	{
->>   	.secret =3D
->>   #ifdef __LITTLE_ENDIAN
->> @@ -1423,7 +1422,7 @@ static const struct kpp_testvec dh_tv_template[] =
-=3D {
->>   	.expected_a_public_size =3D 256,
->>   	.expected_ss_size =3D 256,
->>   	},
->> -#endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526) */
->> +#else
->>   	{
->>   	.secret =3D
->>   #ifdef __LITTLE_ENDIAN
->> @@ -1642,6 +1641,7 @@ static const struct kpp_testvec dh_tv_template[] =
-=3D {
->>   	.expected_a_public_size =3D 256,
->>   	.expected_ss_size =3D 256,
->>   	},
->> +#endif
->>   };
->>     static const struct kpp_testvec curve25519_tv_template[] =3D {
->>
-> ... and maybe add a config option to run a full test.
+    $ cat > station_sae_test.conf << "EOF"
+    country=US
+    network={
+            scan_ssid=1
+            ssid="Maverick6g"
+            key_mgmt=SAE
+            psk="testtest"
+            proto=RSN
+            ieee80211w=2
+            beacon_int=100
+    }
+    EOF
 
-I didn't do this at this point, because I don't see much value in
-running tests on more than one randomly selected DH group, i.e. on
-ffdhe3072 and modp2048: both test vectors test the same code paths.
+    $ ip link set up dev wlp5s0
+    $ ./wpa_supplicant -D nl80211 -i wlp6s0 -c ~/station_sae_test.cfg -B
+    $ iw dev wlp5s0 link
+    Connected to 00:03:7f:12:8c:8c (on wlp5s0)
+            SSID: Maverick6g
+            freq: 6115
+            RX: 3092674 bytes (26805 packets)
+            TX: 114756 bytes (1073 packets)
+            signal: -49 dBm
+            rx bitrate: 1080.6 MBit/s 80MHz HE-MCS 10 HE-NSS 2 HE-GI 0 HE-DCM 0
+            tx bitrate: 6.5 MBit/s MCS 0
+    
+            bss flags:      short-slot-time
+            dtim period:    2
+            beacon int:     100
+    $ ping ff02::1%wlp5s0
+    ....
+     
 
-It might perhaps make sense to run tests for all the DH safe-prime
-groups each for verifying that the resp. ->p primes are all correct. But
-that would be a large TV dump and I'm not sure it would be desirable...
+Just as note: It is still not possible to see beacons when using the card in 
+monitor mode.
 
-Thanks,
+Tested-by: Sven Eckelmann <sven@narfation.org>
 
-Nicolai
+Kind regards,
+	Svem
+--nextPart3341260.rLAWO6SjPS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
---=20
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
-ermany
-(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGxyn4ACgkQXYcKB8Em
+e0YICA/9HP/KgPvp7hf4CLElCGNnekR8cj2P6tEOYqIpQwvmG+FfxVSBESzKJDbL
+jb0U+dnm9hooIkgX/UPcaSiiaDPRzek3xqZyaFvl4aZRN3iK64ovTt4ytDrGmBi6
+Ew5kI7vevnAjt/RDYNKCPobGqmjKyslCezJnReNAVTlk7v0R5fiX2i+mwsKv3GB0
+mzpVEaIoWsKuYHwhypHF1l2Ay2SuRRpnORQg2DyfWwd5bU39Q7kN/r4nybhPjJ+W
+QUA6sYhx/p09c/SzJo9lL+vBVbrBzZwxGTaCdGi7i0EoEMblIcmruB3d3OHam5y/
+uBwOy6E46PIStRfw3vbq38ZBM10g3z4qjA/OgfSUBY3kTF/PcLUDwnMaYqKgFAcp
+W7MfHa0tpDixKTortPic7QBzp8KGvsAYfXWvN7xSVZCVbZZBRHqCaBYW7dVPC/9M
+CNiGZj90gUqLDnLirm/O/K3UvMJqZYqhVula3BxNSIkL1TczyBtIZDQYF4iRwfIb
+XTJX8eVpcij9DCuMOEp0guQ5ogbgP/+OG6E6RUlw9eX9KcjZl+a+BsCyy90J4m0P
+d2sxR6qMwa8NoV7cF0iyoEyhVpEs9FPzLXWRhM4dDIR5FRObMTaFsmXrgQKwxOL7
+q2lQra2dtTU5Az11mZd0WxqPFr9/sbBIWjSv6V+vZy5PEb1HqBI=
+=syZA
+-----END PGP SIGNATURE-----
+
+--nextPart3341260.rLAWO6SjPS--
+
+
+

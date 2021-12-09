@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C730B46F795
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC3F46F796
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbhLIXkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S234403AbhLIXlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXkG (ORCPT
+        with ESMTP id S229760AbhLIXlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:40:06 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D70EC061746;
-        Thu,  9 Dec 2021 15:36:32 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id p8so11403167ljo.5;
-        Thu, 09 Dec 2021 15:36:32 -0800 (PST)
+        Thu, 9 Dec 2021 18:41:19 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F63C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:37:45 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z6so5075631plk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:37:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=F8boScU7PkpLy5I01OwUQvLADtvtEkn8BzfdBWDEDcY=;
-        b=q4XxCaU4czP1BeRuh/U1Da9cRVNH1Rq3z1/WNTaj88K+UGWfKa6yV85JcVeNQSqaUt
-         iKvkwx79/DlRJSvMww4HroTv+tB1pfH9v4lywRhkVtdGMiGFj1v6bKcXZg1hyENS3arn
-         pc6YBECRfRyPLzGpMNwZjiQAo9gMuzTsp0PyqFJoyd70IicIqMwfGTJXqpRcqX/4itWK
-         5/bC/V1QSTB5UPnZO5VUVI7YmL0FoAklls7qpB3RmKBsQuPmwnX9izQoYQnX2JMKcZ12
-         sF1807fmH/fTi9t6HlbWhNssLYh8+GtWAP8Mv8BcFxCJggSPD2rjmSJ88QpCc4FT4St3
-         nFgg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2djF0P4/pIiIN2tn2/N0Kxd449t54dXIhZh8UA9W5m0=;
+        b=AsoDzv/qewrgwQFk+1LG/Q5IZ5JNhPI2jMNNToGHWKcru+V88AmBdb6PebMs2sZ2bh
+         Bm6xB2omaLLkax8Ap731YYd05k4Jf4H8LLLKrMjscvyelECxoaSNmAtCPN/aQITNQd2W
+         o5Iz6GlxcqnCxinVCrDZ3xgmqQvIx08sjij5A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=F8boScU7PkpLy5I01OwUQvLADtvtEkn8BzfdBWDEDcY=;
-        b=Cva5BqufOSYH0gBBQUwZgmmNX93MtzfHiqVmpKMPRq/sdV8s2sLj/AFPi4jhPaH+2Q
-         QhDHxpclcBWzrMsNFPGcOghye3w8h75gQDJyQ7KZ5cGwU1/PQPKIzT7gcGR9CL5KbLEk
-         o5+k5Mt+vKK/dSfMM0WwxKy3JCGilMsecgS1yLqaM2NO3OrHC6JNPAdsPfVxDn5wXFbH
-         FFa0xWR+Jah6P89mP1dcs4KIah/7DrvYdNyHtdI4ccr4Dj0XqMkiPpjdOOmTcP1VERj6
-         5H3Nyl1UWuJkaDUMvwqfbu38G80nDFolbWQBypMQRMF/9BCQdsvujBSfBeU1CDpokgrW
-         caEQ==
-X-Gm-Message-State: AOAM533j9pzt51J9vlMAuRZwZn+G7VCisvLV+o+rmZV5hMAfgU29w4t2
-        E7Fvw54hs7S75bGzKkjvqZp2aqqmzDUuGDH7zrk=
-X-Google-Smtp-Source: ABdhPJx2AU7IRNZHdt1Ln3B0zqHP/c6Gv3XpXJyJv4OKtRNw/C2tcCV0Xz0ZnCQClkwMAXzkDBg++JinGDj3OM01SNk=
-X-Received: by 2002:a2e:6e15:: with SMTP id j21mr9488073ljc.195.1639092990871;
- Thu, 09 Dec 2021 15:36:30 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2djF0P4/pIiIN2tn2/N0Kxd449t54dXIhZh8UA9W5m0=;
+        b=JXlNmYTiWA7tgGg8gJtw4InFzD1eLtXCXqcn5XzvqvmDcfcZ9gQd719Q7Mba/nuTwQ
+         vum0u+G+BBxxZyhjRQolOXjpaKGa+ey7BXJMxmRYpYGcTbQgc/+jO90fdRyztWYK2aBw
+         GeqiS8AJPqg1/dLajq15FJCuhkx3234yGu4uJT739sMxxfLKRscDSXmekZoUNXCanvTI
+         9KQ5JW+qH0Tsph0jgrjskuWr97jEYy13yBsfoxFpLnCDnEV8OaG6olOkTEqPwLjdR+4I
+         nXn4nSvHx6n2RQuBf94y2KLnYPeewaTQCMEtblPjkYIZvPVqdLw74AQG2LOUbLUP+Ywg
+         Dp8Q==
+X-Gm-Message-State: AOAM53272Jz9UCGBJ/Kzpwz44o8lUjZ2D/ryVSFvjbzEPPPfsQdlRann
+        iRgFGVH2NysTZz0e9Ri/Jc8CSQ==
+X-Google-Smtp-Source: ABdhPJzm9FnroTff4RdxY1rNi5NMwYvwjDB+MJJSwjZNCUJhLA7OKf5Bg/Xd1vkVwPTjlOP0idl9MA==
+X-Received: by 2002:a17:90a:880a:: with SMTP id s10mr19407803pjn.214.1639093064920;
+        Thu, 09 Dec 2021 15:37:44 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f7sm192558pfj.41.2021.12.09.15.37.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 15:37:44 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:37:43 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] x86/boot/string: Add missing function declarations
+Message-ID: <202112091536.2DDF0DF@keescook>
+References: <20211119175325.3668419-1-keescook@chromium.org>
 MIME-Version: 1.0
-From:   coldolt <andypalmadi@gmail.com>
-Date:   Fri, 10 Dec 2021 01:36:28 +0200
-Message-ID: <CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com>
-Subject: [REGRESSION] Bluetooth not working on 5.15+ since "Bluetooth: Move
- shutdown callback before flushing tx and rx queue"
-To:     marcel@holtmann.org, kai.heng.feng@canonical.com,
-        tedd.an@intel.com, linux-bluetooth@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119175325.3668419-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After a restart, bluetooth doesn't work since commit 0ea53674d07f
-"Bluetooth: Move shutdown callback before flushing tx and rx queue"
+On Fri, Nov 19, 2021 at 09:53:25AM -0800, Kees Cook wrote:
+> Silence "missing function declaration" warnings from string.h when
+> building under W=1.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-bluetoothctl doesn't list any controllers and I get the following in
-dmesg | grep -i bluetooth
+Hi, just a quick ping on this little fix.
 
-[    2.634812] Bluetooth: Core ver 2.22
-[    2.634843] NET: Registered PF_BLUETOOTH protocol family
-[    2.634845] Bluetooth: HCI device and connection manager initialized
-[    2.634850] Bluetooth: HCI socket layer initialized
-[    2.634853] Bluetooth: L2CAP socket layer initialized
-[    2.634858] Bluetooth: SCO socket layer initialized
-[    4.077788] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
-[    4.077794] Bluetooth: BNEP filters: protocol multicast
-[    4.077799] Bluetooth: BNEP socket layer initialized
-[    4.078219] random: bluetoothd: uninitialized urandom read (4 bytes read)
-[    4.852835] Bluetooth: hci0: Reading Intel version command failed (-110)
-[    4.852838] Bluetooth: hci0: command 0xfc05 tx timeout
+Thanks!
 
-However, it works after a cold start or after putting the computer to sleep.
+-Kees
 
-Before 83f2dafe2a62 "Bluetooth: btintel: Refactoring setup routine for
-legacy ROM sku", it always works after a restart, but from that commit
-up until before 0ea53674d07f it either works or doesn't work after a
-restart depending on if before restart it was working or not, meaning
-it stays working or stays not working.
+>  arch/x86/boot/string.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/boot/string.h b/arch/x86/boot/string.h
+> index a232da487cd2..e5d2c6b8c2f1 100644
+> --- a/arch/x86/boot/string.h
+> +++ b/arch/x86/boot/string.h
+> @@ -8,8 +8,10 @@
+>  #undef memcmp
+>  
+>  void *memcpy(void *dst, const void *src, size_t len);
+> +void *memmove(void *dst, const void *src, size_t len);
+>  void *memset(void *dst, int c, size_t len);
+>  int memcmp(const void *s1, const void *s2, size_t len);
+> +int bcmp(const void *s1, const void *s2, size_t len);
+>  
+>  /* Access builtin version by default. */
+>  #define memcpy(d,s,l) __builtin_memcpy(d,s,l)
+> @@ -25,6 +27,7 @@ extern size_t strnlen(const char *s, size_t maxlen);
+>  extern unsigned int atou(const char *s);
+>  extern unsigned long long simple_strtoull(const char *cp, char **endp,
+>  					  unsigned int base);
+> +long simple_strtol(const char *cp, char **endp, unsigned int base);
+>  
+>  int kstrtoull(const char *s, unsigned int base, unsigned long long *res);
+>  int boot_kstrtoul(const char *s, unsigned int base, unsigned long *res);
+> -- 
+> 2.30.2
+> 
 
-Also on the first restart from before 83f2dafe2a62 into 0ea53674d07f
-or later it works, but then restarting again into 0ea53674d07f or
-later it no longer works. So it seems that 0ea53674d07f and later puts
-the bluetooth in a nonworking state if you restart from it, but before
-83f2dafe2a62 it puts it back into a working state at startup, and in
-between it doesn't do either, i.e. it stays the way it was.
-
-I have a Dell Latitude E5550 laptop with an Intel 7265 wifi/bluetooth
-card REV=0x210 firmware version 29.4063824552.0 7265D-29. I'm on Arch
-Linux, the problem is still there on 5.16-rc4.
-
-Here is a thread on the Arch Linux forums with several people with the
-same problem, for some of them it got fixed with a kernel update or by
-reloading modules, but not for everybody, including me
-https://bbs.archlinux.org/viewtopic.php?id=271459
-
-#regzbot introduced 0ea53674d07f
+-- 
+Kees Cook

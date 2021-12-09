@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B772F46E757
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF2C46E75F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbhLILRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:17:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:54450 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232764AbhLILRc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:17:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 743201FB;
-        Thu,  9 Dec 2021 03:13:58 -0800 (PST)
-Received: from [10.57.33.188] (unknown [10.57.33.188])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 90D3D3F73B;
-        Thu,  9 Dec 2021 03:13:56 -0800 (PST)
-Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
- are unavailable
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20211208160907.749482-1-james.clark@arm.com>
- <20211208160907.749482-2-james.clark@arm.com>
- <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
-Date:   Thu, 9 Dec 2021 11:13:55 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236495AbhLILTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236469AbhLILTu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:19:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F1C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 03:16:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39F7DB8243C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12AFBC004DD;
+        Thu,  9 Dec 2021 11:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639048574;
+        bh=kDyOftpkmsDk75GoXEVgUx9K1nNqGrcK4DZF+4URS5E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jQI0P+RkXeUhXDPkrrzoj0GrFMX0eSD1FfDHxzzxFQRopG2Py5EnZHqNLeCygCmlt
+         w1TdvhgRi0nUtZ9TguyZMIAAUCZ0TDfoY403LndDgHvFry24vHaduocWwNXIVfiBvC
+         EAETbyV52qtYoYXPvmDBxyYuQtFNTrV/kyXglI4xo8bcZ0Q/930S+O8QRY1PTmvh5o
+         8+e7JuaNuWMDBSnWME6y7c0y7iKZf58t3+cSsdGU8qRvDyEErXTWUzPMbiARc2s1wo
+         E3ILJdQCqfxXka+VRXzLw+ZOyPXKyVirn1diPqca9ArQVFo4mvpFYxq267tCi0aIut
+         0BW/N+otnTuJw==
+Date:   Thu, 9 Dec 2021 11:16:09 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 08/15] KVM: arm64: pkvm: Refcount the pages shared
+ with EL2
+Message-ID: <20211209111609.GC1912@willie-the-truck>
+References: <20211201170411.1561936-1-qperret@google.com>
+ <20211201170411.1561936-9-qperret@google.com>
 MIME-Version: 1.0
-In-Reply-To: <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201170411.1561936-9-qperret@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09/12/2021 11:00, Suzuki K Poulose wrote:
-> On 08/12/2021 16:09, James Clark wrote:
->> Maintain consistency with the other options by failing to open when they
->> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
->> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
->> requested but not supported by hardware.
->>
->> The consequence of not doing this is that the user may not be
->> aware that they are not enabling the feature as it is silently disabled.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index d2bafb50c66a..0a9bb943a5e5 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
->>       }
->>         /* return stack - enable if selected and supported */
->> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
->> -        /* bit[12], Return stack enable bit */
->> -        config->cfg |= BIT(12);
->> -
->> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
->> +        if (!drvdata->retstack) {
->> +            ret = -EINVAL;
->> +            goto out;
->> +        } else {
->> +            /* bit[12], Return stack enable bit */
->> +            config->cfg |= BIT(12);
->> +        }
+On Wed, Dec 01, 2021 at 05:04:02PM +0000, Quentin Perret wrote:
+> In order to simplify the page tracking infrastructure at EL2 in nVHE
+> protected mode, move the responsibility of refcounting pages that are
+> shared multiple times on the host. In order to do so, let's create a
+> red-black tree tracking all the PFNs that have been shared, along with
+> a refcount.
 > 
-> nit: While at this, please could you change the hard coded value
-> to ETM4_CFG_BIT_RETSTK ?
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+>  arch/arm64/kvm/mmu.c | 78 ++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 68 insertions(+), 10 deletions(-)
 > 
-I started changing them all because I had trouble searching for bits by name but then
-I thought it would snowball into a bigger change so I undid it.
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index fd868fb9d922..d72566896755 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -284,23 +284,72 @@ static phys_addr_t kvm_kaddr_to_phys(void *kaddr)
+>  	}
+>  }
+>  
+> -static int pkvm_share_hyp(phys_addr_t start, phys_addr_t end)
+> +struct hyp_shared_pfn {
+> +	u64 pfn;
+> +	int count;
+> +	struct rb_node node;
+> +};
+> +
+> +static DEFINE_MUTEX(hyp_shared_pfns_lock);
+> +static struct rb_root hyp_shared_pfns = RB_ROOT;
+> +
+> +static struct hyp_shared_pfn *find_shared_pfn(u64 pfn, struct rb_node ***node,
+> +					      struct rb_node **parent)
+>  {
+> -	phys_addr_t addr;
+> -	int ret;
+> +	struct hyp_shared_pfn *this;
+> +
+> +	*node = &hyp_shared_pfns.rb_node;
+> +	*parent = NULL;
+> +	while (**node) {
+> +		this = container_of(**node, struct hyp_shared_pfn, node);
+> +		*parent = **node;
+> +		if (this->pfn < pfn)
+> +			*node = &((**node)->rb_left);
+> +		else if (this->pfn > pfn)
+> +			*node = &((**node)->rb_right);
+> +		else
+> +			return this;
+> +	}
+>  
+> -	for (addr = ALIGN_DOWN(start, PAGE_SIZE); addr < end; addr += PAGE_SIZE) {
+> -		ret = kvm_call_hyp_nvhe(__pkvm_host_share_hyp,
+> -					__phys_to_pfn(addr));
+> -		if (ret)
+> -			return ret;
+> +	return NULL;
+> +}
+> +
+> +static int share_pfn_hyp(u64 pfn)
+> +{
+> +	struct rb_node **node, *parent;
+> +	struct hyp_shared_pfn *this;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&hyp_shared_pfns_lock);
+> +	this = find_shared_pfn(pfn, &node, &parent);
 
-I think I'll just go and do it now if it's an issue here.
+I don't think this is a fast-path at the moment, but in the future we might
+consider using RCU to do the lookup outside of the mutex.
 
-> Otherwise, looks good to me
-> 
-> Suzuki
+But as-is:
+
+Acked-by: Will Deacon <will@kernel.org>
+
+Will

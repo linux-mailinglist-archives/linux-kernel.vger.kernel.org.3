@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 516FB46F491
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A1D46F492
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbhLIUJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S231519AbhLIUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbhLIUJR (ORCPT
+        with ESMTP id S231483AbhLIUJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:09:17 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430FCC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:05:43 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id k2so10700442lji.4
+        Thu, 9 Dec 2021 15:09:18 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143EFC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:05:44 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id l22so14131529lfg.7
         for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 12:05:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=vdi+ngDYZ8frSITjIEVRzjOKqqv9jxuC3qoXZDRzY3E=;
-        b=POI/206AdEE7Y8xM46ArhvWFzWMc2DNrU+UafFP+UOclIvQYLxk1wmsBw/yyS/2aJq
-         S5CpimmLVPKLGv1qeaK8y9ZSZWPbUrwWz0U9F23hBFzZMNnqPiSgGl6i4yrjddpeoM+4
-         pCbv8bG+8PORW01axAIL0xFxcCuYd/SxoZ6D83LMnf0JeYB3FzzmLDoqQYGTBLtxMEcP
-         AqUoKYkz+sQ323/QBMVXkSS+NhUo2aqU24AfJZE57ACd8ve3kXXj62V6znNiezs+Qw1u
-         72Nkmrzzg3J90EBkRxkscukCm+D95/mVkCa9cL3RnL2xd6tVyz3BvuskJvsUpaKNUpzK
-         u5Xw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=CS9aK8CojMqdb/AcA3jHRSI+mrWqH9RveIgOpizvY9U=;
+        b=nJ6YIRKoVQppvpal4aj4p6po8BZEoe2W0v2EiJOt2lz9DD/MZQz4YOGAFga6byn+PS
+         bpoNN7jJzU6n+1ymG3q5nkDMcZyj6qh8VLD5qe9Y82B5S10kXdLAgf8PzlZT01cHKuhA
+         JXaYSWqP6JLSTiUSi3EyD3xZ+LiV/d/6rJhFyPL5A2n9Qlamzj6EkCbfiO7uXKvO0fDC
+         dDKM/bTNoo7nV/iChOSyPjaEfVz8kw6VsAW++5dxIl2Ed/EHaOmZKJK0QgUPBpIFINJw
+         0i+XdqKk7zJC+3HWynXOo7JID118X95q9twABJWbrjnKOuX9i34ZaQ8aTIjd0bmhB/4Y
+         F9XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=vdi+ngDYZ8frSITjIEVRzjOKqqv9jxuC3qoXZDRzY3E=;
-        b=GHS9hYJM/NL85mboFFm6l7CPI/mPyV7rO4xRPIrM/i60cwEeiGaf5LclrF1YnSQSMy
-         DzCfXoPvU/yls2tvFuj83yfAgV0zzgJCwpp2VGcFt9lyO6ztTmDGRLA+V+LVARe+71y3
-         L1tOxNgf+dj8SShizl5dMKO8X/qHnmghmAGieRXj1ytto+PJfgwwwfhnzgmK/oiP2CIj
-         FU+Lv2iyNqYI2hVXz1E8Qnlr3Gnp643jZe91iGolwcafDMBZQb/6i84u1qLhUqwg6NT6
-         koHq/yLnukW/HaXrtPvIixBtTOk/Q76EE1el/kMU935OHiSAvZMnyrdfay4g4nWvVONP
-         mYTQ==
-X-Gm-Message-State: AOAM532jz3NcH/4NsOHOU63Ks3RCoTXg5KTZ87GOLJ+/jxkKBOGozZPr
-        3e7RRHc/4B/9jj/xIMe/CFg=
-X-Google-Smtp-Source: ABdhPJxucGuWwfKQW2OEY9Dp9Wft8deEcKtIdgf1+XzoXquMxrrE4dy0sBiatCkpQLtPu/fTSAEpFw==
-X-Received: by 2002:a2e:530d:: with SMTP id h13mr8398300ljb.95.1639080341326;
-        Thu, 09 Dec 2021 12:05:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=CS9aK8CojMqdb/AcA3jHRSI+mrWqH9RveIgOpizvY9U=;
+        b=V/iHUGBDnguAUmtrgYMhOMViXuQM+EZPqAypJEqCrUUNozvQYJrmJI5ty1GwGu+2ae
+         v/gLQdbVf3VwAqlWcoD+e+Jl2eh3YwrYMgPu5UahCAFMyX2zV/nof5GNpl85dlhws77K
+         ARqCmVqM81t9k1O6A4Q2jA23NvrI59fIq0SIK2Yp4s9ifl2Q47qLbuOnyfhshz0/pPB7
+         8MlGmeHCdKgbIUqbbTnKhH/NF966uYT2n15V3CBGyVy0T7E31BYYLQhTnSkbPmdI6939
+         k3YEZavmoACZ4FrE5/OCGnrl5+ldbnEaEo9Tv1l0w4IR5urmWERhHjGTGZ1bQg8hF+4S
+         JGQg==
+X-Gm-Message-State: AOAM531CBwNJsVkmXsX1Fa8aO07ZFQL+mFePfY9yczpuGAGbBwP8l+Rp
+        UY4KTVgBWKkOlZQkWWw3/+8=
+X-Google-Smtp-Source: ABdhPJxerwr28Tg8c06W+QUK8C5H1O0rKZUkku9U1Odi1NykdsC2f8brvhJBN6XBJ2EuJVFZAjwx2Q==
+X-Received: by 2002:a05:6512:2312:: with SMTP id o18mr8160079lfu.333.1639080342265;
+        Thu, 09 Dec 2021 12:05:42 -0800 (PST)
 Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id o12sm87371lft.134.2021.12.09.12.05.40
+        by smtp.gmail.com with ESMTPSA id o12sm87371lft.134.2021.12.09.12.05.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Dec 2021 12:05:40 -0800 (PST)
+        Thu, 09 Dec 2021 12:05:41 -0800 (PST)
 From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>
-Subject: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges) on Arm
-Date:   Thu,  9 Dec 2021 22:05:30 +0200
-Message-Id: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>
+Subject: [PATCH V4 1/6] xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
+Date:   Thu,  9 Dec 2021 22:05:31 +0200
+Message-Id: <1639080336-26573-2-git-send-email-olekstysh@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Hello all.
+If memremap_pages() succeeds the range is guaranteed to have proper page
+table, there is no need for an additional virt_addr_valid() check.
 
-You can find the RFC-V3 patch series at [1],[2] and [3].
+Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+---
+Changes RFC -> V2:
+   - new patch, instead of
+     "[RFC PATCH 1/2] arm64: mm: Make virt_addr_valid to check for pfn_valid again"
 
-The corresponding Xen support (for both Dom0 and DomU) is already committed and
-is available in mainline Xen since the following commit:
-57f87857dc2de452a796d6bad4f476510efd2aba libxl/arm: Add handling of extended regions for DomU
+Changes V2 -> V3:
+   - add Boris' R-b
 
-The extended region (safe range) is a region of guest physical address space
-which is unused and could be safely used to create grant/foreign mappings instead
-of ballooning out real RAM pages to obtain a physical address space for creating
-these mappings (which simply results in wasting domain memory and shattering super
-pages in P2M table).
+Changes V3 -> V4:
+   - no changes
+---
+ drivers/xen/unpopulated-alloc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-The problem is that we cannot follow Linux advise which memory ranges are unused
-on Arm as there might be some identity mappings in P2M table (stage 2) the guest is not
-aware of or not all device I/O regions might be known (registered) by the time the guest
-starts creating grant/foreign mappings. This is why we need some hints from the hypervisor
-which knows all details in advance to be able to choose extended regions (which won't
-clash with other resources).
-
-The extended regions are chosen at the domain creation time and advertised to it via
-"reg" property under hypervisor node in the guest device-tree [4]. As region 0 is reserved
-for grant table space (always present), the indexes for extended regions are 1...N.
-No device tree bindings update is needed, guest infers the presence of extended regions
-from the number of regions in "reg" property.
-
-Please note the following:
-- The ACPI case is not covered for now
-- patch series was created in a way to retain existing behavior on x86
-
-The patch series is based on v5.16-rc3 and also available at [5], it was fully
-tested on Arm64 and only compile tested on x86.
-
-[1] https://lore.kernel.org/all/1627490656-1267-1-git-send-email-olekstysh@gmail.com/
-    https://lore.kernel.org/all/1627490656-1267-2-git-send-email-olekstysh@gmail.com/
-[2] https://lore.kernel.org/all/1635264312-3796-1-git-send-email-olekstysh@gmail.com/
-[3] https://lore.kernel.org/all/1637787223-21129-1-git-send-email-olekstysh@gmail.com/
-[4] https://xenbits.xen.org/gitweb/?p=xen.git;a=blob_plain;f=docs/misc/arm/device-tree/guest.txt;hb=refs/heads/master
-[5] https://github.com/otyshchenko1/linux/commits/map_opt_ml7
-
-Oleksandr Tyshchenko (6):
-  xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
-  arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
-  xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
-  xen/unpopulated-alloc: Add mechanism to use Xen resource
-  arm/xen: Read extended regions from DT and init Xen resource
-  dt-bindings: xen: Clarify "reg" purpose
-
- Documentation/devicetree/bindings/arm/xen.txt |  14 +--
- arch/arm/xen/enlighten.c                      | 132 ++++++++++++++++++++++++--
- drivers/xen/Kconfig                           |   2 +-
- drivers/xen/balloon.c                         |  20 ++--
- drivers/xen/unpopulated-alloc.c               |  87 ++++++++++++++++-
- include/xen/balloon.h                         |   3 +
- include/xen/xen.h                             |  16 ++++
- 7 files changed, 245 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/xen/unpopulated-alloc.c b/drivers/xen/unpopulated-alloc.c
+index 87e6b7d..a03dc5b 100644
+--- a/drivers/xen/unpopulated-alloc.c
++++ b/drivers/xen/unpopulated-alloc.c
+@@ -85,7 +85,6 @@ static int fill_list(unsigned int nr_pages)
+ 	for (i = 0; i < alloc_pages; i++) {
+ 		struct page *pg = virt_to_page(vaddr + PAGE_SIZE * i);
+ 
+-		BUG_ON(!virt_addr_valid(vaddr + PAGE_SIZE * i));
+ 		pg->zone_device_data = page_list;
+ 		page_list = pg;
+ 		list_count++;
 -- 
 2.7.4
 

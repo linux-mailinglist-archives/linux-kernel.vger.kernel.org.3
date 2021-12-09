@@ -2,96 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19BB46DFB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9525646DFC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbhLIAwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 19:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S241582AbhLIAyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 19:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLIAwu (ORCPT
+        with ESMTP id S233448AbhLIAym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:52:50 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A793C061746;
-        Wed,  8 Dec 2021 16:49:18 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id j11so3590704pgs.2;
-        Wed, 08 Dec 2021 16:49:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ArpiXiiRMMNxywH9lYO6hlsz/ack8Tk8QW26jOZRnm8=;
-        b=pAnnUjRJ6KTfjhp0QbYQ18ZlE64fms2JaW1eUx5oAgZcjZOb5LsL4jzWZA1SkdYQme
-         FP1AonXHEsGpDtk+a7xcz+VVXjzdPLBK2KjXvg+mApc/qzw4hX+ffRO8PfB3PQK9VLUJ
-         9xNqakaGjNti85h6da08tssU4zmdV0w9Jrw710DL9XxpYJ1+c5lFyIdToZxJQW3o0toi
-         oJUz7cQtRc08b7QCTVuK2aEsx4Ouz4wQXgLVnLGvevuB9jU/1sYI1OOJccxBJ3AApluo
-         u9P5NPCMn+Xv3kgeUljbDjbMZ03LOPMjGaYDQFNmr2640+iZs38zfkK6xWUFjEYGuju2
-         xBrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ArpiXiiRMMNxywH9lYO6hlsz/ack8Tk8QW26jOZRnm8=;
-        b=aswPckOdPykFbYoaMxMXktTlym3XXgwP5YLEKU+ybtR+72jUpEJvcJ6r6YJV3drkoG
-         oPN+6/dsNUFQMxdGQunmoS+Rd+KfuWvQmPLoQ2ytuo8x62IqJlmkiQVR56oNvBPGuo3i
-         hPzkDAFcN0O+Lyp9FJi61wuTXWLFYLX2bKBK6lhuTEs7EpvjRzJmJpwGaD+g6bLOgFo5
-         sO0W4BDlv36/Fyaz56bnREf+susBlNkB6OGYnxwQ6T/QV4T4Qav7O92FcAU7Gj+tGRxI
-         j12lFBtMDIh1n7KedylDSpHAaZ0FdEBz5xroWqafq4RkCFt+HP5T4+P8M+x0SV6UBSXw
-         BQmg==
-X-Gm-Message-State: AOAM531KcecrmjGsN1yotYCKbx5IXSyA2zf6blrHY5jQhQsfGBa5oZxI
-        lnwyD0Qo1PDc5iLxdq4drM8reiqGHic=
-X-Google-Smtp-Source: ABdhPJy24uNaIqk2mAh7Sg6mshvNbMFAbEi8B5kihXavLvtINv7CSfPlFg51iL0asEPbw9ZJPTocqg==
-X-Received: by 2002:a62:6dc4:0:b0:4ac:fd66:b746 with SMTP id i187-20020a626dc4000000b004acfd66b746mr8813020pfc.17.1639010957153;
-        Wed, 08 Dec 2021 16:49:17 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j7sm8386764pjf.41.2021.12.08.16.49.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 16:49:16 -0800 (PST)
-Subject: Re: [PATCH v4 2/2] dt-bindings: net: Convert SYSTEMPORT to YAML
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-References: <20211208202801.3706929-1-f.fainelli@gmail.com>
- <20211208202801.3706929-3-f.fainelli@gmail.com>
- <YbEoC3e709/feQc4@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <7f9bb4e7-2560-bf06-b5de-0886c7d749da@gmail.com>
-Date:   Wed, 8 Dec 2021 16:49:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Dec 2021 19:54:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D05C061746;
+        Wed,  8 Dec 2021 16:51:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B88CB82338;
+        Thu,  9 Dec 2021 00:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BF4C00446;
+        Thu,  9 Dec 2021 00:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639011067;
+        bh=lDpvo5Y5XkMJZEGTr3nhMxq/klLuv+XPxGliSChu3X0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=T/yyH422MMiUfEh4eFWKCXrPA1rT3ZCwMR7TYt9Iy6ePpoqbiNvwhZ9Vykf00DqCc
+         S635kFYlwPJQxoUeqz5vb0nEcUU4Tpw+4ZsbMq8akVz4HX5ePiWVh9lYMqGcuOk+IO
+         hNJsfXZKGc12P9JX/uL+MyKlbe0rpUEmMcpqGVFFZlZ99j3vdpFy9uK8Tl0OEaW3nJ
+         NZ9+Hi5p6aMjMXTlUajDbheSs0WOs6GfMW9gnHKY9D3IVa+aDO4jqYEhdDDczW4sRI
+         9cfkeeovr23xZAx8cJUcobkJ7/+ZUdvL/Q0hXEqlgdGrbd0XUh5rMb5jXbAafkl1uz
+         mH67mXCKf3yaA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <YbEoC3e709/feQc4@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <e7c9b7d4-8fef-57f5-b774-9931f5ff40ed@quicinc.com>
+References: <20211109043438.4639-1-quic_mdtipton@quicinc.com> <20211208015324.86282C341C5@smtp.kernel.org> <e7c9b7d4-8fef-57f5-b774-9931f5ff40ed@quicinc.com>
+Subject: Re: [PATCH] clk: Fix children not voting entire parent chain during init
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Mike Tipton <quic_mdtipton@quicinc.com>, mturquette@baylibre.com
+Date:   Wed, 08 Dec 2021 16:51:06 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211209005107.98BF4C00446@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 1:47 PM, Rob Herring wrote:
-> On Wed, 08 Dec 2021 12:28:01 -0800, Florian Fainelli wrote:
->> Convert the Broadcom SYSTEMPORT Ethernet controller Device Tree binding
->> to YAML.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/net/brcm,systemport.txt          | 38 --------
->>  .../bindings/net/brcm,systemport.yaml         | 88 +++++++++++++++++++
->>  MAINTAINERS                                   |  1 +
->>  3 files changed, 89 insertions(+), 38 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/net/brcm,systemport.txt
->>  create mode 100644 Documentation/devicetree/bindings/net/brcm,systemport.yaml
->>
-> 
-> Applied, thanks!
+Quoting Mike Tipton (2021-12-08 08:16:52)
+> On 12/7/2021 5:53 PM, Stephen Boyd wrote:
+> >=20
+> > Let me see if I can fix this up on application.
+> >=20
+>=20
+> Sorry, did you mean you'll address your comments when applying the patch =
 
-Thanks for applying the patches and fixing up my mistakes in the process.
--- 
-Florian
+> to your tree? Or would you like me to submit a v2?
+
+I fixed it up and applied it to clk-fixes.

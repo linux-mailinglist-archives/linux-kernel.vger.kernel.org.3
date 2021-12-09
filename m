@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9DB46E737
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6DE46E73D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236310AbhLILHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S236367AbhLILJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbhLILHV (ORCPT
+        with ESMTP id S232838AbhLILJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:07:21 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87B8C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 03:03:47 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v11so8966836wrw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:03:47 -0800 (PST)
+        Thu, 9 Dec 2021 06:09:45 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BD5C061746;
+        Thu,  9 Dec 2021 03:06:11 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id u17so9045318wrt.3;
+        Thu, 09 Dec 2021 03:06:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gco8rXFcPUiWI8MIlsOriypkPxo61cnS1MnZYRGL2nI=;
-        b=pjNZyALMOJOTfoZjeajYIb2h1unn9loejD1zJAhfuzMuvWRtpb/8HY0X/ABJX/YEy4
-         AqUVyD15chaLb5K0qQEIgZWJmN6Ylv+oX912Qw3bauO68XbZ6twZc7naSzwlA7ySOq10
-         GpdrqdLderxJTc5X+3AXGaaJojlDTMVqIBTaQelVgwe5lEKYntCmSHvykP54jqZBMBYa
-         dnsOdbVXirou544quG/p9AYJDYQ5bXKOpPoWJct7L2qapoA626ifz4GmlN0oHEc/OD6A
-         9nWz4piGB2SQfw1UzvzIDaSWqpw6WI2X4b3+CjL9iRC7Y0cGqQLpNEdsuvtbqpCMimea
-         bvhQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=De9KvF5/yla07zEAmA185om11Z7ZBDnnTpkB/t6a6ss=;
+        b=dbxstdsFT+2CcwuMIiny5cXYRuQzKz7NdZFvmEm4GC726lAl0yW51Hg7bTawkPxubz
+         qdnAGVw95s2h5sI8FtNp/qBJksq+knlY8AukQ1QmaBldq+rsj5YLTHJ6GCFZ167lGguD
+         feemBpNNoJMZCBIAzwz1orJA9y+bMTCqvnAuCibkEfSP+w4q6G5ueqJoz+Z468659ll+
+         BN628bCGVQ+Mdf/BnshbK8laoyOSnE8fxKmo1XBFfmL1WUNJSh+rrIWJPVC/ZzuosdCp
+         jD5g5pkBit+f4NRbiCxCiKdaeoxd2u1GRC2hX6iMeSvL8kGUjZuvKUUYol3q9Yliqc7l
+         ewbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gco8rXFcPUiWI8MIlsOriypkPxo61cnS1MnZYRGL2nI=;
-        b=U2q3WyyARPtbzB2pwtIM+ubW6KO6ik/xV8qDA5SdMjAp/BAwgpGTYdIEx5MVRIl4x7
-         waNjtkqzLM3Z9WUbxNY0d/5qjQMSyNNhqtZvbnVsZ8n9Gy1At9WIx6m09ZN+9/eESfhQ
-         rVOIubiICvWjyCqpYEH3Df3hQ5ohDqG/jcI+Gms99h7BEJbTMR6rPndBW/r3TKtOlz6B
-         KpWJv1fPGK7f6qz2za/GE5Eor95kRbIeK2MFz5tk2ihiy9v6sOLa5U+qPF3MWRhYKJ7e
-         NVUJudzjQRenJEdkkG8yLlWN89i5YOoZjpfDD/AiNUC/blMIVv4+DTQIiYK1XKzlgGxk
-         Hsbw==
-X-Gm-Message-State: AOAM533PBDJexmOZpdbmYoF5R58o7i1A7fczVnodjBuHUyCqSNF75Yfq
-        +2CnrIzAm+8yOseH+WAIjeN3sA==
-X-Google-Smtp-Source: ABdhPJzpu+okH7QBd+cokXbACh6KbY/U9SclkLgPBvY63AozEULnhT7BRdcw5jvVY9ysEsQAQdZtPg==
-X-Received: by 2002:adf:f990:: with SMTP id f16mr5485994wrr.128.1639047825984;
-        Thu, 09 Dec 2021 03:03:45 -0800 (PST)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id f15sm6639511wmg.30.2021.12.09.03.03.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=De9KvF5/yla07zEAmA185om11Z7ZBDnnTpkB/t6a6ss=;
+        b=nv/5yisuO6ceFaDkbKMMsfO2y4EXTVHlHrQBLQHP1kk/PHSK/o+WgX5dJr/H6JPlRs
+         vANE2KzTwpCZD0twp65wMbASz3DifFX/DI4ElMwCLWB8Q8h8B9+yg4iwVrqH0Di+BigS
+         oaqykx1wBCnglKCRbTrOl1l6YlKTrfdT+cLw83+Yifg4Zjs3RCQKHvb1ESlJlmxERYLX
+         LDZLMkasJaKBesZzis2uyVBNWyYaC5tulKVsSpuCF4gijrmdUyEpo2MofLJPSencjix7
+         TGcx111I8L7KTjSpOZYhUpA4UzxIJ/y5ndNZWJVZp/Vczj7eZ/p/Xrf0KJglHZEYHN9D
+         O22A==
+X-Gm-Message-State: AOAM533aJPjKHl4vyIB+qlHdMYk1lkSScTZrPNbGu94VkqrgeGZWwsp3
+        hbp0d6z9IgX1y3R2gOsQyAU=
+X-Google-Smtp-Source: ABdhPJxmjPdACT+CfD8uqBPKucIyK+kxDgRiD1zU/VKQarSIr3+6OJ/mc9cnv+yq1rF+eKtrFwFj6w==
+X-Received: by 2002:a5d:6d06:: with SMTP id e6mr5642870wrq.210.1639047970421;
+        Thu, 09 Dec 2021 03:06:10 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id n2sm8573634wmi.36.2021.12.09.03.06.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 03:03:45 -0800 (PST)
-Date:   Thu, 9 Dec 2021 11:03:23 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
-Message-ID: <YbHie/Z4bIXwTInx@myrica>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
+        Thu, 09 Dec 2021 03:06:09 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     vladimir.oltean@nxp.com
+Cc:     claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2] net: dsa: felix: Fix memory leak in felix_setup_mmio_filtering
+Date:   Thu,  9 Dec 2021 12:05:40 +0100
+Message-Id: <20211209110538.11585-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+Avoid a memory leak if there is not a CPU port defined.
 
-On Tue, Dec 07, 2021 at 05:47:11AM -0800, Jacob Pan wrote:
-> In-kernel DMA is managed by DMA mapping APIs, which supports per device
-> addressing mode for legacy DMA requests. With the introduction of
-> Process Address Space ID (PASID), device DMA can now target at a finer
-> granularity per PASID + Requester ID (RID).
-> 
-> However, for in-kernel DMA there is no need to differentiate between
-> legacy DMA and DMA with PASID in terms of mapping. DMA address mapping
-> for RID+PASID can be made identical to the RID. The benefit for the
-> drivers is the continuation of DMA mapping APIs without change.
-> 
-> This patch reserves a special IOASID for devices that perform in-kernel
-> DMA requests with PASID. This global IOASID is excluded from the
-> IOASID allocator. The analogous case is PASID #0, a special PASID
-> reserved for DMA requests without PASID (legacy). We could have different
-> kernel PASIDs for individual devices, but for simplicity reasons, a
-> globally reserved one will fit the bill.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
->  drivers/iommu/intel/iommu.c                     | 4 ++--
->  drivers/iommu/intel/pasid.h                     | 3 +--
->  drivers/iommu/intel/svm.c                       | 2 +-
->  drivers/iommu/ioasid.c                          | 2 ++
->  include/linux/ioasid.h                          | 4 ++++
->  6 files changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> index ee66d1f4cb81..ac79a37ffe06 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> @@ -329,7 +329,7 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
->  		return ERR_PTR(-ENOMEM);
->  
->  	/* Allocate a PASID for this mm if necessary */
-> -	ret = iommu_sva_alloc_pasid(mm, 1, (1U << master->ssid_bits) - 1);
-> +	ret = iommu_sva_alloc_pasid(mm, IOASID_ALLOC_BASE, (1U << master->ssid_bits) - 1);
+Fixes: 8d5f7954b7c8 ("net: dsa: felix: break at first CPU port during init and teardown")
+Addresses-Coverity-ID: 1492897 ("Resource leak")
+Addresses-Coverity-ID: 1492899 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I'd rather keep hardware limits as parameters here. PASID#0 is reserved by
-the SMMUv3 hardware so we have to pass at least 1 here, but VT-d could
-change RID_PASID and pass 0. On the other hand IOASID_DMA_PASID depends on
-device drivers needs and is not needed on all systems, so I think could
-stay within the ioasid allocator. Could VT-d do an ioasid_alloc()/ioasid_get()
-to reserve this global PASID, storing it under the device_domain_lock?
+---
 
-This looks like we're just one step away from device drivers needing
-multiple PASIDs for kernel DMA so I'm trying to figure out how to evolve
-the API towards that. It's probably as simple as keeping a kernel IOASID
-set at first, but then we'll probably want to optimize by having multiple
-overlapping sets for each device driver (all separate from the SVA set).
+v2: Add Fixes and Reviewed-by tags
+---
+ drivers/net/dsa/ocelot/felix.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-Jean
+diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
+index 327cc4654806..f1a05e7dc818 100644
+--- a/drivers/net/dsa/ocelot/felix.c
++++ b/drivers/net/dsa/ocelot/felix.c
+@@ -290,8 +290,11 @@ static int felix_setup_mmio_filtering(struct felix *felix)
+ 		}
+ 	}
+ 
+-	if (cpu < 0)
++	if (cpu < 0) {
++		kfree(tagging_rule);
++		kfree(redirect_rule);
+ 		return -EINVAL;
++	}
+ 
+ 	tagging_rule->key_type = OCELOT_VCAP_KEY_ETYPE;
+ 	*(__be16 *)tagging_rule->key.etype.etype.value = htons(ETH_P_1588);
+-- 
+2.25.1
 

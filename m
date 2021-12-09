@@ -2,73 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD99E46E456
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745BD46E45B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbhLIIkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbhLIIkH (ORCPT
+        id S234955AbhLIIko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:40:44 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37670 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232803AbhLIIkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:40:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF24C061746;
-        Thu,  9 Dec 2021 00:36:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04B5BB823F6;
-        Thu,  9 Dec 2021 08:36:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E6C4C004DD;
-        Thu,  9 Dec 2021 08:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639038991;
-        bh=LFIggLMpewC9uZQ1lQPk16RmUqYPsYlDDBIf7nXZwIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qbnUnJx01weAzTaaRT+k1ztsTOBn/f4y7J/ZK7jd3ctZL4m0MXcc3hddjCzuh2fvv
-         b6AJhOf2xl8byo7w9My8dWS6ghNKn9ZrrNp3JulALXas5Y8JQ2v0j8AIEzq4BSf5AW
-         isBJ+/sI9o4kHIe3mI+794FuLpkYtrMCNtemBuy7ZNDYnVwSiEd+VztG9JsNmKG3gm
-         bg9HDnk7hKB5kYe4MWJev7WCazdbSoHZ4MsJyfGoOb75wYBewPvbFOUby3hltWiPgM
-         14UhClkUlyYXCDYsa2eY9uzcSPg55S2f3+gA1eyYSuX2yb/B5GxvCenI/tL8+JjEcu
-         Cw8HPXb3Lq/Zg==
-Date:   Thu, 9 Dec 2021 09:36:27 +0100
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Remove myself as modules maintainer
-Message-ID: <YbHAC8fU7WSu6U0r@p200300cbcf38f1003adeadfffec0265a.dip0.t-ipconnect.de>
-References: <20211209082850.10021-1-jeyu@kernel.org>
+        Thu, 9 Dec 2021 03:40:41 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639039027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lzMFnVW/85YWmTw86Zk7iMM6erPIn8vff7QnFiF41HE=;
+        b=H2fIzRBiecZzkrgJpASWNRz2D5zY326mVdbBNkuOsxv9stoVdblJS/rFVzIIRGAkRdSnEf
+        drC7nyP/8YokJ9Oj0D0UO1sSaI0BtbvnEeGXu6362wTmW3gTypNrfMb7UX+LAScqMj3R2J
+        /IMCRDSnxGJ+vMyAPKqLS8MDarmWHCRuUd0hw7ZaNyZJOGVNBBc6/Hrseu5ph1y/ip3aDy
+        TdBtadiqCB3jjz2f23h/QrMIKCsvV5FbgRpjyQXtwKj3jCSgQOy/I+cb/kyZacgIa6FWFC
+        riI6ed5iHo8iL/iA82Fa8MRYTAp7z+uRaMCY63FYFqPkDn2l6pjl5rXHgXSw2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639039027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lzMFnVW/85YWmTw86Zk7iMM6erPIn8vff7QnFiF41HE=;
+        b=bi+8IbnjSJqim1yrMqKUqz/cyLW1+6NdX2qMdIWNvgW9Q9i8LMYUfva+UJ6WnT6hFxJ4P1
+        qo6SpDKNWDp8qqDA==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: RE: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com> <878rx480fk.ffs@tglx>
+ <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+Date:   Thu, 09 Dec 2021 09:37:06 +0100
+Message-ID: <87sfv2yy19.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20211209082850.10021-1-jeyu@kernel.org>
-X-OS:   Linux p200300cbcf38f1003adeadfffec0265a.dip0.t-ipconnect.de
- 5.13.8-1-default x86_64
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+++ Jessica Yu [09/12/21 09:28 +0100]:
->Luis has done a great job maintaining modules so far. As I'm planning to
->take a break from work soon, I think we're ready to transition over fully.
+On Thu, Dec 09 2021 at 05:23, Kevin Tian wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>> I don't see anything wrong with that. A subdevice is it's own entity and
+>> VFIO can chose the most conveniant representation of it to the guest
+>> obviously.
+>> 
+>> How that is backed on the host does not really matter. You can expose
+>> MSI-X to the guest with a INTx backing as well.
+>> 
 >
->Signed-off-by: Jessica Yu <jeyu@kernel.org>
->---
-> MAINTAINERS | 1 -
-> 1 file changed, 1 deletion(-)
+> Agree with this point. How the interrupts are represented to the guest
+> is orthogonal to how the backend resource is allocated. Physically MSI-X 
+> and IMS can be enabled simultaneously on an IDXD device. Once 
+> dynamic allocation is allowed for both, either one can be allocated for
+> a subdevice (with only difference on supported #subdevices). 
 >
->diff --git a/MAINTAINERS b/MAINTAINERS
->index 43007f2d29e0..a92145633fbe 100644
->--- a/MAINTAINERS
->+++ b/MAINTAINERS
->@@ -12866,7 +12866,6 @@ F:	drivers/media/dvb-frontends/mn88473*
->
-> MODULE SUPPORT
-> M:	Luis Chamberlain <mcgrof@kernel.org>
->-M:	Jessica Yu <jeyu@kernel.org>
-> S:	Maintained
-> T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git modules-next
+> When an interrupt resource is exposed to the guest with the same type 
+> (e.g. MSI-on-MSI or IMS-on-IMS), it can be also passed through to the 
+> guest as long as a hypercall machinery is in place to get addr/data pair 
+> from the host (as you suggested earlier).
 
-Grr, I forgot to change the git repo line - will resend shortly.
+As I pointed out in the conclusion of this thread, IMS is only going to
+be supported with interrupt remapping in place on both host and guest.
+
+As these devices are requiring a vIOMMU on the guest anyway (PASID, User
+IO page tables), the required hypercalls are part of the vIOMMU/IR
+implementation. If you look at it from the irqdomain hierarchy view:
+
+                         |- PCI-MSI
+  VECTOR -- [v]IOMMU/IR -|- PCI-MSI-X
+                         |- PCI-IMS
+
+So host and guest use just the same representation which makes a ton of
+sense.
+
+There are two places where this matters:
+
+  1) The activate() callback of the IR domain
+
+  2) The irq_set_affinity() callback of the irqchip associated with the
+     IR domain
+
+Both callbacks are allowed to fail and the error code is handed back to
+the originating call site.
+
+If you look at the above hierarchy view then MSI/MSI-X/IMS are all
+treated in exactly the same way. It all becomes the common case.
+
+No?
+
+Thanks,
+
+        tglx
+
+

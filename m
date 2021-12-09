@@ -2,95 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E35DB46EA5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51CC46EA5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbhLIOy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbhLIOyS (ORCPT
+        id S234052AbhLIOyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:54:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34004 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238900AbhLIOyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:54:18 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5547C061746;
-        Thu,  9 Dec 2021 06:50:44 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id q17so4030779plr.11;
-        Thu, 09 Dec 2021 06:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EV/Cl/bL92j4HW6sBCN23DMzQiHfbcqAse4UFlhA0Hw=;
-        b=X9ZRBon2HXgYSjJVE+NR80PPSbI+tV6BQ6e309dti7lIudYywVarkXOeBLlknLdZyP
-         ZVht5pVSEnzdGOeoIckWRtgpVlPJ2yhXo6e8zCpTRQBaDSVTePgx5sxME7naMw6zn+yZ
-         Xm3s3mEVLforTfbvGjzcBV+O+T/roJGCG/kKfLK+rIcaTDZ4hFdJtr+bPGjfpCfFBS/D
-         QYJoS72LuZerioSUWtgGaE4x6bhcVDK1475/eNv1xyDj8foekSpwc2wGAZIlTKeV8TUU
-         SGuPsciJmR31UExjI0ax/y8GSx+4XXPYkiNTNHwfg3iICmCPzcWqvbvnsY5e+G9FQvib
-         5VVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EV/Cl/bL92j4HW6sBCN23DMzQiHfbcqAse4UFlhA0Hw=;
-        b=wcOhIH8uj/CBL73EAYgycDO8J+VJj9gpxGE4LSG7HmGSnYgDVbVZa57o/40CFIkBhR
-         sJWjyizVGdQedwgUXlJdUXKDKIRk0p4DAx1bajoaulyd01LgAYtJk2IOBXwD4qxj9cs9
-         rdtcVFIX5+G1z1gdVnYynHjPy40U0r4PNDvGAWWkgGiF+AL7y470PJX7TT+BEi7Ov6fp
-         8cL1L/Sldv5EdzfGjbmPmHJ00vn5jg/pI/PgPt31TmoMgcKmM0gw6FRAQvnIg5sXGR70
-         xCd/gBCfBnfwj8/R3kJL/TCsnBPJWoo9G6slV61eyc13SwGZIcB801sGVfj38pWIxV+t
-         ogew==
-X-Gm-Message-State: AOAM530Fy59TliIfk2trEGWBDO5yOL+wKIGfJzjRxqMZ1GivDOiiRU88
-        SYgF1GAKImFZbzF8e9rXFM2tubEt7Qo=
-X-Google-Smtp-Source: ABdhPJwmaAAlrS7xMiUaSe3nKKM8Gh3tybpQz0QjIf6t6MSHSEW3wC+TS8Agb5mXvwdGObnBC24mqQ==
-X-Received: by 2002:a17:90b:4b83:: with SMTP id lr3mr16561802pjb.98.1639061444544;
-        Thu, 09 Dec 2021 06:50:44 -0800 (PST)
-Received: from [192.168.1.26] (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id k28sm5695294pgl.69.2021.12.09.06.50.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 06:50:44 -0800 (PST)
-Message-ID: <1164349c-93a5-ebb8-94aa-dbe03957c40f@gmail.com>
-Date:   Thu, 9 Dec 2021 06:50:43 -0800
+        Thu, 9 Dec 2021 09:54:35 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 31EF81F382;
+        Thu,  9 Dec 2021 14:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639061461; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cqz2Wo2PLKDgEUVXMCi6nFzDYYQd3Bu8kKUXWv4LwQA=;
+        b=qiE1JvT+Cn29lzs+cXyqOztl6bFbUIVpIhjQCnpMVUoipfasrxVCvk1Kisdjbt7NBxfAus
+        mfFe57VoKoAWLl+a7qkIwKEJdBm20lRTaSvWVNe3oEA88Kx6bQnu2mx+fGqmxTQgwZBFg9
+        qWPnKmGU/KhjTONcpBdyYZriCTmynX4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639061461;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cqz2Wo2PLKDgEUVXMCi6nFzDYYQd3Bu8kKUXWv4LwQA=;
+        b=HnkXS3RsEYoPdb3/41HzWQLehFxb6PFCyZPRerIr2dv/LAgEdUG+8rUCqqUAc5YME6BCTS
+        +Z3KZS/oYYodtMCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C98513B2D;
+        Thu,  9 Dec 2021 14:51:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UkBaAtUXsmHbMQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 09 Dec 2021 14:51:01 +0000
+Message-ID: <d0a2acda-c939-73fa-477c-58a2d6bb28f7@suse.cz>
+Date:   Thu, 9 Dec 2021 15:51:00 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH] scsi: lpfc: Use struct_group() to initialize struct
- lpfc_cgn_info
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [syzbot] INFO: task can't die in reclaim_throttle
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        James Smart <james.smart@broadcom.com>
-Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20211208195957.1603092-1-keescook@chromium.org>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <20211208195957.1603092-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     syzbot <syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+References: <00000000000050185105d2ac05d2@google.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <00000000000050185105d2ac05d2@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/2021 11:59 AM, Kees Cook wrote:
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memset(), avoid intentionally writing across
-> neighboring fields.
+On 12/9/21 01:52, syzbot wrote:
+> Hello,
+
++ CC Mel
+
+> syzbot found the following issue on:
 > 
-> Add struct_group() to mark "stat" region of struct lpfc_cgn_info that
-> should be initialized to zero, and refactor the "data" region memset()
-> to wipe everything up to the cgn_stats region.
+> HEAD commit:    4eee8d0b64ec Add linux-next specific files for 20211208
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=113d8d75b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=dcea9eda277e1090b35f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com
+> 
+> INFO: task syz-executor.5:925 can't die for more than 143 seconds.
+> task:syz-executor.5  state:D
+>  stack:23840 pid:  925 ppid:   565 flags:0x00004006
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:4986 [inline]
+>  __schedule+0xab2/0x4d90 kernel/sched/core.c:6296
+>  schedule+0xd2/0x260 kernel/sched/core.c:6369
+>  schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881
+>  reclaim_throttle+0x1ce/0x5e0 mm/vmscan.c:1072
+>  consider_reclaim_throttle mm/vmscan.c:3399 [inline]
+>  shrink_zones mm/vmscan.c:3486 [inline]
+>  do_try_to_free_pages+0x7cd/0x1620 mm/vmscan.c:3541
+>  try_to_free_pages+0x29f/0x750 mm/vmscan.c:3776
+>  __perform_reclaim mm/page_alloc.c:4603 [inline]
+>  __alloc_pages_direct_reclaim mm/page_alloc.c:4624 [inline]
+>  __alloc_pages_slowpath.constprop.0+0xa9e/0x2080 mm/page_alloc.c:5014
+>  __alloc_pages+0x412/0x500 mm/page_alloc.c:5389
+>  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
+>  alloc_slab_page mm/slub.c:1799 [inline]
+>  allocate_slab mm/slub.c:1952 [inline]
+>  new_slab+0x2a9/0x3a0 mm/slub.c:2004
+>  ___slab_alloc+0x6be/0xd60 mm/slub.c:3019
+>  __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3106
+>  slab_alloc_node mm/slub.c:3197 [inline]
+>  slab_alloc mm/slub.c:3239 [inline]
+>  kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3244
+>  mempool_alloc+0x146/0x350 mm/mempool.c:392
+>  bvec_alloc+0x16b/0x200 block/bio.c:206
+>  bio_alloc_bioset+0x376/0x4a0 block/bio.c:481
+>  bio_alloc include/linux/bio.h:371 [inline]
+>  mpage_alloc+0x2f/0x1b0 fs/mpage.c:79
+>  do_mpage_readpage+0xfa9/0x2590 fs/mpage.c:306
+>  mpage_readahead+0x3db/0x920 fs/mpage.c:389
+>  read_pages+0x1db/0x790 mm/readahead.c:129
+>  page_cache_ra_unbounded+0x585/0x780 mm/readahead.c:238
+>  do_page_cache_ra+0xf9/0x140 mm/readahead.c:268
+>  do_sync_mmap_readahead mm/filemap.c:3058 [inline]
+>  filemap_fault+0x157f/0x21c0 mm/filemap.c:3151
+>  __do_fault+0x10d/0x790 mm/memory.c:3846
+>  do_read_fault mm/memory.c:4161 [inline]
+>  do_fault mm/memory.c:4290 [inline]
+>  handle_pte_fault mm/memory.c:4548 [inline]
+>  __handle_mm_fault+0x2761/0x4160 mm/memory.c:4683
+>  handle_mm_fault+0x1c8/0x790 mm/memory.c:4781
+>  faultin_page mm/gup.c:939 [inline]
+>  __get_user_pages+0x503/0xf80 mm/gup.c:1160
+>  populate_vma_page_range+0x24d/0x330 mm/gup.c:1492
+>  __mm_populate+0x1ea/0x3e0 mm/gup.c:1601
+>  mm_populate include/linux/mm.h:2698 [inline]
+>  vm_mmap_pgoff+0x20e/0x290 mm/util.c:524
+>  ksys_mmap_pgoff+0x40d/0x5a0 mm/mmap.c:1630
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7fd1c83f6af9
+> RSP: 002b:00007fd1c736c188 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+> RAX: ffffffffffffffda RBX: 00007fd1c8509f60 RCX: 00007fd1c83f6af9
+> RDX: 0000000001000002 RSI: 0000000000b36000 RDI: 0000000020000000
+> RBP: 00007fd1c8450ff7 R08: 0000000000000004 R09: 0000000000000000
+> R10: 0000000000028011 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007fff309a431f R14: 00007fd1c736c300 R15: 0000000000022000
+>  </TASK>
+> 
+> Showing all locks held in the system:
+> 1 lock held by khungtaskd/26:
+>  #0: ffffffff8bb828a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
+> 1 lock held by kswapd1/99:
+> 1 lock held by in:imklog/6230:
+>  #0: ffff888021d92370 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:994
+> 1 lock held by syz-executor.5/925:
+> 
+> =============================================
+> 
+> 
+> 
 > ---
-
-
-looks fine.
-
-Reviewed-by: James Smart <jsmart2021@gmail.com>
-
--- james
-
-
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
 

@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 981FA46E0D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680E546E0D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbhLICZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:25:26 -0500
-Received: from mga11.intel.com ([192.55.52.93]:16958 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229909AbhLICZZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:25:25 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="235511220"
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="235511220"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:21:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="516080276"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 08 Dec 2021 18:21:47 -0800
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <1638884834-83028-3-git-send-email-jacob.jun.pan@linux.intel.com>
- <16408193-c8bc-3046-b32f-9274bf0b415c@linux.intel.com>
- <20211208104939.732fa5b9@jacob-builder>
- <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <1b3ee13d-0148-1156-52ad-b96bca51cb6f@linux.intel.com>
-Date:   Thu, 9 Dec 2021 10:21:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230072AbhLIC0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229909AbhLIC0j (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:26:39 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D667C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 18:23:06 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bf8so6768878oib.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 18:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ce+3ZLHZVFn6hr/avmz5qPikAqGOU695ooOcBJXu3dg=;
+        b=if2gZp4ZdriFndAsWg8EmVfq9toVFPf33VIceGqgnQvA4udSDGbEZcGFr56gzeqYlB
+         MRr5DwSssiy8+YCF4ya+1z8ql3zlWPf75hsMxeD84VeFGTuJBrHHIwrXcYJ8UU6F4Iti
+         IeItRDbLedrZOCCTPKmXI3tNR2ez8XpCQFdkISpV7YJChxY8/6fFLk88wICt0PbWgMXY
+         YceB2c9q+ne3RjSr6uu4IRccxr0cxl9jGYdilPrn5KzMkLrZ3Mw+K0eTn8Xx+mkdynQX
+         gtO0CJBr2sgx0zl7JA6rvR5ivmBqqOsmhOAb4F6c+LlBBi9lcQp/mkRPA0341pDlfq0s
+         1EXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ce+3ZLHZVFn6hr/avmz5qPikAqGOU695ooOcBJXu3dg=;
+        b=Q767MWIi435qkOkgjZka+RDH5Q9Pjh2hUxSyYsp24Ovw0wRNrbgiTW6t7DAh7oy5zQ
+         HI4p/YRpZlXs8bZCpPC/4tmSoUyFtzYo5U+yNWnV3CHh3rkwyFTP030pTMEk0CFmJ3GI
+         /TGTvVddWE8mjQIZZCvvd9ou+KEpW+Fo909vlZlR2yF92/nsA3cnJypngnOnX2Dk/S+i
+         B9cRGw4BRU5NkTh2OIri2vIz7jnhqenwrpYb4zL//niB0HI9fiiP6m9DWvM2HbpgcB7H
+         cPgGqN7us0iepbo5aUaSmWrrZW7pN8q6qYjZHLqQrAnd5gkMfkXkuWbbVCpocIzENLLL
+         PAuQ==
+X-Gm-Message-State: AOAM531/wScZP5qoqtRojhCqw/o8EG2rx+s8bNFKFzv/C0/mCggnsCSJ
+        16BCZ+tMTBj30orioD267Z+dZGF6dqaL+J5zc7k+kA==
+X-Google-Smtp-Source: ABdhPJyoHCqxuoxzuTYEd7z891USU7AXAoWKFpOZjUl4jhTMLZS9p0jYjZ44oG9JaxR+O6bsYdARh6LMzmzhOafU7Cs=
+X-Received: by 2002:a05:6808:60e:: with SMTP id y14mr3172519oih.162.1639016585914;
+ Wed, 08 Dec 2021 18:23:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211201072626.19599-1-lakshmi.sowjanya.d@intel.com> <20211201072626.19599-2-lakshmi.sowjanya.d@intel.com>
+In-Reply-To: <20211201072626.19599-2-lakshmi.sowjanya.d@intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 9 Dec 2021 03:22:54 +0100
+Message-ID: <CACRpkdYFJf=A_isumOO6F5_oYbsdpA5KyCSj1niFRumKW7VJjw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: Add bindings for Intel
+ Thunderbay pinctrl driver
+To:     lakshmi.sowjanya.d@intel.com
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        bgolaszewski@baylibre.com, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, tamal.saha@intel.com,
+        pandith.n@intel.com, kenchappa.demakkanavar@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 9:56 AM, Tian, Kevin wrote:
->> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
->> Sent: Thursday, December 9, 2021 2:50 AM
->>
->>> Can a device issue DMA requests with PASID even there's no system
->> IOMMU
->>> or the system IOMMU is disabled?
->>>
->> Good point.
->> If IOMMU is not enabled, device cannot issue DMA requests with PASID. This
->> API will not be available. Forgot to add dummy functions to the header.
->>
-> 
-> PASID is a PCI thing, not defined by IOMMU.
-> 
-> I think the key is physically if IOMMU is disabled, how will root complex
-> handle a PCI memory request including a PASID TLP prefix? Does it block
-> such request due to no IOMMU to consume PASID or simply ignore PASID
-> and continue routing the request to the memory controller?
-> 
-> If block, then having an iommu interface makes sense.
-> 
-> If ignore, possibly a DMA API call makes more sense instead, implying that
-> this extension can be used even when iommu is disabled.
-> 
-> I think that is what Baolu wants to point out.
+Hi Lakshmi,
 
-Yes, exactly. Imagining in the VM guest environment, do we require a
-vIOMMU for this functionality? vIOMMU is not performance friendly if we
-put aside the security considerations.
+On Wed, Dec 1, 2021 at 8:26 AM <lakshmi.sowjanya.d@intel.com> wrote:
 
-Best regards,
-baolu
+> +patternProperties:
+> +  '^gpio@[0-9a-f]*$':
+> +    type: object
+> +
+> +    description:
+> +      Child nodes can be specified to contain pin configuration information,
+> +      which can then be utilized by pinctrl client devices.
+> +      The following properties are supported.
+> +
+> +    properties:
+> +      pins:
+> +        description: |
+> +          The name(s) of the pins to be configured in the child node.
+> +          Supported pin names are "GPIO0" up to "GPIO66".
+> +
+> +      bias-disable: true
+> +
+> +      bias-pull-down: true
+> +
+> +      bias-pull-up: true
+> +
+> +      drive-strength:
+> +        description: Drive strength for the pad.
+> +        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+> +
+> +      bias-bus-hold:
+> +        type: boolean
+> +
+> +      input-schmitt-enable:
+> +        type: boolean
+> +
+> +      slew-rate:
+> +        description: GPIO slew rate control.
+> +                      0 - Slow
+> +                      1 - Fast
+> +        enum: [0, 1]
+> +
+> +additionalProperties: false
+
+Can't you reference
+Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+here?
+
+Look at for example:
+Documentation/devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml
+
+Yours,
+Linus Walleij

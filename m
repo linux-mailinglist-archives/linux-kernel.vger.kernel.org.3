@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFC846F396
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6597746F398
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbhLITHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S230148AbhLITHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbhLITG5 (ORCPT
+        with ESMTP id S230136AbhLITHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:06:57 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F10C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:03:23 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id e136so15987423ybc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:03:23 -0800 (PST)
+        Thu, 9 Dec 2021 14:07:34 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC898C0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:03:59 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id e136so15991625ybc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:03:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mFgPKxEL0IYHP9XylpFOWxnMIuX8VMB5Vdn/l5Gnhv4=;
-        b=d49r+a/yxhwOKt2CtOzzbORMPT/pqNpe+rgLAEHE+SZtZY+J0Q/dASqGQEoOO63AKl
-         IZGCxDaRUpLkaPs65s0MelNCEZMOzGWu1jxmrZ5NMk5dQFW7Au7fieqDSWvLVewsPghi
-         JXyseLJkwccRHATEPFZhMQW8coGfhXWVFI5DXDa2n/mkNMcBfzlrWlcmzrrNPZi9GbN5
-         EXjFZQ23bMTrQD0h2s3J5ByCxNqWXe7wGhQr+exDwJ6XnHRB0+m+hrj0kNvx7hVgwMJd
-         0IeO9FYOCWP8SCL3UyqUcFOiT6+XAFctnrpvoAonrahMEdKNAy5CdS57TCljfW/BBsbw
-         +BTg==
+        bh=two5tWS0eGFOwgvR2SUAW/v768W9Njq3kAUeHb+0A4Q=;
+        b=Lwiup1KxwBFyc07FAmO5nKhY05sgszhLXDqINwnOoO1lFEc8Y/u1J2GTVuy7p2BUzj
+         fT7ftz1+EmywUzrlqjNoQ4YaC+RxQccsjCtTUku1d1TRQBu7eFY2grZ1yx8vcnvkL/cy
+         WeTQX/cJPLqK15ZZ+nJpwJhqBZmqQVTKeukO52X1SRIOBJvhuMvx7Opwk5c/YDnX6r/K
+         EdsTJpzMYmheZLwlHenEVAhnZWW9B3Hbd3PB6Q/vCSuUnoPp8JJHTP8jswnti+t7me7d
+         KtA3DZRrG86Ne4ieRt9tWFoM9/NH3IP4yFxA4BLt9M9A9PE17J9vMLRkJ3ZR+0RbIXfz
+         /yPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mFgPKxEL0IYHP9XylpFOWxnMIuX8VMB5Vdn/l5Gnhv4=;
-        b=c57HePOVPPr/dTnFBmYOlaLte5tsyJC4YJ2Di5nll6+hnggFauL3jd+IFwwAHJvXtV
-         w28GUX3QpfJ7uezO1HZLZD8HwgW6SWV1wK/ajW/FJ9zutCKPZ0c4AdADt8eWbEg4+awh
-         S0b7uNkEnBKULHfRMNDTIG0s2T6VpVzXs3PPP5FtR7/xGk/fNPqJHwO3v3I2rrUvwiXi
-         6VwGRl95pNSjVCrTBxe/sZjtyFePRSpNwJY468z6FAXs5CG7EgiFmu0/Z/nRBG3DyL24
-         BCnbwVULxbDnetzlDAniTsUVQR99mbwHCy5qflj83FUI0PQ3p+Lvfpk7VdHXGQP/mi1u
-         CnqA==
-X-Gm-Message-State: AOAM530skfGAYmO8sZFZBU3H5Faw2Aj5vpdst7v8EZdAPNwjDVPJ3dbb
-        7c5GqrusPPylkman3gbjpQ8s3YmjMsYIJXoT3PkFzQ==
-X-Google-Smtp-Source: ABdhPJyLoK6MoV/dr1IqHWQLckho4ke9rkGF44TsXb9R/qALOruPqSksrOVV/ixlpa0mwThmIPfWCovcEqSJsBovAWE=
-X-Received: by 2002:a25:610d:: with SMTP id v13mr7892030ybb.1.1639076602764;
- Thu, 09 Dec 2021 11:03:22 -0800 (PST)
+        bh=two5tWS0eGFOwgvR2SUAW/v768W9Njq3kAUeHb+0A4Q=;
+        b=cT911RXUO4SnwTGIzAC93FBVs36WIw+4nKsc12BweuZB4tgSGFjOLSq8Nc6xnKPl90
+         4Lxchk0dOgpH6pdnu76zF/o9zln+fJiy0MoMX5/5GvYLXf/q/UO0KQIrPyyQsH6FzziT
+         RxqnVYZLYCQ4iyTWiHltdmhD9kDB3FyB4/YrqXZ4a0JaEkLKfRQqnQvSkbG/dCnNfDq8
+         Aj3HAfgcjaQkNGHcdfzoJQCVTWwEmUfcKk+IayuW854OT1tbJGzrMe53m8NzbnS5jP+T
+         coHaAbOQskOrA4G16U0m/EYPbZFmLyP6yP/q6bEo9lVi/5Qlm1gYXV6iGM5vzyH+J70v
+         r7Pw==
+X-Gm-Message-State: AOAM532IOxTExrcAY+Xhsu9dTCdjB0ydjaJ/GAj6qhV5hzWyF3R2gSwr
+        d0QC5N/6UygLi3J4Tm+ujk9mImY6pnYf+CXKchY4Pg==
+X-Google-Smtp-Source: ABdhPJyecQYcqcyB3VigbPT/iwpHLSqnyETAoJb0G5MHHeKta4v9w6O15VNzF6yzZaUdu3RkQuz6hcW7XgA+lP52SNI=
+X-Received: by 2002:a25:a448:: with SMTP id f66mr8383450ybi.225.1639076637791;
+ Thu, 09 Dec 2021 11:03:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208212211.2860249-1-surenb@google.com> <YbHEgLi1g1XtsOgh@dhcp22.suse.cz>
-In-Reply-To: <YbHEgLi1g1XtsOgh@dhcp22.suse.cz>
+References: <20211208212211.2860249-1-surenb@google.com> <20211208212211.2860249-3-surenb@google.com>
+ <YbHFVxd34P0CvfpG@dhcp22.suse.cz>
+In-Reply-To: <YbHFVxd34P0CvfpG@dhcp22.suse.cz>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 9 Dec 2021 11:03:11 -0800
-Message-ID: <CAJuCfpE4CWMAAFGPjvEz=a6_2kpMSY8hhUMWJ5GtfDv7uD8jng@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] mm: protect free_pgtables with mmap_lock write
- lock in exit_mmap
+Date:   Thu, 9 Dec 2021 11:03:46 -0800
+Message-ID: <CAJuCfpHQ0H+Uqb2J2iW4UtgEn+OogvByMzoKrthBaS9gR4OYug@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] mm/oom_kill: allow process_mrelease to run under
+ mmap_lock protection
 To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, rientjes@google.com,
         willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
@@ -67,130 +68,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
+On Thu, Dec 9, 2021 at 12:59 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On Wed 08-12-21 13:22:09, Suren Baghdasaryan wrote:
-> > oom-reaper and process_mrelease system call should protect against
-> > races with exit_mmap which can destroy page tables while they
-> > walk the VMA tree. oom-reaper protects from that race by setting
-> > MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
-> > before taking and releasing mmap_write_lock. process_mrelease has
-> > to elevate mm->mm_users to prevent such race. Both oom-reaper and
-> > process_mrelease hold mmap_read_lock when walking the VMA tree.
-> > The locking rules and mechanisms could be simpler if exit_mmap takes
-> > mmap_write_lock while executing destructive operations such as
-> > free_pgtables.
-> > Change exit_mmap to hold the mmap_write_lock when calling
-> > free_pgtables and remove_vma. Operations like unmap_vmas and
-> > unlock_range are not destructive and could run under mmap_read_lock
-> > but for simplicity we take one mmap_write_lock during almost the entire
-> > operation.
+> On Wed 08-12-21 13:22:11, Suren Baghdasaryan wrote:
+> > With exit_mmap holding mmap_write_lock during free_pgtables call,
+> > process_mrelease does not need to elevate mm->mm_users in order to
+> > prevent exit_mmap from destrying pagetables while __oom_reap_task_mm
+> > is walking the VMA tree. The change prevents process_mrelease from
+> > calling the last mmput, which can lead to waiting for IO completion
+> > in exit_aio.
+> >
+> > Fixes: 337546e83fc7 ("mm/oom_kill.c: prevent a race between process_mrelease and exit_mmap")
 >
-> unlock_range is not safe to be called under read lock. See 27ae357fa82b
-> ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+> I am not sure I have brought this up already but I do not think Fixes
+> tag is a good fit. 337546e83fc7 is a correct way to handle the race. It
+> is just slightly less optimal than this fix.
 
-Ok, I'll remove the sentence above.
-Is my understanding correct that it is unsafe only because oom-reaper
-can't deal with VM_LOCKED, otherwise it would be fine?
+Will post v5 without it. Thanks!
 
 >
-> > Note also that because oom-reaper checks VM_LOCKED flag,
-> > unlock_range() should not be allowed to race with it.
-> > Before this patch, remove_vma used to be called with no locks held,
-> > however with fput being executed asynchronously and vm_ops->close
-> > not being allowed to hold mmap_lock (it is called from __split_vma
-> > with mmap_sem held for write), changing that should be fine.
-> > In most cases this lock should be uncontended. Previously, Kirill
-> > reported ~4% regression caused by a similar change [1]. We reran the
-> > same test and although the individual results are quite noisy, the
-> > percentiles show lower regression with 1.6% being the worst case [2].
-> > The change allows oom-reaper and process_mrelease to execute safely
-> > under mmap_read_lock without worries that exit_mmap might destroy page
-> > tables from under them.
-> >
-> > [1] https://lore.kernel.org/all/20170725141723.ivukwhddk2voyhuc@node.shutemov.name/
-> > [2] https://lore.kernel.org/all/CAJuCfpGC9-c9P40x7oy=jy5SphMcd0o0G_6U1-+JAziGKG6dGA@mail.gmail.com/
-> >
 > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 >
-> The patch looks good otherwise. Btw. when I was trying to do something
-> similar in the past Hugh has noted that we can get rid of the same
-> lock&&unlock trick in ksm. Maybe you want to have a look at that as well
-> ;)
-
-I'll take a look after we cleanup this path completely (oom pieces included).
-
->
 > Acked-by: Michal Hocko <mhocko@suse.com>
-
-Thanks!
-
 >
 > Thanks!
->
 > > ---
-> > changes in v4
-> > - Separated comments describing vm_operations_struct::close locking
-> > requirements into a separate patch, per Matthew Wilcox
+> >  mm/oom_kill.c | 27 +++++++++++++++------------
+> >  1 file changed, 15 insertions(+), 12 deletions(-)
 > >
-> >  mm/mmap.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index bfb0ea164a90..f4e09d390a07 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -3142,25 +3142,27 @@ void exit_mmap(struct mm_struct *mm)
-> >                * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-> >                * __oom_reap_task_mm() will not block.
-> >                *
-> > -              * This needs to be done before calling munlock_vma_pages_all(),
-> > +              * This needs to be done before calling unlock_range(),
-> >                * which clears VM_LOCKED, otherwise the oom reaper cannot
-> >                * reliably test it.
-> >                */
-> >               (void)__oom_reap_task_mm(mm);
-> >
-> >               set_bit(MMF_OOM_SKIP, &mm->flags);
-> > -             mmap_write_lock(mm);
-> > -             mmap_write_unlock(mm);
+> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> > index 1ddabefcfb5a..67780386f478 100644
+> > --- a/mm/oom_kill.c
+> > +++ b/mm/oom_kill.c
+> > @@ -1169,15 +1169,15 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
+> >               goto put_task;
 > >       }
 > >
-> > +     mmap_write_lock(mm);
-> >       if (mm->locked_vm)
-> >               unlock_range(mm->mmap, ULONG_MAX);
-> >
-> >       arch_exit_mmap(mm);
-> >
-> >       vma = mm->mmap;
-> > -     if (!vma)       /* Can happen if dup_mmap() received an OOM */
-> > +     if (!vma) {
-> > +             /* Can happen if dup_mmap() received an OOM */
-> > +             mmap_write_unlock(mm);
-> >               return;
-> > +     }
-> >
-> >       lru_add_drain();
-> >       flush_cache_mm(mm);
-> > @@ -3171,16 +3173,14 @@ void exit_mmap(struct mm_struct *mm)
-> >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
-> >       tlb_finish_mmu(&tlb);
-> >
-> > -     /*
-> > -      * Walk the list again, actually closing and freeing it,
-> > -      * with preemption enabled, without holding any MM locks.
-> > -      */
-> > +     /* Walk the list again, actually closing and freeing it. */
-> >       while (vma) {
-> >               if (vma->vm_flags & VM_ACCOUNT)
-> >                       nr_accounted += vma_pages(vma);
-> >               vma = remove_vma(vma);
-> >               cond_resched();
+> > -     if (mmget_not_zero(p->mm)) {
+> > -             mm = p->mm;
+> > -             if (task_will_free_mem(p))
+> > -                     reap = true;
+> > -             else {
+> > -                     /* Error only if the work has not been done already */
+> > -                     if (!test_bit(MMF_OOM_SKIP, &mm->flags))
+> > -                             ret = -EINVAL;
+> > -             }
+> > +     mm = p->mm;
+> > +     mmgrab(mm);
+> > +
+> > +     if (task_will_free_mem(p))
+> > +             reap = true;
+> > +     else {
+> > +             /* Error only if the work has not been done already */
+> > +             if (!test_bit(MMF_OOM_SKIP, &mm->flags))
+> > +                     ret = -EINVAL;
 > >       }
-> > +     mmap_write_unlock(mm);
-> >       vm_unacct_memory(nr_accounted);
-> >  }
+> >       task_unlock(p);
 > >
+> > @@ -1188,13 +1188,16 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
+> >               ret = -EINTR;
+> >               goto drop_mm;
+> >       }
+> > -     if (!__oom_reap_task_mm(mm))
+> > +     /*
+> > +      * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
+> > +      * possible change in exit_mmap is seen
+> > +      */
+> > +     if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
+> >               ret = -EAGAIN;
+> >       mmap_read_unlock(mm);
+> >
+> >  drop_mm:
+> > -     if (mm)
+> > -             mmput(mm);
+> > +     mmdrop(mm);
+> >  put_task:
+> >       put_task_struct(task);
+> >       return ret;
 > > --
 > > 2.34.1.400.ga245620fadb-goog
 >

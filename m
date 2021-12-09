@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F9A46F776
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A451646F763
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbhLIXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:35:29 -0500
-Received: from mga14.intel.com ([192.55.52.115]:48157 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229760AbhLIXf2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:35:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639092714; x=1670628714;
-  h=from:to:cc:subject:date:message-id;
-  bh=gNoCXxW9NByMSJK7ekXm9u+LGKskuB0g5GKnEq/SOC0=;
-  b=GM5yW9ZaG8Q2VO8CItZ5HqZQEq/Zqa/atpNS4GE4yV32ozUMyE3xHB+x
-   gMJ6LHGu+SID9Jh86vUi54B2tELrikwQgGm+jVnFN0J66S7t51B2MHwOj
-   mLSMN9PbGFT5DwCFhUsjK7GaRLRCxIrS3FOvH1sVHwJ7lkVLmc0j9b+0U
-   o85tdK+6Zn/va5MMs1xYkWQhEIKIYfyWZNud6k+KQ9G992cm5+PtBI0LL
-   A7rmlxVK/6QQSGQ/I2NtFPVch0EyICdIkynHap8ANLK5DT7plLE8wIZqu
-   cJgjzJ9SJ4YOWZxiW1sixwe7yb5D1xdjmi6i2uVGba8EfXLfFz3RG8h96
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238452861"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="238452861"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:31:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="503691267"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by orsmga007.jf.intel.com with ESMTP; 09 Dec 2021 15:31:54 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com,
-        ebiederm@xmission.com, oleg@redhat.com, bp@alien8.de,
-        x86@kernel.org, chang.seok.bae@intel.com
-Subject: [PATCH] signal: Skip the altstack update when not needed
-Date:   Thu,  9 Dec 2021 15:24:34 -0800
-Message-Id: <20211209232434.3585-1-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S234354AbhLIX3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229760AbhLIX3E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 18:29:04 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89849C061746;
+        Thu,  9 Dec 2021 15:25:30 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id k64so6813759pfd.11;
+        Thu, 09 Dec 2021 15:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
+        b=HNCXaHWJiaTGGztOMHPy+t3lPvmxmOLZT3uIKev1QNrU/rHBQK6Z6olmY8gekpBQyn
+         nM1hmrtkgpu3l6PQJ0ErWY6cPQMGA5AVFY4N2FIVs6zD7QxnUTAF+wzB8+qdCA2npE/4
+         Sh2CPMx6cjHIAE+x6nwrjVE4pdIfSFxbaPeQFkM7+tWdx5bJtbJaXBgfSD+ZiTmGBloX
+         ECruT7f5A1ixZ6eJh/E3/iESO/kANeYPYTSjz2n7rNxBqJrU0q5Yb5reVV3Osm8ovTqd
+         8a8FczZJ2PuzPGnjzoukH1pRiitGz4Ly75J/47dUXxUHI/xgKbBAFEHBU/uO3asB39pe
+         Judw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
+        b=Ckl74ZAVXtT1OKsc2lBcPGu/llNTZNRJdoezVlQ4FwF4+4YOVrMs4A4S9SQcKDEYEU
+         ZnhNuiIz/aG4YFjnjcAVqEkRK4FirT4Cl4qtWHzdBIhcyOretfSqcfsB4f3s1ZLIP+oI
+         vRWkP0Ypf/9d3z6T4pu9N0WbQRM3LTWaCky3pbaAQNBU60HgPSKWbcX3oE2WJQeQ6jNK
+         wiR/bOO4zHNWbCLXLYcZEw+RXPxeANScp/hLEq7nAQTFhWIqX8rV61fGxL3ZBj2gYz0J
+         Kz1ab/vLsqMAiCqzchyrkCoDANfMW2yEF1ZZsCngRfDZhRnm933NvLtruwPtL97I3Pdx
+         MXvQ==
+X-Gm-Message-State: AOAM532FUVXVAn1DwJ+rESUWEBXLYNQpiJYP++h4+k1gnVg8bD67ngSE
+        HjOV980yDQ6s4q9QQ7SqV1bl/sIfV40=
+X-Google-Smtp-Source: ABdhPJwyRsGr6WPGru0RwXtRfzS/xGpPNhtpJ1LzcXxk2gAonJHkTvUA09py2j6SL/Ur7wRnrcBw2Q==
+X-Received: by 2002:a65:58cc:: with SMTP id e12mr33921891pgu.59.1639092329633;
+        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y18sm703960pfp.190.2021.12.09.15.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
+Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
+ to YAML
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+ <20211208003727.3596577-3-f.fainelli@gmail.com>
+ <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d68a6115-b076-1eb8-77c1-e0728e8e82dd@gmail.com>
+Date:   Thu, 9 Dec 2021 15:25:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New x86 FPU features require a large signal stack for their large states.
-Instead of requiring a large stack for every process, make sure enough
-altstack both at sys_sigaltstack() and when enabling the feature in each
-process.
+On 12/9/21 1:41 AM, Philipp Zabel wrote:
+> On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
+>> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-The optional size check was added. It helps to reject a too-small altstack
-when the large feature is enabled. Also, the architecture code examines
-each thread's altstack large enough before enabling the feature.
-
-But threads can be racy without a lock. So, this enforcement mechanism
-accompanies a lock to serialize altstack updates and the size check.
-
-On the signal return path, the altstack is restored via do_sigaltstack().
-In fact, the threads without altstack ensure it is disabled there. While no
-altstack change is needed in this case, this call ends up obtaining the
-lock.
-
-When multiple signal returns hit the lock at the same time, this
-unnecessarily increases the lock contention.
-
-Add a new check to avoid this. Check if an altstack update is needed. If
-not, skip the lock and the update. This may help sys_sigaltstack() in
-general. So place it in the function.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
----
- kernel/signal.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index a629b11bf3e0..eeb634f954cd 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -4185,6 +4185,11 @@ do_sigaltstack (const stack_t *ss, stack_t *oss, unsigned long sp,
- 				ss_mode != 0))
- 			return -EINVAL;
- 
-+		if (t->sas_ss_sp == (unsigned long)ss_sp &&
-+		    t->sas_ss_size == ss_size &&
-+		    t->sas_ss_flags == ss_flags)
-+			return 0;
-+
- 		sigaltstack_lock();
- 		if (ss_mode == SS_DISABLE) {
- 			ss_size = 0;
+Thanks, sorry for not carrying your Ack that you provided in v2 already.
 -- 
-2.17.1
-
+Florian

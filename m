@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C8746DF4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331ED46DF4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241395AbhLIAPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 19:15:08 -0500
-Received: from gate.crashing.org ([63.228.1.57]:42476 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241385AbhLIAPG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:15:06 -0500
-Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1B9060E7017366;
-        Wed, 8 Dec 2021 18:06:01 -0600
-Message-ID: <9290cfc85fbb857f55ff297e482b06d96c807f1a.camel@kernel.crashing.org>
-Subject: Re: [PATCH v3 4/4] usb: aspeed-vhub: support test mode feature
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Cc:     BMC-SW@aspeedtech.com
-Date:   Thu, 09 Dec 2021 11:06:00 +1100
-In-Reply-To: <20211208100545.1441397-5-neal_liu@aspeedtech.com>
-References: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
-         <20211208100545.1441397-5-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S241383AbhLIAOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 19:14:45 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:23020 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238478AbhLIAOo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 19:14:44 -0500
+X-IronPort-AV: E=Sophos;i="5.88,190,1635174000"; 
+   d="scan'208";a="103275904"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 09 Dec 2021 09:11:10 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2DDD94137E0B;
+        Thu,  9 Dec 2021 09:11:08 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
+Date:   Thu,  9 Dec 2021 00:10:56 +0000
+Message-Id: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-08 at 18:05 +0800, Neal Liu wrote:
-> Support aspeed usb vhub set feature to test mode.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+of_device_alloc() in early boot stage creates a interrupt mapping if
+there exists a "interrupts" property in the node.
 
-Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+For hierarchical interrupt domains using "interrupts" property in the node
+bypassed the hierarchical setup and messed up the irq setup.
 
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 19 +++++++++++++++----
->  drivers/usb/gadget/udc/aspeed-vhub/hub.c | 23 +++++++++++++++++-----
-> -
->  2 files changed, 32 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> index d918e8b2af3c..b0dfca43fbdc 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-> @@ -110,15 +110,26 @@ static int ast_vhub_dev_feature(struct
-> ast_vhub_dev *d,
->  				u16 wIndex, u16 wValue,
->  				bool is_set)
->  {
-> +	u32 val;
-> +
->  	DDBG(d, "%s_FEATURE(dev val=%02x)\n",
->  	     is_set ? "SET" : "CLEAR", wValue);
->  
-> -	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
-> -		return std_req_driver;
-> +	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-> +		d->wakeup_en = is_set;
-> +		return std_req_complete;
-> +	}
->  
-> -	d->wakeup_en = is_set;
-> +	if (wValue == USB_DEVICE_TEST_MODE) {
-> +		val = readl(d->vhub->regs + AST_VHUB_CTRL);
-> +		val &= ~GENMASK(10, 8);
-> +		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-> +		writel(val, d->vhub->regs + AST_VHUB_CTRL);
->  
-> -	return std_req_complete;
-> +		return std_req_complete;
-> +	}
-> +
-> +	return std_req_driver;
->  }
->  
->  static int ast_vhub_ep_feature(struct ast_vhub_dev *d,
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> index 93f27a745760..65cd4e46f031 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> @@ -212,17 +212,28 @@ static int ast_vhub_hub_dev_feature(struct
-> ast_vhub_ep *ep,
->  				    u16 wIndex, u16 wValue,
->  				    bool is_set)
->  {
-> +	u32 val;
-> +
->  	EPDBG(ep, "%s_FEATURE(dev val=%02x)\n",
->  	      is_set ? "SET" : "CLEAR", wValue);
->  
-> -	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
-> -		return std_req_stall;
-> +	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-> +		ep->vhub->wakeup_en = is_set;
-> +		EPDBG(ep, "Hub remote wakeup %s\n",
-> +		      is_set ? "enabled" : "disabled");
-> +		return std_req_complete;
-> +	}
->  
-> -	ep->vhub->wakeup_en = is_set;
-> -	EPDBG(ep, "Hub remote wakeup %s\n",
-> -	      is_set ? "enabled" : "disabled");
-> +	if (wValue == USB_DEVICE_TEST_MODE) {
-> +		val = readl(ep->vhub->regs + AST_VHUB_CTRL);
-> +		val &= ~GENMASK(10, 8);
-> +		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-> +		writel(val, ep->vhub->regs + AST_VHUB_CTRL);
->  
-> -	return std_req_complete;
-> +		return std_req_complete;
-> +	}
-> +
-> +	return std_req_stall;
->  }
->  
->  static int ast_vhub_hub_ep_feature(struct ast_vhub_ep *ep,
+This patch adds a check in of_device_alloc() to skip interrupt mapping if
+"not-interrupt-producer" property is present in the node. This allows
+nodes to describe the interrupts using "interrupts" property.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Hi All,
+
+Spawning from discussion [1], here is simple patch (not the ideal probably
+welcome for suggestions) from stopping the OF code from creating a map for
+the interrupts when using "interrupts" property.
+
+[1] https://lore.kernel.org/lkml/87pmqrck2m.wl-maz@kernel.org/
+    T/#mbd1e47c1981082aded4b32a52e2c04291e515508
+
+Cheers,
+Prabhakar
+---
+ drivers/of/platform.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index b3faf89744aa..629776ca1721 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -114,7 +114,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
+ 				  struct device *parent)
+ {
+ 	struct platform_device *dev;
+-	int rc, i, num_reg = 0, num_irq;
++	int rc, i, num_reg = 0, num_irq = 0;
+ 	struct resource *res, temp_res;
+ 
+ 	dev = platform_device_alloc("", PLATFORM_DEVID_NONE);
+@@ -124,7 +124,14 @@ struct platform_device *of_device_alloc(struct device_node *np,
+ 	/* count the io and irq resources */
+ 	while (of_address_to_resource(np, num_reg, &temp_res) == 0)
+ 		num_reg++;
+-	num_irq = of_irq_count(np);
++
++	/*
++	 * we don't want to map the interrupts of hierarchical interrupt domain
++	 * into the parent domain yet. This will be the job of the hierarchical
++	 * interrupt driver code to map the interrupts as and when needed.
++	 */
++	if (!of_property_read_bool(np, "not-interrupt-producer"))
++		num_irq = of_irq_count(np);
+ 
+ 	/* Populate the resource table */
+ 	if (num_irq || num_reg) {
+@@ -140,7 +147,7 @@ struct platform_device *of_device_alloc(struct device_node *np,
+ 			rc = of_address_to_resource(np, i, res);
+ 			WARN_ON(rc);
+ 		}
+-		if (of_irq_to_resource_table(np, res, num_irq) != num_irq)
++		if (num_irq && of_irq_to_resource_table(np, res, num_irq) != num_irq)
+ 			pr_debug("not all legacy IRQ resources mapped for %pOFn\n",
+ 				 np);
+ 	}
+-- 
+2.17.1
 

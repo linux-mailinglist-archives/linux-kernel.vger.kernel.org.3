@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A7C46ED1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AA646ED21
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236901AbhLIQgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:36:35 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49142 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236660AbhLIQgd (ORCPT
+        id S237385AbhLIQhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:37:12 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:55357 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235038AbhLIQhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:36:33 -0500
-Received: from nramas-ThinkStation-P330 (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F349E20B7179;
-        Thu,  9 Dec 2021 08:32:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F349E20B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639067580;
-        bh=N3wpQ5OLnIzxXcnsuI1kbDFWKuA1aIQDkbQuBarQopw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Fj/fROnNZjTIOKMcjACq+Rws/AS2Kdzlmi+tmOIw49UIRVqYvhuUog0qTewV7H4l4
-         GkWYWfEQsv09BauGj9qBdBJ53jUKXjZv7eLOOl9wKJU+uqH8QATzUOF2NZDcQGyXB3
-         62pxqEM+WsKCrZL1ZmSgoBlIixaUBNha6gZXIT9c=
-Message-ID: <c287f9be2a6e28da0f1342991afa94ffbcb190c4.camel@linux.microsoft.com>
-Subject: Re: [PATCH] arm64: kexec: Fix missing error code 'ret' warning in
- load_other_segments()
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     dan.carpenter@oracle.com, robh@kernel.org, will@kernel.org,
-        kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bauerman@linux.ibm.com, qiuguorui1@huawei.com
-Date:   Thu, 09 Dec 2021 08:32:59 -0800
-In-Reply-To: <YbHHhRnpR/EtSV3f@arm.com>
-References: <20211209004522.91926-1-nramas@linux.microsoft.com>
-         <YbHHhRnpR/EtSV3f@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Thu, 9 Dec 2021 11:37:10 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id E79AA3201E46;
+        Thu,  9 Dec 2021 11:33:35 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Thu, 09 Dec 2021 11:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=iUWoNkDex2mUJJmI1wEexloUl+w0
+        4ME3+8fgziEwZek=; b=YY4l9hJtcy4EZ06XtcieVJ+48heVMWFwTWHSlt8LrOyJ
+        L5448WmCOwCGtHRbbuET9nqR+esz4A7iCaFP4f2l1sTmO1UC7d5P7XGCW8YfQzUK
+        bQxRJWNVJJIzEZJZBq9nRUEld/Lyzc6M/hWPFZbcG8QJAXIsrgw1AXChMjAa6r4p
+        KP6+ARfkALimXrhrnJYhCdHbgDhUoYZrsQOvQsbQx7c4AU252ouLHeTeDa1Ll9AM
+        As0Zc3/8Qi5/nfNb/QdRmy6C+mP+eD/KrjWLHRSYN7iGgRlOd1xF/jGnbQ2e72zE
+        8KpzJxdMfgkPpmwKwSuPgdgZ2Q/VcBqJVLs9j4mnEg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=iUWoNk
+        Dex2mUJJmI1wEexloUl+w04ME3+8fgziEwZek=; b=Umv4YMSG2SIHbU8A2Kwmth
+        H1pB/OeTI3DSCalNRCqn5CWGkVsvgPo6RCBPOCMeOSrN5hKxIyuHm5mkybT4YV9r
+        TDlvxOL60pz8y298ufT+bWJH4WPq4goHPxcQ0uFeAIJGJYTzeJPjm/RoqHBJNJHP
+        YnyObGQanb2s0i18e79R4DwG8a7syTNqKwJS70SN6cpYwXtPnfiqOwhR/zgJFz4R
+        PAv9KoS8EJyruEFnrays+U46hyBbLwyg73FJXEgcx9gfH7+QpnZiQlSqtVzVbIAP
+        6Hpl2nrUUCAXDzxhcts7RiejYHelloV+/8634Ru9nQhUQd1XK7Z3/kSdYRY4Oodg
+        ==
+X-ME-Sender: <xms:3y-yYY60l1X6kb71rvFxg_tFejAcdszwhNSw6LDSEhm19QKa5c8CQw>
+    <xme:3y-yYZ6QrZzWez1mFwqUab64ypqzhEw5z9lDPwlpbP2ZkqNEpSsS_ykP-sLnHLGjA
+    zkBbACe4vIbY5LqLVc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkedtgdeludcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
+    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
+    htvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudehvdef
+    keffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:3y-yYXff3PIBLiXD0k7AKmt879JbppDLGh1YvG231HR3gSrXy25pkw>
+    <xmx:3y-yYdJ7Z1HmC5-eLE2ytuXCl_GeLkf_nj49l94o9O-m0_PdwrJL0A>
+    <xmx:3y-yYcIoKiAi5Cu8HAk-CID80qwNzws9Q1OK0wuPsDpPNpkHE-Yylw>
+    <xmx:3y-yYWjE8KiNMFxkRKAH_CbE-j40hOSUV0DBunxk4K_iD_fW7zcAQQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0ED52274050D; Thu,  9 Dec 2021 11:33:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4506-g4374de3f18-fm-20211208.001-g4374de3f
+Mime-Version: 1.0
+Message-Id: <3fb087c1-2d67-4527-ad63-1f8ce54e6965@www.fastmail.com>
+In-Reply-To: <20211209055049.99205-1-marcan@marcan.st>
+References: <20211209055049.99205-1-marcan@marcan.st>
+Date:   Thu, 09 Dec 2021 17:33:13 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        "Jassi Brar" <jassisinghbrar@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Mark Kettenis" <kettenis@openbsd.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/2] Apple mailbox fixup: switch to generic compatibles
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
+On Thu, Dec 9, 2021, at 06:50, Hector Martin wrote:
+> Hi folks,
+>
+> Just a quick fix for the Apple mailbox compatible. Similar to [1], we
+> intend to use SoC-specific compatibles only for potential quirks, and
+> rely on a generic compatible to allow for forward-compatibility as long
+> as things don't break.
 
-On Thu, 2021-12-09 at 09:08 +0000, Catalin Marinas wrote:
-> On Wed, Dec 08, 2021 at 04:45:22PM -0800, Lakshmi Ramasubramanian
-> wrote:
-> > 
-> > Set return code to -ENOMEM if of_kexec_alloc_and_setup_fdt()
-> > returns
-> > NULL dtb.
-> > 
-> > 
-> > @@ -149,6 +149,7 @@ int load_other_segments(struct kimage *image,
-> >  					   initrd_len, cmdline, 0);
-> >  	if (!dtb) {
-> >  		pr_err("Preparing for new dtb failed\n");
-> > +		ret = -ENOMEM;
-> >  		goto out_err;
-> >  	}
-> 
-> Above the 'if' block we have:
-> 
-> 	dtb = of_kexec_alloc_and_setup_fdt(image, initrd_load_addr,
-> 					   initrd_len, cmdline, 0);
-> 
-> Looking at this function, it has several ways to fail, not just on
-> allocation. However, we assume above that it's always -ENOMEM. We
-> could
-> do like powerpc and use -EINVAL as more likely than allocation
-> failure
-> or change of_kexec_alloc_and_setup_fdt() to return ERR_PTR() and we
-> use
-> that. The latter would be my preferred option, though it probably
-> doesn't matter much. The second best would be -EINVAL.
+I vaguely remember a brief discussion about this and I think we thought about
+using "t6000-asc", "t8103-asc" in this case since this specific mailbox hardware
+was only introduced in the M1. I think Apple calls this variant ascwrap-v4
+and m3wrap-v2.
 
-I'll change the error code to -EINVAL and post an updated patch.
+Doing it like you suggested is also fine with me though.
 
-thanks,
- -lakshmi
 
+Sven
 

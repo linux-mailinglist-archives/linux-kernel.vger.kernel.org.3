@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0D246ED3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0548F46ED42
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241148AbhLIQlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:41:24 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:33878 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239675AbhLIQlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:41:19 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 13FC61EC04D3;
-        Thu,  9 Dec 2021 17:37:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639067860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        id S241215AbhLIQlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:41:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23604 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241053AbhLIQli (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:41:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639067884;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t0nLQ0BMqQ23yc81J1J+FHAbSSeprtKANW3l+l71OuQ=;
-        b=XsiLRniZfsshKpCSL78DEBz7Y6xMDdigdCADTE++5aGBZjYaZt4IwEfpS8HXovg53YDA8l
-        ftyNhquX9ok4X2TlBHPQKk4ZaTMPUD45KTZxu+MDPfjzBMVydmbo83556Wt/MKlrOJ0UvF
-        sp4stXlUKHo7xpagGrPT7t0i7aBTNYA=
-Date:   Thu, 9 Dec 2021 17:37:42 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        stable@vger.kernel.org, x86@kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
- early param parsing
-Message-ID: <YbIw1nUYJ3KlkjJQ@zn.tnic>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com>
- <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
- <YbIgsO/7oQW9h6wv@zn.tnic>
- <YbIu55LZKoK3IVaF@kernel.org>
+        bh=jNxrSJ7hA39700PK5sP9nWrntBLNr8e9xNebTOGiU18=;
+        b=aMB9he4adxWVAHPddpbC7tYDw+MnVsvOtIe57Owss6iC7nFbaZgjeygzO/RHU4GZ+lQOzB
+        TSXx/shiNYMaC6QlwYpEdaF0DzvEPFleXPqpYnUQXBD7kX7u7HS+qhTDACoGneBGC9ZwyY
+        Ujv4qwrWrCLP/rmvLvpwrzG6jlA0+/U=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-544-hAg5uwjJNKqO8QMSQqB52Q-1; Thu, 09 Dec 2021 11:38:02 -0500
+X-MC-Unique: hAg5uwjJNKqO8QMSQqB52Q-1
+Received: by mail-wr1-f72.google.com with SMTP id q7-20020adff507000000b0017d160d35a8so1595841wro.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 08:38:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-transfer-encoding:content-language;
+        bh=jNxrSJ7hA39700PK5sP9nWrntBLNr8e9xNebTOGiU18=;
+        b=Oj7vIAX26fdNKHIKjQ820FFaRTItLpsYf6CJSElivLGwew9AkjoVj8JThevwjw6kuc
+         h0w3uEA/ju++7GgJP6RVmTQRO9ay4/brSVRTM5kBA/Pz5twenaNfQz41duQBSwCmcrHT
+         EcqWf1AcOC0oBnAuSyKnLvfeHEzorTVwhnU/9PER/T1qieZnWmG/pm0hOlZK1BR2rsmx
+         uGXEjZiDyF64RNfJ20DNwDQa9XT3GEocUpZzzDYY7Ey5G3W92ME02jqeDhtN2T4S5r5s
+         0FHZrGzu/QJW+giGsJyrL7m1lCD7cDqqjRU0D5wqvSEFajyGRnnP9qTC1nd/fZ5l7NpJ
+         3iyw==
+X-Gm-Message-State: AOAM530NdWH/Zc48FnagbeWERnNaJBcoM7o++txObfxzDAZBoqx1/Ic0
+        zdELTqgaA/UOerxkXNVWrXYDMC/mYMl4WIk4xI/IlEQxcQYJ0R2TDxB+3VQlCITipc8xHBoEcpV
+        gfR5n4FjG/3k15ByjZgd2mZyT
+X-Received: by 2002:a5d:58ed:: with SMTP id f13mr7636097wrd.373.1639067881495;
+        Thu, 09 Dec 2021 08:38:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzaV0R+9HzYiSu0FZYalbofmj5ndV0Ij51Jvm3EMXiekkqz6rpjx+QrGmfxHOtUjUM3LxbGgQ==
+X-Received: by 2002:a5d:58ed:: with SMTP id f13mr7636061wrd.373.1639067881306;
+        Thu, 09 Dec 2021 08:38:01 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id d7sm163025wrw.87.2021.12.09.08.37.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 08:38:00 -0800 (PST)
+Reply-To: eric.auger@redhat.com
+Subject: Re: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, peter.maydell@linaro.org,
+        kvm@vger.kernel.org, vivek.gautam@arm.com,
+        kvmarm@lists.cs.columbia.edu, eric.auger.pro@gmail.com,
+        ashok.raj@intel.com, maz@kernel.org, vsethi@nvidia.com,
+        zhangfei.gao@linaro.org, kevin.tian@intel.com, will@kernel.org,
+        alex.williamson@redhat.com, wangxingang5@huawei.com,
+        linux-kernel@vger.kernel.org, lushenming@huawei.com,
+        iommu@lists.linux-foundation.org, robin.murphy@arm.com
+References: <20211027104428.1059740-1-eric.auger@redhat.com>
+ <20211027104428.1059740-2-eric.auger@redhat.com>
+ <Ya3qd6mT/DpceSm8@8bytes.org>
+ <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
+ <e6733c59-ffcb-74d4-af26-273c1ae8ce68@linux.intel.com>
+ <fbeabcff-a6d4-dcc5-6687-7b32d6358fe3@redhat.com>
+ <20211208125616.GN6385@nvidia.com> <YbDpZ0pf7XeZcc7z@myrica>
+ <20211208183102.GD6385@nvidia.com>
+ <b576084b-482f-bcb7-35a6-d786dbb305e1@redhat.com>
+ <20211209154046.GQ6385@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+Message-ID: <f6e93350-e0ee-649a-bf97-314398481fc8@redhat.com>
+Date:   Thu, 9 Dec 2021 17:37:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20211209154046.GQ6385@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbIu55LZKoK3IVaF@kernel.org>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 06:29:27PM +0200, Mike Rapoport wrote:
-> On Thu, Dec 09, 2021 at 04:28:48PM +0100, Borislav Petkov wrote:
-> > On Thu, Dec 09, 2021 at 04:26:55PM +0100, Juergen Gross wrote:
-> > > Sigh. This will break Xen PV. Again. The comment above the call of
-> > > early_reserve_memory() tells you why.
-> > 
-> > I know. I was just looking at how to fix that particular thing and was
-> > going to find you on IRC to talk to you about it...
-> 
-> The memory reservation in arch/x86/platform/efi/efi.c depends on at least
-> two command line parameters, I think it's better put it back later in the
-> boot process and move efi_memblock_x86_reserve_range() out of
-> early_memory_reserve().
-> 
-> I.e. revert c0f2077baa41 ("x86/boot: Mark prepare_command_line() __init")
-> and 8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param
-> parsing") and add the patch below on top.
-> 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 49b596db5631..da36b8f8430b 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
->  
->  	early_reserve_initrd();
->  
-> -	if (efi_enabled(EFI_BOOT))
-> -		efi_memblock_x86_reserve_range();
-> -
->  	memblock_x86_reserve_range_setup_data();
->  
->  	reserve_ibft_region();
-> @@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
->  
->  	parse_early_param();
->  
-> +	if (efi_enabled(EFI_BOOT)) {
-> +		efi_memblock_x86_reserve_range();
-> +
->  #ifdef CONFIG_MEMORY_HOTPLUG
->  	/*
->  	 * Memory used by the kernel cannot be hot-removed because Linux
-> 
-> -- 
+Hi Jason,
 
-Jürgen and I were thinking about a different fix but that's probably
-ok too. But I've said that already about this mess and there's always
-something we haven't thought about.
+On 12/9/21 4:40 PM, Jason Gunthorpe wrote:
+> On Thu, Dec 09, 2021 at 08:50:04AM +0100, Eric Auger wrote:
+>
+>>> The kernel API should accept the S1ContextPtr IPA and all the parts of
+>>> the STE that relate to the defining the layout of what the S1Context
+>>> points to an thats it.
+>> Yes that's exactly what is done currently. At config time the host must
+>> trap guest STE changes (format and S1ContextPtr) and "incorporate" those
+>> changes into the stage2 related STE information. The STE is owned by the
+>> host kernel as it contains the stage2 information (S2TTB).
+> [..]
+>
+>> Note this series only coped with a single CD in the Context Descriptor
+>> Table.
+> I'm confused, where does this limit arise?
+>
+> The kernel accepts as input all the bits in the STE that describe the
+> layout of the CDT owned by userspace, shouldn't userspace be able to
+> construct all forms of CDT with any number of CDs in them?
+>
+> Or do you mean this is some qemu limitation?
+The upstream vSMMUv3 emulation does not support multiple CDs at the
+moment and since I have no proper means to validate the vSVA case I am
+rejecting any attempt from user space to inject guest configs featuring
+mutliple PASIDs. Also PASID cache invalidation must be added to this series.
 
-Whatever we do, it needs to be tested by all folks on Cc who already
-reported regressions, i.e., Anjaneya, Hugh, John and Patrick.
+Nevertheless those limitations were tackled and overcomed by others in
+CC so I don't think there is any blocking issue.
 
-Thx.
+Thanks
 
--- 
-Regards/Gruss,
-    Boris.
+Eric
+>
+> Jason
+>
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,404 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3475B46F460
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D228D46F463
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhLIT6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:58:17 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8172 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229554AbhLIT6Q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:58:16 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Jpv3g009099;
-        Thu, 9 Dec 2021 19:54:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=eq+gQxDBMHrHyZ4ljSLma72E+SoqLxYa2qKFBOkPncc=;
- b=YvQ1Gwhen/1YKCJzO0Dbl/jfei7cstRhJNCJuJyW92gmBejEhDNUboaf0CAij86lwVXt
- 0GNOknKXRKVZqhaEyiQy6ubTZDT2utV3Js3mGRNFz6Jo/UljmxQRZpLsf4g3dXcHNYF1
- SJUOkTyhdfq1mNENfIkJ7M2Lw5Aqthzh7ZLi8h3mDIMSGKLn2sZP4+YR1+AAzFZ2Z0fQ
- V+66owx26plmWbXRwJjcmOT0EpQkfz9UZ8aLR6yZi29KuZpwnI2PouFik10wOZCw29OD
- 4FRu+wWJ+qOPYi8G+puswn2xkyEZPYqMBI0MTRxD9lYwADzqe+tHQTlh6uy427oLF/wJ Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cuqhr90hy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 19:54:42 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9JmNEU029542;
-        Thu, 9 Dec 2021 19:54:41 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cuqhr90ha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 19:54:41 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9Jl4of013214;
-        Thu, 9 Dec 2021 19:54:40 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cqykjw0yn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 19:54:40 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9JsaWX31850970
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 19:54:36 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D298E42045;
-        Thu,  9 Dec 2021 19:54:36 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C469E42041;
-        Thu,  9 Dec 2021 19:54:35 +0000 (GMT)
-Received: from [9.171.1.84] (unknown [9.171.1.84])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 19:54:35 +0000 (GMT)
-Message-ID: <596857e3-ab13-7513-eeda-ed407fe22732@linux.ibm.com>
-Date:   Thu, 9 Dec 2021 20:54:35 +0100
+        id S231247AbhLIT6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:58:33 -0500
+Received: from mail-mw2nam10on2066.outbound.protection.outlook.com ([40.107.94.66]:8544
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229554AbhLIT6c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:58:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gm5MYQJHvLD9PerLCgjjOe5NdubXz2Gfi2b3k9lCaq5J7yoL6defbQ3A/ZxwV27bEQwJL7Stu/9nY1lrfl65dDnknHIpazPacTT8rtEPpAV4yD2V9ZRHontICbtq08VKHI+0LB0PdxvqxawTyhjBr4ktkCLwA2+P8C5LwIPAztFkg9MBAo9+0ExkgpB8jEIwvrZyvZR7o+h1OSniw3mNq+ctpuWtdrfPNCbSFK6Nt46GIP3v96i7yuuKEHYXeapl7Mw003QVlygztIa8bxGsiXSg4Bu+hlr/9jTZlfedm6dhSpEpXblhTybjjjOTz/GH95/k4HkT/HTWWe4gGZre0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0YIOqasBugR+i8av/u8krFympiDbrIIl2J0yjSWq9OY=;
+ b=SGj75yZm8uGCLYt+P4A7WEqO8Bhp7M8dve0WG6HQg9kk3xZ5P9gdeB/wHq1NKpCdDOba/wDSJ4NiuzkkIxKxIjOZARwMY0mGT0gUxjD25dCJFwXUXlHm/qdg6HZ2M9Lg131A+aE60PJ0tBPxufXkWe/QFo1dahb9aEs6+qyDLCiQYl1W0qK37e8ASZnv+L3jhKwkBitOMrLc5T0Dx6NhwWYvtkV+CytnTPV5uxBtWhcKY9S/FNtHcTOi0aP/1NccGEMYBCzNBrCYSg3o9xSE7Ur5Zu9tyzOJ5+UVKpB7lwGPVycPhEbh+qBVOc88Gxh3E+KTVyD6F7xJg022biat8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 203.18.50.12) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0YIOqasBugR+i8av/u8krFympiDbrIIl2J0yjSWq9OY=;
+ b=fGrsikf3VurbT2DRax/mcWMQ7i+FmfmJ9yEFOxZ+7BIe8Y3ZrOt6ORVhqtXLCMYPl9yuOcQBjHfZ4ELXir2cCr67KHHImA47cLGFvYUf2ySCdqxovLmpr5Z4xzBlcETmD1ftcU6dOtUtmH6/1JGdtF+TUfw4RLmdNTDTNCZBtFMj+6NVKLVs7dM3YJnXfjtbn4Nu3hO61TLsuU9wgiwQ7r2NaL5fVXVVCqQlp2HS7dFG0DIsXCbal6mbpfBW3vb97LxrhD7VgShf/c/f/Ox5dzzkVEbtPs0dcJQ6sbri67aL1XPkpzSUSExgEJlKNsxziycas5LVRiAXAiI2/hpAOg==
+Received: from BN0PR04CA0004.namprd04.prod.outlook.com (2603:10b6:408:ee::9)
+ by CY4PR12MB1157.namprd12.prod.outlook.com (2603:10b6:903:3b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13; Thu, 9 Dec
+ 2021 19:54:57 +0000
+Received: from BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ee:cafe::c8) by BN0PR04CA0004.outlook.office365.com
+ (2603:10b6:408:ee::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13 via Frontend
+ Transport; Thu, 9 Dec 2021 19:54:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.12)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 203.18.50.12 as permitted sender) receiver=protection.outlook.com;
+ client-ip=203.18.50.12; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (203.18.50.12) by
+ BN8NAM11FT042.mail.protection.outlook.com (10.13.177.85) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4755.13 via Frontend Transport; Thu, 9 Dec 2021 19:54:56 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HKMAIL101.nvidia.com
+ (10.18.16.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 19:54:54 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 19:54:53 +0000
+Received: from Asurada-Nvidia (172.20.187.5) by mail.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18 via Frontend
+ Transport; Thu, 9 Dec 2021 11:54:52 -0800
+Date:   Thu, 9 Dec 2021 11:54:51 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     <thierry.reding@gmail.com>, <joro@8bytes.org>, <will@kernel.org>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
+ debugfs
+Message-ID: <20211209195450.GB35526@Asurada-Nvidia>
+References: <20211209073822.26728-1-nicolinc@nvidia.com>
+ <20211209073822.26728-7-nicolinc@nvidia.com>
+ <63b4c2e2-0e55-5701-4c45-70684c7e058e@gmail.com>
+ <20211209192450.GA34762@Asurada-Nvidia>
+ <fab11209-a579-bbfb-a701-e613cecabd56@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 14/32] KVM: s390: pci: do initial setup for AEN
- interpretation
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-15-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-15-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wNt2EGKUELc3fCUTvmeo0NsSGPgkNHPJ
-X-Proofpoint-ORIG-GUID: EK7wsKeJ-Wr-bN2XmnalsDAtdccC0lRs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_09,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
- suspectscore=0 adultscore=0 impostorscore=0 mlxscore=0 phishscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090101
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fab11209-a579-bbfb-a701-e613cecabd56@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: afaffd34-37c9-441d-fcaf-08d9bb4dc69c
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1157:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1157F3E5E492E57892EF2A61AB709@CY4PR12MB1157.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ooDdpkEDsWjRieLlFmAHRwpEB2Mbk6TFWAdiS1tqW6L3Pt/PyXUxemgvDSnL/4GOW+7pRqmzkf7v3IHRrLxEJQQi+3av+HS/KhYDV5bQK0TlPinK04JyOogicefe7odRpBNGdp0eNMA0qvMIKZ66zEOPKdLdWznkNZWr64nZb6iD8K8DzewTbUFinPOEz1U7EHgU9kUTVrfpS0bucVHL87npd40MXsYjrjbKzSrfULqrw8RAHErnL2fmUdAwWQFGODMUa0PH0t2Np43VS0siDHEddIU/BznwQduNbYss0Z14O14xcVXcd99srB+1jHl4UFUW8+zSnU5dhhezYtkw8leGOp99Ry6p50VGUOQHVGPCa1fx7pwDn+CnRQm2tOn9os9AOeew+EbZlysuuQ2qOjGIZcB1iMI60i9P0A7u6zJeG1Yc6uhxBDLysYdudngNugspeBVc+n9sOA3HmYpeugHUTE6EbMaAwZ7+TgRjf15q0lc7T6HfcnSYyBu6aGN0SCLgptB4VRboKK3y+W1cZrbE8I/wRbAOyWJRYapvaeoAyBDNDBA5qS4P6vnIfSZFKnt8gERoZknDc0dNAucus7fWSBk+RTEt0S+T4NTF+NrEGtMkXhxo5bzj+d3Pad6IW3swvbAtKDh3JafYAzkWu/quklnVRQHcIdNPN7okJ0LHZln4vRAMb5IkawO0BHWy3JMQJwbFjldUoX93aSQ0dv4N9W6h9yR6r5gkuZNP/AErVdm2TRcz6Ho61v8PSwIuFYSRcjmIoA5/+HYC5K7HwpoI6nsiW6Inmy+VLOSNBo8=
+X-Forefront-Antispam-Report: CIP:203.18.50.12;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(508600001)(34020700004)(70206006)(47076005)(9686003)(26005)(70586007)(5660300002)(33656002)(4326008)(86362001)(36860700001)(55016003)(186003)(336012)(33716001)(8936002)(426003)(1076003)(8676002)(7636003)(54906003)(40460700001)(2906002)(6916009)(356005)(82310400004)(316002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 19:54:56.3689
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afaffd34-37c9-441d-fcaf-08d9bb4dc69c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.12];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1157
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> Initial setup for Adapter Event Notification Interpretation for zPCI
-> passthrough devices.  Specifically, allocate a structure for forwarding of
-> adapter events and pass the address of this structure to firmware.
+On Thu, Dec 09, 2021 at 10:44:25PM +0300, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/pci_insn.h |  12 ++++
->   arch/s390/kvm/interrupt.c        |  17 +++++
->   arch/s390/kvm/kvm-s390.c         |   3 +
->   arch/s390/kvm/pci.c              | 113 +++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h              |  42 ++++++++++++
->   5 files changed, 187 insertions(+)
->   create mode 100644 arch/s390/kvm/pci.h
 > 
-> diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
-> index 5331082fa516..e5f57cfe1d45 100644
-> --- a/arch/s390/include/asm/pci_insn.h
-> +++ b/arch/s390/include/asm/pci_insn.h
-> @@ -101,6 +101,7 @@ struct zpci_fib {
->   /* Set Interruption Controls Operation Controls  */
->   #define	SIC_IRQ_MODE_ALL		0
->   #define	SIC_IRQ_MODE_SINGLE		1
-> +#define	SIC_SET_AENI_CONTROLS		2
->   #define	SIC_IRQ_MODE_DIRECT		4
->   #define	SIC_IRQ_MODE_D_ALL		16
->   #define	SIC_IRQ_MODE_D_SINGLE		17
-> @@ -127,9 +128,20 @@ struct zpci_cdiib {
->   	u64 : 64;
->   } __packed __aligned(8);
->   
-> +/* adapter interruption parameters block */
-> +struct zpci_aipb {
-> +	u64 faisb;
-> +	u64 gait;
-> +	u16 : 13;
-> +	u16 afi : 3;
-> +	u32 : 32;
-> +	u16 faal;
-> +} __packed __aligned(8);
-> +
->   union zpci_sic_iib {
->   	struct zpci_diib diib;
->   	struct zpci_cdiib cdiib;
-> +	struct zpci_aipb aipb;
->   };
->   
->   DECLARE_STATIC_KEY_FALSE(have_mio);
-> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-> index f9b872e358c6..4efe0e95a40f 100644
-> --- a/arch/s390/kvm/interrupt.c
-> +++ b/arch/s390/kvm/interrupt.c
-> @@ -32,6 +32,7 @@
->   #include "kvm-s390.h"
->   #include "gaccess.h"
->   #include "trace-s390.h"
-> +#include "pci.h"
->   
->   #define PFAULT_INIT 0x0600
->   #define PFAULT_DONE 0x0680
-> @@ -3276,8 +3277,16 @@ static struct airq_struct gib_alert_irq = {
->   
->   void kvm_s390_gib_destroy(void)
->   {
-> +	struct zpci_aift *aift;
-> +
->   	if (!gib)
->   		return;
-> +	aift = kvm_s390_pci_get_aift();
-> +	if (aift) {
-> +		mutex_lock(&aift->lock)
-
-aift is a static variable and later patches seem to access that directly without the wrapper.
-Can we get rid of kvm_s390_pci_get_aift?
-;
-> +		kvm_s390_pci_aen_exit();
-> +		mutex_unlock(&aift->lock);
-> +	}
->   	chsc_sgib(0);
->   	unregister_adapter_interrupt(&gib_alert_irq);
->   	free_page((unsigned long)gib);
-> @@ -3315,6 +3324,14 @@ int kvm_s390_gib_init(u8 nisc)
->   		goto out_unreg_gal;
->   	}
->   
-> +	if (IS_ENABLED(CONFIG_PCI) && sclp.has_aeni) {
-> +		if (kvm_s390_pci_aen_init(nisc)) {
-> +			pr_err("Initializing AEN for PCI failed\n");
-> +			rc = -EIO;
-> +			goto out_unreg_gal;
-> +		}
-> +	}
-> +
->   	KVM_EVENT(3, "gib 0x%pK (nisc=%d) initialized", gib, gib->nisc);
->   	goto out;
->   
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 14a18ba5ff2c..9cd3c8eb59e8 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -48,6 +48,7 @@
->   #include <asm/fpu/api.h>
->   #include "kvm-s390.h"
->   #include "gaccess.h"
-> +#include "pci.h"
->   
->   #define CREATE_TRACE_POINTS
->   #include "trace.h"
-> @@ -503,6 +504,8 @@ int kvm_arch_init(void *opaque)
->   		goto out;
->   	}
->   
-> +	kvm_s390_pci_init();
-> +
->   	rc = kvm_s390_gib_init(GAL_ISC);
->   	if (rc)
->   		goto out;
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> index ecfc458a5b39..f0e5386ff943 100644
-> --- a/arch/s390/kvm/pci.c
-> +++ b/arch/s390/kvm/pci.c
-> @@ -10,6 +10,113 @@
->   #include <linux/kvm_host.h>
->   #include <linux/pci.h>
->   #include <asm/kvm_pci.h>
-> +#include "pci.h"
-> +
-> +static struct zpci_aift aift;
-
-see below.
-> +
-> +static inline int __set_irq_noiib(u16 ctl, u8 isc)
-> +{
-> +	union zpci_sic_iib iib = {{0}};
-> +
-> +	return zpci_set_irq_ctrl(ctl, isc, &iib);
-> +}
-> +
-> +struct zpci_aift *kvm_s390_pci_get_aift(void)
-> +{
-> +	return &aift;
-> +}
-> +
-> +/* Caller must hold the aift lock before calling this function */
-> +void kvm_s390_pci_aen_exit(void)
-> +{
-> +	struct zpci_gaite *gait;
-> +	unsigned long flags;
-> +	struct airq_iv *sbv;
-> +	struct kvm_zdev **gait_kzdev;
-> +	int size;
-> +
-> +	/* Clear the GAIT and forwarding summary vector */
-> +	__set_irq_noiib(SIC_SET_AENI_CONTROLS, 0);
-> +
-> +	spin_lock_irqsave(&aift.gait_lock, flags);
-> +	gait = aift.gait;
-> +	sbv = aift.sbv;
-> +	gait_kzdev = aift.kzdev;
-> +	aift.gait = 0;
-> +	aift.sbv = 0;
-> +	aift.kzdev = 0;
-> +	spin_unlock_irqrestore(&aift.gait_lock, flags);
-> +
-> +	if (sbv)
-> +		airq_iv_release(sbv);
-> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
-> +				    sizeof(struct zpci_gaite)));
-> +	free_pages((unsigned long)gait, size);
-> +	kfree(gait_kzdev);
-> +}
-> +
-> +int kvm_s390_pci_aen_init(u8 nisc)
-> +{
-> +	union zpci_sic_iib iib = {{0}};
-> +	struct page *page;
-> +	int rc = 0, size;
-> +
-> +	/* If already enabled for AEN, bail out now */
-> +	if (aift.gait || aift.sbv)
-> +		return -EPERM;
-> +
-> +	mutex_lock(&aift.lock);
-> +	aift.kzdev = kcalloc(ZPCI_NR_DEVICES, sizeof(struct kvm_zdev),
-> +			     GFP_KERNEL);
-> +	if (!aift.kzdev) {
-> +		rc = -ENOMEM;
-> +		goto unlock;
-> +	}
-> +	aift.sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, 0);
-> +	if (!aift.sbv) {
-> +		rc = -ENOMEM;
-> +		goto free_zdev;
-> +	}
-> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
-> +				    sizeof(struct zpci_gaite)));
-> +	page = alloc_pages(GFP_KERNEL | __GFP_ZERO, size);
-> +	if (!page) {
-> +		rc = -ENOMEM;
-> +		goto free_sbv;
-> +	}
-> +	aift.gait = (struct zpci_gaite *)page_to_phys(page);
-> +
-> +	iib.aipb.faisb = (u64)aift.sbv->vector;
-> +	iib.aipb.gait = (u64)aift.gait;
-> +	iib.aipb.afi = nisc;
-> +	iib.aipb.faal = ZPCI_NR_DEVICES;
-> +
-> +	/* Setup Adapter Event Notification Interpretation */
-> +	if (zpci_set_irq_ctrl(SIC_SET_AENI_CONTROLS, 0, &iib)) {
-> +		rc = -EIO;
-> +		goto free_gait;
-> +	}
-> +
-> +	/* Enable floating IRQs */
-> +	if (__set_irq_noiib(SIC_IRQ_MODE_SINGLE, nisc)) {
-> +		rc = -EIO;
-> +		kvm_s390_pci_aen_exit();
-> +	}
-> +
-> +	goto unlock;
-> +
-> +free_gait:
-> +	size = get_order(PAGE_ALIGN(ZPCI_NR_DEVICES *
-> +				    sizeof(struct zpci_gaite)));
-> +	free_pages((unsigned long)aift.gait, size);
-> +free_sbv:
-> +	airq_iv_release(aift.sbv);
-> +free_zdev:
-> +	kfree(aift.kzdev);
-> +unlock:
-> +	mutex_unlock(&aift.lock);
-> +	return rc;
-> +}
->   
->   int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
->   {
-> @@ -55,3 +162,9 @@ int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
->   	return 0;
->   }
->   EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
-> +
-> +void kvm_s390_pci_init(void)
-> +{
-> +	spin_lock_init(&aift.gait_lock);
-> +	mutex_init(&aift.lock);
-> +}
-
-Can we maybe use designated initializer for the static definition of aift, e.g. something
-like
-static struct zpci_aift aift = {
-	.gait_lock = __SPIN_LOCK_UNLOCKED(aift.gait_lock),
-	.lock	= __MUTEX_INITIALIZER(aift.lock),
-}
-and get rid of the init function?
-
-
-> diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
-> new file mode 100644
-> index 000000000000..74b06d39be3b
-> --- /dev/null
-> +++ b/arch/s390/kvm/pci.h
-> @@ -0,0 +1,42 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * s390 kvm PCI passthrough support
-> + *
-> + * Copyright IBM Corp. 2021
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
-> +
-> +#ifndef __KVM_S390_PCI_H
-> +#define __KVM_S390_PCI_H
-> +
-> +#include <linux/pci.h>
-> +#include <linux/mutex.h>
-> +#include <asm/airq.h>
-> +#include <asm/kvm_pci.h>
-> +
-> +struct zpci_gaite {
-> +	unsigned int gisa;
-
-since we use u8 below, what about u32
-> +	u8 gisc;
-> +	u8 count;
-> +	u8 reserved;
-> +	u8 aisbo;
-> +	unsigned long aisb;
-
-and u64 ?
-> +};
-> +
-> +struct zpci_aift {
-> +	struct zpci_gaite *gait;
-> +	struct airq_iv *sbv;
-> +	struct kvm_zdev **kzdev;
-> +	spinlock_t gait_lock; /* Protects the gait, used during AEN forward */
-> +	struct mutex lock; /* Protects the other structures in aift */
-> +};
-> +
-> +struct zpci_aift *kvm_s390_pci_get_aift(void);
-> +
-> +int kvm_s390_pci_aen_init(u8 nisc);
-> +void kvm_s390_pci_aen_exit(void);
-> +
-> +void kvm_s390_pci_init(void);
-> +
-> +#endif /* __KVM_S390_PCI_H */
+> 09.12.2021 22:24, Nicolin Chen пишет:
+> > On Thu, Dec 09, 2021 at 05:49:09PM +0300, Dmitry Osipenko wrote:
+> >> External email: Use caution opening links or attachments
+> >>
+> >>
+> >> 09.12.2021 10:38, Nicolin Chen пишет:
+> >>> +static unsigned long pd_pt_index_iova(unsigned int pd_index, unsigned int pt_index)
+> >>> +{
+> >>> +     return (pd_index & (SMMU_NUM_PDE - 1)) << SMMU_PDE_SHIFT |
+> >>> +            (pt_index & (SMMU_NUM_PTE - 1)) << SMMU_PTE_SHIFT;
+> >>> +}
+> >>
+> >> I'd change the return type to u32 here, for consistency.
+> >
+> > The whole file defines iova using "unsigned long", which I see
+> > as the consistency... If we change it to u32, it'd be probably
+> > necessary to change all iova types to u32 too... So I'd rather
+> > keep it "unsigned long" here. If you see a big necessity to do
+> > that, an additional patch would be nicer IMHO.
+> >
 > 
+> In general IOVA is "unsigned long", of course. But in case of Tegra
+> SMMU, we know that is always u32.
+> 
+> Alright, I see now that there are other places in the driver code that
+> use "unsigned long", so need to change it in this patch.
+
+I think we should do that in a separate patch that changes the iova
+type in the entire tegra-smmu file. I can add one in this series, if
+this makes you happy...

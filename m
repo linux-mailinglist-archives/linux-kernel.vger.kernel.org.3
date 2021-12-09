@@ -2,168 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AF546EAF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD9846EB05
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbhLIPWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235096AbhLIPWp (ORCPT
+        id S235865AbhLIPYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:24:44 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17370 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235172AbhLIPYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:22:45 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F74C0617A1;
-        Thu,  9 Dec 2021 07:19:12 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0036A1EC0503;
-        Thu,  9 Dec 2021 16:19:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639063146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hnVow05zGwYUceTmQ9hNcIsttLUONol/7cmMzWAEf8I=;
-        b=FFpAdOmtSWfdBF9+MI0GQgEE1rFMGX0OYfSJLW0yse2A7TYV0P5+Bzc1xuW2Qa+g2twjh/
-        N6jO011ZBqxqBBLblPN2uJCIhn/ieYzHNgex/3i6IEX7ezN+yhAOabdhgaY4qG8bSg0Oz/
-        wrRhTf+QCC77yyB4DyO6b4rYFKwOvpE=
-Date:   Thu, 9 Dec 2021 16:19:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     John Dorminy <jdorminy@redhat.com>
-Cc:     tip-bot2@linutronix.de, anjaneya.chagam@intel.com,
-        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
-        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
-        x86@kernel.org, Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
- early param parsing
-Message-ID: <YbIeYIM6JEBgO3tG@zn.tnic>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com>
+        Thu, 9 Dec 2021 10:24:42 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9EwCo0023869;
+        Thu, 9 Dec 2021 15:21:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=lkTIk4/eGsjTAIEitjjhFcYQMye7Lsi7gcIXWVUcf+I=;
+ b=JFq7ByRdknLvlgsemBQf4Jb7zzhjZ7g9T8nRir30yYm0CFv059Lt9qiyMm5MY7hnyyNS
+ VSrD99HhgtYSXUJAM1Krk2z/D7hO9dkouuRZSmll9XPBRLgBIXq9C4F+QWxw66/LKLA6
+ EhejkdXHTiQawo3FijeczOYaxY6ywNA+YW/rOnLfyC19cEnt9AgPmfqiJbsEGEH931kP
+ qDrwJiQlnqTHIj+2SWKfcYSOu5b2bENUIsLKp2eOZ1yFjYzOtwcCRXN+Yqws9GquT2wZ
+ grZVExiD9EF09wOkS/3vVM4MnU2tkRBwVOYcmZP42Bf2qqWyERWz7xK5yUGmO4Le5jw8 YQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cum1ggjeh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:21:09 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9F13Im003293;
+        Thu, 9 Dec 2021 15:21:08 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cum1ggjbb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:21:08 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FBxlI023364;
+        Thu, 9 Dec 2021 15:21:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3cqyyajupv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 15:21:00 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9FKuid20709666
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 15:20:56 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 96198A4060;
+        Thu,  9 Dec 2021 15:20:56 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F866A4067;
+        Thu,  9 Dec 2021 15:20:55 +0000 (GMT)
+Received: from [9.171.49.66] (unknown [9.171.49.66])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 15:20:55 +0000 (GMT)
+Message-ID: <db120635-01fe-eef8-611a-44fb7ad83d03@linux.ibm.com>
+Date:   Thu, 9 Dec 2021 16:20:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211209143810.452527-1-jdorminy@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 09/32] s390/pci: export some routines related to RPCIT
+ processing
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-10-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-10-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wiW6vBMctt8ct6nBfJor2uYcegrStbq7
+X-Proofpoint-GUID: CB-6X_7DL7py6maqPDki6i7wZGxetzOs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_06,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090082
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Hugh and Patrick.
 
-On Thu, Dec 09, 2021 at 09:38:10AM -0500, John Dorminy wrote:
-> Greetings;
+
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> KVM will re-use dma_walk_cpu_trans to walk the host shadow table and
+> will also need to be able to call zpci_refresh_trans to re-issue a RPCIT.
 > 
-> It seems that this patch causes a mem= parameter to the kernel to have no effect, unfortunately... 
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+
+Makes sense
+
+Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+
+> ---
+>   arch/s390/pci/pci_dma.c  | 1 +
+>   arch/s390/pci/pci_insn.c | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> As far as I understand, the x86 mem parameter handler parse_memopt() (called by parse_early_param()) relies on being called after e820__memory_setup(): it simply removes any memory above the specified limit at that moment, allowing memory to later be hotplugged without regard for the initial limit. However, the initial non-hotplugged memory must already have been set up, in e820__memory_setup(), so that it can be removed in parse_memopt(); if parse_early_param() is called before e820__memory_setup(), as this change does, the parameter ends up having no effect.
+> diff --git a/arch/s390/pci/pci_dma.c b/arch/s390/pci/pci_dma.c
+> index 1f4540d6bd2d..ae55f2f2ecd9 100644
+> --- a/arch/s390/pci/pci_dma.c
+> +++ b/arch/s390/pci/pci_dma.c
+> @@ -116,6 +116,7 @@ unsigned long *dma_walk_cpu_trans(unsigned long *rto, dma_addr_t dma_addr)
+>   	px = calc_px(dma_addr);
+>   	return &pto[px];
+>   }
+> +EXPORT_SYMBOL_GPL(dma_walk_cpu_trans);
+>   
+>   void dma_update_cpu_trans(unsigned long *entry, void *page_addr, int flags)
+>   {
+> diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
+> index d1a8bd43ce26..0d1ab268ec24 100644
+> --- a/arch/s390/pci/pci_insn.c
+> +++ b/arch/s390/pci/pci_insn.c
+> @@ -95,6 +95,7 @@ int zpci_refresh_trans(u64 fn, u64 addr, u64 range)
+>   
+>   	return (cc) ? -EIO : 0;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_refresh_trans);
+>   
+>   /* Set Interruption Controls */
+>   int zpci_set_irq_ctrl(u16 ctl, u8 isc, union zpci_sic_iib *iib)
 > 
-> I apologize that I don't know how to fix this, but I'm happy to test patches.
-
-Yeah, people have been reporting boot failures with mem= on the cmdline.
-
-I think I see why, can you try this one:
-
----
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 6a190c7f4d71..6db971e61e4b 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -862,6 +862,8 @@ void __init setup_arch(char **cmdline_p)
- 	 */
- 	x86_configure_nx();
- 
-+	e820__memory_setup();
-+
- 	/*
- 	 * This parses early params and it needs to run before
- 	 * early_reserve_memory() because latter relies on such settings
-@@ -884,7 +886,6 @@ void __init setup_arch(char **cmdline_p)
- 	early_reserve_memory();
- 
- 	iomem_resource.end = (1ULL << boot_cpu_data.x86_phys_bits) - 1;
--	e820__memory_setup();
- 	parse_setup_data();
- 
- 	copy_edd();
----
-
-Leaving in the rest for the newly added folks.
-
-> Typical dmesg output showing the lack of effect, built from the prior change and this change:
-> 
-> With a git tree synced to 8d48bf8206f77aa8687f0e241e901e5197e52423^ (working):
-> [    0.000000] Command line: BOOT_IMAGE=(hd0,msdos1)/boot/vmlinuz-5.16.0-rc1 root=UUID=a4f7bd84-4f29-40bc-8c98-f4a72d0856c4 ro net.ifnames=0 crashkernel=128M mem=4G
-> ...
-> [    0.000000] BIOS-provided physical RAM map:
-> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009abff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000000009ac00-0x000000000009ffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000000e0000-0x00000000000fffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007dd3afff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000007dd3b000-0x000000007deeffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x000000007e0d4000-0x000000007f367fff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000007f368000-0x000000007f7fffff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x0000000080000000-0x000000008fffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed3ffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000207fffffff] usable
-> [    0.000000] e820: remove [mem 0x100000000-0xfffffffffffffffe] usable
-> [    0.000000] NX (Execute Disable) protection: active
-> [    0.000000] user-defined physical RAM map:
-> [    0.000000] user: [mem 0x0000000000000000-0x000000000009abff] usable
-> [    0.000000] user: [mem 0x000000000009ac00-0x000000000009ffff] reserved
-> [    0.000000] user: [mem 0x00000000000e0000-0x00000000000fffff] reserved
-> [    0.000000] user: [mem 0x0000000000100000-0x000000007dd3afff] usable
-> [    0.000000] user: [mem 0x000000007dd3b000-0x000000007deeffff] reserved
-> [    0.000000] user: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI NVS
-> [    0.000000] user: [mem 0x000000007e0d4000-0x000000007f367fff] reserved
-> [    0.000000] user: [mem 0x000000007f368000-0x000000007f7fffff] ACPI NVS
-> [    0.000000] user: [mem 0x0000000080000000-0x000000008fffffff] reserved
-> [    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed3ffff] reserved
-> [    0.000000] user: [mem 0x00000000ff000000-0x00000000ffffffff] reserved
-> ...
-> [    0.025617] Memory: 1762876K/2061136K available (16394K kernel code, 3568K rwdata, 10324K rodata, 2676K init, 4924K bss, 298000K reserved, 0K cma-reserved)
-> 
-> Synced 8d48bf8206f77aa8687f0e241e901e5197e52423 (not working):
-> 
-> [    0.000000] Command line: BOOT_IMAGE=(hd0,msdos1)/boot/vmlinuz-5.16.0-rc4+ root=UUID=0e750e61-b92e-4708-a974-c50a3fb7e969 ro net.ifnames=0 crashkernel=128M mem=4G
-> [    0.000000] e820: remove [mem 0x100000000-0xfffffffffffffffe] usable
-> [    0.000000] BIOS-provided physical RAM map:
-> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009abff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000000009ac00-0x000000000009ffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000000e0000-0x00000000000fffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007dd3afff] usable
-> [    0.000000] BIOS-e820: [mem 0x000000007dd3b000-0x000000007deeffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x000000007e0d4000-0x000000007f367fff] reserved
-> [    0.000000] BIOS-e820: [mem 0x000000007f368000-0x000000007f7fffff] ACPI NVS
-> [    0.000000] BIOS-e820: [mem 0x0000000080000000-0x000000008fffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed3ffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] reserved
-> [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000207fffffff] usable
-> [    0.000000] NX (Execute Disable) protection: active
-> [    0.000000] user-defined physical RAM map:
-> [    0.000000] user: [mem 0x0000000000000000-0x000000000009abff] usable
-> [    0.000000] user: [mem 0x000000000009ac00-0x000000000009ffff] reserved
-> [    0.000000] user: [mem 0x00000000000e0000-0x00000000000fffff] reserved
-> [    0.000000] user: [mem 0x0000000000100000-0x000000007dd3afff] usable
-> [    0.000000] user: [mem 0x000000007dd3b000-0x000000007deeffff] reserved
-> [    0.000000] user: [mem 0x000000007def0000-0x000000007e0d3fff] ACPI NVS
-> [    0.000000] user: [mem 0x000000007e0d4000-0x000000007f367fff] reserved
-> [    0.000000] user: [mem 0x000000007f368000-0x000000007f7fffff] ACPI NVS
-> [    0.000000] user: [mem 0x0000000080000000-0x000000008fffffff] reserved
-> [    0.000000] user: [mem 0x00000000fed1c000-0x00000000fed3ffff] reserved
-> [    0.000000] user: [mem 0x00000000ff000000-0x00000000ffffffff] reserved
-> [    0.000000] user: [mem 0x0000000100000000-0x000000207fffffff] usable
-> ...
-> [    0.695267] Memory: 131657608K/134181712K available (16394K kernel code, 3568K rwdata, 10328K rodata, 2676K init, 4924K bss, 2523844K reserved, 0K cma-reserved)
-> 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB6346E76E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A94746E771
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbhLILUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S236551AbhLILVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235365AbhLILUu (ORCPT
+        with ESMTP id S231626AbhLILVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:20:50 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C13C061746;
-        Thu,  9 Dec 2021 03:17:17 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so5918397pjb.1;
-        Thu, 09 Dec 2021 03:17:17 -0800 (PST)
+        Thu, 9 Dec 2021 06:21:33 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA756C061746;
+        Thu,  9 Dec 2021 03:17:59 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id y13so18279029edd.13;
+        Thu, 09 Dec 2021 03:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7++LgR6CHSvNByLY82LW9yKqPrn0areIcNLzqPnbuDs=;
-        b=devInOcspgU9jMzUkwQ4cW9HzrPs8Huk68CilnEkO0UWTbHyLicW6H5aVikM64Gmnx
-         WFs4Sp2hpBcuLpVmLGIsvEPCFunl7OLPuW8wpVIoJMvHPR4Y45nM/4sWIbLncBsa3Tps
-         UCW7DSv0OKimSsiFG+nqvvCNykGnbOPOTWRktixpuBhEC7IcYt5V7AbFgEQKYZS5V8Nk
-         pmC3XjlowIpRQL3uAPUUJXhKBDet1SCbmvvKnsJTSDwAU9fnFWxmbNzL8p1bq1OEnEl8
-         /bcYeIiCEkI8oSLGwK1p0KxtDFemGjK9t+BFw0jb/uD2AVAmRJLTnu/+fy92lNKJGZJF
-         R1Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7++LgR6CHSvNByLY82LW9yKqPrn0areIcNLzqPnbuDs=;
-        b=AEQSXzBXIEA6z5+mfgjnvnZyawK+2i5lQNFX97/1GjIpD127rOTLAZ8Z7BHEnE/LQh
-         1OgSvmur5qtaGk7x7wNi+JT1W4vFmZfnlq/BU1A+L/BTeu9OT0I4RwAR0yHR2lM9HglY
-         N6nmVNnyyLhMw5n5EGoN4Ww+LFSQeIjGgfiCgj/zgxGAk3yW6ASdgMPBEXKe59iZSKKi
-         74QYIVpmI3aPv0+HyvyrCBx3QR81vh1O5De859Pd43EK1YPHnphY4t3vPFBqiP8YqpTY
-         KsHLE2+Fbcgoni/qpKJznb6+bh5dkVRDs1d3GoSqsUScF+j4WEgsWWKiW6xPx9MGbj2M
-         vIHA==
-X-Gm-Message-State: AOAM5330A67IZdTlmpG1UUe05BEiS/3rPUAAe/7+DrMUITkXF+DX71o7
-        PlIyA1lEhEPDcGKpIkvmVRY=
-X-Google-Smtp-Source: ABdhPJw6mFG+w4KDhuIF/LkOsGARjWx+5UEh9URRd9WM7jkBUtu2M0tOhMtumtGVnqqsw5jUCAd09g==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr14999898pjb.10.1639048637182;
-        Thu, 09 Dec 2021 03:17:17 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id d10sm6777113pfl.139.2021.12.09.03.17.08
+        bh=fo8xWj9D41FfrtS+dBIsbHWboaee5HFZE+LrwQkoquk=;
+        b=JANOOX9PXQg9MyLSpE5MXz6+UYgiTld9Px9vmqpvG35e5np+hl8Zt2lcjJlMjImIq1
+         kt2W5eL92vLnoz+j73wq7zOX4nKLAwdI0jyMc3DFM4ZhRZpN3msIJ8/UanTCdS8vHRpG
+         LvJDVal/jeFawsZyGZOmYO+X9gfZ0YQE33B3TOxdk0vgVARQ9W0K0RqHvjVcuy4/iPSI
+         iDvpnh3GI5/M1PRfCufpCL53+8BZt5aXjAsSbihqUA3fKjejqCy1uJAaRh0ivUrZPaV2
+         u6eliG+ypU8adf4sHR7df/HeLhqjDVEG4dkXPc7xOma66I2t/yYSQhMOS/dCbWtgUFif
+         fkMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fo8xWj9D41FfrtS+dBIsbHWboaee5HFZE+LrwQkoquk=;
+        b=kheVyVUTZzUFUVeHtJBq1miq1NtCZMfwb1ZADSZSp0RXzbXmUxwA8ai9jD/pKj+MvE
+         wWv4N+iIfbvi9fAbwLmvJ5yx8jpXFLO+unPg31AO1NeSudkZh6XYDixfOcmIsKT6ulrP
+         CSphXHaKzskxHbtaKk/LK/LI4JolpXuRRTv/PeUGDto1KJ4DjVZaKQd2x/Mltx11zgfH
+         5znGxnxaUUV3DzzfkViH+Y0ho1UZLY6OOfeKiKrLKOz5ijG1lnGiLiDLOSsK7u4dUAD6
+         ymT+bjaPRQdf5XhaUixy+rSC3HIPw+/LdcSS3fZlZjxH6J03f8byXkmo4M5ALEDisLS7
+         hErw==
+X-Gm-Message-State: AOAM533lZL1890nYSbmK6UPkCnRbWZTkaspXj0AHaJgxemgHkrVrl14c
+        DnyoLUHKAOUz566JGKAHtOf/blOhB7A=
+X-Google-Smtp-Source: ABdhPJz2dx4N0511IdZHPLodnRrhg3tWUhYzsom0v3rrLBbF6uvreVwRAdtozgqezbtP/0p1e25+Hw==
+X-Received: by 2002:a50:e608:: with SMTP id y8mr28025782edm.39.1639048675798;
+        Thu, 09 Dec 2021 03:17:55 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id ga37sm2685922ejc.65.2021.12.09.03.17.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:17:16 -0800 (PST)
-Message-ID: <ff4497cc-741a-113c-c6eb-dd5966716863@gmail.com>
-Date:   Thu, 9 Dec 2021 19:17:08 +0800
+        Thu, 09 Dec 2021 03:17:55 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <5b12fc46-bffb-49dd-8cc7-83ba4e841843@redhat.com>
+Date:   Thu, 9 Dec 2021 12:17:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V6 4/5] scsi: storvsc: Add Isolation VM support for
- storvsc driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: x86: Wait for IPIs to be delivered when handling
+ Hyper-V TLB flush hypercall
 Content-Language: en-US
-To:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-References: <20211207075602.2452-1-ltykernel@gmail.com>
- <20211207075602.2452-5-ltykernel@gmail.com>
- <BY5PR21MB1506535EF9222ED4300C38BBCE709@BY5PR21MB1506.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BY5PR21MB1506535EF9222ED4300C38BBCE709@BY5PR21MB1506.namprd21.prod.outlook.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20211209102937.584397-1-vkuznets@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211209102937.584397-1-vkuznets@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/9/2021 4:00 PM, Long Li wrote:
->> @@ -1848,21 +1851,22 @@ static int storvsc_queuecommand(struct Scsi_Host
->> *host, struct scsi_cmnd *scmnd)
->>   		payload->range.len = length;
->>   		payload->range.offset = offset_in_hvpg;
->>
->> +		sg_count = scsi_dma_map(scmnd);
->> +		if (sg_count < 0)
->> +			return SCSI_MLQUEUE_DEVICE_BUSY;
-> Hi Tianyu,
+On 12/9/21 11:29, Vitaly Kuznetsov wrote:
+> Prior to commit 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use
+> tlb_flush_guest()"), kvm_hv_flush_tlb() was using 'KVM_REQ_TLB_FLUSH |
+> KVM_REQUEST_NO_WAKEUP' when making a request to flush TLBs on other vCPUs
+> and KVM_REQ_TLB_FLUSH is/was defined as:
 > 
-> This patch (and this patch series) unconditionally adds code for dealing with DMA addresses for all VMs, including non-isolation VMs.
+>   (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
 > 
-> Does this add performance penalty for VMs that don't require isolation?
+> so KVM_REQUEST_WAIT was lost. Hyper-V TLFS, however, requires that
+> "This call guarantees that by the time control returns back to the
+> caller, the observable effects of all flushes on the specified virtual
+> processors have occurred." and without KVM_REQUEST_WAIT there's a small
+> chance that the vCPU making the TLB flush will resume running before
+> all IPIs get delivered to other vCPUs and a stale mapping can get read
+> there.
+> 
+> Fix the issue by adding KVM_REQUEST_WAIT flag to KVM_REQ_TLB_FLUSH_GUEST:
+> kvm_hv_flush_tlb() is the sole caller which uses it for
+> kvm_make_all_cpus_request()/kvm_make_vcpus_request_mask() where
+> KVM_REQUEST_WAIT makes a difference.
+> 
+> Cc: stable@kernel.org
+> Fixes: 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use tlb_flush_guest()")
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+> - Note, the issue was found by code inspection. Sporadic crashes of
+> big Windows guests using Hyper-V TLB flush enlightenment were reported
+> but I have no proof that these crashes are anyhow related.
+> ---
+>   arch/x86/include/asm/kvm_host.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index e41ad1ead721..8afb21c8a64f 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -97,7 +97,7 @@
+>   	KVM_ARCH_REQ_FLAGS(25, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>   #define KVM_REQ_TLB_FLUSH_CURRENT	KVM_ARCH_REQ(26)
+>   #define KVM_REQ_TLB_FLUSH_GUEST \
+> -	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_NO_WAKEUP)
+> +	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>   #define KVM_REQ_APF_READY		KVM_ARCH_REQ(28)
+>   #define KVM_REQ_MSR_FILTER_CHANGED	KVM_ARCH_REQ(29)
+>   #define KVM_REQ_UPDATE_CPU_DIRTY_LOGGING \
 > 
 
-Hi Long:
-	scsi_dma_map() in the traditional VM just save sg->offset to
-sg->dma_address and no data copy because swiotlb bounce buffer code
-doesn't work. The data copy only takes place in the Isolation VM and
-swiotlb_force is set. So there is no additional overhead in the 
-traditional VM.
+Queued, thanks.
 
-Thanks.
+Paolo

@@ -2,103 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F2E46E21B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE7746E21E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhLIFrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S232384AbhLIFs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbhLIFrJ (ORCPT
+        with ESMTP id S231569AbhLIFsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:47:09 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4528CC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:43:36 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso5123414otr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:43:36 -0800 (PST)
+        Thu, 9 Dec 2021 00:48:54 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A7AC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:45:21 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id m25so4319709qtq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:45:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Au8cIAk26/MRJY9HsdbjV4w48DvK6VK2iUZHG3PEHHE=;
-        b=r5r8wABEQsbS2wVZ9VLdVuOogMqmvTq/REBY7p+otznPODfbDRicJbpwQQPCGOTtnK
-         b2HLjAl25N6mnCGUzeTIF4J3eQRr4Z9nHgjTxifgxSXeYTrmAeJDK+7MFM+zgr1tjWcn
-         55ZeD406MRYaLPvQBudQbSRX988gIgKBKRKiu/eBb6h/x/eCVuadLuw/8Yn0cbAm+wBu
-         0A7KAQJ2SvmCZXtIhOx6Zjus1cWrDu9h4LI2OSndi90miIaN6iCLpF1dUFfVJH2+CLLL
-         9JNZt/JGlk1IAaX9N9VOHhmxH7C6YuF3mBn5JSQoBmTPJ0iP8p8vVE29QH9hrDpcSTDT
-         LERw==
+        h=date:from:to:cc:subject:message-id:mime-version;
+        bh=Wcs4fYEQI1Jqq6kBZB1ZnOXmYbDoVM5sVRAmN4BWitA=;
+        b=MlsalTZOPPARgWp5jOY14+HoXjQAVBQippX01GmqBUhmdTlU7N/JS8/KlWFaGahL26
+         Yg8+DkXwOSEDVhlnMSkHwKhtHE5AT3gMDX+bMisQ8WuulUJWsUpqfY1EHwlA0SIAYC9f
+         ItYECk4YZkQhMm28hA6XfMiefA2hP8n2V89gNzvFOmO3517TwwGnVRhd8PYN1BhgdfXE
+         d33NhXdfiUVSFJj/m23zAKzo3AEjWn54NNk1zuV2ltqKvFxK7dq6rn7cguvZWbgenHVV
+         f/HSnYgv/Wi92pHRigo+Xef6z/ErJcJTkgXXTNikpmkJh1shNr8yOaLaCIDKCyDhSxhR
+         jr8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Au8cIAk26/MRJY9HsdbjV4w48DvK6VK2iUZHG3PEHHE=;
-        b=vOXwrjnuAwAf/TDGoMIu9q5oEbt7Kwnie1Rv5QhwbmAGLHABKnTguk4MaKpOIUlSdh
-         1UpruT5t81bvsg6IL3XCMfv5/fBgayhINcXb897niyGcMMmKUmMvQgSzY8l566tUioVt
-         GNZp8+k669rQ3Ykj4i+Y2Po9M8TNanKjr2dfM3FYMPhsHgXHWH7w7tKPFOoTCG4eWoau
-         IIKsekHdb9PFpIa/IDPwfQskAvz+zeVXQYge5fN/+JDBNJOKlHSYqKEulS0LpEnBruND
-         hWbpefg7ht0Aae8KoxRTxInirlL4LkVojju5da8fb/GS2W5MaZAh7OpamaauOGP/ijXC
-         S3gw==
-X-Gm-Message-State: AOAM531hhh9Rsbbz3HxKWyTqmsyMgqzQvJvw+2/KlJupg5l0Zkzo86un
-        ZZTXuGv15tgc/z1RX7Uv7wXCDiw/OFN4EtEANI7iqKDDQHc=
-X-Google-Smtp-Source: ABdhPJxx2QkTtNLwO6JrfDQYLyrwMb60g9IYrSG7ewxivjWs/62hFfxCoNz9tPAevnR7e+UQiQUmfN4kGqowOQnBL3w=
-X-Received: by 2002:a9d:ed6:: with SMTP id 80mr3652653otj.35.1639028615193;
- Wed, 08 Dec 2021 21:43:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
+        bh=Wcs4fYEQI1Jqq6kBZB1ZnOXmYbDoVM5sVRAmN4BWitA=;
+        b=CfzXExYRZ1/VAZXjgZpvY1q3IbQrxfAWobmJLU/PmGKbVsn7S8rHxYUQFZQsVDTlV7
+         m8wFLAZ+9N9/tai5o0sZVZMzrzZgrAMkUBoEAflxzCxhZCh2KrY4DWEHWdVKt87xmUbL
+         iJ04/R1uQUSTwBxi/dn3jNa25Fxp/kMB1KMVZCXO1lUNZgtd/DN6qnCkuqTdqRrTq2Rd
+         KIQu5qe5p+vvSGrbAOqS46aPfGbwnta3/sp7dkmE/RsL0jyK7Na3CiYZlNIDisFQkcg9
+         6gxKboOC1oY8ZGOFfgkuXiEE66mSCcY7xvlArJh8kanaJgc+MbhuE4gMdvQjmhCgjJLg
+         4jxA==
+X-Gm-Message-State: AOAM532dmDfEMBIOr00UZ3avFs4AjhR76MBK7SrrJLydYxUCWtvBygQ/
+        kHnTc6OejWRBtduQPE1SlgZVlwORbcfElA==
+X-Google-Smtp-Source: ABdhPJyeMj/jXj5Z9K4zAIgi5asZ4Lpf4iEFpjV/t6ROs+o5QQcPTdf46Dn4NpIzOTNmeKupmTrnLA==
+X-Received: by 2002:ac8:7d47:: with SMTP id h7mr14606926qtb.486.1639028720171;
+        Wed, 08 Dec 2021 21:45:20 -0800 (PST)
+Received: from [192.168.1.227] (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id f34sm3522424qtb.7.2021.12.08.21.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 21:45:19 -0800 (PST)
+Date:   Wed, 8 Dec 2021 21:44:54 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Borislav Petkov <bp@suse.de>
+cc:     Dan Williams <dan.j.williams@intel.com>,
+        Anjaneya Chagam <ajaneya.chagam@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: 5.16-rc: "x86/boot: Pull up cmdline" breaks mem=
+Message-ID: <ae2bb14d-d27a-e76d-adde-ef888d373343@google.com>
 MIME-Version: 1.0
-References: <20211208191642.3792819-1-pgonda@google.com> <20211208191642.3792819-2-pgonda@google.com>
-In-Reply-To: <20211208191642.3792819-2-pgonda@google.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Wed, 8 Dec 2021 21:43:23 -0800
-Message-ID: <CAA03e5EePeCmasD211f0UVz45S3CUXNWyd+S=Wps6G=5SX0JJw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] selftests: sev_migrate_tests: Fix test_sev_mirror()
-To:     Peter Gonda <pgonda@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 11:16 AM Peter Gonda <pgonda@google.com> wrote:
->
-> Mirrors should not be able to call LAUNCH_START. Remove the call on the
-> mirror to correct the test before fixing sev_ioctl() to correctly assert
-> on this failed ioctl.
->
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> index 29b18d565cf4..fbc742b42145 100644
-> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> @@ -228,9 +228,6 @@ static void sev_mirror_create(int dst_fd, int src_fd)
->  static void test_sev_mirror(bool es)
->  {
->         struct kvm_vm *src_vm, *dst_vm;
-> -       struct kvm_sev_launch_start start = {
-> -               .policy = es ? SEV_POLICY_ES : 0
-> -       };
->         int i;
->
->         src_vm = sev_vm_create(es);
-> @@ -241,7 +238,7 @@ static void test_sev_mirror(bool es)
->         /* Check that we can complete creation of the mirror VM.  */
->         for (i = 0; i < NR_MIGRATE_TEST_VCPUS; ++i)
->                 vm_vcpu_add(dst_vm, i);
-> -       sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_START, &start);
-> +
->         if (es)
->                 sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
->
-> --
-> 2.34.1.400.ga245620fadb-goog
->
+Bad news, I'm afraid: I boot with "mem=1G" on the cmdline for testing,
+which worked fine on 5.16-rc1, but does not work on 5.16-rc2 onwards.
 
-Reviewed-by: Marc Orr <marcorr@google.com>
+Bisection arrived at 8d48bf8206f7 ("x86/boot: Pull up cmdline preparation
+and early param parsing"); and reverting c0f2077baa41 ("x86/boot: Mark
+prepare_command_line() __init") then 8d48bf820cf7 does fix my "mem=1G".
+
+I have not tried 5.15-stable, but guess that is likewise afflicted.
+Sympathy, but no suggestions from me: early init ordering is hard!
+
+Hugh

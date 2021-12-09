@@ -2,185 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F89F46E0AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA47646E0B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbhLICHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbhLICHN (ORCPT
+        id S229821AbhLICKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:10:00 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16348 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbhLICJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:07:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D453FC061746;
-        Wed,  8 Dec 2021 18:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F5BAB82372;
-        Thu,  9 Dec 2021 02:03:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF079C00446;
-        Thu,  9 Dec 2021 02:03:37 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 21:03:36 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20211208210336.40c7741b@yoga.local.home>
-In-Reply-To: <20211209005823.GA21399@kbox>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
-        <20211201182515.2446-3-beaub@linux.microsoft.com>
-        <20211208181905.62f8f999@gandalf.local.home>
-        <20211209005823.GA21399@kbox>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 8 Dec 2021 21:09:59 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J8cnj5tNWz91gw;
+        Thu,  9 Dec 2021 10:05:45 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 10:06:24 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 10:06:23 +0800
+Subject: Re: [PATCH v16 08/11] x86, arm64: Add ARCH_WANT_RESERVE_CRASH_KERNEL
+ config
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
+ <20211123124646.1995-9-thunder.leizhen@huawei.com> <YbDmxIPdk7TKIKAU@arm.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <092fd3d7-240a-da47-f252-c3c570cb8389@huawei.com>
+Date:   Thu, 9 Dec 2021 10:06:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <YbDmxIPdk7TKIKAU@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 16:58:23 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> >   
-> > > +/*
-> > > + * Handles the final close of the file from user mode.
-> > > + */
-> > > +static int user_events_release(struct inode *node, struct file
-> > > *file) +{
-> > > +	struct user_event_refs *refs;
-> > > +	struct user_event *user;
-> > > +	int i;
-> > > +
-> > > +	/*
-> > > +	 * refs is protected by RCU and could in theory change
-> > > immediately
-> > > +	 * before this call on another core. To ensure we read
-> > > the latest
-> > > +	 * version of refs we acquire the RCU read lock again.
-> > > +	 */
-> > > +	rcu_read_lock_sched();
-> > > +	refs = rcu_dereference_sched(file->private_data);
-> > > +	rcu_read_unlock_sched();  
-> > 
-> > This still bothers me. Can another CPU call an ioctl here?  
-> 
-> Sorry :)
-> 
-> No, another CPU cannot call the ioctl on the file, since if another
-> CPU had a reference to this file release couldn't be called.
-
-OK, so it should be good, as the last fdput() will call this (and the
-ioctl should keep that from happening until its done). But this could
-also be done with less confusion and less paranoia if we simply take
-the reg_mutex, as that should keep everything from changing, and we
-wouldn't need to do any rcu_read_lock*() from the release function.
-
-> 
-> user_events_release is only called when the final reference to the
-> file has been closed, so there cannot be another ioctl pending,
-> starting or finishing for this file at the time it is called.
-> 
-> The last user mode program to call close() on the file will end up
-> invoking user_events_release.
-
-It doesn't work like that. There's only one close(). But you are
-correct that it is protected, and that's by the fdget() and fdput()
-that is done within the ioctl (and other) system call.
-
-> 
-> The user_event_refs is only accessible via the file's private_data,
-> which now has zero references when release is executing. This means
-> the private_data can no longer change and the rcu deref ensures we
-> have the latest version.
-> 
-> refs is per-file, so while there can be other ioctl's occurring for
-> other files, they are completely different ref objects than the one
-> being cleaned up in the release of the file, it's not shared outside
-> of this file lifetime, which has now ended.
-
-Right, but I'm still paranoid ;-)
-
-> 
-> > 
-> >   user_events_ioctl_reg() {
-> >     user_events_ref_add() {
-> >       refs = rcu_dereference_protected(file->private_data, ..);
-> >       new_refs = kzalloc(size, GFP_KERNEL);
-> >       rcu_assign_pointer(file->private_data, new_refs);
-> >       if (refs)
-> >         kfree_rcu(refs, rcu);
-> > 
-> > refs now freed.
-> >   
-> 
-> If user_events_ioctl is executing for that same file,
-> user_events_release could not have been called due to the file being
-> in use to issue the ioctl.
 
 
-The only thing protecting against this is the fdget/put logic in the
-system calls.
+On 2021/12/9 1:09, Catalin Marinas wrote:
+> On Tue, Nov 23, 2021 at 08:46:43PM +0800, Zhen Lei wrote:
+>> diff --git a/arch/Kconfig b/arch/Kconfig
+>> index 26b8ed11639da46..19256aa924c3b2c 100644
+>> --- a/arch/Kconfig
+>> +++ b/arch/Kconfig
+>> @@ -24,6 +24,9 @@ config KEXEC_ELF
+>>  config HAVE_IMA_KEXEC
+>>  	bool
+>>  
+>> +config ARCH_WANT_RESERVE_CRASH_KERNEL
+>> +	bool
+>> +
+>>  config SET_FS
+>>  	bool
+>>  
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index c4207cf9bb17ffb..4b99efa36da3793 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -95,6 +95,7 @@ config ARM64
+>>  	select ARCH_WANT_FRAME_POINTERS
+>>  	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+>>  	select ARCH_WANT_LD_ORPHAN_WARN
+>> +	select ARCH_WANT_RESERVE_CRASH_KERNEL if KEXEC_CORE
+>>  	select ARCH_WANTS_NO_INSTR
+>>  	select ARCH_HAS_UBSAN_SANITIZE_ALL
+>>  	select ARM_AMBA
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 7399327d1eff79d..528034b4276ecf8 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -12,6 +12,7 @@ config X86_32
+>>  	depends on !64BIT
+>>  	# Options that are inherently 32-bit kernel only:
+>>  	select ARCH_WANT_IPC_PARSE_VERSION
+>> +	select ARCH_WANT_RESERVE_CRASH_KERNEL if KEXEC_CORE
+>>  	select CLKSRC_I8253
+>>  	select CLONE_BACKWARDS
+>>  	select GENERIC_VDSO_32
+>> @@ -28,6 +29,7 @@ config X86_64
+>>  	select ARCH_HAS_GIGANTIC_PAGE
+>>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>>  	select ARCH_USE_CMPXCHG_LOCKREF
+>> +	select ARCH_WANT_RESERVE_CRASH_KERNEL if KEXEC_CORE
+>>  	select HAVE_ARCH_SOFT_DIRTY
+>>  	select MODULES_USE_ELF_RELA
+>>  	select NEED_DMA_MAP_STATE
+>> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+>> index 4dc2643fcbccf99..b23cfc0ca8905fd 100644
+>> --- a/kernel/crash_core.c
+>> +++ b/kernel/crash_core.c
+>> @@ -321,9 +321,7 @@ int __init parse_crashkernel_low(char *cmdline,
+>>   * --------- Crashkernel reservation ------------------------------
+>>   */
+>>  
+>> -#ifdef CONFIG_KEXEC_CORE
+>> -
+>> -#if defined(CONFIG_X86) || defined(CONFIG_ARM64)
+>> +#ifdef CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL
+>>  static int __init reserve_crashkernel_low(void)
+>>  {
+>>  #ifdef CONFIG_64BIT
+>> @@ -451,8 +449,7 @@ void __init reserve_crashkernel(void)
+>>  	crashk_res.start = crash_base;
+>>  	crashk_res.end   = crash_base + crash_size - 1;
+>>  }
+>> -#endif
+>> -#endif /* CONFIG_KEXEC_CORE */
+>> +#endif /* CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL */
+> 
+> Nitpick mostly but it may simplify the patches if the x86, arch/Kconfig
+> and crash_core.c changes here could be moved to patch 5. The remaining
+> select for arm64 should be moved to patch 7 and drop the #if change in
+> that patch.
+> 
+> This way we can keep the x86 patches on a separate branch.
+
+That's a good suggestion. I will do it.
 
 > 
-> > > +
-> > > +	if (!refs)
-> > > +		goto out;
-> > > +
-> > > +	/*
-> > > +	 * Do not need RCU while enumerating the events that
-> > > were used.
-> > > +	 * The lifetime of refs has reached an end, it's tied to
-> > > this file.
-> > > +	 * The underlying user_events are ref counted, and
-> > > cannot be freed.
-> > > +	 * After this decrement, the user_events may be freed
-> > > elsewhere.
-> > > +	 */
-> > > +	for (i = 0; i < refs->count; ++i) {  
-> > 
-> > Fault on refs->count
-> > 
-> > ??  
+> Thanks.
 > 
-> refs after rcu_dereference is checked for null before accessing.
-> 
-> refs cannot be changed when release is being executed, since that
-> would mean the ioctl ran without a file reference (not sure how that
-> could happen).
-> 
-> This is why it's important that release get the latest version of
-> refs, an ioctl could have JUST happened before the final close() in
-> user mode, and if it jumped CPUs we could (in theory) get an old
-> value. If we got an old value, then yes, the fault could occur.
-> 
-> This code uses the file ops release method as a final sync point to
-> clean up everything for that file only after there are no more
-> references to it at all, so nobody can do this kind of thing.
-> 
-> Is there some case I am missing where an ioctl on a file can be
-> performed without a reference to that file?
-
-
-Well, the ioctl can be called as the close happens, but it's the
-internal working of fdget/put that protects it. If the ioctl is called
-at the same time as the close, the fdget in the ioctl will keep the
-close from calling the release. And as soon as the ioctl is finished,
-it will call the fdput() which then calls the release logic.
-
-> 
-> Are you worried about a malicious user calling close on the file and
-> then immediately issuing an ioctl on the now closed file?
-> 
-> If so, wouldn't ioctl just reject that file reference being used as
-> not in the processes file table / invalid and not let the ioctl go
-> through?
-> 
-
-I think it seems less confusing and saner to just use the mutex. It's
-not a fast path is it?
-
--- Steve

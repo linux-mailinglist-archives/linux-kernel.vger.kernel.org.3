@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6616F46F6A2
+	by mail.lfdr.de (Postfix) with ESMTP id AE83E46F6A3
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbhLIWTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S233506AbhLIWTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbhLIWTl (ORCPT
+        with ESMTP id S233502AbhLIWTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:19:41 -0500
+        Thu, 9 Dec 2021 17:19:44 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91E8C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:16:07 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id w5-20020a25ac05000000b005c55592df4dso13060122ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:16:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FECC061A72
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:16:10 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id h5-20020a255f45000000b005ffd939127bso12869445ybm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 14:16:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=a1e01/uQIMruIVMxVHsJI+lKzq1arm+BxjGSeQVMHMA=;
-        b=PqB8Y03IRHWlUaGuR+3mpNmM+NV36jEBvM5WalY9UQa7LJQ3Ha7mLeU0SrXzuGpgv7
-         3f1FJ7nyOU1HKi0FN2fKfIxI5t5swTAFYDfuuNdYZhQqduoKHQ1cYMi4OIcVm53c3vCy
-         7yT5rL4j/PWClDNNlKwcRZOM73uddO3lpdJphfRR21b42NwPq21ghJtd4I9iZuBlLngU
-         qCZ6m7MdzEt3RAGpy7Ix+uOw5VaFfqKUEZwR8gWh/+ky7IT5ELKb9UeUJd9IKkCKn5xq
-         NkDxW8QZ9WvEJwcrHkgaoPFQ7+5GNQoVTcHihopQaPQAfuvCjJ80sufoumyAG3oTmcrm
-         rdug==
+        bh=7s8lEM7vxE9oaPCZlcOUwoJ7eBiwu3eQIZufuhM0E/I=;
+        b=ksiw6rsrwZIql9RdnW0zggcto4PhW/OFyE3GwNIVspYOeSFVcU4OkzOgvF2gkZxccX
+         bAnBjk2/2N5TBjb6PPhpPTI5e3DYoUJD5tZwq0N5PSC/VkLZazfhOdl6845mojjGoYbF
+         Buzlq6livqIu8JOBvfszFn7XyWPq/2p4YBpY951LGKJItM1FxAOT1mmHT1j27pWh888j
+         dld8HWIzS5VL+QI7m+LZ0U0gM8P7ddbKo4Pvn11v8jO49iN2xZKt8n8dIF/5j87eios1
+         QnYYtIRfkgsBGqFgPTs8F95xXML5xU2T5M8ABRFTtl9jAyzWCGpszQkfWUK+FFOLIxSC
+         MMcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=a1e01/uQIMruIVMxVHsJI+lKzq1arm+BxjGSeQVMHMA=;
-        b=cwIHoZMJu6sOS/55kzg2erYMHIKySxZnimKMrciJisOiH4iuTmEiP/Y9MThs2Rt+PY
-         b82Vu9vZyRJD6MYPNxFLo4z6c3/zmzHLlJUSaAWlUDK1hRexInVZLFzD5meV6A7JxnHb
-         SIo2hHRuh9NpoFlyn3sAKNliXrCDg/i8zg0oXPYb+M1XwmQpRmKEin1zHP2TNCQG32Dk
-         N3L9Jb3VqnatE0gnc4wqc0aL7Dc45pKjr4Bq7y8N0GtUjQ7b7HuRf83TlTUylNzGkbYw
-         EU7YZ2DBD+FYbs5jvRQwC1ERXTTvaFL3cIhHQPHjzivvFJoHOHSBrGaHnusl/+MCpm8h
-         1MpA==
-X-Gm-Message-State: AOAM533A2hYzTbwI2/uqOfu+Rj/Hx7z/BQMv3ZlSJiypgOpRoHn8te0O
-        IQgTs6IWQabwQqIrslURINToyRs=
-X-Google-Smtp-Source: ABdhPJxc0LQEcS2GZ0xtTl0rfiaEYOwwtlAW2WphlbELpXxEcghi8DcFKiFyg+sJxtCD3pCjqLRkEqw=
+        bh=7s8lEM7vxE9oaPCZlcOUwoJ7eBiwu3eQIZufuhM0E/I=;
+        b=KYLgLSHaD8kAXWoZdsCRyA+eDSGIHWAQaBFciRRIPEKPGlBLv3ibfhiALfDvhRTw15
+         RsntcYGBqhV70VIuldlMaKu9ABnaCC4iquvwSTsWle3AtQe05S0Z0Z/HeIld157pkqTq
+         Ut+4AaU6zfvCZKUlRXKh9DJlKFOMSubgo/C63APMRXpVZ0d2wzgR9t2PGk0NHoJtnunY
+         SyFYydY8b9Iw0eyWJc03BMbTYd8KdXAhgXzIRj+SQ5k+gTSFyWapxP1LxX1JX6s3cwB7
+         VlRtGwiVySh7+/3BF6DHL3YZWhzPzjXsjBXsi7fQmxT2ptjvib3dLYfwz0CDduX8RnoR
+         X99A==
+X-Gm-Message-State: AOAM531S/AuvrcciXgFD4m4AjoYeyHDxKQfvHFmaBnpH3Whl0q8ORnNn
+        sDc1/Hyrb1WnJRh1lpvNj37bPUM=
+X-Google-Smtp-Source: ABdhPJx6SHlSTXft/4uwAkd2t2Qz2vUlOSahwEB+bAnZk0choINS/4CYmxqXe6LtfY7i28pAboGp1Qc=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:f233:e324:8aa0:f65c])
- (user=pcc job=sendgmr) by 2002:a25:2e49:: with SMTP id b9mr10139518ybn.414.1639088166927;
- Thu, 09 Dec 2021 14:16:06 -0800 (PST)
-Date:   Thu,  9 Dec 2021 14:15:43 -0800
+ (user=pcc job=sendgmr) by 2002:a05:6902:1107:: with SMTP id
+ o7mr9802261ybu.120.1639088169471; Thu, 09 Dec 2021 14:16:09 -0800 (PST)
+Date:   Thu,  9 Dec 2021 14:15:44 -0800
 In-Reply-To: <20211209221545.2333249-1-pcc@google.com>
-Message-Id: <20211209221545.2333249-7-pcc@google.com>
+Message-Id: <20211209221545.2333249-8-pcc@google.com>
 Mime-Version: 1.0
 References: <20211209221545.2333249-1-pcc@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v4 6/7] Documentation: document uaccess logging
+Subject: [PATCH v4 7/7] selftests: test uaccess logging
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
@@ -97,189 +97,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the uaccess logging feature.
+Add a kselftest for the uaccess logging feature.
 
-Link: https://linux-review.googlesource.com/id/Ia626c0ca91bc0a3d8067d7f28406aa40693b65a2
+Link: https://linux-review.googlesource.com/id/I39e1707fb8aef53747c42bd55b46ecaa67205199
 Signed-off-by: Peter Collingbourne <pcc@google.com>
 ---
-v3:
-- document what happens if passing NULL to prctl
-- be explicit about meaning of addr and size
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/uaccess_buffer/Makefile |   4 +
+ .../uaccess_buffer/uaccess_buffer_test.c      | 126 ++++++++++++++++++
+ 3 files changed, 131 insertions(+)
+ create mode 100644 tools/testing/selftests/uaccess_buffer/Makefile
+ create mode 100644 tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
 
- Documentation/admin-guide/index.rst           |   1 +
- Documentation/admin-guide/uaccess-logging.rst | 151 ++++++++++++++++++
- 2 files changed, 152 insertions(+)
- create mode 100644 Documentation/admin-guide/uaccess-logging.rst
-
-diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-index 1bedab498104..4f6ee447ab2f 100644
---- a/Documentation/admin-guide/index.rst
-+++ b/Documentation/admin-guide/index.rst
-@@ -54,6 +54,7 @@ ABI will be found here.
-    :maxdepth: 1
- 
-    sysfs-rules
-+   uaccess-logging
- 
- The rest of this manual consists of various unordered guides on how to
- configure specific aspects of kernel behavior to your liking.
-diff --git a/Documentation/admin-guide/uaccess-logging.rst b/Documentation/admin-guide/uaccess-logging.rst
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c852eb40c4f7..291b62430557 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -71,6 +71,7 @@ TARGETS += timers
+ endif
+ TARGETS += tmpfs
+ TARGETS += tpm2
++TARGETS += uaccess_buffer
+ TARGETS += user
+ TARGETS += vDSO
+ TARGETS += vm
+diff --git a/tools/testing/selftests/uaccess_buffer/Makefile b/tools/testing/selftests/uaccess_buffer/Makefile
 new file mode 100644
-index 000000000000..24def38bbdf8
+index 000000000000..e6e5fb43ce29
 --- /dev/null
-+++ b/Documentation/admin-guide/uaccess-logging.rst
-@@ -0,0 +1,151 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/uaccess_buffer/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++TEST_GEN_PROGS := uaccess_buffer_test
 +
-+===============
-+Uaccess Logging
-+===============
++include ../lib.mk
+diff --git a/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+new file mode 100644
+index 000000000000..051062e4fbf9
+--- /dev/null
++++ b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+Background
-+----------
++#include "../kselftest_harness.h"
 +
-+Userspace tools such as sanitizers (ASan, MSan, HWASan) and tools
-+making use of the ARM Memory Tagging Extension (MTE) need to
-+monitor all memory accesses in a program so that they can detect
-+memory errors. Furthermore, fuzzing tools such as syzkaller need to
-+monitor all memory accesses so that they know which parts of memory
-+to fuzz. For accesses made purely in userspace, this is achieved
-+via compiler instrumentation, or for MTE, via direct hardware
-+support. However, accesses made by the kernel on behalf of the user
-+program via syscalls (i.e. uaccesses) are normally invisible to
-+these tools.
++#include <linux/uaccess-buffer.h>
++#include <sys/prctl.h>
++#include <sys/utsname.h>
 +
-+Traditionally, the sanitizers have handled this by interposing the libc
-+syscall stubs with a wrapper that checks the memory based on what we
-+believe the uaccesses will be. However, this creates a maintenance
-+burden: each syscall must be annotated with its uaccesses in order
-+to be recognized by the sanitizer, and these annotations must be
-+continuously updated as the kernel changes.
++FIXTURE(uaccess_buffer)
++{
++	uint64_t addr;
++};
 +
-+The kernel's uaccess logging feature provides userspace tools with
-+the address and size of each userspace access, thereby allowing these
-+tools to report memory errors involving these accesses without needing
-+annotations for every syscall.
++FIXTURE_SETUP(uaccess_buffer)
++{
++	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &self->addr, 0,
++			   0, 0));
++}
 +
-+By relying on the kernel's actual uaccesses, rather than a
-+reimplementation of them, the userspace memory safety tools may
-+play a dual role of verifying the validity of kernel accesses. Even
-+a sanitizer whose syscall wrappers have complete knowledge of the
-+kernel's intended API may vary from the kernel's actual uaccesses due
-+to kernel bugs. A sanitizer with knowledge of the kernel's actual
-+uaccesses may produce more accurate error reports that reveal such
-+bugs. For example, a kernel that accesses more memory than expected
-+by the userspace program could indicate that either userspace or the
-+kernel has the wrong idea about which kernel functionality is being
-+requested -- either way, there is a bug.
++FIXTURE_TEARDOWN(uaccess_buffer)
++{
++	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, 0, 0, 0, 0));
++}
 +
-+Interface
-+---------
++TEST_F(uaccess_buffer, uname)
++{
++	struct uaccess_descriptor desc;
++	struct uaccess_buffer_entry entries[64];
++	struct utsname un;
 +
-+The feature may be used via the following prctl:
++	desc.addr = (uint64_t)(unsigned long)entries;
++	desc.size = 64;
++	self->addr = (uint64_t)(unsigned long)&desc;
++	ASSERT_EQ(0, uname(&un));
++	ASSERT_EQ(0, self->addr);
 +
-+.. code-block:: c
++	if (desc.size == 63) {
++		ASSERT_EQ((uint64_t)(unsigned long)(entries + 1), desc.addr);
 +
-+  uint64_t addr = 0; /* Generally will be a TLS slot or equivalent */
-+  prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &addr, 0, 0, 0);
++		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
++		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
++		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
++	} else {
++		/* See override_architecture in kernel/sys.c */
++		ASSERT_EQ(62, desc.size);
++		ASSERT_EQ((uint64_t)(unsigned long)(entries + 2), desc.addr);
 +
-+Supplying a non-zero address as the second argument to ``prctl``
-+will cause the kernel to read an address (referred to as the *uaccess
-+descriptor address*) from that address on each kernel entry. Specifying
-+an address of NULL as the second argument will restore the kernel's
-+default behavior, i.e. no uaccess descriptor address is read.
++		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
++		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
++		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
 +
-+When entering the kernel with a non-zero uaccess descriptor address
-+to handle a syscall, the kernel will read a data structure of type
-+``struct uaccess_descriptor`` from the uaccess descriptor address,
-+which is defined as follows:
++		ASSERT_EQ((uint64_t)(unsigned long)&un.machine,
++			  entries[1].addr);
++		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[1].flags);
++	}
++}
 +
-+.. code-block:: c
++static bool handled;
 +
-+  struct uaccess_descriptor {
-+    uint64_t addr, size;
-+  };
++static void usr1_handler(int signo)
++{
++	handled = true;
++}
 +
-+This data structure contains the address and size (in array elements)
-+of a *uaccess buffer*, which is an array of data structures of type
-+``struct uaccess_buffer_entry``. Before returning to userspace, the
-+kernel will log information about uaccesses to sequential entries
-+in the uaccess buffer. It will also store ``NULL`` to the uaccess
-+descriptor address, and store the address and size of the unused
-+portion of the uaccess buffer to the uaccess descriptor.
++TEST_F(uaccess_buffer, blocked_signals)
++{
++	struct uaccess_descriptor desc;
++	struct shared_buf {
++		bool ready;
++		bool killed;
++	} volatile *shared = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
++				  MAP_ANON | MAP_SHARED, -1, 0);
++	struct sigaction act = {}, oldact;
++	int pid;
 +
-+The format of a uaccess buffer entry is defined as follows:
++	handled = false;
++	act.sa_handler = usr1_handler;
++	sigaction(SIGUSR1, &act, &oldact);
 +
-+.. code-block:: c
++	pid = fork();
++	if (pid == 0) {
++		/*
++		 * Busy loop to synchronize instead of issuing syscalls because
++		 * we need to test the behavior in the case where no syscall is
++		 * issued by the parent process.
++		 */
++		while (!shared->ready)
++			;
++		kill(getppid(), SIGUSR1);
++		shared->killed = true;
++		_exit(0);
++	} else {
++		int i;
 +
-+  struct uaccess_buffer_entry {
-+    uint64_t addr, size, flags;
-+  };
++		desc.addr = 0;
++		desc.size = 0;
++		self->addr = (uint64_t)(unsigned long)&desc;
 +
-+``addr`` and ``size`` contain the address and size of the user memory
-+access. On arm64, tag bits are preserved in the ``addr`` field. There
-+is currently one flag bit assignment for the ``flags`` field:
++		shared->ready = true;
++		while (!shared->killed)
++			;
 +
-+.. code-block:: c
++		/*
++		 * The kernel should have IPI'd us by now, but let's wait a bit
++		 * longer just in case.
++		 */
++		for (i = 0; i != 1000000; ++i)
++			;
 +
-+  #define UACCESS_BUFFER_FLAG_WRITE 1
++		ASSERT_FALSE(handled);
 +
-+This flag is set if the access was a write, or clear if it was a
-+read. The meaning of all other flag bits is reserved.
++		/*
++		 * Returning from the waitpid syscall should trigger the signal
++		 * handler. The signal itself may also interrupt waitpid, so
++		 * make sure to handle EINTR.
++		 */
++		while (waitpid(pid, NULL, 0) == -1)
++			ASSERT_EQ(EINTR, errno);
++		ASSERT_TRUE(handled);
++	}
 +
-+When entering the kernel with a non-zero uaccess descriptor
-+address for a reason other than a syscall (for example, when
-+IPI'd due to an incoming asynchronous signal), any signals other
-+than ``SIGKILL`` and ``SIGSTOP`` are masked as if by calling
-+``sigprocmask(SIG_SETMASK, set, NULL)`` where ``set`` has been
-+initialized with ``sigfillset(set)``. This is to prevent incoming
-+signals from interfering with uaccess logging.
++	munmap((void *)shared, getpagesize());
++	sigaction(SIGUSR1, &oldact, NULL);
++}
 +
-+Example
-+-------
-+
-+Here is an example of a code snippet that will enumerate the accesses
-+performed by a ``uname(2)`` syscall:
-+
-+.. code-block:: c
-+
-+  struct uaccess_buffer_entry entries[64];
-+  struct uaccess_descriptor desc;
-+  uint64_t desc_addr = 0;
-+  prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &desc_addr, 0, 0, 0);
-+
-+  desc.addr = (uint64_t)&entries;
-+  desc.size = 64;
-+  desc_addr = (uint64_t)&desc;
-+
-+  struct utsname un;
-+  uname(&un);
-+
-+  struct uaccess_buffer_entry* entries_end = (struct uaccess_buffer_entry*)desc.addr;
-+  for (struct uaccess_buffer_entry* entry = entries; entry != entries_end; ++entry) {
-+    printf("%s at 0x%lx size 0x%lx\n", entry->flags & UACCESS_BUFFER_FLAG_WRITE ? "WRITE" : "READ",
-+           (unsigned long)entry->addr, (unsigned long)entry->size);
-+  }
-+
-+Limitations
-+-----------
-+
-+This feature is currently only supported on the arm64, s390 and x86
-+architectures.
-+
-+Uaccess buffers are a "best-effort" mechanism for logging uaccesses. Of
-+course, not all of the accesses may fit in the buffer, but aside from
-+that, not all internal kernel APIs that access userspace memory are
-+covered. Therefore, userspace programs should tolerate unreported
-+accesses.
-+
-+On the other hand, the kernel guarantees that it will not
-+(intentionally) report accessing more data than it is specified
-+to read. For example, if the kernel implements a syscall that is
-+specified to read a data structure of size ``N`` bytes by first
-+reading a page's worth of data and then only using the first ``N``
-+bytes from it, the kernel will either report reading ``N`` bytes or
-+not report the access at all.
++TEST_HARNESS_MAIN
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

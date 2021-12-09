@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B5F46E54B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49BE46E54C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbhLIJPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:15:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44344 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbhLIJPb (ORCPT
+        id S233983AbhLIJPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:15:46 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36654 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233948AbhLIJPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:15:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 9 Dec 2021 04:15:45 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6685F1FD2A;
+        Thu,  9 Dec 2021 09:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639041131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jMKe2fpbaFIkwZm6Sx+WeSLDOJ/0w510lqoTLI2UzPI=;
+        b=XLV+DOARD1znUeX5QY+Ws9skotH/YYoxpu2j/1lUla0gfpLOKIrx9df+SRHjRaNQli31yJ
+        /1SvkgW/vTRWYgL20HgHbCZppbMaam9zpTsg8i0RZ64yCpXyQu6BdmNQl/SnjxRGi+4qF4
+        JOxdkVn519bLQWMp8MoizZzsse3vAkk=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6E07B8235A;
-        Thu,  9 Dec 2021 09:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046E8C004DD;
-        Thu,  9 Dec 2021 09:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639041115;
-        bh=4HYZmqSualm6r0O+iSth2hV1upnEAYO2YGj0dwO4aio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=htWdFp5+38ANXG5FL6pqVERh7jreG+jaOQmd6F4xLKfzHrNOwt6l7wfCtBQ62PiX5
-         s19yH3sQAdYcRqbFf0izs8LOSqAVIKtpoqypuGm1KqaHQq2wKZfcflggL+vQ/rpb0x
-         oM+cRfLfz8DmD9OGiTA9DjbiQghQvTXqK9TUJbLF3ILn//6B9xweyAFxXXpMRiL8m7
-         w+VJBebSbdttACiLJR2o+qH/M+i+UZZjs7iT0JOQMZO6R6aBgrT+xj2USQH2EEBfEf
-         XcP7jEBqazy5GttKk72O8rzAskTAQkkjT6rjdvDPmPB/VZ5rPvSOL7i31Q1h1T2Ieh
-         4Rm50OjZrsKOw==
-Date:   Thu, 9 Dec 2021 10:11:52 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND 5/8] i2c: exynos5: Add bus clock support
-Message-ID: <YbHIWBa4VFEK1wKR@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-6-semen.protsenko@linaro.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 3481AA3B85;
+        Thu,  9 Dec 2021 09:12:11 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 10:12:10 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
+Message-ID: <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
+References: <20211208212211.2860249-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oh3cTo1WoclFiwg3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211204215820.17378-6-semen.protsenko@linaro.org>
+In-Reply-To: <20211208212211.2860249-1-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Do we want this on top?
+----
+From 58b04ae6dc97b0105ea2651daca55cf2386f69b4 Mon Sep 17 00:00:00 2001
+From: Michal Hocko <mhocko@suse.com>
+Date: Thu, 9 Dec 2021 10:07:51 +0100
+Subject: [PATCH] mm: drop MMF_OOM_SKIP from exit_mmap
 
---oh3cTo1WoclFiwg3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+MMF_OOM_SKIP used to play a synchronization role between exit_mmap and
+oom repear in the past. Since the exclusive mmap_sem is held in
+exit_mmap to cover all destructive operations the flag synchronization
+is not needed anymore and we can safely drop it. Just make sure that
+mm->mmap is set to NULL so that nobody will access the freed vma list.
 
-On Sat, Dec 04, 2021 at 11:58:17PM +0200, Sam Protsenko wrote:
-> In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-> part of USIv2 block, there are two clocks provided to HSI2C controller:
->   - PCLK: bus clock (APB), provides access to register interface
->   - IPCLK: operating IP-core clock; SCL is derived from this one
->=20
-> Both clocks have to be asserted for HSI2C to be functional in that case.
->=20
-> Add code to obtain and enable/disable PCLK in addition to already
-> handled operating clock. Make it optional though, as older Exynos SoC
-> variants only have one HSI2C clock.
->=20
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Signed-off-by: Michal Hocko <mhocko@suse.com>
+---
+ mm/mmap.c | 23 +----------------------
+ 1 file changed, 1 insertion(+), 22 deletions(-)
 
-This one doesn't apply here? What tree is this based on?
+diff --git a/mm/mmap.c b/mm/mmap.c
+index f4e09d390a07..0d6af9d89aa8 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -3129,28 +3129,6 @@ void exit_mmap(struct mm_struct *mm)
+ 	/* mm's last user has gone, and its about to be pulled down */
+ 	mmu_notifier_release(mm);
+ 
+-	if (unlikely(mm_is_oom_victim(mm))) {
+-		/*
+-		 * Manually reap the mm to free as much memory as possible.
+-		 * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
+-		 * this mm from further consideration.  Taking mm->mmap_lock for
+-		 * write after setting MMF_OOM_SKIP will guarantee that the oom
+-		 * reaper will not run on this mm again after mmap_lock is
+-		 * dropped.
+-		 *
+-		 * Nothing can be holding mm->mmap_lock here and the above call
+-		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+-		 * __oom_reap_task_mm() will not block.
+-		 *
+-		 * This needs to be done before calling unlock_range(),
+-		 * which clears VM_LOCKED, otherwise the oom reaper cannot
+-		 * reliably test it.
+-		 */
+-		(void)__oom_reap_task_mm(mm);
+-
+-		set_bit(MMF_OOM_SKIP, &mm->flags);
+-	}
+-
+ 	mmap_write_lock(mm);
+ 	if (mm->locked_vm)
+ 		unlock_range(mm->mmap, ULONG_MAX);
+@@ -3180,6 +3158,7 @@ void exit_mmap(struct mm_struct *mm)
+ 		vma = remove_vma(vma);
+ 		cond_resched();
+ 	}
++	mm->mmap = NULL;
+ 	mmap_write_unlock(mm);
+ 	vm_unacct_memory(nr_accounted);
+ }
+-- 
+2.30.2
 
-
---oh3cTo1WoclFiwg3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxyFgACgkQFA3kzBSg
-KbaP0A/+NPOn/NtI0IdhiYFVt0Utf0/aPYwHAd6cku/QMII7ILbSpDGr+vCWlD9u
-RHflrQ7IrkqwF1Tk026PT1zjx12vhFFDAxfBInaRhggDLCAW4fEwPtLzaGWANZMk
-yz3wW63pBTqeKFRcOf3OKoNGOJ8rlYNSKP07GfoBcG9MdUViwTuxIrvw0kDyceq5
-a8UJWaM+OHge+bA8eCGoXzSbG8qcre5fz8RYKK4mTLOOzRyGEaX+XvNxIlJh/V7g
-2z0qB/N90WeKdRXZUpPLwNuHrQlVpck3J459uAz/nbC2kEeBIck83mt15XSC1GPM
-E0ACdNgaPwW+rF0hy/T0QJi+xv9nRNrcIP5++rwPDxTXMSshFf80yHd1l1giQHZb
-bYSDRwww74tK9O2L2d/zqR036P/mehoErrDmlbKjJVFamk9uAP4x5qVmViQ/si/f
-cEb2EPnlqVItVBye/+z6tC6NUprPojU/w/KrYkdx9mw/iSqqZUsw3w4dGf7pHQ1B
-0Lxa4FPnlNQ3PJoGtRNh9R6f8GqTHTxlyJohZ681RU96A3kfylykxUEibMzbxnxn
-ar7mfMkom1MTMeQgdAZNBEXwTg49s2Q7R5b1m8HAU1VJRdR+lFQR0EUc2UfrylC/
-uSyGZb6fjd4aWdDWF8yHO7bbJSzo5sHb+IWydqpqigXyxpRPb/E=
-=f68N
------END PGP SIGNATURE-----
-
---oh3cTo1WoclFiwg3--
+-- 
+Michal Hocko
+SUSE Labs

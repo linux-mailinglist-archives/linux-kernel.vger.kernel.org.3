@@ -2,135 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32C146E8A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03B546E8A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237511AbhLIMu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:50:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40054 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230094AbhLIMu1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:50:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639054013;
+        id S235038AbhLIMwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:52:47 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:55330 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230094AbhLIMwq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:52:46 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 57AF01EC04DE;
+        Thu,  9 Dec 2021 13:49:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639054148;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+rgwOZXwpAx5YyVASfGnt3zTU62rqVUjO/0XDdwQk1Q=;
-        b=GyTosu2fKWyUaeXRkIfJpMe61coNVLE5+KI5Uw1QC+OPnUK/ZupX1xyUloJB4T7caN0GzJ
-        M9JB3Au42jdBA4UKZoVXLtxSEDKkfplqN4z0uTghWqmdYjDC6QUt7xlJ72WQDnUt+dugwm
-        629+UvRa2xaq78/gT/qGw7w+pJVv1CQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-469-4UY_bXghOYWt5ini3xL-LA-1; Thu, 09 Dec 2021 07:46:52 -0500
-X-MC-Unique: 4UY_bXghOYWt5ini3xL-LA-1
-Received: by mail-wm1-f70.google.com with SMTP id 201-20020a1c04d2000000b003335bf8075fso3118391wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:46:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=+rgwOZXwpAx5YyVASfGnt3zTU62rqVUjO/0XDdwQk1Q=;
-        b=h77mbn7Ps9iBTP/Zk487I9YHAu/z+2Hp9+oUAWsBhsssnQBRNkbo66ZdQW/nrZtiOl
-         yy+whlBvNVyJggLVB9GcTtYqlnBi3TrKPp7TafXo27rR1TmPXMe9RN09wr/li3B5E0ST
-         II5siXivUOrZskbYgVdzoX8CMPsw6FwUSweAWHWLVDbXrkB26OJNaLsaKd0glA5wUAxW
-         13gZO2eXBsaIUQD88BsF8e4UJz3VuN3DqTzKJEUH/P2EBQSptSSzF3eh4LpARgyplD4X
-         V1c9XtwEBASEJ8K4eVl1gqX9cJ7c3fRwD3p1U3lyZ5HsZUfoL8/zWSJ/7uk7z1XUQ4DZ
-         9Qtw==
-X-Gm-Message-State: AOAM531v+WQIaHmeuMSTHwBEM10ASWL+q/6KjAnwFQtNcDd55IBUa+y1
-        dBkx2AXSC5bCffP6lva8fqPce2rCI2ogISMrIl3CMcJSOeR4MmsNPnxME148mfghvCTvQhpES0n
-        lPnRHeVft49vplJI34ZV/1eSM
-X-Received: by 2002:adf:f6cf:: with SMTP id y15mr6060754wrp.56.1639054011191;
-        Thu, 09 Dec 2021 04:46:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcYWp6HpitNPUMAnq1oU8ygzfOdTkel9TMOiRGTFVUC9FyfEIlxxRl1jFiLHUrW8VwlvpPxQ==
-X-Received: by 2002:adf:f6cf:: with SMTP id y15mr6060733wrp.56.1639054010986;
-        Thu, 09 Dec 2021 04:46:50 -0800 (PST)
-Received: from ?IPv6:2003:c4:372a:6fe5:a08b:eb12:3927:3670? (p200300c4372a6fe5a08beb1239273670.dip0.t-ipconnect.de. [2003:c4:372a:6fe5:a08b:eb12:3927:3670])
-        by smtp.gmail.com with ESMTPSA id g19sm8880792wmg.12.2021.12.09.04.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 04:46:50 -0800 (PST)
-Message-ID: <14584c1a1e449cc20b5af7918b411ee27cf1570b.camel@redhat.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
- hci_cmd_sync_cancel
-From:   Benjamin Berg <bberg@redhat.com>
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com>,
-        Thinh.Nguyen@synopsys.com, changbin.du@intel.com,
-        christian.brauner@ubuntu.com, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        yajun.deng@linux.dev
-Date:   Thu, 09 Dec 2021 13:46:47 +0100
-In-Reply-To: <3e8cba55-5d34-eab3-0625-687b66bb9449@suse.com>
-References: <00000000000098464c05d2acf3ba@google.com>
-         <3e8cba55-5d34-eab3-0625-687b66bb9449@suse.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-83lGBtdr6vrReHv5wmRv"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=q3M9i0QlpSITzXtwbiQtBavQAFKCEbdUH5cLaclMDsM=;
+        b=YQZQyKbsRRMrV3EOEFBkAtyitenanSmDbeonrfDIFMrO3Jeddnugx/m//qc/mUcKNQ+eLS
+        IWOGOQ9j05QY5bHcMlSGAhLHfQZZGwMlc5IzdJc2GOb1zCuY2V3MpG/ytPp9uDaaHjWHQ4
+        F3tOV90och6JCN5CYhJf6SLGcF7GZBc=
+Date:   Thu, 9 Dec 2021 13:49:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Anjaneya Chagam <anjaneya.chagam@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: 5.16-rc: "x86/boot: Pull up cmdline" breaks mem=
+Message-ID: <YbH7Rlm4/mq0WuTN@zn.tnic>
+References: <ae2bb14d-d27a-e76d-adde-ef888d373343@google.com>
+ <YbHUW1KTfvJtxNwP@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbHUW1KTfvJtxNwP@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Next question: does it boot without having supplied "mem=" on the kernel
+cmdline?
 
---=-83lGBtdr6vrReHv5wmRv
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+And just to make sure I understand correctly: this is 64-bit or 32-bit
+kernel?
 
-Hi,
+Thx.
 
-On Thu, 2021-12-09 at 11:06 +0100, Oliver Neukum wrote:
-> As __cancel_work_timer can be called from hci_cmd_sync_cancel() this is
-> just not
-> an approach you can take. It looks like asynchronously canceling the
-> scheduled work
-> would result in a race, so I would for now just revert.
+-- 
+Regards/Gruss,
+    Boris.
 
-Right, so this needs to be pushed into a workqueue instead, I suppose.
-
-> What issue exactly is this trying to fix or improve?
-
-The problem is aborting long-running synchronous operations. i.e.
-without this patchset, USB enumeration will hang for 10s if a USB
-bluetooth device disappears during firmware loading. This is because
-even though the USB device is gone and all URB submissions fail, the
-operation will only be aborted after the internal timeout happens.
-
-The device in turn disappears because an rfkill switch is blocked and
-the platform removes it from the bus. Overall, this can lead to
-graphical login to hang as fprintd cannot initialise as it hangs in USB
-enumeration.
-
-Benjamin
-
---=-83lGBtdr6vrReHv5wmRv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmGx+rcACgkQq6ZWhpmF
-Y3CJqw/+ONFnidIqlEKcCVDa9JZe01o4i/3PKsHyINaj/XljOCQr1869ewL084xw
-GYdljx03tA+05TDlwnMwaZOE8ozxAB8JInuAhg72BGcmM5HuaB0wMxej0Eyl1yRU
-Es2TLCvJhjRbOtoYnbQ/sMpmuhnAh9ditH7az1UR+dBIWD4/3y7A6wqzqEE1GbJw
-M29xhWuFP6WLn4InqY0PvhAnEiSxE5sWtGfl6gvm9RBtoSpdreFVu5DgYSHSodF6
-FFqg1HorMZP4gBalSe4EOYZiS21pN6aNih7o09TPGmRFfVIEUDbPjODR5z8zsYQx
-wLRHGSaG2O9oeMEJe0YufJyxSC1cZVMi/AzF3RNpX4N89Y4oCfA+TPx3SWqHGYyc
-aaiJkcxudD9Uu7y3EMC3P0J290tLQJkKHeyGrHHwtLPvvc7gS2CidCvAwM+m5qwX
-LTVXlnUX23xt/1ReFVlRBjq09kdxKNUDU4qkt7I0my1BXooCmR7qew1NqHW6c3ex
-lJdVX9y91RivhMVp8udORuT1V0C7K0Mrkr03xJy0q4LTAu94FkqPCjz8O+dRURMX
-jwj3uQ30jP28dwUq5QysHXN+lOrd+Fa2ksmCAIRU2WKBtNKDCXX1uyDjBZMwunvD
-IBrI3O953a1bwgHr+EaBGTgoibSP3f0vmA4P/QLp4/QtX8me5Uk=
-=xPCC
------END PGP SIGNATURE-----
-
---=-83lGBtdr6vrReHv5wmRv--
-
+https://people.kernel.org/tglx/notes-about-netiquette

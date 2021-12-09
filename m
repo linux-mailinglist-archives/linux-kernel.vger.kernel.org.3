@@ -2,147 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC5146E9FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9BE46EA0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbhLIOfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:35:02 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:9382 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232090AbhLIOe4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:34:56 -0500
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9DtwWT015256;
-        Thu, 9 Dec 2021 14:31:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=yiYSzeESQu0tGZK9qHjsQK/qz8p+ptt6QlT2kMFcbtg=;
- b=lx/T4+K6RUtwi81zATaWH5YC8FfKZXN8FUPMFiQCxOPaOhlvt6IdJr5hoLhFn97wK9Q7
- sQaSm03b4XVEAgV6TkDHxBoQdaBAw7BKiE1tWvvqC5qzbUn6aDV+D5QeunmW1NEYbFEe
- FXLS7hLpKyKA4oYGUs9qSXMTbt4vPozUrVr2NORMBteXGmYIQ1PhYllZz4vreTTEGsPV
- tmWuErd3r3h5r0Jl2KrhW945W17/pR8zytqnDvh6EdCT0Nfr84//ctQ2pwxVzl7FUXkL
- ecbNWwumj8G+HGHNAHB2TnbjG6ZbztMgCn0A4wHalbYiT+plwJlS7oyNk7h2f61hDc71 4A== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ctt9mubh6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Dec 2021 14:31:10 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B9EBVqr163604;
-        Thu, 9 Dec 2021 14:31:09 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2175.outbound.protection.outlook.com [104.47.58.175])
-        by aserp3030.oracle.com with ESMTP id 3csc4w9k4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 09 Dec 2021 14:31:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bIWTp1S6tToh/cumfM4AP4Ofb5+YenpdfOMbFg8r3YEgllliEweIxc7CetqPB02C6ABBGhKUcAgbwpvXNoM7EpfmmTyh9X1aLXoJj76j0i7+C7GJSiU/TJh5Fr2S5QsunOX9dnA52lNjjzCnkl1081XUeVthBrtnxWFTY4nuHwkU581OgA1+DNxkh9xOOB5xY9loOPIFYp0TAuxMmDt24zbl968o3ELTo2IpjWWor2bG8m8VAH0SaAKkx+5C1F8RevOYnjCsmuggDFkJwCDDBX1gZGhZq5UvZz1lQFRKf920DRLGFSWN7gKVxgCqyk6gN3/+GgE2VIVMfAooWIZMvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yiYSzeESQu0tGZK9qHjsQK/qz8p+ptt6QlT2kMFcbtg=;
- b=SON5oOAL8hAWg1MHj+kHl2Lg+dOQvljK1DXGDzyeP4QAPn9pnFWo5w33MABGdIVkXUu2tXi8LU9baLLkcl1fMZW4oAqYc9uFOy2R20s2W6EFEar/+MgdCw1l0zC3qvNFSW9+g2MtozIzd1aPZmbtM5kswkdgaC3Ka9Rr50j2g0ZELk0/aJBz4IovUp68u+unLRh/hEqmJHeexvc9erevSWjzb9s0JIJhHchLiawNxAI2kz1LwQQUdr7J+h+1+8LxD5VksUV4GLawtoMsnLEOpRoryP7l23q9opz2Gq3y577EZShNXaiH+RCYVIIP1vKkG+l76/6BnoLKeEO1fVYcEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yiYSzeESQu0tGZK9qHjsQK/qz8p+ptt6QlT2kMFcbtg=;
- b=rznZMmKMJxR1DesevBHUJkMNV7fq1OrIjw6iMN0vielMinrZiHl0Q19/kV6QTYb1Gx1pet0IW7PC/eeG+UTvQH/YvX4HAHd9ndUau4Jfjp0KwSt2axTfXNN5oqttcRYVEVh9l6rrS+E6B1tHl/FQr7BZdTVI/O617rXS1BNW8Q4=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR10MB1357.namprd10.prod.outlook.com
- (2603:10b6:300:21::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
- 2021 14:31:07 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4755.024; Thu, 9 Dec 2021
- 14:31:07 +0000
-Date:   Thu, 9 Dec 2021 17:30:53 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        id S238677AbhLIOgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:36:54 -0500
+Received: from mga03.intel.com ([134.134.136.65]:1266 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238649AbhLIOgx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 09:36:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639060399; x=1670596399;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wN2jdpinsPWdNTccrUFAdERDZZr00FhXJguxPhU6BVo=;
+  b=kOuERtqV1e1pF14nEVoU+Yp/B6VEO/d6fc9MZFiXshH48qPeN7d263LU
+   /d5ZGnoTwux9a3OVJFJkvj7x0JgJMYjCRolEYC8U4rZE5ruk/2bI33YWy
+   RqW3xtk5IWbtApXNfAEb0QFMAKs6inQmjvYqZqK90y50OrHsI7DKZQk2s
+   SICvGOEwr7dtImVz+k3/u3jGvnfGU84gsbpe2kjilmxCnyzQEtZkjpdH9
+   1oGMf9z1HYEblLilB4smbSVNMlRy86M6ggftCYRCmrZHM2NmVkDNnqK6A
+   kUJQBzL7NPukMBeG1sKL0pO8bnLCwo5vpGlLZ98TsHV7L7qcYAe6nn1YY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="238051018"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="238051018"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:32:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="516318946"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 06:32:29 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvKTE-000222-KT; Thu, 09 Dec 2021 14:32:28 +0000
+Date:   Thu, 9 Dec 2021 22:31:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_QueryDrv()
-Message-ID: <20211209143053.GL1956@kadam>
-References: <20211209132516.8387-1-niejianglei2021@163.com>
- <20211209132516.8387-2-niejianglei2021@163.com>
+Subject: [norov:bm-new 13/15] drivers/leds/trigger/ledtrig-cpu.c:42:17:
+ error: redefinition of 'num_active_cpus' as different kind of symbol
+Message-ID: <202112092257.dQgv78Nx-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209132516.8387-2-niejianglei2021@163.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR1P264CA0017.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:2e::22) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-Received: from kadam (102.222.70.114) by MR1P264CA0017.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2e::22) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Thu, 9 Dec 2021 14:31:03 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a8b21d0a-1556-451c-8651-08d9bb208963
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1357:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB13573D76A9EC7A4E8A642EDC8E709@MWHPR10MB1357.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o2ELNSTBSJOfjBzlF7wFhTh0Oh9YMkkKjd+nvzsvEf4XpGJU8W9KWAmedTW2a3L6dPQaGwF5oqUZxnnHPNSqpFYzENII6KGYot8Yp8Ns/GjXDuGDwZ2Ff02NRvTo2zf0C8Ec1/rnjtGH4CvYb3r4Q0kRNalf1HzWpZy2lgjnpvxxh7JuH/Rs031+zEgxnhiVHnRcATo5Gr92iaSTXxoNaDh3r5LyS6qWftVjNIIeXqOqBU6qlNtLlKAE4qG22mp6BnxLd5DzvjsFfnQ11ruChcyVH/VhRYM0FSpUwA8Eo9zqTwM8f61rCnyF6bEyRz9W1yphNtsAy3PGP007XADJu/SZfKYYF0viI3pCKtviS1pZ48n1bUx2++p1KcpcEZvvds3rLWp/sSG9N62GKgwxZf4x00rLCY+O0BKs/ce9dkOse/kS9eQVlYkZy+SdmfRfCVUT2iJ8hhNmECu98dHcOloKlfn4ga9GHWCXf6EsIDyaBRaEBt4Bf4MrC7MRL2B0aofcNZFlRRY3XYzRzXLuI2ghtSSJM2ObCFAH/ehXXRyCAl7aVSQK9xFrB2Berk2upm+/zLPdmziLJkhlu1n5Gqzzp/6FD6pW3QibKKGVwmczYPpySffKUKOkARFwkf06NZuFIAiTJg9dnrshAUsN4DafaJKi435wQ+5OCrM/Hb6ChrNiURgPMRM/P6zZVZGlJt8LI0uzfjQZCxsyE8K+XA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(9686003)(2906002)(508600001)(558084003)(66556008)(4326008)(316002)(38100700002)(9576002)(66476007)(33716001)(1076003)(38350700002)(33656002)(66946007)(8936002)(5660300002)(52116002)(6916009)(4270600006)(6496006)(44832011)(6666004)(86362001)(26005)(19618925003)(55016003)(186003)(956004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?30si3f8JqnUzRHO7dtnGCeEA/yoeWfodkU7SCeEhve6ZlIS7HS0J1EvBPBqq?=
- =?us-ascii?Q?GbJuY7eOn+PiVaQiY3h2xeLISxwGoIfCkmIE7bfTxabiZRkxO9YZkIHPX0Xe?=
- =?us-ascii?Q?JbQE77ayKfQMo/yAXjo7Xe4kzI/K3poPCmw9RBVebORVpoTrHHkgcWwNBgrA?=
- =?us-ascii?Q?4s1ENxXXkDaakbO63mjoQ+6Pk6q/wh2Pfx5EAjQmSiqY7wHLPH9xFl5XlKlE?=
- =?us-ascii?Q?f5VC92dEjYTf1OALdUaMJklaCRsy9eKwTzvKh9K6HmY2eStROVchdfrbURiZ?=
- =?us-ascii?Q?BHMDHSjDaBGVPnvaAanxYCwJCWR1SiBYDqchXN9czXXQKLMoo3/YgF4Bvkbn?=
- =?us-ascii?Q?PuPjYqYoDv+Pm3/IsBAvZvRma/yOf0zYNWeUfKBKNlfoCwDhPfmBmZrzLznX?=
- =?us-ascii?Q?rdieLEuB7MLPibq9W18UMNxEIAdfq4BlK+Kso7wC3GgTOJKzcBuWohNkohQm?=
- =?us-ascii?Q?X0EcnRmjLNY2f9UNG/TpQH3bPAgmLRzuu+2yiAD7mvnrSzho+3GOvfCMRUhc?=
- =?us-ascii?Q?M6AyDLTpJrtE1vZDaUIPAgfylrA+VrJYG9G39lvfTLdSv6//x4Y74CVNUgdI?=
- =?us-ascii?Q?XW73C9P/HDT05+mbw4frKrnFABfD/QseSGFrXI+nJeI6kUEBKiQypxlKYRQB?=
- =?us-ascii?Q?iJgFWYKkIJ/caI3yV71MriASVJtRj81vveAbRWLFt9qQN7gb/18njUFbsDEc?=
- =?us-ascii?Q?J1HQHnrNNG/gNNwxjuXpMIYdzEutnfOdXmyL4nVmn4Dea31gJ0nE0pUsmBQh?=
- =?us-ascii?Q?abX1+eJmtJwQcNxghLHJUn4FS2hnrxHgUQfDfWYAIY3J9fEw8j/XGW33ThQe?=
- =?us-ascii?Q?azhcKQG4dO+ZrIz092zNLm0wgnxfjz+B2de8Ghz8K4ZqnHbDre6R8vmF1Hsj?=
- =?us-ascii?Q?fRaODf9Va8oVNF84/RnIo0CfzYbqC8/9GgQ570814WCKKaHXdraT0VSpZbuH?=
- =?us-ascii?Q?l6BFQAKXps8zatJHlbeiatuuGWnCM6F/OGo4bXPro4n31NqSmVNHji9Iq6zK?=
- =?us-ascii?Q?ansVXYH819aKnhwyax2y38kX/rwmqsGuXwd9HZOqrih649YWj21hEezr+GMe?=
- =?us-ascii?Q?km4Ym3VocFQW6KbRsuZ8oc1+uytb+h5BYl+uq8P/YbPz2Qo3MwjoB+r7QO6h?=
- =?us-ascii?Q?cl7YxrMtBCeYfBg2FoOHL7CMvCux+jMe0R5o05Lq1U8torD/Ix3oBHBGlDyK?=
- =?us-ascii?Q?JtRo9CtTxt+xOq3cymMwXVVr2V68zJ+8WmQFUbpsRxFzVzfaEg5Zkt7L4WoL?=
- =?us-ascii?Q?Qy/XHZmyw7/7NfJMUwy2N8CQqHP/YXil7vLWpObKbg9cWJo9DxrsCmZfYqrV?=
- =?us-ascii?Q?ttbBLX1wTS8mFugkFjcvPYs61HeVLZOWEq6oTMFRIJ7VfGxWJT3B5vW0wWA7?=
- =?us-ascii?Q?A4yVBnkcydrla/T8mnoE85b4ph4/zpJnk1Eap+Y/920EPCyqyUnQsSg4yHYI?=
- =?us-ascii?Q?VjOmPW6ccg6JsIhYnwT8iyVmR2evkmg+m8Vn8Ef8BTDEzH6LZdPk6f7zsyAK?=
- =?us-ascii?Q?ymtjuEElMxWtWuL//Vj9v9dFzYq7Tcre4Y9GYjJcEYiAPhoM7zQOfAo6b9/d?=
- =?us-ascii?Q?dNMPRceaD8M/RsNEM917XdjRSEyrFGTVYjHTNntF6CNd91TkafrURZlddIZm?=
- =?us-ascii?Q?M+SJOSP9BCZ0Wq15CUHucRLuuZAt8N1TlFHmYinRoxCq8Ry3xl592n/KKTXc?=
- =?us-ascii?Q?qpRjSj2TNVbQLG3M0K2y6MAozfE=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8b21d0a-1556-451c-8651-08d9bb208963
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 14:31:07.2341
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rv1isPC+gg38jehPJh6PFXX/uypsgBJ9SZATsp2asby+mHiT8hH1Irtm8Ai7rqAJtZbTWj3Ov1wQY0UE4qyW8Pz1qQJ8rFArGlBeROnlQjk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1357
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10192 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=723
- phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090078
-X-Proofpoint-GUID: BmcGw6OSUOWsZl-vax1ElKJeNEiYlcL9
-X-Proofpoint-ORIG-GUID: BmcGw6OSUOWsZl-vax1ElKJeNEiYlcL9
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This one is obsolete as well.
+tree:   https://github.com/norov/linux bm-new
+head:   b529d6ec834c582d88d8f1286490bb69ee4bedb2
+commit: d9365a115ddda67b4bbe080adf3919f32b9a36c4 [13/15] kernel/cpu: add num_active_cpu counter
+config: arm64-randconfig-r005-20211208 (https://download.01.org/0day-ci/archive/20211209/202112092257.dQgv78Nx-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/norov/linux/commit/d9365a115ddda67b4bbe080adf3919f32b9a36c4
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bm-new
+        git checkout d9365a115ddda67b4bbe080adf3919f32b9a36c4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-regards,
-dan carpenter
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+Note: the norov/bm-new HEAD b529d6ec834c582d88d8f1286490bb69ee4bedb2 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+>> drivers/leds/trigger/ledtrig-cpu.c:42:17: error: redefinition of 'num_active_cpus' as different kind of symbol
+   static atomic_t num_active_cpus = ATOMIC_INIT(0);
+                   ^
+   include/linux/cpumask.h:979:28: note: previous definition is here
+   static inline unsigned int num_active_cpus(void)
+                              ^
+>> drivers/leds/trigger/ledtrig-cpu.c:82:34: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   atomic_add(is_active ? 1 : -1, &num_active_cpus);
+                                                  ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:54:29: note: passing argument to parameter 'v' here
+   atomic_add(int i, atomic_t *v)
+                               ^
+>> drivers/leds/trigger/ledtrig-cpu.c:83:29: error: incompatible pointer types passing 'unsigned int (*)(void)' to parameter of type 'const atomic_t *' [-Werror,-Wincompatible-pointer-types]
+                   active_cpus = atomic_read(&num_active_cpus);
+                                             ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:25:29: note: passing argument to parameter 'v' here
+   atomic_read(const atomic_t *v)
+                               ^
+   3 errors generated.
+
+
+vim +/num_active_cpus +42 drivers/leds/trigger/ledtrig-cpu.c
+
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  40  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  41  static struct led_trigger *trig_cpu_all;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @42  static atomic_t num_active_cpus = ATOMIC_INIT(0);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  43  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  44  /**
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  45   * ledtrig_cpu - emit a CPU event as a trigger
+c10074a1e5809e drivers/leds/trigger/ledtrig-cpu.c Lee Jones         2021-05-28  46   * @ledevt: CPU event to be emitted
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  47   *
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  48   * Emit a CPU event on a CPU core, which will trigger a
+e602fda1a358a0 drivers/leds/trigger/ledtrig-cpu.c Pavel Machek      2016-10-03  49   * bound LED to turn on or turn off.
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  50   */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  51  void ledtrig_cpu(enum cpu_led_event ledevt)
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  52  {
+24c9301ffd2135 drivers/leds/trigger/ledtrig-cpu.c Christoph Lameter 2014-05-05  53  	struct led_trigger_cpu *trig = this_cpu_ptr(&cpu_trig);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  54  	bool is_active = trig->is_active;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  55  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  56  	/* Locate the correct CPU LED */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  57  	switch (ledevt) {
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  58  	case CPU_LED_IDLE_END:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  59  	case CPU_LED_START:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  60  		/* Will turn the LED on, max brightness */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  61  		is_active = true;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  62  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  63  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  64  	case CPU_LED_IDLE_START:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  65  	case CPU_LED_STOP:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  66  	case CPU_LED_HALTED:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  67  		/* Will turn the LED off */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  68  		is_active = false;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  69  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  70  
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  71  	default:
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  72  		/* Will leave the LED as it is */
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  73  		break;
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  74  	}
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  75  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  76  	if (is_active != trig->is_active) {
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  77  		unsigned int active_cpus;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  78  		unsigned int total_cpus;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  79  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  80  		/* Update trigger state */
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  81  		trig->is_active = is_active;
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @82  		atomic_add(is_active ? 1 : -1, &num_active_cpus);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09 @83  		active_cpus = atomic_read(&num_active_cpus);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  84  		total_cpus = num_present_cpus();
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  85  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  86  		led_trigger_event(trig->_trig,
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  87  			is_active ? LED_FULL : LED_OFF);
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  88  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  89  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  90  		led_trigger_event(trig_cpu_all,
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  91  			DIV_ROUND_UP(LED_FULL * active_cpus, total_cpus));
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  92  
+0b88b71c7762a4 drivers/leds/trigger/ledtrig-cpu.c Paulo Costa       2017-02-09  93  	}
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  94  }
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  95  EXPORT_SYMBOL(ledtrig_cpu);
+8f88731d052d2b drivers/leds/ledtrig-cpu.c         Bryan Wu          2011-06-25  96  
+
+:::::: The code at line 42 was first introduced by commit
+:::::: 0b88b71c7762a406ff99c625935474dc42a25003 leds/trigger/cpu: Add LED trigger for all CPUs aggregated
+
+:::::: TO: Paulo Costa <me@paulo.costa.nom.br>
+:::::: CC: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

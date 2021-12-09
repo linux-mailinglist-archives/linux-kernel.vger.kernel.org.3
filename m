@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570C146F625
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F4246F626
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbhLIVut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
+        id S232064AbhLIVuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhLIVus (ORCPT
+        with ESMTP id S231216AbhLIVut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:50:48 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72049C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:47:14 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id i12so6635635pfd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:47:14 -0800 (PST)
+        Thu, 9 Dec 2021 16:50:49 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ABAC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:47:16 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u11so4909590plf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:47:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J9dZhEUcOohDHal2Ib8BavrJapvk4m1HbzlYYeuOFQA=;
-        b=LPm8tgwBSBFWkTfhyrZxOMsCVuH2XLj9E2cG/K1TA4XZZKhYMjF9mQN+zTBPnyaEXm
-         opCorLGQvCBu0+TNwccSslT0IMxgNcSAlhKEnM8iIPUZIWMdJQcyfsa62/lLRWoUE9Qx
-         crr9NvNTjXkuafOWBGf6s3XzxI6U0KSNtcjw4mvR0sHY9hZH+GK+BTBR6Zp85rVKjgJT
-         yHNtVvGkhhvdx7mKt1lyUpTeoD5iF/HDsujorWgdMyp+6SpX00jgiabq3VtxpHsu+k7M
-         DTUQAE39sf+0aM9ySx/2w/XoMRKnnfGManjKVK0NqZM4DaQ8vAvNvQct6zBrrzadYRdh
-         FA0A==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=a8swiEXoojgR8fMVEpmKtUWFtMz5ImAG/VTZz39Zgtg=;
+        b=iK06xmgZWH845WJbjlaSUNXX2witJGET/NOunc7vcXITqaQ+J0OYBlbsrVZWqXmNpq
+         1ZkdS89uhl9wPRwln+nGOF3CDgn2rOlIZHy5q1hYCjPeXIRqSUNk66eYbMP9k/CE9ofE
+         4Bq4HI5Zj9L3TaxJgIf5/fGE4YPT74ZH3DlBwA0YH1Mdmxl6bb+jmHmsOxvH8pNxJK2U
+         Am31x8dqOy61eJi8NizKPzwK6/hjeE+hdG5m1Nmnk5DWCfUUnOtRBxQrB5e0Hbo6JCPQ
+         kMKE3uw5v51EwhqYJNYnL//1RO98imhrjATlvuqHU0d4v4a1XKlWxqUx16iTYCvsosnF
+         Mo7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=J9dZhEUcOohDHal2Ib8BavrJapvk4m1HbzlYYeuOFQA=;
-        b=2/sBi4AyeDYt97aHtf8RKPNV5QGPP5dZztttoiw6OU0KrbpblJXSt6vn728yGMkfoE
-         7a9keJyUnaw+EI/cYfuGs9ynMvFkzZrnxyW7GgrhldMkn6xTyk0DCWmQXktv8GGezEMf
-         uGxHV9BTJSfuQtTo6Q83esviXql3j7ZK+RIqism3jgs82pFzDGsIfD1AB5KsS/q/emJd
-         XlfIpHEga6Sec77bEt/Atinqmxxn/K7s5uD8Ci/DfKGehRPi5tKCBhciHcb0SpxFNNaB
-         oLCsQ0jf1gdPQ1IahcETTSS9+xpWk7lGkyElwm2HKloNB+bHQI7ub/iRCdPcIZAqlqLn
-         F7cg==
-X-Gm-Message-State: AOAM530kdIjuZLXMG7k4c6/Yo4p5p2Vq/bbv+qxzzf9EIiUqz2mPJcQ/
-        jQqE7m6iEKH5lPcDMtBbF/0=
-X-Google-Smtp-Source: ABdhPJyKD1rLYZofTlxV74wpLkdIpM3QjoNsK7Yq0O89NKjXTZlV/vyskmDuUy1F+S1EHNKMD+Jk2w==
-X-Received: by 2002:a63:1547:: with SMTP id 7mr868159pgv.488.1639086433738;
-        Thu, 09 Dec 2021 13:47:13 -0800 (PST)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=a8swiEXoojgR8fMVEpmKtUWFtMz5ImAG/VTZz39Zgtg=;
+        b=X87PriTxCChj/TkUhDJr4aE+PHQusR2F4ehhhro6BdZc5SYUMwHjWUuCSK1tY1BEd7
+         GEtuuXtKD9Db1y31IHETMUDBRRQny9Bq+8CoZXeFfl8e4QU+kXToVAnnqHrTCQ2ixDIO
+         HvXo4+VYI0Pw2Xa0bBM73tTCOG6eD1vmsgzxHqD8OrvgJjwI+17qwUO+OHj8VDBTkCCK
+         4RVwKbKbdUXavEkciY+gosUlmFzgA7H7cr259iTbG+HBuR2UKxpGted3TTLX873mLsbr
+         lIjyLjYxMaH5sJyj3cb18H5JWn1ib9XEtL7iGv8ihZQLHat2kLIepfnH+EdLIiEZ/5ul
+         Rc+g==
+X-Gm-Message-State: AOAM530B/Jym56zUeVEmuQkH/0YbXn40Om9sSgzLwWEWqda400Am/sDL
+        kt7aQzHmCCChtT5uZ2factg=
+X-Google-Smtp-Source: ABdhPJx+0LW9W6RtSgFd704deVCu5AmHhWzYPMKR8HLuTdkfp5ILPOsf/i/FyG1u0yQsz5MqjeYppg==
+X-Received: by 2002:a17:90b:1c81:: with SMTP id oo1mr19350534pjb.137.1639086435505;
+        Thu, 09 Dec 2021 13:47:15 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id h22sm648923pfv.25.2021.12.09.13.47.12
+        by smtp.gmail.com with ESMTPSA id h5sm673182pfc.113.2021.12.09.13.47.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 13:47:13 -0800 (PST)
+        Thu, 09 Dec 2021 13:47:15 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
@@ -56,53 +56,88 @@ To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
         jnewsome@torproject.org, legion@kernel.org, luto@amacapital.net,
         jannh@google.com
 Cc:     linux-kernel@vger.kernel.org, security@kernel.org,
-        kernel-team@fb.com
-Subject: [PATCHSET cgroup/for-5.16-fixes] cgroup: Use open-time creds and namespace for migration perm checks
-Date:   Thu,  9 Dec 2021 11:47:01 -1000
-Message-Id: <20211209214707.805617-1-tj@kernel.org>
+        kernel-team@fb.com, Tejun Heo <tj@kernel.org>
+Subject: [PATCH 1/6] cgroup: Use open-time credentials for process migraton perm checks
+Date:   Thu,  9 Dec 2021 11:47:02 -1000
+Message-Id: <20211209214707.805617-2-tj@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211209214707.805617-1-tj@kernel.org>
+References: <20211209214707.805617-1-tj@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
 cgroup process migration permission checks are performed at write time as
 whether a given operation is allowed or not is dependent on the content of
-the write - the PID. This currently uses current's credentials and cgroup
-namespace which is a potential security weakness as it may allow scenarios
-where a less privileged process tricks a more privileged one into writing
-into a fd that it created.
+the write - the PID. This currently uses current's credentials which is a
+potential security weakness as it may allow scenarios where a less
+privileged process tricks a more privileged one into writing into a fd that
+it created.
 
-This patchset make the perm checks use credentials and cgroup namespace
-stored at the time of open and contains the following patches.
+This patch makes both cgroup2 and cgroup1 process migration interfaces to
+use the credentials saved at the time of open (file->f_cred) instead of
+current's.
 
- 0001-cgroup-Use-open-time-credentials-for-process-migrato.patch
- 0002-cgroup-Allocate-cgroup_file_ctx-for-kernfs_open_file.patch
- 0003-cgroup-Use-open-time-cgroup-namespace-for-process-mi.patch
- 0004-selftests-cgroup-Make-cg_create-use-0755-for-permiss.patch
- 0005-selftests-cgroup-Test-open-time-credential-usage-for.patch
- 0006-selftests-cgroup-Test-open-time-cgroup-namespace-usa.patch
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: Michal Koutný <mkoutny@suse.com>
+---
+ kernel/cgroup/cgroup-v1.c | 7 ++++---
+ kernel/cgroup/cgroup.c    | 9 ++++++++-
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-The patchset is also available in the following git branch.
-
- git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git review-migration-perms
-
-Michal, does this also fix the original bug you were trying to fix? For now,
-I didn't add Fixes / stable tags. If ppl are okay with the patchset, I'll
-route it through cgroup/for-5.16-fixes.
-
-diffstat follows. Thanks.
-
- kernel/cgroup/cgroup-internal.h              |   14 ++++
- kernel/cgroup/cgroup-v1.c                    |    7 +-
- kernel/cgroup/cgroup.c                       |   82 ++++++++++++++++++-------
- tools/testing/selftests/cgroup/cgroup_util.c |    2 
- tools/testing/selftests/cgroup/test_core.c   |  165 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 244 insertions(+), 26 deletions(-)
-
---
-tejun
+diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
+index 81c9e0685948..0e7369103ba6 100644
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -504,10 +504,11 @@ static ssize_t __cgroup1_procs_write(struct kernfs_open_file *of,
+ 		goto out_unlock;
+ 
+ 	/*
+-	 * Even if we're attaching all tasks in the thread group, we only
+-	 * need to check permissions on one of them.
++	 * Even if we're attaching all tasks in the thread group, we only need
++	 * to check permissions on one of them. Check permissions using the
++	 * credentials from file open to protect against inherited fd attacks.
+ 	 */
+-	cred = current_cred();
++	cred = of->file->f_cred;
+ 	tcred = get_task_cred(task);
+ 	if (!uid_eq(cred->euid, GLOBAL_ROOT_UID) &&
+ 	    !uid_eq(cred->euid, tcred->uid) &&
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 919194de39c8..2632e46da1d4 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -4892,6 +4892,7 @@ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
+ {
+ 	struct cgroup *src_cgrp, *dst_cgrp;
+ 	struct task_struct *task;
++	const struct cred *saved_cred;
+ 	ssize_t ret;
+ 	bool locked;
+ 
+@@ -4909,9 +4910,15 @@ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
+ 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
+ 	spin_unlock_irq(&css_set_lock);
+ 
+-	/* process and thread migrations follow same delegation rule */
++	/*
++	 * Process and thread migrations follow same delegation rule. Check
++	 * permissions using the credentials from file open to protect against
++	 * inherited fd attacks.
++	 */
++	saved_cred = override_creds(of->file->f_cred);
+ 	ret = cgroup_attach_permissions(src_cgrp, dst_cgrp,
+ 					of->file->f_path.dentry->d_sb, threadgroup);
++	revert_creds(saved_cred);
+ 	if (ret)
+ 		goto out_finish;
+ 
+-- 
+2.34.1
 

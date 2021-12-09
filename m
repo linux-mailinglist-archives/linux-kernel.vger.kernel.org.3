@@ -2,93 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF7846F5EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9DF46F5F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbhLIVdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLIVdi (ORCPT
+        id S232400AbhLIVeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:34:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35396 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhLIVeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:33:38 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300FC061746;
-        Thu,  9 Dec 2021 13:30:04 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id o14so4872091plg.5;
-        Thu, 09 Dec 2021 13:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RiC7G24eWy//YmTynebfX9hiLgZoILqeHM51jdKCP6k=;
-        b=CzspmICW/W3o3Kyp6lRJiRRrGWA0P+056LHBQD4WI/6ZdYk/bhUTsP1JWlH2EwYPkP
-         aWekYL/8GxJ8mzwkG0jYhXpGj0j4IAchwVL5dyA+go+L+vxdvraYszk9plcztXGsVdAM
-         2HZqaZ79OHj2Gl76dZ7GnKq9ph4Ne/xgvTwHl04Rad+KeLo8NXxJFxbcdey9ahGkp1as
-         A/xgWKiPqXWGQlwNJD1cmo9YzmKV2CnxzDzt9iPNocIgzqx1l7FX0z1Wt85MV6MJuMZS
-         E48gg7+9m101NVSClMU+hz90pn3aGMcSVcG6rp+PngquaZCNm2U/V4sTvJ8N0HOR1Iea
-         QX9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RiC7G24eWy//YmTynebfX9hiLgZoILqeHM51jdKCP6k=;
-        b=Yde8iy5/CdaKPf5TfhMb7jytYG+z1ETnYsfFzda2K864KEaEOrTSJJ63Za/G81pmL+
-         ifFTJw6Z1llwHQrW3QPkI06SqNHvKjM6LpN3nz3nw8wRBdadn+lXGwDmD3+1s0yIShm6
-         6jyd7kk9ZkCtan5PD0xEkwGAK0NXD/UrcstZuuBWKCEKiMZ6gILawJL4CE1Ei1VYqsNA
-         nm7LknIjMabhJLz240Fa5kBMtQUnpKytNndef4yz5kbKrXSU6dPNoT9umQGqIE9PL+Ne
-         ABQnNLxQ61KOJBO9Yy4jOBbrLKez2oug//VxJXYyD+NSG2rcMyJ3mWJMchbENuzFBm70
-         wEcQ==
-X-Gm-Message-State: AOAM533+GbYTgsYQHtjH+Y2VyX0/46W7r1TvJnpTy445grZ192KeSqWP
-        S1vR2J3i3pTCOR2xUcWWyMPySrIaIl8=
-X-Google-Smtp-Source: ABdhPJw6q1SUp3qx/RZ//ts6kYrqMBWTCt8KCFxfZwjPLvBhCMyt8OQM4nLMJ7dW04ZGkA1xPr6ZYw==
-X-Received: by 2002:a17:90a:300c:: with SMTP id g12mr18602577pjb.94.1639085403765;
-        Thu, 09 Dec 2021 13:30:03 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 59sm541244pjz.34.2021.12.09.13.30.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 13:30:02 -0800 (PST)
-Subject: Re: [PATCH v1 1/4] dt-bindings: PCI: Add compatible string for
- Brcmstb 74[23]5 MIPs SOCs
-To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211209204726.6676-1-jim2101024@gmail.com>
- <20211209204726.6676-2-jim2101024@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <592b3630-864f-7616-eb0a-ae6faf6dc9d7@gmail.com>
-Date:   Thu, 9 Dec 2021 13:29:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 9 Dec 2021 16:34:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE062B8268C;
+        Thu,  9 Dec 2021 21:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B198C341C7;
+        Thu,  9 Dec 2021 21:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639085423;
+        bh=0nLiGm6DRDI48lr5XPK/3aMQSk0B5ldWPNaWbeZDORE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GEskyYFfxQ1ojYuDEvF79vtFaEsMF7UwU0vr2OBCMYdV616mpJe3K7LUFZVBgyjfm
+         znKq6cuwNBgeiXyDgYdiCBPzChQVt0B6mv97mb5TBrnC7d8Q+hN8ZTKxj3DNBaJpn3
+         DFLIz6ysMYVb9EZsF+xAPLj2SD5C1UMqG7WCT36nMxrjRttcnLc+Oslc3Lgci39NBI
+         L4xcjCOQMZtFVUsUPa0SO3A37j+opB8pGKz4Ls2fUvBLMYGZb1/lUrmnsDystY25ae
+         XpOO0uUlnR6bUwADclbINISGCZeG1gKIdQIKdDiCVUo2KBCfQ9D2AkZDAxWsRaVB+9
+         klpD3+aHgWvIQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6F4A2609D7;
+        Thu,  9 Dec 2021 21:30:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211209204726.6676-2-jim2101024@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] skbuff: Extract list pointers to silence compiler warnings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163908542345.522.6404194998355353542.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Dec 2021 21:30:23 +0000
+References: <20211207062758.2324338-1-keescook@chromium.org>
+In-Reply-To: <20211207062758.2324338-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kuba@kernel.org, davem@davemloft.net, jonathan.lemon@gmail.com,
+        edumazet@google.com, elver@google.com, alobakin@pm.me,
+        pabeni@redhat.com, cong.wang@bytedance.com, talalahmad@google.com,
+        haokexin@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 12:47 PM, Jim Quinlan wrote:
-> The Broadcom STB Arm and MIPs SOCs use the same PCIe controller
-> HW, although the MIPs version is older.
-> 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+Hello:
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  6 Dec 2021 22:27:58 -0800 you wrote:
+> Under both -Warray-bounds and the object_size sanitizer, the compiler is
+> upset about accessing prev/next of sk_buff when the object it thinks it
+> is coming from is sk_buff_head. The warning is a false positive due to
+> the compiler taking a conservative approach, opting to warn at casting
+> time rather than access time.
+> 
+> However, in support of enabling -Warray-bounds globally (which has
+> found many real bugs), arrange things for sk_buff so that the compiler
+> can unambiguously see that there is no intention to access anything
+> except prev/next.  Introduce and cast to a separate struct sk_buff_list,
+> which contains _only_ the first two fields, silencing the warnings:
+> 
+> [...]
+
+Here is the summary with links:
+  - skbuff: Extract list pointers to silence compiler warnings
+    https://git.kernel.org/netdev/net-next/c/1a2fb220edca
+
+You are awesome, thank you!
 -- 
-Florian
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

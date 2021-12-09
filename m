@@ -2,150 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D75346E98C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE3046E98F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238298AbhLIODG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:03:06 -0500
-Received: from mail-db8eur05on2074.outbound.protection.outlook.com ([40.107.20.74]:52667
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231816AbhLIODF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:03:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MymyuD1OOCR5KU9lHhFwAA/0XgwCSCCvlPtaKAR/fKMRGmYsKMVFATDunsmS94Yadejmo3H7yBw6nm8t9ZzLjczCltLv2YxAsfc0hxNVRO1Pl1ZExsPWSdEaQyrxg9Q7OoLOuYAfx//PKK7yj8DFJogx2x+TXNjuselthP8z2/P/CH5fEJaGa8nzJdQgT2J1swQm7Rf2Dm76Ld38BoEf7sOF7Uf/MC8jZlL9JqKb4IHbBphkVRIVvMzS9V/eAOWaPoyW/cBPWK8haX9cdIoVxyoH+2U9NV4/jda43sdkLndbkpvuL6zrKymXsBjUQ3BFrMSTr0uIicfRWTLXp3bgUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Et//yr+GNvr8bJJYna8JU9dBQGURINV8aje0mdYoFhM=;
- b=FVXPhqeLU8kfwi23G2fdTI9eDEWm016wXvE13COhncPMEv4UncuPKWrngAYJIGz6BPVYABi9iIvmTWz6Gf6aHBajey/7nQ8ck2Hs9NhvrW0tYM9CoQk5tB6T0k7dJ66kGuAWP/p9/a0A45Fx4FDZ+vM1/SJaBJ0ZykB4xwlgsH6H8REKAmur+yrjDRtyws3wr+2iJznkfrs5ceCC5iJDKhtRv/ngyTSoV1g/4Wvk6UplnzYMfMDutrQESE+7/w2d4DHxRoY8GPi8Ufzkka6QZDekzapVG/tLdfpIYeQOhIFKttqNZiwoMkAwLV+5iYTLZ9Q8OskApnr0HeTQUmTaRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Et//yr+GNvr8bJJYna8JU9dBQGURINV8aje0mdYoFhM=;
- b=JNRNGPw33kAyHryiwFh+Lp3ko5oo4Huy5Fzfy5v9zNcmN72q+Ii0+yo0VbKhuNEl+6/DhydjQnUR8QKLYkCMkvWlvXCIajuclY7CfZuhfztZfVW1Db5EjvHoFdsnwtItqD5XbwVDcXPqTpxL+KkoBQYBEnWbqIVduaRZ+DM79/k=
-Received: from AM0PR04MB5121.eurprd04.prod.outlook.com (2603:10a6:208:c1::16)
- by AM0PR04MB5891.eurprd04.prod.outlook.com (2603:10a6:208:12e::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
- 2021 13:59:29 +0000
-Received: from AM0PR04MB5121.eurprd04.prod.outlook.com
- ([fe80::8d61:83aa:b70c:3208]) by AM0PR04MB5121.eurprd04.prod.outlook.com
- ([fe80::8d61:83aa:b70c:3208%6]) with mapi id 15.20.4755.022; Thu, 9 Dec 2021
- 13:59:29 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v3 5/6] net: lan966x: Add vlan support
-Thread-Topic: [PATCH net-next v3 5/6] net: lan966x: Add vlan support
-Thread-Index: AQHX7OGlYEp5PrNq7UKGxDy/7sGvF6wqMDMA
-Date:   Thu, 9 Dec 2021 13:59:28 +0000
-Message-ID: <20211209135928.25myffd3xzcnmndl@skbuf>
-References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
- <20211209094615.329379-6-horatiu.vultur@microchip.com>
-In-Reply-To: <20211209094615.329379-6-horatiu.vultur@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 23b74328-4ec1-4125-6800-08d9bb1c1e3b
-x-ms-traffictypediagnostic: AM0PR04MB5891:EE_
-x-microsoft-antispam-prvs: <AM0PR04MB589116BA15A2F2BECDB34086E0709@AM0PR04MB5891.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3173;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k8kgiK1FfiWHs9WNYy/Rj36wQYL5m2dvQc3vFEkdtUdRK/xagsex8sjg3bKbm4gl7KUT0EVWN+oMZ7CxjLg+IzdJ80Wu8S3ptLc5TOo2kkFVAeQumGJuN8tqz6tgH7puxXQ2snnsyigGruWlFd4z7fRczu9zd5awFC9orHxqnNfAMFDv7lK3pF7FJApUqutlgft1UQ/tPsaKeXnMF39p4Hhd6JDl15et0kGuL4JzeF0EwwKe8cYsuIMbENcRYQRPlf3tkYTFuDpkTfBcUVnV9B3uZYHqhnsmp/uO9MQqz8rjI20ZFaCnrKdkpQYSLVUUPN3NCiY/S2GJk1RLcAvmVmJkM4sPvlUAp1TqOETxoMrfF0mRkWmyWrIDx+PH+gtnFIbsT/Euzd3h7iKvgk1qeeUglZnVG8baKaMyBfqkdSCV9YuihudYqcguO/Pocify1IU3fFiIPickGVJ6PUYXk8zxc5FdkCrDLY8lyp5P59PigvPPjHPxASHGOVmqDdkz9pKe86CVte/8RmDRcdjDDZ8sce+7IQLM2NifU9RtomAEk49zWPvWom2Tr+4Lrep2dR13OlB3uiQJuTOhljHTMH/HC6sG+SF+W14YE7jeNMv1oO50Wx7bFAbAEFl+NPHJ/fVobG4Sa0BCz1sHXl29GTXlvd5URRVvGbup60FKHTb6W9cFivd+oHms262JUBxYMrfYWa54jXMhgBDrNc4MIA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5121.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(66476007)(2906002)(6916009)(38070700005)(4326008)(66946007)(54906003)(71200400001)(186003)(508600001)(6512007)(7416002)(9686003)(64756008)(66556008)(33716001)(38100700002)(86362001)(122000001)(1076003)(8936002)(6506007)(66446008)(8676002)(26005)(5660300002)(44832011)(91956017)(4744005)(76116006)(6486002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?77/834Y473qxC2RTRWjsXLzNY3zznTyN/x/679iTYh+V4NRSTSM+oL7+TTjK?=
- =?us-ascii?Q?wj1Z52COQBsOAFM0rWQ2xJA+09EaGFQgxfLNfcnnKB4g2nZ+uDLU9ZBM1hPW?=
- =?us-ascii?Q?Pq49AoPfzrEtGrTRXWblaNT8WOopKS0LWue98CkcXMys2c3XbQ6nGJVWZswR?=
- =?us-ascii?Q?xO5Q4inUD9D/lisSjKRcGAcahAzexSBJycw0c9NgqQKQjLAwcdG8sBG85iIy?=
- =?us-ascii?Q?vFD0uMAcsvKzqWIoG5U7qoNc4Em+c2pUDRDgLR4oZphU+tcJDCO0+sv4+hRM?=
- =?us-ascii?Q?jAtM/KMCelReQQ7HlSqftaszG09S5nnPyhJYA2Uo4L+RYiGbBPzUIUsu6FHS?=
- =?us-ascii?Q?NXULPa0I3ktMf6J4yg/W8mxv3fDqX4ukpyqOJZSsgYcVSm+itIKxQOkxPwmA?=
- =?us-ascii?Q?g7KYbdAKDZEaoD/WhVM/UXUaNidYSdojFdOrHKofStyYQWGeV+00634lvl65?=
- =?us-ascii?Q?PV1y8WRhkeNv8ZuL1m1bxA5vfCRekCm4Gll8HNHFIDkQFIbR6QQ2rk1pBiMd?=
- =?us-ascii?Q?EiNDuo0L73dyH+BKR7Iaizp8/23OfCBAvjD5ymVfLo22SUdRZx77oOr5vNmg?=
- =?us-ascii?Q?JpAlg0fi6lyaGDNJ284KfZoo2dLLh3E3qxL5zOZCA6CGEBdR6urIkdBXkLYK?=
- =?us-ascii?Q?V6itMLB6lPklW4o5HDMNx/OFSJ6lYPh08sBffp3+LXMuB6mEoOD3WHXXUvGR?=
- =?us-ascii?Q?jVgJ0kmW+r0rC8uutXXnBGXAQi/dEQubR8wgwLTmEQCAVcuygNzK7zeouOge?=
- =?us-ascii?Q?y5OCHKKDPKljU6y+V6ckM/IPCqucGc01njir5PYssG2ZaFmv100MgDa7ydgF?=
- =?us-ascii?Q?sQx4LzI5B2lo7nEpsO6I239trvzM/9xDEMkfg1/qyzZ08DJERB/n2p8D8wgV?=
- =?us-ascii?Q?WSbB/OhzCGfBCiFxE8LkRYipOloM6xilX3Qifk60Vz9MrL+QuL0HWBWs/BbW?=
- =?us-ascii?Q?iat8w5AZarrDJQwNICBvRxmZSJJH9Nsw67kZogWTbPIYwz8txEiD0OECwBqM?=
- =?us-ascii?Q?WJSeuqkwakKVaRuDZhnl2WBRoYDd9DUeMSneU2/SMMED6ZkR7Rf2y/0/6QrN?=
- =?us-ascii?Q?o8jqxigyr4bC0PhcKHrEQ3jqpT3Fjnu4n8ZRE4p0ZKI+EJrkmZVTPl1Bsarq?=
- =?us-ascii?Q?RA9WcvYw69dCSq2HEhuiIwM5rEa4luT94MnRjDR7H0UCZwynds/QgKOh35UO?=
- =?us-ascii?Q?+ld8cgT6onFqDsltFbl+qKtNPqt+IcjB2fyM3Fp2RsW74CDm1nD3fOsiiD5J?=
- =?us-ascii?Q?Im5U6OsT39LIONK67K9k8QAkFphe9QfhjwNCfM74sQ1OOpWXy7hLiF5fyAqX?=
- =?us-ascii?Q?pq332iV1wIMyu2nwsBDUGkGv0oo6WsoPsbpvembKBb47MaFmpk27MYGxJ3Oh?=
- =?us-ascii?Q?HtAFy3MBr/zp8PhTaWVajkcykikjNuoSvBWDxQ5WF5y6MsU3EfBCz6S6d/DC?=
- =?us-ascii?Q?yTomOVi6+SMHbCC2sB/ktxTfXPjhe+A6VOdvQmDQkaV+tIKrQuP6WWHYZsRz?=
- =?us-ascii?Q?8s56x6jRDqfarErraKqSAaGutNTVvYd2mngQEkzwsvlJLXzM29McEgo8KkQQ?=
- =?us-ascii?Q?x0yCdW0ymVygxJVW5Z+fciMHUxRB6OR4UZtZNsJX42MQQUEHdI/9fX+0sY/W?=
- =?us-ascii?Q?oTbW1HEqkI4t+JtJfIn6U8U=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <69A8819DF5FA2F489BD10B71AE9DCCFA@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S238312AbhLIOED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231816AbhLIOEC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 09:04:02 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E97C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:00:28 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so6605554wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+dpt8vUL2anIzLDaCapRKN1qxAb7cNA0NVvcaD2Cl1A=;
+        b=B4BMPcLElw/QrGtY3jFrf992/46j3vDTB/JLhlrJt7jUYOkM0nW7nBfmWQFeKxQNgB
+         NCtGG4tWK1v+70C7ldf8cQeURrBbdOUJJl5EqNG3EtGMH58nPMsbUAb+vYoOuaxNk1Ee
+         0q/fB1BjYccjmx/CRsiAoKQO/KwWWUmHhjAh+eD8sbiZr2dYe4NS8o61vdUsOf4W0dwX
+         /F8xtjcMW6/Wb7iLmKsqRxgFWhlZ+Guzh2LmFVuajLLt4PAmMYOV3jX2MAQAjoSbWHSn
+         31pgx42+7P06vp3VOvFjQifc+PfyTXGKO+v/KlxX3YbuwHSAOnYJrPByiZWcb0tIsFdk
+         6Dqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=+dpt8vUL2anIzLDaCapRKN1qxAb7cNA0NVvcaD2Cl1A=;
+        b=D4NIAafkVFkXZJIA+RgvUNjr/yryrRNiNaJjsJcN9+HUvJMgkMLhvKY9jX8/q5ASTn
+         rkJVHY0fw8tKDsxF3ZFoY/2YWQHquxqkhoOJuv6wsCGKfzM8uM409LA6f/CPp06r6558
+         3Ge0ru1gsiLyM2CEKuB1fd9Z5ghLoDs8cOKHWm2QWZsV+u3xKyV3p8VRO2M678yGFiql
+         vIACD8+GytBZNLP1bXzmHAEf/LETP58Fq2HXrLGRsNmM4rQIeo8AycpACtgSZGSTp2c3
+         pvxA0wl28THQ/E+fiOEwawR+uerJdk68a46UZBUJxk5JUEbQmljDVh3jZnqvG4BrKF+3
+         zwiQ==
+X-Gm-Message-State: AOAM531UvFg7UgU02sim1mkd0qOu27eRRZZD3/9OLES7/qeZvcyWomhE
+        uAkTSsSOU9RtAIhpvNpNEPGKZQ==
+X-Google-Smtp-Source: ABdhPJwSmvHSUsLNntOs0DWvEN3q46Xb/2KT12wtqetfkw3nuKEinZlZPaedYhQluQ1SlJLPOHH9RA==
+X-Received: by 2002:a05:600c:214f:: with SMTP id v15mr7228541wml.194.1639058427321;
+        Thu, 09 Dec 2021 06:00:27 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:ee1f:92e9:bcbf:be87? ([2001:861:44c0:66c0:ee1f:92e9:bcbf:be87])
+        by smtp.gmail.com with ESMTPSA id g198sm6070839wme.23.2021.12.09.06.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 06:00:26 -0800 (PST)
+Subject: Re: [PATCH V2] arm64: dts: add support for S4 based Amlogic AQ222
+To:     "xianwei.zhao" <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211208064435.14307-1-xianwei.zhao@amlogic.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <5ad49e05-3925-08de-af5a-c4b4371f711b@baylibre.com>
+Date:   Thu, 9 Dec 2021 15:00:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5121.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23b74328-4ec1-4125-6800-08d9bb1c1e3b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 13:59:28.9264
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XGNO0pKfYs6f2KNPe500aMNoCRBE3e4//kucNGl1bgK2W1u+NMYORBJAIsYvQ97V9vrYvaFUMmvsYeLoGIhkZw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5891
+In-Reply-To: <20211208064435.14307-1-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:46:14AM +0100, Horatiu Vultur wrote:
-> +int lan966x_vlan_port_set_vid(struct lan966x_port *port, u16 vid,
-> +			      bool pvid, bool untagged)
-> +{
-> +	struct lan966x *lan966x =3D port->lan966x;
-> +
-> +	/* Egress vlan classification */
-> +	if (untagged && port->vid !=3D vid) {
-> +		if (port->vid) {
-> +			dev_err(lan966x->dev,
-> +				"Port already has a native VLAN: %d\n",
-> +				port->vid);
-> +			return -EBUSY;
+Hi,
 
-Are you interested in supporting the use case from 0da1a1c48911 ("net:
-mscc: ocelot: allow a config where all bridge VLANs are egress-untagged")?
-Because it would be good if the driver was structured that way from the
-get-go instead of patching it later.
+On 08/12/2021 07:44, xianwei.zhao wrote:
+> Add basic support for the Amlogic S4 based Amlogic AQ222 board:
+> which describe components as follows: CPU, GIC, IRQ, Timer, UART.
+> It's capable of booting up into the serial console.
+> 
+> Signed-off-by: xianwei.zhao <xianwei.zhao@amlogic.com>
+> ---
+> V1 -> V2: cleaned up coding style, modify CPU affinity of timer interrups,
+>           and modify GIC reg defintions.
+> ---
+>  arch/arm64/boot/dts/amlogic/Makefile          |  1 +
+>  .../dts/amlogic/meson-s4-s805x2-aq222.dts     | 30 ++++++
+>  arch/arm64/boot/dts/amlogic/meson-s4.dtsi     | 99 +++++++++++++++++++
+>  3 files changed, 130 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+> index 5148cd9e5146..faea74a45994 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -57,3 +57,4 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-c4.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-s4-s805x2-aq222.dtb
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+> new file mode 100644
+> index 000000000000..3b340594a125
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-s4.dtsi"
+> +
+> +/ {
+> +	model = "Amlogic Meson S4 AQ222 Development Board";
+> +	compatible = "amlogic,aq222";
 
-> +		}
-> +		port->vid =3D vid;
-> +	}
+According to bindings, it should be: compatible = "amlogic,aq222, "meson,s4";
+
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
 > +
-> +	/* Default ingress vlan classification */
-> +	if (pvid)
-> +		port->pvid =3D vid;
+> +	aliases {
+> +		serial0 = &uart_B;
+> +	};
 > +
-> +	return 0;
-> +}=
+> +	memory@00000000 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x0 0x0 0x40000000>;
+> +	};
+> +
+> +};
+> +
+> +&uart_B {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+> new file mode 100644
+> index 000000000000..d7083c93d3d0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+> @@ -0,0 +1,99 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	cpus:cpus {
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+> +		CPU0:cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a35","arm,armv8";
+> +			reg = <0x0 0x0>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		CPU1:cpu@1 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a35","arm,armv8";
+> +			reg = <0x0 0x1>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		CPU2:cpu@2 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a35","arm,armv8";
+> +			reg = <0x0 0x2>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		CPU3:cpu@3 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a35","arm,armv8";
+> +			reg = <0x0 0x3>;
+> +			enable-method = "psci";
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-1.0";
+> +		method = "smc";
+> +	};
+> +
+> +	xtal: xtal-clk {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <24000000>;
+> +		clock-output-names = "xtal";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		gic: interrupt-controller@fff01000 {
+> +			compatible = "arm,gic-400";
+> +			#interrupt-cells = <3>;
+> +			#address-cells = <0>;
+> +			interrupt-controller;
+> +			reg = <0x0 0xfff01000 0 0x1000>,
+> +			      <0x0 0xfff02000 0 0x2000>,
+> +			      <0x0 0xfff04000 0 0x2000>,
+> +			      <0x0 0xfff06000 0 0x2000>;
+> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> +		};
+> +
+> +		apb4: apb4@fe000000 {
+> +			compatible = "simple-bus";
+> +			reg = <0x0 0xfe000000 0x0 0x480000>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
+> +
+> +			uart_B: serial@7a000 {
+> +				compatible = "amlogic,meson-s4-uart",
+> +					     "amlogic,meson-ao-uart";
+
+When will you send the serial bindings ?
+
+> +				reg = <0x0 0x7a000 0x0 0x18>;
+> +				interrupts = <GIC_SPI 169 IRQ_TYPE_EDGE_RISING>;
+> +				status = "disabled";
+> +				clocks = <&xtal>, <&xtal>, <&xtal>;
+> +				clock-names = "xtal", "pclk", "baud";
+> +			};
+> +		};
+> +	};
+> +};
+> 
+> base-commit: c5468e3c930d4d2937d3a842a85df0f74e95e152
+> 
+
+No need to send a v3 until both bindings have been accepted.
+
+Neil

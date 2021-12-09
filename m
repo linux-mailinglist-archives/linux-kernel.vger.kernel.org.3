@@ -2,128 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4385946EA6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25D446EA73
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbhLIPBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:01:23 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:54906 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbhLIPBW (ORCPT
+        id S239057AbhLIPCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230312AbhLIPCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:01:22 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2EB09210FF;
-        Thu,  9 Dec 2021 14:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639061867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 9 Dec 2021 10:02:41 -0500
+X-Greylist: delayed 20273 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Dec 2021 06:59:07 PST
+Received: from dvalin.narfation.org (dvalin.narfation.org [IPv6:2a00:17d8:100::8b1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9C4C061746;
+        Thu,  9 Dec 2021 06:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1639061944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=B7f6qRahiw5jhS0ShhXv7YNAlwGFAuEPvz02wcswTDY=;
-        b=gPgeGBOqAj1w2/IfiYiUJZQKOR5J82A1Jcgx9IB9Lg4xy6yn6SJ5BFAlgLdbOLu1hHG7vE
-        0panrH92CgFnCxooEeYXPRniRiGQzT2/9Wq8WzmBRRrKzV/iXa5gM6ei/5FlPbBPij83bp
-        vqSVzkoMk5Lf/ek96wOP4gFIEnDAhro=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639061867;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B7f6qRahiw5jhS0ShhXv7YNAlwGFAuEPvz02wcswTDY=;
-        b=ifKqt7859hHQVpcEXofA567hptOij+KjdqlWOciBCOlO/gkAk2kGLrViK2ee2A72WKzrh7
-        l33DkpGEwGJL82CQ==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 44CA3A3B95;
-        Thu,  9 Dec 2021 14:57:45 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 15:57:44 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Message-ID: <20211209145744.GQ117207@kunlun.suse.cz>
-References: <cover.1637862358.git.msuchanek@suse.de>
- <b5e6ec36-a9ec-22f4-be58-28d48bdc38b4@linux.vnet.ibm.com>
+        bh=J8rslS1FwdC6+mnfMg8oxAldamxYdPmhK7VgY20Z0JM=;
+        b=IzcZtoVd3D39YHEGONQtIMkASDH+SBLZfKC2ANEC0PXE0/0RSpFrV/enBt7NJV8IjMWNPO
+        tsko/yGGBLH2Pu6W7VQUGL43r5TzSxGYVbf/15J3n5ChE+91GctpAN5fVu0oKJONPrAVOs
+        bAz2uN1XEMPnUQ/uyiZtVtXwq0WcUL0=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Cc:     jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk,
+        Felix Fietkau <nbd@nbd.name>, Deren Wu <Deren.Wu@mediatek.com>,
+        Mark-YW Chen <Mark-YW.Chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Soul Huang <Soul.Huang@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>, KM Lin <km.lin@mediatek.com>,
+        Robin Chiu <robin.chiu@mediatek.com>,
+        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
+        Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com,
+        linux-firmware <linux-firmware@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date:   Thu, 09 Dec 2021 15:59:01 +0100
+Message-ID: <3198471.FQF0JACdhR@ripper>
+In-Reply-To: <YbIPFIaya1vKF6bM@lore-desk>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com> <3841963.FhVex8QpIh@ripper> <YbIPFIaya1vKF6bM@lore-desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5e6ec36-a9ec-22f4-be58-28d48bdc38b4@linux.vnet.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="nextPart28758891.yo5t8FPOW8"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--nextPart28758891.yo5t8FPOW8
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Cc: jwboyer@kernel.org, dwmw2@infradead.org, ben@decadent.org.uk, Felix Fietkau <nbd@nbd.name>, Deren Wu <Deren.Wu@mediatek.com>, Mark-YW Chen <Mark-YW.Chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Soul Huang <Soul.Huang@mediatek.com>, YN Chen <YN.Chen@mediatek.com>, KM Lin <km.lin@mediatek.com>, Robin Chiu <robin.chiu@mediatek.com>, CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>, Eric Liang <Eric.Liang@mediatek.com>, jemele@google.com, linux-firmware <linux-firmware@kernel.org>, linux-wireless <linux-wireless@vger.kernel.org>, linux-mediatek <linux-mediatek@lists.infradead.org>, linux-kernel <linux-kernel@vger.kernel.org>, jf@simonwunderlich.de
+Subject: Re: [PATCH] linux-firmware: update firmware for MT7921 WiFi device
+Date: Thu, 09 Dec 2021 15:59:01 +0100
+Message-ID: <3198471.FQF0JACdhR@ripper>
+In-Reply-To: <YbIPFIaya1vKF6bM@lore-desk>
+References: <67f30cd5235e2065e6c20cfb4662e4ac72ef6395.1639037336.git.deren.wu@mediatek.com> <3841963.FhVex8QpIh@ripper> <YbIPFIaya1vKF6bM@lore-desk>
 
-On Wed, Dec 08, 2021 at 08:50:54PM -0500, Nayna wrote:
-> 
-> On 11/25/21 13:02, Michal Suchanek wrote:
-> > Hello,
-> 
-> Hi Michael,
-> 
-> > 
-> > This is resend of the KEXEC_SIG patchset.
-> > 
-> > The first patch is new because it'a a cleanup that does not require any
-> > change to the module verification code.
-> > 
-> > The second patch is the only one that is intended to change any
-> > functionality.
-> > 
-> > The rest only deduplicates code but I did not receive any review on that
-> > part so I don't know if it's desirable as implemented.
-> > 
-> > The first two patches can be applied separately without the rest.
-> 
-> Patch 2 fails to apply on v5.16-rc4. Can you please also include git
-> tree/branch while posting the patches ?
+On Thursday, 9 December 2021 15:13:40 CET Lorenzo Bianconi wrote:
+> does it occur with an older fw?
 
-Sorry, I did not have a clean base and the Kconfig had another change.
+Before this version, I've used WM Firmware Version: ____010000, Build Time: 
+20211014150922. This version was not able to connect (and stay connected) to 
+6GHz at all (so I've used 2.4GHz/5GHz).
 
-Here is a tree with the changes applied:
-https://github.com/hramrach/kernel/tree/kexec_sig
+But the old firmware version worked fine as station on 2.4GHz/5GHz with 
+runtime-pm/deep-sleep set to 1. And I didn't see these crashes when starting/
+stopping wpa_supplicant. But I've just reran it with the new firmware and
+it seems like this is not 100% reproducible all the time. But when stopping 
+the wpa_supplicant would leak to a crash with the new firmware then was also 
+a problem to receive packets (not sure about the TX part).
 
-> 
-> Secondly, I see that you add the powerpc support in Patch 2 and then modify
-> it again in Patch 5 after cleanup. Why not add the support for powerpc after
-> the clean up ? This will reduce some rework and also probably simplify
-> patches.
+I also didn't see the crash when using runtime-pm/deep-sleep == 0 and then 
+setting up the mon0 interface with the old firmware.
 
-That's because I don't know if the later patches will be accepted. By
-queueing this patch first it can be applied standalone to ppc tree
-without regard for the other patches. It's a copy of the s390 code so it
-needs the same rework - not really adding complexity.
+But interestingly, i could also see these crashes when
+runtime-pm/deep-sleep == 1 and then starting/stopping wpa_supplicant. Just 
+didn't notice it because I've never used this configuration before.
 
-Thanks
+    [   95.246429] mt7921e 0000:05:00.0: Message 00000046 (seq 8) timeout
+    [   95.252734] mt7921e 0000:05:00.0: chip reset
+    [   95.386747] mt7921e 0000:05:00.0: HW/SW Version: 0x8a108a10, Build 
+Time: 20211014150838a
+    [   95.386747] 
+    [   95.407850] mt7921e 0000:05:00.0: WM Firmware Version: ____010000, 
+Build Time: 20211014150922
+    [   95.447509] mt7921e 0000:05:00.0: Firmware init done
+    [  102.403012] wlp5s0: authenticate with 4a:13:65:00:0c:92
+    [  102.524727] wlp5s0: send auth to 4a:13:65:00:0c:92 (try 1/3)
+    [  102.536201] wlp5s0: authenticated
+    [  102.542294] wlp5s0: associate with 4a:13:65:00:0c:92 (try 1/3)
+    [  102.555600] wlp5s0: RX AssocResp from 4a:13:65:00:0c:92 (capab=0x431 
+status=0 aid=2)
+    [  102.582864] wlp5s0: associated
+    [  102.716868] IPv6: ADDRCONF(NETDEV_CHANGE): wlp5s0: link becomes ready
 
-Michal
+Kind regards,
+	Sven
+--nextPart28758891.yo5t8FPOW8
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGyGbUACgkQXYcKB8Em
+e0YDyg//WHZBiTC9+jIIJdjPUNzZ+MhRdLrrCnREj8Cs1rZiGja0nd8btXkWvUpz
+h7MHwEAj0Ka4gNj3XWdl4NDqQCNCAeNS/J3cFjyrc9rhOts1tAtGc4AsMNO2O/Zs
+judT4R+SMhX+ZQSayalzDgc5sQ13NJNdmSwYAXcbFMuv2xX8oHwDtYQd9053STZC
+pGqP6oe8FQUKBMy+yVgZit11rknDYC+MVlqta5y4SdlK2VIAx/SWFvcotlgZsnx4
+ueLrAnQu0MyikjgbKbVkxFZhbhYF66H++yeAXPQq/Pv0i7g1g6yv3TJaftOMDGWw
+vhoh6GBr9ldLd7f2nPWf8yo8ersHbleuGiWbDBG2O1KToMGPJrPCaIuwtGgPy2N/
+8omO9forOEdrwChyavOl1uiZAeSxnSIyV64mWJh3zsj3v/VXG+P/yJD7D/Cg6XUx
+CONmgDfHPfPQZv438k2Z7EAVdISDV62yQRLkx4VLi77NduB7jnwo2DgjVCaBfITx
+mBL+DUZ21jm4m4cd4uW6mq7WDUyo0KwMgc2rb0x19MAvk7tzA2Owi6uWWUTmk65D
+xWMUMz0YcNelbUqWqAlMDqP0OleT8iSN9FzCpC3IEF3P9O79FSiqtadn3p5ZVyzU
+MppRQX2uA/TBIOQy12VvzPm0j9RRlVrHqWJf3k0umPfHQXmXCZQ=
+=meGf
+-----END PGP SIGNATURE-----
+
+--nextPart28758891.yo5t8FPOW8--
+
+
+

@@ -2,79 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0535446E7C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBD746E7C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbhLILzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:55:51 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:56546 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLILzu (ORCPT
+        id S236917AbhLIL4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:56:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44459 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230080AbhLIL4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:55:50 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 29A28210FF;
-        Thu,  9 Dec 2021 11:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639050736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 9 Dec 2021 06:56:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639050779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YX5nCd41/qX08Uy6D4mC8eSKOoVllnuhCQFVjt3bHYY=;
-        b=j6xIyE0pjiaV96qWX6YW8i89fAGNYXWoIW7+5PM2DM4WJ8vnTVMSa1YyKGFM2noa3MJ/eT
-        QRm5LfMJ6EsefviAuHICxTLFmzECai0JaOhxpXy0Z3CdjXgtDP1b3XKLSoUERfOBCuy8GU
-        FHO+qS966nEFGaHI74MYKiUaoZKUXTI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639050736;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YX5nCd41/qX08Uy6D4mC8eSKOoVllnuhCQFVjt3bHYY=;
-        b=2BnKLHTtAJ0egwCFnhgi64mr4fQdpOSH4ikfdztCnMR5ZUXr9pL+OLktq1UqQc4axI0TNa
-        gYe4jlET5DEuJhBw==
-Received: from suse.de (mgorman.udp.ovpn2.nue.suse.de [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0E978A3B93;
-        Thu,  9 Dec 2021 11:52:14 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 11:52:11 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH -V2] numa balancing: move some document to make it
- consistent with the code
-Message-ID: <20211209115211.GI3301@suse.de>
-References: <20211209004442.999696-1-ying.huang@intel.com>
+        bh=0TYqDLKrFKQnJiMTqk3TD0EmAaxYdybXmgiw3V7bkHY=;
+        b=Ap/qwDeUTyQj+yzssTzH+0vqCHX9t/W0AbQGW+izxrJLw0uTijVuAtRUymbmT/2VI9lMRk
+        I06rzq60c+2KeslMoaky9pxLqmE0cLBWoqdy468oqHLGZ9OAhyIgvHs+BKpbrlbrTxeXss
+        qlG0jItKIc3vAIdDkV54uL14HPJWZ+M=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-46-whJQucYfMymwnYZiOPsxbA-1; Thu, 09 Dec 2021 06:52:58 -0500
+X-MC-Unique: whJQucYfMymwnYZiOPsxbA-1
+Received: by mail-wr1-f72.google.com with SMTP id b1-20020a5d6341000000b001901ddd352eso1331256wrw.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:52:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=0TYqDLKrFKQnJiMTqk3TD0EmAaxYdybXmgiw3V7bkHY=;
+        b=LaaYp5IFvV7E6u7tOuzPO9sbjvLq560FFZtwVjzkX7AdA16c7NZpt83U37L2Cbdqtp
+         0L+giTup4jWOZHzxh9rLhjArKChoz1qfZuMy26TS6prdE/aka18e101F6GUp4SNeRLNJ
+         m+s6dsDzfGjLL5pzpjoZ8DMxQgXuNsvqj1ZrymCVpa90Bkn4YF5jkDTTZ4U5ZD6pAXHL
+         yjX6VjisGETxy2kk3OjCqEhTOylWTRJcKYNF+Q1decojOK0UJ9By5s0orU5JlDf2GI/X
+         9IFrRHzShD3H/CAiYLaEozozXamTizZR9Q+CN5cbwUIJECNs8SOf/phxns4y7iTZoj80
+         9KcA==
+X-Gm-Message-State: AOAM5315qEjqimVcT/5OoCu+XXU0dZWPClZ6Wn6X+YSGQ1bRszj12usA
+        xIOWuAQLmDthgVtjcak8b6zjfcC1IgfduUlfPDWneqWybqWl+Nstx5wmxkz1wI27gnHQNaqrXZC
+        mpC9ubDAe2ZrNNPLjjnErPTkJ
+X-Received: by 2002:a1c:448b:: with SMTP id r133mr6687571wma.85.1639050777615;
+        Thu, 09 Dec 2021 03:52:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyL2rego16YzHim2g10utaFg2hLXRfWqlX4AYNOsaFkm/biENlPxtMps3emSdCNW89UHAze0A==
+X-Received: by 2002:a1c:448b:: with SMTP id r133mr6687533wma.85.1639050777348;
+        Thu, 09 Dec 2021 03:52:57 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23ded.dip0.t-ipconnect.de. [79.242.61.237])
+        by smtp.gmail.com with ESMTPSA id b6sm8982964wmq.45.2021.12.09.03.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 03:52:56 -0800 (PST)
+Message-ID: <858b3185-6770-6c46-5efb-53698c913eec@redhat.com>
+Date:   Thu, 9 Dec 2021 12:52:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20211209004442.999696-1-ying.huang@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 2/2] virtio-mem: prepare fake page onlining code for
+ granularity smaller than MAX_ORDER - 1
+Content-Language: en-US
+To:     Eric Ren <renzhengeek@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Zi Yan <ziy@nvidia.com>,
+        Gavin Shan <gshan@redhat.com>, Hui Zhu <teawater@gmail.com>,
+        Sebastien Boeuf <sebastien.boeuf@intel.com>,
+        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
+References: <20211126134209.17332-1-david@redhat.com>
+ <20211126134209.17332-3-david@redhat.com>
+ <a4e2099d-b543-e2e3-f189-0cdfcc38420e@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <a4e2099d-b543-e2e3-f189-0cdfcc38420e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 08:44:42AM +0800, Huang Ying wrote:
-> After commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
-> debugfs"), some NUMA balancing sysctls enclosed with SCHED_DEBUG has
-> been moved to debugfs.  This patch move the document for these
-> sysctls from
-> 
->   Documentation/admin-guide/sysctl/kernel.rst
-> 
-> to
-> 
->   Documentation/scheduler/debug.txt
-> 
-> to make the document consistent with the code.
-> 
+Hi Eric,
 
-Acked-by: Mel Gorman <mgorman@suse.de>
+thanks for the review!
+
+>>   		if (PageDirty(page)) {
+>> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
+>> -						      false);
+>> -			generic_online_page(page, MAX_ORDER - 1);
+>> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, false);
+>> +			generic_online_page(page, order);
+>>   		} else {
+>> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
+>> -						      true);
+>> -			free_contig_range(pfn + i, max_nr_pages);
+>> -			adjust_managed_page_count(page, max_nr_pages);
+>> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, true);
+>> +			free_contig_range(pfn + i, 1 << order);
+>> +			adjust_managed_page_count(page, 1 << order);
+> In the loop, pfn + i, 1 << order are repeatedly calculated. 1 << order 
+> is a step size, pfn + i  is each step position.
+> Better to figure the numer once each iter?
+
+The compiler better be smart enough to calculate such constants once :)
+
+> 
+> LGTL.
+> LGTM.
+> Reviewed-by: Eric Ren <renzhengeek@gmail.com>
+
+Thanks!
+
 
 -- 
-Mel Gorman
-SUSE Labs
+Thanks,
+
+David / dhildenb
+

@@ -2,59 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5246E871
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D702546E872
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbhLIMbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:31:09 -0500
-Received: from mga18.intel.com ([134.134.136.126]:16894 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229919AbhLIMbI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:31:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224953760"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="224953760"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:27:35 -0800
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="463213461"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:27:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvIVO-0045Cv-SP;
-        Thu, 09 Dec 2021 14:26:34 +0200
-Date:   Thu, 9 Dec 2021 14:26:34 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v1 1/1] kunit: Replace kernel.h with the necessary
- inclusions
-Message-ID: <YbH1+gYYh3/s+KAp@smile.fi.intel.com>
-References: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
+        id S233723AbhLIMbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:31:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46038 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229919AbhLIMbh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:31:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639052883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kCUALssbY0oxqy20XeNiM0IZqaDHE6HLbBTKKFbR5aM=;
+        b=ZTusAF6R62hh9jyVs8XDPVrks6DlnKWLJXg/PpEqNksIf+ZQyPEGuXy5LMAg/otyKLuca+
+        84IhVUQ9/2AgWMPJHoSGUw8hnrRWGGNiD1/Tftr3dFVXaHxdBPcb4/ghlJFJY4+3cClqnd
+        4Inlnt4xi/j2KeOMF5nGjyPpYcWAeIc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-JOBOkZNkPfKQYtxIgl3XXg-1; Thu, 09 Dec 2021 07:28:02 -0500
+X-MC-Unique: JOBOkZNkPfKQYtxIgl3XXg-1
+Received: by mail-wr1-f70.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so1349534wrg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:28:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kCUALssbY0oxqy20XeNiM0IZqaDHE6HLbBTKKFbR5aM=;
+        b=XM8rzYGOnlISZVysnM6gzVSXicb0EW4WbYrK/o+BhMAmyihhnlTbOgdfPLC0tCbpzq
+         mbC6Uk9ECVQtmVjtEiYV4VvsUPVEMCd+Q96POiW4mZPyr4cQwg9Rd1O+IvG5/KhpSHpx
+         9QvXvGyl0tgigxRC50Rup0ndI6mnc41/1IPdnknIhpgdKWERScvMKHMMONux2itq/EBv
+         St9Q+tuNFyPr/7v8wFGfE8gnXTyts+DXSboN4c3CeB2KEMkeiDMmmNVBcir2ItIQJNMZ
+         QlHrdWGbPgBjoxN7XxN1ZNlSarJK1tX0HY753j5IR0C0Q02z+T4ycFqrfMJYpGemdemX
+         sK3w==
+X-Gm-Message-State: AOAM530yAwvsJZriRsvYF1bZexl4+zzTqLuUn7MMuKK7ThARC3NpMurR
+        fFqNbxkT0RpMZUeaCBuvkrG9kFnNBYd9Vzrw+/UjDFJwyjphwd3vSRnuadUwnFiqYIhAm0gcSIg
+        nh/+hEWcHkxy7XozgEx61yKDy
+X-Received: by 2002:a1c:770e:: with SMTP id t14mr6760490wmi.173.1639052881395;
+        Thu, 09 Dec 2021 04:28:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyL2h9N0KGbtDzZwoPUZ5+FGiLDImgFcG7uRNO/NF0d9BGrzMDui9+5mHA0hYe5k4W8nm+zlQ==
+X-Received: by 2002:a1c:770e:: with SMTP id t14mr6760456wmi.173.1639052881165;
+        Thu, 09 Dec 2021 04:28:01 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m20sm9483469wmq.11.2021.12.09.04.28.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 04:28:00 -0800 (PST)
+Message-ID: <408dd9d0-22bb-f5de-b578-9fd20df89a98@redhat.com>
+Date:   Thu, 9 Dec 2021 13:27:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2] Revert "drm/fb-helper: improve DRM fbdev emulation
+ device names"
+Content-Language: en-US
+To:     Johannes Stezenbach <js@sig21.net>
+Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+References: <20211020165740.3011927-1-javierm@redhat.com>
+ <Yath6T5ET17GbkI7@sig21.net>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <Yath6T5ET17GbkI7@sig21.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 12:35:52PM +0200, Andy Shevchenko wrote:
-> When kernel.h is used in the headers it adds a lot into dependency hell,
-> especially when there are circular dependencies are involved.
+Hello Johannes,
+
+Sorry for the late response. I was on holidays for a week and just came back.
+
+On 12/4/21 13:41, Johannes Stezenbach wrote:
+> Hi,
 > 
-> Replace kernel.h inclusion with the list of what is really being used.
+> On Wed, Oct 20, 2021 at 06:57:40PM +0200, Javier Martinez Canillas wrote:
+>> This reverts commit b3484d2b03e4c940a9598aa841a52d69729c582a.
+>>
+>> That change attempted to improve the DRM drivers fbdev emulation device
+>> names to avoid having confusing names like "simpledrmdrmfb" in /proc/fb.
+>>
+>> But unfortunately, there are user-space programs such as pm-utils that
+>> match against the fbdev names and so broke after the mentioned commit.
+>>
+>> Since the names in /proc/fb are used by tools that consider it an uAPI,
+>> let's restore the old names even when this lead to silly names like the
+>> one mentioned above.
+> 
+> I would like to ask about the fate of this patch. It doesn't
+> seem to have been picked up by anyone, does it?
+>
 
-Folks, this patch is dated month ago and nothing in return.
-
-Does the Kunit subsystem abandoned / orphaned? Should I send and update
-to MAINTAINERS? Should I escalate this?
-
+Thanks for the reminder. I've just pushed this to the drm-misc-fixes branch.
+ 
+> 
+> Thanks,
+> Johannes
+> 
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

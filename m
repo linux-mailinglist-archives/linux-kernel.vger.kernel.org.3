@@ -2,173 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF4D46E6D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E60746E6D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbhLIKkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:40:12 -0500
-Received: from mga01.intel.com ([192.55.52.88]:5372 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229451AbhLIKkL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:40:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639046198; x=1670582198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wf6ROojSpFJ7sdzhxvr1loaCWzx6BT/DLqk4a7v5Z4w=;
-  b=RVghWnjzvjdPHHmed++n386tAfLAxSwmqvZFdzfspeUg+UGLtg6q/lc1
-   YZq7AErXpRY+PZagoaVzJ6fKctUBUkeQh/EMhEmDpz8OVWeL/bOVIeK0U
-   GsjkzWpgabpe9DBAo5tL77GV0g6VgvBwrqYNO7/1WDnHiAA51SPu9iAji
-   nmnYU88SuhCN4mUXY8FEFSQBe/HVoK+5FGLdeosFMBM2edbQ8cCz4gY1S
-   1dZ1H1zikK+AuVAZvwKstpaHZQCdpfrKSrD50KX8krQwEe0Oki7U7FL5s
-   wA34/9nLvq1cGidbz6LnPs6i1ah5ZozAQHBDF90RcqjnuPVvY5yyoshdG
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="262174191"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="262174191"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:36:26 -0800
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="680282977"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 02:36:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mvGlo-0043BU-Hn;
-        Thu, 09 Dec 2021 12:35:24 +0200
-Date:   Thu, 9 Dec 2021 12:35:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        id S232859AbhLIKoQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 05:44:16 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:33219 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbhLIKoP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 05:44:15 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9BB56240010;
+        Thu,  9 Dec 2021 10:40:39 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 11:40:38 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] serial: core: Add support of runtime PM
-Message-ID: <YbHb7HRGGFRBorB7@smile.fi.intel.com>
-References: <20211115084203.56478-1-tony@atomide.com>
- <20211115084203.56478-2-tony@atomide.com>
- <YaX82wxybOZnPKpy@hovoldconsulting.com>
- <YbGwaOj0ZbEuNEPA@atomide.com>
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
+Message-ID: <20211209114038.710139a8@xps13>
+In-Reply-To: <bebef734-d0d3-e78e-e07a-9160ead1f673@kernel.org>
+References: <20211206174209.2297565-1-robh@kernel.org>
+        <20211209104224.41d42cca@xps13>
+        <bebef734-d0d3-e78e-e07a-9160ead1f673@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbGwaOj0ZbEuNEPA@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:29:44AM +0200, Tony Lindgren wrote:
-> * Johan Hovold <johan@kernel.org> [211130 10:29]:
-> > On Mon, Nov 15, 2021 at 10:41:57AM +0200, Tony Lindgren wrote:
-> > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > 8250 driver has wrong implementation of runtime power management, i.e.
-> > > it uses an irq_safe flag. The irq_safe flag takes a permanent usage count
-> > > on the parent device preventing the parent from idling. This patch
-> > > prepares for making runtime power management generic by adding runtime PM
-> > > calls to serial core once for all UART drivers.
-> > > 
-> > > As we have serial drivers that do not enable runtime PM, and drivers that
-> > > enable runtime PM, we add new functions for serial_pm_resume_and_get() and
-> > > serial_pm_autosuspend() functions to handle errors and allow the use also
-> > > for cases when runtime PM is not enabled. The other option considered was
-> > > to not check for runtime PM enable errors. But some CPUs can hang when the
-> > > clocks are not enabled for the device, so ignoring the errors is not a good
-> > > option. Eventually with the serial port drivers updated, we should be able
-> > > to just switch to using the standard runtime PM calls with no need for the
-> > > wrapper functions.
+Hi Roger,
+
+rogerq@kernel.org wrote on Thu, 9 Dec 2021 12:08:07 +0200:
+
+> Hi Miquel,
+> 
+> On 09/12/2021 11:42, Miquel Raynal wrote:
+> > Hi Rob,
 > > 
-> > A third option which needs to be considered is to always enable runtime
-> > pm in core but to keep the ports active while they are opened unless a
-> > driver opts in for more aggressive power management. This is how USB
-> > devices are handled for example.
+> > robh@kernel.org wrote on Mon,  6 Dec 2021 11:42:09 -0600:
+> >   
+> >> With 'unevaluatedProperties' support implemented, the TI GPMC example
+> >> has a warning:
+> >>
+> >> Documentation/devicetree/bindings/memory-controllers/ti,gpmc.example.dt.yaml: nand@0,0: Unevaluated properties are not allowed ('rb-gpios' was unexpected)
+> >>
+> >> Add the missing definition for 'rb-gpios'.  
 > > 
-> > A next step could then be to move over uart_change_pm() to be handled
-> > from the pm callbacks.
+> > rb-gpios is already defined in nand-controller.yaml. I seems like the
+> > real problem is that this file does not refer to it. Can you update the
+> > fix?  
 > 
-> Yes that would be nice to do eventually :)
+> I don't think we can refer to nand-controller.yaml right now as we are not
+> fully compatible with it yet. Please see examples below.
+
+This is a *very* wrong way of defining a NAND setup. I will take the
+patch to silence the warning, but please convert this representation to
+the 'new' one. I believe on the driver side it should not be too
+complicated to support having a few of these properties moved to a NAND
+chip subnode and still support the below binding. Just be very clear
+that if the legacy bindings are used, only a single chip is supported.
+
+> ti,gpmc-nand example:
 > 
-> > > @@ -1824,12 +1901,16 @@ static void uart_line_info(struct seq_file *m, struct uart_driver *drv, int i)
-> > >  	}
-> > >  
-> > >  	if (capable(CAP_SYS_ADMIN)) {
-> > > +		err = serial_pm_resume_and_get(uport->dev);
-> > > +		if (err < 0)
-> > > +			goto out;
-> > >  		pm_state = state->pm_state;
-> > >  		if (pm_state != UART_PM_STATE_ON)
-> > >  			uart_change_pm(state, UART_PM_STATE_ON);
-> > >  		spin_lock_irq(&uport->lock);
-> > >  		status = uport->ops->get_mctrl(uport);
-> > >  		spin_unlock_irq(&uport->lock);
-> > > +		serial_pm_autosuspend(uport->dev);
-> > >  		if (pm_state != UART_PM_STATE_ON)
-> > >  			uart_change_pm(state, pm_state);
+>       nand@0,0 {
+>         compatible = "ti,omap2-nand";
+>         reg = <0 0 4>;          /* device IO registers */
+>         interrupt-parent = <&gpmc>;
+>         interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+>                      <1 IRQ_TYPE_NONE>; /* termcount */
+>         ti,nand-xfer-type = "prefetch-dma";
+>         ti,nand-ecc-opt = "bch16";
+>         ti,elm-id = <&elm>;
+>         #address-cells = <1>;
+>         #size-cells = <1>;
+> 
+>         /* NAND generic properties */
+>         nand-bus-width = <8>;
+>         rb-gpios = <&gpmc 0 GPIO_ACTIVE_HIGH>;  /* gpmc_wait0 */
+> 
+>         /* GPMC properties*/
+>         gpmc,device-width = <1>;
+> 
+>         partition@0 {
+>           label = "NAND.SPL";
+>           reg = <0x00000000 0x00040000>;
+>         };
+>         partition@1 {
+>           label = "NAND.SPL.backup1";
+>           reg = <0x00040000 0x00040000>;
+>         };
+>       };
+> 
+> 
+> nand-controller example:
+> 
+>     nand-controller {
+>       #address-cells = <1>;
+>       #size-cells = <0>;
+>       cs-gpios = <0>, <&gpioA 1>; /* A single native CS is available */
+> 
+>       /* controller specific properties */
+> 
+>       nand@0 {
+>         reg = <0>; /* Native CS */
+>         nand-use-soft-ecc-engine;
+>         nand-ecc-algo = "bch";
+> 
+>         /* controller specific properties */
+>       };
+> 
+>       nand@1 {
+>         reg = <1>; /* GPIO CS */
+>       };
+>     };
+> 
+> 
 > > 
-> > The interaction with uart_change_pm() looks inconsistent. Why resume
-> > before the state change and also suspend *before* updating the pm state?
-> 
-> Good point.
-> 
-> > That is, shouldn't the suspend go after uart_change_pm()? And similar in
-> > other places.
-> 
-> Yes agreed, runtime PM may disable the clock and shut down the UART so
-> should be done after uart_change_pm().
-> 
-> BTW, Andy has follow-up patches to also drop the old uart_pm in favor of
-> runtime PM :)
-
-Yeah, but they are just removals without any proper replacements where the
-current drivers already are using some kind of runtime PM. I was focused and
-able to test only 8250 part.
-
-> > > @@ -2050,6 +2131,7 @@ uart_set_options(struct uart_port *port, struct console *co,
-> > >  {
-> > >  	struct ktermios termios;
-> > >  	static struct ktermios dummy;
-> > > +	int ret;
-> > >  
-> > >  	/*
-> > >  	 * Ensure that the serial-console lock is initialised early.
-> > > @@ -2089,7 +2171,17 @@ uart_set_options(struct uart_port *port, struct console *co,
-> > >  	 */
-> > >  	port->mctrl |= TIOCM_DTR;
-> > >  
-> > > -	port->ops->set_termios(port, &termios, &dummy);
-> > > +	/* At early stage device is not created yet, we can't do PM */
-> > > +	if (port->dev) {
+> > While at it you might also want to drop the rb-gpios property from
+> > ingenic,nand.yaml, which also defines it a second time.
+> >   
+> >> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> >> Cc: Richard Weinberger <richard@nod.at>
+> >> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> >> Cc: Tony Lindgren <tony@atomide.com>
+> >> Cc: Roger Quadros <rogerq@kernel.org>
+> >> Cc: linux-mtd@lists.infradead.org
+> >> Signed-off-by: Rob Herring <robh@kernel.org>
+> >> ---
+> >>  Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml | 5 +++++
+> >>  1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml b/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
+> >> index beb26b9bcfb2..1c280f52baa0 100644
+> >> --- a/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
+> >> +++ b/Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml
+> >> @@ -53,6 +53,11 @@ properties:
+> >>      enum: [8, 16]
+> >>      default: 8
+> >>  
+> >> +  rb-gpios:
+> >> +    description:
+> >> +      GPIO connection to R/B signal from NAND chip
+> >> +    maxItems: 1
+> >> +
+> >>  patternProperties:
+> >>    "@[0-9a-f]+$":
+> >>      $ref: "/schemas/mtd/partitions/partition.yaml"  
 > > 
-> > Checking port->dev here looks a bit hacky.
+> > Thanks,
+> > Miquèl
+> >   
 > 
-> As this is kernel console related we may be able to just leave out the
-> runtime PM calls here, see the two commits below. Andy, do you have some
-> comments?
-
-IIRC the uart_set_options() can be called during early boot stages where no
-device is present and we need to handle those cases, otherwise it will be
-KABOOMs. I.o.w. we3 may not get rid of those checks (at least in a simple way).
-
-> > Can you expand on this and also on how this relates to console ports
-> > presumably never being runtime suspended?
+> cheers,
+> -roger
 > 
-> See the following two commits for kernel console handling:
-> 
-> bedb404e91bb ("serial: 8250_port: Don't use power management for kernel console")
-> a3cb39d258ef ("serial: core: Allow detach and attach serial device for console")
-> 
-> Thanks for looking through the patches again, I'll take a look at all
-> your comments and will repost after the merge window.
 
-Thanks, Tony, for moving this forward and Johan for good review!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Miquèl

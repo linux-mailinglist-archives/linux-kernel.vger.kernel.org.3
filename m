@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B37146F1E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA6E46F236
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242966AbhLIRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:33:36 -0500
-Received: from mga05.intel.com ([192.55.52.43]:65366 "EHLO mga05.intel.com"
+        id S243117AbhLIRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:42:15 -0500
+Received: from mga14.intel.com ([192.55.52.115]:18787 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238548AbhLIRdf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:33:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="324423816"
+        id S231476AbhLIRmP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:42:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639071521; x=1670607521;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GW8eLCzIYcPKkn65ZA+HWRTXMBZawug5TiMgnaXmBGc=;
+  b=jAbGeipF++vxB9r086USfv4fAzR9wUd7y5dhRn4aelBdtNgTJyU0yY0X
+   /4EV9+wed2oO1wzcIreu0F68zxyepnS6YxMNloO/C41/wHCSFOR0EnJsR
+   3euv4LdeTqrfZHX3ZZ6pibkOLSpED0THWwYKGu9w0E8Fu+gH4iFvQsIdy
+   Vlh0KQAGkVXg4YArMmrHxP33rgO2G/+a/uJWlDf2hlOfKkeZcZM57DOIl
+   qx4Ev+TgxT1WQsqOoJUOPFsloB69eKaquXDr2G8BLpI6VR4ejItVx1lYM
+   wVUuBaz77ULye4aea7j2f/92/kJCvb7gyKoDoNs1ectAzCTwIEKZgbOfM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238388305"
 X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="324423816"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:30:00 -0800
+   d="scan'208";a="238388305"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:38:41 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="680417004"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:29:59 -0800
-Date:   Thu, 9 Dec 2021 09:34:17 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Raj, Ashok" <ashok.raj@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
-Message-ID: <20211209093417.58767913@jacob-builder>
-In-Reply-To: <20211209165715.GA566788@otc-nc-03>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-3-git-send-email-jacob.jun.pan@linux.intel.com>
-        <16408193-c8bc-3046-b32f-9274bf0b415c@linux.intel.com>
-        <20211208104939.732fa5b9@jacob-builder>
-        <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <1b3ee13d-0148-1156-52ad-b96bca51cb6f@linux.intel.com>
-        <20211209083249.7d775512@jacob-builder>
-        <20211209165715.GA566788@otc-nc-03>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="503581282"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga007.jf.intel.com with ESMTP; 09 Dec 2021 09:38:35 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B9HcXEn013933;
+        Thu, 9 Dec 2021 17:38:33 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org, brouer@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 2/9] i40e: respect metadata on XSK Rx to skb
+Date:   Thu,  9 Dec 2021 18:38:16 +0100
+Message-Id: <20211209173816.5157-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <2811b35a-9179-88ce-d87a-e1f824851494@redhat.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com> <20211208140702.642741-3-alexandr.lobakin@intel.com> <2811b35a-9179-88ce-d87a-e1f824851494@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ashok,
+From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+Date: Thu, 9 Dec 2021 09:27:37 +0100
 
-On Thu, 9 Dec 2021 08:57:15 -0800, "Raj, Ashok" <ashok.raj@intel.com> wrote:
-
-> > Prefixes is disabled
-> >  - Root Complexes may optionally support TLPs with PASID TLP Prefixes.
-> > The mechanism used to detect whether a Root Complex supports the PASID
-> > TLP Prefix is implementation specific  
+> On 08/12/2021 15.06, Alexander Lobakin wrote:
+> > For now, if the XDP prog returns XDP_PASS on XSK, the metadata will
+> > be lost as it doesn't get copied to the skb.
 > 
-> Isn't implementation specific mechanism is IOMMU?
+> I have an urge to add a newline here, when reading this, as IMHO it is a 
+> paragraph with the problem statement.
 > 
-I agree. In case of VT-d it would be in ecap.pasid bit.
-> > "
-> > For all practical purposes, why would someone sets up PASID for DMA
-> > just to be ignored? An IOMMU interface makes sense to me.
-> >   
-> > > Yes, exactly. Imagining in the VM guest environment, do we require a
-> > > vIOMMU for this functionality? vIOMMU is not performance friendly if
-> > > we put aside the security considerations.
-> > >   
-> > The primary use case for accelerators to use in-kernel DMA will be in
-> > pass-through mode. vIOMMU should be able to do PT with good performance,
-> > right? no nesting, IO page faults.  
+> > Copy it along with the frame headers. Account its size on skb
+> > allocation, and when copying just treat it as a part of the frame
+> > and do a pull after to "move" it to the "reserved" zone.
 > 
-> But from an enabling perspective when PASID is in use we have to mandate
-> either the presence of an IOMMU, or some hypercall that will do the
-> required plumbing for PASID isn't it? 
-So the point is that we need either vIOMMU or virtio IOMMU to use PASID?
-For the purpose of this discussion to decide whether iommu API or DMA API
-should be used, I am still convinced it should be iommu API.
+> Also newline here, as next paragraph are some extra details, you felt a 
+> need to explain to the reader.
+> 
+> > net_prefetch() xdp->data_meta and align the copy size to speed-up
+> > memcpy() a little and better match i40e_costruct_skb().
+>                                       ^^^^^^xx^^^^^^^^^
+> 
+> You have a general misspelling of this function name in all of your 
+> commit messages.
 
-Unlike IOMMU on/off for DMA API (which is transparent to the driver), using
-PASID is not transparent. Other than enabling the PASID, the driver has to
-program the PASID explicitly. There is no point of doing this dance knowing
-the PASID might be ignored.
+Oh gosh, I thought I don't have attention deficit. Thanks, maybe
+Tony will fix it for me or I could send a follow-up (or resend if
+needed, I saw those were already applied to dev-queue).
 
-Thanks,
+> 
+> --Jesper
 
-Jacob
+Al

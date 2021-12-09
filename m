@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A58A246E670
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBA846E675
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbhLIKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbhLIKTW (ORCPT
+        id S233979AbhLIKUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:20:38 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56080 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231501AbhLIKUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:19:22 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600ECC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:15:49 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id a23so67046pgm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:15:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=uTtDFl4ylvWzOUxVw5Eo9EBEL+buH4qtkFmI+A3VVv0=;
-        b=NQ9+kg5KOv5dp8pVp2G3I8lUbNXVG0gGlaVKBRUDptLxHDT3j6LoR5hi005x1rifX+
-         uA6bfveQG0dx3f3Pz+tdXHOtl8NoklpAuoTEXZUr+NSdbKoqLQlXdLMULNoJ0k9Rq6ZK
-         SSEUIuBrDVN8GOsU/W4YMnlWzJypWUzwT+skDvkedX8UYzrYQHgnOiqAMWnKd0cRvd41
-         LM6mLgEdHygyZ72GDyz21c7VxxOdNMpIHcsRXabxpb4b5XhinlJaD+deOAZAo8o4HKKs
-         KW2NnFS0VCtV+d/d3qC19MUMo6+woIuBgTEGVoOt7F/LCFRfUQLYO+GyaCpWHXIB2qEu
-         Gbtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=uTtDFl4ylvWzOUxVw5Eo9EBEL+buH4qtkFmI+A3VVv0=;
-        b=nFjplfrV4k/jnNt/Wz0vaFwBd9PKue+z3fOfqEmwKCqT3XtBY2Me1ykrwGRu/g5KIo
-         FeeKD3u/6cFxRgfm+R5NYJ8THH437Y26YvMr6IVMnHZSGzxMlkk3L3cZJF5c/g245Rp/
-         Law9IJvWJ8nGSqZy4so1EHq8Kve5asPRuTJfEPilcL8UWT7kb5CTDIeKOirW/KC3vqyg
-         D/NppjaN3q/a8utnbv3Cc4Q0hiz8sm/KxZnU2WU7yMMsllwYtlDgvH05jf8qLjF14D1C
-         WJlwPjv39HkD3WC1usHmQwB+Jv7nd+ELg3L1+Ey6zZFpUor/+gMw/V+2ewiCMwObgPq/
-         KNEA==
-X-Gm-Message-State: AOAM532r4+q39L9EWdi4b1xyqMOjQQyEOZ5yCdWHNMVUw7eCufRjYfav
-        sE1qqj+QYP9YTtDeQ/37Tg4=
-X-Google-Smtp-Source: ABdhPJwjI9kxYeG3xjcWudWWgMKJYeADbcpgkvYJNmVIASIiiFf9HmZhYN59I+Cd0HwMP0j9lYkm/w==
-X-Received: by 2002:a63:69c6:: with SMTP id e189mr32529626pgc.237.1639044949008;
-        Thu, 09 Dec 2021 02:15:49 -0800 (PST)
-Received: from localhost (203-219-139-206.static.tpgi.com.au. [203.219.139.206])
-        by smtp.gmail.com with ESMTPSA id n6sm6227193pfa.28.2021.12.09.02.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 02:15:48 -0800 (PST)
-Date:   Thu, 09 Dec 2021 20:15:42 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v4 09/10] powerpc/mm: Convert to default topdown mmap
- layout
-To:     "alex@ghiti.fr" <alex@ghiti.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <cover.1638976228.git.christophe.leroy@csgroup.eu>
-        <d2d5510115cba2d56866fa01dab267655a20da71.1638976229.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <d2d5510115cba2d56866fa01dab267655a20da71.1638976229.git.christophe.leroy@csgroup.eu>
+        Thu, 9 Dec 2021 05:20:37 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E57D81F37B;
+        Thu,  9 Dec 2021 10:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639045022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cGDbsYISJh7h/2Ta+ndn57DC4dVJs1oqn6ICJc3IZw4=;
+        b=CAQvlYwWKyPwk36NhGY+4+gffauG+BPi2yv+buLVo0SVmbsFtfhJpypL0pD71vwq2fnOSP
+        GP7yGRNYQ0v/viEmvUNSczVm7J2cNjQvUEy2BD0hGBFuS6BBUnu7OmfbmOh2TOaT8e4uis
+        CcEQzaP7NHpbpI12zVi20Rs4vRo/HL8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639045022;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cGDbsYISJh7h/2Ta+ndn57DC4dVJs1oqn6ICJc3IZw4=;
+        b=0nFYhy/dNkAyduMnjUKGMrYjx+dXy7JUvDOklkfQudPTMEylFYZiy2bUwMfnU7mLeIbvA5
+        Bez1vatrdVOU46Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC4D013B2D;
+        Thu,  9 Dec 2021 10:17:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hi8JKZ7XsWHSJQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 09 Dec 2021 10:17:02 +0000
+Message-ID: <747be2bc-e0a4-81fc-4f28-607d44525c52@suse.de>
+Date:   Thu, 9 Dec 2021 11:17:02 +0100
 MIME-Version: 1.0
-Message-Id: <1639044621.jeow25j0pr.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
+Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211207072943.121961-1-marcan@marcan.st>
+ <20211207072943.121961-2-marcan@marcan.st>
+ <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------c7IHT9aEvAIVFTQ02gTZrBtu"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Christophe Leroy's message of December 9, 2021 3:18 am:
-> Select CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT and
-> remove arch/powerpc/mm/mmap.c
->=20
-> This change provides standard randomisation of mmaps.
->=20
-> See commit 8b8addf891de ("x86/mm/32: Enable full randomization on i386
-> and X86_32") for all the benefits of mmap randomisation.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------c7IHT9aEvAIVFTQ02gTZrBtu
+Content-Type: multipart/mixed; boundary="------------kWj606jlJ7pD7bie8TPb6ZkY";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
+Cc: David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>, dri-devel@lists.freedesktop.org,
+ Javier Martinez Canillas <javier@dowhile0.org>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Message-ID: <747be2bc-e0a4-81fc-4f28-607d44525c52@suse.de>
+Subject: Re: [PATCH v2 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+References: <20211207072943.121961-1-marcan@marcan.st>
+ <20211207072943.121961-2-marcan@marcan.st>
+ <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+G4mv9Xuy1B--TvJNcNv0z3pRZAQPkA-T+aF8rZMrjkA@mail.gmail.com>
 
-The justification seems pretty reasonable.
+--------------kWj606jlJ7pD7bie8TPb6ZkY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->=20
-> Comparison between powerpc implementation and the generic one:
-> - mmap_is_legacy() is identical.
-> - arch_mmap_rnd() does exactly the same allthough it's written
-> slightly differently.
-> - MIN_GAP and MAX_GAP are identical.
-> - mmap_base() does the same but uses STACK_RND_MASK which provides
-> the same values as stack_maxrandom_size().
-> - arch_pick_mmap_layout() is almost identical. The only difference
-> is that it also adds the random factor to mm->mmap_base in legacy mode.
->=20
-> That last point is what provides the standard randomisation of mmaps.
+SGkNCg0KQW0gMDguMTIuMjEgdW0gMTg6NDkgc2NocmllYiBSb2IgSGVycmluZzoNCj4gT24g
+VHVlLCBEZWMgNywgMjAyMSBhdCAxOjMxIEFNIEhlY3RvciBNYXJ0aW4gPG1hcmNhbkBtYXJj
+YW4uc3Q+IHdyb3RlOg0KPj4NCj4+IFRoaXMgY29kZSBpcyByZXF1aXJlZCBmb3IgYm90aCBz
+aW1wbGVmYiBhbmQgc2ltcGxlZHJtLCBzbyBsZXQncyBtb3ZlIGl0DQo+PiBpbnRvIHRoZSBP
+RiBjb3JlIGluc3RlYWQgb2YgaGF2aW5nIGl0IGFzIGFuIGFkLWhvYyBpbml0Y2FsbCBpbiB0
+aGUNCj4+IGRyaXZlcnMuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogSGVjdG9yIE1hcnRpbiA8
+bWFyY2FuQG1hcmNhbi5zdD4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL29mL3BsYXRmb3JtLmMg
+ICAgICAgICAgfCAgNSArKysrKw0KPj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZi
+LmMgfCAyMSArLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+ICAgMiBmaWxlcyBjaGFuZ2VkLCA2
+IGluc2VydGlvbnMoKyksIDIwIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL29mL3BsYXRmb3JtLmMgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4+IGluZGV4
+IGIzZmFmODk3NDRhYS4uZTA5N2Y0MGIwM2MwIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9v
+Zi9wbGF0Zm9ybS5jDQo+PiArKysgYi9kcml2ZXJzL29mL3BsYXRmb3JtLmMNCj4+IEBAIC01
+NDAsNiArNTQwLDExIEBAIHN0YXRpYyBpbnQgX19pbml0IG9mX3BsYXRmb3JtX2RlZmF1bHRf
+cG9wdWxhdGVfaW5pdCh2b2lkKQ0KPj4gICAgICAgICAgICAgICAgICBvZl9ub2RlX3B1dChu
+b2RlKTsNCj4+ICAgICAgICAgIH0NCj4+DQo+PiArICAgICAgIGZvcl9lYWNoX2NoaWxkX29m
+X25vZGUob2ZfY2hvc2VuLCBub2RlKSB7DQo+PiArICAgICAgICAgICAgICAgaWYgKG9mX2Rl
+dmljZV9pc19jb21wYXRpYmxlKG5vZGUsICJzaW1wbGUtZnJhbWVidWZmZXIiKSkNCj4gDQo+
+IG5vZGUgPSBvZl9nZXRfY29tcGF0aWJsZV9jaGlsZChvZl9jaG9zZW4sICJzaW1wbGUtZnJh
+bWVidWZmZXIiKTsNCj4gb2ZfcGxhdGZvcm1fZGV2aWNlX2NyZWF0ZShub2RlLCBOVUxMLCBO
+VUxMKTsNCj4gb2Zfbm9kZV9wdXQobm9kZSk7DQo+IA0KPiBQbGVhc2UgQ2MgdGhlIERUIGxp
+c3QuIExvb2tzIGxpa2UgdGhpcyBwYXRjaCBjYW4gYmUgYXBwbGllZA0KPiBpbmRlcGVuZGVu
+dGx5LiAoQmV0dGVyIGdldCB0aGUgb3RoZXIgMiBpbnRvIGRybS1taXNjIHNvb24gb3IgaXQg
+d2lsbA0KPiBtaXNzIDUuMTcpLg0KDQpDYW4gd2UgbWVyZ2UgdGhlIHdob2xlIHBhdGNoc2V0
+IHRocm91Z2ggZHJtLW1pc2M/IFBhdGNoZXMgMiBhbmQgMyBhcmUgDQp1c2VsZXNzIHdpdGhv
+dXQgdGhlIGZpcnN0IG9uZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gUm9i
+DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxv
+cGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIu
+IDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJn
+KQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Thanks for describing it. Could you add random_factor to mmap_base for
-the legacy path for powerpc as a 2-line change that adds the legacy
-randomisation. And then this bigger patch would be closer to a no-op.
+--------------kWj606jlJ7pD7bie8TPb6ZkY--
 
-Thanks,
-Nick
+--------------c7IHT9aEvAIVFTQ02gTZrBtu
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGx154FAwAAAAAACgkQlh/E3EQov+CE
+tg/+P0rnIqemk1osoaMFBeCnCR5EqRWUX5DVmrLD1A8fuFhIYxQYecNmQwd4WXCFqqHEye8shCIs
+rCTlVtNjlp8qodAaCIJ2g9ezu4bQNa7z/sYCtuH/qgn0Zx+oKZI84RVrmAAfJYpgzf5+Q0la4yjs
+0D6kPR72NeuiOQM+9zp2Y9usF3y4vc0UiXD3QtfGmNJs5/V+d5tVBTF0ZQ7qUp+3Iqtw/Vi8v4B5
+xObmUIcrAtJUtEMIHgyU6x/dHDXldWnE5DoUk2Os8LpCCVn2lYKks/f0MlvxR5ueKL5VEAnGYShX
+f+EiXRUv6Lu4zTfetvmLOhZ94SERtdzXbA0bsOckl1JsIzq+OQDTXhxWuBAkgGe/wSvVg3mzBRAB
+EoXAdbL65B+a+5euSRob8Qu3LNEaot/bDAEIddwCCTn913tmj0ivXuw27jAHohTLQ4P5zlWSzRMS
+rO8x6nymwj/e3uE4DudizuFsrx/zJyesI8qJiWJC0fnBVtBDtiB/CPG1PAujSu1SX9oVuedWrI+Q
+wAxNblABElDTOgt6CzlWyHbKztNs9TCj0DZqTlkihGCYXIAE9bP8f+m6gLcSB75zAt0275iMgj68
+cl5sk8V1T6+LQwxiaiSekpnYSfqvahzoorQ7vW210tZ10BpaGwZvSO8o1CXu5vw6qdtrOoYIn1FN
+sNA=
+=1bk9
+-----END PGP SIGNATURE-----
+
+--------------c7IHT9aEvAIVFTQ02gTZrBtu--

@@ -2,148 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 521CD46F25F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9C846F26C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237652AbhLIRqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237618AbhLIRqZ (ORCPT
+        id S237784AbhLIRtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:49:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25538 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237989AbhLIRtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:46:25 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8AC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:42:51 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so4706652wmc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1qqK9+xQ9ZbtBELQAT0EXm6TWiIt+xXrrL7fOffh/Mk=;
-        b=swxVRUXimw2W0nql09GwFWrzunSGiTpyC0gIyxyFYN1Dsy7gNq0X9WTTLgh1neZcAH
-         nCIp+9n2+NnAzbizapTLdyXdPG5ce9MoU1foUmZ78cIFbjc79sHxnAm/FdcRjXPJeyC2
-         DstUVGwBpbzLQ3xHjAPNFYmqEfE7n6kszR2ht/lK3d+vScLmwSmN/hkeAOQqPUGuXr1Z
-         1JSlb472zlPiw1XUQfrdTYUfcHyFDhiOSVNNxLLIBA4HDPicyTHdZesrRrQLIzvAZo45
-         ne1Tc+AgGVWd2+aZ6kYaWZyIey1BDbrsekOUdcn0cHfMeAj3C9A+disu6qQixs77gWOv
-         IF+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1qqK9+xQ9ZbtBELQAT0EXm6TWiIt+xXrrL7fOffh/Mk=;
-        b=v+bVcCRhr7ED8ZGcRJ91BNjVATcdqwhj+zHq6DsQO5ShuHxi8yWrsuwg961Z1X8Io+
-         85JBRTPHhTbdpWHhT/pjhn4FGuccL8rWxHKbLl5dNWwv+9R2t9HGCvtE3MOs1WVQ9jzf
-         1zp1qZoCW9bGDTYUZYoTpxFrJB4P4B8Cw/0qBf0EPAg5YB2fcZ4Dj02J+NorWOj9ID4M
-         fFiSLeiflaBOsCjzYE5WNdm9Znkne0Fi6etiJhlXUI4rZxLtgnE/msuPAdYjfYXHG0rC
-         t8jEmL8X1ot83O4sWgBb4+Es8KFx8QB7JHtfOJ0aoeyaInac+ISC4ZqiC8W9ngTGjriT
-         qlqg==
-X-Gm-Message-State: AOAM530AV1K3zvoFNAIncJTsavaK5fZwvgNSRnVTcfHg7UKJpXl7aGeY
-        fxs5ju8Zsayg847nwZ8stPnz9g==
-X-Google-Smtp-Source: ABdhPJwCv+vjl+oQsw4enZewe0eQ0mMvqsRmRIJqksr/2N4WKMc8gdbQp9dYk7yOUjrpWsd/GzTzyg==
-X-Received: by 2002:a05:600c:202:: with SMTP id 2mr8895294wmi.134.1639071770161;
-        Thu, 09 Dec 2021 09:42:50 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id w4sm308666wrs.88.2021.12.09.09.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 09:42:49 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Thierry Reding <treding@nvidia.com>
-Subject: [PATCH 4/4] dt-bindings: nvmem: Add missing 'reg' property
-Date:   Thu,  9 Dec 2021 17:42:35 +0000
-Message-Id: <20211209174235.14049-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20211209174235.14049-1-srinivas.kandagatla@linaro.org>
-References: <20211209174235.14049-1-srinivas.kandagatla@linaro.org>
+        Thu, 9 Dec 2021 12:49:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639071960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Lo6dpXi15zAMgWKrGSNjO6+8EwzMzVM9I8nYMM1AGg=;
+        b=il/2CTWhQuTcWsKqPFchhClRgcvRg/j1HzmkLAJKmDeOZsQs3kzpmMeiOtshXY3cfWw6d1
+        qp8xQ5zEpkI0fX6NNJM3WPFdPGwhelzsXQa5L/7JrdmqNYTY7YoJaoEWCn37uxFLpcyo9v
+        UcRPz2o3WXB1MZKEIDUHk5PReDhotxI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-Wz9cGJ3mO7-GzAulEl4VkQ-1; Thu, 09 Dec 2021 12:45:56 -0500
+X-MC-Unique: Wz9cGJ3mO7-GzAulEl4VkQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77650190B2A1;
+        Thu,  9 Dec 2021 17:45:54 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE2C060BF1;
+        Thu,  9 Dec 2021 17:45:53 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 9D445415EE65; Thu,  9 Dec 2021 14:45:35 -0300 (-03)
+Date:   Thu, 9 Dec 2021 14:45:35 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, nilal@redhat.com,
+        linux-rt-users@vger.kernel.org, vbabka@suse.cz, cl@linux.com,
+        ppandit@redhat.com
+Subject: Re: [PATCH v2 3/3] mm/page_alloc: Remotely drain per-cpu lists
+Message-ID: <20211209174535.GA70283@fuller.cnet>
+References: <20211103170512.2745765-1-nsaenzju@redhat.com>
+ <20211103170512.2745765-4-nsaenzju@redhat.com>
+ <20211203141306.GG3301@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203141306.GG3301@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Herring <robh@kernel.org>
+On Fri, Dec 03, 2021 at 02:13:06PM +0000, Mel Gorman wrote:
+> On Wed, Nov 03, 2021 at 06:05:12PM +0100, Nicolas Saenz Julienne wrote:
+> > Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
+> > drain work queued by __drain_all_pages(). So introduce new a mechanism
+> > to remotely drain the per-cpu lists. It is made possible by remotely
+> > locking 'struct per_cpu_pages' new per-cpu spinlocks. A benefit of this
+> > new scheme is that drain operations are now migration safe.
+> > 
+> > There was no observed performance degradation vs. the previous scheme.
+> > Both netperf and hackbench were run in parallel to triggering the
+> > __drain_all_pages(NULL, true) code path around ~100 times per second.
+> > The new scheme performs a bit better (~5%), although the important point
+> > here is there are no performance regressions vs. the previous mechanism.
+> > Per-cpu lists draining happens only in slow paths.
+> > 
+> 
+> netperf and hackbench are not great indicators of page allocator
+> performance as IIRC they are more slab-intensive than page allocator
+> intensive. I ran the series through a few benchmarks and can confirm
+> that there was negligible difference to netperf and hackbench.
+> 
+> However, on Page Fault Test (pft in mmtests), it is noticable. On a
+> 2-socket cascadelake machine I get
+> 
+> pft timings
+>                                  5.16.0-rc1             5.16.0-rc1
+>                                     vanilla    mm-remotedrain-v2r1
+> Amean     system-1         27.48 (   0.00%)       27.85 *  -1.35%*
+> Amean     system-4         28.65 (   0.00%)       30.84 *  -7.65%*
+> Amean     system-7         28.70 (   0.00%)       32.43 * -13.00%*
+> Amean     system-12        30.33 (   0.00%)       34.21 * -12.80%*
+> Amean     system-21        37.14 (   0.00%)       41.51 * -11.76%*
+> Amean     system-30        36.79 (   0.00%)       46.15 * -25.43%*
+> Amean     system-48        58.95 (   0.00%)       65.28 * -10.73%*
+> Amean     system-79       111.61 (   0.00%)      114.78 *  -2.84%*
+> Amean     system-80       113.59 (   0.00%)      116.73 *  -2.77%*
+> Amean     elapsed-1        32.83 (   0.00%)       33.12 *  -0.88%*
+> Amean     elapsed-4         8.60 (   0.00%)        9.17 *  -6.66%*
+> Amean     elapsed-7         4.97 (   0.00%)        5.53 * -11.30%*
+> Amean     elapsed-12        3.08 (   0.00%)        3.43 * -11.41%*
+> Amean     elapsed-21        2.19 (   0.00%)        2.41 * -10.06%*
+> Amean     elapsed-30        1.73 (   0.00%)        2.04 * -17.87%*
+> Amean     elapsed-48        1.73 (   0.00%)        2.03 * -17.77%*
+> Amean     elapsed-79        1.61 (   0.00%)        1.64 *  -1.90%*
+> Amean     elapsed-80        1.60 (   0.00%)        1.64 *  -2.50%*
+> 
+> It's not specific to cascade lake, I see varying size regressions on
+> different Intel and AMD chips, some better and worse than this result.
+> The smallest regression was on a single CPU skylake machine with a 2-6%
+> hit. Worst was Zen1 with a 3-107% hit.
+> 
+> I didn't profile it to establish why but in all cases the system CPU
+> usage was much higher. It *might* be because the spinlock in
+> per_cpu_pages crosses a new cache line and it might be cold although the
+> penalty seems a bit high for that to be the only factor.
+> 
+> Code-wise, the patches look fine but the apparent penalty for PFT is
+> too severe.
 
-With 'unevaluatedProperties' support implemented, the following warnings
-are generated in the nvmem examples:
+Mel,
 
-Documentation/devicetree/bindings/nvmem/st,stm32-romem.example.dt.yaml: efuse@1fff7800: Unevaluated properties are not allowed ('reg' was unexpected)
-Documentation/devicetree/bindings/nvmem/rmem.example.dt.yaml: nvram@10000000: Unevaluated properties are not allowed ('reg' was unexpected)
-Documentation/devicetree/bindings/nvmem/brcm,nvram.example.dt.yaml: nvram@1eff0000: Unevaluated properties are not allowed ('reg' was unexpected)
+Have you read Nicolas RCU patches?
 
-Add the missing 'reg' property definition.
+Date: Fri,  8 Oct 2021 18:19:19 +0200                                                                                   
+From: Nicolas Saenz Julienne <nsaenzju@redhat.com>      
+Subject: [RFC 0/3] mm/page_alloc: Remote per-cpu lists drain support
 
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Rafał Miłecki <rafal@milecki.pl>
-Cc: Saenz Julienne <nsaenzjulienne@suse.de>
-Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Reviewed-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml     | 3 +++
- Documentation/devicetree/bindings/nvmem/rmem.yaml           | 3 +++
- Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 3 +++
- 3 files changed, 9 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-index 58ff6b0bdb1a..8c3f0cd22821 100644
---- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-@@ -24,6 +24,9 @@ properties:
-   compatible:
-     const: brcm,nvram
- 
-+  reg:
-+    maxItems: 1
-+
- unevaluatedProperties: false
- 
- examples:
-diff --git a/Documentation/devicetree/bindings/nvmem/rmem.yaml b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-index 1d85a0a30846..a4a755dcfc43 100644
---- a/Documentation/devicetree/bindings/nvmem/rmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-@@ -19,6 +19,9 @@ properties:
-           - raspberrypi,bootloader-config
-       - const: nvmem-rmem
- 
-+  reg:
-+    maxItems: 1
-+
-   no-map:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
-diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-index a48c8fa56bce..448a2678dc62 100644
---- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-@@ -24,6 +24,9 @@ properties:
-       - st,stm32f4-otp
-       - st,stm32mp15-bsec
- 
-+  reg:
-+    maxItems: 1
-+
- patternProperties:
-   "^.*@[0-9a-f]+$":
-     type: object
--- 
-2.21.0
+RCU seems like a natural fit, we were wondering whether people see any
+fundamental problem with this approach.
 

@@ -2,84 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BCA46E600
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5689046E604
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhLIJ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbhLIJ7M (ORCPT
+        id S231481AbhLIJ73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:59:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53653 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230410AbhLIJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:59:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC6C061746;
-        Thu,  9 Dec 2021 01:55:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95264B82411;
-        Thu,  9 Dec 2021 09:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9EE5C004DD;
-        Thu,  9 Dec 2021 09:55:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639043736;
-        bh=W7pXooK1kVAIY+RLt1VIpEkQiuX45GNgfUBx3j8LOw4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jr61v5g/Tr2SVx2Qb+qDaI6TyL6azG6o2chCU6Rmoel6iyGYtIWG/OqZoA7UrpuiK
-         fJOgAhNVLPT7KYNNdHD2DLkC6U+Z1r31Ll8EuJmoZfb3nKadzS1UqOuIOIQ6oQArTK
-         6SMlNaNv9kMYjSwQeOWn0JkElJdmMkk8RCPr3CiK+K+NlSyYO6EdkKoHA6wjLcJks+
-         H7p6iZ8Di44CG2gAGZN4K/XrX7hbHcdYZa4EEN46HHEfbPaqc+8R6WMu/1EBT023dP
-         E5ExyOieZvkVFrSOmPuKVhPzSYjW0D+KRAmPcSFzG+8Ov0SARf3pk8ltlOkKZ924vw
-         Qv6cRuTz1ZEGg==
-From:   alexs@kernel.org
-Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng01@gmail.com>,
-        Tang Yizhou <tangyizhou@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] doc/zh_CN: add Chinese document coding style reminder
-Date:   Thu,  9 Dec 2021 17:55:28 +0800
-Message-Id: <20211209095528.68875-1-alexs@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Dec 2021 04:59:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639043754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tifu8jPxoXiPodobNqLDC7Ur+Twa+ScoTD0T3Hcu8HE=;
+        b=XsFrOHTXaCcnoX8QVB5ioAN7yMEh1KxSZMVglhgz4u0TSGoORsj++ujs+7wO7q377r0K4m
+        uVQs2tHAQRmbKCRy4+b7FBkk+2ioTjjDUESfej0obYFjcUD2EEwvC+3wtawrthDUvtvLM4
+        akzmG4j7g3f1K5GhiVASx/TvhGxa6DU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-258-GCrEN5tAOe27l6SxX8Ll3g-1; Thu, 09 Dec 2021 04:55:53 -0500
+X-MC-Unique: GCrEN5tAOe27l6SxX8Ll3g-1
+Received: by mail-ed1-f71.google.com with SMTP id v1-20020aa7cd41000000b003e80973378aso4761318edw.14
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:55:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Tifu8jPxoXiPodobNqLDC7Ur+Twa+ScoTD0T3Hcu8HE=;
+        b=TIHFa1TzCbd3B8Pf+9/vBcFDdPNc6R6XD2Me/IHpS3ZlXR6ZmoUqb4Xl9N2TPa+TDd
+         bQxW9+VSJLGTJpzezpMcXb+6tH29fkkXalvzyK3jdwG5NlDzpSubjjWePhILJvkE5wNN
+         CsY8uscfh+Vq6h+1I+NOCRC4BhnfUgw5G6eNzOAHrfkLSDkEo1l5U4/ZKIZ45/93rq+c
+         tQkdDllqlN50ZNIp7uCoKMj4WbgbnDdQZxXqRRLG+1vpZlirFfoj27Rgzy98rYlCkf9b
+         q4BFoi1dACC72ACaOoNgJAn8PmwgTZ1g1KOeH29nd7CLHvZcYy40qPNWtRmqPPR8tA6k
+         JUUw==
+X-Gm-Message-State: AOAM533Pj+yk8dC3B5/gy8ik5D0XDWIk2hFg/uZNlKg50u/RLq8PW9+1
+        fYGXbfJfJ6zqyMZgQW+bfdTN+cmGQJYV+BXjiv8UqGn+BO63vw2Tnsea1odNfgW4bBosf0AMSbP
+        SAfW1IgeJzRwO2LUalxK7IYbD
+X-Received: by 2002:a50:d710:: with SMTP id t16mr27488348edi.50.1639043752305;
+        Thu, 09 Dec 2021 01:55:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6QqCxdit+LRk7iJREbeQBji1uNqG143rwxeUhxS89nG10fe15dcnhEv1m6U1xRuvyXnf4ng==
+X-Received: by 2002:a50:d710:: with SMTP id t16mr27488319edi.50.1639043752085;
+        Thu, 09 Dec 2021 01:55:52 -0800 (PST)
+Received: from fedora (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f7sm3251022edw.44.2021.12.09.01.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 01:55:51 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3 7/8] KVM: x86: Reject fixeds-size Hyper-V hypercalls
+ with non-zero "var_cnt"
+In-Reply-To: <20211207220926.718794-8-seanjc@google.com>
+References: <20211207220926.718794-1-seanjc@google.com>
+ <20211207220926.718794-8-seanjc@google.com>
+Date:   Thu, 09 Dec 2021 10:55:50 +0100
+Message-ID: <87lf0u3xw9.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Shi <alexs@kernel.org>
+Sean Christopherson <seanjc@google.com> writes:
 
-The coding style requirement for Chinese document is easy to be overlooked.
-Add the request as a remdiner.
+> Reject Hyper-V hypercalls if the guest specifies a non-zero variable size
+> header (var_cnt in KVM) for a hypercall that has a fixed header size.
+> Per the TLFS:
+>
+>   It is illegal to specify a non-zero variable header size for a
+>   hypercall that is not explicitly documented as accepting variable sized
+>   input headers. In such a case the hypercall will result in a return
+>   code of HV_STATUS_INVALID_HYPERCALL_INPUT.
+>
+> Note, at least some of the various DEBUG commands likely aren't allowed
+> to use variable size headers, but the TLFS documentation doesn't clearly
+> state what is/isn't allowed.  Omit them for now to avoid unnecessary
+> breakage.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index f33a5e890048..522ccd2f0db4 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -2250,14 +2250,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  
+>  	switch (hc.code) {
+>  	case HVCALL_NOTIFY_LONG_SPIN_WAIT:
+> -		if (unlikely(hc.rep)) {
+> +		if (unlikely(hc.rep || hc.var_cnt)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+>  		kvm_vcpu_on_spin(vcpu, true);
+>  		break;
+>  	case HVCALL_SIGNAL_EVENT:
+> -		if (unlikely(hc.rep)) {
+> +		if (unlikely(hc.rep || hc.var_cnt)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+> @@ -2267,7 +2267,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  		fallthrough;	/* maybe userspace knows this conn_id */
+>  	case HVCALL_POST_MESSAGE:
+>  		/* don't bother userspace if it has no way to handle it */
+> -		if (unlikely(hc.rep || !to_hv_synic(vcpu)->active)) {
+> +		if (unlikely(hc.rep || hc.var_cnt || !to_hv_synic(vcpu)->active)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+> @@ -2280,14 +2280,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  				kvm_hv_hypercall_complete_userspace;
+>  		return 0;
+>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
+> -		if (unlikely(!hc.rep_cnt || hc.rep_idx)) {
+> +		if (unlikely(!hc.rep_cnt || hc.rep_idx || hc.var_cnt)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+>  		ret = kvm_hv_flush_tlb(vcpu, &hc, false);
+>  		break;
+>  	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
+> -		if (unlikely(hc.rep)) {
+> +		if (unlikely(hc.rep || hc.var_cnt)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
+> @@ -2308,7 +2308,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>  		ret = kvm_hv_flush_tlb(vcpu, &hc, true);
+>  		break;
+>  	case HVCALL_SEND_IPI:
+> -		if (unlikely(hc.rep)) {
+> +		if (unlikely(hc.rep || hc.var_cnt)) {
+>  			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
+>  			break;
+>  		}
 
-Signed-off-by: Alex Shi <alexs@kernel.org>
-Cc: Yanteng Si <siyanteng01@gmail.com>
-Cc: Tang Yizhou <tangyizhou@huawei.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- Documentation/translations/zh_CN/index.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index a34e58733ac8..b01c04227d8a 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -23,6 +23,11 @@
- 另外，随时欢迎您对内核文档进行改进；如果您想提供帮助，请加入vger.kernel.org
- 上的linux-doc邮件列表。
- 
-+顺便说下，中文文档也需要遵守内核编码风格，风格中中文和英文的主要不同就是中文
-+的字符标点占用两个英文字符宽度， 所以，当英文要求不要超过每行100个字符时，
-+中文就不要超过50个字符。另外，也要注意'-'，'=' 等符号与相关标题的对齐。在将
-+补丁提交到社区之前，一定要进行必要的checkpatch.pl检查和编译测试。
-+
- 许可证文档
- ----------
- 
 -- 
-2.25.1
+Vitaly
 

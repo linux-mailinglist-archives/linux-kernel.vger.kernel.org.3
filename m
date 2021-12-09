@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117DA46E4B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF52746E4B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbhLIJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        id S235445AbhLIJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLIJAi (ORCPT
+        with ESMTP id S229784AbhLIJBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:00:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A7C061746;
-        Thu,  9 Dec 2021 00:57:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B42ECCE245E;
-        Thu,  9 Dec 2021 08:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE2DC004DD;
-        Thu,  9 Dec 2021 08:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639040221;
-        bh=HUS9Ptxfx1asXriXFVwCYuojXtKlYmv3/KEbAbzET0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNK7id6T0M3fR3WbL33MKzfJGTaydjTX9Yii7StWqsEjMkHNxMddbLU3KCqdN330C
-         iqvqvaMFVKSga6+n9NB6IqtoiZR8EH/flgdu93L052OBfNyVNL4dUyPNiAB8dwbmWD
-         vboOOEco3u78aSMrvshsFXV2WjKJJ6hgvc6sBsU7rRxaaFpwkqWfCv8EHHzsWDrp2L
-         y1/qh64t1+HGvTs1hTipMNrOzlXQNVQt92j+hWy2TNafd5vRJrPB3Cq4/MtnlI+GL1
-         0fN4aiv61TlPYDDPlZK6I76FnsVgy9R6eGWy4JxrYRKB/BsOEHW7HxmkJ+NrrJPAVu
-         zREt2HRf22KUw==
-Date:   Thu, 9 Dec 2021 09:56:58 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>,
-        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
- schema
-Message-ID: <YbHE2nR2T+o9o8ji@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>,
-        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206184613.100809-1-david@ixit.cz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xJzInEz65zJn2DKF"
-Content-Disposition: inline
-In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
+        Thu, 9 Dec 2021 04:01:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17ECC061746;
+        Thu,  9 Dec 2021 00:58:08 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso6426336pji.0;
+        Thu, 09 Dec 2021 00:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=sBwRdSPNuRDWIA8Wm5gBhVfuyi+Iv8qULkfDYoJA8P0=;
+        b=IQ7mun8KdelLvMVUQvjpG9LR1CBH8kXRxHaii6+I/J3Zhffy1ZCciSE6FTSfwzoHTe
+         UpV4BTv1CV8dj+W65uMQag6ND9z0rFhTZ0tEFi1BD+S3iptqs8nD6CYyIfpGs22rA2JN
+         Gj5RweihbAaJUbnE7ixyaLvAtkZaX1W5iUawHsWwRtgT1wqvEjy52ryaxnALbEzpicdW
+         huHXqyc+JJIu5+e1pMvs3O0sbAHoKJJliy1s/lG8zcC80k6Mas/kTO7D6z3iqHvDNpQp
+         VrNmmi7XA2CCckonUntsfQtUaRB6eBwLqS7mRd9z8VTJ9f66ita/WnASr+cB9dA6Ip38
+         zMmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sBwRdSPNuRDWIA8Wm5gBhVfuyi+Iv8qULkfDYoJA8P0=;
+        b=ze2gsVNEk/I1iWh5aHwEeGpmxW3xMHMP5MPUdEno9eyxTi/VSc8QQmCjrWjfVZpYMC
+         8YsVBhYQR8i4k6uS2l/3fPU4deYVPYr2Y7kgZqj4bh2mFe5OwQmNuPbguLvFJmBPcv2m
+         NkNOiA1QrazGBGeijNNlpSRfi5zZRAkQneWUMebldMO7hj58D903ov3PBVP2mIiH0nsy
+         GgFGfmH4HQn0wLMaFmKnc8cFZQh+J7Qu/DET2awM6YdyLmdS2J/CZ2/dUYSyUu+1zahl
+         O1JXBosQi60fzJxychXZeE4iNFLCioOyPwrUxTVxquNTlgTPYlluAQcyqEhKm3cWxCc+
+         PuUQ==
+X-Gm-Message-State: AOAM533/33IckEYKwcWrHXi+PsNQ+6AqU9iUKINdnN7loV9tNKtXAxUW
+        FggOQSUjy5JfsIfEHu5XQq6Aef11KLg=
+X-Google-Smtp-Source: ABdhPJwmDKoBxuWNU3OvGTiCFbZjsV4hExPGlzuo8uIA16/oKrC9IcYQmZarD103Om5X8CHQY93Cxw==
+X-Received: by 2002:a17:90a:49c2:: with SMTP id l2mr14123493pjm.23.1639040288279;
+        Thu, 09 Dec 2021 00:58:08 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id n15sm5008881pgs.59.2021.12.09.00.58.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Dec 2021 00:58:07 -0800 (PST)
+From:   Tony Huang <tonyhuang.sunplus@gmail.com>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     wells.lu@sunplus.com, tony.huang@sunplus.com,
+        Tony Huang <tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v3 0/2] Add iop driver for Sunplus SP7021
+Date:   Thu,  9 Dec 2021 16:58:07 +0800
+Message-Id: <cover.1639039163.git.tonyhuang.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add iop driver for Sunplus SP7021 SOC
 
---xJzInEz65zJn2DKF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a patch series for iop driver for Sunplus SP7021 SOC.
 
-On Mon, Dec 06, 2021 at 07:46:12PM +0100, David Heidelberg wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
->=20
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-Applied to for-next, thanks!
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-David: Please quote only relevant parts of the messages when replying.
-You quoted Florian's tags as well and so they ended up twice. Also, it
-is easier to read, then.
+Tony Huang (2):
+  dt-binding: misc: Add iop yaml file for Sunplus SP7021
+  misc: Add iop driver for Sunplus SP7021
 
+ .../devicetree/bindings/misc/sunplus-iop.yaml      |  61 ++++
+ MAINTAINERS                                        |   6 +
+ drivers/misc/Kconfig                               |  12 +
+ drivers/misc/Makefile                              |   1 +
+ drivers/misc/sunplus_iop.c                         | 395 +++++++++++++++++++++
+ 5 files changed, 475 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+ create mode 100644 drivers/misc/sunplus_iop.c
 
---xJzInEz65zJn2DKF
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.7.4
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxxNoACgkQFA3kzBSg
-Kbanow//U0RpDjbOB8K6jH1RIrbx00AN3tnq7Cu0C0YP/0CSQ5si9aoNbirxI46o
-kjEV5NAgHxZKjo6wfz9ZMsenfqarDC40XRPs+JVsY2LaMWA6/i/8Lc2WPkpV8B4S
-ulkhIqW59iC9cMEGGgfNTU9euvRzqtfMQYYXVCwqXA8P4rw0F+7CrmyU/MtCec0H
-YxoHG/wiQyy4cMVN+NWYLA3pQVccb9QDO8DUBe4tKKhFUOYcchIZNA1u1MbYTA5X
-TKcSYj0RGWz8Ut5yxHji1nJf9g7G8ajEnV7m/kWmx30o1A2Q2yRmYah18j/6YEG9
-aQGVglG14ZcaE9vHxoQGMuy7KwTjX1ECyOg4EeQKMUQRi0tGM4MHd7Zy1+y5P5qG
-qZwgtx0P4uGIKGk6o9rhHDr7D/OeTxl0eW6CFJXylqR9giFrzPkRxgUJIo4+KA19
-eyZ4yGCPMIWC4HzCYPP3TfzYD6etk7d7b4i/1BYGS1AHqzXxVxiayO6wlSHAXdWz
-hNMP05D7kpWpADnSzrmLywvb3LVXKEg32H+hVobZ8SHUHvsGN76SXFU6m2WNHGAb
-rFPwYfiaa0WqGSx7ZmfmTGT2YoAoAk7NOz/F2/sfmaYIJbx+35BhV7TsOuxGVz/S
-lwGMfZ2greQ1GfJxINEZNaKKHr5nuZa5Q64oS28mIItYaROkykI=
-=oC/n
------END PGP SIGNATURE-----
-
---xJzInEz65zJn2DKF--

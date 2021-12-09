@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4080D46F4B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410A446F4B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbhLIUPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhLIUPX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:15:23 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE36C061746;
-        Thu,  9 Dec 2021 12:11:50 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id m5so6436251ilh.11;
-        Thu, 09 Dec 2021 12:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=jhNbB4rDt46/vNR20BUcm1keb2g9oWDbx+OdCeHWbOo=;
-        b=e9IUkhPYe5RAaEaUIWGaDfVh/4yAJ1rQCH4qEQdpgMtcwgUZRybbkKDp6UGUahxZEt
-         KqfRUbwHHUdZOFWkS6sZsKRKZ/ouRKv3nSoPrX6Ndxar/OmffkYmBemhSjEOccaS7xlL
-         sHxLtwp1+uCQ56WFtUspMt1mnzGubwasHNWm8TQh5UifzH2EDKLk2xk5zOLfHJNOcWZs
-         5FcarRyQqcJoYN/GnMlUyer4Z3Q7oJkVg1WI2ACqItqqZvaAWuj1gatgy7x3VVk0hGJ9
-         Ua1Ig6Md+D7pGr5RMN79YbVQ69xATw4GVVr7QWX/rDB3p1k9sjKwj5whJnlXSDcHdfq9
-         kXSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=jhNbB4rDt46/vNR20BUcm1keb2g9oWDbx+OdCeHWbOo=;
-        b=QXS6tSp7d39fVFbNoE+LlMCUnEybTjuNZMcXlS7tVtO7W3c9qQsL94JgdgN+BNbnO4
-         fjNwWTnaVlmEOzq+E4jgBut/8CmhTSUmj+BFrpFq39Rh6pmpZlMDIFvqYa3LOwzHQ1Ob
-         JZEQ3fftQA/KiIZ+kxKZ3Wct/C6I9H3M6vrzIyp7P4CcYWp1/QlMGo3aDjf7C6fV43Nt
-         gGSF+iqXXx4o0T0ZyS0u/DQq3Qfj9Uin4QZjIxDAMS79RtnovYXtws2/3jrjj2fNqYlx
-         lElO2Xi5004nx+CwEiwksJeXBJNGkPDNuyv2QJILF/bwY5PKJVbUAC7JUCL13KPi529H
-         nfiQ==
-X-Gm-Message-State: AOAM53236SEXJtWHaTq/2ikvDIYLqUKQHYVYuc3uSp6w4ByJlRJihbZo
-        HTIXzhuIPZVwKCpYWT9L534=
-X-Google-Smtp-Source: ABdhPJzX27xhz29yO+dD2yqhnLPwnYIfrew0szECcVJecGrRqCGTck3NPERGeDW2ZJWDO//VDUzijw==
-X-Received: by 2002:a05:6e02:1546:: with SMTP id j6mr17051496ilu.310.1639080709662;
-        Thu, 09 Dec 2021 12:11:49 -0800 (PST)
-Received: from localhost ([172.243.151.11])
-        by smtp.gmail.com with ESMTPSA id o22sm555979iow.52.2021.12.09.12.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 12:11:49 -0800 (PST)
-Date:   Thu, 09 Dec 2021 12:11:43 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Yihao Han <hanyihao@vivo.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Message-ID: <61b262ff77868_6bfb20865@john.notmuch>
-In-Reply-To: <20211209092250.56430-1-hanyihao@vivo.com>
-References: <20211209092250.56430-1-hanyihao@vivo.com>
-Subject: RE: [PATCH v2] samples/bpf: xdpsock: fix swap.cocci warning
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S231751AbhLIUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:16:11 -0500
+Received: from mga18.intel.com ([134.134.136.126]:60542 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229478AbhLIUQK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 15:16:10 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225065426"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="225065426"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 12:12:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="503633472"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 09 Dec 2021 12:12:35 -0800
+Received: from debox1-desk4.intel.com (unknown [10.209.3.126])
+        by linux.intel.com (Postfix) with ESMTP id A780F58078C;
+        Thu,  9 Dec 2021 12:12:35 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, david.e.box@linux.intel.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 1/2] PCI/ASPM: Add ASPM BIOS override function
+Date:   Thu,  9 Dec 2021 12:12:34 -0800
+Message-Id: <20211209201235.1314584-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yihao Han wrote:
-> Fix following swap.cocci warning:
-> ./samples/bpf/xdpsock_user.c:528:22-23:
-> WARNING opportunity for swap()
-> 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
+From: Michael Bottini <michael.a.bottini@linux.intel.com>
 
-LGTM
+Devices that appear under the Intel VMD host bridge are not visible to BIOS
+and therefore not programmed by BIOS with ASPM settings. For these devices,
+it is necessary for the driver to configure ASPM. Since ASPM settings are
+adjustable at runtime by module parameter, use the same mechanism to allow
+drivers to override the default (in this case never configured) BIOS policy
+to ASPM_STATE_ALL. Then, reconfigure ASPM on the link. Do not override if
+ASPM control is disabled.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
+V3
+ - Fix missing semicolon in static inline function.
+
+V2
+ - Change return type to int so caller can determine if override was
+   successful
+ - Return immediately if link is not found so that lock it not
+   unecessarily taken, suggested by kw@linux.com
+ - Don't override if aspm_disabled is true
+
+ drivers/pci/pci.h       |  2 ++
+ drivers/pci/pcie/aspm.c | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 3d60cabde1a1..c9c55d43cd8a 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -562,11 +562,13 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+ void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+ void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+ void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
++int pcie_aspm_policy_override(struct pci_dev *dev);
+ #else
+ static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
++static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL; }
+ #endif
+ 
+ #ifdef CONFIG_PCIE_ECRC
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 52c74682601a..e2c61e14e724 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -1140,6 +1140,25 @@ int pci_disable_link_state(struct pci_dev *pdev, int state)
+ }
+ EXPORT_SYMBOL(pci_disable_link_state);
+ 
++int pcie_aspm_policy_override(struct pci_dev *pdev)
++{
++	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
++
++	if (!link || aspm_disabled)
++		return -EINVAL;
++
++	down_read(&pci_bus_sem);
++	mutex_lock(&aspm_lock);
++	link->aspm_default = ASPM_STATE_ALL;
++	pcie_config_aspm_link(link, policy_to_aspm_state(link));
++	pcie_set_clkpm(link, policy_to_clkpm_state(link));
++	mutex_unlock(&aspm_lock);
++	up_read(&pci_bus_sem);
++
++	return 0;
++}
++EXPORT_SYMBOL(pcie_aspm_policy_override);
++
+ static int pcie_aspm_set_policy(const char *val,
+ 				const struct kernel_param *kp)
+ {
+-- 
+2.25.1
+

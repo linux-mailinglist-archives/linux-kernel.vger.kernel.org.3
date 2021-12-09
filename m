@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC00946E868
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D6546E86D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbhLIM1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhLIM1s (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:27:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3BEC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 04:24:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08819B82438
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B323DC341C8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 12:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639052652;
-        bh=2VMAS+tZFZN8v3ZAgT3W7cwA7cVKF0lS3FeHtSesrS4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BUBvkiujkYb1Tj4h0Mc7MQ5n8O7XFyLxx/3HSAl7lxRaywskKoNoxJ5cysLS9tRkB
-         BeJPjF4gbqxjJjC/1pkWZsj8N0p2rQUrftCtv9plDUI2QAGiZW7OBMW6VN0SV0V1qK
-         cW+xbBg1kicjNnpYyHdOLamNz1EJOTbhQmFqqtwYDpSNxgZl4gOBH2ySjImhPdehLa
-         z/7TYyW95Agzh/95n54M341N1ueSIkSReQjcneNA4n4dVA1WpSG8Ge02UVI32bTYAP
-         GQ/Enr5K6leVZFaEKr14AdoINmevdpBhNEdVQuB25HJA9iZeoTOxHlRVDTbm7FejEu
-         GNeEANLYAWD5w==
-Received: by mail-yb1-f177.google.com with SMTP id x32so13184662ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:24:12 -0800 (PST)
-X-Gm-Message-State: AOAM530nVyPO3zmbGcsTEj4z+Iu+74WRrvcykQr8xBfVbgrdDSc+Y3I6
-        cGCVlxOB+dIZn56flxpzJj7Xwm6LgbzOVyDWjbU=
-X-Google-Smtp-Source: ABdhPJz91+2p6VP/aEhUPyI1e+tsuVF0vgIate4Wab5wvh+3MthAWfPM2ihn4FXXee5EDRsJSWzM3Eq55oj/SqZgp4Q=
-X-Received: by 2002:a25:b2a6:: with SMTP id k38mr6309015ybj.122.1639052651761;
- Thu, 09 Dec 2021 04:24:11 -0800 (PST)
+        id S232040AbhLIM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:29:45 -0500
+Received: from mga17.intel.com ([192.55.52.151]:64180 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231162AbhLIM3o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:29:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218778862"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="218778862"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:26:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="462109743"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:25:58 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1mvITo-0045BO-MA;
+        Thu, 09 Dec 2021 14:24:56 +0200
+Date:   Thu, 9 Dec 2021 14:24:56 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH v1 1/1] drm: Replace kernel.h with the necessary
+ inclusions
+Message-ID: <YbH1mBlbuysch15b@smile.fi.intel.com>
+References: <20211110102423.54282-1-andriy.shevchenko@linux.intel.com>
+ <887a15cb-3a3b-4ba2-aa0f-a241e70a19fa@suse.de>
+ <CAHp75VdY57xQBLN8vT3RdagQx=4kLx69qAyuzLwqTvNGC2xUbQ@mail.gmail.com>
+ <d536e7d2-891e-e0a8-6abc-6694987a65f7@suse.de>
+ <YZJGEi6Qqh1aGCxa@smile.fi.intel.com>
+ <YZ0Xrus5wZar3QN7@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20211207071830.GA14915@chq-T47>
-In-Reply-To: <20211207071830.GA14915@chq-T47>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 9 Dec 2021 14:23:45 +0200
-X-Gmail-Original-Message-ID: <CAFCwf117oZaqMSSVUxqJDeJ1TmGzhXj0SZurfyK+dDV=0wYrYw@mail.gmail.com>
-Message-ID: <CAFCwf117oZaqMSSVUxqJDeJ1TmGzhXj0SZurfyK+dDV=0wYrYw@mail.gmail.com>
-Subject: Re: Habanalabs, Ask for the linux firmware code which loads by coprocesseor
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Maling list - DRI developers <dri-devel@lists.freedesktop.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YZ0Xrus5wZar3QN7@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 9:19 AM Cai Huoqing <cai.huoqing@linux.dev> wrote:
->
-> Hi Oded Gabbay and habanalabs folks.
->
-> I'm insterested in this kind of AI acceralator.
->
-> After scanning the driver code.
-> It seems that there are a linux firmware which is loaded by
-> coprocessor(an slave cpu ?).
-> shows in the code.
->
-> ./goya/goya.c:74:#define GOYA_LINUX_FW_FILE     "habanalabs/goya/goya-fit.itb"
-> ./goya/goya.c:2436:     return hl_fw_load_fw_to_device(hdev, GOYA_LINUX_FW_FILE, dst, 0, 0);
-> ./goya/goya.c:2507:     fw_loader->linux_img.image_name = GOYA_LINUX_FW_FILE;
-> ./gaudi/gaudi.c:63:#define GAUDI_LINUX_FW_FILE  "habanalabs/gaudi/gaudi-fit.itb"
-> ./gaudi/gaudi.c:3945:   return hl_fw_load_fw_to_device(hdev, GAUDI_LINUX_FW_FILE, dst, 0, 0);
-> ./gaudi/gaudi.c:4011:   fw_loader->linux_img.image_name = GAUDI_LINUX_FW_FILE;
->
-> And the host driver(/driver/misc/habanalabs) communicate with the slave firmware
-> by MMIO or share memory, right?
->
-> If that, would you mind provide the source code of linux firmware
-> to avoid the confusion from code reading.
-Hi Cai,
+On Tue, Nov 23, 2021 at 06:32:46PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 15, 2021 at 01:35:47PM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 10, 2021 at 05:39:33PM +0100, Thomas Zimmermann wrote:
+> > > Am 10.11.21 um 17:34 schrieb Andy Shevchenko:
+> > > > On Wed, Nov 10, 2021 at 3:55 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> > > > > Am 10.11.21 um 11:24 schrieb Andy Shevchenko:
+> > 
+> > ...
+> > 
+> > > > > > +#include <linux/container_of.h>
+> > > > > 
+> > > > > I built this patch on a recent drm-misc-next, but there's no
+> > > > > linux/container_of.h
+> > > > 
+> > > > Thank you for trying. It's in the upstream, whenever drm-misc-next
+> > > > switches to newer/newest upstream it will be there. I assume it will
+> > > > happen after v5.16-rc1?
+> > > 
+> > > Yes, we'll certainly backmerge soon after rc1 has been released. If I forget
+> > > to add the patch then, please send a reminder.
+> > > 
+> > > Once the necessary headers are available,
+> > 
+> > $ git log --oneline v5.16-rc1 -- include/linux/container_of.h
+> > e1edc277e6f6 linux/container_of.h: switch to static_assert
+> > d2a8ebbf8192 kernel.h: split out container_of() and typeof_member() macros
+> > 
+> > > the patch is
+> > > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> > 
+> > Thanks!
+> 
+> Maybe I misunderstood something, I thought that DRM people may apply this,
+> is it incorrect assumption?
 
-You can download the source code from:
-https://vault.habana.ai/artifactory/misc/hl-linux.bz2
+It still does not appear in Linux Next...
+What should I do to move this forward, please?
 
->
-> BTW, where can I find the register description datasheet
-We don't supply this information.
-Thanks,
-Oded
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

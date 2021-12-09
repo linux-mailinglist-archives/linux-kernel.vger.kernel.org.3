@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0942046E5B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E1546E5B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbhLIJn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:43:29 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34576
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229449AbhLIJn2 (ORCPT
+        id S229838AbhLIJoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229713AbhLIJn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:43:28 -0500
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 378A03F1B7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639042794;
-        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
-        h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type;
-        b=Mg29YuDIpU++0NK/DBasscUzI9TK/JhppUwSbppL+FfdGFWWFD0jYfFB8UrqHBCZ6
-         EN2T4NOG2DRZKUBAtd7eqovd5djzXekmMQRKzBF9qtvv879t3ny7v9hl7C/0JD8QNx
-         6GiBXcQt7e0qkYgo9IOrIpTwMVQkRYFdUxzGu1qM4hqn+UjSbWs5ss5QI37X8YTEBc
-         348Gvh4J9SkACXwXjvAjfjrS6YozyDu8zZLCRUebM4LOp1QfpziT9UzPC6KNJQVx7x
-         yl36GareBTcfzd0G0hTBKmWuq6Npx+ZMlfVL5qfOH/3Ig/EQb868GQ5t68jaCN9IS4
-         D+20ZhPToCb2w==
-Received: by mail-ot1-f71.google.com with SMTP id p7-20020a9d7447000000b0057a4ef67426so1813675otk.23
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:39:54 -0800 (PST)
+        Thu, 9 Dec 2021 04:43:59 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F61EC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 01:40:26 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so5771771pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=EAgzyfuzJrF4vc8wP6iAI5ht/czof/vV71b1T0UUKYM=;
+        b=RvQazjWcfA1CTLQXBKyS6zhLE6thZvJI6iEsOMs0oL+88is+AkWnRLRnks9kAvpct1
+         RcUnXFWjRa73QTiIvzBhxuCaBV3apHjXFNXNBSQ6Pi4SSfJRRT0VtPUtpxBISGpkTk4k
+         j4kEi7GUwmu9E+hBsWMiYCPPC60v47yHAr0IC1pOcTFmQgrVpAcq55VBGhouNMTOzCbU
+         Q0XCIqkeaBWEyC0+H8giMLSISSeBrBjan0wpuxFufC2RzCgRi+pm26/gpPG4rE9AEPhy
+         S3ZYHBjvX6P0yjhv+V/Y7My8aWlT5jwgDQlgGOGSw0WXU+aKE4cyinVxxkgMv0bh3c4M
+         sk9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=RF8mjWX2rbMrzqrrTOjauOGLhmt2KQwefuBfLZrxSTY=;
-        b=Lqymtu2rwcMhpDiCkwubPgq2RHiX4MXV7Pj02Fg80tW8az8k0UtNaY9xzlSzNg1gxp
-         f7mmeidCknxvUAjJOCEsVkFsbn4Ed2PKDZIqPDPQ+AYYsrwlTKOQxWcyRfbrYwiRmgL9
-         q79DKkR/TkhFLO1Rkb2946Ua/VARYZc0hu4Vg456xH9SfvT4NiLDqR0bqj7vHYEudoQ3
-         J5yWeGNY+gicFWLFmhL+xP5dZxfEk7nF4Pl2TgiAsRKIwIb3oLxIcb/q0qjArvMEhw3G
-         Aw4SY7zpOysa/6m7e0jmgqzeypuf1nYBlGtcp/EJgiaCHQPw/+88DG2ASBmpMGBG6ehj
-         8Rzg==
-X-Gm-Message-State: AOAM531wmE4Qt499OaM/AqSsrEY1hgvfzvvJk4QOGutxBbCpGT7l1tzG
-        DTfJMk6HEL3EngL+noG0TGWGCjFU3NhV+svjUdf0tm6B8cGIRQJZ3ynJcXJnyqq0Hu67Vq1tIuU
-        yz8sBFNzrQiF3ktD/bsSIPiFWUOs8jjiNz2TyNwUr3afN8TWejN6R0lUYjg==
-X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110709oos.57.1639042793021;
-        Thu, 09 Dec 2021 01:39:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzijRWv9msOal5mU5JmujRGhjr+O8G3yZfQSeAeBzKE7+kFndNM9oPGFr5MLlOYMHsnquDx3ekJWkcRMcIEaoI=
-X-Received: by 2002:a4a:d54d:: with SMTP id q13mr3110689oos.57.1639042792602;
- Thu, 09 Dec 2021 01:39:52 -0800 (PST)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=EAgzyfuzJrF4vc8wP6iAI5ht/czof/vV71b1T0UUKYM=;
+        b=RjPljfmnHcYQm/78ltOWsdUD3MoBCz7x86o38gCfmV86wnVILX5YT5zbcsfW+Sy+YU
+         AjugCgy5ii44sZgNGEEfyzFZFigP6z10d4BNNzs9730jJ3OrGs//6wjBXK9fZciGwGzV
+         EeZD7IuUFLyHYBfPY6/3QKwf60BTesae9hGTXPyFP8Tu1p4s8TxhN+1I2HiBWGKzcqUS
+         lKGWCU7NsN1+kgZ7ab3mIq3SYYFbWTsjxgnda/Zn5VVu9uRVCz48KfiwAnTPcQ9NOXXp
+         6Tbo0KO+GX/HbaPxfzhOWVR7xSxiE3UXvxCN6498Le69nxgGpIOtgqyA4cPC+2SDzA0W
+         8Pyw==
+X-Gm-Message-State: AOAM531SP/wFXV9ra8lUqtThj3kN6+IIqxDn2EaO19kwTqaYPT2nhxCL
+        hd6u0hr5uHWFYAeaO1l4bWs=
+X-Google-Smtp-Source: ABdhPJylsOgw7VCYRk99dEOJAsH+db9WnMPyzpHrN0JonjFuRepRjCcVVEudR1y+gG6e4nK/u4EbKQ==
+X-Received: by 2002:a17:902:e804:b0:142:1c0b:c2a6 with SMTP id u4-20020a170902e80400b001421c0bc2a6mr64878506plg.23.1639042826217;
+        Thu, 09 Dec 2021 01:40:26 -0800 (PST)
+Received: from localhost (203-219-139-206.static.tpgi.com.au. [203.219.139.206])
+        by smtp.gmail.com with ESMTPSA id ne7sm9080112pjb.36.2021.12.09.01.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 01:40:25 -0800 (PST)
+Date:   Thu, 09 Dec 2021 19:40:20 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v4 02/10] mm, hugetlbfs: Allow an arch to always use
+ generic versions of get_unmapped_area functions
+To:     "alex@ghiti.fr" <alex@ghiti.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <cover.1638976228.git.christophe.leroy@csgroup.eu>
+        <52eb6d66c41f1165c88a0b0da08ae190c0b95a59.1638976229.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <52eb6d66c41f1165c88a0b0da08ae190c0b95a59.1638976229.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Thu, 9 Dec 2021 17:39:41 +0800
-Message-ID: <CABTNMG0zcoCqVue8-3cJQ+iTPkJAgjxEN4FB6_ASX2rgXbWunw@mail.gmail.com>
-Subject: Discrete Thunderbold Controller 8086:1137 throws DMAR and thunderbolt
- fails to work
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1639042788.z08wljpdx8.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-    We created a ticket
-https://bugzilla.kernel.org/show_bug.cgi?id=215265 that is pretty
-similar to https://bugzilla.kernel.org/show_bug.cgi?id=214259. So I
-tried the patch on https://lkml.org/lkml/2020/6/17/751 but it doesn't
-fix the issue. I also tried to boot with the kernel parameter
-`pci=nocrs` but it changed nothing either. I attached the kernel log
-with thunderbolt dynamic debug on and lspci output on the ticket. Also
-tried to disable the intel_iommu, the DMAR failure seems to go away
-but thunderbolt still fails to work. Can anyone suggest what kind of
-information is required to help identify the cause of the problem?
-Thanks
+Excerpts from Christophe Leroy's message of December 9, 2021 3:18 am:
+> Unlike most architectures, powerpc can only define at runtime
+> if it is going to use the generic arch_get_unmapped_area() or not.
+>=20
+> Today, powerpc has a copy of the generic arch_get_unmapped_area()
+> because when selection HAVE_ARCH_UNMAPPED_AREA the generic
+> arch_get_unmapped_area() is not available.
+>=20
+> Rename it generic_get_unmapped_area() and make it independent of
+> HAVE_ARCH_UNMAPPED_AREA.
+>=20
+> Do the same for arch_get_unmapped_area_topdown() versus
+> HAVE_ARCH_UNMAPPED_AREA_TOPDOWN.
+>=20
+> Do the same for hugetlb_get_unmapped_area() versus
+> HAVE_ARCH_HUGETLB_UNMAPPED_AREA.
+>=20
 
-Chris
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  fs/hugetlbfs/inode.c     | 17 +++++++++++++----
+>  include/linux/hugetlb.h  |  5 +++++
+>  include/linux/sched/mm.h |  9 +++++++++
+>  mm/mmap.c                | 31 ++++++++++++++++++++++++-------
+>  4 files changed, 51 insertions(+), 11 deletions(-)
+>=20

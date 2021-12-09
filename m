@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CF946E9D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322D246E9D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbhLIOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbhLIOVt (ORCPT
+        id S233121AbhLIOXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:23:05 -0500
+Received: from sibelius.xs4all.nl ([83.163.83.176]:50079 "EHLO
+        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232049AbhLIOXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:21:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCEFC061746;
-        Thu,  9 Dec 2021 06:18:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54203B8232B;
-        Thu,  9 Dec 2021 14:18:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D23C004DD;
-        Thu,  9 Dec 2021 14:18:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639059493;
-        bh=NDR1+cOTjE99IH1//NVh1k6K3xUweDemHi2a82+imkk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=qj8JyAZtc7gMMZWgvtZTSHmuLTPaYZBaDRaxz/gppSHJ3Sd8oSzwSjNreIU8trau3
-         GOqOPorBav5iDKjDSEMd9+Lg+nDF2iivV2Mj4FsWsp4ERTOGKqIPqvqpedFvRstgyx
-         l0uo9MqyEkrS3QIG2Mi8jUyMhOAKgUM98betLHb1Ijjq5RWfjqG7KG1osB3LNjmLPa
-         2cxsC1mHLzpUPcBauUpEE9H7+oTEgV1YHnSj0Qg3G/rVi+yh2aFU2UTKtUTRwSuQtj
-         Oa6Gy2YUtNEE2+QZ1Quh97XJrXfaDrxohRMz5FPZmiXtJEeBnZkWJEoYxE8nqzwwxF
-         /ol4bN8z4oSuQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH v1 1/1] include/linux/unaligned: Replace kernel.h with the necessary inclusions
-References: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com>
-Date:   Thu, 09 Dec 2021 16:18:05 +0200
-In-Reply-To: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com> (Andy
-        Shevchenko's message of "Thu, 9 Dec 2021 14:38:23 +0200")
-Message-ID: <87lf0t3lr6.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        Thu, 9 Dec 2021 09:23:04 -0500
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id d1a74329;
+        Thu, 9 Dec 2021 15:19:29 +0100 (CET)
+Date:   Thu, 9 Dec 2021 15:19:29 +0100 (CET)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     sven@svenpeter.dev, robh+dt@kernel.org, marcan@marcan.st,
+        alyssa@rosenzweig.io, kettenis@openbsd.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211209051001.70235-2-marcan@marcan.st> (message from Hector
+        Martin on Thu, 9 Dec 2021 14:09:58 +0900)
+Subject: Re: [PATCH 1/4] dt-bindings: arm: apple: Add t6000/t6001 MacBook Pro
+ 14/16" compatibles
+References: <20211209051001.70235-1-marcan@marcan.st> <20211209051001.70235-2-marcan@marcan.st>
+Message-ID: <d3cb39b15900ad62@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-
-> When kernel.h is used in the headers it adds a lot into dependency hell,
-> especially when there are circular dependencies are involved.
->
-> Replace kernel.h inclusion with the list of what is really being used.
->
-> The rest of the changes are induced by the above and may not be split.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> From: Hector Martin <marcan@marcan.st>
+> Date: Thu,  9 Dec 2021 14:09:58 +0900
+> 
+> This adds the initial apple,t6000 platforms:
+> 
+> - apple,j314s - MacBook Pro (14-inch, M1 Pro, 2021)
+> - apple,j316s - MacBook Pro (16-inch, M1 Pro, 2021)
+> 
+> And the initial apple,t6001 platforms:
+> 
+> - apple,j314c - MacBook Pro (14-inch, M1 Max, 2021)
+> - apple,j316c - MacBook Pro (16-inch, M1 Max, 2021)
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c | 2 ++
->  include/linux/unaligned/packed_struct.h                 | 2 +-
->  lib/lz4/lz4defs.h                                       | 2 ++
->  3 files changed, 5 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/arm/apple.yaml        | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 
-I assume this will go via some other tree:
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
 
-Acked-by: Kalle Valo <kvalo@kernel.org>
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> diff --git a/Documentation/devicetree/bindings/arm/apple.yaml b/Documentation/devicetree/bindings/arm/apple.yaml
+> index b23c8dc5a27d..8d93e8a6cc18 100644
+> --- a/Documentation/devicetree/bindings/arm/apple.yaml
+> +++ b/Documentation/devicetree/bindings/arm/apple.yaml
+> @@ -19,6 +19,13 @@ description: |
+>    - MacBook Air (M1, 2020)
+>    - iMac (24-inch, M1, 2021)
+>  
+> +  And devices based on the "M1 Pro" and "M1 Max" SoCs:
+> +
+> +  - MacBook Pro (14-inch, M1 Pro, 2021)
+> +  - MacBook Pro (14-inch, M1 Max, 2021)
+> +  - MacBook Pro (16-inch, M1 Pro, 2021)
+> +  - MacBook Pro (16-inch, M1 Max, 2021)
+> +
+>    The compatible property should follow this format:
+>  
+>    compatible = "apple,<targettype>", "apple,<socid>", "apple,arm-platform";
+> @@ -60,6 +67,20 @@ properties:
+>                - apple,j457 # iMac (24-inch, 2x USB-C, M1, 2021)
+>            - const: apple,t8103
+>            - const: apple,arm-platform
+> +      - description: Apple M1 Pro SoC based platforms
+> +        items:
+> +          - enum:
+> +              - apple,j314s # MacBook Pro (14-inch, M1 Pro, 2021)
+> +              - apple,j316s # MacBook Pro (16-inch, M1 Pro, 2021)
+> +          - const: apple,t6000
+> +          - const: apple,arm-platform
+> +      - description: Apple M1 Max SoC based platforms
+> +        items:
+> +          - enum:
+> +              - apple,j314c # MacBook Pro (14-inch, M1 Max, 2021)
+> +              - apple,j316c # MacBook Pro (16-inch, M1 Max, 2021)
+> +          - const: apple,t6001
+> +          - const: apple,arm-platform
+>  
+>  additionalProperties: true
+>  
+> -- 
+> 2.33.0

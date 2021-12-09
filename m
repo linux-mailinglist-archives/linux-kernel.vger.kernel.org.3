@@ -2,121 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AF646F5C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFA646F5CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbhLIVSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S230330AbhLIVUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbhLIVSf (ORCPT
+        with ESMTP id S229522AbhLIVUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:18:35 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568EC0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:15:01 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id o4so6521621pfp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:15:01 -0800 (PST)
+        Thu, 9 Dec 2021 16:20:19 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC61C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:16:44 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id cf39so2381569lfb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:16:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=idhxYsGIqFY0iC2foXmRO1Y7kKO1WrOHXiDZA3WqNNo=;
-        b=IvRNfl/yHGNbaRuZUg5LCIynBFYEWDlaw/l17q8LxCmsXH13Xt4hnB2FTiA+CpIxlb
-         IoajmcenI66bwwJALCjoJWVlKg31Du5jVorr6966uRrQxKt7EJk838gnpt2RfGP3ZGq7
-         BInxfl8WVp4trftotf12fMsB5G1taS2LOAjLc=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n/PRQqohZJZoWPfeAL4/gTv4y1kA/vUHTgUSzu+kjUk=;
+        b=g4y37LIT8HPOzLKutUXtaDJvUeJ0+/CGyv38hQvAw62juFYmPp8xY81qmdfR94ekL1
+         zJ01fAhqXrPsyVAyF4Rmu71FEe7b28kHRnIAs2gPOubcJVu4C+S4OAM5l5NsTVl1nUNo
+         0geMJEqdhmk9vQoyehfiLCCzsf/vPPpjohT2YtqD+4MZUylekERGXpzLIRlt0a9eGNCv
+         KmdCs4oTnEFlZcz8/j+4GFmLlTedEmnaISi73JDXUTgJvBbOnsFbIJm7FedBs7yGJ+pb
+         B4qRT10iZ7dD3pd3uO4PQnPTq3oVMAcH4oq7NgGzrPRyFYEnuVNDFoz/NHO+Fejw9b/e
+         9Q5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=idhxYsGIqFY0iC2foXmRO1Y7kKO1WrOHXiDZA3WqNNo=;
-        b=n7VpIAyLQB/mBOd884BjnksZK0WeOHOSLROndylwC4stxwOm4MjqBMmM1F6ddqtYs0
-         Zv6iWpDGdIpKOGI9DhK9jUyjJEAkQFpxwcMBHZP3KaS7wkK2PAMKMoUrB3e74K4w4m8d
-         JLam0D3y1s47zA7FDp27H1XKHiZzhnTTSq7Ot0uf3qUNkmpUne393uNPV+5cR+8WiIC1
-         kgwbwJNGVAUR3A5OHjlTXaXlaWeCiv9s/1D0+DFLLJPYkahmmUrY+Lh9pGD57KA2q2mk
-         JS3UoTZ37O2k/h0pyJLy2HzUI198tcgMsexJ2qoCiwHawyoQbInG5ddksBsWptI0xcTO
-         iZvA==
-X-Gm-Message-State: AOAM532WIoxwoT8RKoluBlu5TFH/yE8Hk6nQhtFbKWkEgjJsxfNB0ZbS
-        jYjZhF0ABBvpNEYf6wmyY9Vo8Q==
-X-Google-Smtp-Source: ABdhPJyS+MH0ramfRpc8Q0VxQwzb/l4MW4LuS7YzA0o5Ikzly1HpEbdv8sATmINV6iWKr66GgdUKkQ==
-X-Received: by 2002:a05:6a00:811:b0:4af:d1c9:fa3f with SMTP id m17-20020a056a00081100b004afd1c9fa3fmr14185879pfk.21.1639084500512;
-        Thu, 09 Dec 2021 13:15:00 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q10sm8940664pjd.0.2021.12.09.13.15.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 13:15:00 -0800 (PST)
-Date:   Thu, 9 Dec 2021 13:14:59 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n/PRQqohZJZoWPfeAL4/gTv4y1kA/vUHTgUSzu+kjUk=;
+        b=r/d9ehpTs043VjmzqOqaHtUETHhCNKy/zBO32JGmE+MRSgQQTznkHIWX+g2OO5CZ6d
+         dpWGQxHNd0q+aThY7tOjxFKQcySUlrSn0JIPlVOfYMVDYjiP1Oa3bBEI/PGrdw38eLuJ
+         yi9bsJAssb8JegiEYJvjZtxnetYpBRcxPC8A6/7WrEvGucVGIDL28J5xpETELmQgB+K4
+         sH0NA7HWw6owR8YsLSnX2zpM+m0y4Ym46z8CIEW2wrINUx8Tnnoj9QwZgmzK6U2GGVxO
+         g6CZXfSgzsgkDJpsTcL1YcKiRJcLRro1iedKrDmZpziyvB7GS8IEH5Y278VWMsYDrFW0
+         uk8A==
+X-Gm-Message-State: AOAM530ogdO1L6gWoKF5OiErb00w6btUQ+GGJJ1zrxYzAfV9LgTcYqX6
+        etJUxeRfxfkD1d7cjAwgw6+P6zJVpXFmT9WcjzSCPw==
+X-Google-Smtp-Source: ABdhPJzkqPmVslx+nMihnzHioqa5Jxg3UR3GK3CFA0GryeYJKVH2W5AracL5avcjGmE6Wnoa9W0q6oVMoXkEqKZl8SM=
+X-Received: by 2002:ac2:418f:: with SMTP id z15mr7863545lfh.213.1639084602937;
+ Thu, 09 Dec 2021 13:16:42 -0800 (PST)
+MIME-Version: 1.0
+References: <YbHTKUjEejZCLyhX@elver.google.com>
+In-Reply-To: <YbHTKUjEejZCLyhX@elver.google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 9 Dec 2021 22:16:16 +0100
+Message-ID: <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
+Subject: Re: randomize_kstack: To init or not to init?
+To:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Jann Horn <jannh@google.com>,
         Peter Collingbourne <pcc@google.com>,
         kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Subject: Re: randomize_kstack: To init or not to init?
-Message-ID: <202112091308.600DA7FE63@keescook>
-References: <YbHTKUjEejZCLyhX@elver.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbHTKUjEejZCLyhX@elver.google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
+On Thu, Dec 9, 2021 at 10:58 AM Marco Elver <elver@google.com> wrote:
 > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
 > default since dcb7c0b9461c2, which is why this came on my radar. And
 > Clang also performs auto-init of allocas when auto-init is on
 > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
 > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
 > allocas.
-> 
+>
 > add_random_kstack_offset() uses __builtin_alloca() to add a stack
 > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
 > enabled, add_random_kstack_offset() will auto-init that unused portion
 > of the stack used to add an offset.
-> 
+>
 > There are several problems with this:
-> 
-> 	1. These offsets can be as large as 1023 bytes. Performing
-> 	   memset() on them isn't exactly cheap, and this is done on
-> 	   every syscall entry.
-> 
-> 	2. Architectures adding add_random_kstack_offset() to syscall
-> 	   entry implemented in C require them to be 'noinstr' (e.g. see
-> 	   x86 and s390). The potential problem here is that a call to
-> 	   memset may occur, which is not noinstr.
-> 
-> A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
-> 
->  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
->  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-> 
-> Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
-> 
-> To figure out what the right solution is, the first thing to figure out
-> is, do we actually want that offset portion of the stack to be
-> auto-init'd?
+>
+>         1. These offsets can be as large as 1023 bytes. Performing
+>            memset() on them isn't exactly cheap, and this is done on
+>            every syscall entry.
+>
+>         2. Architectures adding add_random_kstack_offset() to syscall
+>            entry implemented in C require them to be 'noinstr' (e.g. see
+>            x86 and s390). The potential problem here is that a call to
+>            memset may occur, which is not noinstr.
 
-I actually can't reproduce this with the latest Clang. I see no memset
-call with/without INIT_STACK_ALL_ZERO. I do see:
+This doesn't just affect alloca(), right? According to godbolt.org
+(https://godbolt.org/z/jYrWEx7o8):
 
-vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+void bar(char *p);
+void foo() {
+  char arr[512];
+  bar(arr);
+}
 
-I assume that's from:
+when compiled with "-ftrivial-auto-var-init=pattern -O2 -mno-sse"
+gives this result:
 
-	struct bad_iret_stack tmp
+foo:                                    # @foo
+        push    rbx
+        sub     rsp, 512
+        mov     rbx, rsp
+        mov     edx, 512
+        mov     rdi, rbx
+        mov     esi, 170
+        call    memset@PLT
+        mov     rdi, rbx
+        call    bar
+        add     rsp, 512
+        pop     rbx
+        ret
 
-But I'll try with Clang 11 and report back...
-
--- 
-Kees Cook
+So I think to fix this properly in a way that doesn't conflict with
+noinstr validation, I think you'll have to add a compiler flag that
+lets you specify a noinstr-safe replacement for memset() that should
+be used here?

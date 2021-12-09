@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED91146EA37
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E298146EA3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238807AbhLIOqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbhLIOqO (ORCPT
+        id S238842AbhLIOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:46:33 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48932 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233886AbhLIOqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:46:14 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E9EC0617A2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:42:41 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so7082821pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:42:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DlIzAa6h2Qdf88CQ4XAT+zAj7QyEiJFQv1x54NsjTKU=;
-        b=izB4Ze5IwkTdDFN2UPnu25PTURU5BM0L76lRpnraNW9aOiFCIfT4kGA9KN4Hsp9dMI
-         5yc45D+bNrTlgL5C6Ns35vhPzcgiVqugDyrdKVBl3GWVdyX7aH9sJ2i2mH2PkzvVFpfp
-         FMB917/z54Wigzhm2+DyrWiRkYoIHWWOX/zgAVL3aB4rpx/GZM3/vGM6N0eWJ33hutyk
-         cUzhIVJRdLGS1R6INlxbilcEnv2sI9plsP0iJ0PcxwL8zJooz2xqotKh3rt6BZUpHseP
-         esFGUNhzXQuhALatzTkkVnEAVh3AG3FQzSy8RCUqvAmqnmf7IyCgQOFebnZCQFUodlQp
-         EHFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DlIzAa6h2Qdf88CQ4XAT+zAj7QyEiJFQv1x54NsjTKU=;
-        b=sAxdtsGeHiBo6gNa5xWkz6328zRTqyBTIKfvecOGdpx3g4UhuO75WlDjcl4beZa9Mo
-         DMlPZrfaMVX/DiUmZyAD4QyhVlSVa6dfCfG27ljPBCFNFfSOoD+EbJgWIl0H+Wg8iRdX
-         56oVb0sCkjA1Nr/1bsga+2awUMIMygRpmp5sAdabdrG5LH9sUbg0DEOUiZWcAgRDkQeZ
-         ocICK+xNK4j4oF7TGfqRx7WLHSRLUqudPAB0cMEPeUVhJO6iPw6CkhQHkdhBJmviH5ky
-         /LdL39o8HRcriK9uVV10kI6ziiV0Amn1lCE9Jy38LKPYYeMvBmj2dvHgu/WfgJIDbnk7
-         9enw==
-X-Gm-Message-State: AOAM531hk5Vw+rpvCdMZSxUmi/MAVhcAFdn1kdTayYa45XkP+G/LjInR
-        NH2kcbyGkO/GxfNBn7mYucdu
-X-Google-Smtp-Source: ABdhPJxBp3vk9RdIYD+lyw7hUsxgLabInUSRiWT7uujnDncQbAcGGL+tWLA/fU6V5Iel2x2ks7eahA==
-X-Received: by 2002:a17:90b:3149:: with SMTP id ip9mr16188630pjb.77.1639060960427;
-        Thu, 09 Dec 2021 06:42:40 -0800 (PST)
-Received: from thinkpad ([2409:4072:902:fac4:6231:3e3b:50a6:33a7])
-        by smtp.gmail.com with ESMTPSA id b1sm5985623pgk.37.2021.12.09.06.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 06:42:39 -0800 (PST)
-Date:   Thu, 9 Dec 2021 20:12:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     gregkh@linuxfoundation.org, mhi@lists.linux.dev,
-        hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, stable@vger.kernel.org,
-        Pengyu Ma <mapengyu@gmail.com>
-Subject: Re: [PATCH v2] bus: mhi: core: Add support for forced PM resume
-Message-ID: <20211209144233.GA9253@thinkpad>
-References: <20211209131633.4168-1-manivannan.sadhasivam@linaro.org>
- <87fsr13kya.fsf@codeaurora.org>
+        Thu, 9 Dec 2021 09:46:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9B60CCE25F8;
+        Thu,  9 Dec 2021 14:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 278E8C004DD;
+        Thu,  9 Dec 2021 14:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639060975;
+        bh=5sYKLdatVEeqw+k9x1l+DqDRM33F4Pw6XW6oGbdVEGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=boAfB6+7zxF+T9Scu4vRMT4bTp/2BPbZ3KOREh7W+2k6UwwYSXeETAOxJxSkn0rFN
+         A3bU7NMWvf+SqqXKQ4H4pJhpWwdwmaFmkEaa9wmWWB5jvYkiISMx6BvEh8UhBxKpmI
+         fU+mpX8GAs9T/R9esfd0U7mbz2ke69Ic+tw+jaWg3b6uaQ/4jRdQTPg3favnUngc98
+         jetZy2vVPrSBTGGO12BnLFLGI/1IJsZ1aWJ6DAf4ttnRGOd22K502EMWvRUd0WnTaz
+         of+ez2T/mUiLWh4VJb4zNUaByYz4PH8FxC9xo/57GzzxVr8ba92RrP+RGr0Y4mRT9M
+         GUfvYmBVGVeJw==
+Date:   Thu, 9 Dec 2021 15:42:52 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND 6/8] i2c: exynos5: Mention Exynos850 and
+ ExynosAutoV9 in Kconfig
+Message-ID: <YbIV7NJdakfRE3pg@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211204215820.17378-1-semen.protsenko@linaro.org>
+ <20211204215820.17378-7-semen.protsenko@linaro.org>
+ <CAPLW+4kCH7Z3ZJrYcHtjMeq1_mhPg1FusBQb5KyV2nvBc60n5Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="meM80/YF6RpjsyZc"
 Content-Disposition: inline
-In-Reply-To: <87fsr13kya.fsf@codeaurora.org>
+In-Reply-To: <CAPLW+4kCH7Z3ZJrYcHtjMeq1_mhPg1FusBQb5KyV2nvBc60n5Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 04:35:25PM +0200, Kalle Valo wrote:
-> Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
-> 
-> > From: Loic Poulain <loic.poulain@linaro.org>
-> >
-> > For whatever reason, some devices like QCA6390, WCN6855 using ath11k
-> > are not in M3 state during PM resume, but still functional. The
-> > mhi_pm_resume should then not fail in those cases, and let the higher
-> > level device specific stack continue resuming process.
-> >
-> > Add an API mhi_pm_resume_force(), to force resuming irrespective of the
-> > current MHI state. This fixes a regression with non functional ath11k WiFi
-> > after suspend/resume cycle on some machines.
-> >
-> > Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
-> >
-> > Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
-> > Cc: stable@vger.kernel.org #5.13
-> > Link: https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/
-> > Reported-by: Kalle Valo <kvalo@codeaurora.org>
-> > Reported-by: Pengyu Ma <mapengyu@gmail.com>
-> > Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-> > [mani: Switched to API, added bug report, reported-by tags and CCed stable]
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >
-> > * Switched to a new API "mhi_pm_resume_force()" instead of the "force" flag as
-> >   suggested by Greg. The "force" flag is now used inside the API.
-> >
-> > Greg: I'm sending this patch directly to you so that you can apply it to
-> > char-misc once we get an ACK from Kalle.
-> 
-> Thanks! I now tested this patch on top v5.16-rc4 using QCA6390 and
-> firmware WLAN.HST.1.0.1-01740-QCAHSTSWPLZ_V2_TO_X86-1, no issues found:
-> 
-> Tested-by: Kalle Valo <kvalo@kernel.org>
-> 
-> I'm not expecting any conflicts with ath11k, so please take this via
-> Greg's tree. It would be really good to get this regression fixed in
-> v5.16, so is it possible to send this to -rc releases?
-> 
-> For the ath11k part:
-> 
-> Acked-by: Kalle Valo <kvalo@kernel.org>
 
-Thanks. If this patch looks good to Greg, then it will be queued for the next
--rc release.
+--meM80/YF6RpjsyZc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
-Mani
 
-> 
-> -- 
-> https://patchwork.kernel.org/project/linux-wireless/list/
-> 
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Wolfram, can you please also take this one in your tree?
+
+Sure thing, I was only waiting for a resolution for 5/8. Will apply them
+now.
+
+
+--meM80/YF6RpjsyZc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyFegACgkQFA3kzBSg
+Kbb6XA//TOfZhGOFAhxfFYDMWx0bsuoF64lEsWK9a6Nd9vshXttDQ8Ed/lxkxtol
+qVceM/idbUdkIDtl0C8cAKI8qIzmETmz0rGP9Z0xNOYJ5/8WZ8Bgb9FoijghCsBT
+OovMyv6QXMEKfBeIAaiGQeufBa9dd+StqLC0OzTDS/aBcnOnmE+VDXEqWU8eL7Pq
+XvLAqFllvXCVhogJAnFZ86TbuuCPSrki6F82uHMshcjQ4ckRp/lz1PyN+AMKQ2En
+83cHAslT4UQyEErbi2CRYxE6aTV83U4PySYcbz51z00JfvqS0Hx6MK+5BpL1Td9m
+B21rNuv9JhYPnWnEp1+7USa/gfjKZYKOw3te/pFti4HX/PGHj/Qivix+ik/btvRo
+fe9gxONDgzoj7N0hzIYBjjJcA/FCnAH2aGtyGBwPDVlxC7CDzcGYED8LwjXxFxbI
+/6z0Sfe4E/BF0V1BG+gaGiqcnxE5I4OxfiPUAbbrl7JvrKWcN8aTa/C1Aq7BRsSe
+wrvxt0WpPqRzIBuCAagPA+0EIXdwsts7oJaktEQtqxecPc9V0CMtffVTuu8R6gK7
+B12FHeu064NKO6z+Z6kaDvECpl/CzfzKEbNJfqy2WKK0xZ/ZsGlJ5LOc3DjBNwAD
+L5eh1E8x/c4mo1j4c6bcxN+mU/uogn+wFWEJ23lna5XhAU2Px/k=
+=LEmQ
+-----END PGP SIGNATURE-----
+
+--meM80/YF6RpjsyZc--

@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9687746F79D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219C346F7A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234542AbhLIXpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXpC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:45:02 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C84C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:41:28 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v23so5590154pjr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r5IxUk7IoRTtrl9b80LUZD9vVdZvTnVgPepWlX6Ohsg=;
-        b=jdweGnXL6ND3BiYR6OrJRdg5Np7KCGmUX0f6pWmIZofXaOe97M4P6exXy9VtmzFCIx
-         98frCoSGt4fnj1kVXOYDRhRccWPuK0L10zo03sxW2Kic2fIoxAYQ3fFXW9fWADAswkgK
-         UG/ty3h235tjYAvc3RVKU0nlEccy7zoJpzcGE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r5IxUk7IoRTtrl9b80LUZD9vVdZvTnVgPepWlX6Ohsg=;
-        b=kKSa/HcPu3nz7W6R04s4AOgrpjJsDRJ0tX5nDmlxbx9huMGG0qlhd93T61LycZxCDQ
-         VoOb2KB6lckChX79uOZQ+KBsideWd3cUIf8s5wa9K3jera+Fj/BN/OPgB9Cc1iG/DAPX
-         vXmisijpMleZbo9Jtsr/uyZP+LWdSwOMXzX9spM4CokDAG1VsNzUdZ+Hx97oFFU0wG5J
-         FTlZnbj2zOa5pgi2HO2wt9C95ktql7gjMt4eY1vi+VRZzkKooh0vDgD14ExhxcibyE5A
-         QwyTk62+0GEP+4bY9TfpQI1j5lyjkeQDKRbcgBVmpL9mZ87tg9UFyF/HpsQaj9a7ERBR
-         r0hg==
-X-Gm-Message-State: AOAM531YEYjYceVYyWTCkJx+xMwQBD9MUJzvNquoB5mxc+WK0T1Xget0
-        ImYssd07m1j2dacIVxptkPCB9g==
-X-Google-Smtp-Source: ABdhPJzyk4sf1WNPIubTmnLyaDj9YqUyzvUL41XvKfsOUs2io7OX0emxdLtUfl9UQJ01SI14m51qjw==
-X-Received: by 2002:a17:90b:3ecd:: with SMTP id rm13mr19136275pjb.157.1639093287759;
-        Thu, 09 Dec 2021 15:41:27 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mu4sm11720860pjb.8.2021.12.09.15.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 15:41:27 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:41:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
- register
-Message-ID: <202112091539.6B349AC@keescook>
-References: <20211203084354.3105253-1-keescook@chromium.org>
- <87o85r4a4f.fsf@intel.com>
- <202112082220.81ECDC63D@keescook>
- <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
-MIME-Version: 1.0
+        id S234560AbhLIXpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:45:12 -0500
+Received: from mail-bn8nam12on2041.outbound.protection.outlook.com ([40.107.237.41]:10080
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234535AbhLIXpL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 18:45:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fz20ONiLuwPM9NPaMt6kGNOf1LdsHA84K8VHDuH1QxelTrMcPOsaUt2Tzha8YOs/VYSFKgrkneQD0HqYi4hDlWrvmKMe3TVfhag7+JMqFvc8v9WlDQlOIr+j0U7f/mIQ8NLtYcd/8FzVdn7nqsNS2p9uqeN8EQyfzGlfzz4fghBHdNZ1ka6BDZFQ+PB1uDePNCbl44Y8fscbrBOjl2luyqmTmKQ4ZFpKMDeNs6qRsb/gjAV/5ebeG0VjmWEJgx29Ig6wA09CcAkV85vYnDKhB/kSg6TezMTzsU9jo/ciQ/nK8Q/i4fCeVm9U5WUWoTNN1Q26di+zpvx7OPtTmXrt+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5XOdSRM3YKnmE9vEUy9if+sy7S1zN8NC1YVOp5HsjKs=;
+ b=A02ZoTnfpyVSigctZ1zUmjydjBv8zQOi54KJsBuADcnRdJCIz8YG5zmIQIZqEbM3c/z5WJ535+xGhGS3372BvbZGhuctnhsP/AxoYkjJ594PCWrcfoiEwBABe7xx7l7agM6/G+9ECDLeJQYLvPo5lj62FfUbHsLPontxJe5SCA6Atu+I8B9MggVQVf/oJAfY7VL+7UNCIyjgYyEk+HGcY68Qaqq5RbSBlGodyYrz5jG7lIy4aZdg7/A6waFUD9wuswVkF2JVldXfSHhi7oGa9Fyc+F9xVx/9l6OjPu79m3bzn35S2sx9Pq0AB/J3UwPb5GZiqHT2BtcET+KF9lhnCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5XOdSRM3YKnmE9vEUy9if+sy7S1zN8NC1YVOp5HsjKs=;
+ b=A599myIN0rLXuLIegrYcf0KU8WP1vBemUKb50KPoDAVrYHWSETeM1SltDGUFe69l51abILg/c6E9fJBpig7RG+JPhjvZMI/lltE/GLdPRbXxVOe5GMnLAdWatAb4E0X26MpZjtCB/YauYXrcEPpbgb2fyMcA7PdxGG2vUm90A4sbmasnhreYzgC4vbLe9WvUBi+HOqoJcZGUVRlH74CzqSMVTEEpAGVKBIEHGGviMDrAzqqrmCrEX3GHz99wBWGopcopQhDQs7hgS2dvL11XPEjLY1oxBNSWX8i89HsctHhG4NGoJ6VfpQHLDBlbr1jUsmRAUg6RIdWYJfK75f67xg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5301.namprd12.prod.outlook.com (2603:10b6:208:31f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Thu, 9 Dec
+ 2021 23:41:36 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.013; Thu, 9 Dec 2021
+ 23:41:36 +0000
+Date:   Thu, 9 Dec 2021 19:41:35 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
+Message-ID: <20211209234135.GA6385@nvidia.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+ <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
+ <20211208132255.GS6385@nvidia.com>
+ <20211208111659.6de22e52@jacob-builder>
+ <9f724b3a-6028-43d7-b4fc-d8a939e7b2cf@linux.intel.com>
+ <20211209152113.64b817b9@jacob-builder>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
+In-Reply-To: <20211209152113.64b817b9@jacob-builder>
+X-ClientProxiedBy: MN2PR14CA0005.namprd14.prod.outlook.com
+ (2603:10b6:208:23e::10) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79008b6a-fb23-4ed3-32f7-08d9bb6d7075
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5301:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB530167635EAE458B8450217CC2709@BL1PR12MB5301.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ufsX4R260hW/Iu+yKXzFo/C2NBdQlMC3MMUjVkk516Bxu1bLfr58SqXFgIRjWtfoei8C/zr+FDK+tFF1SUepEkS56Zw68B6+/XjXycI2BlpQ7HuyzU90dqLLbpGxqTAlnFaCKDjzjePENOjP58xT8mLHNq4D0bk5oh5hFhlD3MV8+u/CnnrWQbH1Ei/5Ss0OAp0YSMA5QSLaicFRLB4qvBQWxJ3T8JnuiM/dR0kQTwgp3/tUoFEIWUAHK/4EMW6Zqj9caUdgr76wCngoeB7hL9s7VKT9sEChcNfVV+TQeXjn++RBxqr0E7RyH9UIXszOARvSEgQu6AwPTvyMQpetMAMT5MhNK97/z9Bzt2Hhu646yWFkZvapSrDKWDUjY0Pl4qLVkMbBbivGTkzU/1XbF03Kmq/hFeLX0MRy0Na9wJWqORW1i7Tz6O/VBR/rAAXIIzVuHtk5P2eKODTkSOySFuAQL245noU5NQ8rHfmuIRk3gEAExzApweJtGnz1alQh8lK/FxkxetA7tnaPVeyzNFmWdEXP7/5yR76W5ZRnGOhXPBTuNROsrIZQ36sN9pBHWgXRDUwYQkq6+ylR5iMd/WPubpXZlCTReqhvdIpX2jRLIf1LB0HekigGzcMIvQz0VXKTEMAhk1NbIirEWJ+ppA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(2616005)(5660300002)(6916009)(66556008)(4326008)(36756003)(2906002)(66946007)(316002)(33656002)(8936002)(7416002)(66476007)(6512007)(26005)(6506007)(6486002)(508600001)(8676002)(558084003)(86362001)(38100700002)(1076003)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T6O/jb4CK3N/iIigTC3SqSzA6hEKYOO2YtdHzQ67swU/lBFTc8QsNFCoAPEP?=
+ =?us-ascii?Q?NdeeTkJAdrNH3W35A62UfphAIjx09/OuHrwVgTT0B7/ImznHV5KhD0j99Z05?=
+ =?us-ascii?Q?3+vA5/ruMnAAZoSzBHzCDPVDrnUjTFI+GMgfrudsGDKXmEjSLvawARATVfIe?=
+ =?us-ascii?Q?1MmtVmWjHpXH0R4BkKAvAgtGAODhE4oI9mlweRP9qB80cYYuBrAwIyb1adwy?=
+ =?us-ascii?Q?oDQ2NV57XQkqdPrwi5LbcRlDT6zMakZ39yhkroKWWVwfbxwyRzAwC63y0Eun?=
+ =?us-ascii?Q?SJtV8UBPtAf5IG8TjkBnTkQArU4pJpoHi0/92zs5El4oSCEsDMYL5ve4PvWW?=
+ =?us-ascii?Q?7Ij1D882bXSqcskk5HQMrkS+4vQEnek0fFtfPGmC9pH52fSghfTwNMBVFhJD?=
+ =?us-ascii?Q?FUjhR/tdlXG2HSWZDduawc67/ca/fPqjdQm1IrXK8UwK0Ryfvc2jtM2Ef4E8?=
+ =?us-ascii?Q?GyFlzX6mbUOIaqhN3+LoO3+JiV1H3wrv4NU3qI5N3QJwmKiwjae6z4Tir4bu?=
+ =?us-ascii?Q?7vDg9Ra5+fO/RerAOHlzwF7i5cAktATdPvEbFTdnoSkGLUCGkrbgoMCAGI9O?=
+ =?us-ascii?Q?OqXwm9gxMHrUmgugwsJPxrbzVHz3+xUPgpCmH66S7c/J5mjBVQqBpXvCZpwb?=
+ =?us-ascii?Q?DqG2vu3odcsrvdnmY/k+85624lSQO7x0FtenKIrSdwgX5iF7aFOpQZilFY2k?=
+ =?us-ascii?Q?LWLXM0O/E/Q2a/JtcLv4qrUXeCmdAmhnc2x2tZm4b7NLdeYP+oz0PDr9VvJc?=
+ =?us-ascii?Q?FZ/BlqOKgh4FRNIW53foRzeyg+MAEVRm/9eDoO9X8xVPKmPZEqQNie/UKQeK?=
+ =?us-ascii?Q?u/V0keAgqUPP4155rZ/17L0yRUa7JItSFxVVWk8JcUP5LoK+/4W6M/fCIwv8?=
+ =?us-ascii?Q?nsHlxHwRjkZDuEvQAfFGN7YHH6Vc92SmAjBbkOwrhkET007qvG2EK8kD74+i?=
+ =?us-ascii?Q?yxmCrud8+3RJuo/CMtd/f+ov2E9cuD5g8lDqz5NmO+oBmqH5eStLxc15GS+w?=
+ =?us-ascii?Q?a+m5bMHzhMxn6zQ5EBrV+WZAEMj1XreT+vCF8BB764bYB08cMn67CwShOFAL?=
+ =?us-ascii?Q?FGCO6hTen4GALB6E9BbTDXl2w2l1ERkQQLRzKMckkbwwm3uLVcsh9VWSnnKo?=
+ =?us-ascii?Q?mRzSixPjJKS7xnCSrR9bKCcBhedH5a65VxyNWeE+WyzwSI81OQunetFFm6LP?=
+ =?us-ascii?Q?xefJMp/Zu3k/DjXvaSrVMrIeiuPetRKkHngXz8ZkQHdXwsqadsR2FmCjwe+p?=
+ =?us-ascii?Q?oMJC/BH/9vx9mtSavGdPH7y/vOsuAzeRnHpWGIMGNUGfZ86w7U29vLK/U/y0?=
+ =?us-ascii?Q?Ae6KlQxmvHfbpa8d+iRnYmDB2i9xus7g7ERGwB9a/e7GOixS4SliH6xfp9+c?=
+ =?us-ascii?Q?U93pnJPj82qR5Yz7uCVBG9lku9M8LAUsvZ9RJ3WtgewwHtBPdLzhWfJyhqD6?=
+ =?us-ascii?Q?MYo2Nv5XZwmIFYK+EfJN/tbHz42NG0pxmFzeNE03aQkV6oNPRaDQuui1tZmk?=
+ =?us-ascii?Q?tFR0qduYQLsbeTJ3q9EAQRGzhacZifrlFWMIHAlAb0YtALlgb20uXV9sEGzW?=
+ =?us-ascii?Q?8Shnh11XsrVC1hhz8Co=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79008b6a-fb23-4ed3-32f7-08d9bb6d7075
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 23:41:36.3756
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pZwWn7milpd/Cl7N5VFv5XTUbLz3+2gP/hL0rQ5SQmHvNaSTur5SDoCXMXQLwEvo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5301
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 05:20:45PM -0500, Harry Wentland wrote:
-> 
-> 
-> On 2021-12-09 01:23, Kees Cook wrote:
-> > On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
-> >> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
-> >>> The link_status array was not large enough to read the Adjust Request
-> >>> Post Cursor2 register. Adjust the size to include it. Found with a
-> >>> -Warray-bounds build:
-> >>>
-> >>> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
-> >>> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
-> >>>    59 |         return link_status[r - DP_LANE0_1_STATUS];
-> >>>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-> >>> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
-> >>>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> >>>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>
-> >>> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
-> >>> Signed-off-by: Kees Cook <keescook@chromium.org>
-> >>
-> >> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
-> >> published in 2014, and Tegra is the only user of
-> >> drm_dp_get_adjust_request_post_cursor().
-> > 
-> > I see POST_CURSOR2 is used here too:
-> > 
-> > drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> > 
-> 
-> Looks like we read and parse that in the admgpu driver without
-> using drm_dp_get_adjust_request_post_cursor.
+On Thu, Dec 09, 2021 at 03:21:13PM -0800, Jacob Pan wrote:
 
-Right, and probably that could be switched to use it, but I'm not sure
-what the impact of the larger link_status read is.
+> For DMA PASID storage, can we store it in the iommu_domain instead of
+> iommu_group?
 
-> 
-> I don't have a strong feeling but I liked your original
-> patch a bit better. I'm not sure what it means when part
-> of a spec is deprecated. Once a spec is written display
-> vendors might implement it. We should make sure that
-> displays like that are always handled in a sane manner.
+It doesn't make sense to put in the domain, the domain should be only
+the page table and not have any relation to how things are matched to
+it
 
-Jani, Dave, any guidance here? I'm fine with whatever, but the current
-code is for sure broken. ;)
-
--Kees
-
--- 
-Kees Cook
+Jason

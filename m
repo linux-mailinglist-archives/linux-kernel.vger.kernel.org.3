@@ -2,153 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AA846E231
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD8A46E233
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbhLIF4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:56:02 -0500
-Received: from mail-lj1-f180.google.com ([209.85.208.180]:36593 "EHLO
-        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhLIF4B (ORCPT
+        id S232566AbhLIF5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhLIF5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:56:01 -0500
-Received: by mail-lj1-f180.google.com with SMTP id i63so7322290lji.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:52:27 -0800 (PST)
+        Thu, 9 Dec 2021 00:57:09 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBD6C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:53:36 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso5151023otj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:53:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n17CfDjkfVu1x0A2zg/wbnx62qbr1TlYzDoDW7maqgM=;
+        b=BGxKtZWLm9X8tukgLULrnrgzzuYmOH3Lm3z4cFC/ithx5Do/8r6DEv/dZGvCIVDzUa
+         pMAiZ+u1J8JyUrIQVVxFDQO/vSlGNxHRd6JPkqE0a9N5VG9d0d2D7Lez+QVWffs1FB9f
+         cd+4gWsBTa4MRDnf8UYWcMYP/Jmrp30+Cg60J1VjFEa4SKfYTtYLq0Fr42LTOlLdI7Lj
+         ZTzFU0MbgGJmf+30j9R2FpXPSPD0Vre59NJgNjcVGWtFGe9p2ogsU0M9M1c5/4fgbGVU
+         +zBLnvwkGMIE05TkimwOGZcARqpGumwAHaWOxA92Qy71YO6olYgYrAdPYUf4hb72fZMr
+         1+ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WpO2tXfUMmaqVQiNmiQh2gP6IdzAEJ4iuT0rTmJ6Zbc=;
-        b=BnhKyu9JoLTRERzS3MOaEQu+fARnuUtX/TY2c99GKCbEZBjq4CEG3j26zx3WN1yki+
-         KnGYgPdrugtFllUOylCv0eMx3tAJc2EpTdNP4sBmYpS2HP83fUpqozqBNalKvPBgBSny
-         UO1udQAItIu7hRQ2/AaMRchXcL0xeR2QYnCsaZtefvbRxpUvm13GMS8RY8GawVffT9sK
-         QEzhqIfAePZ6AvOm2NyRwmduORILHsnyF6/KgM4Mxf3jD/p/qqNcSjYBTRexsI244JEV
-         50TGCiRJVvht41Y0lJB0D+xhdl1QuJ1AdyyR1KyN7QfQ4z3EbrylY9LOT9i+GhCvVSby
-         s9mg==
-X-Gm-Message-State: AOAM533/aMl7sscAidJr6y1OV4GrFbBa3mc4TYTlUZnfVdxB//SOGKvi
-        FMPMftgZupeYcLhwX5/n2ouJq/Hp3tQJr4i3clc=
-X-Google-Smtp-Source: ABdhPJyfOE7nmYK5cJDxMaz9sIXImoQXyMrFq0FU8xGzaLhjFbwKvJ8tUKcjt9hhHg7xkJl83w6hNTx1QwLZNg8LNdQ=
-X-Received: by 2002:a2e:7305:: with SMTP id o5mr4204098ljc.180.1639029147021;
- Wed, 08 Dec 2021 21:52:27 -0800 (PST)
+        bh=n17CfDjkfVu1x0A2zg/wbnx62qbr1TlYzDoDW7maqgM=;
+        b=BeAB3jssmLnL+u02P7ewHri/6hpkNPSSuJQbfSQ05FAvJy+4ErsnuF6fRFtiGU4dqM
+         +Nuh7sy303nDSHxPgcESScQOtE46D773vlnYjMdLdi/QMGGauHx9S73ti+NefI5Vhzf6
+         l4Px0ZPAqYBm2niESVxUJHn5sl2Yivn4qxDbHP4H5cLl8zP26H3cIoORnGMRNTVm1Xzo
+         MokNqf9n8PkR1VtXbP2AgqIUGfT4m18IVU2JdM8q2Ad9CftEETFst5Od/o3amn2s5Ov7
+         BymdNsxCssscOx/1lhuk7u1knsxZrJgKJ+utU3LwBK1Io5PAFX67yWlWxo/Tp4aDJB4n
+         +kAQ==
+X-Gm-Message-State: AOAM533wQB3kci6wTpPNEF/xGlrB85bGiOK2QfoBr1z/0WDp9vwOEZZa
+        F745phHBKtDkRMNun4ytgfiRl7C7bd1NK/80AKBhFlLy9O/F4w==
+X-Google-Smtp-Source: ABdhPJyafxz4N1Yt1dER7ZAjF/Xyv4Biy1XVnYWlMNPW6NSIkD6ZBaHO6FfdJtHuCY1sHUNKXyuGzxG+Xb+JJT285QI=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr3678667otj.35.1639029216036;
+ Wed, 08 Dec 2021 21:53:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20211205224843.1503081-1-namhyung@kernel.org> <20211208232203.GC16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211208232203.GC16608@worktop.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 8 Dec 2021 21:52:16 -0800
-Message-ID: <CAM9d7cizkX_oOj2UCWnbqS9P+VDW8NLxC7BE23xa4moJQS_+vg@mail.gmail.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
+References: <20211208191642.3792819-1-pgonda@google.com> <20211208191642.3792819-4-pgonda@google.com>
+In-Reply-To: <20211208191642.3792819-4-pgonda@google.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Wed, 8 Dec 2021 21:53:25 -0800
+Message-ID: <CAA03e5H6TxcL6WVYcBs5aX5zHLB=sCYcrBLggAtmLZADn_BHyA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] selftests: sev_migrate_tests: Add mirror command tests
+To:     Peter Gonda <pgonda@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Wed, Dec 8, 2021 at 11:16 AM Peter Gonda <pgonda@google.com> wrote:
+>
+> Add tests to confirm mirror vms can only run correct subset of commands.
+>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Marc Orr <marcorr@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> ---
+>  .../selftests/kvm/x86_64/sev_migrate_tests.c  | 55 +++++++++++++++++--
+>  1 file changed, 51 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> index 4bb960ca6486..80056bbbb003 100644
+> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> @@ -21,7 +21,7 @@
+>  #define NR_LOCK_TESTING_THREADS 3
+>  #define NR_LOCK_TESTING_ITERATIONS 10000
+>
+> -static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+> +static int __sev_ioctl(int vm_fd, int cmd_id, void *data, __u32 *fw_error)
+>  {
+>         struct kvm_sev_cmd cmd = {
+>                 .id = cmd_id,
+> @@ -30,11 +30,20 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+>         };
+>         int ret;
+>
+> -
+>         ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
+> -       TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
+> +       *fw_error = cmd.error;
+> +       return ret;
+> +}
+> +
+> +static void sev_ioctl(int vm_fd, int cmd_id, void *data)
+> +{
+> +       int ret;
+> +       __u32 fw_error;
+> +
+> +       ret = __sev_ioctl(vm_fd, cmd_id, data, &fw_error);
+> +       TEST_ASSERT(ret == 0 && fw_error == SEV_RET_SUCCESS,
+>                     "%d failed: return code: %d, errno: %d, fw error: %d",
+> -                   cmd_id, ret, errno, cmd.error);
+> +                   cmd_id, ret, errno, fw_error);
+>  }
+>
+>  static struct kvm_vm *sev_vm_create(bool es)
+> @@ -226,6 +235,42 @@ static void sev_mirror_create(int dst_fd, int src_fd)
+>         TEST_ASSERT(!ret, "Copying context failed, ret: %d, errno: %d\n", ret, errno);
+>  }
+>
+> +static void verify_mirror_allowed_cmds(int vm_fd)
+> +{
+> +       struct kvm_sev_guest_status status;
+> +
+> +       for (int cmd_id = KVM_SEV_INIT; cmd_id < KVM_SEV_NR_MAX; ++cmd_id) {
+> +               int ret;
+> +               __u32 fw_error;
+> +
+> +               /*
+> +                * These commands are allowed for mirror VMs, all others are
+> +                * not.
+> +                */
+> +               switch (cmd_id) {
+> +               case KVM_SEV_LAUNCH_UPDATE_VMSA:
+> +               case KVM_SEV_GUEST_STATUS:
+> +               case KVM_SEV_DBG_DECRYPT:
+> +               case KVM_SEV_DBG_ENCRYPT:
+> +                       continue;
+> +               default:
+> +                       break;
+> +               }
+> +
+> +               /*
+> +                * These commands should be disallowed before the data
+> +                * parameter is examined so NULL is OK here.
+> +                */
+> +               ret = __sev_ioctl(vm_fd, cmd_id, NULL, &fw_error);
+> +               TEST_ASSERT(
+> +                       ret == -1 && errno == EINVAL,
+> +                       "Should not be able call command: %d. ret: %d, errno: %d\n",
+> +                       cmd_id, ret, errno);
+> +       }
+> +
+> +       sev_ioctl(vm_fd, KVM_SEV_GUEST_STATUS, &status);
 
-On Wed, Dec 8, 2021 at 3:22 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
-> > While commit f79256532682 ("perf/core: fix userpage->time_enabled of
-> > inactive events") fixed this problem for user rdpmc usage,
->
-> You're referring to 'this problem' before actually describing a problem :-(
+Why is this here? I'd either delete it or maybe alternatively move it
+into the `case KVM_SEV_GUEST_STATUS` with a corresponding TEST_ASSERT
+to check that the command succeeded. Something like:
 
-Well, it's a problem of reporting incorrect 'enabled' time.
-I'm sorry if it was not clear.
+...
+               switch (cmd_id) {
+               case KVM_SEV_GUEST_STATUS:
+                    sev_ioctl(vm_fd, KVM_SEV_GUEST_STATUS, &status);
+                    TEST_ASSERT(ret == 0 && fw_error == SEV_RET_SUCCESS, ...);
+                    continue;
+               case KVM_SEV_LAUNCH_UPDATE_VMSA:
+               case KVM_SEV_DBG_DECRYPT:
+               case KVM_SEV_DBG_ENCRYPT:
+                       continue;
+               default:
+                       break;
+               }
 
+> +}
+> +
+>  static void test_sev_mirror(bool es)
+>  {
+>         struct kvm_vm *src_vm, *dst_vm;
+> @@ -243,6 +288,8 @@ static void test_sev_mirror(bool es)
+>         if (es)
+>                 sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
 >
-> Also, you now have me looking at that commit again, and I'm still hating
-> it. Also, I'm again struggling to make sense of it; all except the very
-> last hunk that is.
+> +       verify_mirror_allowed_cmds(dst_vm->fd);
+> +
+>         kvm_vm_free(src_vm);
+>         kvm_vm_free(dst_vm);
+>  }
+> --
+> 2.34.1.400.ga245620fadb-goog
 >
-> So the whole, full-fat, mmap self-monitor thing looks like:
->
->
->         u32 seq, time_mult, time_shift, index, width = 64;
->         u64 count, enabled, running;
->         u64 cyc, time_offset, time_cycles = 0, time_mask = ~0ULL;
->         u64 quot, rem, delta;
->         s64 pmc = 0;
->
->         do {
->                 seq = pc->lock;
->                 barrier();
->
->                 enabled = pc->time_enabled;
->                 running = pc->time_running;
->
->                 if (pc->cap_user_time && enabled != running) {
->                         cyc = rdtsc();
->                         time_offset = pc->time_offset;
->                         time_mult   = pc->time_mult;
->                         time_shift  = pc->time_shift;
->                 }
->
->                 if (pc->cap_user_time_short) {
->                         time_cycles = pc->time_cycles;
->                         time_mask   = pc->time_mask;
->                 }
->
->                 index = pc->index;
->                 count = pc->offset;
->                 if (pc->cap_user_rdpmc && index) {
->                         width = pc->pmc_width;
->                         pmc = rdpmc(index - 1);
->                 }
->
->                 barrier();
->         } while (pc->lock != seq);
->
->         if (width < 64) {
->                 pmc <<= 64 - width;
->                 pmc >>= 64 - width;
->         }
->         count += pmc;
->
->         cyc = time_cycles + ((cyc - time_cycles) & time_mask);
->
->         quot = (cyc >> time_shift);
->         rem = cyc & ((1ULL < time_shift) - 1);
->         delta = time_offset + quot * time_mult +
->                 ((rem * time_mult) >> time_shift);
->
->         enabled += delta;
->         if (index)
->                 running += delta;
->
->         quot = count / running;
->         rem  = count % running;
->         count = quot * enabled + (rem * enabled) / running;
->
->
-> Now, the thing that sticks out to me is that 'enabled' is
-> unconditionally advanced. It *always* runs.
->
-> So how can not updating ->time_enabled when the counter is INACTIVE due
-> to rotation (which causes ->index == 0), cause enabled to not be
-> up-to-date?
-
-Hmm.. I don't get it.  In my understanding, that's the whole point
-of the enabled time - tracking time it was not active due to the
-multiplexing (rotation).  So that users might want to scale the
-count based on the ratio of running vs enabled.
-
-Do I miss something?
-
-Thanks,
-Namhyung
-
-
->
-> Can we please figure that out so I can go revert all but the last hunk
-> of that patch?

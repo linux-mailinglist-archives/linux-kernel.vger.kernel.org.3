@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAF846E14D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD2C46E150
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbhLIDfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S231562AbhLIDiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbhLIDfl (ORCPT
+        with ESMTP id S231517AbhLIDiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:35:41 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9CAC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:32:08 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id n26so4212493pff.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:32:08 -0800 (PST)
+        Wed, 8 Dec 2021 22:38:14 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA60C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:34:41 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p18so2889588plf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:34:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=n5D9j62aLJ1+fG9wTsNvAoJm0MnkmZ9E3fqfoRqVqgQ=;
-        b=d2n0WLemxkM3AvTgShubVt87nB+MoNU0jWskn97Aro1M162OelQj920qEtdAPJFuCz
-         Dne49bZ1dZUxJadgF2Fu6723qU9Ymk9zt1VT3Oy6dp2dCDNc7/v2r0URxOlf+yWa9Pni
-         Yw2R2Noffb/h4Y1+Vop1QSNE8ZIG4bCX1RNJlY7ZH8UqaA1saVBoVvQGAvbu3zWN5egA
-         xzcWsWRDf33Y7SHBey0sLvk1PUn32vF1IAv2bocMSj8HR5iD4gd4QefbAxohIZhAURTT
-         wVYyvibZqKtG5syR0ZOxOVu8tgysKHW68yVFqI5vU4nGczBQ31LC3fVM4xyv+zh4ctgZ
-         IqVA==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=IhIul+4nURod6NuSkYTrchSPnXVCxWUJGXACRxYc3MQ=;
+        b=eXSVG+Ndarp4Nov0ojL5vYXJOqopOe8rmbtZMAES5EqdQfhuTJT9Uq3lALtJGa4LbO
+         wWHdJFJ87qjeMcSOV3aq0PkzuieWlIvRP179Hr6+sgCEYfH7wf+V4jVqH10ELhTez0XB
+         22huR9IEqlUxwdOVegX+j/rAjRjz7L8mt/AiBEGrV7CjsOrfNoQ1BJ9XPY8+vJZH31o7
+         2P/ix6dz02VvGEjb+x0Ea1/8RXd4aZ7czYa7w2YNw1bcNUZxsKs/e400rD6pCJCOWN7L
+         q5fhY1g9Ipg3RqbxuIOSnqylc7dCzgsNU5GquVam3pqRibhz+3qTwbdWItlmR7WucDdh
+         VwaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=n5D9j62aLJ1+fG9wTsNvAoJm0MnkmZ9E3fqfoRqVqgQ=;
-        b=mBxHVvF9Tij67SxojHhFtJPQZwmcVRufDKB0mmDd6xjUo56EspVP7o8FXB3G61nxjM
-         YtVaLaoRqmoSdP4mte8Ld3jg1JV3xanymFCe0ZVEGWSKGAUNL9tGUhmUtEb1wNGrHzgM
-         QkzeuuQ6S5jN8XVFtqvCUsTFbiZlKQs/wvdhS2SRfTBMUBU+6TjqAP2Sqriz+Mu9hkwV
-         SUAXi4NurTVnQC7T+s95B9uIJTznw0P2DJO38mtsviXfOzAY5pv9nNZZl+F2eBDYXpTK
-         y7lrTbO1NtqF6mQCyi67Tzst7nFDItzaZgOVv7qGMTMJ+vuQx+bp/lAaqAIkR04l+7Fd
-         Q92g==
-X-Gm-Message-State: AOAM531w1bnoLRqAj9JJErHNJue+EY8TYG2UEg5sanUYkf+TRMSRAHni
-        TI7/U36FAiTcgUT9nuqLlj7IzWbpraE=
-X-Google-Smtp-Source: ABdhPJw6hmO7CntdCxZ8lHNThS3s1rc6zaJgR0zqgXiUGoiyuHnsrm0RNM0XpMkJkiO3j1rKXJSh9A==
-X-Received: by 2002:a63:f749:: with SMTP id f9mr32031978pgk.330.1639020728016;
-        Wed, 08 Dec 2021 19:32:08 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=IhIul+4nURod6NuSkYTrchSPnXVCxWUJGXACRxYc3MQ=;
+        b=N/fP0CCmd6XVV9WKLi+DnX8xW2p+xEtJNeXjdql2qpz+uDZGFPPssGbNKAvWTmTlQA
+         wtBgzmu/Mu1bWJKjfgPUqwWQw/5odtylyGNH/UlYlPQMor9KmcXOYSLuT0ykpDn9gIRf
+         2ZVdc4UAL++8hss2cvIfssIPunZtupqxWwIDaenYQye3+RFoXzqiEYh8yxP0rUUGbXuC
+         DimvV7A48FBYS59sg9bbY1dUYXJWpm5pnshtW/yZzu2z5Nsl6SgEf+F3tSdCsbmkh18U
+         hJEslD8naS9NlZA39LoxclPyiFSo5csCWAoj47NVQS5zEC0nrLGo66YCb5jNWRMm7IQM
+         ITfg==
+X-Gm-Message-State: AOAM532gROGBaT6Bw0Ny1dZxaiqlksJpu7guDaMeo8ygpk5Kx1teHoZg
+        hYmciupd+47mwOZzrgAIIRovE4UT2KE=
+X-Google-Smtp-Source: ABdhPJx7+EvOV3k5F+MwkvlqnlUuZKHGOaLEFVN8ri3k3vpvOVFTKnJpQnsX5z8mTpBCirtuipNWIg==
+X-Received: by 2002:a17:90b:4b4c:: with SMTP id mi12mr12376886pjb.66.1639020881197;
+        Wed, 08 Dec 2021 19:34:41 -0800 (PST)
 Received: from [183.173.151.43] ([183.173.151.43])
-        by smtp.gmail.com with ESMTPSA id f8sm5423951pfc.77.2021.12.08.19.32.04
+        by smtp.gmail.com with ESMTPSA id y18sm4729594pfp.190.2021.12.08.19.34.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 19:32:07 -0800 (PST)
+        Wed, 08 Dec 2021 19:34:40 -0800 (PST)
+Subject: Re: [BUG] gpu: drm: amd: amdgpu: possible ABBA deadlock in
+ amdgpu_set_power_dpm_force_performance_level() and
+ amdgpu_debugfs_process_reg_op()
 From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] gpu: drm: possible ABBA deadlock in
- drm_gem_prime_fd_to_handle() and drm_gem_prime_handle_to_fd()
-To:     maarten.lankhorst@linux.intel.com,
-        Maxime Ripard <mripard@kernel.org>, tzimmermann@suse.de,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, Felix.Kuehling@amd.com, ray.huang@amd.com,
+        lee.jones@linaro.org
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <ae29d7e4-2794-7d4e-becc-fccb576a706e@gmail.com>
-Date:   Thu, 9 Dec 2021 11:32:05 +0800
+References: <2dc31435-ba62-b6a4-76dc-cfe9747f4cfb@gmail.com>
+Message-ID: <963eab5f-f333-456e-784c-0d2c81b849da@gmail.com>
+Date:   Thu, 9 Dec 2021 11:34:38 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <2dc31435-ba62-b6a4-76dc-cfe9747f4cfb@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -70,30 +75,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-My static analysis tool reports a possible ABBA deadlock in the drm 
-driver in Linux 5.10:
-
-drm_gem_prime_fd_to_handle()
-   mutex_lock(&dev->object_name_lock); --> Line 313 (Lock A)
-   drm_gem_handle_delete()
-     drm_gem_object_release_handle()
-       drm_gem_remove_prime_handles()
-         mutex_lock(&filp->prime.lock); --> Line 16 (Lock B)
-
-drm_gem_prime_handle_to_fd()
-   mutex_lock(&file_priv->prime.lock); --> Line 433 (Lock B)
-   mutex_lock(&dev->object_name_lock); --> Line 466 (Lock A)
-
-When drm_gem_prime_fd_to_handle() and drm_gem_prime_handle_to_fd() are 
-concurrently executed, the deadlock can occur.
-
-I am not quite sure whether this possible deadlock is real and how to 
-fix it if it is real.
-Any feedback would be appreciated, thanks :)
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Could you please provide the feedback to my previous report?
+Thanks a lot :)
 
 
 Best wishes,
 Jia-Ju Bai
+
+On 2021/9/15 17:39, Jia-Ju Bai wrote:
+> Hello,
+>
+> My static analysis tool reports a possible ABBA deadlock in the amdgpu 
+> driver in Linux 5.10:
+>
+> amdgpu_debugfs_process_reg_op()
+>   mutex_lock(&adev->grbm_idx_mutex); --> Line 250 (Lock A)
+>   mutex_lock(&adev->pm.mutex); --> Line 259 (Lock B)
+>
+> amdgpu_set_power_dpm_force_performance_level()
+>   mutex_lock(&adev->pm.mutex); --> Line 381 (Lock B)
+>     pp_dpm_force_performance_level() --> function pointer via 
+> "amdgpu_dpm_force_performance_level()"
+>       pp_dpm_en_umd_pstate()
+>         amdgpu_device_ip_set_clockgating_state()
+>           gfx_v7_0_set_clockgating_state() --> function pointer via 
+> "funcs->set_clockgating_state()"
+>             gfx_v7_0_enable_mgcg()
+>               mutex_lock(&adev->grbm_idx_mutex); --> Line 3646 (Lock A)
+>               mutex_lock(&adev->grbm_idx_mutex); --> Line 3697 (Lock A)
+>
+> When amdgpu_debugfs_process_reg_op() and 
+> amdgpu_set_power_dpm_force_performance_level() are concurrently 
+> executed, the deadlock can occur.
+>
+> I am not quite sure whether this possible deadlock is real and how to 
+> fix it if it is real.
+> Any feedback would be appreciated, thanks :)
+>
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+>
+>
+> Best wishes,
+> Jia-Ju Bai
 

@@ -2,152 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E5846ECC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BF646EC7C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbhLIQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:13:34 -0500
-Received: from mga17.intel.com ([192.55.52.151]:19708 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229598AbhLIQNd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:13:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639066200; x=1670602200;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NCrXJnTuE+nIYEkW7U68F+OGg0dLNStA/e407pi5288=;
-  b=mxQMSeptQ12JT3a9obc47guOknDwc2NkJUOsTSdlfDo8dasw757g469+
-   SFmEFDDwR5xdjIT6xKTNILYwz6QYwm1bmH+w7O8CF0omvRbwnt/ffHLuW
-   U1oUb92+b0B+Z4I6APRRYdcDjOwNOeMkXl5iKegatuZunnH28zEoSE0Cq
-   DmFeJvuYvnt8MFYuaKm01W0SZUmqqqzlsQx5ub6dMwQj9z7Ipxz7faps2
-   Sn34oHbSzBf3xZRfBabqMjWU4LRUzKq3FSaYd9TlWO5KRScZcfFTN+Ct7
-   xfSgRB3bDqST8wZRjZb9TRIElgA22VxUIonGe/UjhIvnT8I28YPebz0Em
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218825002"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="218825002"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:04:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="612549089"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2021 08:04:32 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvLuJ-00028D-3L; Thu, 09 Dec 2021 16:04:31 +0000
-Date:   Fri, 10 Dec 2021 00:03:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi 4/56]
- drivers/net/ethernet/pensando/ionic/ionic_main.c:479:9: warning: 'strncpy'
- output truncated before terminating nul copying 31 bytes from a string of
- the same length
-Message-ID: <202112092344.BejBo4J7-lkp@intel.com>
+        id S240750AbhLIQHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240565AbhLIQH3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:07:29 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65018C061746;
+        Thu,  9 Dec 2021 08:03:55 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id k23so9753310lje.1;
+        Thu, 09 Dec 2021 08:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=cb7DP4xQRrR7eaEbn0nK2nl/RVqJ7P0xuMj6assZJek=;
+        b=WvfEK1oUK7PCmcUwb7qqB5b7t/tqkKwJy25w5G2ZpXi9fXnA0lP0F0Zd13IgPsYYzv
+         DUg3NLq35vVC3ZDxjMlvNaZHaOB6NDNSSf5a57QJWhGMdeApCnf+6Rj2h80bD+exo2S8
+         SJrKkZqx0gEFhuWgsTYdhUovek/wQQtM7FtXIr6y4qN8x4o//npz3+R1UEaq6LIh0BCG
+         hE+UiJvUe14c1LY39MaWNn0b0EKiaxXhsoA5GerX4dnXXKXMN4eKP1DoXEJcPwfTrVi8
+         RFQ7LhCc1viLLw+Azet7F7wpbMKj9g4f9RtCQu6mt80N86GW7YKpizYxVeGhXeIjOUFu
+         NBkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cb7DP4xQRrR7eaEbn0nK2nl/RVqJ7P0xuMj6assZJek=;
+        b=ZddFJUPny/aVwaEfNkAmITqDVgsGv6ByTbjIwzF/NWBT0zS1HKcQBzcXrLOz9enQD7
+         e4MU2iAKn1pcfEcCT3fSizSMlihNWYOOV9w+jgzsJEbX9WTc3ou1YoidZxNwoVnaOW/Y
+         MKb5UtUt7cG2iDO8AMNpGO1mt/8ukNCaGTLnVRYHzC1ssuL0RD1DEpO9NfHATyDcsaLM
+         oqRJGEGq0RFVnA2oBi3lJewSaqgQ67mZoZQE5v6/EgO467dDLiO2q776VJOOrluKDiwI
+         Rt5vfaUxaOsMwtgdfImZBhScRIt6AjUQX6O4YdimA+hoiHtYE63vmaB/73dBV/aYWNux
+         gApw==
+X-Gm-Message-State: AOAM5338Q4C+kZMRcD7xq9N8QoXFO3KTdGNkrNy0AkZqdVIb8/OPp6QH
+        J7H5qWHrCnHIVg14blJqI8PcbRy8I5o=
+X-Google-Smtp-Source: ABdhPJyu5x+iWP19CiNhQXm3GIHUzijm71lS2NrxLaKYKseR9zAb0054+UU1XlOdD9NYHK6SloByPw==
+X-Received: by 2002:a2e:7114:: with SMTP id m20mr7092240ljc.229.1639065833168;
+        Thu, 09 Dec 2021 08:03:53 -0800 (PST)
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl. [194.29.137.1])
+        by smtp.gmail.com with ESMTPSA id x18sm16645ljd.110.2021.12.09.08.03.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 08:03:52 -0800 (PST)
+Message-ID: <2697db33-753c-ead8-019f-5e2ef1773693@gmail.com>
+Date:   Thu, 9 Dec 2021 17:03:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v3 1/1] arm64: dts: add minimal DTS for Microsoft Surface
+ Duo 2
+To:     Katherine Perez <kaperez@linux.microsoft.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+References: <20211208235137.2751003-1-kaperez@linux.microsoft.com>
+ <20211208235137.2751003-2-kaperez@linux.microsoft.com>
+From:   Konrad Dybcio <konradybcio@gmail.com>
+In-Reply-To: <20211208235137.2751003-2-kaperez@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   139e005bda0da795d21b4afeae8b184b1792b2c6
-commit: ef80b406fd9a4660e91461290596f5c86de9cf15 [4/56] Makefile: Add -asahi EXTRAVERSION
-config: alpha-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211209/202112092344.BejBo4J7-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/ef80b406fd9a4660e91461290596f5c86de9cf15
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout ef80b406fd9a4660e91461290596f5c86de9cf15
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/ethernet/pensando/ionic/
+Hi!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 09/12/2021 00:51, Katherine Perez wrote:
+> This is a minimal devicetree for Microsoft Surface Duo 2 with SM8350
+> Chipset
+>
+> Signed-off-by: Katherine Perez <kaperez@linux.microsoft.com>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>
+> Changes since v1:
+> - Change remoteprocs firmware-naming scheme to qcom/sm8350/microsft/*
+> - Add chassis-type
+>
+>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>   .../qcom/sm8350-microsoft-surface-duo2.dts    | 369 ++++++++++++++++++
+>   2 files changed, 370 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+>
+> --
+> 2.31.1
 
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/pensando/ionic/ionic_main.c: In function 'ionic_identify':
->> drivers/net/ethernet/pensando/ionic/ionic_main.c:479:9: warning: 'strncpy' output truncated before terminating nul copying 31 bytes from a string of the same length [-Wstringop-truncation]
-     479 |         strncpy(ident->drv.driver_ver_str, UTS_RELEASE,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     480 |                 sizeof(ident->drv.driver_ver_str) - 1);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[...]
 
 
-vim +/strncpy +479 drivers/net/ethernet/pensando/ionic/ionic_main.c
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+> @@ -0,0 +1,369 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (C) 2021, Microsoft Corporation
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
 
-fbfb8031533c92 Shannon Nelson 2019-09-03  468  
-fbfb8031533c92 Shannon Nelson 2019-09-03  469  int ionic_identify(struct ionic *ionic)
-fbfb8031533c92 Shannon Nelson 2019-09-03  470  {
-fbfb8031533c92 Shannon Nelson 2019-09-03  471  	struct ionic_identity *ident = &ionic->ident;
-fbfb8031533c92 Shannon Nelson 2019-09-03  472  	struct ionic_dev *idev = &ionic->idev;
-fbfb8031533c92 Shannon Nelson 2019-09-03  473  	size_t sz;
-fbfb8031533c92 Shannon Nelson 2019-09-03  474  	int err;
-fbfb8031533c92 Shannon Nelson 2019-09-03  475  
-fbfb8031533c92 Shannon Nelson 2019-09-03  476  	memset(ident, 0, sizeof(*ident));
-fbfb8031533c92 Shannon Nelson 2019-09-03  477  
-fbfb8031533c92 Shannon Nelson 2019-09-03  478  	ident->drv.os_type = cpu_to_le32(IONIC_OS_TYPE_LINUX);
-1fcbebf115d9ce Shannon Nelson 2020-03-06 @479  	strncpy(ident->drv.driver_ver_str, UTS_RELEASE,
-fbfb8031533c92 Shannon Nelson 2019-09-03  480  		sizeof(ident->drv.driver_ver_str) - 1);
-fbfb8031533c92 Shannon Nelson 2019-09-03  481  
-fbfb8031533c92 Shannon Nelson 2019-09-03  482  	mutex_lock(&ionic->dev_cmd_lock);
-fbfb8031533c92 Shannon Nelson 2019-09-03  483  
-fbfb8031533c92 Shannon Nelson 2019-09-03  484  	sz = min(sizeof(ident->drv), sizeof(idev->dev_cmd_regs->data));
-fbfb8031533c92 Shannon Nelson 2019-09-03  485  	memcpy_toio(&idev->dev_cmd_regs->data, &ident->drv, sz);
-fbfb8031533c92 Shannon Nelson 2019-09-03  486  
-fbfb8031533c92 Shannon Nelson 2019-09-03  487  	ionic_dev_cmd_identify(idev, IONIC_IDENTITY_VERSION_1);
-fbfb8031533c92 Shannon Nelson 2019-09-03  488  	err = ionic_dev_cmd_wait(ionic, DEVCMD_TIMEOUT);
-fbfb8031533c92 Shannon Nelson 2019-09-03  489  	if (!err) {
-fbfb8031533c92 Shannon Nelson 2019-09-03  490  		sz = min(sizeof(ident->dev), sizeof(idev->dev_cmd_regs->data));
-fbfb8031533c92 Shannon Nelson 2019-09-03  491  		memcpy_fromio(&ident->dev, &idev->dev_cmd_regs->data, sz);
-fbfb8031533c92 Shannon Nelson 2019-09-03  492  	}
-fbfb8031533c92 Shannon Nelson 2019-09-03  493  	mutex_unlock(&ionic->dev_cmd_lock);
-fbfb8031533c92 Shannon Nelson 2019-09-03  494  
-a21b5d49e77a2e Shannon Nelson 2020-10-01  495  	if (err) {
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  496  		dev_err(ionic->dev, "Cannot identify ionic: %d\n", err);
-a21b5d49e77a2e Shannon Nelson 2020-10-01  497  		goto err_out;
-a21b5d49e77a2e Shannon Nelson 2020-10-01  498  	}
-fbfb8031533c92 Shannon Nelson 2019-09-03  499  
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  500  	if (isprint(idev->dev_info.fw_version[0]) &&
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  501  	    isascii(idev->dev_info.fw_version[0]))
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  502  		dev_info(ionic->dev, "FW: %.*s\n",
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  503  			 (int)(sizeof(idev->dev_info.fw_version) - 1),
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  504  			 idev->dev_info.fw_version);
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  505  	else
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  506  		dev_info(ionic->dev, "FW: (invalid string) 0x%02x 0x%02x 0x%02x 0x%02x ...\n",
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  507  			 (u8)idev->dev_info.fw_version[0],
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  508  			 (u8)idev->dev_info.fw_version[1],
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  509  			 (u8)idev->dev_info.fw_version[2],
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  510  			 (u8)idev->dev_info.fw_version[3]);
-36b20b7fb1c3cb Shannon Nelson 2021-10-01  511  
-a21b5d49e77a2e Shannon Nelson 2020-10-01  512  	err = ionic_lif_identify(ionic, IONIC_LIF_TYPE_CLASSIC,
-a21b5d49e77a2e Shannon Nelson 2020-10-01  513  				 &ionic->ident.lif);
-a21b5d49e77a2e Shannon Nelson 2020-10-01  514  	if (err) {
-a21b5d49e77a2e Shannon Nelson 2020-10-01  515  		dev_err(ionic->dev, "Cannot identify LIFs: %d\n", err);
-a21b5d49e77a2e Shannon Nelson 2020-10-01  516  		goto err_out;
-a21b5d49e77a2e Shannon Nelson 2020-10-01  517  	}
-fbfb8031533c92 Shannon Nelson 2019-09-03  518  
-fbfb8031533c92 Shannon Nelson 2019-09-03  519  	return 0;
-fbfb8031533c92 Shannon Nelson 2019-09-03  520  
-a21b5d49e77a2e Shannon Nelson 2020-10-01  521  err_out:
-fbfb8031533c92 Shannon Nelson 2019-09-03  522  	return err;
-fbfb8031533c92 Shannon Nelson 2019-09-03  523  }
-fbfb8031533c92 Shannon Nelson 2019-09-03  524  
+This is now included in sm8350.dtsi
 
-:::::: The code at line 479 was first introduced by commit
-:::::: 1fcbebf115d9ce077c2ba5ecfb521cc1eedcb467 ionic: drop ethtool driver version
 
-:::::: TO: Shannon Nelson <snelson@pensando.io>
-:::::: CC: David S. Miller <davem@davemloft.net>
+[...]
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +&usb_1 {
+> +	dr_mode = "peripheral";
+> +};
+> +
+
+Looks like you forgot to enable usb_1, but other than these two nits:
+
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+
+Konrad
+

@@ -2,179 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9A546E794
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219246E79A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbhLILbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S236717AbhLILbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbhLILbM (ORCPT
+        with ESMTP id S235897AbhLILbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:31:12 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B173BC061746;
-        Thu,  9 Dec 2021 03:27:38 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z5so18616302edd.3;
-        Thu, 09 Dec 2021 03:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=86tk+RsoMIlYy34p/NNydvCeA5qxbsTCNKyRTnWUx5c=;
-        b=mCTGqgvQ2y9L5RkYlOkwfaVrIWKECJ5icSrpdj9xx+3TUlSaQYL1P9i8X8qw5XjJw0
-         YghfPc4XHzty2rnoR3q/Y9oAkp7kxihTyr8BQjpH4Ot8YhNjy9RLkTkzkzHoCrGhOxaz
-         2bchM1Otxw28WGWbxv/waNMe4QJEG5lATgqrt/KjeKhGZfchrVETo19QrxzsJgFAKo/S
-         aadedutmKirbwPjTlzU64RgPqN3FSzmKLYvjwL88bijzceH5TekcOlmMHG65KS7Y3Tn7
-         O/80KTYX2atQzZtEbkGluXCAeR3dbO9D0w0yJuYLEgxth30OCk+QlZuP2QzSAyle7w4e
-         2v1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=86tk+RsoMIlYy34p/NNydvCeA5qxbsTCNKyRTnWUx5c=;
-        b=LLbiwi4+BEjIS8JGsDz3XsgHxt2xEUZ4GhGmHFx5oVvIPIdxNSx/3LbuKgWiSbB01p
-         LTWUE7q60fDIIz5BQuowzvFbGeVPMGPmCVG0RPp8UmeLAXMRYDmJR0/riOOsp5CNKJ5H
-         RzCfl9GFizot1fqGsJDuG/nUS6wguW5efgMAaCLv2JLfWcZnmGRXlZzpHnmfk+aqTEtb
-         hQO/BDvjKnUSp+a58TduUZhPHFJ9CFAR33c6wPvSY1Tr/JEWKILQ0XqRy6zZLyPWzgiY
-         Ac39UJTteElj38iffV4ECs1Lyzr30SdF7hpH0G7O5EGRq1r2M5rAup5At0A1sITOhHNg
-         t6NA==
-X-Gm-Message-State: AOAM532Ck0HUC2hPZtu2WRHgMSesyDuqKYo8yXYmEH3U/FEX+t1CZYXA
-        FfVVH42wSJi0H/bDFGXVo5pd/MRZf1U=
-X-Google-Smtp-Source: ABdhPJz3gRtIWeqGeEN701gfZg+2amWOqzpNJjrS5NcvJHyG53DsbG0V0QUYt+umT1PYiQ0jTsdO7A==
-X-Received: by 2002:a17:907:6291:: with SMTP id nd17mr14983746ejc.194.1639049256458;
-        Thu, 09 Dec 2021 03:27:36 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id hw8sm2765901ejc.58.2021.12.09.03.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:27:36 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <cd34bb69-e204-57b5-01b1-1834337dcd36@redhat.com>
-Date:   Thu, 9 Dec 2021 12:27:34 +0100
+        Thu, 9 Dec 2021 06:31:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF04C061746;
+        Thu,  9 Dec 2021 03:28:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02BEACE25AD;
+        Thu,  9 Dec 2021 11:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFF2C004DD;
+        Thu,  9 Dec 2021 11:28:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639049284;
+        bh=YuTVc0t94cbpvLs4mLvsGGUtRGZGrbgNbCZEu9G82uM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B+pe+vFHKfbubH8018U6gvVAsdFtIirIJCalN6EhI4dyZJ5JuEpDxz94hQsRwMhxH
+         /LYK2S5dCya/YfVqPTcj2kEJyQDB9P0JeCFJenA84rjfekgx4pm6Sobg8M85+fS4Ho
+         ZV+DVEUsWTsEj41LEp0SNrpevaRBj42pAILAAidD4x0BtqP/7b/S2tQK5tPymtbkal
+         biH19t/d5PXxleFP3651kY+5HH3EsTbJKMcc6l/tYHoZKtru/qS44e43kHoxCcR7QP
+         c+GMcraWIIhbCXItNTHBxxj8b+6sAHqvuF0rGPiNCa1aYY8LbBV26klBHnEEpUJyf9
+         q61U0NO4MNGKQ==
+Received: by pali.im (Postfix)
+        id 08C1E111E; Thu,  9 Dec 2021 12:28:00 +0100 (CET)
+Date:   Thu, 9 Dec 2021 12:28:00 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     bpeled@marvell.com, kostap@marvell.com, nadavh@marvell.com,
+        stefanc@marvell.com, oferh@marvell.com,
+        Marc St-Amand <mstamand@ciena.com>, mw@semihalf.com,
+        jaz@semihalf.com
+Cc:     thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, andrew@lunn.ch, robh+dt@kernel.org
+Subject: Re: =?utf-8?B?W+KAnVBBVENI4oCdIHY=?= =?utf-8?Q?2?= 1/5] PCI:
+ armada8k: Disable LTSSM on link down interrupts
+Message-ID: <20211209112800.mhdi3oeko5eamfj4@pali>
+References: <1618406454-7953-1-git-send-email-bpeled@marvell.com>
+ <1618406454-7953-2-git-send-email-bpeled@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 3/3] selftests: sev_migrate_tests: Add mirror command
- tests
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Orr <marcorr@google.com>
-References: <20211208191642.3792819-1-pgonda@google.com>
- <20211208191642.3792819-4-pgonda@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211208191642.3792819-4-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1618406454-7953-2-git-send-email-bpeled@marvell.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 20:16, Peter Gonda wrote:
-> Add tests to confirm mirror vms can only run correct subset of commands.
+On Wednesday 14 April 2021 16:20:50 bpeled@marvell.com wrote:
+> From: Ben Peled <bpeled@marvell.com>
 > 
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
+> When a PCI link down condition is detected, the link training state
+> machine must be disabled immediately.
+> 
+> Signed-off-by: Marc St-Amand <mstamand@ciena.com>
+> Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+> Signed-off-by: Ben Peled <bpeled@marvell.com>
 > ---
->   .../selftests/kvm/x86_64/sev_migrate_tests.c  | 55 +++++++++++++++++--
->   1 file changed, 51 insertions(+), 4 deletions(-)
+>  drivers/pci/controller/dwc/pcie-armada8k.c | 38 ++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> index 4bb960ca6486..80056bbbb003 100644
-> --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> @@ -21,7 +21,7 @@
->   #define NR_LOCK_TESTING_THREADS 3
->   #define NR_LOCK_TESTING_ITERATIONS 10000
->   
-> -static void sev_ioctl(int vm_fd, int cmd_id, void *data)
-> +static int __sev_ioctl(int vm_fd, int cmd_id, void *data, __u32 *fw_error)
->   {
->   	struct kvm_sev_cmd cmd = {
->   		.id = cmd_id,
-> @@ -30,11 +30,20 @@ static void sev_ioctl(int vm_fd, int cmd_id, void *data)
->   	};
->   	int ret;
->   
-> -
->   	ret = ioctl(vm_fd, KVM_MEMORY_ENCRYPT_OP, &cmd);
-> -	TEST_ASSERT(ret == 0 && cmd.error == SEV_RET_SUCCESS,
-> +	*fw_error = cmd.error;
-> +	return ret;
-> +}
+> diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
+> index 13901f3..b2278b1 100644
+> --- a/drivers/pci/controller/dwc/pcie-armada8k.c
+> +++ b/drivers/pci/controller/dwc/pcie-armada8k.c
+> @@ -54,6 +54,10 @@ struct armada8k_pcie {
+>  #define PCIE_INT_C_ASSERT_MASK		BIT(11)
+>  #define PCIE_INT_D_ASSERT_MASK		BIT(12)
+>  
+> +#define PCIE_GLOBAL_INT_CAUSE2_REG	(PCIE_VENDOR_REGS_OFFSET + 0x24)
+> +#define PCIE_GLOBAL_INT_MASK2_REG	(PCIE_VENDOR_REGS_OFFSET + 0x28)
+> +#define PCIE_INT2_PHY_RST_LINK_DOWN	BIT(1)
 > +
-> +static void sev_ioctl(int vm_fd, int cmd_id, void *data)
-> +{
-> +	int ret;
-> +	__u32 fw_error;
+>  #define PCIE_ARCACHE_TRC_REG		(PCIE_VENDOR_REGS_OFFSET + 0x50)
+>  #define PCIE_AWCACHE_TRC_REG		(PCIE_VENDOR_REGS_OFFSET + 0x54)
+>  #define PCIE_ARUSER_REG			(PCIE_VENDOR_REGS_OFFSET + 0x5C)
+> @@ -193,6 +197,11 @@ static void armada8k_pcie_establish_link(struct armada8k_pcie *pcie)
+>  	       PCIE_INT_C_ASSERT_MASK | PCIE_INT_D_ASSERT_MASK;
+>  	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_MASK1_REG, reg);
+>  
+> +	/* Also enable link down interrupts */
+> +	reg = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_MASK2_REG);
+> +	reg |= PCIE_INT2_PHY_RST_LINK_DOWN;
+> +	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_MASK2_REG, reg);
 > +
-> +	ret = __sev_ioctl(vm_fd, cmd_id, data, &fw_error);
-> +	TEST_ASSERT(ret == 0 && fw_error == SEV_RET_SUCCESS,
->   		    "%d failed: return code: %d, errno: %d, fw error: %d",
-> -		    cmd_id, ret, errno, cmd.error);
-> +		    cmd_id, ret, errno, fw_error);
->   }
->   
->   static struct kvm_vm *sev_vm_create(bool es)
-> @@ -226,6 +235,42 @@ static void sev_mirror_create(int dst_fd, int src_fd)
->   	TEST_ASSERT(!ret, "Copying context failed, ret: %d, errno: %d\n", ret, errno);
->   }
->   
-> +static void verify_mirror_allowed_cmds(int vm_fd)
-> +{
-> +	struct kvm_sev_guest_status status;
+>  	if (!dw_pcie_link_up(pci)) {
+>  		/* Configuration done. Start LTSSM */
+>  		reg = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_CONTROL_REG);
+> @@ -230,6 +239,35 @@ static irqreturn_t armada8k_pcie_irq_handler(int irq, void *arg)
+>  	val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG);
+>  	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG, val);
+>  
+> +	val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_CAUSE2_REG);
 > +
-> +	for (int cmd_id = KVM_SEV_INIT; cmd_id < KVM_SEV_NR_MAX; ++cmd_id) {
-> +		int ret;
-> +		__u32 fw_error;
-> +
+> +	if (PCIE_INT2_PHY_RST_LINK_DOWN & val) {
+> +		u32 ctrl_reg = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_CONTROL_REG);
 > +		/*
-> +		 * These commands are allowed for mirror VMs, all others are
-> +		 * not.
+> +		 * The link went down. Disable LTSSM immediately. This
+> +		 * unlocks the root complex config registers. Downstream
+> +		 * device accesses will return all-Fs
 > +		 */
-> +		switch (cmd_id) {
-> +		case KVM_SEV_LAUNCH_UPDATE_VMSA:
-> +		case KVM_SEV_GUEST_STATUS:
-> +		case KVM_SEV_DBG_DECRYPT:
-> +		case KVM_SEV_DBG_ENCRYPT:
-> +			continue;
-> +		default:
-> +			break;
-> +		}
-> +
+
+Hello! This looks like some issue with PCIe HW. Does it mean that if
+LTSSM is not disabled then Root Complex stuck or crash during processing
+config requests from CPU? Or what else happens?
+
+Could you provide more details what is the exact issue described in this
+comment? And is there any Marvell errata about this particular "disable
+LTSSM immediately" issue?
+
+> +		ctrl_reg &= ~(PCIE_APP_LTSSM_EN);
+> +		dw_pcie_writel_dbi(pci, PCIE_GLOBAL_CONTROL_REG, ctrl_reg);
 > +		/*
-> +		 * These commands should be disallowed before the data
-> +		 * parameter is examined so NULL is OK here.
+> +		 * Mask link down interrupts. They can be re-enabled once
+> +		 * the link is retrained.
 > +		 */
-> +		ret = __sev_ioctl(vm_fd, cmd_id, NULL, &fw_error);
-> +		TEST_ASSERT(
-> +			ret == -1 && errno == EINVAL,
-> +			"Should not be able call command: %d. ret: %d, errno: %d\n",
-> +			cmd_id, ret, errno);
+> +		ctrl_reg = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_MASK2_REG);
+> +		ctrl_reg &= ~PCIE_INT2_PHY_RST_LINK_DOWN;
+> +		dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_MASK2_REG, ctrl_reg);
+> +		/*
+> +		 * At this point a worker thread can be triggered to
+> +		 * initiate a link retrain. If link retrains were
+> +		 * possible, that is.
+> +		 */
+> +		dev_dbg(pci->dev, "%s: link went down\n", __func__);
 > +	}
 > +
-> +	sev_ioctl(vm_fd, KVM_SEV_GUEST_STATUS, &status);
-> +}
+> +	/* Now clear the second interrupt cause. */
+> +	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_CAUSE2_REG, val);
 > +
->   static void test_sev_mirror(bool es)
->   {
->   	struct kvm_vm *src_vm, *dst_vm;
-> @@ -243,6 +288,8 @@ static void test_sev_mirror(bool es)
->   	if (es)
->   		sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
->   
-> +	verify_mirror_allowed_cmds(dst_vm->fd);
-> +
->   	kvm_vm_free(src_vm);
->   	kvm_vm_free(dst_vm);
->   }
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -- 
+> 2.7.4
 > 
-
-Queued, thanks.
-
-Paolo

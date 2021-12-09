@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0EE46E94A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D3F46E959
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238118AbhLINtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:49:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbhLINtY (ORCPT
+        id S238219AbhLINuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:50:04 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4238 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238154AbhLINuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:49:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10ACC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:45:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D4ECACE25C8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68540C341C7;
-        Thu,  9 Dec 2021 13:45:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639057546;
-        bh=nzHJ+8AUgscYkeKl42+DtprhAE5fDcB0eMN1+c5CDg8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GjFY2KAgxOB3/B5Dv8BE3Zhq+MjQkHI1wBUQUnFyNRttv/4quQ2wtmcxlCyFsdMJP
-         yTntvXjxRei4oh5no34BYOXB7Jew3bsdeFZMq1HzjbSih9SGzpX2nnfQl50LBMtGdX
-         88MEWAGxPcF8lzpQuRnKuDNOcJDRVDg0uJWENKb3k5/s/LWkZxbLf2q/Y5aYWQVd9m
-         LhRc7IeaZZn1f0WIIMu4Duh1//Uc2uU6xKdr3Le5nz153Z6OckyNXb1+S4I+mpJDx4
-         Zwyo/+zTp/XsEc5RhsYzBW0FycTj5nqAGdbkbiIhITYhKI8nghVoj32E5CAby30Nvp
-         BaMTTcPdQdtfg==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, perex@perex.cz,
-        kuninori.morimoto.gx@renesas.com,
-        Ameer Hamza <amhamza.mgc@gmail.com>, lgirdwood@gmail.com,
-        tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20211207142309.222820-1-amhamza.mgc@gmail.com>
-References: <Ya9YxoUqkATCOASh@sirena.org.uk> <20211207142309.222820-1-amhamza.mgc@gmail.com>
-Subject: Re: [PATCH v2] ASoC: test-component: fix null pointer dereference.
-Message-Id: <163905754513.1053127.9268237437282458172.b4-ty@kernel.org>
-Date:   Thu, 09 Dec 2021 13:45:45 +0000
+        Thu, 9 Dec 2021 08:50:00 -0500
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8wJ241Gpz67xjc;
+        Thu,  9 Dec 2021 21:44:34 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 14:46:24 +0100
+Received: from [10.47.91.245] (10.47.91.245) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 9 Dec
+ 2021 13:46:23 +0000
+Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+To:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <Viswas.G@microchip.com>, <Ajish.Koshy@microchip.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <a93da7a3-9cbe-b278-36ce-1ac860ad43d6@huawei.com>
+Date:   Thu, 9 Dec 2021 13:46:01 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.245]
+X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 19:23:09 +0500, Ameer Hamza wrote:
-> Dereferncing of_id pointer will result in exception in current
-> implementation since of_match_device() will assign it to NULL.
-> Adding NULL check for protection.
-> 
-> 
+On 26/11/2021 15:35, John Garry wrote:
+>   	/*
+> @@ -4280,8 +4283,9 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>   		pm8001_ha->smp_exp_mode = SMP_INDIRECT;
+>   
+>   
+> -	tmp_addr = cpu_to_le64((u64)sg_dma_address(&task->smp_task.smp_req));
+> -	preq_dma_addr = (char *)phys_to_virt(tmp_addr);
+> +	smp_req = &task->smp_task.smp_req;
+> +	to = kmap(sg_page(smp_req));
 
-Applied to
+This should be a kmap_atomic() as well, as I see the following for when 
+CONFIG_DEBUG_ATOMIC_SLEEP is enabled:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+[   27.222116]  dump_backtrace+0x0/0x2b4
+[   27.225774]  show_stack+0x1c/0x30
+[   27.229084]  dump_stack_lvl+0x68/0x84
+[   27.232741]  dump_stack+0x20/0x3c
+[   27.236049]  __might_resched+0x1d4/0x240
+[   27.239967]  __might_sleep+0x70/0xd0
+[   27.243536]  pm80xx_chip_smp_req+0x2c4/0x56c
+[   27.247802]  pm8001_task_exec.constprop.0+0x718/0x770
+[   27.252848]  pm8001_queue_command+0x1c/0x2c
+[   27.257026]  smp_execute_task_sg+0x1e8/0x370
+[   27.261289]  sas_ex_phy_discover+0x29c/0x31c
+[   27.265553]  smp_ata_check_ready+0x74/0x190
+[   27.269729]  ata_wait_ready+0xd0/0x224
+[   27.273474]  ata_wait_after_reset+0x78/0xac
+[   27.277652]  sas_ata_hard_reset+0xf0/0x18c
+[   27.281742]  ata_do_reset.constprop.0+0x80/0x9c
+[   27.286266]  ata_eh_reset+0xba4/0x1170
+[   27.290008]  ata_eh_recover+0x4b0/0x1b40
+[   27.293924]  ata_do_eh+0x8c/0x110
+[   27.297232]  ata_std_error_handler+0x80/0xb0
+[   27.301495]  ata_scsi_port_error_handler+0x3d4/0x9d0
+[   27.306454]  async_sas_ata_eh+0x70/0xf8
+[   27.310285]  async_run_entry_fn+0x5c/0x1e0
+[   27.314375]  process_one_work+0x378/0x630
+[   27.318379]  worker_thread+0xa8/0x6bc
+[   27.322033]  kthread+0x214/0x230
+[   27.325256]  ret_from_fork+0x10/0x20
+[   27.328825] pm80xx0:: pm80xx_chip_smp_req  4292:SMP REQUEST INDIRECT MODE
 
-Thanks!
+But I don't think that this is the problem which causes error handling 
+to kick in later, as discussed in this thread.
 
-[1/1] ASoC: test-component: fix null pointer dereference.
-      commit: c686316ec1210d43653c91e104c1e4cd0156dc89
+> +	payload = to + smp_req->offset;
+>   
+>   	/* INDIRECT MODE command settings. Use DMA */
+>   	if (pm8001_ha->smp_exp_mode == SMP_INDIRECT) {
+> @@ -4289,7 +4293,7 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>   		/* for SPCv indirect mode. Place the top 4 bytes of
+>   		 * SMP Request header here. */
+>   		for (i = 0; i < 4; i++)
+> -			smp_cmd.smp_req16[i] = *(preq_dma_addr + i);
+> +			smp_cmd.smp_req16[i] = *(payload + i);
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

@@ -2,116 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC2246E740
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC67B46E73F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbhLILLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:11:00 -0500
-Received: from mga18.intel.com ([134.134.136.126]:11248 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236371AbhLILK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:10:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639048046; x=1670584046;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+pNm7LpSapzSHjAl7xGc+T/u8eNQs01fQUKoECN/oJk=;
-  b=Ly53WCToYicGCEVTKn6RKqWB5tzPPIaKHQp89cj3DbifXTdx1JcIHvVK
-   Wmk66DnMG6cJwDH13+n5FCuMQhXZk1qz5M8iPlWW2n54FEPBngPF5NOlW
-   RVM57nUPiTgG3cUDtEBsUZh+lV0Ex9dfeETZxpH2faehkuS34yT+Kkx4w
-   dkBlToNE7a22MAMSrxlvrjqIlOqQMoeTVbIRK8+yP7GuxleomhzDrsQpO
-   eK1uT03MlD9jKlvCsTv5u2MqtZmKGr6+Dj/oGF5zSw7+k6t1Y/ubeZdxR
-   bXywXo7+CmUa+EweMsrDD8ye5GK5uGffOzZJSQF/EdLjsbk2wTxULSSvd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224943889"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="224943889"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:07:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="462091695"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 03:07:23 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvHGk-0001pB-QG; Thu, 09 Dec 2021 11:07:22 +0000
-Date:   Thu, 9 Dec 2021 19:06:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable
- 'sh_msiof_match'
-Message-ID: <202112091948.lD9JYOeh-lkp@intel.com>
+        id S236386AbhLILKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236371AbhLILKl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:10:41 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8B2C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 03:07:08 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id i5so9049875wrb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2VxkDMOundKBfIUdO/7UOYn5EnbqY0Ol39XKGZedyC4=;
+        b=tnNyynQwyy8CoX/o/IVMWly/KprAat84CeBG88w/YJ64AUvSVmLNcVvA16LYXv891P
+         Z64s+R9q/9Y7WOMV27YB3XK+1WNHGCgrqIeih7RDyy1SMQZOi+S+PSQ05t1BbFQA/8Ez
+         MagONdiopnm/IM+c4ovGFpnsqQsi4oYfb3OV3BEhPsKl1pz6yF+EVyPfbTkYTUqF9UMj
+         gkthsbC6manv1ILMKub7RJ/czljEZqLpV2RJ3hLk4zx3vl9WteDgBS+Oj7yKKVsC9rB3
+         dnVMJE6zTO4XDTnyq6UYp6fVq3+JAUu4kl8pugg7py71dFZdBRruW2EXFmoW75WgeZ2Q
+         I2hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2VxkDMOundKBfIUdO/7UOYn5EnbqY0Ol39XKGZedyC4=;
+        b=VfHCH7MzXRZLf4csDCd79gc9KQRD0f9QhV6NJdBr3jNHlD3/ZRU1nUcl1wHNGuoMh8
+         PqEx2sd2L9ascVUv3kG0xry3IXHwfyzm0jxVG6XQDUQ4h++KUMEEtxVhHYgn8ENz0tdD
+         FpPMnU/ea8OAJQ7a59Zs+POyFFyszfEpynZW5lfkVXL6vRZL6D7aGJT/MNEAX5v9kELi
+         SMchGjY5I4qnwxq1VO6HLb4pcGvuAqRwwnVTGaezX+Jrz0YsWcYycbsbx8YpCQvIw88W
+         2sJQ/Jb9y6azTvhDKIwnRYeAEWBxVUo7VfbySPuv4ToaHN/fFZv+dNZoiWRypg9d2ipU
+         cwlw==
+X-Gm-Message-State: AOAM530JUqYknHuPz+omStzWQaksPh5J+osQ98SgeF6Nzi3o4P4t6gGE
+        tBQf8WkNbknbtmk3cvys27WJTw==
+X-Google-Smtp-Source: ABdhPJxcwrCSoW/nJ0vnQG0t5jrG79KztA42Tcvn6rzPrj7zgjsH4fRzVtp8n1WMiyRFOAvlwoi5jA==
+X-Received: by 2002:a05:6000:1869:: with SMTP id d9mr5443407wri.416.1639048026690;
+        Thu, 09 Dec 2021 03:07:06 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d? ([2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d])
+        by smtp.googlemail.com with ESMTPSA id y6sm5536382wrh.18.2021.12.09.03.07.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 03:07:06 -0800 (PST)
+Subject: Re: include/linux/compiler_types.h:328:45: error: call to
+ '__compiletime_assert_202' declared with attribute error: BUILD_BUG failed
+To:     Marc Zyngier <maz@kernel.org>, kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+References: <202112071925.61r0Z8V1-lkp@intel.com>
+ <87k0gg1rw6.wl-maz@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <23d2fdea-960e-9f2b-4d41-f57bc08c3045@linaro.org>
+Date:   Thu, 9 Dec 2021 12:07:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87k0gg1rw6.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 07/12/2021 14:11, Marc Zyngier wrote:
+> + Will for the arm64 tree.
+> 
+> On Tue, 07 Dec 2021 11:53:09 +0000,
+> kernel test robot <lkp@intel.com> wrote:
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   cd8c917a56f20f48748dd43d9ae3caff51d5b987
+>> commit: 4775bc63f880001ee4fbd6456b12ab04674149e3 clocksource/arm_arch_timer: Add build-time guards for unhandled register accesses
+>> date:   7 weeks ago
+>> config: arm64-randconfig-r003-20211207 (https://download.01.org/0day-ci/archive/20211207/202112071925.61r0Z8V1-lkp@intel.com/config)
+>> compiler: aarch64-linux-gcc (GCC) 11.2.0
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4775bc63f880001ee4fbd6456b12ab04674149e3
+>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>         git fetch --no-tags linus master
+>>         git checkout 4775bc63f880001ee4fbd6456b12ab04674149e3
+>>         # save the config file to linux build tree
+>>         mkdir build_dir
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>    In file included from <command-line>:
+>>    In function 'arch_timer_reg_read_cp15',
+>>        inlined from 'arch_timer_reg_read' at drivers/clocksource/arm_arch_timer.c:166:9,
+>>        inlined from 'erratum_set_next_event_tval_generic' at drivers/clocksource/arm_arch_timer.c:414:9:
+>>>> include/linux/compiler_types.h:328:45: error: call to '__compiletime_assert_202' declared with attribute error: BUILD_BUG failed
+> 
+> [...]
+> 
+> This looks like another version of the inlining issue for which I have
+> posted a fix[1] a while ago.
+> 
+> Daniel, can you please pick this one up for the next -rc?
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
-date:   1 year, 7 months ago
-config: hexagon-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211209/202112091948.lD9JYOeh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/spi/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable 'sh_msiof_match' [-Wunused-const-variable]
-   static const struct of_device_id sh_msiof_match[] = {
-                                    ^
-   1 warning generated.
+Applied for next -rc
 
 
-vim +/sh_msiof_match +1072 drivers/spi/spi-sh-msiof.c
 
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1071  
-50a7e23f536779 Geert Uytterhoeven 2014-02-25 @1072  static const struct of_device_id sh_msiof_match[] = {
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1073  	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
-bdacfc7b6216dd Fabrizio Castro    2017-09-25  1074  	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
-bdacfc7b6216dd Fabrizio Castro    2017-09-25  1075  	{ .compatible = "renesas,msiof-r8a7745",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1076  	{ .compatible = "renesas,msiof-r8a7790",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1077  	{ .compatible = "renesas,msiof-r8a7791",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1078  	{ .compatible = "renesas,msiof-r8a7792",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1079  	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1080  	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1081  	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1082  	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
-61a8dec502b873 Geert Uytterhoeven 2017-07-12  1083  	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
-264c3e8de4fbda Simon Horman       2016-12-20  1084  	{ .compatible = "renesas,sh-msiof",        .data = &sh_data }, /* Deprecated */
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1085  	{},
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1086  };
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1087  MODULE_DEVICE_TABLE(of, sh_msiof_match);
-50a7e23f536779 Geert Uytterhoeven 2014-02-25  1088  
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-:::::: The code at line 1072 was first introduced by commit
-:::::: 50a7e23f53677918bf521b09ce9bb20fb87cd175 spi: sh-msiof: Move default FIFO sizes to device ID data
-
-:::::: TO: Geert Uytterhoeven <geert+renesas@linux-m68k.org>
-:::::: CC: Mark Brown <broonie@linaro.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

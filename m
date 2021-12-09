@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBD746E7C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706DC46E7CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236917AbhLIL4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:56:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44459 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230080AbhLIL4e (ORCPT
+        id S235472AbhLIL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:57:40 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52520 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhLIL5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:56:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639050779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0TYqDLKrFKQnJiMTqk3TD0EmAaxYdybXmgiw3V7bkHY=;
-        b=Ap/qwDeUTyQj+yzssTzH+0vqCHX9t/W0AbQGW+izxrJLw0uTijVuAtRUymbmT/2VI9lMRk
-        I06rzq60c+2KeslMoaky9pxLqmE0cLBWoqdy468oqHLGZ9OAhyIgvHs+BKpbrlbrTxeXss
-        qlG0jItKIc3vAIdDkV54uL14HPJWZ+M=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-46-whJQucYfMymwnYZiOPsxbA-1; Thu, 09 Dec 2021 06:52:58 -0500
-X-MC-Unique: whJQucYfMymwnYZiOPsxbA-1
-Received: by mail-wr1-f72.google.com with SMTP id b1-20020a5d6341000000b001901ddd352eso1331256wrw.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 03:52:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=0TYqDLKrFKQnJiMTqk3TD0EmAaxYdybXmgiw3V7bkHY=;
-        b=LaaYp5IFvV7E6u7tOuzPO9sbjvLq560FFZtwVjzkX7AdA16c7NZpt83U37L2Cbdqtp
-         0L+giTup4jWOZHzxh9rLhjArKChoz1qfZuMy26TS6prdE/aka18e101F6GUp4SNeRLNJ
-         m+s6dsDzfGjLL5pzpjoZ8DMxQgXuNsvqj1ZrymCVpa90Bkn4YF5jkDTTZ4U5ZD6pAXHL
-         yjX6VjisGETxy2kk3OjCqEhTOylWTRJcKYNF+Q1decojOK0UJ9By5s0orU5JlDf2GI/X
-         9IFrRHzShD3H/CAiYLaEozozXamTizZR9Q+CN5cbwUIJECNs8SOf/phxns4y7iTZoj80
-         9KcA==
-X-Gm-Message-State: AOAM5315qEjqimVcT/5OoCu+XXU0dZWPClZ6Wn6X+YSGQ1bRszj12usA
-        xIOWuAQLmDthgVtjcak8b6zjfcC1IgfduUlfPDWneqWybqWl+Nstx5wmxkz1wI27gnHQNaqrXZC
-        mpC9ubDAe2ZrNNPLjjnErPTkJ
-X-Received: by 2002:a1c:448b:: with SMTP id r133mr6687571wma.85.1639050777615;
-        Thu, 09 Dec 2021 03:52:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyL2rego16YzHim2g10utaFg2hLXRfWqlX4AYNOsaFkm/biENlPxtMps3emSdCNW89UHAze0A==
-X-Received: by 2002:a1c:448b:: with SMTP id r133mr6687533wma.85.1639050777348;
-        Thu, 09 Dec 2021 03:52:57 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23ded.dip0.t-ipconnect.de. [79.242.61.237])
-        by smtp.gmail.com with ESMTPSA id b6sm8982964wmq.45.2021.12.09.03.52.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:52:56 -0800 (PST)
-Message-ID: <858b3185-6770-6c46-5efb-53698c913eec@redhat.com>
-Date:   Thu, 9 Dec 2021 12:52:56 +0100
+        Thu, 9 Dec 2021 06:57:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ED12FCE245E;
+        Thu,  9 Dec 2021 11:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34854C004DD;
+        Thu,  9 Dec 2021 11:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639050843;
+        bh=LuduuUVtRzUzUrU1F4AC42Ur8LrJtnTcV5XvLjCCZgM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P5e2dNB8nKRDEbTaMlPbcP115LXIR9iFP6KpUPvXQnbXR5igdH0hk9V2Yzc1a772L
+         P2SfAjKd/6HYdrQe6THTcim1QXVkqF/yuKry13bUXVhK+jmuo5qRZwoXBfy8i32xbB
+         WV+blwXbxcNFhCOPagIg1KfvBUjXS/LWSOMlAgPVxz+oBCQDyYZvDL2kWvGLTdquuf
+         LtEi96p5aBXEKKVOC7IGXjol6hn53KqjriUMYpMFdtKVT2dSjH93an7FIjKqLokKyE
+         7TcefqtLtgZWJ6V5Dtna+nAoV1aRctmaMBOZDi8JX2Id8+vHJpzog1CLV+a08hn9M5
+         /UDTXIjflPatQ==
+Date:   Thu, 9 Dec 2021 17:23:59 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+Cc:     "kishon@ti.com" <kishon@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Milind Parab <mparab@cadence.com>,
+        "a-govindraju@ti.com" <a-govindraju@ti.com>
+Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
+ multilink configuration
+Message-ID: <YbHuV/LpcZqOTuLV@matsya>
+References: <20211022170236.18839-1-sjakhade@cadence.com>
+ <20211022170236.18839-14-sjakhade@cadence.com>
+ <YZxyja2xEkpWvStR@matsya>
+ <DM6PR07MB6154FB5EB84B7BE063965619C5619@DM6PR07MB6154.namprd07.prod.outlook.com>
+ <YZ8aygJQoxie+Ddn@matsya>
+ <DM6PR07MB61549C25EBF70ED2639FBCF6C5699@DM6PR07MB6154.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 2/2] virtio-mem: prepare fake page onlining code for
- granularity smaller than MAX_ORDER - 1
-Content-Language: en-US
-To:     Eric Ren <renzhengeek@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Gavin Shan <gshan@redhat.com>, Hui Zhu <teawater@gmail.com>,
-        Sebastien Boeuf <sebastien.boeuf@intel.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
-References: <20211126134209.17332-1-david@redhat.com>
- <20211126134209.17332-3-david@redhat.com>
- <a4e2099d-b543-e2e3-f189-0cdfcc38420e@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <a4e2099d-b543-e2e3-f189-0cdfcc38420e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR07MB61549C25EBF70ED2639FBCF6C5699@DM6PR07MB6154.namprd07.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-thanks for the review!
-
->>   		if (PageDirty(page)) {
->> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
->> -						      false);
->> -			generic_online_page(page, MAX_ORDER - 1);
->> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, false);
->> +			generic_online_page(page, order);
->>   		} else {
->> -			virtio_mem_clear_fake_offline(pfn + i, max_nr_pages,
->> -						      true);
->> -			free_contig_range(pfn + i, max_nr_pages);
->> -			adjust_managed_page_count(page, max_nr_pages);
->> +			virtio_mem_clear_fake_offline(pfn + i, 1 << order, true);
->> +			free_contig_range(pfn + i, 1 << order);
->> +			adjust_managed_page_count(page, 1 << order);
-> In the loop, pfn + i, 1 << order are repeatedly calculated. 1 << order 
-> is a step size, pfn + i  is each step position.
-> Better to figure the numer once each iter?
-
-The compiler better be smart enough to calculate such constants once :)
-
+On 02-12-21, 14:12, Swapnil Kashinath Jakhade wrote:
+> Hi Vinod,
 > 
-> LGTL.
-> LGTM.
-> Reviewed-by: Eric Ren <renzhengeek@gmail.com>
+> > -----Original Message-----
+> > From: Vinod Koul <vkoul@kernel.org>
+> > Sent: Thursday, November 25, 2021 10:41 AM
+> > To: Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+> > Cc: kishon@ti.com; robh+dt@kernel.org; p.zabel@pengutronix.de; linux-
+> > phy@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > devicetree@vger.kernel.org; Milind Parab <mparab@cadence.com>; a-
+> > govindraju@ti.com
+> > Subject: Re: [PATCH v3 13/15] phy: cadence: Sierra: Add PCIe + QSGMII PHY
+> > multilink configuration
+> > 
+> > EXTERNAL MAIL
+> > 
+> > 
+> > On 24-11-21, 07:33, Swapnil Kashinath Jakhade wrote:
+> > 
+> > > > so this is pcie->qsgmii ->ssc/external/internal ... ok
+> > > >
+> > > > > +				[NO_SSC] =
+> > > > &pcie_100_no_ssc_plllc_cmn_vals,
+> > > > > +				[EXTERNAL_SSC] =
+> > > > &pcie_100_ext_ssc_plllc_cmn_vals,
+> > > > > +				[INTERNAL_SSC] =
+> > > > &pcie_100_int_ssc_plllc_cmn_vals,
+> > > > > +			},
+> > > > >  		},
+> > > > >  		[TYPE_USB] = {
+> > > > >  			[TYPE_NONE] = {
+> > > > >  				[EXTERNAL_SSC] =
+> > > > &usb_100_ext_ssc_cmn_vals,
+> > > > >  			},
+> > > > >  		},
+> > > > > +		[TYPE_QSGMII] = {
+> > > > > +			[TYPE_PCIE] = {
+> > > >
+> > > > now it is reverse! qsgmii -> pcie -> ... why?
+> > > >
+> > > > what is meant by pcie->qsgmii and qsgmii-> pcie?
+> > > >
+> > >
+> > > Multi-protocol configuration is done in 2 phases, each for one protocol.
+> > > e.g. for PCIe + QSGMII case,
+> > > [TYPE_PCIE][TYPE_QSGMII] will configure common and lane registers for
+> > > PCIe and [TYPE_QSGMII][TYPE_PCIE] will configure common and lane
+> > registers for QSGMII.
+> > 
+> > Then it should be always common + protocol or protocol + common, not
+> > both please! Pls make an order and stick to it everywhere... If that is not
+> > possible, I would like to understand why
+> 
+> Could you please elaborate what do you mean by
+> " common + protocol or protocol + common, not both please!"?
+> The order is same everywhere which is common + lane configuration for protocol 1
+> and then for protocol 2. For multiprotocol case, PHY configuration is based on which
+> protocols are operating simultaneously. So e.g.
+> [TYPE_QSGMII][TYPE_PCIE] -> QSGMII configuration when other protocol is PCIe
+> Which might be different than
+> [TYPE_QSGMII][TYPE_*] -> QSGMII configuration with other protocol.
 
-Thanks!
-
+As I said I would like to understand what is the difference b/w
+[TYPE_QSGMII][TYPE_PCIE] & [TYPE_PCIE][TYPE_QSGMII] and why?
 
 -- 
-Thanks,
-
-David / dhildenb
-
+~Vinod

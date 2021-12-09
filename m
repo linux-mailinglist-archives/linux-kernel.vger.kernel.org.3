@@ -2,222 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C4E46E8D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8890446E8DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbhLINOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:14:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53352 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234153AbhLINOD (ORCPT
+        id S237623AbhLINPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:15:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53094 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234153AbhLINPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:14:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639055429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4HLYQrYTvDhJOhX5Nedd5N7Rr2EdTZuNtpoWym2CdMY=;
-        b=ECKeRDqijIPpNAbtJLrdQk7Yd1YtverHIIRKa2i7UvNz2VqUx873L0B3maQzim+mgm6gJi
-        /M9bhdqEs7QcZENuh8WNsPaXhyf1YAuyCwYNjG+oWiWXwmzJI2lxrElFQKMe+eGlqp4GX8
-        eIzFoKYaahh4HySTJ0x/a8ghwCHdiQk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-UqH0bl6FMte7ocDMXH8ahw-1; Thu, 09 Dec 2021 08:10:28 -0500
-X-MC-Unique: UqH0bl6FMte7ocDMXH8ahw-1
-Received: by mail-wr1-f69.google.com with SMTP id b1-20020a5d6341000000b001901ddd352eso1397037wrw.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:10:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=4HLYQrYTvDhJOhX5Nedd5N7Rr2EdTZuNtpoWym2CdMY=;
-        b=s5FkwDUQu9+Jwxv33vOUEo6TdkPNhLyk2HQAddvn1Y2km6653kj4kt1Is2OhCUPUKA
-         LV+9ASaP1hEApr7pwRJk8EeIULs9Yx4XYSaoALdJe2g/xHEDWn3t2rivk8MiMomuH/6l
-         LGWgnZkaRAK3fhrsO3t1M9BZA/+B66X1SPQNcVt6vODctSorPs8iaevyJff0I9F+i3QZ
-         eWlWl1oZwOXcBscAUIA5mTnVkjIdFb7TwjirupoaqshD2bG5jVSGNqjMl+Pa/GqBwU7f
-         +5cOStuOWidbnwpwWsqWZV8DfTishg57uu1h/RAS/fu1I6WqsLf+k8c6uAKa7T+jYcrv
-         Tp+g==
-X-Gm-Message-State: AOAM531Jtc8ZPa8Rh4z7R9EtiCJQAYZfZYjnMGGmFjNVRcrYAgmKkL/P
-        RuMXF7UBSBguJa68UAUAWU/KDd/OwIKzhzBtvvqRzEbwniC+eycSP2drgtRRzVPTwR8bm2W0zsM
-        Av4BfQWxDDZQV0lS289JOUo1j
-X-Received: by 2002:a1c:7e04:: with SMTP id z4mr7156667wmc.134.1639055427545;
-        Thu, 09 Dec 2021 05:10:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxrB5QtFpLgO2F74/dDZiIBur1ghv6Xdy5HbLQ6yvADLrjOQvdxb0Lke24kA67qhYJRwDXfWQ==
-X-Received: by 2002:a1c:7e04:: with SMTP id z4mr7156624wmc.134.1639055427304;
-        Thu, 09 Dec 2021 05:10:27 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23ded.dip0.t-ipconnect.de. [79.242.61.237])
-        by smtp.gmail.com with ESMTPSA id j40sm5732030wms.16.2021.12.09.05.10.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 05:10:26 -0800 (PST)
-Message-ID: <a5e172db-2be9-c5bc-a43e-9e9a1fb2a69c@redhat.com>
-Date:   Thu, 9 Dec 2021 14:10:25 +0100
+        Thu, 9 Dec 2021 08:15:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B01BB8243C;
+        Thu,  9 Dec 2021 13:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C828C004DD;
+        Thu,  9 Dec 2021 13:11:27 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 14:11:22 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 04/16] ima: Move delayed work queue and variables into
+ ima_namespace
+Message-ID: <20211209131122.ur4ngp6vi5g6oayc@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-5-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH RESEND v2 3/5] mm_zone: add function to check if managed
- dma zone exists
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@lst.de, robin.murphy@arm.com,
-        cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz, m.szyprowski@samsung.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org
-References: <20211207030750.30824-1-bhe@redhat.com>
- <20211207030750.30824-4-bhe@redhat.com>
- <0a9bc228-21ba-abe3-d9c8-b9d52b936366@redhat.com>
- <20211209130210.GB3050@MiWiFi-R3L-srv>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211209130210.GB3050@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211208221818.1519628-5-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.12.21 14:02, Baoquan He wrote:
-> On 12/07/21 at 12:23pm, David Hildenbrand wrote:
->> On 07.12.21 04:07, Baoquan He wrote:
->>> In some places of the current kernel, it assumes that dma zone must have
->>> managed pages if CONFIG_ZONE_DMA is enabled. While this is not always true.
->>> E.g in kdump kernel of x86_64, only low 1M is presented and locked down
->>> at very early stage of boot, so that there's no managed pages at all in
->>> DMA zone. This exception will always cause page allocation failure if page
->>> is requested from DMA zone.
->>>
->>> Here add function has_managed_dma() and the relevant helper functions to
->>> check if there's DMA zone with managed pages. It will be used in later
->>> patches.
->>>
->>> Signed-off-by: Baoquan He <bhe@redhat.com>
->>> ---
->>>  include/linux/mmzone.h | 21 +++++++++++++++++++++
->>>  mm/page_alloc.c        | 11 +++++++++++
->>>  2 files changed, 32 insertions(+)
->>>
->>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
->>> index 58e744b78c2c..82d23e13e0e5 100644
->>> --- a/include/linux/mmzone.h
->>> +++ b/include/linux/mmzone.h
->>> @@ -998,6 +998,18 @@ static inline bool zone_is_zone_device(struct zone *zone)
->>>  }
->>>  #endif
->>>  
->>> +#ifdef CONFIG_ZONE_DMA
->>> +static inline bool zone_is_dma(struct zone *zone)
->>> +{
->>> +	return zone_idx(zone) == ZONE_DMA;
->>> +}
->>> +#else
->>> +static inline bool zone_is_dma(struct zone *zone)
->>> +{
->>> +	return false;
->>> +}
->>> +#endif
->>> +
->>>  /*
->>>   * Returns true if a zone has pages managed by the buddy allocator.
->>>   * All the reclaim decisions have to use this function rather than
->>> @@ -1046,6 +1058,7 @@ static inline int is_highmem_idx(enum zone_type idx)
->>>  #endif
->>>  }
->>>  
->>> +bool has_managed_dma(void);
->>>  /**
->>>   * is_highmem - helper function to quickly check if a struct zone is a
->>>   *              highmem zone or not.  This is an attempt to keep references
->>> @@ -1131,6 +1144,14 @@ extern struct zone *next_zone(struct zone *zone);
->>>  			; /* do nothing */		\
->>>  		else
->>>  
->>> +#define for_each_managed_zone(zone)		        \
->>> +	for (zone = (first_online_pgdat())->node_zones; \
->>> +	     zone;					\
->>> +	     zone = next_zone(zone))			\
->>> +		if (!managed_zone(zone))		\
->>> +			; /* do nothing */		\
->>> +		else
->>> +
->>>  static inline struct zone *zonelist_zone(struct zoneref *zoneref)
->>>  {
->>>  	return zoneref->zone;
->>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>> index c5952749ad40..ac0ea42a4e5f 100644
->>> --- a/mm/page_alloc.c
->>> +++ b/mm/page_alloc.c
->>> @@ -9459,4 +9459,15 @@ bool take_page_off_buddy(struct page *page)
->>>  	spin_unlock_irqrestore(&zone->lock, flags);
->>>  	return ret;
->>>  }
->>> +
->>> +bool has_managed_dma(void)
->>> +{
->>> +	struct zone *zone;
->>> +
->>> +	for_each_managed_zone(zone) {
->>> +		if (zone_is_dma(zone))
->>> +			return true;
->>> +	}
->>> +	return false;
->>> +}
->>
->> Wouldn't it be "easier/faster" to just iterate online nodes and directly
->> obtain the ZONE_DMA, checking if there are managed pages?
+On Wed, Dec 08, 2021 at 05:18:06PM -0500, Stefan Berger wrote:
+> Move the delayed work queue and associated variables to the
+> ima_namespace and initialize them.
 > 
-> Thanks, Dave.
+> Since keys queued up for measurement currently are only relevant in the
+> init_ima_ns, call ima_init_key_queue() only when the init_ima_ns is
+> initialized.
 > 
-> Please check for_each_managed_zone(), it is iterating online nodes and
-> it's each managed zone. 
+> Protect the ima_namespace when scheduling the delayed work by taking an
+> additional reference to its user namespace. Put the reference when either
+> the delayed work has completed or when it was cancelled but hadn't run.
 > 
-> Is below what you are suggesting? The only difference is I introduced
-> for_each_managed_zone() which can be reused later if needed. Not sure if
-> I got your suggestion correctly.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  include/linux/ima.h                      | 11 +++++++
+>  security/integrity/ima/ima.h             | 12 ++++---
+>  security/integrity/ima/ima_fs.c          |  4 ++-
+>  security/integrity/ima/ima_init.c        |  2 --
+>  security/integrity/ima/ima_init_ima_ns.c |  8 +++++
+>  security/integrity/ima/ima_policy.c      |  4 +--
+>  security/integrity/ima/ima_queue_keys.c  | 42 +++++++++++++-----------
+>  7 files changed, 53 insertions(+), 30 deletions(-)
 > 
-> bool has_managed_dma(void)
-> {
->         struct pglist_data *pgdat;
->         struct zone *zone;
->         enum zone_type i, j;
-> 
->         for_each_online_pgdat(pgdat) {
->                 for (i = 0; i < MAX_NR_ZONES - 1; i++) {          
->                         struct zone *zone = &pgdat->node_zones[i];
->                         if (zone_is_dma(zone))                                                                                                    
->                                 return true;
->                 }
->         }
->         return false;
-> 
-> }
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 9f6de36240b0..529defe4d272 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -217,6 +217,17 @@ struct ima_namespace {
+>  	struct rb_root ns_status_tree;
+>  	rwlock_t ns_status_lock;
+>  	struct kmem_cache *ns_status_cache;
+> +
+> +#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
+> +	/*
+> +	 * If custom IMA policy is not loaded then keys queued up
+> +	 * for measurement should be freed. This worker is used
+> +	 * for handling this scenario.
+> +	 */
+> +	struct delayed_work ima_keys_delayed_work;
+> +	long ima_key_queue_timeout;
+> +	bool timer_expired;
+> +#endif
+>  };
+>  
+>  extern struct ima_namespace init_ima_ns;
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index dd06e16c4e1c..9edab9050dc7 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -77,6 +77,8 @@ struct ima_field_data {
+>  	u32 len;
+>  };
+>  
+> +struct ima_namespace;
+> +
+>  /* IMA template field definition */
+>  struct ima_template_field {
+>  	const char field_id[IMA_TEMPLATE_FIELD_ID_MAX_LEN];
+> @@ -247,18 +249,18 @@ struct ima_key_entry {
+>  	size_t payload_len;
+>  	char *keyring_name;
+>  };
+> -void ima_init_key_queue(void);
+> +void ima_init_key_queue(struct ima_namespace *ns);
+>  bool ima_should_queue_key(void);
+>  bool ima_queue_key(struct key *keyring, const void *payload,
+>  		   size_t payload_len);
+> -void ima_process_queued_keys(void);
+> +void ima_process_queued_keys(struct ima_namespace *ns);
+> +void ima_keys_handler(struct work_struct *work);
+>  #else
+> -static inline void ima_init_key_queue(void) {}
+>  static inline bool ima_should_queue_key(void) { return false; }
+>  static inline bool ima_queue_key(struct key *keyring,
+>  				 const void *payload,
+>  				 size_t payload_len) { return false; }
+> -static inline void ima_process_queued_keys(void) {}
+> +static inline void ima_process_queued_keys(struct ima_namespace *ns) {}
+>  #endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS */
+>  
+>  /* LIM API function definitions */
+> @@ -300,7 +302,7 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
+>  		     struct ima_template_desc **template_desc,
+>  		     const char *func_data, unsigned int *allowed_algos);
+>  void ima_init_policy(void);
+> -void ima_update_policy(void);
+> +void ima_update_policy(struct ima_namespace *ns);
+>  void ima_update_policy_flags(void);
+>  ssize_t ima_parse_add_rule(char *);
+>  void ima_delete_rules(void);
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index 3d8e9d5db5aa..5cff3d6c3dc7 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/parser.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/ima.h>
+>  
+>  #include "ima.h"
+>  
+> @@ -410,6 +411,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+>  static int ima_release_policy(struct inode *inode, struct file *file)
+>  {
+>  	const char *cause = valid_policy ? "completed" : "failed";
+> +	struct ima_namespace *ns = get_current_ns();
+>  
+>  	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+>  		return seq_release(inode, file);
+> @@ -430,7 +432,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+>  		return 0;
+>  	}
+>  
+> -	ima_update_policy();
+> +	ima_update_policy(ns);
+>  #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+>  	securityfs_remove(ima_policy);
+>  	ima_policy = NULL;
+> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+> index f6ae4557a0da..24848373a061 100644
+> --- a/security/integrity/ima/ima_init.c
+> +++ b/security/integrity/ima/ima_init.c
+> @@ -155,8 +155,6 @@ int __init ima_init(void)
+>  	if (rc != 0)
+>  		return rc;
+>  
+> -	ima_init_key_queue();
+> -
+>  	ima_measure_critical_data("kernel_info", "kernel_version",
+>  				  UTS_RELEASE, strlen(UTS_RELEASE), false,
+>  				  NULL, 0);
+> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+> index 64777377664b..75ef17d52b5b 100644
+> --- a/security/integrity/ima/ima_init_ima_ns.c
+> +++ b/security/integrity/ima/ima_init_ima_ns.c
+> @@ -26,6 +26,14 @@ int ima_init_namespace(struct ima_namespace *ns)
+>  	if (!ns->ns_status_cache)
+>  		return -ENOMEM;
+>  
+> +#ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
+> +	INIT_DELAYED_WORK(&ns->ima_keys_delayed_work, ima_keys_handler);
+> +	ns->ima_key_queue_timeout = 300000;
+> +	ns->timer_expired = false;
+> +	if (ns == &init_ima_ns)
+> +		ima_init_key_queue(ns);
 
+The refcounting seems wrong?
+ima_init_key_queue() only takes a reference for init_ima_ns and
+consequently on init_user_ns (which is a bit pointless since it can't go
+away and so can't init_ima_ns).
 
-Even simpler, no need to iterate over zones at all, only over nodes:
+In contrast non-init_ima_ns will not take a reference on their user_ns.
+But ima_keys_handler() always puts the refcount for user_ns for both
+non-init_ima_ns and init_ima_ns alike.
 
-#ifdef CONFIG_ZONE_DMA
-bool has_managed_dma(void)
-{
-	struct pglist_data *pgdat;
+Maybe I'm misreading this.
 
-	for_each_online_pgdat(pgdat) {
-		struct zone *zone = &pgdat->node_zones[ZONE_DMA];
+In your earlier mail in [1] you said:
 
-		if (managed_zone(zone)
-			return true;
-	}
-	return false;
-}
-#endif /* CONFIG_ZONE_DMA */
+> > The only problem that I see where we are accessing the IMA namespace outside a
+> > process context is in 4/16 'ima: Move delayed work queue and variables into
+> > ima_namespace' where a delayed work queue is used. I fixed this now by getting
 
-Without CONFIG_ZONE_DMA, simply provide a dummy in the header that
-returns false.
+So we seem to know that ima always accesses ima_ns from
+current_user_ns() and only in the workqueue case will it delay key
+processing for a specific ima namespace without walking a userns
+hierarchy.
 
+If that's the case we should remove the user_ns member from ima_ns and
+enforce that ima_ns is always accessed from current_user_ns().
+
+Since the workqueue case luckily doesn't need access to user_ns anywhere
+we can add a workqueue specific refcount that only keeps it alive for
+the workqueue case. We just need to enforce that when the refcount is
+bumped for the workqeue it must be done from process context so we're
+guaranteed that when we bump the reference the user_ns and consequently
+the ima_ns is still alive.
+
+This should solve your lifetime issues (once you fixed the problem I
+pointed out above).
+
+(Btw, the kref member was unused before my patch. It didn't really do
+any lifetime management for ima_ns afaict.)
+
+[1]: https://lore.kernel.org/lkml/60fa585b-984e-fa13-e76f-56083a726259@linux.ibm.com
+
+Here's a sketch neither compile nor runtime tested and without the
+refcount issues I pointed out above fixed:
+
+From 130e8d3faaad42820040587eff8695027fcf062a Mon Sep 17 00:00:00 2001
+From: Christian Brauner <christian.brauner@ubuntu.com>
+Date: Thu, 9 Dec 2021 13:15:49 +0100
+Subject: [PATCH] !!!! HERE BE DRAGONS - UNFIXED REFCOUNT ISSUES FROM PREVIOUS
+ PATCH AND ALL UNTESTED !!!!
+
+ima: get rid of user_ns member in struct ima_namespace
+---
+ include/linux/ima.h                      | 40 +++++++++---------------
+ security/integrity/ima/ima_fs.c          |  2 +-
+ security/integrity/ima/ima_init_ima_ns.c |  3 +-
+ security/integrity/ima/ima_main.c        |  2 +-
+ security/integrity/ima/ima_ns.c          |  9 ++----
+ security/integrity/ima/ima_queue_keys.c  | 22 +++++++++----
+ 6 files changed, 36 insertions(+), 42 deletions(-)
+
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 32bf98092143..73cdfbf3f9d4 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -13,6 +13,7 @@
+ #include <linux/kexec.h>
+ #include <linux/user_namespace.h>
+ #include <crypto/hash_info.h>
++#include <linux/refcount.h>
+ struct linux_binprm;
+ 
+ #ifdef CONFIG_IMA
+@@ -241,8 +242,6 @@ enum {
+ };
+ 
+ struct ima_namespace {
+-	struct kref kref;
+-	struct user_namespace *user_ns;
+ 	struct rb_root ns_status_tree;
+ 	rwlock_t ns_status_lock;
+ 	struct kmem_cache *ns_status_cache;
+@@ -264,6 +263,7 @@ struct ima_namespace {
+ 	 * for measurement should be freed. This worker is used
+ 	 * for handling this scenario.
+ 	 */
++	refcount_t ima_keys_delayed_ref;
+ 	struct delayed_work ima_keys_delayed_work;
+ 	long ima_key_queue_timeout;
+ 	bool timer_expired;
+@@ -295,24 +295,12 @@ extern struct list_head ima_default_rules;
+ 
+ #ifdef CONFIG_IMA_NS
+ 
+-void free_ima_ns(struct kref *kref);
+-
+-static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
+-{
+-	if (ns)
+-		kref_get(&ns->kref);
+-
+-	return ns;
+-}
++void free_ima_ns(struct ima_namespace *ns);
++void __put_delayed_ima_ns(struct ima_namespace *ns);
+ 
+ static inline void put_ima_ns(struct user_namespace *user_ns)
+ {
+-	struct ima_namespace *ns = user_ns->ima_ns;
+-
+-	if (ns) {
+-		pr_debug("DEREF   ima_ns: 0x%p  ctr: %d\n", ns, kref_read(&ns->kref));
+-		kref_put(&ns->kref, free_ima_ns);
+-	}
++	__put_delayed_ima_ns(user_ns->ima_ns);
+ }
+ 
+ int create_ima_ns(struct user_namespace *user_ns);
+@@ -322,21 +310,20 @@ static inline struct ima_namespace *get_current_ns(void)
+ 	return current_user_ns()->ima_ns;
+ }
+ 
+-#else
+-
+-static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
++static inline struct user_namespace *ima_user_ns(const struct ima_namespace *ima_ns)
+ {
+-	return ns;
++	struct user_namespace *user_ns;
++	user_ns = current_user_ns();
++	WARN_ON(user_ns->ima_ns != ima_ns);
++	return user_ns;
+ }
+ 
+-static inline void put_ima_ns(struct user_namespace *user_ns)
+-{
+-}
++#else
+ 
+ static inline int create_ima_ns(struct user_namespace *user_ns)
+ {
+ #if CONFIG_IMA
+-	user_ns->ima_ns = get_ima_ns(&init_ima_ns);
++	user_ns->ima_ns = &init_ima_ns;
+ #endif
+ 	return 0;
+ }
+@@ -346,6 +333,9 @@ static inline struct ima_namespace *get_current_ns(void)
+ 	return &init_ima_ns;
+ }
+ 
++static inline void put_ima_ns(struct user_namespace *user_ns)
++{
++}
+ #endif /* CONFIG_IMA_NS */
+ 
+ #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index 778983fd9a73..583462b29cb5 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -386,7 +386,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+ #else
+ 		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+ 			return -EACCES;
+-		if (!mac_admin_ns_capable(ns->user_ns))
++		if (!mac_admin_ns_capable(ima_user_ns(ns)))
+ 			return -EPERM;
+ 		return seq_open(filp, &ima_policy_seqops);
+ #endif
+diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+index 162c94e06d13..6ae6df037f03 100644
+--- a/security/integrity/ima/ima_init_ima_ns.c
++++ b/security/integrity/ima/ima_init_ima_ns.c
+@@ -62,12 +62,11 @@ int __init ima_ns_init(void)
+ }
+ 
+ struct ima_namespace init_ima_ns = {
+-	.kref = KREF_INIT(1),
+-	.user_ns = &init_user_ns,
+ #ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
+ 	.ima_process_keys = false,
+ 	.ima_keys_lock = __MUTEX_INITIALIZER(init_ima_ns.ima_keys_lock),
+ 	.ima_keys = LIST_HEAD_INIT(init_ima_ns.ima_keys),
+ #endif
++	.ima_keys_delayed_ref = REFCOUNT_INIT(1),
+ };
+ EXPORT_SYMBOL(init_ima_ns);
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 70fa26b7bd3f..6ebc57cd91d3 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -410,7 +410,7 @@ static int process_measurement(struct ima_namespace *ns,
+ 			       u32 secid, char *buf, loff_t size, int mask,
+ 			       enum ima_hooks func)
+ {
+-	struct user_namespace *user_ns = ns->user_ns;
++	struct user_namespace *user_ns = ima_user_ns(ns);
+ 	int ret = 0;
+ 
+ 	while (user_ns) {
+diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+index 6a0632806cdb..f96286ad0da8 100644
+--- a/security/integrity/ima/ima_ns.c
++++ b/security/integrity/ima/ima_ns.c
+@@ -31,9 +31,6 @@ int create_ima_ns(struct user_namespace *user_ns)
+ 		return -ENOMEM;
+ 	pr_debug("NEW     ima_ns: 0x%p\n", ns);
+ 
+-	kref_init(&ns->kref);
+-	ns->user_ns = user_ns;
+-
+ 	err = ima_init_namespace(ns);
+ 	if (err)
+ 		goto fail_free;
+@@ -44,6 +41,7 @@ int create_ima_ns(struct user_namespace *user_ns)
+ 	INIT_LIST_HEAD(&ns->ima_keys);
+ #endif
+ 
++	refcount_set(&ns->ima_keys_delayed_ref, 1);
+ 	user_ns->ima_ns = ns;
+ 
+ 	return 0;
+@@ -63,11 +61,8 @@ static void destroy_ima_ns(struct ima_namespace *ns)
+ 	kmem_cache_free(imans_cachep, ns);
+ }
+ 
+-void free_ima_ns(struct kref *kref)
++void free_ima_ns(struct ima_namespace *ns)
+ {
+-	struct ima_namespace *ns;
+-
+-	ns = container_of(kref, struct ima_namespace, kref);
+ 	if (WARN_ON(ns == &init_ima_ns))
+ 		return;
+ 
+diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
+index a6eb802e5ae4..d7c43e592e2c 100644
+--- a/security/integrity/ima/ima_queue_keys.c
++++ b/security/integrity/ima/ima_queue_keys.c
+@@ -14,6 +14,19 @@
+ #include <keys/asymmetric-type.h>
+ #include "ima.h"
+ 
++static inline void __get_delayed_ima_ns(struct ima_namespace *ima_ns)
++{
++	refcount_inc(&ima_ns->ima_keys_delayed_ref);
++}
++
++void __put_delayed_ima_ns(struct ima_namespace *ima_ns)
++{
++	if (ima_ns && refcount_dec_and_test(&ima_ns->ima_keys_delayed_ref)) {
++		pr_debug("DEREF   ima_ns: 0x%p  ctr: %d\n", ima_ns,
++			 refcount_read(&ima_ns->ima_keys_delayed_ref));
++		free_ima_ns(ima_ns);
++	}
++}
+ 
+ /*
+  * This worker function frees keys that may still be
+@@ -26,8 +39,7 @@ void ima_keys_handler(struct work_struct *work)
+ 	ns = container_of(work, struct ima_namespace, ima_keys_delayed_work.work);
+ 	ns->timer_expired = true;
+ 	ima_process_queued_keys(ns);
+-
+-	put_user_ns(ns->user_ns);
++	__put_delayed_ima_ns(ns);
+ }
+ 
+ /*
+@@ -36,9 +48,7 @@ void ima_keys_handler(struct work_struct *work)
+  */
+ void ima_init_key_queue(struct ima_namespace *ns)
+ {
+-	/* keep IMA namespace until delayed work is done */
+-	get_user_ns(ns->user_ns);
+-
++	__get_delayed_ima_ns(ns);
+ 	schedule_delayed_work(&ns->ima_keys_delayed_work,
+ 			      msecs_to_jiffies(ns->ima_key_queue_timeout));
+ }
+@@ -145,7 +155,7 @@ void ima_process_queued_keys(struct ima_namespace *ns)
+ 	if (!ns->timer_expired) {
+ 		if (cancel_delayed_work_sync(&ns->ima_keys_delayed_work))
+ 			/* undo reference from ima_init_key_queue */
+-			put_user_ns(ns->user_ns);
++			__put_delayed_ima_ns(ns);
+ 	}
+ 
+ 	list_for_each_entry_safe(entry, tmp, &ns->ima_keys, list) {
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 

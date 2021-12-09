@@ -2,172 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E1246F5C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AF646F5C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbhLIVSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S232860AbhLIVSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbhLIVSI (ORCPT
+        with ESMTP id S231805AbhLIVSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:18:08 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C387C061D5F;
-        Thu,  9 Dec 2021 13:14:34 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id 8so6582460pfo.4;
-        Thu, 09 Dec 2021 13:14:34 -0800 (PST)
+        Thu, 9 Dec 2021 16:18:35 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568EC0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:15:01 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id o4so6521621pfp.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:15:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1ejdtBcGu/O1Cxw2YS57FB14hxKmb2vB0wySR/Hf7zE=;
-        b=P+EaI414dlrKAt2SUJZUawDH5u9Hkall7tbv2f8N1argny6SjHkSNzI5i3O20hxLPw
-         7vbSf9pIQxNiHm+ecRl1DIH5aWTMOBsg2NTzk+wu4M3M3stfw0p46uX2TS9ZdvP55JGU
-         eaWrj4a4LjdqNQoFgx1JxCYpSzE4CcAtZwKS3T9NMrZkBgvsuzW0npOmunQuOhihBd+S
-         iAJ+rq5D60kg8F8DqUBnaI4GjvhpwOPB3jxaMLLXPO0Z8XIPi0R33v7/bJGNTqA4T42G
-         jGqp1NaoD7LLePmrRchsCmM6yACSj9Zc1tYX8cMoNauLXNIlmiDj/sDT6JOkSwNzcufL
-         KssA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=idhxYsGIqFY0iC2foXmRO1Y7kKO1WrOHXiDZA3WqNNo=;
+        b=IvRNfl/yHGNbaRuZUg5LCIynBFYEWDlaw/l17q8LxCmsXH13Xt4hnB2FTiA+CpIxlb
+         IoajmcenI66bwwJALCjoJWVlKg31Du5jVorr6966uRrQxKt7EJk838gnpt2RfGP3ZGq7
+         BInxfl8WVp4trftotf12fMsB5G1taS2LOAjLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1ejdtBcGu/O1Cxw2YS57FB14hxKmb2vB0wySR/Hf7zE=;
-        b=NJLnEB+E7/U8oV+3/f95GnZd7+rjO2dmCUXrexzf2ANsQ6j+W/sExrEB4T8jfbxy+a
-         n4SvAG+0q+EGRtOOfREJFohdihvdIdYAAPY/PQE/U0lCi3Z3Vu2sw9XNfjflP6IB5HJe
-         c1/0loGMH6uO/Gw5bp48J1JFMM/snhsovXIHriF4On5AdlewHvTW45VN2ca7nkKavVjg
-         J7CfRe1OcRGC1OgfumQDqML6Tbs7YxEwESCmZVrgkb8MtjFl2C5LxWSYv976kBJg8TJo
-         XV7kTGZDS7C1JwKGu/dTrV7o0hn5EePy51++uLtxollhJmR9dJK4usburyKDmdKnz4Py
-         Oz0Q==
-X-Gm-Message-State: AOAM5322dIEpdI7111A+gqAeJJyFUz1QvbPkdgVBebNHa+tkSkTa+3k6
-        TLkJgC9SI9lFjmrB96DwjIcEpbQKdY8=
-X-Google-Smtp-Source: ABdhPJwyhlwJggiRgi7BqXbJk7CM8QL1w7vHCs91o46x2lSJhd/S8prWb7v2FHaHQ4pEeoXNclYBiw==
-X-Received: by 2002:a05:6a00:244b:b0:4ad:5852:f41d with SMTP id d11-20020a056a00244b00b004ad5852f41dmr14392033pfj.29.1639084473656;
-        Thu, 09 Dec 2021 13:14:33 -0800 (PST)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id y4sm617800pfi.178.2021.12.09.13.14.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=idhxYsGIqFY0iC2foXmRO1Y7kKO1WrOHXiDZA3WqNNo=;
+        b=n7VpIAyLQB/mBOd884BjnksZK0WeOHOSLROndylwC4stxwOm4MjqBMmM1F6ddqtYs0
+         Zv6iWpDGdIpKOGI9DhK9jUyjJEAkQFpxwcMBHZP3KaS7wkK2PAMKMoUrB3e74K4w4m8d
+         JLam0D3y1s47zA7FDp27H1XKHiZzhnTTSq7Ot0uf3qUNkmpUne393uNPV+5cR+8WiIC1
+         kgwbwJNGVAUR3A5OHjlTXaXlaWeCiv9s/1D0+DFLLJPYkahmmUrY+Lh9pGD57KA2q2mk
+         JS3UoTZ37O2k/h0pyJLy2HzUI198tcgMsexJ2qoCiwHawyoQbInG5ddksBsWptI0xcTO
+         iZvA==
+X-Gm-Message-State: AOAM532WIoxwoT8RKoluBlu5TFH/yE8Hk6nQhtFbKWkEgjJsxfNB0ZbS
+        jYjZhF0ABBvpNEYf6wmyY9Vo8Q==
+X-Google-Smtp-Source: ABdhPJyS+MH0ramfRpc8Q0VxQwzb/l4MW4LuS7YzA0o5Ikzly1HpEbdv8sATmINV6iWKr66GgdUKkQ==
+X-Received: by 2002:a05:6a00:811:b0:4af:d1c9:fa3f with SMTP id m17-20020a056a00081100b004afd1c9fa3fmr14185879pfk.21.1639084500512;
+        Thu, 09 Dec 2021 13:15:00 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q10sm8940664pjd.0.2021.12.09.13.15.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 13:14:32 -0800 (PST)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v10 7/7] PCI: brcmstb: Do not turn off WOL regulators on suspend
-Date:   Thu,  9 Dec 2021 16:14:05 -0500
-Message-Id: <20211209211407.8102-8-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211209211407.8102-1-jim2101024@gmail.com>
-References: <20211209211407.8102-1-jim2101024@gmail.com>
+        Thu, 09 Dec 2021 13:15:00 -0800 (PST)
+Date:   Thu, 9 Dec 2021 13:14:59 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Subject: Re: randomize_kstack: To init or not to init?
+Message-ID: <202112091308.600DA7FE63@keescook>
+References: <YbHTKUjEejZCLyhX@elver.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbHTKUjEejZCLyhX@elver.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If any downstream device can be awoken do not turn off
-the regulators as the device will need them on.
+On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
+> Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+> default since dcb7c0b9461c2, which is why this came on my radar. And
+> Clang also performs auto-init of allocas when auto-init is on
+> (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+> aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
+> allocas.
+> 
+> add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> enabled, add_random_kstack_offset() will auto-init that unused portion
+> of the stack used to add an offset.
+> 
+> There are several problems with this:
+> 
+> 	1. These offsets can be as large as 1023 bytes. Performing
+> 	   memset() on them isn't exactly cheap, and this is done on
+> 	   every syscall entry.
+> 
+> 	2. Architectures adding add_random_kstack_offset() to syscall
+> 	   entry implemented in C require them to be 'noinstr' (e.g. see
+> 	   x86 and s390). The potential problem here is that a call to
+> 	   memset may occur, which is not noinstr.
+> 
+> A defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> 
+>  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+>  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> 
+> Switching to INIT_STACK_ALL_NONE resolves the warnings as expected.
+> 
+> To figure out what the right solution is, the first thing to figure out
+> is, do we actually want that offset portion of the stack to be
+> auto-init'd?
 
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 53 ++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 9 deletions(-)
+I actually can't reproduce this with the latest Clang. I see no memset
+call with/without INIT_STACK_ALL_ZERO. I do see:
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 9b4df253e79a..8e5cbf6850cd 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -298,6 +298,7 @@ struct brcm_pcie {
- 	void			(*bridge_sw_init_set)(struct brcm_pcie *pcie, u32 val);
- 	bool			refusal_mode;
- 	struct subdev_regulators *sr;
-+	bool			ep_wakeup_capable;
- };
- 
- /*
-@@ -1166,9 +1167,21 @@ static void brcm_pcie_turn_off(struct brcm_pcie *pcie)
- 	pcie->bridge_sw_init_set(pcie, 1);
- }
- 
-+static int pci_dev_may_wakeup(struct pci_dev *dev, void *data)
-+{
-+	bool *ret = data;
-+
-+	if (device_may_wakeup(&dev->dev)) {
-+		*ret = true;
-+		dev_info(&dev->dev, "disable cancelled for wake-up device\n");
-+	}
-+	return (int) *ret;
-+}
-+
- static int brcm_pcie_suspend(struct device *dev)
- {
- 	struct brcm_pcie *pcie = dev_get_drvdata(dev);
-+	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
- 	int ret;
- 
- 	brcm_pcie_turn_off(pcie);
-@@ -1187,11 +1200,22 @@ static int brcm_pcie_suspend(struct device *dev)
- 	}
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn off regulators\n");
--			reset_control_reset(pcie->rescal);
--			return ret;
-+		/*
-+		 * Now turn off the regulators, but if at least one
-+		 * downstream device is enabled as a wake-up source, do not
-+		 * turn off regulators.
-+		 */
-+		pcie->ep_wakeup_capable = false;
-+		pci_walk_bus(bridge->bus, pci_dev_may_wakeup,
-+			     &pcie->ep_wakeup_capable);
-+		if (!pcie->ep_wakeup_capable) {
-+			ret = regulator_bulk_disable(pcie->sr->num_supplies,
-+						     pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn off regulators\n");
-+				reset_control_reset(pcie->rescal);
-+				return ret;
-+			}
- 		}
- 	}
- 	clk_disable_unprepare(pcie->clk);
-@@ -1212,10 +1236,21 @@ static int brcm_pcie_resume(struct device *dev)
- 		return ret;
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_enable(pcie->sr->num_supplies, pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn on regulators\n");
--			goto err_disable_clk;
-+		if (pcie->ep_wakeup_capable) {
-+			/*
-+			 * We are resuming from a suspend.  In the suspend we
-+			 * did not disable the power supplies, so there is
-+			 * no need to enable them (and falsely increase their
-+			 * usage count).
-+			 */
-+			pcie->ep_wakeup_capable = false;
-+		} else {
-+			ret = regulator_bulk_enable(pcie->sr->num_supplies,
-+						    pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn on regulators\n");
-+				goto err_disable_clk;
-+			}
- 		}
- 	}
- 
+vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+
+I assume that's from:
+
+	struct bad_iret_stack tmp
+
+But I'll try with Clang 11 and report back...
+
 -- 
-2.17.1
-
+Kees Cook

@@ -2,123 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFA646F5CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423DE46F5D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbhLIVUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S231805AbhLIVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhLIVUT (ORCPT
+        with ESMTP id S229446AbhLIVXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:20:19 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC61C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:16:44 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id cf39so2381569lfb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:16:44 -0800 (PST)
+        Thu, 9 Dec 2021 16:23:08 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8896EC061746;
+        Thu,  9 Dec 2021 13:19:34 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d10so14499675lfg.6;
+        Thu, 09 Dec 2021 13:19:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n/PRQqohZJZoWPfeAL4/gTv4y1kA/vUHTgUSzu+kjUk=;
-        b=g4y37LIT8HPOzLKutUXtaDJvUeJ0+/CGyv38hQvAw62juFYmPp8xY81qmdfR94ekL1
-         zJ01fAhqXrPsyVAyF4Rmu71FEe7b28kHRnIAs2gPOubcJVu4C+S4OAM5l5NsTVl1nUNo
-         0geMJEqdhmk9vQoyehfiLCCzsf/vPPpjohT2YtqD+4MZUylekERGXpzLIRlt0a9eGNCv
-         KmdCs4oTnEFlZcz8/j+4GFmLlTedEmnaISi73JDXUTgJvBbOnsFbIJm7FedBs7yGJ+pb
-         B4qRT10iZ7dD3pd3uO4PQnPTq3oVMAcH4oq7NgGzrPRyFYEnuVNDFoz/NHO+Fejw9b/e
-         9Q5Q==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w9NVyA3r1gS0dHQGhaIwt4BqUyoksHzNXKqQm+vkFKw=;
+        b=jwRbEoyklu2JLCqR1SMPDJAr7IpOzlLs9QkrICOFL3ztGXNx/oCpBPKK4I2a4guZWq
+         mZLCzNgqApguCAFNnEjqvxcDBn8iYd40PeV6agk4OQ4WdvKTFGdnIpXLh723BjueY1Bv
+         X6RY/enamdBFCXhVpsiGyp3JTOmsgsqeOVzCbQ1vW2tg0NWfMsJbu1O9p1Jk2F3fYumg
+         ULZ/S2m26clxYk+DKKo/eunXZ+e5Dy0XPGydyNrUyIhFm/TAcO0ZTpPq9/ipbiybiSy0
+         WaSXkqWpVuhN5wSGwXFREo9/6X2LXt4hOGAMGGfd9Ca2YByneOobW8SgHdr75lS/67te
+         7QyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n/PRQqohZJZoWPfeAL4/gTv4y1kA/vUHTgUSzu+kjUk=;
-        b=r/d9ehpTs043VjmzqOqaHtUETHhCNKy/zBO32JGmE+MRSgQQTznkHIWX+g2OO5CZ6d
-         dpWGQxHNd0q+aThY7tOjxFKQcySUlrSn0JIPlVOfYMVDYjiP1Oa3bBEI/PGrdw38eLuJ
-         yi9bsJAssb8JegiEYJvjZtxnetYpBRcxPC8A6/7WrEvGucVGIDL28J5xpETELmQgB+K4
-         sH0NA7HWw6owR8YsLSnX2zpM+m0y4Ym46z8CIEW2wrINUx8Tnnoj9QwZgmzK6U2GGVxO
-         g6CZXfSgzsgkDJpsTcL1YcKiRJcLRro1iedKrDmZpziyvB7GS8IEH5Y278VWMsYDrFW0
-         uk8A==
-X-Gm-Message-State: AOAM530ogdO1L6gWoKF5OiErb00w6btUQ+GGJJ1zrxYzAfV9LgTcYqX6
-        etJUxeRfxfkD1d7cjAwgw6+P6zJVpXFmT9WcjzSCPw==
-X-Google-Smtp-Source: ABdhPJzkqPmVslx+nMihnzHioqa5Jxg3UR3GK3CFA0GryeYJKVH2W5AracL5avcjGmE6Wnoa9W0q6oVMoXkEqKZl8SM=
-X-Received: by 2002:ac2:418f:: with SMTP id z15mr7863545lfh.213.1639084602937;
- Thu, 09 Dec 2021 13:16:42 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w9NVyA3r1gS0dHQGhaIwt4BqUyoksHzNXKqQm+vkFKw=;
+        b=PyzrE5y+Zbioe6FhLYrkcTiJ8oy/GJkb0QQcKF+34Z+QcmbJueakaUY4qQl8b7ZWqp
+         PITod4eOcnFYYuH+fq8C/KCjOkWa5N6DxfuOnt6LItk5cxF3KwCAUh8RCuPV1aRUn2CI
+         sNrK+oYQJJJWhZReK9mVw2p95BEYGkz9IENW9yHBJDlvV0Ypihp7yv9yz/YpYF5AAAQ5
+         5pMeeLZtrnxTLJi/NnHeWEw7JPndwYmMse1pZOi4vZYbgnMxzsbv7d/E2ssE5s5DNOiF
+         uzvUEjmVdgWtzjTQygJo8tBKZahz0IL2e9F/I1Y2BWzxM25L/hLQ8z6rJm6zm1OF/tRj
+         eXEg==
+X-Gm-Message-State: AOAM531ts33McOycXYNebnk5ttCh7TOykz33VHlQIs81qR652Wyopfeo
+        ZUDpu2jrd7C9MvpV26hUve0=
+X-Google-Smtp-Source: ABdhPJxQCqULlQtELM136fDWzedMTP7IrJZ/S5NS9VmXHVC56VfQeh6sXcNLIF7qxZ4Io+03QXbN5w==
+X-Received: by 2002:ac2:5ec6:: with SMTP id d6mr3004349lfq.297.1639084772893;
+        Thu, 09 Dec 2021 13:19:32 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id be25sm100371ljb.114.2021.12.09.13.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 13:19:32 -0800 (PST)
+Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
+To:     Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
+ <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <913af84a-957f-6392-1526-6732d43fec5b@gmail.com>
+Date:   Fri, 10 Dec 2021 00:19:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <YbHTKUjEejZCLyhX@elver.google.com>
-In-Reply-To: <YbHTKUjEejZCLyhX@elver.google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 9 Dec 2021 22:16:16 +0100
-Message-ID: <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
-Subject: Re: randomize_kstack: To init or not to init?
-To:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 10:58 AM Marco Elver <elver@google.com> wrote:
-> Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
-> default since dcb7c0b9461c2, which is why this came on my radar. And
-> Clang also performs auto-init of allocas when auto-init is on
-> (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
-> aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
-> allocas.
->
-> add_random_kstack_offset() uses __builtin_alloca() to add a stack
-> offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
-> enabled, add_random_kstack_offset() will auto-init that unused portion
-> of the stack used to add an offset.
->
-> There are several problems with this:
->
->         1. These offsets can be as large as 1023 bytes. Performing
->            memset() on them isn't exactly cheap, and this is done on
->            every syscall entry.
->
->         2. Architectures adding add_random_kstack_offset() to syscall
->            entry implemented in C require them to be 'noinstr' (e.g. see
->            x86 and s390). The potential problem here is that a call to
->            memset may occur, which is not noinstr.
+06.12.2021 16:00, Akhil R пишет:
+> +struct tegra_dma_channel;
 
-This doesn't just affect alloca(), right? According to godbolt.org
-(https://godbolt.org/z/jYrWEx7o8):
+This prototype is unuseful.
 
-void bar(char *p);
-void foo() {
-  char arr[512];
-  bar(arr);
-}
+> +/*
+> + * tegra_dma_channel: Channel specific information
+> + */
+> +struct tegra_dma_channel {
 
-when compiled with "-ftrivial-auto-var-init=pattern -O2 -mno-sse"
-gives this result:
-
-foo:                                    # @foo
-        push    rbx
-        sub     rsp, 512
-        mov     rbx, rsp
-        mov     edx, 512
-        mov     rdi, rbx
-        mov     esi, 170
-        call    memset@PLT
-        mov     rdi, rbx
-        call    bar
-        add     rsp, 512
-        pop     rbx
-        ret
-
-So I think to fix this properly in a way that doesn't conflict with
-noinstr validation, I think you'll have to add a compiler flag that
-lets you specify a noinstr-safe replacement for memset() that should
-be used here?

@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E982346E9C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CF946E9D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbhLIOUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:20:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:57318 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238463AbhLIOUU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:20:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E0521FB;
-        Thu,  9 Dec 2021 06:16:46 -0800 (PST)
-Received: from [10.57.33.188] (unknown [10.57.33.188])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48F843F73B;
-        Thu,  9 Dec 2021 06:16:44 -0800 (PST)
-Subject: Re: [PATCH] perf cs-etm: Remove duplicate and incorrect aux size
- checks
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, Mike Leach <mike.leach@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211208115435.610101-1-james.clark@arm.com>
- <20211208131753.GC273781@leoy-ThinkPad-X240s>
- <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com>
- <20211209134413.GA622826@leoy-ThinkPad-X240s>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com>
-Date:   Thu, 9 Dec 2021 14:16:43 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S233550AbhLIOVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232049AbhLIOVt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 09:21:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCEFC061746;
+        Thu,  9 Dec 2021 06:18:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54203B8232B;
+        Thu,  9 Dec 2021 14:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D23C004DD;
+        Thu,  9 Dec 2021 14:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639059493;
+        bh=NDR1+cOTjE99IH1//NVh1k6K3xUweDemHi2a82+imkk=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=qj8JyAZtc7gMMZWgvtZTSHmuLTPaYZBaDRaxz/gppSHJ3Sd8oSzwSjNreIU8trau3
+         GOqOPorBav5iDKjDSEMd9+Lg+nDF2iivV2Mj4FsWsp4ERTOGKqIPqvqpedFvRstgyx
+         l0uo9MqyEkrS3QIG2Mi8jUyMhOAKgUM98betLHb1Ijjq5RWfjqG7KG1osB3LNjmLPa
+         2cxsC1mHLzpUPcBauUpEE9H7+oTEgV1YHnSj0Qg3G/rVi+yh2aFU2UTKtUTRwSuQtj
+         Oa6Gy2YUtNEE2+QZ1Quh97XJrXfaDrxohRMz5FPZmiXtJEeBnZkWJEoYxE8nqzwwxF
+         /ol4bN8z4oSuQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH v1 1/1] include/linux/unaligned: Replace kernel.h with the necessary inclusions
+References: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com>
+Date:   Thu, 09 Dec 2021 16:18:05 +0200
+In-Reply-To: <20211209123823.20425-1-andriy.shevchenko@linux.intel.com> (Andy
+        Shevchenko's message of "Thu, 9 Dec 2021 14:38:23 +0200")
+Message-ID: <87lf0t3lr6.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20211209134413.GA622826@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+>
+> Replace kernel.h inclusion with the list of what is really being used.
+>
+> The rest of the changes are induced by the above and may not be split.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/xtlv.c | 2 ++
+>  include/linux/unaligned/packed_struct.h                 | 2 +-
+>  lib/lz4/lz4defs.h                                       | 2 ++
+>  3 files changed, 5 insertions(+), 1 deletion(-)
 
-On 09/12/2021 13:44, Leo Yan wrote:
-> On Wed, Dec 08, 2021 at 02:08:04PM +0000, James Clark wrote:
->> On 08/12/2021 13:17, Leo Yan wrote:
->>> Hi James,
->>>
->>> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
->>>> There are two checks, one is for size when running without admin, but
->>>> this one is covered by the driver and reported on in more detail here
->>>> (builtin-record.c):
->>>>
->>>>   pr_err("Permission error mapping pages.\n"
->>>>          "Consider increasing "
->>>>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
->>>>          "or try again with a smaller value of -m/--mmap_pages.\n"
->>>>          "(current value: %u,%u)\n",
->>>
->>> I looked into the kernel code and found:
->>>
->>>   sysctl_perf_event_mlock = 512 + (PAGE_SIZE / 1024);  // 512KB + 1 page
->>>
->>> If the system have multiple cores, let's say 8 cores, then kernel even
->>> can relax the limitaion with:
->>>
->>>   user_lock_limit *= num_online_cpus();
->>>
->>> So means the memory lock limitation is:
->>>
->>>   (512KB + 1 page) * 8 = 4MB + 8 pages.
->>>
->>> Seems to me, it's much relax than the user space's limitaion 128KB.
->>> And let's imagine for Arm server, the permitted buffer size can be a
->>> huge value (e.g. for a system with 128 cores).
->>>
->>> Could you confirm if this is right?
->>
->> Yes that seems to be the case. And the commit message for that addition
->> states the reasoning:
->>
->>   perf_counter: Increase mmap limit
->>   
->>   In a default 'perf top' run the tool will create a counter for
->>   each online CPU. With enough CPUs this will eventually exhaust
->>   the default limit.
->>
->>   So scale it up with the number of online CPUs.
->>
->> To me that makes sense. Normally the memory installed also scales with the
->> number of cores.
->>
->> Are you saying that we should look into modifying that scaling factor in
->> perf_mmap()? Or that we should still add something to userspace for
->> coresight to limit user supplied buffer sizes?
-> 
-> I don't think we should modify the scaling factor in perf_mmap(), the
-> logic is not only used by AUX buffer, it's shared by normal event
-> ring buffer.
-> 
->> I think it makes sense to allow the user to specify any value that will work,
->> it's up to them.
-> 
-> Understand, I verified this patch with below steps:
-> 
-> root@debian:~# echo 0 > /proc/sys/kernel/perf_event_paranoid
-> 
-> leoy@debian:~$ perf record -e cs_etm// -m 4M,8M -o perf_test.data -- sleep 1
-> Permission error mapping pages.
-> Consider increasing /proc/sys/kernel/perf_event_mlock_kb,
-> or try again with a smaller value of -m/--mmap_pages.
-> (current value: 1024,2048)
-> 
-> leoy@debian:~$ perf record -e cs_etm// -m 4M,4M -o perf_test.data -- sleep 1
-> Couldn't synthesize bpf events.
-> [ perf record: Woken up 1 times to write data ]
-> [ perf record: Captured and wrote 0.607 MB perf_test.data ]
-> 
-> So this patch looks good for me:
-> 
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> 
-Thanks Leo!
+I assume this will go via some other tree:
+
+Acked-by: Kalle Valo <kvalo@kernel.org>
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

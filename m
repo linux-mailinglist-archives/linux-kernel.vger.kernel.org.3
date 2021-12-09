@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 297ED46ED0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA346ED1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbhLIQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S235941AbhLIQgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbhLIQdN (ORCPT
+        with ESMTP id S234595AbhLIQgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:33:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE2C061746;
-        Thu,  9 Dec 2021 08:29:40 -0800 (PST)
+        Thu, 9 Dec 2021 11:36:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF305C061746;
+        Thu,  9 Dec 2021 08:32:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E040CE2687;
-        Thu,  9 Dec 2021 16:29:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA18C004DD;
-        Thu,  9 Dec 2021 16:29:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07D43B8253D;
+        Thu,  9 Dec 2021 16:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D9EC004DD;
+        Thu,  9 Dec 2021 16:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639067376;
-        bh=je+VMTptlRRhblnNtVygK1kL8gLHzyY51wjzz0556fE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JJCcroQl8ypBDLI0giOF9hZj5Et7nv2syNZ/Pv+dVr19IDM+4KEmU5LdpbBWJ4kqs
-         YCju4uz5n84xjeOC2AC2VNvF7KCH8U1xlKICHMQTzv9yeZ8E/ziVWmvSg5KbooypDS
-         jxA/r2wPNBDMi7KEdKXPXr9Oi0UkrprDQ+ONn5jk6gL+nXXCPJGNf91WN1dLI6l1FQ
-         k5VcpmadJtLZKjOAem1AJaxnPN3jeIa2bfPFPpz0tKXnHEZmgT9G/+qAMbdmab0gXD
-         04qF2bOFT5anmR+Fu0lqr2O31qHQCjqF3okIe29CyhG0AC5l9Af3VGopHoT2r4A5PG
-         phT7CNV8Yszkg==
-Date:   Thu, 9 Dec 2021 18:29:27 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        stable@vger.kernel.org, x86@kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
- early param parsing
-Message-ID: <YbIu55LZKoK3IVaF@kernel.org>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com>
- <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
- <YbIgsO/7oQW9h6wv@zn.tnic>
+        s=k20201202; t=1639067566;
+        bh=Hfp5b3v+XA/5IbK5LdC4TC8Lj3uCVLepSRSC6eo2XOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BD7+YWxCPnrx0AevCZXoBB0cD13QqzwkZV3TzG/yNMIBNdKtBTvKPnGo6liXV6rBr
+         Dk4mlyxC2FjLh2RTb90SjL7D5O4efldrfDOh2Hx6zOw/Muvmt6HCNKpY72FyxyRDoq
+         uHEr+aLYBPf2PSVsG6CJ0bVnHkeDpzyi4svZNXZZI0lUjgMjOebtKkR83tV0z1g41U
+         xMw+O4aj6ZsN9Y6yW/j7fi+YAJwG+59WG1hyXvCU0kT9WaUa+JjvkoBiHbCA59rNu8
+         0VfayzowRRDBB7cr5Lu/Ll7nN4jYvc+pVyMn4IQ/wKMJH7iZl/D/MgzVprihiUDodK
+         sjPemY3cJFpLA==
+Date:   Thu, 9 Dec 2021 10:32:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <20211209163245.GA245119@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbIgsO/7oQW9h6wv@zn.tnic>
+In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 04:28:48PM +0100, Borislav Petkov wrote:
-> On Thu, Dec 09, 2021 at 04:26:55PM +0100, Juergen Gross wrote:
-> > Sigh. This will break Xen PV. Again. The comment above the call of
-> > early_reserve_memory() tells you why.
+[+cc Rafael, since I used generic PM as an example]
+
+On Wed, Dec 08, 2021 at 09:47:56AM +0100, Greg KH wrote:
+> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
+> > On Wed, 08 Dec 2021, Greg KH wrote:
+> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
+> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> > > > > Adds get/set driver data helpers for auxiliary devices.
+> > > > > 
+> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > > > > ---
+> > > > > V2
+> > > > >   - No changes
+> > > > > 
+> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > 
+> > > > I would really like to see an explanation why such obfuscation is really
+> > > > needed. dev_*_drvdata() is a standard way to access driver data.
+> > 
+> > I wouldn't call it obfuscation, but it does looks like abstraction for
+> > the sake of abstraction, which I usually push back on.  What are the
+> > technical benefits over using the dev_*() variant?
 > 
-> I know. I was just looking at how to fix that particular thing and was
-> going to find you on IRC to talk to you about it...
+> See my response at:
+> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
+> for why it is a good thing to do.
+> 
+> In short, driver authors should not have to worry about mixing
+> bus-specific and low-level driver core functions.
 
-The memory reservation in arch/x86/platform/efi/efi.c depends on at least
-two command line parameters, I think it's better put it back later in the
-boot process and move efi_memblock_x86_reserve_range() out of
-early_memory_reserve().
+In the very common situation of PCI drivers that use generic power
+management, authors *do* have to use both (example from [1]):
 
-I.e. revert c0f2077baa41 ("x86/boot: Mark prepare_command_line() __init")
-and 8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param
-parsing") and add the patch below on top.
+  ioh_gpio_probe(struct pci_dev *pdev)   # pci_driver.probe()
+    pci_set_drvdata(pdev, chip);
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 49b596db5631..da36b8f8430b 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
- 
- 	early_reserve_initrd();
- 
--	if (efi_enabled(EFI_BOOT))
--		efi_memblock_x86_reserve_range();
--
- 	memblock_x86_reserve_range_setup_data();
- 
- 	reserve_ibft_region();
-@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
- 
- 	parse_early_param();
- 
-+	if (efi_enabled(EFI_BOOT)) {
-+		efi_memblock_x86_reserve_range();
-+
- #ifdef CONFIG_MEMORY_HOTPLUG
- 	/*
- 	 * Memory used by the kernel cannot be hot-removed because Linux
+  ioh_gpio_remove(struct pci_dev *pdev)  # pci_driver.remove()
+    struct ioh_gpio *chip = pci_get_drvdata(pdev);
 
--- 
-Sincerely yours,
-Mike.
+  ioh_gpio_suspend(struct device *dev)   # pci_driver.driver.pm.suspend()
+    struct ioh_gpio *chip = dev_get_drvdata(dev);   <--
+
+The pci_driver methods receive a struct pci_dev and use the
+pci_get_drvdata() wrapper.
+
+The generic power management methods receive a struct device and use
+the underlying dev_get_drvdata().
+
+It's kind of ugly that readers have to know that pci_get_drvdata()
+gives you the same thing as dev_get_drvdata().
+
+I guess the generic PM methods could do something like:
+
+  pci_get_drvdata(to_pci_dev(dev));
+
+but that seems a little bit circuitous.  It's slightly wordier, but I
+might prefer to just use this everywhere and skip the pci_* wrappers:
+
+  dev_get_drvdata(&pdev->dev);
+
+Bjorn
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpio/gpio-ml-ioh.c?id=v5.15#n505

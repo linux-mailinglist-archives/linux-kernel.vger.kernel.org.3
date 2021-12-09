@@ -2,126 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFE746F612
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168B46F616
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbhLIVlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S232888AbhLIVlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLIVlE (ORCPT
+        with ESMTP id S229505AbhLIVlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:41:04 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE7C061746;
-        Thu,  9 Dec 2021 13:37:30 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m6so2747614lfu.1;
-        Thu, 09 Dec 2021 13:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TqTpDTINLxy3WS9shl/AGQezgI5fHlezU7a3Hlx0CnI=;
-        b=DXJPkF2bXslN6AlJW7fuVsvie6HWMwkpZoA71U0rpDcSbx2g+evi3vXrvjSZV2nq62
-         B9O+/aoeJBRFjuL2KIvAj74B/A84FyyLnfW2gUCvWjPs9LpThTkaqKrHIC5NFbHLuBG9
-         SvgWcSPA42LFss7qR3MS1miXw05FL8xEDrEkwwOEWmzpA+upYI3c2VVyefdNwjx91N4J
-         eqbvfLSzjwkCioHd0fK66LT6EFIzg69m8//eGTkWKi+XRoGq/UUaz3yI6bdqKmzUU25B
-         Hrj4mKGxlI3idRqmol8oXAjysg5A3vlViwWYDsEkHPb49y/7t4ftZ2YRy1bOwrK4Mo58
-         ZF8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TqTpDTINLxy3WS9shl/AGQezgI5fHlezU7a3Hlx0CnI=;
-        b=U3FMnkpH3G7zIL8VaCasmlihqFJgL+F8PbB+DjlqRSDCEFv/j5zNHyTi+pDFWYYrAS
-         deDQ/D6Pmd0MOXbuaXlstnUISM0O1H0w1Gs/0JKpozDdNvUj3XKuoSEePOtQD+smxzyq
-         HLQT5G5obLlnyFukJVSet9tnizk7EaE2ijr83xiB9DRAItsTjvWrnMgGBVeVKRbHn5ag
-         LnyGqvJCtD+AYU38ACYB3IPgWqi19UE0XdRk767tm1S2QS69kw7BMyLVWxGnvHYickh7
-         9ymCs2xxld2k6CBuVngurucUq5CLcKFALdfzpCFPASIrO74fdse2JZgqA6FvYk66lAmf
-         ZDFA==
-X-Gm-Message-State: AOAM531oROqUt9AZKySiC48lize8otfibVwjrp9CcKm0aTpzkdnTL6oE
-        TkURo6XqBx+ihV93pbaunqU=
-X-Google-Smtp-Source: ABdhPJxJuvc07pm2m00Inr4k5j+ojE1PDO3izUfN9TyqXbGTRQvem85bBJCiHCjsgP+aA7ugv7zbsQ==
-X-Received: by 2002:a05:6512:2815:: with SMTP id cf21mr8365281lfb.211.1639085848520;
-        Thu, 09 Dec 2021 13:37:28 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id c30sm112551lfp.31.2021.12.09.13.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 13:37:28 -0800 (PST)
-Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
-To:     Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, vkoul@kernel.org
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
- <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a8e55db8-67cf-0706-8770-b89e1282e007@gmail.com>
-Date:   Fri, 10 Dec 2021 00:37:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 9 Dec 2021 16:41:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE84C061746;
+        Thu,  9 Dec 2021 13:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P2aQ91d+0Nay119c7Hm3YaZibGVAqClk58OZHKt3Xl4=; b=cnU75D1qm7eep+zg67cBjnjU5u
+        lEicByKXRIZocx5wZq6zz69Ru+PEst/T/YMAfJlX9bjLZTJ8RFLbUZKTb7yq0FGSeTxuxDF318g3Y
+        8bDeqcD4guFJ52AXIO0Ol8Ursu1fyiEL9Fp/krOOOBTH3HOk2GMcRtjxSB5RzR8ZNL9nkRwlqzYVQ
+        J45nCMz4FrZPTnutzDjny73jdO6DYA3AS5OPoFC1bjbRmniOLrddvCkhqnTDaOBBoaMPlby6StiVt
+        aI9kKhleNDxAgoxqQbGxfIEGg2Hmgi85JF43BUH+QueHj7/+g31cgvjKM0v661QxPAY3HpdxM6Xws
+        eNT/Cpag==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvR75-009kVO-PD; Thu, 09 Dec 2021 21:38:04 +0000
+Date:   Thu, 9 Dec 2021 21:38:03 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Darrick J . Wong " <djwong@kernel.org>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH v2 19/28] iomap: Convert __iomap_zero_iter to use a folio
+Message-ID: <YbJ3O1qf+9p/HWka@casper.infradead.org>
+References: <20211108040551.1942823-1-willy@infradead.org>
+ <20211108040551.1942823-20-willy@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108040551.1942823-20-willy@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-06.12.2021 16:00, Akhil R пишет:
-> +static int tegra_dma_terminate_all(struct dma_chan *dc)
-> +{
-> +	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
-> +	unsigned long wcount = 0;
-> +	unsigned long status;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	raw_spin_lock_irqsave(&tdc->lock, flags);
-> +
-> +	if (!tdc->dma_desc) {
-> +		raw_spin_unlock_irqrestore(&tdc->lock, flags);
-> +		return 0;
-> +	}
-> +
-> +	if (!tdc->busy)
-> +		goto skip_dma_stop;
-> +
-> +	if (tdc->tdma->chip_data->hw_support_pause)
-> +		err = tegra_dma_pause(tdc);
-> +	else
-> +		err = tegra_dma_stop_client(tdc);
-> +
-> +	if (err) {
-> +		raw_spin_unlock_irqrestore(&tdc->lock, flags);
-> +		return err;
-> +	}
-> +
-> +	status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
-> +	if (status & TEGRA_GPCDMA_STATUS_ISE_EOC) {
-> +		dev_dbg(tdc2dev(tdc), "%s():handling isr\n", __func__);
-> +		tegra_dma_xfer_complete(tdc);
-> +		status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
-> +	}
-> +
-> +	wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
-> +	tegra_dma_stop(tdc);
-> +
-> +	tdc->dma_desc->bytes_transferred +=
-> +			tdc->dma_desc->bytes_requested - (wcount * 4);
-> +
-> +skip_dma_stop:
-> +	tegra_dma_sid_free(tdc);
-> +	kfree(tdc->dma_desc);
+On Mon, Nov 08, 2021 at 04:05:42AM +0000, Matthew Wilcox (Oracle) wrote:
+> +++ b/fs/iomap/buffered-io.c
+> @@ -881,17 +881,20 @@ EXPORT_SYMBOL_GPL(iomap_file_unshare);
+>  
+>  static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
+>  {
+> +	struct folio *folio;
+>  	struct page *page;
+>  	int status;
+> -	unsigned offset = offset_in_page(pos);
+> -	unsigned bytes = min_t(u64, PAGE_SIZE - offset, length);
+> +	size_t offset, bytes;
+>  
+> -	status = iomap_write_begin(iter, pos, bytes, &page);
+> +	status = iomap_write_begin(iter, pos, length, &page);
 
-This kfree looks very suspicious. It should be on the tdc->vc list
-AFAICS, secondly I don't think that driver can be considered the owner
-of the descriptor.
+This turned out to be buggy.  Darrick and I figured out why his tests
+were failing and mine weren't; this only shows up with a 4kB block
+size filesystem and I was only testing with 1kB block size filesystems.
+(at least on x86; I haven't figured out why it passes with 1kB block size
+filesystems, so I'm not sure what would be true on other filesystems).
+iomap_write_begin() is not prepared to deal with a length that spans a
+page boundary.  So I'm replacing this patch with the following patches
+(whitespace damaged; pick them up from
+https://git.infradead.org/users/willy/linux.git/tag/refs/tags/iomap-folio-5.17c
+if you want to compile them):
 
-> +	vchan_free_chan_resources(&tdc->vc);
+commit 412212960b72
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Thu Dec 9 15:47:44 2021 -0500
 
+    iomap: Allow iomap_write_begin() to be called with the full length
+
+    In the future, we want write_begin to know the entire length of the
+    write so that it can choose to allocate large folios.  Pass the full
+    length in from __iomap_zero_iter() and limit it where necessary.
+
+    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+
+diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
+index d67108489148..9270db17c435 100644
+--- a/fs/gfs2/bmap.c
++++ b/fs/gfs2/bmap.c
+@@ -968,6 +968,9 @@ static int gfs2_iomap_page_prepare(struct inode *inode, loff_t pos,
+        struct gfs2_sbd *sdp = GFS2_SB(inode);
+        unsigned int blocks;
+
++       /* gfs2 does not support large folios yet */
++       if (len > PAGE_SIZE)
++               len = PAGE_SIZE;
+        blocks = ((pos & blockmask) + len + blockmask) >> inode->i_blkbits;
+        return gfs2_trans_begin(sdp, RES_DINODE + blocks, 0);
+ }
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 8d7a67655b60..67fcd3b9928d 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -632,6 +632,8 @@ static int iomap_write_begin(const struct iomap_iter *iter, loff_t pos,
+                goto out_no_page;
+        }
+        folio = page_folio(page);
++       if (pos + len > folio_pos(folio) + folio_size(folio))
++               len = folio_pos(folio) + folio_size(folio) - pos;
+
+        if (srcmap->type == IOMAP_INLINE)
+                status = iomap_write_begin_inline(iter, page);
+@@ -891,16 +893,19 @@ static s64 __iomap_zero_iter(struct iomap_iter *iter, loff
+_t pos, u64 length)
+        struct page *page;
+        int status;
+        unsigned offset = offset_in_page(pos);
+-       unsigned bytes = min_t(u64, PAGE_SIZE - offset, length);
+
+-       status = iomap_write_begin(iter, pos, bytes, &page);
++       if (length > UINT_MAX)
++               length = UINT_MAX;
++       status = iomap_write_begin(iter, pos, length, &page);
+        if (status)
+                return status;
++       if (length > PAGE_SIZE - offset)
++               length = PAGE_SIZE - offset;
+
+-       zero_user(page, offset, bytes);
++       zero_user(page, offset, length);
+        mark_page_accessed(page);
+
+-       return iomap_write_end(iter, pos, bytes, bytes, page);
++       return iomap_write_end(iter, pos, length, length, page);
+ }
+
+ static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
+
+
+commit 78c747a1b3a1
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Fri Nov 5 14:24:09 2021 -0400
+
+    iomap: Convert __iomap_zero_iter to use a folio
+    
+    The zero iterator can work in folio-sized chunks instead of page-sized
+    chunks.  This will save a lot of page cache lookups if the file is cached
+    in large folios.
+    
+    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+    Reviewed-by: Christoph Hellwig <hch@lst.de>
+    Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 67fcd3b9928d..bbde6d4f27cd 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -890,20 +890,23 @@ EXPORT_SYMBOL_GPL(iomap_file_unshare);
+ 
+ static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
+ {
++       struct folio *folio;
+        struct page *page;
+        int status;
+-       unsigned offset = offset_in_page(pos);
++       size_t offset;
+ 
+        if (length > UINT_MAX)
+                length = UINT_MAX;
+        status = iomap_write_begin(iter, pos, length, &page);
+        if (status)
+                return status;
+-       if (length > PAGE_SIZE - offset)
+-               length = PAGE_SIZE - offset;
++       folio = page_folio(page);
+ 
+-       zero_user(page, offset, length);
+-       mark_page_accessed(page);
++       offset = offset_in_folio(folio, pos);
++       if (length > folio_size(folio) - offset)
++               length = folio_size(folio) - offset;
++       folio_zero_range(folio, offset, length);
++       folio_mark_accessed(folio);
+ 
+        return iomap_write_end(iter, pos, length, length, page);
+ }
+
+
+The xfstests that Darrick identified as failing all passed.  Running a
+full sweep now; then I'll re-run with a 1kB filesystem to be sure that
+still passes.  Then I'll send another pull request.

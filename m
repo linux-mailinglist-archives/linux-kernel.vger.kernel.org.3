@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6DE46E73D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC2246E740
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbhLILJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbhLILJp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:09:45 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BD5C061746;
-        Thu,  9 Dec 2021 03:06:11 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u17so9045318wrt.3;
-        Thu, 09 Dec 2021 03:06:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=De9KvF5/yla07zEAmA185om11Z7ZBDnnTpkB/t6a6ss=;
-        b=dbxstdsFT+2CcwuMIiny5cXYRuQzKz7NdZFvmEm4GC726lAl0yW51Hg7bTawkPxubz
-         qdnAGVw95s2h5sI8FtNp/qBJksq+knlY8AukQ1QmaBldq+rsj5YLTHJ6GCFZ167lGguD
-         feemBpNNoJMZCBIAzwz1orJA9y+bMTCqvnAuCibkEfSP+w4q6G5ueqJoz+Z468659ll+
-         BN628bCGVQ+Mdf/BnshbK8laoyOSnE8fxKmo1XBFfmL1WUNJSh+rrIWJPVC/ZzuosdCp
-         jD5g5pkBit+f4NRbiCxCiKdaeoxd2u1GRC2hX6iMeSvL8kGUjZuvKUUYol3q9Yliqc7l
-         ewbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=De9KvF5/yla07zEAmA185om11Z7ZBDnnTpkB/t6a6ss=;
-        b=nv/5yisuO6ceFaDkbKMMsfO2y4EXTVHlHrQBLQHP1kk/PHSK/o+WgX5dJr/H6JPlRs
-         vANE2KzTwpCZD0twp65wMbASz3DifFX/DI4ElMwCLWB8Q8h8B9+yg4iwVrqH0Di+BigS
-         oaqykx1wBCnglKCRbTrOl1l6YlKTrfdT+cLw83+Yifg4Zjs3RCQKHvb1ESlJlmxERYLX
-         LDZLMkasJaKBesZzis2uyVBNWyYaC5tulKVsSpuCF4gijrmdUyEpo2MofLJPSencjix7
-         TGcx111I8L7KTjSpOZYhUpA4UzxIJ/y5ndNZWJVZp/Vczj7eZ/p/Xrf0KJglHZEYHN9D
-         O22A==
-X-Gm-Message-State: AOAM533aJPjKHl4vyIB+qlHdMYk1lkSScTZrPNbGu94VkqrgeGZWwsp3
-        hbp0d6z9IgX1y3R2gOsQyAU=
-X-Google-Smtp-Source: ABdhPJxmjPdACT+CfD8uqBPKucIyK+kxDgRiD1zU/VKQarSIr3+6OJ/mc9cnv+yq1rF+eKtrFwFj6w==
-X-Received: by 2002:a5d:6d06:: with SMTP id e6mr5642870wrq.210.1639047970421;
-        Thu, 09 Dec 2021 03:06:10 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id n2sm8573634wmi.36.2021.12.09.03.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 03:06:09 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     vladimir.oltean@nxp.com
-Cc:     claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2] net: dsa: felix: Fix memory leak in felix_setup_mmio_filtering
-Date:   Thu,  9 Dec 2021 12:05:40 +0100
-Message-Id: <20211209110538.11585-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S236400AbhLILLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:11:00 -0500
+Received: from mga18.intel.com ([134.134.136.126]:11248 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236371AbhLILK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:10:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639048046; x=1670584046;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+pNm7LpSapzSHjAl7xGc+T/u8eNQs01fQUKoECN/oJk=;
+  b=Ly53WCToYicGCEVTKn6RKqWB5tzPPIaKHQp89cj3DbifXTdx1JcIHvVK
+   Wmk66DnMG6cJwDH13+n5FCuMQhXZk1qz5M8iPlWW2n54FEPBngPF5NOlW
+   RVM57nUPiTgG3cUDtEBsUZh+lV0Ex9dfeETZxpH2faehkuS34yT+Kkx4w
+   dkBlToNE7a22MAMSrxlvrjqIlOqQMoeTVbIRK8+yP7GuxleomhzDrsQpO
+   eK1uT03MlD9jKlvCsTv5u2MqtZmKGr6+Dj/oGF5zSw7+k6t1Y/ubeZdxR
+   bXywXo7+CmUa+EweMsrDD8ye5GK5uGffOzZJSQF/EdLjsbk2wTxULSSvd
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224943889"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="224943889"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:07:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="462091695"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 03:07:23 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvHGk-0001pB-QG; Thu, 09 Dec 2021 11:07:22 +0000
+Date:   Thu, 9 Dec 2021 19:06:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable
+ 'sh_msiof_match'
+Message-ID: <202112091948.lD9JYOeh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid a memory leak if there is not a CPU port defined.
+Hi Stephen,
 
-Fixes: 8d5f7954b7c8 ("net: dsa: felix: break at first CPU port during init and teardown")
-Addresses-Coverity-ID: 1492897 ("Resource leak")
-Addresses-Coverity-ID: 1492899 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+commit: bbd7ffdbef6888459f301c5889f3b14ada38b913 clk: Allow the common clk framework to be selectable
+date:   1 year, 7 months ago
+config: hexagon-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211209/202112091948.lD9JYOeh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bbd7ffdbef6888459f301c5889f3b14ada38b913
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bbd7ffdbef6888459f301c5889f3b14ada38b913
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/spi/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi-sh-msiof.c:1072:34: warning: unused variable 'sh_msiof_match' [-Wunused-const-variable]
+   static const struct of_device_id sh_msiof_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/sh_msiof_match +1072 drivers/spi/spi-sh-msiof.c
+
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1071  
+50a7e23f536779 Geert Uytterhoeven 2014-02-25 @1072  static const struct of_device_id sh_msiof_match[] = {
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1073  	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
+bdacfc7b6216dd Fabrizio Castro    2017-09-25  1074  	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
+bdacfc7b6216dd Fabrizio Castro    2017-09-25  1075  	{ .compatible = "renesas,msiof-r8a7745",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1076  	{ .compatible = "renesas,msiof-r8a7790",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1077  	{ .compatible = "renesas,msiof-r8a7791",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1078  	{ .compatible = "renesas,msiof-r8a7792",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1079  	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1080  	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1081  	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1082  	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
+61a8dec502b873 Geert Uytterhoeven 2017-07-12  1083  	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
+264c3e8de4fbda Simon Horman       2016-12-20  1084  	{ .compatible = "renesas,sh-msiof",        .data = &sh_data }, /* Deprecated */
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1085  	{},
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1086  };
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1087  MODULE_DEVICE_TABLE(of, sh_msiof_match);
+50a7e23f536779 Geert Uytterhoeven 2014-02-25  1088  
+
+:::::: The code at line 1072 was first introduced by commit
+:::::: 50a7e23f53677918bf521b09ce9bb20fb87cd175 spi: sh-msiof: Move default FIFO sizes to device ID data
+
+:::::: TO: Geert Uytterhoeven <geert+renesas@linux-m68k.org>
+:::::: CC: Mark Brown <broonie@linaro.org>
 
 ---
-
-v2: Add Fixes and Reviewed-by tags
----
- drivers/net/dsa/ocelot/felix.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
-index 327cc4654806..f1a05e7dc818 100644
---- a/drivers/net/dsa/ocelot/felix.c
-+++ b/drivers/net/dsa/ocelot/felix.c
-@@ -290,8 +290,11 @@ static int felix_setup_mmio_filtering(struct felix *felix)
- 		}
- 	}
- 
--	if (cpu < 0)
-+	if (cpu < 0) {
-+		kfree(tagging_rule);
-+		kfree(redirect_rule);
- 		return -EINVAL;
-+	}
- 
- 	tagging_rule->key_type = OCELOT_VCAP_KEY_ETYPE;
- 	*(__be16 *)tagging_rule->key.etype.etype.value = htons(ETH_P_1588);
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

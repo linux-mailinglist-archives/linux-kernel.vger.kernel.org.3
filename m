@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EE846E0AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F10646E0AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbhLICGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbhLICGE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:06:04 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFBCC0617A1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 18:02:31 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id bk14so6701103oib.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 18:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i8K3bG06x/4Qcc20a3im8lkNmJGI7KGAZkSewlAH7Ic=;
-        b=hbEBZYfCJ7j5wm9xIF0hzQZiJGXk6e83kLO58LTAkWQqt6LBo5fjaRYwbB7B3df7FX
-         /deh+sF65RsILVht4N6YxfwYv75j7Cdx384iTgycWw6tej3js5HOQabpe8xLbHW+IhKR
-         2NOxZhfxxa6SBEqFGHyCdvxvJwx+Ov2hSQZt6ev08fR57PgOkE70hX7AKRro5UxWUgvb
-         vD6kb4S+CA+xFMLpI7bjKYTFyGEuvZrxqyLXmvv7oOSo76T1gUJ/tlHAhcIErd/yNqG+
-         cu0dgjOKOVsun0wP0C5Dn/EfWyl/mu7Hl7cXRnQQ9CG/ZIUk86BnKO4SHNaVn8Qlj+SG
-         S/oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i8K3bG06x/4Qcc20a3im8lkNmJGI7KGAZkSewlAH7Ic=;
-        b=X2v+bMJzRqYGxEdxyTavObCbnB5mD6GoWekb5/nd3zmXg3P2Amf+IhWgnBf64ogaS2
-         zSF9RPgoBygX9e67+flPN1wcSDk9N6iHZd13uMCrgF3r4jI9cFV7v1rANgEsdmQCgl4J
-         4IW4rD5M0PvsJ/iKfqj0cARyRae+kFBzWGTC3eouvd30XhnorbhQyQq88vyW3lXWqaOt
-         hbdBP+pw+4y6dAlexZh1on/2hGcE9YqoLX9w/aG2Z6DjyRqbYrDDJi/tRnMoXSvkKXwd
-         qqlzlqAZjToscl9+Iv6fc6A/qcWjdtCoBeuGYw6l0OpNizg11Bk78gCHq05haaRQ3MiS
-         71lg==
-X-Gm-Message-State: AOAM530S/7QsFDxbtwyrmFPxzsakJCrfmu4+pQM/3fwZrHcjxDpeOzUX
-        +Vrp9jVj9FbDQA+9KB80YpVNKsOuLxLjNmJnHwKGQQ==
-X-Google-Smtp-Source: ABdhPJzCzGNZwo5zhe/Xg4dWDfMmoCYErIh/bGdFKt4jw38rx+SAbxKy4CMNvHObhJWo2OyEZLQY/O0LIL+U1EGgjcs=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr3263096oic.114.1639015351156;
- Wed, 08 Dec 2021 18:02:31 -0800 (PST)
+        id S229779AbhLICGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:06:53 -0500
+Received: from mga17.intel.com ([192.55.52.151]:9219 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229534AbhLICGw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:06:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218682638"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="218682638"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:11 -0800
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="503306622"
+Received: from cxia1-mobl.ccr.corp.intel.com (HELO lkp-zhoujie.ccr.corp.intel.com) ([10.255.28.13])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:06 -0800
+From:   Jie2x Zhou <jie2x.zhou@intel.com>
+To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        dsahern@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, xinjianx.ma@intel.com,
+        zhijianx.li@intel.com, Philip Li <philip.li@intel.com>,
+        Jie2x Zhou <jie2x.zhou@intel.com>
+Subject: [PATCH v3] selftests: net: Correct ping6 expected rc from 2 to 1
+Date:   Thu,  9 Dec 2021 10:02:30 +0800
+Message-Id: <20211209020230.37270-1-jie2x.zhou@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20211201072434.3968768-1-vkoul@kernel.org> <20211201072434.3968768-3-vkoul@kernel.org>
-In-Reply-To: <20211201072434.3968768-3-vkoul@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Dec 2021 03:02:18 +0100
-Message-ID: <CACRpkdYLvEBMzkWgErXNM-NZ3HXrK=stL68Eu2wzaSi8yG8Bvw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] pinctrl: qcom: Add SM8450 pinctrl driver
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 8:24 AM Vinod Koul <vkoul@kernel.org> wrote:
+./fcnal-test.sh -v -t ipv6_ping
+TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
+TEST: ping out, VRF bind - multicast IP                                       [FAIL]
 
-> This adds pincontrol driver for tlmm block found in SM8450 SoC
->
-> This patch is based on initial code downstream by
-> Elliot Berman <eberman@codeaurora.org>
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+ping6 is failing as it should.
+COMMAND: ip netns exec ns-A /bin/ping6 -c1 -w1 fe80::7c4c:bcff:fe66:a63a%red
+strace of ping6 shows it is failing with '1',
+so change the expected rc from 2 to 1.
 
-Patch applied!
+Fixes: c0644e71df33 ("selftests: Add ipv6 ping tests to fcnal-test")
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: David Ahern <dsahern@gmail.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yours,
-Linus Walleij
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 7f5b265fcb90..966787c2f9f0 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -2191,7 +2191,7 @@ ipv6_ping_vrf()
+ 		log_start
+ 		show_hint "Fails since VRF device does not support linklocal or multicast"
+ 		run_cmd ${ping6} -c1 -w1 ${a}
+-		log_test_addr ${a} $? 2 "ping out, VRF bind"
++		log_test_addr ${a} $? 1 "ping out, VRF bind"
+ 	done
+ 
+ 	for a in ${NSB_IP6} ${NSB_LO_IP6} ${NSB_LINKIP6}%${NSA_DEV} ${MCAST}%${NSA_DEV}
+-- 
+2.31.1
+

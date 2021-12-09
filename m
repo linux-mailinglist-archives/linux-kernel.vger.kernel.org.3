@@ -2,79 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5486C46F008
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A74046F014
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbhLIRGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242134AbhLIRGR (ORCPT
+        id S238397AbhLIRGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:06:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54301 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231968AbhLIRGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:06:17 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C662C0617A2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:02:44 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 9 Dec 2021 12:06:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639069383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wYjOLw4BAO7orD1bj0fFOC8hbfHkogMruiOdO8/2NSo=;
+        b=JzOmM7f2UmMYu2V9cUnm/2n/KsER6JLlmfqHAvftI84RdTBO1mAhDpK3ZUoftb4V7bkrsh
+        uzZRMVWV75kwwvp/C+hDeM19CttFkUCxrPqkbJS8JdK5QEAw54Lw/TJMgn3s48DTaTdEqH
+        pqf0EY5yMMVCpM4x/7Bnf6K44Gw0inE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-HuQGRQB0OKCtVyEDdGGcbA-1; Thu, 09 Dec 2021 12:03:00 -0500
+X-MC-Unique: HuQGRQB0OKCtVyEDdGGcbA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 45AE63F63F;
-        Thu,  9 Dec 2021 18:02:41 +0100 (CET)
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
- panels
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>, robdclark@gmail.com
-Cc:     sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
- <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
- <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
-Date:   Thu, 9 Dec 2021 18:02:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E76B381CCFF;
+        Thu,  9 Dec 2021 17:02:57 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6EBF60657;
+        Thu,  9 Dec 2021 17:02:44 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 41/67] cachefiles: Implement volume support
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 17:02:43 +0000
+Message-ID: <163906936397.143852.17788457778396467161.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-In-Reply-To: <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
-> On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
->> In function dpu_encoder_phys_cmd_wait_for_commit_done we are always
->> checking if the relative CTL is started by waiting for an interrupt
->> to fire: it is fine to do that, but then sometimes we call this
->> function while the CTL is up and has never been put down, but that
->> interrupt gets raised only when the CTL gets a state change from
->> 0 to 1 (disabled to enabled), so we're going to wait for something
->> that will never happen on its own.
->>
->> Solving this while avoiding to restart the CTL is actually possible
->> and can be done by just checking if it is already up and running
->> when the wait_for_commit_done function is called: in this case, so,
->> if the CTL was already running, we can say that the commit is done
->> if the command transmission is complete (in other terms, if the
->> interface has been flushed).
-> 
-> I've compared this with the MDP5 driver, where we always wait for PP_DONE 
-> interrupt. Would it be enough to always wait for it (= always call 
-> dpu_encoder_phys_cmd_wait_for_tx_complete())?
-> 
+Implement support for creating the directory layout for a volume on disk
+and setting up and withdrawing volume caching.
 
-This sets my delay record to reply to two months. Great achievement!
+Each volume has a directory named for the volume key under the root of the
+cache (prefixed with an 'I' to indicate to cachefilesd that it's an index)
+and then creates a bunch of hash bucket subdirectories under that (named as
+'@' plus a hex number) in which cookie files will be created.
 
-Jokes apart, yes it would make sense to do that, it's something that works
-at least... but we should verify that such a thing doesn't break new platforms
-(like sm8150 and newer).
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819635314.215744.13081522301564537723.stgit@warthog.procyon.org.uk/ # v1
+---
+
+ fs/cachefiles/Makefile    |    3 +
+ fs/cachefiles/cache.c     |   28 ++++++++++-
+ fs/cachefiles/daemon.c    |    2 +
+ fs/cachefiles/interface.c |    2 +
+ fs/cachefiles/internal.h  |   20 ++++++++
+ fs/cachefiles/volume.c    |  118 +++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 171 insertions(+), 2 deletions(-)
+ create mode 100644 fs/cachefiles/volume.c
+
+diff --git a/fs/cachefiles/Makefile b/fs/cachefiles/Makefile
+index 92af5daee8ce..d67210ece9cd 100644
+--- a/fs/cachefiles/Makefile
++++ b/fs/cachefiles/Makefile
+@@ -9,7 +9,8 @@ cachefiles-y := \
+ 	interface.o \
+ 	main.o \
+ 	namei.o \
+-	security.o
++	security.o \
++	volume.o
+ 
+ cachefiles-$(CONFIG_CACHEFILES_ERROR_INJECTION) += error_inject.o
+ 
+diff --git a/fs/cachefiles/cache.c b/fs/cachefiles/cache.c
+index 4c4121105750..d87db9b6e4c8 100644
+--- a/fs/cachefiles/cache.c
++++ b/fs/cachefiles/cache.c
+@@ -262,6 +262,32 @@ int cachefiles_has_space(struct cachefiles_cache *cache,
+ 	return ret;
+ }
+ 
++/*
++ * Withdraw volumes.
++ */
++static void cachefiles_withdraw_volumes(struct cachefiles_cache *cache)
++{
++	_enter("");
++
++	for (;;) {
++		struct cachefiles_volume *volume = NULL;
++
++		spin_lock(&cache->object_list_lock);
++		if (!list_empty(&cache->volumes)) {
++			volume = list_first_entry(&cache->volumes,
++						  struct cachefiles_volume, cache_link);
++			list_del_init(&volume->cache_link);
++		}
++		spin_unlock(&cache->object_list_lock);
++		if (!volume)
++			break;
++
++		cachefiles_withdraw_volume(volume);
++	}
++
++	_leave("");
++}
++
+ /*
+  * Sync a cache to backing disk.
+  */
+@@ -303,7 +329,7 @@ void cachefiles_withdraw_cache(struct cachefiles_cache *cache)
+ 	// PLACEHOLDER: Withdraw objects
+ 	fscache_wait_for_objects(fscache);
+ 
+-	// PLACEHOLDER: Withdraw volume
++	cachefiles_withdraw_volumes(cache);
+ 	cachefiles_sync_cache(cache);
+ 	cache->cache = NULL;
+ 	fscache_relinquish_cache(fscache);
+diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+index a449ee661987..337597a4e30c 100644
+--- a/fs/cachefiles/daemon.c
++++ b/fs/cachefiles/daemon.c
+@@ -105,6 +105,8 @@ static int cachefiles_daemon_open(struct inode *inode, struct file *file)
+ 
+ 	mutex_init(&cache->daemon_mutex);
+ 	init_waitqueue_head(&cache->daemon_pollwq);
++	INIT_LIST_HEAD(&cache->volumes);
++	spin_lock_init(&cache->object_list_lock);
+ 
+ 	/* set default caching limits
+ 	 * - limit at 1% free space and/or free files
+diff --git a/fs/cachefiles/interface.c b/fs/cachefiles/interface.c
+index 564ea8fa6641..1793e46bd3e7 100644
+--- a/fs/cachefiles/interface.c
++++ b/fs/cachefiles/interface.c
+@@ -15,4 +15,6 @@
+ 
+ const struct fscache_cache_ops cachefiles_cache_ops = {
+ 	.name			= "cachefiles",
++	.acquire_volume		= cachefiles_acquire_volume,
++	.free_volume		= cachefiles_free_volume,
+ };
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index 0ccea2373b40..3b1a6d67cf96 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -19,6 +19,17 @@
+ struct cachefiles_cache;
+ struct cachefiles_object;
+ 
++/*
++ * Cached volume representation.
++ */
++struct cachefiles_volume {
++	struct cachefiles_cache		*cache;
++	struct list_head		cache_link;	/* Link in cache->volumes */
++	struct fscache_volume		*vcookie;	/* The netfs's representation */
++	struct dentry			*dentry;	/* The volume dentry */
++	struct dentry			*fanout[256];	/* Fanout subdirs */
++};
++
+ /*
+  * Data file records.
+  */
+@@ -35,6 +46,8 @@ struct cachefiles_cache {
+ 	struct dentry			*store;		/* Directory into which live objects go */
+ 	struct dentry			*graveyard;	/* directory into which dead objects go */
+ 	struct file			*cachefilesd;	/* manager daemon handle */
++	struct list_head		volumes;	/* List of volume objects */
++	spinlock_t			object_list_lock; /* Lock for volumes and object_list */
+ 	const struct cred		*cache_cred;	/* security override for accessing cache */
+ 	struct mutex			daemon_mutex;	/* command serialisation mutex */
+ 	wait_queue_head_t		daemon_pollwq;	/* poll waitqueue for daemon */
+@@ -162,6 +175,13 @@ static inline void cachefiles_end_secure(struct cachefiles_cache *cache,
+ 	revert_creds(saved_cred);
+ }
+ 
++/*
++ * volume.c
++ */
++void cachefiles_acquire_volume(struct fscache_volume *volume);
++void cachefiles_free_volume(struct fscache_volume *volume);
++void cachefiles_withdraw_volume(struct cachefiles_volume *volume);
++
+ /*
+  * Error handling
+  */
+diff --git a/fs/cachefiles/volume.c b/fs/cachefiles/volume.c
+new file mode 100644
+index 000000000000..2d3635f1aea1
+--- /dev/null
++++ b/fs/cachefiles/volume.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* Volume handling.
++ *
++ * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
++ * Written by David Howells (dhowells@redhat.com)
++ */
++
++#include <linux/fs.h>
++#include <linux/slab.h>
++#include "internal.h"
++#include <trace/events/fscache.h>
++
++/*
++ * Allocate and set up a volume representation.  We make sure all the fanout
++ * directories are created and pinned.
++ */
++void cachefiles_acquire_volume(struct fscache_volume *vcookie)
++{
++	struct cachefiles_volume *volume;
++	struct cachefiles_cache *cache = vcookie->cache->cache_priv;
++	const struct cred *saved_cred;
++	struct dentry *vdentry, *fan;
++	size_t len;
++	char *name;
++	int n_accesses, i;
++
++	_enter("");
++
++	volume = kzalloc(sizeof(struct cachefiles_volume), GFP_KERNEL);
++	if (!volume)
++		return;
++	volume->vcookie = vcookie;
++	volume->cache = cache;
++	INIT_LIST_HEAD(&volume->cache_link);
++
++	cachefiles_begin_secure(cache, &saved_cred);
++
++	len = vcookie->key[0];
++	name = kmalloc(len + 3, GFP_NOFS);
++	if (!name)
++		goto error_vol;
++	name[0] = 'I';
++	memcpy(name + 1, vcookie->key + 1, len);
++	name[len + 1] = 0;
++
++	vdentry = cachefiles_get_directory(cache, cache->store, name);
++	if (IS_ERR(vdentry))
++		goto error_name;
++	volume->dentry = vdentry;
++
++	for (i = 0; i < 256; i++) {
++		sprintf(name, "@%02x", i);
++		fan = cachefiles_get_directory(cache, vdentry, name);
++		if (IS_ERR(fan))
++			goto error_fan;
++		volume->fanout[i] = fan;
++	}
++
++	cachefiles_end_secure(cache, saved_cred);
++
++	vcookie->cache_priv = volume;
++	n_accesses = atomic_inc_return(&vcookie->n_accesses); /* Stop wakeups on dec-to-0 */
++	trace_fscache_access_volume(vcookie->debug_id, 0,
++				    refcount_read(&vcookie->ref),
++				    n_accesses, fscache_access_cache_pin);
++
++	spin_lock(&cache->object_list_lock);
++	list_add(&volume->cache_link, &volume->cache->volumes);
++	spin_unlock(&cache->object_list_lock);
++
++	kfree(name);
++	return;
++
++error_fan:
++	for (i = 0; i < 256; i++)
++		cachefiles_put_directory(volume->fanout[i]);
++	cachefiles_put_directory(volume->dentry);
++error_name:
++	kfree(name);
++error_vol:
++	kfree(volume);
++	cachefiles_end_secure(cache, saved_cred);
++}
++
++/*
++ * Release a volume representation.
++ */
++static void __cachefiles_free_volume(struct cachefiles_volume *volume)
++{
++	int i;
++
++	_enter("");
++
++	volume->vcookie->cache_priv = NULL;
++
++	for (i = 0; i < 256; i++)
++		cachefiles_put_directory(volume->fanout[i]);
++	cachefiles_put_directory(volume->dentry);
++	kfree(volume);
++}
++
++void cachefiles_free_volume(struct fscache_volume *vcookie)
++{
++	struct cachefiles_volume *volume = vcookie->cache_priv;
++
++	if (volume) {
++		spin_lock(&volume->cache->object_list_lock);
++		list_del_init(&volume->cache_link);
++		spin_unlock(&volume->cache->object_list_lock);
++		__cachefiles_free_volume(volume);
++	}
++}
++
++void cachefiles_withdraw_volume(struct cachefiles_volume *volume)
++{
++	fscache_withdraw_volume(volume->vcookie);
++	__cachefiles_free_volume(volume);
++}
+
+

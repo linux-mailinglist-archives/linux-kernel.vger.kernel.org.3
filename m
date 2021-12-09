@@ -2,118 +2,960 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE1E46E89B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C19A46E89C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237502AbhLIMqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbhLIMqK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:46:10 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42915C061746;
-        Thu,  9 Dec 2021 04:42:37 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id m19so3652544vko.12;
-        Thu, 09 Dec 2021 04:42:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B99doplKMhCF3/NI+gmHfnS9FII0vd0OCqQprdWAKGw=;
-        b=cyf0yHemDemISmOvVy+aopA4fi2LoydNrrkxsO/dk0BXNerSGHZF509VK4BHayIJjC
-         fUfr2j+YMMMPHDeBH8Slw8ikVrUcpZnHS6gqeo1XIVLKf4DacsGXUhNxkCY7MseMjWOS
-         GyuiRvkTFtEKcloYUUWM2yYtnR6N0uiinPu1Es0L0nN2ChPWZR91l4O7HcsD0wPQNJT/
-         B4Sj7abwy8G9NORm28sAlu1S61ejA3KyRlUigd5JR1HselBFQNlUXVTMLMlvKPGuNVVu
-         MiW380fJZ/J/1VRrffTnQupdJqCfrn+jUkJNcDEWOQsnesUlZyFYcwp25G3SyPrxwKED
-         IB1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B99doplKMhCF3/NI+gmHfnS9FII0vd0OCqQprdWAKGw=;
-        b=6s5ddKTtVJVv8xzJlnB9ejWOr7lMZw8A7buBWLQuivCeeNtGglcYFEGBbXhiXg6e5e
-         r5VghTD2iFgTdj9tjgFPfwSTJOAPaXjeljGkAqM4RGKqU8t9xcqrw5NoU5GhvcKcBZZy
-         livRW0L+3eOmovaOyzmuEEX/MsgTa+uPA4ycAlz04G1BZooJuScEp4jDZKEIli4EYdnP
-         qnfDgMXn6cWUu9Dcg+rcAjCVqwq61rz4SuZoOApD9K8atuXxNhVwa9yeujrJwtzkfhXV
-         4EmLxG+Mm+UeE2+7CYo7Ao0om5u54HefIX4438OZbqAHxMiptSCTCrkPfEz0TZ7xiIL0
-         sA7Q==
-X-Gm-Message-State: AOAM530KyKZXH94WMysmI7tjg6BKtgLqofokFNdRYuuNkf1zsTqoLdKW
-        n9YYk9SIka1yA2IW7dpju5w=
-X-Google-Smtp-Source: ABdhPJx3lgyOD6ZeYYjqxmbuMSNvFbZ+0T6h79BGDGCI48zAjIY0NPzSMHB7GiHOIv4UE5mMT2mTKw==
-X-Received: by 2002:a1f:cd47:: with SMTP id d68mr8595660vkg.33.1639053756428;
-        Thu, 09 Dec 2021 04:42:36 -0800 (PST)
-Received: from t14s.localdomain ([177.220.172.101])
-        by smtp.gmail.com with ESMTPSA id t5sm3810985vsk.24.2021.12.09.04.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 04:42:36 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 43C72ECD4C; Thu,  9 Dec 2021 09:42:34 -0300 (-03)
-Date:   Thu, 9 Dec 2021 09:42:34 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] sctp: Protect cached endpoints to prevent possible
- UAF
-Message-ID: <YbH5um3HVQbSecx4@t14s.localdomain>
-References: <20211208165434.2962062-1-lee.jones@linaro.org>
+        id S237517AbhLIMqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:46:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:56106 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230094AbhLIMq3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:46:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CB711FB;
+        Thu,  9 Dec 2021 04:42:55 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.64.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF7DB3F5A1;
+        Thu,  9 Dec 2021 04:42:53 -0800 (PST)
+Date:   Thu, 9 Dec 2021 12:42:47 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     will@kernel.org, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
+        keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: Re: [RFC][PATCH 1/5] atomic: Introduce
+ atomic_{inc,dec,dec_and_test}_ofl()
+Message-ID: <YbH5x4FuIwj5krMO@FVFF77S0Q05N>
+References: <20211208183655.251963904@infradead.org>
+ <20211208183906.389506784@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208165434.2962062-1-lee.jones@linaro.org>
+In-Reply-To: <20211208183906.389506784@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:54:34PM +0000, Lee Jones wrote:
-> To prevent this from happening we need to take a reference on the
-> to-be-used/dereferenced 'struct sctp_endpoint' until such a time when
-> we know it can be safely released.
+On Wed, Dec 08, 2021 at 07:36:56PM +0100, Peter Zijlstra wrote:
+> In order to facilitate architecture support for refcount_t, introduce
+> a number of new atomic primitives that have a uaccess style exception
+> for overflow.
 > 
-> When KASAN is not enabled, a similar, but slightly different NULL
-> pointer derefernce crash occurs later along the thread of execution in
-> inet_sctp_diag_fill() this time.
+> Notably:
+> 
+>   atomic_inc_ofl(v, Label) -- increment and goto Label when
+> 			      v is zero or negative.
+> 
+>   atomic_dec_ofl(v, Label) -- decrement and goto Label when
+> 			      the result is zero or negative
+> 
+>   atomic_dec_and_test_ofl(v, Label) -- decrement and return true when
+> 				       the result is zero and goto Label
+> 				       when the result is negative
 
-Hey Lee, did you try running lksctp-tools [1] func tests with this patch?
-I'm getting failures here.
+Just to check, atomic_inc_ofl() tests the *old* value of `v`, and the other
+cases check the *new* value of `v`?
 
-[root@vm1 func_tests]# make v4test
-./test_assoc_abort
-test_assoc_abort.c  1 PASS : ABORT an association using SCTP_ABORT
-test_assoc_abort passes
+For clarity, in the descriptions it might be worth:
 
-./test_assoc_shutdown
-test_assoc_shutdown.c  1 BROK : bind: Address already in use
-DUMP_CORE ../../src/testlib/sctputil.h: 145
-/bin/sh: line 1:  3727 Segmentation fault      (core dumped) ./$a
-test_assoc_shutdown fails
-make: *** [Makefile:1648: v4test] Error 1
+  s/v/the old value of v/
+  s/the result/the new value of v/
 
-I didn't check it closely but it would seem that the ep is beind held
-forever. If I simply retry after a few seconds, it's still there (now the 1st
-test fails):
+... which I think makes that clearer.
 
-[root@vm1 func_tests]# make v4test
-./test_assoc_abort
-test_assoc_abort.c  1 BROK : bind: Address already in use
-DUMP_CORE ../../src/testlib/sctputil.h: 145
-/bin/sh: line 1:  3751 Segmentation fault      (core dumped) ./$a
-test_assoc_abort fails
+> Since the GCC 'Labels as Values' extention doesn't allow having the
+> goto in an inline function, these new 'functions' must in fact be
+> implemented as macro magic.
 
-1.https://github.com/sctp/lksctp-tools
+Oh; fun... :(
 
-  Marcelo
+GCC allows the label to be passed into in a *nested* function, so I had a play
+with that, hoping we might be able to get scoping and evaluatio with something
+like:
+
+| #define arch_${atomic}_dec_and_test_ofl(_v, _label)					\\
+| ({											\\
+| 	bool __nested_arch_${atomic}_dec_and_test_ovf(${atomic}_t *v, void *label)	\\
+| 	{										\\
+| 		${int} new = arch_${atomic}_dec_return(v);				\\
+| 		if (unlikely(new < 0))							\\
+| 			goto label;							\\
+| 		if (unlikely(new == 0))							\\
+| 			return true;							\\
+| 		return false;								\\
+| 	}										\\
+| 	__nested_arch_${atomic}_dec_and_test_ovf(_v, &&_label);				\\
+| })
+
+... but GCC refused to inline things, and Clang doesn't appear to support
+nested functions, so it does appear we're stuck with using macros...
+
+It's a shame to have to use macros, since we have to take great care to avoid
+multiple-evaluation and/or shadowing of variables, but we're probably OK in
+practice given these are simple enough.
+
+> This meant extending the atomic generation scripts to deal with
+> wrapping macros instead of inline functions. Since
+> xchg/cmpxchg/try_cmpxchg were already macro magic, there was existant
+> code for that. While extending/improving that a few latent
+> 'instrumentation' bugs were uncovered and 'accidentally' fixed.
+
+I assume for non-RFC we can split that out into a preparatory patch. :)
+
+Having played about a bit, I don't have any suggestions for improving the
+scripting, and I think that looks OK.
+
+Thanks,
+Mark.
+
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/atomic/atomic-arch-fallback.h |   64 ++++++++++++
+>  include/linux/atomic/atomic-instrumented.h  |  139 ++++++++++++++++++++--------
+>  include/linux/atomic/atomic-long.h          |   32 ++++++
+>  scripts/atomic/atomic-tbl.sh                |    6 +
+>  scripts/atomic/atomics.tbl                  |    6 +
+>  scripts/atomic/fallbacks/dec_and_test_ofl   |   12 ++
+>  scripts/atomic/fallbacks/dec_ofl            |    8 +
+>  scripts/atomic/fallbacks/inc_ofl            |    8 +
+>  scripts/atomic/gen-atomic-fallback.sh       |    4 
+>  scripts/atomic/gen-atomic-instrumented.sh   |  117 +++++++++++++++++++----
+>  scripts/atomic/gen-atomic-long.sh           |   32 +++++-
+>  11 files changed, 359 insertions(+), 69 deletions(-)
+> 
+> --- a/include/linux/atomic/atomic-arch-fallback.h
+> +++ b/include/linux/atomic/atomic-arch-fallback.h
+> @@ -1250,6 +1250,37 @@ arch_atomic_dec_if_positive(atomic_t *v)
+>  #define arch_atomic_dec_if_positive arch_atomic_dec_if_positive
+>  #endif
+>  
+> +#ifndef arch_atomic_inc_ofl
+> +#define arch_atomic_inc_ofl(_v, _label)				\
+> +do {									\
+> +	int __old = arch_atomic_fetch_inc(_v);			\
+> +	if (unlikely(__old <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic_dec_ofl
+> +#define arch_atomic_dec_ofl(_v, _label)				\
+> +do {									\
+> +	int __new = arch_atomic_dec_return(_v);			\
+> +	if (unlikely(__new <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic_dec_and_test_ofl
+> +#define arch_atomic_dec_and_test_ofl(_v, _label)			\
+> +({									\
+> +	bool __ret = false;						\
+> +	int __new = arch_atomic_dec_return(_v);			\
+> +	if (unlikely(__new < 0))					\
+> +		goto _label;						\
+> +	if (unlikely(__new == 0))					\
+> +		__ret = true;						\
+> +	__ret;								\
+> +})
+> +#endif
+> +
+>  #ifdef CONFIG_GENERIC_ATOMIC64
+>  #include <asm-generic/atomic64.h>
+>  #endif
+> @@ -2357,5 +2388,36 @@ arch_atomic64_dec_if_positive(atomic64_t
+>  #define arch_atomic64_dec_if_positive arch_atomic64_dec_if_positive
+>  #endif
+>  
+> +#ifndef arch_atomic64_inc_ofl
+> +#define arch_atomic64_inc_ofl(_v, _label)				\
+> +do {									\
+> +	s64 __old = arch_atomic64_fetch_inc(_v);			\
+> +	if (unlikely(__old <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic64_dec_ofl
+> +#define arch_atomic64_dec_ofl(_v, _label)				\
+> +do {									\
+> +	s64 __new = arch_atomic64_dec_return(_v);			\
+> +	if (unlikely(__new <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic64_dec_and_test_ofl
+> +#define arch_atomic64_dec_and_test_ofl(_v, _label)			\
+> +({									\
+> +	bool __ret = false;						\
+> +	s64 __new = arch_atomic64_dec_return(_v);			\
+> +	if (unlikely(__new < 0))					\
+> +		goto _label;						\
+> +	if (unlikely(__new == 0))					\
+> +		__ret = true;						\
+> +	__ret;								\
+> +})
+> +#endif
+> +
+>  #endif /* _LINUX_ATOMIC_FALLBACK_H */
+> -// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
+> +// a59904b14db62a38bbab8699edc4a785a97871fb
+> --- a/include/linux/atomic/atomic-instrumented.h
+> +++ b/include/linux/atomic/atomic-instrumented.h
+> @@ -501,7 +501,7 @@ static __always_inline bool
+>  atomic_try_cmpxchg(atomic_t *v, int *old, int new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_try_cmpxchg(v, old, new);
+>  }
+>  
+> @@ -509,7 +509,7 @@ static __always_inline bool
+>  atomic_try_cmpxchg_acquire(atomic_t *v, int *old, int new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_try_cmpxchg_acquire(v, old, new);
+>  }
+>  
+> @@ -517,7 +517,7 @@ static __always_inline bool
+>  atomic_try_cmpxchg_release(atomic_t *v, int *old, int new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_try_cmpxchg_release(v, old, new);
+>  }
+>  
+> @@ -525,7 +525,7 @@ static __always_inline bool
+>  atomic_try_cmpxchg_relaxed(atomic_t *v, int *old, int new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_try_cmpxchg_relaxed(v, old, new);
+>  }
+>  
+> @@ -599,6 +599,27 @@ atomic_dec_if_positive(atomic_t *v)
+>  	return arch_atomic_dec_if_positive(v);
+>  }
+>  
+> +#define atomic_inc_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_inc_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic_dec_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_dec_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic_dec_and_test_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_dec_and_test_ofl(__ai_v, L); \
+> +})
+> +
+>  static __always_inline s64
+>  atomic64_read(const atomic64_t *v)
+>  {
+> @@ -1079,7 +1100,7 @@ static __always_inline bool
+>  atomic64_try_cmpxchg(atomic64_t *v, s64 *old, s64 new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic64_try_cmpxchg(v, old, new);
+>  }
+>  
+> @@ -1087,7 +1108,7 @@ static __always_inline bool
+>  atomic64_try_cmpxchg_acquire(atomic64_t *v, s64 *old, s64 new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic64_try_cmpxchg_acquire(v, old, new);
+>  }
+>  
+> @@ -1095,7 +1116,7 @@ static __always_inline bool
+>  atomic64_try_cmpxchg_release(atomic64_t *v, s64 *old, s64 new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic64_try_cmpxchg_release(v, old, new);
+>  }
+>  
+> @@ -1103,7 +1124,7 @@ static __always_inline bool
+>  atomic64_try_cmpxchg_relaxed(atomic64_t *v, s64 *old, s64 new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic64_try_cmpxchg_relaxed(v, old, new);
+>  }
+>  
+> @@ -1177,6 +1198,27 @@ atomic64_dec_if_positive(atomic64_t *v)
+>  	return arch_atomic64_dec_if_positive(v);
+>  }
+>  
+> +#define atomic64_inc_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_inc_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic64_dec_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_dec_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic64_dec_and_test_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_dec_and_test_ofl(__ai_v, L); \
+> +})
+> +
+>  static __always_inline long
+>  atomic_long_read(const atomic_long_t *v)
+>  {
+> @@ -1657,7 +1699,7 @@ static __always_inline bool
+>  atomic_long_try_cmpxchg(atomic_long_t *v, long *old, long new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_long_try_cmpxchg(v, old, new);
+>  }
+>  
+> @@ -1665,7 +1707,7 @@ static __always_inline bool
+>  atomic_long_try_cmpxchg_acquire(atomic_long_t *v, long *old, long new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_long_try_cmpxchg_acquire(v, old, new);
+>  }
+>  
+> @@ -1673,7 +1715,7 @@ static __always_inline bool
+>  atomic_long_try_cmpxchg_release(atomic_long_t *v, long *old, long new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_long_try_cmpxchg_release(v, old, new);
+>  }
+>  
+> @@ -1681,7 +1723,7 @@ static __always_inline bool
+>  atomic_long_try_cmpxchg_relaxed(atomic_long_t *v, long *old, long new)
+>  {
+>  	instrument_atomic_read_write(v, sizeof(*v));
+> -	instrument_atomic_read_write(old, sizeof(*old));
+> +	instrument_read_write(old, sizeof(*old));
+>  	return arch_atomic_long_try_cmpxchg_relaxed(v, old, new);
+>  }
+>  
+> @@ -1755,87 +1797,108 @@ atomic_long_dec_if_positive(atomic_long_
+>  	return arch_atomic_long_dec_if_positive(v);
+>  }
+>  
+
+> +#define atomic_long_inc_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_inc_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic_long_dec_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_dec_ofl(__ai_v, L); \
+> +})
+> +
+> +#define atomic_long_dec_and_test_ofl(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_dec_and_test_ofl(__ai_v, L); \
+> +})
+> +
+>  #define xchg(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_xchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define xchg_acquire(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define xchg_release(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define xchg_relaxed(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg_acquire(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg_release(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg_relaxed(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg64(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg64(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg64_acquire(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg64_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg64_release(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg64_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg64_relaxed(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+> @@ -1843,8 +1906,8 @@ atomic_long_dec_if_positive(atomic_long_
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+>  	typeof(oldp) __ai_oldp = (oldp); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>  	arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>  
+> @@ -1852,8 +1915,8 @@ atomic_long_dec_if_positive(atomic_long_
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+>  	typeof(oldp) __ai_oldp = (oldp); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>  	arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>  
+> @@ -1861,8 +1924,8 @@ atomic_long_dec_if_positive(atomic_long_
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+>  	typeof(oldp) __ai_oldp = (oldp); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>  	arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>  
+> @@ -1870,36 +1933,36 @@ atomic_long_dec_if_positive(atomic_long_
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+>  	typeof(oldp) __ai_oldp = (oldp); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>  	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg_local(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg64_local(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define sync_cmpxchg(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #define cmpxchg_double(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_double(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+> @@ -1907,9 +1970,9 @@ atomic_long_dec_if_positive(atomic_long_
+>  #define cmpxchg_double_local(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> -	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+> +	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>  	arch_cmpxchg_double_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+>  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+> -// 2a9553f0a9d5619f19151092df5cabbbf16ce835
+> +// 214f9a7e972966a9a8e28e1568665cfb75decf91
+> --- a/include/linux/atomic/atomic-long.h
+> +++ b/include/linux/atomic/atomic-long.h
+> @@ -515,6 +515,21 @@ arch_atomic_long_dec_if_positive(atomic_
+>  	return arch_atomic64_dec_if_positive(v);
+>  }
+>  
+> +#define arch_atomic_long_inc_ofl(v, L) \
+> +({ \
+> +	arch_atomic64_inc_ofl((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_ofl(v, L) \
+> +({ \
+> +	arch_atomic64_dec_ofl((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_and_test_ofl(v, L) \
+> +({ \
+> +	arch_atomic64_dec_and_test_ofl((v), L) \
+> +})
+> +
+>  #else /* CONFIG_64BIT */
+>  
+>  static __always_inline long
+> @@ -1009,6 +1024,21 @@ arch_atomic_long_dec_if_positive(atomic_
+>  	return arch_atomic_dec_if_positive(v);
+>  }
+>  
+> +#define arch_atomic_long_inc_ofl(v, L) \
+> +({ \
+> +	arch_atomic_inc_ofl((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_ofl(v, L) \
+> +({ \
+> +	arch_atomic_dec_ofl((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_and_test_ofl(v, L) \
+> +({ \
+> +	arch_atomic_dec_and_test_ofl((v), L) \
+> +})
+> +
+>  #endif /* CONFIG_64BIT */
+>  #endif /* _LINUX_ATOMIC_LONG_H */
+
+
+> -// e8f0e08ff072b74d180eabe2ad001282b38c2c88
+> +// 120f718985fa4c8f0e884cc4f23db8aa950255fb
+> --- a/scripts/atomic/atomic-tbl.sh
+> +++ b/scripts/atomic/atomic-tbl.sh
+> @@ -36,6 +36,12 @@ meta_has_relaxed()
+>  	meta_in "$1" "BFIR"
+>  }
+>  
+> +#meta_has_macro(meta)
+> +meta_has_macro()
+> +{
+> +	meta_in "$1" "m"
+> +}
+> +
+>  #find_fallback_template(pfx, name, sfx, order)
+>  find_fallback_template()
+>  {
+> --- a/scripts/atomic/atomics.tbl
+> +++ b/scripts/atomic/atomics.tbl
+> @@ -10,12 +10,15 @@
+>  # * F/f	- fetch: returns base type (has fetch_ variants)
+>  # * l	- load: returns base type (has _acquire order variant)
+>  # * s	- store: returns void (has _release order variant)
+> +# * m	- macro:
+>  #
+>  # Where args contains list of type[:name], where type is:
+>  # * cv	- const pointer to atomic base type (atomic_t/atomic64_t/atomic_long_t)
+>  # * v	- pointer to atomic base type (atomic_t/atomic64_t/atomic_long_t)
+>  # * i	- base type (int/s64/long)
+>  # * p	- pointer to base type (int/s64/long)
+> +# * L	- label for exception case
+> +# * V:... - vararg
+
+
+
+>  #
+>  read			l	cv
+>  set			s	v	i
+> @@ -39,3 +42,6 @@ inc_not_zero		b	v
+>  inc_unless_negative	b	v
+>  dec_unless_positive	b	v
+>  dec_if_positive		i	v
+> +inc_ofl			m	v	L
+> +dec_ofl			m	v	L
+> +dec_and_test_ofl	m	v	L
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/dec_and_test_ofl
+> @@ -0,0 +1,12 @@
+> +cat << EOF
+> +#define arch_${atomic}_dec_and_test_ofl(_v, _label)			\\
+> +({									\\
+> +	bool __ret = false;						\\
+> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
+> +	if (unlikely(__new < 0))					\\
+> +		goto _label;						\\
+> +	if (unlikely(__new == 0))					\\
+> +		__ret = true;						\\
+> +	__ret;								\\
+> +})
+> +EOF
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/dec_ofl
+> @@ -0,0 +1,8 @@
+> +cat << EOF
+> +#define arch_${atomic}_dec_ofl(_v, _label)				\\
+> +do {									\\
+> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
+> +	if (unlikely(__new <= 0))					\\
+> +		goto _label;						\\
+> +} while (0)
+> +EOF
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/inc_ofl
+> @@ -0,0 +1,8 @@
+> +cat << EOF
+> +#define arch_${atomic}_inc_ofl(_v, _label)				\\
+> +do {									\\
+> +	${int} __old = arch_${atomic}_fetch_inc(_v);			\\
+> +	if (unlikely(__old <= 0))					\\
+> +		goto _label;						\\
+> +} while (0)
+> +EOF
+> --- a/scripts/atomic/gen-atomic-fallback.sh
+> +++ b/scripts/atomic/gen-atomic-fallback.sh
+> @@ -27,7 +27,9 @@ gen_template_fallback()
+>  	if [ ! -z "${template}" ]; then
+>  		printf "#ifndef ${atomicname}\n"
+>  		. ${template}
+> -		printf "#define ${atomicname} ${atomicname}\n"
+> +		if ! meta_has_macro "${meta}"; then
+> +			printf "#define ${atomicname} ${atomicname}\n"
+> +		fi
+>  		printf "#endif\n\n"
+>  	fi
+>  }
+> --- a/scripts/atomic/gen-atomic-instrumented.sh
+> +++ b/scripts/atomic/gen-atomic-instrumented.sh
+> @@ -13,9 +13,13 @@ gen_param_check()
+>  	local type="${arg%%:*}"
+>  	local name="$(gen_param_name "${arg}")"
+>  	local rw="write"
+> +	local pfx;
+>  
+>  	case "${type#c}" in
+> +	v) pfx="atomic_";;
+>  	i) return;;
+> +	L) return;;
+> +	V) return;;
+>  	esac
+>  
+>  	if [ ${type#c} != ${type} ]; then
+> @@ -27,7 +31,16 @@ gen_param_check()
+>  		rw="read_write"
+>  	fi
+>  
+> -	printf "\tinstrument_atomic_${rw}(${name}, sizeof(*${name}));\n"
+> +	if meta_has_macro "${meta}"; then
+> +		name="__ai_${name}"
+> +	fi
+> +
+> +	printf "\tinstrument_${pfx}${rw}(${name}, sizeof(*${name}));"
+> +	if meta_has_macro "${meta}"; then
+> +		printf " \\"
+> +	fi
+> +	printf "\n"
+> +
+>  }
+>  
+>  #gen_params_checks(meta, arg...)
+> @@ -41,6 +54,52 @@ gen_params_checks()
+>  	done
+>  }
+>  
+> +#gen_var(arg)
+> +gen_var()
+> +{
+> +	local type="${1%%:*}"
+> +	local name="$(gen_param_name "$1")"
+> +
+> +	case "${type#c}" in
+> +	L) return;;
+> +	V) return;;
+> +	esac
+> +
+> +	printf "\ttypeof(${name}) __ai_${name} = (${name}); \\\\\n";
+> +}
+> +
+> +#gen_vars(arg...)
+> +gen_vars()
+> +{
+> +	while [ "$#" -gt 0 ]; do
+> +		gen_var "$1"
+> +		shift
+> +	done
+> +}
+> +
+> +#gen_varg(arg)
+> +gen_varg()
+> +{
+> +	local type="${1%%:*}"
+> +	local name="$(gen_param_name "$1")"
+> +
+> +	case "${type#c}" in
+> +	L)	printf "${name}";;
+> +	V)	printf "__VA_ARGS__";;
+> +	*)	printf "__ai_${name}";;
+> +	esac
+> +}
+> +
+> +#gen_vargs(arg...)
+> +gen_vargs()
+> +{
+> +	while [ "$#" -gt 0 ]; do
+> +		printf "$(gen_varg "$1")"
+> +		[ "$#" -gt 1 ] && printf ", "
+> +		shift
+> +	done
+> +}
+> +
+>  #gen_proto_order_variant(meta, pfx, name, sfx, order, atomic, int, arg...)
+>  gen_proto_order_variant()
+>  {
+> @@ -54,11 +113,28 @@ gen_proto_order_variant()
+>  
+>  	local atomicname="${atomic}_${pfx}${name}${sfx}${order}"
+>  
+> -	local ret="$(gen_ret_type "${meta}" "${int}")"
+> -	local params="$(gen_params "${int}" "${atomic}" "$@")"
+>  	local checks="$(gen_params_checks "${meta}" "$@")"
+>  	local args="$(gen_args "$@")"
+> -	local retstmt="$(gen_ret_stmt "${meta}")"
+> +
+> +	if meta_has_macro "${meta}"; then
+> +
+> +		local vars="$(gen_vars "$@")"
+> +		local vargs="$(gen_vargs "$@")"
+> +
+> +cat <<EOF
+> +#define ${atomicname}(${args}) \\
+> +({ \\
+> +${vars}
+> +${checks}
+> +	arch_${atomicname}(${vargs}); \\
+> +})
+> +EOF
+> +
+> +	else
+> +
+> +		local ret="$(gen_ret_type "${meta}" "${int}")"
+> +		local params="$(gen_params "${int}" "${atomic}" "$@")"
+> +		local retstmt="$(gen_ret_stmt "${meta}")"
+>  
+>  cat <<EOF
+>  static __always_inline ${ret}
+> @@ -69,6 +145,8 @@ ${checks}
+>  }
+>  EOF
+>  
+> +	fi
+> +
+>  	printf "\n"
+>  }
+>  
+> @@ -76,32 +154,27 @@ gen_xchg()
+>  {
+>  	local xchg="$1"; shift
+>  	local mult="$1"; shift
+> +	local ARGS;
+>  
+>  	if [ "${xchg%${xchg#try_cmpxchg}}" = "try_cmpxchg" ] ; then
+> -
+> -cat <<EOF
+> -#define ${xchg}(ptr, oldp, ...) \\
+> -({ \\
+> -	typeof(ptr) __ai_ptr = (ptr); \\
+> -	typeof(oldp) __ai_oldp = (oldp); \\
+> -	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+> -	instrument_atomic_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
+> -	arch_${xchg}(__ai_ptr, __ai_oldp, __VA_ARGS__); \\
+> -})
+> -EOF
+> -
+> +		ARGS="v:ptr p:oldp V:..."
+>  	else
+> +		ARGS="v:ptr V:..."
+> +	fi
+> +
+> +	local args="$(gen_args ${ARGS})"
+> +	local vars="$(gen_vars ${ARGS})"
+> +	local checks="$(gen_params_checks "m" ${ARGS})"
+> +	local vargs="$(gen_vargs ${ARGS})"
+>  
+>  cat <<EOF
+> -#define ${xchg}(ptr, ...) \\
+> +#define ${xchg}(${args}) \\
+>  ({ \\
+> -	typeof(ptr) __ai_ptr = (ptr); \\
+> -	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+> -	arch_${xchg}(__ai_ptr, __VA_ARGS__); \\
+> +${vars}
+> +${checks}
+> +	arch_${xchg}(${vargs}); \\
+>  })
+>  EOF
+> -
+> -	fi
+>  }
+>  
+>  cat << EOF
+> --- a/scripts/atomic/gen-atomic-long.sh
+> +++ b/scripts/atomic/gen-atomic-long.sh
+> @@ -17,16 +17,21 @@ gen_cast()
+>  	printf "($(gen_param_type "${arg}" "${int}" "${atomic}"))"
+>  }
+>  
+> -#gen_args_cast(int, atomic, arg...)
+> +#gen_args_cast(meta, int, atomic, arg...)
+>  gen_args_cast()
+>  {
+> +	local meta=$1; shift
+>  	local int="$1"; shift
+>  	local atomic="$1"; shift
+>  
+>  	while [ "$#" -gt 0 ]; do
+>  		local cast="$(gen_cast "$1" "${int}" "${atomic}")"
+>  		local arg="$(gen_param_name "$1")"
+> -		printf "${cast}${arg}"
+> +		if meta_has_macro "${meta}" && [ "${1%%:*}" != "L" ]; then
+> +			printf "${cast}(${arg})"
+> +		else
+> +			printf "${cast}${arg}"
+> +		fi
+>  		[ "$#" -gt 1 ] && printf ", "
+>  		shift;
+>  	done
+> @@ -40,10 +45,24 @@ gen_proto_order_variant()
+>  	local atomic="$1"; shift
+>  	local int="$1"; shift
+>  
+> -	local ret="$(gen_ret_type "${meta}" "long")"
+> -	local params="$(gen_params "long" "atomic_long" "$@")"
+> -	local argscast="$(gen_args_cast "${int}" "${atomic}" "$@")"
+> -	local retstmt="$(gen_ret_stmt "${meta}")"
+> +	local argscast="$(gen_args_cast "${meta}" "${int}" "${atomic}" "$@")"
+> +
+> +	if meta_has_macro "${meta}"; then
+> +
+> +		local args="$(gen_args "$@")"
+> +
+> +cat <<EOF
+> +#define arch_atomic_long_${name}(${args}) \\
+> +({ \\
+> +	arch_${atomic}_${name}(${argscast}) \\
+> +})
+> +
+> +EOF
+> +	else
+> +
+> +		local ret="$(gen_ret_type "${meta}" "long")"
+> +		local params="$(gen_params "long" "atomic_long" "$@")"
+> +		local retstmt="$(gen_ret_stmt "${meta}")"
+>  
+>  cat <<EOF
+>  static __always_inline ${ret}
+> @@ -53,6 +72,7 @@ arch_atomic_long_${name}(${params})
+>  }
+>  
+>  EOF
+> +	fi
+>  }
+>  
+>  cat << EOF
+> 
+> 

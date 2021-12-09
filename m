@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C888C46F6FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FE746F704
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbhLIWmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:42:08 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:4852 "EHLO
+        id S233716AbhLIWnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:43:51 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:4987 "EHLO
         esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbhLIWly (ORCPT
+        with ESMTP id S233584AbhLIWnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:41:54 -0500
+        Thu, 9 Dec 2021 17:43:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639089499; x=1670625499;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LDsNc/Oq686fzO2A+NwuQ7HfDlYyjkmcFgkOqIWKXJY=;
-  b=Bt5erKAb4vkF54mt5+EnZ93pb8PZ1FHr3FApaacA2WfJ5GeeWIt5lFIg
-   RwiXDAe/Yw6nADvQ5tqCuuE9mwZIYKvmlahMq65CVBFC33zHeYh48tUms
-   vfmnFcNOpXfiXRdR0fn9lUcwRcMhG9tmC3TdPBPSUuztTlxqmcqweHz80
-   6524hkrPJ0Jj/WMniMhI6mzC1ZaMpzGQWqFS9fbNGn+7iTgKgdMUuzrmt
-   nzO5xYhkxvwgZLzc9ED2yV7L0n6YbEJaanI5+wVV8HRh9vfNuvB1QXHG6
-   y29n0ospr7tey5JLfFWFN1xMi3rWFQ/dv1TSjSaI648amDwD2Dlrgk9Kv
-   g==;
+  t=1639089615; x=1670625615;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=O3dOxUszHYvSVXwxc+CzHbIk3s+3IdjYDMtYRFQtwCg=;
+  b=kfQpuCzh6blb62Mfwlg7ZkYWSf3nJQVxDtxOzovDGArVFML+AqKXD+h4
+   sJtqbdKpE+AAJPi9uQ8JmFvLSd3u5mzacurEM/Vxr2W2KZ922PTTdn1gP
+   dFtIFDCWWquY5VTme+nHgDaPGH3MgJDqRl3v/+XrDph0CahZxId3mXkPJ
+   N8jhuzlNju6TTofOh4r9EAlDpF0R+n8D3w2cduhSbtWaaBx4Vwc3/a6H7
+   pKmK7g4k0pefFFYiWcq8+vwMrjm/BT5A+7VyR6LW3MaaqCQxd8v9o8KSX
+   68HTWX/D+xVlEYxAwdAoblXlEcgAuYuPXpDVPnFUhKIrpL7Nd1LA1qWV9
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,193,1635177600"; 
-   d="scan'208";a="192666804"
+   d="scan'208";a="192666869"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 06:38:19 +0800
-IronPort-SDR: 4A+C7jh9kGH40bDw0SLAK/DjNYtGJdmXVtO+ILEqDONcM5NljyBF/fPHHNI+/mR2wA+MijrGYS
- YaDI+RpaDTcpk6oYsZcRQWDrCVKu5KENyNY1djKJq8mbzjlDf9b9aCnNuuaHGIJevCn3X0hTWw
- CRLouROHoT4H8qi0ir3SV/LuHI4KUyQo78WFr2AenpMWNlHUvd7C5LWLvCxbsWxOZbbwbJsxHv
- 31X+RSvUOxJR7T5j6AVB1dm8oizL/Xz5dYPdtXnUKqSvphyuuWM7s9rJxjLeBIogMk+04njydG
- Opkrd5hLcFUZbARrmPG7u9uI
+  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 06:40:15 +0800
+IronPort-SDR: ciWzQ3SFlAhsLQq84JJtgPo59DtUQa5tPYWrOiR4fgVplhU33pFrXigNkABcCWS3Csiw8VgDZ+
+ bwXDtMXZNSShGH64ihMAz1TZ2YI93WZKjfxr3h4dRSKcY5cNPYmmtcLlcpzQMhJOpMTB2FpPpB
+ W5wQC3reJW412wxk5T85733dh6tuNYgrQKiY8aoeeMIYMMCO9g5a407STV1LUZyKShd+loWyS8
+ 8ZgjOkyvVP0z+wl5B+IJux1BJPEC6ETYNKd2ywVhtOknlelmhJ/++uM0lQzXgdLCa81ZaILumY
+ bpIyLNXw8gYx7yTZcettQEuv
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:11:22 -0800
-IronPort-SDR: mK5lVb4i+1LnFU/tibxRa8CiGkkvlbULlkI2ImIYFjKNP18MLNu/+ArZilHujLoAzbt9Ld8Ve4
- /AKdJqo0mF7Ig8Ip1CNkVNFQr/4SPeNMYrmoJaTjzkyiqkjUFdTovz2lZRts+VeUMCimlLK0qw
- YbOIOnpwS5nyKV3DWI3Sr+CK8lFWLyl/Hx5IH47TVcdQEReldArJYS4uGYrWre61KiRHWRxrMA
- /56TsW9hqXZR59xr0sNShudT3vvwLKP2OJnsfihzVv6ROsY2515uMJN0tIf6a/TeT5RHmoDvu2
- bc8=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:13:19 -0800
+IronPort-SDR: mVKKI+7JamybSQvd36R7SmrFWkCtXId+VW14taS/FkUn2KumBY0brvsV25XdNNvXg0dVUQrs+j
+ aX93lff4o4Cp5mBlv+XwPVThl+A/ZFXgheEVIwSQ1wg41D6ZIHYVJOymKbaTLwEnuwtd82tun9
+ S0cDTV80ldAOEQcosfZfo39yuYyrG+L4+BBBS0EHUAFPSWad5YnGu3VN+RPCBJzAYqRf4GAEcE
+ F8jmdvms3v0wO1Dn2ZeAOjWbmZWgyQFfolGPcOHadbYH302fnUNbLPGOdI+MgEZtXtpttt2TiB
+ TMA=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:38:21 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:40:17 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J987v6bGVz1RvTh
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:38:19 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J98B80YsWz1RvTh
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 14:40:16 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -54,151 +54,188 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639089499; x=1641681500; bh=LDsNc/Oq686fzO2A+NwuQ7HfDlYyjkmcFgk
-        OqIWKXJY=; b=COmcHiy2VTRFcGJY0BZWDRknFb7cPPcZRTzw8jHhwU2yjk+saPv
-        Eaxjd5lHdYfL3Gbg4jcE+F+QIyk+iJEhHvr9a6rtYGOcVsD2MFLQJAKyljuo8NkM
-        DiKcv+CX6KpKpxg8NW3IK6rjoeK0TnWB/ce3QprE97YO5IF7NuTBqqD8g9/Bo8un
-        doX1Am9/afmMKKlLzq1HFY7OuN8aKIkJaBILM7XQtqkpP4mhnVbs7R5s0trQtwOi
-        w+wp3abQkZdfwdPR9G5UJLRW43ds8dM0z7u8mOpUHj+gsyUZO6lsn7Xr1i9YAXJR
-        mN+hkrKekCcSQzAv9RZlB8RioZS9Tz5XERw==
+        1639089615; x=1641681616; bh=O3dOxUszHYvSVXwxc+CzHbIk3s+3IdjYDMt
+        YRFQtwCg=; b=iJyiKW3MxYslm5u31MUluLE0pj5VEy4nLceKCYRG6J9VdnCo6Ac
+        D15UAarNcsld0VzgS0yW3bLluKRf14yrFpkFdnyg0GMg3zIv9Q704J+rJzlcr0hG
+        2nizh97whclUX2PKF7RlNi02I9XZceGFHkEFYz7Ldjkf0P2SNjvN6UbcfuGk16lN
+        Tc6HJI11gNsIDkxNH3fjYW6fcCCofH8UuMkrA8dTOFq66UDj5torWWn8I6q1XWCM
+        7nnJvuafv6ru/syDCeJmj54RdQ38SV22anTzY4aANNtC0C9De2LIrABk7WDSccr7
+        M4eRPkdSsAB/4UumCsmt3//ZZrVrW3Wk7nA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id epUBFLfa-MaN for <linux-kernel@vger.kernel.org>;
-        Thu,  9 Dec 2021 14:38:19 -0800 (PST)
+        with ESMTP id 1jAHAuGJo5xo for <linux-kernel@vger.kernel.org>;
+        Thu,  9 Dec 2021 14:40:15 -0800 (PST)
 Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J987s43GBz1RtVG;
-        Thu,  9 Dec 2021 14:38:17 -0800 (PST)
-Message-ID: <6ed96184-6291-ad37-0241-00a5389293e6@opensource.wdc.com>
-Date:   Fri, 10 Dec 2021 07:38:16 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J98B70xFPz1RtVG;
+        Thu,  9 Dec 2021 14:40:14 -0800 (PST)
+Message-ID: <5d98df66-a1fb-a2cf-f780-963bf26f6d1e@opensource.wdc.com>
+Date:   Fri, 10 Dec 2021 07:40:13 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+Subject: Re: [PATCH v1 2/3] ata: sata_dwc_460ex: Use temporary variable for
+ struct device
 Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, Ajish.Koshy@microchip.com
-Cc:     jinpu.wang@cloud.ionos.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Viswas.G@microchip.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas.Cassel@wdc.com, Vasanthalakshmi.Tharmarajan@microchip.com
-References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
- <PH0PR11MB51123148E4932FE1C64F8052EC669@PH0PR11MB5112.namprd11.prod.outlook.com>
- <a60318ef-dc19-a146-5ac3-16eae38b8c37@huawei.com>
- <Ya4PAu4Xj8UGHEV7@x1-carbon>
- <PH0PR11MB5112E2E7D00D95F32C86677AEC6E9@PH0PR11MB5112.namprd11.prod.outlook.com>
- <6ee6fe1b-e811-cada-0c18-78149c313358@huawei.com>
- <PH0PR11MB51120361EB6F6931CCE023D6EC709@PH0PR11MB5112.namprd11.prod.outlook.com>
- <f41d2bed-f320-1b70-7d63-fe77caa2534d@huawei.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211209143519.60498-1-andriy.shevchenko@linux.intel.com>
+ <20211209143519.60498-2-andriy.shevchenko@linux.intel.com>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital
-In-Reply-To: <f41d2bed-f320-1b70-7d63-fe77caa2534d@huawei.com>
+In-Reply-To: <20211209143519.60498-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/09 21:19, John Garry wrote:
-> On 09/12/2021 12:04, Ajish.Koshy@microchip.com wrote:
->> Was testing the patch on arm server. Didn't see crash there but observing timeouts and error
->> handling getting triggered for drives. But the same code works fine on x86.
->>
->> At your end do you still face similar situation on arm server ?
+On 2021/12/09 23:35, Andy Shevchenko wrote:
+> Use temporary variable for struct device to make code neater.
 > 
-> Yeah, I see that as well even without enabling the IOMMU.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+What is this based on ? Is this on top of Hannes series ?
+
+> ---
+>  drivers/ata/sata_dwc_460ex.c | 37 ++++++++++++++++++------------------
+>  1 file changed, 19 insertions(+), 18 deletions(-)
 > 
-> root@(none)$ [  163.974907] sas: Enter sas_scsi_recover_host busy: 222 
-> failed: 222
-> [  163.981108] sas: sas_scsi_find_task: aborting task 0x000000005c703676
-> root@(none)$
-> root@(none)$ [  185.963714] pm80xx0:: pm8001_exec_internal_tmf_task 
-> 757:TMF task[1]timeout.
-> 
-> I figured that it was a card FW issue as I have been using what I got 
-> out the box, and I have no tool to update the firmware on an arm host.
-> 
-> It seems that SSP and STP commands are not completing for some reason, 
-> from the "busy: 222" line.
+> diff --git a/drivers/ata/sata_dwc_460ex.c b/drivers/ata/sata_dwc_460ex.c
+> index 513bee589d12..5421f74c0199 100644
+> --- a/drivers/ata/sata_dwc_460ex.c
+> +++ b/drivers/ata/sata_dwc_460ex.c
+> @@ -215,9 +215,10 @@ static int sata_dwc_dma_get_channel_old(struct sata_dwc_device_port *hsdevp)
+>  {
+>  	struct sata_dwc_device *hsdev = hsdevp->hsdev;
+>  	struct dw_dma_slave *dws = &sata_dwc_dma_dws;
+> +	struct device *dev = hsdev->dev;
+>  	dma_cap_mask_t mask;
+>  
+> -	dws->dma_dev = hsdev->dev;
+> +	dws->dma_dev = dev;
+>  
+>  	dma_cap_zero(mask);
+>  	dma_cap_set(DMA_SLAVE, mask);
+> @@ -225,8 +226,7 @@ static int sata_dwc_dma_get_channel_old(struct sata_dwc_device_port *hsdevp)
+>  	/* Acquire DMA channel */
+>  	hsdevp->chan = dma_request_channel(mask, sata_dwc_dma_filter, hsdevp);
+>  	if (!hsdevp->chan) {
+> -		dev_err(hsdev->dev, "%s: dma channel unavailable\n",
+> -			 __func__);
+> +		dev_err(dev, "%s: dma channel unavailable\n", __func__);
+>  		return -EAGAIN;
+>  	}
+>  
+> @@ -236,19 +236,20 @@ static int sata_dwc_dma_get_channel_old(struct sata_dwc_device_port *hsdevp)
+>  static int sata_dwc_dma_init_old(struct platform_device *pdev,
+>  				 struct sata_dwc_device *hsdev)
+>  {
+> -	struct device_node *np = pdev->dev.of_node;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+>  
+> -	hsdev->dma = devm_kzalloc(&pdev->dev, sizeof(*hsdev->dma), GFP_KERNEL);
+> +	hsdev->dma = devm_kzalloc(dev, sizeof(*hsdev->dma), GFP_KERNEL);
+>  	if (!hsdev->dma)
+>  		return -ENOMEM;
+>  
+> -	hsdev->dma->dev = &pdev->dev;
+> +	hsdev->dma->dev = dev;
+>  	hsdev->dma->id = pdev->id;
+>  
+>  	/* Get SATA DMA interrupt number */
+>  	hsdev->dma->irq = irq_of_parse_and_map(np, 1);
+>  	if (hsdev->dma->irq == NO_IRQ) {
+> -		dev_err(&pdev->dev, "no SATA DMA irq\n");
+> +		dev_err(dev, "no SATA DMA irq\n");
+>  		return -ENODEV;
+>  	}
+>  
+> @@ -1205,6 +1206,8 @@ static const struct ata_port_info sata_dwc_port_info[] = {
+>  
+>  static int sata_dwc_probe(struct platform_device *ofdev)
+>  {
+> +	struct device *dev = &ofdev->dev;
+> +	struct device_node *np = dev->of_node;
+>  	struct sata_dwc_device *hsdev;
+>  	u32 idr, versionr;
+>  	char *ver = (char *)&versionr;
+> @@ -1214,12 +1217,11 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	struct ata_host *host;
+>  	struct ata_port_info pi = sata_dwc_port_info[0];
+>  	const struct ata_port_info *ppi[] = { &pi, NULL };
+> -	struct device_node *np = ofdev->dev.of_node;
+>  	struct resource *res;
+>  
+>  	/* Allocate DWC SATA device */
+> -	host = ata_host_alloc_pinfo(&ofdev->dev, ppi, SATA_DWC_MAX_PORTS);
+> -	hsdev = devm_kzalloc(&ofdev->dev, sizeof(*hsdev), GFP_KERNEL);
+> +	host = ata_host_alloc_pinfo(dev, ppi, SATA_DWC_MAX_PORTS);
+> +	hsdev = devm_kzalloc(dev, sizeof(*hsdev), GFP_KERNEL);
+>  	if (!host || !hsdev)
+>  		return -ENOMEM;
+>  
+> @@ -1229,7 +1231,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	base = devm_platform_get_and_ioremap_resource(ofdev, 0, &res);
+>  	if (IS_ERR(base))
+>  		return PTR_ERR(base);
+> -	dev_dbg(&ofdev->dev, "ioremap done for SATA register address\n");
+> +	dev_dbg(dev, "ioremap done for SATA register address\n");
+>  
+>  	/* Synopsys DWC SATA specific Registers */
+>  	hsdev->sata_dwc_regs = base + SATA_DWC_REG_OFFSET;
+> @@ -1243,11 +1245,10 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	/* Read the ID and Version Registers */
+>  	idr = sata_dwc_readl(&hsdev->sata_dwc_regs->idr);
+>  	versionr = sata_dwc_readl(&hsdev->sata_dwc_regs->versionr);
+> -	dev_notice(&ofdev->dev, "id %d, controller version %c.%c%c\n",
+> -		   idr, ver[0], ver[1], ver[2]);
+> +	dev_notice(dev, "id %d, controller version %c.%c%c\n", idr, ver[0], ver[1], ver[2]);
+>  
+>  	/* Save dev for later use in dev_xxx() routines */
+> -	hsdev->dev = &ofdev->dev;
+> +	hsdev->dev = dev;
+>  
+>  	/* Enable SATA Interrupts */
+>  	sata_dwc_enable_interrupts(hsdev);
+> @@ -1255,7 +1256,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	/* Get SATA interrupt number */
+>  	irq = irq_of_parse_and_map(np, 0);
+>  	if (irq == NO_IRQ) {
+> -		dev_err(&ofdev->dev, "no SATA DMA irq\n");
+> +		dev_err(dev, "no SATA DMA irq\n");
+>  		return -ENODEV;
+>  	}
+>  
+> @@ -1267,7 +1268,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	}
+>  #endif
+>  
+> -	hsdev->phy = devm_phy_optional_get(hsdev->dev, "sata-phy");
+> +	hsdev->phy = devm_phy_optional_get(dev, "sata-phy");
+>  	if (IS_ERR(hsdev->phy))
+>  		return PTR_ERR(hsdev->phy);
+>  
+> @@ -1282,7 +1283,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
+>  	 */
+>  	err = ata_host_activate(host, irq, sata_dwc_isr, 0, &sata_dwc_sht);
+>  	if (err)
+> -		dev_err(&ofdev->dev, "failed to activate host");
+> +		dev_err(dev, "failed to activate host");
+>  
+>  	return 0;
+>  
+> @@ -1306,7 +1307,7 @@ static int sata_dwc_remove(struct platform_device *ofdev)
+>  	sata_dwc_dma_exit_old(hsdev);
+>  #endif
+>  
+> -	dev_dbg(&ofdev->dev, "done\n");
+> +	dev_dbg(dev, "done\n");
+>  	return 0;
+>  }
+>  
 
-I have this HBA:
-
-c1:00.0 Serial Attached SCSI controller: ATTO Technology, Inc. ExpressSAS 12Gb/s
-SAS/SATA HBA (rev 06)
-	Subsystem: ATTO Technology, Inc. ExpressSAS H120F
-
-Which uses the pm80xx driver and I do not see such error. E.g.:
-
-[335568.262395] pm80xx 0000:c1:00.0: pm80xx: driver version 0.1.40
-[335568.268931] :: pm8001_pci_alloc  529:Setting link rate to default value
-[335569.489392] scsi host18: pm80xx
-[335570.801031] sas: phy-18:4 added to port-18:0, phy_mask:0x10 (50010860002f5644)
-[335570.801225] sas: DOING DISCOVERY on port 0, pid:58830
-[335570.801310] sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-[335570.807638] sas: ata22: end_device-18:0: dev error handler
-[335570.964864] ata22.00: ATA-11: WDC  WUH721818ALN604, PCGNW232, max UDMA/133
-[335579.062526] ata22.00: 4394582016 sectors, multi 0: LBA48 NCQ (depth 32)
-[335579.070487] ata22.00: Features: NCQ-sndrcv NCQ-prio
-[335579.307260] ata22.00: configured for UDMA/133
-[335579.313018] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-[335579.323512] scsi 18:0:0:0: Direct-Access     ATA      WDC  WUH721818AL W232
-PQ: 0 ANSI: 5
-[335579.333243] sas: DONE DISCOVERY on port 0, pid:58830, result:0
-[335579.333338] sas: phy-18:5 added to port-18:1, phy_mask:0x20 (50010860002f5645)
-[335579.333453] sas: DOING DISCOVERY on port 1, pid:58830
-[335579.333596] sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-[335579.341596] sas: ata23: end_device-18:1: dev error handler
-[335579.341640] sas: ata22: end_device-18:0: dev error handler
-[335579.500374] ata23.00: ATA-11: WDC  WUH721818ALN604, PCGNWTW2, max UDMA/133
-[335588.427115] ata23.00: 4394582016 sectors, multi 0: LBA48 NCQ (depth 32)
-[335588.435158] ata23.00: Features: NCQ-sndrcv NCQ-prio
-[335588.513212] ata23.00: configured for UDMA/133
-[335588.519027] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-[335588.537683] scsi 18:0:1:0: Direct-Access     ATA      WDC  WUH721818AL WTW2
-PQ: 0 ANSI: 5
-[335588.565288] sas: DONE DISCOVERY on port 1, pid:58830, result:0
-[335588.565543] sas: phy-18:7 added to port-18:2, phy_mask:0x80 (50010860002f5647)
-[335588.566917] sas: DOING DISCOVERY on port 2, pid:58830
-[335588.567515] sas: Enter sas_scsi_recover_host busy: 0 failed: 0
-[335588.574948] sas: ata22: end_device-18:0: dev error handler
-[335588.574971] sas: ata23: end_device-18:1: dev error handler
-[335588.574979] sas: ata24: end_device-18:2: dev error handler
-[335588.732190] ata24.00: ATA-11: WDC  WSH722020ALN604, PCGMW803, max UDMA/133
-[335597.778187] ata24.00: 4882956288 sectors, multi 0: LBA48 NCQ (depth 32)
-[335597.788081] ata24.00: Features: NCQ-sndrcv NCQ-prio
-[335597.850404] ata24.00: configured for UDMA/133
-[335597.856225] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 0 tries: 1
-[335597.866680] scsi 18:0:2:0: Direct-Access-ZBC ATA      WDC  WSH722020AL W803
-PQ: 0 ANSI: 7
-[335597.876485] sas: DONE DISCOVERY on port 2, pid:58830, result:0
-[335597.879720] sd 18:0:0:0: [sdd] 4394582016 4096-byte logical blocks: (18.0
-TB/16.4 TiB)
-[335597.881483] sd 18:0:0:0: Attached scsi generic sg3 type 0
-[335597.888827] sd 18:0:0:0: [sdd] Write Protect is off
-[335597.888830] sd 18:0:0:0: [sdd] Mode Sense: 00 3a 00 00
-[335597.888839] sd 18:0:0:0: [sdd] Write cache: enabled, read cache: enabled,
-doesn't support DPO or FUA
-[335597.968683] sd 18:0:1:0: [sde] 4394582016 4096-byte logical blocks: (18.0
-TB/16.4 TiB)
-[335597.969489] sd 18:0:1:0: Attached scsi generic sg4 type 0
-[335597.978210] sd 18:0:1:0: [sde] Write Protect is off
-[335597.978214] sd 18:0:1:0: [sde] Mode Sense: 00 3a 00 00
-[335597.978228] sd 18:0:1:0: [sde] Write cache: enabled, read cache: enabled,
-doesn't support DPO or FUA
-[335598.053869] sd 18:0:2:0: [sdf] Host-managed zoned block device
-[335598.054476] sd 18:0:2:0: Attached scsi generic sg5 type 20
-[335598.066428] sd 18:0:2:0: [sdf] 4882956288 4096-byte logical blocks: (20.0
-TB/18.2 TiB)
-[335598.093762] sd 18:0:2:0: [sdf] Write Protect is off
-[335598.100101] sd 18:0:2:0: [sdf] Mode Sense: 00 3a 00 00
-[335598.100119] sd 18:0:2:0: [sdf] Write cache: enabled, read cache: enabled,
-doesn't support DPO or FUA
-[335598.158832] sd 18:0:1:0: [sde] Attached SCSI disk
-[335598.158870] sd 18:0:0:0: [sdd] Attached SCSI disk
-[335600.015402] sd 18:0:2:0: [sdf] 74508 zones of 65536 logical blocks
-[335600.099235] sd 18:0:2:0: [sdf] Attached SCSI disk
-
-The driver is uselessly verbose (for some reasons, the dbg messages show up),
-but no errors.
 
 -- 
 Damien Le Moal

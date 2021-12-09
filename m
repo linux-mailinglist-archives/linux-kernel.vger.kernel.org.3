@@ -2,328 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3E546E00D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BDE46DFFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241883AbhLIBKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:10:17 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54896 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241781AbhLIBKG (ORCPT
+        id S241650AbhLIBJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233885AbhLIBJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:10:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 29CE5CE2328;
-        Thu,  9 Dec 2021 01:06:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025BDC341CD;
-        Thu,  9 Dec 2021 01:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639011990;
-        bh=1hHgDl4DuMP/diSsAYOCM4QyH8Uo4/33QlFil9GJ4Ao=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cbe7mO4vUA1lV2w/OrW6iZ7kQoUUCpFyBoZV8LuwylvoDy4ZufKYL7f1ECPvKsdSO
-         HVR8exScaQXOn8OnBqRL54/NQ73WzOE2cxLfb6/JhpxK/u/oHvyE1g2HJS5YGdzBPK
-         EYGhUAEPYZs2M6rH83T/kLCPKvPa9TqS+uhtltnoKcIEZX0Z4quzIso+iM5uZjch8X
-         HkeugclDiLqsc3//sv6AyIvElI8IOlmoZusRYEpV3tvxdvb8hBxg1EQj6lc82kpH+v
-         dWhapVsEnKb2CMhx9NBQ2VzdhcPetx3aQMY/GJJVUNVamGTt9VBN91gQQnv2S44jNk
-         8azsUVLqE+fLw==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>
-Cc:     linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ramji Jiyani <ramjiyani@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Martijn Coenen <maco@android.com>, stable@vger.kernel.org
-Subject: [PATCH v3 5/5] aio: fix use-after-free due to missing POLLFREE handling
-Date:   Wed,  8 Dec 2021 17:04:55 -0800
-Message-Id: <20211209010455.42744-6-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211209010455.42744-1-ebiggers@kernel.org>
-References: <20211209010455.42744-1-ebiggers@kernel.org>
+        Wed, 8 Dec 2021 20:09:03 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18BC0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:05:31 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id v19-20020a4a2453000000b002bb88bfb594so1341232oov.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=4CUp87I5GNiNew7OOv6cyVpbjEOafAh1l4vvlgTFXCY=;
+        b=LsmRREmI5Vlld4dzaCdKlMjCawQe3tyy91FA/dNZAAQkpzy3WWUef+uYQ5sZ4ZOKo8
+         nWUU+7YLLYU9OeSFPcDJe/MrKBNPCnqLTIM8xEtBVCYvaGyHwt0Fy+aZLka2AC9JBHk4
+         CtshMt5G2Bbqt04SkYx/pQEa7QtBIa/IrKwA4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=4CUp87I5GNiNew7OOv6cyVpbjEOafAh1l4vvlgTFXCY=;
+        b=yJiUl1sFktngikcT5zUeM6c1Llo9mtetUmmW96dwP+VQMsSCaQiNCxEhcqGQNb8mgD
+         n4lNTCiSMmHGnFn0j1/nBffG5mpQ2M8CWPccMtQdx39ERO/XFc6J6X/RQdPuIoykp7k/
+         ewRanLs8HsfE9Vie494plx/UB+YIoRLH3bg58sLKULAPaAgKcc0hmG+dqvHebGQZKlXO
+         svmOoPCzcTGoFIv6EnTeKDTSkE6GYovt0pKvl8x97lJhcdkRlyOWFUgL1092LSxCS3Yz
+         hETGQ+CefWts0iYtGlbkPMGExjA3S8JAKbKIaMckAiEV0lMjP1yld7POnLWEGlRy6hXP
+         TZxQ==
+X-Gm-Message-State: AOAM530deY8m4nynltnO/V7A8HsH1iRilV5CWidD+apRECDKQh/jSEM8
+        melrFDfRiYMKPkZDD/pmCPC4pRyfDSM26BDkCzV3qw==
+X-Google-Smtp-Source: ABdhPJz/ih15ZqfgzvL6/17bIOqh8cUOESC7F+asCapMlzb3x+BLxiHwcIcwuhTZRTSayUwHGRj338p6oVxPi46o/5o=
+X-Received: by 2002:a4a:dbd3:: with SMTP id t19mr2075617oou.8.1639011930369;
+ Wed, 08 Dec 2021 17:05:30 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 8 Dec 2021 17:05:29 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211208125220.v4.1.Iaac908f3e3149a89190ce006ba166e2d3fd247a3@changeid>
+References: <20211208125220.v4.1.Iaac908f3e3149a89190ce006ba166e2d3fd247a3@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 8 Dec 2021 17:05:29 -0800
+Message-ID: <CAE-0n53JAzTAPsWS6c5wmYoWgAwxQgzTqEP65JnFT6AeMu0rbQ@mail.gmail.com>
+Subject: Re: [PATCH v4] rpmsg: char: Fix race between the release of
+ rpmsg_ctrldev and cdev
+To:     Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Sujit Kautkar <sujitka@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+Quoting Matthias Kaehlcke (2021-12-08 12:52:28)
+> From: Sujit Kautkar <sujitka@chromium.org>
+>
+> From: Sujit Kautkar <sujitka@chromium.org>
 
-signalfd_poll() and binder_poll() are special in that they use a
-waitqueue whose lifetime is the current task, rather than the struct
-file as is normally the case.  This is okay for blocking polls, since a
-blocking poll occurs within one task; however, non-blocking polls
-require another solution.  This solution is for the queue to be cleared
-before it is freed, by sending a POLLFREE notification to all waiters.
+This is here twice. Remove one?
 
-Unfortunately, only eventpoll handles POLLFREE.  A second type of
-non-blocking poll, aio poll, was added in kernel v4.18, and it doesn't
-handle POLLFREE.  This allows a use-after-free to occur if a signalfd or
-binder fd is polled with aio poll, and the waitqueue gets freed.
+>
+> struct rpmsg_ctrldev contains a struct cdev. The current code frees
+> the rpmsg_ctrldev struct in rpmsg_ctrldev_release_device(), but the
+> cdev is a managed object, therefore its release is not predictable
+> and the rpmsg_ctrldev could be freed before the cdev is entirely
+> released, as in the backtrace below.
+>
+> [   93.625603] ODEBUG: free active (active state 0) object type: timer_li=
+st hint: delayed_work_timer_fn+0x0/0x7c
+> [   93.636115] WARNING: CPU: 0 PID: 12 at lib/debugobjects.c:488 debug_pr=
+int_object+0x13c/0x1b0
+> [   93.644799] Modules linked in: veth xt_cgroup xt_MASQUERADE rfcomm alg=
+if_hash algif_skcipher af_alg uinput ip6table_nat fuse uvcvideo videobuf2_v=
+malloc venus_enc venus_dec videobuf2_dma_contig hci_uart btandroid btqca sn=
+d_soc_rt5682_i2c bluetooth qcom_spmi_temp_alarm snd_soc_rt5682v
+> [   93.715175] CPU: 0 PID: 12 Comm: kworker/0:1 Tainted: G    B          =
+   5.4.163-lockdep #26
+> [   93.723855] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
+> [   93.730055] Workqueue: events kobject_delayed_cleanup
+> [   93.735271] pstate: 60c00009 (nZCv daif +PAN +UAO)
+> [   93.740216] pc : debug_print_object+0x13c/0x1b0
+> [   93.744890] lr : debug_print_object+0x13c/0x1b0
+> [   93.749555] sp : ffffffacf5bc7940
+> [   93.752978] x29: ffffffacf5bc7940 x28: dfffffd000000000
+> [   93.758448] x27: ffffffacdb11a800 x26: dfffffd000000000
+> [   93.763916] x25: ffffffd0734f856c x24: dfffffd000000000
+> [   93.769389] x23: 0000000000000000 x22: ffffffd0733c35b0
+> [   93.774860] x21: ffffffd0751994a0 x20: ffffffd075ec27c0
+> [   93.780338] x19: ffffffd075199100 x18: 00000000000276e0
+> [   93.785814] x17: 0000000000000000 x16: dfffffd000000000
+> [   93.791291] x15: ffffffffffffffff x14: 6e6968207473696c
+> [   93.796768] x13: 0000000000000000 x12: ffffffd075e2b000
+> [   93.802244] x11: 0000000000000001 x10: 0000000000000000
+> [   93.807723] x9 : d13400dff1921900 x8 : d13400dff1921900
+> [   93.813200] x7 : 0000000000000000 x6 : 0000000000000000
+> [   93.818676] x5 : 0000000000000080 x4 : 0000000000000000
+> [   93.824152] x3 : ffffffd0732a0fa4 x2 : 0000000000000001
+> [   93.829628] x1 : ffffffacf5bc7580 x0 : 0000000000000061
+> [   93.835104] Call trace:
+> [   93.837644]  debug_print_object+0x13c/0x1b0
+> [   93.841963]  __debug_check_no_obj_freed+0x25c/0x3c0
+> [   93.846987]  debug_check_no_obj_freed+0x18/0x20
+> [   93.851669]  slab_free_freelist_hook+0xbc/0x1e4
+> [   93.856346]  kfree+0xfc/0x2f4
+> [   93.859416]  rpmsg_ctrldev_release_device+0x78/0xb8
+> [   93.864445]  device_release+0x84/0x168
+> [   93.868310]  kobject_cleanup+0x12c/0x298
+> [   93.872356]  kobject_delayed_cleanup+0x10/0x18
+> [   93.876948]  process_one_work+0x578/0x92c
+> [   93.881086]  worker_thread+0x804/0xcf8
+> [   93.884963]  kthread+0x2a8/0x314
+> [   93.888303]  ret_from_fork+0x10/0x18
+>
+> The cdev_device_add/del() API was created to address this issue
+> (see commit 233ed09d7fda), use it instead of cdev add/del().
+>
+> Signed-off-by: Sujit Kautkar <sujitka@chromium.org>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 
-Fix this by making aio poll handle POLLFREE.
-
-A patch by Ramji Jiyani <ramjiyani@google.com>
-(https://lore.kernel.org/r/20211027011834.2497484-1-ramjiyani@google.com)
-tried to do this by making aio_poll_wake() always complete the request
-inline if POLLFREE is seen.  However, that solution had two bugs.
-First, it introduced a deadlock, as it unconditionally locked the aio
-context while holding the waitqueue lock, which inverts the normal
-locking order.  Second, it didn't consider that POLLFREE notifications
-are missed while the request has been temporarily de-queued.
-
-The second problem was solved by my previous patch.  This patch then
-properly fixes the use-after-free by handling POLLFREE in a
-deadlock-free way.  It does this by taking advantage of the fact that
-freeing of the waitqueue is RCU-delayed, similar to what eventpoll does.
-
-Fixes: 2c14fa838cbe ("aio: implement IOCB_CMD_POLL")
-Cc: <stable@vger.kernel.org> # v4.18+
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/aio.c                        | 137 ++++++++++++++++++++++++--------
- include/uapi/asm-generic/poll.h |   2 +-
- 2 files changed, 107 insertions(+), 32 deletions(-)
-
-diff --git a/fs/aio.c b/fs/aio.c
-index 2bc1352a83d8b..c9bb0d3d85932 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -1620,6 +1620,51 @@ static void aio_poll_put_work(struct work_struct *work)
- 	iocb_put(iocb);
- }
- 
-+/*
-+ * Safely lock the waitqueue which the request is on, synchronizing with the
-+ * case where the ->poll() provider decides to free its waitqueue early.
-+ *
-+ * Returns true on success, meaning that req->head->lock was locked, req->wait
-+ * is on req->head, and an RCU read lock was taken.  Returns false if the
-+ * request was already removed from its waitqueue (which might no longer exist).
-+ */
-+static bool poll_iocb_lock_wq(struct poll_iocb *req)
-+{
-+	wait_queue_head_t *head;
-+
-+	/*
-+	 * While we hold the waitqueue lock and the waitqueue is nonempty,
-+	 * wake_up_pollfree() will wait for us.  However, taking the waitqueue
-+	 * lock in the first place can race with the waitqueue being freed.
-+	 *
-+	 * We solve this as eventpoll does: by taking advantage of the fact that
-+	 * all users of wake_up_pollfree() will RCU-delay the actual free.  If
-+	 * we enter rcu_read_lock() and see that the pointer to the queue is
-+	 * non-NULL, we can then lock it without the memory being freed out from
-+	 * under us, then check whether the request is still on the queue.
-+	 *
-+	 * Keep holding rcu_read_lock() as long as we hold the queue lock, in
-+	 * case the caller deletes the entry from the queue, leaving it empty.
-+	 * In that case, only RCU prevents the queue memory from being freed.
-+	 */
-+	rcu_read_lock();
-+	head = smp_load_acquire(&req->head);
-+	if (head) {
-+		spin_lock(&head->lock);
-+		if (!list_empty(&req->wait.entry))
-+			return true;
-+		spin_unlock(&head->lock);
-+	}
-+	rcu_read_unlock();
-+	return false;
-+}
-+
-+static void poll_iocb_unlock_wq(struct poll_iocb *req)
-+{
-+	spin_unlock(&req->head->lock);
-+	rcu_read_unlock();
-+}
-+
- static void aio_poll_complete_work(struct work_struct *work)
- {
- 	struct poll_iocb *req = container_of(work, struct poll_iocb, work);
-@@ -1639,24 +1684,25 @@ static void aio_poll_complete_work(struct work_struct *work)
- 	 * avoid further branches in the fast path.
- 	 */
- 	spin_lock_irq(&ctx->ctx_lock);
--	spin_lock(&req->head->lock);
--	if (!mask && !READ_ONCE(req->cancelled)) {
--		/*
--		 * The request isn't actually ready to be completed yet.
--		 * Reschedule completion if another wakeup came in.
--		 */
--		if (req->work_need_resched) {
--			schedule_work(&req->work);
--			req->work_need_resched = false;
--		} else {
--			req->work_scheduled = false;
-+	if (poll_iocb_lock_wq(req)) {
-+		if (!mask && !READ_ONCE(req->cancelled)) {
-+			/*
-+			 * The request isn't actually ready to be completed yet.
-+			 * Reschedule completion if another wakeup came in.
-+			 */
-+			if (req->work_need_resched) {
-+				schedule_work(&req->work);
-+				req->work_need_resched = false;
-+			} else {
-+				req->work_scheduled = false;
-+			}
-+			poll_iocb_unlock_wq(req);
-+			spin_unlock_irq(&ctx->ctx_lock);
-+			return;
- 		}
--		spin_unlock(&req->head->lock);
--		spin_unlock_irq(&ctx->ctx_lock);
--		return;
--	}
--	list_del_init(&req->wait.entry);
--	spin_unlock(&req->head->lock);
-+		list_del_init(&req->wait.entry);
-+		poll_iocb_unlock_wq(req);
-+	} /* else, POLLFREE has freed the waitqueue, so we must complete */
- 	list_del_init(&iocb->ki_list);
- 	iocb->ki_res.res = mangle_poll(mask);
- 	spin_unlock_irq(&ctx->ctx_lock);
-@@ -1670,13 +1716,14 @@ static int aio_poll_cancel(struct kiocb *iocb)
- 	struct aio_kiocb *aiocb = container_of(iocb, struct aio_kiocb, rw);
- 	struct poll_iocb *req = &aiocb->poll;
- 
--	spin_lock(&req->head->lock);
--	WRITE_ONCE(req->cancelled, true);
--	if (!req->work_scheduled) {
--		schedule_work(&aiocb->poll.work);
--		req->work_scheduled = true;
--	}
--	spin_unlock(&req->head->lock);
-+	if (poll_iocb_lock_wq(req)) {
-+		WRITE_ONCE(req->cancelled, true);
-+		if (!req->work_scheduled) {
-+			schedule_work(&aiocb->poll.work);
-+			req->work_scheduled = true;
-+		}
-+		poll_iocb_unlock_wq(req);
-+	} /* else, the request was force-cancelled by POLLFREE already */
- 
- 	return 0;
- }
-@@ -1728,7 +1775,8 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 		 *
- 		 * Don't remove the request from the waitqueue here, as it might
- 		 * not actually be complete yet (we won't know until vfs_poll()
--		 * is called), and we must not miss any wakeups.
-+		 * is called), and we must not miss any wakeups.  POLLFREE is an
-+		 * exception to this; see below.
- 		 */
- 		if (req->work_scheduled) {
- 			req->work_need_resched = true;
-@@ -1736,6 +1784,28 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 			schedule_work(&req->work);
- 			req->work_scheduled = true;
- 		}
-+
-+		/*
-+		 * If the waitqueue is being freed early but we can't complete
-+		 * the request inline, we have to tear down the request as best
-+		 * we can.  That means immediately removing the request from its
-+		 * waitqueue and preventing all further accesses to the
-+		 * waitqueue via the request.  We also need to schedule the
-+		 * completion work (done above).  Also mark the request as
-+		 * cancelled, to potentially skip an unneeded call to ->poll().
-+		 */
-+		if (mask & POLLFREE) {
-+			WRITE_ONCE(req->cancelled, true);
-+			list_del_init(&req->wait.entry);
-+
-+			/*
-+			 * Careful: this *must* be the last step, since as soon
-+			 * as req->head is NULL'ed out, the request can be
-+			 * completed and freed, since aio_poll_complete_work()
-+			 * will no longer need to take the waitqueue lock.
-+			 */
-+			smp_store_release(&req->head, NULL);
-+		}
- 	}
- 	return 1;
- }
-@@ -1743,6 +1813,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- struct aio_poll_table {
- 	struct poll_table_struct	pt;
- 	struct aio_kiocb		*iocb;
-+	bool				queued;
- 	int				error;
- };
- 
-@@ -1753,11 +1824,12 @@ aio_poll_queue_proc(struct file *file, struct wait_queue_head *head,
- 	struct aio_poll_table *pt = container_of(p, struct aio_poll_table, pt);
- 
- 	/* multiple wait queues per file are not supported */
--	if (unlikely(pt->iocb->poll.head)) {
-+	if (unlikely(pt->queued)) {
- 		pt->error = -EINVAL;
- 		return;
- 	}
- 
-+	pt->queued = true;
- 	pt->error = 0;
- 	pt->iocb->poll.head = head;
- 	add_wait_queue(head, &pt->iocb->poll.wait);
-@@ -1789,6 +1861,7 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 	apt.pt._qproc = aio_poll_queue_proc;
- 	apt.pt._key = req->events;
- 	apt.iocb = aiocb;
-+	apt.queued = false;
- 	apt.error = -EINVAL; /* same as no support for IOCB_CMD_POLL */
- 
- 	/* initialized the list so that we can do list_empty checks */
-@@ -1797,9 +1870,10 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 
- 	mask = vfs_poll(req->file, &apt.pt) & req->events;
- 	spin_lock_irq(&ctx->ctx_lock);
--	if (likely(req->head)) {
--		spin_lock(&req->head->lock);
--		if (list_empty(&req->wait.entry) || req->work_scheduled) {
-+	if (likely(apt.queued)) {
-+		bool on_queue = poll_iocb_lock_wq(req);
-+
-+		if (!on_queue || req->work_scheduled) {
- 			/*
- 			 * aio_poll_wake() already either scheduled the async
- 			 * completion work, or completed the request inline.
-@@ -1815,7 +1889,7 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 		} else if (cancel) {
- 			/* Cancel if possible (may be too late though). */
- 			WRITE_ONCE(req->cancelled, true);
--		} else if (!list_empty(&req->wait.entry)) {
-+		} else if (on_queue) {
- 			/*
- 			 * Actually waiting for an event, so add the request to
- 			 * active_reqs so that it can be cancelled if needed.
-@@ -1823,7 +1897,8 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 			list_add_tail(&aiocb->ki_list, &ctx->active_reqs);
- 			aiocb->ki_cancel = aio_poll_cancel;
- 		}
--		spin_unlock(&req->head->lock);
-+		if (on_queue)
-+			poll_iocb_unlock_wq(req);
- 	}
- 	if (mask) { /* no async, we'd stolen it */
- 		aiocb->ki_res.res = mangle_poll(mask);
-diff --git a/include/uapi/asm-generic/poll.h b/include/uapi/asm-generic/poll.h
-index 41b509f410bf9..f9c520ce4bf4e 100644
---- a/include/uapi/asm-generic/poll.h
-+++ b/include/uapi/asm-generic/poll.h
-@@ -29,7 +29,7 @@
- #define POLLRDHUP       0x2000
- #endif
- 
--#define POLLFREE	(__force __poll_t)0x4000	/* currently only for epoll */
-+#define POLLFREE	(__force __poll_t)0x4000
- 
- #define POLL_BUSY_LOOP	(__force __poll_t)0x8000
- 
--- 
-2.34.1
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

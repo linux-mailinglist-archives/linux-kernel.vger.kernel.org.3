@@ -2,131 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435AA46DF53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1B046DF55
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241420AbhLIAQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 19:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S241429AbhLIARG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 19:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241413AbhLIAQm (ORCPT
+        with ESMTP id S241413AbhLIARF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:16:42 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D415C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:13:10 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id w14so3614566qkf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 16:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZXLHaCEAH+un64UyYr7XPJdqJejjDqylFmPh2v+jPdo=;
-        b=MjibJv3o5tsb8iCd1BtOBtYVQbisRTNO9bO/03va81K4ZALLn/8lApsdvNug85KI5c
-         30zrzTFQ+pr8kE364wkrnctxQpgBxPc1Hr7lo8IcizUnA1A4kgIurVFHu4QH2TLClnKW
-         R+vavanFDKv4jo9cPJNI3jBpDGEQAfxTfSNK2s7fGCeGQqD2k6Ia7ej16DXmuhGu+lmX
-         wUoU9vOFvwpTkkRNCzdDEiVgZyDpP4rRVVYY2TeXMhHK0AM+5+SNH+l7AP10kfQ+BFY8
-         kn1bc6/PM3AZEiKlgcCxYKxb9WZ/vYAtiDedypnYiTgvoQX+uU7tYDr7XnhXhkgYX4i0
-         Vl2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZXLHaCEAH+un64UyYr7XPJdqJejjDqylFmPh2v+jPdo=;
-        b=6yVfuGtCLsI7AaM1u0KuT6pllgZkbR/17rhjU8AOPmX61fDd6/yW44GIQw0uTw7bTv
-         LF3wMcpYztogYWZ8M0vEq1YgGCkYNTuzk3QvaUTWfDzrtuFBYApkqDLIS2EhZpqECVzv
-         jeroSa63GsU6cNKrR1vqoghPSf5yKJHa1aXLxwWRtaBSXAv0aDaiPpOmVsCmjKA40Ef3
-         jL1cL/kZRdVuF7ziwPnQUElb1f8S5WhrU5myWalPLzxZKZ+FGM3G5eHsV415P4At1iLq
-         8njHH5tQ8k2zMX9YJWOfV2Os83wSxOveTgAGPzX5FXTkPrn2C+2bXIpcfF+183KYyavE
-         K1uw==
-X-Gm-Message-State: AOAM5316BmhPlqtgDjBDRU+DCGe0xBgNuuKeXGXmacEfNyf6EA8Kmi+W
-        kVwRaNPae/hSSXpsyg6KXPrDJA==
-X-Google-Smtp-Source: ABdhPJxD0j5IiffK3Q+3ztXHc65b0Zcnp4aqeM+nHJ+HWNiav8thR/LMLpAyPBRxw2WGB75PTHKd0A==
-X-Received: by 2002:a37:9d44:: with SMTP id g65mr10531227qke.495.1639008789316;
-        Wed, 08 Dec 2021 16:13:09 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id f11sm2204053qko.84.2021.12.08.16.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 16:13:08 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mv73b-000wes-5K; Wed, 08 Dec 2021 20:13:07 -0400
-Date:   Wed, 8 Dec 2021 20:13:07 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Doug Ledford <dledford@redhat.com>,
-        Avihai Horon <avihaih@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Mark Zhang <markzhang@nvidia.com>,
-        "Michael S. Tsirkin" <mst@dev.mellanox.co.il>
-Subject: Re: [PATCH rdma-next 2/3] RDMA/core: Let ib_find_gid() continue
- search even after empty entry
-Message-ID: <20211209001307.GD6467@ziepe.ca>
-References: <cover.1637581778.git.leonro@nvidia.com>
- <aab136be84ad03185a1084cb2e1ca9cad322ab23.1637581778.git.leonro@nvidia.com>
- <20211207184304.GB114160@nvidia.com>
- <YbBWD5rDm+wBxVjU@unreal>
+        Wed, 8 Dec 2021 19:17:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9992FC061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:13:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=YKaq7u2ZvlBjsqTL7W0J4+7gh5LsbD02rf6n5cT3NHE=; b=aYUGOucC+1mSIQCxeuiQs6k4O3
+        uZnNI29VLHIC5gsjn6MphBM4pzwqSDJt2SgobOPe43ICDfh78X9Yl4W7dLYDtZfFg5V0jq1EM2gDX
+        uyrdXpp1UHujvzsN10dqs/F08wzhXv4AuK3pDEexq2R9s/n14VS7rFITs1b6rdjQ4TkO7e6dmbRKG
+        EZdFgOSGB7HvJnIxmautqAVkfgk4NC8mjfQJbTXpLXiACxPUbGgfnX9IMqUL+91+xVuSYUaEwG92s
+        56fedlxBXZoN1VkZd3vfwwtYlDxGtBkpx/4zEOZSENo3zcZWvRLw1mirhEvGmS2hJLa3U1kAmesJI
+        Wnjksj0w==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mv73z-00EZwZ-HT; Thu, 09 Dec 2021 00:13:31 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Conor Culhane <conor.culhane@silvaco.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] MAINTAINERS: mark more list instances as moderated
+Date:   Wed,  8 Dec 2021 16:13:30 -0800
+Message-Id: <20211209001330.18558-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbBWD5rDm+wBxVjU@unreal>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 08:51:59AM +0200, Leon Romanovsky wrote:
-> On Tue, Dec 07, 2021 at 02:43:04PM -0400, Jason Gunthorpe wrote:
-> > On Mon, Nov 22, 2021 at 01:53:57PM +0200, Leon Romanovsky wrote:
-> > > From: Avihai Horon <avihaih@nvidia.com>
-> > > 
-> > > Currently, ib_find_gid() will stop searching after encountering the
-> > > first empty GID table entry. This behavior is wrong since neither IB
-> > > nor RoCE spec enforce tightly packed GID tables.
-> > > 
-> > > For example, when a valid GID entry exists at index N, and if a GID
-> > > entry is empty at index N-1, ib_find_gid() will fail to find the valid
-> > > entry.
-> > > 
-> > > Fix it by making ib_find_gid() continue searching even after
-> > > encountering missing entries.
-> > > 
-> > > Fixes: 5eb620c81ce3 ("IB/core: Add helpers for uncached GID and P_Key searches")
-> > > Signed-off-by: Avihai Horon <avihaih@nvidia.com>
-> > > Reviewed-by: Mark Zhang <markzhang@nvidia.com>
-> > > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> > >  drivers/infiniband/core/device.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-> > > index 22a4adda7981..b5d8443030d4 100644
-> > > +++ b/drivers/infiniband/core/device.c
-> > > @@ -2460,8 +2460,11 @@ int ib_find_gid(struct ib_device *device, union ib_gid *gid,
-> > >  		for (i = 0; i < device->port_data[port].immutable.gid_tbl_len;
-> > >  		     ++i) {
-> > >  			ret = rdma_query_gid(device, port, i, &tmp_gid);
-> > > +			if (ret == -ENOENT)
-> > > +				continue;
-> > >  			if (ret)
-> > >  				return ret;
-> > 
-> > There is no return code from rdma_query_gid that means stop searching,
-> 
-> In rdma_query_gid() any error stopped searching, and here we continue
-> same behaviour as before. You can argue that this function can't really
-> get illegal parameters and it never returns -EINVAL, but someone needs
-> to check all callers that this is true.
-> 
-> > so just write
-> > 
-> > if (ret)
-> >    continue
-> 
-> As long as we don't delete input validity checks, it is not correct.
+Some lists that are moderated are not marked as moderated
+consistently, so mark them all as moderated.
 
-It is fine, there is no return condition that means stop searching,
-and even if we fail the validity checks that is a WARN_ON and keep
-going, not a stop searching event here.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Conor Culhane <conor.culhane@silvaco.com>
+Cc: Ryder Lee <ryder.lee@mediatek.com>
+Cc: Jianjun Wang <jianjun.wang@mediatek.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-So just do continue, no need for complications.
+ MAINTAINERS |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Jason
+--- linux-next-20211208.orig/MAINTAINERS
++++ linux-next-20211208/MAINTAINERS
+@@ -14929,7 +14929,7 @@ PCIE DRIVER FOR MEDIATEK
+ M:	Ryder Lee <ryder.lee@mediatek.com>
+ M:	Jianjun Wang <jianjun.wang@mediatek.com>
+ L:	linux-pci@vger.kernel.org
+-L:	linux-mediatek@lists.infradead.org
++L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ F:	Documentation/devicetree/bindings/pci/mediatek*
+ F:	drivers/pci/controller/*mediatek*
+@@ -17536,7 +17536,7 @@ F:	drivers/video/fbdev/sm712*
+ SILVACO I3C DUAL-ROLE MASTER
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+ M:	Conor Culhane <conor.culhane@silvaco.com>
+-L:	linux-i3c@lists.infradead.org
++L:	linux-i3c@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
+ F:	drivers/i3c/master/svc-i3c-master.c

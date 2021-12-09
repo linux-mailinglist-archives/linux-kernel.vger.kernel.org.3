@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E4A46F61E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F4A46F620
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbhLIVqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
+        id S231149AbhLIVsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhLIVqS (ORCPT
+        with ESMTP id S229522AbhLIVsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:46:18 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D2FC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:42:44 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id w1so6663054ilh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:42:44 -0800 (PST)
+        Thu, 9 Dec 2021 16:48:00 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82FDC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:44:26 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id q72so8261643iod.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:44:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fbugMu5CR5PhrqT+DkiH/HvuEbZr+QL+N/jCLQ7fpHs=;
-        b=XgaAcfdAGG8aAk6eFmNrQ+e6nqpznueqCvH9hgw4JSt3wzaSmsNxNkLWS30A3daJAZ
-         BbUUCNx+wjU9O0T2WX893H8TZqJAa+5eBPuaZnWrP3wPlPJSPKK8lEcUXS3z0yJEgw8o
-         BTLHiDbutlolUytjfGGSobpyxOE+gR3PctrGN7dVrh676aaKPrvlIvn/OXAqUFQ1MvAc
-         2xcu/dY33RwARE86lkW+uijXuBssipbekWFdUECClNj1u196L+z22HmJkHNqpMqyLDYn
-         +b3n2nvVse0v9n2oO3r58StgC9j9aqGboYrQLNf46QcodiaGF/zP3FFi6x5P+5LqZVM1
-         A6ng==
+        bh=Sg2gFrO5qvM/u0esUUFyNWyLwrUBcEzHIL828TKtnRU=;
+        b=jrrJ3U6tKnspGvXwHugfumC1TvjJ4RPp9Z8HMdl1OXgXyB1sy67H7ix4sHnZQo9wtT
+         F0YfAaDbdAFADe4cljTeRqRo4F+ToiGcqA+Br5Unxu7gRnN2DmaaBiPLrWmonHFHmxeo
+         U0PwdiZzKVeO/7fWZXPNAarr3Esxcj5J8ntBFrExuZXOca7gQnhpY7egMQBOWCjsmLXr
+         K5tXZbNZ6bcofxoei4lyDEHQyHRLALBd1EjRFW5WNzY/JosK07g2NS5mOFkAecFIxCGH
+         ZytIWJHfTT0F6Lnse0DxybgoBAxWN92Tb6gK0IKd46KGIlR6n8UaZT9YtPdCuXPklqCf
+         qPAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fbugMu5CR5PhrqT+DkiH/HvuEbZr+QL+N/jCLQ7fpHs=;
-        b=HjuDTLF9syB/NRmKBdMCg2FRlRRC766Y6YbC3EC4y0/OCfvgBSUIILBoIpwTuPyWp/
-         39vgRtTY1eFW2L5J0/YwZpyp7dlEKS4UN2jlHgmTwaGMTC+2twLLScaPCnTy3HlMYGg4
-         21tzM4zPvpVu0312MQAn/oVdMBmLDTgO+8bIfK8V3XpDuNUAynuCjCXODSOpyGFk4tA3
-         6BgdTYC7WxXzuacERVCYowLoiQuiJ2ar4Jhxggb0xsE5O8hdATrcBu0pzdI0v9HfDfrh
-         ZZMCnPrj1d0glcTumpQHHiE0OAJRpMMwt4FWflbTRcP8Eu2ZJTyAJdci5fCK69/Cht+e
-         RRbw==
-X-Gm-Message-State: AOAM532K9fn0Kb1u+JZzkpO9hvUXLuI68VcZeIFUn5ZC3ebCDB4lwrx2
-        sDUl2XSO2ckPNCcFsCjJahXZMRH0q5zC0kvOcF8NIw==
-X-Google-Smtp-Source: ABdhPJyLbIkaIpJOMUGjxPv9NAwCkF61V6Fo4Tll7A1Ype0wTp5ZXa1qcdi6tS8RW1IOcQ9B+qehQ8KR6cvg5fyF4K0=
-X-Received: by 2002:a05:6e02:1586:: with SMTP id m6mr17631944ilu.146.1639086163707;
- Thu, 09 Dec 2021 13:42:43 -0800 (PST)
+        bh=Sg2gFrO5qvM/u0esUUFyNWyLwrUBcEzHIL828TKtnRU=;
+        b=fs2SwboJoKXTn8oPWmxzuW12B3tlOsiR1CfhK3DBcED+h8GljQJWpr/JDrl/BnP5Id
+         tCMmG5VL7nsFE8wpN3xvOhZV9Rl+vlykTuj8vX+9BWaUWpqlKacaz10CKUHMFNYIKDcp
+         PUiW3WOdhn8tPaxOzYyEhFOb8mxafxg/0Z5M1SSB3JjXR9zS8LDmPDno3gUsS0C9K8EB
+         3vMfcPPhyeabirz9mwew6SdBM6jTpDYwHHcnTK4ean0ZkaaLuKnjpN3ldtyxAMGkDTTG
+         aO6XbWoyJB/6WyTRmmdEp+a5PkzdXf6KoR2YvOKJFMhnzQG24froh18IVyGb+LLL7BVP
+         +YAA==
+X-Gm-Message-State: AOAM533tH+FLJg2AhLCein+WbDKnaZuZTvghnz7JvOnhr4fzkmEo6e7i
+        zobV2StyT/ZaHFTwFvm7YTR58ohRgjozxjO3TMFHcA==
+X-Google-Smtp-Source: ABdhPJxPrOvWA4e1oo4UC342W7zi0CMyJuUkzw4GyWf0STeXwgTGoBWN7fe7/IqVPC36bMY5YDXmhRut5bPRZsOj7JY=
+X-Received: by 2002:a5e:cb0d:: with SMTP id p13mr16511190iom.71.1639086266134;
+ Thu, 09 Dec 2021 13:44:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-4-pcc@google.com>
- <CACT4Y+ZYLUf7bvd2H45Jq1PHihdfZe0z4txxqzuiE9GnzP1X6A@mail.gmail.com>
-In-Reply-To: <CACT4Y+ZYLUf7bvd2H45Jq1PHihdfZe0z4txxqzuiE9GnzP1X6A@mail.gmail.com>
+References: <20211208044808.872554-1-pcc@google.com> <20211208044808.872554-6-pcc@google.com>
+ <CACT4Y+Ycgo_uOWrfr33VygtDLXvwPqDwee7OseMOaK6jTZSBjQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+Ycgo_uOWrfr33VygtDLXvwPqDwee7OseMOaK6jTZSBjQ@mail.gmail.com>
 From:   Peter Collingbourne <pcc@google.com>
-Date:   Thu, 9 Dec 2021 13:42:32 -0800
-Message-ID: <CAMn1gO4C=wWBuRz6viu4R1SsKgOJh8Ax6KH2Nd6wGUc=25Lakw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] fs: use copy_from_user_nolog() to copy mount() data
+Date:   Thu, 9 Dec 2021 13:44:13 -0800
+Message-ID: <CAMn1gO4+z_z=W47FQ9js_Ej=aeYiydfjFw+rPN2wJ6k6+FkANA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] arm64: add support for uaccess logging
 To:     Dmitry Vyukov <dvyukov@google.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
@@ -95,88 +95,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 1:35 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+On Wed, Dec 8, 2021 at 1:49 AM Dmitry Vyukov <dvyukov@google.com> wrote:
 >
 > On Wed, 8 Dec 2021 at 05:48, Peter Collingbourne <pcc@google.com> wrote:
 > >
-> > With uaccess logging the contract is that the kernel must not report
-> > accessing more data than necessary, as this can lead to false positive
-> > reports in downstream consumers. This generally works out of the box
-> > when instrumenting copy_{from,to}_user(), but with the data argument
-> > to mount() we use copy_from_user() to copy PAGE_SIZE bytes (or as
-> > much as we can, if the PAGE_SIZE sized access failed) and figure out
-> > later how much we actually need.
+> > arm64 does not use CONFIG_GENERIC_ENTRY, so add the support for
+> > uaccess logging directly to the architecture.
 > >
-> > To prevent this from leading to a false positive report, use
-> > copy_from_user_nolog(), which will prevent the access from being logged.
-> > Recall that it is valid for the kernel to report accessing less
-> > data than it actually accessed, as uaccess logging is a best-effort
-> > mechanism for reporting uaccesses.
-> >
-> > Link: https://linux-review.googlesource.com/id/I5629b92a725c817acd9a861288338dd605cafee6
+> > Link: https://linux-review.googlesource.com/id/I88de539fb9c4a9d27fa8cccbe201a6e4382faf89
 > > Signed-off-by: Peter Collingbourne <pcc@google.com>
 > > ---
-> >  fs/namespace.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >  arch/arm64/Kconfig                   | 1 +
+> >  arch/arm64/include/asm/thread_info.h | 7 ++++++-
+> >  arch/arm64/kernel/ptrace.c           | 7 +++++++
+> >  arch/arm64/kernel/signal.c           | 5 +++++
+> >  arch/arm64/kernel/syscall.c          | 1 +
+> >  5 files changed, 20 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/fs/namespace.c b/fs/namespace.c
-> > index 659a8f39c61a..8f5f2aaca64e 100644
-> > --- a/fs/namespace.c
-> > +++ b/fs/namespace.c
-> > @@ -31,6 +31,7 @@
-> >  #include <uapi/linux/mount.h>
-> >  #include <linux/fs_context.h>
-> >  #include <linux/shmem_fs.h>
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index c4207cf9bb17..6023946abe4a 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -161,6 +161,7 @@ config ARM64
+> >         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+> >         select HAVE_ARCH_TRACEHOOK
+> >         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> > +       select HAVE_ARCH_UACCESS_BUFFER
+> >         select HAVE_ARCH_VMAP_STACK
+> >         select HAVE_ARM_SMCCC
+> >         select HAVE_ASM_MODVERSIONS
+> > diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+> > index e1317b7c4525..0461b36251ea 100644
+> > --- a/arch/arm64/include/asm/thread_info.h
+> > +++ b/arch/arm64/include/asm/thread_info.h
+> > @@ -82,6 +82,8 @@ int arch_dup_task_struct(struct task_struct *dst,
+> >  #define TIF_SVE_VL_INHERIT     24      /* Inherit SVE vl_onexec across exec */
+> >  #define TIF_SSBD               25      /* Wants SSB mitigation */
+> >  #define TIF_TAGGED_ADDR                26      /* Allow tagged user addresses */
+> > +#define TIF_UACCESS_BUFFER_ENTRY 27     /* thread has non-zero uaccess_desc_addr_addr */
+> > +#define TIF_UACCESS_BUFFER_EXIT  28     /* thread has non-zero kcur */
+> >
+> >  #define _TIF_SIGPENDING                (1 << TIF_SIGPENDING)
+> >  #define _TIF_NEED_RESCHED      (1 << TIF_NEED_RESCHED)
+> > @@ -98,6 +100,8 @@ int arch_dup_task_struct(struct task_struct *dst,
+> >  #define _TIF_SVE               (1 << TIF_SVE)
+> >  #define _TIF_MTE_ASYNC_FAULT   (1 << TIF_MTE_ASYNC_FAULT)
+> >  #define _TIF_NOTIFY_SIGNAL     (1 << TIF_NOTIFY_SIGNAL)
+> > +#define _TIF_UACCESS_BUFFER_ENTRY      (1 << TIF_UACCESS_BUFFER_ENTRY)
+> > +#define _TIF_UACCESS_BUFFER_EXIT       (1 << TIF_UACCESS_BUFFER_EXIT)
+> >
+> >  #define _TIF_WORK_MASK         (_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+> >                                  _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> > @@ -106,7 +110,8 @@ int arch_dup_task_struct(struct task_struct *dst,
+> >
+> >  #define _TIF_SYSCALL_WORK      (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+> >                                  _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+> > -                                _TIF_SYSCALL_EMU)
+> > +                                _TIF_SYSCALL_EMU | _TIF_UACCESS_BUFFER_ENTRY | \
+> > +                                _TIF_UACCESS_BUFFER_EXIT)
+> >
+> >  #ifdef CONFIG_SHADOW_CALL_STACK
+> >  #define INIT_SCS                                                       \
+> > diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> > index 88a9034fb9b5..283372eccaeb 100644
+> > --- a/arch/arm64/kernel/ptrace.c
+> > +++ b/arch/arm64/kernel/ptrace.c
+> > @@ -29,6 +29,7 @@
+> >  #include <linux/regset.h>
+> >  #include <linux/tracehook.h>
+> >  #include <linux/elf.h>
 > > +#include <linux/uaccess-buffer.h>
 > >
-> >  #include "pnode.h"
-> >  #include "internal.h"
-> > @@ -3197,7 +3198,12 @@ static void *copy_mount_options(const void __user * data)
-> >         if (!copy)
-> >                 return ERR_PTR(-ENOMEM);
+> >  #include <asm/compat.h>
+> >  #include <asm/cpufeature.h>
+> > @@ -1854,6 +1855,9 @@ int syscall_trace_enter(struct pt_regs *regs)
+> >         if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+> >                 trace_sys_enter(regs, regs->syscallno);
 > >
-> > -       left = copy_from_user(copy, data, PAGE_SIZE);
-> > +       /*
-> > +        * Use copy_from_user_nolog to avoid reporting overly large accesses in
-> > +        * the uaccess buffer, as this can lead to false positive reports in
-> > +        * downstream consumers.
-> > +        */
-> > +       left = copy_from_user_nolog(copy, data, PAGE_SIZE);
+> > +       if (flags & _TIF_UACCESS_BUFFER_ENTRY)
+> > +               uaccess_buffer_syscall_entry();
+> > +
+> >         audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
+> >                             regs->regs[2], regs->regs[3]);
+> >
+> > @@ -1866,6 +1870,9 @@ void syscall_trace_exit(struct pt_regs *regs)
+> >
+> >         audit_syscall_exit(regs);
+> >
+> > +       if (flags & _TIF_UACCESS_BUFFER_EXIT)
+> > +               uaccess_buffer_syscall_exit();
+> > +
+> >         if (flags & _TIF_SYSCALL_TRACEPOINT)
+> >                 trace_sys_exit(regs, syscall_get_return_value(current, regs));
+> >
+> > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> > index 8f6372b44b65..5bbd98e5c257 100644
+> > --- a/arch/arm64/kernel/signal.c
+> > +++ b/arch/arm64/kernel/signal.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/tracehook.h>
+> >  #include <linux/ratelimit.h>
+> >  #include <linux/syscalls.h>
+> > +#include <linux/uaccess-buffer.h>
+> >
+> >  #include <asm/daifflags.h>
+> >  #include <asm/debug-monitors.h>
+> > @@ -919,6 +920,8 @@ static void do_signal(struct pt_regs *regs)
+> >
+> >  void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
+> >  {
+> > +       bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
+> > +
+> >         do {
+> >                 if (thread_flags & _TIF_NEED_RESCHED) {
+> >                         /* Unmask Debug and SError for the next task */
+> > @@ -950,6 +953,8 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
+> >                 local_daif_mask();
+> >                 thread_flags = READ_ONCE(current_thread_info()->flags);
+> >         } while (thread_flags & _TIF_WORK_MASK);
+> > +
+> > +       uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
+> >  }
+> >
+> >  unsigned long __ro_after_init signal_minsigstksz;
+> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> > index 50a0f1a38e84..d59022b594f2 100644
+> > --- a/arch/arm64/kernel/syscall.c
+> > +++ b/arch/arm64/kernel/syscall.c
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/ptrace.h>
+> >  #include <linux/randomize_kstack.h>
+> >  #include <linux/syscalls.h>
+> > +#include <linux/uaccess-buffer.h>
 >
-> A late idea...
-> Maybe it's better to log them with a new UACCESS_BUFFER_FLAG_OVERREAD
-> flag. Better for user-space, at least can detect UAFs by checking the
-> first byte. And a more logical kernel annotation (maybe will be used
-> in some other tools? or if we ever check user tags in the kernel).
->
-> Probably not too important today since we use this only in 2 places,
-> but longer term may be better.
+> This looks strange... Does some other header miss this include?
 
-I'm not sure about this. The overreads are basically an implementation
-detail of the kernel, so I'm not sure it makes sense to expose them. A
-scheme where we expose all overreads wouldn't necessarily help with
-UAF, because what if for example the kernel reads *behind* the
-user-provided pointer? I guess it could lead to false positives.
-
-> Btw, what's the story with BPF accesses? Can we log them theoretically?
->
-> Previously the comment said:
->
-> +       /*
-> +        * Avoid copy_from_user() here as it may leak information about the BPF
-> +        * program to userspace via the uaccess buffer.
-> +        */
->
-> but now it says something very generic:
->
-> /*
-> * Avoid logging uaccesses here as the BPF program may not be following
-> * the uaccess log rules.
-> */
-
-Yes we should be able to log them theoretically, but we don't need to
-do that now. See my reply here:
-
-https://lore.kernel.org/all/CAMn1gO5B5Q3hfN6kugv2wmdFGNhJb75iRX1zmCkw3wnueN1dtg@mail.gmail.com/#:~:text=This%20comment%20was,the%20comment%20accordingly.
+This was left in unintentionally. I'll remove it in v4.
 
 Peter

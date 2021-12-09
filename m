@@ -2,98 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AC946E482
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3DB46E484
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbhLIIs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:48:27 -0500
-Received: from www.zeus03.de ([194.117.254.33]:58464 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231782AbhLIIs0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:48:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=cEHgaCv0N69lo2hyEfcT4ETMeNgL
-        4tp9IasmUhtWmxc=; b=rKcfWEbPij9INKoB+NCMWau95U9JVshALj4qNaaq1X6D
-        kL33676V/a3hAAaNDrL2/H79/TVJ1kREvXzsH+jHCtVs5nvoTVS+kUAxxZwb9yPT
-        IFsUjPDZOsA2j2Df7p6BnkB5/SNPB/7p1Lw0D0uFZigqUAMThzJgpGaHwqcMD4o=
-Received: (qmail 996588 invoked from network); 9 Dec 2021 09:44:51 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Dec 2021 09:44:51 +0100
-X-UD-Smtp-Session: l3s3148p1@XEmFnrLSoOsgAQnoAHz+AAHm967oIe70
-Date:   Thu, 9 Dec 2021 09:44:49 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: core: Do not dereference fwnode in struct
- device
-Message-ID: <YbHCAURU5bR3XFL2@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211207162457.18450-1-andriy.shevchenko@linux.intel.com>
+        id S235150AbhLIIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235135AbhLIIsh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:48:37 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D9C061746;
+        Thu,  9 Dec 2021 00:45:04 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id f125so4533625pgc.0;
+        Thu, 09 Dec 2021 00:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:organization:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=tK1hZ3CV+6USV8fTZ69OnQjQ1kpiKKSPbC+alCWSbhE=;
+        b=ZXhgGsxay71B8CKUCUxzedWhTbOEJQsW/AFkHmYQAXbl1khZBXC6Sz8n5BWkWSd7Db
+         BAefUj4RVYk++F8EBR3xs9qVLqTrtieQ/tFdfUX0AwYb8U+eoKwNlYqWctpXxd20Tii/
+         1J68ojkmEoc0BHW/RbL1Fg13EUJdzhpcM43CTvemEIU3PYfqQCZFx7/u6M9Yj0RtI1vz
+         ttOnELXkmnAC+jP4hIFJknXtdsu4yCgpYid5+J2+/13yRQXGINydwxAZiGj/0RZVhpcH
+         pP4Pqn5wZPjaxnpX0MfUzeGaEefgLm97lmPTS8xTLi92/p1Xwv+1F2rVNj4pUI7ZalBG
+         FeTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=tK1hZ3CV+6USV8fTZ69OnQjQ1kpiKKSPbC+alCWSbhE=;
+        b=5UD0Mcj3rP34cB2dOr29awZ3pWX+4UHUIiU9Pm9JjknjOcwObFVnZR+7MwHayO0Iqw
+         P2a9YAGLfKLKtVNBaI4YaGH8siADL2bQJITrQQid+XEDgk3f5EoD65MPzHhTois9fXer
+         JGsySnRcBiU9OP7eLYSIm0CccTz86BGnf8Nx03q6SstW+rO4t8ryWxePX487i8Xx3zPn
+         Q/G51vGeG2uvUZYAgJiZJop0NcG89ZyKsnQ5gtKU5Mt2pzQZ0xqls3pBFTVmw6Qt/SJf
+         Bbe1c84DsSwzGAib5rTzv6rWmau+nOHXk22DLBNwromgXSGKe5cFWq+HuQe5gW7pCzRP
+         aogQ==
+X-Gm-Message-State: AOAM532ggIL056DxD7VPpewFLswrwQAKIfsVRM4IanhXbna/BngpRl1t
+        9JofUtDIYvb12Dv+eOANRhXe1FBs0lM=
+X-Google-Smtp-Source: ABdhPJzKAZBqgP3CexyHBX4s7h0WFpJ+F8MHwwVMrTzHMhJZXGKc9WOGbleIwYK06EBL8zi12xKQvg==
+X-Received: by 2002:a63:6b83:: with SMTP id g125mr32404566pgc.578.1639039504383;
+        Thu, 09 Dec 2021 00:45:04 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id e35sm4766166pgm.92.2021.12.09.00.45.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 00:45:04 -0800 (PST)
+Message-ID: <ad06fc9f-4617-3262-414d-e061d3d68b9d@gmail.com>
+Date:   Thu, 9 Dec 2021 16:44:54 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d6ueVbI/hhwBjqBr"
-Content-Disposition: inline
-In-Reply-To: <20211207162457.18450-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20211130074221.93635-1-likexu@tencent.com>
+ <20211130074221.93635-6-likexu@tencent.com>
+ <CALMp9eQxW_0JBe_6doNTGLXHsXM_Y0YSfnrM1yqTumUQqg7A2A@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+Subject: Re: [PATCH v2 5/6] KVM: x86: Update vPMCs when retiring instructions
+In-Reply-To: <CALMp9eQxW_0JBe_6doNTGLXHsXM_Y0YSfnrM1yqTumUQqg7A2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/12/2021 12:33 pm, Jim Mattson wrote:
+> On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> When KVM retires a guest instruction through emulation, increment any
+>> vPMCs that are configured to monitor "instructions retired," and
+>> update the sample period of those counters so that they will overflow
+>> at the right time.
+>>
+>> Signed-off-by: Eric Hankland <ehankland@google.com>
+>> [jmattson:
+>>    - Split the code to increment "branch instructions retired" into a
+>>      separate commit.
+>>    - Added 'static' to kvm_pmu_incr_counter() definition.
+>>    - Modified kvm_pmu_incr_counter() to check pmc->perf_event->state ==
+>>      PERF_EVENT_STATE_ACTIVE.
+>> ]
+>> Fixes: f5132b01386b ("KVM: Expose a version 2 architectural PMU to a guests")
+>> Signed-off-by: Jim Mattson <jmattson@google.com>
+>> [likexu:
+>>    - Drop checks for pmc->perf_event or event state or event type
+>>    - Increase a counter once its umask bits and the first 8 select bits are matched
+>>    - Rewrite kvm_pmu_incr_counter() with a less invasive approach to the host perf;
+>>    - Rename kvm_pmu_record_event to kvm_pmu_trigger_event;
+>>    - Add counter enable and CPL check for kvm_pmu_trigger_event();
+>> ]
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+> 
+>> +void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id)
+>> +{
+>> +       struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> +       struct kvm_pmc *pmc;
+>> +       int i;
+>> +
+>> +       for_each_set_bit(i, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX) {
+>> +               pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, i);
+>> +
+>> +               if (!pmc || !pmc_is_enabled(pmc) || !pmc_speculative_in_use(pmc))
+>> +                       continue;
+>> +
+>> +               /* Ignore checks for edge detect, pin control, invert and CMASK bits */
+> 
+> I don't understand how we can ignore these checks. Doesn't that
+> violate the architectural specification?
 
---d6ueVbI/hhwBjqBr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+OK, let's take a conservative approach in the V3.
 
-
->  	client->dev.parent =3D &client->adapter->dev;
->  	client->dev.bus =3D &i2c_bus_type;
->  	client->dev.type =3D &i2c_client_type;
-> -	client->dev.of_node =3D of_node_get(info->of_node);
-> -	client->dev.fwnode =3D info->fwnode;
-> =20
->  	device_enable_async_suspend(&client->dev);
->  	i2c_dev_set_name(adap, client, info);
-> =20
-> +	device_set_node(&client->dev, info->fwnode);
-> +	client->dev.of_node =3D of_node_get(info->of_node);
-> +
-
-I am basically OK with this change. I'd just move the code block a
-little to have the same behaviour as before. Something like this
-(hand-edited preview version):
-
->  	client->dev.bus =3D &i2c_bus_type;
->  	client->dev.type =3D &i2c_client_type;
->  	client->dev.of_node =3D of_node_get(info->of_node);
-> -	client->dev.fwnode =3D info->fwnode;
-> =20
-> +	device_set_node(&client->dev, info->fwnode);
->  	device_enable_async_suspend(&client->dev);
->  	i2c_dev_set_name(adap, client, info);
-
-Are you okay with that?
-
-
---d6ueVbI/hhwBjqBr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxwf0ACgkQFA3kzBSg
-KbZq7Q//U0gunWZ66PRtFtMwYXwxpzBJ2B+007qKT2y+UV9GploOmojRzr4SQ0ps
-FLtGJh+f5wnTECEyxHB2VTZWxUdYPGtYSEw5gr3J15XBnrT5cI3DY/jmGc1cGTkv
-pNDIvQprchE++xKZzJdAxDp1ETrbPxtoL6iDyY3ukDliCpA3gjkeYgIZ2RXQ98GO
-N91Dv3gqNQ0MkbVkVYgojpA0k/8XlpAnP6vVqSErFi+LrZz/LPcMQehWSyeMoTYi
-D8fc575MbVrWU2nPpk3rn6wr3696DE6Y5YI0r8qjlOUg7TkljyjoPzIBwoPcjBIy
-Uty4ULzhcwrEGLcDJep2u+5ZBXPyySzy5r1vw7eofF+iRNxkErNhyX0hGr+CcaXI
-XHf684BeqfHjonvx5YUrWQGswPLq9JSNjsyzctg1ybCKNgpRsinAKqW1KC3mZi+x
-4mXCn5F8rJ8iRzGDLC7KpVEEHmd+4UyTdOuUnNB+nQKYw49yhEh2KnQoYSbz+qXb
-8UubyOr1g/ZF6YUFy23Z8Y3i7Q45I5isDh3v23vaqUajRjXUWb1ZCs5+pR5p843a
-spj7lSZP5fx24dVLjibgzESDuRyr3d+AT2Fb0hIOZPQoF2FXuHYDX8AtrIEqbner
-MR1gSV5UzcKoIBM/eTh6+VnoJH26tQm/nPmqzEwJw4lHq2gtduU=
-=vKGY
------END PGP SIGNATURE-----
-
---d6ueVbI/hhwBjqBr--
+> 
+>> +               if (eventsel_match_perf_hw_id(pmc, perf_hw_id) && cpl_is_matched(pmc))
+>> +                       kvm_pmu_incr_counter(pmc);
+>> +       }
+>> +}
+>> +EXPORT_SYMBOL_GPL(kvm_pmu_trigger_event);
+>> +
+> 

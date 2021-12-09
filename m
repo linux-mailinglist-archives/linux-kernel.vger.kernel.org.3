@@ -2,125 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A94746E771
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF73A46E777
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236551AbhLILVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbhLILVd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:21:33 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA756C061746;
-        Thu,  9 Dec 2021 03:17:59 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y13so18279029edd.13;
-        Thu, 09 Dec 2021 03:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fo8xWj9D41FfrtS+dBIsbHWboaee5HFZE+LrwQkoquk=;
-        b=JANOOX9PXQg9MyLSpE5MXz6+UYgiTld9Px9vmqpvG35e5np+hl8Zt2lcjJlMjImIq1
-         kt2W5eL92vLnoz+j73wq7zOX4nKLAwdI0jyMc3DFM4ZhRZpN3msIJ8/UanTCdS8vHRpG
-         LvJDVal/jeFawsZyGZOmYO+X9gfZ0YQE33B3TOxdk0vgVARQ9W0K0RqHvjVcuy4/iPSI
-         iDvpnh3GI5/M1PRfCufpCL53+8BZt5aXjAsSbihqUA3fKjejqCy1uJAaRh0ivUrZPaV2
-         u6eliG+ypU8adf4sHR7df/HeLhqjDVEG4dkXPc7xOma66I2t/yYSQhMOS/dCbWtgUFif
-         fkMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fo8xWj9D41FfrtS+dBIsbHWboaee5HFZE+LrwQkoquk=;
-        b=kheVyVUTZzUFUVeHtJBq1miq1NtCZMfwb1ZADSZSp0RXzbXmUxwA8ai9jD/pKj+MvE
-         wWv4N+iIfbvi9fAbwLmvJ5yx8jpXFLO+unPg31AO1NeSudkZh6XYDixfOcmIsKT6ulrP
-         CSphXHaKzskxHbtaKk/LK/LI4JolpXuRRTv/PeUGDto1KJ4DjVZaKQd2x/Mltx11zgfH
-         5znGxnxaUUV3DzzfkViH+Y0ho1UZLY6OOfeKiKrLKOz5ijG1lnGiLiDLOSsK7u4dUAD6
-         ymT+bjaPRQdf5XhaUixy+rSC3HIPw+/LdcSS3fZlZjxH6J03f8byXkmo4M5ALEDisLS7
-         hErw==
-X-Gm-Message-State: AOAM533lZL1890nYSbmK6UPkCnRbWZTkaspXj0AHaJgxemgHkrVrl14c
-        DnyoLUHKAOUz566JGKAHtOf/blOhB7A=
-X-Google-Smtp-Source: ABdhPJz2dx4N0511IdZHPLodnRrhg3tWUhYzsom0v3rrLBbF6uvreVwRAdtozgqezbtP/0p1e25+Hw==
-X-Received: by 2002:a50:e608:: with SMTP id y8mr28025782edm.39.1639048675798;
-        Thu, 09 Dec 2021 03:17:55 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id ga37sm2685922ejc.65.2021.12.09.03.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:17:55 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <5b12fc46-bffb-49dd-8cc7-83ba4e841843@redhat.com>
-Date:   Thu, 9 Dec 2021 12:17:52 +0100
+        id S236579AbhLILXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 06:23:05 -0500
+Received: from mga09.intel.com ([134.134.136.24]:42812 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236558AbhLILXC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:23:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237882996"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="237882996"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:19:29 -0800
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="680296755"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 03:19:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvHRT-0043zm-GH;
+        Thu, 09 Dec 2021 13:18:27 +0200
+Date:   Thu, 9 Dec 2021 13:18:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yuchang Hsu <saraon640529@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        Richard_Hsu@asmedia.com.tw, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Cindy1_Hsu@asmedia.com.tw, Andrew_Su@asmedia.com.tw
+Subject: Re: [PATCH v3] gpio:amdpt:add new device ID and 24-pin support
+Message-ID: <YbHmAyVka7w814g7@smile.fi.intel.com>
+References: <20211209022605.11250-1-Richard_Hsu@asmedia.com.tw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: x86: Wait for IPIs to be delivered when handling
- Hyper-V TLB flush hypercall
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20211209102937.584397-1-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211209102937.584397-1-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209022605.11250-1-Richard_Hsu@asmedia.com.tw>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 11:29, Vitaly Kuznetsov wrote:
-> Prior to commit 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use
-> tlb_flush_guest()"), kvm_hv_flush_tlb() was using 'KVM_REQ_TLB_FLUSH |
-> KVM_REQUEST_NO_WAKEUP' when making a request to flush TLBs on other vCPUs
-> and KVM_REQ_TLB_FLUSH is/was defined as:
-> 
->   (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-> 
-> so KVM_REQUEST_WAIT was lost. Hyper-V TLFS, however, requires that
-> "This call guarantees that by the time control returns back to the
-> caller, the observable effects of all flushes on the specified virtual
-> processors have occurred." and without KVM_REQUEST_WAIT there's a small
-> chance that the vCPU making the TLB flush will resume running before
-> all IPIs get delivered to other vCPUs and a stale mapping can get read
-> there.
-> 
-> Fix the issue by adding KVM_REQUEST_WAIT flag to KVM_REQ_TLB_FLUSH_GUEST:
-> kvm_hv_flush_tlb() is the sole caller which uses it for
-> kvm_make_all_cpus_request()/kvm_make_vcpus_request_mask() where
-> KVM_REQUEST_WAIT makes a difference.
-> 
-> Cc: stable@kernel.org
-> Fixes: 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use tlb_flush_guest()")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
-> - Note, the issue was found by code inspection. Sporadic crashes of
-> big Windows guests using Hyper-V TLB flush enlightenment were reported
-> but I have no proof that these crashes are anyhow related.
-> ---
->   arch/x86/include/asm/kvm_host.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index e41ad1ead721..8afb21c8a64f 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -97,7 +97,7 @@
->   	KVM_ARCH_REQ_FLAGS(25, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
->   #define KVM_REQ_TLB_FLUSH_CURRENT	KVM_ARCH_REQ(26)
->   #define KVM_REQ_TLB_FLUSH_GUEST \
-> -	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_NO_WAKEUP)
-> +	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
->   #define KVM_REQ_APF_READY		KVM_ARCH_REQ(28)
->   #define KVM_REQ_MSR_FILTER_CHANGED	KVM_ARCH_REQ(29)
->   #define KVM_REQ_UPDATE_CPU_DIRTY_LOGGING \
-> 
+On Thu, Dec 09, 2021 at 10:26:05AM +0800, Yuchang Hsu wrote:
+> From: Hsu Yuchang <Richard_Hsu@asmedia.com.tw>
 
-Queued, thanks.
+Thanks for v3, my comments below.
 
-Paolo
+As I pointed out the subject should be
+
+	gpio: amdpt: add new device ID and 24-pin support
+
+(mind the white spaces).
+
+> This patch add an ACPI HID(AMDIF031) and pin number in the pt_gpio_acpi_match.
+
+As Submitting Patches documentation advises the description should be in
+imperative form:
+
+	Add an ACPI HID(AMDIF031) and pin number in the pt_gpio_acpi_match.
+
+> And we retrieve pin number by device_get_match_data().
+> 
+> Signed-off-by: Yuchang Hsu <Richard_Hsu@asmedia.com.tw>
+
+> --- Add AMDIF031 support
+
+After cutter '--- ' line means _after_, and not on the same line.
+The changelog contents should explain the changes in the patch versions,
+and not the changes which is done in the patch against the code base, for
+the latter the commit message suffices.
+
+Look at the plenty of the examples you may find in the mail archive:
+https://lore.kernel.org/linux-gpio/.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

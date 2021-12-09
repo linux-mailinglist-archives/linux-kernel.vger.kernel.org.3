@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2155446E47F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117DA46E4B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235119AbhLIIsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:48:16 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15712 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbhLIIsP (ORCPT
+        id S235433AbhLIJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232038AbhLIJAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:48:15 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8nZj21D8zZdZM;
-        Thu,  9 Dec 2021 16:41:49 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 9 Dec
- 2021 16:44:40 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <libaokun1@huawei.com>, <yukuai3@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] sysctl: returns -EINVAL when a negative value is passed to proc_doulongvec_minmax
-Date:   Thu, 9 Dec 2021 16:56:35 +0800
-Message-ID: <20211209085635.1288737-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 9 Dec 2021 04:00:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A7C061746;
+        Thu,  9 Dec 2021 00:57:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B42ECCE245E;
+        Thu,  9 Dec 2021 08:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE2DC004DD;
+        Thu,  9 Dec 2021 08:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639040221;
+        bh=HUS9Ptxfx1asXriXFVwCYuojXtKlYmv3/KEbAbzET0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LNK7id6T0M3fR3WbL33MKzfJGTaydjTX9Yii7StWqsEjMkHNxMddbLU3KCqdN330C
+         iqvqvaMFVKSga6+n9NB6IqtoiZR8EH/flgdu93L052OBfNyVNL4dUyPNiAB8dwbmWD
+         vboOOEco3u78aSMrvshsFXV2WjKJJ6hgvc6sBsU7rRxaaFpwkqWfCv8EHHzsWDrp2L
+         y1/qh64t1+HGvTs1hTipMNrOzlXQNVQt92j+hWy2TNafd5vRJrPB3Cq4/MtnlI+GL1
+         0fN4aiv61TlPYDDPlZK6I76FnsVgy9R6eGWy4JxrYRKB/BsOEHW7HxmkJ+NrrJPAVu
+         zREt2HRf22KUw==
+Date:   Thu, 9 Dec 2021 09:56:58 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stephen Warren <swarren@wwwdotorg.org>,
+        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
+ schema
+Message-ID: <YbHE2nR2T+o9o8ji@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stephen Warren <swarren@wwwdotorg.org>,
+        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211206184613.100809-1-david@ixit.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xJzInEz65zJn2DKF"
+Content-Disposition: inline
+In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we pass a negative value to the proc_doulongvec_minmax() function,
-the function returns 0, but the corresponding interface value does not
-change.
 
-we can easily reproduce this problem with the following commands:
-    `cd /proc/sys/fs/epoll`
-    `echo -1 > max_user_watches; echo $?; cat max_user_watches`
+--xJzInEz65zJn2DKF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This function requires a non-negative number to be passed in, so when
-a negative number is passed in, -EINVAL is returned.
+On Mon, Dec 06, 2021 at 07:46:12PM +0100, David Heidelberg wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
+>=20
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- kernel/sysctl.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Applied to for-next, thanks!
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 7f07b058b180..537d2f75faa0 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1149,10 +1149,9 @@ static int __do_proc_doulongvec_minmax(void *data, struct ctl_table *table,
- 					     sizeof(proc_wspace_sep), NULL);
- 			if (err)
- 				break;
--			if (neg)
--				continue;
-+
- 			val = convmul * val / convdiv;
--			if ((min && val < *min) || (max && val > *max)) {
-+			if (neg || (min && val < *min) || (max && val > *max)) {
- 				err = -EINVAL;
- 				break;
- 			}
--- 
-2.31.1
+David: Please quote only relevant parts of the messages when replying.
+You quoted Florian's tags as well and so they ended up twice. Also, it
+is easier to read, then.
 
+
+--xJzInEz65zJn2DKF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxxNoACgkQFA3kzBSg
+Kbanow//U0RpDjbOB8K6jH1RIrbx00AN3tnq7Cu0C0YP/0CSQ5si9aoNbirxI46o
+kjEV5NAgHxZKjo6wfz9ZMsenfqarDC40XRPs+JVsY2LaMWA6/i/8Lc2WPkpV8B4S
+ulkhIqW59iC9cMEGGgfNTU9euvRzqtfMQYYXVCwqXA8P4rw0F+7CrmyU/MtCec0H
+YxoHG/wiQyy4cMVN+NWYLA3pQVccb9QDO8DUBe4tKKhFUOYcchIZNA1u1MbYTA5X
+TKcSYj0RGWz8Ut5yxHji1nJf9g7G8ajEnV7m/kWmx30o1A2Q2yRmYah18j/6YEG9
+aQGVglG14ZcaE9vHxoQGMuy7KwTjX1ECyOg4EeQKMUQRi0tGM4MHd7Zy1+y5P5qG
+qZwgtx0P4uGIKGk6o9rhHDr7D/OeTxl0eW6CFJXylqR9giFrzPkRxgUJIo4+KA19
+eyZ4yGCPMIWC4HzCYPP3TfzYD6etk7d7b4i/1BYGS1AHqzXxVxiayO6wlSHAXdWz
+hNMP05D7kpWpADnSzrmLywvb3LVXKEg32H+hVobZ8SHUHvsGN76SXFU6m2WNHGAb
+rFPwYfiaa0WqGSx7ZmfmTGT2YoAoAk7NOz/F2/sfmaYIJbx+35BhV7TsOuxGVz/S
+lwGMfZ2greQ1GfJxINEZNaKKHr5nuZa5Q64oS28mIItYaROkykI=
+=oC/n
+-----END PGP SIGNATURE-----
+
+--xJzInEz65zJn2DKF--

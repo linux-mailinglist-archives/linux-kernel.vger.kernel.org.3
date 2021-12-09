@@ -2,67 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC6646E9A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2771946E9AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238381AbhLIOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S238432AbhLIOPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbhLIOMi (ORCPT
+        with ESMTP id S238416AbhLIOPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:12:38 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779B1C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 06:09:05 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id m5so5376403ilh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 06:09:05 -0800 (PST)
+        Thu, 9 Dec 2021 09:15:03 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47610C061746;
+        Thu,  9 Dec 2021 06:11:30 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o20so20023868eds.10;
+        Thu, 09 Dec 2021 06:11:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
-        b=WpZoA7yxTx33devqd6KePXdse8KB4vqJLIGM9jrk3S4LRUHFY2DC+rm93+qdrrsBHE
-         9UAhVORWMUtnXspgk/9hGpqXF6XMLbPp+s+YW564phHR8G/TAUe4Cm9tWDqwVYwoj2vc
-         3+EmmVw4QVB2e/zuUFSAt4pZoQ4L/MCi0PQRVSVt+IuRDTeRqd8dvCd3n7elOBBwuvFa
-         MlKjsbaOivwQ+qfP2Lonn5II6fNpMZ89fxRU7QC2tgyB7zR9IiJ4U7NC0F2CkOx1aOdA
-         FV1ao0mizprZOIWZVeID2TUmvdamglEGR1xAdWXSJ3gX0oT64SAWwW1Ws4YU0/Y89T0R
-         ZBkQ==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S6sz9Atp4rL/yKWgC+JomL+J1EODMe3Iav1XoDK6GSM=;
+        b=ELynI2A8NZ0+8hNP5+URK0b0QCChrJa/X092xEWJm+JQVJaEsRFCUOsrXTQW+1y6qZ
+         fkgejIhxXFmc3QNvt1YWl/mQyrTeafE7QmNzZ8XXvKNyPhUub9Ccz906DtD4FcU8s0ym
+         BNEOE8b/i2lTscJ+IQNrgpVHg1Nk3QBGLmGJSQ2nQq/CydFCmcNZkZSXjvfCf7N76FrY
+         GQcy5DLu+7aVn3hCoGVwGNx3ncS0ro7Ht+fK26tNGH7RR0UTVhSZ+U62xMwRU4O1TeeT
+         IWNMFuasoHC1hJgsYecPlJwexrvqPsED1d+/Gc0So/uibYHfxoQIIfSuH7837c/OOPYu
+         89mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2lJlleaQgTOsCM5jHAS3UGS2pjluVEJ3SAgwYv6xgCo=;
-        b=rXWBwj93ccwIDKSY40P7cctUSx3AtjYcdmKf9idUyb27f99KFURQDrCHMzWwdYbiRb
-         TrukqO7f3wmZ1r2UmxviLhFLbJIxIoKATxaq7nMF66iuizkEmUUcPmd3hpUelnKswxXJ
-         K4QpB3fHeUT9Q6n0/sBg7zyhDaCAJ5Z3zNF90x8BJ5wj5shKp1JG30wjyo+XwIPc/uRK
-         /zFiU/VjFK/FB5k1ScnEwPKmdZvREnh0G8x4p52vuc5ymS572nORCT1G3dJAPNWPZGhl
-         /+F2ywlr9zBFLYBIWEvog+3yyjtDqX6LHjcmfyrHxYRTKQAOqEg/fDUaofnpZaF9/2XE
-         SfPA==
-X-Gm-Message-State: AOAM531Q7fGv403KprDB0WN7jP9/vGCflVc496hUgJSAIhdV8opV5WGh
-        yuVetDzTybeb0gUw51w3SmnD50KQxxGRMAeNn+8=
-X-Google-Smtp-Source: ABdhPJxt2qFHz5xTDleOfbz4+1HosyvbiPKfjUbW4LmLzWWo51znUY3Bo3dji+eKbPkm21+ejIPRHPJVfXHsZtCx2Rk=
-X-Received: by 2002:a05:6e02:1a4e:: with SMTP id u14mr15749439ilv.121.1639058944890;
- Thu, 09 Dec 2021 06:09:04 -0800 (PST)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S6sz9Atp4rL/yKWgC+JomL+J1EODMe3Iav1XoDK6GSM=;
+        b=nOrAXn9zU0MhYEuWSsQta8yXiIvABEWAcy01KIJg/d7aDzyf66h0UouXw+3DyYYKRR
+         kc4nkYFJQnzjDeZDRn3x3btaZO77n60a1pN/E5WCP4nt1uSj+5Al9Ds//LasXheNrqJm
+         KuxMBISLlxIqCzo7NuHlQc16TU+xYRzL1TPqpcX1hWKWa2kw6NL8QkSvya1SACZRqPDw
+         2IuFh4va2JBINzilqw2HeQi/OdzfmYTKaEk3GB5F4oGFhu6+f7VYxfFaGcsjEyGQ026A
+         RLiREe1Gcb518RHOA/FA8zEpZndyu+OrBGUGp1vzKQTAGGz91VzGOq0UjpcJLSn2QC3U
+         LY+A==
+X-Gm-Message-State: AOAM530EcajN7+Xz1Z6vreNHJsKZk9HfpWvW6D5ZLjDyvI2h6Vp6GlE7
+        OJjPz3Hb7lOMSOC5cjox3wA=
+X-Google-Smtp-Source: ABdhPJxabksuPImxrznQuxxEGmI/Khoo9EthgkBYzvVg4ontXCLqpWK2N5yCZ3oT81+tDSGxQj26aA==
+X-Received: by 2002:aa7:ca4f:: with SMTP id j15mr28464368edt.178.1639059085688;
+        Thu, 09 Dec 2021 06:11:25 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id ht7sm1639ejc.27.2021.12.09.06.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 06:11:25 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
+Date:   Thu, 9 Dec 2021 15:11:17 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1448:0:0:0:0 with HTTP; Thu, 9 Dec 2021 06:09:04
- -0800 (PST)
-Reply-To: ribeccalawrence@gmail.com
-From:   Rebecca Lawrence <ramdansoule@gmail.com>
-Date:   Thu, 9 Dec 2021 14:09:04 +0000
-Message-ID: <CAD_2-bg5-toMX4mO-BGwLVV1QzPrzJKR4yv15ZcJJ=o8D0G+8w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 3/6] KVM: SVM: fix AVIC race of host->guest IPI delivery
+ vs AVIC inhibition
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+ <20211209115440.394441-4-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211209115440.394441-4-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
-My name is Rebecca, I am a United States and a military woman who has
-never married with no kids yet. I came across your profile, and I
-personally took interest in being your friend. For confidential
-matters, please contact me back through my private email
-ribeccalawrence@gmail.com to enable me to send you my pictures and
-give you more details about me. I Hope to hear from you soon.
-Regards
-Rebecca.
+On 12/9/21 12:54, Maxim Levitsky wrote:
+> If svm_deliver_avic_intr is called just after the target vcpu's AVIC got
+> inhibited, it might read a stale value of vcpu->arch.apicv_active
+> which can lead to the target vCPU not noticing the interrupt.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>   arch/x86/kvm/svm/avic.c | 16 +++++++++++++---
+>   1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 859ad2dc50f1..8c1b934bfa9b 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -691,6 +691,15 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+>   	 * automatically process AVIC interrupts at VMRUN.
+>   	 */
+>   	if (vcpu->mode == IN_GUEST_MODE) {
+> +
+> +		/*
+> +		 * At this point we had read the vcpu->arch.apicv_active == true
+> +		 * and the vcpu->mode == IN_GUEST_MODE.
+> +		 * Since we have a memory barrier after setting IN_GUEST_MODE,
+> +		 * it ensures that AVIC inhibition is complete and thus
+> +		 * the target is really running with AVIC enabled.
+> +		 */
+> +
+>   		int cpu = READ_ONCE(vcpu->cpu);
+
+I don't think it's correct.  The vCPU has apicv_active written (in 
+kvm_vcpu_update_apicv) before vcpu->mode.
+
+For the acquire/release pair to work properly you need to 1) read 
+apicv_active *after* vcpu->mode here 2) use store_release and 
+load_acquire for vcpu->mode, respectively in vcpu_enter_guest and here.
+
+Paolo
+
+>   		/*
+> @@ -706,10 +715,11 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+>   		put_cpu();
+>   	} else {
+>   		/*
+> -		 * Wake the vCPU if it was blocking.  KVM will then detect the
+> -		 * pending IRQ when checking if the vCPU has a wake event.
+> +		 * Kick the target vCPU otherwise, to make sure
+> +		 * it processes the interrupt even if its AVIC is inhibited.
+>   		 */
+> -		kvm_vcpu_wake_up(vcpu);
+> +		kvm_make_request(KVM_REQ_EVENT, vcpu);
+> +		kvm_vcpu_kick(vcpu);
+>   	}
+>   
+>   	return 0;
+> 
+

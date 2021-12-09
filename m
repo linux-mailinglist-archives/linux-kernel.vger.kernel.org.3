@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423DE46F5D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF4546F5D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbhLIVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhLIVXI (ORCPT
+        id S231927AbhLIV0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:26:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36535 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231853AbhLIV0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:23:08 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8896EC061746;
-        Thu,  9 Dec 2021 13:19:34 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id d10so14499675lfg.6;
-        Thu, 09 Dec 2021 13:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=w9NVyA3r1gS0dHQGhaIwt4BqUyoksHzNXKqQm+vkFKw=;
-        b=jwRbEoyklu2JLCqR1SMPDJAr7IpOzlLs9QkrICOFL3ztGXNx/oCpBPKK4I2a4guZWq
-         mZLCzNgqApguCAFNnEjqvxcDBn8iYd40PeV6agk4OQ4WdvKTFGdnIpXLh723BjueY1Bv
-         X6RY/enamdBFCXhVpsiGyp3JTOmsgsqeOVzCbQ1vW2tg0NWfMsJbu1O9p1Jk2F3fYumg
-         ULZ/S2m26clxYk+DKKo/eunXZ+e5Dy0XPGydyNrUyIhFm/TAcO0ZTpPq9/ipbiybiSy0
-         WaSXkqWpVuhN5wSGwXFREo9/6X2LXt4hOGAMGGfd9Ca2YByneOobW8SgHdr75lS/67te
-         7QyQ==
+        Thu, 9 Dec 2021 16:26:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639084981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vgwc1magvMzj/8M1W9pAQzQB7+9j3HSAE2K13KoLOiQ=;
+        b=ODf9xrA3tYfA7hfrO88tpNFd6mGiPR+0CSsvT5ca4ef/+hXX0HvUYmdtIe8jdk1AIB3c3L
+        VJEw81gMuSylNMm4PtyUYm3r/4hG9w+kddYsX/YUv8/1B3xaiirI5wgXrUjiYcDUcXeuSG
+        oo5fZ58bl121fc4c2fHWliJnSKkhWE8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-326-yUjKbxIOOZ2bbG4R2h2TZQ-1; Thu, 09 Dec 2021 16:22:59 -0500
+X-MC-Unique: yUjKbxIOOZ2bbG4R2h2TZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id ay34-20020a05600c1e2200b00337fd217772so2885845wmb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:22:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=w9NVyA3r1gS0dHQGhaIwt4BqUyoksHzNXKqQm+vkFKw=;
-        b=PyzrE5y+Zbioe6FhLYrkcTiJ8oy/GJkb0QQcKF+34Z+QcmbJueakaUY4qQl8b7ZWqp
-         PITod4eOcnFYYuH+fq8C/KCjOkWa5N6DxfuOnt6LItk5cxF3KwCAUh8RCuPV1aRUn2CI
-         sNrK+oYQJJJWhZReK9mVw2p95BEYGkz9IENW9yHBJDlvV0Ypihp7yv9yz/YpYF5AAAQ5
-         5pMeeLZtrnxTLJi/NnHeWEw7JPndwYmMse1pZOi4vZYbgnMxzsbv7d/E2ssE5s5DNOiF
-         uzvUEjmVdgWtzjTQygJo8tBKZahz0IL2e9F/I1Y2BWzxM25L/hLQ8z6rJm6zm1OF/tRj
-         eXEg==
-X-Gm-Message-State: AOAM531ts33McOycXYNebnk5ttCh7TOykz33VHlQIs81qR652Wyopfeo
-        ZUDpu2jrd7C9MvpV26hUve0=
-X-Google-Smtp-Source: ABdhPJxQCqULlQtELM136fDWzedMTP7IrJZ/S5NS9VmXHVC56VfQeh6sXcNLIF7qxZ4Io+03QXbN5w==
-X-Received: by 2002:ac2:5ec6:: with SMTP id d6mr3004349lfq.297.1639084772893;
-        Thu, 09 Dec 2021 13:19:32 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id be25sm100371ljb.114.2021.12.09.13.19.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 13:19:32 -0800 (PST)
-Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
-To:     Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, vkoul@kernel.org
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
- <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <913af84a-957f-6392-1526-6732d43fec5b@gmail.com>
-Date:   Fri, 10 Dec 2021 00:19:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Vgwc1magvMzj/8M1W9pAQzQB7+9j3HSAE2K13KoLOiQ=;
+        b=HQRSBGa2gIhsUl2xLjBifjUnXlfARDvD0Y2EtHmiYMwk+d8n773GItX1HxpjKi2YRD
+         eLrXTeoNaNzLbQeJJcELCWS/8ZjWKED/0H6MhbQTKQsusQPmp14fPR8gPXxLnaBtrqM0
+         d/JQtZ0gXdx7Q9b6/nhwsAExhPNEzOAIGUFtlsqtDYfrwpgPw2IFTxcjb6xAwc91bleP
+         wult6sNR4d74GajwC40uO+qLm1HIkHLgkwMkMwjXPps1xN8EUAliBxFfvoqYeB9LvwOk
+         nGuTZEjTJfppp6a4hksmPxE+/o80YUsufILruJRe0KdU8/PYe4Qccpct92Dv7DZdSlzy
+         ulwA==
+X-Gm-Message-State: AOAM531i5NuMq16U0FqZkbMJ+ZlAD5CalepfcdlwDOJDPQL3FW38yqRt
+        MYa7gWDoa6AjGLoqA9uzp6HiFgwVdc9EUt6hTRi2AJl7uXXNtbOVKEtIlSIlxqUna6xEOQMOWvB
+        PLdsOTQgtXSuVCwnp+07ovcpR
+X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr9190181wru.393.1639084978458;
+        Thu, 09 Dec 2021 13:22:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEhH9zXTTqyJyrSWANNFF5+2UsCUnbJ3IhG7hh2poI6YaxLYQDArU+ddIxOhcq+6xvoWFlHQ==
+X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr9190171wru.393.1639084978284;
+        Thu, 09 Dec 2021 13:22:58 -0800 (PST)
+Received: from redhat.com ([2.55.18.120])
+        by smtp.gmail.com with ESMTPSA id g13sm1214316wrd.57.2021.12.09.13.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 13:22:56 -0800 (PST)
+Date:   Thu, 9 Dec 2021 16:22:52 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] Bluetooth: virtio_bt: fix device removal
+Message-ID: <20211209162149-mutt-send-email-mst@kernel.org>
+References: <20211125174200.133230-1-mst@redhat.com>
+ <F52F65FE-6A07-486B-8E84-684ED85709E9@holtmann.org>
 MIME-Version: 1.0
-In-Reply-To: <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <F52F65FE-6A07-486B-8E84-684ED85709E9@holtmann.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-06.12.2021 16:00, Akhil R пишет:
-> +struct tegra_dma_channel;
+On Thu, Nov 25, 2021 at 09:02:01PM +0100, Marcel Holtmann wrote:
+> Hi Michael,
+> 
+> > Device removal is clearly out of virtio spec: it attempts to remove
+> > unused buffers from a VQ before invoking device reset. To fix, make
+> > open/close NOPs and do all cleanup/setup in probe/remove.
+> 
+> so the virtbt_{open,close} as NOP is not really what a driver is suppose
+> to be doing. These are transport enable/disable callbacks from the BT
+> Core towards the driver. It maps to a device being enabled/disabled by
+> something like bluetoothd for example. So if disabled, I expect that no
+> resources/queues are in use.
+> 
+> Maybe I misunderstand the virtio spec in that regard, but I would like
+> to keep this fundamental concept of a Bluetooth driver. It does work
+> with all other transports like USB, SDIO, UART etc.
+> 
+> > The cost here is a single skb wasted on an unused bt device - which
+> > seems modest.
+> 
+> There should be no buffer used if the device is powered off. We also don’t
+> have any USB URBs in-flight if the transport is not active.
+> 
+> > NB: with this fix in place driver still suffers from a race condition if
+> > an interrupt triggers while device is being reset. Work on a fix for
+> > that issue is in progress.
+> 
+> In the virtbt_close() callback we should deactivate all interrupts.
+> 
+> Regards
+> 
+> Marcel
 
-This prototype is unuseful.
+So Marcel, do I read it right that you are working on a fix
+and I can drop this patch for now?
 
-> +/*
-> + * tegra_dma_channel: Channel specific information
-> + */
-> +struct tegra_dma_channel {
+-- 
+MST
 

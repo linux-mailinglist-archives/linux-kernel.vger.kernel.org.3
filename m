@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F085746F307
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A53046F311
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbhLIS37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:29:59 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58348
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238068AbhLIS35 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:29:57 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5E6DB3F1BA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 18:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639074378;
-        bh=bnnx6rQGK8n7h6ddt6DQom8TrVyPspLo7R1sX2CesnA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=Az07j4PMtkxjV12gLkaWoxA0nwnXVT/T9K3dcrzSAVRPysrfxTc3Sbl8uRPpkTFLT
-         HqXm1L0/+Gzc1ET3ERcQfygbqWH1hwllw8LA+trjsACdXqgfSqGQu0eadnBE2AmYgI
-         7zSqn8YjXNzqDV/0zT5aGC3wBQ4+V7NXrUDgouU+Ocmr2XnJ6e9zDEli/TgA68wrhu
-         k8BLDKN8K7BQ4lKzYXAqGSIO2Ex9Ap9xEXVvmwwgYx6HbvOPOSav3gLikCsEeqoQlv
-         DbflfoDjXU4NYbMd89/0dLRIHakWEe8h7qgM+zUbo6IQilYZlKO7VpDsxhEpy/U5pe
-         KrUw8rT0ikiQQ==
-Received: by mail-lj1-f197.google.com with SMTP id z18-20020a2e8e92000000b00218e583aff1so2190411ljk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 10:26:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bnnx6rQGK8n7h6ddt6DQom8TrVyPspLo7R1sX2CesnA=;
-        b=lNWRDBjZCREdJNrZ2vsaQE02tBncVxQyGqJPNd5WORr6GJVYqMR/mJdK/GYn5/21D0
-         xhRpKC3W4mgIsThmkoamVV1KR9GFbCwLhrHvIzELccqKcGxjgZZpHZJYP3zBhaqnPy46
-         /DngObJEuLNOeYc711gr8Cyj6TFjC452gec2JUYHzt8780/QsL97gK/RriSh61gKHaZD
-         mfG4uOQr9Y/9g0cUx2KCarwl5OkVfwNHBszd43Tf8A48WCyQqh9ViBhyn0L5O6HxGUlc
-         yva3Se8JC/qqj5uk4zVA2Zw0HBv314f+soFYKrX68G6DTNrtV658CzjZlYeWqd/Rh9sP
-         WzyQ==
-X-Gm-Message-State: AOAM5328I3CzEgxeCd1zogsgZ0NJQ40WCmGQAJ6x77a+xIQ2ZSRdQ+Z/
-        VePcCWf2ixWb8wFO6RqO5Kf/kZ5p9lHZUSy32UMSapfvzN0wxeu3hgX1WS/Bz3beCLbxcvBZu+T
-        jjBil96guD0onor93ARrXEl+7R2SVE8jXrlPRBYM84g==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr8105550ljb.214.1639074377379;
-        Thu, 09 Dec 2021 10:26:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwbURx088TRAYYq+SKkON5HsFd14aKjJlvCcvIqppT8KViqIKSlq9u0BdyeXxUl2UrGefiszw==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr8105529ljb.214.1639074377174;
-        Thu, 09 Dec 2021 10:26:17 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id s6sm58531lfo.48.2021.12.09.10.26.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 10:26:16 -0800 (PST)
-Message-ID: <f0e01fda-b153-9d74-ae7d-7ef0fc2112aa@canonical.com>
-Date:   Thu, 9 Dec 2021 19:26:15 +0100
+        id S243323AbhLISan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:30:43 -0500
+Received: from mga14.intel.com ([192.55.52.115]:23370 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243309AbhLISal (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 13:30:41 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238401467"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="238401467"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:27:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="516782459"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Dec 2021 10:27:06 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D4B56329; Thu,  9 Dec 2021 20:27:12 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>
+Subject: [PATCH v2 1/1] PCI: Introduce pci_bus_*() printing macros when device is not available
+Date:   Thu,  9 Dec 2021 20:27:11 +0200
+Message-Id: <20211209182711.28709-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 RESEND 7/8] arm: dts: exynos: Rename hsi2c nodes to i2c
- for Exynos5260
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-8-semen.protsenko@linaro.org>
- <YbIXVw+as1Sj6yDW@ninjato>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YbIXVw+as1Sj6yDW@ninjato>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 15:48, Wolfram Sang wrote:
-> On Sat, Dec 04, 2021 at 11:58:19PM +0200, Sam Protsenko wrote:
->> In Device Tree specification it's recommended to use "i2c" name for I2C
->> nodes. Now that i2c-exynos5 dt-schema binding was added, it shows some
->> warnings like this when validating HS-I2C nodes:
->>
->>     hsi2c@xxxxxxxxx: $nodename:0: 'hsi2c@xxxxxxxx' does not match
->>                                   '^i2c(@.*)?'
->>     From schema: Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
->>
->> Rename hsi2c@* to i2c@* to fix those warnings.
->>
->> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> 
-> Applied to for-next, thanks!
+In some cases PCI device structure is not available and we want to print
+information based on the bus and devfn parameters. For this cases introduce
+pci_bus_*() printing macros and replace in existing users.
 
-I applied the DTS patches, because they should go via arm-soc tree.
-Please drop them from I2C.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+v2: split out as a separate patch, added tag (Jean)
 
-Best regards,
-Krzysztof
+Jean, for now it seems overkill to add pci_bus_dbg() since it's not as simple                                    as the rest, it needs a separate full macro with pr_debug() called explicitly
+underneath. Hence, I tried and decided not to go until we have enough users.
+
+ drivers/pci/probe.c | 12 +++---------
+ include/linux/pci.h |  8 ++++++++
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 2c91d3509d17..7208901fba70 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2334,16 +2334,12 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	 */
+ 	while (pci_bus_crs_vendor_id(*l)) {
+ 		if (delay > timeout) {
+-			pr_warn("pci %04x:%02x:%02x.%d: not ready after %dms; giving up\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_warn(bus, devfn, "not ready after %dms; giving up\n", delay - 1);
+ 
+ 			return false;
+ 		}
+ 		if (delay >= 1000)
+-			pr_info("pci %04x:%02x:%02x.%d: not ready after %dms; waiting\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_info(bus, devfn, "not ready after %dms; waiting\n", delay - 1);
+ 
+ 		msleep(delay);
+ 		delay *= 2;
+@@ -2353,9 +2349,7 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	}
+ 
+ 	if (delay >= 1000)
+-		pr_info("pci %04x:%02x:%02x.%d: ready after %dms\n",
+-			pci_domain_nr(bus), bus->number,
+-			PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++		pci_bus_info(bus, devfn, "ready after %dms\n", delay - 1);
+ 
+ 	return true;
+ }
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 0ce26850470e..ea8736077d83 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2482,4 +2482,12 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+ 	WARN_ONCE(condition, "%s %s: " fmt, \
+ 		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+ 
++#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
++	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
++	       pci_domain_nr(bus), bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
++
++#define pci_bus_err(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_ERR, bus, devfn, fmt, ##arg)
++#define pci_bus_warn(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_WARNING, bus, devfn, fmt, ##arg)
++#define pci_bus_info(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_INFO, bus, devfn, fmt, ##arg)
++
+ #endif /* LINUX_PCI_H */
+-- 
+2.33.0
+

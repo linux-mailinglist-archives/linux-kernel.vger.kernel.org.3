@@ -2,184 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284D246F3F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B40446F3F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhLITdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:33:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37043 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229461AbhLITdp (ORCPT
+        id S230148AbhLITeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229710AbhLITeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:33:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639078211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdNSBzuwMtRAMCNZ3pk+C/086It2DmiMT1JFIWd+i/8=;
-        b=Huv1oLjRnmwKAhl51XqLDXWVjy0rlalwhHTLaimnaSR8Th8utH4B4nWcy5zLQOvR9Czgj3
-        1GkOwbcWlEQFtQfi0yC+PLulsjcVYIA41GLA2S8vk+wc8aeWm6N3DWk58s/TpPdXS2EU8d
-        Brt4e/6khcKBOerS54PLKJ4rHcW7EA4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-K9GEs39uPyiETYOElffX5Q-1; Thu, 09 Dec 2021 14:30:10 -0500
-X-MC-Unique: K9GEs39uPyiETYOElffX5Q-1
-Received: by mail-wr1-f69.google.com with SMTP id q17-20020adff791000000b00183e734ba48so1746786wrp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:30:10 -0800 (PST)
+        Thu, 9 Dec 2021 14:34:15 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20191C061746;
+        Thu,  9 Dec 2021 11:30:41 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g14so22196573edb.8;
+        Thu, 09 Dec 2021 11:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0xRtXJW83Yd8z831Xed6i/iEDs06aIGGNcWdPaz0N3Q=;
+        b=RyfBbQL/vfgxEpy/6Bm0MoQjNUaEqzC9YhtLTbdkQZclUhmdoPWLnj4j2ntG53lwE0
+         omy6N3M4bmOzLNI7Ne1T6qj8w9P0DMe1e2DZr8eadbb9Z2O9mIl1lv9IX3cRsJ7hfHIP
+         QhbYjR3ae1Gk0uojBwN5Mys8RmGuKk1Nttth48tQXiLuDe/lh2psg37ecORjPNW/ZU/m
+         1bDlGV4QzanITlc2q0iT+9KFiWcxeo9fjBOve6X1Csfa8/ZRluRdnntAHT+96yvZo4DW
+         pktOLScd/l3yxeNwxkU9pcdH8HFW+VOU77dSX1K1w8H86+8vFck1nq7VSU9znbXlnn37
+         qQYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KdNSBzuwMtRAMCNZ3pk+C/086It2DmiMT1JFIWd+i/8=;
-        b=PUfL5lW42bHioC8JgFqPC3Jsyo+UaOwoXpXiGsbgJiYuBfyARR1UBBoQeOxkHvWRB3
-         Ef0LuLIb/ojOLPE6K8N7eMJJwnxjf415xBNSMpxUoQyVjkCRszkLj3fJp+TN9wJtT7MB
-         TzYbuXgaj6hcvmCctKF67jlXfL/C2gxW/a+iPQwtupjFZ18zneDln8Adw6xz7vdG8yn7
-         zULKbtmiQxu9Od57VI+co4xKbMgnXpxN6rkobpJKaShwBKCHE5tHINk869Jlzf/5cU+g
-         ZMgv2ORVD61Df90OjtcnrXQ2Iiq0suTMITMTuhPAIP07q7qo5l35raCl+twYwX8IlZTB
-         Oi8w==
-X-Gm-Message-State: AOAM533CZG2eCJlkZRYmlW6U56I+sgMN9FP+0k1yO7d+4SfVIFLa0Mqe
-        GZD8UwY01QSaBvJ09FhzWgKwOek78Ch4x40A8G7zciGoa6Q5jasPNBCw/7VurGoMVAvc05/OmC5
-        JNk62E0tQSckWOa+iOWiBN1b4
-X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr9969177wml.119.1639078209284;
-        Thu, 09 Dec 2021 11:30:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwRx1YfuMaa1lnYlwI+iuXZf1A/jyLmGlWI3oGWUPHiulDW3WXi64kvBXfucbK68/VlCjU9eg==
-X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr9969146wml.119.1639078209058;
-        Thu, 09 Dec 2021 11:30:09 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id a9sm569037wrt.66.2021.12.09.11.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 11:30:08 -0800 (PST)
-Date:   Thu, 9 Dec 2021 20:30:06 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Sohaib Mohamed <sohaib.amhmd@gmail.com>, irogers@google.com,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fabian Hemmer <copy@copy.sh>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Unbuffered output when pipe/tee to a file
-Message-ID: <YbJZPsCfXi8QUbfR@krava>
-References: <20211119061409.78004-1-sohaib.amhmd@gmail.com>
- <YaOhbfWzMv/uvKKi@krava>
- <YbJQOfeeAoJ1GzJZ@kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0xRtXJW83Yd8z831Xed6i/iEDs06aIGGNcWdPaz0N3Q=;
+        b=yPbr7WgIYEPrjaTLqqZYrUT+7+qtzA2+FKav3zWcEDjIYRIHoyG5gPGL+CExMP0gf7
+         Cgn5iDo4hZ5I7+GgSj7zthL9XGy0rKwbIcQnYRi0SqdK2ia1CNk6OyGYH1SaDgoYl7zx
+         WsMzbuEb1d9DmDpcaucrl6QX/0Wp8bnjSjANoLbRQ5sR1puJcUMOGu2kHVcY+EsMwUk5
+         BZkemf5sPaB8d4fwWBrg157WSoxLumhsutqnZJuyivb1AAIAu/16Ij2z2k76wSaa23jf
+         WEi1Q9f8YTPq2VRBWOUbuqT6rRrTWGOG6hEeuOMque2+5iNzu8qtgOefBFqsmBpQBfGq
+         E4BA==
+X-Gm-Message-State: AOAM530kv3WaGZmMT779lISiV3TR86hdA3r2jDTqTxiaTLbWHZDvI5h2
+        v/t0HK9ijjhKX7SWlZQGAf64AI5Gn44=
+X-Google-Smtp-Source: ABdhPJzgx/xQHPAUMDm+QCSw2KPPR3pnbY6xJBcSAwv6NcsMZz7bbc1uRMovkuY6avOW0uV6jad8eg==
+X-Received: by 2002:a05:6402:1395:: with SMTP id b21mr32197670edv.299.1639078239733;
+        Thu, 09 Dec 2021 11:30:39 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id sd28sm404766ejc.37.2021.12.09.11.30.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 11:30:39 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <3118559d-8d4e-e080-2849-b526917969eb@redhat.com>
+Date:   Thu, 9 Dec 2021 20:30:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbJQOfeeAoJ1GzJZ@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 0/6] KVM: x86/pmu: Count two basic events for emulated
+ instructions
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20211130074221.93635-1-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211130074221.93635-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 03:51:37PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sun, Nov 28, 2021 at 04:34:05PM +0100, Jiri Olsa escreveu:
-> > On Fri, Nov 19, 2021 at 08:14:08AM +0200, Sohaib Mohamed wrote:
-> > > The output of Perf bench gets buffered when I pipe it to a file or to
-> > > tee, in such a way that I can see it only at the end.
-> > > 
-> > > E.g.
-> > > $ perf bench internals synthesize -t
-> > > < output comes out fine after each test run >
-> > > 
-> > > $ perf bench internals synthesize -t | tee file.txt
-> > > < output comes out only at the end of all tests >
-> > > 
-> > > This patch resolves this issue for 'bench' and 'test' subcommands.
-> > 
-> > I can reproduce this for bench, but not for test subcommand
-> > other that that it makes sense to me
+On 11/30/21 08:42, Like Xu wrote:
+> Hi,
 > 
-> I reproduced it, see my comment to Sohaib's message, its not at the end,
-> its when the buffer fills up.
+> [ Jim is on holiday, so I'm here to continue this work. ]
 > 
-> From the "it makes sense to me" I'm deriving an Acked-by you, ok?
-
-ok, yes
-
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-
-jirka
-
+> Some cloud customers need accurate virtualization of two
+> basic PMU events on x86 hardware: "instructions retired" and
+> "branch instructions retired". The existing PMU virtualization code
+> fails to account for instructions (e.g, CPUID) that are emulated by KVM.
 > 
-> - Arnaldo
->  
-> > jirka
-> > 
-> > > 
-> > > See, also:
-> > > $ perf bench mem all | tee file.txt
-> > > $ perf bench sched all | tee file.txt
-> > > $ perf bench internals all -t | tee file.txt
-> > > $ perf bench internals all | tee file.txt
-> > > 
-> > > Suggested-by: Riccardo Mancini <rickyman7@gmail.com>
-> > > Signed-off-by: Sohaib Mohamed <sohaib.amhmd@gmail.com>
-> > > ---
-> > > v1 -> v2:
-> > > - Use setvbuf(), instead of sprinkling fflush() calls and missing some places.
-> > > 
-> > > v1: https://lore.kernel.org/linux-perf-users/20211112215313.108823-1-sohaib.amhmd@gmail.com/
-> > > ---
-> > >  tools/perf/builtin-bench.c      | 5 +++--
-> > >  tools/perf/tests/builtin-test.c | 3 +++
-> > >  2 files changed, 6 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-> > > index d0895162c2ba..d291f3a8af5f 100644
-> > > --- a/tools/perf/builtin-bench.c
-> > > +++ b/tools/perf/builtin-bench.c
-> > > @@ -226,7 +226,6 @@ static void run_collection(struct collection *coll)
-> > >  		if (!bench->fn)
-> > >  			break;
-> > >  		printf("# Running %s/%s benchmark...\n", coll->name, bench->name);
-> > > -		fflush(stdout);
-> > > 
-> > >  		argv[1] = bench->name;
-> > >  		run_bench(coll->name, bench->name, bench->fn, 1, argv);
-> > > @@ -247,6 +246,9 @@ int cmd_bench(int argc, const char **argv)
-> > >  	struct collection *coll;
-> > >  	int ret = 0;
-> > > 
-> > > +	/* Unbuffered output */
-> > > +	setvbuf(stdout, NULL, _IONBF, 0);
-> > > +
-> > >  	if (argc < 2) {
-> > >  		/* No collection specified. */
-> > >  		print_usage();
-> > > @@ -300,7 +302,6 @@ int cmd_bench(int argc, const char **argv)
-> > > 
-> > >  			if (bench_format == BENCH_FORMAT_DEFAULT)
-> > >  				printf("# Running '%s/%s' benchmark:\n", coll->name, bench->name);
-> > > -			fflush(stdout);
-> > >  			ret = run_bench(coll->name, bench->name, bench->fn, argc-1, argv+1);
-> > >  			goto end;
-> > >  		}
-> > > diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> > > index 8cb5a1c3489e..d92ae4efd2e6 100644
-> > > --- a/tools/perf/tests/builtin-test.c
-> > > +++ b/tools/perf/tests/builtin-test.c
-> > > @@ -606,6 +606,9 @@ int cmd_test(int argc, const char **argv)
-> > >          if (ret < 0)
-> > >                  return ret;
-> > > 
-> > > +	/* Unbuffered output */
-> > > +	setvbuf(stdout, NULL, _IONBF, 0);
-> > > +
-> > >  	argc = parse_options_subcommand(argc, argv, test_options, test_subcommands, test_usage, 0);
-> > >  	if (argc >= 1 && !strcmp(argv[0], "list"))
-> > >  		return perf_test__list(argc - 1, argv + 1);
-> > > --
-> > > 2.25.1
-> > > 
+> Accurately virtualizing all PMU events for all microarchitectures is a
+> herculean task, let's just stick to the two events covered by this set.
 > 
-> -- 
+> Eric Hankland wrote this code originally, but his plate is full, so Jim
+> and I volunteered to shepherd the changes through upstream acceptance.
 > 
-> - Arnaldo
+> Thanks,
+> 
+> v1 -> v2 Changelog:
+> - Include the patch set [1] and drop the intel_find_fixed_event(); [Paolo]
+>    (we will fix the misleading Intel CPUID events in another patch set)
+> - Drop checks for pmc->perf_event or event state or event type;
+> - Increase a counter once its umask bits and the first 8 select bits are matched;
+> - Rewrite kvm_pmu_incr_counter() with a less invasive approach to the host perf;
+> - Rename kvm_pmu_record_event to kvm_pmu_trigger_event;
+> - Add counter enable check for kvm_pmu_trigger_event();
+> - Add vcpu CPL check for kvm_pmu_trigger_event(); [Jim]
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20211112235235.1125060-2-jmattson@google.com/
+> 
+> [1] https://lore.kernel.org/kvm/20211119064856.77948-1-likexu@tencent.com/
+> 
+> Jim Mattson (1):
+>    KVM: x86: Update vPMCs when retiring branch instructions
+> 
+> Like Xu (5):
+>    KVM: x86/pmu: Setup pmc->eventsel for fixed PMCs
+>    KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
+>    KVM: x86/pmu: Reuse pmc_perf_hw_id() and drop find_fixed_event()
+>    KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+>    KVM: x86: Update vPMCs when retiring instructions
+> 
+>   arch/x86/include/asm/kvm_host.h |   1 +
+>   arch/x86/kvm/emulate.c          |  55 ++++++++------
+>   arch/x86/kvm/kvm_emulate.h      |   1 +
+>   arch/x86/kvm/pmu.c              | 128 ++++++++++++++++++++++----------
+>   arch/x86/kvm/pmu.h              |   5 +-
+>   arch/x86/kvm/svm/pmu.c          |  19 ++---
+>   arch/x86/kvm/vmx/nested.c       |   7 +-
+>   arch/x86/kvm/vmx/pmu_intel.c    |  44 ++++++-----
+>   arch/x86/kvm/x86.c              |   5 ++
+>   9 files changed, 167 insertions(+), 98 deletions(-)
 > 
 
+Queued patches 1-4, thanks.
+
+Paolo

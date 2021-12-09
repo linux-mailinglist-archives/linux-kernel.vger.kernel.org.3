@@ -2,417 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3469746F001
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5486C46F008
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242106AbhLIRGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:06:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27182 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238477AbhLIRGQ (ORCPT
+        id S242097AbhLIRGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242134AbhLIRGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:06:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639069362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2BWZ3dRDDSrtcLS5AAf7x92HCaujLx9s0HUXmv9KQsc=;
-        b=FasxMBFCtWqvjUB51CGO3AC4I4f2H9824R1QpSvtKhqTYgbqPXcpmrr20Bis5pW2TDrB/G
-        C9GJmf22iHnFJc7EPB5g8N1Idg8YMXCRq1CEGxjgb+iF5RoPVqPk1lI1Aey0R5ktObFsHG
-        U6uQ1RgJh9bXdhEMtrEtR6wIqOrgpv4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-yTvjF6BRMUCvHE83S3CRTQ-1; Thu, 09 Dec 2021 12:02:40 -0500
-X-MC-Unique: yTvjF6BRMUCvHE83S3CRTQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Dec 2021 12:06:17 -0500
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C662C0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:02:44 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B88B91006AA2;
-        Thu,  9 Dec 2021 17:02:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F8515D740;
-        Thu,  9 Dec 2021 17:02:35 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v2 40/67] cachefiles: Implement cache registration and
- withdrawal
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 17:02:34 +0000
-Message-ID: <163906935445.143852.15545194974036410029.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 45AE63F63F;
+        Thu,  9 Dec 2021 18:02:41 +0100 (CET)
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
+ panels
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>, robdclark@gmail.com
+Cc:     sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
+ <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+ <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+Date:   Thu, 9 Dec 2021 18:02:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do the following:
+Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
+> On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
+>> In function dpu_encoder_phys_cmd_wait_for_commit_done we are always
+>> checking if the relative CTL is started by waiting for an interrupt
+>> to fire: it is fine to do that, but then sometimes we call this
+>> function while the CTL is up and has never been put down, but that
+>> interrupt gets raised only when the CTL gets a state change from
+>> 0 to 1 (disabled to enabled), so we're going to wait for something
+>> that will never happen on its own.
+>>
+>> Solving this while avoiding to restart the CTL is actually possible
+>> and can be done by just checking if it is already up and running
+>> when the wait_for_commit_done function is called: in this case, so,
+>> if the CTL was already running, we can say that the commit is done
+>> if the command transmission is complete (in other terms, if the
+>> interface has been flushed).
+> 
+> I've compared this with the MDP5 driver, where we always wait for PP_DONE 
+> interrupt. Would it be enough to always wait for it (= always call 
+> dpu_encoder_phys_cmd_wait_for_tx_complete())?
+> 
 
- (1) Fill out cachefiles_daemon_add_cache() so that it sets up the cache
-     directories and registers the cache with cachefiles.
+This sets my delay record to reply to two months. Great achievement!
 
- (2) Add a function to do the top-level part of cache withdrawal and
-     unregistration.
-
- (3) Add a function to sync a cache.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819633175.215744.10857127598041268340.stgit@warthog.procyon.org.uk/ # v1
----
-
- fs/cachefiles/Makefile    |    1 
- fs/cachefiles/cache.c     |  207 +++++++++++++++++++++++++++++++++++++++++++++
- fs/cachefiles/daemon.c    |    8 +-
- fs/cachefiles/interface.c |   18 ++++
- fs/cachefiles/internal.h  |    9 ++
- 5 files changed, 240 insertions(+), 3 deletions(-)
- create mode 100644 fs/cachefiles/interface.c
-
-diff --git a/fs/cachefiles/Makefile b/fs/cachefiles/Makefile
-index e0b092ca077f..92af5daee8ce 100644
---- a/fs/cachefiles/Makefile
-+++ b/fs/cachefiles/Makefile
-@@ -6,6 +6,7 @@
- cachefiles-y := \
- 	cache.o \
- 	daemon.o \
-+	interface.o \
- 	main.o \
- 	namei.o \
- 	security.o
-diff --git a/fs/cachefiles/cache.c b/fs/cachefiles/cache.c
-index 73636f89eefa..4c4121105750 100644
---- a/fs/cachefiles/cache.c
-+++ b/fs/cachefiles/cache.c
-@@ -10,6 +10,166 @@
- #include <linux/namei.h>
- #include "internal.h"
- 
-+/*
-+ * Bring a cache online.
-+ */
-+int cachefiles_add_cache(struct cachefiles_cache *cache)
-+{
-+	struct fscache_cache *cache_cookie;
-+	struct path path;
-+	struct kstatfs stats;
-+	struct dentry *graveyard, *cachedir, *root;
-+	const struct cred *saved_cred;
-+	int ret;
-+
-+	_enter("");
-+
-+	cache_cookie = fscache_acquire_cache(cache->tag);
-+	if (IS_ERR(cache_cookie))
-+		return PTR_ERR(cache_cookie);
-+
-+	/* we want to work under the module's security ID */
-+	ret = cachefiles_get_security_ID(cache);
-+	if (ret < 0)
-+		goto error_getsec;
-+
-+	cachefiles_begin_secure(cache, &saved_cred);
-+
-+	/* look up the directory at the root of the cache */
-+	ret = kern_path(cache->rootdirname, LOOKUP_DIRECTORY, &path);
-+	if (ret < 0)
-+		goto error_open_root;
-+
-+	cache->mnt = path.mnt;
-+	root = path.dentry;
-+
-+	ret = -EINVAL;
-+	if (mnt_user_ns(path.mnt) != &init_user_ns) {
-+		pr_warn("File cache on idmapped mounts not supported");
-+		goto error_unsupported;
-+	}
-+
-+	/* check parameters */
-+	ret = -EOPNOTSUPP;
-+	if (d_is_negative(root) ||
-+	    !d_backing_inode(root)->i_op->lookup ||
-+	    !d_backing_inode(root)->i_op->mkdir ||
-+	    !(d_backing_inode(root)->i_opflags & IOP_XATTR) ||
-+	    !root->d_sb->s_op->statfs ||
-+	    !root->d_sb->s_op->sync_fs ||
-+	    root->d_sb->s_blocksize > PAGE_SIZE)
-+		goto error_unsupported;
-+
-+	ret = -EROFS;
-+	if (sb_rdonly(root->d_sb))
-+		goto error_unsupported;
-+
-+	/* determine the security of the on-disk cache as this governs
-+	 * security ID of files we create */
-+	ret = cachefiles_determine_cache_security(cache, root, &saved_cred);
-+	if (ret < 0)
-+		goto error_unsupported;
-+
-+	/* get the cache size and blocksize */
-+	ret = vfs_statfs(&path, &stats);
-+	if (ret < 0)
-+		goto error_unsupported;
-+
-+	ret = -ERANGE;
-+	if (stats.f_bsize <= 0)
-+		goto error_unsupported;
-+
-+	ret = -EOPNOTSUPP;
-+	if (stats.f_bsize > PAGE_SIZE)
-+		goto error_unsupported;
-+
-+	cache->bsize = stats.f_bsize;
-+	cache->bshift = 0;
-+	if (stats.f_bsize < PAGE_SIZE)
-+		cache->bshift = PAGE_SHIFT - ilog2(stats.f_bsize);
-+
-+	_debug("blksize %u (shift %u)",
-+	       cache->bsize, cache->bshift);
-+
-+	_debug("size %llu, avail %llu",
-+	       (unsigned long long) stats.f_blocks,
-+	       (unsigned long long) stats.f_bavail);
-+
-+	/* set up caching limits */
-+	do_div(stats.f_files, 100);
-+	cache->fstop = stats.f_files * cache->fstop_percent;
-+	cache->fcull = stats.f_files * cache->fcull_percent;
-+	cache->frun  = stats.f_files * cache->frun_percent;
-+
-+	_debug("limits {%llu,%llu,%llu} files",
-+	       (unsigned long long) cache->frun,
-+	       (unsigned long long) cache->fcull,
-+	       (unsigned long long) cache->fstop);
-+
-+	stats.f_blocks >>= cache->bshift;
-+	do_div(stats.f_blocks, 100);
-+	cache->bstop = stats.f_blocks * cache->bstop_percent;
-+	cache->bcull = stats.f_blocks * cache->bcull_percent;
-+	cache->brun  = stats.f_blocks * cache->brun_percent;
-+
-+	_debug("limits {%llu,%llu,%llu} blocks",
-+	       (unsigned long long) cache->brun,
-+	       (unsigned long long) cache->bcull,
-+	       (unsigned long long) cache->bstop);
-+
-+	/* get the cache directory and check its type */
-+	cachedir = cachefiles_get_directory(cache, root, "cache");
-+	if (IS_ERR(cachedir)) {
-+		ret = PTR_ERR(cachedir);
-+		goto error_unsupported;
-+	}
-+
-+	cache->store = cachedir;
-+
-+	/* get the graveyard directory */
-+	graveyard = cachefiles_get_directory(cache, root, "graveyard");
-+	if (IS_ERR(graveyard)) {
-+		ret = PTR_ERR(graveyard);
-+		goto error_unsupported;
-+	}
-+
-+	cache->graveyard = graveyard;
-+	cache->cache = cache_cookie;
-+
-+	ret = fscache_add_cache(cache_cookie, &cachefiles_cache_ops, cache);
-+	if (ret < 0)
-+		goto error_add_cache;
-+
-+	/* done */
-+	set_bit(CACHEFILES_READY, &cache->flags);
-+	dput(root);
-+
-+	pr_info("File cache on %s registered\n", cache_cookie->name);
-+
-+	/* check how much space the cache has */
-+	cachefiles_has_space(cache, 0, 0);
-+	cachefiles_end_secure(cache, saved_cred);
-+	_leave(" = 0 [%px]", cache->cache);
-+	return 0;
-+
-+error_add_cache:
-+	cachefiles_put_directory(cache->graveyard);
-+	cache->graveyard = NULL;
-+error_unsupported:
-+	cachefiles_put_directory(cache->store);
-+	cache->store = NULL;
-+	mntput(cache->mnt);
-+	cache->mnt = NULL;
-+	dput(root);
-+error_open_root:
-+	cachefiles_end_secure(cache, saved_cred);
-+error_getsec:
-+	fscache_relinquish_cache(cache_cookie);
-+	cache->cache = NULL;
-+	pr_err("Failed to register: %d\n", ret);
-+	return ret;
-+}
-+
- /*
-  * See if we have space for a number of pages and/or a number of files in the
-  * cache
-@@ -101,3 +261,50 @@ int cachefiles_has_space(struct cachefiles_cache *cache,
- 	_leave(" = %d", ret);
- 	return ret;
- }
-+
-+/*
-+ * Sync a cache to backing disk.
-+ */
-+static void cachefiles_sync_cache(struct cachefiles_cache *cache)
-+{
-+	const struct cred *saved_cred;
-+	int ret;
-+
-+	_enter("%s", cache->cache->name);
-+
-+	/* make sure all pages pinned by operations on behalf of the netfs are
-+	 * written to disc */
-+	cachefiles_begin_secure(cache, &saved_cred);
-+	down_read(&cache->mnt->mnt_sb->s_umount);
-+	ret = sync_filesystem(cache->mnt->mnt_sb);
-+	up_read(&cache->mnt->mnt_sb->s_umount);
-+	cachefiles_end_secure(cache, saved_cred);
-+
-+	if (ret == -EIO)
-+		cachefiles_io_error(cache,
-+				    "Attempt to sync backing fs superblock returned error %d",
-+				    ret);
-+}
-+
-+/*
-+ * Withdraw cache objects.
-+ */
-+void cachefiles_withdraw_cache(struct cachefiles_cache *cache)
-+{
-+	struct fscache_cache *fscache = cache->cache;
-+
-+	pr_info("File cache on %s unregistering\n", fscache->name);
-+
-+	fscache_withdraw_cache(fscache);
-+
-+	/* we now have to destroy all the active objects pertaining to this
-+	 * cache - which we do by passing them off to thread pool to be
-+	 * disposed of */
-+	// PLACEHOLDER: Withdraw objects
-+	fscache_wait_for_objects(fscache);
-+
-+	// PLACEHOLDER: Withdraw volume
-+	cachefiles_sync_cache(cache);
-+	cache->cache = NULL;
-+	fscache_relinquish_cache(fscache);
-+}
-diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index 7d4691614cec..a449ee661987 100644
---- a/fs/cachefiles/daemon.c
-+++ b/fs/cachefiles/daemon.c
-@@ -702,6 +702,7 @@ static int cachefiles_daemon_bind(struct cachefiles_cache *cache, char *args)
- 
- 	pr_warn("Cache is disabled for development\n");
- 	return -ENOANO; // Don't allow the cache to operate yet
-+	//return cachefiles_add_cache(cache);
- }
- 
- /*
-@@ -711,10 +712,11 @@ static void cachefiles_daemon_unbind(struct cachefiles_cache *cache)
- {
- 	_enter("");
- 
--	if (test_bit(CACHEFILES_READY, &cache->flags)) {
--		// PLACEHOLDER: Withdraw cache
--	}
-+	if (test_bit(CACHEFILES_READY, &cache->flags))
-+		cachefiles_withdraw_cache(cache);
- 
-+	cachefiles_put_directory(cache->graveyard);
-+	cachefiles_put_directory(cache->store);
- 	mntput(cache->mnt);
- 
- 	kfree(cache->rootdirname);
-diff --git a/fs/cachefiles/interface.c b/fs/cachefiles/interface.c
-new file mode 100644
-index 000000000000..564ea8fa6641
---- /dev/null
-+++ b/fs/cachefiles/interface.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* FS-Cache interface to CacheFiles
-+ *
-+ * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#include <linux/slab.h>
-+#include <linux/mount.h>
-+#include <linux/xattr.h>
-+#include <linux/file.h>
-+#include <linux/falloc.h>
-+#include <trace/events/fscache.h>
-+#include "internal.h"
-+
-+const struct fscache_cache_ops cachefiles_cache_ops = {
-+	.name			= "cachefiles",
-+};
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 65e01ac1da39..0ccea2373b40 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -32,6 +32,8 @@ struct cachefiles_object {
- struct cachefiles_cache {
- 	struct fscache_cache		*cache;		/* Cache cookie */
- 	struct vfsmount			*mnt;		/* mountpoint holding the cache */
-+	struct dentry			*store;		/* Directory into which live objects go */
-+	struct dentry			*graveyard;	/* directory into which dead objects go */
- 	struct file			*cachefilesd;	/* manager daemon handle */
- 	const struct cred		*cache_cred;	/* security override for accessing cache */
- 	struct mutex			daemon_mutex;	/* command serialisation mutex */
-@@ -78,8 +80,10 @@ static inline void cachefiles_state_changed(struct cachefiles_cache *cache)
- /*
-  * cache.c
-  */
-+extern int cachefiles_add_cache(struct cachefiles_cache *cache);
- extern int cachefiles_has_space(struct cachefiles_cache *cache,
- 				unsigned fnr, unsigned bnr);
-+extern void cachefiles_withdraw_cache(struct cachefiles_cache *cache);
- 
- /*
-  * daemon.c
-@@ -125,6 +129,11 @@ static inline int cachefiles_inject_remove_error(void)
- 	return cachefiles_error_injection_state & 2 ? -EIO : 0;
- }
- 
-+/*
-+ * interface.c
-+ */
-+extern const struct fscache_cache_ops cachefiles_cache_ops;
-+
- /*
-  * namei.c
-  */
-
-
+Jokes apart, yes it would make sense to do that, it's something that works
+at least... but we should verify that such a thing doesn't break new platforms
+(like sm8150 and newer).

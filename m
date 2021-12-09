@@ -2,182 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EC646E417
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6AF46E419
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbhLII1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:27:32 -0500
-Received: from mail-bn8nam11on2104.outbound.protection.outlook.com ([40.107.236.104]:38528
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229654AbhLII1a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:27:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kroBKaY+AX6+/1cXwpOnA7cHgU27FZpWR5w32jizS6JRWEZg4mox4HHUhp7mwT7rsYtfuLtUtsoW9P/8vBbaoPl/yT7y33Lc5IpgkQrKmUirUaKVk8Fim+Wv/eUu5G7qkbGvLey7TpWpst0JxEd0mEW7GFU96FCMr6c0IeC2fU6LSiB2yQdNqFrMX4rxEUguMP4m/eL482oQPc32hDa1t7ApM/IGD6WPE7Diw06SKwEWGpoJiymKDT8dcGiXzIPHBSvfvw6zM1CLNavDB3aTZkqfzu5/GiVZkP8PPkUM0gy3iFTJEqpi1k9Ls7IcVeP+LWLltGtgum8RcUduUy/7IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IEgN8BqPTUm5WCHowvBEdL5R2pK/EJdsAR/aJ0Wb0ig=;
- b=PhN3oviflRTOpZLn8PgP9TTT/DBOcPVXGT7Fpfx5vh+T/q4fZmunt/3jedDezqrfncviPulVOSl4Dfor8DzU9a6hBuCUoOVX2SXairTMGMg08hcIp4eWHXHJJ0XSjRz2NTxb5nx7sGIQX4CCixHEKAPnQEryNThiGuybaRNVBAV+o9XW7SpKQMjPx6cxgYHBNeO9cvGAbKvmdJImCuiFe2Uhj/a5v9Esb5bJLis8KHzwd/Sn/OAB8NSC6yoPuz/LaoivLiWTCrd/frVSW2Amuv/9lHRk9EqDDx+g+bD6WtJ6igBQQrb8Jdli1IhFHOfHCKHCcCyNc753efba+/3fWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IEgN8BqPTUm5WCHowvBEdL5R2pK/EJdsAR/aJ0Wb0ig=;
- b=hMwI27cHyzO3l4Ps84d/rLPQWBrjbnXiBNdEcC6Zk754xk6IscTyRorluJhUVBrCqpq2Af/lsK9gOOI0jErtoJiBxm8stSM6agfGBRjltmFKmUzui8fm5mF2JLiu7y0kT/rLs5mVGO8Fy/G7AZ6edGebiqXwINtQLVBa9C1ll2o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5716.namprd13.prod.outlook.com (2603:10b6:510:117::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.8; Thu, 9 Dec
- 2021 08:23:54 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::a01a:4940:c69a:e04c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::a01a:4940:c69a:e04c%9]) with mapi id 15.20.4778.012; Thu, 9 Dec 2021
- 08:23:54 +0000
-Date:   Thu, 9 Dec 2021 09:23:47 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, libaokun1@huawei.com,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        id S234717AbhLII17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:27:59 -0500
+Received: from mga05.intel.com ([192.55.52.43]:13327 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229654AbhLII15 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:27:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639038264; x=1670574264;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6A5AWQXLYiocr+OOBCSGB9FRLXfIpaB0p7w82EpjH9c=;
+  b=jwlcWxp/mAtt/X84CG2HSjTqCiwFz6JnqOyXNxv6cEDJqU4Mszmp0RFa
+   8u/y03E7qwbNzQ6sPLJ10qVD35kwnbcczxDFJstfIGXqJR6z361TB0kr+
+   ze6mEHiKn+ndePFhBhgJEdG/QtmT/5Zsffuh9N9VwSpHkrn23Pe28gG1x
+   rIX/bIACXXY2WBD8YcxP2Pn3VTXpKD7+hF1foJmjhz/fmQwD5VF6vACN+
+   RLPTrEqwf/DE/DccT5oXkbGCda3wzGlv1+B+WznpJ3/5EjBAcm9c9YAfs
+   NPGGnrq+wzpe9fDJQtQX3b+7/WUchVqqSBXaGHhWOehdWxZ008oFDM/Fl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="324306695"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="324306695"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 00:24:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="543515564"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 09 Dec 2021 00:24:13 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvEir-0001gM-4x; Thu, 09 Dec 2021 08:24:13 +0000
+Date:   Thu, 9 Dec 2021 16:24:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nfp: Fix memory leak in nfp_cpp_area_cache_add()
-Message-ID: <20211209082347.GC30443@corigine.com>
-References: <20211209061511.122535-1-niejianglei2021@163.com>
+Subject: [willy-pagecache:for-next 42/48] fs/f2fs/f2fs.h:4057:67: warning:
+ declaration of 'struct pagevec' will not be visible outside of this function
+Message-ID: <202112091651.l741qHlr-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209061511.122535-1-niejianglei2021@163.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: AM0PR04CA0064.eurprd04.prod.outlook.com
- (2603:10a6:208:1::41) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1786d4b2-fcf3-4dde-bb21-08d9baed3ce2
-X-MS-TrafficTypeDiagnostic: PH0PR13MB5716:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR13MB5716356B16DDC1EF87C7F21AE8709@PH0PR13MB5716.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n+BBqZctwCRKdYble9CHopawTaOGGXf8/8zG9TN3xprcU9PXIOEB7F3kXmyvMVPxp4SUHZ6Zzr0d6AikKQs7gvY7/iqhGaxy0a0y5DLPxeYoG4Xi4bsj0xeXLEqLF1qynEWQVsAOozY+iXXmwj2qkqIYiHEA3wUKqWWhrTSgA2ARNIZnVOpjLv3tzO8C7v0X2fukneIDOVmgitbmIlLVOGCrkuXQJLbp9SbNzbecWctSPCxvt4hoJ1KyQXRU1SwL0JdkZZ3rzvRXuupMSu7IGPAGrejvZ3zkqtLN5oXbBe8bjUSdy9twhebtxmzMMofJowB4p3VsEuSmGLI1pIsUv1pH8QzWyulpOl+9X9Iv7azquTro2BDqf08x54XCLVdS1hVdAjc6wBfIrotm4xabUwENtSOqflGvPuaadA7J4j2zRKptfEa2ETvpA3ekYRJgKuQCx/LrgsNtMPeNzZuSmBw2D3xyXqeA+O5Z4XH5KqBv76Aqk9uQ9xlddTCrH+iLg/Gl2RVhHzvfHO9Bl48uutZ84+A+zXXIT1r/xDQ8+U2WT5XYyMV/vZUu+yKPI6cjxpQzTtugM1GyZikCvZJ2C6jvRcjiuYVDssSJQsh/RbBFAbVSmpwZegWSMt5j5vLAOIZoFJUNpGu6HTpoZGkLmw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39830400003)(376002)(366004)(396003)(346002)(8676002)(8936002)(6486002)(38100700002)(508600001)(1076003)(44832011)(6512007)(33656002)(316002)(2906002)(83380400001)(36756003)(52116002)(66946007)(186003)(6506007)(6666004)(66476007)(2616005)(5660300002)(6916009)(4326008)(86362001)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o9gYQEMFeiPNGN73EbqimFvhPmFa3fdFSBAlasFAcCOKIPglp6zNvV4j/b/5?=
- =?us-ascii?Q?cWw9gAkMeHfvvEKA1Y//36IAmiQnq8LjysSfk8ZfDgRz/HX5jXkaRfrXzlE7?=
- =?us-ascii?Q?Vr6Qeig8FCx5no4thCc6TlVIhGdiQkO6mEWuKgJxzw+2Ip4ncAPgMDIoyWt3?=
- =?us-ascii?Q?mDJl/RzrXPqB3H6LBYD2PlB0Ndo96v4KZj1Q5XSfST5a1QcHXt0ysoFBd+Pm?=
- =?us-ascii?Q?vebXOp4MiePVW8rNgKcMiLEAC0F1PPBalz6CUL5uEzr9u5NJgCbClPe5szg4?=
- =?us-ascii?Q?/MTfWUBRdxUYTpl/H2cnNNpV5ntvoPSK+mi0W46YiflIkyH05ytQa53dtY+U?=
- =?us-ascii?Q?QC8UCDuQnUU4kaYHz0tQ/2gB9zYUO88UjZq9U3vAnNFPDp4fL8dJd48izImO?=
- =?us-ascii?Q?bqHkL2azDG/WP7IuMrNR6HxIf90IBIdVkWCrSss1m225kgVSmmCbCZTnQKTW?=
- =?us-ascii?Q?3/YVU5thR4UQhK49TCAh6wLn/FP/J1XSEnWmp3tZWF89KzvfOZ2ArdT/qrS3?=
- =?us-ascii?Q?8A4OF1R4rseiOtvt+GCvX6IpEjiduOvD85Ip8+YezuEVHOQ1wwczzbGoy96G?=
- =?us-ascii?Q?lIq1mpJnI00/0gCQfwVyqa+gZlAmzQ8nzFF3Tnv7STWfxLkjn76hhSr0yfre?=
- =?us-ascii?Q?3EbbNer9q8yJKB8ZCpibp9HJuwy/uOE8psw/Y1t5fyJlo+b2sJnDVPtD368D?=
- =?us-ascii?Q?l3eR5uFqXsyyhc11xi2osXl7E7yx/kAMkadCyUErEaoHwzwVMgFGwzBJrVJ8?=
- =?us-ascii?Q?MvB6xLApVh6ff7W9KGf4QHDlAN8aWwq4lgGndBeGmRefHVg/MtnmMWrR9luh?=
- =?us-ascii?Q?LKDU/z3kAG2P4LidL5/BAIDrD1erao8gVXY6ZNGrBiib4m0j5YK1SyEXXCTn?=
- =?us-ascii?Q?brHmsFBAhU3cYQaE7HecwXE6NPyE2F6EF2x0Nwxgd82/1JnpYGISHTEV94L1?=
- =?us-ascii?Q?ynfMMljlFzXZQPGDtKVdPxC6SZ6CE08EE5NDswwHSHRNbBOFq7Fb+NUga1YL?=
- =?us-ascii?Q?Cz6UgC5nbX6lwotQeHdlwDQRCmmnSTn1VuS38Znz/M0+ZzAj5Za6AYz5kAXr?=
- =?us-ascii?Q?/dw1m8UsRnO8qH2cSzkyxYwEDtVeoxoDHhLdmbGLqI89v4sPHnvHsQ1rgt8f?=
- =?us-ascii?Q?IdR5DQBbGIOK85oSqUTn8H/qPdF7Pz6y82dXriq+RInsknqMocMogiR+ekt6?=
- =?us-ascii?Q?+UBhC4nYZqNfAwY6ds8ILvgpWIiGk6F2S7FRXO5FAZd6VHtOIHfbaIKJHrzh?=
- =?us-ascii?Q?sMS+hD7KJrl12FyTdNrBsSgISrlwNZXUCOLx5WMLiHWLDxZhdM18l0qEntSb?=
- =?us-ascii?Q?8VPrNhnaJjZei125/+Nh63gCzYBgW0CSQlYo5yOapfc5ILhVOqudB8qzcGV6?=
- =?us-ascii?Q?nkneCOdRAr3NFA27+LnLVGY4mpm6vQR9E+eCBW553CwKWP3TEwLzP20+semh?=
- =?us-ascii?Q?l1scbpntITt1AMONQgPfsqf3uThkgwXfhxqNxcWCwk43Z2J09qw7oc09e6HG?=
- =?us-ascii?Q?wbnNRNNZP4VLHg2lvH5dBjqtMGwKQQXYbxe2fjoGHlFZD9iO4+qRSBUoIRK+?=
- =?us-ascii?Q?A4bJq9aKWBWt7DYm5jjFShL3sLRtIzchLnMwXmHIbULzQ64AhsiJwLX907En?=
- =?us-ascii?Q?dOMxIcDPmfqSFl+HQSlmSnmcrowlC3x985CgZ/sgxeibghc2iDaJsj/8R4XU?=
- =?us-ascii?Q?ROnHFwJG7Lltw5qxcQO8ibbzd61oHIr43aaNDy/tI38TnLsj6Pnm14DQk0CN?=
- =?us-ascii?Q?BzoagrpFF/icOWEDDKU5AnZQVccdGXo=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1786d4b2-fcf3-4dde-bb21-08d9baed3ce2
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 08:23:54.2029
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gq0ebpdxWzCmxbl1AvLaFU36EaXVpiqvDdftkaQ5pGEWWm/o6IMRMtjj7sDfF0riLbnkeVRZJl+o3s7lVi0MW+pBN2eCjQn72R6UmPCP9UU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianglei,
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   9244dddc51b5e46444a334c881372aa66138f74a
+commit: 3fda3cf387c172cc9a528b6556a024627c9843de [42/48] mm: Convert find_lock_entries() to use a folio_batch
+config: x86_64-randconfig-a013-20211207 (https://download.01.org/0day-ci/archive/20211209/202112091651.l741qHlr-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout 3fda3cf387c172cc9a528b6556a024627c9843de
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-On Thu, Dec 09, 2021 at 02:15:11PM +0800, Jianglei Nie wrote:
-> In line 800 (#1), nfp_cpp_area_alloc() allocates and initializes a
-> CPP area structure. But in line 807 (#2), when the cache is allocated
-> failed, this CPP area structure is not freed, which will result in
-> memory leak.
-> 
-> We can fix it by freeing the CPP area when the cache is allocated
-> failed (#2).
-> 
-> 792 int nfp_cpp_area_cache_add(struct nfp_cpp *cpp, size_t size)
-> 793 {
-> 794 	struct nfp_cpp_area_cache *cache;
-> 795 	struct nfp_cpp_area *area;
-> 
-> 800	area = nfp_cpp_area_alloc(cpp, NFP_CPP_ID(7, NFP_CPP_ACTION_RW, 0),
-> 801 				  0, size);
-> 	// #1: allocates and initializes
-> 
-> 802 	if (!area)
-> 803 		return -ENOMEM;
-> 
-> 805 	cache = kzalloc(sizeof(*cache), GFP_KERNEL);
-> 806 	if (!cache)
-> 807 		return -ENOMEM; // #2: missing free
-> 
-> 817	return 0;
-> 818 }
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for noticing this. I agree that this seems to be incorrect
-and that your patch addresses the problem.
+All warnings (new ones prefixed by >>):
 
-I do wonder if there is a value in adding:
+   In file included from fs/f2fs/dir.c:13:
+>> fs/f2fs/f2fs.h:4057:67: warning: declaration of 'struct pagevec' will not be visible outside of this function [-Wvisibility]
+   bool f2fs_all_cluster_page_loaded(struct compress_ctx *cc, struct pagevec *pvec,
+                                                                     ^
+   1 warning generated.
 
-Fixes: 4cb584e0ee7d ("nfp: add CPP access core")
 
-Also, as I don't think this is hurting anything in practice, perhaps
-this is for net-next (as oppoed to net), which is not specified
-in the patch subject.
+vim +4057 fs/f2fs/f2fs.h
 
-Regardless,
+4c8ff7095bef64 Chao Yu       2019-11-01  4036  
+4c8ff7095bef64 Chao Yu       2019-11-01  4037  /*
+4c8ff7095bef64 Chao Yu       2019-11-01  4038   * compress.c
+4c8ff7095bef64 Chao Yu       2019-11-01  4039   */
+4c8ff7095bef64 Chao Yu       2019-11-01  4040  #ifdef CONFIG_F2FS_FS_COMPRESSION
+4c8ff7095bef64 Chao Yu       2019-11-01  4041  bool f2fs_is_compressed_page(struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4042  struct page *f2fs_compress_control_page(struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4043  int f2fs_prepare_compress_overwrite(struct inode *inode,
+4c8ff7095bef64 Chao Yu       2019-11-01  4044  			struct page **pagep, pgoff_t index, void **fsdata);
+4c8ff7095bef64 Chao Yu       2019-11-01  4045  bool f2fs_compress_write_end(struct inode *inode, void *fsdata,
+4c8ff7095bef64 Chao Yu       2019-11-01  4046  					pgoff_t index, unsigned copied);
+3265d3db1f1639 Chao Yu       2020-03-18  4047  int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock);
+4c8ff7095bef64 Chao Yu       2019-11-01  4048  void f2fs_compress_write_end_io(struct bio *bio, struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4049  bool f2fs_is_compress_backend_ready(struct inode *inode);
+5e6bbde9598230 Chao Yu       2020-04-08  4050  int f2fs_init_compress_mempool(void);
+5e6bbde9598230 Chao Yu       2020-04-08  4051  void f2fs_destroy_compress_mempool(void);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4052  void f2fs_decompress_cluster(struct decompress_io_ctx *dic);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4053  void f2fs_end_read_compressed_page(struct page *page, bool failed,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4054  							block_t blkaddr);
+4c8ff7095bef64 Chao Yu       2019-11-01  4055  bool f2fs_cluster_is_empty(struct compress_ctx *cc);
+4c8ff7095bef64 Chao Yu       2019-11-01  4056  bool f2fs_cluster_can_merge_page(struct compress_ctx *cc, pgoff_t index);
+b368cc5e263411 Fengnan Chang 2021-10-22 @4057  bool f2fs_all_cluster_page_loaded(struct compress_ctx *cc, struct pagevec *pvec,
+b368cc5e263411 Fengnan Chang 2021-10-22  4058  				int index, int nr_pages);
+bbe1da7e34ac5a Chao Yu       2021-08-06  4059  bool f2fs_sanity_check_cluster(struct dnode_of_data *dn);
+4c8ff7095bef64 Chao Yu       2019-11-01  4060  void f2fs_compress_ctx_add_page(struct compress_ctx *cc, struct page *page);
+4c8ff7095bef64 Chao Yu       2019-11-01  4061  int f2fs_write_multi_pages(struct compress_ctx *cc,
+4c8ff7095bef64 Chao Yu       2019-11-01  4062  						int *submitted,
+4c8ff7095bef64 Chao Yu       2019-11-01  4063  						struct writeback_control *wbc,
+4c8ff7095bef64 Chao Yu       2019-11-01  4064  						enum iostat_type io_type);
+4c8ff7095bef64 Chao Yu       2019-11-01  4065  int f2fs_is_compressed_cluster(struct inode *inode, pgoff_t index);
+94afd6d6e52531 Chao Yu       2021-08-04  4066  void f2fs_update_extent_tree_range_compressed(struct inode *inode,
+94afd6d6e52531 Chao Yu       2021-08-04  4067  				pgoff_t fofs, block_t blkaddr, unsigned int llen,
+94afd6d6e52531 Chao Yu       2021-08-04  4068  				unsigned int c_len);
+4c8ff7095bef64 Chao Yu       2019-11-01  4069  int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
+4c8ff7095bef64 Chao Yu       2019-11-01  4070  				unsigned nr_pages, sector_t *last_block_in_bio,
+0683728adab251 Chao Yu       2020-02-18  4071  				bool is_readahead, bool for_write);
+4c8ff7095bef64 Chao Yu       2019-11-01  4072  struct decompress_io_ctx *f2fs_alloc_dic(struct compress_ctx *cc);
+7f59b277f79e8a Eric Biggers  2021-01-04  4073  void f2fs_decompress_end_io(struct decompress_io_ctx *dic, bool failed);
+7f59b277f79e8a Eric Biggers  2021-01-04  4074  void f2fs_put_page_dic(struct page *page);
+94afd6d6e52531 Chao Yu       2021-08-04  4075  unsigned int f2fs_cluster_blocks_are_contiguous(struct dnode_of_data *dn);
+4c8ff7095bef64 Chao Yu       2019-11-01  4076  int f2fs_init_compress_ctx(struct compress_ctx *cc);
+8bfbfb0ddd706b Chao Yu       2021-05-10  4077  void f2fs_destroy_compress_ctx(struct compress_ctx *cc, bool reuse);
+4c8ff7095bef64 Chao Yu       2019-11-01  4078  void f2fs_init_compress_info(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4079  int f2fs_init_compress_inode(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4080  void f2fs_destroy_compress_inode(struct f2fs_sb_info *sbi);
+31083031709eea Chao Yu       2020-09-14  4081  int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi);
+31083031709eea Chao Yu       2020-09-14  4082  void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi);
+c68d6c88302250 Chao Yu       2020-09-14  4083  int __init f2fs_init_compress_cache(void);
+c68d6c88302250 Chao Yu       2020-09-14  4084  void f2fs_destroy_compress_cache(void);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4085  struct address_space *COMPRESS_MAPPING(struct f2fs_sb_info *sbi);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4086  void f2fs_invalidate_compress_page(struct f2fs_sb_info *sbi, block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4087  void f2fs_cache_compressed_page(struct f2fs_sb_info *sbi, struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4088  						nid_t ino, block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4089  bool f2fs_load_compressed_page(struct f2fs_sb_info *sbi, struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4090  								block_t blkaddr);
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4091  void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi, nid_t ino);
+5ac443e26a0964 Daeho Jeong   2021-03-15  4092  #define inc_compr_inode_stat(inode)					\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4093  	do {								\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4094  		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);		\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4095  		sbi->compr_new_inode++;					\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4096  	} while (0)
+5ac443e26a0964 Daeho Jeong   2021-03-15  4097  #define add_compr_block_stat(inode, blocks)				\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4098  	do {								\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4099  		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);		\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4100  		int diff = F2FS_I(inode)->i_cluster_size - blocks;	\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4101  		sbi->compr_written_block += blocks;			\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4102  		sbi->compr_saved_block += diff;				\
+5ac443e26a0964 Daeho Jeong   2021-03-15  4103  	} while (0)
+4c8ff7095bef64 Chao Yu       2019-11-01  4104  #else
+4c8ff7095bef64 Chao Yu       2019-11-01  4105  static inline bool f2fs_is_compressed_page(struct page *page) { return false; }
+4c8ff7095bef64 Chao Yu       2019-11-01  4106  static inline bool f2fs_is_compress_backend_ready(struct inode *inode)
+4c8ff7095bef64 Chao Yu       2019-11-01  4107  {
+4c8ff7095bef64 Chao Yu       2019-11-01  4108  	if (!f2fs_compressed_file(inode))
+4c8ff7095bef64 Chao Yu       2019-11-01  4109  		return true;
+4c8ff7095bef64 Chao Yu       2019-11-01  4110  	/* not support compression */
+4c8ff7095bef64 Chao Yu       2019-11-01  4111  	return false;
+4c8ff7095bef64 Chao Yu       2019-11-01  4112  }
+4c8ff7095bef64 Chao Yu       2019-11-01  4113  static inline struct page *f2fs_compress_control_page(struct page *page)
+4c8ff7095bef64 Chao Yu       2019-11-01  4114  {
+4c8ff7095bef64 Chao Yu       2019-11-01  4115  	WARN_ON_ONCE(1);
+4c8ff7095bef64 Chao Yu       2019-11-01  4116  	return ERR_PTR(-EINVAL);
+4c8ff7095bef64 Chao Yu       2019-11-01  4117  }
+5e6bbde9598230 Chao Yu       2020-04-08  4118  static inline int f2fs_init_compress_mempool(void) { return 0; }
+5e6bbde9598230 Chao Yu       2020-04-08  4119  static inline void f2fs_destroy_compress_mempool(void) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4120  static inline void f2fs_decompress_cluster(struct decompress_io_ctx *dic) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4121  static inline void f2fs_end_read_compressed_page(struct page *page,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4122  						bool failed, block_t blkaddr)
+7f59b277f79e8a Eric Biggers  2021-01-04  4123  {
+7f59b277f79e8a Eric Biggers  2021-01-04  4124  	WARN_ON_ONCE(1);
+7f59b277f79e8a Eric Biggers  2021-01-04  4125  }
+7f59b277f79e8a Eric Biggers  2021-01-04  4126  static inline void f2fs_put_page_dic(struct page *page)
+7f59b277f79e8a Eric Biggers  2021-01-04  4127  {
+7f59b277f79e8a Eric Biggers  2021-01-04  4128  	WARN_ON_ONCE(1);
+7f59b277f79e8a Eric Biggers  2021-01-04  4129  }
+94afd6d6e52531 Chao Yu       2021-08-04  4130  static inline unsigned int f2fs_cluster_blocks_are_contiguous(struct dnode_of_data *dn) { return 0; }
+bbe1da7e34ac5a Chao Yu       2021-08-06  4131  static inline bool f2fs_sanity_check_cluster(struct dnode_of_data *dn) { return false; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4132  static inline int f2fs_init_compress_inode(struct f2fs_sb_info *sbi) { return 0; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4133  static inline void f2fs_destroy_compress_inode(struct f2fs_sb_info *sbi) { }
+31083031709eea Chao Yu       2020-09-14  4134  static inline int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi) { return 0; }
+31083031709eea Chao Yu       2020-09-14  4135  static inline void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi) { }
+c68d6c88302250 Chao Yu       2020-09-14  4136  static inline int __init f2fs_init_compress_cache(void) { return 0; }
+c68d6c88302250 Chao Yu       2020-09-14  4137  static inline void f2fs_destroy_compress_cache(void) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4138  static inline void f2fs_invalidate_compress_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4139  				block_t blkaddr) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4140  static inline void f2fs_cache_compressed_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4141  				struct page *page, nid_t ino, block_t blkaddr) { }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4142  static inline bool f2fs_load_compressed_page(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4143  				struct page *page, block_t blkaddr) { return false; }
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4144  static inline void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi,
+6ce19aff0b8cd3 Chao Yu       2021-05-20  4145  							nid_t ino) { }
+5ac443e26a0964 Daeho Jeong   2021-03-15  4146  #define inc_compr_inode_stat(inode)		do { } while (0)
+94afd6d6e52531 Chao Yu       2021-08-04  4147  static inline void f2fs_update_extent_tree_range_compressed(struct inode *inode,
+94afd6d6e52531 Chao Yu       2021-08-04  4148  				pgoff_t fofs, block_t blkaddr, unsigned int llen,
+94afd6d6e52531 Chao Yu       2021-08-04  4149  				unsigned int c_len) { }
+4c8ff7095bef64 Chao Yu       2019-11-01  4150  #endif
+4c8ff7095bef64 Chao Yu       2019-11-01  4151  
 
-Acked-by: Simon Horman <simon.horman@corigine.com>
+:::::: The code at line 4057 was first introduced by commit
+:::::: b368cc5e26341113453e7458f03cdfe0eeb84a40 f2fs: compress: fix overwrite may reduce compress ratio unproperly
 
-> ---
->  drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> index d7ac0307797f..34c0d2ddf9ef 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> @@ -803,8 +803,10 @@ int nfp_cpp_area_cache_add(struct nfp_cpp *cpp, size_t size)
->  		return -ENOMEM;
->  
->  	cache = kzalloc(sizeof(*cache), GFP_KERNEL);
-> -	if (!cache)
-> +	if (!cache) {
-> +		nfp_cpp_area_free(area);
->  		return -ENOMEM;
-> +	}
->  
->  	cache->id = 0;
->  	cache->addr = 0;
-> -- 
-> 2.25.1
-> 
+:::::: TO: Fengnan Chang <changfengnan@vivo.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,210 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C354446F246
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5384B46F269
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbhLIRo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:44:29 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:56712 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLIRo2 (ORCPT
+        id S236656AbhLIRtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233480AbhLIRtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:44:28 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4B42020B7179;
-        Thu,  9 Dec 2021 09:40:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4B42020B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639071654;
-        bh=lG2p6R/XZTNZndeGv27NBaWgsTundpjnu/MpNLg6rZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S3rqK/2bKDRyE/6yTZvRFfhZ6dsoNSo4MeNJ++vM0l7W+DbGy9he58+inq+tE8tKe
-         V4lEijv5RxdM7rRWYyP7zie/ModkeIxWKPqho1VhmsSk/vvgT11ja3hxvjDCAf2y9i
-         HR2b4td88SMXfR4sQZYzNQemE0nsPVOQeIf302BE=
-Date:   Thu, 9 Dec 2021 09:40:50 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20211209174050.GA21553@kbox>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
- <20211201182515.2446-3-beaub@linux.microsoft.com>
- <20211208181905.62f8f999@gandalf.local.home>
- <20211209005823.GA21399@kbox>
- <20211208210336.40c7741b@yoga.local.home>
+        Thu, 9 Dec 2021 12:49:09 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D42C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:45:35 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so6525755pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iIiD2tB1mZcC9000R3dPN0Ssy5fUgmj5OI6G5tIxfyQ=;
+        b=fW+wTj8NxqXzmqEv5QlWp2Qhp1wrUdcZ6JbL1FPSHnzDR4Gxe3dDW2vhhLUWduQwuo
+         qiDnm+BpjiZwf4I1gPplqveXGR/aIyMah8/6MaLzBgELzYHJy/Fr3+GDWR+cfiOMHOgB
+         543/NHKBnfpE3p8CmSK0ItrN12zBNXCHknhTLXqUtc8gNrXjzUU/MB4Svmbq0RfaLxDn
+         Qir80+jQTw1aEsCpWby/z0L5/CmZgCybgieqHFP1SKcIaHMSta2plOIskL17JEho/hG1
+         o3c3ewCGQwBuGn9EM0tIAvoWQqHGACjOX4oba696klIqN7M0UCFVXOKriezd0diKjSO5
+         Gp8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iIiD2tB1mZcC9000R3dPN0Ssy5fUgmj5OI6G5tIxfyQ=;
+        b=VHjLsYlSvGf55Vh7Lm4dWblnMDs7voFbv7OYqlEYkxOYiRr7eo+30BAbc04RPdMBz/
+         EqOB3NSvkGoRE+fjEYcqKXRLKLBweG1HCpFAnaB3RYyct5rX06h/vzmU2+SO/1MhE1fG
+         BjG2u5LZgDwhIToGkuFdNvKqpGHMmx4VV6+bY2UWHfKfcOqveXgscIqo3BCKYQEsY+ZP
+         6JEct3yWDzYLCWTK6WYU58eqlh/UqbgA/vsAMojEnBJ86ZyHM+NrefCWDJC1k5pjQKdR
+         I9dreAZ2gcZRcc1xlL0MEM8HlQBb6ONJXnjYGyoQ26cUujfrhU8XV9fy2eNuth6HuHdi
+         ugJA==
+X-Gm-Message-State: AOAM532uy2oOq2U2QLqwgJ8yytBvdeZnhlX9t4YPp8/pJ8y1N+J6u7Jh
+        7bN//lmupQKcWxc1t5d0ovY=
+X-Google-Smtp-Source: ABdhPJweZ2hQonU5W8DsUPavTDofIgmCkEal3JT8z/7rb0LDv8Qq6wHaWLE60MAv7AvYLlMAIOqeeQ==
+X-Received: by 2002:a17:902:ab14:b0:143:77d8:2558 with SMTP id ik20-20020a170902ab1400b0014377d82558mr68916770plb.54.1639071935399;
+        Thu, 09 Dec 2021 09:45:35 -0800 (PST)
+Received: from gnu-cfl-2.localdomain ([172.58.35.133])
+        by smtp.gmail.com with ESMTPSA id l6sm297867pfu.129.2021.12.09.09.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 09:45:35 -0800 (PST)
+Received: from gnu-tgl-2.localdomain (gnu-tgl-2 [192.168.1.34])
+        by gnu-cfl-2.localdomain (Postfix) with ESMTPS id 86CC942013E;
+        Thu,  9 Dec 2021 09:40:53 -0800 (PST)
+Received: from gnu-tgl-2.. (localhost [IPv6:::1])
+        by gnu-tgl-2.localdomain (Postfix) with ESMTP id 467C13003CA;
+        Thu,  9 Dec 2021 09:40:52 -0800 (PST)
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Chris Kennelly <ckennelly@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
+        David Rientjes <rientjes@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Hugh Dickens <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] fs/binfmt_elf: use PT_LOAD p_align values for static PIE
+Date:   Thu,  9 Dec 2021 09:40:52 -0800
+Message-Id: <20211209174052.370537-1-hjl.tools@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208210336.40c7741b@yoga.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 09:03:36PM -0500, Steven Rostedt wrote:
-> On Wed, 8 Dec 2021 16:58:23 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > >   
-> > > > +/*
-> > > > + * Handles the final close of the file from user mode.
-> > > > + */
-> > > > +static int user_events_release(struct inode *node, struct file
-> > > > *file) +{
-> > > > +	struct user_event_refs *refs;
-> > > > +	struct user_event *user;
-> > > > +	int i;
-> > > > +
-> > > > +	/*
-> > > > +	 * refs is protected by RCU and could in theory change
-> > > > immediately
-> > > > +	 * before this call on another core. To ensure we read
-> > > > the latest
-> > > > +	 * version of refs we acquire the RCU read lock again.
-> > > > +	 */
-> > > > +	rcu_read_lock_sched();
-> > > > +	refs = rcu_dereference_sched(file->private_data);
-> > > > +	rcu_read_unlock_sched();  
-> > > 
-> > > This still bothers me. Can another CPU call an ioctl here?  
-> > 
-> > Sorry :)
-> > 
-> > No, another CPU cannot call the ioctl on the file, since if another
-> > CPU had a reference to this file release couldn't be called.
-> 
-> OK, so it should be good, as the last fdput() will call this (and the
-> ioctl should keep that from happening until its done). But this could
-> also be done with less confusion and less paranoia if we simply take
-> the reg_mutex, as that should keep everything from changing, and we
-> wouldn't need to do any rcu_read_lock*() from the release function.
-> 
+Extend
 
-Sure, could do that. This shouldn't be a fast path scenario, however
-I dislike taking global locks when not required. Happy to change this
-though.
+commit ce81bb256a224259ab686742a6284930cbe4f1fa
+Author: Chris Kennelly <ckennelly@google.com>
+Date:   Thu Oct 15 20:12:32 2020 -0700
 
-I'm guessing for less confusion and paranoia you'd want the lock held
-for the entire method call?
+    fs/binfmt_elf: use PT_LOAD p_align values for suitable start address
 
-> > 
-> > user_events_release is only called when the final reference to the
-> > file has been closed, so there cannot be another ioctl pending,
-> > starting or finishing for this file at the time it is called.
-> > 
-> > The last user mode program to call close() on the file will end up
-> > invoking user_events_release.
-> 
-> It doesn't work like that. There's only one close(). But you are
-> correct that it is protected, and that's by the fdget() and fdput()
-> that is done within the ioctl (and other) system call.
-> 
+which fixed PIE binaries built with -Wl,-z,max-page-size=0x200000, to
+cover static PIE binaries.  This fixes:
 
-Yeah, I simplified to user space. IE: fork() then close() in each
-process / task. We both understand each other now though ;)
+https://bugzilla.kernel.org/show_bug.cgi?id=215275
 
-> > 
-> > The user_event_refs is only accessible via the file's private_data,
-> > which now has zero references when release is executing. This means
-> > the private_data can no longer change and the rcu deref ensures we
-> > have the latest version.
-> > 
-> > refs is per-file, so while there can be other ioctl's occurring for
-> > other files, they are completely different ref objects than the one
-> > being cleaned up in the release of the file, it's not shared outside
-> > of this file lifetime, which has now ended.
-> 
-> Right, but I'm still paranoid ;-)
-> 
-> > 
-> > > 
-> > >   user_events_ioctl_reg() {
-> > >     user_events_ref_add() {
-> > >       refs = rcu_dereference_protected(file->private_data, ..);
-> > >       new_refs = kzalloc(size, GFP_KERNEL);
-> > >       rcu_assign_pointer(file->private_data, new_refs);
-> > >       if (refs)
-> > >         kfree_rcu(refs, rcu);
-> > > 
-> > > refs now freed.
-> > >   
-> > 
-> > If user_events_ioctl is executing for that same file,
-> > user_events_release could not have been called due to the file being
-> > in use to issue the ioctl.
-> 
-> 
-> The only thing protecting against this is the fdget/put logic in the
-> system calls.
-> 
+Tested by verifying static PIE binaries with -Wl,-z,max-page-size=0x200000
+loading.
 
-Yes, however, it is protected.
+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+---
+ fs/binfmt_elf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > 
-> > > > +
-> > > > +	if (!refs)
-> > > > +		goto out;
-> > > > +
-> > > > +	/*
-> > > > +	 * Do not need RCU while enumerating the events that
-> > > > were used.
-> > > > +	 * The lifetime of refs has reached an end, it's tied to
-> > > > this file.
-> > > > +	 * The underlying user_events are ref counted, and
-> > > > cannot be freed.
-> > > > +	 * After this decrement, the user_events may be freed
-> > > > elsewhere.
-> > > > +	 */
-> > > > +	for (i = 0; i < refs->count; ++i) {  
-> > > 
-> > > Fault on refs->count
-> > > 
-> > > ??  
-> > 
-> > refs after rcu_dereference is checked for null before accessing.
-> > 
-> > refs cannot be changed when release is being executed, since that
-> > would mean the ioctl ran without a file reference (not sure how that
-> > could happen).
-> > 
-> > This is why it's important that release get the latest version of
-> > refs, an ioctl could have JUST happened before the final close() in
-> > user mode, and if it jumped CPUs we could (in theory) get an old
-> > value. If we got an old value, then yes, the fault could occur.
-> > 
-> > This code uses the file ops release method as a final sync point to
-> > clean up everything for that file only after there are no more
-> > references to it at all, so nobody can do this kind of thing.
-> > 
-> > Is there some case I am missing where an ioctl on a file can be
-> > performed without a reference to that file?
-> 
-> 
-> Well, the ioctl can be called as the close happens, but it's the
-> internal working of fdget/put that protects it. If the ioctl is called
-> at the same time as the close, the fdget in the ioctl will keep the
-> close from calling the release. And as soon as the ioctl is finished,
-> it will call the fdput() which then calls the release logic.
-> 
-> > 
-> > Are you worried about a malicious user calling close on the file and
-> > then immediately issuing an ioctl on the now closed file?
-> > 
-> > If so, wouldn't ioctl just reject that file reference being used as
-> > not in the processes file table / invalid and not let the ioctl go
-> > through?
-> > 
-> 
-> I think it seems less confusing and saner to just use the mutex. It's
-> not a fast path is it?
-> 
-> -- Steve
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index a813b70f594e..bd78587194dc 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1110,11 +1110,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			 * independently randomized mmap region (0 load_bias
+ 			 * without MAP_FIXED).
+ 			 */
+-			if (interpreter) {
++			alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
++			if (alignment > ELF_MIN_ALIGN) {
+ 				load_bias = ELF_ET_DYN_BASE;
+ 				if (current->flags & PF_RANDOMIZE)
+ 					load_bias += arch_mmap_rnd();
+-				alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
+ 				if (alignment)
+ 					load_bias &= ~(alignment - 1);
+ 				elf_flags |= MAP_FIXED;
+-- 
+2.33.1
 
-No, this is not a fast path, and I don't have a problem moving to a
-mutex if you feel that is better. I've likely become too close to this
-code to know when things are confusing for others.
-
-Thanks,
--Beau

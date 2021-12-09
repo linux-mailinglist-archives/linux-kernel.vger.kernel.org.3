@@ -2,115 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3A046F475
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E86246F47D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbhLIUCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhLIUCK (ORCPT
+        id S231408AbhLIUEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:04:06 -0500
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:50920 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231391AbhLIUEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:02:10 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D184C061746;
-        Thu,  9 Dec 2021 11:58:36 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m27so14055176lfj.12;
-        Thu, 09 Dec 2021 11:58:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uM+eFXoWiWetPTI10tceV6UBa9/7Dufz9K7yclEKlI0=;
-        b=oCqfCY2JIiJilttvVZHOauO6ECOE6Afie3ANJ3X5Vr0i3pfRV1nmwcCXijTzpzh9wY
-         bi7YBYlkFbKiFcSgZo6cBhenPCTubiN4V9FPUJ9YZIioT9j2O9Ixln1xN+qIsClVc1Do
-         +EKXvKKkUfWEDljaIXjhfucZxW8ta+H202606N8GoTjulMKAhQHNkQrvYT0I4NVbHFuF
-         H09hKK9k/McDAYEwxAzbKUirIj//T9cNDM4e/JI1yrhhnARSjTRVBGyYCEgijek8tPWU
-         6DIeF4/ceATr4ZALuEnwXMssodFcxmS/7XWya+Q5QpoFNR5WTWntKlGUtjYW/1ct97d0
-         2DuA==
+        Thu, 9 Dec 2021 15:04:05 -0500
+Received: by mail-wm1-f45.google.com with SMTP id 133so5192235wme.0;
+        Thu, 09 Dec 2021 12:00:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uM+eFXoWiWetPTI10tceV6UBa9/7Dufz9K7yclEKlI0=;
-        b=tQBH3a4MEB7Kg+fwC+XVmSdeJ3orUqSQEKlWGI5e5/xyJYbJZJ1XJHXdJ2PlanikJo
-         ita77HJQPUAr+YeqO4WKBPIg1WoJqtKm9rnjE17rMIpHe2dz2Kg0nZ0F0hnFNND14VgT
-         edAVGwpdfF9eLK3ZyyIPViiyDyJpXIWSiZrc669/QIaFe2Zj8yp/uZZolrJoeMZUqpbU
-         mQSlVoLwMr29RLI1m+sOpd6C5cyn7BDob+maA0pjRG3ZxzTwskxHWh2u8tlKnO0zSMd6
-         Bdr2n6JNwAQHhIz/8w4L148jAOAbBckkFUJ9VuemRJNVIrBxz43klLrxYYPhXz2Y6n6x
-         84Gw==
-X-Gm-Message-State: AOAM530c17LJcvPMYJY5kYaKa3/cZIeE78csrCfssnB85WGr2trFF4tv
-        dc75albGnyYi1B2e8JL7v5Wh4VpmcGI=
-X-Google-Smtp-Source: ABdhPJx7I+soYFAg27UyyMF614X5ml5K/O6igAuGctXo8HGNaRIcXOQdKsUNc8fVwmt4dOF//1/+rw==
-X-Received: by 2002:a05:6512:32c1:: with SMTP id f1mr1252953lfg.85.1639079914011;
-        Thu, 09 Dec 2021 11:58:34 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id y11sm83212ljh.54.2021.12.09.11.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 11:58:33 -0800 (PST)
-Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
- debugfs
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     thierry.reding@gmail.com, joro@8bytes.org, will@kernel.org,
-        vdumpa@nvidia.com, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20211209073822.26728-1-nicolinc@nvidia.com>
- <20211209073822.26728-7-nicolinc@nvidia.com>
- <63b4c2e2-0e55-5701-4c45-70684c7e058e@gmail.com>
- <20211209192450.GA34762@Asurada-Nvidia>
- <fab11209-a579-bbfb-a701-e613cecabd56@gmail.com>
- <20211209195450.GB35526@Asurada-Nvidia>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <520bc232-7173-dc28-2d81-6b0f42773bc8@gmail.com>
-Date:   Thu, 9 Dec 2021 22:58:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gbPA524UXn7VLl57ldF8UrIDv0OwWD8ZPIHj4sbJMHY=;
+        b=c5/a4RF+Pa+qj4tA1e1a6HHwsdRFPTz5H2DxosPSkw6agG8jQG0v25oS3Zvcs5eUHj
+         y8VF+w+pQE30EIwiqsaRYPhoVUt/wPTkfSP76VE01pVVt32FMBq7QOzV+0T79peCow0i
+         N7mFGVfxP4UA3q8+qvytw4xRBOHrn+XY9l3qK58I800qYvveF6m/8cZ2zIzEMvKIcByP
+         V8H6hbN3DcfLI0jTdxR+r9gZfzyOuYBWFeagBTj1foF9Qaw1kG7YiJzAhw7/PAmBljF0
+         sF2VVUeLMI50erAvXzuNB2eBXeKQd7KD7MxftjoC7M9+C6JbYWp5lWf5MVBidtFUYNBz
+         3w5Q==
+X-Gm-Message-State: AOAM531S36qanfwTzEmVhjBIxbD0Lj2jf2G2M85lLV3I6UBGrXwC6/o7
+        Spd62AvkLa8ILD/dlNFBeBU=
+X-Google-Smtp-Source: ABdhPJx6sMuEBLALN8hgbd7SLjIKAmBQ8tdQEFM4sJ8pcNaZlwU0Ti2nIO/OgD6qvG//K7wC7NF3pg==
+X-Received: by 2002:a1c:20d3:: with SMTP id g202mr9954102wmg.129.1639080030214;
+        Thu, 09 Dec 2021 12:00:30 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id e8sm617025wrr.26.2021.12.09.12.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 12:00:29 -0800 (PST)
+Date:   Thu, 9 Dec 2021 21:00:28 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH v2 1/1] PCI: Introduce pci_bus_*() printing macros when
+ device is not available
+Message-ID: <YbJgXKf6NkbHgy5A@rocinante>
+References: <20211209182711.28709-1-andriy.shevchenko@linux.intel.com>
+ <411886e9e89f797d3f9513245f94b2a5f4a33e7d.camel@perches.com>
+ <YbJaFM0vlkdTwxUS@smile.fi.intel.com>
+ <47d32a2f648281c6a1731266d1a5d00da3d1a875.camel@perches.com>
 MIME-Version: 1.0
-In-Reply-To: <20211209195450.GB35526@Asurada-Nvidia>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <47d32a2f648281c6a1731266d1a5d00da3d1a875.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-09.12.2021 22:54, Nicolin Chen пишет:
-> On Thu, Dec 09, 2021 at 10:44:25PM +0300, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 09.12.2021 22:24, Nicolin Chen пишет:
->>> On Thu, Dec 09, 2021 at 05:49:09PM +0300, Dmitry Osipenko wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> 09.12.2021 10:38, Nicolin Chen пишет:
->>>>> +static unsigned long pd_pt_index_iova(unsigned int pd_index, unsigned int pt_index)
->>>>> +{
->>>>> +     return (pd_index & (SMMU_NUM_PDE - 1)) << SMMU_PDE_SHIFT |
->>>>> +            (pt_index & (SMMU_NUM_PTE - 1)) << SMMU_PTE_SHIFT;
->>>>> +}
->>>>
->>>> I'd change the return type to u32 here, for consistency.
->>>
->>> The whole file defines iova using "unsigned long", which I see
->>> as the consistency... If we change it to u32, it'd be probably
->>> necessary to change all iova types to u32 too... So I'd rather
->>> keep it "unsigned long" here. If you see a big necessity to do
->>> that, an additional patch would be nicer IMHO.
->>>
->>
->> In general IOVA is "unsigned long", of course. But in case of Tegra
->> SMMU, we know that is always u32.
->>
->> Alright, I see now that there are other places in the driver code that
->> use "unsigned long", so need to change it in this patch.
-> 
-> I think we should do that in a separate patch that changes the iova
-> type in the entire tegra-smmu file. I can add one in this series, if
-> this makes you happy...
-> 
+Hi Andy and Joe,
 
-Please keep it "unsigned long", no need for extra patches.
+[...]
+> > > > +#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
+> > > > +	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
+> > > > +	       pci_domain_nr(bus), bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
+> > > 
+> > > I have a small preference for using ... and __VA_ARGS___
+> > 
+> > It contradicts what other macros in the pci.h do.
+> > So I will stick with current solution for the sake of consistency.
+> 
+> There's always this possibility.
+> 
+> And this: (cheers)
+> ---
+>  include/linux/pci.h | 58 ++++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 33 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 0ce26850470ef..1dc34f6eaeda7 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -2456,30 +2456,38 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+>  /* Provide the legacy pci_dma_* API */
+>  #include <linux/pci-dma-compat.h>
+>  
+> -#define pci_printk(level, pdev, fmt, arg...) \
+> -	dev_printk(level, &(pdev)->dev, fmt, ##arg)
+> -
+> -#define pci_emerg(pdev, fmt, arg...)	dev_emerg(&(pdev)->dev, fmt, ##arg)
+> -#define pci_alert(pdev, fmt, arg...)	dev_alert(&(pdev)->dev, fmt, ##arg)
+> -#define pci_crit(pdev, fmt, arg...)	dev_crit(&(pdev)->dev, fmt, ##arg)
+> -#define pci_err(pdev, fmt, arg...)	dev_err(&(pdev)->dev, fmt, ##arg)
+> -#define pci_warn(pdev, fmt, arg...)	dev_warn(&(pdev)->dev, fmt, ##arg)
+> -#define pci_notice(pdev, fmt, arg...)	dev_notice(&(pdev)->dev, fmt, ##arg)
+> -#define pci_info(pdev, fmt, arg...)	dev_info(&(pdev)->dev, fmt, ##arg)
+> -#define pci_dbg(pdev, fmt, arg...)	dev_dbg(&(pdev)->dev, fmt, ##arg)
+> -
+> -#define pci_notice_ratelimited(pdev, fmt, arg...) \
+> -	dev_notice_ratelimited(&(pdev)->dev, fmt, ##arg)
+> -
+> -#define pci_info_ratelimited(pdev, fmt, arg...) \
+> -	dev_info_ratelimited(&(pdev)->dev, fmt, ##arg)
+> -
+> -#define pci_WARN(pdev, condition, fmt, arg...) \
+> -	WARN(condition, "%s %s: " fmt, \
+> -	     dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+> -
+> -#define pci_WARN_ONCE(pdev, condition, fmt, arg...) \
+> -	WARN_ONCE(condition, "%s %s: " fmt, \
+> -		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+> +#define pci_printk(level, pdev, fmt, ...)				\
+> +	dev_printk(level, &(pdev)->dev, fmt, ##__VA_ARGS__)
+> +
+> +#define pci_emerg(pdev, fmt, ...)					\
+> +	dev_emerg(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_alert(pdev, fmt, ...)					\
+> +	dev_alert(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_crit(pdev, fmt, ...)					\
+> +	dev_crit(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_err(pdev, fmt, ...)						\
+> +	dev_err(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_warn(pdev, fmt, ...)					\
+> +	dev_warn(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_notice(pdev, fmt, ...)					\
+> +	dev_notice(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_info(pdev, fmt, ...)					\
+> +	dev_info(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_dbg(pdev, fmt, ...)						\
+> +	dev_dbg(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +
+> +#define pci_notice_ratelimited(pdev, fmt, ...)				\
+> +	dev_notice_ratelimited(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +#define pci_info_ratelimited(pdev, fmt, ...)				\
+> +	dev_info_ratelimited(&(pdev)->dev, fmt, ##__VA_ARGS__)
+> +
+> +#define pci_WARN(pdev, condition, fmt, ...)				\
+> +	WARN(condition, "%s %s: " fmt,					\
+> +	     dev_driver_string(&(pdev)->dev), pci_name(pdev),		\
+> +	     ##__VA_ARGS__)
+> +#define pci_WARN_ONCE(pdev, condition, fmt, ...)			\
+> +	WARN_ONCE(condition, "%s %s: " fmt,				\
+> +		  dev_driver_string(&(pdev)->dev), pci_name(pdev),	\
+> +		  ##__VA_ARGS__)
+>  
+>  #endif /* LINUX_PCI_H */
+
+I think both things look nice!
+
+So perhaps meet in-between here?  Two patches in a small series: one adds
+new useful macros from Andy, and the other updates current macros as per
+Joe's feedback/preference?  I am sure Bjorn wouldn't mind (hopefully).
+
+	Krzysztof

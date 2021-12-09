@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3AA46E39A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F24346E39D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbhLIIDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:03:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42972 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhLIIDg (ORCPT
+        id S234187AbhLIIEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229590AbhLIIEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:03:36 -0500
+        Thu, 9 Dec 2021 03:04:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC54C061746;
+        Thu,  9 Dec 2021 00:00:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB1CBCE245C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 08:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E5C004DD;
-        Thu,  9 Dec 2021 07:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639036800;
-        bh=6si4EnigSjUiEWLkIW5cwTlJeEt38NNMe4X31kf7bk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JRyK3oRx2hgMK4sU4zNzpiQu/vBQno7yDEc2Ww2W6Z7MnJ3zkqEtV1lYYio0j4Jeq
-         nCvNJRyzTJ+CsExT3SdGXzb2M+1ebgGJfVYzHuwZifOV9gBPmjA/t/LuhXnUdTmmUJ
-         CBoyzSHM1I3PY9D9k42ZotA8BBDEkt5ICp+T/5Vw=
-Date:   Thu, 9 Dec 2021 08:59:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_QueryDrv()
-Message-ID: <YbG3fUhdDp7cezk8@kroah.com>
-References: <20211209073421.126251-1-niejianglei2021@163.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA57FB8235C;
+        Thu,  9 Dec 2021 08:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AAAC341C8;
+        Thu,  9 Dec 2021 08:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639036826;
+        bh=q8TudegaWlJbIRiG/KH/x6Pllk5BBrnfUfWzUhhSnpI=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=tYgfBsfMSP7ePJBz01USbUmB+h7cn1kiJMAxltd5f4a3W+dEAisDAwgJfQcbnuy2D
+         yA9RcuHlHf25RnyjyW1S89VqTT390L5DySgXbRZq0apyfFT7Iirh7bEQ4T+KLavslz
+         2u5fcSjQ/bDnfh4hYiW/7R5xxikUabW8HTuHj/kix4HNLUFuwCGg8l3BVVF3IJDZKX
+         C4ohUMjlDuIEqnAXXrtRSoOXAELjCKdxPEGIIFfZaS/shSHHgRowOVHU05ul3kuJ8d
+         Cpeoqp8L4/4pRlFO0cKdzqHP5NoA7yynfRt7fNL7qggWd0vfXM/Qk6klD5st+nF9Qd
+         4KlWVXN9iv8CA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209073421.126251-1-niejianglei2021@163.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] ath6kl: Use struct_group() to avoid size-mismatched
+ casting
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211207063538.2767954-1-keescook@chromium.org>
+References: <20211207063538.2767954-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163903682322.20904.826653912822578576.kvalo@kernel.org>
+Date:   Thu,  9 Dec 2021 08:00:24 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 03:34:21PM +0800, Jianglei Nie wrote:
-> Line 6183 (#1) allocates a memory chunk for input by kmalloc().
-> Line 6204 (#3) frees the input before the function returns while
-> line 6190 (#2) forget to free it, which will lead to a memory leak.
-> 
-> We should kfree() input in line 6190 (#2).
-> 
-> 6177 static int rtw_mp_QueryDrv(struct net_device *dev,
-> 6178 			struct iw_request_info *info,
-> 6179 			union iwreq_data *wrqu, char *extra)
-> 6180 {
-> 6182	char	*input = kmalloc(wrqu->data.length, GFP_KERNEL);
-> 	// #1: kmalloc space
-> 
-> 6186	if (!input)
-> 6187		return -ENOMEM;
-> 
-> 6189 	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
-> 6190 			return -EFAULT; // #2: missing kfree
-> 
-> 6204 	kfree(input); // #3: kfree space
-> 6205 	return 0;
-> 6206 }
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> index 1fd375076001..0524523910f0 100644
-> --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> @@ -6186,8 +6186,11 @@ static int rtw_mp_QueryDrv(struct net_device *dev,
->  	if (!input)
->  		return -ENOMEM;
->  
-> -	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length))
-> -			return -EFAULT;
-> +	if (copy_from_user(input, wrqu->data.pointer, wrqu->data.length)) {
-> +		kfree(input);
-> +		return -EFAULT;
-> +	}
-> +
->  	DBG_88E("%s:iwpriv in =%s\n", __func__, input);
->  
->  	qAutoLoad = strncmp(input, "autoload", 8); /*  strncmp true is 0 */
-> -- 
-> 2.25.1
-> 
-> 
+Kees Cook <keescook@chromium.org> wrote:
 
-Again, what tree are you making this patch against?  This function is no
-longer present.
+> In builds with -Warray-bounds, casts from smaller objects to larger
+> objects will produce warnings. These can be overly conservative, but since
+> -Warray-bounds has been finding legitimate bugs, it is desirable to turn
+> it on globally. Instead of casting a u32 to a larger object, redefine
+> the u32 portion of the header to a separate struct that can be used for
+> both u32 operations and the distinct header fields. Silences this warning:
+> 
+> drivers/net/wireless/ath/ath6kl/htc_mbox.c: In function 'htc_wait_for_ctrl_msg':
+> drivers/net/wireless/ath/ath6kl/htc_mbox.c:2275:20: error: array subscript 'struct htc_frame_hdr[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Werror=array-bounds]
+>  2275 |         if (htc_hdr->eid != ENDPOINT_0)
+>       |                    ^~
+> drivers/net/wireless/ath/ath6kl/htc_mbox.c:2264:13: note: while referencing 'look_ahead'
+>  2264 |         u32 look_ahead;
+>       |             ^~~~~~~~~~
+> 
+> This change results in no executable instruction differences.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Also, when sending more than one patch for the same driver, always make
-a patch series so we know what order they should be applied in.
+Patch applied to ath-next branch of ath.git, thanks.
 
-thanks,
+e3128a9d482c ath6kl: Use struct_group() to avoid size-mismatched casting
 
-greg k-h
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211207063538.2767954-1-keescook@chromium.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

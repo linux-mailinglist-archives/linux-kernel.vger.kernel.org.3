@@ -2,136 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7C646E115
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F241F46E118
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbhLIDDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhLIDDK (ORCPT
+        id S231222AbhLIDEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:04:33 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:65311 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229446AbhLIDEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:03:10 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6232C061746;
-        Wed,  8 Dec 2021 18:59:37 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y12so14645970eda.12;
-        Wed, 08 Dec 2021 18:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s0iRZAJ4YKfdAHbCWbg2s44QSJbfVQdVDell+AQzpQQ=;
-        b=AcljCbXq84DxP1SMjAsfM4nlekaEQe0jEbXR0eHqnmlF08NcDtXWjcd0/9mivZwKUU
-         Wqb0+WkkdrYP9m2+FI0BJKbH1lVlGpIyadD+MFE+7ak02uuhhFevzkAMFaeo+C4Ipv6K
-         +3JvfURLdLffYNRKXNdudJ5i0ThuzFXMRK4nvFLWGmI/JkIJ0N3PrqeklDIzhYgMf4Sx
-         V+VNHtlm4xAoafvPvxBH0I96Xuy848NzKr9iklLt+QOC+kXGA/N6jkSp+zn5buvsvSv6
-         posExISe+kv/vInhCKJBfAP6V9sIbU+yivETPchOScnfpRqwmfVzWljAl677FAnk8ljB
-         nQYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s0iRZAJ4YKfdAHbCWbg2s44QSJbfVQdVDell+AQzpQQ=;
-        b=rBTKE2eFrlNZ2E+b2Wpc/bdXcwiTt+euWaEubVlFNOT0iICD2ibpjj9dpWG7Sn3Hr0
-         /NNgBB0c1PvYCVD0+O7XssaAJ4kY9g5U4w3bizpLudpSWCnCgDPJwIDPzok9PgEMCycJ
-         YcBbITUY0kRgqkjq49FoOTTHF0DElYj6ihyAccfJBuDSGm2mi0icwZiEWP9Xs4gHei2w
-         1UAlvuqx1cc5WO3GDCoyg2iZL9SKxytnly0PiLW5V+ege4udjvMCc6XU9YvLKKWM9zL4
-         aqw7ab+IHll8OUIMv2V1FlaCJgI8n5mhCoM59DatrfR5oqgqJ5NeZFSy8If97mTtdsaX
-         TUEg==
-X-Gm-Message-State: AOAM533vIJOW/0G0nCBz6OqP5+jYm7pOSS0ZMyBnu8klzEMuG36kJADk
-        fw7BQoaO9PhqTykkCEx2OAMkc/et3js=
-X-Google-Smtp-Source: ABdhPJwcx+23NVamz0UYD/td4FOYKfyKsT14Z0PyK5sBAansT9MNh5zDYifZpGibBubQHrTFN4Nnsg==
-X-Received: by 2002:a17:906:f0d4:: with SMTP id dk20mr12154207ejb.257.1639018773762;
-        Wed, 08 Dec 2021 18:59:33 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id w23sm2834208edr.19.2021.12.08.18.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 18:59:33 -0800 (PST)
-Message-ID: <61b17115.1c69fb81.40795.b778@mx.google.com>
-X-Google-Original-Message-ID: <YbFxE3GS/deJLstO@Ansuel-xps.>
-Date:   Thu, 9 Dec 2021 03:59:31 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH v2 0/8] Add support for qca8k mdio rw in
- Ethernet packet
-References: <20211208034040.14457-1-ansuelsmth@gmail.com>
- <20211208123222.pcljtugpq5clikhq@skbuf>
- <61b0c239.1c69fb81.9dfd0.5dc2@mx.google.com>
- <20211208145341.degqvm23bxc3vo7z@skbuf>
+        Wed, 8 Dec 2021 22:04:32 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V-.bdvL_1639018857;
+Received: from 30.21.164.175(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0V-.bdvL_1639018857)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 09 Dec 2021 11:00:58 +0800
+Message-ID: <67f08ec2-4121-d025-013d-915ee23ca369@linux.alibaba.com>
+Date:   Thu, 9 Dec 2021 11:00:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208145341.degqvm23bxc3vo7z@skbuf>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
+ <20211207031217-mutt-send-email-mst@kernel.org>
+ <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
+ <20211208021947-mutt-send-email-mst@kernel.org>
+ <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
+ <20211208191239-mutt-send-email-mst@kernel.org>
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+In-Reply-To: <20211208191239-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:53:41PM +0200, Vladimir Oltean wrote:
-> On Wed, Dec 08, 2021 at 03:33:27PM +0100, Ansuel Smith wrote:
-> > > But there are some problems with offering a "master_going_up/master_going_down"
-> > > set of callbacks. Specifically, we could easily hook into the NETDEV_PRE_UP/
-> > > NETDEV_GOING_DOWN netdev notifiers and transform these into DSA switch
-> > > API calls. The goal would be for the qca8k tagger to mark the
-> > > Ethernet-based register access method as available/unavailable, and in
-> > > the regmap implementation, to use that or the other. DSA would then also
-> > > be responsible for calling "master_going_up" when the switch ports and
-> > > master are sufficiently initialized that traffic should be possible.
-> > > But that first "master_going_up" notification is in fact the most
-> > > problematic one, because we may not receive a NETDEV_PRE_UP event,
-> > > because the DSA master may already be up when we probe our switch tree.
-> > > This would be a bit finicky to get right. We may, for instance, hold
-> > > rtnl_lock for the entirety of dsa_tree_setup_master(). This will block
-> > > potentially concurrent netdevice notifiers handled by dsa_slave_nb.
-> > > And while holding rtnl_lock() and immediately after each dsa_master_setup(),
-> > > we may check whether master->flags & IFF_UP is true, and if it is,
-> > > synthesize a call to ds->ops->master_going_up(). We also need to do the
-> > > reverse in dsa_tree_teardown_master().
-> > 
-> > Should we care about holding the lock for that much time? Will do some
-> > test hoping the IFF_UP is sufficient to make the Ethernet mdio work.
-> 
-> I'm certainly not smart enough to optimize things, so I'd rather hold
-> the rtnl_lock for as long as I'm comfortable is enough to avoid races.
-> The reason why we must hold rtnl_lock is because during
-> dsa_master_setup(), the value of netdev_uses_dsa(dp->master) changes
-> from false to true.
-> The idea is that if IFF_UP isn't set right now, no problem, release the
-> lock and we'll catch the NETDEV_UP notifier when that will appear.
-> But we want to
-> (a) replay the master up state if it was already up while it wasn't a
->     DSA master
-> (b) avoid a potential race where the master does go up, we receive that
->     notification, but netdev_uses_dsa() doesn't yet return true for it.
-> 
-> The model would be similar to what we have for the NETDEV_GOING_DOWN
-> handler.
-> 
-> Please wait for me to finish the sja1105 conversion. There are some
-> issues I've noticed in your connect/disconnect implementation that I
-> haven't had a chance to comment on, yet. I've tested ocelot-8021q plus
-> the tagging protocol change and these appear fine.
-> I'd like to post the changes I have, to make sure that what works for me
-> works for you, and what works for you works for me. I may also have some
-> patches laying around that track the master up/down state (I needed
-> those for some RFC DSA master change patches). I'll build a mini patch
-> series and post it soon-ish.
 
-Anyway just as an info, I implemented also the mib handler and it does
-work correctly. Vladimir implementation works just good and it seems
-pretty clean with the tagger used only to implement stuff and the driver
-to do the ""dirty"" work.
 
-But anyway for this kind of transaction, we really need a way to track
-when it's possible to use it. We need to polish that. Just to not mix
-things I will had my comments in the other series about tracking master
-up.
+在 2021/12/9 上午8:19, Michael S. Tsirkin 写道:
+[snip]
+>>>>>>
+>>>> Hi, Michael
+>>>>
+>>>> Thanks for the comment, unfortunately modify device is not an option for us
+>>>> :-(
+>>>>
+>>>> Is there any idea on how to solve this issue properly?
+>>>>
+>>>> Regards,
+>>>> Michael Wang
+>>>
+>>> By the way, there is a bug in the error message. Want to fix that?
+>>
+>> Could you please provide more detail about the bug? We'd like to help fixing
+>> it :-)
+>>
+>> Besides, I've checked that patch but it can't address our issue, we actually
+>> have this legacy pci device on arm platform, and the memory layout is
+>> unfriendly since allocation rarely providing page-address below 44bit, we
+>> understand the virtio-iommu case should not do force dma, while we don't
+>> have that so it's just working fine.
+>>
+>> Regards,
+>> Michael Wang
+> 
+> BTW is it just the ring that's at issue?
 
--- 
-	Ansuel
+Yes, the dma address for ring allocated as page can't fit the requirement.
+
+> Figuring out we have this problematic config and then allocating just
+> the ring from coherent memory seems more palatable.
+
+Agree, I'm also wondering why can't we force alloc 44bit-pfn page to fit 
+the requirement? I mean if there are such pages, we should use them 
+firstly as dma address for legacy devices, and only fail when there are 
+no such pages at all, but can't find existing API to alloc page with 
+such requirement... anyway.
+
+> 
+> But please note we still need to detect config with a virtual iommu (can
+> be any kind not just virtio-iommu, smmu, vtd are all affected) and
+> disable the hacks. This is what the new DMA API I suggested would do.
+
+Fair enough, any more details about the design of new API?
+
+Regards,
+Michael Wang
+
+
+> 
+> 
+>>>
+>>>
+>>>>>
+>>>>>> ---
+>>>>>>     drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
+>>>>>>     drivers/virtio/virtio_ring.c       |  3 +++
+>>>>>>     include/linux/virtio.h             |  1 +
+>>>>>>     3 files changed, 14 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
+>>>>>> b/drivers/virtio/virtio_pci_legacy.c
+>>>>>> index d62e983..11f2ebf 100644
+>>>>>> --- a/drivers/virtio/virtio_pci_legacy.c
+>>>>>> +++ b/drivers/virtio/virtio_pci_legacy.c
+>>>>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
+>>>>>> *vp_dev)
+>>>>>>     	vp_dev->setup_vq = setup_vq;
+>>>>>>     	vp_dev->del_vq = del_vq;
+>>>>>>
+>>>>>> +	/*
+>>>>>> +	 * The legacy pci device requre 32bit-pfn vq,
+>>>>>> +	 * or setup_vq() will failed.
+>>>>>> +	 *
+>>>>>> +	 * Thus we make sure vring_use_dma_api() will
+>>>>>> +	 * return true during the allocation by marking
+>>>>>> +	 * force_dma here.
+>>>>>> +	 */
+>>>>>> +	vp_dev->vdev.force_dma = true;
+>>>>>> +
+>>>>>>     	return 0;
+>>>>>>
+>>>>>>     err_iomap:
+>>>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>>>>>> index 3035bb6..6562e01 100644
+>>>>>> --- a/drivers/virtio/virtio_ring.c
+>>>>>> +++ b/drivers/virtio/virtio_ring.c
+>>>>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
+>>>>>> virtqueue *_vq,
+>>>>>>
+>>>>>>     static bool vring_use_dma_api(struct virtio_device *vdev)
+>>>>>>     {
+>>>>>> +	if (vdev->force_dma)
+>>>>>> +		return true;
+>>>>>> +
+>>>>>>     	if (!virtio_has_dma_quirk(vdev))
+>>>>>>     		return true;
+>>>>>>
+>>>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+>>>>>> index 41edbc0..a4eb29d 100644
+>>>>>> --- a/include/linux/virtio.h
+>>>>>> +++ b/include/linux/virtio.h
+>>>>>> @@ -109,6 +109,7 @@ struct virtio_device {
+>>>>>>     	bool failed;
+>>>>>>     	bool config_enabled;
+>>>>>>     	bool config_change_pending;
+>>>>>> +	bool force_dma;
+>>>>>>     	spinlock_t config_lock;
+>>>>>>     	spinlock_t vqs_list_lock; /* Protects VQs list access */
+>>>>>>     	struct device dev;
+>>>>>> -- 
+>>>>>> 1.8.3.1

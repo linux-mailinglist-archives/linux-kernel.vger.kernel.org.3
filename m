@@ -2,377 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFF946F7C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D577346F7C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbhLJABI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbhLJABH (ORCPT
+        id S234666AbhLJAC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:02:56 -0500
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:20816 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232985AbhLJACz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:01:07 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75ACC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:57:33 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id 193so6360213qkh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 15:57:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uki05wBt2Curw3Rk1sCic8HVPmQ/onh9arpdABDNhZE=;
-        b=Lx73rRhgsqhUQaq2ygcCUymM7fIcuNnfcFeVbUxwD4LvPpxCgPAdvZ+us2j5P0S0jG
-         qhNF9BmUY0cqiJcxQX/H4oxcFCz4hRaYAJD7ARBi58y7PGyKnMRXut/xnqbwbmOogJx1
-         rQkDuM1oiyGSNkU/IoqhRxoxesnfzWKAwbBBA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uki05wBt2Curw3Rk1sCic8HVPmQ/onh9arpdABDNhZE=;
-        b=H7NWhjHk62d/tMijLrULh9g1tvoTHm+gBi4+NMn+oCMP5+bCl7w7IyqZruhW7cIpqx
-         q8vLyEsOHwc1ALn2QomA3maIpgShXKDgqhE4ZNNxSlR638X9M3AnpzQVCeWCFJ4RSMST
-         7x5Mf1AY0KhSYmiMe3nbGRae40e0sNMiFAwpHpuERDvo9AmXsEO58Cn3v2O6OxgsxurO
-         JGkTujNZzMXyAxYLHcZnZRdm6B8w4e7gPevaJ1DxYT0AhPZ4K3Abhh4TSBln8aPtCaYo
-         0T8OGzUXngRDHnqR7ihKsFup5Pgshdu8GYGFzTzr6xYok/YptrWweJ+eAkpVZ3EjXxUd
-         FhUg==
-X-Gm-Message-State: AOAM532OIHC62Ncr2YGgSAe9UzAJCTTHsaAQtf1d2veGFo+JdRzBImP4
-        3mviC9ZP3OqxNfdislz6E6hB2QfO/L6Z2IiFdAGhNg==
-X-Google-Smtp-Source: ABdhPJxoC/884U4HksLH+wuiXs0WNjfeYhB0s6I4Zf+ZCyxoMZNQDfLnuG+wprFJ15I8geJzMLWy+Mi42/aX2oXvpjU=
-X-Received: by 2002:a05:620a:4446:: with SMTP id w6mr17194393qkp.273.1639094252842;
- Thu, 09 Dec 2021 15:57:32 -0800 (PST)
+        Thu, 9 Dec 2021 19:02:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1639094361; x=1670630361;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cnkxM+v3e7Rw5Wac6Yp3jXRam56qrhimBukSct1R/EI=;
+  b=PQcofmeAVXwpVMJipAQFEfHRzXVRIg0dXTz+Uok5pNx1KUkKl06BNtoi
+   F273Hnj6FDuGf7hkoh1gypPICEErCeSbbEoMGJ18bbOHX0pZ+7WTjHGTT
+   /ia05XbdODK/3GAmrUCvhiexMitSpKtv0oqCVGWTDFtgjaqvz6ydMvH9b
+   MSrWwgc31rEx9n8Or2xKXywLtnJcblpsEJ+jIGbh8Y4nALGGKkzf2RxHx
+   1XUkX7rKM/jM0eEQMZCo39IlXAFJGBHtBJlWRqcvZHTc1EE5en2wxGD8M
+   mJpZnZ+6ik5ApZpL/dt/++SfOCHiHX9KZqvyvidklFKvt5mPYpGChL7cU
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,194,1635177600"; 
+   d="scan'208";a="299733816"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 07:59:21 +0800
+IronPort-SDR: VpaQEO8iOZRWh64tA5dpqU6fzgBUcH4GWTQSOF1+ZI9+uN8zqs6Bh9Uoo5JyL6FOUlEXAmnoYT
+ CaQragXYXUEjdmoY3l4pNh72xwuZ6MOXCMjqJRLMDmArNib4O2QdmNItIz8S7uAHVhgt6plmEC
+ dVIX/YEwVWC6VoPP+3zUEG5XCw6YVzjF7DY4wAmXG2E98HJQJWrDznn7VyQyv01DjaXBRRhLoD
+ 6V51XN0xuwIuUMDfPmYT4k3s8oFimQ6g6YGOv6WArJ0Iba/OWIk+g6jZi63WEtTNTtdlB0tkEe
+ jkoKuNZ9YwV+gM0WffgoA4HU
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:32:22 -0800
+IronPort-SDR: qlICnACCR3RQnT3j1BJWoxOdwmJN45bR6fk3I8BuYv71aWcD4oN/TK55BpatB6YutkfQNLI+fg
+ XwzY1RllIN9GqxYrG3tEEpusqzdnpVkGhI5IZt58weZkCtCDrAu3WT7tfHfJnPwzqjKHKQnx9+
+ YruNW3MdxpgcCoNv4h9x+XWkE8W8Fjb+mtIoyA0diVZo6Gujlsqe20CXVW107B0MiCVQKc8+AJ
+ uzqs7XX6pl/EiLzsENWA/LczJ2qbriwRkZaqkVZQTPcfle/96XpzxDbymioXkUyMBBF6+o4/xp
+ fK8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:59:22 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J99xN4b3Fz1Rwvk
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:59:20 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:subject:to:from; s=dkim; t=1639094359;
+         x=1641686360; bh=cnkxM+v3e7Rw5Wac6Yp3jXRam56qrhimBukSct1R/EI=; b=
+        QQ2lIM0w8R5/FXjkEH0OugTtSDERPVkfLnsvK1UEfiTOtWgcTpfIjHLxj2tWf84/
+        NwirDS1cU3ZjutIIkIafGap0mT4LMuZ9EBEaWidR5Nhww14V+8gSsnJjm7hcZ5tB
+        CfJQGyo+NlKCCgM9unnCFZB2XByLQG+XuqM6vnx7oQ6xsgl0B0msEawD/TDjdSY/
+        VBJ7zsXib3uiLqBuCqf9ODs4iSkKMFXfvPzbF0LrUPpqnk2FrbsNQoZV7u/S52xB
+        6xKAGhJsGSjoC7MBKfULXVGUWoigq/qzga02Q8ReibV7N3TDRWLc8iw0gA2/NCUi
+        fMsPG8TGV0RMASQDC59NxQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id l1Kjq4rT-1mn for <linux-kernel@vger.kernel.org>;
+        Thu,  9 Dec 2021 15:59:19 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.225.165.65])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J99x959wWz1RtVG;
+        Thu,  9 Dec 2021 15:59:09 -0800 (PST)
+From:   Alistair Francis <alistair.francis@opensource.wdc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     dave@stgolabs.net, dvhart@infradead.org, arnd@arndb.de,
+        alistair23@gmail.com, namhyung@kernel.org, acme@kernel.org,
+        jolsa@redhat.com, linux-perf-users@vger.kernel.org,
+        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
+        mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
+        Alistair Francis <alistair.francis@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        linux-riscv@lists.infradead.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH v5 1/6] perf bench futex: Add support for 32-bit systems with 64-bit time_t
+Date:   Fri, 10 Dec 2021 09:58:52 +1000
+Message-Id: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211202034544.2750-1-yunfei.dong@mediatek.com> <20211202034544.2750-16-yunfei.dong@mediatek.com>
-In-Reply-To: <20211202034544.2750-16-yunfei.dong@mediatek.com>
-From:   Steve Cho <stevecho@chromium.org>
-Date:   Thu, 9 Dec 2021 15:57:22 -0800
-Message-ID: <CAC-pXoNYXSoL0L8OEoVg+tU1JoMU5VU-voXNKQD1is0HBYmT_A@mail.gmail.com>
-Subject: Re: [PATCH v12, 15/19] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for mt8192
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Steve Cho <stevecho@chromium.org>
+From: Alistair Francis <alistair.francis@wdc.com>
 
-On Wed, Dec 1, 2021 at 7:46 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
->
-> Adds decoder dt-bindings for mt8192.
+Some 32-bit architectures (such are 32-bit RISC-V) only have a 64-bit
+time_t and as such don't have the SYS_futex syscall. This patch will
+allow us to use the SYS_futex_time64 syscall on those platforms.
 
-basic question: what is dt-bindings?
+This also converts the futex calls to be y2038 safe (when built for a
+5.1+ kernel).
 
-Is this yaml file supposed to be used for some settings?
+This is a revert of commit ba4026b09d83acf56c040b6933eac7916c27e728
+"Revert "perf bench futex: Add support for 32-bit systems with 64-bit tim=
+e_t"".
 
->
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  .../media/mediatek,vcodec-subdev-decoder.yaml | 266 ++++++++++++++++++
->  1 file changed, 266 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
->
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> new file mode 100644
-> index 000000000000..67cbcf8b3373
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -0,0 +1,266 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Mediatek Video Decode Accelerator With Multi Hardware
+The original commit was reverted as including linux/time_types.h would
+fail to compile on older kernels. This commit doesn't include
+linux/time_types.h to avoid this issue.
 
-Is Multi Hardware supposed to mean parent & child devices in this context?
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alistair Francis <alistair23@gmail.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-riscv@lists.infradead.org
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+---
+ tools/perf/bench/futex.h | 52 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 3 deletions(-)
 
-> +
-> +maintainers:
-> +  - Yunfei Dong <yunfei.dong@mediatek.com>
-> +
-> +description: |
-> +  Mediatek Video Decode is the video decode hardware present in Mediatek
-> +  SoCs which supports high resolution decoding functionalities. Required
-> +  parent and child device node.
-> +
-> +  About the Decoder Hardware Block Diagram, please check below:
+diff --git a/tools/perf/bench/futex.h b/tools/perf/bench/futex.h
+index ebdc2b032afc..385d2bdfaa9f 100644
+--- a/tools/perf/bench/futex.h
++++ b/tools/perf/bench/futex.h
+@@ -8,6 +8,7 @@
+ #ifndef _FUTEX_H
+ #define _FUTEX_H
+=20
++#include <errno.h>
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ #include <sys/types.h>
+@@ -28,7 +29,17 @@ struct bench_futex_parameters {
+ };
+=20
+ /**
+- * futex_syscall() - SYS_futex syscall wrapper
++ * This is copied from linux/time_types.h.
++ * We copy this here to avoid compilation failures when running
++ * on systems that don't ship with linux/time_types.h.
++ */
++struct __kernel_old_timespec {
++	__kernel_old_time_t	tv_sec;		/* seconds */
++	long			tv_nsec;	/* nanoseconds */
++};
++
++/**
++ * futex_syscall() - __NR_futex syscall wrapper
+  * @uaddr:	address of first futex
+  * @op:		futex op code
+  * @val:	typically expected value of uaddr, but varies by op
+@@ -49,14 +60,49 @@ static inline int
+ futex_syscall(volatile u_int32_t *uaddr, int op, u_int32_t val, struct t=
+imespec *timeout,
+ 	      volatile u_int32_t *uaddr2, int val3, int opflags)
+ {
+-	return syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, va=
+l3);
++#if defined(__NR_futex_time64)
++	if (sizeof(*timeout) !=3D sizeof(struct __kernel_old_timespec)) {
++		int ret =3D syscall(__NR_futex_time64, uaddr, op | opflags, val, timeo=
+ut,
++				  uaddr2, val3);
++	if (ret =3D=3D 0 || errno !=3D ENOSYS)
++		return ret;
++	}
++#endif
++
++#if defined(__NR_futex)
++	if (sizeof(*timeout) =3D=3D sizeof(struct __kernel_old_timespec))
++		return syscall(__NR_futex, uaddr, op | opflags, val, timeout, uaddr2, =
+val3);
++
++	if (timeout && timeout->tv_sec =3D=3D (long)timeout->tv_sec) {
++		struct __kernel_old_timespec ts32;
++
++		ts32.tv_sec =3D (__kernel_long_t) timeout->tv_sec;
++		ts32.tv_nsec =3D (__kernel_long_t) timeout->tv_nsec;
++
++		return syscall(__NR_futex, uaddr, op | opflags, val, ts32, uaddr2, val=
+3);
++	} else if (!timeout) {
++		return syscall(__NR_futex, uaddr, op | opflags, val, NULL, uaddr2, val=
+3);
++	}
++#endif
++
++	errno =3D ENOSYS;
++	return -1;
+ }
+=20
+ static inline int
+ futex_syscall_nr_requeue(volatile u_int32_t *uaddr, int op, u_int32_t va=
+l, int nr_requeue,
+ 			 volatile u_int32_t *uaddr2, int val3, int opflags)
+ {
+-	return syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2,=
+ val3);
++#if defined(__NR_futex_time64)
++	int ret =3D  syscall(__NR_futex_time64, uaddr, op | opflags, val, nr_re=
+queue,
++			   uaddr2, val3);
++	if (ret =3D=3D 0 || errno !=3D ENOSYS)
++		return ret;
++#endif
++
++#if defined(__NR_futex)
++	return syscall(__NR_futex, uaddr, op | opflags, val, nr_requeue, uaddr2=
+, val3);
++#endif
+ }
+=20
+ /**
+--=20
+2.31.1
 
-Great to see this diagram and description!
-
-
-> +
-> +    +---------------------------------+------------------------------------+
-> +    |                                 |                                    |
-> +    | input -> lat HW -> lat buffer --|--> lat buffer -> core HW -> output |
-> +    |            ||                   |                     ||             |
-> +    +------------||-------------------+---------------------||-------------+
-> +              lat workqueue           |              core workqueue     <parent>
-> +    -------------||-----------------------------------------||------------------
-> +                 ||                                         ||          <child>
-> +                 \/ <----------------HW index-------------->\/
-> +           +------------------------------------------------------+
-> +           |                    enable/disable                    |
-> +           |           clk     power    irq    iommu              |
-> +           |                 (lat/lat soc/core0/core1)            |
-> +           +------------------------------------------------------+
-> +
-> +  As above, there are parent and child devices, child mean each hardware. The child device
-> +  controls the information of each hardware independent which include clk/power/irq.
-> +
-> +  There are two workqueues in parent device: lat workqueue and core workqueue. They are used
-> +  to lat and core hardware deocder. Lat workqueue need to get input bitstream and lat buffer,
-> +  then enable lat to decode, writing the result to lat buffer, dislabe hardware when lat decode
-> +  done. Core workqueue need to get lat buffer and output buffer, then enable core to decode,
-> +  writing the result to output buffer, disable hardware when core decode done. These two
-> +  hardwares will decode each frame cyclically.
-> +
-> +  For the smi common may not the same for each hardware, can't combine all hardware in one node,
-> +  or leading to iommu fault when access dram data.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8192-vcodec-dec
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  iommus:
-> +    minItems: 1
-> +    maxItems: 32
-> +    description: |
-> +      List of the hardware port in respective IOMMU block for current Socs.
-> +      Refer to bindings/iommu/mediatek,iommu.yaml.
-> +
-> +  mediatek,scp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
-> +    description: |
-> +      The node of system control processor (SCP), using
-> +      the remoteproc & rpmsg framework.
-> +      $ref: /schemas/remoteproc/mtk,scp.yaml
-> +
-> +  dma-ranges:
-> +    maxItems: 1
-> +    description: |
-> +      Describes the physical address space of IOMMU maps to memory.
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +# Required child node:
-> +patternProperties:
-> +  vcodec-lat:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mtk-vcodec-lat
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      iommus:
-> +        minItems: 1
-> +        maxItems: 32
-> +        description: |
-> +          List of the hardware port in respective IOMMU block for current Socs.
-> +          Refer to bindings/iommu/mediatek,iommu.yaml.
-> +
-> +      clocks:
-> +        maxItems: 5
-> +
-> +      clock-names:
-> +        items:
-> +          - const: sel
-> +          - const: soc-vdec
-> +          - const: soc-lat
-> +          - const: vdec
-> +          - const: top
-> +
-> +      assigned-clocks:
-> +        maxItems: 1
-> +
-> +      assigned-clock-parents:
-> +        maxItems: 1
-> +
-> +      power-domains:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - interrupts
-> +      - iommus
-> +      - clocks
-> +      - clock-names
-> +      - assigned-clocks
-> +      - assigned-clock-parents
-> +      - power-domains
-> +
-> +    additionalProperties: false
-> +
-> +  vcodec-core:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mtk-vcodec-core
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      iommus:
-> +        minItems: 1
-> +        maxItems: 32
-> +        description: |
-> +          List of the hardware port in respective IOMMU block for current Socs.
-> +          Refer to bindings/iommu/mediatek,iommu.yaml.
-> +
-> +      clocks:
-> +        maxItems: 5
-> +
-> +      clock-names:
-> +        items:
-> +          - const: sel
-> +          - const: soc-vdec
-> +          - const: soc-lat
-> +          - const: vdec
-> +          - const: top
-> +
-> +      assigned-clocks:
-> +        maxItems: 1
-> +
-> +      assigned-clock-parents:
-> +        maxItems: 1
-> +
-> +      power-domains:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - interrupts
-> +      - iommus
-> +      - clocks
-> +      - clock-names
-> +      - assigned-clocks
-> +      - assigned-clock-parents
-> +      - power-domains
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - iommus
-> +  - mediatek,scp
-> +  - dma-ranges
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8192-larb-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8192-clk.h>
-> +    #include <dt-bindings/power/mt8192-power.h>
-> +
-> +    video-codec@16000000 {
-> +        compatible = "mediatek,mt8192-vcodec-dec";
-> +        mediatek,scp = <&scp>;
-> +        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-> +        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges = <0 0x16000000 0x40000>;
-> +        reg = <0x16000000 0x1000>;             /* VDEC_SYS */
-> +        vcodec-lat@10000 {
-> +            compatible = "mediatek,mtk-vcodec-lat";
-> +            reg = <0x10000 0x800>;
-> +            interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-> +            iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-> +                <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-> +            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-> +                <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-> +                <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-> +                <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-> +                <&topckgen CLK_TOP_MAINPLL_D4>;
-> +            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-> +            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-> +            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-> +            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-> +        };
-> +
-> +        vcodec-core@25000 {
-> +            compatible = "mediatek,mtk-vcodec-core";
-> +            reg = <0x25000 0x1000>;
-> +            interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-> +            iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-> +                <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-> +            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-> +                <&vdecsys CLK_VDEC_VDEC>,
-> +                <&vdecsys CLK_VDEC_LAT>,
-> +                <&vdecsys CLK_VDEC_LARB1>,
-> +                <&topckgen CLK_TOP_MAINPLL_D4>;
-> +            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-> +            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-> +            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-> +            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-> +        };
-> +    };
-> --
-> 2.25.1
->

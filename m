@@ -2,93 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A4346F608
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A6B46F60A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbhLIVi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:38:59 -0500
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:44776 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLIVi6 (ORCPT
+        id S232787AbhLIVkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhLIVkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:38:58 -0500
-Received: by mail-lj1-f182.google.com with SMTP id 13so10954880ljj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:35:24 -0800 (PST)
+        Thu, 9 Dec 2021 16:40:01 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B0C061746;
+        Thu,  9 Dec 2021 13:36:28 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id k26so6590847pfp.10;
+        Thu, 09 Dec 2021 13:36:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o1f5T8aJYiDFkPJGm5beIMpQSieyUomju95E5CcKuz4=;
+        b=ZBlxHwH+aqEQxGw2i5VvMNtWuSPGovMDhxOUuZH1P9ObzPxOxbSRA4fNP+nuC65R0L
+         rpZ7woeTeFz8B8vhe8uJu6lCDE7ueal3Qgg6Y2YhzgGtfRvoqqt9oI4417bdl0r1WUVv
+         JV/XCpzSfC+j5OnY/VABwVObGXoXCxIPCByl+vsCGlPYxoCT7anX0ckGXz7QdPTwoL1y
+         VmAVNv6INCQMJxFInU/U2D98VzosuUWYpzqcRPSr/Rjag46e1qblE1sPD5tIEmN+Ciic
+         rPh8CppMxCCwnSisRnacwHTQHWnyAhLmJYKHy0MNr6VSLCSb8nsXP+LTA8iUf+Q+uE/D
+         mVYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r5o60uPlMh9x9rL/ch8a5b+l+nPNHn/QhOTHrxdY54w=;
-        b=f4oYLmb43bMWF/6Sv0fVa27IaSHQL0TQdgVjX5F9LeoxliQidj9lErGpeYl1vlWYF2
-         ZzBq1pl15/jAQNylFeQ3srP4Mdu7OjKRAf9KWBa4Unb2yb9BWjidAYZ0L7tMhV9lujbF
-         HTH/aYQ47GGOeMklVxeH7TH+nzQApXDGomHv+kdhCUiLTEVxSuEvbKlaQY9etGhxDUiu
-         /GvNE+LFxr2PQWKBxDVjhehRVlkZYlcvpL1jeqCtBDdCXCcj14kCVSOF5LLwUXTiUrkl
-         17JQjSX4nWhmiGnMAb77EKHRdH3i+goaLqwcEjTKzKGwoFDqUCj4NSFGGmHY4pLWnlt6
-         LdpA==
-X-Gm-Message-State: AOAM532JrncDUQZNyNWU7SqO+hrbSmTU9A1ZkS7FQwaa4uQzNDmcKa8E
-        f0XbOJFHv/EhxDUoIQVnRlN2K88GwqaB2OafJHc=
-X-Google-Smtp-Source: ABdhPJwXCN9vQTakxO/GvcP55yxF3t04jytCizMXLKjTEG0fCmRlCGdRpB+m/et0SNOgwi0uLh1kZK35L2ZffHvW0iU=
-X-Received: by 2002:a2e:5450:: with SMTP id y16mr9110144ljd.241.1639085723807;
- Thu, 09 Dec 2021 13:35:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o1f5T8aJYiDFkPJGm5beIMpQSieyUomju95E5CcKuz4=;
+        b=PucN/As35/VPaTe19sDGZbNRwgxhug7zPyFCkVPs8ecWuci4lnFHs7Vjd9qbekjksr
+         tFo5i/fDF07BA/N9JgVAFWD1sQFSMdapWVsAqStpLXDETZR0grsjvAppHfoqr6qmXk0J
+         Yr8CJkfV97r1rYKSh1CWanPALStRIr2IVAnl5JSYvbEhKlT0IVB37lQV5jcNWY8dX/Hq
+         mwL6pXwwk4aHalp3z9paZp+0iY48x7lTQK8Tp49f+BiOLtQYYZrTn0M5eXzzN1aw/28y
+         QE9mNJ35sQ6TNaz6Wo70f+dHIK+YsWsscnLcaNJ+SkL7s1hb0AVt5/Hp3bahIpWAQEbC
+         tzhQ==
+X-Gm-Message-State: AOAM531x1y7ZV9dnGAtyfHv0SH/ObhipSmsutbuWh/PuPphe21Db5YDg
+        jdqjiuZMOGc/i53MSpo6D7A=
+X-Google-Smtp-Source: ABdhPJyy+D33tn5Oxeg6fJbQgVTZifb2VrNtJGQeZ+6RV4lN+LN/z1nHVEmtP97rkY+fTQbKa5V0lg==
+X-Received: by 2002:a63:a0b:: with SMTP id 11mr37431492pgk.282.1639085787613;
+        Thu, 09 Dec 2021 13:36:27 -0800 (PST)
+Received: from localhost.localdomain ([103.238.105.137])
+        by smtp.gmail.com with ESMTPSA id ot18sm574453pjb.14.2021.12.09.13.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 13:36:27 -0800 (PST)
+From:   Vihas Mak <makvihas@gmail.com>
+To:     bhelgaas@google.com, lukas@wunner.de
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vihas Mak <makvihas@gmail.com>
+Subject: [PATCH] pci: ibmphp: removed the commented-out functions
+Date:   Fri, 10 Dec 2021 03:06:18 +0530
+Message-Id: <20211209213618.20522-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211205224843.1503081-1-namhyung@kernel.org> <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
-In-Reply-To: <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 9 Dec 2021 13:35:11 -0800
-Message-ID: <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 3:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
->
-> > Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
-> > have a negative enabled time.  In fact, bperf keeps values returned by
-> > bpf_perf_event_read_value() which calls perf_event_read_local(), and
-> > accumulates delta between two calls.  When event->shadow_ctx_time is
-> > not set, it'd return invalid enabled time which is bigger than normal.
->
-> *that*, how does it happen that shadow_time isn't set? It should be last
-> set when the event switches to INACTIVE, no?
+The functions get_max_adapter_speed() and get_bus_name() in
+ibmphp_core.c are commented-out and the fields .get_max_adapter_speed
+and .get_bus_name_status are removed from struct hotplug_slot_ops in
+pci_hotplug.h. Remove the commented-out functions.
 
-As you can see, perf_event_set_state() doesn't set the shadow time.
-It's called from event_sched_in() which might result in ACTIVE or
-INACTIVE.  But the problem is that there's a case that event_sched_in
-was not called at all - when group_can_go_on() returns false.
+Signed-off-by: Vihas Mak <makvihas@gmail.com>
+---
+ drivers/pci/hotplug/TODO          |  5 ---
+ drivers/pci/hotplug/ibmphp_core.c | 74 -------------------------------
+ 2 files changed, 79 deletions(-)
 
-> At which point the logic in
-> perf_event_read_local() should make @enabled move forward while @running
-> stays put.
+diff --git a/drivers/pci/hotplug/TODO b/drivers/pci/hotplug/TODO
+index cc6194aa2..88f217c82 100644
+--- a/drivers/pci/hotplug/TODO
++++ b/drivers/pci/hotplug/TODO
+@@ -30,11 +30,6 @@ ibmphp:
+   or ibmphp should store a pointer to its bus in struct slot.  Probably the
+   former.
+ 
+-* The functions get_max_adapter_speed() and get_bus_name() are commented out.
+-  Can they be deleted?  There are also forward declarations at the top of
+-  ibmphp_core.c as well as pointers in ibmphp_hotplug_slot_ops, likewise
+-  commented out.
+-
+ * ibmphp_init_devno() takes a struct slot **, it could instead take a
+   struct slot *.
+ 
+diff --git a/drivers/pci/hotplug/ibmphp_core.c b/drivers/pci/hotplug/ibmphp_core.c
+index 17124254d..197997e26 100644
+--- a/drivers/pci/hotplug/ibmphp_core.c
++++ b/drivers/pci/hotplug/ibmphp_core.c
+@@ -50,14 +50,6 @@ static int irqs[16];    /* PIC mode IRQs we're using so far (in case MPS
+ 
+ static int init_flag;
+ 
+-/*
+-static int get_max_adapter_speed_1 (struct hotplug_slot *, u8 *, u8);
+-
+-static inline int get_max_adapter_speed (struct hotplug_slot *hs, u8 *value)
+-{
+-	return get_max_adapter_speed_1 (hs, value, 1);
+-}
+-*/
+ static inline int get_cur_bus_info(struct slot **sl)
+ {
+ 	int rc = 1;
+@@ -401,69 +393,6 @@ static int get_max_bus_speed(struct slot *slot)
+ 	return rc;
+ }
+ 
+-/*
+-static int get_max_adapter_speed_1(struct hotplug_slot *hotplug_slot, u8 *value, u8 flag)
+-{
+-	int rc = -ENODEV;
+-	struct slot *pslot;
+-	struct slot myslot;
+-
+-	debug("get_max_adapter_speed_1 - Entry hotplug_slot[%lx] pvalue[%lx]\n",
+-						(ulong)hotplug_slot, (ulong) value);
+-
+-	if (flag)
+-		ibmphp_lock_operations();
+-
+-	if (hotplug_slot && value) {
+-		pslot = hotplug_slot->private;
+-		if (pslot) {
+-			memcpy(&myslot, pslot, sizeof(struct slot));
+-			rc = ibmphp_hpc_readslot(pslot, READ_SLOTSTATUS,
+-						&(myslot.status));
+-
+-			if (!(SLOT_LATCH (myslot.status)) &&
+-					(SLOT_PRESENT (myslot.status))) {
+-				rc = ibmphp_hpc_readslot(pslot,
+-						READ_EXTSLOTSTATUS,
+-						&(myslot.ext_status));
+-				if (!rc)
+-					*value = SLOT_SPEED(myslot.ext_status);
+-			} else
+-				*value = MAX_ADAPTER_NONE;
+-		}
+-	}
+-
+-	if (flag)
+-		ibmphp_unlock_operations();
+-
+-	debug("get_max_adapter_speed_1 - Exit rc[%d] value[%x]\n", rc, *value);
+-	return rc;
+-}
+-
+-static int get_bus_name(struct hotplug_slot *hotplug_slot, char *value)
+-{
+-	int rc = -ENODEV;
+-	struct slot *pslot = NULL;
+-
+-	debug("get_bus_name - Entry hotplug_slot[%lx]\n", (ulong)hotplug_slot);
+-
+-	ibmphp_lock_operations();
+-
+-	if (hotplug_slot) {
+-		pslot = hotplug_slot->private;
+-		if (pslot) {
+-			rc = 0;
+-			snprintf(value, 100, "Bus %x", pslot->bus);
+-		}
+-	} else
+-		rc = -ENODEV;
+-
+-	ibmphp_unlock_operations();
+-	debug("get_bus_name - Exit rc[%d] value[%x]\n", rc, *value);
+-	return rc;
+-}
+-*/
+-
+ /****************************************************************************
+  * This routine will initialize the ops data structure used in the validate
+  * function. It will also power off empty slots that are powered on since BIOS
+@@ -1231,9 +1160,6 @@ const struct hotplug_slot_ops ibmphp_hotplug_slot_ops = {
+ 	.get_attention_status =		get_attention_status,
+ 	.get_latch_status =		get_latch_status,
+ 	.get_adapter_status =		get_adapter_present,
+-/*	.get_max_adapter_speed =	get_max_adapter_speed,
+-	.get_bus_name_status =		get_bus_name,
+-*/
+ };
+ 
+ static void ibmphp_unload(void)
+-- 
+2.30.2
 
-It's not about updating event->total_time_enabled, it only
-afftects the returned value of @enabled.
-
-I'd say the time calculation is broken so it'd break @running
-as well.  But this case can only happen on INACTIVE -
-otherwise it'd call event_sched_in() and update the shadow
-time properly, so no issue there.  And then we can see
-the broken value of enabled time only.
-
->
-> Let me go rummage around a bit... either I'm missing something obvious
-> or something's smelly.
-
-Thank you for doing that!
-
-Thanks,
-Namhyung
